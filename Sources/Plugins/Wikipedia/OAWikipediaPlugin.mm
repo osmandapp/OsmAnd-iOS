@@ -20,9 +20,12 @@
 #import "OAIAPHelper.h"
 
 #define PLUGIN_ID kInAppId_Addon_Wiki
+#define kLastUsedWikipediaKey @"lastUsedWikipedia"
 
 @implementation OAWikipediaPlugin
 {
+    OACommonBoolean *_lastUsedWikipedia;
+
     OsmAndAppInstance _app;
     OAPOIUIFilter *_topWikiPoiFilter;
 }
@@ -33,6 +36,7 @@
     if (self)
     {
         _app = [OsmAndApp instance];
+        _lastUsedWikipedia = [OACommonBoolean withKey:kLastUsedWikipediaKey defValue:NO];
     }
     return self;
 }
@@ -46,11 +50,26 @@
 {
     [super disable];
     [self toggleWikipediaPoi:NO];
+    OAAppData *data = [OsmAndApp instance].data;
+    [_lastUsedWikipedia set:data.wikipedia];
+    [data setWikipedia:NO];
+}
+
+- (void)setEnabled:(BOOL)enabled
+{
+    [super setEnabled:enabled];
+    [[OsmAndApp instance].data setWikipedia:enabled ? [_lastUsedWikipedia get] : NO];
 }
 
 - (BOOL)isEnabled
 {
     return [super isEnabled] && [[OAIAPHelper sharedInstance].wiki isActive];
+}
+
+- (void)wikipediaChanged:(BOOL)isOn
+{
+    [_lastUsedWikipedia set:isOn];
+    [[OsmAndApp instance].data setWikipedia:isOn];
 }
 
 - (NSString *)getName
@@ -184,10 +203,15 @@
 
 - (NSString *)getLanguagesSummary
 {
-    if ([self hasCustomSettings])
+    return [self getLanguagesSummary:nil];
+}
+
+- (NSString *)getLanguagesSummary:(OAApplicationMode *)mode
+{
+    if (mode ? [self hasCustomSettings:mode] : [self hasCustomSettings])
     {
         NSMutableArray<NSString *> *translations = [NSMutableArray new];
-        for (NSString *locale in [self getLanguagesToShow])
+        for (NSString *locale in (mode ? [self getLanguagesToShow:mode] : [self getLanguagesToShow]))
         {
             [translations addObject:[OAUtilities translatedLangName:locale].capitalizedString];
         }

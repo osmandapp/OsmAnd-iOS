@@ -10,6 +10,8 @@
 
 @interface OAWikipediaPlugin : OAPlugin
 
+- (void)wikipediaChanged:(BOOL)isOn;
+
 - (void)updateWikipediaState;
 - (BOOL)hasCustomSettings;
 - (BOOL)hasCustomSettings:(OAApplicationMode *)profile;
@@ -26,6 +28,7 @@
 - (void)toggleWikipediaPoi:(BOOL)enable /*CallbackWithObject<Boolean> callback*/;
 - (void)refreshWikiOnMap;
 - (NSString *)getLanguagesSummary;
+- (NSString *)getLanguagesSummary:(OAApplicationMode *)mode;
 - (NSString *)getWikiArticleLanguage:(NSSet<NSString *> *)availableArticleLangs preferredLanguage:(NSString *)preferredLanguage;
 
 @end

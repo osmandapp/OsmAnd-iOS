@@ -22,6 +22,8 @@
 #import <SafariServices/SafariServices.h>
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
+#define kHeaderImageHeight 170
+
 @interface OAWikiWebViewController () <SFSafariViewControllerDelegate, OAWikiLanguagesWebDelegate>
 
 @end
@@ -161,7 +163,7 @@
         if (availableLocales.count > 0)
         {
             UIAction *availableLanguagesAction = [UIAction actionWithTitle:OALocalizedString(@"available_languages")
-                                                                     image:[UIImage systemImageNamed:@"app.dashed"]
+                                                                     image:[UIImage systemImageNamed:@"globe"]
                                                                 identifier:nil
                                                                    handler:^(__kindof UIAction * _Nonnull action) {
                                           OAWikiLanguagesWebViewContoller *wikiLanguagesViewController = [[OAWikiLanguagesWebViewContoller alloc] initWithSelectedLocale:_contentLocale availableLocales:availableLocales];
@@ -205,7 +207,7 @@
     }
 
     UIAction *downloadOnlyNowModeAction = [UIAction actionWithTitle:OALocalizedString(@"download_only_now")
-                                                              image:[UIImage systemImageNamed:@"app.dashed"]
+                                                              image:[UIImage systemImageNamed:@"square.and.arrow.down"]
                                                          identifier:nil
                                                             handler:^(__kindof UIAction * _Nonnull action) {
                                     OADownloadMode *imagesDownloadMode = [self getImagesDownloadMode];
@@ -288,13 +290,9 @@
 
 - (NSURL *)getUrl
 {
-    NSString *title = [self getTitle];
-    BOOL hasLocalizedName = [title isEqualToString:OALocalizedString(@"download_wikipedia_maps")];
-    return [NSURL URLWithString:[NSString stringWithFormat:@"https://%@.wikipedia.org/wiki/%@",
-                                 (_contentLocale.length == 0 ? @"en" : _contentLocale),
-                                 (hasLocalizedName ? @"" : [[title stringByReplacingOccurrencesOfString:@" "
-                                                                                              withString:@"_"]
-                                                             stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet])]];
+    NSString *locale = _contentLocale.length == 0 ? @"en" : _contentLocale;
+    NSString *wikipediaTitle = [self getWikipediaTitleURL];
+    return [NSURL URLWithString:[NSString stringWithFormat:@"https://%@.wikipedia.org/wiki/%@", locale, wikipediaTitle]];
 }
 
 - (NSString *)getContent
@@ -315,6 +313,64 @@
 - (void)resetDownloadImagesOnlyNow
 {
     _isDownloadImagesOnlyNow = NO;
+}
+
+#pragma mark - Web load
+
+- (void)loadHeaderImage:(void(^)(NSString *content))loadWebView
+{
+    OADownloadMode *imagesDownloadMode = [self getImagesDownloadMode];
+    if (![self isDownloadImagesOnlyNow] && ([imagesDownloadMode isDontDownload] || ([imagesDownloadMode isDownloadOnlyViaWifi] && [[AFNetworkReachabilityManager sharedManager] isReachableViaWWAN])))
+    {
+        if (loadWebView)
+            loadWebView([self getContent]);
+    }
+    else
+    {
+        NSString *locale = _contentLocale.length == 0 ? @"en" : _contentLocale;
+        NSString *wikipediaTitle = [self getWikipediaTitleURL];
+        NSString *titleImageLink = [NSString stringWithFormat:@"https://%@.wikipedia.org/w/api.php?action=query&titles=%@&prop=pageimages&format=json&pithumbsize=%lu",
+                                    locale,
+                                    wikipediaTitle,
+                                    (NSInteger) self.view.frame.size.width];
+        NSURL *titleImageURL = [NSURL URLWithString:titleImageLink];
+        NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+        [[session dataTaskWithURL:titleImageURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+            NSString *content = [self getContent];
+            NSString *imageSource = @"";
+            if (((NSHTTPURLResponse *) response).statusCode == 200 && data)
+            {
+                if (data)
+                {
+                    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+                    if ([result.allKeys containsObject:@"query"])
+                    {
+                        NSDictionary *queryResult = result[@"query"];
+                        if ([queryResult.allKeys containsObject:@"pages"])
+                        {
+                            NSDictionary *pagesResult = queryResult[@"pages"];
+                            if (pagesResult.allKeys.count > 0)
+                            {
+                                NSDictionary *sourceResult = pagesResult[pagesResult.allKeys.firstObject];
+                                if ([sourceResult.allKeys containsObject:@"thumbnail"])
+                                {
+                                    NSDictionary *thumbnailResult = sourceResult[@"thumbnail"];
+                                    imageSource = thumbnailResult[@"source"];
+                                }
+                            }
+                        }
+                    }
+                }
+                if (imageSource && imageSource.length > 0)
+                {
+                    content = [content stringByReplacingOccurrencesOfString:@"</header>"
+                                                                 withString:[NSString stringWithFormat:@"<img src=%@ style=\"object-fit:cover; object-position:center; height:%dpx;\"></header>", imageSource, kHeaderImageHeight]];
+                }
+            }
+            if (loadWebView)
+                loadWebView(content);
+        }] resume];
+    }
 }
 
 #pragma mark - Selectors
@@ -353,7 +409,27 @@
     }
 }
 
+#pragma mark - UIScrollViewDelegate
+
+- (CGFloat)getCustomTitleHeaderTopOffset
+{
+    OADownloadMode *imagesDownloadMode = [self getImagesDownloadMode];
+    if (![self isDownloadImagesOnlyNow] && ([imagesDownloadMode isDontDownload] || ([imagesDownloadMode isDownloadOnlyViaWifi] && [[AFNetworkReachabilityManager sharedManager] isReachableViaWWAN])))
+        return 0.;
+
+    return kHeaderImageHeight;
+}
+
 #pragma mark - Additions
+
+- (NSString *)getWikipediaTitleURL
+{
+    NSString *title = [self getTitle];
+    BOOL hasLocalizedName = ![title isEqualToString:OALocalizedString(@"download_wikipedia_maps")];
+    return !hasLocalizedName ? @"" : [[title stringByReplacingOccurrencesOfString:@" "
+                                                                       withString:@"_"]
+                                      stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+}
 
 - (void)updateWikiData
 {

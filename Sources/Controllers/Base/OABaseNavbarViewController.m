@@ -106,7 +106,7 @@
     appearance.backgroundColor = [self getNavbarBackgroundColor];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : [self getTitleColor]
+        NSForegroundColorAttributeName : [self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle ? UIColor.clearColor : [self getTitleColor]
     };
     appearance.largeTitleTextAttributes = @{
         NSForegroundColorAttributeName : [self getLargeTitleColor]
@@ -197,8 +197,7 @@
 {
     self.title = [self getTitle];
     NSString *sub = [self getSubtitle];
-    BOOL isCustomLargeTitle = [self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle;
-    if ((sub && sub.length > 0) || isCustomLargeTitle)
+    if ((sub && sub.length > 0))
     {
         BOOL isTitleHidden = [self.navigationItem isTitleInStackViewHidden];
         if (isTitleHidden)
@@ -380,6 +379,8 @@
             freeSpaceForNavbarButton -= (rightNavbarButtons.count - 1) * 8.;
             freeSpaceForNavbarButton /= rightNavbarButtons.count;
         }
+        if (freeSpaceForNavbarButton < 44.)
+            freeSpaceForNavbarButton = 44.;
         for (NSInteger i = 0; i < rightNavbarButtons.count; i++)
         {
             UIBarButtonItem *buttonItem = rightNavbarButtons[i];
@@ -387,8 +388,7 @@
             UIButton *button = buttonItem.customView;
             if (button)
             {
-                NSString *buttonTitle = [button titleForState:UIControlStateNormal];
-                [button.widthAnchor constraintEqualToConstant:!buttonTitle ? 44. : freeSpaceForNavbarButton].active = YES;
+                [button.widthAnchor constraintEqualToConstant:freeSpaceForNavbarButton].active = YES;
                 button.contentHorizontalAlignment = i == 0 ? UIControlContentHorizontalAlignmentTrailing : UIControlContentHorizontalAlignmentCenter;
                 button.titleLabel.textAlignment = i == 0 ? NSTextAlignmentRight : NSTextAlignmentCenter;
             }
@@ -406,7 +406,7 @@
                                       action:(SEL)action
                                         menu:(UIMenu *)menu
 {
-    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., 30., 30.)];
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., 44., 30.)];
     button.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     button.titleLabel.numberOfLines = 1;
     button.titleLabel.adjustsFontForContentSizeCategory = YES;
@@ -677,6 +677,11 @@
     }
 }
 
+- (CGFloat)getCustomTitleHeaderTopOffset
+{
+    return 0.;
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (!_isRotating && [self isScreenLoaded])
@@ -687,25 +692,62 @@
             _navbarHeightCurrent = _navbarHeightLarge + _navbarHeightSmall;
             [self updateRightIconLargeTitle];
         }
-        
+
         [self moveAndResizeImage:self.navigationController.navigationBar.frame.size.height];
-        
+
         if ([self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle)
         {
+            UINavigationBarAppearance *appearance = self.navigationController.navigationBar.standardAppearance;
+            BOOL hasSubtitle = [self getSubtitle] && [self getSubtitle].length > 0;
+            BOOL isTitleHidden = hasSubtitle ? [self.navigationItem isTitleInStackViewHidden] : [appearance.titleTextAttributes[NSForegroundColorAttributeName] isEqual:UIColor.clearColor];
             CGFloat y = scrollView.contentOffset.y + _navbarHeightSmall + _navbarHeightLarge;
             if (![self isModal])
                 y += [OAUtilities getTopMargin];
-            CGFloat tableHeaderHeight = self.tableView.tableHeaderView ? self.tableView.tableHeaderView.frame.size.height : _navbarHeightCurrent;
+            CGFloat titleVisiblePosition = (self.tableView.tableHeaderView ? self.tableView.tableHeaderView.frame.size.height : (_navbarHeightCurrent + 56.)) * .75 + [self getCustomTitleHeaderTopOffset];
             if (y > 0)
             {
-                if (y > tableHeaderHeight * .75 && [self.navigationItem isTitleInStackViewHidden])
-                    [self.navigationItem hideTitleInStackView:NO defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
-                else if (y < tableHeaderHeight * .75 && ![self.navigationItem isTitleInStackViewHidden])
-                    [self.navigationItem hideTitleInStackView:YES defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
+                if (y > titleVisiblePosition && isTitleHidden)
+                {
+                    if (hasSubtitle)
+                    {
+                        [self.navigationItem hideTitleInStackView:NO defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
+                    }
+                    else
+                    {
+                        appearance.titleTextAttributes = @{
+                            NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+                            NSForegroundColorAttributeName : [self getTitleColor]
+                        };
+                    }
+                }
+                else if (y < titleVisiblePosition && !isTitleHidden)
+                {
+                    if (hasSubtitle)
+                    {
+                        [self.navigationItem hideTitleInStackView:YES defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
+                    }
+                    else
+                    {
+                        appearance.titleTextAttributes = @{
+                            NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+                            NSForegroundColorAttributeName : UIColor.clearColor
+                        };
+                    }
+                }
             }
-            else if (y <= 0 && ![self.navigationItem isTitleInStackViewHidden])
+            else if (y <= 0 && !isTitleHidden)
             {
-                [self.navigationItem hideTitleInStackView:YES defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
+                if (hasSubtitle)
+                {
+                    [self.navigationItem hideTitleInStackView:YES defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
+                }
+                else
+                {
+                    appearance.titleTextAttributes = @{
+                        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+                        NSForegroundColorAttributeName : UIColor.clearColor
+                    };
+                }
             }
         }
         

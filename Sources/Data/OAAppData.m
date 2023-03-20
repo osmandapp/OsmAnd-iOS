@@ -1446,7 +1446,6 @@
     @synchronized (_lock)
     {
         OAWikipediaPlugin *plugin = (OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class];
-        [plugin setEnabled:wikipedia];
         [plugin toggleWikipediaPoi:wikipedia];
         [_wikipediaChangeObservable notifyEventWithKey:self andValue:@(wikipedia)];
     }
@@ -1524,11 +1523,27 @@
     }
 }
 
-- (void)setWikipediaImagesDownloadMode:(OADownloadMode *)mode
+- (OADownloadMode *)getWikipediaImagesDownloadMode:(OAApplicationMode *)mode
 {
     @synchronized (_lock)
     {
-        [_wikipediaImagesDownloadModeProfile set:mode];
+        return [_wikipediaImagesDownloadModeProfile get:mode];
+    }
+}
+
+- (void)setWikipediaImagesDownloadMode:(OADownloadMode *)downloadMode
+{
+    @synchronized (_lock)
+    {
+        [_wikipediaImagesDownloadModeProfile set:downloadMode];
+    }
+}
+
+- (void)setWikipediaImagesDownloadMode:(OADownloadMode *)downloadMode mode:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        [_wikipediaImagesDownloadModeProfile set:downloadMode mode:mode];
     }
 }
 

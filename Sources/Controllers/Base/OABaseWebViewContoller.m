@@ -62,35 +62,42 @@
 {
 }
 
-#pragma mark - WebView
+#pragma mark - Web load
+
+- (void)loadHeaderImage:(void(^)(NSString *content))loadWebView
+{
+    if (loadWebView)
+        loadWebView([self getContent]);
+}
 
 - (void)loadWebView
 {
     [UIView transitionWithView:self.webView
                       duration:.2
                        options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^(void)
-                    {
-                    [[WKContentRuleListStore defaultStore] compileContentRuleListForIdentifier:@"ContentBlockingRules"
-                                                                        encodedContentRuleList:kImagesBlockRules
-                                                                             completionHandler:^(WKContentRuleList *contentRuleList, NSError *error) {
-                        if (!error)
-                        {
-                            OADownloadMode *imagesDownloadMode = [self getImagesDownloadMode];
-                            WKWebViewConfiguration *configuration = self.webView.configuration;
+                    animations:^(void) {
+                        [[WKContentRuleListStore defaultStore] compileContentRuleListForIdentifier:@"ContentBlockingRules"
+                                                                            encodedContentRuleList:kImagesBlockRules
+                                                                                 completionHandler:^(WKContentRuleList *contentRuleList, NSError *error) {
+                            if (!error)
+                            {
+                                OADownloadMode *imagesDownloadMode = [self getImagesDownloadMode];
+                                WKWebViewConfiguration *configuration = self.webView.configuration;
 
-                            if (![self isDownloadImagesOnlyNow] && ([imagesDownloadMode isDontDownload] || ([imagesDownloadMode isDownloadOnlyViaWifi] && [[AFNetworkReachabilityManager sharedManager] isReachableViaWWAN])))
-                                [[configuration userContentController] addContentRuleList:contentRuleList];
-                            else
-                                [[configuration userContentController] removeContentRuleList:contentRuleList];
+                                if (![self isDownloadImagesOnlyNow] && ([imagesDownloadMode isDontDownload] || ([imagesDownloadMode isDownloadOnlyViaWifi] && [[AFNetworkReachabilityManager sharedManager] isReachableViaWWAN])))
+                                    [[configuration userContentController] addContentRuleList:contentRuleList];
+                                else
+                                    [[configuration userContentController] removeContentRuleList:contentRuleList];
 
-                            [self resetDownloadImagesOnlyNow];
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                [self.webView loadHTMLString:[self getContent] baseURL:[self getUrl]];
-                            });
-                        }
-                    }];
-                    } completion:nil];
+                                [self loadHeaderImage:^(NSString *content) {
+                                    [self resetDownloadImagesOnlyNow];
+                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                        [self.webView loadHTMLString:content baseURL:[self getUrl]];
+                                    });
+                                }];
+                            }
+                        }];
+    } completion:nil];
 }
 
 - (void)webViewDidLoad

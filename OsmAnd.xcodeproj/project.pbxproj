@@ -697,6 +697,7 @@
 		46993C0A2986BCB70047F2F5 /* img_help_announcement_time_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46993C092986BCB60047F2F5 /* img_help_announcement_time_day@3x.png */; };
 		46A27270281DD05E00FF591D /* osm-carto.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 46A2726F281DD05D00FF591D /* osm-carto.render.xml */; };
 		46A8FD33297D985700AF9C0C /* OAUninstallSpeedCamerasViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46A8FD32297D985700AF9C0C /* OAUninstallSpeedCamerasViewController.mm */; };
+		46AB58A729C4C979003B2FB9 /* OAWikipediaImagesSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46AB58A629C4C979003B2FB9 /* OAWikipediaImagesSettingsViewController.m */; };
 		46AEDB8E27F4ABE2006D90E8 /* ic_custom_air_pressure@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AEDB8C27F4ABE1006D90E8 /* ic_custom_air_pressure@3x.png */; };
 		46AEDB8F27F4ABE2006D90E8 /* ic_custom_air_pressure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AEDB8D27F4ABE1006D90E8 /* ic_custom_air_pressure@2x.png */; };
 		46AEDB9227F4ABF1006D90E8 /* ic_custom_clouds@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AEDB9027F4ABF0006D90E8 /* ic_custom_clouds@3x.png */; };
@@ -4216,6 +4217,8 @@
 		46A2726F281DD05D00FF591D /* osm-carto.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "osm-carto.render.xml"; path = "../resources/rendering_styles/osm-carto.render.xml"; sourceTree = "<group>"; };
 		46A8FD31297D982200AF9C0C /* OAUninstallSpeedCamerasViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAUninstallSpeedCamerasViewController.h; sourceTree = "<group>"; };
 		46A8FD32297D985700AF9C0C /* OAUninstallSpeedCamerasViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAUninstallSpeedCamerasViewController.mm; sourceTree = "<group>"; };
+		46AB58A529C4C967003B2FB9 /* OAWikipediaImagesSettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWikipediaImagesSettingsViewController.h; sourceTree = "<group>"; };
+		46AB58A629C4C979003B2FB9 /* OAWikipediaImagesSettingsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAWikipediaImagesSettingsViewController.m; sourceTree = "<group>"; };
 		46AEDB8C27F4ABE1006D90E8 /* ic_custom_air_pressure@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_air_pressure@3x.png"; path = "Resources/Icons/ic_custom_air_pressure@3x.png"; sourceTree = "<group>"; };
 		46AEDB8D27F4ABE1006D90E8 /* ic_custom_air_pressure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_air_pressure@2x.png"; path = "Resources/Icons/ic_custom_air_pressure@2x.png"; sourceTree = "<group>"; };
 		46AEDB9027F4ABF0006D90E8 /* ic_custom_clouds@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clouds@3x.png"; path = "Resources/Icons/ic_custom_clouds@3x.png"; sourceTree = "<group>"; };
@@ -11571,6 +11574,8 @@
 				32119B4D2847B4DF005E1E0C /* OsmandDevelopment */,
 				46DF1D8328C21E8700135D94 /* OSMEditing */,
 				46843FD4286F5D2500B1F08C /* WeatherSettings */,
+				46AB58A529C4C967003B2FB9 /* OAWikipediaImagesSettingsViewController.h */,
+				46AB58A629C4C979003B2FB9 /* OAWikipediaImagesSettingsViewController.m */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -16655,6 +16660,7 @@
 				DA5A82F826C563A800F274C7 /* OASettingsTableViewCell.m in Sources */,
 				DA5A833A26C563A800F274C7 /* OAHomeWorkCell.mm in Sources */,
 				DA5A813226C563A700F274C7 /* OACoreResourcesTransportRouteIconProvider.mm in Sources */,
+				46AB58A729C4C979003B2FB9 /* OAWikipediaImagesSettingsViewController.m in Sources */,
 				C588D1EF298D1ECE001FEDBD /* OASearchHistoryTableGroup.m in Sources */,
 				DA5A824D26C563A700F274C7 /* OAScreenAlertsViewController.m in Sources */,
 				DA4ABF172876DA6800B996EF /* OAGlobalSettingsItem.mm in Sources */,

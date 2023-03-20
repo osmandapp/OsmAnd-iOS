@@ -71,8 +71,11 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 {
     _app = [OsmAndApp instance];
     _wikiPlugin = (OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class];
-    _languages = [NSMutableArray array];
+}
 
+- (void)postInit
+{
+    _languages = [NSMutableArray array];
     NSMutableArray<NSString *> *preferredLocales = [NSMutableArray new];
     for (NSString *langCode in [NSLocale preferredLanguages])
     {
@@ -81,10 +84,10 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
             [preferredLocales addObject:[langCode substringToIndex:index]];
     }
 
-    _isGlobalWikiPoiEnabled = [_wikiPlugin isShowAllLanguages];
-    if ([_wikiPlugin hasLanguagesFilter])
+    _isGlobalWikiPoiEnabled = [_wikiPlugin isShowAllLanguages:self.appMode];
+    if ([_wikiPlugin hasLanguagesFilter:self.appMode])
     {
-        NSArray<NSString *> *enabledWikiPoiLocales = [_wikiPlugin getLanguagesToShow];
+        NSArray<NSString *> *enabledWikiPoiLocales = [_wikiPlugin getLanguagesToShow:self.appMode];
         for (NSString *locale in [[OAPOIHelper sharedInstance] getAllAvailableWikiLocales])
         {
             BOOL checked = [enabledWikiPoiLocales containsObject:locale];
@@ -119,6 +122,11 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 - (NSString *)getTitle
 {
     return OALocalizedString(@"shared_string_language");
+}
+
+- (NSString *)getSubtitle
+{
+    return @"";
 }
 
 - (NSString *)getLeftNavbarButtonTitle
@@ -296,8 +304,8 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 {
     [self applyPreference:NO];
 
-    if (self.delegate)
-        [self.delegate updateSelectedLanguage];
+    if (self.wikipediaDelegate)
+        [self.wikipediaDelegate updateWikipediaSettings];
 
     [self dismissViewController];
 }
@@ -334,8 +342,8 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
     }
     else
     {
-        [_wikiPlugin setLanguagesToShow:localesForSaving];
-        [_wikiPlugin setShowAllLanguages:localesForSaving.count == 0 ? YES : _isGlobalWikiPoiEnabled];
+        [_wikiPlugin setLanguagesToShow:self.appMode languagesToShow:localesForSaving];
+        [_wikiPlugin setShowAllLanguages:self.appMode showAllLanguages:localesForSaving.count == 0 ? YES : _isGlobalWikiPoiEnabled];
     }
     [_wikiPlugin updateWikipediaState];
 }

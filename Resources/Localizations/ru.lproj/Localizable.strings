@@ -551,7 +551,7 @@
 "coords_format" = "Формат координат";
 "save_global_track_interval_descr" = "Укажите общий интервал записи трека (включается через виджет «Запись маршрута» на карте).";
 "rotate_map_to_bearing_descr" = "Выберите способ вращения карты.";
-"rotate_map_none_opt" = "Не вращать (север сверху)";
+"rotate_map_none_fixed_ios" = "Не вращать (север сверху)";
 "shared_string_automatic" = "Авто";
 "map_widget_magnetic_bearing" = "Магнитный пеленг";
 "map_widget_bearing" = "Курсовой угол";
@@ -636,8 +636,8 @@
 "map_widget_compass" = "Компас";
 "map_widget_next_turn" = "Следующий поворот";
 "rotate_map_to" = "Ориентация карты";
-"rotate_map_compass_opt" = "по направлению компаса";
-"rotate_map_bearing_opt" = "по направлению движения";
+"rotate_map_compass_opt_ios" = "по направлению компаса";
+"rotate_map_bearing_opt_ios" = "по направлению движения";
 "day_night_info_description" = "Восход: %@ 
 \nЗакат: %@";
 "daynight_mode_auto" = "Восход/закат";

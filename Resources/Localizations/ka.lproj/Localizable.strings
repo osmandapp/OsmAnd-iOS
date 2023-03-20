@@ -108,9 +108,9 @@
 "send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
 "rotate_map_to" = "რუკის ორიენტაცია";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
-"rotate_map_compass_opt" = "კომპასისაკენ";
-"rotate_map_bearing_opt" = "მოძრაობის მიმართულებით";
-"rotate_map_none_opt" = "Do not rotate (north is up)";
+"rotate_map_compass_opt_ios" = "კომპასისაკენ";
+"rotate_map_bearing_opt_ios" = "მოძრაობის მიმართულებით";
+"rotate_map_none_fixed_ios" = "Do not rotate (north is up)";
 "driving_region_descr" = "აირჩიეთ გზის რეგიონი: აშშ, ევროპა, UK, აზია და სხვა.";
 "driving_region" = "გზის რეგიონი";
 "shared_string_automatic" = "ავტომატური";

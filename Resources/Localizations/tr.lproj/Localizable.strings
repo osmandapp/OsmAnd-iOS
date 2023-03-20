@@ -495,9 +495,9 @@
 "coords_format_descr" = "Coğrafi koordinatlar için biçim.";
 "do_not_send_anonymous_data_desc" = "Konum bilgisi toplamıyoruz. Yalnızca app kullanımı ve harita indirme istatistiklerini topluyoruz.";
 "save_global_track_interval" = "Genel kayıt tutma aralığı";
-"rotate_map_compass_opt" = "Pusula yönü";
-"rotate_map_bearing_opt" = "Hareket yönü";
-"rotate_map_none_opt" = "Döndürülmesin (kuzey yukarıda)";
+"rotate_map_compass_opt_ios" = "Pusula yönü";
+"rotate_map_bearing_opt_ios" = "Hareket yönü";
+"rotate_map_none_fixed_ios" = "Döndürülmesin (kuzey yukarıda)";
 "shared_string_automatic" = "Otomatik";
 "shared_string_near" = "Yakın";
 "map_widget_next_turn" = "Sonraki dönüş";

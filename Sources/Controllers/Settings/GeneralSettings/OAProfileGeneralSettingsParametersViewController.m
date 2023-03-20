@@ -143,28 +143,28 @@
         case EOAProfileGeneralSettingsMapOrientation:
             [dataArr addObject:@{
                 @"name" : @"none",
-                @"title" : OALocalizedString(@"rotate_map_none_fixed"),
+                @"title" : OALocalizedString(@"rotate_map_none_fixed_ios"),
                 @"selected" : @(rotateMap == ROTATE_MAP_NONE),
                 @"icon" : @"ic_custom_direction_north_day",
                 @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"bearing",
-                @"title" : OALocalizedString(@"rotate_map_bearing_opt"),
+                @"title" : OALocalizedString(@"rotate_map_bearing_opt_ios"),
                 @"selected" : @(rotateMap == ROTATE_MAP_BEARING),
                 @"icon" : @"ic_custom_direction_bearing_day",
                 @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                @"name" : @"compass",
-               @"title" : OALocalizedString(@"rotate_map_compass_opt"),
+               @"title" : OALocalizedString(@"rotate_map_compass_opt_ios"),
                @"selected" : @(rotateMap == ROTATE_MAP_COMPASS),
                @"icon" : @"ic_custom_direction_compass_day",
                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                @"name" : @"manually",
-               @"title" : OALocalizedString(@"rotate_map_none_manually"),
+               @"title" : OALocalizedString(@"rotate_map_none_manually_ios"),
                @"selected" : @(rotateMap == ROTATE_MAP_MANUAL),
                @"icon" : @"ic_custom_direction_manual_day",
                @"type" : [OASimpleTableViewCell getCellIdentifier],

@@ -651,9 +651,9 @@
 "coords_format" = "Formato delle coordinate";
 "do_not_send_anonymous_data_desc" = "Non raccogliamo i dati sulla posizione. Solamente statistiche sull’uso dell’app e sullo scaricamento delle mappe.";
 "rotate_map_to_bearing_descr" = "Selezionare l’allineamento della mappa allo schermo.";
-"rotate_map_compass_opt" = "Direzione con bussola";
-"rotate_map_bearing_opt" = "Direzione del movimento";
-"rotate_map_none_opt" = "Nessuna rotazione (nord in alto)";
+"rotate_map_compass_opt_ios" = "Direzione con bussola";
+"rotate_map_bearing_opt_ios" = "Direzione del movimento";
+"rotate_map_none_fixed_ios" = "Nessuna rotazione (nord in alto)";
 "subsequent_dest_description" = "Sposta in alto la destinazione e creala";
 "do_not_show_discount_desc" = "Nascondi le promozioni dell’app e i messaggi di eventi locali speciali.";
 "driving_region_descr" = "Seleziona la regione di guida: USA, Europa, Regno Unito, Asia o altre.";
@@ -2812,8 +2812,8 @@
 "search_favorites" = "Cerca tra i favoriti";
 "map_widget_camera_tilt" = "Inclinazione fotocamera";
 "map_widget_zoom_level" = "Livello di zoom";
-"rotate_map_none_fixed" = "Nord in alto (fisso)";
-"rotate_map_none_manually" = "Rotazione manuale (fissa)";
+"rotate_map_none_fixed_ios" = "Nord in alto (fisso)";
+"rotate_map_none_manually_ios" = "Rotazione manuale (fissa)";
 "compass_click_desc" = "Tocca il compasso per cambiare modalità di orientamento della mappa.";
 "map_widget_camera_distance" = "Distanza fotocamera";
 "change_language" = "Cambia lingua";

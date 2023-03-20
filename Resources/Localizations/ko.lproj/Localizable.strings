@@ -1328,7 +1328,7 @@
 "shared_string_weather" = "날씨";
 "service_is_not_available_please_try_later" = "서비스를 사용할 수 없습니다. 나중에 다시 시도해 주십시오.";
 "select_backup_data_descr" = "백업할 데이터 및 폴더를 선택하십시오.";
-"rotate_map_bearing_opt" = "이동 방향";
+"rotate_map_bearing_opt_ios" = "이동 방향";
 "download_all" = "모두 다운로드";
 "routing_attr_goods_restrictions_name" = "상품 배송";
 "confirm_usage_speed_cameras" = "(독일, 프랑스, 이탈리아, 등) 많은 국가에서 속도 카메라 경고를 사용하는 것은 법률에 의해 허용 되지 않습니다. OsmAnd은 법률을 위반할 경우 어떤 책임도 지지 않습니다. 이 기능을 이해하는 경우에 [예] 를 클릭 하십시오.";
@@ -1372,7 +1372,7 @@
 "select_another_colorization" = "다른 색상 유형을 선택하십시오.";
 "routing_attr_motor_type_petrol_name" = "가솔린";
 "select_nav_profile_dialog_message" = "\'탐색 유형\'은 사용 가능한 오프라인 및 온라인 라우팅 엔진을 사용하여 경로를 계산하는 방법을 선택합니다.";
-"rotate_map_compass_opt" = "나침반 방향";
+"rotate_map_compass_opt_ios" = "나침반 방향";
 "routing_attr_piste_type_downhill_name" = "알파인 및 활강 스키";
 "features_menu_group" = "기능";
 "benefits_for_contributors_primary_descr" = "OpenStreetMap.org에 적극적으로 기여한 사람은 시간당 지도 업데이트를 무제한으로 받을 수 있습니다.";

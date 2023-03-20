@@ -511,9 +511,9 @@
 "save_global_track_interval_descr" = "Določi interval beleženja za splošno snemanje sledi (vklopljeno prek pripomočka »Snemanje poti« na zemljevidu).";
 "rotate_map_to" = "Usmerjenost zemljevida";
 "rotate_map_to_bearing_descr" = "Izbor poravnave zaslona zemljevida.";
-"rotate_map_compass_opt" = "– obračanje zemljevida po kompasu";
-"rotate_map_bearing_opt" = "– obračanje zemljevida glede na smer premikanja";
-"rotate_map_none_opt" = "- brez obračanja zemljevida (sever je vedno zgoraj)";
+"rotate_map_compass_opt_ios" = "– obračanje zemljevida po kompasu";
+"rotate_map_bearing_opt_ios" = "– obračanje zemljevida glede na smer premikanja";
+"rotate_map_none_fixed_ios" = "- brez obračanja zemljevida (sever je vedno zgoraj)";
 "shared_string_automatic" = "Samodejno";
 "map_widget_transparent" = "Prosojni gradniki";
 "shared_string_near" = "V bližini";

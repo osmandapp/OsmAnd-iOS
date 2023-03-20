@@ -98,9 +98,9 @@
 "do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
 "rotate_map_to" = "Wusměrjenje karty";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
-"rotate_map_compass_opt" = "Směr kompasa";
-"rotate_map_bearing_opt" = "Směr pohibowanja";
-"rotate_map_none_opt" = "Do not rotate (north is up)";
+"rotate_map_compass_opt_ios" = "Směr kompasa";
+"rotate_map_bearing_opt_ios" = "Směr pohibowanja";
+"rotate_map_none_fixed_ios" = "Do not rotate (north is up)";
 "driving_region_descr" = "Wubjerće region jězdźenja: Europa, Azija, Zjednoćene staty abo druhe.";
 "driving_region" = "Region jězdźenja";
 "shared_string_automatic" = "Awtomatisce";

@@ -672,9 +672,9 @@
 "do_not_send_anonymous_data_desc" = "Der indsamles ikke lokaliseringsdata. Kun brug af program og statistik for hentning af kort.";
 "save_global_track_interval" = "Generelt logningsinterval";
 "save_global_track_interval_descr" = "Angiv logningsintervallet for den generelle sporregistrering (aktiveres via modulet \"Optagelse af tur\" på kortet).";
-"rotate_map_compass_opt" = "Kompasretning";
-"rotate_map_bearing_opt" = "Bevægelsesretning";
-"rotate_map_none_opt" = "Ingen rotation (nord er op)";
+"rotate_map_compass_opt_ios" = "Kompasretning";
+"rotate_map_bearing_opt_ios" = "Bevægelsesretning";
+"rotate_map_none_fixed_ios" = "Ingen rotation (nord er op)";
 "driving_region_descr" = "Vælg kørselsregion: USA, Europa, Storbritannien, Asien og andre.";
 "shared_string_automatic" = "Automatisk";
 "auto_follow_location_enabled" = "Automatisk centrering af kortvisning aktiv.";
@@ -2826,8 +2826,8 @@
 "delete_history_items" = "Slet historikelementer?";
 "confirm_history_item_delete" = "Er du sikker på, at du vil slette (%ld) historikelementer?";
 "search_favorites" = "Søg i favoritter";
-"rotate_map_none_manually" = "Manuelt roteret (fast)";
-"rotate_map_none_fixed" = "Nord er op (fast)";
+"rotate_map_none_manually_ios" = "Manuelt roteret (fast)";
+"rotate_map_none_fixed_ios" = "Nord er op (fast)";
 "compass_click_desc" = "Tryk på kompas for at skifte kortorienteringstilstand.";
 "map_widget_zoom_level" = "Zoom-niveau";
 "map_widget_target_distance" = "Målafstand";

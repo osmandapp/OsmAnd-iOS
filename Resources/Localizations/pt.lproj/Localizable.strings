@@ -700,9 +700,9 @@
 "do_not_show_discount_desc" = "Oculta a visualização de descontos da aplicação e mensagens especiais de eventos locais.";
 "do_not_send_anonymous_data_desc" = "Não estamos coletando dados de localização. Somente estatísticas de download de mapas e uso de aplicativos.";
 "rotate_map_to_bearing_descr" = "Selecione o alinhamento do ecrã do mapa.";
-"rotate_map_compass_opt" = "Direção da bússola";
-"rotate_map_bearing_opt" = "Direção do movimento";
-"rotate_map_none_opt" = "Sem rotação (norte sempre para cima)";
+"rotate_map_compass_opt_ios" = "Direção da bússola";
+"rotate_map_bearing_opt_ios" = "Direção do movimento";
+"rotate_map_none_fixed_ios" = "Sem rotação (norte sempre para cima)";
 "driving_region_descr" = "Selecione a região de condução: EUA, Europa, Reino Unido, Ásia e outros.";
 "logging_interval_navigation_descr" = "Escolha o intervalo de registo para a gravação do percurso durante a navegação";
 "monitoring_min_distance" = "Deslocamento mínimo";
@@ -2826,8 +2826,8 @@
 "restart_is_required" = "Reinicie a aplicação manualmente para aplicar todas as alterações.";
 "restart_is_required_title" = "É necessário reiniciar";
 "delete_history_items" = "Eliminar itens do histórico?";
-"rotate_map_none_fixed" = "O norte está para cima (fixo)";
-"rotate_map_none_manually" = "Rotação manual (fixa)";
+"rotate_map_none_fixed_ios" = "O norte está para cima (fixo)";
+"rotate_map_none_manually_ios" = "Rotação manual (fixa)";
 "compass_click_desc" = "Toque na bússola para alternar o modo de orientação do mapa.";
 "map_widget_camera_tilt" = "Inclinação da câmara";
 "map_widget_camera_distance" = "Distância da câmara";

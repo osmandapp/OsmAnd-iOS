@@ -108,9 +108,9 @@
 "send_anonymous_data_desc" = "Шаље на OsmAnd статистику преузимања мапе, не прикупљамо податке о локацији, нити било какве личне податке.";
 "rotate_map_to" = "Усмерење карте";
 "rotate_map_to_bearing_descr" = "Изаберите поравнање екрана карте.";
-"rotate_map_compass_opt" = "Правац компаса";
-"rotate_map_bearing_opt" = "У смеру кретања";
-"rotate_map_none_opt" = "Не ротирај (север је горе)";
+"rotate_map_compass_opt_ios" = "Правац компаса";
+"rotate_map_bearing_opt_ios" = "У смеру кретања";
+"rotate_map_none_fixed_ios" = "Не ротирај (север је горе)";
 "driving_region_descr" = "Одаберите област вожње: САД, Европа, Уједињено Краљевство, Азија и остало.";
 "driving_region" = "Област вожње";
 "shared_string_automatic" = "Самостално";

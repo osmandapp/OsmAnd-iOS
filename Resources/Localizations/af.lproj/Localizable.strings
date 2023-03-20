@@ -134,9 +134,9 @@
 "send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
 "rotate_map_to" = "Kaart oriëntasie";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
-"rotate_map_compass_opt" = "Volgens kompas";
-"rotate_map_bearing_opt" = "Volgens rigting van beweging";
-"rotate_map_none_opt" = "Do not rotate (north is up)";
+"rotate_map_compass_opt_ios" = "Volgens kompas";
+"rotate_map_bearing_opt_ios" = "Volgens rigting van beweging";
+"rotate_map_none_fixed_ios" = "Do not rotate (north is up)";
 "driving_region_descr" = "Kies Bestuur Streek: VSA, Europa, VK, Asië en Ander";
 "driving_region" = "Bestuur Streek";
 "shared_string_automatic" = "Automatic";

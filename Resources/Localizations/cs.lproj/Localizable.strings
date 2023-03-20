@@ -62,9 +62,9 @@
 "save_global_track_interval_descr" = "Zadejte interval ukládání pro obecný záznam stopy (aktivovaný přes widget Záznam trasy na mapové obrazovce).";
 "rotate_map_to" = "Natočení mapy";
 "rotate_map_to_bearing_descr" = "Vyberte způsob otáčení mapy.";
-"rotate_map_compass_opt" = "Směr kompasu";
-"rotate_map_bearing_opt" = "Směr pohybu";
-"rotate_map_none_opt" = "Neotáčet (sever vždy nahoře)";
+"rotate_map_compass_opt_ios" = "Směr kompasu";
+"rotate_map_bearing_opt_ios" = "Směr pohybu";
+"rotate_map_none_fixed_ios" = "Neotáčet (sever vždy nahoře)";
 "driving_region_descr" = "Vyberte dopravní oblast: USA, Evropa, Británie, Asie a další.";
 "driving_region" = "Dopravní oblast";
 "shared_string_automatic" = "Automaticky";

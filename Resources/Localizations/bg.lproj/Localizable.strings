@@ -108,9 +108,9 @@
 "send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
 "rotate_map_to" = "Ориентация на картата";
 "rotate_map_to_bearing_descr" = "Изберете начин на завъртане на картата.";
-"rotate_map_compass_opt" = "По компаса";
-"rotate_map_bearing_opt" = "Посока на движение";
-"rotate_map_none_opt" = "Без завъртане (север е горе)";
+"rotate_map_compass_opt_ios" = "По компаса";
+"rotate_map_bearing_opt_ios" = "Посока на движение";
+"rotate_map_none_fixed_ios" = "Без завъртане (север е горе)";
 "driving_region_descr" = "Район на шофиране: САЩ, Европа, Великобритания, Азия или друг.";
 "driving_region" = "Район на шофиране";
 "shared_string_automatic" = "Автоматично";

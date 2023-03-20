@@ -736,7 +736,7 @@
 "osm_live_payment_current_subscription" = "Beddel ajerred amiran ar uɣawas n 2 n iseggasen";
 "sort_by" = "Smizzwer s";
 "shared_string_recorded" = "Imeslawen i yessekles {author}";
-"rotate_map_bearing_opt" = "Ar tnila n umussu";
+"rotate_map_bearing_opt_ios" = "Ar tnila n umussu";
 "gpx_selection_segment_title" = "Segment";
 "shared_string_status" = "Addad";
 "shared_string_angle" = "Angle";

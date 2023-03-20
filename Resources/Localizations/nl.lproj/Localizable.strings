@@ -62,9 +62,9 @@
 "save_global_track_interval_descr" = "Specificeer het registratie-interval voor de algemene trackregistratie (ingeschakeld via de track-widget op de kaart).";
 "rotate_map_to" = "Kaartoriëntatie";
 "rotate_map_to_bearing_descr" = "Selecteer de kaart-uitlijning.";
-"rotate_map_compass_opt" = "Volgens kompas";
-"rotate_map_bearing_opt" = "In beweegrichting";
-"rotate_map_none_opt" = "Niet draaien (noorden is boven)";
+"rotate_map_compass_opt_ios" = "Volgens kompas";
+"rotate_map_bearing_opt_ios" = "In beweegrichting";
+"rotate_map_none_fixed_ios" = "Niet draaien (noorden is boven)";
 "driving_region_descr" = "Kies regio voor autorijden: VS, Europa, GB, Azië of andere.";
 "driving_region" = "Regio voor autorijden";
 "shared_string_automatic" = "Automatisch";

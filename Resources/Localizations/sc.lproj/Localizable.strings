@@ -662,9 +662,9 @@
 "save_global_track_interval_descr" = "Dislinda s’intervallu pro sa registratzione generale de sas rastas (allutu pro mèdiu de su widget \'Registratzione GPX\' in sa mapa).";
 "rotate_map_to" = "Orientamentu de sa mapa";
 "rotate_map_to_bearing_descr" = "Issèbera s’alliniamentu de sa mapa a s’ischermu.";
-"rotate_map_compass_opt" = "Diretzione de sa bùssola";
-"rotate_map_bearing_opt" = "Diretzione de sa mòvida";
-"rotate_map_none_opt" = "Peruna rotatzione (nord in artu)";
+"rotate_map_compass_opt_ios" = "Diretzione de sa bùssola";
+"rotate_map_bearing_opt_ios" = "Diretzione de sa mòvida";
+"rotate_map_none_fixed_ios" = "Peruna rotatzione (nord in artu)";
 "driving_region_descr" = "Issèbera sa regione de ghia: USA, Europa, UK, Àsia e àteras.";
 "shared_string_automatic" = "Automàtica";
 "map_widget_magnetic_bearing" = "Bùssola magnètica";

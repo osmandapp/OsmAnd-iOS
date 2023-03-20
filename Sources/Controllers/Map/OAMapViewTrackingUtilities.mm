@@ -699,7 +699,7 @@
 
 - (void) switchRotateMapMode
 {
-    NSString *rotMode = OALocalizedString(@"rotate_map_none_fixed");
+    NSString *rotMode = OALocalizedString(@"rotate_map_none_fixed_ios");
     if ([_settings.rotateMap get] == ROTATE_MAP_NONE)
     {
         // reset manual rotation
@@ -712,9 +712,9 @@
         _lastPositionTrackStateCaptured = false;
         
         if ([_settings.rotateMap get] == ROTATE_MAP_BEARING)
-            rotMode = OALocalizedString(@"rotate_map_bearing_opt");
+            rotMode = OALocalizedString(@"rotate_map_bearing_opt_ios");
         else if ([_settings.rotateMap get] == ROTATE_MAP_COMPASS)
-            rotMode = OALocalizedString(@"rotate_map_compass_opt");
+            rotMode = OALocalizedString(@"rotate_map_compass_opt_ios");
     }
     rotMode = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"rotate_map_to"), rotMode];
     [_app showShortToastMessage:rotMode];

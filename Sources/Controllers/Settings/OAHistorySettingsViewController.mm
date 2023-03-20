@@ -183,7 +183,6 @@
 - (void)generateData
 {
     _data = [OATableDataModel model];
-
     if (!self.tableView.editing)
     {
         OATableSectionData *switchSection = [_data createNewSection];
@@ -192,125 +191,132 @@
             kCellTypeKey : [OASwitchTableViewCell getCellIdentifier] }
         ];
     }
-
-    if (_isLogHistoryOn)
-    {
-        CLLocation *newLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
-        CLLocationCoordinate2D myLocation = kCLLocationCoordinate2DInvalid;
-        if (newLocation)
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        if (_isLogHistoryOn)
         {
-            OsmAnd::LatLon latLon = OsmAnd::LatLon(newLocation.coordinate.latitude, newLocation.coordinate.longitude);
-            myLocation = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
-        }
-            
-        NSMutableArray<OASearchHistoryTableItem *> *sortedHistoryItems = [NSMutableArray array];
-        if (_historyType == EOAHistorySettingsTypeMapMarkers)
-        {
-            NSArray<OAHistoryItem *> *mapMarkersHistoryItems = [_historyHelper getPointsHavingTypes:_historyHelper.destinationTypes limit:0];
-            for (OAHistoryItem *mapMarkerHistoryItem in mapMarkersHistoryItems)
+            CLLocation *newLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
+            CLLocationCoordinate2D myLocation = kCLLocationCoordinate2DInvalid;
+            if (newLocation)
             {
-                OASearchHistoryTableItem *historyTableItem = [[OASearchHistoryTableItem alloc] initWithItem:mapMarkerHistoryItem mapCenterCoordinate:myLocation];
-                [sortedHistoryItems addObject:historyTableItem];
+                OsmAnd::LatLon latLon = OsmAnd::LatLon(newLocation.coordinate.latitude, newLocation.coordinate.longitude);
+                myLocation = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
             }
-        }
-        else
-        {
-            NSMutableArray<OASearchResult *> *searchResults = [NSMutableArray array];
-            if (_historyType == EOAHistorySettingsTypeSearch)
-                [searchResults addObjectsFromArray:[OAGlobalSettingsViewController getSearchHistoryResults]];
-            else if (_historyType == EOAHistorySettingsTypeNavigation)
-                [searchResults addObjectsFromArray:[OAGlobalSettingsViewController getNavigationHistoryResults]];
-            for (OASearchResult *searchResult in searchResults)
+            
+            NSMutableArray<OASearchHistoryTableItem *> *sortedHistoryItems = [NSMutableArray array];
+            if (_historyType == EOAHistorySettingsTypeMapMarkers)
             {
-                OAHistoryItem *historyItem = [OAGlobalSettingsViewController getHistoryEntry:searchResult];
-                if (historyItem)
+                NSArray<OAHistoryItem *> *mapMarkersHistoryItems = [_historyHelper getPointsHavingTypes:_historyHelper.destinationTypes limit:0];
+                for (OAHistoryItem *mapMarkerHistoryItem in mapMarkersHistoryItems)
                 {
-                    OASearchHistoryTableItem *historyTableItem = [[OASearchHistoryTableItem alloc] initWithItem:historyItem mapCenterCoordinate:myLocation];
+                    OASearchHistoryTableItem *historyTableItem = [[OASearchHistoryTableItem alloc] initWithItem:mapMarkerHistoryItem mapCenterCoordinate:myLocation];
                     [sortedHistoryItems addObject:historyTableItem];
                 }
             }
-        }
-
-        OASearchHistoryTableItem *prevRouteHistoryTableitem;
-        OATableRowData *prevRouteItem;
-        if (_historyType == EOAHistorySettingsTypeNavigation)
-        {
-            OARTargetPoint *pointToStartBackup = _app.data.pointToStartBackup;
-            OARTargetPoint *pointToNavigateBackup = _app.data.pointToNavigateBackup;
-            if (pointToNavigateBackup)
+            else
             {
-                OATableSectionData *prevRouteSection = [_data createNewSection];
-                [prevRouteSection setHeaderText:OALocalizedString(@"previous_route")];
-
-                OAHistoryItem *prevRouteHistoryitem = [[OAHistoryItem alloc] initWithPointDescription:pointToNavigateBackup.pointDescription];
-                prevRouteHistoryitem.name = pointToStartBackup ? pointToStartBackup.pointDescription.name : OALocalizedString(@"shared_string_my_location");
-                prevRouteHistoryitem.latitude = pointToNavigateBackup.point.coordinate.latitude;
-                prevRouteHistoryitem.longitude = pointToNavigateBackup.point.coordinate.longitude;
-                prevRouteHistoryitem.date = [NSDate date];
-                prevRouteHistoryitem.iconName = @"ic_custom_point_to_point";
-                prevRouteHistoryTableitem = [[OASearchHistoryTableItem alloc] initWithItem:prevRouteHistoryitem mapCenterCoordinate:myLocation];
-
-                prevRouteItem = [prevRouteSection createNewRow];
-                prevRouteItem.key = @"prevRoute";
-                prevRouteItem.cellType = [OAValueTableViewCell getCellIdentifier];
-                prevRouteItem.descr = pointToNavigateBackup.pointDescription.name;
-            }
-        }
-
-        if (sortedHistoryItems.count > 0)
-        {
-            [self sortSearchResults:sortedHistoryItems];
-
-            NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
-            NSDate *today = [calendar startOfDayForDate:[NSDate date]];
-            NSDate *sevenDaysAgo = [calendar dateByAddingUnit:NSCalendarUnitDay value:-7 toDate:today options:0];
-            NSMutableDictionary<NSString *, NSMutableArray<OASearchHistoryTableItem *> *> *monthGroups = [NSMutableDictionary dictionary];
-
-            OATableSectionData *lastSection = [_data createNewSection];
-            lastSection.headerText = OALocalizedString(@"last_seven_days");
-
-            for (OASearchHistoryTableItem *historyTableItem in sortedHistoryItems)
-            {
-                if (prevRouteItem && prevRouteHistoryTableitem && prevRouteHistoryTableitem.item.latitude == historyTableItem.item.latitude && prevRouteHistoryTableitem.item.longitude == historyTableItem.item.longitude && [prevRouteItem.descr isEqualToString:historyTableItem.item.name])
+                NSMutableArray<OASearchResult *> *searchResults = [NSMutableArray array];
+                if (_historyType == EOAHistorySettingsTypeSearch)
+                    [searchResults addObjectsFromArray:[OAGlobalSettingsViewController getSearchHistoryResults]];
+                else if (_historyType == EOAHistorySettingsTypeNavigation)
+                    [searchResults addObjectsFromArray:[OAGlobalSettingsViewController getNavigationHistoryResults]];
+                for (OASearchResult *searchResult in searchResults)
                 {
-                    prevRouteHistoryTableitem.item.date = historyTableItem.item.date;
-                    [prevRouteItem setObj:prevRouteHistoryTableitem forKey:@"historyItem"];
-                }
-
-                NSDate *historyItemDate = [calendar startOfDayForDate:historyTableItem.item.date];
-                if ([historyItemDate isEqualToDate:today] || [[historyItemDate laterDate:sevenDaysAgo] isEqualToDate:historyItemDate])
-                {
-                    OATableRowData *rowData = [lastSection createNewRow];
-                    rowData.cellType = [OAValueTableViewCell getCellIdentifier];
-                    [rowData setObj:historyTableItem forKey:@"historyItem"];
-                }
-                else
-                {
-                    NSDateComponents *components = [calendar components:NSCalendarUnitMonth fromDate:historyItemDate];
-                    NSString *monthName = [[[NSDateFormatter alloc] init] monthSymbols][components.month - 1];
-                    NSMutableArray<OASearchHistoryTableItem *> *groupHistoryItems = monthGroups[monthName];
-                    if (!groupHistoryItems)
+                    OAHistoryItem *historyItem = [OAGlobalSettingsViewController getHistoryEntry:searchResult];
+                    if (historyItem)
                     {
-                        groupHistoryItems = [NSMutableArray array];
-                        monthGroups[monthName] = groupHistoryItems;
+                        OASearchHistoryTableItem *historyTableItem = [[OASearchHistoryTableItem alloc] initWithItem:historyItem mapCenterCoordinate:myLocation];
+                        [sortedHistoryItems addObject:historyTableItem];
                     }
-                    [groupHistoryItems addObject:historyTableItem];
                 }
             }
-            for (NSString *monthName in monthGroups.allKeys)
+            
+            OASearchHistoryTableItem *prevRouteHistoryTableitem;
+            OATableRowData *prevRouteItem;
+            if (_historyType == EOAHistorySettingsTypeNavigation)
             {
-                OATableSectionData *monthSection = [_data createNewSection];
-                monthSection.headerText = monthName;
-                NSMutableArray<OASearchHistoryTableItem *> *groupHistoryItems = monthGroups[monthName];
-                for (OASearchHistoryTableItem *historyItem in groupHistoryItems)
+                OARTargetPoint *pointToStartBackup = _app.data.pointToStartBackup;
+                OARTargetPoint *pointToNavigateBackup = _app.data.pointToNavigateBackup;
+                if (pointToNavigateBackup)
                 {
-                    OATableRowData *rowData = [monthSection createNewRow];
-                    rowData.cellType = [OAValueTableViewCell getCellIdentifier];
-                    [rowData setObj:historyItem forKey:@"historyItem"];
+                    OATableSectionData *prevRouteSection = [_data createNewSection];
+                    [prevRouteSection setHeaderText:OALocalizedString(@"previous_route")];
+                    
+                    OAHistoryItem *prevRouteHistoryitem = [[OAHistoryItem alloc] initWithPointDescription:pointToNavigateBackup.pointDescription];
+                    prevRouteHistoryitem.name = pointToStartBackup ? pointToStartBackup.pointDescription.name : OALocalizedString(@"shared_string_my_location");
+                    prevRouteHistoryitem.latitude = pointToNavigateBackup.point.coordinate.latitude;
+                    prevRouteHistoryitem.longitude = pointToNavigateBackup.point.coordinate.longitude;
+                    prevRouteHistoryitem.date = [NSDate date];
+                    prevRouteHistoryitem.iconName = @"ic_custom_point_to_point";
+                    prevRouteHistoryTableitem = [[OASearchHistoryTableItem alloc] initWithItem:prevRouteHistoryitem mapCenterCoordinate:myLocation];
+                    
+                    prevRouteItem = [prevRouteSection createNewRow];
+                    prevRouteItem.key = @"prevRoute";
+                    prevRouteItem.cellType = [OAValueTableViewCell getCellIdentifier];
+                    prevRouteItem.descr = pointToNavigateBackup.pointDescription.name;
+                }
+            }
+            
+            if (sortedHistoryItems.count > 0)
+            {
+                [self sortSearchResults:sortedHistoryItems];
+                
+                NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
+                NSDate *today = [calendar startOfDayForDate:[NSDate date]];
+                NSDate *sevenDaysAgo = [calendar dateByAddingUnit:NSCalendarUnitDay value:-7 toDate:today options:0];
+                NSMutableDictionary<NSString *, NSMutableArray<OASearchHistoryTableItem *> *> *monthGroups = [NSMutableDictionary dictionary];
+                
+                OATableSectionData *lastSection = [_data createNewSection];
+                lastSection.headerText = OALocalizedString(@"last_seven_days");
+                
+                for (OASearchHistoryTableItem *historyTableItem in sortedHistoryItems)
+                {
+                    if (prevRouteItem && prevRouteHistoryTableitem && prevRouteHistoryTableitem.item.latitude == historyTableItem.item.latitude && prevRouteHistoryTableitem.item.longitude == historyTableItem.item.longitude && [prevRouteItem.descr isEqualToString:historyTableItem.item.name])
+                    {
+                        prevRouteHistoryTableitem.item.date = historyTableItem.item.date;
+                        [prevRouteItem setObj:prevRouteHistoryTableitem forKey:@"historyItem"];
+                    }
+                    
+                    NSDate *historyItemDate = [calendar startOfDayForDate:historyTableItem.item.date];
+                    if ([historyItemDate isEqualToDate:today] || [[historyItemDate laterDate:sevenDaysAgo] isEqualToDate:historyItemDate])
+                    {
+                        OATableRowData *rowData = [lastSection createNewRow];
+                        rowData.cellType = [OAValueTableViewCell getCellIdentifier];
+                        [rowData setObj:historyTableItem forKey:@"historyItem"];
+                    }
+                    else
+                    {
+                        NSDateComponents *components = [calendar components:NSCalendarUnitMonth fromDate:historyItemDate];
+                        NSString *monthName = [[[NSDateFormatter alloc] init] monthSymbols][components.month - 1];
+                        NSMutableArray<OASearchHistoryTableItem *> *groupHistoryItems = monthGroups[monthName];
+                        if (!groupHistoryItems)
+                        {
+                            groupHistoryItems = [NSMutableArray array];
+                            monthGroups[monthName] = groupHistoryItems;
+                        }
+                        [groupHistoryItems addObject:historyTableItem];
+                    }
+                }
+                for (NSString *monthName in monthGroups.allKeys)
+                {
+                    OATableSectionData *monthSection = [_data createNewSection];
+                    monthSection.headerText = monthName;
+                    NSMutableArray<OASearchHistoryTableItem *> *groupHistoryItems = monthGroups[monthName];
+                    for (OASearchHistoryTableItem *historyItem in groupHistoryItems)
+                    {
+                        OATableRowData *rowData = [monthSection createNewRow];
+                        rowData.cellType = [OAValueTableViewCell getCellIdentifier];
+                        [rowData setObj:historyItem forKey:@"historyItem"];
+                    }
                 }
             }
         }
-    }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [UIView transitionWithView:self.tableView duration:.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+                [self.tableView reloadData];
+            } completion:nil];
+        });
+    });
+
 }
 
 - (NSString *)getTitleForHeader:(NSInteger)section

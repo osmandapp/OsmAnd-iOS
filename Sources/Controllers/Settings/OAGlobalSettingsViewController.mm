@@ -240,10 +240,10 @@
                 kCellIconNameKey : @"ic_custom_search",
                 kCellIconTint : @(searchHistory ? color_primary_purple : color_tint_gray),
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
-                kCellAccessoryType : @(UITableViewCellAccessoryDisclosureIndicator),
                 @"value" : searchHistory
-                    ? [NSString stringWithFormat:@"%lu", [self.class getSearchHistoryResults].count]
-                    : OALocalizedString(@"shared_string_off"),
+                ? [NSString stringWithFormat:@"%lu", [historyHelper getPointsCountHavingTypes:historyHelper.searchTypes]]
+                : OALocalizedString(@"shared_string_off"),
+                kCellAccessoryType : @(UITableViewCellAccessoryDisclosureIndicator),
             }];
             [historySection addRowFromDictionary:@{
                 kCellKeyKey : @"navigation_history",
@@ -262,10 +262,10 @@
                 kCellIconNameKey : @"ic_custom_marker",
                 kCellIconTint : @(mapMarkersHistory ? color_primary_purple : color_tint_gray),
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
-                kCellAccessoryType : @(UITableViewCellAccessoryDisclosureIndicator),
                 @"value" : mapMarkersHistory
-                    ? [NSString stringWithFormat:@"%lu", [historyHelper getPointsHavingTypes:historyHelper.destinationTypes limit:0].count]
-                    : OALocalizedString(@"shared_string_off"),
+                    ? [NSString stringWithFormat:@"%lu", [historyHelper getPointsCountHavingTypes:historyHelper.destinationTypes]]
+                : OALocalizedString(@"shared_string_off"),
+                kCellAccessoryType : @(UITableViewCellAccessoryDisclosureIndicator)
             }];
 
             OATableSectionData *actionsSection = [_data createNewSection];
@@ -618,7 +618,8 @@
 
 - (NSInteger)calculateNavigationItemsCount
 {
-    NSInteger count = [self.class getNavigationHistoryResults].count;
+    OAHistoryHelper *historyHelper = OAHistoryHelper.sharedInstance;
+    NSInteger count = [historyHelper getPointsCountHavingTypes:historyHelper.searchTypes];
     if ([[OATargetPointsHelper sharedInstance] isBackupPointsAvailable])
     {
         // Take "Previous Route" item into account during calculations

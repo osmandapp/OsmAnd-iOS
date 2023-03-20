@@ -85,6 +85,11 @@
     return [_db getPointsHavingTypes:types limit:limit];
 }
 
+- (NSInteger) getPointsCountHavingTypes:(NSArray<NSNumber *> *)types
+{
+    return [_db getPointsCountHavingTypes:types];
+}
+
 - (OAHistoryItem *)getPointByName:(NSString *)name
 {
     return [_db getPointByName:name];

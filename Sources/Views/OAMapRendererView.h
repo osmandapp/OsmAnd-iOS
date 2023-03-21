@@ -147,5 +147,7 @@ struct CLLocationCoordinate2D;
 - (float)getCameraHeightInMeters;
 - (float)getTargetDistanceInMeters;
 
+- (void) cancelAllAnimations;
+
 
 @end

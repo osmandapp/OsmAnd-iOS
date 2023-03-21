@@ -254,10 +254,13 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
+    _mapPanelViewController = [OARootViewController instance].mapPanel;
+    [_mapPanelViewController.mapViewController.mapView setAzimuth:0.0];
+    [_mapPanelViewController.mapViewController.mapView cancelAllAnimations];
+    
     _app.mapMode = OAMapModeFree;
     _settings = [OAAppSettings sharedManager];
     _routingHelper = [OARoutingHelper sharedInstance];
-    _mapPanelViewController = [OARootViewController instance].mapPanel;
     
     _mapSourceUpdatedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapSourceUpdated)
@@ -377,7 +380,10 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     [super viewDidAppear:animated];
     [_mapPanelViewController.hudViewController hideTopControls];
     [_mapPanelViewController.hudViewController updateMapRulerDataWithDelay];
-    [self refreshPreviewLayer];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self refreshPreviewLayer];
+    });
+    
     [self checkColoringAvailability];
     BOOL isAvailable = [_selectedType.coloringType isAvailableInSubscription];
     if (!isAvailable && _colorValuesCell)

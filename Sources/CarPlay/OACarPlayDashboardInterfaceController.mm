@@ -110,8 +110,11 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (void) onTripStartTriggered
 {
-    CPRouteChoice *routeChoice = [[CPRouteChoice alloc] initWithSummaryVariants:@[] additionalInformationVariants:@[] selectionSummaryVariants:@[]];
-    [self mapTemplate:_mapTemplate startedTrip:_currentTrip usingRouteChoice:routeChoice];
+    if (_isInRoutePreview)
+    {
+        CPRouteChoice *routeChoice = [[CPRouteChoice alloc] initWithSummaryVariants:@[] additionalInformationVariants:@[] selectionSummaryVariants:@[]];
+        [self mapTemplate:_mapTemplate startedTrip:_currentTrip usingRouteChoice:routeChoice];
+    }
 }
 
 - (void) enterBrowsingState

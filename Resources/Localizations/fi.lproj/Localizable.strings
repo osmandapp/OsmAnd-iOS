@@ -107,7 +107,7 @@
 "rotate_map_to_bearing_descr" = "Valitse karttaruudun suunta.";
 "rotate_map_compass_opt" = "Kompassi";
 "rotate_map_bearing_opt" = "Liikkumissuunta";
-"rotate_map_none_fixed" = "Älä käännä (pohjoinen on ylhäällä)";
+"rotate_map_north_opt" = "Älä käännä (pohjoinen on ylhäällä)";
 "driving_region_descr" = "Valitse liikkumisalue: USA, Eurooppa, UK, Aasia tai muut.";
 "driving_region" = "Liikkumisalue";
 "shared_string_automatic" = "Automaattinen";

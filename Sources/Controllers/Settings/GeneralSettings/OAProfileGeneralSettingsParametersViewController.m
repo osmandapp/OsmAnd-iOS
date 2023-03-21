@@ -143,7 +143,7 @@
         case EOAProfileGeneralSettingsMapOrientation:
             [dataArr addObject:@{
                 @"name" : @"none",
-                @"title" : OALocalizedString(@"rotate_map_none_fixed"),
+                @"title" : OALocalizedString(@"rotate_map_north_opt"),
                 @"selected" : @(rotateMap == ROTATE_MAP_NONE),
                 @"icon" : @"ic_custom_direction_north_day",
                 @"type" : [OASimpleTableViewCell getCellIdentifier],
@@ -164,7 +164,7 @@
             }];
             [dataArr addObject:@{
                @"name" : @"manually",
-               @"title" : OALocalizedString(@"rotate_map_none_manually"),
+               @"title" : OALocalizedString(@"rotate_map_manual_opt"),
                @"selected" : @(rotateMap == ROTATE_MAP_MANUAL),
                @"icon" : @"ic_custom_direction_manual_day",
                @"type" : [OASimpleTableViewCell getCellIdentifier],

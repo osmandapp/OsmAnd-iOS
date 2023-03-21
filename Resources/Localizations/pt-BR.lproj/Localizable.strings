@@ -703,7 +703,7 @@
 "rotate_map_to_bearing_descr" = "Selecione o alinhamento do ecrã do mapa.";
 "rotate_map_compass_opt" = "Direção da bússola";
 "rotate_map_bearing_opt" = "Direção do movimento";
-"rotate_map_none_fixed" = "Sem rotação (norte sempre para cima)";
+"rotate_map_north_opt" = "Sem rotação (norte sempre para cima)";
 "driving_region_descr" = "Selecionar a região de condução: EUA, Europa, Reino Unido, Ásia e outros.";
 "logging_interval_navigation_descr" = "Escolha o intervalo de registo para a gravação do percurso durante a navegação";
 "monitoring_min_distance" = "Deslocamento mínimo";
@@ -2825,9 +2825,9 @@
 "enable_search_history" = "Você pode ativar o histórico de pesquisa em Configurações";
 "confirm_history_item_delete" = "Tem certeza de que deseja excluir (%ld) itens do histórico?";
 "search_favorites" = "Pesquisar favoritos";
-"rotate_map_none_manually" = "Rotação manual (fixa)";
+"rotate_map_manual_opt" = "Rotação manual (fixa)";
 "compass_click_desc" = "Toque na bússola para alternar o modo de orientação do mapa.";
-"rotate_map_none_fixed" = "O norte está para cima (fixo)";
+"rotate_map_north_opt" = "O norte está para cima (fixo)";
 "map_widget_camera_distance" = "Distância da câmera";
 "map_widget_zoom_level" = "Nível de zoom";
 "map_widget_target_distance" = "Distância alvo";

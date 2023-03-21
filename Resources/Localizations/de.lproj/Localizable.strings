@@ -670,7 +670,7 @@
 "rotate_map_to_bearing_descr" = "Art der Kartenausrichtung wählen.";
 "rotate_map_compass_opt" = "Kompassrichtung";
 "rotate_map_bearing_opt" = "Bewegungsrichtung";
-"rotate_map_none_fixed" = "Keine Rotation (Norden ist oben)";
+"rotate_map_north_opt" = "Keine Rotation (Norden ist oben)";
 "driving_region_descr" = "Verkehrsregion wählen: USA, Europa, GB, Asien u. a.";
 "shared_string_automatic" = "Automatisch";
 "map_widget_magnetic_bearing" = "Magnetische Peilung";
@@ -2840,8 +2840,8 @@
 "free_downloads" = "Kostenlose Downloads";
 "search_favorites" = "Favoriten suchen";
 "compass_click_desc" = "Tippen Sie auf den Kompass, um den Kartenausrichtungsmodus zu wechseln.";
-"rotate_map_none_fixed" = "Norden ist oben (feststehend)";
-"rotate_map_none_manually" = "Manuell gedreht (feststehend)";
+"rotate_map_north_opt" = "Norden ist oben (feststehend)";
+"rotate_map_manual_opt" = "Manuell gedreht (feststehend)";
 "map_widget_camera_tilt" = "Kameraneigung";
 "map_widget_camera_distance" = "Kameraabstand";
 "map_widget_target_distance" = "Zielentfernung";

@@ -513,7 +513,7 @@
 "rotate_map_to_bearing_descr" = "Izbor poravnave zaslona zemljevida.";
 "rotate_map_compass_opt" = "– obračanje zemljevida po kompasu";
 "rotate_map_bearing_opt" = "– obračanje zemljevida glede na smer premikanja";
-"rotate_map_none_fixed" = "- brez obračanja zemljevida (sever je vedno zgoraj)";
+"rotate_map_north_opt" = "- brez obračanja zemljevida (sever je vedno zgoraj)";
 "shared_string_automatic" = "Samodejno";
 "map_widget_transparent" = "Prosojni gradniki";
 "shared_string_near" = "V bližini";

@@ -500,7 +500,7 @@
 "rotate_map_to" = "Orientacja mapy";
 "rotate_map_compass_opt" = "Względem kompasu";
 "rotate_map_bearing_opt" = "Względem kierunku ruchu";
-"rotate_map_none_fixed" = "Bez obracania (północ na górze)";
+"rotate_map_north_opt" = "Bez obracania (północ na górze)";
 "driving_region_descr" = "Wybierz region jazdy: USA, Europa, Wielka Brytania, Azja i inne.";
 "shared_string_automatic" = "Automatyczny";
 "map_widget_magnetic_bearing" = "Orientacja magnetyczna";

@@ -110,7 +110,7 @@
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "Pēc kompasa";
 "rotate_map_bearing_opt" = "Kustības virzienā";
-"rotate_map_none_fixed" = "Do not rotate (north is up)";
+"rotate_map_north_opt" = "Do not rotate (north is up)";
 "driving_region_descr" = "Izvēlieties braukšanas apgabalu: ASV, Eiropa, Apvienotā Karaliste, Āzija un citi";
 "driving_region" = "Apgabals";
 "shared_string_automatic" = "Automātiski";

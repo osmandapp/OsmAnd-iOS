@@ -139,7 +139,7 @@
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "Nasoka na kompas";
 "rotate_map_bearing_opt" = "Nasoka na dviženje";
-"rotate_map_none_fixed" = "Do not rotate (north is up)";
+"rotate_map_north_opt" = "Do not rotate (north is up)";
 "driving_region_descr" = "Izberete region za vozenje: SAD, Evropa, UK, Azija i drugi.";
 "driving_region" = "Vozen region";
 "shared_string_automatic" = "Automatik";

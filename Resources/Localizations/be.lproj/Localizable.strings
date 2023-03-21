@@ -641,7 +641,7 @@
 "unit_of_length_descr" = "Змяніць адзінкі вымярэння адлегласці.";
 "rotate_map_compass_opt" = "У напрамку компаса";
 "rotate_map_bearing_opt" = "У напрамку руху";
-"rotate_map_none_fixed" = "Не паварочваць (поўнач уверсе)";
+"rotate_map_north_opt" = "Не паварочваць (поўнач уверсе)";
 "shared_string_automatic" = "Аўтаматычна";
 "auto_follow_location_enabled" = "Аўтаматычнае цэнтраванне падчас выкарыстання.";
 "unknown_location" = "Становішча пакуль што не вызначана.";

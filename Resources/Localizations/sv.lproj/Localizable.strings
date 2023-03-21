@@ -110,7 +110,7 @@
 "rotate_map_to_bearing_descr" = "Välj kartskärmens justering.";
 "rotate_map_compass_opt" = "Kompassriktning";
 "rotate_map_bearing_opt" = "Färdriktning";
-"rotate_map_none_fixed" = "Rotera inte (nord är uppåt)";
+"rotate_map_north_opt" = "Rotera inte (nord är uppåt)";
 "driving_region_descr" = "Välj körområde: USA, Europa, UK, Asien och andra.";
 "driving_region" = "Område";
 "shared_string_automatic" = "Automatisk";

@@ -110,7 +110,7 @@
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "Ipar-orratzaren norabidean";
 "rotate_map_bearing_opt" = "Mugimenduaren norabidea";
-"rotate_map_none_fixed" = "Do not rotate (north is up)";
+"rotate_map_north_opt" = "Do not rotate (north is up)";
 "driving_region_descr" = "Aukeratu gidatze eremua: EEBB, Europa, EB, Asia, edo bestelakoak.";
 "driving_region" = "Gidatze eremua";
 "shared_string_automatic" = "Automatikoa";

@@ -125,7 +125,7 @@
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "Կողմնացույցի ուղղությամբ";
 "rotate_map_bearing_opt" = "Շարժման ուղղությամբ";
-"rotate_map_none_fixed" = "Do not rotate (north is up)";
+"rotate_map_north_opt" = "Do not rotate (north is up)";
 "driving_region_descr" = "Ընտրեք վարելու տարածաշրջանը՝ ԱՄՆ, Եվրոպա, Մեծ Բրիտանիա, Ասիա և այլն։";
 "driving_region" = "Վարելու տարածաշրջանը";
 "shared_string_automatic" = "Ավտոմատ";

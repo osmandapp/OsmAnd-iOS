@@ -676,7 +676,7 @@
 "rotate_map_to_bearing_descr" = "Виберіть спосіб обертання мапи.";
 "rotate_map_compass_opt" = "За компасом";
 "rotate_map_bearing_opt" = "За напрямком руху";
-"rotate_map_none_fixed" = "Не обертати (північ угорі)";
+"rotate_map_north_opt" = "Не обертати (північ угорі)";
 "driving_region_descr" = "Виберіть регіон: США, Європа, Англія, Азія та інші.";
 "shared_string_automatic" = "Автоматично";
 "map_widget_magnetic_bearing" = "Магнітний компас";
@@ -2834,9 +2834,9 @@
 "enable_search_history" = "Ви можете ввімкнути історію пошуку в налаштуваннях";
 "confirm_history_item_delete" = "Ви впевнені, що хочете видалити (%ld) елементи історії?";
 "search_favorites" = "Пошук у закладках";
-"rotate_map_none_manually" = "Фіксовано (обертається вручну)";
+"rotate_map_manual_opt" = "Фіксовано (обертається вручну)";
 "compass_click_desc" = "Торкніться компаса, щоб перемикнути режим орієнтації мапи.";
-"rotate_map_none_fixed" = "Фіксовано (північ угорі)";
+"rotate_map_north_opt" = "Фіксовано (північ угорі)";
 "map_widget_zoom_level" = "Масштаб";
 "map_widget_target_distance" = "Відстань до цілі";
 "wikivoyage_download_pics" = "Завантажити зображення";

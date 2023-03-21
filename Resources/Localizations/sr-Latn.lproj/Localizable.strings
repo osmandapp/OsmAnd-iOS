@@ -111,7 +111,7 @@
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "Pravac kompasa";
 "rotate_map_bearing_opt" = "U smeru kretanja";
-"rotate_map_none_fixed" = "Do not rotate (north is up)";
+"rotate_map_north_opt" = "Do not rotate (north is up)";
 "driving_region_descr" = "Odaberite region vožnje: SAD, Evropa, Ujedinjeno Kraljevstvo, Azija i ostalo.";
 "driving_region" = "Oblast vožnje";
 "shared_string_automatic" = "Automatsko";

@@ -30,7 +30,7 @@
 "rotate_map_to_bearing_descr" = "نحوهٔ چرخش نقشه را انتخاب کنید.";
 "rotate_map_compass_opt" = "در جهت قطب‌نما";
 "rotate_map_bearing_opt" = "در جهت حرکت";
-"rotate_map_none_fixed" = "بدون چرخش (بالا به‌طرف شمال است)";
+"rotate_map_north_opt" = "بدون چرخش (بالا به‌طرف شمال است)";
 "driving_region_descr" = "منطقهٔ رانندگی را انتخاب کنید: آمریکا، اروپا، انگلستان، آسیا و سایر مناطق.";
 "driving_region" = "منطقهٔ رانندگی";
 "shared_string_automatic" = "خودکار";

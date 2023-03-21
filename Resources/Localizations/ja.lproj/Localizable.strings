@@ -99,7 +99,7 @@
 "rotate_map_to_bearing_descr" = "マップ画面の向きを選択します。";
 "rotate_map_compass_opt" = "コンパスに従う";
 "rotate_map_bearing_opt" = "移動方向に従う";
-"rotate_map_none_fixed" = "回転しない (北が上)";
+"rotate_map_north_opt" = "回転しない (北が上)";
 "driving_region_descr" = "運転する地域を選択します:アメリカ、ヨーロッパ、イギリス、アジア、その他";
 "driving_region" = "運転地域";
 "shared_string_automatic" = "自動判別";

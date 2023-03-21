@@ -714,9 +714,9 @@
 
 - (void) onRotateMapModeChanged
 {
-    NSString *rotMode = OALocalizedString(@"rotate_map_none_fixed");
+    NSString *rotMode = OALocalizedString(@"rotate_map_north_opt");
     if ([_settings.rotateMap get] == ROTATE_MAP_MANUAL)
-        rotMode = OALocalizedString(@"rotate_map_none_manually");
+        rotMode = OALocalizedString(@"rotate_map_manual_opt");
     else if ([_settings.rotateMap get] == ROTATE_MAP_BEARING)
         rotMode = OALocalizedString(@"rotate_map_bearing_opt");
     else if ([_settings.rotateMap get] == ROTATE_MAP_COMPASS)
@@ -755,7 +755,7 @@
     if ([_settings.rotateMap get] == ROTATE_MAP_NONE)
     {
         [_settings.rotateMap set:ROTATE_MAP_MANUAL];
-        [OAUtilities showToast:nil details:[NSString stringWithFormat:@"%@: %@", OALocalizedString(@"rotate_map_to"), OALocalizedString(@"rotate_map_none_manually")] duration:4 inView:OARootViewController.instance.view];
+        [OAUtilities showToast:nil details:[NSString stringWithFormat:@"%@: %@", OALocalizedString(@"rotate_map_to"), OALocalizedString(@"rotate_map_manual_opt")] duration:4 inView:OARootViewController.instance.view];
     }
 }
 

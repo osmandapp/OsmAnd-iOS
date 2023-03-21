@@ -885,7 +885,7 @@
 "shared_string_min_speed" = "Ελαχ. ταχύτητα";
 "default_speed_setting_title" = "Προεπιλεγμένη ταχύτητα";
 "driving_region_descr" = "Επιλέξτε περιοχή οδήγησης: ΗΠΑ, Ευρώπη, ΗΒ, Ασία κλπ.";
-"rotate_map_none_fixed" = "Να μην περιστρέφετε (ο βορράς είναι επάνω)";
+"rotate_map_north_opt" = "Να μην περιστρέφετε (ο βορράς είναι επάνω)";
 "rotate_map_bearing_opt" = "Κατεύθυνση κίνησης";
 "rotate_map_compass_opt" = "Κατεύθυνση πυξίδας";
 "rotate_map_to_bearing_descr" = "Επιλέξτε την ευθυγράμμιση της οθόνης του χάρτη.";

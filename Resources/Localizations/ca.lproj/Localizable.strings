@@ -686,7 +686,7 @@
 "save_global_track_interval_descr" = "Trieu l\'interval d\'enregistrament general dels desplaçaments (s\'activa mitjançant el giny del mapa \'Enregistrament de ruta\').";
 "rotate_map_compass_opt" = "Orientació de la brúixola";
 "rotate_map_bearing_opt" = "Direcció del moviment";
-"rotate_map_none_fixed" = "No giris el mapa (el nord és dalt)";
+"rotate_map_north_opt" = "No giris el mapa (el nord és dalt)";
 "driving_region_descr" = "Seleccioneu la regió de conducció: EUA, Europa, Regne Unit, Àsia i altres.";
 "shared_string_automatic" = "Automàtic";
 "auto_follow_location_enabled" = "S\'està utilitzant la visualització del mapa centrada automàticament.";

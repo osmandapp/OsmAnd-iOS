@@ -673,7 +673,7 @@
 "shared_string_near" = "Blízko";
 "rotate_map_compass_opt" = "Smer kompasu";
 "rotate_map_bearing_opt" = "Smer pohybu";
-"rotate_map_none_fixed" = "Neotáčať (sever je hore)";
+"rotate_map_north_opt" = "Neotáčať (sever je hore)";
 "driving_region_descr" = "Vyberte jazdnú oblasť: USA, Európa, Spojené kráľovstvo, Ázia a ostatné.";
 "shared_string_automatic" = "Automaticky";
 "auto_follow_location_enabled" = "Automatické nasledovanie je povolené.";

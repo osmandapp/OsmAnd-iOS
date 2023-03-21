@@ -63,7 +63,7 @@
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "Dirección do compás";
 "rotate_map_bearing_opt" = "Dirección do movemento";
-"rotate_map_none_fixed" = "Do not rotate (north is up)";
+"rotate_map_north_opt" = "Do not rotate (north is up)";
 "driving_region_descr" = "Escoller a rexión de condución: Estados Unidos, Europa, Reino Unido, Asia e outras.";
 "driving_region" = "Rexión na que conducir";
 "shared_string_automatic" = "Automático";

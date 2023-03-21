@@ -91,7 +91,7 @@ static NSInteger SEQ = 0;
 
 - (NSString *) getName
 {
-    if (_name.length == 0)
+    if (_name.length == 0 || !self.isActionEditable)
         return [self getDefaultName];
     else
         return _name;

@@ -198,5 +198,7 @@
 - (void)setWikipediaLanguages:(NSArray<NSString *> *)languages;
 - (void)setWikipediaLanguages:(NSArray<NSString *> *)languages mode:(OAApplicationMode *)mode;
 
+- (OADownloadMode *)getWikipediaImagesDownloadMode:(OAApplicationMode *)mode;
+- (void)setWikipediaImagesDownloadMode:(OADownloadMode *)downloadMode mode:(OAApplicationMode *)mode;
 
 @end

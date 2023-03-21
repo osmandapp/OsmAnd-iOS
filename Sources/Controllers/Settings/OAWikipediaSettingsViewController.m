@@ -8,12 +8,14 @@
 
 #import "OAWikipediaSettingsViewController.h"
 #import "OAWikipediaLanguagesViewController.h"
+#import "OAWikipediaImagesSettingsViewController.h"
 #import "OAValueTableViewCell.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
 #import "OAWikipediaPlugin.h"
 #import "OAApplicationMode.h"
+#import "OsmAndApp.h"
 #import "OAColors.h"
 #import "Localization.h"
 
@@ -23,6 +25,7 @@
 
 @implementation OAWikipediaSettingsViewController
 {
+    OsmAndAppInstance _app;
     OATableDataModel *_data;
     OAWikipediaPlugin *_wikiPlugin;
     NSIndexPath *_selectedIndexPath;
@@ -32,6 +35,7 @@
 
 - (void)commonInit
 {
+    _app = [OsmAndApp instance];
     _wikiPlugin = (OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class];
 }
 
@@ -71,13 +75,22 @@
     languageItem.title = OALocalizedString(@"shared_string_language");
     languageItem.iconName = @"ic_custom_map_languge";
     [self generateValueForItem:languageItem];
+
+    OATableRowData *imagesItem = [languageSection createNewRow];
+    imagesItem.key = @"images";
+    imagesItem.cellType = [OAValueTableViewCell getCellIdentifier];
+    imagesItem.title = OALocalizedString(@"wikivoyage_download_pics");
+    imagesItem.iconName = [_app.data getWikipediaImagesDownloadMode:self.appMode].iconName;
+    [self generateValueForItem:imagesItem];
 }
 
 - (void)generateValueForItem:(OATableRowData *)item
 {
     NSString *value = @"";
     if ([item.key isEqualToString:@"language"])
-        value = [_wikiPlugin getLanguagesSummary];
+        value = [_wikiPlugin getLanguagesSummary:self.appMode];
+    else if ([item.key isEqualToString:@"images"])
+        value = [_app.data getWikipediaImagesDownloadMode:self.appMode].title;
     [item setObj:value forKey:@"value"];
 }
 
@@ -128,15 +141,21 @@
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     if ([item.key isEqualToString:@"language"])
     {
-        OAWikipediaLanguagesViewController *controller = [[OAWikipediaLanguagesViewController alloc] init];
-        controller.delegate = self;
+        OAWikipediaLanguagesViewController *controller = [[OAWikipediaLanguagesViewController alloc] initWithAppMode:self.appMode];
+        controller.wikipediaDelegate = self;
+        [self showModalViewController:controller];
+    }
+    if ([item.key isEqualToString:@"images"])
+    {
+        OAWikipediaImagesSettingsViewController *controller = [[OAWikipediaImagesSettingsViewController alloc] initWithAppMode:self.appMode];
+        controller.wikipediaDelegate = self;
         [self showModalViewController:controller];
     }
 }
 
 #pragma mark - OAWikipediaScreenDelegate
 
-- (void)updateSelectedLanguage
+- (void)updateWikipediaSettings
 {
     if (_selectedIndexPath)
     {

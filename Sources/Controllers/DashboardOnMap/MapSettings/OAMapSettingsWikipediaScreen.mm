@@ -68,7 +68,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
         tblView = tableView;
         _wikiPlugin = (OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class];
         _dataLock = [[NSObject alloc] init];
-        _wikipediaEnabled = [[OAPOIFiltersHelper sharedInstance] isPoiFilterSelectedByFilterId:[OAPOIFiltersHelper getTopWikiPoiFilterId]];
+        _wikipediaEnabled = _app.data.wikipedia;
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
         [self commonInit];
         [self initData];
@@ -180,7 +180,8 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     if ([sender isKindOfClass:[UISwitch class]])
     {
         UISwitch *sw = (UISwitch *) sender;
-        [_app.data setWikipedia:_wikipediaEnabled = sw.on];
+        [(OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class] wikipediaChanged:sw.isOn];
+        _wikipediaEnabled = _app.data.wikipedia;
         [self updateAvailableMaps];
     }
 }
@@ -441,8 +442,8 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     NSDictionary *item = [self getItem:indexPath];
     if (indexPath.section == EOAMapSettingsWikipediaSectionLanguages && [item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        OAWikipediaLanguagesViewController *controller = [[OAWikipediaLanguagesViewController alloc] init];
-        controller.delegate = self;
+        OAWikipediaLanguagesViewController *controller = [[OAWikipediaLanguagesViewController alloc] initWithAppMode:[[OAAppSettings sharedManager].applicationMode get]];
+        controller.wikipediaDelegate = self;
         [self.vwController showModalViewController:controller];
     }
     else if (indexPath.section == EOAMapSettingsWikipediaSectionAvailable && [item[@"type"] isEqualToString:kCellTypeMap])
@@ -582,7 +583,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 
 #pragma mark - OAWikipediaScreenDelegate
 
-- (void)updateSelectedLanguage
+- (void)updateWikipediaSettings
 {
     [self.tblView beginUpdates];
     [self.tblView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsWikipediaSectionLanguages] withRowAnimation:UITableViewRowAnimationFade];

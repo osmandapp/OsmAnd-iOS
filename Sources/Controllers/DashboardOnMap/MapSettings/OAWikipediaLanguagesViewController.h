@@ -6,7 +6,7 @@
 //  Copyright (c) 2021 OsmAnd. All rights reserved.
 //
 
-#import "OABaseNavbarViewController.h"
+#import "OABaseSettingsViewController.h"
 
 @class OAWikiLanguageItem;
 
@@ -14,7 +14,7 @@
 
 @required
 
-- (void)updateSelectedLanguage;
+- (void)updateWikipediaSettings;
 
 @end
 
@@ -30,8 +30,8 @@
 
 @end
 
-@interface OAWikipediaLanguagesViewController : OABaseNavbarViewController
+@interface OAWikipediaLanguagesViewController : OABaseSettingsViewController
 
-@property (nonatomic) id<OAWikipediaScreenDelegate> delegate;
+@property (nonatomic) id<OAWikipediaScreenDelegate> wikipediaDelegate;
 
 @end

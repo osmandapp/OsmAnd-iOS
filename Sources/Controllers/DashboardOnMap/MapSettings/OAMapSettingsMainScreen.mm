@@ -28,6 +28,7 @@
 #import "OAPOIHelper.h"
 #import "OASizes.h"
 #import "OAColors.h"
+#import "OAWikipediaPlugin.h"
 #import "OAWeatherPlugin.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
@@ -1101,7 +1102,7 @@
     else if ([item[@"key"] isEqualToString:@"show_borders_of_downloaded_maps"])
         [_settings setShowBordersOfDownloadedMaps:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"wikipedia_layer"])
-        [_app.data setWikipedia:switchView.isOn];
+        [self wikipediaChanged:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"osm_edits_offline_layer"])
         [_settings setShowOfflineEdits:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"osm_notes_online_layer"])
@@ -1237,6 +1238,11 @@
         [_styleSettings save:hidePolygonsParameter];
         _app.data.underlayMapSource = nil;
     }
+}
+
+- (void)wikipediaChanged:(BOOL)isOn
+{
+    [(OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class] wikipediaChanged:isOn];
 }
 
 - (void)weatherChanged:(BOOL)isOn

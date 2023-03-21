@@ -962,6 +962,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (_app.carPlayActive)
     {
         [NSNotificationCenter.defaultCenter postNotificationName:kCarPlayTripStartedNotification object:nil];
+        [[OARootViewController instance].mapPanel closeRouteInfo:YES
+                                                      onComplete:nil];
     }
     else
     {

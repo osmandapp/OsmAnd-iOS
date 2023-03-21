@@ -633,6 +633,8 @@
 "zoom_levels_difference_description" = "The big difference between zoom levels can increase the size of the downloaded data.";
 "use_of_downloaded_map" = "You can now use this map offline as main map source or as overlay/underlay layer";
 "map_update_warning" = "Do you want to reload tile data from the Internet?";
+"without_permission_my_position_value" = "OsmAnd doesn't have location permission";
+"with_permission_my_position_value" = "Move map to current location";
 
 // HUD
 "hud_heading" = "Heading";

@@ -430,6 +430,11 @@
     _renderer->setVisualZoomShift(shift - 1.0);
 }
 
+- (void) cancelAllAnimations
+{
+    _mapAnimator->cancelAllAnimations();
+}
+
 - (QVector<OsmAnd::TileId>)visibleTiles
 {
     return std::dynamic_pointer_cast<OsmAnd::IAtlasMapRenderer>(_renderer)->getVisibleTiles();

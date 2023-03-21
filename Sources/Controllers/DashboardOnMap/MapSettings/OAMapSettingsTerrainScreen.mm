@@ -11,13 +11,15 @@
 #import "OAMapStyleSettings.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
+#import "OARightIconTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAValueTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
 #import "OATitleSliderTableViewCell.h"
 #import "OASegmentTableViewCell.h"
-#import "OATitleRightIconCell.h"
-#import "OAImageDescTableViewCell.h"
 #import "OAImageTextViewCell.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
@@ -30,48 +32,37 @@
 #import "OAManageResourcesViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OALinks.h"
+#import "OASizes.h"
+#import <SafariServices/SafariServices.h>
 
 #define kMinAllowedZoom 1
 #define kMaxAllowedZoom 22
-
 #define kMaxMissingDataZoomShift 5
-
-#define kCellTypeSwitch @"switchCell"
-#define kCellTypeValue @"valueCell"
-#define kCellTypePicker @"pickerCell"
-#define kCellTypeSlider @"sliderCell"
-#define kCellTypeMap @"mapCell"
-#define kCellTypeSegment @"segmentCell"
-#define kCellTypeButton @"buttonIconCell"
-
-#define kZoomSection 2
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
-@interface OAMapSettingsTerrainScreen() <OACustomPickerTableViewCellDelegate>
+@interface OAMapSettingsTerrainScreen() <OACustomPickerTableViewCellDelegate, SFSafariViewControllerDelegate, UITextViewDelegate>
 
 @end
 
 @implementation OAMapSettingsTerrainScreen
 {
     OsmAndAppInstance _app;
-    OAMapStyleSettings *_styleSettings;
     OAIAPHelper *_iapHelper;
-    
-    NSArray<NSArray *> *_dataDisabled;
-    NSArray<NSArray *> *_data;
-    NSArray* _sectionHeaderFooterTitles;
+
+    OATableDataModel *_data;
+    NSIndexPath *_minValueIndexPath;
+    NSIndexPath *_maxValueIndexPath;
     NSIndexPath *_pickerIndexPath;
-    
-    NSInteger _minZoomHillshade;
-    NSInteger _maxZoomHillshade;
-    NSInteger _minZoomSlope;
-    NSInteger _maxZoomSlope;
+    NSInteger _availableMapsSection;
+
+    NSInteger _minZoom;
+    NSInteger _maxZoom;
     NSArray<NSString *> *_possibleZoomValues;
-    
+
     NSObject *_dataLock;
     NSArray<OARepositoryResourceItem *> *_mapItems;
-    
+
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
     OAAutoObserverProxy* _localResourcesChangedObserver;
@@ -97,7 +88,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         _dataLock = [[NSObject alloc] init];
         
         [self setupView];
-        [self generateData];
+        [self initData];
     }
     return self;
 }
@@ -121,138 +112,138 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-- (void) generateData
+- (void) initData
 {
+    _data = [OATableDataModel model];
+
     EOATerrainType type = _app.data.terrainType;
-    switch (type) {
-        case EOATerrainTypeHillshade:
+    _minZoom = type == EOATerrainTypeHillshade ? _app.data.hillshadeMinZoom : _app.data.slopeMinZoom;
+    _maxZoom = type == EOATerrainTypeHillshade ? _app.data.hillshadeMaxZoom : _app.data.slopeMaxZoom;
+
+    OATableSectionData *switchSection = [_data createNewSection];
+    [switchSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        @"value" : @(type != EOATerrainTypeDisabled)
+    }];
+
+    if (type == EOATerrainTypeDisabled)
+    {
+        OATableSectionData *disabledSection = [_data createNewSection];
+        [disabledSection addRowFromDictionary:@{
+            kCellKeyKey : @"disabledImage",
+            kCellTypeKey : [OAImageTextViewCell getCellIdentifier],
+            kCellDescrKey : OALocalizedString(@"enable_hillshade"),
+            kCellIconNameKey : @"img_empty_state_terrain"
+        }];
+        [disabledSection addRowFromDictionary:@{
+            kCellKeyKey : @"readMore",
+            kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
+            kCellTitleKey : OALocalizedString(@"shared_string_read_more"),
+            kCellIconNameKey : @"ic_custom_safari",
+            @"link" : kOsmAndFeaturesContourLinesPlugin
+        }];
+    }
+    else
+    {
+        switchSection.footerText = type == EOATerrainTypeHillshade
+            ? OALocalizedString(@"map_settings_hillshade_description")
+            : OALocalizedString(@"map_settings_slopes_description");
+
+        [switchSection addRowFromDictionary:@{
+            kCellTypeKey : [OASegmentTableViewCell getCellIdentifier],
+            @"title0" : OALocalizedString(@"shared_string_hillshade"),
+            @"title1" : OALocalizedString(@"shared_string_slope")
+        }];
+
+        OATableSectionData *transparencySection = [_data createNewSection];
+        [transparencySection addRowFromDictionary:@{
+            kCellTypeKey : [OATitleSliderTableViewCell getCellIdentifier],
+            kCellTitleKey : OALocalizedString(@"map_settings_layer_transparency")
+        }];
+
+        OATableSectionData *zoomSection = [_data createNewSection];
+        zoomSection.headerText = OALocalizedString(@"shared_string_zoom_levels");
+        zoomSection.footerText = OALocalizedString(@"map_settings_zoom_level_description");
+        [zoomSection addRowFromDictionary:@{
+            kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+            kCellTitleKey: OALocalizedString(@"rec_interval_minimum"),
+            @"value" : @(_minZoom)
+        }];
+        _minValueIndexPath = [NSIndexPath indexPathForRow:[_data rowCount:[_data sectionCount] - 1] - 1 inSection:[_data sectionCount] - 1];
+        if (_pickerIndexPath && _pickerIndexPath.row == _minValueIndexPath.row + 1)
+            [zoomSection addRowFromDictionary:@{ kCellTypeKey : [OACustomPickerTableViewCell getCellIdentifier] }];
+
+        [zoomSection addRowFromDictionary:@{
+            kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+            kCellTitleKey : OALocalizedString(@"shared_string_maximum"),
+            @"value" : @(_maxZoom)
+        }];
+        _maxValueIndexPath = [NSIndexPath indexPathForRow:[_data rowCount:[_data sectionCount] - 1] - 1 inSection:[_data sectionCount] - 1];
+        if (_pickerIndexPath && _pickerIndexPath.row == _maxValueIndexPath.row + 1)
+            [zoomSection addRowFromDictionary:@{ kCellTypeKey : [OACustomPickerTableViewCell getCellIdentifier] }];
+
+        if (_app.data.terrainType == EOATerrainTypeSlope)
         {
-            _minZoomHillshade = _app.data.hillshadeMinZoom;
-            _maxZoomHillshade = _app.data.hillshadeMaxZoom;
-            break;
+            OATableSectionData *slopeLegendSection = [_data createNewSection];
+            slopeLegendSection.headerText = OALocalizedString(@"shared_string_legend");
+            [slopeLegendSection addRowFromDictionary:@{
+                kCellTypeKey : [OAImageTextViewCell getCellIdentifier],
+                kCellDescrKey : OALocalizedString(@"map_settings_slopes_legend"),
+                kCellIconNameKey : @"img_legend_slope",
+                @"link" : kUrlWikipediaSlope
+            }];
         }
-        case EOATerrainTypeSlope:
+
+        if (_mapItems.count > 0)
         {
-            _minZoomSlope = _app.data.slopeMinZoom;
-            _maxZoomSlope = _app.data.slopeMaxZoom;
-            break;
+            OATableSectionData *availableMapsSection = [_data createNewSection];
+            _availableMapsSection = [_data sectionCount] - 1;
+            availableMapsSection.headerText = OALocalizedString(@"available_maps");
+            availableMapsSection.footerText = type == EOATerrainTypeHillshade ? OALocalizedString(@"map_settings_add_maps_hillshade") : OALocalizedString(@"map_settings_add_maps_slopes");
+            for (NSInteger i = 0; i < _mapItems.count; i++)
+            {
+                [availableMapsSection addRowFromDictionary:@{
+                    kCellKeyKey : @"mapItem",
+                    kCellTypeKey : [OARightIconTableViewCell getCellIdentifier]
+                }];
+            }
         }
-        default:
-            break;
+        else
+        {
+            _availableMapsSection = -1;
+        }
     }
-    
-    NSMutableArray *result = [NSMutableArray array];
-    
-    NSMutableArray *switchArr = [NSMutableArray array];
-    [switchArr addObject:@{
-        @"type" : kCellTypeSwitch
-    }];
-    [result addObject:[NSArray arrayWithArray:switchArr]];
-    
-    [self setupDisabledData:result];
-    _dataDisabled = [NSArray arrayWithArray:[NSArray arrayWithArray:result]];
-    [result removeAllObjects];
-    
-    [switchArr addObject:@{
-        @"type" : kCellTypeSegment,
-        @"title0" : OALocalizedString(@"shared_string_hillshade"),
-        @"title1" : OALocalizedString(@"shared_string_slope")
-    }];
-
-    NSMutableArray *transparencyArr = [NSMutableArray array];
-    [transparencyArr addObject:@{
-        @"type" : kCellTypeSlider,
-        @"name" : OALocalizedString(@"map_settings_layer_transparency")
-    }];
-    
-    NSMutableArray *zoomArr = [NSMutableArray new];
-    [zoomArr addObject:@{
-        @"title": OALocalizedString(@"rec_interval_minimum"),
-        @"key" : @"minZoom",
-        @"type" : kCellTypeValue,
-    }];
-    [zoomArr addObject:@{
-        @"title": OALocalizedString(@"shared_string_maximum"),
-        @"key" : @"maxZoom",
-        @"type" : kCellTypeValue,
-    }];
-    [zoomArr addObject:@{
-        @"type" : kCellTypePicker,
-    }];
-    
-    NSMutableArray *slopeLegendArr = [NSMutableArray new];
-    if (_app.data.terrainType == EOATerrainTypeSlope)
-    {
-        [slopeLegendArr addObject:@{
-            @"type" : [OAImageTextViewCell getCellIdentifier],
-            @"descr" : OALocalizedString(@"map_settings_slopes_legend"),
-            @"img" : @"img_legend_slope",
-            @"url" : kUrlWikipediaSlope,
-        }];
-    }
-
-    NSMutableArray *availableMapsArr = [NSMutableArray array];
-    for (OARepositoryResourceItem* item in _mapItems)
-    {
-        [availableMapsArr addObject:@{
-            @"type" : kCellTypeMap,
-            @"item" : item,
-        }];
-    }
-
-    [result addObject:switchArr];
-    [result addObject:transparencyArr];
-    [result addObject:zoomArr];
-    if (slopeLegendArr.count > 0)
-        [result addObject:slopeLegendArr];
-    if (availableMapsArr.count > 0)
-        [result addObject: availableMapsArr];
-
-    _data = [NSArray arrayWithArray:result];
-
-    EOATerrainType terrainType = _app.data.terrainType;
-    NSString *availableSectionFooter =  @"";
-    if (terrainType == EOATerrainTypeHillshade)
-        availableSectionFooter = OALocalizedString(@"map_settings_add_maps_hillshade");
-    else if (terrainType == EOATerrainTypeSlope)
-        availableSectionFooter = OALocalizedString(@"map_settings_add_maps_slopes");
-    NSMutableArray *sectionArr = [NSMutableArray new];
-    [sectionArr addObject:@{}];
-    [sectionArr addObject:@{}];
-    [sectionArr addObject:@{
-        @"header" : OALocalizedString(@"shared_string_zoom_levels"),
-        @"footer" : OALocalizedString(@"map_settings_zoom_level_description")
-    }];
-    if (terrainType == EOATerrainTypeSlope)
-    {
-        [sectionArr addObject:@{
-            @"header" : OALocalizedString(@"shared_string_legend"),
-        }];
-    }
-    
-    [sectionArr addObject:@{
-        @"header" : OALocalizedString(@"available_maps"),
-        @"footer" : availableSectionFooter
-    }];
-    _sectionHeaderFooterTitles = [NSArray arrayWithArray:sectionArr];
 }
 
-- (void) setupDisabledData:(NSMutableArray *)result
+- (void)generateValueForIndexPath:(NSIndexPath *)indexPath
 {
-    NSMutableArray *imageArr = [NSMutableArray array];
-    [imageArr addObject:@{
-        @"type" : [OAImageDescTableViewCell getCellIdentifier],
-        @"desc" : OALocalizedString(@"enable_hillshade"),
-        @"img" : @"img_empty_state_terrain"
-    }];
-    [imageArr addObject:@{
-        @"type" : kCellTypeButton,
-        @"title" : OALocalizedString(@"shared_string_read_more"),
-        @"link" : @"",
-        @"img" : @"ic_custom_safari"
-    }];
-    [result addObject: imageArr];
+    if (indexPath == _minValueIndexPath)
+        [[_data itemForIndexPath:indexPath] setObj:@(_minZoom) forKey:@"value"];
+    else if (indexPath == _maxValueIndexPath)
+        [[_data itemForIndexPath:indexPath] setObj:@(_maxZoom) forKey:@"value"];
 }
+
+- (void)updateAvailableMaps
+{
+    CLLocationCoordinate2D loc = [OAResourcesUIHelper getMapLocation];
+    OsmAnd::ResourcesManager::ResourceType resType = _app.data.terrainType == EOATerrainTypeHillshade ? OsmAndResourceType::HillshadeRegion : OsmAndResourceType::SlopeRegion;
+    _mapItems = [OAResourcesUIHelper findIndexItemsAt:loc
+                                                 type:resType
+                                    includeDownloaded:NO
+                                                limit:-1
+                                  skipIfOneDownloaded:YES];
+
+    [self initData];
+    [UIView transitionWithView:tblView
+                      duration:.35
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^(void)
+                    {
+                        [self.tblView reloadData];
+                    }
+                    completion:nil];
+}
+
 
 - (NSArray<NSString *> *) getPossibleZoomValues
 {
@@ -269,10 +260,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) setupView
 {
     title = OALocalizedString(@"shared_string_terrain");
-
-    tblView.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + 16, 0, 0);
     _possibleZoomValues = [self getPossibleZoomValues];
-    
+
     _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                               withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:)
                                                                andObserve:_app.downloadsManager.progressCompletedObservable];
@@ -282,8 +271,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                withHandler:@selector(onLocalResourcesChanged:withKey:)
                                                                 andObserve:_app.localResourcesChangedObservable];
-    if ([self isTerrainOn])
-        [self updateAvailableMaps];
+    [self updateAvailableMaps];
 }
 
 - (void)onRotation
@@ -292,231 +280,46 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [tblView reloadData];
 }
 
-- (void)initData {
-}
-
-- (void) updateAvailableMaps
-{
-    CLLocationCoordinate2D loc = [OAResourcesUIHelper getMapLocation];
-    OsmAnd::ResourcesManager::ResourceType resType = OsmAnd::ResourcesManager::ResourceType::HillshadeRegion;
-    if (_app.data.terrainType == EOATerrainTypeSlope)
-        resType = OsmAnd::ResourcesManager::ResourceType::SlopeRegion;
-    else if (_app.data.terrainType == EOATerrainTypeHillshade)
-        resType = OsmAnd::ResourcesManager::ResourceType::HillshadeRegion;
-    
-    [OAResourcesUIHelper getMapsForType:resType latLon:loc onComplete:^(NSArray<OARepositoryResourceItem *>* res) {
-        @synchronized(_dataLock)
-        {
-            _mapItems = res;
-            
-            if (![self isTerrainOn])
-                return;
-            
-            BOOL hasDownloads = [_data.lastObject.firstObject[@"type"] isEqualToString:kCellTypeMap];
-            if (_mapItems.count > 0 && !hasDownloads)
-            {
-                [tblView beginUpdates];
-                [tblView insertSections:[[NSIndexSet alloc] initWithIndex:tblView.numberOfSections] withRowAnimation:UITableViewRowAnimationAutomatic];
-                [self generateData];
-                [tblView endUpdates];
-            }
-            else if (hasDownloads)
-            {
-                
-                [self generateData];
-                if (_mapItems.count > 0)
-                    [tblView reloadSections:[[NSIndexSet alloc] initWithIndex:tblView.numberOfSections - 1] withRowAnimation:UITableViewRowAnimationAutomatic];
-                else
-                    [tblView deleteSections:[[NSIndexSet alloc] initWithIndex:tblView.numberOfSections - 1] withRowAnimation:UITableViewRowAnimationAutomatic];
-            }
-        }
-    }];
-}
-
-- (void) linkButtonPressed
-{
-    NSURL *url = [NSURL URLWithString:kOsmAndFeaturesContourLinesPlugin];
-    if ([[UIApplication sharedApplication] canOpenURL:url])
-        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
-}
-
-- (BOOL)pickerIsShown
-{
-    return _pickerIndexPath != nil;
-}
-
-- (void)hideExistingPicker {
-    
-    [tblView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row inSection:_pickerIndexPath.section]]
-                          withRowAnimation:UITableViewRowAnimationFade];
-    _pickerIndexPath = nil;
-}
-
-- (void)hidePicker
-{
-    [tblView beginUpdates];
-    if ([self pickerIsShown])
-        [self hideExistingPicker];
-    [tblView endUpdates];
-}
-
-- (NSIndexPath *)calculateIndexPathForNewPicker:(NSIndexPath *)selectedIndexPath {
-    NSIndexPath *newIndexPath;
-    if (([self pickerIsShown]) && (_pickerIndexPath.row < selectedIndexPath.row))
-        newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row - 1 inSection:kZoomSection];
-    else
-        newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row  inSection:kZoomSection];
-    
-    return newIndexPath;
-}
-
-- (void)showNewPickerAtIndex:(NSIndexPath *)indexPath {
-    
-    NSArray *indexPaths = @[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:kZoomSection]];
-    
-    [tblView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-}
-
-- (NSDictionary *) getItem:(NSIndexPath *)indexPath
-{
-    if ([self isTerrainOn])
-    {
-        if (indexPath.section != kZoomSection)
-        {
-            return _data[indexPath.section][indexPath.row];
-        }
-        else
-        {
-            NSArray *ar = _data[indexPath.section];
-            if ([self pickerIsShown])
-            {
-                if ([indexPath isEqual:_pickerIndexPath])
-                    return ar[2];
-                else if (indexPath.row == 0)
-                    return ar[0];
-                else
-                    return ar[1];
-            }
-            else
-            {
-                if (indexPath.row == 0)
-                    return ar[0];
-                else if (indexPath.row == 1)
-                    return ar[1];
-            }
-        }
-    }
-    else
-    {
-        return _dataDisabled[indexPath.section][indexPath.row];
-    }
-    return nil;
-}
-
-- (NSString *) getSwitchSectionFooter
-{
-    if (_app.data.terrainType == EOATerrainTypeHillshade)
-        return OALocalizedString(@"map_settings_hillshade_description");
-    else if (_app.data.terrainType == EOATerrainTypeSlope)
-        return OALocalizedString(@"map_settings_slopes_description");
-    else
-        return @"";
-}
-
-- (NSInteger) getMinZoom
-{
-    EOATerrainType terrainType = _app.data.terrainType;
-    if (terrainType == EOATerrainTypeHillshade)
-        return _minZoomHillshade;
-    else if (terrainType == EOATerrainTypeSlope)
-        return _minZoomSlope;
-    return 0;
-}
-
-- (NSInteger) getMaxZoom
-{
-    EOATerrainType terrainType = _app.data.terrainType;
-    if (terrainType == EOATerrainTypeHillshade)
-        return _maxZoomHillshade;
-    else if (terrainType == EOATerrainTypeSlope)
-        return _maxZoomSlope;
-    return 0;
-}
-
-- (void) setMinZoom:(NSInteger)zoom
-{
-    EOATerrainType terrainType = _app.data.terrainType;
-    if (terrainType == EOATerrainTypeHillshade)
-        _minZoomHillshade = zoom;
-    else if (terrainType == EOATerrainTypeSlope)
-        _minZoomSlope = zoom;
-}
-
-- (void) setMaxZoom:(NSInteger)zoom
-{
-    EOATerrainType terrainType = _app.data.terrainType;
-    if (terrainType == EOATerrainTypeHillshade)
-        _maxZoomHillshade = zoom;
-    else if (terrainType == EOATerrainTypeSlope)
-        _maxZoomSlope = zoom;
-}
-
-- (BOOL) isTerrainOn
-{
-    return [OsmAndApp instance].data.terrainType != EOATerrainTypeDisabled;
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return section < _sectionHeaderFooterTitles.count ? _sectionHeaderFooterTitles[section][@"header"] : nil;
+    return [_data sectionDataForIndex:section].headerText;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    if (section == 0)
-        return [self getSwitchSectionFooter];
-    return section < _sectionHeaderFooterTitles.count ? _sectionHeaderFooterTitles[section][@"footer"] : nil;
+    return [_data sectionDataForIndex:section].footerText;
 }
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [self isTerrainOn] ? _data.count : _dataDisabled.count;
+    return [_data sectionCount];
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([self isTerrainOn])
-    {
-        if (section == kZoomSection)
-            return [self pickerIsShown] ? 3 : 2;
-        else
-            return _data[section].count;
-    }
-    else
-    {
-        return _dataDisabled[section].count;
-    }
+    return [_data rowCount:section];
 }
 
-- (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString: kCellTypeSwitch])
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    if ([item.cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
         OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *) nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
             [cell descriptionVisibility:NO];
+            [cell setCustomLeftSeparatorInset:YES];
         }
         if (cell)
         {
-            BOOL isOn = [self isTerrainOn];
+            BOOL isOn = [item boolForKey:@"value"];
             cell.titleLabel.text = isOn ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
+            cell.separatorInset = UIEdgeInsetsMake(0., (isOn ? DBL_MAX : 0.), 0., 0.);
 
             NSString *imgName = isOn ? @"ic_custom_show.png" : @"ic_custom_hide.png";
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];
@@ -528,7 +331,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString: kCellTypeValue])
+    else if ([item.cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
         OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
@@ -542,73 +345,116 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (cell)
         {
-            cell.titleLabel.text = item[@"title"];
-            if ([item[@"key"] isEqualToString:@"minZoom"])
-                cell.valueLabel.text = [NSString stringWithFormat:@"%ld", [self getMinZoom]];
-            else if ([item[@"key"] isEqualToString:@"maxZoom"])
-                cell.valueLabel.text = [NSString stringWithFormat:@"%ld", [self getMaxZoom]];
-            else
-                cell.valueLabel.text = @"";
+            cell.titleLabel.text = item.title;
+            cell.valueLabel.text = [item stringForKey:@"value"];
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeButton])
+    else if ([item.cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
+        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
-            cell.titleView.text = item[@"title"];
-            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
-            cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *) nib[0];
+            cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+        }
+        if (cell)
+        {
+            if ([item.key isEqualToString:@"mapItem"])
+            {
+                [cell leftIconVisibility:YES];
+                [cell descriptionVisibility:YES];
+
+                OAResourceItem *mapItem = _mapItems[indexPath.row];
+                cell.leftIconView.image = [UIImage templateImageNamed:(_app.data.terrainType == EOATerrainTypeHillshade ? @"ic_custom_hillshade" : @"ic_action_slope")];
+                cell.titleLabel.text = mapItem.title;
+                cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+                cell.descriptionLabel.text = [NSString stringWithFormat:@"%@  •  %@", [OAResourceType resourceTypeLocalized:mapItem.resourceType],
+                                              [NSByteCountFormatter stringFromByteCount:mapItem.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+
+                if (![_iapHelper.srtm isActive] && (mapItem.resourceType == OsmAndResourceType::HillshadeRegion || mapItem.resourceType == OsmAndResourceType::SlopeRegion))
+                    mapItem.disabled = YES;
+
+                if (!mapItem.downloadTask)
+                {
+                    cell.accessoryView = nil;
+                    cell.titleLabel.textColor = !mapItem.disabled ? UIColor.blackColor : UIColorFromRGB(color_text_footer);
+                    cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_download"];
+                }
+                else
+                {
+                    cell.titleLabel.textColor = UIColor.blackColor;
+                    cell.rightIconView.image = nil;
+                    if (!cell.accessoryView)
+                    {
+                        FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0., 0., 25., 25.)];
+                        progressView.iconView = [[UIView alloc] init];
+                        progressView.tintColor = UIColorFromRGB(color_primary_purple);
+                        cell.accessoryView = progressView;
+                    }
+                    [self updateDownloadingCell:cell indexPath:indexPath];
+                }
+            }
+            else
+            {
+                cell.accessoryView = nil;
+                BOOL isReadMore = [item.key isEqualToString:@"readMore"];
+                [cell leftIconVisibility:!isReadMore];
+                [cell descriptionVisibility:!isReadMore];
+                cell.titleLabel.textColor = isReadMore ? UIColorFromRGB(color_primary_purple) : UIColor.blackColor;
+                cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:isReadMore ? UIFontWeightSemibold : UIFontWeightRegular];
+                cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
+                cell.titleLabel.text = item.title;
+            }
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypePicker])
+    else if ([item.cellType isEqualToString:[OACustomPickerTableViewCell getCellIdentifier]])
     {
-        OACustomPickerTableViewCell* cell;
-        cell = (OACustomPickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell getCellIdentifier]];
+        OACustomPickerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomPickerTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
         }
-        cell.dataArray = _possibleZoomValues;
-        NSInteger minZoom = [self getMinZoom] >= kMinAllowedZoom && [self getMinZoom] <= kMaxAllowedZoom ? [self getMinZoom] : 1;
-        NSInteger maxZoom = [self getMaxZoom] >= kMinAllowedZoom && [self getMaxZoom] <= kMaxAllowedZoom ? [self getMaxZoom] : 1;
-        [cell.picker selectRow:indexPath.row == 1 ? minZoom - 1 : maxZoom - 1 inComponent:0 animated:NO];
-        cell.picker.tag = indexPath.row;
-        cell.delegate = self;
+        if (cell)
+        {
+            cell.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0, 0);
+            cell.dataArray = _possibleZoomValues;
+            NSInteger minZoom = _minZoom >= kMinAllowedZoom && _minZoom <= kMaxAllowedZoom ? _minZoom : 1;
+            NSInteger maxZoom = _maxZoom >= kMinAllowedZoom && _maxZoom <= kMaxAllowedZoom ? _maxZoom : 1;
+            [cell.picker selectRow:indexPath.row == 1 ? minZoom - 1 : maxZoom - 1 inComponent:0 animated:NO];
+            cell.picker.tag = indexPath.row;
+            cell.delegate = self;
+        }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeSlider])
+    else if ([item.cellType isEqualToString:[OATitleSliderTableViewCell getCellIdentifier]])
     {
-        OATitleSliderTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OATitleSliderTableViewCell getCellIdentifier]];
+        OATitleSliderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATitleSliderTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleSliderTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleSliderTableViewCell *)[nib objectAtIndex:0];
-            [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-        
         if (cell)
         {
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.titleLabel.text = item[@"name"];
-            if ([self isTerrainOn])
-                cell.sliderView.value = _app.data.terrainType == EOATerrainTypeSlope ? _app.data.slopeAlpha : _app.data.hillshadeAlpha;
+            cell.titleLabel.text = item.title;
+
+            cell.sliderView.value = _app.data.terrainType == EOATerrainTypeSlope ? _app.data.slopeAlpha : _app.data.hillshadeAlpha;
+            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+
             cell.valueLabel.text = [NSString stringWithFormat:@"%.0f%@", cell.sliderView.value * 100, @"%"];
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeSegment])
+    else if ([item.cellType isEqualToString:[OASegmentTableViewCell getCellIdentifier]])
     {
-        OASegmentTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASegmentTableViewCell getCellIdentifier]];
+        OASegmentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASegmentTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentTableViewCell getCellIdentifier] owner:self options:nil];
@@ -621,189 +467,90 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             [cell.segmentControl removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
-            [cell.segmentControl setTitle:item[@"title0"] forSegmentAtIndex:0];
-            [cell.segmentControl setTitle:item[@"title1"] forSegmentAtIndex:1];
+            [cell.segmentControl setTitle:[item stringForKey:@"title0"] forSegmentAtIndex:0];
+            [cell.segmentControl setTitle:[item stringForKey:@"title1"] forSegmentAtIndex:1];
             [cell.segmentControl setSelectedSegmentIndex:_app.data.terrainType == EOATerrainTypeHillshade ? 0 : 1];
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAImageDescTableViewCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OAImageTextViewCell getCellIdentifier]])
     {
-        OAImageDescTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAImageDescTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImageDescTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAImageDescTableViewCell *)[nib objectAtIndex:0];
-        }
-        if (cell)
-        {
-            cell.descView.text = item[@"desc"];
-            cell.iconView.image = [UIImage rtlImageNamed:item[@"img"]];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
-        }
-        
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:[OAImageTextViewCell getCellIdentifier]])
-    {
-        OAImageTextViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAImageTextViewCell getCellIdentifier]];
+        OAImageTextViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAImageTextViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImageTextViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAImageTextViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell showExtraDesc:NO];
+            cell.descView.delegate = self;
         }
         if (cell)
         {
-            cell.iconView.image = [UIImage rtlImageNamed:item[@"img"]];
+            cell.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0, 0);
+            cell.iconView.image = [UIImage rtlImageNamed:item.iconName];
 
-            NSString *descr = item[@"descr"];
-            if (descr && descr.length > 0)
+            BOOL isDisabled = [item.key isEqualToString:@"disabledImage"];
+            NSString *descr = item.descr;
+            if (isDisabled)
             {
-                NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:descr attributes:@{NSFontAttributeName: [UIFont scaledSystemFontOfSize:15]}];
+                cell.descView.attributedText = nil;
+                cell.descView.text = descr;
+            }
+            else if (descr && descr.length > 0)
+            {
+                NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:descr attributes:@{
+                    NSFontAttributeName: [UIFont scaledSystemFontOfSize:15]
+                }];
                 NSRange range = [descr rangeOfString:@" " options:NSBackwardsSearch];
                 if (range.location != NSNotFound)
                 {
-                    NSDictionary *linkAttributes = @{NSLinkAttributeName: item[@"url"], NSFontAttributeName: [UIFont scaledSystemFontOfSize:15]};
+                    NSDictionary *linkAttributes = @{ NSLinkAttributeName : [item stringForKey:@"link"] };
                     [str setAttributes:linkAttributes range:NSMakeRange(range.location + 1, descr.length - range.location - 1)];
                 }
+                cell.descView.text = nil;
                 cell.descView.attributedText = str;
             }
             else
             {
+                cell.descView.text = nil;
                 cell.descView.attributedText = nil;
             }
-            
+
             if ([cell needsUpdateConstraints])
                 [cell setNeedsUpdateConstraints];
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeMap])
-    {
-        static NSString* const repositoryResourceCell = @"repositoryResourceCell";
-        static NSString* const downloadingResourceCell = @"downloadingResourceCell";
-        OAResourceItem *mapItem = _mapItems[indexPath.row];
-        NSString* cellTypeId = mapItem.downloadTask ? downloadingResourceCell : repositoryResourceCell;
-        
-        uint64_t _sizePkg = mapItem.sizePkg;
-        if ((mapItem.resourceType == OsmAndResourceType::SrtmMapRegion || mapItem.resourceType == OsmAndResourceType::HillshadeRegion || mapItem.resourceType == OsmAndResourceType::SlopeRegion)
-            && ![_iapHelper.srtm isActive])
-        {
-            mapItem.disabled = YES;
-        }
-        NSString *title = mapItem.title;
-        NSString *subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourceType resourceTypeLocalized:mapItem.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
-
-        UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
-        if (cell == nil)
-        {
-            if ([cellTypeId isEqualToString:repositoryResourceCell])
-            {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
-                                              reuseIdentifier:cellTypeId];
-
-                cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
-                cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
-                cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
-
-                UIImage* iconImage = [UIImage rtlImageNamed:@"ic_custom_download"];
-                UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-                [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
-                [btnAcc setImage:iconImage forState:UIControlStateNormal];
-                btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
-                [cell setAccessoryView:btnAcc];
-            }
-            else if ([cellTypeId isEqualToString:downloadingResourceCell])
-            {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
-                                              reuseIdentifier:cellTypeId];
-
-                cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
-                cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
-                cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
-
-                FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
-                progressView.iconView = [[UIView alloc] init];
-
-                cell.accessoryView = progressView;
-            }
-        }
-        
-        if ([cellTypeId isEqualToString:repositoryResourceCell])
-        {
-            if (!mapItem.disabled)
-            {
-                cell.textLabel.textColor = [UIColor blackColor];
-                UIImage* iconImage = [UIImage rtlImageNamed:@"ic_custom_download"];
-                UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-                [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
-                [btnAcc setImage:iconImage forState:UIControlStateNormal];
-                btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
-                [cell setAccessoryView:btnAcc];
-            }
-            else
-            {
-                cell.textLabel.textColor = [UIColor lightGrayColor];
-                cell.accessoryView = nil;
-            }
-        }
-        
-        cell.imageView.image = [UIImage templateImageNamed:(_app.data.terrainType == EOATerrainTypeHillshade ? @"ic_custom_hillshade" : @"ic_action_slope")];
-        cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
-        cell.textLabel.text = title;
-        if (cell.detailTextLabel != nil)
-            cell.detailTextLabel.text = subtitle;
-        
-        if ([cellTypeId isEqualToString:downloadingResourceCell])
-            [self updateDownloadingCell:cell indexPath:indexPath];
-
-        return cell;
-    }
-    
     return nil;
 }
 
-- (void) accessoryButtonPressed:(UIControl *)button withEvent:(UIEvent *)event
-{
-    NSIndexPath *indexPath = [tblView indexPathForRowAtPoint:[[[event touchesForView:button] anyObject] locationInView:tblView]];
-    if (!indexPath)
-        return;
-    
-    [tblView.delegate tableView:tblView accessoryButtonTappedForRowWithIndexPath:indexPath];
-}
+#pragma mark - UITableViewDelegate
 
-- (void) tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self onItemClicked:indexPath];
-}
+    [tblView deselectRowAtIndexPath:indexPath animated:YES];
 
-- (void) onItemClicked:(NSIndexPath *)indexPath
-{
-    NSDictionary *item =  [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kCellTypeValue])
+    OATableRowData *item =  [_data itemForIndexPath:indexPath];
+    if (indexPath == _minValueIndexPath || indexPath == _maxValueIndexPath)
     {
-       [tblView beginUpdates];
-
-       if ([self pickerIsShown] && (_pickerIndexPath.row - 1 == indexPath.row))
-           [self hideExistingPicker];
-       else
-       {
-           NSIndexPath *newPickerIndexPath = [self calculateIndexPathForNewPicker:indexPath];
-           if ([self pickerIsShown])
-               [self hideExistingPicker];
-
-           [self showNewPickerAtIndex:newPickerIndexPath];
-           _pickerIndexPath = [NSIndexPath indexPathForRow:newPickerIndexPath.row + 1 inSection:indexPath.section];
-       }
-       [tblView endUpdates];
-       [tblView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        [tblView beginUpdates];
+        NSIndexPath *newPickerIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
+        BOOL isThisPicker = _pickerIndexPath == newPickerIndexPath;
+        if (_pickerIndexPath != nil)
+            [tblView deleteRowsAtIndexPaths:@[_pickerIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        _pickerIndexPath = isThisPicker ? nil : newPickerIndexPath;
+        [self initData];
+        if (!isThisPicker)
+            [tblView insertRowsAtIndexPaths:@[_pickerIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tblView endUpdates];
+        [tblView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeMap])
+    else if ([item.key isEqualToString:@"readMore"])
+    {
+        SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:[item stringForKey:@"link"]]];
+        [self.vwController presentViewController:safariViewController animated:YES completion:nil];
+    }
+    else if ([item.key isEqualToString:@"mapItem"])
     {
         OAResourceItem *mapItem = _mapItems[indexPath.row];
         if (mapItem.downloadTask != nil)
@@ -826,147 +573,144 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
         }
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeButton])
-    {
-        [self linkButtonPressed];
-    }
-}
-
-#pragma mark - UITableViewDelegate
-
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [self onItemClicked:indexPath];
-    [tblView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - OACustomPickerTableViewCellDelegate
 
-- (void)updatePickerCell:(NSInteger) value
+- (void)resetPickerValue:(NSInteger)zoomValue
 {
-    UITableViewCell *cell = [tblView cellForRowAtIndexPath:_pickerIndexPath];
-    if ([cell isKindOfClass:OACustomPickerTableViewCell.class])
+    if (_pickerIndexPath)
     {
-        OACustomPickerTableViewCell *cellRes = (OACustomPickerTableViewCell *) cell;
-        [cellRes.picker selectRow:[self getMinZoom] - 1 inComponent:0 animated:NO];
+        UITableViewCell *cell = [tblView cellForRowAtIndexPath:_pickerIndexPath];
+        if ([cell isKindOfClass:OACustomPickerTableViewCell.class])
+        {
+            OACustomPickerTableViewCell *pickerCell = (OACustomPickerTableViewCell *) cell;
+            [pickerCell.picker selectRow:zoomValue - 1 inComponent:0 animated:YES];
+        }
     }
 }
 
 - (void)customPickerValueChanged:(NSString *)value tag:(NSInteger)pickerTag
 {
+    NSIndexPath *zoomValueIndexPath;
     NSInteger intValue = [value integerValue];
     EOATerrainType type = _app.data.terrainType;
     if (pickerTag == 1)
     {
-        if (intValue <= [self getMaxZoom])
+        zoomValueIndexPath = _minValueIndexPath;
+        if (intValue <= _maxZoom)
         {
-            [self setMinZoom:intValue];
+            _minZoom = intValue;
             if (type == EOATerrainTypeHillshade)
-            {
-                _app.data.hillshadeMinZoom = [self getMinZoom];
-            }
+                _app.data.hillshadeMinZoom = _minZoom;
             else if (type == EOATerrainTypeSlope)
-            {
-                _app.data.slopeMinZoom = [self getMinZoom];
-            }
+                _app.data.slopeMinZoom = _minZoom;
         }
         else
         {
-            [self setMinZoom:[self getMaxZoom]];
-            [self updatePickerCell:[self getMaxZoom] - 1];
+            _minZoom = _maxZoom;
+            [self resetPickerValue:_maxZoom];
         }
     }
     else if (pickerTag == 2)
     {
-        if (intValue >= [self getMinZoom])
+        zoomValueIndexPath = _maxValueIndexPath;
+        if (intValue >= _minZoom)
         {
-            [self setMaxZoom:intValue];
+            _maxZoom = intValue;
             if (type == EOATerrainTypeHillshade)
-            {
-                _app.data.hillshadeMaxZoom = [self getMaxZoom];
-            }
+                _app.data.hillshadeMaxZoom = _maxZoom;
             else if (type == EOATerrainTypeSlope)
-            {
-                _app.data.slopeMaxZoom = [self getMaxZoom];
-            }
+                _app.data.slopeMaxZoom = _maxZoom;
         }
         else
         {
-            [self setMaxZoom:[self getMinZoom]];
-            [self updatePickerCell:[self getMinZoom] - 1];
+            _maxZoom = _minZoom;
+            [self resetPickerValue:_minZoom];
         }
     }
-    [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+
+    if (zoomValueIndexPath)
+    {
+        [self generateValueForIndexPath:zoomValueIndexPath];
+        [tblView reloadRowsAtIndexPaths:@[zoomValueIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+}
+
+#pragma mark - UITextViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction
+{
+    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:URL];
+    [self.vwController presentViewController:safariViewController animated:YES completion:nil];
+    return NO;
+}
+
+#pragma mark - SFSafariViewControllerDelegate
+
+- (void)safariViewControllerDidFinish:(SFSafariViewController *)controller
+{
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Selectors
 
-- (void) sliderValueChanged:(id)sender
+- (void)mapSettingSwitchChanged:(UISwitch *)switchView
 {
-    UISlider *slider = sender;
+    if (switchView.isOn)
+    {
+        EOATerrainType prevType = _app.data.lastTerrainType;
+        [_app.data setTerrainType:prevType != EOATerrainTypeDisabled ? prevType : EOATerrainTypeHillshade];
+    }
+    else
+    {
+        _pickerIndexPath = nil;
+        _minValueIndexPath = nil;
+        _maxValueIndexPath = nil;
+        _availableMapsSection = -1;
+        _app.data.lastTerrainType = _app.data.terrainType;
+        [_app.data setTerrainType:EOATerrainTypeDisabled];
+    }
+    [self updateAvailableMaps];
+    [UIView transitionWithView:tblView
+                      duration:.35
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^(void)
+                    {
+                        [tblView reloadData];
+                    }
+                    completion:nil];
+}
+
+- (void) sliderValueChanged:(UISlider *)slider
+{
     EOATerrainType type = _app.data.terrainType;
     if (type == EOATerrainTypeHillshade)
-    {
         _app.data.hillshadeAlpha = slider.value;
-    }
     else if (type == EOATerrainTypeSlope)
-    {
         _app.data.slopeAlpha = slider.value;
-    }
 }
 
-- (void) mapSettingSwitchChanged:(id)sender
+- (void) segmentChanged:(UISegmentedControl *)segment
 {
-    UISwitch *switchView = (UISwitch*)sender;
-    if (switchView)
-    {
-        if (switchView.isOn)
-        {
-            EOATerrainType prevType = _app.data.lastTerrainType;
-            [_app.data setTerrainType:prevType != EOATerrainTypeDisabled ? prevType : EOATerrainTypeHillshade];
-            [self updateAvailableMaps];
-        }
-        else
-        {
-            _app.data.lastTerrainType = _app.data.terrainType;
-            [_app.data setTerrainType:EOATerrainTypeDisabled];
-        }
-        [tblView beginUpdates];
-        if (switchView.isOn)
-        {
-            [tblView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(2, _data.count - 2)] withRowAnimation:UITableViewRowAnimationFade];
-            [tblView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-            [tblView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
-        }
-        else
-        {
-            [tblView deleteSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(2, _data.count - 2)] withRowAnimation:UITableViewRowAnimationFade];
-            [tblView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-            [tblView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
-        }
-        [tblView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 2)] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [tblView endUpdates];
-    }
-}
+    _pickerIndexPath = nil;
+    _minValueIndexPath = nil;
+    _maxValueIndexPath = nil;
+    _availableMapsSection = -1;
+    if (segment.selectedSegmentIndex == 0)
+        [_app.data setTerrainType: EOATerrainTypeHillshade];
+    else if (segment.selectedSegmentIndex == 1)
+        [_app.data setTerrainType: EOATerrainTypeSlope];
 
-- (void) segmentChanged:(id)sender
-{
-    UISegmentedControl *segment = (UISegmentedControl*)sender;
-    if (segment)
-    {
-        if (segment.selectedSegmentIndex == 0)
-        {
-            [_app.data setTerrainType: EOATerrainTypeHillshade];
-        }
-        else if (segment.selectedSegmentIndex == 1)
-        {
-            [_app.data setTerrainType: EOATerrainTypeSlope];
-        }
-        [self generateData];
-        [tblView reloadData];
-        [self updateAvailableMaps];
-    }
+    [self updateAvailableMaps];
+    [UIView transitionWithView:tblView
+                      duration:.35
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^(void)
+                    {
+                        [tblView reloadData];
+                    }
+                    completion:nil];
 }
 
 #pragma mark - Downloading cell progress methods
@@ -1021,11 +765,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     @synchronized(_dataLock)
     {
-        for (int i = 0; i < _mapItems.count; i++)
+        if (_availableMapsSection != -1)
         {
-            OAResourceItem *item = (OAResourceItem *)_mapItems[i];
-            if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey])
-                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:(tblView.numberOfSections - 1)]];
+            for (int i = 0; i < _mapItems.count; i++)
+            {
+                OAResourceItem *item = (OAResourceItem *)_mapItems[i];
+                if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey])
+                    [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:_availableMapsSection]];
+            }
         }
     }
 }

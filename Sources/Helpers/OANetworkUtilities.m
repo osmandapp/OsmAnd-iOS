@@ -32,7 +32,7 @@
 
 + (void) sendRequestWithUrl:(NSString *)url params:(NSDictionary<NSString *, NSString *> *)params post:(BOOL)post async:(BOOL)async onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
 {
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(1);
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     NSURL *urlObj;
     NSMutableString *paramsStr = nil;
     NSString *paramsSeparator = [url containsString:@"?"] ? @"&" : @"?";

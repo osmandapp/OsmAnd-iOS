@@ -684,9 +684,7 @@
 
 - (void) onMapGestureAction:(NSNotification *)notification
 {
-    
     _app.mapMode = OAMapModeFree;
-//    _app.mapMode = [_settings.rotateMap get] == ROTATE_MAP_COMPASS ? OAMapModePositionTrack : OAMapModeFree;
 }
 
 - (void) setMapViewController:(OAMapViewController *)mapViewController

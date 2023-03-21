@@ -16,6 +16,7 @@
 #import "OAQuickActionsSheetView.h"
 #import "OAColors.h"
 #import "OAHudButton.h"
+#import "Localization.h"
 
 #import <AudioToolbox/AudioServices.h>
 
@@ -71,6 +72,7 @@
     _buttonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onButtonDragged:)];
     [_buttonDragRecognizer setMinimumPressDuration:0.5];
     [_quickActionFloatingButton addGestureRecognizer:_buttonDragRecognizer];
+    _quickActionFloatingButton.accessibilityLabel = OALocalizedString(@"configure_screen_quick_action");
     
     [self setQuickActionButtonMargin];
 }

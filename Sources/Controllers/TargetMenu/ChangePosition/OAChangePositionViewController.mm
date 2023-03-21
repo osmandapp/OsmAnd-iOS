@@ -57,6 +57,7 @@
     OAMapRendererView *_mapView;
     
     CGFloat _cachedX;
+    CGFloat _cachedY;
 }
 
 -(instancetype) initWithTargetPoint:(OATargetPoint *)targetPoint
@@ -69,6 +70,9 @@
         _mapView = OARootViewController.instance.mapPanel.mapViewController.mapView;
         
         _cachedX = _mapView.viewportXScale;
+        _cachedY = _mapView.viewportYScale;
+        if (_mapView.viewportYScale != kRegularViewportScale)
+            _mapView.viewportYScale = kRegularViewportScale;
         [self adjustViewport];
     }
     return self;
@@ -238,6 +242,8 @@
 {
     [_contextLayer exitChangePositionMode:_targetPoint.targetObj applyNewPosition:NO];
     _mapView.viewportXScale = _cachedX;
+    if (_mapView.viewportYScale != _cachedY)
+        _mapView.viewportYScale = _cachedY;
 }
 
 - (void) applyLocalization

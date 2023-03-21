@@ -561,7 +561,7 @@
 "starting_point" = "起始点";
 "simulate_routing_descr" = "使用已计算的路线模拟您的位置";
 "do_not_send_anonymous_data_desc" = "我们不收集位置信息，只收集应用使用和地图下载统计信息。";
-"rotate_map_none_opt" = "不要旋转（北朝上）";
+"rotate_map_north_opt" = "不要旋转（北朝上）";
 "monitoring_min_distance" = "最小位移";
 "shared_string_near" = "邻近";
 "access_arrival_time" = "到达时间";

@@ -648,7 +648,7 @@
 "rotate_map_to_bearing_descr" = "Orientation de la carte.";
 "rotate_map_compass_opt" = "Direction de la boussole";
 "rotate_map_bearing_opt" = "Direction du déplacement";
-"rotate_map_none_opt" = "Aucune rotation (nord vers le haut)";
+"rotate_map_north_opt" = "Aucune rotation (nord vers le haut)";
 "shared_string_automatic" = "Automatique";
 "map_widget_magnetic_bearing" = "Cap magnétique";
 "map_widget_bearing" = "Cap relatif";
@@ -2820,10 +2820,10 @@
 "last_seven_days" = "7 derniers jours";
 "delete_history_items" = "Supprimer les éléments de l'historique ?";
 "restart_is_required" = "Il est nécessaire de redémarrer l'application pour prendre en compte la modification.";
-"rotate_map_none_manually" = "Fixe (rotation manuelle)";
+"rotate_map_manual_opt" = "Fixe (rotation manuelle)";
 "history_clear_alert_message" = "Êtes-vous sûr de vouloir supprimer tous les éléments de l'historique ?";
 "enable_search_history" = "Vous pouvez activer l'historique des recherches dans les Paramètres";
-"rotate_map_none_fixed" = "Fixe (nord en haut)";
+"rotate_map_north_opt" = "Fixe (nord en haut)";
 "confirm_history_item_delete" = "Êtes-vous sûr de vouloir supprimer (%ld) éléments de l'historique ?";
 "announcement_time_descr" = "Le rythme des annonces vocales dépend du type d'alerte, de la vitesse actuelle et du type de navigation.";
 "restart_is_required_title" = "Redémarrage nécessaire";

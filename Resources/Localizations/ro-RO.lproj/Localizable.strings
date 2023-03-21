@@ -1048,7 +1048,7 @@
 "road_speeds_descr" = "Acești parametri pot afecta calculul traseului.";
 "max_speed" = "Viteza maximă";
 "driving_region_descr" = "Selectați regiune de condus: USA, Europa, UK, Asia, și altele.";
-"rotate_map_none_opt" = "Nu rotiți (nordul este sus)";
+"rotate_map_north_opt" = "Nu rotiți (nordul este sus)";
 "rotate_map_bearing_opt" = "Direcția de deplasare";
 "rotate_map_compass_opt" = "Direcția busolei";
 "rotate_map_to_bearing_descr" = "Selectați alinierea hărții pe ecran.";
@@ -2814,8 +2814,8 @@
 "enable_search_history" = "Puteți activa istoricul căutărilor în Setări";
 "last_seven_days" = "Ultimele 7 zile";
 "confirm_history_item_delete" = "Sunteți sigur că doriți să ștergeți (%ld) elemente din istoric?";
-"rotate_map_none_fixed" = "Nordul este sus (fixat)";
-"rotate_map_none_manually" = "Rotație manuală (fixă)";
+"rotate_map_north_opt" = "Nordul este sus (fixat)";
+"rotate_map_manual_opt" = "Rotație manuală (fixă)";
 "compass_click_desc" = "Apăsați pe busolă pentru a comuta modul de orientare a hărții.";
 "map_markers_history" = "Istoria marcajelor de pe hartă";
 "history_clear_alert_title" = "Ștergeți tot istoricul";

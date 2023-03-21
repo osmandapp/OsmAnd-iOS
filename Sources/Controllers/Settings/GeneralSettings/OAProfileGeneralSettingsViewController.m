@@ -101,12 +101,12 @@
     }
     else if ([_settings.rotateMap get:self.appMode] == ROTATE_MAP_MANUAL)
     {
-        rotateMapValue = OALocalizedString(@"rotate_map_none_manually");
+        rotateMapValue = OALocalizedString(@"rotate_map_manual_opt");
         rotateMapIcon = @"ic_custom_direction_manual";
     }
     else
     {
-        rotateMapValue = OALocalizedString(@"rotate_map_none_fixed");
+        rotateMapValue = OALocalizedString(@"rotate_map_north_opt");
         rotateMapIcon = @"ic_custom_direction_north";
     }
     

@@ -241,6 +241,7 @@
 #define quickActionPortraitYKey @"quickActionPortraitY"
 
 #define contourLinesZoomKey @"contourLinesZoom"
+#define mapManuallyRotatingAngleKey @"mapManuallyRotatingAngle"
 
 #define activeMarkerKey @"activeMarkerKey"
 #define mapDistanceIndicationVisabilityKey @"mapDistanceIndicationVisabilityKey"
@@ -3555,6 +3556,9 @@
         [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_AUTO) mode:OAApplicationMode.BICYCLE];
         [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_DAY) mode:OAApplicationMode.PEDESTRIAN];
         [_profilePreferences setObject:_appearanceMode forKey:@"daynight_mode"];
+        
+        _mapManuallyRotatingAngle = [OACommonDouble withKey:mapManuallyRotatingAngleKey defValue:0];
+        [_profilePreferences setObject:_appearanceMode forKey:mapManuallyRotatingAngleKey];
 
         _settingShowZoomButton = YES;//[[NSUserDefaults standardUserDefaults] objectForKey:settingZoomButtonKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingZoomButtonKey] : YES;
         _settingMapArrows = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapArrowsKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingMapArrowsKey] : MAP_ARROWS_LOCATION;

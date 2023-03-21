@@ -524,7 +524,7 @@
 "rotate_map_to_bearing_descr" = "Veldu stefnu korts miðað við skjá.";
 "rotate_map_compass_opt" = "Eftiráttavita";
 "rotate_map_bearing_opt" = "Eftirátt hreyfingar";
-"rotate_map_none_opt" = "Ekki snúa (norður er upp)";
+"rotate_map_north_opt" = "Ekki snúa (norður er upp)";
 "driving_region_descr" = "Veldu aksturssvæði: BNA, Evrópa, Bretland, Asía og annað.";
 "map_widget_magnetic_bearing" = "Segulstefna";
 "map_widget_bearing" = "Hlutfallsleg stefna";

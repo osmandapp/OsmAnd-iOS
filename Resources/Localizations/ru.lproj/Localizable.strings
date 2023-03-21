@@ -551,7 +551,7 @@
 "coords_format" = "Формат координат";
 "save_global_track_interval_descr" = "Укажите общий интервал записи трека (включается через виджет «Запись маршрута» на карте).";
 "rotate_map_to_bearing_descr" = "Выберите способ вращения карты.";
-"rotate_map_none_opt" = "Не вращать (север сверху)";
+"rotate_map_north_opt" = "Не вращать (север сверху)";
 "shared_string_automatic" = "Авто";
 "map_widget_magnetic_bearing" = "Магнитный пеленг";
 "map_widget_bearing" = "Курсовой угол";

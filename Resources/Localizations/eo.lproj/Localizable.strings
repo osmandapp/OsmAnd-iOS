@@ -110,7 +110,7 @@
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "Direkto de kompaso";
 "rotate_map_bearing_opt" = "Direkto de movado";
-"rotate_map_none_opt" = "Do not rotate (north is up)";
+"rotate_map_north_opt" = "Do not rotate (north is up)";
 "driving_region_descr" = "Elekti trafikan regionon: Usono, Eŭropo, Britujo, Azio kaj aliaj.";
 "driving_region" = "Trafika regiono";
 "shared_string_automatic" = "Aŭtomata";

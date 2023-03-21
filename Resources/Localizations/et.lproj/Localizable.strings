@@ -101,7 +101,7 @@
 "rotate_map_to_bearing_descr" = "Vali kaardi ekraani orientatsioon.";
 "rotate_map_compass_opt" = "Kompassi suund";
 "rotate_map_bearing_opt" = "Liikumissuund";
-"rotate_map_none_opt" = "Ära pööra (põhi on üleval)";
+"rotate_map_north_opt" = "Ära pööra (põhi on üleval)";
 "driving_region_descr" = "Vali sõidupiirkond: USA, Euroopa, UK, Aasia ja teised.";
 "driving_region" = "Sõidupiirkond";
 "shared_string_automatic" = "Automaatne";

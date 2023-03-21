@@ -705,6 +705,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 
 @property (nonatomic) OACommonInteger *appearanceMode; // 0 - Day; 1 - Night; 2 - Auto
+@property (nonatomic) OACommonDouble *mapManuallyRotatingAngle;
 @property (readonly, nonatomic) BOOL nightMode;
 @property (nonatomic) OACommonMetricSystem *metricSystem;
 @property (nonatomic) OACommonBoolean *drivingRegionAutomatic;

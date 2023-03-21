@@ -110,7 +110,7 @@
 "rotate_map_to_bearing_descr" = "Изаберите поравнање екрана карте.";
 "rotate_map_compass_opt" = "Правац компаса";
 "rotate_map_bearing_opt" = "У смеру кретања";
-"rotate_map_none_opt" = "Не ротирај (север је горе)";
+"rotate_map_north_opt" = "Не ротирај (север је горе)";
 "driving_region_descr" = "Одаберите област вожње: САД, Европа, Уједињено Краљевство, Азија и остало.";
 "driving_region" = "Област вожње";
 "shared_string_automatic" = "Самостално";

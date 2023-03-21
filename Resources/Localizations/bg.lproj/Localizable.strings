@@ -110,7 +110,7 @@
 "rotate_map_to_bearing_descr" = "Изберете начин на завъртане на картата.";
 "rotate_map_compass_opt" = "По компаса";
 "rotate_map_bearing_opt" = "Посока на движение";
-"rotate_map_none_opt" = "Без завъртане (север е горе)";
+"rotate_map_north_opt" = "Без завъртане (север е горе)";
 "driving_region_descr" = "Район на шофиране: САЩ, Европа, Великобритания, Азия или друг.";
 "driving_region" = "Район на шофиране";
 "shared_string_automatic" = "Автоматично";

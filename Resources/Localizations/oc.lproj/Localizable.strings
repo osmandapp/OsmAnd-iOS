@@ -99,7 +99,7 @@
 "rotate_map_to_bearing_descr" = "Chausissètz l'alinhament de l'ecran de la mapa.";
 "rotate_map_compass_opt" = "Segon la bossòla";
 "rotate_map_bearing_opt" = "Segon la direccion dau movement";
-"rotate_map_none_opt" = "Ges de rotacion (nòrd adaut)";
+"rotate_map_north_opt" = "Ges de rotacion (nòrd adaut)";
 "driving_region_descr" = "Seleccionatz la region de guida: EUA, Euròpa, Reiaume Unit, Asia e autres.";
 "driving_region" = "Region de guida";
 "shared_string_automatic" = "Automatic";

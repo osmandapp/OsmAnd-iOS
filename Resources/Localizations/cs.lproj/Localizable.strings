@@ -64,7 +64,7 @@
 "rotate_map_to_bearing_descr" = "Vyberte způsob otáčení mapy.";
 "rotate_map_compass_opt" = "Směr kompasu";
 "rotate_map_bearing_opt" = "Směr pohybu";
-"rotate_map_none_opt" = "Neotáčet (sever vždy nahoře)";
+"rotate_map_north_opt" = "Neotáčet (sever vždy nahoře)";
 "driving_region_descr" = "Vyberte dopravní oblast: USA, Evropa, Británie, Asie a další.";
 "driving_region" = "Dopravní oblast";
 "shared_string_automatic" = "Automaticky";
@@ -2821,6 +2821,6 @@
 "map_widget_zoom_level" = "Zoom level";
 "map_widget_target_distance" = "Vzdálenost cíle";
 "top_widgets_panel" = "Horní panel";
-"rotate_map_none_fixed" = "Sever je nahoře (opraveno)";
-"rotate_map_none_manually" = "Ruční otáčení (opraveno)";
+"rotate_map_north_opt" = "Sever je nahoře (opraveno)";
+"rotate_map_manual_opt" = "Ruční otáčení (opraveno)";
 "compass_click_desc" = "Klepnutím na kompas přepnete režim orientace mapy.";

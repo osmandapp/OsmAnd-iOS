@@ -353,7 +353,7 @@
             const OsmAnd::PointI newTarget31(OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
                                              OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
             
-            if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)
+            if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow || [_settings.rotateMap get] == ROTATE_MAP_COMPASS)
             {
                 _mapView.mapAnimator->pause();
                 
@@ -376,7 +376,9 @@
                 const auto azimuthAnimation = _mapView.mapAnimator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
                 _mapView.mapAnimator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
                 
-                if (direction >= 0)
+                NSTimeInterval timeSinceLasGestureRotating = [NSDate now].timeIntervalSince1970 - _mapViewController.lastRotatingByGestureTime.timeIntervalSince1970;
+                
+                if (direction >= 0 && timeSinceLasGestureRotating > 1)
                 {
                     if (azimuthAnimation)
                     {
@@ -392,8 +394,10 @@
                     }
                 }
                 
+                BOOL freeMapCenterMode = [_settings.rotateMap get] == ROTATE_MAP_COMPASS && !(_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow);
+                
                 // Update target
-                if (!sameLocation)
+                if (!sameLocation && !freeMapCenterMode)
                 {
                     if (![self.class isSmallSpeedForAnimation:newLocation] && _settings.animateMyLocation.get)
                     {
@@ -710,9 +714,9 @@
 
 - (void) onRotateMapModeChanged
 {
-    NSString *rotMode = OALocalizedString(@"rotate_map_none_fixed");
+    NSString *rotMode = OALocalizedString(@"rotate_map_north_opt");
     if ([_settings.rotateMap get] == ROTATE_MAP_MANUAL)
-        rotMode = OALocalizedString(@"rotate_map_none_manually");
+        rotMode = OALocalizedString(@"rotate_map_manual_opt");
     else if ([_settings.rotateMap get] == ROTATE_MAP_BEARING)
         rotMode = OALocalizedString(@"rotate_map_bearing_opt");
     else if ([_settings.rotateMap get] == ROTATE_MAP_COMPASS)
@@ -720,7 +724,7 @@
     
     rotMode = [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"rotate_map_to"), rotMode];
     [OAUtilities showToast:nil details:rotMode duration:4 inView:OARootViewController.instance.view];
-    
+
     [self updateSettings];
     if (_mapViewController)
         [_mapViewController refreshMap];
@@ -751,7 +755,7 @@
     if ([_settings.rotateMap get] == ROTATE_MAP_NONE)
     {
         [_settings.rotateMap set:ROTATE_MAP_MANUAL];
-        [OAUtilities showToast:nil details:[NSString stringWithFormat:@"%@: %@", OALocalizedString(@"rotate_map_to"), OALocalizedString(@"rotate_map_none_manually")] duration:4 inView:OARootViewController.instance.view];
+        [OAUtilities showToast:nil details:[NSString stringWithFormat:@"%@: %@", OALocalizedString(@"rotate_map_to"), OALocalizedString(@"rotate_map_manual_opt")] duration:4 inView:OARootViewController.instance.view];
     }
 }
 
@@ -761,6 +765,9 @@
     {
         if ([_settings.rotateMap get] == ROTATE_MAP_NONE)
             [self animatedAlignAzimuthToNorth];
+        else if ([_settings.rotateMap get] == ROTATE_MAP_MANUAL)
+            [self animatedAlignAzimuth:[[OAAppSettings sharedManager].mapManuallyRotatingAngle get]];
+        
         EOAPositionPlacement placement = (EOAPositionPlacement) [_settings.positionPlacementOnMap get];
         if (placement == EOAPositionPlacementAuto)
         {
@@ -775,7 +782,12 @@
 
 - (void) animatedAlignAzimuthToNorth
 {
-    if (!_mapViewController || ![_mapViewController isViewLoaded] || _mapView.azimuth == 0)
+    [self animatedAlignAzimuth:0];
+}
+
+- (void) animatedAlignAzimuth:(CGFloat)azimuth
+{
+    if (!_mapViewController || ![_mapViewController isViewLoaded] || _mapView.azimuth == azimuth)
         return;
     
     _startChangingMapModeTime = CACurrentMediaTime();
@@ -784,8 +796,8 @@
     _mapView.mapAnimator->pause();
     _mapView.mapAnimator->cancelAllAnimations();
     
-    // Animate azimuth change to north
-    _mapView.mapAnimator->animateAzimuthTo(0.0f,
+    // Animate azimuth change
+    _mapView.mapAnimator->animateAzimuthTo(azimuth,
                                         kFastAnimationTime,
                                         OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                         kUserInteractionAnimationKey);

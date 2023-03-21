@@ -111,7 +111,7 @@
 "rotate_map_to_bearing_descr" = "Pilih perataan layar peta.";
 "rotate_map_compass_opt" = "Arah kompas";
 "rotate_map_bearing_opt" = "Arah gerakan";
-"rotate_map_none_opt" = "Jangan berputar (utara di atas)";
+"rotate_map_north_opt" = "Jangan berputar (utara di atas)";
 "driving_region_descr" = "Pilih wilayah mengemudi: AS, Eropa, Inggris Raya, Asia, dan lain-lain.";
 "driving_region" = "Wilayah mengemudi";
 "shared_string_automatic" = "Otomatis";

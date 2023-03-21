@@ -99,7 +99,7 @@
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "Kompassretning";
 "rotate_map_bearing_opt" = "Bevegelsesretning";
-"rotate_map_none_opt" = "Do not rotate (north is up)";
+"rotate_map_north_opt" = "Do not rotate (north is up)";
 "driving_region_descr" = "Velg bilkjøringssted: USA, Europa, Storbritannia, Asia og andre.";
 "driving_region" = "Region for bilkjøring";
 "shared_string_automatic" = "Automatisk";

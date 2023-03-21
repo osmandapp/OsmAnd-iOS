@@ -1139,6 +1139,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     
     // Set rotation
     _mapView.azimuth -= qRadiansToDegrees(recognizer.rotation);
+    if ([[OAAppSettings sharedManager].rotateMap get] == ROTATE_MAP_MANUAL)
+        [[OAAppSettings sharedManager].mapManuallyRotatingAngle set:_mapView.azimuth];
 
     if (recognizer.state == UIGestureRecognizerStateEnded ||
         recognizer.state == UIGestureRecognizerStateCancelled)
@@ -1164,6 +1166,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         [OAMapViewTrackingUtilities.instance setRotationNoneToManual];
     }
     [recognizer setRotation:0];
+    
+    _lastRotatingByGestureTime = [NSDate now];
 }
 
 - (void) zoomInGestureDetected:(UITapGestureRecognizer *)recognizer

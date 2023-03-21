@@ -95,6 +95,8 @@
 @property(readonly) BOOL movingByGesture;
 @property(readonly) BOOL rotatingByGesture;
 
+@property(readonly) NSDate *lastRotatingByGestureTime;
+
 @property (atomic, readonly) BOOL mapViewLoaded;
 
 @property (readonly) OAMapRendererEnvironment *mapRendererEnv;

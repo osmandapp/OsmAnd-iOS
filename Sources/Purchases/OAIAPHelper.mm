@@ -1446,7 +1446,9 @@ static OASubscriptionState *EXPIRED;
         if (!error)
         {
             [result enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *obj, BOOL * _Nonnull stop) {
-                [self provideContentForProductIdentifier:key transactionId:obj];
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                    [self provideContentForProductIdentifier:key transactionId:obj];
+                });
             }];
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductsRestoredNotification object:[NSNumber numberWithInteger:_transactionErrors] userInfo:nil];

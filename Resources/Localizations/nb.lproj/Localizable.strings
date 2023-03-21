@@ -97,9 +97,9 @@
 "do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
 "rotate_map_to" = "Kartorientering";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
-"rotate_map_compass_opt_ios" = "Kompassretning";
-"rotate_map_bearing_opt_ios" = "Bevegelsesretning";
-"rotate_map_none_fixed_ios" = "Do not rotate (north is up)";
+"rotate_map_compass_opt" = "Kompassretning";
+"rotate_map_bearing_opt" = "Bevegelsesretning";
+"rotate_map_none_fixed" = "Do not rotate (north is up)";
 "driving_region_descr" = "Velg bilkjøringssted: USA, Europa, Storbritannia, Asia og andre.";
 "driving_region" = "Region for bilkjøring";
 "shared_string_automatic" = "Automatisk";

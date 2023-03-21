@@ -105,9 +105,9 @@
 "send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
 "rotate_map_to" = "Kartan orientaatio";
 "rotate_map_to_bearing_descr" = "Valitse karttaruudun suunta.";
-"rotate_map_compass_opt_ios" = "Kompassi";
-"rotate_map_bearing_opt_ios" = "Liikkumissuunta";
-"rotate_map_none_fixed_ios" = "Älä käännä (pohjoinen on ylhäällä)";
+"rotate_map_compass_opt" = "Kompassi";
+"rotate_map_bearing_opt" = "Liikkumissuunta";
+"rotate_map_none_fixed" = "Älä käännä (pohjoinen on ylhäällä)";
 "driving_region_descr" = "Valitse liikkumisalue: USA, Eurooppa, UK, Aasia tai muut.";
 "driving_region" = "Liikkumisalue";
 "shared_string_automatic" = "Automaattinen";

@@ -109,9 +109,9 @@
 "send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
 "rotate_map_to" = "Cyfeiriad y map";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
-"rotate_map_compass_opt_ios" = "Cyfeiriad cwmpawd";
-"rotate_map_bearing_opt_ios" = "Cyfeiriad symudiad";
-"rotate_map_none_fixed_ios" = "Do not rotate (north is up)";
+"rotate_map_compass_opt" = "Cyfeiriad cwmpawd";
+"rotate_map_bearing_opt" = "Cyfeiriad symudiad";
+"rotate_map_none_fixed" = "Do not rotate (north is up)";
 "driving_region_descr" = "Dewisa gyfandir gyrru: DU, Ewrop, UDA, Asia, ac eraill.";
 "driving_region" = "Rhanbarth gyrru";
 "shared_string_automatic" = "Awtomatig";

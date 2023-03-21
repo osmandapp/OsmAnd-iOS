@@ -137,10 +137,10 @@
 "send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
 "rotate_map_to" = "Map orientation";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
-"rotate_map_compass_opt_ios" = "To compass";
-"rotate_map_bearing_opt_ios" = "To direction of movement";
-"rotate_map_none_fixed_ios" = "North is up (fixed)";
-"rotate_map_none_manually_ios" = "Manually rotated (fixed)";
+"rotate_map_compass_opt" = "To compass";
+"rotate_map_bearing_opt" = "To direction of movement";
+"rotate_map_none_fixed" = "North is up (fixed)";
+"rotate_map_none_manually" = "Manually rotated (fixed)";
 "compass_click_desc" = "Tap on compass to switch map orientation mode.";
 "driving_region_descr" = "Select driving region: US, Europe, UK, Asia, and others.";
 "driving_region" = "Driving region";

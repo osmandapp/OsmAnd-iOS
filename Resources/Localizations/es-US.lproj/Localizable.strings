@@ -108,9 +108,9 @@
 "send_anonymous_data_desc" = "Enviar a OsmAnd las estadísticas de descarga de mapas, no se recopilan datos personales, ni de ubicación.";
 "rotate_map_to" = "Orientación del mapa";
 "rotate_map_to_bearing_descr" = "Elige la alineación del mapa.";
-"rotate_map_compass_opt_ios" = "Dirección de la brújula";
-"rotate_map_bearing_opt_ios" = "Dirección del movimiento";
-"rotate_map_none_fixed_ios" = "Sin rotación (norte siempre arriba)";
+"rotate_map_compass_opt" = "Dirección de la brújula";
+"rotate_map_bearing_opt" = "Dirección del movimiento";
+"rotate_map_none_fixed" = "Sin rotación (norte siempre arriba)";
 "driving_region_descr" = "Región de conducción: EEUU, Europa, Reino Unido, Asia u otras.";
 "driving_region" = "Región de conducción";
 "shared_string_automatic" = "Automático";
@@ -2799,7 +2799,7 @@
 "speed_camera_pois" = "PDI de los radares de velocidad";
 "privacy_and_security" = "Privacidad y seguridad";
 "shared_string_does_not_exist" = "No existe";
-"rotate_map_none_manually_ios" = "Rotación manual (fijo)";
+"rotate_map_none_manually" = "Rotación manual (fijo)";
 "map_markers_history" = "Historial de los marcadores del mapa";
 "last_seven_days" = "Últimos 7 días";
 "navigation_history" = "Historial de navegación";
@@ -2836,6 +2836,6 @@
 "speak_gps_signal_status" = "Anunciar la pérdida o recuperación de la señal GPS";
 "speak_route_recalculation" = "Anunciar el recálculo de la ruta";
 "announcement_time_prepare" = "Prepararse";
-"rotate_map_none_fixed_ios" = "Norte siempre arriba (fijo)";
+"rotate_map_none_fixed" = "Norte siempre arriba (fijo)";
 "ios_release_4_4" = "• Wikipedia: ahora pueden verse imágenes y se ha actualizado la interfaz de usuario\n• Favoritos: se ha añadido un buscador\n• CarPlay: se ha añadido el historial, se reorganizaron las trazas y la lista de favoritos\n• Rutas de senderismo: ahora pueden marcarse rutas en el mapa para navegar o ver información adicional\n• OpenStreetMap: se ha añadido la posibilidad de cargar trazas\n• Indicaciones por voz: ahora se admiten nuevos idiomas: Catalán, ucraniano, búlgaro, indonesio y esloveno\n• Se ha añadido un aviso legal sobre el uso de alertas con los radares de velocidad\n• Privacidad mejorada: se han añadido opciones para desactivar el registro del historial.\n• Se ha mejorado la visibilidad de la regla del mapa\n• Se ha mejorado la interfaz de usuario para los idiomas RTL (de derecha a izquierda)\n• Accesibilidad: se ha añadido etiquetado en el contenido de los botones del mapa.\n• Se ha añadido soporte para «Tipo dinámico», el tamaño del texto en OsmAnd cambiará según el tamaño del texto en iOS.\n• Orientación del mapa: se ha añadido el modo de rotación manual\n• Desde ahora, la versión mínima de soporte en iOS es v15.0\n";
 "icon_group_service" = "Servicio";

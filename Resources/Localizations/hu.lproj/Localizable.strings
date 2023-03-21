@@ -1493,9 +1493,9 @@
 "road_speeds_descr" = "Ezek a paraméterek befolyásolhatják az útvonal kiszámítását.";
 "max_speed" = "Legnagyobb sebesség";
 "driving_region_descr" = "Vezetési régió kijelölése: USA, Európa, Egyesült Királyság, Ázsia és egyebek.";
-"rotate_map_none_fixed_ios" = "Ne forogjon (észak felfelé)";
-"rotate_map_bearing_opt_ios" = "A mozgás irányába";
-"rotate_map_compass_opt_ios" = "Iránytű alapján";
+"rotate_map_none_fixed" = "Ne forogjon (észak felfelé)";
+"rotate_map_bearing_opt" = "A mozgás irányába";
+"rotate_map_compass_opt" = "Iránytű alapján";
 "send_anonymous_data_desc" = "Küldje el az OsmAndnak a térképletöltési statisztikákat. Nem gyűjtünk helyadatokat és személyes adatokat.";
 "do_not_show_discount_desc" = "Letiltja az alkalmazáskedvezmények és különleges helyi eseményüzenetek megjelenítését.";
 "default_profile_descr" = "Jelölje ki az alkalmazás indításakor használt profilt.";

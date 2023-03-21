@@ -109,9 +109,9 @@
 "send_anonymous_data_desc" = "Kirim ke OsmAnd statistik unduhan peta, kami tidak mengumpulkan data lokasi, atau info pribadi apa pun.";
 "rotate_map_to" = "Orientasi peta";
 "rotate_map_to_bearing_descr" = "Pilih perataan layar peta.";
-"rotate_map_compass_opt_ios" = "Arah kompas";
-"rotate_map_bearing_opt_ios" = "Arah gerakan";
-"rotate_map_none_fixed_ios" = "Jangan berputar (utara di atas)";
+"rotate_map_compass_opt" = "Arah kompas";
+"rotate_map_bearing_opt" = "Arah gerakan";
+"rotate_map_none_fixed" = "Jangan berputar (utara di atas)";
 "driving_region_descr" = "Pilih wilayah mengemudi: AS, Eropa, Inggris Raya, Asia, dan lain-lain.";
 "driving_region" = "Wilayah mengemudi";
 "shared_string_automatic" = "Otomatis";

@@ -714,13 +714,13 @@
 
 - (void) onRotateMapModeChanged
 {
-    NSString *rotMode = OALocalizedString(@"rotate_map_none_fixed_ios");
+    NSString *rotMode = OALocalizedString(@"rotate_map_none_fixed");
     if ([_settings.rotateMap get] == ROTATE_MAP_MANUAL)
-        rotMode = OALocalizedString(@"rotate_map_none_manually_ios");
+        rotMode = OALocalizedString(@"rotate_map_none_manually");
     else if ([_settings.rotateMap get] == ROTATE_MAP_BEARING)
-        rotMode = OALocalizedString(@"rotate_map_bearing_opt_ios");
+        rotMode = OALocalizedString(@"rotate_map_bearing_opt");
     else if ([_settings.rotateMap get] == ROTATE_MAP_COMPASS)
-        rotMode = OALocalizedString(@"rotate_map_compass_opt_ios");
+        rotMode = OALocalizedString(@"rotate_map_compass_opt");
     
     rotMode = [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"rotate_map_to"), rotMode];
     [OAUtilities showToast:nil details:rotMode duration:4 inView:OARootViewController.instance.view];

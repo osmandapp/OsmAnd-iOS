@@ -91,22 +91,22 @@
     NSString *rotateMapIcon;
     if ([_settings.rotateMap get:self.appMode] == ROTATE_MAP_BEARING)
     {
-        rotateMapValue = OALocalizedString(@"rotate_map_bearing_opt_ios");
+        rotateMapValue = OALocalizedString(@"rotate_map_bearing_opt");
         rotateMapIcon = @"ic_custom_direction_movement";
     }
     else if ([_settings.rotateMap get:self.appMode] == ROTATE_MAP_COMPASS)
     {
-        rotateMapValue = OALocalizedString(@"rotate_map_compass_opt_ios");
+        rotateMapValue = OALocalizedString(@"rotate_map_compass_opt");
         rotateMapIcon = @"ic_custom_direction_compass";
     }
     else if ([_settings.rotateMap get:self.appMode] == ROTATE_MAP_MANUAL)
     {
-        rotateMapValue = OALocalizedString(@"rotate_map_none_manually_ios");
+        rotateMapValue = OALocalizedString(@"rotate_map_none_manually");
         rotateMapIcon = @"ic_custom_direction_manual";
     }
     else
     {
-        rotateMapValue = OALocalizedString(@"rotate_map_none_fixed_ios");
+        rotateMapValue = OALocalizedString(@"rotate_map_none_fixed");
         rotateMapIcon = @"ic_custom_direction_north";
     }
     

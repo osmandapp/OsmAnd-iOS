@@ -684,9 +684,9 @@
 "do_not_send_anonymous_data_desc" = "No desem dades d'ubicacions. Tant sols estadístiques d'ús de l'aplicació i dels mapes baixats.";
 "save_global_track_interval" = "Interval d\'enregistrament general";
 "save_global_track_interval_descr" = "Trieu l\'interval d\'enregistrament general dels desplaçaments (s\'activa mitjançant el giny del mapa \'Enregistrament de ruta\').";
-"rotate_map_compass_opt_ios" = "Orientació de la brúixola";
-"rotate_map_bearing_opt_ios" = "Direcció del moviment";
-"rotate_map_none_fixed_ios" = "No giris el mapa (el nord és dalt)";
+"rotate_map_compass_opt" = "Orientació de la brúixola";
+"rotate_map_bearing_opt" = "Direcció del moviment";
+"rotate_map_none_fixed" = "No giris el mapa (el nord és dalt)";
 "driving_region_descr" = "Seleccioneu la regió de conducció: EUA, Europa, Regne Unit, Àsia i altres.";
 "shared_string_automatic" = "Automàtic";
 "auto_follow_location_enabled" = "S\'està utilitzant la visualització del mapa centrada automàticament.";

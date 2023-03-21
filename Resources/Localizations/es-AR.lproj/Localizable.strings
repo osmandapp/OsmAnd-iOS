@@ -108,9 +108,9 @@
 "send_anonymous_data_desc" = "Enviar a OsmAnd las estadísticas de descarga de mapas, no se recopilan datos personales, ni de ubicación.";
 "rotate_map_to" = "Orientación del mapa";
 "rotate_map_to_bearing_descr" = "Elige la alineación del mapa.";
-"rotate_map_compass_opt_ios" = "Dirección de la brújula";
-"rotate_map_bearing_opt_ios" = "Dirección del movimiento";
-"rotate_map_none_fixed_ios" = "Sin rotación (norte siempre arriba)";
+"rotate_map_compass_opt" = "Dirección de la brújula";
+"rotate_map_bearing_opt" = "Dirección del movimiento";
+"rotate_map_none_fixed" = "Sin rotación (norte siempre arriba)";
 "driving_region_descr" = "Región de conducción: EEUU, Europa, Reino Unido, Asia u otras.";
 "driving_region" = "Región de conducción";
 "shared_string_automatic" = "Automático";
@@ -2834,8 +2834,8 @@
 "confirm_history_item_delete" = "¿Borrar (%ld) elementos del historial?";
 "search_favorites" = "Buscar en favoritos";
 "compass_click_desc" = "Sugerencia: Pulsa el widget de la brújula para cambiar el modo de orientación del mapa.";
-"rotate_map_none_fixed_ios" = "Norte siempre arriba (fijo)";
-"rotate_map_none_manually_ios" = "Rotación manual (fijo)";
+"rotate_map_none_fixed" = "Norte siempre arriba (fijo)";
+"rotate_map_none_manually" = "Rotación manual (fijo)";
 "map_widget_camera_tilt" = "Inclinación de la cámara";
 "map_widget_camera_distance" = "Distancia de la cámara";
 "map_widget_zoom_level" = "Nivel de zum";

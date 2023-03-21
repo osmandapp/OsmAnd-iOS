@@ -61,9 +61,9 @@
 "do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
 "rotate_map_to" = "Orientación do mapa";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
-"rotate_map_compass_opt_ios" = "Dirección do compás";
-"rotate_map_bearing_opt_ios" = "Dirección do movemento";
-"rotate_map_none_fixed_ios" = "Do not rotate (north is up)";
+"rotate_map_compass_opt" = "Dirección do compás";
+"rotate_map_bearing_opt" = "Dirección do movemento";
+"rotate_map_none_fixed" = "Do not rotate (north is up)";
 "driving_region_descr" = "Escoller a rexión de condución: Estados Unidos, Europa, Reino Unido, Asia e outras.";
 "driving_region" = "Rexión na que conducir";
 "shared_string_automatic" = "Automático";

@@ -50,7 +50,6 @@
 @implementation OAMapHudViewController
 {
     OsmAndAppInstance _app;
-    OAAppSettings *_settings;
 
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _mapAzimuthObserver;
@@ -104,7 +103,6 @@
     _mapHudType = EOAMapHudBrowse;
     
     _app = [OsmAndApp instance];
-    _settings = [OAAppSettings sharedManager];
 
     _mapPanelViewController = [OARootViewController instance].mapPanel;
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
@@ -1497,7 +1495,7 @@
     _mapSettingsButton.tintColorNight = UIColorFromRGB(mode.getIconColor);
     [_mapSettingsButton updateColorsForPressedState:NO];
     
-    NSString *stringKey = _settings.applicationMode.get.stringKey;
+    NSString *stringKey = [OAAppSettings sharedManager].applicationMode.get.stringKey;
     if ([stringKey isEqualToString:@"default"])
         _mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_default");
     else if ([stringKey isEqualToString:@"car"])

@@ -1494,8 +1494,13 @@
     _mapSettingsButton.tintColorDay = UIColorFromRGB(mode.getIconColor);
     _mapSettingsButton.tintColorNight = UIColorFromRGB(mode.getIconColor);
     [_mapSettingsButton updateColorsForPressedState:NO];
-    
+    [self updateMapSettingsButtonAccessibilityValue];
+}
+
+- (void) updateMapSettingsButtonAccessibilityValue
+{
     NSString *stringKey = [OAAppSettings sharedManager].applicationMode.get.stringKey;
+    
     if ([stringKey isEqualToString:@"default"])
         _mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_default");
     else if ([stringKey isEqualToString:@"car"])

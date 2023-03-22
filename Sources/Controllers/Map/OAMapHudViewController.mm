@@ -845,7 +845,7 @@
     if ([rotateMap get] == ROTATE_MAP_NONE)
     {
         _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_north_night" : @"ic_custom_direction_north_day"];
-        _compassButton.accessibilityValue = OALocalizedString(@"rotate_map_none_fixed");
+        _compassButton.accessibilityValue = OALocalizedString(@"rotate_map_north_opt");
     }
     else if ([rotateMap get] == ROTATE_MAP_BEARING)
     {
@@ -855,7 +855,7 @@
     else if ([rotateMap get] == ROTATE_MAP_MANUAL)
     {
         _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_manual_night" : @"ic_custom_direction_manual_day"];
-        _compassButton.accessibilityValue = OALocalizedString(@"rotate_map_none_manually");
+        _compassButton.accessibilityValue = OALocalizedString(@"rotate_map_manual_opt");
     }
     else
     {

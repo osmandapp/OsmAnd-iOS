@@ -29,6 +29,7 @@ typedef NS_ENUM(NSInteger, EOATableViewCellContentStyle) {
 @property (weak, nonatomic) IBOutlet UIView *bottomContentSpaceView;
 
 - (void)updateSeparatorInset;
+- (void)setCustomLeftSeparatorInset:(BOOL)isCustom;
 
 - (void)leftEditButtonVisibility:(BOOL)show;
 - (void)leftIconVisibility:(BOOL)show;

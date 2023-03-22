@@ -20,11 +20,20 @@
 @end
 
 @implementation OASimpleTableViewCell
+{
+    BOOL _isCustomLeftSeparatorInset;
+}
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    [self updateSeparatorInset];
+    if (!_isCustomLeftSeparatorInset)
+        [self updateSeparatorInset];
+}
+
+- (void)setCustomLeftSeparatorInset:(BOOL)isCustom
+{
+    _isCustomLeftSeparatorInset = isCustom;
 }
 
 - (void)updateSeparatorInset

@@ -349,6 +349,7 @@
     self.zoomInButton.accessibilityLabel = OALocalizedString(@"key_hint_zoom_in");
     self.zoomOutButton.accessibilityLabel = OALocalizedString(@"key_hint_zoom_out");
     self.weatherButton.accessibilityLabel = OALocalizedString(@"shared_string_cancel");
+    self.compassButton.accessibilityLabel = OALocalizedString(@"map_widget_compass");
 }
 
 - (void) updateRulerPosition:(CGFloat)bottom left:(CGFloat)left
@@ -539,7 +540,14 @@
 - (void) updateMapModeButtonIfNeeded
 {
     if (_cachedLocationAvailableState != [self isLocationAvailable])
+    {
         [self updateMapModeButton];
+        _mapModeButton.accessibilityValue = OALocalizedString(@"without_permission_my_position_value");
+    }
+    else
+    {
+        _mapModeButton.accessibilityValue = OALocalizedString(@"with_permission_my_position_value");
+    }
 }
 
 - (void) updateMapModeButton
@@ -835,13 +843,25 @@
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     BOOL showCompass = [self shouldShowCompass];
     if ([rotateMap get] == ROTATE_MAP_NONE)
+    {
         _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_north_night" : @"ic_custom_direction_north_day"];
+        _compassButton.accessibilityValue = OALocalizedString(@"rotate_map_none_fixed");
+    }
     else if ([rotateMap get] == ROTATE_MAP_BEARING)
+    {
         _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_bearing_night" : @"ic_custom_direction_bearing_day"];
+        _compassButton.accessibilityValue = OALocalizedString(@"rotate_map_bearing_opt");
+    }
     else if ([rotateMap get] == ROTATE_MAP_MANUAL)
+    {
         _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_manual_night" : @"ic_custom_direction_manual_day"];
+        _compassButton.accessibilityValue = OALocalizedString(@"rotate_map_none_manually");
+    }
     else
+    {
         _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_compass_night" : @"ic_custom_direction_compass_day"];
+        _compassButton.accessibilityValue = OALocalizedString(@"rotate_map_compass_opt");
+    }
     [self updateCompassVisibility:showCompass];
     [_compassButton updateColorsForPressedState:NO];
 }
@@ -1474,6 +1494,39 @@
     _mapSettingsButton.tintColorDay = UIColorFromRGB(mode.getIconColor);
     _mapSettingsButton.tintColorNight = UIColorFromRGB(mode.getIconColor);
     [_mapSettingsButton updateColorsForPressedState:NO];
+    [self updateMapSettingsButtonAccessibilityValue];
+}
+
+- (void) updateMapSettingsButtonAccessibilityValue
+{
+    NSString *stringKey = [OAAppSettings sharedManager].applicationMode.get.stringKey;
+    
+    if ([stringKey isEqualToString:@"default"])
+        _mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_default");
+    else if ([stringKey isEqualToString:@"car"])
+        _mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_car");
+    else if ([stringKey isEqualToString:@"bicycle"])
+        _mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_bicycle");
+    else if ([stringKey isEqualToString:@"pedestrian"])
+        _mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_pedestrian");
+    else if ([stringKey isEqualToString:@"public_transport"])
+        _mapSettingsButton.accessibilityValue = OALocalizedString(@"poi_filter_public_transport");
+    else if ([stringKey isEqualToString:@"aircraft"])
+        _mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_aircraft");
+    else if ([stringKey isEqualToString:@"truck"])
+        _mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_truck");
+    else if ([stringKey isEqualToString:@"motorcycle"])
+        _mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_motorcycle");
+    else if ([stringKey isEqualToString:@"moped"])
+        _mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_moped");
+    else if ([stringKey isEqualToString:@"boat"])
+        _mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_boat");
+    else if ([stringKey isEqualToString:@"ski"])
+        _mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_skiing");
+    else if ([stringKey isEqualToString:@"horse"])
+        _mapSettingsButton.accessibilityValue = OALocalizedString(@"horseback_riding");
+    else
+        _mapSettingsButton.accessibilityValue = OALocalizedString(@"profile_type_user_string");
 }
 
 - (void) enterContextMenuMode
@@ -1552,18 +1605,21 @@
         [_driveModeButton setImage:[UIImage templateImageNamed:@"ic_custom_navigation_arrow"] forState:UIControlStateNormal];
         _driveModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
         _driveModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
+        _driveModeButton.accessibilityValue = OALocalizedString(@"simulate_in_progress");
     }
     else if (routePlanningMode)
     {
         [_driveModeButton setImage:[UIImage templateImageNamed:@"ic_custom_navigation"] forState:UIControlStateNormal];
         _driveModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
         _driveModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
+        _driveModeButton.accessibilityValue = nil;
     }
     else
     {
         [_driveModeButton setImage:[UIImage templateImageNamed:@"ic_custom_navigation"] forState:UIControlStateNormal];
         _driveModeButton.tintColorDay = UIColorFromRGB(color_on_map_icon_tint_color_light);
         _driveModeButton.tintColorNight = UIColorFromRGB(color_on_map_icon_tint_color_dark);
+        _driveModeButton.accessibilityValue = nil;
     }
 
     [_driveModeButton updateColorsForPressedState:NO];

@@ -74,87 +74,89 @@
     NSString *parentAppModeRoutingProfile = self.appMode.parent.getRoutingProfile;
     BOOL isPublicTransport = [appModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey];
     
-    if (router && !isPublicTransport && ![appModeRoutingProfile isEqualToString:OAApplicationMode.SKI.stringKey] &&
-        ![parentAppModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey] &&
-        ![parentAppModeRoutingProfile isEqualToString:OAApplicationMode.SKI.stringKey])
+    if (!isPublicTransport)
     {
-        auto parameters = router->getParameters(string(self.appMode.getDerivedProfile.UTF8String));
-        for (auto it = parameters.begin(); it != parameters.end(); ++it)
+        if (router && ![appModeRoutingProfile isEqualToString:OAApplicationMode.SKI.stringKey] &&
+            ![parentAppModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey] &&
+            ![parentAppModeRoutingProfile isEqualToString:OAApplicationMode.SKI.stringKey])
         {
-            auto& p = it->second;
-            NSString *param = [NSString stringWithUTF8String:p.id.c_str()];
-            NSString *group = [NSString stringWithUTF8String:p.group.c_str()];
-            if (![param hasPrefix:@"avoid_"]
+            auto parameters = router->getParameters(string(self.appMode.getDerivedProfile.UTF8String));
+            for (auto it = parameters.begin(); it != parameters.end(); ++it)
+            {
+                auto& p = it->second;
+                NSString *param = [NSString stringWithUTF8String:p.id.c_str()];
+                NSString *group = [NSString stringWithUTF8String:p.group.c_str()];
+                if (![param hasPrefix:@"avoid_"]
                     && ![param hasPrefix:@"prefer_"]
                     && ![param isEqualToString:kRouteParamIdShortWay]
                     && ![param isEqualToString:kRouteParamIdHazmatCategory]
                     && ![group isEqualToString:kRouteParamGroupDrivingStyle])
-                _otherParameters.push_back(p);
-        }
-        for (const auto& p : _otherParameters)
-        {
-            NSString *paramId = [NSString stringWithUTF8String:p.id.c_str()];
-            NSString *title = [OAUtilities getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
-            if (!(p.type == RoutingParameterType::BOOLEAN))
+                    _otherParameters.push_back(p);
+            }
+            for (const auto& p : _otherParameters)
             {
-                BOOL isMotorType = [paramId isEqualToString:@"motor_type"];
-                OACommonString *stringParam = [_settings getCustomRoutingProperty:paramId defaultValue:@"0"];
-                NSString *value = [stringParam get:self.appMode];
-                int index = -1;
-                
-                NSMutableArray<NSNumber *> *possibleValues = [NSMutableArray new];
-                NSMutableArray<NSString *> *valueDescriptions = [NSMutableArray new];
-                
-                double d = value ? floorf(value.doubleValue * 100 + 0.5) / 100 : DBL_MAX;
-                
-                for (int i = 0; i < p.possibleValues.size(); i++)
+                NSString *paramId = [NSString stringWithUTF8String:p.id.c_str()];
+                NSString *title = [OAUtilities getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
+                if (!(p.type == RoutingParameterType::BOOLEAN))
                 {
-                    double vl = floorf(p.possibleValues[i] * 100 + 0.5) / 100;
-                    [possibleValues addObject:@(vl)];
-                    NSString *descr = [NSString stringWithUTF8String:p.possibleValueDescriptions[i].c_str()];
-                    [valueDescriptions addObject:descr];
-                    if (vl == d)
-                        index = i;
+                    BOOL isMotorType = [paramId isEqualToString:@"motor_type"];
+                    OACommonString *stringParam = [_settings getCustomRoutingProperty:paramId defaultValue:@"0"];
+                    NSString *value = [stringParam get:self.appMode];
+                    int index = -1;
+                    
+                    NSMutableArray<NSNumber *> *possibleValues = [NSMutableArray new];
+                    NSMutableArray<NSString *> *valueDescriptions = [NSMutableArray new];
+                    
+                    double d = value ? floorf(value.doubleValue * 100 + 0.5) / 100 : DBL_MAX;
+                    
+                    for (int i = 0; i < p.possibleValues.size(); i++)
+                    {
+                        double vl = floorf(p.possibleValues[i] * 100 + 0.5) / 100;
+                        [possibleValues addObject:@(vl)];
+                        NSString *descr = [NSString stringWithUTF8String:p.possibleValueDescriptions[i].c_str()];
+                        [valueDescriptions addObject:descr];
+                        if (vl == d)
+                            index = i;
+                    }
+                    
+                    if (index == 0)
+                        value = OALocalizedString([paramId isEqualToString:@"motor_type"] ? @"shared_string_not_selected" : @"shared_string_none");
+                    else if (index != -1)
+                        value = [NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()];
+                    else
+                        value = [NSString stringWithFormat:@"%@ %@", value, [paramId isEqualToString:@"weight"] ? OALocalizedString(@"metric_ton") : OALocalizedString(@"m")];
+                    [isMotorType ? exraParametersArr : parametersArr addObject:
+                         @{
+                        @"name" : paramId,
+                        @"title" : title,
+                        @"value" : value,
+                        @"selectedItem" : [NSNumber numberWithInt:index],
+                        @"icon" : [self getParameterIcon:paramId],
+                        @"possibleValues" : possibleValues,
+                        @"possibleValuesDescr" : valueDescriptions,
+                        @"setting" : stringParam,
+                        @"type" : [OAIconTitleValueCell getCellIdentifier] }
+                    ];
                 }
-
-                if (index == 0)
-                    value = OALocalizedString([paramId isEqualToString:@"motor_type"] ? @"shared_string_not_selected" : @"shared_string_none");
-                else if (index != -1)
-                    value = [NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()];
-                else
-                    value = [NSString stringWithFormat:@"%@ %@", value, [paramId isEqualToString:@"weight"] ? OALocalizedString(@"metric_ton") : OALocalizedString(@"m")];
-                [isMotorType ? exraParametersArr : parametersArr addObject:
-                 @{
-                     @"name" : paramId,
-                     @"title" : title,
-                     @"value" : value,
-                     @"selectedItem" : [NSNumber numberWithInt:index],
-                     @"icon" : [self getParameterIcon:paramId],
-                     @"possibleValues" : possibleValues,
-                     @"possibleValuesDescr" : valueDescriptions,
-                     @"setting" : stringParam,
-                     @"type" : [OAIconTitleValueCell getCellIdentifier] }
-                 ];
             }
         }
-    }
-    [defaultSpeedArr addObject:@{
-        @"type" : [OAIconTextTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"default_speed_setting_title"),
-        @"icon" : @"ic_action_speed",
-        @"name" : @"defaultSpeed",
-    }];
-    if (parametersArr.count > 0)
-        [tableData addObject:parametersArr];
-    if (exraParametersArr.count > 0)
-        [tableData addObject:exraParametersArr];
-    if (defaultSpeedArr.count > 0)
-    {
-        [tableData addObject:defaultSpeedArr];
-        _otherSection = tableData.count - 1;
-    }
-    if (!isPublicTransport)
+        [defaultSpeedArr addObject:@{
+            @"type" : [OAIconTextTableViewCell getCellIdentifier],
+            @"title" : OALocalizedString(@"default_speed_setting_title"),
+            @"icon" : @"ic_action_speed",
+            @"name" : @"defaultSpeed",
+        }];
+        if (parametersArr.count > 0)
+            [tableData addObject:parametersArr];
+        if (exraParametersArr.count > 0)
+            [tableData addObject:exraParametersArr];
+        if (defaultSpeedArr.count > 0)
+        {
+            [tableData addObject:defaultSpeedArr];
+            _otherSection = tableData.count - 1;
+        }
         _data = [NSArray arrayWithArray:tableData];
+    }
 }
 
 - (NSString *) getParameterIcon:(NSString *)parameterName

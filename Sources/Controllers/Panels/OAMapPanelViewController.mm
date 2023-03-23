@@ -158,6 +158,8 @@ typedef enum
     float _mainMapZoom;
     float _mainMapAzimuth;
     float _mainMapEvelationAngle;
+    float _cachedViewportXScale;
+    float _cachedViewportYScale;
     
     NSString *_formattedTargetName;
     double _targetLatitude;
@@ -242,6 +244,8 @@ typedef enum
 - (void) setMapViewController:(OAMapViewController *)mapViewController
 {
     _mapViewController = mapViewController;
+    _cachedViewportXScale = _mapViewController.mapView.viewportXScale;
+    _cachedViewportYScale = _mapViewController.mapView.viewportYScale;
 }
 
 - (void) loadView
@@ -264,6 +268,8 @@ typedef enum
         _mapViewController.view.frame = self.view.frame;
         _mapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     }
+    _cachedViewportXScale = _mapViewController.mapView.viewportXScale;
+    _cachedViewportYScale = _mapViewController.mapView.viewportYScale;
 
     // Setup target point menu
     self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight)];
@@ -1573,6 +1579,11 @@ typedef enum
 
 - (void) goToTargetPointDefault
 {
+    _cachedViewportXScale = _mapViewController.mapView.viewportXScale;
+    _cachedViewportYScale = _mapViewController.mapView.viewportYScale;
+    _mapViewController.mapView.viewportXScale = [OAUtilities isLandscape] ? (_targetMenuView.frame.size.width / DeviceScreenWidth + 1.f) : 1.f;
+    _mapViewController.mapView.viewportYScale = 1.f;
+
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     renderView.azimuth = 0.0;
     renderView.elevationAngle = 90.0;
@@ -2377,6 +2388,9 @@ typedef enum
 
 - (void) hideTargetPointMenu:(CGFloat)animationDuration onComplete:(void (^)(void))onComplete hideActiveTarget:(BOOL)hideActiveTarget mapGestureAction:(BOOL)mapGestureAction
 {
+    _mapViewController.mapView.viewportXScale = _cachedViewportXScale;
+    _mapViewController.mapView.viewportYScale = _cachedViewportYScale;
+
     if (self.targetMultiMenuView.superview)
     {
         [self.targetMultiMenuView hide:YES duration:animationDuration onComplete:^{
@@ -2445,6 +2459,9 @@ typedef enum
 
 - (void) hideTargetPointMenuAndPopup:(CGFloat)animationDuration onComplete:(void (^)(void))onComplete
 {
+    _mapViewController.mapView.viewportXScale = _cachedViewportXScale;
+    _mapViewController.mapView.viewportYScale = _cachedViewportYScale;
+
     if (self.targetMultiMenuView.superview)
     {
         [self.targetMultiMenuView hide:YES duration:animationDuration onComplete:onComplete];
@@ -2506,7 +2523,13 @@ typedef enum
     [self.targetMenuView.customController viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self.targetMultiMenuView transitionToSize];
-    } completion:nil];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        if (_targetMenuView.customController)
+        {
+            _mapViewController.mapView.viewportXScale = [OAUtilities isLandscape] ? (_targetMenuView.frame.size.width / DeviceScreenWidth + 1.f) : 1.f;
+            _mapViewController.mapView.viewportYScale = 1.f;
+        }
+    }];
 }
 
 - (OATargetPoint *) getCurrentTargetPoint

@@ -12,6 +12,7 @@
 #import "OAAppSettings.h"
 #import "OAOsmAndFormatter.h"
 #import "OAColors.h"
+#import "OAShapeLayer.h"
 
 #define kAnimationDuration .2
 #define kBlurBackgroundTag -999
@@ -20,9 +21,9 @@
 
 @property (strong, nonatomic) UILabel* textLabel;
 
-@property CALayer *bottomBorder;
-@property CALayer *leftBorder;
-@property CALayer *rightBorder;
+@property UIView *bottomBorder;
+@property UIView *leftBorder;
+@property UIView *rightBorder;
 
 @property UIVisualEffectView *blurView;
 
@@ -35,24 +36,23 @@
     self = [super initWithFrame:frame];
     if (self)
     {
-        
-        // Add a bottomBorder.
-        self.bottomBorder = [CALayer layer];
-        self.bottomBorder.frame = CGRectMake(0, self.frame.size.height, self.frame.size.width, 1.0f);
-        [self.layer addSublayer:self.bottomBorder];
-        
-        // Add a leftBorder.
-        self.leftBorder = [CALayer layer];
-        self.leftBorder.frame = CGRectMake(0, self.frame.size.height - 10, 1.0f, 10);
-        [self.layer addSublayer:self.leftBorder];
-        
-        // Add a rightBorder.
-        self.rightBorder = [CALayer layer];
-        self.rightBorder.frame = CGRectMake(self.frame.size.width-1, self.frame.size.height - 10, 1.0f, 10);
-        [self.layer addSublayer:self.rightBorder];
-        
-        // Add border outline
         [UIView animateWithDuration:kAnimationDuration animations:^{
+            // Add a bottomBorder.
+            self.bottomBorder = [[UIView alloc] init];
+            self.bottomBorder.frame = CGRectMake(0, self.frame.size.height, self.frame.size.width, 1.0f);
+            [self addSubview:self.bottomBorder];
+            
+            // Add a leftBorder.
+            self.leftBorder = [[UIView alloc] init];
+            self.leftBorder.frame = CGRectMake(0, self.frame.size.height - 10, 1.0f, 10);
+            [self addSubview:self.leftBorder];
+            
+            // Add a rightBorder.
+            self.rightBorder = [[UIView alloc] init];
+            self.rightBorder.frame = CGRectMake(self.frame.size.width-1, self.frame.size.height - 10, 1.0f, 10);
+            [self addSubview:self.rightBorder];
+            
+            // Add border outline
             self.blurView.frame = CGRectMake(-2.5, self.frame.size.height - 12.5, self.frame.size.width + 5., 16.);
             [self applyBlurMask];
         }];
@@ -147,9 +147,9 @@
 
 - (void) setDay
 {
-    self.bottomBorder.backgroundColor = [UIColor colorWithWhite:0.3f alpha:1.0f].CGColor;
-    self.leftBorder.backgroundColor = [UIColor colorWithWhite:0.3f alpha:1.0f].CGColor;
-    self.rightBorder.backgroundColor = [UIColor colorWithWhite:0.3f alpha:1.0f].CGColor;
+    self.bottomBorder.layer.backgroundColor = [UIColor colorWithWhite:0.3f alpha:1.0f].CGColor;
+    self.leftBorder.layer.backgroundColor = [UIColor colorWithWhite:0.3f alpha:1.0f].CGColor;
+    self.rightBorder.layer.backgroundColor = [UIColor colorWithWhite:0.3f alpha:1.0f].CGColor;
     self.textLabel.textColor = UIColor.blackColor;
     
     [self setupRulerBlurView:UIBlurEffectStyleSystemUltraThinMaterialLight];
@@ -159,9 +159,9 @@
 
 - (void) setNight
 {
-    self.bottomBorder.backgroundColor = UIColorFromRGB(color_icon_color_light).CGColor;
-    self.leftBorder.backgroundColor = UIColorFromRGB(color_icon_color_light).CGColor;
-    self.rightBorder.backgroundColor = UIColorFromRGB(color_icon_color_light).CGColor;
+    self.bottomBorder.layer.backgroundColor = UIColorFromRGB(color_icon_color_light).CGColor;
+    self.leftBorder.layer.backgroundColor = UIColorFromRGB(color_icon_color_light).CGColor;
+    self.rightBorder.layer.backgroundColor = UIColorFromRGB(color_icon_color_light).CGColor;
     self.textLabel.textColor = UIColorFromRGB(color_icon_color_light);
     
     [self setupRulerBlurView:UIBlurEffectStyleSystemUltraThinMaterialDark];
@@ -171,6 +171,9 @@
 
 - (void)applyBlurMask
 {
+    [CATransaction begin];
+    [CATransaction setAnimationDuration:kAnimationDuration];
+    [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
     UIBezierPath *path = [UIBezierPath bezierPath];
     [path moveToPoint:CGPointZero];
     [path addLineToPoint:CGPointMake(6., 0.)];
@@ -182,22 +185,24 @@
     [path addLineToPoint:CGPointMake(0., self.blurView.frame.size.height)];
     [path addLineToPoint:CGPointZero];
     
-    CAShapeLayer *maskLayer = [CAShapeLayer layer];
-    maskLayer.path = path.CGPath;
+    OAShapeLayer *maskLayer = [OAShapeLayer layer];
+    maskLayer.frame = self.blurView.bounds;
+    
     self.blurView.layer.mask = maskLayer;
+    maskLayer.path = path.CGPath;
+    [CATransaction commit];
 }
 
 - (void) invalidateLayout
 {
-    // Add a bottomBorder.
-    self.bottomBorder.frame = CGRectMake(0, self.frame.size.height, self.frame.size.width, 1.0f);
-    self.leftBorder.frame = CGRectMake(0, self.frame.size.height - 10, 1.0f, 10);
-    self.rightBorder.frame = CGRectMake(self.frame.size.width-1, self.frame.size.height - 10, 1.0f, 10);
-    [self.blurView.layer removeAllAnimations];
-    [UIView animateWithDuration:kAnimationDuration delay:0. options:UIViewAnimationOptionOverrideInheritedDuration animations:^{
+    [UIView animateWithDuration:kAnimationDuration delay:0. options:UIViewAnimationOptionCurveEaseOut animations:^{
+        self.bottomBorder.frame = CGRectMake(0, self.frame.size.height, self.frame.size.width, 1.0f);
+        self.leftBorder.frame = CGRectMake(0, self.frame.size.height - 10, 1.0f, 10);
+        self.rightBorder.frame = CGRectMake(self.frame.size.width-1, self.frame.size.height - 10, 1.0f, 10);
         self.blurView.frame = CGRectMake(-2.5, self.frame.size.height - 12.5, self.frame.size.width + 5., 16.);
         [self applyBlurMask];
     } completion:nil];
+    
 }
 
 - (void) setRulerData:(float)metersPerPixel

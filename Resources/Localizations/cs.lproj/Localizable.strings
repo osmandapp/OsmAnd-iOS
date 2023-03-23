@@ -2823,4 +2823,6 @@
 "top_widgets_panel" = "Horní panel";
 "rotate_map_north_opt" = "Sever je nahoře (opraveno)";
 "rotate_map_manual_opt" = "Ruční otáčení (opraveno)";
+"rotate_map_none_fixed" = "Sever je nahoře (opraveno)";
+"rotate_map_none_manually" = "Ruční otáčení (opraveno)";
 "compass_click_desc" = "Klepnutím na kompas přepnete režim orientace mapy.";

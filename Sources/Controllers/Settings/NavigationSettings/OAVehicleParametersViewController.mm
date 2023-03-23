@@ -72,9 +72,9 @@
     _otherParameters.clear();
     NSString *appModeRoutingProfile = self.appMode.getRoutingProfile;
     NSString *parentAppModeRoutingProfile = self.appMode.parent.getRoutingProfile;
+    BOOL isPublicTransport = [appModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey];
     
-    if (router && ![appModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey] &&
-        ![appModeRoutingProfile isEqualToString:OAApplicationMode.SKI.stringKey] &&
+    if (router && !isPublicTransport && ![appModeRoutingProfile isEqualToString:OAApplicationMode.SKI.stringKey] &&
         ![parentAppModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey] &&
         ![parentAppModeRoutingProfile isEqualToString:OAApplicationMode.SKI.stringKey])
     {
@@ -153,7 +153,8 @@
         [tableData addObject:defaultSpeedArr];
         _otherSection = tableData.count - 1;
     }
-    _data = [NSArray arrayWithArray:tableData];
+    if (!isPublicTransport)
+        _data = [NSArray arrayWithArray:tableData];
 }
 
 - (NSString *) getParameterIcon:(NSString *)parameterName

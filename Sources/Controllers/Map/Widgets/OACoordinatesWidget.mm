@@ -17,6 +17,7 @@
 #import "OADownloadMapWidget.h"
 #import "OAOsmAndFormatter.h"
 #import "OASearchToolbarViewController.h"
+#import "OADestinationCardsViewController.h"
 
 #import <OsmAndCore/Utilities.h>
 
@@ -80,9 +81,8 @@
     if (self.delegate)
         [self.delegate widgetChanged:nil];
 
-    BOOL isLandscape = [OAUtilities isLandscapeIpadAware];
     CGFloat middlePoint = self.frame.size.width / 2;
-    CGFloat lineWidth = 1.0 / [UIScreen mainScreen].scale;
+    CGFloat lineWidth = 0.5;
     _horisontalSeparator.frame = CGRectMake(0, 0, self.frame.size.width, lineWidth);
     _verticalSeparator.frame = CGRectMake(middlePoint - lineWidth, 14, lineWidth, 24);
 
@@ -118,12 +118,20 @@
         }
     }
 
-    _horisontalSeparator.hidden = isLandscape;
+    OAMapHudViewController *mapHud = [OARootViewController instance].mapPanel.hudViewController;
+    BOOL topVisible = [mapHud.topCoordinatesWidget isVisible];
+    BOOL bottomVisible = [mapHud.coordinatesMapCenterWidget isVisible];
+    BOOL bothVisible = topVisible && bottomVisible;
+    _horisontalSeparator.hidden = !(bothVisible && _type == EOACoordinatesWidgetTypeMapCenter);
 
-    self.layer.shadowColor = [UIColor.blackColor colorWithAlphaComponent:0.7].CGColor;
-    self.layer.shadowOpacity = 1.0;
-    self.layer.shadowRadius = 1.0;
-    self.layer.shadowOffset = CGSizeMake(0.0, 1.0);
+    CGRect rect = self.bounds;
+    rect.origin.y = 5.;
+    rect.size.height -= 5.;
+    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:rect];
+    self.layer.shadowPath = shadowPath.CGPath;
+    self.layer.shadowOpacity = 0.35;
+    self.layer.shadowRadius = 5;
+    self.layer.shadowOffset = CGSizeMake(0, 2);
     self.layer.masksToBounds = NO;
 
     self.layer.cornerRadius = [OAUtilities isLandscape] ? 3 : 0;
@@ -137,7 +145,8 @@
     return [self isEnabled]
             && [topToolbar getAttentionLevel] != EOAToolbarAttentionLevelHigh
             && !mapPanel.hudViewController.downloadMapWidget.isVisible
-            && ![mapPanel isTopToolbarSearchVisible];
+            && ![mapPanel isTopToolbarSearchVisible]
+            && ![OADestinationCardsViewController sharedInstance].view.superview;
 }
 
 - (BOOL) updateInfo
@@ -226,7 +235,7 @@
             _latTextView.textColor = nightMode ? UIColorFromRGB(text_primary_night) : UIColor.blackColor;
             _lonTextView.textColor = nightMode ? UIColorFromRGB(text_primary_night) : UIColor.blackColor;
             _horisontalSeparator.hidden = !isPortrait;
-            _horisontalSeparator.backgroundColor = self.backgroundColor;
+            _horisontalSeparator.backgroundColor = UIColorFromRGB(color_tint_gray);
 
             _lastUpdatingTime = [[NSDate new] timeIntervalSince1970];
         }

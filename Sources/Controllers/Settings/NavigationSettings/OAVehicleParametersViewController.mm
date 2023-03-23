@@ -76,8 +76,10 @@
     
     if (isPublicTransport)
     {
+        _data = [NSArray arrayWithArray:tableData];
         return;
     }
+    
     if (router && ![appModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey] &&
         ![appModeRoutingProfile isEqualToString:OAApplicationMode.SKI.stringKey] &&
         ![parentAppModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey] &&

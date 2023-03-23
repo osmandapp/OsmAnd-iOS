@@ -2821,11 +2821,6 @@
 "map_widget_zoom_level" = "Zoom level";
 "map_widget_target_distance" = "Vzdálenost cíle";
 "top_widgets_panel" = "Horní panel";
-<<<<<<< HEAD
 "rotate_map_north_opt" = "Sever je nahoře (opraveno)";
 "rotate_map_manual_opt" = "Ruční otáčení (opraveno)";
-=======
-"rotate_map_none_fixed" = "Sever je nahoře (opraveno)";
-"rotate_map_none_manually" = "Ruční otáčení (opraveno)";
->>>>>>> 68ac417cd (Translated using Weblate (Czech))
 "compass_click_desc" = "Klepnutím na kompas přepnete režim orientace mapy.";

@@ -549,13 +549,13 @@
 //inapps
 "plugin_nautical_name" = "Plavební mapový pohled";
 "product_desc_nautical" = "Vektorové mapy vhodné pro navigaci na vodních trasách";
-"plugin_nautical_descr" = "Obohatí vaši mapu o informace o plavebních trasách, navigačních světlech, nebezpečných námořních zónách, zónách s omezením plavby nebo kotvení atd. Pro použití si stáhněte příslušné námořní mapy a povolte styl \"Námořní mapa\" v části \"Konfigurace mapy\". \n\nDalší informace naleznete na adrese https://osmand.net/docs/user/plugins/nautical-charts .";
+"plugin_nautical_descr" = "Obohatí vaši mapu o informace o plavebních trasách, navigačních světlech, nebezpečných námořních zónách, zónách s omezením plavby nebo kotvení atd. Pro použití si stáhněte příslušné námořní mapy a povolte styl \"Námořní mapa\" v \"Nastavení mapy\". \n\nDalší informace naleznete na adrese https://osmand.net/docs/user/plugins/nautical-charts .";
 "osmand_parking_plugin_name" = "Parkovací místo";
 "product_desc_parking" = "Sledování doby parkování a polohy vašeho vozu";
 "osmand_parking_plugin_description" = "Označte si místo, kde máte zaparkované auto, a upozorněte kalendář, kdy končí platnost parkovacího automatu. Chcete-li umístit značku, vyberte místo na mapě, přejděte do části \"Akce\" a klepněte na možnost \"Přidat parkování\".";
 "plugin_ski_name" = "Lyžařský mapový pohled";
 "product_desc_skimap" = "Aktuální mapa lyžařských tratí s vleky a sjezdovkami";
-"plugin_ski_descr" = "Navrženo pro navigaci v oblastech zimních sportů: Sjezdovky, vleky a běžkařské tratě jsou označeny barevnými čarami, které označují obtížnost. Chcete-li tento doplněk používat, povolte jej a přejděte také na \"Konfigurace mapy\" a vyberte styl mapy \"Zima a lyžování\".";
+"plugin_ski_descr" = "Navrženo pro navigaci v oblastech zimních sportů: Sjezdovky, vleky a běžkařské tratě jsou označeny barevnými čarami, které označují obtížnost. Chcete-li tento modul používat, povolte jej a přejděte také do \"Nastavení mapy\" a vyberte styl mapy \"Zima a lyžování\".";
 "record_plugin_name" = "Záznam cesty";
 "product_desc_track_recording" = "Zaznamenávejte a ukládejte své cesty jako GPX stopy";
 "record_plugin_description" = "Zaznamenávejte své výlety nebo tréninky a analyzujte data z hlediska rychlosti, počtu stoupání a klesání, výškového profilu atd. Zaznamenané trasy lze archivovat, sdílet s přáteli, upravovat a následně zpracovávat.\n\nDalší informace naleznete na adrese https://osmand.net/docs/user/plugins/trip-recording .";
@@ -577,7 +577,7 @@
 "purchases_feature_desc_wikipedia" = "Poskytuje offline přístup ke všem článkům z Wikipedie týkajícím se míst, díky čemuž můžete jednoduchým klepnutím na mapě zjistit informace o místech, která navštívíte na své cestě. Nezapomeňte si stáhnout mapové soubory Wikipedie pro příslušné regiony.";
 "srtm_plugin_name" = "Vrstevnice";
 "product_desc_srtm" = "Vizuální posouzení tvaru povrchu země";
-"srtm_plugin_description" = "Informace o terénu, jako jsou obrysové čáry, stíny kopců a svahy, vám pomohou vizuálně zhodnotit reliéf a reliéf terénu, navigaci a další. Topografické informace mohou být na mapě znázorněny stínováním svahů, vrstevnicemi a/nebo zbarvením strmosti.\n\nPodkladová data pocházejí ze systémů SRTM a ASTER.\n\nDalší informace naleznete na adrese http://osmand.net/docs/user/plugins/contour-lines .";
+"srtm_plugin_description" = "Informace o terénu, jako jsou obrysové čáry, stíny kopců a svahy, vám pomohou vizuálně zhodnotit reliéf terénu, schůdnost a další. Topografické informace mohou být na mapě znázorněny stínováním svahů, vrstevnicemi a/nebo zbarvením strmosti.\n\nPodkladová data pocházejí ze systémů SRTM a ASTER.\n\nDalší informace naleznete na adrese http://osmand.net/docs/user/plugins/contour-lines .";
 "my_location" = "Moje poloha";
 "all_categories" = "Všechny kategorie";
 "get_unlimited_access" = "Získejte neomezený přístup";
@@ -1735,7 +1735,7 @@
 "none_point_error" = "Prosím přidejte alespoň jeden bod.";
 "gpx_saved_successfully" = "GPX soubor uložen do %@";
 "plan_route_exit_message" = "Opravdu chcete zavřít plánování trasy bez uložení? Ztratíte tak všechny změny.";
-"route_between_points_add_track_desc" = "Vyberte soubor stopy, do kterého chcete přidat nový segment.";
+"route_between_points_add_track_desc" = "Vyberte soubor stopy, do níž se přidá nový úsek.";
 "sort_last_modified" = "Naposledy změněno";
 "plan_route_open_existing_track" = "Otevřít existující stopu";
 "track_is_saved" = "%@\nbylo uloženo!";
@@ -1799,8 +1799,8 @@
 
 "latest_version" = "Máte nejnovější verzi: %@";
 "desert" = "Poušť";
-"vessel_height_limit_description" = "Nastavte výšku plavidla tak, abyste se vyhnuli nízkým mostům. Mějte na paměti, že pokud je most pohyblivý, použijeme jeho výšku v otevřeném stavu.";
-"lenght_limit_description" = "Uveďte délku svého vozidla, na některých trasách mohou platit omezení pro dlouhá vozidla.";
+"vessel_height_limit_description" = "Nastavte výšku plavidla, aby bylo možné se vyhnout nízkým mostům. Mějte na paměti, že pokud je most pohyblivý, použijeme jeho výšku v otevřeném stavu.";
+"lenght_limit_description" = "Zadejte délku svého vozidla, na trase mohou být omezení pro dlouhá vozidla.";
 "touting_specified_vehicle_parameters_descr" = "Zadané parametry vozidla mohou ovlivnit výpočet trasy.";
 "key_hint_recenter_map" = "Vycentrovat mapu";
 "key_hint_goback" = "Jít zpět";
@@ -2762,20 +2762,20 @@
 "rendering_attr_showMtbScaleIMBATrails_description" = "Zobrazit vyhrazené stezky pro horská kola.";
 "routing_attr_avoid_4wd_only_name" = "Vyhnout se silnicím pro vozidla s pohonem všech kol";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "Nevyjíždějte mimo sjezdovky";
-"rendering_attr_depthContourWidth_description" = "Šířka hloubkové vrstevnice";
+"rendering_attr_depthContourWidth_description" = "Tloušťka hloubkové vrstevnice";
 "routing_attr_avoid_fords_description" = "Vyhnout se brodům";
-"routing_attr_carriage_restrictions_description" = "Zvážit povolení k vjezdu pro vozidla tažená koňmi";
-"routing_attr_freeride_policy_prefer_offpiste_name" = "Raději mimo sjezdovky";
+"routing_attr_carriage_restrictions_description" = "Zohlednit omezení vjezdu pro vozidla tažená koňmi";
+"routing_attr_freeride_policy_prefer_offpiste_name" = "Preferovat mimo sjezdovky";
 "routing_attr_carriage_restrictions_name" = "Omezení přepravy";
 "routing_attr_avoid_fords_name" = "Vyhnout se brodům";
 "routing_attr_difficulty_preference_expert_name" = "Expert";
-"routing_attr_goods_restrictions_description" = "Zvážit povolení k vjezdu pro lehká nákladní vozidla (zboží)";
+"routing_attr_goods_restrictions_description" = "Zohlednit omezení vjezdu pro lehká nákladní vozidla (zboží)";
 "rendering_attr_weatherTempContours_name" = "Teplotní izolinie";
 "rendering_attr_showTramRoutes_name" = "Tramvajové linky";
-"routing_attr_hazmat_category_description" = "Kategorie nebezpečných materiálů / zvažte povolení pro přístup k nebezpečným látkám";
+"routing_attr_hazmat_category_description" = "Kategorie nebezpečných materiálů / zohlednit omezení pro nebezpečný náklad";
 "routing_attr_difficulty_preference_intermediate_name" = "Středně pokročilý";
 "rendering_attr_horse_scale_demanding_name" = "Náročné";
-"routing_attr_avoid_4wd_only_description" = "Vyhýbejte se silnicím vhodným pouze pro vozidla s pohonem všech kol";
+"routing_attr_avoid_4wd_only_description" = "Vyhnout se silnicím vhodným pouze pro vozidla s pohonem všech kol";
 "routing_attr_difficulty_preference_beginner_name" = "Začátečník";
 "announce_when_exceeded" = "Oznámení při překročení";
 "speak_gps_signal_status" = "Oznámení ztráty a obnovení signálu GPS";

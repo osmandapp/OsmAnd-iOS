@@ -534,37 +534,30 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 - (BOOL) allDownloaded
 {
-    NSMutableArray *items = [NSMutableArray new];
-    NSMutableArray *srtmItems = [NSMutableArray new];
-    NSMutableArray *srtmFeetItems = [NSMutableArray new];
-    
-    for (OAResourceItem *item in _items)
+    if (self.resourceType == OsmAndResourceType::SrtmMapRegion)
     {
-        if (item.resourceType == OsmAndResourceType::SrtmMapRegion)
+        NSMutableArray *srtmItems = [NSMutableArray new];
+        NSMutableArray *srtmFeetItems = [NSMutableArray new];
+        
+        for (OAResourceItem *item in _items)
         {
             if ([OAResourceType isSRTMF:item])
                 [srtmFeetItems addObject:item];
             else
                 [srtmItems addObject:item];
         }
-        else
-        {
-            [items addObject:item];
-        }
+        BOOL isSrtmItemsDownloaded = [self checkDownloadedItems:[NSArray arrayWithArray:srtmItems]];
+        BOOL isSrtmFeetItemsDownloaded = [self checkDownloadedItems:[NSArray arrayWithArray:srtmFeetItems]];
+        
+        return isSrtmItemsDownloaded || isSrtmFeetItemsDownloaded;
     }
-    
-    BOOL isSrtmItemsDownloaded = [self checkDownloadedItems:srtmItems];
-    BOOL isSrtmFeetItemsDownloaded = [self checkDownloadedItems:srtmFeetItems];
-    
-    if ((isSrtmFeetItemsDownloaded && srtmFeetItems.count > 0) || (isSrtmItemsDownloaded && srtmItems.count > 0))
-        return YES;
-    else if ((!isSrtmFeetItemsDownloaded && srtmFeetItems.count > 0) || (!isSrtmItemsDownloaded && srtmItems.count > 0))
-        return NO;
     else
-        return [self checkDownloadedItems:items];
+    {
+        return [self checkDownloadedItems:_items];
+    }
 }
 
-- (BOOL) checkDownloadedItems:(NSMutableArray<OAResourceItem *> *)items
+- (BOOL) checkDownloadedItems:(NSArray<OAResourceItem *> *)items
 {
     NSInteger downloadedCount = 0;
     for (OAResourceItem *item in items)

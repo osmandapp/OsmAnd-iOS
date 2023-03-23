@@ -2828,9 +2828,9 @@
 "rotate_map_manual_opt" = "Rotação manual (fixa)";
 "compass_click_desc" = "Toque na bússola para alternar o modo de orientação do mapa.";
 "rotate_map_north_opt" = "O norte está para cima (fixo)";
-"map_widget_camera_distance" = "Distância da câmera";
+"map_widget_camera_distance" = "Elevação da câmera";
 "map_widget_zoom_level" = "Nível de zoom";
-"map_widget_target_distance" = "Distância alvo";
+"map_widget_target_distance" = "Distância da câmera ao alvo";
 "change_language" = "Mudar idioma";
 "wikipedia_language_settings_descr" = "Selecione os idiomas nos quais os artigos da Wikipédia aparecerão no mapa. Você pode alternar entre qualquer idioma disponível durante a leitura do artigo.";
 "dont_download" = "Não baixar";
@@ -2848,3 +2848,15 @@
 "show_map_center" = "Mostrar coordenadas: centro do mapa";
 "hide_map_center" = "Ocultar coordenadas: centro do mapa";
 "quick_action_map_center_widget_descr" = "Uma alternância para mostrar ou ocultar o widget Coordenadas no mapa.";
+"map_widget_sunset" = "Pôr do sol";
+"map_widget_sunset_desc" = "Mostra a hora do próximo pôr do sol ou o tempo restante até o pôr do sol.";
+"map_widget_next_sunrise" = "Próximo nascer do sol";
+"without_permission_my_position_value" = "OsmAnd não tem permissão de localização";
+"with_permission_my_position_value" = "Mover mapa para a localização atual";
+"press_again_to_change_the_map_orientation" = "Toque novamente para alterar a orientação do mapa";
+"app_mode_moped" = "Ciclomotor";
+"map_widget_next_sunset" = "Próximo pôr do sol";
+"map_widget_sunrise" = "Nascer do sol";
+"map_widget_sunrise_desc" = "Mostra a hora do próximo nascer do sol ou o tempo restante até o nascer do sol.";
+"map_widget_sunrise_sunset_time_left" = "Tempo restante";
+"shared_string_external" = "Externo";

@@ -148,7 +148,7 @@
 "speed_limit_exceed" = "Tolerance překročení rychlosti";
 "speed_limit_exceed_message" = "Zvolte toleranční rozpětí rychlostního limitu, při jehož překročení se zobrazí hlasové upozornění.";
 "wake_on_voice" = "Zapnout obrazovku";
-"wake_on_voice_descr" = "Zapnout obrazovku zařízení (pokud je vypnuta) když se blíží odbočka.";
+"wake_on_voice_descr" = "Zapnout obrazovku zařízení (pokud je vypnuta), když se blíží odbočka.";
 "voice_pref_title" = "Hlas";
 "voice_provider" = "Hlasová data";
 "voice_provider_descr" = "Vybrat hlasová data pro navigaci.";
@@ -573,8 +573,8 @@
 "product_desc_allworld" = "Mapy celého světa";
 "product_desc_asia" = "Neomezené stahování map Asie";
 "download_wikipedia_maps" = "Wikipedie";
-"product_desc_wiki" = "Umístění článků Wikipedie na mapě";
-"purchases_feature_desc_wikipedia" = "Poskytuje všechny články z Wikipedie týkající se míst v režimu offline a pomáhá vám dozvědět se informace o místech, která navštívíte na své cestě, pouhým klepnutím na mapu. Nezapomeňte si stáhnout mapové soubory Wikipedie pro příslušné regiony.";
+"product_desc_wiki" = "Články Wikipedie o místech na mapě";
+"purchases_feature_desc_wikipedia" = "Poskytuje offline přístup ke všem článkům z Wikipedie týkajícím se míst, díky čemuž můžete jednoduchým klepnutím na mapě zjistit informace o místech, která navštívíte na své cestě. Nezapomeňte si stáhnout mapové soubory Wikipedie pro příslušné regiony.";
 "srtm_plugin_name" = "Vrstevnice";
 "product_desc_srtm" = "Vizuální posouzení tvaru povrchu země";
 "srtm_plugin_description" = "Informace o terénu, jako jsou obrysové čáry, stíny kopců a svahy, vám pomohou vizuálně zhodnotit reliéf a reliéf terénu, navigaci a další. Topografické informace mohou být na mapě znázorněny stínováním svahů, vrstevnicemi a/nebo zbarvením strmosti.\n\nPodkladová data pocházejí ze systémů SRTM a ASTER.\n\nDalší informace naleznete na adrese http://osmand.net/docs/user/plugins/contour-lines .";
@@ -1115,7 +1115,7 @@
 "rendering_attr_highway_class_steps_name" = "Schody";
 "routing_attr_allow_classic_only_name" = "Povolit pouze trasy pro klasické lyžování";
 "rendering_attr_highway_class_cycleway_name" = "Cyklostezka";
-"routing_attr_allow_private_description" = "Umožnit přístup k soukromým oblastem.";
+"routing_attr_allow_private_description" = "Povolit přístup do soukromých oblastí.";
 "rendering_attr_buildings15zoom_name" = "Budovy při přiblížení 15";
 "rendering_value_default_name" = "Výchozí";
 "rendering_attr_contourColorScheme_description" = "Barevné schéma pro vrstevnice";
@@ -2039,7 +2039,7 @@
 "suggested_maps" = "Navrhované mapy";
 "product_desc_openplacereviews" = "Sdílejte své názory na veřejná místa";
 "plugin_mapillary_descr" = "Snímky pohledů na úrovni ulice. Přispět můžete i vy. Chcete-li zobrazit existující data jako mapovou vrstvu, zapněte v nabídce \"Konfigurace mapy\" možnost \"Snímky na úrovni ulic\".";
-"product_desc_mapillary" = "Pohledy do ulice, abyste si mohli prohlédnout okolí";
+"product_desc_mapillary" = "Snímky z úrovně ulice, abyste si mohli prohlédnout okolí";
 "shared_string_feet" = "stopy";
 "srtm_download_list_help_message" = "OsmAnd poskytuje data vrstevnic vmetrech a stopách. Pro změnu formátu budete muset soubor znovu stáhnout.";
 "srtm_download_single_help_message" = "Vyberte variantu. Chcete-li změnit formát, musíte soubor znovu stáhnout.";
@@ -2510,7 +2510,7 @@
 "cloud_conflict_descr" = "Místní a cloudová verze obsahují změny od poslední synchronizace.";
 "backup_delete_old_data" = "Odstranit staré verze";
 "cloud_all_changes_uploaded" = "Všechny změny byly nahrány";
-"are_you_sure" = "Jste si jistý\?";
+"are_you_sure" = "Jste si jisti?";
 "backup_pause_all" = "Pozastavit vše";
 "promo" = "Promo";
 "local_backup_empty_file" = "Soubor zálohy neobsahuje žádné položky k obnovení.";
@@ -2523,7 +2523,7 @@
 "backup_delete_all_data" = "Smazat všechna moje data";
 "show_borders_of_downloaded_maps" = "Zobrazit hranice stažených map";
 "weather_temperature_fahrenheit" = "Fahrenheit";
-"verification" = "Ověřování";
+"verification" = "Ověření";
 "verification_code_placeholder" = "Kód";
 "shared_string_expires" = "Platnost končí";
 "shared_string_do_not_exist" = "Neexistuje";
@@ -2533,7 +2533,7 @@
 "shared_string_added" = "Přidáno";
 "depth_contour_lines" = "Hloubkové vrstevnice";
 "product_desc_weather" = "24hodinová předpověď na 7 dní dopředu na mapě";
-"weather_plugin_description" = "Poskytuje\n- 24hodinovou a 7denní předpověď počasí s 5 vrstvami.\n- widgety založené na poloze\n- izolinie teploty a tlaku\n\nÚdaje o počasí poskytuje globální předpovědní systém (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
+"weather_plugin_description" = "Poskytuje\n- 24hodinovou a 7denní předpověď počasí s 5 vrstvami\n- widgety založené na poloze\n- izolinie teploty a tlaku\n\nÚdaje o počasí poskytuje globální předpovědní systém (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
 "map_download_privacy_descr" = "Stažením map souhlasíte s <a href='https://osmand.net/docs/legal/terms-of-use'>Podmínkami používání</a> a <a href='https://osmand.net/docs/legal/privacy-policy'>Zásadami ochrany osobních údajů</a>.";
 "mtb_segment_classification" = "Klasifikaceúseku";
 "rendering_attr_showMtbScale_name" = "Zobrazit stupnici MTB";
@@ -2541,7 +2541,7 @@
 "rendering_attr_showFunicularRoutes_name" = "Lanové dráhy";
 "rendering_attr_showRunningRoutes_description" = "Zobrazení běžeckých tras";
 "rendering_attr_showRunningRoutes_name" = "Běžecké trasy";
-"routing_attr_allow_private_for_truck_name" = "Umožnit soukromý vjezd (nákladní automobil)";
+"routing_attr_allow_private_for_truck_name" = "Povolit soukromý vjezd (nákladní automobil)";
 "login_help_email_title" = "OsmAnd iOS Cloud";
 "choose_what_to_restore" = "Vyberte, co se má obnovit.";
 "login_footer_full_text" = "Potřebujete pomoc? Kontaktujte nás na adrese \nsupport@osmand.net";
@@ -2562,7 +2562,7 @@
 "backup_danger_zone" = "Nebezpečná zóna";
 "backup_deleting_all_data" = "Odstraňují se všechna data…";
 "backup_data" = "Zálohovat údaje";
-"track_has_no_needed_data" = "Na trase chybí příslušné údaje.";
+"track_has_no_needed_data" = "Ve stopě chybí potřebné údaje.";
 "purchases_feature_desc_cross_buy" = "Používejte funkce předplatného na různých platformách (Android/iOS/web) bez dalších nákladů.";
 "purchases_feature_desc_carplay" = "Přináší offline mapy a navigaci OsmAnd na obrazovku vozidla a integruje se s ovládacími prvky vozidla.";
 "no_purchases" = "Nemáte žádné nákupy";
@@ -2598,7 +2598,7 @@
 "nautical_depth_points" = "Plavební hloubkové body";
 "depth_contours" = "Hloubkové vrstevnice";
 "tomorrow" = "Zítra";
-"routing_attr_allow_private_for_truck_description" = "Umožnění přístupu nákladních vozidel na soukromé pozemky.";
+"routing_attr_allow_private_for_truck_description" = "Povolit přístup nákladních vozidel na soukromé pozemky.";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (bez omezení)";
 "error_contact_support" = "Pokud problém přetrvává, kontaktujte náš tým podpory.";
 "promo_subscription" = "Propagační předplatné";

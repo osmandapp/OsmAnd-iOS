@@ -3487,7 +3487,8 @@ typedef enum
 
     if ([toolbarController isKindOfClass:[OADestinationViewController class]])
     {
-        BOOL isCoordinatesVisible = [self.hudViewController.topCoordinatesWidget isVisible];
+        BOOL isTopCoordinatesVisible = [self.hudViewController.topCoordinatesWidget isVisible];
+        BOOL isBottomCoordinatesVisible = [self.hudViewController.coordinatesMapCenterWidget isVisible];
         
         CGFloat coordinateWidgetHeight = self.hudViewController.topCoordinatesWidget.frame.size.height;
         CGFloat markersLandscapeWidth = DeviceScreenWidth / 2;
@@ -3496,9 +3497,10 @@ typedef enum
         CGFloat markersHeaderLeftOffset;
         CGFloat markersHeaderWidth;
         
-        if (isCoordinatesVisible)
+        if (isTopCoordinatesVisible || isBottomCoordinatesVisible)
         {
-            coordinateWidgetTopOffset = [OAUtilities isLandscape] ? 0 : coordinateWidgetHeight;
+            BOOL bothVisible = isTopCoordinatesVisible && isBottomCoordinatesVisible;
+            coordinateWidgetTopOffset = [OAUtilities isLandscape] ? 0 : coordinateWidgetHeight * (bothVisible ? 2 : 1);
             CGFloat horisontalLeftOffset = [toolbarController.view isDirectionRTL] ? OAUtilities.getLeftMargin : DeviceScreenWidth / 2;
             markersHeaderLeftOffset = [OAUtilities isLandscape] ? horisontalLeftOffset : 0;
             markersHeaderWidth = [OAUtilities isLandscape] ? (DeviceScreenWidth / 2 - OAUtilities.getLeftMargin) : DeviceScreenWidth;
@@ -3674,6 +3676,7 @@ typedef enum
         [cardsController.cardsView setHidden:NO];
         [cardsController.bottomView setHidden:NO];
     }
+    [self toolbarLayoutDidChange:_destinationViewController animated:YES];
 }
 
 - (void) hideDestinationCardsView
@@ -3715,11 +3718,10 @@ typedef enum
                 _shadeView.alpha = 0.0;
                 
             } completion:^(BOOL finished) {
-                
                 [self removeShade];
-                
                 [cardsController.view removeFromSuperview];
                 [cardsController removeFromParentViewController];
+                [self toolbarLayoutDidChange:_destinationViewController animated:YES];
             }];
         }
         else
@@ -3727,6 +3729,7 @@ typedef enum
             [self removeShade];
             [cardsController.view removeFromSuperview];
             [cardsController removeFromParentViewController];
+            [self toolbarLayoutDidChange:_destinationViewController animated:YES];
         }
     }
 }

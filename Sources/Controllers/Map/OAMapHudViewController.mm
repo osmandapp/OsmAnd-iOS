@@ -1053,7 +1053,9 @@
     
     if (isLandscape)
     {
-        if ((isCurrentLocationCoordinatesVisible || isMapCenterCoordinatesVisible) && isMarkersWidgetVisible && !isMapDownloadVisible)
+        if (isCurrentLocationCoordinatesVisible && isMarkersWidgetVisible && !isMapDownloadVisible)
+            offset += coordinateWidgetHeight;
+        if (isMapCenterCoordinatesVisible && isMarkersWidgetVisible && !isMapDownloadVisible)
             offset += coordinateWidgetHeight;
     }
     else

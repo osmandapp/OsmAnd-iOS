@@ -72,6 +72,13 @@
     _otherParameters.clear();
     NSString *appModeRoutingProfile = self.appMode.getRoutingProfile;
     NSString *parentAppModeRoutingProfile = self.appMode.parent.getRoutingProfile;
+    BOOL isPublicTransport = [appModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey];
+    
+    if (isPublicTransport)
+    {
+        _data = [NSArray arrayWithArray:tableData];
+        return;
+    }
     
     if (router && ![appModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey] &&
         ![appModeRoutingProfile isEqualToString:OAApplicationMode.SKI.stringKey] &&

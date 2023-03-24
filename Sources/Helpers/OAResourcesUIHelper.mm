@@ -534,13 +534,38 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 - (BOOL) allDownloaded
 {
+    if (self.resourceType == OsmAndResourceType::SrtmMapRegion)
+    {
+        NSMutableArray *srtmItems = [NSMutableArray array];
+        NSMutableArray *srtmFeetItems = [NSMutableArray array];
+        
+        for (OAResourceItem *item in _items)
+        {
+            if ([OAResourceType isSRTMF:item])
+                [srtmFeetItems addObject:item];
+            else
+                [srtmItems addObject:item];
+        }
+        BOOL isSrtmItemsDownloaded = [self allItemsDownloaded:srtmItems];
+        BOOL isSrtmFeetItemsDownloaded = [self allItemsDownloaded:srtmFeetItems];
+        
+        return isSrtmItemsDownloaded || isSrtmFeetItemsDownloaded;
+    }
+    else
+    {
+        return [self allItemsDownloaded:_items];
+    }
+}
+
+- (BOOL) allItemsDownloaded:(NSArray<OAResourceItem *> *)items
+{
     NSInteger downloadedCount = 0;
-    for (OAResourceItem *item in _items)
+    for (OAResourceItem *item in items)
     {
         if ([OsmAndApp instance].resourcesManager->isResourceInstalled(item.resourceId))
             downloadedCount++;
     }
-    return downloadedCount == _items.count;
+    return downloadedCount == items.count;
 }
 
 @end

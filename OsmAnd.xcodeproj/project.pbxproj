@@ -3188,6 +3188,7 @@
 		DA9C623D221C46590087E140 /* ic_custom_trip@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA9C6234221C46580087E140 /* ic_custom_trip@3x.png */; };
 		DA9C623F221C46590087E140 /* ic_custom_osm_edits@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA9C6235221C46590087E140 /* ic_custom_osm_edits@3x.png */; };
 		DA9C6241221C46590087E140 /* ic_custom_osm_edits@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA9C6236221C46590087E140 /* ic_custom_osm_edits@2x.png */; };
+		DA9F841C29CC96EF00127DAE /* OAShapeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9F841B29CC96EF00127DAE /* OAShapeLayer.m */; };
 		DAA4EDE9240E85B800F16073 /* ic_custom_download@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA4EDDF240E85B500F16073 /* ic_custom_download@3x.png */; };
 		DAA4EDEB240E85B800F16073 /* ic_custom_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA4EDE0240E85B600F16073 /* ic_custom_close@2x.png */; };
 		DAA4EDED240E85B800F16073 /* ic_custom_online@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA4EDE1240E85B600F16073 /* ic_custom_online@2x.png */; };
@@ -7710,6 +7711,8 @@
 		DA9C6234221C46580087E140 /* ic_custom_trip@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_trip@3x.png"; path = "Resources/Icons/ic_custom_trip@3x.png"; sourceTree = "<group>"; };
 		DA9C6235221C46590087E140 /* ic_custom_osm_edits@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osm_edits@3x.png"; path = "Resources/Icons/ic_custom_osm_edits@3x.png"; sourceTree = "<group>"; };
 		DA9C6236221C46590087E140 /* ic_custom_osm_edits@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osm_edits@2x.png"; path = "Resources/Icons/ic_custom_osm_edits@2x.png"; sourceTree = "<group>"; };
+		DA9F841A29CC96EF00127DAE /* OAShapeLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAShapeLayer.h; sourceTree = "<group>"; };
+		DA9F841B29CC96EF00127DAE /* OAShapeLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAShapeLayer.m; sourceTree = "<group>"; };
 		DAA4EDDF240E85B500F16073 /* ic_custom_download@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download@3x.png"; path = "Resources/Icons/ic_custom_download@3x.png"; sourceTree = "<group>"; };
 		DAA4EDE0240E85B600F16073 /* ic_custom_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_close@2x.png"; path = "Resources/Icons/ic_custom_close@2x.png"; sourceTree = "<group>"; };
 		DAA4EDE1240E85B600F16073 /* ic_custom_online@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_online@2x.png"; path = "Resources/Icons/ic_custom_online@2x.png"; sourceTree = "<group>"; };
@@ -13375,6 +13378,8 @@
 				CA4EDD14CA25B1A6AEB53FE3 /* OASegmentedSlider.h */,
 				CA4EDB568946B3B7E439A94E /* OASubscriptionBannerCardView.mm */,
 				CA4ED7ECFD074988CD7DE369 /* OASubscriptionBannerCardView.h */,
+				DA9F841A29CC96EF00127DAE /* OAShapeLayer.h */,
+				DA9F841B29CC96EF00127DAE /* OAShapeLayer.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -13824,13 +13829,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BBA3AFEB197FC4BB0039D991 /* Build configuration list for PBXNativeTarget "OsmAnd Maps" */;
 			buildPhases = (
+				8401FCFC1EE4723B00238915 /* Copy phrases */,
 				3CF6A0D6E82F1156F659B9F4 /* [CP] Check Pods Manifest.lock */,
 				BBA3AF34197FC4BB0039D991 /* Sources */,
 				BBA3AF66197FC4BB0039D991 /* Frameworks */,
 				DA8713222994F6760087BC7F /* Download regions.ocbf */,
 				BBA3AF82197FC4BB0039D991 /* Resources */,
 				6DDCD3D150843E9C9D19714F /* [CP] Copy Pods Resources */,
-				8401FCFC1EE4723B00238915 /* ShellScript */,
 				DA7F2596231A697300E54F77 /* Embed Frameworks */,
 			);
 			buildRules = (
@@ -16423,13 +16428,14 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8401FCFC1EE4723B00238915 /* ShellScript */ = {
+		8401FCFC1EE4723B00238915 /* Copy phrases */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Copy phrases";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -16724,6 +16730,7 @@
 				DA5A833126C563A800F274C7 /* OASegmentSliderTableViewCell.m in Sources */,
 				DA5A818A26C563A700F274C7 /* OAMapUnderlayAction.mm in Sources */,
 				DA5A81BB26C563A700F274C7 /* OAPOIFilter.m in Sources */,
+				DA9F841C29CC96EF00127DAE /* OAShapeLayer.m in Sources */,
 				DA5A835526C563A800F274C7 /* OAGPXTrackCell.m in Sources */,
 				DA5A844926C563A900F274C7 /* OADiscountToolbarViewController.mm in Sources */,
 				DA5A84A926C563A900F274C7 /* OAAddTrackFolderViewController.m in Sources */,

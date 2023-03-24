@@ -480,9 +480,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    OAResourceItem * item = [self getItem:indexPath];
     if (![self isDividerCell:indexPath] && indexPath.row > 2)
     {
-        if (!_isSingleSRTM)
+        if (!_isSingleSRTM && !item.isInstalled)
             [self selectDeselectItem:indexPath];
         else
             [tableView deselectRowAtIndexPath:indexPath animated:YES];

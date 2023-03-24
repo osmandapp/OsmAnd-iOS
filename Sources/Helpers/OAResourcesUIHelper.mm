@@ -546,10 +546,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             else
                 [srtmItems addObject:item];
         }
-        NSArray<OAResourceItem *> *srtmItemsArray = [NSArray arrayWithArray:srtmItems];
-        NSArray<OAResourceItem *> *srtmFeetItemsArray = [NSArray arrayWithArray:srtmFeetItems];
-        BOOL isSrtmItemsDownloaded = [self allItemsDownloaded:srtmItemsArray];
-        BOOL isSrtmFeetItemsDownloaded = [self allItemsDownloaded:srtmFeetItemsArray];
+        BOOL isSrtmItemsDownloaded = [self allItemsDownloaded:srtmItems];
+        BOOL isSrtmFeetItemsDownloaded = [self allItemsDownloaded:srtmFeetItems];
         
         return isSrtmItemsDownloaded || isSrtmFeetItemsDownloaded;
     }

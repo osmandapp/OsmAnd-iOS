@@ -70,9 +70,9 @@
     [_historyPointsRemoveObservable notifyEventWithKey:items];
 }
 
-- (NSArray<OAHistoryItem *> *)getAllPoints
+- (NSArray<OAHistoryItem *> *)getAllPoints:(BOOL)ignoreDisabledResult
 {
-    return [_db getPoints:nil limit:0];
+    return [_db getPoints:nil ignoreDisabledResult:ignoreDisabledResult limit:0];
 }
 
 - (NSArray<OAHistoryItem *> *)getSearchHistoryPoints:(int)limit
@@ -88,6 +88,16 @@
 - (NSInteger) getPointsCountHavingTypes:(NSArray<NSNumber *> *)types
 {
     return [_db getPointsCountHavingTypes:types];
+}
+
+- (NSArray<OAHistoryItem *> *)getPointsFromNavigation:(int)limit
+{
+    return [_db getPointsFromNavigation:limit];
+}
+
+- (NSInteger)getPointsCountFromNavigation
+{
+    return [_db getPointsCountFromNavigation];
 }
 
 - (OAHistoryItem *)getPointByName:(NSString *)name

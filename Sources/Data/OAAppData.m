@@ -1591,6 +1591,7 @@
         h.longitude = [pointToNavigate getLongitude];
         h.date = [NSDate date];
         h.hType = [[OAHistoryItem alloc] initWithPointDescription:pointToNavigate.pointDescription].hType;
+        h.fromNavigation = YES;
         
         [[OAHistoryHelper sharedInstance] addPoint:h];
     }

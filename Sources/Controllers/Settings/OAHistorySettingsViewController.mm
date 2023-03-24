@@ -533,7 +533,9 @@
     }
 
     OAExportSettingsType *exportSettingsType =
-        _historyType == EOAHistorySettingsTypeMapMarkers ? OAExportSettingsType.HISTORY_MARKERS : OAExportSettingsType.SEARCH_HISTORY;
+        _historyType == EOAHistorySettingsTypeMapMarkers ? OAExportSettingsType.HISTORY_MARKERS
+        : _historyType == EOAHistorySettingsTypeSearch ? OAExportSettingsType.SEARCH_HISTORY
+        : OAExportSettingsType.NAVIGATION_HISTORY ;
     OAExportItemsViewController *exportItemsViewController =
         [[OAExportItemsViewController alloc] initWithType:exportSettingsType selectedItems:selectedItems];
     [self.navigationController pushViewController:exportItemsViewController animated:YES];

@@ -207,7 +207,7 @@
     });
 }
 
-- (OAHistoryItem *)getPointByName:(NSString *)name
+- (OAHistoryItem *)getPointByName:(NSString *)name fromNavigation:(BOOL)fromNavigation
 {
     __block OAHistoryItem *item = nil;
 
@@ -217,7 +217,7 @@
         
         if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
         {
-            NSMutableString *querySQL = [NSMutableString stringWithString:[NSString stringWithFormat:@"SELECT ROWID, %@, %@, %@, %@, %@, %@, %@, %@ FROM %@ WHERE %@ = %@", POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME, POINT_COL_FROM_NAVIGATION, TABLE_NAME, POINT_COL_NAME, name]];
+            NSMutableString *querySQL = [NSMutableString stringWithString:[NSString stringWithFormat:@"SELECT ROWID, %@, %@, %@, %@, %@, %@, %@ FROM %@ WHERE %@ = %@ AND %@ = %d", POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME, TABLE_NAME, POINT_COL_NAME, name, POINT_COL_FROM_NAVIGATION, (fromNavigation ? 1 : 0)]];
             
             const char *query_stmt = [querySQL UTF8String];
             if (sqlite3_prepare_v2(historyDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
@@ -241,9 +241,6 @@
                     NSString *typeName;
                     if (sqlite3_column_text(statement, 7) != nil)
                         typeName = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 7)];
-
-                    NSInteger navigation = sqlite3_column_int(statement, 8);
-                    BOOL fromNavigation = navigation == 1 ? YES : NO;
 
                     NSDate *date = [NSDate dateWithTimeIntervalSince1970:time];
                     
@@ -381,6 +378,11 @@
 
 - (NSArray<OAHistoryItem *> *)getPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit
 {
+    return [self getPointsHavingTypes:types exceptNavigation:YES limit:limit];
+}
+
+- (NSArray<OAHistoryItem *> *)getPointsHavingTypes:(NSArray<NSNumber *> *)types exceptNavigation:(BOOL)exceptNavigation limit:(int)limit
+{
     NSMutableString *arrayStr = [NSMutableString string];
     for (NSNumber *t in types)
     {
@@ -388,7 +390,8 @@
             [arrayStr appendString:@","];
         [arrayStr appendFormat:@"%d", [t intValue]];
     }
-    return [self getPoints:[NSString stringWithFormat:@"WHERE %@ in (%@)", POINT_COL_TYPE, arrayStr] limit:limit];
+    NSString *exceptNavigationStr = exceptNavigation ? [NSString stringWithFormat:@" AND %@ = %d", POINT_COL_FROM_NAVIGATION, exceptNavigation ? 0 : 1] : @"";
+    return [self getPoints:[NSString stringWithFormat:@"WHERE %@ in (%@)%@", POINT_COL_TYPE, arrayStr, exceptNavigationStr] limit:limit];
 }
 
 - (NSInteger)getPointsCountHavingTypes:(NSArray<NSNumber *> *)types

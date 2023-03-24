@@ -18,12 +18,8 @@
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
 #import "OAAppSettings.h"
-#import "OASearchUICore.h"
 #import "OATargetPointsHelper.h"
-#import "OAQuickSearchHelper.h"
 #import "OAHistoryHelper.h"
-#import "OASearchResult.h"
-#import "OAPointDescription.h"
 #import "OAColors.h"
 #import "OASizes.h"
 #import "Localization.h"
@@ -516,10 +512,8 @@
                 UIAlertAction *clearAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_clear")
                                                                         style:UIAlertActionStyleDestructive
                                                                     handler:^(UIAlertAction * _Nonnull action) {
-                    NSArray *historyItems;
                     OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
-                    historyItems = [helper getPointsHavingTypes:helper.searchTypes limit:0];
-                    [helper removePoints:historyItems];
+                    [helper removePoints:[helper getAllPoints:YES]];
                     [self generateData];
                     [self.tableView reloadData];
                 }];
@@ -618,52 +612,13 @@
 
 - (NSInteger)calculateNavigationItemsCount
 {
-    OAHistoryHelper *historyHelper = OAHistoryHelper.sharedInstance;
-    NSInteger count = [historyHelper getPointsCountHavingTypes:historyHelper.searchTypes];
+    NSInteger count = [[OAHistoryHelper sharedInstance] getPointsCountFromNavigation];
     if ([[OATargetPointsHelper sharedInstance] isBackupPointsAvailable])
     {
         // Take "Previous Route" item into account during calculations
         count++;
     }
     return count;
-}
-
-+ (NSArray<OASearchResult *> *)getNavigationHistoryResults
-{
-    NSMutableArray<OASearchResult *> *searchResults = [self getSearchHistoryResults];
-    [searchResults enumerateObjectsUsingBlock:^(OASearchResult *searchResult, NSUInteger idx, BOOL *stop) {
-        OAHistoryItem *historyEntry = [self getHistoryEntry:searchResult];
-        if (historyEntry)
-        {
-            OAPointDescription *pointDescription = [[OAPointDescription alloc] initWithType:[historyEntry getPointDescriptionType]
-                                                                                   typeName:historyEntry.typeName
-                                                                                       name:historyEntry.name];
-            if ([pointDescription isPoiType] || [pointDescription isCustomPoiFilter])
-                [searchResults removeObject:searchResult];
-        }
-
-    }];
-    return searchResults;
-}
-
-+ (NSMutableArray<OASearchResult *> *)getSearchHistoryResults
-{
-    NSMutableArray<OASearchResult *> *searchResults = [NSMutableArray array];
-    OASearchUICore *searchUICore = [[OAQuickSearchHelper instance] getCore];
-    OASearchResultCollection *res = [searchUICore shallowSearch:OASearchHistoryAPI.class text:@"" matcher:nil resortAll:NO removeDuplicates:NO];
-    if (res)
-        [searchResults addObjectsFromArray:[res getCurrentSearchResults]];
-    return searchResults;
-}
-
-+ (OAHistoryItem *)getHistoryEntry:(OASearchResult *)searchResult
-{
-    if ([searchResult.object isKindOfClass:OAHistoryItem.class])
-        return (OAHistoryItem *) searchResult.object;
-    else if ([searchResult.relatedObject isKindOfClass:OAHistoryItem.class])
-        return (OAHistoryItem *) searchResult.relatedObject;
-
-    return nil;
 }
 
 #pragma mark - OAUninstallSpeedCamerasDelegate

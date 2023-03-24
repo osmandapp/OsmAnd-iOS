@@ -134,6 +134,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
+            [cell leftIconVisibility:NO];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
         }
         if (cell)

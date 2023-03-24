@@ -151,7 +151,7 @@
 
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z"];
-        e.value = [dateFormatter stringFromDate:historyItem.date];;
+        e.value = [dateFormatter stringFromDate:historyItem.date];
 
         wpt.extensions = @[e];
         [doc addWpt:wpt];

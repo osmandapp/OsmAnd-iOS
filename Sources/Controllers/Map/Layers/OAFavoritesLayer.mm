@@ -212,7 +212,7 @@
         targetPoint.title = storedItem ? [storedItem getDisplayName] : favLoc->getTitle().toNSString();
         if (storedItem && storedItem.specialPointType == [OASpecialPointType PARKING])
             targetPoint.type = OATargetParking;
-        
+        targetPoint.symbolGroupId = favLoc->getGroup().toNSString();
         targetPoint.icon = [self getFavoriteImage:favLoc];
         
         OAFavoriteItem *item;

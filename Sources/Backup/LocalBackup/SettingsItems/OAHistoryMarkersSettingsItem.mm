@@ -84,7 +84,7 @@
 
         for (OAHistoryItem *duplicate in self.duplicateItems)
         {
-            OAHistoryItem *original = [_historyMarkersHelper getPointByName:duplicate.name];
+            OAHistoryItem *original = [_historyMarkersHelper getPointByName:duplicate.name fromNavigation:NO];
             if (original)
             {
                 [self.appliedItems removeObject:original];

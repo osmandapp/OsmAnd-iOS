@@ -20,6 +20,7 @@
 #import "OAAppSettings.h"
 #import "OATargetPointsHelper.h"
 #import "OAHistoryHelper.h"
+#import "OAExportSettingsType.h"
 #import "OAColors.h"
 #import "OASizes.h"
 #import "Localization.h"
@@ -527,7 +528,13 @@
             {
                 if ([item.key isEqualToString:@"export_history"])
                 {
-                    [self.navigationController pushViewController:[[OAExportItemsViewController alloc] init] animated:YES];
+                    OAHistoryHelper *historyHelper = [OAHistoryHelper sharedInstance];
+                    NSDictionary<OAExportSettingsType *, NSArray<id> *> *typesItems = @{
+                        OAExportSettingsType.HISTORY_MARKERS : [historyHelper getPointsHavingTypes:historyHelper.destinationTypes limit:0],
+                        OAExportSettingsType.SEARCH_HISTORY : [historyHelper getPointsHavingTypes:historyHelper.searchTypes limit:0],
+                        OAExportSettingsType.NAVIGATION_HISTORY : [historyHelper getPointsFromNavigation:0]
+                    };
+                    [self.navigationController pushViewController:[[OAExportItemsViewController alloc] initWithTypes:typesItems] animated:YES];
                 }
                 else
                 {

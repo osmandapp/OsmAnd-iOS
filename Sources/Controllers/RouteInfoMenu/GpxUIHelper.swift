@@ -900,7 +900,7 @@ import Charts.Swift
             } else {
                 x = e.distance;
             }
-            if (x > 0)
+            if (x >= 0)
             {
                 nextX += x / divX
                 if (!e.elevation.isNaN) {

@@ -51,11 +51,22 @@
 - (BOOL) updateInfo
 {
     if ([self isShowTimeLeft])
-        _items = [self.class getTimeLeftUntilSunriseSunset:[_state isSunriseMode]];
+    {
+        NSTimeInterval leftTime = [self.class getTimeLeft:[_state isSunriseMode]];
+        NSString *left = [self.class formatTimeLeft:leftTime];
+        _items = [left componentsSeparatedByString:@" "];
+    }
     else
-        _items = [self.class getNextSunriseSunset:[_state isSunriseMode]];
-    [self setText:_items.firstObject subtext:_items.lastObject];
-
+    {
+        NSTimeInterval nextTime = [self.class getNextTime:[_state isSunriseMode]];
+        NSString *next = [self.class formatNextTime:nextTime];
+        _items = [next componentsSeparatedByString:@" "];
+    }
+    if (_items.count > 1)
+        [self setText:_items.firstObject subtext:_items.lastObject];
+    else
+        [self setText:_items.firstObject subtext:nil];
+    
     return YES;
 }
 
@@ -101,100 +112,65 @@
             return OALocalizedString(@"");
         case EOASunriseSunsetTimeLeft:
         {
-            NSArray <NSString *> *values = [self.class getTimeLeftUntilSunriseSunset:isSunrise];
-            return [NSString stringWithFormat:@"%@ %@", values.firstObject, values.lastObject];
+            NSTimeInterval leftTime = [self getTimeLeft:isSunrise];
+            return [self formatTimeLeft:leftTime];
         }
         case EOASunriseSunsetNext:
         {
-            NSArray <NSString *> *values = [self.class getNextSunriseSunset:isSunrise];
-            return [NSString stringWithFormat:@"%@ %@", values.firstObject, values.lastObject];
+            NSTimeInterval nextTime = [self getNextTime:isSunrise];
+            return [self formatNextTime:nextTime];
         }
         default:
             return @"";
     }
 }
 
-+ (NSArray<NSString *> *) getNextSunriseSunset:(BOOL)isSunrise
++ (NSTimeInterval) getTimeLeft:(BOOL)isSunrise
 {
-    NSDate *actualTime = [NSDate date];
-    NSDate *sunriseSunsetDate;
-    NSString *time;
-    NSString *nextTime;
-    NSString *day;
-    NSString *nextDay;
-    SunriseSunset *sunriseSunset = [self createSunriseSunset:actualTime forNextDay:NO];
-    SunriseSunset *nextSunriseSunset = [self createSunriseSunset:actualTime forNextDay:YES];
+    NSTimeInterval nextTime = [self getNextTime:isSunrise];
+    return nextTime > 0 ? abs(nextTime - NSDate.date.timeIntervalSince1970) : -1;
+}
+
++ (NSTimeInterval) getNextTime:(BOOL)isSunrise
+{
+    NSDate *now = [NSDate date];
+    SunriseSunset *sunriseSunset = [self.class createSunriseSunset:now];
     
-    if (isSunrise)
+    NSDate *nextTimeDate = isSunrise ? [sunriseSunset getSunrise] : [sunriseSunset getSunset];
+    if (nextTimeDate)
     {
-        time = [self getFormattedTime:[sunriseSunset getSunrise]];
-        day = [self getFormattedDay:[sunriseSunset getSunrise]];
-        nextTime = [self getFormattedTime:[nextSunriseSunset getSunrise]];
-        nextDay = [self getFormattedDay:[nextSunriseSunset getSunrise]];
+        if ([nextTimeDate compare:now] == NSOrderedAscending)
+        {
+            NSDateComponents *dayComponent = [[NSDateComponents alloc] init];
+            dayComponent.day = 1;
+
+            NSCalendar *theCalendar = [NSCalendar currentCalendar];
+            nextTimeDate = [theCalendar dateByAddingComponents:dayComponent toDate:nextTimeDate options:0];
+        }
+        return nextTimeDate.timeIntervalSince1970;
     }
-    else
-    {
-        time = [self getFormattedTime:[sunriseSunset getSunset]];
-        day = [self getFormattedDay:[sunriseSunset getSunset]];
-        nextTime = [self getFormattedTime:[nextSunriseSunset getSunset]];
-        nextDay = [self getFormattedDay:[nextSunriseSunset getSunset]];
-    }
-    if ([actualTime compare:sunriseSunsetDate] == NSOrderedDescending)
-        return @[nextTime, nextDay];
-    else
-        return @[time, day];
+    return 0;
 }
 
-+ (NSString *) getFormattedTime:(NSDate *)date
-{
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"HH:mm"];
-    return [dateFormatter stringFromDate:date];
-}
-
-+ (NSString *) getFormattedDay:(NSDate *)date
-{
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"EE"];;
-    return [dateFormatter stringFromDate:date];
-}
-
-+ (NSArray<NSString *> *) getTimeLeftUntilSunriseSunset:(BOOL)isSunrise
-{
-    NSDate *actualTime = [NSDate date];
-    NSDate *date;
-    NSDate *nextDate;
-    NSString *timeLeft;
-    NSString *subText;
-    SunriseSunset *sunriseSunset = [self createSunriseSunset:actualTime forNextDay:NO];
-    SunriseSunset *nextSunriseSunset = [self createSunriseSunset:actualTime forNextDay:YES];
-    
-    date = isSunrise ? [sunriseSunset getSunrise] : [sunriseSunset getSunset];
-    nextDate = isSunrise ? [nextSunriseSunset getSunrise] : [nextSunriseSunset getSunset];
-    
-    if ([actualTime compare:date] == NSOrderedDescending)
-    {
-        NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-        NSDateComponents *components = [calendar components:NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:actualTime toDate:nextDate options:0];
-        timeLeft = [NSString stringWithFormat:@"%ld:%ld", [components hour], [components minute]];
-        subText = [components hour] > 0 ? OALocalizedString(@"int_hour") : OALocalizedString(@"int_min");
-    }
-    else
-    {
-        NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-        NSDateComponents *components = [calendar components:NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:actualTime toDate:date options:0];
-        timeLeft = [NSString stringWithFormat:@"%ld:%ld", [components hour], [components minute]];
-        subText = [components hour] > 0 ? OALocalizedString(@"int_hour") : OALocalizedString(@"int_min");
-    }
-    return @[timeLeft, subText];
-}
-
-+ (SunriseSunset *) createSunriseSunset:(NSDate *)date forNextDay:(BOOL)nextDay
++ (SunriseSunset *) createSunriseSunset:(NSDate *)date
 {
     CLLocation *location = OsmAndApp.instance.locationServices.lastKnownLocation;
     double longitude = location.coordinate.longitude;
-    SunriseSunset *sunriseSunset = [[SunriseSunset alloc] initWithLatitude:location.coordinate.latitude longitude:longitude < 0 ? 360 + longitude : longitude dateInputIn:date tzIn:[NSTimeZone localTimeZone] forNextDay:nextDay];
+    SunriseSunset *sunriseSunset = [[SunriseSunset alloc] initWithLatitude:location.coordinate.latitude longitude:longitude < 0 ? 360 + longitude : longitude dateInputIn:date tzIn:[NSTimeZone localTimeZone]];
     return sunriseSunset;
+}
+
++ (NSString *) formatTimeLeft:(NSTimeInterval)timeLeft
+{
+    return [OAOsmAndFormatter getFormattedTimeHM:timeLeft];
+}
+
++ (NSString *) formatNextTime:(NSTimeInterval)nextTime
+{
+    NSDate *nextDate = [NSDate dateWithTimeIntervalSince1970:nextTime];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"HH:mm EE"];
+    return [dateFormatter stringFromDate:nextDate];
 }
 
 @end

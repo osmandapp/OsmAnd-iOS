@@ -179,7 +179,7 @@ const static NSString *URL = @"https://osmand.net/api/motd";
 
 - (void) checkAndDisplay
 {
-    if (_bannerVisible)
+    
         [self showDiscountBanner];
     
     NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
@@ -387,17 +387,16 @@ const static NSString *URL = @"https://osmand.net/api/motd";
 
 - (void) showDiscountBanner
 {
-    if (!_discountToolbar)
-    {
+    
         _discountToolbar = [[OADiscountToolbarViewController alloc] initWithNibName:@"OADiscountToolbarViewController" bundle:nil];
         _discountToolbar.discountDelegate = self;
-    }
     
-    UIImage *icon = _icon ? [OAUtilities getTintableImageNamed:_icon] : nil;
+    
+    UIImage *icon = [OAUtilities getTintableImageNamed:_icon];
     if (!icon)
         icon = [OAUtilities getTintableImageNamed:@"ic_action_gift"];
     
-    [_discountToolbar setTitle:_title description:_description icon:icon buttonText:_textButtonTitle colors:_colors];
+    [_discountToolbar setTitle:@"Hi I OSMAND compani and Vov" description:@"Super company map map map very greate and detail for you" icon:icon buttonText:@"OsmAnd company" colors:_colors];
     
     _bannerVisible = YES;
     

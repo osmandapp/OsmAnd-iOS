@@ -61,7 +61,7 @@
                                     </subviews>
                                 </stackView>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CB3-Wd-FNT">
-                                    <rect key="frame" x="0.0" y="42.666666666666664" width="326" height="29.999999999999993"/>
+                                    <rect key="frame" x="0.0" y="43" width="94" height="30"/>
                                     <state key="normal" title="Get Unlimited">
                                         <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
@@ -71,8 +71,6 @@
                                 </button>
                             </subviews>
                             <constraints>
-                                <constraint firstItem="CB3-Wd-FNT" firstAttribute="leading" secondItem="kDm-Ru-07w" secondAttribute="leading" id="BSd-nv-xdB"/>
-                                <constraint firstAttribute="trailing" secondItem="CB3-Wd-FNT" secondAttribute="trailing" id="DuN-Ot-7Qa"/>
                                 <constraint firstAttribute="trailing" secondItem="Nmu-ah-9nh" secondAttribute="trailing" id="vu9-6i-rFr"/>
                             </constraints>
                         </stackView>

@@ -2554,7 +2554,7 @@
 "with_offline_maps" = "Com mapas offline";
 "shared_string_available_until" = "Disponível até";
 "shared_string_updates_size" = "Tamanho das atualizações";
-"weather_forecast" = "Previsão do tempo";
+"weather_forecast" = "Previsão meteorológica";
 "weather_clear_offline_cache" = "Isto irá eliminar todos os ficheiros temporários para os ladrilhos da previsão meteorológica.";
 "update_only_over_wi_fi" = "Atualizar apenas em Wi-Fi";
 "service_is_not_available_please_try_later" = "Serviço indisponível. Tente mais tarde.";
@@ -2830,9 +2830,9 @@
 "rotate_map_manual_opt" = "Rotação manual (fixa)";
 "compass_click_desc" = "Toque na bússola para alternar o modo de orientação do mapa.";
 "map_widget_camera_tilt" = "Inclinação da câmara";
-"map_widget_camera_distance" = "Distância da câmara";
+"map_widget_camera_distance" = "Elevação da câmara";
 "map_widget_zoom_level" = "Nível de ampliação";
-"map_widget_target_distance" = "Distância ao alvo";
+"map_widget_target_distance" = "Distância da câmara ao alvo";
 "wikipedia_language_settings_descr" = "Selecione os idiomas nos quais os artigos da Wikipédia aparecerão no mapa. Pode alternar entre qualquer idioma disponível durante a leitura do artigo.";
 "dont_download" = "Não descarregar";
 "over_wifi_only" = "Apenas por Wi-Fi";
@@ -2841,7 +2841,7 @@
 "wikivoyage_download_pics" = "Descarregar imagens";
 "download_over_cellular_network" = "Descarregar imagens pela rede móvel? Isto pode ter custos monetários de utilização de dados móveis.";
 "change_language" = "Mudar idioma";
-"ios_release_4_4" = "• Wikipédia: capacidade adicionada para visualizar imagens, interface do leitor atualizada\n• Favoritos: pesquisa adicionada\n• CarPlay: histórico adicionado, trilhos reorganizados e lista de favoritos\n• Rotas de caminhada: capacidade adicional de selecionar rotas no mapa para visualizar informações adicionais ou navegação\n• OpenStreetMap: adicionada capacidade de enviar trilhos\n• Avisos de voz: suporte adicional para novos idiomas: catalão, ucraniano, búlgaro, indonésio, esloveno\n• Adicionado aviso legal sobre utilização de alertas de radares de velocidade\n• Privacidade aprimorada: opções adicionadas para desativar o registo do histórico\n• Visibilidade melhorada da régua do mapa\n• Melhorias na interface em idiomas que se leem da direita para a esquerda\n• Acessibilidade: adicionado rótulo de conteúdo em botões do mapa\n• Adicionado suporte a \"tipo de letra dinâmico\", o tamanho do texto no OsmAnd mudará de acordo com o tamanho do texto no iOS\n• Orientação do mapa: adicionado modo girado manualmente\n• A versão mínima do iOS foi aumentada para 15.0\n";
+"ios_release_4_4" = "• Wikipédia: capacidade adicionada para visualizar imagens, interface do leitor atualizada\n• Favoritos: pesquisa adicionada\n• CarPlay: histórico adicionado, trilhos reorganizados e lista de favoritos\n• Rotas de caminhada: capacidade adicional de selecionar rotas no mapa para visualizar informações adicionais ou navegação\n• OpenStreetMap: adicionada capacidade de enviar trilhos\n• Novo widget: mostrar a hora exacta ou o tempo que resta para o próximo nascer ou pôr do sol\n• Novo widget: mostrar as coordenadas do centro do mapa\n• Melhor suporte de teclados externos, apoio adicional para ações básicas\n• Avisos de voz: suporte adicional para novos idiomas: catalão, ucraniano, búlgaro, indonésio, esloveno\n• Adicionado aviso legal sobre utilização de alertas de radares de velocidade\n• Privacidade aprimorada: opções adicionadas para desativar o registo do histórico\n• Visibilidade melhorada da régua do mapa\n• Correções no OsmAnd Cloud e melhorias na interface\n• Melhorias na interface em idiomas que se leem da direita para a esquerda\n• Acessibilidade: adicionado rótulo de conteúdo em botões do mapa\n• Adicionado suporte a \"tipo de letra dinâmico\", o tamanho do texto no OsmAnd mudará de acordo com o tamanho do texto no iOS\n• Orientação do mapa: adicionado modo girado manualmente\n• Novo perfil \"Ciclomotor\"\n• A versão mínima do iOS foi aumentada para 15.0\n";
 "icon_group_service" = "Serviço";
 "coordinates_widget_map_center" = "Coordenadas: centro do mapa";
 "toggle_map_center" = "Mostrar / ocultar coordenadas: centro do mapa";
@@ -2849,3 +2849,15 @@
 "hide_map_center" = "Ocultar coordenadas: centro do mapa";
 "top_widgets_panel" = "Painel de cima";
 "quick_action_map_center_widget_descr" = "Um alternador para mostrar ou ocultar as coordenadas no mapa.";
+"map_widget_sunrise" = "Nascer do sol";
+"map_widget_sunset" = "Pôr do sol";
+"map_widget_sunset_desc" = "Mostra a hora do próximo pôr do sol ou o tempo que resta até o pôr do sol.";
+"map_widget_sunrise_sunset_time_left" = "Tempo restante";
+"map_widget_next_sunset" = "Próximo pôr do sol";
+"shared_string_external" = "Externo";
+"with_permission_my_position_value" = "Mover mapa para a localização atual";
+"app_mode_moped" = "Ciclomotor";
+"map_widget_sunrise_desc" = "Mostra a hora do próximo nascer do sol ou o tempo que resta até o nascer do sol.";
+"map_widget_next_sunrise" = "Próximo nascer do sol";
+"without_permission_my_position_value" = "O OsmAnd não tem permissão de localização";
+"press_again_to_change_the_map_orientation" = "Toque novamente para alterar a orientação do mapa";

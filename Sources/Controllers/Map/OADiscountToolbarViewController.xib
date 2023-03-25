@@ -25,7 +25,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Ht-j8-tLW">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="80.666666666666671"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="75"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qIR-Hh-Dct">
                             <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
@@ -40,8 +40,8 @@
                                 <action selector="backPress:" destination="-1" eventType="touchUpInside" id="pb7-Yq-tGX"/>
                             </connections>
                         </button>
-                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="kDm-Ru-07w">
-                            <rect key="frame" x="44" y="8" width="326" height="72.666666666666671"/>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="kDm-Ru-07w">
+                            <rect key="frame" x="44" y="10" width="326" height="64.666666666666671"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Nmu-ah-9nh">
                                     <rect key="frame" x="0.0" y="0.0" width="326" height="34.666666666666664"/>
@@ -61,7 +61,7 @@
                                     </subviews>
                                 </stackView>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CB3-Wd-FNT">
-                                    <rect key="frame" x="0.0" y="43" width="94" height="30"/>
+                                    <rect key="frame" x="0.0" y="34.666666666666664" width="94" height="29.999999999999993"/>
                                     <state key="normal" title="Get Unlimited">
                                         <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
@@ -87,9 +87,8 @@
                                 <action selector="closePress:" destination="-1" eventType="touchUpInside" id="5RB-j4-Bt2"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RcI-Gx-UUI">
-                            <rect key="frame" x="45" y="0.0" width="324" height="81"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RcI-Gx-UUI">
+                            <rect key="frame" x="44" y="0.0" width="326" height="76"/>
                             <connections>
                                 <action selector="shadowPress:" destination="-1" eventType="touchUpInside" id="xBY-oe-xEr"/>
                             </connections>
@@ -97,13 +96,17 @@
                     </subviews>
                     <color key="backgroundColor" red="0.20784313725490194" green="0.49411764705882355" blue="0.94901960784313721" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
+                        <constraint firstItem="RcI-Gx-UUI" firstAttribute="top" secondItem="7Ht-j8-tLW" secondAttribute="top" id="E0e-Lf-nMD"/>
+                        <constraint firstAttribute="bottom" secondItem="RcI-Gx-UUI" secondAttribute="bottom" id="GDD-ty-o1e"/>
                         <constraint firstItem="M2y-iH-be5" firstAttribute="leading" secondItem="kDm-Ru-07w" secondAttribute="trailing" id="IBb-CB-1fc"/>
                         <constraint firstItem="kDm-Ru-07w" firstAttribute="leading" secondItem="qIR-Hh-Dct" secondAttribute="trailing" id="OCv-dA-EOJ"/>
+                        <constraint firstItem="RcI-Gx-UUI" firstAttribute="leading" secondItem="qIR-Hh-Dct" secondAttribute="trailing" id="R3o-t6-wOZ"/>
                         <constraint firstItem="qIR-Hh-Dct" firstAttribute="leading" secondItem="7Ht-j8-tLW" secondAttribute="leading" id="RsH-ro-5g5"/>
                         <constraint firstAttribute="bottom" secondItem="kDm-Ru-07w" secondAttribute="bottom" id="ber-kK-TyW"/>
                         <constraint firstItem="qIR-Hh-Dct" firstAttribute="top" secondItem="7Ht-j8-tLW" secondAttribute="top" id="cE5-aO-gFO"/>
+                        <constraint firstItem="M2y-iH-be5" firstAttribute="leading" secondItem="RcI-Gx-UUI" secondAttribute="trailing" id="gFH-9r-lb5"/>
                         <constraint firstItem="M2y-iH-be5" firstAttribute="top" secondItem="7Ht-j8-tLW" secondAttribute="top" id="keB-al-gKf"/>
-                        <constraint firstItem="kDm-Ru-07w" firstAttribute="top" secondItem="7Ht-j8-tLW" secondAttribute="top" constant="8" id="ojd-Uu-F91"/>
+                        <constraint firstItem="kDm-Ru-07w" firstAttribute="top" secondItem="7Ht-j8-tLW" secondAttribute="top" constant="10" id="ojd-Uu-F91"/>
                         <constraint firstAttribute="trailing" secondItem="M2y-iH-be5" secondAttribute="trailing" id="tNu-WH-ol2"/>
                     </constraints>
                 </view>

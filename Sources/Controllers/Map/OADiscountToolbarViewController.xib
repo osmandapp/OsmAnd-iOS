@@ -25,7 +25,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Ht-j8-tLW">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="75"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="78.666666666666671"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qIR-Hh-Dct">
                             <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
@@ -88,7 +88,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RcI-Gx-UUI">
-                            <rect key="frame" x="44" y="0.0" width="326" height="76"/>
+                            <rect key="frame" x="44" y="0.0" width="326" height="78.666666666666671"/>
                             <connections>
                                 <action selector="shadowPress:" destination="-1" eventType="touchUpInside" id="xBY-oe-xEr"/>
                             </connections>
@@ -102,7 +102,7 @@
                         <constraint firstItem="kDm-Ru-07w" firstAttribute="leading" secondItem="qIR-Hh-Dct" secondAttribute="trailing" id="OCv-dA-EOJ"/>
                         <constraint firstItem="RcI-Gx-UUI" firstAttribute="leading" secondItem="qIR-Hh-Dct" secondAttribute="trailing" id="R3o-t6-wOZ"/>
                         <constraint firstItem="qIR-Hh-Dct" firstAttribute="leading" secondItem="7Ht-j8-tLW" secondAttribute="leading" id="RsH-ro-5g5"/>
-                        <constraint firstAttribute="bottom" secondItem="kDm-Ru-07w" secondAttribute="bottom" id="ber-kK-TyW"/>
+                        <constraint firstAttribute="bottom" secondItem="kDm-Ru-07w" secondAttribute="bottom" constant="4" id="ber-kK-TyW"/>
                         <constraint firstItem="qIR-Hh-Dct" firstAttribute="top" secondItem="7Ht-j8-tLW" secondAttribute="top" id="cE5-aO-gFO"/>
                         <constraint firstItem="M2y-iH-be5" firstAttribute="leading" secondItem="RcI-Gx-UUI" secondAttribute="trailing" id="gFH-9r-lb5"/>
                         <constraint firstItem="M2y-iH-be5" firstAttribute="top" secondItem="7Ht-j8-tLW" secondAttribute="top" id="keB-al-gKf"/>

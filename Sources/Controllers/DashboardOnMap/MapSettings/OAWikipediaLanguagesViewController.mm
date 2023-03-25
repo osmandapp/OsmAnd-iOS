@@ -104,7 +104,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
             [_languages addObject:[[OAWikiLanguageItem alloc] initWithLocale:locale title:[OAUtilities translatedLangName:locale] checked:NO preferred:preferred]];
         }
     }
-    [_languages setArray:[_languages sortedArrayUsingSelector:@selector(compare:)]];
+    [_languages sortUsingSelector:@selector(compare:)];
 }
 
 #pragma mark - UIViewController
@@ -327,6 +327,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 - (void)applyPreference:(BOOL)applyToAllProfiles
 {
     NSMutableArray<NSString *> *localesForSaving = [NSMutableArray new];
+    [_languages sortUsingSelector:@selector(compare:)];
     for (OAWikiLanguageItem *language in _languages)
     {
         if (language.checked)

@@ -2397,7 +2397,7 @@
 "animate_my_location" = "Eigene Position animieren";
 "animate_my_location_descr" = "Flüssiger Übergang des Standorts auf der Karte während der Navigation";
 "shared_string_capacity" = "Kapazität";
-"copy_to_map_favorites" = "Kopiere in Favoriten";
+"copy_to_map_favorites" = "Zu den Favoriten kopieren";
 "altitude_ascent" = "Bergauf";
 "altitude_descent" = "Bergab";
 "shared_string_layers" = "Ebenen";
@@ -2414,8 +2414,8 @@
 "routeInfo_horse_scale_description" = "Zeige Reitwege abhängig vom Schwierigkeitsgrad an";
 "routing_attr_allow_private_for_truck_name" = "Erlaube Privatzugang (LKW)";
 "routing_attr_allow_private_for_truck_description" = "Zufahrt zu Privatgrundstücken für Lkw erlauben.";
-"copy_address" = "Kopiere Adresse";
-"copy_coordinates" = "Kopiere Koordinaten";
+"copy_address" = "Adresse kopieren";
+"copy_coordinates" = "Koordinaten kopieren";
 "toast_empty_name_error" = "Standort ohne Name";
 "share_geo" = "geo:";
 "ios_release_4_2" = "• Aussehen der Routenlinie: Möglichkeit zum Ändern der Breite und Farbe\n• Aufzeichnungen: Option zum Löschen mehrerer Aufzeichnungen auf einmal\n• Aufzeichnungsmenü: Scrollbalken mit Wegpunktgruppen hinzugefügt\n• Kartenaussehen: Zusätzliche Routen in Typen unterteilt und Möglichkeit, jeweils eine pro Kategorie zu aktivieren\n• Reiten: Neuer Navigationsmodus und App-Profil\n• OsmAnd-Dateien sind jetzt in der Datei-App sichtbar\n• Optionen für \"Höhendaten berücksichtigen\" und \"Höhenschwankung auswählen\" wurden verbessert bzw. zusammengefügt und umbenannt in \"Bevorzugtes Terrain\", derzeit nicht verfügbar für Fahrrad und Fußgänger Profile\n• Neue Option \"Richtung einbeziehen\" für Aufzeichnungen\n• Straßennamen-Widget zeigt Verkehrszeichen und Abfahrtsnummern während Navigation\n• Neue Fitness- und Lauf-Routen auf der Karte\n• CarPlay Fehlerbehebungen und neue Gesten für Touchscreens\n• Fehlerbehebung: Importieren von GPX-Dateien\n• Fehlerbehebung: Importieren von benutzerdefinierten Erweiterungen mit inkludierten Dateien\n• Fehlerbehebung: Verschiedene Abstürze im Routenplanungs-Modus\n• Fehlerbehebung: Abstürze während der Navigation\n";
@@ -2615,7 +2615,7 @@
 "map_updates_are_unavailable_yet" = "Kartenupdates sind noch nicht verfügbar :-(";
 "last_two_month_total" = "Letzte zwei Monate insgesamt";
 "offline_edition_descr" = "Wenn die Offline-Bearbeitung aktiviert ist, werdenÄnderungen zunächst lokal gespeichert und auf Anforderung hochgeladen, anderenfalls werden Änderungen sofort hochgeladen.";
-"use_login_and_password" = "Benutzername und Passwort verwenden";
+"use_login_and_password" = "Benutzernamen und Passwort verwenden";
 "use_login_and_password_description" = "Verwenden Sie Ihre E-Mail-Adresse/Ihr Login und Ihr Passwort, um sich bei OpenStreetMap.org anzumelden.";
 "benefits_for_contributors_secondary_descr" = "Melden Sie sich bei OpenStreetMap an, um zu prüfen, ob Sie Anspruch auf unbegrenzte monatliche und stündliche Kartenaktualisierungen haben.";
 "not_enough_contributions_descr" = "Ein Minimum von %@Änderungen in den letzten zwei Monaten %@ ist erforderlich, um Zugang zu unbegrenzten stündlichen Kartenaktualisierungen zu erhalten.";

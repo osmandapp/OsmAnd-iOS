@@ -2615,3 +2615,4 @@
 "rendering_attr_showShareTaxiRoutes_name" = "乗合タクシー路線";
 "icon_group_service" = "設備・技術";
 "weather_forecast_is_outdated" = "天気予報データが古くなっています。";
+"nautical_depth_points" = "水深点(最高深度)";

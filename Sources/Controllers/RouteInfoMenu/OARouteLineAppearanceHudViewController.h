@@ -8,6 +8,9 @@
 
 #import "OABaseScrollableHudViewController.h"
 
+#define kFromSettingsKey @"settings"
+#define kFromNavigationKey @"navigation"
+
 @class OAApplicationMode;
 
 @protocol OARouteLineAppearanceViewControllerDelegate <NSObject>
@@ -21,6 +24,7 @@
 @interface OARouteLineAppearanceHudViewController : OABaseScrollableHudViewController
 
 - (instancetype)initWithAppMode:(OAApplicationMode *)appMode;
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode prevScreenKey:(NSString *)prevScreenKey;
 
 @property (nonatomic, weak) id<OARouteLineAppearanceViewControllerDelegate> delegate;
 

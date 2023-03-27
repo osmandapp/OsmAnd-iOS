@@ -261,7 +261,7 @@
         {
             [self.navigationController popToViewController:OARootViewController.instance animated:YES];
             OARouteLineAppearanceHudViewController *routeLineAppearanceHudViewController =
-                    [[OARouteLineAppearanceHudViewController alloc] initWithAppMode:self.appMode];
+                    [[OARouteLineAppearanceHudViewController alloc] initWithAppMode:self.appMode prevScreenKey:kFromSettingsKey];
             routeLineAppearanceHudViewController.delegate = self;
             [OARootViewController.instance.mapPanel showScrollableHudViewController:routeLineAppearanceHudViewController];
         }

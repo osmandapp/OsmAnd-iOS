@@ -52,13 +52,13 @@
 @implementation OADownloadedRegionsLayer
 {
     std::shared_ptr<OsmAnd::PolygonsCollection> _collection;
+    
+    std::shared_ptr<OsmAnd::PolygonsCollection> _selectedCollection;
     OAAutoObserverProxy* _localResourcesChangedObserver;
     BOOL _initDone;
 
     OAAutoObserverProxy *_weatherToolbarStateChangeObservable;
     BOOL _needsSettingsForToolbar;
-
-    std::shared_ptr<OsmAnd::Polygon> _selectionPolygon;
 }
 
 - (NSString *) layerId
@@ -75,6 +75,7 @@
                                                                      withHandler:@selector(onWeatherToolbarStateChanged)
                                                                       andObserve:[OARootViewController instance].mapPanel.weatherToolbarStateChangeObservable];
     _collection = std::make_shared<OsmAnd::PolygonsCollection>();
+    _selectedCollection = std::make_shared<OsmAnd::PolygonsCollection>();
     _initDone = YES;
     
     [self.mapView addKeyedSymbolsProvider:_collection];
@@ -99,6 +100,7 @@
 {
     [self.mapView removeKeyedSymbolsProvider:_collection];
     _collection = std::make_shared<OsmAnd::PolygonsCollection>();
+    _selectedCollection = std::make_shared<OsmAnd::PolygonsCollection>();
 }
 
 - (BOOL) updateLayer
@@ -145,12 +147,14 @@
                 BOOL hasPoints = NO;
                 for (OAWorldRegion *r in mapRegions)
                 {
-                    OAPointIContainer *pc = [[OAPointIContainer alloc] init];
-                    [r getPoints31:pc];
-                    if (!pc.qPoints.isEmpty())
+                    NSArray<OAPointIContainer *> *polygons = [r getAllPolygons];
+                    for (OAPointIContainer *pc in polygons)
                     {
-                        [self drawRegion:pc.qPoints region:r];
-                        hasPoints = YES;
+                        if (!pc.qPoints.isEmpty())
+                        {
+                            [self drawRegion:pc.qPoints region:r];
+                            hasPoints = YES;
+                        }
                     }
                 }
                 if (hasPoints)
@@ -186,53 +190,34 @@
 - (void) highlightRegion:(OAWorldRegion *)region
 {
     [self.mapViewController runWithRenderSync:^{
-        [self.mapView removeKeyedSymbolsProvider:_collection];
-        OAPointIContainer *pc = [[OAPointIContainer alloc] init];
-        [region getPoints31:pc];
-        const auto points = pc.qPoints;
-        BOOL hidden = NO;
-        if (!_selectionPolygon)
+        [self.mapView removeKeyedSymbolsProvider:_selectedCollection];
+        NSArray<OAPointIContainer *> *polygons = [region getAllPolygons];
+        OsmAnd::ColorARGB regionColor = OsmAnd::ColorARGB(color_region_selected_argb);
+        for (OAPointIContainer *pc in polygons)
         {
-            OsmAnd::ColorARGB regionColor = OsmAnd::ColorARGB(color_region_selected_argb);
+            const auto &points = pc.qPoints;
             if (!points.isEmpty())
             {
                 OsmAnd::PolygonBuilder builder;
                 builder.setBaseOrder(self.baseOrder - _collection->getPolygons().size())
-                .setIsHidden(points.size() == 0)
-                .setPolygonId(100)
-                .setPoints(points)
-                .setFillColor(regionColor);
+                    .setIsHidden(points.size() == 0)
+                    .setPolygonId(100)
+                    .setPoints(points)
+                    .setFillColor(regionColor);
                 
-                _selectionPolygon = builder.buildAndAddToCollection(_collection);
-            }
-            else
-            {
-                hidden = YES;
+                builder.buildAndAddToCollection(_selectedCollection);
             }
         }
-        else
-        {
-            if (!points.isEmpty())
-                _selectionPolygon->setPoints(points);
-            else
-                hidden = YES;
-        }
-        _selectionPolygon->setIsHidden(hidden);
-        [self.mapView addKeyedSymbolsProvider:_collection];
+        [self.mapView addKeyedSymbolsProvider:_selectedCollection];
     }];
 }
 
 - (void) hideRegionHighlight
 {
-    if (_selectionPolygon && !_selectionPolygon->isHidden())
-    {
-        [self.mapViewController runWithRenderSync:^{
-            [self.mapView removeKeyedSymbolsProvider:_collection];
-            if (_selectionPolygon)
-                _selectionPolygon->setIsHidden(true);
-            [self.mapView addKeyedSymbolsProvider:_collection];
-        }];
-    }
+    [self.mapViewController runWithRenderSync:^{
+        [self.mapView removeKeyedSymbolsProvider:_selectedCollection];
+        _selectedCollection = std::make_shared<OsmAnd::PolygonsCollection>();
+    }];
 }
 
 - (OAResourceItem *)createLocalResourceItem:(OAWorldRegion *)region resource:(const std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> &)resource

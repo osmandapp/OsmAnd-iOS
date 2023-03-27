@@ -34,7 +34,6 @@
 @implementation OAWorldRegion
 {
     std::shared_ptr<const OsmAnd::WorldRegion> _worldRegion;
-    QVector<OsmAnd::PointI> _points31;
 }
 
 - (instancetype) initWorld
@@ -156,49 +155,90 @@
 {
 }
 
+- (double) calculateArea:(const QVector<OsmAnd::Point<int>> &)points31
+{
+    double area = 0.;
+    for (int i = 1; i < points31.count(); i++)
+    {
+        double ax = points31.at(i - 1).x;
+        double bx = points31.at(i).x;
+        double ay = points31.at(i - 1).y;
+        double by = points31.at(i).y;
+        area += (bx + ax) * (by - ay) / 1.631E10;
+    }
+    return area;
+}
+
 - (double) getArea
 {
-    double area = 0.0;
-    if (_worldRegion != nullptr && _worldRegion->mapObject != nullptr && _points31.count() > 1)
+    double area = 0.;
+    if (_worldRegion != nullptr)
     {
-        for (int i = 1; i < _points31.count(); i++)
+        const auto &points31 = _worldRegion->polygon;
+        if (_worldRegion->polygon.count() > 1)
+            area += [self calculateArea:points31];
+        for (const auto& additionalArea : _worldRegion->additionalPolygons)
         {
-            double ax = _points31.at(i - 1).x;
-            double bx = _points31.at(i).x;
-            double ay = _points31.at(i - 1).y;
-            double by = _points31.at(i).y;
-            area += (bx + ax) * (by - ay) / 1.631E10;
+            if (additionalArea.count() > 0)
+                area += [self calculateArea:additionalArea];
         }
     }
     return ABS(area);
 }
 
-- (BOOL) contain:(double) lat lon:(double) lon
+- (BOOL)polygonContains:(double)lat lon:(double)lon polygon:(const QVector<OsmAnd::Point<int>> &)points
 {
-    BOOL res = NO;
-    if (_worldRegion != nullptr && _worldRegion->mapObject != nullptr && _points31.count() > 1)
+    if (points.count() > 1)
     {
         OsmAnd::PointI p31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
         int t = 0;
-        for (int i = 1; i < _points31.count(); i++) {
-            int fx = [self.class ray_intersect_x:_points31.at(i).x y:_points31.at(i).y middleY:p31.y prevX:_points31.at(i - 1).x prevY:_points31.at(i - 1).y];
+        for (int i = 1; i < points.count(); i++) {
+            int fx = [self.class ray_intersect_x:points.at(i).x y:points.at(i).y middleY:p31.y prevX:points.at(i - 1).x prevY:points.at(i - 1).y];
             if (INT_MIN != fx && p31.x >= fx)
                 t++;
         }
         return t % 2 == 1;
     }
+    return NO;
+}
+
+- (BOOL) contain:(double) lat lon:(double) lon
+{
+    BOOL res = NO;
+    if (_worldRegion != nullptr)
+    {
+        const auto &points = _worldRegion->polygon;
+        res |= [self polygonContains:lat lon:lon polygon:points];
+        if (res)
+            return res;
+        for (const auto &polygon : _worldRegion->additionalPolygons)
+        {
+            res |= [self polygonContains:lat lon:lon polygon:polygon];
+            if (res)
+                return res;
+        }
+    }
     return res;
 }
 
-- (void)getPoints31:(OAPointIContainer *)container
+- (NSArray<OAPointIContainer *> *) getAllPolygons
 {
-    if (_worldRegion != nullptr && _worldRegion->mapObject != nullptr && _worldRegion->mapObject->points31.count() > 1)
-        container.qPoints = _worldRegion->mapObject->points31;
+    NSMutableArray<OAPointIContainer *> *res = [NSMutableArray array];
+    OAPointIContainer *mainPoly = [[OAPointIContainer alloc] init];
+    mainPoly.qPoints = _worldRegion->polygon;
+    [res addObject:mainPoly];
+    for (const auto &additional : _worldRegion->additionalPolygons)
+    {
+        OAPointIContainer *poly = [[OAPointIContainer alloc] init];
+        poly.qPoints = additional;
+        [res addObject:poly];
+    }
+    return res;
 }
 
 - (QVector<OsmAnd::PointI>)getPoints31
 {
-    return _points31;
+    return _worldRegion->polygon;
 }
 
 + (int) ray_intersect_x:(int) x y:(int) y middleY:(int) middleY prevX:(int) prevX prevY:(int) prevY
@@ -699,43 +739,37 @@
 
 - (void)findBoundaries
 {
-    if (_worldRegion != nullptr && _worldRegion->mapObject != nullptr)
+    if (_worldRegion != nullptr)
     {
-        _points31 = _worldRegion->mapObject->points31;
-        if (!_points31.isEmpty())
+        const auto &polyPoints31 = _worldRegion->polygon;
+        if (!polyPoints31.isEmpty())
         {
-            int32_t x = _points31.at(0).x;
-            int32_t y = _points31.at(0).y;
-            QVector<OsmAnd::PointI> points31;
-            points31 << OsmAnd::PointI(x, y);
+            int32_t x = polyPoints31.at(0).x;
+            int32_t y = polyPoints31.at(0).y;
             double minX = x;
             double maxX = x;
             double minY = y;
             double maxY = y;
 
-            if (_points31.size() > 1)
+            if (polyPoints31.size() > 1)
             {
-                for (int i = 1; i < _points31.size(); i++)
+                for (int i = 1; i < polyPoints31.size(); i++)
                 {
-                    x = _points31.at(i).x;
-                    y = _points31.at(i).y;
-
+                    x = polyPoints31.at(i).x;
+                    y = polyPoints31.at(i).y;
+                    
                     if (x > maxX)
                         maxX = x;
                     else if (x < minX)
                         minX = x;
-
+                    
                     if (y < maxY)
                         maxY = y;
                     else if (y > minY)
                         minY = y;
-
-                    points31 << OsmAnd::PointI(x, y);
                 }
             }
-
             _boundingBox = [[QuadRect alloc] initWithLeft:minX top:minY right:maxX bottom:maxY];
-            _points31 = points31;
         }
     }
 }
@@ -839,7 +873,7 @@
     BOOL isInnerPoint = [self.class isPointInsidePolygon:point polygon:[another getPoints31]];
     if (isInnerPoint)
     {
-        return [self.class isPointInsidePolygon:point polygon:_points31];
+        return [self.class isPointInsidePolygon:point polygon:[self getPoints31]];
     }
     else
     {
@@ -856,8 +890,8 @@
 
 - (BOOL)containsPolygon:(QVector<OsmAnd::PointI>)another
 {
-    return (!_points31.isEmpty() && !another.isEmpty()) &&
-            [self.class isFirstPolygonInsideSecond:another secondPolygon:_points31];
+    return (!_worldRegion->polygon.isEmpty() && !another.isEmpty()) &&
+            [self.class isFirstPolygonInsideSecond:another secondPolygon:_worldRegion->polygon];
 }
 
 + (BOOL)isFirstPolygonInsideSecond:(QVector< OsmAnd::PointI >)firstPolygon secondPolygon:(QVector<OsmAnd::PointI>)secondPolygon

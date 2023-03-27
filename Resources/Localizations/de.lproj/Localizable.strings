@@ -2365,7 +2365,7 @@
 "backup_view_conflicts" = "Konflikte anzeigen";
 "weather_plugin_description" = "Bietet\n- 24-Stunden- und 7-Tage-Wettervorhersage mit 5 Ebenen\n- Standortbasierte Widgets\n- Temperatur-/Luftdruck-Isolinien\n\nWetterdaten werden vom Global Forecast System (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast) bereitgestellt.";
 "backup_error_no_valid_subscription" = "Kein gültiges Abonnement vorhanden";
-"rendering_attr_showFunicularRoutes_name" = "Kabelgetriebene Linien";
+"rendering_attr_showFunicularRoutes_name" = "Standseilbahnlinien";
 "rendering_attr_showLightRailRoutes_name" = "Stadtbahnlinien";
 "backup_error_subscription_was_expired_descr" = "Ihr OsmAnd Pro-Abonnement ist abgelaufen. Erneuern Sie es, um die Datensicherung zu nutzen. Sie können weiterhin Daten aus der Cloud wiederherstellen.";
 "backup_error_user_is_already_registered" = "Diese E-Mail-Adresse wird in einem anderen Konto verwendet";

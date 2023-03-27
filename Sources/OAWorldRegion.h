@@ -57,7 +57,7 @@
 - (NSString *) getCountryNameAtLat:(double)latitude lon:(double)longitude;
 - (double) getArea;
 - (BOOL) contain:(double) lat lon:(double) lon;
-- (void) getPoints31:(OAPointIContainer *)container;
+- (NSArray<OAPointIContainer *> *) getAllPolygons;
 
 - (NSInteger) getLevel;
 - (BOOL) containsSubregion:(NSString *)regionId;

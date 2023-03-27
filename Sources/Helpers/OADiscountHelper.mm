@@ -397,7 +397,7 @@ const static NSString *URL = @"https://osmand.net/api/motd";
     if (!icon)
         icon = [OAUtilities getTintableImageNamed:@"ic_action_gift"];
     
-    [_discountToolbar setTitle:_title description:_description icon:icon buttonText:_textButtonTitle colors: _colors];
+    [_discountToolbar setTitle:_title description:_description icon:icon buttonText:_textButtonTitle colors:_colors];
     
     _bannerVisible = YES;
     

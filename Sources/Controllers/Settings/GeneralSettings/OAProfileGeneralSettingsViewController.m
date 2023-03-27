@@ -102,7 +102,7 @@
     else if ([_settings.rotateMap get:self.appMode] == ROTATE_MAP_MANUAL)
     {
         rotateMapValue = OALocalizedString(@"rotate_map_manual_opt");
-        rotateMapIcon = @"ic_custom_direction_manual";
+        rotateMapIcon = @"ic_custom_direction_manual_day";
     }
     else
     {

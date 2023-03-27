@@ -2658,3 +2658,6 @@
 // Shared Strings
 "shared_string_cancelled" = "Anulowano";
 "icon_group_service" = "Usługi";
+"weather_forecast" = "Prognoza pogody";
+"app_mode_moped" = "Motorower";
+"weather_forecast_is_outdated" = "Prognoza jest nieaktualna.";

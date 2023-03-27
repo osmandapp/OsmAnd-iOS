@@ -210,6 +210,7 @@
         
         OAFavoriteItem *storedItem = [OAFavoritesHelper getVisibleFavByLat:favLat lon:favLon];
         targetPoint.title = storedItem ? [storedItem getDisplayName] : favLoc->getTitle().toNSString();
+        targetPoint.titleAddress = storedItem ? [storedItem getAddress] : favLoc->getAddress().toNSString();
         if (storedItem && storedItem.specialPointType == [OASpecialPointType PARKING])
             targetPoint.type = OATargetParking;
         targetPoint.symbolGroupId = favLoc->getGroup().toNSString();

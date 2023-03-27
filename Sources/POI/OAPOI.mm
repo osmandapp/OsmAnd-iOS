@@ -349,6 +349,7 @@
                 else if ([shortKey isEqualToString:OPENING_HOURS])
                 {
                     openingHours = map[key];
+                    additionalInfo[shortKey] = openingHours;
                 }
             }
             else if ([key hasPrefix:osmPrefix])

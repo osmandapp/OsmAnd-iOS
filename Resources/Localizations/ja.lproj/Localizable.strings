@@ -1558,11 +1558,11 @@
 "app_mode_skiing" = "スキー";
 "app_mode_taxi" = "タクシー";
 "app_mode_wagon" = "ワゴン車";
-"app_mode_bicycle" = "自転車";
-"app_mode_car" = "乗用車";
+"app_mode_bicycle" = "二輪車移動等";
+"app_mode_car" = "車移動等";
 "app_mode_monowheel" = "モノホイール";
 "online_webpage_warning" = "該当ページはオンラインでしか見ることができません。 ウェブブラウザで開きますか？";
-"app_mode_pedestrian" = "徒歩";
+"app_mode_pedestrian" = "徒歩移動等";
 "app_mode_shuttle_bus" = "シャトルバス";
 "app_mode_utv" = "横並び(サイドバイサイド)形式";
 "app_mode_scooter" = "スクーター";
@@ -1608,7 +1608,7 @@
 "choose_auto_center_map_view_descr" = "マップ表示時、移動後に現在地が画面中央に戻るまでの間隔を指定します";
 "change_map_behavior" = "ナビゲーション中のマップ動作を変更する";
 "map_during_navigation" = "ナビゲーション中のマップ表示";
-"shared_string_tones" = "トーン";
+"shared_string_tones" = "トン";
 "lenght_limit_description" = "車の長さを入力してください。一部のルートにおいては、長い車両では通行できない場合があります。";
 "shared_string_meters" = "メートル";
 "default_speed_dialog_msg" = "すべての道路の移動速度を制限し、種別や制限速度が不明な道路が多い場合の到着時間予測に役立ちます(ルート計算に影響します)";

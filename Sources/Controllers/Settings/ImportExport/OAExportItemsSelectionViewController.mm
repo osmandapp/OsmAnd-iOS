@@ -8,7 +8,7 @@
 
 #import "OAExportItemsSelectionViewController.h"
 #import "OAExportSettingsType.h"
-#import "OACustomSelectionButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OAApplicationMode.h"
 #import "OAMenuSimpleCell.h"
 #import "Localization.h"
@@ -119,7 +119,7 @@
 {
     NSMutableArray<NSDictionary *> *data = [NSMutableArray new];
     [data addObject:@{
-        @"type" : [OACustomSelectionButtonCell getCellIdentifier]
+        @"type" : [OAButtonTableViewCell getCellIdentifier]
     }];
     
     for (id obj in _items)
@@ -471,38 +471,40 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:[OACustomSelectionButtonCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
     {
-        OACustomSelectionButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OACustomSelectionButtonCell getCellIdentifier]];
+        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomSelectionButtonCell getCellIdentifier] owner:self options:nil];
-            cell = (OACustomSelectionButtonCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAButtonTableViewCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell descriptionVisibility:NO];
+            [cell leftEditButtonVisibility:YES];
+            [cell.button.titleLabel setTextAlignment:NSTextAlignmentNatural];
+            cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeading;
         }
         if (cell)
         {
-            NSString *selectionText = _selectedItems.count > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all");
-            [cell.selectDeselectButton setTitle:selectionText forState:UIControlStateNormal];
-            [cell.selectDeselectButton removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.selectDeselectButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
-            [cell.selectionButton removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.selectionButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
-            [cell.selectDeselectButtonTouchableArea removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.selectDeselectButtonTouchableArea addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
-            
-            NSInteger selectedAmount = _selectedItems.count;
+            NSUInteger selectedAmount = _selectedItems.count;
+
+            NSString *selectionText = selectedAmount > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all");
+            [cell.button setTitle:selectionText forState:UIControlStateNormal];
+            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.button addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
+
+            UIImage *selectionImage = nil;
             if (selectedAmount > 0)
-            {
-                UIImage *selectionImage = selectedAmount < _items.count ? [UIImage imageNamed:@"ic_system_checkbox_indeterminate"] : [UIImage imageNamed:@"ic_system_checkbox_selected"];
-                [cell.selectionButton setImage:selectionImage forState:UIControlStateNormal];
-            }
+                selectionImage = [UIImage imageNamed:selectedAmount < _items.count ? @"ic_system_checkbox_indeterminate" : @"ic_system_checkbox_selected"];
             else
-            {
-                [cell.selectionButton setImage:nil forState:UIControlStateNormal];
-            }
-            return cell;
+                selectionImage = [UIImage imageNamed:@"ic_custom_checkbox_unselected"];
+            [cell.leftEditButton setImage:selectionImage forState:UIControlStateNormal];
+            [cell.leftEditButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.leftEditButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
         }
+        return cell;
     }
     else if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
@@ -554,8 +556,6 @@
 {
     if (indexPath.row > 0)
         [self selectDeselectItem:indexPath];
-    else
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath

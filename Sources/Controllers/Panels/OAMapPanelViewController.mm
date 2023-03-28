@@ -1807,7 +1807,16 @@ typedef enum
         return;
     
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? self.targetMenuView.frame.size.width + 20.0 : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : height) centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
+    OATargetPoint *targetPoint = [self getCurrentTargetPoint];
+    CGFloat bottomInset = [self.targetMenuView isLandscape] ? 0. : height;
+    if (!targetPoint.centerMap && bottomInset > DeviceScreenHeight - bottomInset)
+        targetPoint.centerMap = YES;
+    [_mapViewController correctPosition:targetPoint31
+                       originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31]
+                              leftInset:[self.targetMenuView isLandscape] ? self.targetMenuView.frame.size.width : 0.
+                            bottomInset:bottomInset
+                             centerBBox:_targetMode == EOATargetBBOX || targetPoint.centerMap
+                               animated:animated];
 }
 
 #pragma mark - OATargetPointViewDelegate
@@ -2553,6 +2562,7 @@ typedef enum
         _targetZoom = 0.0;
         
         targetPoint.toolbarNeeded = pushed;
+        targetPoint.centerMap = YES;
         
         [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:NO];
         [_targetMenuView setTargetPoint:targetPoint];
@@ -2606,6 +2616,7 @@ typedef enum
     targetPoint.titleAddress = description;
     targetPoint.icon = icon;
     targetPoint.toolbarNeeded = pushed;
+    targetPoint.centerMap = YES;
     targetPoint.targetObj = address;
     
     [_targetMenuView setTargetPoint:targetPoint];
@@ -2646,6 +2657,7 @@ typedef enum
     targetPoint.titleAddress = _formattedTargetName;
     targetPoint.icon = icon;
     targetPoint.toolbarNeeded = pushed;
+    targetPoint.centerMap = YES;
     targetPoint.targetObj = item;
     
     [_targetMenuView setTargetPoint:targetPoint];

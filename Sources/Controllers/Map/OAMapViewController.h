@@ -19,8 +19,6 @@
 
 #define kCorrectionMinLeftSpace 40.0
 #define kCorrectionMinBottomSpace 40.0
-#define kCorrectionMinLeftSpaceBBox 20.0
-#define kCorrectionMinBottomSpaceBBox 20.0
 
 #define kElevationGestureMaxThreshold 50.0f
 #define kElevationMinAngle 5.0f

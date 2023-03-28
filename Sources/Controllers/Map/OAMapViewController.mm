@@ -2297,18 +2297,18 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 }
 
 - (void) correctPosition:(Point31)targetPosition31
-       originalCenter31:(Point31)originalCenter31
-              leftInset:(CGFloat)leftInset
-            bottomInset:(CGFloat)bottomInset
-             centerBBox:(BOOL)centerBBox
-               animated:(BOOL)animated
+        originalCenter31:(Point31)originalCenter31
+               leftInset:(CGFloat)leftInset
+             bottomInset:(CGFloat)bottomInset
+              centerBBox:(BOOL)centerBBox
+                animated:(BOOL)animated
 {
     CGFloat leftTargetInset;
     CGFloat bottomTargetInset;
     if (centerBBox)
     {
-        leftTargetInset = kCorrectionMinLeftSpaceBBox;
-        bottomTargetInset = kCorrectionMinBottomSpaceBBox;
+        leftTargetInset = [OAUtilities isLandscape] ? 0. : ((DeviceScreenWidth - leftInset) / 2);
+        bottomTargetInset = (DeviceScreenHeight - bottomInset) / 2;
     }
     else
     {
@@ -2327,24 +2327,23 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     CGPoint targetPoint;
     OsmAnd::PointI targetPositionI = [OANativeUtilities convertFromPoint31:targetPosition31];
     [_mapView convert:&targetPositionI toScreen:&targetPoint checkOffScreen:YES];
-    
+
     CGPoint newPosition = center;
 
-    CGFloat targetX = leftInset + leftTargetInset;
-    CGFloat minPointX = targetX;
-    CGFloat targetY = DeviceScreenHeight - bottomInset - bottomTargetInset;
-    CGFloat minPointY = targetY;
-
+    CGFloat minPointY = DeviceScreenHeight - bottomInset - bottomTargetInset;
     newPosition.y = center.y - (minPointY - targetPoint.y);
-    if (newPosition.y < originalCenter.y)
+    if (!centerBBox && newPosition.y < originalCenter.y)
         newPosition.y = originalCenter.y;
-        
-    newPosition.x = center.x + (-minPointX + targetPoint.x);
-    if (newPosition.x > originalCenter.x)
+
+    CGFloat minPointX = leftInset + leftTargetInset;
+    if (center.x != targetPoint.x)
+        newPosition.x = center.x + (-minPointX + targetPoint.x);
+    if (!centerBBox && newPosition.x > originalCenter.x)
         newPosition.x = originalCenter.x;
-    
+
     newPosition.x *= _mapView.contentScaleFactor;
     newPosition.y *= _mapView.contentScaleFactor;
+
     OsmAnd::PointI newPositionI;
     [_mapView convert:newPosition toLocation:&newPositionI];
     Point31 newPosition31 = [OANativeUtilities convertFromPointI:newPositionI];

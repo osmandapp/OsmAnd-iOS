@@ -1614,7 +1614,7 @@
         [_driveModeButton setImage:[UIImage templateImageNamed:@"ic_custom_navigation"] forState:UIControlStateNormal];
         _driveModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
         _driveModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
-        _driveModeButton.accessibilityValue = nil;
+        _driveModeButton.accessibilityValue = OALocalizedString(@"simulate_in_progress");
     }
     else
     {

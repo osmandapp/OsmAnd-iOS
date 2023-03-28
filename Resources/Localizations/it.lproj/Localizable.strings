@@ -2675,7 +2675,7 @@
 "compass_options_description" = "Fai clic sulla bussola per cambiare la modalità di orientamento della mappa";
 "weather_clear_offline_cache_for" = "Questo cancellerà tutta la cache per il riquadro meteo offline per %@.";
 "with_offline_maps" = "Con mappe offline";
-"weather_forecast_is_outdated" = "La previsione è obsoleta.";
+"weather_forecast_is_outdated" = "Previsioni";
 "weather_offline_forecast_only_desc" = "Le previsioni saranno disponibili solo per i paesi con dati pre-scaricati.";
 "map_updates_for_mappers" = "Aggiornamenti della mappa per i mappatori";
 "not_enough_contributions_descr" = "È necessario un minimo di %@ modifiche negli ultimi due mesi %@ per ottenere l\'accesso agli aggiornamenti orari illimitati delle mappe.";
@@ -2815,6 +2815,16 @@
 "rotate_map_north_opt" = "Nord in alto (fisso)";
 "rotate_map_manual_opt" = "Rotazione manuale (fissa)";
 "compass_click_desc" = "Tocca il compasso per cambiare modalità di orientamento della mappa.";
-"map_widget_camera_distance" = "Distanza fotocamera";
+"map_widget_camera_distance" = "Elevazione fotocamera";
 "change_language" = "Cambia lingua";
 "icon_group_service" = "Servizi";
+"map_widget_sunset" = "Tramonto";
+"map_widget_next_sunrise" = "Prossima alba";
+"map_widget_next_sunset" = "Prossimo tramonto";
+"shared_string_external" = "Esterno";
+"download_only_now" = "Scarica solo per questa volta";
+"over_wifi_only" = "Solo con Wi-Fi";
+"wikivoyage_download_pics" = "Scarica immagini";
+"dont_download" = "Non scaricare";
+"over_any_network" = "Con qualsiasi rete";
+"map_widget_sunrise" = "Alba";

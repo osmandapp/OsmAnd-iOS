@@ -76,7 +76,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         _settingsHelper = [OANetworkSettingsHelper sharedInstance];
         _backupHelper = [OABackupHelper sharedInstance];
         [self setupNotificationListeners];
-        _itemsSection = -1;
         [_backupHelper addPrepareBackupListener:self];
     }
     return self;
@@ -148,6 +147,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (void)generateData
 {
+    _itemsSection = -1;
     _data = [[OATableDataModel alloc] init];
     OATableSectionData *statusSection = [OATableSectionData sectionData];
     NSString *backupTime = _backupHelper.isBackupPreparing ?

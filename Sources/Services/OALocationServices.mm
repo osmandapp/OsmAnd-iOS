@@ -884,7 +884,7 @@
             break;
     }
     if (distance)
-        *distance = (b * A * (sigma - deltaSigma));
+        *distance = (float) (b * A * (sigma - deltaSigma));
     if (initialBearing)
         *initialBearing = atan2(cosU2 * sinLambda, cosU1 * sinU2 - sinU1 * cosU2 * cosLambda) * (180.0 / M_PI);
     //*finalBearing = atan2(cosU1 * sinLambda, -sinU1 * cosU2 + cosU1 * sinU2 * cosLambda) * (180.0 / M_PI);

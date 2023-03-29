@@ -583,10 +583,19 @@ colorizationScheme:(int)colorizationScheme
             }
             if (splitData && (splitByDistance || splitByTime))
             {
+                double lastMetricValue = 0;
+                double lastSegmentValue = 0;
                 for (NSInteger i = 1; i < splitData.count; i++)
                 {
                     OAGPXTrackAnalysis *seg = splitData[i];
                     double metricStartValue = splitData[i - 1].metricEnd;
+                    
+                    if (metricStartValue < lastMetricValue)
+                        lastSegmentValue += lastMetricValue;
+                    
+                    lastMetricValue = metricStartValue;
+                    metricStartValue += lastSegmentValue;
+                    
                     OAWptPt *pt = seg.locationStart;
                     if (pt)
                     {

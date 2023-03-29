@@ -28,9 +28,9 @@ static const double calculatedGpxWindowLength = 10.;
 
 -(double) metric:(OAWptPt *)p1 p2:(OAWptPt *)p2
 {
-    CLLocation *loc1 = [[CLLocation alloc] initWithLatitude:p1.position.latitude longitude:p1.position.longitude];
-    CLLocation *loc2 = [[CLLocation alloc] initWithLatitude:p2.position.latitude longitude:p2.position.longitude];
-    return [loc1 distanceFromLocation:loc2];
+    double distance = 0, bearing = 0;
+    [OALocationServices computeDistanceAndBearing:p1.position.latitude lon1:p1.position.longitude lat2:p2.position.latitude lon2:p2.position.longitude distance:&distance initialBearing:&bearing];
+    return distance;
 }
 
 @end
@@ -286,6 +286,12 @@ static const double calculatedGpxWindowLength = 10.;
     NSMutableArray<OAElevation *> *elevationData = [NSMutableArray new];
     NSMutableArray<OASpeed *> *speedData = [NSMutableArray new];
     
+    if (splitSegments.count > 0)
+    {
+        if ( ((OASplitSegment *)splitSegments[0]).startPointInd == 6293)
+            NSLog(@"!!!!!!!!!!");
+    }
+    
     for (OASplitSegment *s in splitSegments)
     {
         int numberOfPoints = s.getNumberOfPoints;
@@ -501,6 +507,19 @@ static const double calculatedGpxWindowLength = 10.;
     }
     _elevationData = [NSArray arrayWithArray:elevationData];
     _speedData = [NSArray arrayWithArray:speedData];
+    
+//    ((OASplitSegment *)splitSegments[0]).startPointInd
+    if (splitSegments.count > 0)
+    {
+//        NSLog(@"!!!!!!!!!!  %f  %i  %i",
+//              _metricEnd,
+//              ((OASplitSegment *)splitSegments[0]).startPointInd,
+//              ((OASplitSegment *)splitSegments[0]).endPointInd);
+        
+        //    if (_metricEnd == 170000)
+        //        NSLog(@"!!!!!!!!!! !!!");
+        
+    }
 }
 
 +(void) splitSegment:(OASplitMetric*)metric

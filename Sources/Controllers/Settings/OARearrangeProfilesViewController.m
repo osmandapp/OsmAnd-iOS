@@ -39,7 +39,7 @@
 
 @end
 
-@interface OARearrangeProfilesViewController() <UITableViewDelegate, UITableViewDataSource>
+@interface OARearrangeProfilesViewController() <UITableViewDelegate, UITableViewDataSource, OATableViewCellDelegate>
 
 @end
 
@@ -200,6 +200,7 @@
         cell = (OASimpleTableViewCell *) nib[0];
         [cell leftEditButtonVisibility:YES];
         [cell descriptionVisibility:NO];
+        cell.delegate = self;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     if (cell)
@@ -213,7 +214,7 @@
         cell.leftEditButton.enabled = mode.isCustomProfile;
         cell.leftEditButton.tag = indexPath.section << 10 | indexPath.row;
         [cell.leftEditButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-        [cell.leftEditButton addTarget:self action:@selector(actionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.leftEditButton addTarget:self action:@selector(onEditButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return cell;
 }
@@ -285,20 +286,6 @@
     }
 }
 
-- (void) actionButtonPressed:(UIButton *)sender
-{
-    _hasChangesBeenMade = YES;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
-    if (indexPath.section == kAllApplicationProfilesSection)
-    {
-        [self deleteMode:indexPath];
-    }
-    else
-    {
-        [self restoreMode:indexPath];
-    }
-}
-
 - (void) deleteMode:(NSIndexPath *)indexPath
 {
     OAEditProfileItem *am = _appProfiles[indexPath.row];
@@ -332,6 +319,25 @@
     [_tableView moveRowAtIndexPath:indexPath toIndexPath:targetPath];
     [_tableView endUpdates];
     [CATransaction commit];
+}
+
+#pragma mark - Selectors
+
+- (void)onEditButtonPressed:(UIButton *)sender
+{
+    [self onLeftEditButtonPressed:sender.tag];
+}
+
+#pragma mark - OATableViewCellDelegate
+
+- (void)onLeftEditButtonPressed:(NSInteger)tag
+{
+    _hasChangesBeenMade = YES;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:tag & 0x3FF inSection:tag >> 10];
+    if (indexPath.section == kAllApplicationProfilesSection)
+        [self deleteMode:indexPath];
+    else
+        [self restoreMode:indexPath];
 }
 
 @end

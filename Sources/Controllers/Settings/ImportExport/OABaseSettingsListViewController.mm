@@ -34,7 +34,7 @@
 
 @end
 
-@interface OABaseSettingsListViewController () <UITableViewDelegate, UITableViewDataSource, OASettingItemsSelectionDelegate>
+@interface OABaseSettingsListViewController () <UITableViewDelegate, UITableViewDataSource, OASettingItemsSelectionDelegate, OATableViewCellDelegate>
 
 @end
 
@@ -176,21 +176,7 @@
 
 - (void) onGroupCheckmarkPressed:(UIButton *)sender
 {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
-    OAExportSettingsCategory *settingsCategory = _itemTypes[indexPath.section];
-    OASettingsCategoryItems *items = self.itemsMap[settingsCategory];
-    OAExportSettingsType *type = items.getTypes[indexPath.row];
-    BOOL doSelect = self.selectedItemsMap[type].count == 0;
-    
-    if (doSelect)
-    {
-        [self selectAllItems:items section:indexPath.section];
-    }
-    else
-    {
-        [self deselectAllItemsForCategory:items section:indexPath.section];
-    }
-    [self updateControls];
+    [self onLeftEditButtonPressed:sender.tag];
 }
 
 - (void) selectAllItems:(OASettingsCategoryItems *)categoryItems section:(NSInteger)section
@@ -330,9 +316,18 @@
                 cell = (OARightIconTableViewCell *) nib[0];
                 [cell leftEditButtonVisibility:YES];
                 [cell leftIconVisibility:NO];
-                cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
                 [cell setCustomLeftSeparatorInset:YES];
+                cell.delegate = self;
                 cell.separatorInset = UIEdgeInsetsZero;
+                cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+
+                UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
+                conf.contentInsets = NSDirectionalEdgeInsetsMake(0., -6.5, 0., 0.);
+                cell.leftEditButton.configuration = conf;
+                cell.leftEditButton.layer.shadowColor = UIColorFromRGB(color_tint_gray).CGColor;
+                cell.leftEditButton.layer.shadowOffset = CGSizeMake(0., 0.);
+                cell.leftEditButton.layer.shadowOpacity = 1.;
+                cell.leftEditButton.layer.shadowRadius = 1.;
             }
             if (cell)
             {
@@ -511,6 +506,27 @@
 
 - (void)onSettingsExportFinished:(NSString *)file succeed:(BOOL)succeed
 {
+}
+
+#pragma mark - OATableViewCellDelegate
+
+- (void)onLeftEditButtonPressed:(NSInteger)tag
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:tag & 0x3FF inSection:tag >> 10];
+    OAExportSettingsCategory *settingsCategory = _itemTypes[indexPath.section];
+    OASettingsCategoryItems *items = self.itemsMap[settingsCategory];
+    OAExportSettingsType *type = items.getTypes[indexPath.row];
+    BOOL doSelect = self.selectedItemsMap[type].count == 0;
+    
+    if (doSelect)
+    {
+        [self selectAllItems:items section:indexPath.section];
+    }
+    else
+    {
+        [self deselectAllItemsForCategory:items section:indexPath.section];
+    }
+    [self updateControls];
 }
 
 @end

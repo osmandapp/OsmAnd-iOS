@@ -15,7 +15,7 @@
 #import "OADividerCell.h"
 #import "OATableViewCustomHeaderView.h"
 
-@interface OADownloadMultipleResourceViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OADownloadMultipleResourceViewController () <UITableViewDelegate, UITableViewDataSource, OATableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -166,42 +166,9 @@
     [self updateDownloadButtonView];
 }
 
-- (void)selectDeselectGroup:(id)sender
+- (void)selectDeselectGroup:(UIButton *)sender
 {
-    if (!_isSingleSRTM)
-    {
-        BOOL shouldSelect = _selectedItems.count == 0;
-        NSInteger section = _isSRTM ? 1 : 0;
-        if (!shouldSelect)
-        {
-            [_selectedItems removeAllObjects];
-        }
-        else
-        {
-            [_items enumerateObjectsUsingBlock:^(OAResourceItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if (![obj isInstalled])
-                    [_selectedItems addObject:obj];
-            }];
-        }
-
-        for (NSInteger i = 1; i < _items.count + 1; i++)
-        {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(i + 1) * 2 - 1 inSection:section];
-            if (shouldSelect && ![_items[i - 1] isInstalled])
-                [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-            else
-                [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-        }
-        [UIView transitionWithView:self.tableView
-                          duration:0.35f
-                           options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
-                        animations:^(void)
-                        {
-                            [self.tableView reloadData];
-                        }
-                        completion:nil];
-        [self updateDownloadButtonView];
-    }
+    [self onLeftEditButtonPressed:sender.tag];
 }
 
 - (void)segmentChanged:(id)sender
@@ -392,8 +359,17 @@
             [cell titleVisibility:NO];
             [cell descriptionVisibility:NO];
             [cell leftEditButtonVisibility:YES];
+            cell.delegate = self;
             [cell.button.titleLabel setTextAlignment:NSTextAlignmentNatural];
             cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeading;
+
+            UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
+            conf.contentInsets = NSDirectionalEdgeInsetsMake(0., -6.5, 0., 0.);
+            cell.leftEditButton.configuration = conf;
+            cell.leftEditButton.layer.shadowColor = UIColorFromRGB(color_tint_gray).CGColor;
+            cell.leftEditButton.layer.shadowOffset = CGSizeMake(0., 0.);
+            cell.leftEditButton.layer.shadowOpacity = 1.;
+            cell.leftEditButton.layer.shadowRadius = 1.;
         }
         if (cell)
         {
@@ -540,6 +516,46 @@
         if ([item isKindOfClass:OALocalResourceItem.class])
             [self.delegate onDetailsSelected:(OALocalResourceItem *)item];
     }];
+}
+
+#pragma mark - OATableViewCellDelegate
+
+- (void)onLeftEditButtonPressed:(NSInteger)tag
+{
+    if (!_isSingleSRTM)
+    {
+        BOOL shouldSelect = _selectedItems.count == 0;
+        NSInteger section = _isSRTM ? 1 : 0;
+        if (!shouldSelect)
+        {
+            [_selectedItems removeAllObjects];
+        }
+        else
+        {
+            [_items enumerateObjectsUsingBlock:^(OAResourceItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if (![obj isInstalled])
+                    [_selectedItems addObject:obj];
+            }];
+        }
+
+        for (NSInteger i = 1; i < _items.count + 1; i++)
+        {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(i + 1) * 2 - 1 inSection:section];
+            if (shouldSelect && ![_items[i - 1] isInstalled])
+                [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+            else
+                [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        }
+        [UIView transitionWithView:self.tableView
+                          duration:0.35f
+                           options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
+                        animations:^(void)
+                        {
+                            [self.tableView reloadData];
+                        }
+                        completion:nil];
+        [self updateDownloadButtonView];
+    }
 }
 
 @end

@@ -10,7 +10,7 @@
 #import "OASizes.h"
 #import "UITableViewCell+getTableView.h"
 
-@interface OASimpleTableViewCell ()
+@interface OASimpleTableViewCell () <UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIStackView *contentOutsideStackViewVertical;
 @property (weak, nonatomic) IBOutlet UIStackView *textCustomMarginTopStackView;
@@ -22,6 +22,16 @@
 @implementation OASimpleTableViewCell
 {
     BOOL _isCustomLeftSeparatorInset;
+    UITapGestureRecognizer *_tapRecognizer;
+}
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+
+    _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onLeftEditButtonPressed:)];
+    [self addGestureRecognizer:_tapRecognizer];
+    _tapRecognizer.delegate = self;
 }
 
 - (void)layoutSubviews
@@ -36,11 +46,15 @@
     _isCustomLeftSeparatorInset = isCustom;
 }
 
-- (void)updateSeparatorInset
+- (CGFloat)getLeftInsetToTitle
 {
     CGRect titleFrame = [self.titleLabel convertRect:self.titleLabel.bounds toView:self];
-    CGFloat leftInset = [self isDirectionRTL] ? ([self getTableView].frame.size.width - (titleFrame.origin.x + titleFrame.size.width)) : titleFrame.origin.x;
-    self.separatorInset = UIEdgeInsetsMake(0., leftInset, 0., 0.);
+    return [self isDirectionRTL] ? ([self getTableView].frame.size.width - (titleFrame.origin.x + titleFrame.size.width)) : titleFrame.origin.x;
+}
+
+- (void)updateSeparatorInset
+{
+    self.separatorInset = UIEdgeInsetsMake(0., [self getLeftInsetToTitle], 0., 0.);
 }
 
 - (void)leftEditButtonVisibility:(BOOL)show
@@ -103,6 +117,24 @@
     {
         self.contentInsideStackView.alignment = UIStackViewAlignmentTop;
     }
+}
+
+#pragma mark - Selectors
+
+- (void)onLeftEditButtonPressed:(UIGestureRecognizer *)recognizer
+{
+    if (self.delegate && recognizer.state == UIGestureRecognizerStateEnded)
+        [self.delegate onLeftEditButtonPressed:self.leftEditButton.tag];
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    if (self.leftEditButton.hidden || !self.leftEditButton.enabled)
+        return NO;
+
+    return [gestureRecognizer locationInView:self].x <= [self getLeftInsetToTitle];
 }
 
 @end

@@ -11,7 +11,7 @@
 #import "OAMultiselectableHeaderView.h"
 #import "OAPOICategory.h"
 #import "OAPOIType.h"
-#import "OAButtonTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAMenuSimpleCell.h"
 #import "OAColors.h"
 #import "OAPOIUIFilter.h"
@@ -22,7 +22,7 @@
 #import "OATableViewCustomHeaderView.h"
 #import "OACustomPOIViewController.h"
 
-@interface OASelectSubcategoryViewController () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
+@interface OASelectSubcategoryViewController () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, OATableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -174,29 +174,6 @@
     return [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, (int)_items.count] upperCase];
 }
 
-- (void)selectDeselectGroup:(id)sender
-{
-    BOOL shouldSelect = _selectedItems.count == 0;
-    if (!shouldSelect)
-        [_selectedItems removeAllObjects];
-    else
-        [_selectedItems addObjectsFromArray:_items];
-
-    for (NSInteger i = 0; i < _items.count; i++)
-    {
-        if (shouldSelect)
-            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
-        else
-            [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO];
-    }
-    [self.tableView beginUpdates];
-    [self.tableView headerViewForSection:0].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count] upperCase];
-    [self.tableView endUpdates];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
-
-    [self updateApplyButton:[self willUpdateApplyButton]];
-}
-
 - (void)selectDeselectItem:(NSIndexPath *)indexPath
 {
     if (_searchMode || (!_searchMode && indexPath.row > 0))
@@ -318,27 +295,31 @@
 {
     if (indexPath.row == 0 && !_searchMode)
     {
-        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell leftIconVisibility:NO];
-            [cell titleVisibility:NO];
             [cell descriptionVisibility:NO];
             [cell leftEditButtonVisibility:YES];
-            [cell.button.titleLabel setTextAlignment:NSTextAlignmentNatural];
-            cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeading;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.delegate = self;
+            cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+
+            UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
+            conf.contentInsets = NSDirectionalEdgeInsetsMake(0., -6.5, 0., 0.);
+            cell.leftEditButton.configuration = conf;
+            cell.leftEditButton.layer.shadowColor = UIColorFromRGB(color_tint_gray).CGColor;
+            cell.leftEditButton.layer.shadowOffset = CGSizeMake(0., 0.);
+            cell.leftEditButton.layer.shadowOpacity = 1.;
+            cell.leftEditButton.layer.shadowRadius = 1.;
         }
         if (cell)
         {
             NSUInteger selectedAmount = _selectedItems.count;
-
-            NSString *selectionText = selectedAmount > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all");
-            [cell.button setTitle:selectionText forState:UIControlStateNormal];
-            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.button addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
+            cell.titleLabel.text = selectedAmount > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all");
 
             UIImage *selectionImage = nil;
             if (selectedAmount > 0)
@@ -404,7 +385,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (_searchMode || (!_searchMode &&  indexPath.row > 0))
+    if (!_searchMode && indexPath.row == 0)
+        [self selectDeselectGroup:nil];
+    else
         [self selectDeselectItem:indexPath];
 }
 
@@ -491,6 +474,38 @@
         self.applyButtonHeightPrimaryConstraint.active = YES;
         self.applyButtonHeightSecondaryConstraint.active = NO;
     } completion:nil];
+}
+
+#pragma mark - Selectors
+
+- (void)selectDeselectGroup:(UIButton *)sender
+{
+    [self onLeftEditButtonPressed:sender.tag];
+}
+
+#pragma mark - OATableViewCellDelegate
+
+- (void)onLeftEditButtonPressed:(NSInteger)tag
+{
+    BOOL shouldSelect = _selectedItems.count == 0;
+    if (!shouldSelect)
+        [_selectedItems removeAllObjects];
+    else
+        [_selectedItems addObjectsFromArray:_items];
+
+    for (NSInteger i = 0; i < _items.count; i++)
+    {
+        if (shouldSelect)
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+        else
+            [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO];
+    }
+    [self.tableView beginUpdates];
+    [self.tableView headerViewForSection:0].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count] upperCase];
+    [self.tableView endUpdates];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+
+    [self updateApplyButton:[self willUpdateApplyButton]];
 }
 
 #pragma mark - UIScrollViewDelegate

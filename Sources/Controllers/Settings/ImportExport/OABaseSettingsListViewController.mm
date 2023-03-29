@@ -11,7 +11,7 @@
 #import "OASettingsCategoryItems.h"
 #import "OAExportSettingsType.h"
 #import "OAProgressTitleCell.h"
-#import "OACustomSelectionCollapsableCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OAExportSettingsType.h"
 #import "OAMenuSimpleCell.h"
 #import "OAIconTextTableViewCell.h"
@@ -88,7 +88,7 @@
         OASettingsCategoryItems *categoryItems = self.itemsMap[type];
         OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
         group.groupName = type.title;
-        group.type = [OACustomSelectionCollapsableCell getCellIdentifier];
+        group.type = [OARightIconTableViewCell getCellIdentifier];
         group.isOpen = NO;
         for (OAExportSettingsType *type in categoryItems.getTypes)
         {
@@ -172,14 +172,6 @@
     }
     [self.tableView reloadData];
     [self updateControls];
-}
-
-- (void) openCloseGroupButtonAction:(id)sender
-{
-    UIButton *button = (UIButton *)sender;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
-    
-    [self openCloseGroup:indexPath];
 }
 
 - (void) onGroupCheckmarkPressed:(UIButton *)sender
@@ -329,16 +321,17 @@
             }
             return cell;
         }
-        else if ([groupData.type isEqualToString:[OACustomSelectionCollapsableCell getCellIdentifier]])
+        else if ([groupData.type isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
         {
-            OACustomSelectionCollapsableCell* cell = [tableView dequeueReusableCellWithIdentifier:[OACustomSelectionCollapsableCell getCellIdentifier]];
+            OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomSelectionCollapsableCell getCellIdentifier] owner:self options:nil];
-                cell = (OACustomSelectionCollapsableCell *)[nib objectAtIndex:0];
-                cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-                cell.openCloseGroupButton.hidden = NO;
-                [cell makeSelectable:YES];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OARightIconTableViewCell *) nib[0];
+                [cell leftEditButtonVisibility:YES];
+                [cell leftIconVisibility:NO];
+                cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+                [cell setCustomLeftSeparatorInset:YES];
                 cell.separatorInset = UIEdgeInsetsZero;
             }
             if (cell)
@@ -357,43 +350,34 @@
                         itemSelectionCount++;
                     partiallySelected = partiallySelected || allItemsCount != selectedItemsCount;
                 }
-                cell.textView.text = groupData.groupName;
-                cell.descriptionView.text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_of"), itemSelectionCount, itemCount];
+                cell.titleLabel.text = groupData.groupName;
+                cell.descriptionLabel.text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_of"), itemSelectionCount, itemCount];
                 if (size > 0)
                 {
-                    cell.descriptionView.text = [cell.descriptionView.text stringByAppendingFormat:@" • %@", [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile]];
+                    cell.descriptionLabel.text = [cell.descriptionLabel.text stringByAppendingFormat:@" • %@",
+                                                  [NSByteCountFormatter stringFromByteCount:size
+                                                                                 countStyle:NSByteCountFormatterCountStyleFile]];
                 }
-                [cell.openCloseGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-                cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
-                [cell.openCloseGroupButton addTarget:self action:@selector(openCloseGroupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
 
-                [cell.selectionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-                cell.selectionButton.tag = indexPath.section << 10 | indexPath.row;
-                [cell.selectionButton addTarget:self action:@selector(onGroupCheckmarkPressed:) forControlEvents:UIControlEventTouchUpInside];
-
-                [cell.selectionGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-                cell.selectionGroupButton.tag = indexPath.section << 10 | indexPath.row;
-                [cell.selectionGroupButton addTarget:self action:@selector(onGroupCheckmarkPressed:) forControlEvents:UIControlEventTouchUpInside];
-
+                UIImage *selectionImage;
                 if (itemSelectionCount > 0)
-                {
-                    UIImage *selectionImage = partiallySelected ? [UIImage imageNamed:@"ic_system_checkbox_indeterminate"] : [UIImage imageNamed:@"ic_system_checkbox_selected"];
-                    [cell.selectionButton setImage:selectionImage forState:UIControlStateNormal];
-                }
+                    selectionImage = [UIImage imageNamed:partiallySelected ? @"ic_system_checkbox_indeterminate" : @"ic_system_checkbox_selected"];
                 else
-                {
-                    [cell.selectionButton setImage:nil forState:UIControlStateNormal];
-                }
-                
+                    selectionImage = [UIImage imageNamed:@"ic_custom_checkbox_unselected"];
+                [cell.leftEditButton setImage:selectionImage forState:UIControlStateNormal];
+                cell.leftEditButton.tag = indexPath.section << 10 | indexPath.row;
+                [cell.leftEditButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+                [cell.leftEditButton addTarget:self action:@selector(onGroupCheckmarkPressed:) forControlEvents:UIControlEventTouchUpInside];
+
                 if (groupData.isOpen)
                 {
-                    cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_up"];
+                    cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_up"];
                 }
                 else
                 {
-                    cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection;
+                    cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection;
                     if ([cell isDirectionRTL])
-                        [cell.iconView setImage:cell.iconView.image.imageFlippedForRightToLeftLayoutDirection];
+                        [cell.rightIconView setImage:cell.rightIconView.image.imageFlippedForRightToLeftLayoutDirection];
                 }
             }
             return cell;

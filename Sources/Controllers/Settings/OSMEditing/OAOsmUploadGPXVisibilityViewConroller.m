@@ -139,13 +139,15 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.iconView.hidden = YES;
+            cell.tintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)
         {
             cell.textView.text = item.title;
-            cell.iconView.hidden = ![item boolForKey:@"selected"];
+            BOOL selected = [item boolForKey:@"selected"];
+            cell.accessoryType = selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            cell.accessibilityValue = selected ? OALocalizedString(@"shared_string_selected") : OALocalizedString(@"shared_string_not_selected");
         }
         return cell;
     }

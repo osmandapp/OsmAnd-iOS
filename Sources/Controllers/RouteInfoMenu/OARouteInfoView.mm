@@ -970,11 +970,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         BOOL isPublicTransport = [_routingHelper isPublicTransportMode];
         if ([_pointsHelper getPointToNavigate] || isPublicTransport)
         {
+            if (!isPublicTransport)
+                [[OARootViewController instance].mapPanel startNavigation];
             [[OARootViewController instance].mapPanel closeRouteInfo:YES
-                                                          onComplete:^{
-                if (!isPublicTransport)
-                    [[OARootViewController instance].mapPanel startNavigation];
-            }];
+                                                          onComplete:nil];
         }
     }
 }

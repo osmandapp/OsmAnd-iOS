@@ -506,7 +506,6 @@
     [_zoomOutButton updateColorsForPressedState:NO];
 
     [self updateMapModeButton];
-    [self updateRouteButton:NO followingMode:NO];
 
     [_weatherButton updateColorsForPressedState:NO];
     [_weatherButton setImage:[UIImage templateImageNamed:@"ic_custom_cancel"] forState:UIControlStateNormal];
@@ -770,7 +769,7 @@
                 [self updateCompassButton];
             });
         }
-        else if (obj = transparentMapTheme)
+        else if (obj == transparentMapTheme)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateColors];

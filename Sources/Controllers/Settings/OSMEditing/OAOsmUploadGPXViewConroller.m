@@ -12,7 +12,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OASizes.h"
-#import "OASettingsTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAInputTableViewCell.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
@@ -188,7 +188,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         
         OATableSectionData *visibilitySection = [_data createNewSection];
         OATableRowData *visibilityCell = [visibilitySection createNewRow];
-        [visibilityCell setCellType:[OASettingsTableViewCell getCellIdentifier]];
+        [visibilityCell setCellType:[OAValueTableViewCell getCellIdentifier]];
         [visibilityCell setTitle:OALocalizedString(@"visibility")];
         [visibilityCell setDescr:[OAOsmUploadGPXVisibilityViewConroller localizedNameForVisibilityType:_selectedVisibility]];
         [visibilityCell setObj: (^void(){ [weakSelf onVisibilityButtonClicked]; }) forKey:@"actionBlock"];
@@ -345,22 +345,23 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OASettingsTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        OAValueTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-            cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
-            cell.descriptionView.numberOfLines = 1;
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            [cell descriptionVisibility:NO];
+            [cell leftIconVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if (cell)
         {
-            cell.textView.text = item.title;
-            cell.descriptionView.text = item.descr;
+            cell.titleLabel.text = item.title;
+            cell.valueLabel.text = item.descr;
+            cell.accessibilityLabel = item.title;
+            cell.accessibilityValue = item.descr;
         }
         return cell;
     }
@@ -371,6 +372,8 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
+            [cell leftIconVisibility:YES];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
@@ -381,9 +384,8 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
             cell.titleLabel.font = [item objForKey:@"title_font"];
             cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
             cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
-            [cell leftIconVisibility:YES];
-            [cell descriptionVisibility:NO];
             cell.accessoryType = (UITableViewCellAccessoryType) [item integerForKey:@"accessory_type"];
+            cell.accessibilityTraits = UIAccessibilityTraitButton;
         }
         return cell;
     }
@@ -527,7 +529,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 {
     OAOsmUploadGPXVisibilityViewConroller *vc = [[OAOsmUploadGPXVisibilityViewConroller alloc] initWithVisibility:_selectedVisibility];
     vc.visibilityDelegate = self;
-    [self showModalViewController:vc];
+    [self showViewController:vc];
 }
 
 - (void)onAccountButtonPressed

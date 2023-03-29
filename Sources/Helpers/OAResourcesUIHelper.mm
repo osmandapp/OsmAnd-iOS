@@ -460,17 +460,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 - (BOOL)isInstalled
 {
-    if (_resourceType != OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion)
-    {
-        return [OsmAndApp instance].resourcesManager->isResourceInstalled(_resourceId);
-    }
-    else
-    {
-        QString srtmQPath = _resourceId;
-        NSString *srtmfPath = [srtmQPath.toNSString() stringByReplacingOccurrencesOfString:@"srtm" withString:@"srtmf"];
-        QString srtmfQPath = QString(srtmfPath.UTF8String);
-        return [OsmAndApp instance].resourcesManager->isResourceInstalled(srtmQPath) || [OsmAndApp instance].resourcesManager->isResourceInstalled(srtmfQPath);
-    }
+    return [OsmAndApp instance].resourcesManager->isResourceInstalled(_resourceId);
 }
 
 - (BOOL)isFree

@@ -1090,5 +1090,18 @@
     return map.objectEnumerator.allObjects;
 }
 
+- (NSArray<OATrack *> *) getTracks:(BOOL)includeGeneralTrack
+{
+    NSMutableArray<OATrack *> *tracks = [NSMutableArray array];
+    for (OATrack *track in self.tracks)
+    {
+        if (includeGeneralTrack || !track.generalTrack)
+        {
+            [tracks addObject:track];
+        }
+    }
+    return tracks;
+}
+
 @end
 

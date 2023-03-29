@@ -277,6 +277,7 @@
                 int segStartIndex = 0;
                 QVector<OsmAnd::PointI> points;
                 QList<OsmAnd::FColorARGB> segmentColors;
+                NSArray<OATrack *> *tracks = [doc getTracks:NO];
                 for (const auto& track : doc_->tracks)
                 {
                     for (const auto& seg : track->segments)
@@ -292,7 +293,7 @@
                         else if ([cachedTrack[@"colorization_scheme"] intValue] == COLORIZATION_NONE && segmentColors.isEmpty() && gpx.color == 0)
                         {
                             int trackIndex = doc_->tracks.indexOf(track);
-                            OATrack *gpxTrack = doc.tracks[trackIndex];
+                            OATrack *gpxTrack = tracks[trackIndex];
                             const auto colorARGB = [UIColorFromARGB([gpxTrack getColor:kDefaultTrackColor]) toFColorARGB];
                             segmentColors.push_back(colorARGB);
                         }

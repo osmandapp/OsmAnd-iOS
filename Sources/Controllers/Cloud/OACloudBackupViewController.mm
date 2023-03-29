@@ -794,7 +794,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     if (error != nil)
     {
         [self refreshContent];
-        [OAUtilities showToast:nil details:[[OABackupError alloc] initWithError:error].getLocalizedError duration:.4 inView:self.view];
+        [OAUtilities showToast:nil details:[[OABackupError alloc] initWithError:error].getLocalizedError duration:4. inView:self.view];
     }
     else if (!_settingsHelper.isBackupSyncing && !_backupHelper.isBackupPreparing)
     {

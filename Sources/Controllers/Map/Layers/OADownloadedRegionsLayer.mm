@@ -191,6 +191,7 @@
 {
     [self.mapViewController runWithRenderSync:^{
         [self.mapView removeKeyedSymbolsProvider:_selectedCollection];
+        _selectedCollection->removeAllPolygons();
         NSArray<OAPointIContainer *> *polygons = [region getAllPolygons];
         OsmAnd::ColorARGB regionColor = OsmAnd::ColorARGB(color_region_selected_argb);
         for (OAPointIContainer *pc in polygons)

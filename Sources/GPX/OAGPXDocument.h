@@ -72,6 +72,7 @@
 - (NSArray<OAWptPt *> *) getRoutePoints;
 - (NSArray<OAWptPt *> *) getRoutePoints:(NSInteger)routeIndex;
 - (OAApplicationMode *) getRouteProfile;
+- (NSArray<OATrack *> *) getTracks:(BOOL)includeGeneralTrack;
 
 + (OAWptPt *)fetchWpt:(std::shared_ptr<OsmAnd::GpxDocument::WptPt>)mark;
 + (void)fillWpt:(std::shared_ptr<OsmAnd::GpxDocument::WptPt>)wpt usingWpt:(OAWptPt *)w;

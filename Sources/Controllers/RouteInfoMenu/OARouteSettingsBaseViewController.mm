@@ -372,10 +372,10 @@
 
 - (void) openRouteLineAppearance
 {
-    [self dismissViewControllerAnimated:YES completion:^{
+    [self dismissViewControllerAnimated:NO completion:^{
         [OARootViewController.instance.mapPanel closeRouteInfo:NO onComplete:^{
             OARouteLineAppearanceHudViewController *routeLineAppearanceHudViewController =
-                    [[OARouteLineAppearanceHudViewController alloc] initWithAppMode:[_routingHelper getAppMode]];
+                    [[OARouteLineAppearanceHudViewController alloc] initWithAppMode:[_routingHelper getAppMode] prevScreen:EOARouteLineAppearancePrevScreenNavigation];
             routeLineAppearanceHudViewController.delegate = self;
             [OARootViewController.instance.mapPanel showScrollableHudViewController:routeLineAppearanceHudViewController];
         }];

@@ -24,13 +24,39 @@
 @implementation OASearchHistorySettingsItem
 {
     OAHistoryHelper *_searchHistoryHelper;
+    BOOL _fromNavigation;
 }
 
 @dynamic existingItems, appliedItems, items;
 
-- (instancetype) initWithItems:(NSArray<OAHistoryItem *> *)items
+- (instancetype) initWithItems:(NSArray<OAHistoryItem *> *)items fromNavigation:(BOOL)fromNavigation
 {
-    self = [super initWithItems:items];
+    self = [super init];
+    if (self)
+    {
+        _fromNavigation = fromNavigation;
+        [self initialization];
+        self.items = items.mutableCopy;
+    }
+    return self;
+}
+
+- (instancetype _Nullable) initWithJson:(id)json error:(NSError * _Nullable *)error fromNavigation:(BOOL)fromNavigation
+{
+    self = [super init];
+    if (self)
+    {
+        _fromNavigation = fromNavigation;
+        [self initialization];
+        NSError *readError;
+        [self readFromJson:json error:&readError];
+        if (readError)
+        {
+            if (error)
+                *error = readError;
+            return nil;
+        }
+    }
     return self;
 }
 
@@ -38,22 +64,25 @@
 {
     [super initialization];
     _searchHistoryHelper = OAHistoryHelper.sharedInstance;
-    self.existingItems = [NSMutableArray arrayWithArray:[_searchHistoryHelper getPointsHavingTypes:_searchHistoryHelper.searchTypes limit:0]];
+    if (_fromNavigation)
+        self.existingItems = [NSMutableArray arrayWithArray:[_searchHistoryHelper getPointsFromNavigation:0]];
+    else
+        self.existingItems = [NSMutableArray arrayWithArray:[_searchHistoryHelper getPointsHavingTypes:_searchHistoryHelper.searchTypes limit:0]];
 }
 
 - (EOASettingsItemType)type
 {
-    return EOASettingsItemTypeSearchHistory;
+    return _fromNavigation ? EOASettingsItemTypeNavigationHistory : EOASettingsItemTypeSearchHistory;
 }
 
 - (NSString *)name
 {
-    return @"search_history";
+    return _fromNavigation ? @"navigation_history" : @"search_history";
 }
 
 - (NSString *)getPublicName
 {
-    return OALocalizedString(@"shared_string_search_history");
+    return _fromNavigation ? OALocalizedString(@"navigation_history") : OALocalizedString(@"shared_string_search_history");
 }
 
 - (BOOL) shouldReadOnCollecting
@@ -86,8 +115,7 @@
         // leave the last accessed history entry between the duplicate and the original
         for (OAHistoryItem *duplicate in self.duplicateItems)
         {
-            NSString *name = duplicate.name;
-            OAHistoryItem *original = [_searchHistoryHelper getPointByName:name];
+            OAHistoryItem *original = [_searchHistoryHelper getPointByName:duplicate.name fromNavigation:duplicate.fromNavigation];
             if (original && original.date.timeIntervalSince1970 < duplicate.date.timeIntervalSince1970)
             {
                 [self.appliedItems removeObject:original];
@@ -122,11 +150,12 @@
         double latitude = [object[@"latitude"] doubleValue];
         double longitude = [object[@"longitude"] doubleValue];
         NSString *pointDescription = object[@"pointDescription"];
-        
+
         long lastAccessedTime = [object[@"lastAccessedTime"] longValue];
 //        NSString *intervals = object[@"intervals"];
 //        NSString *intervalValues = object[@"intervalValues"];
-        
+        BOOL fromNavigation = [object[@"fromNavigation"] boolValue];
+
         OAPointDescription *pd = [OAPointDescription deserializeFromString:pointDescription l:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude]];
         OAHistoryItem *item = [[OAHistoryItem alloc] initWithPointDescription:pd];
         item.name = pd.name;
@@ -135,6 +164,8 @@
         item.longitude = longitude;
         item.date = [NSDate dateWithTimeIntervalSince1970:lastAccessedTime / 1000];
 //        historyEntry.setFrequency(intervals, intervalValues);
+        item.fromNavigation = fromNavigation;
+
         [self.items addObject:item];
     }
 }
@@ -142,12 +173,10 @@
 - (BOOL)isDuplicate:(id)item
 {
     OAHistoryItem *historyEntry = item;
-    NSString *name = historyEntry.name;
     for (OAHistoryItem *entry in self.existingItems)
     {
-        if ([entry.name isEqualToString:name]) {
+        if ([entry.name isEqualToString:historyEntry.name] && entry.fromNavigation == historyEntry.fromNavigation)
             return YES;
-        }
     }
     return NO;
 }
@@ -181,6 +210,7 @@
             item[@"lastAccessedTime"] = @(historyEntry.date.timeIntervalSince1970 * 1000);
             //                jsonObject.put("intervals", historyEntry.getIntervals());
             //                jsonObject.put("intervalValues", historyEntry.getIntervalsValues());
+            item[@"fromNavigation"] = @(historyEntry.fromNavigation);
             [jsonArray addObject:item];
         }
         json[@"items"] = jsonArray;

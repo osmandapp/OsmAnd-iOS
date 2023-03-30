@@ -693,7 +693,7 @@
 {
     @synchronized(_lock)
     {
-        NSUnitTemperature *unit = (NSUnitTemperature *) (_weatherToolbarActive ? [_weatherTempUnitProfile get] : [_weatherTempUnitProfile get]);
+        NSUnitTemperature *unit = (NSUnitTemperature *) (_weatherToolbarActive ? [_weatherTempToolbarUnitProfile get] : [_weatherTempUnitProfile get]);
         if (self.weatherTempUnitAuto)
         {
             NSUnitTemperature *current = [NSUnitTemperature current];

@@ -50,6 +50,8 @@
             return @"GPX";
         case EOASettingsItemTypeSearchHistory:
             return @"SEARCH_HISTORY";
+        case EOASettingsItemTypeNavigationHistory:
+            return @"NAVIGATION_HISTORY";
         case EOASettingsItemTypeDownloads:
             return @"DOWNLOADS";
         default:
@@ -95,6 +97,8 @@
         return EOASettingsItemTypeGpx;
     if ([typeName isEqualToString:@"SEARCH_HISTORY"])
         return EOASettingsItemTypeSearchHistory;
+    if ([typeName isEqualToString:@"NAVIGATION_HISTORY"])
+        return EOASettingsItemTypeNavigationHistory;
     if ([typeName isEqualToString:@"DOWNLOADS"])
         return EOASettingsItemTypeDownloads;
     

@@ -25,6 +25,7 @@
 #define POINT_COL_TYPE @"ftype"
 #define POINT_COL_ICON_NAME @"ficonname"
 #define POINT_COL_TYPE_NAME @"ftypename"
+#define POINT_COL_FROM_NAVIGATION @"ffromnavigation"
 
 #define MARKERS_HISTORY_LAST_MODIFIED_NAME @"map_markers_history"
 
@@ -102,6 +103,15 @@
                     //Failed to add column. Already exists;
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
+
+                sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ integer", TABLE_NAME, POINT_COL_FROM_NAVIGATION] UTF8String];
+                if (sqlite3_exec(historyDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
+                {
+                    //Failed to add column. Already exists;
+                }
+                if (errMsg != NULL) sqlite3_free(errMsg);
+
+                sqlite3_close(historyDB);
             }
             else
             {
@@ -129,11 +139,13 @@
         if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
         {
             int64_t hId = 0;
-            NSString *querySQL = [NSString stringWithFormat:@"SELECT ROWID FROM %@ WHERE %@ = ? ORDER BY %@ DESC LIMIT 1", TABLE_NAME, POINT_COL_HASH, POINT_COL_TIME];
+            NSString *querySQL = [NSString stringWithFormat:@"SELECT ROWID FROM %@ WHERE %@ = ? AND %@ = ? ORDER BY %@ DESC LIMIT 1", TABLE_NAME, POINT_COL_HASH, POINT_COL_FROM_NAVIGATION, POINT_COL_TIME];
             const char *query_stmt = [querySQL UTF8String];
             if (sqlite3_prepare_v2(historyDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
             {
                 sqlite3_bind_int64(statement, 1, hHash);
+                sqlite3_bind_int(statement, 2, item.fromNavigation ? 1 : 0);
+
                 while (sqlite3_step(statement) == SQLITE_ROW)
                 {
                     hId = sqlite3_column_int64(statement, 0);
@@ -141,7 +153,7 @@
                 sqlite3_finalize(statement);
             }
 
-            querySQL = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(%@%@, %@, %@, %@, %@, %@, %@, %@) VALUES(%@?, ?, ?, ?, ?, ?, ?, ?)", TABLE_NAME, hId > 0 ? @"ROWID, " : @"", POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME, hId > 0 ? @"?, " : @""];
+            querySQL = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(%@%@, %@, %@, %@, %@, %@, %@, %@, %@) VALUES(%@?, ?, ?, ?, ?, ?, ?, ?, ?)", TABLE_NAME, hId > 0 ? @"ROWID, " : @"", POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME, POINT_COL_FROM_NAVIGATION, hId > 0 ? @"?, " : @""];
             query_stmt = [querySQL UTF8String];
 
             sqlite3_prepare_v2(historyDB, query_stmt, -1, &statement, NULL);
@@ -152,6 +164,7 @@
 
             NSString *iconName = item.iconName ? item.iconName : @"";
             NSString *typeName = item.typeName ? item.typeName : @"";
+            int fromNavigation = item.fromNavigation ? 1 : 0;
 
             sqlite3_bind_int64(statement, row++, hHash);
             sqlite3_bind_int64(statement, row++, (int64_t) [item.date timeIntervalSince1970]);
@@ -160,7 +173,8 @@
             sqlite3_bind_text(statement, row++, [item.name UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_bind_int(statement, row++, item.hType);
             sqlite3_bind_text(statement, row++, [iconName UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, row, [typeName UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, row++, [typeName UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_int(statement, row, fromNavigation);
 
             sqlite3_step(statement);
             sqlite3_finalize(statement);
@@ -193,7 +207,7 @@
     });
 }
 
-- (OAHistoryItem *)getPointByName:(NSString *)name
+- (OAHistoryItem *)getPointByName:(NSString *)name fromNavigation:(BOOL)fromNavigation
 {
     __block OAHistoryItem *item = nil;
 
@@ -203,7 +217,7 @@
         
         if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
         {
-            NSMutableString *querySQL = [NSMutableString stringWithString:[NSString stringWithFormat:@"SELECT ROWID, %@, %@, %@, %@, %@, %@, %@ FROM %@ WHERE %@ = %@", POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME, TABLE_NAME, POINT_COL_NAME, name]];
+            NSMutableString *querySQL = [NSMutableString stringWithString:[NSString stringWithFormat:@"SELECT ROWID, %@, %@, %@, %@, %@, %@, %@ FROM %@ WHERE %@ = %@ AND %@ = %d", POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME, TABLE_NAME, POINT_COL_NAME, name, POINT_COL_FROM_NAVIGATION, (fromNavigation ? 1 : 0)]];
             
             const char *query_stmt = [querySQL UTF8String];
             if (sqlite3_prepare_v2(historyDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
@@ -239,6 +253,7 @@
                     item.hType = type;
                     item.iconName = iconName;
                     item.typeName = typeName;
+                    item.fromNavigation = fromNavigation;
                     break;
                 }
                 sqlite3_finalize(statement);
@@ -252,6 +267,11 @@
 
 - (NSArray<OAHistoryItem *> *)getPoints:(NSString *)selectPostfix limit:(int)limit
 {
+    return [self getPoints:selectPostfix ignoreDisabledResult:NO limit:limit];
+}
+
+- (NSArray<OAHistoryItem *> *)getPoints:(NSString *)selectPostfix ignoreDisabledResult:(BOOL)ignoreDisabledResult limit:(int)limit
+{
     NSMutableArray *arr = [NSMutableArray array];
     
     dispatch_sync(dbQueue, ^{
@@ -261,7 +281,7 @@
         
         if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
         {
-            NSMutableString *querySQL = [NSMutableString stringWithString:[NSString stringWithFormat:@"SELECT ROWID, %@, %@, %@, %@, %@, %@, %@, %@ FROM %@", POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME, TABLE_NAME]];
+            NSMutableString *querySQL = [NSMutableString stringWithString:[NSString stringWithFormat:@"SELECT ROWID, %@, %@, %@, %@, %@, %@, %@, %@, %@ FROM %@", POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME, POINT_COL_FROM_NAVIGATION, TABLE_NAME]];
             
             if (selectPostfix)
                 [querySQL appendFormat:@" %@", selectPostfix];
@@ -299,22 +319,27 @@
                     if (sqlite3_column_text(statement, 8) != nil)
                         typeName = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 8)];
 
-                    BOOL skipDisabledResult = NO;
-                    NSSet<NSString *> *disabledPoiTypes = [settings getDisabledTypes];
-                    for (NSString *disabledPoiType in disabledPoiTypes)
-                    {
-                        if ([[poiHelper getPhraseByName:disabledPoiType] isEqualToString:typeName])
-                            skipDisabledResult = YES;
-                    }
-                    if (!skipDisabledResult)
-                    {
-                        skipDisabledResult = type == OAHistoryTypePOI && ![OAQuickSearchTableController findAmenity:name
-                                                                                                                lat:lat
-                                                                                                                lon:lon
-                                                                                                               lang:lang ? lang : @""
-                                                                                                      transliterate:transliterate];
-                    }
+                    NSInteger navigation = sqlite3_column_int(statement, 9);
+                    BOOL fromNavigation = navigation == 1 ? YES : NO;
 
+                    BOOL skipDisabledResult = NO;
+                    if (!ignoreDisabledResult)
+                    {
+                        NSSet<NSString *> *disabledPoiTypes = [settings getDisabledTypes];
+                        for (NSString *disabledPoiType in disabledPoiTypes)
+                        {
+                            if ([[poiHelper getPhraseByName:disabledPoiType] isEqualToString:typeName])
+                                skipDisabledResult = YES;
+                        }
+                        if (!skipDisabledResult)
+                        {
+                            skipDisabledResult = type == OAHistoryTypePOI && ![OAQuickSearchTableController findAmenity:name
+                                                                                                                    lat:lat
+                                                                                                                    lon:lon
+                                                                                                                   lang:lang ? lang : @""
+                                                                                                          transliterate:transliterate];
+                        }
+                    }
                     if (!skipDisabledResult)
                     {
                         NSString *iconName;
@@ -332,6 +357,7 @@
                         item.hType = type;
                         item.iconName = iconName;
                         item.typeName = typeName;
+                        item.fromNavigation = fromNavigation;
 
                         [arr addObject:item];
                     }
@@ -352,6 +378,11 @@
 
 - (NSArray<OAHistoryItem *> *)getPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit
 {
+    return [self getPointsHavingTypes:types exceptNavigation:YES limit:limit];
+}
+
+- (NSArray<OAHistoryItem *> *)getPointsHavingTypes:(NSArray<NSNumber *> *)types exceptNavigation:(BOOL)exceptNavigation limit:(int)limit
+{
     NSMutableString *arrayStr = [NSMutableString string];
     for (NSNumber *t in types)
     {
@@ -359,7 +390,8 @@
             [arrayStr appendString:@","];
         [arrayStr appendFormat:@"%d", [t intValue]];
     }
-    return [self getPoints:[NSString stringWithFormat:@"WHERE %@ in (%@)", POINT_COL_TYPE, arrayStr] limit:limit];
+    NSString *exceptNavigationStr = exceptNavigation ? [NSString stringWithFormat:@" AND %@ = %d", POINT_COL_FROM_NAVIGATION, exceptNavigation ? 0 : 1] : @"";
+    return [self getPoints:[NSString stringWithFormat:@"WHERE %@ in (%@)%@", POINT_COL_TYPE, arrayStr, exceptNavigationStr] limit:limit];
 }
 
 - (NSInteger)getPointsCountHavingTypes:(NSArray<NSNumber *> *)types
@@ -382,6 +414,40 @@
         {
             NSMutableString *querySQL = [NSMutableString stringWithString:[NSString stringWithFormat:@"SELECT count(*) FROM %@ WHERE %@ in (%@)", TABLE_NAME, POINT_COL_TYPE, arrayStr]];
             
+            const char *query_stmt = [querySQL UTF8String];
+            if (sqlite3_prepare_v2(historyDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
+            {
+                
+                while (sqlite3_step(statement) == SQLITE_ROW)
+                {
+                    res = sqlite3_column_int(statement, 0);
+                    break;
+                }
+                sqlite3_finalize(statement);
+            }
+            sqlite3_close(historyDB);
+        }
+    });
+    return res;
+}
+
+- (NSArray<OAHistoryItem *> *)getPointsFromNavigation:(int)limit
+{
+    return [self getPoints:[NSString stringWithFormat:@"WHERE %@ = %d", POINT_COL_FROM_NAVIGATION, 1] limit:limit];
+}
+
+- (NSInteger)getPointsCountFromNavigation
+{
+    __block NSInteger res;
+    dispatch_sync(dbQueue, ^{
+
+        const char *dbpath = [databasePath UTF8String];
+        sqlite3_stmt *statement;
+
+        if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
+        {
+            NSMutableString *querySQL = [NSMutableString stringWithString:[NSString stringWithFormat:@"SELECT count(*) FROM %@ WHERE %@ = %d", TABLE_NAME, POINT_COL_FROM_NAVIGATION, 1]];
+
             const char *query_stmt = [querySQL UTF8String];
             if (sqlite3_prepare_v2(historyDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
             {

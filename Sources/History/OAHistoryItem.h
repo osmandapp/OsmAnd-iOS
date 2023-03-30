@@ -37,6 +37,7 @@ typedef NS_ENUM(NSInteger, OAHistoryType)
 @property (nonatomic) NSString *typeName;
 
 @property (nonatomic) OAHistoryType hType;
+@property (nonatomic, assign) BOOL fromNavigation;
 
 @property (nonatomic) NSString *distance;
 @property (nonatomic, assign) double distanceMeters;

@@ -1127,6 +1127,7 @@ typedef enum
     _searchViewController.distanceFromMyLocation = distanceFromMyLocation;
     _searchViewController.searchNearMapCenter = searchNearMapCenter;
     _searchViewController.searchType = searchType;
+    _searchViewController.fromNavigation = [self isRouteInfoVisible];
 
     if (object)
     {

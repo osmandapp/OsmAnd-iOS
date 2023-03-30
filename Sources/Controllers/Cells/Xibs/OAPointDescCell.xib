@@ -26,10 +26,9 @@
                                     <constraint firstAttribute="width" constant="10" id="GUN-0Z-nqK"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i56-bD-Brz">
-                                <rect key="frame" x="64" y="29" width="100" height="16"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i56-bD-Brz">
+                                <rect key="frame" x="64" y="29" width="33" height="16"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="GcR-Sc-9HD"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="16" id="nHu-Ft-uKQ"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
@@ -86,6 +85,7 @@
                             <constraint firstItem="Fh0-qX-kCt" firstAttribute="leading" secondItem="YCJ-00-gnu" secondAttribute="trailing" constant="16" id="13p-NE-rTU"/>
                             <constraint firstAttribute="bottom" secondItem="i56-bD-Brz" secondAttribute="bottom" constant="5" id="6kK-1u-Jwf"/>
                             <constraint firstAttribute="trailing" secondItem="IIy-sY-CST" secondAttribute="trailing" id="A9S-Hq-518"/>
+                            <constraint firstItem="1Cf-n5-MS3" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="i56-bD-Brz" secondAttribute="trailing" constant="3" id="AgU-oo-ALr"/>
                             <constraint firstItem="i56-bD-Brz" firstAttribute="top" secondItem="FpT-Mz-o9v" secondAttribute="bottom" id="Aui-Nv-bmP"/>
                             <constraint firstItem="FpT-Mz-o9v" firstAttribute="leading" secondItem="YCJ-00-gnu" secondAttribute="trailing" constant="16" id="BW4-7R-c18"/>
                             <constraint firstItem="IIy-sY-CST" firstAttribute="centerY" secondItem="1Cf-n5-MS3" secondAttribute="centerY" id="CqT-bS-3Cg"/>

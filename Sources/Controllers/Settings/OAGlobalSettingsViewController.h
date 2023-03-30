@@ -23,9 +23,5 @@ typedef enum
 
 - (instancetype) initWithSettingsType:(EOAGlobalSettingsScreen)settingsType;
 
-+ (NSArray<OASearchResult *> *)getNavigationHistoryResults;
-+ (NSMutableArray<OASearchResult *> *)getSearchHistoryResults;
-+ (OAHistoryItem *)getHistoryEntry:(OASearchResult *)searchResult;
-
 @end
 

@@ -1353,7 +1353,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 break;
         }
 
-        [[OAHistoryHelper sharedInstance] addPoint:h];
+        if (!self.fromNavigation)
+            [[OAHistoryHelper sharedInstance] addPoint:h];
     }
 }
 

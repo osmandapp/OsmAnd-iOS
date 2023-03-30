@@ -34,9 +34,7 @@
         NSMutableArray<OAFavoriteItem *> *lastModifiedList = [NSMutableArray new];
         [favoriteGroups enumerateObjectsUsingBlock:^(OAFavoriteGroup * _Nonnull group, NSUInteger idx, BOOL * _Nonnull stop) {
             NSMutableArray<OAFavoriteItem *> *points = group.points;
-            [points sortUsingComparator:^NSComparisonResult(OAFavoriteItem *i1, OAFavoriteItem *i2) {
-                return [i1.favorite->getTitle().toNSString() compare:i2.favorite->getTitle().toNSString()];
-            }];
+            [self sortFavoriteItems:points];
             if (points.count > CPListTemplate.maximumItemCount)
                 [points removeObjectsInRange:NSMakeRange(CPListTemplate.maximumItemCount, points.count - CPListTemplate.maximumItemCount)];
 
@@ -62,15 +60,7 @@
         if (listItems.count > maximumItemCount - 1)
             [listItems removeObjectsInRange:NSMakeRange(maximumItemCount - 1, listItems.count - maximumItemCount - 1)];
 
-        [lastModifiedList sortUsingComparator:^NSComparisonResult(OAFavoriteItem *i1, OAFavoriteItem *i2) {
-            NSDate *date1 = [i1 getTimestamp];
-            NSDate *date2 = [i2 getTimestamp];
-            if (!date1 || !date2)
-                return NSOrderedDescending;
-            NSTimeInterval lastTime1 = date1.timeIntervalSince1970;
-            NSTimeInterval lastTime2 = date2.timeIntervalSince1970;
-            return (lastTime1 < lastTime2) ? NSOrderedDescending : ((lastTime1 == lastTime2) ? NSOrderedSame : NSOrderedAscending);
-        }];
+        [self sortFavoriteItems:lastModifiedList];
         if (lastModifiedList.count > maximumItemCount)
             [lastModifiedList removeObjectsInRange:NSMakeRange(maximumItemCount, lastModifiedList.count - maximumItemCount)];
         CPListItem *lastModifiedItem = [[CPListItem alloc] initWithText:OALocalizedString(@"sort_last_modified")
@@ -91,6 +81,19 @@
     {
         return [self generateSingleItemSectionWithTitle:OALocalizedString(@"favorites_empty")];
     }
+}
+
+- (void)sortFavoriteItems:(NSMutableArray<OAFavoriteItem *> *)favoriteItems
+{
+    [favoriteItems sortUsingComparator:^NSComparisonResult(OAFavoriteItem *i1, OAFavoriteItem *i2) {
+        NSDate *date1 = [i1 getTimestamp];
+        NSDate *date2 = [i2 getTimestamp];
+        if (!date1 || !date2)
+            return NSOrderedDescending;
+        NSTimeInterval lastTime1 = date1.timeIntervalSince1970;
+        NSTimeInterval lastTime2 = date2.timeIntervalSince1970;
+        return (lastTime1 < lastTime2) ? NSOrderedDescending : ((lastTime1 == lastTime2) ? NSOrderedSame : NSOrderedAscending);
+    }];
 }
 
 - (void)onItemSelected:(CPListItem * _Nonnull)item completionHandler:(dispatch_block_t)completionBlock

@@ -8,6 +8,11 @@
 
 #import "OABaseScrollableHudViewController.h"
 
+typedef NS_ENUM(NSInteger, EOARouteLineAppearancePrevScreen) {
+    EOARouteLineAppearancePrevScreenSettings = 0,
+    EOARouteLineAppearancePrevScreenNavigation
+};
+
 @class OAApplicationMode;
 
 @protocol OARouteLineAppearanceViewControllerDelegate <NSObject>
@@ -20,7 +25,7 @@
 
 @interface OARouteLineAppearanceHudViewController : OABaseScrollableHudViewController
 
-- (instancetype)initWithAppMode:(OAApplicationMode *)appMode;
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode prevScreen:(EOARouteLineAppearancePrevScreen)prevScreen;
 
 @property (nonatomic, weak) id<OARouteLineAppearanceViewControllerDelegate> delegate;
 

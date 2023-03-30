@@ -507,10 +507,16 @@
     request.requiresNetworkConnectivity = YES;
     // Check for updates every hour
     request.earliestBeginDate = [NSDate dateWithTimeIntervalSinceNow:kCheckUpdatesIntervalHour];
-    NSError *error = nil;
-    [BGTaskScheduler.sharedScheduler submitTaskRequest:request error:&error];
-    if (error)
-        NSLog(@"Could not schedule app refresh: %@", error.description);
+    @try
+    {
+        NSError *error = nil;
+        [BGTaskScheduler.sharedScheduler submitTaskRequest:request error:&error];
+        if (error)
+            NSLog(@"Could not schedule app refresh: %@", error.description);
+    } @catch (NSException *e) {
+        NSLog(@"Could not schedule app refresh: %@", e.reason);
+    }
+    
 }
 
 - (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler

@@ -86,16 +86,12 @@
 
 - (void)generateValueForItem:(OATableRowData *)item
 {
+    NSString *value = @"";
     if ([item.key isEqualToString:@"language"])
-    {
-        [item setObj:[_wikiPlugin getLanguagesSummary:self.appMode] forKey:@"value"];
-    }
+        value = [_wikiPlugin getLanguagesSummary:self.appMode];
     else if ([item.key isEqualToString:@"images"])
-    {
-        OADownloadMode *downloadMode = [_app.data getWikipediaImagesDownloadMode:self.appMode];
-        [item setObj:downloadMode.title forKey:@"value"];
-        item.iconName = downloadMode.iconName;
-    }
+        value = [_app.data getWikipediaImagesDownloadMode:self.appMode].title;
+    [item setObj:value forKey:@"value"];
 }
 
 - (NSString *)getTitleForFooter:(NSInteger)section

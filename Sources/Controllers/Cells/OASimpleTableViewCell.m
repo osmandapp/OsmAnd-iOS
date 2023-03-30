@@ -138,7 +138,11 @@
         return NO;
 
     CGFloat leftInset = [self getLeftInsetToView:self.leftIconView.hidden ? self.titleLabel : self.leftIconView];
-    return [gestureRecognizer locationInView:self].x <= leftInset;
+    CGFloat pressedXLocation = [gestureRecognizer locationInView:self].x;
+    if ([self isDirectionRTL])
+        return [self getTableView].frame.size.width - pressedXLocation <= leftInset;
+    else
+        return pressedXLocation <= leftInset;
 }
 
 @end

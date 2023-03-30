@@ -17,9 +17,7 @@
 #import "OATableViewCustomHeaderView.h"
 
 #define kDefaultArchiveName @"Export"
-#define kSettingsSectionIndex 0
 #define kMyPlacesSectionIndex 1
-#define kResourcesSectionIndex 2
 
 @implementation OAExportItemsViewController
 {
@@ -33,9 +31,7 @@
     long _itemsSize;
     NSString *_fileSize;
     NSString *_headerLabel;
-    BOOL _shouldOpenSettingsOnInit;
     BOOL _shouldOpenMyPlacesOnInit;
-    BOOL _shouldOpenResourcesOnInit;
 }
 
 - (instancetype)initWithAppMode:(OAApplicationMode *)appMode
@@ -66,25 +62,6 @@
     {
         self.selectedItemsMap[type] = selectedItems;
         _shouldOpenMyPlacesOnInit = YES;
-    }
-    return self;
-}
-
-- (instancetype) initWithTypes:(NSDictionary<OAExportSettingsType *, NSArray<id> *> *)typesItems;
-{
-    self = [super init];
-    if (self)
-    {
-        for (OAExportSettingsType *type in typesItems.allKeys)
-        {
-            self.selectedItemsMap[type] = typesItems[type];
-            if ([type isSettingsCategory])
-                _shouldOpenSettingsOnInit = YES;
-            else if ([type isMyPlacesCategory])
-                _shouldOpenMyPlacesOnInit = YES;
-            else if ([type isResourcesCategory])
-                _shouldOpenResourcesOnInit = YES;
-        }
     }
     return self;
 }
@@ -140,20 +117,10 @@
 - (void) generateData
 {
     [super generateData];
-    if (_shouldOpenSettingsOnInit)
-    {
-        self.data[kSettingsSectionIndex].isOpen = YES;
-        _shouldOpenSettingsOnInit = NO;
-    }
     if (_shouldOpenMyPlacesOnInit)
     {
         self.data[kMyPlacesSectionIndex].isOpen = YES;
         _shouldOpenMyPlacesOnInit = NO;
-    }
-    if (_shouldOpenResourcesOnInit)
-    {
-        self.data[kResourcesSectionIndex].isOpen = YES;
-        _shouldOpenResourcesOnInit = NO;
     }
 }
 

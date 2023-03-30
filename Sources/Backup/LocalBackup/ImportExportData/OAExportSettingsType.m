@@ -30,7 +30,6 @@ static OAExportSettingsType * MULTIMEDIA_NOTES;
 static OAExportSettingsType * ACTIVE_MARKERS;
 static OAExportSettingsType * HISTORY_MARKERS;
 static OAExportSettingsType * SEARCH_HISTORY;
-static OAExportSettingsType * NAVIGATION_HISTORY;
 static OAExportSettingsType * CUSTOM_RENDER_STYLE;
 static OAExportSettingsType * CUSTOM_ROUTING;
 static OAExportSettingsType * MAP_SOURCES;
@@ -134,7 +133,6 @@ static NSArray<OAExportSettingsType *> *allValues;
         [res addObject:self.ACTIVE_MARKERS];
         [res addObject:self.HISTORY_MARKERS];
         [res addObject:self.SEARCH_HISTORY];
-        [res addObject:self.NAVIGATION_HISTORY];
         [res addObject:self.CUSTOM_RENDER_STYLE];
         [res addObject:self.CUSTOM_ROUTING];
         [res addObject:self.MAP_SOURCES];
@@ -270,13 +268,6 @@ static NSArray<OAExportSettingsType *> *allValues;
     return SEARCH_HISTORY;
 }
 
-+ (OAExportSettingsType *)NAVIGATION_HISTORY
-{
-    if (!NAVIGATION_HISTORY)
-        NAVIGATION_HISTORY = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"navigation_history") name:@"NAVIGATION_HISTORY" itemName:@"NAVIGATION_HISTORY" icon:[UIImage templateImageNamed:@"ic_custom_navigation"]];
-    return NAVIGATION_HISTORY;
-}
-
 + (OAExportSettingsType *)CUSTOM_RENDER_STYLE
 {
     if (!CUSTOM_RENDER_STYLE)
@@ -335,7 +326,7 @@ static NSArray<OAExportSettingsType *> *allValues;
 {
     return self == self.class.FAVORITES || self == self.class.TRACKS || self == self.class.OSM_EDITS || self == self.class.OSM_NOTES
     /*|| self == self.class.MULTIMEDIA_NOTES*/ || self == self.class.ACTIVE_MARKERS || self == self.class.HISTORY_MARKERS
-    || self == self.class.SEARCH_HISTORY || self == self.class.NAVIGATION_HISTORY;
+    || self == self.class.SEARCH_HISTORY;
 }
 
 - (BOOL) isResourcesCategory

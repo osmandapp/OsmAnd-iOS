@@ -7,6 +7,7 @@
 //
 
 #import "OAHistorySettingsViewController.h"
+#import "OAGlobalSettingsViewController.h"
 #import "OAExportItemsViewController.h"
 #import "OAAppSettings.h"
 #import "OASwitchTableViewCell.h"
@@ -14,13 +15,11 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OARTargetPoint.h"
-#import "OASearchUICore.h"
 #import "OASearchResult.h"
 #import "OASearchHistoryTableItem.h"
 #import "OADistanceDirection.h"
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
-#import "OAQuickSearchHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
@@ -215,21 +214,15 @@
             }
             else
             {
+                NSMutableArray<OASearchResult *> *searchResults = [NSMutableArray array];
                 if (_historyType == EOAHistorySettingsTypeSearch)
-                {
-                    for (OASearchResult *searchResult in [self getSearchHistoryResults])
-                    {
-                        OAHistoryItem *historyItem = [self getHistoryEntry:searchResult];
-                        if (historyItem)
-                        {
-                            OASearchHistoryTableItem *historyTableItem = [[OASearchHistoryTableItem alloc] initWithItem:historyItem mapCenterCoordinate:myLocation];
-                            [sortedHistoryItems addObject:historyTableItem];
-                        }
-                    }
-                }
+                    [searchResults addObjectsFromArray:[OAGlobalSettingsViewController getSearchHistoryResults]];
                 else if (_historyType == EOAHistorySettingsTypeNavigation)
+                    [searchResults addObjectsFromArray:[OAGlobalSettingsViewController getNavigationHistoryResults]];
+                for (OASearchResult *searchResult in searchResults)
                 {
-                    for (OAHistoryItem *historyItem in [[OAHistoryHelper sharedInstance] getPointsFromNavigation:0])
+                    OAHistoryItem *historyItem = [OAGlobalSettingsViewController getHistoryEntry:searchResult];
+                    if (historyItem)
                     {
                         OASearchHistoryTableItem *historyTableItem = [[OASearchHistoryTableItem alloc] initWithItem:historyItem mapCenterCoordinate:myLocation];
                         [sortedHistoryItems addObject:historyTableItem];
@@ -318,17 +311,9 @@
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            [UIView transitionWithView:self.view
-                              duration:.2
-                               options:UIViewAnimationOptionTransitionCrossDissolve
-                            animations:^
-                            {
-                                [self.tableView reloadData];
-                                [self applyLocalization];
-                                [self updateNavbar];
-                                [self updateBottomButtons];
-                            }
-                            completion:nil];
+            [UIView transitionWithView:self.tableView duration:.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+                [self.tableView reloadData];
+            } completion:nil];
         });
     });
 
@@ -375,7 +360,6 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAValueTableViewCell *) nib[0];
-            cell.valueLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
         }
         if (cell)
         {
@@ -442,26 +426,6 @@
         itemsCount += [self rowsCount:i];
     }
     return itemsCount > 0 && selectedCount == itemsCount;
-}
-
-- (NSMutableArray<OASearchResult *> *)getSearchHistoryResults
-{
-    NSMutableArray<OASearchResult *> *searchResults = [NSMutableArray array];
-    OASearchUICore *searchUICore = [[OAQuickSearchHelper instance] getCore];
-    OASearchResultCollection *res = [searchUICore shallowSearch:OASearchHistoryAPI.class text:@"" matcher:nil resortAll:NO removeDuplicates:NO];
-    if (res)
-        [searchResults addObjectsFromArray:[res getCurrentSearchResults]];
-    return searchResults;
-}
-
-- (OAHistoryItem *)getHistoryEntry:(OASearchResult *)searchResult
-{
-    if ([searchResult.object isKindOfClass:OAHistoryItem.class])
-        return (OAHistoryItem *) searchResult.object;
-    else if ([searchResult.relatedObject isKindOfClass:OAHistoryItem.class])
-        return (OAHistoryItem *) searchResult.relatedObject;
-
-    return nil;
 }
 
 #pragma mark - Selectors
@@ -533,9 +497,7 @@
     }
 
     OAExportSettingsType *exportSettingsType =
-        _historyType == EOAHistorySettingsTypeMapMarkers ? OAExportSettingsType.HISTORY_MARKERS
-        : _historyType == EOAHistorySettingsTypeSearch ? OAExportSettingsType.SEARCH_HISTORY
-        : OAExportSettingsType.NAVIGATION_HISTORY ;
+        _historyType == EOAHistorySettingsTypeMapMarkers ? OAExportSettingsType.HISTORY_MARKERS : OAExportSettingsType.SEARCH_HISTORY;
     OAExportItemsViewController *exportItemsViewController =
         [[OAExportItemsViewController alloc] initWithType:exportSettingsType selectedItems:selectedItems];
     [self.navigationController pushViewController:exportItemsViewController animated:YES];

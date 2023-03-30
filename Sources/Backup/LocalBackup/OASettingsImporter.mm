@@ -385,9 +385,6 @@
         case EOASettingsItemTypeSearchHistory:
             item = [[OASearchHistorySettingsItem alloc] initWithJson:json error:&error];
             break;
-        case EOASettingsItemTypeNavigationHistory:
-            item = [[OASearchHistorySettingsItem alloc] initWithJson:json error:&error fromNavigation:YES];
-            break;
         case EOASettingsItemTypeDownloads:
             item = [[OADownloadsItem alloc] initWithJson:json error:&error];
             break;

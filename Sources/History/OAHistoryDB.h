@@ -16,15 +16,11 @@
 - (void)addPoint:(OAHistoryItem *)item;
 - (void)deletePoint:(int64_t)id;
 
-- (OAHistoryItem *)getPointByName:(NSString *)name fromNavigation:(BOOL)fromNavigation;
+- (OAHistoryItem *)getPointByName:(NSString *)name;
 - (NSArray<OAHistoryItem *> *)getPoints:(NSString *)selectPostfix limit:(int)limit;
-- (NSArray<OAHistoryItem *> *)getPoints:(NSString *)selectPostfix ignoreDisabledResult:(BOOL)ignoreDisabledResult limit:(int)limit;
 - (NSArray<OAHistoryItem *> *)getSearchHistoryPoints:(int)count;
 - (NSArray<OAHistoryItem *> *)getPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit;
-- (NSArray<OAHistoryItem *> *)getPointsHavingTypes:(NSArray<NSNumber *> *)types exceptNavigation:(BOOL)exceptNavigation limit:(int)limit;
 - (NSInteger)getPointsCountHavingTypes:(NSArray<NSNumber *> *)types;
-- (NSArray<OAHistoryItem *> *)getPointsFromNavigation:(int)limit;
-- (NSInteger)getPointsCountFromNavigation;
 
 - (long) getMarkersHistoryLastModifiedTime;
 - (void) setMarkersHistoryLastModifiedTime:(long)lastModified;

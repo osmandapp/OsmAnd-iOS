@@ -59,7 +59,7 @@
 "do_not_show_discount_desc" = "Neupozorňovat na slevy a zvláštní místní události v aplikaci.";
 "do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
 "save_global_track_interval" = "Globální interval záznamu";
-"save_global_track_interval_descr" = "Zadejte interval ukládání pro obecný záznam stopy (aktivovaný přes widget Záznam trasy na mapové obrazovce).";
+"save_global_track_interval_descr" = "Zadejte interval ukládání pro obecný záznam stopy (aktivovaný přes nástroj Záznam trasy na mapové obrazovce).";
 "rotate_map_to" = "Natočení mapy";
 "rotate_map_to_bearing_descr" = "Vyberte způsob otáčení mapy.";
 "rotate_map_compass_opt" = "Směr kompasu";
@@ -2432,8 +2432,8 @@
 "shared_string_restoring" = "Obnovování";
 "restoring_from" = "Probíhá obnovování vybraných dat z cloudu";
 "temperature_show" = "Zobrazit teplotu";
-"compass_always_visible" = "Vždy viditelné";
-"compass_always_hidden" = "Vždy skryté";
+"compass_always_visible" = "Vždy viditelný";
+"compass_always_hidden" = "Vždy skrytý";
 "wind_show" = "Zobrazit vítr";
 "cloud_hide" = "Skrýt oblačnost";
 "toggle_cloud" = "Zobrazit/skrýt - Vrstva oblačnosti";
@@ -2533,7 +2533,7 @@
 "shared_string_added" = "Přidáno";
 "depth_contour_lines" = "Hloubkové vrstevnice";
 "product_desc_weather" = "24hodinová předpověď na 7 dní dopředu na mapě";
-"weather_plugin_description" = "Poskytuje\n- 24hodinovou a 7denní předpověď počasí s 5 vrstvami\n- widgety založené na poloze\n- izolinie teploty a tlaku\n\nÚdaje o počasí poskytuje globální předpovědní systém (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
+"weather_plugin_description" = "Poskytuje\n- 24hodinovou a 7denní předpověď počasí s 5 vrstvami\n- nástroje založené na poloze\n- izolinie teploty a tlaku\n\nÚdaje o počasí poskytuje globální předpovědní systém (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
 "map_download_privacy_descr" = "Stažením map souhlasíte s <a href='https://osmand.net/docs/legal/terms-of-use'>Podmínkami používání</a> a <a href='https://osmand.net/docs/legal/privacy-policy'>Zásadami ochrany osobních údajů</a>.";
 "mtb_segment_classification" = "Klasifikaceúseku";
 "rendering_attr_showMtbScale_name" = "Zobrazit stupnici MTB";
@@ -2640,7 +2640,7 @@
 "loading_purchase_information" = "Načítání informací o nákupu";
 "subscription_banner_free_maps_title" = "Můžete si zdarma stáhnout %i map.";
 "subscription_banner_no_free_maps_title" = "Využili jste všechna bezplatná stahování";
-"compass_visible_if_map_rotated" = "Viditelné, pokud je mapa otočena";
+"compass_visible_if_map_rotated" = "Viditelný, pokud je mapa otočena";
 "subscription_banner_osmand_pro_title" = "Získávejte hodinové, denní nebo týdenní aktualizace map s předplatným OsmAnd Pro.";
 "compass_visible_in_rotated_mode_descr" = "Skryté, když je sever nahoře";
 "weather_forecast" = "Předpověď počasí";

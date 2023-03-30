@@ -182,7 +182,7 @@
         NSMutableArray *headerViews = [NSMutableArray array];
         
         OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
-        NSArray *allItems = [helper getPointsHavingTypes:helper.searchTypes limit:0];
+        NSArray *allItems = [helper getPointsHavingTypes:helper.searchTypes exceptNavigation:NO limit:0];
         
         NSTimeInterval todayBeginTime = [self beginningOfToday];
         NSTimeInterval yesterdayBeginTime = todayBeginTime - 60 * 60 * 24;

@@ -426,7 +426,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void)generateHistorySection:(NSMutableDictionary *)dictionary section:(NSMutableArray *)section sectionIndex:(int &)sectionIndex {
     OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
-    NSArray *allItems = [helper getPointsHavingTypes:helper.searchTypes limit:_historyItemsLimit];
+    NSArray *allItems = [helper getPointsFromNavigation:_historyItemsLimit];
     if (allItems.count > 0)
     {
         [section addObject:@{

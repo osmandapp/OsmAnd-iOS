@@ -27,11 +27,14 @@
 - (void)removePoint:(OAHistoryItem *)item;
 - (void)removePoints:(NSArray *)items;
 
-- (NSArray<OAHistoryItem *> *)getAllPoints;
+- (NSArray<OAHistoryItem *> *)getAllPoints:(BOOL)ignoreDisabledResult;
 - (NSArray<OAHistoryItem *> *)getSearchHistoryPoints:(int)limit;
 - (NSArray<OAHistoryItem *> *)getPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit;
-- (OAHistoryItem *)getPointByName:(NSString *)name;
+- (NSArray<OAHistoryItem *> *)getPointsHavingTypes:(NSArray<NSNumber *> *)types exceptNavigation:(BOOL)exceptNavigation limit:(int)limit;
 - (NSInteger) getPointsCountHavingTypes:(NSArray<NSNumber *> *)types;
+- (NSArray<OAHistoryItem *> *)getPointsFromNavigation:(int)limit;
+- (NSInteger)getPointsCountFromNavigation;
+- (OAHistoryItem *)getPointByName:(NSString *)name fromNavigation:(BOOL)fromNavigation;
 
 - (long) getMarkersHistoryLastModifiedTime;
 - (void) setMarkersHistoryLastModifiedTime:(long)lastModified;

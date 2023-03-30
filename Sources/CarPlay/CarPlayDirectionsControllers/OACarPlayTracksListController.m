@@ -51,9 +51,7 @@
         NSMutableArray<OAGpxInfo *> *lastModifiedList = [NSMutableArray new];
         [gpxByFolder enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSArray<OAGpxInfo *> * _Nonnull obj, BOOL * _Nonnull stop) {
             NSMutableArray<OAGpxInfo *> *gpxList = [NSMutableArray arrayWithArray:obj];
-            [gpxList sortUsingComparator:^NSComparisonResult(OAGpxInfo *i1, OAGpxInfo *i2) {
-                return [[i1.gpx getNiceTitle] compare:[i2.gpx getNiceTitle]];
-            }];
+            [self sortGpxItems:gpxList];
             if (gpxList.count > CPListTemplate.maximumItemCount)
                 [gpxList removeObjectsInRange:NSMakeRange(CPListTemplate.maximumItemCount, gpxList.count - CPListTemplate.maximumItemCount)];
             CPListItem *listItem = [[CPListItem alloc] initWithText:key.capitalizedString
@@ -75,11 +73,7 @@
         if (listItems.count > maximumItemCount - 1)
             [listItems removeObjectsInRange:NSMakeRange(maximumItemCount - 1, listItems.count - maximumItemCount - 1)];
 
-        [lastModifiedList sortUsingComparator:^NSComparisonResult(OAGpxInfo *i1, OAGpxInfo *i2) {
-            NSTimeInterval lastTime1 = [i1 getFileDate].timeIntervalSince1970;
-            NSTimeInterval lastTime2 = [i2 getFileDate].timeIntervalSince1970;
-            return (lastTime1 < lastTime2) ? NSOrderedDescending : ((lastTime1 == lastTime2) ? NSOrderedSame : NSOrderedAscending);
-        }];
+        [self sortGpxItems:lastModifiedList];
         if (lastModifiedList.count > maximumItemCount)
             [lastModifiedList removeObjectsInRange:NSMakeRange(maximumItemCount, lastModifiedList.count - maximumItemCount)];
         CPListItem *lastModifiedItem = [[CPListItem alloc] initWithText:OALocalizedString(@"sort_last_modified")
@@ -100,6 +94,15 @@
     {
         [self updateSections:[self generateSingleItemSectionWithTitle:OALocalizedString(@"tracks_empty")]];
     }
+}
+
+- (void)sortGpxItems:(NSMutableArray<OAGpxInfo *> *)gpxItems
+{
+    [gpxItems sortUsingComparator:^NSComparisonResult(OAGpxInfo *i1, OAGpxInfo *i2) {
+        NSTimeInterval lastTime1 = [i1 getFileDate].timeIntervalSince1970;
+        NSTimeInterval lastTime2 = [i2 getFileDate].timeIntervalSince1970;
+        return (lastTime1 < lastTime2) ? NSOrderedDescending : ((lastTime1 == lastTime2) ? NSOrderedSame : NSOrderedAscending);
+    }];
 }
 
 - (void)onItemSelected:(CPListItem * _Nonnull)item completionHandler:(dispatch_block_t)completionBlock

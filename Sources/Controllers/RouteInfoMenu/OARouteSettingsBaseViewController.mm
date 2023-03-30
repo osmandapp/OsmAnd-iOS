@@ -375,7 +375,7 @@
     [self dismissViewControllerAnimated:YES completion:^{
         [OARootViewController.instance.mapPanel closeRouteInfo:NO onComplete:^{
             OARouteLineAppearanceHudViewController *routeLineAppearanceHudViewController =
-                    [[OARouteLineAppearanceHudViewController alloc] initWithAppMode:[_routingHelper getAppMode] prevScreenKey:kFromNavigationKey];
+                    [[OARouteLineAppearanceHudViewController alloc] initWithAppMode:[_routingHelper getAppMode]];
             routeLineAppearanceHudViewController.delegate = self;
             [OARootViewController.instance.mapPanel showScrollableHudViewController:routeLineAppearanceHudViewController];
         }];

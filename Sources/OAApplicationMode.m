@@ -780,8 +780,13 @@ static OAApplicationMode *_HORSE;
             [selectedModes removeObject:mode];
             if (settings.applicationMode.get == mode)
             {
-                [settings setApplicationModePref:_DEFAULT];
+                if ([_values containsObject:_DEFAULT])
+                    [settings setApplicationModePref:_DEFAULT];
+                else
+                    [settings setApplicationModePref:[_values firstObject]];
             }
+            if (settings.defaultApplicationMode.get == mode)
+                [settings.defaultApplicationMode set:settings.applicationMode.get];
         }
         for (OAApplicationMode *m in selectedModes)
         {

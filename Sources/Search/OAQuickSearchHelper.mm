@@ -250,7 +250,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
 {
     OAHistoryHelper *historyhelper = [OAHistoryHelper sharedInstance];
     int p = 0;
-    for (OAHistoryItem *point in [historyhelper getPointsHavingTypes:historyhelper.searchTypes exceptNavigation:NO limit:0])
+    for (OAHistoryItem *point in [historyhelper getPointsHavingTypes:historyhelper.searchTypes limit:0])
     {
         BOOL publish = NO;
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];

@@ -14,9 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OASearchHistorySettingsItem : OACollectionSettingsItem<OAHistoryItem *>
 
-- (instancetype) initWithItems:(NSArray<OAHistoryItem *> *)items fromNavigation:(BOOL)fromNavigation;
-- (instancetype _Nullable) initWithJson:(id)json error:(NSError * _Nullable *)error fromNavigation:(BOOL)fromNavigation;
-
 @end
 
 NS_ASSUME_NONNULL_END

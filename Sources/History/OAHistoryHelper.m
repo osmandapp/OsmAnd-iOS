@@ -85,11 +85,6 @@
     return [_db getPointsHavingTypes:types limit:limit];
 }
 
-- (NSArray<OAHistoryItem *> *)getPointsHavingTypes:(NSArray<NSNumber *> *)types exceptNavigation:(BOOL)exceptNavigation limit:(int)limit
-{
-    return [_db getPointsHavingTypes:types exceptNavigation:exceptNavigation limit:limit];
-}
-
 - (NSInteger) getPointsCountHavingTypes:(NSArray<NSNumber *> *)types
 {
     return [_db getPointsCountHavingTypes:types];
@@ -105,9 +100,9 @@
     return [_db getPointsCountFromNavigation];
 }
 
-- (OAHistoryItem *)getPointByName:(NSString *)name fromNavigation:(BOOL)fromNavigation
+- (OAHistoryItem *)getPointByName:(NSString *)name
 {
-    return [_db getPointByName:name fromNavigation:fromNavigation];
+    return [_db getPointByName:name];
 }
 
 @end

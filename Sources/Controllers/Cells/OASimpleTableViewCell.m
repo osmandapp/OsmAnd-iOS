@@ -25,15 +25,6 @@
     UITapGestureRecognizer *_tapRecognizer;
 }
 
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-
-    _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onLeftEditButtonPressed:)];
-    [self addGestureRecognizer:_tapRecognizer];
-    _tapRecognizer.delegate = self;
-}
-
 - (void)layoutSubviews
 {
     [super layoutSubviews];
@@ -46,21 +37,33 @@
     _isCustomLeftSeparatorInset = isCustom;
 }
 
-- (CGFloat)getLeftInsetToTitle
-{
-    CGRect titleFrame = [self.titleLabel convertRect:self.titleLabel.bounds toView:self];
-    return [self isDirectionRTL] ? ([self getTableView].frame.size.width - (titleFrame.origin.x + titleFrame.size.width)) : titleFrame.origin.x;
-}
-
 - (void)updateSeparatorInset
 {
-    self.separatorInset = UIEdgeInsetsMake(0., [self getLeftInsetToTitle], 0., 0.);
+    self.separatorInset = UIEdgeInsetsMake(0., [self getLeftInsetToView:self.titleLabel], 0., 0.);
+}
+
+- (CGFloat)getLeftInsetToView:(UIView *)view
+{
+    CGRect viewFrame = [view convertRect:view.bounds toView:self];
+    return [self isDirectionRTL] ? ([self getTableView].frame.size.width - (viewFrame.origin.x + viewFrame.size.width)) : viewFrame.origin.x;
 }
 
 - (void)leftEditButtonVisibility:(BOOL)show
 {
     self.leftEditButton.hidden = !show;
     [self updateMargins];
+
+    if (show)
+    {
+        _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onLeftEditButtonPressed:)];
+        [self addGestureRecognizer:_tapRecognizer];
+        _tapRecognizer.delegate = self;
+    }
+    else if (_tapRecognizer)
+    {
+        [self removeGestureRecognizer:_tapRecognizer];
+        _tapRecognizer = nil;
+    }
 }
 
 - (void)leftIconVisibility:(BOOL)show
@@ -134,7 +137,8 @@
     if (self.leftEditButton.hidden || !self.leftEditButton.enabled)
         return NO;
 
-    return [gestureRecognizer locationInView:self].x <= [self getLeftInsetToTitle];
+    CGFloat leftInset = [self getLeftInsetToView:self.leftIconView.hidden ? self.titleLabel : self.leftIconView];
+    return [gestureRecognizer locationInView:self].x <= leftInset;
 }
 
 @end

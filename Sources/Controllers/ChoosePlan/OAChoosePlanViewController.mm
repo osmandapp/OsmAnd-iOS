@@ -281,7 +281,6 @@
     {
         self.scrollView.transform = CGAffineTransformMakeScale(-1.0, 1.0);
         self.viewNavigationBar.transform = CGAffineTransformMakeScale(-1.0, 1.0);
-        self.buttonNavigationBack.transform = CGAffineTransformMakeScale(-1.0, 1.0);
         self.labelNavigationTitle.transform = CGAffineTransformMakeScale(-1.0, 1.0);
         self.buttonNavigationRestore.transform = CGAffineTransformMakeScale(-1.0, 1.0);
     }

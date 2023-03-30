@@ -42,10 +42,11 @@
 - (NSArray<CPListSection *> *)generateSections
 {
     NSMutableArray<OAHistoryItem *> *historyItems = [NSMutableArray array];
-    NSMutableArray<CPListItem *> *listItems = [NSMutableArray array];
+    NSMutableArray<CPListItem *> *listItems = [NSMutableArray new];
 
+    BOOL searchHistoryEnabled = [_settings.searchHistory get];
     BOOL navigationHistoryEnabled = [_settings.navigationHistory get];
-    if ([_settings.searchHistory get])
+    if (searchHistoryEnabled || navigationHistoryEnabled)
     {
         NSMutableArray<OASearchResult *> *searchResults = [NSMutableArray array];
         OASearchUICore *searchUICore = [[OAQuickSearchHelper instance] getCore];
@@ -62,12 +63,19 @@
                 historyItem = (OAHistoryItem *) searchResult.relatedObject;
 
             if (historyItem)
+            {
+                if (!searchHistoryEnabled && navigationHistoryEnabled)
+                {
+                    OAPointDescription *pointDescription = [[OAPointDescription alloc] initWithType:[historyItem getPointDescriptionType]
+                                                                                           typeName:historyItem.typeName
+                                                                                               name:historyItem.name];
+                    if ([pointDescription isPoiType] || [pointDescription isCustomPoiFilter])
+                        continue;
+                }
+
                 [historyItems addObject:historyItem];
+            }
         }
-    }
-    else if (navigationHistoryEnabled)
-    {
-        [historyItems addObjectsFromArray:[[OAHistoryHelper sharedInstance] getPointsFromNavigation:0]];
     }
 
     if (navigationHistoryEnabled)
@@ -98,8 +106,7 @@
             NSTimeInterval lastTime2 = h2.date.timeIntervalSince1970;
             return (lastTime1 < lastTime2) ? NSOrderedDescending : ((lastTime1 == lastTime2) ? NSOrderedSame : NSOrderedAscending);
         }];
-        if (historyItems.count > CPListTemplate.maximumItemCount)
-            [historyItems removeObjectsInRange:NSMakeRange(CPListTemplate.maximumItemCount, historyItems.count - CPListTemplate.maximumItemCount)];
+
         for (OAHistoryItem *historyItem in historyItems)
         {
             [listItems addObject:[self createListItem:historyItem]];

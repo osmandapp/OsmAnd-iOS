@@ -11,6 +11,9 @@
 #import "OAPluginPopupViewController.h"
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAMainSettingsViewController.h"
+#import "OAConfigureProfileViewController.h"
+#import "OAProfileNavigationSettingsViewController.h"
 #import "OAPreviewRouteLineLayer.h"
 #import "OATableViewCustomFooterView.h"
 #import "OAFoldersCollectionView.h"
@@ -235,6 +238,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     NSInteger _cellColorGrid;
     
     OAAutoObserverProxy *_mapSourceUpdatedObserver;
+    NSString *_prevScreenKey;
 }
 
 @dynamic statusBarBackgroundView, contentContainer;
@@ -246,6 +250,19 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     if (self)
     {
         _appMode = appMode;
+        [self commonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode prevScreenKey:(NSString *)prevScreenKey
+{
+    self = [super initWithNibName:@"OARouteLineAppearanceHudViewController"
+                           bundle:nil];
+    if (self)
+    {
+        _appMode = appMode;
+        _prevScreenKey = prevScreenKey;
         [self commonInit];
     }
     return self;
@@ -431,6 +448,19 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             onComplete();
 
         [_mapPanelViewController.mapViewController.mapLayers.routeMapLayer setPreviewRouteLineInfo:nil];
+
+        if ([_prevScreenKey isEqualToString:kFromSettingsKey])
+        {
+            UINavigationController *navigationController = [OARootViewController instance].navigationController;
+            [navigationController pushViewController:[[OAMainSettingsViewController alloc] init] animated:NO];
+            [navigationController pushViewController:[[OAConfigureProfileViewController alloc] initWithAppMode:_appMode targetScreenKey:nil] animated:NO];
+            [navigationController pushViewController:[[OAProfileNavigationSettingsViewController alloc] initWithAppMode:_appMode] animated:YES];
+        }
+        else if ([_prevScreenKey isEqualToString:kFromNavigationKey])
+        {
+            [[OARootViewController instance].mapPanel showRouteInfo];
+            [[OARootViewController instance].mapPanel showRoutePreferences];
+        }
     }];
 }
 

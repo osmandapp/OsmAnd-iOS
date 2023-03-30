@@ -15,6 +15,7 @@
 
 #define kRightIconLargeTitleSmall 34.
 #define kRightIconLargeTitleLarge 40.
+#define kDefaultBarButtonSize 44.
 
 @implementation OABaseNavbarViewController
 {
@@ -261,6 +262,9 @@
         _rightIconLargeTitle = nil;
     }
 
+    if (self.navigationController.viewControllers.lastObject != self)
+        return;
+
     UIImage *rightIconLargeTitle = [self getRightIconLargeTitle];
     if (rightIconLargeTitle && [self getNavbarStyle] == EOABaseNavbarStyleLargeTitle)
     {
@@ -379,8 +383,8 @@
             freeSpaceForNavbarButton -= (rightNavbarButtons.count - 1) * 8.;
             freeSpaceForNavbarButton /= rightNavbarButtons.count;
         }
-        if (freeSpaceForNavbarButton < 44.)
-            freeSpaceForNavbarButton = 44.;
+        if (freeSpaceForNavbarButton < kDefaultBarButtonSize)
+            freeSpaceForNavbarButton = kDefaultBarButtonSize;
         for (NSInteger i = 0; i < rightNavbarButtons.count; i++)
         {
             UIBarButtonItem *buttonItem = rightNavbarButtons[i];
@@ -388,7 +392,11 @@
             UIButton *button = buttonItem.customView;
             if (button)
             {
-                [button.widthAnchor constraintEqualToConstant:freeSpaceForNavbarButton].active = YES;
+                CGFloat buttonWidth = kDefaultBarButtonSize;
+                NSString *buttonTitle = [button titleForState:UIControlStateNormal];
+                if (buttonTitle && buttonTitle.length > 0)
+                    buttonWidth = [OAUtilities calculateTextBounds:buttonTitle width:freeSpaceForNavbarButton font:button.titleLabel.font].width;
+                [button.widthAnchor constraintEqualToConstant:buttonWidth].active = YES;
                 button.contentHorizontalAlignment = i == 0 ? UIControlContentHorizontalAlignmentTrailing : UIControlContentHorizontalAlignmentCenter;
                 button.titleLabel.textAlignment = i == 0 ? NSTextAlignmentRight : NSTextAlignmentCenter;
             }
@@ -406,7 +414,7 @@
                                       action:(SEL)action
                                         menu:(UIMenu *)menu
 {
-    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., 44., 30.)];
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., kDefaultBarButtonSize, 30.)];
     button.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     button.titleLabel.numberOfLines = 1;
     button.titleLabel.adjustsFontForContentSizeCategory = YES;

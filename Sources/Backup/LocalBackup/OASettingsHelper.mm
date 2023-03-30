@@ -324,9 +324,14 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 //        markersGroup.setMarkers(markersHistory);
         myPlacesItems[OAExportSettingsType.HISTORY_MARKERS] = markersHistory;
     }
-    NSArray<OAHistoryItem *> *historyEntries = [historyHelper getPointsHavingTypes:historyHelper.searchTypes limit:0];
-    if (historyEntries.count > 0)
-        myPlacesItems[OAExportSettingsType.SEARCH_HISTORY] = historyEntries;
+
+    NSArray<OAHistoryItem *> *searchHistoryEntries = [historyHelper getPointsHavingTypes:historyHelper.searchTypes limit:0];
+    if (searchHistoryEntries.count > 0)
+        myPlacesItems[OAExportSettingsType.SEARCH_HISTORY] = searchHistoryEntries;
+
+    NSArray<OAHistoryItem *> *navigationHistoryEntries = [historyHelper getPointsFromNavigation:0];
+    if (navigationHistoryEntries.count > 0)
+        myPlacesItems[OAExportSettingsType.NAVIGATION_HISTORY] = navigationHistoryEntries;
     
     return myPlacesItems;
 }
@@ -526,7 +531,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList = [NSMutableArray array];
     NSMutableArray<OADestination *> *activeMarkersList = [NSMutableArray array];
     NSMutableArray<OAHistoryItem *> *historyMarkersList = [NSMutableArray array];
-    NSMutableArray<OAHistoryItem *> *historyItems = [NSMutableArray array];
+    NSMutableArray<OAHistoryItem *> *searchHistoryItems = [NSMutableArray array];
+    NSMutableArray<OAHistoryItem *> *navigationHistoryItems = [NSMutableArray array];
 
     for (id object in data)
     {
@@ -566,10 +572,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             [activeMarkersList addObject:object];
         else if ([object isKindOfClass:OAHistoryItem.class])
         {
-            if ([[OAHistoryHelper sharedInstance].destinationTypes containsObject:@(((OAHistoryItem *) object).hType)])
+            if (((OAHistoryItem *) object).fromNavigation)
+                [navigationHistoryItems addObject:object];
+            else if ([[OAHistoryHelper sharedInstance].destinationTypes containsObject:@(((OAHistoryItem *) object).hType)])
                 [historyMarkersList addObject:object];
             else
-                [historyItems addObject:object];
+                [searchHistoryItems addObject:object];
         }
         else if ([object isKindOfClass:OAGlobalSettingsItem.class])
             [result addObject:object];
@@ -653,9 +661,13 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     {
         [result addObject:[[OAHistoryMarkersSettingsItem alloc] initWithItems:historyMarkersList]];
     }
-    if (historyItems.count > 0)
+    if (searchHistoryItems.count > 0)
     {
-        [result addObject:[[OASearchHistorySettingsItem alloc] initWithItems:historyItems]];
+        [result addObject:[[OASearchHistorySettingsItem alloc] initWithItems:searchHistoryItems]];
+    }
+    if (navigationHistoryItems.count > 0)
+    {
+        [result addObject:[[OASearchHistorySettingsItem alloc] initWithItems:navigationHistoryItems fromNavigation:YES]];
     }
     return result;
 }
@@ -679,8 +691,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList  = [NSMutableArray array];
     NSMutableArray<OADestination *> *markers = [NSMutableArray array];
     NSMutableArray<OAHistoryItem *> *historyMarkers = [NSMutableArray array];
-    NSMutableArray<OAHistoryItem *> *historyEntries = [NSMutableArray array];
-    NSMutableArray<OAHistoryItem *> *navigationEntries = [NSMutableArray array];
+    NSMutableArray<OAHistoryItem *> *searchHistoryEntries = [NSMutableArray array];
+    NSMutableArray<OAHistoryItem *> *navigationHistoryEntries = [NSMutableArray array];
     NSMutableArray<OAGlobalSettingsItem *> *globalSettingsItems = [NSMutableArray array];
     for (OASettingsItem *item in settingsItems)
     {
@@ -788,13 +800,13 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             case EOASettingsItemTypeSearchHistory:
             {
                 OASearchHistorySettingsItem *searchHistorySettingsItem = (OASearchHistorySettingsItem *) item;
-                [historyEntries addObjectsFromArray:searchHistorySettingsItem.items];
+                [searchHistoryEntries addObjectsFromArray:searchHistorySettingsItem.items];
                 break;
             }
             case EOASettingsItemTypeNavigationHistory:
             {
-                OASearchHistorySettingsItem *searchHistorySettingsItem = (OASearchHistorySettingsItem *) item;
-                [historyEntries addObjectsFromArray:searchHistorySettingsItem.items];
+                OASearchHistorySettingsItem *navigationHistorySettingsItem = (OASearchHistorySettingsItem *) item;
+                [navigationHistoryEntries addObjectsFromArray:navigationHistorySettingsItem.items];
                 break;
             }
             case EOASettingsItemTypeGlobal:
@@ -835,8 +847,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         settingsToOperate[OAExportSettingsType.ACTIVE_MARKERS] = markers;
     if (historyMarkers.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.HISTORY_MARKERS] = historyMarkers;
-    if (historyEntries.count > 0 || addEmptyItems)
-        settingsToOperate[OAExportSettingsType.SEARCH_HISTORY] = historyEntries;
+    if (searchHistoryEntries.count > 0 || addEmptyItems)
+        settingsToOperate[OAExportSettingsType.SEARCH_HISTORY] = searchHistoryEntries;
+    if (navigationHistoryEntries.count > 0 || addEmptyItems)
+        settingsToOperate[OAExportSettingsType.NAVIGATION_HISTORY] = navigationHistoryEntries;
     if (globalSettingsItems.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.GLOBAL] = globalSettingsItems;
     return settingsToOperate;

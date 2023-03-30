@@ -238,19 +238,31 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     NSInteger _cellColorGrid;
     
     OAAutoObserverProxy *_mapSourceUpdatedObserver;
-    EOARouteLineAppearancePrevScreen _prevScreen;
+    NSString *_prevScreenKey;
 }
 
 @dynamic statusBarBackgroundView, contentContainer;
 
-- (instancetype)initWithAppMode:(OAApplicationMode *)appMode prevScreen:(EOARouteLineAppearancePrevScreen)prevScreen
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode
 {
     self = [super initWithNibName:@"OARouteLineAppearanceHudViewController"
                            bundle:nil];
     if (self)
     {
         _appMode = appMode;
-        _prevScreen = prevScreen;
+        [self commonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode prevScreenKey:(NSString *)prevScreenKey
+{
+    self = [super initWithNibName:@"OARouteLineAppearanceHudViewController"
+                           bundle:nil];
+    if (self)
+    {
+        _appMode = appMode;
+        _prevScreenKey = prevScreenKey;
         [self commonInit];
     }
     return self;
@@ -437,14 +449,14 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
         [_mapPanelViewController.mapViewController.mapLayers.routeMapLayer setPreviewRouteLineInfo:nil];
 
-        if (_prevScreen == EOARouteLineAppearancePrevScreenSettings)
+        if ([_prevScreenKey isEqualToString:kFromSettingsKey])
         {
             UINavigationController *navigationController = [OARootViewController instance].navigationController;
             [navigationController pushViewController:[[OAMainSettingsViewController alloc] init] animated:NO];
             [navigationController pushViewController:[[OAConfigureProfileViewController alloc] initWithAppMode:_appMode targetScreenKey:nil] animated:NO];
             [navigationController pushViewController:[[OAProfileNavigationSettingsViewController alloc] initWithAppMode:_appMode] animated:YES];
         }
-        else if (_prevScreen == EOARouteLineAppearancePrevScreenNavigation)
+        else if ([_prevScreenKey isEqualToString:kFromNavigationKey])
         {
             [[OARootViewController instance].mapPanel showRouteInfo];
             [[OARootViewController instance].mapPanel showRoutePreferences];

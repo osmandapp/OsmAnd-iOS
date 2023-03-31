@@ -1724,7 +1724,7 @@
 "instructions_repeat" = "Tippen Sie auf das Widget \"Nächste Richtungsangabe\", um Anweisungen zu wiederholen";
 "default_speed_dialog_msg" = "Schätzt die Ankunftszeit für unbekannte Straßentypen und begrenzt die Geschwindigkeit für alle Straßen (kann die Navigation beeinflussen)";
 "vessel_width_limit_description" = "Stellen Sie die Schiffsbreite ein, um schmale Brücken zu vermeiden";
-"lenght_limit_description" = "Bitte geben Sie Ihre Fahrzeuglänge an. Für lange Fahrzeuge könnten einige Streckenabschnitte nicht befahrbar sein.";
+"lenght_limit_description" = "Bitte geben Sie Ihre Fahrzeuglänge an. Für lange Fahrzeuge können einige Streckenabschnitte nicht befahrbar sein.";
 "profile_settings" = "Profilspezifische Einstellungen";
 "vessel_height_limit_description" = "Schiffshöhe einstellen, um niedrige Brücken zu vermeiden. Beachten Sie: Für bewegliche Brücken wird deren Höhe im geöffneten Zustand verwendet.";
 "err_profile_import" = "Fehler beim Lesen von Elementdaten: %@";
@@ -2054,7 +2054,7 @@
 "srtm_download_single_help_message" = "Bitte Variante auswählen. Sie müssen die Datei erneut herunterladen, um das Format zu ändern.";
 "srtm_unit_format" = "Einheitenvariante der Höhenlinien";
 "download_suggestion" = "Detaillierte %@ Karte herunterladen, um dieses Gebiet zu sehen";
-"dialogs_and_notifications_descr" = "Steuern Sie Popups, Dialoge und Benachrichtigungen.";
+"dialogs_and_notifications_descr" = "Steuern Sie Pop-ups, Dialoge und Benachrichtigungen.";
 "routes_color_by_type" = "Routen einfärben nach…";
 "rendering_value_walkingRoutesOSMC_description" = "Einfärbung von Routen nach ihrer individuellen lokalen Farbe (falls in OpenStreetMap vorhanden) und der Wandermarkierungen.";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Einfärbung gemäß Routennetzwerk.";

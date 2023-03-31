@@ -197,9 +197,13 @@
     else if (mode == [OAApplicationMode DEFAULT])
     {
         mode = [OAApplicationMode CAR];
-        if (_settings.lastRoutingApplicationMode && _settings.lastRoutingApplicationMode != [OAApplicationMode DEFAULT])
+        if (_settings.lastRoutingApplicationMode && _settings.lastRoutingApplicationMode != [OAApplicationMode DEFAULT] && [OAApplicationMode.values containsObject:_settings.lastRoutingApplicationMode])
         {
             mode = _settings.lastRoutingApplicationMode;
+        }
+        else
+        {
+            mode = OAApplicationMode.getFirstAvailableNavigationMode;
         }
     }
     return mode;

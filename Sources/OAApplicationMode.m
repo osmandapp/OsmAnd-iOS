@@ -287,6 +287,16 @@ static OAApplicationMode *_HORSE;
     });
 }
 
++ (OAApplicationMode *) getFirstAvailableNavigationMode
+{
+    for (OAApplicationMode *mode in _values)
+    {
+        if (mode != self.DEFAULT)
+            return mode;
+    }
+    return self.CAR;
+}
+
 + (NSArray<OAApplicationMode *> *) allPossibleValues
 {
     return [NSArray arrayWithArray:_values];

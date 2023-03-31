@@ -130,7 +130,7 @@
     {
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
         e.name = @"color";
-        e.value = UIColorFromRGBA(color).toHexString;
+        e.value = UIColorFromRGBA(color).toHexARGBString;
         [extArray addObject:e];
     }
     

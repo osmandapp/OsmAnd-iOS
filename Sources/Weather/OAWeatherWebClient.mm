@@ -143,6 +143,7 @@ bool OAWeatherWebClient::downloadFile(
 
         if (success)
             success = [data writeToFile:name atomically:YES];
+        data = nil;
 
         if (requestResult != nullptr)
             requestResult->reset(new OAWeatherHttpRequestResult(success, responseCode));

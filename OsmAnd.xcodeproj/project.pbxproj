@@ -2231,7 +2231,6 @@
 		DA5A823826C563A700F274C7 /* OAGlobalSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B6726C563A100F274C7 /* OAGlobalSettingsViewController.mm */; };
 		DA5A823926C563A700F274C7 /* OAOsmAccountSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B6826C563A100F274C7 /* OAOsmAccountSettingsViewController.m */; };
 		DA5A823A26C563A700F274C7 /* OABaseBigTitleSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B6926C563A100F274C7 /* OABaseBigTitleSettingsViewController.m */; };
-		DA5A823B26C563A700F274C7 /* OAOsmEditingSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7B6A26C563A100F274C7 /* OAOsmEditingSettingsViewController.xib */; };
 		DA5A823C26C563A700F274C7 /* OABaseBigTitleSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7B6B26C563A100F274C7 /* OABaseBigTitleSettingsViewController.xib */; };
 		DA5A823D26C563A700F274C7 /* OAConfigureProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B6C26C563A100F274C7 /* OAConfigureProfileViewController.m */; };
 		DA5A823E26C563A700F274C7 /* OAProfileDataObject.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B6D26C563A100F274C7 /* OAProfileDataObject.m */; };
@@ -6210,7 +6209,6 @@
 		DA5A7B6726C563A100F274C7 /* OAGlobalSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGlobalSettingsViewController.mm; sourceTree = "<group>"; };
 		DA5A7B6826C563A100F274C7 /* OAOsmAccountSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAOsmAccountSettingsViewController.m; sourceTree = "<group>"; };
 		DA5A7B6926C563A100F274C7 /* OABaseBigTitleSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OABaseBigTitleSettingsViewController.m; sourceTree = "<group>"; };
-		DA5A7B6A26C563A100F274C7 /* OAOsmEditingSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAOsmEditingSettingsViewController.xib; sourceTree = "<group>"; };
 		DA5A7B6B26C563A100F274C7 /* OABaseBigTitleSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OABaseBigTitleSettingsViewController.xib; sourceTree = "<group>"; };
 		DA5A7B6C26C563A100F274C7 /* OAConfigureProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAConfigureProfileViewController.m; sourceTree = "<group>"; };
 		DA5A7B6D26C563A100F274C7 /* OAProfileDataObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAProfileDataObject.m; sourceTree = "<group>"; };
@@ -9706,7 +9704,6 @@
 				DA5A7B6826C563A100F274C7 /* OAOsmAccountSettingsViewController.m */,
 				DA5A7B1A26C563A100F274C7 /* OAOsmEditingSettingsViewController.h */,
 				DA5A7BA326C563A100F274C7 /* OAOsmEditingSettingsViewController.mm */,
-				DA5A7B6A26C563A100F274C7 /* OAOsmEditingSettingsViewController.xib */,
 				460743A728C10B2900F13A7A /* OAOsmLoginMainViewController.xib */,
 				CA4EDA40BF6F4AA69813EBFC /* OAOsmLoginMainViewController.m */,
 				CA4ED7170ED17BBBC870B2C8 /* OAOsmLoginMainViewController.h */,
@@ -16172,7 +16169,6 @@
 				4611DF3A28569C5000885FD1 /* OASubscriptionBannerCardView.xib in Resources */,
 				15BDDEA724DAF3D400079C83 /* ic_custom_remove_outlined@3x.png in Resources */,
 				8A4D03E427A6DF2300B8A778 /* precip_color.txt in Resources */,
-				DA5A823B26C563A700F274C7 /* OAOsmEditingSettingsViewController.xib in Resources */,
 				DA6471A522CF5433008F937F /* ic_custom_wikipedia@3x.png in Resources */,
 				841222511B39CC5200F80F9E /* map_car_bearing@3x.png in Resources */,
 				8458BB941B0F1E7A00738132 /* ic_working_time@2x.png in Resources */,

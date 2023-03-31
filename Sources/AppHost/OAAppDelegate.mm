@@ -644,7 +644,7 @@
         return;
     }
     [self presentInCarPlay:interfaceController window:window];
-    OAApplicationMode *carPlayMode = OAAppSettings.sharedManager.isCarPlayModeDefault ? OAApplicationMode.CAR : [OAAppSettings.sharedManager.carPlayMode get];
+    OAApplicationMode *carPlayMode = [OAAppSettings.sharedManager.isCarPlayModeDefault get] ? OAApplicationMode.getFirstAvailableNavigationMode : [OAAppSettings.sharedManager.carPlayMode get];
     [OAAppSettings.sharedManager setApplicationModePref:carPlayMode markAsLastUsed:NO];
 }
 

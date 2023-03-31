@@ -716,7 +716,7 @@
                     time:wpt.time
                     desc:wpt.desc
                     name:wpt.name
-                   color:UIColorFromRGBA([wpt getColor:0]).toHexString
+                   color:UIColorFromARGB([wpt getColor:0]).toHexARGBString
                    group:wpt.type
                     icon:[wpt getIcon]
               background:[wpt getBackgroundIcon]];
@@ -799,7 +799,7 @@
             sqlite3_bind_double(statement, 2, newLocation.longitude);
             sqlite3_bind_text(statement, 3, [(wpt.desc ? wpt.desc : @"") UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_bind_text(statement, 4, [(wpt.name ? wpt.name : @"") UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 5, [UIColorFromRGBA([wpt getColor:0]).toHexString UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 5, [UIColorFromRGBA([wpt getColor:0]).toHexARGBString UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_bind_text(statement, 6, [(wpt.type ? wpt.type : @"") UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_bind_text(statement, 7, [[wpt getIcon] UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_bind_text(statement, 8, [[wpt getBackgroundIcon] UTF8String], -1, SQLITE_TRANSIENT);
@@ -925,7 +925,7 @@
                        time:wpt.time
                        desc:wpt.desc
                        name:wpt.name
-                      color:UIColorFromRGBA([wpt getColor:0]).toHexString
+                      color:UIColorFromARGB([wpt getColor:0]).toHexARGBString
                       group:wpt.type
                        icon:[wpt getIcon]
                  background:[wpt getBackgroundIcon]];

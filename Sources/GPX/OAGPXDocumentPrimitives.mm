@@ -257,7 +257,7 @@
 - (void) setColor:(int)value
 {
     NSString *hexString = [NSString stringWithFormat:@"#%0X", value];
-    [self setExtension:@"color" value:hexString];
+    [self setExtension:@"color" value:hexString.lowerCase];
 }
 
 - (int) parseColor:(NSString *)colorString defColor:(int)defColor
@@ -466,7 +466,7 @@
 - (UIColor *)getColor
 {
     int color = [self getColor:0];
-    return color != 0 ? UIColorFromRGBA(color) : [OADefaultFavorite getDefaultColor];
+    return color != 0 ? UIColorFromARGB(color) : [OADefaultFavorite getDefaultColor];
 }
 
 - (OAPointDescription *) getPointDescription

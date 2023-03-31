@@ -13,7 +13,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kSidePadding 16
 #define kAllApplicationProfilesSection 0
 
 @interface OAEditProfileItem : NSObject
@@ -39,7 +38,7 @@
 
 @end
 
-@interface OARearrangeProfilesViewController() <UITableViewDelegate, UITableViewDataSource, OATableViewCellDelegate>
+@interface OARearrangeProfilesViewController() <OATableViewCellDelegate>
 
 @end
 
@@ -47,82 +46,70 @@
 {
     NSMutableArray<OAEditProfileItem *> *_appProfiles;
     NSMutableArray<OAEditProfileItem *> *_deletedProfiles;
-    
+
     BOOL _hasChangesBeenMade;
 }
 
-- (instancetype) init
-{
-    self = [super init];
-    if (self) {
-        [self commonInit];
-    }
-    return self;
-}
+#pragma mark - Initialization
 
-- (UIView *) getTopView
+- (void)commonInit
 {
-    return _navBar;
-}
+    _appProfiles = [NSMutableArray array];
+    _deletedProfiles = [NSMutableArray array];
 
-- (void) commonInit
-{
-    [self generateData];
-}
-
-- (void) generateData
-{
-    _appProfiles = [[NSMutableArray alloc] init];
-    _deletedProfiles = [[NSMutableArray alloc] init];
-    
-    for (OAApplicationMode *am in OAApplicationMode.allPossibleValues)
+    for (OAApplicationMode *am in [OAApplicationMode allPossibleValues])
     {
         [_appProfiles addObject:[[OAEditProfileItem alloc] initWithAppMode:am]];
     }
 }
 
-- (void) applyLocalization
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    _titleLabel.text = OALocalizedString(@"rearrange_profiles");
-    [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
+    return OALocalizedString(@"rearrange_profiles");
 }
+
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
+{
+    return @[[self createRightNavbarButton:OALocalizedString(@"shared_string_done")
+                                  iconName:nil
+                                    action:@selector(onRightNavbarButtonPressed)
+                                      menu:nil]];
+}
+
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
+{
+    return EOABaseNavbarColorSchemeOrange;
+}
+
+- (EOABaseNavbarStyle)getNavbarStyle
+{
+    return EOABaseNavbarStyleDescription;
+}
+
+- (NSString *)getCustomTableViewDescription
+{
+    return OALocalizedString(@"rearrange_profile_descr");
+}
+
+#pragma mark - UIViewController
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    [_tableView setEditing:YES];
     
+    self.tableView.editing = YES;
     [self.navigationController.interactivePopGestureRecognizer addTarget:self
                                                                   action:@selector(swipeToCloseRecognized:)];
 }
 
-- (void) swipeToCloseRecognized:(UIGestureRecognizer *)recognizer
-{
-    if (_hasChangesBeenMade)
-    {
-        recognizer.enabled = NO;
-        recognizer.enabled = YES;
-        [self showChangesAlert];
-    }
-}
-
-- (void) viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"rearrange_profile_descr") font:kHeaderDescriptionFont textColor:UIColorFromRGB(color_text_footer) isBigTitle:NO parentViewWidth:self.view.frame.size.width];
-}
-
-- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"rearrange_profile_descr") font:kHeaderDescriptionFont textColor:UIColorFromRGB(color_text_footer) isBigTitle:NO parentViewWidth:self.view.frame.size.width];
-        [_tableView reloadData];
-    } completion:nil];
-}
+#pragma mark - Table data
 
 - (OAEditProfileItem *) getItem:(NSIndexPath *)indexPath
 {
@@ -130,53 +117,7 @@
     return isAllModes ? _appProfiles[indexPath.row] : _deletedProfiles[indexPath.row];
 }
 
-- (void)showChangesAlert
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"exit_without_saving") preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self.navigationController popViewControllerAnimated:YES];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
-- (IBAction) cancelButtonClicked:(id)sender
-{
-    if (_hasChangesBeenMade)
-    {
-        [self showChangesAlert];
-    }
-    else
-    {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-}
-
-- (IBAction) doneButtonClicked:(id)sender
-{
-    NSMutableArray<OAApplicationMode *> *deletedModes = [NSMutableArray new];
-    for (OAEditProfileItem *item in _deletedProfiles)
-        [deletedModes addObject:item.appMode];
-
-    [OAApplicationMode deleteCustomModes:deletedModes];
-    
-    NSMutableDictionary<NSString *, OAEditProfileItem *> *itemMapping = [NSMutableDictionary new];
-    for (OAEditProfileItem *item in _appProfiles)
-         [itemMapping setObject:item forKey:item.appMode.stringKey];
-    
-    for (OAApplicationMode *am in OAApplicationMode.allPossibleValues)
-    {
-        OAEditProfileItem *editItem = itemMapping[am.stringKey];
-        if (editItem)
-            [am setOrder:editItem.order];
-    }
-    [OAApplicationMode reorderAppModes];
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-#pragma mark - TableView
-
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     if (section == kAllApplicationProfilesSection)
         return _appProfiles.count;
@@ -184,16 +125,11 @@
         return _deletedProfiles.count;
 }
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 2;
-}
-
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     BOOL isAllProfiles = indexPath.section == kAllApplicationProfilesSection;
     OAApplicationMode *mode = isAllProfiles ? _appProfiles[indexPath.row].appMode : _deletedProfiles[indexPath.row].appMode;
-    OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+    OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
@@ -219,16 +155,56 @@
     return cell;
 }
 
-- (BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+- (NSInteger)sectionsCount
+{
+    return 2;
+}
+
+#pragma mark - UITableViewDataSource
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
     return indexPath.section == kAllApplicationProfilesSection;
 }
 
-- (UITableViewCellEditingStyle) tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return indexPath.section == kAllApplicationProfilesSection;
+}
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
+{
+    _hasChangesBeenMade = YES;
+    OAEditProfileItem *item = [self getItem:sourceIndexPath];
+    // Deferr the data update until the animation is complete
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        [self.tableView reloadData];
+    }];
+    [_appProfiles removeObjectAtIndex:sourceIndexPath.row];
+    [_appProfiles insertObject:item atIndex:destinationIndexPath.row];
+    [self updateProfileIndexes];
+    [CATransaction commit];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return section == kAllApplicationProfilesSection ? OALocalizedString(@"all_application_profiles") : OALocalizedString(@"poi_remove_success");
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    return section == kAllApplicationProfilesSection ? @"" : OALocalizedString(@"after_tapping_done");
+}
+
+#pragma mark - UITableViewDelegate
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return UITableViewCellEditingStyleNone;
 }
 
-- (BOOL) tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return NO;
 }
@@ -240,9 +216,16 @@
     return proposedDestinationIndexPath;
 }
 
-- (BOOL) tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+#pragma mark - Additions
+
+- (void)showChangesAlert
 {
-    return indexPath.section == kAllApplicationProfilesSection;
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"exit_without_saving") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)updateProfileIndexes
@@ -253,40 +236,7 @@
     }
 }
 
-- (void) tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
-{
-    _hasChangesBeenMade = YES;
-    OAEditProfileItem *item = [self getItem:sourceIndexPath];
-    // Deferr the data update until the animation is complete
-    [CATransaction begin];
-    [CATransaction setCompletionBlock:^{
-        [_tableView reloadData];
-    }];
-    [_appProfiles removeObjectAtIndex:sourceIndexPath.row];
-    [_appProfiles insertObject:item atIndex:destinationIndexPath.row];
-    [self updateProfileIndexes];
-    [CATransaction commit];
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return section == kAllApplicationProfilesSection ? OALocalizedString(@"all_application_profiles") : OALocalizedString(@"poi_remove_success");
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return section == kAllApplicationProfilesSection ? @"" : OALocalizedString(@"after_tapping_done");
-}
-
-- (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
-        UITableViewHeaderFooterView * headerView = (UITableViewHeaderFooterView *) view;
-        headerView.textLabel.textColor  = UIColorFromRGB(color_text_footer);
-    }
-}
-
-- (void) deleteMode:(NSIndexPath *)indexPath
+- (void)deleteMode:(NSIndexPath *)indexPath
 {
     OAEditProfileItem *am = _appProfiles[indexPath.row];
     [_appProfiles removeObject:am];
@@ -295,15 +245,15 @@
     NSIndexPath *targetPath = [NSIndexPath indexPathForRow:_deletedProfiles.count - 1 inSection:1];
     [CATransaction begin];
     [CATransaction setCompletionBlock:^{
-        [_tableView reloadData];
+        [self.tableView reloadData];
     }];
-    [_tableView beginUpdates];
-    [_tableView moveRowAtIndexPath:indexPath toIndexPath:targetPath];
-    [_tableView endUpdates];
+    [self.tableView beginUpdates];
+    [self.tableView moveRowAtIndexPath:indexPath toIndexPath:targetPath];
+    [self.tableView endUpdates];
     [CATransaction commit];
 }
 
-- (void) restoreMode:(NSIndexPath *)indexPath
+- (void)restoreMode:(NSIndexPath *)indexPath
 {
     OAEditProfileItem *am = _deletedProfiles[indexPath.row];
     int order = am.order;
@@ -311,17 +261,57 @@
     NSIndexPath *targetPath = [NSIndexPath indexPathForRow:order inSection:kAllApplicationProfilesSection];
     [CATransaction begin];
     [CATransaction setCompletionBlock:^{
-        [_tableView reloadData];
+        [self.tableView reloadData];
     }];
     [_deletedProfiles removeObjectAtIndex:indexPath.row];
     [_appProfiles insertObject:am atIndex:order];
-    [_tableView beginUpdates];
-    [_tableView moveRowAtIndexPath:indexPath toIndexPath:targetPath];
-    [_tableView endUpdates];
+    [self.tableView beginUpdates];
+    [self.tableView moveRowAtIndexPath:indexPath toIndexPath:targetPath];
+    [self.tableView endUpdates];
     [CATransaction commit];
 }
 
 #pragma mark - Selectors
+
+- (void)onLeftNavbarButtonPressed
+{
+    if (_hasChangesBeenMade)
+        [self showChangesAlert];
+    else
+        [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)onRightNavbarButtonPressed
+{
+    NSMutableArray<OAApplicationMode *> *deletedModes = [NSMutableArray new];
+    for (OAEditProfileItem *item in _deletedProfiles)
+        [deletedModes addObject:item.appMode];
+
+    [OAApplicationMode deleteCustomModes:deletedModes];
+    
+    NSMutableDictionary<NSString *, OAEditProfileItem *> *itemMapping = [NSMutableDictionary new];
+    for (OAEditProfileItem *item in _appProfiles)
+         [itemMapping setObject:item forKey:item.appMode.stringKey];
+    
+    for (OAApplicationMode *am in OAApplicationMode.allPossibleValues)
+    {
+        OAEditProfileItem *editItem = itemMapping[am.stringKey];
+        if (editItem)
+            [am setOrder:editItem.order];
+    }
+    [OAApplicationMode reorderAppModes];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)swipeToCloseRecognized:(UIGestureRecognizer *)recognizer
+{
+    if (_hasChangesBeenMade)
+    {
+        recognizer.enabled = NO;
+        recognizer.enabled = YES;
+        [self showChangesAlert];
+    }
+}
 
 - (void)onEditButtonPressed:(UIButton *)sender
 {

@@ -431,9 +431,9 @@ static BOOL _purchasesUpdated;
     else if ([key isEqualToString:@"contact_support"])
         [self sendEmail];
     else if ([key isEqualToString:@"product_pro_crossplatform"])
-        [self presentViewController:[[OAPurchaseDetailsViewController alloc] initForCrossplatformSubscription] animated:YES completion:nil];
+        [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initForCrossplatformSubscription]];
     else if ([key hasPrefix:@"product_"])
-        [self presentViewController:[[OAPurchaseDetailsViewController alloc] initWithProduct:[item objForKey:@"product"]] animated:YES completion:nil];
+        [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initWithProduct:[item objForKey:@"product"]]];
 }
 
 #pragma mark - UITableViewDelegate

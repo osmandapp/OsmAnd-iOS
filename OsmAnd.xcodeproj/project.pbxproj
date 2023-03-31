@@ -1584,7 +1584,6 @@
 		CA4ED071F93DF4FB0368BACC /* OAShowHidePressureAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED01DD17D02CD759BBC7C /* OAShowHidePressureAction.mm */; };
 		CA4ED0D1E58A3E00EAE53C55 /* OAWeatherBandSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED355FD3FAEA8F4F74263 /* OAWeatherBandSettingsViewController.mm */; };
 		CA4ED0E24578E7AF0472D74C /* OAShowHideCloudAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDABC80C141D6AAD16F8C /* OAShowHideCloudAction.mm */; };
-		CA4ED0FA5BD7BC1DFD06331C /* OAPurchasesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CA4EDD70E43F2B7DF3B13937 /* OAPurchasesViewController.xib */; };
 		CA4ED127365B6FCBDC4E739E /* OABackupTypesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDA0456BEB6851C6646AE /* OABackupTypesViewController.mm */; };
 		CA4ED153BFA207753EEE0E13 /* OAMapillaryOsmTagHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED676EDCD24E9BE24075D /* OAMapillaryOsmTagHelper.mm */; };
 		CA4ED15F50530CD41EB6F164 /* OAPlanTypeCardRow.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED0221B1888DD1A891DAE /* OAPlanTypeCardRow.mm */; };
@@ -5293,7 +5292,6 @@
 		CA4EDD14CA25B1A6AEB53FE3 /* OASegmentedSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASegmentedSlider.h; sourceTree = "<group>"; };
 		CA4EDD1F641FDF3A3C7BB25C /* OAWeatherToolbar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherToolbar.mm; sourceTree = "<group>"; };
 		CA4EDD64C998F4C38A58E4D5 /* OARouteLineAppearanceHudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteLineAppearanceHudViewController.h; sourceTree = "<group>"; };
-		CA4EDD70E43F2B7DF3B13937 /* OAPurchasesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAPurchasesViewController.xib; sourceTree = "<group>"; };
 		CA4EDDD18F59FD98326B733D /* OAWeatherPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherPlugin.mm; sourceTree = "<group>"; };
 		CA4EDDF0C019CF106448907D /* OAWeatherSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherSettingsViewController.mm; sourceTree = "<group>"; };
 		CA4EDE2F7056768E208C7410 /* OASubscriptionCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASubscriptionCardView.h; sourceTree = "<group>"; };
@@ -12240,7 +12238,6 @@
 				CA4ED02BF41419F656CFE755 /* OAWeatherForecastDetailsViewController.h */,
 				CA4EDED38B4AD1FD86AB63E4 /* OAWeatherFrequencySettingsViewController.mm */,
 				CA4EDB52242C414C788B24DE /* OAWeatherFrequencySettingsViewController.h */,
-				CA4EDD70E43F2B7DF3B13937 /* OAPurchasesViewController.xib */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -16377,7 +16374,6 @@
 				845E07311B616E4700DFC2A7 /* ic_restore_purchase@2x.png in Resources */,
 				84EE2DD61AFD149F007C9A94 /* img_purchase_banner_portrait@2x.png in Resources */,
 				DA5A84CF26C563A900F274C7 /* OABottomSheetViewController.xib in Resources */,
-				CA4ED0FA5BD7BC1DFD06331C /* OAPurchasesViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

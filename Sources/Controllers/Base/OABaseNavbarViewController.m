@@ -626,13 +626,6 @@
 {
 }
 
-#pragma mark - IBAction
-
-- (IBAction)onRightNavbarButtonPressed:(UIButton *)sender
-{
-    [self onRightNavbarButtonPressed];
-}
-
 #pragma mark - Selectors
 
 - (void)onRightNavbarButtonPressed

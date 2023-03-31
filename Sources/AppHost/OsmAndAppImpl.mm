@@ -1328,7 +1328,7 @@
     settings.lastRoutingApplicationMode = settings.applicationMode.get;
     [targetPointsHelper removeAllWayPoints:NO clearBackup:NO];
     dispatch_async(dispatch_get_main_queue(), ^{
-        OAApplicationMode *carPlayMode = settings.isCarPlayModeDefault ? OAApplicationMode.CAR : [OAAppSettings.sharedManager.carPlayMode get];
+        OAApplicationMode *carPlayMode = [settings.isCarPlayModeDefault get] ? OAApplicationMode.getFirstAvailableNavigationMode : [OAAppSettings.sharedManager.carPlayMode get];
         OAApplicationMode *defaultAppMode = [settings.useLastApplicationModeByDefault get] ?
             [OAApplicationMode valueOfStringKey:[settings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] :
             settings.defaultApplicationMode.get;

@@ -1011,7 +1011,7 @@
     for (OAWptPt *point in _points)
     {
         NSString *title = point.type == nil ? @"" : point.type;
-        NSString *color = point.type == nil ? @"" : [point getColor].toHexString;
+        NSString *color = point.type == nil ? @"" : [point getColor].toHexARGBString;
         BOOL emptyCategory = title.length == 0;
         if (!emptyCategory)
         {
@@ -1058,7 +1058,7 @@
         NSMutableDictionary<NSString *, NSString *> *categories = [NSMutableDictionary new];
         NSString *title = point.type == nil ? @"" : point.type;
         categories[@"title"] = title;
-        NSString *color = point.type == nil ? @"" : [point getColor].toHexString;
+        NSString *color = point.type == nil ? @"" : [point getColor].toHexARGBString;
         NSString *count = @"1";
         categories[@"count"] = count;
 

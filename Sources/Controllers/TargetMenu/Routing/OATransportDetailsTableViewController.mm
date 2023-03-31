@@ -380,7 +380,7 @@
     vector<SHARED_PTR<TransportRouteResultSegment>> segments = res->segments;
     NSString *name = [NSString stringWithUTF8String:segments[0]->getStart().name.c_str()];
     
-    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
+    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
     NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
     
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"route_from") stringByAppendingString:@" "] attributes:secondaryAttributes]];
@@ -398,7 +398,7 @@
 - (NSAttributedString *) getSecondLineDescrAttributed:(SHARED_PTR<TransportRouteResult>)res
 {
     NSMutableAttributedString *attributedStr = [NSMutableAttributedString new];
-    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
+    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
     NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
     auto& segments = res->segments;
     NSInteger walkTimeReal = [_transportHelper getWalkingTime:segments];

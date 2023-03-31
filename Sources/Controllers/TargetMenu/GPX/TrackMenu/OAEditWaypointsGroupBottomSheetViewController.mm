@@ -460,7 +460,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             cell.textColorNormal = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
 
             cell.titleView.font = [cellData.values.allKeys containsObject:@"font_value"]
-                    ? cellData.values[@"font_value"] : [UIFont scaledSystemFontOfSize:17.];
+                    ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
             cell.iconColorNormal = cellData.tintColor > 0
                     ? UIColorFromRGB(cellData.tintColor) : UIColorFromRGB(color_primary_purple);

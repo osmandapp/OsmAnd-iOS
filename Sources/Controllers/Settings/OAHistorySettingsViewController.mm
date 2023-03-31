@@ -101,8 +101,8 @@
 
 - (void)setupBottomFonts
 {
-    self.topButton.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
-    self.bottomButton.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
+    self.topButton.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    self.bottomButton.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 }
 
 #pragma mark - Base UI

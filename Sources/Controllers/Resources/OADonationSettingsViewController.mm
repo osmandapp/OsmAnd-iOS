@@ -157,7 +157,7 @@
         _userNameCell.inputField.delegate = self;
 
         _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 55.0)];
-        NSDictionary *attrs = @{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:16.0],
+        NSDictionary *attrs = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleCallout],
                                  NSForegroundColorAttributeName : [UIColor whiteColor] };
         NSAttributedString *text = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_save") attributes:attrs];
         UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeSystem];

@@ -31,9 +31,9 @@ static UIFont *_descrFont;
 {
     [super awakeFromNib];
     if (!_titleFont)
-        _titleFont = [UIFont scaledSystemFontOfSize:17.0];
+        _titleFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     if (!_descrFont)
-        _descrFont = [UIFont scaledSystemFontOfSize:15.0];
+        _descrFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
     
 }
 

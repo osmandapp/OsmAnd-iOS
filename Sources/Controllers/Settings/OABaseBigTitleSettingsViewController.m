@@ -97,7 +97,7 @@
 
 - (CGFloat) heightForLabel:(NSString *)text
 {
-    UIFont *labelFont = [UIFont scaledSystemFontOfSize:15.0];
+    UIFont *labelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
     CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
     return [OAUtilities heightForHeaderViewText:text width:textWidth font:labelFont lineSpacing:6.0];
 }

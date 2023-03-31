@@ -322,7 +322,7 @@ static BOOL _purchasesUpdated;
 
             cell.titleView.text = item.title;
             cell.titleView.font = [item.key isEqualToString:@"get_osmand_pro"]
-                    ? [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] : [UIFont scaledSystemFontOfSize:17.];
+                    ? [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
             NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:[item stringForKey:@"button_title"]];
             [buttonTitle addAttribute:NSForegroundColorAttributeName
@@ -388,7 +388,7 @@ static BOOL _purchasesUpdated;
                 paragraphStyle.minimumLineHeight = 17.;
                 paragraphStyle.lineSpacing = 2.;
                 [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attributedString.length)];
-                [attributedString addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:13.] range:NSMakeRange(0, attributedString.length)];
+                [attributedString addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote] range:NSMakeRange(0, attributedString.length)];
                 [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:NSMakeRange(0, attributedString.length)];
                 cell.descriptionView.attributedText = attributedString;
             }
@@ -398,7 +398,7 @@ static BOOL _purchasesUpdated;
                 cell.imgView.image = [UIImage imageNamed:item.iconName];
                 cell.descriptionView.text = item.descr;
                 cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
-                cell.descriptionView.font = [UIFont scaledSystemFontOfSize:13.];
+                cell.descriptionView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
             }
             UIImageView *rightImageView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_arrow_right"]];
             rightImageView.tintColor = UIColorFromRGB(color_tint_gray);
@@ -502,7 +502,7 @@ static BOOL _purchasesUpdated;
     if (show)
     {
         CGFloat headerTopPadding = 40.;
-        UIFont *labelFont = [UIFont scaledSystemFontOfSize:17.];
+        UIFont *labelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, headerTopPadding + labelFont.lineHeight)];
         headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         headerView.backgroundColor = UIColor.clearColor;

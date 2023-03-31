@@ -743,7 +743,7 @@
         NSString *label = info.text;
         if (label.length == 0)
         {
-            cell.textView.font = [UIFont scaledSystemFontOfSize:16.0];
+            cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
             cell.textView.text = info.textPrefix;
             cell.textView.textColor = [UIColor lightGrayColor];
         }

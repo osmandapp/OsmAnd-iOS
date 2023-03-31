@@ -853,7 +853,7 @@
         {
             [cell makeSmallMargins:indexPath.row != [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1];
             cell.textView.text = cellData.title;
-            cell.textView.font = [UIFont scaledSystemFontOfSize:15];
+            cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.textView.textColor = UIColorFromRGB(color_text_footer);
         }
         outCell = cell;
@@ -998,7 +998,7 @@
     return sectionData.headerHeight > 0
     ? [OAUtilities calculateTextBounds:sectionData.header
                                  width:self.scrollableView.frame.size.width - 40. - [OAUtilities getLeftMargin]
-                                  font:[UIFont scaledSystemFontOfSize:13]].height + sectionData.headerHeight
+                                  font:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]].height + sectionData.headerHeight
     : 0.001;
 }
 
@@ -1022,7 +1022,7 @@
 
     OATableViewCustomFooterView *vw =
             [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    UIFont *textFont = [UIFont scaledSystemFontOfSize:13];
+    UIFont *textFont = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
             NSFontAttributeName: textFont,
             NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)

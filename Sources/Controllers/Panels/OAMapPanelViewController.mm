@@ -1363,7 +1363,7 @@ typedef enum
     _gpxProgress.labelText = OALocalizedString(@"shared_string_loading");
     _gpxProgress.labelFont = [UIFont scaledSystemFontOfSize:22. weight:UIFontWeightSemibold];
     _gpxProgress.detailsLabelText = OALocalizedString(@"shared_string_cancel");
-    _gpxProgress.detailsLabelFont = [UIFont scaledSystemFontOfSize:20.];
+    _gpxProgress.detailsLabelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleTitle3];
     _gpxProgress.detailsLabelColor = UIColor.blackColor;
     _gpxProgress.labelColor = UIColor.blackColor;
     [[UIActivityIndicatorView appearanceWhenContainedInInstancesOfClasses:@[[MBProgressHUD class]]] setColor:UIColor.blackColor];

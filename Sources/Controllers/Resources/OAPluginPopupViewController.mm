@@ -61,7 +61,7 @@ static NSMutableArray *activePopups;
     self.cancelButton.layer.borderColor = UIColorFromRGB(0x4caf50).CGColor;
     self.cancelButton.titleLabel.font = [UIFont scaledSystemFontOfSize:12. weight:UIFontWeightSemibold];
 
-    self.descTextView.font = [UIFont scaledSystemFontOfSize:15.];
+    self.descTextView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
 }
 
 - (void)didReceiveMemoryWarning
@@ -522,7 +522,7 @@ static NSMutableArray *activePopups;
 
 + (NSString *) styledHTMLwithHTML:(NSString *)HTML
 {
-    CGFloat fontSize = [UIFont scaledSystemFontOfSize:15.].pointSize;
+    CGFloat fontSize = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline].pointSize;
     NSString *style = [NSString stringWithFormat:@"<meta charset=\"UTF-8\"><style> body { font-family: -apple-system; font-size: %fpx; color:#727272} b {font-family: -apple-system; font-weight: bolder; font-size: %fpx; color:#727272 }</style>", fontSize, fontSize];
     
     return [NSString stringWithFormat:@"%@%@", style, HTML];

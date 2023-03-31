@@ -22,7 +22,7 @@
     
     self.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
 
-    _fontRegular = [UIFont scaledSystemFontOfSize:16.0];
+    _fontRegular = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
     _fontBold = [UIFont scaledSystemFontOfSize:16.0 weight:UIFontWeightSemibold];
     
     _buttonLeft.titleLabel.numberOfLines = 2;

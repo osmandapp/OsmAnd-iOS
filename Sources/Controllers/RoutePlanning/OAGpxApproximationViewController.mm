@@ -346,7 +346,7 @@
             {
                 cell.titleView.text = [item[@"title"] uppercaseString];
                 cell.titleView.textColor = UIColorFromRGB(color_text_footer);
-                cell.titleView.font = [UIFont scaledSystemFontOfSize:13];
+                cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
                 cell.secondaryImageView.hidden = YES;
 				cell.secondaryImageView.image = nil;
             }
@@ -357,7 +357,7 @@
 				cell.secondaryImageView.hidden = NO;
                 cell.titleView.text = profile.toHumanString;
 				cell.titleView.textColor = UIColor.blackColor;
-				cell.titleView.font = [UIFont scaledSystemFontOfSize:17];
+				cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
                 UIImage *img = profile.getIcon;
                 cell.secondaryImageView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 cell.secondaryImageView.tintColor = UIColorFromRGB(profile.getIconColor);

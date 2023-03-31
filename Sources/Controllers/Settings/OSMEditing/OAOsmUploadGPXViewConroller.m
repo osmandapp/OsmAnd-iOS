@@ -223,13 +223,13 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         OATableRowData *titleRow = [section createNewRow];
         [titleRow setCellType:[OATextMultilineTableViewCell getCellIdentifier]];
         [titleRow setTitle: OALocalizedString(@"osm_upload_failed_title")];
-        [titleRow setObj:[UIFont scaledSystemFontOfSize:17]
+        [titleRow setObj:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]
              forKey:@"font"];
         
         OATableRowData *descrRow = [section createNewRow];
         [descrRow setCellType:[OATextMultilineTableViewCell getCellIdentifier]];
         [descrRow setTitle: OALocalizedString(@"osm_upload_failed_descr")];
-        [descrRow setObj:[UIFont scaledSystemFontOfSize:15]
+        [descrRow setObj:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]
              forKey:@"font"];
     }
     else if (_mode == EOAOsmUploadGPXViewConrollerModeNoInternet)
@@ -239,13 +239,13 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         OATableRowData *titleRow = [section createNewRow];
         [titleRow setCellType:[OATextMultilineTableViewCell getCellIdentifier]];
         [titleRow setTitle: OALocalizedString(@"no_internet_avail")];
-        [titleRow setObj:[UIFont scaledSystemFontOfSize:17]
+        [titleRow setObj:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]
              forKey:@"font"];
         
         OATableRowData *descrRow = [section createNewRow];
         [descrRow setCellType:[OATextMultilineTableViewCell getCellIdentifier]];
         [descrRow setTitle: OALocalizedString(@"osm_upload_no_internet")];
-        [descrRow setObj:[UIFont scaledSystemFontOfSize:15]
+        [descrRow setObj:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]
              forKey:@"font"];
     }
 }
@@ -623,7 +623,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     if (_isLogged)
     {
         OAMappersViewController *benefitsViewController = [[OAMappersViewController alloc] init];
-        [self presentViewController:benefitsViewController animated:YES completion:nil];
+        [self showModalViewController:benefitsViewController];
     }
 }
 

@@ -294,7 +294,7 @@
                     offlineForecastData[@"description"] = [OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress
                             ? [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_download_update")
                                                               attributes:@{
-                                                                      NSFontAttributeName: [UIFont scaledSystemFontOfSize:13.],
+                                                                      NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote],
                                                                       NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)
                                                               }]
                             : [OAWeatherHelper getStatusInfoDescription:regionId];

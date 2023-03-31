@@ -133,7 +133,7 @@
     NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"osm_editing_access_descr"), menuPath];
     NSMutableAttributedString *actionsDescrAttr =
             [[NSMutableAttributedString alloc] initWithString:actionsDescr
-                                                   attributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:15],
+                                                   attributes:@{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
                                                                  NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer) }];
     [actionsDescrAttr addAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold] }
                               range:[actionsDescr rangeOfString:menuPath]];
@@ -234,7 +234,7 @@
             [cell titleVisibility:title != nil];
             cell.titleLabel.text = title;
             cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
-            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont scaledSystemFontOfSize:17.];
+            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
             BOOL hasLeftIcon = [item.allKeys containsObject:@"left_icon"];
             [cell leftIconVisibility:hasLeftIcon];
@@ -274,7 +274,7 @@
         {
             cell.titleLabel.text = item[@"title"];
             cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
-            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont scaledSystemFontOfSize:17.];
+            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
             BOOL hasRightIcon = [item.allKeys containsObject:@"right_icon"];
             cell.rightIconView.image = hasRightIcon ? [UIImage templateImageNamed:item[@"right_icon"]] : nil;
@@ -323,7 +323,7 @@
     NSString *header = _headers[@(section)];
     if (header)
     {
-        UIFont *font = [UIFont scaledSystemFontOfSize:13.];
+        UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
         CGFloat headerHeight = [OAUtilities calculateTextBounds:header
                                                           width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
                                                            font:font].height + (section == _credentialIndexPath.section ? 20. : kPaddingOnSideOfHeaderWithText);
@@ -337,7 +337,7 @@
     NSString *footer = _footers[@(section)];
     if (footer)
     {
-        UIFont *font = [UIFont scaledSystemFontOfSize:13.];
+        UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
         CGFloat footerHeight = [OAUtilities calculateTextBounds:[_footers objectForKey:@(section)]
                                                         width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
                                                         font:font].height + kPaddingOnSideOfFooterWithText;
@@ -421,7 +421,7 @@
     if (_isLogged)
     {
         OAMappersViewController *benefitsViewController = [[OAMappersViewController alloc] init];
-        [self presentViewController:benefitsViewController animated:YES completion:nil];
+        [self showModalViewController:benefitsViewController];
     }
 }
 

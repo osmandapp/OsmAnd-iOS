@@ -637,6 +637,8 @@
 - (void)onContentSizeChanged:(NSNotification *)notification
 {
     [self setupCustomLargeTitleView];
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView

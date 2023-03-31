@@ -106,7 +106,7 @@
     NSRange fullRange = NSMakeRange(0, fullText.length);
     NSRange coloredRange = [fullText rangeOfString:coloredPart];
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:fullText];
-    UIFont *font = [UIFont scaledSystemFontOfSize:15];
+    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
     [attributedString addAttribute:NSFontAttributeName value:font range:fullRange];
     [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:fullRange];
     [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_primary_purple) range:coloredRange];

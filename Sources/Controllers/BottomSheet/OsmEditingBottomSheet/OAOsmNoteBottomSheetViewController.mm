@@ -514,7 +514,7 @@
     textField.placeholder = hint;
     [textField.textView setText:text];
     textField.userInteractionEnabled = NO;
-    textField.font = [UIFont scaledSystemFontOfSize:17.0];
+    textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     textField.adjustsFontForContentSizeCategory = YES;
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
@@ -523,7 +523,7 @@
     MDCTextInputControllerFilled *fieldController = [[MDCTextInputControllerFilled alloc] initWithTextInput:textField];
     fieldController.borderFillColor = UIColorFromRGB(color_osm_editing_text_field);
     fieldController.roundedCorners = corners;
-    fieldController.inlinePlaceholderFont = [UIFont scaledSystemFontOfSize:16.0];
+    fieldController.inlinePlaceholderFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
     [floatingControllers addObject:fieldController];
     
@@ -557,7 +557,7 @@
     [textField setText:text];
     [textField setSecureTextEntry:YES];
     textField.userInteractionEnabled = NO;
-    textField.font = [UIFont scaledSystemFontOfSize:17.0];
+    textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     textField.adjustsFontForContentSizeCategory = YES;
     textField.clearButtonMode = UITextFieldViewModeNever;
     textField.placeholderLabel.backgroundColor = [UIColor clearColor];
@@ -567,7 +567,7 @@
     fieldController.borderFillColor = UIColorFromRGB(color_osm_editing_text_field);
     fieldController.roundedCorners = corners;
     fieldController.disabledColor = [UIColor blackColor];
-    fieldController.inlinePlaceholderFont = [UIFont scaledSystemFontOfSize:16.0];
+    fieldController.inlinePlaceholderFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
     [floatingControllers addObject:fieldController];
     

@@ -95,7 +95,7 @@
 - (void)commonInit
 {
     self.labelTitle.font = [UIFont scaledSystemFontOfSize:34 weight:UIFontWeightBold];
-    self.labelDescription.font = [UIFont scaledSystemFontOfSize:17];
+    self.labelDescription.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     self.labelDescription.textColor = UIColorFromRGB(color_text_footer);
     [self.labelPurchaseDescription setText:OALocalizedString(@"subscription_cancel_description")];
     self.viewChooseSubscriptionButtonsBorder.layer.borderWidth = 1.;

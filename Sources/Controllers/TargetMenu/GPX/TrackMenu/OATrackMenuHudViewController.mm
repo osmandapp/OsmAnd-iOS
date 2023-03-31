@@ -1641,7 +1641,6 @@
 - (void) openUploadGpxToOSM
 {
     OAOsmUploadGPXViewConroller *vc = [[OAOsmUploadGPXViewConroller alloc] initWithGPXItems:@[self.gpx]];
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -1921,7 +1920,7 @@
             UIColor *tintColor = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
 
             cell.textView.font = [cellData.values.allKeys containsObject:@"font_value"]
-                    ? cellData.values[@"font_value"] : [UIFont scaledSystemFontOfSize:17.];
+                    ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
             cell.selectionStyle = cellData.toggle ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             cell.textView.text = cellData.title;
@@ -1990,7 +1989,7 @@
         if (cell)
         {
             cell.titleView.font = [cellData.values.allKeys containsObject:@"font_value"]
-                    ? cellData.values[@"font_value"] : [UIFont scaledSystemFontOfSize:17];
+                    ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.titleView.text = cellData.title;
             cell.textColorNormal = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
 

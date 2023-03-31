@@ -148,7 +148,7 @@
     }
     else
     {
-        CGFloat height = [OAUtilities calculateTextBounds:headerText width:tableView.bounds.size.width font:[UIFont scaledSystemFontOfSize:13.]].height;
+        CGFloat height = [OAUtilities calculateTextBounds:headerText width:tableView.bounds.size.width font:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]].height;
         return MAX(38.0, height + 10.0);
     }
 }

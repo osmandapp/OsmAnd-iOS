@@ -454,8 +454,8 @@
         }
         else if (indexPath.section == _availableMapsSection)
         {
-            cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.];
-            cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:13.];
+            cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
 
             if ([cellTypeId isEqualToString:outdatedResourceCell])
             {

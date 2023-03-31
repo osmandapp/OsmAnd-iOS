@@ -519,10 +519,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         
         NSString *time = [OAOsmAndFormatter getFormattedTimeInterval:approxPedestrianTime shortFormat:NO];
         NSString *formattedStr = [NSString stringWithFormat:OALocalizedString(@"public_transport_ped_route_title"), time];
-        NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:formattedStr attributes:@{NSFontAttributeName: [UIFont scaledSystemFontOfSize:17]}];
+        NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:formattedStr attributes:@{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleBody] }];
         
         NSRange range = [formattedStr rangeOfString:time];
-        [str setAttributes:@{NSFontAttributeName:[UIFont scaledSystemFontOfSize:17 weight:UIFontWeightSemibold]} range:range];
+        [str setAttributes:@{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline] } range:range];
         
         [section addObject:@{
             @"cell" : [OASimpleTableViewCell getCellIdentifier],
@@ -722,7 +722,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     vector<SHARED_PTR<TransportRouteResultSegment>> segments = res->segments;
     NSString *name = [NSString stringWithUTF8String:segments[0]->getStart().name.c_str()];
     
-    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
+    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
     NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
     
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"route_from") stringByAppendingString:@" "] attributes:secondaryAttributes]];
@@ -740,7 +740,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (NSAttributedString *) getSecondLineDescrAttributed:(SHARED_PTR<TransportRouteResult>)res
 {
     NSMutableAttributedString *attributedStr = [NSMutableAttributedString new];
-    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
+    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
     NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
     auto& segments = res->segments;
     NSInteger walkTimeReal = [_transportHelper getWalkingTime:segments];
@@ -1843,7 +1843,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSString *mainText = OALocalizedString(@"public_transport_empty_warning_title");
     NSString *additionalText = OALocalizedString(@"public_transport_try_change_settings");
     NSString *settingName = OALocalizedString(@"avoid_transport_type");
-    NSDictionary *attributes = @{NSFontAttributeName: [UIFont scaledSystemFontOfSize:15], NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)};
+    NSDictionary *attributes = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer) };
     
     NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n\n%@\n%@", mainText, additionalText, settingName] attributes:attributes];
     
@@ -1862,7 +1862,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     NSString *mainText = OALocalizedString(@"public_transport_warning_title");
     NSString *additionalText = OALocalizedString(@"public_transport_warning_descr_blog");
-    NSDictionary *attributes = @{NSFontAttributeName: [UIFont scaledSystemFontOfSize:15], NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)};
+    NSDictionary *attributes = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer) };
     
     NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n\n%@", mainText, additionalText] attributes:attributes];
     

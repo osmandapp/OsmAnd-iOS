@@ -92,7 +92,7 @@
 {
     OATableViewCustomHeaderView *customHeader = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     customHeader.label.text = OALocalizedString(@"select_base_profile_dialog_message");
-    customHeader.label.font = [UIFont scaledSystemFontOfSize:15];
+    customHeader.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
     [customHeader setYOffset:0.];
     return customHeader;
 }
@@ -103,7 +103,7 @@
                                             width:self.tableView.bounds.size.width
                                           xOffset:kPaddingOnSideOfContent
                                           yOffset:16.
-                                             font:[UIFont scaledSystemFontOfSize:15.]];
+                                             font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]];
 }
 
 - (void)onRowSelected:(NSIndexPath *)indexPath

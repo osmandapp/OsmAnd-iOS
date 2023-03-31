@@ -18,8 +18,8 @@
     // Initialization code
     _detailsButton.layer.cornerRadius = 6.;
     _showOnMapButton.layer.cornerRadius = 6.;
-    self.topInfoLabel.font = [UIFont scaledSystemFontOfSize:15.];
-    self.bottomInfoLabel.font = [UIFont scaledSystemFontOfSize:15.];
+    self.topInfoLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+    self.bottomInfoLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
     self.detailsButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
     self.showOnMapButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }

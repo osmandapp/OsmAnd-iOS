@@ -88,7 +88,7 @@
     textField.underline.hidden = YES;
     textField.textView.delegate = self;
     textField.layoutDelegate = self;
-    textField.font = [UIFont scaledSystemFontOfSize:17.0];
+    textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     textField.adjustsFontForContentSizeCategory = YES;
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
@@ -99,7 +99,7 @@
         _floatingTextFieldControllers = [NSMutableArray new];
     
     MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
-    fieldController.inlinePlaceholderFont = [UIFont scaledSystemFontOfSize:16.0];
+    fieldController.inlinePlaceholderFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
     [_floatingTextFieldControllers addObject:fieldController];
     
@@ -281,7 +281,7 @@
     self.doneButton.frame = CGRectMake(self.buttonsView.frame.size.width - 16.0 - buttonWidth, 4.0, buttonWidth, 32.0);
     self.doneButton.backgroundColor = [UIColor colorWithRed:0 green:0.48 blue:1 alpha:1];
     self.doneButton.layer.cornerRadius = 4;
-    self.doneButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15.0];
+    self.doneButton.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
     
     self.cancelButton.frame = CGRectMake(16.0 , 4.0, buttonWidth, 32.0);
     self.cancelButton.autoresizingMask = UIViewAutoresizingNone;

@@ -452,7 +452,7 @@
         return 0.001;
     else
     {
-        return [OAUtilities calculateTextBounds:OALocalizedString(@"routing_settings") width:tableView.bounds.size.width font:[UIFont scaledSystemFontOfSize:13]].height + 38;
+        return [OAUtilities calculateTextBounds:OALocalizedString(@"routing_settings") width:tableView.bounds.size.width font:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]].height + 38;
     }
 }
 

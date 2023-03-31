@@ -497,7 +497,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     self.backNavBarButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
     [self.backNavBarButton setAttributedTitle:
                     [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_back")
-                                                    attributes:@{ NSFontAttributeName:[UIFont scaledSystemFontOfSize:17.] }]
+                                                    attributes:@{ NSFontAttributeName:[UIFont preferredFontForTextStyle:UIFontTextStyleBody] }]
                                      forState:UIControlStateNormal];
     self.backNavBarButton.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
@@ -1425,7 +1425,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         {
             [cell makeSmallMargins:indexPath.row != [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1];
             cell.textView.text = cellData.title;
-            cell.textView.font = [UIFont scaledSystemFontOfSize:15];
+            cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
         }
         outCell = cell;
     }
@@ -1443,7 +1443,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             cell.backgroundColor = UIColor.whiteColor;
             cell.segmentedControl.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.1];
             [cell changeHeight:YES];
-            UIFont *font = [UIFont scaledSystemFontOfSize:15.];
+            UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             [cell.segmentedControl setTitleTextAttributes:@{
                 NSForegroundColorAttributeName : UIColor.whiteColor,
                 NSFontAttributeName : font }
@@ -1578,7 +1578,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             ? 0.001
             : [OAUtilities calculateTextBounds:sectionData.header
                                          width:self.scrollableView.frame.size.width - 40. - [OAUtilities getLeftMargin]
-                                          font:[UIFont scaledSystemFontOfSize:13]].height;
+                                          font:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]].height;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -1601,7 +1601,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
     OATableViewCustomFooterView *vw =
             [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    UIFont *textFont = [UIFont scaledSystemFontOfSize:13];
+    UIFont *textFont = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
             NSFontAttributeName: textFont,
             NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)

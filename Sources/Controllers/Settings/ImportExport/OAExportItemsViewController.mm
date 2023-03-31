@@ -247,7 +247,7 @@
         NSMutableAttributedString *headerFileSizeText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"\n%@", _fileSize] attributes:@{NSForegroundColorAttributeName: colorFileSize}];
         [newHeaderText appendAttributedString:headerFileSizeText];
         headerLabel.attributedText = newHeaderText;
-        headerLabel.font = [UIFont scaledSystemFontOfSize:15];
+        headerLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
         return customHeader;
     }
     return nil;

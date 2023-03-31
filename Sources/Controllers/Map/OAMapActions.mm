@@ -201,13 +201,9 @@
         {
             mode = _settings.lastRoutingApplicationMode;
         }
-        for (OAApplicationMode *am in OAApplicationMode.values)
+        else
         {
-            if (am != [OAApplicationMode DEFAULT])
-            {
-                mode = am;
-                break;
-            }
+            mode = OAApplicationMode.getFirstAvailableNavigationMode;
         }
     }
     return mode;

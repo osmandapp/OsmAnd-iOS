@@ -1246,7 +1246,7 @@
 "edit_tilesource_elliptic_tile" = "Эллиптическая проекция Меркатора";
 "edit_tilesource_url_to_load" = "URL";
 "routing_attr_driving_style_name" = "Стиль езды";
-"routeInfo_tracktype_name" = "Твёрдость поверхности";
+"routeInfo_tracktype_name" = "Прочность покрытия";
 "rendering_attr_tracktype_grade3_name" = "Смешанное";
 "rendering_attr_tracktype_grade5_name" = "Мягкое";
 "rendering_attr_noAdminboundaries_description" = "Скрыть региональные границы (admin levels 5-9).";

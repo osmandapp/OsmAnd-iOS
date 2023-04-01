@@ -98,7 +98,7 @@
 "dialogs_and_notifications_title" = "Fenestroj kaj sciigoj";
 "dialogs_and_notifications_descr" = "Administri (ŝpruc)fenestrojn kaj sciigojn.";
 "settings_preset_descr" = "Map-vido kaj navigadaj agordoj estas memoritaj aparte por iu profilo de uzado. Agordi vian implicitan profilon tieĉi.";
-"unit_of_length" = "Mezurunuoj de longo";
+"unit_of_length" = "Unuoj de longo";
 "unit_of_length_descr" = "Ŝanĝi unuojn por reprezenti distancoj.";
 "coords_format" = "Koordinat-formo";
 "coords_format_descr_quick_search" = "You can change coordinates format for profile in General settings";
@@ -2616,3 +2616,5 @@
 "lang_zh-Hant" = "Ĉina (tradicia)";
 "speed_cameras_legal_descr" = "En iuj landoj kaj regionoj uzado de aplikaĵoj avertantaj pri rapidkontroliloj estas kontraŭleĝa.\n\nVi devas elekti laŭleĝe de via lando.\n\nElektu “%@” por pluigi ricevi avertojn pri rapidkontroliloj.\n\nElektu “%@” por forigi (ĝis la reinstalo de OsmAnd) ĉiujn datumojn pri rapidkontrolilojn: avertojn, sciigojn, poziciojn.";
 "icon_group_service" = "Servo";
+"weather_forecast" = "Veterprognozo";
+"weather_forecast_is_outdated" = "Veterprognozo estas malaktuala.";

@@ -821,11 +821,8 @@
 -(NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(int)metricLimit joinSegments:(BOOL)joinSegments
 {
     NSMutableArray *splitSegments = [NSMutableArray array];
-    for (OATrack *subtrack in self.tracks) {
-        for (OATrkSegment *segment in subtrack.segments) {
-            [OAGPXTrackAnalysis splitSegment:metric secondaryMetric:secondaryMetric metricLimit:metricLimit splitSegments:splitSegments segment:segment joinSegments:joinSegments];
-        }
-    }
+    OATrack *generalTrack = [self getGeneralTrack];
+    [OAGPXTrackAnalysis splitSegment:metric secondaryMetric:secondaryMetric metricLimit:metricLimit splitSegments:splitSegments segment:generalTrack.segments.firstObject joinSegments:joinSegments];
     return [OAGPXTrackAnalysis convert:splitSegments];
 }
 

@@ -2779,7 +2779,7 @@
 "routing_attr_difficulty_preference_beginner_name" = "Začátečník";
 "announce_when_exceeded" = "Oznámení při překročení";
 "speak_gps_signal_status" = "Oznámení ztráty a obnovení signálu GPS";
-"announcement_time_title" = "Oznámení o čase";
+"announcement_time_title" = "Čas oznámení";
 "user_points" = "Uživatelské body";
 "announcement_time_descr" = "Načasování hlášení různých hlasových výzev závisí na typu výzvy, aktuální rychlosti navigace a výchozí rychlosti navigace.";
 "announcement_time_intervals" = "Časové a vzdálenostní intervaly";

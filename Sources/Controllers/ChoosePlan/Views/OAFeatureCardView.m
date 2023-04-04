@@ -253,6 +253,7 @@
     self.labelDescription.textAlignment = NSTextAlignmentRight;
     self.labelProductIncluded.transform = CGAffineTransformMakeScale(-1.0, 1.0);
     self.labelProductIncluded.textAlignment = NSTextAlignmentRight;
+    self.imageViewTitleIcon.transform = CGAffineTransformMakeScale(-1.0, 1.0);
 }
 
 - (OAFeatureCardRow *)addFeatureRow:(OAFeature *)feature showDivider:(BOOL)showDivider selected:(BOOL)selected

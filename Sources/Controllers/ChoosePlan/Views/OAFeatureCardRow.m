@@ -284,6 +284,9 @@
     self.labelTitle.textAlignment = NSTextAlignmentRight;
     self.labelDescription.transform = CGAffineTransformMakeScale(-1.0, 1.0);
     self.labelDescription.textAlignment = NSTextAlignmentRight;
+    self.imageViewLeftIcon.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+    self.imageViewFirstRightIcon.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+    self.imageViewSecondRightIcon.transform = CGAffineTransformMakeScale(-1.0, 1.0);
 }
 
 - (void)onTapped:(UIGestureRecognizer *)recognizer

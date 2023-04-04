@@ -1294,10 +1294,12 @@ static OASubscriptionState *EXPIRED;
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
     NSMutableDictionary *res = error ? [NSMutableDictionary dictionary] : [NSMutableDictionary dictionaryWithDictionary:result];
     res[product.productIdentifier] = transactionId;
+    error = nil;
     NSString *resStr = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:res
                                                                                       options:0
                                                                                         error:&error] encoding:NSUTF8StringEncoding];
-    [_settings.purchasedIdentifiers set:resStr];
+    if (!error && resStr)
+        [_settings.purchasedIdentifiers set:resStr];
 }
 
 - (void) provideContentForProductIdentifier:(NSString * _Nonnull)productIdentifier transactionId:(NSString *)transactionId

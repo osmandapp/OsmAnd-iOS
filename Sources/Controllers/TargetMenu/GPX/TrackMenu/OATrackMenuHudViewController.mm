@@ -63,6 +63,7 @@
 #import "OsmAnd_Maps-Swift.h"
 
 #define kGpxDescriptionImageHeight 149
+#define kAltutudeTabIndex @1
 
 @implementation OATrackMenuViewControllerState
 
@@ -213,6 +214,14 @@
     self.groupsButton.titleEdgeInsets = UIEdgeInsetsMake(0., isRTL ? -4. : 0., 0., isRTL ? 0. : -4.);
     self.groupsButton.imageEdgeInsets = UIEdgeInsetsMake(0., isRTL ? 10. : -4., 0., isRTL ? -4. : 10.);
     [self updateGroupsButton];
+    
+    if (_selectedTab == EOATrackMenuHudSegmentsTab && _reopeningState.selectedStatisticsTab == EOATrackMenuHudSegmentsStatisticsAlititudeTab)
+    {
+        OAGPXTableCellData *cellData = _tableData.subjects[0].subjects[0];
+        cellData.values[@"selected_index_int_value"] = kAltutudeTabIndex;
+        [_uiBuilder updateData:cellData];
+        [self.tableView reloadData];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated

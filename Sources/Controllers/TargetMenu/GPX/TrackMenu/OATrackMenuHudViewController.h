@@ -21,6 +21,13 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
     EOATrackMenuHudActionsTab
 };
 
+typedef NS_ENUM(NSUInteger, EOATrackMenuHudSegmentsStatisticsTab)
+{
+    EOATrackMenuHudSegmentsStatisticsOverviewTab = 0,
+    EOATrackMenuHudSegmentsStatisticsAlititudeTab,
+    EOATrackMenuHudSegmentsStatisticsSpeedTab
+};
+
 @protocol OATrackMenuViewControllerDelegate <NSObject>
 
 @required
@@ -99,6 +106,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 + (instancetype)withPinLocation:(CLLocationCoordinate2D)pinLocation openedFromMap:(BOOL)openedFromMap;
 
 @property (nonatomic, assign) EOATrackMenuHudTab lastSelectedTab;
+@property (nonatomic, assign) EOATrackMenuHudSegmentsStatisticsTab selectedStatisticsTab;
 @property (nonatomic, assign) EOARouteStatisticsMode routeStatistics;
 @property (nonatomic) UIImage *trackIcon;
 @property (nonatomic) NSString *gpxFilePath;

@@ -131,6 +131,8 @@
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu saveState:(BOOL)saveState;
 
 - (void) openTargetViewWithGPX:(OAGPX *)item;
+- (void) openTargetViewWithGPX:(OAGPX *)item selectedTab:(int)selectedTab selectedStatisticsTab:(NSInteger)selectedStatisticsTab openedFromMap:(BOOL)openedFromMap;
+
 - (void) openTargetViewWithGPX:(OAGPX *)item
                   trackHudMode:(EOATrackHudMode)trackHudMode
                          state:(OATrackMenuViewControllerState *)state;

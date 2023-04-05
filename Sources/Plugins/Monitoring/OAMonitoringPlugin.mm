@@ -11,36 +11,38 @@
 #import "OAAppSettings.h"
 #import "OATextInfoWidget.h"
 #import "OAApplicationMode.h"
-#import "OALiveMonitoringHelper.h"
 #import "OAIAPHelper.h"
 #import "OARoutingHelper.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapInfoController.h"
 #import "Localization.h"
-#import "OASavingTrackHelper.h"
 #import "OAUtilities.h"
 #import "OAMapViewController.h"
 #import "OAOsmAndFormatter.h"
 #import "OAAlertBottomSheetViewController.h"
 #import "OARecordSettingsBottomSheetViewController.h"
 #import "OARootViewController.h"
+#import "OATripRecordingDistanceWidget.h"
+#import "OATripRecordingTimeWidget.h"
+#import "OATripRecordingUphillWidget.h"
+#import "OATripRecordingDownhillWidget.h"
 
 #define PLUGIN_ID kInAppId_Addon_TrackRecording
 
 @interface OAMonitoringPlugin ()
 
-@property (nonatomic) BOOL saving;
 @property (nonatomic) OsmAndAppInstance app;
 @property (nonatomic) OAAppSettings *settings;
-@property (nonatomic) OALiveMonitoringHelper *liveMonitoringHelper;
-@property (nonatomic) OASavingTrackHelper *recHelper;
 
 @end
 
 @implementation OAMonitoringPlugin
 {
-    OATextInfoWidget *_monitoringControl;
+    OATripRecordingDistanceWidget *_distanceWidget;
+    OATripRecordingTimeWidget *_timeWidget;
+    OATripRecordingUphillWidget *_uphillWidget;
+    OATripRecordingDownhillWidget *_downhillWidget;
 }
 
 - (instancetype) init
@@ -51,7 +53,7 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _liveMonitoringHelper = [[OALiveMonitoringHelper alloc] init];
-        _recHelper = [OASavingTrackHelper sharedInstance];
+        _savingTrackHelper = [OASavingTrackHelper sharedInstance];
         NSArray<OAApplicationMode *> *am = [OAApplicationMode allPossibleValues];
         [OAApplicationMode regWidgetVisibility:PLUGIN_ID am:am];
     }
@@ -72,8 +74,8 @@
 {
     _settings.mapSettingTrackRecording = NO;
     
-    if ([_recHelper hasDataToSave])
-        [_recHelper saveDataToGpx];
+    if ([_savingTrackHelper hasDataToSave])
+        [_savingTrackHelper saveDataToGpx];
     
     [[self getMapViewController] hideRecGpxTrack];
 }
@@ -88,9 +90,15 @@
     OAMapInfoController *mapInfoController = [self getMapInfoController];
     if (mapInfoController)
     {
-        _monitoringControl = [self createMonitoringControl];
+        _distanceWidget = [[OATripRecordingDistanceWidget alloc] initWithPlugin:self];
+        _timeWidget = [[OATripRecordingTimeWidget alloc] init];
+        _uphillWidget = [[OATripRecordingUphillWidget alloc] init];
+        _downhillWidget = [[OATripRecordingDownhillWidget alloc] init];
         
-        [mapInfoController registerSideWidget:_monitoringControl imageId:@"ic_action_play_dark" message:[self getName] key:PLUGIN_ID left:NO priorityOrder:30];
+        [mapInfoController registerSideWidget:_distanceWidget imageId:@"widget_trip_recording_day" message:[OATripRecordingDistanceWidget getName] key:TRIP_RECORDING_DISTANCE left:NO priorityOrder:30];
+        [mapInfoController registerSideWidget:_timeWidget imageId:@"widget_track_recording_duration_day" message:[OATripRecordingTimeWidget getName] key:TRIP_RECORDING_TIME left:NO priorityOrder:31];
+        [mapInfoController registerSideWidget:_uphillWidget imageId:@"widget_track_recording_uphill_day" message:[OATripRecordingUphillWidget getName] key:TRIP_RECORDING_UPHILL left:NO priorityOrder:32];
+        [mapInfoController registerSideWidget:_downhillWidget imageId:@"widget_track_recording_downhill_day" message:[OATripRecordingDownhillWidget getName] key:TRIP_RECORDING_DOWNHILL left:NO priorityOrder:34];
     }
 }
 
@@ -99,156 +107,35 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([self isEnabled])
         {
-            if (!_monitoringControl)
+            if (!_distanceWidget)
                 [self registerWidget];
         }
         else
         {
-            if (_monitoringControl)
+            OAMapInfoController *mapInfoController = [self getMapInfoController];
+            if (_distanceWidget)
             {
-                OAMapInfoController *mapInfoController = [self getMapInfoController];
-                [mapInfoController removeSideWidget:_monitoringControl];
-                _monitoringControl = nil;
+                [mapInfoController removeSideWidget:_distanceWidget];
+                _distanceWidget = nil;
+            }
+            if (_timeWidget)
+            {
+                [mapInfoController removeSideWidget:_timeWidget];
+                _timeWidget = nil;
+            }
+            if (_uphillWidget)
+            {
+                [mapInfoController removeSideWidget:_uphillWidget];
+                _uphillWidget = nil;
+            }
+            if (_downhillWidget)
+            {
+                [mapInfoController removeSideWidget:_downhillWidget];
+                _downhillWidget = nil;
             }
         }
+        [[OARootViewController instance].mapPanel recreateControls];
     });
-}
-
-- (OATextInfoWidget *) createMonitoringControl
-{
-    _monitoringControl = [[OATextInfoWidget alloc] init];
-    __weak OATextInfoWidget *monitoringControlWeak = _monitoringControl;
-    __weak OAMonitoringPlugin *pluginWeak = self;
-    
-    long __block lastUpdateTime;
-    _monitoringControl.updateInfoFunction = ^BOOL {
-        
-        if (pluginWeak.saving)
-        {
-            [monitoringControlWeak setText:OALocalizedString(@"shared_string_save") subtext:@""];
-            [monitoringControlWeak setIcons:@"widget_monitoring_rec_big_day" widgetNightIcon:@"widget_monitoring_rec_big_night"];
-            return YES;
-        }
-        NSString *txt = OALocalizedString(@"monitoring_control_start");
-        NSString *subtxt = nil;
-        NSString *dn;
-        NSString *d;
-        long last = lastUpdateTime;
-        BOOL globalRecord = [OAAppSettings sharedManager].mapSettingTrackRecording;
-        BOOL isRecording = pluginWeak.recHelper.getIsRecording;
-        float dist = pluginWeak.recHelper.distance;
-        
-        //make sure widget always shows recorded track distance if unsaved track exists
-        if (dist > 0)
-        {
-            last = pluginWeak.recHelper.lastTimeUpdated;
-            NSString *ds = [OAOsmAndFormatter getFormattedDistance:dist];
-            int ls = [ds indexOf:@" "];
-            if (ls == -1)
-            {
-                txt = ds;
-            }
-            else
-            {
-                txt = [ds substringToIndex:ls];
-                subtxt = [ds substringFromIndex:ls + 1];
-            }
-        }
-        
-        BOOL liveMonitoringEnabled = [pluginWeak.liveMonitoringHelper isLiveMonitoringEnabled];
-        if (globalRecord)
-        {
-            //indicates global recording (+background recording)
-            if (liveMonitoringEnabled)
-            {
-                dn = @"widget_live_monitoring_rec_big_night";
-                d = @"widget_live_monitoring_rec_big_day";
-            }
-            else
-            {
-                dn = @"widget_monitoring_rec_big_night";
-                d = @"widget_monitoring_rec_big_day";
-            }
-        }
-        else if (isRecording)
-        {
-            //indicates (profile-based, configured in settings) recording (looks like is only active during nav in follow mode)
-            if (liveMonitoringEnabled)
-            {
-                dn = @"widget_live_monitoring_rec_small_night";
-                d = @"widget_live_monitoring_rec_small_day";
-            }
-            else
-            {
-                dn = @"widget_monitoring_rec_small_night";
-                d = @"widget_monitoring_rec_small_day";
-            }
-        }
-        else
-        {
-            dn = @"widget_monitoring_rec_inactive_night";
-            d = @"widget_monitoring_rec_inactive_day";
-        }
-        
-        [monitoringControlWeak setText:txt subtext:subtxt];
-        [monitoringControlWeak setIcons:d widgetNightIcon:dn];
-        if ((last != lastUpdateTime) && (globalRecord || isRecording))
-        {
-            lastUpdateTime = last;
-            //blink implementation with 2 indicator states (global logging + profile/navigation logging)
-            if (liveMonitoringEnabled)
-            {
-                dn = @"widget_live_monitoring_rec_small_night";
-                d = @"widget_live_monitoring_rec_small_day";
-            }
-            else
-            {
-                dn = @"widget_monitoring_rec_small_night";
-                d = @"widget_monitoring_rec_small_day";
-            }
-            [monitoringControlWeak setIcons:d widgetNightIcon:dn];
-            
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                NSString *dn;
-                NSString *d;
-                if (globalRecord)
-                {
-                    if (liveMonitoringEnabled)
-                    {
-                        dn = @"widget_live_monitoring_rec_big_night";
-                        d = @"widget_live_monitoring_rec_big_day";
-                    } else
-                    {
-                        dn = @"widget_monitoring_rec_big_night";
-                        d = @"widget_monitoring_rec_big_day";
-                    }
-                }
-                else
-                {
-                    if (liveMonitoringEnabled)
-                    {
-                        dn = @"widget_live_monitoring_rec_small_night";
-                        d = @"widget_live_monitoring_rec_small_day";
-                    }
-                    else
-                    {
-                        dn = @"widget_monitoring_rec_small_night";
-                        d = @"widget_monitoring_rec_small_day";
-                    }
-                }
-                [monitoringControlWeak setIcons:d widgetNightIcon:dn];
-            });
-        }
-        return YES;
-    };
-    
-    [_monitoringControl updateInfo];
-    
-    _monitoringControl.onClickFunction = ^(id sender) {
-        [pluginWeak controlDialog:true];
-    };
-
-    return _monitoringControl;
 }
 
 - (void) controlDialog:(BOOL)showTrackSelection
@@ -277,12 +164,12 @@
                     }
                     case 2:
                     {
-                        [_recHelper startNewSegment];
+                        [_savingTrackHelper startNewSegment];
                         break;
                     }
                     case 3:
                     {
-                        if ([_recHelper hasDataToSave] && _recHelper.distance < 10.0)
+                        if ([_savingTrackHelper hasDataToSave] && _savingTrackHelper.distance < 10.0)
                         {
                             [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"track_save_short_q")
                                                                        titleIcon:@"ic_custom_route"
@@ -293,7 +180,7 @@
                                 
                                     _settings.mapSettingTrackRecording = NO;
                                     [self saveTrack:YES];
-                                    [_monitoringControl updateInfo];
+                                    [_distanceWidget updateInfo];
                             }];
                         }
                         else
@@ -306,12 +193,12 @@
                     default:
                         break;
                 }
-                [_monitoringControl updateInfo];
+                [_distanceWidget updateInfo];
         }];
     }
     else
     {
-        if ([_recHelper hasData])
+        if ([_savingTrackHelper hasData])
         {
             [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"track_recording")
                                                        titleIcon:@"ic_custom_route"
@@ -323,7 +210,7 @@
                 switch (selectedIndex) {
                     case 0:
                     {
-                        [_recHelper startNewSegment];
+                        [_savingTrackHelper startNewSegment];
                         _settings.mapSettingTrackRecording = YES;
                         break;
                     }
@@ -340,18 +227,18 @@
                                                                  cancelTitle:OALocalizedString(@"shared_string_no")
                                                                    doneTitle:OALocalizedString(@"shared_string_yes")
                                                             doneColpletition:^{
-                            [_recHelper clearData];
+                            [_savingTrackHelper clearData];
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 [[self getMapViewController] hideContextPinMarker];
                                 [[self getMapViewController] hideRecGpxTrack];
-                                [_monitoringControl updateInfo];
+                                [_distanceWidget updateInfo];
                             });
                         }];
                         break;
                     }
                     case 3:
                     {
-                        if ([_recHelper hasDataToSave] && _recHelper.distance < 10.0)
+                        if ([_savingTrackHelper hasDataToSave] && _savingTrackHelper.distance < 10.0)
                         {
                             [OAAlertBottomSheetViewController showAlertWithTitle:nil
                                                                        titleIcon:nil
@@ -360,7 +247,7 @@
                                                                        doneTitle:OALocalizedString(@"shared_string_yes")
                                                                 doneColpletition:^{
                                 [self saveTrack:NO];
-                                [_monitoringControl updateInfo];
+                                [_distanceWidget updateInfo];
                             }];
                         }
                         else
@@ -373,7 +260,7 @@
                     default:
                         break;
                 }
-                [_monitoringControl updateInfo];
+                [_distanceWidget updateInfo];
             }];
         }
         else
@@ -388,7 +275,7 @@
 
                     [_settings.mapSettingShowRecordingTrack set:showOnMap];
                     _settings.mapSettingTrackRecording = YES;
-                    [_monitoringControl updateInfo];
+                    [_distanceWidget updateInfo];
                 }];
                 
                 [bottomSheet presentInViewController:OARootViewController.instance];
@@ -397,20 +284,20 @@
             {
                 _settings.mapSettingTrackRecording = YES;
             }
-            [_monitoringControl updateInfo];
+            [_distanceWidget updateInfo];
         }
     }
 }
 
 - (void) saveTrack:(BOOL)askForRec
 {
-    if ([_recHelper hasDataToSave])
-        [_recHelper saveDataToGpx];
+    if ([_savingTrackHelper hasDataToSave])
+        [_savingTrackHelper saveDataToGpx];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [[self getMapViewController] hideRecGpxTrack];
         [[self getMapViewController] hideContextPinMarker];
-        [_monitoringControl updateInfo];
+        [_distanceWidget updateInfo];
     });
     
     OAMapPanelViewController *mapPanelViewController = [self getMapPanelViewController];

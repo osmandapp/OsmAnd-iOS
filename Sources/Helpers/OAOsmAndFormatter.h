@@ -55,5 +55,6 @@
 + (NSString *) getFormattedCoordinatesWithLat:(double)lat lon:(double)lon outputFormat:(NSInteger)outputFormat;
 + (NSString *) getFormattedDistanceInterval:(double)interval;
 + (NSString *) getFormattedOsmTagValue:(NSString *)tagValue;
++ (NSString *) formatDuration:(long)seconds fullForm:(BOOL) fullForm;
 
 @end

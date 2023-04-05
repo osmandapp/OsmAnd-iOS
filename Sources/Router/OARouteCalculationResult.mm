@@ -1219,16 +1219,15 @@
             auto y31 = res->object->pointsY[intId];
             CLLocation *loc = [[CLLocation alloc] initWithLatitude:get31LatitudeY(y31) longitude:get31LongitudeX(x31)];
             OAAlarmInfo *info = [OAAlarmInfo createAlarmInfo:typeRule locInd:locInd coordinate:loc.coordinate];
-            if(info)
-            {
-                if(info.type == AIT_TRAFFIC_CALMING &&
-                   !res->object->isDirectionApplicable(res->isForwardDirection(), intId))
-                {
+            // For STOP first check if it has directional info
+            if (info) {
+                BOOL forward = res->isForwardDirection();
+                BOOL directionApplicable = res->object->isDirectionApplicable(forward, intId,
+                        info.type == AIT_STOP ? res->getStartPointIndex() : -1, res->getEndPointIndex());
+                if (!directionApplicable) {
                     continue;
                 }
-                // For STOP first check if it has directional info
-                if (!(info.type == AIT_STOP && !res->object->isStopApplicable(res->isForwardDirection(), intId, res->getStartPointIndex(), res->getEndPointIndex())))
-                    [alarms addObject:info];
+                [alarms addObject:info];
             }
         }
     }

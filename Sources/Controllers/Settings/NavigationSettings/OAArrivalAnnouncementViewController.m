@@ -57,7 +57,7 @@
 - (void)setupCustomLargeTitleView
 {
     NSString *text = OALocalizedString(@"announcement_time_descr");
-    CGFloat textWidth = DeviceScreenWidth - (kSidePadding + [OAUtilities getLeftMargin]) * 2;
+    CGFloat textWidth = (OAUtilities.isIPad && OAUtilities.isLandscape ? self.tableView.frame.size.width : DeviceScreenWidth) - (kSidePadding + [OAUtilities getLeftMargin]) * 2;
     CGFloat textHeight = [OAUtilities heightForHeaderViewText:text width:textWidth font:kHeaderDescriptionFontSmall lineSpacing:6.0];
 
     UIView *topImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, .5)];
@@ -68,6 +68,8 @@
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, image.size.height * aspectRatio)];
     imageView.image = image;
     imageView.contentMode = UIViewContentModeScaleAspectFit;
+    if (OAUtilities.isIPad)
+        imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
     UIView *imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, DeviceScreenWidth, imageView.frame.size.height)];
     imageBackgroundView.backgroundColor = UIColor.whiteColor;
@@ -84,7 +86,7 @@
                                                                          NSFontAttributeName : kHeaderDescriptionFontSmall,
                                                                          NSBackgroundColorAttributeName : UIColor.clearColor }];
     label.numberOfLines = 0;
-    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    label.autoresizingMask = OAUtilities.isIPad && OAUtilities.isLandscape ? UIViewAutoresizingNone : UIViewAutoresizingFlexibleWidth;
 
     CGFloat headerHeight = label.frame.origin.y + label.frame.size.height + 26.;
     UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, headerHeight)];

@@ -2792,12 +2792,12 @@
 "uninstall_speed_cameras" = "Desinstalar radares de velocidade";
 "lang_zh-Hans" = "Chinês (simplificado)";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
-"speak_gps_signal_status" = "Anunciar a perda e recuperação do sinal GPS";
-"announce_when_exceeded" = "Anunciar ao exceder";
+"speak_gps_signal_status" = "Avisar perda ou recuperação do sinal GPS";
+"announce_when_exceeded" = "Avisar quando ultrapassar limite de velocidade";
 "announcement_time_descr" = "O tempo de anúncio de diferentes indicações de voz depende do tipo de aviso, da velocidade de navegação atual e da velocidade de navegação predeterminada.";
 "ios_release_4_3" = "• Animação suave nas mudanças de localização durante o movimento\n• CarPlay: adicionadas vias de trânsito (vulgo \"faixas\"), visualização 2.5D, problemas de som corrigidos em conexões por Bluetooth\n• Introdução de novos planos de compra: assinaturas \"OsmAnd Pro\" com acesso a todos os recursos e compra do plano \"Maps+\" com descarregamentos ilimitados de mapas e acesso a complementos (plug-ins) pagos.\n• Adicionada funcionalidade de cópia de segurança na nuvem e previsão do tempo off-line para utilizadores OsmAnd Pro\n• Novo ecrã \"Compra\" mais prático com a lista de todas as compras\n• Benefícios para colaboradores ativos do OpenStreetMap.org\n• Os trilhos agora podem ser coloridos por altitude, velocidade ou inclinação\n• Os mapas off-line estão agora acessíveis através da aplicação do Android \"Ficheiros\"\n• Favoritos: geração de cópias de segurança locais adicionadas após cada alteração, estas cópias de segurança estão acessíveis a partir da aplicação do Android \"Ficheiros\"\n• POI guardado nos favoritos irá armazenar e mostrar todos os dados do POI mesmo sem um mapa off-line\n• GPX com suporte para link, cmt, desc tags e para quaisquer extensões personalizadas\n• Modo adicionado no botão \"Bússola\"\n• Corrigido problema com o formato de Coordenadas UTM\n• Corrigido problema com pontos intermédios na navegação\n";
 "exit_number" = "Número da saída";
-"speak_route_recalculation" = "Anunciar o recálculo da rota";
+"speak_route_recalculation" = "Avisar recálculo da rota";
 "announcement_time_title" = "Tempo de anúncio";
 "user_points" = "Pontos do utilizador";
 "announcement_time_intervals" = "Intervalos de tempo e distância";

@@ -122,7 +122,26 @@
 - (NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *) putTypes:(NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *)acceptedTypes
 {
     if (self.isAdditional)
-        return [_parentType putTypes:acceptedTypes];
+    {
+        [_parentType putTypes:acceptedTypes];
+        if (_filterOnly)
+        {
+            NSMutableSet<NSString *> *set = [acceptedTypes objectForKey:_category];
+            for (OAPOIType *pt in _category.poiTypes)
+            {
+                NSArray<OAPOIType *> *poiAdditionals = pt.poiAdditionals;
+                if (!poiAdditionals)
+                    continue;
+                
+                for (OAPOIType *poiType in poiAdditionals)
+                {
+                    if ([poiType.name isEqualToString:self.name])
+                        [set addObject:pt.name];
+                }
+            }
+        }
+        return acceptedTypes;
+    }
 
     OAPOIType *poiType = self.referenceType ? self.referenceType : self;
     if (![acceptedTypes objectForKey:poiType.category])

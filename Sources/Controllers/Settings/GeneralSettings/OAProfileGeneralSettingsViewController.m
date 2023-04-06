@@ -242,6 +242,7 @@
         @"title" : OALocalizedString(@"rotate_map_to"),
         @"value" : rotateMapValue,
         @"icon" : rotateMapIcon,
+        @"tint" : @NO,
         @"key" : @"map_orientation",
     }];
     [appearanceArr addObject:@{
@@ -338,9 +339,13 @@
         }
         if (cell)
         {
+            if ([item[@"tint"] boolValue])
+                cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            else
+                cell.leftIconView.image = [UIImage imageNamed:item[@"icon"]];
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            
         }
         return cell;
     }

@@ -1351,7 +1351,9 @@
         
         nameFilter = phrase.getUnknownSearchPhrase;
     }
-    else if (_typesAPI != nil && phrase.isFirstUnknownSearchWordComplete)
+    else if (_typesAPI != nil && phrase.isFirstUnknownSearchWordComplete && (phrase.isFirstUnknownSearchWordComplete
+                                                                                || (resultMatcher.getRequestResults.count > 1
+                                                                                    && resultMatcher.getRequestResults.firstObject.objectType == POI_TYPE)))
     {
         OANameStringMatcher *nm = phrase.getFirstUnknownNameStringMatcher;
         OANameStringMatcher *nmAdditional = [[OANameStringMatcher alloc] initWithNamePart:phrase.getFirstUnknownSearchWord mode:CHECK_EQUALS_FROM_SPACE];

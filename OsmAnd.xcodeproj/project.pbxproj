@@ -13841,8 +13841,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BBA3AFEB197FC4BB0039D991 /* Build configuration list for PBXNativeTarget "OsmAnd Maps" */;
 			buildPhases = (
-				8401FCFC1EE4723B00238915 /* Copy phrases */,
 				3CF6A0D6E82F1156F659B9F4 /* [CP] Check Pods Manifest.lock */,
+				8401FCFC1EE4723B00238915 /* Copy phrases */,
 				BBA3AF34197FC4BB0039D991 /* Sources */,
 				BBA3AF66197FC4BB0039D991 /* Frameworks */,
 				DA8713222994F6760087BC7F /* Download regions.ocbf */,
@@ -17778,7 +17778,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.4.1;
-				OBJROOT = $SYMROOT;
+				OBJROOT = "$SYMROOT";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -17838,7 +17838,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.4.1;
-				OBJROOT = $SYMROOT;
+				OBJROOT = "$SYMROOT";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",

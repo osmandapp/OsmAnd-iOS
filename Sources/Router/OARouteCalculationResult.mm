@@ -1220,8 +1220,15 @@
             CLLocation *loc = [[CLLocation alloc] initWithLatitude:get31LatitudeY(y31) longitude:get31LongitudeX(x31)];
             OAAlarmInfo *info = [OAAlarmInfo createAlarmInfo:typeRule locInd:locInd coordinate:loc.coordinate];
             // For STOP first check if it has directional info
-            if (info && !(info.type == AIT_STOP && !res->object->isStopApplicable(res->isForwardDirection(), intId, res->getStartPointIndex(), res->getEndPointIndex())))
+            if (info) {
+                BOOL forward = res->isForwardDirection();
+                BOOL directionApplicable = res->object->isDirectionApplicable(forward, intId,
+                        info.type == AIT_STOP ? res->getStartPointIndex() : -1, res->getEndPointIndex());
+                if (!directionApplicable) {
+                    continue;
+                }
                 [alarms addObject:info];
+            }
         }
     }
 }

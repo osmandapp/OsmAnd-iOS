@@ -457,6 +457,8 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (NSArray *) rowAndIndexForType:(NSString *)type fileName:(NSString *)fileName
 {
+    if (_itemSection == -1)
+        return nil;
     EOASettingsItemType intType = [OASettingsItemType parseType:type];
     OATableSectionData *section = [_data sectionDataForIndex:_itemsSection];
     for (NSInteger i = 0; i < section.rowCount; i++)

@@ -179,7 +179,6 @@
             else
                 _poiUiNameFilter = [f getNameAmenityFilter:f.filterByName];
 
-            QSet<QString> *searchedPois = new QSet<QString>();
             OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter =
                     [=](const std::shared_ptr<const OsmAnd::Amenity> &amenity)
                     {

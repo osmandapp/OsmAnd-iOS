@@ -558,7 +558,7 @@
 "plugin_ski_descr" = "Navrženo pro navigaci v oblastech zimních sportů: Sjezdovky, vleky a běžkařské tratě jsou označeny barevnými čarami, které označují obtížnost. Chcete-li tento modul používat, povolte jej a přejděte také do \"Nastavení mapy\" a vyberte styl mapy \"Zima a lyžování\".";
 "record_plugin_name" = "Záznam cesty";
 "product_desc_track_recording" = "Zaznamenávejte a ukládejte své cesty jako GPX stopy";
-"record_plugin_description" = "Zaznamenávejte své výlety nebo tréninky a analyzujte data z hlediska rychlosti, počtu stoupání a klesání, výškového profilu atd. Zaznamenané trasy lze archivovat, sdílet s přáteli, upravovat a následně zpracovávat.\n\nDalší informace naleznete na adrese https://osmand.net/docs/user/plugins/trip-recording .";
+"record_plugin_description" = "Zaznamenávejte své výlety nebo tréninky a analyzujte data z hlediska rychlosti, stoupání a klesání, výškového profilu atd. Zaznamenané trasy lze archivovat, sdílet s přáteli, upravovat a dále zpracovávat.\n\nDalší informace naleznete na adrese https://osmand.net/docs/user/plugins/trip-recording .";
 "product_title_trip_planning" = "Plánování cesty";
 "product_desc_trip_planning" = "Pomocí tohoto modulu si naplánujete svůj výlet, přidáte trasové body a změříte vzdálenost do cíle";
 "product_desc_ext_trip_planning" = "Modul pro plánování trasy vám umožní vytvořit si cestu na mapě, uložit ji, změřit vzdálenost mezi body spojenými přímkami atd. Vytvořeno pro předběžné plánování cesty, nikoli pro důkladné budování trasy.";
@@ -2038,7 +2038,7 @@
 "suggested_maps_descr" = "Tyto mapy jsou potřebné pro modul.";
 "suggested_maps" = "Navrhované mapy";
 "product_desc_openplacereviews" = "Sdílejte své názory na veřejná místa";
-"plugin_mapillary_descr" = "Snímky pohledů na úrovni ulice. Přispět můžete i vy. Chcete-li zobrazit existující data jako mapovou vrstvu, zapněte v nabídce \"Konfigurace mapy\" možnost \"Snímky na úrovni ulic\".";
+"plugin_mapillary_descr" = "Snímky z úrovně ulice. Přispět můžete i vy. Chcete-li zobrazit existující data jako mapovou vrstvu, zapněte v nabídce \"Nastavení mapy\" možnost \"Snímky z úrovně ulice\".";
 "product_desc_mapillary" = "Snímky z úrovně ulice, abyste si mohli prohlédnout okolí";
 "shared_string_feet" = "stopy";
 "srtm_download_list_help_message" = "OsmAnd poskytuje data vrstevnic vmetrech a stopách. Pro změnu formátu budete muset soubor znovu stáhnout.";
@@ -2357,7 +2357,7 @@
 "purchases_feature_desc_terrain" = "Vrstevnice, mapy se stínováním kopců a sklonem svahů s barevným zvýrazněním vrcholů a nížin.";
 "nautical_depth" = "Námořní hloubka";
 "purchases_feature_desc_nautical" = "Získejte přístup k informacím o námořní hloubce";
-"osmand_development_plugin_description" = "Poskytuje funkce pro testování a ladění aplikace OsmAnd: simulaci navigačních tras, sledování vykreslování obrazovky, kontrolu výkonu atd. Tento zásuvný modul není pro běžné používání aplikace vyžadován.";
+"osmand_development_plugin_description" = "Poskytuje funkce pro testování a ladění aplikace OsmAnd: simulaci navigačních tras, sledování vykreslování obrazovky, kontrolu výkonu atd. Tento modul není pro běžné používání aplikace vyžadován.";
 "shared_string_learn_more" = "Zjistit více";
 "osm_live_subscriptions" = "Předplatné";
 "copy_address" = "Kopírovat adresu";
@@ -2438,10 +2438,10 @@
 "cloud_hide" = "Skrýt oblačnost";
 "toggle_cloud" = "Zobrazit/skrýt - Vrstva oblačnosti";
 "simulation_real_mode_title" = "Realistická simulace";
-"simulation_constant_mode_desc" = "Simulace bude provedena s konstantní zvolenou rychlostí.";
+"simulation_constant_mode_desc" = "Simulace bude provedena se zvolenou konstantní rychlostí.";
 "simulation_constant_mode_title" = "Stálá rychlost";
 "simulation_preview_mode_title" = "Režim rychlého náhledu";
-"speed_mode" = "Režim rychlosti";
+"speed_mode" = "Rychlostní režim";
 "shared_string_clear_offline_cache" = "Smazat offline mezipaměť";
 "shared_string_total_size" = "Celková velikost";
 "wind_hide" = "Skrýt vítr";

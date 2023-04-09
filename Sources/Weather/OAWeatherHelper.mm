@@ -23,7 +23,6 @@
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/FunctorQueryController.h>
 #include <OsmAndCore/WorldRegions.h>
-#include <qqueue.h>
 
 #define kWeatherForecastDownloadStatePrefix @"forecast_download_state_"
 #define kWeatherForecastLastUpdatePrefix @"forecast_last_update_"
@@ -33,8 +32,6 @@
 
 #define kTileSize 40000
 #define kForecastDatesCount (24 + (6 * 8) + 1)
-
-#define kSimultaneousTasksLimit 30
 
 #define kWeatherForecastFrequencyHalfDay 43200
 #define kWeatherForecastFrequencyDay 86400
@@ -47,10 +44,6 @@
     NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, id> *> *_offlineForecastsInfo;
     dispatch_queue_t _forecastSerialDownloader;
     dispatch_group_t _forecastGroupDownloader;
-    
-    QMutex _downloadsLock;
-    QHash<QString, QQueue<OsmAnd::WeatherTileResourcesManager::DownloadGeoTileRequest>> _requestsByRegion;
-    QHash<QString, int> _activeDownloadsByRegion;
 }
 
 @synthesize weatherSizeCalculatedObserver = _weatherSizeCalculatedObserver;
@@ -249,7 +242,6 @@
         NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
         calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
         NSDate *date = [calendar startOfDayForDate:[NSDate date]];
-        QQueue<OsmAnd::WeatherTileResourcesManager::DownloadGeoTileRequest> requests;
         for (NSInteger i = 0; i < kForecastDatesCount; i++)
         {
             int64_t dateTime = date.timeIntervalSince1970 * 1000;
@@ -261,68 +253,27 @@
             request.forceDownload = true;
             request.localData = true;
             request.queryController = queryController;
-            requests.enqueue(request);
-            
+            OsmAnd::WeatherTileResourcesManager::DownloadGeoTilesAsyncCallback callback =
+                                 [self, region]
+                                 (bool succeeded,
+                                  const uint64_t downloadedTiles,
+                                  const uint64_t totalTiles,
+                                  const std::shared_ptr<OsmAnd::Metric> &metric)
+                                 {
+                                     dispatch_async(dispatch_get_main_queue(), ^{
+                                         [self onProgressUpdate:region success:succeeded];
+                                     });
+                                 };
+
+            _weatherResourcesManager->downloadGeoTilesAsync(request, callback);
+
             date = [calendar dateByAddingUnit:NSCalendarUnitHour value:(i < 24 ? 1 : 3) toDate:date options:0];
-        }
-        const auto regionId = QString::fromNSString(region.regionId);
-        _requestsByRegion[regionId] = requests;
-        _activeDownloadsByRegion[regionId] = 0;
-        
-        for (NSInteger i = 0; i < kSimultaneousTasksLimit; i++)
-        {
-            [self enqueTask:region];
         }
     };
 
     dispatch_group_notify(_forecastGroupDownloader, _forecastSerialDownloader, ^{
         dispatch_async(_forecastSerialDownloader, forecastDownload);
     });
-}
-
-- (void) enqueTask:(OAWorldRegion *)region
-{
-    QMutexLocker scopedLocker(&_downloadsLock);
-    const auto regionId = QString::fromNSString(region.regionId);
-    auto &requests = _requestsByRegion[regionId];
-    int activeDownloads = _activeDownloadsByRegion[regionId];
-    if (activeDownloads < kSimultaneousTasksLimit && !requests.isEmpty())
-    {
-        activeDownloads += 1;
-        const auto &request = requests.dequeue();
-        if (request.queryController->isAborted())
-        {
-            requests.clear();
-            _activeDownloadsByRegion[regionId] = 0;
-            return;
-        }
-        OsmAnd::WeatherTileResourcesManager::DownloadGeoTilesAsyncCallback callback =
-                [self, region]
-                (bool succeeded,
-                 const uint64_t downloadedTiles,
-                 const uint64_t totalTiles,
-                 const std::shared_ptr<OsmAnd::Metric> &metric)
-                {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self onProgressUpdate:region success:succeeded];
-                    });
-                    if (downloadedTiles == totalTiles)
-                    {
-                        const auto regId = QString::fromNSString(region.regionId);
-                        int activeDownloads = _activeDownloadsByRegion[regId];
-                        activeDownloads -= 1;
-                        _activeDownloadsByRegion[regId] = activeDownloads;
-                        [self enqueTask:region];
-                    }
-                };
-        _weatherResourcesManager->downloadGeoTilesAsync(request, callback);
-        _activeDownloadsByRegion[regionId] = activeDownloads;
-    }
-    else if (requests.isEmpty())
-    {
-        _requestsByRegion.remove(regionId);
-        _activeDownloadsByRegion.remove(regionId);
-    }
 }
 
 - (void)prepareToStopDownloading:(NSString *)regionId

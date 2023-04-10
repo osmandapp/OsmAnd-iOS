@@ -369,8 +369,6 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
             cell.valueLabel.text = item.descr;
             cell.accessibilityLabel = item.title;
             cell.accessibilityValue = item.descr;
-//            cell.backgroundColor = UIColor.redColor;
-//            cell.valueLabel.textAlignment = NSTextAlignmentLeft;
         }
         return cell;
     }

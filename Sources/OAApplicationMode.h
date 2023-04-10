@@ -65,6 +65,7 @@
 + (OAApplicationMode *) saveProfile:(OAApplicationModeBuilder *)appMode;
 + (void) changeProfileAvailability:(OAApplicationMode *) mode isSelected:(BOOL) isSelected;
 + (BOOL) isProfileNameAvailable:(NSString *)profileName;
++ (OAApplicationMode *) getFirstAvailableNavigationMode;
 
 - (instancetype)initWithName:(NSString *)name stringKey:(NSString *)stringKey;
 

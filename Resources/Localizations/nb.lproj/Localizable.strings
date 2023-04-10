@@ -2581,3 +2581,4 @@
 "delete_tracks_bottom_sheet_description_bold_part" = "%d spor?";
 "delete_tracks_bottom_sheet_title" = "Slett spor?";
 "icon_group_service" = "Tjeneste";
+"weather_forecast_is_outdated" = "Værmeldingen er utdatert.";

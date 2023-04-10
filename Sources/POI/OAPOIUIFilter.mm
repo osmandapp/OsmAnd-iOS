@@ -388,7 +388,7 @@
             return YES;
         }];
     }
-    NSMutableString *nmFilter = [NSMutableString string];
+    NSMutableArray<NSString *> *unknownFilters = [NSMutableArray array];
     NSArray<NSString *> *items = [filter componentsSeparatedByString:@" "];
     BOOL allTime = NO;
     BOOL open = NO;
@@ -417,23 +417,22 @@
             }
             else
             {
-                [nmFilter appendString:s];
-                [nmFilter appendString:@" "];
+                [unknownFilters addObject:s];
             }
         }
     }
-    return [self getNameFilterInternal:nmFilter allTime:allTime open:open poiAdditionals:poiAdditionalsFilter];
+    return [self getNameFilterInternal:unknownFilters allTime:allTime open:open poiAdditionals:poiAdditionalsFilter];
 }
 
 - (OAAmenityExtendedNameFilter *) getNameAmenityFilter:(NSString *)filter
 {
-    if (!filter || filter.length == 0)
+    if (filter.length == 0)
     {
         return [[OAAmenityExtendedNameFilter alloc] initWithAcceptAmenityFunc:^BOOL(std::shared_ptr<const OsmAnd::Amenity> amenity, QHash<QString, QString> values, OAPOIType *type) {
             return YES;
         }];
     }
-    NSMutableString *nmFilter = [NSMutableString string];
+    NSMutableArray<NSString *> *unknownFilters = [NSMutableArray array];
     NSArray<NSString *> *items = [filter componentsSeparatedByString:@" "];
     BOOL allTime = NO;
     BOOL open = NO;
@@ -462,22 +461,18 @@
             }
             else
             {
-                [nmFilter appendString:s];
-                [nmFilter appendString:@" "];
+                [unknownFilters addObject:s];
             }
         }
     }
-    return [self getNameAmenityFilterInternal:nmFilter allTime:allTime open:open poiAdditionals:poiAdditionalsFilter];
+    return [self getNameAmenityFilterInternal:unknownFilters allTime:allTime open:open poiAdditionals:poiAdditionalsFilter];
 }
 
-- (OAAmenityNameFilter *) getNameFilterInternal:(NSMutableString *)nmFilter
+- (OAAmenityNameFilter *) getNameFilterInternal:(NSArray<NSString *> *)unknownFilters
                                         allTime:(BOOL)allTime
                                            open:(BOOL)open
                                  poiAdditionals:(NSArray<OAPOIType *> *)selectedFilters
 {
-    OANameStringMatcher __block *sm = nmFilter.length > 0 ?
-				[[OANameStringMatcher alloc] initWithNamePart:[nmFilter trim] mode:CHECK_STARTS_FROM_SPACE] : nil;
-
     return [[OAAmenityNameFilter alloc] initWithAcceptFunc:^BOOL(OAPOI *amenity) {
         if (allTime)
         {
@@ -500,28 +495,19 @@
             }
         }
 
-        if (sm)
-        {
-            NSString *lower = [poiHelper getPoiStringWithoutType:amenity];
-            if (![sm matches:lower] && ![sm matchesMap:amenity.localizedNames.allValues])
-                return NO;
-        }
-
-        if (![self acceptedAnyFilterOfEachCategory:amenity selectedFilters:selectedFilters])
+        NSString *nameFilter = [self extractNameFilterForPoi:amenity unknownFilters:unknownFilters];
+        if (![self matchesAnyName:amenity nameFilter:nameFilter])
             return NO;
 
-        return YES;
+        return [self acceptedAnyFilterOfEachCategory:amenity selectedFilters:selectedFilters];
     }];
 }
 
-- (OAAmenityExtendedNameFilter *) getNameAmenityFilterInternal:(NSMutableString *)nmFilter
+- (OAAmenityExtendedNameFilter *) getNameAmenityFilterInternal:(NSArray<NSString *> *)unknownFilters
                                                allTime:(BOOL)allTime
                                                   open:(BOOL)open
                                         poiAdditionals:(NSArray<OAPOIType *> *)selectedFilters
 {
-    OANameStringMatcher __block *sm = nmFilter.length > 0 ?
-                [[OANameStringMatcher alloc] initWithNamePart:[nmFilter trim] mode:CHECK_STARTS_FROM_SPACE] : nil;
-    
     return [[OAAmenityExtendedNameFilter alloc] initWithAcceptAmenityFunc:^BOOL(std::shared_ptr<const OsmAnd::Amenity> amenity, QHash<QString, QString> values, OAPOIType *type) {
         
         QString openingHours = nullptr;
@@ -549,35 +535,91 @@
             }
         }
         
-        if (sm)
-        {
-            NSString *name = amenity->nativeName.toNSString();;
-            NSString *typeName = [[OAPOIHelper sharedInstance] getPhrase:type];;
-            NSString *poiStringWithoutType;
-            
-            if (typeName && [name indexOf:typeName] != -1)
-            {
-                poiStringWithoutType = name;
-            }
-            if (name.length == 0)
-                poiStringWithoutType = typeName;
-            poiStringWithoutType = [NSString stringWithFormat:@"%@ %@", typeName, name];
-            
-            NSMutableArray *names = [NSMutableArray array];
-            for (const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
-            {
-                [names addObject:entry.value().toNSString()];
-            }
-            
-            if (![sm matches:poiStringWithoutType] && ![sm matchesMap:names])
-                return NO;
-        }
-        
-        if (![self acceptedAmeintyAnyFilterOfEachCategory:amenity values:values selectedFilters:selectedFilters])
+        NSString *nameFilter = [self extractNameFilter:amenity unknownFilters:unknownFilters];
+        if (![self matchesAnyAmenityName:amenity type:type nameFilter:nameFilter])
             return NO;
         
-        return YES;
+        return [self acceptedAmeintyAnyFilterOfEachCategory:amenity values:values selectedFilters:selectedFilters];
     }];
+}
+
+- (BOOL) matchesAnyName:(OAPOI *)amenity nameFilter:(NSString *)nameFilter
+{
+    if (nameFilter.length == 0)
+        return YES;
+    
+    OANameStringMatcher *sm = [[OANameStringMatcher alloc] initWithNamePart:[nameFilter trim] mode:CHECK_CONTAINS];
+    
+    NSString *lower = [poiHelper getPoiStringWithoutType:amenity];
+    return [sm matches:lower] || [sm matchesMap:amenity.localizedNames.allValues];
+}
+
+- (BOOL) matchesAnyAmenityName:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity type:(OAPOIType *)type nameFilter:(NSString *)nameFilter
+{
+    if (nameFilter.length == 0)
+        return YES;
+    
+    OANameStringMatcher *sm = [[OANameStringMatcher alloc] initWithNamePart:[nameFilter trim] mode:CHECK_CONTAINS];
+    
+    
+    NSString *name = amenity->nativeName.toNSString();;
+    NSString *typeName = [[OAPOIHelper sharedInstance] getPhrase:type];
+    NSString *poiStringWithoutType;
+
+    if (typeName && [name indexOf:typeName] != -1)
+    {
+        poiStringWithoutType = name;
+    }
+    if (name.length == 0)
+        poiStringWithoutType = typeName;
+    poiStringWithoutType = [NSString stringWithFormat:@"%@ %@", typeName, name];
+
+    NSMutableArray *names = [NSMutableArray array];
+    for (const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
+    {
+        [names addObject:entry.value().toNSString()];
+    }
+
+    return [sm matches:poiStringWithoutType] || [sm matchesMap:names];
+}
+
+- (NSString *) extractNameFilterForPoi:(OAPOI *)amenity unknownFilters:(NSArray<NSString *> *)unknownFilters
+{
+    if (!unknownFilters)
+        return @"";
+    
+    NSMutableString *nameFilter = [NSMutableString string];
+    for (NSString *filter in unknownFilters)
+    {
+        NSString *formattedFilter = [filter stringByReplacingOccurrencesOfString:@":" withString:@"_"].lowerCase;
+        if (!amenity.getAdditionalInfo[formattedFilter])
+        {
+            [nameFilter appendString:filter];
+            [nameFilter appendString:@" "];
+        }
+    }
+    return nameFilter;
+}
+
+- (NSString *) extractNameFilter:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity unknownFilters:(NSArray<NSString *> *)unknownFilters
+{
+    if (!unknownFilters)
+        return @"";
+    
+    NSMutableString *nameFilter = [NSMutableString string];
+    NSMutableDictionary *additionalInfo = [NSMutableDictionary dictionary];
+    [OAPOIHelper processDecodedValues:amenity->getDecodedValues() content:nil values:additionalInfo];
+    for (NSString *filter in unknownFilters)
+    {
+        NSString *formattedFilter = [filter stringByReplacingOccurrencesOfString:@":" withString:@"_"].lowerCase;
+        if (!additionalInfo[formattedFilter])
+        {
+            [nameFilter appendString:filter];
+            [nameFilter appendString:@" "];
+        }
+    }
+    
+    return nameFilter;
 }
 
 - (BOOL)acceptedAnyFilterOfEachCategory:(OAPOI *)amenity

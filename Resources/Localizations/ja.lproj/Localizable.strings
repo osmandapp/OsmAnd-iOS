@@ -218,11 +218,11 @@
 "app_mode_motorcycle" = "オートバイ";
 "app_mode_boat" = "船舶・舟艇";
 "app_mode_aircraft" = "航空機";
-"gpx_option_calculate_first_last_segment" = "最初と最後の経路セグメントを利用しOsmAndエンジンでルートを計算する";
+"gpx_option_calculate_first_last_segment" = "最初と最後の経路分類を利用しOsmAndエンジンでルートを計算する";
 "gpx_option_from_start_point" = "経路全体を通過する";
 "gpx_option_reverse_route" = "経路を反転";
 "use_points_as_intermediates" = "地点間でルート計算する";
-"calculate_osmand_route_without_internet" = "インターネットを使用せずにOsmAnd経路セグメントを計算する";
+"calculate_osmand_route_without_internet" = "インターネットを使用せずにOsmAnd経路区分を計算する";
 "routing_settings_2" = "ナビゲーション設定";
 "impassable_road" = "避ける道の指定…";
 "impassable_road_desc" = "ルート検索やナビゲーション中に避けたい道路を選択します";
@@ -449,7 +449,7 @@
 "track_recording" = "経路記録";
 "shared_string_currently_recording_track" = "現在の経路を記録";
 "track_stop_rec" = "記録の停止";
-"gpx_start_new_segment" = "新しいセグメントの開始";
+"gpx_start_new_segment" = "新しい区分の開始";
 "save_current_track" = "現在の経路を保存";
 "save_current_track_descr" = "現在の経路を今すぐメモリーカードに保存します。";
 "track_continue_rec" = "記録の続行";
@@ -1244,7 +1244,7 @@
 "rendering_value_dark_brown_name" = "ダークブラウン";
 "rendering_attr_noAdminboundaries_name" = "境界";
 "rendering_attr_highway_class_service_name" = "アクセス道路、特定施設用道路";
-"routing_attr_short_way_description" = "最適化されたなるべく短いルート (省エネ)";
+"routing_attr_short_way_description" = "最適化されたなるべく短い(省エネ)ルートを選択します";
 "rendering_attr_piste_difficulty_connection_name" = "リフト間接続";
 "rendering_attr_piste_difficulty_intermediate_name" = "中級者向け";
 "rendering_attr_piste_type_nordic_name" = "ノルディック用";
@@ -1375,7 +1375,7 @@
 "routing_attr_no_new_routing_description" = "バージョン1.9で導入されたルート検索方法を使用しない";
 "routing_attr_prefer_motorway_description" = "高速道路を優先する";
 "rendering_value_darkyellow_name" = "ダークイエロー";
-"rendering_value_medium_name" = "中";
+"rendering_value_medium_name" = "中線";
 "rendering_value_black_name" = "黒";
 "rendering_attr_hmRendered_name" = "マップの詳細表示";
 "rendering_attr_piste_type_sleigh_name" = "牽引式そり乗り場";
@@ -1626,7 +1626,7 @@
 "recalculate_route" = "ルートの再計算";
 "routing_profile_straightline" = "直線";
 "routing_profile_ski" = "スキー";
-"base_profile_descr_public_transport" = "定期運行している鉄道やバスなど";
+"base_profile_descr_public_transport" = "定期運行している鉄道、バス、路面電車など";
 "routing_profile_direct_to" = "直接指示";
 "osmand_default_routing" = "OsmAndルーティング";
 "select_nav_profile_dialog_message" = "\'ナビゲーションタイプ\'では、利用可能なオフラインおよびオンラインルーティングエンジンの中から、ルートの計算方法を選択します。";
@@ -1717,7 +1717,7 @@
 "shared_string_profiles" = "プロファイル";
 "shared_string_poi_types" = "POIの種類";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"next_segment" = "次のセグメント";
+"next_segment" = "次の区分";
 "personal_category_name" = "パーソナル";
 "save_as_new_track" = "新しい経路として保存";
 "reverse_route" = "ルート反転";
@@ -1851,7 +1851,7 @@
 "none_point_error" = "少なくとも1つの地点を追加してください。";
 "gpx_saved_successfully" = "%@としてGPSファイルが保存されました";
 "plan_route_exit_message" = "計画したルートを保存せずにを終了してもよろしいですか？すべての変更が失われます。";
-"route_between_points_add_track_desc" = "新しいセグメントを追加するための経路ファイルを選択します。";
+"route_between_points_add_track_desc" = "新しい区分を追加するための経路ファイルを選択します。";
 "sort_last_modified" = "最終更新日";
 "plan_route_open_existing_track" = "既存の経路を開く";
 "track_is_saved" = "%@\nセーブされました！";
@@ -1859,10 +1859,10 @@
 "open_saved_track" = "保存された経路を開く";
 "simplified_track_description" = "ルートの線のみが保存され、経由地点はは削除されます。";
 "simplified_track" = "簡略化された経路";
-"join_segments" = "セグメントの接続";
+"join_segments" = "区分同士の接続";
 "prev_segs_recalc_descr" = "全ての先行セグメントは、選択したプロファイルを使用して再計算されます";
 "next_segs_recalc_descr" = "全ての後続セグメントは、選択したプロファイルを使用して再計算されます";
-"only_selected_segment_recalc" = "選択したセグメントのみ、選択したプロファイルを使用して再計算されます。";
+"only_selected_segment_recalc" = "選択した区分のみ、選択したプロファイルを使用して再計算されます。";
 "prev_segs_dist" = "全ての先行セグメント %@";
 "next_segs_dist" = "全ての後続セグメント %@";
 "prev_seg_dist" = "前のセグメント %@";
@@ -2055,7 +2055,7 @@
 "shared_string_custom" = "カスタム";
 "shared_string_width" = "幅";
 "shared_string_interval" = "間隔";
-"gpx_selection_segment_title" = "セグメント";
+"gpx_selection_segment_title" = "区分";
 "gpx_split_interval_none_descr" = "時間または距離で、必要な分割オプションを選択します。";
 "track_show_start_finish_icons" = "出発地点と目的地アイコンを表示";
 "points_delete_multiple" = "%d個の地点を削除しますか？";
@@ -2458,7 +2458,7 @@
 "recalc_angle_dialog_title" = "現在地とルート間の最小角度";
 "shared_string_added" = "追加しました";
 "upload_local_version" = "現在のバージョンをアップロード";
-"recalc_angle_dialog_descr" = "ルートの再計算が終わるまで、現在地と計算済みルートの間に余剰分の直線セグメントが表示されます";
+"recalc_angle_dialog_descr" = "ルートの再計算が終わるまで、現在地と計算済みルートの間に余剰分の直線区分が表示されます";
 "routing_attr_avoid_tunnels_description" = "移動時にトンネルを避けるようにします";
 "routing_attr_motor_type_description" = "エンジンの燃料タイプを選択します。これは、CO2の排出量を推定するために必要です。";
 "you_can_get_feature_as_part_of_pattern" = "%@プランの一部として\"%@\"を入手できます。比較:";
@@ -2561,12 +2561,12 @@
 "simulation_constant_mode_title" = "定速走行";
 "simulation_preview_mode_desc" = "シミュレーションの速度は直線区間で最大となり、交差点でのみ減速します。";
 "speed_mode" = "スピード重視モード";
-"mtb_segment_classification" = "セグメントの分類";
+"mtb_segment_classification" = "区分の分類";
 "weather_plugin_description" = "提供されるサービスは以下の通りです\n- 5つのレイヤーを備えた 24時間および 7日間の天気予報\n- 位置に応じたウィジェット\n- 温度/気圧の分布図\n\n気象データは、Global Forecast System (GFS、https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ) によって提供されています。";
 "rendering_attr_depthContourColorScheme_name" = "線の色";
 "show_borders_of_downloaded_maps" = "ダウンロードしたマップの境界線を表示";
 "purchases_feature_desc_cross_buy" = "追加料金なしで、さまざまなプラットフォーム(Android/iOS/ウェブ) からサブスクリプション機能を利用できます。";
-"rendering_attr_showMtbScaleIMBATrails_description" = "専用のマウンテンバイク トレイルを表示します。";
+"rendering_attr_showMtbScaleIMBATrails_description" = "指定されたマウンテンバイクトレイルを表示します。";
 "compass_visible_if_map_rotated" = "マップが回転している場合に表示";
 "rendering_attr_depthContourColorScheme_description" = "等深線の配色";
 "routing_attr_avoid_fords_description" = "浅瀬を避ける";
@@ -2592,7 +2592,7 @@
 "weather_pressure_inches_of_mercury" = "水銀柱インチ";
 "weather_pressure_millimeters_of_mercury" = "水銀柱ミリメートル";
 "rendering_attr_showMtbScale_name" = "MTBスケールを表示";
-"rendering_attr_showMtbScaleIMBATrails_name" = "MTBのIMBAトレイルを表示";
+"rendering_attr_showMtbScaleIMBATrails_name" = "MTBのIMBA基準トレイルを表示";
 "routing_attr_allow_private_for_truck_description" = "トラック用の私有地へのアクセスを許可します。";
 "rendering_attr_horse_scale_difficult_name" = "Difficult(難しい道)";
 "rendering_attr_horse_scale_dangerous_name" = "Dangerous(危険)";

@@ -317,6 +317,7 @@
                @"ic_action_shuttle_bus",
                @"ic_action_bus_dark",
                @"ic_action_subway",
+               @"ic_action_train",
                @"ic_action_motorcycle_dark",
                @"ic_action_enduro_motorcycle",
                @"ic_action_motor_scooter",

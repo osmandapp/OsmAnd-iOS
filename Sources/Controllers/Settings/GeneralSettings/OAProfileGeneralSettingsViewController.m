@@ -92,12 +92,12 @@
     if ([_settings.rotateMap get:self.appMode] == ROTATE_MAP_BEARING)
     {
         rotateMapValue = OALocalizedString(@"rotate_map_bearing_opt");
-        rotateMapIcon = @"ic_custom_direction_movement";
+        rotateMapIcon = @"ic_custom_direction_bearing_day";
     }
     else if ([_settings.rotateMap get:self.appMode] == ROTATE_MAP_COMPASS)
     {
         rotateMapValue = OALocalizedString(@"rotate_map_compass_opt");
-        rotateMapIcon = @"ic_custom_direction_compass";
+        rotateMapIcon = @"ic_custom_direction_compass_day";
     }
     else if ([_settings.rotateMap get:self.appMode] == ROTATE_MAP_MANUAL)
     {
@@ -107,7 +107,7 @@
     else
     {
         rotateMapValue = OALocalizedString(@"rotate_map_north_opt");
-        rotateMapIcon = @"ic_custom_direction_north";
+        rotateMapIcon = @"ic_custom_direction_north_day";
     }
     
     NSString *positionMapValue = [self getLocationPositionValue];
@@ -242,6 +242,7 @@
         @"title" : OALocalizedString(@"rotate_map_to"),
         @"value" : rotateMapValue,
         @"icon" : rotateMapIcon,
+        @"no_tint" : @YES,
         @"key" : @"map_orientation",
     }];
     [appearanceArr addObject:@{
@@ -338,9 +339,14 @@
         }
         if (cell)
         {
+            if ([item[@"no_tint"] boolValue])
+                cell.leftIconView.image = [UIImage imageNamed:item[@"icon"]];
+            else
+                cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+                
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            
         }
         return cell;
     }

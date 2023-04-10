@@ -60,6 +60,8 @@ static BOOL _purchasesUpdated;
     [super viewDidLoad];
 
     [self updateLoadingView:!_purchasesUpdated];
+    
+    [self.backButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
 }
 
 - (void)viewWillAppear:(BOOL)animated

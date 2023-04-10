@@ -203,9 +203,24 @@
                                       lroundf(b * 255)];
 }
 
+- (NSString *) toHexARGBString
+{
+    const CGFloat *components = CGColorGetComponents(self.CGColor);
+
+    CGFloat r = components[0];
+    CGFloat g = components[1];
+    CGFloat b = components[2];
+    CGFloat a = components[3];
+    return [NSString stringWithFormat:@"#%02lX%02lX%02lX%02lX",
+                                      lroundf(a * 255),
+                                      lroundf(r * 255),
+                                      lroundf(g * 255),
+                                      lroundf(b * 255)];
+}
+
 + (UIColor *) colorFromString:(NSString *)string
 {
-    return UIColorFromRGBA([OAUtilities colorToNumberFromString:string]);
+    return UIColorFromARGB([OAUtilities colorToNumberFromString:string]);
 }
 
 @end
@@ -1517,7 +1532,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
         }
         case 6:
         {
-            string = [string stringByAppendingString:@"ff"];
+            string = [@"ff" stringByAppendingString:string];
             break;
         }
         case 8:
@@ -1527,7 +1542,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
         }
         default:
         {
-            return nil;
+            return 0;
         }
     }
 

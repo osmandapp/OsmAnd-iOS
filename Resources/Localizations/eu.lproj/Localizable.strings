@@ -2546,3 +2546,6 @@
 "speed_cameras_legal_descr" = "Herrialde edo eskualde batzuetan, abiadura-kamerak abisatzeko aplikazioak erabiltzea legez debekatuta dago.\n\nAukeraketa bat egin behar duzu zure herrialdeko legediaren arabera.\n\nAukeratu %@ eta abiadura-kamerei buruzko alertak eta abisuak jasoko dituzu.\n\nAukeratu %@ eta abiadura-kameraen inguruko datu guztiak, alertak, jakinarazpenak, interesguneak ezabatuko dira OsmAnd erabat berriro instalatu arte.";
 "speed_cameras_alert" = "Abiadura-kameren alertak herrialde batzuetan legeak debekatuta daude.";
 "icon_group_service" = "Zerbitzua";
+"app_mode_moped" = "Ziklomotorra";
+"weather_forecast" = "Eguraldi iragarpena";
+"weather_forecast_is_outdated" = "Iragarpena zaharkituta dago.";

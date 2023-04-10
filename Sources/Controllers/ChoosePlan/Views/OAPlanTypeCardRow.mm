@@ -385,6 +385,8 @@
     self.badgeLabel.textAlignment = NSTextAlignmentRight;
     self.tertiaryDescrLabel.transform = CGAffineTransformMakeScale(-1.0, 1.0);
     self.tertiaryDescrLabel.textAlignment = NSTextAlignmentRight;
+    self.imageViewLeftIcon.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+    self.imageViewRightIcon.transform = CGAffineTransformMakeScale(-1.0, 1.0);
 }
 
 - (void)onTapped:(UIGestureRecognizer *)recognizer

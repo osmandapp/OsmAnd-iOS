@@ -52,6 +52,8 @@
     NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, id> *> *_cachedTracks;
     QHash< QString, QList<OsmAnd::FColorARGB> > _cachedColors;
     NSMutableDictionary<NSString *, NSNumber *> *_cachedTrackWidth;
+    
+    NSOperationQueue *_splitLablesQueue;
 }
 
 - (NSString *) layerId
@@ -62,6 +64,8 @@
 - (void) initLayer
 {
     [super initLayer];
+    
+    _splitLablesQueue = [[NSOperationQueue alloc] init];
     
     _hiddenPointPos31 = OsmAnd::PointI();
     _showCaptionsCache = self.showCaptions;
@@ -509,6 +513,78 @@ colorizationScheme:(int)colorizationScheme
     return nullptr;
 }
 
+- (void)processSplitLables:(OAGPX *)gpx doc:(const std::shared_ptr<const OsmAnd::GpxDocument> &)doc
+{
+    [_splitLablesQueue cancelAllOperations];
+    NSBlockOperation* operation = [[NSBlockOperation alloc] init];
+    __weak NSBlockOperation* weakOperation = operation;
+
+    [operation addExecutionBlock:^{
+        QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> splitLables;
+        OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(doc)];
+        NSArray<OAGPXTrackAnalysis *> *splitData = nil;
+        BOOL splitByTime = NO;
+        BOOL splitByDistance = NO;
+        switch (gpx.splitType) {
+            case EOAGpxSplitTypeDistance: {
+                splitData = [document splitByDistance:gpx.splitInterval joinSegments:gpx.joinSegments];
+                splitByDistance = YES;
+                break;
+            }
+            case EOAGpxSplitTypeTime: {
+                splitData = [document splitByTime:gpx.splitInterval joinSegments:gpx.joinSegments];
+                splitByTime = YES;
+                break;
+            }
+            default:
+                break;
+        }
+        if (splitData && (splitByDistance || splitByTime))
+        {
+            for (NSInteger i = 1; i < splitData.count; i++)
+            {
+                if (weakOperation.isCancelled)
+                    break;
+                OAGPXTrackAnalysis *seg = splitData[i];
+                double metricStartValue = splitData[i - 1].metricEnd;
+                OAWptPt *pt = seg.locationStart;
+                if (pt)
+                {
+                    const auto pos31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude));
+                    QString stringValue;
+                    if (splitByDistance)
+                        stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedDistance:metricStartValue]);
+                    else if (splitByTime)
+                        stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedTimeInterval:metricStartValue shortFormat:YES]);
+                    const auto colorARGB = [UIColorFromARGB(gpx.color == 0 ? kDefaultTrackColor : gpx.color) toFColorARGB];
+                    splitLables.push_back(OsmAnd::GpxAdditionalIconsProvider::SplitLabel(pos31, stringValue, colorARGB));
+                }
+            }
+        }
+        if (!weakOperation.isCancelled)
+        {
+            sk_sp<SkImage> startIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_start"];
+            sk_sp<SkImage> finishIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_finish"];
+            sk_sp<SkImage> startFinishIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_start_finish"];
+            [self.mapView removeTiledSymbolsProvider:_startFinishProvider];
+            _startFinishProvider.reset(new OsmAnd::GpxAdditionalIconsProvider(self.pointsOrder - 20000,
+                                                                              UIScreen.mainScreen.scale,
+                                                                              _startFinishProvider->startFinishPoints,
+                                                                              splitLables,
+                                                                              [OANativeUtilities getScaledSkImage:startIcon
+                                                                                                      scaleFactor:_textScaleFactor],
+                                                                              [OANativeUtilities getScaledSkImage:finishIcon
+                                                                                                      scaleFactor:_textScaleFactor],
+                                                                              [OANativeUtilities getScaledSkImage:startFinishIcon
+                                                                                                      scaleFactor:_textScaleFactor]
+                                                                              ));
+
+            [self.mapView addTiledSymbolsProvider:_startFinishProvider];
+        }
+    }];
+    [_splitLablesQueue addOperation:operation];
+}
+
 - (void) refreshStartFinishPoints
 {
     if (_startFinishProvider)
@@ -518,16 +594,16 @@ colorizationScheme:(int)colorizationScheme
     }
     
     QList<OsmAnd::PointI> startFinishPoints;
-    QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> splitLabels;
+    QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> splitLables;
     for (auto it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
     {
         NSString *path = it.key().toNSString();
         OAGPXDatabase *gpxDb = OAGPXDatabase.sharedDb;
         path = [[gpxDb getFileDir:path] stringByAppendingPathComponent:path.lastPathComponent];
         OAGPX *gpx = [gpxDb getGPXItem:path];
+        const auto& doc = it.value();
         if ((!gpx && ![path isEqualToString:kCurrentTrack]) || gpx.showStartFinish)
         {
-            const auto& doc = it.value();
             if (!doc)
                 continue;
             const auto& tracks = doc->tracks;
@@ -564,44 +640,7 @@ colorizationScheme:(int)colorizationScheme
         }
         if (gpx.splitType != EOAGpxSplitTypeNone)
         {
-            OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())];
-            NSArray<OAGPXTrackAnalysis *> *splitData = nil;
-            BOOL splitByTime = NO;
-            BOOL splitByDistance = NO;
-            switch (gpx.splitType) {
-                case EOAGpxSplitTypeDistance: {
-                    splitData = [document splitByDistance:gpx.splitInterval joinSegments:gpx.joinSegments];
-                    splitByDistance = YES;
-                    break;
-                }
-                case EOAGpxSplitTypeTime: {
-                    splitData = [document splitByTime:gpx.splitInterval joinSegments:gpx.joinSegments];
-                    splitByTime = YES;
-                    break;
-                }
-                default:
-                    break;
-            }
-            if (splitData && (splitByDistance || splitByTime))
-            {
-                for (NSInteger i = 1; i < splitData.count; i++)
-                {
-                    OAGPXTrackAnalysis *seg = splitData[i];
-                    double metricStartValue = splitData[i - 1].metricEnd;
-                    OAWptPt *pt = seg.locationStart;
-                    if (pt)
-                    {
-                        const auto pos31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude));
-                        QString stringValue;
-                        if (splitByDistance)
-                            stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedDistance:metricStartValue]);
-                        else if (splitByTime)
-                            stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedTimeInterval:metricStartValue shortFormat:YES]);
-                        const auto colorARGB = [UIColorFromARGB(gpx.color == 0 ? kDefaultTrackColor : gpx.color) toFColorARGB];
-                        splitLabels.push_back(OsmAnd::GpxAdditionalIconsProvider::SplitLabel(pos31, stringValue, colorARGB));
-                    }
-                }
-            }
+            [self processSplitLables:gpx doc:doc];
         }
     }
 
@@ -611,7 +650,7 @@ colorizationScheme:(int)colorizationScheme
     _startFinishProvider.reset(new OsmAnd::GpxAdditionalIconsProvider(self.pointsOrder - 20000,
                                                                       UIScreen.mainScreen.scale,
                                                                       startFinishPoints,
-                                                                      splitLabels,
+                                                                      splitLables,
                                                                       [OANativeUtilities getScaledSkImage:startIcon
                                                                                               scaleFactor:_textScaleFactor],
                                                                       [OANativeUtilities getScaledSkImage:finishIcon

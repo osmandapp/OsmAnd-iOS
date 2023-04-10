@@ -1427,6 +1427,10 @@
 		8AFC2C2524334A4E0095BA9F /* map_location_car_bottom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC2BBC24334A4E0095BA9F /* map_location_car_bottom@2x.png */; };
 		8AFC2C2724334A4E0095BA9F /* map_location_default_top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC2BBD24334A4E0095BA9F /* map_location_default_top@2x.png */; };
 		8EBE587727297A320075B834 /* test-resources in Resources */ = {isa = PBXBuildFile; fileRef = 8EBE587627297A310075B834 /* test-resources */; };
+		972189E929DC343600AB0D92 /* ic_action_train@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 972189E529DC343600AB0D92 /* ic_action_train@2x.png */; };
+		972189EA29DC343600AB0D92 /* map_action_train@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 972189E629DC343600AB0D92 /* map_action_train@3x.png */; };
+		972189EB29DC343600AB0D92 /* ic_action_train@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 972189E729DC343600AB0D92 /* ic_action_train@3x.png */; };
+		972189EC29DC343600AB0D92 /* map_action_train@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 972189E829DC343600AB0D92 /* map_action_train@2x.png */; };
 		972A49622889820600348A86 /* ic_navbar_update@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 972A49602889820600348A86 /* ic_navbar_update@3x.png */; };
 		972A49632889820600348A86 /* ic_navbar_update@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 972A49612889820600348A86 /* ic_navbar_update@2x.png */; };
 		97BCFBE9287D9152003AFFB2 /* ic_custom_shop_bag_48@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97BCFBE7287D9152003AFFB2 /* ic_custom_shop_bag_48@3x.png */; };
@@ -5014,6 +5018,10 @@
 		8AFC2BBC24334A4E0095BA9F /* map_location_car_bottom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_location_car_bottom@2x.png"; sourceTree = "<group>"; };
 		8AFC2BBD24334A4E0095BA9F /* map_location_default_top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_location_default_top@2x.png"; sourceTree = "<group>"; };
 		8EBE587627297A310075B834 /* test-resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "test-resources"; path = "../resources/test-resources"; sourceTree = "<group>"; };
+		972189E529DC343600AB0D92 /* ic_action_train@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_action_train@2x.png"; sourceTree = "<group>"; };
+		972189E629DC343600AB0D92 /* map_action_train@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_action_train@3x.png"; sourceTree = "<group>"; };
+		972189E729DC343600AB0D92 /* ic_action_train@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_action_train@3x.png"; sourceTree = "<group>"; };
+		972189E829DC343600AB0D92 /* map_action_train@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_action_train@2x.png"; sourceTree = "<group>"; };
 		972A49602889820600348A86 /* ic_navbar_update@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_update@3x.png"; path = "Resources/Icons/ic_navbar_update@3x.png"; sourceTree = "<group>"; };
 		972A49612889820600348A86 /* ic_navbar_update@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_update@2x.png"; path = "Resources/Icons/ic_navbar_update@2x.png"; sourceTree = "<group>"; };
 		97BCFBE7287D9152003AFFB2 /* ic_custom_shop_bag_48@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_shop_bag_48@3x.png"; path = "Resources/Icons/ic_custom_shop_bag_48@3x.png"; sourceTree = "<group>"; };
@@ -10402,6 +10410,10 @@
 		DA133FFE243DC5A50039D214 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				972189E529DC343600AB0D92 /* ic_action_train@2x.png */,
+				972189E729DC343600AB0D92 /* ic_action_train@3x.png */,
+				972189E829DC343600AB0D92 /* map_action_train@2x.png */,
+				972189E629DC343600AB0D92 /* map_action_train@3x.png */,
 				97F6410729C475E6008F527B /* ic_action_hill_climbing@2x.png */,
 				97F6410629C475E6008F527B /* ic_action_hill_climbing@3x.png */,
 				97F6410829C475E7008F527B /* map_action_hill_climbing@2x.png */,
@@ -13820,8 +13832,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BBA3AFEB197FC4BB0039D991 /* Build configuration list for PBXNativeTarget "OsmAnd Maps" */;
 			buildPhases = (
-				8401FCFC1EE4723B00238915 /* Copy phrases */,
 				3CF6A0D6E82F1156F659B9F4 /* [CP] Check Pods Manifest.lock */,
+				8401FCFC1EE4723B00238915 /* Copy phrases */,
 				BBA3AF34197FC4BB0039D991 /* Sources */,
 				BBA3AF66197FC4BB0039D991 /* Frameworks */,
 				DA8713222994F6760087BC7F /* Download regions.ocbf */,
@@ -14785,6 +14797,7 @@
 				DA0D1644281BEEF500CEEF58 /* map_turn_right_dark@3x.png in Resources */,
 				32119B432847785A005E1E0C /* img_plugin_osmand_development.png in Resources */,
 				8458BB851B0F1E7A00738132 /* ic_phone_number@3x.png in Resources */,
+				972189EC29DC343600AB0D92 /* map_action_train@2x.png in Resources */,
 				32E2D2E429B7381600A17D0B /* widget_coordinates_map_center_latitude_north_day@2x.png in Resources */,
 				0AC13D262715C44B00142BFD /* ic_custom_folder_hidden@2x.png in Resources */,
 				0CF58548244072EC0081238D /* widget_marker_triangle_pin_2@3x.png in Resources */,
@@ -15538,6 +15551,7 @@
 				DA540DA9229E8CF80069201E /* widget_mapillary_night@3x.png in Resources */,
 				DA959032246586E5004C9F54 /* img_legend_slope@3x.png in Resources */,
 				3205EC4026E807E80090B491 /* OAQuickSearchCoordinatesViewController.xib in Resources */,
+				972189E929DC343600AB0D92 /* ic_action_train@2x.png in Resources */,
 				845E06A91B5FF17400DFC2A7 /* ic_plugin_parking@3x.png in Resources */,
 				465B935C29BF7805008F476F /* ic_carplay_tracks_night@2x.png in Resources */,
 				8415030D1DEED6AE007FAC50 /* ic_wifi_off@2x.png in Resources */,
@@ -16155,6 +16169,7 @@
 				156E91D9244AF37E00B181BA /* ic_custom_direction_widget_one@3x.png in Resources */,
 				15BDDEA824DAF3D400079C83 /* ic_custom_remove_outlined@2x.png in Resources */,
 				DA13A02F2345FA0100C1A1A8 /* ic_custom_ascent@3x.png in Resources */,
+				972189EB29DC343600AB0D92 /* ic_action_train@3x.png in Resources */,
 				32076B1429014678001A86AF /* ic_custom_fps@3x.png in Resources */,
 				462545A828D3688900637964 /* ic_custom_cross_buy_colored_day@2x.png in Resources */,
 				46453B01283523DF001F9A3A /* ic_custom_map_updates_colored_day@3x.png in Resources */,
@@ -16265,6 +16280,7 @@
 				84EC52A71F8BF26600AFC252 /* ic_action_play_dark@3x.png in Resources */,
 				8412224E1B39CC5200F80F9E /* map_car_bearing@2x.png in Resources */,
 				DA1994AF224CDAF200B25BB0 /* ic_custom_add@2x.png in Resources */,
+				972189EA29DC343600AB0D92 /* map_action_train@3x.png in Resources */,
 				843394C71FF54A19006205A5 /* list_warnings_traffic_calming_us@3x.png in Resources */,
 				DA5A83FA26C563A800F274C7 /* OAPOIFilterViewController.xib in Resources */,
 				15BDDE8124D95F8E00079C83 /* ic_custom_2_5d_view@3x.png in Resources */,
@@ -17750,7 +17766,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.4.1;
-				OBJROOT = $SYMROOT;
+				OBJROOT = "$SYMROOT";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -17810,7 +17826,7 @@
 					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 4.4.1;
-				OBJROOT = $SYMROOT;
+				OBJROOT = "$SYMROOT";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",

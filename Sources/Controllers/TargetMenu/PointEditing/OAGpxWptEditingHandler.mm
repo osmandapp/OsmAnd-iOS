@@ -111,7 +111,7 @@
     {
         NSMutableDictionary<NSString *, NSString *> *newGroup = [NSMutableDictionary new];
         newGroup[@"title"] = _newGroupTitle;
-        newGroup[@"color"] = _newGroupColor.toHexString;
+        newGroup[@"color"] = _newGroupColor.toHexARGBString;
         newGroup[@"count"] = @"0";
 
         NSMutableArray *newGroups = [NSMutableArray arrayWithArray:groups];
@@ -138,7 +138,7 @@
     {
         NSMutableDictionary<NSString *, NSString *> *defaultGroup = [NSMutableDictionary new];
         defaultGroup[@"title"] = OALocalizedString(@"shared_string_waypoints");
-        defaultGroup[@"color"] = [OADefaultFavorite getDefaultColor].toHexString;
+        defaultGroup[@"color"] = [OADefaultFavorite getDefaultColor].toHexARGBString;
         defaultGroup[@"count"] = @"0";
         NSMutableArray *newGroups = [groups mutableCopy];
         [newGroups insertObject:defaultGroup atIndex:0];
@@ -156,7 +156,7 @@
     {
         NSMutableDictionary<NSString *, NSString *> *newGroups = [NSMutableDictionary dictionaryWithDictionary:groups];
         newGroups[@"title"] = _newGroupTitle;
-        newGroups[@"color"] = _newGroupColor.toHexString;
+        newGroups[@"color"] = _newGroupColor.toHexARGBString;
         groups = newGroups;
     }
 
@@ -186,7 +186,7 @@
 - (void)setGroup:(NSString *)groupName color:(UIColor *)color save:(BOOL)save
 {
     _gpxWpt.point.type = groupName;
-    [_gpxWpt.point setColor:[OAUtilities colorToNumber:color]];
+    [_gpxWpt.point setColor:[OAUtilities colorToNumberFromString:color.toHexARGBString]];
     _gpxWpt.color = color;
 
     if (![_gpxWpt.groups containsObject:groupName] && groupName.length > 0)

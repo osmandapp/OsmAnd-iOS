@@ -1046,7 +1046,7 @@
 "start_of_the_track" = "Inicio de la traza";
 "nearest_point" = "Punto más cercano";
 "plan_route_folder" = "Carpeta";
-"change_folder" = "Cambiar carpeta";
+"change_folder" = "Cambiar de carpeta";
 "select_folder" = "Elegir carpeta";
 "select_folder_descr" = "Elegir carpeta o añadir una nueva";
 "add_folder" = "Añadir carpeta";

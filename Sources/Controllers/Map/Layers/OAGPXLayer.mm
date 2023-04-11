@@ -29,6 +29,7 @@
 #import "OAAppVersionDependentConstants.h"
 #import "OAGpxTrackAnalysis.h"
 #import "OAOsmAndFormatter.h"
+#import "OAAtomicInteger.h"
 
 #include <OsmAndCore/LatLon.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
@@ -53,7 +54,11 @@
     QHash< QString, QList<OsmAnd::FColorARGB> > _cachedColors;
     NSMutableDictionary<NSString *, NSNumber *> *_cachedTrackWidth;
     
-    NSOperationQueue *_splitLablesQueue;
+    NSOperationQueue *_splitLabelsQueue;
+    NSObject* _splitLock;
+    OAAtomicInteger *_splitCounter;
+    QList<OsmAnd::PointI> _startFinishPoints;
+    QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> _splitLabels;
 }
 
 - (NSString *) layerId
@@ -64,8 +69,9 @@
 - (void) initLayer
 {
     [super initLayer];
-    
-    _splitLablesQueue = [[NSOperationQueue alloc] init];
+
+    _splitLock = [[NSObject alloc] init];
+    _splitLabelsQueue = [[NSOperationQueue alloc] init];
     
     _hiddenPointPos31 = OsmAnd::PointI();
     _showCaptionsCache = self.showCaptions;
@@ -513,14 +519,16 @@ colorizationScheme:(int)colorizationScheme
     return nullptr;
 }
 
-- (void)processSplitLables:(OAGPX *)gpx doc:(const std::shared_ptr<const OsmAnd::GpxDocument> &)doc
+- (void)processSplitLabels:(OAGPX *)gpx doc:(const std::shared_ptr<const OsmAnd::GpxDocument>)doc
 {
-    [_splitLablesQueue cancelAllOperations];
     NSBlockOperation* operation = [[NSBlockOperation alloc] init];
     __weak NSBlockOperation* weakOperation = operation;
+    OAAtomicInteger *splitCounter = _splitCounter;
 
     [operation addExecutionBlock:^{
-        QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> splitLables;
+        if (splitCounter != _splitCounter || weakOperation.isCancelled)
+            return;
+
         OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(doc)];
         NSArray<OAGPXTrackAnalysis *> *splitData = nil;
         BOOL splitByTime = NO;
@@ -541,9 +549,10 @@ colorizationScheme:(int)colorizationScheme
         }
         if (splitData && (splitByDistance || splitByTime))
         {
+            QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> splitLabels;
             for (NSInteger i = 1; i < splitData.count; i++)
             {
-                if (weakOperation.isCancelled)
+                if (splitCounter != _splitCounter || weakOperation.isCancelled)
                     break;
                 OAGPXTrackAnalysis *seg = splitData[i];
                 double metricStartValue = splitData[i - 1].metricEnd;
@@ -557,36 +566,35 @@ colorizationScheme:(int)colorizationScheme
                     else if (splitByTime)
                         stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedTimeInterval:metricStartValue shortFormat:YES]);
                     const auto colorARGB = [UIColorFromARGB(gpx.color == 0 ? kDefaultTrackColor : gpx.color) toFColorARGB];
-                    splitLables.push_back(OsmAnd::GpxAdditionalIconsProvider::SplitLabel(pos31, stringValue, colorARGB));
+                    splitLabels.push_back(OsmAnd::GpxAdditionalIconsProvider::SplitLabel(pos31, stringValue, colorARGB));
                 }
             }
+            if (splitCounter == _splitCounter && !weakOperation.isCancelled)
+                [self appendSplitLabels:splitLabels];
         }
-        if (!weakOperation.isCancelled)
+        if (splitCounter == _splitCounter && !weakOperation.isCancelled)
         {
-            sk_sp<SkImage> startIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_start"];
-            sk_sp<SkImage> finishIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_finish"];
-            sk_sp<SkImage> startFinishIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_start_finish"];
-            [self.mapView removeTiledSymbolsProvider:_startFinishProvider];
-            _startFinishProvider.reset(new OsmAnd::GpxAdditionalIconsProvider(self.pointsOrder - 20000,
-                                                                              UIScreen.mainScreen.scale,
-                                                                              _startFinishProvider->startFinishPoints,
-                                                                              splitLables,
-                                                                              [OANativeUtilities getScaledSkImage:startIcon
-                                                                                                      scaleFactor:_textScaleFactor],
-                                                                              [OANativeUtilities getScaledSkImage:finishIcon
-                                                                                                      scaleFactor:_textScaleFactor],
-                                                                              [OANativeUtilities getScaledSkImage:startFinishIcon
-                                                                                                      scaleFactor:_textScaleFactor]
-                                                                              ));
-
-            [self.mapView addTiledSymbolsProvider:_startFinishProvider];
+            int counter = [self decrementSplitCounter];
+            if (counter == 0)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self refreshStartFinishProvider];
+                });
+            }
         }
     }];
-    [_splitLablesQueue addOperation:operation];
+
+    [self incrementSplitCounter];
+    [_splitLabelsQueue addOperation:operation];
 }
 
 - (void) refreshStartFinishPoints
 {
+    [_splitLabelsQueue cancelAllOperations];
+    [_splitLabelsQueue setSuspended:YES];
+    [self resetSplitCounter];
+    [self clearStartFinishPoints];
+    [self clearSplitLabels];
     if (_startFinishProvider)
     {
         [self.mapView removeTiledSymbolsProvider:_startFinishProvider];
@@ -594,7 +602,6 @@ colorizationScheme:(int)colorizationScheme
     }
     
     QList<OsmAnd::PointI> startFinishPoints;
-    QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> splitLables;
     for (auto it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
     {
         NSString *path = it.key().toNSString();
@@ -639,27 +646,97 @@ colorizationScheme:(int)colorizationScheme
             }
         }
         if (gpx.splitType != EOAGpxSplitTypeNone)
-        {
-            [self processSplitLables:gpx doc:doc];
-        }
+            [self processSplitLabels:gpx doc:doc];
     }
+    if (!startFinishPoints.isEmpty())
+        [self appendStartFinishPoints:startFinishPoints];
 
-    sk_sp<SkImage> startIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_start"];
-    sk_sp<SkImage> finishIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_finish"];
-    sk_sp<SkImage> startFinishIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_start_finish"];
-    _startFinishProvider.reset(new OsmAnd::GpxAdditionalIconsProvider(self.pointsOrder - 20000,
-                                                                      UIScreen.mainScreen.scale,
-                                                                      startFinishPoints,
-                                                                      splitLables,
-                                                                      [OANativeUtilities getScaledSkImage:startIcon
-                                                                                              scaleFactor:_textScaleFactor],
-                                                                      [OANativeUtilities getScaledSkImage:finishIcon
-                                                                                              scaleFactor:_textScaleFactor],
-                                                                      [OANativeUtilities getScaledSkImage:startFinishIcon
-                                                                                              scaleFactor:_textScaleFactor]
-                                                                      ));
+    [self refreshStartFinishProvider];
+    [_splitLabelsQueue setSuspended:NO];
+}
 
-    [self.mapView addTiledSymbolsProvider:_startFinishProvider];
+- (void) refreshStartFinishProvider
+{
+    @synchronized(_splitLock)
+    {
+        if (_startFinishProvider)
+        {
+            [self.mapView removeTiledSymbolsProvider:_startFinishProvider];
+            _startFinishProvider = nullptr;
+        }
+        sk_sp<SkImage> startIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_start"];
+        sk_sp<SkImage> finishIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_finish"];
+        sk_sp<SkImage> startFinishIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_start_finish"];
+        _startFinishProvider.reset(new OsmAnd::GpxAdditionalIconsProvider(self.pointsOrder - 20000,
+                                                                          UIScreen.mainScreen.scale,
+                                                                          _startFinishPoints,
+                                                                          _splitLabels,
+                                                                          [OANativeUtilities getScaledSkImage:startIcon
+                                                                                                  scaleFactor:_textScaleFactor],
+                                                                          [OANativeUtilities getScaledSkImage:finishIcon
+                                                                                                  scaleFactor:_textScaleFactor],
+                                                                          [OANativeUtilities getScaledSkImage:startFinishIcon
+                                                                                                  scaleFactor:_textScaleFactor]
+                                                                          ));
+
+        [self.mapView addTiledSymbolsProvider:_startFinishProvider];
+    }
+}
+
+- (void) resetSplitCounter
+{
+    @synchronized(_splitLock)
+    {
+        _splitCounter = [OAAtomicInteger atomicInteger:0];
+    }
+}
+
+- (int) incrementSplitCounter
+{
+    @synchronized(_splitLock)
+    {
+        return [_splitCounter incrementAndGet];
+    }
+}
+
+- (int) decrementSplitCounter
+{
+    @synchronized(_splitLock)
+    {
+        return [_splitCounter decrementAndGet];
+    }
+}
+
+- (void) clearStartFinishPoints
+{
+    @synchronized(_splitLock)
+    {
+        _startFinishPoints.clear();
+    }
+}
+
+- (void) appendStartFinishPoints:(QList<OsmAnd::PointI> &)startFinishPoints
+{
+    @synchronized(_splitLock)
+    {
+        _startFinishPoints.append(startFinishPoints);
+    }
+}
+
+- (void) clearSplitLabels
+{
+    @synchronized(_splitLock)
+    {
+        _splitLabels.clear();
+    }
+}
+
+- (void) appendSplitLabels:(QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> &)splitLabels
+{
+    @synchronized(_splitLock)
+    {
+        _splitLabels.append(splitLabels);
+    }
 }
 
 - (void) refreshGpxWaypoints

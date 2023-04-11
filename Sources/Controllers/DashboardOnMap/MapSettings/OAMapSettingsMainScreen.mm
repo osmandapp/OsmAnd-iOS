@@ -716,7 +716,11 @@
 {
     NSArray *cells = tableData[section][@"cells"];
     if (cells.count > 0)
-        return [cells[0][@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]] ? 0.01 : 34.;
+        return [cells[0][@"type"] isEqualToString:[OAAppModeCell getCellIdentifier]]
+            ? 0.01
+            : ([OAUtilities calculateTextBounds:tableData[section][@"group_name"]
+                                          width:tblView.frame.size.width - ([OAUtilities getLeftMargin] + kPaddingOnSideOfContent) * 2
+                                           font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height + 19.);
 
     return 0.01;
 }

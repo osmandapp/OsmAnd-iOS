@@ -180,9 +180,8 @@
             [cell titleVisibility:title && title.length > 0];
             cell.titleLabel.text = title;
 
-            
             cell.titleLabel.textColor = [item objForKey:@"titleColor"];
-            cell.titleLabel.font = [item objForKey:@"title_font"];
+            cell.titleLabel.font = [item objForKey:@"titleFont"];
 
             BOOL hasLeftIcon = item.iconName && item.iconName.length > 0;
             [cell leftIconVisibility:hasLeftIcon];

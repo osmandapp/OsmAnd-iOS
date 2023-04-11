@@ -215,7 +215,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         uploadingSection.headerText = @" ";
         OATableRowData *progressValueCell = [uploadingSection createNewRow];
         [progressValueCell setCellType:[OAValueTableViewCell getCellIdentifier]];
-        [progressValueCell setObj:kUploadingValueCell forKey:kKey];
+        [progressValueCell setKey:kUploadingValueCell];
         OATableRowData *progressBarCell = [uploadingSection createNewRow];
         [progressBarCell setCellType:[OAProgressBarCell getCellIdentifier]];
     }
@@ -350,7 +350,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     }
     else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        NSString *key = [item stringForKey:kKey];
+        NSString *key = [item key];
         if (key && [key isEqualToString:kUploadingValueCell])
             return _progressValueCell;
             

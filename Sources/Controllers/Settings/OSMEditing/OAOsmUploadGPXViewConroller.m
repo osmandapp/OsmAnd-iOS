@@ -33,7 +33,6 @@
 #define kDefaultTag @"osmand"
 #define kDescriptionTextFieldTag 0
 #define kTagsTextFieldsTag 1
-#define kKey @"kKey"
 #define kUploadingValueCell @"kUploadingValueCell"
 
 typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {

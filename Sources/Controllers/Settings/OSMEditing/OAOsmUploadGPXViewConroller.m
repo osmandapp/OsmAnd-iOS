@@ -33,6 +33,7 @@
 #define kDefaultTag @"osmand"
 #define kDescriptionTextFieldTag 0
 #define kTagsTextFieldsTag 1
+#define kUploadingValueCell @"kUploadingValueCell"
 
 typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     EOAOsmUploadGPXViewConrollerModeInitial = 0,
@@ -213,6 +214,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         uploadingSection.headerText = @" ";
         OATableRowData *progressValueCell = [uploadingSection createNewRow];
         [progressValueCell setCellType:[OAValueTableViewCell getCellIdentifier]];
+        [progressValueCell setKey:kUploadingValueCell];
         OATableRowData *progressBarCell = [uploadingSection createNewRow];
         [progressBarCell setCellType:[OAProgressBarCell getCellIdentifier]];
     }
@@ -347,6 +349,10 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     }
     else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
+        NSString *key = [item key];
+        if (key && [key isEqualToString:kUploadingValueCell])
+            return _progressValueCell;
+            
         OAValueTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
@@ -409,10 +415,6 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     else if ([cellType isEqualToString:[OAProgressBarCell getCellIdentifier]])
     {
         return _progressBarCell;
-    }
-    else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
-    {
-        return _progressValueCell;
     }
     return nil;
 }

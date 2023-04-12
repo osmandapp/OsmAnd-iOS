@@ -108,14 +108,9 @@
     return !_openFromMap;
 }
 
-- (EOABaseNavbarStyle)getNavbarStyle
+- (NSString *)getTableHeaderDescription
 {
-    return _settingsType == EOAProfileGeneralSettingsMapOrientation ? EOABaseNavbarStyleDescription : EOABaseNavbarStyleSimple;
-}
-
-- (NSString *)getCustomTableViewDescription
-{
-    return OALocalizedString(@"compass_click_desc");
+    return _settingsType == EOAProfileGeneralSettingsMapOrientation ? OALocalizedString(@"compass_click_desc") : @"";
 }
 
 - (NSString *)getLeftNavbarButtonTitle

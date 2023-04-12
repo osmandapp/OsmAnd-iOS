@@ -58,12 +58,7 @@
     return EOABaseNavbarColorSchemeOrange;
 }
 
-- (EOABaseNavbarStyle)getNavbarStyle
-{
-    return EOABaseNavbarStyleDescription;
-}
-
-- (NSString *)getCustomTableViewDescription
+- (NSString *)getTableHeaderDescription
 {
     return OALocalizedString(@"osm_editing_settings_descr");
 }

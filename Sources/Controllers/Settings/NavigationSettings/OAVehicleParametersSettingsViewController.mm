@@ -116,25 +116,20 @@
                                                            menu:nil]];
 }
 
-- (EOABaseNavbarStyle)getNavbarStyle
-{
-    return EOABaseNavbarStyleDescription;
-}
-
-- (NSString *)getCustomTableViewDescription
+- (NSString *)getTableHeaderDescription
 {
     return [self getParameterDescription:_vehicleParameter[@"name"]];
 }
 
-- (void)setupCustomLargeTitleView
+- (void)setupTableHeaderView
 {
     if (_isMotorType)
     {
-        [super setupCustomLargeTitleView];
+        [super setupTableHeaderView];
     }
     else
     {
-        NSString *text = [self getCustomTableViewDescription];
+        NSString *text = [self getTableHeaderDescription];
         CGFloat textWidth = DeviceScreenWidth - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2;
         CGFloat textHeight = [OAUtilities heightForHeaderViewText:text width:textWidth font:kHeaderDescriptionFontSmall lineSpacing:6.0];
         

@@ -163,6 +163,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 - (void) setFontSize:(CGFloat)size forString:(NSString *)string;
 - (void) setFontWeight:(UIFontWeight)fontWeight andSize:(CGFloat)size forString:(NSString *)string;
 - (void) setColor:(UIColor *)color forString:(NSString *)string;
+- (void) setMinLineHeight:(CGFloat)height forString:(NSString *)string;
 
 @end
 
@@ -319,8 +320,8 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (BOOL) isColorBright:(UIColor *)color;
 + (NSAttributedString *) createAttributedString:(NSString *)text font:(UIFont *)font color:(UIColor *)color strokeColor:(UIColor *)strokeColor strokeWidth:(float)strokeWidth alignment:(NSTextAlignment)alignment;
 + (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor isBigTitle:(BOOL)isBigTitle parentViewWidth:(CGFloat)parentViewWidth;
-+ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor isBigTitle:(BOOL)isBigTitle rightIconName:(NSString *)iconName tintColor:(UIColor *)tintColor parentViewWidth:(CGFloat)parentViewWidth;
-+ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor isBigTitle:(BOOL)isBigTitle topOffset:(CGFloat)topOffset bottomOffset:(CGFloat)bottomOffset rightIconName:(NSString *)iconName tintColor:(UIColor *)tintColor parentViewWidth:(CGFloat)parentViewWidth;
++ (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)attributedText isBigTitle:(BOOL)isBigTitle rightIconName:(NSString *)iconName tintColor:(UIColor *)tintColor parentViewWidth:(CGFloat)parentViewWidth;
++ (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)attributedText isBigTitle:(BOOL)isBigTitle topOffset:(CGFloat)topOffset bottomOffset:(CGFloat)bottomOffset rightIconName:(NSString *)iconName tintColor:(UIColor *)tintColor parentViewWidth:(CGFloat)parentViewWidth;
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode;
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode iconYOffset:(CGFloat)iconYOffset;
 

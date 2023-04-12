@@ -37,12 +37,7 @@
     return OALocalizedString(@"speed_limit_exceed");
 }
 
-- (EOABaseNavbarStyle)getNavbarStyle
-{
-    return EOABaseNavbarStyleDescription;
-}
-
-- (NSString *)getCustomTableViewDescription
+- (NSString *)getTableHeaderDescription
 {
     return OALocalizedString(@"speed_limit_tolerance_descr");
 }

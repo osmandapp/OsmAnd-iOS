@@ -307,6 +307,14 @@
     [self addAttribute:NSForegroundColorAttributeName value:color range:range];
 }
 
+- (void) setMinLineHeight:(CGFloat)height forString:(NSString *)string
+{
+    NSRange range = [self.string rangeOfString:string];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.minimumLineHeight = height;
+    [self addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
+}
+
 @end
 
 @implementation NSString (util)
@@ -2155,12 +2163,13 @@ static const double d180PI = 180.0 / M_PI_2;
                                isBigTitle:(BOOL)isBigTitle
                           parentViewWidth:(CGFloat)parentViewWidth
 {
-    return [self setupTableHeaderViewWithText:text font:font textColor:textColor isBigTitle:isBigTitle rightIconName:nil tintColor:nil parentViewWidth:parentViewWidth];
+    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:text];
+    [attributedText setFont:font forString:text];
+    [attributedText setColor:textColor forString:text];
+    return [self setupTableHeaderViewWithText:attributedText isBigTitle:isBigTitle rightIconName:nil tintColor:nil parentViewWidth:parentViewWidth];
 }
 
-+ (UIView *) setupTableHeaderViewWithText:(NSString *)text
-                                     font:(UIFont *)font
-                                textColor:(UIColor *)textColor
++ (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)attributedText
                                isBigTitle:(BOOL)isBigTitle
                             rightIconName:(NSString *)iconName
                                 tintColor:(UIColor *)tintColor
@@ -2168,12 +2177,10 @@ static const double d180PI = 180.0 / M_PI_2;
 {
     CGFloat topOffset = isBigTitle ? 5. : kPaddingOnSideOfContent;
     CGFloat bottomOffset = isBigTitle ? 7. : kPaddingOnSideOfContent;
-    return [self setupTableHeaderViewWithText:text font:font textColor:textColor isBigTitle:isBigTitle topOffset:topOffset bottomOffset:bottomOffset rightIconName:iconName tintColor:tintColor parentViewWidth:parentViewWidth];
+    return [self setupTableHeaderViewWithText:attributedText isBigTitle:isBigTitle topOffset:topOffset bottomOffset:bottomOffset rightIconName:iconName tintColor:tintColor parentViewWidth:parentViewWidth];
 }
 
-+ (UIView *) setupTableHeaderViewWithText:(NSString *)text
-                                     font:(UIFont *)font
-                                textColor:(UIColor *)textColor
++ (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)attributedText
                                isBigTitle:(BOOL)isBigTitle
                                 topOffset:(CGFloat)topOffset
                              bottomOffset:(CGFloat)bottomOffset
@@ -2181,10 +2188,6 @@ static const double d180PI = 180.0 / M_PI_2;
                                 tintColor:(UIColor *)tintColor
                           parentViewWidth:(CGFloat)parentViewWidth
 {
-    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:text];
-    [attributedText setFont:font forString:text];
-    [attributedText setColor:textColor forString:text];
-
     CGFloat sideOffset = [OAUtilities getLeftMargin] + (isBigTitle ? kSmallPaddingOnSideOfContent : kPaddingOnSideOfContent);
     CGFloat textWidth = parentViewWidth - sideOffset * 2;
     CGFloat textHeight = [self calculateTextBounds:attributedText width:textWidth].height;

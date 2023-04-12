@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OABaseSettingsWithBottomButtonsViewController.h"
+#import "OABaseButtonsViewController.h"
 #import "OASettingsHelper.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -30,12 +30,9 @@ typedef NS_ENUM(NSInteger, EOATableCollapsableGroup)
 
 @end
 
-@interface OABaseSettingsListViewController : OABaseSettingsWithBottomButtonsViewController <OASettingsImportExportDelegate>
+@interface OABaseSettingsListViewController : OABaseButtonsViewController<OASettingsImportExportDelegate>
 
 @property (nonatomic, readonly) BOOL exportMode;
-
-@property (nonatomic, readonly) NSString *descriptionBoldText;
-@property (nonatomic, readonly) NSString *descriptionText;
 
 @property (nonatomic, readonly) NSMutableDictionary<OAExportSettingsType *, NSArray *> *selectedItemsMap;
 @property (nonatomic) NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *itemsMap;
@@ -45,9 +42,6 @@ typedef NS_ENUM(NSInteger, EOATableCollapsableGroup)
 - (NSArray *)getSelectedItems;
 - (void)showActivityIndicatorWithLabel:(NSString *)labelText;
 
-- (void)generateData;
-
-- (void)updateControls;
 - (long)calculateItemsSize:(NSArray *)items;
 - (void)onGroupCheckmarkPressed:(UIButton *)sender;
 

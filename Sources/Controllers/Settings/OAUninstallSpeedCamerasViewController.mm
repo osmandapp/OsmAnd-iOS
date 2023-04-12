@@ -86,7 +86,7 @@
     return NO;
 }
 
-- (void)setupCustomLargeTitleView
+- (void)setupTableHeaderView
 {
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.alignment = NSTextAlignmentCenter;

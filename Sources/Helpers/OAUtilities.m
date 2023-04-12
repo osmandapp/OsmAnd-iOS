@@ -307,11 +307,12 @@
     [self addAttribute:NSForegroundColorAttributeName value:color range:range];
 }
 
-- (void) setMinLineHeight:(CGFloat)height forString:(NSString *)string
+- (void) setMinLineHeight:(CGFloat)height alignment:(NSTextAlignment)alignment forString:(NSString *)string
 {
     NSRange range = [self.string rangeOfString:string];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.minimumLineHeight = height;
+    paragraphStyle.alignment = alignment;
     [self addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
 }
 

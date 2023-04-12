@@ -118,16 +118,16 @@
 
 - (NSAttributedString *)getTableHeaderDescriptionAttr
 {
-    NSString *exportSelectDescr = OALocalizedString(@"export_profile_select_descr");
+    NSString *exportSelectDescr = _exportStarted ? @"" : [OALocalizedString(@"export_profile_select_descr") stringByAppendingString:@"\n"];
     long itemsSize = [self calculateItemsSize:self.getSelectedItems];
     NSString *approximateFileSize = [NSString stringWithFormat:@"%@: %@",
                                         OALocalizedString(@"approximate_file_size"),
                                         [NSByteCountFormatter stringFromByteCount:itemsSize countStyle:NSByteCountFormatterCountStyleFile]];
-    NSMutableAttributedString *descriptionAttr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", exportSelectDescr, approximateFileSize]];
+    NSMutableAttributedString *descriptionAttr = [[NSMutableAttributedString alloc] initWithString:[exportSelectDescr stringByAppendingString:approximateFileSize]];
     [descriptionAttr setColor:UIColorFromRGB(color_text_footer) forString:exportSelectDescr];
     [descriptionAttr setColor:itemsSize > 0 ? UIColor.blackColor : UIColorFromRGB(color_text_footer) forString:approximateFileSize];
     [descriptionAttr setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] forString:descriptionAttr.string];
-    [descriptionAttr setMinLineHeight:18. forString:descriptionAttr.string];
+    [descriptionAttr setMinLineHeight:18. alignment:NSTextAlignmentNatural forString:descriptionAttr.string];
     return descriptionAttr;
 }
 

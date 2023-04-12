@@ -163,7 +163,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 - (void) setFontSize:(CGFloat)size forString:(NSString *)string;
 - (void) setFontWeight:(UIFontWeight)fontWeight andSize:(CGFloat)size forString:(NSString *)string;
 - (void) setColor:(UIColor *)color forString:(NSString *)string;
-- (void) setMinLineHeight:(CGFloat)height forString:(NSString *)string;
+- (void) setMinLineHeight:(CGFloat)height alignment:(NSTextAlignment)alignment forString:(NSString *)string;
 
 @end
 

@@ -6,10 +6,10 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OABaseSettingsWithBottomButtonsViewController.h"
+#import "OABaseButtonsViewController.h"
 #import "OASettingsHelper.h"
 
-@interface OAImportDuplicatesViewController : OABaseSettingsWithBottomButtonsViewController
+@interface OAImportDuplicatesViewController : OABaseButtonsViewController
 
 @property (nonatomic) NSArray *duplicatesList;
 @property (nonatomic) NSArray<OASettingsItem *> *settingsItems;

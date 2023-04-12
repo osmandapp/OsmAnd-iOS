@@ -64,6 +64,7 @@
 - (BOOL) isRoutesPoints;
 
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp;
+- (OAGPXTrackAnalysis*) getCachedAnalysis:(long)fileTimestamp;
 
 - (NSArray*) splitByDistance:(int)meters joinSegments:(BOOL)joinSegments;
 - (NSArray*) splitByTime:(int)seconds joinSegments:(BOOL)joinSegments;

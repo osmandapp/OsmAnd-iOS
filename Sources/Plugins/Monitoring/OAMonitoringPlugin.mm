@@ -25,8 +25,7 @@
 #import "OARootViewController.h"
 #import "OATripRecordingDistanceWidget.h"
 #import "OATripRecordingTimeWidget.h"
-#import "OATripRecordingUphillWidget.h"
-#import "OATripRecordingDownhillWidget.h"
+#import "OATripRecordingElevationWidget.h"
 
 #define PLUGIN_ID kInAppId_Addon_TrackRecording
 

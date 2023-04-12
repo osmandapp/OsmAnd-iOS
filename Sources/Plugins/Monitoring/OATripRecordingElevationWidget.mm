@@ -1,12 +1,12 @@
 //
-//  OATripRecordingUphillWidget.m
+//  OATripRecordingElevationWidget.m
 //  OsmAnd Maps
 //
 //  Created by nnngrach on 04.04.2023.
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OATripRecordingUphillWidget.h"
+#import "OATripRecordingElevationWidget.h"
 #import "OASavingTrackHelper.h"
 #import "OAOsmAndFormatter.h"
 #import "OsmAndApp.h"
@@ -18,21 +18,19 @@
 #import "OARootViewController.h"
 #import "OATrackMenuHudViewController.h"
 
-@implementation OATripRecordingUphillWidget
+@implementation OATripRecordingElevationWidget
 
 - (instancetype) init
 {
-    self = (OATripRecordingUphillWidget *)[[OATextInfoWidget alloc] init];
-    
+    self = [super init];
     if (self)
     {
-        __weak OATripRecordingUphillWidget *weakSelf = self;
-        long __block cachedElevationDiff = -1;
+        __weak OATextInfoWidget *weakSelf = self;
+        double __block cachedElevationDiff = -1;
         
         self.updateInfoFunction = ^BOOL {
-            [weakSelf setIcons:@"widget_track_recording_uphill_day" widgetNightIcon:@"widget_track_recording_uphill_night"];
-            OAGPXTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getAnalysis:0];
-            double elevationDiff = analysis.diffElevationUp;
+            double elevationDiff = [((OATripRecordingElevationWidget *)weakSelf) getElevationDiff];
+            
             if (cachedElevationDiff != elevationDiff)
             {
                 cachedElevationDiff = elevationDiff;
@@ -57,9 +55,68 @@
     return self;
 }
 
+//Override
+- (double) getElevationDiff
+{
+    return -1;
+}
+
+//Override
++ (NSString *) getName
+{
+    return @"";
+}
+
+@end
+
+
+@implementation OATripRecordingUphillWidget
+
+- (instancetype) init
+{
+    self = [super init];
+    if (self)
+    {
+        [self setIcons:@"widget_track_recording_uphill_day" widgetNightIcon:@"widget_track_recording_uphill_night"];
+    }
+    return self;
+}
+
+- (double) getElevationDiff
+{
+    OAGPXTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getAnalysis:0];
+    return analysis.diffElevationUp;
+}
+
 + (NSString *) getName
 {
     return [NSString stringWithFormat:@"%@ - %@", OALocalizedString(@"record_plugin_name"), OALocalizedString(@"map_widget_trip_recording_uphill")];
+}
+
+@end
+
+
+@implementation OATripRecordingDownhillWidget
+
+- (instancetype) init
+{
+    self = [super init];
+    if (self)
+    {
+        [self setIcons:@"widget_track_recording_downhill_day" widgetNightIcon:@"widget_track_recording_downhill_night"];
+    }
+    return self;
+}
+
+- (double) getElevationDiff
+{
+    OAGPXTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getAnalysis:0];
+    return analysis.diffElevationDown;
+}
+
++ (NSString *) getName
+{
+    return [NSString stringWithFormat:@"%@ - %@", OALocalizedString(@"record_plugin_name"), OALocalizedString(@"map_widget_trip_recording_downhill")];
 }
 
 @end

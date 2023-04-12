@@ -646,7 +646,7 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
       } else {
           NSString *min = [NSString stringWithFormat:@"%02ld", minutes % 60];
           long hours = minutes / 60;
-          return [NSString stringWithFormat:@"%ld:%ld:%@", hours, minutes, sec];
+          return [NSString stringWithFormat:@"%ld:%@:%@", hours, min, sec];
       }
 }
 

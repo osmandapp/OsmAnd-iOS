@@ -401,11 +401,13 @@
 		326B772A29D9CEDF00FB23DF /* widget_track_recording_downhill_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 326B771A29D9CEDF00FB23DF /* widget_track_recording_downhill_day@3x.png */; };
 		3278259029E5A70500AB26A2 /* OATripRecordingDistanceWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3278258F29E5A6E500AB26A2 /* OATripRecordingDistanceWidget.xib */; };
 		3278259229E5A84200AB26A2 /* OATripRecordingTimeWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3278259129E5A82200AB26A2 /* OATripRecordingTimeWidget.xib */; };
+		3278259429E68B7400AB26A2 /* OATripRecordingUphillWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3278259329E68B6200AB26A2 /* OATripRecordingUphillWidget.xib */; };
+		3278259629E690FD00AB26A2 /* OATripRecordingDownhillWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3278259529E690C400AB26A2 /* OATripRecordingDownhillWidget.xib */; };
 		327B4AB0288F310700AF71AF /* OAFavoriteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 327B4AAF288F310700AF71AF /* OAFavoriteViewController.mm */; };
 		327B4AB4288F50CC00AF71AF /* OAFavoriteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 327B4AB3288F508E00AF71AF /* OAFavoriteViewController.xib */; };
 		327B4AB82891209F00AF71AF /* OAGPXWptViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 327B4AB72891208500AF71AF /* OAGPXWptViewController.xib */; };
 		328BD49529D5AC6400045871 /* OATripRecordingDistanceWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 328BD49429D5AC6400045871 /* OATripRecordingDistanceWidget.m */; };
-		328EECD629DC5FA7002922AA /* OATripRecordingUphillWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 328EECD529DC5FA7002922AA /* OATripRecordingUphillWidget.mm */; };
+		328EECD629DC5FA7002922AA /* OATripRecordingElevationWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 328EECD529DC5FA7002922AA /* OATripRecordingElevationWidget.mm */; };
 		3296B47B27F8790800108AF7 /* widget_weather_temperature_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B44B27F878FD00108AF7 /* widget_weather_temperature_night@3x.png */; };
 		3296B47C27F8790800108AF7 /* ic_navbar_overflow_menu_stroke@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B44C27F878FE00108AF7 /* ic_navbar_overflow_menu_stroke@2x.png */; };
 		3296B47D27F8790800108AF7 /* ic_custom_wind@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3296B44D27F878FE00108AF7 /* ic_custom_wind@3x.png */; };
@@ -502,7 +504,6 @@
 		32C21CB127DFC18E00DE4266 /* OAAlertBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32C21CB027DFC18E00DE4266 /* OAAlertBottomSheetViewController.mm */; };
 		32C21CB327E08EFD00DE4266 /* OAAlertBottomSheetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32C21CB227E08E4D00DE4266 /* OAAlertBottomSheetViewController.xib */; };
 		32C21CB727E0A66B00DE4266 /* OARecordSettingsBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C21CB627E0A66A00DE4266 /* OARecordSettingsBottomSheetViewController.m */; };
-		32C6462529DD54CE00F05F9F /* OATripRecordingDownhillWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32C6462429DD54CE00F05F9F /* OATripRecordingDownhillWidget.mm */; };
 		32C91E5B25A86A5700FA6470 /* ic_custom_compass_widget_hide@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5525A86A5500FA6470 /* ic_custom_compass_widget_hide@3x.png */; };
 		32C91E5D25A86A5700FA6470 /* ic_custom_compass_widget@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */; };
 		32C91E5F25A86A5700FA6470 /* ic_custom_compass_widget@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */; };
@@ -3928,14 +3929,16 @@
 		327555342976F4E00049BC84 /* ars */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ars; path = ars.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3278258F29E5A6E500AB26A2 /* OATripRecordingDistanceWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATripRecordingDistanceWidget.xib; sourceTree = "<group>"; };
 		3278259129E5A82200AB26A2 /* OATripRecordingTimeWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATripRecordingTimeWidget.xib; sourceTree = "<group>"; };
+		3278259329E68B6200AB26A2 /* OATripRecordingUphillWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATripRecordingUphillWidget.xib; sourceTree = "<group>"; };
+		3278259529E690C400AB26A2 /* OATripRecordingDownhillWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATripRecordingDownhillWidget.xib; sourceTree = "<group>"; };
 		327B4AAE288F30EC00AF71AF /* OAFavoriteViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoriteViewController.h; sourceTree = "<group>"; };
 		327B4AAF288F310700AF71AF /* OAFavoriteViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoriteViewController.mm; sourceTree = "<group>"; };
 		327B4AB3288F508E00AF71AF /* OAFavoriteViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAFavoriteViewController.xib; sourceTree = "<group>"; };
 		327B4AB72891208500AF71AF /* OAGPXWptViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAGPXWptViewController.xib; sourceTree = "<group>"; };
 		328BD49329D5AC5500045871 /* OATripRecordingDistanceWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATripRecordingDistanceWidget.h; sourceTree = "<group>"; };
 		328BD49429D5AC6400045871 /* OATripRecordingDistanceWidget.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATripRecordingDistanceWidget.m; sourceTree = "<group>"; };
-		328EECD429DC5F91002922AA /* OATripRecordingUphillWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATripRecordingUphillWidget.h; sourceTree = "<group>"; };
-		328EECD529DC5FA7002922AA /* OATripRecordingUphillWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATripRecordingUphillWidget.mm; sourceTree = "<group>"; };
+		328EECD429DC5F91002922AA /* OATripRecordingElevationWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATripRecordingElevationWidget.h; sourceTree = "<group>"; };
+		328EECD529DC5FA7002922AA /* OATripRecordingElevationWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATripRecordingElevationWidget.mm; sourceTree = "<group>"; };
 		32961CA62991377E00CF5DAB /* OAUploadGPXFilesTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAUploadGPXFilesTask.h; sourceTree = "<group>"; };
 		3296B44B27F878FD00108AF7 /* widget_weather_temperature_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_weather_temperature_night@3x.png"; path = "Resources/Icons/widget_weather_temperature_night@3x.png"; sourceTree = "<group>"; };
 		3296B44C27F878FE00108AF7 /* ic_navbar_overflow_menu_stroke@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_overflow_menu_stroke@2x.png"; path = "Resources/Icons/ic_navbar_overflow_menu_stroke@2x.png"; sourceTree = "<group>"; };
@@ -4038,8 +4041,6 @@
 		32C21CB227E08E4D00DE4266 /* OAAlertBottomSheetViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAAlertBottomSheetViewController.xib; sourceTree = "<group>"; };
 		32C21CB527E0A65300DE4266 /* OARecordSettingsBottomSheetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARecordSettingsBottomSheetViewController.h; sourceTree = "<group>"; };
 		32C21CB627E0A66A00DE4266 /* OARecordSettingsBottomSheetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARecordSettingsBottomSheetViewController.m; sourceTree = "<group>"; };
-		32C6462329DD54BE00F05F9F /* OATripRecordingDownhillWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATripRecordingDownhillWidget.h; sourceTree = "<group>"; };
-		32C6462429DD54CE00F05F9F /* OATripRecordingDownhillWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATripRecordingDownhillWidget.mm; sourceTree = "<group>"; };
 		32C91E5525A86A5500FA6470 /* ic_custom_compass_widget_hide@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget_hide@3x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget_hide@3x.png"; sourceTree = "<group>"; };
 		32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget@3x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget@3x.png"; sourceTree = "<group>"; };
 		32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget@2x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget@2x.png"; sourceTree = "<group>"; };
@@ -11047,10 +11048,8 @@
 				328BD49429D5AC6400045871 /* OATripRecordingDistanceWidget.m */,
 				326B770829D9CA5200FB23DF /* OATripRecordingTimeWidget.h */,
 				326B770929D9CA6400FB23DF /* OATripRecordingTimeWidget.mm */,
-				328EECD429DC5F91002922AA /* OATripRecordingUphillWidget.h */,
-				328EECD529DC5FA7002922AA /* OATripRecordingUphillWidget.mm */,
-				32C6462329DD54BE00F05F9F /* OATripRecordingDownhillWidget.h */,
-				32C6462429DD54CE00F05F9F /* OATripRecordingDownhillWidget.mm */,
+				328EECD429DC5F91002922AA /* OATripRecordingElevationWidget.h */,
+				328EECD529DC5FA7002922AA /* OATripRecordingElevationWidget.mm */,
 			);
 			path = Monitoring;
 			sourceTree = "<group>";
@@ -13490,6 +13489,8 @@
 				4611DF3928569C5000885FD1 /* OASubscriptionBannerCardView.xib */,
 				3278258F29E5A6E500AB26A2 /* OATripRecordingDistanceWidget.xib */,
 				3278259129E5A82200AB26A2 /* OATripRecordingTimeWidget.xib */,
+				3278259329E68B6200AB26A2 /* OATripRecordingUphillWidget.xib */,
+				3278259529E690C400AB26A2 /* OATripRecordingDownhillWidget.xib */,
 			);
 			path = XibViews;
 			sourceTree = "<group>";
@@ -15384,6 +15385,7 @@
 				46C2FD8328B38EF600771E6E /* ic_custom_user_profile@2x.png in Resources */,
 				46C2FD8728B38EF600771E6E /* ic_custom_storage@2x.png in Resources */,
 				8410D068207F48200049DEB2 /* ic_tree_list_dark@3x.png in Resources */,
+				3278259429E68B7400AB26A2 /* OATripRecordingUphillWidget.xib in Resources */,
 				46C2FD8428B38EF600771E6E /* ic_custom_user_profile@3x.png in Resources */,
 				8AFC2C1524334A4E0095BA9F /* map_location_default_center@2x.png in Resources */,
 				8A6CBCB821CE25F0004033C7 /* img_logo_38dp_contour_lines@2x.png in Resources */,
@@ -16144,6 +16146,7 @@
 				849E81A51AFA5D6700549953 /* btn_map_type_icon_view_selected@3x.png in Resources */,
 				3296B47C27F8790800108AF7 /* ic_navbar_overflow_menu_stroke@2x.png in Resources */,
 				845E06201B5956E800DFC2A7 /* ic_destination_pin_5_small@2x.png in Resources */,
+				3278259629E690FD00AB26A2 /* OATripRecordingDownhillWidget.xib in Resources */,
 				DA5A82A926C563A700F274C7 /* OAMapillaryContributeCell.xib in Resources */,
 				15B4E48E24AB3F8600119365 /* ic_custom_minimal_distance@3x.png in Resources */,
 				3296B48927F8790800108AF7 /* widget_weather_air_pressure_day@3x.png in Resources */,
@@ -17312,7 +17315,6 @@
 				DA5A84DC26C563A900F274C7 /* OAMapSettingsPOIScreen.mm in Sources */,
 				DA5A84B326C563A900F274C7 /* OAFirstMapillaryBottomSheetViewController.mm in Sources */,
 				DA5A837726C563A800F274C7 /* OARouteInfoView.mm in Sources */,
-				32C6462529DD54CE00F05F9F /* OATripRecordingDownhillWidget.mm in Sources */,
 				DA5A84DF26C563A900F274C7 /* OAMapSettingsTerrainScreen.mm in Sources */,
 				DA5A842526C563A800F274C7 /* OATargetHistoryItemViewController.m in Sources */,
 				8A31787527E1D8A800CA8AA4 /* OAMapRendererEnvironment.mm in Sources */,
@@ -17506,7 +17508,7 @@
 				CA4ED5E21D6762F76CAF347A /* OACardButtonCell.mm in Sources */,
 				CA4ED3D37A857AA9DE517533 /* OAPurchaseDetailsViewController.mm in Sources */,
 				CA4EDD68D7B26540651A56EB /* OATitleDescriptionBigIconCell.mm in Sources */,
-				328EECD629DC5FA7002922AA /* OATripRecordingUphillWidget.mm in Sources */,
+				328EECD629DC5FA7002922AA /* OATripRecordingElevationWidget.mm in Sources */,
 				CA4EDF67F88C1EDA037C0E3B /* OAWeatherToolbar.mm in Sources */,
 				CA4EDE42AAD38F5BB5B4C6B1 /* OASegmentedSlider.mm in Sources */,
 				CA4EDD247D185CBEF97908BE /* OAWeatherToolbarHandlers.mm in Sources */,

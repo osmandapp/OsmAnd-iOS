@@ -18,8 +18,7 @@
 
 - (instancetype) initWithPlugin:(OAMonitoringPlugin *)plugin
 {
-    self = (OATripRecordingDistanceWidget *)[[OATextInfoWidget alloc] init];
-    
+    self = [super init];
     if (self)
     {
         __weak OATextInfoWidget *distanceWidgetWeak = self;

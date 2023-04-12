@@ -23,10 +23,10 @@
 
 - (instancetype) init
 {
-    self = (OATripRecordingTimeWidget *)[[OATextInfoWidget alloc] init];
+    self = [super init];
     if (self)
     {
-        __weak OATripRecordingTimeWidget *weakSelf = self;
+        __weak OATextInfoWidget *weakSelf = self;
         long __block cachedTimeSpan = -1;
         
         self.updateInfoFunction = ^BOOL {

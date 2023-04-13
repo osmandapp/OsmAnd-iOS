@@ -129,6 +129,11 @@
         _navbarHeightSmall = self.navigationController.navigationBar.frame.size.height;
 }
 
+- (void)viewDidLayoutSubviews
+{
+    [self setupCustomLargeTitleView];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];

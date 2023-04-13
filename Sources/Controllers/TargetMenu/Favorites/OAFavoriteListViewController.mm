@@ -294,6 +294,7 @@ static UIViewController *parentController;
     _editButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"icon_edit"] style:UIBarButtonItemStylePlain target:self action:@selector(editButtonClicked:)];
     _directionButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"icon_direction"] style:UIBarButtonItemStylePlain target:self action:@selector(sortByDistance:)];
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton, _directionButton] animated:YES];
+    self.tabBarController.navigationItem.title = OALocalizedString(@"my_favorites");
     
     _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     _searchController.searchResultsUpdater = self;
@@ -332,8 +333,7 @@ static UIViewController *parentController;
     }
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-    self.tabBarController.navigationItem.searchController = nil;
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    self.definesPresentationContext = NO;
 }
 
 -(void) addAccessibilityLabels

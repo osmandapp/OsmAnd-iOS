@@ -79,7 +79,7 @@
 
 @end
 
-@interface OAGPXListViewController () <UIDocumentPickerDelegate>
+@interface OAGPXListViewController () <UIDocumentPickerDelegate, UISearchResultsUpdating, UISearchBarDelegate>
 {
     NSURL *_importUrl;
     OAGPXDocument *_doc;
@@ -118,6 +118,13 @@
     NSString *_importGpxPath;
     
     MBProgressHUD *_progressHUD;
+    
+    UIBarButtonItem *_selectAllButton;
+    UIBarButtonItem *_doneButton;
+    UIBarButtonItem *_selectionModeButton;
+    UISearchController *_searchController;
+    
+    BOOL _isSearchActive;
 }
 
 static UIViewController *parentController;
@@ -501,25 +508,25 @@ static UIViewController *parentController;
 
 - (void) updateHeaderLabels
 {
-    [_selectAllButton setTitle:OALocalizedString(@"shared_string_select_all") forState:UIControlStateNormal];
-    [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
+    [_selectAllButton setTitle:OALocalizedString(@"shared_string_select_all")];
+    [_doneButton setTitle:OALocalizedString(@"shared_string_done")];
     
     if (_editActive)
     {
         if (_selectedItems.count > 0)
         {
-            _titleView.text = [NSString stringWithFormat:OALocalizedString(@"selected_tracks_count"), _selectedItems.count];
+            self.tabBarController.navigationItem.title = [NSString stringWithFormat:OALocalizedString(@"selected_tracks_count"), _selectedItems.count];
             if (_selectedItems.count == _displayingTracksCount)
-                [_selectAllButton setTitle:OALocalizedString(@"shared_string_deselect_all") forState:UIControlStateNormal];
+                [_selectAllButton setTitle:OALocalizedString(@"shared_string_deselect_all")];
         }
         else
         {
-            _titleView.text = OALocalizedString(@"select_tracks");
+            self.tabBarController.navigationItem.title = OALocalizedString(@"select_tracks");
         }
     }
     else
     {
-        _titleView.text = OALocalizedString(@"menu_my_trips");
+        self.tabBarController.navigationItem.title = OALocalizedString(@"menu_my_trips");
     }
 }
 
@@ -532,11 +539,8 @@ static UIViewController *parentController;
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
     
     _editActive = NO;
+    _isSearchActive = NO;
 
-    self.selectionModeButton.frame = self.doneButton.frame;
-    CGRect frame = self.backButton.frame;
-    frame.size.width =  kMaxCancelButtonWidth;
-    self.selectAllButton.frame = frame;
     [self setupView];
     
     _selectedIndexPaths = [[NSMutableArray alloc] init];
@@ -547,7 +551,6 @@ static UIViewController *parentController;
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
     self.editToolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
-    self.navBarView.backgroundColor = UIColorFromRGB(color_primary_orange_navbar_background);
     [self.editToolbarView.layer addSublayer:_horizontalLine];
     
     _exportButton.tintColor = UIColorFromRGB(color_primary_purple);
@@ -582,6 +585,24 @@ static UIViewController *parentController;
     [self applySafeAreaMargins];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNewTracksFetched) name:kNotificationNewTracksFetched object:nil];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    _selectionModeButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_overflow_menu_stroke.png"] style:UIBarButtonItemStylePlain target:self action:@selector(selectionModeButtonClick:)];
+    _doneButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_done") style:UIBarButtonItemStylePlain target:self action:@selector(doneButtonClick:)];
+    _selectAllButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_select_all") style:UIBarButtonItemStylePlain target:self action:@selector(selectAllButtonClick:)];
+    [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_selectionModeButton] animated:YES];
+    _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    _searchController.searchResultsUpdater = self;
+    _searchController.searchBar.delegate = self;
+    _searchController.obscuresBackgroundDuringPresentation = NO;
+    self.tabBarController.navigationItem.searchController = _searchController;
+    [self setupSearchController:NO filtered:NO];
+    self.definesPresentationContext = YES;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    
+    [self updateHeaderLabels];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -592,6 +613,9 @@ static UIViewController *parentController;
     _trackRecordingObserver = nil;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotificationNewTracksFetched object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    self.definesPresentationContext = NO;
 }
 
 -(UIView *) getBottomView
@@ -606,10 +630,41 @@ static UIViewController *parentController;
 
 - (void) updateButtons
 {
-    self.backButton.hidden = _editActive;
-    self.selectAllButton.hidden = !_editActive;
-    self.selectionModeButton.hidden = _editActive;
-    self.doneButton.hidden = !_editActive;
+    if (_editActive)
+    {
+        self.tabBarController.navigationItem.hidesBackButton = YES;
+        [self.navigationController.navigationBar.topItem setLeftBarButtonItem:_selectAllButton animated:YES];
+        [self.navigationController.navigationBar.topItem setRightBarButtonItem:_doneButton animated:YES];
+    }
+    else
+    {
+        self.tabBarController.navigationItem.hidesBackButton = NO;
+        [self.navigationController.navigationBar.topItem setLeftBarButtonItem:nil];
+        [self.navigationController.navigationBar.topItem setRightBarButtonItem:_selectionModeButton animated:YES];
+    }
+}
+
+- (void) setupSearchController:(BOOL)isSearchActive filtered:(BOOL)isFiltered
+{
+    if (isSearchActive)
+    {
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+    }
+    else if (isFiltered)
+    {
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_favorites") attributes:@{NSForegroundColorAttributeName:UIColor.grayColor}];
+        _searchController.searchBar.searchTextField.backgroundColor = UIColor.whiteColor;
+        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.grayColor;
+    }
+    else
+    {
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_favorites") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+        _searchController.searchBar.searchTextField.tintColor = UIColor.grayColor;
+    }
 }
 
 - (void) onTrackRecordingChanged
@@ -658,63 +713,66 @@ static UIViewController *parentController;
     self.gpxList = [NSMutableArray arrayWithArray:db.gpxList];
     _displayingTracksCount = 0;
     
-    OAGpxTableGroup *trackRecordingGroup = [[OAGpxTableGroup alloc] init];
-    trackRecordingGroup.isMenu = YES;
-    trackRecordingGroup.type = [OAIconTextTableViewCell getCellIdentifier];
-    trackRecordingGroup.header = OALocalizedString(@"record_trip");
-    
-    if ([_iapHelper.trackRecording isActive])
-        [trackRecordingGroup.groupItems addObject:@{
-            @"title" : OALocalizedString(@"shared_string_currently_recording_track"),
-            @"icon" : @"ic_custom_reverse_direction.png",
-            @"type" : [OAGPXRecTableViewCell getCellIdentifier],
-            @"key" : @"track_recording"}
-        ];
-    else
-        [trackRecordingGroup.groupItems addObject:@{
-            @"title" : OALocalizedString(@"track_rec_addon_q"),
-            @"type" : [OASimpleTableViewCell getCellIdentifier],
-            @"key" : @"track_recording"}
-        ];
-    [tableData addObject:trackRecordingGroup];
-    
-    if (self.gpxList.count > 0)
+    if (!_isSearchActive)
     {
-        // Sort items by date-time added desc
-        NSArray *sortedArrayGroups = [self.gpxList sortedArrayUsingComparator:^NSComparisonResult(OAGPX* obj1, OAGPX* obj2) {
-            return [obj2.importDate compare:obj1.importDate];
-        }];
-        [self.gpxList setArray:sortedArrayGroups];
-    }
-    
-    OAGpxTableGroup* visibleGroup = [[OAGpxTableGroup alloc] init];
-    visibleGroup.groupName = OALocalizedString(@"tracks_on_map");
-    visibleGroup.groupIcon = @"ic_custom_map";
-    visibleGroup.isMenu = NO;
-    visibleGroup.type = kGPXGroupHeaderRow;
-    visibleGroup.header = @"";
-    for (OAGPX *item in _gpxList)
-    {
-        if ([_visible containsObject:item.gpxFilePath])
+        OAGpxTableGroup *trackRecordingGroup = [[OAGpxTableGroup alloc] init];
+        trackRecordingGroup.isMenu = YES;
+        trackRecordingGroup.type = [OAIconTextTableViewCell getCellIdentifier];
+        trackRecordingGroup.header = OALocalizedString(@"record_trip");
+        
+        if ([_iapHelper.trackRecording isActive])
+            [trackRecordingGroup.groupItems addObject:@{
+                @"title" : OALocalizedString(@"shared_string_currently_recording_track"),
+                @"icon" : @"ic_custom_reverse_direction.png",
+                @"type" : [OAGPXRecTableViewCell getCellIdentifier],
+                @"key" : @"track_recording"}
+            ];
+        else
+            [trackRecordingGroup.groupItems addObject:@{
+                @"title" : OALocalizedString(@"track_rec_addon_q"),
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+                @"key" : @"track_recording"}
+            ];
+        [tableData addObject:trackRecordingGroup];
+        
+        if (self.gpxList.count > 0)
         {
-            [visibleGroup.groupItems addObject:
-             @{
-                 @"title" : [item getNiceTitle],
-                 @"icon" : @"ic_custom_trip.png",
-                 @"track" : item,
-                 @"type" : [OASwitchTableViewCell getCellIdentifier],
-                 @"key" : @"track_group"}];
+            // Sort items by date-time added desc
+            NSArray *sortedArrayGroups = [self.gpxList sortedArrayUsingComparator:^NSComparisonResult(OAGPX* obj1, OAGPX* obj2) {
+                return [obj2.importDate compare:obj1.importDate];
+            }];
+            [self.gpxList setArray:sortedArrayGroups];
         }
-    }
-    visibleGroup.isOpen = YES;
-    if (visibleGroup.groupItems.count > 0)
-    {
-        visibleGroup.groupItems = [visibleGroup.groupItems sortedArrayUsingComparator:^NSComparisonResult(NSDictionary* obj1, NSDictionary* obj2) {
-            NSString *title1 = obj1[@"title"];
-            NSString *title2 = obj2[@"title"];
-            return [title1.lowerCase compare: title2.lowerCase];
-        }];
-        [tableData addObject:visibleGroup];
+        
+        OAGpxTableGroup* visibleGroup = [[OAGpxTableGroup alloc] init];
+        visibleGroup.groupName = OALocalizedString(@"tracks_on_map");
+        visibleGroup.groupIcon = @"ic_custom_map";
+        visibleGroup.isMenu = NO;
+        visibleGroup.type = kGPXGroupHeaderRow;
+        visibleGroup.header = @"";
+        for (OAGPX *item in _gpxList)
+        {
+            if ([_visible containsObject:item.gpxFilePath])
+            {
+                [visibleGroup.groupItems addObject:
+                 @{
+                    @"title" : [item getNiceTitle],
+                    @"icon" : @"ic_custom_trip.png",
+                    @"track" : item,
+                    @"type" : [OASwitchTableViewCell getCellIdentifier],
+                    @"key" : @"track_group"}];
+            }
+        }
+        visibleGroup.isOpen = YES;
+        if (visibleGroup.groupItems.count > 0)
+        {
+            visibleGroup.groupItems = [visibleGroup.groupItems sortedArrayUsingComparator:^NSComparisonResult(NSDictionary* obj1, NSDictionary* obj2) {
+                NSString *title1 = obj1[@"title"];
+                NSString *title2 = obj2[@"title"];
+                return [title1.lowerCase compare: title2.lowerCase];
+            }];
+            [tableData addObject:visibleGroup];
+        }
     }
     
     for (NSString *key in _gpxFolders.allKeys)
@@ -765,24 +823,26 @@ static UIViewController *parentController;
             [tableData addObject:tracksGroup];
         }
     }
-    
-    // Generate menu items
-    OAGpxTableGroup* actionsGroup = [[OAGpxTableGroup alloc] init];
-    actionsGroup.isMenu = YES;
-    actionsGroup.type = [OAIconTextTableViewCell getCellIdentifier];
-    actionsGroup.header = OALocalizedString(@"shared_string_actions");
-    self.menuItems = @[@{@"type" : [OAIconTextTableViewCell getCellIdentifier],
-                         @"key" : @"import_track",
-                         @"title": OALocalizedString(@"import_tracks"),
-                         @"icon": @"ic_custom_import",
-                         @"header" : OALocalizedString(@"shared_string_actions")},
-                       @{@"type" : [OAIconTextTableViewCell getCellIdentifier],
-                         @"key" : @"create_new_trip",
-                         @"title": OALocalizedString(@"create_new_trip"),
-                         @"icon": @"ic_custom_trip.png"}];
-    actionsGroup.groupItems = [NSMutableArray arrayWithArray:self.menuItems];
-    
-    [tableData addObject:actionsGroup];
+    if (!_isSearchActive)
+    {
+        // Generate menu items
+        OAGpxTableGroup* actionsGroup = [[OAGpxTableGroup alloc] init];
+        actionsGroup.isMenu = YES;
+        actionsGroup.type = [OAIconTextTableViewCell getCellIdentifier];
+        actionsGroup.header = OALocalizedString(@"shared_string_actions");
+        self.menuItems = @[@{@"type" : [OAIconTextTableViewCell getCellIdentifier],
+                             @"key" : @"import_track",
+                             @"title": OALocalizedString(@"import_tracks"),
+                             @"icon": @"ic_custom_import",
+                             @"header" : OALocalizedString(@"shared_string_actions")},
+                           @{@"type" : [OAIconTextTableViewCell getCellIdentifier],
+                             @"key" : @"create_new_trip",
+                             @"title": OALocalizedString(@"create_new_trip"),
+                             @"icon": @"ic_custom_trip.png"}];
+        actionsGroup.groupItems = [NSMutableArray arrayWithArray:self.menuItems];
+        
+        [tableData addObject:actionsGroup];
+    }
     _data = [NSMutableArray arrayWithArray:tableData];
 }
 
@@ -1138,6 +1198,8 @@ static UIViewController *parentController;
     OAGpxTableGroup* groupData = [_data objectAtIndex:section];
     if (groupData.isMenu)
         return 48.;
+    else if (_isSearchActive)
+        return 0.;
     else
         return 24.;
 }
@@ -1145,7 +1207,7 @@ static UIViewController *parentController;
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     OAGpxTableGroup* groupData = [_data objectAtIndex:section];
-    if (groupData.isMenu)
+    if (groupData.isMenu || _isSearchActive)
         return groupData.groupItems.count;
     else if (groupData.isOpen)
         return [groupData.groupItems count] + 1;
@@ -1227,7 +1289,7 @@ static UIViewController *parentController;
         }
     }
     else {
-        if (indexPath.row == kGPXGroupHeaderRow)
+        if (indexPath.row == kGPXGroupHeaderRow && !_isSearchActive)
         {
             OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
             if (cell == nil)
@@ -1268,7 +1330,7 @@ static UIViewController *parentController;
         }
         else
         {
-            NSInteger dataIndex = indexPath.row - 1;
+            NSInteger dataIndex = _isSearchActive ? indexPath.row : indexPath.row - 1;
             NSDictionary *groupItem = item.groupItems[dataIndex];
             NSString *cellType = groupItem[@"type"];
             OAGPX *gpx = groupItem[@"track"];
@@ -1389,13 +1451,13 @@ static UIViewController *parentController;
                 }
             }
         }
-        else if (indexPath.row == 0)
+        else if (indexPath.row == 0 && !_isSearchActive)
         {
             [self openCloseGroup:indexPath];
         }
         else
         {
-            NSDictionary *gpxInfo = item.groupItems[indexPath.row - 1];
+            NSDictionary *gpxInfo = _isSearchActive ? item.groupItems[indexPath.row] : item.groupItems[indexPath.row - 1];
             OAGPX* gpxItem = gpxInfo[@"track"];
             [self doPush];
             [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpxItem];
@@ -1644,6 +1706,116 @@ static UIViewController *parentController;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self reloadData];
     });
+}
+
+// MARK: Keyboard Notifications
+
+- (void) keyboardWillShow:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    CGRect keyboardBounds;
+    [[userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardBounds];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        UIEdgeInsets insets = [self.gpxTableView contentInset];
+        [self.gpxTableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardBounds.size.height, insets.right)];
+        [self.gpxTableView setScrollIndicatorInsets:self.gpxTableView.contentInset];
+    } completion:nil];
+}
+
+- (void) keyboardWillHide:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        UIEdgeInsets insets = [self.gpxTableView contentInset];
+        [self.gpxTableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0.0, insets.right)];
+        [self.gpxTableView setScrollIndicatorInsets:self.gpxTableView.contentInset];
+    } completion:nil];
+}
+
+// MARK: UISearchResultsUpdating
+
+- (void) updateSearchResultsForSearchController:(UISearchController *)searchController
+{
+    if (searchController.isActive && searchController.searchBar.searchTextField.text.length == 0)
+    {
+        _isSearchActive = YES;
+        [self setupSearchController:YES filtered:NO];
+        [self generateData];
+        [self.gpxTableView reloadData];
+    }
+    else if (searchController.isActive && searchController.searchBar.searchTextField.text.length > 0)
+    {
+        [self setupSearchController:NO filtered:YES];
+        NSMutableArray *filteredItems = [NSMutableArray array];
+        
+        for (NSString *key in _gpxFolders.allKeys)
+        {
+            OAGpxTableGroup *tracksGroup = [[OAGpxTableGroup alloc] init];
+            for (OAGpxInfo *track in _gpxFolders[key])
+            {
+                if (!track.gpx)
+                    continue;
+                
+                NSRange nameTagRange = [[track getName] rangeOfString:searchController.searchBar.searchTextField.text options:NSCaseInsensitiveSearch];
+                if (nameTagRange.location != NSNotFound)
+                {
+                    [tracksGroup.groupItems addObject:@{
+                        @"type" : [OAGPXTrackCell getCellIdentifier],
+                        @"title" : [track getName],
+                        @"track" : track.gpx,
+                        @"distance" : [OAOsmAndFormatter getFormattedDistance:track.gpx.totalDistance],
+                        @"time" : [OAOsmAndFormatter getFormattedTimeInterval:track.gpx.timeSpan shortFormat:YES],
+                        @"importDate" : track.gpx.importDate,
+                        @"wpt" : [NSString stringWithFormat:@"%d", track.gpx.wptPoints],
+                        @"key" : @"track_group"
+                    }];
+                }
+            }
+            tracksGroup.isOpen = NO;
+            if (tracksGroup.groupItems.count > 0)
+            {
+                if ([key isEqualToString:@"import"])
+                {
+                    tracksGroup.groupItems = [tracksGroup.groupItems sortedArrayUsingComparator:^NSComparisonResult(NSDictionary* obj1, NSDictionary* obj2) {
+                        NSDate *importDate1 = obj1[@"importDate"];
+                        NSDate *importDate2 = obj2[@"importDate"];
+                        return [importDate2 compare: importDate1];
+                    }];
+                }
+                else
+                {
+                    tracksGroup.groupItems = [tracksGroup.groupItems sortedArrayUsingComparator:^NSComparisonResult(NSDictionary* obj1, NSDictionary* obj2) {
+                        NSString *title1 = obj1[@"title"];
+                        NSString *title2 = obj2[@"title"];
+                        return [title1.lowerCase compare: title2.lowerCase];
+                    }];
+                }
+                [filteredItems addObject:tracksGroup];
+            }
+        }
+        _data = [NSMutableArray arrayWithArray:filteredItems];
+        [self.gpxTableView reloadData];
+    }
+    else
+    {
+        _isSearchActive = NO;
+        [self setupSearchController:NO filtered:NO];
+        [self generateData];
+        [self.gpxTableView reloadData];
+    }
+}
+
+// MARK: UISearchBarDelegate
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_favorites") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+    searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+    searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
 }
 
 @end

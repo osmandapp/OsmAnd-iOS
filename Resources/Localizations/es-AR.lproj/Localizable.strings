@@ -2868,3 +2868,4 @@
 "without_permission_my_position_value" = "OsmAnd no tiene permisos de ubicación";
 "press_again_to_change_the_map_orientation" = "Pulsa de nuevo para cambiar la orientación del mapa";
 "app_mode_moped" = "Ciclomotor";
+"speak_route_deviation" = "Anunciar desviación de la ruta";

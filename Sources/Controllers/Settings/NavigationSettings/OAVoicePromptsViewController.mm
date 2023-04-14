@@ -214,6 +214,12 @@
         kCellKeyKey : @"speakRouteRecalculation",
         @"value" : _settings.speakRouteRecalculation
     }];
+    [otherSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"speak_route_deviation"),
+        kCellKeyKey : @"speakRouteDeviation",
+        @"value" : _settings.speakRouteDeviation
+    }];
 
     OATableSectionData *optionsSection = [OATableSectionData sectionData];
     optionsSection.headerText = OALocalizedString(@"shared_string_options");

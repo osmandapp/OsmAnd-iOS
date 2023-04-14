@@ -555,7 +555,7 @@ std::string preferredLanguage;
 
 - (void) announceOffRoute:(double)dist
 {
-    if (dist > [_atd getOffRouteDistance])
+    if ([_settings.speakRouteDeviation get] && dist > [_atd getOffRouteDistance])
     {
         long ms = CACurrentMediaTime() * 1000;
         if (waitAnnouncedOffRoute == 0 || ms - lastAnnouncedOffRoute > waitAnnouncedOffRoute)
@@ -609,13 +609,16 @@ std::string preferredLanguage;
 
 - (void) announceBackOnRoute
 {
-    if (announceBackOnRoute) {
-        OACommandBuilder *p = [self getNewCommandPlayerToPlay];
-        if (p != nil) {
-//            notifyOnVoiceMessage();
-            [[p backOnRoute] play];
-        }
-        announceBackOnRoute = false;
+    if ([_settings.speakRouteDeviation get])
+    {
+//        if (announceBackOnRoute) {
+            OACommandBuilder *p = [self getNewCommandPlayerToPlay];
+            if (p != nil) {
+                //            notifyOnVoiceMessage();
+                [[p backOnRoute] play];
+            }
+            announceBackOnRoute = false;
+//        }
     }
 }
 

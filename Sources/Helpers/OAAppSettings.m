@@ -181,6 +181,7 @@
 #define speakExitNumberNamesKey @"speakExitNumberNames"
 #define speakGpsSignalStatusKey @"speakGpsSignalStatus"
 #define speakRouteRecalculationKey @"speakRouteRecalculation"
+#define speakRouteDeviationKey @"speakRouteDeviation"
 #define announceWptKey @"announceWpt"
 #define announceNearbyFavoritesKey @"announceNearbyFavorites"
 #define announceNearbyPoiKey @"announceNearbyPoi"
@@ -4003,6 +4004,7 @@
         _speakExitNumberNames = [OACommonBoolean withKey:speakExitNumberNamesKey defValue:YES];
         _speakGpsSignalStatus = [OACommonBoolean withKey:speakGpsSignalStatusKey defValue:YES];
         _speakRouteRecalculation = [OACommonBoolean withKey:speakRouteRecalculationKey defValue:YES];
+        _speakRouteDeviation = [OACommonBoolean withKey:speakRouteDeviationKey defValue:YES];
         _announceNearbyFavorites = [OACommonBoolean withKey:announceNearbyFavoritesKey defValue:NO];
         _announceNearbyPoi = [OACommonBoolean withKey:announceNearbyPoiKey defValue:NO];
 
@@ -4015,6 +4017,7 @@
         [_profilePreferences setObject:_speakExitNumberNames forKey:@"exit_number_names"];
         [_profilePreferences setObject:_speakGpsSignalStatus forKey:@"speak_gps_signal_status"];
         [_profilePreferences setObject:_speakRouteRecalculation forKey:@"speak_route_recalculation"];
+        [_profilePreferences setObject:_speakRouteDeviation forKey:@"speak_route_deviation"];
         [_profilePreferences setObject:_announceNearbyFavorites forKey:@"announce_nearby_favorites"];
         [_profilePreferences setObject:_announceNearbyPoi forKey:@"announce_nearby_poi"];
 

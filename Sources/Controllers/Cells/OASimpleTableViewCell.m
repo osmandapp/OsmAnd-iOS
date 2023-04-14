@@ -10,7 +10,7 @@
 #import "OASizes.h"
 #import "UITableViewCell+getTableView.h"
 
-@interface OASimpleTableViewCell ()
+@interface OASimpleTableViewCell () <UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIStackView *contentOutsideStackViewVertical;
 @property (weak, nonatomic) IBOutlet UIStackView *textCustomMarginTopStackView;
@@ -22,6 +22,7 @@
 @implementation OASimpleTableViewCell
 {
     BOOL _isCustomLeftSeparatorInset;
+    UITapGestureRecognizer *_tapRecognizer;
 }
 
 - (void)layoutSubviews
@@ -38,15 +39,31 @@
 
 - (void)updateSeparatorInset
 {
-    CGRect titleFrame = [self.titleLabel convertRect:self.titleLabel.bounds toView:self];
-    CGFloat leftInset = [self isDirectionRTL] ? ([self getTableView].frame.size.width - (titleFrame.origin.x + titleFrame.size.width)) : titleFrame.origin.x;
-    self.separatorInset = UIEdgeInsetsMake(0., leftInset, 0., 0.);
+    self.separatorInset = UIEdgeInsetsMake(0., [self getLeftInsetToView:self.titleLabel], 0., 0.);
+}
+
+- (CGFloat)getLeftInsetToView:(UIView *)view
+{
+    CGRect viewFrame = [view convertRect:view.bounds toView:self];
+    return [self isDirectionRTL] ? ([self getTableView].frame.size.width - (viewFrame.origin.x + viewFrame.size.width)) : viewFrame.origin.x;
 }
 
 - (void)leftEditButtonVisibility:(BOOL)show
 {
     self.leftEditButton.hidden = !show;
     [self updateMargins];
+
+    if (show)
+    {
+        _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onLeftEditButtonPressed:)];
+        [self addGestureRecognizer:_tapRecognizer];
+        _tapRecognizer.delegate = self;
+    }
+    else if (_tapRecognizer)
+    {
+        [self removeGestureRecognizer:_tapRecognizer];
+        _tapRecognizer = nil;
+    }
 }
 
 - (void)leftIconVisibility:(BOOL)show
@@ -103,6 +120,29 @@
     {
         self.contentInsideStackView.alignment = UIStackViewAlignmentTop;
     }
+}
+
+#pragma mark - Selectors
+
+- (void)onLeftEditButtonPressed:(UIGestureRecognizer *)recognizer
+{
+    if (self.delegate && recognizer.state == UIGestureRecognizerStateEnded)
+        [self.delegate onLeftEditButtonPressed:self.leftEditButton.tag];
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    if (self.leftEditButton.hidden || !self.leftEditButton.enabled)
+        return NO;
+
+    CGFloat leftInset = [self getLeftInsetToView:self.leftIconView.hidden ? self.titleLabel : self.leftIconView];
+    CGFloat pressedXLocation = [gestureRecognizer locationInView:self].x;
+    if ([self isDirectionRTL])
+        return [self getTableView].frame.size.width - pressedXLocation <= leftInset;
+    else
+        return pressedXLocation <= leftInset;
 }
 
 @end

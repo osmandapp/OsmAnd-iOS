@@ -9,13 +9,13 @@
 #import "OADownloadMultipleResourceViewController.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OACustomSelectionButtonCell.h"
 #import "OASimpleTableViewCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OASegmentedControlCell.h"
 #import "OADividerCell.h"
 #import "OATableViewCustomHeaderView.h"
 
-@interface OADownloadMultipleResourceViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OADownloadMultipleResourceViewController () <UITableViewDelegate, UITableViewDataSource, OATableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -166,42 +166,9 @@
     [self updateDownloadButtonView];
 }
 
-- (void)selectDeselectGroup:(id)sender
+- (void)selectDeselectGroup:(UIButton *)sender
 {
-    if (!_isSingleSRTM)
-    {
-        BOOL shouldSelect = _selectedItems.count == 0;
-        NSInteger section = _isSRTM ? 1 : 0;
-        if (!shouldSelect)
-        {
-            [_selectedItems removeAllObjects];
-        }
-        else
-        {
-            [_items enumerateObjectsUsingBlock:^(OAResourceItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if (![obj isInstalled])
-                    [_selectedItems addObject:obj];
-            }];
-        }
-
-        for (NSInteger i = 1; i < _items.count + 1; i++)
-        {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(i + 1) * 2 - 1 inSection:section];
-            if (shouldSelect && ![_items[i - 1] isInstalled])
-                [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-            else
-                [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-        }
-        [UIView transitionWithView:self.tableView
-                          duration:0.35f
-                           options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
-                        animations:^(void)
-                        {
-                            [self.tableView reloadData];
-                        }
-                        completion:nil];
-        [self updateDownloadButtonView];
-    }
+    [self onLeftEditButtonPressed:sender.tag];
 }
 
 - (void)segmentChanged:(id)sender
@@ -351,7 +318,7 @@
 
     NSString *cellType = _isSRTM && indexPath.section == 0 ? [OASegmentedControlCell getCellIdentifier] :
             indexPath.row == 1 && !_isSingleSRTM
-                    ? [OACustomSelectionButtonCell getCellIdentifier]
+                    ? [OAButtonTableViewCell getCellIdentifier]
                     : [OASimpleTableViewCell getCellIdentifier];
 
     if ([cellType isEqualToString:[OASegmentedControlCell getCellIdentifier]])
@@ -380,34 +347,49 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OACustomSelectionButtonCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
     {
-        OACustomSelectionButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType];
+        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:cellType owner:self options:nil];
             cell = nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell descriptionVisibility:NO];
+            [cell leftEditButtonVisibility:YES];
+            cell.delegate = self;
+            [cell.button.titleLabel setTextAlignment:NSTextAlignmentNatural];
+            cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeading;
+
+            UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
+            conf.contentInsets = NSDirectionalEdgeInsetsMake(0., -6.5, 0., 0.);
+            cell.leftEditButton.configuration = conf;
+            cell.leftEditButton.layer.shadowColor = UIColorFromRGB(color_tint_gray).CGColor;
+            cell.leftEditButton.layer.shadowOffset = CGSizeMake(0., 0.);
+            cell.leftEditButton.layer.shadowOpacity = 1.;
+            cell.leftEditButton.layer.shadowRadius = 1.;
         }
         if (cell)
         {
             NSUInteger selectedAmount = _selectedItems.count;
 
             NSString *selectionText = selectedAmount > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all");
-            [cell.selectDeselectButton setTitle:selectionText forState:UIControlStateNormal];
-            [cell.selectDeselectButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.selectDeselectButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
-            [cell.selectDeselectButtonTouchableArea removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.selectDeselectButtonTouchableArea addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
-            [cell.selectionButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.selectionButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.button setTitle:selectionText forState:UIControlStateNormal];
+            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.button addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
 
             UIImage *selectionImage = nil;
             if (selectedAmount > 0)
-                selectionImage = selectedAmount < _items.count ? [UIImage imageNamed:@"ic_system_checkbox_indeterminate"] : [UIImage imageNamed:@"ic_system_checkbox_selected"];
-
-            [cell.selectionButton setImage:selectionImage forState:UIControlStateNormal];
-            return cell;
+                selectionImage = [UIImage imageNamed:selectedAmount < _items.count ? @"ic_system_checkbox_indeterminate" : @"ic_system_checkbox_selected"];
+            else
+                selectionImage = [UIImage imageNamed:@"ic_custom_checkbox_unselected"];
+            [cell.leftEditButton setImage:selectionImage forState:UIControlStateNormal];
+            [cell.leftEditButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.leftEditButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
         }
+        return cell;
     }
     else if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
@@ -480,17 +462,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAResourceItem * item = [self getItem:indexPath];
     if (![self isDividerCell:indexPath] && indexPath.row > 2)
     {
+        OAResourceItem * item = [self getItem:indexPath];
         if (!_isSingleSRTM && !item.isInstalled)
             [self selectDeselectItem:indexPath];
-        else
-            [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    }
-    else
-    {
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 
@@ -540,6 +516,46 @@
         if ([item isKindOfClass:OALocalResourceItem.class])
             [self.delegate onDetailsSelected:(OALocalResourceItem *)item];
     }];
+}
+
+#pragma mark - OATableViewCellDelegate
+
+- (void)onLeftEditButtonPressed:(NSInteger)tag
+{
+    if (!_isSingleSRTM)
+    {
+        BOOL shouldSelect = _selectedItems.count == 0;
+        NSInteger section = _isSRTM ? 1 : 0;
+        if (!shouldSelect)
+        {
+            [_selectedItems removeAllObjects];
+        }
+        else
+        {
+            [_items enumerateObjectsUsingBlock:^(OAResourceItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if (![obj isInstalled])
+                    [_selectedItems addObject:obj];
+            }];
+        }
+
+        for (NSInteger i = 1; i < _items.count + 1; i++)
+        {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(i + 1) * 2 - 1 inSection:section];
+            if (shouldSelect && ![_items[i - 1] isInstalled])
+                [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+            else
+                [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        }
+        [UIView transitionWithView:self.tableView
+                          duration:0.35f
+                           options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
+                        animations:^(void)
+                        {
+                            [self.tableView reloadData];
+                        }
+                        completion:nil];
+        [self updateDownloadButtonView];
+    }
 }
 
 @end

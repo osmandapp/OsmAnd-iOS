@@ -6,14 +6,8 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseNavbarViewController.h"
 
-@interface OARearrangeProfilesViewController : OACompoundViewController
-
-@property (weak, nonatomic) IBOutlet UIView *navBar;
-@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UIButton *doneButton;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@interface OARearrangeProfilesViewController : OABaseNavbarViewController
 
 @end

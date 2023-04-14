@@ -105,7 +105,7 @@
     NSMutableParagraphStyle *descriptionParagraphStyle = [[NSMutableParagraphStyle alloc] init];
     descriptionParagraphStyle.minimumLineHeight = 25.5;
     [attributedDescription addAttribute:NSParagraphStyleAttributeName value:descriptionParagraphStyle range:NSMakeRange(0, attributedDescription.length)];
-    [attributedDescription addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:17.] range:NSMakeRange(0, attributedDescription.length)];
+    [attributedDescription addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleBody] range:NSMakeRange(0, attributedDescription.length)];
     self.labelDescription.attributedText = attributedDescription;
 
     NSString *mapsPlus = OALocalizedString(@"product_title_plus");
@@ -119,8 +119,8 @@
 
     NSMutableAttributedString *productIncludedText = [[NSMutableAttributedString alloc] initWithString:secondaryDesc];
     [productIncludedText addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:NSMakeRange(0, secondaryDesc.length)];
-    [productIncludedText addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15.] range:NSMakeRange(0, secondaryDesc.length)];
-    [productIncludedText addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15.] range:NSMakeRange(0, secondaryDesc.length)];
+    [productIncludedText addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] range:NSMakeRange(0, secondaryDesc.length)];
+    [productIncludedText addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] range:NSMakeRange(0, secondaryDesc.length)];
     [productIncludedText addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15. weight:UIFontWeightBold] range:[secondaryDesc rangeOfString:mapsPlus]];
     [productIncludedText addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15. weight:UIFontWeightBold] range:[secondaryDesc rangeOfString:osmAndPro]];
     NSMutableParagraphStyle *productIncludedParagraphStyle = [[NSMutableParagraphStyle alloc] init];

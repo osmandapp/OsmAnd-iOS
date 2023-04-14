@@ -499,7 +499,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             else if (descr && descr.length > 0)
             {
                 NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:descr attributes:@{
-                    NSFontAttributeName: [UIFont scaledSystemFontOfSize:15]
+                    NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]
                 }];
                 NSRange range = [descr rangeOfString:@" " options:NSBackwardsSearch];
                 if (range.location != NSNotFound)

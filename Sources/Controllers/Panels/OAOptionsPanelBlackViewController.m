@@ -263,17 +263,17 @@
     [_menuButtonWeather setTitle:OALocalizedString(@"shared_string_weather") forState:UIControlStateNormal];
     [_menuButtonPlugins setTitle:OALocalizedString(@"plugins_menu_group") forState:UIControlStateNormal];
 
-    _menuButtonMaps.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
-    _menuButtonMyData.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
-    _menuButtonMyWaypoints.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
-    _menuButtonMapsAndResources.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
-    _menuButtonConfigureScreen.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
-    _menuButtonSettings.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
-    _menuButtonHelp.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
-    _menuButtonNavigation.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
-    _menuButtonPlanRoute.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
-    _menuButtonWeather.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
-    _menuButtonPlugins.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
+    _menuButtonMaps.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    _menuButtonMyData.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    _menuButtonMyWaypoints.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    _menuButtonMapsAndResources.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    _menuButtonConfigureScreen.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    _menuButtonSettings.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    _menuButtonHelp.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    _menuButtonNavigation.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    _menuButtonPlanRoute.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    _menuButtonWeather.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    _menuButtonPlugins.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
     _menuButtonMaps.titleLabel.adjustsFontForContentSizeCategory = YES;
     _menuButtonMyData.titleLabel.adjustsFontForContentSizeCategory = YES;

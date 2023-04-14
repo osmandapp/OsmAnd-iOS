@@ -126,7 +126,7 @@ static UIFont *_titleFont;
 + (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text
 {
     if (!_titleFont)
-        _titleFont = [UIFont scaledSystemFontOfSize:17.0];
+        _titleFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
     return [OAUtilities calculateTextBounds:text width:width font:_titleFont].height + textMarginVertical * 2;
 }

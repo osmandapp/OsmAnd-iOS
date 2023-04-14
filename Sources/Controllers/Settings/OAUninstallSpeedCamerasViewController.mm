@@ -114,12 +114,12 @@
     NSString *text = [NSString stringWithFormat:OALocalizedString(@"speed_cameras_legal_descr"), keepActiveStr, uninstallStr];
     NSMutableAttributedString *attrText = [[NSMutableAttributedString alloc] initWithString:text
                                                                                  attributes:@{
-                                                                       NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.] }];
+                                                                       NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleBody] }];
     [attrText addAttribute:NSFontAttributeName
-                     value:[UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold]
+                     value:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]
                      range:[text rangeOfString:uninstallStr]];
     [attrText addAttribute:NSFontAttributeName
-                     value:[UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold]
+                     value:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]
                      range:[text rangeOfString:keepActiveStr]];
     NSMutableParagraphStyle *attrTextParagraphStyle = [[NSMutableParagraphStyle alloc] init];
     attrTextParagraphStyle.minimumLineHeight = 22.;

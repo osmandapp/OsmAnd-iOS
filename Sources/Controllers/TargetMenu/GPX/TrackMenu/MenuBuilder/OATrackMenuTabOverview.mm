@@ -120,7 +120,7 @@
 {
     return [OAUtilities createAttributedString:
                     [[OAWikiArticleHelper getFirstParagraph:_description] componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]][0]
-                                          font:[UIFont scaledSystemFontOfSize:17]
+                                          font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]
                                          color:UIColor.blackColor
                                    strokeColor:nil
                                    strokeWidth:0

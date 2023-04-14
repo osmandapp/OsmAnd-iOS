@@ -6,11 +6,11 @@
 //  Copyright (c) 2022 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseNavbarViewController.h"
 
 @class OAProduct;
 
-@interface OAPurchaseDetailsViewController : OACompoundViewController
+@interface OAPurchaseDetailsViewController : OABaseNavbarViewController
 
 - (instancetype)initWithProduct:(OAProduct *)product;
 - (instancetype)initForCrossplatformSubscription;

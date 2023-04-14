@@ -6,9 +6,11 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OASettingsModalPresentationViewController.h"
+#import "OABaseSettingsViewController.h"
 
-@interface OAVehicleParametersSettingsViewController : OASettingsModalPresentationViewController
+@class OAApplcicationMode;
+
+@interface OAVehicleParametersSettingsViewController : OABaseSettingsViewController
 
 - (instancetype)initWithApplicationMode:(OAApplicationMode *)am vehicleParameter:(NSDictionary *)vp;
 

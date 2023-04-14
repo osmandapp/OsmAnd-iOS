@@ -176,7 +176,7 @@
 {
     CGFloat labelWidth = DeviceScreenWidth - kLabelOffset - (OAUtilities.getLeftMargin * 2);
     CGFloat titleHeight = [OAUtilities calculateTextBounds:self.titleLabel.text width:labelWidth font:[UIFont scaledSystemFontOfSize:34. weight:UIFontWeightBold]].height;
-    CGFloat descriptionHeight = [OAUtilities calculateTextBounds:self.descriptionLabel.text width:labelWidth font:[UIFont scaledSystemFontOfSize:15.]].height;
+    CGFloat descriptionHeight = [OAUtilities calculateTextBounds:self.descriptionLabel.text width:labelWidth font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
     return titleHeight + descriptionHeight + kFixedHeight;
 }
 

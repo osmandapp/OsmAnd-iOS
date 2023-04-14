@@ -17,7 +17,7 @@
     _descView.textContainerInset = UIEdgeInsetsZero;
     _descView.textContainer.lineFragmentPadding = 0;
     NSDictionary *linkAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
-                                     NSFontAttributeName: [UIFont scaledSystemFontOfSize:15.]};
+                                     NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]};
     _descView.linkTextAttributes = linkAttributes;
 
     _extraDescView.textContainerInset = UIEdgeInsetsZero;

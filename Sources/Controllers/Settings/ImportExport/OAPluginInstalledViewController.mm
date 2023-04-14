@@ -333,7 +333,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         }
         if (cell)
         {
-            cell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:item[@"text"] fontSize:[UIFont scaledSystemFontOfSize:17.].pointSize];
+            cell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:item[@"text"] fontSize:[UIFont preferredFontForTextStyle:UIFontTextStyleBody].pointSize];
             cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
             [cell.textView sizeToFit];
         }
@@ -363,8 +363,8 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                               reuseIdentifier:cellTypeId];
 
-                cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
-                cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
+                cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+                cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
                 UIImage* iconImage = [UIImage imageNamed:@"ic_custom_download"];
@@ -379,8 +379,8 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                               reuseIdentifier:cellTypeId];
 
-                cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
-                cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
+                cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+                cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
                 FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];

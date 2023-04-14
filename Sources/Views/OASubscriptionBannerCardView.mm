@@ -237,7 +237,7 @@
     return [[NSAttributedString alloc] initWithString:text
                                            attributes:@{
         NSParagraphStyleAttributeName: paragraphStyle,
-        NSFontAttributeName: [UIFont scaledSystemFontOfSize:15.],
+        NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
         NSForegroundColorAttributeName: [UIColor colorWithWhite:1. alpha:.5] }];
 }
 

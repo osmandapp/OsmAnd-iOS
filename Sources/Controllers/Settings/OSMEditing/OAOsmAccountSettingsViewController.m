@@ -267,7 +267,7 @@
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.titleLabel.font = [UIFont scaledSystemFontOfSize:15.];
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.backgroundColor = UIColor.clearColor;
         }
         if (cell)

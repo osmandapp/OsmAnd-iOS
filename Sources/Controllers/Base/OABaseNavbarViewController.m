@@ -626,13 +626,6 @@
 {
 }
 
-#pragma mark - IBAction
-
-- (IBAction)onRightNavbarButtonPressed:(UIButton *)sender
-{
-    [self onRightNavbarButtonPressed];
-}
-
 #pragma mark - Selectors
 
 - (void)onRightNavbarButtonPressed
@@ -644,6 +637,8 @@
 - (void)onContentSizeChanged:(NSNotification *)notification
 {
     [self setupCustomLargeTitleView];
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView

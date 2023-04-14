@@ -139,7 +139,7 @@
     CGFloat height;
     CGFloat width = DeviceScreenWidth - OAUtilities.getLeftMargin * 2;
     
-    CGSize titleSize = [OAUtilities calculateTextBounds:self.titleLabel.text width:width - 90.0 font:[UIFont scaledSystemFontOfSize:17.0 weight:UIFontWeightRegular]];
+    CGSize titleSize = [OAUtilities calculateTextBounds:self.titleLabel.text width:width - 90.0 font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]];
     
     CGSize descSize;
     CGSize buttonSize;
@@ -148,18 +148,18 @@
     CGFloat maxHeight = (hasButton && hasDescription) ? 70 : 44;
     if (hasButton && hasDescription)
     {
-        buttonSize = [OAUtilities calculateTextBounds:self.additionalButton.titleLabel.text width:width - 90.0 font:[UIFont scaledSystemFontOfSize:16.0 weight:UIFontWeightRegular]];
-        descSize = [OAUtilities calculateTextBounds:self.descriptionLabel.text width:width - 90.0 font:[UIFont scaledSystemFontOfSize:12.0 weight:UIFontWeightRegular]];
+        buttonSize = [OAUtilities calculateTextBounds:self.additionalButton.titleLabel.text width:width - 90.0 font:[UIFont preferredFontForTextStyle:UIFontTextStyleCallout]];
+        descSize = [OAUtilities calculateTextBounds:self.descriptionLabel.text width:width - 90.0 font:[UIFont preferredFontForTextStyle:UIFontTextStyleCaption1]];
         height = MAX(maxHeight, titleSize.height + descSize.height + buttonSize.height + 22);
     }
     else if (hasButton)
     {
-        buttonSize = [OAUtilities calculateTextBounds:self.additionalButton.titleLabel.text width:width - 90.0 font:[UIFont scaledSystemFontOfSize:16.0 weight:UIFontWeightRegular]];
+        buttonSize = [OAUtilities calculateTextBounds:self.additionalButton.titleLabel.text width:width - 90.0 font:[UIFont preferredFontForTextStyle:UIFontTextStyleCallout]];
         height = MAX(maxHeight, titleSize.height + buttonSize.height + 22);
     }
     else if (hasDescription)
     {
-        descSize = [OAUtilities calculateTextBounds:self.descriptionLabel.text width:width - 90.0 font:[UIFont scaledSystemFontOfSize:12.0 weight:UIFontWeightRegular]];
+        descSize = [OAUtilities calculateTextBounds:self.descriptionLabel.text width:width - 90.0 font:[UIFont preferredFontForTextStyle:UIFontTextStyleCaption1]];
         
         height = MAX(maxHeight, titleSize.height + descSize.height + 22);
     }

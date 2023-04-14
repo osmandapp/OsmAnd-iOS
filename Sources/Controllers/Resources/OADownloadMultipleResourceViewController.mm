@@ -485,14 +485,14 @@
     if (section == 0 && _isSRTM)
     {
         customHeader.label.text = [self getTitleForSection:section];
-        customHeader.label.font = [UIFont scaledSystemFontOfSize:15];
+        customHeader.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
         [customHeader setYOffset:12];
         return customHeader;
     }
     else if ((section == 0 && !_isSRTM) || (section == 1 && !_isSingleSRTM))
     {
         customHeader.label.text = [self getTitleForSection:section];
-        customHeader.label.font = [UIFont scaledSystemFontOfSize:13];
+        customHeader.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
         [customHeader setYOffset:_isSRTM ? 12 : 32];
         return customHeader;
     }
@@ -502,9 +502,9 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (section == 0 && _isSRTM)
-        return [OATableViewCustomHeaderView getHeight:[self getTitleForSection:section] width:tableView.bounds.size.width yOffset:12 font:[UIFont scaledSystemFontOfSize:15]] + 9;
+        return [OATableViewCustomHeaderView getHeight:[self getTitleForSection:section] width:tableView.bounds.size.width yOffset:12 font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]] + 9;
     else if ((section == 0 && !_isSRTM) || (section == 1 && !_isSingleSRTM))
-        return [OATableViewCustomHeaderView getHeight:[self getTitleForSection:section] width:tableView.bounds.size.width yOffset:_isSRTM ? 12 : 32 font:[UIFont scaledSystemFontOfSize:13]];
+        return [OATableViewCustomHeaderView getHeight:[self getTitleForSection:section] width:tableView.bounds.size.width yOffset:_isSRTM ? 12 : 32 font:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]];
 
     return 0.001;
 }

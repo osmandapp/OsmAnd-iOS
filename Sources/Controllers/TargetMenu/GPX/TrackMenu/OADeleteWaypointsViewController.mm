@@ -139,7 +139,7 @@
                                                       OALocalizedString(@"shared_string_waypoints").lowerCase,
                                                       selectedWaypointsCount];
 
-    UIFont *fontCategories = [UIFont scaledSystemFontOfSize:13];
+    UIFont *fontCategories = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     UIColor *colorCategories = hasSelection != 0 ? UIColor.whiteColor : UIColorFromRGB(color_text_footer);
     NSMutableAttributedString *attrCategories = [[NSMutableAttributedString alloc] initWithString:textGroups attributes:@{NSFontAttributeName: fontCategories, NSForegroundColorAttributeName: colorCategories}];
 

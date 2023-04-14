@@ -76,8 +76,8 @@
     [paragraphStyle setLineHeightMultiple:0.8];
     [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:fullRange];
     
-    UIFont *regularFont = [UIFont scaledSystemFontOfSize:17 weight:UIFontWeightRegular];
-    UIFont *semiboldFont = [UIFont scaledSystemFontOfSize:17 weight:UIFontWeightSemibold];
+    UIFont *regularFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    UIFont *semiboldFont = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
     [attributedString addAttribute:NSFontAttributeName value:regularFont range:fullRange];
     [attributedString addAttribute:NSFontAttributeName value:semiboldFont range:boldRange];
     

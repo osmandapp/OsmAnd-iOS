@@ -137,7 +137,7 @@
 {
     NSString *descriptionString = [NSString stringWithFormat:OALocalizedString(@"profile_alert_delete_msg"), _appMode.toHumanString];
     CGFloat textWidth = tableView.bounds.size.width - 32;
-    CGFloat heightForHeader = [OAUtilities heightForHeaderViewText:descriptionString width:textWidth font:[UIFont scaledSystemFontOfSize:15] lineSpacing:6.] + 16;
+    CGFloat heightForHeader = [OAUtilities heightForHeaderViewText:descriptionString width:textWidth font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] lineSpacing:6.] + 16;
     UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0., 0., tableView.bounds.size.width, heightForHeader)];
     UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(16., 8., textWidth, heightForHeader)];
     description.attributedText = [OAUtilities getStringWithBoldPart:descriptionString mainString:[NSString stringWithFormat:OALocalizedString(@"profile_alert_delete_msg"), @""] boldString:_appMode.toHumanString lineSpacing:4. fontSize:15 highlightColor:UIColor.blackColor];
@@ -150,7 +150,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    CGFloat labelHeight = [OAUtilities heightForHeaderViewText:[NSString stringWithFormat:OALocalizedString(@"profile_alert_delete_msg"), _appMode.toHumanString] width:tableView.bounds.size.width - 32 font:[UIFont scaledSystemFontOfSize:15] lineSpacing:6.];
+    CGFloat labelHeight = [OAUtilities heightForHeaderViewText:[NSString stringWithFormat:OALocalizedString(@"profile_alert_delete_msg"), _appMode.toHumanString] width:tableView.bounds.size.width - 32 font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] lineSpacing:6.];
     return labelHeight + 60;
 }
 

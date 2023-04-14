@@ -14,6 +14,7 @@
 #import "OAWeatherBand.h"
 #import "OAWeatherHelper.h"
 #import "OsmAndApp.h"
+#import "OASizes.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 
@@ -47,7 +48,6 @@
 {
     [super viewDidLoad];
 
-    self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
 }
@@ -60,6 +60,11 @@
 }
 
 #pragma mark - Table data
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return _band.bandIndex == WEATHER_BAND_CLOUD ? OALocalizedString(@"weather_cloud_data_description") : nil;
+}
 
 - (void)generateData
 {
@@ -74,7 +79,6 @@
 
     [data addObject:@{
             @"unit": unitDefault,
-            @"name": OALocalizedString(@"map_settings_weather_temp"),
             @"attributed_title": [self getAttributedNameUnit:nameDefault unit:unitDefaultStr],
             @"type": [OASettingsTitleTableViewCell getCellIdentifier]
     }];
@@ -88,7 +92,6 @@
 
         [data addObject:@{
                 @"unit": unit,
-                @"name": OALocalizedString(@"map_settings_weather_temp"),
                 @"attributed_title": [self getAttributedNameUnit:name unit:unitStr],
                 @"type": [OASettingsTitleTableViewCell getCellIdentifier]
         }];
@@ -120,6 +123,7 @@
         }
         if (cell)
         {
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
             cell.textView.attributedText = item[@"attributed_title"];
             if (indexPath.row == _indexSelected)
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -137,32 +141,6 @@
 - (NSInteger)sectionsCount
 {
     return 1;
-}
-
-- (CGFloat)getCustomHeightForFooter:(NSInteger)section
-{
-    return _band.bandIndex == WEATHER_BAND_CLOUD
-        ? [OATableViewCustomFooterView getHeight:OALocalizedString(@"weather_cloud_data_description")
-                                           width:self.tableView.bounds.size.width]
-        : 0.001;
-}
-
-- (UIView *)getCustomViewForFooter:(NSInteger)section
-{
-    if (_band.bandIndex != WEATHER_BAND_CLOUD)
-        return nil;
-
-    OATableViewCustomFooterView *vw =
-            [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    UIFont *textFont = [UIFont scaledSystemFontOfSize:13];
-    NSMutableAttributedString *textStr =
-            [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"weather_cloud_data_description")
-                                                   attributes:@{
-                                    NSFontAttributeName: textFont,
-                                    NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)
-            }];
-    vw.label.attributedText = textStr;
-    return vw;
 }
 
 - (void)onRowSelected:(NSIndexPath *)indexPath

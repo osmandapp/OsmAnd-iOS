@@ -275,7 +275,7 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
         return [OATableViewCustomHeaderView getHeight:OALocalizedString(@"transport_Routes")
                                                 width:tableView.bounds.size.width
                                               yOffset:32
-                                                 font:[UIFont scaledSystemFontOfSize:13]];
+                                                 font:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]];
     }
     else
     {
@@ -289,7 +289,7 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
     {
         OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
         customHeader.label.text = [OALocalizedString(@"transport_Routes") upperCase];
-        customHeader.label.font = [UIFont scaledSystemFontOfSize:13];
+        customHeader.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
         [customHeader setYOffset:32];
         return customHeader;
     }

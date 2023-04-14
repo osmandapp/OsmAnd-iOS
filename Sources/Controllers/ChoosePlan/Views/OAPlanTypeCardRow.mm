@@ -99,7 +99,7 @@
             self.imageViewLeftIcon.hidden = NO;
             self.imageViewRightIcon.hidden = YES;
             self.labelTitle.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
-            self.labelDescription.font = [UIFont scaledSystemFontOfSize:15.];
+            self.labelDescription.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             self.labelTitle.textColor = UIColorFromRGB(color_primary_purple);
             self.labelDescription.textColor = UIColorFromRGB(color_primary_purple);
             self.labelTitle.textAlignment = NSTextAlignmentLeft;
@@ -111,8 +111,8 @@
             self.backgroundColor = UIColor.whiteColor;
             self.imageViewLeftIcon.hidden = YES;
             self.imageViewRightIcon.hidden = NO;
-            self.labelTitle.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
-            self.labelDescription.font = [UIFont scaledSystemFontOfSize:15.];
+            self.labelTitle.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+            self.labelDescription.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             self.labelTitle.textColor = UIColorFromRGB(color_primary_purple);
             self.labelDescription.textColor = UIColor.blackColor;
             self.labelTitle.textAlignment = NSTextAlignmentLeft;
@@ -125,7 +125,7 @@
             self.imageViewLeftIcon.hidden = YES;
             self.imageViewRightIcon.hidden = YES;
             self.labelTitle.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
-            self.labelDescription.font = [UIFont scaledSystemFontOfSize:15.];
+            self.labelDescription.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             self.labelTitle.textColor = UIColor.whiteColor;
             self.labelDescription.textColor = UIColor.whiteColor;
             self.labelTitle.textAlignment = NSTextAlignmentCenter;

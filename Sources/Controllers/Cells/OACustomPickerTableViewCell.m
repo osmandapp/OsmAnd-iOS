@@ -49,4 +49,18 @@
         [self.delegate customPickerValueChanged:self.dataArray[row] tag:pickerView.tag];
 }
 
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
+{
+    UILabel *pickerLabel = (UILabel *) view;
+    if (!pickerLabel)
+    {
+        pickerLabel = [[UILabel alloc] init];
+        pickerLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+        pickerLabel.textAlignment = NSTextAlignmentCenter;
+        pickerLabel.adjustsFontForContentSizeCategory = YES;
+    }
+    pickerLabel.text = _dataArray[row];
+    return pickerLabel;
+}
+
 @end

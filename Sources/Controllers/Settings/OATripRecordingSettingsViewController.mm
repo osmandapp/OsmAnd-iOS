@@ -370,14 +370,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         if (cell)
         {
-            cell.titleLabel.text = item[@"title"];
-
-            NSString *iconName = item[@"img"];
-            [cell leftIconVisibility:iconName && iconName.length > 0];
-            cell.leftIconView.tintColor = cell.switchView.isOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
-            cell.leftIconView.image = [UIImage templateImageNamed:iconName];
-            cell.separatorInset = UIEdgeInsetsMake(0., iconName && iconName.length > 0 ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent, 0., 0.);
-
             id v = item[@"value"];
             if ([v isKindOfClass:[OACommonBoolean class]])
             {
@@ -389,6 +381,15 @@ static NSArray<NSString *> *minTrackSpeedNames;
             {
                 cell.switchView.on = [v boolValue];
             }
+            
+            cell.titleLabel.text = item[@"title"];
+
+            NSString *iconName = item[@"img"];
+            [cell leftIconVisibility:iconName && iconName.length > 0];
+            cell.leftIconView.tintColor = cell.switchView.isOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+            cell.leftIconView.image = [UIImage templateImageNamed:iconName];
+            cell.separatorInset = UIEdgeInsetsMake(0., iconName && iconName.length > 0 ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent, 0., 0.);
+
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }

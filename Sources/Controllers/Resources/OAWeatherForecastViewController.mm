@@ -21,7 +21,7 @@
 #import "OAResourcesUIHelper.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
-@interface OAWeatherForecastViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, OAWeatherCacheSettingsDelegate, OAWeatherForecastDetails>
+@interface OAWeatherForecastViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, OATableViewCellDelegate, OAWeatherCacheSettingsDelegate, OAWeatherForecastDetails>
 
 @property (weak, nonatomic) IBOutlet UIView *navigationBarView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -931,6 +931,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
+            cell.delegate = self;
         }
         if (cell)
         {
@@ -1163,14 +1164,9 @@
 
 #pragma mark - Selectors
 
-- (void)rearrangeButtonPressed:(id)sender
+- (void)rearrangeButtonPressed:(UIButton *)sender
 {
-    UIButton *button = (UIButton *) sender;
-    if (button)
-    {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
-        [self rearrangeForecast:indexPath];
-    }
+    [self onLeftEditButtonPressed:sender.tag];
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -1237,6 +1233,14 @@
         forecastCell[@"description"] = [OAWeatherHelper getStatusInfoDescription:regionId];
         [self.tableView reloadRowsAtIndexPaths:@[_selectedIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
+}
+
+#pragma mark - OATableViewCellDelegate
+
+- (void)onLeftEditButtonPressed:(NSInteger)tag
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:tag & 0x3FF inSection:tag >> 10];
+    [self rearrangeForecast:indexPath];
 }
 
 @end

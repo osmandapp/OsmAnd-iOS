@@ -867,7 +867,10 @@ typedef enum : NSUInteger {
 {
     if ([[OAAppSettings sharedManager].settingExternalInputDevice get] != NO_EXTERNAL_DEVICE)
     {
-        [self.mapPanel.mapViewController animatedPanUp];
+        if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
+            [self.mapPanel.mapViewController animatedZoomIn];
+        else
+            [self.mapPanel.mapViewController animatedPanUp];
     }
 }
 
@@ -875,7 +878,10 @@ typedef enum : NSUInteger {
 {
     if ([[OAAppSettings sharedManager].settingExternalInputDevice get] != NO_EXTERNAL_DEVICE)
     {
-        [self.mapPanel.mapViewController animatedPanDown];
+        if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
+            [self.mapPanel.mapViewController animatedZoomOut];
+        else
+            [self.mapPanel.mapViewController animatedPanDown];
     }
 }
 

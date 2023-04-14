@@ -88,11 +88,6 @@
     return EOABaseNavbarColorSchemeOrange;
 }
 
-- (EOABaseNavbarStyle)getNavbarStyle
-{
-    return EOABaseNavbarStyleDescription;
-}
-
 - (NSString *)getCustomTableViewDescription
 {
     return OALocalizedString(@"rearrange_profile_descr");
@@ -115,6 +110,16 @@
 {
     BOOL isAllModes = indexPath.section == kAllApplicationProfilesSection;
     return isAllModes ? _appProfiles[indexPath.row] : _deletedProfiles[indexPath.row];
+}
+
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    return section == kAllApplicationProfilesSection ? OALocalizedString(@"all_application_profiles") : OALocalizedString(@"poi_remove_success");
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return section == kAllApplicationProfilesSection ? @"" : OALocalizedString(@"after_tapping_done");
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
@@ -185,16 +190,6 @@
     [_appProfiles insertObject:item atIndex:destinationIndexPath.row];
     [self updateProfileIndexes];
     [CATransaction commit];
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return section == kAllApplicationProfilesSection ? OALocalizedString(@"all_application_profiles") : OALocalizedString(@"poi_remove_success");
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return section == kAllApplicationProfilesSection ? @"" : OALocalizedString(@"after_tapping_done");
 }
 
 #pragma mark - UITableViewDelegate

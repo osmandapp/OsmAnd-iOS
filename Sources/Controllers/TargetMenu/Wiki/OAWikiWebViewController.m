@@ -469,16 +469,23 @@
 
 #pragma mark - WebView
 
-- (void)webViewDidLoad
+- (void)webViewDidCommitted:(void(^)(void))onViewCommitted
 {
+    BOOL containsRTL = [[OAAppSettings sharedManager].rtlLanguages containsObject:_contentLocale];
     NSString *path = [[NSBundle mainBundle] pathForResource:@"article_style" ofType:@"css"];
     NSString *cssContents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     cssContents = [cssContents stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
     NSString *javascriptWithCSSString = [NSString stringWithFormat:kLargeTitleJS, cssContents, [[self getTitle] stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"]];
     [self.webView evaluateJavaScript:kCollapseJS completionHandler:nil];
-    [self.webView evaluateJavaScript:javascriptWithCSSString completionHandler:nil];
-    if ([[OAAppSettings sharedManager].rtlLanguages containsObject:_contentLocale])
-        [self.webView evaluateJavaScript:kRtlJS completionHandler:nil];
+    [self.webView evaluateJavaScript:javascriptWithCSSString completionHandler:^(id _Nullable object, NSError * _Nullable error) {
+        if (!containsRTL && onViewCommitted)
+            onViewCommitted();
+    }];
+    if (containsRTL)
+        [self.webView evaluateJavaScript:kRtlJS completionHandler:^(id _Nullable object, NSError * _Nullable error) {
+            if (onViewCommitted)
+                onViewCommitted();
+        }];
 }
 
 #pragma mark - SFSafariViewControllerDelegate

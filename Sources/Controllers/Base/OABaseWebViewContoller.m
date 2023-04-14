@@ -33,6 +33,7 @@
     self.webView.navigationDelegate = self;
     self.webView.scrollView.delegate = self;
 
+    self.webView.hidden = YES;
     [self loadWebView];
 }
 
@@ -100,15 +101,26 @@
     } completion:nil];
 }
 
-- (void)webViewDidLoad
+- (void)webViewDidCommitted:(void(^)(void))onViewCommitted
 {
+    if (onViewCommitted)
+        onViewCommitted();
 }
 
 #pragma mark - WKNavigationDelegate
 
-- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
+- (void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation
 {
-    [self webViewDidLoad];
+    [self webViewDidCommitted:^{
+        [UIView transitionWithView:self.webView
+                          duration:.2
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^(void)
+                        {
+                            self.webView.hidden = NO;
+                        }
+                        completion:nil];
+    }];
 }
 
 @end

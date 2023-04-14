@@ -338,8 +338,8 @@
 "route_via" = "გავლით:";
 "route_from" = "საიდან:";
 "transfers" = "გადარიცხვები";
-"lat" = "Lat";
-"lon" = "Lon";
+"lat" = "განედი";
+"lon" = "გრძედი";
 "error_calculating_route" = "შეცდომა გზის დათვლისას.";
 "route_calc_progress" = "Calculating: %d%%";
 "internet_connection_required_for_online_route" = "არჩეულია მიმდინარე ნავიგაციის სერვისი მაგრამ ინტერნეტთან შეერთება წვდომადი არაა.";
@@ -503,14 +503,14 @@
 "map_update_warning" = "Do you want to reload tile data from the Internet?";
 
 // HUD
-"hud_heading" = "Heading";
+"hud_heading" = "მიმართულება";
 "hud_no_movement" = "No movement";
 
 // Favorites
 "shared_string_color" = "ფერი";
-"fav_colors" = "Colors";
+"fav_colors" = "ფერები";
 "shared_string_name" = "სახელი";
-"fav_group" = "Group";
+"fav_group" = "ჯგუფი";
 "shared_string_groups" = "ჯგუფები";
 "favorite" = "რჩეული";
 "poi_overlay" = "POI Overlay";
@@ -585,7 +585,7 @@
 "import_tracks" = "Import tracks";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
-"gpx_overwrite" = "Overwrite";
+"gpx_overwrite" = "გადაწერა";
 "gpx_cannot_import" = "Cannot import specified GPX file";
 "gpx_parse_error" = "";
 "tracks_on_map" = "ნაჩვენები ბილიკები";
@@ -599,7 +599,7 @@
 "gpx_remove" = "Remove track?";
 "shared_string_statistics" = "სტატისტიკა";
 "layer_route" = "გზა";
-"gpx_analyze" = "Analyze";
+"gpx_analyze" = "ანალიზი";
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "map_widget_average_speed" = "საშუალო სიჩქარე";

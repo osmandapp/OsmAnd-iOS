@@ -542,7 +542,7 @@
 "gpx_option_calculate_first_last_segment" = "Прокласти маршрут в OsmAnd для першого та останнього відрізків маршруту";
 "gpx_option_from_start_point" = "Пройдіть по усьому треку";
 "gpx_option_reverse_route" = "Зворотний напрямок треку";
-"use_points_as_intermediates" = "Обчислити маршрут між точками";
+"use_points_as_intermediates" = "Прокласти маршрут між точками";
 "calculate_osmand_route_without_internet" = "Прокладання відрізку маршруту в OsmAnd офлайн";
 "routing_settings_2" = "Налаштування навігації";
 "impassable_road" = "Уникати доріг…";
@@ -550,7 +550,7 @@
 "interrupt_music_descr" = "Голосові підказки призупиняють відтворення музики.";
 "interrupt_music" = "Призупиняти музику";
 "shared_string_do_not_use" = "Не використовувати";
-"voice_provider" = "Голосові інструкції";
+"voice_provider" = "Голосовий супровід";
 "shared_string_sound" = "Звук";
 "select_route_start_on_map" = "Виберіть початкову точку маршруту";
 "select_route_finish_on_map" = "Виберіть кінцеву точку маршруту";
@@ -629,7 +629,7 @@
 "wake_on_voice" = "Увімкнути екран";
 "wake_on_voice_descr" = "Увімкнути екран пристрою (якщо його вимкнено) під час наближення до повороту.";
 "voice_pref_title" = "Голос";
-"voice_provider_descr" = "Виберіть голосові вказівки для навігації.";
+"voice_provider_descr" = "Виберіть голосовий супровід для навігації.";
 "choose_audio_stream" = "Голосові інструкції";
 "choose_audio_stream_descr" = "Виберіть канал для голосових інструкцій.";
 "map_markers" = "Позначки";

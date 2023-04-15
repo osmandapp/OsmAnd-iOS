@@ -96,6 +96,11 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     return OALocalizedString(@"shared_string_import_complete");
 }
 
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_close");
+}
+
 - (BOOL)isNavbarSeparatorVisible
 {
     return NO;
@@ -485,6 +490,11 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
 }
 
 #pragma mark - Selectors
+
+- (void)onLeftNavbarButtonPressed
+{
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
 
 - (void)onBottomButtonPressed
 {

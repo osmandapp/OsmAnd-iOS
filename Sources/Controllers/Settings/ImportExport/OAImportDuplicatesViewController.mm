@@ -8,6 +8,7 @@
 
 #import "OAImportDuplicatesViewController.h"
 #import "OAImportCompleteViewController.h"
+#import "OAMainSettingsViewController.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAResourcesUIHelper.h"
@@ -105,18 +106,14 @@
 
 #pragma mark - Base UI
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-
-    [OASettingsHelper sharedInstance].importTask = nil;
-}
-
-#pragma mark - Base UI
-
 - (NSString *)getTitle
 {
     return _importStarted ? OALocalizedString(@"shared_string_importing") : OALocalizedString(@"import_duplicates_title");
+}
+
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return _importStarted ? OALocalizedString(@"shared_string_cancel") : nil;
 }
 
 - (BOOL)isNavbarSeparatorVisible
@@ -131,7 +128,7 @@
 
 - (NSString *)getTableHeaderDescription
 {
-    return _importStarted ? [NSString stringWithFormat:OALocalizedString(@"importing_from"), _file] : OALocalizedString(@"import_duplicates_description");
+    return _importStarted ? [NSString stringWithFormat:OALocalizedString(@"importing_from"), _file.lastPathComponent] : OALocalizedString(@"import_duplicates_description");
 }
 
 - (NSAttributedString *)getTopButtonTitleAttr
@@ -438,6 +435,18 @@
 
 #pragma mark - Selectors
 
+- (void)onLeftNavbarButtonPressed
+{
+    for (UIViewController *controller in self.navigationController.viewControllers)
+    {
+        if ([controller isKindOfClass:OAMainSettingsViewController.class])
+        {
+            [self.navigationController popToViewController:controller animated:YES];
+            return;
+        }
+    }
+}
+
 - (void)onTopButtonPressed
 {
     [self importItems:NO];
@@ -455,7 +464,7 @@
     if (_settingsItems && _file)
     {
         _importStarted = YES;
-        [self updateUI];
+        [self updateUIAnimated];
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         for (OASettingsItem *item in _settingsItems)
         {

@@ -41,6 +41,7 @@ typedef NS_ENUM(NSInteger, EOATableCollapsableGroup)
 
 - (NSArray *)getSelectedItems;
 - (void)showActivityIndicatorWithLabel:(NSString *)labelText;
+- (void)resetActivityIndicatorLabel;
 
 - (long)calculateItemsSize:(NSArray *)items;
 - (void)onGroupCheckmarkPressed:(UIButton *)sender;

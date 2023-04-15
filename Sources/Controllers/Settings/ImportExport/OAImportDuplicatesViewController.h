@@ -19,6 +19,4 @@
 
 - (instancetype) initWithDuplicatesList:(NSArray *)duplicatesList settingsItems:(NSArray<OASettingsItem *> *)settingsItems file:(NSString *)file;
 
-- (void) setupImportingUI;
-
 @end

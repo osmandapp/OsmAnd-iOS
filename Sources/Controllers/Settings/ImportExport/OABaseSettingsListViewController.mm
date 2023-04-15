@@ -46,9 +46,14 @@
 
 #pragma mark - Initialization
 
-- (void)commonInit
+- (instancetype)init
 {
-    _selectedItemsMap = [NSMutableDictionary dictionary];
+    self = [super init];
+    if (self)
+    {
+        _selectedItemsMap = [NSMutableDictionary dictionary];
+    }
+    return self;
 }
 
 #pragma mark - Base UI
@@ -70,10 +75,11 @@
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    return @[[self createRightNavbarButton:[self hasSelection] ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all")
-                                  iconName:nil
-                                    action:@selector(onRightNavbarButtonPressed)
-                                      menu:nil]];
+    return _activityIndicatorLabel && _activityIndicatorLabel.length > 0 ? nil
+        : @[[self createRightNavbarButton:[self hasSelection] ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all")
+                                 iconName:nil
+                                   action:@selector(onRightNavbarButtonPressed)
+                                     menu:nil]];
 }
 
 - (NSString *)getBottomButtonTitle
@@ -90,35 +96,25 @@
 
 - (void)generateData
 {
-    if (_activityIndicatorLabel && _activityIndicatorLabel.length > 0)
+    NSMutableArray *data = [NSMutableArray array];
+    for (OAExportSettingsCategory *type in self.itemTypes)
     {
-        OATableCollapsableGroup *tableGroup = [[OATableCollapsableGroup alloc] init];
-        tableGroup.type = [OAActivityViewWithTitleCell getCellIdentifier];
-        tableGroup.groupName = _activityIndicatorLabel;
-        self.data = @[tableGroup];
-    }
-    else
-    {
-        NSMutableArray *data = [NSMutableArray array];
-        for (OAExportSettingsCategory *type in self.itemTypes)
+        OASettingsCategoryItems *categoryItems = self.itemsMap[type];
+        OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
+        group.groupName = type.title;
+        group.type = [OARightIconTableViewCell getCellIdentifier];
+        group.isOpen = NO;
+        for (OAExportSettingsType *type in categoryItems.getTypes)
         {
-            OASettingsCategoryItems *categoryItems = self.itemsMap[type];
-            OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
-            group.groupName = type.title;
-            group.type = [OARightIconTableViewCell getCellIdentifier];
-            group.isOpen = NO;
-            for (OAExportSettingsType *type in categoryItems.getTypes)
-            {
-                [group.groupItems addObject:@{
-                    @"icon" :  type.icon,
-                    @"title" : type.title,
-                    @"type" : [OAMenuSimpleCell getCellIdentifier]
-                }];
-            }
-            [data addObject:group];
+            [group.groupItems addObject:@{
+                @"icon" :  type.icon,
+                @"title" : type.title,
+                @"type" : [OAMenuSimpleCell getCellIdentifier]
+            }];
         }
-        self.data = data;
+        [data addObject:group];
     }
+    self.data = data;
 }
 
 #pragma mark - UITableViewDataSource
@@ -418,9 +414,29 @@
 
 - (void)showActivityIndicatorWithLabel:(NSString *)labelText
 {
-    _activityIndicatorLabel = labelText;
-    [self updateUI];
-    self.tableView.separatorStyle = labelText && labelText.length > 0 ? UITableViewCellSeparatorStyleNone : UITableViewCellSeparatorStyleSingleLine;
+    [UIView transitionWithView:self.view
+                      duration:.2
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^(void)
+                    {
+                        _activityIndicatorLabel = labelText;
+                        OATableCollapsableGroup *tableGroup = [[OATableCollapsableGroup alloc] init];
+                        tableGroup.type = [OAActivityViewWithTitleCell getCellIdentifier];
+                        tableGroup.groupName = _activityIndicatorLabel;
+                        self.data = @[tableGroup];
+                        [self.tableView reloadData];
+                        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
+                        [self applyLocalization];
+                        [self updateNavbar];
+                        [self updateBottomButtons];
+                    }
+                    completion:nil];
+}
+
+- (void)resetActivityIndicatorLabel
+{
+    _activityIndicatorLabel = nil;
 }
 
 #pragma mark - Selectors

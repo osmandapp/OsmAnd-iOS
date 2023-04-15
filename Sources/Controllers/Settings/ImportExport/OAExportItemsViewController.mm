@@ -91,8 +91,6 @@
 
 - (void)commonInit
 {
-    [super commonInit];
-
     _settingsHelper = [OASettingsHelper sharedInstance];
     self.itemsMap = [_settingsHelper getSettingsByCategory:YES];
     self.itemTypes = self.itemsMap.allKeys;

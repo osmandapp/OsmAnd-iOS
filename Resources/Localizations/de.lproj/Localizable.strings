@@ -2874,3 +2874,4 @@
 "toggle_map_center" = "Koordinaten anzeigen/ausblenden: Kartenmitte";
 "quick_action_map_center_widget_descr" = "Ein Umschalter, um das Koordinaten-Widget auf der Karte ein- oder auszublenden.";
 "app_mode_moped" = "Moped";
+"speak_route_deviation" = "Abweichung von der Route ankündigen";

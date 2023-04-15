@@ -20,6 +20,7 @@ typedef NS_ENUM(NSInteger, EOARoutingProfilesResource)
     EOARoutingProfilesResourceBicycle,
     EOARoutingProfilesResourceSki,
     EOARoutingProfilesResourcePublicTransport,
+    EOARoutingProfilesResourceTrain,
     EOARoutingProfilesResourceBoat,
     EOARoutingProfilesResourceHorsebackriding,
     EOARoutingProfilesResourceGeocoding,

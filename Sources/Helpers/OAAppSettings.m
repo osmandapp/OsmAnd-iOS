@@ -3732,6 +3732,7 @@
         [_routingProfile setModeDefaultValue:@"bicycle" mode:OAApplicationMode.BICYCLE];
         [_routingProfile setModeDefaultValue:@"pedestrian" mode:OAApplicationMode.PEDESTRIAN];
         [_routingProfile setModeDefaultValue:@"public_transport" mode:OAApplicationMode.PUBLIC_TRANSPORT];
+        [_routingProfile setModeDefaultValue:@"train" mode:OAApplicationMode.TRAIN];
         [_routingProfile setModeDefaultValue:@"boat" mode:OAApplicationMode.BOAT];
         [_routingProfile setModeDefaultValue:@"STRAIGHT_LINE_MODE" mode:OAApplicationMode.AIRCRAFT];
         [_routingProfile setModeDefaultValue:@"ski" mode:OAApplicationMode.SKI];
@@ -3745,6 +3746,7 @@
         [_profileIconName setModeDefaultValue:@"ic_action_bicycle_dark" mode:OAApplicationMode.BICYCLE];
         [_profileIconName setModeDefaultValue:@"ic_action_pedestrian_dark" mode:OAApplicationMode.PEDESTRIAN];
         [_profileIconName setModeDefaultValue:@"ic_action_bus_dark" mode:OAApplicationMode.PUBLIC_TRANSPORT];
+        [_profileIconName setModeDefaultValue:@"ic_action_train" mode:OAApplicationMode.TRAIN];
         [_profileIconName setModeDefaultValue:@"ic_action_sail_boat_dark" mode:OAApplicationMode.BOAT];
         [_profileIconName setModeDefaultValue:@"ic_action_aircraft" mode:OAApplicationMode.AIRCRAFT];
         [_profileIconName setModeDefaultValue:@"ic_action_skiing" mode:OAApplicationMode.SKI];

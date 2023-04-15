@@ -53,6 +53,7 @@
 + (OAApplicationMode *) MOPED;
 + (OAApplicationMode *) BOAT;
 + (OAApplicationMode *) PUBLIC_TRANSPORT;
++ (OAApplicationMode *) TRAIN;
 + (OAApplicationMode *) SKI;
 + (OAApplicationMode *) HORSE;
 

@@ -2858,3 +2858,4 @@
 "with_permission_my_position_value" = "Mover el mapa a la ubicación actual";
 "shared_string_external" = "Exteriores";
 "press_again_to_change_the_map_orientation" = "Pulsa de nuevo para cambiar la orientación del mapa";
+"speak_route_deviation" = "Anunciar un desvío de la ruta";

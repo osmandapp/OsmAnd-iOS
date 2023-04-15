@@ -48,7 +48,7 @@
         _iconWidthConstraint.constant = 42.;
         _iconHeightConstraint.constant = 42.;
         _spacingConstraint.constant = 15.;
-        _messageLabel.font = [UIFont scaledSystemFontOfSize:17.];
+        _messageLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     }
 }
 

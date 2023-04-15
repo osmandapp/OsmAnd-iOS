@@ -225,7 +225,7 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
-            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
+            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
         cell.titleView.text = item[@"titleText"];
         cell.titleView.textColor = item[@"color"];

@@ -2605,8 +2605,8 @@ static BOOL _repositoryUpdated = NO;
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
-            cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
+            cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
             UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
@@ -2634,8 +2634,8 @@ static BOOL _repositoryUpdated = NO;
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
             cell.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
-            cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
+            cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
             BOOL isMultipleItem = [item_ isKindOfClass:OAMultipleResourceItem.class];
             BOOL addInfoAccessory = isMultipleItem && [((OAMultipleResourceItem *) item_) allDownloaded];
@@ -2661,8 +2661,8 @@ static BOOL _repositoryUpdated = NO;
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
 
-            cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
-            cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
+            cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
             FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];

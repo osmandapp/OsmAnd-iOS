@@ -13,15 +13,7 @@
 
 @interface OAGPXListViewController : OACompoundViewController<UITableViewDataSource, UITableViewDelegate, OAGPXListDeletingBottomSheetDelegate>
 
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UITableView *gpxTableView;
-
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UIButton *selectAllButton;
-@property (weak, nonatomic) IBOutlet UIButton *doneButton;
-@property (weak, nonatomic) IBOutlet UIButton *selectionModeButton;
-
 @property (weak, nonatomic) IBOutlet UIView *editToolbarView;
 @property (weak, nonatomic) IBOutlet UIButton *exportButton;
 @property (weak, nonatomic) IBOutlet UIButton *showOnMapButton;

@@ -94,11 +94,11 @@
                     @"type" : [OARightIconTableViewCell getCellIdentifier],
                     @"attributed_title" : [[NSAttributedString alloc] initWithString:availableTitle
                                                                          attributes:@{
-                                                                                 NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.],
+                                                                                 NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleBody],
                                                                                  NSForegroundColorAttributeName : UIColor.blackColor
                                                                          }],
                     @"description" : availableDescription,
-                    @"description_font" : [UIFont scaledSystemFontOfSize:15.],
+                    @"description_font" : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
                     @"right_icon" : rightIcon,
                     @"tint_color" : UIColorFromRGB(color_primary_purple),
                     @"top_right_content" : @(YES)
@@ -138,7 +138,7 @@
             NSMutableAttributedString *dateAttributed =
                     [[NSMutableAttributedString alloc] initWithString:[formatterTo stringFromDate:date].capitalizedString];
             [dateAttributed addAttribute:NSFontAttributeName
-                                   value:[UIFont scaledSystemFontOfSize:17.]
+                                   value:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]
                                    range:NSMakeRange(0, dateAttributed.length)];
             [dateAttributed addAttribute:NSForegroundColorAttributeName
                                    value:UIColor.blackColor
@@ -166,7 +166,7 @@
             @"type": [OAValueTableViewCell getCellIdentifier],
             @"attributed_title": [[NSAttributedString alloc] initWithString:OALocalizedString(@"last_two_month_total")
                                                                  attributes:@{
-                                                                         NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.],
+                                                                         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleBody],
                                                                          NSForegroundColorAttributeName : UIColor.blackColor
                                                                  }],
             @"value": [NSString stringWithFormat:@"%li", [self getChangesSize]],
@@ -240,7 +240,7 @@
             cell.titleLabel.attributedText = item[@"attributed_title"];
             [cell descriptionVisibility:[item.allKeys containsObject:@"description"]];
             cell.descriptionLabel.text = item[@"description"];
-            cell.descriptionLabel.font = [item.allKeys containsObject:@"description_font"] ? item[@"description_font"] : [UIFont scaledSystemFontOfSize:13.];
+            cell.descriptionLabel.font = [item.allKeys containsObject:@"description_font"] ? item[@"description_font"] : [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
 
             BOOL hasRightIcon = [item.allKeys containsObject:@"right_icon"];
             cell.rightIconView.image = hasRightIcon ? [UIImage templateImageNamed:item[@"right_icon"]] : nil;
@@ -271,7 +271,7 @@
 
             [cell descriptionVisibility:[item.allKeys containsObject:@"description"]];
             cell.descriptionLabel.text = item[@"description"];
-            cell.descriptionLabel.font = [item.allKeys containsObject:@"description_font"] ? item[@"description_font"] : [UIFont scaledSystemFontOfSize:13.];
+            cell.descriptionLabel.font = [item.allKeys containsObject:@"description_font"] ? item[@"description_font"] : [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
         }
         return cell;
     }

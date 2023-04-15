@@ -3092,6 +3092,7 @@
 "announce_when_exceeded" = "Announce when exceeded";
 "speak_gps_signal_status" = "Announce GPS signal loss and recovery";
 "speak_route_recalculation" = "Announce route recalculation";
+"speak_route_deviation" = "Announce deviation from the route";
 "announcement_time_title" = "Announcement time";
 "user_points" = "User points";
 "speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";

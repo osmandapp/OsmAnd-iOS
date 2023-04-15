@@ -28,6 +28,6 @@
 
 - (void)loadHeaderImage:(void(^)(NSString *content))loadWebView;
 - (void)loadWebView;
-- (void)webViewDidLoad;
+- (void)webViewDidCommitted:(void(^)(void))onViewCommitted;
 
 @end

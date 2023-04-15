@@ -75,7 +75,7 @@
     paragraphStyles.lineSpacing = 3;
     
     UIFont *firstLabelFont = params[@"firstLabelFont"] ? params[@"firstLabelFont"] :[UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold]; [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold];
-    UIFont *secondLabelFont = params[@"secondLabelFont"] ? params[@"secondLabelFont"] : [UIFont scaledSystemFontOfSize:13];
+    UIFont *secondLabelFont = params[@"secondLabelFont"] ? params[@"secondLabelFont"] : [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     NSDictionary *firstLabelAttributes = @{NSForegroundColorAttributeName: params[@"firstLabelColor"], NSFontAttributeName: firstLabelFont, NSParagraphStyleAttributeName:paragraphStyles};
     NSDictionary *secondLabelAttributes = @{NSForegroundColorAttributeName: params[@"secondLabelColor"], NSFontAttributeName: secondLabelFont, NSParagraphStyleAttributeName:paragraphStyles};
     
@@ -104,10 +104,10 @@
             descriptionText = text;
             
         CGFloat textWidth = tableView.bounds.size.width - 32 - OAUtilities.getLeftMargin * 2;
-        CGFloat heightForHeader = [OAUtilities heightForHeaderViewText:descriptionText width:textWidth font:[UIFont scaledSystemFontOfSize:15] lineSpacing:6.] + 16;
+        CGFloat heightForHeader = [OAUtilities heightForHeaderViewText:descriptionText width:textWidth font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] lineSpacing:6.] + 16;
         UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0., 0., tableView.bounds.size.width, heightForHeader)];
         UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(16. + OAUtilities.getLeftMargin, 8., textWidth, heightForHeader)];
-        UIFont *labelFont = [UIFont scaledSystemFontOfSize:15.0];
+        UIFont *labelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
         description.font = labelFont;
         description.adjustsFontForContentSizeCategory = YES;
         [description setTextColor: UIColorFromRGB(color_text_footer)];

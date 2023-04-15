@@ -46,7 +46,7 @@
 {
     static UIFont *_font;
     if (!_font)
-        _font = [UIFont scaledSystemFontOfSize:13.0];
+        _font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     
     return _font;
 }

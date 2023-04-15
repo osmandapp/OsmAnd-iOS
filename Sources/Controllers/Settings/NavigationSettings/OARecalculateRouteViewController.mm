@@ -162,7 +162,6 @@
             cell = (OAValueTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {

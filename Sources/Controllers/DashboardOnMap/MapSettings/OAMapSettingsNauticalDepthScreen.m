@@ -171,7 +171,7 @@
     {
         CGFloat headerHeight = [OAUtilities calculateTextBounds:header
                                                           width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
-                                                           font:[UIFont scaledSystemFontOfSize:13.]].height + kPaddingOnSideOfHeaderWithText;
+                                                           font:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]].height + kPaddingOnSideOfHeaderWithText;
         return headerHeight;
     }
 

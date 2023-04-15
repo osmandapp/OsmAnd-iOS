@@ -722,7 +722,7 @@
             distAttrStr = [[NSMutableAttributedString alloc] initWithString:distStr];
             UIColor *color = UIColorFromRGB(color_myloc_distance);
             [distAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, distStr.length)];
-            [distAttrStr addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:12.0] range:NSMakeRange(0, distAttrStr.length)];
+            [distAttrStr addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleCaption1] range:NSMakeRange(0, distAttrStr.length)];
         }
         NSMutableAttributedString *deviationAttrStr = nil;
         if (deviationStr)
@@ -784,7 +784,7 @@
         {
             UIColor *color = UIColorFromARGB(color_secondary_text_light_argb);
             [descAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, descAttrStr.length)];
-            [descAttrStr addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:12.0] range:NSMakeRange(0, descAttrStr.length)];
+            [descAttrStr addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleCaption1] range:NSMakeRange(0, descAttrStr.length)];
         }
         if (distAttrStr)
         {

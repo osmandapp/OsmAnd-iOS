@@ -64,7 +64,7 @@
     _viewLabel = [[UILabel alloc] initWithFrame:CGRectMake(kMarginLeft, 5.0, 100, 20)];
     _viewLabel.numberOfLines = 0;
     _viewLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    _viewLabel.font = [UIFont scaledSystemFontOfSize:13.0];
+    _viewLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     _viewLabel.adjustsFontForContentSizeCategory = YES;
     _viewLabel.textColor = UIColorFromRGB(color_text_footer);
     _viewLabel.backgroundColor = [UIColor clearColor];
@@ -91,7 +91,7 @@
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
         btn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-        btn.titleLabel.font = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightRegular];
+        btn.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
         btn.layer.cornerRadius = 4.0;
         btn.layer.masksToBounds = YES;
         btn.layer.borderWidth = 0.8;

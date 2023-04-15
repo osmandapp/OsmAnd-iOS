@@ -49,6 +49,15 @@
                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="W5E-JR-MJd" userLabel="Content Inside Stack View">
                                 <rect key="frame" x="0.0" y="13" width="374" height="40"/>
                                 <subviews>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nn7-a4-5PP" userLabel="Left Edit Button">
+                                        <rect key="frame" x="-30" y="5" width="30" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="30" id="gdZ-JF-eGY"/>
+                                            <constraint firstAttribute="height" constant="30" id="ySH-MW-EXo"/>
+                                        </constraints>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="ic_custom_delete.png"/>
+                                    </button>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iEz-9Z-Yfd">
                                         <rect key="frame" x="0.0" y="5" width="30" height="30"/>
                                         <constraints>
@@ -129,6 +138,7 @@
                 <outlet property="bottomContentSpaceView" destination="IyN-6d-erN" id="BBQ-uc-2Xm"/>
                 <outlet property="contentInsideStackView" destination="W5E-JR-MJd" id="6Uf-oh-AQR"/>
                 <outlet property="descriptionLabel" destination="mCw-bA-Opj" id="Jsl-3O-lkx"/>
+                <outlet property="leftEditButton" destination="nn7-a4-5PP" id="wfj-WT-E9o"/>
                 <outlet property="leftIconView" destination="iEz-9Z-Yfd" id="Q9b-jF-X92"/>
                 <outlet property="rightIconView" destination="VST-yo-Bfz" id="SF6-Jy-eQ2"/>
                 <outlet property="textCustomMarginBottomStackView" destination="1Pd-kv-RQv" id="3Is-Ws-9KW"/>
@@ -141,6 +151,7 @@
         </tableViewCell>
     </objects>
     <resources>
+        <image name="ic_custom_delete.png" width="30" height="30"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

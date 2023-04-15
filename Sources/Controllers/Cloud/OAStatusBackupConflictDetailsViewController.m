@@ -390,7 +390,7 @@
     NSString *footer = [_data sectionDataForIndex:section].footerText;
     if (footer)
     {
-        UIFont *font = [UIFont scaledSystemFontOfSize:13.];
+        UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
         CGFloat footerHeight = [OAUtilities calculateTextBounds:footer
                                                           width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
                                                            font:font].height + kPaddingOnSideOfFooterWithText;

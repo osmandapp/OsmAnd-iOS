@@ -36,7 +36,7 @@
 
         _rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _rightButton.frame = CGRectMake(_containerView.frame.size.width - 10.0, 0.0, 10.0, _containerView.frame.size.height);
-        _rightButton.titleLabel.font = [UIFont scaledSystemFontOfSize:13];
+        _rightButton.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
         [_rightButton setTitleColor:UIColorFromRGB(0x587BF8) forState:UIControlStateNormal];
         _rightButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         _rightButton.hidden = YES;

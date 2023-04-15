@@ -220,7 +220,10 @@
         else
         {
             NSString *imgName = [f getIconId];
-            UIImage *img = [OAUtilities getMxIcon:imgName];
+            UIImage *img;
+            if (imgName)
+                img = [OAUtilities getMxIcon:imgName];
+            
             if (!img)
                 img = [OAUtilities getMxIcon:@"user_defined"];
             

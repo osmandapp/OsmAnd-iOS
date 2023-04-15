@@ -15,18 +15,12 @@
 #import "OsmAndApp.h"
 #import "OsmAndAppImpl.h"
 #import "OARoutingHelper.h"
-#import "OARouteProvider.h"
 #import "OAOsmAndFormatter.h"
-
-@interface OADefaultSpeedViewController()
-
-@end
 
 @implementation OADefaultSpeedViewController
 {
     NSArray<NSDictionary *> *_data;
-    OAAppSettings *_settings;
-    
+
     NSDictionary *_speedParameters;
     CGFloat _ratio;
     NSInteger _maxValue;
@@ -36,35 +30,24 @@
     NSString *_units;
 }
 
-- (instancetype) initWithApplicationMode:(OAApplicationMode *)am speedParameters:(NSDictionary *)speedParameters
+#pragma mark - Initialization
+
+- (instancetype)initWithApplicationMode:(OAApplicationMode *)am speedParameters:(NSDictionary *)speedParameters
 {
     self = [super initWithAppMode:am];
     if (self)
     {
-        _settings = [OAAppSettings sharedManager];
         _speedParameters = speedParameters;
-        [self commonInit];
+        [self postInit];
     }
     return self;
 }
 
-- (void) commonInit
+- (void)postInit
 {
-    [self generateData];
-}
-
-- (void) applyLocalization
-{
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"default_speed_setting_title");
-    [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
-}
-
-- (void) generateData
-{
-    _units = [OASpeedConstant toShortString:[_settings.speedSystem get:self.appMode]];
-    switch ([_settings.speedSystem get:self.appMode])
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    _units = [OASpeedConstant toShortString:[settings.speedSystem get:self.appMode]];
+    switch ([settings.speedSystem get:self.appMode])
     {
         case MILES_PER_HOUR:
             _ratio = 3600. / METERS_IN_ONE_MILE;
@@ -87,9 +70,9 @@
             _ratio = 1;
             break;
     }
-    
+
     CGFloat settingsDefaultSpeed = self.appMode.getDefaultSpeed;
-    
+
     auto router = [OsmAndApp.instance getRouter:self.appMode];
     if (!router || self.appMode.getRouterService == STRAIGHT || self.appMode.getRouterService == DIRECT_TO)
     {
@@ -104,15 +87,29 @@
     _defaultValue = round(self.appMode.getDefaultSpeed * _ratio);
 }
 
-- (void) viewDidLoad
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self setupView];
+    return OALocalizedString(@"default_speed_setting_title");
 }
 
-- (void) setupView
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
+{
+    return @[[self createRightNavbarButton:OALocalizedString(@"shared_string_done")
+                                  iconName:nil
+                                    action:@selector(onRightNavbarButtonPressed)
+                                      menu:nil]];
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     NSMutableArray *tableData = [NSMutableArray array];
     if (_selectedValue == 0)
@@ -130,22 +127,23 @@
     _data = [NSArray arrayWithArray:tableData];
 }
 
-- (IBAction) doneButtonPressed:(id)sender
+- (NSString *)getTitleForFooter:(NSInteger)section
 {
-    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
-    [self.appMode setDefaultSpeed:_selectedValue / _ratio];
-    if (self.appMode == [routingHelper getAppMode] && ([routingHelper isRouteCalculated] || [routingHelper isRouteBeingCalculated]))
-        [routingHelper recalculateRouteDueToSettingsChange];
-    [self dismissViewController];
+    return OALocalizedString(@"default_speed_dialog_msg");
 }
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return _data.count;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
@@ -164,8 +162,7 @@
     }
     else if ([cellType isEqualToString:[OASliderWithValuesCell getCellIdentifier]])
     {
-        OASliderWithValuesCell* cell = nil;
-        cell = (OASliderWithValuesCell *)[tableView dequeueReusableCellWithIdentifier:[OASliderWithValuesCell getCellIdentifier]];
+        OASliderWithValuesCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASliderWithValuesCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASliderWithValuesCell getCellIdentifier] owner:self options:nil];
@@ -188,39 +185,27 @@
     return nil;
 }
 
-- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self.tableView reloadData];
-    } completion:nil];
-}
-
-- (void) speedValueChanged:(UISlider *)sender
-{
-    if (sender)
-    {
-        _selectedValue = sender.value;
-        [self setupView];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    }
-}
-
-#pragma mark - TableView
-
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _data.count;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return 1;
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+#pragma mark - Selectors
+
+- (void)onRightNavbarButtonPressed
 {
-    return [self getTableHeaderViewWithText:OALocalizedString(@"default_speed_dialog_msg")];
+    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
+    [self.appMode setDefaultSpeed:_selectedValue / _ratio];
+    if (self.appMode == [routingHelper getAppMode] && ([routingHelper isRouteCalculated] || [routingHelper isRouteBeingCalculated]))
+        [routingHelper recalculateRouteDueToSettingsChange];
+    [self dismissViewController];
+}
+
+- (void)speedValueChanged:(UISlider *)sender
+{
+    _selectedValue = sender.value;
+    [self generateData];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 @end

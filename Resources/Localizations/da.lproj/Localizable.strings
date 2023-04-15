@@ -2861,3 +2861,4 @@
 "map_widget_sunrise_desc" = "Viser tidspunktet for den næste solopgang eller den tid, der er tilbage til solopgang.";
 "app_mode_moped" = "Knallert";
 "press_again_to_change_the_map_orientation" = "Tryk igen for at ændre kortets orientering";
+"speak_route_deviation" = "Meddel afvigelse fra ruten";

@@ -18,6 +18,12 @@ typedef NS_ENUM(NSInteger, EOATableViewCellContentStyle) {
     EOATableViewCellContentTopStyle
 };
 
+@protocol OATableViewCellDelegate
+
+- (void)onLeftEditButtonPressed:(NSInteger)tag;
+
+@end
+
 @interface OASimpleTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIButton *leftEditButton;
@@ -27,6 +33,8 @@ typedef NS_ENUM(NSInteger, EOATableViewCellContentStyle) {
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (weak, nonatomic) IBOutlet UIView *bottomContentSpaceView;
+
+@property (weak, nonatomic) id<OATableViewCellDelegate> delegate;
 
 - (void)updateSeparatorInset;
 - (void)setCustomLeftSeparatorInset:(BOOL)isCustom;

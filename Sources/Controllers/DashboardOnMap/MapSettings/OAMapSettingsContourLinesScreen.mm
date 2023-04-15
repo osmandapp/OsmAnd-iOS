@@ -643,8 +643,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                               reuseIdentifier:cellTypeId];
 
-                cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
-                cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
+                cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+                cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
                 UIImage* iconImage = [UIImage rtlImageNamed:@"ic_custom_download"];
@@ -659,8 +659,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                               reuseIdentifier:cellTypeId];
 
-                cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
-                cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
+                cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+                cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
                 FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
@@ -722,7 +722,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
             cell.titleView.text = item[@"title"];
-            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
+            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
         }

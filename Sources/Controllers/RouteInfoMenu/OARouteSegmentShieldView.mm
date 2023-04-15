@@ -146,7 +146,7 @@ static UIFont *_shieldFont;
 + (CGFloat) getViewWidth:(NSString *)text
 {
     if (!_shieldFont)
-        _shieldFont = [UIFont scaledSystemFontOfSize:15.];
+        _shieldFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
     return 6.0 + 20. + 6.0 + MIN(86.0, [OAUtilities calculateTextBounds:text width:86.0 font:_shieldFont].width) + 12.0;
 }
 

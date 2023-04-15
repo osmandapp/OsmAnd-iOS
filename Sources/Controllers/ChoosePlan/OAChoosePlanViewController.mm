@@ -137,7 +137,7 @@
         [self.scrollViewContainerView addSubview:subscriptionCardView];
 
         _subscriptionManagement = [[UILabel alloc] init];
-        _subscriptionManagement.font = [UIFont scaledSystemFontOfSize:15.];
+        _subscriptionManagement.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
         _subscriptionManagement.adjustsFontForContentSizeCategory = YES;
         _subscriptionManagement.textColor = UIColor.blackColor;
         _subscriptionManagement.numberOfLines = 0;
@@ -150,7 +150,7 @@
                                                  value:subscriptionManagementParagraphStyle
                                                  range:NSMakeRange(0, attributedSubscriptionManagement.length)];
         [attributedSubscriptionManagement addAttribute:NSFontAttributeName
-                                                 value:[UIFont scaledSystemFontOfSize:15.]
+                                                 value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]
                                                  range:NSMakeRange(0, attributedSubscriptionManagement.length)];
         _subscriptionManagement.attributedText = attributedSubscriptionManagement;
 
@@ -170,7 +170,7 @@
         [self.scrollView insertSubview:_viewIncludesSeparator belowSubview:self.buttonRestore];
 
         _labelIncludes = [[UILabel alloc] init];
-        _labelIncludes.font = [UIFont scaledSystemFontOfSize:17.];
+        _labelIncludes.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         _labelIncludes.adjustsFontForContentSizeCategory = YES;
         _labelIncludes.textColor = UIColor.blackColor;
         _labelIncludes.numberOfLines = 0;
@@ -197,7 +197,7 @@
         if (isMaps)
         {
             _labelNotIncluded = [[UILabel alloc] init];
-            _labelNotIncluded.font = [UIFont scaledSystemFontOfSize:17.];
+            _labelNotIncluded.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             _labelNotIncluded.adjustsFontForContentSizeCategory = YES;
             _labelNotIncluded.textColor = UIColor.blackColor;
             _labelNotIncluded.numberOfLines = 0;

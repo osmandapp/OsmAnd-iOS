@@ -181,7 +181,7 @@ typedef enum
                                                                    options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
                                                                              NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
                                                         documentAttributes:nil error:nil];
-    [titleStr addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15.0] range:NSMakeRange(0, titleStr.length)];
+    [titleStr addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] range:NSMakeRange(0, titleStr.length)];
     [titleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:NSMakeRange(0, titleStr.length)];
     [titleStr enumerateAttributesInRange:NSMakeRange(0, titleStr.length) options:0 usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
         if (attrs[@"NSLink"])
@@ -193,7 +193,7 @@ typedef enum
         }
     }];
     NSDictionary *linkAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
-                                     NSFontAttributeName: [UIFont scaledSystemFontOfSize:15.],
+                                     NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
                                      NSUnderlineStyleAttributeName: @(NSUnderlineStyleNone)
     };
     _bottomTextView.linkTextAttributes = linkAttributes;

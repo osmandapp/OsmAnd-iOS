@@ -15,7 +15,6 @@
 #import "OARouteParametersViewController.h"
 #import "OAVoicePromptsViewController.h"
 #import "OAScreenAlertsViewController.h"
-#import "OASettingsModalPresentationViewController.h"
 #import "OAVehicleParametersSettingsViewController.h"
 #import "OADefaultSpeedViewController.h"
 #import "OARouteSettingsBaseViewController.h"
@@ -25,7 +24,7 @@
 #import "OAColors.h"
 #import "OASizes.h"
 
-@interface OAVehicleParametersViewController () <OAVehicleParametersSettingDelegate>
+@interface OAVehicleParametersViewController () <OASettingsDataDelegate>
 
 @end
 
@@ -42,15 +41,6 @@
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
-}
-
-#pragma mark - UIViewController
-
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-
-    self.tableView.separatorInset = UIEdgeInsetsMake(0., 16., 0., 0.);
 }
 
 #pragma mark - Base UI
@@ -256,14 +246,13 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *itemName = item[@"name"];
-    OASettingsModalPresentationViewController* settingsViewController = nil;
+    OABaseSettingsViewController *settingsViewController = nil;
     if ([itemName isEqualToString:@"defaultSpeed"])
         settingsViewController = [[OADefaultSpeedViewController alloc] initWithApplicationMode:self.appMode speedParameters:item];
     else
         settingsViewController = [[OAVehicleParametersSettingsViewController alloc] initWithApplicationMode:self.appMode vehicleParameter:item];
-    
     settingsViewController.delegate = self;
-    [self presentViewController:settingsViewController animated:YES completion:nil];
+    [self showModalViewController:settingsViewController];
 }
 
 #pragma mark - OAVehicleParametersSettingDelegate

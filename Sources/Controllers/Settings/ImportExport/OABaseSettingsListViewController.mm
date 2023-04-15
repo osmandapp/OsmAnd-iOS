@@ -11,7 +11,7 @@
 #import "OASettingsCategoryItems.h"
 #import "OAExportSettingsType.h"
 #import "OAProgressTitleCell.h"
-#import "OACustomSelectionCollapsableCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OAExportSettingsType.h"
 #import "OAMenuSimpleCell.h"
 #import "OAIconTextTableViewCell.h"
@@ -34,7 +34,7 @@
 
 @end
 
-@interface OABaseSettingsListViewController () <UITableViewDelegate, UITableViewDataSource, OASettingItemsSelectionDelegate>
+@interface OABaseSettingsListViewController () <UITableViewDelegate, UITableViewDataSource, OASettingItemsSelectionDelegate, OATableViewCellDelegate>
 
 @end
 
@@ -88,7 +88,7 @@
         OASettingsCategoryItems *categoryItems = self.itemsMap[type];
         OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
         group.groupName = type.title;
-        group.type = [OACustomSelectionCollapsableCell getCellIdentifier];
+        group.type = [OARightIconTableViewCell getCellIdentifier];
         group.isOpen = NO;
         for (OAExportSettingsType *type in categoryItems.getTypes)
         {
@@ -174,31 +174,9 @@
     [self updateControls];
 }
 
-- (void) openCloseGroupButtonAction:(id)sender
-{
-    UIButton *button = (UIButton *)sender;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
-    
-    [self openCloseGroup:indexPath];
-}
-
 - (void) onGroupCheckmarkPressed:(UIButton *)sender
 {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
-    OAExportSettingsCategory *settingsCategory = _itemTypes[indexPath.section];
-    OASettingsCategoryItems *items = self.itemsMap[settingsCategory];
-    OAExportSettingsType *type = items.getTypes[indexPath.row];
-    BOOL doSelect = self.selectedItemsMap[type].count == 0;
-    
-    if (doSelect)
-    {
-        [self selectAllItems:items section:indexPath.section];
-    }
-    else
-    {
-        [self deselectAllItemsForCategory:items section:indexPath.section];
-    }
-    [self updateControls];
+    [self onLeftEditButtonPressed:sender.tag];
 }
 
 - (void) selectAllItems:(OASettingsCategoryItems *)categoryItems section:(NSInteger)section
@@ -329,17 +307,27 @@
             }
             return cell;
         }
-        else if ([groupData.type isEqualToString:[OACustomSelectionCollapsableCell getCellIdentifier]])
+        else if ([groupData.type isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
         {
-            OACustomSelectionCollapsableCell* cell = [tableView dequeueReusableCellWithIdentifier:[OACustomSelectionCollapsableCell getCellIdentifier]];
+            OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomSelectionCollapsableCell getCellIdentifier] owner:self options:nil];
-                cell = (OACustomSelectionCollapsableCell *)[nib objectAtIndex:0];
-                cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-                cell.openCloseGroupButton.hidden = NO;
-                [cell makeSelectable:YES];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OARightIconTableViewCell *) nib[0];
+                [cell leftEditButtonVisibility:YES];
+                [cell leftIconVisibility:NO];
+                [cell setCustomLeftSeparatorInset:YES];
+                cell.delegate = self;
                 cell.separatorInset = UIEdgeInsetsZero;
+                cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+
+                UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
+                conf.contentInsets = NSDirectionalEdgeInsetsMake(0., -6.5, 0., 0.);
+                cell.leftEditButton.configuration = conf;
+                cell.leftEditButton.layer.shadowColor = UIColorFromRGB(color_tint_gray).CGColor;
+                cell.leftEditButton.layer.shadowOffset = CGSizeMake(0., 0.);
+                cell.leftEditButton.layer.shadowOpacity = 1.;
+                cell.leftEditButton.layer.shadowRadius = 1.;
             }
             if (cell)
             {
@@ -357,43 +345,34 @@
                         itemSelectionCount++;
                     partiallySelected = partiallySelected || allItemsCount != selectedItemsCount;
                 }
-                cell.textView.text = groupData.groupName;
-                cell.descriptionView.text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_of"), itemSelectionCount, itemCount];
+                cell.titleLabel.text = groupData.groupName;
+                cell.descriptionLabel.text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_of"), itemSelectionCount, itemCount];
                 if (size > 0)
                 {
-                    cell.descriptionView.text = [cell.descriptionView.text stringByAppendingFormat:@" • %@", [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile]];
+                    cell.descriptionLabel.text = [cell.descriptionLabel.text stringByAppendingFormat:@" • %@",
+                                                  [NSByteCountFormatter stringFromByteCount:size
+                                                                                 countStyle:NSByteCountFormatterCountStyleFile]];
                 }
-                [cell.openCloseGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-                cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
-                [cell.openCloseGroupButton addTarget:self action:@selector(openCloseGroupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
 
-                [cell.selectionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-                cell.selectionButton.tag = indexPath.section << 10 | indexPath.row;
-                [cell.selectionButton addTarget:self action:@selector(onGroupCheckmarkPressed:) forControlEvents:UIControlEventTouchUpInside];
-
-                [cell.selectionGroupButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-                cell.selectionGroupButton.tag = indexPath.section << 10 | indexPath.row;
-                [cell.selectionGroupButton addTarget:self action:@selector(onGroupCheckmarkPressed:) forControlEvents:UIControlEventTouchUpInside];
-
+                UIImage *selectionImage;
                 if (itemSelectionCount > 0)
-                {
-                    UIImage *selectionImage = partiallySelected ? [UIImage imageNamed:@"ic_system_checkbox_indeterminate"] : [UIImage imageNamed:@"ic_system_checkbox_selected"];
-                    [cell.selectionButton setImage:selectionImage forState:UIControlStateNormal];
-                }
+                    selectionImage = [UIImage imageNamed:partiallySelected ? @"ic_system_checkbox_indeterminate" : @"ic_system_checkbox_selected"];
                 else
-                {
-                    [cell.selectionButton setImage:nil forState:UIControlStateNormal];
-                }
-                
+                    selectionImage = [UIImage imageNamed:@"ic_custom_checkbox_unselected"];
+                [cell.leftEditButton setImage:selectionImage forState:UIControlStateNormal];
+                cell.leftEditButton.tag = indexPath.section << 10 | indexPath.row;
+                [cell.leftEditButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+                [cell.leftEditButton addTarget:self action:@selector(onGroupCheckmarkPressed:) forControlEvents:UIControlEventTouchUpInside];
+
                 if (groupData.isOpen)
                 {
-                    cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_up"];
+                    cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_up"];
                 }
                 else
                 {
-                    cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection;
+                    cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection;
                     if ([cell isDirectionRTL])
-                        [cell.iconView setImage:cell.iconView.image.imageFlippedForRightToLeftLayoutDirection];
+                        [cell.rightIconView setImage:cell.rightIconView.image.imageFlippedForRightToLeftLayoutDirection];
                 }
             }
             return cell;
@@ -527,6 +506,27 @@
 
 - (void)onSettingsExportFinished:(NSString *)file succeed:(BOOL)succeed
 {
+}
+
+#pragma mark - OATableViewCellDelegate
+
+- (void)onLeftEditButtonPressed:(NSInteger)tag
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:tag & 0x3FF inSection:tag >> 10];
+    OAExportSettingsCategory *settingsCategory = _itemTypes[indexPath.section];
+    OASettingsCategoryItems *items = self.itemsMap[settingsCategory];
+    OAExportSettingsType *type = items.getTypes[indexPath.row];
+    BOOL doSelect = self.selectedItemsMap[type].count == 0;
+    
+    if (doSelect)
+    {
+        [self selectAllItems:items section:indexPath.section];
+    }
+    else
+    {
+        [self deselectAllItemsForCategory:items section:indexPath.section];
+    }
+    [self updateControls];
 }
 
 @end

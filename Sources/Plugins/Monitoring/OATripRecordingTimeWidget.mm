@@ -39,7 +39,7 @@
             BOOL withoutGaps = !gpxFile.joinSegments &&
             ( (!currentTrack.tracks || currentTrack.tracks.count == 0) || currentTrack.tracks[0].generalTrack);
 
-            OAGPXTrackAnalysis *analysis = [currentTrack getCachedAnalysis:0];
+            OAGPXTrackAnalysis *analysis = [currentTrack getAnalysis:0];
             long timeSpan =  withoutGaps ? analysis.timeSpanWithoutGaps : analysis.timeSpan;
             
             if (cachedTimeSpan != timeSpan)

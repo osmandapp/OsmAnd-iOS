@@ -28,9 +28,6 @@
 
     NSArray<OATrkSegment *> *_processedPointsToDisplay;
     BOOL _routePoints;
-    
-    OAGPXTrackAnalysis *_cachedAnalysis;
-    NSInteger _cachedPointsCount;
 }
 
 - (id)initWithGpxDocument:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument
@@ -809,25 +806,6 @@
     [g prepareInformation:fileTimestamp splitSegments:splitSegments];
     
     return g;
-}
-
-- (OAGPXTrackAnalysis*) getCachedAnalysis:(long)fileTimestamp
-{
-    int pointsCount = 0;
-    for (OATrack *subtrack in self.tracks)
-    {
-        for (OATrkSegment *segment in subtrack.segments)
-        {
-            pointsCount += segment.points.count;
-        }
-    }
-    
-    if (!_cachedAnalysis || pointsCount != _cachedPointsCount)
-    {
-        _cachedPointsCount = pointsCount;
-        _cachedAnalysis = [self getAnalysis:fileTimestamp];
-    }
-    return _cachedAnalysis;
 }
 
 -(NSArray*) splitByDistance:(int)meters joinSegments:(BOOL)joinSegments

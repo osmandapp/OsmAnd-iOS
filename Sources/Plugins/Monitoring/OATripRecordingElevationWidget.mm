@@ -84,7 +84,7 @@
 
 - (double) getElevationDiff
 {
-    OAGPXTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getCachedAnalysis:0];
+    OAGPXTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getAnalysis:0];
     return analysis.diffElevationUp;
 }
 
@@ -110,7 +110,7 @@
 
 - (double) getElevationDiff
 {
-    OAGPXTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getCachedAnalysis:0];
+    OAGPXTrackAnalysis *analysis = [[[OASavingTrackHelper sharedInstance] currentTrack] getAnalysis:0];
     return analysis.diffElevationDown;
 }
 

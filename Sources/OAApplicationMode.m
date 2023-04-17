@@ -289,7 +289,7 @@ static OAApplicationMode *_HORSE;
 
 + (OAApplicationMode *) getFirstAvailableNavigationMode
 {
-    for (OAApplicationMode *mode in _values)
+    for (OAApplicationMode *mode in self.values)
     {
         if (mode != self.DEFAULT)
             return mode;

@@ -344,6 +344,11 @@
 
 - (void) saveDataToGpx
 {
+    [self saveDataToGpxWithCompletionHandler:nil];
+}
+
+- (void) saveDataToGpxWithCompletionHandler:(void (^)(void))completionHandler
+{
     dispatch_sync(syncQueue, ^{
         
         NSDictionary *data = [self collectRecordedData:NO];
@@ -390,6 +395,9 @@
         }
         
         [self clearData];
+        
+        if (completionHandler)
+            completionHandler();
     });
 }
 

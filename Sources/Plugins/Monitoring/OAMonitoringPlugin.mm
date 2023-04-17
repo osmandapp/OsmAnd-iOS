@@ -29,10 +29,17 @@
 
 #define PLUGIN_ID kInAppId_Addon_TrackRecording
 
+#define TRIP_RECORDING_DISTANCE @"monitoring"
+#define TRIP_RECORDING_TIME @"trip_recording_time"
+#define TRIP_RECORDING_UPHILL @"trip_recording_uphill"
+#define TRIP_RECORDING_DOWNHILL @"trip_recording_downhill"
+
 @interface OAMonitoringPlugin ()
 
 @property (nonatomic) OsmAndAppInstance app;
 @property (nonatomic) OAAppSettings *settings;
+@property (nonatomic) OALiveMonitoringHelper *liveMonitoringHelper;
+@property (nonatomic) OASavingTrackHelper *savingTrackHelper;
 
 @end
 
@@ -137,7 +144,7 @@
     });
 }
 
-- (void) controlDialog:(BOOL)showTrackSelection
+- (void) showTripRecordingDialog:(BOOL)showTrackSelection
 {
     BOOL recOn = _settings.mapSettingTrackRecording;
     if (recOn)
@@ -290,8 +297,13 @@
 
 - (void) saveTrack:(BOOL)askForRec
 {
+    _saving = YES;
     if ([_savingTrackHelper hasDataToSave])
-        [_savingTrackHelper saveDataToGpx];
+    {
+        [_savingTrackHelper saveDataToGpxWithCompletionHandler:^{
+            _saving = NO;
+        }];
+    }
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [[self getMapViewController] hideRecGpxTrack];
@@ -324,6 +336,11 @@
 - (NSString *) getDescription
 {
     return OALocalizedString(@"record_plugin_description");
+}
+
+- (BOOL) isLiveMonitoringEnabled
+{
+    return [_liveMonitoringHelper isLiveMonitoringEnabled];
 }
 
 @end

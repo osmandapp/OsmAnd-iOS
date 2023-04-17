@@ -58,7 +58,7 @@
                 }
             }
             
-            BOOL liveMonitoringEnabled = [pluginWeak.liveMonitoringHelper isLiveMonitoringEnabled];
+            BOOL liveMonitoringEnabled = [pluginWeak isLiveMonitoringEnabled];
             if (globalRecord)
             {
                 //indicates global recording (+background recording)
@@ -148,7 +148,7 @@
         [self updateInfo];
         
         self.onClickFunction = ^(id sender) {
-            [pluginWeak controlDialog:true];
+            [pluginWeak showTripRecordingDialog:true];
         };
     }
     return self;

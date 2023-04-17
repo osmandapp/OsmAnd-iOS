@@ -12,6 +12,21 @@
 #import "OATargetPointView.h"
 #import "OABaseTrackMenuHudViewController.h"
 
+typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
+{
+    EOATrackMenuHudOverviewTab = 0,
+    EOATrackMenuHudSegmentsTab,
+    EOATrackMenuHudPointsTab,
+    EOATrackMenuHudActionsTab
+};
+
+typedef NS_ENUM(NSUInteger, EOATrackMenuHudSegmentsStatisticsTab)
+{
+    EOATrackMenuHudSegmentsStatisticsOverviewTab = 0,
+    EOATrackMenuHudSegmentsStatisticsAlititudeTab,
+    EOATrackMenuHudSegmentsStatisticsSpeedTab
+};
+
 @class OAFavoriteItem;
 @class OAGpxWptItem;
 @class OAGPX;
@@ -131,7 +146,7 @@
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu saveState:(BOOL)saveState;
 
 - (void) openTargetViewWithGPX:(OAGPX *)item;
-- (void) openTargetViewWithGPX:(OAGPX *)item selectedTab:(int)selectedTab selectedStatisticsTab:(NSInteger)selectedStatisticsTab openedFromMap:(BOOL)openedFromMap;
+- (void) openTargetViewWithGPX:(OAGPX *)item selectedTab:(EOATrackMenuHudTab)selectedTab selectedStatisticsTab:(EOATrackMenuHudSegmentsStatisticsTab)selectedStatisticsTab openedFromMap:(BOOL)openedFromMap;
 
 - (void) openTargetViewWithGPX:(OAGPX *)item
                   trackHudMode:(EOATrackHudMode)trackHudMode

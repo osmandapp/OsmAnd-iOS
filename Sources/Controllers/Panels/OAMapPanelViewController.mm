@@ -2701,10 +2701,10 @@ typedef enum
                                                                       openedFromMap:NO]];
 }
 
-- (void)openTargetViewWithGPX:(OAGPX *)item selectedTab:(int)selectedTab selectedStatisticsTab:(EOATrackMenuHudSegmentsStatisticsTab)selectedStatisticsTab openedFromMap:(BOOL)openedFromMap
+- (void)openTargetViewWithGPX:(OAGPX *)item selectedTab:(EOATrackMenuHudTab)selectedTab selectedStatisticsTab:(EOATrackMenuHudSegmentsStatisticsTab)selectedStatisticsTab openedFromMap:(BOOL)openedFromMap
 {
     OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:item.bounds.center openedFromMap:openedFromMap];
-    state.lastSelectedTab = (EOATrackMenuHudTab)selectedTab;
+    state.lastSelectedTab = selectedTab;
     state.selectedStatisticsTab = selectedStatisticsTab;
     [self openTargetViewWithGPX:item
                    trackHudMode:EOATrackMenuHudMode

@@ -13,21 +13,6 @@
 @class LineChartView;
 @class OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey;
 
-typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
-{
-    EOATrackMenuHudOverviewTab = 0,
-    EOATrackMenuHudSegmentsTab,
-    EOATrackMenuHudPointsTab,
-    EOATrackMenuHudActionsTab
-};
-
-typedef NS_ENUM(NSUInteger, EOATrackMenuHudSegmentsStatisticsTab)
-{
-    EOATrackMenuHudSegmentsStatisticsOverviewTab = 0,
-    EOATrackMenuHudSegmentsStatisticsAlititudeTab,
-    EOATrackMenuHudSegmentsStatisticsSpeedTab
-};
-
 @protocol OATrackMenuViewControllerDelegate <NSObject>
 
 @required

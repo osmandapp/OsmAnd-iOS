@@ -648,7 +648,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) updateView
 {
     [self applyLocalization];
-    [self setupCustomLargeTitleView];
+    [self setupTableHeaderView];
     [self generateData];
     [self.tableView reloadData];
 }

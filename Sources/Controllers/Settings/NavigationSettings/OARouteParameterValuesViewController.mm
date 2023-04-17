@@ -116,12 +116,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
         : [_group getText];
 }
 
-- (EOABaseNavbarStyle)getNavbarStyle
-{
-    return _isGoodsRestrictionsCategory ? EOABaseNavbarStyleDescription : EOABaseNavbarStyleSimple;
-}
-
-- (NSString *)getCustomTableViewDescription
+- (NSString *)getTableHeaderDescription
 {
     return _isGoodsRestrictionsCategory ? OALocalizedString(@"road_speeds_descr") : @"";
 }

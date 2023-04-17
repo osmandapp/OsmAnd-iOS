@@ -108,19 +108,39 @@
     self.bottomButton.enabled = bottomButtonColorScheme != EOABaseButtonColorSchemeInactive;
 
     NSString *topButtonTitle = [self getTopButtonTitle];
+    NSAttributedString *topButtonTitleAttr = [self getTopButtonTitleAttr];
     NSString *topButtonIconName = [self getTopButtonIconName];
     BOOL hasTopButtonIcon = topButtonIconName && topButtonIconName.length > 0;
-    BOOL hasTopButton = (topButtonTitle && topButtonTitle.length > 0) || hasTopButtonIcon;
+    BOOL hasTopButton = (topButtonTitle && topButtonTitle.length > 0) || (topButtonTitleAttr && topButtonTitleAttr.length > 0) || hasTopButtonIcon;
     self.topButton.hidden = !hasTopButton;
-    [self.topButton setTitle:topButtonTitle forState:UIControlStateNormal];
+    if (topButtonTitle && topButtonTitle.length > 0)
+    {
+        [self.topButton setAttributedTitle:nil forState:UIControlStateNormal];
+        [self.topButton setTitle:topButtonTitle forState:UIControlStateNormal];
+    }
+    else if (topButtonTitleAttr && topButtonTitleAttr.length > 0)
+    {
+        [self.topButton setTitle:nil forState:UIControlStateNormal];
+        [self.topButton setAttributedTitle:topButtonTitleAttr forState:UIControlStateNormal];
+    }
     [self.topButton setImage:hasTopButtonIcon ? [UIImage templateImageNamed:topButtonIconName] : nil forState:UIControlStateNormal];
 
     NSString *bottomButtonTitle = [self getBottomButtonTitle];
+    NSAttributedString *bottomButtonTitleAttr = [self getBottomButtonTitleAttr];
     NSString *bottomButtonIconName = [self getBottomButtonIconName];
     BOOL hasBottomButtonIcon = bottomButtonIconName && bottomButtonIconName.length > 0;
-    BOOL hasBottomButton = (bottomButtonTitle && bottomButtonTitle.length > 0) || hasBottomButtonIcon;
+    BOOL hasBottomButton = (bottomButtonTitle && bottomButtonTitle.length > 0) || (bottomButtonTitleAttr && bottomButtonTitleAttr.length > 0) || hasBottomButtonIcon;
     self.bottomButton.hidden = !hasBottomButton;
-    [self.bottomButton setTitle:bottomButtonTitle forState:UIControlStateNormal];
+    if (bottomButtonTitle && bottomButtonTitle.length > 0)
+    {
+        [self.bottomButton setAttributedTitle:nil forState:UIControlStateNormal];
+        [self.bottomButton setTitle:bottomButtonTitle forState:UIControlStateNormal];
+    }
+    else if (bottomButtonTitleAttr && bottomButtonTitleAttr.length > 0)
+    {
+        [self.bottomButton setTitle:nil forState:UIControlStateNormal];
+        [self.bottomButton setAttributedTitle:bottomButtonTitleAttr forState:UIControlStateNormal];
+    }
     [self.bottomButton setImage:hasBottomButtonIcon ? [UIImage templateImageNamed:bottomButtonIconName] : nil forState:UIControlStateNormal];
 
     self.middleBottomMarginStackView.spacing = [self getSpaceBetweenButtons];
@@ -134,8 +154,8 @@
 
 - (void)setupBottomFonts
 {
-    self.topButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
-    self.bottomButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.topButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold maximumSize:20.];
+    self.bottomButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold maximumSize:20.];
 }
 
 - (UIColor *)getBottomBackgroundColor
@@ -207,9 +227,19 @@
     return @"";
 }
 
+- (NSAttributedString *)getTopButtonTitleAttr
+{
+    return nil;
+}
+
 - (NSString *)getBottomButtonTitle
 {
     return @"";
+}
+
+- (NSAttributedString *)getBottomButtonTitleAttr
+{
+    return nil;
 }
 
 - (NSString *)getTopButtonIconName

@@ -23,64 +23,78 @@
 
 @implementation OATableCollapsableGroup
 
--(instancetype) init
+- (instancetype)init
 {
     self = [super init];
-    if (self) {
-        self.groupItems = [[NSMutableArray alloc] init];
+    if (self)
+    {
+        self.groupItems = [NSMutableArray array];
     }
     return self;
 }
 
 @end
 
-@interface OABaseSettingsListViewController () <UITableViewDelegate, UITableViewDataSource, OASettingItemsSelectionDelegate, OATableViewCellDelegate>
+@interface OABaseSettingsListViewController () <OASettingItemsSelectionDelegate, OATableViewCellDelegate>
 
 @end
 
 @implementation OABaseSettingsListViewController
+{
+    NSString *_activityIndicatorLabel;
+}
+
+#pragma mark - Initialization
 
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
-        _selectedItemsMap = [NSMutableDictionary new];
-        [self commonInit];
+    if (self)
+    {
+        _selectedItemsMap = [NSMutableDictionary dictionary];
     }
     return self;
 }
 
-- (void) commonInit
+#pragma mark - Base UI
+
+- (BOOL)isNavbarSeparatorVisible
 {
+    return NO;
 }
 
-- (void)viewDidLoad
+- (EOABaseNavbarStyle)getNavbarStyle
 {
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
-    
-    [self.additionalNavBarButton addTarget:self action:@selector(selectDeselectAllItems:) forControlEvents:UIControlEventTouchUpInside];
-    self.secondaryBottomButton.hidden = YES;
-    [self updateControls];
-    self.backImageButton.hidden = YES;
-    
-    [super viewDidLoad];
+    return EOABaseNavbarStyleLargeTitle;
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (NSString *)getLeftNavbarButtonTitle
 {
-    [super viewWillAppear:animated];
-    [self setupView];
-    [self.tableView reloadData];
-    self.bottomBarView.hidden = NO;
+    return OALocalizedString(@"shared_string_cancel");
 }
 
-- (void) setupView
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
+    return _activityIndicatorLabel && _activityIndicatorLabel.length > 0 ? nil
+        : @[[self createRightNavbarButton:[self hasSelection] ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all")
+                                 iconName:nil
+                                   action:@selector(onRightNavbarButtonPressed)
+                                     menu:nil]];
 }
 
-- (void) generateData
+- (NSString *)getBottomButtonTitle
+{
+    return _activityIndicatorLabel && _activityIndicatorLabel.length > 0 ? @"" : OALocalizedString(@"shared_string_continue");
+}
+
+- (EOABaseButtonColorScheme)getBottomButtonColorScheme
+{
+    return [self hasSelection] ? EOABaseButtonColorSchemePurple : EOABaseButtonColorSchemeInactive;
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     NSMutableArray *data = [NSMutableArray array];
     for (OAExportSettingsCategory *type in self.itemTypes)
@@ -100,169 +114,12 @@
         }
         [data addObject:group];
     }
-    
-    self.data = [NSArray arrayWithArray:data];
-}
-
-- (void) applyLocalization
-{
-    [super applyLocalization];
-    
-    [self.backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.additionalNavBarButton setTitle:OALocalizedString(@"shared_string_select_all") forState:UIControlStateNormal];
-    [self.primaryBottomButton setTitle:OALocalizedString(@"shared_string_continue") forState:UIControlStateNormal];
-}
-
-- (BOOL) hasSelection
-{
-    for (NSArray *items in self.selectedItemsMap.allValues)
-    {
-        if (items.count > 0)
-            return YES;
-    }
-    return NO;
-}
-
-- (void) updateNavigationBarItem
-{
-    BOOL selected = [self hasSelection];
-    [self.additionalNavBarButton setTitle:selected ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all") forState:UIControlStateNormal];
-}
-
-- (void) setupButtonView
-{
-    BOOL hasSelection = [self hasSelection];
-    self.primaryBottomButton.backgroundColor = hasSelection ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_button_gray_background);
-    [self.primaryBottomButton setTintColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
-    [self.primaryBottomButton setTitleColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
-    [self.primaryBottomButton setUserInteractionEnabled:hasSelection];
-}
-
-- (void) updateControls
-{
-    [self updateNavigationBarItem];
-    [self setupButtonView];
-}
-
-- (NSArray *)getSelectedItems
-{
-    NSMutableArray *selectedItems = [NSMutableArray new];
-    for (NSArray *items in self.selectedItemsMap.allValues)
-        [selectedItems addObjectsFromArray:items];
-    
-    return selectedItems;
-}
-
-- (void) selectDeselectAllItems:(id)sender
-{
-    if (self.selectedItemsMap.count > 0)
-    {
-        [self.selectedItemsMap removeAllObjects];
-    }
-    else
-    {
-        for (OAExportSettingsCategory *category in self.itemsMap)
-        {
-            OASettingsCategoryItems *items = self.itemsMap[category];
-            for (OAExportSettingsType *type in items.getTypes)
-            {
-                self.selectedItemsMap[type] = [items getItemsForType:type];
-            }
-        }
-    }
-    [self.tableView reloadData];
-    [self updateControls];
-}
-
-- (void) onGroupCheckmarkPressed:(UIButton *)sender
-{
-    [self onLeftEditButtonPressed:sender.tag];
-}
-
-- (void) selectAllItems:(OASettingsCategoryItems *)categoryItems section:(NSInteger)section
-{
-    for (OAExportSettingsType *type in categoryItems.getTypes)
-    {
-        self.selectedItemsMap[type] = [categoryItems getItemsForType:type];
-    }
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
-}
-
-- (void) deselectAllItemsForCategory:(OASettingsCategoryItems *)categoryItems section:(NSInteger)section
-{
-    for (OAExportSettingsType *type in categoryItems.getTypes)
-    {
-        [self.selectedItemsMap removeObjectForKey:type];
-    }
-    
-    NSInteger itemsCount = [self.tableView numberOfRowsInSection:section];
-    for (NSInteger i = 0; i < itemsCount; i++)
-    {
-        [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
-    }
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
-}
-
-- (void) openCloseGroup:(NSIndexPath *)indexPath
-{
-    OATableCollapsableGroup* groupData = [self.data objectAtIndex:indexPath.section];
-    groupData.isOpen = !groupData.isOpen;
-    [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
-    UITableViewScrollPosition scrollPosition = !groupData.isOpen ? UITableViewScrollPositionNone : UITableViewScrollPositionTop;
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:YES];
-}
-
-- (void) showActivityIndicatorWithLabel:(NSString *)labelText
-{
-    OATableCollapsableGroup *tableGroup = [[OATableCollapsableGroup alloc] init];
-    tableGroup.type = [OAActivityViewWithTitleCell getCellIdentifier];
-    tableGroup.groupName = labelText;
-    self.data = @[tableGroup];
-    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    [self.tableView reloadData];
-    self.bottomBarView.hidden = YES;
-}
-
-- (long) calculateItemsSize:(NSArray *)items
-{
-    long itemsSize = 0;
-    for (id item in items)
-    {
-        if ([item isKindOfClass:OAFileSettingsItem.class])
-        {
-            itemsSize += [self getItemSize:((OAFileSettingsItem *) item).filePath];
-        }
-        else if ([item isKindOfClass:NSString.class])
-        {
-            itemsSize += [self getItemSize:item];
-        }
-    }
-    return itemsSize;
-}
-
-- (void) updateUI:(NSString *)toolbarTitleRes descriptionRes:(NSString *)descriptionRes activityLabel:(NSString *)activityLabel
-{
-    // override
-}
-
-- (long)getItemSize:(NSString *)item
-{
-    return 0; //override
-}
-
-- (NSInteger) getSelectedItemsAmount:(OAExportSettingsType *)type
-{
-    return self.selectedItemsMap[type].count;
+    self.data = data;
 }
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return self.data.count;
-}
-
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     OATableCollapsableGroup* groupData = [self.data objectAtIndex:section];
     if (groupData.isOpen)
@@ -270,14 +127,14 @@
     return 1;
 }
 
-- (UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     OATableCollapsableGroup* groupData = [self.data objectAtIndex:indexPath.section];
     if (indexPath.row == 0)
     {
         if ([groupData.type isEqualToString:[OAActivityViewWithTitleCell getCellIdentifier]])
         {
-            OAActivityViewWithTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAActivityViewWithTitleCell getCellIdentifier]];
+            OAActivityViewWithTitleCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAActivityViewWithTitleCell getCellIdentifier]];
             if (cell == nil)
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAActivityViewWithTitleCell getCellIdentifier] owner:self options:nil];
@@ -294,7 +151,7 @@
         }
         else if ([groupData.type isEqualToString:[OAProgressTitleCell getCellIdentifier]])
         {
-            OAProgressTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAProgressTitleCell getCellIdentifier]];
+            OAProgressTitleCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAProgressTitleCell getCellIdentifier]];
             if (cell == nil)
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAProgressTitleCell getCellIdentifier] owner:self options:nil];
@@ -309,7 +166,7 @@
         }
         else if ([groupData.type isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
         {
-            OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
+            OARightIconTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
@@ -385,7 +242,7 @@
         NSString *cellType = item[@"type"];
         if ([cellType isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
         {
-            OAMenuSimpleCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
+            OAMenuSimpleCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
             if (cell == nil)
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
@@ -420,7 +277,7 @@
         else if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
         {
             
-            OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+            OAIconTextTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
@@ -440,19 +297,12 @@
     return nil;
 }
 
-#pragma mark - UITableViewDelegate
-
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+- (NSInteger)sectionsCount
 {
-    return [self getHeaderForTableView:tableView withFirstSectionText:self.descriptionText boldFragment:self.descriptionBoldText forSection:section];
+    return self.data.count;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return [self getHeightForHeaderWithFirstHeaderText:self.descriptionText boldFragment:self.descriptionBoldText inSection:section];
-}
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     if (indexPath.row != 0)
     {
@@ -471,32 +321,180 @@
             else
                 [self.selectedItemsMap removeObjectForKey:type];
             
-            [tableView reloadRowsAtIndexPaths:@[indexPath, [NSIndexPath indexPathForRow:0 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath, [NSIndexPath indexPathForRow:0 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
     }
     else
     {
         [self openCloseGroup:indexPath];
     }
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self updateControls];
+
+    [self applyLocalization];
+    [self updateNavbar];
+    [self updateBottomButtons];
 }
 
-// MARK: OASettingItemsSelectionDelegate
+#pragma mark - Additions
+
+- (NSArray *)getSelectedItems
+{
+    NSMutableArray *selectedItems = [NSMutableArray new];
+    for (NSArray *items in self.selectedItemsMap.allValues)
+    {
+        [selectedItems addObjectsFromArray:items];
+    }
+    return selectedItems;
+}
+
+- (NSInteger)getSelectedItemsAmount:(OAExportSettingsType *)type
+{
+    return self.selectedItemsMap[type].count;
+}
+
+- (long)calculateItemsSize:(NSArray *)items
+{
+    long itemsSize = 0;
+    for (id item in items)
+    {
+        if ([item isKindOfClass:OAFileSettingsItem.class])
+            itemsSize += [self getItemSize:((OAFileSettingsItem *) item).filePath];
+        else if ([item isKindOfClass:NSString.class])
+            itemsSize += [self getItemSize:item];
+    }
+    return itemsSize;
+}
+
+- (long)getItemSize:(NSString *)item
+{
+    return 0; //override
+}
+
+- (BOOL)hasSelection
+{
+    for (NSArray *items in self.selectedItemsMap.allValues)
+    {
+        if (items.count > 0)
+            return YES;
+    }
+    return NO;
+}
+
+- (void)selectAllItems:(OASettingsCategoryItems *)categoryItems section:(NSInteger)section
+{
+    for (OAExportSettingsType *type in categoryItems.getTypes)
+    {
+        self.selectedItemsMap[type] = [categoryItems getItemsForType:type];
+    }
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void)deselectAllItemsForCategory:(OASettingsCategoryItems *)categoryItems section:(NSInteger)section
+{
+    for (OAExportSettingsType *type in categoryItems.getTypes)
+    {
+        [self.selectedItemsMap removeObjectForKey:type];
+    }
+    
+    NSInteger itemsCount = [self.tableView numberOfRowsInSection:section];
+    for (NSInteger i = 0; i < itemsCount; i++)
+    {
+        [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
+    }
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void)openCloseGroup:(NSIndexPath *)indexPath
+{
+    OATableCollapsableGroup* groupData = [self.data objectAtIndex:indexPath.section];
+    groupData.isOpen = !groupData.isOpen;
+    [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
+    UITableViewScrollPosition scrollPosition = !groupData.isOpen ? UITableViewScrollPositionNone : UITableViewScrollPositionTop;
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:scrollPosition animated:YES];
+}
+
+- (void)showActivityIndicatorWithLabel:(NSString *)labelText
+{
+    [UIView transitionWithView:self.view
+                      duration:.2
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^(void)
+                    {
+                        _activityIndicatorLabel = labelText;
+                        OATableCollapsableGroup *tableGroup = [[OATableCollapsableGroup alloc] init];
+                        tableGroup.type = [OAActivityViewWithTitleCell getCellIdentifier];
+                        tableGroup.groupName = _activityIndicatorLabel;
+                        self.data = @[tableGroup];
+                        [self.tableView reloadData];
+                        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
+                        [self applyLocalization];
+                        [self updateNavbar];
+                        [self updateBottomButtons];
+                    }
+                    completion:nil];
+}
+
+- (void)resetActivityIndicatorLabel
+{
+    _activityIndicatorLabel = nil;
+}
+
+#pragma mark - Selectors
+
+- (void)onRightNavbarButtonPressed
+{
+    if (self.selectedItemsMap.count > 0)
+    {
+        [self.selectedItemsMap removeAllObjects];
+    }
+    else
+    {
+        for (OAExportSettingsCategory *category in self.itemsMap)
+        {
+            OASettingsCategoryItems *items = self.itemsMap[category];
+            for (OAExportSettingsType *type in items.getTypes)
+            {
+                self.selectedItemsMap[type] = [items getItemsForType:type];
+            }
+        }
+    }
+
+    [self.tableView reloadData];
+    [self applyLocalization];
+    [self updateNavbar];
+    [self updateBottomButtons];
+}
+
+- (void)openCloseGroupButtonAction:(id)sender
+{
+    UIButton *button = (UIButton *)sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
+    [self openCloseGroup:indexPath];
+}
+
+- (void)onGroupCheckmarkPressed:(UIButton *)sender
+{
+    [self onLeftEditButtonPressed:sender.tag];
+}
+
+#pragma mark - OASettingItemsSelectionDelegate
 
 - (void)onItemsSelected:(NSArray *)items type:(OAExportSettingsType *)type
 {
     self.selectedItemsMap[type] = items;
     [self.tableView reloadData];
-    [self updateControls];
+    [self applyLocalization];
+    [self updateNavbar];
+    [self updateBottomButtons];
 }
 
-// MARK: OASettingsImportExportDelegate
+#pragma mark - OASettingsImportExportDelegate
 
-- (void) onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items {
+- (void)onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items
+{
 }
 
-- (void) onDuplicatesChecked:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items
+- (void)onDuplicatesChecked:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items
 {
 }
 
@@ -526,7 +524,9 @@
     {
         [self deselectAllItemsForCategory:items section:indexPath.section];
     }
-    [self updateControls];
+    [self applyLocalization];
+    [self updateNavbar];
+    [self updateBottomButtons];
 }
 
 @end

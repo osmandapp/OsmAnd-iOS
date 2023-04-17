@@ -94,7 +94,7 @@
         [self.tableView reloadData];
     }
 
-    [self setupCustomLargeTitleView];
+    [self setupTableHeaderView];
 
     self.navigationController.navigationBar.prefersLargeTitles = YES;
     if ([self.navigationController isNavigationBarHidden] && [self isNavbarVisible])
@@ -236,7 +236,7 @@
 {
     [self setupNavbarButtons];
     if ([self isScreenLoaded])
-        [self setupCustomLargeTitleView];
+        [self setupTableHeaderView];
 }
 
 - (void)updateUI
@@ -537,22 +537,37 @@
     return EOABaseNavbarStyleSimple;
 }
 
-- (NSString *)getCustomTableViewDescription
+- (NSString *)getTableHeaderDescription
 {
     return @"";
 }
 
-- (void)setupCustomLargeTitleView
+- (NSAttributedString *)getTableHeaderDescriptionAttr
+{
+    return nil;
+}
+
+- (void)setupTableHeaderView
 {
     EOABaseNavbarStyle style = [self getNavbarStyle];
     UIView *tableHeaderView;
     BOOL isCustomLargeTitle = style == EOABaseNavbarStyleCustomLargeTitle;
-    if (isCustomLargeTitle || style == EOABaseNavbarStyleDescription)
+    NSString *tableHeaderDescription = [self getTableHeaderDescription];
+    NSAttributedString *tableHeaderDescriptionAttr = [self getTableHeaderDescriptionAttr];
+    if (isCustomLargeTitle || (tableHeaderDescription && tableHeaderDescription.length > 0))
     {
-        tableHeaderView = [OAUtilities setupTableHeaderViewWithText:isCustomLargeTitle ? [self getTitle] : [self getCustomTableViewDescription]
+        tableHeaderView = [OAUtilities setupTableHeaderViewWithText:isCustomLargeTitle ? [self getTitle] : tableHeaderDescription
                                                                font:isCustomLargeTitle ? kHeaderBigTitleFont : kHeaderDescriptionFontSmall
                                                           textColor:isCustomLargeTitle ? UIColor.blackColor : UIColorFromRGB(color_text_footer)
                                                          isBigTitle:isCustomLargeTitle
+                                                    parentViewWidth:self.view.frame.size.width];
+    }
+    else if (tableHeaderDescriptionAttr && tableHeaderDescriptionAttr.length > 0)
+    {
+        tableHeaderView = [OAUtilities setupTableHeaderViewWithText:tableHeaderDescriptionAttr
+                                                         isBigTitle:NO
+                                                      rightIconName:nil
+                                                          tintColor:nil
                                                     parentViewWidth:self.view.frame.size.width];
     }
     self.tableView.tableHeaderView = tableHeaderView;
@@ -641,7 +656,7 @@
 // override with super to work correctly
 - (void)onContentSizeChanged:(NSNotification *)notification
 {
-    [self setupCustomLargeTitleView];
+    [self setupTableHeaderView];
     [self generateData];
     [self.tableView reloadData];
 }

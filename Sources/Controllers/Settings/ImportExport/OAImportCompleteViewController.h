@@ -6,11 +6,11 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OABaseSettingsWithBottomButtonsViewController.h"
+#import "OABaseButtonsViewController.h"
 
 @class OAExportSettingsType;
 
-@interface OAImportCompleteViewController : OABaseSettingsWithBottomButtonsViewController
+@interface OAImportCompleteViewController : OABaseButtonsViewController
 
 - (instancetype) initWithSettingsItems:(NSDictionary<OAExportSettingsType *, NSArray *> *)settingsItems fileName:(NSString *)fileName;
 

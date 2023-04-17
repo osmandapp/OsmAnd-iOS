@@ -19,7 +19,6 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarColorScheme)
 typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 {
     EOABaseNavbarStyleSimple = 0,
-    EOABaseNavbarStyleDescription,
     EOABaseNavbarStyleLargeTitle,
     EOABaseNavbarStyleCustomLargeTitle
 };
@@ -51,8 +50,9 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 - (UIImage *)getRightIconLargeTitle;
 - (UIColor *)getRightIconTintColorLargeTitle;
 - (EOABaseNavbarStyle)getNavbarStyle;
-- (NSString *)getCustomTableViewDescription;
-- (void)setupCustomLargeTitleView;
+- (NSString *)getTableHeaderDescription;
+- (NSAttributedString *)getTableHeaderDescriptionAttr;
+- (void)setupTableHeaderView;
 - (NSString *)getTableFooterText;
 
 - (void)generateData;

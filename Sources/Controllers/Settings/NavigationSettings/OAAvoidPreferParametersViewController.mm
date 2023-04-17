@@ -45,12 +45,7 @@
     return _isAvoid ? OALocalizedString(@"impassable_road") : OALocalizedString(@"prefer_in_routing_title");
 }
 
-- (EOABaseNavbarStyle)getNavbarStyle
-{
-    return EOABaseNavbarStyleDescription;
-}
-
-- (NSString *)getCustomTableViewDescription
+- (NSString *)getTableHeaderDescription
 {
     return OALocalizedString(@"avoid_in_routing_descr_");
 }

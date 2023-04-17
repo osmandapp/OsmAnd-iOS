@@ -262,7 +262,7 @@
     return EOABaseNavbarStyleCustomLargeTitle;
 }
 
-- (void)setupCustomLargeTitleView
+- (void)setupTableHeaderView
 {
 }
 

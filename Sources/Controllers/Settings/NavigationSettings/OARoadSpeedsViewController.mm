@@ -108,12 +108,7 @@
                                       menu:nil]];
 }
 
-- (EOABaseNavbarStyle)getNavbarStyle
-{
-    return EOABaseNavbarStyleDescription;
-}
-
-- (NSString *)getCustomTableViewDescription
+- (NSString *)getTableHeaderDescription
 {
     return OALocalizedString(@"road_speeds_descr");
 }

@@ -49,12 +49,7 @@
     return OALocalizedString(@"arrival_distance");
 }
 
-- (EOABaseNavbarStyle)getNavbarStyle
-{
-    return EOABaseNavbarStyleDescription;
-}
-
-- (void)setupCustomLargeTitleView
+- (void)setupTableHeaderView
 {
     NSString *text = OALocalizedString(@"announcement_time_descr");
     CGFloat textWidth = DeviceScreenWidth - (kSidePadding + [OAUtilities getLeftMargin]) * 2;

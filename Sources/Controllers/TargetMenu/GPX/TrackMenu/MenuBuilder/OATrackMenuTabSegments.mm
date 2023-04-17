@@ -223,7 +223,7 @@
     if (analysis.isSpeedSpecified)
         values[analysis.hasElevationData ? @"tab_2_string_value" : @"tab_1_string_value"] = OALocalizedString(@"shared_string_speed");
     values[@"row_to_update_int_value"] = @([segmentSectionData.subjects indexOfObject:statisticsCellData]);
-    values[@"selected_index_int_value"] = @0;
+    values[kSlectedIndex] = @0;
     [tabsCellData setData:@{ kTableValues: values }];
 
     if (cell && chartCellData)
@@ -543,7 +543,7 @@
         OAGPXTableSectionData *sectionData = [self.tableData getSubject:[@"section_" stringByAppendingString:segmentKey]];
         if (sectionData)
         {
-            NSInteger selectedIndex = [tableData.values[@"selected_index_int_value"] integerValue];
+            NSInteger selectedIndex = [tableData.values[kSlectedIndex] integerValue];
             if (selectedIndex != NSNotFound)
             {
                 EOARouteStatisticsMode mode;

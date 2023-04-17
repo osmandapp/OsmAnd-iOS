@@ -94,8 +94,6 @@
         [self.tableView reloadData];
     }
 
-    [self setupTableHeaderView];
-
     self.navigationController.navigationBar.prefersLargeTitles = YES;
     if ([self.navigationController isNavigationBarHidden] && [self isNavbarVisible])
         [self.navigationController setNavigationBarHidden:NO animated:YES];
@@ -131,7 +129,10 @@
 
 - (void)viewDidLayoutSubviews
 {
-    [self setupCustomLargeTitleView];
+    [super viewDidLayoutSubviews];
+    
+    if (!_isRotating && [self isScreenLoaded])
+        [self setupTableHeaderView];
 }
 
 - (void)viewDidAppear:(BOOL)animated

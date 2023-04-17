@@ -94,8 +94,6 @@
         [self.tableView reloadData];
     }
 
-    [self setupTableHeaderView];
-
     self.navigationController.navigationBar.prefersLargeTitles = YES;
     if ([self.navigationController isNavigationBarHidden] && [self isNavbarVisible])
         [self.navigationController setNavigationBarHidden:NO animated:YES];
@@ -127,6 +125,14 @@
 
     if (_navbarHeightSmall == 0)
         _navbarHeightSmall = self.navigationController.navigationBar.frame.size.height;
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    
+    if (!_isRotating && [self isScreenLoaded])
+        [self setupTableHeaderView];
 }
 
 - (void)viewDidAppear:(BOOL)animated

@@ -59,6 +59,8 @@ static NSArray<NSString *> *_rpValues;
             return @"SKI";
         case EOARoutingProfilesResourcePublicTransport:
             return @"PUBLIC_TRANSPORT";
+        case EOARoutingProfilesResourceTrain:
+            return @"TRAIN";
         case EOARoutingProfilesResourceBoat:
             return @"BOAT";
         case EOARoutingProfilesResourceHorsebackriding:
@@ -91,6 +93,8 @@ static NSArray<NSString *> *_rpValues;
             return @"ic_action_skiing";
         case EOARoutingProfilesResourcePublicTransport:
             return @"ic_action_bus_dark";
+        case EOARoutingProfilesResourceTrain:
+            return @"ic_action_train";
         case EOARoutingProfilesResourceBoat:
             return @"ic_action_sail_boat_dark";
         case EOARoutingProfilesResourceHorsebackriding:
@@ -123,6 +127,8 @@ static NSArray<NSString *> *_rpValues;
             return OALocalizedString(@"routing_profile_ski");
         case EOARoutingProfilesResourcePublicTransport:
             return OALocalizedString(@"poi_filter_public_transport");
+        case EOARoutingProfilesResourceTrain:
+            return OALocalizedString(@"app_mode_train");
         case EOARoutingProfilesResourceBoat:
             return OALocalizedString(@"app_mode_boat");
         case EOARoutingProfilesResourceHorsebackriding:
@@ -154,6 +160,8 @@ static NSArray<NSString *> *_rpValues;
         return EOARoutingProfilesResourceSki;
     else if ([key isEqualToString: @"PUBLIC_TRANSPORT"])
         return EOARoutingProfilesResourcePublicTransport;
+    else if ([key isEqualToString: @"TRAIN"])
+        return EOARoutingProfilesResourceTrain;
     else if ([key isEqualToString: @"BOAT"])
         return EOARoutingProfilesResourceBoat;
     else if ([key isEqualToString: @"HORSEBACKRIDING"])

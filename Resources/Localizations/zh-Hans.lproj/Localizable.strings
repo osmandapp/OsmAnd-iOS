@@ -352,7 +352,7 @@
 "srtm_plugin_disabled" = "等高线已禁用";
 "prch_wiki_info" = "";
 "prch_srtm_info" = "";
-"shared_string_open" = "打開";
+"shared_string_open" = "打开";
 "time_closed" = "";
 "will_close_at" = "关闭于";
 "time_will_open" = "";
@@ -1169,7 +1169,7 @@
 "base_profile_descr_aircraft" = "飞机、滑翔";
 "map_widget_intermediate_time" = "中转点时间";
 "purchase_dialog_title" = "选择计划";
-"rendering_attr_whiteWaterSports_name" = "激流运动";
+"rendering_attr_whiteWaterSports_name" = "白水运动";
 "rendering_value_darkyellow_name" = "暗黄色";
 "app_mode_osm" = "OSM";
 "rendering_attr_piste_difficulty_aerialway_name" = "空中航线";
@@ -1456,7 +1456,7 @@
 "download_map_dialog" = "下载地图对话框";
 "plugin_mapillary_descr" = "街道级视图的影像。您也可以自己贡献。要将现有数据视为地图图层，请在“配置地图”菜单中打开“街道级影像”。";
 "shared_strings_all_regions" = "所有区域";
-"navigate_point_olc" = "开放地点编码(OLC)";
+"navigate_point_olc" = "开放位置代码（OLC）";
 "gpxup_trackable" = "可追踪";
 "shared_string_wifi_only" = "仅在 Wi-Fi 上";
 "explore_wikipedia_offline" = "离线浏览维基百科。";
@@ -1914,7 +1914,7 @@
 "routing_attr_motor_type_diesel_name" = "柴油";
 "select_another_colorization" = "请选择另一种着色类型。";
 "gpx_selection_segment_title" = "区段";
-"weather_pressure_hectopascals" = "百帕斯卡";
+"weather_pressure_hectopascals" = "百帕";
 "pro_features" = "专业版功能";
 "first_intermediate_dest_description" = "添加始发站";
 "weather_pressure_inches_of_mercury" = "英寸汞柱";
@@ -2001,7 +2001,7 @@
 "shared_string_layers" = "图层";
 "logout_from_osmand_cloud_decsr" = "退出登录？\n您需要再次登录才能备份或恢复数据。";
 "routing_attr_motor_type_hybrid_name" = "混动";
-"weather_temperature_celsius" = "摄氏度";
+"weather_temperature_celsius" = "摄氏";
 "backup_into_file" = "备份为文件";
 "use_displayed_track_for_navigation" = "使用显示的轨迹进行导航？";
 "shared_string_angle_param" = "角度：%@°";
@@ -2137,3 +2137,20 @@
 "sync_now" = "立即同步";
 "rendering_attr_depthContourColorScheme_name" = "线条配色方案";
 "icon_group_service" = "服务";
+"local_file_will_be_restored" = "本地文件将被还原";
+"weather_wind_knots" = "节";
+"rendering_attr_weatherPrecipitationContours_name" = "降水等值线";
+"rendering_attr_weatherWindSpeedContours_name" = "风速等值线";
+"depth_contour_lines" = "等深线";
+"cloud_no_conflicts" = "没有冲突。";
+"local_changes_will_be_dismissed" = "本地更改将被忽略";
+"cloud_all_changes_uploaded" = "已上传所有变更";
+"backup_error_failed_to_fetch_remote_items" = "无法从服务器获取文件列表。";
+"shared_string_expires" = "过期";
+"rendering_attr_weatherCloudContours_name" = "云等值线";
+"cloud_conflict" = "冲突";
+"cloud_all_changes_uploaded_descr" = "在此设备上所做的所有更改都会与OsmAnd Cloud同步。";
+"upload_all" = "全部上传";
+"cloud_recent_changes" = "变更";
+"cloud_all_changes_downloaded" = "已下载所有变更";
+"last_sync" = "上次同步";

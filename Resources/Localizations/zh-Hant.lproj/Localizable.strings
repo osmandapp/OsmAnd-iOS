@@ -2248,3 +2248,5 @@
 "search_favorites" = "搜尋我的最愛";
 "search_results" = "搜尋結果";
 "icon_group_service" = "服務";
+"map_widget_sunrise" = "日出";
+"map_widget_sunset" = "日落";

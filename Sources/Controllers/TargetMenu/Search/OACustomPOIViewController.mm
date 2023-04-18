@@ -239,16 +239,6 @@
     [_core updateSettings:[[_core getSearchSettings] resetSearchTypes]];
 }
 
-- (IBAction)onBackButtonClicked:(id)sender
-{
-    [self resetSearchTypes];
-    [OAQuickSearchHelper.instance refreshCustomPoiFilters];
-    [self dismissViewController];
-
-    if (_editMode && self.refreshDelegate)
-        [self.refreshDelegate refreshList];
-}
-
 - (IBAction)onSaveButtonClicked:(id)sender
 {
     if (self.delegate)
@@ -562,6 +552,18 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return section == 0 && !_searchMode ? [OATableViewCustomHeaderView getHeight:OALocalizedString(@"search_poi_types_descr") width:tableView.bounds.size.width yOffset:12 font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]] + 9 : 0.01;
+}
+
+#pragma mark - Selectors
+
+- (void)onLeftNavbarButtonPressed
+{
+    [self resetSearchTypes];
+    [OAQuickSearchHelper.instance refreshCustomPoiFilters];
+    [self dismissViewController];
+
+    if (_editMode && self.refreshDelegate)
+        [self.refreshDelegate refreshList];
 }
 
 #pragma mark - Keyboard Notifications

@@ -292,6 +292,28 @@
     _isViewVisible = YES;
 }
 
+- (void)hide
+{
+    [self hide:YES duration:.2 onComplete:^{
+        [self.mapViewController hideContextPinMarker];
+
+        if (![self openedFromMap])
+        {
+            UITabBarController *myPlacesViewController =
+                    [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+            [myPlacesViewController setSelectedIndex:1];
+
+            OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
+            if (gpxController == nil)
+                return;
+
+            [gpxController setShouldPopToParent:YES];
+
+            [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
+        }
+    }];
+}
+
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     [super hide:YES duration:duration onComplete:^{
@@ -835,24 +857,7 @@
 
 - (IBAction)onBackButtonPressed:(id)sender
 {
-    [self hide:YES duration:.2 onComplete:^{
-        [self.mapViewController hideContextPinMarker];
-
-        if (![self openedFromMap])
-        {
-            UITabBarController *myPlacesViewController =
-                    [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-            [myPlacesViewController setSelectedIndex:1];
-
-            OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
-            if (gpxController == nil)
-                return;
-
-            [gpxController setShouldPopToParent:YES];
-
-            [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
-        }
-    }];
+    [self hide];
 }
 
 - (IBAction)onGroupsButtonPressed:(id)sender

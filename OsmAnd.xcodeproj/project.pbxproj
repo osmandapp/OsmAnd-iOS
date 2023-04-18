@@ -775,6 +775,7 @@
 		46E0264027B6773F00E554DD /* ic_custom_terrain_less_hilly@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46E0263827B6773F00E554DD /* ic_custom_terrain_less_hilly@2x.png */; };
 		46E1773B28B1742100F78878 /* OASettingsBackupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46E1773A28B1742100F78878 /* OASettingsBackupViewController.xib */; };
 		46E32497284A6B7700F95084 /* OAWeatherToolbar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46E32496284A6B7700F95084 /* OAWeatherToolbar.xib */; };
+		46E8FFC729ED759000DB1EFE /* UINavigationController+keyCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E8FFC629ED756000DB1EFE /* UINavigationController+keyCommands.m */; };
 		46E9AD8E28DC85A700CC55F9 /* OARightIconTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46E9AD8D28DC85A700CC55F9 /* OARightIconTableViewCell.xib */; };
 		46E9AD9128DC869300CC55F9 /* OARightIconTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E9AD9028DC869300CC55F9 /* OARightIconTableViewCell.m */; };
 		46E9AD9228DC894600CC55F9 /* OASimpleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E9AD8C28DC7F8700CC55F9 /* OASimpleTableViewCell.m */; };
@@ -4313,6 +4314,8 @@
 		46E0263827B6773F00E554DD /* ic_custom_terrain_less_hilly@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_less_hilly@2x.png"; path = "Resources/Icons/ic_custom_terrain_less_hilly@2x.png"; sourceTree = "<group>"; };
 		46E1773A28B1742100F78878 /* OASettingsBackupViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASettingsBackupViewController.xib; sourceTree = "<group>"; };
 		46E32496284A6B7700F95084 /* OAWeatherToolbar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAWeatherToolbar.xib; sourceTree = "<group>"; };
+		46E8FFC529ED749800DB1EFE /* UINavigationController+keyCommands.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+keyCommands.h"; sourceTree = "<group>"; };
+		46E8FFC629ED756000DB1EFE /* UINavigationController+keyCommands.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+keyCommands.m"; sourceTree = "<group>"; };
 		46E9AD8B28DC7E7900CC55F9 /* OASimpleTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASimpleTableViewCell.h; sourceTree = "<group>"; };
 		46E9AD8C28DC7F8700CC55F9 /* OASimpleTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASimpleTableViewCell.m; sourceTree = "<group>"; };
 		46E9AD8D28DC85A700CC55F9 /* OARightIconTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OARightIconTableViewCell.xib; sourceTree = "<group>"; };
@@ -11207,6 +11210,8 @@
 				DA5A7A2126C563A000F274C7 /* NSData+CRC32.h */,
 				DA5A7A2326C563A000F274C7 /* NSData+CRC32.m */,
 				DA5A7A2226C563A000F274C7 /* OAWorldRegion+Protected.h */,
+				46E8FFC529ED749800DB1EFE /* UINavigationController+keyCommands.h */,
+				46E8FFC629ED756000DB1EFE /* UINavigationController+keyCommands.m */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -17047,6 +17052,7 @@
 				DA5A83CB26C563A800F274C7 /* OACollapsableView.m in Sources */,
 				DA5A82F426C563A800F274C7 /* OASearchMoreCell.m in Sources */,
 				DA5A81BA26C563A700F274C7 /* OAPOIHistoryType.mm in Sources */,
+				46E8FFC729ED759000DB1EFE /* UINavigationController+keyCommands.m in Sources */,
 				DA5A844E26C563A900F274C7 /* OATransportStopsLayer.mm in Sources */,
 				DA5A831426C563A800F274C7 /* OARouteInfoLegendCell.m in Sources */,
 				DA5A812D26C563A700F274C7 /* IOAMapTiledCollectionProvider.mm in Sources */,

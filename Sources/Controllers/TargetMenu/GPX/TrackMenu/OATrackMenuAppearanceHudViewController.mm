@@ -616,7 +616,7 @@
                            forState:UIControlStateNormal];
 }
 
-- (IBAction)onBackButtonPressed:(id)sender
+- (void)hide
 {
     [self hide:YES duration:.2 onComplete:^{
         if (_reopeningTrackMenuState)
@@ -655,6 +655,11 @@
         else
             [[_app updateGpxTracksOnMapObservable] notifyEvent];
     }];
+}
+
+- (IBAction)onBackButtonPressed:(id)sender
+{
+    [self hide];
 }
 
 - (IBAction)onDoneButtonPressed:(id)sender

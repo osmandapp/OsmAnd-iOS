@@ -427,6 +427,21 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     }];
 }
 
+- (void)hide
+{
+    [self hide:YES duration:.2 onComplete:^{
+        [_mapSourceUpdatedObserver detach];
+        [_settings.appearanceMode set:_oldDayNightMode mode:_appMode];
+        [[OADayNightHelper instance] forceUpdate];
+
+        [self updateRouteLayer:_oldPreviewRouteLineInfo];
+        [_mapPanelViewController.mapViewController.mapLayers.routePreviewLayer resetLayer];
+
+        if (self.delegate)
+            [self.delegate onCloseAppearance];
+    }];
+}
+
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     [super hide:YES duration:duration onComplete:^{
@@ -1221,17 +1236,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (IBAction)onBackButtonPressed:(id)sender
 {
-    [self hide:YES duration:.2 onComplete:^{
-        [_mapSourceUpdatedObserver detach];
-        [_settings.appearanceMode set:_oldDayNightMode mode:_appMode];
-        [[OADayNightHelper instance] forceUpdate];
-
-        [self updateRouteLayer:_oldPreviewRouteLineInfo];
-        [_mapPanelViewController.mapViewController.mapLayers.routePreviewLayer resetLayer];
-
-        if (self.delegate)
-            [self.delegate onCloseAppearance];
-    }];
+    [self hide];
 }
 
 - (IBAction)onApplyButtonPressed:(id)sender

@@ -83,6 +83,8 @@
 - (void) closeDashboard;
 - (void) closeDashboardWithDuration:(CGFloat)duration;
 
+- (BOOL) isDashboardVisible;
+- (void) closeDashboardLastScreen;
 - (void) mapSettingsButtonClick:(id)sender;
 - (void) mapSettingsButtonClick:(id)sender mode:(OAApplicationMode *)targetMode;
 - (void) searchButtonClick:(id)sender;

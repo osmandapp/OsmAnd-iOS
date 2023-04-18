@@ -97,11 +97,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     _onlineMapSources = [OAResourcesUIHelper getSortedRasterMapSources:NO];
 }
 
-- (IBAction) onCancelButtonClicked:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -173,6 +168,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if (self.delegate)
         [self.delegate onNewSourceSelected];
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - Selectors
+
+- (void)onLeftNavbarButtonPressed
+{
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

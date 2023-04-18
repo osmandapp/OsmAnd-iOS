@@ -197,15 +197,6 @@
     [_core updateSettings:[[_core getSearchSettings] resetSearchTypes]];
 }
 
-- (IBAction)onBackButtonClicked:(id)sender
-{
-    if (self.delegate)
-        [self.delegate selectSubcategoryCancel];
-
-    [self resetSearchTypes];
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (IBAction)onApplyButtonClicked:(id)sender
 {
     if (self.delegate)
@@ -477,6 +468,15 @@
 }
 
 #pragma mark - Selectors
+
+- (void)onLeftNavbarButtonPressed
+{
+    if (self.delegate)
+        [self.delegate selectSubcategoryCancel];
+
+    [self resetSearchTypes];
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 - (void)selectDeselectGroup:(UIButton *)sender
 {

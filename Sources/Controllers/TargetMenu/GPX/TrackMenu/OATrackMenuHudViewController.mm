@@ -64,7 +64,9 @@
 #import "OsmAnd_Maps-Swift.h"
 
 #define kGpxDescriptionImageHeight 149
+#define kOverviewTabIndex @0
 #define kAltutudeTabIndex @1
+#define kSpeedTabIndex @2
 
 @implementation OATrackMenuViewControllerState
 

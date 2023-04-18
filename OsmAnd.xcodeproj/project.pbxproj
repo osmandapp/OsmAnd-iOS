@@ -3816,6 +3816,7 @@
 		32309A702698D22E005751F5 /* ic_custom_direction_compass_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_compass_day@3x.png"; path = "Resources/Icons/ic_custom_direction_compass_day@3x.png"; sourceTree = "<group>"; };
 		32309A712698D22E005751F5 /* ic_custom_direction_compass_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_compass_night@3x.png"; path = "Resources/Icons/ic_custom_direction_compass_night@3x.png"; sourceTree = "<group>"; };
 		32309A722698D22E005751F5 /* ic_custom_direction_compass_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_compass_day@2x.png"; path = "Resources/Icons/ic_custom_direction_compass_day@2x.png"; sourceTree = "<group>"; };
+		3233B36B29EEBA060056793F /* OATrackMenuHudViewControllerConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATrackMenuHudViewControllerConstants.h; sourceTree = "<group>"; };
 		3234101828889D0900E90FBA /* OARowInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARowInfo.h; sourceTree = "<group>"; };
 		3234101928889D1B00E90FBA /* OARowInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARowInfo.m; sourceTree = "<group>"; };
 		3236428C290036FD00E18413 /* OAFPSTextInfoWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFPSTextInfoWidget.h; sourceTree = "<group>"; };
@@ -8088,6 +8089,7 @@
 				0A1051D12731A30200BDF6C4 /* MenuBuilder */,
 				B0D617376B44864C22144EAE /* OATrackMenuHudViewController.mm */,
 				B0D619894A15E2D75C4CBC96 /* OATrackMenuHudViewController.h */,
+				3233B36B29EEBA060056793F /* OATrackMenuHudViewControllerConstants.h */,
 				0AA3BB9726EBC00200A9885D /* OATrackMenuHudViewController.xib */,
 				B0D61823DCC461FF03FE8103 /* OATrackMenuHeaderView.mm */,
 				B0D616BD4B59FB4F1D8B9B4C /* OATrackMenuHeaderView.h */,

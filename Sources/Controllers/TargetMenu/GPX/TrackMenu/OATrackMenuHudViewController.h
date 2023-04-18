@@ -9,6 +9,7 @@
 #import "OABaseTrackMenuHudViewController.h"
 #import "OAStatisticsSelectionBottomSheetViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OATrackMenuHudViewControllerConstants.h"
 
 @class LineChartView;
 @class OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey;

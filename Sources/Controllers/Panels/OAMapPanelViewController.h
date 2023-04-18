@@ -11,21 +11,7 @@
 #import "OAMapViewController.h"
 #import "OATargetPointView.h"
 #import "OABaseTrackMenuHudViewController.h"
-
-typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
-{
-    EOATrackMenuHudOverviewTab = 0,
-    EOATrackMenuHudSegmentsTab,
-    EOATrackMenuHudPointsTab,
-    EOATrackMenuHudActionsTab
-};
-
-typedef NS_ENUM(NSUInteger, EOATrackMenuHudSegmentsStatisticsTab)
-{
-    EOATrackMenuHudSegmentsStatisticsOverviewTab = 0,
-    EOATrackMenuHudSegmentsStatisticsAlititudeTab,
-    EOATrackMenuHudSegmentsStatisticsSpeedTab
-};
+#import "OATrackMenuHudViewControllerConstants.h"
 
 @class OAFavoriteItem;
 @class OAGpxWptItem;

@@ -58,11 +58,15 @@
 #import "OAWikiArticleHelper.h"
 #import "OAMapHudViewController.h"
 #import "OAOsmUploadGPXViewConroller.h"
+#import "OATrackMenuTabSegments.h"
 
 #import <Charts/Charts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
 
 #define kGpxDescriptionImageHeight 149
+#define kOverviewTabIndex @0
+#define kAltutudeTabIndex @1
+#define kSpeedTabIndex @2
 
 @implementation OATrackMenuViewControllerState
 
@@ -213,6 +217,40 @@
     self.groupsButton.titleEdgeInsets = UIEdgeInsetsMake(0., isRTL ? -4. : 0., 0., isRTL ? 0. : -4.);
     self.groupsButton.imageEdgeInsets = UIEdgeInsetsMake(0., isRTL ? 10. : -4., 0., isRTL ? -4. : 10.);
     [self updateGroupsButton];
+   
+    if (_selectedTab == EOATrackMenuHudSegmentsTab)
+        [self selectTabOnLaunch:_reopeningState.selectedStatisticsTab];
+}
+
+- (void) selectTabOnLaunch:(EOATrackMenuHudSegmentsStatisticsTab)selectedStatisticsTab
+{
+    NSNumber *tabIndex = kOverviewTabIndex;
+    if (selectedStatisticsTab == EOATrackMenuHudSegmentsStatisticsOverviewTab)
+        tabIndex = kOverviewTabIndex;
+    else if (selectedStatisticsTab == EOATrackMenuHudSegmentsStatisticsAlititudeTab)
+        tabIndex = kAltutudeTabIndex;
+    else if (selectedStatisticsTab == EOATrackMenuHudSegmentsStatisticsAlititudeTab)
+        tabIndex = kSpeedTabIndex;
+    
+    if (_tableData && _tableData.subjects.count > 0)
+    {
+        for (OAGPXTableSectionData *sectionData in _tableData.subjects)
+        {
+            if (sectionData.subjects.count > 0)
+            {
+                for (OAGPXTableCellData *cellData in sectionData.subjects)
+                {
+                    if ([cellData.type isEqualToString:[OASegmentTableViewCell getCellIdentifier]])
+                    {
+                        cellData.values[@"selected_index_int_value"] = tabIndex;
+                        [_uiBuilder updateData:cellData];
+                        [self.tableView reloadData];
+                        break;
+                    }
+                }
+            }
+        }
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated

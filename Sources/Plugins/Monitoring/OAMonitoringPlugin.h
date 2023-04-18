@@ -7,7 +7,14 @@
 //
 
 #import "OAPlugin.h"
+#import "OALiveMonitoringHelper.h"
+#import "OASavingTrackHelper.h"
 
 @interface OAMonitoringPlugin : OAPlugin
+
+@property (nonatomic) BOOL saving;
+
+- (void) showTripRecordingDialog:(BOOL)showTrackSelection;
+- (BOOL) isLiveMonitoringEnabled;
 
 @end

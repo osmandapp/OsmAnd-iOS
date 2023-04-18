@@ -485,10 +485,7 @@
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp
 {
     if (_analysisModifiedTime != _modifiedTime)
-    {
-        _analysisModifiedTime = [[NSDate date] timeIntervalSince1970];
         [self update];
-    }
     return _trackAnalysis;
 }
 

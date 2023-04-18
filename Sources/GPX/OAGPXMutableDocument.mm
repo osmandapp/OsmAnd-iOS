@@ -484,7 +484,7 @@
 
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp
 {
-    if (_analysisModifiedTime != _modifiedTime)
+    if (!_trackAnalysis || _analysisModifiedTime != _modifiedTime)
         [self update];
     return _trackAnalysis;
 }

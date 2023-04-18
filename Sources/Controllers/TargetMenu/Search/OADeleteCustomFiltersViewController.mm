@@ -61,11 +61,6 @@
     [self.deleteButton setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
 }
 
-- (IBAction)onCancelButtonClicked:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (IBAction)onDeleteButtonClicked:(id)sender
 {
     if (self.delegate)
@@ -229,6 +224,11 @@
 }
 
 #pragma mark - Selectors
+
+- (void)onLeftNavbarButtonPressed
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 - (void)selectDeselectGroup:(UIButton *)sender
 {

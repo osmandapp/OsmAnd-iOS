@@ -684,6 +684,25 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self updateDistancePointsText];
 }
 
+- (void)hide
+{
+    if (_hudMode == EOAHudModeMovePoint)
+    {
+        [self exitMovePointMode:YES];
+        return;
+    }
+    if (_editingContext.hasChanges)
+    {
+        OAExitRoutePlanningBottomSheetViewController *bottomSheet = [[OAExitRoutePlanningBottomSheetViewController alloc] init];
+        bottomSheet.delegate = self;
+        [bottomSheet presentInViewController:OARootViewController.instance.mapPanel.mapViewController];
+    }
+    else
+    {
+        [self dismiss];
+    }
+}
+
 - (void)dismiss
 {
     [self hide:YES duration:.2 onComplete:^{
@@ -820,21 +839,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (IBAction)closePressed:(id)sender
 {
-    if (_hudMode == EOAHudModeMovePoint)
-    {
-        [self exitMovePointMode:YES];
-        return;
-    }
-    if (_editingContext.hasChanges)
-    {
-        OAExitRoutePlanningBottomSheetViewController *bottomSheet = [[OAExitRoutePlanningBottomSheetViewController alloc] init];
-        bottomSheet.delegate = self;
-        [bottomSheet presentInViewController:OARootViewController.instance.mapPanel.mapViewController];
-    }
-    else
-    {
-        [self dismiss];
-    }
+    [self hide];
 }
 
 - (IBAction)donePressed:(id)sender

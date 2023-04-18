@@ -397,19 +397,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     [self.tblView reloadData];
 }
 
-- (IBAction)onBackButtonPressed
-{
-    for (UIViewController *controller in self.navigationController.viewControllers)
-    {
-        if ([controller isKindOfClass:[OAMainSettingsViewController class]])
-        {
-            [self.navigationController popToViewController:controller animated:YES];
-            return;
-        }
-    }
-    [self.navigationController popToRootViewControllerAnimated:YES];
-}
-
 - (IBAction)onSettingsButtonPressed
 {
     OASettingsBackupViewController *settingsBackupViewController = [[OASettingsBackupViewController alloc] init];
@@ -721,6 +708,21 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     if (statusBackupViewController)
         [self.navigationController pushViewController:statusBackupViewController animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - Selectors
+
+- (void)onLeftNavbarButtonPressed
+{
+    for (UIViewController *controller in self.navigationController.viewControllers)
+    {
+        if ([controller isKindOfClass:[OAMainSettingsViewController class]])
+        {
+            [self.navigationController popToViewController:controller animated:YES];
+            return;
+        }
+    }
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 // MARK: OAOnPrepareBackupListener

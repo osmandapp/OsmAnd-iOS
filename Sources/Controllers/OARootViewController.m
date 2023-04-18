@@ -849,61 +849,68 @@ typedef enum : NSUInteger {
              [UIKeyCommand keyCommandWithInput:UIKeyInputRightArrow modifierFlags:0 action:@selector(panRight)],
              [UIKeyCommand keyCommandWithInput:@"-" modifierFlags:0 action:@selector(zoomOut)],
              [UIKeyCommand keyCommandWithInput:@"+" modifierFlags:0 action:@selector(zoomIn)],
+             [UIKeyCommand keyCommandWithInput:@"=" modifierFlags:0 action:@selector(zoomIn)],
              [UIKeyCommand keyCommandWithInput:@"-" modifierFlags:UIKeyModifierCommand action:@selector(zoomOut)],
              [UIKeyCommand keyCommandWithInput:@"+" modifierFlags:UIKeyModifierCommand action:@selector(zoomIn)],
              [UIKeyCommand keyCommandWithInput:@"=" modifierFlags:UIKeyModifierCommand action:@selector(zoomIn)],
-             [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack)],
              [UIKeyCommand keyCommandWithInput:@"0" modifierFlags:UIKeyModifierCommand action:@selector(recenterMap)],
              [UIKeyCommand keyCommandWithInput:@"c" modifierFlags:0 action:@selector(recenterMap)],
-             [UIKeyCommand keyCommandWithInput:@"d" modifierFlags:0 action:@selector(changeMapOrienation)]];
+             [UIKeyCommand keyCommandWithInput:@"d" modifierFlags:0 action:@selector(changeMapOrienation)],
+             [UIKeyCommand keyCommandWithInput:@"n" modifierFlags:0 action:@selector(showRouteInfo)],
+             [UIKeyCommand keyCommandWithInput:@"o" modifierFlags:0 action:@selector(changeAppModeToPrev)],
+             [UIKeyCommand keyCommandWithInput:@"p" modifierFlags:0 action:@selector(changeAppModeToNext)],
+             [UIKeyCommand keyCommandWithInput:@"s" modifierFlags:0 action:@selector(openSearch)]];
 }
 
 - (void) changeMapOrienation
 {
-    [[OAMapViewTrackingUtilities instance] switchRotateMapMode];
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+        [[OAMapViewTrackingUtilities instance] switchRotateMapMode];
+}
+
+- (void) showRouteInfo
+{
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+        [self.mapPanel showRouteInfo];
+}
+
+- (void) openSearch
+{
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+        [self.mapPanel openSearch];
 }
 
 - (void) panUp
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] != NO_EXTERNAL_DEVICE)
-    {
-        if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
-            [self.mapPanel.mapViewController animatedZoomIn];
-        else
-            [self.mapPanel.mapViewController animatedPanUp];
-    }
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
+        [self.mapPanel.mapViewController animatedZoomIn];
+    else if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+        [self.mapPanel.mapViewController animatedPanUp];
 }
 
 - (void) panDown
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] != NO_EXTERNAL_DEVICE)
-    {
-        if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
-            [self.mapPanel.mapViewController animatedZoomOut];
-        else
-            [self.mapPanel.mapViewController animatedPanDown];
-    }
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
+        [self.mapPanel.mapViewController animatedZoomOut];
+    else if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+        [self.mapPanel.mapViewController animatedPanDown];
 }
 
 - (void) panLeft
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] != NO_EXTERNAL_DEVICE)
-    {
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
         [self.mapPanel.mapViewController animatedPanLeft];
-    }
 }
 
 - (void) panRight
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] != NO_EXTERNAL_DEVICE)
-    {
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
         [self.mapPanel.mapViewController animatedPanRight];
-    }
 }
 
 - (void) zoomOut
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] != NO_EXTERNAL_DEVICE)
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
     {
         [self.mapPanel.mapViewController animatedZoomOut];
         [self.mapPanel.mapViewController calculateMapRuler];
@@ -912,27 +919,57 @@ typedef enum : NSUInteger {
 
 - (void) zoomIn
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] != NO_EXTERNAL_DEVICE)
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
         [self.mapPanel.mapViewController animatedZoomIn];
-}
-
-- (void) goBack
-{
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
-    {
-        //Launch WunderLINQ
-        NSString *wunderlinqAppURL = @"wunderlinq://datagrid";
-        BOOL canOpenURL = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:wunderlinqAppURL]];
-        if (canOpenURL)
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:wunderlinqAppURL] options:@{} completionHandler:nil];
-    }
 }
 
 - (void) recenterMap
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] != NO_EXTERNAL_DEVICE)
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
         [[OAMapViewTrackingUtilities instance] backToLocationImpl];
-    
+}
+
+- (void)changeAppModeToNext
+{
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    {
+        OAApplicationMode *selectedMode = [[OAAppSettings sharedManager].applicationMode get];
+        NSArray<OAApplicationMode *> *availableModes = [OAApplicationMode values];
+        NSInteger selectedModeIndex = [availableModes indexOfObject:selectedMode];
+        if (availableModes.count - 1 > selectedModeIndex)
+            [[OAAppSettings sharedManager] setApplicationModePref:availableModes[selectedModeIndex + 1]];
+        else
+            [[OAAppSettings sharedManager] setApplicationModePref:availableModes.firstObject];
+
+        NSString *profileName = selectedMode.name.length > 0 ? selectedMode.name : [selectedMode getUserProfileName];
+        [OAUtilities showToast:[NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"),
+                                                          OALocalizedString(@"shared_string_app_profile"),
+                                                          [[[OAAppSettings sharedManager].applicationMode get] toHumanString]]
+                       details:nil
+                      duration:4
+                        inView:self.view];
+    }
+}
+
+- (void)changeAppModeToPrev
+{
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    {
+        OAApplicationMode *selectedMode = [[OAAppSettings sharedManager].applicationMode get];
+        NSArray<OAApplicationMode *> *availableModes = [OAApplicationMode values];
+        NSInteger selectedModeIndex = [availableModes indexOfObject:selectedMode];
+        if (selectedModeIndex == 0)
+            [[OAAppSettings sharedManager] setApplicationModePref:availableModes.lastObject];
+        else
+            [[OAAppSettings sharedManager] setApplicationModePref:availableModes[selectedModeIndex - 1]];
+
+        [OAUtilities showToast:[NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"),
+                                                          OALocalizedString(@"shared_string_app_profile"),
+                                                          [[[OAAppSettings sharedManager].applicationMode get] toHumanString]]
+                       details:nil
+                      duration:4
+                        inView:self.view];
+    }
 }
 
 #pragma mark SFSafariViewControllerDelegate

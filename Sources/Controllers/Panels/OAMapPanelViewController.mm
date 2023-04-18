@@ -857,6 +857,21 @@ typedef enum
     }
 }
 
+- (BOOL)isDashboardVisible
+{
+    return _dashboard != nil;
+}
+
+- (void)closeDashboardLastScreen
+{
+    if (_dashboard)
+    {
+        NSObject *lastMapSettingsCtrl = [self.childViewControllers lastObject];
+        if (lastMapSettingsCtrl && [lastMapSettingsCtrl isKindOfClass:OADashboardViewController.class])
+            [((OADashboardViewController *) lastMapSettingsCtrl) onLeftNavbarButtonPressed];
+    }
+}
+
 - (void) mapSettingsButtonClick:(id)sender
 {
     [self mapSettingsButtonClick:sender mode:nil];

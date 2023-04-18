@@ -1661,6 +1661,7 @@
 "change_application_profile" = "Change app profile";
 "select_application_profile" = "Select application profile";
 "shared_string_add_profile" = "Add profile";
+"shared_string_app_profile" = "App profile";
 "quick_action_switch_profile_descr" = "The action button switches between selected profiles.";
 "profile_type_user_string" = "User profile";
 "profile_type_osmand_string" = "OsmAnd profile";

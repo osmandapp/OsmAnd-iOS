@@ -259,11 +259,6 @@
         [self.trackMenuDelegate reloadSections:indexSet];
 }
 
-- (IBAction)onCancelButtonClicked:(id)sender
-{
-    [self dismissViewController];
-}
-
 - (IBAction)onSelectAllButtonClicked:(id)sender
 {
     NSArray<NSString *> *waypointSortedGroupNames = self.trackMenuDelegate
@@ -492,6 +487,13 @@
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return indexPath.row != 0;
+}
+
+#pragma mark - Selectors
+
+- (void)onLeftNavbarButtonPressed
+{
+    [self dismissViewController];
 }
 
 @end

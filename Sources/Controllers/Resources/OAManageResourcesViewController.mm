@@ -3034,6 +3034,7 @@ static BOOL _repositoryUpdated = NO;
     _lastSearchScope = searchBar.selectedScopeButtonIndex;
     [self performSearchForSearchString:_lastSearchString
                         andSearchScope:_lastSearchScope];
+    [self setupSearchControllerWithFilter:NO];
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText

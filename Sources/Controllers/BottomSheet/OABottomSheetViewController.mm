@@ -449,6 +449,29 @@
     }];
 }
 
+- (void)goBack
+{
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
+    {
+        //Launch WunderLINQ
+        NSString *wunderlinqAppURL = @"wunderlinq://datagrid";
+        BOOL canOpenURL = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:wunderlinqAppURL]];
+        if (canOpenURL)
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:wunderlinqAppURL] options:@{} completionHandler:nil];
+    }
+    else if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    {
+        [self dismiss];
+    }
+}
+
+#pragma mark - UIResponder
+
+- (NSArray *)keyCommands
+{
+    return @[[UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack)]];
+}
+
 #pragma mark -  UIGestureRecognizerDelegate
 
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch

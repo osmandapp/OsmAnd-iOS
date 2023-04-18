@@ -117,12 +117,17 @@
     return NO;
 }
 
-- (IBAction)leftButtonPressed:(id)sender
+- (void)hide:(BOOL)animated
 {
-    [self hide:YES completion:^{
+    [self hide:animated completion:^{
         if (self.trackMenuDelegate)
             [self.trackMenuDelegate openWaypointsGroupOptionsScreen:_groupName];
     }];
+}
+
+- (IBAction)leftButtonPressed:(id)sender
+{
+    [self hide:YES];
 }
 
 - (OAGPXTableCellData *)getCellData:(NSIndexPath *)indexPath

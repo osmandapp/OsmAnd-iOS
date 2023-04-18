@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -35,10 +35,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tTv-fb-Ygd">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="144"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="148"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MNL-k6-ler">
-                            <rect key="frame" x="16" y="52" width="28" height="28"/>
+                            <rect key="frame" x="16" y="56" width="28" height="28"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="28" id="4AP-dU-dhN"/>
                                 <constraint firstAttribute="height" constant="28" id="Qaa-jK-zwB"/>
@@ -46,11 +46,11 @@
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <state key="normal" image="ic_navbar_chevron.png"/>
                             <connections>
-                                <action selector="onBackButtonClicked:" destination="-1" eventType="touchUpInside" id="JBE-B8-vv4"/>
+                                <action selector="onLeftNavbarButtonPressed:" destination="-1" eventType="touchUpInside" id="O6M-al-Nxu"/>
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Custom filter" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3qR-w7-ZwS">
-                            <rect key="frame" x="155" y="55" width="104" height="22"/>
+                            <rect key="frame" x="155" y="59" width="104" height="22"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="22" id="nIM-Ne-7Vl"/>
                             </constraints>
@@ -59,7 +59,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hab-XG-Ggn">
-                            <rect key="frame" x="359" y="52" width="39" height="28"/>
+                            <rect key="frame" x="359" y="56" width="39" height="28"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="28" id="ydi-W7-jTL"/>
                             </constraints>
@@ -72,7 +72,7 @@
                             </connections>
                         </button>
                         <searchBar contentMode="redraw" searchBarStyle="minimal" text="" translatesAutoresizingMaskIntoConstraints="NO" id="YKV-im-CVL">
-                            <rect key="frame" x="10" y="94" width="394" height="36"/>
+                            <rect key="frame" x="10" y="98" width="394" height="36"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="36" id="b4j-tC-OUx"/>
                             </constraints>
@@ -86,7 +86,7 @@
                             </userDefinedRuntimeAttributes>
                         </searchBar>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CA1-7s-Fdq">
-                            <rect key="frame" x="0.0" y="143" width="414" height="1"/>
+                            <rect key="frame" x="0.0" y="147" width="414" height="1"/>
                             <color key="backgroundColor" red="0.76862745099999996" green="0.76862745099999996" blue="0.76862745099999996" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="Gam-5q-fYm"/>
@@ -110,7 +110,7 @@
                     </constraints>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" layoutMarginsFollowReadableWidth="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="OoE-bw-UtS" customClass="OATableView">
-                    <rect key="frame" x="0.0" y="144" width="414" height="642"/>
+                    <rect key="frame" x="0.0" y="148" width="414" height="638"/>
                     <viewLayoutGuide key="safeArea" id="0I3-dE-M3s"/>
                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                 </tableView>

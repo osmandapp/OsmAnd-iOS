@@ -197,14 +197,6 @@
     return filterItem;
 }
 
-- (IBAction)onCancelButtonClicked:(id)sender
-{
-    if (_isChanged)
-        [self showChangesAlert];
-    else
-        [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (IBAction)onDoneButtonClicked:(id)sender
 {
     if (_isChanged)
@@ -467,6 +459,14 @@
 }
 
 #pragma mark - Selectors
+
+- (void)onLeftNavbarButtonPressed
+{
+    if (_isChanged)
+        [self showChangesAlert];
+    else
+        [self.navigationController popViewControllerAnimated:YES];
+}
 
 - (void)onEditButtonPressed:(UIButton *)sender
 {

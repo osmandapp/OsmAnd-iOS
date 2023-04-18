@@ -14,6 +14,8 @@
 @implementation OAGPXMutableDocument
 {
     std::shared_ptr<OsmAnd::GpxDocument> document;
+    NSTimeInterval _analysisModifiedTime;
+    OAGPXTrackAnalysis *_trackAnalysis;
 }
 
 @dynamic points, tracks, routes;
@@ -27,6 +29,7 @@
         self.points = [NSMutableArray array];
         self.tracks = [NSMutableArray array];
         self.routes = [NSMutableArray array];
+        _modifiedTime = 0;
         
         document.reset(new OsmAnd::GpxDocument());
         
@@ -41,6 +44,7 @@
     if (self)
     {
         document = gpxDocument;
+        _modifiedTime = 0;
     }
     return self;
 }
@@ -145,6 +149,7 @@
     [self processBounds:w.position];
     
     [self.points addObject:w];
+    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void)deleteWpt:(OAWptPt *)w
@@ -159,12 +164,14 @@
             break;
         }
     }
+    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void)deleteAllWpts
 {
     [self.points removeAllObjects];
     document->points.clear();
+    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void) addRoutePoints:(NSArray<OAWptPt *> *)points addRoute:(BOOL)addRoute
@@ -177,7 +184,7 @@
     for (OAWptPt *pt in points)
         [self addRoutePoint:pt route:self.routes.lastObject];
     
-//    self.modifiedTime = System.currentTimeMillis();
+    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void) addRoutes:(NSArray<OARoute *> *)routes
@@ -234,6 +241,7 @@
     rte = nullptr;
     
     [self.routes addObject:r];
+    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void) addRoutePoint:(OAWptPt *)p route:(OARoute *)route
@@ -266,6 +274,7 @@
     [self processBounds:p.position];
 
     [((NSMutableArray *)route.points) addObject:p];
+    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void) addTracks:(NSArray<OATrack *> *)tracks
@@ -334,6 +343,7 @@
     trk = nullptr;
     
     [self.tracks addObject:t];
+    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void)addTrackSegment:(OATrkSegment *)s track:(OATrack *)track
@@ -381,6 +391,7 @@
     trkseg = nullptr;
     
     [((NSMutableArray *)track.segments) addObject:s];
+    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (BOOL)removeTrackSegment:(OATrkSegment *)segment
@@ -410,7 +421,7 @@
                 }
 
                 [self addGeneralTrack];
-                _modifiedTime = (long) [[NSDate date] timeIntervalSince1970];
+                _modifiedTime = [[NSDate date] timeIntervalSince1970];
             }
             return removed;
         }
@@ -427,6 +438,7 @@
         self.tracks = tracks;
         self.generalTrack = nil;
         self.generalSegment = nil;
+        _modifiedTime = [[NSDate date] timeIntervalSince1970];
     }
 }
 
@@ -460,6 +472,7 @@
     [self processBounds:p.position];
 
     [((NSMutableArray *)segment.points) addObject:p];
+    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (BOOL) saveTo:(NSString *)filename
@@ -467,6 +480,34 @@
     [self updateDocAndMetadata];
     [self applyBounds];
     return document->saveTo(QString::fromNSString(filename), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
+}
+
+- (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp
+{
+    if (!_trackAnalysis || _analysisModifiedTime != _modifiedTime)
+        [self update];
+    return _trackAnalysis;
+}
+
+- (void) update
+{
+    _analysisModifiedTime = _modifiedTime;
+    
+    NSTimeInterval fileTimestamp = 0;
+    if (self.path && self.path.length > 0)
+    {
+        NSFileManager *manager = NSFileManager.defaultManager;
+        NSError *err = nil;
+        NSDictionary *attrs = [manager attributesOfItemAtPath:self.path error:&err];
+        if (!err)
+            fileTimestamp = attrs.fileModificationDate.timeIntervalSince1970;
+    }
+    else
+    {
+        fileTimestamp = [[NSDate date] timeIntervalSince1970];
+    }
+    
+    _trackAnalysis = [super getAnalysis:fileTimestamp];
 }
 
 @end

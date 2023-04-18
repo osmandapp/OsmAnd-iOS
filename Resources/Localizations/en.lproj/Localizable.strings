@@ -201,6 +201,10 @@
 "map_widget_sunrise_sunset_time_left" = "Time left";
 "map_widget_next_sunrise" = "Next sunrise";
 "map_widget_next_sunset" = "Next sunset";
+"map_widget_trip_recording_downhill" = "Downhill";
+"map_widget_trip_recording_uphill" = "Uphill";
+"map_widget_trip_recording_duration" = "Duration";
+"map_widget_trip_recording_distance" = "Distance";
 "access_arrival_time" = "Arrival time";
 "map_widget_time" = "Time to go";
 "map_widget_ruler_control" = "Radius ruler";
@@ -1657,6 +1661,7 @@
 "change_application_profile" = "Change app profile";
 "select_application_profile" = "Select application profile";
 "shared_string_add_profile" = "Add profile";
+"shared_string_app_profile" = "App profile";
 "quick_action_switch_profile_descr" = "The action button switches between selected profiles.";
 "profile_type_user_string" = "User profile";
 "profile_type_osmand_string" = "OsmAnd profile";

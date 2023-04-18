@@ -124,6 +124,7 @@
                 }
             }
         }
+        [[OARootViewController instance].mapPanel recreateControls];
     });
 }
 

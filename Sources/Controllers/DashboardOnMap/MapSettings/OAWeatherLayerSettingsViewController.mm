@@ -432,6 +432,15 @@
     }
 }
 
+- (void)hide
+{
+    _backButtonPressed = YES;
+    [self hide:YES duration:.2 onComplete:^{
+        if (self.delegate)
+            [self.delegate onDoneWeatherLayerSettings:YES];
+    }];
+}
+
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     [super hide:YES duration:duration onComplete:^{
@@ -443,11 +452,7 @@
 
 - (IBAction)backButtonPressed:(UIButton *)sender
 {
-    _backButtonPressed = YES;
-    [self hide:YES duration:.2 onComplete:^{
-        if (self.delegate)
-            [self.delegate onDoneWeatherLayerSettings:YES];
-    }];
+    [self hide];
 }
 
 - (IBAction)doneButtonPressed:(UIButton *)sender

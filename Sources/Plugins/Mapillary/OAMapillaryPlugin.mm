@@ -101,6 +101,7 @@
                 _mapillaryControl = nil;
             }
         }
+        [[OARootViewController instance].mapPanel recreateControls];
     });
 }
 

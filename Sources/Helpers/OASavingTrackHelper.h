@@ -31,6 +31,7 @@
 - (BOOL) hasData;
 - (BOOL) hasDataToSave;
 - (void) clearData;
+- (void) saveDataToGpxWithCompletionHandler:(void (^)(void))completionHandler;
 - (void) saveDataToGpx;
 - (void) startNewSegment;
 - (BOOL) saveCurrentTrack:(NSString *)fileName;

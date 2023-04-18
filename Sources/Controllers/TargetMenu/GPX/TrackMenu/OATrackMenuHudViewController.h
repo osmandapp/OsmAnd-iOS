@@ -9,17 +9,10 @@
 #import "OABaseTrackMenuHudViewController.h"
 #import "OAStatisticsSelectionBottomSheetViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OATrackMenuHudViewControllerConstants.h"
 
 @class LineChartView;
 @class OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey;
-
-typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
-{
-    EOATrackMenuHudOverviewTab = 0,
-    EOATrackMenuHudSegmentsTab,
-    EOATrackMenuHudPointsTab,
-    EOATrackMenuHudActionsTab
-};
 
 @protocol OATrackMenuViewControllerDelegate <NSObject>
 
@@ -99,6 +92,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 + (instancetype)withPinLocation:(CLLocationCoordinate2D)pinLocation openedFromMap:(BOOL)openedFromMap;
 
 @property (nonatomic, assign) EOATrackMenuHudTab lastSelectedTab;
+@property (nonatomic, assign) EOATrackMenuHudSegmentsStatisticsTab selectedStatisticsTab;
 @property (nonatomic, assign) EOARouteStatisticsMode routeStatistics;
 @property (nonatomic) UIImage *trackIcon;
 @property (nonatomic) NSString *gpxFilePath;

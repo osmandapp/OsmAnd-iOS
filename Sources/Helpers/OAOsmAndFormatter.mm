@@ -636,4 +636,18 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
     return tagValue;
 }
 
++ (NSString *) getFormattedDuration:(NSTimeInterval)seconds fullForm:(BOOL) fullForm
+{
+    NSString *sec = [NSString stringWithFormat:@"%02ld", (long)seconds % 60];
+    
+    long minutes = seconds / 60;
+      if (!fullForm && minutes < 60) {
+          return [NSString stringWithFormat:@"%ld:%@", minutes, sec];
+      } else {
+          NSString *min = [NSString stringWithFormat:@"%02ld", minutes % 60];
+          long hours = minutes / 60;
+          return [NSString stringWithFormat:@"%ld:%@:%@", hours, min, sec];
+      }
+}
+
 @end

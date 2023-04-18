@@ -857,6 +857,21 @@ typedef enum
     }
 }
 
+- (BOOL)isDashboardVisible
+{
+    return _dashboard != nil;
+}
+
+- (void)closeDashboardLastScreen
+{
+    if (_dashboard)
+    {
+        NSObject *lastMapSettingsCtrl = [self.childViewControllers lastObject];
+        if (lastMapSettingsCtrl && [lastMapSettingsCtrl isKindOfClass:OADashboardViewController.class])
+            [((OADashboardViewController *) lastMapSettingsCtrl) onLeftNavbarButtonPressed];
+    }
+}
+
 - (void) mapSettingsButtonClick:(id)sender
 {
     [self mapSettingsButtonClick:sender mode:nil];
@@ -2699,6 +2714,16 @@ typedef enum
                                   ? _activeViewControllerState
                                   : [OATrackMenuViewControllerState withPinLocation:item.bounds.center
                                                                       openedFromMap:NO]];
+}
+
+- (void)openTargetViewWithGPX:(OAGPX *)item selectedTab:(EOATrackMenuHudTab)selectedTab selectedStatisticsTab:(EOATrackMenuHudSegmentsStatisticsTab)selectedStatisticsTab openedFromMap:(BOOL)openedFromMap
+{
+    OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:item.bounds.center openedFromMap:openedFromMap];
+    state.lastSelectedTab = selectedTab;
+    state.selectedStatisticsTab = selectedStatisticsTab;
+    [self openTargetViewWithGPX:item
+                   trackHudMode:EOATrackMenuHudMode
+                          state:state];
 }
 
 - (void)openTargetViewWithGPX:(OAGPX *)item

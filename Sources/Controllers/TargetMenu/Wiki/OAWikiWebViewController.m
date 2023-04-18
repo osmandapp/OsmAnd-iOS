@@ -85,9 +85,10 @@
         {
             NSArray<NSString *> *contentLocales = _poi.localizedContent.allKeys;
             NSMutableSet<NSString *> *preferredLocales = [NSMutableSet set];
-            for (NSInteger i = 0; i < [NSLocale preferredLanguages].count; i ++)
+            NSArray<NSString *> *preferredLanguages = [NSLocale preferredLanguages];
+            for (NSInteger i = 0; i < preferredLanguages.count; i ++)
             {
-                NSString *preferredLocale = [NSLocale preferredLanguages][i];
+                NSString *preferredLocale = preferredLanguages[i];
                 if ([preferredLocale containsString:@"-"])
                     preferredLocale = [preferredLocale substringToIndex:[preferredLocale indexOf:@"-"]];
                 if ([preferredLocale isEqualToString:@"en"])
@@ -147,9 +148,10 @@
     if (_poi.localizedContent.allKeys.count > 1)
     {
         NSMutableSet<NSString *> *preferredLocales = [NSMutableSet set];
-        for (NSInteger i = 0; i < [NSLocale preferredLanguages].count; i ++)
+        NSArray<NSString *> *preferredLanguages = [NSLocale preferredLanguages];
+        for (NSInteger i = 0; i < preferredLanguages.count; i ++)
         {
-            NSString *preferredLocale = [NSLocale preferredLanguages][i];
+            NSString *preferredLocale = preferredLanguages[i];
             if ([preferredLocale containsString:@"-"])
                 preferredLocale = [preferredLocale substringToIndex:[preferredLocale indexOf:@"-"]];
             if ([preferredLocale isEqualToString:@"en"])

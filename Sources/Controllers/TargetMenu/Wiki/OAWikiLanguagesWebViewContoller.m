@@ -58,9 +58,10 @@
     OATableSectionData *prefferedSection = [_data createNewSection];
     prefferedSection.headerText = OALocalizedString(@"preferred_languages");
     NSMutableSet<NSString *> *preferredLocales = [NSMutableSet set];
-    for (NSInteger i = 0; i < [NSLocale preferredLanguages].count; i ++)
+    NSArray<NSString *> *preferredLanguages = [NSLocale preferredLanguages];
+    for (NSInteger i = 0; i < preferredLanguages.count; i ++)
     {
-        NSString *preferredLocale = [NSLocale preferredLanguages][i];
+        NSString *preferredLocale = preferredLanguages[i];
         if ([preferredLocale containsString:@"-"])
             preferredLocale = [preferredLocale substringToIndex:[preferredLocale indexOf:@"-"]];
         if ([preferredLocale isEqualToString:@"en"])

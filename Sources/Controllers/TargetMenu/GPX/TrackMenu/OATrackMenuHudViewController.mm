@@ -221,7 +221,7 @@
         if (_tableData && _tableData.subjects.count > 0 && _tableData.subjects[0].subjects.count > 0)
         {
             OAGPXTableCellData *cellData = _tableData.subjects[0].subjects[0];
-            cellData.values[kSlectedIndex] = kAltutudeTabIndex;
+            cellData.values[@"selected_index_int_value"] = kAltutudeTabIndex;
             [_uiBuilder updateData:cellData];
             [self.tableView reloadData];
         }
@@ -2210,7 +2210,7 @@
             cell.segmentControl.tag = tag;
             [cell.segmentControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
-            NSInteger selectedIndex = [cellData.values[kSlectedIndex] integerValue];
+            NSInteger selectedIndex = [cellData.values[@"selected_index_int_value"] integerValue];
             cell.segmentControl.selectedSegmentIndex = selectedIndex != NSNotFound ? selectedIndex : 0;
         }
         return cell;
@@ -2466,7 +2466,7 @@
     UISegmentedControl *segment = (UISegmentedControl *) sender;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:segment.tag & 0x3FF inSection:segment.tag >> 10];
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
-    cellData.values[kSlectedIndex] = @(segment.selectedSegmentIndex);
+    cellData.values[@"selected_index_int_value"] = @(segment.selectedSegmentIndex);
 
     [_uiBuilder updateData:cellData];
 

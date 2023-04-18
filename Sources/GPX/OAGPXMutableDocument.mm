@@ -14,7 +14,8 @@
 @implementation OAGPXMutableDocument
 {
     std::shared_ptr<OsmAnd::GpxDocument> document;
-    OAGPXTrackAnalysis *_cachedAnalysis;
+    NSTimeInterval _analysisModifiedTime;
+    OAGPXTrackAnalysis *_trackAnalysis;
 }
 
 @dynamic points, tracks, routes;
@@ -483,12 +484,33 @@
 
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp
 {
-    if (!_cachedAnalysis || [[NSDate date] timeIntervalSince1970] - _modifiedTime > 1)
+    if (_analysisModifiedTime != _modifiedTime)
     {
-        _modifiedTime = [[NSDate date] timeIntervalSince1970];
-        _cachedAnalysis = [super getAnalysis:fileTimestamp];
+        _analysisModifiedTime = [[NSDate date] timeIntervalSince1970];
+        [self update];
     }
-    return _cachedAnalysis;
+    return _trackAnalysis;
+}
+
+- (void) update
+{
+    _analysisModifiedTime = _modifiedTime;
+    
+    NSTimeInterval fileTimestamp = 0;
+    if (self.path && self.path.length > 0)
+    {
+        NSFileManager *manager = NSFileManager.defaultManager;
+        NSError *err = nil;
+        NSDictionary *attrs = [manager attributesOfItemAtPath:self.path error:&err];
+        if (!err)
+            fileTimestamp = attrs.fileModificationDate.timeIntervalSince1970;
+    }
+    else
+    {
+        fileTimestamp = [[NSDate date] timeIntervalSince1970];
+    }
+    
+    _trackAnalysis = [super getAnalysis:fileTimestamp];
 }
 
 @end

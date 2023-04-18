@@ -8,8 +8,6 @@
 
 #import "OABaseTrackMenuTabItem.h"
 
-#define kSlectedIndex @"selected_index_int_value"
-
 @interface OATrackMenuTabSegments : OABaseTrackMenuTabItem
 
 @end

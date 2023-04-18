@@ -149,7 +149,7 @@
     [self processBounds:w.position];
     
     [self.points addObject:w];
-    _modifiedTime = (long) [[NSDate date] timeIntervalSince1970];
+    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void)deleteWpt:(OAWptPt *)w
@@ -164,14 +164,14 @@
             break;
         }
     }
-    _modifiedTime = (long) [[NSDate date] timeIntervalSince1970];
+    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void)deleteAllWpts
 {
     [self.points removeAllObjects];
     document->points.clear();
-    _modifiedTime = (long) [[NSDate date] timeIntervalSince1970];
+    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void) addRoutePoints:(NSArray<OAWptPt *> *)points addRoute:(BOOL)addRoute
@@ -184,7 +184,7 @@
     for (OAWptPt *pt in points)
         [self addRoutePoint:pt route:self.routes.lastObject];
     
-    _modifiedTime = (long) [[NSDate date] timeIntervalSince1970];
+    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void) addRoutes:(NSArray<OARoute *> *)routes
@@ -241,7 +241,7 @@
     rte = nullptr;
     
     [self.routes addObject:r];
-    _modifiedTime = (long) [[NSDate date] timeIntervalSince1970];
+    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void) addRoutePoint:(OAWptPt *)p route:(OARoute *)route
@@ -274,7 +274,7 @@
     [self processBounds:p.position];
 
     [((NSMutableArray *)route.points) addObject:p];
-    _modifiedTime = (long) [[NSDate date] timeIntervalSince1970];
+    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void) addTracks:(NSArray<OATrack *> *)tracks
@@ -343,7 +343,7 @@
     trk = nullptr;
     
     [self.tracks addObject:t];
-    _modifiedTime = (long) [[NSDate date] timeIntervalSince1970];
+    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void)addTrackSegment:(OATrkSegment *)s track:(OATrack *)track
@@ -391,7 +391,7 @@
     trkseg = nullptr;
     
     [((NSMutableArray *)track.segments) addObject:s];
-    _modifiedTime = (long) [[NSDate date] timeIntervalSince1970];
+    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (BOOL)removeTrackSegment:(OATrkSegment *)segment
@@ -421,7 +421,7 @@
                 }
 
                 [self addGeneralTrack];
-                _modifiedTime = (long) [[NSDate date] timeIntervalSince1970];
+                _modifiedTime = [[NSDate date] timeIntervalSince1970];
             }
             return removed;
         }
@@ -438,7 +438,7 @@
         self.tracks = tracks;
         self.generalTrack = nil;
         self.generalSegment = nil;
-        _modifiedTime = (long) [[NSDate date] timeIntervalSince1970];
+        _modifiedTime = [[NSDate date] timeIntervalSince1970];
     }
 }
 
@@ -472,7 +472,7 @@
     [self processBounds:p.position];
 
     [((NSMutableArray *)segment.points) addObject:p];
-    _modifiedTime = (long) [[NSDate date] timeIntervalSince1970];
+    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (BOOL) saveTo:(NSString *)filename

@@ -2859,3 +2859,4 @@
 "map_widget_sunrise_sunset_time_left" = "Temps restant";
 "shared_string_external" = "Externe";
 "without_permission_my_position_value" = "OsmAnd n'a pas l'autorisation d'accéder à votre position";
+"speak_route_deviation" = "Annoncer une déviation de l'itinéraire";

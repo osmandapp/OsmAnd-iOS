@@ -2861,3 +2861,4 @@
 "map_widget_next_sunrise" = "Próximo nascer do sol";
 "without_permission_my_position_value" = "O OsmAnd não tem permissão de localização";
 "press_again_to_change_the_map_orientation" = "Toque novamente para alterar a orientação do mapa";
+"speak_route_deviation" = "Avisar afastamento da rota";

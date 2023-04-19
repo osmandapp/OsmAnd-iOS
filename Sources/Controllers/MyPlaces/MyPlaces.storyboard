@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="pFL-rP-JjP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="pFL-rP-JjP">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -22,34 +22,32 @@
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Bf-uz-mXb">
                                 <rect key="frame" x="0.0" y="48" width="414" height="44"/>
-                                <subviews>
-                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="erl-gB-7ba">
-                                        <rect key="frame" x="20" y="6.5" width="374" height="32"/>
-                                        <segments>
-                                            <segment title="All"/>
-                                            <segment title="Edits"/>
-                                            <segment title="Notes"/>
-                                        </segments>
-                                        <connections>
-                                            <action selector="onSegmentChanged:" destination="rfa-sK-jEQ" eventType="valueChanged" id="c29-TQ-LzE"/>
-                                            <action selector="onSegmentChanged:" destination="Pg1-zp-xNx" eventType="valueChanged" id="kmy-67-FwR"/>
-                                        </connections>
-                                    </segmentedControl>
-                                </subviews>
                                 <color key="backgroundColor" red="1" green="0.53333333333333333" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstItem="erl-gB-7ba" firstAttribute="leading" secondItem="7Bf-uz-mXb" secondAttribute="leading" constant="20" id="0EX-8X-aTj"/>
                                     <constraint firstAttribute="height" constant="44" id="G2J-6c-im8"/>
-                                    <constraint firstItem="erl-gB-7ba" firstAttribute="centerY" secondItem="7Bf-uz-mXb" secondAttribute="centerY" id="aP7-am-ngk"/>
-                                    <constraint firstAttribute="trailing" secondItem="erl-gB-7ba" secondAttribute="trailing" constant="20" id="rRH-rj-mVT"/>
                                 </constraints>
                             </view>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="erl-gB-7ba">
+                                <rect key="frame" x="20" y="54.5" width="374" height="32"/>
+                                <segments>
+                                    <segment title="All"/>
+                                    <segment title="Edits"/>
+                                    <segment title="Notes"/>
+                                </segments>
+                                <connections>
+                                    <action selector="onSegmentChanged:" destination="rfa-sK-jEQ" eventType="valueChanged" id="c29-TQ-LzE"/>
+                                    <action selector="onSegmentChanged:" destination="Pg1-zp-xNx" eventType="valueChanged" id="kmy-67-FwR"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="g46-oF-81a"/>
                         <color key="backgroundColor" red="1" green="0.53333333333333333" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="g46-oF-81a" firstAttribute="trailing" secondItem="erl-gB-7ba" secondAttribute="trailing" constant="20" id="3Fr-Yb-IPG"/>
                             <constraint firstItem="zzn-bN-eNS" firstAttribute="top" secondItem="g46-oF-81a" secondAttribute="top" id="3lE-ez-Sjp"/>
+                            <constraint firstItem="erl-gB-7ba" firstAttribute="centerY" secondItem="7Bf-uz-mXb" secondAttribute="centerY" id="Amm-Yp-vkb"/>
                             <constraint firstItem="7Bf-uz-mXb" firstAttribute="top" secondItem="g46-oF-81a" secondAttribute="top" id="Cqz-4g-ev8"/>
+                            <constraint firstItem="erl-gB-7ba" firstAttribute="leading" secondItem="g46-oF-81a" secondAttribute="leading" constant="20" id="HKx-oP-qrc"/>
                             <constraint firstAttribute="trailing" secondItem="7Bf-uz-mXb" secondAttribute="trailing" id="LJO-zh-hG7"/>
                             <constraint firstItem="7Bf-uz-mXb" firstAttribute="leading" secondItem="HiK-Id-V8n" secondAttribute="leading" id="epB-GJ-Cfa"/>
                             <constraint firstAttribute="trailing" secondItem="zzn-bN-eNS" secondAttribute="trailing" id="i04-5w-23c"/>

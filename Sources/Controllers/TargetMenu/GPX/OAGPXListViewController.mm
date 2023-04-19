@@ -591,6 +591,7 @@ static UIViewController *parentController;
     _doneButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_done") style:UIBarButtonItemStylePlain target:self action:@selector(doneButtonClick:)];
     _selectAllButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_select_all") style:UIBarButtonItemStylePlain target:self action:@selector(selectAllButtonClick:)];
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_selectionModeButton] animated:YES];
+    _selectionModeButton.accessibilityLabel = OALocalizedString(@"shared_string_menu");
     _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     _searchController.searchResultsUpdater = self;
     _searchController.searchBar.delegate = self;

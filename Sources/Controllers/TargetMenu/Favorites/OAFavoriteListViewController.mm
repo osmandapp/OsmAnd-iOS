@@ -303,6 +303,7 @@ static UIViewController *parentController;
     self.tabBarController.navigationItem.searchController = _searchController;
     self.definesPresentationContext = YES;
     [self setupSearchController:NO filtered:NO];
+    [self addAccessibilityLabels];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];

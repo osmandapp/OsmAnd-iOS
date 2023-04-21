@@ -9,7 +9,7 @@
 #import "OAMapSettingsSettingScreen.h"
 #import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
-#import "OASettingsTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "Localization.h"
 #import "OADayNightHelper.h"
 
@@ -179,19 +179,20 @@
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OASettingsTableViewCell* cell = nil;
-    cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+    OAValueTableViewCell* cell = nil;
+    cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-        [cell.iconView setHidden:YES];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+        [cell leftIconVisibility:NO];
+        [cell descriptionVisibility:NO];
     }
     
     if (cell)
     {
-        [cell.textView setText: [data[indexPath.row] objectForKey:@"name"]];
-        [cell.descriptionView setText: [data[indexPath.row] objectForKey:@"value"]];
+        [cell.titleLabel setText: [data[indexPath.row] objectForKey:@"name"]];
+        [cell.valueLabel setText: [data[indexPath.row] objectForKey:@"value"]];
         NSString *imgName = [data[indexPath.row] objectForKey:@"img"];
         if (imgName.length > 0)
             cell.accessoryType = UITableViewCellAccessoryCheckmark;

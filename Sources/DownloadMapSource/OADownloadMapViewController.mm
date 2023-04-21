@@ -22,7 +22,6 @@
 #include "OAColors.h"
 #include "OASizes.h"
 
-#import "OASettingsTableViewCell.h"
 #import "OAValueTableViewCell.h"
 #import "OAPreviewZoomLevelsCell.h"
 #import "OACustomPickerTableViewCell.h"
@@ -295,7 +294,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSString *mapSourceName;
     mapSourceName = _app.data.lastMapSource.name;
     [mapTypeArr addObject:@{
-        @"type" : [OASettingsTableViewCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"map_settings_type"),
         @"value" : mapSourceName,
     }];
@@ -493,22 +492,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
-    {
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-        }
-        if (cell)
-        {
-            [cell.textView setText: item[@"title"]];
-            [cell.descriptionView setText: item[@"value"]];
-        }
-        return cell;
-    }
-    else if ([cellType isEqualToString:[OAPreviewZoomLevelsCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OAPreviewZoomLevelsCell getCellIdentifier]])
     {
         OAPreviewZoomLevelsCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAPreviewZoomLevelsCell getCellIdentifier]];
         if (cell == nil)
@@ -543,7 +527,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             cell.titleLabel.text = item[@"title"];
             cell.valueLabel.text = item[@"value"];
-            cell.valueLabel.textColor = [item[@"clickable"] boolValue] ? UIColor.blackColor : UIColorFromRGB(color_text_footer);
+            if (![item[@"title"] isEqualToString:OALocalizedString(@"map_settings_type")])
+                cell.valueLabel.textColor = [item[@"clickable"] boolValue] ? UIColor.blackColor : UIColorFromRGB(color_text_footer);
             if (indexPath.row == kMaxZoomRow && !_maxZoomPickerIsShown)
                 cell.separatorInset = UIEdgeInsetsZero;
             else

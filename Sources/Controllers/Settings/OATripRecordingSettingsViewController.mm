@@ -8,7 +8,6 @@
 
 #import "OATripRecordingSettingsViewController.h"
 #import "OAGPXListViewController.h"
-#import "OASettingsTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAAppSettings.h"
@@ -468,25 +467,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         cell.titleView.text = item[@"title"];
         [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
-        return cell;
-    }
-    else if ([type isEqualToString:[OASettingsTableViewCell getCellIdentifier]] || [type isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
-    {
-        OASettingsTableViewCell* cell = nil;
-        cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-        }
-        
-        if (cell)
-        {
-            [cell.textView setText: item[@"title"]];
-            [cell.descriptionView setText: item[@"value"]];
-            UIImage *image = [UIImage imageNamed:item[@"img"]];
-            [cell.iconView setImage:image];
-        }
         return cell;
     }
     else if ([type isEqualToString:kCellTypeCheck])

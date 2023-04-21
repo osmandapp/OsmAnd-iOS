@@ -2870,3 +2870,8 @@
 "with_permission_my_position_value" = "Перемістити мапу до поточного розташування";
 "app_mode_moped" = "Мопед";
 "speak_route_deviation" = "Повідомляти про відхилення від маршруту";
+"map_widget_trip_recording_duration" = "Тривалість";
+"map_widget_trip_recording_downhill" = "Спуск";
+"map_widget_trip_recording_uphill" = "Підйом";
+"shared_string_app_profile" = "Профіль застосунку";
+"map_widget_trip_recording_distance" = "Відстань";

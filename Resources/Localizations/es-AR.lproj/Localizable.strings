@@ -2869,3 +2869,8 @@
 "press_again_to_change_the_map_orientation" = "Pulsa de nuevo para cambiar la orientación del mapa";
 "app_mode_moped" = "Ciclomotor";
 "speak_route_deviation" = "Anunciar desviación de la ruta";
+"map_widget_trip_recording_uphill" = "Ascenso";
+"map_widget_trip_recording_distance" = "Distancia";
+"map_widget_trip_recording_duration" = "Duración";
+"map_widget_trip_recording_downhill" = "Descenso";
+"shared_string_app_profile" = "Perfiles de la aplicación";

@@ -1671,7 +1671,7 @@
 "default_speed_dialog_msg" = "Anslår ankomsttid for ukendte vejtyper og begrænser hastigheden for alle veje (kan påvirke ruteberegning)";
 "profile_type_base_string" = "Basisprofil";
 "units_and_formats" = "Enheder&formater";
-"configure_profile" = "Konfigurere profil";
+"configure_profile" = "Konfigurer profil";
 "export_profile" = "Eksportér profil";
 "selected_profile" = "Valgt profil";
 "profile_appearance" = "Profil udseende";
@@ -2862,3 +2862,8 @@
 "app_mode_moped" = "Knallert";
 "press_again_to_change_the_map_orientation" = "Tryk igen for at ændre kortets orientering";
 "speak_route_deviation" = "Meddel afvigelse fra ruten";
+"map_widget_trip_recording_uphill" = "Opstigning";
+"map_widget_trip_recording_duration" = "Varighed";
+"shared_string_app_profile" = "App-profil";
+"map_widget_trip_recording_downhill" = "Nedstigning";
+"map_widget_trip_recording_distance" = "Afstand";

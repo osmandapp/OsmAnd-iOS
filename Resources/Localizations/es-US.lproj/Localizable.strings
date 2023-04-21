@@ -2869,3 +2869,9 @@
 "dont_download" = "No descargar";
 "over_wifi_only" = "Sólo por Wi-Fi";
 "download_over_cellular_network" = "¿Descargar imágenes a través de la red móvil? Esto puede incurrir en altos cargos.";
+"speak_route_deviation" = "Anunciar desviación de la ruta";
+"map_widget_trip_recording_downhill" = "Descenso";
+"map_widget_trip_recording_uphill" = "Ascenso";
+"map_widget_trip_recording_duration" = "Duración";
+"map_widget_trip_recording_distance" = "Distancia";
+"shared_string_app_profile" = "Perfiles de la aplicación";

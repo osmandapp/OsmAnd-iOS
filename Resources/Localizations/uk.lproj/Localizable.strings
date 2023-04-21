@@ -604,16 +604,16 @@
 "general_settings_descr" = "Налаштування екрана та загальні параметри застосунку.";
 "routing_settings_descr" = "Визначити параметри навігації.";
 "auto_zoom_none" = "Без автомасштабування";
-"auto_zoom_close" = "Докладніше";
+"auto_zoom_close" = "Докладний масштаб";
 "auto_zoom_far" = "Середній масштаб";
-"auto_zoom_farthest" = "Загальніше";
+"auto_zoom_farthest" = "Загальний масштаб";
 "keep_informing_never" = "Лише вручну (торканням стрілки)";
 "arrival_distance_factor_early" = "Раніше";
 "arrival_distance_factor_normally" = "Звичайно";
 "arrival_distance_factor_late" = "Пізніше";
 "arrival_distance_factor_at_last" = "На останніх метрах";
 "snap_to_road" = "Притягування до доріг";
-"snap_to_road_descr" = "Значок поточної позиції буде притягуватись до дороги під час навігації";
+"snap_to_road_descr" = "Значок поточного положення буде притягуватись до лінії маршруту під час навігації";
 "show_warnings_title" = "Показувати попередження…";
 "show_warnings_descr" = "Налаштування попереджень про дорожній рух (обмеження швидкості, вимушені зупинки, засоби заспокоєння руху, тунелі), попередження про камери контролю швидкості та напрямки руху по смугах.";
 "speak_title" = "Оголошувати…";
@@ -1116,7 +1116,7 @@
 "quick_action_add_first_intermediate" = "Додати першу проміжну точку";
 "quick_action_auto_zoom" = "Автомасштаб мапи увімк/вимк";
 "quick_action_resume_pause_navigation" = "Призупинити/відновити навігацію";
-"quick_action_start_stop_navigation" = "Почати/зупинити навігацію";
+"quick_action_start_stop_navigation" = "Розпочати/закінчити навігацію";
 "toggle_day_night" = "Перемкнути Денний/Нічний режим";
 "show_hide_gpx" = "Показати/сховати треки";
 "search_results" = "Результати пошуку";
@@ -1264,7 +1264,7 @@
 "rendering_attr_piste_type_skitour_name" = "Гірськолижний туризм";
 "rendering_attr_roadStyle_description" = "Стиль доріг";
 "rendering_attr_showRoadMaps_name" = "Мапи доріг";
-"routing_attr_avoid_subway_name" = "Уник. метро";
+"routing_attr_avoid_subway_name" = "Уникати метро";
 "rendering_attr_surface_salt_name" = "Сіль";
 "rendering_attr_surface_grass_paver_name" = "Газонна решітка";
 "rendering_attr_appMode_description" = "Оптимізувати мапу";
@@ -1301,7 +1301,7 @@
 "routing_attr_avoid_ferry_name" = "Уникати поромних переправ";
 "routing_attr_avoid_stairs_name" = "Уник. сходів";
 "rendering_attr_busRoutes_name" = "Автобусні маршрути";
-"routing_attr_avoid_train_name" = "Уник. потягів";
+"routing_attr_avoid_train_name" = "Уникати потягів";
 "rendering_value_brown_name" = "Коричневий";
 "routing_attr_driving_style_speed_name" = "Коротші маршрути";
 "rendering_attr_noAdminboundaries_description" = "Приховати регіональні кордони (рівні 5–9).";
@@ -1451,7 +1451,7 @@
 "routing_attr_piste_type_skitour_name" = "Лижні тури";
 "routing_attr_allow_classic_only_description" = "Маршрути, створені тільки для класичної їзди, без треків для ковзанярського стилю. Сюди входять маршрути, які доглядаються за допомогою малих снігоходів, з цупкішою лижнею, та траси, накатані лижниками самостійно.";
 "routing_attr_driving_style_safety_name" = "Надавати перевагу побічним шляхам";
-"routing_attr_max_num_changes_description" = "Зазначте максимальну кількість змін";
+"routing_attr_max_num_changes_description" = "Зазначте максимальну кількість пересадок";
 "routing_attr_avoid_toll_name" = "Уник. платних доріг";
 "routing_attr_allow_skating_only_name" = "Дозволити лише маршрути для ковзанярського стилю";
 "routing_attr_allow_motorway_name" = "Використовувати автомагістралі";
@@ -1507,7 +1507,7 @@
 "rendering_attr_highway_class_track_grade5_name" = "5клас";
 "routing_attr_piste_type_nordic_name" = "Бігові лижі та скандинавські лижі";
 "routing_attr_avoid_unpaved_description" = "Уникати доріг без покриття";
-"routing_attr_max_num_changes_name" = "Кількість змін";
+"routing_attr_max_num_changes_name" = "Кількість пересадок";
 "rendering_value_pedestrian_name" = "Пішки";
 "rendering_attr_surface_cobblestone_name" = "Булижник";
 "routing_attr_allow_advanced_name" = "Дозволити маршрути підвищеної складності";
@@ -1639,7 +1639,7 @@
 "board_at" = "Приземлення на";
 "base_profile_descr_boat" = "Корабель, веслування, вітрильний спорт";
 "base_profile_descr_public_transport" = "Види громадського транспорту";
-"base_profile_descr_pedestrian" = "Пішки, піший туризм, біг";
+"base_profile_descr_pedestrian" = "Пересування пішки, піший туризм, біг";
 "base_profile_descr_bicycle" = "MTB (велосипед), мопед, верхи";
 "base_profile_descr_car" = "Автомобіль, вантажівка, мотоцикл";
 "new_profile" = "Новий профіль";
@@ -1662,7 +1662,7 @@
 "rearrange_profiles" = "Перевпорядкувати профілі";
 "will_be_show_while_moving" = "Буде показано під час руху";
 "select_navigation_icon" = "Піктограма положення під час руху";
-"select_map_icon" = "Позиція піктограми в стані спокою";
+"select_map_icon" = "Піктограма місцеположення в стані спокою";
 "select_icon_profile_dialog_title" = "Оберіть піктограму";
 "profile_alert_need_profile_name_title" = "Введіть назву профілю";
 "reorder_profiles" = "Редагувати список профілів";
@@ -1689,7 +1689,7 @@
 "settings_item_read_error" = "Не вдається прочитати з \'%@\'.";
 "select_distance_route_will_recalc" = "Оберіть відстань, після якої маршрут буде перебудовано.";
 "recalculate_route_distance_promo" = "Маршрут буде перераховано, якщо відстань від маршруту до поточного місця розташування перевищує вибране значення.";
-"recalculate_route" = "Перестворити маршрут";
+"recalculate_route" = "Перестворювати маршрут";
 "routing_profile_geocoding" = "Геокодування";
 "routing_profile_ski" = "Лижі";
 "nav_type_brouter" = "BRouter";
@@ -2025,7 +2025,7 @@
 "route_between_points_warning_desc" = "Далі, пов\'яжіть трек до найближчої дозволеної дороги з одним із профілів навігації, щоб скористатися цим параметром.";
 "carplay_profile_descr" = "Профіль, який застосовуватиметься для з'єднання з CarPlay.";
 "carplay_profile" = "Профіль CarPlay";
-"shared_string_last_used" = "Востаннє використовувалось";
+"shared_string_last_used" = "Останній використаний";
 "map_widget_parking" = "Стоянка";
 "search_more" = "Шукати ще…";
 "preferred_languages" = "Бажані мови";
@@ -2259,7 +2259,7 @@
 "shared_string_min_height" = "Мін. висота";
 "navigate_point_mgrs" = "MGRS";
 "turn_arrows" = "Стрілки повороту";
-"customize_route_line" = "Налаштувати лінію маршруту";
+"customize_route_line" = "Налаштувати вигляд лінії маршруту";
 "shared_string_max_height" = "Макс. висота";
 "mgrs_format_descr" = "OsmAnd використовує MGRS, який подібний до формату UTM NATO.";
 "route_line_use_map_style_color" = "Застосовувати типовий колір стилю мапи (%@).";
@@ -2517,7 +2517,7 @@
 "compass_always_visible" = "Показується постійно";
 "compass_options_description" = "Натисніть на компас, щоб змінити режим орієнтації мапи";
 "compass_visible_in_rotated_mode_descr" = "Ховати, коли північ вгорі";
-"compass_visible_if_map_rotated" = "Показується, якщо мапу повернути";
+"compass_visible_if_map_rotated" = "Показується після повороту мапи";
 "data_settings" = "Дані";
 "weather_online_cache" = "Онлайн-кеш";
 "shared_string_total_size" = "Загальний розмір";
@@ -2610,7 +2610,7 @@
 "shared_string_refresh" = "Перезавантажити";
 "login_open_street_map_org" = "Увійти до OpenStreetMap.org";
 "map_updates_for_mappers" = "Оновлення мап для маперів";
-"offline_edition_descr" = "Якщо увімкнено редагування в режимі офлайн, то зміни спочатку буде збережено локально та надіслані за запитом, інакше зміни будуть надіслані негайно.";
+"offline_edition_descr" = "Якщо увімкнено редагування в офлайн, то зміни спочатку буде збережено локально та надіслані за запитом, інакше зміни будуть надіслані негайно.";
 "benefits_for_contributors_secondary_descr" = "Увійдіть в OpenStreetMap, щоб перевірити, чи маєте ви право отримувати необмежені щомісячні та погодинні оновлення мап.";
 "map_updates_are_unavailable_yet" = "Оновлення мап досі недоступні. :-(";
 "use_login_and_password" = "Використовуйте логін та пароль";
@@ -2666,7 +2666,7 @@
 "cloud_all_changes_downloaded" = "Усі зміни завантажено";
 "shared_string_cloud" = "Хмара";
 "upload_all" = "Надіслати все";
-"show_borders_of_downloaded_maps" = "Показати межі завантажених мап";
+"show_borders_of_downloaded_maps" = "Показувати межі завантажених мап";
 "shared_string_added" = "Додано";
 "mtb_segment_classification" = "Класифікація відрізків";
 "rendering_attr_showMtbScale_name" = "Показати шкалу MTB";
@@ -2699,10 +2699,10 @@
 "nautical_depth_points" = "Точки морських глибин";
 "amazon_appstore" = "Amazon Appstore";
 "position_on_map" = "Розташування на екрані";
-"position_on_map_center" = "Центр";
+"position_on_map_center" = "В центрі";
 "routing_attr_motor_type_name" = "Двигун автомобіля";
 "co2_mission" = "Викиди CO2";
-"position_on_map_bottom" = "Униз";
+"position_on_map_bottom" = "Внизу";
 "routing_attr_motor_type_description" = "Виберіть тип палива вашого двигуна, це необхідно для оцінки викидів CO2.";
 "routing_attr_motor_type_diesel_name" = "Дизель";
 "routing_attr_motor_type_petrol_name" = "Бензин";
@@ -2836,7 +2836,7 @@
 "search_favorites" = "Пошук у закладках";
 "rotate_map_manual_opt" = "Фіксовано (обертається вручну)";
 "compass_click_desc" = "Торкніться компаса, щоб перемикнути режим орієнтації мапи.";
-"rotate_map_north_opt" = "Фіксовано (північ угорі)";
+"rotate_map_north_opt" = "Фіксовано (північ вгорі)";
 "map_widget_zoom_level" = "Масштаб";
 "map_widget_target_distance" = "Відстань від камери до цілі";
 "wikivoyage_download_pics" = "Завантажити зображення";

@@ -2288,3 +2288,4 @@
 "only_manually" = "Alleen handmatig";
 "import_routing_file_descr" = "Je kunt een route bestanden importeren uit elke cloudopslag app door deze te openen in OsmAnd.";
 "icon_group_service" = "Onderhoud";
+"speak_route_deviation" = "Kondig afwijking van de route aan";

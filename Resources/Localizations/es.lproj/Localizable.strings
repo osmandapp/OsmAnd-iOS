@@ -2859,3 +2859,8 @@
 "shared_string_external" = "Exteriores";
 "press_again_to_change_the_map_orientation" = "Pulsa de nuevo para cambiar la orientación del mapa";
 "speak_route_deviation" = "Anunciar un desvío de la ruta";
+"map_widget_trip_recording_duration" = "Duración";
+"map_widget_trip_recording_downhill" = "Cuesta abajo";
+"shared_string_app_profile" = "Perfil de la aplicación";
+"map_widget_trip_recording_uphill" = "Cuesta arriba";
+"map_widget_trip_recording_distance" = "Distancia";

@@ -89,9 +89,11 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
-    _deleteButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_remove.png"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonPressed:)];
-    _uploadButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_upload.png"] style:UIBarButtonItemStylePlain target:self action:@selector(uploadButtonPressed:)];
+    _deleteButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_trash"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonPressed:)];
+    _uploadButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_upload_to_openstreetmap_outlined"] style:UIBarButtonItemStylePlain target:self action:@selector(uploadButtonPressed:)];
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_uploadButton, _deleteButton] animated:YES];
+    _deleteButton.accessibilityLabel = OALocalizedString(@"shared_string_delete");
+    _uploadButton.accessibilityLabel = OALocalizedString(@"upload_to_openstreetmap");
     self.tabBarController.navigationItem.title = OALocalizedString(@"osm_edits_title");
     _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     _searchController.searchResultsUpdater = self;
@@ -208,13 +210,13 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     }
     else if (isFiltered)
     {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_favorites") attributes:@{NSForegroundColorAttributeName:UIColor.grayColor}];
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:UIColor.grayColor}];
         _searchController.searchBar.searchTextField.backgroundColor = UIColor.whiteColor;
         _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.grayColor;
     }
     else
     {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_favorites") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
         _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
         _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
         _searchController.searchBar.searchTextField.tintColor = UIColor.grayColor;
@@ -559,7 +561,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
-    searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_favorites") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+    searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
     searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
     searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
 }

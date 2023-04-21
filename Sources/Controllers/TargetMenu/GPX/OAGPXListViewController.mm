@@ -591,6 +591,7 @@ static UIViewController *parentController;
     _doneButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_done") style:UIBarButtonItemStylePlain target:self action:@selector(doneButtonClick:)];
     _selectAllButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_select_all") style:UIBarButtonItemStylePlain target:self action:@selector(selectAllButtonClick:)];
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_selectionModeButton] animated:YES];
+    _selectionModeButton.accessibilityLabel = OALocalizedString(@"shared_string_menu");
     _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     _searchController.searchResultsUpdater = self;
     _searchController.searchBar.delegate = self;
@@ -654,13 +655,13 @@ static UIViewController *parentController;
     }
     else if (isFiltered)
     {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_favorites") attributes:@{NSForegroundColorAttributeName:UIColor.grayColor}];
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:UIColor.grayColor}];
         _searchController.searchBar.searchTextField.backgroundColor = UIColor.whiteColor;
         _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.grayColor;
     }
     else
     {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_favorites") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
         _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
         _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
         _searchController.searchBar.searchTextField.tintColor = UIColor.grayColor;
@@ -1813,7 +1814,7 @@ static UIViewController *parentController;
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
-    searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_favorites") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+    searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
     searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
     searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
 }

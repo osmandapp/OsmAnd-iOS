@@ -18,8 +18,10 @@
 #import "OACameraDistanceWidget.h"
 #import "OAZoomLevelWidget.h"
 #import "OATargetDistanceWidget.h"
+#import "OAAltitudeWidget.h"
 #import "OAMapWidgetRegistry.h"
 #import "OARootViewController.h"
+#import "OAIAPHelper.h"
 
 #define PLUGIN_ID kInAppId_Addon_OsmandDevelopment
 #define DEV_FPS @"fps"
@@ -33,12 +35,11 @@
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OAFPSTextInfoWidget *_fpsWidgetControl;
-    OAMapWidgetRegInfo *_widget;
-    OAMapWidgetRegistry *_mapWidgetRegistry;
     OACameraTiltWidget *_cameraTiltWidgetControl;
     OACameraDistanceWidget *_cameraDistanceWidgetControl;
     OAZoomLevelWidget *_zoomLevelWidgetControl;
     OATargetDistanceWidget *_targetDistanceWidgetControl;
+    OAAltitudeWidget *_altitudeWidgetMapCenter;
 }
 
 - (instancetype) init
@@ -48,7 +49,6 @@
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
-        _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
     }
     return self;
 }
@@ -105,49 +105,78 @@
                 [self registerWidget];
             if (!_targetDistanceWidgetControl)
                 [self registerWidget];
+
+            if (!_altitudeWidgetMapCenter && [self isHeightmapEnabled])
+                [self registerAltitudeMapCenterWidget];
+            else if (_altitudeWidgetMapCenter && ![self isHeightmapEnabled])
+                [self unregisterAltitudeMapCenterWidget];
+
             [[OARootViewController instance].mapPanel recreateControls];
         }
         else
         {
+            OAMapWidgetRegistry *mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
+            OAMapWidgetRegInfo *widget;
             if (_fpsWidgetControl)
             {
                 OAMapInfoController *mapInfoController = [self getMapInfoController];
                 [mapInfoController removeSideWidget:_fpsWidgetControl];
-                _widget = [_mapWidgetRegistry widgetByKey:DEV_FPS];
+                widget = [mapWidgetRegistry widgetByKey:DEV_FPS];
                 _fpsWidgetControl = nil;
             }
             if (_cameraTiltWidgetControl)
             {
                 OAMapInfoController *mapInfoController = [self getMapInfoController];
                 [mapInfoController removeSideWidget:_cameraTiltWidgetControl];
-                _widget = [_mapWidgetRegistry widgetByKey:DEV_CAMERA_TILT];
+                widget = [mapWidgetRegistry widgetByKey:DEV_CAMERA_TILT];
                 _cameraTiltWidgetControl = nil;
             }
             if (_cameraDistanceWidgetControl)
             {
                 OAMapInfoController *mapInfoController = [self getMapInfoController];
                 [mapInfoController removeSideWidget:_cameraDistanceWidgetControl];
-                _widget = [_mapWidgetRegistry widgetByKey:DEV_CAMERA_DISTANCE];
+                widget = [mapWidgetRegistry widgetByKey:DEV_CAMERA_DISTANCE];
                 _cameraDistanceWidgetControl = nil;
             }
             if (_zoomLevelWidgetControl)
             {
                 OAMapInfoController *mapInfoController = [self getMapInfoController];
                 [mapInfoController removeSideWidget:_zoomLevelWidgetControl];
-                _widget = [_mapWidgetRegistry widgetByKey:DEV_ZOOM_LEVEL];
+                widget = [mapWidgetRegistry widgetByKey:DEV_ZOOM_LEVEL];
                 _zoomLevelWidgetControl = nil;
             }
             if (_targetDistanceWidgetControl)
             {
                 OAMapInfoController *mapInfoController = [self getMapInfoController];
                 [mapInfoController removeSideWidget:_targetDistanceWidgetControl];
-                _widget = [_mapWidgetRegistry widgetByKey:DEV_TARGET_DISTANCE];
+                widget = [mapWidgetRegistry widgetByKey:DEV_TARGET_DISTANCE];
                 _targetDistanceWidgetControl = nil;
             }
-            [_mapWidgetRegistry setVisibility:_widget visible:NO collapsed:NO];
+            if (_altitudeWidgetMapCenter)
+                [self unregisterAltitudeMapCenterWidget];
+            if (widget)
+                [mapWidgetRegistry setVisibility:widget visible:NO collapsed:NO];
             [[OARootViewController instance].mapPanel recreateControls];
         }
     });
+}
+
+- (void)registerAltitudeMapCenterWidget
+{
+    _altitudeWidgetMapCenter = [[OAAltitudeWidget alloc] initWithType:EOAAltitudeWidgetTypeMapCenter];
+    [[self getMapInfoController] registerSideWidget:_altitudeWidgetMapCenter
+                                            imageId:@"widget_altitude_map_center_day"
+                                            message:OALocalizedString(@"map_widget_altitude_map_center")
+                                        description:OALocalizedString(@"map_widget_altitude_map_center_desc")
+                                                key:ALTITUDE_MAP_CENTER
+                                               left:NO
+                                      priorityOrder:24];
+}
+
+- (void)unregisterAltitudeMapCenterWidget
+{
+    [[self getMapInfoController] removeSideWidget:_altitudeWidgetMapCenter];
+    _altitudeWidgetMapCenter = nil;
 }
 
 - (NSString *) getName
@@ -158,6 +187,16 @@
 - (NSString *) getDescription
 {
     return OALocalizedString(@"osmand_development_plugin_description");
+}
+
+- (BOOL)isHeightmapEnabled
+{
+    return [self isHeightmapAllowed] && [_settings.showHeightmaps get];
+}
+
+- (BOOL)isHeightmapAllowed
+{
+    return [OAIAPHelper isOsmAndProAvailable];
 }
 
 @end

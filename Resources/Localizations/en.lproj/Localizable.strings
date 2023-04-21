@@ -3120,3 +3120,8 @@
 "download_only_now" = "Download only now";
 "wikivoyage_download_pics" = "Download images";
 "download_over_cellular_network" = "Download images over cellular network? This may incur high charges.";
+
+"map_widget_altitude_current_location" = "Altitude: current location";
+"altitude_widget_desc" = "Shows the height above sea level of current geolocation.";
+"map_widget_altitude_map_center" = "Elevation: map center";
+"map_widget_altitude_map_center_desc" = "Shows the elevation above sea level of the current map center.";

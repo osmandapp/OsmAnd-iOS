@@ -90,19 +90,12 @@
     
     [self setText:fps subtext:@"FPS"];
     [self setIcons:@"widget_fps_day" widgetNightIcon:@"widget_fps_night"];
-    [self addAccessibilityLabelsWithValue:fps];
     return YES;
 }
 
 - (void) onWidgetClicked
 {
     [self onExternalUpdate];
-}
-
-- (void) addAccessibilityLabelsWithValue:(NSString *)value
-{
-    self.accessibilityLabel = OALocalizedString(@"map_widget_rendering_fps");
-    self.accessibilityValue = [NSString stringWithFormat: @"%@ FPS", value];
 }
 
 @end

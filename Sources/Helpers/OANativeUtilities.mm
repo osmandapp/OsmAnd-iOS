@@ -11,6 +11,8 @@
 #import <UIKit/UIKit.h>
 #import "OAColors.h"
 #import "OAUtilities.h"
+#import "OARootViewController.h"
+#import "OAMapRendererView.h"
 
 #include <QString>
 
@@ -232,6 +234,24 @@
         return str;
     }
     return nil;
+}
+
++ (double)getAltitudeForPixelPoint:(OsmAnd::PointI)screenPoint
+{
+    if (screenPoint != OsmAnd::PointI())
+    {
+        OAMapRendererView *mapRenderer = (OAMapRendererView *) [OARootViewController instance].mapPanel.mapViewController.view;
+        OsmAnd::PointI elevatedPoint = OsmAnd::PointI();
+        if ([mapRenderer getLocationFromElevatedPoint:screenPoint location31:&elevatedPoint])
+            return [self getAltitudeForElevatedPoint:elevatedPoint];
+    }
+    return kMinAltitudeValue;
+}
+
++ (double)getAltitudeForElevatedPoint:(OsmAnd::PointI)elevatedPoint
+{
+    OAMapRendererView *mapRenderer = (OAMapRendererView *) [OARootViewController instance].mapPanel.mapViewController.view;
+    return [mapRenderer getLocationHeightInMeters:elevatedPoint];
 }
 
 @end

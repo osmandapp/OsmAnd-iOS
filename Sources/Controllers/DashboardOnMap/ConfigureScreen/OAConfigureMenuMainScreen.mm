@@ -440,7 +440,7 @@
     NSString *imgName = data[@"img"];
     if (imgName)
     {
-        if ([imgName hasPrefix:@"widget_developer"] || [data[@"key"] hasPrefix:@"coordinates_widget"]  || [data[@"key"] hasPrefix:@"monitoring"] || [data[@"key"] hasPrefix:@"trip_recording"])
+        if ([imgName hasPrefix:@"widget_developer"] || [data[@"key"] hasPrefix:@"coordinates_widget"]  || [data[@"key"] hasPrefix:@"monitoring"] || [data[@"key"] hasPrefix:@"trip_recording"] || [data[@"key"] hasPrefix:@"altitude"])
         {
             cell.leftIconView.image = [UIImage rtlImageNamed:imgName];
             cell.leftIconView.contentMode = UIViewContentModeCenter;

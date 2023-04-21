@@ -17,6 +17,7 @@
 #import "OADownloadedRegionsLayer.h"
 #import "Localization.h"
 #import "OAOsmAndFormatter.h"
+#import "OAOsmandDevelopmentPlugin.h"
 
 @interface OAMapDownloadController ()
 
@@ -84,7 +85,13 @@
             const auto& resource = app.resourcesManager->getResourceInRepository(resId);
             if (!app.resourcesManager->isResourceInstalled(resId) && resource->type != _mapObject.indexItem.resourceType)
             {
-                if ((!OAAppSettings.sharedManager.showHeightmaps.get && resource->type == OsmAndResourceType::GeoTiffRegion) || resource->type == OsmAndResourceType::HeightmapRegionLegacy)
+                if (resource->type == OsmAndResourceType::GeoTiffRegion)
+                {
+                    OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *) [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
+                    if (!plugin || ![plugin isHeightmapEnabled])
+                        continue;
+                }
+                if (resource->type == OsmAndResourceType::HeightmapRegionLegacy)
                     continue;
                 OAResourceItem *item = [self resourceItemByResource:resource region:_mapObject.worldRegion];
                 [res addObject:item];

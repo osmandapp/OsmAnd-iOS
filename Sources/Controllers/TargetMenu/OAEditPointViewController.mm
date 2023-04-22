@@ -804,9 +804,7 @@
             if (checkingResult && ![checkingResult[@"name"] isEqualToString:self.name])
             {
                 savingName = checkingResult[@"name"];
-                if ([checkingResult[@"status"] isEqualToString:@"emoji"])
-                    _renamedPointAlertMessage = [NSString stringWithFormat:OALocalizedString(@"fav_point_emoticons_message"), savingName];
-                else
+                if ([checkingResult[@"status"] isEqualToString:@"duplicate"])
                     _renamedPointAlertMessage = [NSString stringWithFormat:OALocalizedString(@"fav_point_dublicate_message"), savingName];
             }
 
@@ -1368,7 +1366,7 @@
 - (void) addGroup:(NSString *)groupName color:(UIColor *)color
 {
     _wasChanged = YES;
-    NSString *editedGroupName = [[OAFavoritesHelper checkEmoticons:groupName] trim];
+    NSString *editedGroupName = [groupName trim];
 
     if (_editPointType == EOAEditPointTypeFavorite)
     {

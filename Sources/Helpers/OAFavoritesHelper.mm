@@ -589,16 +589,9 @@ static BOOL _favoritesLoaded = NO;
 
 + (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point
 {
-    NSString *name = [self checkEmoticons:[point getName]];
-    BOOL emoticons = name.length != [point getName].length;
-
+    NSString *name = [point getName];
     NSString *index = @"";
     int number = 0;
-    [point setCategory:[self checkEmoticons:[point getCategory]]];
-    NSString *description = [point getDescription];
-    if (description && description.length > 0)
-        [point setDescription:[self checkEmoticons:description]];
-
     BOOL fl = YES;
     while (fl)
     {
@@ -616,16 +609,11 @@ static BOOL _favoritesLoaded = NO;
             }
         }
     }
-
-    if (index.length > 0 || emoticons)
+    if (index.length > 0)
     {
         [point setName:name];
-        if (emoticons)
-            return @{ @"name": name, @"status": @"emoji" };
-        else
-            return @{ @"name": name, @"status": @"duplicate" };
+        return @{ @"name": name, @"status": @"duplicate" };
     }
-
     return nil;
 }
 

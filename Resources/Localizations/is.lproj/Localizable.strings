@@ -2807,3 +2807,5 @@
 "map_widget_trip_recording_uphill" = "Hækkun";
 "map_widget_trip_recording_duration" = "Tímalengd";
 "map_widget_trip_recording_distance" = "Vegalengd";
+"app_mode_moped" = "Skellinöðrur";
+"speak_route_deviation" = "Tilkynna frávik frá leið";

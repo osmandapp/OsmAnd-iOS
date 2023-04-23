@@ -20,7 +20,7 @@
 @property (nonatomic) NSMutableSet<OAApplicationMode *> *visibleCollapsible;
 @property (nonatomic) NSMutableSet<OAApplicationMode *> *visibleModes;
 
-- (instancetype) initWithKey:(NSString *)key widget:(OATextInfoWidget *)widget imageId:(NSString *)imageId message:(NSString *)message priorityOrder:(int)priorityOrder left:(BOOL)left;
+- (instancetype) initWithKey:(NSString *)key widget:(OATextInfoWidget *)widget imageId:(NSString *)imageId message:(NSString *)message description:(NSString *)description priorityOrder:(int)priorityOrder left:(BOOL)left;
 
 - (instancetype) initWithKey:(NSString *)key widget:(OATextInfoWidget *)widget widgetState:(OAWidgetState *)widgetState priorityOrder:(int)priorityOrder left:(BOOL)left;
 

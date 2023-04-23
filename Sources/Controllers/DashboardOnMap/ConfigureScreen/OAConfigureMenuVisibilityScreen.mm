@@ -270,7 +270,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return [_data.allKeys containsObject:@"additional"] ? [_r getDescription] : nil;
+    return [_r getDescription];
 }
 
 #pragma mark - UITableViewDelegate

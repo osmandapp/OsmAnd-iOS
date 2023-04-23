@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAOsmandDevelopmentPlugin : OAPlugin
 
+- (BOOL)isHeightmapEnabled;
+- (BOOL)isHeightmapAllowed;
+
 @end
 
 NS_ASSUME_NONNULL_END

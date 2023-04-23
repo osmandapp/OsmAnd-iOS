@@ -25,6 +25,8 @@
 
 #import "OACommonTypes.h"
 
+#define kMinAltitudeValue -20000
+
 @interface UIColor (nsColorNative)
 
 - (OsmAnd::FColorARGB) toFColorARGB;
@@ -57,5 +59,8 @@
 
 + (UIColor *) getOpeningHoursColor:(std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>>)openingHoursInfo;
 + (NSAttributedString *) getOpeningHoursDescr:(std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>>)openingHoursInfo;
+
++ (double)getAltitudeForPixelPoint:(OsmAnd::PointI)screenPoint;
++ (double)getAltitudeForElevatedPoint:(OsmAnd::PointI)elevatedPoint;
 
 @end

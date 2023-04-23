@@ -42,6 +42,7 @@
 #import "OAWeatherForecastDetailsViewController.h"
 #import "QuadRect.h"
 #import "OASearchUICore.h"
+#import "OAOsmandDevelopmentPlugin.h"
 
 #include <OsmAndCore/WorldRegions.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
@@ -912,7 +913,9 @@ static BOOL _repositoryUpdated = NO;
             }
             else if (![OAAppSettings.sharedManager.showHeightmaps get] && item_.resourceType == OsmAndResourceType::GeoTiffRegion)
             {
-                continue;
+                OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *) [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
+                if (!plugin || ![plugin isHeightmapEnabled])
+                    continue;
             }
             else if (item_.resourceType == OsmAndResourceType::HeightmapRegionLegacy)
             {

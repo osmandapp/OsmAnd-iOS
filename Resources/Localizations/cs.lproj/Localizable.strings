@@ -2851,3 +2851,9 @@
 "press_again_to_change_the_map_orientation" = "Dalším klepnutím změníte orientaci mapy";
 "quick_action_map_center_widget_descr" = "Přepínač pro zobrazení nebo skrytí widgetu Souřadnice na mapě.";
 "ios_release_4_4" = "- Wikipedie: přidána možnost prohlížení obrázků, aktualizováno uživatelské rozhraní čtečky\n- Wikipedie: přidána možnost prohlížení obrázků, aktualizováno uživatelské rozhraní čtenáře\n- Oblíbené: přidáno vyhledávání\n- CarPlay: přidána historie, přeorganizován seznam skladeb a oblíbených položek\n- Turistické trasy: přidána možnost výběru tras na mapě pro zobrazení dalších informací nebo navigace\n- OpenStreetMap: přidána možnost nahrávání tras\n- Nový widget: zobrazuje přesný čas východu nebo západu slunce nebo čas zbývající do příštího východu nebo západu slunce.\n- Nový widget: zobrazení souřadnic pro střed mapy\n- Vylepšená podpora externích klávesnic, přidána podpora základních akcí\n- Hlasové výzvy: přidána podpora nových jazyků: Katalánština, ukrajinština, bulharština, indonéština, slovinština.\n- Přidáno právní upozornění na používání upozornění na rychlostní radary\n- Vylepšená ochrana osobních údajů: přidány možnosti vypnutí zaznamenávání historie\n- Zlepšena viditelnost pravítka mapy\n- Opravy chyb a vylepšení uživatelského rozhraní služby OsmAnd Cloud\n- Vylepšení uživatelského rozhraní pro jazyky RTL\n- Přístupnost: přidáno označení obsahu tlačítek na mapě\n- Přidána podpora \"dynamického typu\", velikost textu v aplikaci OsmAnd se bude měnit podle velikosti textu v systému iOS.\n- Orientace mapy: přidán režim ručního otáčení\n- Nový profil Moped\n- Minimální verze systému iOS byla zvýšena na 15.0\n";
+"speak_route_deviation" = "Oznámení o odchýlení od trasy";
+"map_widget_trip_recording_uphill" = "Stoupání";
+"map_widget_trip_recording_distance" = "Vzdálenost";
+"map_widget_trip_recording_downhill" = "Klesání";
+"map_widget_trip_recording_duration" = "Trvání";
+"shared_string_app_profile" = "Profil aplikace";

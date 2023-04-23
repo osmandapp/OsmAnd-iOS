@@ -10,6 +10,7 @@
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapInfoController.h"
+#import "OAMapRendererView.h"
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OASegmentedSlider.h"
 #import "OASizes.h"
@@ -19,6 +20,8 @@
 #import "OAWeatherToolbarHandlers.h"
 #import "OAWeatherHelper.h"
 #import "OAWeatherPlugin.h"
+
+#define kDefaultZoom 10
 
 @interface OAWeatherToolbar () <OAWeatherToolbarDelegate>
 
@@ -41,6 +44,8 @@
     NSArray<NSDate *> *_timeInGMTTimezoneValues;
     NSInteger _previousSelectedDayIndex;
     BOOL _isOpening;
+    float _prevZoom;
+    OsmAnd::PointI _prevTarget31;
 }
 
 - (instancetype)init
@@ -193,12 +198,30 @@
 {
     if (visible == self.hidden)
     {
+        OAMapRendererView *mapRenderer = (OAMapRendererView *) [OARootViewController instance].mapPanel.mapViewController.view;
+        OsmAnd::ZoomLevel zoomLevel = mapRenderer.zoomLevel;
+        float zoom = mapRenderer.zoom;
+        OsmAnd::PointI target31 = mapRenderer.target31;
+
         if (visible)
         {
+            if (!self.needsSettingsForToolbar)
+            {
+                _prevZoom = zoom;
+                _prevTarget31 = target31;
+                if (zoom > kDefaultZoom)
+                    [mapRenderer setZoom:kDefaultZoom];
+            }
+
             _selectedLayerIndex = -1;
             _isOpening = YES;
             if ([OAUtilities isLandscape])
                 self.topControlsVisibleInLandscape = [[OARootViewController instance].mapPanel isTopControlsVisible];
+        }
+        else
+        {
+            if (!self.needsSettingsForToolbar && target31 == _prevTarget31 && zoom != _prevZoom && zoom == kDefaultZoom)
+                [mapRenderer setZoom:_prevZoom];
         }
 
         if (self.delegate)

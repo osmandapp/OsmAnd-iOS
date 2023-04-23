@@ -2867,3 +2867,7 @@
 "shared_string_app_profile" = "App-profil";
 "map_widget_trip_recording_downhill" = "Nedstigning";
 "map_widget_trip_recording_distance" = "Afstand";
+"altitude_widget_desc" = "Viser højden over havets overflade for den aktuelle geolokalisering.";
+"map_widget_altitude_map_center" = "Højde: kortcentrum";
+"map_widget_altitude_current_location" = "Højde: Nuværende placering";
+"map_widget_altitude_map_center_desc" = "Viser højden over havniveau for det aktuelle kortcentrum.";

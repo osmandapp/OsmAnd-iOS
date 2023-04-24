@@ -2875,3 +2875,7 @@
 "map_widget_trip_recording_uphill" = "Підйом";
 "shared_string_app_profile" = "Профіль застосунку";
 "map_widget_trip_recording_distance" = "Відстань";
+"map_widget_altitude_map_center" = "Висота над рівнем моря: центр мапи";
+"altitude_widget_desc" = "Показує висоту над рівнем моря поточної геолокації.";
+"map_widget_altitude_current_location" = "Висота: поточне положення";
+"map_widget_altitude_map_center_desc" = "Показує висоту над рівнем моря поточного центру мапи.";

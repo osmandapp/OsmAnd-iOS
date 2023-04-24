@@ -147,7 +147,7 @@
     NSString *markersAppeareance = distanceIndication == WIDGET_DISPLAY ? OALocalizedString(@"shared_string_widgets") : OALocalizedString(@"shared_string_topbar") ;
     [controlsList addObject:@{ @"type" : [OAValueTableViewCell getCellIdentifier],
                                @"title" : OALocalizedString(@"map_markers"),
-                               @"value" : markersAppeareance,
+                               @"description" : markersAppeareance,
                                @"key" : @"map_markers"}];
     
     [controlsList addObject:@{ @"title" : OALocalizedString(@"show_lanes"),
@@ -406,16 +406,8 @@
         if (cell)
         {
             cell.titleLabel.text = data[@"title"];
-            if ([data[@"key"] isEqualToString:@"map_markers"])
-            {
-                cell.valueLabel.text = data[@"value"];
-                [cell leftIconVisibility:NO];
-            }
-            else
-            {
-                cell.valueLabel.text = data[@"description"];
-                [cell leftIconVisibility:YES];
-            }
+            cell.valueLabel.text = data[@"description"];
+            [cell leftIconVisibility:![data[@"key"] isEqualToString:@"map_markers"]];
             cell.leftIconView.image = [UIImage rtlImageNamed:imgName];
             cell.leftIconView.contentMode = UIViewContentModeCenter;
         }

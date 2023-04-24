@@ -14,7 +14,7 @@
 #import "OADefaultFavorite.h"
 #import "OATitleRightIconCell.h"
 #import "OATextInputFloatingCell.h"
-#import "OASettingsTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAColorsTableViewCell.h"
 #import "OAShapesTableViewCell.h"
 #import "OAPoiTableViewCell.h"
@@ -537,7 +537,7 @@
     section = [NSMutableArray new];
     [section addObject:@{
         @"header" : OALocalizedString(@"fav_group"),
-        @"type" : [OASettingsTableViewCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"select_group"),
         @"value" : self.groupTitle ? self.groupTitle : @"",
         @"key" : kSelectGroupKey
@@ -932,24 +932,22 @@
     {
         return item[@"cell"];
     }
-    else if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        OAValueTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.descriptionView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            cell.descriptionView.numberOfLines = 1;
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., 0, 0, CGFLOAT_MAX);
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = item[@"value"];
+            cell.titleLabel.text = item[@"title"];
+            cell.valueLabel.text = item[@"value"];
         }
         return cell;
     }

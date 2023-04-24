@@ -8,7 +8,7 @@
 
 #import "OAMapSettingsPreferredLanguageScreen.h"
 #import "OAMapSettingsViewController.h"
-#import "OASettingsTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #include "Localization.h"
 
 
@@ -157,19 +157,25 @@
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OASettingsTableViewCell* cell = nil;
-    cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+    OAValueTableViewCell* cell = nil;
+    cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+        [cell leftIconVisibility:NO];
+        [cell descriptionVisibility:NO];
+        cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
     if (cell)
     {
-        [cell.textView setText: [[_data objectAtIndex:indexPath.row] objectForKey:@"name"]];
-        [cell.descriptionView setText: [[_data objectAtIndex:indexPath.row] objectForKey:@"value"]];
-        [cell.iconView setImage:[UIImage imageNamed:[[_data objectAtIndex:indexPath.row] objectForKey:@"img"]]];
+        [cell.titleLabel setText: [[_data objectAtIndex:indexPath.row] objectForKey:@"name"]];
+        [cell.valueLabel setText: [[_data objectAtIndex:indexPath.row] objectForKey:@"value"]];
+        if ([UIImage imageNamed:[[_data objectAtIndex:indexPath.row] objectForKey:@"img"]])
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        else
+            cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
     return cell;

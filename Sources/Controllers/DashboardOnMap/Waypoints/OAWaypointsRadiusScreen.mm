@@ -12,7 +12,7 @@
 #import "OsmAndApp.h"
 #import "OAWaypointHelper.h"
 #import "OALocationPointWrapper.h"
-#import "OASettingsTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAOsmAndFormatter.h"
 
 @implementation OAWaypointsRadiusScreen
@@ -80,23 +80,25 @@
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OASettingsTableViewCell* cell = nil;
-    cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+    OAValueTableViewCell* cell = nil;
+    cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+        [cell leftIconVisibility:NO];
+        [cell descriptionVisibility:NO];
     }
     
     if (cell)
     {
-        [cell.textView setText: [_data[indexPath.row] objectForKey:@"name"]];
-        [cell.descriptionView setText:@""];
+        [cell.titleLabel setText: [_data[indexPath.row] objectForKey:@"name"]];
+        [cell.valueLabel setText:@""];
         NSString *imgName = [_data[indexPath.row] objectForKey:@"img"];
         if (imgName.length > 0)
-            [cell.iconView setImage:[UIImage imageNamed:imgName]];
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
         else
-            [cell.iconView setImage:nil];
+            cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
     return cell;

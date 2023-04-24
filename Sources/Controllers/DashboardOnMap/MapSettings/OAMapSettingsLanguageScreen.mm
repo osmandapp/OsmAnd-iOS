@@ -8,7 +8,7 @@
 
 #import "OAMapSettingsLanguageScreen.h"
 #import "OAMapSettingsViewController.h"
-#import "OASettingsTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #include "Localization.h"
 
@@ -156,17 +156,20 @@
 {
     if (indexPath.row == 0)
     {
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        OAValueTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         
         if (cell)
         {
-            [cell.textView setText: OALocalizedString(@"sett_pref_lang")];
-            [cell.descriptionView setText: _prefLang];
+            [cell.titleLabel setText: OALocalizedString(@"sett_pref_lang")];
+            [cell.valueLabel setText: _prefLang];
         }
         return cell;
     }

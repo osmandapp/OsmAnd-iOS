@@ -148,8 +148,11 @@
 }
 
 - (void) webView: (WKWebView *) webView decidePolicyForNavigationAction: (WKNavigationAction *) navigationAction decisionHandler: (void (^)(WKNavigationActionPolicy)) decisionHandler {
-    NSString *currentUrl = [OAWikiArticleHelper normalizeFileUrl:[webView.URL.absoluteString stringByRemovingPercentEncoding]];
     NSString *newUrl = [OAWikiArticleHelper normalizeFileUrl:[navigationAction.request.URL.absoluteString stringByRemovingPercentEncoding]];
+    NSString *currentUrl = [OAWikiArticleHelper normalizeFileUrl:[webView.URL.absoluteString stringByRemovingPercentEncoding]];
+    NSInteger wikiUrlEndDndex = [currentUrl indexOf:@"#"];
+    if (wikiUrlEndDndex > 0)
+        currentUrl = [currentUrl substringToIndex:[currentUrl indexOf:@"#"]];
     
     if (_isFirstLaunch)
     {

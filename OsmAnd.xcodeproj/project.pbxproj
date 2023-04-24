@@ -2623,7 +2623,7 @@
 		DA5A83E326C563A800F274C7 /* OAEditColorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E1526C563A300F274C7 /* OAEditColorViewController.xib */; };
 		DA5A83E426C563A800F274C7 /* OAEditGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E1826C563A300F274C7 /* OAEditGroupViewController.xib */; };
 		DA5A83E526C563A800F274C7 /* OAEditDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E1926C563A300F274C7 /* OAEditDescriptionViewController.m */; };
-		DA5A83E726C563A800F274C7 /* OAWikiWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E2026C563A400F274C7 /* OAWikiWebViewController.m */; };
+		DA5A83E726C563A800F274C7 /* OAWikiWebViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E2026C563A400F274C7 /* OAWikiWebViewController.mm */; };
 		DA5A83E826C563A800F274C7 /* OAWikiMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E2126C563A400F274C7 /* OAWikiMenuViewController.xib */; };
 		DA5A83E926C563A800F274C7 /* OAWikiMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E2226C563A400F274C7 /* OAWikiMenuViewController.m */; };
 		DA5A83EA26C563A800F274C7 /* OACollapsableWaypointsView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E2426C563A400F274C7 /* OACollapsableWaypointsView.mm */; };
@@ -6841,7 +6841,7 @@
 		DA5A7E1B26C563A300F274C7 /* OACollapsableCardsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACollapsableCardsView.h; sourceTree = "<group>"; };
 		DA5A7E1C26C563A300F274C7 /* OACollapsableTransportStopRoutesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACollapsableTransportStopRoutesView.h; sourceTree = "<group>"; };
 		DA5A7E1E26C563A400F274C7 /* OAWikiMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWikiMenuViewController.h; sourceTree = "<group>"; };
-		DA5A7E2026C563A400F274C7 /* OAWikiWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAWikiWebViewController.m; sourceTree = "<group>"; };
+		DA5A7E2026C563A400F274C7 /* OAWikiWebViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWikiWebViewController.mm; sourceTree = "<group>"; };
 		DA5A7E2126C563A400F274C7 /* OAWikiMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAWikiMenuViewController.xib; sourceTree = "<group>"; };
 		DA5A7E2226C563A400F274C7 /* OAWikiMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAWikiMenuViewController.m; sourceTree = "<group>"; };
 		DA5A7E2326C563A400F274C7 /* OAWikiWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWikiWebViewController.h; sourceTree = "<group>"; };
@@ -12525,7 +12525,7 @@
 				DA5A7E2226C563A400F274C7 /* OAWikiMenuViewController.m */,
 				DA5A7E2126C563A400F274C7 /* OAWikiMenuViewController.xib */,
 				DA5A7E2326C563A400F274C7 /* OAWikiWebViewController.h */,
-				DA5A7E2026C563A400F274C7 /* OAWikiWebViewController.m */,
+				DA5A7E2026C563A400F274C7 /* OAWikiWebViewController.mm */,
 			);
 			path = Wiki;
 			sourceTree = "<group>";
@@ -16871,7 +16871,7 @@
 				DA4ABF162876DA6800B996EF /* OASettingsItem.mm in Sources */,
 				DA5A84E926C563A900F274C7 /* OADashboardViewController.mm in Sources */,
 				DA5A848126C563A900F274C7 /* OADistanceToMapMarkerControl.mm in Sources */,
-				DA5A83E726C563A800F274C7 /* OAWikiWebViewController.m in Sources */,
+				DA5A83E726C563A800F274C7 /* OAWikiWebViewController.mm in Sources */,
 				DA5A81E226C563A700F274C7 /* OAGPXDocument.mm in Sources */,
 				321126FF2800710800ED8D52 /* OAExternalTimeFormatter.mm in Sources */,
 				DA5A815E26C563A700F274C7 /* OAMonitoringPlugin.mm in Sources */,

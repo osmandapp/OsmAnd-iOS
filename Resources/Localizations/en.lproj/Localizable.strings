@@ -1874,6 +1874,7 @@
 "some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
+"wiki_article_search_text" = "Searching for the corresponding wiki article";
 
 "srtm_plugin_name" = "Contour lines";
 "product_desc_srtm" = "Visual assessment of the shape of the land surface";

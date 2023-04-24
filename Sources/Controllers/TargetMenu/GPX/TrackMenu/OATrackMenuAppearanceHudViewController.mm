@@ -7,6 +7,7 @@
 //
 
 #import "OATrackMenuAppearanceHudViewController.h"
+#import "OATrackColoringTypeViewController.h"
 #import "OATableViewCustomFooterView.h"
 #import "OAFoldersCollectionView.h"
 #import "OASlider.h"
@@ -17,7 +18,6 @@
 #import "OASegmentSliderTableViewCell.h"
 #import "OASegmentedControlCell.h"
 #import "OADividerCell.h"
-#import "OAFoldersCell.h"
 #import "OAImageTextViewCell.h"
 #import "Localization.h"
 #import "OAColors.h"
@@ -37,22 +37,6 @@
 #define kColorsSection 1
 
 #define kColorGridOrDescriptionCell 2
-
-@interface OATrackAppearanceItem : NSObject
-
-@property (nonatomic) OAColoringType *coloringType;
-@property (nonatomic) NSString *title;
-@property (nonatomic) NSString *attrName;
-@property (nonatomic, assign) BOOL isAvailable;
-@property (nonatomic, assign) BOOL isEnabled;
-
-- (instancetype)initWithColoringType:(OAColoringType *)coloringType
-                               title:(NSString *)title
-                            attrName:(NSString *)attrName
-                            isAvailable:(BOOL)isAvailable
-                            isEnabled:(BOOL)isEnabled;
-
-@end
 
 @implementation OATrackAppearanceItem
 
@@ -76,7 +60,7 @@
 
 @end
 
-@interface OATrackMenuAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, OAFoldersCellDelegate, OAColorsTableViewCellDelegate>
+@interface OATrackMenuAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, OAColorsTableViewCellDelegate, OATrackColoringTypeDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIImageView *titleIconView;
@@ -95,8 +79,6 @@
     OAGPXAppearanceCollection *_appearanceCollection;
     NSArray<OAGPXTableSectionData *> *_tableData;
 
-    OAFoldersCell *_colorValuesCell;
-    OACollectionViewCellState *_scrollCellsState;
     OATrackAppearanceItem *_selectedItem;
     NSArray<OATrackAppearanceItem *> *_availableColoringTypes;
 
@@ -170,7 +152,6 @@
     if (self.gpx.splitInterval > 0 && self.gpx.splitType != EOAGpxSplitTypeNone)
         _selectedSplit.customValue = _selectedSplit.titles[[_selectedSplit.values indexOfObject:@(self.gpx.splitInterval)]];
 
-    _scrollCellsState = [[OACollectionViewCellState alloc] init];
     OAColoringType *currentType = [OAColoringType getNonNullTrackColoringTypeByName:self.gpx.coloringType];
 
     NSMutableArray<OATrackAppearanceItem *> *items = [NSMutableArray array];
@@ -316,8 +297,13 @@
     OAGPXTableCellData *colorTitleCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"color_title",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kTableValues: @{ @"string_value": _selectedItem.title },
-            kCellTitle: OALocalizedString(@"shared_string_color")
+            kTableValues: @{
+                @"string_value": _selectedItem.title,
+                @"accessibility_label": OALocalizedString(@"shared_string_coloring"),
+                @"accessibility_value": _selectedItem.title,
+                @"accessoryType": @(UITableViewCellAccessoryDisclosureIndicator)
+            },
+            kCellTitle: OALocalizedString(@"shared_string_coloring"),
     }];
 
     [colorsCells addObject:colorTitleCellData];
@@ -330,17 +316,6 @@
             @"available": @(item.isAvailable && item.isEnabled)
         }];
     }
-
-    OAGPXTableCellData *colorValuesCellData = [OAGPXTableCellData withData:@{
-            kTableKey: @"color_values",
-            kCellType: [OAFoldersCell getCellIdentifier],
-            kTableValues: @{
-                @"array_value": trackColoringTypes,
-                @"selected_integer_value": @([_availableColoringTypes indexOfObject:_selectedItem])
-            },
-            kCellTitle: OALocalizedString(@"shared_string_color")
-    }];
-    [colorsCells addObject:colorValuesCellData];
 
     OAGPXTableCellData *gridOrDescriptionCellData = [self generateGridOrDescriptionCellData];
     [colorsCells addObject:gridOrDescriptionCellData];
@@ -602,15 +577,7 @@
 {
     BOOL isAvailable = [_selectedItem.coloringType isAvailableInSubscription];
     if (!isAvailable)
-    {
         [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Advanced_Widgets];
-        if (_colorValuesCell)
-        {
-            [_colorValuesCell.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:[_colorValuesCell.collectionView getSelectedIndex] inSection:0]
-                                                    atScrollPosition:UICollectionViewScrollPositionLeft
-                                                            animated:YES];
-        }
-    }
     self.doneButton.userInteractionEnabled = isAvailable;
     [self.doneButton setTitleColor:isAvailable ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)
                            forState:UIControlStateNormal];
@@ -726,7 +693,11 @@
         }
         if (cell)
         {
-            cell.selectionStyle = cellData.toggle ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
+            cell.accessoryType =  [cellData.values.allKeys containsObject:@"accessoryType"]
+                ? ((UITableViewCellAccessoryType) [cellData.values[@"accessoryType"] integerValue])
+                : UITableViewCellAccessoryNone;
+            cell.selectionStyle = cellData.toggle || cell.accessoryType == UITableViewCellAccessoryDisclosureIndicator ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
+
             cell.textView.text = cellData.title;
             cell.descriptionView.text = cellData.values[@"string_value"];
             cell.textView.textColor = cellData.toggle ? UIColorFromRGB(color_primary_purple) : UIColor.blackColor;
@@ -795,29 +766,6 @@
             [cell setNeedsUpdateConstraints];
 
         return cell;
-    }
-    else if ([cellData.type isEqualToString:[OAFoldersCell getCellIdentifier]])
-    {
-        if (_colorValuesCell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFoldersCell getCellIdentifier] owner:self options:nil];
-            _colorValuesCell = (OAFoldersCell *) nib[0];
-            _colorValuesCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            _colorValuesCell.separatorInset = UIEdgeInsetsMake(0., DeviceScreenWidth, 0., 0.);
-            _colorValuesCell.backgroundColor = UIColor.whiteColor;
-            _colorValuesCell.collectionView.backgroundColor = UIColor.whiteColor;
-            _colorValuesCell.collectionView.cellIndex = indexPath;
-            _colorValuesCell.collectionView.state = _scrollCellsState;
-            _colorValuesCell.collectionView.foldersDelegate = self;
-        }
-        if (_colorValuesCell)
-        {
-            NSInteger selectedIndex = [cellData.values[@"selected_integer_value"] integerValue];
-            [_colorValuesCell.collectionView setValues:cellData.values[@"array_value"]
-                      withSelectedIndex:selectedIndex != NSNotFound ? selectedIndex : 0];
-            [_colorValuesCell.collectionView reloadData];
-        }
-        outCell = _colorValuesCell;
     }
     else if ([cellData.type isEqualToString:[OAColorsTableViewCell getCellIdentifier]])
     {
@@ -1099,53 +1047,6 @@
     }
 }
 
-#pragma mark - OAFoldersCellDelegate
-
-- (void)onItemSelected:(NSInteger)index
-{
-    _selectedItem = _availableColoringTypes[index];
-    self.gpx.coloringType = _selectedItem.coloringType == OAColoringType.ATTRIBUTE ? _selectedItem.attrName : _selectedItem.coloringType.name;
-
-    if (self.isCurrentTrack)
-    {
-        [self.doc setColoringType:self.gpx.coloringType];
-        [[_app updateRecTrackOnMapObservable] notifyEvent];
-    }
-    else
-    {
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
-    }
-
-    OAGPXTableSectionData *section = _tableData[kColorsSection];
-    [self updateData:section];
-
-    [UIView transitionWithView:self.tableView
-                      duration:0.35f
-                       options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^(void)
-                    {
-                        [self.tableView reloadData];
-                        self.doneButton.userInteractionEnabled = YES;
-                        [self.doneButton setTitleColor:UIColorFromRGB(color_primary_purple)
-                                              forState:UIControlStateNormal];
-                    }
-                    completion:nil];
-}
-
-- (void)onDisabledItemSelected:(NSInteger)index
-{
-    OATrackAppearanceItem *item = _availableColoringTypes[index];
-    if (item.isAvailable && !item.isEnabled)
-    {
-        NSString *message = [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"track_has_no_needed_data"), OALocalizedString(@"select_another_colorization")];
-        [OAUtilities showToast:message details:nil duration:4 inView:self.view];
-    }
-    else
-    {
-        [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Advanced_Widgets];
-    }
-}
-
 #pragma mark - OAColorsTableViewCellDelegate
 
 - (void)colorChanged:(NSInteger)tag
@@ -1240,7 +1141,14 @@
 {
     if ([tableData.key isEqualToString:@"color_title"])
     {
-        [tableData setData:@{ kTableValues: @{ @"string_value": _selectedItem.title } }];
+        [tableData setData:@{
+            kTableValues: @{
+                @"string_value": _selectedItem.title,
+                @"accessibility_label": OALocalizedString(@"shared_string_coloring"),
+                @"accessibility_value": _selectedItem.title,
+                @"accessoryType": @(UITableViewCellAccessoryDisclosureIndicator)
+            }
+        }];
     }
     else if ([tableData.key isEqualToString:@"color_values"])
     {
@@ -1522,6 +1430,21 @@
 
 - (void)onButtonPressed:(OAGPXBaseTableData *)tableData
 {
+    if ([tableData.key isEqualToString:@"color_title"])
+    {
+        OATrackColoringTypeViewController *coloringViewController = [[OATrackColoringTypeViewController alloc] initWithAvailableColoringTypes:_availableColoringTypes selectedItem:_selectedItem];
+        coloringViewController.delegate = self;
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:coloringViewController];
+        navigationController.modalPresentationStyle = UIModalPresentationPageSheet;
+        UISheetPresentationController *sheet = navigationController.sheetPresentationController;
+        if (sheet)
+        {
+            sheet.detents = @[UISheetPresentationControllerDetent.mediumDetent];
+            sheet.preferredCornerRadius = 20;
+            sheet.prefersEdgeAttachedInCompactHeight = YES;
+        }
+        [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+    }
     if ([tableData.key isEqualToString:@"reset"])
     {
         if (self.isCurrentTrack)
@@ -1555,6 +1478,39 @@
             [self.tableView reloadData];
         } completion:nil];
     }
+}
+
+#pragma mark - OATrackColoringTypeDelegate
+
+- (void)onColoringTypeSelected:(OATrackAppearanceItem *)selectedItem
+{
+    _selectedItem = selectedItem;
+    self.gpx.coloringType = _selectedItem.coloringType == OAColoringType.ATTRIBUTE ? _selectedItem.attrName : _selectedItem.coloringType.name;
+
+    if (self.isCurrentTrack)
+    {
+        [self.doc setColoringType:self.gpx.coloringType];
+        [[_app updateRecTrackOnMapObservable] notifyEvent];
+    }
+    else
+    {
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    }
+
+    OAGPXTableSectionData *section = _tableData[kColorsSection];
+    [self updateData:section];
+
+    [UIView transitionWithView:self.tableView
+                      duration:0.35f
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^(void)
+                    {
+                        [self.tableView reloadData];
+                        self.doneButton.userInteractionEnabled = YES;
+                        [self.doneButton setTitleColor:UIColorFromRGB(color_primary_purple)
+                                              forState:UIControlStateNormal];
+                    }
+                    completion:nil];
 }
 
 @end

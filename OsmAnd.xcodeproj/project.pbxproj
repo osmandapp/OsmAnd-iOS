@@ -591,6 +591,7 @@
 		460679FB27708A980076740B /* OARouteLineAppearanceHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 460679FA27708A980076740B /* OARouteLineAppearanceHudViewController.xib */; };
 		460743A828C10B2900F13A7A /* OAOsmLoginMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 460743A728C10B2900F13A7A /* OAOsmLoginMainViewController.xib */; };
 		4611DF3A28569C5000885FD1 /* OASubscriptionBannerCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4611DF3928569C5000885FD1 /* OASubscriptionBannerCardView.xib */; };
+		461A3F0029F6A62C008EE079 /* OATrackColoringTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3EFF29F6A5DF008EE079 /* OATrackColoringTypeViewController.m */; };
 		461F451E283E36EB00796360 /* ic_navbar_help@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F451C283E36EB00796360 /* ic_navbar_help@2x.png */; };
 		461F451F283E36EB00796360 /* ic_navbar_help@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F451D283E36EB00796360 /* ic_navbar_help@3x.png */; };
 		461F4522283E370C00796360 /* ic_custom_arrow_down_short@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F4520283E370B00796360 /* ic_custom_arrow_down_short@3x.png */; };
@@ -4142,6 +4143,8 @@
 		460679FA27708A980076740B /* OARouteLineAppearanceHudViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OARouteLineAppearanceHudViewController.xib; sourceTree = "<group>"; };
 		460743A728C10B2900F13A7A /* OAOsmLoginMainViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAOsmLoginMainViewController.xib; sourceTree = "<group>"; };
 		4611DF3928569C5000885FD1 /* OASubscriptionBannerCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASubscriptionBannerCardView.xib; sourceTree = "<group>"; };
+		461A3EFE29F6A5C3008EE079 /* OATrackColoringTypeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATrackColoringTypeViewController.h; sourceTree = "<group>"; };
+		461A3EFF29F6A5DF008EE079 /* OATrackColoringTypeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATrackColoringTypeViewController.m; sourceTree = "<group>"; };
 		461F451C283E36EB00796360 /* ic_navbar_help@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_help@2x.png"; path = "Resources/Icons/ic_navbar_help@2x.png"; sourceTree = "<group>"; };
 		461F451D283E36EB00796360 /* ic_navbar_help@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_help@3x.png"; path = "Resources/Icons/ic_navbar_help@3x.png"; sourceTree = "<group>"; };
 		461F4520283E370B00796360 /* ic_custom_arrow_down_short@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_arrow_down_short@3x.png"; path = "Resources/Icons/ic_custom_arrow_down_short@3x.png"; sourceTree = "<group>"; };
@@ -8094,30 +8097,32 @@
 			isa = PBXGroup;
 			children = (
 				0A1051D12731A30200BDF6C4 /* MenuBuilder */,
-				B0D617376B44864C22144EAE /* OATrackMenuHudViewController.mm */,
-				B0D619894A15E2D75C4CBC96 /* OATrackMenuHudViewController.h */,
-				3233B36B29EEBA060056793F /* OATrackMenuHudViewControllerConstants.h */,
-				0AA3BB9726EBC00200A9885D /* OATrackMenuHudViewController.xib */,
-				B0D61823DCC461FF03FE8103 /* OATrackMenuHeaderView.mm */,
-				B0D616BD4B59FB4F1D8B9B4C /* OATrackMenuHeaderView.h */,
-				0A2571A126F253620079774F /* OATrackMenuHeaderView.xib */,
-				0A9ED66B27012444000DB410 /* OATrackMenuAppearanceHudViewController.xib */,
-				B0D61686FC06AEED2517A873 /* OATrackMenuAppearanceHudViewController.mm */,
-				B0D6198DDF14DCBC3FED03FA /* OATrackMenuAppearanceHudViewController.h */,
-				B0D610F332AD1BD4E707EE60 /* OABaseTrackMenuHudViewController.mm */,
-				B0D614BCA21C85893C58B96D /* OABaseTrackMenuHudViewController.h */,
-				B0D618034074DE575CDAACDD /* OAAddWaypointViewController.mm */,
 				B0D6129A27B65E33BA711114 /* OAAddWaypointViewController.h */,
+				B0D618034074DE575CDAACDD /* OAAddWaypointViewController.mm */,
 				0AC13D2A271602F000142BFD /* OAAddWaypointViewController.xib */,
-				B0D6164DBF4B387F62FB25A1 /* OADeleteWaypointsViewController.mm */,
-				B0D6197C14C82E7D0C8DA968 /* OADeleteWaypointsViewController.h */,
-				0A8DDB0E271772A300FDE034 /* OADeleteWaypointsViewController.xib */,
-				B0D610268394E6C3CF0F3C8C /* OAEditWaypointsGroupBottomSheetViewController.mm */,
-				B0D612B5CB6F0BCF4F0DBC08 /* OAEditWaypointsGroupBottomSheetViewController.h */,
-				B0D61BD47F1716F617480A05 /* OADeleteWaypointsGroupBottomSheetViewController.mm */,
+				B0D614BCA21C85893C58B96D /* OABaseTrackMenuHudViewController.h */,
+				B0D610F332AD1BD4E707EE60 /* OABaseTrackMenuHudViewController.mm */,
 				B0D61B1682B18F885993C32F /* OADeleteWaypointsGroupBottomSheetViewController.h */,
-				B0D61D6C029D14889610378F /* OAEditWaypointsGroupOptionsViewController.mm */,
+				B0D61BD47F1716F617480A05 /* OADeleteWaypointsGroupBottomSheetViewController.mm */,
+				B0D6197C14C82E7D0C8DA968 /* OADeleteWaypointsViewController.h */,
+				B0D6164DBF4B387F62FB25A1 /* OADeleteWaypointsViewController.mm */,
+				0A8DDB0E271772A300FDE034 /* OADeleteWaypointsViewController.xib */,
+				B0D612B5CB6F0BCF4F0DBC08 /* OAEditWaypointsGroupBottomSheetViewController.h */,
+				B0D610268394E6C3CF0F3C8C /* OAEditWaypointsGroupBottomSheetViewController.mm */,
 				B0D617A9D1879485C6A8AA8E /* OAEditWaypointsGroupOptionsViewController.h */,
+				B0D61D6C029D14889610378F /* OAEditWaypointsGroupOptionsViewController.mm */,
+				461A3EFE29F6A5C3008EE079 /* OATrackColoringTypeViewController.h */,
+				461A3EFF29F6A5DF008EE079 /* OATrackColoringTypeViewController.m */,
+				B0D6198DDF14DCBC3FED03FA /* OATrackMenuAppearanceHudViewController.h */,
+				B0D61686FC06AEED2517A873 /* OATrackMenuAppearanceHudViewController.mm */,
+				0A9ED66B27012444000DB410 /* OATrackMenuAppearanceHudViewController.xib */,
+				B0D616BD4B59FB4F1D8B9B4C /* OATrackMenuHeaderView.h */,
+				B0D61823DCC461FF03FE8103 /* OATrackMenuHeaderView.mm */,
+				0A2571A126F253620079774F /* OATrackMenuHeaderView.xib */,
+				B0D619894A15E2D75C4CBC96 /* OATrackMenuHudViewController.h */,
+				B0D617376B44864C22144EAE /* OATrackMenuHudViewController.mm */,
+				0AA3BB9726EBC00200A9885D /* OATrackMenuHudViewController.xib */,
+				3233B36B29EEBA060056793F /* OATrackMenuHudViewControllerConstants.h */,
 			);
 			path = TrackMenu;
 			sourceTree = "<group>";
@@ -17540,6 +17545,7 @@
 				CA4ED6AAA32538E21DD77883 /* OASettingsBackupViewController.mm in Sources */,
 				46903D6E29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m in Sources */,
 				CA4EDCD4B8149095B74FD700 /* OACloudAccountLogoutViewController.mm in Sources */,
+				461A3F0029F6A62C008EE079 /* OATrackColoringTypeViewController.m in Sources */,
 				CA4EDBFDA7FC431D027A815E /* OADeleteAllVersionsBackupViewController.mm in Sources */,
 				CA4ED03A64D6784BA1452142 /* OADeleteAllFilesCommand.mm in Sources */,
 				CA4ED4F6BF41371BA62511BA /* OADeleteOldFilesCommand.mm in Sources */,

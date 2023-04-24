@@ -617,44 +617,6 @@ static BOOL _favoritesLoaded = NO;
     return nil;
 }
 
-+ (NSString *) checkEmoticons:(NSString *)text
-{
-    NSUInteger length = [text length];
-    unichar chars[length];
-    [text getCharacters:chars range:NSMakeRange(0, length)];
-
-    unichar ch1;
-    unichar ch2;
-
-    int index = 0;
-    NSMutableString *builder = [NSMutableString string];
-    while (index < length)
-    {
-        ch1 = chars[index];
-        if ((int) ch1 == 0xD83C)
-        {
-            ch2 = chars[index + 1];
-            if ((int) ch2 >= 0xDF00 && (int) ch2 <= 0xDFFF)
-            {
-                index += 2;
-                continue;
-            }
-        }
-        else if ((int) ch1 == 0xD83D)
-        {
-            ch2 = chars[index + 1];
-            if ((int) ch2 >= 0xDC00 && (int) ch2 <= 0xDDFF)
-            {
-                index += 2;
-                continue;
-            }
-        }
-        [builder appendString:[NSString stringWithFormat:@"%C", ch1]];
-        ++index;
-    }
-    return [builder trim];
-}
-
 + (NSArray<NSString *> *) getFlatBackgroundIconNamesList
 {
     if (!_flatBackgroundIcons)

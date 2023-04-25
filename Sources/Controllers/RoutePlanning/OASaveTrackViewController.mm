@@ -15,7 +15,7 @@
 #import "OASaveTrackBottomSheetViewController.h"
 #import "OAMapLayers.h"
 #import "OAMapRendererView.h"
-#import "OASettingsTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAFolderCardsCell.h"
 #import "OASelectTrackFolderViewController.h"
 #import "OAAddTrackFolderViewController.h"
@@ -164,7 +164,7 @@
     
     [data addObject:@[
         @{
-            @"type" : [OASettingsTableViewCell getCellIdentifier],
+            @"type" : [OAValueTableViewCell getCellIdentifier],
             @"header" : OALocalizedString(@"plan_route_folder"),
             @"title" : @"Select folder",
             @"value" : _selectedFolderName,
@@ -324,25 +324,23 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        OAValueTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-            cell.descriptionView.font = [UIFont scaledSystemFontOfSize:17.0];
-            cell.descriptionView.numberOfLines = 1;
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., 0, 0, CGFLOAT_MAX);
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.textView.textColor = UIColor.blackColor;
-            cell.descriptionView.text = item[@"value"];
+            cell.titleLabel.text = item[@"title"];
+            cell.titleLabel.textColor = UIColor.blackColor;
+            cell.valueLabel.text = item[@"value"];
         }
         return cell;
     }
@@ -425,7 +423,7 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
         [self showSelectFolderScreen];
     }

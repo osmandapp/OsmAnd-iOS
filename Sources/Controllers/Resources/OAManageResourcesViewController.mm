@@ -42,6 +42,7 @@
 #import "OAWeatherForecastDetailsViewController.h"
 #import "QuadRect.h"
 #import "OASearchUICore.h"
+#import "OAOsmandDevelopmentPlugin.h"
 
 #include <OsmAndCore/WorldRegions.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
@@ -62,15 +63,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *scopeControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIView *titlePanelView;
-
-@property (weak, nonatomic) IBOutlet UIButton *updateButton;
-@property (weak, nonatomic) IBOutlet UIButton *searchButton;
-
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UIButton *doneButton;
-
 
 @end
 
@@ -127,6 +119,8 @@ struct RegionResources
     NSInteger _lastSearchScope;
     NSArray *_searchResults;
     
+    UIBarButtonItem *_updateButton;
+    UIBarButtonItem *_doneButton;
     UISearchController *_searchController;
     
     uint64_t _totalInstalledSize;
@@ -240,16 +234,12 @@ static BOOL _repositoryUpdated = NO;
 - (void)applyLocalization
 {
     [super applyLocalization];
-
-    _titleView.text = OALocalizedString(@"res_mapsres");
-    [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
+    self.navigationItem.title = OALocalizedString(@"res_mapsres");
 }
 
 -(void) addAccessibilityLabels
 {
-    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
-    self.updateButton.accessibilityLabel = OALocalizedString(@"shared_string_update");
-    self.searchButton.accessibilityLabel = OALocalizedString(@"shared_string_search");
+    _updateButton.accessibilityLabel = OALocalizedString(@"shared_string_update");
 }
 
 - (void) viewDidLoad
@@ -258,18 +248,11 @@ static BOOL _repositoryUpdated = NO;
 
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
-
-    if (self.openFromSplash)
-    {
-        self.backButton.hidden = YES;
-        self.doneButton.hidden = NO;
-        self.doneButton.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
-    }
     
     if (self.region != _app.worldRegion)
-        [self.titleView setText:self.region.name];
+        self.navigationItem.title = self.region.name;
     else if (_currentScope == kLocalResourcesScope)
-        [self.titleView setText:OALocalizedString(@"download_tab_local")];
+        self.navigationItem.title = OALocalizedString(@"download_tab_local");
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 52.;
 
@@ -283,7 +266,6 @@ static BOOL _repositoryUpdated = NO;
     if ([self.region isKindOfClass:OACustomRegion.class])
     {
         OACustomRegion *customReg = (OACustomRegion *) self.region;
-        self.titlePanelView.backgroundColor = customReg.headerColor;
         _downloadDescriptionInfo = customReg.descriptionInfo;
     }
 
@@ -295,9 +277,8 @@ static BOOL _repositoryUpdated = NO;
     _subscribeEmailView.delegate = self;
     _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     _searchController.searchBar.delegate = self;
-    _searchController.hidesNavigationBarDuringPresentation = NO;
     _searchController.obscuresBackgroundDuringPresentation = NO;
-    self.tableView.tableHeaderView = _searchController.searchBar;
+    self.navigationItem.searchController = _searchController;
     
     if (_displayBanner)
         [self setupSubscriptionBanner];
@@ -308,32 +289,36 @@ static BOOL _repositoryUpdated = NO;
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.shadowColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.whiteColor
+    };
+    self.navigationController.navigationBar.standardAppearance = appearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.tintColor = UIColor.whiteColor;
+    self.navigationController.navigationBar.prefersLargeTitles = NO;
+    
+    if (self.openFromSplash)
+    {
+        self.navigationItem.hidesBackButton = YES;
+        _doneButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_done") style:UIBarButtonItemStylePlain target:self action:@selector(onDoneClicked:)];
+        [self.navigationController.navigationBar.topItem setLeftBarButtonItem:_doneButton animated:YES];
+    }
+    _updateButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_update"] style:UIBarButtonItemStylePlain target:self action:@selector(onUpdateBtnClicked:)];
+    if (!hideUpdateButton)
+        [self.navigationController.navigationBar.topItem setRightBarButtonItem:_updateButton animated:YES];
+    [self setupSearchControllerWithFilter:NO];
 
     [self updateContentIfNeeded];
     
     if (_doNotSearch || _currentScope == kLocalResourcesScope)
-    {
-        
-        CGRect f = _searchController.searchBar.frame;
-        f.size.height = 0;
-        _searchController.searchBar.frame = f;
-        _searchController.searchBar.hidden = YES;
-        
-        self.searchButton.hidden = YES;
-        
-    }
-    else
-    {
-        if (self.tableView.bounds.origin.y == 0)
-        {
-            // Hide the search bar until user scrolls up
-            CGRect newBounds = self.tableView.bounds;
-            newBounds.origin.y = newBounds.origin.y + _searchController.searchBar.bounds.size.height;
-            self.tableView.bounds = newBounds;
-        }
-    }
-    
-    self.updateButton.hidden = hideUpdateButton;
+        self.navigationItem.searchController = nil;
 
     _weatherSizeCalculatedObserver =
             [[OAAutoObserverProxy alloc] initWith:self
@@ -385,10 +370,6 @@ static BOOL _repositoryUpdated = NO;
             _updateButton.enabled = NO;
             [_refreshRepositoryProgressHUD show:YES];
         }
-        else if (self.openFromSplash)
-        {
-            [self onSearchBtnClicked:nil];
-        }
     }
     _viewAppeared = YES;
 }
@@ -411,6 +392,7 @@ static BOOL _repositoryUpdated = NO;
     }
 
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void) viewWillLayoutSubviews
@@ -419,14 +401,26 @@ static BOOL _repositoryUpdated = NO;
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 }
 
-- (UIView *) getTopView
-{
-    return _titlePanelView;
-}
-
 - (UIView *) getMiddleView
 {
     return _tableView;
+}
+
+- (void) setupSearchControllerWithFilter:(BOOL)isFiltered
+{
+    if (isFiltered)
+    {
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"res_search_world") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.backgroundColor = UIColor.whiteColor;
+        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.grayColor;
+    }
+    else
+    {
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"res_search_world") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+        _searchController.searchBar.searchTextField.tintColor = UIColor.grayColor;
+    }
 }
 
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -639,8 +633,6 @@ static BOOL _repositoryUpdated = NO;
         _updateButton.enabled = YES;
 
         [_refreshRepositoryProgressHUD hide:YES];
-        if (self.openFromSplash)
-            [self onSearchBtnClicked:nil];
     }
 }
 
@@ -921,7 +913,9 @@ static BOOL _repositoryUpdated = NO;
             }
             else if (![OAAppSettings.sharedManager.showHeightmaps get] && item_.resourceType == OsmAndResourceType::GeoTiffRegion)
             {
-                continue;
+                OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *) [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
+                if (!plugin || ![plugin isHeightmapEnabled])
+                    continue;
             }
             else if (item_.resourceType == OsmAndResourceType::HeightmapRegionLegacy)
             {
@@ -1394,10 +1388,6 @@ static BOOL _repositoryUpdated = NO;
 
         if (_currentScope == kAllResourcesScope && self.region == _app.worldRegion && [_app.worldRegion containsSubregion:_nauticalRegionId] && [[_app.worldRegion getSubregion:_nauticalRegionId] isInPurchasedArea])
             _nauticalMapsSection = _lastUnusedSectionIndex++;
-
-        // Configure search scope
-        _searchController.searchBar.scopeButtonTitles = nil;
-        _searchController.searchBar.placeholder = OALocalizedString(@"res_search_world");
     }
 }
 
@@ -1805,8 +1795,6 @@ static BOOL _repositoryUpdated = NO;
                                     [self updateContent];
                                     [_app.worldRegion buildResourceGroupItem];
                                     _updateButton.enabled = YES;
-                                    if (self.openFromSplash)
-                                        [self onSearchBtnClicked:nil];
                                 }];
 }
 
@@ -1834,23 +1822,9 @@ static BOOL _repositoryUpdated = NO;
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
-- (void)onLeftNavbarButtonPressed
-{
-    if (self.region.regionId == nil && _currentScope == kAllResourcesScope)
-        [self.navigationController popToRootViewControllerAnimated:YES];
-    else
-        [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (IBAction)onUpdateBtnClicked:(id)sender
 {
     [self onRefreshRepositoryButtonClicked];
-}
-
-- (IBAction)onSearchBtnClicked:(id)sender
-{
-    [_tableView setContentOffset:CGPointZero animated:NO];
-    [_searchController.searchBar becomeFirstResponder];
 }
 
 - (void)onRefreshRepositoryButtonClicked
@@ -2605,8 +2579,8 @@ static BOOL _repositoryUpdated = NO;
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
-            cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
+            cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
             UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
@@ -2634,8 +2608,8 @@ static BOOL _repositoryUpdated = NO;
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
             cell.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
-            cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
+            cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
             BOOL isMultipleItem = [item_ isKindOfClass:OAMultipleResourceItem.class];
             BOOL addInfoAccessory = isMultipleItem && [((OAMultipleResourceItem *) item_) allDownloaded];
@@ -2661,8 +2635,8 @@ static BOOL _repositoryUpdated = NO;
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
 
-            cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
-            cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
+            cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
             FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
@@ -3063,6 +3037,7 @@ static BOOL _repositoryUpdated = NO;
     _lastSearchScope = searchBar.selectedScopeButtonIndex;
     [self performSearchForSearchString:_lastSearchString
                         andSearchScope:_lastSearchScope];
+    [self setupSearchControllerWithFilter:NO];
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
@@ -3071,6 +3046,10 @@ static BOOL _repositoryUpdated = NO;
     _lastSearchScope = searchBar.selectedScopeButtonIndex;
     [self performSearchForSearchString:_lastSearchString
                         andSearchScope:_lastSearchScope];
+    if (searchText.length > 0)
+        [self setupSearchControllerWithFilter:YES];
+    else
+        [self setupSearchControllerWithFilter:NO];
 }
 
 #pragma mark - Navigation

@@ -157,7 +157,7 @@
             cell = nib[0];
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
+            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         cell.titleView.text = item[@"title"];

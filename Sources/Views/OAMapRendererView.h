@@ -96,6 +96,7 @@ struct CLLocationCoordinate2D;
 
 @property (nonatomic) CGFloat displayDensityFactor;
 @property (nonatomic) OsmAnd::PointI target31;
+@property (nonatomic) OsmAnd::PointI fixedPixel;
 @property (nonatomic) OsmAnd::ZoomLevel zoomLevel;
 @property (nonatomic) float viewportXScale;
 @property (nonatomic) float viewportYScale;
@@ -149,5 +150,7 @@ struct CLLocationCoordinate2D;
 
 - (void) cancelAllAnimations;
 
+- (BOOL)getLocationFromElevatedPoint:(OsmAnd::PointI)screenPoint location31:(OsmAnd::PointI*)location31;
+- (float)getLocationHeightInMeters:(OsmAnd::PointI)location31;
 
 @end

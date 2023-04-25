@@ -16,7 +16,9 @@
 
 @interface OAWikiLanguagesWebViewContoller : OABaseNavbarViewController
 
-- (instancetype)initWithSelectedLocale:(NSString *)selectedLocale availableLocales:(NSArray<NSString *> *)availableLocales;
+- (instancetype)initWithSelectedLocale:(NSString *)selectedLocale
+                      availableLocales:(NSArray<NSString *> *)availableLocales
+                      preferredLocales:(NSArray<NSString *> *)preferredLocales;
 
 @property(nonatomic, weak) id<OAWikiLanguagesWebDelegate> delegate;
 

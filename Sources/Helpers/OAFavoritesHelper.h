@@ -50,7 +50,6 @@
 + (BOOL) deleteFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groupsToDelete andFavoritesItems:(NSArray<OAFavoriteItem *> *)favoritesItems isNewFavorite:(BOOL)isNewFavorite;
 
 + (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point;
-+ (NSString *) checkEmoticons:(NSString *)text;
 + (void) sortAll;
 + (void) recalculateCachedFavPoints;
 

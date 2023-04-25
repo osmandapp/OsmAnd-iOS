@@ -22,35 +22,28 @@
     NSArray<OASettingsItem *> *_settingsItems;
     BOOL _isNewItems;
     NSString *_file;
-    NSString *_descriptionText;
-    NSString *_descriptionBoldText;
     QList<OsmAnd::ArchiveReader::Item> _archiveItems;
-    NSString *_headerLabel;
 }
 
-- (instancetype) initWithItems:(NSArray<OASettingsItem *> *)items
+#pragma mark - Initialization
+
+- (instancetype)initWithItems:(NSArray<OASettingsItem *> *)items
 {
     self = [super init];
     if (self)
     {
         _settingsItems = [NSArray arrayWithArray:items];
+        [self postInit];
     }
     return self;
 }
 
 - (void)commonInit
 {
-    _settingsHelper = OASettingsHelper.sharedInstance;
+    _settingsHelper = [OASettingsHelper sharedInstance];
 }
 
-- (void) viewDidLoad
-{
-    _descriptionText = OALocalizedString(@"select_data_to_import");
-    _descriptionBoldText = nil;
-    [super viewDidLoad];
-}
-
-- (void) setupView
+- (void)postInit
 {
     OAImportAsyncTask *importTask = _settingsHelper.importTask;
     if (!_isNewItems && importTask && _settingsItems)
@@ -63,7 +56,7 @@
 
         NSArray *duplicates = [importTask getDuplicates];
         NSArray *selectedItems = [importTask getSelectedItems];
-        
+
         if (!duplicates)
         {
             importTask.delegate = self;
@@ -74,12 +67,63 @@
                 [_settingsHelper importSettings:_file items:selectedItems latestChanges:@"" version:1 delegate:self];
         }
     }
-    
+
     if (_settingsItems)
     {
         self.itemsMap = [OASettingsHelper getSettingsToOperateByCategory:_settingsItems importComplete:NO addEmptyItems:NO];
         self.itemTypes = self.itemsMap.allKeys;
-        [self generateData];
+    }
+}
+
+#pragma mark - UIViewController
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    if ([_settingsHelper.importTask isImportDone])
+    {
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        [self resetActivityIndicatorLabel];
+        [self updateUI];
+    }
+}
+
+#pragma mark - Base UI
+
+- (NSString *)getTitle
+{
+    OAImportAsyncTask *importTask = _settingsHelper.importTask;
+    EOAImportType importTaskType = _isNewItems || [_settingsHelper.importTask isImportDone] ? EOAImportTypeCollect : [importTask getImportType];
+    if (importTaskType == EOAImportTypeCheckDuplicates)
+        return OALocalizedString(@"shared_string_preparing");
+    else if (importTaskType == EOAImportTypeImport)
+        return OALocalizedString(@"importing_from");
+    else
+        return OALocalizedString(@"shared_string_import");
+}
+
+- (NSString *)getTableHeaderDescription
+{
+    OAImportAsyncTask *importTask = _settingsHelper.importTask;
+    EOAImportType importTaskType = _isNewItems || [_settingsHelper.importTask isImportDone] ? EOAImportTypeCollect : [importTask getImportType];
+    if (importTaskType == EOAImportTypeCheckDuplicates)
+        return [NSString stringWithFormat:OALocalizedString(@"checking_for_duplicate_description"), _file.lastPathComponent];
+    else if (importTaskType == EOAImportTypeImport)
+        return OALocalizedString(@"shared_string_importing");
+    else if (_settingsItems)
+        return OALocalizedString(@"select_data_to_import");
+    else
+        return @"";
+}
+
+#pragma mark - Table data
+
+- (void)generateData
+{
+    if (_settingsItems)
+    {
+        [super generateData];
     }
     else
     {
@@ -88,58 +132,14 @@
         group.groupName = OALocalizedString(@"reading_file");
         self.data = @[group];
     }
-    
-    EOAImportType importTaskType = _isNewItems ? EOAImportTypeCollect : [importTask getImportType];
-    
-    if (importTaskType == EOAImportTypeCheckDuplicates)
-    {
-        [self updateUI:OALocalizedString(@"shared_string_preparing") descriptionRes:OALocalizedString(@"checking_for_duplicate_description") activityLabel:OALocalizedString(@"checking_for_duplicates")];
-    }
-    else if (importTaskType == EOAImportTypeImport)
-    {
-        [self updateUI:OALocalizedString(@"shared_string_importing") descriptionRes:OALocalizedString(@"importing_from") activityLabel:OALocalizedString(@"shared_string_importing")];
-    }
-    else
-        [self setTableHeaderView:OALocalizedString(@"shared_string_import")];
-
-    _isNewItems = NO;
 }
 
-- (void) updateUI:(NSString *)toolbarTitleRes descriptionRes:(NSString *)descriptionRes activityLabel:(NSString *)activityLabel
+- (BOOL)hideFirstHeader
 {
-    if (_file)
-    {
-        NSString *filename = [_file lastPathComponent];
-        [self setTableHeaderView:toolbarTitleRes];
-        _descriptionText = [NSString stringWithFormat:descriptionRes, filename];
-        _descriptionBoldText = filename;
-        self.bottomBarView.hidden = YES;
-        [self showActivityIndicatorWithLabel:activityLabel];
-        [self.tableView reloadData];
-    }
+    return YES;
 }
 
-- (void) setTableHeaderView:(NSString *)label
-{
-    _headerLabel = label;
-    [super setTableHeaderView:label];
-    self.titleLabel.text = label;
-}
-
-- (NSString *) getTableHeaderTitle
-{
-    return _headerLabel;
-}
-
-- (NSString *) descriptionText
-{
-    return _descriptionText;
-}
-
-- (NSString *) descriptionBoldText
-{
-    return _descriptionBoldText;
-}
+#pragma mark - Additions
 
 - (long)getItemSize:(NSString *)item
 {
@@ -148,68 +148,56 @@
     for (const auto& item : _archiveItems)
     {
         if (item.name.endsWith(fileNameStr))
-        {
             return item.size;
-        }
     }
     return 0;
 }
 
-- (void) importItems
-{
-    [self updateUI:OALocalizedString(@"shared_string_preparing") descriptionRes:OALocalizedString(@"checking_for_duplicate_description") activityLabel:OALocalizedString(@"checking_for_duplicates")];
-    NSArray <OASettingsItem *> *selectedItems = [_settingsHelper prepareSettingsItems:[self getSelectedItems] settingsItems:_settingsItems doExport:NO];
-    
-    if (_file && _settingsItems)
-        [_settingsHelper checkDuplicates:_file items:_settingsItems selectedItems:selectedItems delegate:self];
-}
+#pragma mark - Selectors
 
-#pragma mark - Actions
-
-- (IBAction) primaryButtonPressed:(id)sender
-{
-    [self importItems];
-}
-
-- (IBAction) backButtonPressed:(id)sender
+- (void)onLeftNavbarButtonPressed
 {
     [OAUtilities denyAccessToFile:_file removeFromInbox:YES];
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewController];
+}
+
+- (void)onBottomButtonPressed
+{
+    NSArray <OASettingsItem *> *selectedItems = [_settingsHelper prepareSettingsItems:[self getSelectedItems] settingsItems:_settingsItems doExport:NO];
+    if (_file && _settingsItems)
+    {
+        [_settingsHelper checkDuplicates:_file items:_settingsItems selectedItems:selectedItems delegate:self];
+        [self showActivityIndicatorWithLabel:OALocalizedString(@"checking_for_duplicates")];
+    }
 }
 
 #pragma mark - OASettingsImportExportDelegate
 
-- (void) onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items
+- (void)onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items
 {
     if (succeed)
     {
         [self.tableView reloadData];
-        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[OASettingsHelper getSettingsToOperate:items importComplete:YES addEmptyItems:NO] fileName:[_file lastPathComponent]];
-        [self.navigationController pushViewController:importCompleteVC animated:YES];
-        _settingsHelper.importTask = nil;
+        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[OASettingsHelper getSettingsToOperate:items importComplete:YES addEmptyItems:NO] fileName:_file.lastPathComponent];
+        [self showViewController:importCompleteVC];
         [OAUtilities denyAccessToFile:_file removeFromInbox:YES];
     }
     _settingsHelper.importTask = nil;
 }
 
-- (void) onDuplicatesChecked:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items
-{
-    [self processDuplicates:duplicates items:items];
-}
-
-- (void) processDuplicates:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items
+- (void)onDuplicatesChecked:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items
 {
     if (_file)
     {
         if (duplicates.count == 0)
         {
-            [self updateUI:OALocalizedString(@"shared_string_importing") descriptionRes:OALocalizedString(@"importing_from") activityLabel:OALocalizedString(@"shared_string_importing")];
+            [self showActivityIndicatorWithLabel:OALocalizedString(@"shared_string_importing")];
             [_settingsHelper importSettings:_file items:items latestChanges:@"" version:1 delegate:self];
         }
         else
         {
             OAImportDuplicatesViewController *dublicatesVC = [[OAImportDuplicatesViewController alloc] initWithDuplicatesList:duplicates settingsItems:items file:_file];
-            [self.navigationController pushViewController:dublicatesVC animated:YES];
+            [self showViewController:dublicatesVC];
         }
     }
 }
@@ -222,8 +210,9 @@
     _archiveItems = OsmAnd::ArchiveReader(QString::fromNSString(_file)).getItems();
     if (_settingsItems)
     {
-        [self setupView];
-        [self.tableView reloadData];
+        [self postInit];
+        [self updateUIAnimated];
+        _isNewItems = NO;
     }
 }
 

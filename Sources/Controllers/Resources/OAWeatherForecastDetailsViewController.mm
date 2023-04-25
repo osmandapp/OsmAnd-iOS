@@ -232,7 +232,7 @@
             cell.titleLabel.text = item[@"title"];
             cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
             cell.titleLabel.textAlignment = [item.allKeys containsObject:@"title_alignment"] ? (NSTextAlignment) [item[@"title_alignment"] integerValue] : NSTextAlignmentNatural;
-            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont scaledSystemFontOfSize:17.];
+            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         }
         return cell;
     }
@@ -250,7 +250,7 @@
         {
             cell.titleLabel.text = item[@"title"];
             cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
-            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont scaledSystemFontOfSize:17.];
+            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
             BOOL hasRightIcon = [item.allKeys containsObject:@"right_icon"];
             if (([item[@"key"] isEqualToString:@"update_now_cell"] && [OAWeatherHelper getPreferenceDownloadState:[OAWeatherHelper checkAndGetRegionId:_region]] == EOAWeatherForecastDownloadStateInProgress))
@@ -332,7 +332,7 @@
                                                 width:self.tableView.bounds.size.width
                                               xOffset:kPaddingOnSideOfContent
                                               yOffset:20.
-                                                 font:[UIFont scaledSystemFontOfSize:13.]] + 15.;
+                                                 font:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]] + 15.;
     }
 
     return [super getCustomHeightForHeader:section];
@@ -344,7 +344,7 @@
     if (section == _accuracySection)
     {
         customHeader.label.text = _headers[@(section)];
-        customHeader.label.font = [UIFont scaledSystemFontOfSize:13];
+        customHeader.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
         [customHeader setYOffset:20.];
         return customHeader;
     }

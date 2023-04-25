@@ -10,7 +10,6 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAInputTableViewCell.h"
-#import "OAOnlyImageViewCell.h"
 #import "OAHorizontalCollectionViewCell.h"
 #import "OARightIconTableViewCell.h"
 #import "OAAppSettings.h"
@@ -18,19 +17,11 @@
 #import "OAColors.h"
 #import "OASizes.h"
 #import "OAUtilities.h"
-#import "OAEmissionHelper.h"
-#import "OARoutingHelper.h"
 
-#define kSidePadding 20.
-#define kTopPaddingMotorType 20.
-#define kBottomPaddingMotorType 35.
-#define kDescriptionStringSection 1
 #define kDot @"."
 #define kComma @","
 
 @interface OAVehicleParametersSettingsViewController() <OAHorizontalCollectionViewCellDelegate, UITextFieldDelegate>
-
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *navBarHeightConstraint;
 
 @end
 
@@ -47,117 +38,150 @@
     NSNumber *_selectedParameter;
 }
 
-- (instancetype) initWithApplicationMode:(OAApplicationMode *)am vehicleParameter:(NSDictionary *)vp
+#pragma mark - Initialization
+
+- (instancetype)initWithApplicationMode:(OAApplicationMode *)am vehicleParameter:(NSDictionary *)vp
 {
     self = [super initWithAppMode:am];
     if (self)
     {
         _vehicleParameter = vp;
-        [self commonInit];
+        [self postInit];
     }
     return self;
 }
 
-- (void) commonInit
+- (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
-    _isMotorType = [_vehicleParameter[@"name"] isEqualToString:@"motor_type"];
+}
 
-    _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
-    NSMutableArray *arr = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
-    if ([arr[0] isEqualToString:@"-"])
-        [arr replaceObjectAtIndex:0 withObject:OALocalizedString(_isMotorType ? @"shared_string_not_selected" : @"shared_string_none")];
-    _measurementRangeStringArr = [NSArray arrayWithArray:arr];
-    _selectedParameter = _vehicleParameter[@"selectedItem"];
-    NSString *valueString = _vehicleParameter[@"value"];
-    if ([_selectedParameter intValue] != -1)
+- (void)postInit
+{
+    if (_vehicleParameter)
     {
-        double vl = floorf(_measurementRangeValuesArr[_selectedParameter.intValue].doubleValue * 100 + 0.5) / 100;
-        NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
-        [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-        formatter.minimumIntegerDigits = 1;
-        formatter.minimumFractionDigits = 0;
-        formatter.maximumFractionDigits = 1;
-        formatter.decimalSeparator = kDot;
-        _measurementValue = [formatter stringFromNumber:@(vl)];
-    }
-    else
-    {
-        _measurementValue = [valueString substringToIndex:valueString.length - (valueString.length > 0)];
+        _isMotorType = [_vehicleParameter[@"name"] isEqualToString:@"motor_type"];
+
+        _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
+        NSMutableArray *arr = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
+        if ([arr[0] isEqualToString:@"-"])
+            [arr replaceObjectAtIndex:0 withObject:OALocalizedString(_isMotorType ? @"shared_string_not_selected" : @"shared_string_none")];
+        _measurementRangeStringArr = [NSArray arrayWithArray:arr];
+        _selectedParameter = _vehicleParameter[@"selectedItem"];
+        NSString *valueString = _vehicleParameter[@"value"];
+        if ([_selectedParameter intValue] != -1)
+        {
+            double vl = floorf(_measurementRangeValuesArr[_selectedParameter.intValue].doubleValue * 100 + 0.5) / 100;
+            NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+            [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+            formatter.minimumIntegerDigits = 1;
+            formatter.minimumFractionDigits = 0;
+            formatter.maximumFractionDigits = 1;
+            formatter.decimalSeparator = kDot;
+            _measurementValue = [formatter stringFromNumber:@(vl)];
+        }
+        else
+        {
+            _measurementValue = [valueString substringToIndex:valueString.length - (valueString.length > 0)];
+        }
     }
 }
 
-- (void) applyLocalization
+- (void)registerNotifications
 {
-    [super applyLocalization];
+    if (!_isMotorType)
+    {
+        [self addNotification:UIKeyboardWillShowNotification selector:@selector(keyboardWillShow:)];
+        [self addNotification:UIKeyboardWillHideNotification selector:@selector(keyboardWillHide:)];
+    }
+}
 
-    self.titleLabel.text = _vehicleParameter[@"title"];
+#pragma mark - Base UI
 
+- (NSString *)getTitle
+{
+    return _vehicleParameter[@"title"];
+}
+
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return _isMotorType ? nil : OALocalizedString(@"shared_string_cancel");
+}
+
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
+{
+    return _isMotorType ? nil : @[[self createRightNavbarButton:OALocalizedString(@"shared_string_done")
+                                                       iconName:nil
+                                                         action:@selector(onRightNavbarButtonPressed)
+                                                           menu:nil]];
+}
+
+- (NSString *)getTableHeaderDescription
+{
+    return [self getParameterDescription:_vehicleParameter[@"name"]];
+}
+
+- (void)setupTableHeaderView
+{
     if (_isMotorType)
     {
-        [self.cancelButton setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
-        self.cancelButton.tintColor = UIColorFromRGB(color_primary_purple);
-        [self.cancelButton setTitle:OALocalizedString(@"vehicle_parameters") forState:UIControlStateNormal];
-        self.cancelButton.titleEdgeInsets = UIEdgeInsetsMake(0., -10., 0., 0.);
+        [super setupTableHeaderView];
     }
     else
     {
-        [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-        [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
+        NSString *text = [self getTableHeaderDescription];
+        CGFloat textWidth = DeviceScreenWidth - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2;
+        CGFloat textHeight = [OAUtilities heightForHeaderViewText:text width:textWidth font:kHeaderDescriptionFontSmall lineSpacing:6.0];
+        
+        UIView *topImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, .5)];
+        topImageDivider.backgroundColor = UIColorFromRGB(color_tint_gray);
+        
+        UIImage *image = [UIImage imageNamed:[self getParameterImage:_vehicleParameter[@"name"]]];
+        CGFloat aspectRatio = MIN(DeviceScreenWidth, DeviceScreenHeight) / image.size.width;
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, image.size.height * aspectRatio)];
+        imageView.image = image;
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
+        
+        UIView *imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, DeviceScreenWidth, imageView.frame.size.height)];
+        imageBackgroundView.backgroundColor = UIColor.whiteColor;
+        
+        UIView *bottomImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., imageView.frame.origin.y + imageView.frame.size.height, DeviceScreenWidth, .5)];
+        bottomImageDivider.backgroundColor = UIColorFromRGB(color_tint_gray);
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kPaddingOnSideOfContent + [OAUtilities getLeftMargin], imageView.frame.size.height + 13., textWidth, textHeight)];
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.minimumLineHeight = 17.;
+        label.attributedText = [[NSAttributedString alloc] initWithString:text
+                                                               attributes:@{ NSParagraphStyleAttributeName : style,
+                                                                             NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer),
+                                                                             NSFontAttributeName : kHeaderDescriptionFontSmall,
+                                                                             NSBackgroundColorAttributeName : UIColor.clearColor }];
+        label.numberOfLines = 0;
+        label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        
+        CGFloat headerHeight = label.frame.origin.y + label.frame.size.height + 26.;
+        UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, headerHeight)];
+        [tableHeaderView addSubview:imageBackgroundView];
+        [tableHeaderView addSubview:imageView];
+        [tableHeaderView addSubview:topImageDivider];
+        [tableHeaderView addSubview:bottomImageDivider];
+        [tableHeaderView addSubview:label];
+        tableHeaderView.backgroundColor = UIColor.clearColor;
+        self.tableView.tableHeaderView = tableHeaderView;
     }
 }
+#pragma mark - UIViewContoller
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
 
-    [self.cancelButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
-    self.doneButton.hidden = _isMotorType;
-    self.subtitleLabel.hidden = _isMotorType;
-    [self setupNavBarHeight];
-
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
-
-    [self generateData];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    if (!_isMotorType)
-    {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    }
-}
+#pragma mark - Table data
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    if (!_isMotorType)
-    {
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-    }
-}
-
-- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self.tableView reloadData];
-        [self setupNavBarHeight];
-    } completion:nil];
-}
-
-- (void) setupNavBarHeight
-{
-    self.navBarHeightConstraint.constant = [self isModal] ? [OAUtilities isLandscape] ? defaultNavBarHeight : modalNavBarHeight : defaultNavBarHeight;
-}
-
-- (void) generateData
+- (void)generateData
 {
     NSString *parameter = _vehicleParameter[@"name"];
     NSMutableArray *tableData = [NSMutableArray array];
@@ -171,11 +195,6 @@
     }
     else
     {
-        NSMutableArray *otherArr = [NSMutableArray array];
-        [otherArr addObject:@{
-            @"type" : [OAOnlyImageViewCell getCellIdentifier],
-            @"icon" : [self getParameterImage:parameter],
-        }];
         [parametersArr addObject:@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : [self getMeasurementUnit:parameter],
@@ -186,31 +205,10 @@
             @"selectedValue" : _selectedParameter,
             @"values" : _measurementRangeStringArr,
         }];
-        [tableData addObject:otherArr];
     }
     [tableData addObject:parametersArr];
 
     _data = tableData;
-}
-
-- (BOOL) isBoat
-{
-    return [self.appMode.getRoutingProfile isEqualToString:@"boat"];
-}
-
-- (NSString *) getParameterImage:(NSString *)parameter
-{
-    if ([parameter isEqualToString:@"weight"])
-        return @"img_help_weight_limit_day";
-    else if ([parameter isEqualToString:@"height"])
-        return [self isBoat] ? @"img_help_vessel_height_day" : @"img_help_height_limit_day";
-    else if ([parameter isEqualToString:@"width"])
-        return  [self isBoat] ? @"img_help_vessel_width_day" : @"img_help_width_limit_day";
-    else if ([parameter isEqualToString:@"length"])
-        return @"img_help_length_limit_day";
-    else if ([parameter isEqualToString:@"motor_type"])
-        return @"ic_custom_fuel";
-    return @"";
 }
 
 - (NSString *) getMeasurementUnit:(NSString *)parameter
@@ -222,7 +220,123 @@
     return @"";
 }
 
-- (NSString *) getParameterDescription:(NSString *)parameter
+- (BOOL)hideFirstHeader
+{
+    return YES;
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return _data[section].count;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    NSString *cellType = item[@"type"];
+    if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
+    {
+        OAInputTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell clearButtonVisibility:NO];
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
+            [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
+            cell.inputField.keyboardType = UIKeyboardTypeDecimalPad;
+            cell.inputField.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.inputField.delegate = self;
+//            cell.inputField.userInteractionEnabled = NO;
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            cell.inputField.text = item[@"value"];
+        }
+        return cell;
+    }
+    else if ([cellType isEqualToString:[OAHorizontalCollectionViewCell getCellIdentifier]])
+    {
+        OAHorizontalCollectionViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAHorizontalCollectionViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAHorizontalCollectionViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAHorizontalCollectionViewCell *)[nib objectAtIndex:0];
+            cell.delegate = self;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        if (cell)
+        {
+            cell.dataArray = item[@"values"];
+            cell.selectedIndex = [item[@"selectedValue"] intValue];
+            [cell.collectionView reloadData];
+            [cell layoutIfNeeded];
+        }
+        return cell;
+    }
+    else if ([cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
+    {
+        OARightIconTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            [cell.rightIconView setHidden:YES];
+        }
+        if (cell)
+        {
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20., 0., 0.);
+            cell.titleLabel.text = _measurementRangeStringArr[indexPath.row];
+            if ([_selectedParameter isEqualToNumber:_measurementRangeValuesArr[indexPath.row]])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
+        return cell;
+    }
+    return nil;
+}
+
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
+
+- (void)onRowSelected:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    if ([item[@"type"] isEqualToString:[OAInputTableViewCell getCellIdentifier]])
+    {
+        OAInputTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        if (cell.inputField.isFirstResponder)
+        {
+            [cell.inputField resignFirstResponder];
+            cell.inputField.userInteractionEnabled = NO;
+        }
+        else
+        {
+            cell.inputField.userInteractionEnabled = YES;
+            [cell.inputField becomeFirstResponder];
+        }
+    }
+    else if ([item[@"type"] isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
+    {
+        _selectedParameter = [NSNumber numberWithInteger:indexPath.row];
+        _measurementValue = [self formattedSelectedValueStr:indexPath.row];
+        [self onRightNavbarButtonPressed];
+    }
+}
+
+#pragma mark - Additions
+
+- (BOOL)isBoat
+{
+    return [self.appMode.getRoutingProfile isEqualToString:@"boat"];
+}
+
+- (NSString *)getParameterDescription:(NSString *)parameter
 {
     if ([parameter isEqualToString:@"weight"])
         return OALocalizedString(@"weight_limit_description");
@@ -237,7 +351,36 @@
     return @"";
 }
 
-- (IBAction) doneButtonPressed:(id)sender
+- (NSString *)getParameterImage:(NSString *)parameter
+{
+    if ([parameter isEqualToString:@"weight"])
+        return @"img_help_weight_limit_day";
+    else if ([parameter isEqualToString:@"height"])
+        return [self isBoat] ? @"img_help_vessel_height_day" : @"img_help_height_limit_day";
+    else if ([parameter isEqualToString:@"width"])
+        return  [self isBoat] ? @"img_help_vessel_width_day" : @"img_help_width_limit_day";
+    else if ([parameter isEqualToString:@"length"])
+        return @"img_help_length_limit_day";
+    else if ([parameter isEqualToString:@"motor_type"])
+        return @"ic_custom_fuel";
+    return @"";
+}
+
+- (NSString *) formattedSelectedValueStr:(NSInteger)index
+{
+    double vl = floorf(_measurementRangeValuesArr[index].doubleValue * 10 + 0.5) / 10;
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    formatter.minimumIntegerDigits = 1;
+    formatter.minimumFractionDigits = 0;
+    formatter.maximumFractionDigits = 1;
+    formatter.decimalSeparator = kDot;
+    return [formatter stringFromNumber:@(vl)];
+}
+
+#pragma mark - Selectors
+
+- (void)onRightNavbarButtonPressed
 {
     NSString *systemDecimalSeparator = NSLocale.autoupdatingCurrentLocale.decimalSeparator;
     _measurementValue = [_measurementValue stringByReplacingOccurrencesOfString:systemDecimalSeparator withString:kDot];
@@ -265,159 +408,7 @@
         [[OARootViewController instance].mapPanel updateRouteInfoData];
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _data[section].count;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
-    NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OAOnlyImageViewCell getCellIdentifier]])
-    {
-        OAOnlyImageViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAOnlyImageViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAOnlyImageViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAOnlyImageViewCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        if (cell)
-        {
-            cell.imageView.image = [UIImage rtlImageNamed:item[@"icon"]];
-        }
-        return cell;
-    }
-    else if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
-    {
-        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAInputTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            [cell clearButtonVisibility:NO];
-            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
-            [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
-            cell.inputField.keyboardType = UIKeyboardTypeDecimalPad;
-            cell.inputField.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.inputField.delegate = self;
-            cell.inputField.userInteractionEnabled = NO;
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = item[@"title"];
-            cell.inputField.text = item[@"value"];
-        }
-        return cell;
-    }
-    else if ([cellType isEqualToString:[OAHorizontalCollectionViewCell getCellIdentifier]])
-    {
-        OAHorizontalCollectionViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAHorizontalCollectionViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAHorizontalCollectionViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAHorizontalCollectionViewCell *)[nib objectAtIndex:0];
-            cell.delegate = self;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        if (cell)
-        {
-            cell.dataArray = item[@"values"];
-            cell.selectedIndex = [item[@"selectedValue"] intValue];
-            [cell.collectionView reloadData];
-            [cell layoutIfNeeded];
-        }
-        return cell;
-    }
-    else if ([cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
-    {
-        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OARightIconTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
-            [cell.rightIconView setHidden:YES];
-        }
-        if (cell)
-        {
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20., 0., 0.);
-            cell.titleLabel.text = _measurementRangeStringArr[indexPath.row];
-            if ([_selectedParameter isEqualToNumber:_measurementRangeValuesArr[indexPath.row]])
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        }
-        return cell;
-    }
-    return nil;
-}
-
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    if (section == kDescriptionStringSection || (_isMotorType && section == 0))
-    {
-        NSString *parameter = _vehicleParameter[@"name"];
-        NSString *descriptionString = [self getParameterDescription:parameter];
-        CGFloat heightForHeader = [self heightForLabel:descriptionString];
-        UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(
-            0,
-            0.,
-            tableView.bounds.size.width - [OAUtilities getLeftMargin] * 2,
-            heightForHeader + (_isMotorType ? kTopPaddingMotorType : 0.))];
-        CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-        UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(
-            kSidePadding + [OAUtilities getLeftMargin],
-            _isMotorType ? kTopPaddingMotorType : 0.,
-            textWidth,
-            heightForHeader)];
-        UIFont *labelFont = [UIFont scaledSystemFontOfSize:_isMotorType ? 13. : 15.];
-        description.font = labelFont;
-        description.adjustsFontForContentSizeCategory = YES;
-        [description setTextColor: UIColorFromRGB(color_text_footer)];
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        [style setLineSpacing:6];
-        description.attributedText = [[NSAttributedString alloc] initWithString:descriptionString attributes:@{NSParagraphStyleAttributeName : style}];
-        description.numberOfLines = 0;
-        [vw addSubview:description];
-        return vw;
-    }
-    return nil;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    if (section == kDescriptionStringSection || (_isMotorType && section == 0))
-    {
-        NSString *parameter = _vehicleParameter[@"name"];
-        NSString *descriptionString = [self getParameterDescription:parameter];
-        CGFloat heightForHeader = [self heightForLabel:descriptionString];
-        return heightForHeader + (_isMotorType ? kTopPaddingMotorType + kBottomPaddingMotorType : 16.);
-    }
-    return 0.01;
-}
-
 #pragma mark - OAHorizontalCollectionViewCellDelegate
-
-- (NSString *) formattedSelectedValueStr:(NSInteger)index
-{
-    double vl = floorf(_measurementRangeValuesArr[index].doubleValue * 10 + 0.5) / 10;
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
-    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-    formatter.minimumIntegerDigits = 1;
-    formatter.minimumFractionDigits = 0;
-    formatter.maximumFractionDigits = 1;
-    formatter.decimalSeparator = kDot;
-    return [formatter stringFromNumber:@(vl)];
-}
 
 - (void) valueChanged:(NSInteger)newValueIndex
 {
@@ -426,32 +417,6 @@
     
     [self generateData];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1], [NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:[OAInputTableViewCell getCellIdentifier]])
-    {
-        OAInputTableViewCell *cell = (OAInputTableViewCell *) [tableView cellForRowAtIndexPath:indexPath];
-        if (cell.inputField.isFirstResponder)
-        {
-            [cell.inputField resignFirstResponder];
-            cell.inputField.userInteractionEnabled = NO;
-        }
-        else
-        {
-            cell.inputField.userInteractionEnabled = YES;
-            [cell.inputField becomeFirstResponder];
-        }
-    }
-    else if ([item[@"type"] isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
-    {
-        _selectedParameter = [NSNumber numberWithInteger:indexPath.row];
-        _measurementValue = [self formattedSelectedValueStr:indexPath.row];
-        [self doneButtonPressed:nil];
-    }
 }
 
 #pragma mark - UITextFieldDelegate

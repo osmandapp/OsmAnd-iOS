@@ -10,7 +10,7 @@
 #import "Localization.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OsmAndApp.h"
-#import "OASettingsTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
 #import "OAIAPHelper.h"
@@ -109,7 +109,7 @@ static const NSInteger groupCount = 1;
     if (_settingsScreen == ELiveSettingsScreenMain)
     {
         _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 55.0)];
-        NSDictionary *attrs = @{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:16.0],
+        NSDictionary *attrs = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleCallout],
                                  NSForegroundColorAttributeName : [UIColor whiteColor] };
         NSAttributedString *text = [[NSAttributedString alloc] initWithString:OALocalizedString(@"update_now") attributes:attrs];
         UIButton *updateNow = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -192,8 +192,7 @@ static const NSInteger groupCount = 1;
                @"name" : @"update_frequency",
                @"title" : OALocalizedString(@"update_frequency"),
                @"value" : [OAOsmAndLiveHelper getFrequencyString:_updatingFrequency],
-               @"img" : @"menu_cell_pointer.png",
-               @"type" : [OASettingsTableViewCell getCellIdentifier] }
+               @"type" : [OAValueTableViewCell getCellIdentifier] }
              ];
             
             [dataArr addObject:
@@ -202,7 +201,7 @@ static const NSInteger groupCount = 1;
                @"title" : OALocalizedString(@"osmand_live_updates_size"),
                @"value" : [NSByteCountFormatter stringFromByteCount:_app.resourcesManager->changesManager->getUpdatesSize(_regionName)
                                                          countStyle:NSByteCountFormatterCountStyleFile],
-               @"type" : [OASettingsTableViewCell getCellIdentifier] }
+               @"type" : [OAValueTableViewCell getCellIdentifier] }
              ];
             
             _data = [NSArray arrayWithArray:dataArr];
@@ -304,21 +303,26 @@ static const NSInteger groupCount = 1;
         }
         return cell;
     }
-    else if ([type isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
+    else if ([type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OASettingsTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        OAValueTableViewCell* cell = nil;
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         
         if (cell)
         {
-            [cell.textView setText: item[@"title"]];
-            [cell.descriptionView setText: item[@"value"]];
-            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            [cell.titleLabel setText: item[@"title"]];
+            [cell.valueLabel setText: item[@"value"]];
+            if ([item[@"name"] isEqualToString:@"update_frequency"])
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            else
+                cell.accessoryType = UITableViewCellAccessoryNone;
         }
         return cell;
     }

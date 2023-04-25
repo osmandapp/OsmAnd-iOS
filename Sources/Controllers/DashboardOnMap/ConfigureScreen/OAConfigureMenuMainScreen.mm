@@ -14,7 +14,6 @@
 #import "OAMapWidgetRegistry.h"
 #import "OARootViewController.h"
 #import "OASwitchTableViewCell.h"
-#import "OASettingsTableViewCell.h"
 #import "OAMapHudViewController.h"
 #import "OAQuickActionHudViewController.h"
 #import "OAQuickActionListViewController.h"
@@ -146,9 +145,9 @@
     
     EOADistanceIndicationConstant distanceIndication = [_settings.distanceIndication get];
     NSString *markersAppeareance = distanceIndication == WIDGET_DISPLAY ? OALocalizedString(@"shared_string_widgets") : OALocalizedString(@"shared_string_topbar") ;
-    [controlsList addObject:@{ @"type" : [OASettingsTableViewCell getCellIdentifier],
+    [controlsList addObject:@{ @"type" : [OAValueTableViewCell getCellIdentifier],
                                @"title" : OALocalizedString(@"map_markers"),
-                               @"value" : markersAppeareance,
+                               @"description" : markersAppeareance,
                                @"key" : @"map_markers"}];
     
     [controlsList addObject:@{ @"title" : OALocalizedString(@"show_lanes"),
@@ -373,25 +372,6 @@
         }
         outCell = cell;
     }
-    else if ([data[@"type"] isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
-    {
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-            cell.descriptionView.font = [UIFont scaledSystemFontOfSize:17.0];
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-        }
-        if (cell)
-        {
-            cell.textView.text = data[@"title"];
-            cell.descriptionView.text = data[@"value"];
-        }
-        return cell;
-    }
     else if ([data[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
         OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
@@ -427,6 +407,7 @@
         {
             cell.titleLabel.text = data[@"title"];
             cell.valueLabel.text = data[@"description"];
+            [cell leftIconVisibility:![data[@"key"] isEqualToString:@"map_markers"]];
             cell.leftIconView.image = [UIImage rtlImageNamed:imgName];
             cell.leftIconView.contentMode = UIViewContentModeCenter;
         }
@@ -440,7 +421,7 @@
     NSString *imgName = data[@"img"];
     if (imgName)
     {
-        if ([imgName hasPrefix:@"widget_developer"] || [data[@"key"] hasPrefix:@"coordinates_widget"])
+        if ([imgName hasPrefix:@"widget_developer"] || [data[@"key"] hasPrefix:@"coordinates_widget"]  || [data[@"key"] hasPrefix:@"monitoring"] || [data[@"key"] hasPrefix:@"trip_recording"] || [data[@"key"] hasPrefix:@"altitude"])
         {
             cell.leftIconView.image = [UIImage rtlImageNamed:imgName];
             cell.leftIconView.contentMode = UIViewContentModeCenter;

@@ -25,7 +25,7 @@
 {
     [super awakeFromNib];
     // Initialization code
-    self.descriptionView.font = [UIFont scaledSystemFontOfSize:15.];
+    self.descriptionView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

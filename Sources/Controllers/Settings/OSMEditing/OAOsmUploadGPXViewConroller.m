@@ -33,6 +33,7 @@
 #define kDefaultTag @"osmand"
 #define kDescriptionTextFieldTag 0
 #define kTagsTextFieldsTag 1
+#define kUploadingValueCell @"kUploadingValueCell"
 
 typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     EOAOsmUploadGPXViewConrollerModeInitial = 0,
@@ -213,6 +214,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         uploadingSection.headerText = @" ";
         OATableRowData *progressValueCell = [uploadingSection createNewRow];
         [progressValueCell setCellType:[OAValueTableViewCell getCellIdentifier]];
+        [progressValueCell setKey:kUploadingValueCell];
         OATableRowData *progressBarCell = [uploadingSection createNewRow];
         [progressBarCell setCellType:[OAProgressBarCell getCellIdentifier]];
     }
@@ -223,13 +225,13 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         OATableRowData *titleRow = [section createNewRow];
         [titleRow setCellType:[OATextMultilineTableViewCell getCellIdentifier]];
         [titleRow setTitle: OALocalizedString(@"osm_upload_failed_title")];
-        [titleRow setObj:[UIFont scaledSystemFontOfSize:17]
+        [titleRow setObj:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]
              forKey:@"font"];
         
         OATableRowData *descrRow = [section createNewRow];
         [descrRow setCellType:[OATextMultilineTableViewCell getCellIdentifier]];
         [descrRow setTitle: OALocalizedString(@"osm_upload_failed_descr")];
-        [descrRow setObj:[UIFont scaledSystemFontOfSize:15]
+        [descrRow setObj:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]
              forKey:@"font"];
     }
     else if (_mode == EOAOsmUploadGPXViewConrollerModeNoInternet)
@@ -239,13 +241,13 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         OATableRowData *titleRow = [section createNewRow];
         [titleRow setCellType:[OATextMultilineTableViewCell getCellIdentifier]];
         [titleRow setTitle: OALocalizedString(@"no_internet_avail")];
-        [titleRow setObj:[UIFont scaledSystemFontOfSize:17]
+        [titleRow setObj:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]
              forKey:@"font"];
         
         OATableRowData *descrRow = [section createNewRow];
         [descrRow setCellType:[OATextMultilineTableViewCell getCellIdentifier]];
         [descrRow setTitle: OALocalizedString(@"osm_upload_no_internet")];
-        [descrRow setObj:[UIFont scaledSystemFontOfSize:15]
+        [descrRow setObj:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]
              forKey:@"font"];
     }
 }
@@ -347,6 +349,10 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     }
     else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
+        NSString *key = [item key];
+        if (key && [key isEqualToString:kUploadingValueCell])
+            return _progressValueCell;
+            
         OAValueTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
@@ -409,10 +415,6 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     else if ([cellType isEqualToString:[OAProgressBarCell getCellIdentifier]])
     {
         return _progressBarCell;
-    }
-    else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
-    {
-        return _progressValueCell;
     }
     return nil;
 }
@@ -623,7 +625,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     if (_isLogged)
     {
         OAMappersViewController *benefitsViewController = [[OAMappersViewController alloc] init];
-        [self presentViewController:benefitsViewController animated:YES completion:nil];
+        [self showModalViewController:benefitsViewController];
     }
 }
 

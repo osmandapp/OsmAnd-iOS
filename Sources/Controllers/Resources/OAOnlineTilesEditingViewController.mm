@@ -11,7 +11,6 @@
 #import "OASQLiteTileSource.h"
 #import "OAColors.h"
 #import "OAValueTableViewCell.h"
-#import "OASettingsTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
 #import "OAInputTableViewCell.h"
 #import "OATextMultilineTableViewCell.h"
@@ -263,13 +262,13 @@
     
     [tableData addObject:@{
         @"title": OALocalizedString(@"res_mercator"),
-        @"type" : [OASettingsTableViewCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"key" : @"mercator_sett"
     }];
     
     [tableData addObject:@{
         @"title": OALocalizedString(@"res_source_format"),
-        @"type" : [OASettingsTableViewCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"key" : @"format_sett"
     }];
     _data = [NSArray arrayWithArray:tableData];
@@ -831,42 +830,10 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
-    {
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-        }
-
-        if (cell) {
-            [cell.textView setText:item[@"title"]];
-            NSString *key = item[@"key"];
-            if ([key isEqualToString:@"mercator_sett"])
-            {
-                cell.descriptionView.text = _isEllipticYTile ? OALocalizedString(@"edit_tilesource_elliptic_tile") : OALocalizedString(@"pseudo_mercator_projection");
-            }
-            else if ([key isEqualToString:@"format_sett"])
-            {
-                cell.descriptionView.text = [self getFormatString:_sourceFormat];
-                if ([self isOfflineSQLiteDB])
-                {
-                    cell.userInteractionEnabled = NO;
-                    cell.textView.textColor = [UIColor lightGrayColor];
-                }
-                else
-                {
-                    cell.userInteractionEnabled = YES;
-                    cell.textView.textColor = [UIColor blackColor];
-                }
-            }
-        }
-        return cell;
-    }
 
     else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
+        NSString *key = item[@"key"];
         OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
@@ -874,18 +841,49 @@
             cell = (OAValueTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.valueLabel.textColor = UIColor.blackColor;
         }
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            if ([item[@"key"] isEqualToString:@"minZoom"])
-                cell.valueLabel.text = [NSString stringWithFormat:@"%d", _minZoom];
-            else if ([item[@"key"] isEqualToString:@"maxZoom"])
-                cell.valueLabel.text = [NSString stringWithFormat:@"%d", _maxZoom];
-            else
-                cell.valueLabel.text = @"";
+            
+            if ([key isEqualToString:@"minZoom"] || [key isEqualToString:@"maxZoom"])
+            {
+                if ([key isEqualToString:@"minZoom"])
+                    cell.valueLabel.text = [NSString stringWithFormat:@"%d", _minZoom];
+                else if ([key isEqualToString:@"maxZoom"])
+                    cell.valueLabel.text = [NSString stringWithFormat:@"%d", _maxZoom];
+                else
+                    cell.valueLabel.text = @"";
+                
+                cell.valueLabel.textColor = UIColor.blackColor;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.accessoryType = UITableViewCellAccessoryNone;
+            }
+            else if ([key isEqualToString:@"mercator_sett"] || [key isEqualToString:@"format_sett"])
+            {
+                if ([key isEqualToString:@"mercator_sett"])
+                {
+                    cell.valueLabel.text = _isEllipticYTile ? OALocalizedString(@"edit_tilesource_elliptic_tile") : OALocalizedString(@"pseudo_mercator_projection");
+                }
+                else if ([key isEqualToString:@"format_sett"])
+                {
+                    cell.valueLabel.text = [self getFormatString:_sourceFormat];
+                    if ([self isOfflineSQLiteDB])
+                    {
+                        cell.userInteractionEnabled = NO;
+                        cell.titleLabel.textColor = [UIColor lightGrayColor];
+                    }
+                    else
+                    {
+                        cell.userInteractionEnabled = YES;
+                        cell.titleLabel.textColor = [UIColor blackColor];
+                    }
+                }
+                
+                cell.valueLabel.textColor = UIColor.lightGrayColor;
+                cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            }
         }
         return cell;
     }
@@ -913,39 +911,42 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item =  [self getItem:indexPath];
+    NSString *key = item[@"key"];
     if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        [self.tableView beginUpdates];
-
-        if ([self pickerIsShown] && (_pickerIndexPath.row - 1 == indexPath.row))
-            [self hideExistingPicker];
+        if ([key isEqualToString:@"mercator_sett"] || [key isEqualToString:@"format_sett"])
+        {
+            OAOnlineTilesSettingsViewController *settingsViewController;
+            if ([key isEqualToString:@"mercator_sett"])
+                settingsViewController = [[OAOnlineTilesSettingsViewController alloc] initWithEllipticYTile:_isEllipticYTile];
+            else if ([key isEqualToString:@"format_sett"])
+                settingsViewController = [[OAOnlineTilesSettingsViewController alloc] initWithSourceFormat:_sourceFormat];
+            
+            settingsViewController.delegate = self;
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            [self hidePicker];
+            [self.navigationController pushViewController:settingsViewController animated:YES];
+        }
         else
         {
-            NSIndexPath *newPickerIndexPath = [self calculateIndexPathForNewPicker:indexPath];
-            if ([self pickerIsShown])
+            [self.tableView beginUpdates];
+            
+            if ([self pickerIsShown] && (_pickerIndexPath.row - 1 == indexPath.row))
                 [self hideExistingPicker];
-
-            [self showNewPickerAtIndex:newPickerIndexPath];
-            _pickerIndexPath = [NSIndexPath indexPathForRow:newPickerIndexPath.row + 1 inSection:indexPath.section];
+            else
+            {
+                NSIndexPath *newPickerIndexPath = [self calculateIndexPathForNewPicker:indexPath];
+                if ([self pickerIsShown])
+                    [self hideExistingPicker];
+                
+                [self showNewPickerAtIndex:newPickerIndexPath];
+                _pickerIndexPath = [NSIndexPath indexPathForRow:newPickerIndexPath.row + 1 inSection:indexPath.section];
+            }
+            
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+            [self.tableView endUpdates];
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
         }
-
-        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-        [self.tableView endUpdates];
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-    }
-    else if ([item[@"type"] isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
-    {
-        OAOnlineTilesSettingsViewController *settingsViewController;
-        NSString *key = item[@"key"];
-        if ([key isEqualToString:@"mercator_sett"])
-            settingsViewController = [[OAOnlineTilesSettingsViewController alloc] initWithEllipticYTile:_isEllipticYTile];
-        else if ([key isEqualToString:@"format_sett"])
-            settingsViewController = [[OAOnlineTilesSettingsViewController alloc] initWithSourceFormat:_sourceFormat];
-        
-        settingsViewController.delegate = self;
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
-        [self hidePicker];
-        [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([item[@"type"] isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {

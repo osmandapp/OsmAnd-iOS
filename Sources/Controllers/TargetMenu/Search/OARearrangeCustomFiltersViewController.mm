@@ -75,7 +75,7 @@
 
 @end
 
-@interface OARearrangeCustomFiltersViewController() <UITableViewDelegate, UITableViewDataSource>
+@interface OARearrangeCustomFiltersViewController() <UITableViewDelegate, UITableViewDataSource, OATableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -197,14 +197,6 @@
     return filterItem;
 }
 
-- (IBAction)onCancelButtonClicked:(id)sender
-{
-    if (_isChanged)
-        [self showChangesAlert];
-    else
-        [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (IBAction)onDoneButtonClicked:(id)sender
 {
     if (_isChanged)
@@ -238,17 +230,6 @@
     }
     [[OAQuickSearchHelper instance] refreshCustomPoiFilters];
     [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)onRowButtonClicked:(UIButton *)sender
-{
-    _isChanged = YES;
-    _hiddenModified = YES;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
-    if (indexPath.section == kAllFiltersSection)
-        [self hideMode:indexPath];
-    else if (indexPath.section == kHiddenFiltersSection)
-        [self restoreMode:indexPath];
 }
 
 - (void)hideMode:(NSIndexPath *)indexPath
@@ -320,6 +301,7 @@
             cell = (OASimpleTableViewCell *) nib[0];
             [cell leftEditButtonVisibility:YES];
             [cell descriptionVisibility:NO];
+            cell.delegate = self;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.leftIconView.contentMode = UIViewContentModeCenter;
@@ -345,7 +327,7 @@
             [cell.leftEditButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
             cell.leftEditButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.leftEditButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.leftEditButton addTarget:self action:@selector(onRowButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.leftEditButton addTarget:self action:@selector(onEditButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         return cell;
     }
@@ -474,6 +456,34 @@
     if (proposedDestinationIndexPath.section != kAllFiltersSection)
         return sourceIndexPath;
     return proposedDestinationIndexPath;
+}
+
+#pragma mark - Selectors
+
+- (void)onLeftNavbarButtonPressed
+{
+    if (_isChanged)
+        [self showChangesAlert];
+    else
+        [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)onEditButtonPressed:(UIButton *)sender
+{
+    [self onLeftEditButtonPressed:sender.tag];
+}
+
+#pragma mark - OATableViewCellDelegate
+
+- (void)onLeftEditButtonPressed:(NSInteger)tag
+{
+    _isChanged = YES;
+    _hiddenModified = YES;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:tag & 0x3FF inSection:tag >> 10];
+    if (indexPath.section == kAllFiltersSection)
+        [self hideMode:indexPath];
+    else if (indexPath.section == kHiddenFiltersSection)
+        [self restoreMode:indexPath];
 }
 
 @end

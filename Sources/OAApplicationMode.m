@@ -42,6 +42,7 @@ static OAApplicationMode *_DEFAULT;
 static OAApplicationMode *_CAR;
 static OAApplicationMode *_BICYCLE;
 static OAApplicationMode *_PUBLIC_TRANSPORT;
+static OAApplicationMode *_TRAIN;
 static OAApplicationMode *_PEDESTRIAN;
 static OAApplicationMode *_AIRCRAFT;
 static OAApplicationMode *_TRUCK;
@@ -53,13 +54,13 @@ static OAApplicationMode *_HORSE;
 
 + (void)initRegVisibility
 {
-    NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _BICYCLE, _PEDESTRIAN, _PUBLIC_TRANSPORT, _BOAT, _AIRCRAFT, _SKI, _TRUCK, _MOTORCYCLE, _MOPED, _HORSE];
+    NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _BICYCLE, _PEDESTRIAN, _PUBLIC_TRANSPORT, _TRAIN, _BOAT, _AIRCRAFT, _SKI, _TRUCK, _MOTORCYCLE, _MOPED, _HORSE];
     
     NSArray<OAApplicationMode *> *all = nil;
     NSArray<OAApplicationMode *> *none = @[];
     
     NSArray<OAApplicationMode *> *navigationSet1 = @[_CAR, _BICYCLE, _BOAT, _SKI, _TRUCK, _MOTORCYCLE, _MOPED, _HORSE];
-    NSArray<OAApplicationMode *> *navigationSet2 = @[_PEDESTRIAN, _PUBLIC_TRANSPORT, _AIRCRAFT];
+    NSArray<OAApplicationMode *> *navigationSet2 = @[_PEDESTRIAN, _PUBLIC_TRANSPORT, _TRAIN, _AIRCRAFT];
     
     // left
     [self regWidgetVisibility:@"next_turn" am:navigationSet1];;
@@ -74,7 +75,7 @@ static OAApplicationMode *_HORSE;
     [self regWidgetVisibility:@"distance" am:all];
     [self regWidgetVisibility:@"time" am:all];
     [self regWidgetVisibility:@"intermediate_time" am:all];
-    [self regWidgetVisibility:@"speed" am:@[_CAR, _BICYCLE, _BOAT, _SKI, _PUBLIC_TRANSPORT, _AIRCRAFT, _TRUCK, _MOTORCYCLE, _MOPED, _HORSE]];
+    [self regWidgetVisibility:@"speed" am:@[_CAR, _BICYCLE, _BOAT, _SKI, _PUBLIC_TRANSPORT, _TRAIN, _AIRCRAFT, _TRUCK, _MOTORCYCLE, _MOPED, _HORSE]];
     [self regWidgetVisibility:@"max_speed" am:@[_CAR, _TRUCK, _MOTORCYCLE, _MOPED]];
     [self regWidgetVisibility:@"altitude" am:@[_PEDESTRIAN, _BICYCLE]];
     [self regWidgetVisibility:@"gps_info" am:none];
@@ -126,6 +127,10 @@ static OAApplicationMode *_HORSE;
     _PUBLIC_TRANSPORT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"poi_filter_public_transport") stringKey:@"public_transport"];
     _PUBLIC_TRANSPORT.descr = OALocalizedString(@"base_profile_descr_public_transport");
     [_PUBLIC_TRANSPORT reg];
+    
+    _TRAIN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_train") stringKey:@"train"];
+    _TRAIN.descr = OALocalizedString(@"app_mode_train");
+    [_TRAIN reg];
     
     _AIRCRAFT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_aircraft") stringKey:@"aircraft"];
     _AIRCRAFT.descr = OALocalizedString(@"base_profile_descr_aircraft");
@@ -212,6 +217,11 @@ static OAApplicationMode *_HORSE;
     return _PUBLIC_TRANSPORT;
 }
 
++ (OAApplicationMode *) TRAIN;
+{
+    return _TRAIN;
+}
+
 + (OAApplicationMode *) SKI
 {
     return _SKI;
@@ -289,7 +299,7 @@ static OAApplicationMode *_HORSE;
 
 + (OAApplicationMode *) getFirstAvailableNavigationMode
 {
-    for (OAApplicationMode *mode in _values)
+    for (OAApplicationMode *mode in self.values)
     {
         if (mode != self.DEFAULT)
             return mode;
@@ -634,6 +644,8 @@ static OAApplicationMode *_HORSE;
 + (void) initModesParams
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
+    if ([settings.appModeOrder isSetForMode:_PUBLIC_TRANSPORT] && ![settings.appModeOrder isSetForMode:_TRAIN])
+        [_TRAIN setOrder:_PUBLIC_TRANSPORT.getOrder + 1];
     if ([settings.appModeOrder isSetForMode:_PEDESTRIAN])
     {
         if (![settings.appModeOrder isSetForMode:_TRUCK])

@@ -59,11 +59,15 @@
 #import "OAMapHudViewController.h"
 #import "OAOsmUploadGPXViewConroller.h"
 #import "OANetworkRouteDrawable.h"
+#import "OATrackMenuTabSegments.h"
 
 #import <Charts/Charts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
 
 #define kGpxDescriptionImageHeight 149
+#define kOverviewTabIndex @0
+#define kAltutudeTabIndex @1
+#define kSpeedTabIndex @2
 
 @implementation OATrackMenuViewControllerState
 
@@ -221,6 +225,40 @@
     self.groupsButton.titleEdgeInsets = UIEdgeInsetsMake(0., isRTL ? -4. : 0., 0., isRTL ? 0. : -4.);
     self.groupsButton.imageEdgeInsets = UIEdgeInsetsMake(0., isRTL ? 10. : -4., 0., isRTL ? -4. : 10.);
     [self updateGroupsButton];
+   
+    if (_selectedTab == EOATrackMenuHudSegmentsTab)
+        [self selectTabOnLaunch:_reopeningState.selectedStatisticsTab];
+}
+
+- (void) selectTabOnLaunch:(EOATrackMenuHudSegmentsStatisticsTab)selectedStatisticsTab
+{
+    NSNumber *tabIndex = kOverviewTabIndex;
+    if (selectedStatisticsTab == EOATrackMenuHudSegmentsStatisticsOverviewTab)
+        tabIndex = kOverviewTabIndex;
+    else if (selectedStatisticsTab == EOATrackMenuHudSegmentsStatisticsAlititudeTab)
+        tabIndex = kAltutudeTabIndex;
+    else if (selectedStatisticsTab == EOATrackMenuHudSegmentsStatisticsAlititudeTab)
+        tabIndex = kSpeedTabIndex;
+    
+    if (_tableData && _tableData.subjects.count > 0)
+    {
+        for (OAGPXTableSectionData *sectionData in _tableData.subjects)
+        {
+            if (sectionData.subjects.count > 0)
+            {
+                for (OAGPXTableCellData *cellData in sectionData.subjects)
+                {
+                    if ([cellData.type isEqualToString:[OASegmentTableViewCell getCellIdentifier]])
+                    {
+                        cellData.values[@"selected_index_int_value"] = tabIndex;
+                        [_uiBuilder updateData:cellData];
+                        [self.tableView reloadData];
+                        break;
+                    }
+                }
+            }
+        }
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -298,6 +336,28 @@
     [super viewWillDisappear:animated];
     _exportController = nil;
     _isViewVisible = YES;
+}
+
+- (void)hide
+{
+    [self hide:YES duration:.2 onComplete:^{
+        [self.mapViewController hideContextPinMarker];
+
+        if (![self openedFromMap])
+        {
+            UITabBarController *myPlacesViewController =
+                    [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+            [myPlacesViewController setSelectedIndex:1];
+
+            OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
+            if (gpxController == nil)
+                return;
+
+            [gpxController setShouldPopToParent:YES];
+
+            [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
+        }
+    }];
 }
 
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
@@ -843,24 +903,7 @@
 
 - (IBAction)onBackButtonPressed:(id)sender
 {
-    [self hide:YES duration:.2 onComplete:^{
-        [self.mapViewController hideContextPinMarker];
-
-        if (![self openedFromMap])
-        {
-            UITabBarController *myPlacesViewController =
-                    [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-            [myPlacesViewController setSelectedIndex:1];
-
-            OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
-            if (gpxController == nil)
-                return;
-
-            [gpxController setShouldPopToParent:YES];
-
-            [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
-        }
-    }];
+    [self hide];
 }
 
 - (IBAction)onGroupsButtonPressed:(id)sender
@@ -1655,7 +1698,6 @@
 - (void) openUploadGpxToOSM
 {
     OAOsmUploadGPXViewConroller *vc = [[OAOsmUploadGPXViewConroller alloc] initWithGPXItems:@[self.gpx]];
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -1935,7 +1977,7 @@
             UIColor *tintColor = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
 
             cell.textView.font = [cellData.values.allKeys containsObject:@"font_value"]
-                    ? cellData.values[@"font_value"] : [UIFont scaledSystemFontOfSize:17.];
+                    ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
             cell.selectionStyle = cellData.toggle ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             cell.textView.text = cellData.title;
@@ -2004,7 +2046,7 @@
         if (cell)
         {
             cell.titleView.font = [cellData.values.allKeys containsObject:@"font_value"]
-                    ? cellData.values[@"font_value"] : [UIFont scaledSystemFontOfSize:17];
+                    ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.titleView.text = cellData.title;
             cell.textColorNormal = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
 

@@ -41,7 +41,7 @@
 
 - (CGFloat)initialHeight
 {
-    return OAUtilities.getBottomMargin + 75. + [OAUtilities calculateTextBounds:OALocalizedString(@"route_between_points_warning_desc") width:DeviceScreenWidth font:[UIFont scaledSystemFontOfSize:15.]].height + 16. + self.headerView.frame.size.height + 60.;
+    return OAUtilities.getBottomMargin + 75. + [OAUtilities calculateTextBounds:OALocalizedString(@"route_between_points_warning_desc") width:DeviceScreenWidth font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height + 16. + self.headerView.frame.size.height + 60.;
 }
 
 - (void)onRightButtonPressed

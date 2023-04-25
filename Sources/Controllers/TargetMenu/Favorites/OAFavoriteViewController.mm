@@ -233,7 +233,7 @@
         NSString *address = [@"\n\n" stringByAppendingString:[self.favorite getAddress]];
         [mutAttributedTypeStr appendAttributedString:[[NSAttributedString alloc] initWithString:address]];
     }
-    [mutAttributedTypeStr addAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:15],
+    [mutAttributedTypeStr addAttributes:@{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
                                            NSForegroundColorAttributeName : UIColorFromRGB(color_dialog_text_description_color_night) }
                                   range:NSMakeRange(0, mutAttributedTypeStr.length)];
     return mutAttributedTypeStr;

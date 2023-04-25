@@ -7,7 +7,7 @@
 //
 
 #import "OAMapBehaviorViewController.h"
-#import "OASettingsTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAAutoCenterMapViewController.h"
 #import "OAAutoZoomMapViewController.h"
@@ -69,12 +69,12 @@
     }
 
     NSMutableArray *dataArr = [NSMutableArray arrayWithObjects:@{
-                                    @"type" : [OASettingsTableViewCell getCellIdentifier],
+                                    @"type" : [OAValueTableViewCell getCellIdentifier],
                                     @"title" : OALocalizedString(@"choose_auto_follow_route"),
                                     @"value" : autoCenterValue,
                                     @"key" : @"autoCenter"},
                                 @{
-                                    @"type" : [OASettingsTableViewCell getCellIdentifier],
+                                    @"type" : [OAValueTableViewCell getCellIdentifier],
                                     @"title" : OALocalizedString(@"auto_zoom_map"),
                                     @"value" : autoZoomValue,
                                     @"key" : @"autoZoom",
@@ -108,21 +108,21 @@
 {
     NSDictionary *item = _data[indexPath.section];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OASettingsTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        OAValueTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = item[@"value"];
+            cell.titleLabel.text = item[@"title"];
+            cell.valueLabel.text = item[@"value"];
         }
         return cell;
     }

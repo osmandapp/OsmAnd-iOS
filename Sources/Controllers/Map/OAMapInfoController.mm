@@ -41,6 +41,7 @@
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OASunriseSunsetWidget.h"
 #import "OASunriseSunsetWidgetState.h"
+#import "OAAltitudeWidget.h"
 
 @interface OATextState : NSObject
 
@@ -650,7 +651,12 @@
 
 - (OAMapWidgetRegInfo *) registerSideWidget:(OATextInfoWidget *)widget imageId:(NSString *)imageId message:(NSString *)message key:(NSString *)key left:(BOOL)left priorityOrder:(int)priorityOrder
 {
-    OAMapWidgetRegInfo *reg = [_mapWidgetRegistry registerSideWidgetInternal:widget imageId:imageId message:message key:key left:left priorityOrder:priorityOrder];
+    return [self registerSideWidget:widget imageId:imageId message:message description:nil key:key left:left priorityOrder:priorityOrder];
+}
+
+- (OAMapWidgetRegInfo *) registerSideWidget:(OATextInfoWidget *)widget imageId:(NSString *)imageId message:(NSString *)message description:(NSString *)description key:(NSString *)key left:(BOOL)left priorityOrder:(int)priorityOrder
+{
+    OAMapWidgetRegInfo *reg = [_mapWidgetRegistry registerSideWidgetInternal:widget imageId:imageId message:message description:description key:key left:left priorityOrder:priorityOrder];
     [self updateReg:[self calculateTextState] reg:reg];
     return reg;
 }
@@ -740,16 +746,17 @@
     [self registerSideWidget:bearing widgetState:[[OABearingWidgetState alloc] init] key:@"bearing" left:NO priorityOrder:17];
     
     OATextInfoWidget *marker = [ric createMapMarkerControl:YES];
-    [self registerSideWidget:marker imageId:@"widget_marker_day" message:OALocalizedString(@"widget_marker") key:@"map_marker_1st" left:NO priorityOrder:18];
+    [self registerSideWidget:marker imageId:@"widget_marker_day" message:OALocalizedString(@"map_marker") key:@"map_marker_1st" left:NO priorityOrder:18];
     OATextInfoWidget *marker2nd = [ric createMapMarkerControl:NO];
-    [self registerSideWidget:marker2nd imageId:@"widget_marker_day" message:OALocalizedString(@"widget_marker2") key:@"map_marker_2nd" left:NO priorityOrder:19];
+    [self registerSideWidget:marker2nd imageId:@"widget_marker_day" message:OALocalizedString(@"map_marker") key:@"map_marker_2nd" left:NO priorityOrder:19];
     
     OATextInfoWidget *speed = [ric createSpeedControl];
     [self registerSideWidget:speed imageId:@"ic_action_speed" message:OALocalizedString(@"shared_string_speed") key:@"speed" left:false priorityOrder:20];
     OATextInfoWidget *maxspeed = [ric createMaxSpeedControl];
     [self registerSideWidget:maxspeed imageId:@"ic_action_speed_limit" message:OALocalizedString(@"map_widget_max_speed") key:@"max_speed" left:false priorityOrder:21];
-    OATextInfoWidget *alt = [mic createAltitudeControl];
-    [self registerSideWidget:alt imageId:@"ic_action_altitude" message:OALocalizedString(@"altitude") key:@"altitude" left:false priorityOrder:23];
+
+    OAAltitudeWidget *altitudeWidgetMyLocation = [[OAAltitudeWidget alloc] initWithType:EOAAltitudeWidgetTypeMyLocation];
+    [self registerSideWidget:altitudeWidgetMyLocation imageId:@"widget_altitude_location_day" message:OALocalizedString(@"map_widget_altitude_current_location") description:OALocalizedString(@"altitude_widget_desc") key:@"altitude" left:NO priorityOrder:23];
 
     OATextInfoWidget *plainTime = [ric createPlainTimeControl];
     [self registerSideWidget:plainTime imageId:@"ic_action_time" message:OALocalizedString(@"map_widget_plain_time") key:@"plain_time" left:false priorityOrder:41];

@@ -116,12 +116,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
         : [_group getText];
 }
 
-- (EOABaseNavbarStyle)getNavbarStyle
-{
-    return _isGoodsRestrictionsCategory ? EOABaseNavbarStyleDescription : EOABaseNavbarStyleSimple;
-}
-
-- (NSString *)getCustomTableViewDescription
+- (NSString *)getTableHeaderDescription
 {
     return _isGoodsRestrictionsCategory ? OALocalizedString(@"road_speeds_descr") : @"";
 }
@@ -272,7 +267,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
 
     OATableViewCustomFooterView *vw =
             [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    UIFont *textFont = [UIFont scaledSystemFontOfSize:13];
+    UIFont *textFont = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
             NSFontAttributeName: textFont,
             NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)

@@ -465,7 +465,7 @@
     UIColor *iconColor = color ? color : UIColorFromRGB(0x808080);
     
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
-    UIFont *font = [UIFont scaledSystemFontOfSize:15.0];
+    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
     
     NSMutableAttributedString *stringGroup = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", group]];
     NSTextAttachment *groupAttachment = [[NSTextAttachment alloc] init];

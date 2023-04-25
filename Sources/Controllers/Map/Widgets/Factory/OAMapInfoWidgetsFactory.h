@@ -13,7 +13,6 @@
 
 @interface OAMapInfoWidgetsFactory : NSObject
 
-- (OATextInfoWidget *) createAltitudeControl;
 - (OATextInfoWidget *) createRulerControl;
 - (OATextInfoWidget *) createWeatherControl:(EOAWeatherBand)band;
 

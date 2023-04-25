@@ -189,7 +189,7 @@
         @"image" : _weatherBand ? _weatherBand.getIcon : @"ic_custom_contour_lines"
     }];
     CGFloat switchCellLabelWidth = width - kSwitchCellLabelHorizontalOffset;
-    CGFloat labelHeight = [OAUtilities calculateTextBounds:layerTitle width:switchCellLabelWidth font:[UIFont scaledSystemFontOfSize:17.]].height;
+    CGFloat labelHeight = [OAUtilities calculateTextBounds:layerTitle width:switchCellLabelWidth font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].height;
     _menuHeight += fmax(labelHeight, kSwitchCellLabelHeight) + kSwitchCellFixedHeight;
     
     _dividerHeight = 1.0 / [UIScreen mainScreen].scale;
@@ -252,7 +252,7 @@
                     @"image" : band.getIcon,
                     @"contoursType" : contoursType
                 }];
-                CGFloat titleHeight = [OAUtilities calculateTextBounds:band.getMeasurementName width:width - kTitleValueLabelHorizontalOffset font:[UIFont scaledSystemFontOfSize:17.]].height;
+                CGFloat titleHeight = [OAUtilities calculateTextBounds:band.getMeasurementName width:width - kTitleValueLabelHorizontalOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].height;
                 _menuHeight += titleHeight + kTitleValueFixedHeight;
                 
                 NSNumber *separatorInset = i < contours.count - 1 ? @(horizontalMargin + kTitleValueLabelLeftSpacing) : @(0.);
@@ -298,9 +298,9 @@
             @"title" : OALocalizedString(@"sett_units"),
         };
         [unitsRows addObject:unitsRow];
-        CGFloat valueWidth = [OAUtilities calculateTextBounds:[self getUnitsValue] width:DeviceScreenWidth font:[UIFont scaledSystemFontOfSize:17.]].width;
+        CGFloat valueWidth = [OAUtilities calculateTextBounds:[self getUnitsValue] width:DeviceScreenWidth font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].width;
         CGFloat titleWidth = width - kTitleValueLabelHorizontalOffset - valueWidth;
-        CGFloat titleHeight = [OAUtilities calculateTextBounds:OALocalizedString(@"sett_units") width:titleWidth font:[UIFont scaledSystemFontOfSize:17.]].height;
+        CGFloat titleHeight = [OAUtilities calculateTextBounds:OALocalizedString(@"sett_units") width:titleWidth font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].height;
         _menuHeight += kTitleValueFixedHeight + titleHeight;
         
         [unitsRows addObject:dividerCell];
@@ -318,8 +318,8 @@
             @"type" : kEnableDescrCell,
             @"title" : text
         }];
-        NSLog([NSString stringWithFormat:@"%.1f", [OAUtilities calculateTextBounds:text width:width font:[UIFont scaledSystemFontOfSize:17.]].height]);
-        _menuHeight += [OAUtilities calculateTextBounds:text width:width font:[UIFont scaledSystemFontOfSize:17.]].height + kTextLineCellFixedHeight;
+        NSLog([NSString stringWithFormat:@"%.1f", [OAUtilities calculateTextBounds:text width:width font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].height]);
+        _menuHeight += [OAUtilities calculateTextBounds:text width:width font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].height + kTextLineCellFixedHeight;
     }
     
     _data = data;
@@ -432,6 +432,15 @@
     }
 }
 
+- (void)hide
+{
+    _backButtonPressed = YES;
+    [self hide:YES duration:.2 onComplete:^{
+        if (self.delegate)
+            [self.delegate onDoneWeatherLayerSettings:YES];
+    }];
+}
+
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     [super hide:YES duration:duration onComplete:^{
@@ -443,11 +452,7 @@
 
 - (IBAction)backButtonPressed:(UIButton *)sender
 {
-    _backButtonPressed = YES;
-    [self hide:YES duration:.2 onComplete:^{
-        if (self.delegate)
-            [self.delegate onDoneWeatherLayerSettings:YES];
-    }];
+    [self hide];
 }
 
 - (IBAction)doneButtonPressed:(UIButton *)sender

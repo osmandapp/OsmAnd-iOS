@@ -345,6 +345,11 @@
     } completion:nil];
 }
 
+- (void)hide
+{
+    [self hide:YES duration:.2 onComplete:nil];
+}
+
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     [self restoreMapViewPort];
@@ -478,9 +483,7 @@
 
 - (IBAction)onBackButtonPressed:(id)sender
 {
-    [self hide:YES duration:.2 onComplete:^{
-        [_mapViewController hideContextPinMarker];
-    }];
+    [self hide];
 }
 
 #pragma mark - OADraggableViewActions

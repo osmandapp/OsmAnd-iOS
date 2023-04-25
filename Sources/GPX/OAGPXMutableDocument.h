@@ -14,7 +14,7 @@
 @property (nonatomic) NSMutableArray<OATrack *> *tracks;
 @property (nonatomic) NSMutableArray<OARoute *> *routes;
 
-@property (nonatomic) long modifiedTime;
+@property (nonatomic) NSTimeInterval modifiedTime;
 
 - (instancetype)init;
 

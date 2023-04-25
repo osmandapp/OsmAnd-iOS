@@ -7,7 +7,7 @@
 //
 
 #import "OADonationSettingsViewController.h"
-#import "OASettingsTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAInputTableViewCell.h"
@@ -157,7 +157,7 @@
         _userNameCell.inputField.delegate = self;
 
         _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 55.0)];
-        NSDictionary *attrs = @{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:16.0],
+        NSDictionary *attrs = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleCallout],
                                  NSForegroundColorAttributeName : [UIColor whiteColor] };
         NSAttributedString *text = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_save") attributes:attrs];
         UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -537,19 +537,21 @@
     }
     else if ([type isEqualToString:kCellTypeSingleSelectionList])
     {
-        OASettingsTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        OAValueTableViewCell* cell = nil;
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         
         if (cell)
         {
-            [cell.textView setText: item[@"title"]];
-            [cell.descriptionView setText: item[@"value"]];
-            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            [cell.titleLabel setText: item[@"title"]];
+            [cell.valueLabel setText: item[@"value"]];
         }
         return cell;
     }

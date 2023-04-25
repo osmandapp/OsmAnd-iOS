@@ -14,7 +14,7 @@
 #import "OADefaultFavorite.h"
 #import "OATitleRightIconCell.h"
 #import "OATextInputFloatingCell.h"
-#import "OASettingsTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAColorsTableViewCell.h"
 #import "OAShapesTableViewCell.h"
 #import "OAPoiTableViewCell.h"
@@ -537,7 +537,7 @@
     section = [NSMutableArray new];
     [section addObject:@{
         @"header" : OALocalizedString(@"fav_group"),
-        @"type" : [OASettingsTableViewCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"select_group"),
         @"value" : self.groupTitle ? self.groupTitle : @"",
         @"key" : kSelectGroupKey
@@ -634,7 +634,7 @@
     textField.clearButton.tag = tag;
     [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    textField.font = [UIFont scaledSystemFontOfSize:17.0];
+    textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     textField.adjustsFontForContentSizeCategory = YES;
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateNormal];
@@ -643,7 +643,7 @@
     if (!_floatingTextFieldControllers)
         _floatingTextFieldControllers = [NSMutableArray new];
     MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
-    fieldController.inlinePlaceholderFont = [UIFont scaledSystemFontOfSize:16.0];
+    fieldController.inlinePlaceholderFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
     fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
     [_floatingTextFieldControllers addObject:fieldController];
@@ -804,9 +804,7 @@
             if (checkingResult && ![checkingResult[@"name"] isEqualToString:self.name])
             {
                 savingName = checkingResult[@"name"];
-                if ([checkingResult[@"status"] isEqualToString:@"emoji"])
-                    _renamedPointAlertMessage = [NSString stringWithFormat:OALocalizedString(@"fav_point_emoticons_message"), savingName];
-                else
+                if ([checkingResult[@"status"] isEqualToString:@"duplicate"])
                     _renamedPointAlertMessage = [NSString stringWithFormat:OALocalizedString(@"fav_point_dublicate_message"), savingName];
             }
 
@@ -932,24 +930,22 @@
     {
         return item[@"cell"];
     }
-    else if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        OAValueTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.descriptionView.font = [UIFont scaledSystemFontOfSize:17.0];
-            cell.descriptionView.numberOfLines = 1;
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., 0, 0, CGFLOAT_MAX);
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = item[@"value"];
+            cell.titleLabel.text = item[@"title"];
+            cell.valueLabel.text = item[@"value"];
         }
         return cell;
     }
@@ -1039,7 +1035,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
+            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         cell.titleView.text = item[@"title"];
@@ -1368,7 +1364,7 @@
 - (void) addGroup:(NSString *)groupName color:(UIColor *)color
 {
     _wasChanged = YES;
-    NSString *editedGroupName = [[OAFavoritesHelper checkEmoticons:groupName] trim];
+    NSString *editedGroupName = [groupName trim];
 
     if (_editPointType == EOAEditPointTypeFavorite)
     {

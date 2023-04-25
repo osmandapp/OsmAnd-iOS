@@ -17,6 +17,7 @@
     NSString *_imageId;
     NSString *_itemId;
     NSString *_message;
+    NSString *_description;
     OAWidgetState *_widgetState;
 }
 
@@ -31,7 +32,7 @@
     return self;
 }
 
-- (instancetype) initWithKey:(NSString *)key widget:(OATextInfoWidget *)widget imageId:(NSString *)imageId message:(NSString *)message priorityOrder:(int)priorityOrder left:(BOOL)left
+- (instancetype) initWithKey:(NSString *)key widget:(OATextInfoWidget *)widget imageId:(NSString *)imageId message:(NSString *)message description:(NSString *)description priorityOrder:(int)priorityOrder left:(BOOL)left
 {
     self = [self init];
     if (self)
@@ -40,6 +41,7 @@
         _widget = widget;
         _imageId = imageId;
         _message = message;
+        _description = description;
         _priorityOrder = priorityOrder;
         _left = left;
     }
@@ -80,7 +82,7 @@
     if (_widgetState)
         return [_widgetState getMenuDescription];
     else
-        return nil;
+        return _description;
 }
 
 - (NSString *) getItemId

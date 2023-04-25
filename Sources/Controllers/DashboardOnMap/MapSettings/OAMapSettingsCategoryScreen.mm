@@ -9,7 +9,7 @@
 #import "OAMapSettingsCategoryScreen.h"
 #import "OAMapSettingsViewController.h"
 #import "OATableViewCustomHeaderView.h"
-#import "OASettingsTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -146,7 +146,7 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
             [section addObject:@{
                     @"title": parameter.title,
                     @"description": [parameter getValueTitle],
-                    @"type": [OASettingsTableViewCell getCellIdentifier],
+                    @"type": [OAValueTableViewCell getCellIdentifier],
                     @"select": ^() {
                         OAMapSettingsViewController *mapSettingsViewController =
                                 [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenParameter
@@ -193,18 +193,20 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     UITableViewCell *outCell = nil;
-    if ([item[@"type"] isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OASettingsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            [cell.textView setText:item[@"title"]];
-            [cell.descriptionView setText:item[@"description"]];
+            [cell.titleLabel setText:item[@"title"]];
+            [cell.valueLabel setText:item[@"description"]];
         }
         outCell = cell;
     }
@@ -275,7 +277,7 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
         return [OATableViewCustomHeaderView getHeight:OALocalizedString(@"transport_Routes")
                                                 width:tableView.bounds.size.width
                                               yOffset:32
-                                                 font:[UIFont scaledSystemFontOfSize:13]];
+                                                 font:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]];
     }
     else
     {
@@ -289,7 +291,7 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
     {
         OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
         customHeader.label.text = [OALocalizedString(@"transport_Routes") upperCase];
-        customHeader.label.font = [UIFont scaledSystemFontOfSize:13];
+        customHeader.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
         [customHeader setYOffset:32];
         return customHeader;
     }

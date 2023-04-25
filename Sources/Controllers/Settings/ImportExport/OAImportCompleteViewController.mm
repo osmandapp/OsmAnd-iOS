@@ -44,6 +44,7 @@
 #import "OAExportSettingsType.h"
 #import "OADestination.h"
 #import "OAHistoryViewController.h"
+#import "OASizes.h"
 
 typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeProfiles = 0,
@@ -65,31 +66,18 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeGlobal
 };
 
-@interface OAImportCompleteViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@property (nonatomic, assign) BOOL needRestart;
-
-@end
-
 @implementation OAImportCompleteViewController
 {
     NSDictionary<OAExportSettingsType *, NSArray *> *_itemsMap;
     NSArray <NSString *>*_itemsType;
     NSString *_fileName;
     NSMutableArray<NSDictionary *> * _data;
+    BOOL _needRestart;
 }
 
-- (instancetype) init
-{
-    self = [super init];
-    if (self)
-    {
-        [self commonInit];
-    }
-    return self;
-}
+#pragma mark - Initialization
 
-- (instancetype) initWithSettingsItems:(NSDictionary<OAExportSettingsType *, NSArray *> *)settingsItems fileName:(NSString *)fileName
+- (instancetype)initWithSettingsItems:(NSDictionary<OAExportSettingsType *, NSArray *> *)settingsItems fileName:(NSString *)fileName
 {
     self = [super init];
     if (self)
@@ -97,19 +85,60 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         _itemsMap = settingsItems;
         _itemsType = [NSArray arrayWithArray:[settingsItems allKeys]];
         _fileName = fileName;
-        [self commonInit];
     }
     return self;
 }
 
-- (void) commonInit
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [self generateData];
+    return OALocalizedString(@"shared_string_import_complete");
 }
 
-- (void) generateData
+- (NSString *)getLeftNavbarButtonTitle
 {
-    _data = [NSMutableArray new];
+    return OALocalizedString(@"shared_string_close");
+}
+
+- (BOOL)isNavbarSeparatorVisible
+{
+    return NO;
+}
+
+- (EOABaseNavbarStyle)getNavbarStyle
+{
+    return EOABaseNavbarStyleLargeTitle;
+}
+
+- (NSAttributedString *)getTableHeaderDescriptionAttr
+{
+    NSString *importComplete = [NSString stringWithFormat:OALocalizedString(@"import_complete_description"), _fileName];
+    if (_needRestart)
+        importComplete = [NSString stringWithFormat:@"%@\n\n%@", importComplete, OALocalizedString(@"app_restart_required")];
+    NSMutableAttributedString *descriptionAttr = [[NSMutableAttributedString alloc] initWithString:importComplete];
+    [descriptionAttr setColor:UIColorFromRGB(color_text_footer) forString:importComplete];
+    [descriptionAttr setColor:UIColor.blackColor forString:_fileName];
+    [descriptionAttr setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] forString:descriptionAttr.string];
+    [descriptionAttr setMinLineHeight:18. alignment:NSTextAlignmentNatural forString:descriptionAttr.string];
+    return descriptionAttr;
+}
+
+- (EOABaseButtonColorScheme)getBottomButtonColorScheme
+{
+    return EOABaseButtonColorSchemeGraySimple;
+}
+
+- (NSString *)getBottomButtonTitle
+{
+    return OALocalizedString(@"shared_string_finish");
+}
+
+#pragma mark - Table data
+
+- (void)generateData
+{
+    _data = [NSMutableArray array];
     __block NSInteger profilesCount = 0;
     __block NSInteger actionsCount = 0;
     __block NSInteger filtersCount = 0;
@@ -164,7 +193,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         else if (type == OAExportSettingsType.GLOBAL)
             globalCount += settings.count;
     }];
-    
+
     if (profilesCount > 0)
     {
         [_data addObject: @{
@@ -337,97 +366,43 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
          ];
     }
 }
- 
-- (void) applyLocalization
-{
-    [self.backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
-}
 
-- (NSString *) getTableHeaderTitle
-{
-    return OALocalizedString(@"shared_string_import_complete");
-}
-
-- (void) viewDidLoad
-{
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    
-    self.backButton.hidden = YES;
-    self.backImageButton.hidden = YES;
-    
-    self.primaryBottomButton.hidden = YES;
-    self.secondaryBottomButton.hidden = NO;
-    [self.secondaryBottomButton setTitle:OALocalizedString(@"shared_string_finish") forState:UIControlStateNormal];
-    
-    self.additionalNavBarButton.hidden = YES;
-    [super viewDidLoad];
-}
-
--(void) loadCurrentRoutingMode
-{
-    OAMapActions *mapActions = [[OAMapActions alloc] init];
-    OAApplicationMode *currentRoutingMode = [mapActions getRouteMode];
-    [OARoutingHelper.sharedInstance setAppMode:currentRoutingMode];
-}
-
-- (NSString *)getTitleForSection
-{
-    NSString *headerText = OALocalizedString(@"import_complete_description");
-    if (_needRestart)
-        headerText = [NSString stringWithFormat:@"%@\n\n%@", headerText, OALocalizedString(@"app_restart_required")];
-    return headerText;
-}
-
-#pragma mark - Actions
-
-- (IBAction)secondaryButtonPressed:(id)sender
-{
-    [self.navigationController popToRootViewControllerAnimated:YES];
-}
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return _data.count;
 }
 
-- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
       
-    OAMultiIconTextDescCell *cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
+    OAMultiIconTextDescCell *cell = (OAMultiIconTextDescCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
         cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
     }
-    [cell.textView setText:item[@"label"]];
-    NSString *countString = [NSString stringWithFormat:OALocalizedString(@"added_items"), item[@"count"]];
-    [cell.descView setText:countString];
-    cell.iconView.hidden = YES;
-    cell.overflowButton.enabled = NO;
-    [cell.overflowButton setImage:[UIImage templateImageNamed:item[@"iconName"]] forState:UIControlStateDisabled];
-    [cell.overflowButton setTintColor:UIColorFromRGB(color_primary_purple)];
-    [cell.overflowButton.imageView setContentMode:UIViewContentModeCenter];
-    cell.separatorInset = UIEdgeInsetsMake(0.0, 20.0, 0.0, 0.0);
+    if (cell)
+    {
+        [cell.textView setText:item[@"label"]];
+        NSString *countString = [NSString stringWithFormat:OALocalizedString(@"added_items"), item[@"count"]];
+        [cell.descView setText:countString];
+        cell.iconView.hidden = YES;
+        cell.overflowButton.enabled = NO;
+        [cell.overflowButton setImage:[UIImage templateImageNamed:item[@"iconName"]] forState:UIControlStateDisabled];
+        [cell.overflowButton setTintColor:UIColorFromRGB(color_primary_purple)];
+        [cell.overflowButton.imageView setContentMode:UIViewContentModeCenter];
+        cell.separatorInset = UIEdgeInsetsMake(0.0, [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0.0, 0.0);
+    }
     return cell;
 }
 
-#pragma mark - UITableViewDelegate
-
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+- (NSInteger)sectionsCount
 {
-    return [self getHeaderForTableView:tableView withFirstSectionText:[self getTitleForSection] boldFragment:_fileName forSection:section];
+    return 1;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return [self getHeightForHeaderWithFirstHeaderText:[self getTitleForSection] boldFragment:_fileName inSection:section];
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
     [self.navigationController popToRootViewControllerAnimated:NO];
@@ -512,6 +487,18 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         OAMainSettingsViewController *settingsVC = [[OAMainSettingsViewController alloc] init];
         [rootController.navigationController pushViewController:settingsVC animated:NO];
     }
+}
+
+#pragma mark - Selectors
+
+- (void)onLeftNavbarButtonPressed
+{
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
+- (void)onBottomButtonPressed
+{
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 @end

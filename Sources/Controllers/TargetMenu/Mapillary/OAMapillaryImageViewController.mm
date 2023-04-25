@@ -179,7 +179,7 @@
     CGRect descrFrame = _noConnectionDescr.frame;
     
     CGSize titleSize = [OAUtilities calculateTextBounds:_noConnectionLabel.text width:textMaxWidth font:[UIFont scaledBoldSystemFontOfSize:17.0]];
-    CGSize descrSize = [OAUtilities calculateTextBounds:_noConnectionDescr.text width:textMaxWidth - 32.0 font:[UIFont scaledSystemFontOfSize:15.0]];
+    CGSize descrSize = [OAUtilities calculateTextBounds:_noConnectionDescr.text width:textMaxWidth - 32.0 font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]];
     
     titleFrame.size.width = titleSize.width;
     titleFrame.origin.x = centerX - (titleFrame.size.width / 2);

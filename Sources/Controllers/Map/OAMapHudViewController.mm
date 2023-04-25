@@ -1526,6 +1526,8 @@
         _mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_skiing");
     else if ([stringKey isEqualToString:@"horse"])
         _mapSettingsButton.accessibilityValue = OALocalizedString(@"horseback_riding");
+    else if ([stringKey isEqualToString:@"train"])
+        _mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_train");
     else
         _mapSettingsButton.accessibilityValue = OALocalizedString(@"profile_type_user_string");
 }

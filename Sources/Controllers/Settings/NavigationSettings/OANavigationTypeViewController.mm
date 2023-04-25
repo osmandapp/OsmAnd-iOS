@@ -40,12 +40,7 @@
     return OALocalizedString(@"nav_type_hint");
 }
 
-- (EOABaseNavbarStyle)getNavbarStyle
-{
-    return EOABaseNavbarStyleDescription;
-}
-
-- (NSString *)getCustomTableViewDescription
+- (NSString *)getTableHeaderDescription
 {
     return OALocalizedString(@"select_nav_profile_dialog_message");
 }

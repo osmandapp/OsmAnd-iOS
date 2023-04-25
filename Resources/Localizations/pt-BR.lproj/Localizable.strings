@@ -2860,3 +2860,12 @@
 "map_widget_sunrise_desc" = "Mostra a hora do próximo nascer do sol ou o tempo restante até o nascer do sol.";
 "map_widget_sunrise_sunset_time_left" = "Tempo restante";
 "shared_string_external" = "Externo";
+"speak_route_deviation" = "Anunciar desvio da rota";
+"map_widget_trip_recording_duration" = "Duração";
+"map_widget_trip_recording_distance" = "Distância";
+"map_widget_trip_recording_downhill" = "Descida";
+"altitude_widget_desc" = "Mostra a altura acima do nível do mar da geolocalização atual.";
+"map_widget_altitude_map_center" = "Elevação: Centro do mapa";
+"map_widget_trip_recording_uphill" = "Subida";
+"map_widget_altitude_current_location" = "Altitude: Localização atual";
+"map_widget_altitude_map_center_desc" = "Mostra a elevação acima do nível do mar do centro do mapa atual.";

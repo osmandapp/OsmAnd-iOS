@@ -146,7 +146,7 @@
         if (_tableHeaderView)
         {
             CGFloat textWidth = DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2;
-            UIFont *labelFont = [UIFont scaledSystemFontOfSize:15.0];
+            UIFont *labelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             CGSize labelSize = [OAUtilities calculateTextBounds:OALocalizedString(@"select_avoid_descr") width:textWidth font:labelFont];
             _tableHeaderView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height + 30.0);
             _tableHeaderView.subviews.firstObject.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height);
@@ -199,7 +199,7 @@
     }
     else
     {
-        CGFloat height = [OAUtilities calculateTextBounds:headerText width:tableView.bounds.size.width font:[UIFont scaledSystemFontOfSize:13.]].height;
+        CGFloat height = [OAUtilities calculateTextBounds:headerText width:tableView.bounds.size.width font:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]].height;
         return MAX(38.0, height + 10.0);
     }
 }

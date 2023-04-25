@@ -167,7 +167,7 @@
     if (url)
     {
         NSURL *URL = [NSURL URLWithString:url];
-        UIFont *textFont = [UIFont scaledSystemFontOfSize:13];
+        UIFont *textFont = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
         NSMutableAttributedString * str = [[NSMutableAttributedString alloc] initWithString:url attributes:@{NSFontAttributeName : textFont}];
         [str addAttribute:NSLinkAttributeName value:URL range: NSMakeRange(0, str.length)];
         text = [text stringByAppendingString:@""];

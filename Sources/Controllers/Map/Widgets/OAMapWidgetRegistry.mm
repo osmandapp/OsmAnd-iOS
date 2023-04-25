@@ -154,9 +154,9 @@
     return ii;
 }
 
-- (OAMapWidgetRegInfo *) registerSideWidgetInternal:(OATextInfoWidget *)widget imageId:(NSString *)imageId message:(NSString *)message key:(NSString *)key left:(BOOL)left priorityOrder:(int)priorityOrder
+- (OAMapWidgetRegInfo *) registerSideWidgetInternal:(OATextInfoWidget *)widget imageId:(NSString *)imageId message:(NSString *)message description:(NSString *)description key:(NSString *)key left:(BOOL)left priorityOrder:(int)priorityOrder
 {
-    OAMapWidgetRegInfo *ii = [[OAMapWidgetRegInfo alloc] initWithKey:key widget:widget imageId:imageId message:message priorityOrder:priorityOrder left:left];
+    OAMapWidgetRegInfo *ii = [[OAMapWidgetRegInfo alloc] initWithKey:key widget:widget imageId:imageId message:message description:description priorityOrder:priorityOrder left:left];
     [self processVisibleModes:key ii:ii];
     if (widget)
         [widget setContentTitle:message];

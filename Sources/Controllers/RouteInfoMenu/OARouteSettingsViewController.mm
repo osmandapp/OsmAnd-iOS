@@ -15,7 +15,7 @@
 #import "OADefaultFavorite.h"
 #import "OAColors.h"
 #import "OARoutingHelper.h"
-#import "OASettingsTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAUtilities.h"
 #import "OASwitchTableViewCell.h"
 #import "OAIconTitleValueCell.h"
@@ -112,7 +112,7 @@
     }
     else
     {
-        CGFloat height = [OAUtilities calculateTextBounds:headerText width:tableView.bounds.size.width font:[UIFont scaledSystemFontOfSize:13.]].height;
+        CGFloat height = [OAUtilities calculateTextBounds:headerText width:tableView.bounds.size.width font:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]].height;
         return MAX(38.0, height + 10.0);
     }
 }
@@ -129,18 +129,20 @@
     NSString *type = [param getCellType];
     OAApplicationMode *appMode = [self.routingHelper getAppMode];
     
-    if ([type isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
+    if ([type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        OAValueTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         
         if (cell) {
-            [cell.textView setText:text];
-            [cell.descriptionView setText:value];
+            [cell.titleLabel setText:text];
+            [cell.valueLabel setText:value];
         }
         cell.backgroundColor = UIColor.redColor;
         return cell;

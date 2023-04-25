@@ -37,14 +37,10 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     EDITS_NOTES
 };
 
-@interface OAOsmEditsListViewController () <UITableViewDataSource, UITableViewDelegate, OAOsmEditingBottomSheetDelegate, OAMultiselectableHeaderDelegate>
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
+@interface OAOsmEditsListViewController () <UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating, UISearchBarDelegate, OAOsmEditingBottomSheetDelegate, OAMultiselectableHeaderDelegate>
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
-@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
-@property (weak, nonatomic) IBOutlet UIButton *uploadButton;
+@property (weak, nonatomic) IBOutlet UIView *segmentContainerView;
 
 @end
 
@@ -58,7 +54,12 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     
     OAMultiselectableHeaderView *_headerView;
     
+    UIBarButtonItem *_deleteButton;
+    UIBarButtonItem *_uploadButton;
+    UISearchController *_searchController;
+    
     BOOL _popToParent;
+    BOOL _isSearchActive;
 }
 
 - (void)viewDidLoad {
@@ -75,7 +76,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     _tableView.estimatedRowHeight = kEstimatedRowHeight;
     _tableView.rowHeight = UITableViewAutomaticDimension;
     
-    self.navBarView.backgroundColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    _isSearchActive = NO;
 }
 
 - (void) setShouldPopToParent:(BOOL)shouldPop
@@ -83,24 +84,44 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     _popToParent = shouldPop;
 }
 
--(UIView *) getTopView
+- (void)viewWillAppear:(BOOL)animated
 {
-    return _navBarView;
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    _deleteButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_trash"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonPressed:)];
+    _uploadButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_upload_to_openstreetmap_outlined"] style:UIBarButtonItemStylePlain target:self action:@selector(uploadButtonPressed:)];
+    [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_uploadButton, _deleteButton] animated:YES];
+    _deleteButton.accessibilityLabel = OALocalizedString(@"shared_string_delete");
+    _uploadButton.accessibilityLabel = OALocalizedString(@"upload_to_openstreetmap");
+    self.tabBarController.navigationItem.title = OALocalizedString(@"osm_edits_title");
+    _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    _searchController.searchResultsUpdater = self;
+    _searchController.searchBar.delegate = self;
+    _searchController.obscuresBackgroundDuringPresentation = NO;
+    self.tabBarController.navigationItem.searchController = _searchController;
+    [self setupSearchController:NO filtered:NO];
+    self.definesPresentationContext = YES;
+    
+    UIEdgeInsets insets = [_tableView contentInset];
+    [_tableView setContentInset:UIEdgeInsetsMake(_segmentContainerView.frame.size.height, insets.left, insets.bottom, insets.right)];
+    [_tableView setScrollIndicatorInsets:_tableView.contentInset];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
--(UIView *) getMiddleView
+- (void)viewWillDisappear:(BOOL)animated
 {
-    return _tableView;
-}
-
--(CGFloat) getNavBarHeight
-{
-    return navBarWithSegmentControl;
+    [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    self.definesPresentationContext = NO;
 }
 
 -(void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"osm_edits_title");
     [_segmentControl setTitle:OALocalizedString(@"shared_string_all") forSegmentAtIndex:0];
     [_segmentControl setTitle:OALocalizedString(@"osm_edits_edits_label") forSegmentAtIndex:1];
     [_segmentControl setTitle:OALocalizedString(@"osm_edits_notes") forSegmentAtIndex:2];
@@ -179,6 +200,29 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     }
 }
 
+- (void) setupSearchController:(BOOL)isSearchActive filtered:(BOOL)isFiltered
+{
+    if (isSearchActive)
+    {
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+    }
+    else if (isFiltered)
+    {
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:UIColor.grayColor}];
+        _searchController.searchBar.searchTextField.backgroundColor = UIColor.whiteColor;
+        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.grayColor;
+    }
+    else
+    {
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+        _searchController.searchBar.searchTextField.tintColor = UIColor.grayColor;
+    }
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -191,12 +235,12 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 55.0;
+    return _isSearchActive ? 0.0 : 55.0;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (section == 0)
+    if (section == 0 && !_isSearchActive)
         return _headerView;
     
     return nil;
@@ -288,13 +332,6 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
             }
         }
     }
-}
-
-- (IBAction)backButtonPressed:(id)sender {
-   if (_popToParent)
-        [super onLeftNavbarButtonPressed];
-    else
-        [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (IBAction)deleteButtonPressed:(id)sender {
@@ -427,6 +464,106 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
             [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
     }
     [self.tableView endUpdates];
+}
+
+// MARK: Keyboard Notifications
+
+- (void) keyboardWillShow:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    CGRect keyboardBounds;
+    [[userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardBounds];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        UIEdgeInsets insets = [_tableView contentInset];
+        [_tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardBounds.size.height, insets.right)];
+        [_tableView setScrollIndicatorInsets:_tableView.contentInset];
+    } completion:nil];
+}
+
+- (void) keyboardWillHide:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        UIEdgeInsets insets = [_tableView contentInset];
+        [_tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0.0, insets.right)];
+        [_tableView setScrollIndicatorInsets:_tableView.contentInset];
+    } completion:nil];
+}
+
+// MARK: UISearchResultsUpdating
+
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
+{
+    if (searchController.isActive && searchController.searchBar.searchTextField.text.length == 0)
+    {
+        _isSearchActive = YES;
+        [self setupSearchController:YES filtered:NO];
+        [self setupView];
+        [_tableView reloadData];
+    }
+    else if (searchController.isActive && searchController.searchBar.searchTextField.text.length > 0)
+    {
+        [self setupSearchController:NO filtered:YES];
+        NSMutableArray *filteredItems = [NSMutableArray array];
+        NSArray *poi = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
+        NSArray *notes = [[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints];
+        if (_screenType == EDITS_ALL || _screenType == EDITS_POI)
+        {
+            for (OAOpenStreetMapPoint *p in poi)
+            {
+                NSString *poiType = [p.getEntity getTagFromString:POI_TYPE_TAG];
+                poiType = poiType ? [poiType lowerCase] : @"";
+                NSString *name = p.getName;
+                NSRange nameTagRange = [name rangeOfString:searchController.searchBar.searchTextField.text options:NSCaseInsensitiveSearch];
+                if (nameTagRange.location != NSNotFound)
+                {
+                    [filteredItems addObject:@{
+                        @"title" : name.length == 0 ? [self getDescription:p] : name,
+                        @"poi_type" : poiType,
+                        @"description" : [self getDescription:p],
+                        @"item" : p
+                    }];
+                }
+            }
+        }
+        if (_screenType == EDITS_ALL || _screenType == EDITS_NOTES)
+        {
+            for (OAOsmPoint *p in notes)
+            {
+                NSRange nameTagRange = [p.getName rangeOfString:searchController.searchBar.searchTextField.text options:NSCaseInsensitiveSearch];
+                if (nameTagRange.location != NSNotFound)
+                {
+                    [filteredItems addObject:@{
+                        @"title" : p.getName,
+                        @"description" : [self getDescription:p],
+                        @"item" : p
+                    }];
+                }
+            }
+        }
+        _data = [NSArray arrayWithArray:filteredItems];
+        [_tableView reloadData];
+    }
+    else
+    {
+        _isSearchActive = NO;
+        [self setupSearchController:NO filtered:NO];
+        [self setupView];
+        [_tableView reloadData];
+    }
+}
+
+// MARK: UISearchBarDelegate
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+    searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+    searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
 }
 
 @end

@@ -9,7 +9,7 @@
 #import "OAQuickSearchCoordinatesViewController.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OASettingsTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAInputTableViewCell.h"
 #import "OAQuickSearchCoordinateFormatsViewController.h"
 #import "OAAppSettings.h"
@@ -216,7 +216,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     NSMutableArray *result = [NSMutableArray array];
     
     [result addObject:@{
-        @"type" : [OASettingsTableViewCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"coords_format"),
         @"value" : _formatStr,
     }];
@@ -928,22 +928,22 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     NSDictionary *item = indexPath.section == 0 ? _controlsSectionData[indexPath.row] : _searchResultSectionData[indexPath.row];
     NSString *cellType = item[@"type"];
     
-    if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        OAValueTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-            cell.descriptionView.font = [UIFont scaledSystemFontOfSize:17.0];
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = item[@"value"];
+            cell.titleLabel.text = item[@"title"];
+            cell.valueLabel.text = item[@"value"];
         }
         return cell;
     }
@@ -1052,7 +1052,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         if (_currentEditingTextField)
             [_currentEditingTextField resignFirstResponder];
 
-        if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
+        if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
         {
             OAQuickSearchCoordinateFormatsViewController *vc = [[OAQuickSearchCoordinateFormatsViewController alloc] initWithCurrentFormat:_currentFormat location:[self getDisplayingCoordinate]];
             vc.delegate = self;

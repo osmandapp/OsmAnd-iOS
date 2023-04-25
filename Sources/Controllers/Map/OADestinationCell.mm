@@ -368,7 +368,7 @@
     NSRange coloredRange = NSMakeRange(0, remainingTimeText.length);
     
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:fullText];
-    UIFont *font = [UIFont scaledSystemFontOfSize:15];
+    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
     [attributedString addAttribute:NSFontAttributeName value:font range:fullRange];
     [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1.00f] range:fullRange];
     if (pickupDate && timeInterval <= 0.0)

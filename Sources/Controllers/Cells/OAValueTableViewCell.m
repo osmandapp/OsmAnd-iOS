@@ -16,6 +16,13 @@
 
 @implementation OAValueTableViewCell
 
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    if ([self isDirectionRTL])
+        self.valueLabel.textAlignment = NSTextAlignmentLeft;
+}
+
 - (void)valueVisibility:(BOOL)show
 {
     self.valueStackView.hidden = !show;

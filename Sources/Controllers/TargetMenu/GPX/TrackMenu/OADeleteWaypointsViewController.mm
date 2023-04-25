@@ -139,7 +139,7 @@
                                                       OALocalizedString(@"shared_string_waypoints").lowerCase,
                                                       selectedWaypointsCount];
 
-    UIFont *fontCategories = [UIFont scaledSystemFontOfSize:13];
+    UIFont *fontCategories = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     UIColor *colorCategories = hasSelection != 0 ? UIColor.whiteColor : UIColorFromRGB(color_text_footer);
     NSMutableAttributedString *attrCategories = [[NSMutableAttributedString alloc] initWithString:textGroups attributes:@{NSFontAttributeName: fontCategories, NSForegroundColorAttributeName: colorCategories}];
 
@@ -257,11 +257,6 @@
 
     if (self.trackMenuDelegate)
         [self.trackMenuDelegate reloadSections:indexSet];
-}
-
-- (IBAction)onCancelButtonClicked:(id)sender
-{
-    [self dismissViewController];
 }
 
 - (IBAction)onSelectAllButtonClicked:(id)sender
@@ -492,6 +487,13 @@
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return indexPath.row != 0;
+}
+
+#pragma mark - Selectors
+
+- (void)onLeftNavbarButtonPressed
+{
+    [self dismissViewController];
 }
 
 @end

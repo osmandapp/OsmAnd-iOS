@@ -589,16 +589,9 @@ static BOOL _favoritesLoaded = NO;
 
 + (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point
 {
-    NSString *name = [self checkEmoticons:[point getName]];
-    BOOL emoticons = name.length != [point getName].length;
-
+    NSString *name = [point getName];
     NSString *index = @"";
     int number = 0;
-    [point setCategory:[self checkEmoticons:[point getCategory]]];
-    NSString *description = [point getDescription];
-    if (description && description.length > 0)
-        [point setDescription:[self checkEmoticons:description]];
-
     BOOL fl = YES;
     while (fl)
     {
@@ -616,55 +609,12 @@ static BOOL _favoritesLoaded = NO;
             }
         }
     }
-
-    if (index.length > 0 || emoticons)
+    if (index.length > 0)
     {
         [point setName:name];
-        if (emoticons)
-            return @{ @"name": name, @"status": @"emoji" };
-        else
-            return @{ @"name": name, @"status": @"duplicate" };
+        return @{ @"name": name, @"status": @"duplicate" };
     }
-
     return nil;
-}
-
-+ (NSString *) checkEmoticons:(NSString *)text
-{
-    NSUInteger length = [text length];
-    unichar chars[length];
-    [text getCharacters:chars range:NSMakeRange(0, length)];
-
-    unichar ch1;
-    unichar ch2;
-
-    int index = 0;
-    NSMutableString *builder = [NSMutableString string];
-    while (index < length)
-    {
-        ch1 = chars[index];
-        if ((int) ch1 == 0xD83C)
-        {
-            ch2 = chars[index + 1];
-            if ((int) ch2 >= 0xDF00 && (int) ch2 <= 0xDFFF)
-            {
-                index += 2;
-                continue;
-            }
-        }
-        else if ((int) ch1 == 0xD83D)
-        {
-            ch2 = chars[index + 1];
-            if ((int) ch2 >= 0xDC00 && (int) ch2 <= 0xDDFF)
-            {
-                index += 2;
-                continue;
-            }
-        }
-        [builder appendString:[NSString stringWithFormat:@"%C", ch1]];
-        ++index;
-    }
-    return [builder trim];
 }
 
 + (NSArray<NSString *> *) getFlatBackgroundIconNamesList

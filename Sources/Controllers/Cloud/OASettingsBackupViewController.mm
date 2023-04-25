@@ -350,7 +350,7 @@
     NSString *header = _headers[@(section)];
     if (header)
     {
-        UIFont *font = [UIFont scaledSystemFontOfSize:13.];
+        UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
         CGFloat headerHeight = [OAUtilities calculateTextBounds:header
                                                           width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
                                                            font:font].height + kPaddingOnSideOfHeaderWithText;
@@ -365,7 +365,7 @@
     NSString *footer = _footers[@(section)];
     if (footer)
     {
-        UIFont *font = [UIFont scaledSystemFontOfSize:13.];
+        UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
         CGFloat footerHeight = [OAUtilities calculateTextBounds:footer
                                                           width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
                                                            font:font].height + kPaddingOnSideOfFooterWithText;

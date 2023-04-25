@@ -8,7 +8,6 @@
 
 #import "OATripRecordingSettingsViewController.h"
 #import "OAGPXListViewController.h"
-#import "OASettingsTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAAppSettings.h"
@@ -202,7 +201,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             
             NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"shared_string_menu"), OALocalizedString(@"shared_string_my_places"), OALocalizedString(@"menu_my_trips")];
             NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"trip_rec_actions_descr"), menuPath];
-            NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:actionsDescr attributes:@{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
+            NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:actionsDescr attributes:@{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
             [str addAttributes:@{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold]} range:[actionsDescr rangeOfString:menuPath]];
             
             [dataArr addObject:@[
@@ -370,14 +369,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         if (cell)
         {
-            cell.titleLabel.text = item[@"title"];
-
-            NSString *iconName = item[@"img"];
-            [cell leftIconVisibility:iconName && iconName.length > 0];
-            cell.leftIconView.tintColor = cell.switchView.isOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
-            cell.leftIconView.image = [UIImage templateImageNamed:iconName];
-            cell.separatorInset = UIEdgeInsetsMake(0., iconName && iconName.length > 0 ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent, 0., 0.);
-
             id v = item[@"value"];
             if ([v isKindOfClass:[OACommonBoolean class]])
             {
@@ -389,6 +380,15 @@ static NSArray<NSString *> *minTrackSpeedNames;
             {
                 cell.switchView.on = [v boolValue];
             }
+            
+            cell.titleLabel.text = item[@"title"];
+
+            NSString *iconName = item[@"img"];
+            [cell leftIconVisibility:iconName && iconName.length > 0];
+            cell.leftIconView.tintColor = cell.switchView.isOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+            cell.leftIconView.image = [UIImage templateImageNamed:iconName];
+            cell.separatorInset = UIEdgeInsetsMake(0., iconName && iconName.length > 0 ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent, 0., 0.);
+
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
@@ -463,29 +463,10 @@ static NSArray<NSString *> *minTrackSpeedNames;
             cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
+            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
         cell.titleView.text = item[@"title"];
         [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
-        return cell;
-    }
-    else if ([type isEqualToString:[OASettingsTableViewCell getCellIdentifier]] || [type isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
-    {
-        OASettingsTableViewCell* cell = nil;
-        cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-        }
-        
-        if (cell)
-        {
-            [cell.textView setText: item[@"title"]];
-            [cell.descriptionView setText: item[@"value"]];
-            UIImage *image = [UIImage imageNamed:item[@"img"]];
-            [cell.iconView setImage:image];
-        }
         return cell;
     }
     else if ([type isEqualToString:kCellTypeCheck])

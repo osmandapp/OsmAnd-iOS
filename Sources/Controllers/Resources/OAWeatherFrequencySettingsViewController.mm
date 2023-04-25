@@ -56,12 +56,7 @@
     return OALocalizedString(@"shared_string_updates_frequency");
 }
 
-- (EOABaseNavbarStyle)getNavbarStyle
-{
-    return EOABaseNavbarStyleDescription;
-}
-
-- (NSString *)getCustomTableViewDescription
+- (NSString *)getTableHeaderDescription
 {
     return OALocalizedString(@"weather_generates_new_forecast_description");
 }

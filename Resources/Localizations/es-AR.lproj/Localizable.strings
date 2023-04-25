@@ -1046,7 +1046,7 @@
 "start_of_the_track" = "Inicio de la traza";
 "nearest_point" = "Punto más cercano";
 "plan_route_folder" = "Carpeta";
-"change_folder" = "Cambiar carpeta";
+"change_folder" = "Cambiar de carpeta";
 "select_folder" = "Elegir carpeta";
 "select_folder_descr" = "Elegir carpeta o añadir una nueva";
 "add_folder" = "Añadir carpeta";
@@ -2868,3 +2868,13 @@
 "without_permission_my_position_value" = "OsmAnd no tiene permisos de ubicación";
 "press_again_to_change_the_map_orientation" = "Pulsa de nuevo para cambiar la orientación del mapa";
 "app_mode_moped" = "Ciclomotor";
+"speak_route_deviation" = "Anunciar desviación de la ruta";
+"map_widget_trip_recording_uphill" = "Ascenso";
+"map_widget_trip_recording_distance" = "Distancia";
+"map_widget_trip_recording_duration" = "Duración";
+"map_widget_trip_recording_downhill" = "Descenso";
+"shared_string_app_profile" = "Perfiles de la aplicación";
+"altitude_widget_desc" = "Muestra la altura sobre el nivel del mar en la ubicación actual.";
+"map_widget_altitude_map_center_desc" = "Muestra la elevación sobre el nivel del mar en el centro del mapa actual.";
+"map_widget_altitude_current_location" = "Altitud: ubicación actual";
+"map_widget_altitude_map_center" = "Elevación: centro del mapa";

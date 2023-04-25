@@ -322,17 +322,17 @@
             cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
+            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
         if ([item[@"regular_text"] boolValue])
         {
             cell.titleView.textColor = UIColor.blackColor;
-            cell.titleView.font = [UIFont scaledSystemFontOfSize:17.];
+            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         }
         else
         {
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
+            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
         cell.titleView.text = item[@"title"];
         [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];

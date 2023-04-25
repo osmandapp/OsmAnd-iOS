@@ -17,18 +17,22 @@
 {
     NSString *_selectedLocale;
     NSArray<NSString *> *_availableLocales;
+    NSArray<NSString *> *_preferredLocales;
     OATableDataModel *_data;
 }
 
 #pragma mark - Initialzation
 
-- (instancetype)initWithSelectedLocale:(NSString *)selectedLocale availableLocales:(NSArray<NSString *> *)availableLocales
+- (instancetype)initWithSelectedLocale:(NSString *)selectedLocale
+                      availableLocales:(NSArray<NSString *> *)availableLocales
+                      preferredLocales:(NSArray<NSString *> *)preferredLocales
 {
     self = [super init];
     if (self)
     {
         _selectedLocale = selectedLocale;
         _availableLocales = availableLocales;
+        _preferredLocales = preferredLocales;
     }
     return self;
 }
@@ -53,22 +57,29 @@
 
     OATableSectionData *prefferedSection = [_data createNewSection];
     prefferedSection.headerText = OALocalizedString(@"preferred_languages");
-    NSMutableArray<NSString *> *preferredLocales = [NSMutableArray new];
-    for (NSString *langCode in [NSLocale preferredLanguages])
+    NSMutableSet<NSString *> *preferredLocales = [NSMutableSet set];
+    NSArray<NSString *> *preferredLanguages = [NSLocale preferredLanguages];
+    for (NSInteger i = 0; i < preferredLanguages.count; i ++)
     {
-        NSInteger index = [langCode indexOf:@"-"];
-        if (index != NSNotFound && index < langCode.length)
-            [preferredLocales addObject:[langCode substringToIndex:index]];
+        NSString *preferredLocale = preferredLanguages[i];
+        if ([preferredLocale containsString:@"-"])
+            preferredLocale = [preferredLocale substringToIndex:[preferredLocale indexOf:@"-"]];
+        if ([preferredLocale isEqualToString:@"en"])
+            preferredLocale = @"";
+        [preferredLocales addObject:preferredLocale];
     }
 
     for (NSString *preferredLocale in preferredLocales)
     {
-        [prefferedSection addRowFromDictionary:@{
-            kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
-            @"locale" : preferredLocale,
-            @"language" : [OAUtilities translatedLangName:preferredLocale].capitalizedString,
-            @"selected" : @([_selectedLocale.length == 0 ? @"en" : _selectedLocale isEqualToString:preferredLocale])
-        }];
+        if ([_preferredLocales containsObject:preferredLocale])
+        {
+            [prefferedSection addRowFromDictionary:@{
+                kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
+                @"locale" : preferredLocale,
+                @"language" : [OAUtilities translatedLangName:preferredLocale.length > 0 ? preferredLocale : @"en"].capitalizedString,
+                @"selected" : @([_selectedLocale isEqualToString:preferredLocale])
+            }];
+        }
     }
 
     OATableSectionData *availableSection = [_data createNewSection];
@@ -79,8 +90,8 @@
         [availableLocaleRows addObject:[[OATableRowData alloc] initWithData:@{
             kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
             @"locale" : availableLocale,
-            @"language" : [OAUtilities translatedLangName:availableLocale].capitalizedString,
-            @"selected" : @([_selectedLocale.length == 0 ? @"en" : _selectedLocale isEqualToString:availableLocale])
+            @"language" : [OAUtilities translatedLangName:availableLocale.length > 0 ? availableLocale : @"en"].capitalizedString,
+            @"selected" : @([_selectedLocale isEqualToString:availableLocale])
         }]];
     }
     [self languageCompare:availableLocaleRows];

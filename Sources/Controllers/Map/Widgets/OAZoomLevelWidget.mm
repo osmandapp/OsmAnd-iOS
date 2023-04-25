@@ -45,15 +45,8 @@
         NSString *cachedZoomText = [NSString stringWithFormat:@"%d", _cachedZoom];
         [self setText:cachedZoomText subtext:@""];
         [self setIcons:@"widget_developer_map_zoom_day" widgetNightIcon:@"widget_developer_map_zoom_night"];
-        [self addAccessibilityLabelsWithValue:cachedZoomText];
     }
     return YES;
-}
-
-- (void) addAccessibilityLabelsWithValue:(NSString *)value
-{
-    self.accessibilityLabel = OALocalizedString(@"map_widget_zoom_level");
-    self.accessibilityValue = value;
 }
 
 - (void) setImage:(UIImage *)image

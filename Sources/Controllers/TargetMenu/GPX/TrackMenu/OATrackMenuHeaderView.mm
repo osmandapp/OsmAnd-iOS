@@ -610,7 +610,7 @@
     CGSize sizeByTitle = [OAUtilities calculateTextBounds:title
                                                     width:10000.0
                                                    height:kBlockStatisticsLineHeight
-                                                     font:[UIFont scaledSystemFontOfSize:13. weight:UIFontWeightRegular]];
+                                                     font:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]];
     CGSize sizeByValue = [OAUtilities calculateTextBounds:value
                                                     width:10000.0
                                                    height:kBlockStatisticsLineHeight

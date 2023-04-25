@@ -778,7 +778,7 @@
 "use_osm_live_routing" = "OsmAnd Live navigation";
 "osm_live_routing_descr" = "Brug OsmAnd Live-opdateringer til navigation";
 "osmand_live" = "OsmAnd Live";
-"live_updates" = "Realtidsopdateringer";
+"live_updates" = "Live-opdateringer";
 "available_maps" = "Tilgængelige kort";
 "osmand_live_last_changed" = "Sidste kortændring: %@";
 "last_update" = "Sidst opdateret: %@";
@@ -849,7 +849,7 @@
 "osm_live_get_title" = "Få OsmAnd Live";
 "osm_live_ask_for_purchase" = "Køb først OsmAnd Live-abonnement";
 "shared_string_io_error" = "I/O fejl";
-"osm_live_hide_user_name" = "Vis ikke navn i rapporter";
+"osm_live_hide_user_name" = "Vis ikke mit navn i rapporter";
 "update_now" = "Opdater nu";
 "terms_of_use" = "Vilkår for brug";
 "privacy_policy" = "Privatlivspolitik";
@@ -1228,7 +1228,7 @@
 "edit_tilesource_url_to_load" = "URL";
 "edit_tilesource_elliptic_tile" = "Elliptisk mercatorprojektion";
 "rendering_attr_tracktype_grade4_name" = "Mest blød";
-"rendering_attr_hideIcons_name" = "IP ikoner";
+"rendering_attr_hideIcons_name" = "IP-ikoner";
 "rendering_attr_noPolygons_description" = "Gør alle overflader på kortet transparent.";
 "rendering_value_americanRoadAtlas_name" = "Amerikansk vejkort";
 "rendering_attr_piste_type_nordic_name" = "Nordisk";
@@ -1239,7 +1239,7 @@
 "rendering_value_medium_w_name" = "Mellem";
 "rendering_attr_busRoutes_name" = "Busruter";
 "rendering_attr_coloredBuildings_name" = "Farvekod bygninger efter type";
-"routing_attr_difficulty_preference_description" = "Foretræk ruter af denne vanskelighed, selv om ruteføring over sværere eller lettere pister stadig er mulig, hvis de er kortere.";
+"routing_attr_difficulty_preference_description" = "Foretræk ruter af denne sværhedsgrad, selv om ruteføring over sværere eller lettere pister stadig er mulig, hvis de er kortere.";
 "rendering_attr_showLez_name" = "Vis miljøzoner";
 "rendering_attr_tramTrainRoutes_name" = "Tog- og sporvognsruter";
 "rendering_attr_contourDensity_description" = "Tæthed på højdekurver";
@@ -1274,7 +1274,7 @@
 "rendering_attr_piste_difficulty_expert_name" = "Ekspert";
 "rendering_attr_contourLines_name" = "Vis højdekurver";
 "rendering_attr_showAccess_name" = "Vis adgangsbegrænsninger og vejafgifter";
-"routing_attr_allow_intermediate_name" = "Tillad mellemliggende ruter";
+"routing_attr_allow_intermediate_name" = "Tillad middelsvære ruter";
 "routing_attr_avoid_stairs_name" = "Ingen trapper";
 "rendering_value_brown_name" = "Brun";
 "routing_attr_no_new_routing_description" = "Brug ikke ruteberegningsregler indført i v1.9.";
@@ -1671,7 +1671,7 @@
 "default_speed_dialog_msg" = "Anslår ankomsttid for ukendte vejtyper og begrænser hastigheden for alle veje (kan påvirke ruteberegning)";
 "profile_type_base_string" = "Basisprofil";
 "units_and_formats" = "Enheder&formater";
-"configure_profile" = "Konfigurere profil";
+"configure_profile" = "Konfigurer profil";
 "export_profile" = "Eksportér profil";
 "selected_profile" = "Valgt profil";
 "profile_appearance" = "Profil udseende";
@@ -2861,3 +2861,13 @@
 "map_widget_sunrise_desc" = "Viser tidspunktet for den næste solopgang eller den tid, der er tilbage til solopgang.";
 "app_mode_moped" = "Knallert";
 "press_again_to_change_the_map_orientation" = "Tryk igen for at ændre kortets orientering";
+"speak_route_deviation" = "Meddel afvigelse fra ruten";
+"map_widget_trip_recording_uphill" = "Opstigning";
+"map_widget_trip_recording_duration" = "Varighed";
+"shared_string_app_profile" = "App-profil";
+"map_widget_trip_recording_downhill" = "Nedstigning";
+"map_widget_trip_recording_distance" = "Afstand";
+"altitude_widget_desc" = "Viser højden over havets overflade for den aktuelle geolokalisering.";
+"map_widget_altitude_map_center" = "Højde: kortcentrum";
+"map_widget_altitude_current_location" = "Højde: Nuværende placering";
+"map_widget_altitude_map_center_desc" = "Viser højden over havniveau for det aktuelle kortcentrum.";

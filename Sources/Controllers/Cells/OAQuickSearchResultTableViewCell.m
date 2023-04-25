@@ -14,8 +14,8 @@
 {
     [super awakeFromNib];
 
-    self.distanceLabel.font = [UIFont scaledSystemFontOfSize:13.];
-    self.coordinateLabel.font = [UIFont scaledSystemFontOfSize:13.];
+    self.distanceLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+    self.coordinateLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
 }
 
 - (void) setDesriptionLablesVisible:(BOOL)isVisible;

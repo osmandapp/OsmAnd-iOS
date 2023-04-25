@@ -369,7 +369,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             cell.textView.numberOfLines = 0;
             cell.arrowIconView.image = [cell.arrowIconView.image imageFlippedForRightToLeftLayoutDirection];
             [cell.iconView setTintColor:UIColorFromRGB(color_icon_inactive)];
-            cell.descView.font = [UIFont scaledSystemFontOfSize:15.];
+            cell.descView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.separatorInset = UIEdgeInsetsMake(0., 64., 0., 0.);
         }
         if (cell)
@@ -394,7 +394,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
+            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
         cell.titleView.text = item[@"title"];
         [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
@@ -418,7 +418,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
         NSString *title = _sectionHeaderTitles[section];
         [vw setYOffset:6.];
-        UIFont *labelFont = [UIFont scaledSystemFontOfSize:15.0];
+        UIFont *labelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         [style setLineSpacing:6];
         vw.label.attributedText = [[NSAttributedString alloc] initWithString:title attributes:@{NSParagraphStyleAttributeName : style, NSFontAttributeName : labelFont, NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
@@ -648,7 +648,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) updateView
 {
     [self applyLocalization];
-    [self setupCustomLargeTitleView];
+    [self setupTableHeaderView];
     [self generateData];
     [self.tableView reloadData];
 }

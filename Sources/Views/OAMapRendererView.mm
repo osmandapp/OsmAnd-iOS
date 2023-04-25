@@ -334,6 +334,11 @@
         return _renderer->getState().target31;
 }
 
+- (OsmAnd::PointI)fixedPixel
+{
+    return _renderer->getState().fixedPixel;
+}
+
 - (void)setTarget31:(OsmAnd::PointI)target31
 {
     if (_viewSize.x > 0 && _viewSize.y > 0)
@@ -1051,6 +1056,16 @@
 - (void)setSymbolSubsectionConfiguration:(int)subsectionIndex configuration:(const OsmAnd::SymbolSubsectionConfiguration &)configuration
 {
     _renderer->setSymbolSubsectionConfiguration(subsectionIndex, configuration);
+}
+
+- (BOOL)getLocationFromElevatedPoint:(OsmAnd::PointI)screenPoint location31:(OsmAnd::PointI*)location31
+{
+    return _renderer->getLocationFromElevatedPoint(screenPoint, *location31);
+}
+
+- (float)getLocationHeightInMeters:(OsmAnd::PointI)location31
+{
+    return _renderer->getLocationHeightInMeters(location31);
 }
 
 @end

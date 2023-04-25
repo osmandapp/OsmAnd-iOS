@@ -181,6 +181,7 @@
 #define speakExitNumberNamesKey @"speakExitNumberNames"
 #define speakGpsSignalStatusKey @"speakGpsSignalStatus"
 #define speakRouteRecalculationKey @"speakRouteRecalculation"
+#define speakRouteDeviationKey @"speakRouteDeviation"
 #define announceWptKey @"announceWpt"
 #define announceNearbyFavoritesKey @"announceNearbyFavorites"
 #define announceNearbyPoiKey @"announceNearbyPoi"
@@ -3732,6 +3733,7 @@
         [_routingProfile setModeDefaultValue:@"bicycle" mode:OAApplicationMode.BICYCLE];
         [_routingProfile setModeDefaultValue:@"pedestrian" mode:OAApplicationMode.PEDESTRIAN];
         [_routingProfile setModeDefaultValue:@"public_transport" mode:OAApplicationMode.PUBLIC_TRANSPORT];
+        [_routingProfile setModeDefaultValue:@"train" mode:OAApplicationMode.TRAIN];
         [_routingProfile setModeDefaultValue:@"boat" mode:OAApplicationMode.BOAT];
         [_routingProfile setModeDefaultValue:@"STRAIGHT_LINE_MODE" mode:OAApplicationMode.AIRCRAFT];
         [_routingProfile setModeDefaultValue:@"ski" mode:OAApplicationMode.SKI];
@@ -3745,6 +3747,7 @@
         [_profileIconName setModeDefaultValue:@"ic_action_bicycle_dark" mode:OAApplicationMode.BICYCLE];
         [_profileIconName setModeDefaultValue:@"ic_action_pedestrian_dark" mode:OAApplicationMode.PEDESTRIAN];
         [_profileIconName setModeDefaultValue:@"ic_action_bus_dark" mode:OAApplicationMode.PUBLIC_TRANSPORT];
+        [_profileIconName setModeDefaultValue:@"ic_action_train" mode:OAApplicationMode.TRAIN];
         [_profileIconName setModeDefaultValue:@"ic_action_sail_boat_dark" mode:OAApplicationMode.BOAT];
         [_profileIconName setModeDefaultValue:@"ic_action_aircraft" mode:OAApplicationMode.AIRCRAFT];
         [_profileIconName setModeDefaultValue:@"ic_action_skiing" mode:OAApplicationMode.SKI];
@@ -3935,7 +3938,7 @@
         _metricSystem = [OACommonMetricSystem withKey:metricSystemKey defValue:KILOMETERS_AND_METERS];
         _metricSystemChangedManually = [OACommonBoolean withKey:metricSystemChangedManuallyKey defValue:NO];
         _settingGeoFormat = [OACommonInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES];
-        _settingExternalInputDevice = [OACommonInteger withKey:settingExternalInputDeviceKey defValue:NO_EXTERNAL_DEVICE];
+        _settingExternalInputDevice = [OACommonInteger withKey:settingExternalInputDeviceKey defValue:GENERIC_EXTERNAL_DEVICE];
 
         [_profilePreferences setObject:_settingAllow3DView forKey:@"enable_3d_view"];
         [_profilePreferences setObject:_drivingRegionAutomatic forKey:@"shared_string_automatic"];
@@ -4003,6 +4006,7 @@
         _speakExitNumberNames = [OACommonBoolean withKey:speakExitNumberNamesKey defValue:YES];
         _speakGpsSignalStatus = [OACommonBoolean withKey:speakGpsSignalStatusKey defValue:YES];
         _speakRouteRecalculation = [OACommonBoolean withKey:speakRouteRecalculationKey defValue:YES];
+        _speakRouteDeviation = [OACommonBoolean withKey:speakRouteDeviationKey defValue:YES];
         _announceNearbyFavorites = [OACommonBoolean withKey:announceNearbyFavoritesKey defValue:NO];
         _announceNearbyPoi = [OACommonBoolean withKey:announceNearbyPoiKey defValue:NO];
 
@@ -4015,6 +4019,7 @@
         [_profilePreferences setObject:_speakExitNumberNames forKey:@"exit_number_names"];
         [_profilePreferences setObject:_speakGpsSignalStatus forKey:@"speak_gps_signal_status"];
         [_profilePreferences setObject:_speakRouteRecalculation forKey:@"speak_route_recalculation"];
+        [_profilePreferences setObject:_speakRouteDeviation forKey:@"speak_route_deviation"];
         [_profilePreferences setObject:_announceNearbyFavorites forKey:@"announce_nearby_favorites"];
         [_profilePreferences setObject:_announceNearbyPoi forKey:@"announce_nearby_poi"];
 

@@ -18,6 +18,7 @@
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QKeyValueIterator.h>
+#include <qmap.h>
 
 @implementation OAGPXDocument
 {
@@ -319,6 +320,13 @@
     }
 
     [self fetchExtensions:gpxDocument];
+    
+    NSMutableDictionary<NSString *, NSString *> *routeKeyTags = [NSMutableDictionary dictionary];
+    for (auto it = gpxDocument->networkRouteKeyTags.begin(); it != gpxDocument->networkRouteKeyTags.end(); ++it)
+    {
+        routeKeyTags[it.key().toNSString()] = it.value().toNSString();
+    }
+    _networkRouteKeyTags = routeKeyTags;
 
     // Location Marks
     if (!gpxDocument->points.isEmpty())
@@ -657,8 +665,19 @@
     }
 
     [self fillExtensions:document];
+    [self fillNetworkRouteKeys:document];
 
     return document->saveTo(QString::fromNSString(filename), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
+}
+
+- (void) fillNetworkRouteKeys:(const std::shared_ptr<OsmAnd::GpxDocument> &)doc
+{
+    QMap<QString, QString> res;
+    for (NSString *key in self.networkRouteKeyTags)
+    {
+        res.insert(QString::fromNSString(key), QString::fromNSString(self.networkRouteKeyTags[key]));
+    }
+    doc->networkRouteKeyTags = res;
 }
 
 - (BOOL) isCloudmadeRouteFile

@@ -40,4 +40,19 @@
     return self.routeKey.operator int();
 }
 
++ (OARouteKey *) fromGpx:(NSDictionary<NSString *, NSString *> *)gpx
+{
+    QMap<QString, QString> tags;
+    for (NSString *key in gpx)
+        tags.insert(QString::fromNSString(key), QString::fromNSString(gpx[key]));
+    
+    auto rk = OsmAnd::NetworkRouteKey::fromGpx(tags);
+    if (rk)
+    {
+        auto key = *rk.get();
+        return [[OARouteKey alloc] initWithKey:key];
+    }
+    return nil;
+}
+
 @end

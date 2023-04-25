@@ -7,7 +7,7 @@
 //
 
 #import "OAPurchaseDetailsViewController.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OATitleDescriptionBigIconCell.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
@@ -108,7 +108,7 @@
         [productRow setObj:productIcon forKey:@"icon"];
 
     [productSection addRowFromDictionary:@{
-        kCellTypeKey : [OAIconTitleValueCell getCellIdentifier],
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"shared_string_type"),
         kCellDescrKey : isSubscription || [OAIAPHelper isFullVersion:_product]
             ? [_product getTitle:17.].string
@@ -137,13 +137,13 @@
     }
     
     [productSection addRowFromDictionary:@{
-        kCellTypeKey : [OAIconTitleValueCell getCellIdentifier],
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : purchasedType,
         kCellDescrKey : descr
     }];
     
     [productSection addRowFromDictionary:@{
-        kCellTypeKey : [OAIconTitleValueCell getCellIdentifier],
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"purchase_origin"),
         kCellDescrKey : OALocalizedString(@"app_store")
     }];
@@ -152,7 +152,7 @@
     {
         [productSection addRowFromDictionary:@{
             kCellKeyKey: @"manage_subscription",
-            kCellTypeKey : [OAIconTitleValueCell getCellIdentifier],
+            kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"manage_subscription"),
             @"icon" : [UIImage templateImageNamed:@"ic_custom_shop_bag"]
         }];
@@ -170,7 +170,7 @@
     }];
 
     [productSection addRowFromDictionary:@{
-        kCellTypeKey : [OAIconTitleValueCell getCellIdentifier],
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"shared_string_type"),
         kCellDescrKey : OALocalizedString(@"subscription")
     }];
@@ -181,13 +181,13 @@
     formatter.dateStyle = NSDateFormatterMediumStyle;
 
     [productSection addRowFromDictionary:@{
-        kCellTypeKey : [OAIconTitleValueCell getCellIdentifier],
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : !state.isActive ? OALocalizedString(@"expired") : OALocalizedString(@"shared_string_expires"),
         kCellDescrKey : expirationDate ? [formatter stringFromDate:expirationDate] : @""
     }];
 
     [productSection addRowFromDictionary:@{
-        kCellTypeKey : [OAIconTitleValueCell getCellIdentifier],
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"purchase_origin"),
         kCellDescrKey : [self subscripitonOriginToString:(EOASubscriptionOrigin)_settings.proSubscriptionOrigin.get]
     }];
@@ -262,32 +262,29 @@
         }
         outCell = cell;
     }
-    else if ([item.cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *) nib[0];
-            [cell showLeftIcon:NO];
-            cell.descriptionView.textColor = UIColor.blackColor;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.valueLabel.textColor = UIColor.blackColor;
         }
         if (cell)
         {
-            CGFloat leftInset = [OAUtilities getLeftMargin] + ([_product isKindOfClass:OASubscription.class] && [[_data sectionDataForIndex:indexPath.section] rowCount] - 1 == indexPath.row + 1 ? 0. : kPaddingOnSideOfContent);
-            cell.separatorInset = UIEdgeInsetsMake(0., leftInset, 0., 0.);
-
             BOOL isManageSubscription = [item.key isEqualToString:@"manage_subscription"];
             cell.selectionStyle = isManageSubscription ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
-            [cell showRightIcon:isManageSubscription];
-
+            
             UIColor *tintColor = isManageSubscription ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
-            cell.textView.text = item.title;
-            cell.textView.font = [UIFont scaledSystemFontOfSize:17. weight:isManageSubscription ? UIFontWeightMedium : UIFontWeightRegular];
-            cell.textView.textColor = tintColor;
-            cell.descriptionView.text = isManageSubscription ? @"" : item.descr;
-            cell.rightIconView.image = [item objForKey:@"icon"];
-            cell.rightIconView.tintColor = tintColor;
+            cell.titleLabel.text = item.title;
+            cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:isManageSubscription ? UIFontWeightMedium : UIFontWeightRegular];
+            cell.titleLabel.textColor = tintColor;
+            cell.valueLabel.text = isManageSubscription ? @"" : item.descr;
+            cell.accessoryView = isManageSubscription ? [[UIImageView alloc] initWithImage:[item objForKey:@"icon"]] : nil;
+            cell.accessoryView.tintColor = tintColor;
         }
         outCell = cell;
     }

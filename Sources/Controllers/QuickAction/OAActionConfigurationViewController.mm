@@ -15,7 +15,7 @@
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OASwitchTableViewCell.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAEditColorViewController.h"
 #import "OADefaultFavorite.h"
 #import "OAEditGroupViewController.h"
@@ -585,17 +585,18 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAValueTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
             OAFavoriteColor *color = [OADefaultFavorite builtinColors][[item[@"color"] integerValue]];
             if (item[@"img"])
             {
@@ -610,12 +611,11 @@
             }
             else
             {
-                [cell showLeftIcon:NO];
+                [cell leftIconVisibility:NO];
             }
             
-            cell.descriptionView.text = item[@"value"];
-            cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
-            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.valueLabel.text = item[@"value"];
+            cell.valueLabel.textColor = UIColorFromRGB(color_text_footer);
         }
         return cell;
     }

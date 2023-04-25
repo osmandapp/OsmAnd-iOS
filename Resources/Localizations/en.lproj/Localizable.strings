@@ -270,6 +270,10 @@
 
 // Route info
 
+"route_info" = "Route info";
+"network" = "Network";
+"poi_operator" = "Operator";
+"shared_string_symbol" = "Symbol";
 "shared_string_never" = "Never";
 "confirm_every_run" = "Always ask";
 "general_settings_2" = "General settings";
@@ -2306,7 +2310,19 @@
 "routeInfo_horse_scale_description" = "Render paths according to difficulty of horse trails";
 "mtb_segment_classification" = "Segment classification";
 "rendering_attr_showMtbRoutes_name" = "Mountain bike routes";
+"activity_type_car_name" = "Car";
+"activity_type_motorbike_name" = "Motorbike";
+"activity_type_offroad_name" = "Off-road";
+"activity_type_walking_name" = "Walking";
+"activity_type_running_name" = "Running";
+"activity_type_hiking_name" = "Hiking";
+"activity_type_cycling_name" = "Cycling";
 "activity_type_mountainbike_name" = "Mountain bike";
+"activity_type_racing_name" = "Racing";
+"activity_type_riding_name" = "Riding";
+"activity_type_snowmobile_name" = "Snowmobile";
+"activity_type_winter_name" = "Winter";
+"activity_type_water_name" = "Water";
 "rendering_attr_showMtbScale_name" = "Show MTB scale";
 "rendering_attr_showMtbScaleIMBATrails_name" = "Show MTB IMBA trails";
 "mtb_imba_full" = "International Mountain Bicycling Association";

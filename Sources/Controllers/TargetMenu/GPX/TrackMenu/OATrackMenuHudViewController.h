@@ -66,6 +66,7 @@
 - (BOOL)isJoinSegments;
 - (CLLocationCoordinate2D)getCenterGpxLocation;
 - (CLLocationCoordinate2D)getPinLocation;
+- (OARouteKey *)getRouteKey;
 - (void)openAppearance;
 - (void)openExport;
 - (void)openNavigation;

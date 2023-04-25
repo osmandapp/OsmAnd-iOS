@@ -13,6 +13,8 @@
 
 @property (nonatomic, readonly) OsmAnd::NetworkRouteKey routeKey;
 
++ (OARouteKey *) fromGpx:(NSDictionary<NSString *, NSString *> *)gpx;
+
 - (instancetype) initWithKey:(const OsmAnd::NetworkRouteKey &)key;
 
 @end

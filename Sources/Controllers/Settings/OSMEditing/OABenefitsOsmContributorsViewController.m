@@ -10,7 +10,7 @@
 #import "OADividerCell.h"
 #import "OAFilledButtonCell.h"
 #import "OATitleDescriptionBigIconCell.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAOsmAccountSettingsViewController.h"
 #import "OASizes.h"
 #import "OAColors.h"
@@ -90,7 +90,7 @@
             },
             @{ @"type" : [OADividerCell getCellIdentifier] },
             @{
-                    @"type" : [OAIconTitleValueCell getCellIdentifier],
+                    @"type" : [OAValueTableViewCell getCellIdentifier],
                     @"title" : OALocalizedString(@"daily_map_updates"),
                     @"left_icon": @"ic_custom_map_updates_colored_day",
                     @"right_icon": @"img_openstreetmap_logo"
@@ -100,7 +100,7 @@
                     @"left_inset": @(66. + [OAUtilities getLeftMargin])
             },
             @{
-                    @"type" : [OAIconTitleValueCell getCellIdentifier],
+                    @"type" : [OAValueTableViewCell getCellIdentifier],
                     @"title" : OALocalizedString(@"monthly_map_updates"),
                     @"left_icon": @"ic_custom_monthly_map_updates_colored_day",
                     @"right_icon": @"img_openstreetmap_logo"
@@ -110,7 +110,7 @@
                     @"left_inset": @(66. + [OAUtilities getLeftMargin])
             },
             @{
-                    @"type" : [OAIconTitleValueCell getCellIdentifier],
+                    @"type" : [OAValueTableViewCell getCellIdentifier],
                     @"title" : OALocalizedString(@"unlimited_map_downloads"),
                     @"left_icon": @"ic_custom_unlimited_downloads_colored_day",
                     @"right_icon": @"img_openstreetmap_logo"
@@ -178,22 +178,21 @@
         }
         outCell = cell;
     }
-    else if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    else if ([type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *) nib[0];
-            [cell showLeftIcon:YES];
-            [cell showRightIcon:YES];
-            cell.descriptionView.text = @"";
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            [cell valueVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
             cell.leftIconView.image = [UIImage imageNamed:item[@"left_icon"]];
-            cell.rightIconView.image = [UIImage imageNamed:item[@"right_icon"]];
+            cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:item[@"right_icon"]]];
         }
         outCell = cell;
     }
@@ -278,7 +277,7 @@
     {
         if ([type isEqualToString:[OATitleDescriptionBigIconCell getCellIdentifier]])
             return 66.;
-        else if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+        else if ([type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
             return 48.;
         else if ([type isEqualToString:[OAFilledButtonCell getCellIdentifier]])
             return 42.;

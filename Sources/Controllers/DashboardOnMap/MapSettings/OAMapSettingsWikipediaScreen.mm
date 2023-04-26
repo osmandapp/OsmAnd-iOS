@@ -13,7 +13,7 @@
 #import "OAColors.h"
 #import "OATableViewCustomFooterView.h"
 #import "OASwitchTableViewCell.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAWikipediaLanguagesViewController.h"
 #import "OAWikiArticleHelper.h"
@@ -110,7 +110,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     if (_wikipediaEnabled)
     {
         [dataArr addObject:@[@{
-                        @"type": [OAIconTitleValueCell getCellIdentifier],
+                        @"type": [OAValueTableViewCell getCellIdentifier],
                         @"img": @"ic_custom_map_languge",
                         @"title": OALocalizedString(@"shared_string_language")
                 }]];
@@ -261,20 +261,22 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
             cell.leftIconView.tintColor = UIColorFromRGB(color_dialog_buttons_dark);
-            cell.descriptionView.text = [_wikiPlugin getLanguagesSummary];
+            cell.valueLabel.text = [_wikiPlugin getLanguagesSummary];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         return cell;
     }
@@ -440,7 +442,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 - (void)onItemClicked:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if (indexPath.section == EOAMapSettingsWikipediaSectionLanguages && [item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    if (indexPath.section == EOAMapSettingsWikipediaSectionLanguages && [item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
         OAWikipediaLanguagesViewController *controller = [[OAWikipediaLanguagesViewController alloc] initWithAppMode:[[OAAppSettings sharedManager].applicationMode get]];
         controller.wikipediaDelegate = self;

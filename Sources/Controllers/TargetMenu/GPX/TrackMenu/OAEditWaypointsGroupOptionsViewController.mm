@@ -11,7 +11,7 @@
 #import "OAInputTableViewCell.h"
 #import "OAColorsTableViewCell.h"
 #import "OASwitchTableViewCell.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OADefaultFavorite.h"
@@ -157,7 +157,7 @@
         {
             OAGPXTableCellData *hideShowAllCellData = [OAGPXTableCellData withData:@{
                     kTableKey: @"hide_show_all",
-                    kCellType: [OAIconTitleValueCell getCellIdentifier],
+                    kCellType: [OAValueTableViewCell getCellIdentifier],
                     kCellTitle: [_tableData.values[@"visible_groups_count"] integerValue] == 0
                             ? OALocalizedString(@"shared_string_show_all")
                             : OALocalizedString(@"shared_string_hide_all"),
@@ -438,34 +438,29 @@
         }
         outCell = cell;
     }
-    if ([cellData.type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    if ([cellData.type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier]
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier]
                                                          owner:self options:nil];
-            cell = (OAIconTitleValueCell *) nib[0];
-            [cell showLeftIcon:NO];
-            [cell showRightIcon:YES];
-            cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell valueVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = cellData.title;
-            cell.descriptionView.text = nil;
-            cell.textView.textColor = UIColorFromRGB(cellData.tintColor);
-            cell.rightIconView.image = [UIImage templateImageNamed:cellData.rightIconName];
-            cell.rightIconView.tintColor = UIColorFromRGB(cellData.tintColor);
+            cell.titleLabel.text = cellData.title;
+            cell.titleLabel.textColor = UIColorFromRGB(cellData.tintColor);
+            cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:cellData.rightIconName]];
+            cell.accessoryView.tintColor = UIColorFromRGB(cellData.tintColor);
             if ([cellData.values.allKeys containsObject:@"font_value"])
-                cell.textView.font = cellData.values[@"font_value"];
+                cell.titleLabel.font = cellData.values[@"font_value"];
         }
         outCell = cell;
     }
-
-    if ([outCell needsUpdateConstraints])
-        [outCell updateConstraints];
-
     return outCell;
 }
 

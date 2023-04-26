@@ -9,7 +9,7 @@
 #import "OAVehicleParametersViewController.h"
 #import "OAAppSettings.h"
 #import "OAApplicationMode.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAIconTextTableViewCell.h"
 #import "OANavigationTypeViewController.h"
 #import "OARouteParametersViewController.h"
@@ -130,7 +130,7 @@
                      @"possibleValues" : possibleValues,
                      @"possibleValuesDescr" : valueDescriptions,
                      @"setting" : stringParam,
-                     @"type" : [OAIconTitleValueCell getCellIdentifier] }
+                     @"type" : [OAValueTableViewCell getCellIdentifier] }
                  ];
             }
         }
@@ -195,21 +195,20 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAValueTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = item[@"value"];
+            cell.titleLabel.text = item[@"title"];
+            cell.valueLabel.text = item[@"value"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
             cell.leftIconView.tintColor = [item[@"selectedItem"] intValue] == 0 ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(self.appMode.getIconColor);
         }

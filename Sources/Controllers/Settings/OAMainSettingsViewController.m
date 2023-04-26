@@ -7,7 +7,7 @@
 //
 
 #import "OAMainSettingsViewController.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleRightIconCell.h"
@@ -115,7 +115,7 @@
             @"title" : OALocalizedString(@"osmand_settings"),
             @"description" : OALocalizedString(@"global_settings_descr"),
             @"img" : @"left_menu_icon_settings",
-            @"type" : [OAIconTitleValueCell getCellIdentifier]
+            @"type" : [OAValueTableViewCell getCellIdentifier]
         },
         @{
             @"name" : @"backup_restore",
@@ -123,14 +123,14 @@
             @"value" : @"", // TODO: insert value
             @"description" : OALocalizedString(@"global_settings_descr"),
             @"img" : @"ic_custom_cloud_upload_colored_day",
-            @"type" : [OAIconTitleValueCell getCellIdentifier]
+            @"type" : [OAValueTableViewCell getCellIdentifier]
         },
         @{
             @"name" : @"purchases",
             @"title" : OALocalizedString(@"purchases"),
             @"description" : OALocalizedString(@"global_settings_descr"),
             @"img" : @"ic_custom_shop_bag",
-            @"type" : [OAIconTitleValueCell getCellIdentifier]
+            @"type" : [OAValueTableViewCell getCellIdentifier]
         }
     ]];
     
@@ -238,22 +238,21 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    if ([type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAValueTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = item[@"value"];
+            cell.titleLabel.text = item[@"title"];
+            cell.valueLabel.text = item[@"value"];
             cell.leftIconView.image = [item[@"name"] isEqualToString:@"backup_restore"] ? [UIImage rtlImageNamed:item[@"img"]] : [UIImage templateImageNamed:item[@"img"]];
         }
         return cell;

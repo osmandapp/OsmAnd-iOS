@@ -27,7 +27,7 @@
 #import "OASegmentedControlCell.h"
 #import "OASegmentSliderTableViewCell.h"
 #import "OATextLineViewCell.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -645,7 +645,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
         OAGPXTableCellData *resetCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"reset",
-                kCellType: [OAIconTitleValueCell getCellIdentifier],
+                kCellType: [OAValueTableViewCell getCellIdentifier],
                 kCellTitle: OALocalizedString(@"reset_to_original"),
                 kCellRightIconName: @"ic_custom_reset"
         }];
@@ -1535,26 +1535,25 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         }
         outCell = cell;
     }
-    else if ([cellData.type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier]
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier]
                                                          owner:self options:nil];
-            cell = (OAIconTitleValueCell *) nib[0];
-            [cell showLeftIcon:NO];
-            [cell showRightIcon:YES];
-            cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            [cell valueVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-            cell.textView.textColor = UIColorFromRGB(color_primary_purple);
-            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.descriptionView.text = @"";
+            cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)
         {
-            cell.textView.text = cellData.title;
-            cell.rightIconView.image = [UIImage templateImageNamed:cellData.rightIconName];
+            cell.titleLabel.text = cellData.title;
+            cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:cellData.rightIconName]];
+            [cell.accessoryView setTintColor:UIColorFromRGB(color_primary_purple)];
         }
         outCell = cell;
     }

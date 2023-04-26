@@ -20,7 +20,6 @@
 #import "OADirectionAppearanceViewController.h"
 #import "OAColors.h"
 #import "OAMapLayers.h"
-#import "OAIconTitleValueCell.h"
 #import "OAValueTableViewCell.h"
 #import "OASunriseSunsetWidget.h"
 
@@ -195,7 +194,7 @@
         {
             EOACompassMode compassMode = (EOACompassMode) [r getItemId].intValue;
             description = [OACompassMode getTitle:compassMode];
-            type = [OAIconTitleValueCell getCellIdentifier];
+            type = [OAValueTableViewCell getCellIdentifier];
         }
         else if ([r.key isEqualToString:@"sunrise"])
         {
@@ -372,26 +371,6 @@
         }
         outCell = cell;
     }
-    else if ([data[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
-    {
-        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *) nib[0];
-            [cell showLeftIcon:YES];
-        }
-        if (cell)
-        {
-            cell.textView.text = data[@"title"];
-            cell.descriptionView.text = data[@"description"];
-            cell.leftIconView.image = [UIImage templateImageNamed:data[@"img"]];
-            cell.leftIconView.tintColor = [data[@"selected"] boolValue] ? UIColorFromRGB(_settings.applicationMode.get.getIconColor) : UIColorFromRGB(color_icon_inactive);
-        }
-        if ([cell needsUpdateConstraints])
-            [cell updateConstraints];
-        return cell;
-    }
     else if ([data[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
         OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
@@ -408,8 +387,16 @@
             cell.titleLabel.text = data[@"title"];
             cell.valueLabel.text = data[@"description"];
             [cell leftIconVisibility:![data[@"key"] isEqualToString:@"map_markers"]];
-            cell.leftIconView.image = [UIImage rtlImageNamed:imgName];
-            cell.leftIconView.contentMode = UIViewContentModeCenter;
+            if ([data[@"key"] isEqualToString:@"compass"])
+            {
+                cell.leftIconView.image = [UIImage templateImageNamed:imgName];
+                cell.leftIconView.tintColor = [data[@"selected"] boolValue] ? UIColorFromRGB(_settings.applicationMode.get.getIconColor) : UIColorFromRGB(color_icon_inactive);
+            }
+            else
+            {
+                cell.leftIconView.image = [UIImage rtlImageNamed:imgName];
+                cell.leftIconView.contentMode = UIViewContentModeCenter;
+            }
         }
         return cell;
     }
@@ -475,7 +462,7 @@
         OADirectionAppearanceViewController *vc = [[OADirectionAppearanceViewController alloc] init];
         [self.vwController.navigationController pushViewController:vc animated:YES];
     }
-    else if ([data[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [data[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]] || [data[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    else if ([data[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [data[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
         OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:data[@"key"]];
         if (r && (r.widget || [r.key isEqualToString:@"compass"]))

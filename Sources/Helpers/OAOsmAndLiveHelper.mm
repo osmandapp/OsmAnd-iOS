@@ -111,7 +111,7 @@
             return OALocalizedString(@"hourly");
             break;
         case ELiveUpdateFrequencyDaily:
-            return OALocalizedString(@"osmand_live_daily");
+            return OALocalizedString(@"daily");
             break;
         case ELiveUpdateFrequencyWeekly:
             return OALocalizedString(@"weekly");

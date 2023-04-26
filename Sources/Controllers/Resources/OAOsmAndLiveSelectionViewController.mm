@@ -224,7 +224,7 @@ static const NSInteger groupCount = 1;
             [dataArr addObject:
              @{
                @"name" : @"daily_freq",
-               @"title" : OALocalizedString(@"osmand_live_daily"),
+               @"title" : OALocalizedString(@"daily"),
                @"img" : currentFrequency == ELiveUpdateFrequencyDaily ? @"menu_cell_selected.png" : @"",
                @"type" : [OASettingsTitleTableViewCell getCellIdentifier] }
              ];

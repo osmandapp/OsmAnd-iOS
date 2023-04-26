@@ -626,6 +626,7 @@
 "shared_string_history" = "History";
 "shared_string_external" = "External";
 "shared_string_coloring" = "Coloring";
+"shared_string_all_colors" = "All colors";
 
 "restart" = "Restart";
 

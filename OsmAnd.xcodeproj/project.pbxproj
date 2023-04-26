@@ -592,6 +592,10 @@
 		460743A828C10B2900F13A7A /* OAOsmLoginMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 460743A728C10B2900F13A7A /* OAOsmLoginMainViewController.xib */; };
 		4611DF3A28569C5000885FD1 /* OASubscriptionBannerCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4611DF3928569C5000885FD1 /* OASubscriptionBannerCardView.xib */; };
 		461A3F0029F6A62C008EE079 /* OATrackColoringTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3EFF29F6A5DF008EE079 /* OATrackColoringTypeViewController.m */; };
+		461A3F0429F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 461A3F0329F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib */; };
+		461A3F0729F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3F0629F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m */; };
+		461A3F0A29F6E68F008EE079 /* OAColorsCollectionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3F0929F6E68F008EE079 /* OAColorsCollectionHandler.m */; };
+		461A3F0D29F6E859008EE079 /* OABaseCollectionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3F0C29F6E859008EE079 /* OABaseCollectionHandler.m */; };
 		461F451E283E36EB00796360 /* ic_navbar_help@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F451C283E36EB00796360 /* ic_navbar_help@2x.png */; };
 		461F451F283E36EB00796360 /* ic_navbar_help@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F451D283E36EB00796360 /* ic_navbar_help@3x.png */; };
 		461F4522283E370C00796360 /* ic_custom_arrow_down_short@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F4520283E370B00796360 /* ic_custom_arrow_down_short@3x.png */; };
@@ -715,6 +719,9 @@
 		468AADE428C77A6200BEC402 /* img_openstreetmap_logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 468AADE028C77A6100BEC402 /* img_openstreetmap_logo@3x.png */; };
 		468AADE528C77A6200BEC402 /* ic_custom_download_map_unavailable@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 468AADE128C77A6200BEC402 /* ic_custom_download_map_unavailable@2x.png */; };
 		468AADE628C77A6200BEC402 /* ic_custom_download_map_unavailable@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 468AADE228C77A6200BEC402 /* ic_custom_download_map_unavailable@3x.png */; };
+		468CE3F129F82EA700F3C3E5 /* OAColorsGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 468CE3F029F82E9400F3C3E5 /* OAColorsGridViewController.m */; };
+		468CE3F429F833BC00F3C3E5 /* OACollectionMultilineTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 468CE3F329F833B700F3C3E5 /* OACollectionMultilineTableViewCell.m */; };
+		468CE3F629F8342700F3C3E5 /* OACollectionMultilineTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 468CE3F529F8342700F3C3E5 /* OACollectionMultilineTableViewCell.xib */; };
 		46903D6929B5F734004459F1 /* OABaseWebViewContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 46903D6829B5F734004459F1 /* OABaseWebViewContoller.m */; };
 		46903D6B29B5F77A004459F1 /* OABaseWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46903D6A29B5F77A004459F1 /* OABaseWebViewController.xib */; };
 		46903D6E29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 46903D6D29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m */; };
@@ -4145,6 +4152,13 @@
 		4611DF3928569C5000885FD1 /* OASubscriptionBannerCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASubscriptionBannerCardView.xib; sourceTree = "<group>"; };
 		461A3EFE29F6A5C3008EE079 /* OATrackColoringTypeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATrackColoringTypeViewController.h; sourceTree = "<group>"; };
 		461A3EFF29F6A5DF008EE079 /* OATrackColoringTypeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATrackColoringTypeViewController.m; sourceTree = "<group>"; };
+		461A3F0329F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACollectionSingleLineTableViewCell.xib; sourceTree = "<group>"; };
+		461A3F0529F6E29C008EE079 /* OACollectionSingleLineTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollectionSingleLineTableViewCell.h; sourceTree = "<group>"; };
+		461A3F0629F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACollectionSingleLineTableViewCell.m; sourceTree = "<group>"; };
+		461A3F0829F6E560008EE079 /* OAColorsCollectionHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAColorsCollectionHandler.h; sourceTree = "<group>"; };
+		461A3F0929F6E68F008EE079 /* OAColorsCollectionHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAColorsCollectionHandler.m; sourceTree = "<group>"; };
+		461A3F0B29F6E826008EE079 /* OABaseCollectionHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseCollectionHandler.h; sourceTree = "<group>"; };
+		461A3F0C29F6E859008EE079 /* OABaseCollectionHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseCollectionHandler.m; sourceTree = "<group>"; };
 		461F451C283E36EB00796360 /* ic_navbar_help@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_help@2x.png"; path = "Resources/Icons/ic_navbar_help@2x.png"; sourceTree = "<group>"; };
 		461F451D283E36EB00796360 /* ic_navbar_help@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_help@3x.png"; path = "Resources/Icons/ic_navbar_help@3x.png"; sourceTree = "<group>"; };
 		461F4520283E370B00796360 /* ic_custom_arrow_down_short@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_arrow_down_short@3x.png"; path = "Resources/Icons/ic_custom_arrow_down_short@3x.png"; sourceTree = "<group>"; };
@@ -4278,6 +4292,11 @@
 		468AADE028C77A6100BEC402 /* img_openstreetmap_logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_openstreetmap_logo@3x.png"; path = "Resources/Icons/img_openstreetmap_logo@3x.png"; sourceTree = "<group>"; };
 		468AADE128C77A6200BEC402 /* ic_custom_download_map_unavailable@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download_map_unavailable@2x.png"; path = "Resources/Icons/ic_custom_download_map_unavailable@2x.png"; sourceTree = "<group>"; };
 		468AADE228C77A6200BEC402 /* ic_custom_download_map_unavailable@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download_map_unavailable@3x.png"; path = "Resources/Icons/ic_custom_download_map_unavailable@3x.png"; sourceTree = "<group>"; };
+		468CE3EF29F82E6300F3C3E5 /* OAColorsGridViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAColorsGridViewController.h; sourceTree = "<group>"; };
+		468CE3F029F82E9400F3C3E5 /* OAColorsGridViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAColorsGridViewController.m; sourceTree = "<group>"; };
+		468CE3F229F8336F00F3C3E5 /* OACollectionMultilineTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollectionMultilineTableViewCell.h; sourceTree = "<group>"; };
+		468CE3F329F833B700F3C3E5 /* OACollectionMultilineTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACollectionMultilineTableViewCell.m; sourceTree = "<group>"; };
+		468CE3F529F8342700F3C3E5 /* OACollectionMultilineTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACollectionMultilineTableViewCell.xib; sourceTree = "<group>"; };
 		46903D6729B5F715004459F1 /* OABaseWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseWebViewController.h; sourceTree = "<group>"; };
 		46903D6829B5F734004459F1 /* OABaseWebViewContoller.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseWebViewContoller.m; sourceTree = "<group>"; };
 		46903D6A29B5F77A004459F1 /* OABaseWebViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OABaseWebViewController.xib; sourceTree = "<group>"; };
@@ -8096,6 +8115,7 @@
 		0AC993FB26E903E50004181F /* TrackMenu */ = {
 			isa = PBXGroup;
 			children = (
+				468CE3EE29F82DE100F3C3E5 /* Appearance */,
 				0A1051D12731A30200BDF6C4 /* MenuBuilder */,
 				B0D6129A27B65E33BA711114 /* OAAddWaypointViewController.h */,
 				B0D618034074DE575CDAACDD /* OAAddWaypointViewController.mm */,
@@ -8111,8 +8131,6 @@
 				B0D610268394E6C3CF0F3C8C /* OAEditWaypointsGroupBottomSheetViewController.mm */,
 				B0D617A9D1879485C6A8AA8E /* OAEditWaypointsGroupOptionsViewController.h */,
 				B0D61D6C029D14889610378F /* OAEditWaypointsGroupOptionsViewController.mm */,
-				461A3EFE29F6A5C3008EE079 /* OATrackColoringTypeViewController.h */,
-				461A3EFF29F6A5DF008EE079 /* OATrackColoringTypeViewController.m */,
 				B0D6198DDF14DCBC3FED03FA /* OATrackMenuAppearanceHudViewController.h */,
 				B0D61686FC06AEED2517A873 /* OATrackMenuAppearanceHudViewController.mm */,
 				0A9ED66B27012444000DB410 /* OATrackMenuAppearanceHudViewController.xib */,
@@ -9742,6 +9760,28 @@
 				CA4ED0674197CBD54D7AB46B /* OAWeatherCacheSettingsViewController.h */,
 			);
 			path = WeatherSettings;
+			sourceTree = "<group>";
+		};
+		468CE3ED29F82D8200F3C3E5 /* Handlers */ = {
+			isa = PBXGroup;
+			children = (
+				461A3F0829F6E560008EE079 /* OAColorsCollectionHandler.h */,
+				461A3F0929F6E68F008EE079 /* OAColorsCollectionHandler.m */,
+				461A3F0B29F6E826008EE079 /* OABaseCollectionHandler.h */,
+				461A3F0C29F6E859008EE079 /* OABaseCollectionHandler.m */,
+			);
+			path = Handlers;
+			sourceTree = "<group>";
+		};
+		468CE3EE29F82DE100F3C3E5 /* Appearance */ = {
+			isa = PBXGroup;
+			children = (
+				461A3EFE29F6A5C3008EE079 /* OATrackColoringTypeViewController.h */,
+				461A3EFF29F6A5DF008EE079 /* OATrackColoringTypeViewController.m */,
+				468CE3EF29F82E6300F3C3E5 /* OAColorsGridViewController.h */,
+				468CE3F029F82E9400F3C3E5 /* OAColorsGridViewController.m */,
+			);
+			path = Appearance;
 			sourceTree = "<group>";
 		};
 		46AEDB8A27F4A9AC006D90E8 /* Weather */ = {
@@ -11801,6 +11841,8 @@
 		DA5A7BAA26C563A100F274C7 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				468CE3ED29F82D8200F3C3E5 /* Handlers */,
+				DA5A7BB626C563A100F274C7 /* Xibs */,
 				DA5A7CD226C563A200F274C7 /* OAActivityViewWithTitleCell.h */,
 				DA5A7BB026C563A100F274C7 /* OAActivityViewWithTitleCell.m */,
 				DA5A7CB126C563A200F274C7 /* OABottomSheetHeaderButtonCell.h */,
@@ -12029,7 +12071,6 @@
 				DA5A7D0626C563A300F274C7 /* OAWaypointHeaderCell.m */,
 				DA5A7C8C26C563A200F274C7 /* OAWebViewCell.h */,
 				DA5A7D0926C563A300F274C7 /* OAWebViewCell.m */,
-				DA5A7BB626C563A100F274C7 /* Xibs */,
 				B247454F27E6424000C18C3F /* OALargeImageTitleDescrTableViewCell.h */,
 				B247455027E6424000C18C3F /* OALargeImageTitleDescrTableViewCell.m */,
 				B247455427E6470900C18C3F /* OATwoFilledButtonsTableViewCell.h */,
@@ -12056,6 +12097,10 @@
 				465D7E1F295493F00099B206 /* OATextMultilineTableViewCell.m */,
 				467DFD7E297F16AF008A9830 /* OACardTableViewCell.h */,
 				467DFD7F297F172C008A9830 /* OACardTableViewCell.m */,
+				461A3F0529F6E29C008EE079 /* OACollectionSingleLineTableViewCell.h */,
+				461A3F0629F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m */,
+				468CE3F229F8336F00F3C3E5 /* OACollectionMultilineTableViewCell.h */,
+				468CE3F329F833B700F3C3E5 /* OACollectionMultilineTableViewCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -12187,6 +12232,8 @@
 				4663AB3F2951C95A00D9781E /* OAInputTableViewCell.xib */,
 				465D7E20295494000099B206 /* OATextMultilineTableViewCell.xib */,
 				467DFD7C297EFDBB008A9830 /* OACardTableViewCell.xib */,
+				461A3F0329F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib */,
+				468CE3F529F8342700F3C3E5 /* OACollectionMultilineTableViewCell.xib */,
 			);
 			path = Xibs;
 			sourceTree = "<group>";
@@ -14330,6 +14377,7 @@
 				8476E2501F6C1EEC00EC274F /* map_bicycle_location_lost_night@2x.png in Resources */,
 				32C91E5F25A86A5700FA6470 /* ic_custom_compass_widget@2x.png in Resources */,
 				46453B0D28352407001F9A3A /* ic_custom_monthly_map_updates_colored_day_big@3x.png in Resources */,
+				468CE3F629F8342700F3C3E5 /* OACollectionMultilineTableViewCell.xib in Resources */,
 				8A6CBCBE21CE25F0004033C7 /* img_logo_38dp_contour_lines@3x.png in Resources */,
 				DA32846326CBF76B0036BA73 /* img_plugin_trip_planning.jpg in Resources */,
 				DA6471AD22CF5433008F937F /* ic_custom_timer@2x.png in Resources */,
@@ -15655,6 +15703,7 @@
 				DA959032246586E5004C9F54 /* img_legend_slope@3x.png in Resources */,
 				3205EC4026E807E80090B491 /* OAQuickSearchCoordinatesViewController.xib in Resources */,
 				972189E929DC343600AB0D92 /* ic_action_train@2x.png in Resources */,
+				461A3F0429F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib in Resources */,
 				845E06A91B5FF17400DFC2A7 /* ic_plugin_parking@3x.png in Resources */,
 				465B935C29BF7805008F476F /* ic_carplay_tracks_night@2x.png in Resources */,
 				8415030D1DEED6AE007FAC50 /* ic_wifi_off@2x.png in Resources */,
@@ -16919,6 +16968,7 @@
 				DA5A83C826C563A800F274C7 /* OACollapsableCoordinatesView.mm in Sources */,
 				DA5A837226C563A800F274C7 /* OARoutingSettingsCell.mm in Sources */,
 				DA5A833726C563A800F274C7 /* OATableViewCustomFooterView.m in Sources */,
+				461A3F0D29F6E859008EE079 /* OABaseCollectionHandler.m in Sources */,
 				DA5A84EC26C563A900F274C7 /* OAConfigureMenuViewController.mm in Sources */,
 				DA4ABF162876DA6800B996EF /* OASettingsItem.mm in Sources */,
 				DA5A84E926C563A900F274C7 /* OADashboardViewController.mm in Sources */,
@@ -17012,6 +17062,7 @@
 				DA5A825226C563A700F274C7 /* OANavigationTypeViewController.mm in Sources */,
 				DA5A830C26C563A800F274C7 /* OAEmptySearchCell.m in Sources */,
 				DA5A850426C563A900F274C7 /* OATargetPointView.mm in Sources */,
+				461A3F0A29F6E68F008EE079 /* OAColorsCollectionHandler.m in Sources */,
 				DA5A84F226C563A900F274C7 /* OALocationConvert.mm in Sources */,
 				DA5A81DA26C563A700F274C7 /* OAFirstUsageWizardController.mm in Sources */,
 				DA5A83F326C563A800F274C7 /* OARearrangeCustomFiltersViewController.mm in Sources */,
@@ -17210,6 +17261,7 @@
 				DADF31A928D07D1100DC2886 /* OACarPlayPurchaseViewController.m in Sources */,
 				DA5A836926C563A800F274C7 /* OARouteSettingsViewController.mm in Sources */,
 				DA5A83FD26C563A800F274C7 /* OAHistoryTableViewController.mm in Sources */,
+				461A3F0729F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m in Sources */,
 				DA5A84FD26C563A900F274C7 /* OATableViewCell.m in Sources */,
 				DA5A83DB26C563A800F274C7 /* OASelectFavoriteGroupViewController.mm in Sources */,
 				DA5A854726C563A900F274C7 /* OANetworkUtilities.m in Sources */,
@@ -17236,6 +17288,7 @@
 				DA5A84A226C563A900F274C7 /* OAMovePointCommand.mm in Sources */,
 				DA5A854026C563A900F274C7 /* SunriseSunset.m in Sources */,
 				DA5A832326C563A800F274C7 /* OATitleSliderTableViewCell.m in Sources */,
+				468CE3F129F82EA700F3C3E5 /* OAColorsGridViewController.m in Sources */,
 				DA5A83C726C563A800F274C7 /* OATargetMenuViewController.mm in Sources */,
 				DA5A81BF26C563A700F274C7 /* OAPOIType.m in Sources */,
 				46D38AA229C39D7C000AAE0C /* OARoutingFile.m in Sources */,
@@ -17367,6 +17420,7 @@
 				DA5A84DE26C563A900F274C7 /* OAMapSettingsLanguageScreen.mm in Sources */,
 				DA5A840226C563A800F274C7 /* OASearchToolbarViewController.mm in Sources */,
 				DA5A847026C563A900F274C7 /* OACompassRulerWidgetState.m in Sources */,
+				468CE3F429F833BC00F3C3E5 /* OACollectionMultilineTableViewCell.m in Sources */,
 				DA5A82E626C563A800F274C7 /* OATableViewCustomHeaderView.m in Sources */,
 				DA5A81C926C563A700F274C7 /* OAPointIContainer.mm in Sources */,
 				DA5A83EB26C563A800F274C7 /* OAQuickSearchViewController.mm in Sources */,

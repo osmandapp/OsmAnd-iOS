@@ -17,12 +17,15 @@
 
 @interface OABaseCollectionHandler : NSObject
 
-- (instancetype)initWithData:(NSArray<NSArray *> *)data selectedIndexPath:(NSIndexPath *)selectedIndexPath;
+- (instancetype)initWithData:(NSMutableArray<NSMutableArray *> *)data;
 
 - (NSString *)getCellIdentifier;
 - (CGSize)getItemSize;
 - (UICollectionViewScrollDirection)getScrollDirection;
 - (void)setScrollDirection:(UICollectionViewScrollDirection)scrollDirection;
+
+- (NSIndexPath *)getSelectedIndexPath;
+- (void)setSelectedIndexPath:(NSIndexPath *)selectedIndexPath;
 
 - (NSInteger)rowsCount:(NSInteger)section;
 - (UICollectionViewCell *)getCollectionViewCell:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;

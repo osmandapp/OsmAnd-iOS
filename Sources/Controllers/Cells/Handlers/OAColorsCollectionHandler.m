@@ -14,7 +14,7 @@
 
 @implementation OAColorsCollectionHandler
 {
-    NSArray<NSArray<NSNumber *> *> *_data;
+    NSMutableArray<NSMutableArray<NSNumber *> *> *_data;
     NSIndexPath *_selectedIndexPath;
 }
 
@@ -27,10 +27,29 @@
 
 #pragma mark - Data
 
-- (void)generateData:(NSArray<NSArray *> *)data selectedIndexPath:(NSIndexPath *)selectedIndexPath
+- (void)addColorIfNeededAndSelect:(NSInteger)color collectionView:(UICollectionView *)collectionView
+{
+    NSNumber *selectedColor = @(color);
+    if (![_data.firstObject containsObject:selectedColor])
+        [_data.firstObject addObject:selectedColor];
+
+    [self onRowSelected:[NSIndexPath indexPathForRow:[_data.firstObject indexOfObject:selectedColor] inSection:0]
+         collectionView:collectionView];
+}
+
+- (NSIndexPath *)getSelectedIndexPath
+{
+    return _selectedIndexPath;
+}
+
+- (void)setSelectedIndexPath:(NSIndexPath *)selectedIndexPath
+{
+    _selectedIndexPath = selectedIndexPath;
+}
+
+- (void)generateData:(NSMutableArray<NSMutableArray<NSNumber *> *> *)data
 {
     _data = data;
-    _selectedIndexPath = selectedIndexPath;
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
@@ -86,12 +105,9 @@
     return _data.count;
 }
 
-- (void)onRowSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
-{
-    NSIndexPath *prevSelectedColorIndex = _selectedIndexPath;
-    _selectedIndexPath = indexPath;
-    [collectionView reloadItemsAtIndexPaths:@[prevSelectedColorIndex, indexPath]];
-    [super onRowSelected:indexPath collectionView:collectionView];
-}
+//- (void)onRowSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
+//{
+//    [super onRowSelected:indexPath collectionView:collectionView];
+//}
 
 @end

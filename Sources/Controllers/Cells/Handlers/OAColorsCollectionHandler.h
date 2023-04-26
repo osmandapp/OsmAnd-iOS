@@ -10,4 +10,6 @@
 
 @interface OAColorsCollectionHandler : OABaseCollectionHandler
 
+- (void)addColorIfNeededAndSelect:(NSInteger)color collectionView:(UICollectionView *)collectionView;
+
 @end

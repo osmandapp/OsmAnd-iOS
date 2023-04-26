@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *button;
 
 - (void)setCollectionHandler:(OABaseCollectionHandler *)collectionHandler;
+- (OABaseCollectionHandler *)getCollectionHandler;
 
 - (void)buttonVisibility:(BOOL)show;
 

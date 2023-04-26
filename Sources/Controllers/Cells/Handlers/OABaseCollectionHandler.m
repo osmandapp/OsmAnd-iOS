@@ -15,13 +15,13 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithData:(NSArray<NSArray *> *)data selectedIndexPath:(NSIndexPath *)selectedIndexPath
+- (instancetype)initWithData:(NSMutableArray<NSMutableArray *> *)data
 {
     self = [super init];
     if (self)
     {
         _scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        [self generateData:data selectedIndexPath:selectedIndexPath];
+        [self generateData:data];
     }
     return self;
 }
@@ -50,7 +50,16 @@
 
 #pragma mark - Data
 
-- (void)generateData:(NSArray<NSArray *> *)data selectedIndexPath:(NSIndexPath *)selectedIndexPath
+- (NSIndexPath *)getSelectedIndexPath
+{
+    return nil;
+}
+
+- (void)setSelectedIndexPath:(NSIndexPath *)selectedIndexPath
+{
+}
+
+- (void)generateData:(NSMutableArray<NSMutableArray *> *)data
 {
 }
 
@@ -71,6 +80,9 @@
 
 - (void)onRowSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
+    NSIndexPath *prevSelectedColorIndex = [self getSelectedIndexPath];
+    [self setSelectedIndexPath:indexPath];
+    [collectionView reloadItemsAtIndexPaths:prevSelectedColorIndex ? @[prevSelectedColorIndex, indexPath] : @[indexPath]];
     if (self.delegate)
         [self.delegate onCellSelected:indexPath];
 }

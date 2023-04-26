@@ -46,7 +46,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="323" height="48"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="48" id="Ft8-45-Pf1"/>
+                                            <constraint firstAttribute="height" priority="750" constant="48" id="Ft8-45-Pf1"/>
                                         </constraints>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" automaticEstimatedItemSize="YES" minimumLineSpacing="8" minimumInteritemSpacing="12" id="Fy5-UD-Z9r">
                                             <size key="itemSize" width="48" height="48"/>
@@ -114,6 +114,7 @@
                 <outlet property="button" destination="W16-m3-jDw" id="WYM-0x-XgR"/>
                 <outlet property="collectionStackView" destination="NS9-5f-FoA" id="fzo-0U-cx9"/>
                 <outlet property="collectionView" destination="DOd-wT-r3R" id="vOQ-He-2Ra"/>
+                <outlet property="collectionViewHeight" destination="Ft8-45-Pf1" id="u9e-mm-AHH"/>
                 <outlet property="contentOutsideStackViewVertical" destination="Pde-Gp-UrD" id="xiC-Ve-Sf5"/>
                 <outlet property="topMarginStackView" destination="AxO-VI-ivf" id="BE5-Ss-SJY"/>
             </connections>

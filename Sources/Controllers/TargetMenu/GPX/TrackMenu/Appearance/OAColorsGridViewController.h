@@ -12,7 +12,7 @@
 
 @interface OAColorsGridViewController : OABaseNavbarViewController
 
-- (instancetype)initWithColors:(NSArray<NSNumber *> *)colors selectedColor:(NSInteger)selectedColor;
+- (instancetype)initWithColors:(NSMutableArray<NSNumber *> *)colors selectedColor:(NSInteger)selectedColor;
 
 @property(nonatomic, weak) id<OACollectionCellDelegate>delegate;
 

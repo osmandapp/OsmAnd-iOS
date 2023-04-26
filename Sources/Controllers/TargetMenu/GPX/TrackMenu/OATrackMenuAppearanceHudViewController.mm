@@ -39,7 +39,7 @@
 
 #define kColorsSection 1
 
-#define kColorGridOrDescriptionCell 2
+#define kColorGridOrDescriptionCell 1
 
 @implementation OATrackAppearanceItem
 
@@ -63,7 +63,7 @@
 
 @end
 
-@interface OATrackMenuAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, OATrackColoringTypeDelegate, OACollectionCellDelegate>
+@interface OATrackMenuAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIColorPickerViewControllerDelegate, OATrackColoringTypeDelegate, OACollectionCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIImageView *titleIconView;
@@ -86,7 +86,7 @@
     NSArray<OATrackAppearanceItem *> *_availableColoringTypes;
 
     OAGPXTrackColor *_selectedColor;
-    NSArray<NSNumber *> *_availableColors;
+    NSMutableArray<NSNumber *> *_availableColors;
 
     OAGPXTrackWidth *_selectedWidth;
     NSArray<NSString *> *_customWidthValues;
@@ -200,6 +200,13 @@
         [trackColors addObject:@(trackColor.colorValue)];
     }
     _availableColors = trackColors;
+    NSArray<NSString *> *customTrackColors = [[OAAppSettings sharedManager].customTrackColors get];
+    for (NSString *hexColor in customTrackColors)
+    {
+        [_availableColors addObject:@([OAUtilities colorToNumberFromString:hexColor])];
+    }
+    if (![_availableColors containsObject:@(_selectedColor.colorValue)])
+        [_availableColors addObject:@(_selectedColor.colorValue)];
 
     NSMutableArray *customWidthValues = [NSMutableArray array];
     for (NSInteger i = [OAGPXTrackWidth getCustomTrackWidthMin]; i <= [OAGPXTrackWidth getCustomTrackWidthMax]; i++)
@@ -219,6 +226,28 @@
     self.tableView.sectionFooterHeight = 0.001;
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    if ([_selectedItem.coloringType isTrackSolid])
+    {
+        OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
+        if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
+        {
+            NSIndexPath *colorGridIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
+            OACollectionSingleLineTableViewCell *colorsGridCell = [self.tableView cellForRowAtIndexPath:colorGridIndexPath];
+            NSIndexPath *selectedIndexPath = [[colorsGridCell getCollectionHandler] getSelectedIndexPath];
+            if (![colorsGridCell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
+            {
+                [colorsGridCell.collectionView scrollToItemAtIndexPath:selectedIndexPath
+                                                      atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
+                                                              animated:YES];
+            }
+        }
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -784,11 +813,9 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACollectionSingleLineTableViewCell getCellIdentifier]
                                                          owner:self options:nil];
             cell = nib[0];
-            OAColorsCollectionHandler *colorsHandler =
-                [[OAColorsCollectionHandler alloc] initWithData:@[arrayValue]
-                                              selectedIndexPath:[NSIndexPath indexPathForRow:[arrayValue indexOfObject:cellData.values[@"int_value"]]
-                                                                                   inSection:0]];
+            OAColorsCollectionHandler *colorsHandler = [[OAColorsCollectionHandler alloc] initWithData:[NSMutableArray arrayWithObject:arrayValue]];
             colorsHandler.delegate = self;
+            [colorsHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[arrayValue indexOfObject:cellData.values[@"int_value"]] inSection:0]];
             [cell setCollectionHandler:colorsHandler];
             cell.separatorInset = UIEdgeInsetsZero;
         }
@@ -798,6 +825,8 @@
             cell.button.tag = indexPath.section << 10 | indexPath.row;
             [cell.button removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
             [cell.button addTarget:self action:@selector(onCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.collectionView reloadData];
+            [cell layoutIfNeeded];
         }
         return cell;
     }
@@ -1525,7 +1554,10 @@
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     if ([cellData.key isEqualToString:@"color_grid"])
     {
-        
+        UIColorPickerViewController *colorsViewController = [[UIColorPickerViewController alloc] init];
+        colorsViewController.delegate = self;
+        colorsViewController.selectedColor = _selectedColor.color;
+        [self.navigationController presentViewController:colorsViewController animated:YES completion:nil];
     }
 }
 
@@ -1553,12 +1585,38 @@
         {
             OAGPXTableCellData *colorGridCell = colorSection.subjects[kColorGridOrDescriptionCell];
             [self updateData:colorGridCell];
+        }
+    }
+}
 
-            [UIView setAnimationsEnabled:NO];
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kColorGridOrDescriptionCell
-                                                                        inSection:kColorsSection]]
-                                  withRowAnimation:UITableViewRowAnimationNone];
-            [UIView setAnimationsEnabled:YES];
+#pragma mark - UIColorPickerViewControllerDelegate
+
+- (void)colorPickerViewControllerDidFinish:(UIColorPickerViewController *)viewController
+{
+    UIColor *selectedColor = viewController.selectedColor;
+
+    NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[[OAAppSettings sharedManager].customTrackColors get]];
+    NSString *hexColor = [selectedColor toHexARGBString];
+    if (![customTrackColors containsObject:hexColor])
+    {
+        [customTrackColors addObject:hexColor];
+        [[OAAppSettings sharedManager].customTrackColors set:customTrackColors];
+    }
+
+    OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
+    if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
+    {
+        NSInteger newColor = [OAUtilities colorToNumberFromString:[selectedColor toHexARGBString]];
+        NSIndexPath *colorGridIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
+        OACollectionSingleLineTableViewCell *colorsGridCell = [self.tableView cellForRowAtIndexPath:colorGridIndexPath];
+        OAColorsCollectionHandler *colorsHandler = (OAColorsCollectionHandler *) [colorsGridCell getCollectionHandler];
+        [colorsHandler addColorIfNeededAndSelect:newColor collectionView:colorsGridCell.collectionView];
+        NSIndexPath *selectedIndexPath = [colorsHandler getSelectedIndexPath];
+        if (![colorsGridCell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
+        {
+            [colorsGridCell.collectionView scrollToItemAtIndexPath:selectedIndexPath
+                                                  atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
+                                                          animated:YES];
         }
     }
 }

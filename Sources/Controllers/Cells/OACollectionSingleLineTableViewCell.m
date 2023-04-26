@@ -16,6 +16,8 @@
 @property (weak, nonatomic) IBOutlet UIStackView *collectionStackView;
 @property (weak, nonatomic) IBOutlet UIStackView *bottomMarginStackView;
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
+
 @end
 
 @implementation OACollectionSingleLineTableViewCell
@@ -34,6 +36,11 @@
     self.collectionView.contentInset = UIEdgeInsetsMake(0., kPaddingOnSideOfContent , 0., 0.);
 }
 
+- (OABaseCollectionHandler *)getCollectionHandler
+{
+    return _collectionHandler;
+}
+
 - (void)setCollectionHandler:(OABaseCollectionHandler *)collectionHandler
 {
     _collectionHandler = collectionHandler;
@@ -45,6 +52,9 @@
 
     NSString *cellIdentifier = [_collectionHandler getCellIdentifier];
     [self.collectionView registerNib:[UINib nibWithNibName:cellIdentifier bundle:nil] forCellWithReuseIdentifier:cellIdentifier];
+    [self.collectionView scrollToItemAtIndexPath:[_collectionHandler getSelectedIndexPath]
+                                atScrollPosition:UICollectionViewScrollPositionCenteredVertically
+                                        animated:YES];
 }
 
 #pragma mark - Base UI
@@ -66,6 +76,25 @@
         self.topMarginStackView.spacing = 3.;
         self.bottomMarginStackView.spacing = 9.;
     }
+}
+
+#pragma mark - UIView
+
+- (CGSize)systemLayoutSizeFittingSize:(CGSize)targetSize
+        withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority
+              verticalFittingPriority:(UILayoutPriority)verticalFittingPriority
+{
+    self.contentView.frame = self.bounds;
+    [self.contentView layoutIfNeeded];
+    CGFloat height = self.collectionView.contentSize.height;
+    if (_collectionHandler)
+    {
+        CGSize itemSize = [_collectionHandler getItemSize];
+        if (height < itemSize.height)
+            height = itemSize.height;
+    }
+    self.collectionViewHeight.constant = height;
+    return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 }
 
 #pragma mark - UICollectionViewDataSource

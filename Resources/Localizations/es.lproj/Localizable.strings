@@ -2864,3 +2864,7 @@
 "shared_string_app_profile" = "Perfil de la aplicación";
 "map_widget_trip_recording_uphill" = "Cuesta arriba";
 "map_widget_trip_recording_distance" = "Distancia";
+"map_widget_altitude_current_location" = "Altitud: ubicación actual";
+"altitude_widget_desc" = "Muestra la altura sobre el nivel del mar de la geolocalización actual.";
+"map_widget_altitude_map_center" = "Elevación: centro del mapa";
+"map_widget_altitude_map_center_desc" = "Muestra la elevación sobre el nivel del mar del centro del mapa actual.";

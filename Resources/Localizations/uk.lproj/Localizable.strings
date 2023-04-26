@@ -2879,3 +2879,12 @@
 "altitude_widget_desc" = "Показує висоту над рівнем моря поточної геолокації.";
 "map_widget_altitude_current_location" = "Висота: поточне положення";
 "map_widget_altitude_map_center_desc" = "Показує висоту над рівнем моря поточного центру мапи.";
+"route_info" = "Відомості про маршрут";
+"activity_type_offroad_name" = "Позашляховик";
+"activity_type_walking_name" = "Пішки";
+"activity_type_running_name" = "Біг";
+"activity_type_hiking_name" = "Піший туризм";
+"network" = "Мережа";
+"activity_type_motorbike_name" = "Мотоцикл";
+"activity_type_snowmobile_name" = "Снігохід";
+"poi_operator" = "Оператор";

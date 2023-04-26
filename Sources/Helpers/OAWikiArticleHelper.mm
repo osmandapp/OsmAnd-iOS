@@ -26,7 +26,7 @@
 
 @implementation OAWikiArticleSearchTask
 {
-    CLLocation *_articleLatLon;
+    CLLocationCoordinate2D _articleLatLon;
     NSString *_regionName;
     NSString *_url;
     NSString *_lang;
@@ -36,7 +36,7 @@
     OAWikiArticleSearchTaskBlockType _onComplete;
 }
 
-- (instancetype)initWithLatlon:(CLLocation *)latLon url:(NSString *)url onStart:(void (^)())onStart onComplete:(void (^)())onComplete
+- (instancetype)initWithLatlon:(CLLocationCoordinate2D)latLon url:(NSString *)url onStart:(void (^)())onStart onComplete:(void (^)())onComplete
 {
     self = [super init];
     if (self)
@@ -75,13 +75,13 @@
     if (!_isCanceled)
     {
         OsmAndAppInstance app = [OsmAndApp instance];
-        OAWorldRegion *worldRegion = [app.worldRegion findAtLat:_articleLatLon.coordinate.latitude lon:_articleLatLon.coordinate.longitude];
+        OAWorldRegion *worldRegion = [app.worldRegion findAtLat:_articleLatLon.latitude lon:_articleLatLon.longitude];
         worldRegion = [OAWikiArticleHelper findWikiRegion:worldRegion];
         OARepositoryResourceItem *repository = [OAWikiArticleHelper findResourceItem:worldRegion];
         
         if (repository && app.resourcesManager->isResourceInstalled(repository.resourceId))
         {
-            OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_articleLatLon.coordinate.latitude, _articleLatLon.coordinate.longitude));
+            OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_articleLatLon.latitude, _articleLatLon.longitude));
             NSArray<OAPOI *> *wikiPoints = [OAPOIHelper findPOIsByTagName:nil name:nil location:locI categoryName:OSM_WIKI_CATEGORY poiTypeName:nil bboxTopLeft:worldRegion.bboxTopLeft bboxBottomRight:worldRegion.bboxBottomRight];
             
             for (OAPOI *poi in wikiPoints)
@@ -174,13 +174,10 @@
     return nil;
 }
 
-+ (void) showWikiArticle:(CLLocation *)location url:(NSString *)url onStart:(void (^)())onStart onComplete:(void (^)())onComplete;
++ (void) showWikiArticle:(CLLocationCoordinate2D)location url:(NSString *)url onStart:(void (^)())onStart onComplete:(void (^)())onComplete;
 {
-    if (location)
-    {
-        OAWikiArticleSearchTask *task = [[OAWikiArticleSearchTask alloc] initWithLatlon:location url:url onStart:onStart onComplete:onComplete];
-        [task execute];
-    }
+    OAWikiArticleSearchTask *task = [[OAWikiArticleSearchTask alloc] initWithLatlon:location url:url onStart:onStart onComplete:onComplete];
+    [task execute];
 }
 
 + (void)showHowToOpenWikiAlert:(OARepositoryResourceItem *)item url:(NSString *)url

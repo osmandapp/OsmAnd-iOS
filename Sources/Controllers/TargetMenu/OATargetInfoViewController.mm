@@ -965,7 +965,7 @@
             OAIAPHelper *helper = [OAIAPHelper sharedInstance];
             if ([helper.wiki isPurchased])
             {
-                [OAWikiArticleHelper showWikiArticle:[[CLLocation alloc] initWithLatitude:self.location.latitude longitude:self.location.longitude] url:info.text onStart:nil onComplete:nil];
+                [OAWikiArticleHelper showWikiArticle:self.location url:info.text onStart:nil onComplete:nil];
             }
             else
             {

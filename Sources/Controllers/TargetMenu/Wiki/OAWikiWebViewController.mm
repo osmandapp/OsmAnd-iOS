@@ -147,7 +147,8 @@
         _content = [self appendHeadToContent:_content];
 }
 
-- (void) webView: (WKWebView *) webView decidePolicyForNavigationAction: (WKNavigationAction *) navigationAction decisionHandler: (void (^)(WKNavigationActionPolicy)) decisionHandler {
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
+{
     NSString *newUrl = [OAWikiArticleHelper normalizeFileUrl:[navigationAction.request.URL.absoluteString stringByRemovingPercentEncoding]];
     NSString *currentUrl = [OAWikiArticleHelper normalizeFileUrl:[webView.URL.absoluteString stringByRemovingPercentEncoding]];
     NSInteger wikiUrlEndDndex = [currentUrl indexOf:@"#"];
@@ -174,7 +175,8 @@
                 __block UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[OALocalizedString(@"wiki_article_search_text") stringByAppendingString:@"\n\n"] preferredStyle:UIAlertControllerStyleAlert];
                 UIActivityIndicatorView* spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleLarge];
                 spinner.color = [UIColor blackColor];
-                spinner.translatesAutoresizingMaskIntoConstraints=NO;
+                spinner.translatesAutoresizingMaskIntoConstraints = NO;
+                spinner.tag = -998;
                 [alert.view addSubview:spinner];
                 NSDictionary * views = @{@"pending" : alert.view, @"indicator" : spinner};
                 NSArray * constraintsVertical = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[indicator]-(20)-|" options:0 metrics:nil views:views];
@@ -184,11 +186,11 @@
                 [spinner setUserInteractionEnabled:NO];
                 
                 _content = nil;
-                [OAWikiArticleHelper showWikiArticle:[[CLLocation alloc] initWithLatitude:_poi.latitude longitude:_poi.longitude] url:newUrl onStart:^{
+                [OAWikiArticleHelper showWikiArticle:CLLocationCoordinate2DMake(_poi.latitude, _poi.longitude) url:newUrl onStart:^{
                     [spinner startAnimating];
                     [self presentViewController:alert animated:YES completion:nil];
                 } onComplete:^{
-                    [spinner stopAnimating];
+                    [alert.view removeSpinner];
                     [alert dismissViewControllerAnimated:YES completion:nil];
                     alert = nil;
                 }];

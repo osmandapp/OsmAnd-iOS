@@ -22,7 +22,7 @@ typedef void(^OAWikiArticleSearchTaskBlockType)(void);
 
 @interface OAWikiArticleSearchTask : NSObject
 
-- (instancetype)initWithLatlon:(CLLocation *)latLon url:(NSString *)url onStart:(void (^)())onStart onComplete:(void (^)())onComplete;
+- (instancetype)initWithLatlon:(CLLocationCoordinate2D)latLon url:(NSString *)url onStart:(void (^)())onStart onComplete:(void (^)())onComplete;
 - (void) execute;
 - (void) cancel;
 
@@ -33,7 +33,7 @@ typedef void(^OAWikiArticleSearchTaskBlockType)(void);
 
 + (OAWorldRegion *) findWikiRegion:(OAWorldRegion *)mapRegion;
 + (OARepositoryResourceItem *) findResourceItem:(OAWorldRegion *)worldRegion;
-+ (void) showWikiArticle:(CLLocation *)location url:(NSString *)url onStart:(void (^)())onStart onComplete:(void (^)())onComplete;
++ (void) showWikiArticle:(CLLocationCoordinate2D)location url:(NSString *)url onStart:(void (^)())onStart onComplete:(void (^)())onComplete;
 + (void)showHowToOpenWikiAlert:(OARepositoryResourceItem *)item url:(NSString *)url;
 + (NSString *) getFirstParagraph:(NSString *)descriptionHtml;
 + (NSString *) getPartialContent:(NSString *)source;

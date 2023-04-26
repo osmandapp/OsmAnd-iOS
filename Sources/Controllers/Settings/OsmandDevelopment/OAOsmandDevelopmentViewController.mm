@@ -12,7 +12,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OALocationSimulation.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATableRowData.h"
 #import "OATableDataModel.h"
@@ -80,7 +80,7 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
     __weak OAOsmandDevelopmentViewController *weakSelf = self;
     OATableSectionData *simulationSection = [OATableSectionData sectionData];
     [simulationSection addRowFromDictionary:@{
-        kCellTypeKey : [OAIconTitleValueCell getCellIdentifier],
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellKeyKey : kSimulateLocationKey,
         kCellTitleKey : OALocalizedString(@"simulate_your_location"),
         kCellDescrKey : isRouteAnimating ? OALocalizedString(@"simulate_in_progress") : @"",
@@ -138,22 +138,21 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     NSString *type = item.cellType;
     
-    if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    if ([type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAValueTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
-            [cell showLeftIcon: NO];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            [cell descriptionVisibility:NO];
+            [cell leftIconVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if (cell)
         {
-            cell.textView.text = item.title;
-            cell.descriptionView.text = item.descr;
+            cell.titleLabel.text = item.title;
+            cell.valueLabel.text = item.descr;
         }
         return cell;
     }

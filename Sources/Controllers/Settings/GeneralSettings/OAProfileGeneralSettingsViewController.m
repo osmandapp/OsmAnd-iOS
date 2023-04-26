@@ -9,7 +9,6 @@
 #import "OAProfileGeneralSettingsViewController.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
-#import "OAIconTitleValueCell.h"
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAProfileGeneralSettingsParametersViewController.h"
@@ -231,14 +230,14 @@
     NSMutableArray *unitsAndFormatsArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
 //    [appearanceArr addObject:@{
-//        @"type" : [OAIconTitleValueCell getCellIdentifier],
+//        @"type" : [OAValueTableViewCell getCellIdentifier],
 //        @"title" : OALocalizedString(@"settings_app_theme"),
 //        @"value" : OALocalizedString(@"light_theme"),
 //        @"icon" : @"ic_custom_contrast",
 //        @"key" : @"app_theme",
 //    }];
     [appearanceArr addObject:@{
-        @"type" : [OAIconTitleValueCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"rotate_map_to"),
         @"value" : rotateMapValue,
         @"icon" : rotateMapIcon,
@@ -254,42 +253,42 @@
         @"key" : @"3dView",
     }];
     [appearanceArr addObject:@{
-        @"type" : [OAIconTitleValueCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"position_on_map"),
         @"value" : positionMapValue,
         @"icon" : positionMapIcon,
         @"key" : @"position_on_map",
     }];
     [unitsAndFormatsArr addObject:@{
-        @"type" : [OAIconTitleValueCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"driving_region"),
         @"value" : drivingRegionValue,
         @"icon" : @"ic_profile_car",
         @"key" : @"drivingRegion",
     }];
     [unitsAndFormatsArr addObject:@{
-        @"type" : [OAIconTitleValueCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"unit_of_length"),
         @"value" : metricSystemValue,
         @"icon" : @"ic_custom_ruler",
         @"key" : @"lengthUnits",
     }];
     [unitsAndFormatsArr addObject:@{
-        @"type" : [OAIconTitleValueCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"units_of_speed"),
         @"value" : speedSystemValue,
         @"icon" : @"ic_action_speed",
         @"key" : @"speedUnits",
     }];
     [unitsAndFormatsArr addObject:@{
-        @"type" : [OAIconTitleValueCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"coords_format"),
         @"value" : geoFormatValue,
         @"icon" : @"ic_custom_coordinates",
         @"key" : @"coordsFormat",
     }];
     [unitsAndFormatsArr addObject:@{
-        @"type" : [OAIconTitleValueCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"angular_measurment_units"),
         @"value" : angularUnitsValue,
         @"icon" : @"ic_custom_angular_unit",
@@ -325,32 +324,7 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
-    {
-        OAIconTitleValueCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.leftIconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
-        }
-        if (cell)
-        {
-            if ([item[@"no_tint"] boolValue])
-                cell.leftIconView.image = [UIImage imageNamed:item[@"icon"]];
-            else
-                cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-                
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = item[@"value"];
-            
-        }
-        return cell;
-    }
-    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
         OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
@@ -382,12 +356,24 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
-            [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.leftIconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
         }
         if (cell)
         {
+            if ([item[@"key"] isEqualToString:@"externalImputDevice"])
+            {
+                [cell leftIconVisibility:NO];
+            }
+            else
+            {
+                [cell leftIconVisibility:YES];
+                if ([item[@"no_tint"] boolValue])
+                    cell.leftIconView.image = [UIImage imageNamed:item[@"icon"]];
+                else
+                    cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            }
             cell.titleLabel.text = item[@"title"];
             cell.valueLabel.text = item[@"value"];
         }

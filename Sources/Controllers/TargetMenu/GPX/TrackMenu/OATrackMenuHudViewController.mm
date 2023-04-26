@@ -58,6 +58,7 @@
 #import "OAWikiArticleHelper.h"
 #import "OAMapHudViewController.h"
 #import "OAOsmUploadGPXViewConroller.h"
+#import "OANetworkRouteDrawable.h"
 #import "OATrackMenuTabSegments.h"
 
 #import <Charts/Charts-Swift.h>
@@ -133,6 +134,7 @@
     BOOL _isViewVisible;
     
     OARouteKey *_routeKey;
+    BOOL _isNewRoute;
 }
 
 @dynamic gpx, analysis, isShown, backButton, statusBarBackgroundView, contentContainer;
@@ -166,8 +168,14 @@
     {
         if ([state isKindOfClass:OATrackMenuViewControllerState.class])
         {
-            _reopeningState = state;
-            _routeKey = routeKey;
+            _reopeningState = (OATrackMenuViewControllerState *) state;
+            _isNewRoute = routeKey;
+            _routeKey = routeKey ? routeKey : [OARouteKey fromGpx:self.doc.networkRouteKeyTags];
+            if (_routeKey && !_reopeningState.trackIcon)
+            {
+                OANetworkRouteDrawable *drawable = [[OANetworkRouteDrawable alloc] initWithRouteKey:_routeKey];
+                _reopeningState.trackIcon = drawable.getIcon;
+            }
             _selectedTab = _reopeningState.lastSelectedTab;
             [self commonInit];
         }
@@ -459,7 +467,7 @@
     BOOL isRoute = _routeKey != nil;
     [_headerView updateHeader:self.isCurrentTrack
                    shownTrack:self.isShown
-               isNetworkRoute:isRoute
+               isNetworkRoute:_isNewRoute
             routeIcon:isRoute ? _reopeningState.trackIcon : [UIImage templateImageNamed:@"ic_custom_trip"]
                         title:[self.gpx getNiceTitle]];
 
@@ -926,6 +934,11 @@
                                                         menuControlState:[self getCurrentStateForAnalyze:mode]
                                                                  isRoute:NO];
     }];
+}
+
+- (OARouteKey *)getRouteKey
+{
+    return _routeKey;
 }
 
 - (OAGPXTrackAnalysis *)getGeneralAnalysis
@@ -1549,14 +1562,15 @@
     OAGPX *gpx = [[OAGPXDatabase sharedDb] addGpxItem:path title:self.doc.metadata.name desc:nil bounds:self.doc.bounds document:self.doc];
     [[OAGPXDatabase sharedDb] save];
     self.gpx = gpx;
-    _routeKey = nil;
+    _routeKey = [OARouteKey fromGpx:self.doc.networkRouteKeyTags];
+    _isNewRoute = NO;
     [self.mapViewController hideTempGpxTrack];
     self.isShown = NO;
     [self changeTrackVisible];
     [_headerView updateHeader:self.isCurrentTrack
                    shownTrack:self.isShown
-               isNetworkRoute:_routeKey != nil
-                    routeIcon:[UIImage templateImageNamed:@"ic_custom_trip"]
+               isNetworkRoute:_isNewRoute
+                    routeIcon:_reopeningState.trackIcon
                         title:[self.gpx getNiceTitle]];
     [self setupUIBuilder];
     [_uiBuilder setupTabBar:self.tabBarView

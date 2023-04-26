@@ -29,6 +29,8 @@
 @property (nonatomic) NSArray<OARouteSegment *> *routeSegments;
 @property (nonatomic) NSArray<OARouteType *> *routeTypes;
 
+@property (nonatomic) NSDictionary<NSString *, NSString *> *networkRouteKeyTags;
+
 @property (nonatomic) OAGpxBounds bounds;
 
 @property (nonatomic) BOOL hasAltitude;

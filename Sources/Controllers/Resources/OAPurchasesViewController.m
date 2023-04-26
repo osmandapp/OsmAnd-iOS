@@ -15,7 +15,7 @@
 #import "OAMenuSimpleCell.h"
 #import "OALargeImageTitleDescrTableViewCell.h"
 #import "OACardButtonCell.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
@@ -218,7 +218,7 @@ static BOOL _purchasesUpdated;
 
     [helpSection addRowFromDictionary:@{
         kCellKeyKey : @"restore_purchases",
-        kCellTypeKey : [OAIconTitleValueCell getCellIdentifier],
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"restore_purchases"),
         kCellIconNameKey : @"ic_custom_reset",
         kCellIconTint : @(color_primary_purple)
@@ -226,7 +226,7 @@ static BOOL _purchasesUpdated;
 
     [helpSection addRowFromDictionary:@{
         kCellKeyKey : @"redeem_promo_code",
-        kCellTypeKey : [OAIconTitleValueCell getCellIdentifier],
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"redeem_promo_code"),
         kCellIconNameKey : @"ic_custom_label_sale",
         kCellIconTint : @(color_primary_purple)
@@ -234,7 +234,7 @@ static BOOL _purchasesUpdated;
 
     [helpSection addRowFromDictionary:@{
         kCellKeyKey : @"new_device_account",
-        kCellTypeKey : [OAIconTitleValueCell getCellIdentifier],
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"new_device_account"),
         kCellIconNameKey : @"ic_navbar_help",
         kCellIconTint : @(color_primary_purple),
@@ -243,7 +243,7 @@ static BOOL _purchasesUpdated;
 
     [helpSection addRowFromDictionary:@{
         kCellKeyKey : @"contact_support_description",
-        kCellTypeKey : [OAIconTitleValueCell getCellIdentifier],
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : [NSString stringWithFormat: OALocalizedString(@"contact_support_description"), kSupportEmail],
         kCellIconTint : @(color_text_footer),
         @"leftInset" : @(CGFLOAT_MAX)
@@ -251,7 +251,7 @@ static BOOL _purchasesUpdated;
 
     [helpSection addRowFromDictionary:@{
         kCellKeyKey : @"contact_support",
-        kCellTypeKey : [OAIconTitleValueCell getCellIdentifier],
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"contact_support"),
         kCellIconTint : @(color_primary_purple)
     }];
@@ -271,16 +271,17 @@ static BOOL _purchasesUpdated;
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     UITableViewCell *outCell = nil;
-    if ([item.cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    if ([item.cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *) nib[0];
-            [cell showLeftIcon:NO];
-            cell.textView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
-            cell.descriptionView.text = @"";
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            [cell valueVisibility:NO];
+            cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
         }
         if (cell)
         {
@@ -288,16 +289,15 @@ static BOOL _purchasesUpdated;
             cell.separatorInset = UIEdgeInsetsMake(0., leftInset ? leftInset.floatValue : ([OAUtilities getLeftMargin] + kPaddingOnSideOfContent), 0., 0.);
 
             UIColor *tintColor = UIColorFromRGB(item.iconTint);
-            cell.textView.text = item.title;
-            cell.textView.textColor = tintColor;
+            cell.titleLabel.text = item.title;
+            cell.titleLabel.textColor = tintColor;
 
             BOOL hasRightIcon = item.iconName && item.iconName.length > 0;
-            [cell showRightIcon:hasRightIcon];
             cell.selectionStyle = [item.key isEqualToString: @"contact_support_description"]
                     ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
 
-            cell.rightIconView.image = hasRightIcon ? [UIImage templateImageNamed:item.iconName] : nil;
-            cell.rightIconView.tintColor = tintColor;
+            cell.accessoryView = hasRightIcon ? [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:item.iconName]] : nil;
+            cell.accessoryView.tintColor = tintColor;
         }
         outCell = cell;
     }

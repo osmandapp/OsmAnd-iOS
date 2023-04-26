@@ -12,7 +12,7 @@
 #import "OARootViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OASwitchTableViewCell.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OAColors.h"
 #import "OAWeatherPlugin.h"
@@ -86,35 +86,35 @@
 
     NSArray *weatherLayers = @[
         @{
-            @"type"  : [OAIconTitleValueCell getCellIdentifier],
+            @"type"  : [OAValueTableViewCell getCellIdentifier],
             @"name"  : kWeatherTemp,
             @"title" : OALocalizedString(@"map_settings_weather_temp"),
             @"value" : @(_app.data.weatherTemp),
             @"image" : @"ic_custom_thermometer"
         },
         @{
-            @"type"  : [OAIconTitleValueCell getCellIdentifier],
+            @"type"  : [OAValueTableViewCell getCellIdentifier],
             @"name"  : kWeatherPressure,
             @"title" : OALocalizedString(@"map_settings_weather_pressure"),
             @"value" : @(_app.data.weatherPressure),
             @"image" : @"ic_custom_air_pressure"
         },
         @{
-            @"type"  : [OAIconTitleValueCell getCellIdentifier],
+            @"type"  : [OAValueTableViewCell getCellIdentifier],
             @"name"  : kWeatherWind,
             @"title" : OALocalizedString(@"map_settings_weather_wind"),
             @"value" : @(_app.data.weatherWind),
             @"image" : @"ic_custom_wind"
         },
         @{
-            @"type"  : [OAIconTitleValueCell getCellIdentifier],
+            @"type"  : [OAValueTableViewCell getCellIdentifier],
             @"name"  : kWeatherCloud,
             @"title" : OALocalizedString(@"map_settings_weather_cloud"),
             @"value" : @(_app.data.weatherCloud),
             @"image" : @"ic_custom_clouds"
         },
         @{
-            @"type"  : [OAIconTitleValueCell getCellIdentifier],
+            @"type"  : [OAValueTableViewCell getCellIdentifier],
             @"name"  : kWeatherPrecip,
             @"title" : OALocalizedString(@"map_settings_weather_precip"),
             @"value" : @(_app.data.weatherPrecip),
@@ -140,7 +140,7 @@
 
     NSArray *contourLines = @[
         @{
-            @"type"  : [OAIconTitleValueCell getCellIdentifier],
+            @"type"  : [OAValueTableViewCell getCellIdentifier],
             @"name"  : kWeatherContourLines,
             @"title" : OALocalizedString(@"shared_string_contours"),
             @"value" : selectedContourLinesName,
@@ -237,18 +237,20 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAValueTableViewCell* cell = nil;
+        cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
             NSString *valueText;
             BOOL iconEnabled;
             if ([item[@"name"] isEqualToString:kWeatherContourLines])
@@ -262,7 +264,7 @@
                 valueText = isOn ? OALocalizedString(@"shared_string_on") : OALocalizedString(@"shared_string_off");
                 iconEnabled = isOn;
             }
-            cell.descriptionView.text = valueText;
+            cell.valueLabel.text = valueText;
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"image"]];
             cell.leftIconView.tintColor = iconEnabled ? UIColorFromRGB(nav_bar_day) : UIColorFromRGB(color_tint_gray);
         }

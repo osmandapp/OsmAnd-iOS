@@ -23,7 +23,7 @@
 #import "OARouteKey.h"
 #import "OAMapRendererView.h"
 #import "OATabBar.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OATextLineViewCell.h"
 #import "OATitleIconRoundCell.h"
@@ -1946,14 +1946,15 @@
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     NSInteger tag = indexPath.section << 10 | indexPath.row;
     UITableViewCell *outCell = nil;
-    if ([cellData.type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    if ([cellData.type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *) nib[0];
-            [cell showLeftIcon:NO];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
@@ -1962,19 +1963,18 @@
 
             UIColor *tintColor = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
 
-            cell.textView.font = [cellData.values.allKeys containsObject:@"font_value"]
+            cell.textLabel.font = [cellData.values.allKeys containsObject:@"font_value"]
                     ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
             cell.selectionStyle = cellData.toggle ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
-            cell.textView.text = cellData.title;
-            cell.textView.textColor = tintColor;
-            cell.descriptionView.text = cellData.desc;
+            cell.titleLabel.text = cellData.title;
+            cell.titleLabel.textColor = tintColor;
+            cell.valueLabel.text = cellData.desc;
 
-            [cell showRightIcon:cellData.rightIconName != nil];
             if (cellData.rightIconName)
             {
-                cell.rightIconView.image = [UIImage templateImageNamed:cellData.rightIconName];
-                cell.rightIconView.tintColor = tintColor;
+                cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:cellData.rightIconName]];
+                cell.accessoryView.tintColor = tintColor;
             }
         }
         outCell = cell;

@@ -9,7 +9,7 @@
 #import "OABaseBackupTypesViewController.h"
 #import "MBProgressHUD.h"
 #import "OASwitchTableViewCell.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAStorageStateValuesCell.h"
 #import "OAExportSettingsType.h"
 #import "OASettingsCategoryItems.h"
@@ -130,31 +130,32 @@
         }
         outCell = cell;
     }
-    else if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.separatorInset = UIEdgeInsetsMake(0., 66. + [OAUtilities getLeftMargin], 0., 0.);
             cell.selectionStyle = emptyCell || hasEmptyIcon ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
 
-            cell.textView.text = settingsType ? settingsType.title : item[@"title"];
-            cell.descriptionView.text = [item.allKeys containsObject:@"description"] ? item[@"description"] : @"";
+            cell.titleLabel.text = settingsType ? settingsType.title : item[@"title"];
+            cell.valueLabel.text = [item.allKeys containsObject:@"description"] ? item[@"description"] : @"";
 
-            [cell showRightIcon:!(emptyCell || hasEmptyIcon)];
-            [cell showLeftIcon:!emptyCell];
+            [cell leftIconVisibility:!emptyCell];
             cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            if (!(emptyCell || hasEmptyIcon))
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
             if (hasEmptyIcon)
             {
                 cell.leftIconView.image = nil;
                 cell.leftIconView.backgroundColor = item[@"icon_color"];
-                cell.leftIconView.layer.cornerRadius = cell.rightIconView.layer.frame.size.width / 2;
+                cell.leftIconView.layer.cornerRadius = cell.leftIconView.layer.frame.size.width / 2;
                 cell.leftIconView.clipsToBounds = YES;
             }
             else

@@ -7,7 +7,7 @@
 //
 
 #import "OAManageStorageViewController.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAStorageStateValuesCell.h"
 #import "OAExportSettingsCategory.h"
 #import "OAExportSettingsType.h"
@@ -55,7 +55,7 @@
 
     NSMutableDictionary *resourcesData = [NSMutableDictionary dictionary];
     resourcesData[@"key"] = @"resources_storage_cell";
-    resourcesData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
+    resourcesData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     resourcesData[@"title"] = OALocalizedString(@"shared_string_resources");
     resourcesData[@"has_empty_icon"] = @(YES);
     resourcesData[@"icon_color"] = UIColorFromRGB(backup_restore_icons_blue);
@@ -63,7 +63,7 @@
 
     NSMutableDictionary *myPlacesData = [NSMutableDictionary dictionary];
     myPlacesData[@"key"] = @"my_places_storage_cell";
-    myPlacesData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
+    myPlacesData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     myPlacesData[@"title"] = OALocalizedString(@"shared_string_my_places");
     myPlacesData[@"has_empty_icon"] = @(YES);
     myPlacesData[@"icon_color"] = UIColorFromRGB(backup_restore_icons_yellow);
@@ -71,7 +71,7 @@
 
     NSMutableDictionary *settingsData = [NSMutableDictionary dictionary];
     settingsData[@"key"] = @"settings_storage_cell";
-    settingsData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
+    settingsData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     settingsData[@"title"] = OALocalizedString(@"shared_string_settings");
     settingsData[@"has_empty_icon"] = @(YES);
     settingsData[@"icon_color"] = UIColorFromRGB(backup_restore_icons_green);
@@ -108,7 +108,7 @@
             {
                 NSMutableDictionary *itemData = [NSMutableDictionary dictionary];
                 itemData[@"key"] = [type.name stringByAppendingString:@"_cell"];
-                itemData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
+                itemData[@"type"] = [OAValueTableViewCell getCellIdentifier];
                 itemData[@"setting"] = type;
                 itemData[@"description"] = [NSByteCountFormatter stringFromByteCount:size
                                                                           countStyle:NSByteCountFormatterCountStyleFile];
@@ -154,7 +154,7 @@
     if (myPlacesCells.count == 0)
     {
         emptyData[@"key"] = @"empty_cell_my_places_section";
-        emptyData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
+        emptyData[@"type"] = [OAValueTableViewCell getCellIdentifier];
         emptyData[@"title"] = OALocalizedString(@"backup_empty_data_from_category");
         [myPlacesCells addObject:emptyData];
     }
@@ -162,7 +162,7 @@
     if (resourcesCells.count == 0)
     {
         emptyData[@"key"] = @"empty_cell_resources_section";
-        emptyData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
+        emptyData[@"type"] = [OAValueTableViewCell getCellIdentifier];
         emptyData[@"title"] = OALocalizedString(@"backup_empty_data_from_category");
         [resourcesCells addObject:emptyData];
     }
@@ -170,7 +170,7 @@
     if (settingsCells.count == 0)
     {
         emptyData[@"key"] = @"empty_cell_settings_section";
-        emptyData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
+        emptyData[@"type"] = [OAValueTableViewCell getCellIdentifier];
         emptyData[@"title"] = OALocalizedString(@"backup_empty_data_from_category");
         [settingsCells addObject:emptyData];
     }

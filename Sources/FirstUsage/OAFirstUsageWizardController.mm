@@ -51,7 +51,6 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UIView *cardView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *heightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *progress1DivTopMarginConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *progress2DivTopMarginConstraint;
 
 @property (strong, nonatomic) IBOutlet UIView *viewLocationNotFound;
 @property (weak, nonatomic) IBOutlet UILabel *lbLocationNotFound;
@@ -86,12 +85,6 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UIButton *btnCancel1;
 @property (weak, nonatomic) IBOutlet UIView *viewDivider;
 
-@property (weak, nonatomic) IBOutlet UIImageView *imgMapIcon2;
-@property (weak, nonatomic) IBOutlet UILabel *lbMapName2;
-@property (weak, nonatomic) IBOutlet UILabel *lbMapSize2;
-@property (weak, nonatomic) IBOutlet UIButton *btnRestart2;
-@property (weak, nonatomic) IBOutlet UIProgressView *progress2;
-@property (weak, nonatomic) IBOutlet UIButton *btnCancel2;
 @property (weak, nonatomic) IBOutlet UIButton *btnGoToMap;
 @property (weak, nonatomic) IBOutlet UITextView *bottomTextView;
 
@@ -107,10 +100,8 @@ typedef enum
 
     //WorldRegion localDownloadRegion;
     OARepositoryResourceItem *_localMapIndexItem;
-    OARepositoryResourceItem *_baseMapIndexItem;
     NSMutableArray<OARepositoryResourceItem *> *_indexItems;
-    BOOL _firstMapDownloadCancelled;
-    BOOL _secondMapDownloadCancelled;
+    BOOL _mapDownloadCancelled;
     
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
@@ -166,7 +157,6 @@ typedef enum
 
     // Init progress view
     _btnRestart1.hidden = YES;
-    _btnRestart2.hidden = YES;
     [_btnGoToMap setTitle:OALocalizedString(@"show_region_on_map_go") forState:UIControlStateNormal];
     
     _bottomTextView.textContainerInset = UIEdgeInsetsZero;
@@ -398,7 +388,7 @@ typedef enum
         }
         case MAP_FOUND:
         {
-            OARepositoryResourceItem *indexItem = _localMapIndexItem ? _localMapIndexItem : _baseMapIndexItem;
+            OARepositoryResourceItem *indexItem = _localMapIndexItem;
             if (indexItem)
             {
                 _lbDownloadMapName.text = indexItem.title;
@@ -413,19 +403,17 @@ typedef enum
             _indexItems = [NSMutableArray array];
             if (_localMapIndexItem)
                 [_indexItems addObject:_localMapIndexItem];
-            if (_baseMapIndexItem)
-                [_indexItems addObject:_baseMapIndexItem];
             
             if (_indexItems.count > 0)
             {
                 OARepositoryResourceItem *item = _indexItems[0];
                 _lbMapName1.text = item.title;
                 _lbMapSize1.text = [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
-                if (_firstMapDownloadCancelled)
+                if (_mapDownloadCancelled)
                 {
                     _progress1.hidden = YES;
                     _btnCancel1.hidden = YES;
-                    _btnRestart1.hidden = _firstMapDownloadCancelled ? NO : YES;
+                    _btnRestart1.hidden = _mapDownloadCancelled ? NO : YES;
                 }
             }
             else
@@ -436,28 +424,6 @@ typedef enum
                 _progress1.hidden = YES;
                 _btnCancel1.hidden = YES;
                 _btnRestart1.hidden = YES;
-                _viewDivider.hidden = YES;
-            }
-            if (_indexItems.count > 1)
-            {
-                OARepositoryResourceItem *item = _indexItems[1];
-                _lbMapName2.text = item.title;
-                _lbMapSize2.text = [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
-                if (_secondMapDownloadCancelled)
-                {
-                    _progress2.hidden = YES;
-                    _btnCancel2.hidden = YES;
-                    _btnRestart2.hidden = _secondMapDownloadCancelled ? NO : YES;
-                }
-            }
-            else
-            {
-                _imgMapIcon2.hidden = YES;
-                _lbMapName2.hidden = YES;
-                _lbMapSize2.hidden = YES;
-                _progress2.hidden = YES;
-                _btnCancel2.hidden = YES;
-                _btnRestart2.hidden = YES;
                 _viewDivider.hidden = YES;
             }
             
@@ -576,8 +542,6 @@ typedef enum
         case MAP_DOWNLOAD:
             if (_indexItems.count > 0)
                 [self startDownloadIndex:0];
-            if (_indexItems.count > 1)
-                [self startDownloadIndex:1];
 
             break;
     }
@@ -589,16 +553,7 @@ typedef enum
     if (itemIndex == 0 && _indexItems.count > 0)
     {
         OARepositoryResourceItem *item = _indexItems[0];
-        if ([_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]].count == 0 && !_firstMapDownloadCancelled)
-        {
-            [self startDownload:item];
-            downloadStarted = YES;
-        }
-    }
-    else if (itemIndex == 1 && _indexItems.count > 1)
-    {
-        OARepositoryResourceItem *item = _indexItems[1];
-        if ([_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]].count == 0 && !_secondMapDownloadCancelled)
+        if ([_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]].count == 0 && !_mapDownloadCancelled)
         {
             [self startDownload:item];
             downloadStarted = YES;
@@ -717,24 +672,7 @@ typedef enum
             }
         }
         
-        const auto resource = _app.resourcesManager->getResourceInRepository(kWorldBasemapKey);
-        OARepositoryResourceItem* item = [[OARepositoryResourceItem alloc] init];
-        item.resourceId = resource->id;
-        item.resourceType = resource->type;
-        item.title = [OAResourcesUIHelper titleOfResource:resource
-                                                 inRegion:_app.worldRegion
-                                           withRegionName:YES
-                                         withResourceType:NO];
-        item.resource = resource;
-        item.downloadTask = [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
-        item.size = resource->size;
-        item.sizePkg = resource->packageSize;
-        item.worldRegion = _app.worldRegion;
-        item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
-
-        _baseMapIndexItem = item;
-        
-        if (_localMapIndexItem || _baseMapIndexItem)
+        if (_localMapIndexItem)
             [self startMapFoundFragment];
         else
             [self closeWizard];
@@ -748,14 +686,8 @@ typedef enum
 - (IBAction)downloadPress:(id)sender
 {
     uint64_t spaceNeededForLocal = _localMapIndexItem.sizePkg + _localMapIndexItem.size;
-    uint64_t spaceNeededForBase = _baseMapIndexItem.sizePkg + _baseMapIndexItem.size;
 
-    BOOL spaceEnoughForBoth = _app.freeSpaceAvailableOnDevice >= spaceNeededForLocal + spaceNeededForBase;
     BOOL spaceEnoughForLocal = _app.freeSpaceAvailableOnDevice >= spaceNeededForLocal;
-    if (!spaceEnoughForBoth)
-    {
-        _baseMapIndexItem = nil;
-    }
     if (spaceEnoughForLocal)
     {
         [self startMapDownloadWizard];
@@ -782,13 +714,13 @@ typedef enum
     if (_indexItems.count > 0)
     {
         OARepositoryResourceItem *item = _indexItems[0];
-        if (item && [_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]].count == 0 && _firstMapDownloadCancelled)
+        if (item && [_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]].count == 0 && _mapDownloadCancelled)
         {
             _progress1.hidden = NO;
             _btnCancel1.hidden = NO;
             _btnRestart1.hidden = YES;
             [self startDownload:item];
-            _firstMapDownloadCancelled = NO;
+            _mapDownloadCancelled = NO;
             _progress1DivTopMarginConstraint.constant = PROGRESS_ON_MARGIN;
             [self.view setNeedsLayout];
         }
@@ -804,51 +736,13 @@ typedef enum
         if (task)
             [task stop];
 
-        _firstMapDownloadCancelled = YES;
+        _mapDownloadCancelled = YES;
         _lbMapSize1.text = [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
         _progress1.hidden = YES;
         _progress1.progress = 0;
         _btnCancel1.hidden = YES;
         _btnRestart1.hidden = NO;
         _progress1DivTopMarginConstraint.constant = PROGRESS_OFF_MARGIN;
-        [self.view setNeedsLayout];
-    }
-}
-
-- (IBAction)restart2Press:(id)sender
-{
-    if (_indexItems.count > 1)
-    {
-        OARepositoryResourceItem *item = _indexItems[1];
-        if (item && [_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]].count == 0 && _secondMapDownloadCancelled)
-        {
-            _progress2.hidden = NO;
-            _btnCancel2.hidden = NO;
-            _btnRestart2.hidden = YES;
-            [self startDownload:item];
-            _secondMapDownloadCancelled = NO;
-            _progress2DivTopMarginConstraint.constant = PROGRESS_ON_MARGIN;
-            [self.view setNeedsLayout];
-        }
-    }
-}
-
-- (IBAction)cancel2Press:(id)sender
-{
-    if (_indexItems.count > 1)
-    {
-        OARepositoryResourceItem *item = _indexItems[1];
-        id<OADownloadTask> task = [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]] firstObject];
-        if (task)
-            [task stop];
-
-        _secondMapDownloadCancelled = YES;
-        _lbMapSize2.text = [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
-        _progress2.hidden = YES;
-        _progress2.progress = 0;
-        _btnCancel2.hidden = YES;
-        _btnRestart2.hidden = NO;
-        _progress2DivTopMarginConstraint.constant = PROGRESS_OFF_MARGIN;
         [self.view setNeedsLayout];
     }
 }
@@ -930,17 +824,6 @@ typedef enum
             _lbMapSize1.text = progressStr;
             [_progress1 setProgress:[value floatValue]];
         }
-        if (_indexItems.count > 1 && [_indexItems[1].resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
-        {
-            NSMutableString *progressStr = [NSMutableString string];
-            [progressStr appendString:[f stringFromByteCount:(_indexItems[1].size * [value floatValue])]];
-            [progressStr appendString:@" "];
-            [progressStr appendString:OALocalizedString(@"shared_string_of")];
-            [progressStr appendString:@" "];
-            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:_indexItems[1].size countStyle:NSByteCountFormatterCountStyleFile]];
-            _lbMapSize2.text = progressStr;
-            [_progress2 setProgress:[value floatValue]];
-        }
     });
 }
 
@@ -957,10 +840,6 @@ typedef enum
         if (_indexItems.count > 0)
         {
             _lbMapSize1.text = [NSByteCountFormatter stringFromByteCount:_indexItems[0].size countStyle:NSByteCountFormatterCountStyleFile];
-        }
-        if (_indexItems.count > 1)
-        {
-            _lbMapSize2.text = [NSByteCountFormatter stringFromByteCount:_indexItems[1].size countStyle:NSByteCountFormatterCountStyleFile];
         }
 
         if (task.progressCompleted < 1.0)
@@ -979,14 +858,6 @@ typedef enum
                 _btnCancel1.hidden = YES;
                 _btnRestart1.hidden = YES;
                 _progress1DivTopMarginConstraint.constant = PROGRESS_OFF_MARGIN;
-                [self.view setNeedsLayout];
-            }
-            if (_indexItems.count > 1 && [_indexItems[1].resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
-            {
-                _progress2.hidden = YES;
-                _btnCancel2.hidden = YES;
-                _btnRestart2.hidden = YES;
-                _progress2DivTopMarginConstraint.constant = PROGRESS_OFF_MARGIN;
                 [self.view setNeedsLayout];
             }
         }

@@ -21,7 +21,7 @@
 #import "OrderedDictionary.h"
 #import "Localization.h"
 #import "OAQuickActionType.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAInputTableViewCell.h"
 
@@ -171,7 +171,7 @@ static OAQuickActionType *TYPE;
     OAFavoriteColor *color = [OADefaultFavorite builtinColors][defaultColor];
     
     [data setObject:@[@{
-                          @"type" : [OAIconTitleValueCell getCellIdentifier],
+                          @"type" : [OAValueTableViewCell getCellIdentifier],
                           @"key" : KEY_CATEGORY_NAME,
                           @"title" : OALocalizedString(@"fav_group"),
                           @"value" : self.getParams[KEY_CATEGORY_NAME] ? self.getParams[KEY_CATEGORY_NAME] : OALocalizedString(@"favorites_item"),
@@ -179,7 +179,7 @@ static OAQuickActionType *TYPE;
                           @"img" : @"ic_custom_folder"
                           },
                       @{
-                          @"type" : [OAIconTitleValueCell getCellIdentifier],
+                          @"type" : [OAValueTableViewCell getCellIdentifier],
                           @"key" : KEY_CATEGORY_COLOR,
                           @"title" : OALocalizedString(@"shared_string_color"),
                           @"value" : color ? color.name : @"",

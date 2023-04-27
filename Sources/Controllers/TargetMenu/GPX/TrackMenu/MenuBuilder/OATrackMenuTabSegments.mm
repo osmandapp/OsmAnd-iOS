@@ -9,7 +9,7 @@
 #import "OATrackMenuTabSegments.h"
 #import "OARootViewController.h"
 #import "OARouteBaseViewController.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OALineChartCell.h"
 #import "OAQuadItemsWithTitleDescIconCell.h"
 #import "OASegmentTableViewCell.h"
@@ -152,7 +152,7 @@
 
     OAGPXTableCellData *segmentCellData = index != 0 ? [OAGPXTableCellData withData:@{
             kTableKey: [NSString stringWithFormat:@"segment_%p", (__bridge void *) segment],
-            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellType: [OAValueTableViewCell getCellIdentifier],
             kCellTitle: segmentTitle,
             kCellToggle: @NO
     }] : nil;

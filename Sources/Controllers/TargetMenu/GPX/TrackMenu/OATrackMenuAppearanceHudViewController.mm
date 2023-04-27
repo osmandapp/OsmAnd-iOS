@@ -11,7 +11,7 @@
 #import "OAFoldersCollectionView.h"
 #import "OASlider.h"
 #import "OASwitchTableViewCell.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAColorsTableViewCell.h"
 #import "OATextLineViewCell.h"
 #import "OASegmentSliderTableViewCell.h"
@@ -315,7 +315,7 @@
 
     OAGPXTableCellData *colorTitleCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"color_title",
-            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellType: [OAValueTableViewCell getCellIdentifier],
             kTableValues: @{ @"string_value": _selectedItem.title },
             kCellTitle: OALocalizedString(@"shared_string_color")
     }];
@@ -366,7 +366,7 @@
     NSMutableArray<OAGPXTableCellData *> *widthCells = [NSMutableArray array];
     OAGPXTableCellData *widthTitleCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"width_title",
-            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellType: [OAValueTableViewCell getCellIdentifier],
             kTableValues: @{ @"string_value": _selectedWidth.title },
             kCellTitle: OALocalizedString(@"shared_string_width")
     }];
@@ -403,7 +403,7 @@
     NSMutableArray<OAGPXTableCellData *> *splitCells = [NSMutableArray array];
     OAGPXTableCellData *splitTitleCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"split_title",
-            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellType: [OAValueTableViewCell getCellIdentifier],
             kTableValues: @{ @"string_value": _selectedSplit.title },
             kCellTitle: OALocalizedString(@"gpx_split_interval")
     }];
@@ -446,7 +446,7 @@
 
     OAGPXTableCellData *resetCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"reset",
-            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellType: [OAValueTableViewCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"reset_to_original"),
             kCellRightIconName: @"ic_custom_reset",
             kCellToggle: @YES
@@ -713,29 +713,28 @@
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     UITableViewCell *outCell = nil;
-    if ([cellData.type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    if ([cellData.type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier]
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier]
                                                          owner:self options:nil];
-            cell = (OAIconTitleValueCell *) nib[0];
-            [cell showLeftIcon:NO];
-            cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
             cell.selectionStyle = cellData.toggle ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
-            cell.textView.text = cellData.title;
-            cell.descriptionView.text = cellData.values[@"string_value"];
-            cell.textView.textColor = cellData.toggle ? UIColorFromRGB(color_primary_purple) : UIColor.blackColor;
+            cell.titleLabel.text = cellData.title;
+            cell.valueLabel.text = cellData.values[@"string_value"];
+            cell.titleLabel.textColor = cellData.toggle ? UIColorFromRGB(color_primary_purple) : UIColor.blackColor;
             if (cellData.toggle)
             {
-                cell.rightIconView.image = [UIImage templateImageNamed:cellData.rightIconName];
-                cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+                cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:cellData.rightIconName]];
+                cell.accessoryView.tintColor = UIColorFromRGB(color_primary_purple);
             }
-            [cell showRightIcon:cellData.toggle];
         }
         outCell = cell;
     }

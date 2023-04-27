@@ -8,7 +8,7 @@
 
 #import "OATrackMenuTabOverview.h"
 #import "OATextMultilineTableViewCell.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAWikiArticleHelper.h"
@@ -84,7 +84,7 @@
 
     OAGPXTableCellData *sizeCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"size",
-            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellType: [OAValueTableViewCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"shared_string_size"),
             kCellDesc: self.trackMenuDelegate ? [self.trackMenuDelegate getGpxFileSize] : @""
     }];
@@ -257,7 +257,7 @@
 {
     return [OAGPXTableCellData withData:@{
             kTableKey: @"created_on",
-            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellType: [OAValueTableViewCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"created_on"),
             kCellDesc: [self generateCreatedOnString]
     }];
@@ -267,7 +267,7 @@
 {
     return [OAGPXTableCellData withData:@{
             kTableKey: @"location",
-            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellType: [OAValueTableViewCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"shared_string_location"),
             kCellDesc: [self generateDirName]
     }];
@@ -285,7 +285,7 @@
 {
     return [OAGPXTableCellData withData:@{
             kTableKey: @"add_description",
-            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellType: [OAValueTableViewCell getCellIdentifier],
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"add_description"),
             kCellToggle: @YES,
@@ -306,7 +306,7 @@
 {
     return [OAGPXTableCellData withData:@{
             kTableKey: @"edit_description",
-            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellType: [OAValueTableViewCell getCellIdentifier],
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"context_menu_edit_descr"),
             kCellToggle: @YES,
@@ -318,7 +318,7 @@
 {
     return [OAGPXTableCellData withData:@{
             kTableKey: @"read_full_description",
-            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellType: [OAValueTableViewCell getCellIdentifier],
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"read_full_description"),
             kCellToggle: @YES,

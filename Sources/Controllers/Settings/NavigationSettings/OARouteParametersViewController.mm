@@ -8,7 +8,7 @@
 
 #import "OARouteParametersViewController.h"
 #import "OADeviceScreenTableViewCell.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAIconTextTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAAvoidPreferParametersViewController.h"
@@ -77,7 +77,7 @@
     if (group && group.getText && group.getValue)
     {
         [parametersArr addObject:@{
-            @"type" : [OAIconTitleValueCell getCellIdentifier],
+            @"type" : [OAValueTableViewCell getCellIdentifier],
             @"title" : [group getText],
             @"icon" : [[group getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate],
             @"value" : [group getValue],
@@ -152,7 +152,7 @@
              @"title" : OALocalizedString(@"recalc_angle_dialog_title"),
              @"icon" : [UIImage templateImageNamed:@"ic_custom_minimal_distance"],
              @"value" : [NSString stringWithFormat:OALocalizedString(@"shared_string_angle_param"), @((int) [_settings.routeStraightAngle get:self.appMode]).stringValue],
-             @"type" : [OAIconTitleValueCell getCellIdentifier] }
+             @"type" : [OAValueTableViewCell getCellIdentifier] }
          ];
     }
 
@@ -162,7 +162,7 @@
             ? OALocalizedString(@"rendering_value_disabled_name")
             : [OAOsmAndFormatter getFormattedDistance:recalcDist forceTrailingZeroes:NO];
     [parametersArr addObject:@{
-        @"type" : [OAIconTitleValueCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"recalculate_route"),
         @"value" : descr,
         @"icon" : [UIImage templateImageNamed:@"ic_custom_minimal_distance"],
@@ -319,7 +319,7 @@
                     NSString *defaultValue = p.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue;
                     OACommonString *setting = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()]
                                                                      defaultValue:defaultValue];
-                    parameterDict[@"type"] = [OAIconTitleValueCell getCellIdentifier];
+                    parameterDict[@"type"] = [OAValueTableViewCell getCellIdentifier];
                     parameterDict[@"title"] = title;
                     NSString *value = [NSString stringWithUTF8String:p.possibleValueDescriptions[[setting get:self.appMode].intValue].c_str()];
                     parameterDict[@"value"] = value;
@@ -332,7 +332,7 @@
             if ([p isKindOfClass:OALocalRoutingParameterGroup.class])
             {
                 [parametersArr addObject:@{
-                    @"type" : [OAIconTitleValueCell getCellIdentifier],
+                    @"type" : [OAValueTableViewCell getCellIdentifier],
                     @"title" : [p getText],
                     @"icon" : [UIImage templateImageNamed:[self getParameterIcon:[NSString stringWithUTF8String:p.routingParameter.id.c_str()] isSelected:[p isSelected]]],
                     @"value" : [p getValue],
@@ -403,16 +403,15 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.rightIconView.hidden = YES;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
@@ -425,8 +424,8 @@
             if ([item[@"key"] isEqualToString:@"recalculateRoute"])
                 cell.leftIconView.tintColor = [_settings.routeRecalculationDistance get:self.appMode] == -1 ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(_iconColor);
 
-            cell.textView.text = param ? [param getText] : item[@"title"];
-            cell.descriptionView.text = param
+            cell.titleLabel.text = param ? [param getText] : item[@"title"];
+            cell.valueLabel.text = param
                     ? [param isKindOfClass:OAHazmatRoutingParameter.class]
                             ? OALocalizedString([param isSelected] ? @"shared_string_yes" : @"shared_string_no")
                             : [param getValue]

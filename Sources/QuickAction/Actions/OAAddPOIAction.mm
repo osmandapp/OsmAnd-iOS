@@ -17,7 +17,7 @@
 #import "OALinks.h"
 #import "OAQuickActionType.h"
 #import "OAButtonTableViewCell.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATextInputFloatingCellWithIcon.h"
 #import "OAPOIUIFilter.h"
@@ -115,7 +115,7 @@ static OAQuickActionType *ACTION_TYPE;
                           }] forKey:OALocalizedString(@"quick_action_dialog")];
     
     [data setObject:@[@{
-                          @"type" : [OAIconTitleValueCell getCellIdentifier],
+                          @"type" : [OAValueTableViewCell getCellIdentifier],
                           @"title" : OALocalizedString(@"poi_dialog_poi_type"),
                           @"key" : KEY_CATEGORY,
                           @"value" : self.getTagsFromParams[POI_TYPE_TAG] ? self.getTagsFromParams[POI_TYPE_TAG] : OALocalizedString(@"shared_string_select"),

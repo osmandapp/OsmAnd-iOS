@@ -2289,8 +2289,8 @@
 "route_preferred_terrain_hilly" = "Маршрути з горбистим рельєфом.";
 "start_point" = "Старт";
 "altitude" = "Висота";
-"save_heading_descr" = "Зберігати напрямок для кожної точки треку під час запису.";
-"save_heading" = "Додавати напрямок";
+"save_heading_descr" = "Зберігати азимут кожної точки треку під час запису.";
+"save_heading" = "Записувати азимут";
 "selected_tracks_count" = "Треків - %d";
 "select_tracks" = "Вибрати треки";
 "delete_tracks_bottom_sheet_description_regular_part" = "Ви впевнені, що хочете видалити ";

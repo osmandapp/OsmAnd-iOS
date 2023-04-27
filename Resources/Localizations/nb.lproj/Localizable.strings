@@ -2582,3 +2582,4 @@
 "delete_tracks_bottom_sheet_title" = "Slett spor?";
 "icon_group_service" = "Tjeneste";
 "weather_forecast_is_outdated" = "Værmeldingen er utdatert.";
+"speak_route_deviation" = "Kunngjør avvik fra ruten";

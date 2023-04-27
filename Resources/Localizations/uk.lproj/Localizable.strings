@@ -1809,7 +1809,7 @@
 "shared_string_settings" = "Налаштування";
 "importing_from" = "Імпорт даних з %@";
 "shared_string_importing" = "Імпорт";
-"avoid_road" = "Уникати доріг";
+"avoid_road" = "Уникати цієї дороги";
 "shared_string_rendering_style" = "Стиль рендерингу";
 "shared_string_routing" = "Прокладання маршрутів";
 "quick_action_map_source_title" = "Джерела мап";
@@ -1911,7 +1911,7 @@
 "hide_compass_ruler" = "Сховати компас-лінійку";
 "show_compass_ruler" = "Показати компас-лінійку";
 "tracks_on_map" = "Показані треки";
-"shared_string_visible" = "Показувати";
+"shared_string_visible" = "Показуються";
 "searching" = "Пошук…";
 "shared_string_loading" = "Завантаження…";
 "poi_categories" = "Категорії Точок Інтересу";
@@ -2391,7 +2391,7 @@
 "toggle_cloud" = "Показати/сховати - Шар хмарності";
 "precipitation_show" = "Показати опади";
 "copy_to_map_favorites" = "Копіювати до закладок";
-"shared_string_contours" = "Контури";
+"shared_string_contours" = "Ізолінії";
 "shared_string_layers" = "Шари";
 "weather_pressure_enable_descr" = "Увімкніть, щоб переглянути шар тиску на мапі.";
 "weather_wind_enable_descr" = "Увімкніть, щоб переглянути шар вітру на мапі.";
@@ -2875,3 +2875,16 @@
 "map_widget_trip_recording_uphill" = "Підйом";
 "shared_string_app_profile" = "Профіль застосунку";
 "map_widget_trip_recording_distance" = "Відстань";
+"map_widget_altitude_map_center" = "Висота над рівнем моря: центр мапи";
+"altitude_widget_desc" = "Показує висоту над рівнем моря поточної геолокації.";
+"map_widget_altitude_current_location" = "Висота: поточне положення";
+"map_widget_altitude_map_center_desc" = "Показує висоту над рівнем моря поточного центру мапи.";
+"route_info" = "Відомості про маршрут";
+"activity_type_offroad_name" = "Позашляховик";
+"activity_type_walking_name" = "Пішки";
+"activity_type_running_name" = "Біг";
+"activity_type_hiking_name" = "Піший туризм";
+"network" = "Мережа";
+"activity_type_motorbike_name" = "Мотоцикл";
+"activity_type_snowmobile_name" = "Снігохід";
+"poi_operator" = "Оператор";

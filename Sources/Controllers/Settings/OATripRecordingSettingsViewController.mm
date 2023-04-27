@@ -17,7 +17,7 @@
 #import "OARoutingHelper.h"
 #import "OAFileNameTranslationHelper.h"
 #import "OASavingTrackHelper.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAIconTextTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OAColors.h"
@@ -130,7 +130,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                    @"title" : OALocalizedString(@"save_global_track_interval"),
                    @"description" : OALocalizedString(@"save_global_track_interval_descr"),
                    @"value" : ![settings.mapSettingSaveTrackIntervalApproved get:self.appMode] ? OALocalizedString(@"confirm_every_run") : recIntervalValue,
-                   @"type" : [OAIconTitleValueCell getCellIdentifier] }
+                   @"type" : [OAValueTableViewCell getCellIdentifier] }
              ]];
             
             [dataArr addObject:
@@ -139,7 +139,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                    @"title" : OALocalizedString(@"monitoring_min_distance"),
                    @"description" : OALocalizedString(@"logging_min_distance_descr"),
                    @"value" : minDistValue,
-                   @"type" : [OAIconTitleValueCell getCellIdentifier] }
+                   @"type" : [OAValueTableViewCell getCellIdentifier] }
              ]];
             
             [dataArr addObject:
@@ -148,7 +148,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                    @"title" : OALocalizedString(@"monitoring_min_accuracy"),
                    @"description" : OALocalizedString(@"logging_min_accuracy_descr"),
                    @"value" : minPrecision,
-                   @"type" : [OAIconTitleValueCell getCellIdentifier] }
+                   @"type" : [OAValueTableViewCell getCellIdentifier] }
              ]];
             
             [dataArr addObject:
@@ -157,7 +157,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                    @"title" : OALocalizedString(@"monitoring_min_speed"),
                    @"description" : OALocalizedString(@"logging_min_speed_descr"),
                    @"value" : minSpeed,
-                   @"type" : [OAIconTitleValueCell getCellIdentifier] }
+                   @"type" : [OAValueTableViewCell getCellIdentifier] }
              ]];
             
             [dataArr addObject:
@@ -185,7 +185,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                    @"title" : OALocalizedString(@"save_track_interval"),
                    @"value" : navIntervalValue,
                    @"img" : @"ic_custom_timer",
-                   @"type" : [OAIconTitleValueCell getCellIdentifier],
+                   @"type" : [OAValueTableViewCell getCellIdentifier],
                    @"key" : @"nav_interval"
                }
              ]];
@@ -394,21 +394,20 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         return cell;
     }
-    else if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    else if ([type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAValueTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = item[@"value"];
+            cell.titleLabel.text = item[@"title"];
+            cell.valueLabel.text = item[@"value"];
             
             if ([item[@"key"] isEqualToString:@"nav_interval"] && ![_settings.saveTrackToGPX get:self.appMode])
             {
@@ -429,8 +428,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             if (img)
                 cell.leftIconView.image = [UIImage templateImageNamed:img];
 
-            [cell showLeftIcon:img != nil];
-            [cell updateConstraints];
+            [cell leftIconVisibility:img != nil];
         }
         return cell;
     }

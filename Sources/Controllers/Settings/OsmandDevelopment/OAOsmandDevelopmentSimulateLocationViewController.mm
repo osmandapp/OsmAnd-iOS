@@ -21,7 +21,7 @@
 #import "OAMapActions.h"
 #import "OAOpenAddTrackViewController.h"
 #import "OAOsmandDevelopmentSimulateSpeedSelectorViewController.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OAAutoObserverProxy.h"
 
@@ -111,7 +111,7 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
     else
         trackNameText = OALocalizedString(@"gpx_select_track");
     [settingsSection addObject:@{
-        @"type" : [OAIconTitleValueCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"key" : kTrackSelectKey,
         @"titleText" : OALocalizedString(@"shared_string_gpx_track"),
         @"titleColor" : isRouteAnimating ? UIColorFromRGB(color_text_footer) : UIColor.blackColor,
@@ -127,7 +127,7 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
     
     BOOL isMovementSpeedButtonActive = !isRouteAnimating && isGpxTrackSelected;
     [settingsSection addObject:@{
-        @"type" : [OAIconTitleValueCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"key" : kMovementSpeedKey,
         @"titleText" : OALocalizedString(@"simulate_location_movement_speed"),
         @"titleColor" : isMovementSpeedButtonActive ? UIColor.blackColor : UIColorFromRGB(color_text_footer),
@@ -195,23 +195,22 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
     NSDictionary *item = [self getItem:indexPath];
     
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAValueTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if (cell)
         {
-            cell.textView.text = item[@"titleText"];
-            cell.textView.textColor = item[@"titleColor"];
-            cell.descriptionView.text = item[@"descText"];
-            cell.descriptionView.textColor = item[@"descColor"];
+            cell.titleLabel.text = item[@"titleText"];
+            cell.titleLabel.textColor = item[@"titleColor"];
+            cell.valueLabel.text = item[@"descText"];
+            cell.valueLabel.textColor = item[@"descColor"];
             cell.leftIconView.tintColor = item[@"iconColor"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
         }

@@ -7,7 +7,7 @@
 //
 
 #import "OACloudAccountLogoutViewController.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAAppSettings.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -31,13 +31,13 @@
     _data = @[
             @[@{
                     @"key": @"user_cell",
-                    @"type": [OAIconTitleValueCell getCellIdentifier],
+                    @"type": [OAValueTableViewCell getCellIdentifier],
                     @"title": [[OAAppSettings sharedManager].backupUserEmail get],
                     @"icon": @"ic_custom_user_profile"
             }],
             @[@{
                     @"key": @"logout_cell",
-                    @"type": [OAIconTitleValueCell getCellIdentifier],
+                    @"type": [OAValueTableViewCell getCellIdentifier],
                     @"title": OALocalizedString(@"shared_string_logout")
             }]
     ];
@@ -58,27 +58,27 @@
     NSDictionary *item = [self getItem:indexPath];
     UITableViewCell *outCell = nil;
 
-    if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *) nib[0];
-            [cell showRightIcon:NO];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            [cell valueVisibility:NO];
         }
         if (cell)
         {
             BOOL isLogoutCell = [item[@"key"] isEqualToString:@"logout_cell"];
             cell.selectionStyle = isLogoutCell ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
-            [cell showLeftIcon:!isLogoutCell];
-            cell.textView.font = [UIFont scaledSystemFontOfSize:17. weight:isLogoutCell ? UIFontWeightMedium : UIFontWeightRegular];
-            cell.textView.text = item[@"title"];
-            cell.textView.textColor = isLogoutCell ? UIColorFromRGB(color_support_red) : UIColor.blackColor;
-            cell.textView.textAlignment = isLogoutCell ? NSTextAlignmentCenter : NSTextAlignmentNatural;
+            [cell leftIconVisibility:!isLogoutCell];
+            cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:isLogoutCell ? UIFontWeightMedium : UIFontWeightRegular];
+            cell.titleLabel.text = item[@"title"];
+            cell.titleLabel.textColor = isLogoutCell ? UIColorFromRGB(color_support_red) : UIColor.blackColor;
+            cell.titleLabel.textAlignment = isLogoutCell ? NSTextAlignmentCenter : NSTextAlignmentNatural;
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
             cell.leftIconView.tintColor = UIColorFromRGB(color_icon_color);
-            cell.descriptionView.text = @"";
         }
         outCell = cell;
     }

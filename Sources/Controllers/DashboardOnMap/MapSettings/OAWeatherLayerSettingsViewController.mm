@@ -24,7 +24,7 @@
 #import "OATextLineViewCell.h"
 #import "OATitleSliderTableViewCell.h"
 #import "OADividerCell.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 
 #define kSwitchCell @"switchCell"
 #define kTransparencyCell @"transparencyCell"
@@ -246,7 +246,7 @@
                         break;
                 }
                 [contoursTypesRows addObject:@{
-                    @"cellId" : OAIconTitleValueCell.getCellIdentifier,
+                    @"cellId" : OAValueTableViewCell.getCellIdentifier,
                     @"type" : kContoursTypeCell,
                     @"title" : band.getMeasurementName,
                     @"image" : band.getIcon,
@@ -293,7 +293,7 @@
         _menuHeight += [OADividerCell cellHeight:_dividerHeight dividerInsets:UIEdgeInsetsMake(0., [dividerInset floatValue], 0., 0.)];
         
         NSDictionary *unitsRow = @{
-            @"cellId" : OAIconTitleValueCell.getCellIdentifier,
+            @"cellId" : OAValueTableViewCell.getCellIdentifier,
             @"type" : kUnitsCell,
             @"title" : OALocalizedString(@"sett_units"),
         };
@@ -633,30 +633,37 @@
         }
         return cell;
     }
-    else if ([cellId isEqualToString:OAIconTitleValueCell.getCellIdentifier])
+    else if ([cellId isEqualToString:OAValueTableViewCell.getCellIdentifier])
     {
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAValueTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         BOOL isUnitsCell = [item[@"type"] isEqualToString:kUnitsCell];
         BOOL isSelected = [_selectedContoursParam isEqualToString:item[@"contoursType"]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = isUnitsCell ? [self getUnitsValue] : nil;
-            cell.descriptionView.hidden = !isUnitsCell;
+            cell.titleLabel.text = item[@"title"];
+            cell.valueLabel.text = isUnitsCell ? [self getUnitsValue] : nil;
+            [cell valueVisibility:isUnitsCell];
             if (isUnitsCell)
-                cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"];
+            {
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            }
             else
-                cell.rightIconView.image = isSelected ? [UIImage templateImageNamed:@"ic_checkmark_default"] : nil;
-            cell.rightIconView.tintColor = isUnitsCell ? UIColorFromRGB(color_tint_gray) : UIColorFromRGB(color_primary_purple);
+            {
+                if (isSelected)
+                    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                else
+                    cell.accessoryType = UITableViewCellAccessoryNone;
+            }
+            cell.accessoryView.tintColor = isUnitsCell ? UIColorFromRGB(color_tint_gray) : UIColorFromRGB(color_primary_purple);
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"image"]];
             cell.leftIconView.tintColor = isSelected ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
-            [cell showLeftIcon:!isUnitsCell];
-            [cell updateConstraints];
+            [cell leftIconVisibility:!isUnitsCell];
         }
         return cell;
     }

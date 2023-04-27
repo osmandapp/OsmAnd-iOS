@@ -333,7 +333,7 @@
 - (UIImage *) getPointIcon:(id)point
 {
     sk_sp<SkImage> bitmap = [self getIcon:point];
-    return [OANativeUtilities skImageToUIImage:bitmap];
+    return [OAUtilities resizeImage:[OANativeUtilities skImageToUIImage:bitmap] newSize:CGSizeMake(60., 60.)];
 }
 
 - (void)setPointVisibility:(id)object hidden:(BOOL)hidden

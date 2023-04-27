@@ -1725,6 +1725,7 @@
 "kg" = "kg";
 
 "int_hour" = "h";
+"short_min" = "m";
 "int_min" = "min.";
 "shared_string_sec" = "sec";
 "units_sec_short" = "s";

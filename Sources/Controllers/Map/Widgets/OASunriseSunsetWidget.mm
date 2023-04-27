@@ -162,7 +162,27 @@
 
 + (NSString *) formatTimeLeft:(NSTimeInterval)timeLeft
 {
-    return [OAOsmAndFormatter getFormattedTimeHM:timeLeft];
+    return [self getFormattedTime:timeLeft];
+}
+
++ (NSString*) getFormattedTime:(NSTimeInterval)timeInterval
+{
+    int hours, minutes, seconds;
+    [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
+    
+    NSMutableString *time = [NSMutableString string];
+    NSString *unitStr = OALocalizedString(@"int_hour");
+    if (hours > 0)
+        [time appendFormat:@"%02d:", hours];
+    [time appendFormat:@"%02d", minutes];
+    if (hours == 0)
+    {
+        [time appendFormat:@":%02d", seconds];
+        unitStr = OALocalizedString(@"short_min");
+    }
+    [time appendFormat:@" %@", unitStr];
+    
+    return time;
 }
 
 + (NSString *) formatNextTime:(NSTimeInterval)nextTime

@@ -2898,3 +2898,5 @@
 "activity_type_offroad_name" = "Offroad";
 "altitude_widget_desc" = "Zeigt die Höhe über dem Meeresspiegel der aktuellen Geolokalisierung an.";
 "map_widget_altitude_current_location" = "Höhe: aktueller Standort";
+"map_widget_altitude_map_center" = "Höhe: Kartenmitte";
+"map_widget_altitude_map_center_desc" = "Zeigt die Höhe über dem Meeresspiegel der aktuellen Kartenmitte an.";

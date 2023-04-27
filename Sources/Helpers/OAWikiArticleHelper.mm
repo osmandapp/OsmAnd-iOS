@@ -15,6 +15,7 @@
 #import "OAWikiWebViewController.h"
 #import "OARootViewController.h"
 #import "Localization.h"
+#import "OAUtilities.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -22,6 +23,108 @@
 #define kPOpened @"<p>"
 #define kPClosed @"</p>"
 #define kPartialContentPhrases 3
+
+@implementation OAWikiArticleSearchTask
+{
+    CLLocationCoordinate2D _articleLatLon;
+    NSString *_regionName;
+    NSString *_url;
+    NSString *_lang;
+    NSString *_name;
+    BOOL _isCanceled;
+    OAWikiArticleSearchTaskBlockType _onStart;
+    OAWikiArticleSearchTaskBlockType _onComplete;
+}
+
+- (instancetype)initWithLatlon:(CLLocationCoordinate2D)latLon url:(NSString *)url onStart:(void (^)())onStart onComplete:(void (^)())onComplete
+{
+    self = [super init];
+    if (self)
+    {
+        _articleLatLon = latLon;
+        _url = url;
+        _onStart = onStart;
+        _onComplete = onComplete;
+        _isCanceled = NO;
+    }
+    return self;
+}
+
+- (void) execute
+{
+    [self onPreExecute];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSArray<OAPOI *> *items = [self doInBackground];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self onPostExecute:items];
+        });
+    });
+}
+
+- (void) onPreExecute
+{
+    _lang = [OAWikiArticleHelper getLang:_url];
+    _name = [OAWikiArticleHelper getArticleNameFromUrl:_url lang:_lang];
+    if (_onStart)
+        _onStart();
+}
+
+- (NSArray<OAPOI *> *) doInBackground
+{
+    NSMutableArray<OAPOI *> *results = [NSMutableArray array];
+    if (!_isCanceled)
+    {
+        OsmAndAppInstance app = [OsmAndApp instance];
+        OAWorldRegion *worldRegion = [app.worldRegion findAtLat:_articleLatLon.latitude lon:_articleLatLon.longitude];
+        worldRegion = [OAWikiArticleHelper findWikiRegion:worldRegion];
+        OARepositoryResourceItem *repository = [OAWikiArticleHelper findResourceItem:worldRegion];
+        
+        if (repository && app.resourcesManager->isResourceInstalled(repository.resourceId))
+        {
+            OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_articleLatLon.latitude, _articleLatLon.longitude));
+            NSArray<OAPOI *> *wikiPoints = [OAPOIHelper findPOIsByTagName:nil name:nil location:locI categoryName:OSM_WIKI_CATEGORY poiTypeName:nil bboxTopLeft:worldRegion.bboxTopLeft bboxBottomRight:worldRegion.bboxBottomRight];
+            
+            for (OAPOI *poi in wikiPoints)
+            {
+                if ([poi.name isEqualToString:_name])
+                    [results addObject:poi];
+                else if ([poi.localizedNames.allValues containsObject:_name])
+                    [results addObject:poi];
+            }
+        }
+        else
+        {
+            [OAWikiArticleHelper showHowToOpenWikiAlert:repository url:_url];
+        }
+    }
+    return results;
+}
+
+- (void) onPostExecute:(NSArray<OAPOI *> *)found
+{
+    if (_onComplete)
+        _onComplete();
+    
+    if (found && found.count > 0)
+    {
+        OAWikiWebViewController *wikiController = [[OAWikiWebViewController alloc] initWithPoi:found[0] locale:_lang];
+        [OARootViewController.instance.mapPanel.navigationController pushViewController:wikiController animated:YES];
+    }
+    else
+    {
+        [OAWikiArticleHelper warnAboutExternalLoad:_url];
+    }
+}
+
+- (void) cancel
+{
+    _isCanceled = YES;
+    if (_onComplete)
+        _onComplete();
+}
+
+@end
+
 
 @implementation OAWikiArticleHelper
 
@@ -71,77 +174,51 @@
     return nil;
 }
 
-+ (void) showWikiArticle:(CLLocationCoordinate2D)location url:(NSString *)url
++ (void) showWikiArticle:(CLLocationCoordinate2D)location url:(NSString *)url onStart:(void (^)())onStart onComplete:(void (^)())onComplete;
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
-    OAWorldRegion *worldRegion = [app.worldRegion findAtLat:location.latitude lon:location.longitude];
-    worldRegion = [self findWikiRegion:worldRegion];
-    NSString *articleName = [[url lastPathComponent] stringByRemovingPercentEncoding];
-    OARepositoryResourceItem *item = [self findResourceItem:worldRegion];
+    OAWikiArticleSearchTask *task = [[OAWikiArticleSearchTask alloc] initWithLatlon:location url:url onStart:onStart onComplete:onComplete];
+    [task execute];
+}
+
++ (void)showHowToOpenWikiAlert:(OARepositoryResourceItem *)item url:(NSString *)url
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"how_to_open_wiki_title")
+                                                                   message:OALocalizedString(url)
+                                                            preferredStyle:UIAlertControllerStyleActionSheet];
     
-    if (item && app.resourcesManager->isResourceInstalled(item.resourceId))
-    {
-        OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.latitude, location.longitude));
-        NSArray<OAPOI *> *wiki = [OAPOIHelper findPOIsByTagName:nil name:nil location:locI categoryName:OSM_WIKI_CATEGORY poiTypeName:nil radius:250];
-        OAPOI *foundPoint = nil;
-        for (OAPOI *poi in wiki)
+    UIAlertAction *downloadAction = [UIAlertAction actionWithTitle:OALocalizedString(@"download_wikipedia_data")
+                                                             style:UIAlertActionStyleDefault
+                                                           handler:^(UIAlertAction * _Nonnull action) {
+        OsmAndAppInstance app = [OsmAndApp instance];
+        if ([app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]].count == 0)
         {
-            if ([poi.localizedNames.allValues containsObject:articleName])
-            {
-                foundPoint = poi;
-                break;
-            }
-        }
-        if (foundPoint)
-        {
-            OAWikiWebViewController *wikiController = [[OAWikiWebViewController alloc] initWithPoi:foundPoint];
-            [OARootViewController.instance.mapPanel.navigationController pushViewController:wikiController animated:YES];
+            NSString *resourceName = [OAResourcesUIHelper titleOfResource:item.resource
+                                                                 inRegion:item.worldRegion
+                                                           withRegionName:YES
+                                                         withResourceType:YES];
+            [OAResourcesUIHelper startBackgroundDownloadOf:item.resource resourceName:resourceName];
         }
         else
         {
-            [self warnAboutExternalLoad:url];
+            OASuperViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
+            [[OARootViewController instance].navigationController pushViewController:resourcesViewController animated:YES];
         }
-    }
-    else
-    {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"how_to_open_wiki_title")
-                                                                       message:OALocalizedString(url)
-                                                                preferredStyle:UIAlertControllerStyleActionSheet];
-        
-        UIAlertAction *downloadAction = [UIAlertAction actionWithTitle:OALocalizedString(@"download_wikipedia_data")
-                                                                 style:UIAlertActionStyleDefault
-                                                               handler:^(UIAlertAction * _Nonnull action) {
-            OsmAndAppInstance app = [OsmAndApp instance];
-            if ([app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]].count == 0)
-            {
-                NSString *resourceName = [OAResourcesUIHelper titleOfResource:item.resource
-                                                                     inRegion:item.worldRegion
-                                                               withRegionName:YES
-                                                             withResourceType:YES];
-                [OAResourcesUIHelper startBackgroundDownloadOf:item.resource resourceName:resourceName];
-            }
-            else
-            {
-                OASuperViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
-                [[OARootViewController instance].navigationController pushViewController:resourcesViewController animated:YES];
-            }
-        }];
-        UIAlertAction *openOnlineAction = [UIAlertAction actionWithTitle:OALocalizedString(@"open_in_browser_wiki")
-                                                                   style:UIAlertActionStyleDefault
-                                                                 handler:^(UIAlertAction * _Nonnull action) {
-            [OAUtilities callUrl:url];
-        }];
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
-                                                               style:UIAlertActionStyleCancel
-                                                             handler:nil
-        ];
-        
-        [alert addAction:downloadAction];
-        [alert addAction:openOnlineAction];
-        [alert addAction:cancelAction];
-        alert.preferredAction = cancelAction;
-        [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
-    }
+    }];
+    UIAlertAction *openOnlineAction = [UIAlertAction actionWithTitle:OALocalizedString(@"open_in_browser_wiki")
+                                                               style:UIAlertActionStyleDefault
+                                                             handler:^(UIAlertAction * _Nonnull action) {
+        [OAUtilities callUrl:url];
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:nil
+    ];
+    
+    [alert addAction:downloadAction];
+    [alert addAction:openOnlineAction];
+    [alert addAction:cancelAction];
+    alert.preferredAction = cancelAction;
+    [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
 }
 
 + (void) warnAboutExternalLoad:(NSString *)url
@@ -220,5 +297,41 @@
     return result;
 }
 
++ (NSString *) normalizeFileUrl:(NSString *)url
+{
+    if ([url hasPrefix:kPagePrefixFile])
+        return [url stringByReplacingOccurrencesOfString:kPagePrefixFile withString:kPagePrefixHttps];
+    else
+        return url;
+}
+
++ (NSString *) getLang:(NSString *)url
+{
+    if ([url hasPrefix:kPagePrefixHttp])
+    {
+        int index = [url indexOf:@"."];
+        return [url substringWithRange:NSMakeRange(kPagePrefixHttp.length, index - kPagePrefixHttp.length)];
+    }
+    else if ([url hasPrefix:kPagePrefixHttps])
+    {
+        int index = [url indexOf:@"."];
+        return [url substringWithRange:NSMakeRange(kPagePrefixHttps.length, index - kPagePrefixHttps.length)];
+    }
+    return @"";
+}
+
++ (NSString *) getArticleNameFromUrl:(NSString *)url lang:(NSString *)lang
+{
+    NSString *domain = [url containsString:kWikivoyageDomain] ? kWikivoyageDomain : [url containsString:kWikiDomain] ? kWikiDomain : kWikiDomainCom;
+    NSString *articleName = @"";
+    
+    if ([url hasPrefix:kPagePrefixHttp])
+        articleName = [[url stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@%@%@", kPagePrefixHttp, lang, domain] withString:@""] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    else if ([url hasPrefix:kPagePrefixHttps])
+        articleName = [[url stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@%@%@", kPagePrefixHttps, lang, domain] withString:@""] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    
+    articleName = [articleName stringByRemovingPercentEncoding];
+    return articleName;
+}
 
 @end

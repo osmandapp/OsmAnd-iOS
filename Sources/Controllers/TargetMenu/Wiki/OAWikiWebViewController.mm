@@ -19,6 +19,7 @@
 #import "OsmAndApp.h"
 #import "OASizes.h"
 #import "Localization.h"
+#import "OAWikiArticleHelper.h"
 #import <SafariServices/SafariServices.h>
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
@@ -39,6 +40,7 @@
     UIBarButtonItem *_languageBarButtonItem;
     UIBarButtonItem *_imagesBarButtonItem;
     BOOL _isDownloadImagesOnlyNow;
+    BOOL _isFirstLaunch;
 }
 
 #pragma mark - Initialization
@@ -48,7 +50,22 @@
     self = [super init];
     if (self)
     {
+        _isFirstLaunch = YES;
         _poi = poi;
+        _currentLocale = nil;
+        _contentLocale = nil;
+        [self postInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithPoi:(OAPOI *)poi locale:(NSString *)locale
+{
+    self = [self initWithPoi:poi];
+    if (self)
+    {
+        _currentLocale = [NSLocale localeWithLocaleIdentifier:locale];
+        _contentLocale = [locale isEqualToString:@"en"] ? @"" : locale;
         [self postInit];
     }
     return self;
@@ -59,11 +76,20 @@
     _app = [OsmAndApp instance];
 }
 
+- (void) updateWithPoi:(OAPOI *)poi
+{
+    _poi = poi;
+    [self postInit];
+}
+
 - (void)postInit
 {
-    NSLocale *currentLocal = [NSLocale autoupdatingCurrentLocale];
-    id localIdentifier = [currentLocal objectForKey:NSLocaleIdentifier];
-    _currentLocale = [NSLocale localeWithLocaleIdentifier:localIdentifier];
+    if (!_currentLocale)
+    {
+        NSLocale *currentLocal = [NSLocale autoupdatingCurrentLocale];
+        id localIdentifier = [currentLocal objectForKey:NSLocaleIdentifier];
+        _currentLocale = [NSLocale localeWithLocaleIdentifier:localIdentifier];
+    }
 
     if (_poi.localizedContent.count == 1)
     {
@@ -72,13 +98,16 @@
     }
     else
     {
-        NSString *preferredMapLanguage = [[OAAppSettings sharedManager] settingPrefMapLanguage].get;
-        if (!preferredMapLanguage || preferredMapLanguage.length == 0)
-            preferredMapLanguage = NSLocale.currentLocale.languageCode;
-
-        _contentLocale = [OAPlugin onGetMapObjectsLocale:_poi preferredLocale:preferredMapLanguage];
-        if ([_contentLocale isEqualToString:@"en"])
-            _contentLocale = @"";
+        if (!_contentLocale)
+        {
+            NSString *preferredMapLanguage = [[OAAppSettings sharedManager] settingPrefMapLanguage].get;
+            if (!preferredMapLanguage || preferredMapLanguage.length == 0)
+                preferredMapLanguage = NSLocale.currentLocale.languageCode;
+            
+            _contentLocale = [OAPlugin onGetMapObjectsLocale:_poi preferredLocale:preferredMapLanguage];
+            if ([_contentLocale isEqualToString:@"en"])
+                _contentLocale = @"";
+        }
 
         _content = _poi.localizedContent[_contentLocale];
         if (!_content)
@@ -116,6 +145,70 @@
 
     if (_content)
         _content = [self appendHeadToContent:_content];
+}
+
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
+{
+    NSString *newUrl = [OAWikiArticleHelper normalizeFileUrl:[navigationAction.request.URL.absoluteString stringByRemovingPercentEncoding]];
+    NSString *currentUrl = [OAWikiArticleHelper normalizeFileUrl:[webView.URL.absoluteString stringByRemovingPercentEncoding]];
+    NSInteger wikiUrlEndDndex = [currentUrl indexOf:@"#"];
+    if (wikiUrlEndDndex > 0)
+        currentUrl = [currentUrl substringToIndex:[currentUrl indexOf:@"#"]];
+    
+    if (_isFirstLaunch)
+    {
+        _isFirstLaunch = NO;
+        decisionHandler(WKNavigationActionPolicyAllow);
+    }
+    else
+    {
+        if ([newUrl hasPrefix:currentUrl])
+        {
+            //Navigation inside one page by anchors
+            decisionHandler(WKNavigationActionPolicyAllow);
+        }
+        else
+        {
+            //New url
+            if (([newUrl containsString:kWikiDomain] || [newUrl containsString:kWikiDomainCom]) && _poi)
+            {
+                __block UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[OALocalizedString(@"wiki_article_search_text") stringByAppendingString:@"\n\n"] preferredStyle:UIAlertControllerStyleAlert];
+                UIActivityIndicatorView* spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleLarge];
+                spinner.color = [UIColor blackColor];
+                spinner.translatesAutoresizingMaskIntoConstraints = NO;
+                spinner.tag = -998;
+                [alert.view addSubview:spinner];
+                NSDictionary * views = @{@"pending" : alert.view, @"indicator" : spinner};
+                NSArray * constraintsVertical = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[indicator]-(20)-|" options:0 metrics:nil views:views];
+                NSArray * constraintsHorizontal = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[indicator]|" options:0 metrics:nil views:views];
+                NSArray * constraints = [constraintsVertical arrayByAddingObjectsFromArray:constraintsHorizontal];
+                [alert.view addConstraints:constraints];
+                [spinner setUserInteractionEnabled:NO];
+                
+                _content = nil;
+                [OAWikiArticleHelper showWikiArticle:CLLocationCoordinate2DMake(_poi.latitude, _poi.longitude) url:newUrl onStart:^{
+                    [spinner startAnimating];
+                    [self presentViewController:alert animated:YES completion:nil];
+                } onComplete:^{
+                    [alert.view removeSpinner];
+                    [alert dismissViewControllerAnimated:YES completion:nil];
+                    alert = nil;
+                }];
+                decisionHandler(WKNavigationActionPolicyCancel);
+            }
+            else if ([newUrl hasPrefix:kPagePrefixHttp] || [newUrl hasPrefix:kPagePrefixHttps])
+            {
+                [OAWikiArticleHelper warnAboutExternalLoad:newUrl];
+                decisionHandler(WKNavigationActionPolicyCancel);
+            }
+            else
+            {
+                decisionHandler(WKNavigationActionPolicyAllow);
+                //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                //AndroidUtils.startActivityIfSafe(context, intent);
+            }
+        }
+    }
 }
 
 #pragma mark - UIViewController

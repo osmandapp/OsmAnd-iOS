@@ -13,5 +13,6 @@
 @interface OAWikiWebViewController : OABaseWebViewController
 
 - (instancetype)initWithPoi:(OAPOI *)poi;
+- (instancetype)initWithPoi:(OAPOI *)poi locale:(NSString *)locale;
 
 @end

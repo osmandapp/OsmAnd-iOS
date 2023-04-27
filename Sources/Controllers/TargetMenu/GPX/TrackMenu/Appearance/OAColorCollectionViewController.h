@@ -1,5 +1,5 @@
 //
-//  OAColorsGridViewController.h
+//  OAColorCollectionViewController.h
 //  OsmAnd
 //
 //  Created by Skalii on 25.04.2023.
@@ -10,7 +10,7 @@
 
 @protocol OACollectionCellDelegate;
 
-@interface OAColorsGridViewController : OABaseNavbarViewController
+@interface OAColorCollectionViewController : OABaseNavbarViewController
 
 - (instancetype)initWithColors:(NSMutableArray<NSNumber *> *)colors selectedColor:(NSInteger)selectedColor;
 

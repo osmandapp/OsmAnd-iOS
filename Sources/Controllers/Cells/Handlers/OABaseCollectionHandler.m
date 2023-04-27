@@ -48,6 +48,11 @@
     _scrollDirection = scrollDirection;
 }
 
+- (UIMenu *)getMenuForItem:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
+{
+    return nil;
+}
+
 #pragma mark - Data
 
 - (NSIndexPath *)getSelectedIndexPath
@@ -63,7 +68,7 @@
 {
 }
 
-- (NSInteger)rowsCount:(NSInteger)section
+- (NSInteger)itemsCount:(NSInteger)section
 {
     return 0;
 }
@@ -78,13 +83,13 @@
     return 0;
 }
 
-- (void)onRowSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
+- (void)onItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
     NSIndexPath *prevSelectedColorIndex = [self getSelectedIndexPath];
     [self setSelectedIndexPath:indexPath];
     [collectionView reloadItemsAtIndexPaths:prevSelectedColorIndex ? @[prevSelectedColorIndex, indexPath] : @[indexPath]];
     if (self.delegate)
-        [self.delegate onCellSelected:indexPath];
+        [self.delegate onCollectionItemSelected:indexPath];
 }
 
 @end

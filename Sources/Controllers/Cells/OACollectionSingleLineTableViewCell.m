@@ -97,11 +97,30 @@
     return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 }
 
+- (UIContextMenuConfiguration *)collectionView:(UICollectionView *)collectionView
+    contextMenuConfigurationForItemAtIndexPath:(NSIndexPath *)indexPath
+                                         point:(CGPoint)point
+{
+    if (_collectionHandler)
+    {
+        UIMenu *contextMenu = [_collectionHandler getMenuForItem:indexPath collectionView:collectionView];
+        if (contextMenu)
+        {
+            return [UIContextMenuConfiguration configurationWithIdentifier:nil
+                                                           previewProvider:nil
+                                                            actionProvider:^UIMenu * _Nullable(NSArray<UIMenuElement *> * _Nonnull suggestedActions) {
+                return contextMenu;
+            }];
+        }
+    }
+    return nil;
+}
+
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return _collectionHandler ? [_collectionHandler rowsCount:section] : 0;
+    return _collectionHandler ? [_collectionHandler itemsCount:section] : 0;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -119,7 +138,7 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (_collectionHandler)
-        [_collectionHandler onRowSelected:indexPath collectionView:collectionView];
+        [_collectionHandler onItemSelected:indexPath collectionView:collectionView];
 }
 
 @end

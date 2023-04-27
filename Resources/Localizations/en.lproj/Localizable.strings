@@ -631,6 +631,11 @@
 "shared_string_external" = "External";
 "shared_string_coloring" = "Coloring";
 "shared_string_all_colors" = "All colors";
+"shared_string_add_color" = "Add color";
+"shared_string_edit_color" = "Edit color";
+"shared_string_duplicate_color" = "Duplicate color";
+"shared_string_delete_color" = "Delete color";
+"shared_string_duplicate" = "Duplicate";
 
 "restart" = "Restart";
 

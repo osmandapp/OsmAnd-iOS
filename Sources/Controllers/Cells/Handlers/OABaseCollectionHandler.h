@@ -11,7 +11,8 @@
 
 @protocol OACollectionCellDelegate
 
-- (void)onCellSelected:(NSIndexPath *)indexPath;
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath;
+- (void)reloadCollectionData;
 
 @end
 
@@ -23,14 +24,15 @@
 - (CGSize)getItemSize;
 - (UICollectionViewScrollDirection)getScrollDirection;
 - (void)setScrollDirection:(UICollectionViewScrollDirection)scrollDirection;
+- (UIMenu *)getMenuForItem:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
 
 - (NSIndexPath *)getSelectedIndexPath;
 - (void)setSelectedIndexPath:(NSIndexPath *)selectedIndexPath;
 
-- (NSInteger)rowsCount:(NSInteger)section;
+- (NSInteger)itemsCount:(NSInteger)section;
 - (UICollectionViewCell *)getCollectionViewCell:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
 - (NSInteger)sectionsCount;
-- (void)onRowSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
+- (void)onItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
 
 @property (nonatomic, weak) id<OACollectionCellDelegate> delegate;
 

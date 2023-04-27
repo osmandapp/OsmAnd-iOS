@@ -594,7 +594,7 @@
 		461A3F0029F6A62C008EE079 /* OATrackColoringTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3EFF29F6A5DF008EE079 /* OATrackColoringTypeViewController.m */; };
 		461A3F0429F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 461A3F0329F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib */; };
 		461A3F0729F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3F0629F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m */; };
-		461A3F0A29F6E68F008EE079 /* OAColorsCollectionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3F0929F6E68F008EE079 /* OAColorsCollectionHandler.m */; };
+		461A3F0A29F6E68F008EE079 /* OAColorCollectionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3F0929F6E68F008EE079 /* OAColorCollectionHandler.m */; };
 		461A3F0D29F6E859008EE079 /* OABaseCollectionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3F0C29F6E859008EE079 /* OABaseCollectionHandler.m */; };
 		461F451E283E36EB00796360 /* ic_navbar_help@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F451C283E36EB00796360 /* ic_navbar_help@2x.png */; };
 		461F451F283E36EB00796360 /* ic_navbar_help@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F451D283E36EB00796360 /* ic_navbar_help@3x.png */; };
@@ -719,7 +719,7 @@
 		468AADE428C77A6200BEC402 /* img_openstreetmap_logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 468AADE028C77A6100BEC402 /* img_openstreetmap_logo@3x.png */; };
 		468AADE528C77A6200BEC402 /* ic_custom_download_map_unavailable@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 468AADE128C77A6200BEC402 /* ic_custom_download_map_unavailable@2x.png */; };
 		468AADE628C77A6200BEC402 /* ic_custom_download_map_unavailable@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 468AADE228C77A6200BEC402 /* ic_custom_download_map_unavailable@3x.png */; };
-		468CE3F129F82EA700F3C3E5 /* OAColorsGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 468CE3F029F82E9400F3C3E5 /* OAColorsGridViewController.m */; };
+		468CE3F129F82EA700F3C3E5 /* OAColorCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 468CE3F029F82E9400F3C3E5 /* OAColorCollectionViewController.m */; };
 		46903D6929B5F734004459F1 /* OABaseWebViewContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 46903D6829B5F734004459F1 /* OABaseWebViewContoller.m */; };
 		46903D6B29B5F77A004459F1 /* OABaseWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46903D6A29B5F77A004459F1 /* OABaseWebViewController.xib */; };
 		46903D6E29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 46903D6D29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m */; };
@@ -4153,8 +4153,8 @@
 		461A3F0329F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACollectionSingleLineTableViewCell.xib; sourceTree = "<group>"; };
 		461A3F0529F6E29C008EE079 /* OACollectionSingleLineTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollectionSingleLineTableViewCell.h; sourceTree = "<group>"; };
 		461A3F0629F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACollectionSingleLineTableViewCell.m; sourceTree = "<group>"; };
-		461A3F0829F6E560008EE079 /* OAColorsCollectionHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAColorsCollectionHandler.h; sourceTree = "<group>"; };
-		461A3F0929F6E68F008EE079 /* OAColorsCollectionHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAColorsCollectionHandler.m; sourceTree = "<group>"; };
+		461A3F0829F6E560008EE079 /* OAColorCollectionHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAColorCollectionHandler.h; sourceTree = "<group>"; };
+		461A3F0929F6E68F008EE079 /* OAColorCollectionHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAColorCollectionHandler.m; sourceTree = "<group>"; };
 		461A3F0B29F6E826008EE079 /* OABaseCollectionHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseCollectionHandler.h; sourceTree = "<group>"; };
 		461A3F0C29F6E859008EE079 /* OABaseCollectionHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseCollectionHandler.m; sourceTree = "<group>"; };
 		461F451C283E36EB00796360 /* ic_navbar_help@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_help@2x.png"; path = "Resources/Icons/ic_navbar_help@2x.png"; sourceTree = "<group>"; };
@@ -4290,8 +4290,8 @@
 		468AADE028C77A6100BEC402 /* img_openstreetmap_logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_openstreetmap_logo@3x.png"; path = "Resources/Icons/img_openstreetmap_logo@3x.png"; sourceTree = "<group>"; };
 		468AADE128C77A6200BEC402 /* ic_custom_download_map_unavailable@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download_map_unavailable@2x.png"; path = "Resources/Icons/ic_custom_download_map_unavailable@2x.png"; sourceTree = "<group>"; };
 		468AADE228C77A6200BEC402 /* ic_custom_download_map_unavailable@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download_map_unavailable@3x.png"; path = "Resources/Icons/ic_custom_download_map_unavailable@3x.png"; sourceTree = "<group>"; };
-		468CE3EF29F82E6300F3C3E5 /* OAColorsGridViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAColorsGridViewController.h; sourceTree = "<group>"; };
-		468CE3F029F82E9400F3C3E5 /* OAColorsGridViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAColorsGridViewController.m; sourceTree = "<group>"; };
+		468CE3EF29F82E6300F3C3E5 /* OAColorCollectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAColorCollectionViewController.h; sourceTree = "<group>"; };
+		468CE3F029F82E9400F3C3E5 /* OAColorCollectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAColorCollectionViewController.m; sourceTree = "<group>"; };
 		46903D6729B5F715004459F1 /* OABaseWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseWebViewController.h; sourceTree = "<group>"; };
 		46903D6829B5F734004459F1 /* OABaseWebViewContoller.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseWebViewContoller.m; sourceTree = "<group>"; };
 		46903D6A29B5F77A004459F1 /* OABaseWebViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OABaseWebViewController.xib; sourceTree = "<group>"; };
@@ -9760,8 +9760,8 @@
 		468CE3ED29F82D8200F3C3E5 /* Handlers */ = {
 			isa = PBXGroup;
 			children = (
-				461A3F0829F6E560008EE079 /* OAColorsCollectionHandler.h */,
-				461A3F0929F6E68F008EE079 /* OAColorsCollectionHandler.m */,
+				461A3F0829F6E560008EE079 /* OAColorCollectionHandler.h */,
+				461A3F0929F6E68F008EE079 /* OAColorCollectionHandler.m */,
 				461A3F0B29F6E826008EE079 /* OABaseCollectionHandler.h */,
 				461A3F0C29F6E859008EE079 /* OABaseCollectionHandler.m */,
 			);
@@ -9773,8 +9773,8 @@
 			children = (
 				461A3EFE29F6A5C3008EE079 /* OATrackColoringTypeViewController.h */,
 				461A3EFF29F6A5DF008EE079 /* OATrackColoringTypeViewController.m */,
-				468CE3EF29F82E6300F3C3E5 /* OAColorsGridViewController.h */,
-				468CE3F029F82E9400F3C3E5 /* OAColorsGridViewController.m */,
+				468CE3EF29F82E6300F3C3E5 /* OAColorCollectionViewController.h */,
+				468CE3F029F82E9400F3C3E5 /* OAColorCollectionViewController.m */,
 			);
 			path = Appearance;
 			sourceTree = "<group>";
@@ -17053,7 +17053,7 @@
 				DA5A825226C563A700F274C7 /* OANavigationTypeViewController.mm in Sources */,
 				DA5A830C26C563A800F274C7 /* OAEmptySearchCell.m in Sources */,
 				DA5A850426C563A900F274C7 /* OATargetPointView.mm in Sources */,
-				461A3F0A29F6E68F008EE079 /* OAColorsCollectionHandler.m in Sources */,
+				461A3F0A29F6E68F008EE079 /* OAColorCollectionHandler.m in Sources */,
 				DA5A84F226C563A900F274C7 /* OALocationConvert.mm in Sources */,
 				DA5A81DA26C563A700F274C7 /* OAFirstUsageWizardController.mm in Sources */,
 				DA5A83F326C563A800F274C7 /* OARearrangeCustomFiltersViewController.mm in Sources */,
@@ -17279,7 +17279,7 @@
 				DA5A84A226C563A900F274C7 /* OAMovePointCommand.mm in Sources */,
 				DA5A854026C563A900F274C7 /* SunriseSunset.m in Sources */,
 				DA5A832326C563A800F274C7 /* OATitleSliderTableViewCell.m in Sources */,
-				468CE3F129F82EA700F3C3E5 /* OAColorsGridViewController.m in Sources */,
+				468CE3F129F82EA700F3C3E5 /* OAColorCollectionViewController.m in Sources */,
 				DA5A83C726C563A800F274C7 /* OATargetMenuViewController.mm in Sources */,
 				DA5A81BF26C563A700F274C7 /* OAPOIType.m in Sources */,
 				46D38AA229C39D7C000AAE0C /* OARoutingFile.m in Sources */,

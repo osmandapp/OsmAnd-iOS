@@ -2885,3 +2885,5 @@
 "map_widget_altitude_current_location" = "Altitude : position actuelle";
 "altitude_widget_desc" = "Affiche l'altitude de la position actuelle.";
 "map_widget_altitude_map_center" = "Altitude : centre de la carte";
+"short_min" = "m";
+"wiki_article_search_text" = "Recherche de l'article Wiki correspondant";

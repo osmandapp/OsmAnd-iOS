@@ -20,8 +20,9 @@
 
 @property (nonatomic) UIColor *color;
 @property (nonatomic) NSInteger colorValue;
+@property (nonatomic) NSString *hexKey;
 
-- (instancetype)initWithKey:(NSString *)key value:(NSInteger)value;
+- (instancetype)initWithKey:(NSString *)key value:(NSInteger)value hexKey:(NSString *)hexKey;
 
 @end
 
@@ -62,6 +63,10 @@
 - (NSArray<OAGPXTrackSplitInterval *> *)getAvailableSplitIntervals;
 
 - (OAGPXTrackColor *)getColorForValue:(NSInteger)value;
+- (OAGPXTrackColor *)getColorForHexKey:(NSString *)hexKey;
++ (NSString *)checkDuplicateHexColor:(NSString *)duplicatedHexColor;
++ (NSString *)getOriginalHexColor:(NSString *)duplicatedHexColor;
+
 - (OAGPXTrackWidth *)getWidthForValue:(NSString *)value;
 - (OAGPXTrackSplitInterval *)getSplitIntervalForType:(EOAGpxSplitType)type;
 

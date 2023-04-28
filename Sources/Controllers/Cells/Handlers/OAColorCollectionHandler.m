@@ -8,6 +8,7 @@
 
 #import "OAColorCollectionHandler.h"
 #import "OAColorsCollectionViewCell.h"
+#import "OAGPXAppearanceCollection.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -16,7 +17,7 @@
 
 @implementation OAColorCollectionHandler
 {
-    NSMutableArray<NSMutableArray<NSNumber *> *> *_data;
+    NSMutableArray<NSMutableArray<NSString *> *> *_data;
     NSIndexPath *_selectedIndexPath;
 }
 
@@ -76,12 +77,11 @@
 
 #pragma mark - Data
 
-- (void)addAndSelectColor:(NSInteger)color collectionView:(UICollectionView *)collectionView
+- (void)addAndSelectHexKey:(NSString *)hexKey collectionView:(UICollectionView *)collectionView
 {
-    NSNumber *selectedColor = @(color);
-    [_data.firstObject addObject:selectedColor];
+    [_data.firstObject addObject:hexKey];
     NSIndexPath *prevSelectedIndexPath = _selectedIndexPath;
-    _selectedIndexPath = [NSIndexPath indexPathForRow:_data.firstObject.count - 1 inSection:0];
+    _selectedIndexPath = [NSIndexPath indexPathForRow:[collectionView numberOfItemsInSection:_selectedIndexPath.section] inSection:0];
     [collectionView performBatchUpdates:^{
         [collectionView insertItemsAtIndexPaths:@[_selectedIndexPath]];
     } completion:^(BOOL finished) {
@@ -94,25 +94,20 @@
     }];
 }
 
-- (void)replaceOldColor:(NSIndexPath *)indexPath withNewColor:(NSInteger)newColor collectionView:(UICollectionView *)collectionView
+- (void)replaceOldColor:(NSIndexPath *)indexPath withNewHexKey:(NSString *)newHexKey collectionView:(UICollectionView *)collectionView
 {
-    [_data[indexPath.section] replaceObjectAtIndex:indexPath.row withObject:@(newColor)];
+    [_data[indexPath.section] replaceObjectAtIndex:indexPath.row withObject:newHexKey];
     if (indexPath == _selectedIndexPath)
         [self onItemSelected:_selectedIndexPath collectionView:collectionView];
     else
         [collectionView reloadItemsAtIndexPaths:@[indexPath]];
 }
 
-- (void)duplicateColor:(NSIndexPath *)indexPath isDefaultColor:(BOOL)isDefault collectionView:(UICollectionView *)collectionView
+- (void)addDuplicatedHexKey:(NSString *)hexKey toNewIndexPath:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
-    if (isDefault)
-        [_data[indexPath.section] addObject:_data[indexPath.section][indexPath.row]];
-    else
-        [_data[indexPath.section] insertObject:_data[indexPath.section][indexPath.row] atIndex:indexPath.row + 1];
-    NSIndexPath *newColorIndexPath = [NSIndexPath indexPathForRow:isDefault ? [collectionView numberOfItemsInSection:indexPath.section] : (indexPath.row + 1)
-                                                        inSection:indexPath.section];
+    [_data[indexPath.section] insertObject:hexKey atIndex:indexPath.row];
     [collectionView performBatchUpdates:^{
-        [collectionView insertItemsAtIndexPaths:@[newColorIndexPath]];
+        [collectionView insertItemsAtIndexPaths:@[indexPath]];
     } completion:^(BOOL finished) {
         if (self.delegate)
             [self.delegate reloadCollectionData];
@@ -150,7 +145,7 @@
     _selectedIndexPath = selectedIndexPath;
 }
 
-- (void)generateData:(NSMutableArray<NSMutableArray<NSNumber *> *> *)data
+- (void)generateData:(NSMutableArray<NSMutableArray<NSString *> *> *)data
 {
     _data = data;
 }
@@ -162,7 +157,8 @@
 
 - (UICollectionViewCell *)getCollectionViewCell:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
-    NSInteger color = _data[indexPath.section][indexPath.row].integerValue;
+    NSString *hexKey = _data[indexPath.section][indexPath.row];
+    NSInteger color = [OAUtilities colorToNumberFromString:[OAGPXAppearanceCollection getOriginalHexColor:hexKey]];
     OAColorsCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[OAColorsCollectionViewCell getCellIdentifier]
                                                                                  forIndexPath:indexPath];
     if (!cell)

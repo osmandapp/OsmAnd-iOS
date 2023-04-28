@@ -21,9 +21,9 @@
 
 @property (nonatomic, weak) id<OAColorsCollectionCellDelegate> delegate;
 
-- (void)addAndSelectColor:(NSInteger)color collectionView:(UICollectionView *)collectionView;
-- (void)replaceOldColor:(NSIndexPath *)indexPath withNewColor:(NSInteger)newColor collectionView:(UICollectionView *)collectionView;
-- (void)duplicateColor:(NSIndexPath *)indexPath isDefaultColor:(BOOL)isDefault collectionView:(UICollectionView *)collectionView;
+- (void)addAndSelectHexKey:(NSString *)hexKey collectionView:(UICollectionView *)collectionView;
+- (void)replaceOldColor:(NSIndexPath *)indexPath withNewHexKey:(NSString *)newHexKey collectionView:(UICollectionView *)collectionView;
+- (void)addDuplicatedHexKey:(NSString *)hexKey toNewIndexPath:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
 - (void)removeColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
 
 @end

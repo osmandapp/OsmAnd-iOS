@@ -12,7 +12,7 @@
 
 @interface OAColorCollectionViewController : OABaseNavbarViewController
 
-- (instancetype)initWithColors:(NSMutableArray<NSNumber *> *)colors selectedColor:(NSInteger)selectedColor;
+- (instancetype)initWithHexKeys:(NSMutableArray<NSString *> *)hexKeys selectedHexKey:(NSString *)selectedHexKey;
 
 @property(nonatomic, weak) id<OACollectionCellDelegate>delegate;
 

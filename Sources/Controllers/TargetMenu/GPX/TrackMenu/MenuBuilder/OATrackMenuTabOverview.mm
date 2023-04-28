@@ -124,7 +124,7 @@
         {
             OAGPXTableCellData *networkCellData = [OAGPXTableCellData withData:@{
                     kTableKey: @"network",
-                    kCellType: [OAIconTitleValueCell getCellIdentifier],
+                    kCellType: [OAValueTableViewCell getCellIdentifier],
                     kCellTitle: OALocalizedString(@"network"),
                     kCellDesc: resolvedName
             }];
@@ -134,7 +134,7 @@
 
     OAGPXTableCellData *routeCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"route",
-            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellType: [OAValueTableViewCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"layer_route"),
             kCellDesc: OALocalizedString([NSString stringWithFormat:@"activity_type_%@_name", [self tagToActivity:tag]])
     }];
@@ -145,7 +145,7 @@
     {
         OAGPXTableCellData *operatorCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"operator",
-                kCellType: [OAIconTitleValueCell getCellIdentifier],
+                kCellType: [OAValueTableViewCell getCellIdentifier],
                 kCellTitle: OALocalizedString(@"poi_operator"),
                 kCellDesc: oper
         }];
@@ -157,7 +157,7 @@
     {
         OAGPXTableCellData *symbolCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"symbol",
-                kCellType: [OAIconTitleValueCell getCellIdentifier],
+                kCellType: [OAValueTableViewCell getCellIdentifier],
                 kCellTitle: OALocalizedString(@"shared_string_symbol"),
                 kCellDesc: symbol
         }];
@@ -169,7 +169,7 @@
     {
         OAGPXTableCellData *websiteCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"website",
-                kCellType: [OAIconTitleValueCell getCellIdentifier],
+                kCellType: [OAValueTableViewCell getCellIdentifier],
                 kCellTitle: OALocalizedString(@"website"),
                 kCellDesc: website
         }];
@@ -181,7 +181,7 @@
     {
         OAGPXTableCellData *wikiCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"wiki",
-                kCellType: [OAIconTitleValueCell getCellIdentifier],
+                kCellType: [OAValueTableViewCell getCellIdentifier],
                 kCellTitle: OALocalizedString(@"download_wikipedia_maps"),
                 kCellDesc: wiki
         }];

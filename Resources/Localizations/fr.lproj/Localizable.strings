@@ -2569,7 +2569,7 @@
 "backup_deleting_all_data" = "Suppression de toutes les données …";
 "shared_string_leave" = "Quitter";
 "backup_data" = "Sauvegarder les données";
-"are_you_sure" = "Etes-vous certain ?";
+"are_you_sure" = "Êtes-vous sûr ?";
 "backup_delete_all_data" = "Supprimer toutes mes données";
 "select_backup_data_descr" = "Sélectionnez les données et dossiers à sauvegarder.";
 "backup_delete_all_data_in_progress" = "Veuillez patienter pendant que OsmAnd supprime toutes vos données dans le cloud. Toutes les données sur votre appareil ne seront pas affectées.";

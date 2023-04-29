@@ -2887,3 +2887,5 @@
 "route_info" = "Ruteinfo";
 "activity_type_running_name" = "Løb";
 "activity_type_snowmobile_name" = "Snescooter";
+"short_min" = "m";
+"wiki_article_search_text" = "Søger efter den tilsvarende wiki-artikel";

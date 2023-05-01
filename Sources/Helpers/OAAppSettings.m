@@ -341,6 +341,7 @@
 #define currentTrackShowArrowsKey @"currentTrackShowArrows"
 #define currentTrackShowStartFinishKey @"currentTrackShowStartFinish"
 #define customTrackColorsKey @"customTrackColors"
+#define customTrackColorsLastUsedKey @"customTrackColorsLastUsed"
 #define lastUsedFavIconsKey @"lastUsedFavIcons"
 
 #define gpsStatusAppKey @"gpsStatusApp"
@@ -4305,6 +4306,7 @@
         _currentTrackShowArrows = [[[OACommonBoolean withKey:currentTrackShowArrowsKey defValue:NO] makeGlobal] makeShared];
         _currentTrackShowStartFinish = [[[OACommonBoolean withKey:currentTrackShowStartFinishKey defValue:YES] makeGlobal] makeShared];
         _customTrackColors = [[[OACommonStringList withKey:customTrackColorsKey defValue:@[]] makeGlobal] makeShared];
+        _customTrackColorsLastUsed = [[[OACommonStringList withKey:customTrackColorsLastUsedKey defValue:@[]] makeGlobal] makeShared];
         _lastUsedFavIcons = [[[OACommonStringList withKey:lastUsedFavIconsKey defValue:@[]] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_currentTrackColor forKey:@"current_track_color"];
@@ -4316,6 +4318,7 @@
         [_globalPreferences setObject:_currentTrackShowArrows forKey:@"current_track_show_arrows"];
         [_globalPreferences setObject:_currentTrackShowStartFinish forKey:@"current_track_show_start_finish"];
         [_globalPreferences setObject:_customTrackColors forKey:@"custom_track_colors"];
+        [_globalPreferences setObject:_customTrackColorsLastUsed forKey:@"custom_track_colors_last_used"];
         [_globalPreferences setObject:_lastUsedFavIcons forKey:@"last_used_favorite_icons"];
 
         _gpsStatusApp = [[[OACommonString withKey:gpsStatusAppKey defValue:@""] makeGlobal] makeShared];
@@ -5174,6 +5177,100 @@
 - (BOOL)isTypeDisabled:(NSString *)typeName
 {
     return [_disabledTypes containsObject:typeName];
+}
+
+- (void)addAndSelectCustomTrackHexKey:(NSString *)hexKey
+{
+    NSString *checkedHexKey = [self checkDuplicateHexColor:hexKey];
+    NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[_customTrackColors get]];
+    [customTrackColors addObject:checkedHexKey];
+    [_customTrackColors set:customTrackColors];
+
+    [self reloadCustomTrackHexKeysLastUsed:checkedHexKey];
+}
+
+- (void)replaceCustomTrackHexKey:(NSString *)hexKey withNewHexKey:(NSString *)newHexKey isSelected:(BOOL)isSelected
+{
+    NSString *checkedHexKey = [self checkDuplicateHexColor:newHexKey];
+    NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[_customTrackColors get]];
+    [customTrackColors replaceObjectAtIndex:[customTrackColors indexOfObject:hexKey] withObject:checkedHexKey];
+    [_customTrackColors set:customTrackColors];
+
+    if (isSelected)
+        [self reloadCustomTrackHexKeysLastUsed:checkedHexKey];
+}
+
+- (void)removeCustomTrackHexKey:(NSString *)hexKey
+{
+    NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[_customTrackColors get]];
+    [customTrackColors removeObject:hexKey];
+    [_customTrackColors set:customTrackColors];
+
+    [self reloadCustomTrackHexKeysLastUsed:hexKey];
+}
+
+- (void)duplicateCustomTrackHexKey:(NSString *)hexKey isDefaultColor:(BOOL)isDefaultColor
+{
+    NSString *duplicatedHexKey = [self checkDuplicateHexColor:hexKey];
+    if (isDefaultColor && ![duplicatedHexKey containsString:@"_"])
+        duplicatedHexKey = [duplicatedHexKey stringByAppendingString:@"_2"];
+    NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[_customTrackColors get]];
+    if (isDefaultColor || [customTrackColors indexOfObject:hexKey] == NSNotFound)
+        [customTrackColors addObject:duplicatedHexKey];
+    else
+        [customTrackColors insertObject:duplicatedHexKey atIndex:[customTrackColors indexOfObject:hexKey] + 1];
+    [_customTrackColors set:customTrackColors];
+
+    NSMutableArray<NSString *> *sortedHexKeys = [NSMutableArray arrayWithArray:[_customTrackColorsLastUsed get]];
+    if ([sortedHexKeys indexOfObject:hexKey] != NSNotFound)
+    {
+        [sortedHexKeys insertObject:duplicatedHexKey atIndex:[sortedHexKeys indexOfObject:hexKey] + 1];
+    }
+    else
+    {
+        [sortedHexKeys addObject:hexKey];
+        [sortedHexKeys addObject:duplicatedHexKey];
+    }
+    [_customTrackColorsLastUsed set:sortedHexKeys];
+}
+
+- (void)reloadCustomTrackHexKeysLastUsed:(NSString *)hexKey
+{
+    NSMutableArray<NSString *> *sortedHexKeys = [NSMutableArray arrayWithArray:[_customTrackColorsLastUsed get]];
+    if ([sortedHexKeys containsObject:hexKey])
+        [sortedHexKeys removeObject:hexKey];
+    if ([[_customTrackColors get] containsObject:hexKey])
+        [sortedHexKeys insertObject:hexKey atIndex:0];
+    [_customTrackColorsLastUsed set:sortedHexKeys];
+}
+
+- (NSString *)checkDuplicateHexColor:(NSString *)duplicatedHexColor
+{
+    NSString *originalHexColor = [self getOriginalHexColor:duplicatedHexColor];
+    NSInteger count = 1;
+    for (NSString *hexColor in [_customTrackColors get])
+    {
+        if ([hexColor isEqualToString:originalHexColor] && count < 2)
+        {
+            count = 2;
+        }
+        else if ([hexColor hasPrefix:[originalHexColor stringByAppendingString:@"_"]])
+        {
+            NSInteger newCount = [hexColor substringFromIndex:[hexColor indexOf:@"_"] + 1].integerValue;
+            if (count <= newCount)
+                count = newCount + 1;
+        }
+    }
+    return count == 1 ? originalHexColor : [NSString stringWithFormat:@"%@_%ld", originalHexColor, count];
+}
+
+- (NSString *)getOriginalHexColor:(NSString *)duplicatedHexColor
+{
+    NSString *originalHexColor = duplicatedHexColor;
+    NSInteger index = [originalHexColor indexOf:@"_"];
+    if (index != -1)
+        originalHexColor = [originalHexColor substringToIndex:index];
+    return originalHexColor;
 }
 
 @end

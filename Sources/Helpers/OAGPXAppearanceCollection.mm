@@ -229,7 +229,7 @@
                 [result addObject:
                     [[OAGPXTrackColor alloc] initWithKey:key
                                                    value:obj.integerValue
-                                                  hexKey:[self.class checkDuplicateHexColor:[UIColorFromARGB(obj.integerValue) toHexARGBString]]]];
+                                                  hexKey:[[OAAppSettings sharedManager] checkDuplicateHexColor:[UIColorFromARGB(obj.integerValue) toHexARGBString]]]];
             }
         }];
         _availableColors = [result sortedArrayUsingComparator:^NSComparisonResult(OAGPXTrackColor *obj1, OAGPXTrackColor *obj2) {
@@ -266,7 +266,7 @@
     if (!_availableColors || [_availableColors count] == 0)
         [self getAvailableColors];
 
-    NSInteger value = [OAUtilities colorToNumberFromString:[self.class getOriginalHexColor:hexKey]];
+    NSInteger value = [OAUtilities colorToNumberFromString:[[OAAppSettings sharedManager] getOriginalHexColor:hexKey]];
     for (OAGPXTrackColor *color in _availableColors)
     {
         if (value == 0 && [color.key isEqualToString:@"red"])
@@ -280,34 +280,14 @@
                                          hexKey:hexKey];
 }
 
-+ (NSString *)checkDuplicateHexColor:(NSString *)duplicatedHexColor
+- (BOOL)isDefaultColor:(NSString *)hexKey
 {
-    NSArray<NSString *> *customTrackColors = [[OAAppSettings sharedManager].customTrackColors get];
-    NSString *originalHexColor = [self.class getOriginalHexColor:duplicatedHexColor];
-    NSInteger count = 1;
-    for (NSString *hexColor in customTrackColors)
+    for (OAGPXTrackColor *color in _availableColors)
     {
-        if ([hexColor isEqualToString:originalHexColor] && count < 2)
-        {
-            count = 2;
-        }
-        else if ([hexColor hasPrefix:[originalHexColor stringByAppendingString:@"_"]])
-        {
-            NSInteger newCount = [hexColor substringFromIndex:[hexColor indexOf:@"_"] + 1].integerValue;
-            if (count <= newCount)
-                count = newCount + 1;
-        }
+        if ([color.hexKey isEqualToString:hexKey])
+            return YES;
     }
-    return count == 1 ? originalHexColor : [NSString stringWithFormat:@"%@_%ld", originalHexColor, count];
-}
-
-+ (NSString *)getOriginalHexColor:(NSString *)duplicatedHexColor
-{
-    NSString *originalHexColor = duplicatedHexColor;
-    NSInteger index = [originalHexColor indexOf:@"_"];
-    if (index != -1)
-        originalHexColor = [originalHexColor substringToIndex:index];
-    return originalHexColor;
+    return NO;
 }
 
 - (NSArray<OAGPXTrackWidth *> *)getAvailableWidth

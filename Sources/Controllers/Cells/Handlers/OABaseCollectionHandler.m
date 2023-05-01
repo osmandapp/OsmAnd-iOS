@@ -15,7 +15,7 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithData:(NSMutableArray<NSMutableArray *> *)data
+- (instancetype)initWithData:(NSArray<NSArray *> *)data
 {
     self = [super init];
     if (self)
@@ -64,7 +64,13 @@
 {
 }
 
-- (void)generateData:(NSMutableArray<NSMutableArray *> *)data
+- (void)updateData:(NSArray<NSArray *> *)data collectionView:(UICollectionView *)collectionView
+{
+    [self generateData:data];
+    [collectionView reloadData];
+}
+
+- (void)generateData:(NSArray<NSArray *> *)data
 {
 }
 

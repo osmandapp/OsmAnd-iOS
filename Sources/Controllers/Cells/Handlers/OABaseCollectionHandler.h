@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@protocol OACollectionCellDelegate
+@protocol OACollectionCellDelegate <NSObject>
 
 - (void)onCollectionItemSelected:(NSIndexPath *)indexPath;
 - (void)reloadCollectionData;
@@ -18,7 +18,7 @@
 
 @interface OABaseCollectionHandler : NSObject
 
-- (instancetype)initWithData:(NSMutableArray<NSMutableArray *> *)data;
+- (instancetype)initWithData:(NSArray<NSArray *> *)data;
 
 - (NSString *)getCellIdentifier;
 - (CGSize)getItemSize;
@@ -28,6 +28,7 @@
 
 - (NSIndexPath *)getSelectedIndexPath;
 - (void)setSelectedIndexPath:(NSIndexPath *)selectedIndexPath;
+- (void)updateData:(NSArray<NSArray *> *)data collectionView:(UICollectionView *)collectionView;
 
 - (NSInteger)itemsCount:(NSInteger)section;
 - (UICollectionViewCell *)getCollectionViewCell:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;

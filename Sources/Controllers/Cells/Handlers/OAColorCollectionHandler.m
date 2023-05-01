@@ -8,7 +8,7 @@
 
 #import "OAColorCollectionHandler.h"
 #import "OAColorsCollectionViewCell.h"
-#import "OAGPXAppearanceCollection.h"
+#import "OAAppSettings.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -17,7 +17,7 @@
 
 @implementation OAColorCollectionHandler
 {
-    NSMutableArray<NSMutableArray<NSString *> *> *_data;
+    NSArray<NSArray<NSString *> *> *_data;
     NSIndexPath *_selectedIndexPath;
 }
 
@@ -34,13 +34,14 @@
 {
     NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
 
-    if (self.delegate && ![self.delegate isDefaultColor:indexPath])
+    BOOL isDefaultColor = self.delegate && [self.delegate isDefaultColor:_data[indexPath.section][indexPath.row]];
+    if (self.delegate && !isDefaultColor)
     {
         UIAction *editAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_edit")
                                                    image:[UIImage systemImageNamed:@"pencil"]
                                               identifier:nil
                                                  handler:^(__kindof UIAction * _Nonnull action) {
-            [self.delegate onItemEdit:indexPath];
+            [self.delegate onContextMenuItemEdit:indexPath];
         }];
         editAction.accessibilityLabel = OALocalizedString(@"shared_string_edit_color");
         [menuElements addObject:editAction];
@@ -51,18 +52,18 @@
                                                identifier:nil
                                                   handler:^(__kindof UIAction * _Nonnull action) {
                  if (self.delegate)
-                     [self.delegate onItemDuplicate:indexPath];
+                     [self.delegate onContextMenuItemDuplicate:indexPath];
     }];
     duplicateAction.accessibilityLabel = OALocalizedString(@"shared_string_duplicate_color");
     [menuElements addObject:duplicateAction];
 
-    if (self.delegate && ![self.delegate isDefaultColor:indexPath])
+    if (self.delegate && !isDefaultColor)
     {
         UIAction *deleteAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_delete")
                                                      image:[UIImage systemImageNamed:@"trash"]
                                                 identifier:nil
                                                    handler:^(__kindof UIAction * _Nonnull action) {
-            [self.delegate onItemDelete:indexPath];
+            [self.delegate onContextMenuItemDelete:indexPath];
         }];
         deleteAction.accessibilityLabel = OALocalizedString(@"shared_string_delete_color");
         [menuElements addObject:[UIMenu menuWithTitle:@""
@@ -72,51 +73,67 @@
                                         children:@[deleteAction]]];
     }
 
-    return [UIMenu menuWithChildren:menuElements];
+    return isDefaultColor ? [UIMenu menuWithTitle:OALocalizedString(@"access_default_color") children:menuElements] : [UIMenu menuWithChildren:menuElements];
 }
 
 #pragma mark - Data
 
-- (void)addAndSelectHexKey:(NSString *)hexKey collectionView:(UICollectionView *)collectionView
+- (void)addAndSelectIndexPath:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
-    [_data.firstObject addObject:hexKey];
     NSIndexPath *prevSelectedIndexPath = _selectedIndexPath;
-    _selectedIndexPath = [NSIndexPath indexPathForRow:[collectionView numberOfItemsInSection:_selectedIndexPath.section] inSection:0];
+    _selectedIndexPath = indexPath;
     [collectionView performBatchUpdates:^{
         [collectionView insertItemsAtIndexPaths:@[_selectedIndexPath]];
     } completion:^(BOOL finished) {
-        [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, _selectedIndexPath]];
         if (self.delegate)
         {
+            [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, _selectedIndexPath]];
             [self.delegate onCollectionItemSelected:_selectedIndexPath];
-            [self.delegate reloadCollectionData];
+        }
+        if (![collectionView.indexPathsForVisibleItems containsObject:_selectedIndexPath])
+        {
+            [collectionView scrollToItemAtIndexPath:_selectedIndexPath
+                                   atScrollPosition:[self getScrollDirection] == UICollectionViewScrollDirectionHorizontal
+                                                        ? UICollectionViewScrollPositionCenteredHorizontally
+                                                        : UICollectionViewScrollPositionCenteredVertically
+                                           animated:YES];
         }
     }];
 }
 
-- (void)replaceOldColor:(NSIndexPath *)indexPath withNewHexKey:(NSString *)newHexKey collectionView:(UICollectionView *)collectionView
+- (void)replaceOldColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
-    [_data[indexPath.section] replaceObjectAtIndex:indexPath.row withObject:newHexKey];
-    if (indexPath == _selectedIndexPath)
-        [self onItemSelected:_selectedIndexPath collectionView:collectionView];
-    else
-        [collectionView reloadItemsAtIndexPaths:@[indexPath]];
+    [collectionView reloadItemsAtIndexPaths:@[indexPath]];
+    if (self.delegate)
+    {
+        if (indexPath == _selectedIndexPath)
+            [self.delegate onCollectionItemSelected:indexPath];
+        else
+            [self.delegate reloadCollectionData];
+    }
 }
 
-- (void)addDuplicatedHexKey:(NSString *)hexKey toNewIndexPath:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
+- (void)addDuplicatedHexKey:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
-    [_data[indexPath.section] insertObject:hexKey atIndex:indexPath.row];
     [collectionView performBatchUpdates:^{
         [collectionView insertItemsAtIndexPaths:@[indexPath]];
     } completion:^(BOOL finished) {
         if (self.delegate)
             [self.delegate reloadCollectionData];
+
+        if (![collectionView.indexPathsForVisibleItems containsObject:indexPath])
+        {
+            [collectionView scrollToItemAtIndexPath:indexPath
+                                   atScrollPosition:[self getScrollDirection] == UICollectionViewScrollDirectionHorizontal
+                                                        ? UICollectionViewScrollPositionCenteredHorizontally
+                                                        : UICollectionViewScrollPositionCenteredVertically
+                                           animated:YES];
+        }
     }];
 }
 
 - (void)removeColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
-    [_data[indexPath.section] removeObjectAtIndex:indexPath.row];
     [collectionView performBatchUpdates:^{
         [collectionView deleteItemsAtIndexPaths:@[indexPath]];
     } completion:^(BOOL finished) {
@@ -126,11 +143,21 @@
             [collectionView reloadItemsAtIndexPaths:@[_selectedIndexPath]];
             if (self.delegate)
                 [self.delegate onCollectionItemSelected:_selectedIndexPath];
+
+            if (![collectionView.indexPathsForVisibleItems containsObject:_selectedIndexPath])
+            {
+                [collectionView scrollToItemAtIndexPath:_selectedIndexPath
+                                       atScrollPosition:[self getScrollDirection] == UICollectionViewScrollDirectionHorizontal
+                                                            ? UICollectionViewScrollPositionCenteredHorizontally
+                                                            : UICollectionViewScrollPositionCenteredVertically
+                                               animated:YES];
+            }
         }
         else if (indexPath.row < _selectedIndexPath.row)
         {
+            NSIndexPath *prevSelectedIndexPath = _selectedIndexPath;
             _selectedIndexPath = [NSIndexPath indexPathForRow:_selectedIndexPath.row - 1 inSection:_selectedIndexPath.section];
-            [collectionView reloadItemsAtIndexPaths:@[_selectedIndexPath]];
+            [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, _selectedIndexPath]];
         }
     }];
 }
@@ -145,7 +172,7 @@
     _selectedIndexPath = selectedIndexPath;
 }
 
-- (void)generateData:(NSMutableArray<NSMutableArray<NSString *> *> *)data
+- (void)generateData:(NSArray<NSArray<NSString *> *> *)data
 {
     _data = data;
 }
@@ -158,7 +185,7 @@
 - (UICollectionViewCell *)getCollectionViewCell:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
     NSString *hexKey = _data[indexPath.section][indexPath.row];
-    NSInteger color = [OAUtilities colorToNumberFromString:[OAGPXAppearanceCollection getOriginalHexColor:hexKey]];
+    NSInteger color = [OAUtilities colorToNumberFromString:[[OAAppSettings sharedManager] getOriginalHexColor:hexKey]];
     OAColorsCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[OAColorsCollectionViewCell getCellIdentifier]
                                                                                  forIndexPath:indexPath];
     if (!cell)

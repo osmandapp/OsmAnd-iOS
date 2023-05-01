@@ -64,8 +64,7 @@
 
 - (OAGPXTrackColor *)getColorForValue:(NSInteger)value;
 - (OAGPXTrackColor *)getColorForHexKey:(NSString *)hexKey;
-+ (NSString *)checkDuplicateHexColor:(NSString *)duplicatedHexColor;
-+ (NSString *)getOriginalHexColor:(NSString *)duplicatedHexColor;
+- (BOOL)isDefaultColor:(NSString *)hexKey;
 
 - (OAGPXTrackWidth *)getWidthForValue:(NSString *)value;
 - (OAGPXTrackSplitInterval *)getSplitIntervalForType:(EOAGpxSplitType)type;

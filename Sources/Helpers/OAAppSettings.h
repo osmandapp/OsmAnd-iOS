@@ -1118,6 +1118,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *currentTrackShowArrows;
 @property (nonatomic) OACommonBoolean *currentTrackShowStartFinish;
 @property (nonatomic) OACommonStringList *customTrackColors;
+@property (nonatomic) OACommonStringList *customTrackColorsLastUsed;
 @property (nonatomic) OACommonStringList *lastUsedFavIcons;
 
 @property (nonatomic) OACommonString *gpsStatusApp;
@@ -1184,5 +1185,13 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (void)setDisabledTypes:(NSSet<NSString *> *)disabledTypes;
 - (NSSet<NSString *> *)getDisabledTypes;
 - (BOOL)isTypeDisabled:(NSString *)typeName;
+
+- (void)addAndSelectCustomTrackHexKey:(NSString *)hexKey;
+- (void)replaceCustomTrackHexKey:(NSString *)hexKey withNewHexKey:(NSString *)newHexKey isSelected:(BOOL)isSelected;
+- (void)removeCustomTrackHexKey:(NSString *)hexKey;
+- (void)duplicateCustomTrackHexKey:(NSString *)hexKey isDefaultColor:(BOOL)isDefaultColor;
+- (void)reloadCustomTrackHexKeysLastUsed:(NSString *)hexKey;
+- (NSString *)checkDuplicateHexColor:(NSString *)duplicatedHexColor;
+- (NSString *)getOriginalHexColor:(NSString *)duplicatedHexColor;
 
 @end

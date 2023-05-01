@@ -10,10 +10,10 @@
 
 @protocol OAColorsCollectionCellDelegate <OACollectionCellDelegate>
 
-- (BOOL)isDefaultColor:(NSIndexPath *)indexPath;
-- (void)onItemEdit:(NSIndexPath *)indexPath;
-- (void)onItemDuplicate:(NSIndexPath *)indexPath;
-- (void)onItemDelete:(NSIndexPath *)indexPath;
+- (BOOL)isDefaultColor:(NSString *)hexKey;
+- (void)onContextMenuItemEdit:(NSIndexPath *)indexPath;
+- (void)onContextMenuItemDuplicate:(NSIndexPath *)indexPath;
+- (void)onContextMenuItemDelete:(NSIndexPath *)indexPath;
 
 @end
 
@@ -21,9 +21,9 @@
 
 @property (nonatomic, weak) id<OAColorsCollectionCellDelegate> delegate;
 
-- (void)addAndSelectHexKey:(NSString *)hexKey collectionView:(UICollectionView *)collectionView;
-- (void)replaceOldColor:(NSIndexPath *)indexPath withNewHexKey:(NSString *)newHexKey collectionView:(UICollectionView *)collectionView;
-- (void)addDuplicatedHexKey:(NSString *)hexKey toNewIndexPath:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
+- (void)addAndSelectIndexPath:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
+- (void)replaceOldColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
+- (void)addDuplicatedHexKey:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
 - (void)removeColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
 
 @end

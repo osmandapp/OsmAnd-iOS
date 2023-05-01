@@ -63,7 +63,7 @@
 
 @end
 
-@interface OATrackMenuAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIColorPickerViewControllerDelegate, OATrackColoringTypeDelegate, OAColorsCollectionCellDelegate>
+@interface OATrackMenuAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIColorPickerViewControllerDelegate, OATrackColoringTypeDelegate, OAColorsCollectionCellDelegate, OAColorCollectionDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIImageView *titleIconView;
@@ -87,7 +87,9 @@
 
     OAGPXTrackColor *_selectedColor;
     NSMutableArray<NSString *> *_availableHexKeys;
+    NSMutableArray<NSString *> *_sortedAvailableHexKeys;
     NSIndexPath *_editColorIndexPath;
+    BOOL _isNewColorSelected;
 
     OAGPXTrackWidth *_selectedWidth;
     NSArray<NSString *> *_customWidthValues;
@@ -106,6 +108,7 @@
     OATrackMenuViewControllerState *_reopeningTrackMenuState;
     
     OsmAndAppInstance _app;
+    OAAppSettings *_settings;
     
     NSInteger _widthDataSectionIndex;
     NSInteger _splitDataSectionIndex;
@@ -129,6 +132,9 @@
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
+    _settings = [OAAppSettings sharedManager];
+    _availableHexKeys = [NSMutableArray array];
+
     [self setOldValues];
     [self updateAllValues];
 }
@@ -195,19 +201,12 @@
 
     _availableColoringTypes = items;
 
-    NSMutableArray<NSString *> *trackHexColors = [NSMutableArray array];
-    for (OAGPXTrackColor *trackColor in [_appearanceCollection getAvailableColors])
-    {
-        [trackHexColors addObject:[trackColor.color toHexARGBString]];
-    }
-    _availableHexKeys = trackHexColors;
-    NSArray<NSString *> *customTrackColors = [[OAAppSettings sharedManager].customTrackColors get];
-    for (NSString *hexColor in customTrackColors)
-    {
-        [_availableHexKeys addObject:hexColor];
-    }
+    [self updateColors];
     if (![_availableHexKeys containsObject:_selectedColor.hexKey])
+    {
         [_availableHexKeys addObject:_selectedColor.hexKey];
+        [_sortedAvailableHexKeys insertObject:_selectedColor.hexKey atIndex:0];
+    }
 
     NSMutableArray *customWidthValues = [NSMutableArray array];
     for (NSInteger i = [OAGPXTrackWidth getCustomTrackWidthMin]; i <= [OAGPXTrackWidth getCustomTrackWidthMax]; i++)
@@ -234,21 +233,7 @@
     [super viewWillAppear:animated];
 
     if ([_selectedItem.coloringType isTrackSolid])
-    {
-        OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
-        if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
-        {
-            NSIndexPath *colorGridIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
-            OACollectionSingleLineTableViewCell *colorsGridCell = [self.tableView cellForRowAtIndexPath:colorGridIndexPath];
-            NSIndexPath *selectedIndexPath = [[colorsGridCell getCollectionHandler] getSelectedIndexPath];
-            if (![colorsGridCell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
-            {
-                [colorsGridCell.collectionView scrollToItemAtIndexPath:selectedIndexPath
-                                                      atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
-                                                              animated:YES];
-            }
-        }
-    }
+        [self forceReloadCollectionData];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -293,7 +278,7 @@
             kCellType: [OACollectionSingleLineTableViewCell getCellIdentifier],
             kTableValues: @{
                 @"selectedHexKey": _selectedColor.hexKey,
-                @"hexKeys": _availableHexKeys
+                @"sortedHexKeys": _sortedAvailableHexKeys,
             }
         }];
     }
@@ -678,6 +663,8 @@
 - (IBAction)onDoneButtonPressed:(id)sender
 {
     [self hide:YES duration:.2 onComplete:^{
+        if (_isNewColorSelected)
+            [_settings reloadCustomTrackHexKeysLastUsed:_selectedColor.hexKey];
 
         [[OAGPXDatabase sharedDb] save];
         if (self.isCurrentTrack)
@@ -821,10 +808,10 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACollectionSingleLineTableViewCell getCellIdentifier]
                                                          owner:self options:nil];
             cell = nib[0];
-            NSArray<NSString *> *hexKeys = cellData.values[@"hexKeys"];
-            OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:[NSMutableArray arrayWithObject:hexKeys]];
+            NSArray<NSString *> *sortedHexKeys = cellData.values[@"sortedHexKeys"];
+            OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[sortedHexKeys]];
             colorHandler.delegate = self;
-            [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[hexKeys indexOfObject:cellData.values[@"selectedHexKey"]] inSection:0]];
+            [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[sortedHexKeys indexOfObject:cellData.values[@"selectedHexKey"]] inSection:0]];
             [cell setCollectionHandler:colorHandler];
             cell.separatorInset = UIEdgeInsetsZero;
             cell.button.accessibilityLabel = OALocalizedString(@"shared_string_add_color");
@@ -1204,7 +1191,7 @@
         [tableData setData:@{
             kTableValues: @{
                 @"selectedHexKey": _selectedColor.hexKey,
-                @"hexKeys": _availableHexKeys
+                @"sortedHexKeys": _sortedAvailableHexKeys
             }
         }];
     }
@@ -1564,14 +1551,71 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     if ([cellData.key isEqualToString:@"color_grid"])
-        [self openColorPickerWithColor:[OAGPXAppearanceCollection getOriginalHexColor:_selectedColor.hexKey]];
+        [self openColorPickerWithColor:[_settings getOriginalHexColor:_selectedColor.hexKey]];
+}
+
+#pragma mark - OAColorCollectionDelegate
+
+- (void)onHexKeySelected:(NSString *)selectedHexKey
+{
+    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedAvailableHexKeys indexOfObject:selectedHexKey] inSection:0]];
+}
+
+- (NSArray<NSString *> *)updateColors
+{
+    [_availableHexKeys removeAllObjects];
+    for (OAGPXTrackColor *trackColor in [_appearanceCollection getAvailableColors])
+    {
+        [_availableHexKeys addObject:[trackColor.color toHexARGBString]];
+    }
+    for (NSString *hexColor in [_settings.customTrackColors get])
+    {
+        [_availableHexKeys addObject:hexColor];
+    }
+
+    NSArray<NSString *> *customTrackColorsLastUsed = [_settings.customTrackColorsLastUsed get];
+    _sortedAvailableHexKeys = [NSMutableArray arrayWithArray:[_availableHexKeys sortedArrayUsingComparator:^NSComparisonResult(NSString * obj1, NSString * obj2) {
+        if ([customTrackColorsLastUsed indexOfObject:obj1] < [customTrackColorsLastUsed indexOfObject:obj2])
+            return NSOrderedAscending;
+
+        if ([customTrackColorsLastUsed indexOfObject:obj1] > [customTrackColorsLastUsed indexOfObject:obj2])
+            return NSOrderedDescending;
+
+         return NSOrderedSame;
+    }]];
+
+    return _availableHexKeys;
+}
+
+- (void)forceReloadCollectionData
+{
+    if (_tableData.count > kColorsSection)
+    {
+        OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
+        if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
+        {
+            [self updateData:colorSection.subjects[kColorGridOrDescriptionCell]];
+            NSIndexPath *colorIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
+            [self.tableView reloadRowsAtIndexPaths:@[colorIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+
+            OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorIndexPath];
+            NSIndexPath *selectedIndexPath = [[colorCell getCollectionHandler] getSelectedIndexPath];
+            if (![colorCell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
+            {
+                [colorCell.collectionView scrollToItemAtIndexPath:selectedIndexPath
+                                                 atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
+                                                         animated:YES];
+            }
+        }
+    }
 }
 
 #pragma mark - OACollectionCellDelegate
 
 - (void)onCollectionItemSelected:(NSIndexPath *)indexPath
 {
-    _selectedColor = [_appearanceCollection getColorForHexKey:_availableHexKeys[indexPath.row]];
+    _isNewColorSelected = YES;
+    _selectedColor = [_appearanceCollection getColorForHexKey:_sortedAvailableHexKeys[indexPath.row]];
     self.gpx.color = _selectedColor.colorValue;
 
     if (self.isCurrentTrack)
@@ -1598,63 +1642,48 @@
 
 #pragma mark - OAColorsCollectionCellDelegate
 
-- (BOOL)isDefaultColor:(NSIndexPath *)indexPath
+- (BOOL)isDefaultColor:(NSString *)hexKey
 {
-    return indexPath.row < (_availableHexKeys.count - [[OAAppSettings sharedManager].customTrackColors get].count);
+    return [_appearanceCollection isDefaultColor:hexKey];
 }
 
-- (void)onItemEdit:(NSIndexPath *)indexPath
+- (void)onContextMenuItemEdit:(NSIndexPath *)indexPath
 {
     _editColorIndexPath = indexPath;
-    [self openColorPickerWithColor:[OAGPXAppearanceCollection getOriginalHexColor:_availableHexKeys[indexPath.row]]];
+    [self openColorPickerWithColor:[_settings getOriginalHexColor:_sortedAvailableHexKeys[indexPath.row]]];
 }
 
-- (void)onItemDuplicate:(NSIndexPath *)indexPath
+- (void)onContextMenuItemDuplicate:(NSIndexPath *)indexPath
 {
-    BOOL isDefaultColor = [self isDefaultColor:indexPath];
-    NSString *duplicatedHexKey = [OAGPXAppearanceCollection checkDuplicateHexColor:_availableHexKeys[indexPath.row]];
-    if (isDefaultColor && ![duplicatedHexKey containsString:@"_"])
-        duplicatedHexKey = [duplicatedHexKey stringByAppendingString:@"_2"];
-    NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[[OAAppSettings sharedManager].customTrackColors get]];
-    if (isDefaultColor)
-        [customTrackColors addObject:duplicatedHexKey];
-    else
-        [customTrackColors insertObject:duplicatedHexKey atIndex:indexPath.row - (_availableHexKeys.count - customTrackColors.count) + 1];
-    [[OAAppSettings sharedManager].customTrackColors set:customTrackColors];
-
     OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
     if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
     {
+        BOOL isDefaultColor = [self isDefaultColor:_sortedAvailableHexKeys[indexPath.row]];
+        [_settings duplicateCustomTrackHexKey:_sortedAvailableHexKeys[indexPath.row] isDefaultColor:isDefaultColor];
+        [self updateColors];
+
         NSIndexPath *colorIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
         OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorIndexPath];
         OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-        NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:isDefaultColor ? [colorCell.collectionView numberOfItemsInSection:indexPath.section] : (indexPath.row + 1)
-                                                       inSection:indexPath.section];
-        [colorHandler addDuplicatedHexKey:duplicatedHexKey toNewIndexPath:newIndexPath collectionView:colorCell.collectionView];
+        NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
+        [colorHandler addDuplicatedHexKey:newIndexPath collectionView:colorCell.collectionView];
+        [colorHandler updateData:@[_sortedAvailableHexKeys] collectionView:colorCell.collectionView];
     }
 }
 
-- (void)onItemDelete:(NSIndexPath *)indexPath
+- (void)onContextMenuItemDelete:(NSIndexPath *)indexPath
 {
-    NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[[OAAppSettings sharedManager].customTrackColors get]];
-    [customTrackColors removeObject:_availableHexKeys[indexPath.row]];
-    [[OAAppSettings sharedManager].customTrackColors set:customTrackColors];
-
     OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
     if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
     {
+        [_settings removeCustomTrackHexKey:_sortedAvailableHexKeys[indexPath.row]];
+        [self updateColors];
+
         NSIndexPath *colorIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
         OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorIndexPath];
         OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
         [colorHandler removeColor:indexPath collectionView:colorCell.collectionView];
-
-        NSIndexPath *selectedIndexPath = [colorHandler getSelectedIndexPath];
-        if (![colorCell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
-        {
-            [colorCell.collectionView scrollToItemAtIndexPath:selectedIndexPath
-                                             atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
-                                                     animated:YES];
-        }
+        [colorHandler updateData:@[_sortedAvailableHexKeys] collectionView:colorCell.collectionView];
     }
 }
 
@@ -1662,47 +1691,39 @@
 
 - (void)colorPickerViewControllerDidFinish:(UIColorPickerViewController *)viewController
 {
-    NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[[OAAppSettings sharedManager].customTrackColors get]];
-    if (_editColorIndexPath)
+    OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
+    if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
     {
-        if ([OAGPXAppearanceCollection getOriginalHexColor:_availableHexKeys[_editColorIndexPath.row]] != [viewController.selectedColor toHexARGBString])
+        NSIndexPath *colorIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
+        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorIndexPath];
+        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
+        if (_editColorIndexPath)
         {
-            NSString *newColorHex = [OAGPXAppearanceCollection checkDuplicateHexColor:[viewController.selectedColor toHexARGBString]];
-            [customTrackColors replaceObjectAtIndex:_editColorIndexPath.row - (_availableHexKeys.count - customTrackColors.count) withObject:newColorHex];
-            [[OAAppSettings sharedManager].customTrackColors set:customTrackColors];
-
-            OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
-            if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
+            if ([_settings getOriginalHexColor:_sortedAvailableHexKeys[_editColorIndexPath.row]] != [viewController.selectedColor toHexARGBString])
             {
-                NSIndexPath *colorIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
-                OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorIndexPath];
-                OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-                [colorHandler replaceOldColor:_editColorIndexPath withNewHexKey:newColorHex collectionView:colorCell.collectionView];
+                OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
+                if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
+                {
+                    [_settings replaceCustomTrackHexKey:_sortedAvailableHexKeys[_editColorIndexPath.row]
+                                          withNewHexKey:[viewController.selectedColor toHexARGBString]
+                                             isSelected:_editColorIndexPath == [colorHandler getSelectedIndexPath]];
+                    [self updateColors];
+
+                    [colorHandler updateData:@[_sortedAvailableHexKeys] collectionView:colorCell.collectionView];
+                    if (_editColorIndexPath == [colorHandler getSelectedIndexPath])
+                        [self onCollectionItemSelected:_editColorIndexPath];
+                }
             }
+            _editColorIndexPath = nil;
         }
-        _editColorIndexPath = nil;
-    }
-    else
-    {
-        NSString *selectedHexColor = [OAGPXAppearanceCollection checkDuplicateHexColor:[viewController.selectedColor toHexARGBString]];
-        [customTrackColors addObject:selectedHexColor];
-        [[OAAppSettings sharedManager].customTrackColors set:customTrackColors];
-
-        OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
-        if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
+        else
         {
-            NSIndexPath *colorIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
-            OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorIndexPath];
-            OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-            [colorHandler addAndSelectHexKey:selectedHexColor collectionView:colorCell.collectionView];
+            [_settings addAndSelectCustomTrackHexKey:[viewController.selectedColor toHexARGBString]];
+            [self updateColors];
 
-            NSIndexPath *selectedIndexPath = [colorHandler getSelectedIndexPath];
-            if (![colorCell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
-            {
-                [colorCell.collectionView scrollToItemAtIndexPath:selectedIndexPath
-                                                 atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
-                                                         animated:YES];
-            }
+            [colorHandler addAndSelectIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
+                                 collectionView:colorCell.collectionView];
+            [colorHandler updateData:@[_sortedAvailableHexKeys] collectionView:colorCell.collectionView];
         }
     }
 }

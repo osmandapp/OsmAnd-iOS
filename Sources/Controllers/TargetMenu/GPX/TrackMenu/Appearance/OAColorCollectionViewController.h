@@ -8,12 +8,18 @@
 
 #import "OABaseNavbarViewController.h"
 
-@protocol OACollectionCellDelegate;
+@protocol OAColorCollectionDelegate
+
+- (void)onHexKeySelected:(NSString *)selectedHexKey;
+- (NSArray<NSString *> *)updateColors;
+- (BOOL)isDefaultColor:(NSString *)hexKey;
+
+@end
 
 @interface OAColorCollectionViewController : OABaseNavbarViewController
 
-- (instancetype)initWithHexKeys:(NSMutableArray<NSString *> *)hexKeys selectedHexKey:(NSString *)selectedHexKey;
+- (instancetype)initWithHexKeys:(NSArray<NSString *> *)hexKeys selectedHexKey:(NSString *)selectedHexKey;
 
-@property(nonatomic, weak) id<OACollectionCellDelegate>delegate;
+@property(nonatomic, weak) id<OAColorCollectionDelegate>delegate;
 
 @end

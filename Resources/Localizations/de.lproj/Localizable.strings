@@ -391,7 +391,7 @@
 "all_world_popup_desc" = "Lade die Weltkarte herunter um Ländernamen, Grenzen und andere Informationen zu sehen";
 "sqlitedb_import_already_exists" = "Die angegebene sqlitedb Datei gibt es bereits. Bitte Aktion auswählen.";
 "plugin_ski_descr" = "Entwickelt für die Navigation in Wintersportgebieten: Sehen Sie Skipisten, Skilifte und Langlaufloipen, mit farbigen Linien, die Schwierigkeitsgrade anzeigen. Um diese Erweiterung zu verwenden, aktivieren Sie sie und wählen Sie unter \"Karte konfigurieren\" den Kartenstil \"Winter und Ski\".";
-"purchases_feature_desc_wikipedia" = "Stellt alle ortsbezogenen Wikipedia-Artikel offline bereit und hilft Ihnen, mehrüber die Orte zu erfahren, die Sie auf Ihrer Reise besuchen, indem Sie einfach auf die Karte tippen. Vergessen Sie nicht, die Wikipedia-Kartendateien für die jeweiligen Regionen herunterzuladen.";
+"purchases_feature_desc_wikipedia" = "Stellt alle ortsbezogenen Wikipedia-Artikel offline bereit und hilft Ihnen, mehr über die Orte zu erfahren, die Sie auf Ihrer Reise besuchen, indem Sie einfach auf die Karte tippen. Vergessen Sie nicht, die Wikipedia-Kartendateien für die jeweiligen Regionen herunterzuladen.";
 "prch_wiki_info" = "Wikipedia-Addon aktiviert Wikipedia-Informationen für berechtigte Karten welche sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
 "prch_srtm_info" = "Höhenlinien-Addon aktiviert Höhenlinien für berechtigte Karten, die Sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
 "plugin_popup_srtm_desc" = "Um die Höhenlinien zu nutzen zu können, bitte die entsprechenden Höhendaten herunterladen";

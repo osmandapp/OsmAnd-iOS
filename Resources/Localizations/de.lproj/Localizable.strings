@@ -382,7 +382,7 @@
 "plugin_popup_ski_desc" = "Um den <b>Skikartenstil</b> einzuschalten, gehen Sie bitte zu <b>Karte konfigurieren</b> > <b>Kartendarstellung</b>";
 "plugin_popup_wiki_desc" = "Laden Sie bitte zuerst die Wikipedia-Daten einer Region herunter, um das Wikipedia-Plugin verwenden zu können";
 "gpx_import_desc" = "Verwenden Sie die Option \"Nach OsmAnd-Karten kopieren\", um Ihre GPX-Dateien (gängiges GPS-Datenformat) aus Dropbox, E-Mail oder einer anderen Quelle zu importieren";
-"plugin_nautical_descr" = "Reichert Ihre Karte mit Informationenüber Segelrouten, Leuchtfeuer, nautische Gefahrenzonen, Zonen mit Segel- oder Anlegeverboten usw. an. Um sie zu verwenden, laden Sie die entsprechenden nautischen Karten herunter und aktivieren Sie den Stil \'Nautisch\' unter \'Menü → Karte konfigurieren → Kartendarstellung\'.\n\nWeitere Informationen unter https://osmand.net/docs/user/plugins/nautical-charts.";
+"plugin_nautical_descr" = "Reichert Ihre Karte mit informationen über Segelrouten, Leuchtfeuer, nautische Gefahrenzonen, Zonen mit Segel- oder Anlegeverboten usw. an. Um sie zu verwenden, laden Sie die entsprechenden nautischen Karten herunter und aktivieren Sie den Stil \'Nautisch\' unter \'Menü → Karte konfigurieren → Kartendarstellung\'.\n\nWeitere Informationen unter https://osmand.net/docs/user/plugins/nautical-charts.";
 "osmand_parking_plugin_description" = "Markieren Sie, wo Ihr Auto geparkt ist, und informieren Sie Ihren Kalender, wann die Parkuhr abläuft. Um die Markierung zu setzen, wählen Sie einen Ort auf der Karte, gehen Sie zu \"Aktionen\" und tippen Sie auf \"Parkplatz hinzufügen\".";
 "record_plugin_description" = "Zeichnen Sie Ihre Fahrten oder Trainings auf und analysieren Sie die Daten in Bezug auf Geschwindigkeit, kumulierte Anstiege und Abfahrten, Höhenprofil usw. Die aufgezeichneten Strecken können archiviert, mit Freunden geteilt, bearbeitet und nachbearbeitet werden.\n\nWeitere Informationen unter https://osmand.net/docs/user/plugins/trip-recording.";
 "plugin_popup_wiki_ask" = "Um Wikipedia-Daten herunterladen zu können, müssen Sie das Plugin aktivieren: <b>Wikipedia</b>";
@@ -2444,7 +2444,7 @@
 "purchases_feature_desc_terrain" = "Höhenlinien, Reliefkarten mit dunklen Schattierungen und Hangneigungskarten mit Farben zur Darstellung von Erhebungen und Niederungen.";
 "explore_osmnad_plans_to_find_suitable" = "OsmAnd-Angebote entdecken, um das Passende für Sie zu finden.";
 "complete_purchase" = "Vollständiger Kauf";
-"purchases_feature_desc_nautical" = "Zugang zu Informationenüber Wassertiefen erhalten";
+"purchases_feature_desc_nautical" = "Zugang zu informationen über Wassertiefen erhalten";
 "purchases_feature_desc_monthly_map_updates" = "Erhalten Sie Zugang zu den regulären monatlichen Updates für Offline-Karten.";
 "redeem_promo_code" = "Aktionscode einlösen";
 "wikipedia_and_wikivoyage_offline" = "Wikipedia und Wikivoyage offline";

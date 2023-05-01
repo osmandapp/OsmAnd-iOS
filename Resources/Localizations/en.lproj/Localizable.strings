@@ -1660,7 +1660,7 @@
 "quick_action_showhide_mapillary_descr" = "A toggle to show or hide the Mapillary layer on the map.";
 "quick_action_mapillary_hide" = "Hide Mapillary";
 "quick_action_mapillary_show" = "Show Mapillary";
-"quick_action_remove_next_destination" = "Delete nearest destination point";
+"quick_action_remove_next_destination" = "Delete next destination point";
 "quick_action_remove_next_destination_descr" = "Deletes the next destination on your route. If that is the final destination, the navigation will stop.";
 "change_application_profile" = "Change app profile";
 "select_application_profile" = "Select application profile";

@@ -161,6 +161,10 @@
                 bitmap = bitmapIt.value();
             }
         }
+        else
+        {
+            bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:@"comment" iconName:@"ic_action_close_banner" isFullSize:YES icon:[UIImage imageNamed:@"ic_action_close_banner"]];
+        }
     }
     else
     {

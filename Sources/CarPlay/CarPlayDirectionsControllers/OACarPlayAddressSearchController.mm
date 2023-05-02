@@ -118,7 +118,7 @@
     NSInteger index = indexNum.integerValue;
     OAQuickSearchListItem *searchItem = _searchItems[index];
     CLLocation *loc = searchItem.getSearchResult.location;
-    [self startNavigationGivenLocation:loc];
+    [self startNavigationGivenLocation:loc historyName:nil];
     [self.interfaceController popToRootTemplateAnimated:YES completion:nil];
 }
 

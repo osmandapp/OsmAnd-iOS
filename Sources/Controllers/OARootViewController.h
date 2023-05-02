@@ -12,6 +12,11 @@
 
 #define kLeftPannelGestureRecognizer @"kLeftPannelGestureRecognizer"
 
+#define kCommandSearchScreenOpen @"keyCommandSearchScreenOpen"
+#define kCommandSearchScreenClose @"keyCommandSearchScreenClose"
+#define kCommandNavigationScreenOpen @"keyCommandNavigationScreenOpen"
+#define kCommandNavigationScreenClose @"keyCommandNavigationScreenClose"
+
 @class OAProduct;
 
 @interface OARootViewController : JASidePanelController
@@ -19,6 +24,8 @@
 @property (nonatomic, weak, readonly) OAMapPanelViewController* mapPanel;
 @property(readonly) BOOL isMenuOpened;
 @property (nonatomic) NSString *token;
+
+@property (readonly) OAAutoObserverProxy *keyCommandUpdateObserver;
 
 + (OARootViewController*) instance;
 

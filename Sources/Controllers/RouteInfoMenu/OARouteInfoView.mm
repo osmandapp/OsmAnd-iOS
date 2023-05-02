@@ -60,6 +60,7 @@
 #import "OASimpleTableViewCell.h"
 #import "OARouteBaseViewController.h"
 #import "OAEmissionHelper.h"
+#import "OAAutoObserverProxy.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -1054,6 +1055,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void)show:(BOOL)animated fullMenu:(BOOL)fullMenu onComplete:(void (^)(void))onComplete
 {
+    [[OARootViewController instance].keyCommandUpdateObserver handleObservedEventFrom:nil withKey:kCommandNavigationScreenOpen];
+
     visible = YES;
     _optionsMenuSelected = NO;
     [_appModeView setupModeButtons];
@@ -1190,6 +1193,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     if (![_pointsHelper getPointToNavigate] && ![self isSelectingTargetOnMap] && !_optionsMenuSelected)
         [mapPanel.mapActions stopNavigationWithoutConfirm];
+
+    [[OARootViewController instance].keyCommandUpdateObserver handleObservedEventFrom:nil withKey:kCommandNavigationScreenClose];
 }
 
 - (void) addWaypoint

@@ -29,7 +29,7 @@
 "shared_string_edit" = "Modifier";
 "shared_string_dismiss" = "Arrêter";
 "shared_string_description" = "Description";
-"shared_string_update" = "Mettreà jour";
+"shared_string_update" = "Mettre à jour";
 "shared_string_install" = "Installer";
 "shared_string_uninstall" = "Désinstaller";
 "shared_string_done" = "Terminé";
@@ -742,7 +742,7 @@
 "save_track_to_gpx" = "Enregistrer automatiquement le parcours pendant le guidage";
 "save_track_to_gpx_descrp" = "Enregistre automatiquement la trace lors de la navigation.";
 "osmand_live" = "OsmAnd Live";
-"live_updates" = "Misesà jour en temps réel";
+"live_updates" = "Mises à jour en temps réel";
 "available_maps" = "Cartes disponibles";
 "osmand_live_last_changed" = "Dernière modification de la carte : %@";
 "last_update" = "Dernière mise à jour : %@";
@@ -1614,7 +1614,7 @@
 "download_size" = "Taille du téléchargement";
 "number_of_tiles" = "Nombre de tuiles";
 "move_map_to_select_area" = "Déplacez la carte pour sélectionner la zone souhaitée.";
-"update_tile" = "Mettreà jour la carte";
+"update_tile" = "Mettre à jour la carte";
 "shared_string_not_set" = "Non défini";
 "shared_string_meters" = "mètres";
 "shared_string_tones" = "tonnes";
@@ -2501,7 +2501,7 @@
 "osm_live_payment_subscription_management_aid" = "Le paiement sera débité sur votre compte Apple ID à la confirmation de l'achat.\n\nLa souscription automatique se renouvelle sauf si elle est annulée au moins 24 heures avant la fin de la période actuelle. Votre compte sera débité pour le renouvellement dans les 24 heures avant la fin de la période actuelle.\n\nVous pouvez gérer et annuler vos souscriptions en allant dans les paramètres de votre compte dans l'App Store après votre achat";
 "google_play" = "Google Play";
 "subscription_banner_free_maps_title" = "Vous pouvez télécharger %i cartes gratuitement.";
-"subscription_banner_no_free_maps_title" = "Vous avez dépensé tous vos téléchargements gratuits";
+"subscription_banner_no_free_maps_title" = "Vous avez utilisé tous vos téléchargements gratuits";
 "subscription_banner_free_maps_description" = "Obtenez des téléchargements et mises à jour illimités des cartes.";
 "subscription_banner_osmand_pro_title" = "Obtenez des mises à jour de cartes à chaque heure, jour ou semaine avec OsmAnd Pro.";
 "compass_visible_if_map_rotated" = "Affiché lors de la rotation de la carte";

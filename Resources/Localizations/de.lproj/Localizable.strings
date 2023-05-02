@@ -2901,3 +2901,4 @@
 "map_widget_altitude_map_center" = "Höhe: Kartenmitte";
 "map_widget_altitude_map_center_desc" = "Zeigt die Höhe über dem Meeresspiegel der aktuellen Kartenmitte an.";
 "short_min" = "m";
+"wiki_article_search_text" = "Suche nach dem entsprechenden Wiki-Artikel";

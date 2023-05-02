@@ -2890,3 +2890,5 @@
 "map_widget_altitude_map_center_desc" = "إظهارالارتفاع فوق مستوى سطح البحر لمركز الخريطة الحالي.";
 "map_widget_altitude_current_location" = "الارتفاع: الموقع الحالي";
 "altitude_widget_desc" = "ويدجت عرض الارتفاع فوق مستوى سطح البحر للموقع الجغرافي الحالي.";
+"wiki_article_search_text" = "البحث عن مقالة ويكي المقابلة";
+"short_min" = "م";

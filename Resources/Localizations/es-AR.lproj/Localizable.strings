@@ -2894,3 +2894,5 @@
 "activity_type_motorbike_name" = "Motocicleta";
 "poi_operator" = "Operador";
 "activity_type_running_name" = "Correr";
+"short_min" = "m";
+"wiki_article_search_text" = "Buscando el artículo wiki correspondiente";

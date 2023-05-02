@@ -9,7 +9,7 @@
 #import "OABackupTypesViewController.h"
 #import "OAManageStorageViewController.h"
 #import "OASwitchTableViewCell.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAStorageStateValuesCell.h"
 #import "OAExportSettingsCategory.h"
 #import "OAExportSettingsType.h"
@@ -59,7 +59,7 @@
 
     NSMutableDictionary *manageStorageData = [NSMutableDictionary dictionary];
     manageStorageData[@"key"] = @"manage_storage_cell";
-    manageStorageData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
+    manageStorageData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     manageStorageData[@"title"] = OALocalizedString(@"manage_storage");
     manageStorageData[@"icon"] = @"ic_custom_storage";
     [manageStorageCells addObject:manageStorageData];

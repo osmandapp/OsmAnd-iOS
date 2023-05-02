@@ -21,7 +21,6 @@
 #import "OARootViewController.h"
 #import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
-#import "OAIconTitleValueCell.h"
 #import "OAValueTableViewCell.h"
 #import "OADateTimePickerTableViewCell.h"
 #import "OAColors.h"
@@ -382,27 +381,6 @@ static const NSInteger panoImageFilterSection = 2;
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
-    {
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
-        }
-        if (cell)
-        {
-            cell.textView.text = item[@"title"];
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
-            cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
-            if ([item[@"key"] isEqualToString:@"users_filter"])
-            {
-                NSString *usernames = [_userNames stringByReplacingOccurrencesOfString:@"$$$" withString:@", "];
-                cell.descriptionView.text = !usernames || usernames.length == 0 ? OALocalizedString(@"shared_string_all") : usernames;
-            }
-        }
-        outCell = cell;
-    }
     else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
         OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
@@ -593,7 +571,7 @@ static const NSInteger panoImageFilterSection = 2;
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]] || [indexPath isEqual:_datePickerIndexPath])
+    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]] || [indexPath isEqual:_datePickerIndexPath])
     {
         return UITableViewAutomaticDimension;
     }
@@ -627,12 +605,6 @@ static const NSInteger panoImageFilterSection = 2;
         [self.tblView endUpdates];
         [self.tblView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         [self.tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }
-    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
-    {
-        OAUsernameFilterViewController *controller = [[OAUsernameFilterViewController alloc] initWithData:@[_userNames, _userKeys]];
-        controller.delegate = self;
-        [self.vwController.navigationController pushViewController:controller animated:YES];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

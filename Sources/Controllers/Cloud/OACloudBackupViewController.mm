@@ -17,7 +17,6 @@
 #import "OABackupHelper.h"
 #import "OAStatusBackupConflictDetailsViewController.h"
 #import "OAMultiIconTextDescCell.h"
-#import "OAIconTitleValueCell.h"
 #import "OATitleIconProgressbarCell.h"
 #import "OAValueTableViewCell.h"
 #import "OARightIconTableViewCell.h"
@@ -623,26 +622,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                 cell.titleLabel.textColor = actionButtonDisabled ? UIColorFromRGB(color_text_footer) : UIColorFromRGB(color_primary_purple);
             }
         }
-        return cell;
-    }
-    else if ([cellId isEqualToString:OAIconTitleValueCell.getCellIdentifier])
-    {
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:OAIconTitleValueCell.getCellIdentifier];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
-            cell.textView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
-            cell.textView.textColor = UIColorFromRGB(color_primary_purple);
-            cell.descriptionView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
-            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"];
-            [cell showLeftIcon:NO];
-            [cell showRightIcon:YES];
-        }
-        cell.textView.text = item.title;
-        cell.descriptionView.text = [item stringForKey:@"value"];
         return cell;
     }
     else if ([cellId isEqualToString:[OASimpleTableViewCell getCellIdentifier]])

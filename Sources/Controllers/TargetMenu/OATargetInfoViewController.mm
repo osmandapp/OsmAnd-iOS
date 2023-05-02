@@ -965,7 +965,7 @@
             OAIAPHelper *helper = [OAIAPHelper sharedInstance];
             if ([helper.wiki isPurchased])
             {
-                [OAWikiArticleHelper showWikiArticle:self.location url:info.text];
+                [OAWikiArticleHelper showWikiArticle:self.location url:info.text onStart:nil onComplete:nil];
             }
             else
             {

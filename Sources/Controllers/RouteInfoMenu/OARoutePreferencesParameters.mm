@@ -19,7 +19,7 @@
 #import "OAAvoidSpecificRoads.h"
 #import "OAGPXDocument.h"
 #import "OsmAndApp.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 
 @implementation OALocalRoutingParameter
@@ -425,7 +425,7 @@
 
 - (NSString *) getCellType
 {
-    return [OAIconTitleValueCell getCellIdentifier];
+    return [OAValueTableViewCell getCellIdentifier];
 }
 
 - (OALocalRoutingParameter *) getSelected
@@ -610,7 +610,7 @@
 
 - (NSString *) getCellType
 {
-    return [OAIconTitleValueCell getCellIdentifier];
+    return [OAValueTableViewCell getCellIdentifier];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
@@ -665,7 +665,7 @@
 
 - (NSString *) getCellType
 {
-    return [OAIconTitleValueCell getCellIdentifier];
+    return [OAValueTableViewCell getCellIdentifier];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
@@ -721,7 +721,7 @@
 
 - (NSString *) getCellType
 {
-    return [OAIconTitleValueCell getCellIdentifier];
+    return [OAValueTableViewCell getCellIdentifier];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
@@ -870,7 +870,7 @@
 
 - (NSString *) getCellType
 {
-    return [OAIconTitleValueCell getCellIdentifier];
+    return [OAValueTableViewCell getCellIdentifier];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
@@ -900,7 +900,7 @@
 
 - (NSString *) getCellType
 {
-    return [OAIconTitleValueCell getCellIdentifier];
+    return [OAValueTableViewCell getCellIdentifier];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
@@ -979,7 +979,7 @@
 
 - (NSString *) getCellType
 {
-    return [OAIconTitleValueCell getCellIdentifier];
+    return [OAValueTableViewCell getCellIdentifier];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
@@ -1023,7 +1023,7 @@
 
 - (NSString *) getCellType
 {
-    return [OAIconTitleValueCell getCellIdentifier];
+    return [OAValueTableViewCell getCellIdentifier];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath

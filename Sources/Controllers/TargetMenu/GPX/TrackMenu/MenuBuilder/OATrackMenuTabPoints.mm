@@ -9,7 +9,7 @@
 #import "OATrackMenuTabPoints.h"
 #import "OASelectionCollapsableCell.h"
 #import "OAPointWithRegionTableViewCell.h"
-#import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAOsmAndFormatter.h"
@@ -164,7 +164,7 @@
     BOOL hasWaypoints = [self hasWaypoints];
     OAGPXTableCellData *deleteCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"delete_waypoints",
-            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellType: [OAValueTableViewCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"delete_waypoints"),
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellRightIconName: @"ic_custom_remove_outlined",
@@ -175,7 +175,7 @@
 
     OAGPXTableCellData *addWaypointCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"add_waypoint",
-            kCellType: [OAIconTitleValueCell getCellIdentifier],
+            kCellType: [OAValueTableViewCell getCellIdentifier],
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"add_waypoint"),
             kCellRightIconName: @"ic_custom_add_gpx_waypoint",

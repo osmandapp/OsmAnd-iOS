@@ -9,6 +9,7 @@
 #import "OACarPlayFavoriteResultListController.h"
 #import "OAOsmAndFormatter.h"
 #import "OAFavoriteItem.h"
+#import "OAPointDescription.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import <CarPlay/CarPlay.h>
@@ -91,8 +92,8 @@
             completionBlock();
         return;
     }
-    [self startNavigationGivenLocation:[[CLLocation alloc] initWithLatitude:favoritePoint.getLatitude
-                                                                  longitude:favoritePoint.getLongitude]];
+    OAPointDescription *historyName = [[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:[favoritePoint getName]];
+    [self startNavigationGivenLocation:[[CLLocation alloc] initWithLatitude:favoritePoint.getLatitude longitude:favoritePoint.getLongitude] historyName:historyName];
     [self.interfaceController popToRootTemplateAnimated:YES completion:nil];
 
     if (completionBlock)

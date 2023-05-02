@@ -18,7 +18,6 @@
 #import "OAValueTableViewCell.h"
 #import "OAUtilities.h"
 #import "OASwitchTableViewCell.h"
-#import "OAIconTitleValueCell.h"
 #import "OASizes.h"
 
 @interface OARouteSettingsViewController ()
@@ -144,7 +143,6 @@
             [cell.titleLabel setText:text];
             [cell.valueLabel setText:value];
         }
-        cell.backgroundColor = UIColor.redColor;
         return cell;
     }
     else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
@@ -173,29 +171,7 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
-    {
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
-        }
-        if (cell)
-        {
-            cell.textView.text = text;
-            cell.descriptionView.hidden = !value || value.length == 0;
-            cell.descriptionView.text = value;
-            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.leftIconView.image = [param isKindOfClass:OAHazmatRoutingParameter.class]
-                    ? [param getIcon]
-                    : [[param getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.leftIconView.tintColor = UIColorFromRGB([appMode getIconColor]);
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-        }
-        return cell;
-    }
-
+   
     return nil;
 }
 

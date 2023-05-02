@@ -12,7 +12,6 @@
 #import "OAGpxInfo.h"
 #import "OALoadGpxTask.h"
 #import "OAGPXRecTableViewCell.h"
-#import "OAIconTitleValueCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAGPXTrackCell.h"
 #import "OAGPXDocument.h"
@@ -33,6 +32,7 @@
 #import "OAIndexConstants.h"
 #import "OsmAndApp.h"
 #import "OAOsmUploadGPXViewConroller.h"
+#import "OAValueTableViewCell.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -1292,40 +1292,34 @@ static UIViewController *parentController;
     else {
         if (indexPath.row == kGPXGroupHeaderRow && !_isSearchActive)
         {
-            OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+            OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-                cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OAValueTableViewCell *) nib[0];
+                [cell descriptionVisibility:NO];
+                [cell valueVisibility:YES];
             }
             if (cell)
             {
-                cell.textView.text = item.groupName;
+                cell.titleLabel.text = item.groupName;
                 
                 cell.leftIconView.image = [UIImage templateImageNamed:item.groupIcon];
                 cell.leftIconView.tintColor = UIColorFromRGB(color_chart_orange);
-                cell.descriptionView.text = [NSString stringWithFormat:@"%ld", item.groupItems.count];
-                cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
-                
-                cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
-                [cell.openCloseGroupButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-                [cell.openCloseGroupButton addTarget:self action:@selector(openCloseGroupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-                if ([self.gpxTableView isEditing])
-                    [cell.openCloseGroupButton setHidden:NO];
-                else
-                    [cell.openCloseGroupButton setHidden:YES];
-                
+                cell.valueLabel.text = [NSString stringWithFormat:@"%ld", item.groupItems.count];
+                cell.valueLabel.textColor = UIColorFromRGB(color_text_footer);
                 if (item.isOpen)
                 {
-                    cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_down"];
+                    cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_arrow_down"]];
                 }
                 else
                 {
-                    cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
+                    UIImageView *icon = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_arrow_right"]];
                     if ([cell isDirectionRTL])
-                        [cell.rightIconView setImage:cell.rightIconView.image.imageFlippedForRightToLeftLayoutDirection];
+                        [icon setImage:icon.image.imageFlippedForRightToLeftLayoutDirection];
+                    cell.accessoryView = icon;
                 }
-                cell.rightIconView.tintColor = UIColorFromRGB(color_icon_inactive);
+                cell.accessoryView.tintColor = UIColorFromRGB(color_icon_inactive);
             }
             return cell;
         }

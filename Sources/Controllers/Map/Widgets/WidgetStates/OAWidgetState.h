@@ -28,4 +28,8 @@
 
 - (void) changeState:(NSString *)stateId;
 
+- (NSString *) getSettingsIconId:(BOOL)nightMode;
+- (void) changeToNextState;
+- (void) copyPrefs:(OAApplicationMode *)appMode customId:(NSString *)customId;
+
 @end

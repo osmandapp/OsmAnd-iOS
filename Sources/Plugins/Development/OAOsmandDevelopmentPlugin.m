@@ -30,6 +30,8 @@
 #define DEV_ZOOM_LEVEL @"dev_zoom_level"
 #define DEV_TARGET_DISTANCE @"dev_target_distance"
 
+#define kEnable3dMaps @"enable_3d_maps"
+
 @implementation OAOsmandDevelopmentPlugin
 {
     OsmAndAppInstance _app;
@@ -40,6 +42,8 @@
     OAZoomLevelWidget *_zoomLevelWidgetControl;
     OATargetDistanceWidget *_targetDistanceWidgetControl;
     OAAltitudeWidget *_altitudeWidgetMapCenter;
+    
+    OACommonBoolean *_enable3dMap;
 }
 
 - (instancetype) init
@@ -49,6 +53,8 @@
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
+        _enable3dMap = [[OACommonBoolean withKey:kEnable3dMaps defValue:YES].makeGlobal makeShared];
+        [_settings.getGlobalPreferences setObject:_enable3dMap forKey:kEnable3dMaps];
     }
     return self;
 }
@@ -197,6 +203,11 @@
 - (BOOL)isHeightmapAllowed
 {
     return [OAIAPHelper isOsmAndProAvailable];
+}
+
+- (BOOL) is3DMapsEnabled
+{
+    return [self isHeightmapEnabled] && _enable3dMap.get;
 }
 
 @end

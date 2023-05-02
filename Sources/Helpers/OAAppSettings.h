@@ -396,6 +396,17 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 
 @end
 
+@interface OACommonListOfStringList : OACommonPreference
+
++ (instancetype) withKey:(NSString *)key defValue:(NSArray<NSString *> *)defValue;
+
+- (NSArray<NSArray<NSString *> *> *) get;
+- (NSArray<NSArray<NSString *> *> *) get:(OAApplicationMode *)mode;
+- (void) set:(NSArray<NSArray<NSString *> *> *)arr;
+- (void) set:(NSArray<NSArray<NSString *> *> *)arr mode:(OAApplicationMode *)mode;
+
+@end
+
 @interface OACommonSubscriptionState : OACommonPreference
 
 + (instancetype) withKey:(NSString *)key defValue:(OASubscriptionState *)defValue;
@@ -926,6 +937,13 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @property (nonatomic) OACommonStringList *poiFiltersOrder;
 @property (nonatomic) OACommonStringList *inactivePoiFilters;
+
+// Widgets
+
+@property (nonatomic) OACommonListOfStringList *leftWidgetPanelOrder;
+@property (nonatomic) OACommonListOfStringList *topWidgetPanelOrder;
+@property (nonatomic) OACommonListOfStringList *rightWidgetPanelOrder;
+@property (nonatomic) OACommonListOfStringList *bottomWidgetPanelOrder;
 
 // OSM Editing
 @property (nonatomic) OACommonString *osmUserName;

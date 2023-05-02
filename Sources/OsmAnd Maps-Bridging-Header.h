@@ -6,3 +6,14 @@
 #import "OAColors.h"
 #import "OARouteStatistics.h"
 #import "OAUtilities.h"
+#import "Localization.h"
+#import "OALinks.h"
+#import "OAIAPHelper.h"
+
+// Plugins
+#import "OAPlugin.h"
+#import "OAMonitoringPlugin.h"
+#import "OAOsmAndDevelopmentPlugin.h"
+#import "OAWeatherPlugin.h"
+#import "OAMapillaryPlugin.h"
+#import "OAParkingPositionPlugin.h"

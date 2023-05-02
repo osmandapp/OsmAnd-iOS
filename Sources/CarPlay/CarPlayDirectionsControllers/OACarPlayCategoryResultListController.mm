@@ -20,6 +20,7 @@
 #import "OAPOI.h"
 #import "Localization.h"
 #import "OADistanceDirection.h"
+#import "OAPointDescription.h"
 #import "OsmAndApp.h"
 #import "OALocationServices.h"
 #import "OAAppSettings.h"
@@ -220,7 +221,8 @@
         return;
     }
     CLLocation *loc = searchItem.getSearchResult.location;
-    [self startNavigationGivenLocation:loc];
+    OAPointDescription *historyName = [[OAPointDescription alloc] initWithType:POINT_TYPE_POI name:[searchItem getName]];
+    [self startNavigationGivenLocation:loc historyName:historyName];
     [self.interfaceController popToRootTemplateAnimated:YES completion:nil];
 
     if (completionBlock)

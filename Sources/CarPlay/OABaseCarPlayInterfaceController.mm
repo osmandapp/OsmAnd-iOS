@@ -36,12 +36,12 @@
     // override
 }
 
-- (void) startNavigationGivenLocation:(CLLocation *)loc
+- (void) startNavigationGivenLocation:(CLLocation *)loc historyName:(OAPointDescription *)historyName
 {
     if (loc)
     {
         [OARoutingHelper.sharedInstance setAppMode:OAApplicationMode.CAR];
-        [OATargetPointsHelper.sharedInstance navigateToPoint:loc updateRoute:YES intermediate:-1];
+        [OATargetPointsHelper.sharedInstance navigateToPoint:loc updateRoute:YES intermediate:-1 historyName:historyName];
         [OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:nil from:nil fromName:nil useIntermediatePointsByDefault:NO showDialog:NO];
     }
 }

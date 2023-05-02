@@ -1881,7 +1881,7 @@
 "quick_action_mapillary_show" = "Mapillary anzeigen";
 "quick_action_showhide_mapillary_title" = "Mapillary ein-/ausblenden";
 "quick_action_switch_profile_descr" = "Die Aktionsschaltfläche schaltet zwischen den ausgewählten Profilen um.";
-"quick_action_remove_next_destination" = "Nächstgelegenen Zielpunkt löschen";
+"quick_action_remove_next_destination" = "Nächsten Zielpunkt löschen";
 "arrived_at_destination" = "Sie sind angekommen.";
 "key_hint_recenter_map" = "Karte wieder zentrieren";
 "shared_z_a" = "Z - A";

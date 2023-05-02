@@ -1796,7 +1796,7 @@
 "routing_attr_length_name" = "Længdegrænse";
 "default_profile_descr" = "Vælg en profil, der skal bruges ved start af app.";
 "shared_string_next" = "Næste";
-"quick_action_remove_next_destination" = "Slet nærmeste destinationspunkt";
+"quick_action_remove_next_destination" = "Slet næste destinationspunkt";
 "quick_action_mapillary_show" = "Vis Mapillary";
 "next_segment" = "Næste segment";
 "arrived_at_destination" = "Ankommet.";

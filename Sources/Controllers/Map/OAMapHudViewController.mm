@@ -1209,7 +1209,7 @@
             if ((_previousLocation && [currentLocation distanceFromLocation:_previousLocation] > kDistanceMeters) || _previousLocation == nil)
             {
                 NSString *positionAddress;
-                _previousLocation = _app.locationServices.lastKnownLocation;
+                _previousLocation = currentLocation;
                 positionAddress = [[OAReverseGeocoder instance] lookupAddressAtLat:currentLocation.coordinate.latitude lon:currentLocation.coordinate.longitude];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     _mapModeButton.accessibilityValue = positionAddress.length > 0 ? positionAddress : OALocalizedString(@"shared_string_location_unknown");

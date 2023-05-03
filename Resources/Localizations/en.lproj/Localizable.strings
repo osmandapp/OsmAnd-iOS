@@ -656,6 +656,7 @@
 "map_update_warning" = "Do you want to reload tile data from the Internet?";
 "without_permission_my_position_value" = "OsmAnd doesn't have location permission";
 "with_permission_my_position_value" = "Move map to current location";
+"shared_string_location_unknown" = "Location unknown";
 
 // HUD
 "hud_heading" = "Heading";

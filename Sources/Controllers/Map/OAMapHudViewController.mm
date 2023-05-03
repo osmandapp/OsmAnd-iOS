@@ -30,11 +30,13 @@
 #import "OAWeatherToolbar.h"
 #import "Localization.h"
 #import "OAProfileGeneralSettingsParametersViewController.h"
+#import "OAReverseGeocoder.h"
 
 #define kButtonWidth 50.0
 #define kButtonOffset 16.0
 #define kButtonHeight 50.0
 #define kWidgetsOffset 2.0
+#define kDistanceMeters 100.0
 
 #define _(name) OAMapModeHudViewController__##name
 #define commonInit _(commonInit)
@@ -79,6 +81,8 @@
     
     NSLayoutConstraint *_bottomRulerConstraint;
     NSLayoutConstraint *_leftRulerConstraint;
+    
+    CLLocation *_previousLocation;
     
     BOOL _cachedLocationAvailableState;
 }
@@ -539,14 +543,7 @@
 - (void) updateMapModeButtonIfNeeded
 {
     if (_cachedLocationAvailableState != [self isLocationAvailable])
-    {
         [self updateMapModeButton];
-        _mapModeButton.accessibilityValue = OALocalizedString(@"without_permission_my_position_value");
-    }
-    else
-    {
-        _mapModeButton.accessibilityValue = OALocalizedString(@"with_permission_my_position_value");
-    }
 }
 
 - (void) updateMapModeButton
@@ -576,6 +573,7 @@
                 _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_active);
                 _mapModeButton.tintColorDay = UIColor.whiteColor;
                 _mapModeButton.tintColorNight = UIColor.whiteColor;
+                _mapModeButton.accessibilityHint = OALocalizedString(@"with_permission_my_position_value");
                 _mapModeButton.borderWidthNight = 0;
                 break;
             }
@@ -587,6 +585,7 @@
                 _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
                 _mapModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
                 _mapModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
+                _mapModeButton.accessibilityHint = nil;
                 _mapModeButton.borderWidthNight = 2;
                 break;
             }
@@ -615,6 +614,8 @@
         _mapModeButton.tintColorDay = UIColorFromRGB(color_on_map_icon_tint_color_light);
         _mapModeButton.tintColorNight = UIColorFromRGB(color_on_map_icon_tint_color_dark);
         _mapModeButton.borderWidthNight = 2;
+        _mapModeButton.accessibilityHint = OALocalizedString(@"without_permission_my_position_value");
+        _mapModeButton.accessibilityValue = OALocalizedString(@"shared_string_location_unknown");
         _cachedLocationAvailableState = NO;
     }
     
@@ -701,6 +702,7 @@
 
 - (void) onMapChanged:(id)observable withKey:(id)key
 {
+    [self updateCurrentLocationAddress];
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if (self.toolbarViewController)
@@ -1194,6 +1196,26 @@
         y = [self getHudTopOffset];
     
     return CGRectMake(self.view.bounds.size.width / 2.0 - 50.0, y + 12.0, 100.0, 20.0);
+}
+
+- (void) updateCurrentLocationAddress
+{
+    if (UIAccessibilityIsVoiceOverRunning())
+    {
+        CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
+        if (currentLocation)
+        {
+            if ((_previousLocation && [currentLocation distanceFromLocation:_previousLocation] > kDistanceMeters) || _previousLocation == nil)
+            {
+                NSString *positionAddress;
+                _previousLocation = currentLocation;
+                positionAddress = [[OAReverseGeocoder instance] lookupAddressAtLat:currentLocation.coordinate.latitude lon:currentLocation.coordinate.longitude];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    _mapModeButton.accessibilityValue = positionAddress.length > 0 ? positionAddress : OALocalizedString(@"shared_string_location_unknown");
+                });
+            }
+        }
+    }
 }
 
 #pragma mark - debug

@@ -118,7 +118,7 @@
 "auto_split_gap_descr" = "Start a new segment after 6 min gap, new trip after 2 h gap, or new file after a longer gap";
 "map_widget_magnetic_bearing" = "Magnetisk peiling";
 "map_widget_bearing" = "Relativ peiling";
-"map_widget_transparent" = "Gjennomsiktige moduler";
+"map_widget_transparent" = "Gjennomsiktige miniprogrammer";
 "shared_string_near" = "Nær";
 "map_widget_next_turn" = "Neste sving";
 "map_widget_next_turn_small" = "Neste sving (liten)";
@@ -243,7 +243,7 @@
 "map_markers_other" = "Andre markører";
 "directions_other" = "Other directions";
 "shared_string_turn" = "Sving";
-"stop_routing_confirm" = "Er du sikker på at du vil stoppe navigeringen\?";
+"stop_routing_confirm" = "Stopp navigeringen?";
 "cancel_route" = "Vil du forkaste ruten\?";
 "route_is_too_long_v2" = "For lange distanser: Legg til mellomliggende reisemål hvis ingen rute er funnet innen 10 minutter.";
 "navigation_over_track" = "Starte navigering langs spor\?";
@@ -1151,7 +1151,7 @@
 "get_osmand_live" = "Skaff deg OsmAnd Live forå låse opp alle funksjoner: Daglige kartoppdateringer med ubegrensede nedlastinger, alle programtilleggene, Wikipedia, Wikivoyage og mye mer.";
 "osm_live_subscription" = "OsmAnd Live-abonnement";
 "cancel_subscription" = "Opphev abonnement";
-"wikivoyage_offline" = "Wikivoyage offline";
+"wikivoyage_offline" = "Frakoblet Wikivoyage";
 "unlimited_downloads" = "Ubegrensede nedlastinger";
 "wikipedia_offline" = "Frakoblet Wikipedia";
 "contour_lines_hillshade_maps" = "Kart for koter og relieffskygger";

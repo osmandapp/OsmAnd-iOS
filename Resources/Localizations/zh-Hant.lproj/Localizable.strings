@@ -1411,7 +1411,7 @@
 "osm_edit_close_note" = "關閉 OSM 註記";
 "select_data_to_import" = "選取要匯入的資料。";
 "update_tile" = "更新地圖";
-"quick_action_remove_next_destination" = "刪除最近的目的地點";
+"quick_action_remove_next_destination" = "刪除下一個目的地點";
 "public_transport_hide" = "隱藏大眾運輸";
 "coord_input_add_point" = "新增標點";
 "profile_alert_need_save_title" = "儲存變更";

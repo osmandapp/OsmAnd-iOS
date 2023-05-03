@@ -1091,7 +1091,8 @@ typedef enum
 - (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex searchQuery:(NSString *)searchQuery object:(NSObject *)object
 {
     [OAAnalyticsHelper logEvent:@"search_open"];
-    
+    [[OARootViewController instance].keyCommandUpdateObserver handleObservedEventFrom:nil withKey:kCommandSearchScreenOpen];
+
     [self removeGestureRecognizers];
     
     OAMapRendererView* mapView = (OAMapRendererView*)_mapViewController.view;

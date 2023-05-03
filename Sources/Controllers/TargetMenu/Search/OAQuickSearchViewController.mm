@@ -313,6 +313,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     }
 
     [self unregisterKeyboardNotifications];
+
+    [[OARootViewController instance].keyCommandUpdateObserver handleObservedEventFrom:nil withKey:kCommandSearchScreenClose];
 }
 
 -(void)viewWillLayoutSubviews

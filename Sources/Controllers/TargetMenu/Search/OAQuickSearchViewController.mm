@@ -1477,14 +1477,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self showWaitingIndicator];
     [self runCoreSearch:text updateResult:updateResult searchMore:searchMore onSearchStarted:nil onPublish:^(OASearchResultCollection *res, BOOL append) {
         [self updateSearchResult:res append:append];
-    } onSearchFinished:^BOOL(OASearchPhrase *phrase) {
-        OASearchWord *lastSelectedWord = [phrase getLastSelectedWord];
-        BOOL isEmptyResult = ![self getResultCollection] || [[self getResultCollection] getCurrentSearchResults].count == 0;
-        if (_tableController && [_tableController isShowResult] && isEmptyResult && lastSelectedWord) {
-            [_tableController showOnMap:lastSelectedWord.result searchType:self.searchType delegate:self];
-        }
-        return YES;
-    }];
+    } onSearchFinished:nil];
 }
 
 - (void) runCoreSearch:(NSString *)text updateResult:(BOOL)updateResult searchMore:(BOOL)searchMore onSearchStarted:(OASearchStartedCallback)onSearchStarted onPublish:(OAPublishCallback)onPublish onSearchFinished:(OASearchFinishedCallback)onSearchFinished

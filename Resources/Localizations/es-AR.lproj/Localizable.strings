@@ -2896,3 +2896,4 @@
 "activity_type_running_name" = "Correr";
 "short_min" = "m";
 "wiki_article_search_text" = "Buscando el artículo wiki correspondiente";
+"shared_string_location_unknown" = "Ubicación desconocida";

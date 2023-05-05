@@ -1741,7 +1741,7 @@
 "profile_type_user_string" = "Profil utilisateur";
 "quick_action_switch_profile_descr" = "Le bouton d’action bascule entre les profils sélectionnés.";
 "profile_alert_need_save_title" = "Enregistrer les modifications";
-"quick_action_remove_next_destination" = "Supprimer le prochain point";
+"quick_action_remove_next_destination" = "Supprimer la prochaine étape";
 "profile_sett_descr" = "Affecter le profil de l'application sélectionnée";
 "export_profile_descr" = "Vous pouvez exporter tous les paramètres du profil, copier tous les paramètres d'un autre profil ou réinitialiser tous les paramètres du profil à l'état par défaut.";
 "import_profile_descr" = "Pour importer un profil, appuyez sur le fichier voulu (*.osf) dans n'importe quelle application et sélectionnez \"Copier vers les cartes OsmAnd\"";

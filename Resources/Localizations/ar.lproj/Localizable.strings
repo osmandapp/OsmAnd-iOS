@@ -2892,3 +2892,4 @@
 "altitude_widget_desc" = "ويدجت عرض الارتفاع فوق مستوى سطح البحر للموقع الجغرافي الحالي.";
 "wiki_article_search_text" = "البحث عن مقالة ويكي المقابلة";
 "short_min" = "م";
+"shared_string_location_unknown" = "الموقع غير معروف";

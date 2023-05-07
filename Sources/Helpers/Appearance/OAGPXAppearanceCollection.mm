@@ -203,9 +203,6 @@
 {
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
     _settings = [OAAppSettings sharedManager];
-    [_settings.customTrackColors set:@[]];
-    [_settings.customTrackColorsLastUsed set:@[]];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kGpxFilePathWithColor];
     [self generateAvailableColors];
 }
 

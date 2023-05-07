@@ -12,12 +12,13 @@
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kWhiteColor 0x44FFFFFF
 
 @implementation OAColorCollectionHandler
 {
-    NSArray<NSArray<NSString *> *> *_data;
+    NSArray<NSArray<OAColorItem *> *> *_data;
     NSIndexPath *_selectedIndexPath;
 }
 
@@ -34,7 +35,7 @@
 {
     NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
 
-    BOOL isDefaultColor = self.delegate && [self.delegate isDefaultColor:_data[indexPath.section][indexPath.row]];
+    BOOL isDefaultColor = _data[indexPath.section][indexPath.row].isDefault;
     if (self.delegate && !isDefaultColor)
     {
         UIAction *editAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_edit")
@@ -78,7 +79,7 @@
 
 #pragma mark - Data
 
-- (void)addAndSelectIndexPath:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
+- (void)addAndSelectColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
     NSIndexPath *prevSelectedIndexPath = _selectedIndexPath;
     _selectedIndexPath = indexPath;
@@ -87,8 +88,8 @@
     } completion:^(BOOL finished) {
         if (self.delegate)
         {
-            [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, _selectedIndexPath]];
             [self.delegate onCollectionItemSelected:_selectedIndexPath];
+            [self.delegate reloadCollectionData];
         }
         if (![collectionView.indexPathsForVisibleItems containsObject:_selectedIndexPath])
         {
@@ -113,7 +114,7 @@
     }
 }
 
-- (void)addDuplicatedHexKey:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
+- (void)addDuplicatedColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
     [collectionView performBatchUpdates:^{
         [collectionView insertItemsAtIndexPaths:@[indexPath]];
@@ -172,7 +173,7 @@
     _selectedIndexPath = selectedIndexPath;
 }
 
-- (void)generateData:(NSArray<NSArray<NSString *> *> *)data
+- (void)generateData:(NSArray<NSArray<OAColorItem *> *> *)data
 {
     _data = data;
 }
@@ -184,8 +185,7 @@
 
 - (UICollectionViewCell *)getCollectionViewCell:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
-    NSString *hexKey = _data[indexPath.section][indexPath.row];
-    NSInteger color = [OAUtilities colorToNumberFromString:[[OAAppSettings sharedManager] getOriginalHexColor:hexKey]];
+    NSInteger colorValue = _data[indexPath.section][indexPath.row].value;
     OAColorsCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[OAColorsCollectionViewCell getCellIdentifier]
                                                                                  forIndexPath:indexPath];
     if (!cell)
@@ -197,7 +197,7 @@
     }
     if (cell)
     {
-        if (color == kWhiteColor)
+        if (colorValue == kWhiteColor)
         {
             cell.colorView.layer.borderWidth = 1;
             cell.colorView.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
@@ -207,10 +207,10 @@
             cell.colorView.layer.borderWidth = 0;
         }
 
-        UIColor *aColor = UIColorFromARGB(color);
-        cell.colorView.backgroundColor = aColor;
+        UIColor *color = UIColorFromARGB(colorValue);
+        cell.colorView.backgroundColor = color;
         cell.chessboardView.image = [UIImage templateImageNamed:@"bg_color_chessboard_pattern"];
-        cell.chessboardView.tintColor = UIColorFromRGB(color);
+        cell.chessboardView.tintColor = UIColorFromRGB(colorValue);
 
         if (indexPath == _selectedIndexPath)
         {

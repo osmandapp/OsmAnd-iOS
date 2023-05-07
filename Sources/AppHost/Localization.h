@@ -82,6 +82,11 @@ static inline NSString* _OALocalizedString(BOOL upperCase, NSString* defaultValu
     return res;
 }
 
+static inline NSString * _Nonnull localizedString(NSString* defaultValue)
+{
+    return _OALocalizedString(false, defaultValue);
+}
+
 /*
 #define OALocalizedString(defaultValue) \
     _OALocalizedString(defaultValue, __FILE__, __LINE__, __PRETTY_FUNCTION__)

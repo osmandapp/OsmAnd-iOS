@@ -31,6 +31,11 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 #define kHeaderDescriptionFont [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]
 #define kHeaderDescriptionFontSmall [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]
 
+static inline UIColor * colorFromARGB(NSInteger rgbValue)
+{
+    return UIColorFromARGB(rgbValue);
+}
+
 @interface UIBezierPath (util)
 
 - (void) cubicToX:(float)x1 y1:(float)y1 x2:(float)x2 y2:(float)y2 x3:(float)x3 y3:(float)y3;

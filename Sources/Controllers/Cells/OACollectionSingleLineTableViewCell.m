@@ -52,9 +52,15 @@
 
     NSString *cellIdentifier = [_collectionHandler getCellIdentifier];
     [self.collectionView registerNib:[UINib nibWithNibName:cellIdentifier bundle:nil] forCellWithReuseIdentifier:cellIdentifier];
-    [self.collectionView scrollToItemAtIndexPath:[_collectionHandler getSelectedIndexPath]
-                                atScrollPosition:UICollectionViewScrollPositionCenteredVertically
-                                        animated:YES];
+    NSIndexPath *selectedIndexPath = [_collectionHandler getSelectedIndexPath];
+    if (selectedIndexPath.row != NSNotFound)
+    {
+        [self.collectionView scrollToItemAtIndexPath:selectedIndexPath
+                                    atScrollPosition:layout.scrollDirection == UICollectionViewScrollDirectionHorizontal
+                                                        ? UICollectionViewScrollPositionCenteredHorizontally
+                                                        : UICollectionViewScrollPositionCenteredVertically
+                                            animated:YES];
+    }
 }
 
 #pragma mark - Base UI

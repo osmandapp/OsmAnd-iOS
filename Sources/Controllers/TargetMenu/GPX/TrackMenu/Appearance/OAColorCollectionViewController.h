@@ -8,17 +8,22 @@
 
 #import "OABaseNavbarViewController.h"
 
+@class OAColorItem;
+
 @protocol OAColorCollectionDelegate
 
-- (void)onHexKeySelected:(NSString *)selectedHexKey;
-- (NSArray<NSString *> *)updateColors;
-- (BOOL)isDefaultColor:(NSString *)hexKey;
+- (NSArray<OAColorItem *> *)generateDataForColorCollection;
+- (void)onColorCollectionItemSelected:(OAColorItem *)colorItem;
+- (void)onColorCollectionNewItemAdded:(UIColor *)color;
+- (void)onColorCollectionItemChanged:(OAColorItem *)colorItem withColor:(UIColor *)color;
+- (void)onColorCollectionItemDuplicated:(OAColorItem *)colorItem;
+- (void)onColorCollectionItemDeleted:(OAColorItem *)colorItem;
 
 @end
 
 @interface OAColorCollectionViewController : OABaseNavbarViewController
 
-- (instancetype)initWithHexKeys:(NSArray<NSString *> *)hexKeys selectedHexKey:(NSString *)selectedHexKey;
+- (instancetype)initWithColorItems:(NSArray<OAColorItem *> *)colorItems selectedColorItem:(OAColorItem *)selectedColorItem;
 
 @property(nonatomic, weak) id<OAColorCollectionDelegate>delegate;
 

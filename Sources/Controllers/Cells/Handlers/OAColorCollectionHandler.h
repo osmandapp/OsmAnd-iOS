@@ -10,7 +10,6 @@
 
 @protocol OAColorsCollectionCellDelegate <OACollectionCellDelegate>
 
-- (BOOL)isDefaultColor:(NSString *)hexKey;
 - (void)onContextMenuItemEdit:(NSIndexPath *)indexPath;
 - (void)onContextMenuItemDuplicate:(NSIndexPath *)indexPath;
 - (void)onContextMenuItemDelete:(NSIndexPath *)indexPath;
@@ -21,9 +20,9 @@
 
 @property (nonatomic, weak) id<OAColorsCollectionCellDelegate> delegate;
 
-- (void)addAndSelectIndexPath:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
+- (void)addAndSelectColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
 - (void)replaceOldColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
-- (void)addDuplicatedHexKey:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
+- (void)addDuplicatedColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
 - (void)removeColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
 
 @end

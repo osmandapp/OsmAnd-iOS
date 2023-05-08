@@ -81,7 +81,6 @@
 
 - (void)addAndSelectColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
 {
-    NSIndexPath *prevSelectedIndexPath = _selectedIndexPath;
     _selectedIndexPath = indexPath;
     [collectionView performBatchUpdates:^{
         [collectionView insertItemsAtIndexPaths:@[_selectedIndexPath]];

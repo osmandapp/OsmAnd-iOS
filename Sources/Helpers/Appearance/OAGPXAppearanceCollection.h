@@ -60,6 +60,7 @@
 - (void)selectColor:(OAColorItem *)colorItem toGpxFilePath:(NSString *)gpxFilePath;
 - (NSArray<OAColorItem *> *)getAvailableColorsSortingByKey;
 - (NSArray<OAColorItem *> *)getAvailableColorsSortingByLastUsed;
+- (void)removeGpxFilePath:(NSString *)gpxFilePath;
 - (OAColorItem *)getColorForGpxFilePath:(NSString *)gpxFilePath defaultValue:(NSInteger)defaultValue;
 
 - (NSArray<OAGPXTrackWidth *> *)getAvailableWidth;

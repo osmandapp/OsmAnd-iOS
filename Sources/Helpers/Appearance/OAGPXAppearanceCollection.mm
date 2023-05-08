@@ -456,6 +456,17 @@
         return gpxFilePathWithColor[gpxFilePath].integerValue;
 }
 
+- (void)removeGpxFilePath:(NSString *)gpxFilePath
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults objectForKey:kGpxFilePathWithColor])
+    {
+        NSMutableDictionary<NSString *, NSNumber *> *gpxFilePathWithColor = [NSMutableDictionary dictionaryWithDictionary:[defaults dictionaryForKey:kGpxFilePathWithColor]];
+        [gpxFilePathWithColor removeObjectForKey:gpxFilePath];
+        [defaults setObject:gpxFilePathWithColor forKey:kGpxFilePathWithColor];
+    }
+}
+
 - (OAColorItem *)getColorForGpxFilePath:(NSString *)gpxFilePath defaultValue:(NSInteger)defaultValue
 {
     NSInteger colorId = [self getColorId:gpxFilePath];
@@ -463,7 +474,7 @@
     {
         for (OAColorItem *colorItem in _availableColors)
         {
-            if (colorItem.id == colorId)
+            if (colorItem.id == colorId && colorItem.value == defaultValue)
                 return colorItem;
         }
     }

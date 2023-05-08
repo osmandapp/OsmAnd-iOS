@@ -15,6 +15,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OASavingTrackHelper.h"
+#import "OAGPXAppearanceCollection.h"
 
 #define kDbName @"gpx.db"
 
@@ -286,6 +287,7 @@
         gpx = [self getGPXItemByFileName:filePath];
     if (gpx)
     {
+        [[OAGPXAppearanceCollection sharedInstance] removeGpxFilePath:gpx.gpxFilePath];
         NSMutableArray *newGpxList = [gpxList mutableCopy];
         [newGpxList removeObject:gpx];
         gpxList = newGpxList;

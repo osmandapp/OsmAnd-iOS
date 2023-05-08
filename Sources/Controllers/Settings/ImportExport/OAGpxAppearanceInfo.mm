@@ -47,7 +47,7 @@
 
 - (void) toJson:(id)json
 {
-    json[@"color"] = [NSString stringWithFormat:@"#%0lX", (long)_color];
+    json[@"color"] = [UIColorFromARGB(_color) toHexARGBString];;
     json[@"coloring_type"] = _coloringType;
     json[@"width"] = _width;
     json[@"show_arrows"] = _showArrows ? @"true" : @"false";

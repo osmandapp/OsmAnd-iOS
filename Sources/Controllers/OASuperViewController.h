@@ -29,5 +29,6 @@
 - (void)dismissViewController;
 - (void)showViewController:(UIViewController *)viewController;
 - (void)showModalViewController:(UIViewController *)viewController;
+- (void)showMediumSheetViewController:(UIViewController *)viewController isLargeAvailable:(BOOL)isLargeAvailable;
 
 @end

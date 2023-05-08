@@ -184,4 +184,24 @@
         [self presentViewController:navigationController animated:YES completion:nil];
 }
 
+- (void)showMediumSheetViewController:(UIViewController *)viewController isLargeAvailable:(BOOL)isLargeAvailable
+{
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    navigationController.modalPresentationStyle = UIModalPresentationPageSheet;
+    UISheetPresentationController *sheet = navigationController.sheetPresentationController;
+    if (sheet)
+    {
+        sheet.detents = isLargeAvailable
+            ? @[UISheetPresentationControllerDetent.mediumDetent, UISheetPresentationControllerDetent.largeDetent]
+            : @[UISheetPresentationControllerDetent.mediumDetent];
+        sheet.prefersGrabberVisible = isLargeAvailable;
+        sheet.preferredCornerRadius = 20;
+        sheet.prefersEdgeAttachedInCompactHeight = YES;
+    }
+    if (self.navigationController)
+        [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+    else
+        [self presentViewController:navigationController animated:YES completion:nil];
+}
+
 @end

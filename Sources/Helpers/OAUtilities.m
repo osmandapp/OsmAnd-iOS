@@ -2599,7 +2599,7 @@ static const double d180PI = 180.0 / M_PI_2;
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
         hud.mode = MBProgressHUDModeText;
         hud.margin = 10.f;
-        hud.yOffset = DeviceScreenHeight / 2 - 100;
+        hud.yOffset = view.frame.size.height / 2 - 100;
         hud.removeFromSuperViewOnHide = YES;
         hud.userInteractionEnabled = NO;
 

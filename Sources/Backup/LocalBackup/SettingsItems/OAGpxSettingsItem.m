@@ -10,6 +10,7 @@
 #import "OAGpxAppearanceInfo.h"
 #import "OAGPXUIHelper.h"
 #import "OsmAndApp.h"
+#import "OAGPXAppearanceCollection.h"
 
 @interface OAGpxSettingsItem()
 
@@ -142,6 +143,17 @@
     gpx.splitType = _appearanceInfo.splitType;
     gpx.splitInterval = _appearanceInfo.splitInterval;
     [[OAGPXDatabase sharedDb] save];
+    if (gpx.color != 0)
+    {
+        OAGPXAppearanceCollection *gpxAppearance = [OAGPXAppearanceCollection sharedInstance];
+        OAColorItem *colorItem = [gpxAppearance getColorForGpxFilePath:gpx.gpxFilePath defaultValue:gpx.color];
+        if (!colorItem)
+        {
+            [gpxAppearance addNewSelectedColor:UIColorFromARGB(gpx.color)];
+            colorItem = [gpxAppearance getColorForGpxFilePath:gpx.gpxFilePath defaultValue:gpx.color];
+        }
+        [gpxAppearance selectColor:colorItem toGpxFilePath:gpx.gpxFilePath];
+    }
 }
 
  /*

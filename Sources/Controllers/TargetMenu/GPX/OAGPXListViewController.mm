@@ -33,6 +33,7 @@
 #import "OsmAndApp.h"
 #import "OAOsmUploadGPXViewConroller.h"
 #import "OAValueTableViewCell.h"
+#import "OAGPXAppearanceCollection.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -439,6 +440,17 @@ static UIViewController *parentController;
         item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
     }
     [[OAGPXDatabase sharedDb] save];
+    if (item.color != 0)
+    {
+        OAGPXAppearanceCollection *gpxAppearance = [OAGPXAppearanceCollection sharedInstance];
+        OAColorItem *colorItem = [gpxAppearance getColorForGpxFilePath:item.gpxFilePath defaultValue:item.color];
+        if (!colorItem)
+        {
+            [gpxAppearance addNewSelectedColor:UIColorFromARGB(item.color)];
+            colorItem = [gpxAppearance getColorForGpxFilePath:item.gpxFilePath defaultValue:item.color];
+        }
+        [gpxAppearance selectColor:colorItem toGpxFilePath:item.gpxFilePath];
+    }
 
     [OAUtilities denyAccessToFile:_importUrl.path removeFromInbox:YES];
 

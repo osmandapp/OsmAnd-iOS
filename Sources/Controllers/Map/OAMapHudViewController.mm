@@ -723,8 +723,7 @@
     UISheetPresentationController *sheet = navigationController.sheetPresentationController;
     if (sheet)
     {
-        sheet.detents = @[UISheetPresentationControllerDetent.mediumDetent, UISheetPresentationControllerDetent.largeDetent];
-        sheet.prefersGrabberVisible = YES;
+        sheet.detents = @[UISheetPresentationControllerDetent.mediumDetent];
         sheet.preferredCornerRadius = 20;
         sheet.prefersEdgeAttachedInCompactHeight = YES;
     }

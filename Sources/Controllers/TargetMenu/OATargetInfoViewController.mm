@@ -567,14 +567,14 @@
         urlString = [urlString stringByAppendingString:[NSString stringWithFormat:@"&osm_mapillary_key=%@", mapillaryTagContent]];
 
     NSInteger cardsCount = cards.count;
-    NSURL *urlObj = [[NSURL alloc] initWithString:[[urlString stringByReplacingOccurrencesOfString:@" "  withString:@"_"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    NSURL *urlObj = [[NSURL alloc] initWithString:[[urlString stringByReplacingOccurrencesOfString:@" "  withString:@"_"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
     NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[aSession dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (((NSHTTPURLResponse *)response).statusCode == 200)
         {
             if (data && !error)
             {
-                NSString *safeCharsString = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
+                NSString *safeCharsString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                 NSData *safeCharsData = [safeCharsString dataUsingEncoding:NSUTF8StringEncoding];
                 NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:safeCharsData options:NSJSONReadingAllowFragments error:&error];
                 if (jsonDict)
@@ -648,7 +648,7 @@
         if ([card isKindOfClass:OAMapillaryImageCard.class])
             [mapilaryCards addObject:card];
         else if ([card isKindOfClass:OAMapillaryContributeCard.class])
-            mapilaryContributeCard = card;
+            mapilaryContributeCard = (OAMapillaryContributeCard *)card;
     }
     if (wikimediaCards.count > 0)
     {

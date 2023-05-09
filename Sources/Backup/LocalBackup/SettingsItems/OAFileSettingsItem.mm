@@ -62,6 +62,7 @@
             return documentsPath;
         case EOASettingsItemFileSubtypeObfMap:
         case EOASettingsItemFileSubtypeWikiMap:
+        case EOASettingsItemFileSubtypeSrtmMap:
         case EOASettingsItemFileSubtypeRoadMap:
         case EOASettingsItemFileSubtypeTilesMap:
             return [documentsPath stringByAppendingPathComponent:RESOURCES_DIR];

@@ -17,6 +17,7 @@ class ColorItem: NSObject {
     var id: Int = -1
     let isDefault: Bool
     var sortedPosition: Int = -1
+    private var hexColor: String? = nil
 
     init(key: String?, value: Int, isDefault: Bool) {
         self.key = key
@@ -24,10 +25,16 @@ class ColorItem: NSObject {
         self.isDefault = isDefault
     }
 
-    convenience init(value: Int) {
-        self.init(key: nil, value: value, isDefault: false)
+    convenience init(hexColor: String) {
+        self.init(key: nil, value: Int(OAUtilities.colorToNumber(from: hexColor)), isDefault: false)
+        self.hexColor = hexColor
     }
 
+    func setValue(newValue: Int) {
+        self.value = newValue
+        hexColor = getColor().toHexARGBString()
+    }
+    
     func generateId() {
         id = value + sortedPosition
     }
@@ -42,7 +49,7 @@ class ColorItem: NSObject {
     }
 
     func getHexColor() -> String {
-        return getColor().toHexARGBString()
+        return hexColor != nil ? hexColor! : getColor().toHexARGBString()
     }
 
     override func isEqual(_ object: Any?) -> Bool

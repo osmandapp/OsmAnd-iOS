@@ -244,11 +244,17 @@
         [self saveColorsToEndOfLastUsedIfNeeded:defaultHexColors];
     }
 
-    NSArray *customTrackColors = [_settings.customTrackColors get];
+    NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[_settings.customTrackColors get]];
+    [customTrackColors enumerateObjectsUsingBlock:^(NSString *hexColor, NSUInteger ids, BOOL *stop) {
+        if (hexColor.length == 0)
+            [customTrackColors removeObject:hexColor];
+    }];
+    [_settings.customTrackColors set:customTrackColors];
+
     [self saveColorsToEndOfLastUsedIfNeeded:customTrackColors];
     for (NSString *hexColor in customTrackColors)
     {
-        OAColorItem *colorItem = [[OAColorItem alloc] initWithValue:[OAUtilities colorToNumberFromString:hexColor]];
+        OAColorItem *colorItem = [[OAColorItem alloc] initWithHexColor:hexColor];
         [_availableColors addObject:colorItem];
     }
     [self regenerateSortedPosition];
@@ -343,7 +349,7 @@
 - (void)changeColor:(OAColorItem *)colorItem newColor:(UIColor *)newColor
 {
     NSString *newHexColor = [newColor toHexARGBString];
-    colorItem.value = [OAUtilities colorToNumberFromString:newHexColor];
+    [colorItem setValue:[OAUtilities colorToNumberFromString:newHexColor]];
     [colorItem generateId];
 
     NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[_settings.customTrackColors get]];
@@ -366,7 +372,7 @@
     [customTrackColorsLastUsed insertObject:newHexColor atIndex:0];
     [_settings.customTrackColorsLastUsed set:customTrackColorsLastUsed];
 
-    OAColorItem *colorItem = [[OAColorItem alloc] initWithValue:[OAUtilities colorToNumberFromString:newHexColor]];
+    OAColorItem *colorItem = [[OAColorItem alloc] initWithHexColor:newHexColor];
     [_availableColors addObject:colorItem];
     [self regenerateSortedPosition];
 }
@@ -386,7 +392,7 @@
     [customTrackColorsLastUsed insertObject:hexColor atIndex:colorItem.sortedPosition + 1];
     [_settings.customTrackColorsLastUsed set:customTrackColorsLastUsed];
 
-    OAColorItem *duplicatedColorItem = [[OAColorItem alloc] initWithValue:[OAUtilities colorToNumberFromString:hexColor]];
+    OAColorItem *duplicatedColorItem = [[OAColorItem alloc] initWithHexColor:hexColor];
     if (colorItem.isDefault)
         [_availableColors addObject:duplicatedColorItem];
     else

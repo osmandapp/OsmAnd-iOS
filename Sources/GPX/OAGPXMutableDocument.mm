@@ -84,7 +84,7 @@
         metadata->description = QString::fromNSString(self.metadata.desc);
 
         OAWptPt *pt = [self findPointToShow];
-        metadata->timestamp = pt != nil && pt.time > 0 ? QDateTime::fromTime_t(pt.time).toUTC() : QDateTime::currentDateTime();
+        metadata->timestamp = pt != nil && pt.time > 0 ? QDateTime::fromTime_t(pt.time).toUTC() : QDateTime::currentDateTime().toUTC();
 
         [self.class fillLinks:metadata->links linkArray:self.metadata.links];
         

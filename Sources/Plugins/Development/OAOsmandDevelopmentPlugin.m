@@ -49,6 +49,11 @@
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
+        _enableHeightmap = [[[_settings registerBooleanPreference:@"show_heightmaps" defValue:NO] makeGlobal] makeShared];
+        _enable3DMaps = [[[_settings registerBooleanPreference:@"enable_3d_maps" defValue:YES] makeGlobal] makeShared];
+        _disableVertexHillshade3D = [[[_settings registerBooleanPreference:@"disable_vertex_hillshade_3d" defValue:YES] makeGlobal] makeShared];
+        _generateSlopeFrom3DMaps = [[[_settings registerBooleanPreference:@"generate_slope_from_3d_maps" defValue:YES] makeGlobal] makeShared];
+        _generateHillshadeFrom3DMaps = [[[_settings registerBooleanPreference:@"generate_hillshade_from_3d_maps" defValue:YES] makeGlobal] makeShared];
     }
     return self;
 }
@@ -191,7 +196,7 @@
 
 - (BOOL)isHeightmapEnabled
 {
-    return [self isHeightmapAllowed] && [_settings.showHeightmaps get];
+    return [self isHeightmapAllowed] && [_enableHeightmap get];
 }
 
 - (BOOL)isHeightmapAllowed

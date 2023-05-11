@@ -79,6 +79,7 @@ struct RegionResources
     OsmAndAppInstance _app;
     OAIAPHelper *_iapHelper;
     OAWeatherHelper *_weatherHelper;
+    OAOsmandDevelopmentPlugin *_devPlugin;
 
     NSObject *_dataLock;
 
@@ -195,6 +196,7 @@ static BOOL _repositoryUpdated = NO;
         _app = [OsmAndApp instance];
         _iapHelper = [OAIAPHelper sharedInstance];
         _weatherHelper = [OAWeatherHelper sharedInstance];
+        _devPlugin = (OAOsmandDevelopmentPlugin *) [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
 
         _dataLock = [[NSObject alloc] init];
 
@@ -911,7 +913,7 @@ static BOOL _repositoryUpdated = NO;
             {
                 [allResourcesArray addObject:item_];
             }
-            else if (![OAAppSettings.sharedManager.showHeightmaps get] && item_.resourceType == OsmAndResourceType::GeoTiffRegion)
+            else if (![_devPlugin.enableHeightmap get] && item_.resourceType == OsmAndResourceType::GeoTiffRegion)
             {
                 OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *) [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
                 if (!plugin || ![plugin isHeightmapEnabled])

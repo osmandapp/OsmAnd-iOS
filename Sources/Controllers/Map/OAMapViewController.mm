@@ -55,6 +55,8 @@
 #import "OAMapRendererEnvironment.h"
 #import "OAMapPresentationEnvironment.h"
 #import "OAWeatherHelper.h"
+#import "OAOsmandDevelopmentPlugin.h"
+#import "OAPlugin.h"
 
 #import "OARoutingHelper.h"
 #import "OATransportRoutingHelper.h"
@@ -1879,17 +1881,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
         _gpxDocsRec.clear();
         
-        if ([OAAppSettings.sharedManager.showHeightmaps get])
-        {
-            std::shared_ptr<const OsmAnd::IGeoTiffCollection> heightsCollection;
-            const auto manualTilesCollection = new OsmAnd::GeoTiffCollection();
-            NSString *cacheDir = [_app.cachePath stringByAppendingPathComponent:GEOTIFF_SQLITE_CACHE_DIR];
-            manualTilesCollection->setLocalCache(QString::fromNSString(cacheDir));
-            manualTilesCollection->addDirectory(_app.documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)));
-            heightsCollection.reset(manualTilesCollection);
-            [_mapView setElevationDataProvider:
-                std::make_shared<OsmAnd::SqliteHeightmapTileProvider>(heightsCollection, _mapView.elevationDataTileSize)];
-        }
+        [self recreateHeightmapProvider];
+        [self updateElevationConfiguration];
         
         // Determine what type of map-source is being activated
         typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
@@ -2144,6 +2137,37 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         [self hideProgressHUD];
         [_mapSourceUpdatedObservable notifyEvent];
     }
+}
+
+- (void) recreateHeightmapProvider
+{
+    OAOsmandDevelopmentPlugin *plugin = [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
+    if (!plugin || ![plugin.enableHeightmap get])
+    {
+        [_mapView resetElevationDataProvider:YES];
+        return;
+    }
+    std::shared_ptr<const OsmAnd::IGeoTiffCollection> heightsCollection;
+    const auto manualTilesCollection = new OsmAnd::GeoTiffCollection();
+    NSString *cacheDir = [_app.cachePath stringByAppendingPathComponent:GEOTIFF_SQLITE_CACHE_DIR];
+    manualTilesCollection->setLocalCache(QString::fromNSString(cacheDir));
+    manualTilesCollection->addDirectory(_app.documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)));
+    heightsCollection.reset(manualTilesCollection);
+    [_mapView setElevationDataProvider:
+        std::make_shared<OsmAnd::SqliteHeightmapTileProvider>(heightsCollection, _mapView.elevationDataTileSize)];
+}
+
+- (void) updateElevationConfiguration
+{
+    OAOsmandDevelopmentPlugin *developmentPlugin = [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
+    BOOL disableVertexHillshade = developmentPlugin != nil && [developmentPlugin.disableVertexHillshade3D get];
+    OsmAnd::ElevationConfiguration elevationConfiguration;
+    if (disableVertexHillshade)
+    {
+        elevationConfiguration.setSlopeAlgorithm(OsmAnd::ElevationConfiguration::SlopeAlgorithm::None);
+        elevationConfiguration.setVisualizationStyle(OsmAnd::ElevationConfiguration::VisualizationStyle::None);
+    }
+    [_mapView setElevationConfiguration:elevationConfiguration forcedUpdate:YES];
 }
 
 - (void) updateRasterLayerProviderAlpha

@@ -1369,6 +1369,11 @@
 "shared_string_meters" = "meters";
 "shared_string_feet" = "feet";
 
+"test_heightmap" = "Test heightmap";
+"disable_vertex_hillshade_3d" = "Disable vertex hillshade in 3D";
+"generate_slope_from_3d_maps" = "Generate slope raster maps from 3D maps";
+"generate_hillshade_from_3d_maps" = "Generate hillshade raster maps from 3D maps";
+
 // Menu
 "shared_string_menu" = "Menu";
 "menu_my_trips" = "My Tracks";

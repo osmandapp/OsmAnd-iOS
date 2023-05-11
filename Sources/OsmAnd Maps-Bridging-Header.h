@@ -6,3 +6,4 @@
 #import "OAColors.h"
 #import "OARouteStatistics.h"
 #import "OAUtilities.h"
+#import "Localization.h"

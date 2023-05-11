@@ -185,7 +185,7 @@
 "map_mode" = "Режим мапи";
 "map_widget_renderer" = "Стиль мапи";
 "map_settings_overunder" = "Накладка та підкладка";
-"map_settings_over" = "Накладка";
+"map_settings_over" = "Шар";
 "map_settings_under" = "Підкладка";
 "shared_string_none" = "Нічого";
 "map_settings_offline" = "Стилі оффлайн мап";
@@ -210,7 +210,7 @@
 "shared_string_maps" = "Мапи";
 "purchases" = "Придбання";
 // Purchases
-"prch_addons" = "Доповнення";
+"prch_addons" = "Додатки";
 "prch_nau_q1" = "Будь ласка, увімкніть стиль «Nautical» в налаштуваннях мапи та завантажте світову мапу морських об’єктів.";
 "prch_nau_q2_cell" = "Потрібно завантажити %@ використовуючи стільникову мережу.";
 "incur_high_charges" = "Це може привести до значних витрат.";
@@ -1874,7 +1874,7 @@
 "quick_action_mapillary_show" = "Показати Mapillary";
 "quick_action_remove_next_destination_descr" = "Вилучає наступний пункт призначення з маршруту. Якщо це кінцевий пункт призначення, навігація зупиниться.";
 "shared_string_add_profile" = "Додати профіль";
-"quick_action_remove_next_destination" = "Вилучити найближчу точку призначення";
+"quick_action_remove_next_destination" = "Вилучити наступну точку призначення";
 "reverse_route" = "Зворотний маршрут";
 "quick_action_mapillary_hide" = "Вимкнути Mapillary";
 "profile_type_user_string" = "Профіль користувача";
@@ -2897,3 +2897,11 @@
 "activity_type_water_name" = "Вода";
 "short_min" = "х";
 "wiki_article_search_text" = "Пошук відповідної статті Вікіпедії";
+"shared_string_location_unknown" = "Розташування невідоме";
+"shared_string_coloring" = "Забарвлення";
+"shared_string_edit_color" = "Змінити колір";
+"shared_string_duplicate_color" = "Дублювати колір";
+"shared_string_delete_color" = "Видалити колір";
+"shared_string_duplicate" = "Дублікат";
+"shared_string_all_colors" = "Усі кольори";
+"shared_string_add_color" = "Додати колір";

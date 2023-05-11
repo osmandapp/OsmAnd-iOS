@@ -1827,7 +1827,7 @@
 "quick_action_mapillary_show" = "Pokaż Mapillary";
 "quick_action_showhide_mapillary_title" = "Pokaż/ukryj Mapillary";
 "profile_type_osmand_string" = "Profil OsmAnd";
-"quick_action_remove_next_destination" = "Usuń najbliższy punkt docelowy";
+"quick_action_remove_next_destination" = "Usuń następny punkt docelowy";
 "map_widget_distance_by_tap" = "Odległość po dotknięciu";
 "icon_group_emergency" = "Służby ratunkowe";
 "touting_specified_vehicle_parameters_descr" = "Określone parametry pojazdu mogą mieć wpływ na wyznaczanie trasy.";

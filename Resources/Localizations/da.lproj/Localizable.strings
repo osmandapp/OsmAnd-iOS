@@ -1796,7 +1796,7 @@
 "routing_attr_length_name" = "Længdegrænse";
 "default_profile_descr" = "Vælg en profil, der skal bruges ved start af app.";
 "shared_string_next" = "Næste";
-"quick_action_remove_next_destination" = "Slet nærmeste destinationspunkt";
+"quick_action_remove_next_destination" = "Slet næste destinationspunkt";
 "quick_action_mapillary_show" = "Vis Mapillary";
 "next_segment" = "Næste segment";
 "arrived_at_destination" = "Ankommet.";
@@ -2889,3 +2889,11 @@
 "activity_type_snowmobile_name" = "Snescooter";
 "short_min" = "m";
 "wiki_article_search_text" = "Søger efter den tilsvarende wiki-artikel";
+"shared_string_location_unknown" = "Placering ukendt";
+"shared_string_coloring" = "Farvelægning";
+"shared_string_all_colors" = "Alle farver";
+"shared_string_edit_color" = "Rediger farve";
+"shared_string_duplicate_color" = "Dupliker farve";
+"shared_string_delete_color" = "Slet farve";
+"shared_string_add_color" = "Tilføj farve";
+"shared_string_duplicate" = "Duplikér";

@@ -1242,7 +1242,7 @@
 "base_profile_descr_bicycle" = "Za gorska kolesa, motorna kolesa, ježo s konji";
 "base_profile_descr_aircraft" = "Za letala, jadralna padala";
 "export_profile" = "Izvozi profil";
-"quick_action_remove_next_destination" = "Izbriši najbližjo ciljno točko";
+"quick_action_remove_next_destination" = "Zbriši naslednjo ciljno točko";
 "application_profiles" = "Profili aplikacije";
 "light_theme" = "Svetla";
 "temporary_conditional_routing" = "Upoštevaj začasne omejitve";

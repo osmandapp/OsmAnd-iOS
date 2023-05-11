@@ -1741,7 +1741,7 @@
 "profile_type_user_string" = "Profil utilisateur";
 "quick_action_switch_profile_descr" = "Le bouton d’action bascule entre les profils sélectionnés.";
 "profile_alert_need_save_title" = "Enregistrer les modifications";
-"quick_action_remove_next_destination" = "Supprimer le prochain point";
+"quick_action_remove_next_destination" = "Supprimer la prochaine étape";
 "profile_sett_descr" = "Affecter le profil de l'application sélectionnée";
 "export_profile_descr" = "Vous pouvez exporter tous les paramètres du profil, copier tous les paramètres d'un autre profil ou réinitialiser tous les paramètres du profil à l'état par défaut.";
 "import_profile_descr" = "Pour importer un profil, appuyez sur le fichier voulu (*.osf) dans n'importe quelle application et sélectionnez \"Copier vers les cartes OsmAnd\"";
@@ -2887,3 +2887,11 @@
 "map_widget_altitude_map_center" = "Altitude : centre de la carte";
 "short_min" = "m";
 "wiki_article_search_text" = "Recherche de l'article Wiki correspondant";
+"shared_string_location_unknown" = "Position inconnue";
+"shared_string_edit_color" = "Modifier la couleur";
+"shared_string_coloring" = "Coloriage";
+"shared_string_duplicate" = "Dupliquer";
+"shared_string_all_colors" = "Toutes les couleurs";
+"shared_string_add_color" = "Ajouter une couleur";
+"shared_string_duplicate_color" = "Dupliquer la couleur";
+"shared_string_delete_color" = "Supprimer la couleur";

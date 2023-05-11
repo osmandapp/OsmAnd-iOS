@@ -1683,7 +1683,7 @@
 "reverse_route" = "Ruta inversa";
 "quick_action_remove_next_destination_descr" = "Quita el siguiente destino de la ruta. Si es el destino final, la navegación se detendrá.";
 "public_transport_try_change_settings" = "Intenta cambiar los ajustes.";
-"quick_action_remove_next_destination" = "Borrar el punto de destino más cercano";
+"quick_action_remove_next_destination" = "Borrar el siguiente punto de destino";
 "public_transport_hide" = "Ocultar transporte público";
 "public_transport_menu" = "Transporte";
 "coord_input_add_point" = "Añadir punto";
@@ -2886,3 +2886,11 @@
 "activity_type_cycling_name" = "Bicicleta";
 "short_min" = "min";
 "wiki_article_search_text" = "Buscando el artículo en la wiki correspondiente";
+"shared_string_location_unknown" = "Ubicación desconocida";
+"shared_string_duplicate_color" = "Duplicar un color";
+"shared_string_delete_color" = "Borrar un color";
+"shared_string_duplicate" = "Duplicar";
+"shared_string_edit_color" = "Editar un color";
+"shared_string_coloring" = "Colorear";
+"shared_string_all_colors" = "En todos los colores";
+"shared_string_add_color" = "Añadir un color";

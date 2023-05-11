@@ -163,7 +163,6 @@
 #define showCurrentLocationCoordinatesWidgetKey @"showCoordinatesWidget"
 #define showMapCenterWidgetKey @"showMapCenterWidget"
 
-#define showRoutingAlarmsKey @"showRoutingAlarms"
 #define showTrafficWarningsKey @"showTrafficWarnings"
 #define showPedestrianKey @"showPedestrian"
 #define showCamerasKey @"showCameras"
@@ -341,6 +340,7 @@
 #define currentTrackShowArrowsKey @"currentTrackShowArrows"
 #define currentTrackShowStartFinishKey @"currentTrackShowStartFinish"
 #define customTrackColorsKey @"customTrackColors"
+#define customTrackColorsLastUsedKey @"customTrackColorsLastUsed"
 #define lastUsedFavIconsKey @"lastUsedFavIcons"
 
 #define gpsStatusAppKey @"gpsStatusApp"
@@ -4303,6 +4303,7 @@
         _currentTrackShowArrows = [[[OACommonBoolean withKey:currentTrackShowArrowsKey defValue:NO] makeGlobal] makeShared];
         _currentTrackShowStartFinish = [[[OACommonBoolean withKey:currentTrackShowStartFinishKey defValue:YES] makeGlobal] makeShared];
         _customTrackColors = [[[OACommonStringList withKey:customTrackColorsKey defValue:@[]] makeGlobal] makeShared];
+        _customTrackColorsLastUsed = [[[OACommonStringList withKey:customTrackColorsLastUsedKey defValue:@[]] makeGlobal] makeShared];
         _lastUsedFavIcons = [[[OACommonStringList withKey:lastUsedFavIconsKey defValue:@[]] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_currentTrackColor forKey:@"current_track_color"];
@@ -4314,6 +4315,7 @@
         [_globalPreferences setObject:_currentTrackShowArrows forKey:@"current_track_show_arrows"];
         [_globalPreferences setObject:_currentTrackShowStartFinish forKey:@"current_track_show_start_finish"];
         [_globalPreferences setObject:_customTrackColors forKey:@"custom_track_colors"];
+        [_globalPreferences setObject:_customTrackColorsLastUsed forKey:@"custom_track_colors_last_used"];
         [_globalPreferences setObject:_lastUsedFavIcons forKey:@"last_used_favorite_icons"];
 
         _gpsStatusApp = [[[OACommonString withKey:gpsStatusAppKey defValue:@""] makeGlobal] makeShared];

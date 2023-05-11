@@ -1881,7 +1881,7 @@
 "quick_action_mapillary_show" = "Mapillary anzeigen";
 "quick_action_showhide_mapillary_title" = "Mapillary ein-/ausblenden";
 "quick_action_switch_profile_descr" = "Die Aktionsschaltfläche schaltet zwischen den ausgewählten Profilen um.";
-"quick_action_remove_next_destination" = "Nächstgelegenen Zielpunkt löschen";
+"quick_action_remove_next_destination" = "Nächsten Zielpunkt löschen";
 "arrived_at_destination" = "Sie sind angekommen.";
 "key_hint_recenter_map" = "Karte wieder zentrieren";
 "shared_z_a" = "Z - A";
@@ -2902,3 +2902,11 @@
 "map_widget_altitude_map_center_desc" = "Zeigt die Höhe über dem Meeresspiegel der aktuellen Kartenmitte an.";
 "short_min" = "m";
 "wiki_article_search_text" = "Suche nach dem entsprechenden Wiki-Artikel";
+"shared_string_location_unknown" = "Ort unbekannt";
+"shared_string_all_colors" = "Alle Farben";
+"shared_string_add_color" = "Farbe hinzufügen";
+"shared_string_duplicate_color" = "Farbe duplizieren";
+"shared_string_delete_color" = "Farbe löschen";
+"shared_string_duplicate" = "Duplizieren";
+"shared_string_coloring" = "Farbgebung";
+"shared_string_edit_color" = "Farbe ändern";

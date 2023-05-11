@@ -1394,7 +1394,7 @@
 "quick_action_showhide_mapillary_descr" = "Un botón que alterna la capa de Mapillary en el mapa.";
 "quick_action_mapillary_hide" = "Ocultar Mapillary";
 "quick_action_mapillary_show" = "Mostrar Mapillary";
-"quick_action_remove_next_destination" = "Borrar el punto de destino más cercano";
+"quick_action_remove_next_destination" = "Borrar el siguiente punto de destino";
 "quick_action_remove_next_destination_descr" = "Quita el siguiente destino de la ruta. Si es el destino final, la navegación se detendrá.";
 "change_application_profile" = "Cambiar perfil de la aplicación";
 "select_application_profile" = "Elegir perfil de la aplicación";
@@ -2896,3 +2896,11 @@
 "activity_type_running_name" = "Correr";
 "short_min" = "m";
 "wiki_article_search_text" = "Buscando el artículo wiki correspondiente";
+"shared_string_location_unknown" = "Ubicación desconocida";
+"shared_string_coloring" = "Colorear";
+"shared_string_all_colors" = "Todos los colores";
+"shared_string_add_color" = "Añadir color";
+"shared_string_edit_color" = "Editar color";
+"shared_string_duplicate_color" = "Duplicar color";
+"shared_string_delete_color" = "Borrar color";
+"shared_string_duplicate" = "Duplicar";

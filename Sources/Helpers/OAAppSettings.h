@@ -876,7 +876,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *routeShowTurnArrows;
 
 @property (nonatomic) OACommonBoolean *showScreenAlerts;
-@property (nonatomic) OACommonBoolean *showRoutingAlarms;
 @property (nonatomic) OACommonBoolean *showTrafficWarnings;
 @property (nonatomic) OACommonBoolean *showPedestrian;
 @property (nonatomic) OACommonBoolean *showCameras;
@@ -1116,6 +1115,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *currentTrackShowArrows;
 @property (nonatomic) OACommonBoolean *currentTrackShowStartFinish;
 @property (nonatomic) OACommonStringList *customTrackColors;
+@property (nonatomic) OACommonStringList *customTrackColorsLastUsed;
 @property (nonatomic) OACommonStringList *lastUsedFavIcons;
 
 @property (nonatomic) OACommonString *gpsStatusApp;

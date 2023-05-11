@@ -30,6 +30,7 @@
 #import "OAColors.h"
 #import "OAWikipediaPlugin.h"
 #import "OAWeatherPlugin.h"
+#import "OAAutoObserverProxy.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #define kContourLinesDensity @"contourDensity"
@@ -71,6 +72,7 @@
     NSArray<OAMapStyleParameter *> *_osmParameters;
 
     OAAppModeCell *_appModeCell;
+    OAAutoObserverProxy *_applicationModeObserver;
 }
 
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
@@ -106,11 +108,19 @@
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
+    _applicationModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                         withHandler:@selector(onApplicationModeChanged)
+                                                          andObserve:_app.data.applicationModeChangedObservable];
 }
 
 - (void)deinitView
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    if (_applicationModeObserver)
+    {
+        [_applicationModeObserver detach];
+        _applicationModeObserver = nil;
+    }
 }
 
 - (void)setupView
@@ -1334,6 +1344,17 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setupView];
+    });
+}
+
+#pragma mark - Selectors
+
+- (void)onApplicationModeChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_appModeCell)
+            _appModeCell.selectedMode = [_settings.applicationMode get];
+        [self refreshMenu];
     });
 }
 

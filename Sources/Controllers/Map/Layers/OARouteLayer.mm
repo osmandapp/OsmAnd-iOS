@@ -137,7 +137,7 @@
     [super updateLayer];
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        _appearanceCollection = [[OAGPXAppearanceCollection alloc] init];
+        _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     });
 
     [self refreshRoute];

@@ -163,7 +163,6 @@
 #define showCurrentLocationCoordinatesWidgetKey @"showCoordinatesWidget"
 #define showMapCenterWidgetKey @"showMapCenterWidget"
 
-#define showRoutingAlarmsKey @"showRoutingAlarms"
 #define showTrafficWarningsKey @"showTrafficWarnings"
 #define showPedestrianKey @"showPedestrian"
 #define showCamerasKey @"showCameras"

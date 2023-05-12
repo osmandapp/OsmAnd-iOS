@@ -876,7 +876,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *routeShowTurnArrows;
 
 @property (nonatomic) OACommonBoolean *showScreenAlerts;
-@property (nonatomic) OACommonBoolean *showRoutingAlarms;
 @property (nonatomic) OACommonBoolean *showTrafficWarnings;
 @property (nonatomic) OACommonBoolean *showPedestrian;
 @property (nonatomic) OACommonBoolean *showCameras;

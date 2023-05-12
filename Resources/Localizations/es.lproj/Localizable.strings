@@ -2887,3 +2887,10 @@
 "short_min" = "min";
 "wiki_article_search_text" = "Buscando el artículo en la wiki correspondiente";
 "shared_string_location_unknown" = "Ubicación desconocida";
+"shared_string_duplicate_color" = "Duplicar un color";
+"shared_string_delete_color" = "Borrar un color";
+"shared_string_duplicate" = "Duplicar";
+"shared_string_edit_color" = "Editar un color";
+"shared_string_coloring" = "Colorear";
+"shared_string_all_colors" = "En todos los colores";
+"shared_string_add_color" = "Añadir un color";

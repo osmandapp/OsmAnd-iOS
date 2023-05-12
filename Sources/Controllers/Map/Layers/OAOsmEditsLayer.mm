@@ -163,7 +163,7 @@
         }
         else
         {
-            bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:@"comment" iconName:@"ic_action_close_banner" isFullSize:YES icon:[UIImage imageNamed:@"ic_action_close_banner"]];
+            bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:@"circle" iconName:@"ic_custom_poi" isFullSize:YES icon:[UIImage imageNamed:@"ic_custom_poi"]];
         }
     }
     else

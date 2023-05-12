@@ -2903,3 +2903,10 @@
 "short_min" = "m";
 "wiki_article_search_text" = "Suche nach dem entsprechenden Wiki-Artikel";
 "shared_string_location_unknown" = "Ort unbekannt";
+"shared_string_all_colors" = "Alle Farben";
+"shared_string_add_color" = "Farbe hinzufügen";
+"shared_string_duplicate_color" = "Farbe duplizieren";
+"shared_string_delete_color" = "Farbe löschen";
+"shared_string_duplicate" = "Duplizieren";
+"shared_string_coloring" = "Farbgebung";
+"shared_string_edit_color" = "Farbe ändern";

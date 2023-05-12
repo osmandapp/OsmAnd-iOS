@@ -2890,3 +2890,10 @@
 "short_min" = "m";
 "wiki_article_search_text" = "Søger efter den tilsvarende wiki-artikel";
 "shared_string_location_unknown" = "Placering ukendt";
+"shared_string_coloring" = "Farvelægning";
+"shared_string_all_colors" = "Alle farver";
+"shared_string_edit_color" = "Rediger farve";
+"shared_string_duplicate_color" = "Dupliker farve";
+"shared_string_delete_color" = "Slet farve";
+"shared_string_add_color" = "Tilføj farve";
+"shared_string_duplicate" = "Duplikér";

@@ -47,7 +47,7 @@
 #import "OAIconTextTableViewCell.h"
 #import "OASearchMoreCell.h"
 #import "OAPointDescCell.h"
-#import "OAIconTextDescCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAIconButtonCell.h"
 #import "OAMenuSimpleCell.h"
 #import "OAEmptySearchCell.h"
@@ -478,34 +478,32 @@
     }
 }
 
-+ (OAIconTextDescCell *) getIconTextDescCell:(NSString *)name tableView:(UITableView *)tableView typeName:(NSString *)typeName icon:(UIImage *)icon
++ (OASimpleTableViewCell *) getIconTextDescCell:(NSString *)name tableView:(UITableView *)tableView typeName:(NSString *)typeName icon:(UIImage *)icon
 {
-    OAIconTextDescCell* cell;
-    cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextDescCell getCellIdentifier]];
+    OASimpleTableViewCell* cell;
+    cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescCell getCellIdentifier] owner:self options:nil];
-        cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
-        cell.textView.numberOfLines = 0;
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+        cell.titleLabel.numberOfLines = 0;
     }
     if (cell)
     {
-        [cell.textView setText:name];
+        [cell.titleLabel setText:name];
         if (typeName.length == 0)
         {
-            cell.descView.hidden = YES;
+            [cell descriptionVisibility:NO];
         }
         else
         {
-            [cell.descView setText:typeName];
-            cell.descView.hidden = NO;
+            [cell.descriptionLabel setText:typeName];
+            [cell descriptionVisibility:YES];
         }
-        [cell.iconView setImage:icon];
-        cell.iconView.image = [cell.iconView.image imageFlippedForRightToLeftLayoutDirection];
-        cell.arrowIconView.image = [cell.arrowIconView.image imageFlippedForRightToLeftLayoutDirection];
+        [cell.leftIconView setImage:icon];
+        cell.leftIconView.image = [cell.leftIconView.image imageFlippedForRightToLeftLayoutDirection];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
-    if ([cell needsUpdateConstraints])
-        [cell updateConstraints];
     return cell;
 }
 
@@ -699,9 +697,8 @@
                     }
                     if (!icon && [filter isKindOfClass:[OAPOIUIFilter class]])
                         icon = [OAPOIHelper getCustomFilterIcon:(OAPOIUIFilter *) filter];
-                    OAIconTextDescCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:@"" icon:icon];
-                    cell.iconView.tintColor = UIColorFromRGB(color_osmand_orange);
-                    cell.separatorInset = UIEdgeInsetsMake(0., isLast ? 0. : 66., 0., 0.);
+                    OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:@"" icon:icon];
+                    cell.leftIconView.tintColor = UIColorFromRGB(color_osmand_orange);
                     return cell;
                 }
                 else if ([res.object isKindOfClass:[OAPOIBaseType class]])
@@ -710,8 +707,7 @@
                     NSString *typeName = [OAQuickSearchTableController applySynonyms:res];
                     UIImage *icon = [((OAPOIBaseType *)res.object) icon];
                     
-                    OAIconTextDescCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];
-                    cell.separatorInset = UIEdgeInsetsMake(0., isLast ? 0. : 66., 0., 0.);
+                    OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];
                     return cell;
                 }
                 else if ([res.object isKindOfClass:[OAPOICategory class]])

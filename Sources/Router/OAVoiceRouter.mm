@@ -495,9 +495,15 @@ std::string preferredLanguage;
 
 - (void) nextStatusAfter:(int) previousStatus
 {
-    if (previousStatus != STATUS_TOLD) {
+    //STATUS_UNKNOWN=0 -> STATUS_LONG_PREPARE=1 -> STATUS_PREPARE=2 -> STATUS_TURN_IN=3 -> STATUS_TURN=4 -> STATUS_TOLD=5
+    if (previousStatus != STATUS_TOLD)
+    {
         currentStatus = previousStatus + 1;
-    } else {
+        if (previousStatus == STATUS_TURN)
+            waitAnnouncedOffRoute = 0;
+    }
+    else
+    {
         currentStatus = previousStatus;
     }
 }
@@ -576,6 +582,10 @@ std::string preferredLanguage;
                 waitAnnouncedOffRoute *= 2.5;
             }
             lastAnnouncedOffRoute = ms;
+        } // Avoid offRoute/onRoute loop, #16571:
+        else if (announceBackOnRoute && (dist < 0.3 * [_atd getOffRouteDistance]))
+        {
+            [self announceBackOnRoute];
         }
     }
 }
@@ -601,6 +611,7 @@ std::string preferredLanguage;
     if (newRoute)
     {
         playGoAheadDist = -1;
+        waitAnnouncedOffRoute = 0;
     }
     currentStatus = STATUS_UNKNOWN;
     suppressDest = NO;
@@ -609,17 +620,18 @@ std::string preferredLanguage;
 
 - (void) announceBackOnRoute
 {
-    if ([_settings.speakRouteDeviation get])
-    {
-//        if (announceBackOnRoute) {
+//    if (announceBackOnRoute) {
+        if ([_settings.speakRouteDeviation get])
+        {
             OACommandBuilder *p = [self getNewCommandPlayerToPlay];
             if (p != nil) {
                 //            notifyOnVoiceMessage();
                 [[p backOnRoute] play];
             }
             announceBackOnRoute = false;
-//        }
-    }
+            waitAnnouncedOffRoute = 0;
+        }
+//    }
 }
 
 - (void) announceCurrentDirection:(CLLocation *)currentLocation

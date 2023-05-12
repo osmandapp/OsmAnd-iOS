@@ -10,7 +10,7 @@
 #import "OAMapSettingsViewController.h"
 #import "Localization.h"
 #import "OAUtilities.h"
-#import "OAIconTextDescCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAIconTextTableViewCell.h"
 #import "OAIconButtonCell.h"
 #import "OAPOIUIFilter.h"
@@ -171,16 +171,15 @@ typedef NS_ENUM(NSInteger, EOAPoiRowType) {
         }
         if (!icon)
             icon = [OAUtilities getMxIcon:@"user_defined"];
-        OAIconTextDescCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tblView typeName:@"" icon:icon];
+        OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tblView typeName:@"" icon:icon];
         [self prepareCell:cell uiFilter:filter];
         return cell;
     }
     return nil;
 }
 
-- (void) prepareCell:(OAIconTextDescCell *)cell uiFilter:(OAPOIUIFilter *)filter
+- (void) prepareCell:(OASimpleTableViewCell *)cell uiFilter:(OAPOIUIFilter *)filter
 {
-    cell.arrowIconView.hidden = YES;
     if ([[[OAPOIFiltersHelper sharedInstance] getSelectedPoiFilters] containsObject:filter]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     }

@@ -14,25 +14,31 @@
     OsmAndAppInstance _app;
 }
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _app = OsmAndApp.instance;
     }
     return self;
 }
 
-- (void)main
+- (void) main
 {
+    [_app initialize];
     [self performUpdatesCheck];
 }
 
-- (void)performUpdatesCheck
+- (void) performUpdatesCheck
 {
+    NSLog(@"OAFetchBackgroundDataOperation start");
+
     [_app checkAndDownloadOsmAndLiveUpdates];
     if (!self.cancelled)
         [_app checkAndDownloadWeatherForecastsUpdates];
+
+    NSLog(@"OAFetchBackgroundDataOperation finish");
 }
 
 @end

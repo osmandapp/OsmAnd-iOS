@@ -172,10 +172,16 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
     if ([item.key isEqualToString:kTestHeightmapKey])
     {
         [_plugin.enableHeightmap set:sender.isOn];
-            [self onEnable3DMapsChanged:sender.isOn];
-            [self onDisableVertexHillshade3DChanged:sender.isOn];
-            [self onGenerateSlopeFrom3DMapsChanged:sender.isOn];
-            [self onGenerateHillshadeFrom3DMapsChanged:sender.isOn];
+        [_plugin.enable3DMaps set:sender.isOn];
+        [_plugin.disableVertexHillshade3D set:sender.isOn];
+        [_plugin.generateSlopeFrom3DMaps set:sender.isOn];
+        [_plugin.generateHillshadeFrom3DMaps set:sender.isOn];
+        [self onEnable3DMapsChanged:sender.isOn];
+        [self onDisableVertexHillshade3DChanged:sender.isOn];
+        [self onGenerateSlopeFrom3DMapsChanged:sender.isOn];
+        [self onGenerateHillshadeFrom3DMapsChanged:sender.isOn];
+        [self generateData];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     else if ([item.key isEqualToString:kUse3dReliefHeightmapsKey])
     {

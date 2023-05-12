@@ -2271,8 +2271,8 @@
 "route_line_use_map_style_width" = "Застосовувати типову ширину стилю мапи (%@).";
 "routeInfo_tracktype_description" = "Забарвлення маршруту або треку за складом поверхні. Зазвичай застосовують, коли дорожня мережа в основному без покриття.";
 "ltr_or_rtl_combine_via_dash" = "%@— %@";
-"routing_attr_allow_gate_name" = "Дозволити використання воріт";
-"routing_attr_allow_gate_description" = "Дозволити використання воріт";
+"routing_attr_allow_gate_name" = "Вважати, що ворота відкриті";
+"routing_attr_allow_gate_description" = "Вважати, що ворота відкриті";
 "routing_attr_only_permitted_streets_name" = "Вулиці з явним дозволом для руху";
 "routing_attr_only_permitted_ways_description" = "Використовувати лише шляхи з явним дозволом для руху (доріжки, просіки тощо)";
 "routing_attr_prefer_horse_routes_name" = "Надавати перевагу кінним маршрутам";
@@ -2425,7 +2425,7 @@
 "shared_string_learn_more" = "Докладніше";
 "ltr_or_rtl_combine_via_or" = "%@або %@";
 "osmand_depelopment_simulate_location_section" = "Симулювати";
-"simulate_your_location_gpx_descr" = "Відтворити свою позицію за допомогою записаного треку GPX.";
+"simulate_your_location_gpx_descr" = "Симуляція положення за допомогою записаного треку GPX.";
 "simulate_location_movement_speed" = "Швидкість руху";
 "simulate_location_movement_speed_original" = "Оригінальна";
 "simulate_location_movement_speed_x2_desc" = "Швидкість руху під час імітування буде у 2 рази вищою за швидкість у вибраному файлі.";
@@ -2761,7 +2761,7 @@
 "rendering_attr_horseScale_name" = "Складність кінних стежок";
 "routing_attr_avoid_footways_description" = "Уникати пішохідних шляхів";
 "rendering_attr_showMtbScaleIMBATrails_description" = "Показати маршрути призначені для гірських велосипедів.";
-"rendering_attr_hideMilitaryAreas_description" = "Сховати військові райони";
+"rendering_attr_hideMilitaryAreas_description" = "Не показувати військові обʼєкти";
 "routing_attr_freeride_policy_allow_name" = "Дозволено";
 "rendering_attr_noNatureReserveBoundaries_name" = "Межі природи";
 "routing_attr_difficulty_preference_no_preference_name" = "Без переваг";
@@ -2780,7 +2780,7 @@
 "rendering_attr_showMtbScaleUphill_description" = "Показати траси згідно зі шкалою підйомів MTB.";
 "rendering_attr_showTrolleybusRoutes_name" = "Тролейбусні маршрути";
 "routing_attr_difficulty_preference_advanced_name" = "Досвідчений";
-"rendering_attr_hideMilitaryAreas_name" = "Сховати військові райони";
+"rendering_attr_hideMilitaryAreas_name" = "Не показувати військові обʼєкти";
 "rendering_value_omit_name" = "Пропустити";
 "rendering_attr_horse_scale_difficult_name" = "Важка";
 "rendering_attr_weatherWindSpeedContours_name" = "Ізолінії швидкості вітру";

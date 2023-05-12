@@ -112,13 +112,13 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
     
     OATableSectionData *heightMapSection = [OATableSectionData sectionData];
     heightMapSection.headerText = OALocalizedString(@"download_heightmap_maps");
-    BOOL isPluginSwitchesEnavled = [OAIAPHelper isOsmAndProAvailable];
+    BOOL isPluginSwitchesEnabled = [OAIAPHelper isOsmAndProAvailable];
     
     [heightMapSection addRowFromDictionary:@{
         kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
         kCellKeyKey : kTestHeightmapKey,
         kCellTitleKey : OALocalizedString(@"test_heightmap"),
-        kCellSwitchIsOnKey : [NSNumber numberWithBool:[_plugin.enableHeightmap get]],
+        kCellSwitchIsOnKey : [NSNumber numberWithBool:isPluginSwitchesEnabled ? [_plugin.enableHeightmap get] : NO],
         kCellSwitchEnabledKey : [NSNumber numberWithBool:[OAIAPHelper isOsmAndProAvailable]],
         kCellSwitchUserInteractionEnabledKey : [NSNumber numberWithBool:YES],
         @"actionBlock" : (^void(){ [weakSelf openProPlanScreen]; })
@@ -127,33 +127,33 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
         kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
         kCellKeyKey : kUse3dReliefHeightmapsKey,
         kCellTitleKey : OALocalizedString(@"use_heightmap_setting"),
-        kCellSwitchIsOnKey : [NSNumber numberWithBool:[_plugin.enable3DMaps get]],
+        kCellSwitchIsOnKey : [NSNumber numberWithBool:isPluginSwitchesEnabled ? [_plugin.enable3DMaps get] : NO],
         kCellSwitchEnabledKey : [NSNumber numberWithBool:YES],
-        kCellSwitchUserInteractionEnabledKey : [NSNumber numberWithBool:isPluginSwitchesEnavled]
+        kCellSwitchUserInteractionEnabledKey : [NSNumber numberWithBool:isPluginSwitchesEnabled]
     }];
     [heightMapSection addRowFromDictionary:@{
         kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
         kCellKeyKey : kDisableVertexHillshade,
         kCellTitleKey : OALocalizedString(@"disable_vertex_hillshade_3d"),
-        kCellSwitchIsOnKey : [NSNumber numberWithBool:[_plugin.disableVertexHillshade3D get]],
+        kCellSwitchIsOnKey : [NSNumber numberWithBool:isPluginSwitchesEnabled ? [_plugin.disableVertexHillshade3D get] : NO],
         kCellSwitchEnabledKey : [NSNumber numberWithBool:YES],
-        kCellSwitchUserInteractionEnabledKey : [NSNumber numberWithBool:isPluginSwitchesEnavled]
+        kCellSwitchUserInteractionEnabledKey : [NSNumber numberWithBool:isPluginSwitchesEnabled]
     }];
     [heightMapSection addRowFromDictionary:@{
         kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
         kCellKeyKey : kGenerateSlopeKey,
         kCellTitleKey : OALocalizedString(@"generate_slope_from_3d_maps"),
-        kCellSwitchIsOnKey : [NSNumber numberWithBool:[_plugin.generateSlopeFrom3DMaps get]],
+        kCellSwitchIsOnKey : [NSNumber numberWithBool:isPluginSwitchesEnabled ? [_plugin.generateSlopeFrom3DMaps get] : NO],
         kCellSwitchEnabledKey : [NSNumber numberWithBool:YES],
-        kCellSwitchUserInteractionEnabledKey : [NSNumber numberWithBool:isPluginSwitchesEnavled]
+        kCellSwitchUserInteractionEnabledKey : [NSNumber numberWithBool:isPluginSwitchesEnabled]
     }];
     [heightMapSection addRowFromDictionary:@{
         kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
         kCellKeyKey : kGenerateHillshadeKey,
         kCellTitleKey : OALocalizedString(@"generate_hillshade_from_3d_maps"),
-        kCellSwitchIsOnKey : [NSNumber numberWithBool:[_plugin.generateHillshadeFrom3DMaps get]],
+        kCellSwitchIsOnKey : [NSNumber numberWithBool:isPluginSwitchesEnabled ? [_plugin.generateHillshadeFrom3DMaps get] : NO],
         kCellSwitchEnabledKey : [NSNumber numberWithBool:YES],
-        kCellSwitchUserInteractionEnabledKey : [NSNumber numberWithBool:isPluginSwitchesEnavled]
+        kCellSwitchUserInteractionEnabledKey : [NSNumber numberWithBool:isPluginSwitchesEnabled]
     }];
     [_data addSection:heightMapSection];
 }

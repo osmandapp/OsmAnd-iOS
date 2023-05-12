@@ -21,8 +21,8 @@
 @protocol OsmAndAppProtocol <NSObject>
 @required
 
-- (BOOL)initialize;
-- (void)shutdown;
+- (BOOL) initialize;
+- (void) shutdown;
 
 @property(nonatomic, readonly) NSString* dataPath;
 @property(nonatomic, readonly) NSString* documentsPath;
@@ -96,7 +96,7 @@
 
 @property(readonly) BOOL isRepositoryUpdating;
 
-- (void)startRepositoryUpdateAsync:(BOOL)async;
+- (void) startRepositoryUpdateAsync:(BOOL)async;
 
 - (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force;
 - (void) stopNavigation;
@@ -105,8 +105,8 @@
 - (void) showToastMessage:(NSString *)message;
 - (void) showShortToastMessage:(NSString *)message;
 
-- (void)checkAndDownloadOsmAndLiveUpdates;
-- (void)checkAndDownloadWeatherForecastsUpdates;
+- (void) checkAndDownloadOsmAndLiveUpdates;
+- (void) checkAndDownloadWeatherForecastsUpdates;
 
 - (void) loadRoutingFiles;
 

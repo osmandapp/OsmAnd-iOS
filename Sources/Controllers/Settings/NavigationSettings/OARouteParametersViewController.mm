@@ -174,7 +174,7 @@
          @"key" : @"reverseDir",
          @"title" : OALocalizedString(@"recalculate_wrong_dir"),
          @"icon" : @"ic_custom_reverse_direction",
-         @"value" : @([_settings.disableWrongDirectionRecalc get:self.appMode]),
+         @"value" : @(![_settings.disableWrongDirectionRecalc get:self.appMode]),
          @"type" : [OASwitchTableViewCell getCellIdentifier] }
      ];
     
@@ -541,7 +541,7 @@
         BOOL isChecked = ((UISwitch *) sender).on;
         if ([item[@"key"] isEqualToString:@"reverseDir"])
         {
-            [_settings.disableWrongDirectionRecalc set:isChecked mode:self.appMode];
+            [_settings.disableWrongDirectionRecalc set:!isChecked mode:self.appMode];
         }
         else if ([item[@"key"] isEqualToString:@"temp_limitation"])
         {

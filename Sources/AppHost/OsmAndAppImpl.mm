@@ -56,6 +56,7 @@
 #include <OsmAndCore/IWebClient.h>
 #include "OAWebClient.h"
 #include "OAWeatherWebClient.h"
+#include "CoreResourcesFromBundleProvider.h"
 
 #include <CommonCollections.h>
 #include <binaryRead.h>
@@ -90,6 +91,7 @@
 @implementation OsmAndAppImpl
 {
     BOOL _initialized;
+    BOOL _initializedCore;
 
     NSString* _worldMiniBasemapFilename;
 
@@ -153,6 +155,7 @@
     self = [super init];
     if (self)
     {
+        _initializedCore = NO;
         _initialized = NO;
 
         // Get default paths
@@ -301,11 +304,47 @@
         _resourcesManager->rescanUnmanagedStoragePaths(true);
 }
 
+- (BOOL) initializeCore
+{
+    @synchronized (self)
+    {
+        if (_initializedCore)
+        {
+            NSLog(@"OsmAndApp Core already initialized. Finish.");
+            return YES;
+        }
+
+        @try
+        {
+            // Initialize OsmAnd Core
+            NSLog(@"OsmAndApp InitializeCore start");
+            const std::shared_ptr<CoreResourcesFromBundleProvider> coreResourcesFromBundleProvider(new CoreResourcesFromBundleProvider());
+            OsmAnd::InitializeCore(coreResourcesFromBundleProvider);
+            _initializedCore = YES;
+            NSLog(@"OsmAndApp InitializeCore finish");
+            return YES;
+        }
+        @catch (NSException *e)
+        {
+            NSLog(@"Failed to InitializeCore. Reason: %@", e.reason);
+            return NO;
+        }
+    }
+}
+
 - (BOOL) initialize
 {
     @synchronized (self)
     {
-        return [self initializeImpl];
+        @try
+        {
+            return [self initializeImpl];
+        }
+        @catch (NSException *e)
+        {
+            NSLog(@"Failed to initialize OsmAndApp. Reason: %@", e.reason);
+            return NO;
+        }
     }
 }
 

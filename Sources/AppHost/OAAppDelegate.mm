@@ -41,8 +41,6 @@
 #import "OACloudAccountVerificationViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
-#include "CoreResourcesFromBundleProvider.h"
-
 #include <QDir>
 #include <QFile>
 
@@ -64,7 +62,6 @@
     id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol> _app;
     
     UIBackgroundTaskIdentifier _appInitTask;
-    BOOL _coreInitDone;
     BOOL _appInitDone;
     BOOL _appInitializing;
     
@@ -115,11 +112,7 @@
         NSLog(@"OAAppDelegate beginBackgroundTask");
 
         // Initialize OsmAnd core
-        NSLog(@"OAAppDelegate InitializeCore start");
-        const std::shared_ptr<CoreResourcesFromBundleProvider> coreResourcesFromBundleProvider(new CoreResourcesFromBundleProvider());
-        OsmAnd::InitializeCore(coreResourcesFromBundleProvider);
-        _coreInitDone = YES;
-        NSLog(@"OAAppDelegate InitializeCore finish");
+        [_app initializeCore];
 
         // Initialize application in background
         //[_app initialize];

@@ -29,6 +29,8 @@
 #define kCellSwitchEnabledKey @"kCellSwitchEnabledKey"
 #define kCellSwitchUserInteractionEnabledKey @"kCellSwitchUserInteractionEnabledKey"
 
+#define kGeotiffCacheDir @"GEOTIFF_SQLITE_CACHE_DIR"
+
 
 @interface OAOsmandDevelopmentViewController () <OAOsmandDevelopmentSimulateLocationDelegate>
 
@@ -171,6 +173,7 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
     
     if ([item.key isEqualToString:kTestHeightmapKey])
     {
+        [self createGeotiffCacheFolderIfNeeded];
         [_plugin.enableHeightmap set:sender.isOn];
         [self onEnable3DMapsChanged:sender.isOn];
         [self onDisableVertexHillshade3DChanged:sender.isOn];
@@ -199,6 +202,14 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
         [_plugin.generateHillshadeFrom3DMaps set:sender.isOn];
         [self onGenerateHillshadeFrom3DMapsChanged:sender.isOn];
     }
+}
+
+- (void) createGeotiffCacheFolderIfNeeded
+{
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    NSString *path = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:kGeotiffCacheDir];
+    if (![fileManager fileExistsAtPath:path])
+        [fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
 }
 
 - (void) onEnable3DMapsChanged:(BOOL)isOn

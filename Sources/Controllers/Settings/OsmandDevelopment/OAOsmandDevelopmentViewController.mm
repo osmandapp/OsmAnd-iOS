@@ -24,13 +24,11 @@
 #import "OAIAPHelper.h"
 #import "OAProducts.h"
 #import "OARootViewController.h"
+#import "OAIndexConstants.h"
 
 #define kCellSwitchIsOnKey @"kCellSwitchIsOnKey"
 #define kCellSwitchEnabledKey @"kCellSwitchEnabledKey"
 #define kCellSwitchUserInteractionEnabledKey @"kCellSwitchUserInteractionEnabledKey"
-
-#define kGeotiffCacheDir @"GEOTIFF_SQLITE_CACHE_DIR"
-
 
 @interface OAOsmandDevelopmentViewController () <OAOsmandDevelopmentSimulateLocationDelegate>
 
@@ -207,7 +205,7 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
 - (void) createGeotiffCacheFolderIfNeeded
 {
     NSFileManager *fileManager = NSFileManager.defaultManager;
-    NSString *path = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:kGeotiffCacheDir];
+    NSString *path = [_app.cachePath stringByAppendingPathComponent:GEOTIFF_SQLITE_CACHE_DIR] ;
     if (![fileManager fileExistsAtPath:path])
         [fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
 }

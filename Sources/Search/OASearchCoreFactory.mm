@@ -219,10 +219,13 @@
         cityResult.location = [[CLLocation alloc] initWithLatitude:ct.latitude longitude:ct.longitude];
         QString lang = QString::fromNSString([[phrase getSettings] getLang]);
         const auto& r = OsmAndApp.instance.resourcesManager->getLocalResource(QString::fromNSString(res.resourceId));
-        const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(r->metadata);
-        if (obfMetadata)
-            cityResult.localeRelatedObjectName = obfMetadata->obfFile->getRegionName().toNSString();
-        cityResult.relatedResourceId = res.resourceId;
+        if (r)
+        {
+            const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(r->metadata);
+            if (obfMetadata)
+                cityResult.localeRelatedObjectName = obfMetadata->obfFile->getRegionName().toNSString();
+            cityResult.relatedResourceId = res.resourceId;
+        }
         [phrase countUnknownWordsMatchMainResult:cityResult];
         __block BOOL match = NO;
         if (firstUnknownWordMatches)
@@ -382,6 +385,8 @@
             [_townCities addObject:resId];
             QString rId = QString::fromNSString(resId);
             const auto& r = app.resourcesManager->getLocalResource(rId);
+            if (!r)
+                continue;
             const auto dataInterface = obfsCollection->obtainDataInterface({r});
             QList< std::shared_ptr<const OsmAnd::StreetGroup> > l;
             dataInterface->loadStreetGroups(&l, nullptr, OsmAnd::ObfAddressStreetGroupTypesMask().set(OsmAnd::ObfAddressStreetGroupType::CityOrTown));
@@ -518,6 +523,8 @@
             [immediateResults removeAllObjects];
             
             const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
+            if (!r)
+                continue;
             const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(r->metadata);
             if (obfMetadata)
                 currentRegionName = obfMetadata->obfFile->getRegionName().toNSString();
@@ -742,6 +749,8 @@
     {
         currentResId = resId;
         const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
+        if (!r)
+            continue;
         searchCriteria->localResources = {r};
 
         search->performSearch(*searchCriteria,
@@ -1310,6 +1319,8 @@
             rm = [((OACustomSearchPoiFilter *)poiTypeFilter) wrapResultMatcher:rm];
         
         const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
+        if (!r)
+            continue;
         searchCriteria->localResources = {r};
         
         search->performSearch(*searchCriteria,
@@ -1577,26 +1588,29 @@
     if ([OASearchCoreFactory isLastWordCityGroup:phrase])
     {
         const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(phrase.getLastSelectedWord.result.resourceId));
-        const auto& dataInterface = obfsCollection->obtainDataInterface({r});
-        
-        priority = SEARCH_BUILDING_BY_CITY_PRIORITY;
-        const auto& city = ((OACity *)phrase.getLastSelectedWord.result.object).city;
-        bool res = dataInterface->preloadStreets({std::const_pointer_cast<OsmAnd::StreetGroup>(city)}, ctrl);
-        if (res)
+        if (r)
         {
-            const auto& streets = city->streets;
-            if (streets.size() == 1)
+            const auto& dataInterface = obfsCollection->obtainDataInterface({r});
+
+            priority = SEARCH_BUILDING_BY_CITY_PRIORITY;
+            const auto& city = ((OACity *)phrase.getLastSelectedWord.result.object).city;
+            bool res = dataInterface->preloadStreets({std::const_pointer_cast<OsmAnd::StreetGroup>(city)}, ctrl);
+            if (res)
             {
-                s = streets[0];
-            }
-            else
-            {
-                for (const auto& st : streets)
+                const auto& streets = city->streets;
+                if (streets.size() == 1)
                 {
-                    if (st->nativeName == city->nativeName || st->nativeName == (QStringLiteral("<") + city->nativeName + QStringLiteral(">")))
+                    s = streets[0];
+                }
+                else
+                {
+                    for (const auto& st : streets)
                     {
-                        s = st;
-                        break;
+                        if (st->nativeName == city->nativeName || st->nativeName == (QStringLiteral("<") + city->nativeName + QStringLiteral(">")))
+                        {
+                            s = st;
+                            break;
+                        }
                     }
                 }
             }
@@ -1606,23 +1620,25 @@
     if (s)
     {
         NSString *resId = phrase.getLastSelectedWord.result.resourceId;
-        const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
-        const auto& dataInterface = obfsCollection->obtainDataInterface({r});
-        
         if (_cacheBuilding != s)
         {
             _cacheBuilding = s;
             
-            bool res = dataInterface->preloadBuildings({std::const_pointer_cast<OsmAnd::Street>(s)}, ctrl);
-            if (res)
+            const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
+            if (r)
             {
-                const auto& ms = std::const_pointer_cast<OsmAnd::Street>(s);
-                std::sort(ms->buildings, [](const std::shared_ptr<const OsmAnd::Building>& o1, const std::shared_ptr<const OsmAnd::Building>& o2)
+                const auto& dataInterface = obfsCollection->obtainDataInterface({r});
+                bool res = dataInterface->preloadBuildings({std::const_pointer_cast<OsmAnd::Street>(s)}, ctrl);
+                if (res)
                 {
-                    int i1 = OsmAnd::Utilities::extractFirstInteger(o1->nativeName);
-                    int i2 = OsmAnd::Utilities::extractFirstInteger(o2->nativeName);
-                    return i1 < i2;
-                });
+                    const auto& ms = std::const_pointer_cast<OsmAnd::Street>(s);
+                    std::sort(ms->buildings, [](const std::shared_ptr<const OsmAnd::Building>& o1, const std::shared_ptr<const OsmAnd::Building>& o2)
+                              {
+                        int i1 = OsmAnd::Utilities::extractFirstInteger(o1->nativeName);
+                        int i2 = OsmAnd::Utilities::extractFirstInteger(o2->nativeName);
+                        return i1 < i2;
+                    });
+                }
             }
         }
         QString lw = QString::fromNSString([phrase getUnknownWordToSearchBuilding]);
@@ -1760,8 +1776,11 @@
         {
             const auto& obfsCollection = app.resourcesManager->obfsCollection;
             const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(sw.result.resourceId));
-            const auto& dataInterface = obfsCollection->obtainDataInterface({r});
-            dataInterface->preloadStreets({std::const_pointer_cast<OsmAnd::StreetGroup>(c)});
+            if (r)
+            {
+                const auto& dataInterface = obfsCollection->obtainDataInterface({r});
+                dataInterface->preloadStreets({std::const_pointer_cast<OsmAnd::StreetGroup>(c)});
+            }
         }
         
         int limit = 0;

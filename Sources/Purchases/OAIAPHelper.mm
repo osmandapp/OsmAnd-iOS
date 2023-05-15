@@ -1775,12 +1775,7 @@ static OASubscriptionState *EXPIRED;
             stateHolder.startTime = [subObj[@"start_time"] integerValue] / 1000;
             stateHolder.expireTime = [subObj[@"expire_time"] integerValue] / 1000;
             stateHolder.origin = [self getSubscriptionOriginBySku:sku];
-            EOASubscriptionDuration periodUnit = EOASubscriptionDurationUndefined;
-            if (stateHolder.origin == EOASubscriptionOriginPromo || [sku containsString:@"annual"])
-                periodUnit = EOASubscriptionDurationYearly;
-            else if ([sku containsString:@"monthly"])
-                periodUnit = EOASubscriptionDurationMonthly;
-            stateHolder.duration = periodUnit;
+            stateHolder.duration = [self getSubscriptionDurationBySku:sku origin:stateHolder.origin startTime:stateHolder.startTime expireTime:stateHolder.expireTime];
             subscriptionStateMap[sku] = stateHolder;
         }
     }
@@ -1791,6 +1786,8 @@ static OASubscriptionState *EXPIRED;
 {
     if ([sku isEqualToString:@"promo_website"])
         return EOASubscriptionOriginPromo;
+    else if ([sku.lowerCase hasPrefix:@"promo_"])
+        return EOASubscriptionOriginPromo;
     else if ([sku.lowerCase hasPrefix:@"osmand_pro_"])
         return EOASubscriptionOriginAndroid;
     else if ([sku.lowerCase hasPrefix:@"net.osmand.maps.subscription.pro"])
@@ -1800,6 +1797,32 @@ static OASubscriptionState *EXPIRED;
     else if ([sku.lowerCase containsString:@".amazon.pro"])
         return EOASubscriptionOriginAmazon;
     return EOASubscriptionOriginUndefined;
+}
+
+- (EOASubscriptionDuration) getSubscriptionDurationBySku:(NSString *)sku origin:(EOASubscriptionOrigin)origin startTime:(long)startTime expireTime:(long)expireTime
+{
+    EOASubscriptionDuration periodUnit = EOASubscriptionDurationUndefined;
+    if (origin == EOASubscriptionOriginPromo)
+    {
+        double duration = ((double)expireTime - startTime) / (60.0 * 60.0 * 24.0);
+		if (duration > 360)
+            periodUnit = EOASubscriptionDurationYearly;
+		else if (duration > 180)
+            periodUnit = EOASubscriptionDuration6Months;
+        else if (duration > 90)
+            periodUnit = EOASubscriptionDuration3Months;
+        else
+            periodUnit = EOASubscriptionDurationMonthly;
+    }
+    else if ([sku containsString:@"annual"])
+    {
+        periodUnit = EOASubscriptionDurationYearly;
+    }
+    else if ([sku containsString:@"monthly"])
+    {
+        periodUnit = EOASubscriptionDurationMonthly;
+    }
+    return periodUnit;
 }
 
 - (NSString *) getOrderIdByDeviceIdAndToken

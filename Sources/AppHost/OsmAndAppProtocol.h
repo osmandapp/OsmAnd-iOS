@@ -22,6 +22,7 @@
 @required
 
 - (BOOL) initialize;
+- (BOOL) initializeCore;
 - (void) shutdown;
 
 @property(nonatomic, readonly) NSString* dataPath;

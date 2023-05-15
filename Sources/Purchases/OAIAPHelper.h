@@ -53,7 +53,9 @@ typedef NS_ENUM(NSInteger, EOASubscriptionOrigin) {
 typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
     EOASubscriptionDurationUndefined = -1,
     EOASubscriptionDurationMonthly,
-    EOASubscriptionDurationYearly
+    EOASubscriptionDurationYearly,
+    EOASubscriptionDuration6Months,
+    EOASubscriptionDuration3Months
 };
 
 @interface OASubscriptionStateHolder : NSObject

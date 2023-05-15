@@ -26,8 +26,10 @@
 
 - (void) main
 {
-    [_app initialize];
-    [self performUpdatesCheck];
+    if ([_app initializeCore] && [_app initialize])
+    {
+        [self performUpdatesCheck];
+    }
 }
 
 - (void) performUpdatesCheck

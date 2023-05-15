@@ -1691,7 +1691,7 @@ static BOOL _repositoryUpdated = NO;
             item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
             item.worldRegion = region;
             auto localResource = _app.resourcesManager->getLocalResource(item.resourceId);
-            if (localResource != nullptr)
+            if (localResource)
             {
                 NSString *localResourcePath = localResource->localPath.toNSString();
                 item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];

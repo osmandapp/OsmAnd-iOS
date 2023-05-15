@@ -223,6 +223,10 @@
 
 - (OAResourceItem *)createLocalResourceItem:(OAWorldRegion *)region resource:(const std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> &)resource
 {
+    const auto localResource = self.app.resourcesManager->getLocalResource(resource->id);
+    if (!localResource)
+        return nil;
+
     OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
     item.resourceId = resource->id;
     item.resourceType = resource->type;
@@ -230,12 +234,10 @@
                                              inRegion:region
                                        withRegionName:YES
                                      withResourceType:NO];
-    item.resource = self.app.resourcesManager->getLocalResource(resource->id);
     item.downloadTask = [[self.app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
     item.size = resource->size;
     item.worldRegion = region;
 
-    const auto localResource = self.app.resourcesManager->getLocalResource(resource->id);
     item.resource = localResource;
     item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
 
@@ -253,7 +255,6 @@
                                                  inRegion:region
                                            withRegionName:YES
                                          withResourceType:NO];
-        item.resource = self.app.resourcesManager->getLocalResource(resource->id);
         item.downloadTask = [[self.app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
         item.size = resource->size;
         item.worldRegion = region;
@@ -336,7 +337,8 @@
         {
             OAWorldRegion *largestRegion = regions.firstObject;
             OAResourceItem *item = [self createLocalResourceItem:largestRegion resource:externalMaps.back()];
-            [objectsToAdd addObject:[[OADownloadMapObject alloc] initWithWorldRegion:largestRegion indexItem:item]];
+            if (item)
+            	[objectsToAdd addObject:[[OADownloadMapObject alloc] initWithWorldRegion:largestRegion indexItem:item]];
         }
         [dataObjects addObjectsFromArray:objectsToAdd];
     }

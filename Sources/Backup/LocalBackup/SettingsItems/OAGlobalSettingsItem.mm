@@ -100,7 +100,7 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
         if (nonexistentAppModesKeys.count != 0)
             [appModesKeys removeObjectsInArray:nonexistentAppModesKeys];
 
-        value = [appModesKeys componentsJoinedByString:@","];
+        value = [[appModesKeys componentsJoinedByString:@","] stringByAppendingString:@","];
     }
     else if ([key isEqualToString:@"enabled_plugins"] && [[OAAppSettings sharedManager] getGlobalPreference:key].shared)
     {

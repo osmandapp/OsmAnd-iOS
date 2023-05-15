@@ -112,7 +112,7 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
     
     OATableSectionData *heightMapSection = [OATableSectionData sectionData];
     heightMapSection.headerText = OALocalizedString(@"download_heightmap_maps");
-    BOOL isPluginSwitchesEnabled = [OAIAPHelper isOsmAndProAvailable];
+    BOOL isPluginSwitchesEnabled = [OAIAPHelper isOsmAndProAvailable] && [_plugin.enableHeightmap get];
     
     [heightMapSection addRowFromDictionary:@{
         kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
@@ -127,7 +127,7 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
         kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
         kCellKeyKey : kUse3dReliefHeightmapsKey,
         kCellTitleKey : OALocalizedString(@"use_heightmap_setting"),
-        kCellSwitchIsOnKey : [NSNumber numberWithBool:isPluginSwitchesEnabled ? [_plugin.enable3DMaps get] : NO],
+        kCellSwitchIsOnKey : [NSNumber numberWithBool:[_plugin.enable3DMaps get]],
         kCellSwitchEnabledKey : [NSNumber numberWithBool:YES],
         kCellSwitchUserInteractionEnabledKey : [NSNumber numberWithBool:isPluginSwitchesEnabled]
     }];
@@ -135,7 +135,7 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
         kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
         kCellKeyKey : kDisableVertexHillshade,
         kCellTitleKey : OALocalizedString(@"disable_vertex_hillshade_3d"),
-        kCellSwitchIsOnKey : [NSNumber numberWithBool:isPluginSwitchesEnabled ? [_plugin.disableVertexHillshade3D get] : NO],
+        kCellSwitchIsOnKey : [NSNumber numberWithBool:[_plugin.disableVertexHillshade3D get]],
         kCellSwitchEnabledKey : [NSNumber numberWithBool:YES],
         kCellSwitchUserInteractionEnabledKey : [NSNumber numberWithBool:isPluginSwitchesEnabled]
     }];
@@ -143,7 +143,7 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
         kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
         kCellKeyKey : kGenerateSlopeKey,
         kCellTitleKey : OALocalizedString(@"generate_slope_from_3d_maps"),
-        kCellSwitchIsOnKey : [NSNumber numberWithBool:isPluginSwitchesEnabled ? [_plugin.generateSlopeFrom3DMaps get] : NO],
+        kCellSwitchIsOnKey : [NSNumber numberWithBool:[_plugin.generateSlopeFrom3DMaps get]],
         kCellSwitchEnabledKey : [NSNumber numberWithBool:YES],
         kCellSwitchUserInteractionEnabledKey : [NSNumber numberWithBool:isPluginSwitchesEnabled]
     }];
@@ -151,7 +151,7 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
         kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
         kCellKeyKey : kGenerateHillshadeKey,
         kCellTitleKey : OALocalizedString(@"generate_hillshade_from_3d_maps"),
-        kCellSwitchIsOnKey : [NSNumber numberWithBool:isPluginSwitchesEnabled ? [_plugin.generateHillshadeFrom3DMaps get] : NO],
+        kCellSwitchIsOnKey : [NSNumber numberWithBool:[_plugin.generateHillshadeFrom3DMaps get]],
         kCellSwitchEnabledKey : [NSNumber numberWithBool:YES],
         kCellSwitchUserInteractionEnabledKey : [NSNumber numberWithBool:isPluginSwitchesEnabled]
     }];
@@ -172,10 +172,6 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
     if ([item.key isEqualToString:kTestHeightmapKey])
     {
         [_plugin.enableHeightmap set:sender.isOn];
-        [_plugin.enable3DMaps set:sender.isOn];
-        [_plugin.disableVertexHillshade3D set:sender.isOn];
-        [_plugin.generateSlopeFrom3DMaps set:sender.isOn];
-        [_plugin.generateHillshadeFrom3DMaps set:sender.isOn];
         [self onEnable3DMapsChanged:sender.isOn];
         [self onDisableVertexHillshade3DChanged:sender.isOn];
         [self onGenerateSlopeFrom3DMapsChanged:sender.isOn];
@@ -302,6 +298,7 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
             
             cell.titleLabel.textColor = [item boolForKey:kCellSwitchUserInteractionEnabledKey] ? UIColor.blackColor : UIColorFromRGB(color_bottom_sheet_secondary);
             cell.titleLabel.text = item.title;
+            cell.switchView.onTintColor = [item boolForKey:kCellSwitchUserInteractionEnabledKey] ? UIColorFromRGB(color_uiswitch_on_day) : UIColorFromRGB(color_footer_icon_gray);
             cell.switchView.on = [item boolForKey:kCellSwitchIsOnKey];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];

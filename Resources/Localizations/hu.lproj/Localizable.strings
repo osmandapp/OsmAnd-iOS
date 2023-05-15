@@ -467,15 +467,15 @@
 "towards" = "erre:";
 "route_roundabout" = "Körforgalom: hajtson ki a(z) %d kijáraton és haladjon tovább itt:";
 "route_roundabout_short" = "Hajtson ki a(z) %d kijáraton, és haladjon tovább itt:";
-"route_kl" = "Tartson balra,és haladjon tovább itt:";
-"route_kr" = "Tartson jobbra,és haladjon tovább itt:";
-"route_tr" = "Forduljon jobbra,és haladjon tovább itt:";
-"route_tshr" = "Forduljonélesen jobbra, és haladjon tovább itt:";
-"route_tslr" = "Forduljon enyhén jobbra, és haladjon tovább itt:";
+"route_kl" = "Tartson balra, és haladjon tovább ezen:";
+"route_kr" = "Tartson jobbra, és haladjon tovább ezen:";
+"route_tr" = "Forduljon jobbra, és haladjon tovább ezen:";
+"route_tshr" = "Forduljon élesen jobbra, és haladjon tovább ezen:";
+"route_tslr" = "Forduljon enyhén jobbra, és haladjon tovább ezen:";
 "route_tl" = "Forduljon balra,és haladjon tovább itt:";
 "route_tshl" = "Forduljonélesen balra, és haladjon tovább itt:";
-"route_tsll" = "Forduljon enyhén balra, és haladjon tovább itt:";
-"route_tu" = "Forduljon meg, és haladjon tovább itt:";
+"route_tsll" = "Forduljon enyhén balra, és haladjon tovább ezen:";
+"route_tu" = "Forduljon meg, és haladjon tovább ezen:";
 "route_head" = "Előre";
 "looking_up_address" = "Cím keresése";
 "no_address_found" = "Ismeretlen cím";
@@ -2359,3 +2359,4 @@
 "speed_camera_pois" = "Traffipax POI-k";
 "uninstall_speed_cameras" = "Traffipaxok eltávolítása";
 "icon_group_service" = "Szolgáltatás";
+"announce_when_exceeded" = "Bemondás túllépéskor";

@@ -94,7 +94,9 @@
         }
         else
         {
-            [OAWikiArticleHelper showHowToOpenWikiAlert:repository url:_url];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [OAWikiArticleHelper showHowToOpenWikiAlert:repository url:_url];
+            });
         }
     }
     return results;

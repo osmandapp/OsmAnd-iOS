@@ -58,6 +58,9 @@ typedef enum : NSUInteger {
     BOOL _productsRequestWithProgress;
     BOOL _productsRequestReload;
     BOOL _restoringPurchases;
+
+    BOOL _isSearchScreenOpened;
+    BOOL _isNavigationScreenOpened;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -73,7 +76,9 @@ typedef enum : NSUInteger {
 - (void) commonInit
 {
     _iapHelper = [OAIAPHelper sharedInstance];
-    
+    _keyCommandUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                          withHandler:@selector(onKeyCommandUpdate:withKey:)];
+
     // Create panels:
     [self setLeftPanel:[[OAOptionsPanelBlackViewController alloc] initWithNibName:@"OptionsPanel" bundle:nil]];
     [self setCenterPanel:[[OAMapPanelViewController alloc] init]];
@@ -841,6 +846,22 @@ typedef enum : NSUInteger {
     return YES;
 }
 
+- (void)onKeyCommandUpdate:(id<OAObservableProtocol>)observer withKey:(id)key
+{
+    if ([key isKindOfClass:NSString.class])
+    {
+        NSString *kKey = (NSString *) key;
+        if ([kKey isEqualToString:kCommandSearchScreenOpen])
+            _isSearchScreenOpened = YES;
+        else if ([kKey isEqualToString:kCommandSearchScreenClose])
+            _isSearchScreenOpened = NO;
+        else if ([kKey isEqualToString:kCommandNavigationScreenOpen])
+            _isNavigationScreenOpened = YES;
+        else if ([kKey isEqualToString:kCommandNavigationScreenClose])
+            _isNavigationScreenOpened = NO;
+    }
+}
+
 - (NSArray *) keyCommands
 {
     return @[[UIKeyCommand keyCommandWithInput:UIKeyInputDownArrow modifierFlags:0 action:@selector(panDown)],
@@ -871,13 +892,19 @@ typedef enum : NSUInteger {
 - (void) showRouteInfo
 {
     if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
-        [self.mapPanel showRouteInfo];
+    {
+        if (!_isNavigationScreenOpened)
+            [self.mapPanel showRouteInfo];
+    }
 }
 
 - (void) openSearch
 {
     if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
-        [self.mapPanel openSearch];
+    {
+        if (!_isSearchScreenOpened && !_isNavigationScreenOpened)
+            [self.mapPanel openSearch];
+    }
 }
 
 - (void) panUp

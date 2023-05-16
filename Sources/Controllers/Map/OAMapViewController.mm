@@ -55,6 +55,7 @@
 #import "OAMapRendererEnvironment.h"
 #import "OAMapPresentationEnvironment.h"
 #import "OAWeatherHelper.h"
+#import "OAGPXAppearanceCollection.h"
 
 #import "OARoutingHelper.h"
 #import "OATransportRoutingHelper.h"
@@ -2132,6 +2133,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
             return;
         }
 
+        [[OAGPXAppearanceCollection sharedInstance] generateAvailableColors];
         [_mapLayers updateLayers];
 
         if (!_gpxDocFileTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)

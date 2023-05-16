@@ -9,19 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "OAGPXDatabase.h"
 
+@class OAColorItem;
+
 @interface OAGPXTrackAppearance : NSObject
 
 @property (nonatomic) NSString *key;
 @property (nonatomic) NSString *title;
-
-@end
-
-@interface OAGPXTrackColor : OAGPXTrackAppearance
-
-@property (nonatomic) UIColor *color;
-@property (nonatomic) NSInteger colorValue;
-
-- (instancetype)initWithKey:(NSString *)key value:(NSInteger)value;
 
 @end
 
@@ -57,12 +50,23 @@
 
 @interface OAGPXAppearanceCollection : NSObject
 
-- (NSArray<OAGPXTrackColor *> *)getAvailableColors;
-- (NSArray<OAGPXTrackWidth *> *)getAvailableWidth;
-- (NSArray<OAGPXTrackSplitInterval *> *)getAvailableSplitIntervals;
++ (OAGPXAppearanceCollection *)sharedInstance;
 
-- (OAGPXTrackColor *)getColorForValue:(NSInteger)value;
+- (void)generateAvailableColors;
+- (void)changeColor:(OAColorItem *)colorItem newColor:(UIColor *)newColor;
+- (void)addNewSelectedColor:(UIColor *)newColor;
+- (void)duplicateColor:(OAColorItem *)colorItem;
+- (void)deleteColor:(OAColorItem *)colorItem;
+- (void)selectColor:(OAColorItem *)colorItem toGpxFilePath:(NSString *)gpxFilePath;
+- (NSArray<OAColorItem *> *)getAvailableColorsSortingByKey;
+- (NSArray<OAColorItem *> *)getAvailableColorsSortingByLastUsed;
+- (void)removeGpxFilePath:(NSString *)gpxFilePath;
+- (OAColorItem *)getColorForGpxFilePath:(NSString *)gpxFilePath defaultValue:(NSInteger)defaultValue;
+
+- (NSArray<OAGPXTrackWidth *> *)getAvailableWidth;
 - (OAGPXTrackWidth *)getWidthForValue:(NSString *)value;
+
+- (NSArray<OAGPXTrackSplitInterval *> *)getAvailableSplitIntervals;
 - (OAGPXTrackSplitInterval *)getSplitIntervalForType:(EOAGpxSplitType)type;
 
 @end

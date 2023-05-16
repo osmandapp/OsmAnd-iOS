@@ -708,6 +708,13 @@
 "shared_string_keep_active" = "Keep active";
 "shared_string_history" = "History";
 "shared_string_external" = "External";
+"shared_string_coloring" = "Coloring";
+"shared_string_all_colors" = "All colors";
+"shared_string_add_color" = "Add color";
+"shared_string_edit_color" = "Edit color";
+"shared_string_duplicate_color" = "Duplicate color";
+"shared_string_delete_color" = "Delete color";
+"shared_string_duplicate" = "Duplicate";
 
 "restart" = "Restart";
 
@@ -728,6 +735,7 @@
 "map_update_warning" = "Do you want to reload tile data from the Internet?";
 "without_permission_my_position_value" = "OsmAnd doesn't have location permission";
 "with_permission_my_position_value" = "Move map to current location";
+"shared_string_location_unknown" = "Location unknown";
 
 // HUD
 "hud_heading" = "Heading";
@@ -1739,7 +1747,7 @@
 "quick_action_showhide_mapillary_descr" = "A toggle to show or hide the Mapillary layer on the map.";
 "quick_action_mapillary_hide" = "Hide Mapillary";
 "quick_action_mapillary_show" = "Show Mapillary";
-"quick_action_remove_next_destination" = "Delete nearest destination point";
+"quick_action_remove_next_destination" = "Delete next destination point";
 "quick_action_remove_next_destination_descr" = "Deletes the next destination on your route. If that is the final destination, the navigation will stop.";
 "change_application_profile" = "Change app profile";
 "select_application_profile" = "Select application profile";

@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class CPInterfaceController, CPListItem, CPListTemplate, CPListSection;
+@class CPInterfaceController, CPListItem, CPListTemplate, CPListSection, OAPointDescription;
 
 API_AVAILABLE(ios(12.0))
 @interface OABaseCarPlayInterfaceController : NSObject
@@ -22,7 +22,7 @@ API_AVAILABLE(ios(12.0))
 
 - (void) present;
 
-- (void) startNavigationGivenLocation:(CLLocation *)loc;
+- (void) startNavigationGivenLocation:(CLLocation *)loc historyName:(OAPointDescription *)historyName;
 
 - (NSArray<CPListSection *> *) generateSingleItemSectionWithTitle:(NSString *)title;
 

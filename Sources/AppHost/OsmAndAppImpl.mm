@@ -56,6 +56,7 @@
 #include <OsmAndCore/IWebClient.h>
 #include "OAWebClient.h"
 #include "OAWeatherWebClient.h"
+#include "CoreResourcesFromBundleProvider.h"
 
 #include <CommonCollections.h>
 #include <binaryRead.h>
@@ -89,6 +90,9 @@
 #define _(name)
 @implementation OsmAndAppImpl
 {
+    BOOL _initialized;
+    BOOL _initializedCore;
+
     NSString* _worldMiniBasemapFilename;
 
     OAMapMode _mapMode;
@@ -146,11 +150,14 @@
 
 @synthesize carPlayActive = _carPlayActive;
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super init];
     if (self)
     {
+        _initializedCore = NO;
+        _initialized = NO;
+
         // Get default paths
         _dataPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
         _dataDir = QDir(QString::fromNSString(_dataPath));
@@ -191,7 +198,7 @@
     return self;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
     _resourcesManager->localResourcesChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
     _resourcesManager->repositoryUpdateObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
@@ -287,7 +294,8 @@
     OpeningHoursParser::runTestAmPmArabic();
 }
 
-- (void)migrateResourcesToDocumentsIfNeeded {
+- (void) migrateResourcesToDocumentsIfNeeded
+{
     BOOL movedRes = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:RESOURCES_DIR] toDest:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
     BOOL movedSqlite = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR]];
     if (movedRes)
@@ -296,18 +304,59 @@
         _resourcesManager->rescanUnmanagedStoragePaths(true);
 }
 
+- (BOOL) initializeCore
+{
+    @synchronized (self)
+    {
+        if (_initializedCore)
+        {
+            NSLog(@"OsmAndApp Core already initialized. Finish.");
+            return YES;
+        }
+
+        @try
+        {
+            // Initialize OsmAnd Core
+            NSLog(@"OsmAndApp InitializeCore start");
+            const std::shared_ptr<CoreResourcesFromBundleProvider> coreResourcesFromBundleProvider(new CoreResourcesFromBundleProvider());
+            OsmAnd::InitializeCore(coreResourcesFromBundleProvider);
+            _initializedCore = YES;
+            NSLog(@"OsmAndApp InitializeCore finish");
+            return YES;
+        }
+        @catch (NSException *e)
+        {
+            NSLog(@"Failed to InitializeCore. Reason: %@", e.reason);
+            return NO;
+        }
+    }
+}
+
 - (BOOL) initialize
 {
-    [AFNetworkReachabilityManager.sharedManager startMonitoring];
-    [AFNetworkReachabilityManager.sharedManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-        [NSNotificationCenter.defaultCenter postNotificationName:kReachabilityChangedNotification object:nil];
-
-        if (status == AFNetworkReachabilityStatusReachableViaWWAN || status == AFNetworkReachabilityStatusReachableViaWiFi)
+    @synchronized (self)
+    {
+        @try
         {
-            [self checkAndDownloadOsmAndLiveUpdates];
-            [self checkAndDownloadWeatherForecastsUpdates];
+            return [self initializeImpl];
         }
-    }];
+        @catch (NSException *e)
+        {
+            NSLog(@"Failed to initialize OsmAndApp. Reason: %@", e.reason);
+            return NO;
+        }
+    }
+}
+
+- (BOOL) initializeImpl
+{
+    NSLog(@"OsmAndApp initialize start (%@)", [NSThread isMainThread] ? @"Main thread" : @"Background thread");
+    if (_initialized)
+    {
+        NSLog(@"OsmAndApp already initialized. Finish.");
+        return YES;
+    }
+
     NSError* versionError = nil;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -666,8 +715,9 @@
     OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
     [helper reloadAllPoiFilters];
     [helper loadSelectedPoiFilters];
-    [self askReview];
-    
+
+    _initialized = YES;
+    NSLog(@"OsmAndApp initialize finish");
     return YES;
 }
 
@@ -804,23 +854,6 @@
         _defaultRenderer = std::make_shared<OsmAnd::MapPresentationEnvironment>(resolvedMapStyle);
     }
     return _defaultRenderer;
-}
-
-- (void) askReview
-{
-    NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
-    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-    double appInstalledTime = [settings doubleForKey:kAppInstalledDate];
-    int appInstalledDays = (int)((currentTime - appInstalledTime) / (24 * 60 * 60));
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    BOOL isReviewed = [userDefaults boolForKey:@"isReviewed"];
-    if (appInstalledDays < 15 || appInstalledDays > 45)
-        return;
-    if (!isReviewed)
-    {
-        [SKStoreReviewController requestReview];
-        [userDefaults setBool:true forKey:@"isReviewed"];
-    }
 }
 
 - (void) clearUnsupportedTilesCache
@@ -990,25 +1023,36 @@
 }
 
 
-- (void)checkAndDownloadOsmAndLiveUpdates
+- (void) checkAndDownloadOsmAndLiveUpdates
 {
     if (!AFNetworkReachabilityManager.sharedManager.isReachable)
         return;
-    QList<std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdate> > updates;
-    for (const auto& localResource : _resourcesManager->getLocalResources())
+
+    @synchronized (self)
     {
-        [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(localResource->id).remove(QStringLiteral(".obf")) resourcesManager:_resourcesManager];
+        NSLog(@"Prepare checkAndDownloadOsmAndLiveUpdates start");
+        QList<std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdate> > updates;
+        for (const auto& localResource : _resourcesManager->getLocalResources())
+        {
+            [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(localResource->id).remove(QStringLiteral(".obf")) resourcesManager:_resourcesManager];
+        }
+        NSLog(@"Prepare checkAndDownloadOsmAndLiveUpdates finish");
     }
 }
 
-- (void)checkAndDownloadWeatherForecastsUpdates
+- (void) checkAndDownloadWeatherForecastsUpdates
 {
     if (!AFNetworkReachabilityManager.sharedManager.isReachable)
         return;
 
-    OAWeatherHelper *weatherHelper = [OAWeatherHelper sharedInstance];
-    NSArray<NSString *> *regionIds = [weatherHelper getTempForecastsWithDownloadStates:@[@(EOAWeatherForecastDownloadStateFinished)]];
-    [weatherHelper checkAndDownloadForecastsByRegionIds:regionIds];
+    @synchronized (self)
+    {
+        NSLog(@"Prepare checkAndDownloadWeatherForecastsUpdates start");
+        OAWeatherHelper *weatherHelper = [OAWeatherHelper sharedInstance];
+        NSArray<NSString *> *regionIds = [weatherHelper getTempForecastsWithDownloadStates:@[@(EOAWeatherForecastDownloadStateFinished)]];
+        [weatherHelper checkAndDownloadForecastsByRegionIds:regionIds];
+        NSLog(@"Prepare checkAndDownloadWeatherForecastsUpdates finish");
+    }
 }
 
 - (BOOL) installTestResource:(NSString *)filePath

@@ -114,7 +114,7 @@
     }
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.appearanceCollection = [[OAGPXAppearanceCollection alloc] init];
+        self.appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     });
 
     return YES;

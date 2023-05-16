@@ -35,7 +35,7 @@
 
 #define DEFAULT_GPS_TOLERANCE 12
 #define POSITION_TOLERANCE 60
-#define ALLOWED_DEVIATION 2
+#define POS_TOLERANCE_DEVIATION_MULTIPLIER 2
 #define RECALCULATE_THRESHOLD_COUNT_CAUSING_FULL_RECALCULATE 3
 #define RECALCULATE_THRESHOLD_CAUSING_FULL_RECALCULATE_INTERVAL 2 * 60
 
@@ -1038,7 +1038,7 @@ static BOOL _isDeviatedFromRoute = false;
             int currentRoute = _route.currentRoute;
             
             double allowableDeviation = _route.routeRecalcDistance;
-            if (allowableDeviation == 0)
+            if (allowableDeviation <= 0)
                 allowableDeviation = [self.class getDefaultAllowedDeviation:_route.appMode posTolerance:posTolerance];
             
             // 2. Analyze if we need to recalculate route
@@ -1050,7 +1050,7 @@ static BOOL _isDeviatedFromRoute = false;
                 {
                     NSLog(@"Recalculate route, because correlation  : %f", distOrth);
                     _isDeviatedFromRoute = true;
-                    calculateRoute = true;
+                    calculateRoute = ![_settings.disableOffrouteRecalc get];
                 }
             }
             // 3. Identify wrong movement direction
@@ -1059,7 +1059,7 @@ static BOOL _isDeviatedFromRoute = false;
             BOOL isStraight = _route.routeProvider == DIRECT_TO || _route.routeProvider == STRAIGHT;
             BOOL wrongMovementDirection = [self checkWrongMovementDirection:currentLocation prevRouteLocation:prev nextRouteLocation:next];
             if (allowableDeviation > 0 && wrongMovementDirection && !isStraight
-                && ([currentLocation distanceFromLocation:routeNodes[currentRoute]] > allowableDeviation) && ![_settings.disableWrongDirectionRecalc get:_mode])
+                && ([currentLocation distanceFromLocation:routeNodes[currentRoute]] > allowableDeviation) && ![_settings.disableWrongDirectionRecalc get])
             {
                 NSLog(@"Recalculate route, because wrong movement direction: %f", [currentLocation distanceFromLocation:routeNodes[currentRoute]]);
                 _isDeviatedFromRoute = true;
@@ -1071,27 +1071,23 @@ static BOOL _isDeviatedFromRoute = false;
             
             // 5. Update Voice router
             // Do not update in route planning mode
+            BOOL inRecalc = calculateRoute || [self isRouteBeingCalculated];
             if (_isFollowingMode)
             {
-                BOOL inRecalc = calculateRoute || [self isRouteBeingCalculated];
                 if (!inRecalc && !wrongMovementDirection)
                 {
                     [_voiceRouter updateStatus:currentLocation repeat:false];
                     _voiceRouterStopped = false;
                 }
-                else if (_isDeviatedFromRoute && !_voiceRouterStopped && ![_settings.disableOffrouteRecalc get:_mode])
+                else if (_isDeviatedFromRoute && !_voiceRouterStopped)
                 {
                     [_voiceRouter interruptRouteCommands];
                     _voiceRouterStopped = true; // Prevents excessive execution of stop() code
                 }
-                if (distOrth > _mode.getOffRouteDistance * ARRIVAL_DISTANCE_FACTOR && ![_settings.disableOffrouteRecalc get:_mode])
-                {
-                    [_voiceRouter announceOffRoute:distOrth];
-                }
+                [_voiceRouter announceOffRoute:distOrth];
             }
-            
             // calculate projection of current location
-            if (currentRoute > 0)
+            if (currentRoute > 0 && !inRecalc)
             {
                 CLLocation *nextLocation = routeNodes[currentRoute];
                 CLLocation *project = [OAMapUtils getProjection:currentLocation fromLocation:routeNodes[currentRoute - 1] toLocation:routeNodes[currentRoute]];
@@ -1113,12 +1109,16 @@ static BOOL _isDeviatedFromRoute = false;
         NSThread *job = _currentRunningJob;
         if ([job isKindOfClass:[OARouteRecalculationThread class]])
         {
+//            boolean hasPendingTasks = tasksMap.isEmpty();
             OARouteRecalculationThread *thread = (OARouteRecalculationThread *) job;
             if (!thread.paramsChanged)
                 [thread stopCalculation];
-            
-            if (_isFollowingMode)
-                [_voiceRouter announceBackOnRoute];
+//            Avoid offRoute/onRoute loop, #16571
+//            if (hasPendingTasks)
+//            {
+//                if ([self isFollowingMode]())
+//                    [_voiceRouter announceBackOnRoute];
+//            }
         }
     }
     
@@ -1458,17 +1458,13 @@ static BOOL _isDeviatedFromRoute = false;
 
 + (double) getDefaultAllowedDeviation:(OAApplicationMode *)mode posTolerance:(double)posTolerance
 {
-    OAAppSettings *settings = OAAppSettings.sharedManager;
-    if ([settings.disableOffrouteRecalc get:mode]) {
-        return -1.0f;
-    }
-    else if
-        ([mode getRouterService] == DIRECT_TO) {
+    if ([mode getRouterService] == DIRECT_TO)
+    {
         return -1.0f;
     }
     else if ([mode getRouterService] == STRAIGHT)
     {
-        EOAMetricsConstant mc = [settings.metricSystem get:mode];
+        EOAMetricsConstant mc = [[OAAppSettings sharedManager].metricSystem get:mode];
         if (mc == KILOMETERS_AND_METERS || mc == MILES_AND_METERS)
         {
             return 500.;
@@ -1479,7 +1475,7 @@ static BOOL _isDeviatedFromRoute = false;
             return 482.;
         }
     }
-    return posTolerance * ALLOWED_DEVIATION;
+    return posTolerance * POS_TOLERANCE_DEVIATION_MULTIPLIER;
 }
 
 + (double) getPosTolerance:(double)accuracy

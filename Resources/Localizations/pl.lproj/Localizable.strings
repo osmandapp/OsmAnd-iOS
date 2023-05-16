@@ -341,7 +341,7 @@
 "srtm_plugin_disabled" = "Wyłączone poziomice";
 "shared_string_open" = "Otwórz";
 "time_closed" = "Zamknięte";
-"will_close_at" = "Zostanie zamknięty o";
+"will_close_at" = "Zamykane o";
 "time_will_open" = "Zostanie otwarte za";
 "osm_live_active" = "Aktywny";
 "total_time" = "Całkowity czas";
@@ -637,7 +637,7 @@
 "res_catalog_upd" = "Aktualizacja katalogu";
 "open_from" = "Otwarte od";
 "open_till" = "Otwarte do";
-"will_open_at" = "Zostanie otwarty o";
+"will_open_at" = "Otwierane o";
 "will_open_on" = "Zostanie otwarty o";
 "will_open_tomorrow_at" = "Będzie otwarte jutro o";
 "res_uninst_unmanaged_q" = "Zamierzasz usunąć %@. Nie pochodzi z katalogu, upewnij się, że masz kopię zapasową, jeśli jest potrzebna.";
@@ -645,7 +645,7 @@
 "new_destination_point_dialog" = "Już ustalono cel trasy:";
 "replace_destination_point" = "Zastąp cel trasy";
 "shared_string_current" = "Aktualne";
-"make_as_start_point" = "Ustal jako punkt początkowy";
+"make_as_start_point" = "Niech to będzie punktem wyjścia";
 "keep_and_add_destination_point" = "Dodaj kolejny cel";
 "subsequent_dest_description" = "Przesuń cel w górę i utwórz go";
 "add_as_first_destination_point" = "Dodaj jako pierwszy cel pośredni trasy";
@@ -1827,7 +1827,7 @@
 "quick_action_mapillary_show" = "Pokaż Mapillary";
 "quick_action_showhide_mapillary_title" = "Pokaż/ukryj Mapillary";
 "profile_type_osmand_string" = "Profil OsmAnd";
-"quick_action_remove_next_destination" = "Usuń najbliższy punkt docelowy";
+"quick_action_remove_next_destination" = "Usuń następny punkt docelowy";
 "map_widget_distance_by_tap" = "Odległość po dotknięciu";
 "icon_group_emergency" = "Służby ratunkowe";
 "touting_specified_vehicle_parameters_descr" = "Określone parametry pojazdu mogą mieć wpływ na wyznaczanie trasy.";
@@ -2661,3 +2661,12 @@
 "weather_forecast" = "Prognoza pogody";
 "app_mode_moped" = "Motorower";
 "weather_forecast_is_outdated" = "Prognoza jest nieaktualna.";
+"rotate_map_manual_opt" = "Stałe (obracane ręcznie)";
+"map_widget_sunrise" = "Wschód słońca";
+"map_widget_sunset" = "Zachód słońca";
+"map_widget_sunrise_desc" = "Pokazuje czas następnego wschodu słońca lub czas pozostały do wschodu słońca.";
+"history_preferences_descr" = "Rejestrowanie historii można wyłączyć indywidualnie dla każdego typu historii.";
+"history_actions_footer_text" = "Można wyeksportować historię do pliku. Można usunąć wszystkie zapisy historii zarejestrowane do tej pory.";
+"search_favorites" = "Wyszukiwanie ulubionych";
+"speak_route_deviation" = "Zapowiedź zbaczania z trasy";
+"compass_click_desc" = "Stuknij w kompas, aby przełączyć tryb orientacji mapy.";

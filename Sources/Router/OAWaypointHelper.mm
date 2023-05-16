@@ -612,7 +612,7 @@
 - (void) calculateAlarms:(OARouteCalculationResult *)route array:(NSMutableArray<OALocationPointWrapper *> *)array mode:(OAApplicationMode *)mode
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    if (![settings.showRoutingAlarms get:mode])
+    if (![settings.showScreenAlerts get:mode])
         return;
 
     OAAlarmInfo *prevSpeedCam = nil;
@@ -800,7 +800,7 @@
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     if (type == LPW_ALARMS)
-        return [settings.showRoutingAlarms get] && [settings.showTrafficWarnings get:_appMode];
+        return [settings.showScreenAlerts get] && [settings.showTrafficWarnings get:_appMode];
     else if (type == LPW_POI)
         return [settings.showNearbyPoi get:_appMode];
     else if (type == LPW_FAVORITES)

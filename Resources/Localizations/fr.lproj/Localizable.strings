@@ -29,7 +29,7 @@
 "shared_string_edit" = "Modifier";
 "shared_string_dismiss" = "Arrêter";
 "shared_string_description" = "Description";
-"shared_string_update" = "Mettreà jour";
+"shared_string_update" = "Mettre à jour";
 "shared_string_install" = "Installer";
 "shared_string_uninstall" = "Désinstaller";
 "shared_string_done" = "Terminé";
@@ -742,7 +742,7 @@
 "save_track_to_gpx" = "Enregistrer automatiquement le parcours pendant le guidage";
 "save_track_to_gpx_descrp" = "Enregistre automatiquement la trace lors de la navigation.";
 "osmand_live" = "OsmAnd Live";
-"live_updates" = "Misesà jour en temps réel";
+"live_updates" = "Mises à jour en temps réel";
 "available_maps" = "Cartes disponibles";
 "osmand_live_last_changed" = "Dernière modification de la carte : %@";
 "last_update" = "Dernière mise à jour : %@";
@@ -1614,7 +1614,7 @@
 "download_size" = "Taille du téléchargement";
 "number_of_tiles" = "Nombre de tuiles";
 "move_map_to_select_area" = "Déplacez la carte pour sélectionner la zone souhaitée.";
-"update_tile" = "Mettreà jour la carte";
+"update_tile" = "Mettre à jour la carte";
 "shared_string_not_set" = "Non défini";
 "shared_string_meters" = "mètres";
 "shared_string_tones" = "tonnes";
@@ -1741,7 +1741,7 @@
 "profile_type_user_string" = "Profil utilisateur";
 "quick_action_switch_profile_descr" = "Le bouton d’action bascule entre les profils sélectionnés.";
 "profile_alert_need_save_title" = "Enregistrer les modifications";
-"quick_action_remove_next_destination" = "Supprimer le prochain point";
+"quick_action_remove_next_destination" = "Supprimer la prochaine étape";
 "profile_sett_descr" = "Affecter le profil de l'application sélectionnée";
 "export_profile_descr" = "Vous pouvez exporter tous les paramètres du profil, copier tous les paramètres d'un autre profil ou réinitialiser tous les paramètres du profil à l'état par défaut.";
 "import_profile_descr" = "Pour importer un profil, appuyez sur le fichier voulu (*.osf) dans n'importe quelle application et sélectionnez \"Copier vers les cartes OsmAnd\"";
@@ -2501,7 +2501,7 @@
 "osm_live_payment_subscription_management_aid" = "Le paiement sera débité sur votre compte Apple ID à la confirmation de l'achat.\n\nLa souscription automatique se renouvelle sauf si elle est annulée au moins 24 heures avant la fin de la période actuelle. Votre compte sera débité pour le renouvellement dans les 24 heures avant la fin de la période actuelle.\n\nVous pouvez gérer et annuler vos souscriptions en allant dans les paramètres de votre compte dans l'App Store après votre achat";
 "google_play" = "Google Play";
 "subscription_banner_free_maps_title" = "Vous pouvez télécharger %i cartes gratuitement.";
-"subscription_banner_no_free_maps_title" = "Vous avez dépensé tous vos téléchargements gratuits";
+"subscription_banner_no_free_maps_title" = "Vous avez utilisé tous vos téléchargements gratuits";
 "subscription_banner_free_maps_description" = "Obtenez des téléchargements et mises à jour illimités des cartes.";
 "subscription_banner_osmand_pro_title" = "Obtenez des mises à jour de cartes à chaque heure, jour ou semaine avec OsmAnd Pro.";
 "compass_visible_if_map_rotated" = "Affiché lors de la rotation de la carte";
@@ -2569,7 +2569,7 @@
 "backup_deleting_all_data" = "Suppression de toutes les données …";
 "shared_string_leave" = "Quitter";
 "backup_data" = "Sauvegarder les données";
-"are_you_sure" = "Etes-vous certain ?";
+"are_you_sure" = "Êtes-vous sûr ?";
 "backup_delete_all_data" = "Supprimer toutes mes données";
 "select_backup_data_descr" = "Sélectionnez les données et dossiers à sauvegarder.";
 "backup_delete_all_data_in_progress" = "Veuillez patienter pendant que OsmAnd supprime toutes vos données dans le cloud. Toutes les données sur votre appareil ne seront pas affectées.";
@@ -2885,3 +2885,13 @@
 "map_widget_altitude_current_location" = "Altitude : position actuelle";
 "altitude_widget_desc" = "Affiche l'altitude de la position actuelle.";
 "map_widget_altitude_map_center" = "Altitude : centre de la carte";
+"short_min" = "m";
+"wiki_article_search_text" = "Recherche de l'article Wiki correspondant";
+"shared_string_location_unknown" = "Position inconnue";
+"shared_string_edit_color" = "Modifier la couleur";
+"shared_string_coloring" = "Coloriage";
+"shared_string_duplicate" = "Dupliquer";
+"shared_string_all_colors" = "Toutes les couleurs";
+"shared_string_add_color" = "Ajouter une couleur";
+"shared_string_duplicate_color" = "Dupliquer la couleur";
+"shared_string_delete_color" = "Supprimer la couleur";

@@ -8,7 +8,23 @@
 
 #import "OABaseTrackMenuHudViewController.h"
 
-@class OATrackMenuViewControllerState;
+@class OATrackMenuViewControllerState, OAColoringType;
+
+@interface OATrackAppearanceItem : NSObject
+
+@property (nonatomic) OAColoringType *coloringType;
+@property (nonatomic) NSString *title;
+@property (nonatomic) NSString *attrName;
+@property (nonatomic, assign) BOOL isAvailable;
+@property (nonatomic, assign) BOOL isEnabled;
+
+- (instancetype)initWithColoringType:(OAColoringType *)coloringType
+                               title:(NSString *)title
+                            attrName:(NSString *)attrName
+                         isAvailable:(BOOL)isAvailable
+                           isEnabled:(BOOL)isEnabled;
+
+@end
 
 @interface OATrackMenuAppearanceHudViewController : OABaseTrackMenuHudViewController
 

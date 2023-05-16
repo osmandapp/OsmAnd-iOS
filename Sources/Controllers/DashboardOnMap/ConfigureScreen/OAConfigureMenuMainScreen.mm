@@ -65,6 +65,8 @@
 
 - (void) setupView
 {
+    if (_appModeCell)
+        _appModeCell.selectedMode = [_settings.applicationMode get];
     [self setupViewInternal];
     [tblView reloadData];
 }

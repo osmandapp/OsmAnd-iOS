@@ -161,6 +161,10 @@
                 bitmap = bitmapIt.value();
             }
         }
+        else
+        {
+            bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:@"circle" iconName:@"ic_custom_poi" isFullSize:YES icon:[UIImage imageNamed:@"ic_custom_poi"]];
+        }
     }
     else
     {

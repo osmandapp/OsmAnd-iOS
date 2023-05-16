@@ -36,6 +36,7 @@
 #import "OADownloadsItem.h"
 #import "OAResourcesSettingsItem.h"
 #import "OASuggestedDownloadsItem.h"
+#import "OAExportAsyncTask.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -659,11 +660,13 @@
     {
         if ([item isKindOfClass:OAProfileSettingsItem.class])
         {
-            NSString *bakupPatch = [[tempDir stringByAppendingPathComponent:((OAProfileSettingsItem *)item).appMode.stringKey] stringByAppendingPathExtension:@"osf"];
-            if (![[NSFileManager defaultManager] fileExistsAtPath:bakupPatch])
+            NSString *bakupPath = [[tempDir stringByAppendingPathComponent:((OAProfileSettingsItem *)item).appMode.stringKey] stringByAppendingPathExtension:@"osf"];
+            if ([[NSFileManager defaultManager] fileExistsAtPath:bakupPath])
             {
-                [[NSFileManager defaultManager] copyItemAtPath:_file toPath:bakupPatch error:nil];
+                [[NSFileManager defaultManager] removeItemAtPath:bakupPath error:nil];
             }
+            OAExportAsyncTask *backupTask = [[OAExportAsyncTask alloc] initWithFile:bakupPath items:@[item] exportItemFiles:YES extensionsFilter:nil];
+            [backupTask execute];
         }
     }
     return YES;

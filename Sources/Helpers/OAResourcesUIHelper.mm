@@ -1086,7 +1086,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                 {
                     const auto& resource = app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
                     // Speacial case for Saudi Arabia Rahal map
-                    if (resource == nullptr)
+                    if (!resource)
                     {
                         const auto installedResource = app.resourcesManager->getResource(QString::fromNSString(resourceId));
                         if (installedResource && installedResource->type == resourceType)
@@ -1101,11 +1101,14 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                             item.worldRegion = region;
 
                             const auto localResource = app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
-                            item.resource = localResource;
-                            item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
+                            if (localResource)
+                            {
+                                item.resource = localResource;
+                                item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
 
-                            found = YES;
-                            [res addObject:item];
+                                found = YES;
+                                [res addObject:item];
+                            }
                             continue;
                         }
                     }
@@ -1120,7 +1123,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                                                             inRegion:region
                                                       withRegionName:YES
                                                     withResourceType:NO];
-                            item.resource = app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
                             item.downloadTask = [[app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
                             item.size = resource->size;
                             item.worldRegion = region;

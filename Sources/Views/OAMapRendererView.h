@@ -73,6 +73,10 @@ struct CLLocationCoordinate2D;
 
 @property(nonatomic) std::shared_ptr<OsmAnd::IMapElevationDataProvider> elevationDataProvider;
 
+- (void)resetElevationDataProvider:(BOOL)forcedUpdate;
+- (void)setElevationConfiguration:(const OsmAnd::ElevationConfiguration&)configuration
+                     forcedUpdate:(BOOL)forcedUpdate;
+
 - (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsAt:(OsmAnd::PointI)screenPoint;
 - (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsIn:(OsmAnd::AreaI)screenArea strict:(BOOL)strict;
 

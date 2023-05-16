@@ -12,13 +12,22 @@
 #import "OASRTMPlugin.h"
 #import "OAMapStyleSettings.h"
 #import "OAAutoObserverProxy.h"
+#import "OAMapRendererEnvironment.h"
+#import "OAOsmandDevelopmentPlugin.h"
 
 #include "OATerrainMapLayerProvider.h"
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/Map/SlopeRasterMapLayerProvider.h>
+#include <OsmAndCore/Map/HillshadeRasterMapLayerProvider.h>
 
 @implementation OATerrainMapLayer
 {
     std::shared_ptr<OsmAnd::IMapLayerProvider> _terrainMapProvider;
+    
+    std::shared_ptr<const OsmAnd::IGeoTiffCollection> _heightsCollection;
+    std::shared_ptr<OsmAnd::SlopeRasterMapLayerProvider> _slopeLayerProvider;
+    std::shared_ptr<OsmAnd::HillshadeRasterMapLayerProvider> _hillshadeLayerProvider;
+
     OAAutoObserverProxy* _terrainChangeObserver;
     OAAutoObserverProxy* _terrainAlphaChangeObserver;
 }
@@ -55,6 +64,8 @@
 - (void) resetLayer
 {
     _terrainMapProvider.reset();
+    _slopeLayerProvider.reset();
+    _hillshadeLayerProvider.reset();
     [self.mapView resetProviderFor:self.layerIndex];
 }
 
@@ -65,21 +76,17 @@
     EOATerrainType type = self.app.data.terrainType;
     if (type != EOATerrainTypeDisabled && [[OAPlugin getPlugin:OASRTMPlugin.class] isEnabled])
     {
-        OsmAnd::ZoomLevel minZoom = [self getMinZoom];
-        OsmAnd::ZoomLevel maxZoom = [self getMaxZoom];
-        if (type == EOATerrainTypeSlope)
-        {
-            minZoom = OsmAnd::ZoomLevel(self.app.data.slopeMinZoom);
-            maxZoom = OsmAnd::ZoomLevel(self.app.data.slopeMaxZoom);
-        }
-        else if (type == EOATerrainTypeHillshade)
-        {
-            minZoom = OsmAnd::ZoomLevel(self.app.data.hillshadeMinZoom);
-            maxZoom = OsmAnd::ZoomLevel(self.app.data.hillshadeMaxZoom);
-        }
-        _terrainMapProvider = std::make_shared<OATerrainMapLayerProvider>(minZoom, maxZoom);
-        [self.mapView setProvider:_terrainMapProvider forLayer:self.layerIndex];
-        
+        OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *)[OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
+        BOOL slopeFromHeightmap = plugin && [plugin isGenerateSlopeFrom3DMaps];
+        BOOL hillshadeFromHeightmap = plugin && [plugin isGenerateHillshadeFrom3DMaps];
+
+        if (type == EOATerrainTypeSlope && slopeFromHeightmap)
+            [self setupSlopeLayerProvider];
+        else if (type == EOATerrainTypeHillshade && hillshadeFromHeightmap)
+            [self setupHillshadeLayerProvider];
+        else
+            [self setupTerrainMapProvider];
+
         OsmAnd::MapLayerConfiguration config;
         double layerAlpha = self.app.data.hillshadeAlpha;
         if (type == EOATerrainTypeSlope)
@@ -106,6 +113,8 @@
         {
             [self.mapView resetProviderFor:self.layerIndex];
             _terrainMapProvider.reset();
+            _slopeLayerProvider.reset();
+            _hillshadeLayerProvider.reset();
         }
     }];
 }
@@ -129,12 +138,58 @@
 
 - (OsmAnd::ZoomLevel) getMinZoom
 {
-    return _terrainMapProvider != nullptr ? _terrainMapProvider->getMinZoom() : OsmAnd::ZoomLevel1;
+    EOATerrainType type = self.app.data.terrainType;
+    if (type == EOATerrainTypeSlope)
+        return OsmAnd::ZoomLevel(self.app.data.slopeMinZoom);
+    else if (type == EOATerrainTypeHillshade)
+        return OsmAnd::ZoomLevel(self.app.data.hillshadeMinZoom);
+    else
+        return OsmAnd::ZoomLevel1;
 }
 
 - (OsmAnd::ZoomLevel) getMaxZoom
 {
-    return _terrainMapProvider != nullptr ? _terrainMapProvider->getMaxZoom() : OsmAnd::ZoomLevel11;
+    EOATerrainType type = self.app.data.terrainType;
+    if (type == EOATerrainTypeSlope)
+        return OsmAnd::ZoomLevel(self.app.data.slopeMaxZoom);
+    else if (type == EOATerrainTypeHillshade)
+        return OsmAnd::ZoomLevel(self.app.data.hillshadeMaxZoom);
+    else
+        return OsmAnd::ZoomLevel11;
+}
+
+- (void) setupTerrainMapProvider
+{
+    _terrainMapProvider = std::make_shared<OATerrainMapLayerProvider>([self getMinZoom], [self getMaxZoom]);
+
+    [self.mapView setProvider:_terrainMapProvider forLayer:self.layerIndex];
+    _slopeLayerProvider.reset();
+    _hillshadeLayerProvider.reset();
+}
+
+- (void) setupSlopeLayerProvider
+{
+    auto slopeColorFilename = QString::fromNSString([[NSBundle mainBundle] pathForResource:@"slopes_main" ofType:@"txt"]);
+    _slopeLayerProvider = std::make_shared<OsmAnd::SlopeRasterMapLayerProvider>(self.mapViewController.mapRendererEnv.geoTiffCollection, slopeColorFilename);
+    _slopeLayerProvider->setMinVisibleZoom([self getMinZoom]);
+    _slopeLayerProvider->setMaxVisibleZoom([self getMaxZoom]);
+
+    [self.mapView setProvider:_slopeLayerProvider forLayer:self.layerIndex];
+    _hillshadeLayerProvider.reset();
+    _terrainMapProvider.reset();
+}
+
+- (void) setupHillshadeLayerProvider
+{
+    auto hillshadeColorFilename = QString::fromNSString([[NSBundle mainBundle] pathForResource:@"hillshade_main" ofType:@"txt"]);
+    auto slopeSecondaryColorFilename = QString::fromNSString([[NSBundle mainBundle] pathForResource:@"color_slope" ofType:@"txt"]);
+    _hillshadeLayerProvider = std::make_shared<OsmAnd::HillshadeRasterMapLayerProvider>(self.mapViewController.mapRendererEnv.geoTiffCollection, hillshadeColorFilename, slopeSecondaryColorFilename);
+    _hillshadeLayerProvider->setMinVisibleZoom([self getMinZoom]);
+    _hillshadeLayerProvider->setMaxVisibleZoom([self getMaxZoom]);
+
+    [self.mapView setProvider:_hillshadeLayerProvider forLayer:self.layerIndex];
+    _slopeLayerProvider.reset();
+    _terrainMapProvider.reset();
 }
 
 @end

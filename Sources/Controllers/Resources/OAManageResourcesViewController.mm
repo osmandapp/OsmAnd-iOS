@@ -902,6 +902,8 @@ static BOOL _repositoryUpdated = NO;
     NSMutableArray<OAResourceItem *> *allResourcesArray = [NSMutableArray array];
     NSMutableArray<OAResourceItem *> *srtmResourcesArray = [NSMutableArray array];
 
+    OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *) [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
+    BOOL heightmapEnabled = plugin && [plugin isHeightmapEnabled];
     for (const auto& resource_ : regionResources.allResources)
     {
         OAResourceItem *item_ = [self collectSubregionItem:region regionResources:regionResources resource:resource_];
@@ -911,11 +913,10 @@ static BOOL _repositoryUpdated = NO;
             {
                 [allResourcesArray addObject:item_];
             }
-            else if (![OAAppSettings.sharedManager.showHeightmaps get] && item_.resourceType == OsmAndResourceType::GeoTiffRegion)
+            else if (item_.resourceType == OsmAndResourceType::GeoTiffRegion && !heightmapEnabled)
             {
-                OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *) [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
-                if (!plugin || ![plugin isHeightmapEnabled])
-                    continue;
+                // Hide heightmaps if not enabled
+                continue;
             }
             else if (item_.resourceType == OsmAndResourceType::HeightmapRegionLegacy)
             {

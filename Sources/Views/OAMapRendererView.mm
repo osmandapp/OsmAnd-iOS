@@ -196,6 +196,17 @@
     _renderer->setElevationDataProvider(elevationDataProvider);
 }
 
+- (void)resetElevationDataProvider:(BOOL)forcedUpdate
+{
+    _renderer->resetElevationDataProvider(forcedUpdate);
+}
+
+- (void)setElevationConfiguration:(const OsmAnd::ElevationConfiguration&)configuration
+forcedUpdate:(BOOL)forcedUpdate
+{
+    _renderer->setElevationConfiguration(configuration, forcedUpdate);
+}
+
 - (int) maxMissingDataZoomShift
 {
     return _renderer->getMaxMissingDataZoomShift();

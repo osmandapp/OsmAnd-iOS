@@ -55,6 +55,8 @@
 #import "OAMapRendererEnvironment.h"
 #import "OAMapPresentationEnvironment.h"
 #import "OAWeatherHelper.h"
+#import "OAOsmandDevelopmentPlugin.h"
+#import "OAPlugin.h"
 #import "OAGPXAppearanceCollection.h"
 
 #import "OARoutingHelper.h"
@@ -175,6 +177,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     std::shared_ptr<OsmAnd::MapPrimitiviser> _mapPrimitiviser;
     std::shared_ptr<OsmAnd::MapPrimitivesProvider> _mapPrimitivesProvider;
     std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _obfMapSymbolsProvider;
+    std::shared_ptr<OsmAnd::IGeoTiffCollection> _geoTiffCollection;
 
     std::shared_ptr<OsmAnd::ObfDataInterface> _obfsDataInterface;
 
@@ -390,7 +393,9 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     // prevents single tap to fire together with double tap
     [_grSymbolContextMenu requireGestureRecognizerToFail:_grZoomIn];
     [_grSymbolContextMenu requireGestureRecognizerToFail:_grZoomDoubleTap];
-    
+
+    [self createGeoTiffCollection];
+
     _mapLayers = [[OAMapLayers alloc] initWithMapViewController:self];
     
     OARoutingHelper *helper = [OARoutingHelper sharedInstance];
@@ -1880,17 +1885,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
         _gpxDocsRec.clear();
         
-        if ([OAAppSettings.sharedManager.showHeightmaps get])
-        {
-            std::shared_ptr<const OsmAnd::IGeoTiffCollection> heightsCollection;
-            const auto manualTilesCollection = new OsmAnd::GeoTiffCollection();
-            NSString *cacheDir = [_app.cachePath stringByAppendingPathComponent:GEOTIFF_SQLITE_CACHE_DIR];
-            manualTilesCollection->setLocalCache(QString::fromNSString(cacheDir));
-            manualTilesCollection->addDirectory(_app.documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)));
-            heightsCollection.reset(manualTilesCollection);
-            [_mapView setElevationDataProvider:
-                std::make_shared<OsmAnd::SqliteHeightmapTileProvider>(heightsCollection, _mapView.elevationDataTileSize)];
-        }
+        [self recreateHeightmapProvider];
+        [self updateElevationConfiguration];
         
         // Determine what type of map-source is being activated
         typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
@@ -2146,6 +2142,42 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         [self hideProgressHUD];
         [_mapSourceUpdatedObservable notifyEvent];
     }
+}
+
+- (void) createGeoTiffCollection
+{
+    const auto manualTilesCollection = new OsmAnd::GeoTiffCollection();
+    NSString *cacheDir = [_app.cachePath stringByAppendingPathComponent:GEOTIFF_SQLITE_CACHE_DIR];
+    if (![NSFileManager.defaultManager fileExistsAtPath:cacheDir])
+        [NSFileManager.defaultManager createDirectoryAtPath:cacheDir withIntermediateDirectories:YES attributes:nil error:nil];
+    manualTilesCollection->setLocalCache(QString::fromNSString(cacheDir));
+    manualTilesCollection->addDirectory(_app.documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)));
+    _geoTiffCollection.reset(manualTilesCollection);
+}
+
+- (void) recreateHeightmapProvider
+{
+    OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *)[OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
+    if (!plugin || ![plugin is3DMapsEnabled])
+    {
+        [_mapView resetElevationDataProvider:YES];
+        return;
+    }
+    [_mapView setElevationDataProvider:
+        std::make_shared<OsmAnd::SqliteHeightmapTileProvider>(_geoTiffCollection, _mapView.elevationDataTileSize)];
+}
+
+- (void) updateElevationConfiguration
+{
+    OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *)[OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
+    BOOL disableVertexHillshade = plugin != nil && [plugin isDisableVertexHillshade3D];
+    OsmAnd::ElevationConfiguration elevationConfiguration;
+    if (disableVertexHillshade)
+    {
+        elevationConfiguration.setSlopeAlgorithm(OsmAnd::ElevationConfiguration::SlopeAlgorithm::None);
+        elevationConfiguration.setVisualizationStyle(OsmAnd::ElevationConfiguration::VisualizationStyle::None);
+    }
+    [_mapView setElevationConfiguration:elevationConfiguration forcedUpdate:YES];
 }
 
 - (void) updateRasterLayerProviderAlpha
@@ -3434,13 +3466,13 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                                              mapPrimitiviser:_mapPrimitiviser
                                        mapPrimitivesProvider:_mapPrimitivesProvider
                                    mapObjectsSymbolsProvider:_obfMapSymbolsProvider
-                                           obfsDataInterface:_obfsDataInterface];
+                                           obfsDataInterface:_obfsDataInterface
+                                           geoTiffCollection:_geoTiffCollection];
 }
 
 - (OAMapPresentationEnvironment *)mapPresentationEnv
 {
     return [[OAMapPresentationEnvironment alloc] initWithEnvironment:_mapPresentationEnvironment];
 }
-
 
 @end

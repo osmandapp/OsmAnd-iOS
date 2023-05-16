@@ -43,6 +43,7 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 - (NSString *)getSubtitle;
 - (NSString *)getLeftNavbarButtonTitle;
 - (UIImage *)getCustomIconForLeftNavbarButton;
+- (NSString *)getCustomAccessibilityForLeftNavbarButton;
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons;
 - (EOABaseNavbarColorScheme)getNavbarColorScheme;
 - (BOOL)isNavbarBlurring;

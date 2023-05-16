@@ -75,13 +75,7 @@
 
 @end
 
-@interface OARearrangeCustomFiltersViewController() <UITableViewDelegate, UITableViewDataSource, OATableViewCellDelegate>
-
-@property (weak, nonatomic) IBOutlet UIView *navBar;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UIButton *doneButton;
+@interface OARearrangeCustomFiltersViewController() <OATableViewCellDelegate>
 
 @end
 
@@ -99,54 +93,78 @@
     NSMutableArray<OAEditFilterItem *> *_hiddenFiltersItems;
     NSMapTable<NSString *, NSNumber *> *_filtersOrders;
     NSMutableArray<NSString *> *_hiddenFiltersKeys;
+    NSArray<OAPOIUIFilter *> *_filters;
 }
+
+#pragma mark - Initialization
 
 - (instancetype)initWithFilters:(NSArray<OAPOIUIFilter *> *)filters
 {
     self = [super init];
     if (self)
     {
-        _settings = [OAAppSettings sharedManager];
-        _filtersHelper = [OAPOIFiltersHelper sharedInstance];
-        _orderModified = _settings.poiFiltersOrder.get != nil;
-        _hiddenModified = _settings.inactivePoiFilters.get != nil;
-        [self generateData:filters];
+        _filters = filters;
     }
     return self;
 }
+
+- (void)commonInit
+{
+    _settings = [OAAppSettings sharedManager];
+    _filtersHelper = [OAPOIFiltersHelper sharedInstance];
+    _orderModified = [_settings.poiFiltersOrder get] != nil;
+    _hiddenModified = [_settings.inactivePoiFilters get] != nil;
+}
+
+#pragma mark - UIViewColontroller
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self.tableView setEditing:YES];
+    self.tableView.editing = YES;
     self.tableView.allowsSelectionDuringEditing = YES;
+    [self.navigationController.interactivePopGestureRecognizer addTarget:self
+                                                                  action:@selector(swipeToCloseRecognized:)];
 }
 
-- (void)viewDidLayoutSubviews
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super viewDidLayoutSubviews];
-    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"create_custom_categories_list_promo") font:kHeaderDescriptionFont textColor:UIColorFromRGB(color_text_footer) isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+    return OALocalizedString(@"rearrange_categories");
 }
 
-- (void)applyLocalization
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    self.titleLabel.text = OALocalizedString(@"rearrange_categories");
-    [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
+    return @[[self createRightNavbarButton:OALocalizedString(@"shared_string_done")
+                                  iconName:nil
+                                    action:@selector(onRightNavbarButtonPressed)
+                                      menu:nil]];
 }
 
-- (void)generateData:(NSArray<OAPOIUIFilter *> *)filters
+- (NSString *)getTableHeaderDescription
+{
+    return OALocalizedString(@"create_custom_categories_list_promo");
+}
+
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
+{
+    return EOABaseNavbarColorSchemeOrange;
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     _filtersItems = [NSMutableArray new];
     _hiddenFiltersItems = [NSMutableArray new];
     _filtersOrders = [NSMapTable new];
     _hiddenFiltersKeys = [NSMutableArray new];
 
-    for (int i = 0; i < filters.count; i++)
+    for (int i = 0; i < _filters.count; i++)
     {
-        OAPOIUIFilter *filter = filters[i];
+        OAPOIUIFilter *filter = _filters[i];
         OAEditFilterItem *filterItem = [[OAEditFilterItem alloc] initWithFilter:filter];
         [_filtersOrders setObject:@(i) forKey:filter.filterId];
         if (!filter.isActive)
@@ -197,104 +215,45 @@
     return filterItem;
 }
 
-- (IBAction)onDoneButtonClicked:(id)sender
-{
-    if (_isChanged)
-    {
-        OAApplicationMode *appMode = _settings.applicationMode.get;
-        if (_hiddenModified)
-            [_filtersHelper saveInactiveFilters:appMode filterIds:_hiddenFiltersKeys];
-        else if (_wasReset)
-            [_filtersHelper saveInactiveFilters:appMode filterIds:nil];
-        if (_orderModified)
-        {
-            NSMutableArray<NSString *> *filterIds = [NSMutableArray new];
-            for (OAEditFilterItem *filterItem in _filtersItems) {
-                OAPOIUIFilter *filter = filterItem.filter;
-                NSString *filterId = filter.filterId;
-                NSNumber *order = [_filtersOrders objectForKey:filterId];
-                if (order == nil)
-                    order = @(filter.order);
-                BOOL isActive = ![_hiddenFiltersKeys containsObject:filterId];
-                filter.isActive = isActive;
-                filter.order = [order intValue];
-                if (isActive)
-                    [filterIds addObject:filter.filterId];
-            }
-            [_filtersHelper saveFiltersOrder:appMode filterIds:filterIds];
-        }
-        else if (_wasReset)
-        {
-            [_filtersHelper saveFiltersOrder:appMode filterIds:nil];
-        }
-    }
-    [[OAQuickSearchHelper instance] refreshCustomPoiFilters];
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)hideMode:(NSIndexPath *)indexPath
-{
-    OAEditFilterItem *filterItem = _filtersItems[indexPath.row];
-    [_filtersItems removeObject:filterItem];
-    [_hiddenFiltersItems addObject:filterItem];
-    [_hiddenFiltersKeys addObject:filterItem.filter.filterId];
-    filterItem.filter.isActive = NO;
-    [self updateFiltersIndexes];
-    NSIndexPath *targetPath = [NSIndexPath indexPathForRow:_hiddenFiltersItems.count - 1 inSection:kHiddenFiltersSection];
-    [CATransaction begin];
-    [CATransaction setCompletionBlock:^{
-        [_tableView reloadData];
-    }];
-    [_tableView beginUpdates];
-    [_tableView moveRowAtIndexPath:indexPath toIndexPath:targetPath];
-    [_tableView endUpdates];
-    [CATransaction commit];
-}
-
-- (void)restoreMode:(NSIndexPath *)indexPath
-{
-    OAEditFilterItem *filterItem = _hiddenFiltersItems[indexPath.row];
-    int order = filterItem.order;
-    order = order > _filtersItems.count ? (int) _filtersItems.count : order;
-    NSIndexPath *targetPath = [NSIndexPath indexPathForRow:order inSection:kAllFiltersSection];
-    [CATransaction begin];
-    [CATransaction setCompletionBlock:^{
-        [_tableView reloadData];
-    }];
-    [_hiddenFiltersItems removeObjectAtIndex:indexPath.row];
-    [_filtersItems insertObject:filterItem atIndex:order];
-    [_hiddenFiltersKeys removeObject:filterItem.filter.filterId];
-    filterItem.filter.isActive = YES;
-    [_tableView beginUpdates];
-    [_tableView moveRowAtIndexPath:indexPath toIndexPath:targetPath];
-    [_tableView endUpdates];
-    [CATransaction commit];
-}
-
 - (void)updateFiltersIndexes
 {
     for (int i = 0; i < _filtersItems.count; i++)
         _filtersItems[i].order = i;
 }
 
-- (void)showChangesAlert
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"exit_without_saving") preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self.navigationController popViewControllerAnimated:YES];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
-    [self presentViewController:alert animated:YES completion:nil];
+    NSString *title;
+    if (section == kAllFiltersSection)
+        title = OALocalizedString(@"visible_categories");
+    else if (section == kHiddenFiltersSection)
+        title = OALocalizedString(@"hidden_categories");
+    else
+        title = OALocalizedString(@"shared_string_actions");
+    return title;
 }
 
-#pragma mark - UITableViewDataSource
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return section == kActionsSection ? OALocalizedString(@"reset_to_default_category_button_promo") : @"";
+}
 
-- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    if (section == kAllFiltersSection)
+        return _filtersItems.count;
+    else if (section == kHiddenFiltersSection)
+        return _hiddenFiltersItems.count;
+    else
+        return _actionsItems.count;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSString *cellType = indexPath.section == kActionsSection ? [OARightIconTableViewCell getCellIdentifier] : [OASimpleTableViewCell getCellIdentifier];
     if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
@@ -333,7 +292,7 @@
     }
     else if ([cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
+        OARightIconTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
@@ -356,21 +315,25 @@
     return nil;
 }
 
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSInteger)sectionsCount
 {
-    if (indexPath.section == kActionsSection)
-        return indexPath;
-    else
-        return nil;
+    return 3;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (indexPath.section == kActionsSection) {
+    if (indexPath.section == kActionsSection)
+    {
         OAActionItem *actionItem = _actionsItems[indexPath.row];
         [actionItem onClick];
     }
+}
+
+#pragma mark - UITableViewDataSource
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return indexPath.section == kAllFiltersSection;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
@@ -385,7 +348,7 @@
     OAEditFilterItem *filterItem = [self getItem:sourceIndexPath];
     [CATransaction begin];
     [CATransaction setCompletionBlock:^{
-        [_tableView reloadData];
+        [self.tableView reloadData];
     }];
     [_filtersItems removeObjectAtIndex:sourceIndexPath.row];
     [_filtersItems insertObject:filterItem atIndex:destinationIndexPath.row];
@@ -395,51 +358,7 @@
     [CATransaction commit];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    NSString *title;
-    if (section == kAllFiltersSection)
-        title = OALocalizedString(@"visible_categories");
-    else if (section == kHiddenFiltersSection)
-        title = OALocalizedString(@"hidden_categories");
-    else
-        title = OALocalizedString(@"shared_string_actions");
-    return title;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return section == kActionsSection ? OALocalizedString(@"reset_to_default_category_button_promo") : @"";
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 3;
-}
-
-- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if (section == kAllFiltersSection)
-        return _filtersItems.count;
-    else if (section == kHiddenFiltersSection)
-        return _hiddenFiltersItems.count;
-    else
-        return _actionsItems.count;
-}
-
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return indexPath.section == kAllFiltersSection;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    if ([view isKindOfClass:[UITableViewHeaderFooterView class]])
-    {
-        UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *) view;
-        headerView.textLabel.textColor = UIColorFromRGB(color_text_footer);
-    }
-}
+#pragma mark - UITableViewDelegate
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -458,6 +377,65 @@
     return proposedDestinationIndexPath;
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == kActionsSection)
+        return indexPath;
+    else
+        return nil;
+}
+
+#pragma mark - Additions
+
+- (void)showChangesAlert
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"exit_without_saving") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)hideMode:(NSIndexPath *)indexPath
+{
+    OAEditFilterItem *filterItem = _filtersItems[indexPath.row];
+    [_filtersItems removeObject:filterItem];
+    [_hiddenFiltersItems addObject:filterItem];
+    [_hiddenFiltersKeys addObject:filterItem.filter.filterId];
+    filterItem.filter.isActive = NO;
+    [self updateFiltersIndexes];
+    NSIndexPath *targetPath = [NSIndexPath indexPathForRow:_hiddenFiltersItems.count - 1 inSection:kHiddenFiltersSection];
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        [self.tableView reloadData];
+    }];
+    [self.tableView beginUpdates];
+    [self.tableView moveRowAtIndexPath:indexPath toIndexPath:targetPath];
+    [self.tableView endUpdates];
+    [CATransaction commit];
+}
+
+- (void)restoreMode:(NSIndexPath *)indexPath
+{
+    OAEditFilterItem *filterItem = _hiddenFiltersItems[indexPath.row];
+    int order = filterItem.order;
+    order = order > _filtersItems.count ? (int) _filtersItems.count : order;
+    NSIndexPath *targetPath = [NSIndexPath indexPathForRow:order inSection:kAllFiltersSection];
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        [self.tableView reloadData];
+    }];
+    [_hiddenFiltersItems removeObjectAtIndex:indexPath.row];
+    [_filtersItems insertObject:filterItem atIndex:order];
+    [_hiddenFiltersKeys removeObject:filterItem.filter.filterId];
+    filterItem.filter.isActive = YES;
+    [self.tableView beginUpdates];
+    [self.tableView moveRowAtIndexPath:indexPath toIndexPath:targetPath];
+    [self.tableView endUpdates];
+    [CATransaction commit];
+}
+
 #pragma mark - Selectors
 
 - (void)onLeftNavbarButtonPressed
@@ -468,9 +446,54 @@
         [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)onRightNavbarButtonPressed
+{
+    if (_isChanged)
+    {
+        OAApplicationMode *appMode = _settings.applicationMode.get;
+        if (_hiddenModified)
+            [_filtersHelper saveInactiveFilters:appMode filterIds:_hiddenFiltersKeys];
+        else if (_wasReset)
+            [_filtersHelper saveInactiveFilters:appMode filterIds:nil];
+        if (_orderModified)
+        {
+            NSMutableArray<NSString *> *filterIds = [NSMutableArray new];
+            for (OAEditFilterItem *filterItem in _filtersItems) {
+                OAPOIUIFilter *filter = filterItem.filter;
+                NSString *filterId = filter.filterId;
+                NSNumber *order = [_filtersOrders objectForKey:filterId];
+                if (order == nil)
+                    order = @(filter.order);
+                BOOL isActive = ![_hiddenFiltersKeys containsObject:filterId];
+                filter.isActive = isActive;
+                filter.order = [order intValue];
+                if (isActive)
+                    [filterIds addObject:filter.filterId];
+            }
+            [_filtersHelper saveFiltersOrder:appMode filterIds:filterIds];
+        }
+        else if (_wasReset)
+        {
+            [_filtersHelper saveFiltersOrder:appMode filterIds:nil];
+        }
+    }
+    [[OAQuickSearchHelper instance] refreshCustomPoiFilters];
+    [self dismissViewController];
+}
+
 - (void)onEditButtonPressed:(UIButton *)sender
 {
     [self onLeftEditButtonPressed:sender.tag];
+}
+
+- (void)swipeToCloseRecognized:(UIGestureRecognizer *)recognizer
+{
+    if (_isChanged)
+    {
+        recognizer.enabled = NO;
+        recognizer.enabled = YES;
+        [self showChangesAlert];
+    }
 }
 
 #pragma mark - OATableViewCellDelegate

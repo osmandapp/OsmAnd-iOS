@@ -79,7 +79,6 @@ struct RegionResources
     OsmAndAppInstance _app;
     OAIAPHelper *_iapHelper;
     OAWeatherHelper *_weatherHelper;
-    OAOsmandDevelopmentPlugin *_devPlugin;
 
     NSObject *_dataLock;
 
@@ -196,7 +195,6 @@ static BOOL _repositoryUpdated = NO;
         _app = [OsmAndApp instance];
         _iapHelper = [OAIAPHelper sharedInstance];
         _weatherHelper = [OAWeatherHelper sharedInstance];
-        _devPlugin = (OAOsmandDevelopmentPlugin *) [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
 
         _dataLock = [[NSObject alloc] init];
 
@@ -904,6 +902,8 @@ static BOOL _repositoryUpdated = NO;
     NSMutableArray<OAResourceItem *> *allResourcesArray = [NSMutableArray array];
     NSMutableArray<OAResourceItem *> *srtmResourcesArray = [NSMutableArray array];
 
+    OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *) [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
+    BOOL heightmapEnabled = plugin && [plugin isHeightmapEnabled];
     for (const auto& resource_ : regionResources.allResources)
     {
         OAResourceItem *item_ = [self collectSubregionItem:region regionResources:regionResources resource:resource_];
@@ -913,11 +913,10 @@ static BOOL _repositoryUpdated = NO;
             {
                 [allResourcesArray addObject:item_];
             }
-            else if (![_devPlugin.enableHeightmap get] && item_.resourceType == OsmAndResourceType::GeoTiffRegion)
+            else if (item_.resourceType == OsmAndResourceType::GeoTiffRegion && !heightmapEnabled)
             {
-                OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *) [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
-                if (!plugin || ![plugin isHeightmapEnabled])
-                    continue;
+                // Hide heightmaps if not enabled
+                continue;
             }
             else if (item_.resourceType == OsmAndResourceType::HeightmapRegionLegacy)
             {

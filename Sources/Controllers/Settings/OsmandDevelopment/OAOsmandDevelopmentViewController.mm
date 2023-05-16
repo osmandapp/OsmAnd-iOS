@@ -112,48 +112,48 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
     
     OATableSectionData *heightMapSection = [OATableSectionData sectionData];
     heightMapSection.headerText = OALocalizedString(@"download_heightmap_maps");
-    BOOL isPluginSwitchesEnabled = [OAIAPHelper isOsmAndProAvailable] && [_plugin.enableHeightmap get];
+    BOOL heightmapEnabled = [_plugin isHeightmapEnabled];
     
     [heightMapSection addRowFromDictionary:@{
         kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
         kCellKeyKey : kTestHeightmapKey,
         kCellTitleKey : OALocalizedString(@"test_heightmap"),
-        kCellSwitchIsOnKey : [NSNumber numberWithBool:isPluginSwitchesEnabled ? [_plugin.enableHeightmap get] : NO],
-        kCellSwitchEnabledKey : [NSNumber numberWithBool:[OAIAPHelper isOsmAndProAvailable]],
-        kCellSwitchUserInteractionEnabledKey : [NSNumber numberWithBool:YES],
+        kCellSwitchIsOnKey : @(heightmapEnabled ? [_plugin.enableHeightmap get] : NO),
+        kCellSwitchEnabledKey : @([OAIAPHelper isOsmAndProAvailable]),
+        kCellSwitchUserInteractionEnabledKey : @(YES),
         @"actionBlock" : (^void(){ [weakSelf openProPlanScreen]; })
     }];
     [heightMapSection addRowFromDictionary:@{
         kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
         kCellKeyKey : kUse3dReliefHeightmapsKey,
         kCellTitleKey : OALocalizedString(@"use_heightmap_setting"),
-        kCellSwitchIsOnKey : [NSNumber numberWithBool:[_plugin.enable3DMaps get]],
-        kCellSwitchEnabledKey : [NSNumber numberWithBool:YES],
-        kCellSwitchUserInteractionEnabledKey : [NSNumber numberWithBool:isPluginSwitchesEnabled]
+        kCellSwitchIsOnKey : @([_plugin.enable3DMaps get]),
+        kCellSwitchEnabledKey : @(YES),
+        kCellSwitchUserInteractionEnabledKey : @(heightmapEnabled)
     }];
     [heightMapSection addRowFromDictionary:@{
         kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
         kCellKeyKey : kDisableVertexHillshade,
         kCellTitleKey : OALocalizedString(@"disable_vertex_hillshade_3d"),
-        kCellSwitchIsOnKey : [NSNumber numberWithBool:[_plugin.disableVertexHillshade3D get]],
-        kCellSwitchEnabledKey : [NSNumber numberWithBool:YES],
-        kCellSwitchUserInteractionEnabledKey : [NSNumber numberWithBool:isPluginSwitchesEnabled]
+        kCellSwitchIsOnKey : @([_plugin.disableVertexHillshade3D get]),
+        kCellSwitchEnabledKey : @(YES),
+        kCellSwitchUserInteractionEnabledKey : @(heightmapEnabled)
     }];
     [heightMapSection addRowFromDictionary:@{
         kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
         kCellKeyKey : kGenerateSlopeKey,
         kCellTitleKey : OALocalizedString(@"generate_slope_from_3d_maps"),
-        kCellSwitchIsOnKey : [NSNumber numberWithBool:[_plugin.generateSlopeFrom3DMaps get]],
-        kCellSwitchEnabledKey : [NSNumber numberWithBool:YES],
-        kCellSwitchUserInteractionEnabledKey : [NSNumber numberWithBool:isPluginSwitchesEnabled]
+        kCellSwitchIsOnKey : @([_plugin.generateSlopeFrom3DMaps get]),
+        kCellSwitchEnabledKey : @(YES),
+        kCellSwitchUserInteractionEnabledKey : @(heightmapEnabled)
     }];
     [heightMapSection addRowFromDictionary:@{
         kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
         kCellKeyKey : kGenerateHillshadeKey,
         kCellTitleKey : OALocalizedString(@"generate_hillshade_from_3d_maps"),
-        kCellSwitchIsOnKey : [NSNumber numberWithBool:[_plugin.generateHillshadeFrom3DMaps get]],
-        kCellSwitchEnabledKey : [NSNumber numberWithBool:YES],
-        kCellSwitchUserInteractionEnabledKey : [NSNumber numberWithBool:isPluginSwitchesEnabled]
+        kCellSwitchIsOnKey : @([_plugin.generateHillshadeFrom3DMaps get]),
+        kCellSwitchEnabledKey : @(YES),
+        kCellSwitchUserInteractionEnabledKey : @(heightmapEnabled)
     }];
     [_data addSection:heightMapSection];
 }
@@ -168,66 +168,30 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
 {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
     OATableRowData *item = [_data itemForIndexPath:indexPath];
-    
+    BOOL isOn = sender.isOn;
+
     if ([item.key isEqualToString:kTestHeightmapKey])
     {
-        [self createGeotiffCacheFolderIfNeeded];
-        [_plugin.enableHeightmap set:sender.isOn];
-        [self onEnable3DMapsChanged:sender.isOn];
-        [self onDisableVertexHillshade3DChanged:sender.isOn];
-        [self onGenerateSlopeFrom3DMapsChanged:sender.isOn];
-        [self onGenerateHillshadeFrom3DMapsChanged:sender.isOn];
+        [_plugin.enableHeightmap set:isOn];
         [self generateData];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     else if ([item.key isEqualToString:kUse3dReliefHeightmapsKey])
     {
-        [_plugin.enable3DMaps set:sender.isOn];
-        [self onEnable3DMapsChanged:sender.isOn];
+        [_plugin.enable3DMaps set:isOn];
     }
     else if ([item.key isEqualToString:kDisableVertexHillshade])
     {
-        [_plugin.disableVertexHillshade3D set:sender.isOn];
-        [self onDisableVertexHillshade3DChanged:sender.isOn];
+        [_plugin.disableVertexHillshade3D set:isOn];
     }
     else if ([item.key isEqualToString:kGenerateSlopeKey])
     {
-        [_plugin.generateSlopeFrom3DMaps set:sender.isOn];
-        [self onGenerateSlopeFrom3DMapsChanged:sender.isOn];
+        [_plugin.generateSlopeFrom3DMaps set:isOn];
     }
     else if ([item.key isEqualToString:kGenerateHillshadeKey])
     {
-        [_plugin.generateHillshadeFrom3DMaps set:sender.isOn];
-        [self onGenerateHillshadeFrom3DMapsChanged:sender.isOn];
+        [_plugin.generateHillshadeFrom3DMaps set:isOn];
     }
-}
-
-- (void) createGeotiffCacheFolderIfNeeded
-{
-    NSFileManager *fileManager = NSFileManager.defaultManager;
-    NSString *path = [_app.cachePath stringByAppendingPathComponent:GEOTIFF_SQLITE_CACHE_DIR] ;
-    if (![fileManager fileExistsAtPath:path])
-        [fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
-}
-
-- (void) onEnable3DMapsChanged:(BOOL)isOn
-{
-    [OARootViewController.instance.mapPanel.mapViewController recreateHeightmapProvider];
-}
-
-- (void) onDisableVertexHillshade3DChanged:(BOOL)isOn
-{
-    [OARootViewController.instance.mapPanel.mapViewController updateElevationConfiguration];
-}
-
-- (void) onGenerateSlopeFrom3DMapsChanged:(BOOL)isOn
-{
-    [_app.data setTerrainType:_app.data.terrainType];
-}
-
-- (void) onGenerateHillshadeFrom3DMapsChanged:(BOOL)isOn
-{
-    [_app.data setTerrainType:_app.data.terrainType];
 }
 
 #pragma mark - Actions

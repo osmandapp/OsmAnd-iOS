@@ -15,6 +15,7 @@
 #include <OsmAndCore/Map/MapPrimitivesProvider.h>
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 #include <OsmAndCore/ObfDataInterface.h>
+#include <OsmAndCore/IGeoTiffCollection.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, assign) std::shared_ptr<OsmAnd::MapPrimitiviser> mapPrimitiviser;
 @property (nonatomic, readonly, assign) std::shared_ptr<OsmAnd::MapPrimitivesProvider> mapPrimitivesProvider;
 @property (nonatomic, readonly, assign) std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> mapObjectsSymbolsProvider;
+@property (nonatomic, readonly, assign) std::shared_ptr<OsmAnd::IGeoTiffCollection> geoTiffCollection;
 
 @property (nonatomic, assign) std::shared_ptr<OsmAnd::ObfDataInterface> obfsDataInterface;
 
@@ -33,7 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
                  mapPrimitiviser:(const std::shared_ptr<OsmAnd::MapPrimitiviser>&)mapPrimitiviser
            mapPrimitivesProvider:(const std::shared_ptr<OsmAnd::MapPrimitivesProvider>&)mapPrimitivesProvider
        mapObjectsSymbolsProvider:(const std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider>&)mapObjectsSymbolsProvider
-               obfsDataInterface:(const std::shared_ptr<OsmAnd::ObfDataInterface>&)obfsDataInterface;
+               obfsDataInterface:(const std::shared_ptr<OsmAnd::ObfDataInterface>&)obfsDataInterface
+               geoTiffCollection:(const std::shared_ptr<OsmAnd::IGeoTiffCollection>&)geoTiffCollection;
 
 @end
 

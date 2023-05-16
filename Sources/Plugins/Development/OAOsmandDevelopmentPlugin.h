@@ -20,8 +20,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) OACommonBoolean *generateSlopeFrom3DMaps;
 @property (nonatomic) OACommonBoolean *generateHillshadeFrom3DMaps;
 
-- (BOOL)isHeightmapEnabled;
-- (BOOL)isHeightmapAllowed;
+- (BOOL) isHeightmapEnabled;
+- (BOOL) isHeightmapAllowed;
+- (BOOL) is3DMapsEnabled;
+- (BOOL) isDisableVertexHillshade3D;
+- (BOOL) isGenerateSlopeFrom3DMaps;
+- (BOOL) isGenerateHillshadeFrom3DMaps;
 
 @end
 

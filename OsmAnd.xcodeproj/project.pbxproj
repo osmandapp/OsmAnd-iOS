@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05028F792A12A12A003FECD0 /* color_slope.txt in Resources */ = {isa = PBXBuildFile; fileRef = 05028F762A12A12A003FECD0 /* color_slope.txt */; };
+		05028F7A2A12A12A003FECD0 /* hillshade_main.txt in Resources */ = {isa = PBXBuildFile; fileRef = 05028F772A12A12A003FECD0 /* hillshade_main.txt */; };
+		05028F7B2A12A12A003FECD0 /* slopes_main.txt in Resources */ = {isa = PBXBuildFile; fileRef = 05028F782A12A12A003FECD0 /* slopes_main.txt */; };
 		05541D95299267900014AEF8 /* contourlines.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 05541D94299267900014AEF8 /* contourlines.addon.render.xml */; };
 		0575058E292D254500FEECD4 /* weather.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0575058D292D254500FEECD4 /* weather.addon.render.xml */; };
 		0A0C6EBF26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */; };
@@ -274,7 +277,7 @@
 		32076B1529014678001A86AF /* widget_fps_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32076B0F29014677001A86AF /* widget_fps_night@2x.png */; };
 		32076B1629014678001A86AF /* widget_fps_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32076B1029014678001A86AF /* widget_fps_day@2x.png */; };
 		321126FF2800710800ED8D52 /* OAExternalTimeFormatter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */; };
-		32119B3D28477142005E1E0C /* OAOsmandDevelopmentPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 32119B3C28477142005E1E0C /* OAOsmandDevelopmentPlugin.m */; };
+		32119B3D28477142005E1E0C /* OAOsmandDevelopmentPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32119B3C28477142005E1E0C /* OAOsmandDevelopmentPlugin.mm */; };
 		32119B40284776CF005E1E0C /* ic_custom_laptop@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32119B3E284776CF005E1E0C /* ic_custom_laptop@3x.png */; };
 		32119B41284776CF005E1E0C /* ic_custom_laptop@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32119B3F284776CF005E1E0C /* ic_custom_laptop@2x.png */; };
 		32119B432847785A005E1E0C /* img_plugin_osmand_development.png in Resources */ = {isa = PBXBuildFile; fileRef = 32119B4228477859005E1E0C /* img_plugin_osmand_development.png */; };
@@ -3473,6 +3476,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		05028F762A12A12A003FECD0 /* color_slope.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = color_slope.txt; path = ../resources/heightmap/color_slope.txt; sourceTree = "<group>"; };
+		05028F772A12A12A003FECD0 /* hillshade_main.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = hillshade_main.txt; path = ../resources/heightmap/hillshade_main.txt; sourceTree = "<group>"; };
+		05028F782A12A12A003FECD0 /* slopes_main.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = slopes_main.txt; path = ../resources/heightmap/slopes_main.txt; sourceTree = "<group>"; };
 		05541D94299267900014AEF8 /* contourlines.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = contourlines.addon.render.xml; path = ../resources/rendering_styles/contourlines.addon.render.xml; sourceTree = "<group>"; };
 		0575058D292D254500FEECD4 /* weather.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = weather.addon.render.xml; path = ../resources/rendering_styles/weather.addon.render.xml; sourceTree = "<group>"; };
 		0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAGpxStatBlockCollectionViewCell.xib; sourceTree = "<group>"; };
@@ -3777,7 +3783,7 @@
 		32113578275425870050242B /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		32113579275426020050242B /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/Localizable.strings; sourceTree = "<group>"; };
 		32119B3B2847712E005E1E0C /* OAOsmandDevelopmentPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmandDevelopmentPlugin.h; sourceTree = "<group>"; };
-		32119B3C28477142005E1E0C /* OAOsmandDevelopmentPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmandDevelopmentPlugin.m; sourceTree = "<group>"; };
+		32119B3C28477142005E1E0C /* OAOsmandDevelopmentPlugin.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmandDevelopmentPlugin.mm; sourceTree = "<group>"; };
 		32119B3E284776CF005E1E0C /* ic_custom_laptop@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_laptop@3x.png"; path = "Resources/Icons/ic_custom_laptop@3x.png"; sourceTree = "<group>"; };
 		32119B3F284776CF005E1E0C /* ic_custom_laptop@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_laptop@2x.png"; path = "Resources/Icons/ic_custom_laptop@2x.png"; sourceTree = "<group>"; };
 		32119B4228477859005E1E0C /* img_plugin_osmand_development.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = img_plugin_osmand_development.png; path = Resources/Icons/img_plugin_osmand_development.png; sourceTree = "<group>"; };
@@ -8085,6 +8091,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		05028F752A12A102003FECD0 /* heightmap */ = {
+			isa = PBXGroup;
+			children = (
+				05028F762A12A12A003FECD0 /* color_slope.txt */,
+				05028F772A12A12A003FECD0 /* hillshade_main.txt */,
+				05028F782A12A12A003FECD0 /* slopes_main.txt */,
+			);
+			name = heightmap;
+			sourceTree = "<group>";
+		};
 		0A1051D12731A30200BDF6C4 /* MenuBuilder */ = {
 			isa = PBXGroup;
 			children = (
@@ -8150,7 +8166,7 @@
 			isa = PBXGroup;
 			children = (
 				32119B3B2847712E005E1E0C /* OAOsmandDevelopmentPlugin.h */,
-				32119B3C28477142005E1E0C /* OAOsmandDevelopmentPlugin.m */,
+				32119B3C28477142005E1E0C /* OAOsmandDevelopmentPlugin.mm */,
 			);
 			path = Development;
 			sourceTree = "<group>";
@@ -10445,6 +10461,7 @@
 		BB451D8918D70AE4005FBE09 /* Embedded */ = {
 			isa = PBXGroup;
 			children = (
+				05028F752A12A102003FECD0 /* heightmap */,
 				8A4D03DD27A6DEED00B8A778 /* weather */,
 				DA5CA677211ECCB500E2B79B /* style */,
 				DA5A857E26C5692100F274C7 /* article_style.css */,
@@ -15231,6 +15248,7 @@
 				8466964A207CD7E000BA971B /* ic_action_sort_reverse_order@3x.png in Resources */,
 				8431E7951B383A190063C9AF /* ic_operator@2x.png in Resources */,
 				B247452F27E34B3600C18C3F /* ic_custom_restore@2x.png in Resources */,
+				05028F792A12A12A003FECD0 /* color_slope.txt in Resources */,
 				DA65834422BBB6FA0095B03D /* ic_custom_success@2x.png in Resources */,
 				DA0D1623281BEEF500CEEF58 /* map_turn_keep_right_dark@3x.png in Resources */,
 				843394CB1FF54A19006205A5 /* list_stop@3x.png in Resources */,
@@ -15551,6 +15569,7 @@
 				DA45DA74230EE05A0083DFA2 /* img_mapstyle_offroad@3x.png in Resources */,
 				DA518838217F5642007FCC47 /* ic_ruler_center@3x.png in Resources */,
 				DA8EE8142470147700069A6D /* mapillary.html in Resources */,
+				05028F7B2A12A12A003FECD0 /* slopes_main.txt in Resources */,
 				32E2D2E529B7381600A17D0B /* widget_coordinates_map_center_latitude_south_night@3x.png in Resources */,
 				DACBB99D25D6979900378C47 /* btn_map_current_location_day@2x.png in Resources */,
 				DA13419C243DC5A80039D214 /* ic_action_utv@2x.png in Resources */,
@@ -15938,6 +15957,7 @@
 				1565BAFC256C6CFC003C6278 /* ic_control_knob@3x.png in Resources */,
 				DAA4EDED240E85B800F16073 /* ic_custom_online@2x.png in Resources */,
 				DA5A82AE26C563A700F274C7 /* OATitleTwoIconsRoundCell.xib in Resources */,
+				05028F7A2A12A12A003FECD0 /* hillshade_main.txt in Resources */,
 				32A001A026131FEA00ABE0D2 /* ic_custom_clipboard@2x.png in Resources */,
 				DAB985AE2124235E0081F8F8 /* da_tts.js in Resources */,
 				DAF3457522F4482C009E2EB6 /* ic_custom_arrow_forward@3x.png in Resources */,
@@ -16997,7 +17017,7 @@
 				DA5A81C526C563A700F274C7 /* OANameStringMatcher.m in Sources */,
 				DA5A840326C563A800F274C7 /* OAAddressTableViewController.mm in Sources */,
 				328BD49529D5AC6400045871 /* OATripRecordingDistanceWidget.m in Sources */,
-				32119B3D28477142005E1E0C /* OAOsmandDevelopmentPlugin.m in Sources */,
+				32119B3D28477142005E1E0C /* OAOsmandDevelopmentPlugin.mm in Sources */,
 				3242A46F26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm in Sources */,
 				DA5A835D26C563A800F274C7 /* OATextLineViewCell.m in Sources */,
 				DA4ABF1D2876DA6800B996EF /* OAGpxSettingsItem.m in Sources */,

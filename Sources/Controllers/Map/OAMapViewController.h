@@ -195,4 +195,7 @@
 
 - (void) onApplicationDestroyed;
 
+- (void) recreateHeightmapProvider;
+- (void) updateElevationConfiguration;
+
 @end

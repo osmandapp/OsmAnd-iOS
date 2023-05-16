@@ -1683,7 +1683,7 @@
 "reverse_route" = "Ruta inversa";
 "quick_action_remove_next_destination_descr" = "Quita el siguiente destino de la ruta. Si es el destino final, la navegación se detendrá.";
 "public_transport_try_change_settings" = "Intenta cambiar los ajustes.";
-"quick_action_remove_next_destination" = "Borrar el siguiente punto de destino";
+"quick_action_remove_next_destination" = "Eliminar el próximo punto de destino";
 "public_transport_hide" = "Ocultar transporte público";
 "public_transport_menu" = "Transporte";
 "coord_input_add_point" = "Añadir punto";

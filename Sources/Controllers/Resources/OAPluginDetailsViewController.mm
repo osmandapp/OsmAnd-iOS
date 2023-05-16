@@ -18,6 +18,11 @@
 #import "OAChoosePlanHelper.h"
 #import "OAPlugin.h"
 #import "OAColors.h"
+#import "OAOsmandDevelopmentViewController.h"
+#import "OATripRecordingSettingsViewController.h"
+#import "OAOsmEditingSettingsViewController.h"
+#import "OAWeatherSettingsViewController.h"
+#import "OAWikipediaSettingsViewController.h"
 #import <SafariServices/SafariServices.h>
 
 #define kPriceButtonTextInset 8.0
@@ -39,17 +44,20 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     OAIAPHelper *_iapHelper;
     OAPlugin *_plugin;
     EOAPluginScreenType _screenType;
+    UIViewController *_settingsViewController;
 
     CALayer *_horizontalLineDesc;
 }
 
 - (instancetype) initWithProduct:(OAProduct *)product
 {
-    self = [super init];
+    self = [super initWithNibName:@"OAPluginDetailsViewController" bundle:nil];
     if (self)
     {
         _product = product;
         _screenType = EOAPluginScreenTypeProduct;
+        self.title = _product.localizedTitle;
+        _settingsViewController = [self getSettingsViewController];
     }
     return self;
 }
@@ -61,6 +69,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     {
         _plugin = plugin;
         _screenType = EOAPluginScreenTypeCustomPlugin;
+        self.title = _plugin.getName;
     }
     return self;
 }
@@ -120,7 +129,6 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     }
     self.icon.image = logo;
     
-    [self applySafeAreaMargins];
     [self updatePurchaseButton];
 }
 
@@ -152,21 +160,22 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     [super viewWillLayoutSubviews];
     
     CGFloat w;
-
+    
+    CGFloat navbarHeight = self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height;
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
     {
         w = DeviceScreenWidth;
-        _screenshot.frame = CGRectMake(0.0, 0.0, w, 220.0);
+        _screenshot.frame = CGRectMake(0.0, navbarHeight, w, 220.0);
         
-        _detailsView.frame = CGRectMake(0.0, _screenshot.frame.size.height, w, DeviceScreenHeight - _screenshot.frame.size.height);
+        _detailsView.frame = CGRectMake(0.0, navbarHeight + _screenshot.frame.size.height, w, DeviceScreenHeight - _screenshot.frame.size.height - navbarHeight);
     }
     else
     {
         w = DeviceScreenWidth / 2.0;
         
-        _screenshot.frame = CGRectMake(0.0, 0.0, w, DeviceScreenHeight);
+        _screenshot.frame = CGRectMake(0.0, navbarHeight, w, DeviceScreenHeight - navbarHeight);
         
-        _detailsView.frame = CGRectMake(w, 0.0, DeviceScreenWidth - w, DeviceScreenHeight);
+        _detailsView.frame = CGRectMake(w, navbarHeight, DeviceScreenWidth - w, DeviceScreenHeight - navbarHeight);
         
     }
 
@@ -185,6 +194,27 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
 
 }
 
+- (EOABaseNavbarColorScheme)getNavbarColorScheme;
+{
+    return EOABaseNavbarColorSchemeOrange;
+}
+
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
+{
+    if (_settingsViewController == nil)
+        return nil;
+    else
+        return @[[self createRightNavbarButton:nil
+                                  iconName:@"ic_navbar_settings"
+                                    action:@selector(onRightNavbarButtonPressed)
+                                      menu:nil]];
+}
+
+- (void) onRightNavbarButtonPressed
+{
+    if (_settingsViewController)
+        [self.navigationController pushViewController:_settingsViewController animated:YES];
+}
 
 - (UIView *) getTopView
 {
@@ -333,6 +363,21 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updatePurchaseButton];
     });
+}
+
+- (UIViewController *) getSettingsViewController
+{
+    if ([_product isKindOfClass:OATrackRecordingProduct.class])
+        return [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenGeneral applicationMode:[OAAppSettings sharedManager].applicationMode.get];
+    else if ([_product isKindOfClass:OAOsmEditingProduct.class])
+        return [[OAOsmEditingSettingsViewController alloc] init];
+    else if ([_product isKindOfClass:OAWeatherProduct.class])
+        return [[OAWeatherSettingsViewController alloc] init];
+    else if ([_product isKindOfClass:OAOsmandDevelopmentProduct.class])
+        return [[OAOsmandDevelopmentViewController alloc] init];
+    else if ([_product isKindOfClass:OAWikiProduct.class])
+        return [[OAWikipediaSettingsViewController alloc] initWithAppMode:[OAAppSettings sharedManager].applicationMode.get];
+    return nil;
 }
 
 #pragma mark - UITextViewDelegate

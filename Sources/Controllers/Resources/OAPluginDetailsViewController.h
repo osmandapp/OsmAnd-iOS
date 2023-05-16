@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseNavbarViewController.h"
 
 @class OAProduct, OAPlugin;
 
-@interface OAPluginDetailsViewController : OACompoundViewController
+@interface OAPluginDetailsViewController : OABaseNavbarViewController
 
 @property (weak, nonatomic) IBOutlet UIImageView *screenshot;
 

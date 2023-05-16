@@ -235,4 +235,6 @@
 #define color_primary_orange_navbar_background 0xFF8800
 #define color_primary_darkblue_navbar_background 0x09396C
 
+#define color_uiswitch_on_day 0x65C366
+
 #endif /* OAColors_h */

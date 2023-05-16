@@ -2705,13 +2705,13 @@
 "position_on_map" = "Position auf dem Bildschirm";
 "position_on_map_center" = "Zentrieren";
 "position_on_map_bottom" = "Unten";
-"routing_attr_motor_type_description" = "Wählen Sie die Kraftstoffart Ihres Motors, um den CO2-Ausstoß zu berechnen.";
+"routing_attr_motor_type_description" = "Wählen Sie die Kraftstoffart Ihres Motors, um den CO₂-Ausstoß zu berechnen.";
 "routing_attr_motor_type_lpg_name" = "LPG";
 "routing_attr_motor_type_gas_name" = "CNG";
 "routing_attr_motor_type_electric_name" = "Elektrisch";
 "routing_attr_motor_type_hybrid_name" = "Hybrid";
 "routing_attr_motor_type_petrol_name" = "Benzin";
-"co2_mission" = "CO2-Emission";
+"co2_mission" = "CO₂-Emission";
 "routing_attr_motor_type_diesel_name" = "Diesel";
 "routing_attr_motor_type_name" = "Fahrzeugmotor";
 "si_nm_mt" = "Seemeilen/Meter";

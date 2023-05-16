@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class OAApplicationMode;
+
 @interface OAWidgetState : NSObject
 
 - (NSString *) getMenuTitle;

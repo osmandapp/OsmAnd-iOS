@@ -1,0 +1,44 @@
+//
+//  DistanceToIntermediateDestinationWidget.swift
+//  OsmAnd Maps
+//
+//  Created by Paul on 11.05.2023.
+//  Copyright © 2023 OsmAnd. All rights reserved.
+//
+
+import Foundation
+import CoreLocation
+
+@objc(OADistanceToIntermediateDestinationWidget)
+@objcMembers
+class DistanceToIntermediateDestinationWidget: OADistanceToPointWidget {
+    
+    init() {
+        super.init(icons: "widget_intermediate_day", nightIconId: "widget_intermediate_night")
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    override func click() {
+        if let intermediatePoints = OATargetPointsHelper.sharedInstance().getIntermediatePoints(), intermediatePoints.count > 1 {
+            // TODO: map.getMapActions().openIntermediatePointsDialog()
+        } else {
+            super.click()
+        }
+    }
+    
+    override func getPointToNavigate() -> CLLocation? {
+        let p = OATargetPointsHelper.sharedInstance().getFirstIntermediatePoint()
+        return p?.point
+    }
+    
+    override func getDistance() -> CLLocationDistance {
+        let routingHelper = OARoutingHelper.sharedInstance()!
+        if let pointToNavigate = getPointToNavigate(), routingHelper.isRouteCalculated() {
+            return CLLocationDistance(routingHelper.getLeftDistanceNextIntermediate())
+        }
+        return super.getDistance()
+    }
+}

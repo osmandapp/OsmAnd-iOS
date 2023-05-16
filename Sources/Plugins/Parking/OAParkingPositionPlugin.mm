@@ -26,6 +26,7 @@
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
 #import "OAOsmAndFormatter.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -71,7 +72,7 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _helper = [OADestinationsHelper instance];
-        [OAApplicationMode regWidgetVisibility:PLUGIN_ID am:nil];
+        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetId:PLUGIN_ID appModes:nil];
         
         _parkingLat = [[[OACommonDouble withKey:PARKING_POINT_LAT defValue:0.] makeShared] makeGlobal];
         _parkingLon = [[[OACommonDouble withKey:PARKING_POINT_LON defValue:0.] makeShared] makeGlobal];

@@ -350,10 +350,10 @@ typedef enum
         _destinationViewController.delegate = self;
         _destinationViewController.destinationDelegate = self;
         
-        if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisibility get])
+        if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisibility get])
             [self showToolbar:_destinationViewController];
     }
-    else if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+    else if ([_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY)
         [self showToolbar:_destinationViewController];
     
     // Inflate new HUD controller
@@ -445,7 +445,7 @@ typedef enum
 - (void) refreshToolbar
 {
     [_destinationViewController refreshView];
-    if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.distanceIndicationVisibility get] && [_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+    if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.distanceIndicationVisibility get] && [_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY)
         [self showToolbar:_destinationViewController];
     else
         [self hideToolbar:_destinationViewController];
@@ -742,8 +742,13 @@ typedef enum
 - (BOOL) isContextMenuVisible
 {
     return (_targetMenuView && _targetMenuView.superview && !_targetMenuView.hidden)
-        || (_targetMultiMenuView && _targetMultiMenuView.superview)
+        || self.isTargetMultiMenuViewVisible
         || (_scrollableHudViewController && _scrollableHudViewController.view.superview);
+}
+
+- (BOOL) isTargetMultiMenuViewVisible
+{
+    return _targetMultiMenuView && _targetMultiMenuView.superview;
 }
 
 - (BOOL) isRouteInfoVisible
@@ -3649,7 +3654,7 @@ typedef enum
 
 - (void)destinationsAdded
 {
-    if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisibility get])
+    if ([_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisibility get])
         [self showToolbar:_destinationViewController];
 }
 
@@ -3725,7 +3730,7 @@ typedef enum
     
         [cardsController doViewWillDisappear];
 
-        if ([OADestinationsHelper instance].sortedDestinations.count == 0 || !([_settings.distanceIndicationVisibility get]) || ([_settings.distanceIndication get] == WIDGET_DISPLAY))
+        if ([OADestinationsHelper instance].sortedDestinations.count == 0 || !([_settings.distanceIndicationVisibility get]) || ([_settings.mapMarkersDisplayMode get] == WIDGET_DISPLAY))
         {
             [self hideToolbar:_destinationViewController];
         }

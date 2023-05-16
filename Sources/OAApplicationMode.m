@@ -12,6 +12,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kBackgroundDistanceSlow 5
 #define kBackgroundDistanceFast 10
@@ -628,7 +629,7 @@ static OAApplicationMode *_HORSE;
     [self initModesParents];
     [self initCustomModes];
     [self initModesParams];
-    [self initRegVisibility];
+    [OAWidgetsAvailabilityHelper initRegVisibility];
     [self reorderAppModes];
 }
 
@@ -748,7 +749,7 @@ static OAApplicationMode *_HORSE;
     {
         mode = [builder customReg];
         [_values addObject:mode];
-        [OAApplicationMode initRegVisibility];
+        [OAWidgetsAvailabilityHelper initRegVisibility];
     }
     
     [self reorderAppModes];

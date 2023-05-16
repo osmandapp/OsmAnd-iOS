@@ -142,7 +142,7 @@
                                    @"type" : [OASwitchTableViewCell getCellIdentifier]} ];
     }
     
-    EOADistanceIndicationConstant distanceIndication = [_settings.distanceIndication get];
+    EOADistanceIndicationConstant distanceIndication = [_settings.mapMarkersDisplayMode get];
     NSString *markersAppeareance = distanceIndication == WIDGET_DISPLAY ? OALocalizedString(@"shared_string_widgets") : OALocalizedString(@"shared_string_topbar") ;
     [controlsList addObject:@{ @"type" : [OAValueTableViewCell getCellIdentifier],
                                @"title" : OALocalizedString(@"map_markers"),
@@ -184,8 +184,8 @@
 {
     for (OAMapWidgetRegInfo *r in widgets)
     {
-        if (![mode isWidgetAvailable:r.key])
-            continue;
+//        if (![mode isWidgetAvailable:r.key])
+//            continue;
 
         NSString *type;
         NSString *description;

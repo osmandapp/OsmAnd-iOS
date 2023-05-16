@@ -37,4 +37,6 @@
 
 - (void) setRotationNoneToManual;
 
+- (CLLocation *) getDefaultLocation;
+
 @end

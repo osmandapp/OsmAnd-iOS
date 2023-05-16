@@ -147,6 +147,11 @@
     return 36;
 }
 
+- (BOOL)isVisible
+{
+    return !_collection->getLines().isEmpty();
+}
+
 - (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points addToExisting:(BOOL)addToExisting colors:(const QList<OsmAnd::FColorARGB> &)colors colorizationScheme:(int)colorizationScheme
 {
     [self.mapViewController runWithRenderSync:^{

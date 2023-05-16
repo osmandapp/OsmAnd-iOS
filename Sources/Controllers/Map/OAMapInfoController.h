@@ -39,4 +39,6 @@
 
 - (void) updateRuler;
 
+- (BOOL)topTextViewVisible;
+
 @end

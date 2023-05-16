@@ -8,6 +8,20 @@
 
 #import <Foundation/Foundation.h>
 
+#define COLLAPSED_PREFIX @"+"
+#define HIDE_PREFIX @"-"
+#define SHOW_PREFIX @""
+#define SETTINGS_SEPARATOR @";"
+
+#define kWidgetModeDisabled 0x1
+#define kWidgetModeEnabled 0x2
+#define KWidgetModeAvailable 0x4
+#define kWidgetModeDefault 0x8
+
+#define kWidgetRegisteredNotification @"onWidgetRegistered"
+#define kWidgetVisibilityChangedMotification @"onWidgetVisibilityChanged"
+#define kWidgetsCleared @"onWidgetsCleared"
+
 @class OAApplicationMode, OATextInfoWidget, OAMapWidgetRegInfo, OAWidgetState;
 
 @interface OAMapWidgetRegistry : NSObject

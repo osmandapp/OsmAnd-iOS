@@ -209,6 +209,9 @@
 
 #define rulerModeKey @"rulerMode"
 #define showDistanceRulerKey @"showDistanceRuler"
+#define showElevationProfileWidgetKey @"show_elevation_profile_widget"
+#define showSlopesOnElevationWidget @"show_slopes_on_elevation_widget"
+#define customWidgetKeys @"custom_widgets_keys"
 
 #define osmUserNameKey @"osm_user_name"
 #define userOsmBugNameKey @"userOsmBugName"
@@ -363,6 +366,7 @@
 
 #define routeMapMarkersStartMyLocKey @"routeMapMarkersStartMyLoc"
 #define routeMapMarkersRoundTripKey @"routeMapMarkersRoundTrip"
+#define showMapMarkersBarWidgetKey @"showMapMarkersBarWidget"
 
 #define osmandUsageSpaceKey @"osmandUsageSpace"
 
@@ -3887,6 +3891,14 @@
 
         _showDistanceRuler = [OACommonBoolean withKey:showDistanceRulerKey defValue:NO];
         [_profilePreferences setObject:_showDistanceRuler forKey:@"show_distance_ruler"];
+        
+        _showElevationProfileWidget = [OACommonBoolean withKey:showElevationProfileWidgetKey defValue:NO];
+        [_profilePreferences setObject:_showDistanceRuler forKey:showElevationProfileWidgetKey];
+        _showSlopesOnElevationWidget = [OACommonBoolean withKey:showSlopesOnElevationWidget defValue:NO];
+        [_profilePreferences setObject:_showDistanceRuler forKey:showSlopesOnElevationWidget];
+        
+        _customWidgetKeys = [OACommonStringList withKey:customWidgetKeys defValue:nil];
+        [_profilePreferences setObject:_customWidgetKeys forKey:customWidgetKeys];
 
         _showArrivalTime = [OACommonBoolean withKey:showArrivalTimeKey defValue:YES];
         _showIntermediateArrivalTime = [OACommonBoolean withKey:showIntermediateArrivalTimeKey defValue:YES];
@@ -4216,12 +4228,14 @@
         [_profilePreferences setObject:_activeMarkers forKey:@"displayed_markers_widgets_count"];
         _distanceIndicationVisibility = [OACommonBoolean withKey:mapDistanceIndicationVisabilityKey defValue:YES];
         [_profilePreferences setObject:_distanceIndicationVisibility forKey:@"markers_distance_indication_enabled"];
-        _distanceIndication = [OACommonDistanceIndicationConstant withKey:mapDistanceIndicationKey defValue:TOP_BAR_DISPLAY];
-        [_profilePreferences setObject:_distanceIndication forKey:@"map_markers_mode"];
+        _mapMarkersDisplayMode = [OACommonDistanceIndicationConstant withKey:mapDistanceIndicationKey defValue:TOP_BAR_DISPLAY];
+        [_profilePreferences setObject:_mapMarkersDisplayMode forKey:@"map_markers_mode"];
         _arrowsOnMap = [OACommonBoolean withKey:mapArrowsOnMapKey defValue:NO];
         [_profilePreferences setObject:_arrowsOnMap forKey:@"show_arrows_to_first_markers"];
         _directionLines = [OACommonBoolean withKey:mapDirectionLinesKey defValue:YES];
         [_profilePreferences setObject:_directionLines forKey:@"show_lines_to_first_markers"];
+        _showMapMarkersBarWidget = [OACommonBoolean withKey:showMapMarkersBarWidgetKey defValue:YES];
+        [_profilePreferences setObject:_showMapMarkersBarWidget forKey:@"markers_distance_indication_enabled"];
 
         // global
 

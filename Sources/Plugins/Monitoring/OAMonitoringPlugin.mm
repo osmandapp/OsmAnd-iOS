@@ -26,6 +26,7 @@
 #import "OATripRecordingDistanceWidget.h"
 #import "OATripRecordingTimeWidget.h"
 #import "OATripRecordingElevationWidget.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define PLUGIN_ID kInAppId_Addon_TrackRecording
 
@@ -60,8 +61,7 @@
         _settings = [OAAppSettings sharedManager];
         _liveMonitoringHelper = [[OALiveMonitoringHelper alloc] init];
         _savingTrackHelper = [OASavingTrackHelper sharedInstance];
-        NSArray<OAApplicationMode *> *am = [OAApplicationMode allPossibleValues];
-        [OAApplicationMode regWidgetVisibility:PLUGIN_ID am:am];
+        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetId:PLUGIN_ID appModes:nil];
     }
     return self;
 }

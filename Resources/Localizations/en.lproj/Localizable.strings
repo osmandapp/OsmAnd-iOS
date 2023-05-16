@@ -232,6 +232,9 @@
 "widget_secondary_desc_part_of" = "Part of \“%@\” plugin.";
 "weather_widgets_secondary_desc" = "Measurement units can be changed in the Weather plugin settings.";
 
+"shared_string_switch_mode" = "Switch mode";
+"go_to_marker_location" = "Go to marker location";
+"side_marker_eta" = "Estimated arrival time";
 "map_markers_bar" = "Map markers bar";
 "map_widget_distance_to_destination" = "Distance to destination";
 "map_widget_distance_to_intermediate" = "Distance to intermediate";

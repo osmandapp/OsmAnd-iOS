@@ -10,6 +10,7 @@
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "OAAppSettings.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define textHeight 22
 #define minTextWidth 64
@@ -148,6 +149,11 @@
     _imageView.hidden = hidden;
 }
 
+- (BOOL) setIcons:(OAWidgetType *)widgetType
+{
+    return [self setIcons:widgetType.dayIconName widgetNightIcon:widgetType.nightIconName];
+}
+
 - (BOOL) setIcons:(NSString *)widgetDayIcon widgetNightIcon:(NSString *)widgetNightIcon
 {
     if (![_dayIcon isEqualToString:widgetDayIcon] || ![_nightIcon isEqualToString:widgetNightIcon])
@@ -166,6 +172,16 @@
 - (BOOL) isNight
 {
     return _isNight;
+}
+
+- (NSString *) getIconName
+{
+    return [self getIconName:self.isNight];
+}
+
+- (NSString *) getIconName:(BOOL)nightMode
+{
+    return nightMode ? _nightIcon : _dayIcon;
 }
 
 - (NSString *) combine:(NSString *)text subtext:(NSString *)subtext
@@ -371,6 +387,14 @@
 - (BOOL) isExplicitlyVisible
 {
     return _explicitlyVisible;
+}
+
+- (void) setTimeText:(NSTimeInterval)time
+{
+    int hours, minutes, seconds;
+    [OAUtilities getHMS:time hours:&hours minutes:&minutes seconds:&seconds];
+    NSString *timeStr = [NSString stringWithFormat:@"%d:%02d", hours, minutes];
+    [self setText:timeStr subtext:nil];
 }
 
 - (void) updateIconMode:(BOOL)night

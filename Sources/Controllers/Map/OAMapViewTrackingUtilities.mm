@@ -804,6 +804,26 @@
     _mapView.mapAnimator->resume();
 }
 
+- (CLLocation *) getDefaultLocation
+{
+    CLLocation *location = _app.locationServices.lastKnownLocation;
+//    if (location == nil) {
+//        getLocationProvider().getLastStaleKnownLocation();
+//    }
+    if (location != nil) {
+        return location;
+    }
+    return [self getMapLocation];
+}
+
+- (CLLocation *) getMapLocation {
+//    if (mapView == null) {
+//        return settings.getLastKnownMapLocation();
+//    }
+    OsmAnd::LatLon centerLatLon = OsmAnd::Utilities::convert31ToLatLon(_mapView.target31);
+    return [[CLLocation alloc] initWithLatitude:centerLatLon.latitude longitude:centerLatLon.longitude];
+}
+
 - (void) resetDrivingRegionUpdate
 {
     _drivingRegionUpdated = NO;

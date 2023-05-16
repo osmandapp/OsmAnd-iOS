@@ -229,6 +229,11 @@
     }
 }
 
+- (BOOL)topTextViewVisible
+{
+    return _streetNameView && _streetNameView.superview && !_streetNameView.hidden;
+}
+
 - (void) layoutWidgets:(OABaseWidgetView *)widget
 {
     NSMutableArray<UIView *> *containers = [NSMutableArray array];
@@ -261,7 +266,7 @@
     CGFloat maxContainerHeight = 0;
     CGFloat yPos = 0;
     BOOL hasStreetName = NO;
-    if (_streetNameView && _streetNameView.superview && !_streetNameView.hidden)
+    if ([self topTextViewVisible])
     {
         hasStreetName = YES;
         if (portrait)

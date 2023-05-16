@@ -34,7 +34,7 @@ class WidgetType: NSObject {
         self.defaultPanel = defaultPanel
     }
 
-    func getIconName(night: Bool) -> String {
+    func getIconName(_ night: Bool) -> String {
         return night ? nightIconName : dayIconName
     }
 
@@ -159,8 +159,7 @@ class WidgetType: NSObject {
     }
 
     static func getDefaultWidgetId(_ id: String) -> String {
-        // TODO: Use the delimeter constant from MapWidgetInfo class once implemented
-        let range = id.range(of: "__")
+        let range = id.range(of: MapWidgetInfo.DELIMITER)
         if let range {
             let index = id.distance(from: id.startIndex, to: range.lowerBound)
             return id.substring(to: index)
@@ -173,7 +172,7 @@ class WidgetType: NSObject {
     }
 
     static func getDuplicateWidgetId(_ widgetId: String) -> String {
-        return getDefaultWidgetId(widgetId) + "__" + String(Date.now.timeIntervalSince1970 * 1000);
+        return getDefaultWidgetId(widgetId) + MapWidgetInfo.DELIMITER + String(Date.now.timeIntervalSince1970 * 1000);
     }
 }
 

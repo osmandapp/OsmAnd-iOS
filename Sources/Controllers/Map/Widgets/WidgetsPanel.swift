@@ -10,7 +10,7 @@ import Foundation
 
 @objc(OAWidgetsPanel)
 @objcMembers
-class WidgetsPanel: NSObject {
+class WidgetsPanel: NSObject, NSCopying {
     
     static let leftPanel = WidgetsPanel(title: localizedString("map_widget_left"))
     static let rightPanel = WidgetsPanel(title: localizedString("map_widget_right"))
@@ -36,7 +36,7 @@ class WidgetsPanel: NSObject {
     
     let title: String
     
-    required init(title: String) {
+    internal required init(title: String) {
         self.title = title
     }
 
@@ -138,5 +138,9 @@ class WidgetsPanel: NSObject {
             return [.bottomPanel]
         }
         fatalError("Unsupported widgets panel")
+    }
+    
+    func copy(with zone: NSZone? = nil) -> Any {
+        self
     }
 }

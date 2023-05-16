@@ -923,6 +923,9 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *showStreetName;
 @property (nonatomic) OACommonInteger *positionPlacementOnMap;
 @property (nonatomic) OACommonBoolean *showDistanceRuler;
+@property (nonatomic) OACommonBoolean *showElevationProfileWidget;
+@property (nonatomic) OACommonBoolean *showSlopesOnElevationWidget;
+@property (nonatomic) OACommonStringList *customWidgetKeys;
 
 @property (assign, nonatomic) BOOL simulateNavigation;
 @property (nonatomic) NSString *simulateNavigationMode;
@@ -1041,9 +1044,10 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @property (nonatomic) OACommonActiveMarkerConstant* activeMarkers;
 @property (nonatomic) OACommonBoolean *distanceIndicationVisibility;
-@property (nonatomic) OACommonDistanceIndicationConstant *distanceIndication;
+@property (nonatomic) OACommonDistanceIndicationConstant *mapMarkersDisplayMode;
 @property (nonatomic) OACommonBoolean *arrowsOnMap;
 @property (nonatomic) OACommonBoolean *directionLines;
+@property (nonatomic) OACommonBoolean *showMapMarkersBarWidget;
 
 // global
 

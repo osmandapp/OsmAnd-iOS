@@ -13,6 +13,10 @@
 #define kTextInfoWidgetWidth 94
 #define kTextInfoWidgetHeight 32
 
+#define UPDATE_INTERVAL_MILLIS 1000
+
+@class OAWidgetType;
+
 @interface OATextInfoWidget : OABaseWidgetView
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
@@ -29,8 +33,12 @@
 
 - (void) setImage:(UIImage *)image;
 - (void) setImageHidden:(BOOL)visible;
+- (void) setTimeText:(NSTimeInterval)time;
 - (BOOL) isNight;
+- (BOOL) setIcons:(OAWidgetType *)widgetType;
 - (BOOL) setIcons:(NSString *)widgetDayIcon widgetNightIcon:(NSString *)widgetNightIcon;
+- (NSString *) getIconName;
+- (NSString *) getIconName:(BOOL)nightMode;
 
 - (void) setContentDescription:(NSString *)text;
 - (void) setContentTitle:(NSString *)text;

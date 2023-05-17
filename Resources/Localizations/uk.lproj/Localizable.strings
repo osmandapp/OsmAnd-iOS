@@ -2905,3 +2905,7 @@
 "shared_string_duplicate" = "Дублікат";
 "shared_string_all_colors" = "Усі кольори";
 "shared_string_add_color" = "Додати колір";
+"test_heightmap" = "Спробувати мапу висот";
+"generate_hillshade_from_3d_maps" = "Генерувати растрові мапи із відтіненням рельєфу з 3D-мап";
+"disable_vertex_hillshade_3d" = "Вимкнути відтінення вершини в 3D";
+"generate_slope_from_3d_maps" = "Генерувати растрові мапи схилів з 3D-мап";

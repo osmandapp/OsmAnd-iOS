@@ -2897,3 +2897,7 @@
 "shared_string_delete_color" = "Slet farve";
 "shared_string_add_color" = "Tilføj farve";
 "shared_string_duplicate" = "Duplikér";
+"test_heightmap" = "Test højdekort";
+"disable_vertex_hillshade_3d" = "Deaktiver vertex-terrænskygge i 3D";
+"generate_slope_from_3d_maps" = "Generér hældningsrasterkort fra 3D-kort";
+"generate_hillshade_from_3d_maps" = "Generér terrænskygge-rasterkort fra 3D-kort";

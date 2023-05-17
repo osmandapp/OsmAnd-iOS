@@ -44,7 +44,7 @@
 "switch_start_finish" = "Inversar lo ponch de partença e la destinacion";
 "clear_all_intermediates" = "Escafa lei ponchs intermediaris";
 "shared_string_options" = "Chausidas";
-"new_destination_point_dialog" = "Avètz ja determinat la destinacion";
+"new_destination_point_dialog" = "Avètz ja determinat la destinacion :";
 "replace_destination_point" = "Remplaçar la destinacion";
 "shared_string_current" = "Actuau";
 "make_as_start_point" = "Prendre aquest ponch per partença";
@@ -85,7 +85,7 @@
 "daynight_mode_auto" = "Auba/tremont";
 "route_simulation" = "Simulacion de percors";
 "auto_follow_location_enabled" = "Visualizatz una mapa centrada automaticament.";
-"unknown_location" = "La posicion es pas encar conoissuda";
+"unknown_location" = "La posicion es pas encar conoissuda.";
 "animate_routing_route_not_calculated" = "D\'en premier, avisatz-vos de carcular lo percors";
 "settings_preset" = "Perfiu predefinit";
 "settings_preset_descr" = "La configuracion de la mapa e de la navigacion seguís un perfiu d\'utilitzacion. Seleccionatz aicí vòstre perfiu predefinit.";
@@ -424,7 +424,7 @@
 "shared_string_waypoints" = "Ponchs d'etapa";
 "gpx_points" = "Ponch(s)";
 "shared_string_export" = "Exportar";
-"import_export" = "Importar/Exportar";
+"import_export" = "Importar/exportar";
 "import_tracks" = "Importar de traças";
 "gpx_import_already_exists" = "Lo fichier de l'itinerari indicat se tròba ja dins la lista. Chausissètz una accion.";
 "gpx_add_new" = "Ajustar un fichier novèu";
@@ -1892,9 +1892,7 @@
 "custom_osmand_plugin" = "Ajust d'OsmAnd adaptat";
 "custom_plugins" = "Ajusts complementaris personalizats";
 "import_duplicates_title" = "D\'uneis elements ja existisson";
-"import_duplicates_description" = "D\'elements importats pòrtan de noms pariers a aquelei qu\'a OsmAnd.
-\n
-\nSeleccionatz una accion.";
+"import_duplicates_description" = "D\'elements importats pòrtan de noms pariers a aquelei qu\'a OsmAnd.\n\nSeleccionatz una accion.";
 "shared_string_quick_actions" = "Accions dirèctas";
 "shared_string_poi_types" = "Tipes de PDI";
 "quick_action_map_source_title" = "Fònts de la mapa";
@@ -2187,8 +2185,7 @@
 "public_transport_hide" = "Amagar lo transpòrt public";
 "quick_action_showhide_mapillary_title" = "Mostrar & Amagar Mapillary (fòtos)";
 "backup_error_invalid_token" = "Lo testimòni de seguretat vau pas";
-"osmand_cloud_create_account_descr" = "Per plaser, indicatz vòstra adreiça electronica, un còde de verificacion vos serà mandat
-\ne totei vòstrei donadas i seràn ligadas.";
+"osmand_cloud_create_account_descr" = "Per plaser, indicatz vòstra adreiça electronica, un còde de verificacion vos serà mandat\ne totei vòstrei donadas i seràn ligadas.";
 "cloud_create_account" = "Crear un còmpte";
 "local_backup" = "Sauvagarda locala";
 "local_backup_descr" = "Sauvagardarò restaurar de donadas partent d\'un fichier locau.";
@@ -2292,9 +2289,7 @@
 "default_speed_descr" = "Estimar l'ora d'arribada si la mena de vias es pas conoissuda e en aplicant lei limitacions de velocitat en totei lei carrieras (aquò podriá afectar la navigacion)";
 "weather_precip_inches" = "Poces";
 "help_what_is_new" = "Noveutats";
-"open_place_reviews_plugin_description" = "Mandatz de fòtos, de criticas e de liames sus de luòcs publics taus coma restaurants, ostalariás, musèus e etapas per donadas dobèrtas https://openplacereviews.org/data/.
-\n
-\nNe\'n saber mai sus : https://openplacereviews.org";
+"open_place_reviews_plugin_description" = "Mandatz de fòtos, de criticas e de liames sus de luòcs publics taus coma restaurants, ostalariás, musèus e etapas per donadas dobèrtas https://openplacereviews.org/data/.\n\nNe\'n saber mai sus : https://openplacereviews.org";
 "read_full_description" = "Legir la descripcion completa";
 "app_mode_car" = "Automobila";
 "add_description" = "Ajustar una descripcion";
@@ -2337,7 +2332,7 @@
 "app_mode_bicycle" = "Bicicleta";
 "app_mode_campervan" = "Autocaravana (RV)";
 "service_is_not_available_please_try_later" = "Servici indisponible, assajatz mai pus tard.";
-"backup_error_failed_to_fetch_remote_items" = "La recuperacion de la lista sus lo servidor a mancat, pecaire.";
+"backup_error_failed_to_fetch_remote_items" = "Impossible de recuperar la lista dei fichiers sus lo servidor.";
 "error_contact_support" = "Se la dificultat persita, contactatz nòstra equipa de supòrt.";
 "promo_subscription" = "Abonament promocionau";
 "renew_subscription" = "Renovelar l\'abonament";
@@ -2443,9 +2438,7 @@
 "select_backup_data_descr" = "Seleccionar lei donadas e lei dorsiers de sauvagardar.";
 "no_purchases" = "Avètz ges de cròmpas";
 "track_has_no_needed_data" = "Mancan lei donadas relativas a la traça.";
-"backup_delete_all_data_warning" = "Siatz a suprimir totei lei donadas telecargadas sus la Nívol OsmAnd, istoric dei versions comprés.
-\n
-\nPodrètz pas recuperar lei donadas suprimidas.";
+"backup_delete_all_data_warning" = "Siatz a suprimir totei lei donadas telecargadas sus la Nívol OsmAnd, istoric dei versions comprés.\n\nPodrètz pas recuperar lei donadas suprimidas.";
 "download_all" = "Tot teledescargar";
 "benefits_for_contributors_primary_descr" = "Lei contributors actius sus OpenStreetMap.org pòdon beneficiar de l\'actualizacion cartografica orària illimitada.";
 "contact_support" = "Contactar lo suppòrt";
@@ -2465,8 +2458,7 @@
 "duration_ago" = "%@ fach(s)";
 "contributions_may_calculate_with_delay" = "Lo calcul dei contribucions pòt demandar mai d\'una ora.";
 "select_another_colorization" = "Per plaser, chausissètz una autra mena de colorizacion.";
-"logout_from_osmand_cloud_decsr" = "Se deconnectar \?
-\nVos deuretz tornar connectar per sauvagardarò restaurar lei donadas.";
+"logout_from_osmand_cloud_decsr" = "Se deconnectar \?\nVos deuretz tornar connectar per sauvagardarò restaurar lei donadas.";
 "shared_string_added" = "Ajustat";
 "enough_contributions_descr" = "Felicitacions, avètz un nombre de contribucions OpenStreetMap sufisent e podètz profichar de l\'actualizacion illimitada de la mapa OsmAnd !";
 "pro_features" = "Fonccionalitats avançadas";
@@ -2484,11 +2476,8 @@
 "routing_attr_short_way_description" = "Prioritat a un percors breu e esparnhaire en energia";
 "backup_version_history" = "Istoric de la version";
 "walking_route_osmc_description" = "Coloratz lei percors de sa color locala particulara (se figura sus OpenStreetMap) e sa categoria (internationala, regionala, locala).";
-"backup_delete_old_data_warning" = "Siatz a mand d\'escafar l\'istoric dei modificacions ai donadas cargadas precedentament.
-\n
-\nLa version correnta dei donadas serà telecargada sus lo servidor mai vos serà pus possible de restaurar lei modificacions precedentas.";
+"backup_delete_old_data_warning" = "Siatz a mand d\'escafar l\'istoric dei modificacions ai donadas cargadas precedentament.\n\nLa version correnta dei donadas serà telecargada sus lo servidor mai vos serà pus possible de restaurar lei modificacions precedentas.";
 "backup_delete_all_data" = "Escafar totei mei donadas";
-
 "rendering_value_all_name" = "Tot";
 "routing_attr_allow_intermittent_description" = "Permetre lei vias navigablas non permanentas";
 "rendering_attr_showWaterwayTunnels_name" = "Galariás fluvialas";
@@ -2520,3 +2509,29 @@
 "shared_string_height" = "Auçada";
 "privacy_and_security" = "Vida privada e seguretat";
 "icon_group_service" = "Servici";
+"cloud_all_changes_downloaded" = "Totei lei modificacions son estat teledescargadas";
+"rendering_attr_weatherWindSpeedContours_name" = "Isolinhas de la velocitat dau vent";
+"cloud_all_changes_uploaded" = "Totei lei modificacions son estat telecargadas";
+"cloud_recent_changes" = "Cambiaments";
+"deleted_file" = "Fichier suprimit";
+"new_file" = "Fichier novèu";
+"mtb_imba_full" = "Associacion Internacionala de Ciclisme de Montanha";
+"shared_string_uploaded" = "Telecargat";
+"local_changes" = "Cambiaments locaus";
+"modified_file" = "Fichier modificat";
+"rendering_attr_weatherCloudContours_name" = "Isolinhas dei nívols";
+"rendering_attr_weatherPrecipitationContours_name" = "Isolinhas dei precipitacions";
+"shared_string_cloud" = "Nívol";
+"cloud_conflict" = "Conflicte";
+"upload_all" = "Tot telecargar";
+"cloud_all_changes_uploaded_descr" = "Totei lei cambiaments d'aquest aparelh se sincronizan amb OsmAnd Cloud.";
+"shared_string_expires" = "Expiracion";
+"search_favorites" = "Recercar de favorits";
+"sync_now" = "Sincronizar ara";
+"upload_change" = "Mandar la modificacion";
+"cloud_version_will_be_removed" = "La version Nívol serà eliminada";
+"last_sync" = "Darriera sincronizacion";
+"cloud_no_conflicts" = "I a ges de conflicte.";
+"cloud_changes_will_be_dismissed" = "Lei modificacions de Nívol seràn ignoradas";
+"local_file_will_be_restored" = "Lo fichier locau serà restaurat";
+"local_changes_will_be_dismissed" = "Lei cambiaments locaus seràn ignorats";

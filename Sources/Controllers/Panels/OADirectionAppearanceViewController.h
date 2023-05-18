@@ -6,8 +6,8 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseNavbarViewController.h"
 
-@interface OADirectionAppearanceViewController : OACompoundViewController
+@interface OADirectionAppearanceViewController : OABaseNavbarViewController
 
 @end

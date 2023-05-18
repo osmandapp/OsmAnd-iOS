@@ -155,7 +155,7 @@
         _rightIconLargeTitle = nil;
     }
 
-    if (![self isModal] && ![self.navigationController isNavigationBarHidden])
+    if (![self.navigationController isNavigationBarHidden])
     {
         //hide root navbar if open screen without navbar
         if (![self.navigationController.viewControllers.lastObject isNavbarVisible])
@@ -365,14 +365,16 @@
             freeSpaceForNavbarButton = 30.;
         }
         [leftButton setImage:leftNavbarButtonCustomIcon forState:UIControlStateNormal];
-        leftButton.imageEdgeInsets = UIEdgeInsetsMake(0., -10., 0., 0.);
         [leftButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         [leftButton addTarget:self action:@selector(onLeftNavbarButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         leftButton.translatesAutoresizingMaskIntoConstraints = NO;
         [leftButton.widthAnchor constraintLessThanOrEqualToConstant:freeSpaceForNavbarButton].active = YES;
 
+        NSString *accessibilityLabel = [self getCustomAccessibilityForLeftNavbarButton];
+        if (!accessibilityLabel)
+            accessibilityLabel = leftButtonTitle ? leftButtonTitle : OALocalizedString(@"shared_string_back");
         _leftNavbarButton = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
-        _leftNavbarButton.accessibilityLabel = leftButtonTitle ? leftButtonTitle : OALocalizedString(@"shared_string_back");
+        _leftNavbarButton.accessibilityLabel = accessibilityLabel;
         [self.navigationItem setLeftBarButtonItem:_leftNavbarButton animated:YES];
     }
     else
@@ -499,6 +501,11 @@
 }
 
 - (UIImage *)getCustomIconForLeftNavbarButton
+{
+    return nil;
+}
+
+- (NSString *)getCustomAccessibilityForLeftNavbarButton
 {
     return nil;
 }

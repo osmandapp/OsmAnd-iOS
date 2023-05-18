@@ -233,6 +233,7 @@
 #define color_primary_table_background 0xF2F2F3
 #define color_primary_gray_navbar_background 0xF9F9F9
 #define color_primary_orange_navbar_background 0xFF8800
+#define color_primary_darkblue_navbar_background 0x09396C
 
 #define color_uiswitch_on_day 0x65C366
 

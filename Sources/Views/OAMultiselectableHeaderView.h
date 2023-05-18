@@ -28,6 +28,7 @@
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated;
 - (void)setTitleText:(NSString *)title;
+- (CGFloat)getHeight;
 
 
 @end

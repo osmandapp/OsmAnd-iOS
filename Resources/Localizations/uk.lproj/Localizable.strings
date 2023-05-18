@@ -704,7 +704,7 @@
 "switch_start_finish" = "Поміняти місцями пункти відправлення і призначення";
 "clear_all_intermediates" = "Очистити усі проміжні точки";
 "shared_string_options" = "Параметри";
-"new_destination_point_dialog" = "Ви вже встановили пункт призначення:";
+"new_destination_point_dialog" = "Пункт призначення вже задано:";
 "replace_destination_point" = "Замінити пункт призначення";
 "shared_string_current" = "Поточний";
 "make_as_start_point" = "Зробити пунктом відправлення";
@@ -875,8 +875,8 @@
 "map_widget_intermediate_time" = "Час до проміжного пункту призначення";
 "shared_string_time" = "Час";
 "shared_string_distance" = "Відстань";
-"angular_units" = "Кутові одиниці виміру";
-"angular_units_descr" = "Змінити одиниці вимірювання азимуту.";
+"angular_units" = "Кутові одиниці";
+"angular_units_descr" = "Змінити одиниці вимірювання азимута.";
 "show_tunnels" = "Тунелі";
 "map_magnifier" = "Масштаб";
 "text_size" = "Розмір тексту";
@@ -955,7 +955,7 @@
 "years_5" = "Років";
 "price_free" = "Безплатно";
 "get_discount_title" = "Отримайте %d %@ зі знижкою %@.";
-"get_free_trial_title" = "Розпочніть ваш випробувальний період %d %@ .";
+"get_free_trial_title" = "Розпочніть ваш випробувальний період %d %@.";
 "get_discount_short_descr" = "%@ за %d %@, потім %@";
 "osm_succsessful_uploads" = "Успішно";
 "osm_failed_uploads" = "Помилка";

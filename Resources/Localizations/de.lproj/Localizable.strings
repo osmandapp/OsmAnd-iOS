@@ -2910,3 +2910,5 @@
 "shared_string_duplicate" = "Duplizieren";
 "shared_string_coloring" = "Farbgebung";
 "shared_string_edit_color" = "Farbe ändern";
+"generate_hillshade_from_3d_maps" = "Schummerungs-Rasterkarten aus 3D-Karten erzeugen";
+"disable_vertex_hillshade_3d" = "Eckpunkt-Schummerung in 3D deaktivieren";

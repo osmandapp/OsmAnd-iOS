@@ -469,7 +469,7 @@
 - (OAAlarmInfo *) getMostImportantAlarm:(EOASpeedConstant)sc showCameras:(BOOL)showCameras
 {
     CLLocation *lastProjection = [[OARoutingHelper sharedInstance] getLastProjection];
-    float mxspeed = [_route getCurrentMaxSpeed];
+    float mxspeed = [_route getCurrentMaxSpeed:[_appMode getRouteTypeProfile]];
     float delta = [[OAAppSettings sharedManager].speedLimitExceedKmh get] / 3.6f;
     OAAlarmInfo *speedAlarm = [self.class createSpeedAlarm:sc mxspeed:mxspeed loc:lastProjection delta:delta];
     if (speedAlarm)
@@ -839,7 +839,7 @@
 - (OAAlarmInfo *) calculateMostImportantAlarm:(const std::shared_ptr<RouteDataObject>)ro loc:(CLLocation *)loc mc:(EOAMetricsConstant)mc sc:(EOASpeedConstant)sc showCameras:(BOOL)showCameras
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    float mxspeed = ro->getMaximumSpeed(ro->bearingVsRouteDirection(loc.course));
+    float mxspeed = ro->getMaximumSpeed(ro->bearingVsRouteDirection(loc.course), [_appMode getRouteTypeProfile]);
     float delta = [settings.speedLimitExceedKmh get] / 3.6f;
     OAAlarmInfo *speedAlarm = [self.class createSpeedAlarm:sc mxspeed:mxspeed loc:loc delta:delta];
     if (speedAlarm)

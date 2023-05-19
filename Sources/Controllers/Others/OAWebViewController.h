@@ -6,19 +6,13 @@
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseWebViewController.h"
 
-#import <WebKit/WebKit.h>
+@interface OAWebViewController : OABaseWebViewController
 
-@interface OAWebViewController : OACompoundViewController
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet WKWebView *webView;
+@property NSString *urlString;
 
-@property NSString* urlString;
-
--(id)initWithUrl:(NSString*)url;
--(id)initWithUrlAndTitle:(NSString*)url title:(NSString *) title;
+- (id)initWithUrl:(NSString*)url;
+- (id)initWithUrlAndTitle:(NSString*)url title:(NSString *) title;
 
 @end

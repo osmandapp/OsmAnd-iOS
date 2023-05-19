@@ -16,18 +16,23 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="75"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Nautical map" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tZN-Uz-mL9">
-                        <rect key="frame" x="73" y="14" width="135" height="20.5"/>
-                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                        <color key="textColor" red="0.014569408260285854" green="0.014568623155355453" blue="0.014569067396223545" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nautical map of all world sdadf asdf asdfsa dfasd qwe rty asd fgh" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KEC-jF-poM">
-                        <rect key="frame" x="73" y="34.5" width="139" height="38.5"/>
-                        <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
-                        <color key="textColor" red="0.50025969743728638" green="0.50024467706680298" blue="0.50025320053100586" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="rt8-Jr-Bqa">
+                        <rect key="frame" x="73" y="15" width="135" height="45"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalCompressionResistancePriority="749" text="Nautical map" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tZN-Uz-mL9">
+                                <rect key="frame" x="0.0" y="0.0" width="135" height="18.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <color key="textColor" red="0.014569408260285854" green="0.014568623155355453" blue="0.014569067396223545" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Nautical map of all world sdadf asdf asdfsa dfasd qwe rty asd fgh" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KEC-jF-poM">
+                                <rect key="frame" x="0.0" y="18.5" width="135" height="26.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
+                                <color key="textColor" red="0.50025969743728638" green="0.50024467706680298" blue="0.50025320053100586" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                    </stackView>
                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pxS-n0-KIc">
                         <rect key="frame" x="16" y="15" width="45" height="45"/>
                         <color key="backgroundColor" red="0.926361083984375" green="0.92633336782455444" blue="0.92634916305541992" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -36,7 +41,7 @@
                             <constraint firstAttribute="height" constant="45" id="vVX-jF-N4b"/>
                         </constraints>
                     </view>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_app_purchase_2.png" translatesAutoresizingMaskIntoConstraints="NO" id="mSp-hr-KOI">
+                    <imageView userInteractionEnabled="NO" contentMode="center" image="img_app_purchase_2.png" translatesAutoresizingMaskIntoConstraints="NO" id="mSp-hr-KOI">
                         <rect key="frame" x="13.5" y="12.5" width="50" height="50"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="50" id="07p-Wz-Tpm"/>
@@ -58,21 +63,20 @@
                     </button>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="2Q3-oI-xox" firstAttribute="leading" secondItem="KEC-jF-poM" secondAttribute="trailing" constant="4" id="8d2-XI-TSb"/>
-                    <constraint firstItem="tZN-Uz-mL9" firstAttribute="leading" secondItem="pxS-n0-KIc" secondAttribute="trailing" constant="12" id="IhA-2A-aIt"/>
-                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="KEC-jF-poM" secondAttribute="bottom" constant="2" id="KaF-OW-9pJ"/>
-                    <constraint firstItem="2Q3-oI-xox" firstAttribute="leading" secondItem="tZN-Uz-mL9" secondAttribute="trailing" constant="8" id="Lty-Vy-jhO"/>
-                    <constraint firstItem="KEC-jF-poM" firstAttribute="leading" secondItem="pxS-n0-KIc" secondAttribute="trailing" constant="12" id="Q7D-Ph-g4Y"/>
-                    <constraint firstItem="pxS-n0-KIc" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Rlw-6B-PND"/>
+                    <constraint firstItem="rt8-Jr-Bqa" firstAttribute="leading" secondItem="pxS-n0-KIc" secondAttribute="trailing" constant="12" id="6OO-U8-Xei"/>
+                    <constraint firstAttribute="bottom" secondItem="rt8-Jr-Bqa" secondAttribute="bottom" constant="15" id="LSr-Ae-JTC"/>
+                    <constraint firstItem="rt8-Jr-Bqa" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="Ufw-uM-zvW"/>
                     <constraint firstItem="mSp-hr-KOI" firstAttribute="centerX" secondItem="pxS-n0-KIc" secondAttribute="centerX" id="ZT9-8G-trB"/>
                     <constraint firstAttribute="trailingMargin" secondItem="2Q3-oI-xox" secondAttribute="trailing" id="efh-tV-ZS8"/>
                     <constraint firstItem="pxS-n0-KIc" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="fk2-AP-ZVq"/>
-                    <constraint firstItem="KEC-jF-poM" firstAttribute="top" secondItem="tZN-Uz-mL9" secondAttribute="bottom" id="qb1-ac-BIa"/>
+                    <constraint firstItem="2Q3-oI-xox" firstAttribute="leading" secondItem="rt8-Jr-Bqa" secondAttribute="trailing" constant="8" id="otg-S1-Huk"/>
                     <constraint firstItem="mSp-hr-KOI" firstAttribute="centerY" secondItem="pxS-n0-KIc" secondAttribute="centerY" id="wBd-ba-pIM"/>
                     <constraint firstItem="2Q3-oI-xox" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="wUv-fB-Ihd"/>
-                    <constraint firstItem="tZN-Uz-mL9" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="14" id="xdP-Tk-ywQ"/>
                 </constraints>
             </tableViewCellContentView>
+            <constraints>
+                <constraint firstItem="pxS-n0-KIc" firstAttribute="centerY" secondItem="KGk-i7-Jjw" secondAttribute="centerY" id="kiW-1G-FIN"/>
+            </constraints>
             <connections>
                 <outlet property="btnPrice" destination="2Q3-oI-xox" id="coS-ii-sRb"/>
                 <outlet property="imgIcon" destination="mSp-hr-KOI" id="Ron-BZ-mVd"/>

@@ -92,6 +92,7 @@
 @property(nonatomic, assign) BOOL minimap;
 
 @property(readonly) BOOL zoomingByGesture;
+@property(readonly) BOOL zoomingByTapGesture;
 @property(readonly) BOOL movingByGesture;
 @property(readonly) BOOL rotatingByGesture;
 

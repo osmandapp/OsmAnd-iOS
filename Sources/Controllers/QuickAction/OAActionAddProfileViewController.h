@@ -6,7 +6,7 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseNavbarViewController.h"
 
 @protocol OAAddProfileDelegate <NSObject>
 
@@ -16,7 +16,7 @@
 
 @end
 
-@interface OAActionAddProfileViewController : OACompoundViewController
+@interface OAActionAddProfileViewController : OABaseNavbarViewController
 
 @property (nonatomic) id<OAAddProfileDelegate> delegate;
 

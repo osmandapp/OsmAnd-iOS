@@ -51,7 +51,6 @@ class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
         fatalError("init(coder:) has not been implemented")
     }
 
-
     private func changeWidgetState() {
         widgetState.changeToNextState()
         _ = updateInfo()
@@ -118,21 +117,18 @@ class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
         cachedMeters = distance
         lastUpdatedTime = currentTime
         
-        // TODO: Implement AverageSpeedComputer
-//        let averageSpeedComputer = app.getAverageSpeedComputer()
-//        let interval = widgetState.getAverageSpeedIntervalPref().get()
-//        let averageSpeed = averageSpeedComputer.getAverageSpeed(interval: interval, isDelta: false)
-        
-        let averageSpeed = Double.nan
+        let averageSpeedComputer = OAAverageSpeedComputer.sharedInstance()
+        let interval = widgetState.averageSpeedIntervalPref.get()
+        let averageSpeed = averageSpeedComputer.getAverageSpeed(interval, skipLowSpeed: false)
         
         if averageSpeed.isNaN || averageSpeed == 0 {
             setText(Self.DASH, subtext: nil)
             return
         }
         
-//        let estimatedLeftSeconds = Int(Double(distance) / averageSpeed)
-//        let estimatedArrivalTime = currentTime + TimeInterval(estimatedLeftSeconds)
-//        setTimeText(estimatedArrivalTime)
+        let estimatedLeftSeconds = Int(Double(distance) / Double(averageSpeed))
+        let estimatedArrivalTime = currentTime + TimeInterval(estimatedLeftSeconds)
+        setTimeText(estimatedArrivalTime)
     }
     
     private func updateIconIfNeeded(marker: OADestination, newMode: SideMarkerMode, modeChanged: Bool) {

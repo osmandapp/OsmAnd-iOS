@@ -17,10 +17,13 @@
 #import "OAAppSettings.h"
 #import "OAOsmAndFormatter.h"
 
+#define kTopViewSide 72
+#define kLeftViewSide 24
+
 @interface OANextTurnWidget ()
 
-@property (weak, nonatomic) IBOutlet UIView *topView;
-@property (weak, nonatomic) IBOutlet UIView *leftView;
+@property (nonatomic) IBOutlet UIView *topView;
+@property (nonatomic) IBOutlet UIView *leftView;
 
 @end
 
@@ -43,6 +46,11 @@
     self = [super init];
     if (self)
     {
+        _topView = [[UIView alloc] initWithFrame:CGRectMake(11., 6., kTopViewSide, kTopViewSide)];
+        _leftView = [[UIView alloc] initWithFrame:CGRectMake(2., 84., kLeftViewSide, kLeftViewSide)];
+        [self addSubview:_topView];
+        [self addSubview:_leftView];
+        
         _app = [OsmAndApp instance];
         _horisontalMini = horisontalMini;
         _nextNext = nextNext;

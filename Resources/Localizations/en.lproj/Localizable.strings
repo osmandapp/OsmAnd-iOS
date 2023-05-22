@@ -298,11 +298,13 @@
 "shared_string_collapse" = "Collapse";
 "shared_string_topbar" = "Top bar";
 "shared_string_widgets" = "Widgets";
+"shared_string_buttons" = "Buttons";
 "map_widget_right" = "Right panel";
 "map_widget_left" = "Left panel";
 "top_widgets_panel" = "Top panel";
 "bottom_widgets_panel" = "Bottom panel";
 "layer_map_appearance" = "Configure screen";
+"widget_panels_descr" = "Select screen part to add or rearrange widgets.";
 "edit_profile_screen_options_subtitle" = "Select screen options for the profile";
 "map_markers" = "Map markers";
 "markers_history" = "Markers history";

@@ -11,8 +11,6 @@ import UIKit
 @objc(OAMapMarkerSideWidgetState)
 @objcMembers
 class MapMarkerSideWidgetState: OAWidgetState {
-    // TODO: Implement AverageSpeedComputer
-    static let DEFAULT_INTERVAL_MILLIS = 30 * 60 * 1000
     
     let settings = OAAppSettings.sharedManager()!
     let mapMarkerModePref: OACommonString
@@ -40,7 +38,7 @@ class MapMarkerSideWidgetState: OAWidgetState {
         if let customId, !customId.isEmpty {
             prefId += customId
         }
-        return settings.registerLongPreference(prefId, defValue: MapMarkerSideWidgetState.DEFAULT_INTERVAL_MILLIS)
+        return settings.registerLongPreference(prefId, defValue: OAAverageSpeedComputer.default_INTERVAL_MILLIS())
     }
     
     private static func registerMarkerClickBehaviourPref(_ customId: String?, settings: OAAppSettings, firstMarker: Bool) -> OACommonString {

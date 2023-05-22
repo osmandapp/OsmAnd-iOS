@@ -17,8 +17,13 @@ class DistanceToDestinationWidget: OADistanceToPointWidget {
         super.init(icons: "widget_target_day", nightIconId: "widget_target_night")
     }
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.frame = frame
+    }
+    
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func getPointToNavigate() -> CLLocation? {

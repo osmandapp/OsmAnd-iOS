@@ -12,10 +12,10 @@ import Foundation
 @objcMembers
 class WidgetsPanel: NSObject, NSCopying {
     
-    static let leftPanel = WidgetsPanel(title: localizedString("map_widget_left"))
-    static let rightPanel = WidgetsPanel(title: localizedString("map_widget_right"))
-    static let topPanel = WidgetsPanel(title: localizedString("top_widgets_panel"))
-    static let bottomPanel = WidgetsPanel(title: localizedString("bottom_widgets_panel"))
+    static let leftPanel = WidgetsPanel("ic_custom_screen_side_left", title: localizedString("map_widget_left"))
+    static let rightPanel = WidgetsPanel("ic_custom_screen_side_right", title: localizedString("map_widget_right"))
+    static let topPanel = WidgetsPanel("ic_custom_screen_side_top", title: localizedString("top_widgets_panel"))
+    static let bottomPanel = WidgetsPanel("ic_custom_screen_side_bottom", title: localizedString("bottom_widgets_panel"))
     
     static let DEFAULT_ORDER = 1000
     
@@ -35,9 +35,11 @@ class WidgetsPanel: NSObject, NSCopying {
     private static var ORIGINAL_BOTTOM_ORDER = getOrderIds(.bottomPanel)
     
     let title: String
+    let iconName: String
     
-    internal required init(title: String) {
+    internal required init(_ iconName: String, title: String) {
         self.title = title
+        self.iconName = iconName
     }
 
     private func getRtlPanel(rtl: Bool) -> WidgetsPanel {

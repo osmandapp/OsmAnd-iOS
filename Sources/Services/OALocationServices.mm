@@ -613,6 +613,11 @@
     [self setLocation:location];
 }
 
+- (BOOL) isInLocationSimulation
+{
+    return _simulatePosition != nil;
+}
+
 - (void) setLocation:(CLLocation *)location
 {
     if (location)

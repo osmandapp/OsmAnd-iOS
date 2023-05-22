@@ -73,4 +73,7 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView;
 - (void)onRotation;
 
+// Use to refresh button appearance
+- (void)setupNavbarButtons;
+
 @end

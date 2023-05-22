@@ -21,7 +21,7 @@ class CurrentTimeWidget: OATextInfoWidget {
     }
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func updateInfo() -> Bool {

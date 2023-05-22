@@ -13,13 +13,15 @@
 #import "OsmAnd_Maps-Swift.h"
 
 #define textHeight 22
+#define imageSide 24
 #define minTextWidth 64
 #define fullTextWidth 90
 
 @interface OATextInfoWidget ()
 
-@property (weak, nonatomic) IBOutlet UILabel *textView;
-@property (weak, nonatomic) IBOutlet UILabel *textShadowView;
+@property (nonatomic) UILabel *textView;
+@property (nonatomic) UILabel *textShadowView;
+@property (nonatomic) UIImageView *imageView;
 
 @end
 
@@ -50,48 +52,37 @@
 
 - (instancetype) init
 {
-    NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
-    
-    for (UIView *v in bundle)
-    {
-        if ([v isKindOfClass:[OATextInfoWidget class]])
-        {
-            self = (OATextInfoWidget *)v;
-            break;
-        }
-    }
+    self = [super init];
 
     if (self)
+    {
         self.frame = CGRectMake(0, 0, kTextInfoWidgetWidth, kTextInfoWidgetHeight);
-
-    [self commonInit];
-
+    }
     return self;
 }
 
 - (instancetype) initWithFrame:(CGRect)frame
 {
-    NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
-    
-    for (UIView *v in bundle)
-    {
-        if ([v isKindOfClass:[OATextInfoWidget class]])
-        {
-            self = (OATextInfoWidget *)v;
-            break;
-        }
-    }
-    
+    self = [super initWithFrame:frame];
     if (self)
+    {
         self.frame = frame;
-
-    [self commonInit];
+        [self commonInit];
+    }
     
     return self;
 }
 
 - (void) commonInit
 {
+    _textView = [[UILabel alloc] init];
+    _textShadowView = [[UILabel alloc] init];
+    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(2., 4., imageSide, imageSide)];
+    
+    [self addSubview:_textView];
+    [self addSubview:_textShadowView];
+    [self addSubview:_imageView];
+    
     CGFloat radius = 3.0;
     self.backgroundColor = [UIColor whiteColor];
     self.layer.cornerRadius = radius;

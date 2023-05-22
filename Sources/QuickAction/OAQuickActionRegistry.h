@@ -48,6 +48,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (long) getLastModifiedTime;
 - (void) setLastModifiedTime:(long)lastModifiedTime;
 
+- (NSInteger) getQuickActionsCount;
+
 @end
 
 NS_ASSUME_NONNULL_END

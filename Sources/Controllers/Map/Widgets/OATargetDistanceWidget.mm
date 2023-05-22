@@ -63,7 +63,7 @@
 
 - (void) setImage:(UIImage *)image
 {
-    [self.imageView setImage:image.imageFlippedForRightToLeftLayoutDirection];
+    [super setImage:image.imageFlippedForRightToLeftLayoutDirection];
 }
 
 @end

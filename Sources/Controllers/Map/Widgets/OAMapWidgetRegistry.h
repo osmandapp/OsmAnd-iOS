@@ -22,7 +22,7 @@
 #define kWidgetVisibilityChangedMotification @"onWidgetVisibilityChanged"
 #define kWidgetsCleared @"onWidgetsCleared"
 
-@class OAApplicationMode, OATextInfoWidget, OAMapWidgetRegInfo, OAWidgetState;
+@class OAApplicationMode, OATextInfoWidget, OAMapWidgetRegInfo, OAWidgetState, OAMapWidgetInfo, OAWidgetsPanel;
 
 @interface OAMapWidgetRegistry : NSObject
 
@@ -46,5 +46,10 @@
 - (NSOrderedSet<OAMapWidgetRegInfo *> *) getLeftWidgetSet;
 - (NSOrderedSet<OAMapWidgetRegInfo *> *) getRightWidgetSet;
 - (OAMapWidgetRegInfo *) widgetByKey:(NSString *)key;
+
+- (NSArray<OAMapWidgetInfo *> *)getAllWidgets;
+- (NSMutableOrderedSet<OAMapWidgetInfo *> *)getWidgetsForPanel:(OAApplicationMode *)appMode
+                                                   filterModes:(NSInteger) filterModes
+                                                        panels:(NSArray<OAWidgetsPanel *> *)panels;
 
 @end

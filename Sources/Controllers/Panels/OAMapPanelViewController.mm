@@ -102,6 +102,7 @@
 #import "OASearchToolbarViewController.h"
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OAMapInfoController.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #import "OARouteKey.h"
 #import "OANetworkRouteSelectionTask.h"
@@ -956,10 +957,13 @@ typedef enum
     
     [self removeGestureRecognizers];
     
-    _dashboard = [[OAConfigureMenuViewController alloc] init];
-    [_dashboard show:self parentViewController:nil animated:YES];
+    OAConfigureScreenViewController *vc = [[OAConfigureScreenViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
     
-    [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
+//    _dashboard = [[OAConfigureMenuViewController alloc] init];
+//    [_dashboard show:self parentViewController:nil animated:YES];
+//
+//    [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
     
     [self.targetMenuView quickHide];
     

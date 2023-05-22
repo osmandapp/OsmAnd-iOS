@@ -20,6 +20,8 @@
 #import "OADestinationItem.h"
 #import "OAMapViewHelper.h"
 #import "OAMapViewTrackingUtilities.h"
+#import "OAUtilities.h"
+#import "OAQuickActionRegistry.h"
 
 // Widgets
 #import "OAWidgetState.h"
@@ -38,6 +40,7 @@
 #import "OARulerWidget.h"
 #import "OASunriseSunsetWidget.h"
 #import "OASunriseSunsetWidgetState.h"
+#import "OAAverageSpeedComputer.h"
 
 // Plugins
 #import "OAPlugin.h"
@@ -46,3 +49,16 @@
 #import "OAWeatherPlugin.h"
 #import "OAMapillaryPlugin.h"
 #import "OAParkingPositionPlugin.h"
+
+// TableView Data
+#import "OATableDataModel.h"
+#import "OATableRowData.h"
+#import "OATableSectionData.h"
+
+// Controllers
+#import "OABaseNavbarViewController.h"
+
+// Cells
+#import "OAValueTableViewCell.h"
+#import "OASwitchTableViewCell.h"
+

@@ -116,6 +116,26 @@
     _data[kCellAccessoryType] = @(accessoryType);
 }
 
+- (NSString *)accessibilityLabel
+{
+    return _data[kCellAccessibilityLabel];
+}
+
+- (void)setAccessibilityLabel:(NSString *)accessibilityLabel
+{
+    _data[kCellAccessibilityLabel] = accessibilityLabel;
+}
+
+- (NSString *)accessibilityValue
+{
+    return _data[kCellAccessibilityValue];
+}
+
+- (void)setAccessibilityValue:(NSString *)accessibilityValue
+{
+    _data[kCellAccessibilityValue] = accessibilityValue;
+}
+
 - (void) setObj:(id)data forKey:(nonnull NSString *)key
 {
     _data[key] = data;

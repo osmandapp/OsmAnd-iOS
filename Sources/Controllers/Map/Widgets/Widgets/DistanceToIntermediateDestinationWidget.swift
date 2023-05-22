@@ -17,8 +17,13 @@ class DistanceToIntermediateDestinationWidget: OADistanceToPointWidget {
         super.init(icons: "widget_intermediate_day", nightIconId: "widget_intermediate_night")
     }
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.frame = frame
+    }
+    
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func click() {

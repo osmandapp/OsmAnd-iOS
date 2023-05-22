@@ -1915,7 +1915,8 @@ static OASubscriptionState *EXPIRED;
 
 - (void) checkBackupPurchase
 {
-    [self checkBackupPurchase:nil];
+    if (AFNetworkReachabilityManager.sharedManager.isReachable)
+        [self checkBackupPurchase:nil];
 }
 
 - (void) checkBackupPurchaseIfNeeded:(void(^)(BOOL))onComplete

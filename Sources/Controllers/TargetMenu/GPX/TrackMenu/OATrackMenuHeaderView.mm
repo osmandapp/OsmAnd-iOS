@@ -181,6 +181,7 @@
             [self.appearanceButton addTarget:self
                                       action:@selector(onAppearancePressed:)
                             forControlEvents:UIControlEventTouchUpInside];
+            [self.appearanceButton setImage:[UIImage templateImageNamed:@"ic_custom_appearance.png"] forState:UIControlStateNormal];
 
             if (!currentTrack)
             {

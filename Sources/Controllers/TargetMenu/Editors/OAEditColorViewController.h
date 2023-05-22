@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseNavbarViewController.h"
 
 @protocol OAEditColorViewControllerDelegate <NSObject>
 
@@ -15,19 +15,13 @@
 
 @end
 
-@interface OAEditColorViewController : OACompoundViewController<UITableViewDataSource, UITableViewDelegate>
-
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UIButton *saveButton;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@interface OAEditColorViewController : OABaseNavbarViewController
 
 @property (assign, nonatomic) NSInteger colorIndex;
 @property (nonatomic, readonly) BOOL saveChanges;
 
-@property (weak, nonatomic) id delegate;
+@property (nonatomic, weak) id<OAEditColorViewControllerDelegate> delegate;
 
-- (id) initWithColor:(UIColor *)color;
+- (instancetype)initWithColor:(UIColor *)color;
 
 @end

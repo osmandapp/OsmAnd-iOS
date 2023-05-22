@@ -7,10 +7,11 @@
 //
 
 #import "OAEditGroupViewController.h"
-#import "OAIconTextTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAInputTableViewCell.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
+
 #include "Localization.h"
 
 @implementation OAEditGroupViewController
@@ -18,7 +19,9 @@
     NSArray* _groups;
 }
 
--(id)initWithGroupName:(NSString *)groupName groups:(NSArray *)groups
+#pragma mark - Initialization
+
+- (instancetype)initWithGroupName:(NSString *)groupName groups:(NSArray *)groups
 {
     self = [super init];
     if (self) {
@@ -30,58 +33,39 @@
     return self;
 }
 
-- (void)applyLocalization
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    _titleView.text = OALocalizedString(@"shared_string_groups");
-    [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
+    return OALocalizedString(@"shared_string_groups");
 }
 
-- (void)viewDidLoad
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    [super viewDidLoad];
-    
-    _saveChanges = NO;
-    
-    [self setupView];
-    self.saveButton.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
+    return @[[self createRightNavbarButton:OALocalizedString(@"shared_string_save")
+                                  iconName:nil
+                                    action:@selector(onRightNavbarButtonPressed)
+                                      menu:nil]];
 }
 
-- (void)didReceiveMemoryWarning
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    return EOABaseNavbarColorSchemeOrange;
 }
 
--(UIView *) getTopView
-{
-    return _navBarView;
-}
+#pragma mark - Table data
 
--(UIView *) getMiddleView
-{
-    return _tableView;
-}
-
--(void)setupView
-{
-    [self applySafeAreaMargins];
-    [self.tableView setDataSource:self];
-    [self.tableView setDelegate:self];
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-}
-
-#pragma mark - UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return 2;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
     return [@[OALocalizedString(@"shared_string_groups"), OALocalizedString(@"fav_create_group")] objectAtIndex:section];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     if (section == 0)
         return [_groups count] + 1;
@@ -89,16 +73,17 @@
         return 1;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0)
     {
-        OAIconTextTableViewCell* cell;
-        cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+            [cell descriptionVisibility:NO];
+            [cell leftIconVisibility:NO];
         }
         
         if (cell)
@@ -106,28 +91,24 @@
             if (indexPath.row > 0)
             {
                 NSString* item = [_groups objectAtIndex:indexPath.row - 1];
-                [cell showImage:NO];
-                [cell.textView setText:item];
-                [cell.arrowIconView setImage:nil];
+                [cell.titleLabel setText:item];
+                cell.accessoryType = UITableViewCellAccessoryNone;
                 if ([item isEqualToString:self.groupName])
-                    [cell.arrowIconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];
+                    cell.accessoryType = UITableViewCellAccessoryCheckmark;
             }
             else
             {
-                [cell showImage:NO];
-                [cell.textView setText:OALocalizedString(@"favorites_item")];
-                [cell.arrowIconView setImage:nil];
+                [cell.titleLabel setText:OALocalizedString(@"favorites_item")];
+                cell.accessoryType = UITableViewCellAccessoryNone;
                 if (self.groupName.length == 0)
-                    [cell.arrowIconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];
+                    cell.accessoryType = UITableViewCellAccessoryCheckmark;
             }
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
         }
         return cell;
     }
     else
     {
-        OAInputTableViewCell *cell = (OAInputTableViewCell *) [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
+        OAInputTableViewCell *cell = (OAInputTableViewCell *) [self.tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
@@ -149,8 +130,7 @@
     return nil;
 }
 
-#pragma mark - UITableViewDelegate
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0)
     {
@@ -167,22 +147,16 @@
     }
 }
 
-#pragma mark - UITextFieldDelegate
+#pragma mark - Additions
+
 - (void)editGroupName:(id)sender
 {
     self.groupName = [((UITextField*)sender) text];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)sender
-{
-    [sender resignFirstResponder];
-    return YES;
-}
+#pragma mark - Selectors
 
-
-#pragma mark - Actions
-
-- (IBAction)saveClicked:(id)sender
+- (void)onRightNavbarButtonPressed
 {
     _saveChanges = YES;
 
@@ -190,6 +164,14 @@
         [self.delegate groupChanged];
 
     [self dismissViewController];
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)sender
+{
+    [sender resignFirstResponder];
+    return YES;
 }
 
 @end

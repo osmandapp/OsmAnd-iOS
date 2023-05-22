@@ -173,6 +173,7 @@
 
     _driveModeButton.hidden = NO;
     _driveModeButton.userInteractionEnabled = YES;
+    _driveModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
 
     _toolbarTopPosition = [OAUtilities getStatusBarHeight];
     

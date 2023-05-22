@@ -226,7 +226,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     NSMutableArray<OATouchLocation *> *_zoomTouchLocations;
     NSMutableArray<OATouchLocation *> *_rotateTouchLocations;
     OATouchLocation *_carPlayMapTouchLocation;
-    BOOL _inconsistentMapTarget;
 
     CLLocationCoordinate2D _centerLocationForMapArrows;
     
@@ -718,23 +717,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         _mapView.viewportYScale = 1.f;
 }
 
-/**
- * Make map target in sync with current map location coordinates and elevation
- */
-- (void) resetMapTarget
-{
-    if (_inconsistentMapTarget)
-    {
-        _inconsistentMapTarget = NO;
-        [_mapView resetMapTarget];
-    }
-}
-
-- (void) invalidateMapTarget
-{
-    _inconsistentMapTarget = YES;
-}
-
 - (void) setupMapArrowsLocation
 {
     [self setupMapArrowsLocation:_centerLocationForMapArrows];
@@ -1027,7 +1009,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         velocity.x = -velocityInMapSpace.x * scale31;
         velocity.y = -velocityInMapSpace.y * scale31;
 
-        [self invalidateMapTarget];
         _mapView.mapAnimator->animateFlatTargetWith(velocity, OsmAnd::PointD(kTargetMoveDeceleration * scale31, kTargetMoveDeceleration * scale31), kUserInteractionAnimationKey);
         _mapView.mapAnimator->resume();
     }
@@ -1111,7 +1092,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         velocity.x = -velocityInMapSpace.x * scale31;
         velocity.y = -velocityInMapSpace.y * scale31;
         
-        [self invalidateMapTarget];
         _mapView.mapAnimator->animateFlatTargetWith(velocity, OsmAnd::PointD(kTargetMoveDeceleration * scale31, kTargetMoveDeceleration * scale31), kUserInteractionAnimationKey);
         _mapView.mapAnimator->resume();
     }

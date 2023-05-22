@@ -173,6 +173,7 @@
 
     _driveModeButton.hidden = NO;
     _driveModeButton.userInteractionEnabled = YES;
+    [self updateRouteButton:NO followingMode:NO];
 
     _toolbarTopPosition = [OAUtilities getStatusBarHeight];
     

@@ -222,6 +222,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
     BOOL _targetChanged;
     OsmAnd::PointI _targetPixel;
+    OsmAnd::PointI _carPlayScreenPoint;
     NSMutableArray<OATouchLocation *> *_moveTouchLocations;
     NSMutableArray<OATouchLocation *> *_zoomTouchLocations;
     NSMutableArray<OATouchLocation *> *_rotateTouchLocations;
@@ -1028,6 +1029,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         [self storeTargetPosition:nil];
 
         CGPoint touchPoint = CGPointMake(_targetPixel.x, _targetPixel.y);
+        _carPlayScreenPoint = _targetPixel;
         _carPlayMapTouchLocation = [self acquireMapTouchLocation:touchPoint];
 
         // Suspend symbols update
@@ -1038,9 +1040,9 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
     if (state == UIGestureRecognizerStateChanged && _carPlayMapTouchLocation)
     {
-        auto touchPoint = OsmAnd::PointI(_targetPixel.x + translation.x * _mapView.contentScaleFactor, _targetPixel.y + translation.y * _mapView.contentScaleFactor);
+        _carPlayScreenPoint = OsmAnd::PointI(_carPlayScreenPoint.x + translation.x * _mapView.contentScaleFactor, _carPlayScreenPoint.y + translation.y * _mapView.contentScaleFactor);
         auto touchLocation31 = [OANativeUtilities convertFromPoint31:_carPlayMapTouchLocation.touchLocation31];
-        [_mapView setMapTarget:touchPoint location31:touchLocation31];
+        [_mapView setMapTarget:_carPlayScreenPoint location31:touchLocation31];
     }
 
     if (state == UIGestureRecognizerStateEnded ||

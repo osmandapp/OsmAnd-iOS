@@ -2600,7 +2600,6 @@
 		DA5A83B626C563A800F274C7 /* OAActionAddCategoryViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DCD26C563A300F274C7 /* OAActionAddCategoryViewController.mm */; };
 		DA5A83B726C563A800F274C7 /* OAQuickActionHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DCE26C563A300F274C7 /* OAQuickActionHudViewController.mm */; };
 		DA5A83B826C563A800F274C7 /* OAQuickActionsSheetView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DCF26C563A300F274C7 /* OAQuickActionsSheetView.m */; };
-		DA5A83B926C563A800F274C7 /* OAActionAddProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DD026C563A300F274C7 /* OAActionAddProfileViewController.xib */; };
 		DA5A83BA26C563A800F274C7 /* OAQuickActionsSheetView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DD326C563A300F274C7 /* OAQuickActionsSheetView.xib */; };
 		DA5A83BB26C563A800F274C7 /* OAActionAddMapStyleViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DD426C563A300F274C7 /* OAActionAddMapStyleViewController.mm */; };
 		DA5A83BC26C563A800F274C7 /* OAQuickActionListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DD626C563A300F274C7 /* OAQuickActionListViewController.m */; };
@@ -2611,8 +2610,6 @@
 		DA5A83C126C563A800F274C7 /* OAActionConfigurationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DDE26C563A300F274C7 /* OAActionConfigurationViewController.xib */; };
 		DA5A83C226C563A800F274C7 /* OAQuickActionHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DDF26C563A300F274C7 /* OAQuickActionHudViewController.xib */; };
 		DA5A83C326C563A800F274C7 /* OAActionAddCategoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DE026C563A300F274C7 /* OAActionAddCategoryViewController.xib */; };
-		DA5A83C426C563A800F274C7 /* OAActionAddMapSourceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DE126C563A300F274C7 /* OAActionAddMapSourceViewController.xib */; };
-		DA5A83C526C563A800F274C7 /* OAActionAddMapStyleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DE426C563A300F274C7 /* OAActionAddMapStyleViewController.xib */; };
 		DA5A83C626C563A800F274C7 /* OAActionConfigurationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DE526C563A300F274C7 /* OAActionConfigurationViewController.mm */; };
 		DA5A83C726C563A800F274C7 /* OATargetMenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DE726C563A300F274C7 /* OATargetMenuViewController.mm */; };
 		DA5A83C826C563A800F274C7 /* OACollapsableCoordinatesView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DE826C563A300F274C7 /* OACollapsableCoordinatesView.mm */; };
@@ -2638,8 +2635,6 @@
 		DA5A83DF26C563A800F274C7 /* OAEditGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E1026C563A300F274C7 /* OAEditGroupViewController.m */; };
 		DA5A83E026C563A800F274C7 /* OAEditDescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E1126C563A300F274C7 /* OAEditDescriptionViewController.xib */; };
 		DA5A83E226C563A800F274C7 /* OAEditColorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E1426C563A300F274C7 /* OAEditColorViewController.m */; };
-		DA5A83E326C563A800F274C7 /* OAEditColorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E1526C563A300F274C7 /* OAEditColorViewController.xib */; };
-		DA5A83E426C563A800F274C7 /* OAEditGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E1826C563A300F274C7 /* OAEditGroupViewController.xib */; };
 		DA5A83E526C563A800F274C7 /* OAEditDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E1926C563A300F274C7 /* OAEditDescriptionViewController.m */; };
 		DA5A83E726C563A800F274C7 /* OAWikiWebViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E2026C563A400F274C7 /* OAWikiWebViewController.mm */; };
 		DA5A83E826C563A800F274C7 /* OAWikiMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E2126C563A400F274C7 /* OAWikiMenuViewController.xib */; };
@@ -6810,7 +6805,6 @@
 		DA5A7DCD26C563A300F274C7 /* OAActionAddCategoryViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAActionAddCategoryViewController.mm; sourceTree = "<group>"; };
 		DA5A7DCE26C563A300F274C7 /* OAQuickActionHudViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickActionHudViewController.mm; sourceTree = "<group>"; };
 		DA5A7DCF26C563A300F274C7 /* OAQuickActionsSheetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAQuickActionsSheetView.m; sourceTree = "<group>"; };
-		DA5A7DD026C563A300F274C7 /* OAActionAddProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAActionAddProfileViewController.xib; sourceTree = "<group>"; };
 		DA5A7DD126C563A300F274C7 /* OAQuickActionHudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAQuickActionHudViewController.h; sourceTree = "<group>"; };
 		DA5A7DD226C563A300F274C7 /* OAActionAddMapSourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAActionAddMapSourceViewController.h; sourceTree = "<group>"; };
 		DA5A7DD326C563A300F274C7 /* OAQuickActionsSheetView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAQuickActionsSheetView.xib; sourceTree = "<group>"; };
@@ -6827,10 +6821,8 @@
 		DA5A7DDE26C563A300F274C7 /* OAActionConfigurationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAActionConfigurationViewController.xib; sourceTree = "<group>"; };
 		DA5A7DDF26C563A300F274C7 /* OAQuickActionHudViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAQuickActionHudViewController.xib; sourceTree = "<group>"; };
 		DA5A7DE026C563A300F274C7 /* OAActionAddCategoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAActionAddCategoryViewController.xib; sourceTree = "<group>"; };
-		DA5A7DE126C563A300F274C7 /* OAActionAddMapSourceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAActionAddMapSourceViewController.xib; sourceTree = "<group>"; };
 		DA5A7DE226C563A300F274C7 /* OAQuickActionListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAQuickActionListViewController.h; sourceTree = "<group>"; };
 		DA5A7DE326C563A300F274C7 /* OAActionConfigurationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAActionConfigurationViewController.h; sourceTree = "<group>"; };
-		DA5A7DE426C563A300F274C7 /* OAActionAddMapStyleViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAActionAddMapStyleViewController.xib; sourceTree = "<group>"; };
 		DA5A7DE526C563A300F274C7 /* OAActionConfigurationViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAActionConfigurationViewController.mm; sourceTree = "<group>"; };
 		DA5A7DE726C563A300F274C7 /* OATargetMenuViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATargetMenuViewController.mm; sourceTree = "<group>"; };
 		DA5A7DE826C563A300F274C7 /* OACollapsableCoordinatesView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACollapsableCoordinatesView.mm; sourceTree = "<group>"; };
@@ -6869,9 +6861,7 @@
 		DA5A7E1126C563A300F274C7 /* OAEditDescriptionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAEditDescriptionViewController.xib; sourceTree = "<group>"; };
 		DA5A7E1326C563A300F274C7 /* OAEditDescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAEditDescriptionViewController.h; sourceTree = "<group>"; };
 		DA5A7E1426C563A300F274C7 /* OAEditColorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAEditColorViewController.m; sourceTree = "<group>"; };
-		DA5A7E1526C563A300F274C7 /* OAEditColorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAEditColorViewController.xib; sourceTree = "<group>"; };
 		DA5A7E1626C563A300F274C7 /* OAEditGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAEditGroupViewController.h; sourceTree = "<group>"; };
-		DA5A7E1826C563A300F274C7 /* OAEditGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAEditGroupViewController.xib; sourceTree = "<group>"; };
 		DA5A7E1926C563A300F274C7 /* OAEditDescriptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAEditDescriptionViewController.m; sourceTree = "<group>"; };
 		DA5A7E1A26C563A300F274C7 /* OAEditColorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAEditColorViewController.h; sourceTree = "<group>"; };
 		DA5A7E1B26C563A300F274C7 /* OACollapsableCardsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACollapsableCardsView.h; sourceTree = "<group>"; };
@@ -12453,13 +12443,10 @@
 				DA5A7DE026C563A300F274C7 /* OAActionAddCategoryViewController.xib */,
 				DA5A7DD226C563A300F274C7 /* OAActionAddMapSourceViewController.h */,
 				DA5A7DDD26C563A300F274C7 /* OAActionAddMapSourceViewController.mm */,
-				DA5A7DE126C563A300F274C7 /* OAActionAddMapSourceViewController.xib */,
 				DA5A7DD726C563A300F274C7 /* OAActionAddMapStyleViewController.h */,
 				DA5A7DD426C563A300F274C7 /* OAActionAddMapStyleViewController.mm */,
-				DA5A7DE426C563A300F274C7 /* OAActionAddMapStyleViewController.xib */,
 				DA5A7DDA26C563A300F274C7 /* OAActionAddProfileViewController.h */,
 				DA5A7DCB26C563A300F274C7 /* OAActionAddProfileViewController.m */,
-				DA5A7DD026C563A300F274C7 /* OAActionAddProfileViewController.xib */,
 				DA5A7DE326C563A300F274C7 /* OAActionConfigurationViewController.h */,
 				DA5A7DE526C563A300F274C7 /* OAActionConfigurationViewController.mm */,
 				DA5A7DDE26C563A300F274C7 /* OAActionConfigurationViewController.xib */,
@@ -12589,9 +12576,7 @@
 				DA5A7E1126C563A300F274C7 /* OAEditDescriptionViewController.xib */,
 				DA5A7E1326C563A300F274C7 /* OAEditDescriptionViewController.h */,
 				DA5A7E1426C563A300F274C7 /* OAEditColorViewController.m */,
-				DA5A7E1526C563A300F274C7 /* OAEditColorViewController.xib */,
 				DA5A7E1626C563A300F274C7 /* OAEditGroupViewController.h */,
-				DA5A7E1826C563A300F274C7 /* OAEditGroupViewController.xib */,
 				DA5A7E1926C563A300F274C7 /* OAEditDescriptionViewController.m */,
 				DA5A7E1A26C563A300F274C7 /* OAEditColorViewController.h */,
 			);
@@ -14174,7 +14159,6 @@
 				46453AE22835235C001F9A3A /* ic_custom_backpack_colored_day@2x.png in Resources */,
 				8441CB671B1370580033AC95 /* selection_unchecked@3x.png in Resources */,
 				DA1BC134233F9B01004DAF78 /* ic_custom_show_on_map@3x.png in Resources */,
-				DA5A83E426C563A800F274C7 /* OAEditGroupViewController.xib in Resources */,
 				DAB625B42125A92200E6AF2E /* ro_tts.js in Resources */,
 				B24745A227F4A7A200C18C3F /* ic_custom_wifi_off@3x.png in Resources */,
 				84C102981FBDC10800D3E5EE /* warnings_railways@3x.png in Resources */,
@@ -14569,7 +14553,6 @@
 				DAE08345253F0CFD009B5A11 /* ic_custom_redo@2x.png in Resources */,
 				46B3F328282BF9FE00A5A57D /* ic_share_address@2x.png in Resources */,
 				C56FAB7129B22C430096192F /* widget_developer_map_zoom_night@2x.png in Resources */,
-				DA5A83E326C563A800F274C7 /* OAEditColorViewController.xib in Resources */,
 				842432571AEFDD1900925821 /* widget_monitoring_rec_big_day@2x.png in Resources */,
 				DA1341D8243DC5A90039D214 /* ic_action_truck@2x.png in Resources */,
 				0AA3BB9426EB540100A9885D /* ic_small_map_point@3x.png in Resources */,
@@ -14781,7 +14764,6 @@
 				DA5A826626C563A700F274C7 /* OARouteInfoLegendCell.xib in Resources */,
 				15B4E49E24AB3FF500119365 /* ic_custom_weight_limit@3x.png in Resources */,
 				463C536A286B58FB00AFABE9 /* warnings_railways_ca@2x.png in Resources */,
-				DA5A83B926C563A800F274C7 /* OAActionAddProfileViewController.xib in Resources */,
 				841C47431AF91B800039B3BF /* destination_map_center@2x.png in Resources */,
 				0A82ABAA2694D68000ED1F01 /* ic_custom_logo_openplacereviews@3x.png in Resources */,
 				DA54AA8524EFEFBE001E6560 /* ic_custom_elevation@3x.png in Resources */,
@@ -15059,7 +15041,6 @@
 				DA5A827526C563A700F274C7 /* OABottomSheetHeaderDescrButtonCell.xib in Resources */,
 				46B619D829EFE34300950A20 /* widget_altitude_location_day@2x.png in Resources */,
 				DAF820CD2369BC5D007003FA /* ic_custom_start_point@2x.png in Resources */,
-				DA5A83C426C563A800F274C7 /* OAActionAddMapSourceViewController.xib in Resources */,
 				DA5A826226C563A700F274C7 /* OAPointDescCell.xib in Resources */,
 				DA2DC41D23B2116300F40D1D /* ic_custom_arrow_down@2x.png in Resources */,
 				8454DA1E1B2F16D700E5A5C5 /* ic_coordinates@2x.png in Resources */,
@@ -15314,7 +15295,6 @@
 				84C41DEF1AB8600D0089EABB /* ic_destination_pin_1@3x.png in Resources */,
 				B247452E27E34B3600C18C3F /* ic_custom_restore@3x.png in Resources */,
 				DA0D1642281BEEF500CEEF58 /* map_turn_keep_left@3x.png in Resources */,
-				DA5A83C526C563A800F274C7 /* OAActionAddMapStyleViewController.xib in Resources */,
 				DAF345C522F4482C009E2EB6 /* ic_custom_moon@2x.png in Resources */,
 				32A001A126131FEA00ABE0D2 /* ic_custom_clipboard@3x.png in Resources */,
 				32B50AD926BBE3C7002E6C92 /* ic_custom_map_location_free@2x.png in Resources */,

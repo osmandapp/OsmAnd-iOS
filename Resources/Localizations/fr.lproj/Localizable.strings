@@ -1190,7 +1190,7 @@
 "rendering_attr_noPolygons_name" = "Polygones";
 "rendering_attr_hideWaterPolygons_name" = "Eau";
 "rendering_attr_contourColorScheme_description" = "Couleurs des courbes de niveau";
-"rendering_attr_highway_class_footway_name" = "Passerelle";
+"rendering_attr_highway_class_footway_name" = "Voie piétonne";
 "rendering_attr_currentTrackWidth_description" = "Largeur GPX";
 "routing_attr_width_description" = "Indique la limite de largeur autorisée sur les itinéraires.";
 "rendering_attr_hideAccess_name" = "Accès restreints";
@@ -1317,7 +1317,7 @@
 "rendering_value_orange_name" = "Orange";
 "rendering_attr_surface_ground_name" = "Sol";
 "routing_attr_allow_motorway_name" = "Autoriser les autoroutes";
-"rendering_attr_highway_class_steps_name" = "Étapes";
+"rendering_attr_highway_class_steps_name" = "Escalier";
 "rendering_attr_showAccess_name" = "Afficher les accès restreints et les péages";
 "routing_attr_avoid_unpaved_name" = "Éviter les voies non revêtues";
 "rendering_attr_hideProposed_name" = "Objets proposés";

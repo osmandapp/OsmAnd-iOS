@@ -1683,7 +1683,7 @@
 "reverse_route" = "Ruta inversa";
 "quick_action_remove_next_destination_descr" = "Quita el siguiente destino de la ruta. Si es el destino final, la navegación se detendrá.";
 "public_transport_try_change_settings" = "Intenta cambiar los ajustes.";
-"quick_action_remove_next_destination" = "Borrar el siguiente punto de destino";
+"quick_action_remove_next_destination" = "Eliminar el próximo punto de destino";
 "public_transport_hide" = "Ocultar transporte público";
 "public_transport_menu" = "Transporte";
 "coord_input_add_point" = "Añadir punto";
@@ -2894,3 +2894,7 @@
 "shared_string_coloring" = "Colorear";
 "shared_string_all_colors" = "En todos los colores";
 "shared_string_add_color" = "Añadir un color";
+"test_heightmap" = "Mapa de alturas en prueba";
+"disable_vertex_hillshade_3d" = "Desactivar la sombra de los vértices en 3D";
+"generate_slope_from_3d_maps" = "Generar mapas ráster de pendiente a partir de mapas 3D";
+"generate_hillshade_from_3d_maps" = "Genere mapas ráster de sombreado a partir de mapas 3D";

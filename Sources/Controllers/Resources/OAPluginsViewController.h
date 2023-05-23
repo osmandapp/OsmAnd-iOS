@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseNavbarViewController.h"
 
-@interface OAPluginsViewController : OACompoundViewController
+@interface OAPluginsViewController : OABaseNavbarViewController
 
 @end

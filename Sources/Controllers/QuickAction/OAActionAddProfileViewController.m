@@ -8,17 +8,12 @@
 
 #import "OAActionAddProfileViewController.h"
 #import "Localization.h"
-#import "OAMenuSimpleCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OsmAndApp.h"
 #import "OAProfileDataObject.h"
 #import "OAProfileDataUtils.h"
 
-@interface OAActionAddProfileViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIButton *backBtn;
-@property (weak, nonatomic) IBOutlet UIButton *doneButton;
+@interface OAActionAddProfileViewController () <UITextFieldDelegate>
 
 @end
 
@@ -28,51 +23,100 @@
     NSArray<OAProfileDataObject *> *_data;
 }
 
+#pragma mark - Initialization
+
 - (instancetype)initWithNames:(NSMutableArray<NSString *> *)names
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _initialValues = names;
     }
     return self;
 }
 
+#pragma mark - UIViewController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self commonInit];
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
+
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
-    self.tableView.separatorInset = UIEdgeInsetsMake(0.0, 55., 0.0, 0.0);
     [self.tableView setEditing:YES];
-    [self.backBtn setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
-    [self.backBtn setTintColor:UIColor.whiteColor];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super viewWillAppear:animated];
-    [self applySafeAreaMargins];
+    return OALocalizedString(@"select_application_profile");
 }
 
--(void) commonInit
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
+{
+    return @[[self createRightNavbarButton:OALocalizedString(@"shared_string_done")
+                                  iconName:nil
+                                    action:@selector(onRightNavbarButtonPressed)
+                                      menu:nil]];
+}
+
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
+{
+    return EOABaseNavbarColorSchemeOrange;
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     _data = [OAProfileDataUtils getDataObjects:[OAApplicationMode allPossibleValues]];
 }
 
-- (void)applyLocalization
+- (NSInteger)sectionsCount
 {
-    _titleView.text = OALocalizedString(@"select_application_profile");
-    [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
+    return 1;
 }
 
-- (IBAction)backPressed:(id)sender
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    return OALocalizedString(@"application_profiles");
 }
 
-- (IBAction)doneButtonPressed:(id)sender
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return _data.count;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
+    OAProfileDataObject *item = _data[indexPath.row];
+    OASimpleTableViewCell *cell = nil;
+    
+    cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+    }
+    
+    if (cell)
+    {
+        cell.titleLabel.text = item.name;
+        cell.descriptionLabel.text = item.descr;
+        cell.leftIconView.image = [UIImage templateImageNamed:item.iconName].imageFlippedForRightToLeftLayoutDirection;
+        cell.leftIconView.tintColor = UIColorFromRGB(item.iconColor);
+        if ([_initialValues containsObject:item.stringKey])
+        {
+            [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+            [_initialValues removeObject:item.stringKey];
+        }
+    }
+    return cell;
+}
+
+#pragma mark - Selectors
+
+- (void)onRightNavbarButtonPressed
 {
     NSArray *selectedItems = [self.tableView indexPathsForSelectedRows];
     NSMutableArray *arr = [NSMutableArray new];
@@ -84,51 +128,6 @@
     if (self.delegate)
         [self.delegate onProfileSelected:[NSArray arrayWithArray:arr]];
     [self.navigationController popViewControllerAnimated:YES];
-}
-
-#pragma mark - UITableViewDataSource
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    OAProfileDataObject *item = _data[indexPath.row];
-    OAMenuSimpleCell* cell = nil;
-    
-    cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
-    if (cell == nil)
-    {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
-        cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
-    }
-    
-    if (cell)
-    {
-        cell.textView.text = item.name;
-        cell.descriptionView.text = item.descr;
-        cell.imgView.image = [UIImage templateImageNamed:item.iconName];
-        cell.imgView.tintColor = UIColorFromRGB(item.iconColor);
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-        if ([_initialValues containsObject:item.stringKey])
-        {
-            [_tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-            [_initialValues removeObject:item.stringKey];
-        }
-    }
-    return cell;
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _data.count;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return OALocalizedString(@"application_profiles");
 }
 
 @end

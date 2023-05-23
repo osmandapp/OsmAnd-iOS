@@ -7,15 +7,18 @@
 //
 
 #import "OAEditColorViewController.h"
-#import "OAIconTextTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OADefaultFavorite.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
+
 #include "Localization.h"
 
 @implementation OAEditColorViewController
 
-- (id) initWithColor:(UIColor *)color
+#pragma mark - Initialization
+
+- (instancetype)initWithColor:(UIColor *)color
 {
     self = [super init];
     if (self)
@@ -26,93 +29,72 @@
     return self;
 }
 
-- (void)applyLocalization
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [_titleView setText:OALocalizedString(@"shared_string_color")];
-    [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
+    return OALocalizedString(@"shared_string_color");
 }
 
-- (void)viewDidLoad
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    [super viewDidLoad];
-    
-    _saveChanges = NO;
-    
-    [self setupView];
+    return @[[self createRightNavbarButton:OALocalizedString(@"shared_string_save")
+                                  iconName:nil
+                                    action:@selector(onRightNavbarButtonPressed)
+                                      menu:nil]];
 }
 
--(UIView *) getTopView
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
-    return _navBarView;
+    return EOABaseNavbarColorSchemeOrange;
 }
 
--(UIView *) getMiddleView
-{
-    return _tableView;
-}
+#pragma mark - Table data
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
--(void)setupView
-{
-    [self applySafeAreaMargins];
-    [self.tableView setDataSource:self];
-    [self.tableView setDelegate:self];
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-}
-
-#pragma mark - UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return 1;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
     return OALocalizedString(@"fav_colors");
 }
 
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return [[OADefaultFavorite builtinColors] count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    OAIconTextTableViewCell* cell;
-    cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+    OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-        cell.iconView.layer.cornerRadius = cell.iconView.frame.size.width / 2;
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+        cell.leftIconView.layer.cornerRadius = cell.leftIconView.frame.size.width / 2;
     }
     
-    if (cell) {
+    if (cell)
+    {
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][indexPath.row];
-        [cell.textView setText:favCol.name];
-        [cell.iconView setBackgroundColor:favCol.color];
-        [cell.arrowIconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];
-        cell.arrowIconView.hidden = indexPath.row != self.colorIndex;
+        [cell.titleLabel setText:favCol.name];
+        [cell.leftIconView setBackgroundColor:favCol.color];
+        cell.accessoryType = indexPath.row != self.colorIndex ? UITableViewCellAccessoryNone : UITableViewCellAccessoryCheckmark;
     }
     return cell;
 }
 
-#pragma mark - UITableViewDelegate
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+- (void)onRowSelected:(NSIndexPath *)indexPath
+{
     self.colorIndex = indexPath.row;
     [self.tableView reloadData];
 }
 
-#pragma mark - Actions
+#pragma mark - Selectors
 
-- (IBAction)saveClicked:(id)sender
+- (void)onRightNavbarButtonPressed
 {
     _saveChanges = YES;
 

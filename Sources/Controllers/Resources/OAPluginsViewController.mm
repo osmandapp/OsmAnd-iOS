@@ -13,7 +13,6 @@
 #include "Localization.h"
 #import "OAPluginDetailsViewController.h"
 #import "OAPluginPopupViewController.h"
-#import "OASizes.h"
 #import "OASubscriptionBannerCardView.h"
 #import "OAChoosePlanHelper.h"
 #import "OARootViewController.h"
@@ -26,14 +25,7 @@
 #define kDefaultPluginsSection 0
 #define kCustomPluginsSection 1
 
-@interface OAPluginsViewController () <UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate, OASubscriptionBannerCardViewDelegate>
-
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIView *titlePanelView;
-
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UIButton *doneButton;
+@interface OAPluginsViewController () <UIAlertViewDelegate, OASubscriptionBannerCardViewDelegate>
 
 @end
 
@@ -43,96 +35,52 @@
     OASubscriptionBannerCardView *_subscriptionBannerView;
 
     NSArray<OACustomPlugin *> *_customPlugins;
-    
-    OAAutoObserverProxy *_addonsSwitchObserver;
-    
-    CALayer *_horizontalLine;
 }
 
-- (void) applyLocalization
-{
-    _titleView.text = OALocalizedString(@"plugins_menu_group");
-    [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
-}
+#pragma mark - Initialization
 
-- (void) viewDidLoad
+- (void)commonInit
 {
-    [super viewDidLoad];
     _iapHelper = [OAIAPHelper sharedInstance];
+    _customPlugins = [OAPlugin getCustomPlugins];
 }
 
-- (void) viewWillLayoutSubviews
+- (void)registerNotifications
 {
-    [super viewWillLayoutSubviews];
-
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+    [self addNotification:OAIAPProductPurchasedNotification selector:@selector(productPurchased:)];
+    [self addNotification:OAIAPProductsRequestSucceedNotification selector:@selector(productsRequested:)];
+    [self addNotification:OAIAPProductsRestoredNotification selector:@selector(productRestored:)];
 }
 
-- (UIView *) getTopView
+- (void)registerObservers
 {
-    return _titlePanelView;
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:@selector(onAddonsSwitch:withKey:andValue:)
+                                                 andObserve:OsmAndApp.instance.addonsSwitchObservable]];
 }
 
-- (UIView *) getMiddleView
-{
-    return _tableView;
-}
+#pragma mark - UIViewController
 
-- (CGFloat) getToolBarHeight
-{
-    return defaultToolBarHeight;
-}
-
-- (void) didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void) viewWillAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productRestored:) name:OAIAPProductsRestoredNotification object:nil];
-    
-    _addonsSwitchObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                      withHandler:@selector(onAddonsSwitch:withKey:andValue:)
-                                                       andObserve:OsmAndApp.instance.addonsSwitchObservable];
-
-    _customPlugins = [OAPlugin getCustomPlugins];
     [[OARootViewController instance] requestProductsWithProgress:NO reload:NO];
-
-    [self setupSubscriptionBanner];
-
-    [self applySafeAreaMargins];
-    [self.tableView reloadData];
 }
 
-- (void) viewWillDisappear:(BOOL)animated
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    [_addonsSwitchObserver detach];
+    return OALocalizedString(@"plugins_menu_group");
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [self setupSubscriptionBanner];
-    } completion:nil];
+    return EOABaseNavbarColorSchemeOrange;
 }
 
-- (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadData];
-    });
-}
-
-- (void)setupSubscriptionBanner
+- (void)setupTableHeaderView
 {
     BOOL isPaid = [OAIAPHelper isPaidVersion];
     if (!isPaid && !_subscriptionBannerView)
@@ -151,19 +99,26 @@
     self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
 }
 
--(void) addAccessibilityLabels
+#pragma mark - Table data
+
+- (BOOL)hideFirstHeader
 {
-    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    return YES;
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return _customPlugins.count > 0 ? 2 : 1;
 }
 
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    if (section == kCustomPluginsSection)
+        return OALocalizedString(@"custom_plugins");
+    return @"";
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
 {
     if (section == kDefaultPluginsSection)
         return _iapHelper.inAppAddons.count;
@@ -172,17 +127,9 @@
     return 0;
 }
 
-- (NSString*) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    if (section == kCustomPluginsSection)
-        return OALocalizedString(@"custom_plugins");
-    return @"";
-}
-
-- (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    OAInAppCell* cell;
-    cell = (OAInAppCell *)[tableView dequeueReusableCellWithIdentifier:[OAInAppCell getCellIdentifier]];
+    OAInAppCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAInAppCell getCellIdentifier]];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInAppCell getCellIdentifier] owner:self options:nil];
@@ -231,7 +178,7 @@
                 title = plugin.getName;
                 desc = plugin.getDescription;
             }
-             
+            
             cell.imgIcon.contentMode = UIViewContentModeCenter;
             if (!imgTitle)
                 imgTitle = [UIImage imageNamed:@"img_app_purchase_2.png"];
@@ -248,16 +195,11 @@
             [cell.btnPrice layoutIfNeeded];
         }];
     }
-    
     return cell;
 }
 
-#pragma mark - UITableViewDelegate
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
     OAPluginDetailsViewController *pluginDetails = nil;
     if (indexPath.section == kDefaultPluginsSection)
     {
@@ -271,21 +213,66 @@
         if (plugin)
             pluginDetails = [[OAPluginDetailsViewController alloc] initWithCustomPlugin:plugin];
     }
-    [self.navigationController pushViewController:pluginDetails animated:YES];
+    [self showViewController:pluginDetails];
+}
+
+#pragma mark - Additions
+
+- (void)onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
 }
 
 - (void)refreshProduct:(NSIndexPath *)indexPath {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         [OAQuickActionRegistry.sharedInstance updateActionTypes];
         [OAQuickActionRegistry.sharedInstance.quickActionListChangedObservable notifyEvent];
     });
 }
 
-- (IBAction) buttonPurchaseClicked:(id)sender
+- (void)productsRequested:(NSNotification *)notification
 {
-    UIButton *btn = sender;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:btn.tag & 0x3FF inSection:btn.tag >> 10];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+        CATransition *animation = [CATransition animation];
+        [animation setType:kCATransitionPush];
+        [animation setSubtype:kCATransitionFromBottom];
+        [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [animation setFillMode:kCAFillModeBoth];
+        [animation setDuration:.3];
+        [[self.tableView layer] addAnimation:animation forKey:@"UITableViewReloadDataAnimationKey"];
+    });
+}
+
+- (void)productPurchased:(NSNotification *)notification
+{
+    NSString * identifier = notification.object;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setupTableHeaderView];
+        [self.tableView reloadData];
+        
+        OAProduct *product = [_iapHelper product:identifier];
+        if (product)
+            [OAPluginPopupViewController showProductAlert:product afterPurchase:YES];
+    });
+}
+
+- (void)productRestored:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setupTableHeaderView];
+        [self.tableView reloadData];
+    });
+}
+
+#pragma mark - Selectors
+
+- (void)buttonPurchaseClicked:(UIButton *)sender
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
     
     if (indexPath.section == kDefaultPluginsSection)
     {
@@ -323,44 +310,9 @@
     }
 }
 
-- (void) productsRequested:(NSNotification *)notification
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadData];
-        CATransition *animation = [CATransition animation];
-        [animation setType:kCATransitionPush];
-        [animation setSubtype:kCATransitionFromBottom];
-        [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-        [animation setFillMode:kCAFillModeBoth];
-        [animation setDuration:.3];
-        [[self.tableView layer] addAnimation:animation forKey:@"UITableViewReloadDataAnimationKey"];
-    });
-}
-
-- (void) productPurchased:(NSNotification *)notification
-{
-    NSString * identifier = notification.object;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self setupSubscriptionBanner];
-        [self.tableView reloadData];
-
-        OAProduct *product = [_iapHelper product:identifier];
-        if (product)
-            [OAPluginPopupViewController showProductAlert:product afterPurchase:YES];
-    });
-}
-
-- (void) productRestored:(NSNotification *)notification
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self setupSubscriptionBanner];
-        [self.tableView reloadData];
-    });
-}
-
 #pragma mark - OASubscriptionBannerCardViewDelegate
 
-- (void) onButtonPressed
+- (void)onButtonPressed
 {
     [OAChoosePlanHelper showChoosePlanScreen:self.navigationController];
 }

@@ -6,7 +6,7 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseNavbarViewController.h"
 
 @class OAQuickSearchListItem;
 
@@ -14,13 +14,13 @@
 
 @required
 
-- (void) onMapStylesSelected:(NSArray *)items;
+- (void)onMapStylesSelected:(NSArray *)items;
 
 @end
 
-@interface OAActionAddMapStyleViewController : OACompoundViewController
+@interface OAActionAddMapStyleViewController : OABaseNavbarViewController
 
--(instancetype)initWithNames:(NSMutableArray<NSString *> *)names;
+- (instancetype)initWithNames:(NSMutableArray<NSString *> *)names;
 
 @property (nonatomic) id<OAAddMapStyleDelegate> delegate;
 

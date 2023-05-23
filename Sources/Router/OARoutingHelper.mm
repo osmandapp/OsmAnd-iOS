@@ -1269,7 +1269,7 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (float) getCurrentMaxSpeed
 {
-    return [_route getCurrentMaxSpeed];
+    return [_route getCurrentMaxSpeed:[[self getAppMode] getRouteTypeProfile]];
 }
 
 - (OARoutingEnvironment *) getRoutingEnvironment:(OAApplicationMode *)mode start:(CLLocation *)start end:(CLLocation *)end

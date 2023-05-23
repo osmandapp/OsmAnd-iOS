@@ -34,7 +34,7 @@
         _collectionCell.noImagesLabel.text = OALocalizedString(@"mapil_no_images");
         [_collectionCell.imageView setImage:[UIImage templateImageNamed:@"ic_custom_trouble.png"]];
         _collectionCell.imageView.tintColor = UIColorFromRGB(color_icon_color);
-        [_collectionCell.addPhotosButton setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0x007AFF)] forState:UIControlStateNormal];
+        [_collectionCell.addPhotosButton setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(color_primary_purple)] forState:UIControlStateNormal];
         [_collectionCell.addPhotosButton setImage:[UIImage templateImageNamed:@"ic_custom_add.png"] forState:UIControlStateNormal];
         _collectionCell.addPhotosButton.imageView.tintColor = [UIColor whiteColor];
         [_collectionCell.addPhotosButton setTitle:OALocalizedString(@"shared_string_add_photos") forState:UIControlStateNormal];

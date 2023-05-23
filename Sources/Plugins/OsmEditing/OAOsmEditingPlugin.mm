@@ -76,7 +76,7 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _helper = [OADestinationsHelper instance];
-        _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+        _mapViewController = nil;
         _dbbug = [OAOsmBugsDBHelper sharedDatabase];
         _dbpoi = [OAOsmEditsDBHelper sharedDatabase];
         _localUtil = [[OAOpenStreetMapLocalUtil alloc] init];

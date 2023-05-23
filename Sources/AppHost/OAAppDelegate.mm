@@ -39,8 +39,7 @@
 #import "OABackupHelper.h"
 #import "OAFetchBackgroundDataOperation.h"
 #import "OACloudAccountVerificationViewController.h"
-
-#include "CoreResourcesFromBundleProvider.h"
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #include <QDir>
 #include <QFile>
@@ -54,7 +53,7 @@
 
 #import "OAFirstUsageWelcomeController.h"
 
-#define kCheckUpdatesIntervalHour 3600
+#define kCheckUpdatesInterval 3600
 
 #define kFetchDataUpdatesId @"net.osmand.fetchDataUpdates"
 
@@ -63,7 +62,6 @@
     id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol> _app;
     
     UIBackgroundTaskIdentifier _appInitTask;
-    BOOL _coreInitDone;
     BOOL _appInitDone;
     BOOL _appInitializing;
     
@@ -85,8 +83,11 @@
 {
     if (_appInitDone || _appInitializing)
         return YES;
-    
+
     _appInitializing = YES;
+
+    NSLog(@"OAAppDelegate initialize start");
+
     // Configure device
     UIDevice* device = [UIDevice currentDevice];
     [device beginGeneratingDeviceOrientationNotifications];
@@ -100,19 +101,6 @@
     self.window.rootViewController = [[OALaunchScreenViewController alloc] init];
     [self.window makeKeyAndVisible];
     
-    // Set the background fetch
-    _dataFetchQueue = [[NSOperationQueue alloc] init];
-    @try
-    {
-        [BGTaskScheduler.sharedScheduler registerForTaskWithIdentifier:kFetchDataUpdatesId usingQueue:nil launchHandler:^(__kindof BGTask * _Nonnull task) {
-            [self handleAppRefresh:(BGAppRefreshTask *)task];
-        }];
-    }
-    @catch (NSException *e)
-    {
-        NSLog(@"Failed to schedule background fetch. Reason: %@", e.reason);
-    }
-    
     _appInitTask = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"appInitTask" expirationHandler:^{
         
         [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
@@ -121,16 +109,21 @@
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
+        NSLog(@"OAAppDelegate beginBackgroundTask");
+
         // Initialize OsmAnd core
-        const std::shared_ptr<CoreResourcesFromBundleProvider> coreResourcesFromBundleProvider(new CoreResourcesFromBundleProvider());
-        OsmAnd::InitializeCore(coreResourcesFromBundleProvider);
-        _coreInitDone = YES;
-        
+        [_app initializeCore];
+
+        // Initialize application in background
+        //[_app initialize];
+
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            // Initialize application
+            // Initialize application in main thread
             [_app initialize];
-            
+
+            [self askReview];
+
             // Update app execute counter
             NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
             NSInteger execCount = [settings integerForKey:kAppExecCounter];
@@ -167,15 +160,19 @@
                 _loadedURL = nil;
             }
             [OAUtilities clearTmpDirectory];
-            
+
+            [self requestUpdatesOnNetworkReachable];
+
             _appInitDone = YES;
             _appInitializing = NO;
             
             [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
             _appInitTask = UIBackgroundTaskInvalid;
 
+            NSLog(@"OAAppDelegate endBackgroundTask");
+
             // Check for updates every hour when the app is in the foreground
-            _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesIntervalHour target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
+            _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesInterval target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
 
             // show map in carPlay if it is a cold start
             if (_windowToAttach && _carPlayInterfaceController)
@@ -189,10 +186,42 @@
         });
     });
     
+    NSLog(@"OAAppDelegate initialize finish");
     return YES;
 }
 
-- (BOOL)openURL:(NSURL *)url
+- (void) requestUpdatesOnNetworkReachable
+{
+    [AFNetworkReachabilityManager.sharedManager startMonitoring];
+    [AFNetworkReachabilityManager.sharedManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        [NSNotificationCenter.defaultCenter postNotificationName:kReachabilityChangedNotification object:nil];
+
+        if (status == AFNetworkReachabilityStatusReachableViaWWAN || status == AFNetworkReachabilityStatusReachableViaWiFi)
+        {
+            [_app checkAndDownloadOsmAndLiveUpdates];
+            [_app checkAndDownloadWeatherForecastsUpdates];
+        }
+    }];
+}
+
+- (void) askReview
+{
+    NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
+    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+    double appInstalledTime = [settings doubleForKey:kAppInstalledDate];
+    int appInstalledDays = (int)((currentTime - appInstalledTime) / (24 * 60 * 60));
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    BOOL isReviewed = [userDefaults boolForKey:@"isReviewed"];
+    if (appInstalledDays < 15 || appInstalledDays > 45)
+        return;
+    if (!isReviewed)
+    {
+        [SKStoreReviewController requestReview];
+        [userDefaults setBool:true forKey:@"isReviewed"];
+    }
+}
+
+- (BOOL) openURL:(NSURL *)url
 {
     if (_rootViewController)
     {
@@ -212,7 +241,7 @@
     }
 }
 
-- (BOOL)handleIncomingActionsURL:(NSURL *)url
+- (BOOL) handleIncomingActionsURL:(NSURL *)url
 {
     // osmandmaps://?lat=45.6313&lon=34.9955&z=8&title=New+York
     if (_rootViewController && [url.scheme.lowercaseString isEqualToString:kOsmAndActionScheme])
@@ -243,14 +272,14 @@
     return NO;
 }
 
-- (BOOL)handleIncomingFileURL:(NSURL *)url
+- (BOOL) handleIncomingFileURL:(NSURL *)url
 {
     if (_rootViewController && [url.scheme.lowercaseString isEqualToString:kFileScheme])
         return [_rootViewController handleIncomingURL:url];
     return NO;
 }
 
-- (BOOL)handleIncomingNavigationURL:(NSURL *)url
+- (BOOL) handleIncomingNavigationURL:(NSURL *)url
 {
     NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:YES];
     NSArray<NSURLQueryItem *> *queryItems = components.queryItems;
@@ -343,7 +372,7 @@
     return NO;
 }
 
-- (BOOL)handleIncomingMoveMapToLocationURL:(NSURL *)url
+- (BOOL) handleIncomingMoveMapToLocationURL:(NSURL *)url
 {
     NSString *pathPrefix = @"/map#";
     NSInteger pathStartIndex = [url.absoluteString indexOf:pathPrefix];
@@ -362,7 +391,7 @@
     return NO;
 }
 
-- (BOOL)handleIncomingOpenLocationMenuURL:(NSURL *)url
+- (BOOL) handleIncomingOpenLocationMenuURL:(NSURL *)url
 {
     if ([OAUtilities isOsmAndGoUrl:url])
     {
@@ -398,7 +427,7 @@
     return NO;
 }
 
-- (BOOL)handleIncomingTileSourceURL:(NSURL *)url
+- (BOOL) handleIncomingTileSourceURL:(NSURL *)url
 {
     if (_rootViewController && [OAUtilities isOsmAndSite:url] && [OAUtilities isPathPrefix:url pathPrefix:@ "/add-tile-source"])
     {
@@ -411,7 +440,7 @@
     return NO;
 }
 
-- (BOOL)handleIncomingOsmAndCloudURL:(NSURL *)url
+- (BOOL) handleIncomingOsmAndCloudURL:(NSURL *)url
 {
     if (![OAUtilities isOsmAndSite:url] || ![OAUtilities isPathPrefix:url pathPrefix:@ "/premium/device-registration"])
         return NO;
@@ -446,7 +475,7 @@
     return YES;
 }
 
-- (void)moveMapToLat:(double)lat lon:(double)lon zoom:(int)zoom withTitle:(NSString *)title
+- (void) moveMapToLat:(double)lat lon:(double)lon zoom:(int)zoom withTitle:(NSString *)title
 {
     Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -466,12 +495,12 @@
     });
 }
 
-- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+- (BOOL) application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
 {
     return [self openURL:userActivity.webpageURL];
 }
 
-- (void)performUpdatesCheck
+- (void) performUpdatesCheck
 {
     [_app checkAndDownloadOsmAndLiveUpdates];
     [_app checkAndDownloadWeatherForecastsUpdates];
@@ -479,15 +508,32 @@
 
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    if (!_dataFetchQueue)
+    {
+        // Set the background fetch
+        _dataFetchQueue = [[NSOperationQueue alloc] init];
+        @try
+        {
+            NSLog(@"BGTaskScheduler registerForTaskWithIdentifier");
+            [BGTaskScheduler.sharedScheduler registerForTaskWithIdentifier:kFetchDataUpdatesId usingQueue:nil launchHandler:^(__kindof BGTask * _Nonnull task) {
+                [self handleBackgroundDataFetch:(BGProcessingTask *)task];
+            }];
+        }
+        @catch (NSException *e)
+        {
+            NSLog(@"Failed to schedule background fetch. Reason: %@", e.reason);
+        }
+    }
+
     if (application.applicationState == UIApplicationStateBackground)
         return NO;
-    
+
     return [self initialize];
 }
 
-- (void) handleAppRefresh:(BGAppRefreshTask *)task
+- (void) handleBackgroundDataFetch:(BGProcessingTask *)task
 {
-    [self scheduleAppRefresh];
+    [self scheduleBackgroundDataFetch];
     
     OAFetchBackgroundDataOperation *operation = [[OAFetchBackgroundDataOperation alloc] init];
     [task setExpirationHandler:^{
@@ -501,15 +547,17 @@
     [_dataFetchQueue addOperation:operation];
 }
 
-- (void) scheduleAppRefresh
+- (void) scheduleBackgroundDataFetch
 {
     BGProcessingTaskRequest *request = [[BGProcessingTaskRequest alloc] initWithIdentifier:kFetchDataUpdatesId];
     request.requiresNetworkConnectivity = YES;
     // Check for updates every hour
-    request.earliestBeginDate = [NSDate dateWithTimeIntervalSinceNow:kCheckUpdatesIntervalHour];
+    request.earliestBeginDate = [NSDate dateWithTimeIntervalSinceNow:kCheckUpdatesInterval];
     @try
     {
+        NSLog(@"BGTaskScheduler submitTaskRequest");
         NSError *error = nil;
+        // e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"net.osmand.fetchDataUpdates"]
         [BGTaskScheduler.sharedScheduler submitTaskRequest:request error:&error];
         if (error)
             NSLog(@"Could not schedule app refresh: %@", error.description);
@@ -551,7 +599,7 @@
         [_app onApplicationDidEnterBackground];
     
     [BGTaskScheduler.sharedScheduler cancelAllTaskRequests];
-    [self scheduleAppRefresh];
+    [self scheduleBackgroundDataFetch];
 }
 
 - (void) applicationWillEnterForeground:(UIApplication *)application
@@ -570,7 +618,7 @@
     
     if (_appInitDone)
     {
-        _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesIntervalHour target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
+        _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesInterval target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
         [_app onApplicationDidBecomeActive];
     }
 }

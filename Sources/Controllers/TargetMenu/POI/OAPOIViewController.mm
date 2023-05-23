@@ -224,7 +224,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
         if ([vl hasPrefix:@"http://"] || [vl hasPrefix:@"https://"] || [vl hasPrefix:@"HTTP://"] || [vl hasPrefix:@"HTTPS://"])
         {
             isUrl = YES;
-            textColor = UIColorFromRGB(kHyperlinkColor);
+            textColor = UIColorFromRGB(color_primary_purple);
         }
         else if (needLinks)
         {
@@ -232,7 +232,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
             if (socialMediaUrl)
             {
                 isUrl = YES;
-                textColor = UIColorFromRGB(kHyperlinkColor);
+                textColor = UIColorFromRGB(color_primary_purple);
             }
         }
 
@@ -304,7 +304,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
         else if ([kContactPhoneTags containsObject:convertedKey])
         {
             iconId = @"ic_phone_number";
-            textColor = UIColorFromRGB(kHyperlinkColor);
+            textColor = UIColorFromRGB(color_primary_purple);
             isPhoneNumber = YES;
         }
         else if ([convertedKey isEqualToString:WEBSITE] || [kContactUrlTags containsObject:convertedKey])
@@ -316,7 +316,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
                     icon = [OATargetInfoViewController getIcon:[OAUtilities drawablePath:[@"mm_" stringByAppendingString:convertedKey]]];
             }
             iconId = @"ic_website";
-            textColor = UIColorFromRGB(kHyperlinkColor);
+            textColor = UIColorFromRGB(color_primary_purple);
             isUrl = YES;
         }
         else if ([convertedKey isEqualToString:CUISINE])
@@ -628,7 +628,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
                                                   icon:[UIImage imageNamed:@"ic_custom_osm_edits"]
                                             textPrefix:nil
                                                   text:[NSString stringWithFormat:@"%@%llu", link, entityId]
-                                             textColor:UIColorFromRGB(kHyperlinkColor)
+                                             textColor:UIColorFromRGB(color_primary_purple)
                                                 isText:YES
                                              needLinks:YES
                                                  order:10000

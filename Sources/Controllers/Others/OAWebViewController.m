@@ -9,81 +9,82 @@
 #import "OAWebViewController.h"
 #import "Localization.h"
 
-@interface OAWebViewController () <WKNavigationDelegate>
-
-@end
-
 @implementation OAWebViewController
 {
     NSString *_title;
 }
 
--(id)initWithUrl:(NSString*)url {
+#pragma mark - Initialization
+
+- (instancetype)initWithUrl:(NSString*)url
+{
     self = [super init];
-    if (self) {
+    if (self)
+    {
         self.urlString = url;
     }
     return self;
 }
 
--(id)initWithUrlAndTitle:(NSString*)url title:(NSString *) title
+- (instancetype)initWithUrlAndTitle:(NSString*)url title:(NSString *)title
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         self.urlString = url;
         _title = title;
     }
     return self;
 }
 
--(void)applyLocalization
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    _titleLabel.text = _title ? _title : OALocalizedString(@"help_quiz");
+    return _title ? _title : OALocalizedString(@"help_quiz");
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
-    [self applySafeAreaMargins];
+    return EOABaseNavbarColorSchemeOrange;
 }
 
--(UIView *) getTopView
+#pragma mark - Web data
+
+- (NSURL *)getUrl
 {
-    return _navBarView;
+    return [NSURL URLWithString:self.urlString];
 }
 
--(UIView *) getMiddleView
+- (NSString *)getContent
 {
-    return _webView;
+    return [NSString stringWithContentsOfFile:[self getUrl].path
+                                     encoding:NSUTF8StringEncoding
+                                        error:NULL];
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    NSURL *websiteUrl = [NSURL URLWithString:self.urlString];
-    if ([websiteUrl.scheme isEqualToString:@"file"]) {
-        NSString* content = [NSString stringWithContentsOfFile:websiteUrl.path
-                                                      encoding:NSUTF8StringEncoding
-                                                         error:NULL];
-        [_webView loadHTMLString:content baseURL:[NSURL URLWithString:@"https://osmand.net/"]];
-        _webView.navigationDelegate = self;
+#pragma mark - Web load
+
+- (void)loadWebView
+{
+    if ([[self getUrl].scheme isEqualToString:@"file"])
+    {
+        [self.webView loadHTMLString:[self getContent] baseURL:[NSURL URLWithString:@"https://osmand.net/"]];
     }
     else
     {
-        NSURLRequest *urlRequest = [NSURLRequest requestWithURL:websiteUrl];
-        [_webView loadRequest:urlRequest];
+        NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[self getUrl]];
+        [self.webView loadRequest:urlRequest];
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - WKNavigationDelegate
-
-- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
+- (void)webViewDidCommitted:(void (^)(void))onViewCommitted
 {
     NSString *jsString = [[NSString alloc] initWithFormat:@"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '%lu%%'",(unsigned long) 250];
-    [webView evaluateJavaScript:jsString completionHandler:nil];
+    [self.webView evaluateJavaScript:jsString completionHandler:^(id _Nullable object, NSError * _Nullable error) {
+        if (onViewCommitted)
+            onViewCommitted();
+    }];
 }
 
 @end

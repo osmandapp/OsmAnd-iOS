@@ -925,7 +925,7 @@
 "copy_from_other_profile_descr" = "You can copy all settings from any profile to the selected profile: ";
 "profile_alert_delete_title" = "Ezabatu profila";
 "profile_alert_delete_msg" = "Ziur \"%@\" profila ezabatu nahi duzula";
-"select_base_profile_dialog_message" = "Oinarritu zure profil pertsonala lehenetsitako aplikazio profil  batean, hau da, oinarrizko konfigurazioa, trepeten eta abiadura eta distantziaren lehenetsitako ikusgarritasuna definitzen duena. Hauek dira aplikazio profil lehenetsiak, profil pertsonalizatuen adibideekin batera:";
+"select_base_profile_dialog_message" = "Oinarritu zure profil pertsonala lehenetsitako aplikazio profil batean, hau da, oinarrizko konfigurazioa, trepeten eta abiadura eta distantziaren lehenetsitako ikusgarritasuna definitzen duena. Hauek dira aplikazio profil lehenetsiak, profil pertsonalizatuen adibideekin batera:";
 "profile_type_custom_string" = "Profil pertsonalizatua";
 "new_profile" = "Profil berria";
 "configure_profile" = "Konfiguratu profila";

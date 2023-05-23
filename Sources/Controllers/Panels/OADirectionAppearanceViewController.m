@@ -9,8 +9,6 @@
 #import "OADirectionAppearanceViewController.h"
 #import "OARootViewController.h"
 #import "OAAppSettings.h"
-#import "OATableViewCustomHeaderView.h"
-#import "OATableViewCustomFooterView.h"
 #import "OASwitchTableViewCell.h"
 #import "OASettingsCheckmarkCell.h"
 #import "OAMapWidgetRegInfo.h"
@@ -18,7 +16,6 @@
 #import "OAMapPanelViewController.h"
 
 #include "Localization.h"
-#include "OASizes.h"
 #include "OAColors.h"
 
 #define kActiveMarkers @"activeMarkers"
@@ -30,60 +27,26 @@
 #define kArrowsOnMap @"arrows"
 #define kLinesOnMap @"lines"
 
-@interface OADirectionAppearanceViewController() <UITableViewDelegate, UITableViewDataSource>
-
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-
-@end
-
 @implementation OADirectionAppearanceViewController
 {
     NSDictionary *_data;
     OAAppSettings *_settings;
     OAMapWidgetRegistry *_mapWidgetRegistry;
     OAMapPanelViewController *_mapPanel;
-    OsmAndAppInstance _app;
 }
 
-- (void) applyLocalization
-{
-    _titleView.text = OALocalizedString(@"shared_string_appearance");
-}
+#pragma mark - Initialization
 
--(void) addAccessibilityLabels
+- (void)commonInit
 {
-    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
-}
-
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
     _settings = [OAAppSettings sharedManager];
-    self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
-    [self.backButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
+    _mapPanel = [OARootViewController instance].mapPanel;
 }
 
-- (void) viewWillLayoutSubviews
-{
-    [super viewWillLayoutSubviews];
-}
+#pragma mark - UIViewColontroller
 
-- (void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    [self setupView];
-    [self.tableView reloadData];
-}
-
-- (void) viewWillDisappear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
@@ -91,31 +54,23 @@
     [_mapPanel refreshMap:YES];
 }
 
-- (UIView *) getTopView
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    return _navBarView;
+    return OALocalizedString(@"shared_string_appearance");
 }
 
-- (UIView *) getMiddleView
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
-    return _tableView;
+    return EOABaseNavbarColorSchemeOrange;
 }
 
-- (CGFloat) getNavBarHeight
-{
-    return defaultNavBarHeight;
-}
+#pragma mark - Table data
 
-- (IBAction)backButtonPressed:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void) setupView
+- (void)generateData
 {
     _data = [NSMutableDictionary dictionary];
-    _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
-    _mapPanel = [OARootViewController instance].mapPanel;
     
     NSMutableArray *activeMarkersArr = [NSMutableArray array];
     NSMutableArray *distanceIndicationArr = [NSMutableArray array];
@@ -188,18 +143,7 @@
             };
 }
 
- - (void) adjustViews
- {
-     CGRect buttonFrame = _backButton.frame;
-     CGRect titleFrame = _titleView.frame;
-     CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
-     buttonFrame.origin.y = statusBarHeight;
-     titleFrame.origin.y = statusBarHeight;
-     _backButton.frame = buttonFrame;
-     _titleView.frame = titleFrame;
- }
-
-- (UIImage *) drawDeviceImage:(NSString *)fgImage bgColor:(UIColor *)bgColor
+- (UIImage *)drawDeviceImage:(NSString *)fgImage bgColor:(UIColor *)bgColor
  {
      UIImage *fgImg = [UIImage templateImageNamed:fgImage];
      UIImage *bgImg = [UIImage templateImageNamed:@"ic_custom_direction_device"];
@@ -216,28 +160,55 @@
      return newImage;
  }
 
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
-   return _data.count;;
+    switch (section)
+    {
+        case 0:
+            return OALocalizedString(@"active_markers");
+        case 1:
+            return OALocalizedString(@"show_direction");
+        case 2:
+            return OALocalizedString(@"appearance_on_the_map");
+        default:
+            return @"";
+    }
 }
 
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    switch (section)
+    {
+        case 0:
+            return OALocalizedString(@"specify_number_of_dir_indicators");
+        case 1:
+            return OALocalizedString(@"choose_how_display_distance");
+        case 2:
+            return OALocalizedString(@"arrows_direction_to_markers");
+        default:
+            return @"";
+    }
+}
+
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
 {
     if (![_settings.distanceIndicationVisibility get] && section == 1)
         return 1;
     return [_data[_data.allKeys[section]] count];
 }
 
-- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[_data.allKeys[indexPath.section]][indexPath.row];
     
     if ([item[@"type"] isEqualToString:[OASettingsCheckmarkCell getCellIdentifier]])
     {
-        OASettingsCheckmarkCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsCheckmarkCell getCellIdentifier]];
+        OASettingsCheckmarkCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsCheckmarkCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsCheckmarkCell getCellIdentifier] owner:self options:nil];
@@ -280,12 +251,13 @@
     }
     else
     {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
+            [cell leftIconVisibility:NO];
         }
         cell.titleLabel.text = item[@"title"];
         [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -308,93 +280,8 @@
     }
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
-    NSString *title = [self getTitleForHeaderSection:section];
-    return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width];
-}
-
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    NSString *title = [self getTitleForHeaderSection:section];
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-    if (!title)
-    {
-        vw.label.text = title;
-        return vw;
-    }
-    vw.label.text = [title upperCase];
-    return vw;
-}
-
-- (NSString *) getTitleForHeaderSection:(NSInteger) section
-{
-    switch (section)
-    {
-        case 0:
-            return OALocalizedString(@"active_markers");
-        case 1:
-            return OALocalizedString(@"show_direction");
-        case 2:
-            return OALocalizedString(@"appearance_on_the_map");
-        default:
-            return @"";
-    }
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    NSString *title = [self getTitleForFooterSection:section];
-    return [OATableViewCustomFooterView getHeight:title width:tableView.bounds.size.width];
-}
-
-- (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    NSString *title = [self getTitleForFooterSection:section];
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    vw.label.text = title;
-    return vw;
-}
-
-- (NSString *) getTitleForFooterSection:(NSInteger)section
-{
-    switch (section)
-    {
-        case 0:
-            return OALocalizedString(@"specify_number_of_dir_indicators");
-        case 1:
-            return OALocalizedString(@"choose_how_display_distance");
-        case 2:
-            return OALocalizedString(@"arrows_direction_to_markers");
-        default:
-            return @"";
-    }
-}
-
-- (void) setWidgetVisibility:(BOOL)visible collapsed:(BOOL)collapsed
-{
-    OAMapWidgetRegInfo *marker1st = [_mapWidgetRegistry widgetByKey:@"map_marker_1st"];
-    OAMapWidgetRegInfo *marker2nd = [_mapWidgetRegistry widgetByKey:@"map_marker_2nd"];
-    if (marker1st)
-        [_mapWidgetRegistry setVisibility:marker1st visible:visible collapsed:collapsed];
-    if (marker2nd && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
-        [_mapWidgetRegistry setVisibility:marker2nd visible:visible collapsed:collapsed];
-    else
-        [_mapWidgetRegistry setVisibility:marker2nd visible:NO collapsed:collapsed];
-}
-
-#pragma mark - UITableViewDelegate
-
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
-}
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
     NSDictionary *item = _data[_data.allKeys[indexPath.section]][indexPath.row];
 
     if ([item[@"section"] isEqualToString:@"activeMarkers"])
@@ -420,32 +307,55 @@
         }
     }
     if ([_settings.distanceIndicationVisibility get])
-        [tableView reloadRowsAtIndexPaths:[[NSMutableArray alloc] initWithObjects:[NSIndexPath indexPathForRow:0 inSection:0], [NSIndexPath indexPathForRow:1 inSection:0], [NSIndexPath indexPathForRow:1 inSection:1], [NSIndexPath indexPathForRow:2 inSection:1], nil] withRowAnimation:UITableViewRowAnimationFade];
+    {
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0],
+                                                 [NSIndexPath indexPathForRow:1 inSection:0],
+                                                 [NSIndexPath indexPathForRow:1 inSection:1],
+                                                 [NSIndexPath indexPathForRow:2 inSection:1]]
+                              withRowAnimation:UITableViewRowAnimationFade];
+    }
     else
-        [tableView reloadRowsAtIndexPaths:[[NSMutableArray alloc] initWithObjects:[NSIndexPath indexPathForRow:0 inSection:0], [NSIndexPath indexPathForRow:1 inSection:0], nil] withRowAnimation:UITableViewRowAnimationFade];
+    {
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0],
+                                                 [NSIndexPath indexPathForRow:1 inSection:0]]
+                              withRowAnimation:UITableViewRowAnimationFade];
+    }
 }
 
-- (void) showDistanceIndication:(id)sender
+#pragma mark - Additions
+
+- (void)setWidgetVisibility:(BOOL)visible collapsed:(BOOL)collapsed
 {
-    UISwitch *switchView = (UISwitch*)sender;
-    if (switchView)
-        [_settings.distanceIndicationVisibility set:switchView.isOn];
-    [self setupView];
+    OAMapWidgetRegInfo *marker1st = [_mapWidgetRegistry widgetByKey:@"map_marker_1st"];
+    OAMapWidgetRegInfo *marker2nd = [_mapWidgetRegistry widgetByKey:@"map_marker_2nd"];
+    if (marker1st)
+        [_mapWidgetRegistry setVisibility:marker1st visible:visible collapsed:collapsed];
+    if (marker2nd && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
+        [_mapWidgetRegistry setVisibility:marker2nd visible:visible collapsed:collapsed];
+    else
+        [_mapWidgetRegistry setVisibility:marker2nd visible:NO collapsed:collapsed];
+}
+
+#pragma mark - Selectors
+
+- (void)showDistanceIndication:(UISwitch *)sender
+{
+    if (sender)
+        [_settings.distanceIndicationVisibility set:sender.isOn];
+    [self generateData];
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
 }
 
-- (void) showArrowsOnMap:(id)sender
+- (void)showArrowsOnMap:(UISwitch *)sender
 {
-    UISwitch *switchView = (UISwitch*)sender;
-    if (switchView)
-        [_settings.arrowsOnMap set:switchView.isOn];
+    if (sender)
+        [_settings.arrowsOnMap set:sender.isOn];
 }
 
-- (void) showLinesOnMap:(id)sender
+- (void)showLinesOnMap:(UISwitch *)sender
 {
-    UISwitch *switchView = (UISwitch*)sender;
-    if (switchView)
-        [_settings.directionLines set:switchView.isOn];
+    if (sender)
+        [_settings.directionLines set:sender.isOn];
 }
 
 @end

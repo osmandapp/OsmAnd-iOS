@@ -18,7 +18,17 @@
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OAOsmandDevelopmentSimulateLocationViewController.h"
+#import "OAOsmandDevelopmentPlugin.h"
+#import "OAPlugin.h"
+#import "OAChoosePlanHelper.h"
+#import "OAIAPHelper.h"
+#import "OAProducts.h"
+#import "OARootViewController.h"
+#import "OAIndexConstants.h"
 
+#define kCellSwitchIsOnKey @"kCellSwitchIsOnKey"
+#define kCellSwitchEnabledKey @"kCellSwitchEnabledKey"
+#define kCellSwitchUserInteractionEnabledKey @"kCellSwitchUserInteractionEnabledKey"
 
 @interface OAOsmandDevelopmentViewController () <OAOsmandDevelopmentSimulateLocationDelegate>
 
@@ -26,59 +36,57 @@
 
 @implementation OAOsmandDevelopmentViewController
 {
-    OATableDataModel* _data;
-    NSString *_headerDescription;
+    OsmAndAppInstance _app;
+    OATableDataModel *_data;
+    OAOsmandDevelopmentPlugin *_plugin;
 }
 
 NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
+NSString *const kTestHeightmapKey = @"kTestHeightmapKey";
+NSString *const kUse3dReliefHeightmapsKey = @"kUse3dReliefHeightmapsKey";
+NSString *const kDisableVertexHillshade = @"kDisableVertexHillshade";
+NSString *const kGenerateHillshadeKey = @"kGenerateHillshadeKey";
+NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
 
-- (void) viewDidLoad
+#pragma mark - Initialization
+
+- (void)commonInit
 {
-    [super viewDidLoad];
-    [self applySafeAreaMargins];
-    
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:kHeaderDescriptionFont textColor:UIColorFromRGB(color_text_footer) isBigTitle:NO parentViewWidth:self.view.frame.size.width];
-    
-    [self.backButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
+    _app = [OsmAndApp instance];
+    _plugin = (OAOsmandDevelopmentPlugin *) [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
 }
 
-- (void) viewWillAppear:(BOOL)animated
+- (void)registerNotifications
 {
-    [self applySafeAreaMargins];
-    [self reloadData];
+    [self addNotification:OAIAPProductPurchasedNotification selector:@selector(productPurchased:)];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:kHeaderDescriptionFont textColor:UIColorFromRGB(color_text_footer) isBigTitle:NO parentViewWidth:self.view.frame.size.width];
-    } completion:nil];
+    return OALocalizedString(@"debugging_and_development");;
 }
 
--(UIView *) getTopView
+- (NSString *)getTableHeaderDescription
 {
-    return _navBarView;
+    return OALocalizedString(@"osm_editing_settings_descr");
 }
 
-
-#pragma mark - Setup data
-
-- (void) applyLocalization
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
-    _titleView.text = OALocalizedString(@"debugging_and_development");
-    _headerDescription = OALocalizedString(@"osm_editing_settings_descr");
+    return EOABaseNavbarColorSchemeOrange;
 }
 
-- (void) generateData
+#pragma mark - Table data
+
+- (void)generateData
 {
     BOOL isRouteAnimating = [[OsmAndApp instance].locationServices.locationSimulation isRouteAnimating];
     _data = [OATableDataModel model];
     __weak OAOsmandDevelopmentViewController *weakSelf = self;
     OATableSectionData *simulationSection = [OATableSectionData sectionData];
+    simulationSection.headerText = OALocalizedString(@"osmand_depelopment_simulate_location_section");
     [simulationSection addRowFromDictionary:@{
         kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellKeyKey : kSimulateLocationKey,
@@ -86,61 +94,84 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
         kCellDescrKey : isRouteAnimating ? OALocalizedString(@"simulate_in_progress") : @"",
         @"actionBlock" : (^void(){ [weakSelf openSimulateLocationSettings]; })
     }];
-    simulationSection.headerText = OALocalizedString(@"osmand_depelopment_simulate_location_section");
     [_data addSection:simulationSection];
     
     OATableSectionData *heightMapSection = [OATableSectionData sectionData];
+    heightMapSection.headerText = OALocalizedString(@"download_heightmap_maps");
+    BOOL heightmapEnabled = [_plugin isHeightmapEnabled];
+    
     [heightMapSection addRowFromDictionary:@{
         kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
-        kCellKeyKey : @"display_heightmap",
-        kCellTitleKey : OALocalizedString(@"use_heightmap_setting")
+        kCellKeyKey : kTestHeightmapKey,
+        kCellTitleKey : OALocalizedString(@"test_heightmap"),
+        kCellSwitchIsOnKey : @(heightmapEnabled ? [_plugin.enableHeightmap get] : NO),
+        kCellSwitchEnabledKey : @([OAIAPHelper isOsmAndProAvailable]),
+        kCellSwitchUserInteractionEnabledKey : @(YES),
+        @"actionBlock" : (^void(){ [weakSelf openProPlanScreen]; })
+    }];
+    [heightMapSection addRowFromDictionary:@{
+        kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
+        kCellKeyKey : kUse3dReliefHeightmapsKey,
+        kCellTitleKey : OALocalizedString(@"use_heightmap_setting"),
+        kCellSwitchIsOnKey : @([_plugin.enable3DMaps get]),
+        kCellSwitchEnabledKey : @(YES),
+        kCellSwitchUserInteractionEnabledKey : @(heightmapEnabled)
+    }];
+    [heightMapSection addRowFromDictionary:@{
+        kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
+        kCellKeyKey : kDisableVertexHillshade,
+        kCellTitleKey : OALocalizedString(@"disable_vertex_hillshade_3d"),
+        kCellSwitchIsOnKey : @([_plugin.disableVertexHillshade3D get]),
+        kCellSwitchEnabledKey : @(YES),
+        kCellSwitchUserInteractionEnabledKey : @(heightmapEnabled)
+    }];
+    [heightMapSection addRowFromDictionary:@{
+        kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
+        kCellKeyKey : kGenerateSlopeKey,
+        kCellTitleKey : OALocalizedString(@"generate_slope_from_3d_maps"),
+        kCellSwitchIsOnKey : @([_plugin.generateSlopeFrom3DMaps get]),
+        kCellSwitchEnabledKey : @(YES),
+        kCellSwitchUserInteractionEnabledKey : @(heightmapEnabled)
+    }];
+    [heightMapSection addRowFromDictionary:@{
+        kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
+        kCellKeyKey : kGenerateHillshadeKey,
+        kCellTitleKey : OALocalizedString(@"generate_hillshade_from_3d_maps"),
+        kCellSwitchIsOnKey : @([_plugin.generateHillshadeFrom3DMaps get]),
+        kCellSwitchEnabledKey : @(YES),
+        kCellSwitchUserInteractionEnabledKey : @(heightmapEnabled)
     }];
     [_data addSection:heightMapSection];
 }
 
-- (void) reloadData
-{
-    [self generateData];
-    [self.tableView reloadData];
-}
-
-- (void) applyParameter:(UISwitch *)sender
-{
-    [OAAppSettings.sharedManager.showHeightmaps set:sender.isOn];
-    [OsmAndApp.instance.mapSettingsChangeObservable notifyEvent];
-}
-
-
-#pragma mark - Actions
-
-- (void) openSimulateLocationSettings
-{
-    OAOsmandDevelopmentSimulateLocationViewController *vc = [[OAOsmandDevelopmentSimulateLocationViewController alloc] init];
-    vc.simulateLocationDelegate = self;
-    [self.navigationController pushViewController:vc animated:YES];
-}
-
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return _data.sectionCount;
 }
 
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    return [_data sectionDataForIndex:section].headerText;
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return [_data sectionDataForIndex:section].footerText;
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return [_data rowCount:section];
 }
 
-- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     NSString *type = item.cellType;
     
     if ([type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAValueTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+        OAValueTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
@@ -158,7 +189,7 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
     }
     else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
@@ -167,12 +198,15 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }
-        
         if (cell)
         {
+            cell.userInteractionEnabled = [item boolForKey:kCellSwitchUserInteractionEnabledKey];
+            cell.switchView.userInteractionEnabled = [item boolForKey:kCellSwitchEnabledKey];
+            
+            cell.titleLabel.textColor = [item boolForKey:kCellSwitchUserInteractionEnabledKey] ? UIColor.blackColor : UIColorFromRGB(color_bottom_sheet_secondary);
             cell.titleLabel.text = item.title;
-
-            cell.switchView.on = [OAAppSettings.sharedManager.showHeightmaps get];
+            cell.switchView.onTintColor = [item boolForKey:kCellSwitchUserInteractionEnabledKey] ? UIColorFromRGB(color_uiswitch_on_day) : UIColorFromRGB(color_footer_icon_gray);
+            cell.switchView.on = [item boolForKey:kCellSwitchIsOnKey];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
@@ -182,43 +216,75 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
     return nil;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
-    return [_data sectionDataForIndex:section].headerText;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return [_data sectionDataForIndex:section].footerText;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
-    [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     void (^actionBlock)() = [item objForKey:@"actionBlock"];
     if (actionBlock)
         actionBlock();
 }
 
+#pragma mark - Additions
+
+- (void)openSimulateLocationSettings
+{
+    OAOsmandDevelopmentSimulateLocationViewController *vc = [[OAOsmandDevelopmentSimulateLocationViewController alloc] init];
+    vc.simulateLocationDelegate = self;
+    [self showViewController:vc];
+}
+
+- (void)openProPlanScreen
+{
+    if (![OAIAPHelper isOsmAndProAvailable])
+        [OAChoosePlanHelper showChoosePlanScreenWithProduct:[OAIAPHelper sharedInstance].proMonthly navController:self.navigationController];
+}
+
+- (void)productPurchased:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self generateData];
+        [self.tableView reloadData];
+    });
+}
+
+#pragma mark - Selectors
+
+- (void)applyParameter:(UISwitch *)sender
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    BOOL isOn = sender.isOn;
+    
+    if ([item.key isEqualToString:kTestHeightmapKey])
+    {
+        [_plugin.enableHeightmap set:isOn];
+        [self generateData];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+    else if ([item.key isEqualToString:kUse3dReliefHeightmapsKey])
+    {
+        [_plugin.enable3DMaps set:isOn];
+    }
+    else if ([item.key isEqualToString:kDisableVertexHillshade])
+    {
+        [_plugin.disableVertexHillshade3D set:isOn];
+    }
+    else if ([item.key isEqualToString:kGenerateSlopeKey])
+    {
+        [_plugin.generateSlopeFrom3DMaps set:isOn];
+    }
+    else if ([item.key isEqualToString:kGenerateHillshadeKey])
+    {
+        [_plugin.generateHillshadeFrom3DMaps set:isOn];
+    }
+}
 
 #pragma mark - OAOsmandDevelopmentSimulateLocationDelegate
 
-- (void) onSimulateLocationInformationUpdated
+- (void)onSimulateLocationInformationUpdated
 {
-    [self reloadData];
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 @end

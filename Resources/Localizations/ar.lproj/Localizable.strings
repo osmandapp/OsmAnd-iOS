@@ -2893,3 +2893,14 @@
 "wiki_article_search_text" = "البحث عن مقالة ويكي المقابلة";
 "short_min" = "م";
 "shared_string_location_unknown" = "الموقع غير معروف";
+"shared_string_coloring" = "تلوين";
+"shared_string_duplicate_color" = "نسخ لون";
+"shared_string_delete_color" = "حذف لون";
+"shared_string_all_colors" = "كل الألوان";
+"shared_string_add_color" = "إضافة لون";
+"shared_string_edit_color" = "تعديل لون";
+"shared_string_duplicate" = "نسخ";
+"generate_slope_from_3d_maps" = "إنشاء خرائط الانحدار من خرائط ثلاثية الأبعاد";
+"test_heightmap" = "اختبار خريطة الارتفاع";
+"disable_vertex_hillshade_3d" = "تعطيل قمة الارتفاع في عرض الثلاثي الأبعاد";
+"generate_hillshade_from_3d_maps" = "إنشاء خرائط الارتفاع من خرائط ثلاثية الأبعاد";

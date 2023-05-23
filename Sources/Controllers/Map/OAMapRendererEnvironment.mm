@@ -16,6 +16,7 @@
            mapPrimitivesProvider:(const std::shared_ptr<OsmAnd::MapPrimitivesProvider>&)mapPrimitivesProvider
        mapObjectsSymbolsProvider:(const std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider>&)mapObjectsSymbolsProvider
                obfsDataInterface:(const std::shared_ptr<OsmAnd::ObfDataInterface>&)obfsDataInterface
+               geoTiffCollection:(const std::shared_ptr<OsmAnd::IGeoTiffCollection>&)geoTiffCollection
 {
     self = [super init];
     if (self) {
@@ -25,6 +26,7 @@
         _mapPrimitivesProvider = mapPrimitivesProvider;
         _mapObjectsSymbolsProvider = mapObjectsSymbolsProvider;
         _obfsDataInterface = obfsDataInterface;
+        _geoTiffCollection = geoTiffCollection;
     }
     return self;
 }

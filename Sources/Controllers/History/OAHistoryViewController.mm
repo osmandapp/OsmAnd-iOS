@@ -20,6 +20,7 @@
 #import "MGSwipeButton.h"
 #import "MGSwipeTableCell.h"
 #import "OAOsmAndFormatter.h"
+#import "OAColors.h"
 
 #import "OsmAndApp.h"
 
@@ -85,7 +86,6 @@
 
 @property (strong, nonatomic) NSMutableArray* groupsAndItems;
 
-@property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
 @property CGFloat azimuthDirection;
 @property NSTimeInterval lastUpdate;
 
@@ -93,185 +93,109 @@
 
 @implementation OAHistoryViewController
 {
-    OAAutoObserverProxy *_historyPointRemoveObserver;
-    OAAutoObserverProxy *_historyPointsRemoveObserver;
-
     NSArray *_headerViews;
     BOOL _isAnimating;
 }
 
-- (void)applyLocalization
+#pragma mark - Initialization
+
+- (void)registerObservers
 {
-    _titleView.text = OALocalizedString(@"shared_string_history");
+    OsmAndAppInstance app = [OsmAndApp instance];
+    
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:@selector(updateDistanceAndDirection)
+                                                 andObserve:app.locationServices.updateObserver]];
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:@selector(onPointRemove:withKey:)
+                                                 andObserve:[OAHistoryHelper sharedInstance].historyPointRemoveObservable]];
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:@selector(onPointsRemove:withKey:)
+                                                 andObserve:[OAHistoryHelper sharedInstance].historyPointsRemoveObservable]];
 }
 
--(void) addAccessibilityLabels
-{
-    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
-    self.editButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
-    self.deleteButton.accessibilityLabel = OALocalizedString(@"shared_string_delete");
-}
+#pragma mark - UIViewColontroller
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
+    self.tableView.allowsMultipleSelectionDuringEditing = YES;
     isDecelerating = NO;
-    self.view.backgroundColor = [UIColor whiteColor];
-    self.deleteButton.hidden = YES;
 }
 
-- (void)updateDistanceAndDirection
+- (void)viewWillAppear:(BOOL)animated
 {
-    [self updateDistanceAndDirection:NO];
-}
-
-- (void)updateDistanceAndDirection:(BOOL)forceUpdate
-{
-    if ([self.tableView isEditing])
-        return;
-    
-    if (([[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3 || _isAnimating) && !forceUpdate)
-        return;
-    self.lastUpdate = [[NSDate date] timeIntervalSince1970];
-    
-    OsmAndAppInstance app = [OsmAndApp instance];
-    // Obtain fresh location and heading
-    CLLocation* newLocation = app.locationServices.lastKnownLocation;
-    if (!newLocation)
-        return;
-    
-    CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
-    CLLocationDirection newDirection =
-    (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
-    ? newLocation.course
-    : newHeading;
-    
-    for (HistoryTableGroup *group in self.groupsAndItems)
-    {
-        for (HistoryTableItem *dataItem in group.groupItems)
-        {
-            const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                              newLocation.coordinate.latitude,
-                                                              dataItem.item.longitude, dataItem.item.latitude);
-            
-            dataItem.distance = [OAOsmAndFormatter getFormattedDistance:distance];
-            dataItem.distanceMeters = distance;
-            CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:dataItem.item.latitude longitude:dataItem.item.longitude]];
-            dataItem.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
-        }
-    }
-    
-    if (isDecelerating)
-        return;
-    
-    [self refreshVisibleRows];
-}
-
-- (void)refreshVisibleRows
-{
-    if ([self.tableView isEditing])
-        return;
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        [self.tableView beginUpdates];
-        NSArray *visibleIndexPaths = [self.tableView indexPathsForVisibleRows];
-        for (NSIndexPath *i in visibleIndexPaths)
-        {
-            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:i];
-            if ([cell isKindOfClass:[OADirectionTableViewCell class]])
-            {
-                HistoryTableGroup *groupData = [self.groupsAndItems objectAtIndex:i.section];
-                HistoryTableItem *dataItem = [groupData.groupItems objectAtIndex:i.row];
-                
-                OADirectionTableViewCell *c = (OADirectionTableViewCell *)cell;
-                
-                [c.titleLabel setText:dataItem.item.name];
-                c.leftIcon.image = [dataItem.item icon];
-                
-                [c.descLabel setText:dataItem.distance];
-                c.descIcon.transform = CGAffineTransformMakeRotation(dataItem.direction);
-            }
-        }
-        [self.tableView endUpdates];
-    });
-}
-
--(void)viewWillAppear:(BOOL)animated
-{
-    [self generateData];
-    [self setupView];
-    [self updateDistanceAndDirection:YES];
-    
-    OsmAndAppInstance app = [OsmAndApp instance];
-    self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                    withHandler:@selector(updateDistanceAndDirection)
-                                                                     andObserve:app.locationServices.updateObserver];
-
-    _historyPointRemoveObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                            withHandler:@selector(onPointRemove:withKey:)
-                                                             andObserve:[OAHistoryHelper sharedInstance].historyPointRemoveObservable];
-    _historyPointsRemoveObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                            withHandler:@selector(onPointsRemove:withKey:)
-                                                             andObserve:[OAHistoryHelper sharedInstance].historyPointsRemoveObservable];
-    [self applySafeAreaMargins];
     [super viewWillAppear:animated];
+    
+    [self updateDistanceAndDirection:YES];
 }
 
--(UIView *) getTopView
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    return _navBarView;
+    return OALocalizedString(@"shared_string_history");
 }
 
--(UIView *) getMiddleView
+- (UIImage *)getCustomIconForLeftNavbarButton
 {
-    return _tableView;
+    return self.tableView.editing ? [UIImage templateImageNamed:@"icon_remove"] : nil;
 }
 
--(void)viewWillDisappear:(BOOL)animated
+- (NSString *)getCustomAccessibilityForLeftNavbarButton
 {
-    [super viewWillDisappear:animated];
-    
-    if (_historyPointsRemoveObserver)
-    {
-        [_historyPointsRemoveObserver detach];
-        _historyPointsRemoveObserver = nil;
-    }
-    
-    if (_historyPointRemoveObserver)
-    {
-        [_historyPointRemoveObserver detach];
-        _historyPointRemoveObserver = nil;
-    }
-    
-    if (self.locationServicesUpdateObserver)
-    {
-        [self.locationServicesUpdateObserver detach];
-        self.locationServicesUpdateObserver = nil;
-    }
-    
+    return self.tableView.editing ? OALocalizedString(@"shared_string_delete") : OALocalizedString(@"shared_string_back");
 }
 
-- (NSTimeInterval)beginningOfToday
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDateComponents *components = [cal components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:[NSDate date]];
-    [components setHour:0];
-    [components setMinute:0];
-    [components setSecond:0];
-    [components setNanosecond:0];
-    NSDate *today = [cal dateFromComponents:components];
-    
-    return [today timeIntervalSince1970];
+    UIBarButtonItem *rightButton = [self createRightNavbarButton:nil
+                                                        iconName:@"icon_edit"
+                                                          action:@selector(onRightNavbarButtonPressed)
+                                                            menu:nil];
+    rightButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
+    return @[rightButton];
 }
 
--(void)generateData
+- (UIColor *)getNavbarBackgroundColor
+{
+    return UIColorFromRGB(color_primary_darkblue_navbar_background);
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
+- (UIColor *)getNavbarButtonsTintColor
+{
+    return UIColor.whiteColor;
+}
+
+- (UIColor *)getTitleColor
+{
+    return UIColor.whiteColor;
+}
+
+- (BOOL)isNavbarBlurring
+{
+    return NO;
+}
+
+- (BOOL)isNavbarSeparatorVisible
+{
+    return NO;
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     [self generateData:YES];
 }
 
--(void)generateData:(BOOL)doReload
+- (void)generateData:(BOOL)doReload
 {
     self.groupsAndItems = [[NSMutableArray alloc] init];
     NSMutableArray *headerViews = [NSMutableArray array];
@@ -332,7 +256,7 @@
     
     int i = 0;
     for (HistoryTableGroup *group in self.groupsAndItems)
-    {        
+    {
         // add header
         OAMultiselectableHeaderView *headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
         if ([group.groupName isEqualToString:@"0"])
@@ -353,16 +277,34 @@
     _headerViews = [NSArray arrayWithArray:headerViews];
 }
 
--(void)setupView
+- (void)refreshVisibleRows
 {
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self.tableView reloadData];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    if ([self.tableView isEditing])
+        return;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [self.tableView beginUpdates];
+        NSArray *visibleIndexPaths = [self.tableView indexPathsForVisibleRows];
+        for (NSIndexPath *i in visibleIndexPaths)
+        {
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:i];
+            if ([cell isKindOfClass:[OADirectionTableViewCell class]])
+            {
+                HistoryTableGroup *groupData = [self.groupsAndItems objectAtIndex:i.section];
+                HistoryTableItem *dataItem = [groupData.groupItems objectAtIndex:i.row];
+                
+                OADirectionTableViewCell *c = (OADirectionTableViewCell *)cell;
+                
+                [c.titleLabel setText:dataItem.item.name];
+                c.leftIcon.image = [dataItem.item icon];
+                
+                [c.descLabel setText:dataItem.distance];
+                c.descIcon.transform = CGAffineTransformMakeRotation(dataItem.direction);
+            }
+        }
+        [self.tableView endUpdates];
+    });
 }
 
 - (NSIndexPath *)indexPathOfItem:(OAHistoryItem *)item
@@ -458,23 +400,7 @@
     [CATransaction commit];
 }
 
-
-#pragma mark - Actions
-
-- (IBAction)deletePressed:(id)sender
-{
-    NSArray *selectedRows = [self.tableView indexPathsForSelectedRows];
-    if ([selectedRows count] == 0) {
-        UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"hist_select_remove") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-        [removeAlert show];
-        return;
-    }
-    
-    UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"hist_remove_q") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_no") otherButtonTitles:OALocalizedString(@"shared_string_yes"), nil];
-    [removeAlert show];
-}
-
--(NSArray*)getItemsForRows:(NSArray*)indexPath
+- (NSArray*)getItemsForRows:(NSArray*)indexPath
 {
     NSMutableArray* itemList = [[NSMutableArray alloc] init];
 
@@ -486,79 +412,32 @@
     return itemList;
 }
 
-- (IBAction)editButtonClicked:(id)sender
-{
-    [self.tableView beginUpdates];
-    [self.tableView setEditing:![self.tableView isEditing] animated:YES];
-    
-    if ([self.tableView isEditing])
-    {
-        [self.deleteButton setHidden:NO];
-        [self.editButton setImage:[UIImage imageNamed:@"icon_edit_active"] forState:UIControlStateNormal];
-        [self.backButton setHidden:YES];
-    }
-    else
-    {
-        [self.deleteButton setHidden:YES];
-        [self.editButton setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
-        [self.backButton setHidden:NO];
-    }
-    [self.tableView endUpdates];
-}
-
-- (IBAction)goRootScreen:(id)sender {
-    [self.navigationController popToRootViewControllerAnimated:YES];
-}
-
-
-#pragma mark - UIAlertViewDelegate
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex != alertView.cancelButtonIndex)
-    {
-        NSArray *selectedRows = [self.tableView indexPathsForSelectedRows];
-        NSArray* selectedItems = [self getItemsForRows:selectedRows];
-        
-        NSMutableArray *arr = [NSMutableArray array];
-        for (HistoryTableItem* dataItem in selectedItems)
-            [arr addObject:dataItem.item];
-        
-        [[OAHistoryHelper sharedInstance] removePoints:arr];
-
-        [self editButtonClicked:nil];
-    }
-}
-
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return [self.groupsAndItems count];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
 {
-    return 46.0;
+    return [_headerViews[section] getHeight];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+- (CGFloat)getCustomHeightForFooter:(NSInteger)section
 {
     return 0.01;
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+- (UIView *)getCustomViewForHeader:(NSInteger)section
 {
     return _headerViews[section];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return [((HistoryTableGroup*)[self.groupsAndItems objectAtIndex:section]).groupItems count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     HistoryTableGroup* groupData = [self.groupsAndItems objectAtIndex:indexPath.section];
     
@@ -584,14 +463,129 @@
     return cell;
 }
 
--(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
-    return YES;
+    if ([self.tableView isEditing])
+        return;
+    
+    HistoryTableGroup* groupData = [self.groupsAndItems objectAtIndex:indexPath.section];
+    HistoryTableItem* dataItem = [groupData.groupItems objectAtIndex:indexPath.row];
+    
+    [[OARootViewController instance].mapPanel hideDestinationCardsViewAnimated:NO];
+    [self dismissViewController];
+    [[OARootViewController instance].mapPanel openTargetViewWithHistoryItem:dataItem.item pushed:NO];
+}
+
+#pragma mark - Additions
+
+- (void)updateDistanceAndDirection
+{
+    [self updateDistanceAndDirection:NO];
+}
+
+- (void)updateDistanceAndDirection:(BOOL)forceUpdate
+{
+    if ([self.tableView isEditing])
+        return;
+    
+    if (([[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3 || _isAnimating) && !forceUpdate)
+        return;
+    self.lastUpdate = [[NSDate date] timeIntervalSince1970];
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    // Obtain fresh location and heading
+    CLLocation* newLocation = app.locationServices.lastKnownLocation;
+    if (!newLocation)
+        return;
+    
+    CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
+    CLLocationDirection newDirection =
+    (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+    ? newLocation.course
+    : newHeading;
+    
+    for (HistoryTableGroup *group in self.groupsAndItems)
+    {
+        for (HistoryTableItem *dataItem in group.groupItems)
+        {
+            const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
+                                                              newLocation.coordinate.latitude,
+                                                              dataItem.item.longitude, dataItem.item.latitude);
+            
+            dataItem.distance = [OAOsmAndFormatter getFormattedDistance:distance];
+            dataItem.distanceMeters = distance;
+            CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:dataItem.item.latitude longitude:dataItem.item.longitude]];
+            dataItem.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+        }
+    }
+    
+    if (isDecelerating)
+        return;
+    
+    [self refreshVisibleRows];
+}
+
+- (NSTimeInterval)beginningOfToday
+{
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *components = [cal components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:[NSDate date]];
+    [components setHour:0];
+    [components setMinute:0];
+    [components setSecond:0];
+    [components setNanosecond:0];
+    NSDate *today = [cal dateFromComponents:components];
+    
+    return [today timeIntervalSince1970];
+}
+
+#pragma mark - Actions
+
+- (void)onLeftNavbarButtonPressed
+{
+    if (self.tableView.editing)
+    {
+        NSArray *selectedRows = [self.tableView indexPathsForSelectedRows];
+        if ([selectedRows count] == 0)
+        {
+            UIAlertController *removeAlert = [UIAlertController alertControllerWithTitle:@"" message:OALocalizedString(@"hist_select_remove") preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil];
+            [removeAlert addAction:okAction];
+            [self presentViewController:removeAlert animated:YES completion:nil];
+            return;
+        }
+        
+        UIAlertController *removeAlert = [UIAlertController alertControllerWithTitle:@"" message:OALocalizedString(@"hist_remove_q") preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *noAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleCancel handler:nil];
+        [removeAlert addAction:noAction];
+        
+        UIAlertAction *yesAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            NSArray *selectedRows = [self.tableView indexPathsForSelectedRows];
+            NSArray* selectedItems = [self getItemsForRows:selectedRows];
+            NSMutableArray *arr = [NSMutableArray array];
+            for (HistoryTableItem* dataItem in selectedItems)
+                [arr addObject:dataItem.item];
+            [[OAHistoryHelper sharedInstance] removePoints:arr];
+            [self onRightNavbarButtonPressed];
+        }];
+        [removeAlert addAction:yesAction];
+        
+        [self presentViewController:removeAlert animated:YES completion:nil];
+    }
+    else
+    {
+        [self dismissViewController];
+    }
+}
+    
+- (void)onRightNavbarButtonPressed
+{
+    [self.tableView setEditing:![self.tableView isEditing] animated:YES];
+    [self updateNavbar];
 }
 
 
-#pragma mark -
-#pragma mark Deferred image loading (UIScrollViewDelegate)
+#pragma mark - Deferred image loading (UIScrollViewDelegate)
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
@@ -610,26 +604,9 @@
     isDecelerating = NO;
 }
 
-
-#pragma mark - UITableViewDelegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ([self.tableView isEditing])
-        return;
-    
-    HistoryTableGroup* groupData = [self.groupsAndItems objectAtIndex:indexPath.section];
-    HistoryTableItem* dataItem = [groupData.groupItems objectAtIndex:indexPath.row];
-    
-    [[OARootViewController instance].mapPanel hideDestinationCardsViewAnimated:NO];
-    [self dismissViewController];
-    [[OARootViewController instance].mapPanel openTargetViewWithHistoryItem:dataItem.item pushed:NO];
-}
-
-
 #pragma mark - OAMultiselectableHeaderDelegate
 
--(void)headerCheckboxChanged:(id)sender value:(BOOL)value
+- (void)headerCheckboxChanged:(id)sender value:(BOOL)value
 {
     OAMultiselectableHeaderView *headerView = (OAMultiselectableHeaderView *)sender;
     NSInteger section = headerView.section;
@@ -649,15 +626,14 @@
     [self.tableView endUpdates];
 }
 
+#pragma mark - Swipe Delegate
 
-#pragma mark Swipe Delegate
-
--(BOOL) swipeTableCell:(MGSwipeTableCell*) cell canSwipe:(MGSwipeDirection) direction;
+- (BOOL) swipeTableCell:(MGSwipeTableCell*) cell canSwipe:(MGSwipeDirection) direction;
 {
     return YES;
 }
 
--(NSArray*) swipeTableCell:(MGSwipeTableCell*) cell swipeButtonsForDirection:(MGSwipeDirection)direction
+- (NSArray*) swipeTableCell:(MGSwipeTableCell*) cell swipeButtonsForDirection:(MGSwipeDirection)direction
              swipeSettings:(MGSwipeSettings*) swipeSettings expansionSettings:(MGSwipeExpansionSettings*) expansionSettings
 {
     swipeSettings.transition = MGSwipeTransitionDrag;
@@ -685,6 +661,5 @@
     
     return nil;
 }
-
 
 @end

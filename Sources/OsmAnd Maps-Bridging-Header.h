@@ -41,6 +41,9 @@
 #import "OASunriseSunsetWidget.h"
 #import "OASunriseSunsetWidgetState.h"
 #import "OAAverageSpeedComputer.h"
+#import "OsmAndApp.h"
+#import "OAObservable.h"
+#import "OAAutoObserverProxy.h"
 
 // Plugins
 #import "OAPlugin.h"
@@ -57,8 +60,12 @@
 
 // Controllers
 #import "OABaseNavbarViewController.h"
+#import "OAQuickActionListViewController.h"
+#import "OAConfigureMenuViewController.h"
+#import "OACreateProfileViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 

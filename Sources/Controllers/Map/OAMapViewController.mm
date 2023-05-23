@@ -55,6 +55,8 @@
 #import "OAMapRendererEnvironment.h"
 #import "OAMapPresentationEnvironment.h"
 #import "OAWeatherHelper.h"
+#import "OAOsmandDevelopmentPlugin.h"
+#import "OAPlugin.h"
 #import "OAGPXAppearanceCollection.h"
 
 #import "OARoutingHelper.h"
@@ -130,6 +132,16 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     EOAMapPanDirectionRight
 };
 
+@interface OATouchLocation : NSObject
+
+@property (nonatomic) Point31 touchLocation31;
+@property (nonatomic) float touchLocationHeight;
+
+@end
+
+@implementation OATouchLocation
+@end
+
 @interface OAMapViewController () <OAMapRendererDelegate, OARouteInformationListener>
 
 @property (atomic) BOOL mapViewLoaded;
@@ -175,6 +187,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     std::shared_ptr<OsmAnd::MapPrimitiviser> _mapPrimitiviser;
     std::shared_ptr<OsmAnd::MapPrimitivesProvider> _mapPrimitivesProvider;
     std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _obfMapSymbolsProvider;
+    std::shared_ptr<OsmAnd::IGeoTiffCollection> _geoTiffCollection;
 
     std::shared_ptr<OsmAnd::ObfDataInterface> _obfsDataInterface;
 
@@ -200,14 +213,21 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     UIPanGestureRecognizer* _grZoomDoubleTap;
     
     UIRotationGestureRecognizer* _grRotate;
-    CGFloat _accumulatedRotationAngle;
-    
+
     UITapGestureRecognizer* _grZoomIn;
     UITapGestureRecognizer* _grZoomOut;
     UIPanGestureRecognizer* _grElevation;
     UITapGestureRecognizer* _grSymbolContextMenu;
     UILongPressGestureRecognizer* _grPointContextMenu;
-    
+
+    BOOL _targetChanged;
+    OsmAnd::PointI _targetPixel;
+    OsmAnd::PointI _carPlayScreenPoint;
+    NSMutableArray<OATouchLocation *> *_moveTouchLocations;
+    NSMutableArray<OATouchLocation *> *_zoomTouchLocations;
+    NSMutableArray<OATouchLocation *> *_rotateTouchLocations;
+    OATouchLocation *_carPlayMapTouchLocation;
+
     CLLocationCoordinate2D _centerLocationForMapArrows;
     
     MBProgressHUD *_progressHUD;
@@ -240,6 +260,10 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     _webClient = std::make_shared<OAWebClient>();
 
     _rendererSync = [[NSObject alloc] init];
+
+    _moveTouchLocations = [NSMutableArray array];
+    _zoomTouchLocations = [NSMutableArray array];
+    _rotateTouchLocations = [NSMutableArray array];
 
     _mapLayerChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onMapLayerChanged)
@@ -332,26 +356,26 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     
     // - Zoom gesture
     _grZoom = [[UIPinchGestureRecognizer alloc] initWithTarget:self
-                                                        action:@selector(zoomGestureDetected:)];
+                                                        action:@selector(zoomAndRotateGestureDetected:)];
     _grZoom.delegate = self;
-    
+
     // - Move gesture
     _grMove = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                       action:@selector(moveGestureDetected:)];
     _grMove.delegate = self;
     _grMove.minimumNumberOfTouches = 1;
-    _grMove.maximumNumberOfTouches = 1;
-    
+    _grMove.maximumNumberOfTouches = 2;
+
     // - Zoom double tap gesture
     _grZoomDoubleTap = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                      action:@selector(zoomGestureDetected:)];
+                                                      action:@selector(zoomAndRotateGestureDetected:)];
     _grZoomDoubleTap.delegate = self;
     _grZoomDoubleTap.minimumNumberOfTouches = 1;
     _grZoomDoubleTap.maximumNumberOfTouches = 1;
     
     // - Rotation gesture
     _grRotate = [[UIRotationGestureRecognizer alloc] initWithTarget:self
-                                                             action:@selector(rotateGestureDetected:)];
+                                                             action:@selector(zoomAndRotateGestureDetected:)];
     _grRotate.delegate = self;
     
     // - Zoom-in gesture
@@ -390,7 +414,9 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     // prevents single tap to fire together with double tap
     [_grSymbolContextMenu requireGestureRecognizerToFail:_grZoomIn];
     [_grSymbolContextMenu requireGestureRecognizerToFail:_grZoomDoubleTap];
-    
+
+    [self createGeoTiffCollection];
+
     _mapLayers = [[OAMapLayers alloc] initWithMapViewController:self];
     
     OARoutingHelper *helper = [OARoutingHelper sharedInstance];
@@ -471,16 +497,22 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     {
         _mapView.target31 = OsmAnd::PointI(_app.initialURLMapState.target31.x,
                                            _app.initialURLMapState.target31.y);
-        _mapView.zoom = _app.initialURLMapState.zoom;
-        _mapView.azimuth = _app.initialURLMapState.azimuth;
+        float zoom = _app.initialURLMapState.zoom;
+        _mapView.zoom = qBound(_mapView.minZoom, isnan(zoom) ? 5 : zoom, _mapView.maxZoom);
+        float azimuth = _app.initialURLMapState.azimuth;
+        _mapView.azimuth = isnan(azimuth) ? 0 : azimuth;
     }
     else
     {
         _mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
                                            _app.data.mapLastViewedState.target31.y);
-        _mapView.zoom = _app.data.mapLastViewedState.zoom;
-        _mapView.azimuth = _app.data.mapLastViewedState.azimuth;
-        _mapView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
+
+        float zoom = _app.data.mapLastViewedState.zoom;
+        _mapView.zoom = qBound(_mapView.minZoom, isnan(zoom) ? 5 : zoom, _mapView.maxZoom);
+        float azimuth = _app.data.mapLastViewedState.azimuth;
+        _mapView.azimuth = isnan(azimuth) ? 0 : azimuth;
+        float elevationAngle = _app.data.mapLastViewedState.elevationAngle;
+        _mapView.elevationAngle = isnan(elevationAngle) ? 90 : elevationAngle;
     }
     
     // Mark that map source is no longer valid
@@ -745,7 +777,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     return YES;
 }
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
     if (gestureRecognizer == _grZoomDoubleTap)
         return touch.tapCount == 2;
@@ -792,106 +824,94 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     return YES;
 }
 
-- (void) zoomGestureDetected:(UIGestureRecognizer *)recognizer
+- (OATouchLocation *) acquireMapTouchLocation:(CGPoint)touchPoint
 {
-    // Ignore gesture if we have no view
-    if (!self.mapViewLoaded)
-        return;
-    
-    UIPinchGestureRecognizer *pinchRecognizer = [recognizer isKindOfClass:UIPinchGestureRecognizer.class] ? (UIPinchGestureRecognizer *) recognizer : nil;
-    UIPanGestureRecognizer *panGestutreRecognizer = [recognizer isKindOfClass:UIPanGestureRecognizer.class] ? (UIPanGestureRecognizer *) recognizer : nil;
-    
-    // If gesture has just began, just capture current zoom
-    if (recognizer.state == UIGestureRecognizerStateBegan)
-    {
-        // Suspend symbols update
-        while (![_mapView suspendSymbolsUpdate]);
-        _initialZoomLevelDuringGesture = _mapView.zoom;
-        if (panGestutreRecognizer)
-            _initialZoomTapPointY = [panGestutreRecognizer locationInView:recognizer.view].y;
-        return;
-    }
-    
-    // If gesture has been cancelled or failed, restore previous zoom
-    if (recognizer.state == UIGestureRecognizerStateFailed || recognizer.state == UIGestureRecognizerStateCancelled)
-    {
-        _mapView.zoom = _initialZoomLevelDuringGesture;
+    OATouchLocation *loc = [[OATouchLocation alloc] init];
+    OsmAnd::PointI touchLocation31 = _mapView.getTarget;
+    float height = [_mapView getHeightAndLocationFromElevatedPoint:OsmAnd::PointI((int)touchPoint.x, (int)touchPoint.y) location31:&touchLocation31];
+    loc.touchLocation31 = [OANativeUtilities convertFromPointI:touchLocation31];
+    loc.touchLocationHeight = height > kMinAltitudeValue ? height : 0.0f;
+    return loc;
+}
 
-        [self restoreMapArrowsLocation];
-        // Resume symbols update
-        while (![_mapView resumeSymbolsUpdate]);
-        _zoomingByGesture = NO;
-        return;
-    }
-    
-    // Capture current touch center point
-    OsmAnd::PointI centerLocationBefore;
-    CGPoint centerPoint;
-    if (pinchRecognizer)
+- (CGPoint) getTouchPoint:(UIGestureRecognizer *)recognizer touchIndex:(NSUInteger)touchIndex
+{
+    if (touchIndex >= 0 && touchIndex < recognizer.numberOfTouches)
     {
-        centerPoint = [recognizer locationOfTouch:0 inView:recognizer.view];
-        for(NSInteger touchIdx = 1; touchIdx < recognizer.numberOfTouches; touchIdx++)
-        {
-            CGPoint touchPoint = [recognizer locationOfTouch:touchIdx inView:self.view];
-            
-            centerPoint.x += touchPoint.x;
-            centerPoint.y += touchPoint.y;
-        }
-        centerPoint.x /= recognizer.numberOfTouches;
-        centerPoint.y /= recognizer.numberOfTouches;
-        centerPoint.x *= _mapView.contentScaleFactor;
-        centerPoint.y *= _mapView.contentScaleFactor;
+        CGPoint touchPoint = [recognizer locationOfTouch:touchIndex inView:self.view];
+        touchPoint.x *= _mapView.contentScaleFactor;
+        touchPoint.y *= _mapView.contentScaleFactor;
+        return touchPoint;
     }
-    else
-    {
-        centerPoint = CGPointMake(DeviceScreenWidth / 2 * _mapView.contentScaleFactor, DeviceScreenHeight / 2 * _mapView.contentScaleFactor);
-    }
-    [_mapView convert:centerPoint toLocation:&centerLocationBefore];
-    
-    // Change zoom
-    CGFloat gestureScale = pinchRecognizer
-        ? pinchRecognizer.scale
-        : ([panGestutreRecognizer locationInView:recognizer.view].y * _mapView.contentScaleFactor) / (_initialZoomTapPointY * _mapView.contentScaleFactor);
-    CGFloat scale = 1 - gestureScale;
+    return CGPointZero;
+}
 
-    if (gestureScale < 1 || (scale < 0 && !pinchRecognizer))
-        scale = scale * (kGestureZoomCoef / _mapView.contentScaleFactor);
-    if (!pinchRecognizer)
-        scale = -scale;
+- (BOOL) isTargetChanged
+{
+    return _targetChanged;
+}
 
-    _mapView.zoom = _initialZoomLevelDuringGesture - scale;
-    if (_mapView.zoom > _mapView.maxZoom)
-        _mapView.zoom = _mapView.maxZoom;
-    else if (_mapView.zoom < _mapView.minZoom)
-        _mapView.zoom = _mapView.minZoom;
+- (BOOL) isLastMultiGesture
+{
+    return (_movingByGesture && !_zoomingByGesture && !_rotatingByGesture)
+    	|| (!_movingByGesture && _zoomingByGesture && !_rotatingByGesture)
+    	|| (!_movingByGesture && !_zoomingByGesture && _rotatingByGesture);
+}
 
-    // Adjust current target position to keep touch center the same
-    OsmAnd::PointI centerLocationAfter;
-    [_mapView convert:centerPoint toLocation:&centerLocationAfter];
-    const auto centerLocationDelta = centerLocationAfter - centerLocationBefore;
-    [_mapView setTarget31:_mapView.target31 - centerLocationDelta];
-
-    if (recognizer.state == UIGestureRecognizerStateEnded ||
-        recognizer.state == UIGestureRecognizerStateCancelled)
+- (void) storeTargetPosition:(UIGestureRecognizer *)recognizer
+{
+    if (![self isTargetChanged])
     {
-        [self restoreMapArrowsLocation];
-        // Resume symbols update
-        while (![_mapView resumeSymbolsUpdate]);
-        _zoomingByGesture = NO;
+        _targetChanged = YES;
+
+        // Remember last target position before it is changed with map gesture
+        _targetPixel = _mapView.getTargetScreenPosition;
     }
-    else
+    if (recognizer)
+    	[self reacquireMapTouchLocations:recognizer];
+}
+
+- (void) restorePreviousTarget
+{
+    if ([self isTargetChanged] && [self isLastMultiGesture])
     {
-        _zoomingByGesture = YES;
+        _targetChanged = NO;
+
+        // Restore previous target screen position after map gesture
+        [_mapView resetMapTargetPixelCoordinates:_targetPixel];
     }
-    // If this is the end of gesture, get velocity for animation
-    if (recognizer.state == UIGestureRecognizerStateEnded)
+}
+
+- (void) reacquireMapTouchLocations:(UIGestureRecognizer *)recognizer
+{
+    if (recognizer == _grMove)
+        [_moveTouchLocations removeAllObjects];
+    else if (recognizer == _grZoom)
+        [_zoomTouchLocations removeAllObjects];
+    else if (recognizer == _grRotate)
+        [_rotateTouchLocations removeAllObjects];
+
+    CGPoint firstPoint = [self getTouchPoint:recognizer touchIndex:0];
+    if (!CGPointEqualToPoint(firstPoint, CGPointZero))
     {
-        CGFloat recognizerVelocity = pinchRecognizer ? pinchRecognizer.velocity : 0;
-        float velocity = qBound(-kZoomVelocityAbsLimit, (float)recognizerVelocity, kZoomVelocityAbsLimit);
-        _mapView.mapAnimator->animateZoomWith(velocity,
-                                          kZoomDeceleration,
-                                          kUserInteractionAnimationKey);
-        _mapView.mapAnimator->resume();
+        OATouchLocation *firstTouch = [self acquireMapTouchLocation:firstPoint];
+        if (recognizer == _grMove)
+        	[_moveTouchLocations addObject:firstTouch];
+        else if (recognizer == _grZoom)
+            [_zoomTouchLocations addObject:firstTouch];
+        else if (recognizer == _grRotate)
+            [_rotateTouchLocations addObject:firstTouch];
+    }
+    CGPoint secondPoint = [self getTouchPoint:recognizer touchIndex:1];
+    if (!CGPointEqualToPoint(secondPoint, CGPointZero))
+    {
+        OATouchLocation *secondTouch = [self acquireMapTouchLocation:secondPoint];
+        if (recognizer == _grMove)
+            [_moveTouchLocations addObject:secondTouch];
+        else if (recognizer == _grZoom)
+            [_zoomTouchLocations addObject:secondTouch];
+        else if (recognizer == _grRotate)
+            [_rotateTouchLocations addObject:secondTouch];
     }
 }
 
@@ -905,52 +925,49 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
     if (recognizer.state == UIGestureRecognizerStateBegan && recognizer.numberOfTouches > 0)
     {
-        // Get location of the gesture
-        CGPoint touchPoint = [recognizer locationOfTouch:0 inView:self.view];
-        touchPoint.x *= _mapView.contentScaleFactor;
-        touchPoint.y *= _mapView.contentScaleFactor;
-        OsmAnd::PointI touchLocation;
-        [_mapView convert:touchPoint toLocation:&touchLocation];
-        
-        double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
-        double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
-        _centerLocationForMapArrows = CLLocationCoordinate2DMake(lat, lon);
-        [self performSelector:@selector(setupMapArrowsLocation) withObject:nil afterDelay:1.0];
+        [self storeTargetPosition:recognizer];
+
+        if (_moveTouchLocations.count > 0)
+        {
+            OATouchLocation *firstTouch = _moveTouchLocations[0];
+            double lon = OsmAnd::Utilities::get31LongitudeX(firstTouch.touchLocation31.x);
+            double lat = OsmAnd::Utilities::get31LatitudeY(firstTouch.touchLocation31.y);
+            _centerLocationForMapArrows = CLLocationCoordinate2DMake(lat, lon);
+            [self performSelector:@selector(setupMapArrowsLocation) withObject:nil afterDelay:1.0];
+        }
 
         // Suspend symbols update
         while (![_mapView suspendSymbolsUpdate]);
+
+        return;
     }
-    
-    // Get movement delta in points (not pixels, that is for retina and non-retina devices value is the same)
-    CGPoint translation = [recognizer translationInView:self.view];
-    translation.x *= _mapView.contentScaleFactor;
-    translation.y *= _mapView.contentScaleFactor;
 
-    // Take into account current azimuth and reproject to map space (points)
-    const float angle = qDegreesToRadians(_mapView.azimuth);
-    const float cosAngle = cosf(angle);
-    const float sinAngle = sinf(angle);
-    CGPoint translationInMapSpace;
-    translationInMapSpace.x = translation.x * cosAngle - translation.y * sinAngle;
-    translationInMapSpace.y = translation.x * sinAngle + translation.y * cosAngle;
+    if (recognizer.state == UIGestureRecognizerStateChanged)
+    {
+        if (_moveTouchLocations.count != recognizer.numberOfTouches)
+            [self reacquireMapTouchLocations:recognizer];
 
-    // Taking into account current zoom, get how many 31-coordinates there are in 1 point
-    const uint32_t tileSize31 = (1u << (31 - _mapView.zoomLevel));
-    const double scale31 = static_cast<double>(tileSize31) / _mapView.tileSizeOnScreenInPixels;
+        CGPoint firstPoint = [self getTouchPoint:recognizer touchIndex:0];
+        if (!CGPointEqualToPoint(firstPoint, CGPointZero) && _moveTouchLocations.count > 0 && !_rotatingByGesture && !_zoomingByGesture)
+        {
+            OATouchLocation *firstTouch = _moveTouchLocations[0];
+            OsmAnd::PointI touchLocation31 = [OANativeUtilities convertFromPoint31:firstTouch.touchLocation31];
+            [_mapView setMapTarget:OsmAnd::PointI((int)firstPoint.x, (int)firstPoint.y) location31:touchLocation31];
+        }
+    }
 
-    // Rescale movement to 31 coordinates
-    OsmAnd::PointI target31 = _mapView.target31;
-    target31.x -= static_cast<int32_t>(round(translationInMapSpace.x * scale31));
-    target31.y -= static_cast<int32_t>(round(translationInMapSpace.y * scale31));
-    _mapView.target31 = target31;
-    
     if (recognizer.state == UIGestureRecognizerStateEnded ||
         recognizer.state == UIGestureRecognizerStateCancelled)
     {
+        [self restorePreviousTarget];
         [self restoreMapArrowsLocation];
-        // Resume symbols update
-        while (![_mapView resumeSymbolsUpdate]);
+
+        [_moveTouchLocations removeAllObjects];
         _movingByGesture = NO;
+
+        // Resume symbols update
+        if (!_rotatingByGesture && !_zoomingByGesture && !_zoomingByTapGesture && !_movingByGesture)
+            while (![_mapView resumeSymbolsUpdate]);
     }
     else
     {
@@ -976,6 +993,14 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         screenVelocity.y *= _mapView.contentScaleFactor;
 
         // Take into account current azimuth and reproject to map space (points)
+        const float angle = qDegreesToRadians(_mapView.azimuth);
+        const float cosAngle = cosf(angle);
+        const float sinAngle = sinf(angle);
+
+        // Taking into account current zoom, get how many 31-coordinates there are in 1 point
+        const uint32_t tileSize31 = (1u << (31 - _mapView.zoomLevel));
+        const double scale31 = static_cast<double>(tileSize31) / _mapView.tileSizeOnScreenInPixels;
+
         CGPoint velocityInMapSpace;
         velocityInMapSpace.x = screenVelocity.x * cosAngle - screenVelocity.y * sinAngle;
         velocityInMapSpace.y = screenVelocity.x * sinAngle + screenVelocity.y * cosAngle;
@@ -984,13 +1009,10 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         OsmAnd::PointD velocity;
         velocity.x = -velocityInMapSpace.x * scale31;
         velocity.y = -velocityInMapSpace.y * scale31;
-        
-        _mapView.mapAnimator->animateTargetWith(velocity,
-                                            OsmAnd::PointD(kTargetMoveDeceleration * scale31, kTargetMoveDeceleration * scale31),
-                                            kUserInteractionAnimationKey);
+
+        _mapView.mapAnimator->animateFlatTargetWith(velocity, OsmAnd::PointD(kTargetMoveDeceleration * scale31, kTargetMoveDeceleration * scale31), kUserInteractionAnimationKey);
         _mapView.mapAnimator->resume();
     }
-    [recognizer setTranslation:CGPointZero inView:self.view];
 }
 
 - (void) carPlayMoveGestureDetected:(UIGestureRecognizerState)state
@@ -1004,36 +1026,32 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
     if (state == UIGestureRecognizerStateBegan && numberOfTouches > 0)
     {
+        [self storeTargetPosition:nil];
+
+        CGPoint touchPoint = CGPointMake(_targetPixel.x, _targetPixel.y);
+        _carPlayScreenPoint = _targetPixel;
+        _carPlayMapTouchLocation = [self acquireMapTouchLocation:touchPoint];
+
         // Suspend symbols update
         while (![_mapView suspendSymbolsUpdate]);
+
+        return;
     }
-    
-    // Get movement delta in points (not pixels, that is for retina and non-retina devices value is the same)
-    translation.x *= _mapView.contentScaleFactor;
-    translation.y *= _mapView.contentScaleFactor;
 
-    // Take into account current azimuth and reproject to map space (points)
-    const float angle = qDegreesToRadians(_mapView.azimuth);
-    const float cosAngle = cosf(angle);
-    const float sinAngle = sinf(angle);
-    CGPoint translationInMapSpace;
-    translationInMapSpace.x = translation.x * cosAngle - translation.y * sinAngle;
-    translationInMapSpace.y = translation.x * sinAngle + translation.y * cosAngle;
+    if (state == UIGestureRecognizerStateChanged && _carPlayMapTouchLocation)
+    {
+        _carPlayScreenPoint = OsmAnd::PointI(_carPlayScreenPoint.x + translation.x * _mapView.contentScaleFactor, _carPlayScreenPoint.y + translation.y * _mapView.contentScaleFactor);
+        auto touchLocation31 = [OANativeUtilities convertFromPoint31:_carPlayMapTouchLocation.touchLocation31];
+        [_mapView setMapTarget:_carPlayScreenPoint location31:touchLocation31];
+    }
 
-    // Taking into account current zoom, get how many 31-coordinates there are in 1 point
-    const uint32_t tileSize31 = (1u << (31 - _mapView.zoomLevel));
-    const double scale31 = static_cast<double>(tileSize31) / _mapView.tileSizeOnScreenInPixels;
-
-    // Rescale movement to 31 coordinates
-    OsmAnd::PointI target31 = _mapView.target31;
-    target31.x -= static_cast<int32_t>(round(translationInMapSpace.x * scale31));
-    target31.y -= static_cast<int32_t>(round(translationInMapSpace.y * scale31));
-    _mapView.target31 = target31;
-    
     if (state == UIGestureRecognizerStateEnded ||
         state == UIGestureRecognizerStateCancelled)
     {
+        [self restorePreviousTarget];
         [self restoreMapArrowsLocation];
+        _carPlayMapTouchLocation = nil;
+
         // Resume symbols update
         while (![_mapView resumeSymbolsUpdate]);
         _movingByGesture = NO;
@@ -1059,6 +1077,14 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         screenVelocity.y *= _mapView.contentScaleFactor;
 
         // Take into account current azimuth and reproject to map space (points)
+        const float angle = qDegreesToRadians(_mapView.azimuth);
+        const float cosAngle = cosf(angle);
+        const float sinAngle = sinf(angle);
+        // Taking into account current zoom, get how many 31-coordinates there are in 1 point
+        const uint32_t tileSize31 = (1u << (31 - _mapView.zoomLevel));
+        const double scale31 = static_cast<double>(tileSize31) / _mapView.tileSizeOnScreenInPixels;
+
+        // Take into account current azimuth and reproject to map space (points)
         CGPoint velocityInMapSpace;
         velocityInMapSpace.x = screenVelocity.x * cosAngle - screenVelocity.y * sinAngle;
         velocityInMapSpace.y = screenVelocity.x * sinAngle + screenVelocity.y * cosAngle;
@@ -1068,107 +1094,186 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         velocity.x = -velocityInMapSpace.x * scale31;
         velocity.y = -velocityInMapSpace.y * scale31;
         
-        _mapView.mapAnimator->animateTargetWith(velocity,
-                                            OsmAnd::PointD(kTargetMoveDeceleration * scale31, kTargetMoveDeceleration * scale31),
-                                            kUserInteractionAnimationKey);
+        _mapView.mapAnimator->animateFlatTargetWith(velocity, OsmAnd::PointD(kTargetMoveDeceleration * scale31, kTargetMoveDeceleration * scale31), kUserInteractionAnimationKey);
         _mapView.mapAnimator->resume();
     }
 }
 
-- (void) rotateGestureDetected:(UIRotationGestureRecognizer *)recognizer
+- (void) zoomAndRotateGestureDetected:(UIGestureRecognizer *)recognizer
 {
     // Ignore gesture if we have no view
-    if (!self.mapViewLoaded || _rotationAnd3DViewDisabled)
+    if (!self.mapViewLoaded)
         return;
-    
-    // Zeroify accumulated rotation on gesture begin
+
+    UIPinchGestureRecognizer *pinchRecognizer = [recognizer isKindOfClass:UIPinchGestureRecognizer.class] ? (UIPinchGestureRecognizer *) recognizer : nil;
+    UIRotationGestureRecognizer *rotationRecognizer = [recognizer isKindOfClass:UIRotationGestureRecognizer.class] ? (UIRotationGestureRecognizer *) recognizer : nil;
+    UIPanGestureRecognizer *panRecognizer = [recognizer isKindOfClass:UIPanGestureRecognizer.class] ? (UIPanGestureRecognizer *) recognizer : nil;
+
+    if (_rotationAnd3DViewDisabled && rotationRecognizer)
+        return;
+
+    // If gesture has just began, just capture current zoom
     if (recognizer.state == UIGestureRecognizerStateBegan)
     {
+        [self storeTargetPosition:recognizer];
+
         // Suspend symbols update
         while (![_mapView suspendSymbolsUpdate]);
 
-        _accumulatedRotationAngle = 0.0f;
-    }
-    
-    // Check if accumulated rotation is greater than threshold
-    if (fabs(_accumulatedRotationAngle) < kRotationGestureThresholdDegrees)
-    {
-        _accumulatedRotationAngle += qRadiansToDegrees(recognizer.rotation);
-        [recognizer setRotation:0];
-
-        [self restoreMapArrowsLocation];
-
-        if (recognizer.state == UIGestureRecognizerStateEnded ||
-            recognizer.state == UIGestureRecognizerStateCancelled)
+        if (panRecognizer)
         {
-            // Resume symbols update
-            while (![_mapView resumeSymbolsUpdate]);
+            _initialZoomLevelDuringGesture = _mapView.zoom;
+            _initialZoomTapPointY = [panRecognizer locationInView:recognizer.view].y;
+
+            CGPoint touchPoint = [self getTouchPoint:recognizer touchIndex:0];
+            OATouchLocation *touchLocation = [self acquireMapTouchLocation:touchPoint];
+            OsmAnd::PointI touchLocation31 = [OANativeUtilities convertFromPoint31:touchLocation.touchLocation31];
+            [_mapView setMapTarget:OsmAnd::PointI((int)touchPoint.x, (int)touchPoint.y) location31:touchLocation31];
         }
 
-        _rotatingByGesture = NO;
         return;
     }
 
-    // Get center of all touches as centroid
-    CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];
-    for(NSInteger touchIdx = 1; touchIdx < recognizer.numberOfTouches; touchIdx++)
+    // If gesture has been cancelled or failed, restore previous zoom
+    if (recognizer.state == UIGestureRecognizerStateFailed || recognizer.state == UIGestureRecognizerStateCancelled)
     {
-        CGPoint touchPoint = [recognizer locationOfTouch:touchIdx inView:self.view];
-        
-        centerPoint.x += touchPoint.x;
-        centerPoint.y += touchPoint.y;
+        [self restorePreviousTarget];
+        [self restoreMapArrowsLocation];
+
+        if (rotationRecognizer)
+        {
+            [_rotateTouchLocations removeAllObjects];
+            _rotatingByGesture = NO;
+        }
+        else if (pinchRecognizer)
+        {
+            [_zoomTouchLocations removeAllObjects];
+            _zoomingByGesture = NO;
+        }
+        else if (panRecognizer)
+        {
+            _zoomingByTapGesture = NO;
+        }
+
+        // Resume symbols update
+        if (!_rotatingByGesture && !_zoomingByGesture && !_zoomingByTapGesture && !_movingByGesture)
+            while (![_mapView resumeSymbolsUpdate]);
+
+        return;
     }
-    centerPoint.x /= recognizer.numberOfTouches;
-    centerPoint.y /= recognizer.numberOfTouches;
-    centerPoint.x *= _mapView.contentScaleFactor;
-    centerPoint.y *= _mapView.contentScaleFactor;
-    
-    // Convert point from screen to location
-    OsmAnd::PointI centerLocation;
-    [_mapView convert:centerPoint toLocation:&centerLocation];
-    
-    // Rotate current target around center location
-    OsmAnd::PointI target = _mapView.target31;
-    target -= centerLocation;
-    OsmAnd::PointI newTarget;
-    const float cosAngle = cosf(-recognizer.rotation);
-    const float sinAngle = sinf(-recognizer.rotation);
-    newTarget.x = target.x * cosAngle - target.y * sinAngle;
-    newTarget.y = target.x * sinAngle + target.y * cosAngle;
-    newTarget += centerLocation;
-    _mapView.target31 = newTarget;
-    
-    // Set rotation
-    _mapView.azimuth -= qRadiansToDegrees(recognizer.rotation);
-    if ([[OAAppSettings sharedManager].rotateMap get] == ROTATE_MAP_MANUAL)
-        [[OAAppSettings sharedManager].mapManuallyRotatingAngle set:_mapView.azimuth];
+
+    if (recognizer.state == UIGestureRecognizerStateChanged)
+    {
+        if (pinchRecognizer || rotationRecognizer)
+        {
+            NSArray<OATouchLocation *> *touchLocations = [NSArray arrayWithArray:pinchRecognizer ? _zoomTouchLocations : _rotateTouchLocations];
+            if (touchLocations.count != recognizer.numberOfTouches)
+            {
+                [self reacquireMapTouchLocations:recognizer];
+                touchLocations = [NSArray arrayWithArray:pinchRecognizer ? _zoomTouchLocations : _rotateTouchLocations];
+            }
+            CGPoint firstTouchPoint = [self getTouchPoint:recognizer touchIndex:0];
+            CGPoint secondTouchPoint = [self getTouchPoint:recognizer touchIndex:1];
+            if (!CGPointEqualToPoint(firstTouchPoint, CGPointZero) && CGPointEqualToPoint(secondTouchPoint, CGPointZero) && touchLocations.count > 0)
+            {
+                OsmAnd::PointI firstTouchLocation31 = [OANativeUtilities convertFromPoint31:touchLocations[0].touchLocation31];
+                [_mapView setMapTarget:OsmAnd::PointI((int)firstTouchPoint.x, (int)firstTouchPoint.y) location31:firstTouchLocation31];
+            }
+            if (!CGPointEqualToPoint(firstTouchPoint, CGPointZero) && !CGPointEqualToPoint(secondTouchPoint, CGPointZero) && touchLocations.count >= 2)
+            {
+                OsmAnd::PointI firstTouchLocation31 = [OANativeUtilities convertFromPoint31:touchLocations[0].touchLocation31];
+                float firstTouchLocationHeight = touchLocations[0].touchLocationHeight;
+                OsmAnd::PointI secondTouchLocation31 = [OANativeUtilities convertFromPoint31:touchLocations[1].touchLocation31];
+                float secondTouchLocationHeight = touchLocations[1].touchLocationHeight;
+
+                [_mapView setMapTarget:OsmAnd::PointI((int)firstTouchPoint.x, (int)firstTouchPoint.y) location31:firstTouchLocation31];
+
+                OsmAnd::PointI firstPosition((int)firstTouchPoint.x, (int)firstTouchPoint.y);
+                OsmAnd::PointI secondPosition((int)secondTouchPoint.x, (int)secondTouchPoint.y);
+                OsmAnd::PointD zoomAndRotation;
+                if ([_mapView getZoomAndRotationAfterPinch:firstTouchLocation31 firstHeight:firstTouchLocationHeight firstPoint:firstPosition secondLocation31:secondTouchLocation31 secondHeight:secondTouchLocationHeight secondPoint:secondPosition zoomAndRotate:&zoomAndRotation])
+                {
+                    if (pinchRecognizer)
+                    {
+                        auto zoom = zoomAndRotation.x;
+                        if (!isnan(zoom))
+                            _mapView.zoom = qBound(_mapView.minZoom, _mapView.zoom + (float)zoom, _mapView.maxZoom);
+                    }
+                    else
+                    {
+                        auto angle = zoomAndRotation.y;
+                        if (!isnan(angle))
+                        {
+                            _mapView.azimuth += angle;
+                            if ([[OAAppSettings sharedManager].rotateMap get] == ROTATE_MAP_MANUAL)
+                                [[OAAppSettings sharedManager].mapManuallyRotatingAngle set:_mapView.azimuth];
+                        }
+                    }
+                }
+            }
+        }
+        else if (panRecognizer)
+        {
+            // Change zoom
+            CGFloat gestureScale = ([panRecognizer locationInView:recognizer.view].y * _mapView.contentScaleFactor) / (_initialZoomTapPointY * _mapView.contentScaleFactor);
+            CGFloat scale = 1 - gestureScale;
+            if (gestureScale < 1 || scale < 0)
+                scale = -scale * (kGestureZoomCoef / _mapView.contentScaleFactor);
+
+            _mapView.zoom = qBound(_mapView.minZoom, (float)(_initialZoomLevelDuringGesture - scale), _mapView.maxZoom);
+        }
+    }
 
     if (recognizer.state == UIGestureRecognizerStateEnded ||
         recognizer.state == UIGestureRecognizerStateCancelled)
     {
+        [self restorePreviousTarget];
         [self restoreMapArrowsLocation];
+
+        if (rotationRecognizer)
+        {
+            [_rotateTouchLocations removeAllObjects];
+            _rotatingByGesture = NO;
+        }
+        else if (pinchRecognizer)
+        {
+            [_zoomTouchLocations removeAllObjects];
+            _zoomingByGesture = NO;
+        }
+        else if (panRecognizer)
+        {
+            _zoomingByTapGesture = NO;
+        }
+
         // Resume symbols update
-        while (![_mapView resumeSymbolsUpdate]);
-        _rotatingByGesture = NO;
+        if (!_rotatingByGesture && !_zoomingByGesture && !_zoomingByTapGesture && !_movingByGesture)
+            while (![_mapView resumeSymbolsUpdate]);
     }
     else
     {
-        _rotatingByGesture = YES;
+        if (rotationRecognizer)
+            _rotatingByGesture = YES;
+        else if (pinchRecognizer)
+            _zoomingByGesture = YES;
+        else if (panRecognizer)
+            _zoomingByTapGesture = YES;
     }
-
+    // If this is the end of gesture, get velocity for animation
     if (recognizer.state == UIGestureRecognizerStateEnded)
     {
-        //float velocity = qBound(-kRotateVelocityAbsLimitInDegrees, -qRadiansToDegrees((float)recognizer.velocity), kRotateVelocityAbsLimitInDegrees);
-        //_mapView.animator->animateAzimuthWith(velocity,
-        //                                     kRotateDeceleration,
-        //                                     kUserInteractionAnimationKey);
-        
+//        CGFloat recognizerVelocity = pinchRecognizer ? pinchRecognizer.velocity : 0;
+//        float velocity = qBound(-kZoomVelocityAbsLimit, (float)recognizerVelocity, kZoomVelocityAbsLimit);
+//        if (velocity != 0)
+//            _mapView.mapAnimator->animateZoomWith(velocity,
+//                                                  kZoomDeceleration,
+//                                                  kUserInteractionAnimationKey);
         _mapView.mapAnimator->resume();
-        [OAMapViewTrackingUtilities.instance setRotationNoneToManual];
+        if (rotationRecognizer)
+            [OAMapViewTrackingUtilities.instance setRotationNoneToManual];
     }
-    [recognizer setRotation:0];
-    
-    _lastRotatingByGestureTime = [NSDate now];
+
+    if (rotationRecognizer)
+    	_lastRotatingByGestureTime = [NSDate now];
 }
 
 - (void) zoomInGestureDetected:(UITapGestureRecognizer *)recognizer
@@ -1188,9 +1293,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     float zoomDelta = [self currentZoomInDelta];
 
     // Put tap location to center of screen
-    CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];
-    centerPoint.x *= _mapView.contentScaleFactor;
-    centerPoint.y *= _mapView.contentScaleFactor;
+    CGPoint centerPoint = [self getTouchPoint:recognizer touchIndex:0];
     OsmAnd::PointI centerLocation;
     [_mapView convert:centerPoint toLocation:&centerLocation];
 
@@ -1292,7 +1395,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     }
 }
 
--(BOOL) simulateContextMenuPress:(UIGestureRecognizer *)recognizer
+- (BOOL) simulateContextMenuPress:(UIGestureRecognizer *)recognizer
 {
     return [self pointContextMenuGestureDetected:recognizer];
 }
@@ -1880,17 +1983,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
         _gpxDocsRec.clear();
         
-        if ([OAAppSettings.sharedManager.showHeightmaps get])
-        {
-            std::shared_ptr<const OsmAnd::IGeoTiffCollection> heightsCollection;
-            const auto manualTilesCollection = new OsmAnd::GeoTiffCollection();
-            NSString *cacheDir = [_app.cachePath stringByAppendingPathComponent:GEOTIFF_SQLITE_CACHE_DIR];
-            manualTilesCollection->setLocalCache(QString::fromNSString(cacheDir));
-            manualTilesCollection->addDirectory(_app.documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)));
-            heightsCollection.reset(manualTilesCollection);
-            [_mapView setElevationDataProvider:
-                std::make_shared<OsmAnd::SqliteHeightmapTileProvider>(heightsCollection, _mapView.elevationDataTileSize)];
-        }
+        [self recreateHeightmapProvider];
+        [self updateElevationConfiguration];
         
         // Determine what type of map-source is being activated
         typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
@@ -2146,6 +2240,42 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         [self hideProgressHUD];
         [_mapSourceUpdatedObservable notifyEvent];
     }
+}
+
+- (void) createGeoTiffCollection
+{
+    const auto manualTilesCollection = new OsmAnd::GeoTiffCollection();
+    NSString *cacheDir = [_app.cachePath stringByAppendingPathComponent:GEOTIFF_SQLITE_CACHE_DIR];
+    if (![NSFileManager.defaultManager fileExistsAtPath:cacheDir])
+        [NSFileManager.defaultManager createDirectoryAtPath:cacheDir withIntermediateDirectories:YES attributes:nil error:nil];
+    manualTilesCollection->setLocalCache(QString::fromNSString(cacheDir));
+    manualTilesCollection->addDirectory(_app.documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)));
+    _geoTiffCollection.reset(manualTilesCollection);
+}
+
+- (void) recreateHeightmapProvider
+{
+    OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *)[OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
+    if (!plugin || ![plugin is3DMapsEnabled])
+    {
+        [_mapView resetElevationDataProvider:YES];
+        return;
+    }
+    [_mapView setElevationDataProvider:
+        std::make_shared<OsmAnd::SqliteHeightmapTileProvider>(_geoTiffCollection, _mapView.elevationDataTileSize)];
+}
+
+- (void) updateElevationConfiguration
+{
+    OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *)[OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
+    BOOL disableVertexHillshade = plugin != nil && [plugin isDisableVertexHillshade3D];
+    OsmAnd::ElevationConfiguration elevationConfiguration;
+    if (disableVertexHillshade)
+    {
+        elevationConfiguration.setSlopeAlgorithm(OsmAnd::ElevationConfiguration::SlopeAlgorithm::None);
+        elevationConfiguration.setVisualizationStyle(OsmAnd::ElevationConfiguration::VisualizationStyle::None);
+    }
+    [_mapView setElevationConfiguration:elevationConfiguration forcedUpdate:YES];
 }
 
 - (void) updateRasterLayerProviderAlpha
@@ -3434,13 +3564,13 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                                              mapPrimitiviser:_mapPrimitiviser
                                        mapPrimitivesProvider:_mapPrimitivesProvider
                                    mapObjectsSymbolsProvider:_obfMapSymbolsProvider
-                                           obfsDataInterface:_obfsDataInterface];
+                                           obfsDataInterface:_obfsDataInterface
+                                           geoTiffCollection:_geoTiffCollection];
 }
 
 - (OAMapPresentationEnvironment *)mapPresentationEnv
 {
     return [[OAMapPresentationEnvironment alloc] initWithEnvironment:_mapPresentationEnvironment];
 }
-
 
 @end

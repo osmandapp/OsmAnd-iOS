@@ -73,6 +73,10 @@ struct CLLocationCoordinate2D;
 
 @property(nonatomic) std::shared_ptr<OsmAnd::IMapElevationDataProvider> elevationDataProvider;
 
+- (void)resetElevationDataProvider:(BOOL)forcedUpdate;
+- (void)setElevationConfiguration:(const OsmAnd::ElevationConfiguration&)configuration
+                     forcedUpdate:(BOOL)forcedUpdate;
+
 - (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsAt:(OsmAnd::PointI)screenPoint;
 - (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsIn:(OsmAnd::AreaI)screenArea strict:(BOOL)strict;
 
@@ -125,7 +129,15 @@ struct CLLocationCoordinate2D;
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point checkOffScreen:(BOOL)offScreen;
 - (BOOL)convert:(OsmAnd::PointI64*)pos64 toScreen64:(CGPoint*)point;
 
-- (OsmAnd::AreaI)getVisibleBBox31;
+- (OsmAnd::PointI) getTarget;
+- (OsmAnd::PointI) getTargetScreenPosition;
+- (BOOL) setMapTarget:(OsmAnd::PointI)screenPoint location31:(OsmAnd::PointI)location31;
+- (BOOL) resetMapTarget;
+- (BOOL) resetMapTargetPixelCoordinates:(OsmAnd::PointI)screenPoint;
+- (float) getHeightAndLocationFromElevatedPoint:(OsmAnd::PointI)screenPoint location31:(OsmAnd::PointI*)location31;
+- (BOOL) getZoomAndRotationAfterPinch:(OsmAnd::PointI)firstLocation31 firstHeight:(float)firstHeight firstPoint:(OsmAnd::PointI)firstPoint secondLocation31:(OsmAnd::PointI)secondLocation31 secondHeight:(float)secondHeight secondPoint:(OsmAnd::PointI)secondPoint zoomAndRotate:(OsmAnd::PointD*)zoomAndRotate;
+
+- (OsmAnd::AreaI) getVisibleBBox31;
 - (NSArray<NSValue *> *) getVisibleLineFromLat:(double)fromLat fromLon:(double)fromLon toLat:(double)toLat toLon:(double)toLon;
 - (BOOL)isPositionVisible:(OsmAnd::PointI)pos;
 

@@ -9,8 +9,10 @@
 #import "OAMultiselectableHeaderView.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OAUtilities.h"
 
 #define kMargin 16.0
+#define kHeight 28.0
 
 static UIFont *_btnFont;
 
@@ -160,5 +162,10 @@ static UIFont *_btnFont;
     }
 }
 
+- (CGFloat)getHeight
+{
+    CGFloat height = [OAUtilities calculateTextBounds:_title.text width:_title.frame.size.width font:_title.font].height;
+    return height + kHeight;
+}
 
 @end

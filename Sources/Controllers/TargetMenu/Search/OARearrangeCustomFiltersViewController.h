@@ -6,11 +6,11 @@
 // Copyright (c) 2021 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseNavbarViewController.h"
 
 @class OAPOIUIFilter;
 
-@interface OARearrangeCustomFiltersViewController : OACompoundViewController
+@interface OARearrangeCustomFiltersViewController : OABaseNavbarViewController
 
 - (instancetype)initWithFilters:(NSArray<OAPOIUIFilter *> *)filters;
 

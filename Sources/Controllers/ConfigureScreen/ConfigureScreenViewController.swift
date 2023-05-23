@@ -11,7 +11,7 @@ import Foundation
 
 @objc(OAConfigureScreenViewController)
 @objcMembers
-class ConfigureScreenViewController: OABaseNavbarViewController {
+class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectionDelegate {
     
     static let selectedKey = "selected"
     
@@ -25,9 +25,9 @@ class ConfigureScreenViewController: OABaseNavbarViewController {
     
     
     override func generateData() {
-        appMode = OAAppSettings.sharedManager()!.applicationMode.get()
         widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         let settings = OAAppSettings.sharedManager()!
+        appMode = settings.applicationMode.get()
         
         tableData = OATableDataModel()
         
@@ -92,7 +92,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController {
         row.accessibilityLabel = title
         row.accessibilityValue = descr
         row.setObj(title, forKey: "")
-        row.key = "map_widget_compass"
+        row.key = "compass"
         row.iconTint = Int(Int(appMode?.getIconColor() ?? color_tint_gray))
         row.iconName = OACompassMode.getIconName(compassMode)
         row.cellType = OAValueTableViewCell.getIdentifier()
@@ -114,7 +114,20 @@ class ConfigureScreenViewController: OABaseNavbarViewController {
     }
     
     override func onRightNavbarButtonPressed() {
-        appMode = OAApplicationMode.bicycle()
+        let modeSelectionVc = AppModeSelectionViewController()
+        modeSelectionVc.delegate = self
+        let navigationController = UINavigationController()
+        navigationController.setViewControllers([modeSelectionVc], animated: true)
+        
+        navigationController.modalPresentationStyle = .pageSheet
+        let sheet = navigationController.sheetPresentationController
+        if let sheet
+        {
+            sheet.detents = [.medium(), .large()]
+            sheet.preferredCornerRadius = 20
+            sheet.prefersEdgeAttachedInCompactHeight = true
+        }
+        self.navigationController?.present(navigationController, animated: true)
     }
     
     override func isNavbarSeparatorVisible() -> Bool {
@@ -124,6 +137,17 @@ class ConfigureScreenViewController: OABaseNavbarViewController {
     func getWidgetsCount(panel: WidgetsPanel) -> Int {
         let filter = Int(kWidgetModeEnabled | KWidgetModeAvailable)
         return widgetRegistry!.getWidgetsForPanel(appMode, filterModes: filter, panels: [panel]).count
+    }
+    
+    // MARK: AppModeSelectionDelegate
+    func onAppModeSelected(_ appMode: OAApplicationMode) {
+        OAAppSettings.sharedManager()!.setApplicationModePref(appMode)
+        self.appMode = appMode
+    }
+    
+    func onNewProfilePressed() {
+        let vc = OACreateProfileViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -210,8 +234,6 @@ extension ConfigureScreenViewController {
         let settings = OAAppSettings.sharedManager()!
         if data.key == "map_widget_transparent" {
             settings.transparentMapTheme.set(sw.isOn)
-        } else if data.key == "quick_action" {
-            settings.quickActionIsOn.set(sw.isOn)
         }
         
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
@@ -223,5 +245,19 @@ extension ConfigureScreenViewController {
         return false
     }
 
+    override func onRowSelected(_ indexPath: IndexPath!) {
+        guard let data = tableData!.item(for: indexPath) else {
+            return
+        }
+        if data.key == "quick_action" {
+            let vc = OAQuickActionListViewController()
+            self.navigationController?.pushViewController(vc, animated: true)
+        } else if data.key == "compass" {
+//        TODO: Needs widget refactoring
+//            let vc = OAConfigureMenuViewController(configureMenuScreen: .visibility, param: data.key)!
+//            vc.showFull = true
+//            vc.show(self, parentViewController: nil, animated: true)
+        }
+    }
 
 }

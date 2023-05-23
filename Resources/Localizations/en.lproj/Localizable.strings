@@ -314,6 +314,7 @@
 "favorites_empty" = "You have not saved any favorite points";
 
 "shared_string_last_used" = "Last used";
+"switch_profile" = "Switch profile";
 
 "carplay_available_in_sub_plans" = "Purchase OsmAnd Pro or Maps+ to use OsmAnd with CarPlay.";
 "carplay_active_message" = "Map is displayed via CarPlay";
@@ -1229,6 +1230,7 @@
 "select_base_profile_dialog_message" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";
 "profile_type_custom_string" = "Custom profile";
 "new_profile" = "New profile";
+"shared_string_rearrange" = "Rearrange";
 "configure_profile" = "Configure profile";
 "profile_settings" = "Profile Specific Settings";
 "profile_appearance" = "Profile appearance";
@@ -1456,6 +1458,11 @@
 "srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
 "shared_string_meters" = "meters";
 "shared_string_feet" = "feet";
+
+"test_heightmap" = "Test heightmap";
+"disable_vertex_hillshade_3d" = "Disable vertex hillshade in 3D";
+"generate_slope_from_3d_maps" = "Generate slope raster maps from 3D maps";
+"generate_hillshade_from_3d_maps" = "Generate hillshade raster maps from 3D maps";
 
 // Menu
 "shared_string_menu" = "Menu";
@@ -3110,7 +3117,17 @@
 • Fixed an issue with UTM Coordinates format\n
 • Fixed an issue with intermediate points in navigation\n";
 
-"ios_release_4_4" = "• Wikipedia: added ability to view images, updated reader UI\n
+"ios_release_4_4" = "• External keyboard: added support for new keys\n
+• New widgets for Trip recording\n
+• Added search for Favorites, Tracks, and OSM Edits\n
+• CarPlay: history includes points that were used in navigation\n
+• Emoji can now be used as favorites or waypoint name\n
+• Fixed transition between offline Wikipedia articles\n
+• Fixed issues with the import of custom routing and rendering files\n
+• Track appearance: added ability to set any custom color\n
+• New widget \"Elevation: map center\"\n
+• Added option to disable announcing for deviation from the route\n
+• Wikipedia: added ability to view images, updated reader UI\n
 • Wikipedia: added ability to view images, updated reader UI\n
 • Favorites: added search\n
 • CarPlay: added history, reorganized tracks and favorites list\n

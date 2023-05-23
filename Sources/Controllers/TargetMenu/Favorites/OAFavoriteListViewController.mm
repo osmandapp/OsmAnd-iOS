@@ -1737,12 +1737,6 @@ static UIViewController *parentController;
         _isSearchActive = YES;
         _isFiltered = NO;
         [self setupSearchController:YES filtered:NO];
-        [UIView animateWithDuration:.3 animations:^{
-            self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
-            [self applySafeAreaMargins];
-        } completion:^(BOOL finished) {
-            [self.tabBarController.tabBar setHidden:YES];
-        }];
         _directionButton.tag = 1;
         [self generateData];
         [self.favoriteTableView reloadData];
@@ -1766,12 +1760,6 @@ static UIViewController *parentController;
         _isFiltered = NO;
         _directionButton.tag = 0;
         [self setupSearchController:NO filtered:NO];
-        [UIView animateWithDuration:.3 animations:^{
-            [self.tabBarController.tabBar setHidden:NO];
-            self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight - self.tabBarController.tabBar.frame.size.height, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
-        } completion:^(BOOL finished) {
-            [self applySafeAreaMargins];
-        }];
         [self.favoriteTableView reloadData];
     }
 }

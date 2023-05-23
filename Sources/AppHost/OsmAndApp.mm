@@ -24,4 +24,9 @@
     return instance;
 }
 
++ (id<OsmAndAppProtocol>)swiftInstance
+{
+    return self.instance;
+}
+
 @end

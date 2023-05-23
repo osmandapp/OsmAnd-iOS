@@ -196,6 +196,17 @@
     _renderer->setElevationDataProvider(elevationDataProvider);
 }
 
+- (void)resetElevationDataProvider:(BOOL)forcedUpdate
+{
+    _renderer->resetElevationDataProvider(forcedUpdate);
+}
+
+- (void)setElevationConfiguration:(const OsmAnd::ElevationConfiguration&)configuration
+forcedUpdate:(BOOL)forcedUpdate
+{
+    _renderer->setElevationConfiguration(configuration, forcedUpdate);
+}
+
 - (int) maxMissingDataZoomShift
 {
     return _renderer->getMaxMissingDataZoomShift();
@@ -493,7 +504,46 @@
     return res;
 }
 
-- (OsmAnd::AreaI)getVisibleBBox31
+- (OsmAnd::PointI) getTarget
+{
+    auto fixedPixel = _renderer->getState().fixedPixel;
+    if (fixedPixel.x >= 0 && fixedPixel.y >= 0)
+        return _renderer->getState().fixedLocation31;
+    else
+        return _renderer->getState().target31;
+}
+
+- (OsmAnd::PointI) getTargetScreenPosition
+{
+    return _renderer->getState().fixedPixel;
+}
+
+- (float) getHeightAndLocationFromElevatedPoint:(OsmAnd::PointI)screenPoint location31:(OsmAnd::PointI*)location31
+{
+    return _renderer->getHeightAndLocationFromElevatedPoint(screenPoint, *location31);
+}
+
+- (BOOL) getZoomAndRotationAfterPinch:(OsmAnd::PointI)firstLocation31 firstHeight:(float)firstHeight firstPoint:(OsmAnd::PointI)firstPoint secondLocation31:(OsmAnd::PointI)secondLocation31 secondHeight:(float)secondHeight secondPoint:(OsmAnd::PointI)secondPoint zoomAndRotate:(OsmAnd::PointD*)zoomAndRotate
+{
+    return _renderer->getZoomAndRotationAfterPinch(firstLocation31, firstHeight, firstPoint, secondLocation31, secondHeight, secondPoint, *zoomAndRotate);
+}
+
+- (BOOL) setMapTarget:(OsmAnd::PointI)screenPoint location31:(OsmAnd::PointI)location31
+{
+    return _renderer->setMapTarget(screenPoint, location31);
+}
+
+- (BOOL) resetMapTarget
+{
+    return _renderer->resetMapTarget();
+}
+
+- (BOOL) resetMapTargetPixelCoordinates:(OsmAnd::PointI)screenPoint
+{
+    return _renderer->resetMapTargetPixelCoordinates(screenPoint);
+}
+
+- (OsmAnd::AreaI) getVisibleBBox31
 {
     return _renderer->getVisibleBBox31();
 }

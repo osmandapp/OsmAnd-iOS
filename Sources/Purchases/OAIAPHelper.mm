@@ -13,6 +13,7 @@
 #import "Localization.h"
 #import "OADonationSettingsViewController.h"
 #import "OACheckBackupSubscriptionTask.h"
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 
 NSString *const OAIAPProductsRequestSucceedNotification = @"OAIAPProductsRequestSucceedNotification";
 NSString *const OAIAPProductsRequestFailedNotification = @"OAIAPProductsRequestFailedNotification";
@@ -1480,7 +1481,7 @@ static OASubscriptionState *EXPIRED;
 
 - (BOOL) needRequestBackupPurchase
 {
-    return !_backupPurchaseRequested || NSDate.date.timeIntervalSince1970 - _lastBackupPurchaseCheckTime > PURCHASE_VALIDATION_PERIOD_SEC;
+    return AFNetworkReachabilityManager.sharedManager.isReachable && (!_backupPurchaseRequested || NSDate.date.timeIntervalSince1970 - _lastBackupPurchaseCheckTime > PURCHASE_VALIDATION_PERIOD_SEC);
 }
 
 - (void) getActiveProducts:(RequestActiveProductsCompletionHandler)onComplete
@@ -1914,7 +1915,8 @@ static OASubscriptionState *EXPIRED;
 
 - (void) checkBackupPurchase
 {
-    [self checkBackupPurchase:nil];
+    if (AFNetworkReachabilityManager.sharedManager.isReachable)
+        [self checkBackupPurchase:nil];
 }
 
 - (void) checkBackupPurchaseIfNeeded:(void(^)(BOOL))onComplete

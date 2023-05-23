@@ -2511,3 +2511,5 @@
 "depth_contours" = "Контури на дълбочина";
 "map_widget_altitude_map_center" = "Надм. височина: център на картата";
 "map_widget_altitude_current_location" = "Надм. височина: текущо местоположение";
+"rendering_attr_showFitnessTrails_description" = "Показване на пътеки за поддържане на формата";
+"rendering_attr_showFitnessTrails_name" = "Пътеки за поддържане на форма";

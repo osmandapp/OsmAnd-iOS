@@ -460,14 +460,10 @@ forcedUpdate:(BOOL)forcedUpdate
 {
     if (!location)
         return NO;
-    return _renderer->getLocationFromScreenPoint(OsmAnd::PointI(static_cast<int32_t>(point.x), static_cast<int32_t>(point.y)), *location);
-}
-
-- (BOOL)convert:(CGPoint)point toLocation64:(OsmAnd::PointI64*)location
-{
-    if (!location)
-        return NO;
-    return _renderer->getLocationFromScreenPoint(OsmAnd::PointI(static_cast<int32_t>(point.x), static_cast<int32_t>(point.y)), *location);
+    if (_heightmapSupported)
+        return _renderer->getLocationFromElevatedPoint(OsmAnd::PointI(static_cast<int32_t>(point.x), static_cast<int32_t>(point.y)), *location);
+    else
+        return _renderer->getLocationFromScreenPoint(OsmAnd::PointI(static_cast<int32_t>(point.x), static_cast<int32_t>(point.y)), *location);
 }
 
 // virtual bool obtainScreenPointFromPosition(const PointI64& position, PointI& outScreenPoint) const = 0;
@@ -477,8 +473,14 @@ forcedUpdate:(BOOL)forcedUpdate
 {
     if (!pos)
         return NO;
+
     OsmAnd::PointI _point(0, 0);
-    BOOL res = _renderer->obtainScreenPointFromPosition(*pos, _point, offScreen);
+    BOOL res;
+    if (_heightmapSupported)
+        res = _renderer->obtainElevatedPointFromPosition(*pos, _point, offScreen);
+    else
+        res = _renderer->obtainScreenPointFromPosition(*pos, _point, offScreen);
+
     if (res) {
         point->x = _point.x / [UIScreen mainScreen].scale;
         point->y = _point.y / [UIScreen mainScreen].scale;
@@ -489,19 +491,6 @@ forcedUpdate:(BOOL)forcedUpdate
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point
 {
     return [self convert:pos toScreen:point checkOffScreen:NO];
-}
-
-- (BOOL)convert:(OsmAnd::PointI64*)pos64 toScreen64:(CGPoint*)point
-{
-    if (!pos64)
-        return NO;
-    OsmAnd::PointI _point(0, 0);
-    BOOL res = _renderer->obtainScreenPointFromPosition(*pos64, _point);
-    if (res) {
-        point->x = _point.x / [UIScreen mainScreen].scale;
-        point->y = _point.y / [UIScreen mainScreen].scale;
-    }
-    return res;
 }
 
 - (OsmAnd::PointI) getTarget
@@ -895,6 +884,11 @@ forcedUpdate:(BOOL)forcedUpdate
 
 @synthesize settingsObservable = _settingsObservable;
 
+- (OsmAnd::PointI) getCenterPixel
+{
+    return OsmAnd::PointI(_viewSize.x * _viewportXScale / 2.0, _viewSize.y * _viewportYScale / 2.0);
+}
+
 - (void)render:(CADisplayLink*)displayLink
 {
     if (![EAGLContext setCurrentContext:_glRenderContext])
@@ -926,10 +920,7 @@ forcedUpdate:(BOOL)forcedUpdate
         // Update size of renderer window and viewport
         _renderer->setWindowSize(_viewSize);
         _renderer->setViewport(OsmAnd::AreaI(OsmAnd::PointI(0, 0), _viewSize));
-        _renderer->setMapTarget(
-            OsmAnd::PointI(_viewSize.x * _viewportXScale / 2.0,
-                           _viewSize.y * _viewportYScale / 2.0),
-            self.target31);
+        _renderer->setMapTarget([self getCenterPixel], self.target31);
 
         _renderer->attachToRenderTarget();
     }

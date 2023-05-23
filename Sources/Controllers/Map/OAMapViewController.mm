@@ -2258,9 +2258,11 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *)[OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
     if (!plugin || ![plugin is3DMapsEnabled])
     {
+        _mapView.heightmapSupported = NO;
         [_mapView resetElevationDataProvider:YES];
         return;
     }
+    _mapView.heightmapSupported = YES;
     [_mapView setElevationDataProvider:
         std::make_shared<OsmAnd::SqliteHeightmapTileProvider>(_geoTiffCollection, _mapView.elevationDataTileSize)];
 }

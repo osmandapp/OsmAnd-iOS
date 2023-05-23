@@ -104,6 +104,7 @@ struct CLLocationCoordinate2D;
 @property (nonatomic) OsmAnd::ZoomLevel zoomLevel;
 @property (nonatomic) float viewportXScale;
 @property (nonatomic) float viewportYScale;
+@property (nonatomic) BOOL heightmapSupported;
 
 @property (nonatomic, readonly) unsigned int symbolsCount;
 @property (nonatomic, readonly) BOOL isSymbolsUpdateSuspended;
@@ -123,11 +124,8 @@ struct CLLocationCoordinate2D;
 
 // Utilities:
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location;
-- (BOOL)convert:(CGPoint)point toLocation64:(OsmAnd::PointI64*)location;
-
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point;
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point checkOffScreen:(BOOL)offScreen;
-- (BOOL)convert:(OsmAnd::PointI64*)pos64 toScreen64:(CGPoint*)point;
 
 - (OsmAnd::PointI) getTarget;
 - (OsmAnd::PointI) getTargetScreenPosition;
@@ -157,6 +155,7 @@ struct CLLocationCoordinate2D;
 @property (nonatomic) int heixelsPerTileSide;
 @property (nonatomic) int elevationDataTileSize;
 
+- (OsmAnd::PointI) getCenterPixel;
 - (float)getCameraHeightInMeters;
 - (float)getTargetDistanceInMeters;
 

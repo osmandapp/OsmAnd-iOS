@@ -717,16 +717,13 @@
 - (void) handleLongPressCompass:(UILongPressGestureRecognizer *)gestureRecognizer
 {
     OAProfileGeneralSettingsParametersViewController *settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initMapOrientationFromMap];
-    
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
-    
     navigationController.modalPresentationStyle = UIModalPresentationPageSheet;
     UISheetPresentationController *sheet = navigationController.sheetPresentationController;
     if (sheet)
     {
         sheet.detents = @[UISheetPresentationControllerDetent.mediumDetent];
         sheet.preferredCornerRadius = 20;
-        sheet.prefersEdgeAttachedInCompactHeight = YES;
     }
     
     [self.navigationController presentViewController:navigationController animated:YES completion:nil];

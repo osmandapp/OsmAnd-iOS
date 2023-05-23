@@ -1489,7 +1489,6 @@
         {
             sheet.detents = @[UISheetPresentationControllerDetent.mediumDetent];
             sheet.preferredCornerRadius = 20;
-            sheet.prefersEdgeAttachedInCompactHeight = YES;
         }
         [self.navigationController presentViewController:navigationController animated:YES completion:nil];
     }

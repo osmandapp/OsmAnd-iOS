@@ -70,6 +70,14 @@
         @"key" : @"work"}];
 }
 
+- (void)setSelectedIndex:(NSInteger)selectedIndex
+{
+    NSInteger prevSelectedItemIndex = _selectedItemIndex;
+    _selectedItemIndex = selectedIndex;
+    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:prevSelectedItemIndex inSection:0],
+                                                   [NSIndexPath indexPathForRow:_selectedItemIndex inSection:0]]];
+}
+
 #pragma mark - Scroll offset calculations
 
 - (void) updateContentOffset
@@ -192,8 +200,7 @@
         if (_delegate)
         {
             [_delegate onItemSelected:indexPath.row];
-            _selectedItemIndex = indexPath.row;
-            [self.collectionView reloadData];
+            [self setSelectedIndex:indexPath.row];
         }
     }
     

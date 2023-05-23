@@ -146,7 +146,7 @@
 
 - (UIImage *) getFavoriteImage:(const OsmAnd::IFavoriteLocation *)fav
 {
-    UIColor* color = [UIColor colorWithRed:fav->getColor().r/255.0 green:fav->getColor().g/255.0 blue:fav->getColor().b/255.0 alpha:1.0];
+    UIColor *color = [UIColor colorWithRed:fav->getColor().r/255.0 green:fav->getColor().g/255.0 blue:fav->getColor().b/255.0 alpha:fav->getColor().a/255.0];
     return [self.class getImageWithColor:color
                         background:fav->getBackground().toNSString()
                               icon:[@"mx_" stringByAppendingString:fav->getIcon().toNSString()]];
@@ -281,7 +281,7 @@
             QString group = favorite->getGroup();
             QString icon = favorite->getIcon();
             QString background = favorite->getBackground();
-            OsmAnd::ColorRGB color = favorite->getColor();
+            OsmAnd::ColorARGB color = favorite->getColor();
             QHash<QString, QString> extensions = favorite->getExtensions();
             bool calendarEvent = favorite->getCalendarEvent();
             

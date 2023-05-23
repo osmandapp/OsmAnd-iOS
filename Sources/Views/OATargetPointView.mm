@@ -1841,16 +1841,11 @@ static const NSInteger _buttonsCount = 4;
     if (_targetPoint.type == OATargetFavorite)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            
-            UIColor* color = [UIColor colorWithRed:favoriteLocation->getColor().r/255.0 green:favoriteLocation->getColor().g/255.0 blue:favoriteLocation->getColor().b/255.0 alpha:1.0];
-            OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-            
             OAFavoriteItem *item = [OAFavoritesHelper getVisibleFavByLat:favoriteLocation->getLatLon().latitude lon:favoriteLocation->getLatLon().longitude];
             _targetPoint.title = [item getDisplayName];
             
             [_addressLabel setText:_targetPoint.title];
             [self updateAddressLabel];
-            _targetPoint.icon = [UIImage imageNamed:favCol.iconName];
             _imageView.image = [item getCompositeIcon];
         });
     }

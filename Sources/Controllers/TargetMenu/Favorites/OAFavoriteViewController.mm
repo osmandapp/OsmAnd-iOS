@@ -102,7 +102,7 @@
                                                                         group,
                                                                         icon,
                                                                         background,
-                                                                        OsmAnd::FColorRGB(r,g,b));
+                                                                        OsmAnd::FColorARGB(a,r,g,b));
         
         OAFavoriteItem* fav = [[OAFavoriteItem alloc] initWithFavorite:favorite];
         _favorite = fav;

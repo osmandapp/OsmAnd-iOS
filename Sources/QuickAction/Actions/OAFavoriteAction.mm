@@ -116,7 +116,7 @@ static OAQuickActionType *TYPE;
     QString icon = QString();
     QString background = QString();
     
-    app.favoritesCollection->createFavoriteLocation(OsmAnd::LatLon(lat, lon), elevation, time, pickupTime, titleStr, description, address, group, icon, background, OsmAnd::FColorRGB(r,g,b));
+    app.favoritesCollection->createFavoriteLocation(OsmAnd::LatLon(lat, lon), elevation, time, pickupTime, titleStr, description, address, group, icon, background, OsmAnd::FColorARGB(a,r,g,b));
 
     [app saveFavoritesToPermanentStorage:@[groupName]];
 }

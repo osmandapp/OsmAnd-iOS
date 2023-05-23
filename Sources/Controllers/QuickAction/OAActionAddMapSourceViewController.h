@@ -6,7 +6,7 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseNavbarViewController.h"
 
 typedef NS_ENUM(NSInteger, EOAMapSourceType)
 {
@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger, EOAMapSourceType)
 
 @end
 
-@interface OAActionAddMapSourceViewController : OACompoundViewController
+@interface OAActionAddMapSourceViewController : OABaseNavbarViewController
 
 -(instancetype)initWithNames:(NSMutableArray<NSString *> *)names type:(EOAMapSourceType)type;
 

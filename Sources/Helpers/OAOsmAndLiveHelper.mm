@@ -94,6 +94,12 @@
     }
 }
 
++ (BOOL) isPreferencesInited:(NSString *)regionName
+{
+    NSString *firstPrefKey = [kLiveUpdatesFrequencyPrefix stringByAppendingString:regionName];
+    return [[NSUserDefaults standardUserDefaults] objectForKey:firstPrefKey] != nil;
+}
+
 + (NSArray<NSString *> *)getPrefKeys:(NSString *)regionName
 {
     NSMutableArray<NSString *> *keys = [[NSMutableArray alloc] init];

@@ -34,8 +34,18 @@
 #import "OAShareMenuActivity.h"
 #import "OAPOI.h"
 
+#define kMargin 16.0
 #define kButtonsViewHeight 44.0
 #define kDefaultMapRulerMarginBottom 0
+
+#define kButtonsTopMargin 1.0
+#define kButtonsBottomMargin 10.0
+#define kButtonsSideMargin 6.0
+#define kButtonsIconSize 30.0
+#define kButtonsIconTopMargin 7.0
+#define kButtonsLabelTopMargin 38.0
+#define kButtonsLabelSideMargin 4.0
+#define kButtonsLabelHeight 30.0
 
 @interface OATargetPointView() <UIScrollViewDelegate, OAScrollViewDelegate, OAShareMenuDelegate>
 
@@ -58,6 +68,16 @@
 @property (weak, nonatomic) IBOutlet OAButton *buttonDirection;
 @property (weak, nonatomic) IBOutlet OAButton *buttonMore;
 
+@property (weak, nonatomic) IBOutlet UILabel *buttonFavoriteLabel;
+@property (weak, nonatomic) IBOutlet UILabel *buttonShareLabel;
+@property (weak, nonatomic) IBOutlet UILabel *buttonDirectionLabel;
+@property (weak, nonatomic) IBOutlet UILabel *buttonMoreLabel;
+
+@property (weak, nonatomic) IBOutlet UIImageView *buttonFavoriteIcon;
+@property (weak, nonatomic) IBOutlet UIImageView *buttonShareIcon;
+@property (weak, nonatomic) IBOutlet UIImageView *buttonDirectionIcon;
+@property (weak, nonatomic) IBOutlet UIImageView *buttonMoreIcon;
+
 @property (weak, nonatomic) IBOutlet UIButton *buttonShadow;
 
 @property (weak, nonatomic) IBOutlet UIView *controlButtonsView;
@@ -70,6 +90,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *downloadCancelButton;
 
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
+@property (weak, nonatomic) IBOutlet UIView *buttonsColoredView;
 @property (weak, nonatomic) IBOutlet UIView *backView1;
 @property (weak, nonatomic) IBOutlet UIView *backView2;
 @property (weak, nonatomic) IBOutlet UIView *backView3;
@@ -93,7 +114,6 @@ static const NSInteger _buttonsCount = 4;
 @implementation OATargetPointView
 {
     
-    CALayer *_horizontalLine;
     CALayer *_horizontalRouteLine;
 
     CGFloat _headerY;
@@ -177,9 +197,9 @@ static const NSInteger _buttonsCount = 4;
     
     [self doUpdateUI];
 
-    [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
-    [_buttonShare setTitle:OALocalizedString(@"shared_string_share") forState:UIControlStateNormal];
-    [_buttonDirection setTitle:OALocalizedString(@"map_marker") forState:UIControlStateNormal];
+    _buttonFavoriteLabel.text = OALocalizedString(@"ctx_mnu_add_fav");
+    _buttonShareLabel.text = OALocalizedString(@"shared_string_share");
+    _buttonDirectionLabel.text = OALocalizedString(@"map_marker");
     [_buttonShowInfo setTitle:[OALocalizedString(@"info_button") upperCase] forState:UIControlStateNormal];
     [_buttonRoute setTitle:[OALocalizedString(@"shared_string_navigation") upperCase] forState:UIControlStateNormal];
 
@@ -195,11 +215,6 @@ static const NSInteger _buttonsCount = 4;
     self.sliderView.hidden = [self isLandscape];
     self.sliderView.layer.cornerRadius = 3.;
     self.buttonShadow.hidden = YES;
-    
-    _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [UIColorFromRGB(0xe3e3e3) CGColor];
-    
-    [_buttonsView.layer addSublayer:_horizontalLine];
 
     _horizontalRouteLine = [CALayer layer];
     _horizontalRouteLine.backgroundColor = [UIColorFromRGB(0xe3e3e3) CGColor];
@@ -285,16 +300,15 @@ static const NSInteger _buttonsCount = 4;
     btn.layer.cornerRadius = 4.0;
     btn.layer.masksToBounds = YES;
     btn.layer.borderWidth = 0.8;
-    btn.layer.borderColor = UIColorFromRGB(color_dialog_buttons_light).CGColor;
-    //[btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xffffff)] forState:UIControlStateNormal];
-    btn.tintColor = UIColorFromRGB(color_dialog_buttons_light);
+    btn.layer.borderColor = UIColorFromRGB(color_primary_purple).CGColor;
+    btn.tintColor = UIColorFromRGB(color_primary_purple);
 }
 
 - (void) updateDirectionButton
 {
     if ([self.customController hasDismissButton])
     {
-        self.buttonDirection.imageView.transform = CGAffineTransformIdentity;
+        _buttonDirectionIcon.transform = CGAffineTransformIdentity;
     }
     else
     {
@@ -324,9 +338,8 @@ static const NSInteger _buttonsCount = 4;
     CGFloat itemDirection = [[OsmAndApp instance].locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:_targetPoint.location.latitude longitude:_targetPoint.location.longitude]];
     CGFloat direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
     
-    self.buttonDirection.imageView.transform = CGAffineTransformMakeRotation(direction);
-    self.buttonDirection.titleLabel.text = distanceStr;
-    [self.buttonDirection setTitle:distanceStr forState:UIControlStateNormal];
+    _buttonDirectionIcon.transform = CGAffineTransformMakeRotation(direction);
+    _buttonDirectionLabel.text = distanceStr;
 }
 
 - (void) updateToolbarGradientWithAlpha:(CGFloat)alpha
@@ -655,52 +668,54 @@ static const NSInteger _buttonsCount = 4;
     if (self.customController.contentView)
         [self insertSubview:self.customController.contentView atIndex:0];
     
-    [self.buttonMore setImage:[UIImage imageNamed:@"three_dots.png"] forState:UIControlStateNormal];
-    [self.buttonMore setTitle:OALocalizedString(@"shared_string_actions") forState:UIControlStateNormal];
-        
+    _buttonShareIcon.image = [UIImage templateImageNamed:@"ic_custom_export"];
+    _buttonMoreIcon.image = [UIImage templateImageNamed:@"ic_custom_overflow_menu"];
+    _buttonMoreLabel.text = OALocalizedString(@"shared_string_actions");
+    
     if (self.customController.hasDismissButton)
     {
-        [_buttonDirection setTitle:OALocalizedString(@"shared_string_dismiss") forState:UIControlStateNormal];
-        [_buttonDirection setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        [_buttonDirection setImage:[UIImage imageNamed:@"ic_trip_removepoint"] forState:UIControlStateNormal];
-        [_buttonDirection setTintColor:[UIColor redColor]];
-        _buttonDirection.imageView.transform = CGAffineTransformIdentity;
+        _buttonDirectionIcon.image = [UIImage templateImageNamed:@"ic_custom_marker_remove"];
+        _buttonDirectionIcon.tintColor = [UIColor redColor];
+        _buttonDirectionLabel.text = OALocalizedString(@"shared_string_dismiss");
+        _buttonDirectionLabel.textColor = [UIColor redColor];
+        _buttonDirectionIcon.transform = CGAffineTransformIdentity;
     }
     else
     {
-        [_buttonDirection setTitle:OALocalizedString(@"map_marker") forState:UIControlStateNormal];
-        [_buttonDirection setTitleColor:UIColorFromRGB(0x666666) forState:UIControlStateNormal];
-        [_buttonDirection setImage:[UIImage imageNamed:@"menu_direction_icon_2"] forState:UIControlStateNormal];
-        [_buttonDirection setTintColor:UIColorFromRGB(0x666666)];
-        _buttonDirection.imageView.transform = CGAffineTransformIdentity;
+        _buttonDirectionIcon.image = [UIImage templateImageNamed:@"ic_custom_arrow_direction"];
+        _buttonDirectionIcon.tintColor = UIColorFromRGB(color_primary_purple);
+        _buttonDirectionLabel.text = OALocalizedString(@"map_marker");
+        _buttonDirectionLabel.textColor = UIColorFromRGB(color_primary_purple);
     }
     
     if (self.activeTargetType == OATargetGPX)
     {
         if (_targetPoint.type == OATargetWpt && ![self newItem])
         {
-            [_buttonFavorite setTitle:OALocalizedString(@"edit_waypoint_short") forState:UIControlStateNormal];
+            _buttonFavoriteLabel.text = OALocalizedString(@"edit_waypoint_short");
             [_buttonFavorite setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
         }
         else
         {
-            [_buttonFavorite setTitle:OALocalizedString(@"add_waypoint_short") forState:UIControlStateNormal];
-            [_buttonFavorite setImage:[UIImage imageNamed:@"add_waypoint_to_track"] forState:UIControlStateNormal];
+            _buttonFavoriteLabel.text = OALocalizedString(@"add_waypoint_short");
+            _buttonFavoriteIcon.image = [UIImage templateImageNamed:@"add_waypoint_to_track"];
         }
     }
     else
     {
         if (_targetPoint.type == OATargetFavorite && ![self newItem])
         {
-            [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_edit_fav") forState:UIControlStateNormal];
-            [_buttonFavorite setImage:[UIImage imageNamed:@"ic_dialog_edit"] forState:UIControlStateNormal];
+            _buttonFavoriteLabel.text = OALocalizedString(@"ctx_mnu_edit_fav");
+            _buttonFavoriteIcon.image = [UIImage templateImageNamed:@"ic_dialog_edit"];
         }
         else
         {
-            [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
-            [_buttonFavorite setImage:[UIImage imageNamed:@"menu_star_icon"] forState:UIControlStateNormal];
+            _buttonFavoriteLabel.text = OALocalizedString(@"ctx_mnu_add_fav");
+            _buttonFavoriteIcon.image = [UIImage templateImageNamed:@"ic_custom_favorites"];
         }
     }
+    
+    _buttonFavoriteIcon.tintColor = UIColorFromRGB(color_primary_purple);
     
     _imageView.hidden = NO;
     
@@ -1312,55 +1327,67 @@ static const NSInteger _buttonsCount = 4;
     }
     
     _buttonShadow.frame = CGRectMake(0.0, 0.0, width - 50.0, 73.0);
+    
+    CGFloat leftSafe = [OAUtilities getLeftMargin];
         
     _buttonsView.frame = CGRectMake(0.0, _topView.frame.origin.y + topViewHeight + controlButtonsHeight, width, infoViewHeight + heightWithMargin);
+    _buttonsColoredView.frame = CGRectMake(0.0, kOATargetPointButtonsViewHeight, width, _buttonsView.frame.size.height - kOATargetPointButtonsViewHeight);
 
-    CGFloat x = [OAUtilities getLeftMargin];
-    CGFloat backViewWidth = floor((_buttonsView.frame.size.width - x) / _buttonsCount);
-    
-    _backView1.frame = CGRectMake(x, 1.0, backViewWidth, kOATargetPointButtonsViewHeight - 1.0);
-    x += backViewWidth + 1.0;
-    _backView2.frame = CGRectMake(x, 1.0, backViewWidth, kOATargetPointButtonsViewHeight - 1.0);
-    x += backViewWidth + 1.0;
-    _backView3.frame = CGRectMake(x, 1.0, backViewWidth, kOATargetPointButtonsViewHeight - 1.0);
-    
-    x += backViewWidth + 1.0;
-    _backView4.frame = CGRectMake(x, 1.0, _buttonsView.frame.size.width - x, kOATargetPointButtonsViewHeight - 1.0);
+    CGFloat backViewWidth = (_buttonsView.frame.size.width - leftSafe - kMargin * 2 - kButtonsSideMargin * (_buttonsCount - 1)) / _buttonsCount;
+    CGFloat x = leftSafe + kMargin;
+    _backView1.frame = CGRectMake(x, kButtonsTopMargin, backViewWidth, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
+    x += backViewWidth + kButtonsSideMargin;
+    _backView2.frame = CGRectMake(x, kButtonsTopMargin, backViewWidth, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
+    x += backViewWidth + kButtonsSideMargin;
+    _backView3.frame = CGRectMake(x, kButtonsTopMargin, backViewWidth, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
+    x += backViewWidth + kButtonsSideMargin;
+    _backView4.frame = CGRectMake(x, kButtonsTopMargin, _buttonsView.frame.size.width - x - kMargin, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
     if (_backView4.hidden)
         _backView4.hidden = NO;
-        
+    
+    _backView1.layer.cornerRadius = 6.0;
+    _backView2.layer.cornerRadius = 6.0;
+    _backView3.layer.cornerRadius = 6.0;
+    _backView4.layer.cornerRadius = 6.0;
+    
+    _buttonFavoriteIcon.frame = CGRectMake((_backView1.frame.size.width - kButtonsIconSize) / 2, kButtonsIconTopMargin, kButtonsIconSize, kButtonsIconSize);
+    _buttonFavoriteLabel.frame = CGRectMake(kButtonsLabelSideMargin, kButtonsLabelTopMargin, _backView1.frame.size.width - 2 * kButtonsLabelSideMargin, kButtonsLabelHeight);
+    _buttonShareIcon.frame = CGRectMake((_backView1.frame.size.width - kButtonsIconSize) / 2, kButtonsIconTopMargin, kButtonsIconSize, kButtonsIconSize);
+    _buttonShareLabel.frame = CGRectMake(kButtonsLabelSideMargin, kButtonsLabelTopMargin, _backView2.frame.size.width - 2 * kButtonsLabelSideMargin, kButtonsLabelHeight);
+    _buttonDirectionIcon.frame = CGRectMake((_backView3.frame.size.width - kButtonsIconSize) / 2, kButtonsIconTopMargin, kButtonsIconSize, kButtonsIconSize);
+    _buttonDirectionLabel.frame = CGRectMake(kButtonsLabelSideMargin, kButtonsLabelTopMargin, _backView3.frame.size.width - 2 * kButtonsLabelSideMargin, kButtonsLabelHeight);
+    _buttonMoreIcon.frame = CGRectMake((_backView4.frame.size.width - kButtonsIconSize) / 2, kButtonsIconTopMargin, kButtonsIconSize, kButtonsIconSize);
+    _buttonMoreLabel.frame = CGRectMake(kButtonsLabelSideMargin, kButtonsLabelTopMargin, _backView4.frame.size.width - 2 * kButtonsLabelSideMargin, kButtonsLabelHeight);
     
     if (_buttonMore.hidden)
         _buttonMore.hidden = NO;
     
-    _backViewRoute.frame = CGRectMake(0., _backView1.frame.origin.y + _backView1.frame.size.height + 1.0, _buttonsView.frame.size.width, kOATargetPointInfoViewHeight);
+    _backViewRoute.frame = CGRectMake(0., _backView1.frame.origin.y + _backView1.frame.size.height + kButtonsBottomMargin, _buttonsView.frame.size.width, kOATargetPointInfoViewHeight);
     
     [_buttonRoute sizeToFit];
     [_buttonShowInfo sizeToFit];
     CGRect biFrame = _buttonShowInfo.frame;
     CGRect brFrame = _buttonRoute.frame;
-    biFrame.size.height = _backViewRoute.frame.size.height - 10;
-    brFrame.size.height = _backViewRoute.frame.size.height - 10;
+    biFrame.size.height = _backViewRoute.frame.size.height - kButtonsBottomMargin;
+    brFrame.size.height = _backViewRoute.frame.size.height - kButtonsBottomMargin;
     _buttonShowInfo.frame = biFrame;
     _buttonRoute.frame = brFrame;
 
-    CGFloat margin = 16.0;
-    CGFloat leftSafe = [OAUtilities getLeftMargin];
     if ([_backViewRoute isDirectionRTL])
     {
-        _buttonRoute.frame = CGRectMake(leftSafe + margin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
+        _buttonRoute.frame = CGRectMake(leftSafe + kMargin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
         [_buttonRoute setImage:[UIImage imageNamed:@"left_menu_icon_navigation.png"].imageWithHorizontallyFlippedOrientation forState:UIControlStateNormal];
         _buttonRoute.semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;
         _buttonRoute.titleEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
-        _buttonShowInfo.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonShowInfo.frame.size.width - margin, 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
+        _buttonShowInfo.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonShowInfo.frame.size.width - kMargin, 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
     }
     else
     {
-        _buttonShowInfo.frame = CGRectMake(leftSafe + margin, 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
+        _buttonShowInfo.frame = CGRectMake(leftSafe + kMargin, 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
         [_buttonRoute setImage:[UIImage imageNamed:@"left_menu_icon_navigation.png"] forState:UIControlStateNormal];
         _buttonRoute.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
         _buttonRoute.imageEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
-        _buttonRoute.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonRoute.frame.size.width - margin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
+        _buttonRoute.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonRoute.frame.size.width - kMargin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
     }
     if (![_buttonsView isDirectionRTL])
     {
@@ -1383,14 +1410,11 @@ static const NSInteger _buttonsCount = 4;
     
     if (_targetPoint.type == OATargetImpassableRoadSelection)
     {
-        _horizontalLine.hidden = YES;
         _horizontalRouteLine.hidden = YES;
     }
     else
     {
-        _horizontalLine.hidden = NO;
         _horizontalRouteLine.hidden = NO;
-        _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
         _horizontalRouteLine.frame = CGRectMake(0.0, 0.0, _backViewRoute.frame.size.width, 0.5);
     }
     

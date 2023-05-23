@@ -76,15 +76,11 @@ static const NSInteger groupCount = 1;
 -(void) setInitialValues
 {
     _isLiveUpdatesEnabled = [OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:_regionNameNSString];
-    if (!_isLiveUpdatesEnabled)
-    {
+    if (!_isLiveUpdatesEnabled && ![OAOsmAndLiveHelper isPreferencesInited: _regionNameNSString])
         [OAOsmAndLiveHelper setDefaultPreferencesForLocalIndex:_regionNameNSString];
-    }
-    else
-    {
-        _isWifiUpdatesOnly = [OAOsmAndLiveHelper getPreferenceWifiForLocalIndex:_regionNameNSString];
-        _updatingFrequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:_regionNameNSString];
-    }
+
+    _isWifiUpdatesOnly = [OAOsmAndLiveHelper getPreferenceWifiForLocalIndex:_regionNameNSString];
+    _updatingFrequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:_regionNameNSString];
 }
 
 -(void) applyLocalization
@@ -404,7 +400,6 @@ static const NSInteger groupCount = 1;
     }
     else
     {
-        [OAOsmAndLiveHelper removePreferencesForLocalIndex:regionNameStr];
         [self removeUpdates];
     }
     [self.navigationController popViewControllerAnimated:YES];

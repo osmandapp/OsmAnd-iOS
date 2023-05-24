@@ -174,12 +174,13 @@
 
 - (BOOL) allowed
 {
-    return ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized);
+    CLAuthorizationStatus authorizationStatus = _manager.authorizationStatus;
+    return authorizationStatus == kCLAuthorizationStatusAuthorizedAlways || authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse;
 }
 
 - (BOOL) denied
 {
-    return ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied);
+    return _manager.authorizationStatus == kCLAuthorizationStatusDenied;
 }
 
 @synthesize stateObservable = _stateObservable;
@@ -668,7 +669,7 @@
 - (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
     // If services were running, but now authorization was revoked, stop them
-    if (status != kCLAuthorizationStatusAuthorized && status != kCLAuthorizationStatusNotDetermined && (_locationActive || _compassActive))
+    if (status != kCLAuthorizationStatusAuthorizedAlways && status != kCLAuthorizationStatusAuthorizedWhenInUse && status != kCLAuthorizationStatusNotDetermined && (_locationActive || _compassActive))
         [self stop];
 
     [_stateObservable notifyEvent];

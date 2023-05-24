@@ -25,13 +25,6 @@
 #import "OAColors.h"
 #import "Localization.h"
 
-@interface OAStatusBackupConflictDetailsViewController () <UITableViewDelegate, UITableViewDataSource>
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIButton *closeButton;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-
-@end
-
 @implementation OAStatusBackupConflictDetailsViewController
 {
     OALocalFile *_localFile;
@@ -44,6 +37,8 @@
     EOABackupSyncOperationType _operation;
     EOARecentChangesType _recentChangesType;
 }
+
+#pragma mark - Initialization
 
 - (instancetype)initWithLocalFile:(OALocalFile *)localeFile
                        remoteFile:(OARemoteFile *)remoteFile
@@ -62,34 +57,26 @@
     return self;
 }
 
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (void)commonInit
 {
-    return [super initWithNibName:@"OAStatusBackupConflictDetailsViewController" bundle:nil];
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
     _settingsHelper = [OANetworkSettingsHelper sharedInstance];
-
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    self.tableView.sectionHeaderHeight = 0.001;
-    self.tableView.sectionFooterHeight = 0.001;
-
-    [self generateData];
 }
 
-- (void)applyLocalization
+- (OASettingsItem *)getSettingsItem:(OALocalFile *)localFile remoteFile:(OARemoteFile *)remoteFile
 {
-    [self.closeButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
-    self.titleView.text = [self titleForOperation:_operation];
+    OASettingsItem *settingsItem;
+    if (_recentChangesType == EOARecentChangesLocal)
+        settingsItem = localFile == nil ? remoteFile.item : localFile.item;
+    else
+        settingsItem = remoteFile == nil ? localFile.item : remoteFile.item;
+    return settingsItem;
 }
 
-- (NSString *) titleForOperation:(EOABackupSyncOperationType)operation
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    switch (operation)
+    switch (_operation)
     {
         case EOABackupSyncOperationDownload:
             return OALocalizedString(!_localFile ? @"new_file" : @"modified_file");
@@ -102,27 +89,12 @@
     }
 }
 
-- (OASettingsItem *) getSettingsItem:(OALocalFile *)localFile remoteFile:(OARemoteFile *)remoteFile
+- (NSString *)getLeftNavbarButtonTitle
 {
-    OASettingsItem *settingsItem;
-    if (_recentChangesType == EOARecentChangesLocal)
-        settingsItem = localFile == nil ? remoteFile.item : localFile.item;
-    else
-        settingsItem = remoteFile == nil ? localFile.item : remoteFile.item;
-    return settingsItem;
+    return OALocalizedString(@"shared_string_close");
 }
 
-- (CGFloat) initialHeight
-{
-    return DeviceScreenHeight / 2;
-}
-
-- (BOOL) isRowEnabled:(NSString *)fileName
-{
-    OAImportBackupTask *importTask = [_settingsHelper getImportTask:fileName];
-    OAExportBackupTask *exportTask = [_settingsHelper getExportTask:fileName];
-    return exportTask == nil && importTask == nil;
-}
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -185,8 +157,8 @@
     else if (self.delegate)
     {
         long timeMs = _recentChangesType == EOARecentChangesLocal || _recentChangesType == EOARecentChangesConflicts
-            ? _localFile.localModifiedTime * 1000
-            : _recentChangesType == EOARecentChangesRemote && deleteOperation ? _localFile.uploadTime : _remoteFile.updatetimems;
+        ? _localFile.localModifiedTime * 1000
+        : _recentChangesType == EOARecentChangesRemote && deleteOperation ? _localFile.uploadTime : _remoteFile.updatetimems;
         NSString *summary = OALocalizedString(deleteOperation && _recentChangesType != EOARecentChangesLocal ? @"poi_remove_success" : @"shared_string_modified");
         [itemInfoRow setDescr:[self.delegate generateTimeString:timeMs summary:summary]];
     }
@@ -213,6 +185,109 @@
     [_data addSection:itemActionSection];
 }
 
+- (NSInteger)sectionsCount
+{
+    return _data.sectionCount;
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return [_data sectionDataForIndex:section].footerText;
+}
+
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return section == _itemInfoSection ? 0.001 : kHeaderHeightDefault;
+}
+
+- (CGFloat)getCustomHeightForFooter:(NSInteger)section
+{
+    NSString *footer = [_data sectionDataForIndex:section].footerText;
+    if (footer)
+    {
+        UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+        CGFloat footerHeight = [OAUtilities calculateTextBounds:footer
+                                                          width:self.tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
+                                                           font:font].height + kPaddingOnSideOfFooterWithText;
+        return footerHeight;
+    }
+    return 0.001;
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return [_data sectionDataForIndex:section].rowCount;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    {
+        OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        if (cell)
+        {
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
+            NSString *title = item.title;
+            [cell titleVisibility:title != nil];
+            cell.titleLabel.text = title;
+            cell.descriptionLabel.text = item.descr;
+            cell.leftIconView.image = [[item objForKey:@"icon"] imageFlippedForRightToLeftLayoutDirection];
+            cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
+        }
+        return cell;
+    }
+    else if ([item.cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
+    {
+        OARightIconTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
+        }
+        if (cell)
+        {
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
+            BOOL enabled = [item boolForKey:@"enabled"];
+            cell.selectionStyle = enabled ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
+            cell.titleLabel.textColor = enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
+            cell.titleLabel.text = item.title;
+            cell.descriptionLabel.text = item.descr;
+            cell.rightIconView.image = [UIImage templateImageNamed:item.secondaryIconName];
+            cell.rightIconView.tintColor = enabled ? UIColorFromRGB(item.iconTint) : UIColorFromRGB(color_footer_icon_gray);
+        }
+        return cell;
+    }
+    return nil;
+}
+
+- (void)onRowSelected:(NSIndexPath *)indexPath
+{
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    if ([item boolForKey:@"enabled"])
+    {
+        [self dismissViewControllerAnimated:YES completion:^{
+            NSString *fileName = [OABackupHelper getItemFileName:_settingsItem];
+            if ([item.key isEqualToString:@"uploadLocal"])
+                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationUpload];
+            else if ([item.key isEqualToString:@"downloadCloud"])
+                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationDownload];
+            else if ([item.key isEqualToString:@"deleteItem"])
+                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationDelete];
+        }];
+    }
+}
+
+#pragma mark - Additions
+
 - (OATableRowData *)populateUploadAction
 {
     BOOL deleteOperation = _operation == EOABackupSyncOperationDelete;
@@ -225,9 +300,9 @@
         if (deleteOperation)
         {
             description = _recentChangesType == EOARecentChangesLocal
-                ? OALocalizedString(@"cloud_version_will_be_removed")
-                : [self.delegate generateTimeString:_localFile.localModifiedTime * 1000
-                                            summary:OALocalizedString(@"shared_string_modified")];
+            ? OALocalizedString(@"cloud_version_will_be_removed")
+            : [self.delegate generateTimeString:_localFile.localModifiedTime * 1000
+                                        summary:OALocalizedString(@"shared_string_modified")];
         }
         else if (!_localFile)
         {
@@ -244,7 +319,7 @@
             }
         }
     }
-
+    
     return [[OATableRowData alloc] initWithData:@{
         kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
         kCellKeyKey: deleteOperation ? @"deleteItem" : @"uploadLocal",
@@ -299,7 +374,7 @@
             }
         }
     }
-
+    
     return [[OATableRowData alloc] initWithData:@{
         kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
         kCellKeyKey: deleteOperation ? @"deleteItem" : @"downloadCloud",
@@ -311,112 +386,11 @@
     }];
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (BOOL)isRowEnabled:(NSString *)fileName
 {
-    return _data.sectionCount;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [_data sectionDataForIndex:section].rowCount;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    OATableRowData *item = [_data itemForIndexPath:indexPath];
-    if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
-    {
-        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASimpleTableViewCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        if (cell)
-        {
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
-            NSString *title = item.title;
-            [cell titleVisibility:title != nil];
-            cell.titleLabel.text = title;
-            cell.descriptionLabel.text = item.descr;
-            cell.leftIconView.image = [[item objForKey:@"icon"] imageFlippedForRightToLeftLayoutDirection];
-            cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
-        }
-        return cell;
-    }
-    else if ([item.cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
-    {
-        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OARightIconTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
-        }
-        if (cell)
-        {
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
-            BOOL enabled = [item boolForKey:@"enabled"];
-            cell.selectionStyle = enabled ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
-            cell.titleLabel.textColor = enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
-            cell.titleLabel.text = item.title;
-            cell.descriptionLabel.text = item.descr;
-            cell.rightIconView.image = [UIImage templateImageNamed:item.secondaryIconName];
-            cell.rightIconView.tintColor = enabled ? UIColorFromRGB(item.iconTint) : UIColorFromRGB(color_footer_icon_gray);
-        }
-        return cell;
-    }
-    return nil;
-}
-
-#pragma mark - UITableViewDelegate
-
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return [_data sectionDataForIndex:section].footerText;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return section == _itemInfoSection ? 0.001 : kHeaderHeightDefault;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    NSString *footer = [_data sectionDataForIndex:section].footerText;
-    if (footer)
-    {
-        UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-        CGFloat footerHeight = [OAUtilities calculateTextBounds:footer
-                                                          width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
-                                                           font:font].height + kPaddingOnSideOfFooterWithText;
-        return footerHeight;
-    }
-
-    return 0.001;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
-    OATableRowData *item = [_data itemForIndexPath:indexPath];
-    if ([item boolForKey:@"enabled"])
-    {
-        [self dismissViewControllerAnimated:YES completion:^{
-            NSString *fileName = [OABackupHelper getItemFileName:_settingsItem];
-            if ([item.key isEqualToString:@"uploadLocal"])
-                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationUpload];
-            else if ([item.key isEqualToString:@"downloadCloud"])
-                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationDownload];
-            else if ([item.key isEqualToString:@"deleteItem"])
-                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationDelete];
-        }];
-    }
+    OAImportBackupTask *importTask = [_settingsHelper getImportTask:fileName];
+    OAExportBackupTask *exportTask = [_settingsHelper getExportTask:fileName];
+    return exportTask == nil && importTask == nil;
 }
 
 @end

@@ -749,7 +749,8 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                                                                          operation:(EOABackupSyncOperationType) [item integerForKey:@"operation"]
                                                                  recentChangesType:_tableType];
             statusDetailsViewController.delegate = self;
-            [self presentViewController:statusDetailsViewController animated:YES completion:nil];
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:statusDetailsViewController];
+            [self.navigationController presentViewController:navigationController animated:YES completion:nil];
         }
     }
 

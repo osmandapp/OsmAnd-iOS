@@ -6,7 +6,7 @@
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OASuperViewController.h"
+#import "OABaseNavbarViewController.h"
 #import "OAStatusBackupTableViewController.h"
 #import "OANetworkSettingsHelper.h"
 
@@ -14,7 +14,7 @@
 
 @protocol OAStatusBackupDelegate;
 
-@interface OAStatusBackupConflictDetailsViewController : OASuperViewController
+@interface OAStatusBackupConflictDetailsViewController : OABaseNavbarViewController
 
 - (instancetype)initWithLocalFile:(OALocalFile *)localeFile
                        remoteFile:(OARemoteFile *)remoteFile

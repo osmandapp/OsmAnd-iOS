@@ -6,7 +6,7 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseNavbarViewController.h"
 #import "OAResourcesBaseViewController.h"
 #import "OAOnlineTilesEditingViewController.h"
 
@@ -17,14 +17,11 @@
 
 @end
 
-@interface OAOnlineTilesSettingsViewController : OACompoundViewController <UITableViewDelegate, UITableViewDataSource>
+@interface OAOnlineTilesSettingsViewController : OABaseNavbarViewController
 
-@property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 @property (nonatomic) id<OAOnlineTilesSettingsViewControllerDelegate> delegate;
 
 -(instancetype) initWithEllipticYTile:(BOOL)isEllipticYTile;
 -(instancetype) initWithSourceFormat:(EOASourceFormat)sourceFormat;
 
 @end
-

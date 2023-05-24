@@ -21,9 +21,6 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
     EOAOnlineSourceSettingSourceFormat
 };
 
-@interface OAOnlineTilesSettingsViewController ()
-@end
-
 @implementation OAOnlineTilesSettingsViewController
 {
     BOOL _isEllipticYTile;
@@ -32,7 +29,9 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
     NSArray *_data;
 }
 
--(instancetype) initWithEllipticYTile:(BOOL)isEllipticYTile
+#pragma mark - Initialization
+
+- (instancetype)initWithEllipticYTile:(BOOL)isEllipticYTile
 {
     self = [super init];
     if (self)
@@ -43,7 +42,7 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
     return self;
 }
 
--(instancetype) initWithSourceFormat:(EOASourceFormat)sourceFormat
+- (instancetype)initWithSourceFormat:(EOASourceFormat)sourceFormat
 {
     self = [super init];
     if (self)
@@ -54,34 +53,29 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
     return self;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self generateData];
-}
+#pragma mark - Base UI
 
--(void)applyLocalization
+- (NSString *)getTitle
 {
     switch (_settingsType)
     {
         case EOAOnlineSourceSettingMercatorProjection:
-        {
-            _titleLabel.text = OALocalizedString(@"res_mercator");
-            break;
-        }
+            return OALocalizedString(@"res_mercator");
         case EOAOnlineSourceSettingSourceFormat:
-        {
-            _titleLabel.text = OALocalizedString(@"res_source_format");
-            break;
-        }
+            return OALocalizedString(@"res_source_format");
         default:
-            break;
+            return @"";
     }
 }
 
-- (void) generateData
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
+{
+    return EOABaseNavbarColorSchemeOrange;
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     NSMutableArray *data = [NSMutableArray new];
     switch (_settingsType)
@@ -90,24 +84,24 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
         {
             
             [data addObject:@{
-                                @"text": OALocalizedString(@"edit_tilesource_elliptic_tile"),
-                                @"img": _isEllipticYTile ? @"menu_cell_selected.png" : @""
+                @"text": OALocalizedString(@"edit_tilesource_elliptic_tile"),
+                @"img": _isEllipticYTile ? @"menu_cell_selected.png" : @""
             }];
             [data addObject:@{
-                                @"text": OALocalizedString(@"pseudo_mercator_projection"),
-                                @"img": !_isEllipticYTile ? @"menu_cell_selected.png" : @""
+                @"text": OALocalizedString(@"pseudo_mercator_projection"),
+                @"img": !_isEllipticYTile ? @"menu_cell_selected.png" : @""
             }];
             break;
         }
         case EOAOnlineSourceSettingSourceFormat:
         {
             [data addObject:@{
-                                @"text": OALocalizedString(@"sqlite_db_file"),
-                                @"img": _sourceFormat == EOASourceFormatSQLite ? @"menu_cell_selected.png" : @""
+                @"text": OALocalizedString(@"sqlite_db_file"),
+                @"img": _sourceFormat == EOASourceFormatSQLite ? @"menu_cell_selected.png" : @""
             }];
             [data addObject:@{
-                                @"text": OALocalizedString(@"one_image_per_tile"),
-                                @"img": _sourceFormat == EOASourceFormatOnline ? @"menu_cell_selected.png" : @""
+                @"text": OALocalizedString(@"one_image_per_tile"),
+                @"img": _sourceFormat == EOASourceFormatOnline ? @"menu_cell_selected.png" : @""
             }];
             break;
         }
@@ -117,24 +111,28 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
     _data = [NSArray arrayWithArray:data];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)sectionsCount
+{
+    return 1;
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return _data.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
     
     OASettingsTitleTableViewCell* cell = nil;
-    cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+    cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
     
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
     }
-    
     if (cell)
     {
         [cell.textView setText: item[@"text"]];
@@ -146,42 +144,35 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
     return cell;
 }
 
-- (IBAction)backButtonPressed:(UIButton *)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     switch (_settingsType)
-       {
-           case EOAOnlineSourceSettingMercatorProjection:
-           {
-               if ((indexPath.row == 0 && _isEllipticYTile) || (indexPath.row == 1 && !_isEllipticYTile))
-                   break;
-               _isEllipticYTile = indexPath.row == 0 ? YES : NO;
-               if (_delegate)
-                   [_delegate onMercatorChanged:_isEllipticYTile];
-               [self generateData];
-               [_tableView reloadData];
-               break;
-           }
-           case EOAOnlineSourceSettingSourceFormat:
-           {
-               if ((indexPath.row == 0 && _sourceFormat == EOASourceFormatSQLite) || (indexPath.row == 1 && _sourceFormat == EOASourceFormatOnline))
-                   break;
-               _sourceFormat = indexPath.row == 0 ? EOASourceFormatSQLite : EOASourceFormatOnline;
-               if (_delegate)
-                   [_delegate onStorageFormatChanged:_sourceFormat];
-               [self generateData];
-               [_tableView reloadData];
-               break;
-           }
-           default:
-               break;
-       }
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    {
+        case EOAOnlineSourceSettingMercatorProjection:
+        {
+            if ((indexPath.row == 0 && _isEllipticYTile) || (indexPath.row == 1 && !_isEllipticYTile))
+                break;
+            _isEllipticYTile = indexPath.row == 0 ? YES : NO;
+            if (_delegate)
+                [_delegate onMercatorChanged:_isEllipticYTile];
+            [self generateData];
+            [self.tableView reloadData];
+            break;
+        }
+        case EOAOnlineSourceSettingSourceFormat:
+        {
+            if ((indexPath.row == 0 && _sourceFormat == EOASourceFormatSQLite) || (indexPath.row == 1 && _sourceFormat == EOASourceFormatOnline))
+                break;
+            _sourceFormat = indexPath.row == 0 ? EOASourceFormatSQLite : EOASourceFormatOnline;
+            if (_delegate)
+                [_delegate onStorageFormatChanged:_sourceFormat];
+            [self generateData];
+            [self.tableView reloadData];
+            break;
+        }
+        default:
+            break;
+    }
     [self.navigationController popViewControllerAnimated:YES];
 }
 

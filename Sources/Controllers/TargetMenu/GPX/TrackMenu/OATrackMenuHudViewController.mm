@@ -1168,8 +1168,8 @@
             waypoint.color = newGroupColor;
             if (!newGroupName && !self.isCurrentTrack)
             {
-                [appearanceCollection selectColor:[appearanceCollection getColorForItem:@""
-                                                                           defaultValue:[OAUtilities colorToNumberFromString:[waypoint.color toHexARGBString]]]
+                NSInteger defaultValue = [OAUtilities colorToNumberFromString:[waypoint.color toHexARGBString]];
+                [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:defaultValue]
                                     toGpxFilePath:self.gpx.gpxFilePath
                                         groupName:waypoint.point.type
                                         pointName:waypoint.point.name];
@@ -1180,8 +1180,7 @@
         {
             [OAGPXDocument fillWpt:waypoint.point.wpt usingWpt:waypoint.point];
             OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-            [appearanceCollection selectColor:[appearanceCollection getColorForItem:@""
-                                                                       defaultValue:[waypoint.point getColor:0]]
+            [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[waypoint.point getColor:0]]
                                 toGpxFilePath:nil
                                     groupName:waypoint.point.type
                                     pointName:waypoint.point.name];
@@ -1206,8 +1205,7 @@
                     {
                         [OAGPXDocument fillWpt:existWaypoint.point.wpt usingWpt:existWaypoint.point];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                        [appearanceCollection selectColor:[appearanceCollection getColorForItem:@""
-                                                                                   defaultValue:[existWaypoint.point getColor:0]]
+                        [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[existWaypoint.point getColor:0]]
                                             toGpxFilePath:nil
                                                 groupName:existWaypoint.point.type
                                                 pointName:existWaypoint.point.name];
@@ -1215,8 +1213,8 @@
                     }
                     else
                     {
-                        [appearanceCollection selectColor:[appearanceCollection getColorForItem:@""
-                                                                                   defaultValue:[OAUtilities colorToNumberFromString:[existWaypoint.color toHexARGBString]]]
+                        NSInteger defaultValue = [OAUtilities colorToNumberFromString:[existWaypoint.color toHexARGBString]];
+                        [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:defaultValue]
                                             toGpxFilePath:self.gpx.gpxFilePath
                                                 groupName:existWaypoint.point.type
                                                 pointName:existWaypoint.point.name];

@@ -207,8 +207,8 @@ static BOOL _favoritesLoaded = NO;
     }
 
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    [appearanceCollection selectColor:[appearanceCollection getColorForItem:@""
-                                                               defaultValue:[OAUtilities colorToNumberFromString:[[point getColor] toHexARGBString]]]
+    NSInteger defaultValue = [OAUtilities colorToNumberFromString:[[point getColor] toHexARGBString]];
+    [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:defaultValue]
                   toFavoriteGroupName:[point getCategory]
                             pointName:[point getName]];
     if (saveImmediately)
@@ -300,8 +300,8 @@ static BOOL _favoritesLoaded = NO;
         [newGroup.points addObject:item];
     }
 
-    [appearanceCollection selectColor:[appearanceCollection getColorForItem:@""
-                                                               defaultValue:[OAUtilities colorToNumberFromString:[[item getColor] toHexARGBString]]]
+    NSInteger defaultValue = [OAUtilities colorToNumberFromString:[[item getColor] toHexARGBString]];
+    [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:defaultValue]
                   toFavoriteGroupName:group
                             pointName:[item getName]];
 

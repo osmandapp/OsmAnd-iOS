@@ -2979,8 +2979,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                     {
                         [OAGPXDocument fillWpt:w usingWpt:self.foundWpt];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                        [appearanceCollection selectColor:[appearanceCollection getColorForItem:@""
-                                                                                   defaultValue:[self.foundWpt getColor:0]]
+                        [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[self.foundWpt getColor:0]]
                                             toGpxFilePath:self.foundWptDocPath
                                                 groupName:self.foundWpt.type
                                                 pointName:self.foundWpt.name];
@@ -3042,8 +3041,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                 p.reset(new OsmAnd::GpxDocument::WptPt());
                 [OAGPXDocument fillWpt:p usingWpt:wpt];
                 OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                [appearanceCollection selectColor:[appearanceCollection getColorForItem:@""
-                                                                           defaultValue:[wpt getColor:0]]
+                [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[wpt getColor:0]]
                                     toGpxFilePath:gpxFileName
                                         groupName:wpt.type
                                         pointName:wpt.name];
@@ -3084,8 +3082,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
             p.reset(new OsmAnd::GpxDocument::WptPt());
             [OAGPXDocument fillWpt:p usingWpt:wpt];
             OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-            [appearanceCollection selectColor:[appearanceCollection getColorForItem:@""
-                                                                       defaultValue:[wpt getColor:0]]
+            [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[wpt getColor:0]]
                                 toGpxFilePath:gpxFileName
                                     groupName:wpt.type
                                     pointName:wpt.name];
@@ -3170,8 +3167,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                     {
                         [OAGPXDocument fillWpt:w usingWpt:item.point];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                        [appearanceCollection selectColor:[appearanceCollection getColorForItem:@""
-                                                                                   defaultValue:[item.point getColor:0]]
+                        [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[item.point getColor:0]]
                                             toGpxFilePath:docPath
                                                 groupName:item.point.type
                                                 pointName:item.point.name];
@@ -3214,8 +3210,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                 {
                     [OAGPXDocument fillWpt:w usingWpt:item.point];
                     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                    [appearanceCollection selectColor:[appearanceCollection getColorForItem:@""
-                                                                               defaultValue:[item.point getColor:0]]
+                    [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[item.point getColor:0]]
                                         toGpxFilePath:item.docPath
                                             groupName:item.point.type
                                             pointName:item.point.name];

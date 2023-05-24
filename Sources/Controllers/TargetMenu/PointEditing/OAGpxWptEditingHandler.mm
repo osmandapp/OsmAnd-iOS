@@ -189,8 +189,7 @@
     _gpxWpt.color = color;
 
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    [appearanceCollection selectColor:[appearanceCollection getColorForItem:@""
-                                                               defaultValue:[OAUtilities colorToNumberFromString:[color toHexARGBString]]]
+    [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[OAUtilities colorToNumberFromString:[color toHexARGBString]]]
                         toGpxFilePath:_gpxFileName
                             groupName:_gpxWpt.point.type
                             pointName:_gpxWpt.point.name];

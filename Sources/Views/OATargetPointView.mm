@@ -198,8 +198,11 @@ static const NSInteger _buttonsCount = 4;
     [self doUpdateUI];
 
     _buttonFavoriteLabel.text = OALocalizedString(@"ctx_mnu_add_fav");
+    _buttonFavorite.accessibilityLabel = OALocalizedString(@"ctx_mnu_add_fav");
     _buttonShareLabel.text = OALocalizedString(@"shared_string_share");
+    _buttonShare.accessibilityLabel = OALocalizedString(@"shared_string_share");
     _buttonDirectionLabel.text = OALocalizedString(@"map_marker");
+    _buttonDirection.accessibilityLabel = OALocalizedString(@"map_marker");
     [_buttonShowInfo setTitle:[OALocalizedString(@"info_button") upperCase] forState:UIControlStateNormal];
     [_buttonRoute setTitle:[OALocalizedString(@"shared_string_navigation") upperCase] forState:UIControlStateNormal];
 
@@ -240,13 +243,6 @@ static const NSInteger _buttonsCount = 4;
                                                                       {
                                                                           [self onFavoriteLocationChanged:favoriteLocation];
                                                                       });
-    if ([_buttonsView isDirectionRTL])
-    {
-        [_backView4 addSubview:_buttonFavorite];
-        [_backView3 addSubview:_buttonShare];
-        [_backView2 addSubview:_buttonDirection];
-        [_backView1 addSubview:_buttonMore];
-    }
 }
 
 - (void) startLocationUpdate
@@ -340,6 +336,7 @@ static const NSInteger _buttonsCount = 4;
     
     _buttonDirectionIcon.transform = CGAffineTransformMakeRotation(direction);
     _buttonDirectionLabel.text = distanceStr;
+    _buttonDirection.accessibilityValue = distanceStr;
 }
 
 - (void) updateToolbarGradientWithAlpha:(CGFloat)alpha
@@ -671,12 +668,14 @@ static const NSInteger _buttonsCount = 4;
     _buttonShareIcon.image = [UIImage templateImageNamed:@"ic_custom_export"];
     _buttonMoreIcon.image = [UIImage templateImageNamed:@"ic_custom_overflow_menu"];
     _buttonMoreLabel.text = OALocalizedString(@"shared_string_actions");
+    _buttonMore.accessibilityLabel = OALocalizedString(@"shared_string_actions");
     
     if (self.customController.hasDismissButton)
     {
         _buttonDirectionIcon.image = [UIImage templateImageNamed:@"ic_custom_marker_remove"];
         _buttonDirectionIcon.tintColor = [UIColor redColor];
         _buttonDirectionLabel.text = OALocalizedString(@"shared_string_dismiss");
+        _buttonDirection.accessibilityLabel = OALocalizedString(@"shared_string_dismiss");
         _buttonDirectionLabel.textColor = [UIColor redColor];
         _buttonDirectionIcon.transform = CGAffineTransformIdentity;
     }
@@ -685,6 +684,7 @@ static const NSInteger _buttonsCount = 4;
         _buttonDirectionIcon.image = [UIImage templateImageNamed:@"ic_custom_arrow_direction"];
         _buttonDirectionIcon.tintColor = UIColorFromRGB(color_primary_purple);
         _buttonDirectionLabel.text = OALocalizedString(@"map_marker");
+        _buttonDirection.accessibilityLabel = OALocalizedString(@"map_marker");
         _buttonDirectionLabel.textColor = UIColorFromRGB(color_primary_purple);
     }
     
@@ -693,11 +693,13 @@ static const NSInteger _buttonsCount = 4;
         if (_targetPoint.type == OATargetWpt && ![self newItem])
         {
             _buttonFavoriteLabel.text = OALocalizedString(@"edit_waypoint_short");
+            _buttonFavorite.accessibilityLabel = OALocalizedString(@"edit_waypoint_short");
             [_buttonFavorite setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
         }
         else
         {
             _buttonFavoriteLabel.text = OALocalizedString(@"add_waypoint_short");
+            _buttonFavorite.accessibilityLabel = OALocalizedString(@"add_waypoint_short");
             _buttonFavoriteIcon.image = [UIImage templateImageNamed:@"add_waypoint_to_track"];
         }
     }
@@ -706,11 +708,13 @@ static const NSInteger _buttonsCount = 4;
         if (_targetPoint.type == OATargetFavorite && ![self newItem])
         {
             _buttonFavoriteLabel.text = OALocalizedString(@"ctx_mnu_edit_fav");
-            _buttonFavoriteIcon.image = [UIImage templateImageNamed:@"ic_dialog_edit"];
+            _buttonFavorite.accessibilityLabel = OALocalizedString(@"ctx_mnu_edit_fav");
+            _buttonFavoriteIcon.image = [UIImage templateImageNamed:@"ic_custom_edit"];
         }
         else
         {
             _buttonFavoriteLabel.text = OALocalizedString(@"ctx_mnu_add_fav");
+            _buttonFavorite.accessibilityLabel = OALocalizedString(@"ctx_mnu_add_fav");
             _buttonFavoriteIcon.image = [UIImage templateImageNamed:@"ic_custom_favorites"];
         }
     }
@@ -1335,13 +1339,26 @@ static const NSInteger _buttonsCount = 4;
 
     CGFloat backViewWidth = (_buttonsView.frame.size.width - leftSafe - kMargin * 2 - kButtonsSideMargin * (_buttonsCount - 1)) / _buttonsCount;
     CGFloat x = leftSafe + kMargin;
-    _backView1.frame = CGRectMake(x, kButtonsTopMargin, backViewWidth, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
-    x += backViewWidth + kButtonsSideMargin;
-    _backView2.frame = CGRectMake(x, kButtonsTopMargin, backViewWidth, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
-    x += backViewWidth + kButtonsSideMargin;
-    _backView3.frame = CGRectMake(x, kButtonsTopMargin, backViewWidth, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
-    x += backViewWidth + kButtonsSideMargin;
-    _backView4.frame = CGRectMake(x, kButtonsTopMargin, _buttonsView.frame.size.width - x - kMargin, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
+    if ([_backViewRoute isDirectionRTL])
+    {
+        _backView4.frame = CGRectMake(x, kButtonsTopMargin, backViewWidth, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
+        x += backViewWidth + kButtonsSideMargin;
+        _backView3.frame = CGRectMake(x, kButtonsTopMargin, backViewWidth, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
+        x += backViewWidth + kButtonsSideMargin;
+        _backView2.frame = CGRectMake(x, kButtonsTopMargin, backViewWidth, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
+        x += backViewWidth + kButtonsSideMargin;
+        _backView1.frame = CGRectMake(x, kButtonsTopMargin, _buttonsView.frame.size.width - x - kMargin, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
+    }
+    else
+    {
+        _backView1.frame = CGRectMake(x, kButtonsTopMargin, backViewWidth, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
+        x += backViewWidth + kButtonsSideMargin;
+        _backView2.frame = CGRectMake(x, kButtonsTopMargin, backViewWidth, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
+        x += backViewWidth + kButtonsSideMargin;
+        _backView3.frame = CGRectMake(x, kButtonsTopMargin, backViewWidth, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
+        x += backViewWidth + kButtonsSideMargin;
+        _backView4.frame = CGRectMake(x, kButtonsTopMargin, _buttonsView.frame.size.width - x - kMargin, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
+    }
     if (_backView4.hidden)
         _backView4.hidden = NO;
     
@@ -1349,6 +1366,11 @@ static const NSInteger _buttonsCount = 4;
     _backView2.layer.cornerRadius = 6.0;
     _backView3.layer.cornerRadius = 6.0;
     _backView4.layer.cornerRadius = 6.0;
+    
+    _buttonFavorite.frame = _backView1.bounds;
+    _buttonShare.frame = _backView2.bounds;
+    _buttonDirection.frame = _backView3.bounds;
+    _buttonMore.frame = _backView4.bounds;
     
     _buttonFavoriteIcon.frame = CGRectMake((_backView1.frame.size.width - kButtonsIconSize) / 2, kButtonsIconTopMargin, kButtonsIconSize, kButtonsIconSize);
     _buttonFavoriteLabel.frame = CGRectMake(kButtonsLabelSideMargin, kButtonsLabelTopMargin, _backView1.frame.size.width - 2 * kButtonsLabelSideMargin, kButtonsLabelHeight);
@@ -1359,6 +1381,14 @@ static const NSInteger _buttonsCount = 4;
     _buttonMoreIcon.frame = CGRectMake((_backView4.frame.size.width - kButtonsIconSize) / 2, kButtonsIconTopMargin, kButtonsIconSize, kButtonsIconSize);
     _buttonMoreLabel.frame = CGRectMake(kButtonsLabelSideMargin, kButtonsLabelTopMargin, _backView4.frame.size.width - 2 * kButtonsLabelSideMargin, kButtonsLabelHeight);
     
+    _buttonFavoriteIcon.layer.zPosition = _backView1.layer.zPosition + 1;
+    _buttonFavoriteLabel.layer.zPosition = _backView1.layer.zPosition + 1;
+    _buttonShareIcon.layer.zPosition = _backView2.layer.zPosition + 1;
+    _buttonShareLabel.layer.zPosition = _backView2.layer.zPosition + 1;
+    _buttonDirectionIcon.layer.zPosition = _backView3.layer.zPosition + 1;
+    _buttonDirectionLabel.layer.zPosition = _backView3.layer.zPosition + 1;
+    _buttonMoreIcon.layer.zPosition = _backView4.layer.zPosition + 1;
+    _buttonMoreLabel.layer.zPosition = _backView4.layer.zPosition + 1;
     if (_buttonMore.hidden)
         _buttonMore.hidden = NO;
     
@@ -1388,20 +1418,6 @@ static const NSInteger _buttonsCount = 4;
         _buttonRoute.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
         _buttonRoute.imageEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
         _buttonRoute.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonRoute.frame.size.width - kMargin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
-    }
-    if (![_buttonsView isDirectionRTL])
-    {
-        _buttonFavorite.frame = _backView1.bounds;
-        _buttonShare.frame = _backView2.bounds;
-        _buttonDirection.frame = _backView3.bounds;
-        _buttonMore.frame = _backView4.bounds;
-    }
-    else
-    {
-        _buttonFavorite.frame = _backView4.bounds;
-        _buttonShare.frame = _backView3.bounds;
-        _buttonDirection.frame = _backView2.bounds;
-        _buttonMore.frame = _backView1.bounds;
     }
     [_buttonFavorite setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
     [_buttonShare setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];

@@ -23,9 +23,12 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
     EOABaseNavbarStyleCustomLargeTitle
 };
 
+@class OATableDataModel;
+
 @interface OABaseNavbarViewController : OASuperViewController<UIGestureRecognizerDelegate, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, readonly) OATableDataModel *tableData;
 
 - (void)commonInit;
 - (void)postInit;

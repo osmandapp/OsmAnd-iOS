@@ -21,15 +21,12 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
             setupNavbarButtons()
         }
     }
-    var tableData: OATableDataModel?
     
     
     override func generateData() {
         widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         let settings = OAAppSettings.sharedManager()!
         appMode = settings.applicationMode.get()
-        
-        tableData = OATableDataModel()
         
         let widgetsSection = tableData!.createNewSection()!
         widgetsSection.headerText = localizedString("shared_string_widgets")
@@ -41,6 +38,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
             row.cellType = OAValueTableViewCell.getIdentifier()
             row.title = panel.title
             row.iconName = panel.iconName
+            row.setObj(panel, forKey: "panel")
             row.iconTint = Int(widgetsCount == 0 ? color_tint_gray : appMode!.getIconColor())
             row.descr = String(widgetsCount)
             row.accessibilityLabel = panel.title
@@ -125,7 +123,6 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         {
             sheet.detents = [.medium(), .large()]
             sheet.preferredCornerRadius = 20
-            sheet.prefersEdgeAttachedInCompactHeight = true
         }
         self.navigationController?.present(navigationController, animated: true)
     }
@@ -153,21 +150,6 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
 
 // TableView
 extension ConfigureScreenViewController {
-    override func rowsCount(_ section: Int) -> Int {
-        Int(tableData!.rowCount(UInt(section)))
-    }
-    
-    override func sectionsCount() -> Int {
-        Int(tableData!.sectionCount())
-    }
-    
-    override func getTitleForHeader(_ section: Int) -> String! {
-        tableData?.sectionData(for: UInt(section)).headerText
-    }
-    
-    override func getTitleForFooter(_ section: Int) -> String! {
-        tableData?.sectionData(for: UInt(section)).footerText
-    }
     
     fileprivate func applyAccessibility(_ cell: UITableViewCell, _ item: OATableRowData) {
         cell.accessibilityLabel = item.accessibilityLabel
@@ -257,6 +239,12 @@ extension ConfigureScreenViewController {
 //            let vc = OAConfigureMenuViewController(configureMenuScreen: .visibility, param: data.key)!
 //            vc.showFull = true
 //            vc.show(self, parentViewController: nil, animated: true)
+        } else {
+            let panel = data.obj(forKey: "panel") as? WidgetsPanel
+            if let panel {
+                let vc = WidgetsListViewController(widgetPanel: panel)
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
         }
     }
 

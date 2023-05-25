@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseNavbarViewController.h"
 
 @protocol OAEditGroupViewControllerDelegate <NSObject>
 
@@ -15,20 +15,13 @@
 
 @end
 
-@interface OAEditGroupViewController : OACompoundViewController<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
-
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UIButton *saveButton;
-
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@interface OAEditGroupViewController : OABaseNavbarViewController<UITextFieldDelegate>
 
 @property (strong, nonatomic) NSString* groupName;
 @property (nonatomic, readonly) BOOL saveChanges;
 
-@property (weak, nonatomic) id delegate;
+@property (nonatomic, weak) id<OAEditGroupViewControllerDelegate> delegate;
 
--(id)initWithGroupName:(NSString *)groupName groups:(NSArray *)groups;
+-(instancetype)initWithGroupName:(NSString *)groupName groups:(NSArray *)groups;
 
 @end

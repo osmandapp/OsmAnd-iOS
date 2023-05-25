@@ -20,7 +20,7 @@
 "fav_remove_q" = "Favorit löschen?";
 "fav_import_title" = "Favorit importieren";
 "fav_export_title" = "Favorit exportieren";
-"fav_select_remove" = "Bitte Favoriten markieren zum löschen";
+"fav_select_remove" = "Bitte Favoriten markieren zum Löschen";
 "fav_export_select" = "Bitte Favoriten markieren zum Exportieren";
 "fav_create_group" = "Erstelle neue Gruppe";
 "fav_enter_group_name" = "Gib den Gruppennamen ein";
@@ -175,9 +175,9 @@
 "prch_items_failed" = "Elemente wurden nicht wieder hergestellt. Bitte versuch es erneut.";
 // Resources
 "res_mapsres" = "Karten & Ressourcen";
-"res_banner_many" = "Es sind %d kostenlose Karten zum herunterladen verfügbar";
-"res_banner_one" = "Es gibt eine kostenlose Karte zum herunterladen";
-"res_banner_no" = "Du hast keine kostenlosen Karten zum herunterladen";
+"res_banner_many" = "Es sind %d kostenlose Karten zum Herunterladen verfügbar";
+"res_banner_one" = "Es gibt eine kostenlose Karte zum Herunterladen";
+"res_banner_no" = "Du hast keine kostenlosen Karten zum Herunterladen";
 "res_catalog_upd" = "Katalog Aktualisierung";
 "res_region_map" = "Umgebungskarte";
 "res_deleting" = "Wird gelöscht …";
@@ -187,7 +187,7 @@
 "res_map_of_region" = "Karte der Umgebung";
 "res_update_no_space" = "Für das Update ist zu wenig Speicher vorhanden";
 "res_no_space_free" = "ist notwendig. Bitte etwas Speicher freimachen.";
-"res_free_exp" = "Du hast alle freien Downloads verbraucht. Bitte kaufe einen Kontinent zum herunteladen/aktualiseren der Karten.";
+"res_free_exp" = "Du hast alle freien Downloads verbraucht. Bitte kaufe einen Kontinent zum Herunteladen/Aktualisieren der Karten.";
 "res_cancel_upd_q" = "Du bist dabei, die Aktualisierung von %@ abzubrechen.";
 "res_cancel_inst_q" = "Du bist dabei die Installation %@ abzubrechen.";
 "res_uninst_managed_q" = "Du bist dabei %@ zu deinstallieren. Du kannst es später wieder im Katalog installieren.";
@@ -289,7 +289,7 @@
 "gpx_uphldownhl" = "Bergauf/Bergab";
 "gpx_elev_range" = "Höhenbereich";
 "gpx_uphills_total" = "Bergauf gesamt";
-"record_trip" = "Zeichnen Sie ihren Track auf";
+"record_trip" = "Zeichnen Sie Ihren Track auf";
 "gpx_distance_points" = "Entfernung (Punkte)";
 "gpx_max_speed" = "Höchstgeschwindigkeit";
 "shared_string_speed" = "Geschwindigkeit";
@@ -329,7 +329,7 @@
 "total_time" = "Gesamtzeit";
 "moving_time" = "Zeit in Bewegung";
 "change_group" = "Gruppe ändern";
-"change_color" = "Farbeändern";
+"change_color" = "Farbe ändern";
 "wpt_select" = "Bitte wählen Sie Wegpunkte aus";
 "gpx_remove_wpts_q" = "Möchten Sie die ausgewählten Wegpunkte entfernen?";
 "create_new_trip" = "Neuen Track erstellen";
@@ -443,7 +443,7 @@
 "apply_filters" = "Filter anwenden";
 "filter_poi_hint" = "Nach Namen filtern";
 "city_type_district" = "Bezirk";
-"nothing_found_descr" = "Bitte Suchkriterienändern oder Suchradius vergrößern.";
+"nothing_found_descr" = "Bitte Suchkriterien ändern oder Suchradius vergrößern.";
 "nothing_found" = "Nichts gefunden";
 "select_street" = "Straße wählen";
 "type_address" = "Adresse eingeben";
@@ -797,12 +797,12 @@
 "donations" = "Spenden";
 "osmand_live_donation_switch_title" = "Spende an die OpenStreetMap-Gemeinschaft";
 "osmand_live_donation_switch_descr" = "Ein Teil Ihrer Spende wird an die OSM-Benutzer verteilt, die Änderungen an OpenStreetMap vornehmen. Die Kosten für das Abonnement bleiben gleich";
-"osmand_live_donations_enter_email" = "Geben Sie ihre E-Mail-Adresse ein";
+"osmand_live_donations_enter_email" = "Geben Sie Ihre E-Mail-Adresse ein";
 "osmand_live_donations_email_descr" = "Bitte geben Sie Ihre E-Mail-Adresse an, um die Spendenberichte zu erhalten";
 "osm_live_support_region" = "Unterstützte Region";
 "osmand_live_support_reg_descr" = "Teile Ihrer Spende werden an OSM-Mitwirkende weitergegeben, die diese Region bearbeiten";
 "osmand_live_public_name" = "Geben Sie Ihren Namen ein";
-"osmand_live_subscription_canceled" = "Sie haben ihr OsmAnd Live-Abonnement gekündigt";
+"osmand_live_subscription_canceled" = "Sie haben Ihr OsmAnd Live-Abonnement gekündigt";
 "shared_string_world" = "Welt";
 "wikivoyage_travel_guide" = "Reiseführer";
 "osm_live_plan_pricing" = "Tarife und Preise";
@@ -856,7 +856,7 @@
 "osm_live_ask_for_purchase" = "Bitte kaufen Sie zuerst ein OsmAnd-Live-Abonnement";
 "shared_string_io_error" = "I/O-Fehler";
 "osm_live_hide_user_name" = "Meinen Namen nicht in Berichten anzeigen";
-"subscriptions_public_info" = "Zahlungen werden auf ihrem iTunes-Konto belastet sobald der Kauf bestätigt wird. Das Abonnement wird automatisch erneuert, es sei denn die automatische Erneuerung wird mindestens 24 Stunden vor dem Ende der derzeitigen Abrechnungsperiode abgeschaltet. Ihr Konto wird gemäß ihres Erneuerungsabonnements belastet, innerhalb 24 Stunden vor dem Ablauf der derzeitigen Abrechnungsperiode. Sie können die automatische Erneuerung in ihren Kontoeinstellungen verwalten oder beenden. Falls Sie ein Abonnement während einer kostenlosen Probezeit kaufen, werden unbenutzte Anteile dieser Zeit verfallen.";
+"subscriptions_public_info" = "Zahlungen werden auf Ihrem iTunes-Konto belastet sobald der Kauf bestätigt wird. Das Abonnement wird automatisch erneuert, es sei denn die automatische Erneuerung wird mindestens 24 Stunden vor dem Ende der derzeitigen Abrechnungsperiode abgeschaltet. Ihr Konto wird gemäß Ihres Erneuerungsabonnements belastet, innerhalb 24 Stunden vor dem Ablauf der derzeitigen Abrechnungsperiode. Sie können die automatische Erneuerung in Ihren Kontoeinstellungen verwalten oder beenden. Falls Sie ein Abonnement während einer kostenlosen Probezeit kaufen, werden unbenutzte Anteile dieser Zeit verfallen.";
 "terms_of_use" = "Nutzungsbedingungen";
 "privacy_policy" = "Datenschutzregelung";
 "already_has_subscription" = "Sie haben bereits OsmAnd Live abonniert und alle Vorzüge sind freigeschaltet.";
@@ -938,7 +938,7 @@
 "osm_edit_comment_note" = "OSM-Hinweis kommentieren";
 "osm_note_reopen_title" = "OSM-Hinweis wieder öffnen";
 "poi_dialog_comment" = "Kommentar";
-"poi_dialog_reopen" = "Wiederöffnen";
+"poi_dialog_reopen" = "Wieder öffnen";
 "osm_edits_offline_layer" = "OSM Bearbeitungen/Hinweise (Offline)";
 "osm_notes_online_layer" = "OSM Hinweise (Online)";
 "tab_title_basic" = "Basis";
@@ -1025,7 +1025,7 @@
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Hineinzoomen";
 "key_hint_goback" = "Zurück";
-"osm_tag_too_long_message" = "Die maximale Wertlänge für den tag %@ beträgt 255 Zeichen. \nBitte machen Sie ihn kürzer, um fortzufahren.";
+"osm_tag_too_long_message" = "Die maximale Wertlänge für den Tag %@ beträgt 255 Zeichen. \nBitte machen Sie ihn kürzer, um fortzufahren.";
 "save_poi_without_poi_type_message" = "POI wirklich ohne Typ speichern\?";
 "save_poi_too_many_uppercase" = "Der Name enthält zu viele Großbuchstaben. Vorgang fortsetzen?";
 "local_openstreetmap_uploading" = "Hochladen…";
@@ -1085,10 +1085,10 @@
 "toggle_online_notes" = "OSM-Hinweise umschalten";
 "toggle_local_edits" = "Lokale OSM-Bearbeitungen umschalten";
 "quick_action_add_poi" = "POI hinzufügen";
-"quick_action_map_style" = "Kartendarstellungändern";
-"quick_action_map_source" = "Kartenquelleändern";
-"quick_action_map_overlay" = "Overlay-Karteändern";
-"quick_action_map_underlay" = "Karten-Underlayändern";
+"quick_action_map_style" = "Kartendarstellung ändern";
+"quick_action_map_source" = "Kartenquelle ändern";
+"quick_action_map_overlay" = "Overlay-Karte ändern";
+"quick_action_map_underlay" = "Karten-Underlay ändern";
 "quick_action_replace_destination" = "Ziel ersetzen";
 "add_destination" = "Ziel hinzufügen";
 "quick_action_auto_zoom" = "Automatische Vergrößerung an/aus";
@@ -1555,7 +1555,7 @@
 "map_settings_add_maps_desc" = "Sie können neue Karten über einen Link oder durch den Import von SQLite-Dateien hinzufügen.";
 "how_to_open_wiki_title" = "Wieöffnet man Wikipedia-Artikel?";
 "download_wiki_data" = "Wikipedia-Daten für %@ herunterladen";
-"open_in_browser_wiki" = "Artikel onlineöffnen";
+"open_in_browser_wiki" = "Artikel online öffnen";
 "online_webpage_warning" = "Seite nur online verfügbar. Im Webbrowser öffnen\?";
 "context_menu_points_of_group" = "Alle Punkte der Gruppe";
 "displayed_route_save" = "In OsmAnd-Tracks speichern";
@@ -1621,7 +1621,7 @@
 "shared_string_two" = "Zwei";
 // Dirrection appearance
 "shared_string_one" = "Eins";
-"public_transport_try_change_settings" = "Versuchen Sie, die Einstellungen zuändern.";
+"public_transport_try_change_settings" = "Versuchen Sie, die Einstellungen zu ändern.";
 "public_transport_empty_warning_title" = "Leider konnte OsmAnd keine für Ihre Einstellungen geeignete Route finden.";
 "help_legend_descr" = "Die Anleitung zu den Symbolen der Karte";
 "mapillary_item" = "OsmAnd + Mapillary";
@@ -1887,7 +1887,7 @@
 "shared_z_a" = "Z - A";
 "shared_a_z" = "A - Z";
 "select_application_profile" = "App-Profil auswählen";
-"change_application_profile" = "App-Profiländern";
+"change_application_profile" = "App-Profil ändern";
 "quick_action_showhide_mapillary_descr" = "Eine Schaltfläche zum Ein- oder Ausblenden des Mapillary-Layers auf der Karte.";
 "nearest_point" = "Nächstgelegener Punkt";
 "start_of_the_track" = "Startpunkt des Tracks";
@@ -1905,10 +1905,10 @@
 "plan_route_exit_message" = "Sind Sie sicher, dass Sie die Routenplanung schließen wollen, ohne zu speichern? Sie verlieren dann alle Änderungen.";
 "route_between_points_add_track_desc" = "Wählen Sie eine Trackdatei, zu der das neue Segment hinzugefügt werden soll.";
 "sort_last_modified" = "Zuletzt geändert";
-"plan_route_open_existing_track" = "Vorhandenen Tracköffnen";
+"plan_route_open_existing_track" = "Vorhandenen Track öffnen";
 "track_is_saved" = "%@\nwurde gespeichert!";
 "plan_route_create_new_route" = "Neue Route erstellen";
-"open_saved_track" = "Gespeicherten Tracköffnen";
+"open_saved_track" = "Gespeicherten Track öffnen";
 "simplified_track_description" = "Nur die Routenlinie wird gespeichert, die Wegpunkte werden gelöscht.";
 "simplified_track" = "Vereinfachter Track";
 "join_segments" = "Segmente verbinden";
@@ -1929,7 +1929,7 @@
 "add_folder" = "Ordner hinzufügen";
 "select_folder_descr" = "Ordner auswählen oder neuen hinzufügen";
 "select_folder" = "Ordner auswählen";
-"change_folder" = "Ordnerändern";
+"change_folder" = "Ordner ändern";
 "plan_route_folder" = "Ordner";
 "street_level_imagery" = "Bilder auf Straßenebene";
 "map_widget_distance_by_tap" = "Entfernung durch Antippen";
@@ -2056,10 +2056,10 @@
 "download_suggestion" = "Detaillierte %@ Karte herunterladen, um dieses Gebiet zu sehen";
 "dialogs_and_notifications_descr" = "Steuern Sie Pop-ups, Dialoge und Benachrichtigungen.";
 "routes_color_by_type" = "Routen einfärben nach…";
-"rendering_value_walkingRoutesOSMC_description" = "Einfärbung von Routen nach ihrer individuellen lokalen Farbe (falls in OpenStreetMap vorhanden) und der Wandermarkierungen.";
+"rendering_value_walkingRoutesOSMC_description" = "Einfärbung von Routen nach Ihrer individuellen lokalen Farbe (falls in OpenStreetMap vorhanden) und der Wandermarkierungen.";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Einfärbung gemäß Routennetzwerk.";
-"rendering_value_walkingRoutesOSMCNodes_description" = "Einfärbung von Routen nach dem Typ ihres Knotennetzes (international, regional, lokal).";
-"walking_route_osmc_description" = "Einfärbung von Routen nach ihrer individuellen lokalen Farbe (falls in OpenStreetMap vorhanden) und ihrem Typ (international, regional, lokal).";
+"rendering_value_walkingRoutesOSMCNodes_description" = "Einfärbung von Routen nach dem Typ Ihres Knotennetzes (international, regional, lokal).";
+"walking_route_osmc_description" = "Einfärbung von Routen nach Ihrer individuellen lokalen Farbe (falls in OpenStreetMap vorhanden) und Ihrem Typ (international, regional, lokal).";
 "travel_routes" = "Reiserouten";
 "shared_string_feet" = "Fuß";
 "srtm_download_list_help_message" = "OsmAnd liefert Höhenlinien-Daten in Metern und Fuß. Sie müssen die Datei erneut herunterladen, um das Format zu ändern.";
@@ -2910,3 +2910,7 @@
 "shared_string_duplicate" = "Duplizieren";
 "shared_string_coloring" = "Farbgebung";
 "shared_string_edit_color" = "Farbe ändern";
+"generate_hillshade_from_3d_maps" = "Schummerungs-Rasterkarten aus 3D-Karten erzeugen";
+"disable_vertex_hillshade_3d" = "Eckpunkt-Schummerung in 3D deaktivieren";
+"test_heightmap" = "Test-Höhenkarte";
+"generate_slope_from_3d_maps" = "Erzeugen von Hangrasterkarten aus 3D-Karten";

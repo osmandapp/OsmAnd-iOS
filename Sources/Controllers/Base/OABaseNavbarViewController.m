@@ -7,7 +7,9 @@
 //
 
 #import "OABaseNavbarViewController.h"
-#import "OASimpleTableViewCell.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
 #import "OAUtilities.h"
 #import "OASizes.h"
 #import "OAColors.h"
@@ -43,6 +45,7 @@
 
 - (void)commonInit
 {
+    _tableData = [[OATableDataModel alloc] init];
 }
 
 // use in overridden init method if class properties have complex dependencies
@@ -422,7 +425,7 @@
                                       action:(SEL)action
                                         menu:(UIMenu *)menu
 {
-    return [self createRightNavbarButton:title icon:[UIImage systemImageNamed:iconName] action:action menu:menu];
+    return [self createRightNavbarButton:title icon:[UIImage systemImageNamed:iconName withConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:24.]] action:action menu:menu];
 }
 
 - (UIBarButtonItem *)createRightNavbarButton:(NSString *)title
@@ -621,16 +624,22 @@
 
 - (NSString *)getTitleForHeader:(NSInteger)section
 {
-    return @"";
+    if (self.tableData.sectionCount > 0)
+        return [self.tableData sectionDataForIndex:section].headerText;
+    return nil;
 }
 
 - (NSString *)getTitleForFooter:(NSInteger)section
 {
-    return @"";
+    if (self.tableData.sectionCount > 0)
+        return [self.tableData sectionDataForIndex:section].footerText;
+    return nil;
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
 {
+    if (self.tableData.sectionCount > 0)
+        return [self.tableData rowCount:section];
     return 0;
 }
 
@@ -641,7 +650,7 @@
 
 - (NSInteger)sectionsCount
 {
-    return 0;
+    return self.tableData.sectionCount;
 }
 
 - (CGFloat)getCustomHeightForHeader:(NSInteger)section

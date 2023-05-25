@@ -2904,3 +2904,7 @@
 "shared_string_duplicate_color" = "Duplicar color";
 "shared_string_delete_color" = "Borrar color";
 "shared_string_duplicate" = "Duplicar";
+"test_heightmap" = "Probar mapas de altura";
+"disable_vertex_hillshade_3d" = "Desactivar el sombreado de vértices en 3D";
+"generate_slope_from_3d_maps" = "Generar mapas ráster de pendientes a partir de mapas 3D";
+"generate_hillshade_from_3d_maps" = "Generar mapas ráster de sombreado a partir de mapas 3D";

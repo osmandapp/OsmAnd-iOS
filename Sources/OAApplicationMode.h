@@ -73,6 +73,7 @@
 - (NSDictionary *) toJson;
 
 - (BOOL) hasFastSpeed;
+- (int) getRouteTypeProfile;
 - (BOOL) isDerivedRoutingFrom:(OAApplicationMode *)mode;
 
 /**

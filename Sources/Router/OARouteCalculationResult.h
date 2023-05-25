@@ -72,7 +72,7 @@ struct RouteSegmentResult;
 - (std::shared_ptr<RouteSegmentResult>) getCurrentSegmentResult;
 - (std::shared_ptr<RouteSegmentResult>) getNextStreetSegmentResult;
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart;
-- (float) getCurrentMaxSpeed;
+- (float) getCurrentMaxSpeed:(int)profile;
 - (int) getWholeDistance;
 - (BOOL) isCalculated;
 - (BOOL) isEmpty;

@@ -12,7 +12,7 @@ import UIKit
 @objcMembers
 class AppModeSelectionViewController: OABaseNavbarViewController {
     
-    var tableData: [OAApplicationMode]!
+    var appModes: [OAApplicationMode]!
     let appMode: OAApplicationMode!
     var delegate: AppModeSelectionDelegate?
     
@@ -27,7 +27,7 @@ class AppModeSelectionViewController: OABaseNavbarViewController {
     }
     
     override func generateData() {
-        tableData = OAApplicationMode.values()
+        appModes = OAApplicationMode.values()
     }
     
     override func onLeftNavbarButtonPressed() {
@@ -82,7 +82,7 @@ class AppModeSelectionViewController: OABaseNavbarViewController {
     }
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
-        let appMode = tableData![indexPath.row]
+        let appMode = appModes![indexPath.row]
         var cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier()) as? OASimpleTableViewCell
         if cell == nil {
             let nib = Bundle.main.loadNibNamed(OASimpleTableViewCell.getIdentifier(), owner: self, options: nil)
@@ -106,11 +106,11 @@ class AppModeSelectionViewController: OABaseNavbarViewController {
     }
     
     override func rowsCount(_ section: Int) -> Int {
-        tableData!.count
+        appModes!.count
     }
     
     override func onRowSelected(_ indexPath: IndexPath!) {
-        delegate?.onAppModeSelected(tableData[indexPath.row])
+        delegate?.onAppModeSelected(appModes[indexPath.row])
         dismiss(animated: true)
     }
     
@@ -127,13 +127,13 @@ class AppModeSelectionViewController: OABaseNavbarViewController {
     }
     
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let itemToMove = tableData[sourceIndexPath.row]
-        tableData.remove(at: sourceIndexPath.row)
-        tableData.insert(itemToMove, at: destinationIndexPath.row)
+        let itemToMove = appModes[sourceIndexPath.row]
+        appModes.remove(at: sourceIndexPath.row)
+        appModes.insert(itemToMove, at: destinationIndexPath.row)
     }
     
     private func updateProfileOrder() {
-        for (index, element) in tableData.enumerated() {
+        for (index, element) in appModes.enumerated() {
             element.setOrder(Int32(index))
         }
         OAApplicationMode.reorderAppModes()

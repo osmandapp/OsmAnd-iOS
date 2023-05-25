@@ -180,11 +180,11 @@
     return std::vector<std::shared_ptr<RouteSegmentResult>>();
 }
 
-- (float) getCurrentMaxSpeed
+- (float) getCurrentMaxSpeed:(int)profile
 {
     auto res = [self getCurrentSegmentResult];
     if (res)
-        return res->object->getMaximumSpeed(res->isForwardDirection());
+        return res->object->getMaximumSpeed(res->isForwardDirection(), profile);
     
     return 0;
 }

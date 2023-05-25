@@ -60,6 +60,7 @@
 
 // Controllers
 #import "OABaseNavbarViewController.h"
+#import "OABaseButtonsViewController.h"
 #import "OAQuickActionListViewController.h"
 #import "OAConfigureMenuViewController.h"
 #import "OACreateProfileViewController.h"

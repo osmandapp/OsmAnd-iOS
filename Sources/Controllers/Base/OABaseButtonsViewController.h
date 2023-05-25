@@ -33,6 +33,8 @@ typedef NS_ENUM(NSInteger, EOABaseButtonColorScheme)
 @property (weak, nonatomic) IBOutlet UIButton *bottomButton;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsBottomOffsetConstraint;
 
+- (instancetype) init NS_DESIGNATED_INITIALIZER;
+
 - (void)updateBottomButtons;
 - (void)setupBottomButtons;
 

@@ -53,6 +53,9 @@ static OAApplicationMode *_BOAT;
 static OAApplicationMode *_SKI;
 static OAApplicationMode *_HORSE;
 
+static int PROFILE_NONE = 0;
+static int PROFILE_TRUCK = 1000;
+
 + (void)initRegVisibility
 {
     NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _BICYCLE, _PEDESTRIAN, _PUBLIC_TRANSPORT, _TRAIN, _BOAT, _AIRCRAFT, _SKI, _TRUCK, _MOTORCYCLE, _MOPED, _HORSE];
@@ -830,6 +833,14 @@ static OAApplicationMode *_HORSE;
     }
 
     return def;
+}
+
+- (int) getRouteTypeProfile
+{
+	if ([self isDerivedRoutingFrom:OAApplicationMode.TRUCK]){
+		return PROFILE_TRUCK;
+	}
+	return PROFILE_NONE;
 }
 
 - (BOOL) isDerivedRoutingFrom:(OAApplicationMode *)mode

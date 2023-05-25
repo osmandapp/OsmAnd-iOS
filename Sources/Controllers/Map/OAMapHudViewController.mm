@@ -703,7 +703,6 @@
 
 - (void) onMapChanged:(id)observable withKey:(id)key
 {
-    [self updateCurrentLocationAddress];
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if (self.toolbarViewController)
@@ -1201,22 +1200,24 @@
 
 - (void) updateCurrentLocationAddress
 {
-    if (UIAccessibilityIsVoiceOverRunning())
-    {
-        CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
-        if (currentLocation)
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        if (UIAccessibilityIsVoiceOverRunning())
         {
-            if ((_previousLocation && [currentLocation distanceFromLocation:_previousLocation] > kDistanceMeters) || _previousLocation == nil)
+            CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
+            if (currentLocation)
             {
-                NSString *positionAddress;
-                _previousLocation = currentLocation;
-                positionAddress = [[OAReverseGeocoder instance] lookupAddressAtLat:currentLocation.coordinate.latitude lon:currentLocation.coordinate.longitude];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    _mapModeButton.accessibilityValue = positionAddress.length > 0 ? positionAddress : OALocalizedString(@"shared_string_location_unknown");
-                });
+                if (!_previousLocation || [currentLocation distanceFromLocation:_previousLocation] > kDistanceMeters)
+                {
+                    NSString *positionAddress;
+                    _previousLocation = currentLocation;
+                    positionAddress = [[OAReverseGeocoder instance] lookupAddressAtLat:currentLocation.coordinate.latitude lon:currentLocation.coordinate.longitude];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        _mapModeButton.accessibilityValue = positionAddress.length > 0 ? positionAddress : OALocalizedString(@"shared_string_location_unknown");
+                    });
+                }
             }
         }
-    }
+    });
 }
 
 #pragma mark - debug

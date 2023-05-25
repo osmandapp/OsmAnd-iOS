@@ -1206,7 +1206,7 @@
             CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
             if (currentLocation)
             {
-                if ((_previousLocation && [currentLocation distanceFromLocation:_previousLocation] > kDistanceMeters) || _previousLocation == nil)
+                if (!_previousLocation || (_previousLocation && [currentLocation distanceFromLocation:_previousLocation] > kDistanceMeters))
                 {
                     NSString *positionAddress;
                     _previousLocation = currentLocation;

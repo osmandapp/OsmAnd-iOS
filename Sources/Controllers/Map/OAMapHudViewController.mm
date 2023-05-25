@@ -703,7 +703,6 @@
 
 - (void) onMapChanged:(id)observable withKey:(id)key
 {
-    [self updateCurrentLocationAddress];
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if (self.toolbarViewController)

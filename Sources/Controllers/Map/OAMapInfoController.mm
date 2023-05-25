@@ -185,6 +185,7 @@
 
 - (void) onLocationServicesUpdate
 {
+    [self updateCurrentLocationAddress];
     [self updateInfo];
 }
 
@@ -194,6 +195,11 @@
     [_mapWidgetRegistry updateInfo:_settings.applicationMode.get expanded:_expanded];
     for (OABaseWidgetView *widget in _widgetsToUpdate)
          [widget updateInfo];
+}
+
+- (void) updateCurrentLocationAddress
+{
+    [_mapHudViewController updateCurrentLocationAddress];
 }
 
 - (void) updateInfo

@@ -165,7 +165,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     QString qIconName = iconName ? QString::fromNSString(iconName) : QString();
     QString qBackgroundIconName = backgroundIconName ? QString::fromNSString(backgroundIconName) : QString();
     
-    UIColor *iconColor = color ? color : ((OAFavoriteColor *)[OADefaultFavorite builtinColors][0]).color;
+    UIColor *iconColor = color ? color : [OADefaultFavorite getDefaultColor];
     CGFloat r,g,b,a;
     [iconColor getRed:&r
                 green:&g
@@ -182,7 +182,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
                                                                      qCategory,
                                                                      qIconName,
                                                                      qBackgroundIconName,
-                                                                     OsmAnd::FColorRGB(r,g,b));
+                                                                     OsmAnd::FColorARGB(a,r,g,b));
     
     favorite->setIsHidden(!visible);
     return favorite;
@@ -356,9 +356,10 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (UIColor *) getColor
 {
-    UIColor *storedColor = [UIColor colorWithRed:self.favorite->getColor().r/255.0 green:self.favorite->getColor().g/255.0 blue:self.favorite->getColor().b/255.0 alpha:1.0];
-    UIColor *nearestColor = [OADefaultFavorite nearestFavColor:storedColor].color;
-    return nearestColor;
+    return [UIColor colorWithRed:self.favorite->getColor().r/255.0
+                           green:self.favorite->getColor().g/255.0
+                            blue:self.favorite->getColor().b/255.0
+                           alpha:self.favorite->getColor().a/255.0];
 }
 
 - (void) setColor:(UIColor *)color
@@ -369,7 +370,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
              blue:&b
             alpha:&a];
     
-    self.favorite->setColor(OsmAnd::FColorRGB(r,g,b));
+    self.favorite->setColor(OsmAnd::FColorARGB(a,r,g,b));
 }
 
 - (NSString *) getAmenityOriginName
@@ -585,7 +586,10 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     }
     if (self.getColor)
     {
-        [pt setColor:[OAUtilities colorToNumber:self.getColor]];
+        OAGpxExtension *e = [[OAGpxExtension alloc] init];
+        e.name = @"color";
+        e.value = [self.getColor toHexRGBAString].lowercaseString;
+        [exts addObject:e];
     }
     if (self.getCalendarEvent)
     {

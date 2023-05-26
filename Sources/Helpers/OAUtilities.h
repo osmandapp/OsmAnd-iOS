@@ -143,6 +143,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 - (NSString *) toHexString;
 - (NSString *) toHexARGBString;
+- (NSString *) toHexRGBAString;
 + (UIColor *) colorFromString:(NSString *)string;
 
 @end

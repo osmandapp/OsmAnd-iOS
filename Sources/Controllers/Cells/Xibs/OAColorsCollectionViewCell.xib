@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -27,18 +27,18 @@
                         </constraints>
                     </view>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg_color_chessboard_pattern.png" translatesAutoresizingMaskIntoConstraints="NO" id="pHv-Ek-efa">
-                        <rect key="frame" x="4" y="4" width="40" height="40"/>
+                        <rect key="frame" x="6" y="6" width="36" height="36"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="40" id="8sT-qD-YX4"/>
-                            <constraint firstAttribute="height" constant="40" id="sdn-gR-ZrT"/>
+                            <constraint firstAttribute="width" constant="36" id="8sT-qD-YX4"/>
+                            <constraint firstAttribute="height" constant="36" id="sdn-gR-ZrT"/>
                         </constraints>
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aXl-Qc-xR7">
-                        <rect key="frame" x="4" y="4" width="40" height="40"/>
+                        <rect key="frame" x="6" y="6" width="36" height="36"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="40" id="NZ1-I9-krc"/>
-                            <constraint firstAttribute="height" constant="40" id="rJ4-8H-ybV"/>
+                            <constraint firstAttribute="width" constant="36" id="NZ1-I9-krc"/>
+                            <constraint firstAttribute="height" constant="36" id="rJ4-8H-ybV"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -46,15 +46,15 @@
                     <constraint firstItem="6y2-40-0Vt" firstAttribute="top" secondItem="WMf-NI-iXI" secondAttribute="top" id="6Ja-B1-WHv"/>
                     <constraint firstAttribute="bottom" secondItem="6y2-40-0Vt" secondAttribute="bottom" id="8RJ-Mw-S02"/>
                     <constraint firstAttribute="trailing" secondItem="6y2-40-0Vt" secondAttribute="trailing" id="9nV-Mw-4VF"/>
-                    <constraint firstAttribute="bottom" secondItem="pHv-Ek-efa" secondAttribute="bottom" constant="4" id="BRI-Oh-nMs"/>
-                    <constraint firstItem="pHv-Ek-efa" firstAttribute="leading" secondItem="WMf-NI-iXI" secondAttribute="leading" constant="4" id="DjP-ky-4y7"/>
-                    <constraint firstAttribute="trailing" secondItem="aXl-Qc-xR7" secondAttribute="trailing" constant="4" id="Fnx-0s-pbJ"/>
-                    <constraint firstItem="aXl-Qc-xR7" firstAttribute="leading" secondItem="WMf-NI-iXI" secondAttribute="leading" constant="4" id="Hzg-2q-kqM"/>
-                    <constraint firstItem="pHv-Ek-efa" firstAttribute="top" secondItem="WMf-NI-iXI" secondAttribute="top" constant="4" id="JVd-D5-kJd"/>
-                    <constraint firstAttribute="bottom" secondItem="aXl-Qc-xR7" secondAttribute="bottom" constant="4" id="Xov-iK-t33"/>
-                    <constraint firstAttribute="trailing" secondItem="pHv-Ek-efa" secondAttribute="trailing" constant="4" id="kKV-b4-ro0"/>
+                    <constraint firstAttribute="bottom" secondItem="pHv-Ek-efa" secondAttribute="bottom" constant="6" id="BRI-Oh-nMs"/>
+                    <constraint firstItem="pHv-Ek-efa" firstAttribute="leading" secondItem="WMf-NI-iXI" secondAttribute="leading" constant="6" id="DjP-ky-4y7"/>
+                    <constraint firstAttribute="trailing" secondItem="aXl-Qc-xR7" secondAttribute="trailing" constant="6" id="Fnx-0s-pbJ"/>
+                    <constraint firstItem="aXl-Qc-xR7" firstAttribute="leading" secondItem="WMf-NI-iXI" secondAttribute="leading" constant="6" id="Hzg-2q-kqM"/>
+                    <constraint firstItem="pHv-Ek-efa" firstAttribute="top" secondItem="WMf-NI-iXI" secondAttribute="top" constant="6" id="JVd-D5-kJd"/>
+                    <constraint firstAttribute="bottom" secondItem="aXl-Qc-xR7" secondAttribute="bottom" constant="6" id="Xov-iK-t33"/>
+                    <constraint firstAttribute="trailing" secondItem="pHv-Ek-efa" secondAttribute="trailing" constant="6" id="kKV-b4-ro0"/>
                     <constraint firstItem="6y2-40-0Vt" firstAttribute="leading" secondItem="WMf-NI-iXI" secondAttribute="leading" id="w5R-M4-Eo0"/>
-                    <constraint firstItem="aXl-Qc-xR7" firstAttribute="top" secondItem="WMf-NI-iXI" secondAttribute="top" constant="4" id="wZd-dL-cAk"/>
+                    <constraint firstItem="aXl-Qc-xR7" firstAttribute="top" secondItem="WMf-NI-iXI" secondAttribute="top" constant="6" id="wZd-dL-cAk"/>
                 </constraints>
             </collectionViewCellContentView>
             <connections>

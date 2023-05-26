@@ -85,7 +85,7 @@
                                                                         group,
                                                                         icon,
                                                                         background,
-                                                                        OsmAnd::FColorRGB(r,g,b));
+                                                                        OsmAnd::FColorARGB(a,r,g,b));
         
         _favorite = [[OAFavoriteItem alloc] initWithFavorite:favorite];
         [_favorite setAmenity:poi];

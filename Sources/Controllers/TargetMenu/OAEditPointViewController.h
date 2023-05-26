@@ -38,10 +38,8 @@ typedef NS_ENUM(NSInteger, EOAEditPointType) {
 @property (nonatomic, copy) NSString *desc;
 @property (nonatomic, copy) NSString *address;
 @property (nonatomic, copy) NSString *gpxFileName;
-@property (nonatomic, assign) NSInteger savedColorIndex;
 @property (nonatomic, copy) NSString *savedGroupName;
 @property (nonatomic, copy) NSString *groupTitle;
-@property (nonatomic, copy) UIColor *groupColor;
 
 @property (nonatomic, weak) id<OAGpxWptEditingHandlerDelegate> gpxWptDelegate;
 

@@ -18,20 +18,20 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Pde-Gp-UrD" userLabel="Content Outside Stack View">
-                        <rect key="frame" x="0.0" y="0.0" width="373" height="60"/>
+                        <rect key="frame" x="0.0" y="0.0" width="377" height="60"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="AxO-VI-ivf" userLabel="Top Margin Stack View">
-                                <rect key="frame" x="0.0" y="0.0" width="373" height="3"/>
+                                <rect key="frame" x="0.0" y="0.0" width="377" height="3"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wTP-2O-fC4">
-                                        <rect key="frame" x="0.0" y="0.0" width="373" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="377" height="0.0"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" id="z2K-Ka-zv1"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cb8-0r-VeY">
-                                        <rect key="frame" x="0.0" y="3" width="373" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="3" width="377" height="0.0"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" id="bEJ-bz-fGM"/>
@@ -40,10 +40,10 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="NS9-5f-FoA" userLabel="Collection Stack View">
-                                <rect key="frame" x="0.0" y="3" width="373" height="48"/>
+                                <rect key="frame" x="0.0" y="3" width="377" height="48"/>
                                 <subviews>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="DOd-wT-r3R">
-                                        <rect key="frame" x="0.0" y="0.0" width="323" height="48"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="327" height="48"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" priority="750" constant="48" id="Ft8-45-Pf1"/>
@@ -56,7 +56,7 @@
                                         </collectionViewFlowLayout>
                                     </collectionView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W16-m3-jDw" userLabel="Right Action Button">
-                                        <rect key="frame" x="337" y="6" width="36" height="36"/>
+                                        <rect key="frame" x="341" y="6" width="36" height="36"/>
                                         <color key="backgroundColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="0.099635479951397321" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="36" id="Okc-Mp-aLZ"/>
@@ -81,17 +81,17 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="ao7-vZ-qL2" userLabel="Bottom Margin Stack View">
-                                <rect key="frame" x="0.0" y="51" width="373" height="9"/>
+                                <rect key="frame" x="0.0" y="51" width="377" height="9"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DwP-ib-F70">
-                                        <rect key="frame" x="0.0" y="0.0" width="373" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="377" height="0.0"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" id="tUh-U2-X2o"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WUB-aI-9oi">
-                                        <rect key="frame" x="0.0" y="9" width="373" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="9" width="377" height="0.0"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" id="7QX-O0-SZC"/>
@@ -111,11 +111,11 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="bottomMarginStackView" destination="ao7-vZ-qL2" id="UiJ-Hz-Brs"/>
-                <outlet property="button" destination="W16-m3-jDw" id="WYM-0x-XgR"/>
                 <outlet property="collectionStackView" destination="NS9-5f-FoA" id="fzo-0U-cx9"/>
                 <outlet property="collectionView" destination="DOd-wT-r3R" id="vOQ-He-2Ra"/>
                 <outlet property="collectionViewHeight" destination="Ft8-45-Pf1" id="u9e-mm-AHH"/>
                 <outlet property="contentOutsideStackViewVertical" destination="Pde-Gp-UrD" id="xiC-Ve-Sf5"/>
+                <outlet property="rightActionButton" destination="W16-m3-jDw" id="Qgy-3m-aET"/>
                 <outlet property="topMarginStackView" destination="AxO-VI-ivf" id="BE5-Ss-SJY"/>
             </connections>
             <point key="canvasLocation" x="69" y="-11"/>

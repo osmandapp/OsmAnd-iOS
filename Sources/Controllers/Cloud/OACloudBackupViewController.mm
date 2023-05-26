@@ -110,6 +110,8 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupFinished:) name:kBackupSyncFinishedNotification object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupStarted) name:kBackupSyncStartedNotification object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupProgressUpdate:) name:kBackupProgressUpdateNotification object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(productRestored:) name:OAIAPProductsRestoredNotification object:nil];
 }
 
 - (void)viewDidLoad
@@ -351,7 +353,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                 kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
                 kCellKeyKey: @"onSubscriptionExpired",
                 kCellTitleKey: _status.actionTitle,
-                kCellIconNameKey: @"ic_custom_osmand_pro_logo_colored"
+                kCellIconNameKey: @"ic_custom_cloud_upload"
             };
             [backupRows addRowFromDictionary:purchaseCell];
         }
@@ -791,6 +793,32 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         {
             _backupProgressCell.progressBar.progress = value;
             _backupProgressCell.textView.text = [OALocalizedString(@"syncing_progress") stringByAppendingString:[NSString stringWithFormat:@"%i%%", (int) (value * 100)]];
+        }
+    });
+}
+
+#pragma mark - Purchases
+
+- (void) productPurchased:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!_settingsHelper.isBackupSyncing && !_backupHelper.isBackupPreparing)
+        {
+            [self.tblView.refreshControl beginRefreshing];
+            [_backupHelper addPrepareBackupListener:self];
+            [_backupHelper prepareBackup];
+        }
+    });
+}
+
+- (void) productRestored:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!_settingsHelper.isBackupSyncing && !_backupHelper.isBackupPreparing)
+        {
+            [self.tblView.refreshControl beginRefreshing];
+            [_backupHelper addPrepareBackupListener:self];
+            [_backupHelper prepareBackup];
         }
     });
 }

@@ -179,8 +179,13 @@
 - (void) onPostExecute:(OABackupInfo *)backupInfo
 {
 //    operationLog.finishOperation(backupInfo.toString());
+    __block NSString *subscriptionError = nil;
+    [[OABackupHelper sharedInstance] checkSubscriptions:^(NSInteger status, NSString *message, NSString *error) {
+        if (error)
+            subscriptionError = error;
+    }];
     if (_onComplete)
-        _onComplete(backupInfo, nil);
+        _onComplete(backupInfo, subscriptionError);
 }
 
 @end

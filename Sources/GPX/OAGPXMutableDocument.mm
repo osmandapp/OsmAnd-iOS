@@ -54,6 +54,8 @@
     if (filename && filename.length > 0)
     {
         document = OsmAnd::GpxDocument::loadFrom(QString::fromNSString(filename));
+        _trackAnalysis = nil;
+        _modifiedTime = 0;
         return [self fetch:document];
     }
     else
@@ -183,8 +185,6 @@
     }
     for (OAWptPt *pt in points)
         [self addRoutePoint:pt route:self.routes.lastObject];
-    
-    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void) addRoutes:(NSArray<OARoute *> *)routes
@@ -484,14 +484,15 @@
 
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp
 {
-    if (!_trackAnalysis || _analysisModifiedTime != _modifiedTime)
-        [self update];
+    NSTimeInterval modifiedTime = _modifiedTime;
+    if (!_trackAnalysis || _analysisModifiedTime != modifiedTime)
+        [self update:modifiedTime];
     return _trackAnalysis;
 }
 
-- (void) update
+- (void) update:(NSTimeInterval)modifiedTime
 {
-    _analysisModifiedTime = _modifiedTime;
+    _analysisModifiedTime = modifiedTime;
     
     NSTimeInterval fileTimestamp = 0;
     if (self.path && self.path.length > 0)

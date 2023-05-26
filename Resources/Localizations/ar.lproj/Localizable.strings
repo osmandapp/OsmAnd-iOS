@@ -1908,7 +1908,7 @@
 "simplified_track_description" = "سيتم حفظ خط الطريق فقط، وسيتم حذف نقاط المسار.";
 "open_saved_track" = "فتح المسار المحفوظ";
 "tracks_on_map" = "المسارات المعروضة";
-"shared_string_visible" = "المعروضة على الخريطة";
+"shared_string_visible" = "مرئي";
 "searching" = "جار البحث…";
 "shared_string_loading" = "جارٍ التحميل…";
 "poi_categories" = "فئات النقاط";

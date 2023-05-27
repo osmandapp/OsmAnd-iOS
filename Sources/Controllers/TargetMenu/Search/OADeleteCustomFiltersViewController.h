@@ -6,7 +6,7 @@
 // Copyright (c) 2021 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseButtonsViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface OADeleteCustomFiltersViewController : OACompoundViewController
+@interface OADeleteCustomFiltersViewController : OABaseButtonsViewController
 
 @property(weak, nonatomic) id <OAPOIFiltersRemoveDelegate> delegate;
 

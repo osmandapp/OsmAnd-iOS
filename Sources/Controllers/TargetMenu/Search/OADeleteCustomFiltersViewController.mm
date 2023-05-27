@@ -14,12 +14,7 @@
 #import "OAMenuSimpleCell.h"
 #import "OAPOIHelper.h"
 
-@interface OADeleteCustomFiltersViewController () <UITableViewDelegate, UITableViewDataSource, OATableViewCellDelegate>
-
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
+@interface OADeleteCustomFiltersViewController () <OATableViewCellDelegate>
 
 @end
 
@@ -28,6 +23,8 @@
     NSMutableArray<OAPOIUIFilter *> *_items;
     NSMutableArray<OAPOIUIFilter *> *_selectedItems;
 }
+
+#pragma mark - Initialization
 
 - (instancetype)initWithFilters:(NSArray<OAPOIUIFilter *> *)filters
 {
@@ -40,73 +37,74 @@
     return self;
 }
 
+#pragma mark - UIViewController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+    
+    self.tableView.allowsMultipleSelectionDuringEditing = YES;
     self.tableView.editing = YES;
-    self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
-    self.tableView.rowHeight = kEstimatedRowHeight;
-    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
-
-    [self setupDeleteButtonView];
 }
 
-- (void)applyLocalization
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    self.titleLabel.text = OALocalizedString(@"delete_custom_categories");
-    [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.deleteButton setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
+    return OALocalizedString(@"delete_custom_categories");
 }
 
-- (IBAction)onDeleteButtonClicked:(id)sender
+- (NSString *)getLeftNavbarButtonTitle
 {
-    if (self.delegate)
-        [self.delegate removeFilters:_selectedItems];
-    [self.navigationController popViewControllerAnimated:YES];
+    return OALocalizedString(@"shared_string_cancel");
 }
 
-- (void)selectDeselectItem:(NSIndexPath *)indexPath
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
-    if (indexPath.row > 0)
-    {
-        [self.tableView beginUpdates];
-        OAPOIUIFilter *filter = _items[indexPath.row - 1];
-        if ([_selectedItems containsObject:filter])
-            [_selectedItems removeObject:filter];
-        else
-            [_selectedItems addObject:filter];
-        [self.tableView headerViewForSection:indexPath.section].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int) _selectedItems.count, _items.count] upperCase];
-        [self.tableView endUpdates];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section], indexPath] withRowAnimation:UITableViewRowAnimationNone];
-    }
-    [self setupDeleteButtonView];
+    return EOABaseNavbarColorSchemeOrange;
 }
 
-- (void)setupDeleteButtonView
+- (NSString *)getBottomButtonTitle
+{
+    return OALocalizedString(@"shared_string_delete");
+}
+
+- (EOABaseButtonColorScheme)getBottomButtonColorScheme
 {
     BOOL hasSelection = _selectedItems.count != 0;
-    self.deleteButton.backgroundColor = hasSelection ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_button_gray_background);
-    [self.deleteButton setTintColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
-    [self.deleteButton setTitleColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
-    [self.deleteButton setUserInteractionEnabled:hasSelection];
+    return hasSelection ? EOABaseButtonColorSchemePurple : EOABaseButtonColorSchemeInactive;
 }
 
-#pragma mark - UITableViewDataSource
+#pragma mark - Table data
 
-- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+- (NSInteger)sectionsCount
+{
+    return 1;
+}
+
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    if (section == 0)
+        return [NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count];
+    return nil;
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return _items.count + 1;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSString *cellType = indexPath.row == 0 ? [OASimpleTableViewCell getCellIdentifier] : [OAMenuSimpleCell getCellIdentifier];
     if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             [cell leftEditButtonVisibility:YES];
@@ -140,7 +138,7 @@
     }
     else if ([cellType isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
     {
-        OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
+        OAMenuSimpleCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
@@ -173,6 +171,35 @@
     return nil;
 }
 
+- (void)onRowSelected:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == 0)
+        [self selectDeselectGroup:nil];
+    else
+        [self selectDeselectItem:indexPath];
+}
+
+#pragma mark - Additions
+
+- (void)selectDeselectItem:(NSIndexPath *)indexPath
+{
+    if (indexPath.row > 0)
+    {
+        [self.tableView beginUpdates];
+        OAPOIUIFilter *filter = _items[indexPath.row - 1];
+        if ([_selectedItems containsObject:filter])
+            [_selectedItems removeObject:filter];
+        else
+            [_selectedItems addObject:filter];
+        [self.tableView headerViewForSection:indexPath.section].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int) _selectedItems.count, _items.count] upperCase];
+        [self.tableView endUpdates];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section], indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    }
+    [self updateBottomButtons];
+}
+
+#pragma mark - UITableViewDelegate
+
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row > 0)
@@ -187,36 +214,13 @@
     }
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.row == 0)
-        [self selectDeselectGroup:nil];
-    else
-        [self selectDeselectItem:indexPath];
-}
-
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row > 0)
         [self selectDeselectItem:indexPath];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    if (section == 0)
-        return [NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count];
-    return nil;
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _items.count + 1;
-}
+#pragma mark - UITableViewDataSource
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -233,6 +237,13 @@
 - (void)selectDeselectGroup:(UIButton *)sender
 {
     [self onLeftEditButtonPressed:sender.tag];
+}
+
+- (void)onBottomButtonPressed
+{
+    if (self.delegate)
+        [self.delegate removeFilters:_selectedItems];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - OATableViewCellDelegate
@@ -256,7 +267,7 @@
     [self.tableView headerViewForSection:0].textLabel.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, _items.count] upperCase];
     [self.tableView endUpdates];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
-    [self setupDeleteButtonView];
+    [self updateBottomButtons];
 }
 
 @end

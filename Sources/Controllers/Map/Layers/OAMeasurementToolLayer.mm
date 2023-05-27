@@ -381,9 +381,13 @@
 {
     NSArray<OATrkSegment *> *before = _editingCtx.getBeforeSegments;
     NSArray<OATrkSegment *> *after = _editingCtx.getAfterSegments;
-    const auto& center = self.mapViewController.mapView.target31;
+
+    OsmAnd::PointI center;
+    auto centerPixel = self.mapViewController.mapView.getCenterPixel;
+    [self.mapViewController.mapView convert:CGPointMake(centerPixel.x, centerPixel.y) toLocation:&center];
     if (center == _cachedCenter)
         return;
+
     _cachedCenter = center;
     QVector<OsmAnd::PointI> points;
     if (before.count > 0 || after.count > 0)

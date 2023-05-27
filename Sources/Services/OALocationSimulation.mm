@@ -328,7 +328,7 @@
 
 - (instancetype)initWithSimulatedLocation:(OASimulatedLocation *)location
 {
-    self = [super initWithLatitude:location.coordinate.latitude longitude:location.coordinate.longitude];
+    self = [super initWithCoordinate:location.coordinate altitude:location.altitude horizontalAccuracy:location.horizontalAccuracy verticalAccuracy:location.verticalAccuracy course:location.course speed:location.speed timestamp:location.timestamp];
     if (self)
     {
         _trafficLight = [location isTrafficLight];
@@ -340,7 +340,7 @@
 
 - (instancetype)initWithLocation:(CLLocation *)location
 {
-    self = [super initWithLatitude:location.coordinate.latitude longitude:location.coordinate.longitude];
+    self = [super initWithCoordinate:location.coordinate altitude:location.altitude horizontalAccuracy:location.horizontalAccuracy verticalAccuracy:location.verticalAccuracy course:location.course speed:location.speed timestamp:location.timestamp];
     if (self)
     {
         _trafficLight = NO;

@@ -196,7 +196,6 @@
             : @[UISheetPresentationControllerDetent.mediumDetent];
         sheet.prefersGrabberVisible = isLargeAvailable;
         sheet.preferredCornerRadius = 20;
-        sheet.prefersEdgeAttachedInCompactHeight = YES;
     }
     if (self.navigationController)
         [self.navigationController presentViewController:navigationController animated:YES completion:nil];

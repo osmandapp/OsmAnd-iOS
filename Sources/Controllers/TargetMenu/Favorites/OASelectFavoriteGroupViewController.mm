@@ -225,9 +225,9 @@
 {
     if (indexPath.section == kAddNewGroupSection)
     {
-        OAAddFavoriteGroupViewController * addGroupVC = [[OAAddFavoriteGroupViewController alloc] init];
+        OAAddFavoriteGroupViewController *addGroupVC = [[OAAddFavoriteGroupViewController alloc] init];
         addGroupVC.delegate = self;
-        [self presentViewController:addGroupVC animated:YES completion:nil];
+        [self showModalViewController:addGroupVC];
     }
     else if (indexPath.section == kGroupsListSection)
     {
@@ -250,12 +250,20 @@
 
 #pragma mark - OAAddFavoriteGroupDelegate
 
-- (void) onFavoriteGroupAdded:(NSString *)groupName color:(UIColor *)color
+- (void)onFavoriteGroupAdded:(NSString *)groupName color:(UIColor *)color
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (_delegate)
             [_delegate onNewGroupAdded:groupName color:color];
         [self dismissViewControllerAnimated:YES completion:nil];
+    });
+}
+
+- (void)onFavoriteGroupColorsRefresh
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_delegate)
+            [_delegate onFavoriteGroupColorsRefresh];
     });
 }
 

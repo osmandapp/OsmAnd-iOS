@@ -2547,7 +2547,6 @@
 		DA5A837826C563A800F274C7 /* OARouteSettingsBaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D5A26C563A300F274C7 /* OARouteSettingsBaseViewController.mm */; };
 		DA5A837926C563A800F274C7 /* OARouteSettingsParameterController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D5B26C563A300F274C7 /* OARouteSettingsParameterController.mm */; };
 		DA5A837A26C563A800F274C7 /* OAAppModeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7D5E26C563A300F274C7 /* OAAppModeView.xib */; };
-		DA5A837B26C563A800F274C7 /* OADestinationItemsListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7D5F26C563A300F274C7 /* OADestinationItemsListViewController.xib */; };
 		DA5A837C26C563A800F274C7 /* OAAppModeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7D6026C563A300F274C7 /* OAAppModeCell.xib */; };
 		DA5A837D26C563A800F274C7 /* GpxUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D6326C563A300F274C7 /* GpxUIHelper.swift */; };
 		DA5A837E26C563A800F274C7 /* OADestinationCardHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D6926C563A300F274C7 /* OADestinationCardHeaderView.m */; };
@@ -2607,8 +2606,6 @@
 		DA5A83BB26C563A800F274C7 /* OAActionAddMapStyleViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DD426C563A300F274C7 /* OAActionAddMapStyleViewController.mm */; };
 		DA5A83BC26C563A800F274C7 /* OAQuickActionListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DD626C563A300F274C7 /* OAQuickActionListViewController.m */; };
 		DA5A83BD26C563A800F274C7 /* OAAddQuickActionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DD926C563A300F274C7 /* OAAddQuickActionViewController.m */; };
-		DA5A83BE26C563A800F274C7 /* OAQuickActionListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DDB26C563A300F274C7 /* OAQuickActionListViewController.xib */; };
-		DA5A83BF26C563A800F274C7 /* OAAddQuickActionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DDC26C563A300F274C7 /* OAAddQuickActionViewController.xib */; };
 		DA5A83C026C563A800F274C7 /* OAActionAddMapSourceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DDD26C563A300F274C7 /* OAActionAddMapSourceViewController.mm */; };
 		DA5A83C126C563A800F274C7 /* OAActionConfigurationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DDE26C563A300F274C7 /* OAActionConfigurationViewController.xib */; };
 		DA5A83C226C563A800F274C7 /* OAQuickActionHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DDF26C563A300F274C7 /* OAQuickActionHudViewController.xib */; };
@@ -2667,7 +2664,6 @@
 		DA5A840126C563A800F274C7 /* OAQuickSearchButtonListItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E4C26C563A400F274C7 /* OAQuickSearchButtonListItem.mm */; };
 		DA5A840226C563A800F274C7 /* OASearchToolbarViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E4D26C563A400F274C7 /* OASearchToolbarViewController.mm */; };
 		DA5A840326C563A800F274C7 /* OAAddressTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E4E26C563A400F274C7 /* OAAddressTableViewController.mm */; };
-		DA5A840426C563A800F274C7 /* OADeleteCustomFiltersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E4F26C563A400F274C7 /* OADeleteCustomFiltersViewController.xib */; };
 		DA5A840526C563A800F274C7 /* OAPOIViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E5126C563A400F274C7 /* OAPOIViewController.xib */; };
 		DA5A840626C563A800F274C7 /* OAPOIViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E5326C563A400F274C7 /* OAPOIViewController.mm */; };
 		DA5A840726C563A800F274C7 /* OAMyLocationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E5526C563A400F274C7 /* OAMyLocationViewController.xib */; };
@@ -6714,7 +6710,6 @@
 		DA5A7D5C26C563A300F274C7 /* OARouteAvoidTransportSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteAvoidTransportSettingsViewController.h; sourceTree = "<group>"; };
 		DA5A7D5D26C563A300F274C7 /* OARoutingSettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARoutingSettingsCell.h; sourceTree = "<group>"; };
 		DA5A7D5E26C563A300F274C7 /* OAAppModeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAAppModeView.xib; sourceTree = "<group>"; };
-		DA5A7D5F26C563A300F274C7 /* OADestinationItemsListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADestinationItemsListViewController.xib; sourceTree = "<group>"; };
 		DA5A7D6026C563A300F274C7 /* OAAppModeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAAppModeCell.xib; sourceTree = "<group>"; };
 		DA5A7D6126C563A300F274C7 /* OARoutePreferencesParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARoutePreferencesParameters.h; sourceTree = "<group>"; };
 		DA5A7D6226C563A300F274C7 /* OARouteSettingsParameterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteSettingsParameterController.h; sourceTree = "<group>"; };
@@ -6821,8 +6816,6 @@
 		DA5A7DD826C563A300F274C7 /* OAQuickActionsSheetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAQuickActionsSheetView.h; sourceTree = "<group>"; };
 		DA5A7DD926C563A300F274C7 /* OAAddQuickActionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAddQuickActionViewController.m; sourceTree = "<group>"; };
 		DA5A7DDA26C563A300F274C7 /* OAActionAddProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAActionAddProfileViewController.h; sourceTree = "<group>"; };
-		DA5A7DDB26C563A300F274C7 /* OAQuickActionListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAQuickActionListViewController.xib; sourceTree = "<group>"; };
-		DA5A7DDC26C563A300F274C7 /* OAAddQuickActionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAAddQuickActionViewController.xib; sourceTree = "<group>"; };
 		DA5A7DDD26C563A300F274C7 /* OAActionAddMapSourceViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAActionAddMapSourceViewController.mm; sourceTree = "<group>"; };
 		DA5A7DDE26C563A300F274C7 /* OAActionConfigurationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAActionConfigurationViewController.xib; sourceTree = "<group>"; };
 		DA5A7DDF26C563A300F274C7 /* OAQuickActionHudViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAQuickActionHudViewController.xib; sourceTree = "<group>"; };
@@ -6918,7 +6911,6 @@
 		DA5A7E4C26C563A400F274C7 /* OAQuickSearchButtonListItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickSearchButtonListItem.mm; sourceTree = "<group>"; };
 		DA5A7E4D26C563A400F274C7 /* OASearchToolbarViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASearchToolbarViewController.mm; sourceTree = "<group>"; };
 		DA5A7E4E26C563A400F274C7 /* OAAddressTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAddressTableViewController.mm; sourceTree = "<group>"; };
-		DA5A7E4F26C563A400F274C7 /* OADeleteCustomFiltersViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADeleteCustomFiltersViewController.xib; sourceTree = "<group>"; };
 		DA5A7E5126C563A400F274C7 /* OAPOIViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAPOIViewController.xib; sourceTree = "<group>"; };
 		DA5A7E5226C563A400F274C7 /* OAPOIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPOIViewController.h; sourceTree = "<group>"; };
 		DA5A7E5326C563A400F274C7 /* OAPOIViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPOIViewController.mm; sourceTree = "<group>"; };
@@ -12251,7 +12243,6 @@
 				DA5A7D5E26C563A300F274C7 /* OAAppModeView.xib */,
 				DA5A7D5326C563A300F274C7 /* OADestinationItemsListViewController.h */,
 				DA5A7D4326C563A300F274C7 /* OADestinationItemsListViewController.mm */,
-				DA5A7D5F26C563A300F274C7 /* OADestinationItemsListViewController.xib */,
 				DA5A7D5026C563A300F274C7 /* OARouteAvoidSettingsViewController.h */,
 				DA5A7D5826C563A300F274C7 /* OARouteAvoidSettingsViewController.mm */,
 				DA5A7D5C26C563A300F274C7 /* OARouteAvoidTransportSettingsViewController.h */,
@@ -12461,13 +12452,11 @@
 				DA5A7DDE26C563A300F274C7 /* OAActionConfigurationViewController.xib */,
 				DA5A7DCC26C563A300F274C7 /* OAAddQuickActionViewController.h */,
 				DA5A7DD926C563A300F274C7 /* OAAddQuickActionViewController.m */,
-				DA5A7DDC26C563A300F274C7 /* OAAddQuickActionViewController.xib */,
 				DA5A7DD126C563A300F274C7 /* OAQuickActionHudViewController.h */,
 				DA5A7DCE26C563A300F274C7 /* OAQuickActionHudViewController.mm */,
 				DA5A7DDF26C563A300F274C7 /* OAQuickActionHudViewController.xib */,
 				DA5A7DE226C563A300F274C7 /* OAQuickActionListViewController.h */,
 				DA5A7DD626C563A300F274C7 /* OAQuickActionListViewController.m */,
-				DA5A7DDB26C563A300F274C7 /* OAQuickActionListViewController.xib */,
 				DA5A7DD826C563A300F274C7 /* OAQuickActionsSheetView.h */,
 				DA5A7DCF26C563A300F274C7 /* OAQuickActionsSheetView.m */,
 				DA5A7DD326C563A300F274C7 /* OAQuickActionsSheetView.xib */,
@@ -12620,7 +12609,6 @@
 				DA5A7E3226C563A400F274C7 /* OACustomPOIViewController.xib */,
 				DA5A7E2F26C563A400F274C7 /* OADeleteCustomFiltersViewController.h */,
 				DA5A7E3B26C563A400F274C7 /* OADeleteCustomFiltersViewController.mm */,
-				DA5A7E4F26C563A400F274C7 /* OADeleteCustomFiltersViewController.xib */,
 				DA5A7E2D26C563A400F274C7 /* OAHistoryTableViewController.h */,
 				DA5A7E4726C563A400F274C7 /* OAHistoryTableViewController.mm */,
 				DA5A7E3F26C563A400F274C7 /* OAHistoryTableViewController.xib */,
@@ -14353,7 +14341,6 @@
 				0CF5854C244072EC0081238D /* widget_marker_day@2x.png in Resources */,
 				0A7DAF8F270C401E0059238B /* ic_custom_folder_move@3x.png in Resources */,
 				0A3EE20E275E4EE600C8B772 /* OAFoldersCollectionView.xib in Resources */,
-				DA5A840426C563A800F274C7 /* OADeleteCustomFiltersViewController.xib in Resources */,
 				849E81A21AFA5D6700549953 /* btn_map_type_icon_view_selected@2x.png in Resources */,
 				32A001702610B43700ABE0D2 /* widget_coordinates_latitude_south_day@3x.png in Resources */,
 				DA540D8E229E63270069201E /* ic_custom_plus@2x.png in Resources */,
@@ -15133,7 +15120,6 @@
 				841222451B39CC5200F80F9E /* map_bicycle_bearing@2x.png in Resources */,
 				DA45DA70230EE05A0083DFA2 /* img_mapstyle_touring-view_(more-contrast-and-details)@3x.png in Resources */,
 				15C428C024A72B6B00B21005 /* img_settings_sreen_route_alerts@3x.png in Resources */,
-				DA5A83BF26C563A800F274C7 /* OAAddQuickActionViewController.xib in Resources */,
 				DA8DB8DB218DA7DD00EBF914 /* ic_ruler_center@2x.png in Resources */,
 				46AF98FA28D077E900626C9C /* ic_custom_file_routing@3x.png in Resources */,
 				844E07DF1E4231C200EFC525 /* ic_action_street_name@2x.png in Resources */,
@@ -15619,7 +15605,6 @@
 				0AA3BB8E26EB540100A9885D /* ic_custom_waypoint@3x.png in Resources */,
 				DAF7A50621786BED00FB94FD /* widget_ruler_circle_hide_night@2x.png in Resources */,
 				8412222D1B395D2C00F80F9E /* ic_travel_time@3x.png in Resources */,
-				DA5A837B26C563A800F274C7 /* OADestinationItemsListViewController.xib in Resources */,
 				323BD8F52628850400D255ED /* ic_bg_point_circle_top@2x.png in Resources */,
 				DA68B3CE233B821A00F5ACCC /* ic_profile_car@2x.png in Resources */,
 				845E061A1B5956E800DFC2A7 /* ic_destination_pin_4@3x.png in Resources */,
@@ -15782,7 +15767,6 @@
 				46DF1D8128C21B4300135D94 /* img_openstreetmap_logo_big@3x.png in Resources */,
 				323BD8EE2628850400D255ED /* ic_bg_point_comment_top@3x.png in Resources */,
 				0A8D1A1526FBA1750042444C /* ic_small_altitude@3x.png in Resources */,
-				DA5A83BE26C563A800F274C7 /* OAQuickActionListViewController.xib in Resources */,
 				C54371F629B7923D00028C3C /* widget_sunset_night@2x.png in Resources */,
 				84F3A8D41B4DA93100D16EBC /* ic_parking_pin_small@2x.png in Resources */,
 				DA98A0292109D99300BB32D0 /* it_tts.js in Resources */,

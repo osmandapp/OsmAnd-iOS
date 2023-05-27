@@ -499,7 +499,8 @@
         [vwController dismiss];
         OADestinationItemsListViewController *destinations = [[OADestinationItemsListViewController alloc] initWithDestinationType:[key isEqualToString:@"favorites"] ? EOADestinationPointTypeFavorite : EOADestinationPointTypeMarker];
         destinations.delegate = self;
-        [[OARootViewController instance].navigationController presentViewController:destinations animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destinations];
+        [[OARootViewController instance].navigationController presentViewController:navigationController animated:YES completion:nil];
     }
     else
     {

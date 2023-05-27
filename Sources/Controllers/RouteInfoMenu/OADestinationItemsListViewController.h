@@ -6,7 +6,7 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseNavbarViewController.h"
 
 @class OAFavoriteItem;
 @class OADestination;
@@ -25,13 +25,7 @@ typedef NS_ENUM (NSInteger, EOADestinationPointType)
 
 @end
 
-@interface OADestinationItemsListViewController : OACompoundViewController<UITableViewDelegate, UITableViewDataSource>
-
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UIButton *sortButton;
+@interface OADestinationItemsListViewController : OABaseNavbarViewController
 
 @property (nonatomic, weak) id<OADestinationPointListDelegate> delegate;
 

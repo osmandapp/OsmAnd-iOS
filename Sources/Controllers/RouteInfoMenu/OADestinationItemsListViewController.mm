@@ -37,7 +37,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
 
 @implementation FavTableGroup
 
--(id) init
+-(id)init
 {
     self = [super init];
     if (self) {
@@ -45,10 +45,6 @@ typedef NS_ENUM(NSInteger, EOASortType)
     }
     return self;
 }
-
-@end
-
-@interface OADestinationItemsListViewController ()
 
 @end
 
@@ -66,57 +62,70 @@ typedef NS_ENUM(NSInteger, EOASortType)
     NSMutableArray<OADestinationItem *> *_destinationItems;
 }
 
-- (instancetype) initWithDestinationType:(EOADestinationPointType)type
+#pragma mark - Initialization
+
+- (instancetype)initWithDestinationType:(EOADestinationPointType)type
 {
     self = [super init];
-    if (self) {
+    if (self)
         _type = type;
-        [self commonInit];
-    }
     return self;
 }
 
-- (void) commonInit
+- (void)commonInit
 {
     _sortingType = EOASortTypeByGroup;
     _isDecelerating = NO;
     
-    [self generateData];
-    [self setupView];
     if (_type == EOADestinationPointTypeFavorite)
         [self updateDistanceAndDirectionFavorites:YES];
     else
         [self updateDistanceAndDirectionMarkers:YES];
 }
 
+#pragma mark - Base UI
 
--(void) applyLocalization
+- (NSString *)getTitle
 {
-    _titleView.text = _type == EOADestinationPointTypeFavorite ? OALocalizedString(@"select_favorite") : OALocalizedString(@"select_map_marker");
-    [_backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [_sortButton setTitle:OALocalizedString(@"sort_by") forState:UIControlStateNormal];
+    return _type == EOADestinationPointTypeFavorite ? OALocalizedString(@"select_favorite") : OALocalizedString(@"select_map_marker");
 }
 
-- (void) viewDidLoad
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
-    [super viewDidLoad];
+    return EOABaseNavbarColorSchemeGray;
+}
+
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
+{
+    if (_type != EOADestinationPointTypeMarker)
+        return @[[self createRightNavbarButton:OALocalizedString(@"sort_by")
+                                      iconName:nil
+                                        action:@selector(onRightNavbarButtonPressed)
+                                          menu:nil]];
+    else
+        return nil;
+}
+
+- (BOOL)isNavbarSeparatorVisible
+{
+    return NO;
+}
+
+#pragma mark - Table data
+
+- (void)generateData
+{
+    if (_type == EOADestinationPointTypeFavorite)
+        [self generateFavoritesData];
+    else
+        [self generateMarkersData];
     
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    
-    self.sortButton.hidden = _type == EOADestinationPointTypeMarker;
-}
-
-- (void) didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self setupView];
+    [self.tableView reloadData];
 }
 
 - (void)generateFavoritesData
@@ -209,7 +218,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
     [_sortedByNameFavoriteItems setArray:sortedArray];
 }
 
-- (void) generateMarkersData
+- (void)generateMarkersData
 {
     _destinationItems = [NSMutableArray array];
     for (OADestination *destination in [[OADestinationsHelper instance] sortedDestinationsWithoutParking])
@@ -219,18 +228,154 @@ typedef NS_ENUM(NSInteger, EOASortType)
         [_destinationItems addObject:item];
     }
     
-    [_tableView reloadData];
+    [self.tableView reloadData];
 }
 
-- (void) generateData
+- (NSInteger)sectionsCount
 {
-    if (_type == EOADestinationPointTypeFavorite)
-        [self generateFavoritesData];
-    else
-        [self generateMarkersData];
+    if (_sortingType != EOASortTypeByGroup || _type == EOADestinationPointTypeMarker)
+        return 1;
     
-    [_tableView reloadData];
+    return _groupsAndFavorites.count;
 }
+
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    if (_type == EOADestinationPointTypeMarker)
+    {
+        return OALocalizedString(@"map_markers");
+    }
+    else if (_sortingType == EOASortTypeByName)
+    {
+        return OALocalizedString(@"by_name");
+    }
+    else if (_sortingType == EOASortTypeByDistance)
+    {
+        return OALocalizedString(@"by_dist");
+    }
+    else
+    {
+        FavTableGroup *group = _groupsAndFavorites[section];
+        return group.groupName;
+    }
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    if (_type == EOADestinationPointTypeMarker)
+        return _destinationItems.count;
+    else if (_sortingType != EOASortTypeByGroup)
+        return _sortedByNameFavoriteItems.count;
+    
+    return ((FavTableGroup*)[_groupsAndFavorites objectAtIndex:section]).groupItems.count;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
+    if (_type == EOADestinationPointTypeMarker)
+    {
+        OAPointTableViewCell* cell;
+        cell = (OAPointTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            OADestinationItem* item = _destinationItems[indexPath.row];
+            if (item)
+            {
+                NSString *title = item.destination.desc ? item.destination.desc : OALocalizedString(@"map_marker");
+                NSString *imageName = [item.destination.markerResourceName ? item.destination.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"];
+                
+                [cell.titleView setText:title];
+                cell.titleIcon.image = [UIImage imageNamed:imageName];
+                
+                [cell.distanceView setText:item.distanceStr];
+                cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+                cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
+                cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
+            }
+        }
+        return cell;
+    }
+    else if (_sortingType != EOASortTypeByGroup)
+    {
+        OAPointTableViewCell* cell;
+        cell = (OAPointTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            OAFavoriteItem* item = [self getSortedFavoriteItem:indexPath];
+            [cell.titleView setText:item.favorite->getTitle().toNSString()];
+            cell.titleIcon.image = item.getCompositeIcon;
+            
+            [cell.distanceView setText:item.distance];
+            cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+            cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
+            cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
+        }
+        return cell;
+    }
+    FavTableGroup* groupData = [_groupsAndFavorites objectAtIndex:indexPath.section];
+    
+    OAPointTableViewCell* cell;
+    cell = (OAPointTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
+    }
+    
+    if (cell)
+    {
+        OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];
+        [cell.titleView setText:item.favorite->getTitle().toNSString()];
+        cell.titleIcon.image = item.getCompositeIcon;
+        
+        [cell.distanceView setText:item.distance];
+        cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+        cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
+        cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
+    }
+    return cell;
+}
+
+- (void)onRowSelected:(NSIndexPath *)indexPath
+{
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (_type == EOADestinationPointTypeMarker)
+    {
+        OADestinationItem* item = _destinationItems[indexPath.row];
+        if (self.delegate)
+            [self.delegate onDestinationSelected:item.destination];
+    }
+    else if (_sortingType == EOASortTypeByGroup)
+    {
+        FavTableGroup* groupData = [_groupsAndFavorites objectAtIndex:indexPath.section];
+        OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];
+        if (self.delegate)
+            [self.delegate onFavoriteSelected:item];
+    }
+    else
+    {
+        OAFavoriteItem* item = [self getSortedFavoriteItem:indexPath];
+        if (self.delegate)
+            [self.delegate onFavoriteSelected:item];
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - Aditions
 
 - (void)updateDistanceAndDirectionMarkers:(BOOL)forceUpdate
 {
@@ -320,7 +465,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
     [self refreshVisibleFavorites];
 }
 
-- (OAFavoriteItem *) getSortedFavoriteItem:(NSIndexPath *)indexPath
+- (OAFavoriteItem *)getSortedFavoriteItem:(NSIndexPath *)indexPath
 {
     if (_sortingType == EOASortTypeByDistance)
     {
@@ -333,15 +478,15 @@ typedef NS_ENUM(NSInteger, EOASortType)
     return nil;
 }
 
-- (void) refreshVisibleMarkers
+- (void)refreshVisibleMarkers
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        [_tableView beginUpdates];
-        NSArray *visibleIndexPaths = [_tableView indexPathsForVisibleRows];
+        [self.tableView beginUpdates];
+        NSArray *visibleIndexPaths = [self.tableView indexPathsForVisibleRows];
         for (NSIndexPath *i in visibleIndexPaths)
         {
-            UITableViewCell *cell = [_tableView cellForRowAtIndexPath:i];
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:i];
             if ([cell isKindOfClass:[OAPointTableViewCell class]])
             {
                 OADestinationItem* item = _destinationItems[i.row];
@@ -360,7 +505,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
                 }
             }
         }
-        [_tableView endUpdates];
+        [self.tableView endUpdates];
     });
 }
 
@@ -368,11 +513,11 @@ typedef NS_ENUM(NSInteger, EOASortType)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        [_tableView beginUpdates];
-        NSArray *visibleIndexPaths = [_tableView indexPathsForVisibleRows];
+        [self.tableView beginUpdates];
+        NSArray *visibleIndexPaths = [self.tableView indexPathsForVisibleRows];
         for (NSIndexPath *i in visibleIndexPaths)
         {
-            UITableViewCell *cell = [_tableView cellForRowAtIndexPath:i];
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:i];
             if ([cell isKindOfClass:[OAPointTableViewCell class]])
             {
                 OAFavoriteItem* item;
@@ -399,24 +544,16 @@ typedef NS_ENUM(NSInteger, EOASortType)
                 }
             }
         }
-        [_tableView endUpdates];
+        [self.tableView endUpdates];
         
         //NSArray *visibleIndexPaths = [_tableView indexPathsForVisibleRows];
         //[_tableView reloadRowsAtIndexPaths:visibleIndexPaths withRowAnimation:UITableViewRowAnimationNone];
-        
     });
 }
 
-- (void) setupView
-{
-    [_tableView setDataSource:self];
-    [_tableView setDelegate:self];
-    _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    
-    [_tableView reloadData];
-}
+#pragma mark - Selectors
 
-- (IBAction)sortButtonPressed:(id)sender
+- (void)onRightNavbarButtonPressed
 {
     if (_sortingType == EOASortTypeByGroup)
         _sortingType = EOASortTypeByName;
@@ -426,166 +563,6 @@ typedef NS_ENUM(NSInteger, EOASortType)
         _sortingType = EOASortTypeByGroup;
     
     [self.tableView reloadData];
-}
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    if (_sortingType != EOASortTypeByGroup || _type == EOADestinationPointTypeMarker)
-        return [self getSortedNumberOfSectionsInTableView];
-    
-    return [self getUnsortedNumberOfSectionsInTableView];
-}
-
-- (NSInteger) getSortedNumberOfSectionsInTableView
-{
-    return 1;
-}
-
-- (NSInteger) getUnsortedNumberOfSectionsInTableView
-{
-    return _groupsAndFavorites.count;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    if (_type == EOADestinationPointTypeMarker)
-    {
-        return OALocalizedString(@"map_markers");
-    }
-    else if (_sortingType == EOASortTypeByName)
-    {
-        return OALocalizedString(@"by_name");
-    }
-    else if (_sortingType == EOASortTypeByDistance)
-    {
-        return OALocalizedString(@"by_dist");
-    }
-    else
-    {
-        FavTableGroup *group = _groupsAndFavorites[section];
-        return group.groupName;
-    }
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 60;
-}
-
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if (_type == EOADestinationPointTypeMarker)
-        return _destinationItems.count;
-    else if (_sortingType != EOASortTypeByGroup)
-        return [self getSortedNumberOfRowsInSection:section];
-    
-    return [self getUnsortedNumberOfRowsInSection:section];
-}
-
-- (NSInteger) getSortedNumberOfRowsInSection:(NSInteger)section
-{
-    return _sortedByNameFavoriteItems.count;
-}
-
-- (NSInteger) getUnsortedNumberOfRowsInSection:(NSInteger)section
-{
-    return ((FavTableGroup*)[_groupsAndFavorites objectAtIndex:section]).groupItems.count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (_type == EOADestinationPointTypeMarker)
-        return [self getMarkerCellForIndexPath:indexPath];
-    else if (_sortingType != EOASortTypeByGroup)
-        return [self getSortedcellForRowAtIndexPath:indexPath];
-    
-    return [self getUnsortedcellForRowAtIndexPath:indexPath];
-}
-
-- (UITableViewCell *) getMarkerCellForIndexPath:(NSIndexPath *)indexPath
-{
-    OAPointTableViewCell* cell;
-    cell = (OAPointTableViewCell *)[_tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
-    if (cell == nil)
-    {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
-    }
-    
-    if (cell)
-    {
-        OADestinationItem* item = _destinationItems[indexPath.row];
-        if (item)
-        {
-            NSString *title = item.destination.desc ? item.destination.desc : OALocalizedString(@"map_marker");
-            NSString *imageName = [item.destination.markerResourceName ? item.destination.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"];
-            
-            [cell.titleView setText:title];
-            cell.titleIcon.image = [UIImage imageNamed:imageName];
-            
-            [cell.distanceView setText:item.distanceStr];
-            cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
-            cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
-            cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
-        }
-    }
-    
-    return cell;
-}
-
-- (UITableViewCell*) getSortedcellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    OAPointTableViewCell* cell;
-    cell = (OAPointTableViewCell *)[_tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
-    if (cell == nil)
-    {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
-    }
-    
-    if (cell)
-    {
-        OAFavoriteItem* item = [self getSortedFavoriteItem:indexPath];
-        [cell.titleView setText:item.favorite->getTitle().toNSString()];
-        cell.titleIcon.image = item.getCompositeIcon;
-        
-        [cell.distanceView setText:item.distance];
-        cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
-        cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
-        cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
-    }
-    
-    return cell;
-}
-
-
-- (UITableViewCell*) getUnsortedcellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    FavTableGroup* groupData = [_groupsAndFavorites objectAtIndex:indexPath.section];
-
-    OAPointTableViewCell* cell;
-    cell = (OAPointTableViewCell *)[_tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
-    if (cell == nil)
-    {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
-    }
-    
-    if (cell)
-    {
-        OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];
-        [cell.titleView setText:item.favorite->getTitle().toNSString()];
-        cell.titleIcon.image = item.getCompositeIcon;
-        
-        [cell.distanceView setText:item.distance];
-        cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
-        cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
-        cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
-    }
-    
-    return cell;
 }
 
 #pragma mark Deferred image loading (UIScrollViewDelegate)
@@ -609,45 +586,6 @@ typedef NS_ENUM(NSInteger, EOASortType)
 {
     _isDecelerating = NO;
     //[self refreshVisibleRows];
-}
-
-#pragma mark - UITableViewDelegate
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
-    if (_type == EOADestinationPointTypeMarker)
-    {
-        OADestinationItem* item = _destinationItems[indexPath.row];
-        if (self.delegate)
-            [self.delegate onDestinationSelected:item.destination];
-    }
-    else if (_sortingType == EOASortTypeByGroup)
-    {
-        [self didSelectRowAtIndexPathUnsorted:indexPath];
-    }
-    else
-    {
-        [self didSelectRowAtIndexPathSorted:indexPath];
-    }
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void) didSelectRowAtIndexPathSorted:(NSIndexPath *)indexPath
-{
-    OAFavoriteItem* item = [self getSortedFavoriteItem:indexPath];
-    if (self.delegate)
-        [self.delegate onFavoriteSelected:item];
-}
-
-- (void) didSelectRowAtIndexPathUnsorted:(NSIndexPath *)indexPath
-{
-    FavTableGroup* groupData = [_groupsAndFavorites objectAtIndex:indexPath.section];
-    OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];
-    if (self.delegate)
-        [self.delegate onFavoriteSelected:item];
 }
 
 @end

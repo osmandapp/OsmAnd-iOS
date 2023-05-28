@@ -1394,7 +1394,7 @@
 "quick_action_showhide_mapillary_descr" = "Прикажи или сакриј слој Мапиларија на карти.";
 "quick_action_mapillary_hide" = "Сакриј Мапилари";
 "quick_action_mapillary_show" = "Прикажи Мапилари";
-"quick_action_remove_next_destination" = "Обриши најближу одредишну тачку";
+"quick_action_remove_next_destination" = "Обриши следећу одредишну тачку";
 "quick_action_remove_next_destination_descr" = "Уклања тренутну одредишну тачку. Ако је она и завршна тачка, навођење ће се зауставити.";
 "change_application_profile" = "Промени налог програма";
 "select_application_profile" = "Изаберите профил апликације";
@@ -2678,3 +2678,6 @@
 "history_preferences_descr" = "Можете да онемогућите бележење историје појединачно за сваку врсту историје.";
 "shared_string_cross_buy" = "Унакрсна куповина";
 "icon_group_service" = "Услуга";
+"weather_forecast" = "Временске прилике";
+"weather_forecast_is_outdated" = "Временске прилике су застареле.";
+"speak_route_deviation" = "Најави одступање од пута";

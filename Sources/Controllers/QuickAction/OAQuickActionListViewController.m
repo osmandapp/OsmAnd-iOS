@@ -19,22 +19,7 @@
 
 #import <AudioToolbox/AudioServices.h>
 
-#define toolbarHeight 64
-
-@interface OAQuickActionListViewController () <UITableViewDelegate, UITableViewDataSource, MGSwipeTableCellDelegate, OAMultiselectableHeaderDelegate, OAQuickActionListDelegate>
-
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIButton *backBtn;
-@property (weak, nonatomic) IBOutlet UIButton *btnAdd;
-@property (weak, nonatomic) IBOutlet UIButton *btnEdit;
-@property (weak, nonatomic) IBOutlet UIView *toolBarView;
-@property (weak, nonatomic) IBOutlet UIButton *selectAllAction;
-@property (weak, nonatomic) IBOutlet UIButton *deleteAction;
-@property (weak, nonatomic) IBOutlet UIButton *btnCancel;
-@property (weak, nonatomic) IBOutlet UIButton *btnDone;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeight;
+@interface OAQuickActionListViewController () <MGSwipeTableCellDelegate, OAMultiselectableHeaderDelegate, OAQuickActionListDelegate>
 
 @end
 
@@ -42,286 +27,144 @@
 {
     OAQuickActionRegistry *_registry;
     NSMutableArray<OAQuickAction *> *_data;
-    
-    UIView *_tableHeaderView;
-    UIView *_toolbarBackgroundView;
-    CALayer *_horizontalLine;
 }
+
+#pragma mark - Initialization
+
+- (void)commonInit
+{
+    _registry = [OAQuickActionRegistry sharedInstance];
+}
+
+#pragma mark - UIViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self commonInit];
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 48.0;
+
     [self.tableView registerClass:OAMultiselectableHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-    [self.btnAdd setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
-    [self.btnAdd setTintColor:UIColor.whiteColor];
-    [self.btnEdit setImage:[UIImage templateImageNamed:@"ic_custom_edit"] forState:UIControlStateNormal];
-    [self.btnEdit setTintColor:UIColor.whiteColor];
-    [self.backBtn setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
-    self.tableView.tableHeaderView = _tableHeaderView;
-    _bottomViewHeight.constant = 0;
 }
 
-- (void)viewWillAppear:(BOOL)animated
+#pragma mark - Base setup UI
+
+- (void)setupBottomFonts
 {
-    [super viewWillAppear:animated];
-    [self applySafeAreaMargins];
+    self.topButton.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    self.bottomButton.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 }
 
--(void) commonInit
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    _registry = [OAQuickActionRegistry sharedInstance];
-    _data = [NSMutableArray arrayWithArray:_registry.getQuickActions];
-    
-    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"quick_action_add_actions_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
-    if (!UIAccessibilityIsReduceTransparencyEnabled())
+    return self.tableView.editing ? OALocalizedString(@"quick_action_edit_list") : OALocalizedString(@"configure_screen_quick_action");
+}
+
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return self.tableView.editing ? OALocalizedString(@"shared_string_cancel") : nil;
+}
+
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
+{
+    if (self.tableView.editing)
     {
-        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
-        blurEffectView.frame = _toolBarView.frame;
-        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        _toolbarBackgroundView = blurEffectView;
-        [_toolBarView insertSubview:_toolbarBackgroundView atIndex:0];
-        _toolBarView.backgroundColor = UIColor.clearColor;
+        return @[[self createRightNavbarButton:OALocalizedString(@"shared_string_done")
+                                      iconName:nil
+                                        action:@selector(donePressed)
+                                          menu:nil]];
     }
-    _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
-    [self.toolBarView.layer addSublayer:_horizontalLine];
-}
-
-- (void)applyLocalization
-{
-    _titleView.text = OALocalizedString(@"configure_screen_quick_action");
-    [_deleteAction setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
-    [_selectAllAction setTitle:OALocalizedString(@"shared_string_select_all") forState:UIControlStateNormal];
-    [_btnCancel setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [_btnDone setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
-}
-
--(void) addAccessibilityLabels
-{
-    self.backBtn.accessibilityLabel = OALocalizedString(@"shared_string_back");
-    self.btnEdit.accessibilityLabel = OALocalizedString(@"shared_string_edit");
-    self.btnAdd.accessibilityLabel = OALocalizedString(@"shared_string_add");
-}
-
-- (void)applySafeAreaMargins
-{
-    [super applySafeAreaMargins];
-    CGRect tableViewFrame = _tableView.frame;
-    tableViewFrame.size.height += _toolBarView.frame.size.height;
-    _tableView.frame = tableViewFrame;
-    UIEdgeInsets insets = _tableView.contentInset;
-    insets.bottom = _toolBarView.frame.size.height;
-    _tableView.contentInset = insets;
-    _toolbarBackgroundView.frame = _toolBarView.bounds;
-    
-    CGFloat btnWidth = (DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2) / 2;
-    _selectAllAction.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 13.0, btnWidth, 22.0);
-    _deleteAction.frame = CGRectMake(CGRectGetMaxX(_selectAllAction.frame), 13.0, btnWidth, 22.0);
-}
-
-- (void)saveChanges
-{
-    [_registry updateQuickActions:[NSArray arrayWithArray:_data]];
-    [_registry.quickActionListChangedObservable notifyEvent];
-}
-
-- (IBAction)editPressed:(id)sender
-{
-    [self.tableView beginUpdates];
-    [self.tableView setEditing:YES animated:YES];
-    _toolBarView.hidden = NO;
-    _btnCancel.hidden = NO;
-    _btnDone.hidden = NO;
-    _btnAdd.hidden = YES;
-    _btnEdit.hidden = YES;
-    _backBtn.hidden = YES;
-    [UIView animateWithDuration:.3 animations:^{
-        _titleView.text = OALocalizedString(@"quick_action_edit_list");
-        _bottomViewHeight.constant = toolbarHeight;
-        [self applySafeAreaMargins];
-    }];
-    [self.tableView endUpdates];
-}
-
-- (IBAction)donePressed:(id)sender
-{
-    [self disableEditing];
-    [self saveChanges];
-}
-
-- (IBAction)cancelPressed:(id)sender
-{
-    [self disableEditing];
-    _data = [NSMutableArray arrayWithArray:_registry.getQuickActions];
-    [self.tableView reloadData];
-}
-
-- (void) disableEditing
-{
-    [self.tableView beginUpdates];
-    [self.tableView setEditing:NO animated:YES];
-    _btnAdd.hidden = NO;
-    _btnEdit.hidden = NO;
-    _backBtn.hidden = NO;
-    _btnCancel.hidden = YES;
-    _btnDone.hidden = YES;
-    [UIView animateWithDuration:.3 animations:^{
-        _titleView.text = OALocalizedString(@"configure_screen_quick_action");
-        [self.tabBarController.tabBar setHidden:NO];
-        _bottomViewHeight.constant = 0;
-    } completion:^(BOOL finished) {
-        _toolBarView.hidden = YES;
-        [self applySafeAreaMargins];
-    }];
-    [self.tableView endUpdates];
-}
-
-- (IBAction)addActionPressed:(id)sender
-{
-    OAAddQuickActionViewController *vc = [[OAAddQuickActionViewController alloc] init];
-    vc.delegate = self;
-    [self.navigationController pushViewController:vc animated:YES];
-}
-
-
-- (void) openQuickActionSetupFor:(NSIndexPath *)indexPath
-{
-    OAQuickAction *item = [self getAction:indexPath];
-    OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithAction:item isNew:NO];
-    actionScreen.delegate = self;
-    [self.navigationController pushViewController:actionScreen animated:YES];
-}
-
-- (NSInteger)getScreensCount
-{
-    NSInteger numOfItems = _data.count;
-    BOOL oneSection = numOfItems / 6 < 1;
-    BOOL hasRemainder = numOfItems % 6 != 0;
-    if (oneSection)
-        return 1;
     else
-        return (numOfItems / 6) + (hasRemainder ? 1 : 0);
-}
-
-- (OAQuickAction *) getAction:(NSIndexPath *)indexPath
-{
-    if (_data.count == 1)
-        return _data.firstObject;
-    return _data[6 * indexPath.section + indexPath.row];
-}
-
-- (IBAction)selectAllPressed:(id)sender
-{
-    NSInteger sections = self.tableView.numberOfSections;
-    
-    [self.tableView beginUpdates];
-    for (NSInteger section = 0; section < sections; section++)
     {
-        NSInteger rowsCount = [self.tableView numberOfRowsInSection:section];
-        for (NSInteger row = 0; row < rowsCount; row++)
-        {
-            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
-        }
-    }
-    [self.tableView endUpdates];
-}
-
-- (IBAction)deletePressed:(id)sender
-{
-    NSArray *indexes = [self.tableView indexPathsForSelectedRows];
-    if (indexes.count > 0)
-    {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:
-                                    [NSString stringWithFormat:OALocalizedString(@"confirm_bulk_delete"), indexes.count]
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
-        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            NSMutableArray *dataCopy = [NSMutableArray arrayWithArray:_data];
-            for (NSIndexPath *path in indexes)
-            {
-                OAQuickAction *item = [self getAction:path];
-                [dataCopy removeObject:item];
-            }
-            _data = dataCopy;
-            [self saveChanges];
-            [self.tableView reloadData];
-            [self editPressed:nil];
-        }]];
-        [self presentViewController:alert animated:YES completion:nil];
+        UIBarButtonItem *addButton = [self createRightNavbarButton:nil
+                                                          iconName:@"ic_navbar_add"
+                                                            action:@selector(addActionPressed)
+                                                              menu:nil];
+        
+        UIBarButtonItem *aditButton = [self createRightNavbarButton:nil
+                                                           iconName:@"ic_navbar_pencil"
+                                                             action:@selector(editPressed)
+                                                               menu:nil];
+        
+        addButton.accessibilityLabel = OALocalizedString(@"shared_string_add");
+        aditButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
+        
+        return @[addButton, aditButton];
     }
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self applySafeAreaMargins];
-        CGFloat textWidth = DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2;
-        UIFont *labelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-        CGSize labelSize = [OAUtilities calculateTextBounds:OALocalizedString(@"quick_action_add_actions_descr") width:textWidth font:labelFont];
-        _tableHeaderView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height + 30.0);
-        _tableHeaderView.subviews.firstObject.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height);
-        _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
-    } completion:nil];
+    return EOABaseNavbarColorSchemeOrange;
 }
 
-#pragma mark - UITableViewDelegate
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+- (NSString *)getTableHeaderDescription
 {
-    OAMultiselectableHeaderView *vw = (OAMultiselectableHeaderView *)[tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+    return OALocalizedString(@"quick_action_add_actions_descr");
+}
+
+- (UILayoutConstraintAxis)getBottomAxisMode
+{
+    return UILayoutConstraintAxisHorizontal;
+}
+
+- (NSString *)getTopButtonTitle
+{
+    return self.tableView.editing ? OALocalizedString(@"shared_string_select_all") : @"";
+}
+
+- (NSString *)getBottomButtonTitle
+{
+    return self.tableView.editing ? OALocalizedString(@"shared_string_delete") : @"";
+}
+
+- (EOABaseButtonColorScheme)getTopButtonColorScheme
+{
+    return EOABaseButtonColorSchemeGraySimple;
+}
+
+- (EOABaseButtonColorScheme)getBottomButtonColorScheme
+{
+    return EOABaseButtonColorSchemeGraySimple;
+}
+
+#pragma mark - Table data
+
+- (void)generateData
+{
+    _data = [NSMutableArray arrayWithArray:_registry.getQuickActions];
+}
+
+- (NSInteger)sectionsCount
+{
+    return [self getScreensCount];
+}
+
+- (UIView *)getCustomViewForHeader:(NSInteger)section
+{
+    OAMultiselectableHeaderView *vw = (OAMultiselectableHeaderView *)[self.tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     [vw setTitleText:[NSString stringWithFormat:OALocalizedString(@"quick_action_screen_header"), section + 1]];
     vw.section = section;
     vw.delegate = self;
     return vw;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
 {
     return 46.0;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSInteger)rowsCount:(NSInteger)section
 {
-    if (_tableView.isEditing)
-        return;
-    
-    [self openQuickActionSetupFor:indexPath];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    BOOL oneSection = _data.count / 6 < 1;
+    BOOL lastSection = section == _data.count / 6;
+    return oneSection || lastSection ? _data.count % 6 : 6;
 }
 
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
-{
-    if (_data.count == 1)
-        return;
-    
-    AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-    NSInteger destRow = destinationIndexPath.row;
-    if (destRow == [tableView numberOfRowsInSection:destinationIndexPath.section] - 1)
-        destinationIndexPath = [NSIndexPath indexPathForRow:destRow - 1 inSection:destinationIndexPath.section];
-        
-    OAQuickAction *sourceAction = [self getAction:sourceIndexPath];
-    OAQuickAction *destAction = [self getAction:destinationIndexPath];
-    [_data setObject:sourceAction atIndexedSubscript:destinationIndexPath.section * 6 + destinationIndexPath.row];
-    [_data setObject:destAction atIndexedSubscript:sourceIndexPath.section * 6 + sourceIndexPath.row];
-    [_tableView reloadData];
-}
-
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return tableView.isEditing;
-}
-
-#pragma mark - UITableViewDataSource
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     OAQuickAction *action = [self getAction:indexPath];
-    OATitleDescrDraggableCell* cell = (OATitleDescrDraggableCell *)[tableView dequeueReusableCellWithIdentifier:[OATitleDescrDraggableCell getCellIdentifier]];
+    OATitleDescrDraggableCell* cell = (OATitleDescrDraggableCell *)[self.tableView dequeueReusableCellWithIdentifier:[OATitleDescrDraggableCell getCellIdentifier]];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleDescrDraggableCell getCellIdentifier] owner:self options:nil];
@@ -362,26 +205,155 @@
     return cell;
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
-    return [self getScreensCount];
+    if (self.tableView.isEditing)
+        return;
+    
+    [self openQuickActionSetupFor:indexPath];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+#pragma mark - UITableViewDataSource
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
-    BOOL oneSection = _data.count / 6 < 1;
-    BOOL lastSection = section == _data.count / 6;
-    return oneSection || lastSection ? _data.count % 6 : 6;
+    if (_data.count == 1)
+        return;
+    
+    AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+    NSInteger destRow = destinationIndexPath.row;
+    if (destRow == [tableView numberOfRowsInSection:destinationIndexPath.section] - 1)
+        destinationIndexPath = [NSIndexPath indexPathForRow:destRow - 1 inSection:destinationIndexPath.section];
+    
+    OAQuickAction *sourceAction = [self getAction:sourceIndexPath];
+    OAQuickAction *destAction = [self getAction:destinationIndexPath];
+    [_data setObject:sourceAction atIndexedSubscript:destinationIndexPath.section * 6 + destinationIndexPath.row];
+    [_data setObject:destAction atIndexedSubscript:sourceIndexPath.section * 6 + sourceIndexPath.row];
+    [self.tableView reloadData];
+}
+
+#pragma mark - Additions
+
+- (void)saveChanges
+{
+    [_registry updateQuickActions:[NSArray arrayWithArray:_data]];
+    [_registry.quickActionListChangedObservable notifyEvent];
+}
+
+- (NSInteger)getScreensCount
+{
+    NSInteger numOfItems = _data.count;
+    BOOL oneSection = numOfItems / 6 < 1;
+    BOOL hasRemainder = numOfItems % 6 != 0;
+    if (oneSection)
+        return 1;
+    else
+        return (numOfItems / 6) + (hasRemainder ? 1 : 0);
+}
+
+- (void)disableEditing
+{
+    [self.tableView beginUpdates];
+    [self.tableView setEditing:NO animated:YES];
+    [self updateUIAnimated];
+    [self.tableView endUpdates];
+}
+
+- (OAQuickAction *)getAction:(NSIndexPath *)indexPath
+{
+    if (_data.count == 1)
+        return _data.firstObject;
+    return _data[6 * indexPath.section + indexPath.row];
+}
+
+- (void)openQuickActionSetupFor:(NSIndexPath *)indexPath
+{
+    OAQuickAction *item = [self getAction:indexPath];
+    OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithAction:item isNew:NO];
+    actionScreen.delegate = self;
+    [self.navigationController pushViewController:actionScreen animated:YES];
+}
+
+#pragma mark - Selectors
+
+- (void)editPressed
+{
+    [self.tableView beginUpdates];
+    [self.tableView setEditing:YES animated:YES];
+    self.tableView.allowsMultipleSelectionDuringEditing = YES;
+    [self updateUIAnimated];
+    [self.tableView endUpdates];
+}
+
+- (void)onLeftNavbarButtonPressed
+{
+    [self disableEditing];
+    _data = [NSMutableArray arrayWithArray:_registry.getQuickActions];
+    [self.tableView reloadData];
+}
+
+- (void)donePressed
+{
+    [self disableEditing];
+    [self saveChanges];
+}
+
+- (void)addActionPressed
+{
+    OAAddQuickActionViewController *vc = [[OAAddQuickActionViewController alloc] init];
+    vc.delegate = self;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)onTopButtonPressed
+{
+    NSInteger sections = self.tableView.numberOfSections;
+    
+    [self.tableView beginUpdates];
+    for (NSInteger section = 0; section < sections; section++)
+    {
+        NSInteger rowsCount = [self.tableView numberOfRowsInSection:section];
+        for (NSInteger row = 0; row < rowsCount; row++)
+        {
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
+        }
+    }
+    [self.tableView endUpdates];
+}
+
+- (void)onBottomButtonPressed
+{
+    NSArray *indexes = [self.tableView indexPathsForSelectedRows];
+    if (indexes.count > 0)
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:
+                                    [NSString stringWithFormat:OALocalizedString(@"confirm_bulk_delete"), indexes.count]
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            NSMutableArray *dataCopy = [NSMutableArray arrayWithArray:_data];
+            for (NSIndexPath *path in indexes)
+            {
+                OAQuickAction *item = [self getAction:path];
+                [dataCopy removeObject:item];
+            }
+            _data = dataCopy;
+            [self saveChanges];
+            [self.tableView reloadData];
+            [self editPressed];
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 #pragma mark - Swipe Delegate
 
-- (BOOL) swipeTableCell:(MGSwipeTableCell *)cell canSwipe:(MGSwipeDirection)direction;
+- (BOOL)swipeTableCell:(MGSwipeTableCell *)cell canSwipe:(MGSwipeDirection)direction;
 {
-    return _tableView.isEditing;
+    return self.tableView.isEditing;
 }
 
-- (void) swipeTableCell:(MGSwipeTableCell *)cell didChangeSwipeState:(MGSwipeState)state gestureIsActive:(BOOL)gestureIsActive
+- (void)swipeTableCell:(MGSwipeTableCell *)cell didChangeSwipeState:(MGSwipeState)state gestureIsActive:(BOOL)gestureIsActive
 {
     if (state != MGSwipeStateNone)
         cell.showsReorderControl = NO;
@@ -391,7 +363,7 @@
 
 #pragma mark - OAMultiselectableHeaderDelegate
 
--(void)headerCheckboxChanged:(id)sender value:(BOOL)value
+- (void)headerCheckboxChanged:(id)sender value:(BOOL)value
 {
     OAMultiselectableHeaderView *headerView = (OAMultiselectableHeaderView *)sender;
     NSInteger section = headerView.section;

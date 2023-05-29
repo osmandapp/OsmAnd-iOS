@@ -6,12 +6,12 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseNavbarViewController.h"
 #import "OAActionConfigurationViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OAAddQuickActionViewController : OACompoundViewController
+@interface OAAddQuickActionViewController : OABaseNavbarViewController
 
 @property (nonatomic, weak) id<OAQuickActionListDelegate> delegate;
 

@@ -1365,6 +1365,8 @@
 		DA0132E22A1E4A6300920C14 /* ic_custom20_screen_side_bottom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132DA2A1E4A6200920C14 /* ic_custom20_screen_side_bottom@2x.png */; };
 		DA0132E32A1E4A6300920C14 /* ic_custom20_screen_side_bottom@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132DB2A1E4A6200920C14 /* ic_custom20_screen_side_bottom@3x.png */; };
 		DA0132E42A1E4A6300920C14 /* ic_custom20_screen_side_left@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132DC2A1E4A6200920C14 /* ic_custom20_screen_side_left@3x.png */; };
+		DA0132E92A1F540700920C14 /* OABaseSegmentedControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0132E72A1F540700920C14 /* OABaseSegmentedControlViewController.swift */; };
+		DA0133142A20E24700920C14 /* WidgetsSettingsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0133132A20E24700920C14 /* WidgetsSettingsHelper.swift */; };
 		DA03184222DF0E50008FC564 /* ic_custom_boat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA03183E22DF0E4F008FC564 /* ic_custom_boat@2x.png */; };
 		DA03184422DF0E50008FC564 /* ic_custom_boat@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA03183F22DF0E50008FC564 /* ic_custom_boat@3x.png */; };
 		DA04D775284F86060097CAED /* ic_custom_osmand_pro_logo_monotone_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA04D76F284F86040097CAED /* ic_custom_osmand_pro_logo_monotone_big@2x.png */; };
@@ -5213,6 +5215,8 @@
 		DA0132DA2A1E4A6200920C14 /* ic_custom20_screen_side_bottom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_bottom@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_bottom@2x.png"; sourceTree = "<group>"; };
 		DA0132DB2A1E4A6200920C14 /* ic_custom20_screen_side_bottom@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_bottom@3x.png"; path = "Resources/Icons/ic_custom20_screen_side_bottom@3x.png"; sourceTree = "<group>"; };
 		DA0132DC2A1E4A6200920C14 /* ic_custom20_screen_side_left@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_left@3x.png"; path = "Resources/Icons/ic_custom20_screen_side_left@3x.png"; sourceTree = "<group>"; };
+		DA0132E72A1F540700920C14 /* OABaseSegmentedControlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OABaseSegmentedControlViewController.swift; sourceTree = "<group>"; };
+		DA0133132A20E24700920C14 /* WidgetsSettingsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetsSettingsHelper.swift; sourceTree = "<group>"; };
 		DA03183E22DF0E4F008FC564 /* ic_custom_boat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_boat@2x.png"; path = "Resources/Icons/ic_custom_boat@2x.png"; sourceTree = "<group>"; };
 		DA03183F22DF0E50008FC564 /* ic_custom_boat@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_boat@3x.png"; path = "Resources/Icons/ic_custom_boat@3x.png"; sourceTree = "<group>"; };
 		DA04D76F284F86040097CAED /* ic_custom_osmand_pro_logo_monotone_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osmand_pro_logo_monotone_big@2x.png"; path = "Resources/Icons/ic_custom_osmand_pro_logo_monotone_big@2x.png"; sourceTree = "<group>"; };
@@ -9889,6 +9893,7 @@
 				46903D6A29B5F77A004459F1 /* OABaseWebViewController.xib */,
 				DA5A7FE526C563A500F274C7 /* OACompoundViewController.h */,
 				DA5A7D3826C563A300F274C7 /* OACompoundViewController.m */,
+				DA0132E72A1F540700920C14 /* OABaseSegmentedControlViewController.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -10435,6 +10440,20 @@
 				BB451DF318D8F7D7005FBE09 /* Localizable.strings */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		DA0133122A20E1E900920C14 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				DAA61CC72A03AB5E00AFF65D /* WidgetsAvailabilityHelper.swift */,
+				DAA61CCC2A03D9C000AFF65D /* OAWidgetsVisibilityHelper.h */,
+				DAA61CCD2A03D9C000AFF65D /* OAWidgetsVisibilityHelper.mm */,
+				DA8DC3992A0D0875006C116B /* MarkerWidgetsHelper.swift */,
+				DAABE4E12A13752000569F71 /* OAAverageSpeedComputer.h */,
+				DAABE4E22A13752000569F71 /* OAAverageSpeedComputer.m */,
+				DA0133132A20E24700920C14 /* WidgetsSettingsHelper.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		DA0D15DA281BEEF400CEEF58 /* DirectionArrows */ = {
@@ -13323,6 +13342,7 @@
 		DA5A7F1526C563A400F274C7 /* Widgets */ = {
 			isa = PBXGroup;
 			children = (
+				DA0133122A20E1E900920C14 /* Helpers */,
 				DA8DC38E2A0CCFB2006C116B /* Widgets */,
 				DAA61CC22A0397D200AFF65D /* WidgetInfo */,
 				DA5A7F3C26C563A400F274C7 /* Factory */,
@@ -13382,13 +13402,7 @@
 				DA2EC47A29FBB90A00ECEB37 /* WidgetType.swift */,
 				DA2EC7B229FBCD0300ECEB37 /* WidgetGroup.swift */,
 				DA2EC7B429FBCD1700ECEB37 /* WidgetsPanel.swift */,
-				DAA61CC72A03AB5E00AFF65D /* WidgetsAvailabilityHelper.swift */,
-				DAA61CCC2A03D9C000AFF65D /* OAWidgetsVisibilityHelper.h */,
-				DAA61CCD2A03D9C000AFF65D /* OAWidgetsVisibilityHelper.mm */,
 				DA842ECC2A0B998E0030866E /* WidgetInfoCreator.swift */,
-				DA8DC3992A0D0875006C116B /* MarkerWidgetsHelper.swift */,
-				DAABE4E12A13752000569F71 /* OAAverageSpeedComputer.h */,
-				DAABE4E22A13752000569F71 /* OAAverageSpeedComputer.m */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -17280,6 +17294,7 @@
 				DA5A836826C563A800F274C7 /* OARouteAvoidTransportSettingsViewController.mm in Sources */,
 				DA5A836626C563A800F274C7 /* OARouteStatistics.m in Sources */,
 				8A90CEDB27A7C2310001C84D /* OAMapSettingsWeatherScreen.mm in Sources */,
+				DA0133142A20E24700920C14 /* WidgetsSettingsHelper.swift in Sources */,
 				DA849999287EBEC7002B1E11 /* OADeleteFilesCommand.m in Sources */,
 				DA4ABF1E2876DA6800B996EF /* OAProfileSettingsItem.mm in Sources */,
 				DA5A830126C563A800F274C7 /* OAIconsTableViewCell.m in Sources */,
@@ -17912,6 +17927,7 @@
 				DA5A854226C563A900F274C7 /* UIColor+RGB.swift in Sources */,
 				DA5A832026C563A800F274C7 /* OAMultilineTextViewCell.m in Sources */,
 				DA5A81D126C563A700F274C7 /* OATerrainLayer.mm in Sources */,
+				DA0132E92A1F540700920C14 /* OABaseSegmentedControlViewController.swift in Sources */,
 				DA5A81B626C563A700F274C7 /* OASearchPoiTypeFilter.m in Sources */,
 				DA5A83B026C563A800F274C7 /* OASubscriptionCancelViewController.mm in Sources */,
 				DA5A850E26C563A900F274C7 /* OAUserInteractionPassThroughView.m in Sources */,

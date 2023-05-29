@@ -32,6 +32,7 @@ typedef NS_ENUM(NSInteger, EOABaseButtonColorScheme)
 @property (weak, nonatomic) IBOutlet UIButton *topButton;
 @property (weak, nonatomic) IBOutlet UIButton *bottomButton;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsBottomOffsetConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *topTableViewConstraint;
 
 - (instancetype) init NS_DESIGNATED_INITIALIZER;
 

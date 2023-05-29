@@ -13,10 +13,10 @@ import Foundation
 @objcMembers
 class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectionDelegate {
     
-    static let selectedKey = "selected"
+    private static let selectedKey = "selected"
     
-    var widgetRegistry: OAMapWidgetRegistry?
-    var appMode: OAApplicationMode? {
+    private var widgetRegistry: OAMapWidgetRegistry?
+    private var appMode: OAApplicationMode? {
         didSet {
             setupNavbarButtons()
         }

@@ -237,13 +237,13 @@
 
 - (void) enableDisableWidgetForMode:(OAApplicationMode *)appMode
                          widgetInfo:(OAMapWidgetInfo *)widgetInfo
-                            enabled:(BOOL)enabled
+                            enabled:(NSNumber *)enabled
                    recreateControls:(BOOL)recreateControls
 {
-    [widgetInfo enableDisableWithAppMode:appMode enabled:@(enabled)];
+    [widgetInfo enableDisableWithAppMode:appMode enabled:enabled];
     [self notifyWidgetVisibilityChanged:widgetInfo];
     
-    if ([widgetInfo isCustomWidget] && !enabled)
+    if ([widgetInfo isCustomWidget] && (!enabled || !enabled.boolValue))
         [_settings.customWidgetKeys remove:widgetInfo.key];
     
     if (recreateControls)

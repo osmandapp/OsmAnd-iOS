@@ -48,8 +48,13 @@
 - (OAMapWidgetRegInfo *) widgetByKey:(NSString *)key;
 
 - (NSArray<OAMapWidgetInfo *> *)getAllWidgets;
-- (NSMutableOrderedSet<OAMapWidgetInfo *> *)getWidgetsForPanel:(OAApplicationMode *)appMode
-                                                   filterModes:(NSInteger) filterModes
-                                                        panels:(NSArray<OAWidgetsPanel *> *)panels;
+- (NSMutableOrderedSet<OAMapWidgetInfo *> * _Nonnull)getWidgetsForPanel:(OAApplicationMode *_Nonnull)appMode
+                                                            filterModes:(NSInteger) filterModes
+                                                                 panels:(NSArray<OAWidgetsPanel *> *_Nonnull)panels;
+
+- (void) enableDisableWidgetForMode:(OAApplicationMode *)appMode
+                         widgetInfo:(OAMapWidgetInfo *)widgetInfo
+                            enabled:(NSNumber *)enabled
+                   recreateControls:(BOOL)recreateControls;
 
 @end

@@ -17,6 +17,8 @@ class WidgetsPanel: NSObject, NSCopying {
     static let topPanel = WidgetsPanel("ic_custom_screen_side_top", title: localizedString("top_widgets_panel"))
     static let bottomPanel = WidgetsPanel("ic_custom_screen_side_bottom", title: localizedString("bottom_widgets_panel"))
     
+    static let values: [WidgetsPanel] = [.leftPanel, .rightPanel, .topPanel, .bottomPanel]
+    
     static let DEFAULT_ORDER = 1000
     
     private static func getOrderIds(_ panel: WidgetsPanel) -> [String] {

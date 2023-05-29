@@ -10,15 +10,17 @@ import UIKit
 
 @objc(OAWidgetsListViewController)
 @objcMembers
-class WidgetsListViewController: OABaseButtonsViewController {
+class WidgetsListViewController: OABaseSegmentedControlViewController {
     
-    let panels = [WidgetsPanel.leftPanel, WidgetsPanel.rightPanel, WidgetsPanel.topPanel, WidgetsPanel.bottomPanel]
+    let panels = WidgetsPanel.values
     
     var widgetPanel: WidgetsPanel! {
         didSet {
-            applyLocalization()
+            navigationItem.title = getTitle()
         }
     }
+    
+    lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
     
     init(widgetPanel: WidgetsPanel!) {
         self.widgetPanel = widgetPanel
@@ -32,7 +34,9 @@ class WidgetsListViewController: OABaseButtonsViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         widgetPanel = .leftPanel
-        
+    }
+    
+    override func createSegmentControl() -> UISegmentedControl? {
         let segmentedControl = UISegmentedControl(items: [
             UIImage(named: "ic_custom20_screen_side_left")!,
             UIImage(named: "ic_custom20_screen_side_right")!,
@@ -40,25 +44,15 @@ class WidgetsListViewController: OABaseButtonsViewController {
             UIImage(named: "ic_custom20_screen_side_bottom")!])
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
-
-        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(segmentedControl)
-        NSLayoutConstraint.activate([
-            segmentedControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
-            segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            segmentedControl.heightAnchor.constraint(equalToConstant: 40)
-        ])
-
-        // Adjust the top constraint of other view elements below the segmented control
-        // For example, if you have a table view
-        tableView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 8).isActive = true
-        
+        return segmentedControl
     }
     
     func segmentedControlValueChanged(_ control: UISegmentedControl) {
         widgetPanel = panels[control.selectedSegmentIndex]
-        navigationItem.title = getTitle()
+    }
+    
+    override func generateData() {
+        
     }
 
 }
@@ -79,20 +73,18 @@ extension WidgetsListViewController {
     }
     
     override func getTopButtonTitle() -> String {
-        return tableView.isEditing ? NSLocalizedString("shared_string_export", comment: "") : ""
+        return localizedString("add_widget")
     }
 
     override func getBottomButtonTitle() -> String {
-        return tableView.isEditing ? NSLocalizedString("shared_string_delete", comment: "") : ""
+        return localizedString("shared_string_edit")
     }
 
     override func getTopButtonColorScheme() -> EOABaseButtonColorScheme {
-        return sectionsCount() == 0 || tableView.indexPathsForSelectedRows?.count == 0 ? .inactive : .graySimple
+        return .graySimple
     }
 
     override func getBottomButtonColorScheme() -> EOABaseButtonColorScheme {
-        return sectionsCount() == 0 || tableView.indexPathsForSelectedRows?.count == 0 ? .inactive : .grayAttn
+        return .graySimple
     }
-
-    
 }

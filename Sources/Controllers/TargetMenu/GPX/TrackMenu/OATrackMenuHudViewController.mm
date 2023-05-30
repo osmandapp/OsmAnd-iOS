@@ -60,6 +60,7 @@
 #import "OAOsmUploadGPXViewConroller.h"
 #import "OANetworkRouteDrawable.h"
 #import "OATrackMenuTabSegments.h"
+#import "OAGPXPrimitivesNativeWrapper.h"
 
 #import <Charts/Charts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
@@ -1161,7 +1162,7 @@
 
         if (self.isCurrentTrack)
         {
-            [OAGPXDocument fillWpt:waypoint.point.wpt usingWpt:waypoint.point];
+            [OAGPXDocumentNativeWrapper fillWpt:waypoint.point.wrapper.wpt usingWpt:waypoint.point];
             [self.savingHelper saveWpt:waypoint.point];
         }
     }
@@ -1181,7 +1182,7 @@
                     existWaypoint.color = UIColorFromRGB([self getWaypointsGroupColor:groupName]);
                     if (self.isCurrentTrack)
                     {
-                        [OAGPXDocument fillWpt:existWaypoint.point.wpt usingWpt:existWaypoint.point];
+                        [OAGPXDocumentNativeWrapper fillWpt:existWaypoint.point.wrapper.wpt usingWpt:existWaypoint.point];
                         [self.savingHelper saveWpt:existWaypoint.point];
                     }
                 }

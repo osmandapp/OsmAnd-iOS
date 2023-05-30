@@ -61,6 +61,7 @@
 #import "OARouteBaseViewController.h"
 #import "OAEmissionHelper.h"
 #import "OAAutoObserverProxy.h"
+#import "OAGPXPrimitivesNativeWrapper.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -316,7 +317,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             if (doc != nullptr && (doc->hasRtePt() || doc->hasTrkPt()))
             {
                 [visibleGpx addObject:gpx];
-                [visibleGpxDocs addObject:[[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(doc)]];
+                [visibleGpxDocs addObject:[[OAGPXDocument alloc] initWithNativeWrapper:[[OAGPXDocumentNativeWrapper alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(doc)]]];
             }
         }
     }

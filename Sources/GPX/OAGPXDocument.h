@@ -9,15 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "OAGPXDocumentPrimitives.h"
 #import "OACommonTypes.h"
-#import <CoreLocation/CoreLocation.h>
 
-#include <QList>
-#include <QHash>
-#include <QStack>
-#include <OsmAndCore/GpxDocument.h>
-
-@class OAGPXTrackAnalysis;
-@class OASplitMetric, QuadRect, OAApplicationMode;
+@class OAGPXTrackAnalysis, OASplitMetric, QuadRect, OAApplicationMode, OAGPXDocumentNativeWrapper;
 
 @interface OAGPXDocument : OAGpxExtensions
 
@@ -43,11 +36,13 @@
 @property (nonatomic) OATrack *generalTrack;
 @property (nonatomic) OATrkSegment *generalSegment;
 
-- (id)initWithGpxDocument:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument;
-- (id)initWithGpxFile:(NSString *)filename;
+@property (nonatomic) OAGPXDocumentNativeWrapper *wrapper;
+
+- (instancetype)initWithNativeWrapper:(OAGPXDocumentNativeWrapper *)wrapper;
+- (instancetype)initWithGpxFile:(NSString *)filename;
 
 - (BOOL) loadFrom:(NSString *)filename;
-- (BOOL) fetch:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument;
+- (BOOL) fetch:(NSString *)fileName;
 
 - (BOOL) saveTo:(NSString *)filename;
 
@@ -75,16 +70,6 @@
 - (NSArray<OAWptPt *> *) getRoutePoints:(NSInteger)routeIndex;
 - (OAApplicationMode *) getRouteProfile;
 - (NSArray<OATrack *> *) getTracks:(BOOL)includeGeneralTrack;
-
-+ (OAWptPt *)fetchWpt:(std::shared_ptr<OsmAnd::GpxDocument::WptPt>)mark;
-+ (void)fillWpt:(std::shared_ptr<OsmAnd::GpxDocument::WptPt>)wpt usingWpt:(OAWptPt *)w;
-+ (void)fillMetadata:(std::shared_ptr<OsmAnd::GpxDocument::Metadata>)meta usingMetadata:(OAMetadata *)m;
-+ (void)fillTrack:(std::shared_ptr<OsmAnd::GpxDocument::Track>)trk usingTrack:(OATrack *)t;
-+ (void)fillRoute:(std::shared_ptr<OsmAnd::GpxDocument::Route>)rte usingRoute:(OARoute *)r;
-
-+ (void) fillLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>&)links linkArray:(NSArray *)linkArray;
-+ (void) fillExtension:(const std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension>&)extension ext:(OAGpxExtension *)e;
-+ (void) fillExtensions:(const std::shared_ptr<OsmAnd::GpxExtensions>&)extensions ext:(OAGpxExtensions *)ext;
 
 - (void)initBounds;
 - (void)processBounds:(CLLocationCoordinate2D)coord;
@@ -121,16 +106,3 @@
 - (NSArray<NSDictionary<NSString *, NSString *> *> *)getWaypointCategoriesWithAllData:(BOOL)withDefaultCategory;
 
 @end
-
-
-
-
-
-
-
-
-
-
-
-
-

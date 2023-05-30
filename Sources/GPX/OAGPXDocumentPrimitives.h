@@ -7,11 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreLocation/CoreLocation.h>
 #import "OALocationPoint.h"
-
-#include <OsmAndCore.h>
-#include <OsmAndCore/GpxDocument.h>
 
 #define ICON_NAME_EXTENSION @"icon"
 #define BACKGROUND_TYPE_EXTENSION @"background"
@@ -57,9 +53,7 @@ typedef NS_ENUM(NSInteger, EOAGPXColor)
     TEAL
 };
 
-@class OAPOI;
-
-struct RouteDataBundle;
+@class OAPOI, OASplitMetric, OAGpxExtensionsNativeWrapper, OAWptPtNativeWrapper, OARouteSegmentNativeWrapper, OARouteTypeNativeWrapper, OATrkSegmentNativeWrapper, OATrackNativeWrapper, OARouteNativeWrapper;
 
 @interface OAGPXColor : NSObject
 
@@ -88,18 +82,13 @@ struct RouteDataBundle;
 @property (nonatomic) NSDictionary *attributes;
 @property (nonatomic) NSString *value;
 @property (nonatomic) NSArray<OAGpxExtension *> *extensions;
+@property (nonatomic) OAGpxExtensionsNativeWrapper *wrapper;
 
 - (void) copyExtensions:(OAGpxExtensions *)e;
 - (OAGpxExtension *) getExtensionByKey:(NSString *)key;
 - (void) addExtension:(OAGpxExtension *)e;
 - (void) removeExtension:(OAGpxExtension *)e;
 - (void) setExtension:(NSString *)key value:(NSString *)value;
-
-- (NSArray<OAGpxExtension *> *) fetchExtension:(QList<OsmAnd::Ref<OsmAnd::GpxExtensions::GpxExtension>>)extensions;
-- (void) fetchExtensions:(std::shared_ptr<OsmAnd::GpxExtensions>)extensions;
-
-- (void) fillExtension:(const std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension>&)extension ext:(OAGpxExtension *)e;
-- (void) fillExtensions:(const std::shared_ptr<OsmAnd::GpxExtensions>&)extensions;
 
 - (int) getColor:(int)defColor;
 - (void) setColor:(int)value;
@@ -129,8 +118,6 @@ struct RouteDataBundle;
 
 @interface OAWptPt : OAGpxExtensions<OALocationPoint>
 
-@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::WptPt> wpt;
-
 @property (nonatomic) BOOL firstPoint;
 @property (nonatomic) BOOL lastPoint;
 @property (nonatomic) CLLocationCoordinate2D position;
@@ -146,6 +133,7 @@ struct RouteDataBundle;
 @property (nonatomic) double horizontalDilutionOfPrecision;
 @property (nonatomic) double verticalDilutionOfPrecision;
 @property (nonatomic) double heading;
+@property (nonatomic) OAWptPtNativeWrapper *wrapper;
 
 - (instancetype)initWithWpt:(OAWptPt *)wptPt;
 
@@ -175,54 +163,28 @@ struct RouteDataBundle;
 
 @interface OARouteSegment : NSObject
 
-@property (nonatomic) NSString *identifier;
-@property (nonatomic) NSString *length;
-@property (nonatomic) NSString *startTrackPointIndex;
-@property (nonatomic) NSString *segmentTime;
-@property (nonatomic) NSString *speed;
-@property (nonatomic) NSString *turnType;
-@property (nonatomic) NSString *turnAngle;
-@property (nonatomic) NSString *types;
-@property (nonatomic) NSString *pointTypes;
-@property (nonatomic) NSString *names;
+@property (nonatomic) OARouteSegmentNativeWrapper *wrapper;
 
-+ (OARouteSegment *) fromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle;
-- (std::shared_ptr<RouteDataBundle>) toStringBundle;
-
-- (instancetype) initWithDictionary:(NSDictionary<NSString *, NSString *> *)dict;
-- (instancetype) initWithRteSegment:(OsmAnd::Ref<OsmAnd::GpxDocument::RouteSegment> &)seg;
-
-- (NSDictionary<NSString *, NSString *> *) toDictionary;
+- (instancetype) initWithNativeWrapper:(OARouteSegmentNativeWrapper *)wrapper;
 
 @end
 
 @interface OARouteType : NSObject
 
-@property (nonatomic) NSString *tag;
-@property (nonatomic) NSString *value;
+@property (nonatomic) OARouteTypeNativeWrapper *wrapper;
 
-+ (OARouteType *) fromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle;
-- (std::shared_ptr<RouteDataBundle>) toStringBundle;
-
-- (instancetype) initWithDictionary:(NSDictionary<NSString *, NSString *> *)dict;
-- (instancetype) initWithRteType:(OsmAnd::Ref<OsmAnd::GpxDocument::RouteType> &)type;
-
-- (NSDictionary<NSString *, NSString *> *) toDictionary;
+- (instancetype) initWithNativeWrapper:(OARouteTypeNativeWrapper *)wrapper;
 
 @end
 
-@class OASplitMetric;
-
 @interface OATrkSegment : OAGpxExtensions
 
-@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::TrkSegment> trkseg;
 @property (nonatomic) BOOL generalSegment;
-
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSArray<OAWptPt *> *points;
-
 @property (nonatomic) NSMutableArray<OARouteSegment *> *routeSegments;
 @property (nonatomic) NSMutableArray<OARouteType *> *routeTypes;
+@property (nonatomic) OATrkSegmentNativeWrapper *wrapper;
 
 -(NSArray *) splitByDistance:(double)meters joinSegments:(BOOL)joinSegments;
 -(NSArray *) splitByTime:(int)seconds joinSegments:(BOOL)joinSegments;
@@ -237,25 +199,23 @@ struct RouteDataBundle;
 
 @interface OATrack : OAGpxExtensions
 
-@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::Track> trk;
-
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *desc;
 @property (nonatomic) NSArray<OATrkSegment *> *segments;
 @property (nonatomic) NSString *source;
 @property (nonatomic) int slotNumber;
 @property (nonatomic) BOOL generalTrack;
+@property (nonatomic) OATrackNativeWrapper *wrapper;
 
 @end
 
 @interface OARoute : OAGpxExtensions
-
-@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::Route> rte;
 
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *desc;
 @property (nonatomic) NSArray<OAWptPt *> *points;
 @property (nonatomic) NSString *source;
 @property (nonatomic) int slotNumber;
+@property (nonatomic) OARouteNativeWrapper *wrapper;
 
 @end

@@ -7,3 +7,5 @@
 #import "OARouteStatistics.h"
 #import "OAUtilities.h"
 #import "Localization.h"
+#import "OAGPXDocumentPrimitives.h"
+#import "OAGPXDocument.h"

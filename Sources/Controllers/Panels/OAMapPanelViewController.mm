@@ -102,6 +102,7 @@
 #import "OASearchToolbarViewController.h"
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OAMapInfoController.h"
+#import "OAGPXPrimitivesNativeWrapper.h"
 
 #import "OARouteKey.h"
 #import "OANetworkRouteSelectionTask.h"
@@ -4098,9 +4099,9 @@ typedef enum
 
 - (void)saveItemToStorage:(OAGpxWptItem *)gpxWptItem
 {
-    if (gpxWptItem.point.wpt != nullptr)
+    if (gpxWptItem.point.wrapper.wpt != nullptr)
     {
-        [OAGPXDocument fillWpt:gpxWptItem.point.wpt usingWpt:gpxWptItem.point];
+        [OAGPXDocumentNativeWrapper fillWpt:gpxWptItem.point.wrapper.wpt usingWpt:gpxWptItem.point];
         [_mapViewController saveFoundWpt];
     }
 }

@@ -10,6 +10,7 @@
 #import "OARouteKey.h"
 #import "OAGPXDocument.h"
 #import "OsmAndApp.h"
+#import "OAGPXPrimitivesNativeWrapper.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/NetworkRouteSelector.h>
@@ -53,7 +54,7 @@
         {
             auto gpx = it.value();
             dispatch_async(dispatch_get_main_queue(), ^{
-                OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxDocument:gpx];
+                OAGPXDocument *doc = [[OAGPXDocument alloc] initWithNativeWrapper:[[OAGPXDocumentNativeWrapper alloc] initWithGpxDocument:gpx]];
                 onComplete(doc);
             });
         }

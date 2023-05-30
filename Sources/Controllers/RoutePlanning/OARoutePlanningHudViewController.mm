@@ -55,6 +55,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OATrackMenuHudViewController.h"
 #import "OAAppVersionDependentConstants.h"
+#import "OAGPXPrimitivesNativeWrapper.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -568,7 +569,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFileName];
     const auto &selectedFile = selectedGpxHelper.activeGpx[QString::fromNSString(gpxFileName.lastPathComponent)];
     if (selectedFile != nullptr)
-        mutableDocument = [[OAGPXMutableDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(selectedFile)];
+        mutableDocument = [[OAGPXMutableDocument alloc] initWithNativeWrapper:[[OAGPXDocumentNativeWrapper alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(selectedFile)]];
     else
         mutableDocument = [[OAGPXMutableDocument alloc] initWithGpxFile:gpx.absolutePath];
     

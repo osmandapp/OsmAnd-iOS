@@ -10,6 +10,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
 #import "OAGPXMutableDocument.h"
+#import "OAGPXPrimitivesNativeWrapper.h"
 
 #include <routeSegmentResult.h>
 #include <routeDataBundle.h>
@@ -125,13 +126,13 @@
     NSMutableArray<OARouteSegment *> *routeSegments = [NSMutableArray new];
     for (const auto& item : routeItems)
     {
-        [routeSegments addObject:[OARouteSegment fromStringBundle:item]];
+        [routeSegments addObject:[[OARouteSegment alloc] initWithNativeWrapper:[[OARouteSegmentNativeWrapper alloc] initWithStringBundle:item]]];
     }
     trkSegment.routeSegments = routeSegments;
     NSMutableArray<OARouteType *> *routeTypes = [NSMutableArray new];
     for (const auto& item : typeList)
     {
-        [routeTypes addObject:[OARouteType fromStringBundle:item]];
+        [routeTypes addObject:[[OARouteType alloc] initWithNativeWrapper:[[OARouteTypeNativeWrapper alloc] initWithStringBundle:item]]];
     }
     trkSegment.routeTypes = routeTypes;
     [trkSegment fillExtensions];

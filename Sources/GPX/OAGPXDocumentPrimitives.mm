@@ -12,6 +12,7 @@
 #import "OAPointDescription.h"
 #import "OADefaultFavorite.h"
 #import "OAPOI.h"
+#import "OAGPXPrimitivesNativeWrapper.h"
 
 #include <routeSegmentResult.h>
 #include <routeDataBundle.h>
@@ -109,6 +110,7 @@
     if (self)
     {
         _extensions = @[];
+        _wrapper = [[OAGpxExtensionsNativeWrapper alloc] init];
     }
     return self;
 }
@@ -171,76 +173,6 @@
     }
 }
 
-- (NSArray<OAGpxExtension *> *)fetchExtension:(QList<OsmAnd::Ref<OsmAnd::GpxExtensions::GpxExtension>>)extensions
-{
-    if (!extensions.isEmpty())
-    {
-        NSMutableArray<OAGpxExtension *> *extensionsArray = [NSMutableArray array];
-        for (const auto &ext: extensions)
-        {
-            OAGpxExtension *e = [[OAGpxExtension alloc] init];
-            e.name = ext->name.toNSString().lowerCase;
-            e.value = ext->value.toNSString();
-            if (!ext->attributes.isEmpty())
-            {
-                NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-                for (const auto &entry: OsmAnd::rangeOf(OsmAnd::constOf(ext->attributes)))
-                {
-                    dict[entry.key().toNSString()] = entry.value().toNSString();
-                }
-                e.attributes = dict;
-            }
-            e.subextensions = [self fetchExtension:ext->subextensions];
-            [extensionsArray addObject:e];
-        }
-        return extensionsArray;
-    }
-    return @[];
-}
-
-- (void)fetchExtensions:(std::shared_ptr<OsmAnd::GpxExtensions>)extensions
-{
-    self.value = extensions->value.toNSString();
-    if (!extensions->attributes.isEmpty()) {
-        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-        for (const auto &entry: OsmAnd::rangeOf(OsmAnd::constOf(extensions->attributes))) {
-            [dict setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
-        }
-        self.attributes = dict;
-    }
-
-    self.extensions = [self fetchExtension:extensions->extensions];
-}
-
-- (void)fillExtension:(const std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension>&)extension ext:(OAGpxExtension *)e
-{
-    extension->name = QString::fromNSString(e.name);
-    extension->value = QString::fromNSString(e.value);
-    for (NSString *key in e.attributes.allKeys)
-    {
-        extension->attributes[QString::fromNSString(key)] = QString::fromNSString(e.attributes[key]);
-    }
-    for (OAGpxExtension *es in e.subextensions)
-    {
-        std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension> subextension(new OsmAnd::GpxExtensions::GpxExtension());
-        [self fillExtension:subextension ext:es];
-        extension->subextensions.push_back(subextension);
-        subextension.reset();
-    }
-}
-
-- (void)fillExtensions:(const std::shared_ptr<OsmAnd::GpxExtensions>&)extensions
-{
-    extensions->extensions.clear();
-    for (OAGpxExtension *e in self.extensions)
-    {
-        std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension> extension(new OsmAnd::GpxExtensions::GpxExtension());
-        [self fillExtension:extension ext:e];
-        extensions->extensions.push_back(extension);
-        extension.reset();
-    }
-}
-
 - (int) getColor:(int)defColor
 {
     OAGpxExtension *e = [self getExtensionByKey:@"color"];
@@ -288,6 +220,8 @@
 
 @implementation OAWptPt
 
+@dynamic wrapper;
+
 - (instancetype)init
 {
     self = [super init];
@@ -299,6 +233,7 @@
         self.verticalDilutionOfPrecision = NAN;
         self.heading = NAN;
         self.distance = 0.0;
+        self.wrapper = [[OAWptPtNativeWrapper alloc] init];
     }
     return self;
 }
@@ -328,6 +263,7 @@
 //        self.slopeColor = wptPt.slopeColor;
 //        self.colourARGB = wptPt.colourARGB;
         self.distance = wptPt.distance;
+        self.wrapper = wptPt.wrapper;
     }
     return self;
 }
@@ -533,162 +469,64 @@
 
 @implementation OARouteSegment
 
-- (instancetype)initWithDictionary:(NSDictionary<NSString *,NSString *> *)dict
+- (instancetype)init
 {
     self = [super init];
-    if (self) {
-        _identifier = dict[@"id"];
-        _length = dict[@"length"];
-        _startTrackPointIndex = dict[@"startTrkptIdx"];
-        _segmentTime = dict[@"segmentTime"];
-        _speed = dict[@"speed"];
-        _turnType = dict[@"turnType"];
-        _turnAngle = dict[@"turnAngle"];
-        _types = dict[@"types"];
-        _pointTypes = dict[@"pointTypes"];
-        _names = dict[@"names"];
+    if (self)
+    {
+        self.wrapper = [[OARouteSegmentNativeWrapper alloc] init];
     }
     return self;
 }
 
-- (instancetype) initWithRteSegment:(OsmAnd::Ref<OsmAnd::GpxDocument::RouteSegment> &)seg
+- (instancetype)initWithNativeWrapper:(OARouteSegmentNativeWrapper *)wrapper
 {
     self = [super init];
-    if (self) {
-        _identifier = seg->id.toNSString();
-        _length = seg->length.toNSString();
-        _startTrackPointIndex = seg->startTrackPointIndex.toNSString();
-        _segmentTime = seg->segmentTime.toNSString();
-        _speed = seg->speed.toNSString();
-        _turnType = seg->turnType.toNSString();
-        _turnAngle = seg->turnAngle.toNSString();
-        _types = seg->types.toNSString();
-        _pointTypes = seg->pointTypes.toNSString();
-        _names = seg->names.toNSString();
+    if (self)
+    {
+        self.wrapper = wrapper;
     }
     return self;
-}
-
-+ (OARouteSegment *) fromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle
-{
-    OARouteSegment *s = [[OARouteSegment alloc] init];
-    s.identifier = [NSString stringWithUTF8String:bundle->getString("id", "").c_str()];
-    s.length = [NSString stringWithUTF8String:bundle->getString("length", "").c_str()];
-    s.startTrackPointIndex = [NSString stringWithUTF8String:bundle->getString("startTrkptIdx", "").c_str()];
-    s.segmentTime = [NSString stringWithUTF8String:bundle->getString("segmentTime", "").c_str()];
-    s.speed = [NSString stringWithUTF8String:bundle->getString("speed", "").c_str()];
-    s.turnType = [NSString stringWithUTF8String:bundle->getString("turnType", "").c_str()];
-    s.turnAngle = [NSString stringWithUTF8String:bundle->getString("turnAngle", "").c_str()];
-    s.types = [NSString stringWithUTF8String:bundle->getString("types", "").c_str()];
-    s.pointTypes = [NSString stringWithUTF8String:bundle->getString("pointTypes", "").c_str()];
-    s.names = [NSString stringWithUTF8String:bundle->getString("names", "").c_str()];
-    return s;
-}
-
-- (std::shared_ptr<RouteDataBundle>) toStringBundle
-{
-    auto bundle = std::make_shared<RouteDataBundle>();
-    [self addToBundleIfNotNull:"id" value:_identifier bundle:bundle];
-    [self addToBundleIfNotNull:"length" value:_length bundle:bundle];
-    [self addToBundleIfNotNull:"startTrkptIdx" value:_startTrackPointIndex bundle:bundle];
-    [self addToBundleIfNotNull:"segmentTime" value:_segmentTime bundle:bundle];
-    [self addToBundleIfNotNull:"speed" value:_speed bundle:bundle];
-    [self addToBundleIfNotNull:"turnType" value:_turnType bundle:bundle];
-    [self addToBundleIfNotNull:"turnAngle" value:_turnAngle bundle:bundle];
-    [self addToBundleIfNotNull:"types" value:_types bundle:bundle];
-    [self addToBundleIfNotNull:"pointTypes" value:_pointTypes bundle:bundle];
-    [self addToBundleIfNotNull:"names" value:_names bundle:bundle];
-    return bundle;
-}
-
-- (void) addToBundleIfNotNull:(const string&)key value:(NSString *)value bundle:(std::shared_ptr<RouteDataBundle> &)bundle
-{
-    if (value)
-        bundle->put(key, value.UTF8String);
-}
-
-- (NSDictionary<NSString *,NSString *> *)toDictionary
-{
-    NSMutableDictionary<NSString *, NSString *> *res = [NSMutableDictionary new];
-    [self addIfValueNotEmpty:res key:@"id" value:_identifier];
-    [self addIfValueNotEmpty:res key:@"length" value:_length];
-    [self addIfValueNotEmpty:res key:@"startTrkptIdx" value:_startTrackPointIndex];
-    [self addIfValueNotEmpty:res key:@"segmentTime" value:_segmentTime];
-    [self addIfValueNotEmpty:res key:@"speed" value:_speed];
-    [self addIfValueNotEmpty:res key:@"turnType" value:_turnType];
-    [self addIfValueNotEmpty:res key:@"turnAngle" value:_turnAngle];
-    [self addIfValueNotEmpty:res key:@"types" value:_types];
-    [self addIfValueNotEmpty:res key:@"pointTypes" value:_pointTypes];
-    [self addIfValueNotEmpty:res key:@"names" value:_names];
-    return res;
-}
-
-- (void) addIfValueNotEmpty:(NSMutableDictionary<NSString *, NSString *> *)dict key:(NSString *)key value:(NSString *)value
-{
-    if (value.length > 0)
-        dict[key] = value;
 }
 
 @end
 
 @implementation OARouteType
 
-- (instancetype)initWithDictionary:(NSDictionary<NSString *,NSString *> *)dict
+- (instancetype)init
 {
     self = [super init];
-    if (self) {
-        _tag = dict[@"t"];
-        _value = dict[@"v"];
+    if (self)
+    {
+        self.wrapper = [[OARouteTypeNativeWrapper alloc] init];
     }
     return self;
 }
 
-- (instancetype) initWithRteType:(OsmAnd::Ref<OsmAnd::GpxDocument::RouteType> &)type
+- (instancetype)initWithNativeWrapper:(OARouteTypeNativeWrapper *)wrapper
 {
     self = [super init];
-    if (self) {
-        _tag = type->tag.toNSString();
-        _value = type->value.toNSString();
+    if (self)
+    {
+        self.wrapper = wrapper;
     }
     return self;
-}
-
-+ (OARouteType *) fromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle
-{
-    OARouteType *t = [[OARouteType alloc] init];
-    t.tag = [NSString stringWithUTF8String:bundle->getString("t", "").c_str()];
-    t.value = [NSString stringWithUTF8String:bundle->getString("v", "").c_str()];
-    return t;
-}
-
-- (std::shared_ptr<RouteDataBundle>) toStringBundle
-{
-    auto bundle = std::make_shared<RouteDataBundle>();
-    if (_tag)
-        bundle->put("t", _tag.UTF8String);
-    if (_value)
-        bundle->put("v", _value.UTF8String);
-    return bundle;
-}
-
-- (NSDictionary<NSString *,NSString *> *)toDictionary
-{
-    return @{
-            @"t" : _tag,
-            @"v" : _value
-    };
 }
 
 @end
 
 @implementation OATrkSegment
 
+@dynamic wrapper;
+
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _routeTypes = [NSMutableArray new];
         _routeSegments = [NSMutableArray new];
+        self.wrapper = [[OATrkSegmentNativeWrapper alloc] init];
     }
     return self;
 }
@@ -717,15 +555,15 @@
 
 - (void) fillRouteDetails
 {
-    if (self.trkseg)
+    if (self.wrapper.trkseg)
     {
-        for (auto& rteSeg : self.trkseg->routeSegments)
+        for (auto& rteSeg : self.wrapper.trkseg->routeSegments)
         {
-            [_routeSegments addObject:[[OARouteSegment alloc] initWithRteSegment:rteSeg]];
+            [_routeSegments addObject:[[OARouteSegment alloc] initWithNativeWrapper:[[OARouteSegmentNativeWrapper alloc] initWithRteSegment:rteSeg]]];
         }
-        for (auto& rteType : self.trkseg->routeTypes)
+        for (auto& rteType : self.wrapper.trkseg->routeTypes)
         {
-            [_routeTypes addObject:[[OARouteType alloc] initWithRteType:rteType]];
+            [_routeTypes addObject:[[OARouteType alloc] initWithNativeWrapper:[[OARouteTypeNativeWrapper alloc] initWithRteType:rteType]]];
         }
     }
 }
@@ -741,7 +579,7 @@
         {
             OAGpxExtension *subExt = [[OAGpxExtension alloc] init];
             subExt.name = @"segment";
-            subExt.attributes = seg.toDictionary;
+            subExt.attributes = [seg.wrapper toDictionary];
             [subexts addObject:subExt];
         }
         ext.subextensions = subexts;
@@ -756,7 +594,7 @@
         {
             OAGpxExtension *subExt = [[OAGpxExtension alloc] init];
             subExt.name = @"type";
-            subExt.attributes = type.toDictionary;
+            subExt.attributes = [type.wrapper toDictionary];
             [subexts addObject:subExt];
         }
         ext.subextensions = subexts;
@@ -767,7 +605,33 @@
 @end
 
 @implementation OATrack
+
+@dynamic wrapper;
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        self.wrapper = [[OATrackNativeWrapper alloc] init];
+    }
+    return self;
+}
+
 @end
 
 @implementation OARoute
+
+@dynamic wrapper;
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        self.wrapper = [[OARouteNativeWrapper alloc] init];
+    }
+    return self;
+}
+
 @end

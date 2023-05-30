@@ -43,6 +43,7 @@
 #import "OAReverseGeocoder.h"
 #import "OAColors.h"
 #import "OASizes.h"
+#import "OAGPXPrimitivesNativeWrapper.h"
 
 #import "OAIconTextTableViewCell.h"
 #import "OASearchMoreCell.h"
@@ -408,7 +409,7 @@
             {
                 if (searchResult.wpt)
                 {
-                    OAWptPt *wpt = [OAGPXDocument fetchWpt:std::const_pointer_cast<OsmAnd::GpxDocument::WptPt>(searchResult.wpt)];
+                    OAWptPt *wpt = [OAGPXDocumentNativeWrapper fetchWpt:std::const_pointer_cast<OsmAnd::GpxDocument::WptPt>(searchResult.wpt)];
                     OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
                     wptItem.point = wpt;
 

@@ -15,6 +15,7 @@
 #import "Localization.h"
 #import "OAMapUtils.h"
 #import "OAAppVersionDependentConstants.h"
+#import "OAGPXPrimitivesNativeWrapper.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QKeyValueIterator.h>
@@ -31,12 +32,15 @@
     BOOL _routePoints;
 }
 
-- (id)initWithGpxDocument:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument
+@dynamic wrapper;
+
+- (instancetype)initWithNativeWrapper:(OAGPXDocumentNativeWrapper *)wrapper
 {
     if (self = [super init])
     {
         _path = @"";
-        if ([self fetch:gpxDocument])
+        self.wrapper = wrapper;
+        if ([self fetchFromGpxDocument:[wrapper getGpxDocument]])
             return self;
         else
             return nil;
@@ -47,11 +51,12 @@
     }
 }
 
-- (id)initWithGpxFile:(NSString *)filename
+- (instancetype)initWithGpxFile:(NSString *)filename
 {
     if (self = [super init])
     {
         self.path = filename;
+        self.wrapper = [[OAGPXDocumentNativeWrapper alloc] init];
         if ([self loadFrom:filename])
             return self;
         else
@@ -214,25 +219,6 @@
     [self setExtension:@"show_start_finish" value:strValue];
 }
 
-+ (NSArray *)fetchLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>)links
-{
-    if (!links.isEmpty()) {
-        NSMutableArray<OALink *> *gpxLinks = [NSMutableArray array];
-        for (const auto& l : links)
-        {
-            OsmAnd::Ref<OsmAnd::GpxDocument::Link> *_l = (OsmAnd::Ref<OsmAnd::GpxDocument::Link>*)&l;
-            const std::shared_ptr<const OsmAnd::GpxDocument::Link> link = _l->shared_ptr();
-
-            OALink *gpxLink = [[OALink alloc] init];
-            gpxLink.text = link->text.toNSString();
-            gpxLink.url = link->url.toNSURL();
-            [gpxLinks addObject:gpxLink];
-        }
-        return gpxLinks;
-    }
-    return nil;
-}
-
 - (void)initBounds
 {
     left = DBL_MAX;
@@ -270,33 +256,12 @@
     self.bounds = bounds;
 }
 
-+ (OAWptPt *)fetchWpt:(std::shared_ptr<OsmAnd::GpxDocument::WptPt>)mark
+- (BOOL) fetch:(NSString *)fileName
 {
-    OAWptPt *wptPt = [[OAWptPt alloc] init];
-    wptPt.position = CLLocationCoordinate2DMake(mark->position.latitude, mark->position.longitude);
-    wptPt.name = mark->name.toNSString();
-    wptPt.desc = mark->description.toNSString();
-    wptPt.elevation = mark->elevation;
-    wptPt.time = mark->timestamp.toSecsSinceEpoch();
-    wptPt.comment = mark->comment.toNSString();
-    wptPt.type = mark->type.toNSString();
-    wptPt.horizontalDilutionOfPrecision = mark->horizontalDilutionOfPrecision;
-    wptPt.verticalDilutionOfPrecision = mark->verticalDilutionOfPrecision;
-    wptPt.links = [self.class fetchLinks:mark->links];
-    wptPt.speed = mark->speed;
-    wptPt.heading = mark->heading;
-
-    [wptPt fetchExtensions:mark];
-    for (OAGpxExtension *e in wptPt.extensions)
-    {
-        if ([e.name isEqualToString:@"color"])
-            [wptPt setColor:[OAUtilities colorToNumberFromString:e.value]];
-    }
-
-    return wptPt;
+    return [self fetchFromGpxDocument:[self.wrapper loadGpxDocument:fileName]];
 }
 
-- (BOOL) fetch:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument
+- (BOOL) fetchFromGpxDocument:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument
 {
     if (gpxDocument == nullptr)
         return false;
@@ -312,14 +277,14 @@
         metadata.name = gpxDocument->metadata->name.toNSString();
         metadata.desc = gpxDocument->metadata->description.toNSString();
         metadata.time = gpxDocument->metadata->timestamp.toSecsSinceEpoch();
-        metadata.links = [self.class fetchLinks:gpxDocument->metadata->links];
+        metadata.links = [OAGPXDocumentNativeWrapper fetchLinks:gpxDocument->metadata->links];
         
         OsmAnd::Ref<OsmAnd::GpxDocument::Metadata> *_metadata = &gpxDocument->metadata;
-        [metadata fetchExtensions:_metadata->shared_ptr()];
+        [metadata.wrapper fetchExtensions:_metadata->shared_ptr() withExtensionsObj:metadata];
         self.metadata = metadata;
     }
 
-    [self fetchExtensions:gpxDocument];
+    [self.wrapper fetchExtensions:gpxDocument withExtensionsObj:self];
     
     NSMutableDictionary<NSString *, NSString *> *routeKeyTags = [NSMutableDictionary dictionary];
     for (auto it = gpxDocument->networkRouteKeyTags.begin(); it != gpxDocument->networkRouteKeyTags.end(); ++it)
@@ -339,7 +304,7 @@
             OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_m = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&m;
             const std::shared_ptr<const OsmAnd::GpxDocument::WptPt> mark = _m->shared_ptr();
             
-            OAWptPt *_mark = [self.class fetchWpt:_m->shared_ptr()];
+            OAWptPt *_mark = [OAGPXDocumentNativeWrapper fetchWpt:_m->shared_ptr()];
             [self processBounds:_mark.position];
 
             [_marks addObject:_mark];
@@ -388,33 +353,33 @@
                             _p.time = p->timestamp.isNull() ? 0 : p->timestamp.toSecsSinceEpoch();
                             _p.comment = p->comment.toNSString();
                             _p.type = p->type.toNSString();
-                            _p.links = [self.class fetchLinks:p->links];
+                            _p.links = [OAGPXDocumentNativeWrapper fetchLinks:p->links];
                             _p.horizontalDilutionOfPrecision = p->horizontalDilutionOfPrecision;
                             _p.verticalDilutionOfPrecision = p->verticalDilutionOfPrecision;
                             _p.speed = p->speed;
                             _p.heading = p->heading;
 
-                            [_p fetchExtensions:_pt->shared_ptr()];
+                            [_p.wrapper fetchExtensions:_pt->shared_ptr() withExtensionsObj:_p];
 
                             [self processBounds:_p.position];
                             [pts addObject:_p];
                         }
                         _seg.points = pts;
                     }
-                    _seg.trkseg = _s->shared_ptr();
-                    [_seg fetchExtensions:_s->shared_ptr()];
+                    _seg.wrapper.trkseg = _s->shared_ptr();
+                    [_seg.wrapper fetchExtensions:_s->shared_ptr() withExtensionsObj:_seg];
                     [_seg fillRouteDetails];
                     [_seg fillExtensions];
-                    [_seg fillExtensions:_s->shared_ptr()];
+                    [_seg.wrapper fillExtensions:_s->shared_ptr() withExtensionsObj:_seg];
                     [seg addObject:_seg];
                 }
                 
                 _track.segments = seg;
             }
 
-            [_track fetchExtensions:_t->shared_ptr()];
+            [_track.wrapper fetchExtensions:_t->shared_ptr() withExtensionsObj:_track];
 
-            _track.trk = _t->shared_ptr();
+            _track.wrapper.trk = _t->shared_ptr();
             [_trcks addObject:_track];
         }
         self.tracks = _trcks;
@@ -451,13 +416,13 @@
                     _p.time = p->timestamp.isNull() ? 0 : p->timestamp.toSecsSinceEpoch();
                     _p.comment = p->comment.toNSString();
                     _p.type = p->type.toNSString();
-                    _p.links = [self.class fetchLinks:p->links];
+                    _p.links = [OAGPXDocumentNativeWrapper fetchLinks:p->links];
                     _p.horizontalDilutionOfPrecision = p->horizontalDilutionOfPrecision;
                     _p.verticalDilutionOfPrecision = p->verticalDilutionOfPrecision;
                     _p.speed = p->speed;
                     _p.heading = p->heading;
 
-                    [_p fetchExtensions:_pt->shared_ptr()];
+                    [_p.wrapper fetchExtensions:_pt->shared_ptr() withExtensionsObj:_p];
 
                     [self processBounds:_p.position];
                     [_points addObject:_p];
@@ -467,7 +432,7 @@
                 _route.points = _points;
             }
 
-            [_route fetchExtensions:_r->shared_ptr()];
+            [_route.wrapper fetchExtensions:_r->shared_ptr() withExtensionsObj:_route];
 
             [_rts addObject:_route];
         }
@@ -484,135 +449,9 @@
 - (BOOL) loadFrom:(NSString *)filename
 {
     if (filename && filename.length > 0)
-        return [self fetch:OsmAnd::GpxDocument::loadFrom(QString::fromNSString(filename))];
+        return [self fetch:filename];
     else
         return false;
-}
-
-+ (void) fillLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>&)links linkArray:(NSArray *)linkArray
-{
-    std::shared_ptr<OsmAnd::GpxDocument::Link> link;
-    for (OALink *l in linkArray)
-    {
-        if (l.url)
-        {
-            link.reset(new OsmAnd::GpxDocument::Link());
-            link->url = QUrl::fromNSURL(l.url);
-            if (l.text)
-                link->text = QString::fromNSString(l.text);
-            links.append(link);
-            link = nullptr;
-        }
-    }
-}
-
-+ (void)fillMetadata:(std::shared_ptr<OsmAnd::GpxDocument::Metadata>)meta usingMetadata:(OAMetadata *)m
-{
-    meta->name = QString::fromNSString(m.name);
-    meta->description = QString::fromNSString(m.desc);
-    meta->timestamp = m.time > 0 ? QDateTime::fromTime_t(m.time).toUTC() : QDateTime().toUTC();
-    
-    [self fillLinks:meta->links linkArray:m.links];
-    
-    [m fillExtensions:meta];
-}
-
-+ (void)fillWpt:(std::shared_ptr<OsmAnd::GpxDocument::WptPt>)wpt usingWpt:(OAWptPt *)w
-{
-    wpt->position.latitude = w.position.latitude;
-    wpt->position.longitude = w.position.longitude;
-
-    if (!isnan(w.elevation))
-        wpt->elevation = w.elevation;
-
-    wpt->timestamp = w.time > 0 ? QDateTime::fromTime_t(w.time).toUTC() : QDateTime().toUTC();
-
-    if (w.name)
-        wpt->name = QString::fromNSString(w.name);
-    if (w.desc)
-        wpt->description = QString::fromNSString(w.desc);
-
-    [self fillLinks:wpt->links linkArray:w.links];
-
-    if (w.type)
-        wpt->type = QString::fromNSString(w.type);
-    if (w.comment)
-        wpt->comment = QString::fromNSString(w.comment);
-    if (!isnan(w.horizontalDilutionOfPrecision))
-        wpt->horizontalDilutionOfPrecision = w.horizontalDilutionOfPrecision;
-    if (!isnan(w.verticalDilutionOfPrecision))
-        wpt->verticalDilutionOfPrecision = w.verticalDilutionOfPrecision;
-    if (!isnan(w.heading))
-        wpt->heading = w.heading;
-    if (w.speed > 0)
-        wpt->speed = w.speed;
-
-    OAGpxExtensions *extensions = [[OAGpxExtensions alloc] init];
-    NSMutableArray<OAGpxExtension *> *extArray = [w.extensions mutableCopy];
-    NSString *profile = [w getProfileType];
-    if ([GAP_PROFILE_TYPE isEqualToString:profile])
-    {
-        OAGpxExtension *profileExtension = [w getExtensionByKey:PROFILE_TYPE_EXTENSION];
-        [extArray removeObject:profileExtension];
-    }
-
-    extensions.extensions = extArray;
-    [extensions fillExtensions:wpt];
-}
-
-+ (void)fillTrack:(std::shared_ptr<OsmAnd::GpxDocument::Track>)trk usingTrack:(OATrack *)t
-{
-    std::shared_ptr<OsmAnd::GpxDocument::WptPt> trkpt;
-    std::shared_ptr<OsmAnd::GpxDocument::TrkSegment> trkseg;
-
-    if (t.name)
-        trk->name = QString::fromNSString(t.name);
-    if (t.desc)
-        trk->description = QString::fromNSString(t.desc);
-
-    for (OATrkSegment *s in t.segments)
-    {
-        trkseg.reset(new OsmAnd::GpxDocument::TrkSegment());
-
-        if (s.name)
-            trkseg->name = QString::fromNSString(s.name);
-
-        for (OAWptPt *p in s.points)
-        {
-            trkpt.reset(new OsmAnd::GpxDocument::WptPt());
-            [self fillWpt:trkpt usingWpt:p];
-            trkseg->points.append(trkpt);
-            trkpt = nullptr;
-        }
-
-//        assignRouteExtensionWriter(segment);
-        [s fillExtensions:trkseg];
-
-        trk->segments.append(trkseg);
-        trkseg = nullptr;
-    }
-
-    [t fillExtensions:trk];
-}
-
-+ (void)fillRoute:(std::shared_ptr<OsmAnd::GpxDocument::Route>)rte usingRoute:(OARoute *)r
-{
-    std::shared_ptr<OsmAnd::GpxDocument::WptPt> rtept;
-
-    if (r.name)
-        rte->name = QString::fromNSString(r.name);
-    if (r.desc)
-        rte->description = QString::fromNSString(r.desc);
-
-    for (OAWptPt *p in r.points)
-    {
-        rtept.reset(new OsmAnd::GpxDocument::WptPt());
-        [self fillWpt:rtept usingWpt:p];
-        rte->points.append(rtept);
-        rtept = nullptr;
-    }
-    
-    [r fillExtensions:rte];
 }
 
 - (BOOL) saveTo:(NSString *)filename
@@ -629,7 +468,7 @@
 
     metadata.reset(new OsmAnd::GpxDocument::Metadata());
     if (self.metadata)
-        [self.class fillMetadata:metadata usingMetadata:self.metadata];
+        [OAGPXDocumentNativeWrapper fillMetadata:metadata usingMetadata:self.metadata];
 
     document->metadata = metadata;
     metadata = nullptr;
@@ -640,7 +479,7 @@
     for (OAWptPt *w in self.points)
     {
         wpt.reset(new OsmAnd::GpxDocument::WptPt());
-        [self.class fillWpt:wpt usingWpt:w];
+        [OAGPXDocumentNativeWrapper fillWpt:wpt usingWpt:w];
         document->points.append(wpt);
         wpt = nullptr;
     }
@@ -650,7 +489,7 @@
         if (!t.generalTrack)
         {
             trk.reset(new OsmAnd::GpxDocument::Track());
-            [self.class fillTrack:trk usingTrack:t];
+            [OAGPXDocumentNativeWrapper fillTrack:trk usingTrack:t];
             document->tracks.append(trk);
             trk = nullptr;
         }
@@ -659,12 +498,12 @@
     for (OARoute *r in self.routes)
     {
         rte.reset(new OsmAnd::GpxDocument::Route());
-        [self.class fillRoute:rte usingRoute:r];
+        [OAGPXDocumentNativeWrapper fillRoute:rte usingRoute:r];
         document->routes.append(rte);
         rte = nullptr;
     }
 
-    [self fillExtensions:document];
+    [self.wrapper fillExtensions:document withExtensionsObj:self];
     [self fillNetworkRouteKeys:document];
 
     return document->saveTo(QString::fromNSString(filename), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));

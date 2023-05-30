@@ -58,6 +58,7 @@
 #import "OAOsmandDevelopmentPlugin.h"
 #import "OAPlugin.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OAGPXPrimitivesNativeWrapper.h"
 
 #import "OARoutingHelper.h"
 #import "OATransportRoutingHelper.h"
@@ -2604,7 +2605,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         
         [helper runSyncBlock:^{
             
-            const auto& doc = [helper.currentTrack getDocument];
+            const auto& doc = [helper.currentTrack.wrapper getGpxDocument];
             if (doc != nullptr && [helper hasData])
             {
                 _recTrackShowing = YES;
@@ -2806,8 +2807,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                 OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&loc;
                 const std::shared_ptr<OsmAnd::GpxDocument::WptPt> w = _wpt->shared_ptr();
 
-                OAWptPt *wptItem = [OAGPXDocument fetchWpt:w];
-                wptItem.wpt = w;
+                OAWptPt *wptItem = [OAGPXDocumentNativeWrapper fetchWpt:w];
+                wptItem.wrapper.wpt = w;
                 
                 self.foundWpt = wptItem;
                 self.foundWptDocPath = it.key().toNSString();
@@ -2836,7 +2837,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     if (!_gpxDocsTemp.isEmpty())
     {
         const auto &doc = std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first());
-        OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxDocument:doc];
+        OAGPXDocument *document = [[OAGPXDocument alloc] initWithNativeWrapper:[[OAGPXDocumentNativeWrapper alloc] initWithGpxDocument:doc]];
         NSString *gpxFilePath = [document.path
                 stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
                                           withString:@""];
@@ -2854,8 +2855,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                 OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&loc;
                 const std::shared_ptr<OsmAnd::GpxDocument::WptPt> w = _wpt->shared_ptr();
                 
-                OAWptPt *wptItem = [OAGPXDocument fetchWpt:w];
-                wptItem.wpt = w;
+                OAWptPt *wptItem = [OAGPXDocumentNativeWrapper fetchWpt:w];
+                wptItem.wrapper.wpt = w;
                 
                 self.foundWpt = wptItem;
                 self.foundWptDocPath = _gpxDocFileTemp;
@@ -2912,12 +2913,12 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
             {
                 auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
                 
-                if (!doc->points.removeOne(_foundWpt.wpt))
+                if (!doc->points.removeOne(_foundWpt.wrapper.wpt))
                     for (int i = 0; i < doc->points.count(); i++)
                     {
                         const auto& w = doc->points[i];
-                        if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:_foundWpt.wpt->position.latitude] &&
-                            [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:_foundWpt.wpt->position.longitude])
+                        if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:_foundWpt.wrapper.wpt->position.latitude] &&
+                            [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:_foundWpt.wrapper.wpt->position.longitude])
                         {
                             doc->points.removeAt(i);
                             break;
@@ -2979,7 +2980,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                     if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:self.foundWpt.position.latitude] &&
                         [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:self.foundWpt.position.longitude])
                     {
-                        [OAGPXDocument fillWpt:w usingWpt:self.foundWpt];
+                        [OAGPXDocumentNativeWrapper fillWpt:w usingWpt:self.foundWpt];
                         break;
                     }
                 }
@@ -3036,12 +3037,12 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
                 std::shared_ptr<OsmAnd::GpxDocument::WptPt> p;
                 p.reset(new OsmAnd::GpxDocument::WptPt());
-                [OAGPXDocument fillWpt:p usingWpt:wpt];
+                [OAGPXDocumentNativeWrapper fillWpt:p usingWpt:wpt];
                 
                 doc->points.append(p);
                 doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
                 
-                wpt.wpt = p;
+                wpt.wrapper.wpt = p;
                 self.foundWpt = wpt;
                 self.foundWptDocPath = gpxFileName;
                 
@@ -3072,12 +3073,12 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
             std::shared_ptr<OsmAnd::GpxDocument::WptPt> p;
             p.reset(new OsmAnd::GpxDocument::WptPt());
-            [OAGPXDocument fillWpt:p usingWpt:wpt];
+            [OAGPXDocumentNativeWrapper fillWpt:p usingWpt:wpt];
             
             doc->points.append(p);
             doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
             
-            wpt.wpt = p;
+            wpt.wrapper.wpt = p;
             self.foundWpt = wpt;
             self.foundWptDocPath = gpxFileName;
             
@@ -3115,13 +3116,13 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
             NSString *path = it.key().toNSString();
             if ([path isEqualToString:gpxFileName])
             {
-                OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())];
+                OAGPXDocument *document = [[OAGPXDocument alloc] initWithNativeWrapper:[[OAGPXDocumentNativeWrapper alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())]];
                 return document.points;
             }
         }
         if ([_gpxDocFileTemp isEqualToString:[gpxFileName lastPathComponent]])
         {
-            OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first())];
+            OAGPXDocument *document = [[OAGPXDocument alloc] initWithNativeWrapper:[[OAGPXDocumentNativeWrapper alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first())]];
             return document.points;
         }
     }
@@ -3152,7 +3153,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                     if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.position.latitude] &&
                         [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
                     {
-                        [OAGPXDocument fillWpt:w usingWpt:item.point];
+                        [OAGPXDocumentNativeWrapper fillWpt:w usingWpt:item.point];
                         found = YES;
                         break;
                     }
@@ -3190,7 +3191,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                 if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.position.latitude] &&
                     [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
                 {
-                    [OAGPXDocument fillWpt:w usingWpt:item.point];
+                    [OAGPXDocumentNativeWrapper fillWpt:w usingWpt:item.point];
                     found = YES;
                     break;
                 }
@@ -3234,7 +3235,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                 doc->metadata = m;
             }
             
-            [OAGPXDocument fillMetadata:m usingMetadata:metadata];
+            [OAGPXDocumentNativeWrapper fillMetadata:m usingMetadata:metadata];
 
             _selectedGpxHelper.activeGpx.remove(QString::fromNSString(oldPath));
             _selectedGpxHelper.activeGpx[QString::fromNSString(docPath)] = doc;
@@ -3257,7 +3258,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
             doc->metadata = m;
         }
 
-        [OAGPXDocument fillMetadata:m usingMetadata:metadata];
+        [OAGPXDocumentNativeWrapper fillMetadata:m usingMetadata:metadata];
         
         doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
         

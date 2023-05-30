@@ -170,7 +170,7 @@
 "edit_profile_screen_options_subtitle" = "Select screen options for the profile";
 "map_markers" = "Маркери";
 "markers_history" = "История на маркери";
-"confirm_usage_speed_cameras" = "В много държави (Германия, Франция, Италия и други) използването на предупреждения за камери е незаконно. OsmAnd не поема никаква отговорност, ако Вие нарушавате съответния закон. Моля, изберете \'Да\', само ако имате право да използвате тази функция.";
+"confirm_usage_speed_cameras" = "В много държави (Германия, Франция, Италия и други) използването на предупреждения за камери за контрол на скоростта е незаконно. OsmAnd не поема никаква отговорност, ако Вие нарушавате съответния закон. Моля, изберете 'Да', само ако имате право да използвате тази функция.";
 "map_markers_empty" = "You have no active map markers";
 "tracks_empty" = "Your track list is empty";
 "favorites_empty" = "You have not saved any favorite points";
@@ -180,11 +180,11 @@
 "carplay_profile_descr" = "Profile that will be used while connected to CarPlay.";
 "show_traffic_warnings" = "Показвай пътни предупреждения";
 "show_pedestrian_warnings" = "Пешеходни пътеки";
-"show_cameras" = "Показвай камери за скорост";
+"show_cameras" = "Камери за контрол на скоростта";
 "show_lanes" = "Пътни платна";
 "speak_street_names" = "Имена на улици (синтезиран глас)";
 "speak_speed_limit" = "Ограничения на скоростта";
-"speak_cameras" = "Камери за скорост";
+"speak_cameras" = "Камери за контрол на скоростта";
 "speak_traffic_warnings" = "Предупреждения за трафика";
 "shared_string_gpx_waypoints" = "Отправни точки на трасето";
 "speak_favorites" = "Избрани в близост";
@@ -249,7 +249,7 @@
 "snap_to_road" = "Придържай мястото към пътя";
 "snap_to_road_descr" = "Иконата за текуща позиция ще се прикрепи към текущия навигационен маршрут.";
 "show_warnings_title" = "Показване на предупреждения…";
-"show_warnings_descr" = "Настройте предупреждения (ограничения на скоростта, знак „Стоп“, легнали полицаи, тунели), камери за превишена скорост и информация за пътни ленти.";
+"show_warnings_descr" = "Настройте предупреждения (ограничения на скоростта, знак „Стоп“, легнали полицаи, тунели), камери за контрол на скорост и информация за пътни ленти.";
 "speak_title" = "Обявяване…";
 "speak_descr" = "Настройки за гласови напътствия - имена на улици, предупреждения за пътя (знак \'Стоп\', легнали полицаи), предупреждения за камери, ограничения на скоростта";
 "keep_informing" = "Повтаряне на напътствията";
@@ -371,7 +371,7 @@
 "traffic_warning_payment" = "Плащане на такса";
 "traffic_warning_stop" = "Стоп";
 "traffic_warning_calming" = "Легнал полицай";
-"traffic_warning_speed_camera" = "Камера за скорост";
+"traffic_warning_speed_camera" = "Камери за контрол на скоростта";
 "traffic_warning" = "Предупреждение за трафика";
 "traffic_warning_railways" = "ЖП прелези";
 "traffic_warning_pedestrian" = "Пешеходна пътека";
@@ -2570,3 +2570,6 @@
 "turn_arrows_descr" = "Изберете дали на линията на маршрута да се показват стрелки на завоите.";
 "shared_string_open_street_map" = "OpenStreetMap";
 "shared_string_logout" = "Излизане";
+"uninstall_speed_cameras" = "Премахване на камери за контрол на скоростта";
+"speed_camera_pois" = "POI на камери за контрол на скоростта";
+"speed_cameras_alert" = "Предупрежденията за камери за контрол на скоростта в някои страни са забранени от закона.";

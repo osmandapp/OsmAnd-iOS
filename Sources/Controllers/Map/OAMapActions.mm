@@ -29,7 +29,8 @@
 #import "OAWaypointHelper.h"
 #import "OAAddWaypointBottomSheetViewController.h"
 #import "OAUninstallSpeedCamerasViewController.h"
-#import "OAGPXPrimitivesNativeWrapper.h"
+
+#include "OAGPXDocument+cpp.h"
 
 #define START_TRACK_POINT_MY_LOCATION_RADIUS_METERS 50 * 1000
 
@@ -171,7 +172,7 @@
     QString qPath = QString::fromNSString(path);
     if (gpxMap.contains(qPath))
     {
-        document = [[OAGPXDocument alloc] initWithNativeWrapper:[[OAGPXDocumentNativeWrapper alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(gpxMap[qPath])]];
+        document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(gpxMap[qPath])];
         document.path = path;
     }
     else

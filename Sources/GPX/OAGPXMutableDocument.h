@@ -16,6 +16,8 @@
 
 @property (nonatomic) NSTimeInterval modifiedTime;
 
+- (instancetype)init;
+
 - (void) updateDocAndMetadata;
 - (void) addWpt:(OAWptPt *)w;
 - (void) addTrack:(OATrack *)t;

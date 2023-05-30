@@ -25,7 +25,8 @@
 #import "OAGPXDatabase.h"
 #import "OAPointDescription.h"
 #import "OAPOIHelper.h"
-#import "OAGPXPrimitivesNativeWrapper.h"
+
+#include "OAGPXDocument+cpp.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -207,7 +208,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
             sr.localeName = point->name.toNSString();
             sr.wpt = point;
 
-            sr.object = [OAGPXDocumentNativeWrapper fetchWpt:std::const_pointer_cast<OsmAnd::GpxDocument::WptPt>(sr.wpt)];
+            sr.object = [OAGPXDocument fetchWpt:std::const_pointer_cast<OsmAnd::GpxDocument::WptPt>(sr.wpt)];
             sr.priority = SEARCH_WPT_OBJECT_PRIORITY;
             sr.objectType = WPT;
             sr.location = [[CLLocation alloc] initWithLatitude:point->position.latitude longitude:point->position.longitude];

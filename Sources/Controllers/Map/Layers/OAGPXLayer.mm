@@ -30,7 +30,10 @@
 #import "OAGpxTrackAnalysis.h"
 #import "OAOsmAndFormatter.h"
 #import "OAAtomicInteger.h"
-#import "OAGPXPrimitivesNativeWrapper.h"
+
+#include "OAGPXDocumentPrimitives+cpp.h"
+#include "OAGPXDocument+cpp.h"
+#include "OAGPXMutableDocument+cpp.h"
 
 #include <OsmAndCore/LatLon.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
@@ -211,7 +214,7 @@
                 }
                 else
                 {
-                    doc = [[OAGPXDocument alloc] initWithNativeWrapper:[[OAGPXDocumentNativeWrapper alloc] initWithGpxDocument:doc_]];
+                    doc = [[OAGPXDocument alloc] initWithGpxDocument:doc_];
                     doc.path = gpx.absolutePath;
                 }
 
@@ -530,7 +533,7 @@ colorizationScheme:(int)colorizationScheme
         if (splitCounter != _splitCounter || weakOperation.isCancelled)
             return;
 
-        OAGPXDocument *document = [[OAGPXDocument alloc] initWithNativeWrapper:[[OAGPXDocumentNativeWrapper alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(doc)]];
+        OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(doc)];
         NSArray<OAGPXTrackAnalysis *> *splitData = nil;
         BOOL splitByTime = NO;
         BOOL splitByDistance = NO;
@@ -845,7 +848,7 @@ colorizationScheme:(int)colorizationScheme
     int r = [self getDefaultRadiusPoi] * textSize;
     auto activeGpx = OASelectedGPXHelper.instance.activeGpx;
 
-    auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>([[OASavingTrackHelper sharedInstance].currentTrack.wrapper getGpxDocument]);
+    auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>([[OASavingTrackHelper sharedInstance].currentTrack getDocument]);
     if (doc)
         activeGpx.insert(QString::fromNSString(kCurrentTrack), doc);
 
@@ -862,7 +865,7 @@ colorizationScheme:(int)colorizationScheme
         {
             document = isCurrentTrack
                     ? [OASavingTrackHelper sharedInstance].currentTrack
-                    : [[OAGPXDocument alloc] initWithNativeWrapper:[[OAGPXDocumentNativeWrapper alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())]];
+                    : [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())];
         }
 
         NSArray<OAWptPt *> *points = [self findPointsNearSegments:[document getPointsToDisplay] radius:r point:point];
@@ -1081,7 +1084,7 @@ colorizationScheme:(int)colorizationScheme
         if (item.docPath)
         {
             item.point.position = position;
-            item.point.wrapper.wpt->position = OsmAnd::LatLon(position.latitude, position.longitude);
+            item.point.wpt->position = OsmAnd::LatLon(position.latitude, position.longitude);
             const auto activeGpx = [OASelectedGPXHelper instance].activeGpx;
             const auto& doc = activeGpx[QString::fromNSString(item.docPath)];
             if (doc != nullptr)
@@ -1096,7 +1099,7 @@ colorizationScheme:(int)colorizationScheme
         {
             OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
             [helper updatePointCoordinates:item.point newLocation:position];
-            item.point.wrapper.wpt->position = OsmAnd::LatLon(position.latitude, position.longitude);
+            item.point.wpt->position = OsmAnd::LatLon(position.latitude, position.longitude);
             [self.app.updateRecTrackOnMapObservable notifyEventWithKey:@(YES)];
         }
     }

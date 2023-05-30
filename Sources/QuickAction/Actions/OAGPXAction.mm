@@ -24,7 +24,9 @@
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAInputTableViewCell.h"
-#import "OAGPXPrimitivesNativeWrapper.h"
+
+#include "OAGPXDocumentPrimitives+cpp.h"
+#include "OAGPXDocument+cpp.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -103,16 +105,16 @@ static OAQuickActionType *TYPE;
     p.position = CLLocationCoordinate2DMake(lat, lon);
     p.type = groupName;
     p.time = (long)[[NSDate date] timeIntervalSince1970];
-    p.wrapper.wpt = std::make_shared<OsmAnd::GpxDocument::WptPt>();
+    p.wpt = std::make_shared<OsmAnd::GpxDocument::WptPt>();
     wpt.point = p;
     wpt.color = color;
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     OAMapViewController *mapVC = mapPanel.mapViewController;
     [mapVC addNewWpt:wpt.point gpxFileName:nil];
     wpt.groups = mapVC.foundWptGroups;
-    if (wpt.point.wrapper.wpt != nullptr)
+    if (wpt.point.wpt != nullptr)
     {
-        [OAGPXDocumentNativeWrapper fillWpt:wpt.point.wrapper.wpt usingWpt:wpt.point];
+        [OAGPXDocument fillWpt:wpt.point.wpt usingWpt:wpt.point];
         mapVC.foundWpt = p;
         [mapVC saveFoundWpt];
     }

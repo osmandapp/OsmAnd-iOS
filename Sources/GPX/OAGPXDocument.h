@@ -10,7 +10,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OACommonTypes.h"
 
-@class OAGPXTrackAnalysis, OASplitMetric, QuadRect, OAApplicationMode, OAGPXDocumentNativeWrapper;
+@class OAGPXTrackAnalysis, OASplitMetric, QuadRect, OAApplicationMode;
 
 @interface OAGPXDocument : OAGpxExtensions
 
@@ -18,31 +18,20 @@
 @property (nonatomic) NSArray<OAWptPt *> *points;
 @property (nonatomic) NSArray<OATrack *> *tracks;
 @property (nonatomic) NSArray<OARoute *> *routes;
-
 @property (nonatomic) NSArray<OARouteSegment *> *routeSegments;
 @property (nonatomic) NSArray<OARouteType *> *routeTypes;
-
 @property (nonatomic) NSDictionary<NSString *, NSString *> *networkRouteKeyTags;
-
 @property (nonatomic) OAGpxBounds bounds;
-
 @property (nonatomic) BOOL hasAltitude;
-
 @property (nonatomic) NSString *version;
 @property (nonatomic) NSString *creator;
-
 @property (nonatomic, copy) NSString *path;
-
 @property (nonatomic) OATrack *generalTrack;
 @property (nonatomic) OATrkSegment *generalSegment;
 
-@property (nonatomic) OAGPXDocumentNativeWrapper *wrapper;
-
-- (instancetype)initWithNativeWrapper:(OAGPXDocumentNativeWrapper *)wrapper;
 - (instancetype)initWithGpxFile:(NSString *)filename;
 
 - (BOOL) loadFrom:(NSString *)filename;
-- (BOOL) fetch:(NSString *)fileName;
 
 - (BOOL) saveTo:(NSString *)filename;
 

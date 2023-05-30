@@ -620,7 +620,6 @@
 		4631377929AE6D8A000B0258 /* OACarPlayHistoryListController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4631377829AE6D8A000B0258 /* OACarPlayHistoryListController.mm */; };
 		46339CED2891AAC10090BB93 /* OAWeatherForecastViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46339CEC2891AAC10090BB93 /* OAWeatherForecastViewController.xib */; };
 		4635DDE82A02A7DE00D36203 /* ColorItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4635DDE72A02A7DE00D36203 /* ColorItem.swift */; };
-		4639408F2A212560006D4EF4 /* OAGPXPrimitivesNativeWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4639408E2A212560006D4EF4 /* OAGPXPrimitivesNativeWrapper.mm */; };
 		463C5369286B58FB00AFABE9 /* warnings_speed_limit_ca@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 463C5365286B58FA00AFABE9 /* warnings_speed_limit_ca@2x.png */; };
 		463C536A286B58FB00AFABE9 /* warnings_railways_ca@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 463C5366286B58FA00AFABE9 /* warnings_railways_ca@2x.png */; };
 		463C536B286B58FB00AFABE9 /* warnings_speed_limit_ca@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 463C5367286B58FA00AFABE9 /* warnings_speed_limit_ca@3x.png */; };
@@ -4179,8 +4178,6 @@
 		4631377829AE6D8A000B0258 /* OACarPlayHistoryListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACarPlayHistoryListController.mm; sourceTree = "<group>"; };
 		46339CEC2891AAC10090BB93 /* OAWeatherForecastViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAWeatherForecastViewController.xib; sourceTree = "<group>"; };
 		4635DDE72A02A7DE00D36203 /* ColorItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorItem.swift; sourceTree = "<group>"; };
-		4639408D2A21254C006D4EF4 /* OAGPXPrimitivesNativeWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXPrimitivesNativeWrapper.h; sourceTree = "<group>"; };
-		4639408E2A212560006D4EF4 /* OAGPXPrimitivesNativeWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXPrimitivesNativeWrapper.mm; sourceTree = "<group>"; };
 		463C5365286B58FA00AFABE9 /* warnings_speed_limit_ca@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "warnings_speed_limit_ca@2x.png"; sourceTree = "<group>"; };
 		463C5366286B58FA00AFABE9 /* warnings_railways_ca@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "warnings_railways_ca@2x.png"; sourceTree = "<group>"; };
 		463C5367286B58FA00AFABE9 /* warnings_speed_limit_ca@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "warnings_speed_limit_ca@3x.png"; sourceTree = "<group>"; };
@@ -4326,6 +4323,9 @@
 		46B0CC58299CEB45003D9F40 /* OABaseButtonsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseButtonsViewController.h; sourceTree = "<group>"; };
 		46B0CC59299CEB99003D9F40 /* OABaseButtonsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseButtonsViewController.m; sourceTree = "<group>"; };
 		46B0E77127F5E88900D5A075 /* img_plugin_weather.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = img_plugin_weather.jpg; path = Resources/Icons/img_plugin_weather.jpg; sourceTree = "<group>"; };
+		46B2460F2A263368000BAEE4 /* OAGPXDocumentPrimitives+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAGPXDocumentPrimitives+cpp.h"; sourceTree = "<group>"; };
+		46B246102A2636E9000BAEE4 /* OAGPXDocument+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAGPXDocument+cpp.h"; sourceTree = "<group>"; };
+		46B246112A263C90000BAEE4 /* OAGPXMutableDocument+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAGPXMutableDocument+cpp.h"; sourceTree = "<group>"; };
 		46B2EABF28E5CA6A00F466F6 /* ic_custom_cloud_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cloud_info@2x.png"; path = "Resources/Icons/ic_custom_cloud_info@2x.png"; sourceTree = "<group>"; };
 		46B2EAC028E5CA6B00F466F6 /* ic_custom_cloud_info@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cloud_info@3x.png"; path = "Resources/Icons/ic_custom_cloud_info@3x.png"; sourceTree = "<group>"; };
 		46B3F320282BF9FC00A5A57D /* ic_share_coordinates@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_share_coordinates@3x.png"; path = "Resources/Icons/ic_share_coordinates@3x.png"; sourceTree = "<group>"; };
@@ -11596,14 +11596,15 @@
 				DA5A7ABB26C563A100F274C7 /* OAGPXDatabase.mm */,
 				DA5A7ABF26C563A100F274C7 /* OAGPXDocument.h */,
 				DA5A7AB626C563A100F274C7 /* OAGPXDocument.mm */,
+				46B246102A2636E9000BAEE4 /* OAGPXDocument+cpp.h */,
 				DA5A7ABD26C563A100F274C7 /* OAGPXDocumentPrimitives.h */,
 				DA5A7AB726C563A100F274C7 /* OAGPXDocumentPrimitives.mm */,
+				46B2460F2A263368000BAEE4 /* OAGPXDocumentPrimitives+cpp.h */,
 				DA5A7ABA26C563A100F274C7 /* OAGpxInfo.h */,
 				DA5A7AB526C563A100F274C7 /* OAGpxInfo.m */,
 				DA5A7AC226C563A100F274C7 /* OAGPXMutableDocument.h */,
 				DA5A7AB426C563A100F274C7 /* OAGPXMutableDocument.mm */,
-				4639408D2A21254C006D4EF4 /* OAGPXPrimitivesNativeWrapper.h */,
-				4639408E2A212560006D4EF4 /* OAGPXPrimitivesNativeWrapper.mm */,
+				46B246112A263C90000BAEE4 /* OAGPXMutableDocument+cpp.h */,
 				DA5A7AB326C563A100F274C7 /* OAGPXTrackAnalysis.h */,
 				DA5A7AC126C563A100F274C7 /* OAGPXTrackAnalysis.mm */,
 				DA5A7ABC26C563A100F274C7 /* OALoadGpxTask.h */,
@@ -17510,7 +17511,6 @@
 				DA5A83FB26C563A800F274C7 /* OAPOIFilterViewController.mm in Sources */,
 				C56FAB5129B226C60096192F /* OACameraDistanceWidget.mm in Sources */,
 				DA5A846226C563A900F274C7 /* OAFavoritesLayer.mm in Sources */,
-				4639408F2A212560006D4EF4 /* OAGPXPrimitivesNativeWrapper.mm in Sources */,
 				DA5A81A526C563A700F274C7 /* OASearchWord.mm in Sources */,
 				DA5A83EA26C563A800F274C7 /* OACollapsableWaypointsView.mm in Sources */,
 				DA5A837D26C563A800F274C7 /* GpxUIHelper.swift in Sources */,

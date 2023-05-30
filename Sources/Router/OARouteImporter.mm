@@ -9,7 +9,8 @@
 #import "OARouteImporter.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
-#import "OAGPXPrimitivesNativeWrapper.h"
+
+#include "OAGPXDocumentPrimitives+cpp.h"
 
 #include <routeDataResources.h>
 #include <routeSegmentResult.h>
@@ -135,7 +136,7 @@
     {
         auto object = std::make_shared<RouteDataObject>(region);
         auto segmentResult = std::make_shared<RouteSegmentResult>(object);
-		auto bundle = std::make_shared<RouteDataBundle>(resources, [routeSegment.wrapper toStringBundle]);
+		auto bundle = std::make_shared<RouteDataBundle>(resources, routeSegment.toStringBundle);
         try
         {
             segmentResult->readFromBundle(bundle);
@@ -159,7 +160,7 @@
     int i = 0;
     for (OARouteType *routeType in segment.routeTypes)
 	{
-		auto bundle = [routeType.wrapper toStringBundle];
+		auto bundle = routeType.toStringBundle;
         const auto t = bundle->getString("t", "");
         const auto v = bundle->getString("v", "");
         region->initRouteEncodingRule(i++, t, v);

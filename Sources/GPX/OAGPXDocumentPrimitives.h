@@ -53,7 +53,7 @@ typedef NS_ENUM(NSInteger, EOAGPXColor)
     TEAL
 };
 
-@class OAPOI, OASplitMetric, OAGpxExtensionsNativeWrapper, OAWptPtNativeWrapper, OARouteSegmentNativeWrapper, OARouteTypeNativeWrapper, OATrkSegmentNativeWrapper, OATrackNativeWrapper, OARouteNativeWrapper;
+@class OAPOI;
 
 @interface OAGPXColor : NSObject
 
@@ -82,7 +82,6 @@ typedef NS_ENUM(NSInteger, EOAGPXColor)
 @property (nonatomic) NSDictionary *attributes;
 @property (nonatomic) NSString *value;
 @property (nonatomic) NSArray<OAGpxExtension *> *extensions;
-@property (nonatomic) OAGpxExtensionsNativeWrapper *wrapper;
 
 - (void) copyExtensions:(OAGpxExtensions *)e;
 - (OAGpxExtension *) getExtensionByKey:(NSString *)key;
@@ -133,7 +132,6 @@ typedef NS_ENUM(NSInteger, EOAGPXColor)
 @property (nonatomic) double horizontalDilutionOfPrecision;
 @property (nonatomic) double verticalDilutionOfPrecision;
 @property (nonatomic) double heading;
-@property (nonatomic) OAWptPtNativeWrapper *wrapper;
 
 - (instancetype)initWithWpt:(OAWptPt *)wptPt;
 
@@ -163,28 +161,37 @@ typedef NS_ENUM(NSInteger, EOAGPXColor)
 
 @interface OARouteSegment : NSObject
 
-@property (nonatomic) OARouteSegmentNativeWrapper *wrapper;
-
-- (instancetype) initWithNativeWrapper:(OARouteSegmentNativeWrapper *)wrapper;
+@property (nonatomic) NSString *identifier;
+@property (nonatomic) NSString *length;
+@property (nonatomic) NSString *startTrackPointIndex;
+@property (nonatomic) NSString *segmentTime;
+@property (nonatomic) NSString *speed;
+@property (nonatomic) NSString *turnType;
+@property (nonatomic) NSString *turnAngle;
+@property (nonatomic) NSString *types;
+@property (nonatomic) NSString *pointTypes;
+@property (nonatomic) NSString *names;
 
 @end
 
 @interface OARouteType : NSObject
 
-@property (nonatomic) OARouteTypeNativeWrapper *wrapper;
-
-- (instancetype) initWithNativeWrapper:(OARouteTypeNativeWrapper *)wrapper;
+@property (nonatomic) NSString *tag;
+@property (nonatomic) NSString *value;
 
 @end
+
+@class OASplitMetric;
 
 @interface OATrkSegment : OAGpxExtensions
 
 @property (nonatomic) BOOL generalSegment;
+
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSArray<OAWptPt *> *points;
+
 @property (nonatomic) NSMutableArray<OARouteSegment *> *routeSegments;
 @property (nonatomic) NSMutableArray<OARouteType *> *routeTypes;
-@property (nonatomic) OATrkSegmentNativeWrapper *wrapper;
 
 -(NSArray *) splitByDistance:(double)meters joinSegments:(BOOL)joinSegments;
 -(NSArray *) splitByTime:(int)seconds joinSegments:(BOOL)joinSegments;
@@ -205,7 +212,6 @@ typedef NS_ENUM(NSInteger, EOAGPXColor)
 @property (nonatomic) NSString *source;
 @property (nonatomic) int slotNumber;
 @property (nonatomic) BOOL generalTrack;
-@property (nonatomic) OATrackNativeWrapper *wrapper;
 
 @end
 
@@ -216,6 +222,5 @@ typedef NS_ENUM(NSInteger, EOAGPXColor)
 @property (nonatomic) NSArray<OAWptPt *> *points;
 @property (nonatomic) NSString *source;
 @property (nonatomic) int slotNumber;
-@property (nonatomic) OARouteNativeWrapper *wrapper;
 
 @end

@@ -9,7 +9,10 @@
 #import "OAGPXMutableDocument.h"
 #import "OAUtilities.h"
 #import "OAAppVersionDependentConstants.h"
-#import "OAGPXPrimitivesNativeWrapper.h"
+
+#include "OAGPXDocumentPrimitives+cpp.h"
+#include "OAGPXDocument+cpp.h"
+#include "OAGPXMutableDocument+cpp.h"
 
 @implementation OAGPXMutableDocument
 {
@@ -31,20 +34,19 @@
         self.routes = [NSMutableArray array];
         _modifiedTime = 0;
 
-        self.wrapper = [[OAGPXDocumentNativeWrapper alloc] init];
-        document = [self.wrapper getGpxDocument];
+        document.reset(new OsmAnd::GpxDocument());
 
         [self initBounds];
     }
     return self;
 }
 
-- (instancetype)initWithNativeWrapper:(OAGPXDocumentNativeWrapper *)wrapper
+- (instancetype)initWithGpxDocument:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument
 {
-    self = [super initWithNativeWrapper:wrapper];
+    self = [super initWithGpxDocument:gpxDocument];
     if (self)
     {
-        document = [wrapper getGpxDocument];
+        document = gpxDocument;
         _modifiedTime = 0;
     }
     return self;
@@ -54,13 +56,18 @@
 {
     if (filename && filename.length > 0)
     {
-        document = [self.wrapper loadGpxDocument:filename];
-        return [self fetch:filename];
+        document = OsmAnd::GpxDocument::loadFrom(QString::fromNSString(filename));
+        return [self fetch:document];
     }
     else
     {
         return false;
     }
+}
+
+- (const std::shared_ptr<OsmAnd::GpxDocument>&) getDocument
+{
+    return document;
 }
 
 - (void) updateDocAndMetadata
@@ -71,7 +78,7 @@
     document->version = QString::fromNSString(self.version);
     document->creator = QString::fromNSString(self.creator);
     
-    [self.wrapper fillExtensions:document withExtensionsObj:self];
+    [self fillExtensions:document];
 
     metadata.reset(new OsmAnd::GpxDocument::Metadata());
     if (self.metadata)
@@ -82,9 +89,9 @@
         OAWptPt *pt = [self findPointToShow];
         metadata->timestamp = pt != nil && pt.time > 0 ? QDateTime::fromTime_t(pt.time).toUTC() : QDateTime::currentDateTime().toUTC();
 
-        [OAGPXDocumentNativeWrapper fillLinks:metadata->links linkArray:self.metadata.links];
+        [self.class fillLinks:metadata->links linkArray:self.metadata.links];
         
-        [self.metadata.wrapper fillExtensions:metadata withExtensionsObj:self.metadata];
+        [self.metadata fillExtensions:metadata];
     }
     document->metadata = metadata;
     metadata = nullptr;
@@ -116,7 +123,7 @@
     wpt->heading = w.heading;
     wpt->speed = w.speed;
     
-    [OAGPXDocumentNativeWrapper fillLinks:wpt->links linkArray:w.links];
+    [self.class fillLinks:wpt->links linkArray:w.links];
     
     NSMutableArray *extArray = [NSMutableArray array];
     for (OAGpxExtension *e in w.extensions)
@@ -136,9 +143,9 @@
     
     w.extensions = extArray;
 
-    [w.wrapper fillExtensions:wpt withExtensionsObj:w];
+    [w fillExtensions:wpt];
 
-    w.wrapper.wpt = wpt;
+    w.wpt = wpt;
     document->points.append(wpt);
     wpt = nullptr;
 
@@ -155,8 +162,8 @@
         if (wpt == w || wpt.time == w.time)
         {
             [self.points removeObject:wpt];
-            document->points.removeOne(wpt.wrapper.wpt);
-            w.wrapper.wpt = nullptr;
+            document->points.removeOne(wpt.wpt);
+            w.wpt = nullptr;
             break;
         }
     }
@@ -219,20 +226,20 @@
         rtept->heading = p.heading;
         rtept->speed = p.speed;
         
-        [OAGPXDocumentNativeWrapper fillLinks:rtept->links linkArray:p.links];
+        [self.class fillLinks:rtept->links linkArray:p.links];
 
-        [p.wrapper fillExtensions:rtept withExtensionsObj:p];
-        
-        p.wrapper.wpt = rtept;
+        [p fillExtensions:rtept];
+
+        p.wpt = rtept;
         rte->points.append(rtept);
         rtept = nullptr;
         
         [self processBounds:p.position];
     }
     
-    [r.wrapper fillExtensions:rte withExtensionsObj:r];
+    [r fillExtensions:rte];
 
-    r.wrapper.rte = rte;
+    r.rte = rte;
     document->routes.append(rte);
     rte = nullptr;
     
@@ -259,12 +266,12 @@
     rtept->heading = p.heading;
     rtept->speed = p.speed;
     
-    [OAGPXDocumentNativeWrapper fillLinks:rtept->links linkArray:p.links];
-    
-    [p.wrapper fillExtensions:rtept withExtensionsObj:p];
+    [self.class fillLinks:rtept->links linkArray:p.links];
 
-    p.wrapper.wpt = rtept;
-    route.wrapper.rte->points.append(rtept);
+    [p fillExtensions:rtept];
+
+    p.wpt = rtept;
+    route.rte->points.append(rtept);
     rtept = nullptr;
     
     [self processBounds:p.position];
@@ -314,27 +321,27 @@
             trkpt->heading = p.heading;
             trkpt->speed = p.speed;
             
-            [OAGPXDocumentNativeWrapper fillLinks:trkpt->links linkArray:p.links];
+            [self.class fillLinks:trkpt->links linkArray:p.links];
 
-            [p.wrapper fillExtensions:trkpt withExtensionsObj:p];
+            [p fillExtensions:trkpt];
 
-            p.wrapper.wpt = trkpt;
+            p.wpt = trkpt;
             trkseg->points.append(trkpt);
             trkpt = nullptr;
             
             [self processBounds:p.position];
         }
         
-        [s.wrapper fillExtensions:trkseg withExtensionsObj:s];
+        [s fillExtensions:trkseg];
 
-        s.wrapper.trkseg = trkseg;
+        s.trkseg = trkseg;
         trk->segments.append(trkseg);
         trkseg = nullptr;
     }
 
-    [t.wrapper fillExtensions:trk withExtensionsObj:t];
+    [t fillExtensions:trk];
 
-    t.wrapper.trk = trk;
+    t.trk = trk;
     document->tracks.append(trk);
     trk = nullptr;
     
@@ -369,21 +376,21 @@
         trkpt->heading = p.heading;
         trkpt->speed = p.speed;
         
-        [OAGPXDocumentNativeWrapper fillLinks:trkpt->links linkArray:p.links];
+        [self.class fillLinks:trkpt->links linkArray:p.links];
 
-        [p.wrapper fillExtensions:trkpt withExtensionsObj:p];
+        [p fillExtensions:trkpt];
 
-        p.wrapper.wpt = trkpt;
+        p.wpt = trkpt;
         trkseg->points.append(trkpt);
         trkpt = nullptr;
 
         [self processBounds:p.position];
     }
     
-    [s.wrapper fillExtensions:trkseg withExtensionsObj:s];
+    [s fillExtensions:trkseg];
 
-    s.wrapper.trkseg = trkseg;
-    track.wrapper.trk->segments.append(trkseg);
+    s.trkseg = trkseg;
+    track.trk->segments.append(trkseg);
     trkseg = nullptr;
     
     [((NSMutableArray *)track.segments) addObject:s];
@@ -396,9 +403,9 @@
 
     for (OATrack *track in self.tracks)
     {
-        if ([track.segments containsObject:segment] && segment.wrapper.trkseg != nullptr)
+        if ([track.segments containsObject:segment] && segment.trkseg != nullptr)
         {
-            BOOL removed = track.wrapper.trk->segments.removeOne(std::dynamic_pointer_cast<OsmAnd::GpxDocument::TrkSegment>(segment.wrapper.trkseg));
+            BOOL removed = track.trk->segments.removeOne(std::dynamic_pointer_cast<OsmAnd::GpxDocument::TrkSegment>(segment.trkseg));
             if (removed)
             {
                 if (track.segments.count > 1)
@@ -457,12 +464,12 @@
     trkpt->heading = p.heading;
     trkpt->speed = p.speed;
     
-    [OAGPXDocumentNativeWrapper fillLinks:trkpt->links linkArray:p.links];
-    
-    [p.wrapper fillExtensions:trkpt withExtensionsObj:p];
+    [self.class fillLinks:trkpt->links linkArray:p.links];
 
-    p.wrapper.wpt = trkpt;
-    segment.wrapper.trkseg->points.append(trkpt);
+    [p fillExtensions:trkpt];
+
+    p.wpt = trkpt;
+    segment.trkseg->points.append(trkpt);
     trkpt = nullptr;
     
     [self processBounds:p.position];

@@ -306,7 +306,7 @@ class OnlineRoutingEngine: NSObject, NSCopying {
         }
 
         func getRoute() -> [CLLocation]? {
-            return self.route
+            return route
         }
 
 //        func getDirections() -> [OARouteDirectionInfo]? {
@@ -314,11 +314,11 @@ class OnlineRoutingEngine: NSObject, NSCopying {
 //        }
 
         func getGpxFile() -> OAGPXDocument? {
-            return self.gpxFile
+            return gpxFile
         }
 
         func hasCalculatedTimeSpeed() -> Bool {
-            return self.calculatedTimeSpeed
+            return calculatedTimeSpeed
         }
     }
 

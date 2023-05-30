@@ -2898,3 +2898,5 @@
 "activity_type_car_name" = "Carro";
 "activity_type_motorbike_name" = "Motocicleta";
 "shared_string_app_profile" = "Perfil do aplicativo";
+"short_min" = "m";
+"shared_string_coloring" = "Colorindo";

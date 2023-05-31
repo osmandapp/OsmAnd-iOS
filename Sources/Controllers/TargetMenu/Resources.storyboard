@@ -162,45 +162,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mgw-15-BJP">
-                                <rect key="frame" x="-4" y="0.0" width="375" height="64"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eVA-G5-Cns">
-                                        <rect key="frame" x="8" y="19" width="44" height="43"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <state key="normal" image="ic_navbar_chevron.png"/>
-                                        <connections>
-                                            <action selector="onLeftNavbarButtonPressed:" destination="w8S-Nb-zGN" eventType="touchUpInside" id="yWT-NG-sVU"/>
-                                        </connections>
-                                    </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Updates" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000027" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kUw-kt-nW2">
-                                        <rect key="frame" x="76" y="19" width="221" height="43"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rRv-lm-sff">
-                                        <rect key="frame" x="267" y="19" width="108" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <state key="normal" title="Update all">
-                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="updateAllClicked:" destination="w8S-Nb-zGN" eventType="touchUpInside" id="Fzl-ou-iZM"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" red="0.99015593528747559" green="0.48271048069000244" blue="0.032639358192682266" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="50" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="vN3-1c-cfU" userLabel="tableView">
-                                <rect key="frame" x="-4" y="62" width="375" height="584"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="50" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="vN3-1c-cfU" userLabel="tableView">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="liveUpdatesCell" textLabel="oMf-rx-iRa" detailTextLabel="nqE-dZ-YsZ" style="IBUITableViewCellStyleSubtitle" id="nHz-ID-XKd">
@@ -239,15 +202,17 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="gzt-J4-M2N"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="vN3-1c-cfU" firstAttribute="top" secondItem="CML-Vt-67j" secondAttribute="top" id="Fsg-2P-659"/>
+                            <constraint firstItem="gzt-J4-M2N" firstAttribute="trailing" secondItem="vN3-1c-cfU" secondAttribute="trailing" id="GWg-B8-LLx"/>
+                            <constraint firstItem="gzt-J4-M2N" firstAttribute="bottom" secondItem="vN3-1c-cfU" secondAttribute="bottom" id="apc-Ka-e7C"/>
+                            <constraint firstItem="vN3-1c-cfU" firstAttribute="leading" secondItem="CML-Vt-67j" secondAttribute="leading" id="d79-AJ-xpR"/>
+                        </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" id="lU9-tG-nZJ"/>
                     <connections>
-                        <outlet property="backButton" destination="eVA-G5-Cns" id="J8w-tj-Tun"/>
-                        <outlet property="navBarView" destination="mgw-15-BJP" id="d91-ws-BCT"/>
                         <outlet property="tableView" destination="vN3-1c-cfU" id="sSL-OD-y2i"/>
-                        <outlet property="titleView" destination="kUw-kt-nW2" id="ZpA-Om-jnB"/>
-                        <outlet property="updateAllButton" destination="rRv-lm-sff" id="1om-qB-soG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cmf-Ht-NON" userLabel="First Responder" sceneMemberID="firstResponder"/>

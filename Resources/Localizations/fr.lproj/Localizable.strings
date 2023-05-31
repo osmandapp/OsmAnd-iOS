@@ -2895,3 +2895,7 @@
 "shared_string_add_color" = "Ajouter une couleur";
 "shared_string_duplicate_color" = "Dupliquer la couleur";
 "shared_string_delete_color" = "Supprimer la couleur";
+"test_heightmap" = "Carte d'altitude de test";
+"disable_vertex_hillshade_3d" = "Désactiver l'ombrage des sommets en 3D";
+"generate_slope_from_3d_maps" = "Générer des cartes matricielles des pentes à partir de cartes 3D";
+"generate_hillshade_from_3d_maps" = "Générer des cartes matricielles d'ombrages du relief à partir de cartes 3D";

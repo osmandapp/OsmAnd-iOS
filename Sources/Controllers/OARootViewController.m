@@ -354,6 +354,26 @@ typedef enum : NSUInteger {
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+- (void)importAsFavorites:(NSURL *)url
+{
+    UIViewController* incomingURLViewController = [[OAFavoriteImportViewController alloc] initFor:url];
+    if (incomingURLViewController == nil)
+        return;
+
+    if (((OAFavoriteImportViewController *)incomingURLViewController).handled == NO)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.class showInfoAlertWithTitle:OALocalizedString(@"import_failed")
+                                       message:OALocalizedString(@"import_cannot")
+                                  inController:self];
+        });
+        incomingURLViewController = nil;
+    }
+
+    [self closeMenuAndPanelsAnimated:NO];
+    [self.navigationController pushViewController:incomingURLViewController animated:YES];
+}
+
 - (void)importAsGPX:(NSURL *)url
 {
     [self importAsGPX:url showAlerts:YES openGpxView:YES];
@@ -506,27 +526,8 @@ typedef enum : NSUInteger {
     }
     else if ([ext caseInsensitiveCompare:@"gpx"] == NSOrderedSame)
     {
-        if (([fileName hasPrefix:@"favourites"] || [fileName hasPrefix:@"favorites"]) && [fileName.pathExtension isEqualToString:@"gpx"])
-        {
-            UIViewController* incomingURLViewController = [[OAFavoriteImportViewController alloc] initFor:url];
-            if (incomingURLViewController == nil)
-                return nil;
-            
-            if (((OAFavoriteImportViewController *)incomingURLViewController).handled == NO)
-            {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.class showInfoAlertWithTitle:OALocalizedString(@"import_failed")
-                                               message:OALocalizedString(@"import_cannot")
-                                          inController:self];
-                });
-                
-                incomingURLViewController = nil;
-            }
-            
-            [self closeMenuAndPanelsAnimated:NO];
-            
-            [self.navigationController pushViewController:incomingURLViewController animated:YES];
-        }
+        if (([fileName.lowerCase hasPrefix:@"favourites"] || [fileName.lowerCase hasPrefix:@"favorites"]) && [fileName.pathExtension.lowerCase isEqualToString:@"gpx"])
+            [self importAsFavorites:url];
         else
             [self importAsGPX:url];
     }

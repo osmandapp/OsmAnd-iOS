@@ -189,10 +189,7 @@
     _gpxWpt.color = color;
 
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[OAUtilities colorToNumberFromString:[color toHexARGBString]]]
-                        toGpxFilePath:_gpxFileName
-                            groupName:_gpxWpt.point.type
-                            pointName:_gpxWpt.point.name];
+    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[OAUtilities colorToNumberFromString:[color toHexARGBString]]]];
 
     if (![_gpxWpt.groups containsObject:groupName] && groupName.length > 0)
     {
@@ -223,14 +220,6 @@
 
 - (void)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint
 {
-    if (!newPoint)
-    {
-        OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-        [appearanceCollection removeGpxFilePath:_gpxFileName
-                                      groupName:_gpxWpt.point.type
-                                      pointName:_gpxWpt.point.name];
-    }
-
     [_gpxWpt.point setName:data.name];
     [_gpxWpt.point setDesc:data.descr];
     [self setGroup:data.category color:data.color save:NO];

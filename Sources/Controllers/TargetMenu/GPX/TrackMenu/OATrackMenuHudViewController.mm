@@ -1157,9 +1157,6 @@
     {
         if (newGroupName)
         {
-            [appearanceCollection removeGpxFilePath:self.gpx.gpxFilePath
-                                          groupName:waypoint.point.type
-                                          pointName:waypoint.point.name];
             waypoint.point.type = newGroupName;
         }
 
@@ -1169,10 +1166,7 @@
             if (!newGroupName && !self.isCurrentTrack)
             {
                 NSInteger defaultValue = [OAUtilities colorToNumberFromString:[waypoint.color toHexARGBString]];
-                [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:defaultValue]
-                                    toGpxFilePath:self.gpx.gpxFilePath
-                                        groupName:waypoint.point.type
-                                        pointName:waypoint.point.name];
+                [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:defaultValue]];
             }
         }
 
@@ -1180,10 +1174,7 @@
         {
             [OAGPXDocument fillWpt:waypoint.point.wpt usingWpt:waypoint.point];
             OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-            [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[waypoint.point getColor:0]]
-                                toGpxFilePath:nil
-                                    groupName:waypoint.point.type
-                                    pointName:waypoint.point.name];
+            [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[waypoint.point getColor:0]]];
             [self.savingHelper saveWpt:waypoint.point];
         }
     }
@@ -1205,19 +1196,13 @@
                     {
                         [OAGPXDocument fillWpt:existWaypoint.point.wpt usingWpt:existWaypoint.point];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                        [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[existWaypoint.point getColor:0]]
-                                            toGpxFilePath:nil
-                                                groupName:existWaypoint.point.type
-                                                pointName:existWaypoint.point.name];
+                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[existWaypoint.point getColor:0]]];
                         [self.savingHelper saveWpt:existWaypoint.point];
                     }
                     else
                     {
                         NSInteger defaultValue = [OAUtilities colorToNumberFromString:[existWaypoint.color toHexARGBString]];
-                        [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:defaultValue]
-                                            toGpxFilePath:self.gpx.gpxFilePath
-                                                groupName:existWaypoint.point.type
-                                                pointName:existWaypoint.point.name];
+                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:defaultValue]];
                     }
                 }
                 [existWaypoints addObjectsFromArray:waypoints];

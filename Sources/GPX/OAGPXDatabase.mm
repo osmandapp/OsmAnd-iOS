@@ -287,7 +287,6 @@
         gpx = [self getGPXItemByFileName:filePath];
     if (gpx)
     {
-        [[OAGPXAppearanceCollection sharedInstance] removeItem:gpx.gpxFilePath];
         NSMutableArray *newGpxList = [gpxList mutableCopy];
         [newGpxList removeObject:gpx];
         gpxList = newGpxList;

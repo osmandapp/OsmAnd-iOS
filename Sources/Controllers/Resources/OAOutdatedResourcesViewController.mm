@@ -23,11 +23,7 @@
 
 @interface OAOutdatedResourcesViewController () <UITableViewDelegate, UITableViewDataSource, OASubscriptionBannerCardViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UIButton *updateAllButton;
 
 @end
 
@@ -46,6 +42,8 @@
 
     CALayer *_horizontalLine;
     OASubscriptionBannerCardView *_subscriptionBannerView;
+    
+    UIBarButtonItem *_updateAllButton;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -61,31 +59,36 @@
     return self;
 }
 
--(void)applyLocalization
-{
-    [super applyLocalization];
-    
-    _titleView.text = OALocalizedString(@"download_tab_updates");
-    [_updateAllButton setTitle:OALocalizedString(@"res_update_all") forState:UIControlStateNormal];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    UIBarButtonItem* refreshAllBarButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"res_update_all")
-                                                                            style:UIBarButtonItemStylePlain
-                                                                           target:self
-                                                                           action:@selector(onUpdateAllBarButtonClicked)];
-    self.navigationItem.rightBarButtonItem = refreshAllBarButton;
-    
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
+    
+    self.navigationItem.title = OALocalizedString(@"download_tab_updates");
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [self applySafeAreaMargins];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.shadowColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.whiteColor
+    };
+    self.navigationController.navigationBar.standardAppearance = appearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.tintColor = UIColor.whiteColor;
+    self.navigationController.navigationBar.prefersLargeTitles = NO;
+    
+    _updateAllButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"res_update_all") style:UIBarButtonItemStylePlain target:self action:@selector(onUpdateAllBarButtonClicked)];
+    [self.navigationController.navigationBar.topItem setRightBarButtonItem:_updateAllButton animated:YES];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
@@ -109,6 +112,13 @@
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self setupSubscriptionBanner];
     } completion:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)prepareContent
@@ -139,11 +149,6 @@
         [_subscriptionBannerView updateView];
 
     self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
-}
-
--(UIView *) getTopView
-{
-    return _navBarView;
 }
 
 -(UIView *) getMiddleView
@@ -285,11 +290,6 @@
                                                                      [self startDownloadOf:resourceInRepository resourceName:resourceName];
                                                                  }
                                                              }], nil] show];
-}
-
-- (IBAction)updateAllClicked:(id)sender
-{
-    [self onUpdateAllBarButtonClicked];
 }
 
 - (void)onUpdateAllBarButtonClicked

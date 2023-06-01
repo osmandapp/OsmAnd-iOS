@@ -18,6 +18,11 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
+#define kDefaulRedColorName @"red"
+#define kDefaulRedColorValue 0xFFFF0000
+#define kDefaulFavoriteColorName @"default_favorite"
+#define kDefaulFavoriteColorValue 0xFF3F51B5
+
 @implementation OAGPXTrackAppearance
 
 @end
@@ -220,6 +225,7 @@
     if (!_mapViewController)
         return;
 
+    _defaultLineColorItem = nil;
     NSMutableArray<NSString *> *possibleTrackColorKeys = [NSMutableArray array];
     OAMapStyleParameter *currentTrackColor = [[OAMapStyleSettings sharedInstance] getParameter:CURRENT_TRACK_COLOR_ATTR];
     if (currentTrackColor)
@@ -242,7 +248,7 @@
                 [_availableColors addObject:colorItem];
                 colorItem.sortedPosition = [_availableColors indexOfObject:colorItem];
                 [colorItem generateId];
-                if ([colorItem.key isEqualToString:@"red"])
+                if ([colorItem.key isEqualToString:kDefaulRedColorName])
                     _defaultLineColorItem = colorItem;
             }
         }];
@@ -409,11 +415,11 @@
 {
     if (!_defaultLineColorItem || ![_availableColors containsObject:_defaultLineColorItem])
     {
-        _defaultLineColorItem = [[OAColorItem alloc] initWithKey:@"red" value:0xFFFF0000 isDefault:YES];
+        _defaultLineColorItem = [[OAColorItem alloc] initWithKey:kDefaulRedColorName value:kDefaulRedColorValue isDefault:YES];
         [_availableColors addObject:_defaultLineColorItem];
         _defaultLineColorItem.sortedPosition = [_availableColors indexOfObject:_defaultLineColorItem];
         [_defaultLineColorItem generateId];
-        _defaultColorValues[@"red"] = @(0xFFFF0000);
+        _defaultColorValues[kDefaulRedColorName] = @(kDefaulRedColorValue);
     }
     return _defaultLineColorItem;
 }
@@ -422,11 +428,11 @@
 {
     if (!_defaultPointColorItem || ![_availableColors containsObject:_defaultPointColorItem])
     {
-        _defaultPointColorItem = [[OAColorItem alloc] initWithKey:@"default_favorite" value:0xFF3F51B5 isDefault:YES];
+        _defaultPointColorItem = [[OAColorItem alloc] initWithKey:kDefaulFavoriteColorName value:kDefaulFavoriteColorValue isDefault:YES];
         [_availableColors addObject:_defaultPointColorItem];
         _defaultPointColorItem.sortedPosition = [_availableColors indexOfObject:_defaultPointColorItem];
         [_defaultPointColorItem generateId];
-        _defaultColorValues[@"default_favorite"] = @(0xFF3F51B5);
+        _defaultColorValues[kDefaulFavoriteColorName] = @(kDefaulFavoriteColorValue);
     }
     return _defaultPointColorItem;
 }
@@ -563,7 +569,7 @@
 
     for (OAColorItem *colorItem in _availableColors)
     {
-        if (value == 0 && [colorItem.key isEqualToString:@"red"])
+        if (value == 0 && [colorItem.key isEqualToString:kDefaulRedColorName])
             return colorItem;
     }
 

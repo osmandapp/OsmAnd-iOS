@@ -18,7 +18,6 @@
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "OARouteInfoView.h"
-#import "OARouteDirectionInfo.h"
 #import "OACurrentPositionHelper.h"
 #import "Localization.h"
 #import "OARootViewController.h"

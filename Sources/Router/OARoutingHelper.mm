@@ -30,6 +30,9 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <OsmAndCore/Utilities.h>
 
+#include "OARouteCalculationParams+cpp.h"
+#include "OARouteCalculationResult+cpp.h"
+
 #include <routeSegmentResult.h>
 
 #define DEFAULT_GPS_TOLERANCE 12

@@ -36,6 +36,7 @@
 #import "OAPluginPopupViewController.h"
 #import "OASegmentedSlider.h"
 #import "OARouteStatisticsHelper.h"
+#import "OAColoringType.h"
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
 

@@ -12,13 +12,13 @@
 #import "OARoutingHelper.h"
 #import "OARouteCalculationResult.h"
 #import "OANativeUtilities.h"
-#import "OARouteDirectionInfo.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
 #import "OAPreviewRouteLineInfo.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OARouteColorizationHelper.h"
 #import "OAMapPresentationEnvironment.h"
+#import "OAColoringType.h"
 
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarker.h>

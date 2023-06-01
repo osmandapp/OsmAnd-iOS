@@ -30,6 +30,7 @@
 #import "OAGpxTrackAnalysis.h"
 #import "OAOsmAndFormatter.h"
 #import "OAAtomicInteger.h"
+#import "OAColoringType.h"
 
 #include "OAGPXDocumentPrimitives+cpp.h"
 #include "OAGPXDocument+cpp.h"

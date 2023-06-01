@@ -10,16 +10,10 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
-#import "OARouteCalculationResult.h"
-#import "OAMapStyleSettings.h"
-#import "OARouteProvider.h"
-#import "OARoutingHelper.h"
 
-#include <OsmAndCore.h>
-#include <routeCalculationProgress.h>
+@class OARouteCalculationResult, OAWalkingRouteSegment, OAApplicationMode, OAGPXRouteParams;
 
-@class OARouteCalculationResult;
-@class OAWalkingRouteSegment;
+@protocol OARouteCalculationProgressCallback;
 
 @protocol OARouteCalculationResultListener <NSObject>
 
@@ -50,7 +44,6 @@
 @property (nonatomic) BOOL initialCalculation;
 @property (nonatomic) BOOL inSnapToRoadMode;
 
-@property (nonatomic, assign) std::shared_ptr<RouteCalculationProgress> calculationProgress;
 @property (nonatomic) id<OARouteCalculationProgressCallback> calculationProgressCallback;
 @property (nonatomic) id<OARouteCalculationResultListener> resultListener;
 

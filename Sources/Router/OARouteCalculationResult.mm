@@ -19,8 +19,11 @@
 #import "QuadRect.h"
 #import "OAExitInfo.h"
 #import "OAMapUtils.h"
+#import "OALocationSimulation.h"
+#import "OARouteProvider.h"
 
-#include <routeSegmentResult.h>
+#include "OARouteCalculationResult+cpp.h"
+#include "OARouteDirectionInfo+cpp.h"
 
 #define distanceClosestToIntermediate 3000.0
 #define distanceThresholdToIntermediate 25

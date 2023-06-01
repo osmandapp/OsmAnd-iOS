@@ -15,6 +15,7 @@
 #import "OAVoiceRouter.h"
 #import "OAAnnounceTimeDistances.h"
 
+#include "OARouteDirectionInfo+cpp.h"
 #include "routeSegmentResult.h"
 
 @implementation OACurrentStreetName

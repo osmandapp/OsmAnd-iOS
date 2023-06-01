@@ -25,6 +25,9 @@
 #import "OAGPXDocument.h"
 #import "OAMapLayers.h"
 #import "OAMapUtils.h"
+#import "OAColoringType.h"
+
+#include "OARouteCalculationResult+cpp.h"
 
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarker.h>

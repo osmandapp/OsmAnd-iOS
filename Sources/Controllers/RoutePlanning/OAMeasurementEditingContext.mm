@@ -20,10 +20,13 @@
 #import "OARouteExporter.h"
 #import "OAGpxRouteApproximation.h"
 #import "OANativeUtilities.h"
+#import "OARouteCalculationResult.h"
+
+#include "OARouteCalculationParams+cpp.h"
+#include "OARouteCalculationResult+cpp.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
-
 #include <routeSegmentResult.h>
 #include <routeCalculationProgress.h>
 #include <routePlannerFrontEnd.h>

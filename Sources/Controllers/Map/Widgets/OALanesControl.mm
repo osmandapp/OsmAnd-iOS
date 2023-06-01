@@ -21,6 +21,8 @@
 #import "OATextInfoWidget.h"
 #import "OAOsmAndFormatter.h"
 
+#include "OARouteDirectionInfo+cpp.h"
+
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
 #include <turnType.h>

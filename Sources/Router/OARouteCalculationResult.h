@@ -10,19 +10,10 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
-#import "OAMapStyleSettings.h"
 #import "OALocationPoint.h"
-#import "OARouteProvider.h"
-#import "OALocationSimulation.h"
-#import "OAWorldRegion.h"
+#import "OAAppSettings.h"
 
-#include "CommonCollections.h"
-#include "commonOsmAndCore.h"
-#include <turnType.h>
-
-struct RouteSegmentResult;
-
-@class OARouteCalculationParams, OARouteDirectionInfo, OAAlarmInfo, QuadRect;
+@class OASimulatedLocation, OAAlarmInfo, OAApplicationMode, OARouteDirectionInfo, OARouteCalculationParams, QuadRect;
 
 @interface OANextDirectionInfo : NSObject
 
@@ -55,23 +46,13 @@ struct RouteSegmentResult;
 
 - (instancetype) initWithLocations:(NSArray<CLLocation *> *)list directions:(NSArray<OARouteDirectionInfo *> *)directions params:(OARouteCalculationParams *)params waypoints:(NSArray<id<OALocationPoint>> *)waypoints addMissingTurns:(BOOL)addMissingTurns;
 
-- (instancetype) initWithSegmentResults:(std::vector<std::shared_ptr<RouteSegmentResult>>&)list start:(CLLocation *)start end:(CLLocation *)end intermediates:(NSArray<CLLocation *> *)intermediates leftSide:(BOOL)leftSide routingTime:(float)routingTime waypoints:(NSArray<id<OALocationPoint>> *)waypoints mode:(OAApplicationMode *)mode calculateFirstAndLastPoint:(BOOL)calculateFirstAndLastPoint initialCalculation:(BOOL)initialCalculation;
-
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute;
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex;
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex includeFirstSegment:(BOOL)includeFirstSegment;
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex endIndex:(int)endIndex includeFirstSegment:(BOOL)includeFirstSegment;
 - (QuadRect *) getLocationsRect;
-+ (NSString *) toString:(std::shared_ptr<TurnType>)type shortName:(BOOL)shortName;
 
 - (NSArray<CLLocation *> *) getImmutableAllLocations;
 - (NSArray<OASimulatedLocation *> *)getImmutableSimulatedLocations;
 - (NSArray<OARouteDirectionInfo *> *) getImmutableAllDirections;
 - (NSArray<CLLocation *> *) getRouteLocations;
 - (int) getRouteDistanceToFinish:(int)posFromCurrentIndex;
-- (std::shared_ptr<RouteSegmentResult>) getCurrentSegmentResult;
-- (std::shared_ptr<RouteSegmentResult>) getNextStreetSegmentResult;
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart;
 - (float) getCurrentMaxSpeed:(int)profile;
 - (int) getWholeDistance;
 - (BOOL) isCalculated;

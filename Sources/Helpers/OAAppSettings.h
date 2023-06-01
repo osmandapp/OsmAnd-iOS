@@ -8,10 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
-#import "OAApplicationMode.h"
 #import "OAColorizationType.h"
-#import "OAColoringType.h"
-#import "OADownloadMode.h"
 
 #define kNotificationSetProfileSetting @"kNotificationSetProfileSetting"
 #define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"
@@ -28,7 +25,7 @@
 
 #define kSimMinSpeed 5 / 3.6f
 
-@class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
+@class OAApplicationMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState, OAColoringType, OADownloadMode;
 
 typedef NS_ENUM(NSInteger, EOAPositionPlacement)
 {

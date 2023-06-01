@@ -24,6 +24,11 @@
 #import "OAGpxRouteApproximation.h"
 #import "OATargetPointsHelper.h"
 #import "OAIndexConstants.h"
+#import "OARoutingHelper.h"
+
+#include "OARouteCalculationParams+cpp.h"
+#include "OARouteCalculationResult+cpp.h"
+#include "OARouteDirectionInfo+cpp.h"
 
 #include <precalculatedRouteDirection.h>
 #include <routePlannerFrontEnd.h>

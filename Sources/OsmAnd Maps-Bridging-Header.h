@@ -9,3 +9,6 @@
 #import "Localization.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
+#import "OARouteCalculationParams.h"
+#import "OARouteCalculationResult.h"
+#import "OARouteDirectionInfo.h"

@@ -23,8 +23,9 @@
 #import "OAAnnounceTimeDistances.h"
 #import <AudioToolbox/AudioToolbox.h>
 
-#include <routeSegmentResult.h>
+#include "OARouteDirectionInfo+cpp.h"
 
+#include <routeSegmentResult.h>
 
 @implementation OAVoiceRouter
 {

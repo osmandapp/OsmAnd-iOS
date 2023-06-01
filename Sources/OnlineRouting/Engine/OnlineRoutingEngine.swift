@@ -199,7 +199,7 @@ class OnlineRoutingEngine: NSObject, NSCopying {
         return OnlineRoutingEngine.isPredefinedEngineKey(stringKey: getStringKey())
     }
 
-    func updateRouteParameters(/*params: OARouteCalculationParams, previousRoute: OARouteCalculationResult?*/) {
+    func updateRouteParameters(params: OARouteCalculationParams, previousRoute: OARouteCalculationResult?) {
     }
 
     fileprivate func getSelectedVehicleName() -> String? {
@@ -287,20 +287,20 @@ class OnlineRoutingEngine: NSObject, NSCopying {
     class OnlineRoutingResponse {
 
         private var route: [CLLocation]?
-//        let directions: [OARouteDirectionInfo]?
+        let directions: [OARouteDirectionInfo]?
         private var gpxFile: OAGPXDocument?
         private var calculatedTimeSpeed: Bool
 
-        init(route: [CLLocation]?/*, directions: [OARouteDirectionInfo]?*/) {
+        init(route: [CLLocation]?, directions: [OARouteDirectionInfo]?) {
             self.route = route
-//            self.directions = directions
+            self.directions = directions
             self.gpxFile = nil
             self.calculatedTimeSpeed = false
         }
 
         init(gpxFile: OAGPXDocument?, calculatedTimeSpeed: Bool) {
             self.route = nil
-//            self.directions = nil
+            self.directions = nil
             self.gpxFile = gpxFile
             self.calculatedTimeSpeed = calculatedTimeSpeed
         }
@@ -309,9 +309,9 @@ class OnlineRoutingEngine: NSObject, NSCopying {
             return route
         }
 
-//        func getDirections() -> [OARouteDirectionInfo]? {
-//            return directions
-//        }
+        func getDirections() -> [OARouteDirectionInfo]? {
+            return directions
+        }
 
         func getGpxFile() -> OAGPXDocument? {
             return gpxFile

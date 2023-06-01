@@ -28,6 +28,8 @@
 #import "OAAnnounceTimeDistances.h"
 #import "OARouteDirectionInfo.h"
 
+#include "OARouteDirectionInfo+cpp.h"
+
 #include <binaryRead.h>
 
 #define NOT_ANNOUNCED 0

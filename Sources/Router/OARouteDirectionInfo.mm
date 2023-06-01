@@ -11,6 +11,14 @@
 #import "OAUtilities.h"
 #import "OAOsmAndFormatter.h"
 
+#include "OARouteDirectionInfo+cpp.h"
+
+@interface OARouteDirectionInfo ()
+
+@property (nonatomic, assign) std::shared_ptr<TurnType> turnType;
+@property (nonatomic) std::shared_ptr<RouteDataObject> routeDataObject;
+
+@end
 
 @implementation OARouteDirectionInfo
 {

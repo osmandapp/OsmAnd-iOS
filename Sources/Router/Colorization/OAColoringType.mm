@@ -18,6 +18,8 @@
 #import "OARouteProvider.h"
 #import "OAIAPHelper.h"
 
+#include "OARouteCalculationResult+cpp.h"
+
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
 

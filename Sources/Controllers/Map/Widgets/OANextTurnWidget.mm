@@ -17,6 +17,9 @@
 #import "OAAppSettings.h"
 #import "OAOsmAndFormatter.h"
 
+#include "OARouteCalculationResult+cpp.h"
+#include "OARouteDirectionInfo+cpp.h"
+
 @interface OANextTurnWidget ()
 
 @property (weak, nonatomic) IBOutlet UIView *topView;

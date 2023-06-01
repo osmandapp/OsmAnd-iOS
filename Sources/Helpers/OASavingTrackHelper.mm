@@ -18,6 +18,7 @@
 #import "OARoutingHelper.h"
 #import "OAMonitoringPlugin.h"
 #import "OAPlugin.h"
+#import "OAColoringType.h"
 #import "Localization.h"
 #include <OsmAndCore/Utilities.h>
 

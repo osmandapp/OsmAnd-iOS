@@ -39,6 +39,7 @@
 #import "OADefaultFavorite.h"
 #import "OARouteStatisticsHelper.h"
 #import "OAProducts.h"
+#import "OAColoringType.h"
 #import "OASizes.h"
 
 #define kColorDayMode OALocalizedString(@"day")

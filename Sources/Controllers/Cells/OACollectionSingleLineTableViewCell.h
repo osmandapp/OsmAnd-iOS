@@ -10,15 +10,23 @@
 #import "OABaseCollectionHandler.h"
 #import "OASimpleTableViewCell.h"
 
+@protocol OACollectionTableViewCellDelegate
+
+- (void)onRightActionButtonPressed:(NSInteger)tag;
+
+@end
+
 @interface OACollectionSingleLineTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
-@property (weak, nonatomic) IBOutlet UIButton *button;
+@property (weak, nonatomic) IBOutlet UIButton *rightActionButton;
+
+@property (weak, nonatomic) id<OACollectionTableViewCellDelegate> delegate;
 
 - (void)setCollectionHandler:(OABaseCollectionHandler *)collectionHandler;
 - (OABaseCollectionHandler *)getCollectionHandler;
 
-- (void)buttonVisibility:(BOOL)show;
+- (void)rightActionButtonVisibility:(BOOL)show;
 
 - (void)anchorContent:(EOATableViewCellContentStyle)style;
 

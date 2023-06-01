@@ -7,15 +7,16 @@
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OABaseTableViewController.h"
+#import "OABaseNavbarViewController.h"
 
 @protocol OAAddFavoriteGroupDelegate <NSObject>
 
-- (void) onFavoriteGroupAdded:(NSString *)groupName color:(UIColor *)color;
+- (void)onFavoriteGroupAdded:(NSString *)groupName color:(UIColor *)color;
+- (void)onFavoriteGroupColorsRefresh;
 
 @end
 
-@interface OAAddFavoriteGroupViewController : OABaseTableViewController
+@interface OAAddFavoriteGroupViewController : OABaseNavbarViewController
 
 @property (nonatomic, weak) id<OAAddFavoriteGroupDelegate> delegate;
 

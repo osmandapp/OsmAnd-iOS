@@ -15,6 +15,7 @@
 #import "Localization.h"
 #import "OAMapUtils.h"
 #import "OAAppVersionDependentConstants.h"
+#import "OAGPXAppearanceCollection.h"
 
 #include "OAGPXDocument+cpp.h"
 #include "OAGPXDocumentPrimitives+cpp.h"
@@ -644,6 +645,11 @@
     {
         wpt.reset(new OsmAnd::GpxDocument::WptPt());
         [self.class fillWpt:wpt usingWpt:w];
+        OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+        [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[w getColor:0]]
+                            toGpxFilePath:filename
+                                groupName:w.type
+                                pointName:w.name];
         document->points.append(wpt);
         wpt = nullptr;
     }

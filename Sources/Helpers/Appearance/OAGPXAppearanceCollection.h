@@ -9,7 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "OAGPXDatabase.h"
 
-@class OAColorItem;
+#define kFavoritePrefixColorId @"favorite"
+#define kWaypointPrefixColorId @"waypoint"
+
+@class OAColorItem, OAFavoriteGroup;
 
 @interface OAGPXTrackAppearance : NSObject
 
@@ -53,15 +56,25 @@
 + (OAGPXAppearanceCollection *)sharedInstance;
 
 - (void)generateAvailableColors;
+- (BOOL)saveFavoriteColorsIfNeeded:(NSArray<OAFavoriteGroup *> *)favoriteGroups;
+- (OAColorItem *)getDefaultLineColorItem;
+- (OAColorItem *)getDefaultPointColorItem;
+
 - (void)changeColor:(OAColorItem *)colorItem newColor:(UIColor *)newColor;
 - (void)addNewSelectedColor:(UIColor *)newColor;
 - (void)duplicateColor:(OAColorItem *)colorItem;
 - (void)deleteColor:(OAColorItem *)colorItem;
-- (void)selectColor:(OAColorItem *)colorItem toGpxFilePath:(NSString *)gpxFilePath;
+- (void)selectColor:(OAColorItem *)colorItem toItem:(NSString *)item;
+- (void)selectColor:(OAColorItem *)colorItem toFavoriteGroupName:(NSString *)groupName pointName:(NSString *)pointName;
+- (void)selectColor:(OAColorItem *)colorItem toGpxFilePath:(NSString *)gpxFilePath groupName:(NSString *)groupName pointName:(NSString *)pointName;
 - (NSArray<OAColorItem *> *)getAvailableColorsSortingByKey;
 - (NSArray<OAColorItem *> *)getAvailableColorsSortingByLastUsed;
-- (void)removeGpxFilePath:(NSString *)gpxFilePath;
-- (OAColorItem *)getColorForGpxFilePath:(NSString *)gpxFilePath defaultValue:(NSInteger)defaultValue;
+- (void)removeItem:(NSString *)item;
+- (void)removeFavoriteGroupName:(NSString *)groupName pointName:(NSString *)pointName;
+- (void)removeGpxFilePath:(NSString *)gpxFilePath groupName:(NSString *)groupName pointName:(NSString *)pointName;
+- (OAColorItem *)getColorForItem:(NSString *)item defaultValue:(NSInteger)defaultValue;
+- (OAColorItem *)getColorForFavoriteGroupName:(NSString *)groupName pointName:(NSString *)pointName defaultValue:(NSInteger)defaultValue;
+- (OAColorItem *)getColorForGpxFilePath:(NSString *)gpxFilePath groupName:(NSString *)groupName pointName:(NSString *)pointName defaultValue:(NSInteger)defaultValue;
 
 - (NSArray<OAGPXTrackWidth *> *)getAvailableWidth;
 - (OAGPXTrackWidth *)getWidthForValue:(NSString *)value;

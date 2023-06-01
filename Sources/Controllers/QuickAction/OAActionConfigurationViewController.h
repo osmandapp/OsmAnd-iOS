@@ -6,7 +6,7 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseButtonsViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OAQuickAction;
 
-@interface OAActionConfigurationViewController : OACompoundViewController
+@interface OAActionConfigurationViewController : OABaseButtonsViewController
 
 -(instancetype) initWithAction:(OAQuickAction *)action isNew:(BOOL)isNew;
 

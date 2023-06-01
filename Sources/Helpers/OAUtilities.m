@@ -218,6 +218,21 @@
                                       lroundf(b * 255)];
 }
 
+- (NSString *) toHexRGBAString
+{
+    const CGFloat *components = CGColorGetComponents(self.CGColor);
+
+    CGFloat r = components[0];
+    CGFloat g = components[1];
+    CGFloat b = components[2];
+    CGFloat a = components[3];
+    return [NSString stringWithFormat:@"#%02lX%02lX%02lX%02lX",
+                                      lroundf(r * 255),
+                                      lroundf(g * 255),
+                                      lroundf(b * 255),
+                                      lroundf(a * 255)];
+}
+
 + (UIColor *) colorFromString:(NSString *)string
 {
     return UIColorFromARGB([OAUtilities colorToNumberFromString:string]);

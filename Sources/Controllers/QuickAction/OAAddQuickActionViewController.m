@@ -16,12 +16,7 @@
 #import "OASizes.h"
 #import "OAQuickActionType.h"
 
-@interface OAAddQuickActionViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIButton *backBtn;
-@property (weak, nonatomic) IBOutlet UIButton *searchBtn;
+@interface OAAddQuickActionViewController () <UISearchBarDelegate>
 
 @end
 
@@ -30,52 +25,89 @@
     OrderedDictionary<NSString *, NSArray<OAQuickActionType *> *> *_actions;
     
     NSMutableArray<OAQuickActionType *> *_filteredData;
+    UISearchController *_searchController;
     BOOL _isFiltered;
-    BOOL _searchIsActive;
-    
-    UITextField *_searchField;
-    UIView *_searchFieldContainer;
-    
-    UIView *_tableHeaderView;
 }
 
-- (void)viewDidLoad
+#pragma mark - Initialization
+
+- (void)registerNotifications
 {
-    [super viewDidLoad];
-    [self commonInit];
-    [self setupSearchView];
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    self.tableView.tableHeaderView = _tableHeaderView;
-    [self.backBtn setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
-    [self.backBtn setTintColor:UIColor.whiteColor];
-    [self.searchBtn setImage:[UIImage templateImageNamed:@"ic_navbar_search"] forState:UIControlStateNormal];
-    [self.searchBtn setTintColor:UIColor.whiteColor];
-    
-    _searchFieldContainer = [[UIView alloc] initWithFrame:CGRectMake(0., defaultNavBarHeight + OAUtilities.getStatusBarHeight, DeviceScreenWidth, 0.1)];
-    _searchFieldContainer.backgroundColor = _navBarView.backgroundColor;
-    [_searchFieldContainer addSubview:_searchField];
-    _searchField.hidden = YES;
-    _searchFieldContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [self addNotification:UIKeyboardWillShowNotification selector:@selector(keyboardWillShow:)];
+    [self addNotification:UIKeyboardWillHideNotification selector:@selector(keyboardWillHide:)];
 }
+
+#pragma mark - UIViewController
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self applySafeAreaMargins];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    _searchController.searchBar.delegate = self;
+    _searchController.obscuresBackgroundDuringPresentation = NO;
+    self.navigationItem.searchController = _searchController;
+    [self setupSearchControllerWithFilter:NO];
+    _isFiltered = NO;
+    [self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    
+    self.navigationItem.searchController = nil;
 }
 
--(void) commonInit
+#pragma mark - Base UI
+
+- (NSString *)getTitle
+{
+    return OALocalizedString(@"quick_action_new_action");
+}
+
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
+{
+    UIBarButtonItem *rightButton = [self createRightNavbarButton:nil
+                                                        iconName:@"ic_navbar_search"
+                                                          action:@selector(searchPressed)
+                                                            menu:nil];
+    
+    rightButton.accessibilityLabel = OALocalizedString(@"shared_string_search");
+    
+    return @[rightButton];
+}
+
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
+{
+    return EOABaseNavbarColorSchemeOrange;
+}
+
+- (NSString *)getTableHeaderDescription
+{
+    return OALocalizedString(@"quick_action_add_actions_descr");
+}
+
+- (void)setupSearchControllerWithFilter:(BOOL)isFiltered
+{
+    if (isFiltered)
+    {
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.backgroundColor = UIColor.whiteColor;
+        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.grayColor;
+    }
+    else
+    {
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+        _searchController.searchBar.searchTextField.tintColor = UIColor.grayColor;
+    }
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     NSArray<OAQuickActionType *> *all = [[OAQuickActionRegistry sharedInstance] produceTypeActionsListWithHeaders];
     NSMutableArray<OAQuickActionType *> *actionsInSection = nil;
@@ -98,99 +130,11 @@
     }
     if (currSectionName && actionsInSection && actionsInSection.count > 0)
         [mapping setObject:[NSArray arrayWithArray:actionsInSection] forKey:currSectionName];
-
+    
     _actions = [OrderedDictionary dictionaryWithDictionary:mapping];
-    
-    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"quick_action_add_actions_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
 }
 
--(void) setupSearchView
-{
-    _searchField = [[UITextField alloc] initWithFrame:CGRectMake(16. + OAUtilities.getLeftMargin, 10., DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2, 30.0)];
-    _searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _searchField.placeholder = OALocalizedString(@"shared_string_search");
-    _searchField.backgroundColor = [UIColor colorWithWhite:1 alpha:0.44];
-    _searchField.layer.cornerRadius = 10.0;
-    _searchField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:_searchField.placeholder attributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
-    _searchField.leftView = [[UIView alloc] initWithFrame:CGRectMake(4.0, 0.0, 34.0, _searchField.bounds.size.height)];
-    _searchField.leftViewMode = UITextFieldViewModeAlways;
-    _searchField.textColor = [UIColor whiteColor];
-    _searchField.delegate = self;
-    [_searchField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
-    
-    UIImageView *leftImageView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"search_icon"]];
-    leftImageView.contentMode = UIViewContentModeCenter;
-    leftImageView.frame = _searchField.leftView.frame;
-    leftImageView.tintColor = [UIColor whiteColor];
-    
-    [_searchField.leftView addSubview:leftImageView];
-}
-
-- (void)applyLocalization
-{
-    _titleView.text = OALocalizedString(@"quick_action_new_action");
-}
-
--(void) addAccessibilityLabels
-{
-    self.backBtn.accessibilityLabel = OALocalizedString(@"shared_string_back");
-    self.searchBtn.accessibilityLabel = OALocalizedString(@"shared_string_search");
-}
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        CGRect searchBarFrame = _searchFieldContainer.frame;
-        searchBarFrame.origin.y = CGRectGetMaxY(_navBarView.frame);
-        _searchFieldContainer.frame = searchBarFrame;
-        
-        CGFloat textWidth = DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2;
-        UIFont *labelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-        CGSize labelSize = [OAUtilities calculateTextBounds:OALocalizedString(@"quick_action_add_actions_descr") width:textWidth font:labelFont];
-        _tableHeaderView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height + 30.0);
-        _tableHeaderView.subviews.firstObject.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height);
-    } completion:nil];
-}
-
-- (IBAction)backPressed:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (IBAction)searchPressed:(id)sender
-{
-    _isFiltered = NO;
-    [_filteredData removeAllObjects];
-    _searchIsActive = !_searchIsActive;
-    if (_searchFieldContainer.superview)
-    {
-        _tableView.contentInset = UIEdgeInsetsMake(0., _tableView.contentInset.left, _tableView.contentInset.bottom, _tableView.contentInset.right);
-        [UIView animateWithDuration:.3 animations:^{
-            _searchField.hidden = YES;
-            _searchFieldContainer.frame = CGRectMake(0., CGRectGetMaxY(_navBarView.frame), DeviceScreenWidth, 0.01);
-        } completion:^(BOOL finished) {
-            [_searchFieldContainer removeFromSuperview];
-        }];
-    }
-    else
-    {
-        [UIView animateWithDuration:.3 animations:^{
-            [self.view addSubview:_searchFieldContainer];
-            _searchFieldContainer.frame = CGRectMake(0., CGRectGetMaxY(_navBarView.frame), DeviceScreenWidth, 50.0);
-        } completion:^(BOOL finished) {
-            _searchField.hidden = NO;
-            
-        }];
-        _tableView.contentInset = UIEdgeInsetsMake(_searchFieldContainer.frame.size.height, _tableView.contentInset.left, _tableView.contentInset.bottom, _tableView.contentInset.right);
-    }
-    [_tableView reloadData];
-    
-    if (_searchIsActive)
-        [_searchField becomeFirstResponder];
-}
-
--(OAQuickActionType *)getItem:(NSIndexPath *)indexPath
+- (OAQuickActionType *)getItem:(NSIndexPath *)indexPath
 {
     if (_isFiltered)
         return _filteredData[indexPath.row];
@@ -199,40 +143,31 @@
     return _actions[sectionKey][indexPath.row];
 }
 
-- (void) addAction:(id)sender
+- (NSInteger)sectionsCount
 {
-    if ([sender isKindOfClass:UIButton.class])
-    {
-        UIButton *button = (UIButton *) sender;
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
-        [self openQuickActionSetupFor:indexPath];
-    }
+    return _isFiltered ? 1 : _actions.allKeys.count;
 }
 
-- (void) openQuickActionSetupFor:(NSIndexPath *)indexPath
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
-    OAQuickActionType *item = [self getItem:indexPath];
-    OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithAction:[item createNew] isNew:YES];
-    actionScreen.delegate = self.delegate;
-    [self.navigationController pushViewController:actionScreen animated:YES];
+    return _isFiltered ? OALocalizedString(@"search_results") : _actions.allKeys[section];
 }
 
-#pragma mark - UITableViewDelegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSInteger)rowsCount:(NSInteger)section
 {
-    [self openQuickActionSetupFor:indexPath];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (_isFiltered)
+        return _filteredData.count;
+    
+    NSString *key = _actions.allKeys[section];
+    return _actions[key].count;
 }
 
-#pragma mark - UITableViewDataSource
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     OAQuickActionType *action = [self getItem:indexPath];
     if (action)
     {
-        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
+        OAButtonTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
@@ -272,56 +207,39 @@
     return nil;
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
-    return _isFiltered ? 1 : _actions.allKeys.count;
+    [self openQuickActionSetupFor:indexPath];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if (_isFiltered)
-        return _filteredData.count;
-    
-    NSString *key = _actions.allKeys[section];
-    return _actions[key].count;
-}
+#pragma mark - Selectors
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (void)addAction:(id)sender
 {
-    return _isFiltered ? OALocalizedString(@"search_results") : _actions.allKeys[section];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 38.5;
-}
-
--(void)textViewDidChange:(UITextView *)textView
-{
-    if (textView.text.length == 0)
+    if ([sender isKindOfClass:UIButton.class])
     {
-        _isFiltered = NO;
+        UIButton *button = (UIButton *) sender;
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
+        [self openQuickActionSetupFor:indexPath];
     }
-    else
-    {
-        _isFiltered = YES;
-        _filteredData = [NSMutableArray new];
-        for (NSArray *actionGroup in _actions.allValues)
-        {
-            for (OAQuickActionType *actionType in actionGroup)
-            {
-                NSRange nameRange = [actionType.name rangeOfString:textView.text options:NSCaseInsensitiveSearch];
-                if (nameRange.location != NSNotFound)
-                    [_filteredData addObject:actionType];
-            }
-        }
-    }
-    [_tableView reloadData];
+}
+
+-(void)searchPressed
+{
+    _searchController.active = YES;
+}
+
+- (void)openQuickActionSetupFor:(NSIndexPath *)indexPath
+{
+    OAQuickActionType *item = [self getItem:indexPath];
+    OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithAction:[item createNew] isNew:YES];
+    actionScreen.delegate = self.delegate;
+    [self.navigationController pushViewController:actionScreen animated:YES];
 }
 
 #pragma mark - Keyboard Notifications
 
-- (void) keyboardWillShow:(NSNotification *)notification;
+- (void)keyboardWillShow:(NSNotification *)notification;
 {
     NSDictionary *userInfo = [notification userInfo];
     CGRect keyboardBounds;
@@ -335,7 +253,7 @@
     } completion:nil];
 }
 
-- (void) keyboardWillHide:(NSNotification *)notification;
+- (void)keyboardWillHide:(NSNotification *)notification;
 {
     NSDictionary *userInfo = [notification userInfo];
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
@@ -345,6 +263,41 @@
         [self.tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0.0, insets.right)];
         [self.tableView setScrollIndicatorInsets:self.tableView.contentInset];
     } completion:nil];
+}
+
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    [searchBar resignFirstResponder];
+    _isFiltered = NO;
+    [self setupSearchControllerWithFilter:NO];
+    [self.tableView reloadData];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    if (searchText.length > 0)
+    {
+        [self setupSearchControllerWithFilter:YES];
+        _isFiltered = YES;
+        _filteredData = [NSMutableArray new];
+        for (NSArray *actionGroup in _actions.allValues)
+        {
+            for (OAQuickActionType *actionType in actionGroup)
+            {
+                NSRange nameRange = [actionType.name rangeOfString:searchText options:NSCaseInsensitiveSearch];
+                if (nameRange.location != NSNotFound)
+                    [_filteredData addObject:actionType];
+            }
+        }
+    }
+    else
+    {
+        _isFiltered = NO;
+        [self setupSearchControllerWithFilter:NO];
+    }
+    [self.tableView reloadData];
 }
 
 @end

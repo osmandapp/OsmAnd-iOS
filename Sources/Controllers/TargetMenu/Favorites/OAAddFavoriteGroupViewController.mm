@@ -7,111 +7,139 @@
 //
 
 #import "OAAddFavoriteGroupViewController.h"
-#import "OAColors.h"
-#import "OADefaultFavorite.h"
-#import "Localization.h"
-#import "OAUtilities.h"
-#import "OAFavoritesHelper.h"
+#import "OAColorCollectionViewController.h"
 #import "OAInputTableViewCell.h"
-#import "OAColorsTableViewCell.h"
+#import "OACollectionSingleLineTableViewCell.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
+#import "OAColorCollectionHandler.h"
+#import "OAGPXAppearanceCollection.h"
+#import "OADefaultFavorite.h"
+#import "OAFavoritesHelper.h"
+#import "OAUtilities.h"
 #import "OsmAndApp.h"
+#import "OAColors.h"
+#import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
-@interface OAAddFavoriteGroupViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, OAColorsTableViewCellDelegate>
+#define kIllegalFileNameCharacters [NSCharacterSet characterSetWithCharactersInString:@"/\\?%*|\"<>:;.,"]
+
+@interface OAAddFavoriteGroupViewController() <UITextFieldDelegate, UIColorPickerViewControllerDelegate, OAColorsCollectionCellDelegate, OAColorCollectionDelegate, OACollectionTableViewCellDelegate>
 
 @end
 
 @implementation OAAddFavoriteGroupViewController
 {
-    NSArray<NSArray<NSDictionary *> *> *_data;
+    OATableDataModel *_data;
     NSString *_newGroupName;
-    OAFavoriteColor *_selectedColor;
-    int _selectedColorIndex;
-    NSArray<NSNumber *> *_colors;
+    UIBarButtonItem *_doneBarButton;
+    OAGPXAppearanceCollection *_appearanceCollection;
+    NSArray<OAColorItem *> *_sortedColorItems;
+    OAColorItem *_selectedColorItem;
+    NSIndexPath *_editColorIndexPath;
+    BOOL _isNewColorSelected;
+    BOOL _needToScrollToSelectedColor;
+    NSIndexPath *_colorIndexPath;
 }
 
-- (instancetype) init
-{
-    self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
-    if (self)
-    {
-        [self setupColors];
-        [self generateData];
-    }
-    return self;
-}
+#pragma mark - Initialization
 
-- (void) viewDidLoad
+- (void)commonInit
 {
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
-    self.doneButton.hidden = NO;
-    self.doneButton.enabled = NO;
     _newGroupName = @"";
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    _needToScrollToSelectedColor = YES;
+    _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+    _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
+    _selectedColorItem = [_appearanceCollection getDefaultPointColorItem];
 }
 
-- (void) setupColors
+- (void)registerNotifications
 {
-    _selectedColor = [OADefaultFavorite builtinColors][0];
-    _selectedColorIndex = 0;
-    
-    NSMutableArray *tempColors = [NSMutableArray new];
-    for (OAFavoriteColor *favColor in [OADefaultFavorite builtinColors])
-    {
-        [tempColors addObject:[NSNumber numberWithInt:[OAUtilities colorToNumber:favColor.color]]];
-    }
-    _colors = [NSArray arrayWithArray:tempColors];
+    [self addNotification:UIKeyboardWillShowNotification selector:@selector(keyboardWillShow:)];
+    [self addNotification:UIKeyboardWillHideNotification selector:@selector(keyboardWillHide:)];
 }
 
-- (void) generateData
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    NSMutableArray *data = [NSMutableArray new];
-    [data addObject:@[
-        @{
-            @"header" : OALocalizedString(@"favorite_group_name"),
-            @"footer" : @"",
-            @"type" : [OAInputTableViewCell getCellIdentifier],
-            @"title" : @""
-        }
-    ]];
-    [data addObject:@[
-        @{
-            @"header" : OALocalizedString(@"access_default_color"),
-            @"footer" : OALocalizedString(@"default_color_descr"),
-            @"type" : [OAColorsTableViewCell getCellIdentifier],
-            @"title" : OALocalizedString(@"shared_string_color"),
-            @"value" : _selectedColor.name,
-            @"index" : [NSNumber numberWithInt:_selectedColorIndex],
-        }
-    ]];
-    _data = data;
+    return OALocalizedString(@"fav_add_new_group");
 }
 
-- (void) applyLocalization
+- (NSString *)getLeftNavbarButtonTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"fav_add_new_group");
+    return OALocalizedString(@"shared_string_cancel");
 }
 
-- (void)onDoneButtonPressed
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    [self.delegate onFavoriteGroupAdded:_newGroupName color:_selectedColor.color];
+    _doneBarButton = [self createRightNavbarButton:OALocalizedString(@"shared_string_done")
+                                          iconName:nil
+                                            action:@selector(onRightNavbarButtonPressed)
+                                              menu:nil];
+    [self changeButtonAvailability:_doneBarButton isEnabled:NO];
+    return @[_doneBarButton];
+}
+
+#pragma mark - Table data
+
+- (void)generateData
+{
+    _data = [OATableDataModel model];
+
+    OATableSectionData *nameSection = [_data createNewSection];
+    nameSection.headerText = OALocalizedString(@"favorite_group_name");
+    [nameSection addRowFromDictionary:@{
+        kCellTypeKey : [OAInputTableViewCell getCellIdentifier],
+        kCellTitleKey : @""
+    }];
+
+    OATableSectionData *colorSection = [_data createNewSection];
+    colorSection.headerText = OALocalizedString(@"access_default_color");
+    colorSection.footerText = OALocalizedString(@"default_color_descr");
+    [colorSection addRowFromDictionary:@{
+        kCellKeyKey : @"colorTitle",
+        kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"shared_string_coloring")
+    }];
+    [colorSection addRowFromDictionary:@{
+        kCellKeyKey : @"colorGrid",
+        kCellTypeKey : [OACollectionSingleLineTableViewCell getCellIdentifier]
+    }];
+    _colorIndexPath = [NSIndexPath indexPathForRow:[colorSection rowCount] - 1 inSection:[_data sectionCount] - 1];
+
+    [colorSection addRowFromDictionary:@{
+        kCellKeyKey : @"allColors",
+        kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"shared_string_all_colors"),
+        kCellIconTint : @color_primary_purple
+    }];
 }
 
 #pragma mark - UITableViewDataSource
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
-    NSString *cellType = item[@"type"];
-    
-    if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
+    return [_data sectionDataForIndex:section].headerText;
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return [_data sectionDataForIndex:section].footerText;
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return [_data rowCount:section];
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    if ([item.cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
+        OAInputTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
@@ -127,33 +155,72 @@
         }
         if (cell)
         {
-            cell.inputField.text = item[@"title"];
+            cell.inputField.text = item.title;
             cell.inputField.delegate = self;
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OAColorsTableViewCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OACollectionSingleLineTableViewCell getCellIdentifier]])
     {
-        OAColorsTableViewCell *cell = nil;
-        cell = (OAColorsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:[OAColorsTableViewCell getCellIdentifier]];
+        OACollectionSingleLineTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OACollectionSingleLineTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAColorsTableViewCell *)[nib objectAtIndex:0];
-            cell.dataArray = _colors;
-            cell.delegate = self;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACollectionSingleLineTableViewCell getCellIdentifier]
+                                                         owner:self options:nil];
+            cell = nib[0];
+            OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems]];
+            colorHandler.delegate = self;
+            NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:_selectedColorItem] inSection:0];
+            if (selectedIndexPath.row == NSNotFound)
+                selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:[_appearanceCollection getDefaultPointColorItem]] inSection:0];
+            [colorHandler setSelectedIndexPath:selectedIndexPath];
+            [cell setCollectionHandler:colorHandler];
             cell.separatorInset = UIEdgeInsetsZero;
+            cell.rightActionButton.accessibilityLabel = OALocalizedString(@"shared_string_add_color");
+            cell.delegate = self;
         }
         if (cell)
         {
-            cell.titleLabel.text = item[@"title"];
-            cell.valueLabel.text = item[@"value"];
-            cell.valueLabel.tintColor = UIColorFromRGB(color_text_footer);
-            int selectedIndex = [item[@"index"] intValue];
-            cell.currentColor = selectedIndex;
+            [cell.rightActionButton setImage:[UIImage templateImageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
+            cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
+            [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+            [cell.rightActionButton addTarget:self action:@selector(onCellButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             [cell.collectionView reloadData];
-            [cell layoutSubviews];
+            [cell layoutIfNeeded];
+
+            if (_needToScrollToSelectedColor)
+            {
+                NSIndexPath *selectedIndexPath = [[cell getCollectionHandler] getSelectedIndexPath];
+                if (selectedIndexPath.row != NSNotFound && ![cell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath])
+                {
+                    [cell.collectionView scrollToItemAtIndexPath:selectedIndexPath
+                                                atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
+                                                        animated:YES];
+                }
+                _needToScrollToSelectedColor = NO;
+            }
+        }
+        return cell;
+    }
+    else if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    {
+        OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            [cell setCustomLeftSeparatorInset:YES];
+            cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
+
+            NSInteger tintColor = item.iconTint;
+            cell.titleLabel.text = item.title;
+            cell.titleLabel.textColor = tintColor != -1 ? UIColorFromRGB(tintColor) : UIColor.blackColor;
+            cell.selectionStyle = tintColor == -1 ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
         }
         return cell;
     }
@@ -161,24 +228,57 @@
     return nil;
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)sectionsCount
 {
-    return _data[section].count;
+    return [_data sectionCount];
 }
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
-    return _data.count;
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    if ([item.key isEqualToString:@"allColors"])
+    {
+        OAColorCollectionViewController *colorCollectionViewController =
+            [[OAColorCollectionViewController alloc] initWithColorItems:[self generateDataForColorCollection]
+                                                      selectedColorItem:_selectedColorItem];
+        colorCollectionViewController.delegate = self;
+        [self showViewController:colorCollectionViewController];
+    }
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+#pragma mark - Additions
+
+- (void)openColorPickerWithColor:(OAColorItem *)colorItem
 {
-    return _data[section][0][@"header"];
+    UIColorPickerViewController *colorViewController = [[UIColorPickerViewController alloc] init];
+    colorViewController.delegate = self;
+    colorViewController.selectedColor = [colorItem getColor];
+    [self presentViewController:colorViewController animated:YES completion:nil];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+#pragma mark - Selectors
+
+- (void)onRightNavbarButtonPressed
 {
-    return _data[section][0][@"footer"];
+    [self dismissViewController];
+
+    if (self.delegate)
+        [self.delegate onFavoriteGroupAdded:_newGroupName color:[_selectedColorItem getColor]];
+}
+
+- (void)onCellButtonPressed:(UIButton *)sender
+{
+    [self onRightActionButtonPressed:sender.tag];
+}
+
+#pragma mark - OACollectionTableViewCellDelegate
+
+- (void)onRightActionButtonPressed:(NSInteger)tag
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:tag & 0x3FF inSection:tag >> 10];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    if ([item.key isEqualToString:@"colorGrid"])
+        [self openColorPickerWithColor:_selectedColorItem];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -191,36 +291,17 @@
 
 - (void) textViewDidChange:(UITextView *)textView
 {
-    if (textView.text.length == 0 ||
-        [self isIncorrectFileName: textView.text] ||
-        [textView.text isEqualToString:OALocalizedString(@"favorites_item")] ||
-        [textView.text isEqualToString:OALocalizedString(@"personal_category_name")] ||
-        [textView.text isEqualToString:kPersonalCategory] ||
-        [OAFavoritesHelper getGroupByName:textView.text])
-    {
-        self.doneButton.enabled = NO;
-    }
-    else
-    {
+    BOOL isEnabled = textView.text.length > 0
+        && [textView.text rangeOfCharacterFromSet:kIllegalFileNameCharacters].length == 0
+        && ![textView.text isEqualToString:OALocalizedString(@"favorites_item")]
+        && ![textView.text isEqualToString:OALocalizedString(@"personal_category_name")]
+        && ![textView.text isEqualToString:kPersonalCategory]
+        && ![OAFavoritesHelper getGroupByName:textView.text];
+
+    if (isEnabled)
         _newGroupName = textView.text;
-        self.doneButton.enabled = YES;
-    }
-}
 
-- (BOOL) isIncorrectFileName:(NSString *)fileName
-{
-    NSCharacterSet* illegalFileNameCharacters = [NSCharacterSet characterSetWithCharactersInString:@"/\\?%*|\"<>:;.,"];
-    return [fileName rangeOfCharacterFromSet:illegalFileNameCharacters].length != 0;
-}
-
-#pragma mark - OAColorsTableViewCellDelegate
-
-- (void)colorChanged:(NSInteger)tag
-{
-    _selectedColorIndex = tag;
-    _selectedColor = [OADefaultFavorite builtinColors][tag];
-    [self generateData];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+    [self changeButtonAvailability:_doneBarButton isEnabled:isEnabled];
 }
 
 #pragma mark - Keyboard Notifications
@@ -250,6 +331,125 @@
         [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0., insets.right)];
         [[self view] layoutIfNeeded];
     } completion:nil];
+}
+
+#pragma mark - OAColorCollectionDelegate
+
+- (NSArray<OAColorItem *> *)generateDataForColorCollection
+{
+    return [_appearanceCollection getAvailableColorsSortingByKey];
+}
+
+- (void)onColorCollectionItemSelected:(OAColorItem *)colorItem
+{
+    _needToScrollToSelectedColor = YES;
+    [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0]];
+    [self.tableView reloadRowsAtIndexPaths:@[_colorIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void)onColorCollectionNewItemAdded:(UIColor *)color
+{
+    [_appearanceCollection addNewSelectedColor:color];
+    _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
+    if (self.delegate)
+        [self.delegate onFavoriteGroupColorsRefresh];
+}
+
+- (void)onColorCollectionItemChanged:(OAColorItem *)colorItem withColor:(UIColor *)color
+{
+    [_appearanceCollection changeColor:colorItem newColor:color];
+    _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
+    if (self.delegate)
+        [self.delegate onFavoriteGroupColorsRefresh];
+}
+
+- (void)onColorCollectionItemDuplicated:(OAColorItem *)colorItem
+{
+    [_appearanceCollection duplicateColor:colorItem];
+    _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
+    if (self.delegate)
+        [self.delegate onFavoriteGroupColorsRefresh];
+}
+
+- (void)onColorCollectionItemDeleted:(OAColorItem *)colorItem
+{
+    [_appearanceCollection deleteColor:colorItem];
+    _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
+    if (self.delegate)
+        [self.delegate onFavoriteGroupColorsRefresh];
+}
+
+#pragma mark - OACollectionCellDelegate
+
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath
+{
+    _isNewColorSelected = YES;
+    _selectedColorItem = _sortedColorItems[indexPath.row];
+}
+
+- (void)reloadCollectionData
+{
+}
+
+#pragma mark - OAColorsCollectionCellDelegate
+
+- (void)onContextMenuItemEdit:(NSIndexPath *)indexPath
+{
+    _editColorIndexPath = indexPath;
+    [self openColorPickerWithColor:_sortedColorItems[indexPath.row]];
+}
+
+- (void)onContextMenuItemDuplicate:(NSIndexPath *)indexPath
+{
+    [self onColorCollectionItemDuplicated:_sortedColorItems[indexPath.row]];
+    _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
+
+    OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorIndexPath];
+    OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
+    NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
+    [colorHandler addDuplicatedColor:newIndexPath collectionView:colorCell.collectionView];
+    [colorHandler updateData:@[_sortedColorItems] collectionView:colorCell.collectionView];
+}
+
+- (void)onContextMenuItemDelete:(NSIndexPath *)indexPath
+{
+    [self onColorCollectionItemDeleted:_sortedColorItems[indexPath.row]];
+    _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
+
+    OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorIndexPath];
+    OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
+    [colorHandler removeColor:indexPath collectionView:colorCell.collectionView];
+    [colorHandler updateData:@[_sortedColorItems] collectionView:colorCell.collectionView];
+}
+
+#pragma mark - UIColorPickerViewControllerDelegate
+
+- (void)colorPickerViewControllerDidFinish:(UIColorPickerViewController *)viewController
+{
+    OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorIndexPath];
+    OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
+    if (_editColorIndexPath)
+    {
+        if (![[_sortedColorItems[_editColorIndexPath.row] getHexColor] isEqualToString:[viewController.selectedColor toHexARGBString]])
+        {
+            [self onColorCollectionItemChanged:_sortedColorItems[_editColorIndexPath.row] withColor:viewController.selectedColor];
+            _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
+
+            [colorHandler updateData:@[_sortedColorItems] collectionView:colorCell.collectionView];
+            if (_editColorIndexPath == [colorHandler getSelectedIndexPath])
+                [self onCollectionItemSelected:_editColorIndexPath];
+        }
+        _editColorIndexPath = nil;
+    }
+    else
+    {
+        [self onColorCollectionNewItemAdded:viewController.selectedColor];
+        _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
+
+        [colorHandler addAndSelectColor:[NSIndexPath indexPathForRow:0 inSection:0]
+                         collectionView:colorCell.collectionView];
+        [colorHandler updateData:@[_sortedColorItems] collectionView:colorCell.collectionView];
+    }
 }
 
 @end

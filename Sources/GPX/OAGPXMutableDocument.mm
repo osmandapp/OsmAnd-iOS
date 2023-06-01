@@ -9,6 +9,7 @@
 #import "OAGPXMutableDocument.h"
 #import "OAUtilities.h"
 #import "OAAppVersionDependentConstants.h"
+#import "OAGPXAppearanceCollection.h"
 
 #include "OAGPXDocumentPrimitives+cpp.h"
 #include "OAGPXDocument+cpp.h"
@@ -57,6 +58,8 @@
     if (filename && filename.length > 0)
     {
         document = OsmAnd::GpxDocument::loadFrom(QString::fromNSString(filename));
+        _trackAnalysis = nil;
+        _modifiedTime = 0;
         return [self fetch:document];
     }
     else
@@ -106,6 +109,12 @@
 
 - (void) addWpt:(OAWptPt *)w
 {
+    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+    [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[w getColor:0]]
+                        toGpxFilePath:nil
+                            groupName:w.type
+                            pointName:w.name];
+
     std::shared_ptr<OsmAnd::GpxDocument::WptPt> wpt;
     std::shared_ptr<OsmAnd::GpxDocument::Link> link;
 
@@ -137,7 +146,7 @@
     {
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
         e.name = @"color";
-        e.value = UIColorFromRGBA(color).toHexARGBString;
+        e.value = UIColorFromRGBA(color).toHexRGBAString;
         [extArray addObject:e];
     }
     
@@ -157,6 +166,11 @@
 
 - (void)deleteWpt:(OAWptPt *)w
 {
+    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+    [appearanceCollection removeGpxFilePath:nil
+                                  groupName:w.type
+                                  pointName:w.name];
+
     for (OAWptPt *wpt in self.points)
     {
         if (wpt == w || wpt.time == w.time)
@@ -186,8 +200,6 @@
     }
     for (OAWptPt *pt in points)
         [self addRoutePoint:pt route:self.routes.lastObject];
-    
-    _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
 - (void) addRoutes:(NSArray<OARoute *> *)routes
@@ -487,14 +499,15 @@
 
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp
 {
-    if (!_trackAnalysis || _analysisModifiedTime != _modifiedTime)
-        [self update];
+    NSTimeInterval modifiedTime = _modifiedTime;
+    if (!_trackAnalysis || _analysisModifiedTime != modifiedTime)
+        [self update:modifiedTime];
     return _trackAnalysis;
 }
 
-- (void) update
+- (void) update:(NSTimeInterval)modifiedTime
 {
-    _analysisModifiedTime = _modifiedTime;
+    _analysisModifiedTime = modifiedTime;
     
     NSTimeInterval fileTimestamp = 0;
     if (self.path && self.path.length > 0)

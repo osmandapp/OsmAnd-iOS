@@ -60,6 +60,7 @@
 #import "OAOsmUploadGPXViewConroller.h"
 #import "OANetworkRouteDrawable.h"
 #import "OATrackMenuTabSegments.h"
+#import "OAGPXAppearanceCollection.h"
 
 #import <Charts/Charts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
@@ -1153,18 +1154,39 @@
         dataToUpdate[@"new_group_color"] = newGroupColor;
     }
 
+    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     NSMutableArray<OAGpxWptItem *> *waypoints = _waypointGroups[groupName];
     for (OAGpxWptItem *waypoint in waypoints)
     {
         if (newGroupName)
+        {
+            [appearanceCollection removeGpxFilePath:self.gpx.gpxFilePath
+                                          groupName:waypoint.point.type
+                                          pointName:waypoint.point.name];
             waypoint.point.type = newGroupName;
+        }
 
         if (newGroupColor)
+        {
             waypoint.color = newGroupColor;
+            if (!newGroupName && !self.isCurrentTrack)
+            {
+                NSInteger defaultValue = [OAUtilities colorToNumberFromString:[waypoint.color toHexARGBString]];
+                [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:defaultValue]
+                                    toGpxFilePath:self.gpx.gpxFilePath
+                                        groupName:waypoint.point.type
+                                        pointName:waypoint.point.name];
+            }
+        }
 
         if (self.isCurrentTrack)
         {
             [OAGPXDocument fillWpt:waypoint.point.wpt usingWpt:waypoint.point];
+            OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+            [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[waypoint.point getColor:0]]
+                                toGpxFilePath:nil
+                                    groupName:waypoint.point.type
+                                    pointName:waypoint.point.name];
             [self.savingHelper saveWpt:waypoint.point];
         }
     }
@@ -1185,7 +1207,20 @@
                     if (self.isCurrentTrack)
                     {
                         [OAGPXDocument fillWpt:existWaypoint.point.wpt usingWpt:existWaypoint.point];
+                        OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+                        [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[existWaypoint.point getColor:0]]
+                                            toGpxFilePath:nil
+                                                groupName:existWaypoint.point.type
+                                                pointName:existWaypoint.point.name];
                         [self.savingHelper saveWpt:existWaypoint.point];
+                    }
+                    else
+                    {
+                        NSInteger defaultValue = [OAUtilities colorToNumberFromString:[existWaypoint.color toHexARGBString]];
+                        [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:defaultValue]
+                                            toGpxFilePath:self.gpx.gpxFilePath
+                                                groupName:existWaypoint.point.type
+                                                pointName:existWaypoint.point.name];
                     }
                 }
                 [existWaypoints addObjectsFromArray:waypoints];

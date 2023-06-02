@@ -144,7 +144,13 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 - (NSString *) toHexString;
 - (NSString *) toHexARGBString;
 - (NSString *) toHexRGBAString;
+- (int) toRGBNumber;
+- (int) toRGBANumber;
+- (int) toARGBNumber;
+
 + (UIColor *) colorFromString:(NSString *)string;
++ (int) toNumberFromString:(NSString *)string;
++ (BOOL) colorRGB:(UIColor *)color1 equalToColorRGB:(UIColor *)color2;
 
 @end
 
@@ -275,11 +281,6 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (UIImage *) getTintableImageNamed:(NSString *)name;
 + (UIImage *) tintImageWithColor:(UIImage *)source color:(UIColor *)color;
 + (UIImage *) layeredImageWithColor:(UIColor *)color bottom:(UIImage *)bottom center:(UIImage *)center top:(UIImage *)top;
-
-+ (NSString *) colorToString:(UIColor *)color;
-+ (int) colorToNumberFromString:(NSString *)string;
-+ (int) colorToNumber:(UIColor *)color;
-+ (BOOL) areColorsEqual:(UIColor *)color1 color2:(UIColor *)color2;
 
 + (BOOL) doublesEqualUpToDigits:(int)digits source:(double)source destination:(double)destination;
 + (BOOL) isCoordEqual:(double)srcLat srcLon:(double)srcLon destLat:(double)destLat destLon:(double)destLon;

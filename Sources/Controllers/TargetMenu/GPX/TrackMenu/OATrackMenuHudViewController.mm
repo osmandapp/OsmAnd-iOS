@@ -1047,7 +1047,7 @@
 - (NSInteger)getWaypointsGroupColor:(NSString *)groupName
 {
     if ([self isRteGroup:groupName])
-        return [OAUtilities colorToNumber:UIColorFromRGB(color_footer_icon_gray)];
+        return [UIColorFromRGB(color_footer_icon_gray) toRGBNumber];
 
     UIColor *groupColor;
     if (groupName && groupName.length > 0 && [self getWaypointsCount:groupName] > 0)
@@ -1058,7 +1058,7 @@
     if (!groupColor)
         groupColor = [OADefaultFavorite getDefaultColor];
 
-    return [OAUtilities colorToNumber:groupColor];
+    return [groupColor toARGBNumber];
 }
 
 - (BOOL)isWaypointsGroupVisible:(NSString *)groupName
@@ -1157,9 +1157,6 @@
     {
         if (newGroupName)
         {
-            [appearanceCollection removeGpxFilePath:self.gpx.gpxFilePath
-                                          groupName:waypoint.point.type
-                                          pointName:waypoint.point.name];
             waypoint.point.type = newGroupName;
         }
 
@@ -1167,23 +1164,14 @@
         {
             waypoint.color = newGroupColor;
             if (!newGroupName && !self.isCurrentTrack)
-            {
-                NSInteger defaultValue = [OAUtilities colorToNumberFromString:[waypoint.color toHexARGBString]];
-                [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:defaultValue]
-                                    toGpxFilePath:self.gpx.gpxFilePath
-                                        groupName:waypoint.point.type
-                                        pointName:waypoint.point.name];
-            }
+                [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[waypoint.color toARGBNumber]]];
         }
 
         if (self.isCurrentTrack)
         {
             [OAGPXDocument fillWpt:waypoint.point.wpt usingWpt:waypoint.point];
             OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-            [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[waypoint.point getColor:0]]
-                                toGpxFilePath:nil
-                                    groupName:waypoint.point.type
-                                    pointName:waypoint.point.name];
+            [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[waypoint.point getColor:0]]];
             [self.savingHelper saveWpt:waypoint.point];
         }
     }
@@ -1205,19 +1193,12 @@
                     {
                         [OAGPXDocument fillWpt:existWaypoint.point.wpt usingWpt:existWaypoint.point];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                        [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[existWaypoint.point getColor:0]]
-                                            toGpxFilePath:nil
-                                                groupName:existWaypoint.point.type
-                                                pointName:existWaypoint.point.name];
+                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[existWaypoint.point getColor:0]]];
                         [self.savingHelper saveWpt:existWaypoint.point];
                     }
                     else
                     {
-                        NSInteger defaultValue = [OAUtilities colorToNumberFromString:[existWaypoint.color toHexARGBString]];
-                        [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:defaultValue]
-                                            toGpxFilePath:self.gpx.gpxFilePath
-                                                groupName:existWaypoint.point.type
-                                                pointName:existWaypoint.point.name];
+                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[existWaypoint.color toARGBNumber]]];
                     }
                 }
                 [existWaypoints addObjectsFromArray:waypoints];

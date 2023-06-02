@@ -58,7 +58,7 @@
         CLLocationCoordinate2D loc = location;
         p.position = loc;
         p.time = (long)[[NSDate date] timeIntervalSince1970];
-        [p setColor:[OAUtilities colorToNumber:color]];
+        [p setColor:[color toARGBNumber]];
         p.desc = @"";
         
         _iconName = nil;
@@ -185,14 +185,11 @@
 - (void)setGroup:(NSString *)groupName color:(UIColor *)color save:(BOOL)save
 {
     _gpxWpt.point.type = groupName;
-    [_gpxWpt.point setColor:[OAUtilities colorToNumberFromString:color.toHexARGBString]];
+    [_gpxWpt.point setColor:[color toARGBNumber]];
     _gpxWpt.color = color;
 
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[OAUtilities colorToNumberFromString:[color toHexARGBString]]]
-                        toGpxFilePath:_gpxFileName
-                            groupName:_gpxWpt.point.type
-                            pointName:_gpxWpt.point.name];
+    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[color toARGBNumber]]];
 
     if (![_gpxWpt.groups containsObject:groupName] && groupName.length > 0)
     {
@@ -223,14 +220,6 @@
 
 - (void)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint
 {
-    if (!newPoint)
-    {
-        OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-        [appearanceCollection removeGpxFilePath:_gpxFileName
-                                      groupName:_gpxWpt.point.type
-                                      pointName:_gpxWpt.point.name];
-    }
-
     [_gpxWpt.point setName:data.name];
     [_gpxWpt.point setDesc:data.descr];
     [self setGroup:data.category color:data.color save:NO];

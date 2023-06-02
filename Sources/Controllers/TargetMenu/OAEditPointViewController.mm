@@ -490,26 +490,8 @@
 
 - (void)setupColors
 {
-    UIColor *loadedColor = [_pointHandler getColor];
-
     _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    if (_editPointType == EOAEditPointTypeFavorite)
-    {
-        _selectedColorItem =
-            [_appearanceCollection getColorForFavoriteGroupName:_favorite ? [_favorite getCategory]
-                                                                          : _isNewItemAdding ? [[OAAppSettings sharedManager].lastFavCategoryEntered get] : @""
-                                                      pointName:self.name
-                                                   defaultValue:[OAUtilities colorToNumberFromString:[loadedColor toHexARGBString]]];
-    }
-    else
-    {
-        _selectedColorItem = [_appearanceCollection getColorForGpxFilePath:_waypoint ? _waypoint.docPath : _gpxFileName
-                                                                 groupName:_waypoint ? _waypoint.point.type : @""
-                                                                 pointName:self.name
-                                                              defaultValue:[OAUtilities colorToNumberFromString:[loadedColor toHexARGBString]]];
-    }
-    if (!_selectedColorItem)
-        _selectedColorItem = [_appearanceCollection getDefaultPointColorItem];
+    _selectedColorItem = [_appearanceCollection getColorItemWithValue:[[_pointHandler getColor] toARGBNumber]];
     _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
 }
 
@@ -1402,9 +1384,7 @@
     if (_editPointType == EOAEditPointTypeFavorite)
     {
         [OAFavoritesHelper addEmptyCategory:editedGroupName color:color visible:YES];
-        _selectedColorItem = _selectedColorItem = [_appearanceCollection getColorForFavoriteGroupName:editedGroupName
-                                                                                            pointName:nil
-                                                                                         defaultValue:[OAUtilities colorToNumberFromString:[color toHexARGBString]]];
+        _selectedColorItem = _selectedColorItem = [_appearanceCollection getColorItemWithValue:[color toARGBNumber]];
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
     {
@@ -1412,10 +1392,7 @@
             _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
 
         [((OAGpxWptEditingHandler *) _pointHandler) setGroup:editedGroupName color:color save:YES];
-        _selectedColorItem = [_appearanceCollection getColorForGpxFilePath:_waypoint ? _waypoint.docPath : _gpxFileName
-                                                                 groupName:editedGroupName
-                                                                 pointName:nil
-                                                              defaultValue:[OAUtilities colorToNumberFromString:[color toHexARGBString]]];
+        _selectedColorItem = [_appearanceCollection getColorItemWithValue:[color toARGBNumber]];
     }
 
     self.groupTitle = editedGroupName;
@@ -1688,18 +1665,11 @@
         groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
         OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:groupName];
         if (group)
-        {
-            _selectedColorItem = [_appearanceCollection getColorForFavoriteGroupName:groupName
-                                                                           pointName:nil
-                                                                        defaultValue:[OAUtilities colorToNumberFromString:[group.color toHexARGBString]]];
-        }
+            _selectedColorItem = [_appearanceCollection getColorItemWithValue:[group.color toARGBNumber]];
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
     {
-        _selectedColorItem = [_appearanceCollection getColorForGpxFilePath:_waypoint ? _waypoint.docPath : _gpxFileName
-                                                                 groupName:groupName
-                                                                 pointName:nil
-                                                              defaultValue:[OAUtilities colorToNumberFromString:[(OAGpxWptEditingHandler *) _pointHandler getGroupsWithColors][groupName]]];
+        _selectedColorItem = [_appearanceCollection getColorItemWithValue:[UIColor toNumberFromString:[(OAGpxWptEditingHandler *) _pointHandler getGroupsWithColors][groupName]]];
     }
 
     [self updateHeaderIcon];

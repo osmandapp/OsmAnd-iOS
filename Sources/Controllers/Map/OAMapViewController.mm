@@ -2981,10 +2981,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                     {
                         [OAGPXDocument fillWpt:w usingWpt:self.foundWpt];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                        [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[self.foundWpt getColor:0]]
-                                            toGpxFilePath:self.foundWptDocPath
-                                                groupName:self.foundWpt.type
-                                                pointName:self.foundWpt.name];
+                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[self.foundWpt getColor:0]]];
                         break;
                     }
                 }
@@ -3043,10 +3040,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                 p.reset(new OsmAnd::GpxDocument::WptPt());
                 [OAGPXDocument fillWpt:p usingWpt:wpt];
                 OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[wpt getColor:0]]
-                                    toGpxFilePath:gpxFileName
-                                        groupName:wpt.type
-                                        pointName:wpt.name];
+                [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[wpt getColor:0]]];
 
                 doc->points.append(p);
                 doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
@@ -3084,10 +3078,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
             p.reset(new OsmAnd::GpxDocument::WptPt());
             [OAGPXDocument fillWpt:p usingWpt:wpt];
             OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-            [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[wpt getColor:0]]
-                                toGpxFilePath:gpxFileName
-                                    groupName:wpt.type
-                                    pointName:wpt.name];
+            [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[wpt getColor:0]]];
 
             doc->points.append(p);
             doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
@@ -3169,10 +3160,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                     {
                         [OAGPXDocument fillWpt:w usingWpt:item.point];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                        [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[item.point getColor:0]]
-                                            toGpxFilePath:docPath
-                                                groupName:item.point.type
-                                                pointName:item.point.name];
+                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[item.point getColor:0]]];
                         found = YES;
                         break;
                     }
@@ -3212,10 +3200,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                 {
                     [OAGPXDocument fillWpt:w usingWpt:item.point];
                     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                    [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[item.point getColor:0]]
-                                        toGpxFilePath:item.docPath
-                                            groupName:item.point.type
-                                            pointName:item.point.name];
+                    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[item.point getColor:0]]];
                     found = YES;
                     break;
                 }
@@ -3310,7 +3295,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     }
 
     BOOL found = NO;
-    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     auto activeGpx = _selectedGpxHelper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
@@ -3327,9 +3311,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                     if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.position.latitude] &&
                         [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
                     {
-                        [appearanceCollection removeGpxFilePath:docPath
-                                                      groupName:item.point.type
-                                                      pointName:item.point.name];
                         doc->points.removeAt(i);
                         found = YES;
                         break;
@@ -3366,9 +3347,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                 if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:item.point.position.latitude] &&
                     [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
                 {
-                    [appearanceCollection removeGpxFilePath:item.docPath
-                                                  groupName:item.point.type
-                                                  pointName:item.point.name];
                     doc->points.removeAt(i);
                     found = YES;
                     break;

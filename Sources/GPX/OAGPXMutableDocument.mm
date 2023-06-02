@@ -400,8 +400,18 @@
     s.trkseg = trkseg;
     track.trk->segments.append(trkseg);
     trkseg = nullptr;
-    
-    [((NSMutableArray *)track.segments) addObject:s];
+
+    if ([track.segments isKindOfClass:NSMutableArray.class])
+    {
+        [((NSMutableArray *)track.segments) addObject:s];
+    }
+    else
+    {
+        NSMutableArray<OATrkSegment *> *segments = [NSMutableArray arrayWithArray:track.segments];
+        [segments addObject:s];
+        track.segments = segments;
+    }
+
     _modifiedTime = [[NSDate date] timeIntervalSince1970];
 }
 
@@ -428,7 +438,7 @@
                 }
                 else
                 {
-                    track.segments = @[];
+                    track.segments = [NSMutableArray array];
                 }
 
                 [self addGeneralTrack];

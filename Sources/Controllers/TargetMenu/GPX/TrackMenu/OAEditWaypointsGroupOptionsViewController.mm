@@ -64,7 +64,7 @@
         NSMutableArray<NSNumber *> *tempColors = [NSMutableArray new];
         for (OAFavoriteColor *favColor in [OADefaultFavorite builtinColors])
         {
-            [tempColors addObject:@([OAUtilities colorToNumber:favColor.color])];
+            [tempColors addObject:@([favColor.color toRGBNumber])];
         }
         _colors = tempColors;
     }
@@ -126,7 +126,7 @@
                         kTableKey: @"color_grid",
                         kCellType: [OAColorsTableViewCell getCellIdentifier],
                         kTableValues: @{
-                                @"int_value": @([OAUtilities colorToNumber:_selectedColor.color]),
+                                @"int_value": @([_selectedColor.color toRGBNumber]),
                                 @"array_value": _colors
                         },
                         kCellTitle: OALocalizedString(@"shared_string_color"),
@@ -174,7 +174,7 @@
                     continue;
 
                 BOOL visible = NO;
-                NSInteger color = [OAUtilities colorToNumber:[OADefaultFavorite getDefaultColor]];
+                NSInteger color = [[OADefaultFavorite getDefaultColor] toRGBNumber];
 
                 if (self.delegate)
                 {
@@ -278,7 +278,7 @@
 {
     if ([tableData.key isEqualToString:@"color_grid"])
     {
-        tableData.values[@"int_value"] = @([OAUtilities colorToNumber:_selectedColor.color]);
+        tableData.values[@"int_value"] = @([_selectedColor.color toRGBNumber]);
         tableData.values[@"array_value"] = _colors;
         [tableData setData:@{ kCellDesc: _selectedColor.name }];
     }

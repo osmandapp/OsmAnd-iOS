@@ -106,10 +106,7 @@
 - (void) addWpt:(OAWptPt *)w
 {
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[w getColor:0]]
-                        toGpxFilePath:nil
-                            groupName:w.type
-                            pointName:w.name];
+    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[w getColor:0]]];
 
     std::shared_ptr<OsmAnd::GpxDocument::WptPt> wpt;
     std::shared_ptr<OsmAnd::GpxDocument::Link> link;
@@ -162,11 +159,6 @@
 
 - (void)deleteWpt:(OAWptPt *)w
 {
-    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    [appearanceCollection removeGpxFilePath:nil
-                                  groupName:w.type
-                                  pointName:w.name];
-
     for (OAWptPt *wpt in self.points)
     {
         if (wpt == w || wpt.time == w.time)

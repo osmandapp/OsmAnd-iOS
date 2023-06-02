@@ -59,7 +59,7 @@
     if (!self.point)
         return;
     
-    [self.point setColor:[OAUtilities colorToNumberFromString:self.color.toHexARGBString]];
+    [self.point setColor:[self.color toARGBNumber]];
 }
 
 - (void) acquireColor

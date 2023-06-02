@@ -154,7 +154,7 @@
 
 - (void)updateAllValues
 {
-    _selectedColorItem = [_appearanceCollection getColorForItem:self.gpx.gpxFilePath defaultValue:self.gpx.color];
+    _selectedColorItem = [_appearanceCollection getColorItemWithValue:self.gpx.color];
     if (!_selectedColorItem)
         _selectedColorItem = [_appearanceCollection getDefaultLineColorItem];
     _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
@@ -676,7 +676,7 @@
 {
     [self hide:YES duration:.2 onComplete:^{
         if (_isNewColorSelected)
-            [_appearanceCollection selectColor:_selectedColorItem toItem:self.gpx.gpxFilePath];
+            [_appearanceCollection selectColor:_selectedColorItem];
 
         [[OAGPXDatabase sharedDb] save];
         if (self.isCurrentTrack)

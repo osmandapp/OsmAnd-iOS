@@ -291,7 +291,7 @@
     for (OAGpxExtension *e in wptPt.extensions)
     {
         if ([e.name isEqualToString:@"color"])
-            [wptPt setColor:[OAUtilities colorToNumberFromString:e.value]];
+            [wptPt setColor:[UIColor toNumberFromString:e.value]];
     }
 
     return wptPt;
@@ -643,10 +643,7 @@
         wpt.reset(new OsmAnd::GpxDocument::WptPt());
         [self.class fillWpt:wpt usingWpt:w];
         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-        [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:[w getColor:0]]
-                            toGpxFilePath:filename
-                                groupName:w.type
-                                pointName:w.name];
+        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[w getColor:0]]];
         document->points.append(wpt);
         wpt = nullptr;
     }

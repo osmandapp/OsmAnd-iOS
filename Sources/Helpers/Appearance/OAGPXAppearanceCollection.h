@@ -9,9 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "OAGPXDatabase.h"
 
-#define kFavoritePrefixColorId @"favorite"
-#define kWaypointPrefixColorId @"waypoint"
-
 @class OAColorItem, OAFavoriteGroup;
 
 @interface OAGPXTrackAppearance : NSObject
@@ -64,17 +61,10 @@
 - (void)addNewSelectedColor:(UIColor *)newColor;
 - (void)duplicateColor:(OAColorItem *)colorItem;
 - (void)deleteColor:(OAColorItem *)colorItem;
-- (void)selectColor:(OAColorItem *)colorItem toItem:(NSString *)item;
-- (void)selectColor:(OAColorItem *)colorItem toFavoriteGroupName:(NSString *)groupName pointName:(NSString *)pointName;
-- (void)selectColor:(OAColorItem *)colorItem toGpxFilePath:(NSString *)gpxFilePath groupName:(NSString *)groupName pointName:(NSString *)pointName;
+- (void)selectColor:(OAColorItem *)colorItem;
 - (NSArray<OAColorItem *> *)getAvailableColorsSortingByKey;
 - (NSArray<OAColorItem *> *)getAvailableColorsSortingByLastUsed;
-- (void)removeItem:(NSString *)item;
-- (void)removeFavoriteGroupName:(NSString *)groupName pointName:(NSString *)pointName;
-- (void)removeGpxFilePath:(NSString *)gpxFilePath groupName:(NSString *)groupName pointName:(NSString *)pointName;
-- (OAColorItem *)getColorForItem:(NSString *)item defaultValue:(NSInteger)defaultValue;
-- (OAColorItem *)getColorForFavoriteGroupName:(NSString *)groupName pointName:(NSString *)pointName defaultValue:(NSInteger)defaultValue;
-- (OAColorItem *)getColorForGpxFilePath:(NSString *)gpxFilePath groupName:(NSString *)groupName pointName:(NSString *)pointName defaultValue:(NSInteger)defaultValue;
+- (OAColorItem *)getColorItemWithValue:(int)defaultValue;
 
 - (NSArray<OAGPXTrackWidth *> *)getAvailableWidth;
 - (OAGPXTrackWidth *)getWidthForValue:(NSString *)value;

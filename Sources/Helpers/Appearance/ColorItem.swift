@@ -26,7 +26,7 @@ class ColorItem: NSObject {
     }
 
     convenience init(hexColor: String) {
-        let colorValue: Int = Int(OAUtilities.colorToNumber(from: hexColor))
+        let colorValue: Int = Int(UIColor.toNumber(from: hexColor))
         self.init(key: ColorItem.generateKey(colorValue: colorValue), value: colorValue, isDefault: false)
         self.hexColor = hexColor
     }

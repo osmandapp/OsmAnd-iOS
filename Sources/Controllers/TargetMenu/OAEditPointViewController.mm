@@ -491,7 +491,7 @@
 - (void)setupColors
 {
     _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    _selectedColorItem = [_appearanceCollection getColorItemWithValue:[OAUtilities colorToNumberFromString:[[_pointHandler getColor] toHexARGBString]]];
+    _selectedColorItem = [_appearanceCollection getColorItemWithValue:[[_pointHandler getColor] toARGBNumber]];
     _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
 }
 
@@ -1384,7 +1384,7 @@
     if (_editPointType == EOAEditPointTypeFavorite)
     {
         [OAFavoritesHelper addEmptyCategory:editedGroupName color:color visible:YES];
-        _selectedColorItem = _selectedColorItem = [_appearanceCollection getColorItemWithValue:[OAUtilities colorToNumberFromString:[color toHexARGBString]]];
+        _selectedColorItem = _selectedColorItem = [_appearanceCollection getColorItemWithValue:[color toARGBNumber]];
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
     {
@@ -1392,7 +1392,7 @@
             _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
 
         [((OAGpxWptEditingHandler *) _pointHandler) setGroup:editedGroupName color:color save:YES];
-        _selectedColorItem = [_appearanceCollection getColorItemWithValue:[OAUtilities colorToNumberFromString:[color toHexARGBString]]];
+        _selectedColorItem = [_appearanceCollection getColorItemWithValue:[color toARGBNumber]];
     }
 
     self.groupTitle = editedGroupName;
@@ -1665,11 +1665,11 @@
         groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
         OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:groupName];
         if (group)
-            _selectedColorItem = [_appearanceCollection getColorItemWithValue:[OAUtilities colorToNumberFromString:[group.color toHexARGBString]]];
+            _selectedColorItem = [_appearanceCollection getColorItemWithValue:[group.color toARGBNumber]];
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
     {
-        _selectedColorItem = [_appearanceCollection getColorItemWithValue:[OAUtilities colorToNumberFromString:[(OAGpxWptEditingHandler *) _pointHandler getGroupsWithColors][groupName]]];
+        _selectedColorItem = [_appearanceCollection getColorItemWithValue:[UIColor toNumberFromString:[(OAGpxWptEditingHandler *) _pointHandler getGroupsWithColors][groupName]]];
     }
 
     [self updateHeaderIcon];

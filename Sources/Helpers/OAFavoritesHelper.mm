@@ -207,8 +207,7 @@ static BOOL _favoritesLoaded = NO;
     }
 
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    NSInteger defaultValue = [OAUtilities colorToNumberFromString:[[point getColor] toHexARGBString]];
-    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:defaultValue]];
+    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[[point getColor] toARGBNumber]]];
     if (saveImmediately)
     {
         [OAFavoritesHelper sortAll];
@@ -295,9 +294,8 @@ static BOOL _favoritesLoaded = NO;
         [newGroup.points addObject:item];
     }
 
-    NSInteger defaultValue = [OAUtilities colorToNumberFromString:[[item getColor] toHexARGBString]];
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:defaultValue]];
+    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[[item getColor] toARGBNumber]]];
 
     [OAFavoritesHelper sortAll];
     [OAFavoritesHelper saveCurrentPointsIntoFile];
@@ -773,7 +771,7 @@ static BOOL _favoritesLoaded = NO;
 
 - (UIColor *) color
 {
-    return [OAUtilities areColorsEqual:_color color2:UIColor.whiteColor] ? UIColorFromRGB(color_chart_orange) : _color;
+    return [UIColor colorRGB:_color equalToColorRGB:UIColor.whiteColor] ? UIColorFromRGB(color_chart_orange) : _color;
 }
 
 - (BOOL) isPersonal

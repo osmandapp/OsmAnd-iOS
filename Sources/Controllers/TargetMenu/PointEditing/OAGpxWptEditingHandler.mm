@@ -58,7 +58,7 @@
         CLLocationCoordinate2D loc = location;
         p.position = loc;
         p.time = (long)[[NSDate date] timeIntervalSince1970];
-        [p setColor:[OAUtilities colorToNumber:color]];
+        [p setColor:[color toARGBNumber]];
         p.desc = @"";
         
         _iconName = nil;
@@ -185,11 +185,11 @@
 - (void)setGroup:(NSString *)groupName color:(UIColor *)color save:(BOOL)save
 {
     _gpxWpt.point.type = groupName;
-    [_gpxWpt.point setColor:[OAUtilities colorToNumberFromString:color.toHexARGBString]];
+    [_gpxWpt.point setColor:[color toARGBNumber]];
     _gpxWpt.color = color;
 
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[OAUtilities colorToNumberFromString:[color toHexARGBString]]]];
+    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[color toARGBNumber]]];
 
     if (![_gpxWpt.groups containsObject:groupName] && groupName.length > 0)
     {

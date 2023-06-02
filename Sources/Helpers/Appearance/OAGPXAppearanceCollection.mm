@@ -244,7 +244,7 @@
             }
             else
             {
-                OAColorItem *colorItem = [[OAColorItem alloc] initWithKey:key value:obj.integerValue isDefault:YES];
+                OAColorItem *colorItem = [[OAColorItem alloc] initWithKey:key value:obj.intValue isDefault:YES];
                 [_availableColors addObject:colorItem];
                 colorItem.sortedPosition = [_availableColors indexOfObject:colorItem];
                 [colorItem generateId];
@@ -306,7 +306,7 @@
         NSInteger sortedHexColorIndex = [sortedPositionWithHexColors.allValues indexOfObject:hexColor];
         if (sortedHexColorIndex != NSNotFound)
         {
-            NSInteger sortedPosition = sortedPositionWithHexColors.allKeys[sortedHexColorIndex].integerValue;
+            NSInteger sortedPosition = sortedPositionWithHexColors.allKeys[sortedHexColorIndex].intValue;
             colorItem.sortedPosition = sortedPosition;
             [colorItem generateId];
             [sortedPositionWithHexColors removeObjectForKey:@(sortedPosition)];
@@ -351,14 +351,14 @@
                 groupName = @"default";
             if ([self saveValueIfNeeded:customTrackColorsLastUsed
                       customTrackColors:customTrackColors
-                               hexColor:[favoriteGroup.color toHexARGBString]])
+                                  color:favoriteGroup.color])
                 isRegenerated = YES;
 
             for (OAFavoriteItem *favoriteItem in favoriteGroup.points)
             {
                 if ([self saveValueIfNeeded:customTrackColorsLastUsed
                           customTrackColors:customTrackColors
-                                   hexColor:[[favoriteItem getColor] toHexARGBString]])
+                                      color:[favoriteItem getColor]])
                     isRegenerated = YES;
             }
         }
@@ -375,10 +375,11 @@
 
 - (BOOL)saveValueIfNeeded:(NSMutableArray<NSString *> *)customTrackColorsLastUsed
         customTrackColors:(NSMutableArray<NSString *> *)customTrackColors
-                 hexColor:(NSString *)hexColor
+                    color:(UIColor *)color
 {
     OAColorItem *colorItem;
-    NSInteger colorValue = [OAUtilities colorToNumberFromString:hexColor];
+    int colorValue = [color toARGBNumber];
+    NSString *hexColor = [color toHexARGBString];
     for (OAColorItem *ci in _availableColors)
     {
         if (ci.value == colorValue)
@@ -447,7 +448,7 @@
     }
     for (NSNumber *colorValue in _defaultColorValues.allValues)
     {
-        if ([hexColor isEqualToString:[UIColorFromARGB(colorValue.integerValue) toHexARGBString]])
+        if ([hexColor isEqualToString:[UIColorFromARGB(colorValue.intValue) toHexARGBString]])
             count++;
     }
     return count;
@@ -467,7 +468,7 @@
 - (void)changeColor:(OAColorItem *)colorItem newColor:(UIColor *)newColor
 {
     NSString *newHexColor = [newColor toHexARGBString];
-    [colorItem setValueWithNewValue:[OAUtilities colorToNumberFromString:newHexColor]];
+    [colorItem setValueWithNewValue:[newColor toARGBNumber]];
     [colorItem generateId];
 
     NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[_settings.customTrackColors get]];
@@ -559,7 +560,7 @@
     }];
 }
 
-- (OAColorItem *)getColorItemWithValue:(NSInteger)value
+- (OAColorItem *)getColorItemWithValue:(int)value
 {
     for (OAColorItem *colorItem in _availableColors)
     {

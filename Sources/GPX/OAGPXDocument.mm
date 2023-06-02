@@ -291,7 +291,7 @@
     for (OAGpxExtension *e in wptPt.extensions)
     {
         if ([e.name isEqualToString:@"color"])
-            [wptPt setColor:[OAUtilities colorToNumberFromString:e.value]];
+            [wptPt setColor:[UIColor toNumberFromString:e.value]];
     }
 
     return wptPt;

@@ -64,7 +64,7 @@
 - (void)selectColor:(OAColorItem *)colorItem;
 - (NSArray<OAColorItem *> *)getAvailableColorsSortingByKey;
 - (NSArray<OAColorItem *> *)getAvailableColorsSortingByLastUsed;
-- (OAColorItem *)getColorItemWithValue:(NSInteger)defaultValue;
+- (OAColorItem *)getColorItemWithValue:(int)defaultValue;
 
 - (NSArray<OAGPXTrackWidth *> *)getAvailableWidth;
 - (OAGPXTrackWidth *)getWidthForValue:(NSString *)value;

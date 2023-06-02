@@ -1047,7 +1047,7 @@
 - (NSInteger)getWaypointsGroupColor:(NSString *)groupName
 {
     if ([self isRteGroup:groupName])
-        return [OAUtilities colorToNumber:UIColorFromRGB(color_footer_icon_gray)];
+        return [UIColorFromRGB(color_footer_icon_gray) toRGBNumber];
 
     UIColor *groupColor;
     if (groupName && groupName.length > 0 && [self getWaypointsCount:groupName] > 0)
@@ -1058,7 +1058,7 @@
     if (!groupColor)
         groupColor = [OADefaultFavorite getDefaultColor];
 
-    return [OAUtilities colorToNumber:groupColor];
+    return [groupColor toARGBNumber];
 }
 
 - (BOOL)isWaypointsGroupVisible:(NSString *)groupName
@@ -1164,10 +1164,7 @@
         {
             waypoint.color = newGroupColor;
             if (!newGroupName && !self.isCurrentTrack)
-            {
-                NSInteger defaultValue = [OAUtilities colorToNumberFromString:[waypoint.color toHexARGBString]];
-                [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:defaultValue]];
-            }
+                [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[waypoint.color toARGBNumber]]];
         }
 
         if (self.isCurrentTrack)
@@ -1201,8 +1198,7 @@
                     }
                     else
                     {
-                        NSInteger defaultValue = [OAUtilities colorToNumberFromString:[existWaypoint.color toHexARGBString]];
-                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:defaultValue]];
+                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[existWaypoint.color toARGBNumber]]];
                     }
                 }
                 [existWaypoints addObjectsFromArray:waypoints];

@@ -1276,7 +1276,7 @@
 "rendering_attr_smoothness_excellent_name" = "Excelente";
 "rendering_attr_piste_difficulty_expert_name" = "Especialista";
 "rendering_attr_hmRendered_description" = "Aumentar o nível de detalhe do mapa.";
-"rendering_attr_hikingRoutesOSMC_description" = "Renderizar caminhos de acordo com traços OSMC.";
+"rendering_attr_hikingRoutesOSMC_description" = "Apresentar caminhos de acordo com traços OSMC.";
 "rendering_attr_highway_class_bridleway_name" = "Caminho para cavaleiros";
 "rendering_value_translucent_purple_name" = "Roxo translúcido";
 "routing_attr_avoid_shuttle_train_description" = "Evita usar comboios vaivém, em pequenos trajetos predefinidos como aeroportos";

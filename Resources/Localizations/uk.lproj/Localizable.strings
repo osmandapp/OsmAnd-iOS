@@ -808,7 +808,7 @@
 // OSM Editing actions
 "opening_changeset" = "Відкривається набір змін…";
 "closing_changeset" = "Закривається набір змін…";
-"commiting_node" = "Надсилання точки…";
+"commiting_node" = "Збереження точки…";
 "loading_poi_obj" = "Завантаження точок інтересу…";
 "osn_bug_name" = "Нотатка OSM";
 "osm_created" = "Створено";
@@ -1166,7 +1166,7 @@
 "select_underlay" = "Виберіть мапу підкладки";
 "confirm_bulk_delete" = "Ви дійсно бажаєте вилучити %ld елементів?";
 "quick_action_add_actions_descr" = "Додати дії для швидкого доступу до них на мапі.";
-"quick_action_interim_dialog" = "Показати проміжний діалог";
+"quick_action_interim_dialog" = "Показувати проміжний діалог";
 "quick_action_dialog_descr" = "Увімкніть, щоб показати діалогове вікно перед застосуванням дії";
 "quick_action_template_name" = "Назва шаблона";
 "quick_action_fav_name_descr" = "Залиште порожнім, щоб використати адресу або назву місця.";
@@ -2416,7 +2416,7 @@
 "copy_address" = "Копіювати адресу";
 "share_geo" = "geo:";
 "toast_empty_name_error" = "Місце без назви";
-"animate_my_location" = "Анімувати моє розташування";
+"animate_my_location" = "Анімувати моє положення";
 "animate_my_location_descr" = "Плавне переміщення на мапі під час навігації";
 "copy_poi_name" = "Копіювати назву точки інтересу";
 "copy_coordinates" = "Копіювати координати";

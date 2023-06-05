@@ -38,6 +38,7 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
                                     iconName:(NSString *)iconName
                                       action:(SEL)action
                                         menu:(UIMenu *)menu;
+- (void)changeButtonAvailability:(UIBarButtonItem *)barButtonItem isEnabled:(BOOL)isEnabled;
 
 - (NSString *)getTitle;
 - (NSString *)getSubtitle;

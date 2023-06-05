@@ -1276,7 +1276,7 @@
 "rendering_attr_smoothness_excellent_name" = "Excelente";
 "rendering_attr_piste_difficulty_expert_name" = "Especialista";
 "rendering_attr_hmRendered_description" = "Aumentar o nível de detalhe do mapa.";
-"rendering_attr_hikingRoutesOSMC_description" = "Renderizar caminhos de acordo com traços OSMC.";
+"rendering_attr_hikingRoutesOSMC_description" = "Apresentar caminhos de acordo com traços OSMC.";
 "rendering_attr_highway_class_bridleway_name" = "Caminho para cavaleiros";
 "rendering_value_translucent_purple_name" = "Roxo translúcido";
 "routing_attr_avoid_shuttle_train_description" = "Evita usar comboios vaivém, em pequenos trajetos predefinidos como aeroportos";
@@ -2841,7 +2841,7 @@
 "wikivoyage_download_pics" = "Descarregar imagens";
 "download_over_cellular_network" = "Descarregar imagens pela rede móvel? Isto pode ter custos monetários de utilização de dados móveis.";
 "change_language" = "Mudar idioma";
-"ios_release_4_4" = "• Wikipédia: capacidade adicionada para visualizar imagens, interface do leitor atualizada\n• Favoritos: pesquisa adicionada\n• CarPlay: histórico adicionado, trilhos reorganizados e lista de favoritos\n• Rotas de caminhada: capacidade adicional de selecionar rotas no mapa para visualizar informações adicionais ou navegação\n• OpenStreetMap: adicionada capacidade de enviar trilhos\n• Novo widget: mostrar a hora exacta ou o tempo que resta para o próximo nascer ou pôr do sol\n• Novo widget: mostrar as coordenadas do centro do mapa\n• Melhor suporte de teclados externos, apoio adicional para ações básicas\n• Avisos de voz: suporte adicional para novos idiomas: catalão, ucraniano, búlgaro, indonésio, esloveno\n• Adicionado aviso legal sobre utilização de alertas de radares de velocidade\n• Privacidade aprimorada: opções adicionadas para desativar o registo do histórico\n• Visibilidade melhorada da régua do mapa\n• Correções no OsmAnd Cloud e melhorias na interface\n• Melhorias na interface em idiomas que se leem da direita para a esquerda\n• Acessibilidade: adicionado rótulo de conteúdo em botões do mapa\n• Adicionado suporte a \"tipo de letra dinâmico\", o tamanho do texto no OsmAnd mudará de acordo com o tamanho do texto no iOS\n• Orientação do mapa: adicionado modo girado manualmente\n• Novo perfil \"Ciclomotor\"\n• A versão mínima do iOS foi aumentada para 15.0\n";
+"ios_release_4_4" = "• Teclado externo: suporte adicionado para novas teclas\n• Novos widgets para gravação de viagem\n• Pesquisa adicionada nos Favoritos, Trilhos e Edições OSM\n• CarPlay: o histórico inclui pontos que foram usados na navegação\n• Os Emojis agora podem ser usados como favoritos ou no nome de ponto de passagem\n• Corrigida a transição entre artigos off-line da Wikipédia\n• Problemas corrigidos com a importação de roteamento personalizado e ficheiros de renderização\n• Aparência dos trilhos: adicionada opção para definir qualquer cor personalizada\n• Novo widget \"Elevação: centro do mapa\"\n• Adicionada opção para desativar o aviso de desvio da rota\n• Wikipédia: adicionada opção para visualizar imagens; interface do leitor atualizada\n• CarPlay: histórico adicionado, trilhos reorganizados e lista de favoritos\n• Rotas de caminhada: capacidade adicional de selecionar rotas no mapa para visualizar informações adicionais ou navegação\n• OpenStreetMap: adicionada capacidade de enviar trilhos\n• Novo widget: mostrar a hora exacta ou o tempo que resta para o próximo nascer ou pôr do sol\n• Novo widget: mostrar as coordenadas do centro do mapa\n• Melhor suporte de teclados externos, apoio adicional para ações básicas\n• Avisos de voz: suporte adicional para novos idiomas: catalão, ucraniano, búlgaro, indonésio, esloveno\n• Adicionado aviso legal sobre utilização de alertas de radares de velocidade\n• Privacidade aprimorada: opções adicionadas para desativar o registo do histórico\n• Visibilidade melhorada da régua do mapa\n• Correções no OsmAnd Cloud e melhorias na interface\n• Melhorias na interface em idiomas que se leem da direita para a esquerda\n• Acessibilidade: adicionado rótulo de conteúdo em botões do mapa\n• Adicionado suporte a \"tipo de letra dinâmico\", o tamanho do texto no OsmAnd mudará de acordo com o tamanho do texto no iOS\n• Orientação do mapa: adicionado modo girado manualmente\n• Novo perfil \"Ciclomotor\"\n• A versão mínima do iOS foi aumentada para 15.0\n";
 "icon_group_service" = "Serviço";
 "coordinates_widget_map_center" = "Coordenadas: centro do mapa";
 "toggle_map_center" = "Mostrar / ocultar coordenadas: centro do mapa";
@@ -2897,3 +2897,7 @@
 "map_widget_altitude_map_center_desc" = "Mostra a elevação acima do nível do mar do centro do mapa atual.";
 "map_widget_altitude_current_location" = "Altitude: localização atual";
 "altitude_widget_desc" = "Mostra a altura acima do nível do mar da geolocalização atual.";
+"test_heightmap" = "Testar mapa de altitude";
+"disable_vertex_hillshade_3d" = "Desativar vértices de sombras de relevo em 3D";
+"generate_slope_from_3d_maps" = "Gerar mapas raster de declives a partir de mapas 3D";
+"generate_hillshade_from_3d_maps" = "Gerar mapas de sombras de relevo a partir de mapas 3D";

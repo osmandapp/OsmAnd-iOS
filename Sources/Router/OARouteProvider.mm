@@ -667,7 +667,7 @@
     auto cf = config->build(routingProfile, params.start.course >= 0.0 ? params.start.course / 180.0 * M_PI : -360, memoryLimit, paramsR);
     if ([OAAppSettings.sharedManager.enableTimeConditionalRouting get:params.mode])
     {
-        cf->routeCalculationTime = [[NSDate date] timeIntervalSince1970] * 1000;
+        cf->routeCalculationTime = [[NSDate date] timeIntervalSince1970];
     }
     return cf;
 }

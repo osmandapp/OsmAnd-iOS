@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "OAGPXDatabase.h"
 
-@class OAColorItem;
+@class OAColorItem, OAFavoriteGroup;
 
 @interface OAGPXTrackAppearance : NSObject
 
@@ -53,15 +53,18 @@
 + (OAGPXAppearanceCollection *)sharedInstance;
 
 - (void)generateAvailableColors;
+- (BOOL)saveFavoriteColorsIfNeeded:(NSArray<OAFavoriteGroup *> *)favoriteGroups;
+- (OAColorItem *)getDefaultLineColorItem;
+- (OAColorItem *)getDefaultPointColorItem;
+
 - (void)changeColor:(OAColorItem *)colorItem newColor:(UIColor *)newColor;
 - (void)addNewSelectedColor:(UIColor *)newColor;
 - (void)duplicateColor:(OAColorItem *)colorItem;
 - (void)deleteColor:(OAColorItem *)colorItem;
-- (void)selectColor:(OAColorItem *)colorItem toGpxFilePath:(NSString *)gpxFilePath;
+- (void)selectColor:(OAColorItem *)colorItem;
 - (NSArray<OAColorItem *> *)getAvailableColorsSortingByKey;
 - (NSArray<OAColorItem *> *)getAvailableColorsSortingByLastUsed;
-- (void)removeGpxFilePath:(NSString *)gpxFilePath;
-- (OAColorItem *)getColorForGpxFilePath:(NSString *)gpxFilePath defaultValue:(NSInteger)defaultValue;
+- (OAColorItem *)getColorItemWithValue:(int)defaultValue;
 
 - (NSArray<OAGPXTrackWidth *> *)getAvailableWidth;
 - (OAGPXTrackWidth *)getWidthForValue:(NSString *)value;

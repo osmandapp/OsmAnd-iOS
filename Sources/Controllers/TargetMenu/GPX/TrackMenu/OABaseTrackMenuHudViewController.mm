@@ -257,8 +257,9 @@
 {
     if (_doc)
     {
-        _analysis = [_doc getGeneralTrack] && [_doc getGeneralSegment]
-                ? [OAGPXTrackAnalysis segment:0 seg:_doc.generalSegment] : [_doc getAnalysis:0];
+        _analysis = !_isCurrentTrack && [_doc getGeneralTrack] && [_doc getGeneralSegment]
+        	? [OAGPXTrackAnalysis segment:0 seg:_doc.generalSegment]
+        	: [_doc getAnalysis:0];
     }
     else
     {

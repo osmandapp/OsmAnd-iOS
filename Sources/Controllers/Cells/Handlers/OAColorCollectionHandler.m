@@ -214,12 +214,12 @@
         if (indexPath == _selectedIndexPath)
         {
             cell.backView.layer.borderWidth = 2;
-            cell.backView.layer.borderColor = UIColorFromARGB(color_primary_purple_50).CGColor;
+            cell.backView.layer.borderColor = UIColorFromRGB(color_primary_purple).CGColor;
         }
         else
         {
             cell.backView.layer.borderWidth = 0;
-            cell.backView.layer.borderColor = [UIColor clearColor].CGColor;
+            cell.backView.layer.borderColor = UIColor.clearColor.CGColor;
         }
     }
     return cell;

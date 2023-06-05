@@ -16,6 +16,7 @@
 #import "OAEditPointViewController.h"
 #import "OASavingTrackHelper.h"
 #import "OAGPXDocument.h"
+#import "OAGPXAppearanceCollection.h"
 #import "Localization.h"
 
 @implementation OAGpxWptEditingHandler
@@ -49,9 +50,7 @@
     if (self)
     {
         _gpxFileName = gpxFileName;
-
-        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors].firstObject;
-        UIColor* color = favCol.color;
+        UIColor *color = [OADefaultFavorite getDefaultColor];
 
         OAGpxWptItem* wpt = [[OAGpxWptItem alloc] init];
         OAWptPt* p = [[OAWptPt alloc] init];
@@ -59,7 +58,7 @@
         CLLocationCoordinate2D loc = location;
         p.position = loc;
         p.time = (long)[[NSDate date] timeIntervalSince1970];
-        [p setColor:[OAUtilities colorToNumber:color]];
+        [p setColor:[color toARGBNumber]];
         p.desc = @"";
         
         _iconName = nil;
@@ -186,8 +185,11 @@
 - (void)setGroup:(NSString *)groupName color:(UIColor *)color save:(BOOL)save
 {
     _gpxWpt.point.type = groupName;
-    [_gpxWpt.point setColor:[OAUtilities colorToNumberFromString:color.toHexARGBString]];
+    [_gpxWpt.point setColor:[color toARGBNumber]];
     _gpxWpt.color = color;
+
+    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[color toARGBNumber]]];
 
     if (![_gpxWpt.groups containsObject:groupName] && groupName.length > 0)
     {

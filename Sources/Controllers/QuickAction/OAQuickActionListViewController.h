@@ -6,8 +6,8 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseButtonsViewController.h"
 
-@interface OAQuickActionListViewController : OACompoundViewController
+@interface OAQuickActionListViewController : OABaseButtonsViewController
 
 @end

@@ -70,9 +70,9 @@
     id color = json[@"color"];
     BOOL hasColor = color != nil;
     if (hasColor)
-        gpxAppearanceInfo.color = [color isKindOfClass:NSNumber.class] ? ((NSNumber *) color).intValue : [OAUtilities colorToNumberFromString:color];
+        gpxAppearanceInfo.color = [color isKindOfClass:NSNumber.class] ? ((NSNumber *) color).intValue : [UIColor toNumberFromString:color];
     else
-        gpxAppearanceInfo.color = [OAUtilities colorToNumberFromString:nil];
+        gpxAppearanceInfo.color = [UIColor toNumberFromString:nil];
     gpxAppearanceInfo.coloringType = json[@"coloring_type"];
     gpxAppearanceInfo.width = json[@"width"];
     gpxAppearanceInfo.showArrows = [json[@"show_arrows"] boolValue];

@@ -1716,7 +1716,7 @@
 "lang_da" = "丹麥";
 "lang_pms" = "皮埃蒙特語";
 "lang_en_gb" = "英語（英國）";
-"lang_zh_tw" = "中文（正體）";
+"lang_zh_tw" = "繁體中文";
 "lang_sl" = "斯洛維尼亞";
 "shared_string_width" = "寬度";
 "lang_es_us" = "西班牙語（美洲）";
@@ -2233,7 +2233,7 @@
 "km" = "公里";
 "open_place_reviews_plugin_description" = "為 OpenPlaceReviews 專案做出貢獻，例如餐廳、旅館或博物館等公共場所的照片、評論或連結。\n\n在我們的網站上找到關於如何貢獻的說明 https://osmand.net/docs/user/plugins/openplacereviews。";
 "kg" = "公斤";
-"lang_zh-Hant" = "中文（正體）";
+"lang_zh-Hant" = "繁體中文";
 "shared_string_height" = "高度";
 "speed_cameras_alert" = "某些國家禁止使用測速照相的警報裝置。";
 "speed_cameras_legal_descr" = "在某些國家或地區，法律禁止使用測速照相的警報應用程式。\n\n您必須根據您所在國家的法律做出選擇。\n\n選取 %@，您將會收到關於測速照相的警報與警告。\n\n選取 %@。所有關於測速照相的：警報、通知與 POI 都將會被刪除，直到您完全重新安裝 OsmAnd 為止。";

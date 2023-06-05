@@ -443,13 +443,7 @@ static UIViewController *parentController;
     if (item.color != 0)
     {
         OAGPXAppearanceCollection *gpxAppearance = [OAGPXAppearanceCollection sharedInstance];
-        OAColorItem *colorItem = [gpxAppearance getColorForGpxFilePath:item.gpxFilePath defaultValue:item.color];
-        if (!colorItem)
-        {
-            [gpxAppearance addNewSelectedColor:UIColorFromARGB(item.color)];
-            colorItem = [gpxAppearance getColorForGpxFilePath:item.gpxFilePath defaultValue:item.color];
-        }
-        [gpxAppearance selectColor:colorItem toGpxFilePath:item.gpxFilePath];
+        [gpxAppearance selectColor:[gpxAppearance getColorItemWithValue:item.color]];
     }
 
     [OAUtilities denyAccessToFile:_importUrl.path removeFromInbox:YES];

@@ -446,6 +446,17 @@
     return rightNavbarButton;
 }
 
+- (void)changeButtonAvailability:(UIBarButtonItem *)barButtonItem isEnabled:(BOOL)isEnabled
+{
+    if (barButtonItem.customView && [barButtonItem.customView isKindOfClass:UIButton.class])
+    {
+        UIButton *button = barButtonItem.customView;
+        button.enabled = isEnabled;
+        button.tintColor = isEnabled ? [self getNavbarButtonsTintColor] : UIColor.lightGrayColor;
+        [button setTitleColor:isEnabled ? [self getNavbarButtonsTintColor] : UIColor.lightGrayColor forState:UIControlStateNormal];
+    }
+}
+
 - (BOOL)isAnyLargeTitle
 {
     return [self getNavbarStyle] == EOABaseNavbarStyleLargeTitle || [self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle;

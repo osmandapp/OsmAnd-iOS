@@ -336,7 +336,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     NSMutableArray<NSNumber *> *lineColors = [NSMutableArray array];
     for (OAFavoriteColor *lineColor in colors)
     {
-        [lineColors addObject:@([OAUtilities colorToNumber:lineColor.color])];
+        [lineColors addObject:@([lineColor.color toRGBNumber])];
     }
     _availableColors = lineColors;
 

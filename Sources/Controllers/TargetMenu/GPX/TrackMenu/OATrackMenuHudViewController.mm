@@ -60,6 +60,7 @@
 #import "OAOsmUploadGPXViewConroller.h"
 #import "OANetworkRouteDrawable.h"
 #import "OATrackMenuTabSegments.h"
+#import "OAGPXAppearanceCollection.h"
 
 #import <Charts/Charts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
@@ -1046,7 +1047,7 @@
 - (NSInteger)getWaypointsGroupColor:(NSString *)groupName
 {
     if ([self isRteGroup:groupName])
-        return [OAUtilities colorToNumber:UIColorFromRGB(color_footer_icon_gray)];
+        return [UIColorFromRGB(color_footer_icon_gray) toRGBNumber];
 
     UIColor *groupColor;
     if (groupName && groupName.length > 0 && [self getWaypointsCount:groupName] > 0)
@@ -1057,7 +1058,7 @@
     if (!groupColor)
         groupColor = [OADefaultFavorite getDefaultColor];
 
-    return [OAUtilities colorToNumber:groupColor];
+    return [groupColor toARGBNumber];
 }
 
 - (BOOL)isWaypointsGroupVisible:(NSString *)groupName
@@ -1150,18 +1151,27 @@
         dataToUpdate[@"new_group_color"] = newGroupColor;
     }
 
+    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     NSMutableArray<OAGpxWptItem *> *waypoints = _waypointGroups[groupName];
     for (OAGpxWptItem *waypoint in waypoints)
     {
         if (newGroupName)
+        {
             waypoint.point.type = newGroupName;
+        }
 
         if (newGroupColor)
+        {
             waypoint.color = newGroupColor;
+            if (!newGroupName && !self.isCurrentTrack)
+                [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[waypoint.color toARGBNumber]]];
+        }
 
         if (self.isCurrentTrack)
         {
             [OAGPXDocument fillWpt:waypoint.point.wpt usingWpt:waypoint.point];
+            OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+            [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[waypoint.point getColor:0]]];
             [self.savingHelper saveWpt:waypoint.point];
         }
     }
@@ -1182,7 +1192,13 @@
                     if (self.isCurrentTrack)
                     {
                         [OAGPXDocument fillWpt:existWaypoint.point.wpt usingWpt:existWaypoint.point];
+                        OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[existWaypoint.point getColor:0]]];
                         [self.savingHelper saveWpt:existWaypoint.point];
+                    }
+                    else
+                    {
+                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[existWaypoint.color toARGBNumber]]];
                     }
                 }
                 [existWaypoints addObjectsFromArray:waypoints];

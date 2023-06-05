@@ -20,6 +20,7 @@
 #import "OAPlugin.h"
 #import "OAIndexConstants.h"
 #import "OAAppVersionDependentConstants.h"
+#import "OAGPXAppearanceCollection.h"
 
 #import <EventKit/EventKit.h>
 
@@ -76,6 +77,7 @@ static BOOL _favoritesLoaded = NO;
     
     [OAFavoritesHelper sortAll];
     [OAFavoritesHelper recalculateCachedFavPoints];
+    [[OAGPXAppearanceCollection sharedInstance] saveFavoriteColorsIfNeeded:_favoriteGroups];
 
     _favoritesLoaded = YES;
 }
@@ -203,6 +205,9 @@ static BOOL _favoritesLoaded = NO;
         [group addPoint:point];
         [_cachedFavoritePoints addObject:point];
     }
+
+    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[[point getColor] toARGBNumber]]];
     if (saveImmediately)
     {
         [OAFavoritesHelper sortAll];
@@ -265,6 +270,7 @@ static BOOL _favoritesLoaded = NO;
 + (BOOL) editFavoriteName:(OAFavoriteItem *)item newName:(NSString *)newName group:(NSString *)group descr:(NSString *)descr address:(NSString *)address
 {
     NSString *oldGroup = [item getCategory];
+
     [item setName:newName];
     [item setCategory:group];
     [item setDescription:descr];
@@ -281,13 +287,16 @@ static BOOL _favoritesLoaded = NO;
         
         //TODO: change icon for parking points here
 
-        UIColor *defaultColor = ((OAFavoriteColor *)[OADefaultFavorite builtinColors][0]).color;
+        UIColor *defaultColor = [OADefaultFavorite getDefaultColor];
         if (![item getColor] && [item getColor] == defaultColor)
             [item setColor:newGroup.color];
 
         [newGroup.points addObject:item];
     }
-    
+
+    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[[item getColor] toARGBNumber]]];
+
     [OAFavoritesHelper sortAll];
     [OAFavoritesHelper saveCurrentPointsIntoFile];
     return YES;
@@ -503,6 +512,7 @@ static BOOL _favoritesLoaded = NO;
     OAFavoriteGroup *group = [[OAFavoriteGroup alloc] initWithName:name isVisible:visible color:color];
     [_favoriteGroups addObject:group];
     _flatGroups[name] = group;
+    [[OAGPXAppearanceCollection sharedInstance] saveFavoriteColorsIfNeeded:@[group]];
 }
 
 + (BOOL) deleteNewFavoriteItem:(OAFavoriteItem *)favoritesItem
@@ -552,7 +562,9 @@ static BOOL _favoritesLoaded = NO;
             {
                 NSInteger cachedIndexItem = [_cachedFavoritePoints indexOfObject:favoriteItem];
                 if (cachedIndexItem != NSNotFound)
+                {
                     [_cachedFavoritePoints removeObjectAtIndex:cachedIndexItem];
+                }
 
                 toDelete.push_back(favoriteItem.favorite);
             }
@@ -759,7 +771,7 @@ static BOOL _favoritesLoaded = NO;
 
 - (UIColor *) color
 {
-    return [OAUtilities areColorsEqual:_color color2:UIColor.whiteColor] ? UIColorFromRGB(color_chart_orange) : _color;
+    return [UIColor colorRGB:_color equalToColorRGB:UIColor.whiteColor] ? UIColorFromRGB(color_chart_orange) : _color;
 }
 
 - (BOOL) isPersonal

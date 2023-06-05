@@ -256,7 +256,7 @@
 
 - (void) setColor:(int)value
 {
-    NSString *hexString = [NSString stringWithFormat:@"#%0X", value];
+    NSString *hexString = [UIColorFromRGBA(value) toHexRGBAString];
     [self setExtension:@"color" value:hexString.lowerCase];
 }
 
@@ -266,7 +266,7 @@
     {
         if ([colorString hasPrefix:@"#"])
         {
-            return [OAUtilities colorToNumberFromString:colorString];
+            return [UIColor toNumberFromString:colorString];
         }
         else
         {

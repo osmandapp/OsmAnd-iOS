@@ -218,9 +218,115 @@
                                       lroundf(b * 255)];
 }
 
+- (NSString *) toHexRGBAString
+{
+    const CGFloat *components = CGColorGetComponents(self.CGColor);
+
+    CGFloat r = components[0];
+    CGFloat g = components[1];
+    CGFloat b = components[2];
+    CGFloat a = components[3];
+    return [NSString stringWithFormat:@"#%02lX%02lX%02lX%02lX",
+                                      lroundf(r * 255),
+                                      lroundf(g * 255),
+                                      lroundf(b * 255),
+                                      lroundf(a * 255)];
+}
+
+- (int)toRGBNumber
+{
+    CGFloat r,g,b,a;
+    [self getRed:&r green:&g blue:&b alpha:&a];
+
+    uint32_t red = r * 255;
+    uint32_t green = g * 255;
+    uint32_t blue = b * 255;
+
+    int result = (red << 16) + (green << 8) + blue;
+    return result;
+}
+
+- (int)toRGBANumber
+{
+    CGFloat r,g,b,a;
+    [self getRed:&r green:&g blue:&b alpha:&a];
+
+    uint32_t red = r * 255;
+    uint32_t green = g * 255;
+    uint32_t blue = b * 255;
+    uint32_t alpha = a * 255;
+
+    int result = (red << 24) + (green << 16) + (blue << 8) + alpha;
+    return result;
+}
+
+- (int)toARGBNumber
+{
+    CGFloat r,g,b,a;
+    [self getRed:&r green:&g blue:&b alpha:&a];
+
+    uint32_t red = r * 255;
+    uint32_t green = g * 255;
+    uint32_t blue = b * 255;
+    uint32_t alpha = a * 255;
+
+    int result = (alpha << 24) + (red << 16) + (green << 8) + blue;
+    return result;
+}
+
 + (UIColor *) colorFromString:(NSString *)string
 {
-    return UIColorFromARGB([OAUtilities colorToNumberFromString:string]);
+    return UIColorFromARGB([self.class toNumberFromString:string]);
+}
+
++ (int)toNumberFromString:(NSString *)string
+{
+    string = [string lowercaseString];
+    string = [string stringByReplacingOccurrencesOfString:@"#" withString:@""];
+    string = [string stringByReplacingOccurrencesOfString:@"0x" withString:@""];
+
+    switch ([string length])
+    {
+        case 0:
+        {
+            string = @"00000000";
+            break;
+        }
+        case 3:
+        {
+            NSString *red = [string substringWithRange:NSMakeRange(0, 1)];
+            NSString *green = [string substringWithRange:NSMakeRange(1, 1)];
+            NSString *blue = [string substringWithRange:NSMakeRange(2, 1)];
+            string = [NSString stringWithFormat:@"%1$@%1$@%2$@%2$@%3$@%3$@ff", red, green, blue];
+            break;
+        }
+        case 6:
+        {
+            string = [@"ff" stringByAppendingString:string];
+            break;
+        }
+        case 8:
+        {
+            //do nothing
+            break;
+        }
+        default:
+        {
+            return 0;
+        }
+    }
+
+    uint32_t rgba;
+    NSScanner *scanner = [NSScanner scannerWithString:string];
+    [scanner scanHexInt:&rgba];
+    return rgba;
+}
+
++ (BOOL)colorRGB:(UIColor *)color1 equalToColorRGB:(UIColor *)color2
+{
+    int col1 = [color1 toRGBNumber];
+    int col2 = [color2 toRGBNumber];
+    return col1 == col2;
 }
 
 @end
@@ -1461,31 +1567,6 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     return coloredImg;
 }
 
-+ (NSString *) colorToString:(UIColor *)color
-{
-    CGFloat r,g,b,a;
-    [color getRed:&r green:&g blue:&b alpha:&a];
-    
-    uint32_t red = r * 255;
-    uint32_t green = g * 255;
-    uint32_t blue = b * 255;
-    
-    return [NSString stringWithFormat:@"#%.6x", (red << 16) + (green << 8) + blue];
-}
-
-+ (int) colorToNumber:(UIColor *)color
-{
-    CGFloat r,g,b,a;
-    [color getRed:&r green:&g blue:&b alpha:&a];
-    
-    uint32_t red = r * 255;
-    uint32_t green = g * 255;
-    uint32_t blue = b * 255;
-    
-    int result = (red << 16) + (green << 8) + blue;
-    return result;
-}
-
 + (NSString *) appendMeters:(float)value
 {
     NSString *formattedValue = [OAOsmAndFormatter getFormattedDistance:value];
@@ -1516,56 +1597,6 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
         [res addObject:[self appendSpeed:num.floatValue]];
     }
     return res;
-}
-
-+ (int) colorToNumberFromString:(NSString *)string
-{
-    string = [string lowercaseString];
-    string = [string stringByReplacingOccurrencesOfString:@"#" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"0x" withString:@""];
-
-    switch ([string length])
-    {
-        case 0:
-        {
-            string = @"00000000";
-            break;
-        }
-        case 3:
-        {
-            NSString *red = [string substringWithRange:NSMakeRange(0, 1)];
-            NSString *green = [string substringWithRange:NSMakeRange(1, 1)];
-            NSString *blue = [string substringWithRange:NSMakeRange(2, 1)];
-            string = [NSString stringWithFormat:@"%1$@%1$@%2$@%2$@%3$@%3$@ff", red, green, blue];
-            break;
-        }
-        case 6:
-        {
-            string = [@"ff" stringByAppendingString:string];
-            break;
-        }
-        case 8:
-        {
-            //do nothing
-            break;
-        }
-        default:
-        {
-            return 0;
-        }
-    }
-
-    uint32_t rgba;
-    NSScanner *scanner = [NSScanner scannerWithString:string];
-    [scanner scanHexInt:&rgba];
-    return rgba;
-}
-
-+ (BOOL) areColorsEqual:(UIColor *)color1 color2:(UIColor *)color2
-{
-    NSString *col1Str = [self.class colorToString:color1];
-    NSString *col2Str = [self.class colorToString:color2];
-    return [col1Str isEqualToString:col2Str];
 }
 
 + (BOOL) doublesEqualUpToDigits:(int)digits source:(double)source destination:(double)destination

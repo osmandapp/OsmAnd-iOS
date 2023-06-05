@@ -40,6 +40,7 @@
 - (void) restoreCenterPanel:(UIViewController *)viewController;
 
 - (BOOL) handleIncomingURL:(NSURL *)url;
+- (void) importAsFavorites:(NSURL *)url;
 - (void) importAsGPX:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView;
 
 + (void) showInfoAlertWithTitle:(NSString *)title

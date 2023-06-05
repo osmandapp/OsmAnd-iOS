@@ -28,6 +28,7 @@
 #import "OAURLSessionProgress.h"
 #import "OAGPXDatabase.h"
 #import "OsmAndApp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ArchiveWriter.h>
@@ -68,7 +69,6 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
 - (void) uploadGPXFile:(NSString *)tagstring description:(NSString *)description visibility:(NSString *)visibility gpxDoc:(OAGPX *)gpx listener:(id<OAOnUploadFileListener>)listener
 {
     NSString *url = [BASE_URL stringByAppendingString:@"api/0.6/gpx/create"];
-    NSString *authStr = [NSString stringWithFormat:@"%@:%@", _settings.osmUserName.get, _settings.osmUserPassword.get];
     NSDictionary<NSString *, NSString *> *additionalData = @{
         @"description": description,
         @"tags": tagstring,
@@ -98,7 +98,8 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
                 [listener onFileUploadProgress:nil fileName:fileName progress:progress deltaWork:deltaWork];
         }];
         
-        [OANetworkUtilities uploadFile:url fileName:fileName params:additionalData headers:@{} data:data gzip:YES userNamePassword:authStr progress:progress onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSString *authHeader = [OsmOAuthHelper getAutorizationHeader];
+        [OANetworkUtilities uploadFile:url fileName:fileName params:additionalData headers:@{} data:data gzip:YES autorizationHeader:[OsmOAuthHelper getAutorizationHeader] progress:progress onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
             if (listener)
             {
                 NSString *err = nil;

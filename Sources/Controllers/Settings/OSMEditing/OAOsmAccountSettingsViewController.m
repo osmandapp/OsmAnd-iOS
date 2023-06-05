@@ -20,6 +20,7 @@
 #import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAOsmAccountSettingsViewController () <UITextFieldDelegate, UIGestureRecognizerDelegate>
 
@@ -48,7 +49,7 @@
     _settings = [OAAppSettings sharedManager];
     _newUserName = [_settings.osmUserName get];
     _newPassword = [_settings.osmUserPassword get];
-    _isLogged = _newUserName.length > 0 && _newPassword.length > 0;
+    _isLogged = [OsmOAuthHelper isLogged];
 }
 
 - (void)registerNotifications
@@ -192,8 +193,11 @@
         {
             BOOL isEmail = [item[@"key"] isEqualToString:@"email_input_cell"];
             BOOL isPassword = [item[@"key"] isEqualToString:@"password_input_cell"];
-
-            cell.titleLabel.text = isEmail ? OALocalizedString(@"shared_string_email") : OALocalizedString(@"user_password");
+            
+            if (isEmail)
+                cell.titleLabel.text = [OsmOAuthHelper isOAuthLogged] ? OALocalizedString(@"user_name") : OALocalizedString(@"shared_string_email");
+            else
+                cell.titleLabel.text = OALocalizedString(@"user_password");
             cell.titleLabel.textColor = [UIColor blackColor];
 
             cell.inputField.userInteractionEnabled = !_isLogged;
@@ -357,8 +361,7 @@
         NSString *warning = result.warning;
         if (warning)
         {
-            [_settings.osmUserName resetToDefault];
-            [_settings.osmUserPassword resetToDefault];
+            [OsmOAuthHelper logOut];
             _errorMessage = OALocalizedString(@"auth_failed");
 
             [self generateData];
@@ -382,11 +385,7 @@
     }
     else
     {
-        [_settings.osmUserName resetToDefault];
-        [_settings.osmUserPassword resetToDefault];
-        [_settings.osmUserDisplayName resetToDefault];
-        [_settings.mapperLiveUpdatesExpireTime resetToDefault];
-
+        [OsmOAuthHelper logOut];
         [self dismissViewControllerAnimated:YES completion:^{
             if (self.accountDelegate)
                 [self.accountDelegate onAccountInformationUpdated];

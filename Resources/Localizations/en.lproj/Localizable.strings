@@ -2168,6 +2168,7 @@
 
 "email_example_hint" = "user@example.com";
 "shared_string_required" = "Required";
+"user_name" = "User name";
 "login_account" = "Account";
 "shared_string_account_add" = "Add account";
 "shared_string_email" = "Email";
@@ -2934,6 +2935,7 @@
 "open_street_map_login_mode_simple" = "You need to log in to upload your changes.";
 "sign_in_with_open_street_map" = "Sign in with OpenStreetMap";
 "use_login_and_password" = "Use username and password";
+"perform_oauth_authorization" = "Log in via OAuth";
 "use_login_and_password_description" = "Use your email/login and password to log in to OpenStreetMap.org.";
 "benefits_for_contributors" = "Benefits for active OSM contributors";
 "benefits_for_contributors_primary_descr" = "Active contributors to OpenStreetMap.org may be entitled to unlimited hourly map updates.";

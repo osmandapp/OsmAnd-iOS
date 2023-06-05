@@ -9,7 +9,6 @@
 #import "OAOsmEditingSettingsViewController.h"
 #import "OAOsmAccountSettingsViewController.h"
 #import "OAOsmEditsListViewController.h"
-#import "OAOsmLoginMainViewController.h"
 #import "OABenefitsOsmContributorsViewController.h"
 #import "OAMappersViewController.h"
 #import "OASimpleTableViewCell.h"
@@ -23,6 +22,7 @@
 #import "OAColors.h"
 #import "OAAppSettings.h"
 #import "OAIAPHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAOsmEditingSettingsViewController () <OAAccountSettingDelegate>
 
@@ -43,7 +43,8 @@
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
-    _isLogged = [_settings.osmUserName get].length > 0 && [_settings.osmUserPassword get].length > 0;
+    _isLogged = [OsmOAuthHelper isLogged];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAccountInformationUpdated) name:OsmOAuthHelper.notificationKey object:nil];
 }
 
 #pragma mark - Base UI
@@ -275,9 +276,7 @@
         }
         else
         {
-            OAOsmLoginMainViewController *loginMainViewController = [[OAOsmLoginMainViewController alloc] init];
-            loginMainViewController.delegate = self;
-            [self presentViewController:loginMainViewController animated:YES completion:nil];
+            [OsmOAuthHelper showAuthIntroScreenWithHostVC:self];
         }
     }
     else if ([item.key isEqualToString:@"updates_for_mappers"])
@@ -329,21 +328,23 @@
 
 - (void)onAccountInformationUpdated
 {
-    _isLogged = [_settings.osmUserName get].length > 0 && [_settings.osmUserPassword get].length > 0;
-    if (_credentialIndexPath && _mappersIndexPath)
-    {
-        OATableRowData *credentialRow = [_data itemForIndexPath:_credentialIndexPath];
-        credentialRow.title = _isLogged ? [_settings.osmUserName get] : OALocalizedString(@"login_open_street_map_org");
-        credentialRow.accessoryType = _isLogged ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
-        [credentialRow setObj:_isLogged ? UIColor.blackColor : UIColorFromRGB(color_primary_purple) forKey:@"titleColor"];
-        [credentialRow setObj:[UIFont scaledSystemFontOfSize:17. weight:_isLogged ? UIFontWeightRegular : UIFontWeightMedium] forKey:@"titleFont"];
-
-        OATableRowData *mappersRow = [_data itemForIndexPath:_mappersIndexPath];
-        mappersRow.descr = [self getMappersDescription];
-
-        [self.tableView reloadRowsAtIndexPaths:@[_credentialIndexPath, _mappersIndexPath]
-                              withRowAnimation:UITableViewRowAnimationNone];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _isLogged = [OsmOAuthHelper isLogged];
+        if (_credentialIndexPath && _mappersIndexPath)
+        {
+            OATableRowData *credentialRow = [_data itemForIndexPath:_credentialIndexPath];
+            credentialRow.title = _isLogged ? [_settings.osmUserName get] : OALocalizedString(@"login_open_street_map_org");
+            credentialRow.accessoryType = _isLogged ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+            [credentialRow setObj:_isLogged ? UIColor.blackColor : UIColorFromRGB(color_primary_purple) forKey:@"titleColor"];
+            [credentialRow setObj:[UIFont scaledSystemFontOfSize:17. weight:_isLogged ? UIFontWeightRegular : UIFontWeightMedium] forKey:@"titleFont"];
+            
+            OATableRowData *mappersRow = [_data itemForIndexPath:_mappersIndexPath];
+            mappersRow.descr = [self getMappersDescription];
+            
+            [self.tableView reloadRowsAtIndexPaths:@[_credentialIndexPath, _mappersIndexPath]
+                                  withRowAnimation:UITableViewRowAnimationNone];
+        }
+    });
 }
 
 -(void)onAccountInformationUpdatedFromBenefits

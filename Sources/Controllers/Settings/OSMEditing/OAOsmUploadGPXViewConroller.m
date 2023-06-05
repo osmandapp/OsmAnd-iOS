@@ -18,7 +18,6 @@
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
 #import "OAOsmAccountSettingsViewController.h"
-#import "OAOsmLoginMainViewController.h"
 #import "OAMappersViewController.h"
 #import "OAUploadGPXFilesTask.h"
 #import "OAPlugin.h"
@@ -29,6 +28,7 @@
 #import "OABackupListeners.h"
 #import "OATextMultilineTableViewCell.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "OsmAnd_Maps-Swift.h"
 
 #define kDefaultTag @"osmand"
 #define kDescriptionTextFieldTag 0
@@ -62,6 +62,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     NSMutableDictionary<NSString *, NSNumber *> *_filesUploadingProgress;
     NSMutableArray<NSString *> *_failedFileNames;
     EOAOsmUploadGPXViewConrollerMode _mode;
+    OAAutoObserverProxy *_oauthAccountUpdatedObserver;
 }
 
 #pragma mark - Initialization
@@ -83,7 +84,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     _selectedVisibility = EOAOsmUploadGPXVisibilityPublic;
     _descriptionText = @"";
     _tagsText = kDefaultTag;
-    _isLogged = [_settings.osmUserName get].length > 0 && [_settings.osmUserPassword get].length > 0;
+    _isLogged = [OsmOAuthHelper isLogged];
 }
 
 #pragma mark - UIViewController
@@ -93,19 +94,15 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAccountInformationUpdated) name:OsmOAuthHelper.notificationKey object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    _isLogged = [_settings.osmUserName get].length > 0 && [_settings.osmUserPassword get].length > 0;
+    _isLogged = [OsmOAuthHelper isLogged];
     if (!_isLogged)
-    {
-        OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
-        accountSettings.accountDelegate = self;
-        [self showModalViewController:accountSettings];
-    }
+        [OsmOAuthHelper showAuthIntroScreenWithHostVC:self];
 }
 
 #pragma mark - Base UI
@@ -198,7 +195,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         accountSection.headerText = OALocalizedString(@"login_account");
         OATableRowData *accountCell = [accountSection createNewRow];
         [accountCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
-        [accountCell setTitle: _isLogged ? [_settings.osmUserName get] : OALocalizedString(@"login_open_street_map_org")];
+        [accountCell setTitle: _isLogged ? [OsmOAuthHelper getUserName] : OALocalizedString(@"login_open_street_map_org")];
         [accountCell setIconName:@"ic_custom_user_profile"];
         [accountCell setObj:(_isLogged ? UIColor.blackColor : UIColorFromRGB(color_primary_purple)) forKey:@"title_color"];
         [accountCell setObj:([UIFont systemFontOfSize:17. weight:_isLogged ? UIFontWeightRegular : UIFontWeightMedium]) forKey:@"title_font"];
@@ -544,9 +541,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     }
     else
     {
-        OAOsmLoginMainViewController *loginMainViewController = [[OAOsmLoginMainViewController alloc] init];
-        loginMainViewController.delegate = self;
-        [self presentViewController:loginMainViewController animated:YES completion:nil];
+        [OsmOAuthHelper showAuthIntroScreenWithHostVC:self];
     }
 }
 
@@ -614,9 +609,11 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 
 - (void)onAccountInformationUpdated
 {
-    _isLogged = [_settings.osmUserName get].length > 0 && [_settings.osmUserPassword get].length > 0;
-    [self generateData];
-    [self.tableView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _isLogged = [OsmOAuthHelper isLogged];
+        [self generateData];
+        [self.tableView reloadData];
+    });
 }
 
 - (void)onAccountInformationUpdatedFromBenefits

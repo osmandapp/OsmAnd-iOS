@@ -9,7 +9,6 @@
 #import "OAActionAddCategoryViewController.h"
 #import "OAActionConfigurationViewController.h"
 #import "Localization.h"
-#import "OASizes.h"
 #import "OASearchUICore.h"
 #import "OAQuickSearchHelper.h"
 #import "OAQuickSearchListItem.h"
@@ -19,70 +18,110 @@
 #import "OAPOIHelper.h"
 #import "OAColors.h"
 
-@interface OAActionAddCategoryViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIButton *backBtn;
-@property (weak, nonatomic) IBOutlet UIButton *doneButton;
-@property (weak, nonatomic) IBOutlet UITextField *searchField;
+@interface OAActionAddCategoryViewController () <UITextFieldDelegate, UISearchBarDelegate>
 
 @end
 
 @implementation OAActionAddCategoryViewController
 {
     NSArray *_data;
-    
     NSMutableArray *_filteredData;
-    BOOL _isFiltered;
-    
     NSMutableArray<NSString *> *_initialValues;
     
     UIView *_tableHeaderView;
+    UISearchController *_searchController;
+    
+    BOOL _isFiltered;
 }
+
+#pragma mark - Initialization
 
 - (instancetype)initWithNames:(NSMutableArray<NSString *> *)names
 {
     self = [super init];
-    if (self) {
+    if (self)
         _initialValues = names;
-    }
     return self;
 }
+
+- (void)registerNotifications
+{
+    [self addNotification:UIKeyboardWillShowNotification selector:@selector(keyboardWillShow:)];
+    [self addNotification:UIKeyboardWillHideNotification selector:@selector(keyboardWillHide:)];
+}
+
+#pragma mark - UIViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self commonInit];
-    [self setupSearchView];
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
+
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
-    self.tableView.separatorInset = UIEdgeInsetsMake(0.0, 55., 0.0, 0.0);
-    self.tableView.tableHeaderView = _tableHeaderView;
     [self.tableView setEditing:YES];
-    [self.backBtn setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
-    [self.backBtn setTintColor:UIColor.whiteColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self applySafeAreaMargins];
-    [self setupSearchView];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    _searchController.searchBar.delegate = self;
+    _searchController.obscuresBackgroundDuringPresentation = NO;
+    _searchController.hidesNavigationBarDuringPresentation = NO;
+    self.navigationItem.searchController = _searchController;
+    [self setupSearchControllerWithFilter:NO];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    return OALocalizedString(@"quick_action_new_action");
 }
 
--(void) commonInit
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
+{
+    return EOABaseNavbarColorSchemeOrange;
+}
+
+- (NSString *)getTableHeaderDescription
+{
+    return OALocalizedString(@"quick_action_add_category_descr");
+}
+
+- (BOOL)hideFirstHeader
+{
+    return YES;
+}
+
+- (void)setupSearchControllerWithFilter:(BOOL)isFiltered
+{
+    if (isFiltered)
+    {
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.backgroundColor = UIColor.whiteColor;
+        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.grayColor;
+    }
+    else
+    {
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+        _searchController.searchBar.searchTextField.tintColor = UIColor.grayColor;
+    }
+}
+
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
+{
+    return @[[self createRightNavbarButton:OALocalizedString(@"shared_string_done")
+                                  iconName:nil
+                                    action:@selector(onRightNavbarButtonPressed)
+                                      menu:nil]];
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     OASearchResultCollection *res = [[[OAQuickSearchHelper instance] getCore] shallowSearch:[OASearchAmenityTypesAPI class] text:@"" matcher:nil];
     NSMutableArray *rows = [NSMutableArray array];
@@ -92,101 +131,38 @@
             [rows addObject:sr.object];
     }
     _data = [NSArray arrayWithArray:rows];
-    
-    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"quick_action_add_category_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
 }
 
--(void) setupSearchView
-{
-    _searchField.backgroundColor = [UIColor colorWithWhite:1 alpha:0.44];
-    _searchField.layer.cornerRadius = 10.0;
-    _searchField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:_searchField.placeholder attributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
-    _searchField.leftView = [[UIView alloc] initWithFrame:CGRectMake(4.0, 0.0, 34.0, _searchField.bounds.size.height)];
-    _searchField.leftViewMode = UITextFieldViewModeAlways;
-    _searchField.textColor = [UIColor whiteColor];
-    _searchField.delegate = self;
-    [_searchField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
-    
-    UIImageView *leftImageView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"search_icon"]];
-    leftImageView.contentMode = UIViewContentModeCenter;
-    leftImageView.frame = _searchField.leftView.frame;
-    leftImageView.tintColor = [UIColor whiteColor];
-    
-    [_searchField.leftView addSubview:leftImageView];
-}
-
-- (void)applyLocalization
-{
-    _titleView.text = OALocalizedString(@"quick_action_new_action");
-    _searchField.placeholder = OALocalizedString(@"shared_string_search");
-    [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
-}
-
--(UIView *) getTopView
-{
-    return _navBarView;
-}
-
--(UIView *) getMiddleView
-{
-    return _tableView;
-}
-
--(CGFloat)getNavBarHeight
-{
-    return navBarWithSearchFieldHeight;
-}
-
-- (IBAction)backPressed:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (IBAction)doneButtonPressed:(id)sender
-{
-    NSArray *selectedItems = [self.tableView indexPathsForSelectedRows];
-    NSMutableArray *arr = [NSMutableArray new];
-    for (NSIndexPath *path in selectedItems)
-        [arr addObject:[self getItem:path]];
-    
-    if (self.delegate)
-        [self.delegate onCategoriesSelected:[NSArray arrayWithArray:arr]];
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
--(id)getItem:(NSIndexPath *)indexPath
+- (id)getItem:(NSIndexPath *)indexPath
 {
     if (_isFiltered)
         return _filteredData[indexPath.row];
     return _data[indexPath.row];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (NSInteger)sectionsCount
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        CGFloat textWidth = DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2;
-        UIFont *labelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-        CGSize labelSize = [OAUtilities calculateTextBounds:OALocalizedString(@"quick_action_add_actions_descr") width:textWidth font:labelFont];
-        _tableHeaderView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height + 30.0);
-        _tableHeaderView.subviews.firstObject.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height);
-    } completion:nil];
+    return 1;
 }
 
-#pragma mark - UITableViewDataSource
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    if (_isFiltered)
+        return _filteredData.count;
+    return _data.count;
+}
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     id category = [self getItem:indexPath];
     OASimpleTableViewCell* cell;
-    cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+    cell = (OASimpleTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
         [cell descriptionVisibility:NO];
     }
-    
     if (cell)
     {
         cell.contentView.backgroundColor = [UIColor whiteColor];
@@ -200,14 +176,16 @@
         cell.leftIconView.tintColor = UIColorFromRGB(color_osmand_orange);
         if ([_initialValues containsObject:name])
         {
-            [_tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+            [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
             [_initialValues removeObject:name];
         }
     }
     return cell;
 }
 
-- (NSString *) getNameFromCategory:(id)category
+#pragma mark - Additions
+
+- (NSString *)getNameFromCategory:(id)category
 {
     if ([category isKindOfClass:OAPOIUIFilter.class])
     {
@@ -219,21 +197,14 @@
         OAPOIBaseType *filter = (OAPOIBaseType *)category;
         return filter.nameLocalized;
     }
+    else
+    {
+        return nil;
+    }
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSString *)getName:(id)item
 {
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if (_isFiltered)
-        return _filteredData.count;
-    return _data.count;
-}
-
-- (NSString *)getName:(id)item {
     NSString *name = @"";
     if ([item isKindOfClass:OAPOIUIFilter.class])
     {
@@ -248,30 +219,55 @@
     return name;
 }
 
--(void)textViewDidChange:(UITextView *)textView
+#pragma mark - Selectors
+
+- (void)onRightNavbarButtonPressed
 {
-    if (textView.text.length == 0)
+    NSArray *selectedItems = [self.tableView indexPathsForSelectedRows];
+    NSMutableArray *arr = [NSMutableArray new];
+    for (NSIndexPath *path in selectedItems)
+        [arr addObject:[self getItem:path]];
+    
+    if (self.delegate)
+        [self.delegate onCategoriesSelected:[NSArray arrayWithArray:arr]];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    _isFiltered = NO;
+    [self setupSearchControllerWithFilter:NO];
+    [self.tableView reloadData];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    if (searchText.length == 0)
     {
         _isFiltered = NO;
+        [self setupSearchControllerWithFilter:NO];
     }
     else
     {
         _isFiltered = YES;
+        [self setupSearchControllerWithFilter:YES];
         _filteredData = [NSMutableArray new];
         for (id item in _data)
         {
             NSString * name = [self getName:item];
-            NSRange nameRange = [name rangeOfString:textView.text options:NSCaseInsensitiveSearch];
+            NSRange nameRange = [name rangeOfString:searchText options:NSCaseInsensitiveSearch];
             if (nameRange.location != NSNotFound)
                 [_filteredData addObject:item];
         }
     }
-    [_tableView reloadData];
+    [self.tableView reloadData];
 }
 
 #pragma mark - Keyboard Notifications
 
-- (void) keyboardWillShow:(NSNotification *)notification;
+- (void)keyboardWillShow:(NSNotification *)notification;
 {
     NSDictionary *userInfo = [notification userInfo];
     CGRect keyboardBounds;
@@ -285,7 +281,7 @@
     } completion:nil];
 }
 
-- (void) keyboardWillHide:(NSNotification *)notification;
+- (void)keyboardWillHide:(NSNotification *)notification;
 {
     NSDictionary *userInfo = [notification userInfo];
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];

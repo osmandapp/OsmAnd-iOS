@@ -2909,3 +2909,5 @@
 "generate_hillshade_from_3d_maps" = "Генерувати растрові мапи із відтіненням рельєфу з 3D-мап";
 "disable_vertex_hillshade_3d" = "Вимкнути відтінення вершини в 3D";
 "generate_slope_from_3d_maps" = "Генерувати растрові мапи схилів з 3D-мап";
+"perform_oauth_authorization" = "Увійти через OAuth";
+"user_name" = "Ім’я користувача";

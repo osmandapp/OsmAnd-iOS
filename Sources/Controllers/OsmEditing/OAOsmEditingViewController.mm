@@ -27,6 +27,7 @@
 #import "Localization.h"
 #import "OAPOIHelper.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
@@ -90,8 +91,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     OAAppSettings *settings = OAAppSettings.sharedManager;
     if ([settings.offlineEditing get]
         || !AFNetworkReachabilityManager.sharedManager.isReachable
-        || [settings.osmUserName get].length == 0
-        || [settings.osmUserPassword get].length == 0)
+        || ![OAOsmOAuthHelper isAuthorised])
     {
         return _editingPlugin.getPoiModificationLocalUtil;
     }

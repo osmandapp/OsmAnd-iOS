@@ -75,10 +75,12 @@
 
 - (void)onAccountInformationUpdated
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        if (self.delegate)
-            [self.delegate onAccountInformationUpdated];
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self dismissViewControllerAnimated:YES completion:^{
+            if (self.delegate)
+                [self.delegate onAccountInformationUpdated];
+        }];
+    });
 }
 
 @end

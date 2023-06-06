@@ -267,6 +267,9 @@
 		15CD7EA725B1C1A700BCB36A /* ic_small_time_start@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EA425B1C1A700BCB36A /* ic_small_time_start@2x.png */; };
 		15CD7EAD25B1C1B900BCB36A /* ic_small_waypoints@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EAA25B1C1B700BCB36A /* ic_small_waypoints@3x.png */; };
 		15CD7EAF25B1C1B900BCB36A /* ic_small_waypoints@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EAC25B1C1B800BCB36A /* ic_small_waypoints@2x.png */; };
+		32048FC52A25E70200AA4B71 /* BaseOAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32048FC42A25E70200AA4B71 /* BaseOAuthHelper.swift */; };
+		32048FC72A26084000AA4B71 /* OsmOAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32048FC62A26084000AA4B71 /* OsmOAuthHelper.swift */; };
+		32048FC92A26132600AA4B71 /* OsmOAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32048FC82A26132600AA4B71 /* OsmOAuthView.swift */; };
 		3205EC3D26E6B96E0090B491 /* ic_custom_map_pin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3205EC3B26E6B96E0090B491 /* ic_custom_map_pin@2x.png */; };
 		3205EC3E26E6B96E0090B491 /* ic_custom_map_pin@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3205EC3C26E6B96E0090B491 /* ic_custom_map_pin@3x.png */; };
 		3205EC4026E807E80090B491 /* OAQuickSearchCoordinatesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3205EC3F26E8079E0090B491 /* OAQuickSearchCoordinatesViewController.xib */; };
@@ -493,6 +496,8 @@
 		32A7EE16261BBF6C00F7A697 /* bg_point_octagon_contour@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A7EE14261BBF6C00F7A697 /* bg_point_octagon_contour@2x.png */; };
 		32A7EE1B261BBF7E00F7A697 /* bg_point_square_contour@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A7EE19261BBF7D00F7A697 /* bg_point_square_contour@2x.png */; };
 		32A7EE1C261BBF7E00F7A697 /* bg_point_square_contour@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A7EE1A261BBF7E00F7A697 /* bg_point_square_contour@3x.png */; };
+		32AD5D5A2A2F111600A51B60 /* OsmAccessTokenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AD5D592A2F111600A51B60 /* OsmAccessTokenModel.swift */; };
+		32AD5D5C2A2F11A200A51B60 /* OsmUserDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AD5D5B2A2F11A200A51B60 /* OsmUserDataModel.swift */; };
 		32ADB42B25D2EC2900F5C634 /* ic_dialog_move@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32ADB42825D2EC2700F5C634 /* ic_dialog_move@3x.png */; };
 		32ADB42F25D2EC2900F5C634 /* ic_dialog_move@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32ADB42A25D2EC2900F5C634 /* ic_dialog_move@2x.png */; };
 		32B50ABD26BBDA0D002E6C92 /* ic_custom_shop_bag@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32B50ABB26BBDA0A002E6C92 /* ic_custom_shop_bag@2x.png */; };
@@ -3729,6 +3734,9 @@
 		15CD7EAA25B1C1B700BCB36A /* ic_small_waypoints@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_waypoints@3x.png"; path = "Resources/Icons/ic_small_waypoints@3x.png"; sourceTree = "<group>"; };
 		15CD7EAC25B1C1B800BCB36A /* ic_small_waypoints@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_waypoints@2x.png"; path = "Resources/Icons/ic_small_waypoints@2x.png"; sourceTree = "<group>"; };
 		2CFA9B52B7169930B7654453 /* Pods-OsmAnd Maps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.debug.xcconfig"; sourceTree = "<group>"; };
+		32048FC42A25E70200AA4B71 /* BaseOAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseOAuthHelper.swift; sourceTree = "<group>"; };
+		32048FC62A26084000AA4B71 /* OsmOAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmOAuthHelper.swift; sourceTree = "<group>"; };
+		32048FC82A26132600AA4B71 /* OsmOAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmOAuthView.swift; sourceTree = "<group>"; };
 		3205EC3B26E6B96E0090B491 /* ic_custom_map_pin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_pin@2x.png"; path = "Resources/Icons/ic_custom_map_pin@2x.png"; sourceTree = "<group>"; };
 		3205EC3C26E6B96E0090B491 /* ic_custom_map_pin@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_pin@3x.png"; path = "Resources/Icons/ic_custom_map_pin@3x.png"; sourceTree = "<group>"; };
 		3205EC3F26E8079E0090B491 /* OAQuickSearchCoordinatesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAQuickSearchCoordinatesViewController.xib; sourceTree = "<group>"; };
@@ -4028,6 +4036,8 @@
 		32A7EE14261BBF6C00F7A697 /* bg_point_octagon_contour@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_octagon_contour@2x.png"; path = "Resources/Icons/bg_point_octagon_contour@2x.png"; sourceTree = "<group>"; };
 		32A7EE19261BBF7D00F7A697 /* bg_point_square_contour@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_square_contour@2x.png"; path = "Resources/Icons/bg_point_square_contour@2x.png"; sourceTree = "<group>"; };
 		32A7EE1A261BBF7E00F7A697 /* bg_point_square_contour@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_square_contour@3x.png"; path = "Resources/Icons/bg_point_square_contour@3x.png"; sourceTree = "<group>"; };
+		32AD5D592A2F111600A51B60 /* OsmAccessTokenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmAccessTokenModel.swift; sourceTree = "<group>"; };
+		32AD5D5B2A2F11A200A51B60 /* OsmUserDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmUserDataModel.swift; sourceTree = "<group>"; };
 		32ADB42825D2EC2700F5C634 /* ic_dialog_move@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_dialog_move@3x.png"; path = "Resources/Icons/ic_dialog_move@3x.png"; sourceTree = "<group>"; };
 		32ADB42A25D2EC2900F5C634 /* ic_dialog_move@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_dialog_move@2x.png"; path = "Resources/Icons/ic_dialog_move@2x.png"; sourceTree = "<group>"; };
 		32B50ABB26BBDA0A002E6C92 /* ic_custom_shop_bag@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_shop_bag@2x.png"; path = "Resources/Icons/ic_custom_shop_bag@2x.png"; sourceTree = "<group>"; };
@@ -8164,6 +8174,26 @@
 				3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */,
 			);
 			path = GPXListDeletingBottomSheet;
+			sourceTree = "<group>";
+		};
+		32AD5D582A2F10EA00A51B60 /* OAuthHelper */ = {
+			isa = PBXGroup;
+			children = (
+				32048FC42A25E70200AA4B71 /* BaseOAuthHelper.swift */,
+				32AD5D672A2F22B500A51B60 /* OsmOAuthHelper */,
+			);
+			path = OAuthHelper;
+			sourceTree = "<group>";
+		};
+		32AD5D672A2F22B500A51B60 /* OsmOAuthHelper */ = {
+			isa = PBXGroup;
+			children = (
+				32048FC82A26132600AA4B71 /* OsmOAuthView.swift */,
+				32048FC62A26084000AA4B71 /* OsmOAuthHelper.swift */,
+				32AD5D592A2F111600A51B60 /* OsmAccessTokenModel.swift */,
+				32AD5D5B2A2F11A200A51B60 /* OsmUserDataModel.swift */,
+			);
+			path = OsmOAuthHelper;
 			sourceTree = "<group>";
 		};
 		32C21CB427E0A62200DE4266 /* RecordSettingsBottomSheet */ = {
@@ -13624,6 +13654,7 @@
 				DA5A809026C563A500F274C7 /* SunriseSunset.h */,
 				DA5A80C326C563A600F274C7 /* SunriseSunset.m */,
 				DA5A80C526C563A600F274C7 /* UIColor+RGB.swift */,
+				32AD5D582A2F10EA00A51B60 /* OAuthHelper */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -16669,6 +16700,7 @@
 				DA5A845E26C563A900F274C7 /* OARoutePointsLayer.mm in Sources */,
 				DA5A852C26C563A900F274C7 /* OAOcbfHelper.m in Sources */,
 				DA5A815426C563A700F274C7 /* OACarPlayMapViewController.mm in Sources */,
+				32048FC92A26132600AA4B71 /* OsmOAuthView.swift in Sources */,
 				DA5A845826C563A900F274C7 /* OAOverlayMapLayer.mm in Sources */,
 				DA5A853E26C563A900F274C7 /* OADayNightHelper.m in Sources */,
 				DA5A83D626C563A800F274C7 /* OAReplaceFavoriteViewController.mm in Sources */,
@@ -16705,6 +16737,7 @@
 				DA5A824526C563A700F274C7 /* OAVehicleParametersViewController.mm in Sources */,
 				DA5A853026C563A900F274C7 /* OAOsmAndLiveHelper.mm in Sources */,
 				8A7DF79D27B94A2D0005BF39 /* OAWeatherBand.mm in Sources */,
+				32AD5D5A2A2F111600A51B60 /* OsmAccessTokenModel.swift in Sources */,
 				DA5A81E026C563A700F274C7 /* OAGPXMutableDocument.mm in Sources */,
 				DA5A817626C563A700F274C7 /* OAPointDescription.mm in Sources */,
 				DA5A833D26C563A800F274C7 /* OAPublicTransportPointCell.m in Sources */,
@@ -16767,10 +16800,12 @@
 				DA9A2C3026FDB72800BEC681 /* OARouteColorizationHelper.mm in Sources */,
 				DA5A84A526C563A900F274C7 /* OAMeasurementCommandManager.m in Sources */,
 				DA775B8727E5F30E0081B9C1 /* OARemoteFile.m in Sources */,
+				32048FC52A25E70200AA4B71 /* BaseOAuthHelper.swift in Sources */,
 				DA5A820626C563A700F274C7 /* OAFeatureCardView.m in Sources */,
 				46DC808629B8898700C477C3 /* OADownloadMode.mm in Sources */,
 				DA5A837926C563A800F274C7 /* OARouteSettingsParameterController.mm in Sources */,
 				DA5A850D26C563A900F274C7 /* OAScrollView.m in Sources */,
+				32AD5D5C2A2F11A200A51B60 /* OsmUserDataModel.swift in Sources */,
 				DA5A81CA26C563A700F274C7 /* OAAtomicInteger.m in Sources */,
 				DA5A81B326C563A700F274C7 /* OAPOIUIFilter.mm in Sources */,
 				46B8F5C22936C0D9001AA71A /* OAAngleStraightLineViewController.mm in Sources */,
@@ -17000,6 +17035,7 @@
 				32119B4A284789F1005E1E0C /* OAOsmandDevelopmentViewController.mm in Sources */,
 				DA5A813D26C563A700F274C7 /* OAOSMSettings.m in Sources */,
 				DA5A825726C563A700F274C7 /* OAAvoidPreferParametersViewController.mm in Sources */,
+				32048FC72A26084000AA4B71 /* OsmOAuthHelper.swift in Sources */,
 				DA5A815B26C563A700F274C7 /* OACustomPlugin.mm in Sources */,
 				DA5A855426C563A900F274C7 /* OAGPXAppearanceCollection.mm in Sources */,
 				DA5A83A426C563A800F274C7 /* OAPoiTypeSelectionViewController.mm in Sources */,

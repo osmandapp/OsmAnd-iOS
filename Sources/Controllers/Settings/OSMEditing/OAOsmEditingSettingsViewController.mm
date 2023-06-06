@@ -43,14 +43,8 @@
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
-    _isAuthorised = [OsmOAuthHelper isAuthorised];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAccountInformationUpdated) name:OsmOAuthHelper.notificationKey object:nil];
-}
-
-- (void) viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    _isAuthorised = [OAOsmOAuthHelper isAuthorised];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAccountInformationUpdated) name:OAOsmOAuthHelper.notificationKey object:nil];
 }
 
 #pragma mark - Base UI
@@ -282,7 +276,7 @@
         }
         else
         {
-            [OsmOAuthHelper showAuthIntroScreenWithHostVC:self];
+            [OAOsmOAuthHelper showAuthIntroScreenWithHostVC:self];
         }
     }
     else if ([item.key isEqualToString:@"updates_for_mappers"])
@@ -335,7 +329,7 @@
 - (void)onAccountInformationUpdated
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        _isAuthorised = [OsmOAuthHelper isAuthorised];
+        _isAuthorised = [OAOsmOAuthHelper isAuthorised];
         if (_credentialIndexPath && _mappersIndexPath)
         {
             OATableRowData *credentialRow = [_data itemForIndexPath:_credentialIndexPath];

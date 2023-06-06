@@ -498,11 +498,6 @@
 		32A7EE1C261BBF7E00F7A697 /* bg_point_square_contour@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A7EE1A261BBF7E00F7A697 /* bg_point_square_contour@3x.png */; };
 		32AD5D5A2A2F111600A51B60 /* OsmAccessTokenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AD5D592A2F111600A51B60 /* OsmAccessTokenModel.swift */; };
 		32AD5D5C2A2F11A200A51B60 /* OsmUserDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AD5D5B2A2F11A200A51B60 /* OsmUserDataModel.swift */; };
-		32AD5D5E2A2F214300A51B60 /* OsmOAuthImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AD5D5D2A2F214300A51B60 /* OsmOAuthImageView.swift */; };
-		32AD5D602A2F216100A51B60 /* OsmOAuthTextHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AD5D5F2A2F216100A51B60 /* OsmOAuthTextHeaderView.swift */; };
-		32AD5D622A2F21C900A51B60 /* OsmOAuthTextDescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AD5D612A2F21C900A51B60 /* OsmOAuthTextDescriptionView.swift */; };
-		32AD5D642A2F21F300A51B60 /* OsmOAuthButtonOAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AD5D632A2F21F300A51B60 /* OsmOAuthButtonOAuthView.swift */; };
-		32AD5D662A2F222400A51B60 /* OsmOAuthButtonLoginPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AD5D652A2F222400A51B60 /* OsmOAuthButtonLoginPasswordView.swift */; };
 		32ADB42B25D2EC2900F5C634 /* ic_dialog_move@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32ADB42825D2EC2700F5C634 /* ic_dialog_move@3x.png */; };
 		32ADB42F25D2EC2900F5C634 /* ic_dialog_move@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32ADB42A25D2EC2900F5C634 /* ic_dialog_move@2x.png */; };
 		32B50ABD26BBDA0D002E6C92 /* ic_custom_shop_bag@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32B50ABB26BBDA0A002E6C92 /* ic_custom_shop_bag@2x.png */; };
@@ -4046,11 +4041,6 @@
 		32A7EE1A261BBF7E00F7A697 /* bg_point_square_contour@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_square_contour@3x.png"; path = "Resources/Icons/bg_point_square_contour@3x.png"; sourceTree = "<group>"; };
 		32AD5D592A2F111600A51B60 /* OsmAccessTokenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmAccessTokenModel.swift; sourceTree = "<group>"; };
 		32AD5D5B2A2F11A200A51B60 /* OsmUserDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmUserDataModel.swift; sourceTree = "<group>"; };
-		32AD5D5D2A2F214300A51B60 /* OsmOAuthImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmOAuthImageView.swift; sourceTree = "<group>"; };
-		32AD5D5F2A2F216100A51B60 /* OsmOAuthTextHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmOAuthTextHeaderView.swift; sourceTree = "<group>"; };
-		32AD5D612A2F21C900A51B60 /* OsmOAuthTextDescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmOAuthTextDescriptionView.swift; sourceTree = "<group>"; };
-		32AD5D632A2F21F300A51B60 /* OsmOAuthButtonOAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmOAuthButtonOAuthView.swift; sourceTree = "<group>"; };
-		32AD5D652A2F222400A51B60 /* OsmOAuthButtonLoginPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmOAuthButtonLoginPasswordView.swift; sourceTree = "<group>"; };
 		32ADB42825D2EC2700F5C634 /* ic_dialog_move@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_dialog_move@3x.png"; path = "Resources/Icons/ic_dialog_move@3x.png"; sourceTree = "<group>"; };
 		32ADB42A25D2EC2900F5C634 /* ic_dialog_move@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_dialog_move@2x.png"; path = "Resources/Icons/ic_dialog_move@2x.png"; sourceTree = "<group>"; };
 		32B50ABB26BBDA0A002E6C92 /* ic_custom_shop_bag@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_shop_bag@2x.png"; path = "Resources/Icons/ic_custom_shop_bag@2x.png"; sourceTree = "<group>"; };
@@ -8197,7 +8187,6 @@
 			children = (
 				32048FC42A25E70200AA4B71 /* BaseOAuthHelper.swift */,
 				32AD5D672A2F22B500A51B60 /* OsmOAuthHelper */,
-				32AD5D682A2F22CB00A51B60 /* OsmOAuthView */,
 			);
 			path = OAuthHelper;
 			sourceTree = "<group>";
@@ -8205,24 +8194,12 @@
 		32AD5D672A2F22B500A51B60 /* OsmOAuthHelper */ = {
 			isa = PBXGroup;
 			children = (
+				32048FC82A26132600AA4B71 /* OsmOAuthView.swift */,
 				32048FC62A26084000AA4B71 /* OsmOAuthHelper.swift */,
 				32AD5D592A2F111600A51B60 /* OsmAccessTokenModel.swift */,
 				32AD5D5B2A2F11A200A51B60 /* OsmUserDataModel.swift */,
 			);
 			path = OsmOAuthHelper;
-			sourceTree = "<group>";
-		};
-		32AD5D682A2F22CB00A51B60 /* OsmOAuthView */ = {
-			isa = PBXGroup;
-			children = (
-				32048FC82A26132600AA4B71 /* OsmOAuthView.swift */,
-				32AD5D5D2A2F214300A51B60 /* OsmOAuthImageView.swift */,
-				32AD5D5F2A2F216100A51B60 /* OsmOAuthTextHeaderView.swift */,
-				32AD5D612A2F21C900A51B60 /* OsmOAuthTextDescriptionView.swift */,
-				32AD5D632A2F21F300A51B60 /* OsmOAuthButtonOAuthView.swift */,
-				32AD5D652A2F222400A51B60 /* OsmOAuthButtonLoginPasswordView.swift */,
-			);
-			path = OsmOAuthView;
 			sourceTree = "<group>";
 		};
 		32C21CB427E0A62200DE4266 /* RecordSettingsBottomSheet */ = {
@@ -16814,7 +16791,6 @@
 				DA5A84BF26C563A900F274C7 /* OAPointOptionsBottomSheetViewController.mm in Sources */,
 				DA5A852D26C563A900F274C7 /* OASaveGpxToTripsActivity.mm in Sources */,
 				DA5A854326C563A900F274C7 /* OANativeUtilities.mm in Sources */,
-				32AD5D602A2F216100A51B60 /* OsmOAuthTextHeaderView.swift in Sources */,
 				DA5A812F26C563A700F274C7 /* OAOsmNotesMapLayerProvider.mm in Sources */,
 				DA5A817D26C563A700F274C7 /* OAMapSourceAction.mm in Sources */,
 				DA5A82F626C563A800F274C7 /* OALabelCollectionViewCell.m in Sources */,
@@ -17067,7 +17043,6 @@
 				DA5A830426C563A800F274C7 /* OADestinationCollectionViewCell.mm in Sources */,
 				DA5A83CA26C563A800F274C7 /* OARouteBaseViewController.mm in Sources */,
 				DA5A830826C563A800F274C7 /* OATitleRightIconCell.m in Sources */,
-				32AD5D622A2F21C900A51B60 /* OsmOAuthTextDescriptionView.swift in Sources */,
 				DA5A84D526C563A900F274C7 /* OAMapSettingsSettingScreen.mm in Sources */,
 				32119B4A284789F1005E1E0C /* OAOsmandDevelopmentViewController.mm in Sources */,
 				DA5A813D26C563A700F274C7 /* OAOSMSettings.m in Sources */,
@@ -17416,7 +17391,6 @@
 				DA5A832026C563A800F274C7 /* OAMultilineTextViewCell.m in Sources */,
 				DA5A81D126C563A700F274C7 /* OATerrainLayer.mm in Sources */,
 				DA5A81B626C563A700F274C7 /* OASearchPoiTypeFilter.m in Sources */,
-				32AD5D642A2F21F300A51B60 /* OsmOAuthButtonOAuthView.swift in Sources */,
 				DA5A83B026C563A800F274C7 /* OASubscriptionCancelViewController.mm in Sources */,
 				DA5A850E26C563A900F274C7 /* OAUserInteractionPassThroughView.m in Sources */,
 				DA5A849E26C563A900F274C7 /* OAReversePointsCommand.mm in Sources */,
@@ -17448,7 +17422,6 @@
 				46F0CA9829B0C4F50009C205 /* OAWikipediaSettingsViewController.m in Sources */,
 				DA5A837E26C563A800F274C7 /* OADestinationCardHeaderView.m in Sources */,
 				DA5A81D226C563A700F274C7 /* OAFileImportHelper.mm in Sources */,
-				32AD5D5E2A2F214300A51B60 /* OsmOAuthImageView.swift in Sources */,
 				DA5A81EA26C563A700F274C7 /* OAHistoryItem.m in Sources */,
 				DA5A84DE26C563A900F274C7 /* OAMapSettingsLanguageScreen.mm in Sources */,
 				DA5A840226C563A800F274C7 /* OASearchToolbarViewController.mm in Sources */,
@@ -17560,7 +17533,6 @@
 				DA5A837826C563A800F274C7 /* OARouteSettingsBaseViewController.mm in Sources */,
 				DA5A847226C563A900F274C7 /* OATurnResource.m in Sources */,
 				DA5A826026C563A700F274C7 /* OAImageCardCell.mm in Sources */,
-				32AD5D662A2F222400A51B60 /* OsmOAuthButtonLoginPasswordView.swift in Sources */,
 				DA5A850326C563A900F274C7 /* OARouteInfoLegendItemView.m in Sources */,
 				DA5A816926C563A700F274C7 /* OAIPFSImageCard.mm in Sources */,
 				DA5A82EB26C563A800F274C7 /* OAPublicTransportRouteCell.mm in Sources */,

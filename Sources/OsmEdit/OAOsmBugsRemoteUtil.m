@@ -78,7 +78,7 @@ static const NSString* USERS_API_BASE_URL = @"https://api.openstreetmap.org/api/
     
     if (!_anonymous)
     {
-        [request setValue:[OsmOAuthHelper getAutorizationHeader] forHTTPHeaderField:@"Authorization"];
+        [request setValue:[OAOsmOAuthHelper getAutorizationHeader] forHTTPHeaderField:@"Authorization"];
     }
     
     __block OAOsmBugResult *res = [[OAOsmBugResult alloc] init];

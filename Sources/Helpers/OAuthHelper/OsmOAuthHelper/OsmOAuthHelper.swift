@@ -12,7 +12,7 @@
 import SwiftUI
 import AuthenticationServices
 
-@objc(OsmOAuthHelper)
+@objc(OAOsmOAuthHelper)
 @objcMembers
 class OsmOAuthHelper : BaseOAuthHelper {
     
@@ -24,12 +24,10 @@ class OsmOAuthHelper : BaseOAuthHelper {
     override class var urlScheme: String { return "osmand-oauth" }
     override class var scopes: [String] { return ["read_gpx", "write_gpx", "write_api", "write_notes", "read_prefs"] }
     
-    override class func getToken() -> String? {
-        return OAAppSettings.sharedManager().osmUserAccessToken.get(OAApplicationMode.default())
-    }
-    
-    override class func setToken(token: String?) {
-        OAAppSettings.sharedManager().osmUserAccessToken.set(token, mode: OAApplicationMode.default())
+    override class var token: String? {
+        get { return OAAppSettings.sharedManager().osmUserAccessToken.get(OAApplicationMode.default()) }
+        set { OAAppSettings.sharedManager().osmUserAccessToken.set(newValue, mode: OAApplicationMode.default()) }
+        
     }
     
     static let notificationKey = "OsmOAuthTokenKey"
@@ -37,12 +35,9 @@ class OsmOAuthHelper : BaseOAuthHelper {
     override class func parseTokenJSON(data: Data) -> (ParsedTokenResponce) {
         do {
             let parsedJSON = try JSONDecoder().decode(OsmAccessTokenModel.self, from: data)
-            if let token = parsedJSON.access_token {
-                return (token: token, expirationTimestamp: nil)
-            }
-            print("parseTokenJSON() Error:  \(String(decoding: data, as: UTF8.self))")
+            return (token: parsedJSON.access_token, expirationTimestamp: nil)
         } catch {
-            print("parseTokenJSON() Error: \(error)")
+            print("parseTokenJSON() Error: \(error)  \n  data: \(String(decoding: data, as: UTF8.self))")
         }
         return (token: nil, expirationTimestamp: nil)
     }
@@ -60,8 +55,8 @@ class OsmOAuthHelper : BaseOAuthHelper {
                 request.httpMethod = "GET"
                 request.allHTTPHeaderFields = ["Authorization": header]
                 let (data, _) = try await URLSession.shared.data(for: request)
-                let parsedJSON: OsmUserDataModel = try JSONDecoder().decode(OsmUserDataModel.self, from: data)
-                OAAppSettings.sharedManager().osmUserName.set(parsedJSON.user!.display_name)
+                let parsedJSON = try JSONDecoder().decode(OsmUserDataModel.self, from: data)
+                OAAppSettings.sharedManager().osmUserName.set(parsedJSON.user.display_name)
             }
         } catch {
             print("fetchUserData() Error: \(error)")
@@ -70,7 +65,7 @@ class OsmOAuthHelper : BaseOAuthHelper {
     
     static func getAutorizationHeader() -> String? {
         if (isOAuthAuthorised()) {
-            return "Bearer " + self.getToken()!
+            return "Bearer " + token!
         } else if (isLegacyAuthorised()) {
             var content = getUserName() + ":" + getLegacyPassword()
             content = content.data(using: .utf8)!.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
@@ -91,7 +86,7 @@ class OsmOAuthHelper : BaseOAuthHelper {
     }
     
     static func isOAuthAuthorised() -> Bool {
-        return self.getToken() != nil && self.getToken()!.length > 0
+        return token != nil && token!.length > 0
     }
     
     static func getUserName() -> String {
@@ -107,7 +102,7 @@ class OsmOAuthHelper : BaseOAuthHelper {
         OAAppSettings.sharedManager().osmUserPassword.resetToDefault()
         OAAppSettings.sharedManager().osmUserDisplayName.resetToDefault()
         OAAppSettings.sharedManager().osmUserDisplayName.resetToDefault()
-        setToken(token: nil)
+        token = ""
         sendNotifications()
     }
     

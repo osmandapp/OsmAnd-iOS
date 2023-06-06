@@ -49,7 +49,7 @@
     _settings = [OAAppSettings sharedManager];
     _newUserName = [_settings.osmUserName get];
     _newPassword = [_settings.osmUserPassword get];
-    _isAuthorised = [OsmOAuthHelper isAuthorised];
+    _isAuthorised = [OAOsmOAuthHelper isAuthorised];
 }
 
 - (void)registerNotifications
@@ -195,7 +195,7 @@
             BOOL isPassword = [item[@"key"] isEqualToString:@"password_input_cell"];
             
             if (isEmail)
-                cell.titleLabel.text = [OsmOAuthHelper isOAuthAuthorised] ? OALocalizedString(@"user_name") : OALocalizedString(@"shared_string_email");
+                cell.titleLabel.text = [OAOsmOAuthHelper isOAuthAuthorised] ? OALocalizedString(@"user_name") : OALocalizedString(@"shared_string_email");
             else
                 cell.titleLabel.text = OALocalizedString(@"user_password");
             cell.titleLabel.textColor = [UIColor blackColor];
@@ -361,7 +361,7 @@
         NSString *warning = result.warning;
         if (warning)
         {
-            [OsmOAuthHelper logOut];
+            [OAOsmOAuthHelper logOut];
             _errorMessage = OALocalizedString(@"auth_failed");
 
             [self generateData];
@@ -385,7 +385,7 @@
     }
     else
     {
-        [OsmOAuthHelper logOut];
+        [OAOsmOAuthHelper logOut];
         [self dismissViewControllerAnimated:YES completion:^{
             if (self.accountDelegate)
                 [self.accountDelegate onAccountInformationUpdated];

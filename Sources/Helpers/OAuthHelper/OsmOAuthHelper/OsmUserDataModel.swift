@@ -9,15 +9,15 @@
 import Foundation
 
 struct OsmUserDataModel: Codable {
-    var user: OsmUserDataUserModel?
+    var user: OsmUserDataUserModel
 }
 
 struct OsmUserDataUserModel: Codable {
     var id: Int?
-    var display_name: String?
-    var img: OsmUserDataUserImageModel?
+    var display_name: String
+    var img: OsmUserDataUserImageModel
 }
 
 struct OsmUserDataUserImageModel: Codable {
-    var href: String?
+    var href: String
 }

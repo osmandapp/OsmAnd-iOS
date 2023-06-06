@@ -2168,7 +2168,7 @@
 
 "email_example_hint" = "user@example.com";
 "shared_string_required" = "Required";
-"user_name" = "User name";
+"user_name" = "Username";
 "login_account" = "Account";
 "shared_string_account_add" = "Add account";
 "shared_string_email" = "Email";

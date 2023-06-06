@@ -12,7 +12,7 @@
 import SwiftUI
 import AuthenticationServices
 
-@objc(BaseOAuthHelper)
+@objc(OABaseOAuthHelper)
 @objcMembers
 class BaseOAuthHelper : NSObject {
 
@@ -25,13 +25,9 @@ class BaseOAuthHelper : NSObject {
     class var urlScheme: String { return "" }
     class var scopes: [String] { return [] }
     
-    class func getToken() -> String? {
-        // TODO: if now() > expirationTime then refreshExpiredToken()
-        return nil
-    }
-    
-    class func setToken(token: String?) {
-        //
+    class var token: String? {
+        get { return ""}
+        set {}
     }
     
     @available(iOS 16.4, *)
@@ -47,14 +43,14 @@ class BaseOAuthHelper : NSObject {
                 preferredBrowserSession: .ephemeral
             )
             
-            guard let accessCode = trimAccessCodeFrom(fullResponseURL: onCompleteURL.absoluteString) else {throw CustomError.error("No access code")}
+            guard let accessCode = trimAccessCodeFrom(fullResponseURL: onCompleteURL.absoluteString) else {throw OAuthError.error("No access code")}
 
-            guard let tokenJson = try await fetchToken(accessCode: accessCode) else {throw CustomError.error("No parsed token json")}
+            guard let tokenJson = try await fetchToken(accessCode: accessCode) else {throw OAuthError.error("No parsed token json")}
 
             if (tokenJson.token != nil && tokenJson.token!.count > 0) {
-                setToken(token: tokenJson.token!)
+                token = tokenJson.token!
             } else {
-                throw CustomError.error("No parsed token")
+                throw OAuthError.error("No parsed token")
             }
 
             if (tokenJson.expirationTimestamp != nil && tokenJson.expirationTimestamp!.count > 0) {
@@ -114,7 +110,7 @@ class BaseOAuthHelper : NSObject {
     class func parseTokenJSON(data: Data) -> ParsedTokenResponce? {
         do {
             let parsedJSON = try JSONDecoder().decode(OsmAccessTokenModel.self, from: data)
-            return (token: parsedJSON.access_token!, expirationTimestamp: nil)
+            return (token: parsedJSON.access_token, expirationTimestamp: nil)
         } catch {
             print("parseTokenJSON() Error: \(error)")
         }
@@ -127,7 +123,7 @@ class BaseOAuthHelper : NSObject {
     }
 
     
-    enum CustomError: Error {
+    enum OAuthError: Error {
         case error(String)
     }
     

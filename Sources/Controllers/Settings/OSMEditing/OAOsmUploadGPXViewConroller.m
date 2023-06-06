@@ -84,7 +84,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     _selectedVisibility = EOAOsmUploadGPXVisibilityPublic;
     _descriptionText = @"";
     _tagsText = kDefaultTag;
-    _isAuthorised = [OsmOAuthHelper isAuthorised];
+    _isAuthorised = [OAOsmOAuthHelper isAuthorised];
 }
 
 #pragma mark - UIViewController
@@ -94,21 +94,15 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAccountInformationUpdated) name:OsmOAuthHelper.notificationKey object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAccountInformationUpdated) name:OAOsmOAuthHelper.notificationKey object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    _isAuthorised = [OsmOAuthHelper isAuthorised];
+    _isAuthorised = [OAOsmOAuthHelper isAuthorised];
     if (!_isAuthorised)
-        [OsmOAuthHelper showAuthIntroScreenWithHostVC:self];
-}
-
-- (void) viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+        [OAOsmOAuthHelper showAuthIntroScreenWithHostVC:self];
 }
 
 #pragma mark - Base UI
@@ -201,7 +195,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         accountSection.headerText = OALocalizedString(@"login_account");
         OATableRowData *accountCell = [accountSection createNewRow];
         [accountCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
-        [accountCell setTitle: _isAuthorised ? [OsmOAuthHelper getUserName] : OALocalizedString(@"login_open_street_map_org")];
+        [accountCell setTitle: _isAuthorised ? [OAOsmOAuthHelper getUserName] : OALocalizedString(@"login_open_street_map_org")];
         [accountCell setIconName:@"ic_custom_user_profile"];
         [accountCell setObj:(_isAuthorised ? UIColor.blackColor : UIColorFromRGB(color_primary_purple)) forKey:@"title_color"];
         [accountCell setObj:([UIFont systemFontOfSize:17. weight:_isAuthorised ? UIFontWeightRegular : UIFontWeightMedium]) forKey:@"title_font"];
@@ -547,7 +541,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     }
     else
     {
-        [OsmOAuthHelper showAuthIntroScreenWithHostVC:self];
+        [OAOsmOAuthHelper showAuthIntroScreenWithHostVC:self];
     }
 }
 
@@ -616,7 +610,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 - (void)onAccountInformationUpdated
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        _isAuthorised = [OsmOAuthHelper isAuthorised];
+        _isAuthorised = [OAOsmOAuthHelper isAuthorised];
         [self generateData];
         [self.tableView reloadData];
     });

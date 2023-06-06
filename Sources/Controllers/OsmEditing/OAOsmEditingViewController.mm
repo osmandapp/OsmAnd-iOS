@@ -91,7 +91,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     OAAppSettings *settings = OAAppSettings.sharedManager;
     if ([settings.offlineEditing get]
         || !AFNetworkReachabilityManager.sharedManager.isReachable
-        || ![OsmOAuthHelper isAuthorised])
+        || ![OAOsmOAuthHelper isAuthorised])
     {
         return _editingPlugin.getPoiModificationLocalUtil;
     }

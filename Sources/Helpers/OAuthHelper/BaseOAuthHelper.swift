@@ -1,5 +1,5 @@
 //
-//  OAuthHelper.swift
+//  BaseOAuthHelper.swift
 //  OsmAnd Maps
 //
 //  Created by nnngrach on 15.05.2023.
@@ -10,32 +10,32 @@
 // Grant type: Authorization code
 
 import SwiftUI
-import Foundation
 import AuthenticationServices
 
-@objc class OAuthHelper : NSObject {
+@objc(BaseOAuthHelper)
+@objcMembers
+class BaseOAuthHelper : NSObject {
 
     //Override in sublcasses
-    internal class var authURL: String { return "" }
-    internal class var accessTokenURL: String { return "" }
-    internal class var clientID: String { return "" }
-    internal class var clientSecret: String { return "" }
-    internal class var redirectURI: String { return "" }
-    internal class var urlScheme: String { return "" }
-    internal class var scopes: [String] { return [] }
-    internal class var tokenSettingsKey: String { return "" }
-
-    @objc public static func getToken() -> String? {
-        return UserDefaults.standard.string(forKey: tokenSettingsKey)
+    class var authURL: String { return "" }
+    class var accessTokenURL: String { return "" }
+    class var clientID: String { return "" }
+    class var clientSecret: String { return "" }
+    class var redirectURI: String { return "" }
+    class var urlScheme: String { return "" }
+    class var scopes: [String] { return [] }
+    
+    class func getToken() -> String? {
         // TODO: if now() > expirationTime then refreshExpiredToken()
+        return nil
     }
     
-    public static func setToken(token: String?) {
-        UserDefaults.standard.setValue(token, forKey: tokenSettingsKey)
+    class func setToken(token: String?) {
+        //
     }
     
     @available(iOS 16.4, *)
-    public static func performOAuth(session: WebAuthenticationSession) async -> String? {
+    static func performOAuth(session: WebAuthenticationSession) async -> String? {
         do {
             let accessCodeRequestURL = buildAccessCodeRequestURL()
 
@@ -113,10 +113,7 @@ import AuthenticationServices
     // Override in subclasses
     class func parseTokenJSON(data: Data) -> ParsedTokenResponce? {
         do {
-            struct AccessTokenModel: Codable {
-                var access_token: String?
-            }
-            let parsedJSON = try JSONDecoder().decode(AccessTokenModel.self, from: data)
+            let parsedJSON = try JSONDecoder().decode(OsmAccessTokenModel.self, from: data)
             return (token: parsedJSON.access_token!, expirationTimestamp: nil)
         } catch {
             print("parseTokenJSON() Error: \(error)")
@@ -130,7 +127,7 @@ import AuthenticationServices
     }
 
     
-    public enum CustomError: Error {
+    enum CustomError: Error {
         case error(String)
     }
     

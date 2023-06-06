@@ -10,11 +10,11 @@
 // "The access tokens currently do not expire automatically."
 
 import SwiftUI
-import Foundation
 import AuthenticationServices
 
-
-@objc class OsmOAuthHelper : OAuthHelper {
+@objc(OsmOAuthHelper)
+@objcMembers
+class OsmOAuthHelper : BaseOAuthHelper {
     
     override class var authURL: String { return "https://www.openstreetmap.org/oauth2/authorize" }
     override class var accessTokenURL: String { return "https://www.openstreetmap.org/oauth2/token" }
@@ -24,19 +24,19 @@ import AuthenticationServices
     override class var urlScheme: String { return "osmand-oauth" }
     override class var scopes: [String] { return ["read_gpx", "write_gpx", "write_api", "write_notes", "read_prefs"] }
     
-    override class var tokenSettingsKey: String { return "OsmOAuthTokenKey" }
-    @objc static let notificationKey = "OsmOAuthTokenKey"
+    override class func getToken() -> String? {
+        return OAAppSettings.sharedManager().osmUserAccessToken.get(OAApplicationMode.default())
+    }
+    
+    override class func setToken(token: String?) {
+        OAAppSettings.sharedManager().osmUserAccessToken.set(token, mode: OAApplicationMode.default())
+    }
+    
+    static let notificationKey = "OsmOAuthTokenKey"
     
     override class func parseTokenJSON(data: Data) -> (ParsedTokenResponce) {
         do {
-            struct AccessTokenModel: Codable {
-                var access_token: String?
-                var token_type: String?
-                var scopesuccess: String?
-                var created_at: Int?
-            }
-            
-            let parsedJSON = try JSONDecoder().decode(AccessTokenModel.self, from: data)
+            let parsedJSON = try JSONDecoder().decode(OsmAccessTokenModel.self, from: data)
             if let token = parsedJSON.access_token {
                 return (token: token, expirationTimestamp: nil)
             }
@@ -53,17 +53,6 @@ import AuthenticationServices
     }
     
     static func fetchUserData() async {
-        struct UserDataModel: Codable {
-            var user: UserModel?
-        }
-        struct UserModel: Codable {
-            var id: Int?
-            var display_name: String?
-            var img: ImageModel?
-        }
-        struct ImageModel: Codable {
-            var href: String?
-        }
         do {
             if let header = getAutorizationHeader() {
                 guard let url = URL(string: "https://api.openstreetmap.org/api/0.6/user/details.json") else { return }
@@ -71,7 +60,7 @@ import AuthenticationServices
                 request.httpMethod = "GET"
                 request.allHTTPHeaderFields = ["Authorization": header]
                 let (data, _) = try await URLSession.shared.data(for: request)
-                let parsedJSON: UserDataModel = try JSONDecoder().decode(UserDataModel.self, from: data)
+                let parsedJSON: OsmUserDataModel = try JSONDecoder().decode(OsmUserDataModel.self, from: data)
                 OAAppSettings.sharedManager().osmUserName.set(parsedJSON.user!.display_name)
             }
         } catch {
@@ -79,10 +68,10 @@ import AuthenticationServices
         }
     }
     
-    @objc static func getAutorizationHeader() -> String? {
-        if (isOAuthLogged()) {
+    static func getAutorizationHeader() -> String? {
+        if (isOAuthAuthorised()) {
             return "Bearer " + self.getToken()!
-        } else if (isLegacyLogged()) {
+        } else if (isLegacyAuthorised()) {
             var content = getUserName() + ":" + getLegacyPassword()
             content = content.data(using: .utf8)!.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
             return "Basic " + content
@@ -90,30 +79,30 @@ import AuthenticationServices
         return nil
     }
     
-    @objc static func isLogged() -> Bool {
-        return isLegacyLogged() || isOAuthLogged()
+    static func isAuthorised() -> Bool {
+        return isLegacyAuthorised() || isOAuthAuthorised()
     }
     
-    @objc static func isLegacyLogged() -> Bool {
+    static func isLegacyAuthorised() -> Bool {
         return OAAppSettings.sharedManager().osmUserName != nil &&
             OAAppSettings.sharedManager().osmUserPassword != nil &&
             OAAppSettings.sharedManager().osmUserName.get().length > 0 &&
             OAAppSettings.sharedManager().osmUserPassword.get().length > 0
     }
     
-    @objc static func isOAuthLogged() -> Bool {
+    static func isOAuthAuthorised() -> Bool {
         return self.getToken() != nil && self.getToken()!.length > 0
     }
     
-    @objc static func getUserName() -> String {
+    static func getUserName() -> String {
         return OAAppSettings.sharedManager().osmUserName.get()
     }
     
-    @objc static func getLegacyPassword() -> String {
+    static func getLegacyPassword() -> String {
         return OAAppSettings.sharedManager().osmUserPassword.get()
     }
     
-    @objc static func logOut() {
+    static func logOut() {
         OAAppSettings.sharedManager().osmUserName.resetToDefault()
         OAAppSettings.sharedManager().osmUserPassword.resetToDefault()
         OAAppSettings.sharedManager().osmUserDisplayName.resetToDefault()
@@ -127,9 +116,9 @@ import AuthenticationServices
     }
     
     
-    @objc static func showAuthIntroScreen(hostVC: UIViewController) {
+    static func showAuthIntroScreen(hostVC: UIViewController) {
         if #available(iOS 16.4, *) {
-            hostVC.present(OsmOAuthSwidtUIViewWrapper.get(), animated: true)
+            hostVC.present(OsmOAuthSwiftUIViewWrapper.get(), animated: true)
         } else {
             let targetVC = OAOsmLoginMainViewController()
             if let delegateHostVC = hostVC as? OAAccountSettingDelegate {

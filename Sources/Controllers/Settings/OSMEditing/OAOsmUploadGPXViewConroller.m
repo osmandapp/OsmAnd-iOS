@@ -55,7 +55,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     NSString *_descriptionText;
     NSString *_tagsText;
     EOAOsmUploadGPXVisibility _selectedVisibility;
-    BOOL _isLogged;
+    BOOL _isAuthorised;
     OAProgressBarCell *_progressBarCell;
     OAValueTableViewCell *_progressValueCell;
     OAUploadGPXFilesTask *_uploadTask;
@@ -84,7 +84,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     _selectedVisibility = EOAOsmUploadGPXVisibilityPublic;
     _descriptionText = @"";
     _tagsText = kDefaultTag;
-    _isLogged = [OsmOAuthHelper isLogged];
+    _isAuthorised = [OsmOAuthHelper isAuthorised];
 }
 
 #pragma mark - UIViewController
@@ -100,9 +100,15 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    _isLogged = [OsmOAuthHelper isLogged];
-    if (!_isLogged)
+    _isAuthorised = [OsmOAuthHelper isAuthorised];
+    if (!_isAuthorised)
         [OsmOAuthHelper showAuthIntroScreenWithHostVC:self];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Base UI
@@ -195,11 +201,11 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         accountSection.headerText = OALocalizedString(@"login_account");
         OATableRowData *accountCell = [accountSection createNewRow];
         [accountCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
-        [accountCell setTitle: _isLogged ? [OsmOAuthHelper getUserName] : OALocalizedString(@"login_open_street_map_org")];
+        [accountCell setTitle: _isAuthorised ? [OsmOAuthHelper getUserName] : OALocalizedString(@"login_open_street_map_org")];
         [accountCell setIconName:@"ic_custom_user_profile"];
-        [accountCell setObj:(_isLogged ? UIColor.blackColor : UIColorFromRGB(color_primary_purple)) forKey:@"title_color"];
-        [accountCell setObj:([UIFont systemFontOfSize:17. weight:_isLogged ? UIFontWeightRegular : UIFontWeightMedium]) forKey:@"title_font"];
-        [accountCell setObj:(_isLogged ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone)) forKey:@"accessory_type"];
+        [accountCell setObj:(_isAuthorised ? UIColor.blackColor : UIColorFromRGB(color_primary_purple)) forKey:@"title_color"];
+        [accountCell setObj:([UIFont systemFontOfSize:17. weight:_isAuthorised ? UIFontWeightRegular : UIFontWeightMedium]) forKey:@"title_font"];
+        [accountCell setObj:(_isAuthorised ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone)) forKey:@"accessory_type"];
         [accountCell setObj: (^void(){ [weakSelf onAccountButtonPressed]; }) forKey:@"actionBlock"];
     }
     else if (_mode == EOAOsmUploadGPXViewConrollerModeUploading)
@@ -476,7 +482,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
             return;
         }
         
-        if (_isLogged)
+        if (_isAuthorised)
         {
             [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeUploading];
             [self generateData];
@@ -533,7 +539,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 
 - (void)onAccountButtonPressed
 {
-    if (_isLogged)
+    if (_isAuthorised)
     {
         OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
         accountSettings.accountDelegate = self;
@@ -610,7 +616,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 - (void)onAccountInformationUpdated
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        _isLogged = [OsmOAuthHelper isLogged];
+        _isAuthorised = [OsmOAuthHelper isAuthorised];
         [self generateData];
         [self.tableView reloadData];
     });
@@ -619,7 +625,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 - (void)onAccountInformationUpdatedFromBenefits
 {
     [self onAccountInformationUpdated];
-    if (_isLogged)
+    if (_isAuthorised)
     {
         OAMappersViewController *benefitsViewController = [[OAMappersViewController alloc] init];
         [self showModalViewController:benefitsViewController];

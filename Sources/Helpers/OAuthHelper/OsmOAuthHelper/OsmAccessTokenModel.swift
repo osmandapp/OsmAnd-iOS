@@ -10,7 +10,7 @@ import Foundation
 
 struct OsmAccessTokenModel: Codable {
     var access_token: String
-    var token_type: String?
-    var scopesuccess: String?
-    var created_at: Int?
+    var token_type: String
+    var scope: String
+    var created_at: Int
 }

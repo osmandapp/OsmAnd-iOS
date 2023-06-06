@@ -13,7 +13,7 @@ struct OsmUserDataModel: Codable {
 }
 
 struct OsmUserDataUserModel: Codable {
-    var id: Int?
+    var id: Int
     var display_name: String
     var img: OsmUserDataUserImageModel
 }

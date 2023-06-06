@@ -208,7 +208,7 @@
 "sett_lang_show_local" = "Показувати місцеві назви";
 "translit_names" = "Транслітерація назв";
 "shared_string_maps" = "Мапи";
-"purchases" = "Придбання";
+"purchases" = "Покупки";
 // Purchases
 "prch_addons" = "Додатки";
 "prch_nau_q1" = "Будь ласка, увімкніть стиль «Nautical» в налаштуваннях мапи та завантажте світову мапу морських об’єктів.";
@@ -607,7 +607,7 @@
 "auto_zoom_close" = "Докладний масштаб";
 "auto_zoom_far" = "Середній масштаб";
 "auto_zoom_farthest" = "Загальний масштаб";
-"keep_informing_never" = "Лише вручну (торканням стрілки)";
+"keep_informing_never" = "Вручну (натисканням на стрілку)";
 "arrival_distance_factor_early" = "Раніше";
 "arrival_distance_factor_normally" = "Звичайно";
 "arrival_distance_factor_late" = "Пізніше";
@@ -1608,7 +1608,7 @@
 "mapillary_item" = "OsmAnd + Mapillary";
 "help_travel" = "Подорожі (Wikipedia та Wikivoyage)";
 "subscription_osmandlive_item" = "Передплата — OsmAnd Live";
-"osmand_purchases_item" = "Придбання OsmAnd";
+"osmand_purchases_item" = "Покупки в OsmAnd";
 "enable_hillshade" = "Увімкнути для перегляду даних про рельєф";
 "hide_terrain" = "Сховати рельєф";
 "show_terrain" = "Показувати рельєф";
@@ -1681,7 +1681,7 @@
 "move_map_to_select_area" = "Перемістіть мапу, щоб вибрати потрібну ділянку.";
 "update_tile" = "Оновити мапу";
 "import_routing_file_descr" = "Ви можете імпортувати файл маршрутизації з будь-якого застосунку хмарного сховища, відкривши його в OsmAnd.";
-"osmand_default_routing" = "Маршрутизація OsmAnd";
+"osmand_default_routing" = "Прокладання маршрутів OsmAnd";
 "change_map_behavior" = "Зміна поведінки мапи під час навігації";
 "map_during_navigation" = "Мапа під час навігації";
 "voice_anounces" = "Голосові вказівки";
@@ -1724,7 +1724,7 @@
 "accessibility_announce" = "Оголошення";
 "only_manually" = "Лише вручну";
 "speed_limit_tolerance_descr" = "Виберіть допустиме значення перевищення швидкості, після перевищення якої ви отримаєте голосове попередження.";
-"special_routing_type" = "Спеціальна маршрутизація";
+"special_routing_type" = "Прокладання спеціалізованих маршрутів";
 "choose_auto_center_map_view_descr" = "Час, за який мапа повернеться до поточного розташування";
 "weight_limit_description" = "Зазначте вагу транспортного засобу. До вантажівок можуть застосовуватися певні маршрутні обмеження.";
 "vessel_width_limit_description" = "Вкажіть ширину судна, щоб уникати вузьких мостів";
@@ -2353,7 +2353,7 @@
 "weather_cloud_data_description" = "Дані про погоду завантажуватимуться для переглянутої зони щоразу.";
 "verification_code_missing" = "Код підтвердження не надійшов";
 "verification_code_missing_description" = "Може тривати 10 хвилин. Скористайтеся кнопкою внизу, якщо його немає в теці зі спамом.";
-"backup_view_conflicts" = "Переглянути неузгодженості";
+"backup_view_conflicts" = "Переглянути конфлікти";
 "weather_precip_milimeters" = "Міліметри";
 "cloud_email_not_registered" = "Цю електронну адресу ще не зареєстровано для OsmAnd Cloud";
 "osmand_cloud_create_account_descr" = "Введіть вашу адресу е-пошти, код підтвердження буде надіслано\nна неї, а ваші дані буде повʼязано з нею.";
@@ -2468,7 +2468,7 @@
 "product_desc_development" = "Для розробників і досвідчених користувачів";
 "restore_purchase" = "Відновити придбання";
 "osmand_development_plugin_description" = "Надає функціональність для тестування та налагодження OsmAnd: моделювання маршрутів навігації, моніторинг рендерингу зображення, перевірка швидкодії тощо. Цей втулок не обовʼязковий для повсякденного користування застосунком.";
-"restore_purchases" = "Відновлення придбань";
+"restore_purchases" = "Відновлення покупок";
 "transport_hazmat_no_desc" = "Дороги та тунелі можуть мати обмеження на перевезення небезпечних матеріалів.";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Без обмежень)";
 "unlimited_map_downloads" = "Необмежена кількість завантажень мап";

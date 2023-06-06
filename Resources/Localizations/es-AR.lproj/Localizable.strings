@@ -2908,3 +2908,5 @@
 "disable_vertex_hillshade_3d" = "Desactivar el sombreado de vértices en 3D";
 "generate_slope_from_3d_maps" = "Generar mapas ráster de pendientes a partir de mapas 3D";
 "generate_hillshade_from_3d_maps" = "Generar mapas ráster de sombreado a partir de mapas 3D";
+"user_name" = "Nombre de usuario";
+"perform_oauth_authorization" = "Ingresar a través de OAuth";

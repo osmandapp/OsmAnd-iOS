@@ -2569,7 +2569,6 @@
 		DA5A839226C563A800F274C7 /* OAOnlineTilesEditingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D8A26C563A300F274C7 /* OAOnlineTilesEditingViewController.mm */; };
 		DA5A839326C563A800F274C7 /* OACustomSourceDetailsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D8D26C563A300F274C7 /* OACustomSourceDetailsViewController.mm */; };
 		DA5A839426C563A800F274C7 /* OAOutdatedResourcesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D8E26C563A300F274C7 /* OAOutdatedResourcesViewController.mm */; };
-		DA5A839526C563A800F274C7 /* OADonationSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7D8F26C563A300F274C7 /* OADonationSettingsViewController.xib */; };
 		DA5A839626C563A800F274C7 /* OAPluginsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D9126C563A300F274C7 /* OAPluginsViewController.mm */; };
 		DA5A839726C563A800F274C7 /* OALocalResourceInformationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D9226C563A300F274C7 /* OALocalResourceInformationViewController.mm */; };
 		DA5A839826C563A800F274C7 /* OAResourcesBaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D9326C563A300F274C7 /* OAResourcesBaseViewController.mm */; };
@@ -6747,7 +6746,6 @@
 		DA5A7D8C26C563A300F274C7 /* OAPluginDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPluginDetailsViewController.h; sourceTree = "<group>"; };
 		DA5A7D8D26C563A300F274C7 /* OACustomSourceDetailsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACustomSourceDetailsViewController.mm; sourceTree = "<group>"; };
 		DA5A7D8E26C563A300F274C7 /* OAOutdatedResourcesViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOutdatedResourcesViewController.mm; sourceTree = "<group>"; };
-		DA5A7D8F26C563A300F274C7 /* OADonationSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADonationSettingsViewController.xib; sourceTree = "<group>"; };
 		DA5A7D9026C563A300F274C7 /* OAPurchasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPurchasesViewController.h; sourceTree = "<group>"; };
 		DA5A7D9126C563A300F274C7 /* OAPluginsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPluginsViewController.mm; sourceTree = "<group>"; };
 		DA5A7D9226C563A300F274C7 /* OALocalResourceInformationViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OALocalResourceInformationViewController.mm; sourceTree = "<group>"; };
@@ -12314,7 +12312,6 @@
 				DA5A7D8726C563A300F274C7 /* OACustomSourceDetailsViewController.xib */,
 				DA5A7D8B26C563A300F274C7 /* OADonationSettingsViewController.h */,
 				DA5A7D7F26C563A300F274C7 /* OADonationSettingsViewController.mm */,
-				DA5A7D8F26C563A300F274C7 /* OADonationSettingsViewController.xib */,
 				0AD1F3A326CC02B100EE4DFD /* OADownloadMultipleResourceViewController.h */,
 				0AD1F3A426CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm */,
 				DA5A7D8326C563A300F274C7 /* OALocalResourceInfoCell.h */,
@@ -16490,7 +16487,6 @@
 				460743A828C10B2900F13A7A /* OAOsmLoginMainViewController.xib in Resources */,
 				DA9C622B221C438C0087E140 /* ic_custom_search@2x.png in Resources */,
 				8410D072207F48200049DEB2 /* ic_flat_list_dark@3x.png in Resources */,
-				DA5A839526C563A800F274C7 /* OADonationSettingsViewController.xib in Resources */,
 				84EE2DA31AFBB6D2007C9A94 /* track_clear_data@3x.png in Resources */,
 				844E07D91E42319700EFC525 /* ic_action_intersection@2x.png in Resources */,
 				DA9A2C2826FB587400BEC681 /* map_direction_arrow@3x.png in Resources */,

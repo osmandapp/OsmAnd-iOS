@@ -55,6 +55,11 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     UIView *_enabledHeaderView;
     UIView *_availableHeaderView;
     
+    UIBarButtonItem *_donationSettings;
+    UIStackView *_stackView;
+    UILabel *_titleLabel;
+    UILabel *_timeLabel;
+    
     OAAutoObserverProxy* _osmAndLiveDownloadedObserver;
     OAAutoObserverProxy* _localResourcesChangedObserver;
 }
@@ -73,13 +78,6 @@ static const NSInteger enabledIndex = 0;
 static const NSInteger availableIndex = 1;
 static const NSInteger sectionCount = 2;
 
-- (void) applyLocalization
-{
-    _titleView.text = OALocalizedString(@"live_updates");
-    [_segmentControl setTitle:OALocalizedString(@"download_tab_updates") forSegmentAtIndex:0];
-    [_segmentControl setTitle:OALocalizedString(@"osmand_live_reports") forSegmentAtIndex:1];
-}
-
 - (void) viewDidLoad
 {
     [super viewDidLoad];
@@ -87,14 +85,29 @@ static const NSInteger sectionCount = 2;
     _app = [OsmAndApp instance];
     _settings = [OAAppSettings sharedManager];
     _iapHelper = [OAIAPHelper sharedInstance];
-    _segmentControl.hidden = YES;
     _localIndexes = [NSMutableArray new];
+    
+    [self createNavigationTitle];
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.shadowColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.whiteColor
+    };
+    self.navigationController.navigationBar.standardAppearance = appearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.tintColor = UIColor.whiteColor;
+    self.navigationController.navigationBar.prefersLargeTitles = NO;
+    
     [self prefersStatusBarHidden];
     [self setupView];
     
@@ -114,24 +127,37 @@ static const NSInteger sectionCount = 2;
 - (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (UIView *) getTopView
+- (void)createNavigationTitle
 {
-    return _navBarView;
+    _titleLabel = [[UILabel alloc] init];
+    _titleLabel.backgroundColor = UIColor.clearColor;
+    _titleLabel.textColor = UIColor.whiteColor;
+    _titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold maximumSize:22.];
+    _titleLabel.text = OALocalizedString(@"live_updates");
+    
+    _timeLabel = [[UILabel alloc] init];
+    _timeLabel.backgroundColor = UIColor.clearColor;
+    _timeLabel.textColor = UIColor.whiteColor;
+    _timeLabel.font = [UIFont scaledSystemFontOfSize:13. maximumSize:18.];
+    
+    _stackView = [[UIStackView alloc] initWithArrangedSubviews:@[_titleLabel, _timeLabel]];
+    _stackView.backgroundColor = UIColor.clearColor;
+    _stackView.distribution = UIStackViewDistributionEqualCentering;
+    _stackView.alignment = UIStackViewAlignmentCenter;
+    _stackView.axis = UILayoutConstraintAxisVertical;
+    [_stackView layoutSubviews];
+    
+    self.navigationItem.titleView = _stackView;
 }
 
 - (UIView *) getMiddleView
 {
     return _tableView;
-}
-
--(CGFloat) getNavBarHeight
-{
-    CGFloat height = osmAndLiveNavBarHeight - (_segmentControl.hidden ? _segmentControl.frame.size.height : 0.0);
-    return _timeLabel.hidden ? height : height + _timeLabel.frame.size.height;
 }
 
 - (NSString *) getDescription:(QString) resourceId
@@ -220,32 +246,13 @@ static const NSInteger sectionCount = 2;
 {
     [self applySafeAreaMargins];
     [self setLastUpdateDate];
-    [self adjustViews];
-
     [self setupSubscriptionBanner];
-
-    self.donationSettings.hidden = ![_iapHelper.monthlyLiveUpdates isAnyPurchased] || ![_iapHelper.proMonthly isAnyPurchased];
-
     [self updateContent];
-}
-
-- (void) adjustViews
-{
-    CGRect buttonFrame = _backButton.frame;
-    CGRect titleFrame = _titleView.frame;
-    CGRect settingsButtonFrame = _donationSettings.frame;
-    CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
-    buttonFrame.origin.y = statusBarHeight;
-    titleFrame.origin.y = statusBarHeight;
-    settingsButtonFrame.origin.y = statusBarHeight;
-    _donationSettings.frame = settingsButtonFrame;
-    _backButton.frame = buttonFrame;
-    _titleView.frame = titleFrame;
-    if (!_timeLabel.hidden)
+    
+    if ([_iapHelper.monthlyLiveUpdates isAnyPurchased] || [_iapHelper.proMonthly isAnyPurchased])
     {
-        CGRect timeLabelFrame = _timeLabel.frame;
-        timeLabelFrame.origin.y = titleFrame.origin.y + titleFrame.size.height - 5.0;
-        _timeLabel.frame = timeLabelFrame;
+        _donationSettings = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_settings"] style:UIBarButtonItemStylePlain target:self action:@selector(donationSettingsClicked:)];
+        [self.navigationController.navigationBar.topItem setRightBarButtonItem:_donationSettings animated:YES];
     }
 }
 
@@ -254,7 +261,6 @@ static const NSInteger sectionCount = 2;
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self applySafeAreaMargins];
-        [self adjustViews];
         if (_enabledHeaderView)
         {
             UIView *switchView = [_enabledHeaderView viewWithTag:kButtonTag];
@@ -303,11 +309,8 @@ static const NSInteger sectionCount = 2;
             NSDate *dateInLocalTimezone = [dateFromServer dateByAddingTimeInterval:timeZoneSeconds];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [UIView animateWithDuration:0.3f animations:^{
-                    _timeLabel.frame = CGRectMake(0, _timeLabel.frame.origin.y, DeviceScreenWidth, _timeLabel.frame.size.height);
                     [_timeLabel setText:[NSString stringWithFormat:OALocalizedString(@"osmand_live_server_date"), [dateFormatter stringFromDate:dateInLocalTimezone]]];
-                    _timeLabel.hidden = NO;
                     [self applySafeAreaMargins];
-                    [self adjustViews];
                 }];
             });
         }

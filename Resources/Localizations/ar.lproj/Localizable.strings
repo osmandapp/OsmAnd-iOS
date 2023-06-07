@@ -2904,3 +2904,5 @@
 "test_heightmap" = "اختبار خريطة الارتفاع";
 "disable_vertex_hillshade_3d" = "تعطيل قمة الارتفاع في عرض الثلاثي الأبعاد";
 "generate_hillshade_from_3d_maps" = "إنشاء خرائط الارتفاع من خرائط ثلاثية الأبعاد";
+"perform_oauth_authorization" = "تسجيل الدخول عبر OAuth";
+"user_name" = "اسم المستخدم";

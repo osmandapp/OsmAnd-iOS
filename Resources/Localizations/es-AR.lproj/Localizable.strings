@@ -2833,7 +2833,7 @@
 "last_seven_days" = "Últimos 7 días";
 "confirm_history_item_delete" = "¿Borrar (%ld) elementos del historial?";
 "search_favorites" = "Buscar en favoritos";
-"compass_click_desc" = "Sugerencia: Pulsa el widget de la brújula para cambiar el modo de orientación del mapa.";
+"compass_click_desc" = "Sugerencia: Pulsa el botón de la brújula para cambiar el modo de orientación del mapa.";
 "rotate_map_north_opt" = "Norte siempre arriba (fijo)";
 "rotate_map_manual_opt" = "Rotación manual (fijo)";
 "map_widget_camera_tilt" = "Inclinación de la cámara";
@@ -2908,3 +2908,5 @@
 "disable_vertex_hillshade_3d" = "Desactivar el sombreado de vértices en 3D";
 "generate_slope_from_3d_maps" = "Generar mapas ráster de pendientes a partir de mapas 3D";
 "generate_hillshade_from_3d_maps" = "Generar mapas ráster de sombreado a partir de mapas 3D";
+"user_name" = "Nombre de usuario";
+"perform_oauth_authorization" = "Ingresar a través de OAuth";

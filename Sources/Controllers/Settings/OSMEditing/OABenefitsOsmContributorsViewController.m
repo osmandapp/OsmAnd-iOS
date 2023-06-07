@@ -324,10 +324,12 @@
 
 - (void)onAccountInformationUpdated
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        if (self.accountDelegate)
-            [self.accountDelegate onAccountInformationUpdatedFromBenefits];
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self dismissViewControllerAnimated:YES completion:^{
+            if (self.accountDelegate)
+                [self.accountDelegate onAccountInformationUpdatedFromBenefits];
+        }];
+    });
 }
 
 @end

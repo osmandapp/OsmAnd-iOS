@@ -40,17 +40,13 @@
     CALayer *_horizontalLine;
 }
 
--(void)applyLocalization
-{
-    _titleView.text = OALocalizedString(@"shared_string_details");
-}
-
 -(void)viewDidLoad
 {
     [super viewDidLoad];
 
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
+    self.navigationItem.title = OALocalizedString(@"shared_string_details");
 }
 
 -(void)viewWillLayoutSubviews
@@ -63,17 +59,25 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.backButton setImage:self.backButton.imageView.image.imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.shadowColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.whiteColor
+    };
+    self.navigationController.navigationBar.standardAppearance = appearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.tintColor = UIColor.whiteColor;
+    self.navigationController.navigationBar.prefersLargeTitles = NO;
     if (self.regionTitle)
-        self.titleView.text = self.regionTitle;
+        self.navigationItem.title = self.regionTitle;
 
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [self applySafeAreaMargins];
-}
-
--(UIView *) getTopView
-{
-    return _navBarView;
 }
 
 -(UIView *) getMiddleView

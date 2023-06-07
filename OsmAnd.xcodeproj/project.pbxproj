@@ -102,7 +102,6 @@
 		0AC29CFA26E763E600A78C53 /* ic_custom_wikipedia_download_colored@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AC29CF626E763E500A78C53 /* ic_custom_wikipedia_download_colored@2x.png */; };
 		0AC29CFB26E763E600A78C53 /* ic_custom_wikipedia_download_colored@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AC29CF726E763E500A78C53 /* ic_custom_wikipedia_download_colored@3x.png */; };
 		0AD1F3A626CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0AD1F3A426CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm */; };
-		0AD1F3A726CC02B100EE4DFD /* OADownloadMultipleResourceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AD1F3A526CC02B100EE4DFD /* OADownloadMultipleResourceViewController.xib */; };
 		0AD1F3AA26CC034900EE4DFD /* ic_custom_multi_download@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD1F3A826CC034800EE4DFD /* ic_custom_multi_download@3x.png */; };
 		0AD1F3AB26CC034900EE4DFD /* ic_custom_multi_download@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD1F3A926CC034900EE4DFD /* ic_custom_multi_download@2x.png */; };
 		0AD1F3BA26CC0D6F00EE4DFD /* OAMapSettingsRoutesScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0AD1F3B926CC0D6F00EE4DFD /* OAMapSettingsRoutesScreen.mm */; };
@@ -3558,7 +3557,6 @@
 		0AC29CF726E763E500A78C53 /* ic_custom_wikipedia_download_colored@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wikipedia_download_colored@3x.png"; path = "Resources/Icons/ic_custom_wikipedia_download_colored@3x.png"; sourceTree = "<group>"; };
 		0AD1F3A326CC02B100EE4DFD /* OADownloadMultipleResourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADownloadMultipleResourceViewController.h; sourceTree = "<group>"; };
 		0AD1F3A426CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadMultipleResourceViewController.mm; sourceTree = "<group>"; };
-		0AD1F3A526CC02B100EE4DFD /* OADownloadMultipleResourceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADownloadMultipleResourceViewController.xib; sourceTree = "<group>"; };
 		0AD1F3A826CC034800EE4DFD /* ic_custom_multi_download@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_multi_download@3x.png"; path = "Resources/Icons/ic_custom_multi_download@3x.png"; sourceTree = "<group>"; };
 		0AD1F3A926CC034900EE4DFD /* ic_custom_multi_download@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_multi_download@2x.png"; path = "Resources/Icons/ic_custom_multi_download@2x.png"; sourceTree = "<group>"; };
 		0AD1F3B826CC0D6F00EE4DFD /* OAMapSettingsRoutesScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsRoutesScreen.h; sourceTree = "<group>"; };
@@ -12319,7 +12317,6 @@
 				DA5A7D8F26C563A300F274C7 /* OADonationSettingsViewController.xib */,
 				0AD1F3A326CC02B100EE4DFD /* OADownloadMultipleResourceViewController.h */,
 				0AD1F3A426CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm */,
-				0AD1F3A526CC02B100EE4DFD /* OADownloadMultipleResourceViewController.xib */,
 				DA5A7D8326C563A300F274C7 /* OALocalResourceInfoCell.h */,
 				DA5A7D9826C563A300F274C7 /* OALocalResourceInfoCell.m */,
 				DA5A7D9926C563A300F274C7 /* OALocalResourceInformationViewController.h */,
@@ -14825,7 +14822,6 @@
 				C5CD4CF229EFE6AC00B35C3D /* ic_navbar_trash@3x.png in Resources */,
 				DA5A840526C563A800F274C7 /* OAPOIViewController.xib in Resources */,
 				84F464211B664D3B00C1D96F /* ic_popup_no_internet@3x.png in Resources */,
-				0AD1F3A726CC02B100EE4DFD /* OADownloadMultipleResourceViewController.xib in Resources */,
 				46E0263A27B6773F00E554DD /* ic_custom_terrain_hilly@3x.png in Resources */,
 				DABF818D228BDE9300651A91 /* map_mapillary_location@2x.png in Resources */,
 				0CBDD09F245038EC00C94BC2 /* map_marker_direction_arrow_p2_color_pin_5@3x.png in Resources */,

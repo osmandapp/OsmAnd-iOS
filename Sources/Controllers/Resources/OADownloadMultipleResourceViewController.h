@@ -7,7 +7,7 @@
 //
 
 #import <OsmAndCore/ResourcesManager.h>
-#import "OACompoundViewController.h"
+#import "OABaseButtonsViewController.h"
 #import "OAResourcesUIHelper.h"
 
 @protocol OADownloadMultipleResourceDelegate
@@ -21,7 +21,7 @@
 
 @end
 
-@interface OADownloadMultipleResourceViewController : OACompoundViewController
+@interface OADownloadMultipleResourceViewController : OABaseButtonsViewController
 
 @property(weak, nonatomic) id <OADownloadMultipleResourceDelegate> delegate;
 

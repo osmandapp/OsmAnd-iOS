@@ -1885,7 +1885,8 @@ static BOOL _repositoryUpdated = NO;
             {
                 OADownloadMultipleResourceViewController *controller = [[OADownloadMultipleResourceViewController alloc] initWithResource:multipleItem];
                 controller.delegate = self;
-                [self presentViewController:controller animated:YES completion:nil];
+                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+                [self.navigationController presentViewController:navigationController animated:YES completion:nil];
             }
         }
     }

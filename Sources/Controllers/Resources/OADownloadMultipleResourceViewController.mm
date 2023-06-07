@@ -97,7 +97,7 @@
 
 - (BOOL)hideFirstHeader
 {
-    return YES;
+    return _isSRTM ? YES : NO;
 }
 
 - (NSString *)getTopButtonTitle

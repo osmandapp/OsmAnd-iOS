@@ -588,7 +588,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     {
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
         e.name = @"color";
-        e.value = [self.getColor toHexRGBAString].lowercaseString;
+        e.value = [self.getColor toHexARGBString].lowercaseString;
         [exts addObject:e];
     }
     if (self.getCalendarEvent)
@@ -653,7 +653,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     if (calendarExt)
         [fp setCalendarEvent:[calendarExt.value isEqualToString:@"true"]];
 
-    [fp setColor:UIColorFromRGBA([pt getColor:0])];
+    [fp setColor:UIColorFromARGB([pt getColor:0])];
 
     OAGpxExtension *hiddenExt = [pt getExtensionByKey:EXTENSION_HIDDEN];
     [fp setVisible:hiddenExt ? [hiddenExt.value isEqualToString:@"true"] : NO];

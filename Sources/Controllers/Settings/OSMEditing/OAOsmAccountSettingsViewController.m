@@ -20,6 +20,7 @@
 #import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAOsmAccountSettingsViewController () <UITextFieldDelegate, UIGestureRecognizerDelegate>
 
@@ -34,7 +35,7 @@
     NSIndexPath *_errorEmptySpaceIndexPath;
 
     OAAppSettings *_settings;
-    BOOL _isLogged;
+    BOOL _isAuthorised;
     NSString *_errorMessage;
 
     NSString *_newUserName;
@@ -48,7 +49,7 @@
     _settings = [OAAppSettings sharedManager];
     _newUserName = [_settings.osmUserName get];
     _newPassword = [_settings.osmUserPassword get];
-    _isLogged = _newUserName.length > 0 && _newPassword.length > 0;
+    _isAuthorised = [OAOsmOAuthHelper isAuthorised];
 }
 
 - (void)registerNotifications
@@ -65,7 +66,7 @@
 
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
-    if (!_isLogged)
+    if (!_isAuthorised)
     {
         self.tableView.tableHeaderView =
                 [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"use_login_and_password_description")
@@ -79,7 +80,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    if (!_isLogged && _userNameIndexPath)
+    if (!_isAuthorised && _userNameIndexPath)
         [self showKeyboardForCellForIndexPath:_userNameIndexPath];
 }
 
@@ -87,7 +88,7 @@
 
 - (NSString *)getTitle
 {
-    return _isLogged ? OALocalizedString(@"login_account") : OALocalizedString(@"shared_string_account_add");
+    return _isAuthorised ? OALocalizedString(@"login_account") : OALocalizedString(@"shared_string_account_add");
 }
 
 - (BOOL)isNavbarSeparatorVisible
@@ -114,7 +115,7 @@
     }];
     _userNameIndexPath = [NSIndexPath indexPathForRow:loginLogoutSection.count - 1 inSection:data.count - 1];
 
-    if (!_isLogged)
+    if (!_isAuthorised)
     {
         [loginLogoutSection addObject:@{
             @"type" : [OADividerCell getCellIdentifier],
@@ -192,11 +193,14 @@
         {
             BOOL isEmail = [item[@"key"] isEqualToString:@"email_input_cell"];
             BOOL isPassword = [item[@"key"] isEqualToString:@"password_input_cell"];
-
-            cell.titleLabel.text = isEmail ? OALocalizedString(@"shared_string_email") : OALocalizedString(@"user_password");
+            
+            if (isEmail)
+                cell.titleLabel.text = [OAOsmOAuthHelper isOAuthAuthorised] ? OALocalizedString(@"user_name") : OALocalizedString(@"shared_string_email");
+            else
+                cell.titleLabel.text = OALocalizedString(@"user_password");
             cell.titleLabel.textColor = [UIColor blackColor];
 
-            cell.inputField.userInteractionEnabled = !_isLogged;
+            cell.inputField.userInteractionEnabled = !_isAuthorised;
             cell.inputField.text = isEmail ? _settings.osmUserName.get : _settings.osmUserPassword.get;
             cell.inputField.placeholder = isEmail ? OALocalizedString(@"email_example_hint") : OALocalizedString(@"shared_string_required");
             cell.inputField.textContentType = isEmail ? UITextContentTypeUsername : UITextContentTypePassword;
@@ -222,17 +226,17 @@
         }
         if (cell)
         {
-            cell.button.backgroundColor = _isLogged || _newUserName.length == 0 || _newPassword.length == 0 || _errorMessage != nil
+            cell.button.backgroundColor = _isAuthorised || _newUserName.length == 0 || _newPassword.length == 0 || _errorMessage != nil
                     ? UIColorFromRGB(color_button_gray_background)
                     : UIColorFromRGB(color_primary_purple);
-            [cell.button setTitleColor:_isLogged
+            [cell.button setTitleColor:_isAuthorised
                             ? UIColorFromRGB(color_primary_purple)
                             : _newUserName.length == 0 || _newPassword.length == 0 || _errorMessage != nil
                                     ? UIColorFromRGB(color_text_footer) : UIColor.whiteColor
                               forState:UIControlStateNormal];
-            [cell.button setTitle:_isLogged > 0 ? OALocalizedString(@"shared_string_logout") : OALocalizedString(@"user_login")
+            [cell.button setTitle:_isAuthorised > 0 ? OALocalizedString(@"shared_string_logout") : OALocalizedString(@"user_login")
                          forState:UIControlStateNormal];
-            cell.button.userInteractionEnabled = _isLogged ? YES : _newUserName.length > 0 && _newPassword.length > 0 && _errorMessage == nil;
+            cell.button.userInteractionEnabled = _isAuthorised ? YES : _newUserName.length > 0 && _newPassword.length > 0 && _errorMessage == nil;
             [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.button addTarget:self action:@selector(loginLogoutButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         }
@@ -347,7 +351,7 @@
         [cell.inputField resignFirstResponder];
     }
 
-    if (!_isLogged)
+    if (!_isAuthorised)
     {
         [_settings.osmUserName set:_newUserName];
         [_settings.osmUserPassword set:_newPassword];
@@ -357,8 +361,7 @@
         NSString *warning = result.warning;
         if (warning)
         {
-            [_settings.osmUserName resetToDefault];
-            [_settings.osmUserPassword resetToDefault];
+            [OAOsmOAuthHelper logOut];
             _errorMessage = OALocalizedString(@"auth_failed");
 
             [self generateData];
@@ -382,11 +385,7 @@
     }
     else
     {
-        [_settings.osmUserName resetToDefault];
-        [_settings.osmUserPassword resetToDefault];
-        [_settings.osmUserDisplayName resetToDefault];
-        [_settings.mapperLiveUpdatesExpireTime resetToDefault];
-
+        [OAOsmOAuthHelper logOut];
         [self dismissViewControllerAnimated:YES completion:^{
             if (self.accountDelegate)
                 [self.accountDelegate onAccountInformationUpdated];
@@ -454,7 +453,7 @@
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField
 {
-    if (!_isLogged && _passwordIndexPath && _userNameIndexPath)
+    if (!_isAuthorised && _passwordIndexPath && _userNameIndexPath)
     {
         if (_newPassword.length > 0 && _newUserName.length > 0)
         {

@@ -19,13 +19,11 @@
 #import "OAEditPOIData.h"
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
+#import "OAKeyboardHintBar.h"
 
 #define kVerticalMargin 8.
 
-@interface OAAdvancedEditingViewController () <UITextViewDelegate, UIGestureRecognizerDelegate, MDCMultilineTextInputLayoutDelegate>
-
-@property (strong, nonatomic) IBOutlet UIView *toolbarView;
-@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@interface OAAdvancedEditingViewController () <UITextViewDelegate, UIGestureRecognizerDelegate, MDCMultilineTextInputLayoutDelegate, OAKeyboardHintBarDelegate>
 
 @property (weak) UITextView *tagTextView;
 
@@ -37,6 +35,8 @@
     id<OAOsmEditingDataProtocol> _dataProvider;
     
     NSMutableArray *_fieldPairs;
+    
+    OAKeyboardHintBar *_hintView;
     
     BOOL _isKeyboardShown;
     BOOL _isHintsAvailable;
@@ -148,6 +148,9 @@
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onOutsedeCellsTapped)];
     tapGesture.cancelsTouchesInView = NO;
     [self.tableView addGestureRecognizer:tapGesture];
+    
+    _hintView = [[OAKeyboardHintBar alloc] init];
+    _hintView.delegate = self;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -468,7 +471,7 @@
     UITextInputAssistantItem* item = self.tagTextView.inputAssistantItem;
     item.leadingBarButtonGroups = @[];
     item.trailingBarButtonGroups = @[];
-    self.tagTextView.inputAccessoryView = self.toolbarView;
+    self.tagTextView.inputAccessoryView = _hintView;
     [self.tagTextView reloadInputViews];
     _isHintsAvailable = YES;
 }
@@ -518,8 +521,8 @@
     NSInteger xPosition = 0;
     NSInteger margin = 8;
     
-    [self.scrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    self.scrollView.contentSize = CGSizeMake(margin, self.toolbarView.frame.size.height);
+    [_hintView.scrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    _hintView.scrollView.contentSize = CGSizeMake(margin, _hintView.frame.size.height);
     
     if ([hints count] == 0)
     {
@@ -549,11 +552,11 @@
             
             xPosition += btn.frame.size.width + margin;
             
-            [self.scrollView addSubview:btn];
+            [_hintView.scrollView addSubview:btn];
         }
         _isHintsAvailable = YES;
     }
-    self.scrollView.contentSize = CGSizeMake(xPosition, self.toolbarView.frame.size.height);
+    _hintView.scrollView.contentSize = CGSizeMake(xPosition, _hintView.frame.size.height);
 }
 
 - (void) removeFromSuperview:(UITapGestureRecognizer *)sender
@@ -583,7 +586,7 @@
     }
 }
 
-- (IBAction)hintDonePressed:(id)sender
+- (void)keyboardHintBarDidTapButton
 {
     [self performKeyboardHiding];
 }

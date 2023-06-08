@@ -136,7 +136,7 @@
                             ? @"ic_custom_folder_hidden" : @"ic_custom_folder"],
                     kCellRightIconName: @"ic_custom_arrow_up",
                     kCellToggle: @YES,
-                    kCellTintColor: @([OAUtilities colorToNumber:waypointsSectionData.values[@"tint_color"]]),
+                    kCellTintColor: @([waypointsSectionData.values[@"tint_color"] toARGBNumber]),
                     kTableValues: @{ @"is_rte": @(self.trackMenuDelegate && [self.trackMenuDelegate isRteGroup:groupName]) }
             }];
             [waypointsSectionData.subjects addObject:groupCellData];
@@ -296,7 +296,7 @@
                     kTableKey: [NSString stringWithFormat:@"cell_waypoints_group_%@", cellData.title],
                     kCellLeftIcon: [UIImage templateImageNamed:[sectionData.values[@"is_hidden"] boolValue]
                             ? @"ic_custom_folder_hidden" : @"ic_custom_folder"],
-                    kCellTintColor: @([OAUtilities colorToNumber:sectionData.values[@"tint_color"]])
+                    kCellTintColor: @([sectionData.values[@"tint_color"] toARGBNumber])
             }];
             cellData.values[@"is_rte"] = @(self.trackMenuDelegate && [self.trackMenuDelegate isRteGroup:cellData.title]);
         }

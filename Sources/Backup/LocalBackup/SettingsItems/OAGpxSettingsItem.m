@@ -146,8 +146,7 @@
     if (gpx.color != 0)
     {
         OAGPXAppearanceCollection *gpxAppearance = [OAGPXAppearanceCollection sharedInstance];
-        OAColorItem *colorItem = [gpxAppearance getColorForItem:gpx.gpxFilePath defaultValue:gpx.color];
-        [gpxAppearance selectColor:colorItem toItem:gpx.gpxFilePath];
+        [gpxAppearance selectColor:[gpxAppearance getColorItemWithValue:gpx.color]];
     }
 }
 

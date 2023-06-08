@@ -67,9 +67,10 @@
 #import "OAQuickActionListViewController.h"
 #import "OAConfigureMenuViewController.h"
 #import "OACreateProfileViewController.h"
+#import "OAOsmAccountSettingsViewController.h"
+#import "OAOsmLoginMainViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OASimpleTableViewCell.h"
-

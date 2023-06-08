@@ -4046,10 +4046,10 @@
         _routeRecalculationDistance = [OACommonDouble withKey:routeRecalculationDistanceKey defValue:0.];
         [_profilePreferences setObject:_routeRecalculationDistance forKey:@"routing_recalc_distance"];
 
-        _customRouteColorDay = [OACommonInteger withKey:customRouteColorDayKey defValue:[OAUtilities colorToNumber:UIColorFromARGB(kDefaultRouteLineDayColor)]];
+        _customRouteColorDay = [OACommonInteger withKey:customRouteColorDayKey defValue:[UIColorFromARGB(kDefaultRouteLineDayColor) toARGBNumber]];
         [_profilePreferences setObject:_customRouteColorDay forKey:@"route_line_color"];
 
-        _customRouteColorNight = [OACommonInteger withKey:customRouteColorNightKey defValue:[OAUtilities colorToNumber:UIColorFromARGB(kDefaultRouteLineNightColor)]];
+        _customRouteColorNight = [OACommonInteger withKey:customRouteColorNightKey defValue:[UIColorFromARGB(kDefaultRouteLineNightColor) toARGBNumber]];
         [_profilePreferences setObject:_customRouteColorNight forKey:@"route_line_color_night"];
 
         _routeColoringType = [OACommonColoringType withKey:routeColoringTypeKey defValue:OAColoringType.DEFAULT values:[OAColoringType getRouteColoringTypes]];

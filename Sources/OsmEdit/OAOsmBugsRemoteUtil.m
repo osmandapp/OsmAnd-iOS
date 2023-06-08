@@ -10,6 +10,7 @@
 #import "OAOsmNotePoint.h"
 #import "OAOsmBugResult.h"
 #import "OAAppSettings.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define GET @"GET"
 #define POST @"POST"
@@ -77,11 +78,7 @@ static const NSString* USERS_API_BASE_URL = @"https://api.openstreetmap.org/api/
     
     if (!_anonymous)
     {
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        NSString *authStr = [NSString stringWithFormat:@"%@:%@", settings.osmUserName.get, settings.osmUserPassword.get];
-        NSData *authData = [authStr dataUsingEncoding:NSUTF8StringEncoding];
-        NSString *authValue = [NSString stringWithFormat: @"Basic %@", [authData base64EncodedStringWithOptions:0]];
-        [request setValue:authValue forHTTPHeaderField:@"Authorization"];
+        [request setValue:[OAOsmOAuthHelper getAutorizationHeader] forHTTPHeaderField:@"Authorization"];
     }
     
     __block OAOsmBugResult *res = [[OAOsmBugResult alloc] init];

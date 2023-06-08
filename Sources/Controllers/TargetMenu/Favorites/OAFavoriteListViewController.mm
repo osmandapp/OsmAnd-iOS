@@ -1697,7 +1697,7 @@ static UIViewController *parentController;
         return;
     
     NSURL *url = urls.firstObject;
-    [OARootViewController.instance handleIncomingURL:url];
+    [OARootViewController.instance importAsFavorites:url];
 }
 
 #pragma mark - Keyboard Notifications

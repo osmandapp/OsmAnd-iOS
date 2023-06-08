@@ -323,36 +323,32 @@ extension WidgetsListViewController {
 // Appearance
 extension WidgetsListViewController {
     
-    func setupBottomFonts() {
-        topButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
-        bottomButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
-    }
+//    func setupBottomFonts() {
+//        topButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+//        bottomButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+//    }
     
     override func getTitle() -> String! {
         widgetPanel.title
     }
-    
-    override func isNavbarSeparatorVisible() -> Bool {
-        false
-    }
-    
-    override func getBottomAxisMode() -> NSLayoutConstraint.Axis {
-        .horizontal
-    }
-    
-    override func getTopButtonTitle() -> String {
-        return localizedString("add_widget")
-    }
-
-    override func getBottomButtonTitle() -> String {
-        return localizedString("shared_string_edit")
-    }
-
-    override func getTopButtonColorScheme() -> EOABaseButtonColorScheme {
-        return .graySimple
-    }
-
-    override func getBottomButtonColorScheme() -> EOABaseButtonColorScheme {
-        return .graySimple
-    }
+    // TODO: add buttons in new design
+//    override func getBottomAxisMode() -> NSLayoutConstraint.Axis {
+//        .horizontal
+//    }
+//
+//    override func getTopButtonTitle() -> String {
+//        return localizedString("add_widget")
+//    }
+//
+//    override func getBottomButtonTitle() -> String {
+//        return localizedString("shared_string_edit")
+//    }
+//
+//    override func getTopButtonColorScheme() -> EOABaseButtonColorScheme {
+//        return .graySimple
+//    }
+//
+//    override func getBottomButtonColorScheme() -> EOABaseButtonColorScheme {
+//        return .graySimple
+//    }
 }

@@ -2901,3 +2901,5 @@
 "disable_vertex_hillshade_3d" = "Deaktiver vertex-terrænskygge i 3D";
 "generate_slope_from_3d_maps" = "Generér hældningsrasterkort fra 3D-kort";
 "generate_hillshade_from_3d_maps" = "Generér terrænskygge-rasterkort fra 3D-kort";
+"perform_oauth_authorization" = "Log ind via OAuth";
+"user_name" = "Brugernavn";

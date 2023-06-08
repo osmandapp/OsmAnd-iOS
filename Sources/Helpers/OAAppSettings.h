@@ -390,6 +390,7 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 - (void) set:(NSArray<NSString *> *)arr mode:(OAApplicationMode *)mode;
 
 - (void) add:(NSString *)string;
+- (void) add:(NSString *)string appMode:(OAApplicationMode *)appMode;
 - (void) addUnique:(NSString *)string;
 - (void) remove:(NSString *)string;
 - (BOOL) contains:(NSString *)string;

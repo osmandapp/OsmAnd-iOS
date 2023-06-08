@@ -27,6 +27,10 @@
 @property (nonatomic, readonly) UIColor *unitsShadowColor;
 @property (nonatomic, readonly) float shadowRadius;
 
+@property (nonatomic) UILabel *textView;
+@property (nonatomic) UILabel *textShadowView;
+@property (nonatomic) UIImageView *imageView;
+
 @property (strong) BOOL(^updateInfoFunction)();
 @property (strong) void(^onClickFunction)(id sender);
 

@@ -24,6 +24,8 @@
 #import "OAIAPHelper.h"
 #import "OAResourcesBaseViewController.h"
 
+#import "OsmAnd_Maps-Swift.h"
+
 #define PLUGIN_ID kInAppId_Addon_OsmandDevelopment
 #define DEV_FPS @"fps"
 #define DEV_CAMERA_TILT @"dev_camera_tilt"
@@ -37,12 +39,6 @@
 {
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
-    OAFPSTextInfoWidget *_fpsWidgetControl;
-    OACameraTiltWidget *_cameraTiltWidgetControl;
-    OACameraDistanceWidget *_cameraDistanceWidgetControl;
-    OAZoomLevelWidget *_zoomLevelWidgetControl;
-    OATargetDistanceWidget *_targetDistanceWidgetControl;
-    OAAltitudeWidget *_altitudeWidgetMapCenter;
     
     OACommonBoolean *_enable3dMap;
 }
@@ -59,6 +55,12 @@
         _disableVertexHillshade3D = [[[_settings registerBooleanPreference:@"disable_vertex_hillshade_3d" defValue:YES] makeGlobal] makeShared];
         _generateSlopeFrom3DMaps = [[[_settings registerBooleanPreference:@"generate_slope_from_3d_maps" defValue:YES] makeGlobal] makeShared];
         _generateHillshadeFrom3DMaps = [[[_settings registerBooleanPreference:@"generate_hillshade_from_3d_maps" defValue:YES] makeGlobal] makeShared];
+        
+        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.devFps appModes:@[]];
+        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.devCameraTilt appModes:@[]];
+        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.devCameraDistance appModes:@[]];
+        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.devZoomLevel appModes:@[]];
+        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.devTargetDistance appModes:@[]];
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
     }
@@ -77,118 +79,123 @@
 
 - (void) registerLayers
 {
-    [self registerWidget];
+//    [self registerWidget];
 }
 
-- (void) registerWidget
+- (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
 {
-    OAMapInfoController *mapInfoController = [self getMapInfoController];
-    if (mapInfoController)
-    {
-        _fpsWidgetControl = [[OAFPSTextInfoWidget alloc] init];
-        [mapInfoController registerSideWidget:_fpsWidgetControl imageId:@"widget_fps_day" message:OALocalizedString(@"map_widget_rendering_fps") key:DEV_FPS left:false priorityOrder:99];
-        
-        _cameraTiltWidgetControl = [[OACameraTiltWidget alloc] init];
-        [mapInfoController registerSideWidget:_cameraTiltWidgetControl imageId:@"widget_developer_camera_tilt_day" message:OALocalizedString(@"map_widget_camera_tilt") key:DEV_CAMERA_TILT left:false priorityOrder:100];
-        
-        _cameraDistanceWidgetControl = [[OACameraDistanceWidget alloc] init];
-        [mapInfoController registerSideWidget:_cameraDistanceWidgetControl imageId:@"widget_developer_camera_distance_day" message:OALocalizedString(@"map_widget_camera_distance") key:DEV_CAMERA_DISTANCE left:false priorityOrder:101];
-        
-        _zoomLevelWidgetControl = [[OAZoomLevelWidget alloc] init];
-        [mapInfoController registerSideWidget:_zoomLevelWidgetControl imageId:@"widget_developer_map_zoom_day" message:OALocalizedString(@"map_widget_zoom_level") key:DEV_ZOOM_LEVEL left:false priorityOrder:102];
-        
-        _targetDistanceWidgetControl = [[OATargetDistanceWidget alloc] init];
-        [mapInfoController registerSideWidget:_targetDistanceWidgetControl imageId:@"widget_developer_target_distance_day" message:OALocalizedString(@"map_widget_target_distance") key:DEV_TARGET_DISTANCE left:false priorityOrder:103];
+    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
+
+    OABaseWidgetView *fpsWidget = [self createMapWidgetForParams:OAWidgetType.devFps];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:fpsWidget]];
+    
+    OABaseWidgetView *cameraTiltWidget = [self createMapWidgetForParams:OAWidgetType.devCameraTilt];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:cameraTiltWidget]];
+    
+    OABaseWidgetView *cameraDistanceWidget = [self createMapWidgetForParams:OAWidgetType.devCameraDistance];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:cameraDistanceWidget]];
+    
+    OABaseWidgetView *zoomLevelWidget = [self createMapWidgetForParams:OAWidgetType.devZoomLevel];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:zoomLevelWidget]];
+    
+    OABaseWidgetView *targetDistanceWidget = [self createMapWidgetForParams:OAWidgetType.devTargetDistance];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:targetDistanceWidget]];
+}
+
+- (OABaseWidgetView *) createMapWidgetForParams:(OAWidgetType *)widgetType
+{
+    if (widgetType == OAWidgetType.devFps) {
+        return [[OAFPSTextInfoWidget alloc] init];
+    } else if (widgetType == OAWidgetType.devCameraTilt) {
+        return [[OACameraTiltWidget alloc] init];
+    } else if (widgetType == OAWidgetType.devCameraDistance) {
+        return [[OACameraDistanceWidget alloc] init];
+    } else if (widgetType == OAWidgetType.devZoomLevel) {
+        return [[OAZoomLevelWidget alloc] init];
+    } else if (widgetType == OAWidgetType.devTargetDistance) {
+        return [[OATargetDistanceWidget alloc] init];
     }
+        
+    return nil;
 }
 
 - (void) updateLayers
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self isEnabled])
-        {
-            if (!_fpsWidgetControl)
-                [self registerWidget];
-            if (!_cameraTiltWidgetControl)
-                [self registerWidget];
-            if (!_cameraDistanceWidgetControl)
-                [self registerWidget];
-            if (!_zoomLevelWidgetControl)
-                [self registerWidget];
-            if (!_targetDistanceWidgetControl)
-                [self registerWidget];
-
-            if (!_altitudeWidgetMapCenter && [self isHeightmapEnabled])
-                [self registerAltitudeMapCenterWidget];
-            else if (_altitudeWidgetMapCenter && ![self isHeightmapEnabled])
-                [self unregisterAltitudeMapCenterWidget];
-
-            [[OARootViewController instance].mapPanel recreateControls];
-        }
-        else
-        {
-            OAMapWidgetRegistry *mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
-            OAMapWidgetRegInfo *widget;
-            if (_fpsWidgetControl)
-            {
-                OAMapInfoController *mapInfoController = [self getMapInfoController];
-                [mapInfoController removeSideWidget:_fpsWidgetControl];
-                widget = [mapWidgetRegistry widgetByKey:DEV_FPS];
-                _fpsWidgetControl = nil;
-            }
-            if (_cameraTiltWidgetControl)
-            {
-                OAMapInfoController *mapInfoController = [self getMapInfoController];
-                [mapInfoController removeSideWidget:_cameraTiltWidgetControl];
-                widget = [mapWidgetRegistry widgetByKey:DEV_CAMERA_TILT];
-                _cameraTiltWidgetControl = nil;
-            }
-            if (_cameraDistanceWidgetControl)
-            {
-                OAMapInfoController *mapInfoController = [self getMapInfoController];
-                [mapInfoController removeSideWidget:_cameraDistanceWidgetControl];
-                widget = [mapWidgetRegistry widgetByKey:DEV_CAMERA_DISTANCE];
-                _cameraDistanceWidgetControl = nil;
-            }
-            if (_zoomLevelWidgetControl)
-            {
-                OAMapInfoController *mapInfoController = [self getMapInfoController];
-                [mapInfoController removeSideWidget:_zoomLevelWidgetControl];
-                widget = [mapWidgetRegistry widgetByKey:DEV_ZOOM_LEVEL];
-                _zoomLevelWidgetControl = nil;
-            }
-            if (_targetDistanceWidgetControl)
-            {
-                OAMapInfoController *mapInfoController = [self getMapInfoController];
-                [mapInfoController removeSideWidget:_targetDistanceWidgetControl];
-                widget = [mapWidgetRegistry widgetByKey:DEV_TARGET_DISTANCE];
-                _targetDistanceWidgetControl = nil;
-            }
-            if (_altitudeWidgetMapCenter)
-                [self unregisterAltitudeMapCenterWidget];
-            if (widget)
-                [mapWidgetRegistry setVisibility:widget visible:NO collapsed:NO];
-            [[OARootViewController instance].mapPanel recreateControls];
-        }
+//        if ([self isEnabled])
+//        {
+//
+//            if (!_altitudeWidgetMapCenter && [self isHeightmapEnabled])
+//                [self registerAltitudeMapCenterWidget];
+//            else if (_altitudeWidgetMapCenter && ![self isHeightmapEnabled])
+//                [self unregisterAltitudeMapCenterWidget];
+//
+//            [[OARootViewController instance].mapPanel recreateControls];
+//        }
+//        else
+//        {
+//            OAMapWidgetRegistry *mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
+//            OAMapWidgetRegInfo *widget;
+//            if (_fpsWidgetControl)
+//            {
+//                OAMapInfoController *mapInfoController = [self getMapInfoController];
+//                [mapInfoController removeSideWidget:_fpsWidgetControl];
+//                widget = [mapWidgetRegistry widgetByKey:DEV_FPS];
+//                _fpsWidgetControl = nil;
+//            }
+//            if (_cameraTiltWidgetControl)
+//            {
+//                OAMapInfoController *mapInfoController = [self getMapInfoController];
+//                [mapInfoController removeSideWidget:_cameraTiltWidgetControl];
+//                widget = [mapWidgetRegistry widgetByKey:DEV_CAMERA_TILT];
+//                _cameraTiltWidgetControl = nil;
+//            }
+//            if (_cameraDistanceWidgetControl)
+//            {
+//                OAMapInfoController *mapInfoController = [self getMapInfoController];
+//                [mapInfoController removeSideWidget:_cameraDistanceWidgetControl];
+//                widget = [mapWidgetRegistry widgetByKey:DEV_CAMERA_DISTANCE];
+//                _cameraDistanceWidgetControl = nil;
+//            }
+//            if (_zoomLevelWidgetControl)
+//            {
+//                OAMapInfoController *mapInfoController = [self getMapInfoController];
+//                [mapInfoController removeSideWidget:_zoomLevelWidgetControl];
+//                widget = [mapWidgetRegistry widgetByKey:DEV_ZOOM_LEVEL];
+//                _zoomLevelWidgetControl = nil;
+//            }
+//            if (_targetDistanceWidgetControl)
+//            {
+//                OAMapInfoController *mapInfoController = [self getMapInfoController];
+//                [mapInfoController removeSideWidget:_targetDistanceWidgetControl];
+//                widget = [mapWidgetRegistry widgetByKey:DEV_TARGET_DISTANCE];
+//                _targetDistanceWidgetControl = nil;
+//            }
+//            if (_altitudeWidgetMapCenter)
+//                [self unregisterAltitudeMapCenterWidget];
+//            if (widget)
+//                [mapWidgetRegistry setVisibility:widget visible:NO collapsed:NO];
+//            [[OARootViewController instance].mapPanel recreateControls];
+//        }
     });
 }
 
 - (void) registerAltitudeMapCenterWidget
 {
-    _altitudeWidgetMapCenter = [[OAAltitudeWidget alloc] initWithType:EOAAltitudeWidgetTypeMapCenter];
-    [[self getMapInfoController] registerSideWidget:_altitudeWidgetMapCenter
-                                            imageId:@"widget_altitude_map_center_day"
-                                            message:OALocalizedString(@"map_widget_altitude_map_center")
-                                        description:OALocalizedString(@"map_widget_altitude_map_center_desc")
-                                                key:ALTITUDE_MAP_CENTER
-                                               left:NO
-                                      priorityOrder:24];
+//    _altitudeWidgetMapCenter = [[OAAltitudeWidget alloc] initWithType:EOAAltitudeWidgetTypeMapCenter];
+//    [[self getMapInfoController] registerSideWidget:_altitudeWidgetMapCenter
+//                                            imageId:@"widget_altitude_map_center_day"
+//                                            message:OALocalizedString(@"map_widget_altitude_map_center")
+//                                        description:OALocalizedString(@"map_widget_altitude_map_center_desc")
+//                                                key:ALTITUDE_MAP_CENTER
+//                                               left:NO
+//                                      priorityOrder:24];
 }
 
 - (void) unregisterAltitudeMapCenterWidget
 {
-    [[self getMapInfoController] removeSideWidget:_altitudeWidgetMapCenter];
-    _altitudeWidgetMapCenter = nil;
+//    [[self getMapInfoController] removeSideWidget:_altitudeWidgetMapCenter];
+//    _altitudeWidgetMapCenter = nil;
 }
 
 - (NSString *) getName

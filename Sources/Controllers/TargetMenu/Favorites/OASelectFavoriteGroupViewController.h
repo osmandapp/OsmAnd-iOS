@@ -12,6 +12,7 @@
 
 - (void) onGroupSelected:(NSString *)selectedGroupName;
 - (void) onNewGroupAdded:(NSString *)selectedGroupName color:(UIColor *)color;
+- (void) onFavoriteGroupColorsRefresh;
 
 @end
 

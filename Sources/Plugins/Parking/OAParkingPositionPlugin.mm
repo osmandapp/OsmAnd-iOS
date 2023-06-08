@@ -193,43 +193,24 @@
 
 - (void) registerLayers
 {
-    [self registerWidget];
+
 }
 
-- (void) registerWidget
+- (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
 {
-    OAMapInfoController *mapInfoController = [self getMapInfoController];
-    if (mapInfoController)
-    {
-        _parkingPlaceControl = [self createParkingPlaceInfoControl];
-        
-        [mapInfoController registerSideWidget:_parkingPlaceControl imageId:@"ic_custom_parking" message:[self getName] key:PLUGIN_ID left:NO priorityOrder:10];
-    }
+    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
+    _parkingPlaceControl = [self createParkingPlaceInfoControl];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:_parkingPlaceControl]];
 }
 
 - (void) updateLayers
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self isEnabled])
-        {
-            if (!_parkingPlaceControl)
-                [self registerWidget];
-        }
-        else
-        {
-            if (_parkingPlaceControl)
-            {
-                OAMapInfoController *mapInfoController = [self getMapInfoController];
-                [mapInfoController removeSideWidget:_parkingPlaceControl];
-                _parkingPlaceControl = nil;
-            }
-        }
-    });
 }
 
 - (OATextInfoWidget *) createParkingPlaceInfoControl
 {
     _parkingPlaceControl = [[OATextInfoWidget alloc] init];
+    _parkingPlaceControl.widgetType = OAWidgetType.parking;
     __weak OATextInfoWidget *parkingPlaceControlWeak = _parkingPlaceControl;
     __weak OAParkingPositionPlugin *pluginWeak = self;
     

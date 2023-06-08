@@ -8,13 +8,17 @@
 
 #import "OAGPXAppearanceCollection.h"
 #import "OARootViewController.h"
+#import "OAEditPointViewController.h"
 #import "Localization.h"
 #import "OAMapStyleSettings.h"
 #import "OAOsmAndFormatter.h"
+#import "OAFavoritesHelper.h"
+#import "OAFavoriteItem.h"
 #import "OsmAndApp.h"
+#import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
-#define kGpxFilePathWithColor @"gpxFilePathWithColor"
+#define kItemWithColorId @"gpxFilePathWithColor"
 
 @implementation OAGPXTrackAppearance
 
@@ -174,9 +178,13 @@
 
     NSMutableArray<OAColorItem *> *_availableColors;
     NSMutableDictionary<NSString *, NSNumber *> *_defaultColorValues;
+    OAColorItem *_defaultPointColorItem;
+    OAColorItem *_defaultLineColorItem;
 
     NSArray<OAGPXTrackWidth *> *_availableWidth;
     NSArray<OAGPXTrackSplitInterval *> *_availableSplitInterval;
+
+    NSArray<OAFavoriteGroup *> *_cachedFavoriteGroups;
 }
 
 + (OAGPXAppearanceCollection *)sharedInstance
@@ -209,6 +217,10 @@
 - (void)generateAvailableColors
 {
     _availableColors = [NSMutableArray array];
+    if (!_mapViewController)
+        _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    if (!_mapViewController)
+        return;
 
     NSMutableArray<NSString *> *possibleTrackColorKeys = [NSMutableArray array];
     OAMapStyleParameter *currentTrackColor = [[OAMapStyleSettings sharedInstance] getParameter:CURRENT_TRACK_COLOR_ATTR];
@@ -230,19 +242,26 @@
             {
                 OAColorItem *colorItem = [[OAColorItem alloc] initWithKey:key value:obj.integerValue isDefault:YES];
                 [_availableColors addObject:colorItem];
+                colorItem.sortedPosition = [_availableColors indexOfObject:colorItem];
+                [colorItem generateId];
+                if ([colorItem.key isEqualToString:@"red"])
+                    _defaultLineColorItem = colorItem;
             }
         }];
         [_availableColors sortUsingComparator:^NSComparisonResult(OAColorItem *obj1, OAColorItem *obj2) {
             return [@([possibleTrackColorKeys indexOfObject:obj1.key]) compare:@([possibleTrackColorKeys indexOfObject:obj2.key])];
         }];
-
-        NSMutableArray<NSString *> *defaultHexColors = [NSMutableArray array];
-        for (OAColorItem *defaultColorItem in _availableColors)
-        {
-            [defaultHexColors addObject:[defaultColorItem getHexColor]];
-        }
-        [self saveColorsToEndOfLastUsedIfNeeded:defaultHexColors];
     }
+
+    if (!_defaultLineColorItem)
+        [self getDefaultLineColorItem];
+    [self getDefaultPointColorItem];
+    NSMutableArray<NSString *> *defaultHexColors = [NSMutableArray array];
+    for (OAColorItem *defaultColorItem in _availableColors)
+    {
+        [defaultHexColors addObject:[defaultColorItem getHexColor]];
+    }
+    [self saveColorsToEndOfLastUsedIfNeeded:defaultHexColors];
 
     NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[_settings.customTrackColors get]];
     [customTrackColors enumerateObjectsUsingBlock:^(NSString *hexColor, NSUInteger ids, BOOL *stop) {
@@ -256,8 +275,17 @@
     {
         OAColorItem *colorItem = [[OAColorItem alloc] initWithHexColor:hexColor];
         [_availableColors addObject:colorItem];
+        colorItem.sortedPosition = [_availableColors indexOfObject:colorItem];
+        [colorItem generateId];
     }
-    [self regenerateSortedPosition];
+    BOOL isRegenerated = NO;
+    if (_cachedFavoriteGroups)
+    {
+        isRegenerated = [self saveFavoriteColorsIfNeeded:_cachedFavoriteGroups];
+        _cachedFavoriteGroups = nil;
+    }
+    if (!isRegenerated)
+        [self regenerateSortedPosition];
 }
 
 - (void)regenerateSortedPosition
@@ -270,40 +298,46 @@
     }
 
     NSMutableArray<NSNumber *> *sortedColorItems = [NSMutableArray array];
-    NSDictionary<NSString *, NSNumber *> *gpxFilePathWithColor = [[NSUserDefaults standardUserDefaults] dictionaryForKey:kGpxFilePathWithColor];
-    if (gpxFilePathWithColor)
+    NSDictionary<NSString *, NSNumber *> *itemWithColorId = [[NSUserDefaults standardUserDefaults] dictionaryForKey:kItemWithColorId];
+    if (itemWithColorId)
     {
-        NSMutableArray<NSNumber *> *ids = [NSMutableArray arrayWithArray:gpxFilePathWithColor.allValues];
+        NSMutableArray<NSNumber *> *ids = [NSMutableArray arrayWithArray:itemWithColorId.allValues];
         for (NSInteger i = 0; i < _availableColors.count; i++)
         {
             OAColorItem *colorItem = _availableColors[i];
             if ([ids containsObject:@(colorItem.id)])
             {
                 [ids removeObject:@(colorItem.id)];
-                NSInteger indexOfColorId = [gpxFilePathWithColor.allValues indexOfObject:@(colorItem.id)];
+                NSInteger indexOfColorId = [itemWithColorId.allValues indexOfObject:@(colorItem.id)];
                 NSString *hexColor = [colorItem getHexColor];
                 NSInteger sortedPosition = sortedPositionWithHexColors.allKeys[[sortedPositionWithHexColors.allValues indexOfObject:hexColor]].integerValue;
                 colorItem.sortedPosition = sortedPosition;
                 [colorItem generateId];
                 [sortedPositionWithHexColors removeObjectForKey:@(sortedPosition)];
                 [sortedColorItems addObject:@(i)];
-                [self setColorId:colorItem.id toGpxFilePath:[gpxFilePathWithColor.allKeys objectAtIndex:indexOfColorId]];
+                [self setColorId:colorItem.id toItem:[itemWithColorId.allKeys objectAtIndex:indexOfColorId]];
             }
         }
     }
 
-    for (NSInteger i = 0; i < _availableColors.count; i++)
-    {
-        OAColorItem *colorItem = _availableColors[i];
-        if (![sortedColorItems containsObject:@(i)])
+    [_availableColors enumerateObjectsUsingBlock:^(OAColorItem * _Nonnull colorItem, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (![sortedColorItems containsObject:@(idx)])
         {
             NSString *hexColor = [colorItem getHexColor];
-            NSInteger sortedPosition = sortedPositionWithHexColors.allKeys[[sortedPositionWithHexColors.allValues indexOfObject:hexColor]].integerValue;
-            colorItem.sortedPosition = sortedPosition;
-            [colorItem generateId];
-            [sortedPositionWithHexColors removeObjectForKey:@(sortedPosition)];
+            NSInteger sortedHexColorIndex = [sortedPositionWithHexColors.allValues indexOfObject:hexColor];
+            if (sortedHexColorIndex != NSNotFound)
+            {
+                NSInteger sortedPosition = sortedPositionWithHexColors.allKeys[sortedHexColorIndex].integerValue;
+                colorItem.sortedPosition = sortedPosition;
+                [colorItem generateId];
+                [sortedPositionWithHexColors removeObjectForKey:@(sortedPosition)];
+            }
+            else
+            {
+                [_availableColors removeObject:colorItem];
+            }
         }
-    }
+    }];
 }
 
 - (void)saveColorsToEndOfLastUsedIfNeeded:(NSArray<NSString *> *)customColors
@@ -313,10 +347,126 @@
     {
         NSInteger availableCount = [self getMaxCountOfDuplicates:hexColor];
         NSInteger lastUsedCount = [self getMaxCountOfDuplicatesInLastUsed:hexColor];
-        if (lastUsedCount < availableCount)
+        if (lastUsedCount < availableCount
+            || (lastUsedCount == 0 && availableCount == 0 && ([hexColor isEqualToString:[[self getDefaultLineColorItem] getHexColor]]
+                                                              || [hexColor isEqualToString:[[self getDefaultPointColorItem] getHexColor]])))
             [customTrackColorsLastUsed addObject:hexColor];
     }
     [_settings.customTrackColorsLastUsed set:customTrackColorsLastUsed];
+}
+
+- (BOOL)saveFavoriteColorsIfNeeded:(NSArray<OAFavoriteGroup *> *)favoriteGroups
+{
+    BOOL isRegenerated = NO;
+
+    if (!_mapViewController)
+        _cachedFavoriteGroups = favoriteGroups;
+
+    if (_mapViewController && favoriteGroups && favoriteGroups.count > 0)
+    {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[_settings.customTrackColors get]];
+        NSMutableArray<NSString *> *customTrackColorsLastUsed = [NSMutableArray arrayWithArray:[_settings.customTrackColorsLastUsed get]];
+        NSMutableDictionary<NSString *, NSNumber *> *itemWithColorId = [NSMutableDictionary dictionaryWithDictionary:[defaults dictionaryForKey:kItemWithColorId]];
+        for (OAFavoriteGroup *favoriteGroup in favoriteGroups)
+        {
+            NSString *groupName = favoriteGroup.name;
+            if (!groupName || groupName.length == 0)
+                groupName = @"default";
+            if ([self saveValueIfNeeded:customTrackColorsLastUsed
+                      customTrackColors:customTrackColors
+                        itemWithColorId:itemWithColorId
+                                   item:[NSString stringWithFormat:@"%@_%@", kFavoritePrefixColorId, groupName]
+                               hexColor:[favoriteGroup.color toHexARGBString]])
+                isRegenerated = YES;
+
+            for (OAFavoriteItem *favoriteItem in favoriteGroup.points)
+            {
+                if ([self saveValueIfNeeded:customTrackColorsLastUsed
+                          customTrackColors:customTrackColors
+                            itemWithColorId:itemWithColorId
+                                       item:[NSString stringWithFormat:@"%@_%@_%@", kFavoritePrefixColorId, groupName, [favoriteItem getName]]
+                                   hexColor:[[favoriteItem getColor] toHexARGBString]])
+                    isRegenerated = YES;
+            }
+        }
+        if (isRegenerated)
+        {
+            [_settings.customTrackColors set:customTrackColors];
+            [_settings.customTrackColorsLastUsed set:customTrackColorsLastUsed];
+            [defaults setObject:itemWithColorId forKey:kItemWithColorId];
+        }
+    }
+
+    if (isRegenerated)
+        [self regenerateSortedPosition];
+
+    return isRegenerated;
+}
+
+- (BOOL)saveValueIfNeeded:(NSMutableArray<NSString *> *)customTrackColorsLastUsed
+        customTrackColors:(NSMutableArray<NSString *> *)customTrackColors
+          itemWithColorId:(NSMutableDictionary<NSString *, NSNumber *> *)itemWithColorId
+                     item:(NSString *)item
+                 hexColor:(NSString *)hexColor
+{
+    if (![itemWithColorId.allKeys containsObject:item])
+    {
+        BOOL hasColor = NO;
+        NSInteger colorId = -1;
+        NSInteger colorValue = [OAUtilities colorToNumberFromString:hexColor];
+        for (OAColorItem *colorItem in _availableColors)
+        {
+            if (colorItem.value == colorValue)
+            {
+                hasColor = YES;
+                colorId = colorItem.id;
+                break;
+            }
+        }
+
+        if (!hasColor)
+        {
+            OAColorItem *newColorItem = [[OAColorItem alloc] initWithHexColor:hexColor];
+            [_availableColors addObject:newColorItem];
+            newColorItem.sortedPosition = [_availableColors indexOfObject:newColorItem];
+            [newColorItem generateId];
+            colorId = newColorItem.id;
+        }
+
+        itemWithColorId[item] = @(colorId);
+        if (![customTrackColors containsObject:hexColor])
+            [customTrackColors addObject:hexColor];
+        if (![customTrackColorsLastUsed containsObject:hexColor])
+            [customTrackColorsLastUsed addObject:hexColor];
+
+        return YES;
+    }
+    return NO;
+}
+
+- (OAColorItem *)getDefaultLineColorItem
+{
+    if (!_defaultLineColorItem || ![_availableColors containsObject:_defaultLineColorItem])
+    {
+        _defaultLineColorItem = [[OAColorItem alloc] initWithKey:@"red" value:0xFFFF0000 isDefault:YES];
+        [_availableColors addObject:_defaultLineColorItem];
+        _defaultLineColorItem.sortedPosition = [_availableColors indexOfObject:_defaultLineColorItem];
+        [_defaultLineColorItem generateId];
+    }
+    return _defaultLineColorItem;
+}
+
+- (OAColorItem *)getDefaultPointColorItem
+{
+    if (!_defaultPointColorItem || ![_availableColors containsObject:_defaultPointColorItem])
+    {
+        _defaultPointColorItem = [[OAColorItem alloc] initWithKey:@"purple" value:0xFF3F51B5 isDefault:YES];
+        [_availableColors addObject:_defaultPointColorItem];
+        _defaultPointColorItem.sortedPosition = [_availableColors indexOfObject:_defaultPointColorItem];
+        [_defaultPointColorItem generateId];
+    }
+    return _defaultPointColorItem;
 }
 
 - (NSInteger)getMaxCountOfDuplicates:(NSString *)hexColor
@@ -349,7 +499,7 @@
 - (void)changeColor:(OAColorItem *)colorItem newColor:(UIColor *)newColor
 {
     NSString *newHexColor = [newColor toHexARGBString];
-    [colorItem setValue:[OAUtilities colorToNumberFromString:newHexColor]];
+    [colorItem setValueWithNewValue:[OAUtilities colorToNumberFromString:newHexColor]];
     [colorItem generateId];
 
     NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[_settings.customTrackColors get]];
@@ -374,6 +524,8 @@
 
     OAColorItem *colorItem = [[OAColorItem alloc] initWithHexColor:newHexColor];
     [_availableColors addObject:colorItem];
+    colorItem.sortedPosition = [_availableColors indexOfObject:colorItem];
+    [colorItem generateId];
     [self regenerateSortedPosition];
 }
 
@@ -414,15 +566,35 @@
     [self regenerateSortedPosition];
 }
 
-- (void)selectColor:(OAColorItem *)colorItem toGpxFilePath:(NSString *)gpxFilePath
+- (void)selectColor:(OAColorItem *)colorItem toItem:(NSString *)item
 {
-    NSString *hexColor = [colorItem getHexColor];
-    NSMutableArray<NSString *> *customTrackColorsLastUsed = [NSMutableArray arrayWithArray:[_settings.customTrackColorsLastUsed get]];
-    [customTrackColorsLastUsed removeObjectAtIndex:colorItem.sortedPosition];
-    [customTrackColorsLastUsed insertObject:hexColor atIndex:0];
-    [_settings.customTrackColorsLastUsed set:customTrackColorsLastUsed];
-    [self setColorId:colorItem.id toGpxFilePath:gpxFilePath];
-    [self regenerateSortedPosition];
+    if (colorItem)
+    {
+        NSString *hexColor = [colorItem getHexColor];
+        NSMutableArray<NSString *> *customTrackColorsLastUsed = [NSMutableArray arrayWithArray:[_settings.customTrackColorsLastUsed get]];
+        [customTrackColorsLastUsed removeObjectAtIndex:colorItem.sortedPosition];
+        [customTrackColorsLastUsed insertObject:hexColor atIndex:0];
+        [_settings.customTrackColorsLastUsed set:customTrackColorsLastUsed];
+        [self setColorId:colorItem.id toItem:item];
+        [self regenerateSortedPosition];
+    }
+}
+
+- (void)selectColor:(OAColorItem *)colorItem toFavoriteGroupName:(NSString *)groupName pointName:(NSString *)pointName
+{
+    if (!groupName || groupName.length == 0)
+        groupName = @"default";
+    NSString *item = [NSString stringWithFormat:@"%@_%@%@", kFavoritePrefixColorId, groupName, pointName ? [@"_" stringByAppendingString:pointName] : @""];
+    [self selectColor:colorItem toItem:item];
+}
+
+- (void)selectColor:(OAColorItem *)colorItem toGpxFilePath:(NSString *)gpxFilePath groupName:(NSString *)groupName pointName:(NSString *)pointName
+{
+    if (!groupName || groupName.length == 0)
+        groupName = @"default";
+    gpxFilePath = gpxFilePath ? [gpxFilePath stringByReplacingOccurrencesOfString:[OsmAndApp instance].gpxPath withString:@""] : @"current";
+    NSString *item = [NSString stringWithFormat:@"%@_%@_%@%@", kWaypointPrefixColorId, gpxFilePath, groupName, pointName ? [@"_" stringByAppendingString:pointName] : @""];
+    [self selectColor:colorItem toItem:item];
 }
 
 - (NSArray<OAColorItem *> *)getAvailableColorsSortingByKey
@@ -437,45 +609,62 @@
     }];
 }
 
-- (void)setColorId:(NSInteger)id toGpxFilePath:(NSString *)gpxFilePath
+- (void)setColorId:(NSInteger)colorId toItem:(NSString *)item
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if (![defaults objectForKey:kGpxFilePathWithColor])
+    if (![defaults objectForKey:kItemWithColorId])
     {
-        [defaults setObject:@{ gpxFilePath: @(id) } forKey:kGpxFilePathWithColor];
+        [defaults setObject:@{ item: @(colorId) } forKey:kItemWithColorId];
     }
     else
     {
-        NSMutableDictionary<NSString *, NSNumber *> *gpxFilePathWithColor = [NSMutableDictionary dictionaryWithDictionary:[defaults dictionaryForKey:kGpxFilePathWithColor]];
-        gpxFilePathWithColor[gpxFilePath] = @(id);
-        [defaults setObject:gpxFilePathWithColor forKey:kGpxFilePathWithColor];
+        NSMutableDictionary<NSString *, NSNumber *> *itemWithColorId = [NSMutableDictionary dictionaryWithDictionary:[defaults dictionaryForKey:kItemWithColorId]];
+        itemWithColorId[item] = @(colorId);
+        [defaults setObject:itemWithColorId forKey:kItemWithColorId];
     }
 }
 
-- (NSInteger)getColorId:(NSString *)gpxFilePath
+- (NSInteger)getColorId:(NSString *)item
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary<NSString *, NSNumber *> *gpxFilePathWithColor = [defaults dictionaryForKey:kGpxFilePathWithColor];
-    if (!gpxFilePathWithColor)
+    NSDictionary<NSString *, NSNumber *> *itemWithColorId = [defaults dictionaryForKey:kItemWithColorId];
+    if (!itemWithColorId)
         return -1;
     else
-        return gpxFilePathWithColor[gpxFilePath].integerValue;
+        return itemWithColorId[item].integerValue;
 }
 
-- (void)removeGpxFilePath:(NSString *)gpxFilePath
+- (void)removeItem:(NSString *)item
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if ([defaults objectForKey:kGpxFilePathWithColor])
+    if ([defaults objectForKey:kItemWithColorId])
     {
-        NSMutableDictionary<NSString *, NSNumber *> *gpxFilePathWithColor = [NSMutableDictionary dictionaryWithDictionary:[defaults dictionaryForKey:kGpxFilePathWithColor]];
-        [gpxFilePathWithColor removeObjectForKey:gpxFilePath];
-        [defaults setObject:gpxFilePathWithColor forKey:kGpxFilePathWithColor];
+        NSMutableDictionary<NSString *, NSNumber *> *itemWithColorId = [NSMutableDictionary dictionaryWithDictionary:[defaults dictionaryForKey:kItemWithColorId]];
+        [itemWithColorId removeObjectForKey:item];
+        [defaults setObject:itemWithColorId forKey:kItemWithColorId];
     }
 }
 
-- (OAColorItem *)getColorForGpxFilePath:(NSString *)gpxFilePath defaultValue:(NSInteger)defaultValue
+- (void)removeFavoriteGroupName:(NSString *)groupName pointName:(NSString *)pointName
 {
-    NSInteger colorId = [self getColorId:gpxFilePath];
+    if (!groupName || groupName.length == 0)
+        groupName = @"default";
+    NSString *item = [NSString stringWithFormat:@"%@_%@%@", kFavoritePrefixColorId, groupName, pointName ? [@"_" stringByAppendingString:pointName] : @""];
+    [self removeItem:item];
+}
+
+- (void)removeGpxFilePath:(NSString *)gpxFilePath groupName:(NSString *)groupName pointName:(NSString *)pointName
+{
+    if (!groupName || groupName.length == 0)
+        groupName = @"default";
+    gpxFilePath = gpxFilePath ? [gpxFilePath stringByReplacingOccurrencesOfString:[OsmAndApp instance].gpxPath withString:@""] : @"current";
+    NSString *item = [NSString stringWithFormat:@"%@_%@_%@%@", kWaypointPrefixColorId, gpxFilePath, groupName, pointName ? [@"_" stringByAppendingString:pointName] : @""];
+    [self removeItem:item];
+}
+
+- (OAColorItem *)getColorForItem:(NSString *)item defaultValue:(NSInteger)defaultValue
+{
+    NSInteger colorId = [self getColorId:item];
     if (colorId != -1)
     {
         for (OAColorItem *colorItem in _availableColors)
@@ -491,7 +680,26 @@
         else if (colorItem.value == defaultValue)
             return colorItem;
     }
-    return nil;
+
+    [self addNewSelectedColor:UIColorFromARGB(defaultValue)];
+    return _availableColors.lastObject;
+}
+
+- (OAColorItem *)getColorForFavoriteGroupName:(NSString *)groupName pointName:(NSString *)pointName defaultValue:(NSInteger)defaultValue
+{
+    if (!groupName || groupName.length == 0)
+        groupName = @"default";
+    NSString *item = [NSString stringWithFormat:@"%@_%@%@", kFavoritePrefixColorId, groupName, pointName ? [@"_" stringByAppendingString:pointName] : @""];
+    return [self getColorForItem:item defaultValue:defaultValue];
+}
+
+- (OAColorItem *)getColorForGpxFilePath:(NSString *)gpxFilePath groupName:(NSString *)groupName pointName:(NSString *)pointName defaultValue:(NSInteger)defaultValue
+{
+    if (!groupName || groupName.length == 0)
+        groupName = @"default";
+    gpxFilePath = gpxFilePath ? [gpxFilePath stringByReplacingOccurrencesOfString:[OsmAndApp instance].gpxPath withString:@""] : @"current";
+    NSString *item = [NSString stringWithFormat:@"%@_%@_%@%@", kWaypointPrefixColorId, gpxFilePath, groupName, pointName ? [@"_" stringByAppendingString:pointName] : @""];
+    return [self getColorForItem:item defaultValue:defaultValue];
 }
 
 - (NSArray<OAGPXTrackWidth *> *)getAvailableWidth

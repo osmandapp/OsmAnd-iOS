@@ -12,26 +12,16 @@ import Foundation
 class CenterWidgetInfo: MapWidgetInfo {
     
     override func getUpdatedPanel() -> WidgetsPanel {
+        let settings = OAAppSettings.sharedManager()!
+        let widgetType = getWidgetType()
+        
+        if (widgetType.defaultPanel == .bottomPanel && WidgetsPanel.topPanel.contains(widgetId: key)) {
+            widgetPanel = .topPanel;
+        } else if (widgetType.defaultPanel == .topPanel && WidgetsPanel.bottomPanel.contains(widgetId: key)) {
+            widgetPanel = .bottomPanel
+        } else {
+            widgetPanel = widgetType.defaultPanel
+        }
         return widgetPanel
-    }
-    
-    override func isEnabledForAppMode(_ appMode: OAApplicationMode) -> Bool {
-        let visibilityPref = widget.getWidgetVisibilityPref()
-        return visibilityPref == nil || visibilityPref!.get(appMode)
-    }
-    
-    override func enableDisable(appMode: OAApplicationMode, enabled: NSNumber?) {
-        let visibilityPref = widget.getWidgetVisibilityPref()
-        if let visibilityPref = visibilityPref {
-            if enabled == nil {
-                visibilityPref.resetMode(toDefault: appMode)
-            } else {
-                visibilityPref.set(enabled!.boolValue, mode: appMode)
-            }
-        }
-        let settingsPref = widget.getWidgetSettingsPref(toReset: appMode)
-        if (enabled == nil || enabled!.boolValue == false), let settingsPref {
-            settingsPref.resetMode(toDefault: appMode)
-        }
     }
 }

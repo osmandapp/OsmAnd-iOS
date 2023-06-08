@@ -114,13 +114,17 @@
         NSForegroundColorAttributeName : [self getLargeTitleColor]
     };
 
+    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+    
     if (![self isNavbarSeparatorVisible])
     {
         appearance.shadowImage = nil;
         appearance.shadowColor = nil;
+        blurAppearance.shadowColor = nil;
+        blurAppearance.shadowImage = nil;
     }
-
-    self.navigationController.navigationBar.standardAppearance = [self isNavbarBlurring] ? [[UINavigationBarAppearance alloc] init] : appearance;
+    
+    self.navigationController.navigationBar.standardAppearance = [self isNavbarBlurring] ? blurAppearance : appearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
 
     self.navigationController.navigationBar.tintColor = [self getNavbarButtonsTintColor];
@@ -243,24 +247,31 @@
         [self setupTableHeaderView];
 }
 
-- (void)updateUI
+- (void)updateUI:(BOOL)animated
 {
     [self generateData];
-    [self.tableView reloadData];
+    [self reloadData:animated];
     [self applyLocalization];
     [self updateNavbar];
 }
 
-- (void)updateUIAnimated
+- (void) reloadData:(BOOL)animated
 {
-    [UIView transitionWithView:self.view
-                      duration:.2
-                       options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^(void)
-                    {
-                        [self updateUI];
-                    }
-                    completion:nil];
+    if (animated)
+    {
+        [UIView transitionWithView:self.view
+                          duration:.2
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^(void)
+                        {
+                            [self.tableView reloadData];
+                        }
+                        completion:nil];
+    }
+    else
+    {
+        [self.tableView reloadData];
+    }
 }
 
 - (void)updateRightIconLargeTitle
@@ -465,6 +476,16 @@
     return rightNavbarButton;
 }
 
+- (void)changeButtonAvailability:(UIBarButtonItem *)barButtonItem isEnabled:(BOOL)isEnabled
+{
+    if (barButtonItem.customView && [barButtonItem.customView isKindOfClass:UIButton.class])
+    {
+        UIButton *button = barButtonItem.customView;
+        button.enabled = isEnabled;
+        button.tintColor = isEnabled ? [self getNavbarButtonsTintColor] : UIColor.lightGrayColor;
+        [button setTitleColor:isEnabled ? [self getNavbarButtonsTintColor] : UIColor.lightGrayColor forState:UIControlStateNormal];
+    }
+}
 
 - (BOOL)isAnyLargeTitle
 {

@@ -71,22 +71,26 @@ class WidgetsPanel: NSObject, NSCopying {
         let order = getOriginalOrder().firstIndex(of: widgetId)
         return order ?? WidgetsPanel.DEFAULT_ORDER
     }
-
+    
     func getWidgetPage(_ widgetId: String) -> Int {
-        getPagedOrder(widgetId).0
+        getWidgetPage(widgetId, appMode: OAAppSettings.sharedManager().applicationMode.get()!)
     }
 
-    func getWidgetOrder(_ widgetId: String) -> Int {
-        return getPagedOrder(widgetId).1
+    func getWidgetPage(_ widgetId: String, appMode: OAApplicationMode) -> Int {
+        getPagedOrder(widgetId, appMode: appMode).0
     }
     
-    private func appMode() -> OAApplicationMode {
-        OAAppSettings.sharedManager().applicationMode.get()
+    func getWidgetOrder(_ widgetId: String) -> Int {
+        return getWidgetOrder(widgetId, appMode: OAAppSettings.sharedManager().applicationMode.get()!)
     }
 
-    private func getPagedOrder(_ widgetId: String) -> (Int, Int) {
+    func getWidgetOrder(_ widgetId: String, appMode: OAApplicationMode) -> Int {
+        return getPagedOrder(widgetId, appMode: appMode).1
+    }
+
+    private func getPagedOrder(_ widgetId: String, appMode: OAApplicationMode) -> (Int, Int) {
         let orderPreference = getOrderPreference()
-        let pages = orderPreference.get(appMode())
+        let pages = orderPreference.get(appMode)
         guard let pages, !pages.isEmpty else {
             return (0, WidgetsPanel.DEFAULT_ORDER)
         }
@@ -101,14 +105,14 @@ class WidgetsPanel: NSObject, NSCopying {
         return (0, WidgetsPanel.DEFAULT_ORDER)
     }
 
-    func setWidgetsOrder(pagedOrder: [[String]]) {
+    func setWidgetsOrder(pagedOrder: [[String]], appMode: OAApplicationMode) {
         let orderPreference = getOrderPreference()
-        orderPreference.set(pagedOrder, mode: appMode())
+        orderPreference.set(pagedOrder, mode: appMode)
     }
 
 
-    func contains(widgetId: String) -> Bool {
-        return getWidgetOrder(widgetId) != WidgetsPanel.DEFAULT_ORDER
+    func contains(widgetId: String, appMode: OAApplicationMode = OAAppSettings.sharedManager().applicationMode.get()!) -> Bool {
+        return getWidgetOrder(widgetId, appMode: appMode) != WidgetsPanel.DEFAULT_ORDER
     }
 
     func isPagingAllowed() -> Bool {

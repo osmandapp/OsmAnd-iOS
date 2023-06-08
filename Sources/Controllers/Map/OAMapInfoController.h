@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol OAWidgetListener;
+
 @protocol OAMapInfoControllerProtocol
 @required
 
@@ -18,7 +20,7 @@
 
 @class OAMapHudViewController, OATextInfoWidget, OAWidgetState, OAMapWidgetRegInfo, OARulerWidget;
 
-@interface OAMapInfoController : NSObject
+@interface OAMapInfoController : NSObject <OAWidgetListener>
 
 @property (nonatomic, weak) id<OAMapInfoControllerProtocol> delegate;
 @property (nonatomic) BOOL weatherToolbarVisible;

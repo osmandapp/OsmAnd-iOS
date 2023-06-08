@@ -20,6 +20,15 @@
     return self;
 }
 
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.frame = frame;
+    }
+    return self;
+}
+
 - (OACommonBoolean * _Nullable ) getWidgetVisibilityPref {
     return nil;
 }
@@ -44,7 +53,7 @@
 
 - (BOOL) isExternal
 {
-    return self.getWidgetState == nil;
+    return self.widgetType == nil;
 }
 
 - (BOOL)updateInfo

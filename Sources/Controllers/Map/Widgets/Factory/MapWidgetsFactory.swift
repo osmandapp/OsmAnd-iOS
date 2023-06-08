@@ -31,16 +31,23 @@ class MapWidgetsFactory: NSObject {
         case .secondNextTurn:
             return OANextTurnWidget(horisontalMini: true, nextNext: true)
         case .coordinatesCurrentLocation:
-            return OACoordinatesWidget(type: .currentLocation)
+            let widget = OACoordinatesWidget(type: .currentLocation)
+            widget?.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
+            return widget
         case .coordinatesMapCenter:
-            return OACoordinatesWidget(type: .mapCenter)
+            let widget = OACoordinatesWidget(type: .mapCenter)
+            widget?.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
+            return widget
         case .streetName:
-            return OATopTextView()
-//            StreetNameWidget(mapActivity: mapActivity)
+            let widget = OATopTextView()
+            widget.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
+            return widget
         case .markersTopBar:
             return nil // MapMarkersBarWidget(mapActivity: mapActivity)
         case .lanes:
-            return OALanesControl()
+            let widget = OALanesControl()
+            widget.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
+            return widget
         case .distanceToDestination:
             return DistanceToDestinationWidget()
         case .intermediateDestination:

@@ -14,7 +14,7 @@ import CoreLocation
 class DistanceToIntermediateDestinationWidget: OADistanceToPointWidget {
     
     init() {
-        super.init(icons: "widget_intermediate_day", nightIconId: "widget_intermediate_night")
+        super.init(icons: "widget_intermediate_day", nightIconId: "widget_intermediate_night", widgetType: .intermediateDestination)
     }
     
     override init(frame: CGRect) {

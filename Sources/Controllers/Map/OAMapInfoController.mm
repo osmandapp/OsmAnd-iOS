@@ -43,6 +43,8 @@
 #import "OASunriseSunsetWidgetState.h"
 #import "OAAltitudeWidget.h"
 
+#import "OsmAnd_Maps-Swift.h"
+
 @interface OATextState : NSObject
 
 @property (nonatomic) BOOL textBold;
@@ -61,7 +63,7 @@
 @implementation OATextState
 @end
 
-@interface OAMapInfoController () <OAWidgetListener, OAWeatherLayerSettingsDelegate>
+@interface OAMapInfoController () <OAWeatherLayerSettingsDelegate>
 
 @end
 
@@ -75,8 +77,8 @@
     OAMapWidgetRegistry *_mapWidgetRegistry;
     BOOL _expanded;
     OATopTextView *_streetNameView;
-    OACoordinatesWidget *_topCoordinatesView;
-    OACoordinatesWidget *_coordinatesMapCenterWidget;
+    OABaseWidgetView *_topCoordinatesView;
+    OABaseWidgetView *_coordinatesMapCenterWidget;
     OADownloadMapWidget *_downloadMapWidget;
     OAWeatherToolbar *_weatherToolbar;
     OALanesControl *_lanesControl;
@@ -185,6 +187,7 @@
 
 - (void) onLocationServicesUpdate
 {
+    [self updateCurrentLocationAddress];
     [self updateInfo];
 }
 
@@ -192,8 +195,13 @@
 {
     [self updateColorShadowsOfText];
     [_mapWidgetRegistry updateInfo:_settings.applicationMode.get expanded:_expanded];
-    for (OABaseWidgetView *widget in _widgetsToUpdate)
-         [widget updateInfo];
+//    for (OABaseWidgetView *widget in _widgetsToUpdate)
+//         [widget updateInfo];
+}
+
+- (void) updateCurrentLocationAddress
+{
+    [_mapHudViewController updateCurrentLocationAddress];
 }
 
 - (void) updateInfo
@@ -215,10 +223,10 @@
     if (_themeId != calcThemeId) {
         _themeId = calcThemeId;
         OATextState *ts = [self calculateTextState];
-        for (OAMapWidgetRegInfo *reg in [_mapWidgetRegistry getLeftWidgetSet])
+        for (OAMapWidgetInfo *reg in [_mapWidgetRegistry getWidgetsForPanel:OAWidgetsPanel.leftPanel])
             [self updateReg:ts reg:reg];
 
-        for (OAMapWidgetRegInfo *reg in [_mapWidgetRegistry getRightWidgetSet])
+        for (OAMapWidgetInfo *reg in [_mapWidgetRegistry getWidgetsForPanel:OAWidgetsPanel.rightPanel])
             [self updateReg:ts reg:reg];
 
         [self updateStreetName:nightMode ts:ts];
@@ -281,12 +289,13 @@
     }
     
     BOOL hasLeftWidgets = NO;
-    for (UIView *v in _leftWidgetsView.subviews)
+    for (UIView *v in _leftWidgetsView.subviews) {
         if (!v.hidden && v.frame.size.height > 0)
         {
             hasLeftWidgets = YES;
             break;
         }
+    }
 
     BOOL hasRightWidgets = NO;
     for (UIView *v in _rightWidgetsView.subviews)
@@ -580,8 +589,15 @@
         [widget removeFromSuperview];
     
     //[self.view insertSubview:self.widgetsView belowSubview:_toolbarViewController.view];
-    [_mapWidgetRegistry populateStackControl:_leftWidgetsView mode:appMode left:YES expanded:_expanded];
-    [_mapWidgetRegistry populateStackControl:_rightWidgetsView mode:appMode left:NO expanded:_expanded];
+//    [_mapWidgetRegistry populateStackControl:_leftWidgetsView mode:appMode left:YES expanded:_expanded];
+//    [_mapWidgetRegistry populateStackControl:_rightWidgetsView mode:appMode left:NO expanded:_expanded];
+    
+    [_mapWidgetRegistry clearWidgets];
+    [_mapWidgetRegistry registerAllControls];
+    [_mapWidgetRegistry reorderWidgets];
+    
+    [_mapWidgetRegistry populateStackControl:_leftWidgetsView mode:appMode widgetPanel:OAWidgetsPanel.leftPanel];
+    [_mapWidgetRegistry populateStackControl:_rightWidgetsView mode:appMode widgetPanel:OAWidgetsPanel.rightPanel];
         
     for (UIView *v in _leftWidgetsView.subviews)
     {
@@ -593,7 +609,8 @@
         OATextInfoWidget *w = (OATextInfoWidget *)v;
         w.delegate = self;
     }
-    
+    _themeId = -1;
+    [self updateColorShadowsOfText];
     [self layoutWidgets:nil];
 }
 
@@ -647,11 +664,15 @@
     return ts;
 }
 
-- (void) updateReg:(OATextState *)ts reg:(OAMapWidgetRegInfo *)reg
+- (void) updateReg:(OATextState *)ts reg:(OAMapWidgetInfo *)reg
 {
-    reg.widget.backgroundColor = reg.left ? ts.leftColor : ts.rightColor;
-    [reg.widget updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius];
-    [reg.widget updateIconMode:ts.night];
+    if ([reg.widget isKindOfClass:OATextInfoWidget.class])
+    {
+        OATextInfoWidget *widget = (OATextInfoWidget *) reg.widget;
+        widget.backgroundColor = ts.leftColor;
+        [widget updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius];
+        [widget updateIconMode:ts.night];
+    }
 }
 
 - (OAMapWidgetRegInfo *) registerSideWidget:(OATextInfoWidget *)widget imageId:(NSString *)imageId message:(NSString *)message key:(NSString *)key left:(BOOL)left priorityOrder:(int)priorityOrder
@@ -662,14 +683,14 @@
 - (OAMapWidgetRegInfo *) registerSideWidget:(OATextInfoWidget *)widget imageId:(NSString *)imageId message:(NSString *)message description:(NSString *)description key:(NSString *)key left:(BOOL)left priorityOrder:(int)priorityOrder
 {
     OAMapWidgetRegInfo *reg = [_mapWidgetRegistry registerSideWidgetInternal:widget imageId:imageId message:message description:description key:key left:left priorityOrder:priorityOrder];
-    [self updateReg:[self calculateTextState] reg:reg];
+//    [self updateReg:[self calculateTextState] reg:reg];
     return reg;
 }
 
 - (void) registerSideWidget:(OATextInfoWidget *)widget widgetState:(OAWidgetState *)widgetState key:(NSString *)key left:(BOOL)left priorityOrder:(int)priorityOrder
 {
     OAMapWidgetRegInfo *reg = [_mapWidgetRegistry registerSideWidgetInternal:widget widgetState:widgetState key:key left:left priorityOrder:priorityOrder];
-    [self updateReg:[self calculateTextState] reg:reg];
+//    [self updateReg:[self calculateTextState] reg:reg];
 }
 
 - (void) removeSideWidget:(OATextInfoWidget *)widget
@@ -680,34 +701,17 @@
 - (void) registerAllControls
 {
     OARouteInfoWidgetsFactory *ric = [[OARouteInfoWidgetsFactory alloc] init];
-    OAMapInfoWidgetsFactory *mic = [[OAMapInfoWidgetsFactory alloc] init];
-    /*
-    MapMarkersWidgetsFactory mwf = map.getMapLayers().getMapMarkersLayer().getWidgetsFactory();
-    OsmandApplication app = view.getApplication();
-     */
+//    OAMapInfoWidgetsFactory *mic = [[OAMapInfoWidgetsFactory alloc] init];
+//    /*
+//    MapMarkersWidgetsFactory mwf = map.getMapLayers().getMapMarkersLayer().getWidgetsFactory();
+//    OsmandApplication app = view.getApplication();
+//     */
     NSMutableArray<OABaseWidgetView *> *widgetsToUpdate = [NSMutableArray array];
-    
-    _lanesControl = [ric createLanesControl];
-    _lanesControl.delegate = self;
-    [widgetsToUpdate addObject:_lanesControl];
 
-    _streetNameView = [[OATopTextView alloc] init];
-    _streetNameView.delegate = self;
-    [widgetsToUpdate addObject:_streetNameView];
-    [self updateStreetName:NO ts:[self calculateTextState]];
-    
     _alarmControl = [ric createAlarmInfoControl];
     _alarmControl.delegate = self;
     [widgetsToUpdate addObject:_alarmControl];
-    
-    _topCoordinatesView = [[OACoordinatesWidget alloc] initWithType:EOACoordinatesWidgetTypeCurrentLocation];
-    _topCoordinatesView.delegate = self;
-    [widgetsToUpdate addObject:_topCoordinatesView];
-    
-    _coordinatesMapCenterWidget = [[OACoordinatesWidget alloc] initWithType:EOACoordinatesWidgetTypeMapCenter];
-    _coordinatesMapCenterWidget.delegate = self;
-    [widgetsToUpdate addObject:_coordinatesMapCenterWidget];
-    
+
     _downloadMapWidget = [[OADownloadMapWidget alloc] init];
     _downloadMapWidget.delegate = self;
     [widgetsToUpdate addObject:_downloadMapWidget];
@@ -717,67 +721,79 @@
     [widgetsToUpdate addObject:_weatherToolbar];
 
     _widgetsToUpdate = widgetsToUpdate;
+//
+//    _rulerControl = [ric createRulerControl];
+//
+//    /*
+//    topToolbarView = new TopToolbarView(map);
+//    updateTopToolbar(false);
+//
+//    */
+//    // register left stack
+//
+//    [self registerSideWidget:nil widgetState:[[OACompassModeWidgetState alloc] init] key:@"compass" left:YES priorityOrder:4];
+//
+//    OANextTurnWidget *bigInfoControl = [ric createNextInfoControl:NO];
+//    [self registerSideWidget:bigInfoControl imageId:@"ic_action_next_turn" message:OALocalizedString(@"map_widget_next_turn") key:@"next_turn" left:YES priorityOrder:5];
+//    OANextTurnWidget *smallInfoControl = [ric createNextInfoControl:YES];
+//    [self registerSideWidget:smallInfoControl imageId:@"ic_action_next_turn" message:OALocalizedString(@"map_widget_next_turn_small") key:@"next_turn_small" left:YES priorityOrder:6];
+//    OANextTurnWidget *nextNextInfoControl = [ric createNextNextInfoControl:YES];
+//    [self registerSideWidget:nextNextInfoControl imageId:@"ic_action_next_turn" message:OALocalizedString(@"map_widget_next_next_turn") key:@"next_next_turn" left:YES priorityOrder:7];
+//
+//    // register right stack
+//
+//    // priorityOrder: 10s navigation-related, 20s position-related, 30s recording- and other plugin-related, 40s general device information, 50s debugging-purpose
+//    OATextInfoWidget *intermediateDist = [ric createIntermediateDistanceControl];
+//    [self registerSideWidget:intermediateDist imageId:@"ic_action_intermediate" message:OALocalizedString(@"map_widget_intermediate_distance") key:@"intermediate_distance" left:NO priorityOrder:13];
+//    OATextInfoWidget *intermediateTime = [ric createTimeControl:YES];
+//    [self registerSideWidget:intermediateTime widgetState:[[OAIntermediateTimeControlWidgetState alloc] init] key:@"intermediate_time" left:NO priorityOrder:14];
+//    OATextInfoWidget *dist = [ric createDistanceControl];
+//    [self registerSideWidget:dist imageId:@"ic_action_target" message:OALocalizedString(@"route_descr_destination") key:@"distance" left:NO priorityOrder:15];
+//    OATextInfoWidget *time = [ric createTimeControl:NO];
+//    [self registerSideWidget:time widgetState:[[OATimeWidgetState alloc] init] key:@"time" left:NO priorityOrder:16];
+//    OATextInfoWidget *bearing = [ric createBearingControl];
+//    [self registerSideWidget:bearing widgetState:[[OABearingWidgetState alloc] init] key:@"bearing" left:NO priorityOrder:17];
+//
+//    OATextInfoWidget *marker = [ric createMapMarkerControl:YES];
+//    [self registerSideWidget:marker imageId:@"widget_marker_day" message:OALocalizedString(@"map_marker") key:@"map_marker_1st" left:NO priorityOrder:18];
+//    OATextInfoWidget *marker2nd = [ric createMapMarkerControl:NO];
+//    [self registerSideWidget:marker2nd imageId:@"widget_marker_day" message:OALocalizedString(@"map_marker") key:@"map_marker_2nd" left:NO priorityOrder:19];
+//
+//    OATextInfoWidget *speed = [ric createSpeedControl];
+//    [self registerSideWidget:speed imageId:@"ic_action_speed" message:OALocalizedString(@"shared_string_speed") key:@"speed" left:false priorityOrder:20];
+//    OATextInfoWidget *maxspeed = [ric createMaxSpeedControl];
+//    [self registerSideWidget:maxspeed imageId:@"ic_action_speed_limit" message:OALocalizedString(@"map_widget_max_speed") key:@"max_speed" left:false priorityOrder:21];
+//
+//    OAAltitudeWidget *altitudeWidgetMyLocation = [[OAAltitudeWidget alloc] initWithType:EOAAltitudeWidgetTypeMyLocation];
+//    [self registerSideWidget:altitudeWidgetMyLocation imageId:@"widget_altitude_location_day" message:OALocalizedString(@"map_widget_altitude_current_location") description:OALocalizedString(@"altitude_widget_desc") key:@"altitude" left:NO priorityOrder:23];
+//
+//    OATextInfoWidget *plainTime = [ric createPlainTimeControl];
+//    [self registerSideWidget:plainTime imageId:@"ic_action_time" message:OALocalizedString(@"map_widget_plain_time") key:@"plain_time" left:false priorityOrder:41];
+//    OATextInfoWidget *battery = [ric createBatteryControl];
+//    [self registerSideWidget:battery imageId:@"ic_action_battery" message:OALocalizedString(@"map_widget_battery") key:@"battery" left:false priorityOrder:42];
+//
+//    OATextInfoWidget *ruler = [mic createRulerControl];
+//    [self registerSideWidget:ruler widgetState:[[OACompassRulerWidgetState alloc] init] key:@"radius_ruler" left:NO priorityOrder:43];
+//
+//    OASunriseSunsetWidgetState *sunriseState = [[OASunriseSunsetWidgetState alloc] initWithType:YES customId:nil];
+//    OASunriseSunsetWidget *sunriseWidget = [[OASunriseSunsetWidget alloc] initWithState:sunriseState];
+//    [self registerSideWidget:sunriseWidget widgetState:sunriseState key:@"sunrise" left:NO priorityOrder:44];
+//
+//    OASunriseSunsetWidgetState *sunsetState = [[OASunriseSunsetWidgetState alloc] initWithType:NO customId:nil];
+//    OASunriseSunsetWidget *sunsetWidget = [[OASunriseSunsetWidget alloc] initWithState:sunsetState];
+//    [self registerSideWidget:sunsetWidget widgetState:sunsetState key:@"sunset" left:NO priorityOrder:45];
     
-    _rulerControl = [ric createRulerControl];
-  
-    /*
-    topToolbarView = new TopToolbarView(map);
-    updateTopToolbar(false);
-    
-    */
-    // register left stack
-
-    [self registerSideWidget:nil widgetState:[[OACompassModeWidgetState alloc] init] key:@"compass" left:YES priorityOrder:4];
-
-    OANextTurnWidget *bigInfoControl = [ric createNextInfoControl:NO];
-    [self registerSideWidget:bigInfoControl imageId:@"ic_action_next_turn" message:OALocalizedString(@"map_widget_next_turn") key:@"next_turn" left:YES priorityOrder:5];
-    OANextTurnWidget *smallInfoControl = [ric createNextInfoControl:YES];
-    [self registerSideWidget:smallInfoControl imageId:@"ic_action_next_turn" message:OALocalizedString(@"map_widget_next_turn_small") key:@"next_turn_small" left:YES priorityOrder:6];
-    OANextTurnWidget *nextNextInfoControl = [ric createNextNextInfoControl:YES];
-    [self registerSideWidget:nextNextInfoControl imageId:@"ic_action_next_turn" message:OALocalizedString(@"map_widget_next_next_turn") key:@"next_next_turn" left:YES priorityOrder:7];
-
-    // register right stack
-    
-    // priorityOrder: 10s navigation-related, 20s position-related, 30s recording- and other plugin-related, 40s general device information, 50s debugging-purpose
-    OATextInfoWidget *intermediateDist = [ric createIntermediateDistanceControl];
-    [self registerSideWidget:intermediateDist imageId:@"ic_action_intermediate" message:OALocalizedString(@"map_widget_intermediate_distance") key:@"intermediate_distance" left:NO priorityOrder:13];
-    OATextInfoWidget *intermediateTime = [ric createTimeControl:YES];
-    [self registerSideWidget:intermediateTime widgetState:[[OAIntermediateTimeControlWidgetState alloc] init] key:@"intermediate_time" left:NO priorityOrder:14];
-    OATextInfoWidget *dist = [ric createDistanceControl];
-    [self registerSideWidget:dist imageId:@"ic_action_target" message:OALocalizedString(@"route_descr_destination") key:@"distance" left:NO priorityOrder:15];
-    OATextInfoWidget *time = [ric createTimeControl:NO];
-    [self registerSideWidget:time widgetState:[[OATimeWidgetState alloc] init] key:@"time" left:NO priorityOrder:16];
-    OATextInfoWidget *bearing = [ric createBearingControl];
-    [self registerSideWidget:bearing widgetState:[[OABearingWidgetState alloc] init] key:@"bearing" left:NO priorityOrder:17];
-    
-    OATextInfoWidget *marker = [ric createMapMarkerControl:YES];
-    [self registerSideWidget:marker imageId:@"widget_marker_day" message:OALocalizedString(@"map_marker") key:@"map_marker_1st" left:NO priorityOrder:18];
-    OATextInfoWidget *marker2nd = [ric createMapMarkerControl:NO];
-    [self registerSideWidget:marker2nd imageId:@"widget_marker_day" message:OALocalizedString(@"map_marker") key:@"map_marker_2nd" left:NO priorityOrder:19];
-    
-    OATextInfoWidget *speed = [ric createSpeedControl];
-    [self registerSideWidget:speed imageId:@"ic_action_speed" message:OALocalizedString(@"shared_string_speed") key:@"speed" left:false priorityOrder:20];
-    OATextInfoWidget *maxspeed = [ric createMaxSpeedControl];
-    [self registerSideWidget:maxspeed imageId:@"ic_action_speed_limit" message:OALocalizedString(@"map_widget_max_speed") key:@"max_speed" left:false priorityOrder:21];
-
-    OAAltitudeWidget *altitudeWidgetMyLocation = [[OAAltitudeWidget alloc] initWithType:EOAAltitudeWidgetTypeMyLocation];
-    [self registerSideWidget:altitudeWidgetMyLocation imageId:@"widget_altitude_location_day" message:OALocalizedString(@"map_widget_altitude_current_location") description:OALocalizedString(@"altitude_widget_desc") key:@"altitude" left:NO priorityOrder:23];
-
-    OATextInfoWidget *plainTime = [ric createPlainTimeControl];
-    [self registerSideWidget:plainTime imageId:@"ic_action_time" message:OALocalizedString(@"map_widget_plain_time") key:@"plain_time" left:false priorityOrder:41];
-    OATextInfoWidget *battery = [ric createBatteryControl];
-    [self registerSideWidget:battery imageId:@"ic_action_battery" message:OALocalizedString(@"map_widget_battery") key:@"battery" left:false priorityOrder:42];
-    
-    OATextInfoWidget *ruler = [mic createRulerControl];
-    [self registerSideWidget:ruler widgetState:[[OACompassRulerWidgetState alloc] init] key:@"radius_ruler" left:NO priorityOrder:43];
-    
-    OASunriseSunsetWidgetState *sunriseState = [[OASunriseSunsetWidgetState alloc] initWithType:YES customId:nil];
-    OASunriseSunsetWidget *sunriseWidget = [[OASunriseSunsetWidget alloc] initWithState:sunriseState];
-    [self registerSideWidget:sunriseWidget widgetState:sunriseState key:@"sunrise" left:NO priorityOrder:44];
-    
-    OASunriseSunsetWidgetState *sunsetState = [[OASunriseSunsetWidgetState alloc] initWithType:NO customId:nil];
-    OASunriseSunsetWidget *sunsetWidget = [[OASunriseSunsetWidget alloc] initWithState:sunsetState];
-    [self registerSideWidget:sunsetWidget widgetState:sunsetState key:@"sunset" left:NO priorityOrder:45];
+    [_mapWidgetRegistry registerAllControls];
+    // TODO: Refactor this logic to use a stack view and get rid of the references entirely
+    _topCoordinatesView = [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.coordinatesCurrentLocation.id].widget;
+    _coordinatesMapCenterWidget = [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.coordinatesMapCenter.id].widget;
+    _lanesControl = (OALanesControl *) [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.lanes.id].widget;
+    _rulerControl = (OARulerWidget *) [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.radiusRuler.id].widget;
+    _streetNameView = (OATopTextView *) [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.streetName.id].widget;
+    OATextState *ts = [self calculateTextState];
+    [self updateStreetName:NO ts:ts];
+    _themeId = -1;
+    [self updateColorShadowsOfText];
 }
 
 - (void) updateStreetName:(BOOL)nightMode ts:(OATextState *)ts

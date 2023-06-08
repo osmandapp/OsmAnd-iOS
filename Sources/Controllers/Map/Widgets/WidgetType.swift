@@ -103,16 +103,16 @@ class WidgetType: NSObject {
     }
 
     func getPanel() -> WidgetsPanel {
-        return getPanel(id);
+        return getPanel(id, appMode: OAAppSettings.sharedManager().applicationMode.get());
     }
 
-    func getPanel(_ widgetId: String) -> WidgetsPanel {
+    func getPanel(_ widgetId: String, appMode: OAApplicationMode) -> WidgetsPanel {
         if (defaultPanel == .topPanel || defaultPanel == .bottomPanel) {
             return defaultPanel
         } else if (defaultPanel == .leftPanel) {
-            return WidgetsPanel.rightPanel.contains(widgetId: widgetId) ? WidgetsPanel.rightPanel : WidgetsPanel.leftPanel
+            return WidgetsPanel.rightPanel.contains(widgetId: widgetId, appMode: appMode) ? WidgetsPanel.rightPanel : WidgetsPanel.leftPanel
         } else if (defaultPanel == .rightPanel) {
-            return WidgetsPanel.leftPanel.contains(widgetId: widgetId) ? WidgetsPanel.leftPanel : WidgetsPanel.rightPanel;
+            return WidgetsPanel.leftPanel.contains(widgetId: widgetId, appMode: appMode) ? WidgetsPanel.leftPanel : WidgetsPanel.rightPanel;
         }
         fatalError("Unsupported panel")
     }
@@ -196,8 +196,8 @@ extension WidgetType {
     static let timeToIntermediate = WidgetType(ordinal: 11, id: "time_to_intermediate", title: localizedString("map_widget_time_to_intermediate"), descr: localizedString("time_to_intermediate_widget_desc"), dayIconName: "widget_intermediate_time_day", nightIconName: "widget_intermediate_time_night", group: .navigationPoints, defaultPanel: .rightPanel)
     static let timeToDestination = WidgetType(ordinal: 12, id: "time_to_destination", title: localizedString("map_widget_time_to_destination"), descr: localizedString("time_to_destination_widget_desc"), dayIconName: "widget_time_to_distance_day", nightIconName: "widget_time_to_distance_night", group: .navigationPoints, defaultPanel: .rightPanel)
 
-    static let sideMarker1 = WidgetType(ordinal: 13, id: "map_marker_1st", title: localizedString("marker_1st"), descr: localizedString("first_marker_widget_desc"), dayIconName: "widget_marker_day", nightIconName: "widget_marker_night", group: .mapMarkers, defaultPanel: .rightPanel)
-    static let sideMarker2 = WidgetType(ordinal: 14, id: "map_marker_2nd", title: localizedString("marker_2nd"), descr: localizedString("second_marker_widget_desc"), dayIconName: "widget_marker_day", nightIconName: "widget_marker_night", group: .mapMarkers, defaultPanel: .rightPanel)
+    static let sideMarker1 = WidgetType(ordinal: 13, id: "map_marker_1st", title: localizedString("map_marker_1st"), descr: localizedString("first_marker_widget_desc"), dayIconName: "widget_marker_day", nightIconName: "widget_marker_night", group: .mapMarkers, defaultPanel: .rightPanel)
+    static let sideMarker2 = WidgetType(ordinal: 14, id: "map_marker_2nd", title: localizedString("map_marker_2nd"), descr: localizedString("second_marker_widget_desc"), dayIconName: "widget_marker_day", nightIconName: "widget_marker_night", group: .mapMarkers, defaultPanel: .rightPanel)
 
     static let relativeBearing = WidgetType(ordinal: 15, id: "relative_bearing", title: localizedString("map_widget_bearing"), descr: localizedString("relative_bearing_widget_desc"), dayIconName: "widget_relative_bearing_day", nightIconName: "widget_relative_bearing_night", group: .bearing, defaultPanel: .rightPanel)
     static let magneticBearing = WidgetType(ordinal: 16, id: "magnetic_bearing", title: localizedString("map_widget_magnetic_bearing"), descr: localizedString("magnetic_bearing_widget_desc"), dayIconName: "widget_bearing_day", nightIconName: "widget_bearing_night", group: .bearing, defaultPanel: .rightPanel)
@@ -246,7 +246,7 @@ extension WidgetType {
     static let weatherPrecipitationWidget = WidgetType(ordinal: 39, id: "weather_precip", title: localizedString("map_settings_weather_precip"), descr: localizedString("precipitation_widget_desc"), dayIconName: "widget_weather_precipitation_day", nightIconName: "widget_weather_precipitation_night", group: .weather, defaultPanel: .rightPanel)
     static let weatherWindWidget = WidgetType(ordinal: 40, id: "weather_wind", title: localizedString("map_settings_weather_wind"), descr: localizedString("wind_widget_desc"), dayIconName: "widget_weather_wind_day", nightIconName: "widget_weather_wind_night", group: .weather, defaultPanel: .rightPanel)
     static let weatherCloudsWidget = WidgetType(ordinal: 41, id: "weather_cloud", title: localizedString("map_settings_weather_cloud"), descr: localizedString("clouds_widget_desc"), dayIconName: "widget_weather_clouds_day", nightIconName: "widget_weather_clouds_night", group: .weather, defaultPanel: .rightPanel)
-    static let weatherAirPressureWidget = WidgetType(ordinal: 42, id: "weather_pressure", title: localizedString("map_settings_weather_air_pressure"), descr: localizedString("air_pressure_widget_desc"), dayIconName: "widget_weather_air_pressure_day", nightIconName: "widget_weather_air_pressure_night", group: .weather, defaultPanel: .rightPanel)
+    static let weatherAirPressureWidget = WidgetType(ordinal: 42, id: "weather_pressure", title: localizedString("map_settings_weather_pressure"), descr: localizedString("air_pressure_widget_desc"), dayIconName: "widget_weather_air_pressure_day", nightIconName: "widget_weather_air_pressure_night", group: .weather, defaultPanel: .rightPanel)
 
     static let sunrise = WidgetType(ordinal: 43, id: "day_night_mode_sunrise", title: localizedString("map_widget_sunrise"), descr: localizedString("map_widget_sunrise_desc"), dayIconName: "widget_sunrise_day", nightIconName: "widget_sunrise_night", group: .sunriseSunset, defaultPanel: .rightPanel)
     static let sunset = WidgetType(ordinal: 44, id: "day_night_mode_sunset", title: localizedString("map_widget_sunset"), descr: localizedString("map_widget_sunset_desc"), dayIconName: "widget_sunset_day", nightIconName: "widget_sunset_night", group: .sunriseSunset, defaultPanel: .rightPanel)

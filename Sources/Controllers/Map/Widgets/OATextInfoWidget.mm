@@ -17,13 +17,6 @@
 #define minTextWidth 64
 #define fullTextWidth 90
 
-@interface OATextInfoWidget ()
-
-@property (nonatomic) UILabel *textView;
-@property (nonatomic) UILabel *textShadowView;
-@property (nonatomic) UIImageView *imageView;
-
-@end
 
 @implementation OATextInfoWidget
 {
@@ -66,7 +59,7 @@
     self = [super initWithFrame:frame];
     if (self)
     {
-        self.frame = frame;
+        self.frame = CGRectMake(0, 0, kTextInfoWidgetWidth, kTextInfoWidgetHeight);
         [self commonInit];
     }
     
@@ -79,8 +72,8 @@
     _textShadowView = [[UILabel alloc] init];
     _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(2., 4., imageSide, imageSide)];
     
-    [self addSubview:_textView];
     [self addSubview:_textShadowView];
+    [self addSubview:_textView];
     [self addSubview:_imageView];
     
     CGFloat radius = 3.0;
@@ -295,6 +288,7 @@
     CGRect tf = _textView.frame;
     tf.origin.x = _imageView.hidden ? 4 : 28;
     tf.size.height = 22;
+    tf.origin.y = ([self getWidgetHeight] - tf.size.height) / 2;
     tf.size.width = MAX(tf.size.width, _imageView.hidden ? fullTextWidth : minTextWidth);
     _textView.frame = tf;
     _textShadowView.frame = tf;

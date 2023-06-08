@@ -124,7 +124,7 @@
             [colorHandler setScrollDirection:UICollectionViewScrollDirectionVertical];
             [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[_colorItems indexOfObject:_selectedColorItem] inSection:0]];
             [cell setCollectionHandler:colorHandler];
-            [cell buttonVisibility:NO];
+            [cell rightActionButtonVisibility:NO];
             [cell anchorContent:EOATableViewCellContentCenterStyle];
             cell.collectionView.scrollEnabled = NO;
         }
@@ -168,6 +168,8 @@
 
     if (self.delegate)
         [self.delegate onColorCollectionItemSelected:_selectedColorItem];
+
+    [self dismissViewController];
 }
 
 - (void)reloadCollectionData

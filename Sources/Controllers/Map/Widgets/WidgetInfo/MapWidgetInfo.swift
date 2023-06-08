@@ -110,13 +110,48 @@ class MapWidgetInfo: NSObject, Comparable {
     }
     
     func isEnabledForAppMode(_ appMode: OAApplicationMode) -> Bool {
-        fatalError("Subclass must override")
+        let widgetsVisibility = getWidgetsVisibility(appMode)
+        if widgetsVisibility.contains(key) || widgetsVisibility.contains(COLLAPSED_PREFIX + key) {
+            return true
+        } else if widgetsVisibility.contains(HIDE_PREFIX + key) {
+            return false
+        }
+        return WidgetsAvailabilityHelper.isWidgetVisibleByDefault(widgetId: key, appMode: appMode)
+
     }
     
     func enableDisable(appMode: OAApplicationMode, enabled: NSNumber?) {
-        // implementation
+        var widgetsVisibility: [String] = getWidgetsVisibility(appMode)
+        widgetsVisibility.removeAll(where: { $0 == key })
+        widgetsVisibility.removeAll(where: { $0 == COLLAPSED_PREFIX + key })
+        widgetsVisibility.removeAll(where: { $0 == HIDE_PREFIX + key })
+
+        if let enabled = enabled, (!isCustomWidget() || enabled.boolValue) {
+            widgetsVisibility.append(enabled.boolValue ? key : HIDE_PREFIX + key)
+        }
+
+        var newVisibilityString = ""
+        for visibility in widgetsVisibility {
+            newVisibilityString.append(visibility + SETTINGS_SEPARATOR)
+        }
+
+        getVisibilityPreference().set(newVisibilityString, mode: appMode)
+
+        if let settingsPref = widget.getWidgetSettingsPref(toReset: appMode), (enabled == nil || !enabled!.boolValue) {
+            settingsPref.resetMode(toDefault: appMode)
+        }
     }
     
+    private func getWidgetsVisibility(_ appMode: OAApplicationMode) -> [String] {
+        let widgetsVisibilityString = getVisibilityPreference().get(appMode)
+        guard let widgetsVisibilityString else { return [] }
+        return widgetsVisibilityString.components(separatedBy: SETTINGS_SEPARATOR)
+    }
+    
+    private func getVisibilityPreference() -> OACommonString {
+        OAAppSettings.sharedManager().mapInfoControls
+    }
+
     override func isEqual(_ obj: Any?) -> Bool {
         guard let other = obj as? MapWidgetInfo else {
             return false
@@ -125,7 +160,14 @@ class MapWidgetInfo: NSObject, Comparable {
     }
     
     override var hash: Int {
-        return getMessage().hashValue
+        var hasher = Hasher()
+        hasher.combine(message)
+        hasher.combine(key)
+        hasher.combine(widget)
+        hasher.combine(priority)
+        hasher.combine(pageIndex)
+        hasher.combine(widgetPanel)
+        return hasher.finalize()
     }
 
     static func < (lhs: MapWidgetInfo, rhs: MapWidgetInfo) -> Bool {

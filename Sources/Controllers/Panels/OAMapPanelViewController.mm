@@ -103,6 +103,7 @@
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OAMapInfoController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAGPXAppearanceCollection.h"
 
 #import "OARouteKey.h"
 #import "OANetworkRouteSelectionTask.h"
@@ -952,10 +953,10 @@ typedef enum
 {
     [OAAnalyticsHelper logEvent:@"configure_screen_open"];
     
-    _targetAppMode = targetMode;
-    _reopenSettings = _targetAppMode != nil;
-    
-    [self removeGestureRecognizers];
+//    _targetAppMode = targetMode;
+//    _reopenSettings = _targetAppMode != nil;
+//
+//    [self removeGestureRecognizers];
     
     OAConfigureScreenViewController *vc = [[OAConfigureScreenViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
@@ -965,9 +966,9 @@ typedef enum
 //
 //    [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
     
-    [self.targetMenuView quickHide];
+//    [self.targetMenuView quickHide];
     
-    self.sidePanelController.recognizesPanGesture = NO;
+//    self.sidePanelController.recognizesPanGesture = NO;
 }
 
 - (void) showWaypoints
@@ -2685,14 +2686,8 @@ typedef enum
     }
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-    
     NSString *caption = item.point.name;
-    
-    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:item.color];
-    UIImage *icon = [UIImage imageNamed:favCol.iconName];
-    
     targetPoint.type = OATargetWpt;
-    
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = caption;
     _targetMode = EOATargetPoint;
@@ -2702,7 +2697,6 @@ typedef enum
     
     targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
     targetPoint.title = _formattedTargetName;
-    targetPoint.icon = icon;
     targetPoint.toolbarNeeded = pushed;
     targetPoint.targetObj = item;
     
@@ -4076,11 +4070,7 @@ typedef enum
 
     gpxWpt.groups = _mapViewController.foundWptGroups;
 
-    UIColor* color = gpxWpt.color;
-    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-
     self.targetMenuView.targetPoint.type = OATargetWpt;
-    self.targetMenuView.targetPoint.icon = [UIImage imageNamed:favCol.iconName];
     self.targetMenuView.targetPoint.targetObj = gpxWpt;
 
     [self.targetMenuView updateTargetPointType:OATargetWpt];

@@ -23,12 +23,12 @@
 
 @interface OABaseWidgetView : UIView
 
-@property (nonatomic, readonly) OAWidgetType * _Nullable widgetType;
+@property (nonatomic) OAWidgetType * _Nullable widgetType;
 @property (nonatomic, readonly, assign) BOOL nightMode;
 
 @property (nonatomic, weak) id<OAWidgetListener> _Nullable delegate;
 
-- (instancetype)initWithType:(OAWidgetType * _Nonnull)type;
+- (instancetype _Nonnull )initWithType:(OAWidgetType * _Nonnull)type;
 
 - (BOOL) updateInfo;
 - (BOOL) isTopText;

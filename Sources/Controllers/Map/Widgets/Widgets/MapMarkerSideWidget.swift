@@ -14,10 +14,10 @@ import CoreLocation
 class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
     private static let DASH = "—"
     
-    private let mapMarkersHelper: OADestinationsHelper = OADestinationsHelper.instance()!
-    private let widgetState: MapMarkerSideWidgetState
-    private let markerModePref: OACommonString
-    private let markerClickBehaviourPref: OACommonString
+    private var mapMarkersHelper: OADestinationsHelper = OADestinationsHelper.instance()!
+    private var widgetState: MapMarkerSideWidgetState
+    private var markerModePref: OACommonString
+    private var markerClickBehaviourPref: OACommonString
     
     private var cachedMode: SideMarkerMode?
     private var cachedMeters: Int = 0
@@ -27,12 +27,14 @@ class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
     
     private var customLatLon: CLLocation?
     
-    init(widgetState: MapMarkerSideWidgetState) {
+    convenience init(widgetState: MapMarkerSideWidgetState) {
+        
+        self.init(frame: .zero)
+        
+        self.widgetType = widgetState.isFirstMarker() ? WidgetType.sideMarker1 : WidgetType.sideMarker2
         self.widgetState = widgetState
         self.markerModePref = widgetState.mapMarkerModePref
         self.markerClickBehaviourPref = widgetState.markerClickBehaviourPref
-        
-        super.init()
         self.cachedNightMode = self.nightMode
         self.cachedMode = SideMarkerMode.markerModeByName(markerModePref.get())
         
@@ -45,6 +47,14 @@ class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
                 self?.showMarkerOnMap()
             }
         }
+    }
+    
+    override init(frame: CGRect) {
+        let widgetState = MapMarkerSideWidgetState(customId: "", firstMarker: true)
+        self.widgetState = widgetState
+        self.markerModePref = widgetState.mapMarkerModePref
+        self.markerClickBehaviourPref = widgetState.markerClickBehaviourPref
+        super.init(frame: frame)
     }
     
     required init?(coder: NSCoder) {

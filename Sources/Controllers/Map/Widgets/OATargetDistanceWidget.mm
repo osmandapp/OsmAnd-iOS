@@ -12,6 +12,7 @@
 #import "OAMapRendererView.h"
 #import "OAOsmAndFormatter.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OATargetDistanceWidget
 {
@@ -21,7 +22,7 @@
 
 - (instancetype) init
 {
-    self = [super init];
+    self = [super initWithType:OAWidgetType.devTargetDistance];
     if (self)
     {
         _cachedTargetDistance = -1;

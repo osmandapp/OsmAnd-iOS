@@ -11,12 +11,12 @@ import Foundation
 
 @objc(OAConfigureScreenViewController)
 @objcMembers
-class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectionDelegate {
-    
+class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectionDelegate, WidgetStateDelegate {
+
     private static let selectedKey = "selected"
     
     private var widgetRegistry: OAMapWidgetRegistry?
-    private var appMode: OAApplicationMode? {
+    private var appMode: OAApplicationMode! {
         didSet {
             setupNavbarButtons()
         }
@@ -24,15 +24,15 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
     
     
     override func generateData() {
+        tableData.clearAllData()
         widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         let settings = OAAppSettings.sharedManager()!
         appMode = settings.applicationMode.get()
         
-        let widgetsSection = tableData!.createNewSection()!
+        let widgetsSection = tableData!.createNewSection()
         widgetsSection.headerText = localizedString("shared_string_widgets")
         widgetsSection.footerText = localizedString("widget_panels_descr")
-        let panels: [WidgetsPanel] = [.leftPanel, .rightPanel, .topPanel, .bottomPanel]
-        for panel in panels {
+        for panel in WidgetsPanel.values {
             let widgetsCount = getWidgetsCount(panel: panel)
             let row = widgetsSection.createNewRow()
             row.cellType = OAValueTableViewCell.getIdentifier()
@@ -51,7 +51,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         transparencyRow.setObj(NSNumber(value: settings.transparentMapTheme.get()), forKey: Self.selectedKey)
         transparencyRow.cellType = OASwitchTableViewCell.getIdentifier()
         
-        let buttonsSection = tableData!.createNewSection()!
+        let buttonsSection = tableData!.createNewSection()
         buttonsSection.headerText = localizedString("shared_string_buttons")
         populateCompassRow(buttonsSection.createNewRow())
         let distByTapRow = buttonsSection.createNewRow()
@@ -140,6 +140,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
     func onAppModeSelected(_ appMode: OAApplicationMode) {
         OAAppSettings.sharedManager()!.setApplicationModePref(appMode)
         self.appMode = appMode
+        onWidgetStateChanged()
     }
     
     func onNewProfilePressed() {
@@ -157,7 +158,7 @@ extension ConfigureScreenViewController {
     }
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
-        let item = tableData!.item(for: indexPath)!
+        let item = tableData!.item(for: indexPath)
         var outCell: UITableViewCell? = nil
         if item.cellType == OAValueTableViewCell.getIdentifier() {
             var cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.getIdentifier()) as? OAValueTableViewCell
@@ -209,9 +210,7 @@ extension ConfigureScreenViewController {
         }
         
         let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
-        guard let data = tableData!.item(for: indexPath) else {
-            return false
-        }
+        let data = tableData!.item(for: indexPath)
         
         let settings = OAAppSettings.sharedManager()!
         if data.key == "map_widget_transparent" {
@@ -228,11 +227,9 @@ extension ConfigureScreenViewController {
     }
 
     override func onRowSelected(_ indexPath: IndexPath!) {
-        guard let data = tableData!.item(for: indexPath) else {
-            return
-        }
+        let data = tableData!.item(for: indexPath)
         if data.key == "quick_action" {
-            let vc = OAQuickActionListViewController()
+            let vc = OAQuickActionListViewController()!
             self.navigationController?.pushViewController(vc, animated: true)
         } else if data.key == "compass" {
 //        TODO: Needs widget refactoring
@@ -243,9 +240,16 @@ extension ConfigureScreenViewController {
             let panel = data.obj(forKey: "panel") as? WidgetsPanel
             if let panel {
                 let vc = WidgetsListViewController(widgetPanel: panel)
+                vc.delegate = self
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }
+    }
+    
+    // MARK: WidgetStateDelegate
+    func onWidgetStateChanged() {
+        generateData()
+        tableView.reloadData()
     }
 
 }

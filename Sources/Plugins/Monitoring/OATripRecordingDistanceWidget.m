@@ -13,12 +13,13 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OATripRecordingDistanceWidget
 
 - (instancetype) initWithPlugin:(OAMonitoringPlugin *)plugin
 {
-    self = [super init];
+    self = [super initWithType:OAWidgetType.tripRecordingDistance];
     if (self)
     {
         __weak OATextInfoWidget *distanceWidgetWeak = self;

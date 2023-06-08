@@ -146,13 +146,8 @@
     if (gpx.color != 0)
     {
         OAGPXAppearanceCollection *gpxAppearance = [OAGPXAppearanceCollection sharedInstance];
-        OAColorItem *colorItem = [gpxAppearance getColorForGpxFilePath:gpx.gpxFilePath defaultValue:gpx.color];
-        if (!colorItem)
-        {
-            [gpxAppearance addNewSelectedColor:UIColorFromARGB(gpx.color)];
-            colorItem = [gpxAppearance getColorForGpxFilePath:gpx.gpxFilePath defaultValue:gpx.color];
-        }
-        [gpxAppearance selectColor:colorItem toGpxFilePath:gpx.gpxFilePath];
+        OAColorItem *colorItem = [gpxAppearance getColorForItem:gpx.gpxFilePath defaultValue:gpx.color];
+        [gpxAppearance selectColor:colorItem toItem:gpx.gpxFilePath];
     }
 }
 

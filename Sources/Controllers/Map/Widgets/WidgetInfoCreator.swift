@@ -12,6 +12,12 @@ import Foundation
 @objcMembers
 class WidgetInfoCreator: NSObject {
     
+    let appMode: OAApplicationMode
+    
+    init(appMode: OAApplicationMode) {
+        self.appMode = appMode
+    }
+    
     func createWidgetInfo(factory: MapWidgetsFactory, widgetType: WidgetType) -> MapWidgetInfo? {
         let mapWidget = factory.createMapWidget(widgetType: widgetType)
         if let mapWidget {
@@ -23,7 +29,7 @@ class WidgetInfoCreator: NSObject {
     func createCustomWidgetInfo(factory: MapWidgetsFactory, key: String, widgetType: WidgetType) -> MapWidgetInfo? {
         let widget = factory.createMapWidget(customId: key, widgetType: widgetType)
         if let widget = widget {
-            let panel = widgetType.getPanel(key)
+            let panel = widgetType.getPanel(key, appMode: appMode)
             return createCustomWidgetInfo(widgetId: key, widget: widget, widgetType: widgetType, panel: panel)
         }
         return nil
@@ -35,17 +41,17 @@ class WidgetInfoCreator: NSObject {
         }
         
         let widgetId = widgetType.id
-        let panel = widgetType.getPanel(widgetId)
-        let page = panel.getWidgetPage(widgetId)
-        let order = panel.getWidgetOrder(widgetId)
+        let panel = widgetType.getPanel(widgetId, appMode: appMode)
+        let page = panel.getWidgetPage(widgetId, appMode: appMode)
+        let order = panel.getWidgetOrder(widgetId, appMode: appMode)
         
         return createWidgetInfo(widgetId: widgetId, widget: widget, dayIconName: widgetType.dayIconName, nightIconName: widgetType.nightIconName, message: widgetType.title, page: page, order: order, widgetPanel: panel)
     }
     
     func createExternalWidget(widgetId: String, widget: OABaseWidgetView, settingsIconName: String, message: String?, defaultPanel: WidgetsPanel, order: Int) -> MapWidgetInfo {
         let panel = getExternalWidgetPanel(widgetId: widgetId, defaultPanel: defaultPanel)
-        let page = panel.getWidgetPage(widgetId)
-        let savedOrder = panel.getWidgetOrder(widgetId)
+        let page = panel.getWidgetPage(widgetId, appMode: appMode)
+        let savedOrder = panel.getWidgetOrder(widgetId, appMode: appMode)
         
         var updatedOrder = order
         if savedOrder != WidgetsPanel.DEFAULT_ORDER {
@@ -56,8 +62,8 @@ class WidgetInfoCreator: NSObject {
     }
     
     private func getExternalWidgetPanel(widgetId: String, defaultPanel: WidgetsPanel) -> WidgetsPanel {
-        let storedInLeftPanel = WidgetsPanel.leftPanel.getWidgetOrder(widgetId) != WidgetsPanel.DEFAULT_ORDER
-        let storedInRightPanel = WidgetsPanel.rightPanel.getWidgetOrder(widgetId) != WidgetsPanel.DEFAULT_ORDER
+        let storedInLeftPanel = WidgetsPanel.leftPanel.getWidgetOrder(widgetId, appMode: appMode) != WidgetsPanel.DEFAULT_ORDER
+        let storedInRightPanel = WidgetsPanel.rightPanel.getWidgetOrder(widgetId, appMode: appMode) != WidgetsPanel.DEFAULT_ORDER
         
         if storedInLeftPanel {
             return WidgetsPanel.leftPanel
@@ -68,8 +74,8 @@ class WidgetInfoCreator: NSObject {
     }
     
     func createCustomWidgetInfo(widgetId: String, widget: OABaseWidgetView, widgetType: WidgetType, panel: WidgetsPanel) -> MapWidgetInfo {
-        let page = panel.getWidgetPage(widgetId)
-        let order = panel.getWidgetOrder(widgetId)
+        let page = panel.getWidgetPage(widgetId, appMode: appMode)
+        let order = panel.getWidgetOrder(widgetId, appMode: appMode)
         return createWidgetInfo(widgetId: widgetId, widget: widget, dayIconName: widgetType.dayIconName, nightIconName: widgetType.nightIconName, message: widgetType.title, page: page, order: order, widgetPanel: panel)
     }
     

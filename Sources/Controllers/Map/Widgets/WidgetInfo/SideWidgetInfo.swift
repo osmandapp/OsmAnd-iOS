@@ -35,7 +35,6 @@ class SideWidgetInfo: MapWidgetInfo {
     }
     
     override func getUpdatedPanel() -> WidgetsPanel {
-        let settings = OAAppSettings.sharedManager()
         let widgetType = getWidgetType()
         if widgetType.defaultPanel == .leftPanel, WidgetsPanel.rightPanel.contains(widgetId: key) {
             widgetPanel = .rightPanel
@@ -45,43 +44,6 @@ class SideWidgetInfo: MapWidgetInfo {
             widgetPanel = widgetType.defaultPanel
         }
         return widgetPanel
-    }
-    
-    override func isEnabledForAppMode(_ appMode: OAApplicationMode) -> Bool {
-        let widgetsVisibility = getWidgetsVisibility(appMode: appMode)
-        if widgetsVisibility.contains(key) || widgetsVisibility.contains(COLLAPSED_PREFIX + key) {
-            return true
-        } else if widgetsVisibility.contains(HIDE_PREFIX + key) {
-            return false
-        }
-        return WidgetsAvailabilityHelper.isWidgetVisibleByDefault(widgetId: key, appMode: appMode)
-    }
-    
-    override func enableDisable(appMode: OAApplicationMode, enabled: NSNumber?) {
-        var widgetsVisibility = getWidgetsVisibility(appMode: appMode)
-        widgetsVisibility.removeAll { $0 == key || $0 == COLLAPSED_PREFIX + key || $0 == HIDE_PREFIX + key }
-        
-        if let enabled, (!isCustomWidget() || enabled.boolValue) {
-            widgetsVisibility.append(enabled.boolValue ? key : HIDE_PREFIX + key)
-        }
-        
-        let newVisibilityString = widgetsVisibility.joined(separator: SETTINGS_SEPARATOR)
-        getVisibilityPreference().set(newVisibilityString, mode: appMode)
-        
-        if let settingsPref = widget.getWidgetSettingsPref(toReset: appMode), (enabled == nil || !enabled!.boolValue) {
-            settingsPref.resetMode(toDefault: appMode)
-        }
-    }
-    
-    private func getWidgetsVisibility(appMode: OAApplicationMode) -> [String] {
-        if let widgetsVisibilityString = getVisibilityPreference().get(appMode) {
-            return widgetsVisibilityString.components(separatedBy: SETTINGS_SEPARATOR)
-        }
-        return [String]()
-    }
-    
-    private func getVisibilityPreference() -> OACommonString {
-        return OAAppSettings.sharedManager().mapInfoControls
     }
 }
 

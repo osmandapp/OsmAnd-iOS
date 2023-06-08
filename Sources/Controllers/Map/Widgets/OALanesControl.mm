@@ -20,6 +20,7 @@
 #import "OAUtilities.h"
 #import "OATextInfoWidget.h"
 #import "OAOsmAndFormatter.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
@@ -105,6 +106,7 @@
 
 - (void) commonInit
 {
+    self.widgetType = OAWidgetType.lanes;
     _settings = [OAAppSettings sharedManager];
     _rh = [OARoutingHelper sharedInstance];
     _app = [OsmAndApp instance];

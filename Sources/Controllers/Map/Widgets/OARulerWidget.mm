@@ -21,6 +21,7 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OAAutoObserverProxy.h"
 #import "OAOsmAndFormatter.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -147,6 +148,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (void) commonInit
 {
+    self.widgetType = OAWidgetType.radiusRuler;
     _settings = [OAAppSettings sharedManager];
     _app = [OsmAndApp instance];
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
@@ -700,7 +702,18 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (OsmAnd::PointI) getCenter31
 {
-    return _mapViewController.mapView.target31;
+    OAMapRendererView *mapRendererView = _mapViewController.mapView;
+    if (mapRendererView.heightmapSupported)
+    {
+        OsmAnd::PointI target31;
+        auto centerPixel = mapRendererView.getCenterPixel;
+        [mapRendererView convert:CGPointMake(centerPixel.x, centerPixel.y) toLocation:&target31];
+        return target31;
+    }
+    else
+    {
+        return mapRendererView.target31;
+    }
 }
 
 - (CGPoint) screenPointFromPoint:(CGPoint)point
@@ -779,10 +792,16 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             double fullMapScale = _cachedMapDensity * kMapRulerMaxWidth * [[UIScreen mainScreen] scale];
             float mapAzimuth = mapRendererView.azimuth;
             float mapZoom = mapRendererView.zoom;
-            const auto target31 = mapRendererView.target31;
+            int targetUpdatingThreshold = TARGET31_UPDATING_THRESHOLD;
+            auto target31 = mapRendererView.target31;
+            if (mapRendererView.heightmapSupported)
+            {
+                auto centerPixel = mapRendererView.getCenterPixel;
+                [mapRendererView convert:CGPointMake(centerPixel.x, centerPixel.y) toLocation:&target31];
+                targetUpdatingThreshold = 1;
+            }
             const auto target31Delta = _cachedCenter31 - target31;
-            
-            BOOL wasTargetChanged = abs(target31Delta.y) > TARGET31_UPDATING_THRESHOLD;
+            BOOL wasTargetChanged = abs(target31Delta.y) > targetUpdatingThreshold;
             if (wasTargetChanged)
                 _cachedCenter31 = target31;
             

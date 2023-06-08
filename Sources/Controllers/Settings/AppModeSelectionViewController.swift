@@ -27,6 +27,7 @@ class AppModeSelectionViewController: OABaseNavbarViewController {
     }
     
     override func generateData() {
+        tableData.clearAllData()
         appModes = OAApplicationMode.values()
     }
     

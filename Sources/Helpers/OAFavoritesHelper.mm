@@ -20,6 +20,7 @@
 #import "OAPlugin.h"
 #import "OAIndexConstants.h"
 #import "OAAppVersionDependentConstants.h"
+#import "OAGPXAppearanceCollection.h"
 
 #import <EventKit/EventKit.h>
 
@@ -76,6 +77,7 @@ static BOOL _favoritesLoaded = NO;
     
     [OAFavoritesHelper sortAll];
     [OAFavoritesHelper recalculateCachedFavPoints];
+    [[OAGPXAppearanceCollection sharedInstance] saveFavoriteColorsIfNeeded:_favoriteGroups];
 
     _favoritesLoaded = YES;
 }
@@ -203,6 +205,12 @@ static BOOL _favoritesLoaded = NO;
         [group addPoint:point];
         [_cachedFavoritePoints addObject:point];
     }
+
+    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+    NSInteger defaultValue = [OAUtilities colorToNumberFromString:[[point getColor] toHexARGBString]];
+    [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:defaultValue]
+                  toFavoriteGroupName:[point getCategory]
+                            pointName:[point getName]];
     if (saveImmediately)
     {
         [OAFavoritesHelper sortAll];
@@ -265,6 +273,10 @@ static BOOL _favoritesLoaded = NO;
 + (BOOL) editFavoriteName:(OAFavoriteItem *)item newName:(NSString *)newName group:(NSString *)group descr:(NSString *)descr address:(NSString *)address
 {
     NSString *oldGroup = [item getCategory];
+
+    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+    [appearanceCollection removeFavoriteGroupName:oldGroup pointName:[item getName]];
+
     [item setName:newName];
     [item setCategory:group];
     [item setDescription:descr];
@@ -281,13 +293,18 @@ static BOOL _favoritesLoaded = NO;
         
         //TODO: change icon for parking points here
 
-        UIColor *defaultColor = ((OAFavoriteColor *)[OADefaultFavorite builtinColors][0]).color;
+        UIColor *defaultColor = [OADefaultFavorite getDefaultColor];
         if (![item getColor] && [item getColor] == defaultColor)
             [item setColor:newGroup.color];
 
         [newGroup.points addObject:item];
     }
-    
+
+    NSInteger defaultValue = [OAUtilities colorToNumberFromString:[[item getColor] toHexARGBString]];
+    [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:defaultValue]
+                  toFavoriteGroupName:group
+                            pointName:[item getName]];
+
     [OAFavoritesHelper sortAll];
     [OAFavoritesHelper saveCurrentPointsIntoFile];
     return YES;
@@ -503,6 +520,7 @@ static BOOL _favoritesLoaded = NO;
     OAFavoriteGroup *group = [[OAFavoriteGroup alloc] initWithName:name isVisible:visible color:color];
     [_favoriteGroups addObject:group];
     _flatGroups[name] = group;
+    [[OAGPXAppearanceCollection sharedInstance] saveFavoriteColorsIfNeeded:@[group]];
 }
 
 + (BOOL) deleteNewFavoriteItem:(OAFavoriteItem *)favoritesItem
@@ -517,6 +535,7 @@ static BOOL _favoritesLoaded = NO;
 
 + (BOOL) deleteFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groupsToDelete andFavoritesItems:(NSArray<OAFavoriteItem *> *)favoritesItems isNewFavorite:(BOOL)isNewFavorite
 {
+    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     if (favoritesItems)
     {
         for (OAFavoriteItem *item in favoritesItems)
@@ -530,12 +549,14 @@ static BOOL _favoritesLoaded = NO;
             }
             if (group.points.count == 0 && (!isNewFavorite || (isNewFavorite && group.name.length > 0)))
             {
+                [appearanceCollection removeFavoriteGroupName:[item getCategory] pointName:nil];
                 [_flatGroups removeObjectForKey:group.name];
                 [_favoriteGroups removeObject:group];
             }
             NSInteger cachedIndexItem = [_cachedFavoritePoints indexOfObject:item];
             if (cachedIndexItem != NSNotFound)
                 [_cachedFavoritePoints removeObjectAtIndex:cachedIndexItem];
+            [appearanceCollection removeFavoriteGroupName:[item getCategory] pointName:[item getName]];
             [OsmAndApp instance].favoritesCollection->removeFavoriteLocation(item.favorite);
         }
     }
@@ -544,6 +565,7 @@ static BOOL _favoritesLoaded = NO;
         QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > toDelete;
         for (OAFavoriteGroup *group in groupsToDelete)
         {
+            [appearanceCollection removeFavoriteGroupName:group.name pointName:nil];
             [_flatGroups removeObjectForKey:group.name];
             [_favoriteGroups removeObject:group];
 
@@ -552,7 +574,10 @@ static BOOL _favoritesLoaded = NO;
             {
                 NSInteger cachedIndexItem = [_cachedFavoritePoints indexOfObject:favoriteItem];
                 if (cachedIndexItem != NSNotFound)
+                {
+                    [appearanceCollection removeFavoriteGroupName:[favoriteItem getCategory] pointName:[favoriteItem getName]];
                     [_cachedFavoritePoints removeObjectAtIndex:cachedIndexItem];
+                }
 
                 toDelete.push_back(favoriteItem.favorite);
             }

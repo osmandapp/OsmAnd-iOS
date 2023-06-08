@@ -75,14 +75,15 @@
     
     NSMutableArray<OABaseWidgetView *> *widgetsToShow = [NSMutableArray array];
     
-//    NSArray *weatherWidgets = @[kWeatherTemp, kWeatherPressure, kWeatherWind, kWeatherCloud, kWeatherPrecip];
-//    BOOL weatherToolbarVisible = [OARootViewController instance].mapPanel.hudViewController.mapInfoController.weatherToolbarVisible;
+    BOOL weatherToolbarVisible = self.isWeatherToolbarVisible;
     for (OAMapWidgetInfo *widgetInfo in widgets)
     {
-        if ([widgetInfo isEnabledForAppMode:mode])
+        if ([widgetInfo isEnabledForAppMode:mode] || weatherToolbarVisible)
         {
             [widgetsToShow addObject:widgetInfo.widget];
-        } else {
+        }
+        else
+        {
             [widgetInfo.widget removeFromSuperview];
         }
     }
@@ -141,8 +142,13 @@
 
 - (void) updateInfo:(OAApplicationMode *)mode expanded:(BOOL)expanded
 {
-    [self update:mode expanded:expanded widgetSet:_leftWidgetSet];
-    [self update:mode expanded:expanded widgetSet:_rightWidgetSet];
+    for (OAMapWidgetInfo *widgetInfo in self.getAllWidgets)
+    {
+        if ([widgetInfo isEnabledForAppMode:mode] || [widgetInfo isKindOfClass:OACenterWidgetInfo.class] || (self.isWeatherToolbarVisible && widgetInfo.getWidgetType.group == OAWidgetGroup.weather))
+        {
+            [widgetInfo.widget updateInfo];
+        }
+    }
 }
 
 - (void) update:(OAApplicationMode *)mode expanded:(BOOL)expanded widgetSet:(NSOrderedSet<OAMapWidgetRegInfo *> *)widgetSet
@@ -265,7 +271,7 @@
         widget.priority = [panel getWidgetOrder:widget.key];
         
         NSMutableOrderedSet<OAMapWidgetInfo *> *widgetsOfPanel = newAllWidgets[panel];
-        if (widgetsOfPanel == nil)
+        if (widgetsOfPanel == nil && panel != nil)
         {
             widgetsOfPanel = [NSMutableOrderedSet orderedSet];
             newAllWidgets[panel] = widgetsOfPanel;
@@ -297,11 +303,11 @@
     for (OAMapWidgetInfo *widgetInfo in [self getWidgetsForPanel:appMode filterModes:filterModes panels:@[panel]])
     {
         NSInteger page = widgetInfo.pageIndex;
-        NSMutableOrderedSet<OAMapWidgetInfo *> *widgetsOfPage = widgetsByPages[page];
+        NSMutableOrderedSet<OAMapWidgetInfo *> *widgetsOfPage = widgetsByPages[@(page)];
         if (!widgetsOfPage)
         {
             widgetsOfPage = [NSMutableOrderedSet orderedSet];
-            widgetsByPages[page] = widgetsOfPage;
+            widgetsByPages[@(page)] = widgetsOfPage;
         }
         [widgetsOfPage addObject:widgetInfo];
     }
@@ -315,8 +321,8 @@
     NSMutableArray<OAMapWidgetInfo *> *widgetInfos = [NSMutableArray array];
     if (_settings.applicationMode.get == appMode)
         [widgetInfos addObjectsFromArray:self.getAllWidgets];
-//    else
-//        [widgetInfos addObjectsFromArray:[OAWidgetsInitializer createAllControls:appMode]];
+    else
+        [widgetInfos addObjectsFromArray:[OAWidgetsInitializer createAllControlsWithAppMode:appMode]];
     NSMutableOrderedSet<OAMapWidgetInfo *> *filteredWidgets = [NSMutableOrderedSet orderedSet];
     for (OAMapWidgetInfo *widget in widgetInfos)
     {
@@ -341,8 +347,28 @@
     return filteredWidgets;
 }
 
+- (BOOL) isWeatherToolbarVisible
+{
+    return [OARootViewController instance].mapPanel.hudViewController.mapInfoController.weatherToolbarVisible;
+}
+
 - (NSMutableOrderedSet<OAMapWidgetInfo *> *)getWidgetsForPanel:(OAWidgetsPanel *)panel
 {
+    if (panel == OAWidgetsPanel.rightPanel && self.isWeatherToolbarVisible)
+    {
+        NSMutableOrderedSet<OAMapWidgetInfo *> *widgets = [NSMutableOrderedSet orderedSet];
+        for (OAMapWidgetInfo *info in _allWidgets[panel])
+        {
+            if (info.getWidgetType.group == OAWidgetGroup.weather) {
+                [widgets addObject:info];
+            }
+        }
+        return widgets;
+    }
+    else if (self.isWeatherToolbarVisible)
+    {
+        return [NSMutableOrderedSet orderedSet];
+    }
     NSMutableOrderedSet<OAMapWidgetInfo *> *widgets = _allWidgets[panel];
     if (widgets == nil)
     {
@@ -588,6 +614,18 @@
             [set addObjectsFromArray:split];
         }
 
+    }
+}
+
+- (void) registerAllControls
+{
+    OAApplicationMode *appMode = _settings.applicationMode.get;
+    NSArray<OAMapWidgetInfo *> *infos = [OAWidgetsInitializer createAllControlsWithAppMode:appMode];
+    [self reorderWidgets:infos];
+    
+    for (OAMapWidgetInfo *widgetInfo : infos)
+    {
+        [self notifyWidgetRegistered:widgetInfo];
     }
 }
 

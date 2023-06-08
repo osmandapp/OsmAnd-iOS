@@ -464,7 +464,7 @@
     if (_settingsItems && _file)
     {
         _importStarted = YES;
-        [self updateUIAnimated];
+        [self updateUI:YES];
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         for (OASettingsItem *item in _settingsItems)
         {

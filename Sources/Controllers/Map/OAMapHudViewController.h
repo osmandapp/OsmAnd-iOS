@@ -105,4 +105,6 @@
 - (void) recreateControls;
 - (void) updateInfo;
 
+- (void) updateCurrentLocationAddress;
+
 @end

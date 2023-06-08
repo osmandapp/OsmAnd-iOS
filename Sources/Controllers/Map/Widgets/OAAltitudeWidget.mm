@@ -13,6 +13,8 @@
 #import "OAOsmAndFormatter.h"
 #import "OANativeUtilities.h"
 
+#import "OsmAnd_Maps-Swift.h"
+
 @implementation OAAltitudeWidget
 {
     OsmAndAppInstance _app;
@@ -25,6 +27,8 @@
     self = [super init];
     if (self)
     {
+        // TODO: refactor widget type
+        self.widgetType = widgetType == EOAAltitudeWidgetTypeMapCenter ? OAWidgetType.altitudeMapCenter : OAWidgetType.altitudeMyLocation;
         _widgetType = widgetType;
         _app = [OsmAndApp instance];
         _cachedAltitude = 0;

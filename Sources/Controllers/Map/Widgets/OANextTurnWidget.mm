@@ -17,6 +17,8 @@
 #import "OAAppSettings.h"
 #import "OAOsmAndFormatter.h"
 
+#import "OsmAnd_Maps-Swift.h"
+
 #define kTopViewSide 72
 #define kLeftViewSide 24
 
@@ -43,7 +45,7 @@
 
 - (instancetype) initWithHorisontalMini:(BOOL)horisontalMini nextNext:(BOOL)nextNext
 {
-    self = [super init];
+    self = [super initWithType:horisontalMini ? OAWidgetType.smallNextTurn : OAWidgetType.nextTurn];
     if (self)
     {
         _topView = [[UIView alloc] initWithFrame:CGRectMake(11., 6., kTopViewSide, kTopViewSide)];
@@ -173,6 +175,24 @@
     {
         _nextTurnDistance = nextTurnDistance;
         [self updateDistance];
+    }
+}
+
+- (void) adjustViewSize
+{
+    [super adjustViewSize];
+    if (!_horisontalMini)
+    {
+        CGRect tf = self.textView.frame;
+        tf.origin.y = self.getWidgetHeight - tf.size.height - 6.;
+        self.textView.frame = tf;
+        self.textShadowView.frame = tf;
+    }
+    else
+    {
+        CGRect leftViewFrame = self.leftView.frame;
+        leftViewFrame.origin.y = (self.getWidgetHeight - leftViewFrame.size.height) / 2;
+        self.leftView.frame = leftViewFrame;
     }
 }
 

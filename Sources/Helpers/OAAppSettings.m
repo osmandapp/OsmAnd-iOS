@@ -1971,6 +1971,11 @@
     [self set:[[self get] arrayByAddingObject:string]];
 }
 
+- (void) add:(NSString *)string appMode:(OAApplicationMode *)appMode
+{
+    [self set:[[self get:appMode] arrayByAddingObject:string] mode:appMode];
+}
+
 - (void) addUnique:(NSString *)string
 {
     if (![self contains:string])

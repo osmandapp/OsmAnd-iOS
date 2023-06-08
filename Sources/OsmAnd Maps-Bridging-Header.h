@@ -22,6 +22,9 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OAUtilities.h"
 #import "OAQuickActionRegistry.h"
+#import "OAMapHudViewController.h"
+#import "OAMapInfoController.h"
+#import "OAMapillaryPlugin.h"
 
 // Widgets
 #import "OAWidgetState.h"

@@ -20,12 +20,18 @@ class CurrentTimeWidget: OATextInfoWidget {
         setText(nil, subtext: nil)
     }
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     override func updateInfo() -> Bool {
-        var time = Date.now.timeIntervalSince1970
+        let timeNow = Date.now.timeIntervalSince1970
+        let timeStart = Date.now.startOfDay.timeIntervalSince1970
+        let time = timeNow - timeStart
         if (isUpdateNeeded() || time - cachedTime > TimeInterval(UPDATE_INTERVAL_MILLIS)) {
             cachedTime = time
             setTimeText(time)

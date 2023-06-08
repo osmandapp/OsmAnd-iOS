@@ -15,18 +15,20 @@ class TimeToNavigationPointWidget: OATextInfoWidget {
     
     private let routingHelper: OARoutingHelper = OARoutingHelper.sharedInstance()!
     private var widgetState: TimeToNavigationPointWidgetState?
-    private let arrivalTimeOtherwiseTimeToGoPref: OACommonBoolean
+    private var arrivalTimeOtherwiseTimeToGoPref: OACommonBoolean
     
     private var cachedArrivalTimeOtherwiseTimeToGo: Bool
     private var cachedLeftSeconds: Int
     
-    init(widgetState: TimeToNavigationPointWidgetState) {
+    convenience init(widgetState: TimeToNavigationPointWidgetState) {
+        
+        self.init(frame: .zero)
+        
         self.widgetState = widgetState
         self.arrivalTimeOtherwiseTimeToGoPref = widgetState.getPreference()
         self.cachedArrivalTimeOtherwiseTimeToGo = arrivalTimeOtherwiseTimeToGoPref.get()
         self.cachedLeftSeconds = 0
-        
-        super.init()
+        self.widgetType = widgetState.isIntermediate() ? WidgetType.timeToIntermediate : WidgetType.timeToDestination
         
         setText(nil, subtext: nil)
         updateIcons()
@@ -35,6 +37,14 @@ class TimeToNavigationPointWidget: OATextInfoWidget {
             self?.widgetState!.changeToNextState()
             _ = self?.updateInfo()
         }
+    }
+    
+    override init(frame: CGRect) {
+        self.widgetState = TimeToNavigationPointWidgetState(customId: "", intermediate: true)
+        self.arrivalTimeOtherwiseTimeToGoPref = widgetState!.getPreference()
+        self.cachedArrivalTimeOtherwiseTimeToGo = arrivalTimeOtherwiseTimeToGoPref.get()
+        self.cachedLeftSeconds = 0
+        super.init(frame: frame)
     }
     
     required init?(coder: NSCoder) {

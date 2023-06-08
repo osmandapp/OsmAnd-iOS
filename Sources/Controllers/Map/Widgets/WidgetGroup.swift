@@ -126,6 +126,22 @@ class WidgetGroup: NSObject {
         getWidgets().first!.ordinal;
     }
     
+    override func isEqual(_ object: Any?) -> Bool {
+        if object == nil {
+            return false
+        }
+        
+        if let object = object as? WidgetGroup
+        {
+            return title == object.title
+                && object.descr == descr
+                && object.dayIconName == dayIconName
+                && object.nightIconName == nightIconName
+                && object.docsUrl == docsUrl
+        }
+        return false
+    }
+    
     class func getPartOfPluginDesc(plugin: AnyClass) -> String? {
         let plugin = OAPlugin.getPlugin(plugin)
         if let plugin {

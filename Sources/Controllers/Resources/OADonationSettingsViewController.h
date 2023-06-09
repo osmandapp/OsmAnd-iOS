@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseButtonsViewController.h"
 
 typedef NS_ENUM(NSInteger, EDonationSettingsScreen)
 {
@@ -20,24 +20,19 @@ typedef NS_ENUM(NSInteger, EDonationSettingsScreen)
 @property (nonatomic) NSString *localName;
 @property (nonatomic) NSString *downloadName;
 
-- (id) initWithLocalName:(NSString *)localName downloadName:(NSString *) downloadName;
+- (instancetype)initWithLocalName:(NSString *)localName downloadName:(NSString *) downloadName;
 
 @end
 
-@interface OADonationSettingsViewController : OACompoundViewController<UITableViewDelegate, UITableViewDataSource>
+@interface OADonationSettingsViewController : OABaseButtonsViewController
 
 @property (nonatomic, readonly) EDonationSettingsScreen settingsType;
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-
 @property (nonatomic) OACountryItem *selectedCountryItem;
 @property (nonatomic) NSArray<OACountryItem *> *countryItems;
 
-- (id) initWithSettingsType:(EDonationSettingsScreen)settingsType parentController:(OADonationSettingsViewController *)parentController;
+- (instancetype)initWithSettingsType:(EDonationSettingsScreen)settingsType parentController:(OADonationSettingsViewController *)parentController;
 
-- (void) initCountries;
-- (OACountryItem *) getCountryItem:(NSString *)downloadName;
+- (void)initCountries;
+- (OACountryItem *)getCountryItem:(NSString *)downloadName;
 
 @end

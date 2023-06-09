@@ -8,6 +8,10 @@
 
 #import "OABaseButtonsViewController.h"
 
+@protocol OAWidgetStateDelegate;
+
 @interface OAQuickActionListViewController : OABaseButtonsViewController
+
+@property (nonatomic, weak) id<OAWidgetStateDelegate> delegate;
 
 @end

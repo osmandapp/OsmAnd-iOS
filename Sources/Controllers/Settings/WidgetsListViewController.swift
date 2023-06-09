@@ -8,6 +8,7 @@
 
 import UIKit
 
+@objc(OAWidgetStateDelegate)
 protocol WidgetStateDelegate: AnyObject {
     func onWidgetStateChanged()
 }

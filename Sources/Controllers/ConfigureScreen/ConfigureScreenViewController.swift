@@ -57,6 +57,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         let distByTapRow = buttonsSection.createNewRow()
         distByTapRow.title = localizedString("map_widget_distance_by_tap")
         distByTapRow.iconName = "ic_action_ruler_line"
+        distByTapRow.iconTint = Int(appMode!.getIconColor())
         distByTapRow.key = "map_widget_distance_by_tap"
         distByTapRow.accessibilityLabel = distByTapRow.title
         distByTapRow.accessibilityLabel = settings.showDistanceRuler.get() ? localizedString("shared_string_on") : localizedString("shared_string_off")
@@ -89,7 +90,6 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         row.descr = descr
         row.accessibilityLabel = title
         row.accessibilityValue = descr
-        row.setObj(title, forKey: "")
         row.key = "compass"
         row.iconTint = Int(Int(appMode?.getIconColor() ?? color_tint_gray))
         row.iconName = OACompassMode.getIconName(compassMode)
@@ -192,7 +192,7 @@ extension ConfigureScreenViewController {
                 cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
                 let selected = item.bool(forKey: Self.selectedKey)
                 cell.switchView.isOn = selected
-                cell.leftIconView.tintColor = UIColor(rgb: Int(selected ? color_primary_purple : color_tint_gray))
+                cell.leftIconView.tintColor = UIColor(rgb: selected ? item.iconTint :Int(color_tint_gray))
 
                 cell.switchView.tag = indexPath.section << 10 | indexPath.row
                 cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
@@ -215,6 +215,9 @@ extension ConfigureScreenViewController {
         let settings = OAAppSettings.sharedManager()!
         if data.key == "map_widget_transparent" {
             settings.transparentMapTheme.set(sw.isOn)
+        } else if data.key == "map_widget_distance_by_tap" {
+            settings.showDistanceRuler.set(sw.isOn)
+            OARootViewController.instance().mapPanel.mapViewController.updateTapRulerLayer()
         }
         
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
@@ -230,12 +233,21 @@ extension ConfigureScreenViewController {
         let data = tableData!.item(for: indexPath)
         if data.key == "quick_action" {
             let vc = OAQuickActionListViewController()!
+            vc.delegate = self
             self.navigationController?.pushViewController(vc, animated: true)
         } else if data.key == "compass" {
-//        TODO: Needs widget refactoring
-//            let vc = OAConfigureMenuViewController(configureMenuScreen: .visibility, param: data.key)!
-//            vc.showFull = true
-//            vc.show(self, parentViewController: nil, animated: true)
+            let vc = CompassVisibilityViewController()
+            vc.delegate = self
+            let navigationController = UINavigationController()
+            navigationController.setViewControllers([vc], animated: true)
+            navigationController.modalPresentationStyle = .pageSheet
+            let sheet = navigationController.sheetPresentationController
+            if let sheet
+            {
+                sheet.detents = [.medium()]
+                sheet.preferredCornerRadius = 20
+            }
+            self.navigationController?.present(navigationController, animated: true)
         } else {
             let panel = data.obj(forKey: "panel") as? WidgetsPanel
             if let panel {

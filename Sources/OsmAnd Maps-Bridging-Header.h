@@ -47,6 +47,7 @@
 #import "OsmAndApp.h"
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
+#import "OAMapViewController.h"
 
 // Plugins
 #import "OAPlugin.h"

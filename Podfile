@@ -14,7 +14,6 @@ def defaultPods
     pod 'FFCircularProgressView', '~> 0.4'
     pod 'FormatterKit', '~> 1.8.0'
     pod 'SWTableViewCell', '~> 0.3.7'
-    pod 'RegexKitLite', '~> 4.0'
     pod 'MBProgressHUD', '~> 0.9.1'
     pod 'CocoaSecurity', '~> 1.2.4'
     pod 'TPKeyboardAvoiding', '~> 1.2.6'

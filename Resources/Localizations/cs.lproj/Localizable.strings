@@ -2857,3 +2857,5 @@
 "map_widget_trip_recording_downhill" = "Klesání";
 "map_widget_trip_recording_duration" = "Trvání";
 "shared_string_app_profile" = "Profil aplikace";
+"route_info" = "Informace o trase";
+"network" = "Síť";

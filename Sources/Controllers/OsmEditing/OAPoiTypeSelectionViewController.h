@@ -6,7 +6,7 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseNavbarViewController.h"
 #import "OAOsmEditingViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -25,13 +25,13 @@ typedef NS_ENUM(NSInteger, EOASelectionType)
 
 @end
 
-@interface OAPoiTypeSelectionViewController : OACompoundViewController
+@interface OAPoiTypeSelectionViewController : OABaseNavbarViewController
 
 @property (nonatomic) id<OAOsmEditingDataProtocol> dataProvider;
 
 @property id<OAPoiTypeSelectionDelegate> delegate;
 
--(id)initWithType:(EOASelectionType)type;
+-(instancetype)initWithType:(EOASelectionType)type;
 
 @end
 

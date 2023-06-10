@@ -18,7 +18,6 @@
 #import "OAPOIBaseType.h"
 #import "OAUtilities.h"
 #import "OALocationParser.h"
-#import <RegexKitLite.h>
 #import "OAAbbreviations.h"
 #import "OAMapUtils.h"
 

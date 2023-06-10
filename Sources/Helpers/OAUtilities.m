@@ -551,6 +551,41 @@
     return [NSArray arrayWithArray:results];
 }
 
+- (BOOL)isMatchedByRegex:(NSString *)regexPattern
+{
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regexPattern options:0 error:nil];
+    NSRange fullRange = NSMakeRange(0, self.length);
+    NSRange matchedRange = [regex rangeOfFirstMatchInString:self options:0 range:fullRange];
+    
+    return (matchedRange.location != NSNotFound);
+}
+
+- (NSArray<NSString *> *)componentsSeparatedByRegex:(NSString *)regexPattern
+{
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regexPattern options:0 error:nil];
+    NSArray<NSTextCheckingResult *> *matches = [regex matchesInString:self options:0 range:NSMakeRange(0, self.length)];
+
+    NSMutableArray<NSString *> *components = [NSMutableArray array];
+    NSUInteger previousLocation = 0;
+
+    for (NSTextCheckingResult *match in matches) {
+        NSRange matchRange = [match range];
+        NSRange componentRange = NSMakeRange(previousLocation, matchRange.location - previousLocation);
+        NSString *component = [self substringWithRange:componentRange];
+        [components addObject:component];
+        previousLocation = matchRange.location + matchRange.length;
+    }
+
+    // Add the remaining substring after the last match
+    if (previousLocation < self.length) {
+        NSString *remainingComponent = [self substringFromIndex:previousLocation];
+        [components addObject:remainingComponent];
+    }
+
+    return [components copy];
+}
+
+
 @end
 
 @implementation UIViewController (utils)

@@ -32,8 +32,6 @@
 #import "OARegisterDeviceCommand.h"
 #import "OAURLSessionProgress.h"
 
-#import <RegexKitLite.h>
-
 #define kUpdateIdOperation @"Update order id"
 
 static NSString *INFO_EXT = @"info";

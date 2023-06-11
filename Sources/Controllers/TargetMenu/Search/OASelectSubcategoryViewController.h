@@ -6,7 +6,7 @@
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseButtonsViewController.h"
 
 @class OAPOICategory;
 @class OAPOIUIFilter;
@@ -22,7 +22,7 @@
 
 @end
 
-@interface OASelectSubcategoryViewController : OACompoundViewController
+@interface OASelectSubcategoryViewController : OABaseButtonsViewController
 
 @property (nonatomic, weak) id<OASelectSubcategoryDelegate> delegate;
 

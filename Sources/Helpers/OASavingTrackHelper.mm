@@ -452,7 +452,7 @@
                         wpt.name = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 3)];
                     
                     if (sqlite3_column_text(statement, 4) != nil)
-                        [wpt setColor:[OAUtilities colorToNumberFromString:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 4)]]];
+                        [wpt setColor:[[UIColor colorFromString:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 4)]] toARGBNumber]];
                     if (sqlite3_column_text(statement, 5) != nil)
                         wpt.type = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 5)];
                     if (sqlite3_column_text(statement, 6) != nil)

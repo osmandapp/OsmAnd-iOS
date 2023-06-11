@@ -178,7 +178,7 @@
 "carplay_active_message" = "Map is displayed via CarPlay";
 "carplay_profile" = "CarPlay profile";
 "carplay_profile_descr" = "Profile that will be used while connected to CarPlay.";
-"show_traffic_warnings" = "Показвай пътни предупреждения";
+"show_traffic_warnings" = "Предупреждения при пътуване";
 "show_pedestrian_warnings" = "Пешеходни пътеки";
 "show_cameras" = "Камери за контрол на скоростта";
 "show_lanes" = "Пътни платна";
@@ -347,7 +347,7 @@
 "destination_point" = "Крайна цел %@";
 "intermediate_point" = "Междинна точка \'%@\'";
 "arrived_at_intermediate_point" = "Пристигнахте в междинна точка";
-"starting_point_too_far" = "Началната позиция е твърде далеч от път.";
+"starting_point_too_far" = "Отправната позиция е твърде далеч от път.";
 "ending_point_too_far" = "Крайната цел е твърде далеч от най-близкия път.";
 "intermediate_point_too_far" = "Междинна точка %@ е твърде далеч от най-близкия път.";
 "arrived_at_destination" = "Пристигнахте в крайната цел";
@@ -1894,7 +1894,7 @@
 "routing_attr_height_description" = "Въведете височина на МПС (за камиони и извън-габаритни товари)";
 "touting_specified_vehicle_parameters_descr" = "Specified vehicle parameters may affect routing.";
 "routing_attr_height_obstacles_name" = "Използване на данни за височината";
-"routing_attr_avoid_toll_name" = "Пътища без такса";
+"routing_attr_avoid_toll_name" = "Без пътища с такса";
 "rendering_attr_appMode_description" = "Оптимизирай картата за";
 "routing_attr_avoid_ice_roads_fords_name" = "No ice roads or fords";
 "rendering_value_germanRoadAtlas_name" = "Немска пътна карта";

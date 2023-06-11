@@ -6,7 +6,7 @@
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseButtonsViewController.h"
 
 @class OAPOIUIFilter;
 @class OAPOIType;
@@ -14,7 +14,7 @@
 @protocol OAPOIFilterViewDelegate;
 @protocol OAPOIFilterRefreshDelegate;
 
-@interface OACustomPOIViewController : OACompoundViewController
+@interface OACustomPOIViewController : OABaseButtonsViewController
 
 @property (weak, nonatomic) id<OAPOIFilterViewDelegate> delegate;
 @property (weak, nonatomic) id<OAPOIFilterRefreshDelegate> _Nullable refreshDelegate;

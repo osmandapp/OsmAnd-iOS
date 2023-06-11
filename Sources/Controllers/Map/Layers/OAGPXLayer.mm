@@ -171,18 +171,6 @@
     return color;
 }
 
-- (UIColor *) getWptColor:(OsmAnd::Ref<OsmAnd::GpxExtensions>)extensions
-{
-    if (extensions)
-    {
-        const auto& values = extensions->getValues();
-        const auto& it = values.find(QStringLiteral("color"));
-        if (it != values.end())
-            return [UIColor colorFromString:it.value().toString().toNSString()];
-    }
-    return nil;
-}
-
 - (void) refreshGpxTracks
 {
     if (!_gpxDocs.empty())

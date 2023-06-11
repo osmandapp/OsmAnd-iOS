@@ -338,7 +338,7 @@
         OAWptPt *wpt = [[OAWptPt alloc] init];
         wpt.position = CLLocationCoordinate2DMake(marker.latitude, marker.longitude);
         wpt.name = marker.desc;
-        [wpt setColor:[OAUtilities colorToNumberFromString:[marker.color toHexARGBString]]];
+        [wpt setColor:[marker.color toARGBNumber]];
 
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
         e.name = @"creation_date";

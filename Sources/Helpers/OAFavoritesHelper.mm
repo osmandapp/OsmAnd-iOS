@@ -207,10 +207,7 @@ static BOOL _favoritesLoaded = NO;
     }
 
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    NSInteger defaultValue = [OAUtilities colorToNumberFromString:[[point getColor] toHexARGBString]];
-    [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:defaultValue]
-                  toFavoriteGroupName:[point getCategory]
-                            pointName:[point getName]];
+    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[[point getColor] toARGBNumber]]];
     if (saveImmediately)
     {
         [OAFavoritesHelper sortAll];
@@ -274,9 +271,6 @@ static BOOL _favoritesLoaded = NO;
 {
     NSString *oldGroup = [item getCategory];
 
-    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    [appearanceCollection removeFavoriteGroupName:oldGroup pointName:[item getName]];
-
     [item setName:newName];
     [item setCategory:group];
     [item setDescription:descr];
@@ -300,10 +294,8 @@ static BOOL _favoritesLoaded = NO;
         [newGroup.points addObject:item];
     }
 
-    NSInteger defaultValue = [OAUtilities colorToNumberFromString:[[item getColor] toHexARGBString]];
-    [appearanceCollection selectColor:[appearanceCollection getColorForItem:@"" defaultValue:defaultValue]
-                  toFavoriteGroupName:group
-                            pointName:[item getName]];
+    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[[item getColor] toARGBNumber]]];
 
     [OAFavoritesHelper sortAll];
     [OAFavoritesHelper saveCurrentPointsIntoFile];
@@ -535,7 +527,6 @@ static BOOL _favoritesLoaded = NO;
 
 + (BOOL) deleteFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groupsToDelete andFavoritesItems:(NSArray<OAFavoriteItem *> *)favoritesItems isNewFavorite:(BOOL)isNewFavorite
 {
-    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     if (favoritesItems)
     {
         for (OAFavoriteItem *item in favoritesItems)
@@ -549,14 +540,12 @@ static BOOL _favoritesLoaded = NO;
             }
             if (group.points.count == 0 && (!isNewFavorite || (isNewFavorite && group.name.length > 0)))
             {
-                [appearanceCollection removeFavoriteGroupName:[item getCategory] pointName:nil];
                 [_flatGroups removeObjectForKey:group.name];
                 [_favoriteGroups removeObject:group];
             }
             NSInteger cachedIndexItem = [_cachedFavoritePoints indexOfObject:item];
             if (cachedIndexItem != NSNotFound)
                 [_cachedFavoritePoints removeObjectAtIndex:cachedIndexItem];
-            [appearanceCollection removeFavoriteGroupName:[item getCategory] pointName:[item getName]];
             [OsmAndApp instance].favoritesCollection->removeFavoriteLocation(item.favorite);
         }
     }
@@ -565,7 +554,6 @@ static BOOL _favoritesLoaded = NO;
         QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > toDelete;
         for (OAFavoriteGroup *group in groupsToDelete)
         {
-            [appearanceCollection removeFavoriteGroupName:group.name pointName:nil];
             [_flatGroups removeObjectForKey:group.name];
             [_favoriteGroups removeObject:group];
 
@@ -575,7 +563,6 @@ static BOOL _favoritesLoaded = NO;
                 NSInteger cachedIndexItem = [_cachedFavoritePoints indexOfObject:favoriteItem];
                 if (cachedIndexItem != NSNotFound)
                 {
-                    [appearanceCollection removeFavoriteGroupName:[favoriteItem getCategory] pointName:[favoriteItem getName]];
                     [_cachedFavoritePoints removeObjectAtIndex:cachedIndexItem];
                 }
 
@@ -784,7 +771,7 @@ static BOOL _favoritesLoaded = NO;
 
 - (UIColor *) color
 {
-    return [OAUtilities areColorsEqual:_color color2:UIColor.whiteColor] ? UIColorFromRGB(color_chart_orange) : _color;
+    return [UIColor colorRGB:_color equalToColorRGB:UIColor.whiteColor] ? UIColorFromRGB(color_chart_orange) : _color;
 }
 
 - (BOOL) isPersonal

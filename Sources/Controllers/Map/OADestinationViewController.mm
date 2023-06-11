@@ -580,7 +580,7 @@
         UIColor *c = _colors[i];
         BOOL colorExists = NO;
         for (OADestination *destination in _app.data.destinations)
-            if ([OAUtilities areColorsEqual:destination.color color2:c])
+            if ([UIColor colorRGB:destination.color equalToColorRGB:c])
             {
                 colorExists = YES;
                 break;
@@ -606,7 +606,7 @@
         for (int i = 0; i < _colors.count; i++)
         {
             UIColor *c = _colors[i];
-            if ([OAUtilities areColorsEqual:lastUsedColor color2:c])
+            if ([UIColor colorRGB:lastUsedColor equalToColorRGB:c])
             {
                 int res = i + 1;
                 if (res >= _colors.count)

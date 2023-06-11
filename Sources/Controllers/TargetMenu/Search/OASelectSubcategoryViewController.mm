@@ -8,7 +8,6 @@
 
 #import "OASelectSubcategoryViewController.h"
 #import "Localization.h"
-#import "OAMultiselectableHeaderView.h"
 #import "OAPOICategory.h"
 #import "OAPOIType.h"
 #import "OASimpleTableViewCell.h"
@@ -22,19 +21,7 @@
 #import "OATableViewCustomHeaderView.h"
 #import "OACustomPOIViewController.h"
 
-@interface OASelectSubcategoryViewController () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, OATableViewCellDelegate>
-
-@property (weak, nonatomic) IBOutlet UIView *navBar;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UIButton *applyButton;
-@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
-@property (weak, nonatomic) IBOutlet UIView *bottomView;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeightPrimaryConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeightSecondaryConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *applyButtonHeightPrimaryConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *applyButtonHeightSecondaryConstraint;
+@interface OASelectSubcategoryViewController () <UISearchBarDelegate, OATableViewCellDelegate>
 
 @end
 
@@ -46,23 +33,108 @@
     NSArray<OAPOIType *> *_items;
     NSMutableArray<OAPOIType *> *_selectedItems;
     NSMutableArray<OAPOIType *> *_searchResult;
+    UISearchController *_searchController;
     BOOL _searchMode;
+    BOOL _hasSelection;
 }
+
+#pragma mark - Initialization
 
 - (instancetype)initWithCategory:(OAPOICategory *)category filter:(OAPOIUIFilter *)filter
 {
     self = [super init];
     if (self)
     {
-        _core = [[OAQuickSearchHelper instance] getCore];
         _category = category;
         _filter = filter;
-        [self initData];
     }
     return self;
 }
 
-- (void)initData
+- (void)commonInit
+{
+    _core = [[OAQuickSearchHelper instance] getCore];
+}
+
+- (void)registerNotifications
+{
+    [self addNotification:UIKeyboardWillShowNotification selector:@selector(keyboardWillShow:)];
+    [self addNotification:UIKeyboardWillHideNotification selector:@selector(keyboardWillHide:)];
+}
+
+#pragma mark - UIViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    self.tableView.editing = YES;
+    self.tableView.allowsMultipleSelectionDuringEditing = YES;
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+    [self.tableView beginUpdates];
+    for (NSInteger i = 0; i < _items.count; i++)
+        if ([_selectedItems containsObject:_items[i]])
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+    [self.tableView endUpdates];
+    
+    _searchMode = NO;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    _searchController.searchBar.delegate = self;
+    _searchController.obscuresBackgroundDuringPresentation = NO;
+    self.navigationItem.searchController = _searchController;
+    [self setupSearchControllerWithFilter:NO];
+//    _hasSelection = NO;
+    [self updateBottomButtons];
+}
+
+#pragma mark - Base UI
+
+- (NSString *)getTitle
+{
+    return _category ? _category.nameLocalized : @"";
+}
+
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
+{
+    return EOABaseNavbarColorSchemeOrange;
+}
+
+- (void)setupSearchControllerWithFilter:(BOOL)isFiltered
+{
+    if (isFiltered)
+    {
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.backgroundColor = UIColor.whiteColor;
+        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.grayColor;
+    }
+    else
+    {
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+        _searchController.searchBar.searchTextField.tintColor = UIColor.grayColor;
+    }
+}
+
+- (NSString *)getBottomButtonTitle
+{
+    return OALocalizedString(@"shared_string_apply");
+}
+
+- (EOABaseButtonColorScheme)getBottomButtonColorScheme
+{
+    return _hasSelection ? EOABaseButtonColorSchemePurple : EOABaseButtonColorSchemeInactive;
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     if (_category)
     {
@@ -90,75 +162,167 @@
     }
 }
 
-- (void)viewDidLoad
+- (NSInteger)sectionsCount
 {
-    [super viewDidLoad];
-
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.editing = YES;
-    self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-
-    [self.tableView beginUpdates];
-    for (NSInteger i = 0; i < _items.count; i++)
-        if ([_selectedItems containsObject:_items[i]])
-            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
-    [self.tableView endUpdates];
-
-    _searchMode = NO;
-    self.searchBar.delegate = self;
-
-    [self updateApplyButton:NO];
+    return 1;
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (UIView *)getCustomViewForHeader:(NSInteger)section
 {
-    [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    if (section == 0)
+    {
+        OATableViewCustomHeaderView *customHeader = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+        [customHeader setYOffset:32];
+        customHeader.label.text = [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, (int)_items.count] upperCase];
+        return customHeader;
+    }
+    return nil;
+}
+ 
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    if (section == 0)
+    {
+        return [OATableViewCustomHeaderView getHeight:[[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, (int)_items.count] upperCase] width:self.tableView.bounds.size.width] + 18;
+    }
+    return UITableViewAutomaticDimension;
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+- (NSInteger)rowsCount:(NSInteger)section
 {
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    return _searchMode ? _searchResult.count : _items.count + 1;
 }
 
--(void)applyLocalization
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    [self updateScreenTitle];
-
-    self.applyButton.titleLabel.text = OALocalizedString(@"shared_string_apply");
-    self.searchBar.placeholder = _searchMode ? @"" : OALocalizedString(@"shared_string_search");
-}
-
-- (void)updateScreenTitle
-{
-    if (_searchMode)
-        self.titleLabel.text = OALocalizedString(@"shared_string_search");
-    else if (_category)
-        self.titleLabel.text = _category.nameLocalized;
+    if (indexPath.row == 0 && !_searchMode)
+    {
+        OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            [cell leftEditButtonVisibility:YES];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.delegate = self;
+            cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+            
+            UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
+            conf.contentInsets = NSDirectionalEdgeInsetsMake(0., -6.5, 0., 0.);
+            cell.leftEditButton.configuration = conf;
+            cell.leftEditButton.layer.shadowColor = UIColorFromRGB(color_tint_gray).CGColor;
+            cell.leftEditButton.layer.shadowOffset = CGSizeMake(0., 0.);
+            cell.leftEditButton.layer.shadowOpacity = 1.;
+            cell.leftEditButton.layer.shadowRadius = 1.;
+        }
+        if (cell)
+        {
+            NSUInteger selectedAmount = _selectedItems.count;
+            cell.titleLabel.text = selectedAmount > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all");
+            
+            UIImage *selectionImage = nil;
+            if (selectedAmount > 0)
+                selectionImage = [UIImage imageNamed:selectedAmount < _items.count ? @"ic_system_checkbox_indeterminate" : @"ic_system_checkbox_selected"];
+            else
+                selectionImage = [UIImage imageNamed:@"ic_custom_checkbox_unselected"];
+            [cell.leftEditButton setImage:selectionImage forState:UIControlStateNormal];
+            [cell.leftEditButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.leftEditButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        return cell;
+    }
     else
-        self.titleLabel.text = @"";
+    {
+        OAMenuSimpleCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
+            cell = nib[0];
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 65.0, 0.0, 0.0);
+            cell.tintColor = UIColorFromRGB(color_primary_purple);
+            UIView *bgColorView = [[UIView alloc] init];
+            bgColorView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
+            [cell setSelectedBackgroundView:bgColorView];
+        }
+        if (cell)
+        {
+            OAPOIType *poiType = _searchMode && _searchResult.count > indexPath.row ? _searchResult[indexPath.row] : _items[indexPath.row - 1];
+            BOOL selected = [_selectedItems containsObject:poiType];
+            
+            UIColor *selectedColor = selected ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+            cell.imgView.image = self.delegate ? [self.delegate getPoiIcon:poiType] : [UIImage templateImageNamed:@"ic_custom_search_categories"];
+            cell.imgView.tintColor = selectedColor;
+            if (cell.imgView.image.size.width < cell.imgView.frame.size.width && cell.imgView.image.size.height < cell.imgView.frame.size.height)
+                cell.imgView.contentMode = UIViewContentModeCenter;
+            else
+                cell.imgView.contentMode = UIViewContentModeScaleAspectFit;
+            
+            cell.textView.text = poiType.nameLocalized ? poiType.nameLocalized : @"";
+            cell.descriptionView.hidden = YES;
+            
+            if ([cell needsUpdateConstraints])
+                [cell updateConstraints];
+            return cell;
+        }
+    }
+    return nil;
 }
 
-- (void)updateApplyButton:(BOOL)hasSelection
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
-    self.applyButton.backgroundColor = hasSelection ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_button_gray_background);
-    [self.applyButton setTintColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
-    [self.applyButton setTitleColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
-    [self.applyButton setUserInteractionEnabled:hasSelection];
+    if (!_searchMode && indexPath.row == 0)
+        [self selectDeselectGroup:nil];
+    else
+        [self selectDeselectItem:indexPath];
 }
 
-- (BOOL)willUpdateApplyButton
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (_searchMode || (!_searchMode &&  indexPath.row > 0))
+    {
+        OAPOIType *item = _searchMode && _searchResult.count > indexPath.row ? _searchResult[indexPath.row] : _items[indexPath.row - 1];
+        BOOL selected = [_selectedItems containsObject:item];
+        [cell setSelected:selected animated:NO];
+        if (selected)
+            [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+        else
+            [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (_searchMode || (!_searchMode &&  indexPath.row > 0))
+        [self selectDeselectItem:indexPath];
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return indexPath;
+}
+
+#pragma mark - UITableViewDataSource
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return _searchMode || (!_searchMode && indexPath.row != 0);
+}
+
+#pragma mark - Additions
+
+- (void)hasSelection
 {
     NSSet<NSString *> *acceptedSubtypes = [_filter getAcceptedSubtypes:_category];
     NSArray<OAPOIType *> *types = _category.poiTypes;
     if ((![[self getSelectedKeys] isEqualToSet:acceptedSubtypes] && acceptedSubtypes != [OAPOIBaseType nullSet]) || (acceptedSubtypes == [OAPOIBaseType nullSet] && _selectedItems.count != types.count))
-        return YES;
-    return NO;
+        _hasSelection = YES;
+    else
+        _hasSelection = NO;
 }
 
 - (NSMutableSet<NSString *> *)getSelectedKeys
@@ -167,11 +331,6 @@
     for (OAPOIType *poiType in _selectedItems)
         [selectedKeys addObject:poiType.name];
     return selectedKeys;
-}
-
-- (NSString *)getTitleForSection
-{
-    return [[NSString stringWithFormat:OALocalizedString(@"selected_of"), (int)_selectedItems.count, (int)_items.count] upperCase];
 }
 
 - (void)selectDeselectItem:(NSIndexPath *)indexPath
@@ -188,7 +347,8 @@
         [self.tableView endUpdates];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 
-        [self updateApplyButton:[self willUpdateApplyButton]];
+        [self hasSelection];
+        [self updateBottomButtons];
     }
 }
 
@@ -197,7 +357,18 @@
     [_core updateSettings:[[_core getSearchSettings] resetSearchTypes]];
 }
 
-- (IBAction)onApplyButtonClicked:(id)sender
+#pragma mark - Selectors
+
+- (void)onLeftNavbarButtonPressed
+{
+    if (self.delegate)
+        [self.delegate selectSubcategoryCancel];
+    
+    [self resetSearchTypes];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)onBottomButtonPressed
 {
     if (self.delegate)
         [self.delegate selectSubcategoryDone:_category keys:[self getSelectedKeys] allSelected:_selectedItems.count == _items.count];
@@ -206,17 +377,18 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)selectDeselectGroup:(UIButton *)sender
+{
+    [self onLeftEditButtonPressed:sender.tag];
+}
+
 #pragma mark - UISearchBarDelegate
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
-    searchBar.text = @"";
     _searchMode = NO;
+    [self setupSearchControllerWithFilter:NO];
     _searchResult = [NSMutableArray new];
-    self.searchBar.placeholder = OALocalizedString(@"shared_string_search");
-    [self updateScreenTitle];
-    [self.tableView setEditing:NO];
-    self.tableView.allowsMultipleSelectionDuringEditing = NO;
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 }
 
@@ -225,12 +397,14 @@
     if (searchBar.text.length == 0)
     {
         _searchMode = NO;
+        [self setupSearchControllerWithFilter:NO];
         [_core updateSettings:_core.getSearchSettings.resetSearchTypes];
         [self resetSearchTypes];
     }
     else
     {
         _searchMode = YES;
+        [self setupSearchControllerWithFilter:YES];
         _searchResult = [NSMutableArray new];
         OASearchSettings *searchSettings = [[_core getSearchSettings] setSearchTypes:@[[OAObjectType withType:POI_TYPE]]];
         [_core updateSettings:searchSettings];
@@ -266,7 +440,8 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     _searchResult = [NSMutableArray arrayWithArray:results];
                     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
-                    [self updateApplyButton:[self willUpdateApplyButton]];
+                    [self hasSelection];
+                    [self updateBottomButtons];
                 });
             }
             return YES;
@@ -274,213 +449,40 @@
             return !_searchMode;
         }]];
     }
-    self.searchBar.placeholder = _searchMode ? @"" : OALocalizedString(@"shared_string_search");
-    [self updateScreenTitle];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
-    [self updateApplyButton:[self willUpdateApplyButton]];
-}
-
-#pragma mark - UITableViewDataSource
-
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.row == 0 && !_searchMode)
-    {
-        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = nib[0];
-            [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
-            [cell leftEditButtonVisibility:YES];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.delegate = self;
-            cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
-            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-
-            UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
-            conf.contentInsets = NSDirectionalEdgeInsetsMake(0., -6.5, 0., 0.);
-            cell.leftEditButton.configuration = conf;
-            cell.leftEditButton.layer.shadowColor = UIColorFromRGB(color_tint_gray).CGColor;
-            cell.leftEditButton.layer.shadowOffset = CGSizeMake(0., 0.);
-            cell.leftEditButton.layer.shadowOpacity = 1.;
-            cell.leftEditButton.layer.shadowRadius = 1.;
-        }
-        if (cell)
-        {
-            NSUInteger selectedAmount = _selectedItems.count;
-            cell.titleLabel.text = selectedAmount > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all");
-
-            UIImage *selectionImage = nil;
-            if (selectedAmount > 0)
-                selectionImage = [UIImage imageNamed:selectedAmount < _items.count ? @"ic_system_checkbox_indeterminate" : @"ic_system_checkbox_selected"];
-            else
-                selectionImage = [UIImage imageNamed:@"ic_custom_checkbox_unselected"];
-            [cell.leftEditButton setImage:selectionImage forState:UIControlStateNormal];
-            [cell.leftEditButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.leftEditButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
-        }
-        return cell;
-    }
-    else
-    {
-        OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
-            cell = nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 65.0, 0.0, 0.0);
-            cell.tintColor = UIColorFromRGB(color_primary_purple);
-            UIView *bgColorView = [[UIView alloc] init];
-            bgColorView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
-            [cell setSelectedBackgroundView:bgColorView];
-        }
-        if (cell)
-        {
-            OAPOIType *poiType = _searchMode && _searchResult.count > indexPath.row ? _searchResult[indexPath.row] : _items[indexPath.row - 1];
-            BOOL selected = [_selectedItems containsObject:poiType];
-
-            UIColor *selectedColor = selected ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
-            cell.imgView.image = self.delegate ? [self.delegate getPoiIcon:poiType] : [UIImage templateImageNamed:@"ic_custom_search_categories"];
-            cell.imgView.tintColor = selectedColor;
-            if (cell.imgView.image.size.width < cell.imgView.frame.size.width && cell.imgView.image.size.height < cell.imgView.frame.size.height)
-                cell.imgView.contentMode = UIViewContentModeCenter;
-            else
-                cell.imgView.contentMode = UIViewContentModeScaleAspectFit;
-
-            cell.textView.text = poiType.nameLocalized ? poiType.nameLocalized : @"";
-            cell.descriptionView.hidden = YES;
-
-            if ([cell needsUpdateConstraints])
-                [cell updateConstraints];
-            return cell;
-        }
-    }
-    return nil;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (_searchMode || (!_searchMode &&  indexPath.row > 0))
-    {
-        OAPOIType *item = _searchMode && _searchResult.count > indexPath.row ? _searchResult[indexPath.row] : _items[indexPath.row - 1];
-        BOOL selected = [_selectedItems containsObject:item];
-        [cell setSelected:selected animated:NO];
-        if (selected)
-            [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-        else
-            [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    }
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (!_searchMode && indexPath.row == 0)
-        [self selectDeselectGroup:nil];
-    else
-        [self selectDeselectItem:indexPath];
-}
-
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (_searchMode || (!_searchMode &&  indexPath.row > 0))
-        [self selectDeselectItem:indexPath];
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    if (section == 0) {
-        OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-        [customHeader setYOffset:32];
-        customHeader.label.text = [self getTitleForSection];
-        return customHeader;
-    }
-    return nil;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
-        return [OATableViewCustomHeaderView getHeight:[self getTitleForSection] width:tableView.bounds.size.width] + 18;
-    }
-    return UITableViewAutomaticDimension;
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _searchMode ? _searchResult.count : _items.count + 1;
-}
-
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return _searchMode || (!_searchMode && indexPath.row != 0);
+    [self hasSelection];
+    [self updateBottomButtons];
 }
 
 #pragma mark - Keyboard Notifications
 
 - (void)keyboardWillShow:(NSNotification *)notification;
 {
-    NSDictionary* userInfo = [notification userInfo];
-    CGRect keyboardRect = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
-    CGFloat keyboardHeight = keyboardRect.size.height;
+    NSDictionary *userInfo = [notification userInfo];
+    NSValue *keyboardBoundsValue = userInfo[UIKeyboardFrameEndUserInfoKey];
+    CGFloat keyboardHeight = [keyboardBoundsValue CGRectValue].size.height;
+    
     CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
-
-    CGRect viewFrame = self.view.frame;
-    viewFrame.size.height = DeviceScreenHeight - keyboardHeight;
-
+    UIEdgeInsets insets = [[self tableView] contentInset];
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-        self.view.frame = viewFrame;
-        self.bottomViewHeightPrimaryConstraint.active = NO;
-        self.bottomViewHeightSecondaryConstraint.active = YES;
-        self.applyButtonHeightPrimaryConstraint.active = NO;
-        self.applyButtonHeightSecondaryConstraint.active = YES;
+        self.buttonsBottomOffsetConstraint.constant = keyboardHeight - [OAUtilities getBottomMargin];
+        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardHeight, insets.right)];
+        [[self view] layoutIfNeeded];
     } completion:nil];
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification;
 {
-    NSDictionary* userInfo = [notification userInfo];
-    CGRect keyboardRect = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
-    CGFloat keyboardHeight = keyboardRect.size.height;
+    NSDictionary *userInfo = [notification userInfo];
     CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
-
-    CGRect viewFrame = self.view.frame;
-    viewFrame.size.height = DeviceScreenHeight;
-
+    UIEdgeInsets insets = [[self tableView] contentInset];
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-        self.view.frame = viewFrame;
-
-        self.bottomViewHeightPrimaryConstraint.active = YES;
-        self.bottomViewHeightSecondaryConstraint.active = NO;
-
-        self.applyButtonHeightPrimaryConstraint.active = YES;
-        self.applyButtonHeightSecondaryConstraint.active = NO;
+        self.buttonsBottomOffsetConstraint.constant = 0;
+        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0., insets.right)];
+        [[self view] layoutIfNeeded];
     } completion:nil];
-}
-
-#pragma mark - Selectors
-
-- (void)onLeftNavbarButtonPressed
-{
-    if (self.delegate)
-        [self.delegate selectSubcategoryCancel];
-
-    [self resetSearchTypes];
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)selectDeselectGroup:(UIButton *)sender
-{
-    [self onLeftEditButtonPressed:sender.tag];
 }
 
 #pragma mark - OATableViewCellDelegate
@@ -505,14 +507,15 @@
     [self.tableView endUpdates];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 
-    [self updateApplyButton:[self willUpdateApplyButton]];
+    [self hasSelection];
+    [self updateBottomButtons];
 }
 
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    [self.searchBar resignFirstResponder];
+    [_searchController.searchBar resignFirstResponder];
 }
 
 @end

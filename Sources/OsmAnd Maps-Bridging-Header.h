@@ -7,6 +7,8 @@
 #import "OARouteStatistics.h"
 #import "OAUtilities.h"
 #import "Localization.h"
+#import "OAOsmAccountSettingsViewController.h"
+#import "OAOsmLoginMainViewController.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
 #import "OARouteCalculationParams.h"

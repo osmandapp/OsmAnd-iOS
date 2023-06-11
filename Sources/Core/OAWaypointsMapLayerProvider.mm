@@ -95,7 +95,7 @@ sk_sp<SkImage> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const OsmAnd::Re
     if (!iconName)
         iconName = @"mm_special_star";
     
-    QString iconId = QString([[NSString stringWithFormat:@"%@_%@_%@_%@", [OAUtilities colorToString:color], iconName, shapeName, size]UTF8String]);
+    QString iconId = QString([NSString stringWithFormat:@"%@_%@_%@_%@", [color toHexString], iconName, shapeName, size].UTF8String);
 
     const auto bitmapIt = _iconsCache.find(iconId);
     sk_sp<SkImage> bitmap;

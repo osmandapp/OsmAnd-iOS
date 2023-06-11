@@ -6,7 +6,7 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseNavbarViewController.h"
 
 @class OAQuickSearchListItem;
 
@@ -18,7 +18,7 @@
 
 @end
 
-@interface OAActionAddCategoryViewController : OACompoundViewController
+@interface OAActionAddCategoryViewController : OABaseNavbarViewController
 
 -(instancetype)initWithNames:(NSMutableArray<NSString *> *)names;
 

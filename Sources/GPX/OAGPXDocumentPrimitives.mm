@@ -268,7 +268,7 @@
     {
         if ([colorString hasPrefix:@"#"])
         {
-            return [OAUtilities colorToNumberFromString:colorString];
+            return [UIColor toNumberFromString:colorString];
         }
         else
         {

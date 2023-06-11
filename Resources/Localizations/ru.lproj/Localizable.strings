@@ -1891,7 +1891,7 @@
 "profile_type_osmand_string" = "Профиль OsmAnd";
 "quick_action_remove_next_destination_descr" = "Следующая точка маршрута будет удалена. Если это конечный пункт, навигация завершится.";
 "gpx_export_failed" = "Не удалось сохранить созданный маршрут";
-"shared_string_visible" = "Видимые";
+"shared_string_visible" = "Виден";
 "hide_compass_ruler" = "Скрыть компас-линейку";
 "show_compass_ruler" = "Показать компас-линейку";
 "address_search_desc" = "Поиск по адресу";

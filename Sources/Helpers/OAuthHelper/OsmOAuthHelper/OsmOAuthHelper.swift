@@ -9,8 +9,11 @@
 // From documentation:
 // "The access tokens currently do not expire automatically."
 
+// Waiting for GitHub Actions XCode and macOS version updating
+/*
 import SwiftUI
 import AuthenticationServices
+ */
 
 @objc(OAOsmOAuthHelper)
 @objcMembers
@@ -32,6 +35,8 @@ class OsmOAuthHelper : BaseOAuthHelper {
     
     static let notificationKey = "OsmOAuthTokenKey"
     
+    // Waiting for GitHub Actions XCode and macOS version updating
+    /*
     override class func parseTokenJSON(data: Data) -> (ParsedTokenResponce) {
         do {
             let parsedJSON = try JSONDecoder().decode(OsmAccessTokenModel.self, from: data)
@@ -62,6 +67,7 @@ class OsmOAuthHelper : BaseOAuthHelper {
             print("fetchUserData() Error: \(error)")
         }
     }
+     */
     
     static func getAutorizationHeader() -> String? {
         if (isOAuthAuthorised()) {
@@ -110,17 +116,18 @@ class OsmOAuthHelper : BaseOAuthHelper {
         NotificationCenter.default.post(name: Notification.Name(notificationKey), object: nil)
     }
     
-    
     static func showAuthIntroScreen(hostVC: UIViewController) {
-        if #available(iOS 16.4, *) {
-            hostVC.present(OsmOAuthSwiftUIViewWrapper.get(), animated: true)
-        } else {
+        // Waiting for GitHub Actions XCode and macOS version updating
+        
+        //if #available(iOS 16.4, *) {
+        //    hostVC.present(OsmOAuthSwiftUIViewWrapper.get(), animated: true)
+        //} else {
             let targetVC = OAOsmLoginMainViewController()
             if let delegateHostVC = hostVC as? OAAccountSettingDelegate {
                 targetVC.delegate = delegateHostVC
             }
             hostVC.present(targetVC, animated: true)
-        }
+        //}
     }
     
 }

@@ -2914,3 +2914,5 @@
 "disable_vertex_hillshade_3d" = "Eckpunkt-Schummerung in 3D deaktivieren";
 "test_heightmap" = "Test-Höhenkarte";
 "generate_slope_from_3d_maps" = "Erzeugen von Hangrasterkarten aus 3D-Karten";
+"perform_oauth_authorization" = "Anmeldung über OAuth";
+"user_name" = "Benutzername";

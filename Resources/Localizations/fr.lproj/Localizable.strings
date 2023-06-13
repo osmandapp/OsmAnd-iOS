@@ -2899,3 +2899,5 @@
 "disable_vertex_hillshade_3d" = "Désactiver l'ombrage des sommets en 3D";
 "generate_slope_from_3d_maps" = "Générer des cartes matricielles des pentes à partir de cartes 3D";
 "generate_hillshade_from_3d_maps" = "Générer des cartes matricielles d'ombrages du relief à partir de cartes 3D";
+"user_name" = "Nom d'utilisateur";
+"perform_oauth_authorization" = "Connectez-vous avec OAuth";

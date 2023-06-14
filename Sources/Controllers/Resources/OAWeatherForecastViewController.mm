@@ -23,18 +23,7 @@
 
 @interface OAWeatherForecastViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, OATableViewCellDelegate, OAWeatherCacheSettingsDelegate, OAWeatherForecastDetails>
 
-@property (weak, nonatomic) IBOutlet UIView *navigationBarView;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UIButton *editButton;
-@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleWithSearchConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleNoSearchConstraint;
-
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *tableViewWithSearchConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *tableViewNoSearchConstraint;
 
 @end
 
@@ -57,6 +46,12 @@
     NSObject *_searchDataLock;
     NSArray<OAWorldRegion *> *_searchResults;
     NSString *_searchText;
+    
+    UIBarButtonItem *_cancelButton;
+    UIBarButtonItem *_editButton;
+    UIBarButtonItem *_applyButton;
+    UISearchController *_searchController;
+    
 
     OAAutoObserverProxy *_weatherSizeCalculatedObserver;
     OAAutoObserverProxy *_weatherForecastDownloadingObserver;
@@ -108,6 +103,8 @@
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    
+    self.navigationItem.title = OALocalizedString(@"weather_offline_forecast");
 
     NSPredicate *onlyWeatherPredicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary<NSString *, id> *bindings) {
         return [OAWeatherHelper shouldHaveWeatherForecast:evaluatedObject];
@@ -116,13 +113,41 @@
         [[_app.worldRegion.flattenedSubregions filteredArrayUsingPredicate:onlyWeatherPredicate] sortedArrayUsingComparator:_regionsComparator]];
 
     [self setupView];
-    self.searchBar.delegate = self;
-    [self updateSearchBarVisible];
-
-    self.editButton.hidden = [_weatherHelper getTempForecastsWithDownloadStates:@[@(EOAWeatherForecastDownloadStateInProgress), @(EOAWeatherForecastDownloadStateFinished)]].count == 0;
+    
+    _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    _searchController.searchBar.delegate = self;
+    _searchController.obscuresBackgroundDuringPresentation = NO;
+    _searchController.hidesNavigationBarDuringPresentation = NO;
+    [self setupSearchControllerWithFilter:NO];
 
     _progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:_progressHUD];
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.shadowColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.whiteColor
+    };
+    self.navigationController.navigationBar.standardAppearance = appearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.tintColor = UIColor.whiteColor;
+    self.navigationController.navigationBar.prefersLargeTitles = NO;
+    
+    _cancelButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_cancel") style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
+    _editButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_edit") style:UIBarButtonItemStylePlain target:self action:@selector(onEditButtonClicked:)];
+    _applyButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_apply") style:UIBarButtonItemStylePlain target:self action:@selector(onEditButtonClicked:)];
+    
+    if ([_weatherHelper getTempForecastsWithDownloadStates:@[@(EOAWeatherForecastDownloadStateInProgress), @(EOAWeatherForecastDownloadStateFinished)]].count != 0)
+        [self.navigationController.navigationBar.topItem setRightBarButtonItem:_editButton animated:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -162,13 +187,6 @@
         [_weatherForecastDownloadingObserver detach];
         _weatherForecastDownloadingObserver = nil;
     }
-}
-
-- (void)applyLocalization
-{
-    [self.editButton setTitle:OALocalizedString(@"shared_string_edit") forState:UIControlStateNormal];
-    self.titleLabel.text = OALocalizedString(@"weather_offline_forecast");
-    self.searchBar.placeholder = OALocalizedString(@"shared_string_search");
 }
 
 - (void)setupView
@@ -571,6 +589,7 @@
                                                                              [_regionsWithOfflineMaps removeAllObjects];
                                                                              [_regionsOtherCountries sortUsingComparator:_regionsComparator];
                                                                              } completionBlock:onComplete];
+                                                                          [self setNeedsStatusBarAppearanceUpdate];
                                                                      }
             ];
 
@@ -591,34 +610,35 @@
     });
 }
 
-- (void)updateSearchBarVisible
+- (void)setupSearchControllerWithFilter:(BOOL)isFiltered
 {
-    self.searchBar.text = @"";
-    if (_editMode)
+    if (isFiltered)
     {
-        self.searchBar.hidden = NO;
-
-        self.titleWithSearchConstraint.active = YES;
-        self.titleNoSearchConstraint.active = NO;
-
-        self.tableViewWithSearchConstraint.active = YES;
-        self.tableViewNoSearchConstraint.active = NO;
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.backgroundColor = UIColor.whiteColor;
+        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.grayColor;
     }
     else
     {
-        self.searchBar.hidden = YES;
-
-        self.titleWithSearchConstraint.active = NO;
-        self.titleNoSearchConstraint.active = YES;
-
-        self.tableViewWithSearchConstraint.active = NO;
-        self.tableViewNoSearchConstraint.active = YES;
-
-        [self.searchBar resignFirstResponder];
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+        _searchController.searchBar.searchTextField.tintColor = UIColor.grayColor;
     }
+}
 
-    [self.view setNeedsUpdateConstraints];
-    [self.view updateConstraintsIfNeeded];
+- (void)updateSearchBarVisible
+{
+    if (_editMode)
+    {
+        self.navigationItem.searchController = _searchController;
+    }
+    else
+    {
+        [self setupSearchControllerWithFilter:NO];
+        _searchController.active = NO;
+        self.navigationItem.searchController = nil;
+    }
 }
 
 - (NSMutableDictionary *)getItem:(NSIndexPath *)indexPath
@@ -645,64 +665,54 @@
 
 - (void)onLeftNavbarButtonPressed
 {
-    if (_editMode)
-    {
-        dispatch_block_t executingBlock = ^{
-            _editMode = NO;
-            _searchResults = @[];
-            _searchText = @"";
-
-            [self cancelChangesInEditMode];
-        };
-
-        MBProgressHUDCompletionBlock completionBlock = ^{
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [UIView transitionWithView:self.tableView
-                                  duration:0.35f
-                                   options:UIViewAnimationOptionTransitionCrossDissolve
-                                animations:^(void)
-                                {
-                                    self.titleLabel.text = OALocalizedString(@"weather_offline_forecast");
-                                    [_backButton setTitle:nil forState:UIControlStateNormal];
-                                    [_backButton setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
-
-                                    [self updateSearchBarVisible];
-
-                                    [self setupView];
-                                    [self.tableView setContentOffset:CGPointZero animated:NO];
-                                    [self.tableView reloadData];
-
-                                    NSArray<NSString *> *regionIds = [_weatherHelper getTempForecastsWithDownloadStates:@[
-                                            @(EOAWeatherForecastDownloadStateInProgress),
-                                            @(EOAWeatherForecastDownloadStateFinished)
-                                    ]];
-                                    if (regionIds.count == 0)
-                                    {
-                                        _editButton.hidden = YES;
-                                        _sizeIndexPath = nil;
-                                    }
-                                    else
-                                    {
-                                        [_editButton setTitle:OALocalizedString(@"shared_string_edit") forState:UIControlStateNormal];
-                                        _editButton.hidden = NO;
-                                    }
-                                }
-                                completion:^(BOOL finished)
-                                {
-                                    [self updateCacheSize];
-                                }
-                ];
-            });
-        };
-        [self showProgressView:@""
-                  countOfItems:0
-                   onExecuting:executingBlock
-                    onComplete:completionBlock];
-    }
-    else
-    {
-        [self dismissViewController];
-    }
+    dispatch_block_t executingBlock = ^{
+        _editMode = NO;
+        _searchResults = @[];
+        _searchText = @"";
+        
+        [self cancelChangesInEditMode];
+    };
+    
+    MBProgressHUDCompletionBlock completionBlock = ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [UIView transitionWithView:self.tableView
+                              duration:0.35f
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^(void)
+             {
+                self.navigationItem.title = OALocalizedString(@"weather_offline_forecast");
+                [self.navigationController.navigationBar.topItem setLeftBarButtonItem:nil animated:YES];
+                
+                [self updateSearchBarVisible];
+                [self setupView];
+                [self.tableView setContentOffset:CGPointZero animated:NO];
+                [self.tableView reloadData];
+                
+                NSArray<NSString *> *regionIds = [_weatherHelper getTempForecastsWithDownloadStates:@[
+                    @(EOAWeatherForecastDownloadStateInProgress),
+                    @(EOAWeatherForecastDownloadStateFinished)
+                ]];
+                if (regionIds.count == 0)
+                {
+                    [self.navigationController.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
+                    _sizeIndexPath = nil;
+                }
+                else
+                {
+                    [self.navigationController.navigationBar.topItem setRightBarButtonItem:_editButton animated:YES];
+                }
+            }
+                            completion:^(BOOL finished)
+             {
+                [self updateCacheSize];
+            }
+            ];
+        });
+    };
+    [self showProgressView:@""
+              countOfItems:0
+               onExecuting:executingBlock
+                onComplete:completionBlock];
 }
 
 - (IBAction)onEditButtonClicked:(id)sender
@@ -814,20 +824,15 @@
                             {
                                 [self updateSearchBarVisible];
 
-                                self.titleLabel.text = OALocalizedString(_editMode ? @"shared_string_edit" : @"weather_offline_forecast");
-                                [_backButton setTitle:_editMode ? OALocalizedString(@"shared_string_cancel") : nil
-                                             forState:UIControlStateNormal];
-                                [_backButton setImage:_editMode ? nil : [UIImage templateImageNamed:@"ic_navbar_chevron"]
-                                             forState:UIControlStateNormal];
-
+                                self.navigationItem.title = OALocalizedString(_editMode ? @"shared_string_edit" : @"weather_offline_forecast");
+                                [self.navigationController.navigationBar.topItem setLeftBarButtonItem: _editMode ? _cancelButton : nil animated:YES];
                                 [self setupView];
                                 [self.tableView setContentOffset:CGPointZero animated:NO];
                                 [self.tableView reloadData];
 
                                 if (_editMode)
                                 {
-                                    [_editButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
-                                    _editButton.hidden = NO;
+                                    [self.navigationController.navigationBar.topItem setRightBarButtonItem:_applyButton animated:YES];
                                     _sizeIndexPath = nil;
                                 }
                                 else
@@ -838,14 +843,16 @@
                                     ]];
                                     if (forecastsWithDownloadStates.count > 0)
                                     {
-                                        [_editButton setTitle:OALocalizedString(_editMode ? @"shared_string_apply" : @"shared_string_edit")
-                                                     forState:UIControlStateNormal];
+                                        [self.navigationController.navigationBar.topItem setRightBarButtonItem: _editMode ? _applyButton : _editButton animated:YES];
                                     }
                                     else
                                     {
                                         _sizeIndexPath = nil;
                                     }
-                                    _editButton.hidden = forecastsWithDownloadStates.count == 0;
+                                    if (forecastsWithDownloadStates.count != 0)
+                                        [self.navigationController.navigationBar.topItem setRightBarButtonItem:_editButton animated:YES];
+                                    else
+                                        [self.navigationController.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
                                 }
                             }
                             completion: ^(BOOL finished)
@@ -867,6 +874,7 @@
     {
         if (searchString == nil || [searchString length] == 0 || [[searchString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] length] == 0)
         {
+            [self setupSearchControllerWithFilter:NO];
             _searchResults = @[];
             [self setupView];
             [self.tableView reloadData];
@@ -893,6 +901,7 @@
         }
 
         _searchResults = [[startsWithResult arrayByAddingObjectsFromArray:onlyContainsResult] sortedArrayUsingComparator:_regionsComparator];
+        [self setupSearchControllerWithFilter:YES];
         [self setupView];
         [self.tableView reloadData];
     }
@@ -904,6 +913,12 @@
 {
     _searchText = searchText;
     [self performSearchForSearchString:searchText];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    _searchText = @"";
+    [self performSearchForSearchString:_searchText];
 }
 
 #pragma mark - UITableViewDataSource
@@ -1134,7 +1149,7 @@
                                                             }
                                                             else
                                                             {
-                                                                _editButton.hidden = YES;
+                                                                [self.navigationController.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
                                                                 _sizeIndexPath = nil;
                                                                 [self setupView];
                                                                 [self.tableView reloadData];
@@ -1173,7 +1188,7 @@
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    [self.searchBar resignFirstResponder];
+    [_searchController resignFirstResponder];
 }
 
 #pragma mark - OAWeatherCacheSettingsDelegate
@@ -1214,7 +1229,7 @@
             }
             else
             {
-                _editButton.hidden = YES;
+                [self.navigationController.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
                 _sizeIndexPath = nil;
                 [self setupView];
                 [self.tableView reloadData];

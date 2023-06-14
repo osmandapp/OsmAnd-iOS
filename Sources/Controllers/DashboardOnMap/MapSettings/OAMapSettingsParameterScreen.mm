@@ -93,6 +93,7 @@
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
+        [cell.iconView setHidden:YES];
     }
     
     if (cell)

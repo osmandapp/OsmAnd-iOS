@@ -647,7 +647,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
     BOOL found = NO;
     for (OARowInfo *row in rows)
     {
-        if ([newRow.text isEqualToString:row.text])
+        if ([row isEqual:newRow])
         {
             found = YES;
             break;

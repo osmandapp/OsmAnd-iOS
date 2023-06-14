@@ -644,16 +644,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
 
 - (void) addRowIfNotExsists:(OARowInfo *)newRow toDestinationRows:(NSMutableArray<OARowInfo *> *)rows
 {
-    BOOL found = NO;
-    for (OARowInfo *row in rows)
-    {
-        if ([row isEqual:newRow])
-        {
-            found = YES;
-            break;
-        }
-    }
-    if (!found)
+    if (![rows containsObject:newRow])
         [rows addObject:newRow];
 }
 

@@ -3191,6 +3191,9 @@
 		DA68B3FB233B826200F5ACCC /* ic_custom_alert@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA68B3F7233B826100F5ACCC /* ic_custom_alert@3x.png */; };
 		DA68B404233B826E00F5ACCC /* ic_custom_add@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA68B400233B826D00F5ACCC /* ic_custom_add@3x.png */; };
 		DA68B406233B826E00F5ACCC /* ic_custom_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA68B401233B826E00F5ACCC /* ic_custom_add@2x.png */; };
+		DA69ED5C2A385B1B001022C7 /* WidgetPanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA69ED5A2A385B1B001022C7 /* WidgetPanelViewController.swift */; };
+		DA69ED5D2A385B1B001022C7 /* OAWidgetPanelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA69ED5B2A385B1B001022C7 /* OAWidgetPanelViewController.xib */; };
+		DA69ED5F2A385DA6001022C7 /* WidgetPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA69ED5E2A385DA6001022C7 /* WidgetPageViewController.swift */; };
 		DA6B074224ED65200062AA98 /* ic_custom_reverse_direction@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6B073F24ED651F0062AA98 /* ic_custom_reverse_direction@3x.png */; };
 		DA6B074424ED65200062AA98 /* ic_custom_reverse_direction@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6B074024ED651F0062AA98 /* ic_custom_reverse_direction@2x.png */; };
 		DA6BF94424DBF21B00F7DC7B /* ic_custom_remove_outlined@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6BF93824DBF21600F7DC7B /* ic_custom_remove_outlined@3x.png */; };
@@ -7868,6 +7871,9 @@
 		DA68B3F7233B826100F5ACCC /* ic_custom_alert@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_alert@3x.png"; path = "Resources/Icons/ic_custom_alert@3x.png"; sourceTree = "<group>"; };
 		DA68B400233B826D00F5ACCC /* ic_custom_add@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_add@3x.png"; path = "Resources/Icons/ic_custom_add@3x.png"; sourceTree = "<group>"; };
 		DA68B401233B826E00F5ACCC /* ic_custom_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_add@2x.png"; path = "Resources/Icons/ic_custom_add@2x.png"; sourceTree = "<group>"; };
+		DA69ED5A2A385B1B001022C7 /* WidgetPanelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetPanelViewController.swift; sourceTree = "<group>"; };
+		DA69ED5B2A385B1B001022C7 /* OAWidgetPanelViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAWidgetPanelViewController.xib; sourceTree = "<group>"; };
+		DA69ED5E2A385DA6001022C7 /* WidgetPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetPageViewController.swift; sourceTree = "<group>"; };
 		DA6B073F24ED651F0062AA98 /* ic_custom_reverse_direction@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_reverse_direction@3x.png"; path = "Resources/Icons/ic_custom_reverse_direction@3x.png"; sourceTree = "<group>"; };
 		DA6B074024ED651F0062AA98 /* ic_custom_reverse_direction@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_reverse_direction@2x.png"; path = "Resources/Icons/ic_custom_reverse_direction@2x.png"; sourceTree = "<group>"; };
 		DA6BF93824DBF21600F7DC7B /* ic_custom_remove_outlined@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_remove_outlined@3x.png"; path = "Resources/Icons/ic_custom_remove_outlined@3x.png"; sourceTree = "<group>"; };
@@ -13424,6 +13430,9 @@
 				DA842ECC2A0B998E0030866E /* WidgetInfoCreator.swift */,
 				DA2F790B2A273D39002B9B83 /* WidgetsInitializer.swift */,
 				DA45B2412A30B6BF0055055A /* MapillaryWidget.swift */,
+				DA69ED5A2A385B1B001022C7 /* WidgetPanelViewController.swift */,
+				DA69ED5B2A385B1B001022C7 /* OAWidgetPanelViewController.xib */,
+				DA69ED5E2A385DA6001022C7 /* WidgetPageViewController.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -16823,6 +16832,7 @@
 				323BD90F2628850400D255ED /* ic_bg_point_octagon_center@3x.png in Resources */,
 				DA22DC5025C05F130070FFCA /* ic_custom_split_before@3x.png in Resources */,
 				DA1340DA243DC5A80039D214 /* map_action_motorcycle_dark@3x.png in Resources */,
+				DA69ED5D2A385B1B001022C7 /* OAWidgetPanelViewController.xib in Resources */,
 				78D57B8B238D2FFD0068CF48 /* ic_custom_hillshade@2x.png in Resources */,
 				15CD7E9F25B1C19900BCB36A /* ic_small_distance@2x.png in Resources */,
 				DA54AA8724EFEFBE001E6560 /* ic_custom_elevation@2x.png in Resources */,
@@ -17714,6 +17724,7 @@
 				DA5A81F126C563A700F274C7 /* OAProfileIconColor.m in Sources */,
 				DA5A83F026C563A800F274C7 /* OAQuickSearchTableController.mm in Sources */,
 				DA5A819E26C563A700F274C7 /* NSData+CRC32.m in Sources */,
+				DA69ED5C2A385B1B001022C7 /* WidgetPanelViewController.swift in Sources */,
 				DA5A816526C563A700F274C7 /* OAApplicationMode.m in Sources */,
 				DA5A834326C563A800F274C7 /* OAImageTextViewCell.m in Sources */,
 				DA5A84AA26C563A900F274C7 /* OASaveTrackBottomSheetViewController.mm in Sources */,
@@ -17803,6 +17814,7 @@
 				DA5A844F26C563A900F274C7 /* OAUnderlayMapLayer.mm in Sources */,
 				DA45B2402A2F47200055055A /* Extensions.swift in Sources */,
 				46C49509291E57DA005A9D70 /* OANauticalDepthParametersViewController.m in Sources */,
+				DA69ED5F2A385DA6001022C7 /* WidgetPageViewController.swift in Sources */,
 				DA5A83CF26C563A800F274C7 /* OATransportStopViewController.mm in Sources */,
 				DA5A839026C563A800F274C7 /* OAOsmAndLiveSelectionViewController.mm in Sources */,
 				DA5A83C626C563A800F274C7 /* OAActionConfigurationViewController.mm in Sources */,

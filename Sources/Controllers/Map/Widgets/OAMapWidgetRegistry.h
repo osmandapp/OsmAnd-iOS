@@ -22,12 +22,12 @@
 #define kWidgetVisibilityChangedMotification @"onWidgetVisibilityChanged"
 #define kWidgetsCleared @"onWidgetsCleared"
 
-@class OAApplicationMode, OATextInfoWidget, OAMapWidgetRegInfo, OAWidgetState, OAMapWidgetInfo, OAWidgetsPanel, OAWidgetType;
+@class OAApplicationMode, OATextInfoWidget, OAMapWidgetRegInfo, OAWidgetState, OAMapWidgetInfo, OAWidgetsPanel, OAWidgetType, OAWidgetPanelViewController;
 
 @interface OAMapWidgetRegistry : NSObject
 
 - (void) populateStackControl:(UIView *)stack mode:(OAApplicationMode *)mode left:(BOOL)left expanded:(BOOL)expanded;
-- (void) populateStackControl:(UIView *)stack mode:(OAApplicationMode *)mode widgetPanel:(OAWidgetsPanel *)widgetPanel;
+- (void) populateStackControl:(OAWidgetPanelViewController *)stack mode:(OAApplicationMode *)mode widgetPanel:(OAWidgetsPanel *)widgetPanel;
 - (BOOL) hasCollapsibles:(OAApplicationMode *)mode;
 
 - (void) updateInfo:(OAApplicationMode *)mode expanded:(BOOL)expanded;

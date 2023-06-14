@@ -73,6 +73,9 @@
     UIView __weak *_widgetsView;
     UIView __weak *_leftWidgetsView;
     UIView __weak *_rightWidgetsView;
+    
+    OAWidgetPanelViewController *_leftPanelController;
+    OAWidgetPanelViewController *_rightPanelController;
 
     OAMapWidgetRegistry *_mapWidgetRegistry;
     BOOL _expanded;
@@ -110,8 +113,17 @@
 
         _mapHudViewController = mapHudViewController;
         _widgetsView = mapHudViewController.widgetsView;
-        _leftWidgetsView = mapHudViewController.leftWidgetsView;
-        _rightWidgetsView = mapHudViewController.rightWidgetsView;
+        _leftPanelController = [[OAWidgetPanelViewController alloc] init];
+        _rightPanelController = [[OAWidgetPanelViewController alloc] init];
+        
+        [mapHudViewController addChildViewController:_leftPanelController];
+        [mapHudViewController addChildViewController:_rightPanelController];
+        [_widgetsView addSubview:_leftPanelController.view];
+        [_widgetsView addSubview:_rightPanelController.view];
+        [_leftPanelController didMoveToParentViewController:mapHudViewController];
+        [_rightPanelController didMoveToParentViewController:mapHudViewController];
+//        _leftWidgetsView = mapHudViewController.leftWidgetsView;
+//        _rightWidgetsView = mapHudViewController.rightWidgetsView;
 
         _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
         _expanded = NO;
@@ -136,10 +148,10 @@
                                                      withHandler:@selector(onMapSourceUpdated)
                                                       andObserve:[OARootViewController instance].mapPanel.mapViewController.mapSourceUpdatedObservable];
         
-        if (_rightWidgetsView.superview && [_rightWidgetsView.superview isKindOfClass:OAUserInteractionPassThroughView.class])
-            _rightWidgetSuperviewDidLayoutObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                         withHandler:@selector(onRightWidgetSuperviewLayout)
-                                                          andObserve:((OAUserInteractionPassThroughView *)_rightWidgetsView.superview).didLayoutObservable];
+//        if (_rightWidgetsView.superview && [_rightWidgetsView.superview isKindOfClass:OAUserInteractionPassThroughView.class])
+//            _rightWidgetSuperviewDidLayoutObserver = [[OAAutoObserverProxy alloc] initWith:self
+//                                                         withHandler:@selector(onRightWidgetSuperviewLayout)
+//                                                          andObserve:((OAUserInteractionPassThroughView *)_rightWidgetsView.superview).didLayoutObservable];
     }
     return self;
 }
@@ -266,8 +278,8 @@
     }
     else
     {
-        [containers addObject:_leftWidgetsView];
-        [containers addObject:_rightWidgetsView];
+        [containers addObject:_leftPanelController.view];
+        [containers addObject:_rightPanelController.view];
     }
     
     BOOL portrait = ![OAUtilities isLandscape];
@@ -588,6 +600,9 @@
     for (UIView *widget in _rightWidgetsView.subviews)
         [widget removeFromSuperview];
     
+    [_leftPanelController clearWidgets];
+    [_rightPanelController clearWidgets];
+    
     //[self.view insertSubview:self.widgetsView belowSubview:_toolbarViewController.view];
 //    [_mapWidgetRegistry populateStackControl:_leftWidgetsView mode:appMode left:YES expanded:_expanded];
 //    [_mapWidgetRegistry populateStackControl:_rightWidgetsView mode:appMode left:NO expanded:_expanded];
@@ -596,8 +611,8 @@
     [_mapWidgetRegistry registerAllControls];
     [_mapWidgetRegistry reorderWidgets];
     
-    [_mapWidgetRegistry populateStackControl:_leftWidgetsView mode:appMode widgetPanel:OAWidgetsPanel.leftPanel];
-    [_mapWidgetRegistry populateStackControl:_rightWidgetsView mode:appMode widgetPanel:OAWidgetsPanel.rightPanel];
+    [_mapWidgetRegistry populateStackControl:_leftPanelController mode:appMode widgetPanel:OAWidgetsPanel.leftPanel];
+    [_mapWidgetRegistry populateStackControl:_leftPanelController mode:appMode widgetPanel:OAWidgetsPanel.rightPanel];
         
     for (UIView *v in _leftWidgetsView.subviews)
     {

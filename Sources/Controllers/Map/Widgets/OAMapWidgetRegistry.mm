@@ -69,7 +69,7 @@
     }
 }
 
-- (void) populateStackControl:(UIView *)stack mode:(OAApplicationMode *)mode widgetPanel:(OAWidgetsPanel *)widgetPanel
+- (void) populateStackControl:(OAWidgetPanelViewController *)stack mode:(OAApplicationMode *)mode widgetPanel:(OAWidgetsPanel *)widgetPanel
 {
     NSOrderedSet<OAMapWidgetInfo *> *widgets = [self getWidgetsForPanel:widgetPanel];
     
@@ -88,14 +88,15 @@
         }
     }
     
-    for (int i = 0; i < widgetsToShow.count; i++)
-    {
-        OABaseWidgetView *widget = widgetsToShow[i];
-        NSArray<OABaseWidgetView *> *followingWidgets = i + 1 == widgetsToShow.count
-        ? @[]
-        : [widgetsToShow subarrayWithRange:NSMakeRange(i + 1, widgetsToShow.count - (i + 1))];
-        [widget attachView:stack order:i followingWidgets:followingWidgets];
-    }
+//    for (int i = 0; i < widgetsToShow.count; i++)
+//    {
+//        OABaseWidgetView *widget = widgetsToShow[i];
+//        NSArray<OABaseWidgetView *> *followingWidgets = i + 1 == widgetsToShow.count
+//        ? @[]
+//        : [widgetsToShow subarrayWithRange:NSMakeRange(i + 1, widgetsToShow.count - (i + 1))];
+//        [widget attachView:stack order:i followingWidgets:followingWidgets];
+//    }
+    [stack updateWidgetPages:@[widgetsToShow]];
 }
 
 - (void) updateWidgetsInfo:(OAApplicationMode *)appMode

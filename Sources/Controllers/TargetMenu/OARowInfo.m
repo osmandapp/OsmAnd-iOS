@@ -59,7 +59,7 @@
     if ([object isKindOfClass:self.class])
     {
         OARowInfo *item = (OARowInfo *) object;
-        return [_text containsString:item.text];
+        return [_text isEqualToString:item.text];
     }
     return NO;
 }

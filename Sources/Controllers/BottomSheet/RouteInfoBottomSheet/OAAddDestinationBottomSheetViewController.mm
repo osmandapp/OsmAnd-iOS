@@ -438,7 +438,7 @@
         else if (_type == EOADestinationTypeWork)
             [mapPanel openSearch:OAQuickSearchType::WORK];
     }
-    else if ([item[@"key"] isEqualToString:@"address_search_desc"])
+    else if ([item[@"key"] isEqualToString:@"address_search"])
     {
         if (_type == EOADestinationTypeIntermediate)
             [mapPanel openSearch:OAQuickSearchType::INTERMEDIATE location:nil tabIndex:2];

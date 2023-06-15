@@ -215,12 +215,11 @@ static const NSInteger groupCount = 1;
             break;
         }
         case ELiveSettingsScreenFrequency: {
-            NSInteger currentFrequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:_regionNameNSString];
             [dataArr addObject:
              @{
                @"name" : @"hourly_freq",
                @"title" : OALocalizedString(@"hourly"),
-               @"img" : currentFrequency == ELiveUpdateFrequencyHourly ? @"menu_cell_selected.png" : @"",
+               @"img" : _updatingFrequency == ELiveUpdateFrequencyHourly ? @"menu_cell_selected.png" : @"",
                @"type" : [OASettingsTitleTableViewCell getCellIdentifier] }
              ];
             
@@ -228,7 +227,7 @@ static const NSInteger groupCount = 1;
              @{
                @"name" : @"daily_freq",
                @"title" : OALocalizedString(@"daily"),
-               @"img" : currentFrequency == ELiveUpdateFrequencyDaily ? @"menu_cell_selected.png" : @"",
+               @"img" : _updatingFrequency == ELiveUpdateFrequencyDaily ? @"menu_cell_selected.png" : @"",
                @"type" : [OASettingsTitleTableViewCell getCellIdentifier] }
              ];
             
@@ -236,7 +235,7 @@ static const NSInteger groupCount = 1;
              @{
                @"name" : @"weekly_freq",
                @"title" : OALocalizedString(@"weekly"),
-               @"img" : currentFrequency == ELiveUpdateFrequencyWeekly ? @"menu_cell_selected.png" : @"",
+               @"img" : _updatingFrequency == ELiveUpdateFrequencyWeekly ? @"menu_cell_selected.png" : @"",
                @"type" : [OASettingsTitleTableViewCell getCellIdentifier] }
              ];
             
@@ -383,6 +382,7 @@ static const NSInteger groupCount = 1;
     {
         OAOsmAndLiveSelectionViewController* selectionViewController = [[OAOsmAndLiveSelectionViewController alloc] initWithType:ELiveSettingsScreenFrequency regionName:_regionName titleName:_titleName];
         selectionViewController.delegate = self;
+        [selectionViewController updateFrequency:_updatingFrequency];
         [self.navigationController pushViewController:selectionViewController animated:YES];
     }
     else if (_settingsScreen == ELiveSettingsScreenFrequency)

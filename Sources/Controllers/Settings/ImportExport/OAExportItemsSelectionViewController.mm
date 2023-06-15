@@ -44,7 +44,6 @@
 @interface OAExportItemsSelectionViewController () <UITableViewDelegate, UITableViewDataSource, OATableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 
@@ -79,6 +78,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.navigationItem.title = _type.title;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
@@ -98,6 +99,25 @@
     [self generateData];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor = UIColorFromRGB(color_primary_table_background);
+    appearance.shadowColor = UIColorFromRGB(color_primary_table_background);
+    appearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.blackColor
+    };
+    self.navigationController.navigationBar.standardAppearance = appearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.tintColor = UIColorFromRGB(color_primary_purple);
+    self.navigationController.navigationBar.prefersLargeTitles = NO;
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -111,7 +131,6 @@
 
 - (void)applyLocalization
 {
-    self.titleView.text = _type.title;
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.saveButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
 }

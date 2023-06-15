@@ -98,6 +98,7 @@ NSString *const kUICellKey = @"kUICellKey";
 {
     [super viewDidLoad];
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
+    self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -187,7 +188,7 @@ NSString *const kUICellKey = @"kUICellKey";
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUICellKey];
         }
         BOOL isSelected = [item[@"selected"] boolValue];
-        cell.accessoryView = isSelected ? [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]] : nil;
+        cell.accessoryType = isSelected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         NSString *regularText = item[@"title"];
         cell.textLabel.text = regularText;
         return cell;

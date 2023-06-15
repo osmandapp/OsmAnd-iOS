@@ -93,6 +93,19 @@
     [self deleteBackupFiles];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    for (UIViewController *controller in self.navigationController.viewControllers)
+    {
+        if ([controller isKindOfClass:[OASettingsBackupViewController class]])
+        {
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
+            return;
+        }
+    }
+    [super viewWillDisappear:animated];
+}
+
 #pragma mark - Base UI
 
 - (NSString *)getTitle

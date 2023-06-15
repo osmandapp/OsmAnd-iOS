@@ -27,13 +27,8 @@
 
 @interface OAStatusBackupViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, OAOnPrepareBackupListener>
 
-@property (weak, nonatomic) IBOutlet UIView *navigationBarView;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
-
 @property (weak, nonatomic) IBOutlet UIView *contentView;
-
 @property (weak, nonatomic) IBOutlet UIView *bottomButtonsContainerView;
 @property (weak, nonatomic) IBOutlet UIButton *leftBottomButton;
 @property (weak, nonatomic) IBOutlet UIButton *rightBottomButton;
@@ -67,7 +62,6 @@
 
 - (void)applyLocalization
 {
-    self.titleLabel.text = OALocalizedString(@"cloud_recent_changes");
     [self.segmentControl setTitle:OALocalizedString(@"download_tab_local") forSegmentAtIndex:EOARecentChangesLocal];
     [self.segmentControl setTitle:OALocalizedString(@"shared_string_cloud") forSegmentAtIndex:EOARecentChangesRemote];
     [self.segmentControl setTitle:OALocalizedString(@"cloud_conflicts") forSegmentAtIndex:EOARecentChangesConflicts];
@@ -77,9 +71,8 @@
 {
     [super viewDidLoad];
     
-    UIImage *backImage = [UIImage templateImageNamed:@"ic_navbar_chevron"];
-    [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
-                     forState:UIControlStateNormal];
+    self.navigationItem.title = OALocalizedString(@"cloud_recent_changes");
+    
     [_segmentControl setTitleTextAttributes:@{ NSForegroundColorAttributeName : UIColor.whiteColor,
                                                NSFontAttributeName : [UIFont scaledSystemFontOfSize:14.] } forState:UIControlStateNormal];
     [_segmentControl setTitleTextAttributes:@{ NSForegroundColorAttributeName : UIColor.blackColor,

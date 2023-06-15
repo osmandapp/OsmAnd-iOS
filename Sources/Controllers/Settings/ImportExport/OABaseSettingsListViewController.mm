@@ -312,7 +312,8 @@
         {
             OAExportItemsSelectionViewController *selectionVC = [[OAExportItemsSelectionViewController alloc] initWithItems:[items getItemsForType:type] type:type selectedItems:self.selectedItemsMap[type]];
             selectionVC.delegate = self;
-            [self presentViewController:selectionVC animated:YES completion:nil];
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:selectionVC];
+            [self.navigationController presentViewController:navigationController animated:YES completion:nil];
         }
         else
         {

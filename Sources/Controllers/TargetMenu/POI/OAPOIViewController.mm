@@ -171,6 +171,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
     NSString *preferredLang = [OAUtilities preferredLang];
     NSMutableArray<OARowInfo *> *infoRows = [NSMutableArray array];
     NSMutableArray<OARowInfo *> *descriptions = [NSMutableArray array];
+    NSMutableArray<OARowInfo *> *urlRows = [NSMutableArray array];
 
     NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *poiAdditionalCategories = [NSMutableDictionary dictionary];
     OARowInfo *cuisineRow;
@@ -307,7 +308,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
             textColor = UIColorFromRGB(color_primary_purple);
             isPhoneNumber = YES;
         }
-        else if ([convertedKey isEqualToString:WEBSITE] || [kContactUrlTags containsObject:convertedKey])
+        else if ([convertedKey isEqualToString:WEBSITE] || [convertedKey isEqualToString:URL_KEY] || [kContactUrlTags containsObject:convertedKey])
         {
             if ([kContactUrlTags containsObject:convertedKey])
             {
@@ -482,6 +483,8 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
             [descriptions addObject:row];
         else if (isCuisine)
             cuisineRow = row;
+        else if (isUrl)
+            [self addRowIfNotExsists:row toDestinationRows:urlRows];
         else if (!poiType)
             [infoRows addObject:row];
     }
@@ -580,6 +583,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
         [infoRows addObject:row];
     }
 
+    [infoRows addObjectsFromArray:urlRows];
     [infoRows sortUsingComparator:^NSComparisonResult(OARowInfo *row1, OARowInfo *row2) {
         if (row1.order < row2.order)
             return NSOrderedAscending;
@@ -636,6 +640,12 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
                                          isPhoneNumber:NO
                                                  isUrl:YES]];
     }
+}
+
+- (void) addRowIfNotExsists:(OARowInfo *)newRow toDestinationRows:(NSMutableArray<OARowInfo *> *)rows
+{
+    if (![rows containsObject:newRow])
+        [rows addObject:newRow];
 }
 
 - (NSString *)getSocialMediaUrl:(NSString *)key value:(NSString *)value

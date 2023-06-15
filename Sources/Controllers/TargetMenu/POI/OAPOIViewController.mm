@@ -640,6 +640,9 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
 
 - (NSString *)getSocialMediaUrl:(NSString *)key value:(NSString *)value
 {
+    if (!value || value.length == 0)
+        return nil;
+    
     // Remove leading and closing slashes
     NSMutableString *sb = [NSMutableString stringWithString:[value trim]];
     if ([sb characterAtIndex:0] == '/')

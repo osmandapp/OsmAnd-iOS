@@ -313,6 +313,7 @@
                      forState:UIControlStateNormal];
     self.backButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
     [self.backButton addBlurEffect:YES cornerRadius:12. padding:0];
+    self.backButton.accessibilityLabel = localizedString(@"shared_string_dismiss");
 
     [self setupView];
 

@@ -7,6 +7,7 @@
 //
 
 #import "OABackupTypesViewController.h"
+#import "OASettingsBackupViewController.h"
 #import "OAManageStorageViewController.h"
 #import "OASwitchTableViewCell.h"
 #import "OAValueTableViewCell.h"
@@ -31,6 +32,21 @@
 {
     _backupHelper = [OABackupHelper sharedInstance];
     [super commonInit];
+}
+
+#pragma mark - UIViewController
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    for (UIViewController *controller in self.navigationController.viewControllers)
+    {
+        if ([controller isKindOfClass:[OASettingsBackupViewController class]])
+        {
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
+            return;
+        }
+    }
+    [super viewWillDisappear:animated];
 }
 
 #pragma mark - Base UI

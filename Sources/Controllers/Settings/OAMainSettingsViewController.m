@@ -74,6 +74,21 @@
                                                  andObserve:OsmAndApp.instance.data.applicationModeChangedObservable]];
 }
 
+#pragma mark - UIViewController
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    for (UIViewController *controller in self.navigationController.viewControllers)
+    {
+        if ([controller isKindOfClass:[OACloudBackupViewController class]])
+        {
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
+            return;
+        }
+    }
+    [super viewWillDisappear:animated];
+}
+
 #pragma mark - Base UI
 
 - (NSString *)getTitle

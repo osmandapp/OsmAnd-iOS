@@ -2351,7 +2351,7 @@
 "backup_and_restore" = "Copia de seguridad y restauración";
 "product_desc_weather" = "Pronóstico horario de 24 horas con 7 días de anticipación en el mapa";
 "user_login" = "Ingresar";
-"osmand_cloud_login_descr" = "Ingresa el correo electrónico usado para el registro. Enviaremos un código temporal necesario para el siguiente paso.";
+"osmand_cloud_login_descr" = "Ingresa el correo electrónico usado para el registro. Enviaremos una contraseña de un solo uso.";
 "cloud_email_not_registered" = "Este correo electrónico no está registrado en OsmAnd Cloud";
 "cloud_email_already_registered" = "Este correo electrónico ya se encuentra registrado.";
 "make_backup_descr" = "Hay muchos cambios en este dispositivo, haz una copia de seguridad de estos datos para no perderlos.";

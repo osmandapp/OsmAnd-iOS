@@ -120,10 +120,16 @@
         [mapHudViewController addChildViewController:_rightPanelController];
         [_widgetsView addSubview:_leftPanelController.view];
         [_widgetsView addSubview:_rightPanelController.view];
+        
+        _leftPanelController.view.translatesAutoresizingMaskIntoConstraints = false;
+        [_leftPanelController.view.topAnchor constraintEqualToAnchor:_widgetsView.topAnchor].active = YES;
+        [_leftPanelController.view.leadingAnchor constraintEqualToAnchor:_widgetsView.leadingAnchor].active = YES;
+        _rightPanelController.view.translatesAutoresizingMaskIntoConstraints = false;
+        [_rightPanelController.view.topAnchor constraintEqualToAnchor:_widgetsView.topAnchor].active = YES;
+        [_rightPanelController.view.trailingAnchor constraintEqualToAnchor:_widgetsView.trailingAnchor].active = YES;
+        
         [_leftPanelController didMoveToParentViewController:mapHudViewController];
         [_rightPanelController didMoveToParentViewController:mapHudViewController];
-//        _leftWidgetsView = mapHudViewController.leftWidgetsView;
-//        _rightWidgetsView = mapHudViewController.rightWidgetsView;
 
         _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
         _expanded = NO;
@@ -278,8 +284,8 @@
     }
     else
     {
-        [containers addObject:_leftPanelController.view];
-        [containers addObject:_rightPanelController.view];
+//        [containers addObject:_leftPanelController.view];
+//        [containers addObject:_rightPanelController.view];
     }
     
     BOOL portrait = ![OAUtilities isLandscape];
@@ -300,23 +306,21 @@
         yPos += 1;
     }
     
-    BOOL hasLeftWidgets = NO;
-    for (UIView *v in _leftWidgetsView.subviews) {
-        if (!v.hidden && v.frame.size.height > 0)
-        {
-            hasLeftWidgets = YES;
-            break;
-        }
-    }
+    BOOL hasLeftWidgets = _leftPanelController.hasWidgets;
+    BOOL hasRightWidgets = _rightPanelController.hasWidgets;
 
-    BOOL hasRightWidgets = NO;
-    for (UIView *v in _rightWidgetsView.subviews)
-        if (!v.hidden && v.frame.size.height > 0)
-        {
-            hasRightWidgets = YES;
-            break;
-        }
-
+    CGRect leftRect = _leftPanelController.view.frame;
+    [_leftPanelController updateWidgetSizes];
+    [_rightPanelController updateWidgetSizes];
+    
+    CGFloat maxWidth = fmax(_leftPanelController.view.frame.size.width, _rightPanelController.view.frame.size.width);
+    CGFloat widgetsHeight = fmax(_leftPanelController.view.frame.size.height, _rightPanelController.view.frame.size.height);
+    
+    maxContainerHeight = fmax(maxContainerHeight, widgetsHeight);
+    
+    if (self.delegate && !CGRectEqualToRect(leftRect, _leftPanelController.view.frame))
+        [self.delegate leftWidgetsLayoutDidChange:_leftPanelController.view animated:YES];
+    
     for (UIView *container in containers)
     {
         NSArray<UIView *> *allViews = container.subviews;
@@ -325,8 +329,7 @@
             if (!v.hidden)
                 [views addObject:v];
         
-        CGFloat maxWidth = 0;
-        CGFloat widgetsHeight = 0;
+        
         for (UIView *v in views)
         {
             if (v.hidden)
@@ -418,11 +421,8 @@
         _rulerControl.center = _rulerControl.superview.center;
     }
     
-    if (_rightWidgetsView.superview)
-    {
-        CGRect f = _rightWidgetsView.superview.frame;
-        _rightWidgetsView.superview.frame = CGRectMake(f.origin.x, f.origin.y, f.size.width, maxContainerHeight);
-    }
+    CGRect f = _widgetsView.frame;
+    _widgetsView.frame = CGRectMake(f.origin.x, f.origin.y, f.size.width, maxContainerHeight);
     
     BOOL showTopCoordinatesView = _topCoordinatesView && _topCoordinatesView.superview && !_topCoordinatesView.hidden;
     BOOL showCoordinatesMapCenterWidget = _coordinatesMapCenterWidget && _coordinatesMapCenterWidget.superview && !_coordinatesMapCenterWidget.hidden;
@@ -566,8 +566,8 @@
     if (!_streetNameView.hidden)
         res = _streetNameView.frame.origin.y + _streetNameView.frame.size.height;
     
-    if (!_leftWidgetsView.hidden && _leftWidgetsView.frame.size.height > 0)
-        res = _leftWidgetsView.frame.origin.y + _leftWidgetsView.frame.size.height;
+    if (!_leftPanelController.view.hidden && _leftPanelController.view.frame.size.height > 0)
+        res = _leftPanelController.view.frame.origin.y + _leftPanelController.view.frame.size.height;
         
     return res;
 }
@@ -612,7 +612,7 @@
     [_mapWidgetRegistry reorderWidgets];
     
     [_mapWidgetRegistry populateStackControl:_leftPanelController mode:appMode widgetPanel:OAWidgetsPanel.leftPanel];
-    [_mapWidgetRegistry populateStackControl:_leftPanelController mode:appMode widgetPanel:OAWidgetsPanel.rightPanel];
+    [_mapWidgetRegistry populateStackControl:_rightPanelController mode:appMode widgetPanel:OAWidgetsPanel.rightPanel];
         
     for (UIView *v in _leftWidgetsView.subviews)
     {

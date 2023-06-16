@@ -4,13 +4,13 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAWidgetPanelViewController" customModule="OsmAnd_Maps" customModuleProvider="target">
             <connections>
                 <outlet property="pageControl" destination="skp-uv-S5T" id="u7k-hs-duo"/>
+                <outlet property="pageControlHeightConstraint" destination="1bH-FK-9lc" id="Sab-Tg-h1R"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -22,9 +22,14 @@
                 <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="skp-uv-S5T">
                     <rect key="frame" x="0.0" y="826" width="393" height="26"/>
                     <color key="backgroundColor" red="0.59215686270000001" green="0.56078431370000004" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="26" id="1bH-FK-9lc"/>
+                    </constraints>
+                    <connections>
+                        <action selector="pageControlTapped:" destination="-1" eventType="valueChanged" id="gaW-WV-FQ3"/>
+                    </connections>
                 </pageControl>
             </subviews>
-            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="skp-uv-S5T" secondAttribute="trailing" id="PGg-mD-Q4F"/>
                 <constraint firstAttribute="bottom" secondItem="skp-uv-S5T" secondAttribute="bottom" id="h8G-Dr-Q48"/>
@@ -33,9 +38,4 @@
             <point key="canvasLocation" x="140" y="20"/>
         </view>
     </objects>
-    <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-    </resources>
 </document>

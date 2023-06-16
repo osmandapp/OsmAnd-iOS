@@ -12,13 +12,16 @@ import Foundation
 @objcMembers
 class MapillaryWidget: OATextInfoWidget {
     
-    convenience init() {
-        self.init()
-        self.widgetType = .mapillary
+    init() {
+        super.init(type: .mapillary)
         setText(localizedString("mapillary"), subtext: "")
         onClickFunction = { _ in
             OAMapillaryPlugin.installOrOpenMapillary()
         }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
     
     required init?(coder: NSCoder) {

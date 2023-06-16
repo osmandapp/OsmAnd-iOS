@@ -82,8 +82,8 @@
 
 - (void) layoutSubviews
 {
-    if (self.delegate)
-        [self.delegate widgetChanged:nil];
+//    if (self.delegate)
+//        [self.delegate widgetChanged:nil];
 
     CGFloat middlePoint = self.frame.size.width / 2;
     CGFloat lineWidth = 0.5;
@@ -244,7 +244,7 @@
             _lastUpdatingTime = [[NSDate new] timeIntervalSince1970];
         }
 
-        [self layoutSubviews];
+//        [self layoutSubviews];
         return NO;
     }
     else

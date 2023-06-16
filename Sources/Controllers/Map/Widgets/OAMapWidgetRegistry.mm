@@ -87,6 +87,22 @@
             [widgetInfo.widget removeFromSuperview];
         }
     }
+    NSMutableArray<NSArray<OABaseWidgetView *> *> *widgetPages = [NSMutableArray array];
+    NSMutableArray<OABaseWidgetView *> *currentPage = [NSMutableArray array];
+    NSInteger idx = 0;
+    for (OABaseWidgetView *view in widgetsToShow) {
+        if (idx < 5) {
+            [currentPage addObject:view];
+            idx++;
+        } else {
+            [widgetPages addObject:currentPage];
+            currentPage = [NSMutableArray array];
+            [currentPage addObject:view];
+            idx = 0;
+        }
+    }
+    if (currentPage.count > 0)
+        [widgetPages addObject:currentPage];
     
 //    for (int i = 0; i < widgetsToShow.count; i++)
 //    {
@@ -96,7 +112,7 @@
 //        : [widgetsToShow subarrayWithRange:NSMakeRange(i + 1, widgetsToShow.count - (i + 1))];
 //        [widget attachView:stack order:i followingWidgets:followingWidgets];
 //    }
-    [stack updateWidgetPages:@[widgetsToShow]];
+    [stack updateWidgetPages:widgetPages];
 }
 
 - (void) updateWidgetsInfo:(OAApplicationMode *)appMode

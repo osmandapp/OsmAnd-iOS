@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#include <vector>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -24,7 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (double) getLatitude:(NSInteger)index;
 - (double) getLongitude:(NSInteger)index;
 
-- (std::vector<std::pair<double, double>>) getLatLonList;
 - (NSArray<OAWptPt *> *)getWptPtList;
 - (NSArray<CLLocation *> *) getLocationsList;
 

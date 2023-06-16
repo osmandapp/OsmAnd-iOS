@@ -14,6 +14,9 @@
 #import "OAResultMatcher.h"
 #import "OAGpxRouteApproximation.h"
 
+#include "OARoutingHelper+cpp.h"
+#include "OARouteProvider+cpp.h"
+
 #include <routePlannerFrontEnd.h>
 
 @interface OAGpxApproximator ()

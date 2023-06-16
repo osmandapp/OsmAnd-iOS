@@ -24,12 +24,14 @@
 
 #include "OARouteCalculationParams+cpp.h"
 #include "OARouteCalculationResult+cpp.h"
+#include "OAGpxRouteApproximation+cpp.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
 #include <routeSegmentResult.h>
 #include <routeCalculationProgress.h>
 #include <routePlannerFrontEnd.h>
+#include <routeResultPreparation.h>
 
 static OAApplicationMode *DEFAULT_APP_MODE;
 
@@ -51,7 +53,9 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     
     OARouteCalculationParams *_params;
     NSArray<OAWptPt *> *_currentPair;
-    
+
+    BOOL _calculatedTimeSpeed;
+
     std::shared_ptr<RouteCalculationProgress> _calculationProgress;
 }
 
@@ -818,13 +822,32 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     }
 }
 
-- (NSArray<OAWptPt *> *) setPoints:(OAGpxRouteApproximation *)gpxApproximation originalPoints:(NSArray<OAWptPt *> *)originalPoints mode:(OAApplicationMode *)mode
+- (NSArray<OAWptPt *> *) setPoints:(OAGpxRouteApproximation *)gpxApproximation
+                    originalPoints:(NSArray<OAWptPt *> *)originalPoints
+                              mode:(OAApplicationMode *)mode
+             useExternalTimestamps:(BOOL)useExternalTimestamps
 {
 	if (gpxApproximation == nil || gpxApproximation.gpxApproximation->finalPoints.size() == 0 || gpxApproximation.gpxApproximation->result.size() == 0)
 		return nil;
-	
+    const auto gpxPoints = gpxApproximation.gpxApproximation->finalPoints;
+
+    OAWptPt *firstOriginalPoint = originalPoints.firstObject;
+    OAWptPt *lastOriginalPoint = originalPoints.lastObject;
+    NSInteger originalPointIndex = -1;
+    long lastOriginalPointTime = 0;
+    double dist = 0;
+    OAWptPt *originalPoint;
+    vector<SHARED_PTR<RouteSegmentResult>> pendingSegments;
+    BOOL modifySegments = useExternalTimestamps && firstOriginalPoint.time > 0 && lastOriginalPoint.time > 0;
+    if (modifySegments)
+    {
+        originalPointIndex = 1;
+        lastOriginalPointTime = firstOriginalPoint.time;
+        originalPoint = originalPoints[originalPointIndex];
+    }
 	NSMutableArray<OAWptPt *> *routePoints = [NSMutableArray array];
-	const auto gpxPoints = gpxApproximation.gpxApproximation->finalPoints;
+    vector<SHARED_PTR<RouteSegmentResult>> allSegments;
+    OAWptPt *addedPoint;
 	for (NSInteger i = 0; i < gpxPoints.size(); i++)
 	{
 		const auto& gp1 = gpxPoints[i];
@@ -835,15 +858,103 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 		{
 			const auto& seg = gp1->routeToTarget[k];
 			if (seg->getStartPointIndex() != seg->getEndPointIndex())
-			{
 				segments.push_back(seg);
-			}
 		}
+        vector<SHARED_PTR<RouteSegmentResult>> modifiedSegments;
 		for (NSInteger k = 0; k < segments.size(); k++)
 		{
 			const auto& seg = segments[k];
-			[self fillPointsArray:points seg:seg includeEndPoint:lastGpxPoint && k == segments.size() - 1];
+            if (!modifySegments)
+            {
+                [self fillPointsArray:points seg:seg includeEndPoint:lastGpxPoint && k == segments.size() - 1];
+            }
+            else
+            {
+                int ind = seg->getStartPointIndex();
+                bool plus = seg->isForwardDirection();
+                std::vector<double> heightArray = seg->object->calculateHeightArray();
+                BOOL segmentAdded;
+                while (ind != seg->getEndPointIndex())
+                {
+                    OAWptPt *prevAddedPoint = addedPoint;
+                    addedPoint = [self addPointToArray:points seg:seg index:ind heightArray:heightArray];
+                    if (prevAddedPoint)
+                    {
+                        dist += getDistance(prevAddedPoint.position.latitude, prevAddedPoint.position.longitude, addedPoint.position.latitude, addedPoint.position.longitude);
+                    }
+                    ind = plus ? ind + 1 : ind - 1;
+                    if (originalPoint && getDistance(originalPoint.position.latitude, originalPoint.position.longitude, addedPoint.position.latitude, addedPoint.position.longitude) < 20)
+                    {
+                        if (ind != seg->getEndPointIndex())
+                        {
+                            /* Could be used for more precise estimation
+                             RouteSegmentResult newSeg = new RouteSegmentResult(seg.getObject(), seg.getStartPointIndex(), ind);
+                             modifiedSegments.add(newSeg);
+                             pendingSegments.add(newSeg);
+                             seg = new RouteSegmentResult(seg.getObject(), ind, seg.getEndPointIndex());
+                             */
+                        }
+                        else
+                        {
+                            modifiedSegments.push_back(seg);
+                            pendingSegments.push_back(seg);
+                            segmentAdded = YES;
+                        }
+                        long originalPointTime = originalPoint.time;
+                        if (originalPointIndex + 1 < originalPoints.count)
+                            originalPoint = originalPoints[++originalPointIndex];
+                        if (originalPointTime > 0 && originalPointTime > lastOriginalPointTime
+                            && originalPoint != lastOriginalPoint && originalPoint.time > originalPointTime)
+                        {
+                            double speed = dist / ((originalPointTime - lastOriginalPointTime) / 1000.0);
+                            if (speed > 0 && pendingSegments.size() > 0)
+                            {
+                                for (NSInteger k = 0; k < pendingSegments.size(); k++)
+                                {
+                                    pendingSegments[k]->segmentSpeed = (float) speed;
+                                }
+                                dist = 0;
+                                pendingSegments.clear();
+                                lastOriginalPointTime = originalPointTime;
+                            }
+                        }
+                    }
+                }
+                if (!segmentAdded)
+                {
+                    modifiedSegments.push_back(seg);
+                    pendingSegments.push_back(seg);
+                }
+                if (lastGpxPoint && k == segments.size() - 1) {
+                    OAWptPt *prevAddedPoint = addedPoint;
+                    addedPoint = [self addPointToArray:points seg:seg index:ind heightArray:heightArray];
+                    if (prevAddedPoint)
+                    {
+                        dist += getDistance(prevAddedPoint.position.latitude, prevAddedPoint.position.longitude, addedPoint.position.latitude, addedPoint.position.longitude);
+                    }
+                    if (originalPoint)
+                    {
+                        long originalPointTime = lastOriginalPoint.time;
+                        if (originalPointTime > 0 && originalPointTime > lastOriginalPointTime) {
+                            double speed = dist / ((originalPointTime - lastOriginalPointTime) / 1000.0);
+                            if (speed > 0)
+                            {
+                                for (NSInteger k = 0; k < pendingSegments.size(); k++){
+                                    pendingSegments[k]->segmentSpeed = (float) speed;
+                                }
+                                dist = 0;
+                                pendingSegments.clear();
+                                lastOriginalPointTime = originalPointTime;
+                            }
+                        }
+                    }
+                }
+            }
 		}
+        if (modifySegments)
+            segments = modifiedSegments;
+        allSegments.insert(allSegments.end(), segments.begin(), segments.end());
+
 		if (points.count > 0)
 		{
 			OAWptPt *wp1 = [[OAWptPt alloc] init];
@@ -870,13 +981,46 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 			break;
 		}
 	}
-	OAWptPt *lastOriginalPoint = originalPoints.lastObject;
+    
+    if (modifySegments)
+    {
+        recalculateTimeDistance(allSegments);
+
+        /* Could be used after split segments
+        RouteResultPreparation preparation = new RouteResultPreparation();
+        for (RouteSegmentResult r : allSegments) {
+            r.setTurnType(null);
+            r.setDescription("");
+        }
+        preparation.prepareTurnResults(gpxApproximation.ctx, allSegments);
+        */
+        _calculatedTimeSpeed = true;
+    }
+    else
+    {
+        _calculatedTimeSpeed = false;
+    }
+
+    double calculatedDuration = 0;
+    for (NSInteger i = 0; i < pendingSegments.size(); i++)
+    {
+        calculatedDuration += pendingSegments[i]->segmentTime;
+    }
+    long originalDuration = lastOriginalPoint.time - firstOriginalPoint.time;
+//    LOG.debug("Approximation result: start=" + firstOriginalPoint.lat + ", " + firstOriginalPoint.lon +
+//            " finish=" + lastOriginalPoint.lat + ", " + lastOriginalPoint.lon +
+//            " calculatedTime=" + calculatedDuration + "s originalTime=" + originalDuration / 1000.0 + "s");
 	OAWptPt *lastRoutePoint = routePoints.lastObject;
 	if (lastOriginalPoint.isGap)
 		[lastRoutePoint setGap];
 	
 	[self replacePoints:originalPoints points:routePoints];
 	return routePoints;
+}
+
+- (BOOL)hasCalculatedTimeSpeed
+{
+    return _calculatedTimeSpeed;
 }
 
 - (void) replacePoints:(NSArray<OAWptPt *> *)originalPoints points:(NSArray<OAWptPt *> *)points
@@ -949,7 +1093,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 		[self addPointToArray:points seg:seg index:ind heightArray:heightArray];
 }
 
-- (void) addPointToArray:(NSMutableArray<OAWptPt *> *)points
+- (OAWptPt *) addPointToArray:(NSMutableArray<OAWptPt *> *)points
 					 seg:(const SHARED_PTR<RouteSegmentResult> &)seg
 				   index:(NSInteger)index
 			 heightArray:(const std::vector<double>&)heightArray
@@ -960,6 +1104,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 		pt.elevation = heightArray[index * 2 + 1];
 	pt.position = CLLocationCoordinate2DMake(l.lat, l.lon);
 	[points addObject:pt];
+    return pt;
 }
 
 - (BOOL) canSplit:(BOOL)after

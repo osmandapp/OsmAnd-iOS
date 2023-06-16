@@ -97,7 +97,7 @@
     {
         OAGpxRouteApproximation *approximation = _approximations[i];
         NSArray<OAWptPt *> *segmentPoints = _segmentPointsList[i];
-        NSArray<OAWptPt *> *newSegmentPoints = [ctx setPoints:approximation originalPoints:segmentPoints mode:_mode];
+        NSArray<OAWptPt *> *newSegmentPoints = [ctx setPoints:approximation originalPoints:segmentPoints mode:_mode useExternalTimestamps:NO];
         if (newSegmentPoints != nil)
             _segmentPointsList[i] = newSegmentPoints;
     }

@@ -21,6 +21,7 @@
 #import "OAMapUtils.h"
 #import "OALocationSimulation.h"
 #import "OARouteProvider.h"
+#import "OAApplicationMode.h"
 
 #include "OARouteCalculationResult+cpp.h"
 #include "OARouteDirectionInfo+cpp.h"

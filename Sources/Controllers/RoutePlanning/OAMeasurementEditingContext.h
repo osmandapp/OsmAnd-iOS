@@ -88,8 +88,12 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (void) addPoint:(OAWptPt *)pt mode:(EOAAddPointMode)mode;
 - (void) addPoint:(NSInteger)position point:(OAWptPt *)pt mode:(EOAAddPointMode)mode;
 
-- (NSArray<OAWptPt *> *) setPoints:(OAGpxRouteApproximation *)gpxApproximation originalPoints:(NSArray<OAWptPt *> *)originalPoints mode:(OAApplicationMode *)mode;
+- (NSArray<OAWptPt *> *) setPoints:(OAGpxRouteApproximation *)gpxApproximation
+                    originalPoints:(NSArray<OAWptPt *> *)originalPoints
+                              mode:(OAApplicationMode *)mode
+             useExternalTimestamps:(BOOL)useExternalTimestamps;
 
+- (BOOL) hasCalculatedTimeSpeed;
 - (double) getRouteDistance;
 - (BOOL) isNewData;
 - (BOOL) isApproximationNeeded;

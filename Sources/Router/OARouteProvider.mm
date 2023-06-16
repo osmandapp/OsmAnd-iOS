@@ -25,10 +25,14 @@
 #import "OATargetPointsHelper.h"
 #import "OAIndexConstants.h"
 #import "OARoutingHelper.h"
+#import "OALocationSimulation.h"
 
 #include "OARouteCalculationParams+cpp.h"
 #include "OARouteCalculationResult+cpp.h"
 #include "OARouteDirectionInfo+cpp.h"
+#include "OAGpxRouteApproximation+cpp.h"
+#include "OALocationsHolder+cpp.h"
+#include "OARouteProvider+cpp.h"
 
 #include <precalculatedRouteDirection.h>
 #include <routePlannerFrontEnd.h>
@@ -139,7 +143,9 @@
 
 @end
 
-@interface OAGPXRouteParams()
+@interface OAGPXRouteParams ()
+
+@property (nonatomic) std::vector<SHARED_PTR<RouteSegmentResult>> route;
 
 @end
 
@@ -316,9 +322,21 @@
 
 @end
 
+@interface OARoutingEnvironment ()
+
+@property (nonatomic, readonly) SHARED_PTR<RoutePlannerFrontEnd> router;
+@property (nonatomic, readonly) SHARED_PTR<RoutingContext> ctx;
+@property (nonatomic, readonly) SHARED_PTR<RoutingContext> complexCtx;
+@property (nonatomic, readonly) std::shared_ptr<PrecalculatedRouteDirection> precalculated;
+
+@end
+
 @implementation OARoutingEnvironment
 
-- (instancetype)initWithRouter:(std::shared_ptr<RoutePlannerFrontEnd>)router context:(std::shared_ptr<RoutingContext>)ctx complextCtx:(std::shared_ptr<RoutingContext>)complexCtx precalculated:(std::shared_ptr<PrecalculatedRouteDirection>)precalculated
+- (instancetype)initWithRouter:(SHARED_PTR<RoutePlannerFrontEnd>)router
+                       context:(SHARED_PTR<RoutingContext>)ctx
+                   complextCtx:(SHARED_PTR<RoutingContext>)complexCtx
+                 precalculated:(SHARED_PTR<PrecalculatedRouteDirection>)precalculated
 {
     self = [super init];
     if (self) {
@@ -358,10 +376,10 @@
     return nil;
 }
 
-+ (std::vector<std::shared_ptr<RouteSegmentResult>>) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
-                                                                 gpxFile:(OAGPXDocument *)gpxFile
-                                                        segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
-                                                         selectedSegment:(NSInteger)selectedSegment
++ (std::vector<SHARED_PTR<RouteSegmentResult>>) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
+                                                            gpxFile:(OAGPXDocument *)gpxFile
+                                                   segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
+                                                    selectedSegment:(NSInteger)selectedSegment
 {
     NSArray<OATrkSegment *> *segments = [gpxFile getNonEmptyTrkSegments:NO];
     if (selectedSegment != -1 && segments.count > selectedSegment)
@@ -619,7 +637,9 @@
     return [[OARouteCalculationResult alloc] initWithErrorMessage:@"Empty result"];
 }
 
-- (std::shared_ptr<RoutingConfiguration>) initOsmAndRoutingConfig:(std::shared_ptr<RoutingConfigurationBuilder>)config params:(OARouteCalculationParams *)params generalRouter:(std::shared_ptr<GeneralRouter>)generalRouter
+- (SHARED_PTR<RoutingConfiguration>) initOsmAndRoutingConfig:(SHARED_PTR<RoutingConfigurationBuilder>)config
+                                                      params:(OARouteCalculationParams *)params
+                                               generalRouter:(SHARED_PTR<GeneralRouter>)generalRouter
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     string derivedProfile(params.mode.getDerivedProfile.UTF8String);

@@ -30,8 +30,10 @@
 @property (nonatomic) OATrkSegment *generalSegment;
 
 - (instancetype)initWithGpxFile:(NSString *)filename;
+- (instancetype)initWithData:(NSData *)data;
 
 - (BOOL) loadFrom:(NSString *)filename;
+- (BOOL) loadFromData:(NSData *)data;
 
 - (BOOL) saveTo:(NSString *)filename;
 
@@ -55,6 +57,7 @@
 - (NSArray*) splitByTime:(int)seconds joinSegments:(BOOL)joinSegments;
 - (NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(int)metricLimit joinSegments:(BOOL)joinSegments;
 
+- (NSArray<OAWptPt *> *) getAllSegmentsPoints;
 - (NSArray<OAWptPt *> *) getRoutePoints;
 - (NSArray<OAWptPt *> *) getRoutePoints:(NSInteger)routeIndex;
 - (OAApplicationMode *) getRouteProfile;

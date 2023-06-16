@@ -111,12 +111,13 @@ class OnlineRoutingEngine: NSObject, NSCopying {
     }
 
     func getFullUrl(path: [[NSNumber]], startBearing: Float?) -> String {
-        let sb: String = getBaseUrl()
-        makeFullUrl(sb: sb, path: path, startBearing: startBearing)
+        var sb: String = getBaseUrl()
+        makeFullUrl(sb: &sb, path: path, startBearing: startBearing)
         return sb
     }
 
-    fileprivate func makeFullUrl(sb: String, path: [[NSNumber]], startBearing: Float?) {
+    /*protected*/
+    func makeFullUrl(sb: inout String, path: [[NSNumber]], startBearing: Float?) {
         fatalError("Subclasses must override makeFullUrl(sb:path:startBearing:)")
     }
 
@@ -144,7 +145,7 @@ class OnlineRoutingEngine: NSObject, NSCopying {
         return nil
     }
 
-    func parseResponse(content: String, leftSideNavigation: Bool, initialCalculation: Bool/*, calculationProgress: OARouteCalculationProgress?*/) throws -> OnlineRoutingResponse? {
+    func parseResponse(content: String, leftSideNavigation: Bool, initialCalculation: Bool, calculationProgress: OARouteCalculationProgress) throws -> OnlineRoutingResponse? {
         fatalError("Subclasses must override parseResponse(content:app:leftSideNavigation:initialCalculation:calculationProgress:)")
     }
 
@@ -170,12 +171,12 @@ class OnlineRoutingEngine: NSObject, NSCopying {
 
     private func collectAllowedVehicles() {
         allowedVehicles.removeAll()
-        collectAllowedVehicles(vehicles: &allowedVehicles)
+        collectAllowedVehicles(vehicles: allowedVehicles)
         allowedVehicles.append(OnlineRoutingEngine.customVehicle)
         allowedVehicles.append(OnlineRoutingEngine.noneVehicle)
     }
 
-    fileprivate func collectAllowedVehicles(vehicles: inout [VehicleType]) {
+    fileprivate func collectAllowedVehicles(vehicles: [VehicleType]) {
         fatalError("Subclasses must override collectAllowedVehicles(vehicles:)")
     }
 
@@ -187,7 +188,8 @@ class OnlineRoutingEngine: NSObject, NSCopying {
         collectAllowedParameters(params: &allowedParameters)
     }
 
-    fileprivate func collectAllowedParameters(params: inout Set<EngineParameter>) {
+    /*protected*/
+     func collectAllowedParameters(params: inout Set<EngineParameter>) {
         fatalError("Subclasses must override collectAllowedParameters(params:)")
     }
 
@@ -255,8 +257,7 @@ class OnlineRoutingEngine: NSObject, NSCopying {
         return getParams() == engine.getParams()
     }
 
-    func newInstance(params: [String: String]) -> OnlineRoutingEngine
-    {
+    func newInstance(params: [String: String]) -> OnlineRoutingEngine {
         fatalError("Subclasses must override newInstance(params:)")
     }
 
@@ -265,7 +266,7 @@ class OnlineRoutingEngine: NSObject, NSCopying {
     }
 
     static func generatePredefinedKey(provider: String, type: String) -> String {
-        let key = predefinedPrefix + provider + "_" + type
+        let key: String = predefinedPrefix + provider + "_" + type
         return key.replacingOccurrences(of: " ", with: "_").lowercased()
     }
 

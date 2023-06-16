@@ -24,6 +24,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 
 #include "OARouteDirectionInfo+cpp.h"
+#include "OARoutingHelper+cpp.h"
 
 #include <routeSegmentResult.h>
 

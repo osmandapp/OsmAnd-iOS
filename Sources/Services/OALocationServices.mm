@@ -25,6 +25,8 @@
 
 #import <FormatterKit/TTTLocationFormatter.h>
 
+#include "OARoutingHelper+cpp.h"
+
 #define _(name) OALocationServices__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)

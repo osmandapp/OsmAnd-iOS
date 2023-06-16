@@ -12,6 +12,7 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapActions.h"
+#import "OAApplicationMode.h"
 #import <CarPlay/CarPlay.h>
 
 @implementation OABaseCarPlayInterfaceController

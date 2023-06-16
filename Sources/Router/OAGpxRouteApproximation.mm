@@ -7,12 +7,37 @@
 //
 
 #import "OAGpxRouteApproximation.h"
+#import "OARouteCalculationProgress.h"
+#import "OARouteProvider.h"
 
+#include "OAGpxRouteApproximation+cpp.h"
+#include "OARouteCalculationProgress+cpp.h"
+#include "OARouteProvider+cpp.h"
+
+#include <routingContext.h>
 #include <routePlannerFrontEnd.h>
+
+@interface OAGpxRouteApproximation ()
+
+@property (nonatomic) SHARED_PTR<GpxRouteApproximation> gpxApproximation;
+
+@end
 
 @implementation OAGpxRouteApproximation
 
-- (instancetype) initWithApproximation:(std::shared_ptr<GpxRouteApproximation> &)gpxApproximation
+- (instancetype)initWithRoutingEnvironment:(OARoutingEnvironment *)routingEnvironment
+                  routeCalculationProgress:(OARouteCalculationProgress *)routeCalculationProgress
+{
+    self = [super init];
+    if (self)
+    {
+        routingEnvironment.ctx.get()->progress = routeCalculationProgress.routeCalculationProgress;
+        _gpxApproximation = std::make_shared<GpxRouteApproximation>(routingEnvironment.ctx.get());
+    }
+    return self;
+}
+
+- (instancetype) initWithApproximation:(SHARED_PTR<GpxRouteApproximation> &)gpxApproximation
 {
 	self = [super init];
 	if (self) {

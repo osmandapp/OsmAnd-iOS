@@ -13,6 +13,7 @@
 #import "OAAvoidSpecificRoads.h"
 #import "OARoutingHelper.h"
 #import "OASettingsItemReader.h"
+#import "OAApplicationMode.h"
 
 #define APPROXIMATE_AVOID_ROAD_SIZE_BYTES 185
 

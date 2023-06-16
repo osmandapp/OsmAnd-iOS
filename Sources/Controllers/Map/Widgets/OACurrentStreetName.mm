@@ -16,6 +16,8 @@
 #import "OAAnnounceTimeDistances.h"
 
 #include "OARouteDirectionInfo+cpp.h"
+#include "OARoutingHelper+cpp.h"
+
 #include "routeSegmentResult.h"
 
 @implementation OACurrentStreetName

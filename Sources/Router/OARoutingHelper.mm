@@ -26,12 +26,17 @@
 #import "OATransportRoutingHelper.h"
 #import "OAGpxRouteApproximation.h"
 #import "OACurrentStreetName.h"
+#import "OAResultMatcher.h"
+#import "OAMeasurementEditingContext.h"
 
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <OsmAndCore/Utilities.h>
 
 #include "OARouteCalculationParams+cpp.h"
 #include "OARouteCalculationResult+cpp.h"
+#include "OARouteProvider+cpp.h"
+#include "OARoutingHelper+cpp.h"
+#include "OAGpxRouteApproximation+cpp.h"
 
 #include <routeSegmentResult.h>
 
@@ -1291,6 +1296,66 @@ static BOOL _isDeviatedFromRoute = false;
 												  resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
 {
 	return [_provider calculateGpxApproximation:env gctx:gctx points:points resultMatcher:resultMatcher];
+}
+
+- (OAGPXMutableDocument *)approximateGpxFile:(OAGPXDocument *)gpxFile
+                         calculatedTimeSpeed:(NSMutableArray<NSNumber *> *)calculatedTimeSpeed
+                                         env:(OARoutingEnvironment *)env
+                                        gctx:(OAGpxRouteApproximation *)gctx
+                             locationsHolder:(OALocationsHolder *)locationsHolder
+               shouldNetworkApproximateRoute:(BOOL)shouldNetworkApproximateRoute
+                                      points:(NSArray<OAWptPt *> *)points
+                                     appMode:(OAApplicationMode *)appMode
+                          routingGpxFileName:(NSString *)routingGpxFileName
+{
+    std::vector<SHARED_PTR<GpxPoint>> gpxPoints = [_provider generateGpxPoints:env gctx:gctx.gpxApproximation locationsHolder:locationsHolder];
+
+    OAGpxRouteApproximation *gpxApproximation;
+    if (shouldNetworkApproximateRoute)
+    {
+        //todo implement
+//        let readers = app.getResourceManager().getRoutingMapFiles()
+//        let gpxApproximator = NetworkRouteGpxApproximator(readers, true)
+//        do {
+//            try gpxApproximator.approximate(gpxFile, env.getCtx())
+//        } catch let error {
+////                        LOG.error(error.localizedDescription)
+//        }
+        gpxApproximation = [self prepareApproximationResult:gctx gpxPoints:gpxPoints /*gpxApproximator:gpxApproximator*/];
+        points = @[points.firstObject, points.lastObject];
+    }
+    else
+    {
+        gpxApproximation.gpxApproximation = [self calculateGpxApproximation:env
+                                                                       gctx:gctx.gpxApproximation
+                                                                     points:gpxPoints
+                                                              resultMatcher:nil];
+    }
+    OAMeasurementEditingContext *ctx = [[OAMeasurementEditingContext alloc] init];
+    [ctx setPoints           :gpxApproximation
+               originalPoints:points
+                         mode:appMode
+        useExternalTimestamps:calculatedTimeSpeed.firstObject.boolValue];
+
+    calculatedTimeSpeed[0] = @([ctx hasCalculatedTimeSpeed]);
+    return [ctx exportGpx:routingGpxFileName];
+}
+
+- (OAGpxRouteApproximation *)prepareApproximationResult:(OAGpxRouteApproximation *)gctx
+                                              gpxPoints:(vector<SHARED_PTR<GpxPoint>>)gpxPoints
+//                                        gpxApproximator:(OANetworkRouteGpxApproximator *)gpxApproximator
+{
+    SHARED_PTR<GpxPoint> first = gpxPoints[0];
+//    first->routeToTarget = gpxApproximator.result
+    SHARED_PTR<GpxPoint> last = gpxPoints[gpxPoints.size() - 1];
+    last->ind = 1;
+    vector<SHARED_PTR<RouteSegmentResult>> routeToTarget;
+    last->routeToTarget = routeToTarget;
+    gctx.gpxApproximation->finalPoints.push_back(first);
+    gctx.gpxApproximation->finalPoints.push_back(last);
+    gpxPoints.insert(gpxPoints.end(), gctx.gpxApproximation->finalPoints.begin(), gctx.gpxApproximation->finalPoints.end());
+//    gctx.gpxApproximation->result = gpxApproximator.result
+    return gctx;
 }
 
 - (CLLocation *) getLastProjection

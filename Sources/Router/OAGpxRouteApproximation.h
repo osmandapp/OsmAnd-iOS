@@ -8,18 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
-#include <CommonCollections.h>
-#include <commonOsmAndCore.h>
+@class OARoutingEnvironment, OARouteCalculationProgress;
 
 NS_ASSUME_NONNULL_BEGIN
 
-struct GpxRouteApproximation;
-
 @interface OAGpxRouteApproximation : NSObject
 
-@property (nonatomic) std::shared_ptr<GpxRouteApproximation> gpxApproximation;
-
-- (instancetype) initWithApproximation:(std::shared_ptr<GpxRouteApproximation> &)gpxApproximation;
+- (instancetype)initWithRoutingEnvironment:(OARoutingEnvironment *)routingEnvironment
+                  routeCalculationProgress:(OARouteCalculationProgress *)routeCalculationProgress;
 
 @end
 

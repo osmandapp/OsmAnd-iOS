@@ -8,8 +8,9 @@
 
 #import "OALocationsHolder.h"
 #import "OAGPXDocumentPrimitives.h"
-
 #import <CoreLocation/CoreLocation.h>
+
+#include "OALocationsHolder+cpp.h"
 
 #define LOCATION_TYPE_UNKNOWN -1
 #define LOCATION_TYPE_LOCATION 0

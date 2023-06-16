@@ -67,6 +67,22 @@
     }
 }
 
+- (instancetype)initWithData:(NSData *)data
+{
+    if (self = [super init])
+    {
+        self.path = @"";
+        if ([self loadFromData:data])
+            return self;
+        else
+            return nil;
+    }
+    else
+    {
+        return nil;
+    }
+}
+
 - (BOOL)hasGeneralTrack
 {
     return _generalTrack != nil;
@@ -491,6 +507,19 @@
         return [self fetch:OsmAnd::GpxDocument::loadFrom(QString::fromNSString(filename))];
     else
         return false;
+}
+
+- (BOOL) loadFromData:(NSData *)data
+{
+    if (data)
+    {
+        QXmlStreamReader xmlReader(QByteArray::fromNSData(data));
+        return [self fetch:OsmAnd::GpxDocument::loadFrom(xmlReader)];
+    }
+    else
+    {
+        return false;
+    }
 }
 
 + (void) fillLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>&)links linkArray:(NSArray *)linkArray
@@ -992,6 +1021,24 @@
 - (BOOL) hasRoute
 {
 	return [self getNonEmptyTrkSegments:YES].count > 0;
+}
+
+- (NSArray<OAWptPt *> *)getAllSegmentsPoints
+{
+    NSMutableArray<OAWptPt *> *points = [NSMutableArray array];
+    for (OATrack *track in self.tracks)
+    {
+        if (!track.generalTrack)
+        {
+            for (OATrkSegment *segment in track.segments)
+            {
+                if (!segment.generalSegment)
+                    [points addObjectsFromArray:segment.points];
+            }
+        }
+    }
+
+    return points;
 }
 
 - (NSArray<OAWptPt *> *) getRoutePoints

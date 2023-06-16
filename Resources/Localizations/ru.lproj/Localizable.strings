@@ -990,9 +990,9 @@
 "logging_min_accuracy_descr" = "Фильтр: не регистрировать, пока не достигнута необходимая точность";
 "monitoring_min_speed" = "Минимальная скорость";
 "logging_min_speed_descr" = "Фильтр: не регистрировать, пока не достигнута необходимая скорость";
-"auto_split_recording_title" = "Авторазрыв записи после перерыва";
+"auto_split_recording_title" = "Авторазрыв после перерыва";
 "auto_split_gap_descr" = "Начинает новый сегмент после 6-минутного перерыва, новый трек после 2-часового или новый файл после долгого перерыва";
-"context_menu_item_directions_from" = "Маршрут от этой точки";
+"context_menu_item_directions_from" = "Маршрут от этой точки";
 "start_editing_card_image_text" = "Бесплатный путеводитель по всему миру, который может редактировать каждый.";
 "wikivoyage_travel_guide_descr" = "Гид по самым интересным местам планеты в OsmAnd без подключения к интернету.";
 "product_desc_sea_depth_contours" = "Горизонтали морских глубин и плавучие знаки";
@@ -1038,8 +1038,8 @@
 "empty_route_calculated" = "Невозможно построить маршрут.";
 "avoid_roads_msg" = "Запуск альтернативного маршрута путём исключения указанных дорог";
 "poi_overlay" = "Наложение POI";
-"save_track_to_gpx" = "Автозапись трека во время навигации";
-"save_track_to_gpx_descrp" = "Автозапуск записи трека во время навигации и автосохранение по окончании.";
+"save_track_to_gpx" = "Автозапись трека при навигации";
+"save_track_to_gpx_descrp" = "Автозапуск записи трека во время навигации и автосохранение по завершении.";
 "import_from_docs" = "Импортировать из документов";
 "live_updates" = "Автообновления";
 "osmand_live_last_changed" = "Последнее изменение карты: %@";
@@ -1319,7 +1319,7 @@
 "routing_attr_freeride_policy_description" = "Фрирайд и внетрассовые маршруты — это неофициальные трассы и проезды. Как правило, они не подготовлены, не обслуживаются и не проверяются вечером. Вход на свой страх и риск.";
 "rendering_attr_surface_sett_name" = "Брусчатка";
 "rendering_attr_highway_class_track_grade4_name" = "Класс 4";
-"routing_attr_relief_smoothness_factor_hills_name" = "Любые перепады";
+"routing_attr_relief_smoothness_factor_hills_name" = "Любой сложности";
 "rendering_attr_showMtbRoutes_name" = "Маршруты для горных велосипедов";
 "rendering_attr_piste_type_hike_name" = "Хайк";
 "rendering_attr_surface_snow_name" = "Снег";
@@ -1396,7 +1396,7 @@
 "rendering_attr_highway_class_track_grade2_name" = "Класс 2";
 "rendering_attr_hideIcons_name" = "Значки POI";
 "routing_attr_avoid_shuttle_train_description" = "Избегать использования челночных поездов (шаттлов)";
-"routing_attr_relief_smoothness_factor_name" = "Колебания высоты ландшафта";
+"routing_attr_relief_smoothness_factor_name" = "Перепады высоты ландшафта";
 "rendering_attr_depthContours_name" = "Контуры морских глубин";
 "rendering_attr_publicTransportMode_name" = "Маршруты автобусов, троллейбусов и маршрутных такси";
 "rendering_attr_surface_wood_name" = "Дерево";
@@ -1724,7 +1724,7 @@
 "default_speed_setting_title" = "Скорость по умолчанию";
 "routing_attr_length_name" = "Предельная длина";
 "do_not_rotate" = "Не вращать";
-"select_distance_route_will_recalc" = "Отклонение, при котором маршрут будет пересчитан.";
+"select_distance_route_will_recalc" = "Пороговое отклонение для пересчёта маршрута.";
 "special_routing_type" = "Специальная навигация";
 "default_profile_descr" = "Выберите профиль, который будет использоваться при запуске приложения.";
 "vessel_width_limit_description" = "Укажите ширину судна, чтобы избежать узких мостов";
@@ -1765,7 +1765,7 @@
 "accessibility_announce" = "Оповещение";
 "instructions_repeat" = "Нажмите на виджет \"Следующий поворот\", чтобы повторить инструкции";
 "speed_limit_tolerance_descr" = "Выберите допустимое значение превышения скорости выше которого вы получите голосовое предупреждение.";
-"recalculate_route_distance_promo" = "Максимальное расстояние между маршрутом и текущей позицией, после которого маршрут будет пересчитан.";
+"recalculate_route_distance_promo" = "Предельно допустимое отдаление от маршрута, после которого маршрут перестроится.";
 "recalculate_route" = "Пересчёт маршрута";
 "choose_auto_center_map_view_descr" = "Время до синхронизации вида карты с текущим положением после перемещения";
 "edit_profile_screen_options_subtitle" = "Настройка элементов экрана для профиля";
@@ -1795,7 +1795,7 @@
 "shared_string_copy" = "Копировать";
 "navigation_profiles_item" = "Профили навигации";
 "import_profile_descr" = "Чтобы импортировать профиль, нажмите на нужный файл (*.osf) в любом приложении и выберите \"Копировать в OsmAnd Maps\"";
-"profile_prefs_reset_successful" = "Все настройки профиля восстановлены до состояния по умолчанию.";
+"profile_prefs_reset_successful" = "Все настройки профиля восстановлены до начальных.";
 "reset_profile_action_descr" = "Сбросить все настройки профиля до значений по умолчанию. Нажатие на \"Сброс\" отменяет все ваши изменения, это действие нельзя отменить.";
 "gpx_parse_error" = "В GPX-файле обнаружены проблемы.\n\nДля выяснения причин свяжитесь со службой поддержки .";
 "shared_string_next" = "Следующая";
@@ -2323,7 +2323,7 @@
 "backup_error_gzip_only_supported_upload" = "Файл должен быть отправлен в формате .gzip";
 "osmand_cloud" = "OsmAnd Cloud";
 "rendering_attr_showFunicularRoutes_name" = "Фуникулерные маршруты";
-"osmand_cloud_authorize_descr" = "Не теряйте данные. Используйте резервное копирование для лёгкого сохранения и восстановления информации.";
+"osmand_cloud_authorize_descr" = "Не теряйте данные. Используйте резервное копирование для сохранения и восстановления информации.";
 "save_heading" = "Сохранять путевой угол";
 "routing_attr_only_permitted_streets_description" = "Использовать только специально разрешённые улицы.";
 "routing_attr_prefer_horse_routes_name" = "Предпочитать конные маршруты";
@@ -2361,7 +2361,7 @@
 "weather_pressure_inches_of_mercury" = "Дюймы ртутного столба";
 "routing_attr_avoid_low_emission_zone_name" = "Без зон с низким уровнем выбросов";
 "routing_attr_avoid_low_emission_zone_description" = "Избегать зон с низким уровнем выбросов";
-"weather_temperature_celsius" = "Градус Цельсия";
+"weather_temperature_celsius" = "Градусы Цельсия";
 "weather_pressure_hectopascals" = "Гектопаскали";
 "q_clear_weather_cache" = "Вы хотите очистить кэш погоды?";
 "map_settings_weather_precip" = "Осадки";
@@ -2373,7 +2373,7 @@
 "toggle_cloud" = "Показать/скрыть - Слой облачности";
 "precipitation_show" = "Показать осадки";
 "precipitation_hide" = "Скрыть осадки";
-"weather_temperature_fahrenheit" = "Градус Фаренгейта";
+"weather_temperature_fahrenheit" = "Градусы Фаренгейта";
 "weather_precip_inches" = "Дюймы";
 "login_footer_full_text" = "Нужна помощь? Пожалуйста, свяжитесь с нами по адресу\nsupport@osmand.net";
 "login_footer_email_part" = "support@osmand.net";

@@ -53,12 +53,12 @@
 
 - (float) getTargetDistanceInMeters
 {
-    return [_rendererView getTargetDistanceInMeters];
+    return [_rendererView getTargetDistanceInMeters] * 1000;
 }
 
 - (NSString *) formatDistance: (float) distanceInMeters
 {
-    return [OAOsmAndFormatter getFormattedDistance:distanceInMeters];
+    return [OAOsmAndFormatter getFormattedDistance:distanceInMeters forceTrailingZeroes:NO];
 }
 
 - (void) setImage:(UIImage *)image

@@ -618,7 +618,7 @@
 "show_warnings_title" = "Vis advarsler…";
 "show_warnings_descr" = "Konfigurer trafikadvarsler (hastighedsgrænser, tvungne stop, vejbump, tunneler), fartkameraadvarsler og vognbane oplysninger.";
 "speak_title" = "Meddel…";
-"speak_descr" = "Konfigurer for at annoncere gadenavne, trafikadvarsler (tvungne stop, vejbump), fartkameraadvarsler og hastighedsgrænser";
+"speak_descr" = "Konfigurer for at meddele gadenavne, trafikadvarsler (tvungne stop, vejbump), fartkameraadvarsler og hastighedsgrænser";
 "keep_informing" = "Gentag navigationsinstruktioner";
 "keep_informing_descr" = "Gentag navigationsinstruktioner med jævne mellemrum.";
 "arrival_distance" = "Meddel ankomst";
@@ -1720,7 +1720,7 @@
 "shared_string_copy" = "Kopier";
 "shared_string_meters" = "meter";
 "shared_string_tones" = "toner";
-"accessibility_announce" = "Annoncere";
+"accessibility_announce" = "Meddel";
 "only_manually" = "Kun manuelt";
 "select_distance_route_will_recalc" = "Vælg afstanden, hvorefter ruten genberegnes.";
 "recalculate_route_distance_promo" = "Ruten genberegnes, hvis afstanden fra ruten til den aktuelle placering er større end den valgte værdi.";
@@ -2431,7 +2431,7 @@
 "simulate_location_movement_speed_x2_desc" = "Bevægelseshastigheden af placeringen under simuleringen vil være det dobbelte af hastigheden i den valgte fil.";
 "simulate_location_movement_speed" = "Bevægelseshastighed";
 "simulate_location_movement_speed_x4" = "x4";
-"routing_attr_hazmat_category_name" = "Kategori af farligt gods";
+"routing_attr_hazmat_category_name" = "Transport af farligt gods";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Ingen restriktioner)";
 "transport_hazmat_yes_desc" = "Vælg den rette kategori.";
 "transport_hazmat_no_desc" = "Veje og tunneller kan have begrænsninger på transport af farlige materialer.";
@@ -2783,7 +2783,7 @@
 "kg" = "kg";
 "shared_string_keep_active" = "Hold aktiv";
 "lang_sat" = "Santali";
-"speed_cameras_alert" = "I nogle lande er indberetninger om hastighedskameraer forbudt i henhold til loven.";
+"speed_cameras_alert" = "I nogle lande er advarsler om fartkameraer forbudt ved lov.";
 "uninstall_speed_cameras" = "Afinstaller fartkameraer";
 "speed_camera_pois" = "Fartkamera-IP\'er";
 "shared_string_height" = "Højde";

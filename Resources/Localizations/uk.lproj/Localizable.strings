@@ -2431,7 +2431,7 @@
 "simulate_location_movement_speed_x2_desc" = "Швидкість руху під час імітування буде у 2 рази вищою за швидкість у вибраному файлі.";
 "debugging_and_development" = "Налагодження і розробка OsmAnd";
 "osm_live_payment_year_cost_descr" = "%@ / рік";
-"routing_attr_hazmat_category_name" = "Категорія небезпеки";
+"routing_attr_hazmat_category_name" = "Перевезення небезпечних матеріалів";
 "transport_hazmat_yes_desc" = "Виберіть відповідну категорію.";
 "pro_features" = "Pro функції";
 "wikipedia_and_wikivoyage_offline" = "Вікіпедія і Вікімандри офлайн";

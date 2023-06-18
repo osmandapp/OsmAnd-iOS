@@ -2438,7 +2438,7 @@
 "product_desc_development" = "Para desarrolladores y usuarios experimentados";
 "osmand_development_plugin_description" = "Incluye funciones de prueba y depuración de OsmAnd: simula rutas de navegación, monitorea el renderizado de la pantalla, comprueba el rendimiento, etc. El complemento no es necesario para el uso normal de la aplicación.";
 "ltr_or_rtl_combine_via_or" = "%@ o %@";
-"routing_attr_hazmat_category_name" = "Categoría de materiales peligrosos";
+"routing_attr_hazmat_category_name" = "Transporte de materiales peligrosos";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Sin restricciones)";
 "transport_hazmat_yes_desc" = "Marca la categoría correspondiente.";
 "carplay" = "CarPlay";

@@ -310,8 +310,8 @@
     BOOL hasRightWidgets = _rightPanelController.hasWidgets;
 
     CGRect leftRect = _leftPanelController.view.frame;
-    [_leftPanelController updateWidgetSizes];
-    [_rightPanelController updateWidgetSizes];
+//    [_leftPanelController updateWidgetSizes];
+//    [_rightPanelController updateWidgetSizes];
     
     CGFloat maxWidth = fmax(_leftPanelController.view.frame.size.width, _rightPanelController.view.frame.size.width);
     CGFloat widgetsHeight = fmax(_leftPanelController.view.frame.size.height, _rightPanelController.view.frame.size.height);

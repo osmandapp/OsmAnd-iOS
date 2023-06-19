@@ -10,7 +10,7 @@ import UIKit
 
 @objc(OAWidgetPanelViewController)
 @objcMembers
-class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+class WidgetPanelViewController: UIViewController {
     
     static let controlHeight: CGFloat = 26
     
@@ -18,155 +18,171 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
     
     @IBOutlet var pageControlHeightConstraint: NSLayoutConstraint!
 
+    @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet var collectionHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var collectionWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var pageControl: UIPageControl!
     
-    var pageViewController: UIPageViewController!
-    var pages: [UIViewController] = []
-    
     var widgetPages: [[OABaseWidgetView]] = []
-    var currentIndex: Int {
-        guard let vc = pageViewController.viewControllers?.first else { return 0 }
-        return pages.firstIndex(of: vc) ?? 0
-    }
-    
-    let pageContainerView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(PageCollectionViewCell.self, forCellWithReuseIdentifier: PageCollectionViewCell.getIdentifier())
         
-        pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-        pageViewController.dataSource = self
-        pageViewController.delegate = self
-        
-        // Add the container view to the view hierarchy
-        view.addSubview(pageContainerView)
-        
-        // Set up constraints
-        pageContainerView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            pageContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            pageContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            pageContainerView.topAnchor.constraint(equalTo: view.topAnchor),
-            pageContainerView.bottomAnchor.constraint(equalTo: pageControl.topAnchor),
-            pageContainerView.widthAnchor.constraint(equalToConstant: 0),
-            pageContainerView.heightAnchor.constraint(equalToConstant: 0)
-        ])
-        
-        // Add the page view controller as a child view controller
-        addChild(pageViewController)
-        pageContainerView.addSubview(pageViewController.view)
-        pageViewController.didMove(toParent: self)
-        
-        // Set up constraints for the page view controller's view
-        pageViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            pageViewController.view.leadingAnchor.constraint(equalTo: pageContainerView.leadingAnchor),
-            pageViewController.view.trailingAnchor.constraint(equalTo: pageContainerView.trailingAnchor),
-            pageViewController.view.topAnchor.constraint(equalTo: pageContainerView.topAnchor),
-            pageViewController.view.bottomAnchor.constraint(equalTo: pageContainerView.bottomAnchor)
-        ])
-        
-        updateWidgetPages(widgetPages)
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
+        layout.sectionInset = .zero
+        collectionView.collectionViewLayout = layout
+        collectionView.isPagingEnabled = true
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        collectionView.reloadData()
+        updateContainerViewSize(for: 0)
+
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
     }
     
     @IBAction func pageControlTapped(_ sender: Any) {
         guard let pageControl = sender as? UIPageControl else { return }
         let selectedPage = pageControl.currentPage
-        pageViewController.setViewControllers([pages[selectedPage]], direction: selectedPage > currentIndex ? .forward : .reverse, animated: true) { [weak self] _ in
-            self?.updateContainerSize()
-        }
-    }
-    
-    private func calculateContentSize() -> (width: CGFloat, height: CGFloat) {
-        if let controller = pages[currentIndex] as? WidgetPageViewController {
-            return controller.layoutWidgets()
-        }
-        return (0, 0)
-    }
-    
-    private func updateContainerSize() {
-        let contentSize = calculateContentSize()
-        
-        // Update the height constraint of the container view
-        for constraint in pageContainerView.constraints {
-            if constraint.firstItem === pageContainerView {
-                if constraint.firstAttribute == .height {
-                    constraint.constant = contentSize.height
-                } else if constraint.firstAttribute == .width {
-                    constraint.constant = contentSize.width
-                }
-            }
-        }
-
-//        UIView.transition(with: view, duration: 0.2, options: .transitionCrossDissolve, animations: {
-        self.view.superview?.layoutIfNeeded()
-//        }, completion: nil)
+        collectionView.reloadData()
     }
     
     func clearWidgets() {
-        pages.removeAll()
         widgetPages.removeAll()
-        guard let pageViewController else { return }
-        pageViewController.setViewControllers([UIViewController()], direction: .forward, animated: false)
+        collectionView.reloadData()
     }
     
     func updateWidgetPages(_ widgetPages: [[OABaseWidgetView]]) {
-        guard let pageViewController else { return }
         self.widgetPages = widgetPages
-        for page in widgetPages {
-            let vc = WidgetPageViewController()
-            vc.widgetViews = page
-            pages.append(vc)
-        }
-        if pages.isEmpty {
-            pages.append(UIViewController())
-        }
-        pageViewController.setViewControllers([pages[currentIndex]], direction: .forward, animated: true)
+        collectionView.reloadData()
         
         // Set up the page control
-        pageControl.numberOfPages = pages.count
-        pageControl.currentPage = currentIndex
-        pageControl.isHidden = pages.count <= 1;
+        pageControl.numberOfPages = widgetPages.count
+        pageControl.currentPage = 0
+        pageControl.isHidden = widgetPages.count <= 1;
         pageControlHeightConstraint.constant = pageControl.isHidden ? 0 : Self.controlHeight
     }
     
     func hasWidgets() -> Bool {
         return !widgetPages.isEmpty
     }
+}
+
+extension WidgetPanelViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    func updateWidgetSizes() {
-        if !isInTransition {
-            updateContainerSize()
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return widgetPages.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PageCollectionViewCell.getIdentifier(), for: indexPath) as! PageCollectionViewCell
+        cell.configure(with: widgetPages[indexPath.item])
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return calculateSize(section: indexPath.section)
+    }
+    
+    private func calculateMaxSize() -> CGSize {
+//        let views = widgetPages[section]
+        var width: CGFloat = 0
+        var height: CGFloat = 0
+        for i in widgetPages.indices {
+            let size = calculateSize(section: i)
+            width = max(width, size.width)
+            height = max(height, size.height)
+        }
+        return CGSize(width: width, height: height)
+    }
+    
+    private func calculateSize(section: Int) -> CGSize {
+        let views = widgetPages[section]
+        var width: CGFloat = 0
+        var height: CGFloat = 0
+        for widget in views {
+            if let widget = widget as? OATextInfoWidget {
+                widget.adjustViewSize()
+            } else {
+                widget.sizeToFit()
+            }
+            width = max(width, widget.frame.size.width)
+            if !widget.isHidden {
+                height += widget.frame.size.height
+            }
+        }
+        return CGSize(width: width, height: height)
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let visibleRect = CGRect(origin: collectionView.contentOffset, size: collectionView.bounds.size)
+        let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
+
+        if let visibleIndexPath = collectionView.indexPathForItem(at: visiblePoint) {
+            pageControl.currentPage = visibleIndexPath.item
+            updateContainerViewSize(for: visibleIndexPath.item)
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
+            } completion: { _ in
+                self.collectionView.scrollToItem(at: visibleIndexPath, at: .centeredHorizontally, animated: false)
+            }
         }
     }
     
-    // MARK: - UIPageViewControllerDataSource
+    private func updateContainerViewSize(for pageIndex: Int) {
+        let cellSize = calculateMaxSize()
+        collectionHeightConstraint.constant = cellSize.height
+        collectionWidthConstraint.constant = cellSize.width
+//        view.layoutIfNeeded()
+    }
+}
+
+class PageCollectionViewCell: UICollectionViewCell {
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard currentIndex > 0 else {
-            return nil
-        }
-        return pages[currentIndex - 1]
+    private var stackView: UIStackView!
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupStackView()
     }
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard currentIndex < pages.count - 1 else {
-            return nil
-        }
-        return pages[currentIndex + 1]
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - UIPageViewControllerDelegate
-    
-    func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
-        isInTransition = true
-    }
-    
-    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        if !completed || !finished { return }
+    private func setupStackView() {
+        stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 0
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         
-        isInTransition = false
-        pageControl.currentPage = currentIndex
-        updateWidgetSizes()
+        contentView.addSubview(stackView)
+        NSLayoutConstraint.activate([
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0)
+        ])
+    }
+    
+    func configure(with views: [UIView]) {
+        stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        views.forEach {
+            if let widget = $0 as? OATextInfoWidget {
+                widget.adjustViewSize()
+            }
+            $0.heightAnchor.constraint(equalToConstant: $0.frame.size.height).isActive = true
+            stackView.addArrangedSubview($0)
+        }
     }
 }

@@ -9,6 +9,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAWidgetPanelViewController" customModule="OsmAnd_Maps" customModuleProvider="target">
             <connections>
+                <outlet property="collectionHeightConstraint" destination="rTB-Zh-2dF" id="Paw-kT-2Kl"/>
+                <outlet property="collectionView" destination="EtJ-aC-Etm" id="qZO-Fk-Q5I"/>
+                <outlet property="collectionWidthConstraint" destination="YF6-6f-BZg" id="c7G-Gh-B4O"/>
                 <outlet property="pageControl" destination="skp-uv-S5T" id="u7k-hs-duo"/>
                 <outlet property="pageControlHeightConstraint" destination="1bH-FK-9lc" id="Sab-Tg-h1R"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -29,11 +32,28 @@
                         <action selector="pageControlTapped:" destination="-1" eventType="valueChanged" id="gaW-WV-FQ3"/>
                     </connections>
                 </pageControl>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="never" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="EtJ-aC-Etm">
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="826"/>
+                    <constraints>
+                        <constraint firstAttribute="width" priority="999" constant="150" id="YF6-6f-BZg"/>
+                        <constraint firstAttribute="height" priority="999" id="rTB-Zh-2dF"/>
+                    </constraints>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="arK-f6-V2c">
+                        <size key="itemSize" width="128" height="128"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
             </subviews>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="EtJ-aC-Etm" secondAttribute="trailing" id="3KM-MB-VeY"/>
+                <constraint firstItem="EtJ-aC-Etm" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="F0K-IY-pbq"/>
+                <constraint firstItem="skp-uv-S5T" firstAttribute="top" secondItem="EtJ-aC-Etm" secondAttribute="bottom" id="IHh-Ns-AX8"/>
                 <constraint firstAttribute="trailing" secondItem="skp-uv-S5T" secondAttribute="trailing" id="PGg-mD-Q4F"/>
                 <constraint firstAttribute="bottom" secondItem="skp-uv-S5T" secondAttribute="bottom" id="h8G-Dr-Q48"/>
                 <constraint firstItem="skp-uv-S5T" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="knX-wD-2CJ"/>
+                <constraint firstItem="EtJ-aC-Etm" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="oHk-Cl-6xh"/>
             </constraints>
             <point key="canvasLocation" x="140" y="20"/>
         </view>

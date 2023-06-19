@@ -2476,7 +2476,7 @@
 "shared_string_progress" = "Progreso";
 "shared_string_contributions" = "Contribuciones";
 "simulate_location_movement_speed" = "Velocidad de movimiento";
-"routing_attr_hazmat_category_name" = "Categoría de materiales peligrosos";
+"routing_attr_hazmat_category_name" = "Transporte de mercancías peligrosas";
 "service_is_not_available_please_try_later" = "Servicio no disponible. Por favor, inténtelo de nuevo más tarde.";
 "renew_subscription" = "Renovar suscripción";
 "backup_into_file" = "Crear copia de seguridad local";

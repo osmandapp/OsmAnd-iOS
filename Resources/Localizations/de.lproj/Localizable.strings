@@ -1809,7 +1809,7 @@
 "listed_exist" = "Aufgelistete %@, in OsmAnd bereits vorhanden.";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"search_activity" = "Suche";
+"search_activity" = "Suchen";
 "configure_screen_quick_action" = "Schnellaktion";
 "shared_string_settings" = "Einstellungen";
 "importing_from" = "Daten aus %@ importieren";

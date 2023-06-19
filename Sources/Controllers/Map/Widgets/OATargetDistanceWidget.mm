@@ -53,7 +53,7 @@
 
 - (float) getTargetDistanceInMeters
 {
-    return [_rendererView getTargetDistanceInMeters] * 1000;
+    return [_rendererView getTargetDistanceInMeters];
 }
 
 - (NSString *) formatDistance: (float) distanceInMeters

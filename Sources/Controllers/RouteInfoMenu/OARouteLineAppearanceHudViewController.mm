@@ -506,6 +506,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                      forState:UIControlStateNormal];
     self.backButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
     [self.backButton addBlurEffect:YES cornerRadius:12. padding:0];
+    self.backButton.accessibilityLabel = localizedString(@"shared_string_dismiss");
     backImage = [UIImage templateImageNamed:@"ic_navbar_chevron"];
 
     [self.backNavBarButton setImage:isRTL ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage

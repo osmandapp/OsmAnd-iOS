@@ -341,9 +341,9 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if ([item[@"selected"] boolValue])
-            cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
         else
-            cell.accessoryView = nil;
+            cell.accessoryType = UITableViewCellAccessoryNone;
         
         NSString *regularText = item[@"title"];
         NSString *coloredText = item[@"descr"];

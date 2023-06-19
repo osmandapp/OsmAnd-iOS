@@ -2901,3 +2901,5 @@
 "disable_vertex_hillshade_3d" = "Desativar vértices de sombras de relevo em 3D";
 "generate_slope_from_3d_maps" = "Gerar mapas raster de declives a partir de mapas 3D";
 "generate_hillshade_from_3d_maps" = "Gerar mapas de sombras de relevo a partir de mapas 3D";
+"user_name" = "Nome de utilizador";
+"perform_oauth_authorization" = "Iniciar sessão com OAuth";

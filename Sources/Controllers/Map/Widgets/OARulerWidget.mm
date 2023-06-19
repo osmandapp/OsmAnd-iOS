@@ -383,7 +383,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         {
             double pixelDensity = _cachedMapDensity * [[UIScreen mainScreen] scale];
             auto latLon = OsmAnd::Utilities::rhumbDestinationPoint(centerLatLon, circleRadius * pixelDensity, a);
-            if (ABS(latLon.latitude) > 90 || ABS(latLon.longitude) > 180)
+            if (ABS(latLon.latitude) > 90)
             {
                 if (points.count > 0)
                 {
@@ -701,17 +701,10 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 - (OsmAnd::PointI) getCenter31
 {
     OAMapRendererView *mapRendererView = _mapViewController.mapView;
-    if (mapRendererView.heightmapSupported)
-    {
-        OsmAnd::PointI target31;
-        auto centerPixel = mapRendererView.getCenterPixel;
-        [mapRendererView convert:CGPointMake(centerPixel.x, centerPixel.y) toLocation:&target31];
-        return target31;
-    }
-    else
-    {
-        return mapRendererView.target31;
-    }
+    OsmAnd::PointI target31;
+    auto centerPixel = mapRendererView.getCenterPixel;
+    [mapRendererView convert:CGPointMake(centerPixel.x, centerPixel.y) toLocation:&target31];
+    return target31;
 }
 
 - (CGPoint) screenPointFromPoint:(CGPoint)point

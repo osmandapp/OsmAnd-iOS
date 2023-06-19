@@ -2592,7 +2592,6 @@
 		DA5A83A026C563A800F274C7 /* OAOsmEditTargetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DA626C563A300F274C7 /* OAOsmEditTargetViewController.xib */; };
 		DA5A83A126C563A800F274C7 /* OAOsmNotesOnlineTargetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DA726C563A300F274C7 /* OAOsmNotesOnlineTargetViewController.xib */; };
 		DA5A83A226C563A800F274C7 /* OAOsmEditingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DAB26C563A300F274C7 /* OAOsmEditingViewController.mm */; };
-		DA5A83A326C563A800F274C7 /* OAPoiTypeSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DAC26C563A300F274C7 /* OAPoiTypeSelectionViewController.xib */; };
 		DA5A83A426C563A800F274C7 /* OAPoiTypeSelectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DAD26C563A300F274C7 /* OAPoiTypeSelectionViewController.mm */; };
 		DA5A83A526C563A800F274C7 /* OAOsmEditingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DAE26C563A300F274C7 /* OAOsmEditingViewController.xib */; };
 		DA5A83A626C563A800F274C7 /* OAOpeningHoursSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DAF26C563A300F274C7 /* OAOpeningHoursSelectionViewController.xib */; };
@@ -6805,7 +6804,6 @@
 		DA5A7DA926C563A300F274C7 /* OAPoiTypeSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPoiTypeSelectionViewController.h; sourceTree = "<group>"; };
 		DA5A7DAA26C563A300F274C7 /* OAOpeningHoursSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOpeningHoursSelectionViewController.h; sourceTree = "<group>"; };
 		DA5A7DAB26C563A300F274C7 /* OAOsmEditingViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmEditingViewController.mm; sourceTree = "<group>"; };
-		DA5A7DAC26C563A300F274C7 /* OAPoiTypeSelectionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAPoiTypeSelectionViewController.xib; sourceTree = "<group>"; };
 		DA5A7DAD26C563A300F274C7 /* OAPoiTypeSelectionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPoiTypeSelectionViewController.mm; sourceTree = "<group>"; };
 		DA5A7DAE26C563A300F274C7 /* OAOsmEditingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAOsmEditingViewController.xib; sourceTree = "<group>"; };
 		DA5A7DAF26C563A300F274C7 /* OAOpeningHoursSelectionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAOpeningHoursSelectionViewController.xib; sourceTree = "<group>"; };
@@ -12470,7 +12468,6 @@
 				DA5A7DA726C563A300F274C7 /* OAOsmNotesOnlineTargetViewController.xib */,
 				DA5A7DA926C563A300F274C7 /* OAPoiTypeSelectionViewController.h */,
 				DA5A7DAD26C563A300F274C7 /* OAPoiTypeSelectionViewController.mm */,
-				DA5A7DAC26C563A300F274C7 /* OAPoiTypeSelectionViewController.xib */,
 				32961CA62991377E00CF5DAB /* OAUploadGPXFilesTask.h */,
 				32BFF097299137D60023D067 /* OAUploadGPXFilesTask.m */,
 			);
@@ -14387,7 +14384,6 @@
 				46453B2528352449001F9A3A /* ic_custom_osmand_pro_logo_colored_big@3x.png in Resources */,
 				DA8A928025DE8B4A00F5320A /* ic_carplay_search@2x.png in Resources */,
 				DA7FA55E2695DCFB0044F05A /* fi_tts.js in Resources */,
-				DA5A83A326C563A800F274C7 /* OAPoiTypeSelectionViewController.xib in Resources */,
 				DAC849B626CF97EE00018091 /* OADownloadMapWidget.xib in Resources */,
 				3296B48727F8790800108AF7 /* widget_weather_umbrella_night@2x.png in Resources */,
 				46E9AD9428DC89DD00CC55F9 /* OASwitchTableViewCell.xib in Resources */,

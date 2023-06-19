@@ -7,7 +7,7 @@
 //
 
 #import "OAOpeningHoursSelectionViewController.h"
-#import "OASettingsTitleTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "Localization.h"
 #import "OAEditPOIData.h"
 #import "OASwitchTableViewCell.h"
@@ -15,6 +15,7 @@
 #import "OAValueTableViewCell.h"
 #import "OASizes.h"
 #import "OAOSMSettings.h"
+#import "OAColors.h"
 
 #include <ctime>
 
@@ -26,9 +27,6 @@ static const NSInteger timeSectionIndex = 1;
 
 @interface OAOpeningHoursSelectionViewController () <UITableViewDelegate, UITableViewDataSource>
 
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *toolBar;
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
@@ -78,20 +76,15 @@ static const NSInteger timeSectionIndex = 1;
     [super viewDidLoad];
     [self setupView];
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
+    self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
+    self.navigationItem.title = OALocalizedString(@"osm_add_timespan");
 }
 
 
 -(void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"osm_add_timespan");
     [_applyButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
     [_deleteButton setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
-}
-
-
--(UIView *) getTopView
-{
-    return _navBarView;
 }
 
 -(UIView *) getMiddleView
@@ -135,7 +128,7 @@ static const NSInteger timeSectionIndex = 1;
     for (int i = 0; i < [_dateFormatter weekdaySymbols].count; i++) {
         [dataArr addObject:@{
                              @"title" : [[self weekdayNameFromWeekdayNumber:i] capitalizedString],
-                             @"type" : [OASettingsTitleTableViewCell getCellIdentifier]
+                             @"type" : [OASimpleTableViewCell getCellIdentifier]
                              }];
     }
     _weekdaysData = [NSArray arrayWithArray:dataArr];
@@ -288,20 +281,22 @@ static const NSInteger timeSectionIndex = 1;
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OASettingsTitleTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell* cell = nil;
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         
         if (cell)
         {
-            [cell.textView setText:item[@"title"]];
-            [cell.iconView setImage:[UIImage imageNamed:_currentRule->containsDay({0, 0, 0, 0, 0, 0, static_cast<int>([self indexFromWeekdayNumber:indexPath.row])}) ? @"menu_cell_selected.png" : @""]];
+            [cell.titleLabel setText:item[@"title"]];
+            cell.accessoryType = _currentRule->containsDay({0, 0, 0, 0, 0, 0, static_cast<int>([self indexFromWeekdayNumber:indexPath.row])}) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         return cell;
     }
@@ -410,7 +405,7 @@ static const NSInteger timeSectionIndex = 1;
         [self.tableView endUpdates];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
-    else if ([item[@"type"] isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
         const auto rule = std::dynamic_pointer_cast<OpeningHoursParser::BasicOpeningHourRule>(_currentRule);
         rule->getDays()[[self weekdayNumberFromIndex:indexPath.row]] = !rule->getDays()[[self weekdayNumberFromIndex:indexPath.row]];
@@ -441,10 +436,6 @@ static const NSInteger timeSectionIndex = 1;
     
     [self.tableView insertRowsAtIndexPaths:indexPaths
                           withRowAnimation:UITableViewRowAnimationFade];
-}
-
-- (IBAction)backButtonPressed:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (std::vector<std::shared_ptr<OpeningHoursParser::OpeningHoursRule> >)getRulesWithoutCurrent {

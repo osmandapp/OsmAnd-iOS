@@ -2528,7 +2528,7 @@
 "weather_plugin_description" = "Fornisce\n- previsioni meteo, 24 ore per 7 giorni, con 5 livelli\n- widget localizzati\n- isoterme / isobare\n\nI dati meteo sono forniti dal Global Forecast System (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
 "res_import_unsupported" = "Tipo di file errato. Sono supportati solo i file routing.xml e *.render.xml.";
 "subscriptions_public_info" = "Il pagamento verrà addebitato sul tuo account iTunes alla conferma dell'acquisto. L'abbonamento si rinnoverà automaticamente a meno che il rinnovo automatico non venga disattivato almeno 24 ore prima della fine del periodo corrente. Il tuo account verrà addebitato in base al tuo piano per il rinnovo entro 24 ore prima della fine del periodo corrente. Puoi gestire o disattivare il rinnovo automatico nelle Impostazioni account dopo l'acquisto. Se acquisti un abbonamento durante un periodo di prova gratuito, la parte inutilizzata di questo periodo verrà persa.";
-"map_download_privacy_descr" = "Scaricando le mappe accetti i <a href='https://osmand.net/docs/legal/terms-of-use'>Termini d'uso</a> e la <a href='https://osmand. net/docs/legal/privacy-policy'>Informativa sulla privacy</a>.";
+"map_download_privacy_descr" = "Scaricando le mappe accetti i <a href='https://osmand.net/docs/legal/terms-of-use'>Termini d'uso</a> e la <a href='https://osmand.net/docs/legal/privacy-policy'>Informativa sulla privacy</a>.";
 "already_has_inapp" = "Sei già iscritto a %@.";
 "already_has_subscription" = "Sei già abbonato a OsmAnd Live e hai tutte le funzionalità sbloccate.";
 "touting_specified_vehicle_parameters_descr" = "I parametri del veicolo specificati possono influire sul percorso.";

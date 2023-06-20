@@ -2583,3 +2583,18 @@
 "icon_group_service" = "Tjeneste";
 "weather_forecast_is_outdated" = "Værmeldingen er utdatert.";
 "speak_route_deviation" = "Kunngjør avvik fra ruten";
+
+// Shared Strings
+"shared_string_cancelled" = "Avbrutt";
+"map_widget_sunrise" = "Soloppgang";
+"map_widget_sunset" = "Solnedgang";
+"map_widget_sunrise_sunset_time_left" = "Tid igjen";
+"map_widget_next_sunrise" = "Neste soloppgang";
+"map_widget_next_sunset" = "Neste solnedgang";
+"last_seven_days" = "Siste syv dager";
+"map_widget_zoom_level" = "Forstørrelsesnivå";
+"map_widget_target_distance" = "Avstand fra kamera til mål";
+"map_widget_trip_recording_downhill" = "Nedoverbakke";
+"map_widget_trip_recording_uphill" = "Oppoverbakke";
+"map_widget_trip_recording_duration" = "Varighet";
+"map_widget_trip_recording_distance" = "Avstand";

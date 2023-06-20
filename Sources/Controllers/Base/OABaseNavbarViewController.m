@@ -238,6 +238,8 @@
     [self setupNavbarButtons];
     if ([self isScreenLoaded])
         [self setupTableHeaderView];
+    if (_rightIconLargeTitle)
+        [self updateRightIconLargeTitle];
 }
 
 - (void)updateUI

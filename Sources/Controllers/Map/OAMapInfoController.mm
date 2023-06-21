@@ -74,7 +74,7 @@
 
     OAMapWidgetRegistry *_mapWidgetRegistry;
     BOOL _expanded;
-    BOOL _isBorders0fDownloadedMaps;
+    BOOL _isBordersOfDownloadedMaps;
     OATopTextView *_streetNameView;
     OACoordinatesWidget *_topCoordinatesView;
     OACoordinatesWidget *_coordinatesMapCenterWidget;
@@ -493,8 +493,8 @@
         [_mapHudViewController updateWeatherButtonVisibility];
     }
     
-    _isBorders0fDownloadedMaps = [_settings.mapSettingShowBordersOfDownloadedMaps get];
-    if (_isBorders0fDownloadedMaps)
+    _isBordersOfDownloadedMaps = [_settings.mapSettingShowBordersOfDownloadedMaps get];
+    if (_isBordersOfDownloadedMaps)
     {
         [_settings.mapSettingShowBordersOfDownloadedMaps set:NO];
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
@@ -530,7 +530,7 @@
     }
     [mapPanel.weatherToolbarStateChangeObservable notifyEvent];
     
-    if (_isBorders0fDownloadedMaps)
+    if (_isBordersOfDownloadedMaps)
     {
         [_settings.mapSettingShowBordersOfDownloadedMaps set:YES];
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];

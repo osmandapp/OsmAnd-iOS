@@ -33,6 +33,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (BOOL) downloadFile:(NSString *)fileName url:(NSString *)url progress:(OAURLSessionProgress *)progress;
 
++ (void)getHttpURLConnection:(NSString *)urlStr
+              requestHandler:(void (NSMutableURLRequest *))requestHandler
+                 taskHandler:(void (^)(NSData * _Nullable, NSURLResponse * _Nullable, NSError * _Nullable))taskHandler;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -77,14 +77,14 @@ class GpxEngine: OnlineRoutingEngine {
     override func parseResponse(content: String,
                                 leftSideNavigation: Bool,
                                 initialCalculation: Bool,
-                                calculationProgress: OARouteCalculationProgress) -> OnlineRoutingResponse? {
+                                calculationProgress: OARouteCalculationProgress?) -> OnlineRoutingResponse? {
         var gpxFile: OAGPXDocument? = parseGpx(content: content)
         return gpxFile != nil ? prepareResponse(gpxFile: &gpxFile!, initialCalculation: initialCalculation, calculationProgress: calculationProgress) : nil
     }
 
     private func prepareResponse(gpxFile: inout OAGPXDocument,
                                  initialCalculation: Bool,
-                                 calculationProgress: OARouteCalculationProgress) -> OnlineRoutingResponse {
+                                 calculationProgress: OARouteCalculationProgress?) -> OnlineRoutingResponse {
         var calculatedTimeSpeed: NSMutableArray = [useExternalTimestamps()]
         if shouldApproximateRoute() && !initialCalculation {
             if let approximated = approximateGpxFile(gpxFile: gpxFile, calculationProgress: calculationProgress, calculatedTimeSpeed: &calculatedTimeSpeed) {
@@ -95,7 +95,7 @@ class GpxEngine: OnlineRoutingEngine {
     }
 
     private func approximateGpxFile(gpxFile: OAGPXDocument,
-                                    calculationProgress: OARouteCalculationProgress,
+                                    calculationProgress: OARouteCalculationProgress?,
                                     calculatedTimeSpeed: inout NSMutableArray) -> OAGPXMutableDocument? {
         let routingHelper: OARoutingHelper = OARoutingHelper.sharedInstance()
         let appMode: OAApplicationMode = routingHelper.getAppMode()

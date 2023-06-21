@@ -10,13 +10,9 @@
 
 @class OARoutingEnvironment, OARouteCalculationProgress;
 
-NS_ASSUME_NONNULL_BEGIN
-
 @interface OAGpxRouteApproximation : NSObject
 
 - (instancetype)initWithRoutingEnvironment:(OARoutingEnvironment *)routingEnvironment
-                  routeCalculationProgress:(OARouteCalculationProgress *)routeCalculationProgress;
+                  routeCalculationProgress:(OARouteCalculationProgress * _Nullable)routeCalculationProgress;
 
 @end
-
-NS_ASSUME_NONNULL_END

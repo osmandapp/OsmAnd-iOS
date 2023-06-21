@@ -26,7 +26,7 @@
 @implementation OAGpxRouteApproximation
 
 - (instancetype)initWithRoutingEnvironment:(OARoutingEnvironment *)routingEnvironment
-                  routeCalculationProgress:(OARouteCalculationProgress *)routeCalculationProgress
+                  routeCalculationProgress:(OARouteCalculationProgress * _Nullable)routeCalculationProgress
 {
     self = [super init];
     if (self)

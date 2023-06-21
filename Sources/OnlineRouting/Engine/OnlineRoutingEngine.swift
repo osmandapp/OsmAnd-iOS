@@ -145,7 +145,7 @@ class OnlineRoutingEngine: NSObject, NSCopying {
         return nil
     }
 
-    func parseResponse(content: String, leftSideNavigation: Bool, initialCalculation: Bool, calculationProgress: OARouteCalculationProgress) throws -> OnlineRoutingResponse? {
+    func parseResponse(content: String, leftSideNavigation: Bool, initialCalculation: Bool, calculationProgress: OARouteCalculationProgress?) throws -> OnlineRoutingResponse? {
         fatalError("Subclasses must override parseResponse(content:app:leftSideNavigation:initialCalculation:calculationProgress:)")
     }
 

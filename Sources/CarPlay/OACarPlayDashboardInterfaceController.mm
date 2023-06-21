@@ -25,6 +25,8 @@
 #import "OAOsmAndFormatter.h"
 #import "OALanesDrawable.h"
 
+#include "OARouteDirectionInfo+cpp.h"
+
 #define unitsKm OALocalizedString(@"km")
 #define unitsM OALocalizedString(@"m")
 #define unitsMi OALocalizedString(@"mile")

@@ -21,6 +21,7 @@
 #import "OATargetPointsHelper.h"
 #import "OAHistoryHelper.h"
 #import "OAExportSettingsType.h"
+#import "OAApplicationMode.h"
 #import "OAColors.h"
 #import "OASizes.h"
 #import "Localization.h"

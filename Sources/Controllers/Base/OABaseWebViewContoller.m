@@ -8,6 +8,7 @@
 
 #import "OABaseWebViewController.h"
 #import "OAAppSettings.h"
+#import "OADownloadMode.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 @implementation OABaseWebViewController

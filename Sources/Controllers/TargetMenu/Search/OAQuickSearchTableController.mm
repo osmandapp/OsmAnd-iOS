@@ -53,6 +53,8 @@
 #import "OAEmptySearchCell.h"
 #import "OARightIconTableViewCell.h"
 
+#include "OAGPXDocument+cpp.h"
+
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Search/AmenitiesInAreaSearch.h>

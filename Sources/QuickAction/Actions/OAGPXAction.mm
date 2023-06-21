@@ -25,6 +25,9 @@
 #import "OASwitchTableViewCell.h"
 #import "OAInputTableViewCell.h"
 
+#include "OAGPXDocumentPrimitives+cpp.h"
+#include "OAGPXDocument+cpp.h"
+
 #include <OsmAndCore/Utilities.h>
 
 #define KEY_NAME @"name"

@@ -15,9 +15,10 @@
 #import "OARouteProvider.h"
 #import "OARouteCalculationParams.h"
 
+#include "OARouteProvider+cpp.h"
+
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
-
 #include <routePlannerFrontEnd.h>
 #include <routingConfiguration.h>
 #include <routingContext.h>

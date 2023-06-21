@@ -65,6 +65,9 @@
 #import <Charts/Charts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
 
+#include "OAGPXDocumentPrimitives+cpp.h"
+#include "OAGPXDocument+cpp.h"
+
 #define kGpxDescriptionImageHeight 149
 #define kOverviewTabIndex @0
 #define kAltutudeTabIndex @1

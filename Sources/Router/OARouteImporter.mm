@@ -10,6 +10,8 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
 
+#include "OAGPXDocumentPrimitives+cpp.h"
+
 #include <routeDataResources.h>
 #include <routeSegmentResult.h>
 #include <routeDataBundle.h>

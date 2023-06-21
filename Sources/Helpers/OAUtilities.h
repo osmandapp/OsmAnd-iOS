@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import <UIKit/UIKit.h>
 
 //RGB color macro
 #define UIColorFromRGB(rgbValue) [UIColor \

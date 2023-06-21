@@ -17,6 +17,9 @@
 #import "OAAppVersionDependentConstants.h"
 #import "OAGPXAppearanceCollection.h"
 
+#include "OAGPXDocument+cpp.h"
+#include "OAGPXDocumentPrimitives+cpp.h"
+
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QKeyValueIterator.h>
 #include <qmap.h>
@@ -32,7 +35,7 @@
     BOOL _routePoints;
 }
 
-- (id)initWithGpxDocument:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument
+- (instancetype)initWithGpxDocument:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument
 {
     if (self = [super init])
     {
@@ -48,12 +51,28 @@
     }
 }
 
-- (id)initWithGpxFile:(NSString *)filename
+- (instancetype)initWithGpxFile:(NSString *)filename
 {
     if (self = [super init])
     {
         self.path = filename;
         if ([self loadFrom:filename])
+            return self;
+        else
+            return nil;
+    }
+    else
+    {
+        return nil;
+    }
+}
+
+- (instancetype)initWithData:(NSData *)data
+{
+    if (self = [super init])
+    {
+        self.path = @"";
+        if ([self loadFromData:data])
             return self;
         else
             return nil;
@@ -490,6 +509,19 @@
         return false;
 }
 
+- (BOOL) loadFromData:(NSData *)data
+{
+    if (data)
+    {
+        QXmlStreamReader xmlReader(QByteArray::fromNSData(data));
+        return [self fetch:OsmAnd::GpxDocument::loadFrom(xmlReader)];
+    }
+    else
+    {
+        return false;
+    }
+}
+
 + (void) fillLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>&)links linkArray:(NSArray *)linkArray
 {
     std::shared_ptr<OsmAnd::GpxDocument::Link> link;
@@ -512,9 +544,9 @@
     meta->name = QString::fromNSString(m.name);
     meta->description = QString::fromNSString(m.desc);
     meta->timestamp = m.time > 0 ? QDateTime::fromTime_t(m.time).toUTC() : QDateTime().toUTC();
-    
+
     [self fillLinks:meta->links linkArray:m.links];
-    
+
     [m fillExtensions:meta];
 }
 
@@ -612,7 +644,7 @@
         rte->points.append(rtept);
         rtept = nullptr;
     }
-    
+
     [r fillExtensions:rte];
 }
 
@@ -989,6 +1021,24 @@
 - (BOOL) hasRoute
 {
 	return [self getNonEmptyTrkSegments:YES].count > 0;
+}
+
+- (NSArray<OAWptPt *> *)getAllSegmentsPoints
+{
+    NSMutableArray<OAWptPt *> *points = [NSMutableArray array];
+    for (OATrack *track in self.tracks)
+    {
+        if (!track.generalTrack)
+        {
+            for (OATrkSegment *segment in track.segments)
+            {
+                if (!segment.generalSegment)
+                    [points addObjectsFromArray:segment.points];
+            }
+        }
+    }
+
+    return points;
 }
 
 - (NSArray<OAWptPt *> *) getRoutePoints

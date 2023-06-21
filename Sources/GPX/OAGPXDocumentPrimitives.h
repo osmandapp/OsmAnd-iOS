@@ -7,11 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreLocation/CoreLocation.h>
 #import "OALocationPoint.h"
-
-#include <OsmAndCore.h>
-#include <OsmAndCore/GpxDocument.h>
 
 #define ICON_NAME_EXTENSION @"icon"
 #define BACKGROUND_TYPE_EXTENSION @"background"
@@ -59,8 +55,6 @@ typedef NS_ENUM(NSInteger, EOAGPXColor)
 
 @class OAPOI;
 
-struct RouteDataBundle;
-
 @interface OAGPXColor : NSObject
 
 @property (nonatomic) EOAGPXColor type;
@@ -95,12 +89,6 @@ struct RouteDataBundle;
 - (void) removeExtension:(OAGpxExtension *)e;
 - (void) setExtension:(NSString *)key value:(NSString *)value;
 
-- (NSArray<OAGpxExtension *> *) fetchExtension:(QList<OsmAnd::Ref<OsmAnd::GpxExtensions::GpxExtension>>)extensions;
-- (void) fetchExtensions:(std::shared_ptr<OsmAnd::GpxExtensions>)extensions;
-
-- (void) fillExtension:(const std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension>&)extension ext:(OAGpxExtension *)e;
-- (void) fillExtensions:(const std::shared_ptr<OsmAnd::GpxExtensions>&)extensions;
-
 - (int) getColor:(int)defColor;
 - (void) setColor:(int)value;
 
@@ -128,8 +116,6 @@ struct RouteDataBundle;
 @end
 
 @interface OAWptPt : OAGpxExtensions<OALocationPoint>
-
-@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::WptPt> wpt;
 
 @property (nonatomic) BOOL firstPoint;
 @property (nonatomic) BOOL lastPoint;
@@ -186,14 +172,6 @@ struct RouteDataBundle;
 @property (nonatomic) NSString *pointTypes;
 @property (nonatomic) NSString *names;
 
-+ (OARouteSegment *) fromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle;
-- (std::shared_ptr<RouteDataBundle>) toStringBundle;
-
-- (instancetype) initWithDictionary:(NSDictionary<NSString *, NSString *> *)dict;
-- (instancetype) initWithRteSegment:(OsmAnd::Ref<OsmAnd::GpxDocument::RouteSegment> &)seg;
-
-- (NSDictionary<NSString *, NSString *> *) toDictionary;
-
 @end
 
 @interface OARouteType : NSObject
@@ -201,21 +179,12 @@ struct RouteDataBundle;
 @property (nonatomic) NSString *tag;
 @property (nonatomic) NSString *value;
 
-+ (OARouteType *) fromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle;
-- (std::shared_ptr<RouteDataBundle>) toStringBundle;
-
-- (instancetype) initWithDictionary:(NSDictionary<NSString *, NSString *> *)dict;
-- (instancetype) initWithRteType:(OsmAnd::Ref<OsmAnd::GpxDocument::RouteType> &)type;
-
-- (NSDictionary<NSString *, NSString *> *) toDictionary;
-
 @end
 
 @class OASplitMetric;
 
 @interface OATrkSegment : OAGpxExtensions
 
-@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::TrkSegment> trkseg;
 @property (nonatomic) BOOL generalSegment;
 
 @property (nonatomic) NSString *name;
@@ -237,8 +206,6 @@ struct RouteDataBundle;
 
 @interface OATrack : OAGpxExtensions
 
-@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::Track> trk;
-
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *desc;
 @property (nonatomic) NSArray<OATrkSegment *> *segments;
@@ -249,8 +216,6 @@ struct RouteDataBundle;
 @end
 
 @interface OARoute : OAGpxExtensions
-
-@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::Route> rte;
 
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *desc;

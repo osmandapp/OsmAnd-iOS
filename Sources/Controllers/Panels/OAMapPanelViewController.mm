@@ -108,6 +108,9 @@
 #import "OANetworkRouteSelectionTask.h"
 #import <MBProgressHUD.h>
 
+#include "OAGPXDocumentPrimitives+cpp.h"
+#include "OAGPXDocument+cpp.h"
+
 #include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/CachingRoadLocator.h>
 #include <OsmAndCore/Data/Road.h>

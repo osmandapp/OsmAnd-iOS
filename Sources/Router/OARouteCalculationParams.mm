@@ -8,6 +8,14 @@
 
 #import "OARouteCalculationParams.h"
 
+#include "OARouteCalculationParams+cpp.h"
+
+@interface OARouteCalculationParams ()
+
+@property (nonatomic, assign) std::shared_ptr<RouteCalculationProgress> calculationProgress;
+
+@end
+
 @implementation OARouteCalculationParams
 
 @end

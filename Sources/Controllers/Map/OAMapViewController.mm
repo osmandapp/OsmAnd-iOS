@@ -77,6 +77,10 @@
 
 //#include "OAMapMarkersCollection.h"
 
+#include "OAGPXDocumentPrimitives+cpp.h"
+#include "OAGPXDocument+cpp.h"
+#include "OAGPXMutableDocument+cpp.h"
+
 #include <OpenGLES/ES2/gl.h>
 
 #include <QtMath>

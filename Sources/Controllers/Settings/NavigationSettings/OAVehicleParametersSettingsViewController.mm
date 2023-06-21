@@ -12,6 +12,7 @@
 #import "OAInputTableViewCell.h"
 #import "OAHorizontalCollectionViewCell.h"
 #import "OARightIconTableViewCell.h"
+#import "OAApplicationMode.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAColors.h"

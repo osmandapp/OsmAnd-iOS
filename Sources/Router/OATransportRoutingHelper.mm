@@ -19,6 +19,8 @@
 #import "OARouteProvider.h"
 #import "OARootViewController.h"
 
+#include "OARouteCalculationParams+cpp.h"
+
 #include <OsmAndCore/Utilities.h>
 #include <transportRoutingObjects.h>
 #include <routingConfiguration.h>

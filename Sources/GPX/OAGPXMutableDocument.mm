@@ -11,6 +11,10 @@
 #import "OAAppVersionDependentConstants.h"
 #import "OAGPXAppearanceCollection.h"
 
+#include "OAGPXDocumentPrimitives+cpp.h"
+#include "OAGPXDocument+cpp.h"
+#include "OAGPXMutableDocument+cpp.h"
+
 @implementation OAGPXMutableDocument
 {
     std::shared_ptr<OsmAnd::GpxDocument> document;
@@ -30,9 +34,9 @@
         self.tracks = [NSMutableArray array];
         self.routes = [NSMutableArray array];
         _modifiedTime = 0;
-        
+
         document.reset(new OsmAnd::GpxDocument());
-        
+
         [self initBounds];
     }
     return self;
@@ -229,7 +233,7 @@
         [self.class fillLinks:rtept->links linkArray:p.links];
 
         [p fillExtensions:rtept];
-        
+
         p.wpt = rtept;
         rte->points.append(rtept);
         rtept = nullptr;
@@ -267,7 +271,7 @@
     rtept->speed = p.speed;
     
     [self.class fillLinks:rtept->links linkArray:p.links];
-    
+
     [p fillExtensions:rtept];
 
     p.wpt = rtept;
@@ -475,7 +479,7 @@
     trkpt->speed = p.speed;
     
     [self.class fillLinks:trkpt->links linkArray:p.links];
-    
+
     [p fillExtensions:trkpt];
 
     p.wpt = trkpt;

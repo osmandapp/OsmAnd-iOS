@@ -30,6 +30,8 @@
 #import "OAAddWaypointBottomSheetViewController.h"
 #import "OAUninstallSpeedCamerasViewController.h"
 
+#include "OAGPXDocument+cpp.h"
+
 #define START_TRACK_POINT_MY_LOCATION_RADIUS_METERS 50 * 1000
 
 @implementation OAMapActions

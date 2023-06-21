@@ -187,4 +187,17 @@
     return success;
 }
 
++ (void)getHttpURLConnection:(NSString *)urlStr
+              requestHandler:(void (NSMutableURLRequest *))requestHandler
+                 taskHandler:(void (^)(NSData * _Nullable, NSURLResponse * _Nullable, NSError * _Nullable))taskHandler
+{
+    NSURL *url = [NSURL URLWithString:urlStr];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    if (requestHandler)
+        requestHandler(request);
+
+    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:taskHandler];
+    [task resume];
+}
+
 @end

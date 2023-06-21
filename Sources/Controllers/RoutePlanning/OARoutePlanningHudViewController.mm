@@ -56,6 +56,8 @@
 #import "OATrackMenuHudViewController.h"
 #import "OAAppVersionDependentConstants.h"
 
+#include "OAGPXDocument+cpp.h"
+
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
 

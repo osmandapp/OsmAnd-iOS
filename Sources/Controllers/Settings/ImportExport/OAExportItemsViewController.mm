@@ -14,6 +14,7 @@
 #import "OAColors.h"
 #import "OAExportSettingsCategory.h"
 #import "OASettingsCategoryItems.h"
+#import "OAApplicationMode.h"
 
 #define kDefaultArchiveName @"Export"
 #define kSettingsSectionIndex 0

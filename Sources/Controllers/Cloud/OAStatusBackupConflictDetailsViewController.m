@@ -20,6 +20,7 @@
 #import "OASettingsItem.h"
 #import "OAFileSettingsItem.h"
 #import "OAProfileSettingsItem.h"
+#import "OAApplicationMode.h"
 #import "OAOsmAndFormatter.h"
 #import "OASizes.h"
 #import "OAColors.h"

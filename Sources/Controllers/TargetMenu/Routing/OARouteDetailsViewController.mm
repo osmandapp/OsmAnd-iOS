@@ -34,6 +34,8 @@
 #import "OAEmissionHelper.h"
 #import <Charts/Charts-Swift.h>
 
+#include "OARouteCalculationResult+cpp.h"
+
 #define kStatsSection 0
 #define kAdditionalRouteDetailsOffset 184.0
 

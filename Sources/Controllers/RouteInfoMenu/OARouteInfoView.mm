@@ -62,6 +62,8 @@
 #import "OAEmissionHelper.h"
 #import "OAAutoObserverProxy.h"
 
+#include "OAGPXDocument+cpp.h"
+
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
 #define kHistoryItemLimitDefault 3

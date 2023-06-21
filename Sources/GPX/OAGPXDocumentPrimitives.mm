@@ -13,6 +13,8 @@
 #import "OADefaultFavorite.h"
 #import "OAPOI.h"
 
+#include "OAGPXDocumentPrimitives+cpp.h"
+
 #include <routeSegmentResult.h>
 #include <routeDataBundle.h>
 #include <routeDataResources.h>
@@ -284,6 +286,10 @@
 @end
 
 @implementation OAMetadata
+@end
+
+@interface OAWptPt ()
+@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::WptPt> wpt;
 @end
 
 @implementation OAWptPt
@@ -681,6 +687,10 @@
 
 @end
 
+@interface OATrkSegment ()
+@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::TrkSegment> trkseg;
+@end
+
 @implementation OATrkSegment
 
 - (instancetype)init
@@ -766,7 +776,15 @@
 
 @end
 
+@interface OATrack ()
+@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::Track> trk;
+@end
+
 @implementation OATrack
+@end
+
+@interface OARoute ()
+@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::Route> rte;
 @end
 
 @implementation OARoute

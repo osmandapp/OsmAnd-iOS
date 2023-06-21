@@ -11,6 +11,8 @@
 #import "OAGPXDocument.h"
 #import "OsmAndApp.h"
 
+#include "OAGPXDocument+cpp.h"
+
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/NetworkRouteSelector.h>
 #include <OsmAndCore/FunctorQueryController.h>

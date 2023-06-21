@@ -26,6 +26,8 @@
 #import "OAPointDescription.h"
 #import "OAPOIHelper.h"
 
+#include "OAGPXDocument+cpp.h"
+
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 

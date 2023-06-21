@@ -15,6 +15,7 @@
 #import "OATableRowData.h"
 #import "OAWikipediaPlugin.h"
 #import "OAApplicationMode.h"
+#import "OADownloadMode.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
 #import "Localization.h"

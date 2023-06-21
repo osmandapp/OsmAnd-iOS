@@ -18,8 +18,6 @@
 
 - (instancetype)init;
 
-- (const std::shared_ptr<OsmAnd::GpxDocument>&) getDocument;
-
 - (void) updateDocAndMetadata;
 - (void) addWpt:(OAWptPt *)w;
 - (void) addTrack:(OATrack *)t;

@@ -12,6 +12,7 @@
 #import "OAOsmAndFormatter.h"
 #import "Localization.h"
 #import "OsmAndApp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OASunriseSunsetWidget
 {
@@ -29,6 +30,7 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _state = state;
+        self.widgetType = state.isSunriseMode ? OAWidgetType.sunrise : OAWidgetType.sunset;
         
         __weak OASunriseSunsetWidget *selfWeak = self;
         self.updateInfoFunction = ^BOOL{

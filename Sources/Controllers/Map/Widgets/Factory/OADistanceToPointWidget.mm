@@ -23,9 +23,9 @@
     CLLocationDistance _cachedMeters;
 }
 
-- (instancetype) initWithIcons:(NSString *)dayIconId nightIconId:(NSString *)nightIconId
+- (instancetype) initWithIcons:(NSString *)dayIconId nightIconId:(NSString *)nightIconId widgetType:(OAWidgetType *)widgetType
 {
-    self = [super init];
+    self = [super initWithType:widgetType];
     if (self)
     {
         _app = [OsmAndApp instance];

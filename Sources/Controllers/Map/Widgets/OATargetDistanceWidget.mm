@@ -12,6 +12,7 @@
 #import "OAMapRendererView.h"
 #import "OAOsmAndFormatter.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OATargetDistanceWidget
 {
@@ -21,7 +22,7 @@
 
 - (instancetype) init
 {
-    self = [super init];
+    self = [super initWithType:OAWidgetType.devTargetDistance];
     if (self)
     {
         _cachedTargetDistance = -1;
@@ -63,7 +64,7 @@
 
 - (void) setImage:(UIImage *)image
 {
-    [self.imageView setImage:image.imageFlippedForRightToLeftLayoutDirection];
+    [super setImage:image.imageFlippedForRightToLeftLayoutDirection];
 }
 
 @end

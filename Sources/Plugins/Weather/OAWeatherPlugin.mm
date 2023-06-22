@@ -10,13 +10,14 @@
 #import "OARootViewController.h"
 #import "OAMapInfoController.h"
 #import "OAMapHudViewController.h"
-#import "OATextInfoWidget.h"
+#import "OAWeatherWidget.h"
 #import "OAMapInfoWidgetsFactory.h"
 #import "OAMapWidgetRegistry.h"
 #import "OAMapWidgetRegInfo.h"
 #import "OAIAPHelper.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define PLUGIN_ID kInAppId_Addon_Weather
 #define kLastUsedWeatherKey @"lastUsedWeather"
@@ -25,11 +26,11 @@
 {
     OACommonBoolean *_lastUsedWeather;
 
-    OATextInfoWidget *_weatherTempControl;
-    OATextInfoWidget *_weatherPressureControl;
-    OATextInfoWidget *_weatherWindSpeedControl;
-    OATextInfoWidget *_weatherCloudControl;
-    OATextInfoWidget *_weatherPrecipControl;
+    OAWeatherWidget *_weatherTempControl;
+    OAWeatherWidget *_weatherPressureControl;
+    OAWeatherWidget *_weatherWindSpeedControl;
+    OAWeatherWidget *_weatherCloudControl;
+    OAWeatherWidget *_weatherPrecipControl;
 }
 
 - (instancetype)init
@@ -38,6 +39,11 @@
     if (self)
     {
         _lastUsedWeather = [OACommonBoolean withKey:kLastUsedWeatherKey defValue:NO];
+        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.weatherTemperatureWidget appModes:@[]];
+        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.weatherAirPressureWidget appModes:@[]];
+        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.weatherWindWidget appModes:@[]];
+        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.weatherCloudsWidget appModes:@[]];
+        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.weatherPrecipitationWidget appModes:@[]];
     }
     return self;
 }
@@ -72,134 +78,33 @@
     [[OsmAndApp instance].data setWeather:isOn];
 }
 
-- (void) updateLayers
+- (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self isEnabled])
-        {
-            if (!_weatherTempControl)
-                [self registerWidget:WEATHER_BAND_TEMPERATURE];
+    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
 
-            if (!_weatherPressureControl)
-                [self registerWidget:WEATHER_BAND_PRESSURE];
-
-            if (!_weatherWindSpeedControl)
-                [self registerWidget:WEATHER_BAND_WIND_SPEED];
-
-            if (!_weatherCloudControl)
-                [self registerWidget:WEATHER_BAND_CLOUD];
-
-            if (!_weatherPrecipControl)
-                [self registerWidget:WEATHER_BAND_PRECIPITATION];
-        }
-        else
-        {
-            OAMapInfoController *mapInfoController = [self getMapInfoController];
-            if (mapInfoController)
-            {
-                if (_weatherTempControl)
-                {
-                    [mapInfoController removeSideWidget:_weatherTempControl];
-                    _weatherTempControl = nil;
-                }
-                if (_weatherPressureControl)
-                {
-                    [mapInfoController removeSideWidget:_weatherPressureControl];
-                    _weatherPressureControl = nil;
-                }
-                if (_weatherWindSpeedControl)
-                {
-                    [mapInfoController removeSideWidget:_weatherWindSpeedControl];
-                    _weatherWindSpeedControl = nil;
-                }
-                if (_weatherCloudControl)
-                {
-                    [mapInfoController removeSideWidget:_weatherCloudControl];
-                    _weatherCloudControl = nil;
-                }
-                if (_weatherPrecipControl)
-                {
-                    [mapInfoController removeSideWidget:_weatherPrecipControl];
-                    _weatherPrecipControl = nil;
-                }
-            }
-        }
-        [[OARootViewController instance].mapPanel recreateControls];
-    });
+    _weatherTempControl = [self createMapWidgetForParams:OAWidgetType.weatherTemperatureWidget band:WEATHER_BAND_TEMPERATURE];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherTempControl]];
+    
+    _weatherPressureControl = [self createMapWidgetForParams:OAWidgetType.weatherAirPressureWidget band:WEATHER_BAND_PRESSURE];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherPressureControl]];
+    
+    _weatherWindSpeedControl = [self createMapWidgetForParams:OAWidgetType.weatherWindWidget band:WEATHER_BAND_WIND_SPEED];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherWindSpeedControl]];
+    
+    _weatherCloudControl = [self createMapWidgetForParams:OAWidgetType.weatherCloudsWidget band:WEATHER_BAND_CLOUD];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherCloudControl]];
+    
+    _weatherPrecipControl = [self createMapWidgetForParams:OAWidgetType.weatherPrecipitationWidget band:WEATHER_BAND_PRECIPITATION];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherPrecipControl]];
 }
 
-- (void)registerWidget:(EOAWeatherBand)band
+- (OAWeatherWidget *) createMapWidgetForParams:(OAWidgetType *)widgetType band:(EOAWeatherBand)band
 {
-    OAMapInfoController *mapInfoController = [self getMapInfoController];
-    if (mapInfoController)
-    {
-        OAMapInfoWidgetsFactory *mic = [[OAMapInfoWidgetsFactory alloc] init];
+    return [[OAWeatherWidget alloc] initWithType:widgetType band:band];
+}
 
-        switch (band)
-        {
-            case WEATHER_BAND_TEMPERATURE:
-            {
-                _weatherTempControl = [mic createWeatherControl:WEATHER_BAND_TEMPERATURE];
-                [mapInfoController registerSideWidget:_weatherTempControl
-                                              imageId:[[OAWeatherBand withWeatherBand:WEATHER_BAND_TEMPERATURE] getIcon]
-                                              message:[[OAWeatherBand withWeatherBand:WEATHER_BAND_TEMPERATURE] getMeasurementName]
-                                                  key:kWeatherTemp
-                                                 left:NO
-                                        priorityOrder:120];
-                break;
-            }
-
-            case WEATHER_BAND_PRESSURE:
-            {
-                _weatherPressureControl = [mic createWeatherControl:WEATHER_BAND_PRESSURE];
-                [mapInfoController registerSideWidget:_weatherPressureControl
-                                              imageId:[[OAWeatherBand withWeatherBand:WEATHER_BAND_PRESSURE] getIcon]
-                                              message:[[OAWeatherBand withWeatherBand:WEATHER_BAND_PRESSURE] getMeasurementName]
-                                                  key:kWeatherPressure
-                                                 left:NO
-                                        priorityOrder:121];
-                break;
-            }
-
-            case WEATHER_BAND_WIND_SPEED:
-            {
-                _weatherWindSpeedControl = [mic createWeatherControl:WEATHER_BAND_WIND_SPEED];
-                [mapInfoController registerSideWidget:_weatherWindSpeedControl
-                                              imageId:[[OAWeatherBand withWeatherBand:WEATHER_BAND_WIND_SPEED] getIcon]
-                                              message:[[OAWeatherBand withWeatherBand:WEATHER_BAND_WIND_SPEED] getMeasurementName]
-                                                  key:kWeatherWind
-                                                 left:NO
-                                        priorityOrder:122];
-                break;
-            }
-
-            case WEATHER_BAND_CLOUD:
-            {
-                _weatherCloudControl = [mic createWeatherControl:WEATHER_BAND_CLOUD];
-                [mapInfoController registerSideWidget:_weatherCloudControl
-                                              imageId:[[OAWeatherBand withWeatherBand:WEATHER_BAND_CLOUD] getIcon]
-                                              message:[[OAWeatherBand withWeatherBand:WEATHER_BAND_CLOUD] getMeasurementName]
-                                                  key:kWeatherCloud
-                                                 left:NO
-                                        priorityOrder:123];
-            }
-
-            case WEATHER_BAND_PRECIPITATION:
-            {
-                _weatherPrecipControl = [mic createWeatherControl:WEATHER_BAND_PRECIPITATION];
-                [mapInfoController registerSideWidget:_weatherPrecipControl
-                                              imageId:[[OAWeatherBand withWeatherBand:WEATHER_BAND_PRECIPITATION] getIcon]
-                                              message:[[OAWeatherBand withWeatherBand:WEATHER_BAND_PRECIPITATION] getMeasurementName]
-                                                  key:kWeatherPrecip
-                                                 left:NO
-                                        priorityOrder:124];
-                break;
-            }
-
-            default:
-                return;
-        }
-    }
+- (void) updateLayers
+{
 }
 
 - (void)updateWidgetsInfo

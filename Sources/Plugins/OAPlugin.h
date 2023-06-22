@@ -12,6 +12,8 @@
 @class OAMapPanelViewController, OAMapInfoController, OAMapViewController, OAQuickActionType, OACustomPlugin, OAWorldRegion, OAResourceItem, OAApplicationMode;
 @class OAPOIUIFilter, OAPOI;
 
+@protocol OAWidgetRegistrationDelegate;
+
 @interface OAPlugin : NSObject
 
 - (OAMapPanelViewController *) getMapPanelViewController;
@@ -59,6 +61,7 @@
 + (void) createLayers;
 + (void) updateLocationPlugins:(CLLocation *)location;
 + (void) registerQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)types disabled:(BOOL)disabled;
++ (void) createMapWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode;
 
 + (NSArray<OACustomPlugin *> *) getCustomPlugins;
 + (void) addCustomPlugin:(OACustomPlugin *)plugin;

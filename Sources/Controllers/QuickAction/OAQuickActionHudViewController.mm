@@ -149,6 +149,11 @@
     }];
 }
 
+- (BOOL) isQuickActionFloatingButtonVisible
+{
+    return _quickActionFloatingButton.alpha == 1;
+}
+
 // Android counterpart: setQuickActionButtonMargin()
 - (void) setQuickActionButtonMargin
 {

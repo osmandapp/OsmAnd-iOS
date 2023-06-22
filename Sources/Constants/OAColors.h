@@ -136,6 +136,7 @@
 #define color_button_gray_background 0xE0DDE3
 
 #define color_icon_inactive 0xA49DAF
+#define color_icon_inactive_night 0x716D78
 
 #define color_slider_gray 0xe4e4e6
 #define color_footer_icon_gray 0xC4C4C4
@@ -236,5 +237,10 @@
 #define color_primary_darkblue_navbar_background 0x09396C
 
 #define color_uiswitch_on_day 0x65C366
+
+#define color_control_day 0xE5E4E7
+#define color_control_night 0x323036
+
+
 
 #endif /* OAColors_h */

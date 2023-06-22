@@ -3584,4 +3584,9 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     return [[OAMapPresentationEnvironment alloc] initWithEnvironment:_mapPresentationEnvironment];
 }
 
+- (void) updateTapRulerLayer
+{
+    [self.mapLayers.rulerByTapControlLayer updateLayer];
+}
+
 @end

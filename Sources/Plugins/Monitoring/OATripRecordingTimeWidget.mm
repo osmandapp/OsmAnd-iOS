@@ -18,12 +18,13 @@
 #import "OAGPXTrackAnalysis.h"
 #import "OARootViewController.h"
 #import "OATrackMenuHudViewController.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OATripRecordingTimeWidget
 
 - (instancetype) init
 {
-    self = [super init];
+    self = [super initWithType:OAWidgetType.tripRecordingTime];
     if (self)
     {
         __weak OATextInfoWidget *weakSelf = self;

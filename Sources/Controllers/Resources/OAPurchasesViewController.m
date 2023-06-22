@@ -493,7 +493,7 @@ static BOOL _purchasesUpdated;
     dispatch_async(dispatch_get_main_queue(), ^{
         _purchasesUpdated = YES;
         [self updateLoadingView:NO];
-        [self updateUI];
+        [self updateUI:NO];
     });
 }
 

@@ -102,6 +102,7 @@
 #import "OASearchToolbarViewController.h"
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OAMapInfoController.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAGPXAppearanceCollection.h"
 
 #import "OARouteKey.h"
@@ -351,10 +352,10 @@ typedef enum
         _destinationViewController.delegate = self;
         _destinationViewController.destinationDelegate = self;
         
-        if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisibility get])
+        if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisibility get])
             [self showToolbar:_destinationViewController];
     }
-    else if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+    else if ([_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY)
         [self showToolbar:_destinationViewController];
     
     // Inflate new HUD controller
@@ -446,7 +447,7 @@ typedef enum
 - (void) refreshToolbar
 {
     [_destinationViewController refreshView];
-    if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.distanceIndicationVisibility get] && [_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+    if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.distanceIndicationVisibility get] && [_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY)
         [self showToolbar:_destinationViewController];
     else
         [self hideToolbar:_destinationViewController];
@@ -743,8 +744,13 @@ typedef enum
 - (BOOL) isContextMenuVisible
 {
     return (_targetMenuView && _targetMenuView.superview && !_targetMenuView.hidden)
-        || (_targetMultiMenuView && _targetMultiMenuView.superview)
+        || self.isTargetMultiMenuViewVisible
         || (_scrollableHudViewController && _scrollableHudViewController.view.superview);
+}
+
+- (BOOL) isTargetMultiMenuViewVisible
+{
+    return _targetMultiMenuView && _targetMultiMenuView.superview;
 }
 
 - (BOOL) isRouteInfoVisible
@@ -947,19 +953,22 @@ typedef enum
 {
     [OAAnalyticsHelper logEvent:@"configure_screen_open"];
     
-    _targetAppMode = targetMode;
-    _reopenSettings = _targetAppMode != nil;
+//    _targetAppMode = targetMode;
+//    _reopenSettings = _targetAppMode != nil;
+//
+//    [self removeGestureRecognizers];
     
-    [self removeGestureRecognizers];
+    OAConfigureScreenViewController *vc = [[OAConfigureScreenViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
     
-    _dashboard = [[OAConfigureMenuViewController alloc] init];
-    [_dashboard show:self parentViewController:nil animated:YES];
+//    _dashboard = [[OAConfigureMenuViewController alloc] init];
+//    [_dashboard show:self parentViewController:nil animated:YES];
+//
+//    [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
     
-    [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
+//    [self.targetMenuView quickHide];
     
-    [self.targetMenuView quickHide];
-    
-    self.sidePanelController.recognizesPanGesture = NO;
+//    self.sidePanelController.recognizesPanGesture = NO;
 }
 
 - (void) showWaypoints
@@ -3644,7 +3653,7 @@ typedef enum
 
 - (void)destinationsAdded
 {
-    if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisibility get])
+    if ([_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisibility get])
         [self showToolbar:_destinationViewController];
 }
 
@@ -3720,7 +3729,7 @@ typedef enum
     
         [cardsController doViewWillDisappear];
 
-        if ([OADestinationsHelper instance].sortedDestinations.count == 0 || !([_settings.distanceIndicationVisibility get]) || ([_settings.distanceIndication get] == WIDGET_DISPLAY))
+        if ([OADestinationsHelper instance].sortedDestinations.count == 0 || !([_settings.distanceIndicationVisibility get]) || ([_settings.mapMarkersDisplayMode get] == WIDGET_DISPLAY))
         {
             [self hideToolbar:_destinationViewController];
         }

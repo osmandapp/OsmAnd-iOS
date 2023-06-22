@@ -13,6 +13,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OACameraDistanceWidget
 {
@@ -23,7 +24,7 @@
 
 - (instancetype) init
 {
-    self = [super init];
+    self = [super initWithType:OAWidgetType.devCameraDistance];
     if (self)
     {
         _cachedCameraDistance = -1;
@@ -66,7 +67,7 @@
 
 - (void) setImage:(UIImage *)image
 {
-    [self.imageView setImage:image.imageFlippedForRightToLeftLayoutDirection];
+    [super setImage:image.imageFlippedForRightToLeftLayoutDirection];
 }
 
 @end

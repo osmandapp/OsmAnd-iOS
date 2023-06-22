@@ -87,4 +87,27 @@
 
 #define kWeatherTilesUrlPrefix @"https://osmand.net/weather/gfs/tiff/"
 
+#define docs_widgets @"https://docs.osmand.net/docs/user/widgets/"
+#define docs_widget_configure_screen @"https://docs.osmand.net/docs/user/widgets/configure-screen"
+#define docs_widget_route_maneuvers @"https://docs.osmand.net/docs/user/widgets/nav-widgets#next-turns"
+#define docs_widget_navigation_points @"https://docs.osmand.net/docs/user/widgets/nav-widgets/#navigation-points"
+#define docs_widget_markers @"https://docs.osmand.net/docs/user/widgets/markers/"
+#define docs_widget_bearing @"https://docs.osmand.net/docs/user/widgets/nav-widgets#bearing"
+#define docs_widget_av_notes @"https://docs.osmand.net/docs/user/widgets/info-widgets#-audio-video-notes-widget-android"
+#define docs_widget_coordinates @"https://docs.osmand.net/docs/user/widgets/info-widgets#coordinates-widget"
+#define docs_widget_street_name @"https://docs.osmand.net/docs/user/widgets/nav-widgets#street-name"
+#define docs_widget_lanes @"https://docs.osmand.net/docs/user/widgets/nav-widgets/#lanes"
+#define docs_widget_current_speed @"https://docs.osmand.net/docs/user/widgets/info-widgets/#speed"
+#define docs_widget_max_speed @"https://docs.osmand.net/docs/user/widgets/nav-widgets/#speed-limit"
+#define docs_widget_altitude @"https://docs.osmand.net/docs/user/widgets/info-widgets/#altitude"
+#define docs_widget_gps_info @"https://docs.osmand.net/docs/user/widgets/info-widgets/#gps-info-android"
+#define docs_widget_trip_recording @"https://docs.osmand.net/docs/user/widgets/info-widgets/#-trip-recording-widgets"
+#define docs_widget_current_time @"https://docs.osmand.net/docs/user/widgets/info-widgets/#current-time"
+#define docs_widget_battery @"https://docs.osmand.net/docs/user/widgets/info-widgets/#battery-level"
+#define docs_widget_radius_ruler @"https://docs.osmand.net/docs/user/widgets/radius-ruler"
+#define docs_widget_fps @"https://docs.osmand.net/docs/user/widgets/info-widgets/#-fps-info-android"
+#define docs_widget_mapillary @"https://docs.osmand.net/docs/user/widgets/info-widgets/#-mapillary-widget"
+#define docs_widget_parking @"https://docs.osmand.net/docs/user/widgets/info-widgets/#-parking-widget"
+#define docs_widget_distance_by_tap @"https://docs.osmand.net/docs/user/widgets/radius-ruler#distance-by-tap-tool"
+
 #endif /* OALinks_h */

@@ -12,16 +12,11 @@
 #import "OARootViewController.h"
 #import "OAAppSettings.h"
 #import "OASunriseSunsetWidget.h"
-
-typedef NS_ENUM(NSInteger, EOASunriseSunsetWidgetType)
-{
-    SUNRISE_TYPE = 0,
-    SUNSET_TYPE
-};
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OASunriseSunsetWidgetState
 {
-    EOASunriseSunsetWidgetType _type;
+    OAWidgetType *_type;
     OAAppSettings *_settings;
     OACommonInteger *_preference;
 }
@@ -32,7 +27,7 @@ typedef NS_ENUM(NSInteger, EOASunriseSunsetWidgetType)
     if (self)
     {
         _settings = [OAAppSettings sharedManager];
-        _type = sunriseMode ? SUNRISE_TYPE : SUNSET_TYPE;
+        _type = sunriseMode ? OAWidgetType.sunrise : OAWidgetType.sunset;
         _preference = [self registerPreference:customId];
     }
     return self;
@@ -40,15 +35,12 @@ typedef NS_ENUM(NSInteger, EOASunriseSunsetWidgetType)
 
 - (BOOL) isSunriseMode
 {
-    return _type == SUNRISE_TYPE;
+    return _type == OAWidgetType.sunrise;
 }
 
 - (NSString *) getMenuTitle
 {
-    if ([self isSunriseMode])
-        return OALocalizedString(@"map_widget_sunrise");
-    else
-        return OALocalizedString(@"map_widget_sunset");
+    return _type.title;
 }
 
 - (NSString *)getMenuDescription
@@ -67,6 +59,11 @@ typedef NS_ENUM(NSInteger, EOASunriseSunsetWidgetType)
         return @"widget_sunset_day";
 }
 
+- (NSString *)getSettingsIconId:(BOOL)nightMode
+{
+    return [_type getIconName:nightMode];
+}
+
 - (NSString *) getMenuItemId
 {
     return @((EOASunriseSunsetMode) [[self getPreference] get]).stringValue;
@@ -74,44 +71,42 @@ typedef NS_ENUM(NSInteger, EOASunriseSunsetWidgetType)
 
 - (NSArray<NSString *> *) getMenuTitles
 {
-    switch (_type)
+    if (_type == OAWidgetType.sunrise)
     {
-        case SUNRISE_TYPE:
-            return @[
-                [OASunriseSunsetWidget getTitle:EOASunriseSunsetHide isSunrise:YES],
-                [OASunriseSunsetWidget getTitle:EOASunriseSunsetTimeLeft isSunrise:YES],
-                [OASunriseSunsetWidget getTitle:EOASunriseSunsetNext isSunrise:YES]
-            ];
-        case SUNSET_TYPE:
-            return @[
-                [OASunriseSunsetWidget getTitle:EOASunriseSunsetHide isSunrise:NO],
-                [OASunriseSunsetWidget getTitle:EOASunriseSunsetTimeLeft isSunrise:NO],
-                [OASunriseSunsetWidget getTitle:EOASunriseSunsetNext isSunrise:NO]
-            ];
-        default:
-            return @[@""];
+        return @[
+            [OASunriseSunsetWidget getTitle:EOASunriseSunsetHide isSunrise:YES],
+            [OASunriseSunsetWidget getTitle:EOASunriseSunsetTimeLeft isSunrise:YES],
+            [OASunriseSunsetWidget getTitle:EOASunriseSunsetNext isSunrise:YES]
+        ];
+    } else if (_type == OAWidgetType.sunset)
+    {
+        return @[
+            [OASunriseSunsetWidget getTitle:EOASunriseSunsetHide isSunrise:NO],
+            [OASunriseSunsetWidget getTitle:EOASunriseSunsetTimeLeft isSunrise:NO],
+            [OASunriseSunsetWidget getTitle:EOASunriseSunsetNext isSunrise:NO]
+        ];
     }
+    return @[@""];
 }
 
 - (NSArray<NSString *> *) getMenuDescriptions
 {
-    switch (_type)
+    if (_type == OAWidgetType.sunrise)
     {
-        case SUNRISE_TYPE:
-            return @[
-                [OASunriseSunsetWidget getDescription:EOASunriseSunsetHide isSunrise:YES],
-                [OASunriseSunsetWidget getDescription:EOASunriseSunsetTimeLeft isSunrise:YES],
-                [OASunriseSunsetWidget getDescription:EOASunriseSunsetNext isSunrise:YES]
-            ];
-        case SUNSET_TYPE:
-            return @[
-                [OASunriseSunsetWidget getDescription:EOASunriseSunsetHide isSunrise:NO],
-                [OASunriseSunsetWidget getDescription:EOASunriseSunsetTimeLeft isSunrise:NO],
-                [OASunriseSunsetWidget getDescription:EOASunriseSunsetNext isSunrise:NO]
-            ];
-        default:
-            return @[@""];
+        return @[
+            [OASunriseSunsetWidget getDescription:EOASunriseSunsetHide isSunrise:YES],
+            [OASunriseSunsetWidget getDescription:EOASunriseSunsetTimeLeft isSunrise:YES],
+            [OASunriseSunsetWidget getDescription:EOASunriseSunsetNext isSunrise:YES]
+        ];
+    } else if (_type == OAWidgetType.sunset)
+    {
+        return @[
+            [OASunriseSunsetWidget getDescription:EOASunriseSunsetHide isSunrise:NO],
+            [OASunriseSunsetWidget getDescription:EOASunriseSunsetTimeLeft isSunrise:NO],
+            [OASunriseSunsetWidget getDescription:EOASunriseSunsetNext isSunrise:NO]
+        ];
     }
+    return @[@""];
 }
 
 - (NSArray<NSString *> *) getMenuItemIds
@@ -141,7 +136,7 @@ typedef NS_ENUM(NSInteger, EOASunriseSunsetWidgetType)
 - (OACommonInteger *) registerPreference:(NSString *)customId
 {
     NSString *prefId = [self isSunriseMode] ? @"show_sunrise_info" : @"show_sunset_info";
-    if (customId && customId.length >0)
+    if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
 
     return [_settings registerIntPreference:prefId defValue:EOASunriseSunsetHide];

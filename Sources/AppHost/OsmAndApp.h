@@ -19,4 +19,6 @@
 
 + (id<OsmAndAppProtocol, OsmAndAppCppProtocol>)instance;
 
++ (id<OsmAndAppProtocol>)swiftInstance;
+
 @end

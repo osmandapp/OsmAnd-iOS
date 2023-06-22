@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
 typedef NS_ENUM(NSInteger, EOATableRowType) {
     EOATableRowTypeRegular,
     EOATableRowTypeCollapsable
@@ -25,32 +23,34 @@ typedef NS_ENUM(NSInteger, EOATableRowType) {
 #define kCellIconTint @"iconTint"
 #define kCellSecondaryIconName @"secondaryIconName"
 #define kCellAccessoryType @"accessoryType"
+#define kCellAccessibilityLabel @"accessibilityLabel"
+#define kCellAccessibilityValue @"accessibilityValue"
 
-+ (instancetype) rowData;
++ (instancetype _Nonnull ) rowData;
 
-- (instancetype)initWithData:(NSDictionary *)data;
+- (instancetype _Nonnull)initWithData:(NSDictionary *_Nonnull)data;
 
-@property (nonatomic) NSString *cellType;
-@property (nonatomic) NSString *key;
-@property (nonatomic) NSString *title;
-@property (nonatomic) NSString *descr;
-@property (nonatomic) NSString *iconName;
+@property (nonatomic) NSString * _Nullable cellType;
+@property (nonatomic) NSString * _Nullable key;
+@property (nonatomic) NSString * _Nullable title;
+@property (nonatomic) NSString * _Nullable descr;
+@property (nonatomic) NSString * _Nullable iconName;
 @property (nonatomic) NSInteger iconTint;
-@property (nonatomic) NSString *secondaryIconName;
+@property (nonatomic) NSString * _Nullable secondaryIconName;
+@property (nonatomic) NSString * _Nullable accessibilityLabel;
+@property (nonatomic) NSString * _Nullable accessibilityValue;
 @property (nonatomic) UITableViewCellAccessoryType accessoryType;
 
 @property (nonatomic, readonly, assign) EOATableRowType rowType;
 
-- (void) setObj:(id)data forKey:(nonnull NSString *)key;
-- (id) objForKey:(nonnull NSString *)key;
+- (void) setObj:(id _Nonnull )data forKey:(nonnull NSString *)key;
+- (id _Nullable ) objForKey:(nonnull NSString *)key;
 
-- (NSString *) stringForKey:(nonnull NSString *)key;
+- (NSString *_Nullable) stringForKey:(nonnull NSString *)key;
 - (NSInteger) integerForKey:(nonnull NSString *)key;
 - (BOOL) boolForKey:(nonnull NSString *)key;
 
 - (NSInteger) dependentRowsCount;
-- (OATableRowData *) getDependentRow:(NSUInteger)index;
+- (OATableRowData *_Nonnull) getDependentRow:(NSUInteger)index;
 
 @end
-
-NS_ASSUME_NONNULL_END

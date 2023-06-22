@@ -27,6 +27,7 @@
 #import "OADistanceToMapMarkerControl.h"
 #import "OADestinationsLineWidget.h"
 #import "OAOsmAndFormatter.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <CommonCollections.h>
 #include <binaryRead.h>
@@ -35,82 +36,6 @@
 #define INTERMEDIATE_TIME_CONTROL_WIDGET_STATE_TIME_TO_GO @"intermediate_time_control_widget_state_time_to_go"
 
 static float MIN_SPEED_FOR_HEADING = 1.f;
-
-@interface OADistanceControl : OADistanceToPointWidget
-
-@end
-
-@implementation OADistanceControl
-
-- (instancetype) init
-{
-    self = [super initWithIcons:@"widget_target_day" nightIconId:@"widget_target_night"];
-    if (self)
-    {
-    }
-    return self;
-}
-
-- (CLLocation *) getPointToNavigate
-{
-    OARTargetPoint *p = [[OATargetPointsHelper sharedInstance] getPointToNavigate];
-    return p ? p.point : nil;
-}
-
-- (CLLocationDistance) getDistance
-{
-    OARoutingHelper *routinHelper = [OARoutingHelper sharedInstance];
-    if ([routinHelper isRouteCalculated])
-        return [routinHelper getLeftDistance];
-    
-    return [super getDistance];
-}
-
-@end
-
-@interface OAIntermediateDistanceControl : OADistanceToPointWidget
-
-@end
-
-@implementation OAIntermediateDistanceControl
-
-- (instancetype) init
-{
-    self = [super initWithIcons:@"widget_intermediate_day" nightIconId:@"widget_intermediate_night"];
-    if (self)
-    {
-    }
-    return self;
-}
-
-- (void) click
-{
-    if ([[OATargetPointsHelper sharedInstance] getIntermediatePoints].count > 1)
-    {
-        //TODO map.getMapActions().openIntermediatePointsDialog();
-    }
-    else
-    {
-        [super click];
-    }
-}
-
-- (CLLocation *) getPointToNavigate
-{
-    OARTargetPoint *p = [[OATargetPointsHelper sharedInstance] getFirstIntermediatePoint];
-    return p ? p.point : nil;
-}
-
-- (CLLocationDistance) getDistance
-{
-    OARoutingHelper *routinHelper = [OARoutingHelper sharedInstance];
-    if ([self getPointToNavigate] && [routinHelper isRouteCalculated])
-        return [routinHelper getLeftDistanceNextIntermediate];
-    
-    return [super getDistance];
-}
-
-@end
 
 @implementation OAIntermediateTimeControlWidgetState
 {
@@ -561,12 +486,12 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
 
 - (OATextInfoWidget *) createDistanceControl
 {
-    return [[OADistanceControl alloc] init];
+    return [[OADistanceToDestinationWidget alloc] init];
 }
 
 - (OATextInfoWidget *) createIntermediateDistanceControl
 {
-    return [[OAIntermediateDistanceControl alloc] init];
+    return [[OADistanceToIntermediateDestinationWidget alloc] init];
 }
 
 - (OANextTurnWidget *) createNextInfoControl:(BOOL)horisontalMini

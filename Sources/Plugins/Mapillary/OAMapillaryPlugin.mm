@@ -27,6 +27,7 @@
 #import "OAMapInfoController.h"
 #import "OAMapLayers.h"
 #import "OAMapLayer.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -75,7 +76,6 @@
 
 - (void) registerLayers
 {
-    [self registerWidget];
 }
 
 - (void)disable
@@ -87,12 +87,7 @@
 - (void) updateLayers
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self isEnabled])
-        {
-            if (!_mapillaryControl)
-                [self registerWidget];
-        }
-        else
+        if (![self isEnabled])
         {
             if (_mapillaryControl)
             {
@@ -101,36 +96,20 @@
                 _mapillaryControl = nil;
             }
         }
-        [[OARootViewController instance].mapPanel recreateControls];
+//        [[OARootViewController instance].mapPanel recreateControls];
     });
+}
+
+- (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
+{
+    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
+    OABaseWidgetView *widget = [[OAMapillaryWidget alloc] init];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:widget]];
 }
 
 - (BOOL) isVisible
 {
     return NO;
-}
-
-- (void) registerWidget
-{
-    OAMapInfoController *mapInfoController = [self getMapInfoController];
-    if (mapInfoController)
-    {
-        _mapillaryControl = [self createMapillaryInfoControl];
-        
-        [mapInfoController registerSideWidget:_mapillaryControl imageId:@"ic_custom_mapillary_symbol" message:[self getName] key:PLUGIN_ID left:NO priorityOrder:19];
-    }
-}
-
-- (OATextInfoWidget *) createMapillaryInfoControl
-{
-    _mapillaryControl = [[OATextInfoWidget alloc] init];
-    [_mapillaryControl setText:[self getName] subtext:nil];
-    
-    _mapillaryControl.onClickFunction = ^(id sender) {
-        [OAMapillaryPlugin installOrOpenMapillary];
-    };
-    [_mapillaryControl setIcons:@"widget_mapillary_day" widgetNightIcon:@"widget_mapillary_night"];
-    return _mapillaryControl;
 }
 
 + (void) installOrOpenMapillary

@@ -30,6 +30,7 @@
 #import "OAPOIUIFilter.h"
 #import "OAOpenPlaceReviews.h"
 #import "OAWeatherPlugin.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAPlugin
 {
@@ -162,6 +163,11 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 - (NSString *) getVersion
 {
     return @"";
+}
+
+- (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
+{
+    // Override
 }
 
 /**
@@ -456,6 +462,7 @@ private static void checkMarketPlugin(OsmandApplication app, OsmandPlugin srtm, 
     }
     [[OAAppSettings sharedManager] enablePlugin:[plugin getId] enable:enable];
     [OAQuickActionRegistry.sharedInstance updateActionTypes];
+    [OARootViewController.instance.mapPanel.hudViewController.mapInfoController recreateControls];
     [plugin updateLayers];
     
     return YES;
@@ -693,6 +700,14 @@ public static void onMapActivityScreenOff(MapActivity activity) {
     for (OAPlugin *plugin in [self getEnabledPlugins])
     {
         [plugin registerLayers];
+    }
+}
+
++ (void) createMapWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
+{
+    for (OAPlugin *plugin in [self getEnabledPlugins])
+    {
+        [plugin createWidgets:delegate appMode:appMode];
     }
 }
 

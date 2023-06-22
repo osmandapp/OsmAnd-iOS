@@ -18,6 +18,7 @@
 #import "OAAppSettings.h"
 #import "OASimulationProvider.h"
 #import "OARoutingHelper.h"
+#import "OARoutingHelper+cpp.h"
 #import "OAVoiceRouter.h"
 #import "OALocationSimulation.h"
 #import "OAWaypointHelper.h"
@@ -611,6 +612,11 @@
 - (void) setLocationFromSimulation:(CLLocation *)location
 {
     [self setLocation:location];
+}
+
+- (BOOL) isInLocationSimulation
+{
+    return _simulatePosition != nil;
 }
 
 - (void) setLocation:(CLLocation *)location

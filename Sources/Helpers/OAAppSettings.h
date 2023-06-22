@@ -390,9 +390,21 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 - (void) set:(NSArray<NSString *> *)arr mode:(OAApplicationMode *)mode;
 
 - (void) add:(NSString *)string;
+- (void) add:(NSString *)string appMode:(OAApplicationMode *)appMode;
 - (void) addUnique:(NSString *)string;
 - (void) remove:(NSString *)string;
 - (BOOL) contains:(NSString *)string;
+
+@end
+
+@interface OACommonListOfStringList : OACommonPreference
+
++ (instancetype) withKey:(NSString *)key defValue:(NSArray<NSString *> *)defValue;
+
+- (NSArray<NSArray<NSString *> *> *) get;
+- (NSArray<NSArray<NSString *> *> *) get:(OAApplicationMode *)mode;
+- (void) set:(NSArray<NSArray<NSString *> *> *)arr;
+- (void) set:(NSArray<NSArray<NSString *> *> *)arr mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -911,6 +923,9 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *showStreetName;
 @property (nonatomic) OACommonInteger *positionPlacementOnMap;
 @property (nonatomic) OACommonBoolean *showDistanceRuler;
+@property (nonatomic) OACommonBoolean *showElevationProfileWidget;
+@property (nonatomic) OACommonBoolean *showSlopesOnElevationWidget;
+@property (nonatomic) OACommonStringList *customWidgetKeys;
 
 @property (assign, nonatomic) BOOL simulateNavigation;
 @property (nonatomic) NSString *simulateNavigationMode;
@@ -923,6 +938,13 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @property (nonatomic) OACommonStringList *poiFiltersOrder;
 @property (nonatomic) OACommonStringList *inactivePoiFilters;
+
+// Widgets
+
+@property (nonatomic) OACommonListOfStringList *leftWidgetPanelOrder;
+@property (nonatomic) OACommonListOfStringList *topWidgetPanelOrder;
+@property (nonatomic) OACommonListOfStringList *rightWidgetPanelOrder;
+@property (nonatomic) OACommonListOfStringList *bottomWidgetPanelOrder;
 
 // OSM Editing
 @property (nonatomic) OACommonString *osmUserName;
@@ -1020,9 +1042,10 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @property (nonatomic) OACommonActiveMarkerConstant* activeMarkers;
 @property (nonatomic) OACommonBoolean *distanceIndicationVisibility;
-@property (nonatomic) OACommonDistanceIndicationConstant *distanceIndication;
+@property (nonatomic) OACommonDistanceIndicationConstant *mapMarkersDisplayMode;
 @property (nonatomic) OACommonBoolean *arrowsOnMap;
 @property (nonatomic) OACommonBoolean *directionLines;
+@property (nonatomic) OACommonBoolean *showMapMarkersBarWidget;
 
 // global
 

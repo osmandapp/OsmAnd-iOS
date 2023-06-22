@@ -96,4 +96,9 @@
     return _sectionData[section].rowCount;
 }
 
+- (void) clearAllData
+{
+    _sectionData.removeAllObjects;
+}
+
 @end

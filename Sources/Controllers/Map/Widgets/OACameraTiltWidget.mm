@@ -11,6 +11,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OACameraTiltWidget
 {
@@ -20,7 +21,7 @@
 
 - (instancetype) init
 {
-    self = [super init];
+    self = [super initWithType:OAWidgetType.devCameraTilt];
     if (self)
     {
         _cachedMapTilt = 0;
@@ -49,7 +50,7 @@
 
 - (void) setImage:(UIImage *)image
 {
-    [self.imageView setImage:image.imageFlippedForRightToLeftLayoutDirection];
+    [super setImage:image.imageFlippedForRightToLeftLayoutDirection];
 }
 
 @end

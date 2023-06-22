@@ -21,6 +21,7 @@
 #import "Localization.h"
 #import "OAExitInfo.h"
 #import "OAAnnounceTimeDistances.h"
+#import "OARoutingHelper+cpp.h"
 #import <AudioToolbox/AudioToolbox.h>
 
 #include <routeSegmentResult.h>

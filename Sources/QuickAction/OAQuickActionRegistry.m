@@ -381,6 +381,11 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     return nil;
 }
 
+- (NSInteger) getQuickActionsCount
+{
+    return _quickActions.count;
+}
+
 + (OAQuickAction *) produceAction:(OAQuickAction *) quickAction
 {
     return [quickAction.actionType createNew:quickAction];

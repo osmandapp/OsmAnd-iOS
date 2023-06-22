@@ -471,7 +471,7 @@
     {
         [self.tableView setEditing:NO animated:YES];
         self.tableView.allowsMultipleSelectionDuringEditing = NO;
-        [self updateUIAnimated];
+        [self updateUI:YES];
     }
     else
     {
@@ -512,7 +512,7 @@
     {
         [self.tableView setEditing:YES animated:YES];
         self.tableView.allowsMultipleSelectionDuringEditing = YES;
-        [self updateUIAnimated];
+        [self updateUI:YES];
     }
 }
 
@@ -615,7 +615,7 @@
 - (void)onHistoryItemsDeleted:(id)observable withKey:(id)key
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateUIAnimated];
+        [self updateUI:YES];
         if ([self sectionsCount] == 0)
             [self onLeftNavbarButtonPressed];
     });

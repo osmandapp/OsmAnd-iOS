@@ -199,4 +199,6 @@
 - (void) recreateHeightmapProvider;
 - (void) updateElevationConfiguration;
 
+- (void) updateTapRulerLayer;
+
 @end

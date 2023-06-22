@@ -85,7 +85,7 @@
     {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         [self resetActivityIndicatorLabel];
-        [self updateUI];
+        [self updateUI:NO];
     }
 }
 
@@ -211,7 +211,7 @@
     if (_settingsItems)
     {
         [self postInit];
-        [self updateUIAnimated];
+        [self updateUI:YES];
         _isNewItems = NO;
     }
 }

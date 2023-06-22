@@ -829,7 +829,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             {
                 OADownloadMultipleResourceViewController *controller = [[OADownloadMultipleResourceViewController alloc] initWithResource:_mapMultipleItems[indexPath.row]];
                 controller.delegate = self;
-                [OARootViewController.instance presentViewController:controller animated:YES completion:nil];
+                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+                [OARootViewController.instance presentViewController:navigationController animated:YES completion:nil];
             }
         }
     }

@@ -595,7 +595,8 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         {
             OADownloadMultipleResourceViewController *controller = [[OADownloadMultipleResourceViewController alloc] initWithResource:(OAMultipleResourceItem *)dataItem];
             controller.delegate = self;
-            [self presentViewController:controller animated:YES completion:nil];
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+            [self.navigationController presentViewController:navigationController animated:YES completion:nil];
         }
     }
 }

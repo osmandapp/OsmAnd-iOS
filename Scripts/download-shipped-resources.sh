@@ -42,4 +42,4 @@ function downloadShippedResource()
 }
 
 # Download world mini-basemap
-downloadShippedResource WorldMiniBasemap.obf "http://builder.osmand.net/basemap/World_basemap_mini_2.obf"
+downloadShippedResource WorldMiniBasemap.obf "http://creator.osmand.net/basemap/World_basemap_mini_2.obf"

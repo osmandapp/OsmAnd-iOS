@@ -35,11 +35,6 @@ typedef NS_ENUM(NSInteger, ELiveSettingsScreen)
 @property (weak, nonatomic) id<OAOsmAndLiveSelectionDelegate> delegate;
 @property (nonatomic, readonly) ELiveSettingsScreen settingsScreen;
 
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (weak, nonatomic) IBOutlet UIButton *applyButton;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
 
 @end

@@ -42,9 +42,6 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 @interface OAOsmEditingViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, OAOsmEditingDataProtocol, UIGestureRecognizerDelegate>
 
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
 @property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UIView *toolBarView;
@@ -62,6 +59,8 @@ typedef NS_ENUM(NSInteger, EditingTab)
     OAEditPOIData *_editPoiData;
     OAOsmEditingPlugin *_editingPlugin;
     id<OAOpenStreetMapUtilsProtocol> _editingUtil;
+    
+    UIBarButtonItem *_backButton;
     
     BOOL _isAddingNewPOI;
     BOOL _isOnScreenSwitching;
@@ -129,12 +128,32 @@ typedef NS_ENUM(NSInteger, EditingTab)
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    self.navigationItem.title = _isAddingNewPOI ? OALocalizedString(@"osm_add_place") : OALocalizedString(@"osm_modify_place");
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.shadowColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.whiteColor
+    };
+    self.navigationController.navigationBar.standardAppearance = appearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.tintColor = UIColor.whiteColor;
+    self.navigationController.navigationBar.prefersLargeTitles = NO;
+    
+    _backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] style:UIBarButtonItemStylePlain target:self action:@selector(onBackPressed)];
+    [self.navigationController.navigationBar.topItem setLeftBarButtonItem:_backButton animated:YES];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [self setupView];
@@ -146,11 +165,9 @@ typedef NS_ENUM(NSInteger, EditingTab)
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-}
-
--(UIView *) getTopView
-{
-    return _navBarView;
+    
+    if ([self isMovingFromParentViewController])
+        [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
 -(UIView *) getMiddleView
@@ -175,7 +192,6 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 -(void) applyLocalization
 {
-    _titleView.text = _isAddingNewPOI ? OALocalizedString(@"osm_add_place") : OALocalizedString(@"osm_modify_place");
     [_buttonDelete setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
     [_buttonApply setTitle:[self isOnlineEditing] ? OALocalizedString(@"shared_string_upload") : OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
     [_segmentControl setTitle:OALocalizedString(@"tab_title_basic") forSegmentAtIndex:0];
@@ -186,7 +202,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 -(void) addAccessibilityLabels
 {
-    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    _backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
 }
 
 - (void)setupPageController
@@ -458,7 +474,8 @@ typedef NS_ENUM(NSInteger, EditingTab)
        _segmentControl.selectedSegmentIndex = ADVANCED;
 }
 
-- (IBAction)onBackPressed:(id)sender {
+- (void)onBackPressed
+{
     if ([_editPoiData hasChangesBeenMade])
     {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"exit_without_saving") message:OALocalizedString(@"unsaved_changes_will_be_lost") preferredStyle:UIAlertControllerStyleAlert];
@@ -473,6 +490,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
 }
 
 #pragma mark - OAOsmEditingDataProtocol
+
 -(OAEditPOIData *)getData
 {
     return _editPoiData;

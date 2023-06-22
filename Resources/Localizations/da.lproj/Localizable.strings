@@ -417,7 +417,7 @@
 "search_another_country" = "Vælg et andet område";
 "skip_map_downloading" = "Spring over hentning af kort";
 "skip_map_downloading_desc_ios" = "Der er ingen offline kort installeret. Vælg et kort fra listen eller hent et kort senere via Menu - Administrer kort";
-"wiki_around" = "Wikipedia artikler i nærheden";
+"wiki_around" = "Wikipedia-artikler i nærheden";
 "search_categories" = "Kategorier";
 "items_selected" = "%d valgt";
 "custom_search" = "Brugerdefineret søgning";
@@ -618,7 +618,7 @@
 "show_warnings_title" = "Vis advarsler…";
 "show_warnings_descr" = "Konfigurer trafikadvarsler (hastighedsgrænser, tvungne stop, vejbump, tunneler), fartkameraadvarsler og vognbane oplysninger.";
 "speak_title" = "Meddel…";
-"speak_descr" = "Konfigurer for at annoncere gadenavne, trafikadvarsler (tvungne stop, vejbump), fartkameraadvarsler og hastighedsgrænser";
+"speak_descr" = "Konfigurer for at meddele gadenavne, trafikadvarsler (tvungne stop, vejbump), fartkameraadvarsler og hastighedsgrænser";
 "keep_informing" = "Gentag navigationsinstruktioner";
 "keep_informing_descr" = "Gentag navigationsinstruktioner med jævne mellemrum.";
 "arrival_distance" = "Meddel ankomst";
@@ -823,7 +823,7 @@
 "wikivoyage_travel_guide_descr" = "Rejseguider til de mest interessante steder på kloden via OsmAnd og uden en internetforbindelse.";
 "product_desc_sea_depth_contours" = "Havdybdekurver og sømærker";
 "free_version_message" = "%@ kort til download eller opdatering.";
-"get_osmand_live" = "Abonner på OsmAnd Live og brug alle funktioner: daglige opdateringer af kort, alle gratis og betalte udvidelser, Wikipedia, Wikivoyage og meget mere.";
+"get_osmand_live" = "Abonnér på OsmAnd Live og få adgang til alle funktioner: daglige opdateringer af kort, alle gratis og betalte udvidelser, Wikipedia, Wikivoyage og meget mere.";
 "osm_live_subscription" = "OsmAnd Live-abonnement";
 "wikivoyage_offline" = "Wikivoyage offline";
 "unlimited_downloads" = "Ubegrænset hentninger";
@@ -1576,7 +1576,7 @@
 "online_webpage_warning" = "Siden er kun tilgængelig online. Åben den i en webbrowser?";
 "open_in_browser_wiki" = "Åbn artiklen online";
 "download_wiki_data" = "Hent Wikipedia-data for %@";
-"how_to_open_wiki_title" = "Hvordanåbner man Wikipedia artikler?";
+"how_to_open_wiki_title" = "Hvordan åbner man Wikipedia-artikler?";
 "context_menu_points_of_group" = "Alle punkter i gruppen";
 "enable_contour_lines" = "Aktivér for visning af højdekurver på kortet";
 "map_settings_available_srtm_maps_descr" = "Yderligere kort er nødvendige for at se terrænskygger på kortet";
@@ -1720,7 +1720,7 @@
 "shared_string_copy" = "Kopier";
 "shared_string_meters" = "meter";
 "shared_string_tones" = "toner";
-"accessibility_announce" = "Annoncere";
+"accessibility_announce" = "Meddel";
 "only_manually" = "Kun manuelt";
 "select_distance_route_will_recalc" = "Vælg afstanden, hvorefter ruten genberegnes.";
 "recalculate_route_distance_promo" = "Ruten genberegnes, hvis afstanden fra ruten til den aktuelle placering er større end den valgte værdi.";
@@ -1934,7 +1934,7 @@
 "navigate_point_easting" = "Østlig";
 "added_profiles_descr" = "Profiler tilføjet af udvidelse";
 "open_place_reviews" = "OpenPlaceReviews";
-"wiki_menu_download_descr" = "Yderligere kort er nødvendige for at se Wikipedia Interessepunkter på kortet.";
+"wiki_menu_download_descr" = "Yderligere kort er nødvendige for at se Wikipedia-interessepunkter på kortet.";
 "navigate_point_olc" = "Open Location Code (OLC)";
 "contour_lines_hillshades_slope" = "Højdekurver, terrænskygger, hældning";
 "explore_wikipedia_offline" = "Udforsk Wikipedia offline.";
@@ -2431,7 +2431,7 @@
 "simulate_location_movement_speed_x2_desc" = "Bevægelseshastigheden af placeringen under simuleringen vil være det dobbelte af hastigheden i den valgte fil.";
 "simulate_location_movement_speed" = "Bevægelseshastighed";
 "simulate_location_movement_speed_x4" = "x4";
-"routing_attr_hazmat_category_name" = "Kategori af farligt gods";
+"routing_attr_hazmat_category_name" = "Transport af farligt gods";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Ingen restriktioner)";
 "transport_hazmat_yes_desc" = "Vælg den rette kategori.";
 "transport_hazmat_no_desc" = "Veje og tunneller kan have begrænsninger på transport af farlige materialer.";
@@ -2783,7 +2783,7 @@
 "kg" = "kg";
 "shared_string_keep_active" = "Hold aktiv";
 "lang_sat" = "Santali";
-"speed_cameras_alert" = "I nogle lande er indberetninger om hastighedskameraer forbudt i henhold til loven.";
+"speed_cameras_alert" = "I nogle lande er advarsler om fartkameraer forbudt ved lov.";
 "uninstall_speed_cameras" = "Afinstaller fartkameraer";
 "speed_camera_pois" = "Fartkamera-IP\'er";
 "shared_string_height" = "Højde";

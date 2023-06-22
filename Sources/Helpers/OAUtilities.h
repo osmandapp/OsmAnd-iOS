@@ -68,6 +68,8 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 - (NSString *) xmlStringToString;
 - (NSString *) regexReplacePattern:(NSString *)pattern newString:(NSString *)newString;
 - (NSArray<NSString *> *) regexSplitInStringByPattern:(NSString *)pattern;
+- (BOOL)isMatchedByRegex:(NSString *)regexPattern;
+- (NSArray<NSString *> *)componentsSeparatedByRegex:(NSString *)regexPattern;
 
 @end
 

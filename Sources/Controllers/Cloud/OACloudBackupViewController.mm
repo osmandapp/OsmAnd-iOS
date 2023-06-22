@@ -63,10 +63,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 @interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OAOnPrepareBackupListener, OABackupTypesDelegate, MFMailComposeViewControllerDelegate>
 
-@property (weak, nonatomic) IBOutlet UIView *navBarBackgroundView;
-@property (weak, nonatomic) IBOutlet UILabel *navBarTitle;
-@property (weak, nonatomic) IBOutlet UIButton *backImgButton;
-@property (weak, nonatomic) IBOutlet UIButton *settingsButton;
 @property (weak, nonatomic) IBOutlet UITableView *tblView;
 
 @end
@@ -85,6 +81,9 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     
     OATitleIconProgressbarCell *_backupProgressCell;
     NSInteger _itemsSection;
+    
+    UIBarButtonItem *_settingsButton;
+    UIBarButtonItem *_backButton;
 }
 
 - (instancetype) initWithSourceType:(EOACloudScreenSourceType)type
@@ -117,7 +116,8 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.backImgButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
+    
+    self.navigationItem.title = OALocalizedString(@"osmand_cloud");
     [self setupNotificationListeners];
     [OAIAPHelper.sharedInstance checkBackupPurchase];
     _settingsHelper = OANetworkSettingsHelper.sharedInstance;
@@ -134,21 +134,41 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     self.tblView.rowHeight = UITableViewAutomaticDimension;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.shadowColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.whiteColor
+    };
+    self.navigationController.navigationBar.standardAppearance = appearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.tintColor = UIColor.whiteColor;
+    self.navigationController.navigationBar.prefersLargeTitles = NO;
+    
+    OACloudBackupViewController *navigationController = (OACloudBackupViewController *)self.navigationController.topViewController;
+    _settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_settings"] style:UIBarButtonItemStylePlain target:self action:@selector(onSettingsButtonPressed)];
+    _backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
+    [navigationController.navigationItem setRightBarButtonItem:_settingsButton];
+    [navigationController.navigationItem setLeftBarButtonItem:_backButton];
+}
+
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [_backupHelper removePrepareBackupListener:self];
 }
 
-- (void)applyLocalization
-{
-    self.navBarTitle.text = OALocalizedString(@"osmand_cloud");
-}
-
 -(void) addAccessibilityLabels
 {
-    self.backImgButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
-    self.settingsButton.accessibilityLabel = OALocalizedString(@"shared_string_settings");
+    _settingsButton.accessibilityLabel = OALocalizedString(@"shared_string_settings");
+    _backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
 }
 
 - (void) onRefresh
@@ -716,8 +736,8 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         _status = [OABackupStatus getBackupStatus:_backup];
         _error = _backup.error;
         [self refreshContent];
-        self.settingsButton.userInteractionEnabled = YES;
-        self.settingsButton.tintColor = UIColor.whiteColor;
+        _settingsButton.enabled = YES;
+        _settingsButton.tintColor = UIColor.whiteColor;
         [self.tblView.refreshControl endRefreshing];
     });
 }
@@ -725,8 +745,8 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (void)onBackupPreparing
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.settingsButton.userInteractionEnabled = NO;
-        self.settingsButton.tintColor = UIColorFromRGB(color_tint_gray);
+        _settingsButton.enabled = NO;
+        _settingsButton.tintColor = UIColorFromRGB(color_tint_gray);
     });
 }
 

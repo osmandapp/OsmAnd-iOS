@@ -798,7 +798,7 @@ static UIViewController *parentController;
             
             [tracksGroup.groupItems addObject:@{
                 @"type" : [OAGPXTrackCell getCellIdentifier],
-                @"title" : [track getName],
+                @"title" : [track.file stringByDeletingPathExtension],
                 @"track" : track.gpx,
                 @"distance" : [OAOsmAndFormatter getFormattedDistance:track.gpx.totalDistance],
                 @"time" : [OAOsmAndFormatter getFormattedTimeInterval:track.gpx.timeSpan shortFormat:YES],

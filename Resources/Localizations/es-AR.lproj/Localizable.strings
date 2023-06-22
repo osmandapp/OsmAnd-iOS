@@ -2351,7 +2351,7 @@
 "backup_and_restore" = "Copia de seguridad y restauración";
 "product_desc_weather" = "Pronóstico horario de 24 horas con 7 días de anticipación en el mapa";
 "user_login" = "Ingresar";
-"osmand_cloud_login_descr" = "Ingresa el correo electrónico usado para el registro. Enviaremos un código temporal necesario para el siguiente paso.";
+"osmand_cloud_login_descr" = "Ingresa el correo electrónico usado para el registro. Enviaremos una contraseña de un solo uso.";
 "cloud_email_not_registered" = "Este correo electrónico no está registrado en OsmAnd Cloud";
 "cloud_email_already_registered" = "Este correo electrónico ya se encuentra registrado.";
 "make_backup_descr" = "Hay muchos cambios en este dispositivo, haz una copia de seguridad de estos datos para no perderlos.";
@@ -2438,7 +2438,7 @@
 "product_desc_development" = "Para desarrolladores y usuarios experimentados";
 "osmand_development_plugin_description" = "Incluye funciones de prueba y depuración de OsmAnd: simula rutas de navegación, monitorea el renderizado de la pantalla, comprueba el rendimiento, etc. El complemento no es necesario para el uso normal de la aplicación.";
 "ltr_or_rtl_combine_via_or" = "%@ o %@";
-"routing_attr_hazmat_category_name" = "Categoría de materiales peligrosos";
+"routing_attr_hazmat_category_name" = "Transporte de materiales peligrosos";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Sin restricciones)";
 "transport_hazmat_yes_desc" = "Marca la categoría correspondiente.";
 "carplay" = "CarPlay";

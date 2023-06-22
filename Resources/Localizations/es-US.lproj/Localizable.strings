@@ -2342,7 +2342,7 @@
 "weather_temperature_fahrenheit" = "Fahrenheit";
 "weather_pressure_hectopascals" = "Hectopascales";
 "weather_pressure_millimeters_of_mercury" = "Milímetros de mercurio";
-"osmand_cloud_login_descr" = "Ingresa el correo electrónico usado para el registro. Enviaremos un código temporal necesario para el siguiente paso.";
+"osmand_cloud_login_descr" = "Ingresa el correo electrónico usado para el registro. Enviaremos una contraseña de un solo uso.";
 "login_footer_email_part" = "support@osmand.net";
 "cloud_email_already_registered" = "Este correo electrónico ya se encuentra registrado.";
 "login_help_email_title" = "OsmAnd Cloud en iOS";
@@ -2474,7 +2474,7 @@
 "plugin_popup_nautical_ask" = "Activa el complemento náutico";
 "restore_purchase" = "Restaurar compra";
 "osm_live_payment_year_cost_descr" = "%@ / año";
-"routing_attr_hazmat_category_name" = "Categoría de materiales peligrosos";
+"routing_attr_hazmat_category_name" = "Transporte de materiales peligrosos";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Sin restricciones)";
 "pro_features" = "Funciones«Pro»";
 "carplay" = "CarPlay";
@@ -2826,7 +2826,7 @@
 "announcement_time_title" = "Tiempo de anuncio";
 "user_points" = "Puntos de usuario";
 "announcement_time_off_route" = "Fuera de la ruta";
-"compass_click_desc" = "Sugerencia: Pulsa el widget de la brújula para cambiar el modo de orientación del mapa.";
+"compass_click_desc" = "Sugerencia: Pulsa el botón de la brújula para cambiar el modo de orientación del mapa.";
 "history_clear_alert_title" = "Borrar todo el historial";
 "history_clear_alert_message" = "¿Borrar los elementos marcados en el historial?";
 "lang_zh-Hans" = "Chino (Simplificado)";
@@ -2909,3 +2909,5 @@
 "shared_string_duplicate" = "Duplicar";
 "generate_slope_from_3d_maps" = "Generar mapas ráster de pendientes a partir de mapas 3D";
 "generate_hillshade_from_3d_maps" = "Generar mapas ráster de sombreado a partir de mapas 3D";
+"user_name" = "Nombre de usuario";
+"perform_oauth_authorization" = "Ingresar a través de OAuth";

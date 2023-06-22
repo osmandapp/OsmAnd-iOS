@@ -208,7 +208,7 @@
 "use_osm_live_routing" = "OsmAnd Live-navigering";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "guidance_preferences_descr" = "Navigeringsinnstillinger";
-"routing_preferences_descr" = "Ruteplanleggingsinnstillinger";
+"routing_preferences_descr" = "Rutingsinnstillinger";
 "recording_preferences_descr" = "Trip recording preferences";
 "routing_settings" = "Navigering";
 "app_mode_bus" = "Buss";
@@ -1364,7 +1364,7 @@
 "rendering_attr_trolleybusRoutes_name" = "Trolleybussruter";
 "rendering_attr_hideAccess_name" = "Adgangsrestriksjoner";
 "routeInfo_tracktype_name" = "Overflatefasthet";
-"rendering_attr_hikingRoutesOSMC_name" = "Fottursymbol-overlegg";
+"rendering_attr_hikingRoutesOSMC_name" = "Fotturruter";
 "rendering_attr_hideBuildings_name" = "Bygninger";
 "routing_attr_driving_style_prefer_unpaved_description" = "Foretrekk veier uten fast dekke framfor med fast dekke for ruting.";
 "rendering_attr_tracktype_grade3_name" = "For det meste hard";
@@ -1399,8 +1399,8 @@
 "rendering_attr_transportStops_name" = "Stoppesteder";
 "rendering_attr_surface_dirt_name" = "Bakke";
 "rendering_attr_piste_difficulty_advanced_name" = "Avansert";
-"routing_attr_no_new_routing_name" = "Ingen v1.9-regler for ruteplanlegging";
-"routing_attr_no_new_routing_description" = "Ikke bruk ruteplanleggingsregler introdusert i v1.9.";
+"routing_attr_no_new_routing_name" = "Ingen v1.9-regler for ruting";
+"routing_attr_no_new_routing_description" = "Ikke bruk rutingsregler introdusert i v1.9.";
 "rendering_attr_highway_class_track_grade3_name" = "Klasse 3";
 "rendering_attr_surface_salt_name" = "Salt";
 "rendering_value_medium_w_name" = "Middels";
@@ -1655,7 +1655,7 @@
 "voice_announces" = "Talemeldinger";
 "map_look_descr" = "Kartutseende";
 "profile_type_user_string" = "Brukerprofil";
-"shared_string_routing" = "Ruteplanlegging";
+"shared_string_routing" = "Ruting";
 "save_as_new_track" = "Lagre som nytt spor";
 "weight_limit_description" = "Angi kjøretøyvekt, noen rutebegrensninger for tunge kjøretøy kan tilkomme.";
 "profile_type_base_string" = "Grunnprofil";
@@ -1767,7 +1767,7 @@
 "point_num" = "Punkt %d";
 
 // Route planning
-"plan_route" = "Planlegg rute";
+"plan_route" = "Ruteplanlegging";
 "downloading" = "Laster ned …";
 "empty_profile_name_warning" = "Profilnavnet kan ikke være tomt";
 "profile_appearance_descr" = "Ikon, farge og navn";
@@ -1875,7 +1875,7 @@
 "recalculate_wrong_dir" = "Omberegn rute i fall retningen vendes";
 "recalculate_route" = "Beregn rute på nytt";
 "import_routing_file_descr" = "Du kan importere rutefiler fra ethvert skylager ved å åpne det i OsmAnd.";
-"select_nav_profile_dialog_message" = "«Navigasjonstype» bestemmer hvordan ruter beregnes.";
+"select_nav_profile_dialog_message" = "'Navigeringstype' velger hvordan ruter beregnes, med tilgjengelige frakoblede og nettbaserte rutingsmotorer.";
 "choose_auto_center_map_view_descr" = "Tid til kartvisning synkroniseres med nåværende posisjon etter forflytning";
 "nav_type_descr" = "Velg hvordan du vil kalkulere en rute for denne profilen";
 "change_map_behavior" = "Endre kartoppførsel under navigasjon";
@@ -2583,3 +2583,18 @@
 "icon_group_service" = "Tjeneste";
 "weather_forecast_is_outdated" = "Værmeldingen er utdatert.";
 "speak_route_deviation" = "Kunngjør avvik fra ruten";
+
+// Shared Strings
+"shared_string_cancelled" = "Avbrutt";
+"map_widget_sunrise" = "Soloppgang";
+"map_widget_sunset" = "Solnedgang";
+"map_widget_sunrise_sunset_time_left" = "Tid igjen";
+"map_widget_next_sunrise" = "Neste soloppgang";
+"map_widget_next_sunset" = "Neste solnedgang";
+"last_seven_days" = "Siste syv dager";
+"map_widget_zoom_level" = "Forstørrelsesnivå";
+"map_widget_target_distance" = "Avstand fra kamera til mål";
+"map_widget_trip_recording_downhill" = "Nedoverbakke";
+"map_widget_trip_recording_uphill" = "Oppoverbakke";
+"map_widget_trip_recording_duration" = "Varighet";
+"map_widget_trip_recording_distance" = "Avstand";

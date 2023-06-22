@@ -102,7 +102,6 @@
 		0AC29CFA26E763E600A78C53 /* ic_custom_wikipedia_download_colored@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AC29CF626E763E500A78C53 /* ic_custom_wikipedia_download_colored@2x.png */; };
 		0AC29CFB26E763E600A78C53 /* ic_custom_wikipedia_download_colored@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AC29CF726E763E500A78C53 /* ic_custom_wikipedia_download_colored@3x.png */; };
 		0AD1F3A626CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0AD1F3A426CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm */; };
-		0AD1F3A726CC02B100EE4DFD /* OADownloadMultipleResourceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AD1F3A526CC02B100EE4DFD /* OADownloadMultipleResourceViewController.xib */; };
 		0AD1F3AA26CC034900EE4DFD /* ic_custom_multi_download@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD1F3A826CC034800EE4DFD /* ic_custom_multi_download@3x.png */; };
 		0AD1F3AB26CC034900EE4DFD /* ic_custom_multi_download@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AD1F3A926CC034900EE4DFD /* ic_custom_multi_download@2x.png */; };
 		0AD1F3BA26CC0D6F00EE4DFD /* OAMapSettingsRoutesScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0AD1F3B926CC0D6F00EE4DFD /* OAMapSettingsRoutesScreen.mm */; };
@@ -2698,7 +2697,6 @@
 		DA5A839226C563A800F274C7 /* OAOnlineTilesEditingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D8A26C563A300F274C7 /* OAOnlineTilesEditingViewController.mm */; };
 		DA5A839326C563A800F274C7 /* OACustomSourceDetailsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D8D26C563A300F274C7 /* OACustomSourceDetailsViewController.mm */; };
 		DA5A839426C563A800F274C7 /* OAOutdatedResourcesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D8E26C563A300F274C7 /* OAOutdatedResourcesViewController.mm */; };
-		DA5A839526C563A800F274C7 /* OADonationSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7D8F26C563A300F274C7 /* OADonationSettingsViewController.xib */; };
 		DA5A839626C563A800F274C7 /* OAPluginsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D9126C563A300F274C7 /* OAPluginsViewController.mm */; };
 		DA5A839726C563A800F274C7 /* OALocalResourceInformationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D9226C563A300F274C7 /* OALocalResourceInformationViewController.mm */; };
 		DA5A839826C563A800F274C7 /* OAResourcesBaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D9326C563A300F274C7 /* OAResourcesBaseViewController.mm */; };
@@ -2711,7 +2709,6 @@
 		DA5A83A026C563A800F274C7 /* OAOsmEditTargetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DA626C563A300F274C7 /* OAOsmEditTargetViewController.xib */; };
 		DA5A83A126C563A800F274C7 /* OAOsmNotesOnlineTargetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DA726C563A300F274C7 /* OAOsmNotesOnlineTargetViewController.xib */; };
 		DA5A83A226C563A800F274C7 /* OAOsmEditingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DAB26C563A300F274C7 /* OAOsmEditingViewController.mm */; };
-		DA5A83A326C563A800F274C7 /* OAPoiTypeSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DAC26C563A300F274C7 /* OAPoiTypeSelectionViewController.xib */; };
 		DA5A83A426C563A800F274C7 /* OAPoiTypeSelectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7DAD26C563A300F274C7 /* OAPoiTypeSelectionViewController.mm */; };
 		DA5A83A526C563A800F274C7 /* OAOsmEditingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DAE26C563A300F274C7 /* OAOsmEditingViewController.xib */; };
 		DA5A83A626C563A800F274C7 /* OAOpeningHoursSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7DAF26C563A300F274C7 /* OAOpeningHoursSelectionViewController.xib */; };
@@ -3700,7 +3697,6 @@
 		0AC29CF726E763E500A78C53 /* ic_custom_wikipedia_download_colored@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wikipedia_download_colored@3x.png"; path = "Resources/Icons/ic_custom_wikipedia_download_colored@3x.png"; sourceTree = "<group>"; };
 		0AD1F3A326CC02B100EE4DFD /* OADownloadMultipleResourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADownloadMultipleResourceViewController.h; sourceTree = "<group>"; };
 		0AD1F3A426CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadMultipleResourceViewController.mm; sourceTree = "<group>"; };
-		0AD1F3A526CC02B100EE4DFD /* OADownloadMultipleResourceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADownloadMultipleResourceViewController.xib; sourceTree = "<group>"; };
 		0AD1F3A826CC034800EE4DFD /* ic_custom_multi_download@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_multi_download@3x.png"; path = "Resources/Icons/ic_custom_multi_download@3x.png"; sourceTree = "<group>"; };
 		0AD1F3A926CC034900EE4DFD /* ic_custom_multi_download@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_multi_download@2x.png"; path = "Resources/Icons/ic_custom_multi_download@2x.png"; sourceTree = "<group>"; };
 		0AD1F3B826CC0D6F00EE4DFD /* OAMapSettingsRoutesScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsRoutesScreen.h; sourceTree = "<group>"; };
@@ -7020,7 +7016,6 @@
 		DA5A7D8C26C563A300F274C7 /* OAPluginDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPluginDetailsViewController.h; sourceTree = "<group>"; };
 		DA5A7D8D26C563A300F274C7 /* OACustomSourceDetailsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACustomSourceDetailsViewController.mm; sourceTree = "<group>"; };
 		DA5A7D8E26C563A300F274C7 /* OAOutdatedResourcesViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOutdatedResourcesViewController.mm; sourceTree = "<group>"; };
-		DA5A7D8F26C563A300F274C7 /* OADonationSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADonationSettingsViewController.xib; sourceTree = "<group>"; };
 		DA5A7D9026C563A300F274C7 /* OAPurchasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPurchasesViewController.h; sourceTree = "<group>"; };
 		DA5A7D9126C563A300F274C7 /* OAPluginsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPluginsViewController.mm; sourceTree = "<group>"; };
 		DA5A7D9226C563A300F274C7 /* OALocalResourceInformationViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OALocalResourceInformationViewController.mm; sourceTree = "<group>"; };
@@ -7046,7 +7041,6 @@
 		DA5A7DA926C563A300F274C7 /* OAPoiTypeSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPoiTypeSelectionViewController.h; sourceTree = "<group>"; };
 		DA5A7DAA26C563A300F274C7 /* OAOpeningHoursSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOpeningHoursSelectionViewController.h; sourceTree = "<group>"; };
 		DA5A7DAB26C563A300F274C7 /* OAOsmEditingViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmEditingViewController.mm; sourceTree = "<group>"; };
-		DA5A7DAC26C563A300F274C7 /* OAPoiTypeSelectionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAPoiTypeSelectionViewController.xib; sourceTree = "<group>"; };
 		DA5A7DAD26C563A300F274C7 /* OAPoiTypeSelectionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPoiTypeSelectionViewController.mm; sourceTree = "<group>"; };
 		DA5A7DAE26C563A300F274C7 /* OAOsmEditingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAOsmEditingViewController.xib; sourceTree = "<group>"; };
 		DA5A7DAF26C563A300F274C7 /* OAOpeningHoursSelectionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAOpeningHoursSelectionViewController.xib; sourceTree = "<group>"; };
@@ -12759,10 +12753,8 @@
 				DA5A7D8726C563A300F274C7 /* OACustomSourceDetailsViewController.xib */,
 				DA5A7D8B26C563A300F274C7 /* OADonationSettingsViewController.h */,
 				DA5A7D7F26C563A300F274C7 /* OADonationSettingsViewController.mm */,
-				DA5A7D8F26C563A300F274C7 /* OADonationSettingsViewController.xib */,
 				0AD1F3A326CC02B100EE4DFD /* OADownloadMultipleResourceViewController.h */,
 				0AD1F3A426CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm */,
-				0AD1F3A526CC02B100EE4DFD /* OADownloadMultipleResourceViewController.xib */,
 				DA5A7D8326C563A300F274C7 /* OALocalResourceInfoCell.h */,
 				DA5A7D9826C563A300F274C7 /* OALocalResourceInfoCell.m */,
 				DA5A7D9926C563A300F274C7 /* OALocalResourceInformationViewController.h */,
@@ -12841,7 +12833,6 @@
 				DA5A7DA726C563A300F274C7 /* OAOsmNotesOnlineTargetViewController.xib */,
 				DA5A7DA926C563A300F274C7 /* OAPoiTypeSelectionViewController.h */,
 				DA5A7DAD26C563A300F274C7 /* OAPoiTypeSelectionViewController.mm */,
-				DA5A7DAC26C563A300F274C7 /* OAPoiTypeSelectionViewController.xib */,
 				32961CA62991377E00CF5DAB /* OAUploadGPXFilesTask.h */,
 				32BFF097299137D60023D067 /* OAUploadGPXFilesTask.m */,
 			);
@@ -14818,7 +14809,6 @@
 				DA2EC64E29FBBE0300ECEB37 /* ic_action_hide@2x.png in Resources */,
 				DA8A928025DE8B4A00F5320A /* ic_carplay_search@2x.png in Resources */,
 				DA7FA55E2695DCFB0044F05A /* fi_tts.js in Resources */,
-				DA5A83A326C563A800F274C7 /* OAPoiTypeSelectionViewController.xib in Resources */,
 				DAC849B626CF97EE00018091 /* OADownloadMapWidget.xib in Resources */,
 				46E9AD9428DC89DD00CC55F9 /* OASwitchTableViewCell.xib in Resources */,
 				8AFC2C0D24334A4E0095BA9F /* map_location_default_top@3x.png in Resources */,
@@ -15346,7 +15336,6 @@
 				DA5A840526C563A800F274C7 /* OAPOIViewController.xib in Resources */,
 				DA2EC62529FBBE0200ECEB37 /* widget_destination_time_to_go_night@2x.png in Resources */,
 				84F464211B664D3B00C1D96F /* ic_popup_no_internet@3x.png in Resources */,
-				0AD1F3A726CC02B100EE4DFD /* OADownloadMultipleResourceViewController.xib in Resources */,
 				46E0263A27B6773F00E554DD /* ic_custom_terrain_hilly@3x.png in Resources */,
 				DA2EC78229FBBE0400ECEB37 /* widget_route_elevation_night@2x.png in Resources */,
 				DABF818D228BDE9300651A91 /* map_mapillary_location@2x.png in Resources */,
@@ -17090,7 +17079,6 @@
 				460743A828C10B2900F13A7A /* OAOsmLoginMainViewController.xib in Resources */,
 				DA9C622B221C438C0087E140 /* ic_custom_search@2x.png in Resources */,
 				8410D072207F48200049DEB2 /* ic_flat_list_dark@3x.png in Resources */,
-				DA5A839526C563A800F274C7 /* OADonationSettingsViewController.xib in Resources */,
 				84EE2DA31AFBB6D2007C9A94 /* track_clear_data@3x.png in Resources */,
 				844E07D91E42319700EFC525 /* ic_action_intersection@2x.png in Resources */,
 				DA9A2C2826FB587400BEC681 /* map_direction_arrow@3x.png in Resources */,
@@ -17179,7 +17167,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Download the new version each build (does not fail the buld if there's no Internet)\ncurl -o ${SRCROOT}/Resources/Shipped/regions.ocbf https://builder.osmand.net/basemap/regions.ocbf ||:\n";
+			shellScript = "# Download the new version each build (does not fail the buld if there's no Internet)\ncurl -o ${SRCROOT}/Resources/Shipped/regions.ocbf https://creator.osmand.net/basemap/regions.ocbf ||:\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

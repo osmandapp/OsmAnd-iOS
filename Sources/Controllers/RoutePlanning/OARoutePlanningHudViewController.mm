@@ -139,6 +139,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 	
 	BOOL _showSnapWarning;
     OATargetMenuViewControllerState *_targetMenuState;
+    OAMapRendererView *_mapView;
 }
 
 @synthesize menuHudMode;
@@ -225,6 +226,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     _editingContext = context;
     _editingContext.progressDelegate = self;
     _layer.editingCtx = _editingContext;
+    _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
 }
 
 - (void)viewDidLoad
@@ -599,7 +601,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     BOOL landscape = [self isLeftSidePresentation];
     [mapPanel displayAreaOnMap:routeBBox.topLeft
                    bottomRight:routeBBox.bottomRight
-                          zoom:0
+                          zoom:_mapView.zoom
                    bottomInset:!landscape ? self.getViewHeight : 0
                      leftInset:landscape ? self.tableView.frame.size.width : 0
                       animated:YES];

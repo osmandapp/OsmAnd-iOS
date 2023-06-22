@@ -542,7 +542,7 @@
 "shared_string_automatic" = "Авто";
 "map_widget_magnetic_bearing" = "Магнитный пеленг";
 "map_widget_bearing" = "Курсовой угол";
-"shared_string_near" = "Рядом с";
+"shared_string_near" = "Вблизи";
 "map_markers" = "Маркеры";
 "default_speed_system" = "Единицы измерения скорости";
 "right_side_navigation" = "Правостороннее движение";
@@ -559,7 +559,7 @@
 "speed_limit_exceed_message" = "Выберите значение скорости, при превышении которого вы получите голосовое предупреждение.";
 "wake_on_voice" = "Автовключение экрана перед поворотом";
 "routing_settings_2" = "Настройки навигации";
-"impassable_road" = "Избегать дорог…";
+"impassable_road" = "Исключить дороги…";
 "shared_string_do_not_use" = "Не использовать";
 "voice_provider" = "Голосовые данные";
 "navigation_over_track" = "Начать навигацию по треку?";
@@ -580,17 +580,17 @@
 "will_open_at" = "Откроется в";
 "will_open_on" = "Откроется в";
 "will_open_tomorrow_at" = "Откроется завтра в";
-"road_blocked" = "Дорога перекрыта";
+"road_blocked" = "Нежелательный участок";
 "shared_string_road" = "Дорога";
 "arrival_distance_descr" = "Как скоро следует сообщать о прибытии?";
 "app_mode_aircraft" = "Воздушное судно";
-"stop_routing_confirm" = "Остановить навигацию\?";
+"stop_routing_confirm" = "Завершение навигации";
 "clear_all_intermediates" = "Очистить все промежуточные точки";
 "shared_string_current" = "Текущий";
 "make_as_start_point" = "Сделать пунктом отправления";
-"subsequent_dest_description" = "Текущий пункт назначения станет последним промежуточным пунктом";
-"first_intermediate_dest_description" = "Сделать начальной остановкой маршрута";
-"last_intermediate_dest_description" = "Добавить промежуточную остановку";
+"subsequent_dest_description" = "Текущий конечный пункт станет последним промежуточным";
+"first_intermediate_dest_description" = "Сделать первым промежуточным пунктом";
+"last_intermediate_dest_description" = "Сделать последним промежуточным пунктом";
 "in_app_purchase_desc" = "Разовый платёж";
 "transport_Routes" = "Маршруты";
 "transport_nearby_routes" = "В пределах";
@@ -716,7 +716,7 @@
 "features_menu_group" = "Возможности";
 "map_viewing_item" = "Обзор карты";
 "help_search" = "Поиск по карте";
-"planning_trip_item" = "Планирование маршрута при навигации";
+"planning_trip_item" = "Ручное составление маршрута";
 "map_legend" = "Легенда";
 "other_location" = "Другие";
 "instalation_troubleshooting_item" = "Установка и решение проблем";
@@ -769,9 +769,9 @@
 "search_radius_proximity" = "В радиусе";
 "poi" = "POI";
 "show_poi_over_map" = "Показывать POI";
-"keep_and_add_destination_point" = "Добавить пункт назначения";
-"add_as_first_destination_point" = "Первый промежуточный пункт";
-"add_as_last_destination_point" = "Последний промежуточный пункт";
+"keep_and_add_destination_point" = "Добавить в конец маршрута";
+"add_as_first_destination_point" = "Добавить в начало маршрута";
+"add_as_last_destination_point" = "Добавить перед конечным пунктом";
 "intermediate_items_sort_by_distance" = "Расположить в оптимальном порядке";
 "route_stops_before" = "%@остановок до выбранной";
 "osm_live_plan_pricing" = "План и цены";
@@ -849,7 +849,7 @@
 "lon" = "Долгота";
 "route_descr_select_destination" = "Задать пункт назначения";
 "sort_by_distance" = "Сортировать по расстоянию";
-"cancel_route" = "Отменить маршрут\?";
+"cancel_route" = "Отменить маршрут?";
 "select_route_start_on_map" = "Выберите начальную точку маршрута";
 "select_route_finish_on_map" = "Выберите конечную точку маршрута";
 "interrupt_music" = "Прерывать музыку";
@@ -1292,12 +1292,12 @@
 "rendering_attr_appMode_name" = "Режим отрисовки";
 "rendering_value_lightgreen_name" = "Светло-зелёный";
 "rendering_attr_trainLightrailRoutes_name" = "Маршруты поездов";
-"routing_attr_avoid_bus_description" = "Избегать автобусы и троллейбусы";
+"routing_attr_avoid_bus_description" = "Избегать автобусов и троллейбусов";
 "routing_attr_allow_intermediate_description" = "Более сложные маршруты с крутыми участками дороги. В целом, препятствия, которых следует избегать.";
 "rendering_attr_appMode_description" = "Оптимизация карты для соответствующего профиля";
 "routing_attr_driving_style_safety_name" = "Предпочитать тихие улицы";
 "rendering_attr_subwayMode_name" = "Линии метро";
-"routing_attr_avoid_train_description" = "Избегать поезда";
+"routing_attr_avoid_train_description" = "Избегать поездов";
 "rendering_attr_showRoadMaps_description" = "Выберите, когда показывать только дорожные карты:";
 "routing_attr_avoid_toll_description" = "Избегать платных дорог";
 "rendering_attr_roadColors_name" = "Цветовая схема дорог";
@@ -1363,7 +1363,7 @@
 "routing_attr_avoid_unpaved_name" = "Без грунтовых дорог";
 "rendering_attr_piste_difficulty_easy_name" = "Легко";
 "routing_attr_avoid_bus_name" = "Без автобусов";
-"routing_attr_avoid_tram_description" = "Избегать трамваи";
+"routing_attr_avoid_tram_description" = "Избегать трамваев";
 "rendering_attr_surface_grass_paver_name" = "Газонная решётка";
 "routing_attr_avoid_shuttle_train_name" = "Без челночных поездов (шаттлов)";
 "routing_attr_prefer_motorway_description" = "Предпочитать магистрали";
@@ -1373,7 +1373,7 @@
 "routing_attr_allow_intermediate_name" = "Разрешить средние маршруты";
 "routing_attr_allow_expert_name" = "Разрешить экспертные маршруты";
 "rendering_attr_smoothness_excellent_name" = "Отличная";
-"routing_attr_avoid_share_taxi_description" = "Избегать маршрутные такси";
+"routing_attr_avoid_share_taxi_description" = "Избегать маршрутных такси";
 "rendering_value_yellow_name" = "Жёлтый";
 "rendering_attr_surface_compacted_name" = "Утрамбованное";
 "rendering_attr_smoothness_impassable_name" = "Непроходимая";
@@ -1382,11 +1382,11 @@
 "routing_attr_driving_style_prefer_unpaved_description" = "Предпочитать дороги без покрытия.";
 "rendering_attr_contourDensity_name" = "Частота горизонталей";
 "rendering_attr_piste_difficulty_undefined_name" = "Неопределённая";
-"routing_attr_avoid_subway_description" = "Избегать метро и легкорельсовый транспорт";
+"routing_attr_avoid_subway_description" = "Избегать метро и легкорельсового транспорта";
 "routeInfo_road_types_name" = "Типы дорог";
 "rendering_value_purple_name" = "Фиолетовый";
 "rendering_attr_hikingRoutesOSMC_description" = "Отрисовка дорог в соответствии с трассировкой OSMC.";
-"routing_attr_avoid_ferry_description" = "Избегать паромы";
+"routing_attr_avoid_ferry_description" = "Избегать паромов";
 "rendering_attr_surface_fine_gravel_name" = "Мелкий гравий";
 "rendering_attr_surface_ground_name" = "Земля";
 "rendering_attr_currentTrackColor_description" = "Цвет трека GPX";
@@ -1429,7 +1429,7 @@
 "routing_attr_allow_private_name" = "Въезд на частную территорию";
 "rendering_value_green_name" = "Зелёный";
 "rendering_attr_highway_class_track_grade3_name" = "Класс 3";
-"routing_attr_avoid_share_taxi_name" = "Без маршрутных такси";
+"routing_attr_avoid_share_taxi_name" = "Без маршруток";
 "rendering_value_thick_name" = "Толстая";
 "rendering_attr_noAdminboundaries_name" = "Границы";
 "routing_attr_allow_skating_only_name" = "Разрешить маршруты только для конькового хода";
@@ -1472,7 +1472,7 @@
 "rendering_value_default13_name" = "По умолчанию (13)";
 "rendering_attr_coloredBuildings_name" = "Цветовая маркировка зданий по типу";
 "routing_attr_width_name" = "Ограничение по ширине";
-"routing_attr_avoid_ferries_description" = "Избегать паромные переправы";
+"routing_attr_avoid_ferries_description" = "Избегать паромных переправ";
 "routing_attr_piste_type_sled_name" = "Сани";
 "routing_attr_height_obstacles_name" = "Рельеф";
 "rendering_attr_shareTaxiRoutes_name" = "Маршрутное такси";
@@ -1724,7 +1724,7 @@
 "default_speed_setting_title" = "Скорость по умолчанию";
 "routing_attr_length_name" = "Предельная длина";
 "do_not_rotate" = "Не вращать";
-"select_distance_route_will_recalc" = "Пороговое отклонение для пересчёта маршрута.";
+"select_distance_route_will_recalc" = "Автоперестроение маршрута при сходе с него.";
 "special_routing_type" = "Специальная навигация";
 "default_profile_descr" = "Выберите профиль, который будет использоваться при запуске приложения.";
 "vessel_width_limit_description" = "Укажите ширину судна, чтобы избежать узких мостов";
@@ -1765,7 +1765,7 @@
 "accessibility_announce" = "Оповещение";
 "instructions_repeat" = "Нажмите на виджет \"Следующий поворот\", чтобы повторить инструкции";
 "speed_limit_tolerance_descr" = "Выберите допустимое значение превышения скорости выше которого вы получите голосовое предупреждение.";
-"recalculate_route_distance_promo" = "Предельно допустимое отдаление от маршрута, после которого маршрут перестроится.";
+"recalculate_route_distance_promo" = "Предельно допустимое удаление от маршрута, после которого маршрут будет перестроен.";
 "recalculate_route" = "Пересчёт маршрута";
 "choose_auto_center_map_view_descr" = "Время до синхронизации вида карты с текущим положением после перемещения";
 "edit_profile_screen_options_subtitle" = "Настройка элементов экрана для профиля";
@@ -1823,7 +1823,7 @@
 "shared_string_settings" = "Настройки";
 "importing_from" = "Импорт данных из %@";
 "shared_string_importing" = "Импортирование";
-"avoid_road" = "Избегать дорог";
+"avoid_road" = "Обходить";
 "quick_action_map_source_title" = "Источники карт";
 "shared_string_poi_types" = "Типы POI";
 "shared_string_quick_actions" = "Быстрые действия";
@@ -1847,7 +1847,7 @@
 "move_point_descr" = "Переместите карту, чтобы изменить положение этой точки.";
 
 // Route planning
-"plan_route" = "Планирование маршрута";
+"plan_route" = "Составление маршрута";
 "listed_exist" = "Указанные %@ уже существуют в OsmAnd.";
 "keep_both_desc" = "Импортированные элементы будут добавлены с префиксом";
 "shared_string_max" = "Макс.";
@@ -1884,7 +1884,7 @@
 "layer_amenity_label" = "Названия точек";
 "quick_action_mapillary_hide" = "Скрыть Mapillary";
 "shared_string_add_profile" = "Добавить профиль";
-"arrived_at_destination" = "Вы прибыли.";
+"arrived_at_destination" = "Вы на месте.";
 "profile_type_user_string" = "Профиль пользователя";
 "quick_action_switch_profile_descr" = "Кнопка действия переключает между выбранными профилями.";
 "reverse_route" = "Обратный маршрут";
@@ -1903,7 +1903,7 @@
 "open_saved_track" = "Открыть сохранённый трек";
 "nearest_point" = "Ближайшая точка";
 "simplified_track" = "Упрощённый трек";
-"follow_track" = "Следовать по маршруту";
+"follow_track" = "Ведение по треку";
 "replace_favorite_confirmation" = "Заменить избранные %@\?";
 "favorite_group_name" = "Имя группы";
 "available_groups" = "Доступные группы";
@@ -1963,7 +1963,7 @@
 "shared_string_octagon" = "Восьмиугольник";
 "favorite_friends_category" = "Друзья";
 "icon_group_sport" = "Спорт";
-"sort_last_modified" = "Последнее изменение";
+"sort_last_modified" = "По дате";
 "shared_string_icon" = "Значок";
 "gpx_upload_private_visibility_descr" = "«Частный» означает, что трек не будет виден в любых общедоступных списках, но точки из него будут доступны через public GPS API без отметок времени.";
 "gpx_upload_trackable_visibility_descr" = "«Отслеживаемый» означает, что трек не будет виден в любых общедоступных списках, но обработанные точки c отметками времени из него будут доступны через public GPS API (приэтом трек не будет ассоциирован с вами). Другие пользователи смогут лишь загружать обработанные точки из вашего трека.";
@@ -2333,7 +2333,7 @@
 "route_preferred_terrain_less_hilly" = "Более короткие, менее холмистые маршруты.";
 "map_settings_weather_temp" = "Температура";
 "routing_attr_avoid_tunnels_name" = "Без тоннелей";
-"routing_attr_avoid_tunnels_description" = "Избегать тоннели";
+"routing_attr_avoid_tunnels_description" = "Избегать тоннелей";
 "preferred_terrain" = "Предпочтительный рельеф";
 "shared_string_weather" = "Погода";
 "product_desc_weather" = "24-часовой прогноз ежечасно и прогноз на 7 дней каждые 3 часа";
@@ -2591,7 +2591,7 @@
 "routing_attr_difficulty_preference_expert_name" = "Эксперт";
 "routing_attr_carriage_restrictions_description" = "Учитывать права доступа для гужевых транспортных средств";
 "routing_attr_hazmat_category_description" = "Категория опасных материалов / Учитывать разрешение на доступ к опасным веществам";
-"routing_attr_avoid_highway_description" = "Избегать автомагистрали";
+"routing_attr_avoid_highway_description" = "Избегать автомагистралей";
 "routing_attr_prefer_tactile_paving_name" = "Предпочитать тактильное покрытие";
 "rendering_attr_horse_scale_critical_name" = "Критический";
 "rendering_attr_weatherPrecipitationContours_name" = "Изолинии осадков (изогиеты)";
@@ -2606,7 +2606,7 @@
 "rendering_attr_natureReserves_name" = "Заповедники";
 "routing_attr_freeride_policy_prefer_offpiste_name" = "Предпочитать внетрассовое катание";
 "rendering_attr_horseScale_name" = "Сложность конных маршрутов";
-"routing_attr_avoid_fords_description" = "Избегать броды";
+"routing_attr_avoid_fords_description" = "Избегать бродов";
 "rendering_attr_showShareTaxiRoutes_name" = "Маршрутные такси";
 "rendering_attr_hideMilitaryAreas_name" = "Военные зоны";
 "routing_attr_allow_intermittent_name" = "Разрешить пересыхающие водные пути";
@@ -2652,7 +2652,7 @@
 "routing_attr_difficulty_preference_advanced_name" = "Продвинутый";
 "routing_attr_avoid_highway_name" = "Без автомагистралей";
 "rendering_attr_horse_scale_common_name" = "Обычный";
-"routing_attr_avoid_4wd_only_description" = "Избегать дорог, подходящих только для полноприводных автомобилей";
+"routing_attr_avoid_4wd_only_description" = "Избегать дорог, пригодных только для полноприводных автомобилей";
 "routing_attr_avoid_4wd_only_name" = "Без дорог 4WD";
 "rendering_attr_horse_scale_demanding_name" = "Требовательный";
 "routing_attr_freeride_policy_allow_name" = "Разрешить";

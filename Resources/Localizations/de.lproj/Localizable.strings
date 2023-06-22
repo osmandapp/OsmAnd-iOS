@@ -2480,7 +2480,7 @@
 "plugin_popup_nautical_ask" = "Bitte aktivieren Sie das Nautical-Plugin";
 "restore_purchase" = "Kauf wiederherstellen";
 "osm_live_payment_year_cost_descr" = "%@ / Jahr";
-"routing_attr_hazmat_category_name" = "Gefahrgutkategorie";
+"routing_attr_hazmat_category_name" = "Transport von Gefahrgut";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Keine Einschränkungen)";
 "pro_features" = "Pro-Funktionen";
 "carplay" = "CarPlay";

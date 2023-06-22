@@ -66,18 +66,6 @@
     return OALocalizedString(@"quick_action_new_action");
 }
 
-- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
-{
-    UIBarButtonItem *rightButton = [self createRightNavbarButton:nil
-                                                        iconName:@"ic_navbar_search"
-                                                          action:@selector(searchPressed)
-                                                            menu:nil];
-    
-    rightButton.accessibilityLabel = OALocalizedString(@"shared_string_search");
-    
-    return @[rightButton];
-}
-
 - (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
     return EOABaseNavbarColorSchemeOrange;
@@ -222,11 +210,6 @@
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
         [self openQuickActionSetupFor:indexPath];
     }
-}
-
--(void)searchPressed
-{
-    _searchController.active = YES;
 }
 
 - (void)openQuickActionSetupFor:(NSIndexPath *)indexPath

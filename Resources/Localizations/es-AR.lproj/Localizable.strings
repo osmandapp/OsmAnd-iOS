@@ -1590,7 +1590,7 @@
 "preferred_languages" = "Idiomas preferidos";
 "srtm_plugin_name" = "Curvas de nivel";
 "product_desc_srtm" = "Evaluación visual de la forma de la superficie terrestre";
-"srtm_plugin_description" = "La información del terreno, como las curvas de nivel, los sombreados y las pendientes, ayudan a evaluar visualmente la disposición del terreno y el relieve, la navegabilidad y más. La información topográfica en un mapa puede representarse mediante el sombreado de la pendiente, las curvas de nivel y/o el color de la inclinación.\n\nLos datos subyacentes provienen de SRTM y ASTER.\n\nVéase - http://osmand.net/docs/user/plugins/contour-lines .";
+"srtm_plugin_description" = "La información topográfica, como las curvas de nivel, los sombreados y las pendientes, ayudan a evaluar visualmente la disposición del terreno y el relieve, la navegabilidad y más. La información topográfica en un mapa puede representarse mediante el sombreado de la pendiente, las curvas de nivel y/o el color de la inclinación.\n\nLos datos subyacentes provienen de SRTM y ASTER.\n\nVéase - http://osmand.net/docs/user/plugins/contour-lines .";
 "wikivoyage_travel_guide" = "Guías turísticas";
 "start_editing_card_image_text" = "La guía turística libre global que cualquiera puede editar.";
 "wikivoyage_travel_guide_descr" = "Las guías de los sitios más interesantes del planeta, dentro de OsmAnd y sin conexión a Internet.";
@@ -2482,7 +2482,7 @@
 "unlimited_map_downloads" = "Descargas de mapas ilimitadas";
 "wikipedia_and_wikivoyage_offline" = "Wikipedia y Wikiviajes sin conexión";
 "nautical_depth" = "Profundidad náutica";
-"terrain_maps" = "Mapas del terreno";
+"terrain_maps" = "Mapas topográficos";
 "purchases_feature_desc_hourly_map_updates" = "Obtén acceso a actualizaciones de mapas con mayor frecuencia, elige entre: actualizaciones horarias, diarias o semanales. Las actualizaciones se descargan de forma incremental, sólo para el área modificada.";
 "purchases_feature_desc_carplay" = "Transmite los mapas y navegación sin conexión de OsmAnd en la pantalla del vehículo y se integra con los controles del mismo.";
 "purchases_feature_desc_unlimited_map_download" = "Obtén acceso sin conexión a descargas ilimitadas para todos los continentes y mapas de regiones.";

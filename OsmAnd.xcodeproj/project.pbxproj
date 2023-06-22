@@ -1386,6 +1386,7 @@
 		DA05A6A3285B3DCE00D0AFAB /* OABackupExporter.m in Sources */ = {isa = PBXBuildFile; fileRef = DA05A6A2285B3DCE00D0AFAB /* OABackupExporter.m */; };
 		DA06BB5529967A4C003B9212 /* depthcontourlines.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA06BB5429967A4C003B9212 /* depthcontourlines.addon.render.xml */; };
 		DA08A0D2227096DA000A53BA /* offroad.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA08A0D1227096DA000A53BA /* offroad.render.xml */; };
+		DA08A14A2A41DA7400205D7E /* RulerDistanceWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA08A1492A41DA7400205D7E /* RulerDistanceWidget.swift */; };
 		DA0BAC732851F25000AFA550 /* OACheckBackupSubscriptionTask.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0BAC722851F25000AFA550 /* OACheckBackupSubscriptionTask.m */; };
 		DA0C2BDD27EF4B3800B7CC4F /* OAPrepareBackupTask.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0C2BDC27EF4B3800B7CC4F /* OAPrepareBackupTask.m */; };
 		DA0C641821245B4500B2A350 /* et_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C641721245B4400B2A350 /* et_tts.js */; };
@@ -5244,6 +5245,7 @@
 		DA05A6A2285B3DCE00D0AFAB /* OABackupExporter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABackupExporter.m; sourceTree = "<group>"; };
 		DA06BB5429967A4C003B9212 /* depthcontourlines.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = depthcontourlines.addon.render.xml; path = ../resources/rendering_styles/depthcontourlines.addon.render.xml; sourceTree = "<group>"; };
 		DA08A0D1227096DA000A53BA /* offroad.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = offroad.render.xml; path = ../resources/rendering_styles/offroad.render.xml; sourceTree = "<group>"; };
+		DA08A1492A41DA7400205D7E /* RulerDistanceWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulerDistanceWidget.swift; sourceTree = "<group>"; };
 		DA0BAC712851F25000AFA550 /* OACheckBackupSubscriptionTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACheckBackupSubscriptionTask.h; sourceTree = "<group>"; };
 		DA0BAC722851F25000AFA550 /* OACheckBackupSubscriptionTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACheckBackupSubscriptionTask.m; sourceTree = "<group>"; };
 		DA0C2BDB27EF4B3800B7CC4F /* OAPrepareBackupTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPrepareBackupTask.h; sourceTree = "<group>"; };
@@ -14272,6 +14274,7 @@
 				DAABE4E72A16102100569F71 /* AverageSpeedWidget.swift */,
 				DA14DC902A31D76A002A91BC /* OAWeatherWidget.h */,
 				DA14DC912A31D76A002A91BC /* OAWeatherWidget.mm */,
+				DA08A1492A41DA7400205D7E /* RulerDistanceWidget.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -17572,6 +17575,7 @@
 				DA5A81EC26C563A700F274C7 /* OARendererRegistry.mm in Sources */,
 				DA5A81C526C563A700F274C7 /* OANameStringMatcher.m in Sources */,
 				DA14DC922A31D76A002A91BC /* OAWeatherWidget.mm in Sources */,
+				DA08A14A2A41DA7400205D7E /* RulerDistanceWidget.swift in Sources */,
 				DA5A840326C563A800F274C7 /* OAAddressTableViewController.mm in Sources */,
 				328BD49529D5AC6400045871 /* OATripRecordingDistanceWidget.m in Sources */,
 				32119B3D28477142005E1E0C /* OAOsmandDevelopmentPlugin.mm in Sources */,

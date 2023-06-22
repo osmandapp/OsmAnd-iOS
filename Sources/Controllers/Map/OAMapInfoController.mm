@@ -63,7 +63,7 @@
 @implementation OATextState
 @end
 
-@interface OAMapInfoController () <OAWeatherLayerSettingsDelegate>
+@interface OAMapInfoController () <OAWeatherLayerSettingsDelegate, OAWidgetPanelDelegate>
 
 @end
 
@@ -101,6 +101,11 @@
     
     NSArray<OABaseWidgetView *> *_widgetsToUpdate;
     NSTimer *_framePreparedTimer;
+    
+    NSLayoutConstraint *_leftTopConstraint;
+    NSLayoutConstraint *_rightTopConstraint;
+    
+    CGRect _leftRect;
 }
 
 - (instancetype) initWithHudViewController:(OAMapHudViewController *)mapHudViewController
@@ -114,6 +119,7 @@
         _mapHudViewController = mapHudViewController;
         _widgetsView = mapHudViewController.widgetsView;
         _leftPanelController = [[OAWidgetPanelViewController alloc] init];
+        _leftPanelController.delegate = self;
         _rightPanelController = [[OAWidgetPanelViewController alloc] init];
         
         [mapHudViewController addChildViewController:_leftPanelController];
@@ -122,11 +128,13 @@
         [_widgetsView addSubview:_rightPanelController.view];
         
         _leftPanelController.view.translatesAutoresizingMaskIntoConstraints = false;
-        [_leftPanelController.view.topAnchor constraintEqualToAnchor:_widgetsView.topAnchor].active = YES;
-        [_leftPanelController.view.leadingAnchor constraintEqualToAnchor:_widgetsView.leadingAnchor].active = YES;
+        _leftTopConstraint = [_leftPanelController.view.topAnchor constraintEqualToAnchor:_widgetsView.topAnchor];
+        _leftTopConstraint.active = YES;
+        [_leftPanelController.view.leadingAnchor constraintEqualToAnchor:_widgetsView.leadingAnchor constant:-2.].active = YES;
         _rightPanelController.view.translatesAutoresizingMaskIntoConstraints = false;
-        [_rightPanelController.view.topAnchor constraintEqualToAnchor:_widgetsView.topAnchor].active = YES;
-        [_rightPanelController.view.trailingAnchor constraintEqualToAnchor:_widgetsView.trailingAnchor].active = YES;
+        _rightTopConstraint = [_rightPanelController.view.topAnchor constraintEqualToAnchor:_widgetsView.topAnchor];
+        _rightTopConstraint.active = YES;
+        [_rightPanelController.view.trailingAnchor constraintEqualToAnchor:_widgetsView.trailingAnchor constant:2.].active = YES;
         
         [_leftPanelController didMoveToParentViewController:mapHudViewController];
         [_rightPanelController didMoveToParentViewController:mapHudViewController];
@@ -262,31 +270,6 @@
 
 - (void) layoutWidgets:(OABaseWidgetView *)widget
 {
-    NSMutableArray<UIView *> *containers = [NSMutableArray array];
-    if (widget)
-    {
-        for (UIView *w in _leftWidgetsView.subviews)
-        {
-            if (w == widget)
-            {
-                [containers addObject:_leftWidgetsView];
-                break;
-            }
-        }
-        for (UIView *w in _rightWidgetsView.subviews)
-        {
-            if (w == widget)
-            {
-                [containers addObject:_rightWidgetsView];
-                break;
-            }
-        }
-    }
-    else
-    {
-//        [containers addObject:_leftPanelController.view];
-//        [containers addObject:_rightPanelController.view];
-    }
     
     BOOL portrait = ![OAUtilities isLandscape];
     CGFloat maxContainerHeight = 0;
@@ -309,7 +292,7 @@
     BOOL hasLeftWidgets = _leftPanelController.hasWidgets;
     BOOL hasRightWidgets = _rightPanelController.hasWidgets;
 
-    CGRect leftRect = _leftPanelController.view.frame;
+    _leftRect = _leftPanelController.view.frame;
     [_leftPanelController updateWidgetSizes];
     [_rightPanelController updateWidgetSizes];
     
@@ -318,68 +301,8 @@
     
     maxContainerHeight = fmax(maxContainerHeight, widgetsHeight);
     
-    if (self.delegate && !CGRectEqualToRect(leftRect, _leftPanelController.view.frame))
+    if (self.delegate && !CGRectEqualToRect(_leftRect, _leftPanelController.view.frame))
         [self.delegate leftWidgetsLayoutDidChange:_leftPanelController.view animated:YES];
-    
-    for (UIView *container in containers)
-    {
-        NSArray<UIView *> *allViews = container.subviews;
-        NSMutableArray<UIView *> *views = [NSMutableArray array];
-        for (UIView *v in allViews)
-            if (!v.hidden)
-                [views addObject:v];
-        
-        
-        for (UIView *v in views)
-        {
-            if (v.hidden)
-                continue;
-            
-            if ([v isKindOfClass:[OATextInfoWidget class]])
-                [((OATextInfoWidget *)v) adjustViewSize];
-            else
-                [v sizeToFit];
-            
-            if (maxWidth < v.frame.size.width)
-                maxWidth = v.frame.size.width;
-            
-            widgetsHeight += v.frame.size.height + 2;
-        }
-        
-        CGFloat containerHeight = widgetsHeight;
-        
-        if (container == _rightWidgetsView)
-        {
-            hasRightWidgets = widgetsHeight > 0;
-            CGFloat rightOffset = 2.0;
-            CGRect rightContainerFrame = CGRectMake(_mapHudViewController.view.frame.size.width - maxWidth - 2 * rightOffset, yPos, maxWidth, containerHeight);
-            if (!CGRectEqualToRect(container.frame, rightContainerFrame))
-                container.frame = rightContainerFrame;
-        }
-        else
-        {
-            hasLeftWidgets = widgetsHeight > 0;
-            CGRect leftContainerFrame = CGRectMake(0, yPos, maxWidth, containerHeight);
-            if (!CGRectEqualToRect(container.frame, leftContainerFrame))
-            {
-                container.frame = leftContainerFrame;
-                if (self.delegate)
-                    [self.delegate leftWidgetsLayoutDidChange:container animated:YES];
-            }
-        }
-        
-        if (maxContainerHeight < containerHeight)
-            maxContainerHeight = containerHeight;
-        
-        CGFloat y = 0;
-        for (int i = 0; i < views.count; i++)
-        {
-            UIView *v = views[i];
-            CGFloat h = v.frame.size.height;
-            v.frame = CGRectMake(0, y, maxWidth, h);
-            y += h + 2;
-        }
-    }
     
     if (hasStreetName)
     {
@@ -388,17 +311,24 @@
         if (portrait)
         {
             _streetNameView.frame = CGRectMake(0, 0, f.size.width, streetNameViewHeight);
+            _leftTopConstraint.constant = streetNameViewHeight;
+            _rightTopConstraint.constant = streetNameViewHeight;
         }
         else
         {
-            CGRect leftFrame = _leftWidgetsView.frame;
-            CGRect rightFrame = _rightWidgetsView.frame;
+            CGRect leftFrame = _leftPanelController.view.frame;
+            CGRect rightFrame = _rightPanelController.view.frame;
             CGFloat w = f.size.width - (hasRightWidgets ? rightFrame.size.width + 2 : 0) - (hasLeftWidgets ? leftFrame.size.width + 2 : 0);
             _streetNameView.frame = CGRectMake(hasLeftWidgets ? leftFrame.size.width + 2 : 0, yPos, w, streetNameViewHeight);
         }
         [self.delegate streetViewLayoutDidChange:_streetNameView animate:YES];
         if (maxContainerHeight < streetNameViewHeight)
             maxContainerHeight = streetNameViewHeight;
+    }
+    else
+    {
+        _leftTopConstraint.constant = 0;
+        _rightTopConstraint.constant = 0;
     }
     
     if (_lanesControl && _lanesControl.superview && !_lanesControl.hidden)
@@ -564,10 +494,10 @@
 {
     CGFloat res = 0;
     if (!_streetNameView.hidden)
-        res = _streetNameView.frame.origin.y + _streetNameView.frame.size.height;
+        res += _streetNameView.frame.origin.y + _streetNameView.frame.size.height;
     
     if (!_leftPanelController.view.hidden && _leftPanelController.view.frame.size.height > 0)
-        res = _leftPanelController.view.frame.origin.y + _leftPanelController.view.frame.size.height;
+        res += _leftPanelController.view.frame.size.height;
         
     return res;
 }
@@ -582,9 +512,11 @@
     [_mapHudViewController setWeatherToolbarMapWidget:_weatherToolbar];
 
     [_streetNameView removeFromSuperview];
+    _streetNameView.delegate = self;
     [_widgetsView addSubview:_streetNameView];
 
     [_lanesControl removeFromSuperview];
+    _lanesControl.delegate = self;
     [_widgetsView addSubview:_lanesControl];
     
     [_rulerControl removeFromSuperview];
@@ -592,6 +524,7 @@
     [self updateRuler];
 
     [_alarmControl removeFromSuperview];
+    _alarmControl.delegate = self;
     [_mapHudViewController.view addSubview:_alarmControl];
 
     for (UIView *widget in _leftWidgetsView.subviews)
@@ -607,23 +540,14 @@
 //    [_mapWidgetRegistry populateStackControl:_leftWidgetsView mode:appMode left:YES expanded:_expanded];
 //    [_mapWidgetRegistry populateStackControl:_rightWidgetsView mode:appMode left:NO expanded:_expanded];
     
-    [_mapWidgetRegistry clearWidgets];
-    [_mapWidgetRegistry registerAllControls];
-    [_mapWidgetRegistry reorderWidgets];
+//    [_mapWidgetRegistry clearWidgets];
+//    [_mapWidgetRegistry registerAllControls];
+//    [_mapWidgetRegistry reorderWidgets];
+    [_mapWidgetRegistry updateWidgetsInfo:OAAppSettings.sharedManager.applicationMode.get];
     
     [_mapWidgetRegistry populateStackControl:_leftPanelController mode:appMode widgetPanel:OAWidgetsPanel.leftPanel];
     [_mapWidgetRegistry populateStackControl:_rightPanelController mode:appMode widgetPanel:OAWidgetsPanel.rightPanel];
-        
-    for (UIView *v in _leftWidgetsView.subviews)
-    {
-        OATextInfoWidget *w = (OATextInfoWidget *)v;
-        w.delegate = self;
-    }
-    for (UIView *v in _rightWidgetsView.subviews)
-    {
-        OATextInfoWidget *w = (OATextInfoWidget *)v;
-        w.delegate = self;
-    }
+    
     _themeId = -1;
     [self updateColorShadowsOfText];
     [self layoutWidgets:nil];
@@ -736,8 +660,8 @@
     [widgetsToUpdate addObject:_weatherToolbar];
 
     _widgetsToUpdate = widgetsToUpdate;
-//
-//    _rulerControl = [ric createRulerControl];
+    
+    _rulerControl = [ric createRulerControl];
 //
 //    /*
 //    topToolbarView = new TopToolbarView(map);
@@ -801,9 +725,10 @@
     [_mapWidgetRegistry registerAllControls];
     // TODO: Refactor this logic to use a stack view and get rid of the references entirely
     _topCoordinatesView = [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.coordinatesCurrentLocation.id].widget;
+    _topCoordinatesView.delegate = self;
     _coordinatesMapCenterWidget = [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.coordinatesMapCenter.id].widget;
+    _coordinatesMapCenterWidget.delegate = self;
     _lanesControl = (OALanesControl *) [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.lanes.id].widget;
-    _rulerControl = (OARulerWidget *) [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.radiusRuler.id].widget;
     _streetNameView = (OATopTextView *) [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.streetName.id].widget;
     OATextState *ts = [self calculateTextState];
     [self updateStreetName:NO ts:ts];
@@ -826,7 +751,7 @@
 
 - (void) widgetChanged:(OABaseWidgetView *)widget
 {
-    if (!widget.isTopText)
+    if (widget.isTopText)
         [self layoutWidgets:widget];
 }
 
@@ -851,6 +776,17 @@
 {
     if (show)
         [_mapHudViewController changeWeatherToolbarVisible];
+}
+
+// MARK: OAWidgetPanelDelegate
+
+- (void)onPanelSizeChanged
+{
+    if (self.delegate && !CGRectEqualToRect(_leftRect, _leftPanelController.view.frame))
+    {
+        [self.delegate leftWidgetsLayoutDidChange:_leftPanelController.view animated:YES];
+        _leftRect = _leftPanelController.view.frame;
+    }
 }
 
 @end

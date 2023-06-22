@@ -148,7 +148,6 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (void) commonInit
 {
-    self.widgetType = OAWidgetType.radiusRuler;
     _settings = [OAAppSettings sharedManager];
     _app = [OsmAndApp instance];
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
@@ -261,7 +260,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (BOOL) rulerModeOn
 {
-    return [[OARootViewController instance].mapPanel.mapWidgetRegistry isVisible:@"radius_ruler"] && [self rulerWidgetOn];;
+    return [self rulerWidgetOn] && _settings.rulerMode.get != RULER_MODE_NO_CIRCLES;
 }
 
 - (int) getCompassCircleIndex:(CGPoint)center
@@ -870,7 +869,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (BOOL) rulerWidgetOn
 {
-    return [[OARootViewController instance].mapPanel.mapWidgetRegistry isVisible:@"radius_ruler"];
+    return [OARootViewController.instance.mapPanel.mapWidgetRegistry isWidgetVisible:@"ruler"];
 }
 
 - (BOOL) updateVisibility:(BOOL)visible

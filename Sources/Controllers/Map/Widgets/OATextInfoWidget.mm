@@ -36,6 +36,8 @@
     UIFont *_largeBoldFont;
     UIFont *_smallFont;
     UIFont *_smallBoldFont;
+    
+    UIView *_separatorView;
 
     BOOL _metricSystemDepended;
     BOOL _angularUnitsDepended;
@@ -76,16 +78,13 @@
     [self addSubview:_textView];
     [self addSubview:_imageView];
     
-    CGFloat radius = 3.0;
     self.backgroundColor = [UIColor whiteColor];
-    self.layer.cornerRadius = radius;
 
-    // drop shadow
-    self.layer.shadowColor = UIColor.blackColor.CGColor;
-    self.layer.shadowOpacity = 0.3;
-    self.layer.shadowRadius = 2.0;
-    self.layer.shadowOffset = CGSizeMake(0.0, 0.0);
-    
+    _separatorView = [[UIView alloc] init];
+    _separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
+    _separatorView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - .5, CGRectGetWidth(self.frame), .5);
+    [self addSubview:_separatorView];
+
     _largeFont = [UIFont systemFontOfSize:21 weight:UIFontWeightSemibold];
     _largeBoldFont = [UIFont systemFontOfSize:21 weight:UIFontWeightBold];
     _primaryFont = _largeFont;
@@ -297,6 +296,8 @@
     f.size.width = tf.origin.x + tf.size.width + 4;
     f.size.height = [self getWidgetHeight];
     self.frame = f;
+    
+    _separatorView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - .5, CGRectGetWidth(self.frame), .5);
 }
 
 - (BOOL) updateVisibility:(BOOL)visible
@@ -407,17 +408,8 @@
     _primaryShadowColor = textShadowColor;
     _unitsShadowColor = textShadowColor;
     _shadowRadius = shadowRadius;
-    
-    self.layer.shadowOpacity = shadowRadius > 0 ? 0.0 : 0.3;
-    [self.class turnLayerBorder:self on:shadowRadius > 0];
 
     [self refreshLabel];
-}
-
-+ (void) turnLayerBorder:(UIView *)view on:(BOOL)on
-{
-    view.layer.borderWidth = on ? 1 : 0;
-    view.layer.borderColor = UIColorFromARGB(color_map_widget_stroke_argb).CGColor;
 }
 
 @end

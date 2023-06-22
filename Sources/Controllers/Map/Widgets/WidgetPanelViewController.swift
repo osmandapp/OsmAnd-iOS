@@ -10,14 +10,17 @@ import UIKit
 
 @objc(OAWidgetPanelViewController)
 @objcMembers
-class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, OAWidgetListener {
     
-    static let controlHeight: CGFloat = 26
+    private static let controlHeight: CGFloat = 26
+    private static let contentHeight: CGFloat = 32
+    private static let borderWidth: CGFloat = 2
     
     private var isInTransition = false
     
     @IBOutlet var pageControlHeightConstraint: NSLayoutConstraint!
 
+    @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var pageControl: UIPageControl!
     
     var pageViewController: UIPageViewController!
@@ -30,13 +33,21 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
     }
     
     let pageContainerView = UIView()
+    var dayNightObserver: OAAutoObserverProxy!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    weak var delegate: WidgetPanelDelegate?
+    
+    deinit {
+        dayNightObserver.detach()
+    }
+    
+    private func setupViews() {
         pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         pageViewController.dataSource = self
         pageViewController.delegate = self
+        
+        contentView.layer.borderWidth = Self.borderWidth
+        contentView.layer.borderColor = UIColor.black.withAlphaComponent(0.3).cgColor
         
         // Add the container view to the view hierarchy
         view.addSubview(pageContainerView)
@@ -44,12 +55,12 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
         // Set up constraints
         pageContainerView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            pageContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            pageContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            pageContainerView.topAnchor.constraint(equalTo: view.topAnchor),
+            pageContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Self.borderWidth),
+            pageContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Self.borderWidth),
+            pageContainerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Self.borderWidth),
             pageContainerView.bottomAnchor.constraint(equalTo: pageControl.topAnchor),
             pageContainerView.widthAnchor.constraint(equalToConstant: 0),
-            pageContainerView.heightAnchor.constraint(equalToConstant: 0)
+            pageContainerView.heightAnchor.constraint(equalToConstant: Self.contentHeight)
         ])
         
         // Add the page view controller as a child view controller
@@ -65,23 +76,53 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
             pageViewController.view.topAnchor.constraint(equalTo: pageContainerView.topAnchor),
             pageViewController.view.bottomAnchor.constraint(equalTo: pageContainerView.bottomAnchor)
         ])
+    }
+    
+    private func setupPageControl() {
+        let isNight = OAAppSettings.sharedManager().nightMode
+        pageControl.backgroundColor = UIColor(rgb: Int(isNight ? color_control_night : color_control_day))
+        pageControl.currentPageIndicatorTintColor = UIColor(rgb: Int(isNight ? color_on_map_icon_tint_color_dark : color_on_map_icon_tint_color_light))
+        pageControl.pageIndicatorTintColor = UIColor(rgb: Int(isNight ? color_icon_inactive_night : color_icon_inactive))
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
+        dayNightObserver = OAAutoObserverProxy(self, withHandler: #selector(onDayNightModeChanged), andObserve: OsmAndApp.swiftInstance().dayNightModeObservable)
+        
+        setupViews()
+        setupPageControl()
         updateWidgetPages(widgetPages)
+    }
+    
+    @objc private func onDayNightModeChanged() {
+        DispatchQueue.main.async {
+            self.setupPageControl()
+        }
     }
     
     @IBAction func pageControlTapped(_ sender: Any) {
         guard let pageControl = sender as? UIPageControl else { return }
         let selectedPage = pageControl.currentPage
         pageViewController.setViewControllers([pages[selectedPage]], direction: selectedPage > currentIndex ? .forward : .reverse, animated: true) { [weak self] _ in
-            self?.updateContainerSize()
+            DispatchQueue.main.async { [weak self] in
+                self?.updateContainerSize()
+            }
         }
     }
     
     private func calculateContentSize() -> (width: CGFloat, height: CGFloat) {
-        if let controller = pages[currentIndex] as? WidgetPageViewController {
-            return controller.layoutWidgets()
+        var width: CGFloat = 0
+        var height: CGFloat = Self.contentHeight
+        for (idx, page) in pages.enumerated() {
+            let widgetSize = (page as? WidgetPageViewController)?.layoutWidgets() ?? (0, 0)
+            if idx == currentIndex {
+                height = widgetSize.1
+            }
+            width = max(width, widgetSize.0)
         }
-        return (0, 0)
+        height = max(height, Self.contentHeight)
+        return (width + 2, height)
     }
     
     private func updateContainerSize() {
@@ -98,21 +139,34 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
             }
         }
 
-//        UIView.transition(with: view, duration: 0.2, options: .transitionCrossDissolve, animations: {
-        self.view.superview?.layoutIfNeeded()
-//        }, completion: nil)
+        self.view.layoutIfNeeded()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        delegate?.onPanelSizeChanged()
     }
     
     func clearWidgets() {
+        pageViewController.dataSource = nil
+        pageViewController.delegate = nil
+        for viewController in pageViewController.children {
+            viewController.willMove(toParent: nil)
+            viewController.view.removeFromSuperview()
+            viewController.removeFromParent()
+        }
         pages.removeAll()
         widgetPages.removeAll()
-        guard let pageViewController else { return }
-        pageViewController.setViewControllers([UIViewController()], direction: .forward, animated: false)
+        pageViewController.dataSource = self
+        pageViewController.delegate = self
     }
     
     func updateWidgetPages(_ widgetPages: [[OABaseWidgetView]]) {
         guard let pageViewController else { return }
+        pageViewController.dataSource = nil
+        pageViewController.delegate = nil
         self.widgetPages = widgetPages
+        widgetPages.forEach { $0.forEach { $0.delegate = self } }
         for page in widgetPages {
             let vc = WidgetPageViewController()
             vc.widgetViews = page
@@ -121,7 +175,9 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
         if pages.isEmpty {
             pages.append(UIViewController())
         }
-        pageViewController.setViewControllers([pages[currentIndex]], direction: .forward, animated: true)
+        pageViewController.setViewControllers([pages[currentIndex]], direction: .forward, animated: false)
+        pageViewController.dataSource = self
+        pageViewController.delegate = self
         
         // Set up the page control
         pageControl.numberOfPages = pages.count
@@ -166,7 +222,30 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
         if !completed || !finished { return }
         
         isInTransition = false
-        pageControl.currentPage = currentIndex
+        DispatchQueue.main.async { [weak self] in
+            self?.pageControl.currentPage = self?.currentIndex ?? 0
+            self?.updateContainerSize()
+        }
+    }
+    
+    // MARK: OAWidgetListener
+    
+    func widgetChanged(_ widget: OABaseWidgetView?) {
+        if delegate != nil {
+            updateWidgetSizes()
+        }
+    }
+    
+    func widgetVisibilityChanged(_ widget: OABaseWidgetView, visible: Bool) {
         updateWidgetSizes()
     }
+    
+    func widgetClicked(_ widget: OABaseWidgetView) {
+        updateWidgetSizes()
+    }
+}
+
+@objc(OAWidgetPanelDelegate)
+protocol WidgetPanelDelegate: AnyObject {
+    func onPanelSizeChanged()
 }

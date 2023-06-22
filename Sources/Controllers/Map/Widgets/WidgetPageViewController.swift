@@ -18,8 +18,6 @@ class WidgetPageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
         // Create the stack view
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -28,11 +26,12 @@ class WidgetPageViewController: UIViewController {
         
         // Add the widget views to the stack view
         for widgetView in widgetViews {
-            widgetView.translatesAutoresizingMaskIntoConstraints = false
             if let widget = widgetView as? OATextInfoWidget {
                 widget.adjustViewSize()
             }
-            widgetView.heightAnchor.constraint(greaterThanOrEqualToConstant: widgetView.frame.size.height).isActive = true
+            let constraint = widgetView.heightAnchor.constraint(greaterThanOrEqualToConstant: widgetView.frame.size.height)
+            constraint.priority = .defaultHigh
+            constraint.isActive = true
             stackView.addArrangedSubview(widgetView)
         }
         
@@ -44,8 +43,7 @@ class WidgetPageViewController: UIViewController {
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             stackView.topAnchor.constraint(equalTo: view.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-//            stackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 150)
+            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
@@ -53,6 +51,7 @@ class WidgetPageViewController: UIViewController {
         var width: CGFloat = 0
         var height: CGFloat = 0
         for widget in widgetViews {
+            widget.translatesAutoresizingMaskIntoConstraints = false
             if let widget = widget as? OATextInfoWidget {
                 widget.adjustViewSize()
             } else {

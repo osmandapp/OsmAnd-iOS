@@ -177,9 +177,6 @@
     _textShadowColor = textShadowColor;
     _shadowRadius = shadowRadius;
 
-    self.layer.shadowOpacity = shadowRadius > 0 ? 0.0 : 0.3;
-    [OATextInfoWidget turnLayerBorder:self on:shadowRadius > 0];
-
     [self refreshLabel:_textView.text];
 }
 

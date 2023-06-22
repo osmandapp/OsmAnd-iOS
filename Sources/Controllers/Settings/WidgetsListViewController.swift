@@ -249,17 +249,17 @@ extension WidgetsListViewController {
     
     func onWidgetsSelectedToAdd(widgetsIds: [String], panel: WidgetsPanel, shouldAdd: Bool) {
         let filter = KWidgetModeAvailable | kWidgetModeEnabled
-        
+        let widgetsFactory = MapWidgetsFactory()
         for widgetId in widgetsIds {
-            guard let widgetInfo = widgetRegistry.getWidgetInfo(byId: widgetId) else { continue }
+            var widgetInfo = widgetRegistry.getWidgetInfo(byId: widgetId)
             
             let widgetInfos = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(filter), panels: WidgetsPanel.values)
-            
-//            if panel.isDuplicatesAllowed() && (widgetInfo == nil || widgetInfos.contains(widgetInfo)) {
-//                widgetInfo = createDuplicateWidget(widgetId, panel)
+            // TODO: Uncomment with new design, for now creates endless widgets in the list with switches
+//            if panel.isDuplicatesAllowed() && (widgetInfo == nil || widgetInfos!.contains(widgetInfo!)) && shouldAdd {
+//                widgetInfo = createDuplicateWidget(widgetId, panel: panel, widgetsFactory: widgetsFactory, selectedAppMode: selectedAppMode)
 //            }
             
-            if shouldAdd {
+            if let widgetInfo, shouldAdd {
                 addWidgetToEnd(widgetInfo, widgetsPanel: panel)
             }
             widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: NSNumber(value: shouldAdd), recreateControls: false)
@@ -270,6 +270,22 @@ extension WidgetsListViewController {
 //        onWidgetsConfigurationChanged()
     }
     
+    private func createDuplicateWidget(_ widgetId: String, panel: WidgetsPanel,
+                                             widgetsFactory: MapWidgetsFactory, selectedAppMode: OAApplicationMode) -> MapWidgetInfo? {
+        guard let widgetType = WidgetType.getById(widgetId) else {
+            return nil
+        }
+        
+        let id = widgetId.contains(MapWidgetInfo.DELIMITER) ? widgetId : WidgetType.getDuplicateWidgetId(widgetId)
+        guard let widget = widgetsFactory.createMapWidget(customId: id, widgetType: widgetType) else {
+            return nil
+        }
+        
+        OAAppSettings.sharedManager()!.customWidgetKeys.add(id, appMode: selectedAppMode)
+        let creator = WidgetInfoCreator(appMode: selectedAppMode)
+        return creator.createCustomWidgetInfo(widgetId: id, widget: widget, widgetType: widgetType, panel: panel)
+    }
+
     func addWidgetToEnd(_ targetWidget: MapWidgetInfo, widgetsPanel: WidgetsPanel) {
         var pagedOrder = [Int: [String]]()
         let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(kWidgetModeEnabled), panels: [widgetsPanel])!
@@ -295,9 +311,9 @@ extension WidgetsListViewController {
         } else {
             var pages = Array(pagedOrder.keys)
             var orders = Array(pagedOrder.values)
-            var lastPageOrder = orders[orders.count - 1]
             
-            lastPageOrder.append(targetWidget.key)
+            orders[orders.count - 1].append(targetWidget.key)
+            var lastPageOrder = orders[orders.count - 1]
             
             let previousLastWidgetId = lastPageOrder[lastPageOrder.count - 2]
             if let previousLastVisibleWidgetInfo = widgetRegistry.getWidgetInfo(byId: previousLastWidgetId) {

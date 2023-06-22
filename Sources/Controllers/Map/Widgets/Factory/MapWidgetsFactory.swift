@@ -87,7 +87,7 @@ class MapWidgetsFactory: NSObject {
         case .battery:
             return BatteryWidget()
         case .radiusRuler:
-            return OARulerWidget()
+            return RulerDistanceWidget()
         case .sunrise:
             let sunriseState = OASunriseSunsetWidgetState(type: true, customId: customId)
             return OASunriseSunsetWidget(state: sunriseState)

@@ -9,6 +9,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAWidgetPanelViewController" customModule="OsmAnd_Maps" customModuleProvider="target">
             <connections>
+                <outlet property="contentView" destination="PVB-gi-Qrg" id="Y8T-XM-BJb"/>
                 <outlet property="pageControl" destination="skp-uv-S5T" id="u7k-hs-duo"/>
                 <outlet property="pageControlHeightConstraint" destination="1bH-FK-9lc" id="Sab-Tg-h1R"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -19,23 +20,35 @@
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="skp-uv-S5T">
-                    <rect key="frame" x="0.0" y="826" width="393" height="26"/>
-                    <color key="backgroundColor" red="0.59215686270000001" green="0.56078431370000004" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PVB-gi-Qrg">
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                    <subviews>
+                        <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="skp-uv-S5T">
+                            <rect key="frame" x="2" y="824" width="389" height="26"/>
+                            <color key="backgroundColor" red="0.89803921568627454" green="0.89411764705882346" blue="0.90588235294117647" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="26" id="1bH-FK-9lc"/>
+                            </constraints>
+                            <connections>
+                                <action selector="pageControlTapped:" destination="-1" eventType="valueChanged" id="gaW-WV-FQ3"/>
+                            </connections>
+                        </pageControl>
+                    </subviews>
                     <constraints>
-                        <constraint firstAttribute="height" constant="26" id="1bH-FK-9lc"/>
+                        <constraint firstAttribute="bottom" secondItem="skp-uv-S5T" secondAttribute="bottom" constant="2" id="Q6U-lP-hgl"/>
+                        <constraint firstItem="skp-uv-S5T" firstAttribute="leading" secondItem="PVB-gi-Qrg" secondAttribute="leading" constant="2" id="kmS-9A-Kcj"/>
+                        <constraint firstAttribute="trailing" secondItem="skp-uv-S5T" secondAttribute="trailing" constant="2" id="zPn-gh-3vl"/>
                     </constraints>
-                    <connections>
-                        <action selector="pageControlTapped:" destination="-1" eventType="valueChanged" id="gaW-WV-FQ3"/>
-                    </connections>
-                </pageControl>
+                </view>
             </subviews>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="skp-uv-S5T" secondAttribute="trailing" id="PGg-mD-Q4F"/>
-                <constraint firstAttribute="bottom" secondItem="skp-uv-S5T" secondAttribute="bottom" id="h8G-Dr-Q48"/>
-                <constraint firstItem="skp-uv-S5T" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="knX-wD-2CJ"/>
+                <constraint firstItem="PVB-gi-Qrg" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="2Jv-fA-HKr"/>
+                <constraint firstItem="PVB-gi-Qrg" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="QB7-ya-Cv2"/>
+                <constraint firstAttribute="bottom" secondItem="PVB-gi-Qrg" secondAttribute="bottom" id="c9r-Zf-z8z"/>
+                <constraint firstAttribute="trailing" secondItem="PVB-gi-Qrg" secondAttribute="trailing" id="rYH-E5-vMn"/>
             </constraints>
-            <point key="canvasLocation" x="140" y="20"/>
+            <point key="canvasLocation" x="139.69465648854961" y="19.718309859154932"/>
         </view>
     </objects>
 </document>

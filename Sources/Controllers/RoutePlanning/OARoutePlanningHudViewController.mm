@@ -137,8 +137,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     NSString *_fileName;
     CLLocation *_initialPoint;
 	
-	BOOL _showSnapWarning;
+    BOOL _showSnapWarning;
     BOOL _adjustMapPosition;
+    
     OATargetMenuViewControllerState *_targetMenuState;
 }
 

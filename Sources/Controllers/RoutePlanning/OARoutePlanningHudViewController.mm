@@ -137,7 +137,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     NSString *_fileName;
     CLLocation *_initialPoint;
 	
-	BOOL _showSnapWarning;
+    BOOL _showSnapWarning;
+    BOOL _adjustMapPosition;
+    
     OATargetMenuViewControllerState *_targetMenuState;
 }
 
@@ -199,11 +201,13 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (instancetype) initWithFileName:(NSString *)fileName
                   targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
+                adjustMapPosition:(BOOL)adjustMapPosition
 {
     self = [self initWithFileName:fileName];
     if (self)
     {
         _targetMenuState = targetMenuState;
+        _adjustMapPosition = adjustMapPosition;
     }
     return self;
 }
@@ -225,6 +229,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     _editingContext = context;
     _editingContext.progressDelegate = self;
     _layer.editingCtx = _editingContext;
+    _adjustMapPosition = YES;
 }
 
 - (void)viewDidLoad
@@ -597,12 +602,16 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     BOOL landscape = [self isLeftSidePresentation];
-    [mapPanel displayAreaOnMap:routeBBox.topLeft
-                   bottomRight:routeBBox.bottomRight
-                          zoom:0
-                   bottomInset:!landscape ? self.getViewHeight : 0
-                     leftInset:landscape ? self.tableView.frame.size.width : 0
-                      animated:YES];
+    if (_adjustMapPosition)
+    {
+        [mapPanel displayAreaOnMap:routeBBox.topLeft
+                       bottomRight:routeBBox.bottomRight
+                              zoom:0
+                       bottomInset:!landscape ? self.getViewHeight : 0
+                         leftInset:landscape ? self.tableView.frame.size.width : 0
+                          animated:YES];
+    }
+    _adjustMapPosition = YES;
 }
 
 - (OAGpxData *) setupGpxData:(OAGPXMutableDocument *)gpxFile

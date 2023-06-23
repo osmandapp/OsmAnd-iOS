@@ -968,8 +968,7 @@
     [self hide:YES duration:.2 onComplete:^{
         [self.mapViewController hideContextPinMarker];
         [self.mapPanelViewController showScrollableHudViewController:[
-                [OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFilePath
-                                                          targetMenuState:[self getCurrentState]]];
+            [OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFilePath                                                     targetMenuState:[self getCurrentState]                                                 adjustMapPosition:NO]];
     }];
 }
 

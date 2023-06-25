@@ -933,7 +933,7 @@
 "osm_edit_close_note" = "Luk OSM-note";
 "osm_edit_comment_note" = "Kommenter OSM-note";
 "osm_note_reopen_title" = "Genåbn OSM-note";
-"poi_dialog_comment" = "Kommentar";
+"poi_dialog_comment" = "Kommentér";
 "poi_dialog_reopen" = "Genåbn";
 "osm_edits_offline_layer" = "OSM redigeringer/noter (offline)";
 "osm_notes_online_layer" = "OSM-noter (online)";

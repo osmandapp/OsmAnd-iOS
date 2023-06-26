@@ -62,6 +62,7 @@
 #import "OATrackMenuTabSegments.h"
 #import "OAGPXAppearanceCollection.h"
 
+#import <SafariServices/SafariServices.h>
 #import <Charts/Charts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
 
@@ -86,7 +87,7 @@
 
 @end
 
-@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate, OAEditDescriptionViewControllerDelegate, OARouteLineChartHelperDelegate>
+@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, SFSafariViewControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate, OAEditDescriptionViewControllerDelegate, OARouteLineChartHelperDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -1656,6 +1657,12 @@
     }];
 }
 
+- (void)openURL:(NSString *)url
+{
+    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:url]];
+    [self presentViewController:safariViewController animated:YES completion:nil];
+}
+
 - (void)showAlertDeleteTrack
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:self.isCurrentTrack ? OALocalizedString(@"track_clear_q") : OALocalizedString(@"gpx_remove") preferredStyle:UIAlertControllerStyleAlert];
@@ -1977,7 +1984,7 @@
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     NSInteger tag = indexPath.section << 10 | indexPath.row;
-    BOOL isWebsite = [cellData.key isEqualToString:kWebsiteCellName];
+    BOOL isWebsite = [cellData.key isEqualToString:kWebsiteCellName] || [OAWikiAlgorithms isUrl:cellData.desc];
     UITableViewCell *outCell = nil;
     if ([cellData.type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
@@ -2641,6 +2648,13 @@
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:[_tableData.subjects indexOfObject:sectionData]]
                       withRowAnimation:UITableViewRowAnimationNone];
     }
+}
+
+#pragma mark - SFSafariViewControllerDelegate
+
+- (void)safariViewControllerDidFinish:(SFSafariViewController *)controller
+{
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

@@ -1997,10 +1997,15 @@
             cell.textLabel.font = [cellData.values.allKeys containsObject:@"font_value"]
                     ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
-            cell.selectionStyle = cellData.toggle ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
+            cell.selectionStyle = cellData.toggle || [cellData.key isEqualToString:@"website"] ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             cell.titleLabel.text = cellData.title;
             cell.titleLabel.textColor = tintColor;
             cell.valueLabel.text = cellData.desc;
+            
+            if ([cellData.key isEqualToString:@"website"])
+                cell.valueLabel.textColor = UIColorFromRGB(color_primary_purple);
+            else
+                cell.valueLabel.textColor = UIColorFromRGB(color_text_footer);
 
             if (cellData.rightIconName)
             {
@@ -2453,6 +2458,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
+    
+    if ([cellData.key isEqualToString:@"website"])
+        [OAUtilities callUrl:cellData.desc];
+    
     [_uiBuilder onButtonPressed:cellData];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

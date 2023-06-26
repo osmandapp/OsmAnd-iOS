@@ -230,13 +230,24 @@
 {
     uint64_t totalDownloadSize = 0;
     uint64_t totalSpaceNeeded = 0;
+    
+    items = [items sortedArrayUsingComparator:^NSComparisonResult(OAOutdatedResourceItem * _Nonnull item1, OAOutdatedResourceItem * _Nonnull item2) {
+        const auto resourceInRepository1 = _app.resourcesManager->getResourceInRepository(item1.resourceId);
+        const auto resourceInRepository2 = _app.resourcesManager->getResourceInRepository(item2.resourceId);
+
+        if (resourceInRepository1->packageSize + resourceInRepository1->size > resourceInRepository2->packageSize + resourceInRepository2->size)
+            return NSOrderedAscending;
+        if (resourceInRepository1->packageSize + resourceInRepository1->size < resourceInRepository2->packageSize + resourceInRepository2->size)
+            return NSOrderedDescending;
+        return NSOrderedSame;
+    }];
+    
     for (OAOutdatedResourceItem* item in items)
     {
         const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
-
         totalDownloadSize += resourceInRepository->packageSize;
-        totalSpaceNeeded += resourceInRepository->packageSize + resourceInRepository->size;
     }
+    totalSpaceNeeded = totalDownloadSize + _app.resourcesManager->getResourceInRepository(((OAOutdatedResourceItem *) items.firstObject).resourceId)->size;
 
     if (_app.freeSpaceAvailableOnDevice < totalSpaceNeeded)
     {

@@ -69,6 +69,7 @@
 #define kOverviewTabIndex @0
 #define kAltutudeTabIndex @1
 #define kSpeedTabIndex @2
+#define kWebsiteCellName @"website"
 
 @implementation OATrackMenuViewControllerState
 
@@ -1976,7 +1977,7 @@
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     NSInteger tag = indexPath.section << 10 | indexPath.row;
-    BOOL isWebsite = [cellData.key isEqualToString:@"website"];
+    BOOL isWebsite = [cellData.key isEqualToString:kWebsiteCellName];
     UITableViewCell *outCell = nil;
     if ([cellData.type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
@@ -2460,7 +2461,7 @@
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     
-    if ([cellData.key isEqualToString:@"website"])
+    if ([cellData.key isEqualToString:kWebsiteCellName])
         [OAUtilities callUrl:cellData.desc];
     
     [_uiBuilder onButtonPressed:cellData];

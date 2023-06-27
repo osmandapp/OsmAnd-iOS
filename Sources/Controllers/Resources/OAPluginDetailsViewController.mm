@@ -49,6 +49,8 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     CALayer *_horizontalLineDesc;
 }
 
+#pragma mark - Initialization
+
 - (instancetype) initWithProduct:(OAProduct *)product
 {
     self = [super initWithNibName:@"OAPluginDetailsViewController" bundle:nil];
@@ -56,34 +58,67 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     {
         _product = product;
         _screenType = EOAPluginScreenTypeProduct;
-        self.title = _product.localizedTitle;
         _settingsViewController = [self getSettingsViewController];
+        [self commonInit];
     }
     return self;
 }
 
 - (instancetype) initWithCustomPlugin:(OAPlugin *)plugin
 {
-    self = [super init];
+    self = [super initWithNibName:@"OAPluginDetailsViewController" bundle:nil];
     if (self)
     {
         _plugin = plugin;
         _screenType = EOAPluginScreenTypeCustomPlugin;
-        self.title = _plugin.getName;
+        [self commonInit];
     }
     return self;
 }
 
-- (void) applyLocalization
+- (void)commonInit
 {
-    self.descLabel.text = OALocalizedStringUp(@"shared_string_description");
+    _iapHelper = [OAIAPHelper sharedInstance];
 }
+
+- (void)registerNotifications
+{
+    [self addNotification:OAIAPProductPurchasedNotification selector:@selector(productPurchased:)];
+    [self addNotification:OAIAPProductsRequestSucceedNotification selector:@selector(productsRequested:)];
+}
+
+#pragma mark - Base UI
+
+- (NSString *)getTitle
+{
+    return _plugin ? _plugin.getName : _product ? _product.localizedTitle : @"";
+}
+
+- (EOABaseNavbarColorScheme)getNavbarColorScheme;
+{
+    return EOABaseNavbarColorSchemeOrange;
+}
+
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
+{
+    if (_settingsViewController == nil)
+    {
+        return nil;
+    }
+    else
+    {
+        return @[[self createRightNavbarButton:nil
+                                      iconName:@"ic_navbar_settings"
+                                        action:@selector(onRightNavbarButtonPressed)
+                                          menu:nil]];
+    }
+}
+
+#pragma mark - UIViewController
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-
-    _iapHelper = [OAIAPHelper sharedInstance];
 
     _horizontalLineDesc = [CALayer layer];
     _horizontalLineDesc.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
@@ -96,6 +131,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     self.buttonDeleteCustomPlugin.userInteractionEnabled = !self.buttonDeleteCustomPlugin.hidden;
 
     self.descTextView.delegate = self;
+    self.descLabel.text = OALocalizedStringUp(@"shared_string_description");
     self.descLabel.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightSemibold];
 
     UIImage *screenshotImage;
@@ -135,24 +171,8 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
 
     [[OARootViewController instance] requestProductsWithProgress:YES reload:NO];
-}
-
-- (void) viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void) didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void) viewWillLayoutSubviews
@@ -179,80 +199,35 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
         
     }
 
-    _toolbarView.frame = CGRectMake(0.0, 0.0, w, _toolbarView.frame.size.height);
-    _titleLabel.frame = CGRectMake(50.0, _titleLabel.frame.origin.y, w - 100.0, _titleLabel.frame.size.height);
-    _gradient.frame = _toolbarView.bounds;
-
     _priceButton.frame = CGRectMake(_detailsView.frame.size.width - _priceButton.frame.size.width - 15.0, 15.0, _priceButton.frame.size.width, _priceButton.frame.size.height);
-    
+
     _buttonDeleteCustomPlugin.frame = CGRectMake(CGRectGetMinX(_priceButton.frame) - 16. - 30., CGRectGetMinY(_priceButton.frame) + 5.0, 30., 30.);
 
     _descLabel.frame = CGRectMake(15.0, 85.0, w - 30.0, _descLabel.frame.size.height);
     _descTextView.frame = CGRectMake(10.0, 105.0, w - 20.0, _detailsView.frame.size.height - 105.0);
-    
+
     _horizontalLineDesc.frame = CGRectMake(15.0, 70.0, _detailsView.frame.size.width - 30.0, 0.5);
-
-}
-
-- (EOABaseNavbarColorScheme)getNavbarColorScheme;
-{
-    return EOABaseNavbarColorSchemeOrange;
-}
-
-- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
-{
-    if (_settingsViewController == nil)
-        return nil;
-    else
-        return @[[self createRightNavbarButton:nil
-                                  iconName:@"ic_navbar_settings"
-                                    action:@selector(onRightNavbarButtonPressed)
-                                      menu:nil]];
-}
-
-- (void) onRightNavbarButtonPressed
-{
-    if (_settingsViewController)
-        [self.navigationController pushViewController:_settingsViewController animated:YES];
-}
-
-- (UIView *) getTopView
-{
-    return self.toolbarView;
-}
-
-- (UIView *) getMiddleView
-{
-    return self.detailsView;
-}
-
-- (CGFloat) getToolBarHeight
-{
-    return defaultToolBarHeight;
 }
 
 - (void) updatePurchaseButton
 {
-    NSString *title;
     NSString *desc = nil;
     NSAttributedString *attrDesc = nil;
     NSString *price;
     
     if (_screenType == EOAPluginScreenTypeProduct)
     {
-        title = _product.localizedTitle;
         desc = _product.localizedDescriptionExt;
         if (!_product.free)
             price = [OALocalizedString(@"buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
     }
     else if (_screenType == EOAPluginScreenTypeCustomPlugin)
     {
-        title = _plugin.getName;
         attrDesc = [OAUtilities attributedStringFromHtmlString:_plugin.getDescription fontSize:17];
     }
-    
-    self.titleLabel.text = title;
-    
+
+    [self applyLocalization];
+
     if (desc)
     {
         self.descTextView.text = desc;
@@ -312,13 +287,54 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     self.priceButton.frame = priceFrame;
 }
 
+#pragma mark - UITextViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction
+{
+    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:URL];
+    [self presentViewController:safariViewController animated:YES completion:nil];
+    return NO;
+}
+
+#pragma mark - SFSafariViewControllerDelegate
+
+- (void)safariViewControllerDidFinish:(SFSafariViewController *)controller
+{
+    [controller dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - Selectors
+
+- (void)onRightNavbarButtonPressed
+{
+    if (_settingsViewController)
+        [self showViewController:_settingsViewController];
+}
+
+- (void)productPurchased:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updatePurchaseButton];
+        [OAPluginPopupViewController showProductAlert:_product afterPurchase:YES];
+    });
+}
+
+- (void)productsRequested:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updatePurchaseButton];
+    });
+}
+
 - (IBAction)deleteButtonClicked:(id)sender
 {
     [OAPlugin removeCustomPlugin:(OACustomPlugin *)_plugin];
+    if (self.delegate)
+        [self.delegate onCustomPluginDeleted];
     [self dismissViewController];
 }
 
-- (IBAction) priceButtonClicked:(id)sender
+- (IBAction)priceButtonClicked:(id)sender
 {
     if (_screenType == EOAPluginScreenTypeProduct)
     {
@@ -350,20 +366,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     }
 }
 
-- (void) productPurchased:(NSNotification *)notification
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self updatePurchaseButton];
-        [OAPluginPopupViewController showProductAlert:_product afterPurchase:YES];
-    });
-}
-
-- (void) productsRequested:(NSNotification *)notification
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self updatePurchaseButton];
-    });
-}
+#pragma mark - Aditions
 
 - (UIViewController *) getSettingsViewController
 {
@@ -378,22 +381,6 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     else if ([_product isKindOfClass:OAWikiProduct.class])
         return [[OAWikipediaSettingsViewController alloc] initWithAppMode:[OAAppSettings sharedManager].applicationMode.get];
     return nil;
-}
-
-#pragma mark - UITextViewDelegate
-
-- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction
-{
-    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:URL];
-    [self presentViewController:safariViewController animated:YES completion:nil];
-    return NO;
-}
-
-#pragma mark - SFSafariViewControllerDelegate
-
-- (void)safariViewControllerDidFinish:(SFSafariViewController *)controller
-{
-    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

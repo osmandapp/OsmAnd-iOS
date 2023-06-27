@@ -394,7 +394,7 @@ forcedUpdate:(BOOL)forcedUpdate
 
 - (float)getTargetDistanceInMeters
 {
-    return _renderer->getMapTargetDistance(self.target31);
+    return _renderer->getMapTargetDistance(self.target31) * 1000;
 }
 
 - (float)minZoom

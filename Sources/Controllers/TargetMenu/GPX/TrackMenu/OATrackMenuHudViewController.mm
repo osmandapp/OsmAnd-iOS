@@ -69,6 +69,7 @@
 #define kOverviewTabIndex @0
 #define kAltutudeTabIndex @1
 #define kSpeedTabIndex @2
+#define kWebsiteCellName @"website"
 
 @implementation OATrackMenuViewControllerState
 
@@ -968,8 +969,9 @@
     [self hide:YES duration:.2 onComplete:^{
         [self.mapViewController hideContextPinMarker];
         [self.mapPanelViewController showScrollableHudViewController:[
-                [OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFilePath
-                                                          targetMenuState:[self getCurrentState]]];
+            [OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFilePath
+                                                      targetMenuState:[self getCurrentState]
+                                                    adjustMapPosition:NO]];
     }];
 }
 
@@ -1975,6 +1977,7 @@
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     NSInteger tag = indexPath.section << 10 | indexPath.row;
+    BOOL isWebsite = [cellData.key isEqualToString:kWebsiteCellName];
     UITableViewCell *outCell = nil;
     if ([cellData.type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
@@ -1996,10 +1999,15 @@
             cell.textLabel.font = [cellData.values.allKeys containsObject:@"font_value"]
                     ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
-            cell.selectionStyle = cellData.toggle ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
+            cell.selectionStyle = cellData.toggle || isWebsite ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             cell.titleLabel.text = cellData.title;
             cell.titleLabel.textColor = tintColor;
             cell.valueLabel.text = cellData.desc;
+            
+            if (isWebsite)
+                cell.valueLabel.textColor = UIColorFromRGB(color_primary_purple);
+            else
+                cell.valueLabel.textColor = UIColorFromRGB(color_text_footer);
 
             if (cellData.rightIconName)
             {
@@ -2452,6 +2460,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
+    
+    if ([cellData.key isEqualToString:kWebsiteCellName])
+        [OAUtilities callUrl:cellData.desc];
+    
     [_uiBuilder onButtonPressed:cellData];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

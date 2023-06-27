@@ -1633,7 +1633,7 @@
 "lang_pl" = "波蘭";
 "gpx_join_gaps" = "加入 gaps";
 "lang_al" = "阿爾巴尼亞";
-"lang_be" = "白俄羅斯";
+"lang_be" = "白羅斯";
 "lang_vi" = "越南";
 "lang_mn" = "蒙古語";
 "lang_is" = "冰島語";
@@ -1648,7 +1648,7 @@
 "lang_bn" = "孟加拉語";
 "lang_gu" = "古吉拉特語";
 "lang_bar" = "巴伐利亞語";
-"lang_it" = "意大利";
+"lang_it" = "義大利";
 "lang_uz" = "烏茲別克語";
 "lang_sr" = "塞爾維亞語（西里爾文）";
 "lang_la" = "拉丁語";
@@ -1680,7 +1680,7 @@
 "lang_cv" = "楚瓦什語";
 "lang_sw" = "斯瓦希里";
 "lang_zhminnan" = "閩南語";
-"lang_be_by" = "白俄羅斯語（拉丁）";
+"lang_be_by" = "白羅斯語（拉丁）";
 "lang_zh_cn" = "中文（简体）";
 "lang_war" = "瓦瑞語";
 "lang_vo" = "沃拉普克語";
@@ -2377,3 +2377,9 @@
 "gpx_import_already_exists_short" = "指定的軌跡檔已在表上。";
 "map_settings_layer_transparency" = "圖層透明度";
 "map_widget_trip_recording_distance" = "距離";
+"av_notes_photo_widget_desc" = "點一下小工具能讓你照相。";
+"av_notes_video_widget_desc" = "點一下小工具讓你錄製影片。";
+"av_notes_audio_widget_desc" = "點一下小工具讓你錄製語音筆記。";
+
+// Widget descriptions
+"coordinates_widget_current_location_desc" = "顯示目前地理位置的經緯度";

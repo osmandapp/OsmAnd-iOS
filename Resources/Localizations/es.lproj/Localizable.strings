@@ -2900,3 +2900,19 @@
 "generate_hillshade_from_3d_maps" = "Genere mapas ráster de sombreado a partir de mapas 3D";
 "user_name" = "Nombre de usuario";
 "perform_oauth_authorization" = "Iniciar sesión mediante OAuth";
+"av_notes_photo_widget_desc" = "Si tocas el widget, podrás hacer una foto.";
+"second_marker_widget_desc" = "Puedes configurar el widget para que muestre la distancia o la hora estimada de llegada que queda hasta el segundo marcador del mapa.";
+
+// Widget descriptions
+"coordinates_widget_current_location_desc" = "Muestra las coordenadas geográficas de la geolocalización actual";
+"trip_recording_uphill_widget_desc" = "Muestra la suma de todas las subidas del viaje registrado actualmente.";
+"first_marker_widget_desc" = "Puedes configurar el widget para que muestre la distancia o la hora estimada de llegada que queda hasta el primer marcador del mapa.";
+"av_notes_video_widget_desc" = "Si tocas el widget, podrás grabar un vídeo.";
+"av_notes_audio_widget_desc" = "Si tocas el widget, podrás tomar una nota de voz.";
+"trip_recording_downhill_widget_desc" = "Muestra la suma de todos los descensos del trayecto registrado actualmente.";
+"trip_recording_duration_widget_desc" = "Muestra el tiempo del viaje registrado actualmente.";
+"trip_recording_distance_widget_desc" = "Muestra la distancia del viaje registrada actualmente.";
+"true_bearing_widget_desc" = "Ángulo entre el norte verdadero y el punto del objetivo observado desde tu ubicación.";
+"time_to_intermediate_widget_desc" = "El widget muestra \"La hora de llegada\" o \"El tiempo restante\" hasta el primer punto intermedio. El tiempo se actualiza constantemente durante la navegación, y cuando se pasa un punto intermedio, el tiempo se actualiza al siguiente punto intermedio.";
+"relative_bearing_widget_desc" = "Muestra el ángulo entre la dirección de tu movimiento hacia delante y el punto objetivo.";
+"time_to_destination_widget_desc" = "El widget muestra la \"Hora de llegada\" o el \"Tiempo que falta\" hasta el último punto del destino. El tiempo se actualiza constantemente durante la navegación y es igual al tiempo de ruta desde la ubicación actual.";

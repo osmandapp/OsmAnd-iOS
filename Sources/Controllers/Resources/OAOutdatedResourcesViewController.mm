@@ -247,26 +247,31 @@
         const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
         totalDownloadSize += resourceInRepository->packageSize;
     }
-    totalSpaceNeeded = totalDownloadSize + _app.resourcesManager->getResourceInRepository(((OAOutdatedResourceItem *) items.firstObject).resourceId)->size;
+    const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(((OAOutdatedResourceItem *) items.firstObject).resourceId);
+    totalSpaceNeeded = resourceInRepository->size + resourceInRepository->packageSize;
 
     if (_app.freeSpaceAvailableOnDevice < totalSpaceNeeded)
     {
         NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:totalSpaceNeeded
                                                                    countStyle:NSByteCountFormatterCountStyleFile];
 
-        [[[UIAlertView alloc] initWithTitle:nil
-                                    message:[NSString stringWithFormat:OALocalizedString(@"res_updates_no_space"),
-                                                              [items count],
-                                                              stringifiedSize]
-                           cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_ok")]
-                           otherButtonItems:nil] show];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
+                                                                       message:[NSString stringWithFormat:OALocalizedString(@"res_updates_no_space"),
+                                                                                [items count],
+                                                                                stringifiedSize]
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
+                                                               style:UIAlertActionStyleDefault
+                                                             handler:nil];
+        [alert addAction:okAction];
+        [self presentViewController:alert animated:YES completion:nil];
         return;
     }
 
     NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:totalDownloadSize
                                                                countStyle:NSByteCountFormatterCountStyleFile];
 
-    NSMutableString* message  = [[NSString stringWithFormat:@"%d %@",
+    NSMutableString* message  = [[NSString stringWithFormat:@"%lu %@",
                                   [items count],
                                   OALocalizedString(@"res_updates_avail_q")] mutableCopy];
     
@@ -287,20 +292,29 @@
         [message appendString:OALocalizedString(@"proceed_q")];
     }
 
-    [[[UIAlertView alloc] initWithTitle:nil
-                                message:message
-                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")]
-                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"res_update_all")
-                                                             action:^{
-                                                                 for (OAOutdatedResourceItem* item in items)
-                                                                 {
-                                                                     const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
-                                                                     
-                                                                     NSString *resourceName = [OAResourcesUIHelper titleOfResource:item.resource inRegion:item.worldRegion withRegionName:YES withResourceType:YES];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
+                                                                   message:message
+                                                            preferredStyle:UIAlertControllerStyleAlert];
 
-                                                                     [self startDownloadOf:resourceInRepository resourceName:resourceName];
-                                                                 }
-                                                             }], nil] show];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:nil];
+
+    UIAlertAction *updateAllAction = [UIAlertAction actionWithTitle:OALocalizedString(@"res_update_all")
+                                                              style:UIAlertActionStyleDefault
+                                                            handler:^(UIAlertAction * _Nonnull action) {
+        for (OAOutdatedResourceItem* item in items)
+        {
+            const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
+            NSString *resourceName = [OAResourcesUIHelper titleOfResource:item.resource inRegion:item.worldRegion
+                                                           withRegionName:YES
+                                                         withResourceType:YES];
+            [self startDownloadOf:resourceInRepository resourceName:resourceName];
+        }
+    }];
+    [alert addAction:cancelAction];
+    [alert addAction:updateAllAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)onUpdateAllBarButtonClicked

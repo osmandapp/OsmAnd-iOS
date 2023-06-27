@@ -77,6 +77,11 @@
     return row;
 }
 
+- (void)removeAllRows
+{
+    [_rowData removeAllObjects];
+}
+
 - (void)removeRowAtIndex:(NSInteger)index
 {
     [_rowData removeObjectAtIndex:index];

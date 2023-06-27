@@ -81,8 +81,8 @@ class MapWidgetInfo: NSObject, Comparable {
         }
     }
     
-    func getWidgetType() -> WidgetType {
-        return widget.widgetType!
+    func getWidgetType() -> WidgetType? {
+        return widget.widgetType
     }
     
     func isExternal() -> Bool {
@@ -117,7 +117,10 @@ class MapWidgetInfo: NSObject, Comparable {
             return false
         }
         return WidgetsAvailabilityHelper.isWidgetVisibleByDefault(widgetId: key, appMode: appMode)
-
+    }
+    
+    func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
+        widget.getSettingsData(appMode)
     }
     
     func enableDisable(appMode: OAApplicationMode, enabled: NSNumber?) {
@@ -135,6 +138,7 @@ class MapWidgetInfo: NSObject, Comparable {
         for visibility in widgetsVisibility {
             newVisibilityString.append(visibility + SETTINGS_SEPARATOR)
         }
+        newVisibilityString.removeLast()
 
         getVisibilityPreference().set(newVisibilityString, mode: appMode)
 

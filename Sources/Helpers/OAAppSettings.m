@@ -2852,10 +2852,9 @@
         return [self set:RULER_MODE_NO_CIRCLES mode:mode];
 }
 
-- (NSString *)toStringValue:(OAApplicationMode *)mode
++ (NSString *) rulerWidgetModeToString:(EOARulerWidgetMode)rulerMode
 {
-    switch ([self get:mode])
-    {
+    switch (rulerMode) {
         case RULER_MODE_DARK:
             return @"FIRST";
         case RULER_MODE_LIGHT:
@@ -2865,6 +2864,11 @@
         default:
             return @"FIRST";
     }
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    return [self.class rulerWidgetModeToString:[self get:mode]];
 }
 
 - (void) resetToDefault
@@ -3902,7 +3906,7 @@
         _showSlopesOnElevationWidget = [OACommonBoolean withKey:showSlopesOnElevationWidget defValue:NO];
         [_profilePreferences setObject:_showDistanceRuler forKey:showSlopesOnElevationWidget];
         
-        _customWidgetKeys = [OACommonStringList withKey:customWidgetKeys defValue:nil];
+        _customWidgetKeys = [OACommonStringList withKey:customWidgetKeys defValue:@[]];
         [_profilePreferences setObject:_customWidgetKeys forKey:customWidgetKeys];
 
         _showArrivalTime = [OACommonBoolean withKey:showArrivalTimeKey defValue:YES];
@@ -4149,8 +4153,8 @@
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];
         [_profilePreferences setObject:_snapToRoad forKey:@"snap_to_road"];
 
-        _poiFiltersOrder = [OACommonStringList withKey:poiFiltersOrderKey defValue:nil];
-        _inactivePoiFilters = [OACommonStringList withKey:inactivePoiFiltersKey defValue:nil];
+        _poiFiltersOrder = [OACommonStringList withKey:poiFiltersOrderKey defValue:@[]];
+        _inactivePoiFilters = [OACommonStringList withKey:inactivePoiFiltersKey defValue:@[]];
         [_profilePreferences setObject:_poiFiltersOrder forKey:@"poi_filters_order"];
         [_profilePreferences setObject:_inactivePoiFilters forKey:@"inactive_poi_filters"];
 

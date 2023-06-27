@@ -173,6 +173,7 @@
 "reset_plugin_to_default" = "Reset plugin settings to default";
 "save_heading" = "Include heading";
 "save_heading_descr" = "Save heading to each track point while recording.";
+"distance_circles" = "Distance circles";
 
 // Widget descriptions
 "coordinates_widget_current_location_desc" = "Shows the geographic coordinates of the current geolocation";
@@ -219,6 +220,7 @@
 "wind_widget_desc" = "Displays the wind speed for the current map center.";
 "precipitation_widget_desc" = "Shows the precipitation for the current map center.";
 "temperature_widget_desc" = "Shows the temperature for the current map center.";
+"true_bearing_wdiget_desc" = "Angle between true north and the target point observed from your location.";
 "bearing_desc" = "Shows the absolute or relative bearing to a target in angular units (in 180 degree, 360 degree, or milliradians mode).";
 "map_widget_altitude_desc" = "Display the altitude of the current geolocation or the elevation of the current map center";
 "weather_widget_group_desc" = "A set of widgets showing various weather information.";
@@ -232,6 +234,10 @@
 "widget_secondary_desc_part_of" = "Part of \“%@\” plugin.";
 "weather_widgets_secondary_desc" = "Measurement units can be changed in the Weather plugin settings.";
 
+"shared_string_dark" = "Dark";
+"shared_string_light" = "Light";
+"shared_string_page_number" = "Page %d";
+"compass_on_circles" = "Compass on circles";
 "add_widget" = "Add widget";
 "add_page" = "Add page";
 "shared_string_switch_mode" = "Switch mode";
@@ -288,6 +294,7 @@
 "access_arrival_time" = "Arrival time";
 "map_widget_time" = "Time to go";
 "map_widget_ruler_control" = "Radius ruler";
+"ruler_circles" = "Ruler circles";
 "show_compass_ruler" = "Show compass ruler";
 "hide_compass_ruler" = "Hide compass ruler";
 "map_widget_distance_by_tap" = "Distance by tap";
@@ -972,7 +979,6 @@
 "screen_settings_weather_toolbar" = "Weather toolbar";
 
 "settings_app_theme" = "Application theme";
-"light_theme" = "Light";
 "do_not_rotate" = "Do not rotate";
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Units of speed";

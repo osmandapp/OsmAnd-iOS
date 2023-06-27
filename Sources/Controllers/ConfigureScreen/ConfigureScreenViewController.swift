@@ -9,6 +9,11 @@
 import UIKit
 import Foundation
 
+@objc(OAWidgetStateDelegate)
+protocol WidgetStateDelegate: AnyObject {
+    func onWidgetStateChanged()
+}
+
 @objc(OAConfigureScreenViewController)
 @objcMembers
 class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectionDelegate, WidgetStateDelegate {
@@ -22,6 +27,9 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         }
     }
     
+    override func registerObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(onWidgetStateChanged), name: NSNotification.Name(kWidgetVisibilityChangedMotification), object: nil)
+    }
     
     override func generateData() {
         tableData.clearAllData()
@@ -252,14 +260,13 @@ extension ConfigureScreenViewController {
             let panel = data.obj(forKey: "panel") as? WidgetsPanel
             if let panel {
                 let vc = WidgetsListViewController(widgetPanel: panel)
-                vc.delegate = self
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }
     }
     
     // MARK: WidgetStateDelegate
-    func onWidgetStateChanged() {
+    @objc func onWidgetStateChanged() {
         generateData()
         tableView.reloadData()
     }

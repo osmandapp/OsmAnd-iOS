@@ -56,6 +56,11 @@
     return self.widgetType == nil;
 }
 
+- (OATableDataModel *) getSettingsData:(OAApplicationMode *)appMode
+{
+    return nil;
+}
+
 - (BOOL)updateInfo
 {
     return NO; // override

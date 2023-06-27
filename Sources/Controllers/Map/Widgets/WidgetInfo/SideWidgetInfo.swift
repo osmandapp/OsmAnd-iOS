@@ -36,13 +36,18 @@ class SideWidgetInfo: MapWidgetInfo {
     
     override func getUpdatedPanel() -> WidgetsPanel {
         let widgetType = getWidgetType()
-        if widgetType.defaultPanel == .leftPanel, WidgetsPanel.rightPanel.contains(widgetId: key) {
-            widgetPanel = .rightPanel
-        } else if widgetType.defaultPanel == .rightPanel, WidgetsPanel.leftPanel.contains(widgetId: key) {
-            widgetPanel = .leftPanel
+        if let widgetType {
+            if widgetType.defaultPanel == .leftPanel, WidgetsPanel.rightPanel.contains(widgetId: key) {
+                widgetPanel = .rightPanel
+            } else if widgetType.defaultPanel == .rightPanel, WidgetsPanel.leftPanel.contains(widgetId: key) {
+                widgetPanel = .leftPanel
+            } else {
+                widgetPanel = widgetType.defaultPanel
+            }
         } else {
-            widgetPanel = widgetType.defaultPanel
+            widgetPanel = WidgetsPanel.leftPanel.contains(widgetId: key) ? .leftPanel : .rightPanel
         }
+        
         return widgetPanel
     }
 }

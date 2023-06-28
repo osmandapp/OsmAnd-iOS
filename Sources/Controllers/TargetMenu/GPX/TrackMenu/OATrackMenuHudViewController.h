@@ -75,6 +75,7 @@
 - (void)openDuplicateTrack;
 - (void)openMoveTrack;
 - (void)openWptOnMap:(OAGpxWptItem *)gpxWptItem;
+- (void)openURL:(NSString *)url;
 - (void)showAlertDeleteTrack;
 - (void)showAlertRenameTrack;
 - (void)openUploadGpxToOSM;

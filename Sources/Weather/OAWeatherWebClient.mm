@@ -4,7 +4,6 @@
 //
 
 #import "OAWeatherWebClient.h"
-#import "OAWeatherHelper.h"
 
 #define kTimeout 60.0 * 5.0 // 5 minutes
 
@@ -151,12 +150,7 @@ long long OAWeatherWebClient::downloadFile(
             return result;
        
         if (lastModified > 0 && lastModified <= lastTime)
-        {
-            NSDate *dateTime = [NSDate date];
-            auto currentTime = [dateTime timeIntervalSince1970] * 1000;
-            if ((long long) currentTime - lastModified > kWeatherForecastExpireTime)
-                return 0;
-        }
+            return 0;
 
         request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url.toNSString()]
                                           cachePolicy:NSURLRequestReloadIgnoringCacheData

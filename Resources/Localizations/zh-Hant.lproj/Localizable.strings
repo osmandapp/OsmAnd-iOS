@@ -2377,3 +2377,9 @@
 "gpx_import_already_exists_short" = "指定的軌跡檔已在表上。";
 "map_settings_layer_transparency" = "圖層透明度";
 "map_widget_trip_recording_distance" = "距離";
+"av_notes_photo_widget_desc" = "點一下小工具能讓你照相。";
+"av_notes_video_widget_desc" = "點一下小工具讓你錄製影片。";
+"av_notes_audio_widget_desc" = "點一下小工具讓你錄製語音筆記。";
+
+// Widget descriptions
+"coordinates_widget_current_location_desc" = "顯示目前地理位置的經緯度";

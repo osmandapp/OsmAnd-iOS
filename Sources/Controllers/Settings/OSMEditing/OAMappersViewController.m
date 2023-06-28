@@ -364,21 +364,24 @@
 
     [OANetworkUtilities sendRequest:request async:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
     {
-        NSMutableDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-        if (((NSHTTPURLResponse *) response).statusCode == 200 && !error && result.count > 0)
+        if (data && response)
         {
-            @try
+            NSMutableDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+            if (((NSHTTPURLResponse *) response).statusCode == 200 && !error && result.count > 0)
             {
-                _objectChanges = result[@"objectChanges"];
-                [self checkLastChanges];
-                [self generateData];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.tableView reloadData];
-                });
-            }
-            @catch (NSException *e)
-            {
-                NSLog(e.reason);
+                @try
+                {
+                    _objectChanges = result[@"objectChanges"];
+                    [self checkLastChanges];
+                    [self generateData];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.tableView reloadData];
+                    });
+                }
+                @catch (NSException *e)
+                {
+                    NSLog(e.reason);
+                }
             }
         }
     }];

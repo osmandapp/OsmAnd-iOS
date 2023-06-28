@@ -4,6 +4,7 @@
 //
 
 #import "OAWeatherWebClient.h"
+#import "OAWeatherHelper.h"
 
 #define kTimeout 60.0 * 5.0 // 5 minutes
 
@@ -73,20 +74,26 @@ QString OAWeatherWebClient::downloadString(
     return QString();
 }
 
-bool OAWeatherWebClient::downloadFile(
+long long OAWeatherWebClient::downloadFile(
         const QString& url,
         const QString& fileName,
+        const long long lastTime,
         std::shared_ptr<const OsmAnd::IWebClient::IRequestResult>* const requestResult/* = nullptr*/,
         const OsmAnd::IWebClient::RequestProgressCallbackSignature progressCallback/* = nullptr*/,
         const std::shared_ptr<const OsmAnd::IQueryController>& queryController/* = nullptr*/) const
 {
+    long long result = -1;
     BOOL success = false;
     if (url != nullptr && !url.isEmpty() && fileName != nullptr && !fileName.isEmpty())
     {
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url.toNSString()]
-                                                 cachePolicy:NSURLRequestReloadIgnoringCacheData
-                                             timeoutInterval:kTimeout];
+        long long lastModified = 0;
+        NSMutableURLRequest *request =
+                [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url.toNSString()]
+                                    cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                    timeoutInterval:kTimeout];
 
+        [request setHTTPMethod:@"HEAD"];
+       
         unsigned int responseCode = 0;
         NSURLResponse __block *response = nil;
         NSError __block *error = nil;
@@ -94,6 +101,73 @@ bool OAWeatherWebClient::downloadFile(
 
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
         NSURLSessionDataTask *task = [_urlSession dataTaskWithRequest:request completionHandler:^(NSData *_data, NSURLResponse *_response, NSError *_error)
+                {
+                    response = _response;
+                    error = _error;
+                    dispatch_semaphore_signal(semaphore);
+                }
+        ];
+        [task resume];
+
+        if (queryController)
+        {
+            while (dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(100 * NSEC_PER_MSEC))))
+            {
+                if (queryController->isAborted())
+                {
+                    [task cancel];
+
+                    if (requestResult != nullptr)
+                        requestResult->reset(new OAWeatherHttpRequestResult(false, responseCode));
+
+                    return result;
+                }
+            }
+        }
+        else
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+
+        if (error)
+            return result;
+        else if(response && [response isKindOfClass:[NSHTTPURLResponse class]])
+        {
+            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*) response;
+            if ([httpResponse respondsToSelector:@selector(allHeaderFields)]) {
+                NSDictionary *headerFields = [httpResponse allHeaderFields];
+                NSString *lastModification = [headerFields objectForKey:@"Last-Modified"];
+
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateFormat:@"EEE, dd MMM yyyy HH:mm:ss zzz"];
+                NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en"];
+                [formatter setLocale:locale];
+                NSDate *dateTime = [formatter dateFromString:lastModification];
+                
+                lastModified = (long long) ([dateTime timeIntervalSince1970] * 1000);
+            }
+            else
+                return result;
+        }
+        else
+            return result;
+       
+        if (lastModified > 0 && lastModified <= lastTime)
+        {
+            NSDate *dateTime = [NSDate date];
+            auto currentTime = [dateTime timeIntervalSince1970] * 1000;
+            if ((long long) currentTime - lastModified > kWeatherForecastExpireTime)
+                return 0;
+        }
+
+        request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url.toNSString()]
+                                          cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                      timeoutInterval:kTimeout];
+        
+        responseCode = 0;
+        response = nil;
+        error = nil;
+
+        semaphore = dispatch_semaphore_create(0);
+        task = [_urlSession dataTaskWithRequest:request completionHandler:^(NSData *_data, NSURLResponse *_response, NSError *_error)
                 {
                     response = _response;
                     data = _data;
@@ -131,7 +205,7 @@ bool OAWeatherWebClient::downloadFile(
             if (requestResult != nullptr)
                 requestResult->reset(new OAWeatherHttpRequestResult(false, responseCode));
 
-            return false;
+            return result;
         }
 
         NSString *name = fileName.toNSString();
@@ -147,6 +221,9 @@ bool OAWeatherWebClient::downloadFile(
 
         if (requestResult != nullptr)
             requestResult->reset(new OAWeatherHttpRequestResult(success, responseCode));
+
+        if (success)
+            result = lastModified > 0 ? lastModified : 1;
     }
-    return success;
+    return result;
 }

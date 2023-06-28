@@ -62,9 +62,10 @@ public:
         std::shared_ptr<const OsmAnd::IWebClient::IRequestResult>* const requestResult = nullptr,
         const OsmAnd::IWebClient::RequestProgressCallbackSignature progressCallback = nullptr,
         const std::shared_ptr<const OsmAnd::IQueryController>& queryController = nullptr) const;
-    virtual bool downloadFile(
+    virtual long long downloadFile(
         const QString& url,
         const QString& fileName,
+        const long long lastTime,
         std::shared_ptr<const OsmAnd::IWebClient::IRequestResult>* const requestResult = nullptr,
         const OsmAnd::IWebClient::RequestProgressCallbackSignature progressCallback = nullptr,
         const std::shared_ptr<const OsmAnd::IQueryController>& queryController = nullptr) const;

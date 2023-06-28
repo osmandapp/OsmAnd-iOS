@@ -833,6 +833,7 @@
         bandSettings,
         QString::fromNSString(_weatherForecastPath),
         QString::fromNSString([NSHomeDirectory() stringByAppendingString:@"/Library/Application Support/proj"]),
+        kWeatherForecastExpireTime,
         256,
         [UIScreen mainScreen].scale,
         std::make_shared<OAWeatherWebClient>()

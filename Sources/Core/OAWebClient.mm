@@ -209,13 +209,15 @@ QString OAWebClient::downloadString(
     return QString::null;
 }
 
-bool OAWebClient::downloadFile(
+long long OAWebClient::downloadFile(
     const QString& url,
     const QString& fileName,
+    const long long lastTime,
     std::shared_ptr<const OsmAnd::IWebClient::IRequestResult>* const requestResult/* = nullptr*/,
     const OsmAnd::IWebClient::RequestProgressCallbackSignature progressCallback/* = nullptr*/,
     const std::shared_ptr<const OsmAnd::IQueryController>& queryController/* = nullptr*/) const
 {
+    long long result = -1;
     BOOL success = false;
     if (url != nullptr && !url.isEmpty() && fileName != nullptr && !fileName.isEmpty())
     {
@@ -249,7 +251,7 @@ bool OAWebClient::downloadFile(
                     if (requestResult != nullptr)
                         requestResult->reset(new OAHttpRequestResult(false, responseCode));
 
-                    return false;
+                    return result;
                 }
             }
         }
@@ -266,7 +268,7 @@ bool OAWebClient::downloadFile(
             if (requestResult != nullptr)
                 requestResult->reset(new OAHttpRequestResult(false, responseCode));
 
-            return false;
+            return result;
         }
 
         NSString *name = fileName.toNSString();
@@ -281,6 +283,9 @@ bool OAWebClient::downloadFile(
         
         if (requestResult != nullptr)
             requestResult->reset(new OAHttpRequestResult(success, responseCode));
+        
+        if (success)
+            result = 1;
     }
-    return success;
+    return result;
 }

@@ -398,6 +398,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         {
             if (_routesSettingType == ERoutesSettingCycle)
             {
+                _routesParameter.value = @"true";
                 cycleNode.value = [_settings.cycleRoutesParameter get];
                 [_styleSettings save:cycleNode];
             }

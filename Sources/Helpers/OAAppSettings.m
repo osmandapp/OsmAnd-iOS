@@ -4228,13 +4228,13 @@
         _contourLinesZoom = [OACommonString withKey:contourLinesZoomKey defValue:@""];
         [_profilePreferences setObject:_contourLinesZoom forKey:@"contour_lines_zoom"];
         
-        _hikingRoutesParameter = [OACommonString withKey:hikingRoutesParameterKey defValue:@""];
+        _hikingRoutesParameter = [OACommonString withKey:hikingRoutesParameterKey defValue:@"walkingRoutesOSMC"];
         [_profilePreferences setObject:_hikingRoutesParameter forKey:@"hiking_routes_parameter"];
         
-        _cycleRoutesParameter = [OACommonString withKey:cycleRoutesParameterKey defValue:@""];
+        _cycleRoutesParameter = [OACommonString withKey:cycleRoutesParameterKey defValue:@"false"];
         [_profilePreferences setObject:_cycleRoutesParameter forKey:@"cycle_routes_parameter"];
         
-        _mountainBikeRoutesParameter = [OACommonString withKey:mountainBikeRoutesParameterKey defValue:@""];
+        _mountainBikeRoutesParameter = [OACommonString withKey:mountainBikeRoutesParameterKey defValue:@"showMtbScale"];
         [_profilePreferences setObject:_mountainBikeRoutesParameter forKey:@"mountain_bike_routes_parameter"];
 
         // Custom plugins

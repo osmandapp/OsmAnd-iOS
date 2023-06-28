@@ -32,7 +32,6 @@
 
     NSMapTable<OAApplicationMode *, NSMutableSet<NSString *> *> *_visibleElementsFromSettings;
     OAAppSettings *_settings;
-    OAAutoObserverProxy* _widgetSettingResetObserver;
 }
 
 - (instancetype) init
@@ -44,7 +43,6 @@
         _visibleElementsFromSettings = [NSMapTable strongToStrongObjectsMapTable];
         _settings = [OAAppSettings sharedManager];
         [self loadVisibleElementsFromSettings];
-        _widgetSettingResetObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onWidgetSettingsReset:withKey:) andObserve:[OsmAndApp instance].widgetSettingResetObservable];
     }
     return self;
 }
@@ -72,37 +70,34 @@
 - (void) populateStackControl:(OAWidgetPanelViewController *)stack mode:(OAApplicationMode *)mode widgetPanel:(OAWidgetsPanel *)widgetPanel
 {
     NSOrderedSet<OAMapWidgetInfo *> *widgets = [self getWidgetsForPanel:widgetPanel];
-    
-    NSMutableArray<OABaseWidgetView *> *widgetsToShow = [NSMutableArray array];
-    
-    BOOL weatherToolbarVisible = self.isWeatherToolbarVisible;
-    for (OAMapWidgetInfo *widgetInfo in widgets)
-    {
-        if ([widgetInfo isEnabledForAppMode:mode] || weatherToolbarVisible)
-        {
-            [widgetsToShow addObject:widgetInfo.widget];
-        }
-        else
-        {
-            [widgetInfo.widget removeFromSuperview];
-        }
-    }
-    NSMutableArray<NSArray<OABaseWidgetView *> *> *widgetPages = [NSMutableArray array];
+    NSMutableArray<NSMutableArray<OABaseWidgetView *> *> *widgetsToShow = [NSMutableArray array];
     NSMutableArray<OABaseWidgetView *> *currentPage = [NSMutableArray array];
-    NSInteger idx = 0;
-    for (OABaseWidgetView *view in widgetsToShow) {
-        if (idx < 5) {
-            [currentPage addObject:view];
-            idx++;
-        } else {
-            [widgetPages addObject:currentPage];
+    BOOL weatherToolbarVisible = self.isWeatherToolbarVisible;
+    if (widgetPanel.isPagingAllowed)
+    {
+        NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *pagedWidgets = [self getPagedWidgetsForPanel:mode panel:widgetPanel filterModes:(KWidgetModeAvailable | kWidgetModeEnabled)];
+        for (NSOrderedSet<OAMapWidgetInfo *> *page in pagedWidgets) {
+            for (OAMapWidgetInfo *widgetInfo in page) {
+                if ([widgetInfo isEnabledForAppMode:mode] || weatherToolbarVisible)
+                {
+                    [currentPage addObject:widgetInfo.widget];
+                }
+                else
+                {
+                    [widgetInfo.widget removeFromSuperview];
+                }
+            }
+            [widgetsToShow addObject:currentPage];
             currentPage = [NSMutableArray array];
-            [currentPage addObject:view];
-            idx = 0;
         }
     }
-    if (currentPage.count > 0)
-        [widgetPages addObject:currentPage];
+    else
+    {
+        for (OAMapWidgetInfo *widgetInfo in widgets) {
+            [currentPage addObject:widgetInfo.widget];
+        }
+        [widgetsToShow addObject:currentPage];
+    }
     
 //    for (int i = 0; i < widgetsToShow.count; i++)
 //    {
@@ -112,7 +107,7 @@
 //        : [widgetsToShow subarrayWithRange:NSMakeRange(i + 1, widgetsToShow.count - (i + 1))];
 //        [widget attachView:stack order:i followingWidgets:followingWidgets];
 //    }
-    [stack updateWidgetPages:widgetPages];
+    [stack updateWidgetPages:widgetsToShow];
 }
 
 - (void) updateWidgetsInfo:(OAApplicationMode *)appMode
@@ -554,14 +549,6 @@
     }
 
     [_settings.mapInfoControls set:[NSString stringWithString:bs]];
-}
-
-- (void) onWidgetSettingsReset:(id)sender withKey:(id)key;
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (key && [key isKindOfClass:OAApplicationMode.class])
-            [self resetToDefault:(OAApplicationMode *)key];
-    });
 }
 
 - (void) resetDefault:(OAApplicationMode *)mode set:(NSMutableOrderedSet<OAMapWidgetRegInfo *> *)set

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class OABaseWidgetView, OAWidgetType, OAWidgetState, OAApplicationMode, OACommonBoolean, OACommonPreference;
+@class OABaseWidgetView, OAWidgetType, OAWidgetState, OAApplicationMode, OACommonBoolean, OACommonPreference, OATableDataModel;
 
 @protocol OAWidgetListener <NSObject>
 
@@ -38,6 +38,7 @@
 - (void) copySettings:(OAApplicationMode *_Nonnull)appMode customId:(NSString *_Nullable)customId;
 - (OAWidgetState *_Nullable) getWidgetState;
 - (BOOL) isExternal;
+- (OATableDataModel *_Nullable) getSettingsData:(OAApplicationMode *)appMode;
 
 - (void) attachView:(UIView *_Nonnull)container order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *_Nullable)followingWidgets;
 

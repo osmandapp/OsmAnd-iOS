@@ -15,12 +15,16 @@ class CenterWidgetInfo: MapWidgetInfo {
         let settings = OAAppSettings.sharedManager()!
         let widgetType = getWidgetType()
         
-        if (widgetType.defaultPanel == .bottomPanel && WidgetsPanel.topPanel.contains(widgetId: key)) {
-            widgetPanel = .topPanel;
-        } else if (widgetType.defaultPanel == .topPanel && WidgetsPanel.bottomPanel.contains(widgetId: key)) {
-            widgetPanel = .bottomPanel
+        if let widgetType {
+            if (widgetType.defaultPanel == .bottomPanel && WidgetsPanel.topPanel.contains(widgetId: key)) {
+                widgetPanel = .topPanel;
+            } else if (widgetType.defaultPanel == .topPanel && WidgetsPanel.bottomPanel.contains(widgetId: key)) {
+                widgetPanel = .bottomPanel
+            } else {
+                widgetPanel = widgetType.defaultPanel
+            }
         } else {
-            widgetPanel = widgetType.defaultPanel
+            widgetPanel = WidgetsPanel.topPanel.contains(widgetId: key) ? .topPanel : .bottomPanel
         }
         return widgetPanel
     }

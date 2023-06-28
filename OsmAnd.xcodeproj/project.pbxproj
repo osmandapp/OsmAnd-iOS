@@ -3450,6 +3450,12 @@
 		DACBB99F25D6979900378C47 /* btn_map_current_location_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACBB99C25D6979800378C47 /* btn_map_current_location_day@3x.png */; };
 		DACF784427E3441700A8A218 /* OABackupHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACF784327E3441600A8A218 /* OABackupHelper.mm */; };
 		DAD2203E2913AF010052B967 /* OATableCollapsableRowData.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD2203D2913AF010052B967 /* OATableCollapsableRowData.m */; };
+		DAD3FD132A4599F500BFA03A /* WidgetConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD3FD122A4599F500BFA03A /* WidgetConfigurationViewController.swift */; };
+		DAD3FD152A4984C300BFA03A /* WidgetParameterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD3FD142A4984C300BFA03A /* WidgetParameterViewController.swift */; };
+		DAD3FD202A49925600BFA03A /* ic_action_ruler_circle_hide@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAD3FD1E2A49925500BFA03A /* ic_action_ruler_circle_hide@3x.png */; };
+		DAD3FD212A49925600BFA03A /* ic_action_ruler_circle_hide@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAD3FD1F2A49925600BFA03A /* ic_action_ruler_circle_hide@2x.png */; };
+		DAD3FD242A4ACB2E00BFA03A /* WidgetGroupListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD3FD232A4ACB2E00BFA03A /* WidgetGroupListViewController.swift */; };
+		DAD3FD262A4AEE7C00BFA03A /* WidgetGroupItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD3FD252A4AEE7C00BFA03A /* WidgetGroupItemsViewController.swift */; };
 		DAD5B4CF288E80EC009CF611 /* OAOperationLog.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD5B4CE288E80EC009CF611 /* OAOperationLog.m */; };
 		DADBE9F22A32085800C0C102 /* CompassVisibilityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADBE9F12A32085800C0C102 /* CompassVisibilityViewController.swift */; };
 		DADC09DE272957EC00ADBB3B /* libqtpcre2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA578C4B266263D2007A086E /* libqtpcre2.a */; };
@@ -8163,6 +8169,12 @@
 		DACF784327E3441600A8A218 /* OABackupHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OABackupHelper.mm; sourceTree = "<group>"; };
 		DAD2203C2913AF010052B967 /* OATableCollapsableRowData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATableCollapsableRowData.h; sourceTree = "<group>"; };
 		DAD2203D2913AF010052B967 /* OATableCollapsableRowData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATableCollapsableRowData.m; sourceTree = "<group>"; };
+		DAD3FD122A4599F500BFA03A /* WidgetConfigurationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetConfigurationViewController.swift; sourceTree = "<group>"; };
+		DAD3FD142A4984C300BFA03A /* WidgetParameterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetParameterViewController.swift; sourceTree = "<group>"; };
+		DAD3FD1E2A49925500BFA03A /* ic_action_ruler_circle_hide@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_action_ruler_circle_hide@3x.png"; sourceTree = "<group>"; };
+		DAD3FD1F2A49925600BFA03A /* ic_action_ruler_circle_hide@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_action_ruler_circle_hide@2x.png"; sourceTree = "<group>"; };
+		DAD3FD232A4ACB2E00BFA03A /* WidgetGroupListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetGroupListViewController.swift; sourceTree = "<group>"; };
+		DAD3FD252A4AEE7C00BFA03A /* WidgetGroupItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetGroupItemsViewController.swift; sourceTree = "<group>"; };
 		DAD5B4CD288E80EC009CF611 /* OAOperationLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOperationLog.h; sourceTree = "<group>"; };
 		DAD5B4CE288E80EC009CF611 /* OAOperationLog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOperationLog.m; sourceTree = "<group>"; };
 		DADBE9F12A32085800C0C102 /* CompassVisibilityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassVisibilityViewController.swift; sourceTree = "<group>"; };
@@ -10699,6 +10711,8 @@
 		DA2EC47C29FBBDFE00ECEB37 /* Widgets */ = {
 			isa = PBXGroup;
 			children = (
+				DAD3FD1F2A49925600BFA03A /* ic_action_ruler_circle_hide@2x.png */,
+				DAD3FD1E2A49925500BFA03A /* ic_action_ruler_circle_hide@3x.png */,
 				DA2EC47D29FBBDFE00ECEB37 /* widget_altitude_night@2x.png */,
 				DA2EC47E29FBBDFE00ECEB37 /* widget_time_to_distance_day@3x.png */,
 				DA2EC47F29FBBDFE00ECEB37 /* list_warnings_traffic_calming@2x.png */,
@@ -12146,10 +12160,10 @@
 		DA5A7B0826C563A100F274C7 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				DAD3FD222A4ACAED00BFA03A /* WidgetSettings */,
 				DA5A7B0926C563A100F274C7 /* GeneralSettings */,
 				DA5A7B1B26C563A100F274C7 /* ImportExport */,
 				DA5A7B7226C563A100F274C7 /* NavigationSettings */,
-				DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */,
 				DA5A7BA526C563A100F274C7 /* OABaseBigTitleSettingsViewController.h */,
 				DA5A7B6926C563A100F274C7 /* OABaseBigTitleSettingsViewController.m */,
 				DA5A7B6B26C563A100F274C7 /* OABaseBigTitleSettingsViewController.xib */,
@@ -12269,6 +12283,7 @@
 				DA5A7B8C26C563A100F274C7 /* OAVoicePromptsViewController.mm */,
 				46B8F5C02936C097001AA71A /* OAAngleStraightLineViewController.h */,
 				46B8F5C12936C0D9001AA71A /* OAAngleStraightLineViewController.mm */,
+				DAD3FD142A4984C300BFA03A /* WidgetParameterViewController.swift */,
 			);
 			path = NavigationSettings;
 			sourceTree = "<group>";
@@ -14424,6 +14439,17 @@
 			path = Backup;
 			sourceTree = "<group>";
 		};
+		DAD3FD222A4ACAED00BFA03A /* WidgetSettings */ = {
+			isa = PBXGroup;
+			children = (
+				DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */,
+				DAD3FD122A4599F500BFA03A /* WidgetConfigurationViewController.swift */,
+				DAD3FD232A4ACB2E00BFA03A /* WidgetGroupListViewController.swift */,
+				DAD3FD252A4AEE7C00BFA03A /* WidgetGroupItemsViewController.swift */,
+			);
+			path = WidgetSettings;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -14623,6 +14649,7 @@
 				848A14D61B223A4C00A31AE7 /* bg_title@2x.png in Resources */,
 				DA1BC120233F9B01004DAF78 /* ic_custom_search@2x.png in Resources */,
 				465B935529BF7805008F476F /* ic_carplay_map_markers_night@2x.png in Resources */,
+				DAD3FD212A49925600BFA03A /* ic_action_ruler_circle_hide@2x.png in Resources */,
 				DA5A828226C563A700F274C7 /* OAIconTextDescCell.xib in Resources */,
 				847F8FD11EE07CFC00CF5EA5 /* ic_search_empty_state@3x.png in Resources */,
 				8433947B1FF4FA38006205A5 /* ding.aiff in Resources */,
@@ -16509,6 +16536,7 @@
 				32C91E5B25A86A5700FA6470 /* ic_custom_compass_widget_hide@3x.png in Resources */,
 				0A8D1A0E26FBA1750042444C /* ic_small_profile_straight_line@2x.png in Resources */,
 				845E06B81B5FF17400DFC2A7 /* ic_plugin_tracrecording@2x.png in Resources */,
+				DAD3FD202A49925600BFA03A /* ic_action_ruler_circle_hide@3x.png in Resources */,
 				15C428DC24A76F0500B21005 /* img_help_vessel_height_day@3x.png in Resources */,
 				DA1341A2243DC5A80039D214 /* ic_action_monowheel@3x.png in Resources */,
 				15CD7E9E25B1C19900BCB36A /* ic_small_distance@3x.png in Resources */,
@@ -17405,6 +17433,7 @@
 				DA5A845126C563A900F274C7 /* OAMyPositionLayer.mm in Sources */,
 				DA0BAC732851F25000AFA550 /* OACheckBackupSubscriptionTask.m in Sources */,
 				4655EB3328E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m in Sources */,
+				DAD3FD132A4599F500BFA03A /* WidgetConfigurationViewController.swift in Sources */,
 				DA5A834526C563A800F274C7 /* OAIconTextDescButtonCell.m in Sources */,
 				DA5A824126C563A700F274C7 /* OACoordinatesFormatViewController.m in Sources */,
 				DA5A813726C563A700F274C7 /* OAOsmPoint.m in Sources */,
@@ -17566,6 +17595,7 @@
 				DA5A849626C563A900F274C7 /* InitialRoutePlanningBottomSheetViewController.mm in Sources */,
 				DA5A81EC26C563A700F274C7 /* OARendererRegistry.mm in Sources */,
 				DA5A81C526C563A700F274C7 /* OANameStringMatcher.m in Sources */,
+				DAD3FD152A4984C300BFA03A /* WidgetParameterViewController.swift in Sources */,
 				DA14DC922A31D76A002A91BC /* OAWeatherWidget.mm in Sources */,
 				DA08A14A2A41DA7400205D7E /* RulerDistanceWidget.swift in Sources */,
 				DA5A840326C563A800F274C7 /* OAAddressTableViewController.mm in Sources */,
@@ -17588,6 +17618,7 @@
 				DA5A855826C563A900F274C7 /* OAMapillaryImageCard.mm in Sources */,
 				DA5A835C26C563A800F274C7 /* OAPreviewZoomLevelsCell.m in Sources */,
 				DA5A81A926C563A700F274C7 /* OAAbbreviations.mm in Sources */,
+				DAD3FD242A4ACB2E00BFA03A /* WidgetGroupListViewController.swift in Sources */,
 				DA5A818426C563A700F274C7 /* OANavAddDestinationAction.mm in Sources */,
 				DA5A832626C563A800F274C7 /* OALineChartCell.m in Sources */,
 				DA5A842F26C563A800F274C7 /* OATargetTurnViewController.m in Sources */,
@@ -17978,6 +18009,7 @@
 				DA5A842526C563A800F274C7 /* OATargetHistoryItemViewController.m in Sources */,
 				8A31787527E1D8A800CA8AA4 /* OAMapRendererEnvironment.mm in Sources */,
 				DA4ABF352876ECB300B996EF /* OAAbstractWriter.m in Sources */,
+				DAD3FD262A4AEE7C00BFA03A /* WidgetGroupItemsViewController.swift in Sources */,
 				DA5A84A026C563A900F274C7 /* OAReorderPointCommand.mm in Sources */,
 				DA5A848626C563A900F274C7 /* OAMapInfoController.mm in Sources */,
 				DA5A838E26C563A800F274C7 /* OAOsmAndLiveViewController.mm in Sources */,

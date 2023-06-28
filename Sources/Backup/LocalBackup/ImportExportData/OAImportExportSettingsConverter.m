@@ -10,20 +10,6 @@
 
 @implementation OAImportExportSettingsConverter
 
-+ (NSString *) rulerWidgetModeToString:(EOARulerWidgetMode)rulerMode
-{
-    switch (rulerMode) {
-        case RULER_MODE_DARK:
-            return @"FIRST";
-        case RULER_MODE_LIGHT:
-            return @"SECOND";
-        case RULER_MODE_NO_CIRCLES:
-            return @"EMPTY";
-        default:
-            return @"FIRST";
-    }
-}
-
 + (NSString *) booleanPreferenceToString:(BOOL)pref
 {
     return pref ? @"true" : @"false";

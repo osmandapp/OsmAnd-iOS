@@ -21,6 +21,18 @@ extension UIColor {
         self.init(red: normalizedRed, green: normalizedGreen, blue: normalizedBlue, alpha: 1.0)
     }
     
+    convenience init(rgb: Int32) {
+        let red = CGFloat((rgb >> 16) & 0xFF)
+        let green = CGFloat((rgb >> 8) & 0xFF)
+        let blue = CGFloat(rgb & 0xFF)
+        
+        let normalizedRed = red / 255.0
+        let normalizedGreen = green / 255.0
+        let normalizedBlue = blue / 255.0
+        
+        self.init(red: normalizedRed, green: normalizedGreen, blue: normalizedBlue, alpha: 1.0)
+    }
+    
     convenience init(argb: Int) {
         let alpha = CGFloat((argb >> 24) & 0xFF)
         let red = CGFloat((argb >> 16) & 0xFF)

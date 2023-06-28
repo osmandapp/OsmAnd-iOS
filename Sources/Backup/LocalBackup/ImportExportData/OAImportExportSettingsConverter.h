@@ -11,7 +11,6 @@
 
 @interface OAImportExportSettingsConverter : NSObject
 
-+ (NSString *) rulerWidgetModeToString:(EOARulerWidgetMode)rulerMode;
 + (NSString *) booleanPreferenceToString:(BOOL)pref;
 + (NSString *) arrayPreferenceToString:(NSArray *)pref;
 

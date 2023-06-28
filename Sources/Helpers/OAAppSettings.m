@@ -4660,7 +4660,7 @@
     }
 
     [OAAppData.defaults resetProfileSettingsForMode:mode];
-    [[[OsmAndApp instance] widgetSettingResetObservable] notifyEventWithKey:mode];
+    [NSNotificationCenter.defaultCenter postNotificationName:kWidgetVisibilityChangedMotification object:nil];
 }
 
 // Common Settings

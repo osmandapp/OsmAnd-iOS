@@ -16,10 +16,17 @@ class WidgetsListViewController: OABaseSegmentedControlViewController {
     
     let panels = WidgetsPanel.values
     
-    var widgetPanel: WidgetsPanel! {
+    private var widgetPanel: WidgetsPanel! {
         didSet {
             navigationItem.title = getTitle()
             
+            updateUI(true)
+        }
+    }
+    
+    private var editMode: Bool = false {
+        didSet {
+            tableView.isEditing = editMode
             updateUI(true)
         }
     }
@@ -127,8 +134,7 @@ extension WidgetsListViewController {
     }
     
     @objc func onWidgetStateChanged() {
-        generateData()
-        tableView.reloadData()
+        updateUI(true)
     }
     
     override func onRowSelected(_ indexPath: IndexPath!) {
@@ -141,9 +147,46 @@ extension WidgetsListViewController {
             show(vc)
         }
     }
+    
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    // TODO: delete section reorder logic is in ReorderWidgetsAdapter, ReorderWidgetsAdapterHelper in Android
+    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let row = tableData.item(for: sourceIndexPath)
+        tableData.removeRow(at: sourceIndexPath)
+        tableData.addRow(at: destinationIndexPath, row: row)
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let item = tableData.item(for: indexPath)
+            if let widgetInfo = item.obj(forKey: "widget_info") as? MapWidgetInfo {
+                tableData.removeRow(at: indexPath)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+                deleteWidget(widgetInfo)
+            }
+        }
+    }
+    
+    private func deleteWidget(_ widgetInfo: MapWidgetInfo) {
+        widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: NSNumber(value: false), recreateControls: true)
+    }
+    
+    override func tableView(_ tableView: UITableView,
+                            targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
+                            toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        if proposedDestinationIndexPath.section >= self.sectionsCount() {
+            let prevSection = proposedDestinationIndexPath.section - 1
+            let lastRowInSection = self.rowsCount(prevSection)
+            return IndexPath(row: lastRowInSection, section: prevSection)
+        }
+        return proposedDestinationIndexPath
+    }
 }
 
-// Appearance
+// MARK: Appearance
 extension WidgetsListViewController {
     
     func setupBottomFonts() {
@@ -162,9 +205,52 @@ extension WidgetsListViewController {
     override func getTopButtonTitle() -> String {
         return localizedString("add_widget")
     }
+    
+    override func getLeftNavbarButtonTitle() -> String! {
+        editMode ? localizedString("shared_string_cancel") : nil
+    }
+    
+    override func getRightNavbarButtons() -> [UIBarButtonItem]! {
+        if editMode {
+            let button = createRightNavbarButton(localizedString("shared_string_done"), iconName: nil, action: #selector(onRightNavbarButtonPressed), menu: nil)
+            return [button!]
+        }
+        return nil
+    }
+    
+    override func onRightNavbarButtonPressed() {
+        var arr = [MapWidgetInfo]()
+        var orders = [[String]]()
+        var currPage = [String]()
+        for sec in 0..<tableData.sectionCount() {
+            let section = tableData.sectionData(for: sec)
+            for r in 0..<section.rowCount() {
+                let rowData = section.getRow(r)
+                if let row = rowData.obj(forKey: "widget_info") as? MapWidgetInfo {
+                    currPage.append(row.key)
+                    arr.append(row)
+                }
+            }
+            orders.append(currPage)
+            currPage = [String]()
+        }
+        
+        widgetPanel.setWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode)
+        widgetRegistry.reorderWidgets()
+        OARootViewController.instance().mapPanel.recreateControls()
+        editMode = false
+    }
+    
+    override func onLeftNavbarButtonPressed() {
+        if editMode {
+            editMode = false
+            return
+        }
+        super.onLeftNavbarButtonPressed()
+    }
 
     override func getBottomButtonTitle() -> String {
-        return localizedString("shared_string_edit")
+        return localizedString(editMode ? "add_page" : "shared_string_edit")
     }
 
     override func getTopButtonColorScheme() -> EOABaseButtonColorScheme {
@@ -182,6 +268,12 @@ extension WidgetsListViewController {
     }
     
     override func onBottomButtonPressed() {
-        // TODO: enter edit mode
+        if (editMode) {
+            let section = tableData.createNewSection()
+            section.headerText = String(format:localizedString("shared_string_page_number"), tableData.sectionCount())
+            tableView.reloadData()
+        } else {
+            editMode = true
+        }
     }
 }

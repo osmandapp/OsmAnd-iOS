@@ -184,7 +184,6 @@ extension WidgetConfigurationViewController {
         attrStr.addAttribute(.font, value: font, range: NSRange(location: 0, length: attrStr.length))
 
         // Set color attribute
-        let color = UIColor.red
         attrStr.addAttribute(.foregroundColor, value: UIColor(rgb: Int(color_text_footer)), range: NSRange(location: 0, length: attrStr.length))
         return attrStr
     }

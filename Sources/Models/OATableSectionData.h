@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)addRow:(OATableRowData *)rowData;
 - (void)addRows:(NSArray<OATableRowData *> *)rows;
+- (void)addRow:(OATableRowData *)rowData position:(NSUInteger)position;
 - (OATableRowData *) addRowFromDictionary:(NSDictionary *)dictionary;
 - (void)removeRowAtIndex:(NSInteger)index;
 - (void)removeAllRows;

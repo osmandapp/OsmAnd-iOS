@@ -60,6 +60,11 @@
     return nil;
 }
 
+- (void)addRow:(OATableRowData *)rowData position:(NSUInteger)position
+{
+    [_rowData insertObject:rowData atIndex:position];
+}
+
 - (void)addRow:(OATableRowData *)rowData
 {
     [_rowData addObject:rowData];

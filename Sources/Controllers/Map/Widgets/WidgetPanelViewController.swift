@@ -113,7 +113,7 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
     
     private func calculateContentSize() -> (width: CGFloat, height: CGFloat) {
         var width: CGFloat = 0
-        var height: CGFloat = Self.contentHeight
+        var height: CGFloat = pages.isEmpty ? 0 : Self.contentHeight
         for (idx, page) in pages.enumerated() {
             let widgetSize = (page as? WidgetPageViewController)?.layoutWidgets() ?? (0, 0)
             if idx == currentIndex {
@@ -121,7 +121,9 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
             }
             width = max(width, widgetSize.0)
         }
-        height = max(height, Self.contentHeight)
+        if !widgetPages.isEmpty {
+            height = max(height, Self.contentHeight)
+        }
         return (width + 2, height)
     }
     
@@ -138,7 +140,7 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
                 }
             }
         }
-
+        self.view.isHidden = widgetPages.isEmpty
         self.view.layoutIfNeeded()
     }
     

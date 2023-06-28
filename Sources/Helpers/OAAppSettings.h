@@ -983,6 +983,10 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 // Contour Lines
 @property (nonatomic) OACommonString *contourLinesZoom;
 
+@property (nonatomic) OACommonString *hikingRoutesParameter;
+@property (nonatomic) OACommonString *cycleRoutesParameter;
+@property (nonatomic) OACommonString *mountainBikeRoutesParameter;
+
 // Custom plugins
 @property (nonatomic) NSString *customPluginsJson;
 

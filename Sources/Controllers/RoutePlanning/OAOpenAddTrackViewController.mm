@@ -141,11 +141,11 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    NSString *headerDescription = _screenType == EOAFollowTrack ? OALocalizedString(@"select_track_to_follow") : @"";
-    if (_screenType != EOAOpenExistingTrack)
+    
+    if (_screenType == EOAFollowTrack)
     {
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-            self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:headerDescription font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+            self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_track_to_follow") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
             [self.tableView reloadData];
         } completion:nil];
     }

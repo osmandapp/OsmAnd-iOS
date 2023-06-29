@@ -408,7 +408,8 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
                 }
                 if (!isDescription && !icon)
                 {
-                    icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", [pType.name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
+                    if (![pType.name isEqualToString:@"start_date"])
+                        icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", [pType.name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
                     if (isText && icon)
                         textPrefix = @"";
                 }

@@ -15,7 +15,7 @@
 
 #define kWeatherEntireWorldRegionId @"entire_world"
 
-#define kWeatherForecastExpireTime 1000 * 60 * 60 * 12
+#define kWeatherCacheExpireTime 1000 * 60 * 60 * 6
 
 typedef NS_ENUM(NSInteger, EOAWeatherForecastUpdatesFrequency)
 {

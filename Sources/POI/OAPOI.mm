@@ -9,6 +9,7 @@
 #import "OAPOI.h"
 #import "OAAppSettings.h"
 #import "OAPOIHelper.h"
+#import "OAGPXDocumentPrimitives.h"
 
 #define TYPE @"type"
 #define SUBTYPE @"subtype"
@@ -16,6 +17,17 @@
 #define OPENING_HOURS @"opening_hours"
 #define COLLAPSABLE_PREFIX @"collapsable_"
 #define SEPARATOR @";"
+
+static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
+    COLOR_NAME_EXTENSION,
+    ICON_NAME_EXTENSION,
+    BACKGROUND_TYPE_EXTENSION,
+    PROFILE_TYPE_EXTENSION,
+    ADDRESS_EXTENSION,
+    [NSString stringWithFormat:@"%@%@", PRIVATE_PREFIX, AMENITY_NAME],
+    [NSString stringWithFormat:@"%@%@", PRIVATE_PREFIX, TYPE],
+    [NSString stringWithFormat:@"%@%@", PRIVATE_PREFIX, SUBTYPE]
+];
 
 @implementation OAPOIRoutePoint
 
@@ -330,7 +342,7 @@
         NSString *subType = nil;
         NSString *openingHours = nil;
         NSMutableDictionary<NSString *, NSString *> *additionalInfo = [NSMutableDictionary dictionary];
-        
+
         for (NSString *key in map.allKeys)
         {
             if ([key hasPrefix:privatePrefix])
@@ -339,8 +351,6 @@
                 if ([shortKey isEqualToString:TYPE])
                 {
                     type = [OAPOIHelper.sharedInstance getPoiTypeByName:map[key]];
-                    if (!type)
-                        type = [OAPOIHelper.sharedInstance getDefaultOtherCategoryType];
                 }
                 else if ([shortKey isEqualToString:SUBTYPE])
                 {
@@ -360,15 +370,14 @@
             else
             {
                 NSString *shortKey = [key componentsSeparatedByString:@":"].lastObject;
-                if (![shortKey isEqualToString:@"icon"] &&
-                    ![key isEqualToString:@"color"] &&
-                    ![key isEqualToString:@"background"])
-                {
+                if (![HIDDEN_EXTENSIONS containsObject:shortKey] && ![HIDDEN_EXTENSIONS containsObject:key])
                     additionalInfo[key] = map[key];
-                }
             }
         }
-        
+
+        if (!type)
+            type = [OAPOIHelper.sharedInstance getDefaultOtherCategoryType];
+
         if (type)
         {
             amenity = [[OAPOI alloc] init];

@@ -78,7 +78,7 @@ class WidgetsListViewController: OABaseSegmentedControlViewController {
             guard let widget = widget as? MapWidgetInfo else { continue }
             let row = section.createNewRow()
             row.setObj(widget, forKey: "widget_info")
-            row.iconName = widget.getMapIconId(nightMode: OAAppSettings.sharedManager().nightMode)
+            row.iconName = widget.widget.widgetType?.getIconName(OAAppSettings.sharedManager().nightMode)
             row.title = widget.getTitle()
             row.descr = widget.getMessage()
             row.cellType = OASimpleTableViewCell.getIdentifier()

@@ -13,6 +13,8 @@
 #import "OAOsmNotesSettingsItem.h"
 #import "OAOsmEditsSettingsItem.h"
 #import "Localization.h"
+#import "OARootViewController.h"
+#import "OAMapWidgetRegistry.h"
 
 #import "OASettingsItem.h"
 #import "OAAvoidRoadsSettingsItem.h"
@@ -697,6 +699,7 @@
         app.resourcesManager->rescanUnmanagedStoragePaths(true);
         [app.localResourcesChangedObservable notifyEvent];
     }
+    [[OARootViewController instance].mapPanel.mapWidgetRegistry reorderWidgets];
 }
 
 - (void) onPostExecute:(BOOL)success

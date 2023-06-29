@@ -2028,7 +2028,7 @@ typedef enum
             }
             return;
         }
-        OAOpenAddTrackViewController *saveTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOAOpenExistingTrack showCurrent:YES];
+        OAOpenAddTrackViewController *saveTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOASelectTrack showCurrent:YES];
         saveTrackViewController.delegate = self;
         [self presentViewController:saveTrackViewController animated:YES completion:nil];
     }

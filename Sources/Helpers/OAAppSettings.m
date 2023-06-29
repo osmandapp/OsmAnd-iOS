@@ -2068,6 +2068,31 @@
     [self set:defaultValue];
 }
 
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSMutableArray<NSArray<NSString *> *> *res = [NSMutableArray array];
+    NSArray<NSString *> *subarrays = [strValue componentsSeparatedByString:@";"];
+    for (NSString *str in subarrays)
+    {
+        if (str.length > 0) {
+            [res addObject:[str componentsSeparatedByString:@","]];
+        }
+    }
+    [self set:res mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    NSArray<NSArray<NSString *> *> *val = [self get:mode];
+    NSMutableString *result = [NSMutableString string];
+    for (NSArray<NSString *> *innerArray in val) {
+        NSString *string = [innerArray componentsJoinedByString:@","];
+        [result appendString:string];
+        [result appendString:@";"];
+    }
+    return result;
+}
+
 @end
 
 @interface OACommonSubscriptionState ()

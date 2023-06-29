@@ -1272,7 +1272,7 @@
 "rendering_value_red_name" = "Красный";
 "rendering_attr_surfaceIntegrity_name" = "Качество дорожного покрытия";
 "routing_attr_avoid_sett_name" = "Без булыжников или брусчатки";
-"rendering_attr_contourColorScheme_name" = "Цветовая гамма горизонталей";
+"rendering_attr_contourColorScheme_name" = "Цветовая схема горизонталей";
 "rendering_attr_highway_class_footway_name" = "Пешеходная";
 "rendering_attr_surface_paving_stones_name" = "Тротуарная плитка";
 "rendering_attr_alpineHiking_description" = "Раскраска троп и дорог согласно шкале SAC.";
@@ -1578,7 +1578,7 @@
 "gpx_analyze" = "Анализировать";
 "osmand_parking_warning" = "Предупреждение";
 "map_transparency" = "Прозрачность основной карты";
-"srtm_color_scheme" = "Цвет горизонталей";
+"srtm_color_scheme" = "Цветовая схема";
 "shared_string_zoom_levels" = "Уровни масштаба";
 "shared_string_appearance" = "Внешний вид";
 "context_menu_points_of_group" = "Все точки группы";
@@ -2532,7 +2532,7 @@
 "recalc_angle_dialog_descr" = "Между текущей позицией и рассчитанным маршрутом будет отображаться прямой отрезок, пока маршрут не будет пересчитан.";
 "shared_string_status" = "Статус";
 "shared_string_layers" = "Слои";
-"rendering_attr_depthContourColorScheme_name" = "Цвет изобат";
+"rendering_attr_depthContourColorScheme_name" = "Цветовая схема линий";
 "you_can_get_feature_as_part_of_pattern" = "Получить «%@» как часть тарифного плана %@. Сравнение планов:";
 "shared_string_cloud" = "Облако";
 "service_is_not_available_please_try_later" = "Сервис недоступен. Повторите попытку позже.";
@@ -2596,7 +2596,7 @@
 "rendering_attr_horse_scale_critical_name" = "Критический";
 "rendering_attr_weatherPrecipitationContours_name" = "Изолинии осадков (изогиеты)";
 "routing_attr_prefer_hiking_routes_name" = "Предпочитать пешеходные маршруты";
-"rendering_attr_depthContourColorScheme_description" = "Цвет контурных линий глубины (изобат)";
+"rendering_attr_depthContourColorScheme_description" = "Цветовая схема линий глубины (изобат)";
 "rendering_attr_showMtbScaleIMBATrails_description" = "Показать выделенные трассы для горных велосипедов.";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Значки на мелком масштабе";
 "routing_attr_allow_intermittent_description" = "Разрешить пересыхающие водные пути";

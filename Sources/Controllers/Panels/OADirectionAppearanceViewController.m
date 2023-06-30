@@ -216,7 +216,7 @@
             cell.separatorInset = UIEdgeInsetsMake(0.0, 50.0, 0.0, 0.0);
         }
         NSString *key = item[@"key"];
-        EOADistanceIndicationConstant distanceIndication = [_settings.distanceIndication get];
+        EOADistanceIndicationConstant distanceIndication = [_settings.mapMarkersDisplayMode get];
         EOAActiveMarkerConstant activeMarkers = [_settings.activeMarkers get];
         BOOL selected = NO;
         if ([key isEqualToString:kOneActiveMarker])
@@ -290,19 +290,19 @@
             [_settings.activeMarkers set:ONE_ACTIVE_MARKER];
         else
             [_settings.activeMarkers set:TWO_ACTIVE_MARKERS];
-        if ([_settings.distanceIndication get] == WIDGET_DISPLAY)
+        if ([_settings.mapMarkersDisplayMode get] == WIDGET_DISPLAY)
             [self setWidgetVisibility:YES collapsed:NO];
     }
     else if ([item[@"section"] isEqualToString:@"distanceIndication"])
     {
         if (indexPath.row == 1)
         {
-            [_settings.distanceIndication set:TOP_BAR_DISPLAY];
+            [_settings.mapMarkersDisplayMode set:TOP_BAR_DISPLAY];
             [self setWidgetVisibility:NO collapsed:NO];
         }
         else
         {
-            [_settings.distanceIndication set:WIDGET_DISPLAY];
+            [_settings.mapMarkersDisplayMode set:WIDGET_DISPLAY];
             [self setWidgetVisibility:YES collapsed:NO];
         }
     }

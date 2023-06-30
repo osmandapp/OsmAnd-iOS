@@ -202,7 +202,7 @@ static const NSInteger _buttonsCount = 4;
     _buttonShareLabel.text = OALocalizedString(@"shared_string_share");
     _buttonShare.accessibilityLabel = OALocalizedString(@"shared_string_share");
     _buttonDirectionLabel.text = OALocalizedString(@"map_marker");
-    _buttonDirection.accessibilityLabel = OALocalizedString(@"map_marker");
+    _buttonDirection.accessibilityLabel = OALocalizedString(@"quick_action_add_marker");
     [_buttonShowInfo setTitle:[OALocalizedString(@"info_button") upperCase] forState:UIControlStateNormal];
     [_buttonRoute setTitle:[OALocalizedString(@"shared_string_navigation") upperCase] forState:UIControlStateNormal];
 
@@ -684,7 +684,7 @@ static const NSInteger _buttonsCount = 4;
         _buttonDirectionIcon.image = [UIImage templateImageNamed:@"ic_custom_arrow_direction"];
         _buttonDirectionIcon.tintColor = UIColorFromRGB(color_primary_purple);
         _buttonDirectionLabel.text = OALocalizedString(@"map_marker");
-        _buttonDirection.accessibilityLabel = OALocalizedString(@"map_marker");
+        _buttonDirection.accessibilityLabel = OALocalizedString(@"quick_action_add_marker");
         _buttonDirectionLabel.textColor = UIColorFromRGB(color_primary_purple);
     }
     

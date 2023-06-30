@@ -15,6 +15,7 @@
 #import "OAImageDescTableViewCell.h"
 #import "OARouteKey.h"
 #import "OAPOIHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kDescriptionImageCell 0
 #define kInfoCreatedOnCell 0
@@ -175,8 +176,8 @@
         }];
         [infoSectionData.subjects addObject:websiteCellData];
     }
-    
-    NSString *wiki = routeKey.routeKey.getWikipedia().toNSString();
+
+    NSString *wiki = [OAWikiAlgorithms getWikiUrlWithText:routeKey.routeKey.getWikipedia().toNSString()];
     if (wiki.length > 0)
     {
         OAGPXTableCellData *wikiCellData = [OAGPXTableCellData withData:@{
@@ -484,6 +485,10 @@
     else if ([tableData.key isEqualToString:@"read_full_description"] && self.trackMenuDelegate)
     {
         [self.trackMenuDelegate openDescription];
+    }
+    else if ([tableData.key isEqualToString:@"wiki"] && self.trackMenuDelegate)
+    {
+        [self.trackMenuDelegate openURL:((OAGPXTableCellData *) tableData).desc];
     }
 }
 

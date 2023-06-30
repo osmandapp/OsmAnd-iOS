@@ -22,7 +22,8 @@
 
 - (instancetype) initWithFileName:(NSString *)fileName;
 - (instancetype) initWithFileName:(NSString *)fileName
-                  targetMenuState:(OATargetMenuViewControllerState *)targetMenuState;
+                  targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
+                adjustMapPosition:(BOOL)adjustMapPosition;
 - (instancetype) initWithInitialPoint:(CLLocation *)latLon;
 - (instancetype) initWithEditingContext:(OAMeasurementEditingContext *)editingCtx followTrackMode:(BOOL)followTrackMode showSnapWarning:(BOOL)showSnapWarning;
 

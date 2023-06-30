@@ -11,6 +11,7 @@
 #import "OAAppSettings.h"
 #import "OARoutingHelperUtils.h"
 #import "OARoutingHelper.h"
+#import "OARoutingHelper+cpp.h"
 #import "OARouteDirectionInfo.h"
 #import "OAVoiceRouter.h"
 #import "OAAnnounceTimeDistances.h"

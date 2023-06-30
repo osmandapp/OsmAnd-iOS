@@ -23,19 +23,25 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
     EOABaseNavbarStyleCustomLargeTitle
 };
 
+@class OATableDataModel;
+
 @interface OABaseNavbarViewController : OASuperViewController<UIGestureRecognizerDelegate, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, readonly) OATableDataModel *tableData;
 
 - (void)commonInit;
 - (void)postInit;
 
 - (void)updateNavbar;
-- (void)updateUI;
-- (void)updateUIAnimated;
+- (void)updateUI:(BOOL)animated;
 
 - (UIBarButtonItem *)createRightNavbarButton:(NSString *)title
                                     iconName:(NSString *)iconName
+                                      action:(SEL)action
+                                        menu:(UIMenu *)menu;
+- (UIBarButtonItem *)createRightNavbarButton:(NSString *)title
+                              systemIconName:(NSString *)iconName
                                       action:(SEL)action
                                         menu:(UIMenu *)menu;
 - (void)changeButtonAvailability:(UIBarButtonItem *)barButtonItem isEnabled:(BOOL)isEnabled;
@@ -74,5 +80,8 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 - (void)onRightNavbarButtonPressed;
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView;
 - (void)onRotation;
+
+// Use to refresh button appearance
+- (void)setupNavbarButtons;
 
 @end

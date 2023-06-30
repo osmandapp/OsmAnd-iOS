@@ -143,7 +143,7 @@
 {
     [self clean];
     
-    if ([_settings.distanceIndication get] == WIDGET_DISPLAY)
+    if ([_settings.mapMarkersDisplayMode get] == WIDGET_DISPLAY)
         return;
 
     if ([OADestinationsHelper instance].sortedDestinations.count == 0)
@@ -183,7 +183,7 @@
         [cell updateDirections:location direction:direction];
     }
     
-    if (secondCellDestination && [_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS && [_settings.distanceIndicationVisibility get])
+    if (secondCellDestination && [_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS && [_settings.distanceIndicationVisibility get])
     {
         OADestination *destination = secondCellDestination;
         
@@ -231,7 +231,7 @@
         [_destinationCells removeLastObject];
     }
 
-    if ([_settings.distanceIndication get] == WIDGET_DISPLAY || ![_settings.distanceIndicationVisibility get])
+    if ([_settings.mapMarkersDisplayMode get] == WIDGET_DISPLAY || ![_settings.distanceIndicationVisibility get])
     {
         while (_destinationCells.count > 0)
         {
@@ -359,7 +359,7 @@
             
             if (_multiCell)
             {
-                if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+                if ([_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY)
                     _multiCell.contentView.hidden = NO;
                 else
                     _multiCell.contentView.hidden = YES;
@@ -372,7 +372,7 @@
             _singleLineMode = NO;
             CGFloat h = 0.0;
 
-            if (_destinationCells.count > 0 && [_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+            if (_destinationCells.count > 0 && [_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY)
                 h = 50.0 + 35.0 * (_destinationCells.count - 1.0);
             else
                 h = navBarHeight;
@@ -402,7 +402,7 @@
             
             if (_multiCell)
             {
-                if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+                if ([_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY)
                     _multiCell.contentView.hidden = NO;
                 else
                     _multiCell.contentView.hidden = YES;
@@ -421,7 +421,7 @@
             
             if (_multiCell)
             {
-                if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+                if ([_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY)
                     _multiCell.contentView.hidden = NO;
                 else
                     _multiCell.contentView.hidden = YES;

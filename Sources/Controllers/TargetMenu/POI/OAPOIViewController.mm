@@ -47,6 +47,7 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
 
 static const NSArray<NSString *> *kContactUrlTags = @[@"youtube", @"facebook", @"instagram", @"twitter", @"vk", @"ok", @"webcam", @"telegram", @"linkedin", @"pinterest", @"foursquare", @"xing", @"flickr", @"email", @"mastodon", @"diaspora", @"gnusocial", @"skype"];
 static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsapp", @"viber"];
+static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
 - (instancetype) init
 {
@@ -171,6 +172,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
     NSString *preferredLang = [OAUtilities preferredLang];
     NSMutableArray<OARowInfo *> *infoRows = [NSMutableArray array];
     NSMutableArray<OARowInfo *> *descriptions = [NSMutableArray array];
+    NSMutableArray<OARowInfo *> *urlRows = [NSMutableArray array];
 
     NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *poiAdditionalCategories = [NSMutableDictionary dictionary];
     OARowInfo *cuisineRow;
@@ -307,7 +309,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
             textColor = UIColorFromRGB(color_primary_purple);
             isPhoneNumber = YES;
         }
-        else if ([convertedKey isEqualToString:WEBSITE] || [kContactUrlTags containsObject:convertedKey])
+        else if ([convertedKey isEqualToString:WEBSITE] || [convertedKey isEqualToString:URL_KEY] || [kContactUrlTags containsObject:convertedKey])
         {
             if ([kContactUrlTags containsObject:convertedKey])
             {
@@ -401,14 +403,14 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
                         NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
                         [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
                         [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-                        NSInteger population = [vl integerValue];
-                        vl = [numberFormatter stringFromNumber:@(population)];
+                        NSInteger numberValue = [vl integerValue];
+                        vl = [numberFormatter stringFromNumber:@(numberValue)];
                     }
                 }
                 if (!isDescription && !icon)
                 {
                     icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", [pType.name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
-                    if (isText && icon)
+                    if (isText && icon && ![kPrefixTags containsObject:convertedKey])
                         textPrefix = @"";
                 }
                 if (!icon && isText && !iconId)
@@ -482,6 +484,8 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
             [descriptions addObject:row];
         else if (isCuisine)
             cuisineRow = row;
+        else if (isUrl)
+            [self addRowIfNotExsists:row toDestinationRows:urlRows];
         else if (!poiType)
             [infoRows addObject:row];
     }
@@ -580,6 +584,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
         [infoRows addObject:row];
     }
 
+    [infoRows addObjectsFromArray:urlRows];
     [infoRows sortUsingComparator:^NSComparisonResult(OARowInfo *row1, OARowInfo *row2) {
         if (row1.order < row2.order)
             return NSOrderedAscending;
@@ -638,8 +643,17 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
     }
 }
 
+- (void) addRowIfNotExsists:(OARowInfo *)newRow toDestinationRows:(NSMutableArray<OARowInfo *> *)rows
+{
+    if (![rows containsObject:newRow])
+        [rows addObject:newRow];
+}
+
 - (NSString *)getSocialMediaUrl:(NSString *)key value:(NSString *)value
 {
+    if (!value || value.length == 0)
+        return nil;
+    
     // Remove leading and closing slashes
     NSMutableString *sb = [NSMutableString stringWithString:[value trim]];
     if ([sb characterAtIndex:0] == '/')

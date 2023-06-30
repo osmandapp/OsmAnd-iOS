@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class OAApplicationMode;
+
 @interface OAWidgetState : NSObject
 
 - (NSString *) getMenuTitle;
@@ -27,5 +29,9 @@
 - (NSArray<NSString *> *) getMenuItemIds;
 
 - (void) changeState:(NSString *)stateId;
+
+- (NSString *) getSettingsIconId:(BOOL)nightMode;
+- (void) changeToNextState;
+- (void) copyPrefs:(OAApplicationMode *)appMode customId:(NSString *)customId;
 
 @end

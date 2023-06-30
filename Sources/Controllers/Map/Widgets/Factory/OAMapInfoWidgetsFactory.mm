@@ -153,14 +153,14 @@
                             {
                                 [weatherControlWeak setText:bandValueStr.toNSString() subtext:bandUnit];
                             }
-                            [selfWeak setMapCenterMarkerVisibility:YES];
+//                            [selfWeak setMapCenterMarkerVisibility:YES];
                         }
                     }
                     else if (cachedValue[0] != undefined)
                     {
                         cachedValue[0] = undefined;
                         [weatherControlWeak setText:nil subtext:nil];
-                        [selfWeak setMapCenterMarkerVisibility:NO];
+//                        [selfWeak setMapCenterMarkerVisibility:NO];
                     }
                 });
             };
@@ -201,41 +201,6 @@
 
     [weatherControl setIcons:iconNameDay widgetNightIcon:iconNameNight];
     return weatherControl;
-}
-
-- (void) setMapCenterMarkerVisibility:(BOOL)visible
-{
-    UIView *targetView;
-    UIView *view = [OARootViewController instance].mapPanel.mapViewController.view;
-    if (view)
-    {
-        for (UIView *v in view.subviews)
-        {
-            if (v.tag == 2222)
-                targetView = v;
-        }
-        if (targetView.tag != 2222)
-        {
-            double w = 20;
-            double h = 20;
-            targetView = [[UIView alloc] initWithFrame:{view.frame.size.width / 2.0 - w / 2.0, view.frame.size.height / 2.0 - h / 2.0, w, h}];
-            targetView.backgroundColor = UIColor.clearColor;
-            targetView.tag = 2222;
-
-            CAShapeLayer *shape = [CAShapeLayer layer];
-            [shape setPath:[[UIBezierPath bezierPathWithOvalInRect:CGRectMake(2, 2, w - 4, h - 4)] CGPath]];
-            shape.strokeColor = UIColor.redColor.CGColor;
-            shape.fillColor = UIColor.clearColor.CGColor;
-            [targetView.layer addSublayer:shape];
-        }
-        if (targetView)
-        {
-            if (visible)
-                [view addSubview:targetView];
-            else
-                [targetView removeFromSuperview];
-        }
-    }
 }
 
 @end

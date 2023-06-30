@@ -7,7 +7,9 @@
 //
 
 #import "OABaseNavbarViewController.h"
-#import "OASimpleTableViewCell.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
 #import "OAUtilities.h"
 #import "OASizes.h"
 #import "OAColors.h"
@@ -43,6 +45,7 @@
 
 - (void)commonInit
 {
+    _tableData = [[OATableDataModel alloc] init];
 }
 
 // use in overridden init method if class properties have complex dependencies
@@ -111,13 +114,17 @@
         NSForegroundColorAttributeName : [self getLargeTitleColor]
     };
 
+    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+    
     if (![self isNavbarSeparatorVisible])
     {
         appearance.shadowImage = nil;
         appearance.shadowColor = nil;
+        blurAppearance.shadowColor = nil;
+        blurAppearance.shadowImage = nil;
     }
-
-    self.navigationController.navigationBar.standardAppearance = [self isNavbarBlurring] ? [[UINavigationBarAppearance alloc] init] : appearance;
+    
+    self.navigationController.navigationBar.standardAppearance = [self isNavbarBlurring] ? blurAppearance : appearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
 
     self.navigationController.navigationBar.tintColor = [self getNavbarButtonsTintColor];
@@ -238,26 +245,35 @@
     [self setupNavbarButtons];
     if ([self isScreenLoaded])
         [self setupTableHeaderView];
+    if (_rightIconLargeTitle)
+        [self updateRightIconLargeTitle];
 }
 
-- (void)updateUI
+- (void)updateUI:(BOOL)animated
 {
     [self generateData];
-    [self.tableView reloadData];
+    [self reloadData:animated];
     [self applyLocalization];
     [self updateNavbar];
 }
 
-- (void)updateUIAnimated
+- (void) reloadData:(BOOL)animated
 {
-    [UIView transitionWithView:self.view
-                      duration:.2
-                       options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^(void)
-                    {
-                        [self updateUI];
-                    }
-                    completion:nil];
+    if (animated)
+    {
+        [UIView transitionWithView:self.view
+                          duration:.2
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^(void)
+                        {
+                            [self.tableView reloadData];
+                        }
+                        completion:nil];
+    }
+    else
+    {
+        [self.tableView reloadData];
+    }
 }
 
 - (void)updateRightIconLargeTitle
@@ -418,7 +434,23 @@
 }
 
 - (UIBarButtonItem *)createRightNavbarButton:(NSString *)title
+                              systemIconName:(NSString *)iconName
+                                      action:(SEL)action
+                                        menu:(UIMenu *)menu
+{
+    return [self createRightNavbarButton:title icon:[UIImage systemImageNamed:iconName withConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:24.]] action:action menu:menu];
+}
+
+- (UIBarButtonItem *)createRightNavbarButton:(NSString *)title
                                     iconName:(NSString *)iconName
+                                      action:(SEL)action
+                                        menu:(UIMenu *)menu
+{
+    return [self createRightNavbarButton:title icon:[UIImage templateImageNamed:iconName] action:action menu:menu];
+}
+
+- (UIBarButtonItem *)createRightNavbarButton:(NSString *)title
+                                    icon:(UIImage *)icon
                                       action:(SEL)action
                                         menu:(UIMenu *)menu
 {
@@ -431,7 +463,7 @@
     [button setTitleColor:[self getNavbarButtonsTintColor] forState:UIControlStateNormal];
     [button setTitleColor:[[self getNavbarButtonsTintColor] colorWithAlphaComponent:.3] forState:UIControlStateHighlighted];
     [button setTitle:title forState:UIControlStateNormal];
-    [button setImage:[UIImage templateImageNamed:iconName] forState:UIControlStateNormal];
+    [button setImage:icon forState:UIControlStateNormal];
     [button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
     button.translatesAutoresizingMaskIntoConstraints = NO;
@@ -615,16 +647,22 @@
 
 - (NSString *)getTitleForHeader:(NSInteger)section
 {
-    return @"";
+    if (self.tableData.sectionCount > 0)
+        return [self.tableData sectionDataForIndex:section].headerText;
+    return nil;
 }
 
 - (NSString *)getTitleForFooter:(NSInteger)section
 {
-    return @"";
+    if (self.tableData.sectionCount > 0)
+        return [self.tableData sectionDataForIndex:section].footerText;
+    return nil;
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
 {
+    if (self.tableData.sectionCount > 0)
+        return [self.tableData rowCount:section];
     return 0;
 }
 
@@ -635,7 +673,7 @@
 
 - (NSInteger)sectionsCount
 {
-    return 0;
+    return self.tableData.sectionCount;
 }
 
 - (CGFloat)getCustomHeightForHeader:(NSInteger)section

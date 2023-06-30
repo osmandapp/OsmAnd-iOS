@@ -25,7 +25,7 @@
 #define kDefaultPluginsSection 0
 #define kCustomPluginsSection 1
 
-@interface OAPluginsViewController () <UIAlertViewDelegate, OASubscriptionBannerCardViewDelegate>
+@interface OAPluginsViewController () <UIAlertViewDelegate, OASubscriptionBannerCardViewDelegate, OAPluginDetailsDelegate>
 
 @end
 
@@ -213,6 +213,7 @@
         if (plugin)
             pluginDetails = [[OAPluginDetailsViewController alloc] initWithCustomPlugin:plugin];
     }
+    pluginDetails.delegate = self;
     [self showViewController:pluginDetails];
 }
 
@@ -315,6 +316,14 @@
 - (void)onButtonPressed
 {
     [OAChoosePlanHelper showChoosePlanScreen:self.navigationController];
+}
+
+#pragma mark - OAPluginDetailsDelegate
+
+- (void)onCustomPluginDeleted
+{
+    _customPlugins = [OAPlugin getCustomPlugins];
+    [self.tableView reloadData];
 }
 
 @end

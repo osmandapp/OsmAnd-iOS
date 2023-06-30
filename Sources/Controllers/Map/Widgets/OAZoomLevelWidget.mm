@@ -11,6 +11,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAZoomLevelWidget
 {
@@ -20,7 +21,7 @@
 
 - (instancetype) init
 {
-    self = [super init];
+    self = [super initWithType:OAWidgetType.devZoomLevel];
     if (self)
     {
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
@@ -51,7 +52,7 @@
 
 - (void) setImage:(UIImage *)image
 {
-    [self.imageView setImage:image.imageFlippedForRightToLeftLayoutDirection];
+    [super setImage:image.imageFlippedForRightToLeftLayoutDirection];
 }
 
 @end

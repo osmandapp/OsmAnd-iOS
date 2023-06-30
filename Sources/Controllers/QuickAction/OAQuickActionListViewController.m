@@ -15,9 +15,14 @@
 #import "OATitleDescrDraggableCell.h"
 #import "OAMultiselectableHeaderView.h"
 #import "OAColors.h"
+#import "OAAppSettings.h"
 #import "OATableViewCustomHeaderView.h"
+#import "OASwitchTableViewCell.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #import <AudioToolbox/AudioServices.h>
+
+#define kEnableSection 0
 
 @interface OAQuickActionListViewController () <MGSwipeTableCellDelegate, OAMultiselectableHeaderDelegate, OAQuickActionListDelegate>
 
@@ -27,6 +32,8 @@
 {
     OAQuickActionRegistry *_registry;
     NSMutableArray<OAQuickAction *> *_data;
+    
+    OAAppSettings *_settings;
 }
 
 #pragma mark - Initialization
@@ -34,6 +41,7 @@
 - (void)commonInit
 {
     _registry = [OAQuickActionRegistry sharedInstance];
+    _settings = OAAppSettings.sharedManager;
 }
 
 #pragma mark - UIViewController
@@ -43,6 +51,12 @@
     [super viewDidLoad];
 
     [self.tableView registerClass:OAMultiselectableHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+}
+
+- (void) onSwitchPressed:(UISwitch *)sender
+{
+    [_settings.quickActionIsOn set:sender.isOn];
+    [self.delegate onWidgetStateChanged];
 }
 
 #pragma mark - Base setup UI
@@ -137,13 +151,16 @@
 
 - (NSInteger)sectionsCount
 {
-    return [self getScreensCount];
+    // Add enable section
+    return [self getScreensCount] + 1;
 }
 
 - (UIView *)getCustomViewForHeader:(NSInteger)section
 {
+    if (section == kEnableSection)
+        return nil;
     OAMultiselectableHeaderView *vw = (OAMultiselectableHeaderView *)[self.tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-    [vw setTitleText:[NSString stringWithFormat:OALocalizedString(@"quick_action_screen_header"), section + 1]];
+    [vw setTitleText:[NSString stringWithFormat:OALocalizedString(@"quick_action_screen_header"), section]];
     vw.section = section;
     vw.delegate = self;
     return vw;
@@ -151,11 +168,16 @@
 
 - (CGFloat)getCustomHeightForHeader:(NSInteger)section
 {
+    if (section == kEnableSection)
+        return 0.;
     return 46.0;
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
 {
+    if (section == kEnableSection)
+        return 1;
+    
     BOOL oneSection = _data.count / 6 < 1;
     BOOL lastSection = section == _data.count / 6;
     return oneSection || lastSection ? _data.count % 6 : 6;
@@ -163,6 +185,27 @@
 
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == kEnableSection)
+    {
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            [cell leftIconVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.switchView.on = _settings.quickActionIsOn.get;
+            cell.titleLabel.text = OALocalizedString(@"shared_string_enabled");
+
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
+        }
+        return cell;
+    }
     OAQuickAction *action = [self getAction:indexPath];
     OATitleDescrDraggableCell* cell = (OATitleDescrDraggableCell *)[self.tableView dequeueReusableCellWithIdentifier:[OATitleDescrDraggableCell getCellIdentifier]];
     if (cell == nil)
@@ -221,15 +264,38 @@
         return;
     
     AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-    NSInteger destRow = destinationIndexPath.row;
-    if (destRow == [tableView numberOfRowsInSection:destinationIndexPath.section] - 1)
-        destinationIndexPath = [NSIndexPath indexPathForRow:destRow - 1 inSection:destinationIndexPath.section];
     
     OAQuickAction *sourceAction = [self getAction:sourceIndexPath];
     OAQuickAction *destAction = [self getAction:destinationIndexPath];
+    destinationIndexPath = [NSIndexPath indexPathForRow:destinationIndexPath.row inSection:destinationIndexPath.section - 1];
+    sourceIndexPath = [NSIndexPath indexPathForRow:sourceIndexPath.row inSection:sourceIndexPath.section - 1];
     [_data setObject:sourceAction atIndexedSubscript:destinationIndexPath.section * 6 + destinationIndexPath.row];
     [_data setObject:destAction atIndexedSubscript:sourceIndexPath.section * 6 + sourceIndexPath.row];
     [self.tableView reloadData];
+}
+
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return indexPath.section != kEnableSection;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return indexPath.section != kEnableSection;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
+{
+    if(proposedDestinationIndexPath.section == kEnableSection)
+    {
+        return sourceIndexPath;
+    }
+    else if (proposedDestinationIndexPath.section >= self.sectionsCount)
+    {
+        NSInteger prevSection = proposedDestinationIndexPath.section - 1;
+        return [NSIndexPath indexPathForRow:[self rowsCount:prevSection] - 1 inSection:prevSection];
+    }
+    return proposedDestinationIndexPath;
 }
 
 #pragma mark - Additions
@@ -255,15 +321,16 @@
 {
     [self.tableView beginUpdates];
     [self.tableView setEditing:NO animated:YES];
-    [self updateUIAnimated];
+    [self updateUI:YES];
     [self.tableView endUpdates];
 }
 
 - (OAQuickAction *)getAction:(NSIndexPath *)indexPath
 {
+    NSIndexPath *correctedPath = indexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section - 1];
     if (_data.count == 1)
         return _data.firstObject;
-    return _data[6 * indexPath.section + indexPath.row];
+    return _data[6 * correctedPath.section + correctedPath.row];
 }
 
 - (void)openQuickActionSetupFor:(NSIndexPath *)indexPath
@@ -281,7 +348,7 @@
     [self.tableView beginUpdates];
     [self.tableView setEditing:YES animated:YES];
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
-    [self updateUIAnimated];
+    [self updateUI:YES];
     [self.tableView endUpdates];
 }
 

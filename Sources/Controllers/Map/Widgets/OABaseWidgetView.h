@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class OABaseWidgetView;
+@class OABaseWidgetView, OAWidgetType, OAWidgetState, OAApplicationMode, OACommonBoolean, OACommonPreference, OATableDataModel;
 
 @protocol OAWidgetListener <NSObject>
 
 @required
-- (void) widgetChanged:(OABaseWidgetView *)widget;
-- (void) widgetVisibilityChanged:(OABaseWidgetView *)widget visible:(BOOL)visible;
-- (void) widgetClicked:(OABaseWidgetView *)widget;
+- (void) widgetChanged:(OABaseWidgetView *_Nullable)widget;
+- (void) widgetVisibilityChanged:(OABaseWidgetView *_Nonnull)widget visible:(BOOL)visible;
+- (void) widgetClicked:(OABaseWidgetView *_Nonnull)widget;
 
 @end
 
@@ -23,10 +23,24 @@
 
 @interface OABaseWidgetView : UIView
 
-@property (nonatomic, weak) id<OAWidgetListener> delegate;
+@property (nonatomic) OAWidgetType * _Nullable widgetType;
+@property (nonatomic, readonly, assign) BOOL nightMode;
+
+@property (nonatomic, weak) id<OAWidgetListener> _Nullable delegate;
+
+- (instancetype _Nonnull )initWithType:(OAWidgetType * _Nonnull)type;
 
 - (BOOL) updateInfo;
 - (BOOL) isTopText;
+
+- (OACommonBoolean * _Nullable ) getWidgetVisibilityPref;
+- (OACommonPreference * _Nullable ) getWidgetSettingsPrefToReset:(OAApplicationMode *_Nonnull)appMode;
+- (void) copySettings:(OAApplicationMode *_Nonnull)appMode customId:(NSString *_Nullable)customId;
+- (OAWidgetState *_Nullable) getWidgetState;
+- (BOOL) isExternal;
+- (OATableDataModel *_Nullable) getSettingsData:(OAApplicationMode *)appMode;
+
+- (void) attachView:(UIView *_Nonnull)container order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *_Nullable)followingWidgets;
 
 @end
 

@@ -9,6 +9,7 @@
 #import "OAGpxApproximator.h"
 #import "OARouteProvider.h"
 #import "OARoutingHelper.h"
+#import "OARoutingHelper+cpp.h"
 #import "OAApplicationMode.h"
 #import "OALocationsHolder.h"
 #import "OAResultMatcher.h"

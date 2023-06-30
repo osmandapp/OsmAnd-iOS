@@ -10,17 +10,13 @@
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "OAAppSettings.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define textHeight 22
+#define imageSide 24
 #define minTextWidth 64
 #define fullTextWidth 90
 
-@interface OATextInfoWidget ()
-
-@property (weak, nonatomic) IBOutlet UILabel *textView;
-@property (weak, nonatomic) IBOutlet UILabel *textShadowView;
-
-@end
 
 @implementation OATextInfoWidget
 {
@@ -40,6 +36,8 @@
     UIFont *_largeBoldFont;
     UIFont *_smallFont;
     UIFont *_smallBoldFont;
+    
+    UIView *_separatorView;
 
     BOOL _metricSystemDepended;
     BOOL _angularUnitsDepended;
@@ -49,58 +47,44 @@
 
 - (instancetype) init
 {
-    NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
-    
-    for (UIView *v in bundle)
-    {
-        if ([v isKindOfClass:[OATextInfoWidget class]])
-        {
-            self = (OATextInfoWidget *)v;
-            break;
-        }
-    }
+    self = [super init];
 
     if (self)
+    {
         self.frame = CGRectMake(0, 0, kTextInfoWidgetWidth, kTextInfoWidgetHeight);
-
-    [self commonInit];
-
+    }
     return self;
 }
 
 - (instancetype) initWithFrame:(CGRect)frame
 {
-    NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
-    
-    for (UIView *v in bundle)
-    {
-        if ([v isKindOfClass:[OATextInfoWidget class]])
-        {
-            self = (OATextInfoWidget *)v;
-            break;
-        }
-    }
-    
+    self = [super initWithFrame:frame];
     if (self)
-        self.frame = frame;
-
-    [self commonInit];
+    {
+        self.frame = CGRectMake(0, 0, kTextInfoWidgetWidth, kTextInfoWidgetHeight);
+        [self commonInit];
+    }
     
     return self;
 }
 
 - (void) commonInit
 {
-    CGFloat radius = 3.0;
-    self.backgroundColor = [UIColor whiteColor];
-    self.layer.cornerRadius = radius;
-
-    // drop shadow
-    self.layer.shadowColor = UIColor.blackColor.CGColor;
-    self.layer.shadowOpacity = 0.3;
-    self.layer.shadowRadius = 2.0;
-    self.layer.shadowOffset = CGSizeMake(0.0, 0.0);
+    _textView = [[UILabel alloc] init];
+    _textShadowView = [[UILabel alloc] init];
+    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(2., 4., imageSide, imageSide)];
     
+    [self addSubview:_textShadowView];
+    [self addSubview:_textView];
+    [self addSubview:_imageView];
+    
+    self.backgroundColor = [UIColor whiteColor];
+
+    _separatorView = [[UIView alloc] init];
+    _separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
+    _separatorView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - .5, CGRectGetWidth(self.frame), .5);
+    [self addSubview:_separatorView];
+
     _largeFont = [UIFont systemFontOfSize:21 weight:UIFontWeightSemibold];
     _largeBoldFont = [UIFont systemFontOfSize:21 weight:UIFontWeightBold];
     _primaryFont = _largeFont;
@@ -148,6 +132,11 @@
     _imageView.hidden = hidden;
 }
 
+- (BOOL) setIcons:(OAWidgetType *)widgetType
+{
+    return [self setIcons:widgetType.dayIconName widgetNightIcon:widgetType.nightIconName];
+}
+
 - (BOOL) setIcons:(NSString *)widgetDayIcon widgetNightIcon:(NSString *)widgetNightIcon
 {
     if (![_dayIcon isEqualToString:widgetDayIcon] || ![_nightIcon isEqualToString:widgetNightIcon])
@@ -166,6 +155,16 @@
 - (BOOL) isNight
 {
     return _isNight;
+}
+
+- (NSString *) getIconName
+{
+    return [self getIconName:self.isNight];
+}
+
+- (NSString *) getIconName:(BOOL)nightMode
+{
+    return nightMode ? _nightIcon : _dayIcon;
 }
 
 - (NSString *) combine:(NSString *)text subtext:(NSString *)subtext
@@ -288,6 +287,7 @@
     CGRect tf = _textView.frame;
     tf.origin.x = _imageView.hidden ? 4 : 28;
     tf.size.height = 22;
+    tf.origin.y = ([self getWidgetHeight] - tf.size.height) / 2;
     tf.size.width = MAX(tf.size.width, _imageView.hidden ? fullTextWidth : minTextWidth);
     _textView.frame = tf;
     _textShadowView.frame = tf;
@@ -296,6 +296,8 @@
     f.size.width = tf.origin.x + tf.size.width + 4;
     f.size.height = [self getWidgetHeight];
     self.frame = f;
+    
+    _separatorView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - .5, CGRectGetWidth(self.frame), .5);
 }
 
 - (BOOL) updateVisibility:(BOOL)visible
@@ -373,6 +375,14 @@
     return _explicitlyVisible;
 }
 
+- (void) setTimeText:(NSTimeInterval)time
+{
+    int hours, minutes, seconds;
+    [OAUtilities getHMS:time hours:&hours minutes:&minutes seconds:&seconds];
+    NSString *timeStr = [NSString stringWithFormat:@"%d:%02d", hours, minutes];
+    [self setText:timeStr subtext:nil];
+}
+
 - (void) updateIconMode:(BOOL)night
 {
     _isNight = night;
@@ -398,17 +408,8 @@
     _primaryShadowColor = textShadowColor;
     _unitsShadowColor = textShadowColor;
     _shadowRadius = shadowRadius;
-    
-    self.layer.shadowOpacity = shadowRadius > 0 ? 0.0 : 0.3;
-    [self.class turnLayerBorder:self on:shadowRadius > 0];
 
     [self refreshLabel];
-}
-
-+ (void) turnLayerBorder:(UIView *)view on:(BOOL)on
-{
-    view.layer.borderWidth = on ? 1 : 0;
-    view.layer.borderColor = UIColorFromARGB(color_map_widget_stroke_argb).CGColor;
 }
 
 @end

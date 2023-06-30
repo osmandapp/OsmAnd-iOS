@@ -68,8 +68,7 @@
     if (!_imageUrl || _imageUrl.length == 0)
         return;
     _downloading = YES;
-    NSString* encodedImageURL = [_imageUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    NSURL* imgURL = [NSURL URLWithString:encodedImageURL];
+    NSURL* imgURL = [NSURL URLWithString:_imageUrl];
     NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[aSession dataTaskWithURL:imgURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (((NSHTTPURLResponse *)response).statusCode == 200) {

@@ -13,9 +13,12 @@
 #define kTextInfoWidgetWidth 94
 #define kTextInfoWidgetHeight 32
 
+#define UPDATE_INTERVAL_MILLIS 1000
+
+@class OAWidgetType;
+
 @interface OATextInfoWidget : OABaseWidgetView
 
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (nonatomic, readonly) UIFont *primaryFont;
 @property (nonatomic, readonly) UIColor *primaryColor;
 @property (nonatomic, readonly) UIColor *primaryShadowColor;
@@ -24,13 +27,21 @@
 @property (nonatomic, readonly) UIColor *unitsShadowColor;
 @property (nonatomic, readonly) float shadowRadius;
 
+@property (nonatomic) UILabel *textView;
+@property (nonatomic) UILabel *textShadowView;
+@property (nonatomic) UIImageView *imageView;
+
 @property (strong) BOOL(^updateInfoFunction)();
 @property (strong) void(^onClickFunction)(id sender);
 
 - (void) setImage:(UIImage *)image;
 - (void) setImageHidden:(BOOL)visible;
+- (void) setTimeText:(NSTimeInterval)time;
 - (BOOL) isNight;
+- (BOOL) setIcons:(OAWidgetType *)widgetType;
 - (BOOL) setIcons:(NSString *)widgetDayIcon widgetNightIcon:(NSString *)widgetNightIcon;
+- (NSString *) getIconName;
+- (NSString *) getIconName:(BOOL)nightMode;
 
 - (void) setContentDescription:(NSString *)text;
 - (void) setContentTitle:(NSString *)text;
@@ -53,7 +64,5 @@
 
 - (CGFloat) getWidgetHeight;
 - (void) adjustViewSize;
-
-+ (void) turnLayerBorder:(UIView *)view on:(BOOL)on;
 
 @end

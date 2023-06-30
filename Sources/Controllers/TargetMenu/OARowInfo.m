@@ -49,4 +49,19 @@
     return [UIFont scaledSystemFontOfSize:17.0 weight:_isUrl ? UIFontWeightMedium : UIFontWeightRegular];
 }
 
+- (BOOL) isEqual:(id)object
+{
+    if (self == object)
+        return YES;
+    if (!object)
+        return NO;
+    
+    if ([object isKindOfClass:self.class])
+    {
+        OARowInfo *item = (OARowInfo *) object;
+        return [_text isEqualToString:item.text];
+    }
+    return NO;
+}
+
 @end

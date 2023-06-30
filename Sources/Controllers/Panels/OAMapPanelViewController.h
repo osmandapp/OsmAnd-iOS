@@ -85,6 +85,7 @@
 - (void) closeDashboardWithDuration:(CGFloat)duration;
 
 - (BOOL) isDashboardVisible;
+- (BOOL) isTargetMultiMenuViewVisible;
 - (void) closeDashboardLastScreen;
 - (void) mapSettingsButtonClick:(id)sender;
 - (void) mapSettingsButtonClick:(id)sender mode:(OAApplicationMode *)targetMode;

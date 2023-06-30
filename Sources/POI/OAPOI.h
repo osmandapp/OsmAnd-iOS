@@ -10,6 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OAPOIType.h"
 
+#define URL_KEY @"url"
 #define WEBSITE @"website"
 #define PHONE @"phone"
 #define MOBILE @"mobile"

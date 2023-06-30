@@ -52,6 +52,11 @@
     [_sectionData removeObjectAtIndex:section];
 }
 
+- (void)removeRowAt:(NSIndexPath *)indexPath
+{
+    [_sectionData[indexPath.section] removeRowAtIndex:indexPath.row];
+}
+
 - (void)removeItemsAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths
 {
     for (NSIndexPath *indexPath in indexPaths)
@@ -75,6 +80,11 @@
     }
 }
 
+- (void) addRowAtIndexPath:(NSIndexPath *)indexPath row:(OATableRowData *)row
+{
+    [_sectionData[indexPath.section] addRow:row position:indexPath.row];
+}
+
 - (OATableSectionData *)sectionDataForIndex:(NSUInteger)index
 {
     return _sectionData[index];
@@ -94,6 +104,11 @@
 - (NSUInteger)rowCount:(NSUInteger)section
 {
     return _sectionData[section].rowCount;
+}
+
+- (void) clearAllData
+{
+    _sectionData.removeAllObjects;
 }
 
 @end

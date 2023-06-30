@@ -12,8 +12,6 @@
 #import "OACommonTypes.h"
 #import "OAResultMatcher.h"
 
-#include <vector>
-
 @protocol OARouteInformationListener <NSObject>
 
 @required
@@ -72,7 +70,6 @@ struct RouteSegmentResult;
 - (OACurrentStreetName *) getCurrentName:(OANextDirectionInfo *)next;
 - (OABBox) getBBox;
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart;
 - (NSArray<CLLocation *> *) getCurrentCalculatedRoute;
 - (OARouteCalculationResult *) getRoute;
 - (OAGPXTrackAnalysis *) getTrackAnalysis;
@@ -99,18 +96,11 @@ struct RouteSegmentResult;
 - (void) clearCurrentRoute:(CLLocation *)newFinalLocation newIntermediatePoints:(NSArray<CLLocation *> *)newIntermediatePoints;
 - (void) recalculateRouteDueToSettingsChange;
 - (void) notifyIfRouteIsCalculated;
-- (std::shared_ptr<RouteSegmentResult>) getCurrentSegmentResult;
-- (std::shared_ptr<RouteSegmentResult>) getNextStreetSegmentResult;
 - (BOOL) isPublicTransportMode;
 
 - (void) startRouteCalculationThread:(OARouteCalculationParams *)params paramsChanged:(BOOL)paramsChanged updateProgress:(BOOL)updateProgress;
 
 - (OARoutingEnvironment *) getRoutingEnvironment:(OAApplicationMode *)mode start:(CLLocation *)start end:(CLLocation *)end;
-- (std::vector<std::shared_ptr<GpxPoint>>) generateGpxPoints:(OARoutingEnvironment *)env gctx:(std::shared_ptr<GpxRouteApproximation>)gctx locationsHolder:(OALocationsHolder *)locationsHolder;
-- (std::shared_ptr<GpxRouteApproximation>) calculateGpxApproximation:(OARoutingEnvironment *)env
-														   gctx:(std::shared_ptr<GpxRouteApproximation>)gctx
-														 points:(std::vector<std::shared_ptr<GpxPoint>> &)points
-												  resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
 
 - (OAGPXDocument *) generateGPXFileWithRoute:(NSString *)name;
 

@@ -37,6 +37,9 @@
     
     UIView *_footerView;
     
+    UIBarButtonItem *_cancelButton;
+    UIBarButtonItem *_applyButton;
+    
     NSArray *_data;
 }
 
@@ -83,13 +86,6 @@ static const NSInteger groupCount = 1;
     _updatingFrequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:_regionNameNSString];
 }
 
--(void) applyLocalization
-{
-    _titleView.text = _settingsScreen == ELiveSettingsScreenMain ? _titleName : OALocalizedString(@"update_frequency");
-    [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [_applyButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
-}
-
 - (void) viewDidLoad
 {
     [super viewDidLoad];
@@ -98,9 +94,8 @@ static const NSInteger groupCount = 1;
     self.tableView.delegate = self;
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-
-    self.cancelButton.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
-    self.applyButton.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
+    
+    self.navigationItem.title = _settingsScreen == ELiveSettingsScreenMain ? _titleName : OALocalizedString(@"update_frequency");
 
     if (_settingsScreen == ELiveSettingsScreenMain)
     {
@@ -135,6 +130,30 @@ static const NSInteger groupCount = 1;
 
 - (void) viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.shadowColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.whiteColor
+    };
+    self.navigationController.navigationBar.standardAppearance = appearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.tintColor = UIColor.whiteColor;
+    self.navigationController.navigationBar.prefersLargeTitles = NO;
+    
+    if (_settingsScreen == ELiveSettingsScreenMain)
+    {
+        _cancelButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_cancel") style:UIBarButtonItemStylePlain target:self action:@selector(backInSelectionClicked:)];
+        _applyButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_apply") style:UIBarButtonItemStylePlain target:self action:@selector(applyButtonClicked:)];
+        [self.navigationController.navigationBar.topItem setLeftBarButtonItem:_cancelButton animated:YES];
+        [self.navigationController.navigationBar.topItem setRightBarButtonItem:_applyButton animated:YES];
+    }
+    
     [self setupView];
 }
 
@@ -144,11 +163,6 @@ static const NSInteger groupCount = 1;
     
     CGFloat btnMargin = MAX(10, [OAUtilities getLeftMargin]);
     _footerView.subviews[0].frame = CGRectMake(btnMargin, 0, _footerView.frame.size.width - btnMargin * 2, 44.0);
-}
-
--(UIView *) getTopView
-{
-    return _navBarView;
 }
 
 -(UIView *) getMiddleView
@@ -163,10 +177,6 @@ static const NSInteger groupCount = 1;
     
     switch (_settingsScreen) {
         case ELiveSettingsScreenMain: {
-            _backButton.hidden = YES;
-            _cancelButton.hidden = NO;
-            _applyButton.hidden = NO;
-             
             [dataArr addObject:
              @{
                @"name" : @"osm_live_enabled",
@@ -205,15 +215,11 @@ static const NSInteger groupCount = 1;
             break;
         }
         case ELiveSettingsScreenFrequency: {
-            _backButton.hidden = NO;
-            _cancelButton.hidden = YES;
-            _applyButton.hidden = YES;
-            NSInteger currentFrequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:_regionNameNSString];
             [dataArr addObject:
              @{
                @"name" : @"hourly_freq",
                @"title" : OALocalizedString(@"hourly"),
-               @"img" : currentFrequency == ELiveUpdateFrequencyHourly ? @"menu_cell_selected.png" : @"",
+               @"img" : _updatingFrequency == ELiveUpdateFrequencyHourly ? @"menu_cell_selected.png" : @"",
                @"type" : [OASettingsTitleTableViewCell getCellIdentifier] }
              ];
             
@@ -221,7 +227,7 @@ static const NSInteger groupCount = 1;
              @{
                @"name" : @"daily_freq",
                @"title" : OALocalizedString(@"daily"),
-               @"img" : currentFrequency == ELiveUpdateFrequencyDaily ? @"menu_cell_selected.png" : @"",
+               @"img" : _updatingFrequency == ELiveUpdateFrequencyDaily ? @"menu_cell_selected.png" : @"",
                @"type" : [OASettingsTitleTableViewCell getCellIdentifier] }
              ];
             
@@ -229,7 +235,7 @@ static const NSInteger groupCount = 1;
              @{
                @"name" : @"weekly_freq",
                @"title" : OALocalizedString(@"weekly"),
-               @"img" : currentFrequency == ELiveUpdateFrequencyWeekly ? @"menu_cell_selected.png" : @"",
+               @"img" : _updatingFrequency == ELiveUpdateFrequencyWeekly ? @"menu_cell_selected.png" : @"",
                @"type" : [OASettingsTitleTableViewCell getCellIdentifier] }
              ];
             
@@ -376,6 +382,7 @@ static const NSInteger groupCount = 1;
     {
         OAOsmAndLiveSelectionViewController* selectionViewController = [[OAOsmAndLiveSelectionViewController alloc] initWithType:ELiveSettingsScreenFrequency regionName:_regionName titleName:_titleName];
         selectionViewController.delegate = self;
+        [selectionViewController updateFrequency:_updatingFrequency];
         [self.navigationController pushViewController:selectionViewController animated:YES];
     }
     else if (_settingsScreen == ELiveSettingsScreenFrequency)

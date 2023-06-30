@@ -55,4 +55,14 @@
 {
 }
 
+- (void)changeToNextState {
+}
+
+- (void)copyPrefs:(OAApplicationMode *)appMode customId:(NSString *)customId {
+}
+
+- (NSString *)getSettingsIconId:(BOOL)nightMode {
+    return nil;
+}
+
 @end

@@ -12,6 +12,8 @@
 #import "OAMapRendererView.h"
 #import "Localization.h"
 
+#import "OsmAnd_Maps-Swift.h"
+
 #define WIDGET_REFRESHING_INTERVAL_SECONDS 1.0
 
 @implementation OAFPSTextInfoWidget
@@ -24,7 +26,7 @@
 
 - (instancetype) init
 {
-    self = [super init];
+    self = [super initWithType:OAWidgetType.devFps];
     if (self)
     {
         _lastUpdatingMs = 0;

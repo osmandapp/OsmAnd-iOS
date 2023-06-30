@@ -12,6 +12,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kBackgroundDistanceSlow 5
 #define kBackgroundDistanceFast 10
@@ -54,54 +55,6 @@ static OAApplicationMode *_HORSE;
 
 static int PROFILE_NONE = 0;
 static int PROFILE_TRUCK = 1000;
-
-+ (void)initRegVisibility
-{
-    NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _BICYCLE, _PEDESTRIAN, _PUBLIC_TRANSPORT, _TRAIN, _BOAT, _AIRCRAFT, _SKI, _TRUCK, _MOTORCYCLE, _MOPED, _HORSE];
-    
-    NSArray<OAApplicationMode *> *all = nil;
-    NSArray<OAApplicationMode *> *none = @[];
-    
-    NSArray<OAApplicationMode *> *navigationSet1 = @[_CAR, _BICYCLE, _BOAT, _SKI, _TRUCK, _MOTORCYCLE, _MOPED, _HORSE];
-    NSArray<OAApplicationMode *> *navigationSet2 = @[_PEDESTRIAN, _PUBLIC_TRANSPORT, _TRAIN, _AIRCRAFT];
-    
-    // left
-    [self regWidgetVisibility:@"next_turn" am:navigationSet1];;
-    [self regWidgetVisibility:@"next_turn_small" am:navigationSet2];
-    [self regWidgetVisibility:@"next_next_turn" am:navigationSet1];
-    [self regWidgetAvailability:@"next_turn" am:exceptDefault];
-    [self regWidgetAvailability:@"next_turn_small" am:exceptDefault];
-    [self regWidgetAvailability:@"next_next_turn" am:exceptDefault];
-    
-    // right
-    [self regWidgetVisibility:@"intermediate_distance" am:all];
-    [self regWidgetVisibility:@"distance" am:all];
-    [self regWidgetVisibility:@"time" am:all];
-    [self regWidgetVisibility:@"intermediate_time" am:all];
-    [self regWidgetVisibility:@"speed" am:@[_CAR, _BICYCLE, _BOAT, _SKI, _PUBLIC_TRANSPORT, _TRAIN, _AIRCRAFT, _TRUCK, _MOTORCYCLE, _MOPED, _HORSE]];
-    [self regWidgetVisibility:@"max_speed" am:@[_CAR, _TRUCK, _MOTORCYCLE, _MOPED]];
-    [self regWidgetVisibility:@"altitude" am:@[_PEDESTRIAN, _BICYCLE]];
-    [self regWidgetVisibility:@"gps_info" am:none];
-    
-    [self regWidgetAvailability:@"intermediate_distance" am:all];
-    [self regWidgetAvailability:@"distance" am:all];
-    [self regWidgetAvailability:@"time" am:all];
-    [self regWidgetAvailability:@"intermediate_time" am:all];
-    [self regWidgetAvailability:@"map_marker_1st" am:none];
-    [self regWidgetAvailability:@"map_marker_2nd" am:none];
-    
-    // top
-    [self regWidgetVisibility:@"config" am:none];
-    [self regWidgetVisibility:@"layers" am:none];
-    [self regWidgetVisibility:@"compass" am:none];
-    [self regWidgetVisibility:@"street_name" am:@[_CAR, _BICYCLE, _PEDESTRIAN, _PUBLIC_TRANSPORT, _TRUCK, _MOTORCYCLE]];
-    [self regWidgetVisibility:@"back_to_location" am:all];
-    [self regWidgetVisibility:@"monitoring_services" am:none];
-    [self regWidgetVisibility:@"bgService" am:none];
-
-    // bottom
-    [self regWidgetVisibility:@"weather_button" am:none];
-}
 
 + (void) initialize
 {
@@ -631,7 +584,7 @@ static int PROFILE_TRUCK = 1000;
     [self initModesParents];
     [self initCustomModes];
     [self initModesParams];
-    [self initRegVisibility];
+    [OAWidgetsAvailabilityHelper initRegVisibility];
     [self reorderAppModes];
 }
 
@@ -751,7 +704,7 @@ static int PROFILE_TRUCK = 1000;
     {
         mode = [builder customReg];
         [_values addObject:mode];
-        [OAApplicationMode initRegVisibility];
+        [OAWidgetsAvailabilityHelper initRegVisibility];
     }
     
     [self reorderAppModes];

@@ -17,12 +17,13 @@
 #import "OAGPXTrackAnalysis.h"
 #import "OARootViewController.h"
 #import "OATrackMenuHudViewController.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OATripRecordingElevationWidget
 
-- (instancetype) init
+- (instancetype) initWithType:(OAWidgetType *)type
 {
-    self = [super init];
+    self = [super initWithType:type];
     if (self)
     {
         __weak OATextInfoWidget *weakSelf = self;
@@ -74,7 +75,7 @@
 
 - (instancetype) init
 {
-    self = [super init];
+    self = [super initWithType:OAWidgetType.tripRecordingUphill];
     if (self)
     {
         [self setIcons:@"widget_track_recording_uphill_day" widgetNightIcon:@"widget_track_recording_uphill_night"];
@@ -100,7 +101,7 @@
 
 - (instancetype) init
 {
-    self = [super init];
+    self = [super initWithType:OAWidgetType.tripRecordingDownhill];
     if (self)
     {
         [self setIcons:@"widget_track_recording_downhill_day" widgetNightIcon:@"widget_track_recording_downhill_night"];

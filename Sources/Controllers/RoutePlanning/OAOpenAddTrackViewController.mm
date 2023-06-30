@@ -111,9 +111,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.contentInset = UIEdgeInsetsMake(-16, 0, 0, 0);
     NSString *header;
-    if (_screenType == EOAAddToATrack || _screenType == EOASelectTrack)
-        header = OALocalizedString(@"route_between_points_add_track_desc");
-    else if (_screenType == EOAFollowTrack)
+    if (_screenType == EOAFollowTrack)
         header = OALocalizedString(@"select_track_to_follow");
     if (header)
         self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:header font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
@@ -143,11 +141,11 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    NSString *headerDescription = _screenType == EOAAddToATrack ? OALocalizedString(@"route_between_points_add_track_desc") : OALocalizedString(@"select_track_to_follow");
-    if (_screenType != EOAOpenExistingTrack)
+    
+    if (_screenType == EOAFollowTrack)
     {
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-            self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:headerDescription font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+            self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_track_to_follow") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
             [self.tableView reloadData];
         } completion:nil];
     }

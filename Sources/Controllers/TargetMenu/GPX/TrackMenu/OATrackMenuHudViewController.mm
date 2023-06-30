@@ -62,6 +62,7 @@
 #import "OATrackMenuTabSegments.h"
 #import "OAGPXAppearanceCollection.h"
 
+#import <SafariServices/SafariServices.h>
 #import <Charts/Charts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
 
@@ -69,6 +70,7 @@
 #define kOverviewTabIndex @0
 #define kAltutudeTabIndex @1
 #define kSpeedTabIndex @2
+#define kWebsiteCellName @"website"
 
 @implementation OATrackMenuViewControllerState
 
@@ -85,7 +87,7 @@
 
 @end
 
-@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate, OAEditDescriptionViewControllerDelegate, OARouteLineChartHelperDelegate>
+@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, SFSafariViewControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate, OAEditDescriptionViewControllerDelegate, OARouteLineChartHelperDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -968,8 +970,9 @@
     [self hide:YES duration:.2 onComplete:^{
         [self.mapViewController hideContextPinMarker];
         [self.mapPanelViewController showScrollableHudViewController:[
-                [OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFilePath
-                                                          targetMenuState:[self getCurrentState]]];
+            [OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFilePath
+                                                      targetMenuState:[self getCurrentState]
+                                                    adjustMapPosition:NO]];
     }];
 }
 
@@ -1654,6 +1657,12 @@
     }];
 }
 
+- (void)openURL:(NSString *)url
+{
+    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:url]];
+    [self presentViewController:safariViewController animated:YES completion:nil];
+}
+
 - (void)showAlertDeleteTrack
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:self.isCurrentTrack ? OALocalizedString(@"track_clear_q") : OALocalizedString(@"gpx_remove") preferredStyle:UIAlertControllerStyleAlert];
@@ -1975,6 +1984,7 @@
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     NSInteger tag = indexPath.section << 10 | indexPath.row;
+    BOOL isWebsite = [cellData.key isEqualToString:kWebsiteCellName] || [OAWikiAlgorithms isUrl:cellData.desc];
     UITableViewCell *outCell = nil;
     if ([cellData.type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
@@ -1996,10 +2006,15 @@
             cell.textLabel.font = [cellData.values.allKeys containsObject:@"font_value"]
                     ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
-            cell.selectionStyle = cellData.toggle ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
+            cell.selectionStyle = cellData.toggle || isWebsite ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             cell.titleLabel.text = cellData.title;
             cell.titleLabel.textColor = tintColor;
             cell.valueLabel.text = cellData.desc;
+            
+            if (isWebsite)
+                cell.valueLabel.textColor = UIColorFromRGB(color_primary_purple);
+            else
+                cell.valueLabel.textColor = UIColorFromRGB(color_text_footer);
 
             if (cellData.rightIconName)
             {
@@ -2452,6 +2467,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
+    
+    if ([cellData.key isEqualToString:kWebsiteCellName])
+        [OAUtilities callUrl:cellData.desc];
+    
     [_uiBuilder onButtonPressed:cellData];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -2629,6 +2648,13 @@
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:[_tableData.subjects indexOfObject:sectionData]]
                       withRowAnimation:UITableViewRowAnimationNone];
     }
+}
+
+#pragma mark - SFSafariViewControllerDelegate
+
+- (void)safariViewControllerDidFinish:(SFSafariViewController *)controller
+{
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

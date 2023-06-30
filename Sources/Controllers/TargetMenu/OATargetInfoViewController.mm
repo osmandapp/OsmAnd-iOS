@@ -501,6 +501,11 @@
         if (onComplete)
             onComplete([[OAUrlImageCard alloc] initWithData:feature]);
     }
+    else
+    {
+        if (onComplete)
+            onComplete(nil);
+    }
 }
 
 - (void)addOpenPlaceCards:(NSString *)openPlaceTagContent cards:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
@@ -588,6 +593,7 @@
                     }
                     else
                     {
+                        NSInteger __block count = features.count;
                         for (NSDictionary *dict in features)
                         {
                             dispatch_async(dispatch_get_main_queue(), ^{
@@ -595,10 +601,14 @@
                                     if (card)
                                     {
                                         [cards addObject:card];
-                                        if (cards.count == features.count + cardsCount)
-                                        {
+                                        if (cards.count == count + cardsCount)
                                             [self onOtherCardsReady:cards rowInfo:nearbyImagesRowInfo];
-                                        }
+                                    }
+                                    else
+                                    {
+                                        count--;
+                                        if (cards.count == count + cardsCount)
+                                            [self onOtherCardsReady:cards rowInfo:nearbyImagesRowInfo];
                                     }
                                 }];
                             });

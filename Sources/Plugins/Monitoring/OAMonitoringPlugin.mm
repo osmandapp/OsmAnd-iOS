@@ -26,6 +26,7 @@
 #import "OATripRecordingDistanceWidget.h"
 #import "OATripRecordingTimeWidget.h"
 #import "OATripRecordingElevationWidget.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define PLUGIN_ID kInAppId_Addon_TrackRecording
 
@@ -44,12 +45,6 @@
 @end
 
 @implementation OAMonitoringPlugin
-{
-    OATripRecordingDistanceWidget *_distanceWidget;
-    OATripRecordingTimeWidget *_timeWidget;
-    OATripRecordingUphillWidget *_uphillWidget;
-    OATripRecordingDownhillWidget *_downhillWidget;
-}
 
 - (instancetype) init
 {
@@ -60,8 +55,7 @@
         _settings = [OAAppSettings sharedManager];
         _liveMonitoringHelper = [[OALiveMonitoringHelper alloc] init];
         _savingTrackHelper = [OASavingTrackHelper sharedInstance];
-        NSArray<OAApplicationMode *> *am = [OAApplicationMode allPossibleValues];
-        [OAApplicationMode regWidgetVisibility:PLUGIN_ID am:am];
+        [self registerWidgetsVisibility];
     }
     return self;
 }
@@ -88,60 +82,51 @@
 
 - (void) registerLayers
 {
-    [self registerWidget];
 }
 
-- (void) registerWidget
+- (void) registerWidgetsVisibility
 {
-    OAMapInfoController *mapInfoController = [self getMapInfoController];
-    if (mapInfoController)
+    for (OAWidgetType *widget in OAWidgetGroup.tripRecording.getWidgets)
     {
-        _distanceWidget = [[OATripRecordingDistanceWidget alloc] initWithPlugin:self];
-        _timeWidget = [[OATripRecordingTimeWidget alloc] init];
-        _uphillWidget = [[OATripRecordingUphillWidget alloc] init];
-        _downhillWidget = [[OATripRecordingDownhillWidget alloc] init];
-        
-        [mapInfoController registerSideWidget:_distanceWidget imageId:@"widget_trip_recording_day" message:[OATripRecordingDistanceWidget getName] key:TRIP_RECORDING_DISTANCE left:NO priorityOrder:30];
-        [mapInfoController registerSideWidget:_timeWidget imageId:@"widget_track_recording_duration_day" message:[OATripRecordingTimeWidget getName] key:TRIP_RECORDING_TIME left:NO priorityOrder:31];
-        [mapInfoController registerSideWidget:_uphillWidget imageId:@"widget_track_recording_uphill_day" message:[OATripRecordingUphillWidget getName] key:TRIP_RECORDING_UPHILL left:NO priorityOrder:32];
-        [mapInfoController registerSideWidget:_downhillWidget imageId:@"widget_track_recording_downhill_day" message:[OATripRecordingDownhillWidget getName] key:TRIP_RECORDING_DOWNHILL left:NO priorityOrder:34];
+        NSArray<OAApplicationMode *> *appModes = widget == OAWidgetType.tripRecordingDistance ? nil : @[];
+        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:widget appModes:appModes];
     }
+}
+
+- (void)createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
+{
+    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
+
+    OABaseWidgetView *distanceWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDistance];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:distanceWidget]];
+
+    OABaseWidgetView *timeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingTime];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:timeWidget]];
+
+    OABaseWidgetView *uphillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingUphill];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:uphillWidget]];
+
+    OABaseWidgetView *downhillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDownhill];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:downhillWidget]];
+}
+
+- (nullable OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType
+{
+    if (widgetType == OAWidgetType.tripRecordingDistance) {
+        return [[OATripRecordingDistanceWidget alloc] initWithPlugin:self];
+    } else if (widgetType == OAWidgetType.tripRecordingTime) {
+        return [[OATripRecordingTimeWidget alloc] init];
+    } else if (widgetType == OAWidgetType.tripRecordingUphill) {
+        return [[OATripRecordingUphillWidget alloc] init];
+    } else if (widgetType == OAWidgetType.tripRecordingDownhill) {
+        return [[OATripRecordingDownhillWidget alloc] init];
+    }
+    return nil;
 }
 
 - (void) updateLayers
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([self isEnabled])
-        {
-            if (!_distanceWidget)
-                [self registerWidget];
-        }
-        else
-        {
-            OAMapInfoController *mapInfoController = [self getMapInfoController];
-            if (_distanceWidget)
-            {
-                [mapInfoController removeSideWidget:_distanceWidget];
-                _distanceWidget = nil;
-            }
-            if (_timeWidget)
-            {
-                [mapInfoController removeSideWidget:_timeWidget];
-                _timeWidget = nil;
-            }
-            if (_uphillWidget)
-            {
-                [mapInfoController removeSideWidget:_uphillWidget];
-                _uphillWidget = nil;
-            }
-            if (_downhillWidget)
-            {
-                [mapInfoController removeSideWidget:_downhillWidget];
-                _downhillWidget = nil;
-            }
-        }
-        [[OARootViewController instance].mapPanel recreateControls];
-    });
+    
 }
 
 - (void) showTripRecordingDialog:(BOOL)showTrackSelection
@@ -186,7 +171,7 @@
                                 
                                     _settings.mapSettingTrackRecording = NO;
                                     [self saveTrack:YES];
-                                    [_distanceWidget updateInfo];
+//                                    [_distanceWidget updateInfo];
                             }];
                         }
                         else
@@ -199,7 +184,7 @@
                     default:
                         break;
                 }
-                [_distanceWidget updateInfo];
+//                [_distanceWidget updateInfo];
         }];
     }
     else
@@ -237,7 +222,7 @@
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 [[self getMapViewController] hideContextPinMarker];
                                 [[self getMapViewController] hideRecGpxTrack];
-                                [_distanceWidget updateInfo];
+//                                [_distanceWidget updateInfo];
                             });
                         }];
                         break;
@@ -253,7 +238,7 @@
                                                                        doneTitle:OALocalizedString(@"shared_string_yes")
                                                                 doneColpletition:^{
                                 [self saveTrack:NO];
-                                [_distanceWidget updateInfo];
+//                                [_distanceWidget updateInfo];
                             }];
                         }
                         else
@@ -266,7 +251,7 @@
                     default:
                         break;
                 }
-                [_distanceWidget updateInfo];
+//                [_distanceWidget updateInfo];
             }];
         }
         else
@@ -281,7 +266,7 @@
 
                     [_settings.mapSettingShowRecordingTrack set:showOnMap];
                     _settings.mapSettingTrackRecording = YES;
-                    [_distanceWidget updateInfo];
+//                    [_distanceWidget updateInfo];
                 }];
                 
                 [bottomSheet presentInViewController:OARootViewController.instance];
@@ -290,7 +275,7 @@
             {
                 _settings.mapSettingTrackRecording = YES;
             }
-            [_distanceWidget updateInfo];
+//            [_distanceWidget updateInfo];
         }
     }
 }
@@ -308,7 +293,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [[self getMapViewController] hideRecGpxTrack];
         [[self getMapViewController] hideContextPinMarker];
-        [_distanceWidget updateInfo];
+//        [_distanceWidget updateInfo];
     });
     
     OAMapPanelViewController *mapPanelViewController = [self getMapPanelViewController];

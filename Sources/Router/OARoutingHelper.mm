@@ -7,6 +7,7 @@
 //
 
 #import "OARoutingHelper.h"
+#import "OARoutingHelper+cpp.h"
 #import "OsmAndApp.h"
 #import "OARouteProvider.h"
 #import "OARouteCalculationResult.h"

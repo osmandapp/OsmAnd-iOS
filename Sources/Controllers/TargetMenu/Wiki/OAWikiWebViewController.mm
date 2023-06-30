@@ -22,6 +22,7 @@
 #import "OAWikiArticleHelper.h"
 #import <SafariServices/SafariServices.h>
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "OsmAnd_Maps-Swift.h"
 
 #define kHeaderImageHeight 170
 
@@ -409,7 +410,8 @@
 {
     NSString *locale = _contentLocale.length == 0 ? @"en" : _contentLocale;
     NSString *wikipediaTitle = [self getWikipediaTitleURL];
-    return [NSURL URLWithString:[NSString stringWithFormat:@"https://%@.wikipedia.org/wiki/%@", locale, wikipediaTitle]];
+    NSString *wikiUrl = [OAWikiAlgorithms getWikiUrlWithText:[NSString stringWithFormat:@"%@:%@", locale, wikipediaTitle]];
+    return [NSURL URLWithString:wikiUrl];
 }
 
 - (NSString *)getContent

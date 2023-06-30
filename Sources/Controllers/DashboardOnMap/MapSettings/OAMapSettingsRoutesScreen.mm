@@ -41,6 +41,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
     OAMapStyleSettings *_styleSettings;
     OAMapStyleParameter *_routesParameter;
     ERoutesSettingType _routesSettingType;
+    OAAppSettings *_settings;
 
     NSArray<NSArray <NSDictionary *> *> *_data;
     BOOL _routesEnabled;
@@ -83,6 +84,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         vwController = viewController;
         
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+        _settings = [OAAppSettings sharedManager];
         [self initData];
     }
     return self;
@@ -365,27 +367,29 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         [tblView beginUpdates];
         UISwitch *sw = (UISwitch *) sender;
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
+        OAMapStyleParameter *cycleNode = [_styleSettings getParameter:CYCLE_NODE_NETWORK_ROUTES_ATTR];
         _routesEnabled = sw.on;
 
         if (_routesSettingType == ERoutesSettingMountain)
         {
+            NSString *mountainBikeRoutesParameter = [_settings.mountainBikeRoutesParameter get];
             _routesParameter.value = _routesEnabled ? @"true" : @"false";
             OAMapStyleParameter *mtbScale = [_styleSettings getParameter:SHOW_MTB_SCALE];
             if (mtbScale)
             {
-                mtbScale.value = _routesEnabled ? @"true" : @"false";
+                mtbScale.value = _routesEnabled && [mountainBikeRoutesParameter isEqualToString:mtbScale.name] ? @"true" : @"false";
                 [_styleSettings save:mtbScale];
             }
             OAMapStyleParameter *mtbScaleUphill = [_styleSettings getParameter:SHOW_MTB_SCALE_UPHILL];
             if (mtbScaleUphill)
             {
-                mtbScaleUphill.value = _routesEnabled ? @"true" : @"false";
+                mtbScaleUphill.value = mtbScale ? mtbScale.value : @"false";
                 [_styleSettings save:mtbScaleUphill];
             }
             OAMapStyleParameter *imbaTrails = [_styleSettings getParameter:SHOW_MTB_SCALE_IMBA_TRAILS];
-            if (imbaTrails && [imbaTrails.value isEqualToString:@"true"])
+            if (imbaTrails)
             {
-                imbaTrails.value = @"false";
+                imbaTrails.value = _routesEnabled && [mountainBikeRoutesParameter isEqualToString:imbaTrails.name] ? @"true" : @"false";
                 [_styleSettings save:imbaTrails];
             }
             [self initData];
@@ -393,16 +397,19 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         else if (_routesEnabled)
         {
             if (_routesSettingType == ERoutesSettingCycle)
+            {
                 _routesParameter.value = @"true";
+                cycleNode.value = [_settings.cycleRoutesParameter get];
+                [_styleSettings save:cycleNode];
+            }
             else if (_routesSettingType == ERoutesSettingHiking)
-                _routesParameter.value = @"walkingRoutesOSMC";
+                _routesParameter.value = [_settings.hikingRoutesParameter get];
         }
         else
         {
             if (_routesSettingType == ERoutesSettingCycle)
             {
                 _routesParameter.value = @"false";
-                OAMapStyleParameter *cycleNode = [_styleSettings getParameter:CYCLE_NODE_NETWORK_ROUTES_ATTR];
                 if (cycleNode)
                 {
                     cycleNode.value = @"false";
@@ -433,6 +440,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         OAMapStyleParameter *cycleNode = [_styleSettings getParameter:CYCLE_NODE_NETWORK_ROUTES_ATTR];
         if (cycleNode && ![cycleNode.value isEqualToString:value])
         {
+            [_settings.cycleRoutesParameter set:value];
             cycleNode.value = value;
             [_styleSettings save:cycleNode];
         }
@@ -449,6 +457,8 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         if (mtbScale)
         {
             mtbScale.value = isMTBEnable ? @"true" : @"false";
+            if (isMTBEnable)
+                [_settings.mountainBikeRoutesParameter set:mtbScale.name];
             [_styleSettings save:mtbScale];
         }
         OAMapStyleParameter *mtbScaleUphill = [_styleSettings getParameter:SHOW_MTB_SCALE_UPHILL];
@@ -461,6 +471,8 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         if (imbaTrails)
         {
             imbaTrails.value = !isMTBEnable ? @"true" : @"false";
+            if (!isMTBEnable)
+                [_settings.mountainBikeRoutesParameter set:imbaTrails.name];
             [_styleSettings save:imbaTrails];
         }
         [self initData];
@@ -469,6 +481,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
     {
         if (![_routesParameter.value isEqualToString:value])
         {
+            [_settings.hikingRoutesParameter set:value];
             _routesParameter.value = value;
             [_styleSettings save:_routesParameter];
         }

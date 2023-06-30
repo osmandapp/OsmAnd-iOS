@@ -14,6 +14,7 @@
 #import "OAAvoidRoadInfo.h"
 #import "OAGPXDatabase.h"
 #import "OAIAPHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define metricSystemKey @"settingMetricSystemKey"
@@ -207,6 +208,9 @@
 
 #define rulerModeKey @"rulerMode"
 #define showDistanceRulerKey @"showDistanceRuler"
+#define showElevationProfileWidgetKey @"show_elevation_profile_widget"
+#define showSlopesOnElevationWidget @"show_slopes_on_elevation_widget"
+#define customWidgetKeys @"custom_widgets_keys"
 
 #define osmUserNameKey @"osm_user_name"
 #define userOsmBugNameKey @"userOsmBugName"
@@ -247,6 +251,9 @@
 #define map3dModeVisibilityKey @"map_3d_mode_visibility"
 
 #define contourLinesZoomKey @"contourLinesZoom"
+#define hikingRoutesParameterKey @"hikingRoutesParameter"
+#define cycleRoutesParameterKey @"cycleRoutesParameter"
+#define mountainBikeRoutesParameterKey @"mountainBikeRoutesParameter"
 #define mapManuallyRotatingAngleKey @"mapManuallyRotatingAngle"
 
 #define activeMarkerKey @"activeMarkerKey"
@@ -368,6 +375,7 @@
 
 #define routeMapMarkersStartMyLocKey @"routeMapMarkersStartMyLoc"
 #define routeMapMarkersRoundTripKey @"routeMapMarkersRoundTrip"
+#define showMapMarkersBarWidgetKey @"showMapMarkersBarWidget"
 
 #define osmandUsageSpaceKey @"osmandUsageSpace"
 
@@ -408,6 +416,14 @@
 #define lastProfileSettingsModifiedTimeKey @"lastProfileSettingsModifiedTime"
 
 #define lastUUIDChangeTimestampKey @"lastUUIDChangeTimestamp"
+
+#define kShowHeightmapsKey @"showHeightmaps"
+
+// Widgets
+#define kLeftWidgetPanelOrderKey @"left_widget_panel_order"
+#define kRightWidgetPanelOrderKey @"right_widget_panel_order"
+#define kTopWidgetPanelOrderKey @"top_widget_panel_order"
+#define kBottomWidgetPanelOrderKey @"bottom_widget_panel_order"
 
 @implementation OACompassMode
 
@@ -2019,6 +2035,11 @@
     [self set:[[self get] arrayByAddingObject:string]];
 }
 
+- (void) add:(NSString *)string appMode:(OAApplicationMode *)appMode
+{
+    [self set:[[self get:appMode] arrayByAddingObject:string] mode:appMode];
+}
+
 - (void) addUnique:(NSString *)string
 {
     if (![self contains:string])
@@ -2057,6 +2078,83 @@
 {
     NSArray<NSString *> *value = [self get:mode];
     return value ? [value componentsJoinedByString:@","] : @"";
+}
+
+@end
+
+@interface OACommonListOfStringList ()
+
+@property (nonatomic) NSArray<NSArray<NSString *> *> *defValue;
+
+@end
+
+@implementation OACommonListOfStringList
+
++ (instancetype) withKey:(NSString *)key defValue:(NSArray<NSArray<NSString *> *> *)defValue
+{
+    OACommonListOfStringList *obj = [[OACommonListOfStringList alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (NSArray<NSArray<NSString *> *> *) get
+{
+    return [self get:self.appMode];
+}
+
+- (NSArray<NSArray<NSString *> *> *) get:(OAApplicationMode *)mode
+{
+    NSObject *value = [self getValue:mode];
+    return value ? (NSArray<NSArray<NSString *> *> *)value : self.defValue;
+}
+
+- (void) set:(NSArray<NSArray<NSString *> *> *)arr
+{
+    [self set:arr mode:self.appMode];
+}
+
+- (void) set:(NSArray<NSArray<NSString *> *> *)arr mode:(OAApplicationMode *)mode
+{
+    [self setValue:arr mode:mode];
+}
+
+- (void) resetToDefault
+{
+    NSArray<NSArray<NSString *> *> *defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (NSArray<NSArray<NSString *> *> *)pDefault;
+    
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    NSMutableArray<NSArray<NSString *> *> *res = [NSMutableArray array];
+    NSArray<NSString *> *subarrays = [strValue componentsSeparatedByString:@";"];
+    for (NSString *str in subarrays)
+    {
+        if (str.length > 0) {
+            [res addObject:[str componentsSeparatedByString:@","]];
+        }
+    }
+    [self set:res mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    NSArray<NSArray<NSString *> *> *val = [self get:mode];
+    NSMutableString *result = [NSMutableString string];
+    for (NSArray<NSString *> *innerArray in val) {
+        NSString *string = [innerArray componentsJoinedByString:@","];
+        [result appendString:string];
+        [result appendString:@";"];
+    }
+    return result;
 }
 
 @end
@@ -2843,10 +2941,9 @@
         return [self set:RULER_MODE_NO_CIRCLES mode:mode];
 }
 
-- (NSString *)toStringValue:(OAApplicationMode *)mode
++ (NSString *) rulerWidgetModeToString:(EOARulerWidgetMode)rulerMode
 {
-    switch ([self get:mode])
-    {
+    switch (rulerMode) {
         case RULER_MODE_DARK:
             return @"FIRST";
         case RULER_MODE_LIGHT:
@@ -2856,6 +2953,11 @@
         default:
             return @"FIRST";
     }
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    return [self.class rulerWidgetModeToString:[self get:mode]];
 }
 
 - (void) resetToDefault
@@ -3674,29 +3776,29 @@
         _registeredPreferences = [NSMapTable strongToStrongObjectsMapTable];
         _globalPreferences = [NSMapTable strongToStrongObjectsMapTable];
         _profilePreferences = [NSMapTable strongToStrongObjectsMapTable];
-
+        
         _applicationMode = [[[OACommonAppMode withKey:applicationModeKey defValue:OAApplicationMode.DEFAULT] makeGlobal] makeShared];
         [_globalPreferences setObject:_applicationMode forKey:@"application_mode"];
-
+        
         _trackIntervalArray = @[@0, @1, @2, @3, @5, @10, @15, @30, @60, @90, @120, @180, @300];
         
         _mapLanguages = @[
             @"af", @"als", @"ar", @"az", @"be", @"ber", @"bg", @"bn", @"bpy", @"br", @"bs", @"ca", @"ceb", @"ckb", @"cs", @"cy", @"da", @"de", @"el", @"eo", @"es", @"et", @"eu", @"fa", @"fi", @"fr", @"fy", @"ga", @"gl", @"he", @"hi", @"hsb", @"hr", @"ht", @"hu", @"hy", @"id", @"is", @"it", @"ja", @"ka", @"kab", @"kk", @"kn", @"ko", @"ku", @"la", @"lb", @"lo", @"lt", @"lv", @"mk", @"ml", @"mr", @"ms", @"nds", @"new", @"nl", @"nn", @"no", @"nv", @"oc", @"os", @"pl", @"pms", @"pt", @"ro", @"ru", @"sat", @"sc", @"sh", @"sk", @"sl", @"sq", @"sr", @"sv", @"sw", @"ta", @"te", @"th", @"tl", @"tr", @"uk", @"vi", @"vo", @"zh", @"zh-Hans", @"zh-Hant"];
-
+        
         _rtlLanguages = @[@"ar",@"dv",@"he",@"iw",@"fa",@"nqo",@"ps",@"sd",@"ug",@"ur",@"yi"];
-
+        
         _ttsAvailableVoices = @[@"ar", @"bg", @"cs", @"ca", @"da", @"de", @"el", @"en-gb", @"en", @"es-ar", @"es", @"et", @"fa", @"fi", @"fr", @"hi", @"hr", @"hu-formal", @"hu", @"id", @"it", @"ja", @"ko", @"nb", @"nl", @"pl", @"pt-br", @"pt", @"ro", @"ru", @"sk", @"sl", @"sv", @"tr", @"uk", @"zh-hk", @"zh"];
-
+        
         // Common Settings
         _settingMapLanguage = [[[OACommonInteger withKey:settingMapLanguageKey defValue:0] makeGlobal] makeShared];
         _settingPrefMapLanguage = [[[OACommonString withKey:settingPrefMapLanguageKey defValue:@""] makeGlobal] makeShared];
         _settingMapLanguageShowLocal = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapLanguageShowLocalKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingMapLanguageShowLocalKey] : NO;
         _settingMapLanguageTranslit = [[[OACommonBoolean withKey:settingMapLanguageTranslitKey defValue: NO] makeGlobal] makeShared];
-
+        
         [_globalPreferences setObject:_settingMapLanguage forKey:@"preferred_locale"];
         [_globalPreferences setObject:_settingPrefMapLanguage forKey:@"map_preferred_locale"];
         [_globalPreferences setObject:_settingMapLanguageTranslit forKey:@"map_transliterate_names"];
-
+        
         _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
         _appearanceMode = [OACommonInteger withKey:settingAppModeKey defValue:APPEARANCE_MODE_DAY];
         [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_AUTO) mode:OAApplicationMode.CAR];
@@ -3706,30 +3808,30 @@
         
         _mapManuallyRotatingAngle = [OACommonDouble withKey:mapManuallyRotatingAngleKey defValue:0];
         [_profilePreferences setObject:_appearanceMode forKey:mapManuallyRotatingAngleKey];
-
+        
         _settingShowZoomButton = YES;//[[NSUserDefaults standardUserDefaults] objectForKey:settingZoomButtonKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingZoomButtonKey] : YES;
         _settingMapArrows = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapArrowsKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingMapArrowsKey] : MAP_ARROWS_LOCATION;
-
+        
         _settingShowAltInDriveMode = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapShowAltInDriveModeKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingMapShowAltInDriveModeKey] : NO;
-
+        
         _settingDoNotShowPromotions = [[[OACommonBoolean withKey:settingDoNotShowPromotionsKey defValue:NO] makeGlobal] makeShared];
         _settingUseAnalytics = [[[OACommonBoolean withKey:settingUseFirebaseKey defValue:YES] makeGlobal] makeShared];
-
+        
         [_globalPreferences setObject:_settingDoNotShowPromotions forKey:@"do_not_show_promotions"];
         [_globalPreferences setObject:_settingUseAnalytics forKey:@"use_analytics"];
         [_globalPreferences setObject:_showDownloadMapDialog forKey:@"show_download_map_dialog"];
         
         _animateMyLocation = [OACommonBoolean withKey:animateMyLocationKey defValue:YES];
         [_profilePreferences setObject:_animateMyLocation forKey:@"animate_my_location"];
-
+        
         _liveUpdatesPurchased = [[OACommonBoolean withKey:liveUpdatesPurchasedKey defValue:NO] makeGlobal];
         _settingOsmAndLiveEnabled = [[[OACommonBoolean withKey:settingOsmAndLiveEnabledKey defValue:NO] makeGlobal] makeShared];
         _liveUpdatesRetries = [[OACommonInteger withKey:liveUpdatesRetriesKey defValue:2] makeGlobal];
-
+        
         [_globalPreferences setObject:_liveUpdatesPurchased forKey:@"billing_live_updates_purchased"];
         [_globalPreferences setObject:_settingOsmAndLiveEnabled forKey:@"is_live_updates_on"];
         [_globalPreferences setObject:_liveUpdatesRetries forKey:@"live_updates_retryes"];
-
+        
         _billingUserId = [[OACommonString withKey:billingUserIdKey defValue:@""] makeGlobal];
         _billingUserName = [[OACommonString withKey:billingUserNameKey defValue:@""] makeGlobal];
         _billingUserToken = [[OACommonString withKey:billingUserTokenKey defValue:@""] makeGlobal];
@@ -3749,11 +3851,11 @@
         _osmandProPurchased = [[OACommonBoolean withKey:osmandProPurchasedKey defValue:NO] makeGlobal];
         _osmandMapsPurchased = [[OACommonBoolean withKey:osmandMapsPurchasedKey defValue:NO] makeGlobal];
         _mapperLiveUpdatesExpireTime = [[OACommonLong withKey:mapperLiveUpdatesExpireTimeKey defValue:0] makeGlobal];
-
+        
         _lastReceiptValidationDate = [[NSUserDefaults standardUserDefaults] objectForKey:lastReceiptValidationDateKey] ? [NSDate dateWithTimeIntervalSince1970:[[NSUserDefaults standardUserDefaults] doubleForKey:lastReceiptValidationDateKey]] : [NSDate dateWithTimeIntervalSince1970:0];
         _eligibleForIntroductoryPrice = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForIntroductoryPriceKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForIntroductoryPriceKey] : NO;
         _eligibleForSubscriptionOffer = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForSubscriptionOfferKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForSubscriptionOfferKey] : NO;
-
+        
         [_globalPreferences setObject:_billingUserId forKey:@"billing_user_id"];
         [_globalPreferences setObject:_billingUserName forKey:@"billing_user_name"];
         [_globalPreferences setObject:_billingUserToken forKey:@"billing_user_token"];
@@ -3773,8 +3875,19 @@
         [_globalPreferences setObject:_osmandProPurchased forKey:@"billing_osmand_pro_purchased"];
         [_globalPreferences setObject:_osmandMapsPurchased forKey:@"billing_osmand_maps_purchased"];
         [_globalPreferences setObject:_mapperLiveUpdatesExpireTime forKey:@"mapper_live_updates_expire_time"];
-
+        
         _shouldShowWhatsNewScreen = [[NSUserDefaults standardUserDefaults] objectForKey:shouldShowWhatsNewScreenKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:shouldShowWhatsNewScreenKey] : YES;
+        
+        // Widgets
+        _leftWidgetPanelOrder = [OACommonListOfStringList withKey:kLeftWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel leftPanel] getOriginalOrder]]];
+        _rightWidgetPanelOrder = [OACommonListOfStringList withKey:kRightWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel rightPanel] getOriginalOrder]]];
+        _topWidgetPanelOrder = [OACommonListOfStringList withKey:kTopWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel topPanel] getOriginalOrder]]];
+        _bottomWidgetPanelOrder = [OACommonListOfStringList withKey:kBottomWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
+        
+        [_profilePreferences setObject:_leftWidgetPanelOrder forKey:_leftWidgetPanelOrder.key];
+        [_profilePreferences setObject:_rightWidgetPanelOrder forKey:_rightWidgetPanelOrder.key];
+        [_profilePreferences setObject:_topWidgetPanelOrder forKey:_topWidgetPanelOrder.key];
+        [_profilePreferences setObject:_bottomWidgetPanelOrder forKey:_bottomWidgetPanelOrder.key];
 
         // Map Settings
         _mapSettingShowFavorites = [OACommonBoolean withKey:mapSettingShowFavoritesKey defValue:YES];
@@ -3963,6 +4076,14 @@
 
         _showDistanceRuler = [OACommonBoolean withKey:showDistanceRulerKey defValue:NO];
         [_profilePreferences setObject:_showDistanceRuler forKey:@"show_distance_ruler"];
+        
+        _showElevationProfileWidget = [OACommonBoolean withKey:showElevationProfileWidgetKey defValue:NO];
+        [_profilePreferences setObject:_showDistanceRuler forKey:showElevationProfileWidgetKey];
+        _showSlopesOnElevationWidget = [OACommonBoolean withKey:showSlopesOnElevationWidget defValue:NO];
+        [_profilePreferences setObject:_showDistanceRuler forKey:showSlopesOnElevationWidget];
+        
+        _customWidgetKeys = [OACommonStringList withKey:customWidgetKeys defValue:@[]];
+        [_profilePreferences setObject:_customWidgetKeys forKey:customWidgetKeys];
 
         _showArrivalTime = [OACommonBoolean withKey:showArrivalTimeKey defValue:YES];
         _showIntermediateArrivalTime = [OACommonBoolean withKey:showIntermediateArrivalTimeKey defValue:YES];
@@ -4208,8 +4329,8 @@
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];
         [_profilePreferences setObject:_snapToRoad forKey:@"snap_to_road"];
 
-        _poiFiltersOrder = [OACommonStringList withKey:poiFiltersOrderKey defValue:nil];
-        _inactivePoiFilters = [OACommonStringList withKey:inactivePoiFiltersKey defValue:nil];
+        _poiFiltersOrder = [OACommonStringList withKey:poiFiltersOrderKey defValue:@[]];
+        _inactivePoiFilters = [OACommonStringList withKey:inactivePoiFiltersKey defValue:@[]];
         [_profilePreferences setObject:_poiFiltersOrder forKey:@"poi_filters_order"];
         [_profilePreferences setObject:_inactivePoiFilters forKey:@"inactive_poi_filters"];
 
@@ -4295,6 +4416,15 @@
         
         _contourLinesZoom = [OACommonString withKey:contourLinesZoomKey defValue:@""];
         [_profilePreferences setObject:_contourLinesZoom forKey:@"contour_lines_zoom"];
+        
+        _hikingRoutesParameter = [OACommonString withKey:hikingRoutesParameterKey defValue:@"walkingRoutesOSMC"];
+        [_profilePreferences setObject:_hikingRoutesParameter forKey:@"hiking_routes_parameter"];
+        
+        _cycleRoutesParameter = [OACommonString withKey:cycleRoutesParameterKey defValue:@"false"];
+        [_profilePreferences setObject:_cycleRoutesParameter forKey:@"cycle_routes_parameter"];
+        
+        _mountainBikeRoutesParameter = [OACommonString withKey:mountainBikeRoutesParameterKey defValue:@"showMtbScale"];
+        [_profilePreferences setObject:_mountainBikeRoutesParameter forKey:@"mountain_bike_routes_parameter"];
 
         // Custom plugins
         _customPluginsJson = [[NSUserDefaults standardUserDefaults] objectForKey:customPluginsJsonKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:customPluginsJsonKey] : @"";
@@ -4304,12 +4434,14 @@
         [_profilePreferences setObject:_activeMarkers forKey:@"displayed_markers_widgets_count"];
         _distanceIndicationVisibility = [OACommonBoolean withKey:mapDistanceIndicationVisabilityKey defValue:YES];
         [_profilePreferences setObject:_distanceIndicationVisibility forKey:@"markers_distance_indication_enabled"];
-        _distanceIndication = [OACommonDistanceIndicationConstant withKey:mapDistanceIndicationKey defValue:TOP_BAR_DISPLAY];
-        [_profilePreferences setObject:_distanceIndication forKey:@"map_markers_mode"];
+        _mapMarkersDisplayMode = [OACommonDistanceIndicationConstant withKey:mapDistanceIndicationKey defValue:TOP_BAR_DISPLAY];
+        [_profilePreferences setObject:_mapMarkersDisplayMode forKey:@"map_markers_mode"];
         _arrowsOnMap = [OACommonBoolean withKey:mapArrowsOnMapKey defValue:NO];
         [_profilePreferences setObject:_arrowsOnMap forKey:@"show_arrows_to_first_markers"];
         _directionLines = [OACommonBoolean withKey:mapDirectionLinesKey defValue:YES];
         [_profilePreferences setObject:_directionLines forKey:@"show_lines_to_first_markers"];
+        _showMapMarkersBarWidget = [OACommonBoolean withKey:showMapMarkersBarWidgetKey defValue:YES];
+        [_profilePreferences setObject:_showMapMarkersBarWidget forKey:@"markers_distance_indication_enabled"];
 
         // global
 
@@ -4725,7 +4857,7 @@
     }
 
     [OAAppData.defaults resetProfileSettingsForMode:mode];
-    [[[OsmAndApp instance] widgetSettingResetObservable] notifyEventWithKey:mode];
+    [NSNotificationCenter.defaultCenter postNotificationName:kWidgetVisibilityChangedMotification object:nil];
 }
 
 // Common Settings

@@ -12,21 +12,25 @@
 
 @interface OATableDataModel : NSObject
 
-+ (instancetype) model;
++ (instancetype _Nonnull ) model;
 
-@property (nonatomic) NSString *tableHeaderText;
-@property (nonatomic) NSString *tableFooterText;
+@property (nonatomic) NSString * _Nullable tableHeaderText;
+@property (nonatomic) NSString * _Nullable tableFooterText;
 
-- (OATableSectionData *) createNewSection;
-- (void) addSection:(OATableSectionData *)sectionData;
-- (void) addSection:(OATableSectionData *)sectionData atIndex:(NSInteger)index;
+- (OATableSectionData * _Nonnull) createNewSection;
+- (void) addSection:(OATableSectionData *_Nonnull)sectionData;
+- (void) addSection:(OATableSectionData *_Nonnull)sectionData atIndex:(NSInteger)index;
+- (void) addRowAtIndexPath:(NSIndexPath *_Nonnull)indexPath row:(OATableRowData *_Nonnull)row;
+- (void) removeRowAt:(NSIndexPath *_Nonnull)indexPath;
 - (void) removeSection:(NSUInteger)section;
-- (void) removeItemsAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths;
+- (void) removeItemsAtIndexPaths:(NSArray<NSIndexPath *> *_Nonnull)indexPaths;
 
-- (OATableSectionData *)sectionDataForIndex:(NSUInteger)index;
-- (OATableRowData *) itemForIndexPath:(NSIndexPath *)indexPath;
+- (OATableSectionData *_Nonnull)sectionDataForIndex:(NSUInteger)index;
+- (OATableRowData *_Nonnull) itemForIndexPath:(NSIndexPath *_Nonnull)indexPath;
 
 - (NSUInteger) sectionCount;
 - (NSUInteger) rowCount:(NSUInteger)section;
+
+- (void) clearAllData;
 
 @end

@@ -909,7 +909,7 @@
 "poi_dialog_reopen" = "Újranyitás";
 "quick_action_map_overlay_title" = "Térképfedőrétegek";
 "map_viewing_item" = "Térkép böngészése";
-"map_widget_ruler_control" = "Sugárirányú vonalzó";
+"map_widget_ruler_control" = "Sugárvonalzó";
 "faq_item" = "GYIK";
 "mapillary_menu_title_tile_cache" = "Csempegyorsítótár";
 "hide_contour_lines" = "Szintvonalak elrejtése";
@@ -2202,7 +2202,7 @@
 "sign_in_with_open_street_map" = "Bejelentkezés OpenStreetMap-fiókkal";
 "osm_live_payment_desc" = "Az előfizetési díj a kiválasztott időnként lesz felszámítva. Az előfizetést bármikor lemondhatja a Google Play-en.";
 "no_purchases" = "Ön nem vásárolt semmit";
-"map_widget_rendering_fps" = "Térképmegjelenítés (képkocka/másodperc)";
+"map_widget_rendering_fps" = "Térképrajzolás (képkocka/mp)";
 "backup_complete" = "A biztonsági mentés kész";
 "create_custom_categories_list_promo" = "Lista sorrendjének módosítása és kategóriák elrejtése. Minden módosítás profilként importálható és exportálható.";
 "shared_string_progress" = "Haladás";

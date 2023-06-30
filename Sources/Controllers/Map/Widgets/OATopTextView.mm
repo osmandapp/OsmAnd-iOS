@@ -32,6 +32,7 @@
 #import "OARoutingHelperUtils.h"
 #import "OAMapPresentationEnvironment.h"
 #import "OANativeUtilities.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
 #include <OsmAndCore/Map/MapStyleEvaluator.h>
@@ -140,6 +141,7 @@
 
 - (void) commonInit
 {
+    self.widgetType = OAWidgetType.streetName;
     _app = [OsmAndApp instance];
     _settings = [OAAppSettings sharedManager];
     _routingHelper = [OARoutingHelper sharedInstance];
@@ -343,9 +345,6 @@
     _textColor = textColor;
     _textShadowColor = textShadowColor;
     _shadowRadius = shadowRadius;
-    
-    self.layer.shadowOpacity = shadowRadius > 0 ? 0.0 : 0.3;
-    [OATextInfoWidget turnLayerBorder:self on:shadowRadius > 0];
 
     [self refreshLabel:_addressText.text];
 }

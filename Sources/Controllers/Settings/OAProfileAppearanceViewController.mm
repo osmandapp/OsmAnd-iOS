@@ -405,13 +405,19 @@
     else
     {
         [self saveProfile];
+        BOOL foundVC = NO;
         for (UIViewController *vc in [self.navigationController viewControllers])
         {
             if (([vc isKindOfClass:OAMainSettingsViewController.class] && _isNewProfile)
                 || ([vc isKindOfClass:OAConfigureProfileViewController.class] && !_isNewProfile))
             {
+                foundVC = YES;
                 [self.navigationController popToViewController:vc animated:YES];
             }
+        }
+        if (!foundVC)
+        {
+            [self.navigationController popToRootViewControllerAnimated:YES];
         }
     }
 }

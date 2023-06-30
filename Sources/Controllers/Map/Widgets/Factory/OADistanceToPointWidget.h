@@ -11,9 +11,11 @@
 #import "OATextInfoWidget.h"
 #import <CoreLocation/CoreLocation.h>
 
+@class OAWidgetType;
+
 @interface OADistanceToPointWidget : OATextInfoWidget
 
-- (instancetype) initWithIcons:(NSString *)dayIconId nightIconId:(NSString *)nightIconId;
+- (instancetype) initWithIcons:(NSString *)dayIconId nightIconId:(NSString *)nightIconId widgetType:(OAWidgetType *)widgetType;
 
 - (void) click;
 - (CLLocation *) getPointToNavigate;

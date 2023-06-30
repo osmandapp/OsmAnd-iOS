@@ -23,7 +23,7 @@
 #import "OANavigationController.h"
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
-#import "OAQuickActionHudViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
 #import "OAResourcesBaseViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OAPOIHelper.h"
@@ -1435,7 +1435,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     accepted |= !longPress && recognizer.state == UIGestureRecognizerStateEnded;
     if (accepted)
     {
-        OAQuickActionHudViewController *quickAction = [OARootViewController instance].mapPanel.hudViewController.quickActionController;
+        OAFloatingButtonsHudViewController *quickAction = [OARootViewController instance].mapPanel.hudViewController.quickActionController;
         [quickAction hideActionsSheetAnimated];
         [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress forceHide:[recognizer isKindOfClass:UITapGestureRecognizer.class] && recognizer.numberOfTouches == 1];
         
@@ -1487,6 +1487,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         case OAMapRendererViewStateEntryElevationAngle:
         {
             _app.data.mapLastViewedState.elevationAngle = _mapView.elevationAngle;
+            [[OsmAndApp instance].map3dModeObservable notifyEvent];
             break;
         }
         case OAMapRendererViewStateEntryTarget:

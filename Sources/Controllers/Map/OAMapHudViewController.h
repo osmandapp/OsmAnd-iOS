@@ -10,7 +10,7 @@
 #import "OAMapModeHeaders.h"
 #import "OAHudButton.h"
 
-@class OAQuickActionHudViewController;
+@class OAFloatingButtonsHudViewController;
 @class OAToolbarViewController;
 @class OAMapRulerView;
 @class OAMapInfoController;
@@ -21,7 +21,7 @@
 @interface OAMapHudViewController : UIViewController
 
 @property (nonatomic, readonly) EOAMapHudType mapHudType;
-@property (nonatomic) OAQuickActionHudViewController *quickActionController;
+@property (nonatomic) OAFloatingButtonsHudViewController *quickActionController;
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarView;
 

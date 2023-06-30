@@ -36,7 +36,7 @@
 #import "OAWeatherToolbar.h"
 #import "OAWeatherPlugin.h"
 #import "OACompassModeWidgetState.h"
-#import "OAQuickActionHudViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
 #import "OAMapLayers.h"
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OASunriseSunsetWidget.h"

@@ -54,7 +54,6 @@
     float _lastZoom;
     float _lastElevationAngle;
     
-    BOOL _isIn3dMode;
     BOOL _forceZoom;
     
     BOOL _needsLocationUpdate;
@@ -153,21 +152,11 @@
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self setMapLinkedToLocation:NO];
-                    if (![_settings.settingAllow3DView get] && _mapView.elevationAngle != kMapModePositionTrackingDefaultElevationAngle)
-                    {
-                        _isIn3dMode = NO;
-                        _lastElevationAngle = kMapModePositionTrackingDefaultElevationAngle;
-                        [_mapView setElevationAngle:kMapModePositionTrackingDefaultElevationAngle];
-                    }
-                    
                 });
                 break;
             }
             case OAMapModePositionTrack:
             {
-                if (_lastMapMode == OAMapModeFollow)
-                    _isIn3dMode = NO;
-                
                 if (newLocation)
                 {
                     // Fly to last-known position without changing anything but target
@@ -191,10 +180,6 @@
                                                             kFastAnimationTime,
                                                             OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                             kLocationServicesAnimationKey);
-                        _mapView.mapAnimator->animateElevationAngleTo(_lastElevationAngle,
-                                                                   kHalfSecondAnimatonTime,
-                                                                   OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
-                                                                   kLocationServicesAnimationKey);
                         _mapView.mapAnimator->animateZoomTo(_lastZoom,
                                                          kFastAnimationTime,
                                                          OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
@@ -210,12 +195,6 @@
                                                                kFastAnimationTime,
                                                                OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                                kUserInteractionAnimationKey);
-                            
-                            if (_mapView.elevationAngle != kMapModePositionTrackingDefaultElevationAngle)
-                                _mapView.mapAnimator->animateElevationAngleTo(kMapModePositionTrackingDefaultElevationAngle,
-                                                                           kHalfSecondAnimatonTime,
-                                                                           OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
-                                                                           kLocationServicesAnimationKey);
                             
                             if (zoomMap)
                                 _mapView.mapAnimator->animateZoomTo(kGoToMyLocationZoom,
@@ -236,9 +215,6 @@
                             
                             if (direction >= 0)
                                 [_mapView setAzimuth:direction];
-                            
-                            if (_mapView.elevationAngle != kMapModePositionTrackingDefaultElevationAngle)
-                                [_mapView setElevationAngle:kMapModePositionTrackingDefaultElevationAngle];
                         }
                     }
                     
@@ -250,13 +226,11 @@
             case OAMapModeFollow:
             {
                 // In case previous mode was PositionTrack, remember azimuth, elevation angle and zoom
-                if (_lastMapMode == OAMapModePositionTrack && !_isIn3dMode)
+                if (_lastMapMode == OAMapModePositionTrack && ![self isIn3dMode])
                 {
                     _lastAzimuthInPositionTrack = _mapView.azimuth;
                     _lastZoom = _mapView.zoom;
-                    _lastElevationAngle = kMapModePositionTrackingDefaultElevationAngle;
                     _lastPositionTrackStateCaptured = true;
-                    _isIn3dMode = YES;
                 }
                 
                 _mapView.mapAnimator->pause();
@@ -266,11 +240,6 @@
                                                  kFastAnimationTime,
                                                  OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                  kLocationServicesAnimationKey);
-                
-                _mapView.mapAnimator->animateElevationAngleTo([_mapView normalizeElevationAngle:kMapModeFollowDefaultElevationAngle],
-                                                           kFastAnimationTime,
-                                                           OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
-                                                           kLocationServicesAnimationKey);
                 
                 if (newLocation)
                 {
@@ -299,6 +268,36 @@
         
         _lastMapMode = _app.mapMode;
     });
+}
+
+- (BOOL) isIn3dMode
+{
+    return [OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle < 89;
+}
+
+- (void) onMap3dModeChanged
+{
+    if ([_settings.settingAllow3DView get] && ![self isIn3dMode])
+    {
+        _lastElevationAngle = kMapModePositionTrackingDefaultElevationAngle;
+        _mapView.mapAnimator->pause();
+        _mapView.mapAnimator->cancelAllAnimations();
+        _mapView.mapAnimator->animateElevationAngleTo([_mapView normalizeElevationAngle:kMapModeFollowDefaultElevationAngle],
+                                                   kFastAnimationTime,
+                                                   OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
+                                                   kLocationServicesAnimationKey);
+        _mapView.mapAnimator->resume();
+    }
+    else
+    {
+        _mapView.mapAnimator->pause();
+        _mapView.mapAnimator->cancelAllAnimations();
+        _mapView.mapAnimator->animateElevationAngleTo(_lastElevationAngle,
+                                                   kHalfSecondAnimatonTime,
+                                                   OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
+                                                   kLocationServicesAnimationKey);
+        _mapView.mapAnimator->resume();
+    }
 }
 
 - (void) onLocationServicesStatusChanged

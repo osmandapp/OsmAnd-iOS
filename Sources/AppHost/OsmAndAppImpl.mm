@@ -671,6 +671,7 @@
     _mapMode = OAMapModeFree;
     _prevMapMode = OAMapModeFree;
     _mapModeObservable = [[OAObservable alloc] init];
+    _map3dModeObservable = [[OAObservable alloc] init];
 
     _downloadsManager = [[OADownloadsManager alloc] init];
     _downloadsManagerActiveTasksCollectionChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -1150,6 +1151,7 @@
 }
 
 @synthesize mapModeObservable = _mapModeObservable;
+@synthesize map3dModeObservable = _map3dModeObservable;
 
 @synthesize favoritesCollectionChangedObservable = _favoritesCollectionChangedObservable;
 @synthesize favoriteChangedObservable = _favoriteChangedObservable;

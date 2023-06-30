@@ -22,7 +22,7 @@
 #import "OARootViewController.h"
 #import "OAOverlayUnderlayView.h"
 #import "OAToolbarViewController.h"
-#import "OAQuickActionHudViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
 #import "OADownloadProgressView.h"
 #import "OARoutingProgressView.h"
 #import "OAMapWidgetRegistry.h"
@@ -186,7 +186,7 @@
     _zoomInButton.enabled = [_mapViewController canZoomIn];
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
     
-    self.quickActionController = [[OAQuickActionHudViewController alloc] initWithMapHudViewController:self];
+    self.quickActionController = [[OAFloatingButtonsHudViewController alloc] initWithMapHudViewController:self];
     self.quickActionController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self addChildViewController:self.quickActionController];
     

@@ -15,7 +15,7 @@
 #import "OARootViewController.h"
 #import "OASwitchTableViewCell.h"
 #import "OAMapHudViewController.h"
-#import "OAQuickActionHudViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
 #import "OAQuickActionListViewController.h"
 #import "OADirectionAppearanceViewController.h"
 #import "OAColors.h"

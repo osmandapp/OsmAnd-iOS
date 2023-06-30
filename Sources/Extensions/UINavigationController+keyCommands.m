@@ -13,7 +13,7 @@
 #import "OASuperViewController.h"
 #import "OABaseBottomSheetViewController.h"
 #import "OADashboardViewController.h"
-#import "OAQuickActionHudViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
 #import "OAWeatherToolbar.h"
 #import "OALog.h"
 

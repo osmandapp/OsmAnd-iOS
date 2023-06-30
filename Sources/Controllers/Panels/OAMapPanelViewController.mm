@@ -39,7 +39,7 @@
 #import "OAImpassableRoadViewController.h"
 #import "OAAvoidSpecificRoads.h"
 #import "OAWaypointsViewController.h"
-#import "OAQuickActionHudViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
 #import "OARouteSettingsViewController.h"
 #import "OARouteAvoidSettingsViewController.h"
 #import "OARoutePreferencesParameters.h"

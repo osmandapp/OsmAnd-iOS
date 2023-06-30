@@ -12,6 +12,7 @@
 #import "OAColorizationType.h"
 #import "OAColoringType.h"
 #import "OADownloadMode.h"
+#import "OAMap3DModeVisibilityType.h"
 
 #define kNotificationSetProfileSetting @"kNotificationSetProfileSetting"
 #define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"
@@ -51,6 +52,25 @@ typedef NS_ENUM(NSInteger, EOACompassMode)
 + (NSString *) getIconName:(EOACompassMode)cm;
 
 @end
+
+typedef NS_ENUM(NSInteger, EOAMap3DModeVisibility)
+{
+    EOAMap3DModeVisibilityHidden = 0,
+    EOAMap3DModeVisibilityVisible,
+    EOAMap3DModeVisibilityVisibleIn3DMode
+};
+
+@interface OAMap3DModeVisibility : NSObject
+
+@property (nonatomic) EOAMap3DModeVisibility mode;
+
++ (instancetype) withModeConstant:(EOAMap3DModeVisibility)mode;
++ (NSString *) getTitle:(EOAMap3DModeVisibility)mode;
++ (NSString *) getDescription:(EOAMap3DModeVisibility)mode;
++ (NSString *) getIconName:(EOAMap3DModeVisibility)mode;
+
+@end
+
 
 typedef NS_ENUM(NSInteger, EOASunriseSunsetMode)
 {
@@ -301,6 +321,7 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 @property (nonatomic) long lastModifiedTime;
 
 - (id) makeGlobal;
+- (id) makeProfile;
 - (id) makeShared;
 
 - (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode;
@@ -648,6 +669,20 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @end
 
+@interface OACommonMap3DModeVisibilityType : OACommonInteger
+
+@property (nonatomic) NSArray<OAMap3DModeVisibilityType *> *values;
+
++ (instancetype) withKey:(NSString *)key defValue:(OAMap3DModeVisibilityType *)defValue;
++ (instancetype) withKey:(NSString *)key defValue:(OAMap3DModeVisibilityType *)defValue values:(NSArray<OAMap3DModeVisibilityType *> *)values;
+
+- (OAMap3DModeVisibilityType *) get;
+- (OAMap3DModeVisibilityType *) get:(OAApplicationMode *)mode;
+- (void) set:(OAMap3DModeVisibilityType *)coordinateInputFormats;
+- (void) set:(OAMap3DModeVisibilityType *)coordinateInputFormats mode:(OAApplicationMode *)mode;
+
+@end
+
 @interface OAAppSettings : NSObject
 
 + (OAAppSettings *)sharedManager;
@@ -957,6 +992,14 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic, readonly) OACommonDouble *quickActionLandscapeY;
 @property (nonatomic, readonly) OACommonDouble *quickActionPortraitX;
 @property (nonatomic, readonly) OACommonDouble *quickActionPortraitY;
+
+// Map 3d mode
+
+@property (nonatomic) OACommonMap3DModeVisibilityType *map3dModeVisibility;
+@property (nonatomic, readonly) OACommonDouble *map3dModeLandscapeX;
+@property (nonatomic, readonly) OACommonDouble *map3dModeLandscapeY;
+@property (nonatomic, readonly) OACommonDouble *map3dModePortraitX;
+@property (nonatomic, readonly) OACommonDouble *map3dModePortraitY;
 
 // Contour Lines
 @property (nonatomic) OACommonString *contourLinesZoom;

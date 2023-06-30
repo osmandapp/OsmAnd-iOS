@@ -47,6 +47,7 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
 
 static const NSArray<NSString *> *kContactUrlTags = @[@"youtube", @"facebook", @"instagram", @"twitter", @"vk", @"ok", @"webcam", @"telegram", @"linkedin", @"pinterest", @"foursquare", @"xing", @"flickr", @"email", @"mastodon", @"diaspora", @"gnusocial", @"skype"];
 static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsapp", @"viber"];
+static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
 - (instancetype) init
 {
@@ -402,15 +403,14 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
                         NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
                         [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
                         [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-                        NSInteger population = [vl integerValue];
-                        vl = [numberFormatter stringFromNumber:@(population)];
+                        NSInteger numberValue = [vl integerValue];
+                        vl = [numberFormatter stringFromNumber:@(numberValue)];
                     }
                 }
                 if (!isDescription && !icon)
                 {
-                    if (![pType.name isEqualToString:@"start_date"])
-                        icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", [pType.name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
-                    if (isText && icon)
+                    icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", [pType.name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
+                    if (isText && icon && ![kPrefixTags containsObject:convertedKey])
                         textPrefix = @"";
                 }
                 if (!icon && isText && !iconId)

@@ -20,6 +20,7 @@
 #import "OARouteBaseViewController.h"
 #import "OAGPXListViewController.h"
 #import "OARootViewController.h"
+#import "OAPluginPopupViewController.h"
 #import "OARouteKey.h"
 #import "OAMapRendererView.h"
 #import "OATabBar.h"
@@ -61,6 +62,7 @@
 #import "OANetworkRouteDrawable.h"
 #import "OATrackMenuTabSegments.h"
 #import "OAGPXAppearanceCollection.h"
+#import "MBProgressHUD.h"
 
 #import <SafariServices/SafariServices.h>
 #import <Charts/Charts-Swift.h>
@@ -1659,8 +1661,49 @@
 
 - (void)openURL:(NSString *)url
 {
-    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:url]];
-    [self presentViewController:safariViewController animated:YES completion:nil];
+    if ([url containsString:OAWikiAlgorithms.wikipediaDomain])
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            MBProgressHUD *progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+            progressHUD.removeFromSuperViewOnHide = YES;
+            progressHUD.labelText = OALocalizedString(@"wiki_article_search_text");
+            [self.view addSubview:progressHUD];
+            [self.view bringSubviewToFront:progressHUD];
+
+            OAIAPHelper *helper = [OAIAPHelper sharedInstance];
+            if ([helper.wiki isPurchased])
+            {
+                [OAWikiArticleHelper showWikiArticle:[self collectTrackPoints] url:url onStart:^{
+                    [progressHUD show:YES];
+                } onComplete:^{
+                    [progressHUD hide:YES];
+                }];
+            }
+            else
+            {
+                [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
+            }
+        });
+    }
+    else
+    {
+        SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:url]];
+        [self presentViewController:safariViewController animated:YES completion:nil];
+    }
+}
+
+- (NSArray<CLLocation *> *)collectTrackPoints
+{
+    NSMutableArray<CLLocation *> *points = [NSMutableArray array];
+    if (self.doc)
+    {
+        for (OAWptPt *wptPt in [self.doc getAllPoints])
+        {
+            [points addObject:[[CLLocation alloc] initWithLatitude:[wptPt getLatitude] longitude:[wptPt getLongitude]]];
+        }
+    }
+    
+    return points;
 }
 
 - (void)showAlertDeleteTrack

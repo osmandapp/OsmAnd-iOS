@@ -655,26 +655,29 @@
     return [NSArray arrayWithArray:res];
 }
 
-- (OAWorldRegion *) findAtLat:(double)latitude lon:(double)longitude
+- (NSArray<OAWorldRegion *> *) getWorldRegionsAt:(double)latitude longitude:(double)longitude
 {
-    NSMutableArray<OAWorldRegion *> *mapRegions = [[self queryAtLat:latitude lon:longitude] mutableCopy];
-    
-    OAWorldRegion *selectedRegion = nil;
+    NSMutableArray<OAWorldRegion *> *mapRegions = [NSMutableArray arrayWithArray:[self queryAtLat:latitude lon:longitude]];
     if (mapRegions.count > 0)
     {
         [mapRegions enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
             if (![region contain:latitude lon:longitude])
                 [mapRegions removeObject:region];
         }];
-        
+
         [mapRegions sortUsingComparator:^NSComparisonResult(id a, id b) {
             NSNumber *first = [NSNumber numberWithDouble:[(OAWorldRegion *)a getArea]];
             NSNumber *second = [NSNumber numberWithDouble:[(OAWorldRegion *)b getArea]];
             return [first compare:second];
         }];
-        selectedRegion = mapRegions.firstObject;
     }
-    return selectedRegion;
+    return mapRegions;
+}
+
+- (OAWorldRegion *) findAtLat:(double)latitude lon:(double)longitude
+{
+    NSArray<OAWorldRegion *> *mapRegions = [self getWorldRegionsAt:latitude longitude:longitude];
+    return mapRegions.count > 0 ? mapRegions.firstObject : nil;
 }
 
 - (NSString *) getCountryNameAtLat:(double)latitude lon:(double)longitude
@@ -939,6 +942,12 @@
         return [kWorld isEqualToString:superRegionId] && ![OsmAnd::WorldRegions::RussiaRegionId.toNSString() isEqualToString:thisRegionId];
     }
     return false;
+}
+
+- (BOOL)containsPoint:(CLLocation *)location
+{
+    OsmAnd::PointI point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude));
+    return !_worldRegion->polygon.isEmpty() && [self.class isPointInsidePolygon:point polygon:_worldRegion->polygon];
 }
 
 @end

@@ -1002,6 +1002,32 @@
     return points;
 }
 
+- (NSArray<OAWptPt *> *)getAllPoints
+{
+    NSMutableArray<OAWptPt *> *total = [NSMutableArray array];
+    [total addObjectsFromArray:_points];
+    [total addObjectsFromArray:[self getAllSegmentsPoints]];
+    return total;
+}
+
+- (NSArray<OAWptPt *> *)getAllSegmentsPoints
+{
+    NSMutableArray<OAWptPt *> *points = [NSMutableArray array];
+    for (OATrack *track in self.tracks)
+    {
+        if (!track.generalTrack)
+        {
+            for (OATrkSegment *segment in track.segments)
+            {
+                if (!segment.generalSegment)
+                    [points addObjectsFromArray:segment.points];
+            }
+        }
+    }
+
+    return points;
+}
+
 - (NSArray<OAWptPt *> *) getRoutePoints:(NSInteger)routeIndex
 {
     NSMutableArray<OAWptPt *> *points = [NSMutableArray new];

@@ -26,7 +26,7 @@
 
 @implementation OAWikiArticleSearchTask
 {
-    CLLocationCoordinate2D _articleLatLon;
+    NSArray<CLLocation *> *_articleLocations;
     NSString *_regionName;
     NSString *_url;
     NSString *_lang;
@@ -36,12 +36,12 @@
     OAWikiArticleSearchTaskBlockType _onComplete;
 }
 
-- (instancetype)initWithLatlon:(CLLocationCoordinate2D)latLon url:(NSString *)url onStart:(void (^)())onStart onComplete:(void (^)())onComplete
+- (instancetype)initWithLocations:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart onComplete:(void (^)())onComplete
 {
     self = [super init];
     if (self)
     {
-        _articleLatLon = latLon;
+        _articleLocations = locations;
         _url = url;
         _onStart = onStart;
         _onComplete = onComplete;
@@ -75,27 +75,48 @@
     if (!_isCanceled)
     {
         OsmAndAppInstance app = [OsmAndApp instance];
-        OAWorldRegion *worldRegion = [app.worldRegion findAtLat:_articleLatLon.latitude lon:_articleLatLon.longitude];
-        worldRegion = [OAWikiArticleHelper findWikiRegion:worldRegion];
-        OARepositoryResourceItem *repository = [OAWikiArticleHelper findResourceItem:worldRegion];
-        
-        if (repository && app.resourcesManager->isResourceInstalled(repository.resourceId))
+        NSArray<NSDictionary<CLLocation *, NSArray<OAWorldRegion *> *> *> *regionsByLatLon = [self collectUniqueRegions:_articleLocations];
+        OARepositoryResourceItem *foundRepository;
+        for (NSDictionary<CLLocation *, NSArray<OAWorldRegion *> *> *res in regionsByLatLon)
         {
-            OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_articleLatLon.latitude, _articleLatLon.longitude));
-            NSArray<OAPOI *> *wikiPoints = [OAPOIHelper findPOIsByTagName:nil name:nil location:locI categoryName:OSM_WIKI_CATEGORY poiTypeName:nil bboxTopLeft:worldRegion.bboxTopLeft bboxBottomRight:worldRegion.bboxBottomRight];
-            
-            for (OAPOI *poi in wikiPoints)
+            CLLocation *location = res.allKeys.firstObject;
+            NSArray<OAWorldRegion *> *regions = res.allValues.firstObject;
+
+            for (OAWorldRegion *region in regions)
             {
-                if ([poi.name isEqualToString:_name])
-                    [results addObject:poi];
-                else if ([poi.localizedNames.allValues containsObject:_name])
-                    [results addObject:poi];
+                OAWorldRegion *worldRegion = [OAWikiArticleHelper findWikiRegion:region];
+                OARepositoryResourceItem *repository = [OAWikiArticleHelper findResourceItem:worldRegion];
+
+                if (repository)
+                {
+                    if (app.resourcesManager->isResourceInstalled(repository.resourceId))
+                    {
+                        OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude));
+                        NSArray<OAPOI *> *wikiPoints = [OAPOIHelper findPOIsByTagName:nil name:nil location:locI categoryName:OSM_WIKI_CATEGORY poiTypeName:nil bboxTopLeft:worldRegion.bboxTopLeft bboxBottomRight:worldRegion.bboxBottomRight];
+                        
+                        for (OAPOI *poi in wikiPoints)
+                        {
+                            if ([poi.name isEqualToString:_name])
+                                [results addObject:poi];
+                            else if ([poi.localizedNames.allValues containsObject:_name])
+                                [results addObject:poi];
+                        }
+                        if (results.count > 0)
+                            break;
+                    }
+                    else
+                    {
+                        foundRepository = repository;
+                    }
+                }
+                if (results.count > 0)
+                    break;
             }
         }
-        else
+        if (foundRepository && results.count == 0)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [OAWikiArticleHelper showHowToOpenWikiAlert:repository url:_url];
+                [OAWikiArticleHelper showHowToOpenWikiAlert:foundRepository url:_url];
             });
         }
     }
@@ -125,6 +146,66 @@
         _onComplete();
 }
 
+- (BOOL)isRegionAdded:(OAWorldRegion *)region
+      regionsByLatLon:(NSDictionary<CLLocation *, NSArray<OAWorldRegion *> *> *)regionsByLatLon
+{
+    for (NSArray<OAWorldRegion *> *regionsInMap in regionsByLatLon.allValues)
+    {
+        if ([regionsInMap containsObject:region])
+            return YES;
+    }
+    return NO;
+}
+
+- (BOOL)isUniqueLocation:(CLLocation *)location regionsByLatLon:(NSDictionary<CLLocation *, NSArray<OAWorldRegion *> *> *)regionsByLatLon
+{
+    for (NSArray<OAWorldRegion *> *regions in regionsByLatLon.allValues)
+    {
+        BOOL containsInAll = YES;
+        for (OAWorldRegion *region in regions)
+        {
+            if (![region containsPoint:location])
+            {
+                containsInAll = NO;
+                break;
+            }
+        }
+        if (containsInAll)
+            return NO;
+    }
+    return YES;
+}
+
+- (NSArray<NSDictionary<CLLocation *, NSArray<OAWorldRegion *> *> *> *)collectUniqueRegions:(NSArray<CLLocation *> *)locations
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    NSMutableArray *result = [NSMutableArray array];
+    NSMutableDictionary<CLLocation *, NSArray<OAWorldRegion *> *> *regionsByLocation = [NSMutableDictionary dictionary];
+    for (CLLocation *location in locations)
+    {
+        if (![self isUniqueLocation:location regionsByLatLon:regionsByLocation])
+            continue;
+        @try {
+            NSArray<OAWorldRegion *> *regionsAtLocation = [app.worldRegion getWorldRegionsAt:location.coordinate.latitude longitude:location.coordinate.longitude];
+            NSMutableArray<OAWorldRegion *> *uniqueRegions = [NSMutableArray array];
+            for (OAWorldRegion *region in regionsAtLocation)
+            {
+                if (![self isRegionAdded:region regionsByLatLon:regionsByLocation])
+                    [uniqueRegions addObject:region];
+            }
+            if (uniqueRegions.count > 0)
+            {
+                regionsByLocation[location] = uniqueRegions;
+                [result addObject:@{ location : uniqueRegions }];
+            }
+        }
+        @catch (NSException *exception)
+        {
+            NSLog(@"%@", [exception reason]);
+        }
+    }
+    return result;
+}
 @end
 
 
@@ -176,9 +257,14 @@
     return nil;
 }
 
-+ (void) showWikiArticle:(CLLocationCoordinate2D)location url:(NSString *)url onStart:(void (^)())onStart onComplete:(void (^)())onComplete;
++ (void) showWikiArticle:(CLLocation *)location url:(NSString *)url
 {
-    OAWikiArticleSearchTask *task = [[OAWikiArticleSearchTask alloc] initWithLatlon:location url:url onStart:onStart onComplete:onComplete];
+    [self showWikiArticle:@[location] url:url onStart:nil onComplete:nil];
+}
+
++ (void) showWikiArticle:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart onComplete:(void (^)())onComplete
+{
+    OAWikiArticleSearchTask *task = [[OAWikiArticleSearchTask alloc] initWithLocations:locations url:url onStart:onStart onComplete:onComplete];
     [task execute];
 }
 

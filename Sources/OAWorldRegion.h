@@ -53,6 +53,7 @@
 - (BOOL) isInPurchasedArea;
 
 - (NSArray<OAWorldRegion *> *) queryAtLat:(double)lat lon:(double)lon;
+- (NSArray<OAWorldRegion *> *) getWorldRegionsAt:(double)latitude longitude:(double)longitude;
 - (OAWorldRegion *) findAtLat:(double)latitude lon:(double)longitude;
 - (NSString *) getCountryNameAtLat:(double)latitude lon:(double)longitude;
 - (double) getArea;
@@ -77,5 +78,6 @@
 - (BOOL)containsRegion:(OAWorldRegion *)another;
 
 - (BOOL)isContinent;
+- (BOOL)containsPoint:(CLLocation *)location;
 
 @end

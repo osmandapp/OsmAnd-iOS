@@ -60,6 +60,11 @@
     return nil;
 }
 
+- (void)addRow:(OATableRowData *)rowData position:(NSUInteger)position
+{
+    [_rowData insertObject:rowData atIndex:position];
+}
+
 - (void)addRow:(OATableRowData *)rowData
 {
     [_rowData addObject:rowData];
@@ -75,6 +80,11 @@
     OATableRowData *row = [[OATableRowData alloc] initWithData:dictionary];
     [_rowData addObject:row];
     return row;
+}
+
+- (void)removeAllRows
+{
+    [_rowData removeAllObjects];
 }
 
 - (void)removeRowAtIndex:(NSInteger)index

@@ -232,7 +232,7 @@
 //    [appearanceArr addObject:@{
 //        @"type" : [OAValueTableViewCell getCellIdentifier],
 //        @"title" : OALocalizedString(@"settings_app_theme"),
-//        @"value" : OALocalizedString(@"light_theme"),
+//        @"value" : OALocalizedString(@"shared_string_light"),
 //        @"icon" : @"ic_custom_contrast",
 //        @"key" : @"app_theme",
 //    }];

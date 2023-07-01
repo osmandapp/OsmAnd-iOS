@@ -74,14 +74,12 @@
     if (_type == OAWidgetType.sunrise)
     {
         return @[
-            [OASunriseSunsetWidget getTitle:EOASunriseSunsetHide isSunrise:YES],
             [OASunriseSunsetWidget getTitle:EOASunriseSunsetTimeLeft isSunrise:YES],
             [OASunriseSunsetWidget getTitle:EOASunriseSunsetNext isSunrise:YES]
         ];
     } else if (_type == OAWidgetType.sunset)
     {
         return @[
-            [OASunriseSunsetWidget getTitle:EOASunriseSunsetHide isSunrise:NO],
             [OASunriseSunsetWidget getTitle:EOASunriseSunsetTimeLeft isSunrise:NO],
             [OASunriseSunsetWidget getTitle:EOASunriseSunsetNext isSunrise:NO]
         ];
@@ -94,14 +92,12 @@
     if (_type == OAWidgetType.sunrise)
     {
         return @[
-            [OASunriseSunsetWidget getDescription:EOASunriseSunsetHide isSunrise:YES],
             [OASunriseSunsetWidget getDescription:EOASunriseSunsetTimeLeft isSunrise:YES],
             [OASunriseSunsetWidget getDescription:EOASunriseSunsetNext isSunrise:YES]
         ];
     } else if (_type == OAWidgetType.sunset)
     {
         return @[
-            [OASunriseSunsetWidget getDescription:EOASunriseSunsetHide isSunrise:NO],
             [OASunriseSunsetWidget getDescription:EOASunriseSunsetTimeLeft isSunrise:NO],
             [OASunriseSunsetWidget getDescription:EOASunriseSunsetNext isSunrise:NO]
         ];
@@ -112,7 +108,6 @@
 - (NSArray<NSString *> *) getMenuItemIds
 {
     return @[
-        @(EOASunriseSunsetHide).stringValue,
         @(EOASunriseSunsetTimeLeft).stringValue,
         @(EOASunriseSunsetNext).stringValue
     ];
@@ -139,7 +134,7 @@
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
 
-    return [_settings registerIntPreference:prefId defValue:EOASunriseSunsetHide];
+    return [_settings registerIntPreference:prefId defValue:EOASunriseSunsetTimeLeft];
 }
 
 @end

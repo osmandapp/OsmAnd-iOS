@@ -63,6 +63,38 @@ class TimeToNavigationPointWidget: OATextInfoWidget {
         return widgetState
     }
     
+    override func getSettingsData(_ appMode: OAApplicationMode!) -> OATableDataModel? {
+        let data = OATableDataModel()
+        let section = data.createNewSection()
+        section.headerText = localizedString("shared_string_settings")
+        let settingRow = section.createNewRow()
+        settingRow.cellType = OAValueTableViewCell.getIdentifier()
+        settingRow.key = "value_pref"
+        settingRow.title = widgetType!.title
+        settingRow.descr = widgetType!.title
+        settingRow.setObj(widgetState!.getPrefValue(), forKey: "value")
+        settingRow.setObj(getPossibleValues(), forKey: "possible_values")
+        return data
+    }
+    
+    private func getPossibleValues() -> [OATableRowData] {
+        let isIntermediate = widgetState!.isIntermediate()
+        var timeToGo = false
+        var res = [OATableRowData]()
+        for _ in 0..<2 {
+            let pointState = TimeToNavigationPointState.getState(intermediate: isIntermediate, arrivalOtherwiseTimeToGo: !timeToGo)
+            let row = OATableRowData()
+            row.cellType = OASimpleTableViewCell.getIdentifier()
+            row.setObj(arrivalTimeOtherwiseTimeToGoPref, forKey: "pref")
+            row.setObj(timeToGo ? "false" : "true", forKey: "value")
+            row.title = pointState.title
+            row.iconName = pointState.dayIconName
+            res.append(row)
+            timeToGo = true
+        }
+        return res
+    }
+    
     override func updateInfo() -> Bool {
         var leftSeconds = 0
         

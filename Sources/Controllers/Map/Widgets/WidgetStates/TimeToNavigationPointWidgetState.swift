@@ -32,6 +32,10 @@ class TimeToNavigationPointWidgetState: OAWidgetState {
         return TimeToNavigationPointState.getState(intermediate: intermediate, arrivalOtherwiseTimeToGo: arrivalTimeOrTimeToGo.get()).getTitle()
     }
     
+    func getPrefValue() -> String {
+        TimeToNavigationPointState.getState(intermediate: intermediate, arrivalOtherwiseTimeToGo: arrivalTimeOrTimeToGo.get()).title
+    }
+    
     override func getSettingsIconId(_ nightMode: Bool) -> String {
         return TimeToNavigationPointState.getState(intermediate: intermediate, arrivalOtherwiseTimeToGo: arrivalTimeOrTimeToGo.get()).getIconName(nightMode: nightMode)
     }

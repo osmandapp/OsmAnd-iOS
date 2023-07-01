@@ -91,12 +91,46 @@
     return [_state getPreference];
 }
 
+- (OAWidgetState *)getWidgetState
+{
+    return _state;
+}
+
+- (OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode
+{
+    OATableDataModel *data = [[OATableDataModel alloc] init];
+    OATableSectionData *section = [data createNewSection];
+    section.headerText = OALocalizedString(@"shared_string_settings");
+    
+    OATableRowData *row = section.createNewRow;
+    row.cellType = OAValueTableViewCell.getCellIdentifier;
+    row.key = @"value_pref";
+    row.title = OALocalizedString(@"recording_context_menu_show");
+    row.descr = OALocalizedString(@"recording_context_menu_show");
+    [row setObj:[self.class getTitle:(EOASunriseSunsetMode)[_state.getPreference get:appMode] isSunrise:_state.isSunriseMode] forKey:@"value"];
+    [row setObj:self.getPossibleValues forKey:@"possible_values"];
+    return data;
+}
+
+- (NSArray<OATableRowData *> *) getPossibleValues
+{
+    NSMutableArray<OATableRowData *> *res = [NSMutableArray array];
+    for (NSInteger i = EOASunriseSunsetTimeLeft; i <= EOASunriseSunsetNext; i++) {
+        OATableRowData *row = [[OATableRowData alloc] init];
+        row.cellType = OASimpleTableViewCell.getCellIdentifier;
+        [row setObj:_state.getPreference forKey:@"pref"];
+        [row setObj:@(i) forKey:@"value"];
+        row.title = [self.class getTitle:(EOASunriseSunsetMode) i isSunrise:_state.isSunriseMode];
+        row.descr = [self.class getDescription:(EOASunriseSunsetMode) i isSunrise:_state.isSunriseMode];
+        [res addObject:row];
+    }
+    return res;
+}
+
 + (NSString *) getTitle:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise
 {
     switch (ssm)
     {
-        case EOASunriseSunsetHide:
-            return OALocalizedString(@"shared_string_hide");
         case EOASunriseSunsetTimeLeft:
             return OALocalizedString(@"map_widget_sunrise_sunset_time_left");
         case EOASunriseSunsetNext:
@@ -110,8 +144,6 @@
 {
     switch (ssm)
     {
-        case EOASunriseSunsetHide:
-            return OALocalizedString(@"");
         case EOASunriseSunsetTimeLeft:
         {
             NSTimeInterval leftTime = [self getTimeLeft:isSunrise];

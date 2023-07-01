@@ -54,8 +54,7 @@ typedef NS_ENUM(NSInteger, EOACompassMode)
 
 typedef NS_ENUM(NSInteger, EOASunriseSunsetMode)
 {
-    EOASunriseSunsetHide = 0,
-    EOASunriseSunsetTimeLeft,
+    EOASunriseSunsetTimeLeft = 0,
     EOASunriseSunsetNext
 };
 
@@ -564,6 +563,8 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 - (EOARulerWidgetMode) get:(OAApplicationMode *)mode;
 - (void) set:(EOARulerWidgetMode)rulerWidgetMode;
 - (void) set:(EOARulerWidgetMode)rulerWidgetMode mode:(OAApplicationMode *)mode;
+
++ (NSString *) rulerWidgetModeToString:(EOARulerWidgetMode)rulerMode;
 
 @end
 

@@ -2928,3 +2928,5 @@
 "trip_recording_duration_widget_desc" = "Zeigt die aktuell aufgezeichnete Reisezeit an.";
 "true_bearing_widget_desc" = "Winkel zwischen wahrem Norden und dem Zielpunkt, der von Ihrem Standort aus beobachtet wird.";
 "relative_bearing_widget_desc" = "Zeigt den Winkel zwischen Ihrer Bewegungsrichtung und dem Zielpunkt an.";
+"second_marker_widget_desc" = "Sie können das Widget so konfigurieren, dass es die Entfernung oder voraussichtliche Ankunftszeit bis zur zweiten Kartenmarkierung anzeigt.";
+"first_marker_widget_desc" = "Sie können das Widget so konfigurieren, dass es die Entfernung oder voraussichtliche Ankunftszeit bis zur ersten Kartenmarkierung anzeigt.";

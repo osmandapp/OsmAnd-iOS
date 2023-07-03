@@ -2078,7 +2078,6 @@
 		DA32845326CBC0460036BA73 /* ic_custom_pause@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32844D26CBC0450036BA73 /* ic_custom_pause@3x.png */; };
 		DA32845426CBC0460036BA73 /* ic_custom_play@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32844E26CBC0460036BA73 /* ic_custom_play@3x.png */; };
 		DA32845526CBC0460036BA73 /* ic_custom_stop@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32844F26CBC0460036BA73 /* ic_custom_stop@3x.png */; };
-		DA32845826CBECEE0036BA73 /* OAColorViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA32845726CBECEE0036BA73 /* OAColorViewCell.m */; };
 		DA32846126CBF76B0036BA73 /* img_plugin_parking.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DA32845926CBF7670036BA73 /* img_plugin_parking.jpg */; };
 		DA32846226CBF76B0036BA73 /* img_plugin_skimap.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DA32845A26CBF7680036BA73 /* img_plugin_skimap.jpg */; };
 		DA32846326CBF76B0036BA73 /* img_plugin_trip_planning.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DA32845B26CBF7690036BA73 /* img_plugin_trip_planning.jpg */; };
@@ -2502,7 +2501,6 @@
 		DA5A82A126C563A700F274C7 /* OAImagesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BF726C563A100F274C7 /* OAImagesTableViewCell.xib */; };
 		DA5A82A326C563A700F274C7 /* OATitleDescriptionCollapsableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BF926C563A200F274C7 /* OATitleDescriptionCollapsableCell.xib */; };
 		DA5A82A426C563A700F274C7 /* OAPreviewZoomLevelsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BFA26C563A200F274C7 /* OAPreviewZoomLevelsCell.xib */; };
-		DA5A82A526C563A700F274C7 /* OAColorViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BFB26C563A200F274C7 /* OAColorViewCell.xib */; };
 		DA5A82A626C563A700F274C7 /* OABottomSheetHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BFC26C563A200F274C7 /* OABottomSheetHeaderCell.xib */; };
 		DA5A82A726C563A700F274C7 /* OAGPXRecTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BFD26C563A200F274C7 /* OAGPXRecTableViewCell.xib */; };
 		DA5A82A826C563A700F274C7 /* OAIconTextCollapseCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BFE26C563A200F274C7 /* OAIconTextCollapseCell.xib */; };
@@ -5952,8 +5950,6 @@
 		DA32844D26CBC0450036BA73 /* ic_custom_pause@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_pause@3x.png"; path = "Resources/Icons/ic_custom_pause@3x.png"; sourceTree = "<group>"; };
 		DA32844E26CBC0460036BA73 /* ic_custom_play@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_play@3x.png"; path = "Resources/Icons/ic_custom_play@3x.png"; sourceTree = "<group>"; };
 		DA32844F26CBC0460036BA73 /* ic_custom_stop@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_stop@3x.png"; path = "Resources/Icons/ic_custom_stop@3x.png"; sourceTree = "<group>"; };
-		DA32845626CBECEE0036BA73 /* OAColorViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAColorViewCell.h; sourceTree = "<group>"; };
-		DA32845726CBECEE0036BA73 /* OAColorViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAColorViewCell.m; sourceTree = "<group>"; };
 		DA32845926CBF7670036BA73 /* img_plugin_parking.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = img_plugin_parking.jpg; path = Resources/Icons/img_plugin_parking.jpg; sourceTree = "<group>"; };
 		DA32845A26CBF7680036BA73 /* img_plugin_skimap.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = img_plugin_skimap.jpg; path = Resources/Icons/img_plugin_skimap.jpg; sourceTree = "<group>"; };
 		DA32845B26CBF7690036BA73 /* img_plugin_trip_planning.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = img_plugin_trip_planning.jpg; path = Resources/Icons/img_plugin_trip_planning.jpg; sourceTree = "<group>"; };
@@ -6695,7 +6691,6 @@
 		DA5A7BF726C563A100F274C7 /* OAImagesTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAImagesTableViewCell.xib; sourceTree = "<group>"; };
 		DA5A7BF926C563A200F274C7 /* OATitleDescriptionCollapsableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OATitleDescriptionCollapsableCell.xib; sourceTree = "<group>"; };
 		DA5A7BFA26C563A200F274C7 /* OAPreviewZoomLevelsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAPreviewZoomLevelsCell.xib; sourceTree = "<group>"; };
-		DA5A7BFB26C563A200F274C7 /* OAColorViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAColorViewCell.xib; sourceTree = "<group>"; };
 		DA5A7BFC26C563A200F274C7 /* OABottomSheetHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OABottomSheetHeaderCell.xib; sourceTree = "<group>"; };
 		DA5A7BFD26C563A200F274C7 /* OAGPXRecTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAGPXRecTableViewCell.xib; sourceTree = "<group>"; };
 		DA5A7BFE26C563A200F274C7 /* OAIconTextCollapseCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAIconTextCollapseCell.xib; sourceTree = "<group>"; };
@@ -12311,8 +12306,6 @@
 				DA5A7CB426C563A200F274C7 /* OAColorsCollectionViewCell.m */,
 				DA5A7CC926C563A200F274C7 /* OAColorsTableViewCell.h */,
 				DA5A7C3C26C563A200F274C7 /* OAColorsTableViewCell.m */,
-				DA32845626CBECEE0036BA73 /* OAColorViewCell.h */,
-				DA32845726CBECEE0036BA73 /* OAColorViewCell.m */,
 				DA5A7CF226C563A200F274C7 /* OACustomPickerTableViewCell.h */,
 				DA5A7C5726C563A200F274C7 /* OACustomPickerTableViewCell.m */,
 				DA5A7C9526C563A200F274C7 /* OADateTimePickerTableViewCell.h */,
@@ -12565,7 +12558,6 @@
 				DA5A7C2826C563A200F274C7 /* OACollectionViewCell.xib */,
 				DA5A7C0A26C563A200F274C7 /* OAColorsCollectionViewCell.xib */,
 				DA5A7C2D26C563A200F274C7 /* OAColorsTableViewCell.xib */,
-				DA5A7BFB26C563A200F274C7 /* OAColorViewCell.xib */,
 				DA5A7BB726C563A100F274C7 /* OACustomPickerTableViewCell.xib */,
 				DA5A7BF426C563A100F274C7 /* OADateTimePickerTableViewCell.xib */,
 				DA5A7BE926C563A100F274C7 /* OADestinationCollectionViewCell.xib */,
@@ -16377,7 +16369,6 @@
 				DAF3455B22F4482B009E2EB6 /* ic_custom_osm_note_resolved@2x.png in Resources */,
 				DAF3456122F4482B009E2EB6 /* ic_custom_sunset@2x.png in Resources */,
 				DA2EC64A29FBBE0200ECEB37 /* widget_monitoring_rec_inactive_day@3x.png in Resources */,
-				DA5A82A526C563A700F274C7 /* OAColorViewCell.xib in Resources */,
 				DA0C641E21245B8F00B2A350 /* hi_tts.js in Resources */,
 				15C428DB24A76F0500B21005 /* img_help_width_limit_day@3x.png in Resources */,
 				DA5F6A17245844A200C7DF71 /* map_public_transport_stop_shield@3x.png in Resources */,
@@ -17863,7 +17854,6 @@
 				DA5A844526C563A900F274C7 /* UIViewController+OARootViewController.m in Sources */,
 				DA5A833626C563A800F274C7 /* OAImagesCollectionViewCell.m in Sources */,
 				DA5A81E426C563A700F274C7 /* OALoadGpxTask.m in Sources */,
-				DA32845826CBECEE0036BA73 /* OAColorViewCell.m in Sources */,
 				DA5A854826C563A900F274C7 /* OADebugSettings.mm in Sources */,
 				DA5A818F26C563A700F274C7 /* OAShowHidePoiAction.m in Sources */,
 				DABC7F2227B65FD6005C76E2 /* OARoutingHelperUtils.mm in Sources */,

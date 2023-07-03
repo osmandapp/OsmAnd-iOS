@@ -1435,8 +1435,16 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     accepted |= !longPress && recognizer.state == UIGestureRecognizerStateEnded;
     if (accepted)
     {
-        OAQuickActionHudViewController *quickAction = [OARootViewController instance].mapPanel.hudViewController.quickActionController;
+        OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+        OAQuickActionHudViewController *quickAction = mapPanel.hudViewController.quickActionController;
         [quickAction hideActionsSheetAnimated];
+        if ([mapPanel gpxModeActive])
+        {
+            [mapPanel hideScrollableHudViewController];
+            [mapPanel.hudViewController resetToDefaultRulerLayout];
+            [mapPanel setTopControlsVisible:YES];
+            [mapPanel setBottomControlsVisible:YES menuHeight:0 animated:YES];
+        }
         [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress forceHide:[recognizer isKindOfClass:UITapGestureRecognizer.class] && recognizer.numberOfTouches == 1];
         
         // Handle route planning touch events

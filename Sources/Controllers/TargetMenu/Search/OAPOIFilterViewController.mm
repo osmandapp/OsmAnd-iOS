@@ -17,7 +17,7 @@
 #import "OAPOIType.h"
 #import "OAPOIFilter.h"
 #import "OAUtilities.h"
-#import "OAIconTextCollapseCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OASimpleTableViewCell.h"
 #import "OAInputTableViewCell.h"
@@ -873,32 +873,38 @@ typedef enum
     {
         case GROUP_HEADER:
         {
-            OAIconTextCollapseCell* cell;
-            cell = (OAIconTextCollapseCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextCollapseCell getCellIdentifier]];
+            OARightIconTableViewCell* cell;
+            cell = (OARightIconTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextCollapseCell getCellIdentifier] owner:self options:nil];
-                cell = (OAIconTextCollapseCell *)[nib objectAtIndex:0];
-                cell.iconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
-                cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
+                cell.leftIconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
+                [cell descriptionVisibility:NO];
             }
             
             if (cell)
             {
                 if (item.icon)
                 {
-                    cell.iconView.image = item.icon;
-                    cell.iconView.hidden = NO;
+                    cell.leftIconView.image = item.icon;
+                    [cell leftIconVisibility:YES];
                 }
                 else
                 {
-                    cell.iconView.hidden = YES;
+                    [cell leftIconVisibility:NO];
                 }
-                [cell.textView setText:item.text];
+                [cell.titleLabel setText:item.text];
                 if (item.expandable)
-                    cell.collapsed = !item.expanded;
+                {
+                    cell.rightIconView.image = !item.expanded ? [UIImage templateImageNamed:@"ic_arrow_open.png"] : [UIImage templateImageNamed:@"ic_arrow_close.png"];
+                    cell.rightIconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
+                    [cell rightIconVisibility:YES];
+                }
                 else
-                    cell.rightIconView.hidden = YES;
+                {
+                    [cell rightIconVisibility:NO];
+                }
                 
             }
             return cell;

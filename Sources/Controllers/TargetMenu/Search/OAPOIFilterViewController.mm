@@ -19,7 +19,7 @@
 #import "OAUtilities.h"
 #import "OAIconTextCollapseCell.h"
 #import "OASwitchTableViewCell.h"
-#import "OAIconButtonCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAInputTableViewCell.h"
 #import "OASizes.h"
 #import "OAColors.h"
@@ -939,28 +939,29 @@ typedef enum
         }
         case BUTTON_ITEM:
         {
-            OAIconButtonCell* cell;
-            cell = (OAIconButtonCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconButtonCell getCellIdentifier]];
+            OASimpleTableViewCell* cell;
+            cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconButtonCell getCellIdentifier] owner:self options:nil];
-                cell = (OAIconButtonCell *)[nib objectAtIndex:0];
-                cell.iconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
-                cell.arrowIconView.hidden = YES;
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+                cell.leftIconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
+                [cell descriptionVisibility:NO];
             }
-            
             if (cell)
             {
                 if (item.icon)
                 {
-                    cell.iconView.image = item.icon;
-                    cell.iconView.hidden = NO;
+                    cell.leftIconView.image = item.icon;
+                    cell.leftIconView.contentMode = UIViewContentModeCenter;
+                    [cell leftIconVisibility:YES];
                 }
                 else
                 {
-                    cell.iconView.hidden = YES;
+                    [cell leftIconVisibility:NO];
                 }
-                [cell.textView setText:item.text];
+                [cell.titleLabel setText:item.text];
+                cell.titleLabel.textColor = UIColorFromRGB(tag_hint_text_color);
             }
             return cell;
         }

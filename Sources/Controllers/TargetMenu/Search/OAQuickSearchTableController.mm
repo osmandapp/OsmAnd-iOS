@@ -48,7 +48,6 @@
 #import "OASearchMoreCell.h"
 #import "OAPointDescCell.h"
 #import "OASimpleTableViewCell.h"
-#import "OATextMultilineTableViewCell.h"
 #import "OAMenuSimpleCell.h"
 #import "OAEmptySearchCell.h"
 #import "OARightIconTableViewCell.h"
@@ -762,13 +761,13 @@
         }
         if ([item getType] == BUTTON)
         {
-            OATextMultilineTableViewCell* cell;
-            cell = (OATextMultilineTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
+            OASimpleTableViewCell* cell;
+            cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
-                cell = (OATextMultilineTableViewCell *)[nib objectAtIndex:0];
-                [cell clearButtonVisibility:NO];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+                [cell descriptionVisibility:NO];
             }
             
             if (cell)
@@ -777,12 +776,12 @@
                 cell.leftIconView.image = [buttonItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
                 cell.leftIconView.contentMode = UIViewContentModeCenter;
                 if ([buttonItem getName])
-                    [cell.textView setText:[item getName]];
+                    [cell.titleLabel setText:[item getName]];
                 else if ([buttonItem getAttributedName])
-                    [cell.textView setAttributedText:[buttonItem getAttributedName]];
+                    [cell.titleLabel setAttributedText:[buttonItem getAttributedName]];
                 else
-                    [cell.textView setText:@""];
-                cell.textView.textColor = UIColorFromRGB(tag_hint_text_color);
+                    [cell.titleLabel setText:@""];
+                cell.titleLabel.textColor = UIColorFromRGB(tag_hint_text_color);
             }
             return cell;
         }

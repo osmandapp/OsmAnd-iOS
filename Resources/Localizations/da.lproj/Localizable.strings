@@ -1346,7 +1346,7 @@
 "rendering_attr_surface_sand_name" = "Sand";
 "rendering_value_lightgreen_name" = "Lysegrøn";
 "rendering_attr_showSurfaces_name" = "Vis vejbelægning";
-"routing_attr_driving_style_safety_name" = "Foretrækk biveje";
+"routing_attr_driving_style_safety_name" = "Foretræk biveje";
 "rendering_attr_showRoadMaps_description" = "Vælg, hvornår der skal vises kort kun med veje:";
 "rendering_attr_alpineHiking_description" = "Generer stier efter SAC skalaen.";
 "routing_attr_prefer_motorway_description" = "Foretræk motorveje";
@@ -1823,7 +1823,7 @@
 "shared_string_octagon" = "Oktagon";
 "icon_group_travel" = "Rejse";
 "shared_string_icon" = "Ikon";
-"hide_compass_ruler" = "Skjul kompas lineal";
+"hide_compass_ruler" = "Skjul kompaslineal";
 "segments_count" = "Segment %d";
 "shared_string_resources" = "Ressourcer";
 "icon_group_emergency" = "Nødsituation";
@@ -1833,7 +1833,7 @@
 "nearest_point" = "Nærmeste punkt";
 "shared_string_gpx_track" = "Spor";
 "street_level_imagery" = "Billeder på gadeniveau";
-"show_compass_ruler" = "Vis kompas lineal";
+"show_compass_ruler" = "Vis kompaslineal";
 "download_regular_maps" = "Standard kort";
 "sort_last_modified" = "Sidstændret";
 "searching_gps" = "Søger efter GPS";
@@ -2987,3 +2987,10 @@
 "bearing_secondary_desc" = "Du kan ændre dataformatet, der bruges i: %@ – %@ – %@.";
 "coordinates_format" = "Koordinatformat";
 "magnetic_bearing_widget_desc" = "Vinkel mellem det magnetiske nord og målpunktet observeret fra din placering.";
+"shared_string_dark" = "Mørk";
+"shared_string_light" = "Lys";
+"shared_string_page_number" = "Side %d";
+"compass_on_circles" = "Kompas på cirkler";
+"ruler_circles" = "Linealcirkler";
+"distance_circles" = "Afstandscirkler";
+"true_bearing_wdiget_desc" = "Vinkel mellem det sande nord og målpunktet observeret fra din placering.";

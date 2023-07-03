@@ -21,6 +21,7 @@
 @property (nonatomic, readonly) int points;
 @property (nonatomic, readonly) float distance;
 @property (nonatomic, readonly) BOOL isRecording;
+@property (nonatomic, readonly) int currentTrackIndex;
 
 @property (nonatomic, readonly) OAGPXMutableDocument *currentTrack;
 

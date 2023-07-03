@@ -1620,7 +1620,7 @@
 "map_settings_add_maps_hillshade" = "Yderligere kort er nødvendige for at se terrænskygger på kortet";
 "map_settings_zoom_level_description" = "Indstil minimum og maksimum zoomniveau for at få vist laget";
 "map_settings_slopes_legend" = "Læs mere om skråninger på Wikipedia";
-"map_settings_slopes_description" = "Skråningskort bruger forskellige farver til at visualisere terrænet";
+"map_settings_slopes_description" = "Hældningskort bruger forskellige farver til at visualisere terrænet";
 "map_settings_layer_transparency" = "Lagets gennemsigtighed";
 "shared_string_terrain" = "Terræn";
 "arrows_direction_to_markers" = "Pile viser retning til den aktive markør, hvis den er placeret uden for skærmen. Retningslinjer tegner en linje til aktive markører.";

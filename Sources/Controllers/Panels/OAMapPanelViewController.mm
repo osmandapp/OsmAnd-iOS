@@ -1814,7 +1814,7 @@ typedef enum
      if (_searchViewController)
          [_searchViewController dismissViewControllerAnimated:YES completion:nil];
      if (_hudViewController)
-         [_hudViewController.quickActionController hideActionsSheetAnimated];
+         [_hudViewController.floatingButtonsController hideActionsSheetAnimated];
  }
 
 - (void) updateTargetPointPosition:(CGFloat)height animated:(BOOL)animated

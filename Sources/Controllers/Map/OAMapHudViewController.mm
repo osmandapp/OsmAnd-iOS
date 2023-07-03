@@ -186,12 +186,12 @@
     _zoomInButton.enabled = [_mapViewController canZoomIn];
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
     
-    self.quickActionController = [[OAFloatingButtonsHudViewController alloc] initWithMapHudViewController:self];
-    self.quickActionController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [self addChildViewController:self.quickActionController];
+    self.floatingButtonsController = [[OAFloatingButtonsHudViewController alloc] initWithMapHudViewController:self];
+    self.floatingButtonsController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self addChildViewController:self.floatingButtonsController];
     
-    self.quickActionController.view.frame = self.view.frame;
-    [self.view addSubview:self.quickActionController.view];
+    self.floatingButtonsController.view.frame = self.view.frame;
+    [self.view addSubview:self.floatingButtonsController.view];
     
     self.weatherButton.alpha = 0.;
 
@@ -497,7 +497,7 @@
 {
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     
-    [_quickActionController updateColors:isNight];
+    [_floatingButtonsController updateColors:isNight];
 
     [self updateMapSettingsButton];
     [self updateCompassButton];
@@ -742,7 +742,7 @@
 
 - (void) updateDependentButtonsVisibility
 {
-    [_quickActionController updateViewVisibility];
+    [_floatingButtonsController updateViewVisibility];
 }
 
 - (void) onApplicationModeChanged:(OAApplicationMode *)prevMode

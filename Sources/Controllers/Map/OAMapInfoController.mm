@@ -456,7 +456,7 @@
         [_mapHudViewController showBottomControls:[OAUtilities isLandscape] ? 0. : _weatherToolbar.frame.size.height - [OAUtilities getBottomMargin]
                                          animated:YES];
         [mapPanel setTopControlsVisible:YES];
-        [_mapHudViewController.quickActionController updateViewVisibility];
+        [_mapHudViewController.floatingButtonsController updateViewVisibility];
         [self recreateControls];
 
         CGFloat height = [OAUtilities isLandscape] ? 0. : _weatherToolbar.frame.size.height;
@@ -500,7 +500,7 @@
         }
     }];
     [_mapHudViewController resetToDefaultRulerLayout];
-    [_mapHudViewController.quickActionController updateViewVisibility];
+    [_mapHudViewController.floatingButtonsController updateViewVisibility];
     [self recreateControls];
 }
 

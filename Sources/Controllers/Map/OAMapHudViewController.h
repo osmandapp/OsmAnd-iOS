@@ -21,7 +21,7 @@
 @interface OAMapHudViewController : UIViewController
 
 @property (nonatomic, readonly) EOAMapHudType mapHudType;
-@property (nonatomic) OAFloatingButtonsHudViewController *quickActionController;
+@property (nonatomic) OAFloatingButtonsHudViewController *floatingButtonsController;
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarView;
 
@@ -69,6 +69,7 @@
 - (void) updateMapRulerDataWithDelay;
 
 - (void) updateDependentButtonsVisibility;
+- (void) updateCompassButton;
 
 - (BOOL) needsSettingsForWeatherToolbar;
 - (void) changeWeatherToolbarVisible;

@@ -24,7 +24,6 @@
 #define settingGeoFormatKey @"settingGeoFormatKey"
 #define settingMapArrowsKey @"settingMapArrowsKey"
 #define settingMapShowAltInDriveModeKey @"settingMapShowAltInDriveModeKey"
-#define settingEnable3DViewKey @"settingEnable3DView"
 #define settingDoNotShowPromotionsKey @"settingDoNotShowPromotionsKey"
 #define settingUseFirebaseKey @"settingUseFirebaseKey"
 #define metricSystemChangedManuallyKey @"metricSystemChangedManuallyKey"
@@ -507,9 +506,9 @@
     switch (mode)
     {
         case EOAMap3DModeVisibilityHidden:
-            return @"compass_always_hidden";
+            return @"ic_custom_button_3d_off";
         default:
-            return @"compass_always_visible";
+            return @"ic_custom_button_3d";
     }
 }
 
@@ -3546,93 +3545,6 @@
 
 @end
 
-@implementation OACommonMap3DModeVisibilityType
-{
-    NSArray<OAMap3DModeVisibilityType *> *_values;
-}
-
-@dynamic defValue;
-
-+ (instancetype) withKey:(NSString *)key defValue:(OAMap3DModeVisibilityType *)defValue
-{
-    OACommonMap3DModeVisibilityType *obj = [[OACommonMap3DModeVisibilityType alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = 0;
-        obj.values = [NSArray array];
-    }
-    return obj;
-}
-
-+ (instancetype) withKey:(NSString *)key defValue:(OAMap3DModeVisibilityType *)defValue values:(NSArray<OAMap3DModeVisibilityType *> *)values
-{
-    OACommonMap3DModeVisibilityType *obj = [[OACommonMap3DModeVisibilityType alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        NSUInteger indexOfValue = [values indexOfObject:defValue];
-        obj.defValue = indexOfValue != NSNotFound ? indexOfValue : 0;
-        obj.values = values;
-    }
-    return obj;
-}
-
-- (OAColoringType *) get
-{
-    NSInteger indexOfValue = [super get:self.appMode];
-    return self.values.count > indexOfValue ? self.values[indexOfValue] : self.values.firstObject;
-}
-
-- (void) set:(OAMap3DModeVisibilityType *)coloringType
-{
-    NSUInteger indexOfValue = [self.values indexOfObject:coloringType];
-    [super setValue:@(indexOfValue != NSNotFound ? indexOfValue : 0) mode:self.appMode];
-}
-
-- (OAMap3DModeVisibilityType *) get:(OAApplicationMode *)mode
-{
-    NSInteger indexOfValue = [super get:mode];
-    return self.values.count > indexOfValue ? self.values[indexOfValue] : self.values.firstObject;
-}
-
-- (void) set:(OAMap3DModeVisibilityType *)coloringType mode:(OAApplicationMode *)mode
-{
-    NSUInteger indexOfValue = [self.values indexOfObject:coloringType];
-    [super set:indexOfValue != NSNotFound ? indexOfValue : 0 mode:mode];
-}
-
-- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
-{
-    if ([strValue isEqualToString:@"hidden"])
-        return [self set:OAMap3DModeVisibilityType.HIDDEN mode:mode];
-    else if ([strValue isEqualToString:@"visible"])
-        return [self set:OAMap3DModeVisibilityType.VISIBLE mode:mode];
-    else if ([strValue isEqualToString:@"visible_in_3d_mode"])
-        return [self set:OAMap3DModeVisibilityType.VISIBLE_IN_3D_MODE mode:mode];
-}
-
-- (NSString *)toStringValue:(OAApplicationMode *)mode
-{
-    OAMap3DModeVisibilityType *type = [OAMap3DModeVisibilityType getTypes][[super get:mode]];
-
-    if ([type isEqual:OAMap3DModeVisibilityType.HIDDEN])
-        return @"hidden";
-    else if ([type isEqual:OAMap3DModeVisibilityType.VISIBLE])
-        return @"visible";
-    else if ([type isEqual:OAMap3DModeVisibilityType.VISIBLE_IN_3D_MODE])
-        return @"visible_in_3d_mode";
-
-    return @"hidden";
-}
-
-- (void) resetToDefault
-{
-    [self set:self.values.count > self.defValue ? self.values[self.defValue] : self.values.firstObject];
-}
-
-@end
-
 @interface OACommonUnit ()
 
 @property (nonatomic) NSUnit *defValue;
@@ -4199,7 +4111,6 @@
         [_keepInforming setModeDefaultValue:@0 mode:[OAApplicationMode PEDESTRIAN]];
         [_profilePreferences setObject:_keepInforming forKey:@"keep_informing"];
 
-        _settingAllow3DView = [OACommonBoolean withKey:settingEnable3DViewKey defValue:YES];
         _drivingRegionAutomatic = [OACommonBoolean withKey:drivingRegionAutomaticKey defValue:YES];
         _drivingRegion = [OACommonDrivingRegion withKey:drivingRegionKey defValue:[OADrivingRegion getDefaultRegion]];
         _metricSystem = [OACommonMetricSystem withKey:metricSystemKey defValue:KILOMETERS_AND_METERS];
@@ -4207,7 +4118,6 @@
         _settingGeoFormat = [OACommonInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES];
         _settingExternalInputDevice = [OACommonInteger withKey:settingExternalInputDeviceKey defValue:GENERIC_EXTERNAL_DEVICE];
 
-        [_profilePreferences setObject:_settingAllow3DView forKey:@"enable_3d_view"];
         [_profilePreferences setObject:_drivingRegionAutomatic forKey:@"shared_string_automatic"];
         [_profilePreferences setObject:_drivingRegion forKey:@"default_driving_region"];
         [_profilePreferences setObject:_metricSystem forKey:@"default_metric_system"];
@@ -4402,17 +4312,17 @@
         [_profilePreferences setObject:_quickActionLandscapeX forKey:@"quick_fab_margin_x_landscape_margin"];
         [_profilePreferences setObject:_quickActionLandscapeY forKey:@"quick_fab_margin_y_landscape_margin"];
         
+        _map3dMode = [OACommonInteger withKey:map3dModeVisibilityKey defValue:EOAMap3DModeVisibilityVisibleIn3DMode];
+
         _map3dModeLandscapeX = [OACommonDouble withKey:map3dModeLandscapeXKey defValue:0];
         _map3dModePortraitY = [OACommonDouble withKey:map3dModeLandscapeYKey defValue:0];
         _map3dModeLandscapeX = [OACommonDouble withKey:map3dModePortraitXKey defValue:0];
         _map3dModeLandscapeY = [OACommonDouble withKey:map3dModePortraitYKey defValue:0];
+        [_profilePreferences setObject:_map3dMode forKey:map3dModeVisibilityKey];
         [_profilePreferences setObject:_map3dModeLandscapeX forKey:@"3dmode_fab_margin_x_portrait_margin"];
         [_profilePreferences setObject:_map3dModePortraitY forKey:@"3dmode_fab_margin_y_portrait_margin"];
         [_profilePreferences setObject:_map3dModeLandscapeX forKey:@"3dmode_fab_margin_x_landscape_margin"];
         [_profilePreferences setObject:_map3dModeLandscapeY forKey:@"3dmode_fab_margin_y_landscape_margin"];
-        
-        _map3dModeVisibility = [[[OACommonMap3DModeVisibilityType withKey:map3dModeVisibilityKey defValue:OAMap3DModeVisibilityType.HIDDEN values:[OAMap3DModeVisibilityType getTypes]] makeGlobal] makeShared];
-        [_profilePreferences setObject:_map3dModeVisibility forKey:map3dModeVisibilityKey];	
         
         _contourLinesZoom = [OACommonString withKey:contourLinesZoomKey defValue:@""];
         [_profilePreferences setObject:_contourLinesZoom forKey:@"contour_lines_zoom"];

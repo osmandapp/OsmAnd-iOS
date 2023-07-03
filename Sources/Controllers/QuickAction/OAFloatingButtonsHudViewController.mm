@@ -20,6 +20,7 @@
 #import "Localization.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAAutoObserverProxy.h"
+#import "OAMap3DModeVisibilityType.h"
 
 #import <AudioToolbox/AudioServices.h>
 
@@ -115,11 +116,20 @@
 - (void) onMap3dModeUpdated
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        [self setupMap3dModeButtonVisibility];
         [_map3dModeFloatingButton updateColorsForPressedState: NO];
         if ([OAMapViewTrackingUtilities.instance isIn3dMode])
+        {
             [_map3dModeFloatingButton setImage:[UIImage templateImageNamed:@"ic_custom_3d"] forState:UIControlStateNormal];
+            _map3dModeFloatingButton.accessibilityLabel = OALocalizedString(@"map_3d_mode_action");
+        }
         else
+        {
             [_map3dModeFloatingButton setImage:[UIImage templateImageNamed:@"ic_custom_2d"] forState:UIControlStateNormal];
+            _map3dModeFloatingButton.accessibilityLabel = OALocalizedString(@"map_2d_mode_action");
+        }
+        EOAMap3DModeVisibility visibilityMode = ((EOAMap3DModeVisibility) [_settings.map3dMode get]);
+        _map3dModeFloatingButton.accessibilityValue = [OAMap3DModeVisibility getTitle:visibilityMode];
     });
 }
 
@@ -152,6 +162,7 @@
 //    setLayerState(false);
 //    isLayerOn = quickActionRegistry.isQuickActionOn();
     [self setupQuickActionBtnVisibility];
+    [self setupMap3dModeButtonVisibility];
 }
 
 - (void) setupQuickActionBtnVisibility
@@ -169,6 +180,25 @@
         _quickActionFloatingButton.alpha = hideQuickButton ? 0 : 1;
     } completion:^(BOOL finished) {
         _quickActionFloatingButton.userInteractionEnabled = !hideQuickButton;
+    }];
+}
+
+- (void) setupMap3dModeButtonVisibility
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+
+    BOOL hideButton = [_settings.map3dMode get] == EOAMap3DModeVisibilityHidden ||
+    ([_settings.map3dMode get] == EOAMap3DModeVisibilityVisibleIn3DMode &&
+        ![OAMapViewTrackingUtilities.instance isIn3dMode])  ||
+    [mapPanel isContextMenuVisible] ||
+    [mapPanel gpxModeActive] ||
+    [mapPanel isRouteInfoVisible] ||
+    mapPanel.hudViewController.mapInfoController.weatherToolbarVisible;
+    
+    [UIView animateWithDuration:.25 animations:^{
+        _map3dModeFloatingButton.alpha = hideButton ? 0 : 1;
+    } completion:^(BOOL finished) {
+        _map3dModeFloatingButton.userInteractionEnabled = !hideButton;
     }];
 }
 

@@ -244,7 +244,7 @@
     if ([key isEqualToString:@"quick_action"])
     {
         [_settings.quickActionIsOn set:sw.on];
-        [[OARootViewController instance].mapPanel.hudViewController.quickActionController updateViewVisibility];
+        [[OARootViewController instance].mapPanel.hudViewController.floatingButtonsController updateViewVisibility];
         return YES;
     }
 

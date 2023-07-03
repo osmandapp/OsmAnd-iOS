@@ -1368,7 +1368,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 - (void) elevationGestureDetected:(UIPanGestureRecognizer *)recognizer
 {
     // Ignore gesture if we have no view or if 3D view is disabled
-    if (!self.mapViewLoaded || ![OAAppSettings.sharedManager.settingAllow3DView get] || _rotationAnd3DViewDisabled)
+    if (!self.mapViewLoaded || _rotationAnd3DViewDisabled)
         return;
 
     if (recognizer.state == UIGestureRecognizerStateBegan)
@@ -1435,7 +1435,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     accepted |= !longPress && recognizer.state == UIGestureRecognizerStateEnded;
     if (accepted)
     {
-        OAFloatingButtonsHudViewController *quickAction = [OARootViewController instance].mapPanel.hudViewController.quickActionController;
+        OAFloatingButtonsHudViewController *quickAction = [OARootViewController instance].mapPanel.hudViewController.floatingButtonsController;
         [quickAction hideActionsSheetAnimated];
         [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress forceHide:[recognizer isKindOfClass:UITapGestureRecognizer.class] && recognizer.numberOfTouches == 1];
         

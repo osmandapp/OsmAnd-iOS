@@ -685,12 +685,14 @@
 "shared_string_includes" = "Includes";
 "shared_string_purchased" = "Purchased";
 "shared_string_control_start" = "Start";
-"map_2d_mode_action" = "3D Mode";
+"map_2d_mode_action" = "2D Mode";
 "map_3d_mode_action" = "3D Mode";
 "compass_always_visible" = "Always visible";
 "compass_always_hidden" = "Always hidden";
 "shared_string_hidden" = "Hidden";
 "visible_in_3d_mode" = "Visible in 3D mode";
+"map_3d_mode_description" = "Touch map with two fingers and moves them up and down to adjust map tilt.";
+"map_3d_mode_hint" = "Long tap the button allows to change button position.";
 "data_settings" = "Data";
 "weather_online_cache" = "Online cache";
 "shared_string_clear_online_cache" = "Clear online cache";

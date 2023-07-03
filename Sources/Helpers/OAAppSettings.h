@@ -682,20 +682,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @end
 
-@interface OACommonMap3DModeVisibilityType : OACommonInteger
-
-@property (nonatomic) NSArray<OAMap3DModeVisibilityType *> *values;
-
-+ (instancetype) withKey:(NSString *)key defValue:(OAMap3DModeVisibilityType *)defValue;
-+ (instancetype) withKey:(NSString *)key defValue:(OAMap3DModeVisibilityType *)defValue values:(NSArray<OAMap3DModeVisibilityType *> *)values;
-
-- (OAMap3DModeVisibilityType *) get;
-- (OAMap3DModeVisibilityType *) get:(OAApplicationMode *)mode;
-- (void) set:(OAMap3DModeVisibilityType *)coordinateInputFormats;
-- (void) set:(OAMap3DModeVisibilityType *)coordinateInputFormats mode:(OAApplicationMode *)mode;
-
-@end
-
 @interface OAAppSettings : NSObject
 
 + (OAAppSettings *)sharedManager;
@@ -762,7 +748,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonInteger *settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
 @property (nonatomic) OACommonBoolean *metricSystemChangedManually;
-@property (nonatomic) OACommonBoolean *settingAllow3DView;
 
 @property (assign, nonatomic) int settingMapArrows; // 0 - from Location; 1 - from Map Center
 @property (assign, nonatomic) CLLocationCoordinate2D mapCenter;
@@ -1018,7 +1003,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 // Map 3d mode
 
-@property (nonatomic) OACommonMap3DModeVisibilityType *map3dModeVisibility;
+@property (nonatomic) OACommonInteger *map3dMode;
 @property (nonatomic, readonly) OACommonDouble *map3dModeLandscapeX;
 @property (nonatomic, readonly) OACommonDouble *map3dModeLandscapeY;
 @property (nonatomic, readonly) OACommonDouble *map3dModePortraitX;

@@ -277,7 +277,7 @@
 
 - (void) onMap3dModeChanged
 {
-    if ([_settings.settingAllow3DView get] && ![self isIn3dMode])
+    if (![self isIn3dMode])
     {
         _lastElevationAngle = kMapModePositionTrackingDefaultElevationAngle;
         _mapView.mapAnimator->pause();
@@ -292,7 +292,7 @@
     {
         _mapView.mapAnimator->pause();
         _mapView.mapAnimator->cancelAllAnimations();
-        _mapView.mapAnimator->animateElevationAngleTo(_lastElevationAngle,
+        _mapView.mapAnimator->animateElevationAngleTo([_mapView normalizeElevationAngle: _lastElevationAngle],
                                                    kHalfSecondAnimatonTime,
                                                    OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                    kLocationServicesAnimationKey);
@@ -624,7 +624,7 @@
                 
             case OAMapModePositionTrack:
                 // Perform switch to follow-mode only in case location services have compass
-                if (_app.locationServices.compassPresent && [_settings.settingAllow3DView get])
+                if (_app.locationServices.compassPresent)
                     newMode = OAMapModeFollow;
                 break;
                 

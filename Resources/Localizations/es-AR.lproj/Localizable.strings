@@ -2994,3 +2994,10 @@
 "switch_profile" = "Cambiar perfil";
 "shared_string_rearrange" = "Reorganizar";
 "temperature_widget_desc" = "Muestra la temperatura para el centro de mapa actual.";
+"distance_circles" = "Círculos de distancia";
+"shared_string_dark" = "Oscuro";
+"shared_string_light" = "Claro";
+"compass_on_circles" = "Brújula en círculos";
+"shared_string_page_number" = "Página %d";
+"true_bearing_wdiget_desc" = "El ángulo entre el norte verdadero y el punto objetivo observado desde tu ubicación.";
+"ruler_circles" = "Regla en círculos";

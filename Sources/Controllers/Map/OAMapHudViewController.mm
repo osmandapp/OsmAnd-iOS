@@ -590,17 +590,6 @@
                 _mapModeButton.borderWidthNight = 2;
                 break;
             }
-                
-            case OAMapModeFollow: // Compass - 3D mode
-            {
-                [_mapModeButton setImage:[UIImage templateImageNamed:@"ic_custom_map_location_follow"] forState:UIControlStateNormal];
-                _mapModeButton.unpressedColorDay = UIColorFromRGB(color_on_map_icon_background_color_light);
-                _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
-                _mapModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
-                _mapModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
-                _mapModeButton.borderWidthNight = 2;
-                break;
-            }
 
             default:
                 break;

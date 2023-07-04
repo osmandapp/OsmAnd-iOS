@@ -15,7 +15,7 @@
 #import "OARootViewController.h"
 #import "OANativeUtilities.h"
 #import "OADestination.h"
-#import "OAIconTextTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAColors.h"
@@ -243,17 +243,17 @@
     NSInteger index = indexPath.row;
     if (indexPath.row == [tableView numberOfRowsInSection:0] - 1)
     {
-        OAIconTextTableViewCell* cell;
-        cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell* cell;
+        cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-            cell.iconView.hidden = YES;
-            cell.arrowIconView.hidden = YES;
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
-        cell.textView.text = self.formattedCoords;
+        cell.titleLabel.text = self.formattedCoords;
         
         return cell;
     }

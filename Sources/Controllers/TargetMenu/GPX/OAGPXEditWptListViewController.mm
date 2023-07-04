@@ -13,7 +13,7 @@
 #import "OAGpxWptItem.h"
 #import "OAUtilities.h"
 #import "OARootViewController.h"
-#import "OAIconTextTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAMultiselectableHeaderView.h"
 #import "OAColors.h"
 #import "OAOsmAndFormatter.h"
@@ -258,18 +258,19 @@
 {
     if (self.unsortedPoints.count == 0)
     {
-        OAIconTextTableViewCell* cell;
-        cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell* cell;
+        cell = (OASimpleTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+            [cell descriptionVisibility:NO];
         }
         
         if (cell)
         {
-            [cell.textView setText:OALocalizedString(@"add_waypoint")];
-            [cell.iconView setImage: [UIImage imageNamed:@"add_waypoint_to_track"]];
+            [cell.titleLabel setText:OALocalizedString(@"add_waypoint")];
+            [cell.leftIconView setImage: [UIImage imageNamed:@"add_waypoint_to_track"]];
         }
         return cell;
     }

@@ -8,7 +8,6 @@
 
 #import "OAProfileGeneralSettingsParametersViewController.h"
 #import "OAAppSettings.h"
-#import "OAIconTextTableViewCell.h"
 #import "OAAppSettings.h"
 #import "OAFileNameTranslationHelper.h"
 #import "OAMapViewTrackingUtilities.h"
@@ -172,21 +171,21 @@
                 @"title" : OALocalizedString(@"shared_string_automatic"),
                 @"selected" : @(positionMap == EOAPositionPlacementAuto),
                 @"icon" : @"ic_custom_display_position_automatic",
-                @"type" : [OAIconTextTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"center",
                 @"title" : OALocalizedString(@"position_on_map_center"),
                 @"selected" : @(positionMap == EOAPositionPlacementCenter),
                 @"icon" : @"ic_custom_display_position_center",
-                @"type" : [OAIconTextTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"bottom",
                 @"title" : OALocalizedString(@"position_on_map_bottom"),
                 @"selected" : @(positionMap == EOAPositionPlacementBottom),
                 @"icon" : @"ic_custom_display_position_bottom",
-                @"type" : [OAIconTextTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             break;
             
@@ -386,26 +385,6 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
-    {
-        OAIconTextTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            [cell.arrowIconView setHidden:YES];
-        }
-        if (cell)
-        {
-            cell.textView.text = item[@"title"];
-            if ([item[@"selected"] boolValue])
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.iconView.tintColor = [item[@"selected"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
-        }
-        return cell;
-    }
     if ([cellType isEqualToString:[OATitleDescriptionCollapsableCell getCellIdentifier]])
     {
         OATitleDescriptionCollapsableCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OATitleDescriptionCollapsableCell getCellIdentifier]];
@@ -431,9 +410,9 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
-            [cell.descriptionLabel setHidden:YES];
+            [cell descriptionVisibility:NO];
             if (!item[@"icon"])
-                [cell.leftIconView setHidden:YES];
+                [cell leftIconVisibility:NO];
         }
         if (cell)
         {

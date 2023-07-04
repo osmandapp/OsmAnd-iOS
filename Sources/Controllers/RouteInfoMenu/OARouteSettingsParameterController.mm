@@ -9,7 +9,7 @@
 #import "OARouteSettingsParameterController.h"
 #import "OARoutePreferencesParameters.h"
 #import "OARoutingHelper.h"
-#import "OAIconTextTableViewCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OATableViewCustomFooterView.h"
 #import "OAColors.h"
 
@@ -121,35 +121,37 @@
     UIImage *icon = [[param getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     UIColor *color = [param getTintColor];
 
-    OAIconTextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+    OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OAIconTextTableViewCell *) nib[0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OARightIconTableViewCell *) nib[0];
+        [cell descriptionVisibility:NO];
     }
     
     if (cell)
     {
-        [cell.textView setText:text];
-        [cell showImage:icon != nil];
-        cell.iconView.image = icon;
+        [cell.titleLabel setText:text];
+        [cell leftIconVisibility:icon != nil];
+        cell.leftIconView.image = icon;
         if (indexPath.row == _indexSelected)
         {
-            [cell.arrowIconView setImage:color
+            [cell rightIconVisibility:YES];
+            [cell.rightIconView setImage:color
                     ? [UIImage templateImageNamed:@"menu_cell_selected"]
                     : [UIImage imageNamed:@"menu_cell_selected"]];
 
             if (color)
-                cell.iconView.tintColor = color;
+                cell.leftIconView.tintColor = color;
         }
         else
         {
-            cell.iconView.tintColor = UIColorFromRGB(color_icon_inactive);
-            [cell.arrowIconView setImage:nil];
+            cell.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
+            [cell rightIconVisibility:NO];
         }
 
         if (color)
-            cell.arrowIconView.tintColor = color;
+            cell.rightIconView.tintColor = color;
     }
     
     return cell;

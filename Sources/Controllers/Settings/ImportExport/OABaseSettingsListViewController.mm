@@ -14,7 +14,7 @@
 #import "OARightIconTableViewCell.h"
 #import "OAExportSettingsType.h"
 #import "OAMenuSimpleCell.h"
-#import "OAIconTextTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAActivityViewWithTitleCell.h"
 #import "OAFileSettingsItem.h"
 #import "OAExportSettingsCategory.h"
@@ -274,22 +274,21 @@
             }
             return cell;
         }
-        else if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
+        else if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
         {
             
-            OAIconTextTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+            OASimpleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-                cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-                cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-                cell.arrowIconView.hidden = YES;
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+                [cell descriptionVisibility:NO];
             }
             if (cell)
             {
-                cell.textView.text = item[@"title"];
-                cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
-                cell.iconView.tintColor = item[@"color"] ? item[@"color"] : UIColorFromRGB(color_tint_gray);
+                cell.titleLabel.text = item[@"title"];
+                cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+                cell.leftIconView.tintColor = item[@"color"] ? item[@"color"] : UIColorFromRGB(color_tint_gray);
             }
             return cell;
         }

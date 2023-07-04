@@ -11,7 +11,6 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OASimpleTableViewCell.h"
-#import "OAIconTextTableViewCell.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAMapViewController.h"

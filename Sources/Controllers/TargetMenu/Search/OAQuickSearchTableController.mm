@@ -44,7 +44,6 @@
 #import "OAColors.h"
 #import "OASizes.h"
 
-#import "OAIconTextTableViewCell.h"
 #import "OASearchMoreCell.h"
 #import "OAPointDescCell.h"
 #import "OASimpleTableViewCell.h"
@@ -711,21 +710,21 @@
                 }
                 else if ([res.object isKindOfClass:[OAPOICategory class]])
                 {
-                    OAIconTextTableViewCell* cell;
-                    cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+                    OASimpleTableViewCell* cell;
+                    cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
                     if (cell == nil)
                     {
-                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-                        cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+                        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+                        [cell descriptionVisibility:NO];
                     }
                     if (cell)
                     {
-                        cell.contentView.backgroundColor = [UIColor whiteColor];
-                        cell.arrowIconView.image = [UIImage imageNamed:@"menu_cell_pointer.png"];
-                        cell.arrowIconView.image = [cell.arrowIconView.image imageFlippedForRightToLeftLayoutDirection];
-                        [cell.textView setTextColor:[UIColor blackColor]];
-                        [cell.textView setText:[item getName]];
-                        [cell.iconView setImage:[((OAPOICategory *)res.object) icon]];
+                        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                        [cell.titleLabel setTextColor:[UIColor blackColor]];
+                        [cell.titleLabel setText:[item getName]];
+                        [cell.leftIconView setImage:[((OAPOICategory *)res.object) icon]];
+                        [cell setCustomLeftSeparatorInset:YES];
                         cell.separatorInset = UIEdgeInsetsMake(0., isLast ? 0. : 66., 0., 0.);
                     }
                     return cell;

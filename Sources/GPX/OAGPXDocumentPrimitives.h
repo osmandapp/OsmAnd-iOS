@@ -15,6 +15,7 @@
 
 #define ICON_NAME_EXTENSION @"icon"
 #define BACKGROUND_TYPE_EXTENSION @"background"
+#define COLOR_NAME_EXTENSION @"color"
 #define ADDRESS_EXTENSION @"address"
 #define CALENDAR_EXTENSION @"calendar_event"
 #define PICKUP_DATE @"pickup_date"

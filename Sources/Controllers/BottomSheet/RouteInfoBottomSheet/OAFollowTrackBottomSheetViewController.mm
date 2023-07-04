@@ -16,7 +16,7 @@
 #import "OAGPXTrackCell.h"
 #import "OAGPXDatabase.h"
 #import "OASegmentTableViewCell.h"
-#import "OAIconTextDescCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OsmAndApp.h"
@@ -183,7 +183,7 @@
 	}];
 	
 	[items addObject:@{
-		@"type" : [OAIconTextDescCell getCellIdentifier],
+		@"type" : [OASimpleTableViewCell getCellIdentifier],
 		@"title" : OALocalizedString(@"select_another_track"),
 		@"img" : @"ic_custom_folder",
 		@"key" : @"select_another"
@@ -199,7 +199,7 @@
 	if (!_gpx.hasRtePt && !_gpx.hasRoute)
 	{
 		[items addObject:@{
-			@"type" : [OAIconTextDescCell getCellIdentifier],
+			@"type" : [OASimpleTableViewCell getCellIdentifier],
 			@"title" : OALocalizedString(@"attach_to_the_roads"),
 			@"img" : @"ic_custom_attach_track",
 			@"key" : @"attach_to_roads"
@@ -367,29 +367,23 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:[OAIconTextDescCell getCellIdentifier]])
+    else if ([type isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAIconTextDescCell* cell;
-        cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextDescCell getCellIdentifier]];
+        OASimpleTableViewCell* cell;
+        cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
-            cell.textView.numberOfLines = 0;
-            cell.textView.lineBreakMode = NSLineBreakByWordWrapping;
-            [cell.arrowIconView removeFromSuperview];
-            [cell.iconView setTintColor:UIColorFromRGB(color_primary_purple)];
-            cell.descView.hidden = YES;
-            cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+            cell.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+            [cell.leftIconView setTintColor:UIColorFromRGB(color_primary_purple)];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            [cell.textView setText:item[@"title"]];
+            [cell.titleLabel setText:item[@"title"]];
                 
-            [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
-            
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
+            [cell.leftIconView setImage:[UIImage templateImageNamed:item[@"img"]]];
         }
         return cell;
     }

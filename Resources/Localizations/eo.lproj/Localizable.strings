@@ -2618,3 +2618,4 @@
 "icon_group_service" = "Servo";
 "weather_forecast" = "Veterprognozo";
 "weather_forecast_is_outdated" = "Veterprognozo estas malaktuala.";
+"map_widget_distance_to_intermediate" = "Distanco al intercelo";

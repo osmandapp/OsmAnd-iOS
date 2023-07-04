@@ -21,6 +21,7 @@
     [super awakeFromNib];
     if ([self isDirectionRTL])
         self.valueLabel.textAlignment = NSTextAlignmentLeft;
+    [self layoutIfNeeded];
 }
 
 - (void)valueVisibility:(BOOL)show

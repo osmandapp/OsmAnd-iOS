@@ -589,8 +589,8 @@
 "shared_string_current" = "Текущий";
 "make_as_start_point" = "Сделать пунктом отправления";
 "subsequent_dest_description" = "Текущий конечный пункт станет последним промежуточным";
-"first_intermediate_dest_description" = "Сделать первым промежуточным пунктом";
-"last_intermediate_dest_description" = "Сделать последним промежуточным пунктом";
+"first_intermediate_dest_description" = "Добавить первым промежуточным пунктом";
+"last_intermediate_dest_description" = "Добавить последним промежуточным пунктом";
 "in_app_purchase_desc" = "Разовый платёж";
 "transport_Routes" = "Маршруты";
 "transport_nearby_routes" = "В пределах";
@@ -769,9 +769,9 @@
 "search_radius_proximity" = "В радиусе";
 "poi" = "POI";
 "show_poi_over_map" = "Показывать POI";
-"keep_and_add_destination_point" = "Добавить в конец маршрута";
-"add_as_first_destination_point" = "Добавить в начало маршрута";
-"add_as_last_destination_point" = "Добавить перед конечным пунктом";
+"keep_and_add_destination_point" = "Следующий пункт назначения";
+"add_as_first_destination_point" = "Первый промежуточный пункт";
+"add_as_last_destination_point" = "Последний промежуточный пункт";
 "intermediate_items_sort_by_distance" = "Расположить в оптимальном порядке";
 "route_stops_before" = "%@остановок до выбранной";
 "osm_live_plan_pricing" = "План и цены";
@@ -974,7 +974,7 @@
 "hide_hillshade" = "Скрыть затенение рельефа";
 "day_night_info" = "Восход/закат";
 "search_my_location" = "Найти моё местоположение";
-"avoid_in_routing_descr_" = "Исключить определённые маршруты и типы дорог";
+"avoid_in_routing_descr_" = "Избегать определённых участков и типов дорог";
 "general_settings_descr" = "Настройки экрана, локализации, единиц измерения и другие.";
 "auto_zoom_none" = "Без автомасштаба";
 "auto_zoom_close" = "К ближнему плану";
@@ -1035,7 +1035,7 @@
 "route_tsll" = "Плавно налево";
 "route_tu" = "Развернитесь";
 "intermediate_point_too_far" = "Промежуточный пункт %@ слишком далеко от ближайшей дороги.";
-"empty_route_calculated" = "Невозможно построить маршрут.";
+"empty_route_calculated" = "Данные маршрута потеряны";
 "avoid_roads_msg" = "Запуск альтернативного маршрута путём исключения указанных дорог";
 "poi_overlay" = "Наложение POI";
 "save_track_to_gpx" = "Автозапись трека при навигации";
@@ -1272,7 +1272,7 @@
 "rendering_value_red_name" = "Красный";
 "rendering_attr_surfaceIntegrity_name" = "Качество дорожного покрытия";
 "routing_attr_avoid_sett_name" = "Без булыжников или брусчатки";
-"rendering_attr_contourColorScheme_name" = "Цветовая гамма горизонталей";
+"rendering_attr_contourColorScheme_name" = "Цветовая схема горизонталей";
 "rendering_attr_highway_class_footway_name" = "Пешеходная";
 "rendering_attr_surface_paving_stones_name" = "Тротуарная плитка";
 "rendering_attr_alpineHiking_description" = "Раскраска троп и дорог согласно шкале SAC.";
@@ -1281,8 +1281,8 @@
 "routing_attr_allow_classic_only_description" = "Маршруты только для классического стиля, без конькобежных трасс. Сюда входят маршруты, подготовленные небольшим снегоходом с более свободной лыжнёй и трассами, подготовленными вручную лыжниками.";
 "rendering_attr_OSMMapperAssistant_name" = "Помощник картографа OSM";
 "routing_attr_avoid_subway_name" = "Без метро";
-"routing_attr_driving_style_prefer_unpaved_name" = "Предпочитать грунтовые дороги";
-"routing_attr_driving_style_balance_name" = "Сбалансированный";
+"routing_attr_driving_style_prefer_unpaved_name" = "Предпочитать дороги без покрытия";
+"routing_attr_driving_style_balance_name" = "Приоритет быстрейшему маршруту";
 "rendering_value_translucent_orange_name" = "Оранжевый прозрачный";
 "rendering_value_default_name" = "По умолчанию";
 "rendering_attr_contourWidth_name" = "Толщина горизонталей";
@@ -1306,12 +1306,12 @@
 "routing_attr_avoid_toll_name" = "Без платных дорог";
 "rendering_attr_streetLighting_name" = "Уличное освещение";
 "rendering_value_orange_name" = "Оранжевый";
-"routing_attr_prefer_unpaved_name" = "Предпочитать грунтовые дороги";
+"routing_attr_prefer_unpaved_name" = "Предпочитать дороги без покрытия";
 "rendering_value_defaultTranslucentCyan_name" = "По умолчанию (голубой прозрачный)";
 "rendering_value_highContrastRoads_name" = "Высокий контраст";
 "rendering_value_car_name" = "Автомобиль";
 "routing_attr_allow_motorway_description" = "Разрешает движение по автомагистралям.";
-"routing_attr_driving_style_speed_name" = "Предпочитать оживлённые улицы";
+"routing_attr_driving_style_speed_name" = "Предпочитать крупные дороги";
 "rendering_value_boldOutline_name" = "Жирный контур";
 "rendering_value_fine_name" = "Тончайшая";
 "rendering_attr_surface_sand_name" = "Песок";
@@ -1319,7 +1319,7 @@
 "routing_attr_freeride_policy_description" = "Фрирайд и внетрассовые маршруты — это неофициальные трассы и проезды. Как правило, они не подготовлены, не обслуживаются и не проверяются вечером. Вход на свой страх и риск.";
 "rendering_attr_surface_sett_name" = "Брусчатка";
 "rendering_attr_highway_class_track_grade4_name" = "Класс 4";
-"routing_attr_relief_smoothness_factor_hills_name" = "Любая сложность";
+"routing_attr_relief_smoothness_factor_hills_name" = "Максимально сложный";
 "rendering_attr_showMtbRoutes_name" = "Маршруты для горных велосипедов";
 "rendering_attr_piste_type_hike_name" = "Хайк";
 "rendering_attr_surface_snow_name" = "Снег";
@@ -1334,7 +1334,7 @@
 "rendering_attr_pisteGrooming_name" = "Тип лыжной трассы";
 "rendering_value_americanRoadAtlas_name" = "Атлас дорог Америки";
 "rendering_attr_highway_class_street_name" = "Улица";
-"routing_attr_relief_smoothness_factor_more_plains_name" = "Максимально ровный";
+"routing_attr_relief_smoothness_factor_more_plains_name" = "Максимально плоский";
 "rendering_attr_horseRoutes_name" = "Конные маршруты";
 "rendering_attr_surface_gravel_name" = "Гравий";
 "routeInfo_piste_type_name" = "Тип горнолыжной трассы";
@@ -1353,7 +1353,7 @@
 "rendering_value_pink_name" = "Розовый";
 "routing_attr_short_way_description" = "Оптимизированный более короткий маршрут (экономия топлива/энергии)";
 "rendering_attr_highway_class_track_grade1_name" = "Класс 1";
-"routing_attr_allow_private_description" = "Разрешить доступ на частную территорию.";
+"routing_attr_allow_private_description" = "Разрешить доступ в частные зоны (например с проездом через шлагбаум или КПП).";
 "rendering_attr_transportStops_name" = "Остановки транспорта";
 "rendering_attr_showSurfaceGrade_name" = "Качество дорог";
 "rendering_attr_contourLines_name" = "Показывать контурные линии";
@@ -1426,7 +1426,7 @@
 "routing_attr_avoid_train_name" = "Без поездов";
 "rendering_attr_surface_salt_name" = "Соль";
 "routing_attr_no_new_routing_name" = "Не использовать маршрутизацию версии 1.9";
-"routing_attr_allow_private_name" = "Въезд на частную территорию";
+"routing_attr_allow_private_name" = "Частные зоны";
 "rendering_value_green_name" = "Зелёный";
 "rendering_attr_highway_class_track_grade3_name" = "Класс 3";
 "routing_attr_avoid_share_taxi_name" = "Без маршруток";
@@ -1528,7 +1528,7 @@
 "routing_attr_piste_type_sled_description" = "Склоны для катания на санях.";
 "rendering_attr_alpineHiking_name" = "Пеший горный туризм по шкале SAC";
 "rendering_value_pedestrian_name" = "Пешком";
-"routing_attr_prefer_unpaved_description" = "Предпочитать грунтовые дороги.";
+"routing_attr_prefer_unpaved_description" = "Предпочитать грунтовые дороги и тропы.";
 "rendering_value_darkyellow_name" = "Тёмно-жёлтый";
 "rendering_attr_surface_unpaved_name" = "Грунтовое";
 "rendering_attr_streetLightingNight_name" = "Показывать только ночью";
@@ -1578,7 +1578,7 @@
 "gpx_analyze" = "Анализировать";
 "osmand_parking_warning" = "Предупреждение";
 "map_transparency" = "Прозрачность основной карты";
-"srtm_color_scheme" = "Цвет горизонталей";
+"srtm_color_scheme" = "Цветовая схема";
 "shared_string_zoom_levels" = "Уровни масштаба";
 "shared_string_appearance" = "Внешний вид";
 "context_menu_points_of_group" = "Все точки группы";
@@ -1823,7 +1823,7 @@
 "shared_string_settings" = "Настройки";
 "importing_from" = "Импорт данных из %@";
 "shared_string_importing" = "Импортирование";
-"avoid_road" = "Обходить";
+"avoid_road" = "Избегать на маршруте";
 "quick_action_map_source_title" = "Источники карт";
 "shared_string_poi_types" = "Типы POI";
 "shared_string_quick_actions" = "Быстрые действия";
@@ -1942,7 +1942,7 @@
 "icon_group_emergency" = "Экстренные службы";
 "icon_group_symbols" = "Символы";
 "fav_point_dublicate" = "Введено повторяющееся название избранной точки";
-"attach_to_the_roads" = "Привязка к дороге";
+"attach_to_the_roads" = "Привязка к дорогам";
 "add_custom_category" = "Создать свою категорию";
 "shared_string_gpx_points" = "Точки";
 "shared_string_resources" = "Ресурсы";
@@ -2406,8 +2406,8 @@
 "shared_string_purchased" = "Куплено";
 "wikipedia_and_wikivoyage_offline" = "Локальные Википедия и Викигид";
 "osm_live_banner_desc" = "Получите неограниченное количество загрузок карт, а также еженедельные, ежедневные и даже почасовые обновления.";
-"routing_attr_allow_private_for_truck_name" = "Въезд на частную территорию (грузовик)";
-"routing_attr_allow_private_for_truck_description" = "Разрешить доступ грузовых автомобилей на частную территорию.";
+"routing_attr_allow_private_for_truck_name" = "Частные зоны (грузовик)";
+"routing_attr_allow_private_for_truck_description" = "Разрешить доступ в частные зоны (например с проездом через шлагбаум или КПП).";
 "terrain_maps" = "Карты рельефа";
 "annual_subscription" = "Годовая подписка";
 "copy_coordinates" = "Копировать координаты";
@@ -2532,7 +2532,7 @@
 "recalc_angle_dialog_descr" = "Между текущей позицией и рассчитанным маршрутом будет отображаться прямой отрезок, пока маршрут не будет пересчитан.";
 "shared_string_status" = "Статус";
 "shared_string_layers" = "Слои";
-"rendering_attr_depthContourColorScheme_name" = "Цвет изобат";
+"rendering_attr_depthContourColorScheme_name" = "Цветовая схема линий";
 "you_can_get_feature_as_part_of_pattern" = "Получить «%@» как часть тарифного плана %@. Сравнение планов:";
 "shared_string_cloud" = "Облако";
 "service_is_not_available_please_try_later" = "Сервис недоступен. Повторите попытку позже.";
@@ -2571,7 +2571,7 @@
 "delete_all_confirmation" = "Да, удалите все";
 "pro_features" = "Функции Pro";
 "shared_string_cross_buy" = "Перекрестная покупка";
-"show_borders_of_downloaded_maps" = "Показать границы загруженных карт";
+"show_borders_of_downloaded_maps" = "Границы загруженных карт";
 "use_login_and_password" = "Используйте логин и пароль";
 "routing_attr_motor_type_electric_name" = "Электричество";
 "not_enough_contributions_descr" = "Чтобы получить бесплатные обновления, сделайте минимум %@ изменений, в сумме за последение два месяца %@";
@@ -2580,7 +2580,7 @@
 "routing_attr_goods_restrictions_name" = "Доставка товаров";
 "rendering_attr_showMtbScale_name" = "Показать MTB-сложность";
 "routing_attr_motor_type_name" = "Двигатель автомобиля";
-"simulation_real_mode_desc" = "Максимальная разрешённая скорость на прямых участках.\nЗамедление на перекрёстках.\nДополнительные штрафы на светофорах, знаках остановки и пр.";
+"simulation_real_mode_desc" = "Максимальная разрешённая скорость на прямых участках.\nЗамедление на перекрёстках.\nТакже на скорость влияют светофоры, знаки остановки и пр.";
 "choose_what_to_restore" = "Выберите данные для восстановления.";
 "activity_type_mountainbike_name" = "Горный велосипед";
 "backup_data" = "Резервное копирование данных";
@@ -2596,7 +2596,7 @@
 "rendering_attr_horse_scale_critical_name" = "Критический";
 "rendering_attr_weatherPrecipitationContours_name" = "Изолинии осадков (изогиеты)";
 "routing_attr_prefer_hiking_routes_name" = "Предпочитать пешеходные маршруты";
-"rendering_attr_depthContourColorScheme_description" = "Цвет контурных линий глубины (изобат)";
+"rendering_attr_depthContourColorScheme_description" = "Цветовая схема линий глубины (изобат)";
 "rendering_attr_showMtbScaleIMBATrails_description" = "Показать выделенные трассы для горных велосипедов.";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Значки на мелком масштабе";
 "routing_attr_allow_intermittent_description" = "Разрешить пересыхающие водные пути";

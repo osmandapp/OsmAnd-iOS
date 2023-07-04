@@ -74,12 +74,19 @@
     _quickActionFloatingButton.tintColorDay = UIColorFromRGB(color_primary_purple);
     _quickActionFloatingButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
     [_quickActionFloatingButton updateColorsForPressedState:NO];
+    [self setQuickActionButtonMargin];
     
     _quickActionsButtonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onQuickActionButtonDragged:)];
     [_quickActionsButtonDragRecognizer setMinimumPressDuration:0.5];
     [_quickActionFloatingButton addGestureRecognizer:_quickActionsButtonDragRecognizer];
     _quickActionFloatingButton.accessibilityLabel = OALocalizedString(@"configure_screen_quick_action");
+    
+    [self onMap3dModeUpdated];
     [self setQuickActionButtonMargin];
+    
+    _map3dModeButtonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onMap3dModeButtonDragged:)];
+    [_map3dModeButtonDragRecognizer setMinimumPressDuration:0.5];
+    [_map3dModeFloatingButton addGestureRecognizer:_map3dModeButtonDragRecognizer];
     
     _map3dModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                    withHandler:@selector(onMap3dModeUpdated)

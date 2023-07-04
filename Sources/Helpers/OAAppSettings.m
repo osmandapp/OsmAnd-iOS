@@ -4314,12 +4314,12 @@
         
         _map3dMode = [OACommonInteger withKey:map3dModeVisibilityKey defValue:EOAMap3DModeVisibilityVisibleIn3DMode];
 
+        _map3dModePortraitX = [OACommonDouble withKey:map3dModePortraitXKey defValue:0];
+        _map3dModePortraitY = [OACommonDouble withKey:map3dModePortraitYKey defValue:0];
         _map3dModeLandscapeX = [OACommonDouble withKey:map3dModeLandscapeXKey defValue:0];
-        _map3dModePortraitY = [OACommonDouble withKey:map3dModeLandscapeYKey defValue:0];
-        _map3dModeLandscapeX = [OACommonDouble withKey:map3dModePortraitXKey defValue:0];
-        _map3dModeLandscapeY = [OACommonDouble withKey:map3dModePortraitYKey defValue:0];
+        _map3dModeLandscapeY = [OACommonDouble withKey:map3dModeLandscapeYKey defValue:0];
         [_profilePreferences setObject:_map3dMode forKey:map3dModeVisibilityKey];
-        [_profilePreferences setObject:_map3dModeLandscapeX forKey:@"3dmode_fab_margin_x_portrait_margin"];
+        [_profilePreferences setObject:_map3dModePortraitX forKey:@"3dmode_fab_margin_x_portrait_margin"];
         [_profilePreferences setObject:_map3dModePortraitY forKey:@"3dmode_fab_margin_y_portrait_margin"];
         [_profilePreferences setObject:_map3dModeLandscapeX forKey:@"3dmode_fab_margin_x_landscape_margin"];
         [_profilePreferences setObject:_map3dModeLandscapeY forKey:@"3dmode_fab_margin_y_landscape_margin"];

@@ -24,7 +24,6 @@
 #define settingGeoFormatKey @"settingGeoFormatKey"
 #define settingMapArrowsKey @"settingMapArrowsKey"
 #define settingMapShowAltInDriveModeKey @"settingMapShowAltInDriveModeKey"
-#define settingEnable3DViewKey @"settingEnable3DView"
 #define settingDoNotShowPromotionsKey @"settingDoNotShowPromotionsKey"
 #define settingUseFirebaseKey @"settingUseFirebaseKey"
 #define metricSystemChangedManuallyKey @"metricSystemChangedManuallyKey"
@@ -244,6 +243,12 @@
 #define quickActionPortraitXKey @"quickActionPortraitX"
 #define quickActionPortraitYKey @"quickActionPortraitY"
 
+#define map3dModeLandscapeXKey @"map3dModeLandscapeX"
+#define map3dModeLandscapeYKey @"map3dModeLandscapeY"
+#define map3dModePortraitXKey @"map3dModePortraitX"
+#define map3dModePortraitYKey @"map3dModePortraitY"
+#define map3dModeVisibilityKey @"map_3d_mode_visibility"
+
 #define contourLinesZoomKey @"contourLinesZoom"
 #define hikingRoutesParameterKey @"hikingRoutesParameter"
 #define cycleRoutesParameterKey @"cycleRoutesParameter"
@@ -455,6 +460,55 @@
             return @"ic_custom_compass_hidden";
         default:
             return @"ic_custom_compass_rotated";
+    }
+}
+
+@end
+
+@implementation OAMap3DModeVisibility
+
++ (instancetype) withModeConstant:(EOAMap3DModeVisibility)mode;
+{
+    OAMap3DModeVisibility *obj = [[OAMap3DModeVisibility alloc] init];
+    if (obj)
+        obj.mode = mode;
+    return obj;
+}
+
++ (NSString *) getTitle:(EOAMap3DModeVisibility)mode
+{
+    switch (mode)
+    {
+        case EOAMap3DModeVisibilityHidden:
+            return OALocalizedString(@"shared_string_hidden");
+        case EOAMap3DModeVisibilityVisible:
+            return OALocalizedString(@"shared_string_visible");
+        default:
+            return OALocalizedString(@"visible_in_3d_mode");
+    }
+}
+
++ (NSString *) getDescription:(EOAMap3DModeVisibility)mode
+{
+    switch (mode)
+    {
+        case EOAMap3DModeVisibilityHidden:
+            return OALocalizedString(@"shared_string_hidden");
+        case EOAMap3DModeVisibilityVisible:
+            return OALocalizedString(@"shared_string_visible");
+        default:
+            return OALocalizedString(@"visible_in_3d_mode");
+    }
+}
+
++ (NSString *) getIconName:(EOAMap3DModeVisibility)mode
+{
+    switch (mode)
+    {
+        case EOAMap3DModeVisibilityHidden:
+            return @"ic_custom_button_3d_off";
+        default:
+            return @"ic_custom_button_3d";
     }
 }
 
@@ -1319,6 +1373,12 @@
 - (id)makeGlobal
 {
     _global = YES;
+    return self;
+}
+
+- (id)makeProfile
+{
+    _global = NO;
     return self;
 }
 
@@ -2911,6 +2971,82 @@
 
 @end
 
+@implementation OACommonMap3dMode
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAMap3DModeVisibility)defValue
+{
+    OACommonRulerWidgetMode *obj = [[OACommonRulerWidgetMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOAMap3DModeVisibility) get
+{
+    return [super get];
+}
+
+- (void) set:(EOAMap3DModeVisibility)map3dMode
+{
+    [super set:map3dMode];
+}
+
+- (EOAMap3DModeVisibility) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOAMap3DModeVisibility)map3dMode mode:(OAApplicationMode *)mode
+{
+    [super set:map3dMode mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"Hidden"])
+        return [self set:EOAMap3DModeVisibilityHidden mode:mode];
+    else if ([strValue isEqualToString:@"Visible"])
+        return [self set:EOAMap3DModeVisibilityVisible mode:mode];
+    else if ([strValue isEqualToString:@"VisibleIn3DMode"])
+        return [self set:EOAMap3DModeVisibilityVisibleIn3DMode mode:mode];
+}
+
++ (NSString *) rulerWidgetModeToString:(EOAMap3DModeVisibility)map3dMode
+{
+    switch (map3dMode) {
+        case EOAMap3DModeVisibilityHidden:
+            return @"Hidden";
+        case EOAMap3DModeVisibilityVisible:
+            return @"Visible";
+        case EOAMap3DModeVisibilityVisibleIn3DMode:
+            return @"VisibleIn3DMode";
+        default:
+            return @"VisibleIn3DMode";
+    }
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    return [self.class rulerWidgetModeToString:[self get:mode]];
+}
+
+- (void) resetToDefault
+{
+    EOAMap3DModeVisibility defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAMap3DModeVisibility)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+@end
+
 @implementation OACommonWikiArticleShowImages
 
 @dynamic defValue;
@@ -3485,6 +3621,7 @@
 
 @end
 
+
 @interface OACommonUnit ()
 
 @property (nonatomic) NSUnit *defValue;
@@ -4051,7 +4188,6 @@
         [_keepInforming setModeDefaultValue:@0 mode:[OAApplicationMode PEDESTRIAN]];
         [_profilePreferences setObject:_keepInforming forKey:@"keep_informing"];
 
-        _settingAllow3DView = [OACommonBoolean withKey:settingEnable3DViewKey defValue:YES];
         _drivingRegionAutomatic = [OACommonBoolean withKey:drivingRegionAutomaticKey defValue:YES];
         _drivingRegion = [OACommonDrivingRegion withKey:drivingRegionKey defValue:[OADrivingRegion getDefaultRegion]];
         _metricSystem = [OACommonMetricSystem withKey:metricSystemKey defValue:KILOMETERS_AND_METERS];
@@ -4059,7 +4195,6 @@
         _settingGeoFormat = [OACommonInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES];
         _settingExternalInputDevice = [OACommonInteger withKey:settingExternalInputDeviceKey defValue:GENERIC_EXTERNAL_DEVICE];
 
-        [_profilePreferences setObject:_settingAllow3DView forKey:@"enable_3d_view"];
         [_profilePreferences setObject:_drivingRegionAutomatic forKey:@"shared_string_automatic"];
         [_profilePreferences setObject:_drivingRegion forKey:@"default_driving_region"];
         [_profilePreferences setObject:_metricSystem forKey:@"default_metric_system"];
@@ -4253,7 +4388,18 @@
         [_profilePreferences setObject:_quickActionPortraitY forKey:@"quick_fab_margin_y_portrait_margin"];
         [_profilePreferences setObject:_quickActionLandscapeX forKey:@"quick_fab_margin_x_landscape_margin"];
         [_profilePreferences setObject:_quickActionLandscapeY forKey:@"quick_fab_margin_y_landscape_margin"];
-
+        
+        _map3dMode = [[OACommonMap3dMode withKey:map3dModeVisibilityKey defValue:EOAMap3DModeVisibilityVisibleIn3DMode] makeShared];
+        _map3dModePortraitX = [OACommonDouble withKey:map3dModePortraitXKey defValue:0];
+        _map3dModePortraitY = [OACommonDouble withKey:map3dModePortraitYKey defValue:0];
+        _map3dModeLandscapeX = [OACommonDouble withKey:map3dModeLandscapeXKey defValue:0];
+        _map3dModeLandscapeY = [OACommonDouble withKey:map3dModeLandscapeYKey defValue:0];
+        [_profilePreferences setObject:_map3dMode forKey:map3dModeVisibilityKey];
+        [_profilePreferences setObject:_map3dModePortraitX forKey:@"3dmode_fab_margin_x_portrait_margin"];
+        [_profilePreferences setObject:_map3dModePortraitY forKey:@"3dmode_fab_margin_y_portrait_margin"];
+        [_profilePreferences setObject:_map3dModeLandscapeX forKey:@"3dmode_fab_margin_x_landscape_margin"];
+        [_profilePreferences setObject:_map3dModeLandscapeY forKey:@"3dmode_fab_margin_y_landscape_margin"];
+        
         _contourLinesZoom = [OACommonString withKey:contourLinesZoomKey defValue:@""];
         [_profilePreferences setObject:_contourLinesZoom forKey:@"contour_lines_zoom"];
         

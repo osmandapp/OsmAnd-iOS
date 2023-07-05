@@ -14,7 +14,7 @@
 #import "OARootViewController.h"
 #import "OAMapInfoController.h"
 #import "OAMapHudViewController.h"
-#import "OAQuickActionHudViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
 #import "OAMeasurementToolLayer.h"
 #import "OAMapLayer.h"
 #import "OAMapViewTrackingUtilities.h"
@@ -200,7 +200,7 @@
 }
 
 - (BOOL) isQuickActionLayerOn {
-    return _mapPanel.hudViewController.quickActionController.isQuickActionFloatingButtonVisible;
+    return _mapPanel.hudViewController.floatingButtonsController.isQuickActionFloatingButtonVisible;
 }
 
 - (BOOL) isMapRouteInfoMenuVisible {

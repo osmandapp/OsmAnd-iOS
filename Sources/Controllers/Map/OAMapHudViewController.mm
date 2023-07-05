@@ -22,7 +22,7 @@
 #import "OARootViewController.h"
 #import "OAOverlayUnderlayView.h"
 #import "OAToolbarViewController.h"
-#import "OAQuickActionHudViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
 #import "OADownloadProgressView.h"
 #import "OARoutingProgressView.h"
 #import "OAMapWidgetRegistry.h"
@@ -186,12 +186,12 @@
     _zoomInButton.enabled = [_mapViewController canZoomIn];
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
     
-    self.quickActionController = [[OAQuickActionHudViewController alloc] initWithMapHudViewController:self];
-    self.quickActionController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [self addChildViewController:self.quickActionController];
+    self.floatingButtonsController = [[OAFloatingButtonsHudViewController alloc] initWithMapHudViewController:self];
+    self.floatingButtonsController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self addChildViewController:self.floatingButtonsController];
     
-    self.quickActionController.view.frame = self.view.frame;
-    [self.view addSubview:self.quickActionController.view];
+    self.floatingButtonsController.view.frame = self.view.frame;
+    [self.view addSubview:self.floatingButtonsController.view];
     
     self.weatherButton.alpha = 0.;
 
@@ -497,7 +497,7 @@
 {
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     
-    [_quickActionController updateColors:isNight];
+    [_floatingButtonsController updateColors:isNight];
 
     [self updateMapSettingsButton];
     [self updateCompassButton];
@@ -587,17 +587,6 @@
                 _mapModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
                 _mapModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
                 _mapModeButton.accessibilityHint = nil;
-                _mapModeButton.borderWidthNight = 2;
-                break;
-            }
-                
-            case OAMapModeFollow: // Compass - 3D mode
-            {
-                [_mapModeButton setImage:[UIImage templateImageNamed:@"ic_custom_map_location_follow"] forState:UIControlStateNormal];
-                _mapModeButton.unpressedColorDay = UIColorFromRGB(color_on_map_icon_background_color_light);
-                _mapModeButton.unpressedColorNight = UIColorFromRGB(color_on_map_icon_background_color_dark);
-                _mapModeButton.tintColorDay = UIColorFromRGB(color_primary_purple);
-                _mapModeButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
                 _mapModeButton.borderWidthNight = 2;
                 break;
             }
@@ -742,7 +731,7 @@
 
 - (void) updateDependentButtonsVisibility
 {
-    [_quickActionController updateViewVisibility];
+    [_floatingButtonsController updateViewVisibility];
 }
 
 - (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
@@ -759,6 +748,8 @@
     OACommonPreference *obj = notification.object;
     OACommonInteger *rotateMap = [OAAppSettings sharedManager].rotateMap;
     OACommonBoolean *transparentMapTheme = [OAAppSettings sharedManager].transparentMapTheme;
+    OACommonInteger *map3dMode = [OAAppSettings sharedManager].map3dMode;
+    OACommonInteger *compassMode = [OAAppSettings sharedManager].compassMode;
     if (obj)
     {
         if (obj == rotateMap)
@@ -771,6 +762,18 @@
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateColors];
+            });
+        }
+        else if (obj == map3dMode)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateDependentButtonsVisibility];
+            });
+        }
+        else if (obj == compassMode)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateCompassButton];
             });
         }
     }

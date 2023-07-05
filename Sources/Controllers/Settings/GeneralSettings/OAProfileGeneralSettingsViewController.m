@@ -112,8 +112,6 @@
     NSString *positionMapValue = [self getLocationPositionValue];
     NSString *positionMapIcon = [self getLocationPositionIcon];
     
-    NSNumber *allow3DValue = @([_settings.settingAllow3DView get:self.appMode]);
-    
     NSString *drivingRegionValue;
     if ([_settings.drivingRegionAutomatic get:self.appMode])
         drivingRegionValue = OALocalizedString(@"shared_string_automatic");
@@ -243,14 +241,6 @@
         @"icon" : rotateMapIcon,
         @"no_tint" : @YES,
         @"key" : @"map_orientation",
-    }];
-    [appearanceArr addObject:@{
-        @"name" : @"allow_3d",
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"allow_3D_view"),
-        @"isOn" : allow3DValue,
-        @"icon" : @"ic_custom_2_5d_view",
-        @"key" : @"3dView",
     }];
     [appearanceArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
@@ -434,19 +424,6 @@
         NSString *name = item[@"name"];
         if (name)
         {
-            BOOL isChecked = sw.on;
-            if ([name isEqualToString:@"allow_3d"])
-            {
-                [_settings.settingAllow3DView set:isChecked mode:self.appMode];
-                if (!isChecked)
-                {
-                    OsmAndAppInstance app = OsmAndApp.instance;
-                    if (app.mapMode == OAMapModeFollow)
-                        [app setMapMode:OAMapModePositionTrack];
-                    else
-                        [app.mapModeObservable notifyEvent];
-                }
-            }
             [self generateData];
             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
         }

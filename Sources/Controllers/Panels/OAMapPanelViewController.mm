@@ -39,7 +39,7 @@
 #import "OAImpassableRoadViewController.h"
 #import "OAAvoidSpecificRoads.h"
 #import "OAWaypointsViewController.h"
-#import "OAQuickActionHudViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
 #import "OARouteSettingsViewController.h"
 #import "OARouteAvoidSettingsViewController.h"
 #import "OARoutePreferencesParameters.h"
@@ -1827,7 +1827,7 @@ typedef enum
      if (_searchViewController)
          [_searchViewController dismissViewControllerAnimated:YES completion:nil];
      if (_hudViewController)
-         [_hudViewController.quickActionController hideActionsSheetAnimated];
+         [_hudViewController.floatingButtonsController hideActionsSheetAnimated];
  }
 
 - (void) updateTargetPointPosition:(CGFloat)height animated:(BOOL)animated

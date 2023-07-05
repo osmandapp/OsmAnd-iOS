@@ -23,7 +23,7 @@
 #import "OANavigationController.h"
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
-#import "OAQuickActionHudViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
 #import "OAResourcesBaseViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OAPOIHelper.h"
@@ -311,6 +311,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     _settingsObservable = [[OAObservable alloc] init];
     _azimuthObservable = [[OAObservable alloc] init];
     _zoomObservable = [[OAObservable alloc] init];
+    _elevationAngleObservable = [[OAObservable alloc] init];
     _mapObservable = [[OAObservable alloc] init];
     _framePreparedObservable = [[OAObservable alloc] init];
     _mapSourceUpdatedObservable = [[OAObservable alloc] init];
@@ -1368,7 +1369,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 - (void) elevationGestureDetected:(UIPanGestureRecognizer *)recognizer
 {
     // Ignore gesture if we have no view or if 3D view is disabled
-    if (!self.mapViewLoaded || ![OAAppSettings.sharedManager.settingAllow3DView get] || _rotationAnd3DViewDisabled)
+    if (!self.mapViewLoaded || _rotationAnd3DViewDisabled)
         return;
 
     if (recognizer.state == UIGestureRecognizerStateBegan)
@@ -1435,8 +1436,9 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     accepted |= !longPress && recognizer.state == UIGestureRecognizerStateEnded;
     if (accepted)
     {
+        
         OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-        OAQuickActionHudViewController *quickAction = mapPanel.hudViewController.quickActionController;
+        OAFloatingButtonsHudViewController *quickAction = mapPanel.hudViewController.floatingButtonsController;
         [quickAction hideActionsSheetAnimated];
         if ([mapPanel gpxModeActive])
         {
@@ -1495,6 +1497,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         case OAMapRendererViewStateEntryElevationAngle:
         {
             _app.data.mapLastViewedState.elevationAngle = _mapView.elevationAngle;
+            [_elevationAngleObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:_mapView.elevationAngle]];
             break;
         }
         case OAMapRendererViewStateEntryTarget:
@@ -1531,6 +1534,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 @synthesize zoomObservable = _zoomObservable;
 
 @synthesize mapObservable = _mapObservable;
+
+@synthesize elevationAngleObservable = _elevationAngleObservable;
 
 - (float) currentZoomInDelta
 {

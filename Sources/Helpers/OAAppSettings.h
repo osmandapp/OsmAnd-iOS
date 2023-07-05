@@ -12,6 +12,7 @@
 #import "OAColorizationType.h"
 #import "OAColoringType.h"
 #import "OADownloadMode.h"
+#import "OAMap3DModeVisibilityType.h"
 
 #define kNotificationSetProfileSetting @"kNotificationSetProfileSetting"
 #define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"
@@ -51,6 +52,25 @@ typedef NS_ENUM(NSInteger, EOACompassMode)
 + (NSString *) getIconName:(EOACompassMode)cm;
 
 @end
+
+typedef NS_ENUM(NSInteger, EOAMap3DModeVisibility)
+{
+    EOAMap3DModeVisibilityHidden = 0,
+    EOAMap3DModeVisibilityVisible,
+    EOAMap3DModeVisibilityVisibleIn3DMode
+};
+
+@interface OAMap3DModeVisibility : NSObject
+
+@property (nonatomic) EOAMap3DModeVisibility mode;
+
++ (instancetype) withModeConstant:(EOAMap3DModeVisibility)mode;
++ (NSString *) getTitle:(EOAMap3DModeVisibility)mode;
++ (NSString *) getDescription:(EOAMap3DModeVisibility)mode;
++ (NSString *) getIconName:(EOAMap3DModeVisibility)mode;
+
+@end
+
 
 typedef NS_ENUM(NSInteger, EOASunriseSunsetMode)
 {
@@ -300,6 +320,7 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 @property (nonatomic) long lastModifiedTime;
 
 - (id) makeGlobal;
+- (id) makeProfile;
 - (id) makeShared;
 
 - (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode;
@@ -568,6 +589,19 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 @end
 
+@interface OACommonMap3dMode : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAMap3DModeVisibility)defValue;
+
+- (EOAMap3DModeVisibility) get;
+- (EOAMap3DModeVisibility) get:(OAApplicationMode *)mode;
+- (void) set:(EOAMap3DModeVisibility)map3dMode;
+- (void) set:(EOAMap3DModeVisibility)map3dMode mode:(OAApplicationMode *)mode;
+
++ (NSString *) rulerWidgetModeToString:(EOAMap3DModeVisibility)map3dMode;
+
+@end
+
 @interface OACommonWikiArticleShowImages : OACommonInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAWikiArticleShowConstant)defValue;
@@ -727,7 +761,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonInteger *settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
 @property (nonatomic) OACommonBoolean *metricSystemChangedManually;
-@property (nonatomic) OACommonBoolean *settingAllow3DView;
 
 @property (assign, nonatomic) int settingMapArrows; // 0 - from Location; 1 - from Map Center
 @property (assign, nonatomic) CLLocationCoordinate2D mapCenter;
@@ -980,6 +1013,14 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic, readonly) OACommonDouble *quickActionLandscapeY;
 @property (nonatomic, readonly) OACommonDouble *quickActionPortraitX;
 @property (nonatomic, readonly) OACommonDouble *quickActionPortraitY;
+
+// Map 3d mode
+
+@property (nonatomic) OACommonMap3dMode *map3dMode;
+@property (nonatomic, readonly) OACommonDouble *map3dModeLandscapeX;
+@property (nonatomic, readonly) OACommonDouble *map3dModeLandscapeY;
+@property (nonatomic, readonly) OACommonDouble *map3dModePortraitX;
+@property (nonatomic, readonly) OACommonDouble *map3dModePortraitY;
 
 // Contour Lines
 @property (nonatomic) OACommonString *contourLinesZoom;

@@ -20,8 +20,7 @@ typedef NS_ENUM(NSInteger, OAMapMode)
 {
     OAMapModeUnknown = -1,
     OAMapModeFree,
-    OAMapModePositionTrack,
-    OAMapModeFollow
+    OAMapModePositionTrack
 };
 
 typedef struct Point31

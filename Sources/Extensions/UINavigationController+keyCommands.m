@@ -13,7 +13,7 @@
 #import "OASuperViewController.h"
 #import "OABaseBottomSheetViewController.h"
 #import "OADashboardViewController.h"
-#import "OAQuickActionHudViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
 #import "OAWeatherToolbar.h"
 #import "OALog.h"
 
@@ -49,8 +49,8 @@
                 [rvc.mapPanel closeDashboardLastScreen];
             else if ([rvc.mapPanel isRouteInfoVisible])
                 [rvc.mapPanel closeRouteInfo];
-            else if ([rvc.mapPanel.hudViewController.quickActionController isActionSheetVisible])
-                [rvc.mapPanel.hudViewController.quickActionController hideActionsSheetAnimated];
+            else if ([rvc.mapPanel.hudViewController.floatingButtonsController isActionSheetVisible])
+                [rvc.mapPanel.hudViewController.floatingButtonsController hideActionsSheetAnimated];
             else if ([rvc.mapPanel.hudViewController.mapInfoController weatherToolbarVisible])
                 [rvc.mapPanel.hudViewController hideWeatherToolbarIfNeeded];
             else if ([rvc.mapPanel isContextMenuVisible])

@@ -424,7 +424,7 @@
         return kCLLocationAccuracyBestForNavigation;
 
     // In case app is in browsing mode and user is following map, a bit less than best accuracy is needed
-    if (_app.mapMode == OAMapModeFollow || _settings.mapSettingTrackRecording)
+    if (_settings.mapSettingTrackRecording)
         return kCLLocationAccuracyBest;
 
     // If just tracking position while browsing, it's safe to use medium accuracy
@@ -469,9 +469,9 @@
         {
             [self updateRequestedAccuracy];
         }
-        // If map mode is OAMapModePositionTrack or OAMapModeFollow, and services are not running,
+        // If map mode is OAMapModePositionTrack and services are not running,
         // launch them (except if waiting for user authorization).
-        else if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)
+        else if (_app.mapMode == OAMapModePositionTrack)
         {
             [self start];
         }

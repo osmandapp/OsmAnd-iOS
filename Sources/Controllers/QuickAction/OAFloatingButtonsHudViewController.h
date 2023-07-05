@@ -1,5 +1,5 @@
 //
-//  OAQuickActionHudViewController.h
+//  OAFloatingButtonsHudViewController.h
 //  OsmAnd
 //
 //  Created by Paul on 7/28/19.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "OAMapHudViewController.h"
 
-@interface OAQuickActionHudViewController : UIViewController
+@interface OAFloatingButtonsHudViewController : UIViewController
 
 - (instancetype) initWithMapHudViewController:(OAMapHudViewController *)mapHudController;
 

@@ -315,9 +315,15 @@ forcedUpdate:(BOOL)forcedUpdate
 
 - (double) normalizeElevationAngle:(double)elevationAngle
 {
-    // TODO: skip normalize temporarily
-    return elevationAngle;
+    return elevationAngle > 90 ? 90 : MAX([self getMinAllowedElevationAngle:elevationAngle], elevationAngle);
+}
 
+- (double) getMinAllowedElevationAngle:(double)elevationAngle
+{
+    // TODO: skip normalize temporarily
+    if (YES)
+        return 10;
+    
     int verticalTilesCount = round(UIScreen.mainScreen.bounds.size.height * self.viewportYScale * self.displayDensityFactor / 256.0);
     if (verticalTilesCount < 6)
         return MAX(30.0, elevationAngle);

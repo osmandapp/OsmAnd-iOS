@@ -426,7 +426,7 @@
 "record_plugin_description" = "Запись и сохранение треков через виджет GPX; возможность автоматической записи маршрута в GPX-файл при навигации (должно быть включено в настройках).\n\nЗаписанные треки можно отправлять друзьям или использовать для вклада в OSM.\nОни помогут спортсменам контролировать тренировки. Базовый анализ треков (время прохождения круга, средняя скорость и др.) можно выполнить непосредственно в OsmAnd. И конечно, треки можно анализировать специальными инструментами сторонних производителей.";
 "product_desc_trip_planning" = "Планирование поездки, добавить путевые точки, измерить расстояние до пункта назначения с помощью этого плагина";
 "product_desc_ext_trip_planning" = "Маршрутный плагин планирования позволяет создавать вашу поездку на карте, сохранить её, измерить расстояние между точками, связанными прямыми линиями и т.д. Создан для предварительного планирования поездки, а не тщательного строительства трассы.";
-"purchases_feature_desc_wikipedia" = "Изучайте Википедию офлайн. Статьи разделены по странам и регионам и доступны на всех языках.";
+"purchases_feature_desc_wikipedia" = "Статьи офлайн-Википедии. Разделены по регионам и доступны на всех языках.";
 "srtm_plugin_description" = "Наложение контурных линий и слоя затенения рельефа (отмывки) поверх стандартных карт OsmAnd. Эту функцию оценят спортсмены, туристы, путешественники и все, кому важнарельефная структура ландшафта.\n\nГлобальные данные (между 70° на севере и 70° на юге) основаны на измерениях SRTM (Shuttle Radar Topography Mission) и ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer) — инструменте визуализации Terra, флагманского спутника Системы наблюдения Земли NASA. ASTER является результатом совместных усилий NASA, министерства экономики Японии, торговли и промышленности (METI), а также Космических систем Японии (J-spacesystems).";
 "custom_search" = "Настраиваемый поиск";
 "new_filter_desc" = "Введите имя для нового фильтра. Он добавится в список «Категории».";
@@ -499,7 +499,7 @@
 "location_not_found" = "Не удалось определить местоположение";
 "no_inet_connection_desc_map" = "Требуется загрузить карты.";
 "try_again" = "Попробуйте снова";
-"search_location" = "Определение местоположения…";
+"search_location" = "Определение позиции…";
 "poi_filter_closest_poi" = "Ближайшие POI";
 "poi_filter_by_name" = "Поиск по имени";
 "edit_filter" = "Редактировать категории";
@@ -527,7 +527,7 @@
 "map_markers_other" = "Другие маркеры";
 "si_mi_meters" = "Мили/метры";
 "first_usage_greeting" = "Открывайте новые места и стройте маршруты без подключения к интернету";
-"first_usage_wizard_desc" = "OsmAndопределит ваше местоположение и предложит загрузить карты для этой области.";
+"first_usage_wizard_desc" = "OsmAnd определит ваше местоположение и предложит загрузить карты для этой области.";
 "city_type_neighbourhood" = "Пригород";
 "coords_format_descr" = "Формат для географических координат.";
 "no_inet_connection" = "Соединение с интернетом отсутствует";
@@ -538,7 +538,7 @@
 "coords_format" = "Формат координат";
 "save_global_track_interval_descr" = "Укажите общий интервал записи трека (включается через виджет «Запись маршрута» на карте).";
 "rotate_map_to_bearing_descr" = "Выберите способ вращения карты.";
-"rotate_map_north_opt" = "Не вращать (север сверху)";
+"rotate_map_north_opt" = "север сверху (фикс.)";
 "shared_string_automatic" = "Авто";
 "map_widget_magnetic_bearing" = "Магнитный пеленг";
 "map_widget_bearing" = "Курсовой угол";
@@ -565,7 +565,7 @@
 "navigation_over_track" = "Начать навигацию по треку?";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Выбрать на карте";
-"shared_string_my_location" = "Моё местоположение";
+"shared_string_my_location" = "Моя позиция";
 "traffic_warning_payment" = "Платный проезд";
 "traffic_warning_speed_camera" = "Камера скорости";
 "traffic_warning" = "Дорожные предупреждения";
@@ -865,7 +865,7 @@
 "arrival_distance_factor_at_last" = "На последних метрах";
 "show_warnings_title" = "Показывать сигналы…";
 "speak_title" = "Оповещать…";
-"keep_informing" = "Повторение указаний";
+"keep_informing" = "Повторение навигационных инструкций";
 "arrival_distance" = "Оповещение о прибытии";
 "default_speed_system_descr" = "Выберите единицы измерения скорости.";
 "map_widget_intermediate_distance" = "Промежуточный пункт";
@@ -982,7 +982,7 @@
 "auto_zoom_farthest" = "К дальнему плану";
 "keep_informing_never" = "При нажатии на стрелку (вручную)";
 "map_widget_next_next_turn" = "Второй след. поворот";
-"unknown_location" = "Местоположение ещё не определено.";
+"unknown_location" = "Позиция пока не известна";
 "logging_interval_navigation_descr" = "Выберите интервал регистрации местоположения для записи трека во время навигации";
 "monitoring_min_distance" = "Минимальное смещение";
 "logging_min_distance_descr" = "Фильтр: минимальное расстояние, необходимое для регистрации новой точки";
@@ -1170,23 +1170,23 @@
 "choose_auto_follow_route" = "Автовозврат к позиции на карте";
 "auto_zoom_map" = "Автомасштаб";
 "snap_to_road" = "Привязка к дороге";
-"choose_audio_stream" = "Аудиоканал речевой навигации";
+"choose_audio_stream" = "Аудиоканал голосовой навигации";
 "settings_preset_descr" = "Вид карты и настройки навигации сохраняются для каждого отдельного профиля. Установите ваш профиль по умолчанию.";
-"auto_follow_location_enabled" = "Возврат к текущей позиции...";
+"auto_follow_location_enabled" = "Переход к текущей позиции…";
 "commiting_node" = "Сохранение объекта…";
 "select_avoid_descr" = "Выберите дороги, которые хотите избегать во время навигации. Вы можете выбрать дорогу на карте или выбрать тип из списка ниже.";
 "left_side_navigation" = "Левостороннее движение";
 "use_displayed_track_for_navigation" = "Использовать показанный путь для навигации?";
 "calculate_osmand_route_without_internet" = "Рассчитать сегмент маршрута OsmAnd без интернета";
 "impassable_road_desc" = "Укажите дороги, которых следует избегать при навигации.";
-"interrupt_music_descr" = "Приостановка воспроизведения во время указаний.";
+"interrupt_music_descr" = "Приостановка воспроизведения во время звучания голоса.";
 "fast_route_mode_descr" = "Расчёт скоростного маршрута вместо кратчайшего.";
 "auto_zoom_map_descr" = "Масштабирование по скорости (при отображении позиции на карте).";
 "snap_to_road_descr" = "Значок текущего местоположения будет привязан к маршруту навигации";
 "keep_informing_descr" = "Повторять навигационные инструкции с заданным интервалом.";
 "wake_on_voice_descr" = "Включать экран перед поворотом (если выключен).";
 "voice_provider_descr" = "Выберите голосовое сопровождение для навигации.";
-"choose_audio_stream_descr" = "Выберите канал вывода речевых указаний.";
+"choose_audio_stream_descr" = "Выберите канал вывода голосовых инструкций.";
 "recording_preferences_descr" = "Настройки записи трека";
 "osm_live_routing_descr" = "Использовать обновления OsmAnd Live для навигации";
 "osmand_live_donation_switch_descr" = "Часть вашего пожертвования распределяется среди пользователей OSM, которые вносят изменения в OpenStreetMap. Стоимость подписки остается прежней";
@@ -1320,7 +1320,7 @@
 "rendering_attr_surface_sett_name" = "Брусчатка";
 "rendering_attr_highway_class_track_grade4_name" = "Класс 4";
 "routing_attr_relief_smoothness_factor_hills_name" = "Максимально сложный";
-"rendering_attr_showMtbRoutes_name" = "Маршруты для горных велосипедов";
+"rendering_attr_showMtbRoutes_name" = "Маршруты для MTB";
 "rendering_attr_piste_type_hike_name" = "Хайк";
 "rendering_attr_surface_snow_name" = "Снег";
 "rendering_attr_tramTrainRoutes_name" = "Маршруты трамваев и поездов";
@@ -1437,7 +1437,7 @@
 "rendering_attr_hikingRoutesOSMC_name" = "Пешеходные маршруты";
 "rendering_value_translucent_lightblue_name" = "Голубой прозрачный";
 "rendering_attr_showCycleRoutes_name" = "Велосипедные маршруты";
-"routing_attr_piste_type_skitour_description" = "Маршруты для горнолыжного туризма.";
+"routing_attr_piste_type_skitour_description" = "Маршруты для лыжного туризма.";
 "rendering_attr_hideWoodScrubs_name" = "Леса и кустарники";
 "rendering_value__name" = "По умолчанию";
 "routing_attr_allow_skating_only_description" = "Маршруты, подготовленные для свободного стиля или катания только коньковым ходом без классической лыжни.";
@@ -1615,7 +1615,7 @@
 "clear_tiles_warning" = "Применение этих изменений приведёт к очистке кешированных данных этого источника тайлов";
 "res_zoom_invalid_value" = "Значения масштабирования должны находиться в диапазоне 1 - 22";
 "download_wiki_data" = "Скачать данные Википедии для %@";
-"move_marker_bottom_sheet_title" = "Двигайте карту, чтобы изменить позицию точки или маркера";
+"move_marker_bottom_sheet_title" = "Двигайте карту, чтобы изменить позицию";
 "change_object_posiotion" = "Изменить положение объекта";
 "one_image_per_tile" = "Каждый тайл в своём файле";
 "map_settings_hide_polygons_desc" = "Этот параметр влияет только на автономные векторные карты OsmAnd";
@@ -1718,7 +1718,7 @@
 "routing_profile_geocoding" = "Геокодирование";
 "routing_profile_ski" = "Лыжи";
 "nav_type_brouter" = "BRouter";
-"voice_announces" = "Речевые указания";
+"voice_announces" = "Голосовая навигация";
 "max_speed" = "Макс. скорость";
 "shared_string_min_speed" = "Мин. скорость";
 "default_speed_setting_title" = "Скорость по умолчанию";
@@ -1884,7 +1884,7 @@
 "layer_amenity_label" = "Названия точек";
 "quick_action_mapillary_hide" = "Скрыть Mapillary";
 "shared_string_add_profile" = "Добавить профиль";
-"arrived_at_destination" = "Вы на месте.";
+"arrived_at_destination" = "Вы на месте";
 "profile_type_user_string" = "Профиль пользователя";
 "quick_action_switch_profile_descr" = "Кнопка действия переключает между выбранными профилями.";
 "reverse_route" = "Обратный маршрут";
@@ -2685,3 +2685,4 @@
 "announce_when_exceeded" = "Оповещать о превышении";
 "announcement_time_title" = "Время оповещения";
 "announcement_time_descr" = "Время голосового оповещения определяется его типом, текущей скоростью навигации и скоростью навигации по умолчанию.";
+"rotate_map_manual_opt" = "поворот вручную (фикс.)";

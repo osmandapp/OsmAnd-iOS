@@ -47,7 +47,6 @@
 @property(nonatomic) OAMapMode mapMode;
 @property(nonatomic) OAMapMode prevMapMode;
 @property(readonly) OAObservable* mapModeObservable;
-@property(readonly) OAObservable* elevationAngleObservable;
 
 @property(nonatomic) OAMapViewState* initialURLMapState;
 

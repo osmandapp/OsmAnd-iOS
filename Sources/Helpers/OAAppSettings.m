@@ -2971,6 +2971,82 @@
 
 @end
 
+@implementation OACommonMap3dMode
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAMap3DModeVisibility)defValue
+{
+    OACommonRulerWidgetMode *obj = [[OACommonRulerWidgetMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOAMap3DModeVisibility) get
+{
+    return [super get];
+}
+
+- (void) set:(EOAMap3DModeVisibility)map3dMode
+{
+    [super set:map3dMode];
+}
+
+- (EOAMap3DModeVisibility) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOAMap3DModeVisibility)map3dMode mode:(OAApplicationMode *)mode
+{
+    [super set:map3dMode mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"Hidden"])
+        return [self set:EOAMap3DModeVisibilityHidden mode:mode];
+    else if ([strValue isEqualToString:@"Visible"])
+        return [self set:EOAMap3DModeVisibilityVisible mode:mode];
+    else if ([strValue isEqualToString:@"VisibleIn3DMode"])
+        return [self set:EOAMap3DModeVisibilityVisibleIn3DMode mode:mode];
+}
+
++ (NSString *) rulerWidgetModeToString:(EOAMap3DModeVisibility)map3dMode
+{
+    switch (map3dMode) {
+        case EOAMap3DModeVisibilityHidden:
+            return @"Hidden";
+        case EOAMap3DModeVisibilityVisible:
+            return @"Visible";
+        case EOAMap3DModeVisibilityVisibleIn3DMode:
+            return @"VisibleIn3DMode";
+        default:
+            return @"VisibleIn3DMode";
+    }
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    return [self.class rulerWidgetModeToString:[self get:mode]];
+}
+
+- (void) resetToDefault
+{
+    EOAMap3DModeVisibility defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAMap3DModeVisibility)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+@end
+
 @implementation OACommonWikiArticleShowImages
 
 @dynamic defValue;
@@ -3544,6 +3620,7 @@
 }
 
 @end
+
 
 @interface OACommonUnit ()
 
@@ -4312,8 +4389,7 @@
         [_profilePreferences setObject:_quickActionLandscapeX forKey:@"quick_fab_margin_x_landscape_margin"];
         [_profilePreferences setObject:_quickActionLandscapeY forKey:@"quick_fab_margin_y_landscape_margin"];
         
-        _map3dMode = [OACommonInteger withKey:map3dModeVisibilityKey defValue:EOAMap3DModeVisibilityVisibleIn3DMode];
-
+        _map3dMode = [[OACommonMap3dMode withKey:map3dModeVisibilityKey defValue:EOAMap3DModeVisibilityVisibleIn3DMode] makeShared];
         _map3dModePortraitX = [OACommonDouble withKey:map3dModePortraitXKey defValue:0];
         _map3dModePortraitY = [OACommonDouble withKey:map3dModePortraitYKey defValue:0];
         _map3dModeLandscapeX = [OACommonDouble withKey:map3dModeLandscapeXKey defValue:0];

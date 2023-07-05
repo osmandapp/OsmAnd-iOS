@@ -311,6 +311,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     _settingsObservable = [[OAObservable alloc] init];
     _azimuthObservable = [[OAObservable alloc] init];
     _zoomObservable = [[OAObservable alloc] init];
+    _elevationAngleObservable = [[OAObservable alloc] init];
     _mapObservable = [[OAObservable alloc] init];
     _framePreparedObservable = [[OAObservable alloc] init];
     _mapSourceUpdatedObservable = [[OAObservable alloc] init];
@@ -1487,7 +1488,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         case OAMapRendererViewStateEntryElevationAngle:
         {
             _app.data.mapLastViewedState.elevationAngle = _mapView.elevationAngle;
-            [[OsmAndApp instance].elevationAngleObservable notifyEvent];
+            [_elevationAngleObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:_mapView.elevationAngle]];
             break;
         }
         case OAMapRendererViewStateEntryTarget:
@@ -1524,6 +1525,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 @synthesize zoomObservable = _zoomObservable;
 
 @synthesize mapObservable = _mapObservable;
+
+@synthesize elevationAngleObservable = _elevationAngleObservable;
 
 - (float) currentZoomInDelta
 {

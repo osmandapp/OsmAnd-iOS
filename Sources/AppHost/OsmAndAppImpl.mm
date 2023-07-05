@@ -667,7 +667,6 @@
     _mapMode = OAMapModeFree;
     _prevMapMode = OAMapModeFree;
     _mapModeObservable = [[OAObservable alloc] init];
-    _elevationAngleObservable = [[OAObservable alloc] init];
 
     _downloadsManager = [[OADownloadsManager alloc] init];
     _downloadsManagerActiveTasksCollectionChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -1147,7 +1146,6 @@
 }
 
 @synthesize mapModeObservable = _mapModeObservable;
-@synthesize elevationAngleObservable = _elevationAngleObservable;
 
 @synthesize favoritesCollectionChangedObservable = _favoritesCollectionChangedObservable;
 @synthesize favoriteChangedObservable = _favoriteChangedObservable;

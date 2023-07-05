@@ -589,6 +589,19 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 @end
 
+@interface OACommonMap3dMode : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAMap3DModeVisibility)defValue;
+
+- (EOAMap3DModeVisibility) get;
+- (EOAMap3DModeVisibility) get:(OAApplicationMode *)mode;
+- (void) set:(EOAMap3DModeVisibility)map3dMode;
+- (void) set:(EOAMap3DModeVisibility)map3dMode mode:(OAApplicationMode *)mode;
+
++ (NSString *) rulerWidgetModeToString:(EOAMap3DModeVisibility)map3dMode;
+
+@end
+
 @interface OACommonWikiArticleShowImages : OACommonInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAWikiArticleShowConstant)defValue;
@@ -1003,7 +1016,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 // Map 3d mode
 
-@property (nonatomic) OACommonInteger *map3dMode;
+@property (nonatomic) OACommonMap3dMode *map3dMode;
 @property (nonatomic, readonly) OACommonDouble *map3dModeLandscapeX;
 @property (nonatomic, readonly) OACommonDouble *map3dModeLandscapeY;
 @property (nonatomic, readonly) OACommonDouble *map3dModePortraitX;

@@ -90,7 +90,7 @@
     
     _map3dModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                    withHandler:@selector(onMap3dModeUpdated)
-                                                    andObserve:[OsmAndApp instance].elevationAngleObservable];
+                                                    andObserve:[OARootViewController instance].mapPanel.mapViewController.elevationAngleObservable];
     
     [self updateColors:NO];
 }

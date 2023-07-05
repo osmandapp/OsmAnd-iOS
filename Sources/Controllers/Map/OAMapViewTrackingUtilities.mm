@@ -49,7 +49,6 @@
     OAAutoObserverProxy *_mapModeObserver;
     
     OAMapMode _lastMapMode;
-    bool _lastPositionTrackStateCaptured;
     float _lastAzimuthInPositionTrack;
     float _lastZoom;
     float _lastElevationAngle;
@@ -87,8 +86,6 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _myLocation = _app.locationServices.lastKnownLocation;
-
-        _lastPositionTrackStateCaptured = false;
         
         _lastMapMode = _app.mapMode;
 
@@ -618,7 +615,6 @@
 {
     int vl = ([_settings.rotateMap get] + 1) % 4;
     [_settings.rotateMap set:vl];
-    _lastPositionTrackStateCaptured = false;
     [self onRotateMapModeChanged];
 }
 

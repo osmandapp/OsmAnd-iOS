@@ -17,9 +17,9 @@ class Map3dModeButtonVisibilityViewController: OABaseNavbarViewController {
     
     private var compassMode: EOAMap3DModeVisibility {
         get {
-            EOAMap3DModeVisibility(rawValue: Int(OAAppSettings.sharedManager()!.map3dMode.get()))!
+            OAAppSettings.sharedManager()!.map3dMode.get()
         } set {
-            OAAppSettings.sharedManager()!.map3dMode.set(Int32(newValue.rawValue))
+            OAAppSettings.sharedManager()!.map3dMode.set(EOAMap3DModeVisibility(rawValue: Int(newValue.rawValue))!)
         }
     }
     

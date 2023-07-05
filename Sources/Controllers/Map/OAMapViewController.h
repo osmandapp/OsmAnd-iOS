@@ -73,6 +73,7 @@
 
 @property (readonly) OAObservable* azimuthObservable;
 @property (readonly) OAObservable* zoomObservable;
+@property (readonly) OAObservable* elevationAngleObservable;
 @property (readonly) OAObservable* mapObservable;
 @property (readonly) OAObservable* mapSourceUpdatedObservable;
 

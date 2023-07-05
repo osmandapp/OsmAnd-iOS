@@ -271,7 +271,7 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
     }
     numberFormatter.positiveFormat = pattern;
 
-    NSString *preferredLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage].get;
+    NSString *preferredLocale = OAUtilities.currentLang;
     NSLocale *locale = [NSLocale localeWithLocaleIdentifier:preferredLocale];
 
     numberFormatter.locale = locale;

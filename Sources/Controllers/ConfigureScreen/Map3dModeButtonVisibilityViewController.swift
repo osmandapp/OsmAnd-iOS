@@ -75,7 +75,6 @@ class Map3dModeButtonVisibilityViewController: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
         compassMode = EOAMap3DModeVisibility(rawValue: (item.obj(forKey: "map_3d_mode") as! NSNumber).intValue)!
         delegate?.onWidgetStateChanged()
-        OARootViewController.instance().mapPanel.hudViewController.updateDependentButtonsVisibility()
         self.dismiss()
     }
     

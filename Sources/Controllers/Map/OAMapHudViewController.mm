@@ -748,6 +748,8 @@
     OACommonPreference *obj = notification.object;
     OACommonInteger *rotateMap = [OAAppSettings sharedManager].rotateMap;
     OACommonBoolean *transparentMapTheme = [OAAppSettings sharedManager].transparentMapTheme;
+    OACommonInteger *map3dMode = [OAAppSettings sharedManager].map3dMode;
+    OACommonInteger *compassMode = [OAAppSettings sharedManager].compassMode;
     if (obj)
     {
         if (obj == rotateMap)
@@ -760,6 +762,18 @@
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateColors];
+            });
+        }
+        else if (obj == map3dMode)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateDependentButtonsVisibility];
+            });
+        }
+        else if (obj == compassMode)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateCompassButton];
             });
         }
     }

@@ -90,7 +90,7 @@
     
     _map3dModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                    withHandler:@selector(onMap3dModeUpdated)
-                                                    andObserve:[OsmAndApp instance].map3dModeObservable];
+                                                    andObserve:[OsmAndApp instance].elevationAngleObservable];
     
     [self updateColors:NO];
 }
@@ -444,7 +444,7 @@
 
 - (IBAction)map3dModeButtonPressed:(id)sender
 {
-    [OAMapViewTrackingUtilities.instance onMap3dModeChanged];
+    [OAMapViewTrackingUtilities.instance switchMap3dMode];
     [self updateColors:NO];
 }
 

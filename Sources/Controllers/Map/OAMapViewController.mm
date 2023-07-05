@@ -1487,7 +1487,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         case OAMapRendererViewStateEntryElevationAngle:
         {
             _app.data.mapLastViewedState.elevationAngle = _mapView.elevationAngle;
-            [[OsmAndApp instance].map3dModeObservable notifyEvent];
+            [[OsmAndApp instance].elevationAngleObservable notifyEvent];
             break;
         }
         case OAMapRendererViewStateEntryTarget:

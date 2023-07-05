@@ -24,7 +24,7 @@
 + (BOOL) isSmallSpeedForAnimation:(CLLocation *)location;
 
 - (BOOL) isIn3dMode;
-- (void) onMap3dModeChanged;
+- (void) switchMap3dMode;
 
 - (BOOL) isMapLinkedToLocation;
 - (void) setMapLinkedToLocation:(BOOL)isMapLinkedToLocation;

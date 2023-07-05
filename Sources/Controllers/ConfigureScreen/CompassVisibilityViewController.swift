@@ -72,7 +72,6 @@ class CompassVisibilityViewController: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
         compassMode = EOACompassMode(rawValue: (item.obj(forKey: "compass_mode") as! NSNumber).intValue)!
         delegate?.onWidgetStateChanged()
-        OARootViewController.instance().mapPanel.hudViewController.updateCompassButton()
         self.dismiss()
     }
     

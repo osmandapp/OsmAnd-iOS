@@ -89,10 +89,6 @@
         _myLocation = _app.locationServices.lastKnownLocation;
 
         _lastPositionTrackStateCaptured = false;
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:kUDLastMapModePositionTrack])
-        {
-            OAMapMode mapMode = (OAMapMode)[[NSUserDefaults standardUserDefaults] integerForKey:kUDLastMapModePositionTrack];
-        }
         
         _lastMapMode = _app.mapMode;
 
@@ -142,8 +138,6 @@
         switch (_app.mapMode)
         {
             case OAMapModeFree:
-        
-//        if (_app.mapMode != OAMapModePositionTrack)
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self setMapLinkedToLocation:NO];
@@ -212,7 +206,7 @@
     return [OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle < 89;
 }
 
-- (void) onMap3dModeChanged
+- (void) switchMap3dMode
 {
     if ([self isIn3dMode])
     {

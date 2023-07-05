@@ -404,6 +404,20 @@ typedef enum
 
 - (void) showScrollableHudViewController:(OABaseScrollableHudViewController *)controller
 {
+    if (self.targetMenuView.superview)
+    {
+        [self hideTargetPointMenu:.2 onComplete:^{
+            [self onShowScrollableHudViewController:controller];
+        }];
+    }
+    else
+    {
+        [self onShowScrollableHudViewController:controller];
+    }
+}
+
+- (void)onShowScrollableHudViewController:(OABaseScrollableHudViewController *)controller
+{
     [self.hudViewController hideWeatherToolbarIfNeeded];
 
     self.sidePanelController.recognizesPanGesture = NO;
@@ -893,7 +907,7 @@ typedef enum
     
     [self removeGestureRecognizers];
 
-    if (_scrollableHudViewController)
+    if (_scrollableHudViewController && _activeTargetType == OATargetRoutePlanning)
     {
         _prevScrollableHudViewController = _scrollableHudViewController;
         [self hideScrollableHudViewController];
@@ -1335,7 +1349,6 @@ typedef enum
     || _activeTargetType == OATargetRouteDetailsGraph
     || _activeTargetType == OATargetRouteDetails
     || (_activeTargetType == OATargetRoutePlanning && !_isNewContextMenuStillEnabled)
-    || _activeTargetType == OATargetGPX
     || _activeTargetType == OATargetRouteLineAppearance
     || _activeTargetType == OATargetWeatherLayerSettings
     || _activeTargetType == OATargetWeatherToolbar;
@@ -2163,11 +2176,9 @@ typedef enum
     [self.hudViewController hideWeatherToolbarIfNeeded];
     [self hideMultiMenuIfNeeded];
 
-    if (_scrollableHudViewController)
-    {
+    if (_scrollableHudViewController && _activeTargetType == OATargetRoutePlanning)
         _prevScrollableHudViewController = _scrollableHudViewController;
-        [self hideScrollableHudViewController];
-    }
+    [self hideScrollableHudViewController];
 
     if (_activeTargetActive)
     {

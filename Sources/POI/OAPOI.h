@@ -39,6 +39,9 @@
 #define COLOR @"color"
 #define LANG_YES @"lang_yes"
 #define GPX_ICON @"gpx_icon"
+#define TYPE @"type"
+#define SUBTYPE @"subtype"
+#define AMENITY_NAME @"name"
 
 @interface OAPOIRoutePoint : NSObject
 

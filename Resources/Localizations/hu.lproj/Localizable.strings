@@ -181,7 +181,7 @@
 "res_updates_avail_q" = "frissítés érhető el.";
 "res_updates_exp" = "Vásároljon kontinenseket a térképek frissítéséhez";
 // Menu
-"shared_string_my_places" = "Saját helyek";
+"shared_string_my_places" = "Kedvencek";
 "feedback" = "Visszajelzés";
 "menu_about" = "Névjegy";
 "other_options" = "Egyéb beállítások";
@@ -651,7 +651,7 @@
 "shared_string_enabled" = "Engedélyezve";
 "stop_routing_confirm" = "Megszakadjon a navigáció\?";
 "cancel_route" = "Elveti azútvonalat\?";
-"gpx_option_calculate_first_last_segment" = "OsmAndútvonal számítása az első és az utolsó útszakaszra";
+"gpx_option_calculate_first_last_segment" = "OsmAnd útvonal tervezése az első és az utolsó útszakaszra";
 "interrupt_music" = "Zene szüneteltetése";
 "app_mode_truck" = "Teherautó";
 "app_mode_motorcycle" = "Motorkerékpár";
@@ -804,7 +804,7 @@
 "shared_string_add_photos" = "Fényképek hozzáadása";
 "quick_action_map_style" = "Térképstílus módosítás";
 "quick_action_start_stop_navigation" = "Navigáció indítása/megállítása";
-"fast_route_mode_descr" = "Leggyorsabbútvonal kiszámításának engedélyezése vagy letiltása az üzemanyag-takarékos útvonal kedvéért.";
+"fast_route_mode_descr" = "Leggyorsabb útvonal tervezésének engedélyezése vagy letiltása az üzemanyag-takarékos útvonal kedvéért.";
 "contact_info" = "Elérhetőségek";
 "shared_string_actions" = "Műveletek";
 "osm_edit_created_note" = "Létrehozott OSM Jegyzet";
@@ -1248,7 +1248,7 @@
 "screen_alerts" = "Képernyő riasztások";
 "vehicle_parameters" = "Jármű paraméterei";
 "units_and_formats" = "Mértékegységek&formátumok";
-"select_nav_profile_dialog_message" = "A„Navigáció típusával” jelölheti ki az útvonal kiszámításának módját a rendelkezésre álló offline és online útvonaltervezők közül.";
+"select_nav_profile_dialog_message" = "A „Navigáció típusával” jelölheti ki az útvonal tervezésének módját a rendelkezésre álló offline és online útvonaltervezők közül.";
 "select_color" = "Szín kijelölése";
 "routing_attr_length_name" = "Hosszkorlátozás";
 "login_account" = "Fiók";
@@ -1330,7 +1330,7 @@
 "next_segment" = "Következő szakasz";
 "transport_stops" = "megálló";
 "profile_type_user_string" = "Felhasználói profil";
-"recalculate_route_distance_promo" = "Azútvonal újraszámításra kerül, amennyiben az útvonal és a jelenlegi helyzet közötti távolság nagyobb, mint a kiválasztott érték.";
+"recalculate_route_distance_promo" = "Az útvonal újrastervezésre kerül, amennyiben az útvonal és a jelenlegi helyzet közötti távolság nagyobb, mint a kiválasztott érték.";
 "metric_ton" = "t";
 "select_navigation_icon" = "Mozgás közben látható pozícióikon";
 "monitoring_min_speed" = "Legkisebb sebesség";
@@ -1869,7 +1869,7 @@
 "animate_my_location" = "Saját pozíció animált mozgatása";
 "choose_audio_stream_descr" = "Hangszóró kijelölése hangnavigációhoz.";
 "osm_live_routing_descr" = "Használja az OsmAnd Live frissítéseket a navigációhoz";
-"calculate_osmand_route_without_internet" = "OsmAndútvonalszakasz offline kiszámítása";
+"calculate_osmand_route_without_internet" = "OsmAnd útvonalszakasz offline tervezése";
 "only_manually" = "Csak kézzel";
 "speed_limit_tolerance_descr" = "Válassza ki a sebességhatár túllépésének értékét, amely felett figyelmeztető hangjelzés érkezzen.";
 "recalculate_wrong_dir" = "Útvonal újraszámítás fordított irány esetén";
@@ -2020,7 +2020,7 @@
 "osm_delete_confirmation_descr" = "Törölni szeretné ezt a POI-t?";
 
 // Route planning
-"plan_route" = "Útvonal tervezése";
+"plan_route" = "Egy útvonal tervezése";
 "add_folder" = "Mappa hozzáadása";
 "err_profile_import" = "Hiba az elemadatok olvasásakor: %@";
 "move_point" = "Pont mozgatása";
@@ -2100,7 +2100,7 @@
 "backup_into_file" = "Biztonsági mentés fájlként";
 "weather_temperature_celsius" = "Celsius fok";
 "duration_ago" = "Ennyi idővel ezelőtt: %@";
-"recalculate_route" = "Útvonal újraszámítása";
+"recalculate_route" = "Útvonal újratervezése";
 "weather_pressure_inches_of_mercury" = "Higanyhüvelyk";
 "rendering_attr_depthContourColorScheme_name" = "Vonal színsémája";
 "parking_place" = "Parkolóhely";
@@ -2125,7 +2125,7 @@
 "routing_attr_motor_type_description" = "A CO₂-kibocsátás megbecsüléséhez válassza ki a motor által használt üzemanyag típusát.";
 "quick_action_showhide_mapillary_descr" = "A Mapillary réteget a térképen megjelenítő vagy elrejtő kapcsoló.";
 "lenght_limit_description" = "Adja meg a járműve hosszát (a hosszú járművekre útvonalkorlátozások vonatkozhatnak).";
-"public_transport_warning_descr_blog" = "Az OsmAndútvonalszámításának módjáról a blogunkon olvashat.";
+"public_transport_warning_descr_blog" = "Az OsmAnd útvonaltervezés módjáról a blogunkon olvashat.";
 "login_open_street_map_org" = "Bejelentkezés az OpenStreetMap.org-ra";
 "weather_temperature_fahrenheit" = "Fahrenheit fok";
 "by_transport_type" = "Ezzel: %@";
@@ -2232,7 +2232,7 @@
 "checking_progress" = "Ellenőrzés…";
 "backup_delete_all_data" = "Összes adatom törlése";
 "nautical_depth_points" = "Tengeri mélységpontok";
-"recalc_angle_dialog_descr" = "Egy egyenes szakasz fog megjelenni a helyzetemés a tervezett útvonal között, amíg az útvonal újraszámításra kerül";
+"recalc_angle_dialog_descr" = "Egy egyenes szakasz fog megjelenni a helyzetem és a tervezett útvonal között, amíg az útvonal újratervezésre kerül";
 "routing_attr_avoid_low_emission_zone_name" = "Alacsony kibocsátású zónák elkerülése";
 "quick_action_contour_lines_descr" = "Gomb, amely a térképen megjeleníti vagy elrejti a szintvonalakat.";
 "not_enough_contributions_descr" = "Legalább %@ változtatás szükséges az elmúlt két hónapos időszakban %@, hogy hozzáférést kapjon a korlátlan óránkénti térképfrissítéshez.";

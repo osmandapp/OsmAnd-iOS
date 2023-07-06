@@ -2618,3 +2618,4 @@
 "shared_string_legal" = "Legal";
 "speed_cameras_alert" = "Peringatan kamera pengukur kecepatan di beberapa negara dilarang oleh undang-undang.";
 "icon_group_service" = "Layanan";
+"map_widget_distance_to_intermediate" = "Jarak ke perantara";

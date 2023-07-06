@@ -2966,3 +2966,10 @@
 "trip_recording_downhill_widget_desc" = "Afișează suma tuturor coborârilor din călătoria înregistrată în prezent.";
 "route_maneuvers_desc" = "Widgeturile de navigație sunt activate în timpul navigării pentru a afișa informații precum distanța, ora de sosire sau de plecare, următoarele viraje, direcția, numele străzii curente, informații despre benzi, viteza maximă, alerte de apropiere, POI, puncte de reper.";
 "widget_panels_descr" = "Selectați partea de ecran pentru a adăuga sau rearanja widgeturile.";
+"distance_circles" = "Cercuri de distanță";
+"true_bearing_wdiget_desc" = "Unghiul dintre nordul adevărat și punctul țintă observat din locația dumneavoastră.";
+"shared_string_dark" = "Întuneric";
+"shared_string_light" = "Lumină";
+"shared_string_page_number" = "Pagina %d";
+"compass_on_circles" = "Busolă pe cercuri";
+"ruler_circles" = "cercuri de distanță";

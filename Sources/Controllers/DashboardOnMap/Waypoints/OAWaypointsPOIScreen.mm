@@ -18,7 +18,7 @@
 #import "OARootViewController.h"
 
 #import "OALocationPointWrapper.h"
-#import "OAIconTextTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 
 @implementation OAWaypointsPOIScreen
 {
@@ -199,23 +199,21 @@
     NSString *name = item[@"name"];
     NSString *imgName = item[@"img"];
     
-    OAIconTextTableViewCell* cell;
-    cell = (OAIconTextTableViewCell *)[tblView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+    OASimpleTableViewCell* cell;
+    cell = (OASimpleTableViewCell *)[tblView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-        cell.textView.numberOfLines = 0;
-        cell.arrowIconView.hidden = YES;
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+        [cell descriptionVisibility:NO];
     }
     
     if (cell)
     {
-        [cell.textView setText:name];
-        [cell.textView setTextColor:[UIColor blackColor]];
+        [cell.titleLabel setText:name];
         if (imgName)
         {
-            [cell.iconView setImage:[UIImage imageNamed:imgName]];
+            [cell.leftIconView setImage:[UIImage imageNamed:imgName]];
         }
         else
         {
@@ -227,7 +225,7 @@
             if (!img)
                 img = [OAUtilities getMxIcon:@"user_defined"];
             
-            [cell.iconView setImage:img];
+            [cell.leftIconView setImage:img];
         }
     }
     

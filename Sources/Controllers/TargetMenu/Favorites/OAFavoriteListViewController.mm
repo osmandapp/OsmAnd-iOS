@@ -9,7 +9,7 @@
 #import "OAFavoriteListViewController.h"
 #import "OAPointTableViewCell.h"
 #import "OAPointHeaderTableViewCell.h"
-#import "OAIconTextTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
 #import "OAMapViewController.h"
@@ -965,18 +965,20 @@ static UIViewController *parentController;
     }
     else
     {
-        OAIconTextTableViewCell* cell;
-        cell = (OAIconTextTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell* cell;
+        cell = (OASimpleTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+            [cell descriptionVisibility:NO];
         }
 
-        if (cell) {
+        if (cell)
+        {
             NSDictionary* item = [self.menuItems objectAtIndex:indexPath.row];
-            [cell.textView setText:[item objectForKey:@"text"]];
-            [cell.iconView setImage: [UIImage imageNamed:[item objectForKey:@"icon"]]];
+            [cell.titleLabel setText:[item objectForKey:@"text"]];
+            [cell.leftIconView setImage:[UIImage imageNamed:[item objectForKey:@"icon"]]];
         }
         return cell;
     }
@@ -1075,18 +1077,19 @@ static UIViewController *parentController;
 - (UITableViewCell*)getActionCellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    OAIconTextTableViewCell* cell;
-    cell = (OAIconTextTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+    OASimpleTableViewCell* cell;
+    cell = (OASimpleTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+        [cell descriptionVisibility:NO];
     }
 
     if (cell)
     {
-        [cell.textView setText:[item objectForKey:@"text"]];
-        [cell.iconView setImage: [UIImage imageNamed:[item objectForKey:@"icon"]]];
+        [cell.titleLabel setText:[item objectForKey:@"text"]];
+        [cell.leftIconView setImage:[UIImage imageNamed:[item objectForKey:@"icon"]]];
     }
     return cell;
 }

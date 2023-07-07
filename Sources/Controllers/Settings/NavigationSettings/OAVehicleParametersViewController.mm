@@ -10,7 +10,7 @@
 #import "OAAppSettings.h"
 #import "OAApplicationMode.h"
 #import "OAValueTableViewCell.h"
-#import "OAIconTextTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OANavigationTypeViewController.h"
 #import "OARouteParametersViewController.h"
 #import "OAVoicePromptsViewController.h"
@@ -136,7 +136,7 @@
         }
     }
     [defaultSpeedArr addObject:@{
-        @"type" : [OAIconTextTableViewCell getCellIdentifier],
+        @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"default_speed_setting_title"),
         @"icon" : @"ic_action_speed",
         @"name" : @"defaultSpeed",
@@ -214,22 +214,21 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAIconTextTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.arrowIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.arrowIconView.tintColor = UIColorFromRGB(color_tint_gray);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+            [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.iconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
+            cell.titleLabel.text = item[@"title"];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            cell.leftIconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
         }
         return cell;
     }

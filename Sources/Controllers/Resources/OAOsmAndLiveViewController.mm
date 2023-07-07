@@ -14,7 +14,7 @@
 #import "Localization.h"
 #import "OAPurchasesViewController.h"
 #import "OAPluginsViewController.h"
-#import "OAIconTextDescCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OAQuickSearchTableController.h"
 #import "OADonationSettingsViewController.h"
 #import "OAUtilities.h"
@@ -453,22 +453,19 @@ static const NSInteger sectionCount = 2;
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    OAIconTextDescCell* cell;
-    cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextDescCell getCellIdentifier]];
+    OARightIconTableViewCell* cell;
+    cell = (OARightIconTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescCell getCellIdentifier] owner:self options:nil];
-        cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
-        
-        cell.textView.numberOfLines = 0;
-        cell.descView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-        cell.iconView.hidden = YES;
-        [cell.arrowIconView setTintColor:UIColorFromRGB(color_icon_inactive)];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
+        cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+        [cell leftIconVisibility:NO];
     }
     if (cell)
     {
-        [cell.textView setText:item[@"title"]];
-        cell.descView.hidden = item[@"description"] == nil || [item[@"description"] length] == 0;
+        [cell.titleLabel setText:item[@"title"]];
+        [cell descriptionVisibility:item[@"description"] != nil || [item[@"description"] length] != 0];
         BOOL isAvailable = [item[@"type"] isEqualToString:kMapAvailableType];
         if (!isAvailable)
         {
@@ -476,16 +473,21 @@ static const NSInteger sectionCount = 2;
                                                                                                       stringByReplacingOccurrencesOfString:@".obf" withString:@""]];
             NSString *frequencyString = [OAOsmAndLiveHelper getFrequencyString:frequency];
             NSMutableAttributedString *formattedText = [self setColorForText:frequencyString inText:item[@"description"] withColor:UIColorFromRGB(color_live_frequency)];
-            cell.descView.attributedText = formattedText;
-        } else
-            [cell.descView setText:item[@"description"]];
-        [cell.arrowIconView setImage:[[UIImage imageNamed:isAvailable ? @"ic_action_plus" : @"menu_cell_pointer"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            cell.descriptionLabel.text = nil;
+            cell.descriptionLabel.attributedText = formattedText;
+        }
+        else
+        {
+            cell.descriptionLabel.attributedText = nil;
+            [cell.descriptionLabel setText:item[@"description"]];
+        }
+        [cell.rightIconView setImage:[[UIImage imageNamed:isAvailable ? @"ic_action_plus" : @"menu_cell_pointer"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         if (isAvailable)
         {
-            CGRect iconView = cell.arrowIconView.frame;
+            CGRect iconView = cell.rightIconView.frame;
             CGFloat y = cell.frame.size.height / 2 - iconView.size.height / 2;
             iconView.origin.y = y;
-            cell.arrowIconView.frame = iconView;
+            cell.rightIconView.frame = iconView;
         }
     }
     return cell;

@@ -11,13 +11,12 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OASimpleTableViewCell.h"
-#import "OAIconTextTableViewCell.h"
-#import "OAIconButtonCell.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
 #import "OAQuickSearchTableController.h"
+#import "OAColors.h"
 
 typedef NS_ENUM(NSInteger, EOAPoiRowType) {
     EOAPoiRowTypeButton,
@@ -136,26 +135,22 @@ typedef NS_ENUM(NSInteger, EOAPoiRowType) {
     OAPOIFilterTableRow *item = [rows objectAtIndex:indexPath.row];
     if (item.rowType == EOAPoiRowTypeButton)
     {
-        OAIconButtonCell* cell;
-        cell = (OAIconButtonCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconButtonCell getCellIdentifier]];
+        OASimpleTableViewCell* cell;
+        cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconButtonCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconButtonCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+            [cell descriptionVisibility:NO];
         }
         
         if (cell)
         {
-            cell.contentView.backgroundColor = [UIColor whiteColor];
-            cell.arrowIconView.hidden = YES;
-            [cell setImage:item.icon tint:YES];
-            if (item.title)
-                [cell.textView setText:title];
-            else
-                [cell.textView setText:@""];
+            cell.leftIconView.image = [item.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+            cell.leftIconView.contentMode = UIViewContentModeCenter;
+            cell.titleLabel.text = item.title ? title : @"";
+            cell.titleLabel.textColor = UIColorFromRGB(tag_hint_text_color);
         }
-        if ([cell needsUpdateConstraints])
-            [cell updateConstraints];
         return cell;
     }
     else if (item.rowType == EOAPoiRowTypePoiFilter)

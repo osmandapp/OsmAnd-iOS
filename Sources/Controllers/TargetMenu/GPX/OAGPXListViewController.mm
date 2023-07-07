@@ -7,7 +7,6 @@
 //
 
 #import "OAGPXListViewController.h"
-#import "OAIconTextTableViewCell.h"
 #import "OASimpleTableViewCell.h"
 #import "OAGpxInfo.h"
 #import "OALoadGpxTask.h"
@@ -724,7 +723,7 @@ static UIViewController *parentController;
     {
         OAGpxTableGroup *trackRecordingGroup = [[OAGpxTableGroup alloc] init];
         trackRecordingGroup.isMenu = YES;
-        trackRecordingGroup.type = [OAIconTextTableViewCell getCellIdentifier];
+        trackRecordingGroup.type = [OASimpleTableViewCell getCellIdentifier];
         trackRecordingGroup.header = OALocalizedString(@"record_trip");
         
         if ([_iapHelper.trackRecording isActive])
@@ -835,14 +834,14 @@ static UIViewController *parentController;
         // Generate menu items
         OAGpxTableGroup* actionsGroup = [[OAGpxTableGroup alloc] init];
         actionsGroup.isMenu = YES;
-        actionsGroup.type = [OAIconTextTableViewCell getCellIdentifier];
+        actionsGroup.type = [OASimpleTableViewCell getCellIdentifier];
         actionsGroup.header = OALocalizedString(@"shared_string_actions");
-        self.menuItems = @[@{@"type" : [OAIconTextTableViewCell getCellIdentifier],
+        self.menuItems = @[@{@"type" : [OASimpleTableViewCell getCellIdentifier],
                              @"key" : @"import_track",
                              @"title": OALocalizedString(@"import_tracks"),
                              @"icon": @"ic_custom_import",
                              @"header" : OALocalizedString(@"shared_string_actions")},
-                           @{@"type" : [OAIconTextTableViewCell getCellIdentifier],
+                           @{@"type" : [OASimpleTableViewCell getCellIdentifier],
                              @"key" : @"create_new_trip",
                              @"title": OALocalizedString(@"create_new_trip"),
                              @"icon": @"ic_custom_trip.png"}];
@@ -1264,38 +1263,37 @@ static UIViewController *parentController;
         else if ([menuCellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
         {
             OASimpleTableViewCell *cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+            BOOL isImportCreateTrack = [menuItem[@"key"] isEqualToString:@"import_track"] || [menuItem[@"key"] isEqualToString:@"create_new_trip"];
             if (cell == nil)
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OASimpleTableViewCell *) nib[0];
-                [cell leftIconVisibility:NO];
+                [cell leftIconVisibility:isImportCreateTrack];
                 [cell descriptionVisibility:NO];
-                cell.titleLabel.font = [UIFont scaledSystemFontOfSize:14.0];
-                cell.titleLabel.textColor = [UIColor darkGrayColor];
             }
             if (cell)
-                cell.titleLabel.text = OALocalizedString(@"track_rec_addon_q");
-            return cell;
-        }
-        else if ([menuCellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
-        {
-            OAIconTextTableViewCell* cell;
-            cell = (OAIconTextTableViewCell *)[self.gpxTableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
-            if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-                cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-                cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            }
-            if (cell) {
-                cell.textView.text = menuItem[@"title"];
-                cell.iconView.image = [UIImage templateImageNamed:menuItem[@"icon"]];
-                cell.arrowIconView.hidden = YES;
+                if (isImportCreateTrack)
+                {
+                    cell.titleLabel.text = menuItem[@"title"];
+                    cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+                    cell.titleLabel.textColor = [UIColor blackColor];
+                    cell.leftIconView.image = [UIImage templateImageNamed:menuItem[@"icon"]];
+                    cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
+                }
+                else
+                {
+                    cell.leftIconView.image = nil;
+                    cell.titleLabel.text = OALocalizedString(@"track_rec_addon_q");
+                    cell.titleLabel.font = [UIFont scaledSystemFontOfSize:14.0];
+                    cell.titleLabel.textColor = [UIColor darkGrayColor];
+                }
             }
             return cell;
         }
     }
-    else {
+    else
+    {
         if (indexPath.row == kGPXGroupHeaderRow && !_isSearchActive)
         {
             OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];

@@ -892,6 +892,7 @@ typedef enum
                 }
                 else
                 {
+                    cell.leftIconView.image = nil;
                     [cell leftIconVisibility:NO];
                 }
                 [cell.titleLabel setText:item.text];
@@ -964,6 +965,7 @@ typedef enum
                 }
                 else
                 {
+                    cell.leftIconView.image = nil;
                     [cell leftIconVisibility:NO];
                 }
                 [cell.titleLabel setText:item.text];

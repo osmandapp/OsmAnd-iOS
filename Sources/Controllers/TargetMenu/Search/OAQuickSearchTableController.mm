@@ -724,8 +724,8 @@
                         [cell.titleLabel setTextColor:[UIColor blackColor]];
                         [cell.titleLabel setText:[item getName]];
                         [cell.leftIconView setImage:[((OAPOICategory *)res.object) icon]];
-                        [cell setCustomLeftSeparatorInset:YES];
-                        cell.separatorInset = UIEdgeInsetsMake(0., isLast ? 0. : 66., 0., 0.);
+                        [cell setCustomLeftSeparatorInset:isLast];
+                        cell.separatorInset = UIEdgeInsetsMake(0., 0., 0., 0.);
                     }
                     return cell;
                 }
@@ -775,11 +775,20 @@
                 cell.leftIconView.image = [buttonItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
                 cell.leftIconView.contentMode = UIViewContentModeCenter;
                 if ([buttonItem getName])
+                {
+                    cell.titleLabel.attributedText = nil;
                     [cell.titleLabel setText:[item getName]];
+                }
                 else if ([buttonItem getAttributedName])
+                {
+                    cell.titleLabel.text = nil;
                     [cell.titleLabel setAttributedText:[buttonItem getAttributedName]];
+                }
                 else
+                {
+                    cell.titleLabel.attributedText = nil;
                     [cell.titleLabel setText:@""];
+                }
                 cell.titleLabel.textColor = UIColorFromRGB(tag_hint_text_color);
             }
             return cell;

@@ -1270,15 +1270,6 @@ static UIViewController *parentController;
                 cell = (OASimpleTableViewCell *) nib[0];
                 [cell leftIconVisibility:isImportCreateTrack];
                 [cell descriptionVisibility:NO];
-                if (isImportCreateTrack)
-                {
-                    cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
-                }
-                else
-                {
-                    cell.titleLabel.font = [UIFont scaledSystemFontOfSize:14.0];
-                    cell.titleLabel.textColor = [UIColor darkGrayColor];
-                }
             }
             if (cell)
             {
@@ -1286,10 +1277,14 @@ static UIViewController *parentController;
                 {
                     cell.titleLabel.text = menuItem[@"title"];
                     cell.leftIconView.image = [UIImage templateImageNamed:menuItem[@"icon"]];
+                    cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
                 }
                 else
                 {
+                    cell.leftIconView.image = nil;
                     cell.titleLabel.text = OALocalizedString(@"track_rec_addon_q");
+                    cell.titleLabel.font = [UIFont scaledSystemFontOfSize:14.0];
+                    cell.titleLabel.textColor = [UIColor darkGrayColor];
                 }
             }
             return cell;

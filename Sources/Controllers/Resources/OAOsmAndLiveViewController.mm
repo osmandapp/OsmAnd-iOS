@@ -473,10 +473,12 @@ static const NSInteger sectionCount = 2;
                                                                                                       stringByReplacingOccurrencesOfString:@".obf" withString:@""]];
             NSString *frequencyString = [OAOsmAndLiveHelper getFrequencyString:frequency];
             NSMutableAttributedString *formattedText = [self setColorForText:frequencyString inText:item[@"description"] withColor:UIColorFromRGB(color_live_frequency)];
+            cell.descriptionLabel.text = nil;
             cell.descriptionLabel.attributedText = formattedText;
         }
         else
         {
+            cell.descriptionLabel.attributedText = nil;
             [cell.descriptionLabel setText:item[@"description"]];
         }
         [cell.rightIconView setImage:[[UIImage imageNamed:isAvailable ? @"ic_action_plus" : @"menu_cell_pointer"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];

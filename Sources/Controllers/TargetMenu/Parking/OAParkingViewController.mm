@@ -253,7 +253,10 @@
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }
-        cell.titleLabel.text = self.formattedCoords;
+        if (cell)
+        {
+            cell.titleLabel.text = self.formattedCoords;
+        }
         
         return cell;
     }

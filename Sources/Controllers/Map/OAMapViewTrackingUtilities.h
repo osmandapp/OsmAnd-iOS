@@ -23,6 +23,9 @@
 + (BOOL) isSmallSpeedForCompass:(CLLocation *)location;
 + (BOOL) isSmallSpeedForAnimation:(CLLocation *)location;
 
+- (BOOL) isIn3dMode;
+- (void) switchMap3dMode;
+
 - (BOOL) isMapLinkedToLocation;
 - (void) setMapLinkedToLocation:(BOOL)isMapLinkedToLocation;
 - (void) backToLocationImpl;

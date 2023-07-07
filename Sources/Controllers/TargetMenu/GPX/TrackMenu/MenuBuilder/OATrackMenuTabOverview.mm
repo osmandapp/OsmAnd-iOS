@@ -494,6 +494,10 @@
     {
         [self.trackMenuDelegate openURL:((OAGPXTableCellData *) tableData).desc];
     }
+    else if ([tableData.key isEqualToString:@"website"] && self.trackMenuDelegate)
+    {
+        [self.trackMenuDelegate openURL:((OAGPXTableCellData *) tableData).desc];
+    }
 }
 
 @end

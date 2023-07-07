@@ -15,7 +15,7 @@
 #import "OARootViewController.h"
 #import "OASwitchTableViewCell.h"
 #import "OAMapHudViewController.h"
-#import "OAQuickActionHudViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
 #import "OAQuickActionListViewController.h"
 #import "OADirectionAppearanceViewController.h"
 #import "OAColors.h"
@@ -244,7 +244,7 @@
     if ([key isEqualToString:@"quick_action"])
     {
         [_settings.quickActionIsOn set:sw.on];
-        [[OARootViewController instance].mapPanel.hudViewController.quickActionController updateViewVisibility];
+        [[OARootViewController instance].mapPanel.hudViewController.floatingButtonsController updateViewVisibility];
         return YES;
     }
 

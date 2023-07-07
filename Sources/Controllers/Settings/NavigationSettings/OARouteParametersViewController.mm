@@ -9,7 +9,7 @@
 #import "OARouteParametersViewController.h"
 #import "OADeviceScreenTableViewCell.h"
 #import "OAValueTableViewCell.h"
-#import "OAIconTextTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAAvoidPreferParametersViewController.h"
 #import "OARecalculateRouteViewController.h"
@@ -239,7 +239,7 @@
         if (_avoidParameters.size() > 0)
         {
             [parametersArr addObject:@{
-                @"type" : [OAIconTextTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
                 @"title" : OALocalizedString(@"impassable_road"),
                 @"icon" : @"ic_custom_alert",
                 @"value" : @([self checkIfAnyParameterIsSelected:_avoidParameters]),
@@ -344,7 +344,7 @@
         if (_preferParameters.size() > 0)
         {
             [parametersArr addObject:@{
-                @"type" : [OAIconTextTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
                 @"title" : OALocalizedString(@"prefer_in_routing_title"),
                 @"icon" : @"ic_custom_alert",
                 @"value" : @([self checkIfAnyParameterIsSelected:_preferParameters]),
@@ -360,7 +360,7 @@
             @"type" : [OASwitchTableViewCell getCellIdentifier] }
         ];
         [parametersArr addObject:@{
-            @"type" : [OAIconTextTableViewCell getCellIdentifier],
+            @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"road_speeds"),
             @"icon" : @"ic_custom_alert",
             @"value" : @(YES),
@@ -433,22 +433,21 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAIconTextTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.arrowIconView.hidden = YES;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+            [cell descriptionVisibility:NO];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.iconView.tintColor = [item[@"value"] boolValue] ? UIColorFromRGB(_iconColor) : UIColorFromRGB(color_icon_inactive);
+            cell.titleLabel.text = item[@"title"];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            cell.leftIconView.tintColor = [item[@"value"] boolValue] ? UIColorFromRGB(_iconColor) : UIColorFromRGB(color_icon_inactive);
         }
         return cell;
     }

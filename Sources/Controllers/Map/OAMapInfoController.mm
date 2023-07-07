@@ -36,7 +36,7 @@
 #import "OAWeatherToolbar.h"
 #import "OAWeatherPlugin.h"
 #import "OACompassModeWidgetState.h"
-#import "OAQuickActionHudViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
 #import "OAMapLayers.h"
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OASunriseSunsetWidget.h"
@@ -131,11 +131,18 @@
         _leftPanelController.view.translatesAutoresizingMaskIntoConstraints = false;
         _leftTopConstraint = [_leftPanelController.view.topAnchor constraintEqualToAnchor:_widgetsView.topAnchor];
         _leftTopConstraint.active = YES;
-        [_leftPanelController.view.leadingAnchor constraintEqualToAnchor:_widgetsView.leadingAnchor constant:-2.].active = YES;
+        if ([_mapHudViewController.view isDirectionRTL])
+            [_leftPanelController.view.trailingAnchor constraintEqualToAnchor:_widgetsView.trailingAnchor constant:-2.].active = YES;
+        else
+            [_leftPanelController.view.leadingAnchor constraintEqualToAnchor:_widgetsView.leadingAnchor constant:-2.].active = YES;
+        
         _rightPanelController.view.translatesAutoresizingMaskIntoConstraints = false;
         _rightTopConstraint = [_rightPanelController.view.topAnchor constraintEqualToAnchor:_widgetsView.topAnchor];
         _rightTopConstraint.active = YES;
-        [_rightPanelController.view.trailingAnchor constraintEqualToAnchor:_widgetsView.trailingAnchor constant:2.].active = YES;
+        if ([_mapHudViewController.view isDirectionRTL])
+            [_rightPanelController.view.leadingAnchor constraintEqualToAnchor:_widgetsView.leadingAnchor constant:2.].active = YES;
+        else
+            [_rightPanelController.view.trailingAnchor constraintEqualToAnchor:_widgetsView.trailingAnchor constant:2.].active = YES;
         
         [_leftPanelController didMoveToParentViewController:mapHudViewController];
         [_rightPanelController didMoveToParentViewController:mapHudViewController];
@@ -456,7 +463,7 @@
         [_mapHudViewController showBottomControls:[OAUtilities isLandscape] ? 0. : _weatherToolbar.frame.size.height - [OAUtilities getBottomMargin]
                                          animated:YES];
         [mapPanel setTopControlsVisible:YES];
-        [_mapHudViewController.quickActionController updateViewVisibility];
+        [_mapHudViewController.floatingButtonsController updateViewVisibility];
         [self recreateControls];
 
         CGFloat height = [OAUtilities isLandscape] ? 0. : _weatherToolbar.frame.size.height;
@@ -500,7 +507,7 @@
         }
     }];
     [_mapHudViewController resetToDefaultRulerLayout];
-    [_mapHudViewController.quickActionController updateViewVisibility];
+    [_mapHudViewController.floatingButtonsController updateViewVisibility];
     [self recreateControls];
 }
 

@@ -44,11 +44,9 @@
 #import "OAColors.h"
 #import "OASizes.h"
 
-#import "OAIconTextTableViewCell.h"
 #import "OASearchMoreCell.h"
 #import "OAPointDescCell.h"
 #import "OASimpleTableViewCell.h"
-#import "OAIconButtonCell.h"
 #import "OAMenuSimpleCell.h"
 #import "OAEmptySearchCell.h"
 #import "OARightIconTableViewCell.h"
@@ -712,22 +710,22 @@
                 }
                 else if ([res.object isKindOfClass:[OAPOICategory class]])
                 {
-                    OAIconTextTableViewCell* cell;
-                    cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+                    OASimpleTableViewCell* cell;
+                    cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
                     if (cell == nil)
                     {
-                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-                        cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+                        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+                        [cell descriptionVisibility:NO];
                     }
                     if (cell)
                     {
-                        cell.contentView.backgroundColor = [UIColor whiteColor];
-                        cell.arrowIconView.image = [UIImage imageNamed:@"menu_cell_pointer.png"];
-                        cell.arrowIconView.image = [cell.arrowIconView.image imageFlippedForRightToLeftLayoutDirection];
-                        [cell.textView setTextColor:[UIColor blackColor]];
-                        [cell.textView setText:[item getName]];
-                        [cell.iconView setImage:[((OAPOICategory *)res.object) icon]];
-                        cell.separatorInset = UIEdgeInsetsMake(0., isLast ? 0. : 66., 0., 0.);
+                        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                        [cell.titleLabel setTextColor:[UIColor blackColor]];
+                        [cell.titleLabel setText:[item getName]];
+                        [cell.leftIconView setImage:[((OAPOICategory *)res.object) icon]];
+                        [cell setCustomLeftSeparatorInset:isLast];
+                        cell.separatorInset = UIEdgeInsetsMake(0., 0., 0., 0.);
                     }
                     return cell;
                 }
@@ -762,26 +760,36 @@
         }
         if ([item getType] == BUTTON)
         {
-            OAIconButtonCell* cell;
-            cell = (OAIconButtonCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconButtonCell getCellIdentifier]];
+            OASimpleTableViewCell* cell;
+            cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconButtonCell getCellIdentifier] owner:self options:nil];
-                cell = (OAIconButtonCell *)[nib objectAtIndex:0];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+                [cell descriptionVisibility:NO];
             }
             
             if (cell)
             {
                 OAQuickSearchButtonListItem *buttonItem = (OAQuickSearchButtonListItem *) item;
-                cell.contentView.backgroundColor = [UIColor whiteColor];
-                cell.arrowIconView.hidden = YES;
-                [cell setImage:buttonItem.icon tint:YES];
+                cell.leftIconView.image = [buttonItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+                cell.leftIconView.contentMode = UIViewContentModeCenter;
                 if ([buttonItem getName])
-                    [cell.textView setText:[item getName]];
+                {
+                    cell.titleLabel.attributedText = nil;
+                    [cell.titleLabel setText:[item getName]];
+                }
                 else if ([buttonItem getAttributedName])
-                    [cell.textView setAttributedText:[buttonItem getAttributedName]];
+                {
+                    cell.titleLabel.text = nil;
+                    [cell.titleLabel setAttributedText:[buttonItem getAttributedName]];
+                }
                 else
-                    [cell.textView setText:@""];
+                {
+                    cell.titleLabel.attributedText = nil;
+                    [cell.titleLabel setText:@""];
+                }
+                cell.titleLabel.textColor = UIColorFromRGB(tag_hint_text_color);
             }
             return cell;
         }

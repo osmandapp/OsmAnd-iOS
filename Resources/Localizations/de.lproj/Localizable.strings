@@ -2916,3 +2916,17 @@
 "generate_slope_from_3d_maps" = "Erzeugen von Hangrasterkarten aus 3D-Karten";
 "perform_oauth_authorization" = "Anmeldung über OAuth";
 "user_name" = "Benutzername";
+"av_notes_photo_widget_desc" = "Durch Tippen auf das Widget kann ein Foto aufgenommen werden.";
+"av_notes_video_widget_desc" = "Durch Tippen auf das Widget kann ein Video aufgenommen werden.";
+"av_notes_audio_widget_desc" = "Durch Tippen auf das Widget kann eine Sprachnotiz aufgenommen werden.";
+
+// Widget descriptions
+"coordinates_widget_current_location_desc" = "Zeigt die geografischen Koordinaten des aktuellen Standorts an";
+"trip_recording_distance_widget_desc" = "Zeigt die aktuell aufgezeichnete Reisestrecke an.";
+"trip_recording_downhill_widget_desc" = "Zeigt die Summe aller Abfahrten der aktuell aufgezeichneten Strecke an.";
+"trip_recording_uphill_widget_desc" = "Zeigt die Summe aller Anstiege der aktuell aufgezeichneten Strecke an.";
+"trip_recording_duration_widget_desc" = "Zeigt die aktuell aufgezeichnete Reisezeit an.";
+"true_bearing_widget_desc" = "Winkel zwischen wahrem Norden und dem Zielpunkt, der von Ihrem Standort aus beobachtet wird.";
+"relative_bearing_widget_desc" = "Zeigt den Winkel zwischen Ihrer Bewegungsrichtung und dem Zielpunkt an.";
+"second_marker_widget_desc" = "Sie können das Widget so konfigurieren, dass es die Entfernung oder voraussichtliche Ankunftszeit bis zur zweiten Kartenmarkierung anzeigt.";
+"first_marker_widget_desc" = "Sie können das Widget so konfigurieren, dass es die Entfernung oder voraussichtliche Ankunftszeit bis zur ersten Kartenmarkierung anzeigt.";

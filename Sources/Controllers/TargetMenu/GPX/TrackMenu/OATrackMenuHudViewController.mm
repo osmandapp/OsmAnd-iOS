@@ -2511,9 +2511,6 @@
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     
-    if ([cellData.key isEqualToString:kWebsiteCellName])
-        [OAUtilities callUrl:cellData.desc];
-    
     [_uiBuilder onButtonPressed:cellData];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

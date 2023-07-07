@@ -87,6 +87,16 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         quickActionRow.accessibilityLabel = quickActionRow.title
         quickActionRow.accessibilityValue = quickActionRow.descr
         
+        let map3dModeRow = buttonsSection.createNewRow()
+        let selected3dMode = OAAppSettings.sharedManager()!.map3dMode.get()
+        map3dModeRow.key = "map_3d_mode"
+        map3dModeRow.title = localizedString("map_3d_mode_action")
+        map3dModeRow.descr = OAMap3DModeVisibility.getTitle(selected3dMode) ?? ""
+        map3dModeRow.iconTint = Int(quickActionsEnabled ? appMode!.getIconColor() : color_tint_gray)
+        map3dModeRow.iconName = OAMap3DModeVisibility.getIconName(selected3dMode)
+        map3dModeRow.cellType = OAValueTableViewCell.getIdentifier()
+        map3dModeRow.accessibilityLabel = map3dModeRow.title
+        map3dModeRow.accessibilityValue = map3dModeRow.descr
     }
     
     func populateCompassRow(_ row: OATableRowData) {
@@ -245,6 +255,19 @@ extension ConfigureScreenViewController {
             self.navigationController?.pushViewController(vc, animated: true)
         } else if data.key == "compass" {
             let vc = CompassVisibilityViewController()
+            vc.delegate = self
+            let navigationController = UINavigationController()
+            navigationController.setViewControllers([vc], animated: true)
+            navigationController.modalPresentationStyle = .pageSheet
+            let sheet = navigationController.sheetPresentationController
+            if let sheet
+            {
+                sheet.detents = [.medium()]
+                sheet.preferredCornerRadius = 20
+            }
+            self.navigationController?.present(navigationController, animated: true)
+        } else if data.key == "map_3d_mode" {
+            let vc = Map3dModeButtonVisibilityViewController()
             vc.delegate = self
             let navigationController = UINavigationController()
             navigationController.setViewControllers([vc], animated: true)

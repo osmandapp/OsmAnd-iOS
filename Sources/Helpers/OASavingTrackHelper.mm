@@ -66,7 +66,7 @@
     CLLocationCoordinate2D lastPoint;
 }
 
-@synthesize lastTimeUpdated, points, isRecording, distance, currentTrack;
+@synthesize lastTimeUpdated, points, isRecording, distance, currentTrack, currentTrackIndex;
 
 + (OASavingTrackHelper*)sharedInstance
 {
@@ -96,6 +96,7 @@
     if (self)
     {
         _app = [OsmAndApp instance];
+        currentTrackIndex = 1;
         syncQueue = dispatch_queue_create("sth_syncQueue", DISPATCH_QUEUE_SERIAL);
 
         [self createDb];
@@ -331,7 +332,8 @@
     
     distance = 0;
     points = 0;
-    
+    currentTrackIndex++;
+
     lastTimeUpdated = 0;
     lastPoint = kCLLocationCoordinate2DInvalid;
     

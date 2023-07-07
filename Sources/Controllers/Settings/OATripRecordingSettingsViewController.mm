@@ -18,7 +18,7 @@
 #import "OAFileNameTranslationHelper.h"
 #import "OASavingTrackHelper.h"
 #import "OAValueTableViewCell.h"
-#import "OAIconTextTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OAColors.h"
 #import "OASizes.h"
@@ -206,7 +206,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             
             [dataArr addObject:@[
                 @{
-                    @"type" : [OAIconTextTableViewCell getCellIdentifier],
+                    @"type" : [OASimpleTableViewCell getCellIdentifier],
                     @"title" : str,
                     @"header" : OALocalizedString(@"shared_string_actions")
                 },
@@ -432,22 +432,23 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         return cell;
     }
-    else if ([type isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
+    else if ([type isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAIconTextTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-            cell.arrowIconView.hidden = YES;
-            cell.iconView.hidden = YES;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            [cell setCustomLeftSeparatorInset:YES];
             cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
-            cell.textView.numberOfLines = 0;
-            cell.textView.lineBreakMode = NSLineBreakByWordWrapping;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         }
         if (cell)
         {
-            cell.textView.attributedText = item[@"title"];
+            cell.titleLabel.attributedText = item[@"title"];
         }
         return cell;
     }

@@ -30,7 +30,7 @@
 #import "OAMapActions.h"
 #import "OAUtilities.h"
 #import "OAAvoidSpecificRoads.h"
-#import "OAMenuSimpleCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAButtonTableViewCell.h"
 #import "OAOsmAndFormatter.h"
 
@@ -96,7 +96,7 @@
                                    @"roadId" : @((unsigned long long)r.roadId),
                                    @"descr"  : [self.class getDescr:r],
                                    @"header" : @"",
-                                   @"type"   : [OAMenuSimpleCell getCellIdentifier]} ];
+                                   @"type"   : [OASimpleTableViewCell getCellIdentifier]} ];
         }
         
         [sectionData addObjectsFromArray:roadList];
@@ -242,24 +242,21 @@
     {
         NSString *text = item[@"title"];
         NSString *value = item[@"descr"];
-        if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
+        if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
         {
-            OAMenuSimpleCell *cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
+            OASimpleTableViewCell *cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
-                cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
             }
             
             if (cell)
             {
-                cell.imgView.image = [UIImage imageNamed:@"ic_custom_alert_color"];
-                cell.descriptionView.hidden = !value || value.length == 0;
-                cell.descriptionView.text = value;
-                [cell.textView setText:text];
-                
-                if ([cell needsUpdateConstraints])
-                    [cell updateConstraintsIfNeeded];
+                cell.leftIconView.image = [UIImage imageNamed:@"ic_custom_alert_color"];
+                [cell descriptionVisibility:value || value.length != 0];
+                cell.descriptionLabel.text = value;
+                [cell.titleLabel setText:text];
             }
             return cell;
         }

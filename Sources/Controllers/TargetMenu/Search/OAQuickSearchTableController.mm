@@ -47,7 +47,6 @@
 #import "OASearchMoreCell.h"
 #import "OAPointDescCell.h"
 #import "OASimpleTableViewCell.h"
-#import "OAMenuSimpleCell.h"
 #import "OAEmptySearchCell.h"
 #import "OARightIconTableViewCell.h"
 
@@ -824,18 +823,19 @@
         }
         else if ([item getType] == HEADER)
         {
-            OAMenuSimpleCell *cell;
-            cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
+            OASimpleTableViewCell *cell;
+            cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
-                cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+                [cell descriptionVisibility:NO];
+                [cell leftIconVisibility:NO];
             }
             
             if (cell)
             {
-                [cell.textView setText:[item getName]];
-                cell.descriptionView.hidden = YES;
+                [cell.titleLabel setText:[item getName]];
             }
             return cell;
         }

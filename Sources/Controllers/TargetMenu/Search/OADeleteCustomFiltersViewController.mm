@@ -11,7 +11,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OASimpleTableViewCell.h"
-#import "OAMenuSimpleCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OAPOIHelper.h"
 
 @interface OADeleteCustomFiltersViewController () <OATableViewCellDelegate>
@@ -96,7 +96,7 @@
 
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    NSString *cellType = indexPath.row == 0 ? [OASimpleTableViewCell getCellIdentifier] : [OAMenuSimpleCell getCellIdentifier];
+    NSString *cellType = indexPath.row == 0 ? [OASimpleTableViewCell getCellIdentifier] : [OARightIconTableViewCell getCellIdentifier];
     if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
         OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
@@ -136,14 +136,15 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OAMenuSimpleCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
+        OARightIconTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
+            [cell rightIconVisibility:NO];
+            [cell descriptionVisibility:NO];
             cell.tintColor = UIColorFromRGB(color_primary_purple);
             UIView *bgColorView = [[UIView alloc] init];
             bgColorView.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.05];
@@ -153,18 +154,12 @@
         {
             OAPOIUIFilter *filter = _items[indexPath.row - 1];
             BOOL selected = [_selectedItems containsObject:filter];
-
             UIImage *icon = [[OAPOIHelper getCustomFilterIcon:filter] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            [cell.imgView setImage:icon ];
+            [cell.leftIconView setImage:icon ];
             UIColor *selectedColor = selected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
-            cell.imgView.tintColor = selectedColor;
-            cell.imgView.contentMode = UIViewContentModeCenter;
-
-            cell.textView.text = filter.getName ? filter.getName : @"";
-            cell.descriptionView.hidden = YES;
-
-            if ([cell needsUpdateConstraints])
-                [cell updateConstraints];
+            cell.leftIconView.tintColor = selectedColor;
+            cell.leftIconView.contentMode = UIViewContentModeCenter;
+            cell.titleLabel.text = filter.getName ? filter.getName : @"";
             return cell;
         }
     }

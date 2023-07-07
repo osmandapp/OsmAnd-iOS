@@ -16,7 +16,7 @@
 #import "OsmAndApp.h"
 #import "OAQuickActionType.h"
 #import "OAButtonTableViewCell.h"
-#import "OAMenuSimpleCell.h"
+#import "OASimpleTableViewCell.h"
 
 #define KEY_FILTERS @"filters"
 
@@ -132,7 +132,7 @@ static OAQuickActionType *TYPE;
         [items addObject:@{
                            @"title" : filter.getName,
                            @"value" : filter.filterId,
-                           @"type" : [OAMenuSimpleCell getCellIdentifier],
+                           @"type" : [OASimpleTableViewCell getCellIdentifier],
                            @"img" : iconId
                            }];
     }

@@ -21,7 +21,7 @@
 #import "OAEditGroupViewController.h"
 #import "OANativeUtilities.h"
 #import "OsmAndApp.h"
-#import "OAMenuSimpleCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAButtonTableViewCell.h"
 #import "OAActionAddCategoryViewController.h"
 #import "OAQuickSearchListItem.h"
@@ -404,14 +404,14 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAMenuSimpleCell* cell = nil;
-        cell = [self.tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
+        OASimpleTableViewCell* cell = nil;
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
-            cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
         }
         
         if (cell)
@@ -423,15 +423,12 @@
             if (!img)
                 img = [OAUtilities getMxIcon:@"user_defined"];
             
-            cell.textView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
             NSString *desc = item[@"descr"];
-            cell.descriptionView.text = desc;
-            cell.descriptionView.hidden = desc.length == 0;
-            [cell.imgView setTintColor:UIColorFromRGB(color_icon_color)];
-            cell.imgView.image = img;
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
+            cell.descriptionLabel.text = desc;
+            [cell descriptionVisibility:desc.length != 0];
+            [cell.leftIconView setTintColor:UIColorFromRGB(color_icon_color)];
+            cell.leftIconView.image = img;
         }
         return cell;
     }
@@ -558,7 +555,7 @@
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
         return YES;
     return NO;
 }
@@ -1008,7 +1005,7 @@
             [newItems addObject:@{
                 @"title" : filter.getName,
                 @"value" : filter.filterId,
-                @"type" : [OAMenuSimpleCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
                 @"img" : iconId
             }];
             [titles addObject:filter.getName];
@@ -1019,7 +1016,7 @@
             [newItems addObject:@{
                 @"title" : filter.nameLocalized,
                 @"value" : [STD_PREFIX stringByAppendingString:filter.name],
-                @"type" : [OAMenuSimpleCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
                 @"img" : filter.name
             }];
             [titles addObject:filter.nameLocalized];

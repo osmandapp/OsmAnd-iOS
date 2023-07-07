@@ -15,7 +15,7 @@
 #import "OATargetPointsHelper.h"
 #import "OAWaypointHelper.h"
 #import "OAWaypointUIHelper.h"
-#import "OAMenuSimpleCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAWaypointHeaderCell.h"
 #import "OADividerCell.h"
 #import "OAUtilities.h"
@@ -82,24 +82,24 @@
     [arr addObject:@{ @"title" : OALocalizedString(@"intermediate_items_sort_by_distance"),
                       @"key" : @"intermediate_items_sort_by_distance",
                       @"img" : @"ic_action_sort_door_to_door",
-                      @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
+                      @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
     
     [arr addObject:@{ @"title" : OALocalizedString(@"switch_start_finish"),
                       @"key" : @"switch_start_finish",
                       @"img" : @"ic_action_sort_reverse_order",
-                      @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
+                      @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
     
     [arr addObject:@{ @"type" : [OADividerCell getCellIdentifier] } ];
     
     [arr addObject:@{ @"title" : OALocalizedString(@"add_waypoint_short"),
                       @"key" : @"add_waypoint",
                       @"img" : @"ic_action_plus",
-                      @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
+                      @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
     
     [arr addObject:@{ @"title" : OALocalizedString(@"clear_all_intermediates"),
                       @"key" : @"clear_all_intermediates",
                       @"img" : @"ic_action_clear_all",
-                      @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
+                      @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
     
     _data = [NSArray arrayWithArray:arr];
 }
@@ -111,11 +111,7 @@
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
-    {
-        return UITableViewAutomaticDimension;
-    }
-    else if ([item[@"type"] isEqualToString:[OAWaypointHeaderCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OAWaypointHeaderCell getCellIdentifier]])
     {
         return 44.0;
     }
@@ -169,17 +165,16 @@
 {
     NSDictionary *item = _data[indexPath.row];
     
-    if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAMenuSimpleCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
+        OASimpleTableViewCell* cell = nil;
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
-            cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
-            cell.backgroundColor = UIColor.clearColor;
-            cell.textView.textColor = UIColorFromRGB(color_menu_button);
-            cell.descriptionView.textColor = UIColorFromRGB(color_secondary_text_blur);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+            cell.titleLabel.textColor = UIColorFromRGB(color_menu_button);
+            cell.descriptionLabel.textColor = UIColorFromRGB(color_secondary_text_blur);
         }
         
         if (cell)
@@ -189,13 +184,11 @@
             if (imgName)
                 img = [UIImage imageNamed:imgName];
             
-            cell.textView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
             NSString *desc = item[@"description"];
-            cell.descriptionView.text = desc;
-            cell.descriptionView.hidden = desc.length == 0;
-            cell.imgView.image = img;
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
+            cell.descriptionLabel.text = desc;
+            [cell descriptionVisibility:desc.length != 0];
+            cell.leftIconView.image = img;
         }
         
         return cell;
@@ -265,7 +258,7 @@
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
         return indexPath;
     else
         return nil;

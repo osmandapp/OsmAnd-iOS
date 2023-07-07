@@ -9,7 +9,7 @@
 #import "OASelectMapSourceViewController.h"
 #import "OAMapSource.h"
 #import "OsmAndApp.h"
-#import "OAMenuSimpleCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAMapCreatorHelper.h"
 #import "OASQLiteTileSource.h"
 #import "OAResourcesUIHelper.h"
@@ -132,25 +132,24 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         itemMapSource = ((OAOnlineTilesResourceItem *) item).mapSource;
         caption = itemMapSource.name;
     }
-    OAMenuSimpleCell* cell = nil;
-    cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
+    OASimpleTableViewCell* cell = nil;
+    cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
-        cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
-        cell.descriptionView.hidden = YES;
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 61.0, 0.0, 0.0);
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+        [cell descriptionVisibility:NO];
     }
     if (cell)
     {
         UIImage *img = nil;
         img = [UIImage imageNamed:@"ic_custom_map_online"];
-        cell.textView.text = caption;
-        cell.imgView.image = img;
+        cell.titleLabel.text = caption;
+        cell.leftIconView.image = img;
         if ([_app.data.lastMapSource isEqual:itemMapSource])
-            cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_checkmark_default.png"]];
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
         else
-            cell.accessoryView = nil;
+            cell.accessoryType = UITableViewCellAccessoryNone;
     }
     return cell;
 }

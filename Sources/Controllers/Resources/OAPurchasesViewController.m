@@ -12,7 +12,7 @@
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OAChoosePlanHelper.h"
-#import "OAMenuSimpleCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OALargeImageTitleDescrTableViewCell.h"
 #import "OACardButtonCell.h"
 #import "OAValueTableViewCell.h"
@@ -171,7 +171,7 @@ static BOOL _purchasesUpdated;
                     }
                     [activeSection addRowFromDictionary:@{
                         kCellKeyKey : @"product_pro_crossplatform",
-                        kCellTypeKey : [OAMenuSimpleCell getCellIdentifier],
+                        kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
                         kCellIconNameKey : @"ic_custom_osmand_pro_logo_colored",
                         kCellTitleKey : isPromo ? OALocalizedString(@"promo_subscription") : OALocalizedString(@"product_title_pro"),
                         kCellDescrKey : dateString
@@ -182,7 +182,7 @@ static BOOL _purchasesUpdated;
                     OAProduct *product = activeProducts[i];
                     [activeSection addRowFromDictionary:@{
                         kCellKeyKey : [@"product_" stringByAppendingString:product.productIdentifier],
-                        kCellTypeKey : [OAMenuSimpleCell getCellIdentifier],
+                        kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
                         @"product" : product
                     }];
                 }
@@ -196,7 +196,7 @@ static BOOL _purchasesUpdated;
                     OAProduct *product = expiredProducts[i];
                     [expiredSection addRowFromDictionary:@{
                         kCellKeyKey : [@"product_" stringByAppendingString:product.productIdentifier],
-                        kCellTypeKey : [OAMenuSimpleCell getCellIdentifier],
+                        kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
                         @"product" : product
                     }];
                 }
@@ -361,25 +361,23 @@ static BOOL _purchasesUpdated;
         }
         outCell = cell;
     }
-    else if ([item.cellType isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAMenuSimpleCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
+        OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            [cell changeHeight:YES];
         }
         if (cell)
         {
-            cell.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0, 0);
             OAProduct *product = [item objForKey:@"product"];
             if (product)
             {
-                cell.textView.text = [product.productIdentifier isEqualToString:kInAppId_Addon_Nautical]
+                cell.titleLabel.text = [product.productIdentifier isEqualToString:kInAppId_Addon_Nautical]
                         ? OALocalizedString(@"rendering_attr_depthContours_name")
                         : product.localizedTitle;
-                cell.imgView.image = [product isKindOfClass:OASubscription.class] || [OAIAPHelper isFullVersion:product]
+                cell.leftIconView.image = [product isKindOfClass:OASubscription.class] || [OAIAPHelper isFullVersion:product]
                         ? [UIImage imageNamed:product.productIconName]
                         : [product.feature getIcon];
 
@@ -390,26 +388,22 @@ static BOOL _purchasesUpdated;
                 [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attributedString.length)];
                 [attributedString addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote] range:NSMakeRange(0, attributedString.length)];
                 [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:NSMakeRange(0, attributedString.length)];
-                cell.descriptionView.attributedText = attributedString;
+                cell.descriptionLabel.text = nil;
+                cell.descriptionLabel.attributedText = attributedString;
             }
             else
             {
-                cell.textView.text = item.title;
-                cell.imgView.image = [UIImage imageNamed:item.iconName];
-                cell.descriptionView.text = item.descr;
-                cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
-                cell.descriptionView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+                cell.titleLabel.text = item.title;
+                cell.leftIconView.image = [UIImage imageNamed:item.iconName];
+                cell.descriptionLabel.attributedText = nil;
+                cell.descriptionLabel.text = item.descr;
+                cell.descriptionLabel.textColor = UIColorFromRGB(color_text_footer);
+                cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
             }
-            UIImageView *rightImageView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_arrow_right"]];
-            rightImageView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.accessoryView = rightImageView;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
-        outCell = cell;
+        return cell;
     }
-
-    if ([outCell needsUpdateConstraints])
-        [outCell updateConstraints];
-
     return outCell;
 }
 

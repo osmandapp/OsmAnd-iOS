@@ -10,7 +10,7 @@
 #import "OAExportSettingsType.h"
 #import "OASimpleTableViewCell.h"
 #import "OAApplicationMode.h"
-#import "OAMenuSimpleCell.h"
+#import "OARightIconTableViewCell.h"
 #import "Localization.h"
 #import "OAProfileDataObject.h"
 #import "OARoutingDataObject.h"
@@ -156,7 +156,7 @@
         return nil;
     
     NSMutableDictionary *item = [NSMutableDictionary new];
-    item[@"type"] = [OAMenuSimpleCell getCellIdentifier];
+    item[@"type"] = [OARightIconTableViewCell getCellIdentifier];
     item[@"object"] = object;
     if ([object isKindOfClass:OAApplicationModeBean.class])
     {
@@ -511,14 +511,14 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OAMenuSimpleCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
+        OARightIconTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
-            cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
+            [cell rightIconVisibility:NO];
             cell.tintColor = UIColorFromRGB(color_primary_purple);
             UIView *bgColorView = [[UIView alloc] init];
             bgColorView.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.05];
@@ -526,16 +526,14 @@
         }
         if (cell)
         {
-            cell.imgView.image = item[@"icon"];
-            cell.textView.text = item[@"title"];
+            cell.leftIconView.image = item[@"icon"];
+            cell.titleLabel.text = item[@"title"];
             BOOL selected = [_selectedItems containsObject:item[@"object"]];
             UIColor *selectedColor = item[@"color"];
             selectedColor = selectedColor ? selectedColor : UIColorFromRGB(color_primary_purple);
-            cell.imgView.tintColor = selected ? selectedColor : UIColorFromRGB(color_tint_gray);
-            cell.descriptionView.text = item[@"descr"];
-            cell.descriptionView.hidden = !cell.descriptionView.text || cell.descriptionView.text.length == 0;
-            if ([cell needsUpdateConstraints])
-                [cell updateConstraints];
+            cell.leftIconView.tintColor = selected ? selectedColor : UIColorFromRGB(color_tint_gray);
+            cell.descriptionLabel.text = item[@"descr"];
+            [cell descriptionVisibility:cell.descriptionLabel.text || cell.descriptionLabel.text.length != 0];
         }
         return cell;
     }

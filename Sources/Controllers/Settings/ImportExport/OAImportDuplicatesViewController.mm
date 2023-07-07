@@ -18,7 +18,6 @@
 #import "OAAvoidRoadInfo.h"
 #import "OAProfileDataObject.h"
 #import "OARoutingDataObject.h"
-#import "OAMenuSimpleCell.h"
 #import "OASimpleTableViewCell.h"
 #import "OAActivityViewWithTitleCell.h"
 #import "OAIndexConstants.h"
@@ -202,6 +201,7 @@
                     item[@"label"] = header.title;
                     item[@"description"] = [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [header.title lowerCase]];
                     item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
+                    item[@"key"] = @"headerType";
                 }
                 else if ([currentItem isKindOfClass:OAApplicationModeBean.class])
                 {
@@ -238,7 +238,7 @@
                     
                     item[@"icon"] = [UIImage imageNamed:modeBean.iconName];
                     item[@"iconColor"] = UIColorFromRGB(modeBean.iconColor);
-                    item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
+                    item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                 }
                 else if ([currentItem isKindOfClass:OAQuickAction.class])
                 {
@@ -246,7 +246,7 @@
                     item[@"label"] = [action getName];
                     item[@"icon"] = [UIImage imageNamed:[action getIconResName]];
                     item[@"description"] = @"";
-                    item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
+                    item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                 }
                 else if ([currentItem isKindOfClass:OAPOIUIFilter.class])
                 {
@@ -254,7 +254,7 @@
                     item[@"label"] = [filter getName];
                     item[@"icon"] = [OAPOIHelper getCustomFilterIcon:filter];
                     item[@"description"] = @"";
-                    item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
+                    item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                 }
                 else if ([currentItem isKindOfClass:OATileSource.class])
                 {
@@ -263,7 +263,7 @@
                     item[@"label"] = caption;
                     item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_map"];
                     item[@"description"] = @"";
-                    item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
+                    item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                     item[@"iconColor"] = UIColorFromRGB(color_tint_gray);
                 }
                 else if ([currentItem isKindOfClass:NSString.class])
@@ -303,14 +303,14 @@
                     }
                     item[@"iconColor"] = UIColorFromRGB(color_tint_gray);
                     item[@"description"] = @"";
-                    item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
+                    item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                 }
                 else if ([currentItem isKindOfClass:OAAvoidRoadInfo.class])
                 {
                     item[@"label"] = ((OAAvoidRoadInfo *)currentItem).name;
                     item[@"icon"] = [UIImage imageNamed:@"ic_custom_alert"];
                     item[@"description"] = @"";
-                    item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
+                    item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                 }
                 else if ([currentItem isKindOfClass:OAFavoriteGroup.class])
                 {
@@ -318,7 +318,7 @@
                     item[@"label"] = [OAFavoriteGroup getDisplayName:group.name];
                     item[@"icon"] = [UIImage imageNamed:@"ic_custom_favorites"];
                     item[@"description"] = @"";
-                    item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
+                    item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                 }
                 else if ([currentItem isKindOfClass:OADestination.class])
                 {
@@ -326,7 +326,7 @@
                     item[@"label"] = marker.desc;
                     item[@"icon"] = [UIImage imageNamed:@"ic_custom_marker"];
                     item[@"description"] = @"";
-                    item[@"cellType"] = [OAMenuSimpleCell getCellIdentifier];
+                    item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                 }
                 NSDictionary *newDict = [NSDictionary dictionaryWithDictionary:item];
                 [sectionData addObject:newDict];
@@ -351,6 +351,7 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *type = item[@"cellType"];
+    BOOL isHeaderType = [item[@"key"] isEqualToString:@"headerType"];
 
     if ([type isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
@@ -359,52 +360,42 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
             cell.titleLabel.text = item[@"label"];
-            cell.descriptionLabel.text = item[@"description"];
-        }
-        return cell;
-    }
-    else if ([type isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
-    {
-        OAMenuSimpleCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
-            cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        if (cell)
-        {
-            cell.separatorInset = UIEdgeInsetsMake(.0, [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, .0, .0);
-            cell.textView.text = item[@"label"];
-
-            if (!item[@"description"] || ((NSString *)item[@"description"]).length > 0)
+            
+            if (isHeaderType)
             {
-                cell.descriptionView.hidden = NO;
-                cell.descriptionView.text = item[@"description"];
+                [cell leftIconVisibility:NO];
+                cell.descriptionLabel.text = item[@"description"];
             }
             else
             {
-                cell.descriptionView.hidden = YES;
-            }
+                if (!item[@"description"] || ((NSString *)item[@"description"]).length > 0)
+                {
+                    [cell descriptionVisibility:YES];
+                    cell.descriptionLabel.text = item[@"description"];
+                }
+                else
+                {
+                    [cell descriptionVisibility:NO];
+                    cell.descriptionLabel.text = nil;
+                }
 
-            if (item[@"icon"] && item[@"iconColor"])
-            {
-                cell.imgView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                cell.imgView.tintColor = item[@"iconColor"];
-            }
-            else if (item[@"icon"])
-            {
-                cell.imgView.image = item[@"icon"];
+                if (item[@"icon"] && item[@"iconColor"])
+                {
+                    cell.leftIconView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    cell.leftIconView.tintColor = item[@"iconColor"];
+                }
+                else if (item[@"icon"])
+                {
+                    cell.leftIconView.image = item[@"icon"];
+                }
+                [cell leftIconVisibility:YES];
             }
         }
-        if ([cell needsUpdateConstraints])
-            [cell updateConstraints];
         return cell;
     }
     else if ([type isEqualToString:[OAActivityViewWithTitleCell getCellIdentifier]])

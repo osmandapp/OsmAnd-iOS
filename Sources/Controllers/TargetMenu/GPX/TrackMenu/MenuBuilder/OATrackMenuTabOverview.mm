@@ -177,16 +177,20 @@
         [infoSectionData.subjects addObject:websiteCellData];
     }
 
-    NSString *wiki = [OAWikiAlgorithms getWikiUrlWithText:routeKey.routeKey.getWikipedia().toNSString()];
+    NSString *wiki = routeKey.routeKey.getWikipedia().toNSString();
     if (wiki.length > 0)
     {
-        OAGPXTableCellData *wikiCellData = [OAGPXTableCellData withData:@{
+        wiki = [OAWikiAlgorithms getWikiUrlWithText:wiki];
+        if (wiki.length > 0)
+        {
+            OAGPXTableCellData *wikiCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"wiki",
                 kCellType: [OAValueTableViewCell getCellIdentifier],
                 kCellTitle: OALocalizedString(@"download_wikipedia_maps"),
                 kCellDesc: wiki
-        }];
-        [infoSectionData.subjects addObject:wikiCellData];
+            }];
+            [infoSectionData.subjects addObject:wikiCellData];
+        }
     }
 }
 

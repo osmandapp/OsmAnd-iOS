@@ -187,7 +187,7 @@
                 [spinner setUserInteractionEnabled:NO];
                 
                 _content = nil;
-                [OAWikiArticleHelper showWikiArticle:CLLocationCoordinate2DMake(_poi.latitude, _poi.longitude) url:newUrl onStart:^{
+                [OAWikiArticleHelper showWikiArticle:@[[[CLLocation alloc] initWithLatitude:_poi.latitude longitude:_poi.longitude]] url:newUrl onStart:^{
                     [spinner startAnimating];
                     [self presentViewController:alert animated:YES completion:nil];
                 } onComplete:^{

@@ -10,7 +10,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAApplicationMode.h"
-#import "OAMenuSimpleCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OAProfileAppearanceViewController.h"
 #import "OAUtilities.h"
@@ -64,21 +64,20 @@
 
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    OAMenuSimpleCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
+    OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
-        cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 70.0, 0.0, 0.0);
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
     }
     if (cell)
     {
         OAApplicationMode *am = _profileList[indexPath.row];
         UIImage *img = am.getIcon;
-        cell.imgView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
-        cell.imgView.tintColor = UIColorFromRGB(am.getIconColor);
-        cell.textView.text = _profileList[indexPath.row].toHumanString;
-        cell.descriptionView.text = _profileList[indexPath.row].getProfileDescription;
+        cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+        cell.leftIconView.tintColor = UIColorFromRGB(am.getIconColor);
+        cell.titleLabel.text = _profileList[indexPath.row].toHumanString;
+        cell.descriptionLabel.text = _profileList[indexPath.row].getProfileDescription;
     }
     return cell;
 }

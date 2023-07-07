@@ -13,7 +13,7 @@
 #import "OAPOIFiltersHelper.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OAMenuSimpleCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OASearchUICore.h"
 #import "OAQuickSearchHelper.h"
 #import "OASearchSettings.h"
@@ -217,11 +217,11 @@
 
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    OAMenuSimpleCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
+    OASimpleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
-        cell = (OAMenuSimpleCell *) nib[0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OASimpleTableViewCell *) nib[0];
         if (_searchMode)
         {
             cell.tintColor = UIColorFromRGB(color_primary_purple);
@@ -234,9 +234,6 @@
     {
         if (!_searchMode)
         {
-            [cell changeHeight:YES];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 70.0, 0.0, 0.0);
-            
             OAPOICategory *category = _categories[indexPath.row];
             NSSet<NSString *> *subtypes = [_acceptedTypes objectForKey:category];
             NSInteger countAcceptedTypes = subtypes.count;
@@ -244,44 +241,41 @@
             BOOL isSelected = [_filter isTypeAccepted:category] && subtypes.count > 0;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             
-            cell.textView.text = category.nameLocalized;
+            cell.titleLabel.text = category.nameLocalized;
             
             UIImage *categoryIcon = [[category icon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.imgView.image = categoryIcon;
-            cell.imgView.tintColor = isSelected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
-            cell.imgView.contentMode = UIViewContentModeCenter;
+            cell.leftIconView.image = categoryIcon;
+            cell.leftIconView.tintColor = isSelected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
+            cell.leftIconView.contentMode = UIViewContentModeCenter;
             
             NSString *descText;
             if (subtypes == [OAPOIBaseType nullSet] || countAllTypes == countAcceptedTypes)
                 descText = [NSString stringWithFormat:@"%@ - %lu", OALocalizedString(@"shared_string_all"), countAllTypes];
             else
                 descText = [NSString stringWithFormat:@"%lu/%lu", countAcceptedTypes, countAllTypes];
-            cell.descriptionView.hidden = NO;
-            cell.descriptionView.text = descText;
-            cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
+            [cell descriptionVisibility:YES];
+            cell.descriptionLabel.text = descText;
+            cell.descriptionLabel.textColor = UIColorFromRGB(color_text_footer);
         }
         else
         {
-            [cell changeHeight:NO];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
-            
             OAPOIType *poiType = _searchResult[indexPath.row];
             BOOL accepted = [[_searchResultSelected objectForKey:poiType.category] containsObject:poiType.name];
             cell.accessoryType = UITableViewCellAccessoryNone;
             
-            cell.textView.text = poiType.nameLocalized ? poiType.nameLocalized : @"";
+            cell.titleLabel.text = poiType.nameLocalized ? poiType.nameLocalized : @"";
             
             UIColor *selectedColor = accepted ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
-            cell.imgView.image = [self getPoiIcon:poiType];
-            cell.imgView.tintColor = selectedColor;
-            if (cell.imgView.image.size.width < cell.imgView.frame.size.width && cell.imgView.image.size.height < cell.imgView.frame.size.height)
-                cell.imgView.contentMode = UIViewContentModeCenter;
+            cell.leftIconView.image = [self getPoiIcon:poiType];
+            cell.leftIconView.tintColor = selectedColor;
+            if (cell.leftIconView.image.size.width < cell.leftIconView.frame.size.width && cell.leftIconView.image.size.height < cell.leftIconView.frame.size.height)
+                cell.leftIconView.contentMode = UIViewContentModeCenter;
             else
-                cell.imgView.contentMode = UIViewContentModeScaleAspectFit;
+                cell.leftIconView.contentMode = UIViewContentModeScaleAspectFit;
             
-            cell.descriptionView.hidden = YES;
+            cell.descriptionLabel.text = nil;
+            [cell descriptionVisibility:NO];
         }
-        [cell updateConstraints];
         return cell;
     }
     return nil;

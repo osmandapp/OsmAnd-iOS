@@ -12,7 +12,7 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapCreatorHelper.h"
-#import "OAMenuSimpleCell.h"
+#import "OASimpleTableViewCell.h"
 
 #include <QSet>
 
@@ -189,12 +189,13 @@ typedef enum
     const auto& item = _onlineMapSources[(int) indexPath.row];
     NSString* caption = item->name.toNSString();
     
-    OAMenuSimpleCell* cell = nil;
-    cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
+    OASimpleTableViewCell* cell = nil;
+    cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
-        cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+        [cell descriptionVisibility:NO];
     }
     
     if (cell)
@@ -202,10 +203,10 @@ typedef enum
         UIImage *img = nil;
         img = [UIImage rtlImageNamed:@"ic_custom_map_style"];
         
-        cell.textView.text = caption;
-        cell.descriptionView.hidden = YES;
-        cell.imgView.image = img;
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        cell.titleLabel.text = caption;
+        cell.leftIconView.image = img;
+        [cell setCustomLeftSeparatorInset:YES];
+        cell.separatorInset = UIEdgeInsetsMake(0., 0., 0., 0.);
     }
     return cell;
 }

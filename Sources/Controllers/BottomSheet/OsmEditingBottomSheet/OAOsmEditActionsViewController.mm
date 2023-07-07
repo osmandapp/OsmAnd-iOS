@@ -22,7 +22,7 @@
 #import "OAOsmEditsDBHelper.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmNotePoint.h"
-#import "OAMenuSimpleCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OABottomSheetTwoButtonsViewController.h"
 #import "OAOsmEditingBottomSheetViewController.h"
 #import "OAOsmBugsRemoteUtil.h"
@@ -85,23 +85,23 @@
     [arr addObject:@{ @"title" : OALocalizedString(@"upload_to_osm"),
                       @"key" : @"upload_to_osm",
                       @"img" : @"ic_custom_upload",
-                      @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
+                      @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
 
     [arr addObject:@{ @"title" : OALocalizedString(@"osm_edit_show_on_map"),
                       @"key" : @"osm_edit_show_on_map",
                       @"descr" : OALocalizedString(@"osm_edit_show_on_map_descr"),
                       @"img" : @"ic_custom_show_on_map",
-                      @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
+                      @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
     
     [arr addObject:@{ @"title" : OALocalizedString(@"poi_context_menu_modify_osm_change"),
                       @"key" : @"poi_modify",
                       @"img" : @"ic_custom_edit",
-                      @"type" : [OAMenuSimpleCell getCellIdentifier] }];
+                      @"type" : [OASimpleTableViewCell getCellIdentifier] }];
     
     [arr addObject:@{ @"title" : OALocalizedString(@"shared_string_delete"),
                       @"key" : @"edit_delete",
                       @"img" : @"ic_custom_remove",
-                      @"type" : [OAMenuSimpleCell getCellIdentifier] }];
+                      @"type" : [OASimpleTableViewCell getCellIdentifier] }];
     
     _data = [NSArray arrayWithArray:arr];
 }
@@ -144,15 +144,14 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAMenuSimpleCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
+        OASimpleTableViewCell* cell = nil;
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
-            cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
-            cell.backgroundColor = UIColor.clearColor;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
         }
         
         if (cell)
@@ -162,14 +161,12 @@
             if (imgName)
                 img = [UIImage templateImageNamed:imgName];
             
-            cell.textView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
             NSString *desc = item[@"descr"];
-            cell.descriptionView.text = desc;
-            cell.descriptionView.hidden = desc.length == 0;
-            [cell.imgView setTintColor:UIColorFromRGB(color_icon_color)];
-            cell.imgView.image = img;
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
+            cell.descriptionLabel.text = desc;
+            [cell descriptionVisibility:desc.length != 0];
+            [cell.leftIconView setTintColor:UIColorFromRGB(color_icon_color)];
+            cell.leftIconView.image = img;
         }
         
         return cell;

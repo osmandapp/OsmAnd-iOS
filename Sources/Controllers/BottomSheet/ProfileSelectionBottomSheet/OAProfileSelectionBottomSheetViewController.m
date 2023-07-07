@@ -16,7 +16,7 @@
 #import "OARootViewController.h"
 #import "OASizes.h"
 #import "OAAppSettings.h"
-#import "OAMenuSimpleCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAMapSource.h"
 #import "OAMapStyleAction.h"
 
@@ -73,7 +73,7 @@
     for (int i = 0; i < stringKeys.count; i++)
     {
         [arr addObject:@{
-                         @"type" : [OAMenuSimpleCell getCellIdentifier],
+                         @"type" : [OASimpleTableViewCell getCellIdentifier],
                          @"title" : names[i],
                          @"value" : stringKeys[i],
                          @"param" : stringKeys[i],
@@ -122,16 +122,15 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAMenuSimpleCell* cell = nil;
+        OASimpleTableViewCell* cell = nil;
         
-        cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
-            cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
-            cell.backgroundColor = UIColor.clearColor;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
         }
         
         if (cell)
@@ -140,22 +139,21 @@
             NSString *imgColor = item[@"iconColor"];
             if (imgName && imgColor)
             {
-                cell.imgView.image = [UIImage templateImageNamed:imgName];
-                cell.imgView.tintColor = UIColorFromRGB([item[@"iconColor"] intValue]);
+                cell.leftIconView.image = [UIImage templateImageNamed:imgName];
+                cell.leftIconView.tintColor = UIColorFromRGB([item[@"iconColor"] intValue]);
             }
             else if (imgName)
-                cell.imgView.image = [UIImage imageNamed:imgName];
+            {
+                cell.leftIconView.image = [UIImage imageNamed:imgName];
+                cell.leftIconView.tintColor = nil;
+            }
             
-            cell.textView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
             NSString *desc = item[@"descr"];
-            cell.descriptionView.text = desc;
-            cell.descriptionView.hidden = desc.length == 0;
-            if (!cell.accessoryView)
-                cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected"]];
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
-            BOOL isActive = [item[@"stringKey"] isEqualToString:[OAAppSettings sharedManager].applicationMode.get.stringKey];
-            cell.accessoryView.hidden = !isActive;
+            cell.descriptionLabel.text = desc;
+            [cell descriptionVisibility:desc.length != 0];
+            BOOL isActive = [item[@"param"] isEqualToString:[OAAppSettings sharedManager].applicationMode.get.stringKey];
+            cell.accessoryType = isActive ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         return cell;
     }

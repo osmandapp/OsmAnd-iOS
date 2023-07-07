@@ -13,7 +13,6 @@
 #import "OAProgressTitleCell.h"
 #import "OARightIconTableViewCell.h"
 #import "OAExportSettingsType.h"
-#import "OAMenuSimpleCell.h"
 #import "OASimpleTableViewCell.h"
 #import "OAActivityViewWithTitleCell.h"
 #import "OAFileSettingsItem.h"
@@ -109,7 +108,8 @@
             [group.groupItems addObject:@{
                 @"icon" :  type.icon,
                 @"title" : type.title,
-                @"type" : [OAMenuSimpleCell getCellIdentifier]
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+                @"key" : @"exportItem"
             }];
         }
         [data addObject:group];
@@ -240,55 +240,48 @@
         NSInteger dataIndex = indexPath.row - 1;
         NSDictionary* item = [groupData.groupItems objectAtIndex:dataIndex];
         NSString *cellType = item[@"type"];
-        if ([cellType isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
+        BOOL isExportItem = [item[@"key"] isEqualToString:@"exportItem"];
+        if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
         {
-            OAMenuSimpleCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
-            if (cell == nil)
-            {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
-                cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
-                cell.separatorInset = UIEdgeInsetsMake(0., 70., 0., 0.);
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
-            }
-            if (cell)
-            {
-                cell.imgView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
-                cell.textView.text = item[@"title"];
-                OASettingsCategoryItems *items = self.itemsMap[_itemTypes[indexPath.section]];
-                OAExportSettingsType *settingType = items.getTypes[indexPath.row - 1];
-                NSInteger selectedAmount = [self getSelectedItemsAmount:settingType];
-                NSInteger itemsTotal = [items getItemsForType:settingType].count;
-                NSString *selectedStr = selectedAmount == 0 ? OALocalizedString(@"shared_string_none") : (selectedAmount == itemsTotal ? OALocalizedString(@"shared_string_all") : [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_of"), selectedAmount, itemsTotal]);
-                
-                long size = [self calculateItemsSize:self.selectedItemsMap[settingType]];
-                if (size > 0)
-                {
-                    selectedStr = [selectedStr stringByAppendingFormat:@" • %@", [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile]];
-                }
-                
-                UIColor *color = selectedAmount == 0 ? UIColorFromRGB(color_tint_gray) : item[@"color"];
-                cell.imgView.tintColor = color;
-                
-                cell.descriptionView.text = selectedStr;
-            }
-            return cell;
-        }
-        else if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
-        {
-            
             OASimpleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
-                [cell descriptionVisibility:NO];
             }
             if (cell)
             {
-                cell.titleLabel.text = item[@"title"];
-                cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-                cell.leftIconView.tintColor = item[@"color"] ? item[@"color"] : UIColorFromRGB(color_tint_gray);
+                if (isExportItem)
+                {
+                    [cell descriptionVisibility:YES];
+                    cell.leftIconView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+                    cell.titleLabel.text = item[@"title"];
+                    OASettingsCategoryItems *items = self.itemsMap[_itemTypes[indexPath.section]];
+                    OAExportSettingsType *settingType = items.getTypes[indexPath.row - 1];
+                    NSInteger selectedAmount = [self getSelectedItemsAmount:settingType];
+                    NSInteger itemsTotal = [items getItemsForType:settingType].count;
+                    NSString *selectedStr = selectedAmount == 0 ? OALocalizedString(@"shared_string_none") : (selectedAmount == itemsTotal ? OALocalizedString(@"shared_string_all") : [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_of"), selectedAmount, itemsTotal]);
+                    
+                    long size = [self calculateItemsSize:self.selectedItemsMap[settingType]];
+                    if (size > 0)
+                    {
+                        selectedStr = [selectedStr stringByAppendingFormat:@" • %@", [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile]];
+                    }
+                    
+                    UIColor *color = selectedAmount == 0 ? UIColorFromRGB(color_tint_gray) : item[@"color"];
+                    cell.leftIconView.tintColor = color;
+                    cell.descriptionLabel.text = selectedStr;
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                }
+                else
+                {
+                    [cell descriptionVisibility:NO];
+                    cell.titleLabel.text = item[@"title"];
+                    cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+                    cell.leftIconView.tintColor = item[@"color"] ? item[@"color"] : UIColorFromRGB(color_tint_gray);
+                    cell.descriptionLabel.text = nil;
+                    cell.accessoryType = UITableViewCellAccessoryNone;
+                }
             }
             return cell;
         }

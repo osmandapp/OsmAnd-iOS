@@ -13,7 +13,7 @@
 #import "OAColors.h"
 #import "OARootViewController.h"
 #import "OASwitchableAction.h"
-#import "OAMenuSimpleCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAMapStyleAction.h"
 #import "OAIndexConstants.h"
 
@@ -79,7 +79,7 @@
                 if (!source)
                     continue;
                 [arr addObject:@{
-                    @"type" : [OAMenuSimpleCell getCellIdentifier],
+                    @"type" : [OASimpleTableViewCell getCellIdentifier],
                     @"title" : param,
                     @"source" : source,
                     @"img" : [NSString stringWithFormat:@"img_mapstyle_%@", [source.resourceId stringByReplacingOccurrencesOfString:RENDERER_INDEX_EXT withString:@""]]
@@ -92,7 +92,7 @@
         for (NSArray *pair in params)
         {
             [arr addObject:@{
-                             @"type" : [OAMenuSimpleCell getCellIdentifier],
+                             @"type" : [OASimpleTableViewCell getCellIdentifier],
                              @"title" : pair.lastObject,
                              @"value" : pair.firstObject,
                              @"param" : pair,
@@ -141,15 +141,14 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAMenuSimpleCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCell getCellIdentifier]];
+        OASimpleTableViewCell* cell = nil;
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCell getCellIdentifier] owner:self options:nil];
-            cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
-            cell.backgroundColor = UIColor.clearColor;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
         }
         
         if (cell)
@@ -159,15 +158,11 @@
             if (imgName)
                 img = [UIImage imageNamed:imgName];
             
-            cell.textView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
             NSString *desc = item[@"descr"];
-            cell.descriptionView.text = desc;
-            cell.descriptionView.hidden = desc.length == 0;
-            cell.imgView.image = img;
-            if (!cell.accessoryView)
-                cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected"]];
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
+            cell.descriptionLabel.text = desc;
+            [cell descriptionVisibility:desc.length != 0];
+            cell.leftIconView.image = img;
             BOOL isActive;
             switch (vwController.type)
             {
@@ -195,7 +190,7 @@
                     break;
                 }
             }
-            cell.accessoryView.hidden = !isActive;
+            cell.accessoryType = isActive ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         return cell;
     }

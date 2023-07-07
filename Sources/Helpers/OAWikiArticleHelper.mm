@@ -75,13 +75,9 @@
     if (!_isCanceled)
     {
         OsmAndAppInstance app = [OsmAndApp instance];
-        NSArray<NSDictionary<CLLocation *, NSArray<OAWorldRegion *> *> *> *regionsByLatLon = [self collectUniqueRegions:_articleLocations];
-        OARepositoryResourceItem *foundRepository;
-        for (NSDictionary<CLLocation *, NSArray<OAWorldRegion *> *> *res in regionsByLatLon)
-        {
-            CLLocation *location = res.allKeys.firstObject;
-            NSArray<OAWorldRegion *> *regions = res.allValues.firstObject;
-
+        NSDictionary<CLLocation *, NSArray<OAWorldRegion *> *> *regionsByLatLon = [self collectUniqueRegions:_articleLocations];
+        OARepositoryResourceItem __block *foundRepository;
+        [regionsByLatLon enumerateKeysAndObjectsUsingBlock:^(CLLocation * _Nonnull location, NSArray<OAWorldRegion *> * _Nonnull regions, BOOL * _Nonnull stop) {
             for (OAWorldRegion *region in regions)
             {
                 OAWorldRegion *worldRegion = [OAWikiArticleHelper findWikiRegion:region];
@@ -112,7 +108,7 @@
                 if (results.count > 0)
                     break;
             }
-        }
+        }];
         if (foundRepository && results.count == 0)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -176,10 +172,9 @@
     return YES;
 }
 
-- (NSArray<NSDictionary<CLLocation *, NSArray<OAWorldRegion *> *> *> *)collectUniqueRegions:(NSArray<CLLocation *> *)locations
+- (NSDictionary<CLLocation *, NSArray<OAWorldRegion *> *> *)collectUniqueRegions:(NSArray<CLLocation *> *)locations
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    NSMutableArray *result = [NSMutableArray array];
     NSMutableDictionary<CLLocation *, NSArray<OAWorldRegion *> *> *regionsByLocation = [NSMutableDictionary dictionary];
     for (CLLocation *location in locations)
     {
@@ -194,17 +189,14 @@
                     [uniqueRegions addObject:region];
             }
             if (uniqueRegions.count > 0)
-            {
                 regionsByLocation[location] = uniqueRegions;
-                [result addObject:@{ location : uniqueRegions }];
-            }
         }
         @catch (NSException *exception)
         {
             NSLog(@"%@", [exception reason]);
         }
     }
-    return result;
+    return regionsByLocation;
 }
 @end
 

@@ -205,6 +205,8 @@ typedef enum
         
         cell.titleLabel.text = caption;
         cell.leftIconView.image = img;
+        [cell setCustomLeftSeparatorInset:YES];
+        cell.separatorInset = UIEdgeInsetsMake(0., 0., 0., 0.);
     }
     return cell;
 }

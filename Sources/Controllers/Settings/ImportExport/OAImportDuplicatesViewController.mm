@@ -392,6 +392,7 @@
                 else if (item[@"icon"])
                 {
                     cell.leftIconView.image = item[@"icon"];
+                    cell.leftIconView.tintColor = nil;
                 }
                 [cell leftIconVisibility:YES];
             }

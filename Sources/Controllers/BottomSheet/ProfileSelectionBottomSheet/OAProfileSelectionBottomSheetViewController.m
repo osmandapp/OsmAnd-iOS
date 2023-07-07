@@ -131,7 +131,6 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
-            cell.leftIconView.tintColor = UIColorFromRGB([item[@"iconColor"] intValue]);
         }
         
         if (cell)
@@ -139,9 +138,15 @@
             NSString *imgName = item[@"img"];
             NSString *imgColor = item[@"iconColor"];
             if (imgName && imgColor)
+            {
                 cell.leftIconView.image = [UIImage templateImageNamed:imgName];
+                cell.leftIconView.tintColor = UIColorFromRGB([item[@"iconColor"] intValue]);
+            }
             else if (imgName)
+            {
                 cell.leftIconView.image = [UIImage imageNamed:imgName];
+                cell.leftIconView.tintColor = nil;
+            }
             
             cell.titleLabel.text = item[@"title"];
             NSString *desc = item[@"descr"];

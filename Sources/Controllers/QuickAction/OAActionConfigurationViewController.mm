@@ -429,6 +429,8 @@
             [cell descriptionVisibility:desc.length != 0];
             [cell.leftIconView setTintColor:UIColorFromRGB(color_icon_color)];
             cell.leftIconView.image = img;
+            [cell setCustomLeftSeparatorInset:YES];
+            cell.separatorInset = UIEdgeInsetsMake(0., 0., 0., 0.);
         }
         return cell;
     }

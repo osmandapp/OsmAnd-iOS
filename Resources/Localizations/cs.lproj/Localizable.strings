@@ -2893,3 +2893,23 @@
 "shared_string_duplicate_color" = "Duplicitní barva";
 "shared_string_delete_color" = "Odstranit barvu";
 "shared_string_duplicate" = "Duplicitní";
+"distance_circles" = "Vzdálenostní kruhy";
+"distance_to_destination_widget_desc" = "Widget zobrazuje zbývající vzdálenost do posledního cílového bodu.";
+"second_next_turn_widget_desc" = "Widget zobrazuje informace o druhém příštím odbočení, které je povoleno, pokud je odbočení v dojezdové vzdálenosti.";
+"distance_to_intermediate_widget_desc" = "Widget zobrazuje vzdálenost, která zbývá do prvního mezilehlého bodu. Po překročení mezilehlých bodů se vzdálenost aktualizuje k dalšímu mezilehlému bodu.";
+"time_to_intermediate_widget_desc" = "Widget zobrazuje \"Čas příjezdu\" nebo \"Čas do odjezdu\" do prvního mezilehlého bodu. Čas je během navigace neustále aktualizován, jakmile je překročen mezibod, aktualizuje se čas do dalšího mezibodu.";
+"time_to_destination_widget_desc" = "Widget zobrazuje \"Čas příjezdu\" nebo \"Čas do odjezdu\" do posledního cílového bodu. Čas je během navigace neustále aktualizován a rovná se času na trase z aktuální polohy.";
+"trip_recording_duration_widget_desc" = "Zobrazuje aktuálně zaznamenaný čas jízdy.";
+"trip_recording_distance_widget_desc" = "Zobrazuje aktuálně zaznamenanou vzdálenost jízdy.";
+"true_bearing_widget_desc" = "Úhel mezi skutečným severem a cílovým bodem pozorovaným z vaší polohy.";
+"relative_bearing_widget_desc" = "Zobrazuje úhel mezi směrem vašeho pohybu vpřed a cílovým bodem.";
+"second_marker_widget_desc" = "Widget můžete nakonfigurovat tak, aby zobrazoval vzdálenost nebo odhadovaný čas příjezdu k druhé mapové značce.";
+
+// Widget descriptions
+"coordinates_widget_current_location_desc" = "Zobrazí zeměpisné souřadnice aktuální polohy";
+"av_notes_photo_widget_desc" = "Klepnutím na widget pořídíte fotografii.";
+"av_notes_video_widget_desc" = "Klepnutím na widget můžete nahrávat video.";
+"av_notes_audio_widget_desc" = "Klepnutím na widget můžete pořídit zvukovou poznámku.";
+"trip_recording_downhill_widget_desc" = "Zobrazuje součet všech klesání aktuálně zaznamenané jízdy.";
+"trip_recording_uphill_widget_desc" = "Zobrazuje součet všech stoupání aktuálně zaznamenané cesty.";
+"first_marker_widget_desc" = "Widget můžete nakonfigurovat tak, aby zobrazoval vzdálenost nebo odhadovaný čas příjezdu k první mapové značce.";

@@ -1276,6 +1276,8 @@ static UIViewController *parentController;
                 if (isImportCreateTrack)
                 {
                     cell.titleLabel.text = menuItem[@"title"];
+                    cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+                    cell.titleLabel.textColor = [UIColor blackColor];
                     cell.leftIconView.image = [UIImage templateImageNamed:menuItem[@"icon"]];
                     cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
                 }

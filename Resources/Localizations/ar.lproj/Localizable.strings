@@ -1503,7 +1503,7 @@
 "rendering_value_translucent_red_name" = "أحمر فاتح";
 "rendering_attr_surface_asphalt_name" = "إسفلت";
 "rendering_value_purple_name" = "بنفسجي";
-"rendering_attr_showCycleRoutes_name" = "طرق الدرجات الهوائية";
+"rendering_attr_showCycleRoutes_name" = "طرق الدراجات الهوائية";
 "rendering_attr_surface_grass_paver_name" = "مرصف العشب";
 "routing_attr_allow_intermediate_description" = "طرق أكثر صعوبة مع أقسام أكثر حدة. بعض العقبات التي ينبغي تجنبها.";
 "rendering_attr_coloredBuildings_name" = "تلوين المباني حسب النوع";
@@ -2832,7 +2832,7 @@
 "rotate_map_manual_opt" = "استدارة يدويا (مثبتة)";
 "compass_click_desc" = "اضغط على البوصلة لتبديل وضع اتجاه الخريطة.";
 "rotate_map_north_opt" = "الشمال لأعلى (مثبت)";
-"map_widget_camera_tilt" = "إمالة الكاميرا";
+"map_widget_camera_tilt" = "تحريك الكاميرا";
 "map_widget_zoom_level" = "مستويات التكبير";
 "map_widget_target_distance" = "المسافة من الكاميرا إلى الهدف";
 "change_language" = "غيَّر اللغة";
@@ -2990,3 +2990,10 @@
 "widget_panels_descr" = "حدد جزء الشاشة لإضافة عناصر لواجهة المستخدم أو إعادة ترتيبها.";
 "switch_profile" = "تبديل الوضع";
 "shared_string_rearrange" = "إعادة الترتيب";
+"distance_circles" = "دوائر المسافة";
+"true_bearing_wdiget_desc" = "الزاوية بين الشمال الحقيقي ونقطة الهدف التي تم تعيينها من موقعك.";
+"shared_string_dark" = "ليلي";
+"shared_string_light" = "نهاري";
+"shared_string_page_number" = "الصفحة %d";
+"compass_on_circles" = "دوائر البوصلة";
+"ruler_circles" = "دوائر المسطرة";

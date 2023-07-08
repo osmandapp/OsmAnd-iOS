@@ -11,10 +11,9 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OALocationServices.h"
 #import "OARouteColorizationHelper.h"
+#import "OAMapUtils.h"
 
 #include <OsmAndCore/Utilities.h>
-
-static const double calculatedGpxWindowLength = 10.;
 
 
 @implementation OASplitMetric
@@ -459,10 +458,15 @@ static const double calculatedGpxWindowLength = 10.;
                 }
             }
         }
-        OAElevationDiffsCalculator *elevationDiffsCalc = [[OAElevationDiffsCalculator alloc] init:0 numberOfPoints:numberOfPoints splitSegment:s];
-        [elevationDiffsCalc calculateElevationDiffs:s];
-        _diffElevationUp += elevationDiffsCalc.diffElevationUp;
-        _diffElevationDown += elevationDiffsCalc.diffElevationDown;
+        OAElevationApproximator *approximator = [[OAElevationApproximator alloc] init];
+        NSArray<OAApproxResult *> *approxData = [approximator approximate:s];
+        if (approxData)
+        {
+            OAElevationDiffsCalculator *elevationDiffsCalc = [[OAElevationDiffsCalculator alloc] initWithApproxData:approxData];
+            [elevationDiffsCalc calculateElevationDiffs];
+            _diffElevationUp += elevationDiffsCalc.diffElevationUp;
+            _diffElevationDown += elevationDiffsCalc.diffElevationDown;
+        }
     }
     if (_totalDistance < 0) {
         _hasElevationData = NO;
@@ -560,117 +564,218 @@ static const double calculatedGpxWindowLength = 10.;
     return ls;
 }
 
+@end
+
+
+@implementation OAApproxResult
+
+- (instancetype) initWithDist:(double)dist ele:(double)ele
+{
+    self = [super init];
+    if (self)
+    {
+        _dist = dist;
+        _ele = ele;
+    }
+    return self;
+}
 
 @end
 
+static const double SLOPE_THRESHOLD = 70.0;
+
+@implementation OAElevationApproximator
+
+- (NSArray<OAApproxResult *> *) approximate:(OASplitSegment *)splitSegment
+{
+    int pointsCount = splitSegment.getNumberOfPoints;
+    if (pointsCount < 4)
+        return nil;
+
+    NSMutableArray<NSNumber *> *survived = [NSMutableArray arrayWithObject:@NO count:pointsCount];
+    int lastSurvived = 0;
+    survived[0] = @YES;
+    int survidedCount = 1;
+    for (int i = 1; i < pointsCount - 1; i++)
+    {
+        double prevEle = [splitSegment get:lastSurvived].elevation;
+        double ele = [splitSegment get:i].elevation;
+        double eleNext = [splitSegment get:i + 1].elevation;
+        if ((ele - prevEle) * (eleNext - ele) > 0 && ABS(ele - prevEle) > 2)
+        {
+            survived[i] = @YES;
+            lastSurvived = i;
+            survidedCount++;
+        }
+    }
+    survived[pointsCount - 1] = @YES;
+    survidedCount++;
+    if (survidedCount < 4)
+        return nil;
+
+    lastSurvived = 0;
+    survidedCount = 1;
+    for (int i = 1; i < pointsCount; i++)
+    {
+        if (![survived[i] boolValue])
+            continue;
+
+        OAWptPt *point = [splitSegment get:i];
+        OAWptPt *lastPoint = [splitSegment get:lastSurvived];
+        double ele = point.elevation;
+        double prevEle = lastPoint.elevation;
+        double dist = [OAMapUtils getDistance:point.position second:lastPoint.position];
+        double slope = (ele - prevEle) * 100 / dist;
+        if (ABS(slope) > SLOPE_THRESHOLD)
+        {
+            survived[i] = @NO;
+            continue;
+        }
+        lastSurvived = i;
+        survidedCount++;
+    }
+    if (survidedCount < 4)
+        return nil;
+
+    NSMutableArray<OAApproxResult *> *res = [NSMutableArray array];
+    int k = 0;
+    lastSurvived = 0;
+    for (int i = 0; i < pointsCount; i++)
+    {
+        if (![survived[i] boolValue] || k == survidedCount)
+            continue;
+
+        OAWptPt *point = [splitSegment get:i];
+        OAWptPt *lastPoint = [splitSegment get:lastSurvived];
+
+        [res addObject:[[OAApproxResult alloc] initWithDist:lastSurvived == i ? 0 : [OAMapUtils getDistance:point.position second:lastPoint.position] ele:point.elevation]];
+
+        k++;
+        lastSurvived = i;
+    }
+    return res;
+}
+
+@end
+
+
+@implementation OAExtremum
+
+- (instancetype) initWithDist:(double)dist ele:(double)ele
+{
+    self = [super init];
+    if (self)
+    {
+        _dist = dist;
+        _ele = ele;
+    }
+    return self;
+}
+
+@end
+
+
+@interface OAElevationDiffsCalculator()
+
+@property (nonatomic) NSArray<OAExtremum *> *extremums;
+
+@end
+
+static const double ELE_THRESHOLD = 7.0;
+
 @implementation OAElevationDiffsCalculator
-
-
--(OAWptPt *) getPoint:(int)index splitSegment:(OASplitSegment *)splitSegment
 {
-    return [splitSegment get:index];
-};
-
-- (instancetype)init:(int)startIndex numberOfPoints:(int)numberOfPoints splitSegment:(OASplitSegment *)splitSegment
-{
-    self = [super init];
-    if (self) {
-        _startIndex = startIndex;
-        _numberOfPoints = numberOfPoints;
-        OAWptPt * lastPoint = [self getPoint:(startIndex + numberOfPoints - 1) splitSegment:splitSegment];
-        _windowLength = lastPoint.time == 0 ? calculatedGpxWindowLength : MAX(20., lastPoint.distance / numberOfPoints * 4);
-    }
-    return self;
+    NSArray<OAApproxResult *> *_approxData;
 }
-- (instancetype)initWithWindowLength:(double)windowLength startIndex:(int)startIndex numberOfPoints:(int)numberOfPoints
+
+- (instancetype) initWithApproxData:(NSArray<OAApproxResult *> *)approxData
 {
     self = [super init];
-    if (self) {
-        _startIndex = startIndex;
-        _numberOfPoints = numberOfPoints;
-        _windowLength = windowLength;
-    }
+    if (self)
+        _approxData = approxData;
+
     return self;
 }
 
--(double) getDiffElevationUp
+- (double) getProjectionDist:(double)x y:(double)y fromx:(double)fromx fromy:(double)fromy tox:(double)tox toy:(double)toy
 {
-    return self.diffElevationUp;
-};
--(double) getDiffElevationDown
-{
-    return self.diffElevationDown;
-};
-
--(double) calcAvg:(double)eleSumm pointsCount:(int)pointsCount eleAvg:(double)eleAvg
-{
-    double avg = eleSumm / pointsCount;
-    if (!isnan(eleAvg))
+    double mDist = (fromx - tox) * (fromx - tox) + (fromy - toy) * (fromy - toy);
+    double projection = [OAMapUtils scalarMultiplication:fromx yA:fromy xB:tox yB:toy xC:x yC:y];
+    double prx;
+    double pry;
+    if (projection < 0)
     {
-        double diff = avg - eleAvg;
-        if (diff > 0)
-            _diffElevationUp += diff;
-        else
-            _diffElevationDown -= diff;
+        prx = fromx;
+        pry = fromy;
     }
-    return avg;
+    else if (projection >= mDist)
+    {
+        prx = tox;
+        pry = toy;
+    }
+    else
+    {
+        prx = fromx + (tox - fromx) * (projection / mDist);
+        pry = fromy + (toy - fromy) * (projection / mDist);
+    }
+    return sqrt((prx - x) * (prx - x) + (pry - y) * (pry - y));
 }
 
--(void) calculateElevationDiffs:(OASplitSegment *) splitSegment
+- (void) findMaximumExtremumBetween:(int)start end:(int)end points:(NSMutableArray<NSNumber *> *)points
 {
-    OAWptPt * initialPoint = [self getPoint:_startIndex splitSegment:splitSegment];
-    
-    double eleSumm = initialPoint.elevation;
-    double prevEle = initialPoint.elevation;
-    int pointsCount = isnan(eleSumm) ? 0 : 1;
-    double eleAvg = NAN;
-    double nextWindowPos = initialPoint.distance + self.windowLength;
-    int pointIndex = self.startIndex + 1;
-    
-    while (pointIndex < self.numberOfPoints + self.startIndex)
+    OAApproxResult *firstPoint = _approxData[start];
+    OAApproxResult *endPoint = _approxData[end];
+    int max = start;
+    double maxDiff = ELE_THRESHOLD;
+    for (int i = start + 1; i < end; i++)
     {
-        OAWptPt * point = [self getPoint:pointIndex splitSegment:splitSegment];
-        if (point.distance > nextWindowPos)
+        OAApproxResult *point = _approxData[i];
+        double md = [self getProjectionDist:point.dist y:point.ele fromx:firstPoint.dist fromy:firstPoint.ele tox:endPoint.dist toy:endPoint.ele];
+        if (md > maxDiff)
         {
-            eleAvg = [self calcAvg:eleSumm pointsCount:pointsCount eleAvg:eleAvg];
-            if (!isnan(point.elevation))
-            {
-                eleSumm = point.elevation;
-                prevEle = point.elevation;
-                pointsCount = 1;
-            }
-            else if (!isnan(prevEle))
-            {
-                eleSumm = prevEle;
-                pointsCount = 1;
-            }
-            else
-            {
-                eleSumm = NAN;
-                pointsCount = 0;
-            }
-            while (nextWindowPos < point.distance)
-                nextWindowPos += [self windowLength];
+            max = i;
+            maxDiff = md;
         }
-        else
-        {
-            if (!isnan(point.elevation))
-            {
-                eleSumm += point.elevation;
-                prevEle = point.elevation;
-                pointsCount++;
-            }
-            else if (!isnan(prevEle))
-            {
-                eleSumm += prevEle;
-                pointsCount++;
-            }
-        }
-        pointIndex++;
     }
-    if (pointsCount > 1)
-        [self calcAvg:eleSumm pointsCount:pointsCount eleAvg:eleAvg];
-    _diffElevationUp = round(self.diffElevationUp + 0.3);
-};
+    if (max != start)
+    {
+        points[max] = @YES;
+        [self findMaximumExtremumBetween:start end:max points:points];
+        [self findMaximumExtremumBetween:max end:end points:points];
+    }
+}
+
+- (void) calculateElevationDiffs
+{
+    int pointsCount = (int)_approxData.count;
+    if (pointsCount < 2)
+        return;
+
+    NSMutableArray<NSNumber *> *points = [NSMutableArray arrayWithObject:@NO count:pointsCount];
+    points[0] = @YES;
+    points[pointsCount - 1] = @YES;
+    [self findMaximumExtremumBetween:0 end:pointsCount - 1 points:points];
+
+    NSMutableArray<OAExtremum *> *extremums = [NSMutableArray array];
+    for (int i = 0; i < points.count; i++)
+        if ([points[i] boolValue])
+        {
+            OAApproxResult *point = _approxData[i];
+            [extremums addObject:[[OAExtremum alloc] initWithDist:point.dist ele:point.ele]];
+        }
+
+    for (int i = 1; i < extremums.count; i++)
+    {
+        double prevElevation = extremums[i - 1].ele;
+        double elevation = extremums[i].ele;
+        double eleDiffSumm = elevation - prevElevation;
+        if (eleDiffSumm > 0) {
+            _diffElevationUp += eleDiffSumm;
+        } else {
+            _diffElevationDown -= eleDiffSumm;
+        }
+    }
+    _extremums = extremums;
+}
 
 @end

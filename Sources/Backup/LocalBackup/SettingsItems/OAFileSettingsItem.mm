@@ -436,8 +436,10 @@
         prefix = [filePath substringToIndex:[filePath lastIndexOf:BINARY_SRTM_MAP_INDEX_EXT]];
     else if ([filePath hasSuffix:BINARY_ROAD_MAP_INDEX_EXT])
         prefix = [filePath substringToIndex:[filePath lastIndexOf:BINARY_ROAD_MAP_INDEX_EXT]];
-    else
+    else if ([filePath containsString:@"."])
         prefix = [filePath substringToIndex:[filePath lastIndexOf:@"."]];
+    else
+        prefix = filePath;
     
     NSString *suffix = [filePath stringByReplacingOccurrencesOfString:prefix withString:@""];
 

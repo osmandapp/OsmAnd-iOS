@@ -2995,3 +2995,10 @@
 "angular_measeurement_descr" = "Cambiar el acimut en el que se mide.";
 "map_widget_current_speed" = "Velocidad actual";
 "map_widget_gps_info" = "Información GPS";
+"distance_circles" = "Círculos de distancia";
+"true_bearing_wdiget_desc" = "El ángulo entre el norte verdadero y el punto objetivo observado desde tu ubicación.";
+"shared_string_dark" = "Oscuro";
+"ruler_circles" = "Regla en círculos";
+"compass_on_circles" = "Brújula en círculos";
+"shared_string_page_number" = "Página %d";
+"shared_string_light" = "Claro";

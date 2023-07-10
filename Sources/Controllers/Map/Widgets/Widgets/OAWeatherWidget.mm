@@ -30,6 +30,7 @@
     OsmAnd::PointI _cachedTarget31;
     OsmAnd::ZoomLevel _cachedZoom;
     NSDate *_cachedDate;
+    CGSize _cachedViewFrame;
     
     NSMeasurementFormatter *_formatter;
     NSString *_cachedBandUnit;
@@ -63,14 +64,23 @@
     NSDate *date = mapCtrl.mapLayers.weatherDate;
     NSString *bandUnit = [_formatter displayStringFromUnit:[[OAWeatherBand withWeatherBand:_band] getBandUnit]];
     BOOL needToUpdate = ![_cachedBandUnit isEqualToString:bandUnit];
+    CGSize viewFrame = mapCtrl.view.frame.size;
+    BOOL frameChanged = !CGSizeEqualToSize(_cachedViewFrame, viewFrame);
 
-    if (_cachedTarget31 == target31 && _cachedZoom == zoom && _cachedDate && [_cachedDate isEqualToDate:date] && !needToUpdate)
+    if (_cachedTarget31 == target31 && _cachedZoom == zoom && !frameChanged && _cachedDate && [_cachedDate isEqualToDate:date] && !needToUpdate)
         return false;
+
+    if (frameChanged)
+    {
+        [self setMapCenterMarkerVisibility:NO];
+        [self setMapCenterMarkerVisibility:YES];
+    }
 
     _cachedTarget31 = target31;
     _cachedZoom = zoom;
     _cachedDate = date;
     _cachedBandUnit = bandUnit;
+    _cachedViewFrame = viewFrame;
 
     OsmAnd::WeatherTileResourcesManager::ValueRequest _request;
     _request.dateTime = date.timeIntervalSince1970 * 1000;

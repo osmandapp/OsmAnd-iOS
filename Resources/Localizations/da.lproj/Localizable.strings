@@ -2994,3 +2994,9 @@
 "ruler_circles" = "Linealcirkler";
 "distance_circles" = "Afstandscirkler";
 "true_bearing_wdiget_desc" = "Vinkel mellem det sande nord og målpunktet observeret fra din placering.";
+"map_3d_mode_action" = "3D-tilstand";
+"shared_string_hidden" = "Skjult";
+"map_3d_mode_description" = "Berør kortet med to fingre, og bevæg dem op og ned for at justere kortets hældning.";
+"map_3d_mode_hint" = "Med langt tryk på knappen kan knapposition ændres.";
+"map_2d_mode_action" = "2D-tilstand";
+"visible_in_3d_mode" = "Synlig i 3D-tilstand";

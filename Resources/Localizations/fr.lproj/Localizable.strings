@@ -2992,3 +2992,9 @@
 "compass_on_circles" = "Boussole sur les cercles";
 "ruler_circles" = "Cercles de distance";
 "distance_circles" = "Cercles de distance";
+"map_3d_mode_action" = "Mode 3D";
+"shared_string_hidden" = "Masqué";
+"map_3d_mode_hint" = "Un appui long sur le bouton permet de modifier sa position.";
+"visible_in_3d_mode" = "Visible en mode 3D";
+"map_2d_mode_action" = "Mode 2D";
+"map_3d_mode_description" = "Touchez la carte avec deux doigts et déplacez-les vers le haut ou vers le bas pour modifier l'inclinaison de la carte.";

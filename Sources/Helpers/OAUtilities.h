@@ -375,4 +375,6 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 + (NSString *) getRoutingStringPropertyName:(NSString *)propertyName defaultName:(NSString *)defaultName;
 
++ (NSString *)replaceIllegalCharactersInFileName:(NSString *)filename;
+
 @end

@@ -1180,7 +1180,8 @@
 
 - (NSString *) favoritesStorageFilename:(NSString *)groupName
 {
-    NSString *fileName = [groupName.length == 0 ? _favoritesFilePrefix : [NSString stringWithFormat:@"%@%@%@", _favoritesFilePrefix, _favoritesGroupNameSeparator, groupName] stringByAppendingString:GPX_FILE_EXT];
+    NSString *preparedGroupName = [OAUtilities replaceIllegalCharactersInFileName:groupName];
+    NSString *fileName = [preparedGroupName.length == 0 ? _favoritesFilePrefix : [NSString stringWithFormat:@"%@%@%@", _favoritesFilePrefix, _favoritesGroupNameSeparator, preparedGroupName] stringByAppendingString:GPX_FILE_EXT];
     return [_favoritesPath stringByAppendingPathComponent:fileName];
 }
 

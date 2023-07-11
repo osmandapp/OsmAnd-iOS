@@ -208,9 +208,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     }
     else
     {
-        fileName = item.fileName;
-        if (fileName.length == 0)
-            fileName = item.defaultFileName;
+        fileName = [item requireFileName];
     }
     if (fileName.length > 0 && [fileName characterAtIndex:0] == '/')
     {

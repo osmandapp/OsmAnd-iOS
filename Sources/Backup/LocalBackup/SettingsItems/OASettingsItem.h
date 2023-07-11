@@ -50,6 +50,8 @@ FOUNDATION_EXTERN NSInteger const kSettingsItemErrorCodeAlreadyRead;
 + (EOASettingsItemType) parseItemType:(id)json error:(NSError * _Nullable *)error;
 - (long) getEstimatedSize;
 - (NSString *)getPublicName;
+- (NSString *)requireProcessedFileName;
+- (NSString *)requireFileName;
 
 - (OASettingsItemReader *) getReader;
 - (OASettingsItemWriter *) getWriter;

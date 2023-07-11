@@ -23,7 +23,7 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
-#define kIllegalFileNameCharacters [NSCharacterSet characterSetWithCharactersInString:@"/\\?%*|\"<>:;.,"]
+#define kIllegalFileNameCharacters [NSCharacterSet characterSetWithCharactersInString:@"\\?%*|\"<>:;.,"]
 
 @interface OAAddFavoriteGroupViewController() <UITextFieldDelegate, UIColorPickerViewControllerDelegate, OAColorsCollectionCellDelegate, OAColorCollectionDelegate, OACollectionTableViewCellDelegate>
 

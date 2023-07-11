@@ -115,7 +115,7 @@
         {
             NSString *fileName = item.fileName;
             if (!fileName || fileName.length == 0)
-                fileName = item.defaultFileName;
+                fileName = [item requireProcessedFileName];
             if (_acceptedExtensions && ![_acceptedExtensions containsObject:fileName.pathExtension])
                 continue;
             NSString *path = [_tmpFilesDir stringByAppendingPathComponent:fileName];

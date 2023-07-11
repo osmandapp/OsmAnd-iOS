@@ -31,6 +31,8 @@
 #define kTitleInNavItemStackViewTag -996
 #define kSubtitleInNavItemStackViewTag -995
 
+#define kSubfolderPlaceholder @"_%_"
+
 @implementation UIBezierPath (util)
 
 /**
@@ -2711,6 +2713,13 @@ static const double d180PI = 180.0 / M_PI_2;
     if ([res isEqualToString:key])
         res = defaultName;
     return res;
+}
+
++ (NSString *)replaceIllegalCharactersInFileName:(NSString *)filename
+{
+    if ([filename containsString:@"/"])
+         filename = [filename stringByReplacingOccurrencesOfString:@"/" withString:kSubfolderPlaceholder];
+    return [filename stringByReplacingOccurrencesOfString:@"/" withString:@"_%_"];
 }
  
 @end

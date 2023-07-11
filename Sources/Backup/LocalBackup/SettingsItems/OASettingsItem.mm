@@ -177,10 +177,8 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
     
     if ([self getWriter])
     {
-        if (!self.fileName || self.fileName.length == 0)
-            self.fileName = self.defaultFileName;
-        
-        json[@"file"] = self.fileName;
+        NSString *fileName = [self requireProcessedFileName];
+        json[@"file"] = fileName;
     }
 }
 
@@ -217,6 +215,20 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 - (NSString *)getPublicName
 {
     return nil; // override
+}
+
+- (NSString *)requireProcessedFileName
+{
+    return [self requireFileName];
+}
+
+- (NSString *)requireFileName
+{
+    NSString *filename = _fileName;
+    if (!filename || filename.length == 0)
+        return [self defaultFileName];
+    else
+        return filename;
 }
 
 - (OASettingsItemReader *) getJsonReader

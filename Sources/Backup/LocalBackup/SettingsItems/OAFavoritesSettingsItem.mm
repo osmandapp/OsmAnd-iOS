@@ -92,6 +92,11 @@
     }
 }
 
+- (NSString *)requireProcessedFileName
+{
+    return [OAUtilities replaceIllegalCharactersInFileName:[self requireFileName]];
+}
+
 - (NSString *) defaultFileExtension
 {
     return GPX_FILE_EXT;

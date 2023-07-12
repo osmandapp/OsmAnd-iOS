@@ -254,6 +254,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     NSMutableArray<OASearchWord *> *leftWords = [NSMutableArray arrayWithArray:_words];
     NSString *thisTxt = [self getText:YES];
     NSMutableArray<OASearchWord *> *foundWords = [NSMutableArray new];
+    thisTxt = [self normalizeSearchText:thisTxt];
     if ([textToSearch hasPrefix:thisTxt])
     {
         // string is longer

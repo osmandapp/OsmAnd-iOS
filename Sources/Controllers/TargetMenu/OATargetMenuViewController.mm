@@ -152,6 +152,12 @@
             break;
         }
             
+        case OATargetAddress:
+        {
+            controller = [[OATargetHistoryItemViewController alloc] initWithHistoryItem:nil];
+            break;
+        }
+            
         case OATargetMapDownload:
         {
             controller = [[OAMapDownloadController alloc] initWithMapObject:targetPoint.targetObj];

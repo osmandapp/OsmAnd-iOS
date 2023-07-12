@@ -2614,7 +2614,7 @@ typedef enum
     _targetMode = EOATargetPoint;
     _targetLatitude = lat;
     _targetLongitude = lon;
-    _targetZoom = 16.0;
+    _targetZoom = 17.0;
     
     targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
     targetPoint.title = caption;

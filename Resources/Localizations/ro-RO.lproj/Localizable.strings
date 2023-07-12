@@ -2973,3 +2973,9 @@
 "shared_string_page_number" = "Pagina %d";
 "compass_on_circles" = "Busolă pe cercuri";
 "ruler_circles" = "cercuri de distanță";
+"map_3d_mode_action" = "Modul 3D";
+"shared_string_hidden" = "Ascuns";
+"map_3d_mode_hint" = "Atingerea lungă a butonului permite schimbarea poziției acestuia.";
+"map_2d_mode_action" = "Modul 2D";
+"visible_in_3d_mode" = "Vizibil în modul 3D";
+"map_3d_mode_description" = "Atingeți harta cu două degete și deplasați-le în sus și în jos pentru a regla înclinarea hărții.";

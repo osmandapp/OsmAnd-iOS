@@ -2991,3 +2991,9 @@
 "map_markers_desc" = "El widget muestra la distancia o la hora estimada de llegada (ETA) de los dos primeros marcadores de la lista de marcadores del mapa.";
 "route_maneuvers" = "Maniobras de la ruta";
 "navigation_points_desc" = "Los widgets de navegación se activan durante la navegación para mostrar información como distancia, tiempo de llegada o restante, próximos giros, rumbo, nombre de la calle actual/siguiente, información de carril, velocidad máxima, alertas de aproximación, los puntos de interés y los puntos intermedios.";
+"shared_string_hidden" = "Oculto";
+"map_2d_mode_action" = "Modo 2D";
+"map_3d_mode_action" = "Modo 3D";
+"visible_in_3d_mode" = "Visible en modo 3D";
+"map_3d_mode_description" = "Toca el mapa con dos dedos y muévelos arriba y abajo para ajustar la inclinación del mapa.";
+"map_3d_mode_hint" = "Pulsar prolongadamente el botón permite cambiar tu posición.";

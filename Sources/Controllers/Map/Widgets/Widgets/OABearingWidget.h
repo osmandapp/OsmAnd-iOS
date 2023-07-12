@@ -17,14 +17,16 @@ typedef NS_ENUM(NSInteger, EOABearingType) {
     EOABearingTypeTrue
 };
 
+@class OAGeomagneticField;
+
 @interface OABearingWidget : OATextInfoWidget
 
 - (instancetype)initWithBearingType:(EOABearingType)bearingType;
 
 - (int)getBearing;
-- (nullable CLLocation *)getDestinationLocation:(CLLocation *)fromLocation;
+- (CLLocation *) getDestinationLocation;
 - (int)getRelativeBearing:(CLLocation *)myLocation magneticBearingToDest:(float)magneticBearingToDest;
-//- (GeomagneticField *)getGeomagneticField:(Location *)location;
+- (OAGeomagneticField *) getGeomagneticField:(CLLocation *)location;
 - (BOOL)isAngularUnitsDepended;
 
 @end

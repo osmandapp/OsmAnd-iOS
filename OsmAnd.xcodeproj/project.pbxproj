@@ -382,6 +382,7 @@
 		326B4FBF257FD11400ABAB1D /* ic_action_light_aircraft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 326B4FBB257FD11300ABAB1D /* ic_action_light_aircraft@2x.png */; };
 		326B4FC1257FD11400ABAB1D /* ic_action_light_aircraft@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 326B4FBC257FD11400ABAB1D /* ic_action_light_aircraft@3x.png */; };
 		326B770A29D9CA6400FB23DF /* OATripRecordingTimeWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 326B770929D9CA6400FB23DF /* OATripRecordingTimeWidget.mm */; };
+		326C0BA02A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326C0B9F2A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift */; };
 		3271CC6E2A38C27900DCEBAC /* OAMap3DModeVisibilityType.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321E08072A37794000105DAE /* OAMap3DModeVisibilityType.mm */; };
 		327B4AB0288F310700AF71AF /* OAFavoriteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 327B4AAF288F310700AF71AF /* OAFavoriteViewController.mm */; };
 		327B4AB4288F50CC00AF71AF /* OAFavoriteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 327B4AB3288F508E00AF71AF /* OAFavoriteViewController.xib */; };
@@ -447,6 +448,7 @@
 		32C91E5D25A86A5700FA6470 /* ic_custom_compass_widget@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */; };
 		32C91E5F25A86A5700FA6470 /* ic_custom_compass_widget@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */; };
 		32C91E6525A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5A25A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png */; };
+		32CA48C02A5D50E900DE76FD /* Geomagnetism.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CA48BF2A5D50E900DE76FD /* Geomagnetism.swift */; };
 		32D253AD27F336C100324717 /* OACloudAccountVerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D253A027F336BF00324717 /* OACloudAccountVerificationViewController.m */; };
 		32D253AE27F336C100324717 /* OACloudBackupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32D253A127F336BF00324717 /* OACloudBackupViewController.xib */; };
 		32D253AF27F336C100324717 /* OABaseCloudBackupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D253A227F336BF00324717 /* OABaseCloudBackupViewController.m */; };
@@ -4037,6 +4039,7 @@
 		326B4FBC257FD11400ABAB1D /* ic_action_light_aircraft@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_light_aircraft@3x.png"; path = "Resources/Icons/Profile/ic_action_light_aircraft@3x.png"; sourceTree = "<group>"; };
 		326B770829D9CA5200FB23DF /* OATripRecordingTimeWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATripRecordingTimeWidget.h; sourceTree = "<group>"; };
 		326B770929D9CA6400FB23DF /* OATripRecordingTimeWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATripRecordingTimeWidget.mm; sourceTree = "<group>"; };
+		326C0B9F2A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeomagnetismObjCBridge.swift; sourceTree = "<group>"; };
 		3275552129758ED80049BC84 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3275552229759C110049BC84 /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/Localizable.strings; sourceTree = "<group>"; };
 		327555232975A2150049BC84 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -4129,6 +4132,7 @@
 		32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget@3x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget@3x.png"; sourceTree = "<group>"; };
 		32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget@2x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget@2x.png"; sourceTree = "<group>"; };
 		32C91E5A25A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget_hide@2x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget_hide@2x.png"; sourceTree = "<group>"; };
+		32CA48BF2A5D50E900DE76FD /* Geomagnetism.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geomagnetism.swift; sourceTree = "<group>"; };
 		32D2539D27F336BE00324717 /* OACloudBackupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACloudBackupViewController.h; sourceTree = "<group>"; };
 		32D2539E27F336BF00324717 /* OACloudAccountLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACloudAccountLoginViewController.h; sourceTree = "<group>"; };
 		32D2539F27F336BF00324717 /* OACloudAccountVerificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACloudAccountVerificationViewController.h; sourceTree = "<group>"; };
@@ -8496,6 +8500,15 @@
 			path = AlertBottomSheet;
 			sourceTree = "<group>";
 		};
+		32CA48BE2A5D50C800DE76FD /* Geomagnetism-Swift */ = {
+			isa = PBXGroup;
+			children = (
+				32CA48BF2A5D50E900DE76FD /* Geomagnetism.swift */,
+				326C0B9F2A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift */,
+			);
+			path = "Geomagnetism-Swift";
+			sourceTree = "<group>";
+		};
 		3AC639A61A1CF54F001D5E57 /* IntroImages */ = {
 			isa = PBXGroup;
 			children = (
@@ -11683,6 +11696,7 @@
 		DA5A79CE26C563A000F274C7 /* ThirdPart */ = {
 			isa = PBXGroup;
 			children = (
+				32CA48BE2A5D50C800DE76FD /* Geomagnetism-Swift */,
 				DA5A79CF26C563A000F274C7 /* MGSwipeTableCell */,
 			);
 			path = ThirdPart;
@@ -17222,6 +17236,7 @@
 				461FB12E298801FA00097673 /* OAAnnounceTimeDistances.m in Sources */,
 				DA5A839226C563A800F274C7 /* OAOnlineTilesEditingViewController.mm in Sources */,
 				465DB48929AF9F6C007F5989 /* OACarPlayFavoriteResultListController.mm in Sources */,
+				326C0BA02A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift in Sources */,
 				DA45B2422A30B6BF0055055A /* MapillaryWidget.swift in Sources */,
 				DA5A825C26C563A700F274C7 /* OAProfileAppearanceViewController.mm in Sources */,
 				DA5A853226C563A900F274C7 /* OAResourcesUIHelper.mm in Sources */,
@@ -17802,6 +17817,7 @@
 				DA3FBFED27D60DB000D25E86 /* OAPreviewRouteLineLayer.mm in Sources */,
 				DA5A840126C563A800F274C7 /* OAQuickSearchButtonListItem.mm in Sources */,
 				DA5A854426C563A900F274C7 /* OADownloadsItem.mm in Sources */,
+				32CA48C02A5D50E900DE76FD /* Geomagnetism.swift in Sources */,
 				DA5A842E26C563A800F274C7 /* OARouteTargetViewController.mm in Sources */,
 				DA5A847426C563A900F274C7 /* OAMapWidgetRegistry.mm in Sources */,
 				DA5A814926C563A700F274C7 /* OADirectionsGridController.m in Sources */,

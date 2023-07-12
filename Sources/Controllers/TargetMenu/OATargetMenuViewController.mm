@@ -58,6 +58,7 @@
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 #import "OAFavoriteViewController.h"
+#import "OATargetAddressViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -154,7 +155,7 @@
             
         case OATargetAddress:
         {
-            controller = [[OATargetHistoryItemViewController alloc] initWithHistoryItem:nil];
+            controller = [[OATargetAddressViewController alloc] initWithAddress:targetPoint.targetObj];
             break;
         }
             

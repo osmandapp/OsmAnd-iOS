@@ -286,7 +286,7 @@
         group.groupType = EOATableCollapsableGroupMapSettingsRoutes;
 
         NSMutableArray<NSDictionary *> *routeCells = [NSMutableArray array];
-        NSArray<NSString *> *hasParameters = @[SHOW_CYCLE_ROUTES_ATTR, SHOW_MTB_ROUTES, HIKING_ROUTES_OSMC_ATTR, TRAVEL_ROUTES];
+        NSArray<NSString *> *hasParameters = @[SHOW_CYCLE_ROUTES_ATTR, SHOW_MTB_ROUTES, SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES, HIKING_ROUTES_OSMC_ATTR, TRAVEL_ROUTES];
         for (OAMapStyleParameter *routeParameter in _routesParameters)
         {
             NSString *value = @"";
@@ -311,12 +311,35 @@
                     value = OALocalizedString(@"shared_string_off");
                 }
             }
+            BOOL isDifficultyClassification = [routeParameter.name isEqualToString:SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES];
+            if (isDifficultyClassification)
+            {
+                OAMapStyleParameter *alpineHikingScaleSchemeRoutes = [_styleSettings getParameter:SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES];
+                if (alpineHikingScaleSchemeRoutes && alpineHikingScaleSchemeRoutes.storedValue.length > 0 && ![alpineHikingScaleSchemeRoutes.storedValue isEqualToString:@"disabled"])
+                {
+                    NSString *parameter = [_settings.alpineHikingScaleSchemeRoutesParameter get];
+                    for (OAMapStyleParameterValue *item in alpineHikingScaleSchemeRoutes.possibleValues)
+                    {
+                        if (item.name.length > 0)
+                        {
+                            if ([parameter isEqualToString:item.name])
+                            {
+                                value = [item.title upperCase];
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    value = OALocalizedString(@"shared_string_off");
+                }
+            }
             NSDictionary *routeData = @{
-                    @"name": isMountainBike ? OALocalizedString(@"activity_type_mountainbike_name") : routeParameter.title,
+                    @"name": [self getNameFromConditions:routeParameter.title isMountainBike:isMountainBike isDifficultyClassification:isDifficultyClassification],
                     @"image": [self getImageForParameterOrCategory:routeParameter.name],
                     @"key": [NSString stringWithFormat:@"routes_%@", routeParameter.name],
                     @"type": [hasParameters containsObject:routeParameter.name]
-                                ? isMountainBike ? [OAValueTableViewCell getCellIdentifier] : [OASimpleTableViewCell getCellIdentifier]
+                                ? isMountainBike || isDifficultyClassification ? [OAValueTableViewCell getCellIdentifier] : [OASimpleTableViewCell getCellIdentifier]
                                 : [OASwitchTableViewCell getCellIdentifier],
                     @"value": value
             };
@@ -516,7 +539,7 @@
 
     if (_routesParameters.count > 0)
     {
-        NSArray<NSString *> *orderedNames = @[SHOW_CYCLE_ROUTES_ATTR, SHOW_MTB_ROUTES, HIKING_ROUTES_OSMC_ATTR,
+        NSArray<NSString *> *orderedNames = @[SHOW_CYCLE_ROUTES_ATTR, SHOW_MTB_ROUTES, SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES, HIKING_ROUTES_OSMC_ATTR,
                 ALPINE_HIKING_ATTR, PISTE_ROUTES_ATTR, HORSE_ROUTES_ATTR, WHITE_WATER_SPORTS_ATTR];
         _routesParameters = [_routesParameters sortedArrayUsingComparator:^NSComparisonResult(OAMapStyleParameter *obj1, OAMapStyleParameter *obj2) {
             return [@([orderedNames indexOfObject:obj1.name]) compare:@([orderedNames indexOfObject:obj2.name])];
@@ -597,6 +620,22 @@
     return descr;
 }
 
+- (NSString *)getNameFromConditions:(NSString *)defaultValue
+                     isMountainBike:(BOOL)isMountainBike
+         isDifficultyClassification:(BOOL)isDifficultyClassification
+{
+    NSString *result = defaultValue;
+    if (isMountainBike)
+    {
+        result = OALocalizedString(@"activity_type_mountainbike_name");
+    }
+    else if (isDifficultyClassification)
+    {
+        result = OALocalizedString(@"activity_type_alpine_hiking_scale_scheme_name");
+    }
+    return result;
+}
+
 - (NSString *)getImageForParameterOrCategory:(NSString *)paramName
 {
     if ([paramName isEqualToString:SHOW_CYCLE_ROUTES_ATTR] || [paramName isEqualToString:SHOW_MTB_ROUTES] || [paramName isEqualToString:SHOW_MTB_SCALE_IMBA_TRAILS])
@@ -605,7 +644,7 @@
         return @"ic_action_kayak";
     else if([paramName isEqualToString:HORSE_ROUTES_ATTR])
         return @"ic_action_horse";
-    else if([paramName isEqualToString:HIKING_ROUTES_OSMC_ATTR] || [paramName isEqualToString:ALPINE_HIKING_ATTR])
+    else if([paramName isEqualToString:HIKING_ROUTES_OSMC_ATTR] || [paramName isEqualToString:ALPINE_HIKING_ATTR] || [paramName isEqualToString:SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES])
         return @"ic_action_trekking_dark";
     else if([paramName isEqualToString:PISTE_ROUTES_ATTR])
         return @"ic_action_skiing";
@@ -661,6 +700,11 @@
         return _app.data.weather;
     else if ([key isEqualToString:@"nautical_depth"])
         return [[_styleSettings getParameter:NAUTICAL_DEPTH_CONTOURS].value isEqualToString:@"true"];
+    else if ([key containsString:SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES])
+    {
+        NSString *routesValue = _routesParameters[index].value;
+        return routesValue.length > 0 && ![routesValue isEqualToString:@"disabled"];
+    }
 
     if ([key hasPrefix:@"routes_"] && _routesParameters.count > index)
     {
@@ -1065,7 +1109,7 @@
 
     if ([item[@"key"] hasPrefix:@"routes_"])
     {
-        NSArray<NSString *> *hasParameters = @[SHOW_CYCLE_ROUTES_ATTR, SHOW_MTB_ROUTES, HIKING_ROUTES_OSMC_ATTR, TRAVEL_ROUTES];
+        NSArray<NSString *> *hasParameters = @[SHOW_CYCLE_ROUTES_ATTR, SHOW_MTB_ROUTES,SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES, SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES,HIKING_ROUTES_OSMC_ATTR, TRAVEL_ROUTES];
         NSString *parameterName = [item[@"key"] substringFromIndex:7];
         if ([hasParameters containsObject:parameterName])
             mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenRoutes param:parameterName];

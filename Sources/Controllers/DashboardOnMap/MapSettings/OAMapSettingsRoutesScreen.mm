@@ -29,8 +29,8 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
     ERoutesSettingCycle = 0,
     ERoutesSettingMountain,
     ERoutesSettingHiking,
-    ERoutesSettingTravel
-
+    ERoutesSettingTravel,
+    ERoutesSettingDifficultyClassification
 };
 
 @implementation OAMapSettingsRoutesScreen
@@ -69,6 +69,12 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         {
             _routesSettingType = ERoutesSettingMountain;
             _routesEnabled = _routesParameter.storedValue.length > 0 && [_routesParameter.storedValue isEqualToString:@"true"];
+        }
+        else if ([param isEqualToString:SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES])
+        {
+            _routesParameter.title = OALocalizedString(@"activity_type_alpine_hiking_scale_scheme_name");
+            _routesSettingType = ERoutesSettingDifficultyClassification;
+            _routesEnabled = _routesParameter.storedValue.length > 0 && ![_routesParameter.storedValue isEqualToString:@"disabled"];
         }
         else if ([param isEqualToString:HIKING_ROUTES_OSMC_ATTR])
         {
@@ -129,6 +135,23 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
                 @"value": imbaTrails.value,
                 @"title": imbaTrails.title
             }];
+        }
+    }
+    else if (_routesSettingType == ERoutesSettingDifficultyClassification)
+    {
+        NSString *parameter = [_settings.alpineHikingScaleSchemeRoutesParameter get];
+        for (OAMapStyleParameterValue *value in _routesParameter.possibleValues)
+        {
+            if (value.name.length > 0)
+            {
+                [valuesArr addObject:@{
+                    @"type": [OARightIconTableViewCell getCellIdentifier],
+                    @"value": [parameter containsString:value.title] ? @"true" : @"false",
+                    @"title": [OALocalizedString(([NSString stringWithFormat:@"rendering_value_%@_name", value.name])) upperCase],
+                    @"description": [self getRenderingStringPropertyDescription:value.name],
+                    @"parameter": value.name
+                }];
+            }
         }
     }
     else if (_routesSettingType == ERoutesSettingHiking)
@@ -201,6 +224,11 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         OAMapStyleParameter *imbaTrails = [_styleSettings getParameter:SHOW_MTB_SCALE_IMBA_TRAILS];
         return imbaTrails && [imbaTrails.value isEqualToString:@"true"] ? [self getRenderingStringPropertyDescription:imbaTrails.name] : @"";
     }
+    else if (_routesSettingType == ERoutesSettingDifficultyClassification)
+    {
+        OAMapStyleParameter *difficultyClassification = [_styleSettings getParameter:SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES];
+        return difficultyClassification && [difficultyClassification.value isEqualToString:@"true"] ? [self getRenderingStringPropertyDescription:difficultyClassification.name] : @"";
+    }
 
     return [self getRenderingStringPropertyDescription:_routesParameter.value];
 }
@@ -239,12 +267,31 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         }
         if (cell)
         {
-            BOOL isMountain = _routesSettingType == ERoutesSettingMountain;
             BOOL enabled = _routesEnabled;
-            cell.titleLabel.text = enabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
-            NSString *imgName = isMountain ? @"ic_action_bicycle_dark" : enabled ? @"ic_custom_show" : @"ic_custom_hide";
+            BOOL isMountain = _routesSettingType == ERoutesSettingMountain;
+            BOOL isDifficultyClassification = _routesSettingType == ERoutesSettingDifficultyClassification;
+            if (isDifficultyClassification)
+            {
+                cell.titleLabel.text = title;
+            }
+            else
+            {
+                [cell descriptionVisibility:NO];
+                cell.titleLabel.text = enabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
+            }
+            
+            NSString *imgName = enabled ? @"ic_custom_show" : @"ic_custom_hide";
+            if (isMountain)
+            {
+                imgName = @"ic_action_bicycle_dark";
+            }
+            else if (isDifficultyClassification)
+            {
+                imgName = @"ic_action_trekking_dark";
+            }
+            
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];
-            cell.leftIconView.tintColor = enabled ? isMountain ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
+            cell.leftIconView.tintColor = enabled ? isMountain || isDifficultyClassification ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
 
             [cell.switchView setOn:enabled];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -273,7 +320,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
                 OAMapStyleParameter *cycleNode = [_styleSettings getParameter:CYCLE_NODE_NETWORK_ROUTES_ATTR];
                 selected = cycleNode && [cycleNode.value isEqualToString:item[@"value"]];
             }
-            else if (_routesSettingType == ERoutesSettingMountain)
+            else if (_routesSettingType == ERoutesSettingMountain || _routesSettingType == ERoutesSettingDifficultyClassification)
             {
                 selected = [item[@"value"] isEqualToString:@"true"];
             }
@@ -283,6 +330,11 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
             }
 
             cell.titleLabel.text = item[@"title"];
+            if (item[@"description"])
+            {
+                [cell descriptionVisibility:YES];
+                cell.descriptionLabel.text = item[@"description"];
+            }
             if (selected)
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
             else
@@ -323,7 +375,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (!_routesEnabled || section == EOAMapSettingsRoutesSectionVisibility)
+    if (!_routesEnabled || section == EOAMapSettingsRoutesSectionVisibility || _routesSettingType == ERoutesSettingDifficultyClassification)
         return @"";
 
     return _routesSettingType == ERoutesSettingMountain ? OALocalizedString(@"mtb_segment_classification") : OALocalizedString(@"routes_color_by_type");
@@ -393,6 +445,29 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
                 [_styleSettings save:imbaTrails];
             }
             [self initData];
+        }
+        else if (_routesSettingType == ERoutesSettingDifficultyClassification)
+        {
+            if (_routesEnabled)
+            {
+                NSString *parameterValue = @"";
+                NSString *parameter = [_settings.alpineHikingScaleSchemeRoutesParameter get];
+                for (OAMapStyleParameterValue *value in _routesParameter.possibleValues)
+                {
+                    if (value.name.length > 0)
+                    {
+                        if ([parameter isEqualToString:value.name])
+                        {
+                            parameterValue = value.title;
+                        }
+                    }
+                }
+                _routesParameter.value = parameterValue;
+            }
+            else
+            {
+                _routesParameter.value = @"disabled";
+            }
         }
         else if (_routesEnabled)
         {
@@ -475,6 +550,14 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
                 [_settings.mountainBikeRoutesParameter set:imbaTrails.name];
             [_styleSettings save:imbaTrails];
         }
+        [self initData];
+    }
+    else if (_routesSettingType == ERoutesSettingDifficultyClassification)
+    {
+        NSString *parameter = [self getItem:indexPath][@"parameter"];
+        [_settings.alpineHikingScaleSchemeRoutesParameter set:parameter];
+        _routesParameter.value = parameter;
+        [_styleSettings save:_routesParameter];
         [self initData];
     }
     else

@@ -253,6 +253,8 @@
 #define hikingRoutesParameterKey @"hikingRoutesParameter"
 #define cycleRoutesParameterKey @"cycleRoutesParameter"
 #define mountainBikeRoutesParameterKey @"mountainBikeRoutesParameter"
+#define alpineHikingScaleSchemeRoutesParameterKey @"alpineHikingScaleSchemeRoutesParameter"
+
 #define mapManuallyRotatingAngleKey @"mapManuallyRotatingAngle"
 
 #define activeMarkerKey @"activeMarkerKey"
@@ -4411,6 +4413,10 @@
         
         _mountainBikeRoutesParameter = [OACommonString withKey:mountainBikeRoutesParameterKey defValue:@"showMtbScale"];
         [_profilePreferences setObject:_mountainBikeRoutesParameter forKey:@"mountain_bike_routes_parameter"];
+        
+        _alpineHikingScaleSchemeRoutesParameter = [OACommonString withKey:alpineHikingScaleSchemeRoutesParameterKey defValue:@"sacScale"];
+        
+        [_profilePreferences setObject:_alpineHikingScaleSchemeRoutesParameter forKey:@"alpine_hiking_scale_scheme_parameter"];
 
         // Custom plugins
         _customPluginsJson = [[NSUserDefaults standardUserDefaults] objectForKey:customPluginsJsonKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:customPluginsJsonKey] : @"";

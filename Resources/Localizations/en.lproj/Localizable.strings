@@ -2433,6 +2433,7 @@
 "activity_type_mountainbike_name" = "Mountain bike";
 "activity_type_racing_name" = "Racing";
 "activity_type_riding_name" = "Riding";
+"activity_type_alpine_hiking_scale_scheme_name" = "Difficulty classification";
 "activity_type_snowmobile_name" = "Snowmobile";
 "activity_type_winter_name" = "Winter";
 "activity_type_water_name" = "Water";
@@ -2643,6 +2644,10 @@
 "rendering_attr_highway_class_track_grade1_name" = "Grade 1";
 "rendering_attr_transportStops_name" = "Transport stops";
 "rendering_value_walkingRoutesOSMCNodes_name" = "Node networks";
+"rendering_value_sacScale_name" = "sac";
+"rendering_value_sacScale_description" = "Swiss Alpine Club";
+"rendering_value_caiScale_name" = "cai";
+"rendering_value_caiScale_description" = "Club Alpino Italiano (Italian Alpine Club)";
 "rendering_attr_piste_difficulty_expert_name" = "Expert";
 "rendering_attr_buildings15zoom_name" = "Buildings on zoom 15";
 "rendering_attr_tracktype_grade1_name" = "Solid (paved)";
@@ -3181,6 +3186,7 @@
 "rendering_attr_OSMMapperAssistantFixme_name" = "Fixme tags";
 "rendering_attr_showBusRoutes_name" = "Bus routes";
 "rendering_attr_showMtbScaleIMBATrails_description" = "Show dedicated mountain biking trails.";
+"rendering_attr_alpineHikingScaleScheme_description" = "Difficulty classification types for routes.";
 "routing_attr_avoid_4wd_only_name" = "Avoid 4WD roads";
 "routing_attr_avoid_footways_name" = "Avoid footways";
 "rendering_attr_showMtbScale_description" = "Display trails according to their MTB scale.";

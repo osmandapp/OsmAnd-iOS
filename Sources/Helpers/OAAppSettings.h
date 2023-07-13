@@ -1028,6 +1028,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonString *hikingRoutesParameter;
 @property (nonatomic) OACommonString *cycleRoutesParameter;
 @property (nonatomic) OACommonString *mountainBikeRoutesParameter;
+@property (nonatomic) OACommonString *alpineHikingScaleSchemeRoutesParameter;
 
 // Custom plugins
 @property (nonatomic) NSString *customPluginsJson;

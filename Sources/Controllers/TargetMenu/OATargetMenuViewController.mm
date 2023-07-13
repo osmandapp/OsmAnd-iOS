@@ -58,6 +58,7 @@
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 #import "OAFavoriteViewController.h"
+#import "OATargetAddressViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -149,6 +150,12 @@
         case OATargetPOI:
         {
             controller = [[OAPOIViewController alloc] initWithPOI:targetPoint.targetObj];
+            break;
+        }
+            
+        case OATargetAddress:
+        {
+            controller = [[OATargetAddressViewController alloc] initWithAddress:targetPoint.targetObj];
             break;
         }
             

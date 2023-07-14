@@ -67,7 +67,7 @@ static const int INVALID_BEARING = -1000;
     if ([self isUpdateNeeded] || [self.class degreesChanged:_cachedDegrees degrees:b])
     {
         _cachedDegrees = b;
-        if (b != -1000)
+        if (b != INVALID_BEARING)
             [self setText:[NSString stringWithFormat:@"%@%@", [OAOsmAndFormatter getFormattedAzimuth:b], relative ? @"" : @" M"] subtext:nil];
         else
             [self setText:nil subtext:nil];

@@ -763,7 +763,7 @@ static UIViewController *parentController;
                 [visibleGroup.groupItems addObject:
                  @{
                     @"title" : [item getNiceTitle],
-                    @"icon" : @"ic_custom_trip.png",
+                    @"icon" : @"ic_custom_trip",
                     @"track" : item,
                     @"type" : [OASwitchTableViewCell getCellIdentifier],
                     @"key" : @"track_group"}];
@@ -1353,6 +1353,7 @@ static UIViewController *parentController;
                     cell.switchView.on = [_settings.mapSettingVisibleGpx.get containsObject:gpx.gpxFilePath];
                     [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
                     cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+                    cell.selectionStyle = UITableViewCellSelectionStyleDefault;
                 }
                 return cell;
             }

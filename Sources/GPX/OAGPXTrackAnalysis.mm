@@ -601,7 +601,7 @@ static const double SLOPE_THRESHOLD = 70.0;
         double prevEle = [splitSegment get:lastSurvived].elevation;
         double ele = [splitSegment get:i].elevation;
         double eleNext = [splitSegment get:i + 1].elevation;
-        if ((ele - prevEle) * (eleNext - ele) > 0 && ABS(ele - prevEle) > 2)
+        if ((ele - prevEle) * (eleNext - ele) > 0)
         {
             survived[i] = @YES;
             lastSurvived = i;

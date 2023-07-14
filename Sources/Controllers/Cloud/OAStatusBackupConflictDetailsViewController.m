@@ -351,6 +351,7 @@
                                                                 summary:OALocalizedString(@"shared_string_uploaded")],
                                OALocalizedString(@"local_file_will_be_restored")
                 ];
+                deleteOperation = NO;
             }
             else
             {

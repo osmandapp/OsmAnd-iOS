@@ -33,14 +33,9 @@
 //        _gradientSlopeColor = dataItem.getGradientSlopeColor;
 //        _gradientAltitudeColor = dataItem.getGradientAltitudeColor;
 //
-        OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:dataItem.absolutePath];
-        OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
-        if (analysis)
-        {
-            _timeSpan = analysis.timeSpan;
-            _wptPoints = analysis.wptPoints;
-            _totalDistance = analysis.totalDistance;
-        }
+        _timeSpan = dataItem.timeSpan;
+        _wptPoints = dataItem.wptPoints;
+        _totalDistance = dataItem.totalDistance;
     }
     return self;
 }

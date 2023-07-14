@@ -9,6 +9,7 @@
 #import "OABearingWidget.h"
 #import "OsmAndApp.h"
 #import "OALocationServices.h"
+#import "OADestinationsHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static float MIN_SPEED_FOR_HEADING = 1.f;
@@ -57,7 +58,7 @@ static const int INVALID_BEARING = -1000;
 {
     BOOL relative = [[OAAppSettings sharedManager].showRelativeBearing get];
     [self setContentTitle:relative ? OALocalizedString(@"map_widget_bearing") : OALocalizedString(@"map_widget_magnetic_bearing")];
-    int b = [self.class getBearing:relative];
+    int b = [self getBearing];
     EOAAngularConstant angularUnits = [[OAAppSettings sharedManager].angularUnits get];
     if (_cachedAngularUnits != angularUnits)
     {
@@ -66,7 +67,7 @@ static const int INVALID_BEARING = -1000;
     if ([self isUpdateNeeded] || [self.class degreesChanged:_cachedDegrees degrees:b])
     {
         _cachedDegrees = b;
-        if (b != -1000)
+        if (b != INVALID_BEARING)
             [self setText:[NSString stringWithFormat:@"%@%@", [OAOsmAndFormatter getFormattedAzimuth:b], relative ? @"" : @" M"] subtext:nil];
         else
             [self setText:nil subtext:nil];
@@ -81,119 +82,83 @@ static const int INVALID_BEARING = -1000;
     return ABS(oldDegrees - degrees) >= 1;
 }
 
-+ (int) getBearing:(BOOL)relative
+- (int) getBearing
 {
-    int d = -1000;
     CLLocation *myLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
-    CLLocationDirection heading = [OsmAndApp instance].locationServices.lastKnownHeading;
-    CLLocationDegrees declination = [OsmAndApp instance].locationServices.lastKnownDeclination;
-    CLLocation *l = [self.class getNextTargetPoint];
-    if (!l)
+    CLLocation *destination = [self getDestinationLocation];
+    
+    if (!myLocation || !destination)
+        return INVALID_BEARING;
+    
+    double trueBearing = [myLocation bearingTo:destination];
+    if (_bearingType == EOABearingTypeTrue)
+        return (int)trueBearing;
+    
+    OAGeomagneticField *destGf = [self getGeomagneticField:destination];
+    double magneticBearing = trueBearing - [destGf declination];
+    
+    if (_bearingType == EOABearingTypeMagnetic)
     {
-        NSMutableArray *destinations = [OADestinationsHelper instance].sortedDestinations;
-        if (destinations.count > 0)
-        {
-            OADestination *d = destinations[0];
-            l = [[CLLocation alloc] initWithLatitude:d.latitude longitude:d.longitude];
-        }
+        return (int)magneticBearing;
     }
-    if (myLocation && l)
+    else if (_bearingType == EOABearingTypeRelative)
     {
-        double bearing = [myLocation bearingTo:l];
-        bearing += bearing < 0 && !relative ? 360 : 0;
-        double bearingToDest = bearing - declination;
-        if (relative)
-        {
-            float b = -1000;
-            if (myLocation.speed < MIN_SPEED_FOR_HEADING || myLocation.course < 0)
-            {
-                b = heading;
-            }
-            else if (myLocation.course >= 0)
-            {
-                b = myLocation.course - declination;
-            }
-            if (b > -1000) {
-                bearingToDest -= b;
-                if (bearingToDest > 180.f)
-                    bearingToDest -= 360.f;
-                else if (bearingToDest < -180.f)
-                    bearingToDest += 360.f;
-                
-                d = (int) bearingToDest;
-            }
-        }
-        else
-        {
-            d = (int) bearingToDest;
-        }
+        return [self getRelativeBearing:myLocation magneticBearingToDest:magneticBearing];
     }
-    return d;
+    else
+    {
+        return INVALID_BEARING;
+    }
 }
 
-+ (CLLocation *) getNextTargetPoint
+- (CLLocation *) getDestinationLocation
 {
     NSArray<OARTargetPoint *> *points = [[OATargetPointsHelper sharedInstance] getIntermediatePointsWithTarget];
-    return points.count == 0 ? nil : points[0].point;
+    if (points && points.count > 0)
+        return points[0].point;
+    
+    NSArray<OADestination *> *markers = [OADestinationsHelper instance].sortedDestinations;
+    if (markers && markers.count > 0)
+        return [[CLLocation alloc] initWithLatitude:markers[0].latitude longitude:markers[0].longitude];
+
+    return nil;
 }
 
-//- (nullable Location *)getDestinationLocation:(Location *)fromLocation {
-//    LatLon *destLatLon = nil;
-//    NSArray<TargetPoint *> *points = [app.getTargetPointsHelper getIntermediatePointsWithTarget];
-//    if (points.count > 0) {
-//        destLatLon = points[0].point;
-//    }
-//
-//    NSArray<MapMarker *> *markers = [app.getMapMarkersHelper getMapMarkers];
-//    if (destLatLon == nil && markers.count > 0)
-//    {
-//        destLatLon = markers[0].point;
-//    }
-//
-//    lua
-//    Copy code
-//    if (destLatLon != nil) {
-//        Location *destLocation = [[Location alloc] initWithLatitude:destLatLon.getLatitude longitude:destLatLon.getLongitude];
-//        [destLocation setBearing:[fromLocation bearingTo:destLocation]];
-//        return destLocation;
-//    }
-//
-//    return nil;
-//}
-//
-//- (int) getRelativeBearing:(Location *)myLocation magneticBearingToDest:(float)magneticBearingToDest {
-//    float bearing = INVALID_BEARING;
-//    NSNumber *heading = [self.locationProvider getHeading];
-//
-//    if (heading != nil && (myLocation.getSpeed < MIN_SPEED || ![myLocation hasBearing])) {
-//        bearing = [heading floatValue];
-//    } else if ([myLocation hasBearing]) {
-//        GeomagneticField *myLocGf = [self getGeomagneticField:myLocation];
-//        bearing = myLocation.getBearing - myLocGf.getDeclination;
-//    }
-//
-//    if (bearing > INVALID_BEARING) {
-//        magneticBearingToDest -= bearing;
-//        if (magneticBearingToDest > 180.0f) {
-//            magneticBearingToDest -= 360.0f;
-//        } else if (magneticBearingToDest < -180.0f) {
-//            magneticBearingToDest += 360.0f;
-//        }
-//        return (int)magneticBearingToDest;
-//    }
-//
-//    return INVALID_BEARING;
-//}
-//
-//- (GeomagneticField *) getGeomagneticField:(Location *)location {
-//    float lat = (float)location.getLatitude;
-//    float lon = (float)location.getLongitude;
-//    float alt = (float)location.getAltitude;
-//    return [[GeomagneticField alloc] initWithFloat:lat lon:lon alt:alt time:currentTimeMillis()];
-//}
+- (int) getRelativeBearing:(CLLocation *)myLocation magneticBearingToDest:(float)magneticBearingToDest {
+    double bearing = INVALID_BEARING;
+    CLLocationDirection heading = [OsmAndApp instance].locationServices.lastKnownHeading;
+    CLLocation *destination = [self getDestinationLocation];
+    
+    if (heading != -1.0 && (myLocation.speed < MIN_SPEED || myLocation.course < 0)) {
+        bearing = heading;
+    } else if (myLocation && destination) {
+        OAGeomagneticField *myLocGf = [self getGeomagneticField:myLocation];
+        bearing = myLocation.course - [myLocGf declination];
+    }
 
-//- (BOOL) isAngularUnitsDepended {
-//    return YES;
-//}
+    if (bearing > INVALID_BEARING) {
+        magneticBearingToDest -= bearing;
+        if (magneticBearingToDest > 180.0f) {
+            magneticBearingToDest -= 360.0f;
+        } else if (magneticBearingToDest < -180.0f) {
+            magneticBearingToDest += 360.0f;
+        }
+        return (int)magneticBearingToDest;
+    }
+
+    return INVALID_BEARING;
+}
+
+- (OAGeomagneticField *) getGeomagneticField:(CLLocation *)location
+{
+    CLLocationDegrees lat = location.coordinate.latitude;
+    CLLocationDegrees lon = location.coordinate.longitude;
+    CLLocationDistance alt = location.altitude;
+    return [[OAGeomagneticField alloc] initWithLongitude:lon latitude:lat altitude:alt date:[NSDate now]];
+}
+
+- (BOOL) isAngularUnitsDepended {
+    return YES;
+}
 
 @end

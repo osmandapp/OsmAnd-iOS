@@ -2994,3 +2994,9 @@
 "shared_string_buttons" = "Botões";
 "switch_profile" = "Mudar de perfil";
 "shared_string_rearrange" = "Reorganizar";
+"map_2d_mode_action" = "Modo 2D";
+"map_3d_mode_action" = "Modo 3D";
+"shared_string_hidden" = "oculto";
+"visible_in_3d_mode" = "Visível no modo 3D";
+"map_3d_mode_hint" = "Toque longo no botão permite alterar a posição do botão.";
+"map_3d_mode_description" = "Toque no mapa com dois dedos e mova-os para cima e para baixo para ajustar a inclinação do mapa.";

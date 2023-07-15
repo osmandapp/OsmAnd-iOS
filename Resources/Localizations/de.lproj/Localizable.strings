@@ -2930,3 +2930,12 @@
 "relative_bearing_widget_desc" = "Zeigt den Winkel zwischen Ihrer Bewegungsrichtung und dem Zielpunkt an.";
 "second_marker_widget_desc" = "Sie können das Widget so konfigurieren, dass es die Entfernung oder voraussichtliche Ankunftszeit bis zur zweiten Kartenmarkierung anzeigt.";
 "first_marker_widget_desc" = "Sie können das Widget so konfigurieren, dass es die Entfernung oder voraussichtliche Ankunftszeit bis zur ersten Kartenmarkierung anzeigt.";
+"distance_circles" = "Entfernungskreise";
+"average_speed_widget_desc" = "Zeigt die durchschnittliche Geschwindigkeit der aktuellen Reise.";
+"time_to_destination_widget_desc" = "Das Widget zeigt \"Ankunftszeit\" oder \"Verbleibende Zeit\" zum letzten Zielpunkt an. Die Zeit wird während der Navigation ständig aktualisiert und entspricht der Routenzeit vom aktuellen Standort aus.";
+"distance_to_intermediate_widget_desc" = "Das Widget zeigt die verbleibende Entfernung zum ersten Zwischenpunkt an. Sobald Zwischenpunkte passiert sind, wird die Distanz bis zum nächsten Zwischenpunkt aktualisiert.";
+"distance_to_destination_widget_desc" = "Das Widget zeigt die verbleibende Entfernung zum letzten Zielpunkt an.";
+"second_next_turn_widget_desc" = "Das Widget zeigt Informationen über Ihre übernächste Abbiegung an, die aktiviert wird, wenn sich die Abbiegung in unmittelbarer Nähe befindet.";
+"next_turn_widget_desc" = "Das Widget zeigt Informationen zu Ihrer nächsten Abbiegung an, mit einem Bild des Manövers und entsprechender Entfernungsangabe.";
+"time_to_intermediate_widget_desc" = "Das Widget zeigt \"Ankunftszeit\" oder \"Verbleibende Zeit\" zum ersten Zwischenpunkt an. Die Zeit wird während der Navigation ständig aktualisiert, sobald Zwischenpunkte passiert sind, wird die Zeit auf den nächsten Zwischenpunkt aktualisiert.";
+"elevation_profile_widget_desc" = "Zeigt Höhenprofil und Hangneigung der aktuellen Route an.";

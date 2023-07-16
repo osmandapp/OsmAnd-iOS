@@ -9,13 +9,8 @@
 // OAuth version: 2.0
 // Grant type: Authorization code
 
-import Foundation
-
-// Waiting for GitHub Actions XCode and macOS version updating
-/*
 import SwiftUI
 import AuthenticationServices
- */
 
 @objc(OABaseOAuthHelper)
 @objcMembers
@@ -34,9 +29,7 @@ class BaseOAuthHelper : NSObject {
         get { return ""}
         set {}
     }
- 
-    // Waiting for GitHub Actions XCode and macOS version updating 
-    /*
+    
     @available(iOS 16.4, *)
     static func performOAuth(session: WebAuthenticationSession) async -> String? {
         do {
@@ -135,7 +128,5 @@ class BaseOAuthHelper : NSObject {
     }
     
     typealias ParsedTokenResponce = (token: String?, expirationTimestamp: String?)
-     
-     */
 
 }

@@ -6,8 +6,6 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-// Waiting for GitHub Actions XCode and macOS version updating
-/*
 import SwiftUI
 import Foundation
 import AuthenticationServices
@@ -199,4 +197,3 @@ struct AccountSettingsVCWrapper: UIViewControllerRepresentable {
         //Do nothing
     }
 }
-*/

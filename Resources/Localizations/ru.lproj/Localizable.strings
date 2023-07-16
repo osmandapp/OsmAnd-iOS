@@ -2308,7 +2308,7 @@
 "routing_attr_allow_gate_name" = "Разрешить использование ворот";
 "make_backup" = "Создайте резервную копию";
 "routing_attr_only_permitted_streets_name" = "Разрешённые улицы";
-"routeInfo_tracktype_description" = "Окраска линии маршрута/трека на основе состава поверхности. Обычно применяется для неасфальтированных дорог.";
+"routeInfo_tracktype_description" = "Окраска линии маршрута/трека на основе состава поверхности. Обычно применяется для дорог без покрытия.";
 "backup_error_size_is_exceeded" = "Максимальный размер OsmAnd Cloud превышает %@";
 "route_line_use_map_style_color" = "Используется цвет стиля карты (%@).";
 "routeInfo_roadClass_description" = "Окраска маршрута или трека в соответствии с классификацией дорог.";

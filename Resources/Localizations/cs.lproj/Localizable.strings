@@ -2866,7 +2866,7 @@
 "wiki_article_search_text" = "Vyhledávání odpovídajícího článku na wiki";
 "activity_type_water_name" = "Voda";
 "user_name" = "Uživatelské jméno";
-"activity_type_motorbike_name" = "Motokolo";
+"activity_type_motorbike_name" = "Motocykl";
 "activity_type_offroad_name" = "Off-road";
 "activity_type_running_name" = "Běh";
 "activity_type_hiking_name" = "Turistika";
@@ -2879,7 +2879,7 @@
 "altitude_widget_desc" = "Zobrazuje nadmořskou výšku aktuální zeměpisné polohy.";
 "map_widget_altitude_map_center" = "Nadmořská výška: střed mapy";
 "map_widget_altitude_map_center_desc" = "Zobrazuje nadmořskou výšku aktuálního středu mapy.";
-"test_heightmap" = "Test výškové mapy";
+"test_heightmap" = "Testovací výšková mapa";
 "disable_vertex_hillshade_3d" = "Vypnout stínování vrcholů ve 3D";
 "generate_slope_from_3d_maps" = "Generovat rastrové mapy svahů z 3D map";
 "generate_hillshade_from_3d_maps" = "Generovat rastrové mapy stínování kopců z 3D map";
@@ -2907,9 +2907,9 @@
 
 // Widget descriptions
 "coordinates_widget_current_location_desc" = "Zobrazí zeměpisné souřadnice aktuální polohy";
-"av_notes_photo_widget_desc" = "Klepnutím na widget pořídíte fotografii.";
-"av_notes_video_widget_desc" = "Klepnutím na widget můžete nahrávat video.";
-"av_notes_audio_widget_desc" = "Klepnutím na widget můžete pořídit zvukovou poznámku.";
+"av_notes_photo_widget_desc" = "Klepnutím na nástroj pořídíte fotografii.";
+"av_notes_video_widget_desc" = "Klepnutím na nástroj můžete nahrávat video.";
+"av_notes_audio_widget_desc" = "Klepnutím na nástroj můžete pořídit zvukovou poznámku.";
 "trip_recording_downhill_widget_desc" = "Zobrazuje součet všech klesání aktuálně zaznamenané jízdy.";
 "trip_recording_uphill_widget_desc" = "Zobrazuje součet všech stoupání aktuálně zaznamenané cesty.";
 "first_marker_widget_desc" = "Widget můžete nakonfigurovat tak, aby zobrazoval vzdálenost nebo odhadovaný čas příjezdu k první mapové značce.";

@@ -125,6 +125,14 @@
 #define deinit _(deinit)
 #define kGestureZoomCoef 10.0f
 
+#define ZONE_0_ANGLE_THRESHOLD 5.0f
+#define ZONE_1_ANGLE_THRESHOLD 20.0f
+#define ZONE_2_ANGLE_THRESHOLD 30.0f
+#define ZONE_3_ANGLE_THRESHOLD 60.0f
+#define ZONE_0_ZOOM_THRESHOLD 0.15f
+#define ZONE_1_ZOOM_THRESHOLD 0.6f
+#define ZONE_2_ZOOM_THRESHOLD 1.5f
+
 typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     EOAMapPanDirectionUp = 0,
     EOAMapPanDirectionDown,
@@ -219,6 +227,10 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     UIPanGestureRecognizer* _grElevation;
     UITapGestureRecognizer* _grSymbolContextMenu;
     UILongPressGestureRecognizer* _grPointContextMenu;
+    BOOL _startRotating;
+    BOOL _startZooming;
+    float _startAzimuth;
+    float _startZoom;
 
     BOOL _targetChanged;
     OsmAnd::PointI _targetPixel;
@@ -1121,6 +1133,9 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         // Suspend symbols update
         while (![_mapView suspendSymbolsUpdate]);
 
+        _startZoom = _mapView.zoom;
+        _startAzimuth = _mapView.azimuth;
+
         if (panRecognizer)
         {
             _initialZoomLevelDuringGesture = _mapView.zoom;
@@ -1155,6 +1170,9 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         {
             _zoomingByTapGesture = NO;
         }
+
+        _startZooming = NO;
+        _startRotating = NO;
 
         // Resume symbols update
         if (!_rotatingByGesture && !_zoomingByGesture && !_zoomingByTapGesture && !_movingByGesture)
@@ -1194,20 +1212,35 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                 OsmAnd::PointD zoomAndRotation;
                 if ([_mapView getZoomAndRotationAfterPinch:firstTouchLocation31 firstHeight:firstTouchLocationHeight firstPoint:firstPosition secondLocation31:secondTouchLocation31 secondHeight:secondTouchLocationHeight secondPoint:secondPosition zoomAndRotate:&zoomAndRotation])
                 {
-                    if (pinchRecognizer)
+                    auto zoom = zoomAndRotation.x;
+                    auto angle = zoomAndRotation.y;
+                    if (!isnan(zoom) && !isnan(angle))
                     {
-                        auto zoom = zoomAndRotation.x;
-                        if (!isnan(zoom))
-                            _mapView.zoom = qBound(_mapView.minZoom, _mapView.zoom + (float)zoom, _mapView.maxZoom);
-                    }
-                    else
-                    {
-                        auto angle = zoomAndRotation.y;
-                        if (!isnan(angle))
+                        float newZoom = _mapView.zoom + (float)zoom;
+                        float newAzimuth = _mapView.azimuth + (float)angle;
+                        if (pinchRecognizer)
                         {
-                            _mapView.azimuth += angle;
-                            if ([[OAAppSettings sharedManager].rotateMap get] == ROTATE_MAP_MANUAL)
-                                [[OAAppSettings sharedManager].mapManuallyRotatingAngle set:_mapView.azimuth];
+                            if (ABS(_startZoom - newZoom) <= ZONE_0_ZOOM_THRESHOLD && !_startZooming)
+                                zoom = 0; // keep only rotating
+                            else
+                                _startZooming = YES;
+
+                            if (_startZooming && zoom != 0)
+                                _mapView.zoom = qBound(_mapView.minZoom, _mapView.zoom + (float)zoom, _mapView.maxZoom);
+                        }
+                        else
+                        {
+                            if ([self isAngleOverThreshold:ABS(_startAzimuth - newAzimuth) deltaZoom:ABS(_startZoom - newZoom)])
+                                _startRotating = YES;
+                            else
+                                angle = 0;
+
+                            if (_startRotating && angle != 0)
+                            {
+                                _mapView.azimuth += angle;
+                                if ([[OAAppSettings sharedManager].rotateMap get] == ROTATE_MAP_MANUAL)
+                                    [[OAAppSettings sharedManager].mapManuallyRotatingAngle set:_mapView.azimuth];
+                            }
                         }
                     }
                 }
@@ -1246,6 +1279,9 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
             _zoomingByTapGesture = NO;
         }
 
+        _startZooming = NO;
+        _startRotating = NO;
+
         // Resume symbols update
         if (!_rotatingByGesture && !_zoomingByGesture && !_zoomingByTapGesture && !_movingByGesture)
             while (![_mapView resumeSymbolsUpdate]);
@@ -1275,6 +1311,20 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
     if (rotationRecognizer)
     	_lastRotatingByGestureTime = [NSDate now];
+}
+
+- (BOOL) isAngleOverThreshold:(double)angle deltaZoom:(double)deltaZoom
+{
+    if (_startRotating)
+        return YES;
+    else if (!_startZooming)
+        return ABS(angle) >= ZONE_0_ANGLE_THRESHOLD;
+    else if (deltaZoom >= ZONE_2_ZOOM_THRESHOLD)
+        return ABS(angle) >= ZONE_3_ANGLE_THRESHOLD;
+    else if (deltaZoom >= ZONE_1_ZOOM_THRESHOLD)
+        return ABS(angle) >= ZONE_2_ANGLE_THRESHOLD;
+    else
+        return ABS(angle) >= ZONE_1_ANGLE_THRESHOLD;
 }
 
 - (void) zoomInGestureDetected:(UITapGestureRecognizer *)recognizer

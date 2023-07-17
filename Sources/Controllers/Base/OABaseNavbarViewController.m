@@ -187,11 +187,12 @@
 {
     _isRotating = YES;
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    __weak OABaseNavbarViewController *weakSelf = self;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [self updateNavbar];
-        [self updateRightIconLargeTitle];
-        [self moveAndResizeImage:self.navigationController.navigationBar.frame.size.height];
-        [self onRotation];
+        [weakSelf updateNavbar];
+        [weakSelf updateRightIconLargeTitle];
+        [weakSelf moveAndResizeImage:weakSelf.navigationController.navigationBar.frame.size.height];
+        [weakSelf onRotation];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         _isRotating = NO;
     }];

@@ -2415,7 +2415,7 @@
 "routing_attr_length_description" = "Angi kjøretøylengde som tillates på rutene.";
 "rendering_attr_horse_scale_common_name" = "Vanlig";
 "routing_attr_allow_streams_name" = "Tillat bekker og dreneringsgrøfter";
-"rendering_attr_showMtbScale_description" = "Viser løyper ihht. deres fjellsykkel-skala.";
+"rendering_attr_showMtbScale_description" = "Vis løyper ifølge deres terrengsykkel-skala.";
 "routing_attr_carriage_restrictions_description" = "Overvei adgangstillatelser for hestekjøretøy";
 "rendering_attr_noNatureReserveBoundaries_name" = "Naturgrenser";
 "routing_attr_allow_intermittent_description" = "Tillat periodiske vannveier";
@@ -2495,14 +2495,14 @@
 "map_settings_weather_cloud" = "Sky";
 "weather_pressure_hectopascals" = "Hektopascal";
 "weather_plugin_description" = "Tilbyr\n- 24-timer og 7-dagers værmelding med 5 lag\n- posisjonsbaserte miniprogrammer\n- temperatur/lufttrykksisolinjer\n\nVærdata tilbys av det globale værmeldingssystemet (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
-"mtb_imba_full" = "Internasjonelt fjellsyklingssamband";
+"mtb_imba_full" = "International Mountain Bicycling Association";
 "rendering_attr_weatherCloudContours_name" = "Sky-isolinjer";
 "rendering_attr_depthContourWidth_description" = "Linjebredde for dybdekoter";
 "weather_pressure_inches_of_mercury" = "Tommer kvikksølv";
 "weather_pressure_millimeters_of_mercury" = "Millimeter kvikksølv";
 "checking_progress" = "Sjekker …";
-"rendering_attr_showMtbScaleIMBATrails_description" = "Viser egnede fjellsykkelstier.";
-"rendering_attr_showMtbScaleIMBATrails_name" = "Vis IMBA-fjellsykkelstier";
+"rendering_attr_showMtbScaleIMBATrails_description" = "Vis løyper ment for terrengsykkel.";
+"rendering_attr_showMtbScaleIMBATrails_name" = "Vis IMBA-Terrengsykkelløyper";
 "shared_string_cross_buy" = "Krysskjøp";
 "announcement_time_descr" = "Kunngjøringstid for forskjellige talemeldinger avhenger av meldingstype, gjeldende navigasjonshastighet og forvalgt navigasjonshastighet.";
 "announcement_time_intervals" = "Tid- og avstandsintervaller";
@@ -2598,3 +2598,4 @@
 "map_widget_trip_recording_uphill" = "Oppoverbakke";
 "map_widget_trip_recording_duration" = "Varighet";
 "map_widget_trip_recording_distance" = "Avstand";
+"visible_in_3d_mode" = "Synlig i 3D-modus";

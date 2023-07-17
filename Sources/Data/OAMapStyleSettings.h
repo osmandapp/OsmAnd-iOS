@@ -21,6 +21,9 @@ static NSString * const SHOW_RUNNING_ROUTES_ATTR = @"showRunningRoutes";
 
 static NSString * const SHOW_MTB_ROUTES = @"showMtbRoutes";
 static NSString * const SHOW_MTB_SCALE = @"showMtbScale";
+
+static NSString * const SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES = @"alpineHikingScaleScheme";
+
 static NSString * const SHOW_MTB_SCALE_UPHILL = @"showMtbScaleUphill";
 static NSString * const SHOW_MTB_SCALE_IMBA_TRAILS = @"showMtbScaleIMBATrails";
 

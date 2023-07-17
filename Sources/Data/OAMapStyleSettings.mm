@@ -325,7 +325,9 @@
     for (OAMapStyleParameter *p in self.parameters)
     {
         if ([p.category isEqualToString:category])
+        {
             [res addObject:p];
+        }
     }
     return sorted ? [res sortedArrayUsingComparator:^NSComparisonResult(OAMapStyleParameter *obj1, OAMapStyleParameter *obj2) {
         return [[obj1.title lowercaseString] compare:[obj2.title lowercaseString]];

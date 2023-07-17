@@ -419,14 +419,30 @@
         [self generateAllCategories];
         for (NSString *cName in _allCategories)
         {
-            BOOL isTransport = [[cName lowercaseString] isEqualToString:TRANSPORT_CATEGORY];
-            [mapStyleSectionData addObject:@{
-                    @"name": [_styleSettings getCategoryTitle:cName],
-                    @"image": [self getImageForParameterOrCategory:cName],
-                    @"key": [NSString stringWithFormat:@"category_%@", cName],
-                    @"type": isTransport ? [OASwitchTableViewCell getCellIdentifier] : [OASimpleTableViewCell getCellIdentifier],
-                    isTransport ? @"has_options" : @"value": isTransport ? @YES : @""
-            }];
+            if ([cName isEqualToString:kOtherCategory])
+            {
+                NSArray<OAMapStyleParameter *> *_otherParameters = [_styleSettings getParameters:kOtherCategory sorted:NO];
+                NSArray<OAMapStyleParameter *> * additionalItems = [_otherParameters filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(name != %@) AND (name != %@)", SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES, ALPINE_HIKING_ATTR]];
+                if (additionalItems.count > 0)
+                {
+                    [mapStyleSectionData addObject:@{
+                            @"name": [_styleSettings getCategoryTitle:cName],
+                            @"image": [self getImageForParameterOrCategory:cName],
+                            @"key": [NSString stringWithFormat:@"category_%@", cName],
+                            @"type": [OASimpleTableViewCell getCellIdentifier],
+                            @"value": @""
+                    }];
+                }
+            } else {
+                BOOL isTransport = [[cName lowercaseString] isEqualToString:TRANSPORT_CATEGORY];
+                [mapStyleSectionData addObject:@{
+                        @"name": [_styleSettings getCategoryTitle:cName],
+                        @"image": [self getImageForParameterOrCategory:cName],
+                        @"key": [NSString stringWithFormat:@"category_%@", cName],
+                        @"type": isTransport ? [OASwitchTableViewCell getCellIdentifier] : [OASimpleTableViewCell getCellIdentifier],
+                        isTransport ? @"has_options" : @"value": isTransport ? @YES : @""
+                }];
+            }
         }
 
         _filteredTopLevelParams = [[_styleSettings getParameters:@""] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(_name != %@) AND (_name != %@) AND (_name != %@) AND (_name != %@) AND (_name != %@)", CONTOUR_DENSITY_ATTR, CONTOUR_WIDTH_ATTR, CONTOUR_COLOR_SCHEME_ATTR, NAUTICAL_DEPTH_CONTOUR_WIDTH_ATTR, NAUTICAL_DEPTH_CONTOUR_COLOR_SCHEME_ATTR]];
@@ -535,9 +551,19 @@
 {
     const auto resource = _app.resourcesManager->getResource(QString::fromNSString(_app.data.lastMapSource.resourceId)
             .remove(QStringLiteral(".sqlitedb")));
-    _routesParameters = !([_app.data.lastMapSource.type isEqualToString:@"sqlitedb"]
-            || (resource != nullptr && resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources))
-            ? [_styleSettings getParameters:kRoutesCategory sorted:NO] : [NSArray array];
+    NSMutableArray<OAMapStyleParameter *> *result = [@[] mutableCopy];
+    if (!([_app.data.lastMapSource.type isEqualToString:@"sqlitedb"] || (resource != nullptr && resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources)))
+    {
+        result = [[_styleSettings getParameters:kRoutesCategory sorted:NO] mutableCopy];
+    }
+    
+    NSArray<OAMapStyleParameter *> *_otherParameters = [_styleSettings getParameters:kOtherCategory sorted:NO];
+    id additionalItem = [[_otherParameters filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name == %@", SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES]] firstObject];
+    if (additionalItem)
+    {
+        [result addObject:additionalItem];
+    }
+    _routesParameters = [result copy];
 
     if (_routesParameters.count > 0)
     {
@@ -575,8 +601,7 @@
     {
         if (![[cName lowercaseString] isEqualToString:kUIHiddenCategory]
                 && ![[cName lowercaseString] isEqualToString:kRoutesCategory]
-                && ![[cName lowercaseString] isEqualToString:kOSMAssistantCategory]
-                && ![[cName lowercaseString] isEqualToString:kOtherCategory])
+                && ![[cName lowercaseString] isEqualToString:kOSMAssistantCategory])
             [res addObject:cName];
     }
     _allCategories = res;
@@ -704,10 +729,7 @@
     else if ([key isEqualToString:@"nautical_depth"])
         return [[_styleSettings getParameter:NAUTICAL_DEPTH_CONTOURS].value isEqualToString:@"true"];
     else if ([key containsString:SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES])
-    {
-        NSString *routesValue = _routesParameters[index].value;
-        return routesValue.length > 0 && ![routesValue isEqualToString:@"disabled"];
-    }
+        return [[_styleSettings getParameter:ALPINE_HIKING_ATTR].value isEqualToString:@"true"];
 
     if ([key hasPrefix:@"routes_"] && _routesParameters.count > index)
     {

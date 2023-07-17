@@ -324,19 +324,9 @@
     NSMutableArray *res = [NSMutableArray array];
     for (OAMapStyleParameter *p in self.parameters)
     {
-        if (![category isEqualToString:@"routes"])
+        if ([p.category isEqualToString:category])
         {
-            if ([p.category isEqualToString:category])
-            {
-                [res addObject:p];
-            }
-        }
-        else
-        {
-            if ([p.category isEqualToString:category] || [p.name isEqualToString: SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES])
-            {
-                [res addObject:p];
-            }
+            [res addObject:p];
         }
     }
     return sorted ? [res sortedArrayUsingComparator:^NSComparisonResult(OAMapStyleParameter *obj1, OAMapStyleParameter *obj2) {

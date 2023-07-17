@@ -52,6 +52,9 @@
 
 #define kRecordTrackRow 0
 #define kRecordTrackSection 0
+#define kActionsSection 3
+#define kActionsImportRow 0
+#define kActionsNewTrackRow 1
 #define kGPXGroupHeaderRow 0
 #define kVisibleTracksWithoutRoutePlanningSection 1
 #define kRoutePlanningSection 1
@@ -1424,32 +1427,7 @@ static UIViewController *parentController;
     {
         if (item.isMenu)
         {
-            NSDictionary *menuItem = item.groupItems[indexPath.row];
-            NSString *menuCellType = menuItem[@"key"];
-            if ([menuCellType isEqualToString:@"import_track"])
-            {
-                [self onImportClicked];
-            }
-            else if ([menuCellType isEqualToString:@"create_new_trip"])
-            {
-                [self onCreateTrackClicked];
-            }
-            else if ([menuCellType isEqualToString:@"track_recording"])
-            {
-                if ([_iapHelper.trackRecording isActive])
-                {
-                    if ([_savingHelper hasData])
-                    {
-                        [self doPush];
-                        [[OARootViewController instance].mapPanel openTargetViewWithGPX:nil];
-                    }
-                }
-                else
-                {
-                    OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
-                    [self.navigationController pushViewController:pluginsViewController animated:YES];
-                }
-            }
+            [self didSelectGpxTableGroupItem:item indexPath:indexPath];
         }
         else if (indexPath.row == 0 && !_isSearchActive)
         {
@@ -1468,12 +1446,47 @@ static UIViewController *parentController;
     {
         if (indexPath.section == kRecordTrackSection && indexPath.row == kRecordTrackRow)
             return;
-        if (indexPath.row == kGPXGroupHeaderRow)
+        if (indexPath.section == kActionsSection && (indexPath.row == kActionsImportRow || indexPath.row == kActionsNewTrackRow))
+        {
+            [self didSelectGpxTableGroupItem:item indexPath:indexPath];
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        }
+        else if (indexPath.row == kGPXGroupHeaderRow)
             [self selectAllGroup:indexPath.section];
         else
             [self selectDeselectGroupItem:indexPath select:YES];
     }
     [self updateHeaderLabels];
+}
+
+- (void)didSelectGpxTableGroupItem:(OAGpxTableGroup *)item indexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *menuItem = item.groupItems[indexPath.row];
+    NSString *menuCellType = menuItem[@"key"];
+    if ([menuCellType isEqualToString:@"import_track"])
+    {
+        [self onImportClicked];
+    }
+    else if ([menuCellType isEqualToString:@"create_new_trip"])
+    {
+        [self onCreateTrackClicked];
+    }
+    else if ([menuCellType isEqualToString:@"track_recording"])
+    {
+        if ([_iapHelper.trackRecording isActive])
+        {
+            if ([_savingHelper hasData])
+            {
+                [self doPush];
+                [[OARootViewController instance].mapPanel openTargetViewWithGPX:nil];
+            }
+        }
+        else
+        {
+            OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
+            [self.navigationController pushViewController:pluginsViewController animated:YES];
+        }
+    }
 }
 
 #pragma mark - Group header methods

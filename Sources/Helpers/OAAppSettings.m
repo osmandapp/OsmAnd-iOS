@@ -253,7 +253,6 @@
 #define hikingRoutesParameterKey @"hikingRoutesParameter"
 #define cycleRoutesParameterKey @"cycleRoutesParameter"
 #define mountainBikeRoutesParameterKey @"mountainBikeRoutesParameter"
-
 #define mapManuallyRotatingAngleKey @"mapManuallyRotatingAngle"
 
 #define activeMarkerKey @"activeMarkerKey"

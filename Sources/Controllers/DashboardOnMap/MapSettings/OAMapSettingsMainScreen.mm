@@ -41,6 +41,7 @@
 #define kDetailsCategory @"details"
 #define kHideCategory @"hide"
 #define kRoutesCategory @"routes"
+#define kOtherCategory @"other"
 
 #define kUIHiddenCategory @"ui_hidden"
 #define kOSMAssistantCategory @"osm_assistant"
@@ -314,19 +315,20 @@
             BOOL isDifficultyClassification = [routeParameter.name isEqualToString:SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES];
             if (isDifficultyClassification)
             {
-                OAMapStyleParameter *alpineHikingScaleSchemeRoutes = [_styleSettings getParameter:SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES];
-                if (alpineHikingScaleSchemeRoutes && alpineHikingScaleSchemeRoutes.storedValue.length > 0 && ![alpineHikingScaleSchemeRoutes.storedValue isEqualToString:@"disabled"])
+                OAMapStyleParameter *alpineHikingAttr = [_styleSettings getParameter:ALPINE_HIKING_ATTR];
+                if (alpineHikingAttr)
                 {
-                    NSString *parameter = [_settings.alpineHikingScaleSchemeRoutesParameter get];
-                    for (OAMapStyleParameterValue *item in alpineHikingScaleSchemeRoutes.possibleValues)
+                    if ([alpineHikingAttr.value isEqualToString:@"true"])
                     {
-                        if (item.name.length > 0)
+                        OAMapStyleParameter *alpineHikingScaleSchemeRoutes = [_styleSettings getParameter:SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES];
+                        if (alpineHikingScaleSchemeRoutes)
                         {
-                            if ([parameter isEqualToString:item.name])
-                            {
-                                value = [item.title upperCase];
-                            }
+                            value = [OALocalizedString(([NSString stringWithFormat:@"rendering_value_%@_name", alpineHikingScaleSchemeRoutes.value])) upperCase];
                         }
+                    }
+                    else
+                    {
+                        value = OALocalizedString(@"shared_string_off");
                     }
                 }
                 else
@@ -573,7 +575,8 @@
     {
         if (![[cName lowercaseString] isEqualToString:kUIHiddenCategory]
                 && ![[cName lowercaseString] isEqualToString:kRoutesCategory]
-                && ![[cName lowercaseString] isEqualToString:kOSMAssistantCategory])
+                && ![[cName lowercaseString] isEqualToString:kOSMAssistantCategory]
+                && ![[cName lowercaseString] isEqualToString:kOtherCategory])
             [res addObject:cName];
     }
     _allCategories = res;
@@ -631,7 +634,7 @@
     }
     else if (isDifficultyClassification)
     {
-        result = OALocalizedString(@"activity_type_alpine_hiking_scale_scheme_name");
+        result = OALocalizedString(@"rendering_attr_alpineHiking_name");
     }
     return result;
 }
@@ -1109,7 +1112,7 @@
 
     if ([item[@"key"] hasPrefix:@"routes_"])
     {
-        NSArray<NSString *> *hasParameters = @[SHOW_CYCLE_ROUTES_ATTR, SHOW_MTB_ROUTES,SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES, SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES,HIKING_ROUTES_OSMC_ATTR, TRAVEL_ROUTES];
+        NSArray<NSString *> *hasParameters = @[SHOW_CYCLE_ROUTES_ATTR, SHOW_MTB_ROUTES, ALPINE_HIKING_ATTR, SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES,HIKING_ROUTES_OSMC_ATTR, TRAVEL_ROUTES];
         NSString *parameterName = [item[@"key"] substringFromIndex:7];
         if ([hasParameters containsObject:parameterName])
             mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenRoutes param:parameterName];

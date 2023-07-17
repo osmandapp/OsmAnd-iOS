@@ -2433,7 +2433,6 @@
 "activity_type_mountainbike_name" = "Mountain bike";
 "activity_type_racing_name" = "Racing";
 "activity_type_riding_name" = "Riding";
-"activity_type_alpine_hiking_scale_scheme_name" = "Difficulty classification";
 "activity_type_snowmobile_name" = "Snowmobile";
 "activity_type_winter_name" = "Winter";
 "activity_type_water_name" = "Water";
@@ -2571,7 +2570,7 @@
 "rendering_value_disabled_name" = "Disabled";
 "rendering_attr_contourColorScheme_name" = "Contour lines color scheme";
 "routing_attr_short_way_name" = "Fuel-efficient way";
-"rendering_attr_alpineHiking_name" = "Alpine hiking scale (SAC)";
+"rendering_attr_alpineHiking_name" = "Difficulty classification";
 "rendering_attr_showLez_name" = "Show Low Emission Zones";
 "rendering_value_green_name" = "Green";
 "routing_attr_piste_type_nordic_description" = "Trails for nordic or cross-country skiing.";

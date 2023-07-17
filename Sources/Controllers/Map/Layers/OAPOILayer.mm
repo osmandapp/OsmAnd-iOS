@@ -446,7 +446,7 @@
             
             auto point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.latitude, point.longitude));
             auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(kPoiSearchRadius, point31);
-            BOOL amenityFound = obfsDataInterface->findAmenityByObfMapObject(obfMapObject, &amenity, &bbox31);
+            BOOL amenityFound = obfsDataInterface->findAmenityByObfMapObject(obfMapObject, &amenity, &bbox31, nullptr, OsmAnd::InvalidZoomLevel, QStringList(QString::fromNSString(OSM_WIKI_CATEGORY)));
             
             const auto tags = obfMapObject->getResolvedAttributes();
             

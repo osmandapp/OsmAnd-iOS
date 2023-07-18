@@ -2939,3 +2939,4 @@
 "next_turn_widget_desc" = "Das Widget zeigt Informationen zu Ihrer nächsten Abbiegung an, mit einem Bild des Manövers und entsprechender Entfernungsangabe.";
 "time_to_intermediate_widget_desc" = "Das Widget zeigt \"Ankunftszeit\" oder \"Verbleibende Zeit\" zum ersten Zwischenpunkt an. Die Zeit wird während der Navigation ständig aktualisiert, sobald Zwischenpunkte passiert sind, wird die Zeit auf den nächsten Zwischenpunkt aktualisiert.";
 "elevation_profile_widget_desc" = "Zeigt Höhenprofil und Hangneigung der aktuellen Route an.";
+"map_widget_distance_to_intermediate" = "Entfernung bis zum Zwischenstopp";

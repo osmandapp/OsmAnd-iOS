@@ -11,7 +11,7 @@
 
 #import "OARootViewController.h"
 
-@interface OAAppDelegate : UIResponder <UIApplicationDelegate, CPApplicationDelegate>
+@interface OAAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property(strong, readonly, nonatomic) OARootViewController* rootViewController;
 

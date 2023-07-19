@@ -176,10 +176,13 @@ extension WidgetsListViewController {
             }
             if let cell = cell {
                 cell.titleLabel?.text = item.title
+                cell.titleLabel?.accessibilityLabel = item.title
                 cell.descriptionLabel?.text = item.descr
+                cell.descriptionLabel?.accessibilityLabel = item.descr
                 cell.cellImageView?.image = UIImage.templateImageNamed(item.iconName)
                 cell.cellImageView?.tintColor = colorFromRGB(item.iconTint)
                 cell.button?.setTitle(item.obj(forKey: "buttonTitle") as? String, for: .normal)
+                cell.button?.accessibilityLabel = item.obj(forKey: "buttonTitle") as? String
                 cell.button?.removeTarget(nil, action: nil, for: .allEvents)
                 cell.button?.tag = indexPath.section << 10 | indexPath.row
                 cell.button?.addTarget(self, action: #selector(onButtonClicked(sender:)), for: .touchUpInside)

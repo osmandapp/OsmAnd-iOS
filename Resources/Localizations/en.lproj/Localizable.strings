@@ -240,6 +240,7 @@
 "compass_on_circles" = "Compass on circles";
 "add_widget" = "Add widget";
 "add_page" = "Add page";
+"add_row" = "Add row";
 "shared_string_switch_mode" = "Switch mode";
 "go_to_marker_location" = "Go to marker location";
 "side_marker_eta" = "Estimated arrival time";
@@ -3263,3 +3264,7 @@
 "map_widget_altitude_current_location" = "Altitude: current location";
 "map_widget_altitude_map_center" = "Elevation: map center";
 "map_widget_altitude_map_center_desc" = "Shows the elevation above sea level of the current map center.";
+
+"reset_all_settings_desc" = "Reset all settings to default?";
+"no_widgets_here_yet" = "No widgets here yet";
+"no_widgets_descr" = "Add one or more widgets from the list of available widgets.";

@@ -1651,6 +1651,11 @@
     [_driveModeButton updateColorsForPressedState:NO];
 }
 
+- (void) recreateAllControls
+{
+    [_mapInfoController recreateAllControls];
+}
+
 - (void) recreateControls
 {
     [_mapInfoController recreateControls];

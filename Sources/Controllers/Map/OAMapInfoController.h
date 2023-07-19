@@ -34,6 +34,7 @@
 
 - (CGFloat) getLeftBottomY;
 
+- (void) recreateAllControls;
 - (void) recreateControls;
 - (void) updateInfo;
 - (void) updateWeatherToolbarVisible;

@@ -1,5 +1,5 @@
 //
-//  OABaseSegmentedControlViewController.swift
+//  BaseSegmentedControlViewController.swift
 //  OsmAnd Maps
 //
 //  Created by Paul on 25.05.2023.
@@ -8,28 +8,39 @@
 
 import UIKit
 
-class OABaseSegmentedControlViewController: OABaseButtonsViewController {
-    
+@objc(OABaseSegmentedControlViewController)
+@objcMembers
+class BaseSegmentedControlViewController: OABaseButtonsViewController {
+
     private static let scrollOffset: CGFloat = -140
     private static let contentOffset: CGFloat = 48
     private static let segmentHeight: CGFloat = 46
 
+    private var containerView: UIView?
     private var blurEffectView: UIVisualEffectView!
-    
+
     private let separatorView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.separator
         return view
     }()
-    
+
+    //MARK: - UIViewController
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = tableView.backgroundColor
+    }
+
+    //MARK: - Base setup UI
+
+    override func updateNavbar() {
+        super.updateNavbar()
         setupBlurView()
         setupSegmentedControl()
     }
-    
+
     private func setupBlurView() {
         if getNavbarColorScheme() == .gray, !UIAccessibility.isReduceTransparencyEnabled {
             let blurEffect = UIBlurEffect(style: .systemThickMaterial)
@@ -37,52 +48,57 @@ class OABaseSegmentedControlViewController: OABaseButtonsViewController {
             blurEffectView.translatesAutoresizingMaskIntoConstraints = false
         }
     }
-    
+
     private func setupSegmentedControl() {
         let segmentedControl = createSegmentControl()
-        if let segmentedControl {
-            let container = UIView()
-            setupContainerAppearance(container)
-            container.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview(container)
+        if let segmentedControl, self.containerView == nil {
+            let containerView: UIView = UIView()
+            setupContainerAppearance(containerView)
+            containerView.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(containerView)
             NSLayoutConstraint.activate([
-                container.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
-                container.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-                container.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-                container.heightAnchor.constraint(equalToConstant: Self.segmentHeight)
+                containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+                containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+                containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+                containerView.heightAnchor.constraint(equalToConstant: Self.segmentHeight)
             ])
             segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-            container.addSubview(segmentedControl)
+            containerView.addSubview(segmentedControl)
             NSLayoutConstraint.activate([
-                segmentedControl.topAnchor.constraint(equalTo: container.topAnchor, constant: 8),
-                segmentedControl.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -8),
-                segmentedControl.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
-                segmentedControl.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
+                segmentedControl.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8),
+                segmentedControl.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
+                segmentedControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+                segmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
                 segmentedControl.heightAnchor.constraint(equalToConstant: 30)
             ])
-            container.addSubview(separatorView)
+            containerView.addSubview(separatorView)
             separatorView.translatesAutoresizingMaskIntoConstraints = false
             
             NSLayoutConstraint.activate([
-                separatorView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-                separatorView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-                separatorView.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+                separatorView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                separatorView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+                separatorView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
                 separatorView.heightAnchor.constraint(equalToConstant: 0.5)
             ])
             tableView.contentInset = UIEdgeInsets(top: Self.contentOffset, left: 0, bottom: 0, right: 0)
             if let blurEffectView {
-                container.insertSubview(blurEffectView, at: 0)
+                containerView.insertSubview(blurEffectView, at: 0)
                 NSLayoutConstraint.activate([
-                    blurEffectView.topAnchor.constraint(equalTo: container.topAnchor),
-                    blurEffectView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-                    blurEffectView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-                    blurEffectView.bottomAnchor.constraint(equalTo: container.bottomAnchor)
+                    blurEffectView.topAnchor.constraint(equalTo: containerView.topAnchor),
+                    blurEffectView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                    blurEffectView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+                    blurEffectView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
                 ])
                 blurEffectView.alpha = 0
             }
+            self.containerView = containerView
+        }
+        else if segmentedControl == nil, self.containerView != nil {
+            self.containerView?.removeFromSuperview()
+            self.containerView = nil
         }
     }
-    
+
     private func setupContainerAppearance(_ container: UIView) {
         switch getNavbarColorScheme() {
         case .gray:
@@ -99,7 +115,15 @@ class OABaseSegmentedControlViewController: OABaseButtonsViewController {
     func createSegmentControl() -> UISegmentedControl? {
         nil
     }
-    
+
+    //MARK: - Base UI
+
+    override func isNavbarSeparatorVisible() -> Bool {
+        false
+    }
+
+    //MARK: - Selectors
+
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // Check if the table view offset is greater than 0
         let offset = scrollView.contentOffset.y
@@ -108,10 +132,6 @@ class OABaseSegmentedControlViewController: OABaseButtonsViewController {
         } else if offset <= Self.scrollOffset {
             blurEffectView.alpha = 0
         }
-    }
-    
-    override func isNavbarSeparatorVisible() -> Bool {
-        false
     }
 
 }

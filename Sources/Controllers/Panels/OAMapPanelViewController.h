@@ -211,6 +211,7 @@
 
 - (void) setRouteTargetPoint:(BOOL)target intermediate:(BOOL)intermediate latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription;
 
+- (void) recreateAllControls;
 - (void) recreateControls;
 - (void) refreshMap;
 - (void) refreshMap:(BOOL)redrawMap;

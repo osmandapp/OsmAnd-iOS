@@ -31,6 +31,11 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 #define kHeaderDescriptionFont [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]
 #define kHeaderDescriptionFontSmall [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]
 
+static inline UIColor * colorFromRGB(NSInteger rgbValue)
+{
+    return UIColorFromRGB(rgbValue);
+}
+
 static inline UIColor * colorFromARGB(NSInteger rgbValue)
 {
     return UIColorFromARGB(rgbValue);

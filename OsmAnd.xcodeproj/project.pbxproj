@@ -1385,7 +1385,7 @@
 		DA0132E22A1E4A6300920C14 /* ic_custom20_screen_side_bottom@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132DA2A1E4A6200920C14 /* ic_custom20_screen_side_bottom@2x.png */; };
 		DA0132E32A1E4A6300920C14 /* ic_custom20_screen_side_bottom@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132DB2A1E4A6200920C14 /* ic_custom20_screen_side_bottom@3x.png */; };
 		DA0132E42A1E4A6300920C14 /* ic_custom20_screen_side_left@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA0132DC2A1E4A6200920C14 /* ic_custom20_screen_side_left@3x.png */; };
-		DA0132E92A1F540700920C14 /* OABaseSegmentedControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0132E72A1F540700920C14 /* OABaseSegmentedControlViewController.swift */; };
+		DA0132E92A1F540700920C14 /* BaseSegmentedControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0132E72A1F540700920C14 /* BaseSegmentedControlViewController.swift */; };
 		DA0133142A20E24700920C14 /* WidgetsSettingsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0133132A20E24700920C14 /* WidgetsSettingsHelper.swift */; };
 		DA03184222DF0E50008FC564 /* ic_custom_boat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA03183E22DF0E4F008FC564 /* ic_custom_boat@2x.png */; };
 		DA03184422DF0E50008FC564 /* ic_custom_boat@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA03183F22DF0E50008FC564 /* ic_custom_boat@3x.png */; };
@@ -5248,7 +5248,7 @@
 		DA0132DA2A1E4A6200920C14 /* ic_custom20_screen_side_bottom@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_bottom@2x.png"; path = "Resources/Icons/ic_custom20_screen_side_bottom@2x.png"; sourceTree = "<group>"; };
 		DA0132DB2A1E4A6200920C14 /* ic_custom20_screen_side_bottom@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_bottom@3x.png"; path = "Resources/Icons/ic_custom20_screen_side_bottom@3x.png"; sourceTree = "<group>"; };
 		DA0132DC2A1E4A6200920C14 /* ic_custom20_screen_side_left@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom20_screen_side_left@3x.png"; path = "Resources/Icons/ic_custom20_screen_side_left@3x.png"; sourceTree = "<group>"; };
-		DA0132E72A1F540700920C14 /* OABaseSegmentedControlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OABaseSegmentedControlViewController.swift; sourceTree = "<group>"; };
+		DA0132E72A1F540700920C14 /* BaseSegmentedControlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSegmentedControlViewController.swift; sourceTree = "<group>"; };
 		DA0133132A20E24700920C14 /* WidgetsSettingsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetsSettingsHelper.swift; sourceTree = "<group>"; };
 		DA03183E22DF0E4F008FC564 /* ic_custom_boat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_boat@2x.png"; path = "Resources/Icons/ic_custom_boat@2x.png"; sourceTree = "<group>"; };
 		DA03183F22DF0E50008FC564 /* ic_custom_boat@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_boat@3x.png"; path = "Resources/Icons/ic_custom_boat@3x.png"; sourceTree = "<group>"; };
@@ -9951,7 +9951,7 @@
 				46903D6A29B5F77A004459F1 /* OABaseWebViewController.xib */,
 				DA5A7FE526C563A500F274C7 /* OACompoundViewController.h */,
 				DA5A7D3826C563A300F274C7 /* OACompoundViewController.m */,
-				DA0132E72A1F540700920C14 /* OABaseSegmentedControlViewController.swift */,
+				DA0132E72A1F540700920C14 /* BaseSegmentedControlViewController.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -17996,7 +17996,7 @@
 				DA5A854226C563A900F274C7 /* UIColor+RGB.swift in Sources */,
 				DA5A832026C563A800F274C7 /* OAMultilineTextViewCell.m in Sources */,
 				DA5A81D126C563A700F274C7 /* OATerrainLayer.mm in Sources */,
-				DA0132E92A1F540700920C14 /* OABaseSegmentedControlViewController.swift in Sources */,
+				DA0132E92A1F540700920C14 /* BaseSegmentedControlViewController.swift in Sources */,
 				DA5A81B626C563A700F274C7 /* OASearchPoiTypeFilter.m in Sources */,
 				DA5A83B026C563A800F274C7 /* OASubscriptionCancelViewController.mm in Sources */,
 				DA5A850E26C563A900F274C7 /* OAUserInteractionPassThroughView.m in Sources */,

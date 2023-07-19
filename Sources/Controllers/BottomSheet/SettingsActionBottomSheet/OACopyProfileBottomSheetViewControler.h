@@ -16,6 +16,10 @@
 
 - (void) onCopyProfileCompleted;
 
+@optional
+
+- (void) onCopyProfile:(OAApplicationMode *)fromAppMode;
+
 @end
 
 @interface OACopyProfileBottomSheetViewControler : OABaseBottomSheetViewController<UITableViewDelegate, UITableViewDataSource>

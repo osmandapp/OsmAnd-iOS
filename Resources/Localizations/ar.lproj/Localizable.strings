@@ -3003,3 +3003,8 @@
 "shared_string_hidden" = "مخفي";
 "map_3d_mode_action" = "وضع ثلاثي الأبعاد";
 "map_3d_mode_description" = "المس الخريطة بإصبعين وحركهما للأعلى وللأسفل لضبط إمالة الخريطة.";
+"rendering_attr_alpineHikingScaleScheme_description" = "أنواع تصنيف الصعوبة للطرق.";
+"rendering_value_sacScale_name" = "ساك (مقياس )";
+"rendering_value_sacScale_description" = "نادي جبال الألب السويسري";
+"rendering_value_caiScale_name" = "كاي (مقياس)";
+"rendering_value_caiScale_description" = "نادي ألبينو إيتاليانو (نادي جبال الألب الإيطالي)";

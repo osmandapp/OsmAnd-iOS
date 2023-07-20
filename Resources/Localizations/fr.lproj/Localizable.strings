@@ -1169,7 +1169,7 @@
 "rendering_attr_surface_mud_name" = "Boue";
 "routing_attr_avoid_ice_roads_fords_name" = "Éviter les routes sur glace, les fjords";
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
-"rendering_attr_alpineHiking_name" = "Difficulté des sentiers de randonnée (CAS)";
+"rendering_attr_alpineHiking_name" = "Classification de la difficulté";
 "rendering_attr_hideOverground_name" = "Objets au sol";
 "rendering_attr_hmRendered_description" = "Augmenter le niveau de détail affiché.";
 "routing_attr_height_obstacles_name" = "Utiliser les données d\'altitude";
@@ -2998,3 +2998,8 @@
 "visible_in_3d_mode" = "Visible en mode 3D";
 "map_2d_mode_action" = "Mode 2D";
 "map_3d_mode_description" = "Touchez la carte avec deux doigts et déplacez-les vers le haut ou vers le bas pour modifier l'inclinaison de la carte.";
+"rendering_value_sacScale_description" = "Swiss Alpine Club (litt. Club Alpin Suisse)";
+"rendering_value_caiScale_description" = "Club Alpino Italiano (litt. Club Alpin Italien)";
+"rendering_attr_alpineHikingScaleScheme_description" = "Classifications de difficulté pour les pistes.";
+"rendering_value_sacScale_name" = "SAC";
+"rendering_value_caiScale_name" = "CAI";

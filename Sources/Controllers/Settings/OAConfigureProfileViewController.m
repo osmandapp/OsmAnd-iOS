@@ -495,12 +495,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     else if ([targetScreenKey isEqualToString:@"configure_screen"])
     {
         [self setCurrentModeActive:EOADashboardScreenTypeScreen];
-        [self.navigationController popToViewController:OARootViewController.instance animated:NO];
     }
-//    else if ([key isEqualToString:@"ui_customization"])
-//    {
-//
-//    }
     else if ([targetScreenKey isEqualToString:@"copy_profile"])
     {
         OACopyProfileBottomSheetViewControler *bottomSheet = [[OACopyProfileBottomSheetViewControler alloc] initWithMode:_appMode];

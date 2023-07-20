@@ -3005,3 +3005,7 @@
 "rendering_attr_alpineHikingScaleScheme_description" = "Klassificeringstyper for sværhedsgrad af ruter.";
 "rendering_value_sacScale_description" = "Den schweiziske alpeklub";
 "rendering_value_caiScale_description" = "Club Alpino Italiano (Den italienske alpeklub)";
+"add_row" = "Tilføj række";
+"no_widgets_here_yet" = "Ingen moduler her endnu";
+"reset_all_settings_desc" = "Nulstil alle indstillinger til standard?";
+"no_widgets_descr" = "Tilføj et eller flere moduler fra listen over tilgængelige moduler.";

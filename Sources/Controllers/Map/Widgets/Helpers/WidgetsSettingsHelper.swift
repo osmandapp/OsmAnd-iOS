@@ -47,20 +47,20 @@ class WidgetsSettingsHelper: NSObject {
         settings.quickActionIsOn.resetMode(toDefault: appMode)
     }
 
-    func copyConfigureScreenSettings(from appMode: OAApplicationMode) {
+    func copyConfigureScreenSettings(fromAppMode: OAApplicationMode) {
         for panel in WidgetsPanel.values {
-            copyWidgetsForPanel(from: appMode, panel: panel)
+            copyWidgetsForPanel(fromAppMode: fromAppMode, panel: panel)
         }
-        copyPrefFromAppMode(pref: settings.transparentMapTheme, from: appMode)
-        copyPrefFromAppMode(pref: settings.compassMode, from: appMode)
-        copyPrefFromAppMode(pref: settings.showDistanceRuler, from: appMode)
-        copyPrefFromAppMode(pref: settings.quickActionIsOn, from: appMode)
+        copyPrefFromAppMode(pref: settings.transparentMapTheme, fromAppMode: fromAppMode)
+        copyPrefFromAppMode(pref: settings.compassMode, fromAppMode: fromAppMode)
+        copyPrefFromAppMode(pref: settings.showDistanceRuler, fromAppMode: fromAppMode)
+        copyPrefFromAppMode(pref: settings.quickActionIsOn, fromAppMode: fromAppMode)
     }
 
-    func copyWidgetsForPanel(from appMode: OAApplicationMode, panel: WidgetsPanel) {
+    func copyWidgetsForPanel(fromAppMode: OAApplicationMode, panel: WidgetsPanel) {
         let filter = kWidgetModeEnabled | KWidgetModeAvailable
         let panels = [panel]
-        let widgetInfosToCopy = widgetRegistry.getWidgetsForPanel(appMode, filterModes: Int(filter), panels: panels)
+        let widgetInfosToCopy = widgetRegistry.getWidgetsForPanel(fromAppMode, filterModes: Int(filter), panels: panels)
 
         var previousPage = -1
         var newPagedOrder = [[String]]()
@@ -100,10 +100,10 @@ class WidgetsSettingsHelper: NSObject {
         panel.setWidgetsOrder(pagedOrder: newPagedOrder, appMode: appMode)
     }
 
-    func getWidgetsPagedOrder(from appMode: OAApplicationMode, panel: WidgetsPanel, filter: Int) -> [[String]] {
+    func getWidgetsPagedOrder(fromAppMode: OAApplicationMode, panel: WidgetsPanel, filter: Int) -> [[String]] {
         var previousPage = -1
         let panels = [panel]
-        let widgetInfos = widgetRegistry.getWidgetsForPanel(appMode, filterModes: filter, panels: panels)
+        let widgetInfos = widgetRegistry.getWidgetsForPanel(fromAppMode, filterModes: filter, panels: panels)
         var pagedOrder = [[String]]()
         for widgetInfo in widgetInfos! {
             guard let widgetInfo = widgetInfo as? MapWidgetInfo else { continue }
@@ -172,7 +172,7 @@ class WidgetsSettingsHelper: NSObject {
         return original && widgetType != nil && widgetType!.defaultPanel != widgetInfo.widgetPanel
     }
 
-    private func copyPrefFromAppMode(pref: OACommonPreference, from appMode: OAApplicationMode) {
-        pref.setValueFrom(pref.toStringValue(appMode), appMode: appMode)
+    private func copyPrefFromAppMode(pref: OACommonPreference, fromAppMode: OAApplicationMode) {
+        pref.setValueFrom(pref.toStringValue(fromAppMode), appMode: appMode)
     }
 }

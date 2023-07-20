@@ -523,6 +523,14 @@
     return res;
 }
 
+- (void) recreateAllControls
+{
+    [_mapWidgetRegistry clearWidgets];
+    [self registerAllControls];
+    [_mapWidgetRegistry reorderWidgets];
+    [self recreateControls];
+}
+
 - (void) recreateControls
 {
     OAApplicationMode *appMode = _settings.applicationMode.get;

@@ -33,6 +33,7 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 - (void)commonInit;
 - (void)postInit;
 
+- (void)updateAppearance;
 - (void)updateNavbar;
 - (void)updateUI:(BOOL)animated;
 

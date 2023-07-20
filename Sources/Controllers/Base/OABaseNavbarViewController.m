@@ -101,34 +101,7 @@
     if ([self.navigationController isNavigationBarHidden] && [self isNavbarVisible])
         [self.navigationController setNavigationBarHidden:NO animated:YES];
 
-    BOOL isLargeTitle = [self getNavbarStyle] == EOABaseNavbarStyleLargeTitle;
-
-    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
-    [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = [self getNavbarBackgroundColor];
-    appearance.titleTextAttributes = @{
-        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : [self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle ? UIColor.clearColor : [self getTitleColor]
-    };
-    appearance.largeTitleTextAttributes = @{
-        NSForegroundColorAttributeName : [self getLargeTitleColor]
-    };
-
-    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
-    
-    if (![self isNavbarSeparatorVisible])
-    {
-        appearance.shadowImage = nil;
-        appearance.shadowColor = nil;
-        blurAppearance.shadowColor = nil;
-        blurAppearance.shadowImage = nil;
-    }
-    
-    self.navigationController.navigationBar.standardAppearance = [self isNavbarBlurring] ? blurAppearance : appearance;
-    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-
-    self.navigationController.navigationBar.tintColor = [self getNavbarButtonsTintColor];
-    self.navigationItem.largeTitleDisplayMode = isLargeTitle ? UINavigationItemLargeTitleDisplayModeAlways : UINavigationItemLargeTitleDisplayModeNever;
+    [self updateAppearance];
 
     if (_navbarHeightSmall == 0)
         _navbarHeightSmall = self.navigationController.navigationBar.frame.size.height;
@@ -238,6 +211,38 @@
 - (BOOL)isNavbarVisible
 {
     return YES;
+}
+
+- (void)updateAppearance
+{
+    BOOL isLargeTitle = [self getNavbarStyle] == EOABaseNavbarStyleLargeTitle;
+
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor = [self getNavbarBackgroundColor];
+    appearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : [self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle ? UIColor.clearColor : [self getTitleColor]
+    };
+    appearance.largeTitleTextAttributes = @{
+        NSForegroundColorAttributeName : [self getLargeTitleColor]
+    };
+
+    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+    
+    if (![self isNavbarSeparatorVisible])
+    {
+        appearance.shadowImage = nil;
+        appearance.shadowColor = nil;
+        blurAppearance.shadowColor = nil;
+        blurAppearance.shadowImage = nil;
+    }
+    
+    self.navigationController.navigationBar.standardAppearance = [self isNavbarBlurring] ? blurAppearance : appearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+
+    self.navigationController.navigationBar.tintColor = [self getNavbarButtonsTintColor];
+    self.navigationItem.largeTitleDisplayMode = isLargeTitle ? UINavigationItemLargeTitleDisplayModeAlways : UINavigationItemLargeTitleDisplayModeNever;
 }
 
 - (void)updateNavbar

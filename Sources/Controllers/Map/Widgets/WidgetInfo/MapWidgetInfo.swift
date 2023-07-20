@@ -138,7 +138,9 @@ class MapWidgetInfo: NSObject, Comparable {
         for visibility in widgetsVisibility {
             newVisibilityString.append(visibility + SETTINGS_SEPARATOR)
         }
-        newVisibilityString.removeLast()
+        if !newVisibilityString.isEmpty {
+            newVisibilityString.removeLast()
+        }
 
         getVisibilityPreference().set(newVisibilityString, mode: appMode)
 

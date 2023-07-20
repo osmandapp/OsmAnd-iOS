@@ -3012,3 +3012,7 @@
 "rendering_value_caiScale_name" = "cai";
 "rendering_value_caiScale_description" = "Club Alpino Italiano";
 "rendering_attr_alpineHikingScaleScheme_description" = "Tipos de clasificación de dificultad para rutas.";
+"reset_all_settings_desc" = "¿Restablecer todos los ajustes a los predefinidos?";
+"add_row" = "Añadir fila";
+"no_widgets_here_yet" = "Todavía sin widgets aquí";
+"no_widgets_descr" = "Añade uno o más widgets de la lista de widgets disponibles.";

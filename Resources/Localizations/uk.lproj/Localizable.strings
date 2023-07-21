@@ -3013,3 +3013,7 @@
 "rendering_attr_alpineHikingScaleScheme_description" = "Типи класифікації складності маршрутів.";
 "rendering_value_sacScale_description" = "Swiss Alpine Club";
 "rendering_value_caiScale_name" = "cai";
+"add_row" = "Додати рядок";
+"no_widgets_here_yet" = "Тут ще немає віджетів";
+"reset_all_settings_desc" = "Скинути всі налаштування до типових?";
+"no_widgets_descr" = "Додайте один або декілька віджетів зі списку доступних.";

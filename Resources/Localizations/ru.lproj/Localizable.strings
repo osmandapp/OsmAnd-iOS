@@ -556,7 +556,7 @@
 "shared_string_never" = "Никогда";
 "general_settings_2" = "Общие настройки";
 "speed_limit_exceed" = "Допустимое превышение скорости";
-"speed_limit_exceed_message" = "Выберите значение скорости, при превышении которого вы получите голосовое предупреждение.";
+"speed_limit_exceed_message" = "Значение, при превышении которого прозвучит голосовое предупреждение.";
 "wake_on_voice" = "Автовключение экрана перед поворотом";
 "routing_settings_2" = "Настройки навигации";
 "impassable_road" = "Исключить дороги…";
@@ -789,7 +789,7 @@
 "osm_live_payment_header" = "Интервал оплаты:";
 "osm_live_payment_contribute_descr" = "Пожертвования помогают финансировать картографию OSM.";
 "purchase_dialog_title" = "Выберите план";
-"purchase_dialog_travel_description" = "Приобретите один из перечисленных ниже, чтоб получить функциональность автономного туристического гида:";
+"purchase_dialog_travel_description" = "Для получения автономного путеводителя приобретите что-нибудь из перечисленного:";
 "free_version_message" = "Вы можете скачать или обновить %@ карт(ы).";
 "get_osmand_live" = "Подпишитесь на OsmAnd Live и разблокируйте все функции: ежедневные обновления карт с неограниченной загрузкой, все платные и бесплатные плагины, Википедия, Викигид и многое другое.";
 "osm_live_subscription" = "Подписка OsmAnd Live";
@@ -1678,8 +1678,8 @@
 "base_profile_descr_pedestrian" = "Прогулки, пеший туризм, бег";
 "base_profile_descr_bicycle" = "Горный велосипед, мопед, лошадь";
 "base_profile_descr_car" = "Автомобиль, грузовик, мотоцикл";
-"select_navigation_icon" = "Значок местоположения при движении";
-"select_map_icon" = "Значок местоположения в состоянии покоя";
+"select_navigation_icon" = "Значок при движении";
+"select_map_icon" = "Значок при покое";
 "select_icon_profile_dialog_title" = "Выберите значок";
 "select_color" = "Выберите цвет";
 "profile_alert_need_profile_name_title" = "Введите имя профиля";
@@ -1689,7 +1689,7 @@
 "create_profile" = "Создать профиль";
 "import_from_files" = "Импорт из файлов";
 "shared_string_exit" = "Выход";
-"select_nav_profile_dialog_message" = "«Режим навигации» определяет правила расчёта маршрутов, с доступными офлайн- или онлайн-механизмами маршрутизации.";
+"select_nav_profile_dialog_message" = "«Режим навигации» определяет правила расчёта маршрутов с использованием автономных или онлайн-маршрутизаторов.";
 "change_map_behavior" = "Изменение поведения карты во время навигации";
 "map_during_navigation" = "Карта во время навигации";
 "vehicle_parameters" = "Параметры транспортного средства";
@@ -2075,7 +2075,7 @@
 "delete_group_confirm_short" = "Удалить группу?";
 "delete_group_confirm" = "Вы уверены, что хотите удалить группу ”%@”?";
 "upload_to_openstreetmap" = "Отправить в OpenStreetMap";
-"change_application_profile" = "Изменить профиль приложения";
+"change_application_profile" = "Сменить профиль";
 "select_application_profile" = "Выбрать профиль приложения";
 "track_coloring_solid" = "Сплошной";
 
@@ -2426,7 +2426,7 @@
 "purchases_feature_desc_nautical" = "Информация о морских глубинах";
 "routeInfo_horse_scale_description" = "Отрисовка маршрута в зависимости от сложности конных троп";
 "simulation_constant_mode_desc" = "Моделирование с заданной скоростью.";
-"purchases_feature_desc_combined_wiki" = "Читайте статьи Википедии и Викигида на ходу, без подключения к интернету. Офлайн-данные разделены по странам и доступны на всех языках.";
+"purchases_feature_desc_combined_wiki" = "Читайте статьи Википедии и Викигида на ходу, без подключения к интернету. Данные разделены по странам и доступны на всех языках.";
 "not_available_with" = "Недоступно с %@";
 "shared_string_includes" = "Включает";
 "transport_hazmat_no_desc" = "Дороги и туннели могут ограничивать транспортировку опасных материалов.";

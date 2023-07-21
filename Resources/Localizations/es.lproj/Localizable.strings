@@ -3002,3 +3002,7 @@
 "rendering_value_sacScale_description" = "Club Alpino Suizo";
 "rendering_value_caiScale_name" = "cai";
 "rendering_value_caiScale_description" = "Club Alpino Italiano";
+"reset_all_settings_desc" = "¿Restablecer todos los ajustes por defecto?";
+"no_widgets_descr" = "Añade uno o varios widgets de la lista de widgets disponibles.";
+"add_row" = "Añadir una fila";
+"no_widgets_here_yet" = "Todavía no hay widgets";

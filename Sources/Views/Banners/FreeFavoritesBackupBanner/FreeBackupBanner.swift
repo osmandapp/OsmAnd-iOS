@@ -8,44 +8,32 @@
 
 import UIKit
 
+@objcMembers
 final class FreeBackupBanner: UIView {
-    enum BannerType {
-        case favorite, settings
+    @objc enum BannerType: Int {
+        case favorite
+        case settings
         
     }
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var titleLabel: UILabel!
-    @IBOutlet private weak var descriptionLabel: UILabel! {
+    @IBOutlet weak var descriptionLabel: UILabel! {
         didSet {
             descriptionLabel.text = localizedString("banner_payment_free_backup_description")
         }
     }
     @IBOutlet private weak var separatorView: UIView!
-    @IBOutlet private weak var osmAndCloudFavoriteButton: UIButton! {
+    @IBOutlet private weak var osmAndCloudButton: UIButton! {
         didSet {
-            osmAndCloudFavoriteButton.titleLabel?.text = localizedString("banner_payment_free_backup_cloud_button_title")
-            osmAndCloudFavoriteButton.layer.cornerRadius = 10
-            osmAndCloudFavoriteButton.isHidden = true
-        }
-    }
-    
-    @IBOutlet private weak var osmAndCloudSettingsButton: UIButton! {
-        didSet {
-            osmAndCloudSettingsButton.titleLabel?.text = localizedString("banner_payment_free_backup_cloud_button_title")
-            osmAndCloudSettingsButton.isHidden = true
+            osmAndCloudButton.titleLabel?.text = localizedString("banner_payment_free_backup_cloud_button_title")
         }
     }
     
     var didCloseButtonAction: (() -> Void)? = nil
+    var didOsmAndCloudButtonAction: (() -> Void)? = nil
     
-    /*
-     banner_payment_free_backup_description = "Register in OsmAnd Cloud to get free backup for favorites and settings";
-     banner_payment_free_backup_favorite_title = "Free Favorites Backup"
-     banner_payment_free_backup_settings_title = "Free Settings Backup"
-     banner_payment_free_backup_cloud_button_title = "Get OsmAnd Cloud";
-     
-     */
-    // Free Settings Backup
+    var defaultFrameHeight = 120
+    var leadingTrailingOffset = 137
     
     func configure(bannerType: BannerType) {
         switch bannerType {
@@ -53,22 +41,19 @@ final class FreeBackupBanner: UIView {
             titleLabel.text = localizedString("banner_payment_free_backup_favorite_title")
             imageView.image = UIImage(named: "ic_custom_folder_cloud_colored")
             separatorView.isHidden = false
-            osmAndCloudFavoriteButton.isHidden = false
-            
         case .settings:
             titleLabel.text = localizedString("banner_payment_free_backup_settings_title")
             imageView.image = UIImage(named: "ic_custom_settings_cloud_colored")
             separatorView.isHidden = true
-            osmAndCloudSettingsButton.isHidden = false
         }
     }
     
     // MARK: - @IBActions
-    @IBAction func onOsmAndCloudButtonAction(_ sender: UIButton) {
-        print(#function)
+    @IBAction private func onOsmAndCloudButtonAction(_ sender: UIButton) {
+        didOsmAndCloudButtonAction?()
     }
     
-    @IBAction func onCloseButtonAction(_ sender: UIButton) {
+    @IBAction private func onCloseButtonAction(_ sender: UIButton) {
         didCloseButtonAction?()
     }
 }

@@ -41,10 +41,13 @@
 #import "OAWeatherSettingsViewController.h"
 #import "OAWikipediaPlugin.h"
 #import "OAWikipediaSettingsViewController.h"
+#import "OsmAnd_Maps-Swift.h"
+#import "OACloudIntroductionViewController.h"
 
 #define kSidePadding 16.
 #define BACKUP_INDEX_DIR @"backup"
 #define OSMAND_SETTINGS_FILE_EXT @"osf"
+#define kWasClodedFreeBackupSettingsBannerKey @"wasClodedFreeBackupSettingsBanner"
 
 typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeNone = 0,
@@ -71,6 +74,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     UIView *_cpyProfileViewUnderlay;
     NSString *_importedFileName;
     NSString *_targetScreenKey;
+    FreeBackupBanner *_freeBackupBanner;
 }
 
 #pragma mark - Initialization
@@ -100,6 +104,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     [super viewDidLoad];
 
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+    [self.tableView registerClass:[FreeBackupBannerCell class] forCellReuseIdentifier:[FreeBackupBannerCell getCellIdentifier]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -111,6 +116,11 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [self openTargetSettingsScreen:_targetScreenKey];
         _targetScreenKey = nil;
     }
+}
+
+- (BOOL) refreshOnAppear
+{
+    return YES;
 }
 
 #pragma mark - Base UI
@@ -157,6 +167,18 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         ]];
         [sectionHeaderTitles addObject:OALocalizedString(@"configure_profile")];
         [sectionFooterTitles addObject:@""];
+    }
+    if ([self isAvailablePaymentBanner])
+    {
+        {
+            [data addObject:@[
+                @{
+                    @"type" : [FreeBackupBannerCell getCellIdentifier]
+                }
+            ]];
+            [sectionHeaderTitles addObject:@""];
+            [sectionFooterTitles addObject:@""];
+        }
     }
 
     NSMutableArray<NSDictionary *> *profileSettings = [NSMutableArray new];
@@ -393,7 +415,61 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
         return cell;
     }
+    else if ([item[@"type"] isEqualToString:[FreeBackupBannerCell getCellIdentifier]])
+    {
+        FreeBackupBannerCell *cell = (FreeBackupBannerCell *)[self.tableView dequeueReusableCellWithIdentifier:[FreeBackupBannerCell getCellIdentifier]];
+        if (!_freeBackupBanner) {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"FreeBackupBanner" owner:self options:nil];
+            _freeBackupBanner = (FreeBackupBanner *)nib[0];
+            __weak OAConfigureProfileViewController *weakSelf = self;
+            _freeBackupBanner.didOsmAndCloudButtonAction = ^{
+                [weakSelf.navigationController pushViewController:[OACloudIntroductionViewController new] animated:YES];
+            };
+            _freeBackupBanner.didCloseButtonAction = ^{
+                [weakSelf closeFreeBackupBanner];
+            };
+            [_freeBackupBanner configureWithBannerType:BannerTypeFavorite];
+            
+            _freeBackupBanner.translatesAutoresizingMaskIntoConstraints = NO;
+            [cell.contentView addSubview:_freeBackupBanner];
+            [NSLayoutConstraint activateConstraints:@[
+                [_freeBackupBanner.topAnchor constraintEqualToAnchor:cell.contentView.topAnchor],
+                [_freeBackupBanner.bottomAnchor constraintEqualToAnchor:cell.contentView.bottomAnchor],
+                [_freeBackupBanner.leadingAnchor constraintEqualToAnchor:cell.contentView.leadingAnchor],
+                [_freeBackupBanner.trailingAnchor constraintEqualToAnchor:cell.contentView.trailingAnchor],
+            ]];
+        }
+        return cell;
+        
+    }
     return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    if ([item[@"type"] isEqualToString:[FreeBackupBannerCell getCellIdentifier]])
+    {
+        CGFloat height = [OAUtilities calculateTextBounds:_freeBackupBanner.descriptionLabel.text width:tableView.frame.size.width - _freeBackupBanner.leadingTrailingOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
+        return _freeBackupBanner.defaultFrameHeight + height;
+    }
+    else
+    {
+        return UITableViewAutomaticDimension;
+    }
+}
+
+- (BOOL)isAvailablePaymentBanner
+{
+    return ![[NSUserDefaults standardUserDefaults] boolForKey:kWasClodedFreeBackupSettingsBannerKey]
+    && ![OAIAPHelper isSubscribedToOsmAndPro]
+    && [OAAppSettings.sharedManager.backupPurchaseActive get];
+}
+
+- (void)closeFreeBackupBanner
+{
+    _freeBackupBanner = nil;
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kWasClodedFreeBackupSettingsBannerKey];
 }
 
 - (NSInteger)sectionsCount

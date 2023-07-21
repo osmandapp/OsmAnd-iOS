@@ -63,8 +63,9 @@
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
+    __weak OACompoundViewController *weakSelf = self;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [self applySafeAreaMargins:self.view.frame.size];
+        [weakSelf applySafeAreaMargins:weakSelf.view.frame.size];
     } completion:nil];
 }
 

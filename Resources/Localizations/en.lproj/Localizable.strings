@@ -2995,6 +2995,11 @@
 "subscription_banner_no_free_maps_title" = "You spent all free downloads";
 "subscription_banner_osmand_pro_title" = "Get hourly, daily or weekly map updates with OsmAnd Pro.";
 
+"banner_payment_free_backup_description" = "Register in OsmAnd Cloud to get free backup for favorites and settings";
+"banner_payment_free_backup_favorite_title" = "Free Favorites Backup";
+"banner_payment_free_backup_settings_title" = "Free Settings Backup";
+"banner_payment_free_backup_cloud_button_title" = "Get OsmAnd Cloud";
+
 "compass_visible_if_map_rotated" = "Visible if map is rotated";
 "compass_visible_in_rotated_mode_descr" = "Hidden when north is up";
 "compass_options_description" = "Click on compass to switch map orientation mode";

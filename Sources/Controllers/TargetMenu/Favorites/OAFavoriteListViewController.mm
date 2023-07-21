@@ -26,13 +26,19 @@
 #import "OAOsmAndFormatter.h"
 
 #import "OsmAndApp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
+#import "OAChoosePlanHelper.h"
+#import "OACloudIntroductionViewController.h"
+#import "OAAppSettings.h"
+
 
 #define _(name) OAFavoriteListViewController__##name
+#define kWasClodedFreeBackupFavoritesBannerKey @"wasClodedFreeBackupFavoritesBanner"
 
 typedef enum
 {
@@ -88,6 +94,7 @@ typedef enum
     UIBarButtonItem *_directionButton;
     UIBarButtonItem *_editButton;
     UISearchController *_searchController;
+    FreeBackupBanner *_freeBackupBanner;
     
     BOOL _isSearchActive;
     BOOL _isFiltered;
@@ -134,10 +141,74 @@ static UIViewController *parentController;
     self.tabBarController.navigationItem.title = OALocalizedString(@"my_favorites");
 }
 
+- (BOOL)isAvailablePaymentBanner
+{
+    return ![[NSUserDefaults standardUserDefaults] boolForKey:kWasClodedFreeBackupFavoritesBannerKey]
+    && ![OAIAPHelper isSubscribedToOsmAndPro]
+    && [OAAppSettings.sharedManager.backupPurchaseActive get];
+    
+}
+
+- (void)resizeHeaderBanner {
+    if ([self isAvailablePaymentBanner] && _freeBackupBanner)
+    {
+        CGFloat height = [OAUtilities calculateTextBounds:_freeBackupBanner.descriptionLabel.text width:self.favoriteTableView.frame.size.width - _freeBackupBanner.leadingTrailingOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
+        _freeBackupBanner.frame = CGRectMake(0,
+                                             0,
+                                             self.favoriteTableView.frame.size.width,
+                                             _freeBackupBanner.defaultFrameHeight + height);
+        self.favoriteTableView.tableHeaderView = _freeBackupBanner;
+    }
+}
+
+- (void)configurePaymentBanner
+{
+    if ([self isAvailablePaymentBanner])
+    {
+        if (!_freeBackupBanner) {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"FreeBackupBanner" owner:self options:nil];
+            _freeBackupBanner = (FreeBackupBanner *)nib[0];
+            __weak OAFavoriteListViewController *weakSelf = self;
+            _freeBackupBanner.didOsmAndCloudButtonAction = ^{
+            [weakSelf.navigationController pushViewController:[OACloudIntroductionViewController new] animated:YES];
+            };
+            _freeBackupBanner.didCloseButtonAction = ^{
+                [weakSelf closeFreeBackupBanner];
+            };
+            [_freeBackupBanner configureWithBannerType:BannerTypeFavorite];
+            [self changeContentInsetTop:20];
+        }
+    }
+    else if (_freeBackupBanner) {
+        [self closeFreeBackupBanner];
+    }
+}
+
+- (void)closeFreeBackupBanner
+{
+    self.favoriteTableView.tableHeaderView = nil;
+    [self changeContentInsetTop:-20];
+    _freeBackupBanner = nil;
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kWasClodedFreeBackupFavoritesBannerKey];
+}
+
+- (void)changeContentInsetTop:(CGFloat)top
+{
+    UIEdgeInsets insets = [self.favoriteTableView contentInset];
+    [self.favoriteTableView setContentInset:UIEdgeInsetsMake(insets.top + top, insets.left, insets.bottom, insets.right)];
+}
+
+
 -(void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    [self resizeHeaderBanner];
 }
 
 -(UIView *) getMiddleView
@@ -304,6 +375,7 @@ static UIViewController *parentController;
     self.definesPresentationContext = YES;
     [self setupSearchController:NO filtered:NO];
     [self addAccessibilityLabels];
+    [self configurePaymentBanner];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];

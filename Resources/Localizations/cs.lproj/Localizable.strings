@@ -2913,3 +2913,4 @@
 "trip_recording_downhill_widget_desc" = "Zobrazuje součet všech klesání aktuálně zaznamenané jízdy.";
 "trip_recording_uphill_widget_desc" = "Zobrazuje součet všech stoupání aktuálně zaznamenané cesty.";
 "first_marker_widget_desc" = "Widget můžete nakonfigurovat tak, aby zobrazoval vzdálenost nebo odhadovaný čas příjezdu k první mapové značce.";
+"map_widget_distance_to_intermediate" = "Vzdálenost do mezicíle";

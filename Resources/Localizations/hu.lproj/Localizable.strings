@@ -1087,7 +1087,7 @@
 "rendering_attr_highway_class_street_name" = "Utca";
 "rendering_value_lightgreen_name" = "Világoszöld";
 "rendering_attr_pisteGrooming_name" = "Sípálya kezeltség";
-"rendering_attr_alpineHiking_name" = "Alpesi túra nehézségi szint (SAC)";
+"rendering_attr_alpineHiking_name" = "Nehézségi besorolás";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Hálózathoz felvétel";
 "routing_attr_avoid_ferries_description" = "Elkerüli a kompokat";
 "rendering_value_disabled_name" = "Letiltva";
@@ -2360,3 +2360,5 @@
 "uninstall_speed_cameras" = "Traffipaxok eltávolítása";
 "icon_group_service" = "Szolgáltatás";
 "announce_when_exceeded" = "Bemondás túllépéskor";
+"rendering_value_sacScale_description" = "Svájci Alpesi Club";
+"rendering_value_caiScale_description" = "Club Alpino Italiano (Olasz Alpesi Club)";

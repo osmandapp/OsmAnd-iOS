@@ -1443,7 +1443,7 @@
 "rendering_attr_surface_sett_name" = "ضبط";
 "routing_attr_allow_intermediate_name" = "السماح بالمسارات المتوسطة";
 "rendering_attr_smoothness_impassable_name" = "غير سالك";
-"rendering_attr_alpineHiking_name" = "مقياس رياضة الهايكنق (SAC)";
+"rendering_attr_alpineHiking_name" = "تصنيف الصعوبة";
 "routing_attr_driving_style_prefer_unpaved_name" = "تفضيل الطرق الغير معبدة";
 "rendering_attr_surface_fine_gravel_name" = "حصى دقيق";
 "rendering_attr_contourColorScheme_description" = "لون الخطوط الكنتورية";
@@ -3004,7 +3004,11 @@
 "map_3d_mode_action" = "وضع ثلاثي الأبعاد";
 "map_3d_mode_description" = "المس الخريطة بإصبعين وحركهما للأعلى وللأسفل لضبط إمالة الخريطة.";
 "rendering_attr_alpineHikingScaleScheme_description" = "أنواع تصنيف الصعوبة للطرق.";
-"rendering_value_sacScale_name" = "ساك (مقياس )";
+"rendering_value_sacScale_name" = "مقياس ساك";
 "rendering_value_sacScale_description" = "نادي جبال الألب السويسري";
-"rendering_value_caiScale_name" = "كاي (مقياس)";
+"rendering_value_caiScale_name" = "مقياس كاي";
 "rendering_value_caiScale_description" = "نادي ألبينو إيتاليانو (نادي جبال الألب الإيطالي)";
+"add_row" = "اضف سطر";
+"no_widgets_descr" = "أضف أداة واحدة أو أكثر من قائمة الأدوات المتاحة.";
+"reset_all_settings_desc" = "إعادة تعيين كافة الإعدادات إلى الافتراضي؟";
+"no_widgets_here_yet" = "لا يوجد ويدجت هنا حتى الان";

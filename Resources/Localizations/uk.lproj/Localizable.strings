@@ -791,7 +791,7 @@
 "update_frequency" = "Частота оновлень";
 "osmand_live_wifi_only" = "Оновлювати лише через WiFi";
 "osmand_live_donation_header" = "Налаштування внесків";
-"donations" = "Внески";
+"donations" = "Пожертвування";
 "osmand_live_donation_switch_title" = "Допомога спільноті OpenStreetMap";
 "osmand_live_donation_switch_descr" = "Частина вашої допомоги розподіляється поміж користувачами OSM, які вносять зміни до OpenStreetMap. Вартість передплати залишається незмінною";
 "osmand_live_donations_enter_email" = "Введіть вашу адресу електронної пошти";

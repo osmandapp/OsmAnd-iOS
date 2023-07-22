@@ -1883,11 +1883,11 @@ static const double d180PI = 180.0 / M_PI_2;
 + (CGFloat) calculateScreenWidth
 {
     if (NSThread.isMainThread)
-        return UIApplication.sharedApplication.delegate.window.bounds.size.width;
+        return UIApplication.sharedApplication.keyWindow.bounds.size.width;
     // else dispatch to the main thread
     __block CGFloat result;
     dispatch_sync(dispatch_get_main_queue(), ^{
-        result = UIApplication.sharedApplication.delegate.window.bounds.size.width;
+        result = UIApplication.sharedApplication.keyWindow.bounds.size.width;
     });
     return result;
 }
@@ -1897,12 +1897,12 @@ static const double d180PI = 180.0 / M_PI_2;
     if (NSThread.isMainThread)
     {
         CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
-        return UIApplication.sharedApplication.delegate.window.bounds.size.height - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
+        return UIApplication.sharedApplication.keyWindow.bounds.size.height - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
     }
     __block CGFloat result;
     dispatch_sync(dispatch_get_main_queue(), ^{
         CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
-        result = UIApplication.sharedApplication.delegate.window.bounds.size.height - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
+        result = UIApplication.sharedApplication.keyWindow.bounds.size.height - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
     });
     return result;
 }
@@ -1912,7 +1912,7 @@ static const double d180PI = 180.0 / M_PI_2;
     BOOL isiOSAppOnMac = [NSProcessInfo processInfo].isiOSAppOnMac;
 
     return !isiOSAppOnMac && [UIDevice.currentDevice userInterfaceIdiom] == UIUserInterfaceIdiomPad && (DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width ||
-            UIApplication.sharedApplication.delegate.window.bounds.size.height != [[UIScreen mainScreen] bounds].size.height);
+            UIApplication.sharedApplication.keyWindow.bounds.size.height != [[UIScreen mainScreen] bounds].size.height);
 }
 
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView

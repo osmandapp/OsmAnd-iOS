@@ -79,8 +79,11 @@
 @synthesize window = _window;
 @synthesize rootViewController = _rootViewController;
 
-- (BOOL) initialize
+- (BOOL) initialize:(UIScene *)scene
 {
+    if (![scene isKindOfClass:UIWindowScene.class])
+        return NO;
+
     if (_appInitDone || _appInitializing)
         return YES;
 
@@ -97,7 +100,8 @@
     _app = (id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol>)[OsmAndApp instance];
 
     // Create window
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    //self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window = [[UIWindow alloc] initWithWindowScene:(UIWindowScene *)scene];
     self.window.rootViewController = [[OALaunchScreenViewController alloc] init];
     [self.window makeKeyAndVisible];
 
@@ -528,7 +532,7 @@
     if (application.applicationState == UIApplicationStateBackground)
         return NO;
 
-    return [self initialize];
+    return [self initialize:nil];
 }
 
 - (void) handleBackgroundDataFetch:(BGProcessingTask *)task
@@ -611,7 +615,7 @@
         _windowToAttach = window;
         _carPlayInterfaceController = interfaceController;
         if (!_appInitializing)
-            [self initialize];
+            [self initialize:nil];
         return;
     }
     [self presentInCarPlay:interfaceController window:window];
@@ -662,7 +666,7 @@
         }
     }
 
-    [self initialize];
+    [self initialize:scene];
 }
 
 - (void)sceneWillResignActive:(UIScene *)scene {
@@ -675,7 +679,7 @@
     if (_appInitDone)
         [_app onApplicationWillEnterForeground];
     else
-        [self initialize];
+        [self initialize:nil];
 }
 
 

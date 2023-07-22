@@ -80,7 +80,7 @@
     }
     else if (fileName.length > 0)
     {
-        groupName = [[fileName stringByReplacingOccurrencesOfString:app.favoritesFilePrefix withString:@""] stringByReplacingOccurrencesOfString:GPX_FILE_EXT withString:@""];
+        groupName = [[[app getGroupName:fileName] stringByReplacingOccurrencesOfString:app.favoritesFilePrefix withString:@""] stringByReplacingOccurrencesOfString:GPX_FILE_EXT withString:@""];
         if ([groupName hasPrefix:app.favoritesGroupNameSeparator])
             groupName = [groupName substringFromIndex:1];
 
@@ -90,6 +90,11 @@
     {
         return OALocalizedString(@"favorites_item");
     }
+}
+
+- (NSString *) defaultFileName
+{
+    return [[OsmAndApp.instance getGroupFileName:self.name] stringByAppendingString:self.defaultFileExtension];
 }
 
 - (NSString *) defaultFileExtension
@@ -206,7 +211,7 @@
     }
 }
 
-- (long)getEstimatedItemSize:(OAFavoriteGroup *)item
+- (long) getEstimatedItemSize:(OAFavoriteGroup *)item
 {
     return item.points.count * APPROXIMATE_FAVOURITE_SIZE_BYTES;
 }

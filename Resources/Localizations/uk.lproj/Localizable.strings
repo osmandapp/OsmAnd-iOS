@@ -3009,9 +3009,9 @@
 "shared_string_hidden" = "Приховано";
 "map_3d_mode_hint" = "Затискання кнопки дозволяє змінити її положення.";
 "rendering_value_sacScale_name" = "sac";
-"rendering_value_caiScale_description" = "Club Alpino Italiano (Italian Alpine Club)";
+"rendering_value_caiScale_description" = "Club Alpino Italiano (Італійський альпійський клуб)";
 "rendering_attr_alpineHikingScaleScheme_description" = "Типи класифікації складності маршрутів.";
-"rendering_value_sacScale_description" = "Swiss Alpine Club";
+"rendering_value_sacScale_description" = "Швейцарський альпійський клуб";
 "rendering_value_caiScale_name" = "cai";
 "add_row" = "Додати рядок";
 "no_widgets_here_yet" = "Тут ще немає віджетів";

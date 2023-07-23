@@ -1751,7 +1751,7 @@
 "not_available_profile_name" = "Профиль с таким именем уже существует.";
 "profile_import_success" = "Профиль приложения был успешно импортирован";
 "err_profile_import" = "Ошибка чтения данных об элементе: %@";
-"ui_customization_short_descr" = "Элементы панели, контекстное меню";
+"ui_customization_short_descr" = "Элементы главного и контекстного меню";
 "ui_customization" = "Настройки интерфейса";
 "profile_appearance_descr" = "Значок, цвет и имя";
 "profile_settings" = "Настройки профиля";
@@ -1947,7 +1947,7 @@
 "shared_string_gpx_points" = "Точки";
 "shared_string_resources" = "Ресурсы";
 "select_group" = "Категории";
-"coordinates_widget_current_location" = "Виджет координат";
+"coordinates_widget_current_location" = "Координаты: текущая позиция";
 "icon_group_transport" = "Транспорт";
 "transport" = "Транспорт";
 "shared_string_circle" = "Круг";

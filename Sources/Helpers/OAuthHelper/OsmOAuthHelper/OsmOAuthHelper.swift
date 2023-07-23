@@ -56,7 +56,7 @@ class OsmOAuthHelper : BaseOAuthHelper {
                 request.allHTTPHeaderFields = ["Authorization": header]
                 let (data, _) = try await URLSession.shared.data(for: request)
                 let parsedJSON = try JSONDecoder().decode(OsmUserDataModel.self, from: data)
-                OAAppSettings.sharedManager().osmUserName.set(parsedJSON.user.display_name)
+                OAAppSettings.sharedManager().osmUserDisplayName.set(parsedJSON.user.display_name)
             }
         } catch {
             print("fetchUserData() Error: \(error)")
@@ -92,7 +92,11 @@ class OsmOAuthHelper : BaseOAuthHelper {
     static func getUserName() -> String {
         return OAAppSettings.sharedManager().osmUserName.get()
     }
-    
+
+    static func getUserDisplayName() -> String {
+        return OAAppSettings.sharedManager().osmUserDisplayName.get()
+    }
+
     static func getLegacyPassword() -> String {
         return OAAppSettings.sharedManager().osmUserPassword.get()
     }
@@ -109,8 +113,7 @@ class OsmOAuthHelper : BaseOAuthHelper {
     static func sendNotifications() {
         NotificationCenter.default.post(name: Notification.Name(notificationKey), object: nil)
     }
-    
-    
+
     static func showAuthIntroScreen(hostVC: UIViewController) {
         if #available(iOS 16.4, *) {
             hostVC.present(OsmOAuthSwiftUIViewWrapper.get(), animated: true)
@@ -122,5 +125,4 @@ class OsmOAuthHelper : BaseOAuthHelper {
             hostVC.present(targetVC, animated: true)
         }
     }
-    
 }

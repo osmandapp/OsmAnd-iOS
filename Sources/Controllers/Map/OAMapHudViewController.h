@@ -103,6 +103,7 @@
 
 - (void) updateRouteButton:(BOOL)routePlanningMode followingMode:(BOOL)followingMode;
 
+- (void) recreateAllControls;
 - (void) recreateControls;
 - (void) updateInfo;
 

@@ -2533,3 +2533,8 @@
 "speed_camera_pois" = "POIкамер кантролю хуткасці";
 "uninstall_speed_cameras" = "Выдаліць камеры кантролю хуткасці";
 "icon_group_service" = "Паслугі";
+"disable_vertex_hillshade_3d" = "Адключыць цень вяршынь ў 3D";
+"test_heightmap" = "Тэст карты вышынь";
+"speak_route_deviation" = "Апавясціць аб адхіленні ад маршруту";
+"generate_slope_from_3d_maps" = "Стварыць растравыя карты схілаў з 3D карт";
+"generate_hillshade_from_3d_maps" = "Стварыць растравыя карты рэльефу з 3D карт";

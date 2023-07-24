@@ -3589,6 +3589,12 @@ typedef enum
     [self hideToolbar:toolbarController];
 }
 
+- (void) recreateAllControls
+{
+    if (self.hudViewController)
+        [self.hudViewController recreateAllControls];
+}
+
 - (void) recreateControls
 {
     if (self.hudViewController)

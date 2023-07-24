@@ -93,9 +93,16 @@
 
 - (void) onRightButtonPressed
 {
-    [self copyProfile];
-    if (self.delegate)
-        [self.delegate onCopyProfileCompleted];
+    if ([self.delegate respondsToSelector: @selector(onCopyProfile:)])
+    {
+        [self.delegate onCopyProfile:_sourceAppMode];
+    }
+    else
+    {
+        [self copyProfile];
+        if (self.delegate)
+            [self.delegate onCopyProfileCompleted];
+    }
     [super onRightButtonPressed];
 }
 

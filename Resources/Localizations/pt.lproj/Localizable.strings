@@ -1228,7 +1228,7 @@
 "rendering_value_default13_name" = "Padrão (13)";
 "rendering_attr_surface_snow_name" = "Neve";
 "rendering_attr_OSMMapperAssistant_name" = "Assistente de mapeador OSM";
-"rendering_attr_alpineHiking_name" = "Escala de caminhada (SAC)";
+"rendering_attr_alpineHiking_name" = "Classificação de dificuldade";
 "rendering_attr_highway_class_cycleway_name" = "Ciclovia";
 "rendering_attr_alpineHiking_description" = "Renderizar caminhos de acordo com a escala de SAC.";
 "rendering_attr_currentTrackWidth_description" = "Espessura dos trilhos GPX";
@@ -3000,3 +3000,8 @@
 "visible_in_3d_mode" = "Visível no modo 3D";
 "map_3d_mode_hint" = "Toque longo no botão permite alterar a posição do botão.";
 "map_3d_mode_description" = "Toque no mapa com dois dedos e mova-os para cima e para baixo para ajustar a inclinação do mapa.";
+"rendering_value_sacScale_description" = "Clube Alpino Suíço (Swiss Alpine Club)";
+"rendering_value_caiScale_description" = "Clube Alpino Italiano (Italian Alpine Club)";
+"rendering_value_sacScale_name" = "sac";
+"rendering_value_caiScale_name" = "cai";
+"rendering_attr_alpineHikingScaleScheme_description" = "Tipos de classificação de dificuldade para rotas.";

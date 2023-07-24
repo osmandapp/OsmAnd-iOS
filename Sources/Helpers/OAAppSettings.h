@@ -991,6 +991,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *oprUseDevUrl;
 @property (nonatomic) OACommonBoolean *offlineEditing;
 @property (nonatomic) OACommonBoolean *osmUseDevUrl;
+@property (nonatomic) OACommonString *osmUserDisplayName;
+@property (nonatomic) OACommonUploadVisibility *osmUploadVisibility;
 
 // Mapillary
 @property (nonatomic) OACommonBoolean *showMapillary;
@@ -1132,9 +1134,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonInteger *sendAnonymousDataLastRequestNs;
 
 @property (nonatomic) OACommonBoolean *webglSupported;
-
-@property (nonatomic) OACommonString *osmUserDisplayName;
-@property (nonatomic) OACommonUploadVisibility *osmUploadVisibility;
 
 @property (nonatomic) OACommonBoolean *inappsRead;
 

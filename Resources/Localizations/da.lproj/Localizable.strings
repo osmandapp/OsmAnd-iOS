@@ -1492,7 +1492,7 @@
 "rendering_attr_highway_class_track_grade2_name" = "Grad 2";
 "routeInfo_roadClass_name" = "Vejtype";
 "rendering_value_pink_name" = "Lyserød";
-"rendering_attr_alpineHiking_name" = "Alpin vandreskala (SAC)";
+"rendering_attr_alpineHiking_name" = "Sværhedsklassificering";
 "rendering_value_translucent_blue_name" = "Gennemsigtig blå";
 "rendering_value_thick_name" = "Tyk";
 "routing_attr_avoid_shuttle_train_name" = "Ingen shuttle-tog";
@@ -3000,3 +3000,12 @@
 "map_3d_mode_hint" = "Med langt tryk på knappen kan knapposition ændres.";
 "map_2d_mode_action" = "2D-tilstand";
 "visible_in_3d_mode" = "Synlig i 3D-tilstand";
+"rendering_value_sacScale_name" = "sac";
+"rendering_value_caiScale_name" = "cai";
+"rendering_attr_alpineHikingScaleScheme_description" = "Klassificeringstyper for sværhedsgrad af ruter.";
+"rendering_value_sacScale_description" = "Den schweiziske alpinklub";
+"rendering_value_caiScale_description" = "Club Alpino Italiano (Den italienske alpinklub)";
+"add_row" = "Tilføj række";
+"no_widgets_here_yet" = "Ingen moduler her endnu";
+"reset_all_settings_desc" = "Nulstil alle indstillinger til standard?";
+"no_widgets_descr" = "Tilføj et eller flere moduler fra listen over tilgængelige moduler.";

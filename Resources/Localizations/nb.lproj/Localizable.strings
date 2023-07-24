@@ -2219,7 +2219,7 @@
 "purchases_feature_desc_osmand_cloud" = "Skaff deg OsmAnd-sky forå lagre all OsmAnd-data på nett. Ingen mistet data etter reinstallasjon. Sikkerhetskopier og gjenopprett info.";
 "shared_string_capacity" = "Kapasitet";
 "debugging_and_development" = "OsmAnd-utvikling";
-"osmand_development_plugin_description" = "Innstillinger for utvikling og avlusingsfunksjoner som navigasjonssimulering, opptegningsytelse, eller talemeldinger. Ment for utviklere og trengs ikke for vanlige brukere.";
+"osmand_development_plugin_description" = "Gir funksjoner til å teste og feilsøke OsmAnd: Simulere navigasjonsruter, overvåke skjermgjengivelsen, kontrollere ytelse osv. Dette tillegget er ikke påkrevd for normal bruk av appen.";
 "manage_subscription" = "Håndter abonnement";
 "copy_to_map_favorites" = "Kopier til favoritter";
 "simulation_real_mode_title" = "Realistisk simulering";
@@ -2582,7 +2582,7 @@
 "delete_tracks_bottom_sheet_title" = "Slett spor?";
 "icon_group_service" = "Tjeneste";
 "weather_forecast_is_outdated" = "Værmeldingen er utdatert.";
-"speak_route_deviation" = "Kunngjør avvik fra ruten";
+"speak_route_deviation" = "Meld om avvik fra ruten";
 
 // Shared Strings
 "shared_string_cancelled" = "Avbrutt";
@@ -2599,3 +2599,4 @@
 "map_widget_trip_recording_duration" = "Varighet";
 "map_widget_trip_recording_distance" = "Avstand";
 "visible_in_3d_mode" = "Synlig i 3D-modus";
+"generate_slope_from_3d_maps" = "Generer helningsrasterkart fra 3D-kart";

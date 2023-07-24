@@ -2038,7 +2038,7 @@
 "rendering_value_disabled_name" = "Malaktiva";
 "rendering_attr_contourColorScheme_name" = "Kolor-skemo de nivelkurboj";
 "routing_attr_short_way_name" = "Brulaĵ-ŝparema kurso";
-"rendering_attr_alpineHiking_name" = "Montogrimpada skalo (SAC)";
+"rendering_attr_alpineHiking_name" = "Klasifiko de facileco";
 "rendering_attr_showLez_name" = "Zonoj de restrikta emisio (LEZ)";
 "rendering_value_green_name" = "Verda";
 "routing_attr_piste_type_nordic_description" = "Skivojoj por skiado nordia (skikurada).";
@@ -2619,3 +2619,5 @@
 "weather_forecast" = "Veterprognozo";
 "weather_forecast_is_outdated" = "Veterprognozo estas malaktuala.";
 "map_widget_distance_to_intermediate" = "Distanco al intercelo";
+"rendering_value_sacScale_description" = "laŭ skalo de Svisa Alpisma Klubo";
+"rendering_value_caiScale_description" = "laŭ skalo de Itala Alpisma Klubo";

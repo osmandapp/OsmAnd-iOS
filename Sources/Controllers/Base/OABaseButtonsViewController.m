@@ -93,6 +93,8 @@
 
 - (void)setupBottomButtons
 {
+    UILayoutConstraintAxis axisMode = [self getBottomAxisMode];
+
     EOABaseButtonColorScheme topButtonColorScheme = [self getTopButtonColorScheme];
     UIColor *topButtonTintColor = [self getButtonTintColor:topButtonColorScheme];
     [self.topButton setTitleColor:topButtonTintColor forState:UIControlStateNormal];
@@ -112,7 +114,10 @@
     NSString *topButtonIconName = [self getTopButtonIconName];
     BOOL hasTopButtonIcon = topButtonIconName && topButtonIconName.length > 0;
     BOOL hasTopButton = (topButtonTitle && topButtonTitle.length > 0) || (topButtonTitleAttr && topButtonTitleAttr.length > 0) || hasTopButtonIcon;
-    self.topButton.hidden = !hasTopButton;
+    if (axisMode == UILayoutConstraintAxisVertical)
+        self.topButton.hidden = !hasTopButton;
+    else
+        self.topButton.userInteractionEnabled = hasTopButton;
 
     if (topButtonTitleAttr && topButtonTitleAttr.length > 0)
     {
@@ -131,7 +136,10 @@
     NSString *bottomButtonIconName = [self getBottomButtonIconName];
     BOOL hasBottomButtonIcon = bottomButtonIconName && bottomButtonIconName.length > 0;
     BOOL hasBottomButton = (bottomButtonTitle && bottomButtonTitle.length > 0) || (bottomButtonTitleAttr && bottomButtonTitleAttr.length > 0) || hasBottomButtonIcon;
-    self.bottomButton.hidden = !hasBottomButton;
+    if (axisMode == UILayoutConstraintAxisVertical)
+        self.bottomButton.hidden = !hasBottomButton;
+    else
+        self.bottomButton.userInteractionEnabled = hasBottomButton;
 
     if (bottomButtonTitleAttr && bottomButtonTitleAttr.length > 0)
     {
@@ -146,7 +154,7 @@
     [self.bottomButton setImage:hasBottomButtonIcon ? [UIImage templateImageNamed:bottomButtonIconName] : nil forState:UIControlStateNormal];
 
     self.middleBottomMarginStackView.spacing = [self getSpaceBetweenButtons];
-    self.middleBottomMarginStackView.hidden = !hasTopButton || !hasBottomButton;
+    self.middleBottomMarginStackView.hidden = axisMode == UILayoutConstraintAxisVertical && (!hasTopButton || !hasBottomButton);
 
     BOOL hasBottomButtons = hasTopButton || hasBottomButton;
     self.bottomBackgroundView.hidden = !hasBottomButtons;

@@ -86,6 +86,7 @@
 #define kAppData @"app_data"
 #define kInstallDate @"install_date"
 #define kNumberOfStarts @"starts_num"
+#define kSubfolderPlaceholder @"_%_"
 
 #define _(name)
 @implementation OsmAndAppImpl
@@ -1180,8 +1181,26 @@
 
 - (NSString *) favoritesStorageFilename:(NSString *)groupName
 {
-    NSString *fileName = [groupName.length == 0 ? _favoritesFilePrefix : [NSString stringWithFormat:@"%@%@%@", _favoritesFilePrefix, _favoritesGroupNameSeparator, groupName] stringByAppendingString:GPX_FILE_EXT];
+    NSString *fileName = [groupName.length == 0
+                          ? _favoritesFilePrefix
+                          : [NSString stringWithFormat:@"%@%@%@", _favoritesFilePrefix, _favoritesGroupNameSeparator, [self getGroupFileName:groupName]] stringByAppendingString:GPX_FILE_EXT];
     return [_favoritesPath stringByAppendingPathComponent:fileName];
+}
+
+- (NSString *) getGroupFileName:(NSString *)groupName
+{
+    if ([groupName containsString:@"/"])
+        return [groupName stringByReplacingOccurrencesOfString:@"/" withString:kSubfolderPlaceholder];
+
+    return groupName;
+}
+
+- (NSString *) getGroupName:(NSString *)fileName
+{
+    if ([fileName containsString:kSubfolderPlaceholder])
+        return [fileName stringByReplacingOccurrencesOfString:kSubfolderPlaceholder withString:@"/"];
+
+    return fileName;
 }
 
 - (void) saveFavoritesToPermanentStorage

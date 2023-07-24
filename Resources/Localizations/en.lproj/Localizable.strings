@@ -685,6 +685,7 @@
 "shared_string_includes" = "Includes";
 "shared_string_purchased" = "Purchased";
 "shared_string_control_start" = "Start";
+"shared_string_free_account" = "Free account";
 "map_2d_mode_action" = "2D Mode";
 "map_3d_mode_action" = "3D Mode";
 "compass_always_visible" = "Always visible";
@@ -2817,6 +2818,7 @@
 "error_contact_support" = "If the issue persists, please contact our support team.";
 "promo_subscription" = "Promo subscription";
 "renew_subscription" = "Renew subscription";
+"start_subscription" = "OsmAnd Start";
 
 "register_opr_create_new_account" = "Create new account";
 "osmand_cloud_create_account_descr" = "Please enter your e-mail address, a verification code will be sent there,\nand all your data will be linked to it.";

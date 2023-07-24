@@ -316,6 +316,7 @@
 #define backupNativeDeviceIdKey @"backupNativeDeviceId"
 #define backupAccessTokenKey @"backupAccessToken"
 #define backupAccessTokenUpdateTimeKey @"backupAccessTokenUpdateTime"
+#define backupFreePlanRegistrationTime @"backupFreePlanRegistrationTime"
 
 #define backupPromocodeKey @"backupPromocode"
 #define backupPurchaseActiveKey @"backupPurchaseActive"
@@ -4511,13 +4512,14 @@
 
         _inappsRead = [[OACommonBoolean withKey:inappsReadKey defValue:NO] makeGlobal];
         [_globalPreferences setObject:_inappsRead forKey:@"inapps_read"];
-
+        
         _backupUserEmail = [[OACommonString withKey:backupUserEmailKey defValue:@""] makeGlobal];
         _backupUserId = [[OACommonString withKey:backupUserIdKey defValue:@""] makeGlobal];
         _backupDeviceId = [[OACommonString withKey:backupDeviceIdKey defValue:@""] makeGlobal];
         _backupNativeDeviceId = [[OACommonString withKey:backupNativeDeviceIdKey defValue:@""] makeGlobal];
         _backupAccessToken = [[OACommonString withKey:backupAccessTokenKey defValue:@""] makeGlobal];
         _backupAccessTokenUpdateTime = [[OACommonString withKey:backupAccessTokenUpdateTimeKey defValue:@""] makeGlobal];
+        _backupFreePlanRegistrationTime = [[OACommonLong withKey:backupFreePlanRegistrationTime defValue:0] makeGlobal];
 
         [_globalPreferences setObject:_backupUserEmail forKey:@"backup_user_email"];
         [_globalPreferences setObject:_backupUserId forKey:@"backup_user_id"];
@@ -4525,6 +4527,7 @@
         [_globalPreferences setObject:_backupNativeDeviceId forKey:@"backup_native_device_id"];
         [_globalPreferences setObject:_backupAccessToken forKey:@"backup_access_token"];
         [_globalPreferences setObject:_backupAccessTokenUpdateTime forKey:@"backup_access_token_update_time"];
+        [_globalPreferences setObject:_backupFreePlanRegistrationTime forKey:backupFreePlanRegistrationTime];
         
         _backupPromocode = [[OACommonString withKey:backupPromocodeKey defValue:@""] makeGlobal];
         _backupPurchaseActive = [[OACommonBoolean withKey:backupPurchaseActiveKey defValue:NO] makeGlobal];

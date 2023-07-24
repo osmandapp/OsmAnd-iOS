@@ -35,6 +35,7 @@
 #import "OAChoosePlanHelper.h"
 #import "OACloudIntroductionViewController.h"
 #import "OAAppSettings.h"
+#import "OABackupHelper.h"
 
 
 #define _(name) OAFavoriteListViewController__##name
@@ -139,13 +140,22 @@ static UIViewController *parentController;
     _selectedItems = [[NSMutableArray alloc] init];
     
     self.tabBarController.navigationItem.title = OALocalizedString(@"my_favorites");
+    [self addNotification:OAIAPProductPurchasedNotification selector:@selector(productPurchased:)];
+}
+
+- (void)productPurchased:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self generateData];
+        [self.favoriteTableView reloadData];
+    });
 }
 
 - (BOOL)isAvailablePaymentBanner
 {
     return ![[NSUserDefaults standardUserDefaults] boolForKey:kWasClodedFreeBackupFavoritesBannerKey]
-    && ![OAIAPHelper isSubscribedToOsmAndPro]
-    && [OAAppSettings.sharedManager.backupPurchaseActive get];
+    && ![OAIAPHelper isOsmAndProAvailable]
+    && OABackupHelper.sharedInstance.isRegistered;
     
 }
 
@@ -170,7 +180,7 @@ static UIViewController *parentController;
             _freeBackupBanner = (FreeBackupBanner *)nib[0];
             __weak OAFavoriteListViewController *weakSelf = self;
             _freeBackupBanner.didOsmAndCloudButtonAction = ^{
-            [weakSelf.navigationController pushViewController:[OACloudIntroductionViewController new] animated:YES];
+                [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.OSMAND_CLOUD navController:weakSelf.navigationController];
             };
             _freeBackupBanner.didCloseButtonAction = ^{
                 [weakSelf closeFreeBackupBanner];

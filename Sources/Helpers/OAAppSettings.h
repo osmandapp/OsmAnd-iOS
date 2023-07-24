@@ -1145,6 +1145,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonString *backupNativeDeviceId;
 @property (nonatomic) OACommonString *backupAccessToken;
 @property (nonatomic) OACommonString *backupAccessTokenUpdateTime;
+@property (nonatomic) OACommonLong *backupFreePlanRegistrationTime;
 
 @property (nonatomic) OACommonString *backupPromocode;
 @property (nonatomic) OACommonBoolean *backupPurchaseActive;

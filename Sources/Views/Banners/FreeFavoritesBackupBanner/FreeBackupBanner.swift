@@ -22,7 +22,6 @@ final class FreeBackupBanner: UIView {
             descriptionLabel.text = localizedString("banner_payment_free_backup_description")
         }
     }
-    @IBOutlet private weak var separatorView: UIView!
     @IBOutlet private weak var osmAndCloudButton: UIButton! {
         didSet {
             osmAndCloudButton.titleLabel?.text = localizedString("banner_payment_free_backup_cloud_button_title")
@@ -40,11 +39,9 @@ final class FreeBackupBanner: UIView {
         case .favorite:
             titleLabel.text = localizedString("banner_payment_free_backup_favorite_title")
             imageView.image = UIImage(named: "ic_custom_folder_cloud_colored")
-            separatorView.isHidden = false
         case .settings:
             titleLabel.text = localizedString("banner_payment_free_backup_settings_title")
             imageView.image = UIImage(named: "ic_custom_settings_cloud_colored")
-            separatorView.isHidden = true
         }
     }
     

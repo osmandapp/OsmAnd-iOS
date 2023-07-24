@@ -97,7 +97,6 @@
                 <outlet property="descriptionLabel" destination="Jsj-N2-R29" id="45i-I4-r6H"/>
                 <outlet property="imageView" destination="kUA-vC-GQM" id="XNS-Vq-iZJ"/>
                 <outlet property="osmAndCloudButton" destination="Teq-n2-r4u" id="LEF-sY-YdP"/>
-                <outlet property="separatorView" destination="xJm-7d-FQ5" id="Dlc-5K-rwU"/>
                 <outlet property="titleLabel" destination="qXa-fC-2qj" id="npZ-GU-kOI"/>
             </connections>
             <point key="canvasLocation" x="99.236641221374043" y="-85.211267605633807"/>

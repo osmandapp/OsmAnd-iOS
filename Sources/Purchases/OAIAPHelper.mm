@@ -1848,6 +1848,10 @@ static OASubscriptionState *EXPIRED;
                 if (!jsonParsingError)
                 {
                     orderId = resultJson[@"orderid"];
+                    if (resultJson[@"regTime"])
+                    {
+                       [OAAppSettings.sharedManager.backupFreePlanRegistrationTime set:[self convertStringDateToTimeInterval:resultJson[@"regTime"]]];
+                    }
                 }
                 else
                 {
@@ -1861,6 +1865,14 @@ static OASubscriptionState *EXPIRED;
             dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
     }
     return orderId;
+}
+
+- (NSTimeInterval)convertStringDateToTimeInterval:(NSString *)string {
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    [dateFormatter setDateFormat:@"MMM d, yyyy, HH:mm:ss a"];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    NSDate *date = [dateFormatter dateFromString:string];
+    return [date timeIntervalSince1970];
 }
 
 - (BOOL) checkBackupSubscriptions

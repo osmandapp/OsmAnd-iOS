@@ -43,6 +43,8 @@
 #import "OAWikipediaSettingsViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OACloudIntroductionViewController.h"
+#import "OABackupHelper.h"
+#import "OAChoosePlanHelper.h"
 
 #define kSidePadding 16.
 #define BACKUP_INDEX_DIR @"backup"
@@ -105,7 +107,10 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     [self.tableView registerClass:[FreeBackupBannerCell class] forCellReuseIdentifier:[FreeBackupBannerCell getCellIdentifier]];
+    
+    [self addNotification:OAIAPProductPurchasedNotification selector:@selector(productPurchased:)];
 }
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -423,12 +428,12 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             _freeBackupBanner = (FreeBackupBanner *)nib[0];
             __weak OAConfigureProfileViewController *weakSelf = self;
             _freeBackupBanner.didOsmAndCloudButtonAction = ^{
-                [weakSelf.navigationController pushViewController:[OACloudIntroductionViewController new] animated:YES];
+                [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.OSMAND_CLOUD navController:weakSelf.navigationController];
             };
             _freeBackupBanner.didCloseButtonAction = ^{
                 [weakSelf closeFreeBackupBanner];
             };
-            [_freeBackupBanner configureWithBannerType:BannerTypeFavorite];
+            [_freeBackupBanner configureWithBannerType:BannerTypeSettings];
             
             _freeBackupBanner.translatesAutoresizingMaskIntoConstraints = NO;
             [cell.contentView addSubview:_freeBackupBanner];
@@ -459,17 +464,27 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     }
 }
 
+- (void)productPurchased:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self generateData];
+        [self.tableView reloadData];
+    });
+}
+
 - (BOOL)isAvailablePaymentBanner
 {
     return ![[NSUserDefaults standardUserDefaults] boolForKey:kWasClodedFreeBackupSettingsBannerKey]
-    && ![OAIAPHelper isSubscribedToOsmAndPro]
-    && [OAAppSettings.sharedManager.backupPurchaseActive get];
+    && ![OAIAPHelper isOsmAndProAvailable]
+    && OABackupHelper.sharedInstance.isRegistered;
 }
 
 - (void)closeFreeBackupBanner
 {
     _freeBackupBanner = nil;
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kWasClodedFreeBackupSettingsBannerKey];
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 - (NSInteger)sectionsCount

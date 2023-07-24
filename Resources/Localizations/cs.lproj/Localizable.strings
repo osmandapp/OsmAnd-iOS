@@ -1186,7 +1186,7 @@
 "rendering_attr_piste_difficulty_intermediate_name" = "Středně pokročilý";
 "rendering_attr_coloredBuildings_name" = "Barvy budov podle typu";
 "routing_attr_driving_style_name" = "Styl jízdy";
-"rendering_attr_alpineHiking_name" = "Vysokohorská turistika (SAC)";
+"rendering_attr_alpineHiking_name" = "Klasifikace podle obížnosti";
 "routing_attr_piste_type_nordic_name" = "Běžecké a klasické lyžování";
 "rendering_value_black_name" = "Černá";
 "rendering_attr_tracktype_grade1_name" = "Pevný (zpevněný)";
@@ -2914,3 +2914,5 @@
 "trip_recording_uphill_widget_desc" = "Zobrazuje součet všech stoupání aktuálně zaznamenané cesty.";
 "first_marker_widget_desc" = "Widget můžete nakonfigurovat tak, aby zobrazoval vzdálenost nebo odhadovaný čas příjezdu k první mapové značce.";
 "map_widget_distance_to_intermediate" = "Vzdálenost do mezicíle";
+"rendering_value_sacScale_description" = "Švýcarský alpinistický klub";
+"rendering_value_caiScale_description" = "Club Alpino Italiano (italský alpinistický klub)";

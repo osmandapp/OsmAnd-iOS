@@ -1260,7 +1260,7 @@
 "rendering_attr_showAccess_name" = "Vis adgangsrestriksjoner og veiavgifter";
 "rendering_attr_smoothness_excellent_name" = "Utmerket";
 "routing_attr_driving_style_speed_name" = "Kortere ruter";
-"rendering_attr_alpineHiking_name" = "Alpin vandringsskala (SAC)";
+"rendering_attr_alpineHiking_name" = "Vanskelighetsklassifisering";
 "rendering_value_translucent_blue_name" = "Gjennomskinnelig blå";
 "routing_attr_max_num_changes_name" = "Antall overganger";
 "rendering_value_medium_name" = "Middels";
@@ -2600,3 +2600,5 @@
 "map_widget_trip_recording_distance" = "Avstand";
 "visible_in_3d_mode" = "Synlig i 3D-modus";
 "generate_slope_from_3d_maps" = "Generer helningsrasterkart fra 3D-kart";
+"rendering_value_caiScale_description" = "Club Alpino Italiano (Italiensk alpinforening)";
+"rendering_value_sacScale_description" = "Sveitsisk alpinklubb";

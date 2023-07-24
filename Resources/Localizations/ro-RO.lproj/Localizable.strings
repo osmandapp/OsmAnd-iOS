@@ -2981,6 +2981,10 @@
 "map_3d_mode_description" = "Atingeți harta cu două degete și deplasați-le în sus și în jos pentru a regla înclinarea hărții.";
 "rendering_value_sacScale_name" = "sac";
 "rendering_value_caiScale_name" = "cai";
-"rendering_value_caiScale_description" = "Clubul Alpin Italian (Italian Alpine Club)";
+"rendering_value_caiScale_description" = "Club Alpino Italiano (Clubul Alpin Italian)";
 "rendering_attr_alpineHikingScaleScheme_description" = "Tipuri de clasificare a dificultății pentru trasee.";
 "rendering_value_sacScale_description" = "Clubul Alpin Elvețian";
+"no_widgets_here_yet" = "Nu există widget-uri aici încă";
+"no_widgets_descr" = "Adăugați unul sau mai multe widgeturi din lista de widgeturi disponibile.";
+"reset_all_settings_desc" = "Resetați toate setările la setările implicite?";
+"add_row" = "Adăugați rând";

@@ -18,6 +18,8 @@
 #import "Localization.h"
 #import "OASearchResult.h"
 #import "OAWeatherHelper.h"
+#import "OAWikipediaPlugin.h"
+#import "OAChoosePlanHelper.h"
 
 #include <OsmAndCore/WorldRegions.h>
 
@@ -423,8 +425,13 @@ static BOOL dataInvalidated = NO;
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Nautical];
             else if (item.resourceType == OsmAndResourceType::MapRegion && [item.worldRegion.regionId isEqualToString:OsmAnd::WorldRegions::NauticalRegionId.toNSString()] && ![OAPlugin isEnabled:OANauticalMapsPlugin.class])
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Nautical];
-            else if (item.resourceType == OsmAndResourceType::WeatherForecast && ![_iapHelper.weather isActive])
-                [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Weather];
+            else if ([item.worldRegion.regionId isEqualToString:OsmAnd::WorldRegions::TravelRegionId.toNSString()] && ![OAPlugin isEnabled:OAWikipediaPlugin.class])
+            {
+                if ([_iapHelper.wiki isPurchased])
+                    [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
+                else
+                    [OAChoosePlanHelper showChoosePlanScreenWithProduct:_iapHelper.wiki navController:self.navigationController];
+            }
             else
                 [self offerDownloadAndInstallOf:item];
         }

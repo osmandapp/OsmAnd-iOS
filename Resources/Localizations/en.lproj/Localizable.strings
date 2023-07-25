@@ -1914,7 +1914,10 @@
 "index_name_russia" = "Russia";
 "index_name_south_america" = "South America";
 "nautical_maps" = "Nautical maps";
+"shared_string_travel_guides" = "Travel guides";
 "download_select_map_types" = "Other maps";
+
+"shared_string_wikivoyage" = "Wikivoyage";
 
 // Help
 "help_quiz" = "Quiz";

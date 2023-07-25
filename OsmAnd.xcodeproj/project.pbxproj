@@ -18564,7 +18564,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 4.4.1.2;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = LM67P5MQ23;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LM67P5MQ23;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -18626,7 +18626,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 4.4.1.2;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = LM67P5MQ23;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

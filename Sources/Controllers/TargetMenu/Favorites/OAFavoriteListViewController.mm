@@ -146,8 +146,7 @@ static UIViewController *parentController;
 - (void)productPurchased:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self generateData];
-        [self.favoriteTableView reloadData];
+        [self configurePaymentBanner];
     });
 }
 

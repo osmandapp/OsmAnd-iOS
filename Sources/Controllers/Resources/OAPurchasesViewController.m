@@ -95,8 +95,10 @@ static BOOL _purchasesUpdated;
 
 #pragma mark - Table data
 
-- (void)createStartFreeSubscription:(OATableSectionData *)activeSection
+- (void)createStartFreeSubscription
 {
+    OATableSectionData *activeSection = [_data createNewSection];
+    activeSection.headerText = OALocalizedString(@"osm_live_active");
     NSDate *purchasedDate = [NSDate dateWithTimeIntervalSince1970:[OAAppSettings.sharedManager.backupFreePlanRegistrationTime get]];
     NSDateFormatter *formatter = [NSDateFormatter new];
     formatter.dateStyle = NSDateFormatterMediumStyle;
@@ -142,9 +144,7 @@ static BOOL _purchasesUpdated;
         {
             if (OABackupHelper.sharedInstance.isRegistered)
             {
-                OATableSectionData *activeSection = [_data createNewSection];
-                activeSection.headerText = OALocalizedString(@"osm_live_active");
-                [self createStartFreeSubscription:activeSection];
+                [self createStartFreeSubscription];
             }
             else
             {
@@ -203,14 +203,6 @@ static BOOL _purchasesUpdated;
                         kCellDescrKey : dateString
                     }];
                 }
-                else
-                {
-                    if (OABackupHelper.sharedInstance.isRegistered)
-                    {
-                        [self createStartFreeSubscription:activeSection];
-                    }
-                }
-
                 for (NSInteger i = 0; i < activeProducts.count; i++)
                 {
                     OAProduct *product = activeProducts[i];
@@ -223,11 +215,11 @@ static BOOL _purchasesUpdated;
             }
             if (expiredProducts.count > 0)
             {
-                if (OABackupHelper.sharedInstance.isRegistered)
+                if (OABackupHelper.sharedInstance.isRegistered
+                    && !isProSubscriptionAvailable
+                    && activeProducts.count == 0)
                 {
-                    OATableSectionData *activeSection = [_data createNewSection];
-                    activeSection.headerText = OALocalizedString(@"osm_live_active");
-                    [self createStartFreeSubscription:activeSection];
+                    [self createStartFreeSubscription];
                 }
                 OATableSectionData *expiredSection = [_data createNewSection];
                 expiredSection.headerText = OALocalizedString(@"expired");

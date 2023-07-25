@@ -2058,7 +2058,6 @@
 "rendering_value_disabled_name" = "מושבת";
 "rendering_attr_contourColorScheme_name" = "ערכת הצבעים של קווי המתאר";
 "routing_attr_short_way_name" = "דרך חסכונית בדלק";
-"rendering_attr_alpineHiking_name" = "דרגות קושי בטיפוס (SAC - מועדון האלפים השווייצרי)";
 "rendering_attr_showLez_name" = "הצגת אזורים עם פליטה נמוכה";
 "rendering_value_green_name" = "ירוק";
 "routing_attr_piste_type_nordic_description" = "מסלולים לסקי נורדי או למרחקים.";

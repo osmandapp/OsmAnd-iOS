@@ -1521,7 +1521,6 @@
 "rendering_attr_piste_difficulty_intermediate_name" = "Miðlungs";
 "rendering_attr_piste_difficulty_advanced_name" = "Vanir";
 "routing_attr_max_num_changes_name" = "Fjöldi breytinga";
-"rendering_attr_alpineHiking_name" = "Svissneska gönguleiðakvörðunin (SAC)";
 "routing_attr_avoid_subway_name" = "Forðast neðanjarðarlestir";
 "rendering_attr_highway_class_cycleway_name" = "Hjólastígur";
 "routeInfo_piste_difficulty_name" = "Erfiðleikastig brautar";

@@ -1055,7 +1055,6 @@
 "rendering_attr_lessDetailed_name" = "Meno dettagli";
 "rendering_attr_smoothness_intermediate_name" = "Intermedio";
 "rendering_attr_contourDensity_name" = "Densità linee isoipse";
-"rendering_attr_alpineHiking_name" = "Classificazione delle difficoltà";
 "rendering_attr_smoothness_bad_name" = "Cattiva";
 "routing_attr_avoid_bus_description" = "Evita gli autobus e i filobus";
 "routing_attr_avoid_unpaved_description" = "Evita le strade non pavimentate";

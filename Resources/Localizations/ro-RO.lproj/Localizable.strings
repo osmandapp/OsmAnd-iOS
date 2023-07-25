@@ -943,7 +943,6 @@
 "rendering_attr_hikingRoutesOSMC_description" = "Redă traseele în funcție de urmele OSMC.";
 "rendering_attr_hikingRoutesOSMC_name" = "Rute de drumeție";
 "rendering_attr_alpineHiking_description" = "Redă traseele în funcție de scara SAC.";
-"rendering_attr_alpineHiking_name" = "Clasificarea dificultății";
 "sett_wunderlinq_ext_input" = "MiracolLINQ";
 "intermediate_items_sort_by_distance" = "Sortare din ușă în ușă";
 "auto_zoom_farthest" = "Pentru a avea o rază lungă de acțiune";

@@ -1492,7 +1492,6 @@
 "rendering_attr_highway_class_track_grade2_name" = "Grad 2";
 "routeInfo_roadClass_name" = "Vejtype";
 "rendering_value_pink_name" = "Lyserød";
-"rendering_attr_alpineHiking_name" = "Sværhedsklassificering";
 "rendering_value_translucent_blue_name" = "Gennemsigtig blå";
 "rendering_value_thick_name" = "Tyk";
 "routing_attr_avoid_shuttle_train_name" = "Ingen shuttle-tog";

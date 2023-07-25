@@ -1440,7 +1440,6 @@
 "routing_attr_avoid_motorway_name" = "Sin autopistas";
 "routing_attr_avoid_ice_roads_fords_description" = "Evitar caminos con hielo y vados.";
 "routeInfo_tracktype_name" = "Firmeza de la superficie";
-"rendering_attr_alpineHiking_name" = "Clasificación por dificultad";
 "routing_attr_avoid_bus_description" = "Evitar autobuses y trolebuses";
 "rendering_attr_surface_snow_name" = "Nieve";
 "rendering_attr_surface_sett_name" = "Adoquín";

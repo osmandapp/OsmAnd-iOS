@@ -1087,7 +1087,6 @@
 "rendering_attr_highway_class_street_name" = "Utca";
 "rendering_value_lightgreen_name" = "Világoszöld";
 "rendering_attr_pisteGrooming_name" = "Sípálya kezeltség";
-"rendering_attr_alpineHiking_name" = "Nehézségi besorolás";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Hálózathoz felvétel";
 "routing_attr_avoid_ferries_description" = "Elkerüli a kompokat";
 "rendering_value_disabled_name" = "Letiltva";

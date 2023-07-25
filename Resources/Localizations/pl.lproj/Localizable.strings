@@ -1268,7 +1268,6 @@
 "routing_attr_height_description" = "Określa dozwoloną wysokość pojazdu na trasach.";
 "rendering_attr_surface_sett_name" = "Kostka brukowa";
 "routing_attr_max_num_changes_name" = "Liczba zmian";
-"rendering_attr_alpineHiking_name" = "Klasyfikacja trudności";
 "rendering_attr_highway_class_street_name" = "Ulica";
 "rendering_attr_hideProposed_name" = "Proponowane obiekty";
 "routing_attr_avoid_share_taxi_name" = "Bez taksówek zbiorowych";

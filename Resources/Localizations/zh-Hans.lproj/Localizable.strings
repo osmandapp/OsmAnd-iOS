@@ -1021,7 +1021,6 @@
 "routing_attr_prefer_motorway_name" = "高速公路优先";
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "routing_attr_avoid_ferries_description" = "避开轮渡";
-"rendering_attr_alpineHiking_name" = "高山远足量表（SAC）";
 "rendering_attr_OSMMapperAssistant_name" = "OSM制图助手";
 "rendering_attr_roadStyle_description" = "道路风格";
 "rendering_attr_hmRendered_description" = "增加地图显示的详细信息量。";

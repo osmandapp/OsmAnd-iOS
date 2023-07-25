@@ -1169,7 +1169,6 @@
 "rendering_attr_surface_mud_name" = "Boue";
 "routing_attr_avoid_ice_roads_fords_name" = "Éviter les routes sur glace, les fjords";
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
-"rendering_attr_alpineHiking_name" = "Classification des difficultés";
 "rendering_attr_hideOverground_name" = "Objets au sol";
 "rendering_attr_hmRendered_description" = "Augmenter le niveau de détail affiché.";
 "routing_attr_height_obstacles_name" = "Utiliser les données d\'altitude";

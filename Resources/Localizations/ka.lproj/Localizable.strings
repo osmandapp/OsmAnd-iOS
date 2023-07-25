@@ -2039,7 +2039,6 @@
 "rendering_value_disabled_name" = "გამორთულია";
 "rendering_attr_contourColorScheme_name" = "კონტურული ხაზების ფერთა გამა";
 "routing_attr_short_way_name" = "საწვავის დასაზოგი გზა";
-"rendering_attr_alpineHiking_name" = "Alpine hiking scale (SAC)";
 "rendering_attr_showLez_name" = "Show Low Emission Zones";
 "rendering_value_green_name" = "მწვანე";
 "routing_attr_piste_type_nordic_description" = "Trails for nordic or cross-country skiing.";

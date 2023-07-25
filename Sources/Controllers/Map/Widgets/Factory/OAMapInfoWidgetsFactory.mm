@@ -130,6 +130,7 @@
         OsmAnd::WeatherTileResourcesManager::ObtainValueAsyncCallback _callback =
             [selfWeak, cachedValue, band, needToUpdate, bandUnit, undefined, weatherControlWeak]
             (const bool succeeded,
+                OsmAnd::PointI requestedPoint31,
                 int64_t requestedTime,
                 const double value,
                 const std::shared_ptr<OsmAnd::Metric>& metric)

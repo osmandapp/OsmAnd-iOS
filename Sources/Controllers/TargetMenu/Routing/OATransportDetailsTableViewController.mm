@@ -145,6 +145,7 @@
 - (void)buildCollapsibleCells:(NSMutableArray *)arr color:(UIColor *)color segment:(const std::shared_ptr<TransportRouteResultSegment> &)segment stopType:(OATransportStopType *)stopType stops:(const std::vector<std::shared_ptr<TransportStop>, std::allocator<std::shared_ptr<TransportStop> > > &)stops section:(NSInteger)section {
     OATransportStopRoute *r = [[OATransportStopRoute alloc] init];
     r.type = stopType;
+    [r initStopIndex];
     NSMutableDictionary *collapsableCell = [NSMutableDictionary new];
     NSMutableArray *subItems = [NSMutableArray new];
     NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray new];

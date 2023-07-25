@@ -15,6 +15,7 @@
 #import "OAColors.h"
 #import "OAUtilities.h"
 #import "OAOsmAndFormatter.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -31,6 +32,16 @@ NSString *const OATransportStopRouteArrow = @" → ";
 @end
 
 @implementation OATransportStopRoute
+
+- (instancetype) init
+{
+    self = [super init];
+    if (self)
+    {
+        _stopIndex = -1;
+    }
+    return self;
+}
 
 - (NSString *) getDescription:(BOOL)useDistance
 {
@@ -169,9 +180,50 @@ NSString *const OATransportStopRouteArrow = @" → ";
     res.stop = self.stop;
     res.type = self.type;
     res.desc = self.desc;
+    res.stopIndex = self.stopIndex;
     res.distance = self.distance;
     res.showWholeRoute = self. showWholeRoute;
     return res;
+}
+
+- (void) initStopIndex
+{
+    if (_route == nullptr || _stop == nullptr)
+        return;
+    
+    NSString *_prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+    BOOL _transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
+    QString _lang = QString::fromNSString(_prefLang);
+    
+    auto& stops = _route->forwardStops;
+    for (int i = 0; i < stops.size(); i++)
+    {
+        auto stop = stops[i];
+        if (_stop->getName(_lang, _transliterate) == stop->getName(_lang, _transliterate))
+        {
+            _stopIndex = i;
+            break;
+        }
+    }
+    if (_stopIndex == -1)
+        _stopIndex = 0;
+}
+
+- (int) getStopIndex
+{
+    if (_stopIndex == -1)
+        [self initStopIndex];
+    return _stopIndex;
+}
+
+- (void) setStopIndex:(int)stopIndex
+{
+    if (_route == nullptr || _stop == nullptr)
+        return;
+    if (_stopIndex == -1)
+        [self initStopIndex];
+    else if (_stopIndex < _route->forwardStops.size())
+        _stopIndex = stopIndex;
 }
 
 @end

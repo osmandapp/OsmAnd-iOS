@@ -282,17 +282,20 @@
             cell.titleLabel.numberOfLines = 3;
             cell.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         }
-        OAApplicationMode *am = item[@"app_mode"];
-        UIImage *img = am.getIcon;
-        cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
-        cell.leftIconView.tintColor = UIColorFromRGB(am.getIconColor);
-        cell.titleLabel.text = am.toHumanString;
-        cell.descriptionLabel.text = [self getProfileDescription:am];
-        cell.contentView.backgroundColor = UIColor.clearColor;
-        if ([item[@"isColored"] boolValue])
-            cell.backgroundColor = [UIColorFromRGB(am.getIconColor) colorWithAlphaComponent:0.1];
-        else
-            cell.backgroundColor = UIColor.whiteColor;
+        if (cell)
+        {
+            OAApplicationMode *am = item[@"app_mode"];
+            UIImage *img = am.getIcon;
+            cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+            cell.leftIconView.tintColor = UIColorFromRGB(am.getIconColor);
+            cell.titleLabel.text = am.toHumanString;
+            cell.descriptionLabel.text = [self getProfileDescription:am];
+            cell.contentView.backgroundColor = UIColor.clearColor;
+            if ([item[@"isColored"] boolValue])
+                cell.backgroundColor = [UIColorFromRGB(am.getIconColor) colorWithAlphaComponent:0.1];
+            else
+                cell.backgroundColor = UIColor.whiteColor;
+        }
         return cell;
     }
     else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])

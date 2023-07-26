@@ -263,6 +263,8 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAButtonTableViewCell *)[nib objectAtIndex:0];
         [cell.button setTitle:nil forState:UIControlStateNormal];
+        [cell.button setTintColor:UIColorFromRGB(color_icon_color_light)];
+        [cell.button.imageView setContentMode:UIViewContentModeCenter];
     }
     
     if (cell)
@@ -271,11 +273,9 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         [cell.descriptionLabel setText:item[@"description"]];
         [cell.leftIconView setImage:poiType ? poiType.icon : [UIImage imageNamed:@"ic_custom_osm_note_unresolved"]];
         [cell.button setImage:[UIImage templateImageNamed:@"ic_custom_overflow_menu.png"] forState:UIControlStateNormal];
-        [cell.button setTintColor:UIColorFromRGB(color_icon_color_light)];
         [cell.button setTag:indexPath.row];
         [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
         [cell.button addTarget:self action:@selector(overflowButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [cell.button.imageView setContentMode:UIViewContentModeCenter];
     }
     return cell;
 }

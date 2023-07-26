@@ -1260,7 +1260,6 @@
 "rendering_attr_showAccess_name" = "Vis adgangsrestriksjoner og veiavgifter";
 "rendering_attr_smoothness_excellent_name" = "Utmerket";
 "routing_attr_driving_style_speed_name" = "Kortere ruter";
-"rendering_attr_alpineHiking_name" = "Alpin vandringsskala (SAC)";
 "rendering_value_translucent_blue_name" = "Gjennomskinnelig blå";
 "routing_attr_max_num_changes_name" = "Antall overganger";
 "rendering_value_medium_name" = "Middels";

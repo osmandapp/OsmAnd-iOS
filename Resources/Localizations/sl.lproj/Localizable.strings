@@ -1071,7 +1071,6 @@
 "rendering_value_boldOutline_name" = "Poudarjen obris";
 "rendering_attr_roadStyle_description" = "Slog izrisa cest";
 "rendering_attr_highway_class_track_grade4_name" = "Ocena 4";
-"rendering_attr_alpineHiking_name" = "Lestvica alpskega pohodništva (SAC)";
 "routing_attr_prefer_motorway_description" = "Prednostno bodo izbrane hitre ceste in avtoceste";
 "routing_attr_no_new_routing_description" = "Ne omogoči uporabe pravil usmerjanja, ki so bile uvedene z različico v1.9.";
 "routing_attr_driving_style_safety_name" = "Vodi po stranpoteh";

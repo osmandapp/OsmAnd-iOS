@@ -1291,7 +1291,6 @@
 "rendering_attr_showAccess_name" = "Kuva ligipääsupiirangud ja toll";
 "rendering_attr_smoothness_excellent_name" = "Suurepärane";
 "routing_attr_driving_style_speed_name" = "Lühemad teekonnad";
-"rendering_attr_alpineHiking_name" = "Alpimatkamise mõõtkava (SAC)";
 "routing_attr_max_num_changes_name" = "Ümberistumiste arv";
 "rendering_value_translucent_blue_name" = "Läbikumav sinine";
 "rendering_value_medium_name" = "Keskmine";

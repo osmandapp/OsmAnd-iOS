@@ -2162,7 +2162,6 @@
 "rendering_attr_tracktype_grade4_name" = "Mostly soft";
 "rendering_value_disabled_name" = "முடக்கியது";
 
-"rendering_attr_alpineHiking_name" = "Alpine hiking scale (SAC)";
 "rendering_attr_showLez_name" = "Show Low Emission Zones";
 "rendering_value_green_name" = "Green";
 "routing_attr_piste_type_nordic_description" = "Trails for nordic or cross-country skiing.";

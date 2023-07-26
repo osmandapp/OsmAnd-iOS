@@ -1186,7 +1186,6 @@
 "rendering_attr_piste_difficulty_intermediate_name" = "Středně pokročilý";
 "rendering_attr_coloredBuildings_name" = "Barvy budov podle typu";
 "routing_attr_driving_style_name" = "Styl jízdy";
-"rendering_attr_alpineHiking_name" = "Vysokohorská turistika (SAC)";
 "routing_attr_piste_type_nordic_name" = "Běžecké a klasické lyžování";
 "rendering_value_black_name" = "Černá";
 "rendering_attr_tracktype_grade1_name" = "Pevný (zpevněný)";

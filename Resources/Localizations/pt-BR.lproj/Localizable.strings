@@ -1229,7 +1229,6 @@
 "rendering_value_default13_name" = "Predefinido (13)";
 "rendering_attr_surface_snow_name" = "Neve";
 "rendering_attr_OSMMapperAssistant_name" = "Assistente de mapeador OSM";
-"rendering_attr_alpineHiking_name" = "Escala de montanhismo (SAC)";
 "rendering_attr_highway_class_cycleway_name" = "Ciclovia";
 "rendering_attr_alpineHiking_description" = "Renderizar caminhos de acordo com a escala de SAC.";
 "rendering_attr_currentTrackWidth_description" = "Largura do GPX";

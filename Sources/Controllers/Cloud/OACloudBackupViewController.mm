@@ -300,7 +300,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
             if (_status.warningTitle != nil || _error.length > 0)
             {
-                if ([self isExpiredPurchased])
+                if ([self isExpiredPurchase])
                 {
                     BOOL hasWarningStatus = _status.warningTitle != nil;
                     BOOL hasDescr = _error || _status.warningDescription;
@@ -370,7 +370,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             };
             [backupRows addRowFromDictionary:retryCell];
         }
-        else if (_status == OABackupStatus.SUBSCRIPTION_EXPIRED && [self isExpiredPurchased])
+        else if (_status == OABackupStatus.SUBSCRIPTION_EXPIRED)
         {
             NSDictionary *purchaseCell = @{
                 kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
@@ -383,9 +383,9 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     }
 }
 
-- (BOOL)isExpiredPurchased {
+- (BOOL)isExpiredPurchase {
     NSArray<OAProduct *> *mainPurchases = [OAIAPHelper.sharedInstance getEverMadeMainPurchases];
-    NSArray<OAProduct *> *inAppsPurchases = [OAIAPHelper.sharedInstance getEverMadeMainPurchases];
+    NSArray<OAProduct *> *inAppsPurchases = [OAIAPHelper.sharedInstance inAppsPurchased];
     
     for (OAProduct *product in mainPurchases)
     {

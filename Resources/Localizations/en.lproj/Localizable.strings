@@ -2819,7 +2819,6 @@
 "error_contact_support" = "If the issue persists, please contact our support team.";
 "promo_subscription" = "Promo subscription";
 "renew_subscription" = "Renew subscription";
-"osmand_start" = "OsmAnd Start";
 
 "register_opr_create_new_account" = "Create new account";
 "osmand_cloud_create_account_descr" = "Please enter your e-mail address, a verification code will be sent there,\nand all your data will be linked to it.";

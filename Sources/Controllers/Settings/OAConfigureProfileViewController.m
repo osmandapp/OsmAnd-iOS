@@ -428,7 +428,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             _freeBackupBanner = (FreeBackupBanner *)nib[0];
             __weak OAConfigureProfileViewController *weakSelf = self;
             _freeBackupBanner.didOsmAndCloudButtonAction = ^{
-                [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.OSMAND_CLOUD navController:weakSelf.navigationController];
+                [weakSelf.navigationController pushViewController:[OACloudIntroductionViewController new] animated:YES];
             };
             _freeBackupBanner.didCloseButtonAction = ^{
                 [weakSelf closeFreeBackupBanner];

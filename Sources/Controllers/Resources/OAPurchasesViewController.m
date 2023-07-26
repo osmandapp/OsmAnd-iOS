@@ -26,6 +26,8 @@
 #import <MessageUI/MFMailComposeViewController.h>
 #import "OABackupHelper.h"
 
+#define OSMAND_START @"OsmAnd Start"
+
 @interface OAPurchasesViewController () <SFSafariViewControllerDelegate, MFMailComposeViewControllerDelegate>
 
 @end
@@ -108,7 +110,7 @@ static BOOL _purchasesUpdated;
         kCellKeyKey : @"product_osmand_start",
         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
         kCellIconNameKey : @"ic_custom_osmand_start",
-        kCellTitleKey :  OALocalizedString(@"osmand_start"),
+        kCellTitleKey : OSMAND_START,
         kCellDescrKey : descriptionString
     }];
 }

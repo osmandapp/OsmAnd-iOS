@@ -22,6 +22,8 @@
 #import "Localization.h"
 #import <SafariServices/SafariServices.h>
 
+#define OSMAND_START @"OsmAnd Start"
+
 @interface OAPurchaseDetailsViewController () <SFSafariViewControllerDelegate>
 
 @end
@@ -84,7 +86,7 @@
         return _isPromo ? OALocalizedString(@"promo_subscription") : OALocalizedString(@"product_title_pro");
     }
     else if (_isFreeStart) {
-        return OALocalizedString(@"osmand_start");
+        return OSMAND_START;
     }
     else
     {
@@ -117,7 +119,7 @@
 
     [productSection addRowFromDictionary:@{
         kCellTypeKey : [OATitleDescriptionBigIconCell getCellIdentifier],
-        kCellTitleKey : OALocalizedString(@"osmand_start"),
+        kCellTitleKey : OSMAND_START,
         @"icon" : [UIImage imageNamed:@"ic_custom_osmand_start_logo_big"]
     }];
 

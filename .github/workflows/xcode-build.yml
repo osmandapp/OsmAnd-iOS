@@ -45,7 +45,7 @@ jobs:
     - name: Checkout ios
       uses: actions/checkout@v3
       with:
-        ref: refs/heads/r4.5
+        ref: refs/heads/master
         path: ios
     - name: Checkout android
       uses: actions/checkout@v3

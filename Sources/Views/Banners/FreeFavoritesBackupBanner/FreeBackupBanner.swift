@@ -37,7 +37,7 @@ final class FreeBackupBanner: UIView {
     func configure(bannerType: BannerType) {
         switch bannerType {
         case .favorite:
-            titleLabel.text = localizedString("banner_payment_free_backup_favorite_title")
+            titleLabel.text = localizedString("free_favorites_backup")
             imageView.image = UIImage(named: "ic_custom_folder_cloud_colored")
         case .settings:
             titleLabel.text = localizedString("banner_payment_free_backup_settings_title")

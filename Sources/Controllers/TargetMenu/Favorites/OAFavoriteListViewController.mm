@@ -154,8 +154,7 @@ static UIViewController *parentController;
 {
     return ![[NSUserDefaults standardUserDefaults] boolForKey:kWasClodedFreeBackupFavoritesBannerKey]
     && ![OAIAPHelper isOsmAndProAvailable]
-    && OABackupHelper.sharedInstance.isRegistered;
-    
+    && !OABackupHelper.sharedInstance.isRegistered;
 }
 
 - (void)resizeHeaderBanner {

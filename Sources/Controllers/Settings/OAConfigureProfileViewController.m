@@ -476,7 +476,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 {
     return ![[NSUserDefaults standardUserDefaults] boolForKey:kWasClodedFreeBackupSettingsBannerKey]
     && ![OAIAPHelper isOsmAndProAvailable]
-    && OABackupHelper.sharedInstance.isRegistered;
+    && !OABackupHelper.sharedInstance.isRegistered;
 }
 
 - (void)closeFreeBackupBanner

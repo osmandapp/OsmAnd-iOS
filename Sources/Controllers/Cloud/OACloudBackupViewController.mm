@@ -370,7 +370,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             };
             [backupRows addRowFromDictionary:retryCell];
         }
-        else if (_status == OABackupStatus.SUBSCRIPTION_EXPIRED)
+        else if (_status == OABackupStatus.SUBSCRIPTION_EXPIRED && [self isExpiredPurchased])
         {
             NSDictionary *purchaseCell = @{
                 kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],

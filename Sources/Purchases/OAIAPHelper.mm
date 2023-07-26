@@ -1870,7 +1870,7 @@ static OASubscriptionState *EXPIRED;
 - (NSTimeInterval)convertStringDateToTimeInterval:(NSString *)string {
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     [dateFormatter setDateFormat:@"MMM d, yyyy, HH:mm:ss a"];
-    [dateFormatter setLocale:[NSLocale currentLocale]];
+    [dateFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US"]];
     NSDate *date = [dateFormatter dateFromString:string];
     return [date timeIntervalSince1970];
 }

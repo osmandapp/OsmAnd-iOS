@@ -29,7 +29,7 @@
 #import "OACustomRegion.h"
 #import "OADownloadDescriptionInfo.h"
 #import "OATextMultilineTableViewCell.h"
-#import "OAMultiIconTextDescCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OAColors.h"
 #import "OANauticalMapsPlugin.h"
 #import "Localization.h"
@@ -2138,7 +2138,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *const descriptionButtonIconCell = @"OAMultiIconTextDescCell";
+    static NSString *const descriptionButtonIconCell = @"OAButtonTableViewCell";
     static NSString *const subregionCell = @"subregionCell";
     static NSString *const outdatedResourceCell = @"outdatedResourceCell";
     static NSString *const localResourceCell = @"localResourceCell";
@@ -2852,17 +2852,19 @@ static BOOL _repositoryUpdated = NO;
     }
     else if ([cellTypeId isEqualToString:descriptionButtonIconCell])
     {
-        OAMultiIconTextDescCell *buttonCell = (OAMultiIconTextDescCell *) cell;
+        OAButtonTableViewCell *buttonCell = (OAButtonTableViewCell *) cell;
         OADownloadActionButton *button = _downloadDescriptionInfo.getActionButtons[indexPath.row - 1];
-        buttonCell.textView.text = button.name;
-        buttonCell.descView.text = button.url;
-        buttonCell.textView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
-        buttonCell.textView.textColor = UIColorFromRGB(color_primary_purple);
-        [buttonCell.overflowButton setImage:[UIImage templateImageNamed:@"ic_custom_safari"] forState:UIControlStateNormal];
-        buttonCell.overflowButton.tag = indexPath.row - 1;
-        buttonCell.overflowButton.tintColor = UIColorFromRGB(color_primary_purple);
-        [buttonCell.overflowButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-        [buttonCell.overflowButton addTarget:self action:@selector(onWebPagePressed:) forControlEvents:UIControlEventTouchUpInside];
+        [buttonCell leftIconVisibility:NO];
+        buttonCell.titleLabel.text = button.name;
+        buttonCell.descriptionLabel.text = button.url;
+        buttonCell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
+        buttonCell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
+        [buttonCell.button setTitle:nil forState:UIControlStateNormal];
+        [buttonCell.button setImage:[UIImage templateImageNamed:@"ic_custom_safari"] forState:UIControlStateNormal];
+        buttonCell.button.tag = indexPath.row - 1;
+        buttonCell.button.tintColor = UIColorFromRGB(color_primary_purple);
+        [buttonCell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+        [buttonCell.button addTarget:self action:@selector(onWebPagePressed:) forControlEvents:UIControlEventTouchUpInside];
     }
 
     return cell;

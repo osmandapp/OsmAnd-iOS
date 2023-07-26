@@ -85,11 +85,11 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
             
             [data addObject:@{
                 @"text": OALocalizedString(@"edit_tilesource_elliptic_tile"),
-                @"img": _isEllipticYTile ? @"menu_cell_selected.png" : @""
+                @"isSelected": @(_isEllipticYTile)
             }];
             [data addObject:@{
                 @"text": OALocalizedString(@"pseudo_mercator_projection"),
-                @"img": !_isEllipticYTile ? @"menu_cell_selected.png" : @""
+                @"isSelected": @(!_isEllipticYTile)
             }];
             break;
         }
@@ -97,11 +97,11 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
         {
             [data addObject:@{
                 @"text": OALocalizedString(@"sqlite_db_file"),
-                @"img": _sourceFormat == EOASourceFormatSQLite ? @"menu_cell_selected.png" : @""
+                @"isSelected": @(_sourceFormat == EOASourceFormatSQLite)
             }];
             [data addObject:@{
                 @"text": OALocalizedString(@"one_image_per_tile"),
-                @"img": _sourceFormat == EOASourceFormatOnline ? @"menu_cell_selected.png" : @""
+                @"isSelected": @(_sourceFormat == EOASourceFormatOnline)
             }];
             break;
         }
@@ -137,8 +137,7 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
     if (cell)
     {
         [cell.titleLabel setText: item[@"text"]];
-        UIImage *image = [UIImage imageNamed:item[@"img"]];
-        cell.accessoryType = image ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+        cell.accessoryType = [item[@"isSelected"] boolValue] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     }
     return cell;
 }

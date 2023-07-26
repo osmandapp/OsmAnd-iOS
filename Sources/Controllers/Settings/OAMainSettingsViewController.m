@@ -8,7 +8,7 @@
 
 #import "OAMainSettingsViewController.h"
 #import "OAValueTableViewCell.h"
-#import "OAMultiIconTextDescCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OAAppSettings.h"
@@ -153,7 +153,7 @@
         @{
             @"name" : @"current_profile",
             @"app_mode" : appMode,
-            @"type" : [OAMultiIconTextDescCell getCellIdentifier],
+            @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"isColored" : @YES
         }
     ]];
@@ -164,7 +164,7 @@
         [profilesSection addObject:@{
             @"name" : @"profile_val",
             @"app_mode" : OAApplicationMode.allPossibleValues[i],
-            @"type" : i == 0 ? [OAMultiIconTextDescCell getCellIdentifier] : [OASwitchTableViewCell getCellIdentifier],
+            @"type" : i == 0 ? [OASimpleTableViewCell getCellIdentifier] : [OASwitchTableViewCell getCellIdentifier],
             @"isColored" : @NO
         }];
     }
@@ -272,24 +272,22 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
+    else if ([type isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAMultiIconTextDescCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
+        OASimpleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
-            cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
-            [cell setOverflowVisibility:YES];
-            cell.textView.numberOfLines = 3;
-            cell.textView.lineBreakMode = NSLineBreakByTruncatingTail;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+            cell.titleLabel.numberOfLines = 3;
+            cell.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         }
         OAApplicationMode *am = item[@"app_mode"];
         UIImage *img = am.getIcon;
-        cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
-        cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
-        cell.textView.text = am.toHumanString;
-        cell.descView.text = [self getProfileDescription:am];
+        cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+        cell.leftIconView.tintColor = UIColorFromRGB(am.getIconColor);
+        cell.titleLabel.text = am.toHumanString;
+        cell.descriptionLabel.text = [self getProfileDescription:am];
         cell.contentView.backgroundColor = UIColor.clearColor;
         if ([item[@"isColored"] boolValue])
             cell.backgroundColor = [UIColorFromRGB(am.getIconColor) colorWithAlphaComponent:0.1];

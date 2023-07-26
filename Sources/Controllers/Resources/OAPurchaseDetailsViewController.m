@@ -84,7 +84,7 @@
         return _isPromo ? OALocalizedString(@"promo_subscription") : OALocalizedString(@"product_title_pro");
     }
     else if (_isFreeStart) {
-        return OALocalizedString(@"start_subscription");
+        return OALocalizedString(@"osmand_start");
     }
     else
     {
@@ -117,14 +117,14 @@
 
     [productSection addRowFromDictionary:@{
         kCellTypeKey : [OATitleDescriptionBigIconCell getCellIdentifier],
-        kCellTitleKey : OALocalizedString(@"start_subscription"),
+        kCellTitleKey : OALocalizedString(@"osmand_start"),
         @"icon" : [UIImage imageNamed:@"ic_custom_osmand_start_logo_big"]
     }];
 
     [productSection addRowFromDictionary:@{
         kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"shared_string_type"),
-        kCellDescrKey : OALocalizedString(@"shared_string_free_account")
+        kCellDescrKey : OALocalizedString(@"free_account")
     }];
     NSDate *purchasedDate = [NSDate dateWithTimeIntervalSince1970:[OAAppSettings.sharedManager.backupFreePlanRegistrationTime get]];
     NSDateFormatter *formatter = [NSDateFormatter new];

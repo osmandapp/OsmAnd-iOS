@@ -102,13 +102,13 @@ static BOOL _purchasesUpdated;
     NSDate *purchasedDate = [NSDate dateWithTimeIntervalSince1970:[OAAppSettings.sharedManager.backupFreePlanRegistrationTime get]];
     NSDateFormatter *formatter = [NSDateFormatter new];
     formatter.dateStyle = NSDateFormatterMediumStyle;
-    NSString *descriptionString = [NSString stringWithFormat:@"%@\n%@", OALocalizedString(@"shared_string_free_account"), [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), OALocalizedString(@"shared_string_purchased"), [formatter stringFromDate:purchasedDate]]];
+    NSString *descriptionString = [NSString stringWithFormat:@"%@\n%@", OALocalizedString(@"free_account"), [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), OALocalizedString(@"shared_string_purchased"), [formatter stringFromDate:purchasedDate]]];
     
     [activeSection addRowFromDictionary:@{
         kCellKeyKey : @"product_osmand_start",
         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
         kCellIconNameKey : @"ic_custom_osmand_start",
-        kCellTitleKey :  OALocalizedString(@"start_subscription"),
+        kCellTitleKey :  OALocalizedString(@"osmand_start"),
         kCellDescrKey : descriptionString
     }];
 }

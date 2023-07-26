@@ -24,7 +24,7 @@ final class FreeBackupBanner: UIView {
     }
     @IBOutlet weak var descriptionLabel: UILabel! {
         didSet {
-            descriptionLabel.text = localizedString("banner_payment_free_backup_description")
+            descriptionLabel.text = localizedString("free_favorites_backup_description")
         }
     }
     

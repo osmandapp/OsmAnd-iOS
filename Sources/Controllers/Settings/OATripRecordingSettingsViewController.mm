@@ -8,7 +8,6 @@
 
 #import "OATripRecordingSettingsViewController.h"
 #import "OAGPXListViewController.h"
-#import "OASettingsTitleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
@@ -470,20 +469,22 @@ static NSArray<NSString *> *minTrackSpeedNames;
     }
     else if ([type isEqualToString:kCellTypeCheck])
     {
-        OASettingsTitleTableViewCell* cell = nil;
+        OASimpleTableViewCell* cell = nil;
         
-        cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         
         if (cell)
         {
-            [cell.textView setText: item[@"title"]];
+            [cell.titleLabel setText: item[@"title"]];
             UIImage *image = [UIImage imageNamed:item[@"img"]];
-            [cell.iconView setImage:image];
+            cell.accessoryType = image ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         return cell;
     }

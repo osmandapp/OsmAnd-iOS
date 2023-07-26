@@ -2490,7 +2490,6 @@
 		DA5A828426C563A700F274C7 /* OAHomeWorkCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BDA26C563A100F274C7 /* OAHomeWorkCollectionViewCell.xib */; };
 		DA5A828626C563A700F274C7 /* OARouteInfoAltitudeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BDC26C563A100F274C7 /* OARouteInfoAltitudeCell.xib */; };
 		DA5A828726C563A700F274C7 /* OARouteProgressBarCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BDD26C563A100F274C7 /* OARouteProgressBarCell.xib */; };
-		DA5A828826C563A700F274C7 /* OAOnlyImageViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BDE26C563A100F274C7 /* OAOnlyImageViewCell.xib */; };
 		DA5A828A26C563A700F274C7 /* OADirectionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BE026C563A100F274C7 /* OADirectionTableViewCell.xib */; };
 		DA5A828B26C563A700F274C7 /* OAFoldersCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BE126C563A100F274C7 /* OAFoldersCollectionViewCell.xib */; };
 		DA5A828C26C563A700F274C7 /* OAGPXTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BE226C563A100F274C7 /* OAGPXTableViewCell.xib */; };
@@ -2588,7 +2587,6 @@
 		DA5A830726C563A800F274C7 /* OAPoiTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7C8D26C563A200F274C7 /* OAPoiTableViewCell.m */; };
 		DA5A830826C563A800F274C7 /* OATitleRightIconCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7C9226C563A200F274C7 /* OATitleRightIconCell.m */; };
 		DA5A830926C563A800F274C7 /* OAIconBackgroundCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7C9326C563A200F274C7 /* OAIconBackgroundCollectionViewCell.m */; };
-		DA5A830A26C563A800F274C7 /* OAOnlyImageViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7C9426C563A200F274C7 /* OAOnlyImageViewCell.m */; };
 		DA5A830C26C563A800F274C7 /* OAEmptySearchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7C9A26C563A200F274C7 /* OAEmptySearchCell.m */; };
 		DA5A830D26C563A800F274C7 /* OATargetInfoCollapsableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7C9B26C563A200F274C7 /* OATargetInfoCollapsableViewCell.m */; };
 		DA5A830E26C563A800F274C7 /* OATitleIconRoundCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7C9C26C563A200F274C7 /* OATitleIconRoundCell.m */; };
@@ -6681,7 +6679,6 @@
 		DA5A7BDA26C563A100F274C7 /* OAHomeWorkCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAHomeWorkCollectionViewCell.xib; sourceTree = "<group>"; };
 		DA5A7BDC26C563A100F274C7 /* OARouteInfoAltitudeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARouteInfoAltitudeCell.xib; sourceTree = "<group>"; };
 		DA5A7BDD26C563A100F274C7 /* OARouteProgressBarCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARouteProgressBarCell.xib; sourceTree = "<group>"; };
-		DA5A7BDE26C563A100F274C7 /* OAOnlyImageViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAOnlyImageViewCell.xib; sourceTree = "<group>"; };
 		DA5A7BE026C563A100F274C7 /* OADirectionTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADirectionTableViewCell.xib; sourceTree = "<group>"; };
 		DA5A7BE126C563A100F274C7 /* OAFoldersCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAFoldersCollectionViewCell.xib; sourceTree = "<group>"; };
 		DA5A7BE226C563A100F274C7 /* OAGPXTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAGPXTableViewCell.xib; sourceTree = "<group>"; };
@@ -6816,7 +6813,6 @@
 		DA5A7C9126C563A200F274C7 /* OARadiusCellEx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARadiusCellEx.h; sourceTree = "<group>"; };
 		DA5A7C9226C563A200F274C7 /* OATitleRightIconCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OATitleRightIconCell.m; sourceTree = "<group>"; };
 		DA5A7C9326C563A200F274C7 /* OAIconBackgroundCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAIconBackgroundCollectionViewCell.m; sourceTree = "<group>"; };
-		DA5A7C9426C563A200F274C7 /* OAOnlyImageViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAOnlyImageViewCell.m; sourceTree = "<group>"; };
 		DA5A7C9526C563A200F274C7 /* OADateTimePickerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADateTimePickerTableViewCell.h; sourceTree = "<group>"; };
 		DA5A7C9826C563A200F274C7 /* OASegmentedControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASegmentedControlCell.h; sourceTree = "<group>"; };
 		DA5A7C9926C563A200F274C7 /* OAIconTextDescButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAIconTextDescButtonCell.h; sourceTree = "<group>"; };
@@ -6898,7 +6894,6 @@
 		DA5A7CFF26C563A300F274C7 /* OASegmentedControlCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASegmentedControlCell.m; sourceTree = "<group>"; };
 		DA5A7D0026C563A300F274C7 /* OARadiusCellEx.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OARadiusCellEx.m; sourceTree = "<group>"; };
 		DA5A7D0126C563A300F274C7 /* OATitleRightIconCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATitleRightIconCell.h; sourceTree = "<group>"; };
-		DA5A7D0226C563A300F274C7 /* OAOnlyImageViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOnlyImageViewCell.h; sourceTree = "<group>"; };
 		DA5A7D0326C563A300F274C7 /* OAIconBackgroundCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAIconBackgroundCollectionViewCell.h; sourceTree = "<group>"; };
 		DA5A7D0426C563A300F274C7 /* OAPoiTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPoiTableViewCell.h; sourceTree = "<group>"; };
 		DA5A7D0526C563A300F274C7 /* OAProgressBarCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAProgressBarCell.mm; sourceTree = "<group>"; };
@@ -12403,8 +12398,6 @@
 				DA5A7CBC26C563A200F274C7 /* OAMultilineTextViewCell.m */,
 				DA5A7BAE26C563A100F274C7 /* OANoImagesCell.h */,
 				DA5A7D1526C563A300F274C7 /* OANoImagesCell.mm */,
-				DA5A7D0226C563A300F274C7 /* OAOnlyImageViewCell.h */,
-				DA5A7C9426C563A200F274C7 /* OAOnlyImageViewCell.m */,
 				DA5A7C5F26C563A200F274C7 /* OAPasswordInputFieldCell.h */,
 				DA5A7C4E26C563A200F274C7 /* OAPasswordInputFieldCell.mm */,
 				DA5A7C7126C563A200F274C7 /* OAPoiCollectionViewCell.h */,
@@ -12601,7 +12594,6 @@
 				DA5A7BC426C563A100F274C7 /* OAMultiIconTextDescCell.xib */,
 				DA5A7BD326C563A100F274C7 /* OAMultilineTextViewCell.xib */,
 				DA5A7C1D26C563A200F274C7 /* OANoImagesCell.xib */,
-				DA5A7BDE26C563A100F274C7 /* OAOnlyImageViewCell.xib */,
 				DA5A7C1826C563A200F274C7 /* OAPasswordInputFieldCell.xib */,
 				DA5A7C2A26C563A200F274C7 /* OAPoiCollectionViewCell.xib */,
 				DA5A7BB826C563A100F274C7 /* OAPointDescCell.xib */,
@@ -15495,7 +15487,6 @@
 				84342E081CFD872B00EF04ED /* left_menu_icon_waypoints@2x.png in Resources */,
 				B24745A327F4A7A200C18C3F /* ic_custom_wifi_off@2x.png in Resources */,
 				46494280286DB36800A44103 /* ic_custom_compass_hidden@3x.png in Resources */,
-				DA5A828826C563A700F274C7 /* OAOnlyImageViewCell.xib in Resources */,
 				DA2EC6DB29FBBE0300ECEB37 /* widget_street_name_night@3x.png in Resources */,
 				DAB265D72913FD8500B9B79A /* ic_custom_device@2x.png in Resources */,
 				DA2EC6A829FBBE0300ECEB37 /* warnings_traffic_calming@3x.png in Resources */,
@@ -17677,7 +17668,6 @@
 				DA4ABEE82876DA5D00B996EF /* OAQuickActionsSettingsItemReader.m in Sources */,
 				DA5A81ED26C563A700F274C7 /* OAProfileIcon.m in Sources */,
 				DA5A84E026C563A900F274C7 /* OAMapSettingsMapillaryScreen.mm in Sources */,
-				DA5A830A26C563A800F274C7 /* OAOnlyImageViewCell.m in Sources */,
 				DA5A825A26C563A700F274C7 /* OABaseSettingsViewController.m in Sources */,
 				DA5A854626C563A900F274C7 /* OASavingTrackHelper.mm in Sources */,
 				DAA61CBF2A02789D00AFF65D /* MapWidgetInfo.swift in Sources */,

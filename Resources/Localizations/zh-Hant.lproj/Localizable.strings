@@ -1160,7 +1160,6 @@
 "routing_attr_prefer_unpaved_name" = "偏好無鋪面道路";
 "rendering_value_yellow_name" = "黃";
 "rendering_attr_currentTrackWidth_description" = "GPX的寬度";
-"rendering_attr_alpineHiking_name" = "登山健行等級（SAC）";
 "rendering_attr_depthContours_name" = "航海等深線";
 "routing_attr_short_way_name" = "省油的方式";
 "rendering_attr_tramRoutes_name" = "有軌電車路線";

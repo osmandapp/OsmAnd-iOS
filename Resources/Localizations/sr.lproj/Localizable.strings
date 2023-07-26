@@ -2039,7 +2039,6 @@
 "rendering_value_disabled_name" = "Искључен";
 "rendering_attr_contourColorScheme_name" = "Образац боја линија изохипси";
 "routing_attr_short_way_name" = "Пут који штеди гориво";
-"rendering_attr_alpineHiking_name" = "Алпска лествица за планинарење (SAC)";
 "rendering_attr_showLez_name" = "Прикажи области ниског загађења";
 "rendering_value_green_name" = "Зелена";
 "routing_attr_piste_type_nordic_description" = "Путеви за нордијско или пољско скијање.";

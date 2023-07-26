@@ -1119,7 +1119,6 @@
 "rendering_attr_surface_stone_name" = "سنگ";
 "rendering_attr_highway_class_service_name" = "خدماتی";
 "rendering_attr_trainLightrailRoutes_name" = "مسیرهای قطار";
-"rendering_attr_alpineHiking_name" = "مقیاس پیاده‌گردی آلپاین (SAC)";
 "rendering_value_bold_name" = "ضخیم";
 "routing_attr_prefer_unpaved_name" = "ترجیح جاده‌های روسازی‌نشده";
 "routing_attr_relief_smoothness_factor_hills_name" = "پُرتپه";

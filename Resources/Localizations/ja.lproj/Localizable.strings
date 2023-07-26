@@ -1459,7 +1459,6 @@
 "rendering_attr_surface_mud_name" = "泥";
 "rendering_attr_piste_type_sled_name" = "そり専用ゲレンデ";
 "routeInfo_winter_ice_road_name" = "冬期道路およびアイスロード";
-"rendering_attr_alpineHiking_name" = "アルペンハイキングスケール(SAC)";
 "rendering_attr_surface_grass_name" = "草、芝";
 "rendering_attr_OSMMapperAssistant_name" = "OSMマッパーアシスタント";
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";

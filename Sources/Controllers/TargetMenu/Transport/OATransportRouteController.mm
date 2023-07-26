@@ -71,19 +71,20 @@ static OATransportRouteToolbarViewController *toolbarController;
 {
     int previousStop = [self getPreviousStop];
     if (previousStop != -1)
-        [self showTransportStop:_transportRoute.route->forwardStops[previousStop]];
+        [self showTransportStop:_transportRoute.route->forwardStops[previousStop] stopIndex:previousStop];
 }
 
 - (void) rightControlButtonPressed
 {
     int nextStop = [self getNextStop];
     if (nextStop != -1)
-        [self showTransportStop:_transportRoute.route->forwardStops[nextStop]];
+        [self showTransportStop:_transportRoute.route->forwardStops[nextStop] stopIndex:nextStop];
 }
 
-- (void) showTransportStop:(std::shared_ptr<OsmAnd::TransportStop>)stop
+- (void) showTransportStop:(std::shared_ptr<OsmAnd::TransportStop>)stop stopIndex:(int)stopIndex
 {
     _transportRoute.stop = stop;
+    [_transportRoute setStopIndex:stopIndex];
     _transportRoute.refStop = stop;
 
     [self refreshContextMenu];
@@ -189,22 +190,10 @@ static OATransportRouteToolbarViewController *toolbarController;
     return ETopToolbarTypeFixed;
 }
 
-- (int) getCurrentStop
-{
-    const auto& stops = _transportRoute.route->forwardStops;
-    for (int i = 0; i < stops.size(); i++)
-    {
-        auto stop = stops[i];
-        if (stop->getName(_lang, _transliterate) == _transportRoute.stop->getName(_lang, _transliterate))
-            return i;
-    }
-    return -1;
-}
-
 - (int) getNextStop
 {
     const auto& stops = _transportRoute.route->forwardStops;
-    int currentPos = [self getCurrentStop];
+    int currentPos = [_transportRoute getStopIndex];
     if (currentPos != -1 && currentPos + 1 < stops.size())
         return currentPos + 1;
     
@@ -213,7 +202,7 @@ static OATransportRouteToolbarViewController *toolbarController;
 
 - (int) getPreviousStop
 {
-    int currentPos = [self getCurrentStop];
+    int currentPos = [_transportRoute getStopIndex];
     if (currentPos > 0)
         return currentPos - 1;
     
@@ -223,7 +212,7 @@ static OATransportRouteToolbarViewController *toolbarController;
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
 {
     const auto& stops = _transportRoute.route->forwardStops;
-    int currentStop = [self getCurrentStop];
+    int currentStop = [_transportRoute getStopIndex];
     UIImage *defaultIcon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"%@.png", !_transportRoute.type ? @"mx_route_bus_ref" : _transportRoute.type.resId]];
     int startPosition = 0;
     if (!_transportRoute.showWholeRoute && currentStop > 1)
@@ -324,7 +313,7 @@ static OATransportRouteToolbarViewController *toolbarController;
         const auto& stops = _transportRoute.route->forwardStops;
         int index = [[rowInfo.key substringFromIndex:5] intValue];
         if (index < stops.size())
-            [self showTransportStop:stops[index]];
+            [self showTransportStop:stops[index] stopIndex:-1];
     }
 }
 

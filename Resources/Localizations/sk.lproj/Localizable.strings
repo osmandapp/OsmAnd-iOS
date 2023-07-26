@@ -1160,7 +1160,6 @@
 "rendering_attr_noPolygons_description" = "Zobraziť plošné krajinné objekty na mape priehľadne.";
 "routing_attr_difficulty_preference_description" = "Preferovať trasy s touto náročnosťou, ale navigovanie cez náročnejšie alebo jednoduchšie zjazdovky je možné ak sú kratšie.";
 "rendering_attr_highway_class_track_grade4_name" = "Stupeň 4";
-"rendering_attr_alpineHiking_name" = "Alpinistická stupnica (SAC)";
 "routing_attr_avoid_sett_name" = "Žiadne nerovné dlažobné kamene";
 "routing_attr_prefer_motorway_description" = "Uprednostniť diaľnice";
 "rendering_attr_piste_type_snow_park_name" = "Snežný terénny areál";

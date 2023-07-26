@@ -2159,7 +2159,6 @@
 "rendering_value_disabled_name" = "നിര്‍ജ്ജീവമാക്കിയ";
 "rendering_attr_contourColorScheme_name" = "കോണ്ടൂര്‍ വരകളുടെ നിറങ്ങളുടെ സ്കീം";
 "routing_attr_short_way_name" = "\"മൈലേജ് കൂടുതലുള്ള വഴി \"";
-"rendering_attr_alpineHiking_name" = "അൽപൈൻ ഹൈക്കിംഗ് സ്കെയിൽ (എസ്എസി)";
 "rendering_attr_showLez_name" = "Show Low Emission Zones";
 "rendering_value_green_name" = "\"പച്ച \"";
 "routing_attr_piste_type_nordic_description" = "Trails for nordic or cross-country skiing.";

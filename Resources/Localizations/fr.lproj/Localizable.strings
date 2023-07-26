@@ -3003,3 +3003,7 @@
 "rendering_attr_alpineHikingScaleScheme_description" = "Classifications de difficulté pour les pistes.";
 "rendering_value_sacScale_name" = "SAC";
 "rendering_value_caiScale_name" = "CAI";
+"add_row" = "Ajouter une ligne";
+"reset_all_settings_desc" = "Réinitialiser tous les paramètres ?";
+"no_widgets_here_yet" = "Pas encore de gadget ici";
+"no_widgets_descr" = "Ajouter un ou plusieurs gadgets depuis la liste des gadgets disponibles.";

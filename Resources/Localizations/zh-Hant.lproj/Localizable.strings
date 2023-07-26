@@ -1160,7 +1160,7 @@
 "routing_attr_prefer_unpaved_name" = "偏好無鋪面道路";
 "rendering_value_yellow_name" = "黃";
 "rendering_attr_currentTrackWidth_description" = "GPX的寬度";
-"rendering_attr_alpineHiking_name" = "登山健行等級（SAC）";
+"rendering_attr_alpineHiking_name" = "難度分類";
 "rendering_attr_depthContours_name" = "航海等深線";
 "routing_attr_short_way_name" = "省油的方式";
 "rendering_attr_tramRoutes_name" = "有軌電車路線";
@@ -2383,3 +2383,5 @@
 
 // Widget descriptions
 "coordinates_widget_current_location_desc" = "顯示目前地理位置的經緯度";
+"rendering_value_sacScale_description" = "瑞士阿爾卑斯山俱樂部";
+"rendering_value_caiScale_description" = "義大利人阿爾卑斯山俱樂部";

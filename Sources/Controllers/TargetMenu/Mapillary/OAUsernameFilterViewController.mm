@@ -12,7 +12,7 @@
 #import "OAPOICategory.h"
 #import "OAPOIType.h"
 #import "OAPOIBaseType.h"
-#import "OASettingsTitleTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -133,23 +133,21 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OASettingsTitleTableViewCell* cell = nil;
+    OASimpleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     
-    cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+        [cell descriptionVisibility:NO];
+        [cell leftIconVisibility:NO];
     }
     
     if (cell)
     {
         NSString *username = _isFiltered ? _filteredData[indexPath.row][@"username"] : _data[indexPath.row];
-        [cell.textView setText:username];
-        if (!_isFiltered || [_data containsObject:username])
-            [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
-        else
-            [cell.iconView setImage:nil];
+        [cell.titleLabel setText:username];
+        cell.accessoryType = !_isFiltered || [_data containsObject:username] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     }
     return cell;
 }

@@ -9,7 +9,7 @@
 #import "OAMapSettingsParameterScreen.h"
 #import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
-#import "OASettingsTitleTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "Localization.h"
 
 @implementation OAMapSettingsParameterScreen
@@ -87,19 +87,20 @@
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OASettingsTitleTableViewCell* cell = nil;
-    cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+    OASimpleTableViewCell* cell = nil;
+    cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
-        [cell.iconView setHidden:YES];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+        [cell leftIconVisibility:NO];
+        [cell descriptionVisibility:NO];
     }
     
     if (cell)
     {
         OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
-        [cell.textView setText:value.title];
+        [cell.titleLabel setText:value.title];
         if ([parameter.value isEqualToString:value.name])
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
         else

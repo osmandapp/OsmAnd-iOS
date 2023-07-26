@@ -10,7 +10,7 @@
 #import "OASQLiteTileSource.h"
 #import "OAResourcesBaseViewController.h"
 #import "Localization.h"
-#import "OASettingsTitleTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
@@ -85,11 +85,11 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
             
             [data addObject:@{
                 @"text": OALocalizedString(@"edit_tilesource_elliptic_tile"),
-                @"img": _isEllipticYTile ? @"menu_cell_selected.png" : @""
+                @"isSelected": @(_isEllipticYTile)
             }];
             [data addObject:@{
                 @"text": OALocalizedString(@"pseudo_mercator_projection"),
-                @"img": !_isEllipticYTile ? @"menu_cell_selected.png" : @""
+                @"isSelected": @(!_isEllipticYTile)
             }];
             break;
         }
@@ -97,11 +97,11 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
         {
             [data addObject:@{
                 @"text": OALocalizedString(@"sqlite_db_file"),
-                @"img": _sourceFormat == EOASourceFormatSQLite ? @"menu_cell_selected.png" : @""
+                @"isSelected": @(_sourceFormat == EOASourceFormatSQLite)
             }];
             [data addObject:@{
                 @"text": OALocalizedString(@"one_image_per_tile"),
-                @"img": _sourceFormat == EOASourceFormatOnline ? @"menu_cell_selected.png" : @""
+                @"isSelected": @(_sourceFormat == EOASourceFormatOnline)
             }];
             break;
         }
@@ -125,21 +125,19 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
 {
     NSDictionary *item = _data[indexPath.row];
     
-    OASettingsTitleTableViewCell* cell = nil;
-    cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+    OASimpleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+        [cell descriptionVisibility:NO];
+        [cell leftIconVisibility:NO];
     }
     if (cell)
     {
-        [cell.textView setText: item[@"text"]];
-        if (item[@"img"])
-            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]].imageFlippedForRightToLeftLayoutDirection];
-        else
-            [cell.iconView setImage:nil];
+        [cell.titleLabel setText: item[@"text"]];
+        cell.accessoryType = [item[@"isSelected"] boolValue] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     }
     return cell;
 }

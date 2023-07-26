@@ -7,7 +7,7 @@
 //
 
 #import "OASpeedLimitToleranceViewController.h"
-#import "OASettingsTitleTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAAppSettings.h"
 #import "OAApplicationMode.h"
 
@@ -59,7 +59,7 @@
                @"name" : speedLimitsKm[i],
                @"title" : [NSString stringWithFormat:@"%d %@", speedLimitsKm[i].intValue, OALocalizedString(@"km_h")],
                @"isSelected" : @(index == i),
-               @"type" : [OASettingsTitleTableViewCell getCellIdentifier]
+               @"type" : [OASimpleTableViewCell getCellIdentifier]
              }];
         }
     }
@@ -72,7 +72,7 @@
                @"name" : speedLimitsKm[i],
                @"title" : [NSString stringWithFormat:@"%d %@", speedLimitsMiles[i].intValue, OALocalizedString(@"mile_per_hour")],
                @"isSelected" : @(index == i),
-               @"type" : [OASettingsTitleTableViewCell getCellIdentifier]
+               @"type" : [OASimpleTableViewCell getCellIdentifier]
              }];
         }
     }
@@ -93,20 +93,20 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OASettingsTitleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
-            [cell.iconView setHidden:YES];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            if ([item[@"isSelected"] boolValue])
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            cell.titleLabel.text = item[@"title"];
+            cell.accessoryType = [item[@"isSelected"] boolValue] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         return cell;
     }

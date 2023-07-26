@@ -397,7 +397,7 @@
 "go_to_downloads" = "Перейти в загрузки";
 "turn_on_plugin" = "Включите плагин";
 "all_world_popup_desc" = "Загрузите обзорную карту мира для отображения названий, границ стран и другой информации";
-"shared_string_restore" = "Восстановление";
+"shared_string_restore" = "Восстановить";
 "restore_all_purchases" = "Восстановить покупки";
 "no_statistics" = "Нет статистики";
 "no_internet_avail" = "Отсутствует интернет-соединение";
@@ -1692,7 +1692,7 @@
 "select_nav_profile_dialog_message" = "«Режим навигации» определяет правила расчёта маршрутов с использованием автономных или онлайн-маршрутизаторов.";
 "change_map_behavior" = "Изменение поведения карты во время навигации";
 "map_during_navigation" = "Карта во время навигации";
-"vehicle_parameters" = "Параметры транспортного средства";
+"vehicle_parameters" = "Физические параметры";
 "screen_alerts" = "Экранные оповещения";
 "voice_anounces" = "Голосовые анонсы";
 "downloading" = "Скачивание";
@@ -2679,9 +2679,9 @@
 "icon_group_service" = "Сервис";
 "weather_forecast_is_outdated" = "Прогноз устарел.";
 "weather_forecast" = "Прогноз погоды";
-"speak_route_recalculation" = "Оповещать о пересчёте маршрута";
-"speak_gps_signal_status" = "Оповещать о потере и восстановлении GPS-сигнала";
-"speak_route_deviation" = "Оповещать об отклонении от маршрута";
+"speak_route_recalculation" = "Пересчёт маршрута";
+"speak_gps_signal_status" = "Потеря связи с GPS";
+"speak_route_deviation" = "Отклонение от маршрута";
 "announce_when_exceeded" = "Оповещать о превышении";
 "announcement_time_title" = "Время оповещения";
 "announcement_time_descr" = "Время голосового оповещения определяется его типом, текущей скоростью навигации и скоростью навигации по умолчанию.";

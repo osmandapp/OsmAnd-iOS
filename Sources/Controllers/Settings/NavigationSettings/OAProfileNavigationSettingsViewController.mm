@@ -9,7 +9,6 @@
 #import "OAProfileNavigationSettingsViewController.h"
 #import "OAValueTableViewCell.h"
 #import "OASimpleTableViewCell.h"
-#import "OASettingsTitleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OANavigationTypeViewController.h"
 #import "OARouteParametersViewController.h"
@@ -109,7 +108,7 @@
         @"key" : @"routeLineAppearance",
     }];
     [otherArr addObject:@{
-        @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+        @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"map_during_navigation"),
         @"key" : @"mapBehavior",
     }];
@@ -188,6 +187,7 @@
         }
         if (cell)
         {
+            [cell leftIconVisibility:![item[@"key"] isEqualToString:@"mapBehavior"]];
             cell.titleLabel.text = item[@"title"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
             cell.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
@@ -213,23 +213,6 @@
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-        }
-        return cell;
-    }
-    else if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
-    {
-        OASettingsTitleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
-        }
-        if (cell)
-        {
-            cell.textView.text = item[@"title"];
         }
         return cell;
     }

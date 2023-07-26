@@ -190,23 +190,17 @@ NSString *const OATransportStopRouteArrow = @" → ";
 {
     if (_route == nullptr || _stop == nullptr)
         return;
-    
-    NSString *_prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
-    BOOL _transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
-    QString _lang = QString::fromNSString(_prefLang);
-    
+
     auto& stops = _route->forwardStops;
     for (int i = 0; i < stops.size(); i++)
     {
         auto stop = stops[i];
-        if (_stop->getName(_lang, _transliterate) == stop->getName(_lang, _transliterate))
+        if (_stop->id == stop->id)
         {
             _stopIndex = i;
             break;
         }
     }
-    if (_stopIndex == -1)
-        _stopIndex = 0;
 }
 
 - (int) getStopIndex

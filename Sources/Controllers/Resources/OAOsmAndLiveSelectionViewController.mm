@@ -12,7 +12,7 @@
 #import "OsmAndApp.h"
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
-#import "OASettingsTitleTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAIAPHelper.h"
 #import "OAAppSettings.h"
 #import "OAColors.h"
@@ -219,24 +219,21 @@ static const NSInteger groupCount = 1;
              @{
                @"name" : @"hourly_freq",
                @"title" : OALocalizedString(@"hourly"),
-               @"img" : _updatingFrequency == ELiveUpdateFrequencyHourly ? @"menu_cell_selected.png" : @"",
-               @"type" : [OASettingsTitleTableViewCell getCellIdentifier] }
+               @"type" : [OASimpleTableViewCell getCellIdentifier] }
              ];
             
             [dataArr addObject:
              @{
                @"name" : @"daily_freq",
                @"title" : OALocalizedString(@"daily"),
-               @"img" : _updatingFrequency == ELiveUpdateFrequencyDaily ? @"menu_cell_selected.png" : @"",
-               @"type" : [OASettingsTitleTableViewCell getCellIdentifier] }
+               @"type" : [OASimpleTableViewCell getCellIdentifier] }
              ];
             
             [dataArr addObject:
              @{
                @"name" : @"weekly_freq",
                @"title" : OALocalizedString(@"weekly"),
-               @"img" : _updatingFrequency == ELiveUpdateFrequencyWeekly ? @"menu_cell_selected.png" : @"",
-               @"type" : [OASettingsTitleTableViewCell getCellIdentifier] }
+               @"type" : [OASimpleTableViewCell getCellIdentifier] }
              ];
             
             _data = [NSArray arrayWithArray:dataArr];
@@ -328,21 +325,23 @@ static const NSInteger groupCount = 1;
         }
         return cell;
     }
-    else if ([type isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
+    else if ([type isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OASettingsTitleTableViewCell* cell = nil;
+        OASimpleTableViewCell* cell = nil;
         
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         
         if (cell)
         {
-            [cell.textView setText: item[@"title"]];
-            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            [cell.titleLabel setText: item[@"title"]];
+            cell.accessoryType = _updatingFrequency == ELiveUpdateFrequencyDaily ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         return cell;
     }

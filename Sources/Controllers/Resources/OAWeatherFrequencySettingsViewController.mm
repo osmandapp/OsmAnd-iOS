@@ -7,7 +7,7 @@
 //
 
 #import "OAWeatherFrequencySettingsViewController.h"
-#import "OASettingsTitleTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAWeatherHelper.h"
 #import "OAWorldRegion.h"
 #import "OASizes.h"
@@ -79,19 +79,19 @@
 
     NSMutableDictionary *semiDailyData = [NSMutableDictionary dictionary];
     semiDailyData[@"key"] = @"semi_daily_cell";
-    semiDailyData[@"type"] = [OASettingsTitleTableViewCell getCellIdentifier];
+    semiDailyData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     semiDailyData[@"title"] = [OAWeatherHelper getFrequencyFormat:EOAWeatherForecastUpdatesSemiDaily];
     [frequencyCells addObject:semiDailyData];
 
     NSMutableDictionary *dailyData = [NSMutableDictionary dictionary];
     dailyData[@"key"] = @"daily_cell";
-    dailyData[@"type"] = [OASettingsTitleTableViewCell getCellIdentifier];
+    dailyData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     dailyData[@"title"] = [OAWeatherHelper getFrequencyFormat:EOAWeatherForecastUpdatesDaily];
     [frequencyCells addObject:dailyData];
 
     NSMutableDictionary *weeklyData = [NSMutableDictionary dictionary];
     weeklyData[@"key"] = @"weekly_cell";
-    weeklyData[@"type"] = [OASettingsTitleTableViewCell getCellIdentifier];
+    weeklyData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     weeklyData[@"title"] = [OAWeatherHelper getFrequencyFormat:EOAWeatherForecastUpdatesWeekly];
     [frequencyCells addObject:weeklyData];
 
@@ -121,34 +121,27 @@
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    UITableViewCell *outCell = nil;
 
-    if ([item[@"type"] isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OASettingsTitleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier]
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier]
                                                          owner:self
                                                        options:nil];
-            cell = (OASettingsTitleTableViewCell *) nib[0];
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            self.tableView.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
-
-            cell.textView.text = item[@"title"];
-            cell.iconView.hidden = indexPath.row != _indexSelected;
+            cell.titleLabel.text = item[@"title"];
+            cell.accessoryType = indexPath.row == _indexSelected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
-        outCell = cell;
+        return cell;
     }
-
-    if ([outCell needsUpdateConstraints])
-        [outCell updateConstraints];
-
-    return outCell;
+    return nil;
 }
 
 - (NSInteger)sectionsCount

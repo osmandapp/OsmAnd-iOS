@@ -8,7 +8,7 @@
 
 #import "OAWeatherBandSettingsViewController.h"
 #import "OATableViewCustomFooterView.h"
-#import "OASettingsTitleTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAWeatherBand.h"
@@ -80,7 +80,7 @@
     [data addObject:@{
             @"unit": unitDefault,
             @"attributed_title": [self getAttributedNameUnit:nameDefault unit:unitDefaultStr],
-            @"type": [OASettingsTitleTableViewCell getCellIdentifier]
+            @"type": [OASimpleTableViewCell getCellIdentifier]
     }];
 
     NSArray<NSUnit *> *units = [_band getAvailableBandUnits];
@@ -93,7 +93,7 @@
         [data addObject:@{
                 @"unit": unit,
                 @"attributed_title": [self getAttributedNameUnit:name unit:unitStr],
-                @"type": [OASettingsTitleTableViewCell getCellIdentifier]
+                @"type": [OASimpleTableViewCell getCellIdentifier]
         }];
     }
 
@@ -108,34 +108,26 @@
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    UITableViewCell *outCell = nil;
-
-    if ([item[@"type"] isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
+    
+    OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+    if (cell == nil)
     {
-        OASettingsTitleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier]
-                                                         owner:self
-                                                       options:nil];
-            cell = (OASettingsTitleTableViewCell *) nib[0];
-            [cell.iconView setHidden:YES];
-        }
-        if (cell)
-        {
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
-            cell.textView.attributedText = item[@"attributed_title"];
-            if (indexPath.row == _indexSelected)
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            else
-                cell.accessoryType = UITableViewCellAccessoryNone;
-        }
-        outCell = cell;
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier]
+                                                     owner:self
+                                                   options:nil];
+        cell = (OASimpleTableViewCell *) nib[0];
+        [cell descriptionVisibility:NO];
+        [cell leftIconVisibility:NO];
     }
-
-    if ([outCell needsUpdateConstraints])
-        [outCell updateConstraints];
-    return outCell;
+    if (cell)
+    {
+        cell.titleLabel.attributedText = item[@"attributed_title"];
+        if (indexPath.row == _indexSelected)
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        else
+            cell.accessoryType = UITableViewCellAccessoryNone;
+    }
+    return cell;
 }
 
 - (NSInteger)sectionsCount

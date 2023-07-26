@@ -2406,7 +2406,6 @@
 "rendering_value_disabled_name" = "Onevozmoženo";
 "rendering_attr_contourColorScheme_name" = "Šema na boi na konturni linii";
 "routing_attr_short_way_name" = "Efikasen način za gorivo";
-"rendering_attr_alpineHiking_name" = "Alpska skala za planinarenje (SAC)";
 "rendering_attr_showLez_name" = "Prikaži zoni so niski emisii";
 "rendering_value_green_name" = "Zelen";
 "routing_attr_piste_type_nordic_description" = "Pateki za nordisko ili kros-kantri skijanje.";

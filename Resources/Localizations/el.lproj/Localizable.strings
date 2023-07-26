@@ -658,7 +658,6 @@
 "rendering_value_medium_w_name" = "Μέση";
 "routing_attr_avoid_tram_name" = "Χωρίς τραμ";
 "rendering_attr_hideProposed_name" = "Προτεινόμενα αντικείμενα";
-"rendering_attr_alpineHiking_name" = "Κλίμακα αλπικής πεζοπορίας (SAC)";
 "routing_attr_driving_style_safety_name" = "Να προτιμώνται παράδρομοι";
 "rendering_attr_piste_difficulty_easy_name" = "Εύκολη";
 "routing_attr_allow_motorway_name" = "Να χρησιμοποιήσεις τους αυτοκινητόδρομους";

@@ -1147,7 +1147,6 @@
 "routing_attr_avoid_toll_name" = "Sen estradas de portaxe ou peaxe";
 "routing_attr_avoid_train_name" = "Sen trens";
 "routing_attr_freeride_policy_description" = "\'Freeride\' e \'Fóra de pista\' son rutas e pasaxes non oficiais. Normalmente con moitas fochancas, sen mantemento e non revisadas. Entra polo teu propio risco.";
-"rendering_attr_alpineHiking_name" = "Escala de sendeirismo alpino (SAC)";
 "rendering_attr_surface_paving_stones_name" = "Pavimento de pedra";
 "rendering_attr_appMode_description" = "Optimizar o mapa para";
 "rendering_attr_contourLines_description" = "Amosar dende o nivel de achegamento (precisa de datos das curvas do nivel):";

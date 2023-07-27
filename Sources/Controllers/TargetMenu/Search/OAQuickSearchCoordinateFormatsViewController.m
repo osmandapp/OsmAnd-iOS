@@ -11,7 +11,7 @@
 #import "OAColors.h"
 #import "OAPointDescription.h"
 #import "OAAppSettings.h"
-#import "OAMultiIconTextDescCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAMapPanelViewController.h"
 #import "OARootViewController.h"
 #import "OsmAndApp.h"
@@ -59,42 +59,42 @@
     double lon = _location.coordinate.longitude;
 
     [_data addObject:@{
-        @"type" : [OAMultiIconTextDescCell getCellIdentifier],
+        @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : [OAPointDescription formatToHumanString:MAP_GEO_FORMAT_DEGREES],
         @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_DEGREES]],
         @"isSelected" : [NSNumber numberWithBool:_currentFormat == MAP_GEO_FORMAT_DEGREES]
     }];
     
     [_data addObject:@{
-        @"type" : [OAMultiIconTextDescCell getCellIdentifier],
+        @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : [OAPointDescription formatToHumanString:MAP_GEO_FORMAT_MINUTES],
         @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MINUTES]],
         @"isSelected" : [NSNumber numberWithBool:_currentFormat == MAP_GEO_FORMAT_MINUTES]
     }];
     
     [_data addObject:@{
-        @"type" : [OAMultiIconTextDescCell getCellIdentifier],
+        @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : [OAPointDescription formatToHumanString:MAP_GEO_FORMAT_SECONDS],
         @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_SECONDS]],
         @"isSelected" : [NSNumber numberWithBool:_currentFormat == MAP_GEO_FORMAT_SECONDS]
     }];
     
     [_data addObject:@{
-        @"type" : [OAMultiIconTextDescCell getCellIdentifier],
+        @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : [OAPointDescription formatToHumanString:MAP_GEO_UTM_FORMAT],
         @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_UTM]],
         @"isSelected" : [NSNumber numberWithBool:_currentFormat == MAP_GEO_UTM_FORMAT]
     }];
     
     [_data addObject:@{
-        @"type" : [OAMultiIconTextDescCell getCellIdentifier],
+        @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : [OAPointDescription formatToHumanString:MAP_GEO_OLC_FORMAT],
         @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_OLC]],
         @"isSelected" : [NSNumber numberWithBool:_currentFormat == MAP_GEO_OLC_FORMAT]
     }];
     
     [_data addObject:@{
-        @"type" : [OAMultiIconTextDescCell getCellIdentifier],
+        @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : [OAPointDescription formatToHumanString:MAP_GEO_MGRS_FORMAT],
         @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MGRS]],
         @"isSelected" : [NSNumber numberWithBool:_currentFormat == MAP_GEO_MGRS_FORMAT]
@@ -111,6 +111,7 @@
     [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     self.tableView.contentInset = UIEdgeInsetsMake(defaultNavBarHeight, 0, 0, 0);
+    self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
     self.doneButton.hidden = YES;
     self.doneButton.enabled = NO;
 
@@ -177,24 +178,25 @@
     NSDictionary *item = _data[indexPath.row];
     NSString *cellType = item[@"type"];
     
-    if ([cellType isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAMultiIconTextDescCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
+        OASimpleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
-            cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
-            cell.descView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+            cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+            [cell leftIconVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.descView.text = item[@"description"];
+            cell.titleLabel.text = item[@"title"];
+            cell.descriptionLabel.text = item[@"description"];
 
             if ([item[@"isSelected"] boolValue])
-                [cell.overflowButton setImage:[UIImage imageNamed:@"ic_checkmark_default"] forState:UIControlStateNormal];
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
             else
-                [cell.overflowButton setImage:nil forState:UIControlStateNormal];
+                cell.accessoryType = UITableViewCellAccessoryNone;
         }
         return cell;
     }

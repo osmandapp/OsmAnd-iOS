@@ -11,7 +11,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OATitleRightIconCell.h"
-#import "OAMultiIconTextDescCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAAddTrackFolderViewController.h"
 #import "OsmAndApp.h"
 #import "OALoadGpxTask.h"
@@ -62,6 +62,7 @@
     self.tableView.dataSource = self;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+    self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
 }
 
 - (void) applyLocalization
@@ -87,7 +88,7 @@
         NSArray *folderItems = foldersData[folderName];
         int tracksCount = folderItems ? folderItems.count : 0;
         [cellFoldersData addObject:@{
-            @"type" : [OAMultiIconTextDescCell getCellIdentifier],
+            @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"header" : OALocalizedString(@"plan_route_folder"),
             @"title" : folderName,
             @"description" : [NSString stringWithFormat:@"%i", tracksCount],
@@ -135,35 +136,27 @@
         return cell;
     }
    
-    else if ([cellType isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAMultiIconTextDescCell* cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
+        OASimpleTableViewCell* cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
-            cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.textView.numberOfLines = 3;
-            cell.textView.lineBreakMode = NSLineBreakByTruncatingTail;
+            cell.titleLabel.numberOfLines = 3;
+            cell.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         }
         if (cell)
         {
-            [cell.textView setText:item[@"title"]];
-            [cell.descView setText:item[@"description"]];
-            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
-            cell.separatorInset = UIEdgeInsetsMake(0, cell.textView.frame.origin.x, 0, 0);
+            [cell.titleLabel setText:item[@"title"]];
+            [cell.descriptionLabel setText:item[@"description"]];
+            [cell.leftIconView setImage:[UIImage imageNamed:item[@"img"]]];
             
             if ([item[@"isSelected"] boolValue])
-            {
-                [cell setOverflowVisibility:NO];
-                [cell.overflowButton setImage:[UIImage templateImageNamed:@"ic_checkmark_default"] forState:UIControlStateNormal];
-            }
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
             else
-            {
-                [cell setOverflowVisibility:YES];
-            }
-            
-            [cell updateConstraintsIfNeeded];
+                cell.accessoryType = UITableViewCellAccessoryNone;
         }
         return cell;
     }

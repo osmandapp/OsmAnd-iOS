@@ -14,7 +14,7 @@
 #import "OAUtilities.h"
 #import "OADefaultFavorite.h"
 #import "OATitleRightIconCell.h"
-#import "OAMultiIconTextDescCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAAddFavoriteGroupViewController.h"
 #import "OsmAndApp.h"
 
@@ -64,6 +64,7 @@
     self.tableView.dataSource = self;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_group_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+    self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
 }
 
 - (void) applyLocalization
@@ -96,7 +97,7 @@
         if (![[OAFavoritesHelper getGroups].allKeys containsObject:@""])
         {
             [cellFoldersData addObject:@{
-                    @"type" : [OAMultiIconTextDescCell getCellIdentifier],
+                    @"type" : [OASimpleTableViewCell getCellIdentifier],
                     @"header" : OALocalizedString(@"available_groups"),
                     @"title" : OALocalizedString(@"favorites_item"),
                     @"description" :@"0",
@@ -111,7 +112,7 @@
             NSString *name = [OAFavoriteGroup getDisplayName:group.name];
 
             [cellFoldersData addObject:@{
-                    @"type": [OAMultiIconTextDescCell getCellIdentifier],
+                    @"type": [OASimpleTableViewCell getCellIdentifier],
                     @"header": OALocalizedString(@"available_groups"),
                     @"title": name,
                     @"description": [NSString stringWithFormat:@"%ld", (unsigned long) group.points.count],
@@ -126,7 +127,7 @@
         for (NSDictionary<NSString *, NSString *> *group in _groupedGpxWpts)
         {
             [cellFoldersData addObject:@{
-                    @"type": [OAMultiIconTextDescCell getCellIdentifier],
+                    @"type": [OASimpleTableViewCell getCellIdentifier],
                     @"header": OALocalizedString(@"available_groups"),
                     @"title": group[@"title"],
                     @"description": [NSString stringWithFormat:@"%i", group[@"count"].intValue],
@@ -165,39 +166,31 @@
         return cell;
     }
    
-    else if ([cellType isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAMultiIconTextDescCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
+        OASimpleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.textView.numberOfLines = 3;
-            cell.textView.lineBreakMode = NSLineBreakByTruncatingTail;
-            cell.separatorInset = UIEdgeInsetsMake(0, cell.textView.frame.origin.x, 0, 0);
+            cell.titleLabel.numberOfLines = 3;
+            cell.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         }
         if (cell)
         {
-            [cell.textView setText:item[@"title"]];
-            [cell.descView setText:item[@"description"]];
-            [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
+            [cell.titleLabel setText:item[@"title"]];
+            [cell.descriptionLabel setText:item[@"description"]];
+            [cell.leftIconView setImage:[UIImage templateImageNamed:item[@"img"]]];
             UIColor *color;
             if (item[@"color"])
                 color = [item[@"color"] isKindOfClass:NSString.class] ? [UIColor colorFromString:item[@"color"]] : item[@"color"];
-            cell.iconView.tintColor = color ? color : UIColorFromRGB(color_primary_purple);
+            cell.leftIconView.tintColor = color ? color : UIColorFromRGB(color_primary_purple);
             
             if ([item[@"isSelected"] boolValue])
-            {
-                [cell setOverflowVisibility:NO];
-                [cell.overflowButton setImage:[UIImage templateImageNamed:@"ic_checkmark_default"] forState:UIControlStateNormal];
-            }
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
             else
-            {
-                [cell setOverflowVisibility:YES];
-            }
-            
-            [cell updateConstraintsIfNeeded];
+                cell.accessoryType = UITableViewCellAccessoryNone;
         }
         return cell;
     }
@@ -242,7 +235,7 @@
 {
         NSDictionary *item = _data[indexPath.section][indexPath.row];
         NSString *cellType = item[@"type"];
-        if ([cellType isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
+        if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
             return 60;
         else
             return UITableViewAutomaticDimension;

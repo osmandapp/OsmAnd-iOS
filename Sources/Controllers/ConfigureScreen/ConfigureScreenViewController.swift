@@ -89,10 +89,11 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         
         let map3dModeRow = buttonsSection.createNewRow()
         let selected3dMode = OAAppSettings.sharedManager()!.map3dMode.get()
+        let isMap3DVisible = settings.map3dMode.get() == .visible || settings.map3dMode.get() == .visibleIn3DMode
         map3dModeRow.key = "map_3d_mode"
         map3dModeRow.title = localizedString("map_3d_mode_action")
         map3dModeRow.descr = OAMap3DModeVisibility.getTitle(selected3dMode) ?? ""
-        map3dModeRow.iconTint = Int(quickActionsEnabled ? appMode!.getIconColor() : color_tint_gray)
+        map3dModeRow.iconTint = Int(isMap3DVisible ? appMode!.getIconColor() : color_tint_gray)
         map3dModeRow.iconName = OAMap3DModeVisibility.getIconName(selected3dMode)
         map3dModeRow.cellType = OAValueTableViewCell.getIdentifier()
         map3dModeRow.accessibilityLabel = map3dModeRow.title

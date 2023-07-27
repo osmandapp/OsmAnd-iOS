@@ -495,7 +495,7 @@
         case EOAMap3DModeVisibilityHidden:
             return OALocalizedString(@"shared_string_hidden");
         case EOAMap3DModeVisibilityVisible:
-            return OALocalizedString(@"shared_string_visible");
+            return @"";
         default:
             return OALocalizedString(@"visible_in_3d_mode");
     }

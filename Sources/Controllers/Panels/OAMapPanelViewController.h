@@ -104,6 +104,7 @@
 - (void) setBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated;
 - (void) showMapStylesScreen;
 - (void) showWeatherLayersScreen;
+- (void) showTravelGuides;
 
 - (void) addWaypoint;
 

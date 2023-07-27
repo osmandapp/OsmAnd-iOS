@@ -1918,6 +1918,7 @@
 "download_select_map_types" = "Other maps";
 
 "shared_string_wikivoyage" = "Wikivoyage";
+"travel_guides_beta" = "Travel guides (Beta)";
 
 // Help
 "help_quiz" = "Quiz";

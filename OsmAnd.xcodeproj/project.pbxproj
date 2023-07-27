@@ -367,6 +367,8 @@
 		3240977B27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */; };
 		3240977F27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */; };
 		3242A46F26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */; };
+		32464B7E2A6FCC6700DA6980 /* TravelGuidesViewConroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32464B7D2A6FCC6700DA6980 /* TravelGuidesViewConroller.swift */; };
+		32464B812A7012D700DA6980 /* OAResourcesUISwiftHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32464B802A7012D700DA6980 /* OAResourcesUISwiftHelper.mm */; };
 		325B69FD26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 325B69FC26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm */; };
 		325B6A0526D923AA00D8B67C /* OAQuickSearchCoordinateFormatsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 325B6A0426D923AA00D8B67C /* OAQuickSearchCoordinateFormatsViewController.m */; };
 		325D713C2A1B71EB00F81ECE /* ic_custom_marker_remove@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 325D71382A1B71E900F81ECE /* ic_custom_marker_remove@3x.png */; };
@@ -4020,6 +4022,9 @@
 		3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAGPXListDeletingBottomSheet.m; sourceTree = "<group>"; };
 		3242A46D26CB0F05001CA174 /* OACollapsableNearestPoiTypeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollapsableNearestPoiTypeView.h; sourceTree = "<group>"; };
 		3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACollapsableNearestPoiTypeView.mm; sourceTree = "<group>"; };
+		32464B7D2A6FCC6700DA6980 /* TravelGuidesViewConroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesViewConroller.swift; sourceTree = "<group>"; };
+		32464B7F2A7012C300DA6980 /* OAResourcesUISwiftHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAResourcesUISwiftHelper.h; sourceTree = "<group>"; };
+		32464B802A7012D700DA6980 /* OAResourcesUISwiftHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAResourcesUISwiftHelper.mm; sourceTree = "<group>"; };
 		3249BFBE285CC2D200FFEF42 /* ckb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ckb; path = ckb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		325B69FB26D828DC00D8B67C /* OAQuickSearchCoordinatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickSearchCoordinatesViewController.h; sourceTree = "<group>"; };
 		325B69FC26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickSearchCoordinatesViewController.mm; sourceTree = "<group>"; };
@@ -8461,6 +8466,14 @@
 			path = GPXListDeletingBottomSheet;
 			sourceTree = "<group>";
 		};
+		32464B7C2A6FCC3200DA6980 /* TravelGuides */ = {
+			isa = PBXGroup;
+			children = (
+				32464B7D2A6FCC6700DA6980 /* TravelGuidesViewConroller.swift */,
+			);
+			path = TravelGuides;
+			sourceTree = "<group>";
+		};
 		32AD5D582A2F10EA00A51B60 /* OAuthHelper */ = {
 			isa = PBXGroup;
 			children = (
@@ -12124,6 +12137,7 @@
 				DA5A7F4B26C563A400F274C7 /* RoutePlanning */,
 				DA5A7B0826C563A100F274C7 /* Settings */,
 				DA5A7DE626C563A300F274C7 /* TargetMenu */,
+				32464B7C2A6FCC3200DA6980 /* TravelGuides */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -14046,6 +14060,8 @@
 				DA5A80DB26C563A600F274C7 /* OAResourcesInstaller.mm */,
 				DA5A80BF26C563A600F274C7 /* OAResourcesUIHelper.h */,
 				DA5A80A626C563A600F274C7 /* OAResourcesUIHelper.mm */,
+				32464B7F2A7012C300DA6980 /* OAResourcesUISwiftHelper.h */,
+				32464B802A7012D700DA6980 /* OAResourcesUISwiftHelper.mm */,
 				DA5A809C26C563A500F274C7 /* OAReverseGeocoder.h */,
 				DA5A80B826C563A600F274C7 /* OAReverseGeocoder.mm */,
 				DA5A80D026C563A600F274C7 /* OASaveGpxToTripsActivity.h */,
@@ -18003,9 +18019,11 @@
 				DA5A849E26C563A900F274C7 /* OAReversePointsCommand.mm in Sources */,
 				DA5A84DC26C563A900F274C7 /* OAMapSettingsPOIScreen.mm in Sources */,
 				DA5A84B326C563A900F274C7 /* OAFirstMapillaryBottomSheetViewController.mm in Sources */,
+				32464B812A7012D700DA6980 /* OAResourcesUISwiftHelper.mm in Sources */,
 				DA5A837726C563A800F274C7 /* OARouteInfoView.mm in Sources */,
 				DA5A84DF26C563A900F274C7 /* OAMapSettingsTerrainScreen.mm in Sources */,
 				DA5A842526C563A800F274C7 /* OATargetHistoryItemViewController.m in Sources */,
+				32464B7E2A6FCC6700DA6980 /* TravelGuidesViewConroller.swift in Sources */,
 				8A31787527E1D8A800CA8AA4 /* OAMapRendererEnvironment.mm in Sources */,
 				DA4ABF352876ECB300B996EF /* OAAbstractWriter.m in Sources */,
 				DAD3FD262A4AEE7C00BFA03A /* WidgetGroupItemsViewController.swift in Sources */,

@@ -21,6 +21,7 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OAUtilities.h"
 #import "OAQuickActionRegistry.h"
+#import "OAResourcesUISwiftHelper.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

@@ -25,7 +25,6 @@ class Map3dModeButtonVisibilityViewController: OABaseNavbarViewController {
     
     override func generateData() {
         let section = tableData.createNewSection()
-        section.headerText = localizedString("map_3d_mode_description")
         section.footerText = localizedString("map_3d_mode_hint")
         for i in 0 ..< 3 {
             let row = section.createNewRow()
@@ -69,6 +68,18 @@ class Map3dModeButtonVisibilityViewController: OABaseNavbarViewController {
     
     override func getLeftNavbarButtonTitle() -> String! {
         localizedString("shared_string_close")
+    }
+    
+    override func getTableHeaderDescription() -> String! {
+        localizedString("map_3d_mode_description")
+    }
+    
+    override func hideFirstHeader() -> Bool {
+        true
+    }
+    
+    override func isNavbarSeparatorVisible() -> Bool {
+        false
     }
     
     override func onRowSelected(_ indexPath: IndexPath!) {

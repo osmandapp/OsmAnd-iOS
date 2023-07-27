@@ -116,7 +116,6 @@
     NSInteger resourcesSize = 0;
     NSInteger myPlacesSize = 0;
     NSInteger settingsSize = 0;
-    NSArray <NSString *>*freeFeatures = @[@"FAVORITES", @"PROFILE", @"GLOBAL"];
     for (OAExportSettingsCategory *category in [self getDataItems].allKeys)
     {
         OASettingsCategoryItems *categoryItems = [self getDataItems][category];
@@ -130,7 +129,7 @@
             }
             else
             {
-                if ([freeFeatures containsObject:type.name])
+                if (type.isAllowedInFreeVersion)
                 {
                     itemData[@"type"] = [OASwitchTableViewCell getCellIdentifier];
                 }

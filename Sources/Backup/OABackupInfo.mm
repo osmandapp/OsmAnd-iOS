@@ -12,6 +12,7 @@
 #import "OARemoteFile.h"
 #import "OABackupHelper.h"
 #import "OAExportSettingsType.h"
+#import "OAIAPHelper.h"
 
 @implementation OABackupInfo
 {
@@ -102,7 +103,7 @@
     for (OALocalFile *localFile in _filesToUpload)
     {
         OAExportSettingsType *type = localFile.item != nil ? [OAExportSettingsType getExportSettingsTypeForItem:localFile.item] : nil;
-        if (type != nil && [helper getBackupTypePref:type].get)
+        if (type != nil && [helper getBackupTypePref:type].get && (type.isAllowedInFreeVersion || [OAIAPHelper isOsmAndProAvailable]))
         {
             [files addObject:localFile];
         }

@@ -20,7 +20,7 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
     }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem]! {
-        let button = createRightNavbarButton(localizedString("shared_string_options"), iconName: nil, action: #selector(onOptionsButtonPressed), menu: nil)
+        let button = createRightNavbarButton(localizedString("shared_string_options"), iconName: nil, action: #selector(onOptionsButtonClicked), menu: nil)
         button?.accessibilityLabel = localizedString("shared_string_options")
         return [button!]
     }
@@ -62,12 +62,12 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
 
     //MARK: Actions
     
-    func onOptionsButtonPressed() {
-        print("onOptionsButtonPressed")
+    func onOptionsButtonClicked() {
+        print("onOptionsButtonClicked")
     }
     
-    func onItemClicked(indexPath: IndexPath) {
-        print("onItemClicked")
+    func onRowItemClicked(indexPath: IndexPath) {
+        print("onRowItemClicked")
     }
     
     func accessoryButtonPressed(button: UIControl , event: UIEvent) {
@@ -163,11 +163,11 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
     }
     
     override func onRowSelected(_ indexPath: IndexPath!) {
-        onItemClicked(indexPath: indexPath)
+        onRowItemClicked(indexPath: indexPath)
     }
 
     override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-        onItemClicked(indexPath: indexPath)
+        onRowItemClicked(indexPath: indexPath)
     }
 
 }

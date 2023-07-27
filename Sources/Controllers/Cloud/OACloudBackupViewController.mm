@@ -16,7 +16,7 @@
 #import "OAIAPHelper.h"
 #import "OABackupHelper.h"
 #import "OAStatusBackupConflictDetailsViewController.h"
-#import "OAMultiIconTextDescCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OATitleIconProgressbarCell.h"
 #import "OAValueTableViewCell.h"
 #import "OARightIconTableViewCell.h"
@@ -265,7 +265,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             NSString *backupStatusDescr = _backup == nil ? OALocalizedString(@"checking_progress")
                 : [OAOsmAndFormatter getFormattedPassedTime:OAAppSettings.sharedManager.backupLastUploadedTime.get def:OALocalizedString(@"shared_string_never")];
             OATableCollapsableRowData *collapsableRow = [[OATableCollapsableRowData alloc] initWithData:@{
-                kCellTypeKey: OAMultiIconTextDescCell.getCellIdentifier,
+                kCellTypeKey: OAButtonTableViewCell.getCellIdentifier,
                 kCellKeyKey: @"lastBackup",
                 kCellTitleKey: _status.statusTitle,
                 kCellDescrKey: backupStatusDescr,
@@ -584,24 +584,24 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         [cell.bottomButton addTarget:self action:@selector(onSetUpBackupButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         return cell;
     }
-    else if ([cellId isEqualToString:OAMultiIconTextDescCell.getCellIdentifier])
+    else if ([cellId isEqualToString:OAButtonTableViewCell.getCellIdentifier])
     {
-        OAMultiIconTextDescCell* cell = [tableView dequeueReusableCellWithIdentifier:OAMultiIconTextDescCell.getCellIdentifier];
+        OAButtonTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:OAButtonTableViewCell.getCellIdentifier];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
-            cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
-            [cell setOverflowVisibility:NO];
-            cell.overflowButton.tintColor = UIColorFromRGB(color_primary_purple);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAButtonTableViewCell *)[nib objectAtIndex:0];
+            [cell.button setTitle:nil forState:UIControlStateNormal];
+            cell.button.tintColor = UIColorFromRGB(color_primary_purple);
         }
         BOOL collapsed = item.rowType == EOATableRowTypeCollapsable && ((OATableCollapsableRowData *) item).collapsed;
-        [cell.overflowButton setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"] forState:UIControlStateNormal];
-        [cell.overflowButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-        [cell.overflowButton addTarget:self action:@selector(onCollapseButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-        cell.textView.text = item.title;
-        cell.descView.text = item.descr;
-        [cell.iconView setImage:[UIImage templateImageNamed:item.iconName]];
-        cell.iconView.tintColor = item.iconTint != -1 ? UIColorFromRGB(item.iconTint) : UIColorFromRGB(color_primary_purple);
+        [cell.button setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"] forState:UIControlStateNormal];
+        [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.button addTarget:self action:@selector(onCollapseButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        cell.titleLabel.text = item.title;
+        cell.descriptionLabel.text = item.descr;
+        [cell.leftIconView setImage:[UIImage templateImageNamed:item.iconName]];
+        cell.leftIconView.tintColor = item.iconTint != -1 ? UIColorFromRGB(item.iconTint) : UIColorFromRGB(color_primary_purple);
         return cell;
     }
     else if ([cellId isEqualToString:[OARightIconTableViewCell getCellIdentifier]])

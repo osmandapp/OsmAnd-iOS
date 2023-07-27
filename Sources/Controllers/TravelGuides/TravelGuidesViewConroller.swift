@@ -17,11 +17,27 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
         localizedString("shared_string_travel_guides")
     }
     
+    override func getRightNavbarButtons() -> [UIBarButtonItem]! {
+        let button = createRightNavbarButton(localizedString("shared_string_options"), iconName: nil, action: #selector(onOptionsButtonPressed), menu: nil)
+        button?.accessibilityLabel = localizedString("shared_string_options")
+        return [button!]
+    }
+    
     override func generateData() {
         tableData.clearAllData()
         
         let downloadSection = tableData.createNewSection()
-        downloadSection.headerText = localizedString("shared_string_download")
+        
+        let downloadHeaderRow = downloadSection.createNewRow()
+        downloadHeaderRow.cellType = OARightIconTableViewCell.getIdentifier()
+        downloadHeaderRow.title = localizedString("download_file")
+        downloadHeaderRow.iconName = "ic_custom_import"
+        downloadHeaderRow.setObj(NSNumber(booleanLiteral: true), forKey: "kHideSeparator")
+        
+        let downloadDescrRow = downloadSection.createNewRow()
+        downloadDescrRow.cellType = OARightIconTableViewCell.getIdentifier()
+        downloadDescrRow.descr = localizedString("travel_card_download_descr")
+        downloadDescrRow.setObj(NSNumber(booleanLiteral: false), forKey: "kHideSeparator")
         
         var downloadingResouces = OAResourcesUISwiftHelper.getResourcesInRepositoryIds(byRegionId: "travel", resourceTypeNames: ["travel"])
         downloadingResouces?.sort(by: { a, b in
@@ -29,7 +45,7 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
         })
         for resource in downloadingResouces! {
             let row = downloadSection.createNewRow()
-            row.cellType = kDownloadCellKey
+            row.cellType = "kDownloadCellKey"
             row.title = resource.title()
             row.descr = resource.type() + "  •  " + resource.formatedSize()
             row.iconTint = resource.isInstalled() ? Int(color_primary_purple) : Int(color_tint_gray)
@@ -45,8 +61,8 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
         var outCell: UITableViewCell? = nil
         
-        if item.cellType == kDownloadCellKey {
-            var cell = UITableViewCell.init(style: .subtitle, reuseIdentifier: kDownloadCellKey)
+        if item.cellType == "kDownloadCellKey" {
+            var cell = UITableViewCell.init(style: .subtitle, reuseIdentifier: "kDownloadCellKey")
             
             cell.textLabel?.text = item.title
             cell.textLabel?.font = UIFont.preferredFont(forTextStyle: .body)
@@ -72,6 +88,48 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
             }
             
             outCell = cell
+        } else if item.cellType == OARightIconTableViewCell.getIdentifier() {
+            var cell = tableView.dequeueReusableCell(withIdentifier: OARightIconTableViewCell.getIdentifier()) as? OARightIconTableViewCell
+            if cell == nil {
+                let nib = Bundle.main.loadNibNamed(OARightIconTableViewCell.getIdentifier(), owner: self, options: nil)
+                cell = nib?.first as? OARightIconTableViewCell
+                cell?.selectionStyle = .none
+                cell?.leftIconVisibility(false)
+            }
+            if let cell {
+                if let title = item.title {
+                    cell.titleLabel.text = title
+                    cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+                    cell.titleVisibility(true)
+                } else {
+                    cell.titleVisibility(false)
+                }
+                
+                if let descr = item.descr {
+                    cell.descriptionLabel.text = descr
+                    cell.descriptionLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+                    cell.descriptionVisibility(true)
+                } else {
+                    cell.descriptionVisibility(false)
+                }
+                
+                if let iconName = item.iconName {
+                    cell.rightIconView.image = UIImage.templateImageNamed(iconName)
+                    cell.rightIconVisibility(true)
+                } else {
+                    cell.rightIconVisibility(false)
+                }
+                
+                let hideSeparator = item.bool(forKey: "kHideSeparator")
+                if hideSeparator {
+                    cell.separatorInset = UIEdgeInsets(top: 0, left: CGFloat.greatestFiniteMagnitude, bottom: 0, right: 0)
+                    
+                } else {
+                    cell.separatorInset = .zero
+                }
+            }
+            
+            outCell = cell
         }
         
         return outCell
@@ -82,7 +140,7 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
     }
     
     func accessoryButtonPressed(button: UIControl , event: UIEvent) {
-        print("!!! accessoryButtonPressed")
+        print("accessoryButtonPressed")
         
 //        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:[[[event touchesForView:button] anyObject] locationInView:self.tableView]];
 //        if (!indexPath)
@@ -91,4 +149,7 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
 //        [self.tableView.delegate tableView:self.tableView accessoryButtonTappedForRowWithIndexPath: indexPath];
     }
     
+    func onOptionsButtonPressed() {
+        print("onOptionsButtonPressed")
+    }
 }

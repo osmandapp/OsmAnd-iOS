@@ -80,6 +80,7 @@
 #import "OASwitchTableViewCell.h"
 #import "OASimpleTableViewCell.h"
 #import "OALargeImageTitleDescrTableViewCell.h"
+#import "OARightIconTableViewCell.h"
 
 // Apple
 #import <SafariServices/SafariServices.h>

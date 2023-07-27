@@ -1919,6 +1919,8 @@
 
 "shared_string_wikivoyage" = "Wikivoyage";
 "travel_guides_beta" = "Travel guides (Beta)";
+"download_file" = "Download file";
+"travel_card_download_descr" = "Download Wikivoyage travel guides to view articles about places around the world without a connection to the Internet.";
 
 // Help
 "help_quiz" = "Quiz";

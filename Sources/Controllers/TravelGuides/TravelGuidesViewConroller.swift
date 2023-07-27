@@ -13,6 +13,8 @@ import Foundation
 @objcMembers
 class TravelGuidesViewConroller: OABaseNavbarViewController {
     
+    //MARK: Data
+    
     override func getTitle() -> String! {
         localizedString("shared_string_travel_guides")
     }
@@ -56,7 +58,32 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
         }
         
     }
+
+
+    //MARK: Actions
     
+    func onOptionsButtonPressed() {
+        print("onOptionsButtonPressed")
+    }
+    
+    func onItemClicked(indexPath: IndexPath) {
+        print("onItemClicked")
+    }
+    
+    func accessoryButtonPressed(button: UIControl , event: UIEvent) {
+        if let touches = event.touches(for: button) {
+            if touches.count > 0 {
+                let point = touches.first!.location(in: self.tableView)
+                if let indexPath = self.tableView.indexPathForRow(at: point) {
+                    self.tableView.delegate?.tableView?(self.tableView, accessoryButtonTappedForRowWith: indexPath)
+                }
+            }
+        }
+    }
+
+
+    //MARK: TableView
+
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let item = tableData.item(for: indexPath)
         var outCell: UITableViewCell? = nil
@@ -136,20 +163,11 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
     }
     
     override func onRowSelected(_ indexPath: IndexPath!) {
-        print("onRowSelected")
+        onItemClicked(indexPath: indexPath)
     }
-    
-    func accessoryButtonPressed(button: UIControl , event: UIEvent) {
-        print("accessoryButtonPressed")
-        
-//        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:[[[event touchesForView:button] anyObject] locationInView:self.tableView]];
-//        if (!indexPath)
-//            return;
-//
-//        [self.tableView.delegate tableView:self.tableView accessoryButtonTappedForRowWithIndexPath: indexPath];
+
+    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        onItemClicked(indexPath: indexPath)
     }
-    
-    func onOptionsButtonPressed() {
-        print("onOptionsButtonPressed")
-    }
+
 }

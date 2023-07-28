@@ -33,7 +33,7 @@ typedef void(^OAWikiArticleSearchTaskBlockType)(void);
 
 + (OAWorldRegion *) findWikiRegion:(OAWorldRegion *)mapRegion;
 + (OARepositoryResourceItem *) findResourceItem:(OAWorldRegion *)worldRegion;
-+ (void) showWikiArticle:(CLLocation *)location url:(NSString *)url;
++ (void) showWikiArticle:(CLLocation *)location url:(NSString *)url sourceView:(UIView *)sourceView sourceFrame:(CGRect)sourceFrame;
 + (void) showWikiArticle:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart onComplete:(void (^)())onComplete;
 + (void)showHowToOpenWikiAlert:(OARepositoryResourceItem *)item url:(NSString *)url;
 + (NSString *) getFirstParagraph:(NSString *)descriptionHtml;

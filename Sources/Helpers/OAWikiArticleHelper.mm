@@ -203,6 +203,9 @@
 
 @implementation OAWikiArticleHelper
 
+UIView *_sourceView;
+CGRect _sourceFrame;
+
 + (OAWorldRegion *) findWikiRegion:(OAWorldRegion *)mapRegion
 {
     if (mapRegion)
@@ -249,8 +252,10 @@
     return nil;
 }
 
-+ (void) showWikiArticle:(CLLocation *)location url:(NSString *)url
++ (void) showWikiArticle:(CLLocation *)location url:(NSString *)url sourceView:(UIView *)sourceView sourceFrame:(CGRect)sourceFrame
 {
+    _sourceView = sourceView;
+    _sourceFrame = sourceFrame;
     [self showWikiArticle:@[location] url:url onStart:nil onComplete:nil];
 }
 
@@ -298,6 +303,15 @@
     [alert addAction:openOnlineAction];
     [alert addAction:cancelAction];
     alert.preferredAction = cancelAction;
+    
+    if (OAUtilities.isIPad)
+    {
+        UIPopoverPresentationController *popPresenter = [alert popoverPresentationController];
+        popPresenter.sourceView = _sourceView;
+        popPresenter.sourceRect = _sourceFrame;
+        popPresenter.permittedArrowDirections = UIPopoverArrowDirectionUp;
+    }
+    
     [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
 }
 

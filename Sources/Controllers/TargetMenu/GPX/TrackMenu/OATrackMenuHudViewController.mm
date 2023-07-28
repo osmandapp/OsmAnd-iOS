@@ -1675,7 +1675,7 @@
             {
                 [OAWikiArticleHelper showWikiArticle:[self collectTrackPoints] url:url onStart:^{
                     [progressHUD show:YES];
-                } onComplete:^{
+                } sourceView:nil sourceFrame:CGRectZero onComplete:^{
                     [progressHUD hide:YES];
                 }];
             }

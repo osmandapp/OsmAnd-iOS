@@ -31,12 +31,14 @@
     NSString *_url;
     NSString *_lang;
     NSString *_name;
+    UIView *_sourceView;
+    CGRect _sourceFrame;
     BOOL _isCanceled;
     OAWikiArticleSearchTaskBlockType _onStart;
     OAWikiArticleSearchTaskBlockType _onComplete;
 }
 
-- (instancetype)initWithLocations:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart onComplete:(void (^)())onComplete
+- (instancetype) initWithLocations:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart sourceView:(UIView *)sourceView sourceFrame:(CGRect)sourceFrame onComplete:(void (^)())onComplete
 {
     self = [super init];
     if (self)
@@ -46,6 +48,8 @@
         _onStart = onStart;
         _onComplete = onComplete;
         _isCanceled = NO;
+        _sourceView = sourceView;
+        _sourceFrame = sourceFrame;
     }
     return self;
 }
@@ -112,7 +116,7 @@
         if (foundRepository && results.count == 0)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [OAWikiArticleHelper showHowToOpenWikiAlert:foundRepository url:_url];
+                [OAWikiArticleHelper showHowToOpenWikiAlert:foundRepository url:_url sourceView:_sourceView sourceFrame:_sourceFrame];
             });
         }
     }
@@ -203,9 +207,6 @@
 
 @implementation OAWikiArticleHelper
 
-UIView *_sourceView;
-CGRect _sourceFrame;
-
 + (OAWorldRegion *) findWikiRegion:(OAWorldRegion *)mapRegion
 {
     if (mapRegion)
@@ -254,18 +255,16 @@ CGRect _sourceFrame;
 
 + (void) showWikiArticle:(CLLocation *)location url:(NSString *)url sourceView:(UIView *)sourceView sourceFrame:(CGRect)sourceFrame
 {
-    _sourceView = sourceView;
-    _sourceFrame = sourceFrame;
-    [self showWikiArticle:@[location] url:url onStart:nil onComplete:nil];
+    [self showWikiArticle:@[location] url:url onStart:nil sourceView:sourceView sourceFrame:sourceFrame onComplete:nil];
 }
 
-+ (void) showWikiArticle:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart onComplete:(void (^)())onComplete
++ (void) showWikiArticle:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart sourceView:(UIView *)sourceView sourceFrame:(CGRect)sourceFrame onComplete:(void (^)())onComplete
 {
-    OAWikiArticleSearchTask *task = [[OAWikiArticleSearchTask alloc] initWithLocations:locations url:url onStart:onStart onComplete:onComplete];
+    OAWikiArticleSearchTask *task = [[OAWikiArticleSearchTask alloc] initWithLocations:locations url:url onStart:onStart sourceView:sourceView sourceFrame:sourceFrame onComplete:onComplete];
     [task execute];
 }
 
-+ (void)showHowToOpenWikiAlert:(OARepositoryResourceItem *)item url:(NSString *)url
++ (void) showHowToOpenWikiAlert:(OARepositoryResourceItem *)item url:(NSString *)url sourceView:(UIView *)sourceView sourceFrame:(CGRect)sourceFrame
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"how_to_open_wiki_title")
                                                                    message:OALocalizedString(url)
@@ -304,13 +303,10 @@ CGRect _sourceFrame;
     [alert addAction:cancelAction];
     alert.preferredAction = cancelAction;
     
-    if (OAUtilities.isIPad)
-    {
-        UIPopoverPresentationController *popPresenter = [alert popoverPresentationController];
-        popPresenter.sourceView = _sourceView;
-        popPresenter.sourceRect = _sourceFrame;
-        popPresenter.permittedArrowDirections = UIPopoverArrowDirectionUp;
-    }
+    UIPopoverPresentationController *popPresenter = [alert popoverPresentationController];
+    popPresenter.sourceView = sourceView;
+    popPresenter.sourceRect = sourceFrame;
+    popPresenter.permittedArrowDirections = UIPopoverArrowDirectionUp;
     
     [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
 }

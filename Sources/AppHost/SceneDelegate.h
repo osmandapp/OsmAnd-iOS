@@ -7,17 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <CarPlay/CarPlay.h>
-
 #import "OARootViewController.h"
 
-@interface OAAppDelegate : UIResponder <UIApplicationDelegate /*CPApplicationDelegate*/>
+NS_ASSUME_NONNULL_BEGIN
 
-@property(strong, readonly, nonatomic) OARootViewController* rootViewController;
+@interface SceneDelegate : UIResponder <UIWindowSceneDelegate>
 
+@property (strong, nonatomic) UIWindow * window;
+@property (strong, readonly, nonatomic) OARootViewController* rootViewController;
 @property (assign, nonatomic, readonly) BOOL appInitDone;
 @property (assign, nonatomic, readonly) BOOL appInitializing;
 
-- (BOOL)initialize;
-
 @end
+
+NS_ASSUME_NONNULL_END

@@ -1,12 +1,12 @@
 //
-//  OAAppDelegate.m
-//  OsmAnd
+//  SceneDelegate.m
+//  OsmAnd Maps
 //
-//  Created by Alexey Pelykh on 7/15/13.
-//  Copyright (c) 2013 OsmAnd. All rights reserved.
+//  Created by Oleksandr Panchenko on 27.07.2023.
+//  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OAAppDelegate.h"
+#import "SceneDelegate.h"
 
 #import <UIKit/UIKit.h>
 #import <BackgroundTasks/BackgroundTasks.h>
@@ -58,27 +58,25 @@
 
 #define kFetchDataUpdatesId @"net.osmand.fetchDataUpdates"
 
-@implementation OAAppDelegate
+@interface SceneDelegate()
+
+@end
+
+@implementation SceneDelegate
 {
     id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol> _app;
     
     UIBackgroundTaskIdentifier _appInitTask;
-//    BOOL _appInitDone;
-//    BOOL _appInitializing;
-    
     NSURL *_loadedURL;
     NSTimer *_checkUpdatesTimer;
 
 //    OACarPlayMapViewController *_carPlayMapController API_AVAILABLE(ios(12.0));
 //    OACarPlayDashboardInterfaceController *_carPlayDashboardController API_AVAILABLE(ios(12.0));
 //    CPWindow *_windowToAttach API_AVAILABLE(ios(12.0));
-    CPInterfaceController *_carPlayInterfaceController API_AVAILABLE(ios(12.0));
+//    CPInterfaceController *_carPlayInterfaceController API_AVAILABLE(ios(12.0));
     
     NSOperationQueue *_dataFetchQueue;
 }
-
-//@property (strong, nonatomic, ) NSString *appInitDone;
-//@property (strong, nonatomic, readonly) NSString *appInitializing;
 
 @synthesize window = _window;
 @synthesize rootViewController = _rootViewController;
@@ -86,8 +84,15 @@
 @synthesize appInitializing = _appInitializing;
 
 
-//- (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-//{
+
+- (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
+        
+    UIWindowScene *windowScene = (UIWindowScene *)scene;
+    self.window = [[UIWindow alloc] initWithWindowScene:windowScene];
+    self.window.rootViewController = [[OALaunchScreenViewController alloc] init];
+   // self.window.frame = windowScene.coordinateSpace.bounds;
+    [self.window makeKeyAndVisible];
+//
 //    if (!_dataFetchQueue)
 //    {
 //        // Set the background fetch
@@ -104,12 +109,113 @@
 //            NSLog(@"Failed to schedule background fetch. Reason: %@", e.reason);
 //        }
 //    }
+    
+//    UIWindowScene *windowScene = (UIWindowScene *)scene;
+//    if (!windowScene) {
+//        return;
+//    }
 //
-//    if (application.applicationState == UIApplicationStateBackground)
-//        return NO;
+//    UIWindow *window = [[UIWindow alloc] initWithWindowScene:windowScene];
 //
-////    return YES;
-//}
+//    NSURL *url = connectionOptions.URLContexts[0].url
+//    if (url) {
+//        [ApplicationURLHandler handleURL:url];
+//    }
+//
+//    NSUserActivity *userActivity = connectionOptions.userActivities[0];
+//    if (userActivity.activityType == NSUserActivityTypeBrowsingWeb) {
+//        NSURL *webpageURL = userActivity.webpageURL;
+//        if (webpageURL && [[UIApplication sharedApplication] canOpenURL:webpageURL]) {
+//            [ApplicationURLHandler handleURL:webpageURL];
+//        }
+//    }
+    
+//    guard let scene = (scene as? UIWindowScene) else { return }
+//    let window = UIWindow(windowScene: scene)
+//    window.backgroundColor = AppColor.background
+//
+//    if let url = connectionOptions.urlContexts.first?.url {
+//        _ = ApplicationURLHandler.handle(url: url)
+//    }
+//
+//    if let userActivity = connectionOptions.userActivities.first,
+//       userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+//       let webpageURL = userActivity.webpageURL,
+//       UIApplication.shared.canOpenURL(webpageURL) {
+//       _ = ApplicationURLHandler.handle(url: webpageURL)
+//    }
+
+    [self initialize];
+}
+
+
+- (void)sceneDidDisconnect:(UIScene *)scene {
+    // Called as the scene is being released by the system.
+    // This occurs shortly after the scene enters the background, or when its session is discarded.
+    // Release any resources associated with this scene that can be re-created the next time the scene connects.
+    // The scene may re-connect later, as its session was not neccessarily discarded (see `application:didDiscardSceneSessions` instead).
+    
+    [_app shutdown];
+    OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
+    [mapVc onApplicationDestroyed];
+    // Release OsmAnd core
+    OsmAnd::ReleaseCore();
+    
+    // Deconfigure device
+    UIDevice* device = [UIDevice currentDevice];
+    device.batteryMonitoringEnabled = NO;
+    [device endGeneratingDeviceOrientationNotifications];
+}
+
+
+- (void)sceneDidBecomeActive:(UIScene *)scene {
+    // Called when the scene has moved from an inactive state to an active state.
+    // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+    if (_appInitDone)
+    {
+        _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesInterval target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
+        [_app onApplicationDidBecomeActive];
+    }
+}
+
+
+
+- (void)sceneWillResignActive:(UIScene *)scene {
+    // Called when the scene will move from an active state to an inactive state.
+    // This may occur due to temporary interruptions (ex. an incoming phone call).
+    
+    if (_appInitDone)
+        [_app onApplicationWillResignActive];
+}
+
+
+- (void)sceneWillEnterForeground:(UIScene *)scene {
+    // Called as the scene transitions from the background to the foreground.
+    // Use this method to undo the changes made on entering the background.
+    
+    if (_appInitDone)
+        [_app onApplicationWillEnterForeground];
+    else
+        [self initialize];
+}
+
+
+- (void)sceneDidEnterBackground:(UIScene *)scene {
+    // Called as the scene transitions from the foreground to the background.
+    // Use this method to save data, release shared resources, and store enough scene-specific state information
+    // to restore the scene back to its current state.
+    
+    if (_checkUpdatesTimer)
+    {
+        [_checkUpdatesTimer invalidate];
+        _checkUpdatesTimer = nil;
+    }
+    if (_appInitDone)
+        [_app onApplicationDidEnterBackground];
+    
+    [BGTaskScheduler.sharedScheduler cancelAllTaskRequests];
+    [self scheduleBackgroundDataFetch];
+}
 
 - (BOOL) initialize
 {
@@ -129,9 +235,9 @@
     _app = (id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol>)[OsmAndApp instance];
     
     // Create window
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = [[OALaunchScreenViewController alloc] init];
-    [self.window makeKeyAndVisible];
+//    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+//    self.window.rootViewController = [[OALaunchScreenViewController alloc] init];
+//    [self.window makeKeyAndVisible];
     
     _appInitTask = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"appInitTask" expirationHandler:^{
         
@@ -527,41 +633,10 @@
     });
 }
 
-- (BOOL) application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
-{
-    return [self openURL:userActivity.webpageURL];
-}
-
 - (void) performUpdatesCheck
 {
     [_app checkAndDownloadOsmAndLiveUpdates];
     [_app checkAndDownloadWeatherForecastsUpdates];
-}
-
-- (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-//    if (!_dataFetchQueue)
-//    {
-//        // Set the background fetch
-//        _dataFetchQueue = [[NSOperationQueue alloc] init];
-//        @try
-//        {
-//            NSLog(@"BGTaskScheduler registerForTaskWithIdentifier");
-//            [BGTaskScheduler.sharedScheduler registerForTaskWithIdentifier:kFetchDataUpdatesId usingQueue:nil launchHandler:^(__kindof BGTask * _Nonnull task) {
-//                [self handleBackgroundDataFetch:(BGProcessingTask *)task];
-//            }];
-//        }
-//        @catch (NSException *e)
-//        {
-//            NSLog(@"Failed to schedule background fetch. Reason: %@", e.reason);
-//        }
-//    }
-//
-//    if (application.applicationState == UIApplicationStateBackground)
-//        return NO;
-//
-//    return [self initialize];
-    return YES;
 }
 
 - (void) handleBackgroundDataFetch:(BGProcessingTask *)task
@@ -600,6 +675,15 @@
     
 }
 
+////
+///
+//
+- (BOOL) application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+{
+    return [self openURL:userActivity.webpageURL];
+}
+
+
 - (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler
 {
     completionHandler();
@@ -610,156 +694,16 @@
     return [self openURL:url];
 }
 
-- (void) applicationWillResignActive:(UIApplication *)application
-{
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-
-    if (_appInitDone)
-        [_app onApplicationWillResignActive];
-}
-
-- (void) applicationDidEnterBackground:(UIApplication *)application
-{
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-    if (_checkUpdatesTimer)
-    {
-        [_checkUpdatesTimer invalidate];
-        _checkUpdatesTimer = nil;
-    }
-    if (_appInitDone)
-        [_app onApplicationDidEnterBackground];
-
-    [BGTaskScheduler.sharedScheduler cancelAllTaskRequests];
-    [self scheduleBackgroundDataFetch];
-}
-
-- (void) applicationWillEnterForeground:(UIApplication *)application
-{
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-
-    if (_appInitDone)
-        [_app onApplicationWillEnterForeground];
-    else
-        [self initialize];
-}
-
-- (void) applicationDidBecomeActive:(UIApplication *)application
-{
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    
-    if (_appInitDone)
-    {
-        _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesInterval target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
-        [_app onApplicationDidBecomeActive];
-    }
-}
-
-- (void) applicationWillTerminate:(UIApplication *)application
-{
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-    [_app shutdown];
-    OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
-    [mapVc onApplicationDestroyed];
-    // Release OsmAnd core
-    OsmAnd::ReleaseCore();
-    
-    // Deconfigure device
-    UIDevice* device = [UIDevice currentDevice];
-    device.batteryMonitoringEnabled = NO;
-    [device endGeneratingDeviceOrientationNotifications];
-}
-
 - (void) application:(UIApplication *)application willChangeStatusBarFrame:(CGRect)newStatusBarFrame
 {
     [OASharedVariables setStatusBarHeight:newStatusBarFrame.size.height];
 }
 
-#pragma mark - UISceneSession Lifecycle
-
-- (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options
-{
-    UISceneConfiguration *configuration = [[UISceneConfiguration alloc] init];
-   // configuration.delegateClass = SceneDelegate.class;
-    return configuration;
-//    return [UISceneConfiguration configurationWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
-}
-
-- (void)application:(UIApplication *)application didDiscardSceneSessions:(NSSet<UISceneSession *> *)sceneSessions
-{
-    OALog(@"didDiscardSceneSessions");
-}
-
-// MARK: UISceneSession Lifecycle
-
-//- (void)presentInCarPlay:(CPInterfaceController * _Nonnull)interfaceController window:(CPWindow * _Nonnull)window API_AVAILABLE(ios(12.0))
-//{
-//
-//    if (OAIAPHelper.sharedInstance.isCarPlayAvailable)
-//    {
-//        OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
-//        if (!mapVc)
-//        {
-//            mapVc = [[OAMapViewController alloc] init];
-//            [OARootViewController.instance.mapPanel setMapViewController:mapVc];
-//        }
-//
-//        _carPlayMapController = [[OACarPlayMapViewController alloc] initWithCarPlayWindow:window mapViewController:mapVc];
-//
-//        window.rootViewController = _carPlayMapController;
-//
-//        _carPlayDashboardController = [[OACarPlayDashboardInterfaceController alloc] initWithInterfaceController:interfaceController];
-//        _carPlayDashboardController.delegate = _carPlayMapController;
-//        [_carPlayDashboardController present];
-//        _carPlayMapController.delegate = _carPlayDashboardController;
-//        [OARootViewController.instance.mapPanel onCarPlayConnected];
-//    }
-//    else
-//    {
-//        OACarPlayActiveViewController *vc = [[OACarPlayActiveViewController alloc] init];
-//        vc.messageText = OALocalizedString(@"carplay_available_in_sub_plans");
-//        vc.smallLogo = YES;
-//        OACarPlayPurchaseViewController *purchaseController = [[OACarPlayPurchaseViewController alloc] initWithCarPlayWindow:window viewController:vc];
-//        window.rootViewController = purchaseController;
-//        _carPlayDashboardController = [[OACarPlayDashboardInterfaceController alloc] initWithInterfaceController:interfaceController];
-//        [_carPlayDashboardController present];
-//        [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.CARPLAY navController:OARootViewController.instance.navigationController];
-//    }
-//}
-//
-//- (void)application:(UIApplication *)application didConnectCarInterfaceController:(CPInterfaceController *)interfaceController toWindow:(CPWindow *)window API_AVAILABLE(ios(12.0))
-//{
-//    _app.carPlayActive = YES;
-//    if (!_appInitDone)
-//    {
-//        _windowToAttach = window;
-//        _carPlayInterfaceController = interfaceController;
-//        if (!_appInitializing)
-//            [self initialize];
-//        return;
-//    }
-//    [self presentInCarPlay:interfaceController window:window];
-//    OAApplicationMode *carPlayMode = [OAAppSettings.sharedManager.isCarPlayModeDefault get] ? OAApplicationMode.getFirstAvailableNavigationMode : [OAAppSettings.sharedManager.carPlayMode get];
-//    [OAAppSettings.sharedManager setApplicationModePref:carPlayMode markAsLastUsed:NO];
-//}
-//
-//- (void)application:(UIApplication *)application didDisconnectCarInterfaceController:(CPInterfaceController *)interfaceController fromWindow:(CPWindow *)window API_AVAILABLE(ios(12.0))
-//{
-//    _app.carPlayActive = NO;
-//    [OAAppSettings.sharedManager setApplicationModePref:[OAAppSettings.sharedManager.defaultApplicationMode get] markAsLastUsed:NO];
-//    [OARootViewController.instance.mapPanel onCarPlayDisconnected:^{
-//        [_carPlayMapController detachFromCarPlayWindow];
-//        _carPlayDashboardController = nil;
-//        [_carPlayMapController.navigationController popViewControllerAnimated:YES];
-//        window.rootViewController = nil;
-//        _carPlayMapController = nil;
-//    }];
-//}
-//
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options
 {
     return [self openURL:url];
 }
+
+
 
 @end

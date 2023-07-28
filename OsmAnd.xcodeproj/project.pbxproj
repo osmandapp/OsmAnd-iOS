@@ -2275,7 +2275,6 @@
 		DA5A816D26C563A700F274C7 /* OsmAndAppImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79BA26C563A000F274C7 /* OsmAndAppImpl.mm */; };
 		DA5A816E26C563A700F274C7 /* OASharedVariables.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79BD26C563A000F274C7 /* OASharedVariables.m */; };
 		DA5A816F26C563A700F274C7 /* OAAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79BE26C563A000F274C7 /* OAAppDelegate.mm */; };
-		DA5A817026C563A700F274C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79BF26C563A000F274C7 /* main.m */; };
 		DA5A817126C563A700F274C7 /* OsmAndApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79C026C563A000F274C7 /* OsmAndApp.mm */; };
 		DA5A817226C563A700F274C7 /* OALog.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79C226C563A000F274C7 /* OALog.mm */; };
 		DA5A817326C563A700F274C7 /* OAFavoriteItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79C526C563A000F274C7 /* OAFavoriteItem.mm */; };
@@ -3559,6 +3558,12 @@
 		DAFE4D3722169B4D009731CA /* map_osm_note_resolved@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D2C22169B4B009731CA /* map_osm_note_resolved@2x.png */; };
 		DAFE4D3B22169B4D009731CA /* map_osm_note_unresolved@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D2E22169B4C009731CA /* map_osm_note_unresolved@2x.png */; };
 		DAFE4D3F22169B4D009731CA /* map_osm_note_resolved@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D3022169B4C009731CA /* map_osm_note_resolved@3x.png */; };
+		FA44BF5A2A72A91C000D2F5F /* InstrumentClusterCarPlaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF572A72A91B000D2F5F /* InstrumentClusterCarPlaySceneDelegate.swift */; };
+		FA44BF5B2A72A91C000D2F5F /* CarPlaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF582A72A91C000D2F5F /* CarPlaySceneDelegate.swift */; };
+		FA44BF5C2A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */; };
+		FA44BF692A72F810000D2F5F /* SceneDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF672A72F810000D2F5F /* SceneDelegate.mm */; };
+		FA69F2852A73948B0044CFCA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79BF26C563A000F274C7 /* main.m */; };
+		FA69F2872A739B7A0044CFCA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA69F2862A739B790044CFCA /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -8265,6 +8270,12 @@
 		DAFE4D2E22169B4C009731CA /* map_osm_note_unresolved@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_osm_note_unresolved@2x.png"; path = "Resources/Icons/map_osm_note_unresolved@2x.png"; sourceTree = "<group>"; };
 		DAFE4D3022169B4C009731CA /* map_osm_note_resolved@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_osm_note_resolved@3x.png"; path = "Resources/Icons/map_osm_note_resolved@3x.png"; sourceTree = "<group>"; };
 		F905FB9C7B198BF071D402C0 /* Pods-OsmAnd Maps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.release.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.release.xcconfig"; sourceTree = "<group>"; };
+		FA44BF572A72A91B000D2F5F /* InstrumentClusterCarPlaySceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstrumentClusterCarPlaySceneDelegate.swift; sourceTree = "<group>"; };
+		FA44BF582A72A91C000D2F5F /* CarPlaySceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPlaySceneDelegate.swift; sourceTree = "<group>"; };
+		FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardCarPlaySceneDelegate.swift; sourceTree = "<group>"; };
+		FA44BF672A72F810000D2F5F /* SceneDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SceneDelegate.mm; sourceTree = "<group>"; };
+		FA44BF682A72F810000D2F5F /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		FA69F2862A739B790044CFCA /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -11630,6 +11641,10 @@
 		DA5A79B426C563A000F274C7 /* AppHost */ = {
 			isa = PBXGroup;
 			children = (
+				FA69F2862A739B790044CFCA /* Main.storyboard */,
+				FA44BF682A72F810000D2F5F /* SceneDelegate.h */,
+				FA44BF672A72F810000D2F5F /* SceneDelegate.mm */,
+				FA44BF562A72A8FC000D2F5F /* CarPlay */,
 				DA5A79B526C563A000F274C7 /* Localization.h */,
 				DA5A79BF26C563A000F274C7 /* main.m */,
 				DA5A79C126C563A000F274C7 /* OAAppDelegate.h */,
@@ -14416,6 +14431,16 @@
 			path = WidgetSettings;
 			sourceTree = "<group>";
 		};
+		FA44BF562A72A8FC000D2F5F /* CarPlay */ = {
+			isa = PBXGroup;
+			children = (
+				FA44BF582A72A91C000D2F5F /* CarPlaySceneDelegate.swift */,
+				FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */,
+				FA44BF572A72A91B000D2F5F /* InstrumentClusterCarPlaySceneDelegate.swift */,
+			);
+			path = CarPlay;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -15559,6 +15584,7 @@
 				DA22DC5625C05F130070FFCA /* ic_custom_join_segments@2x.png in Resources */,
 				DA5A842626C563A800F274C7 /* OATargetHistoryItemViewController.xib in Resources */,
 				325D713F2A1B71EB00F81ECE /* ic_custom_arrow_direction@2x.png in Resources */,
+				FA69F2872A739B7A0044CFCA /* Main.storyboard in Resources */,
 				DA32BBF225C443F200ED7100 /* ic_custom_attach_track@2x.png in Resources */,
 				843257BB1A9DAEE400A7964E /* ic_update@3x.png in Resources */,
 				1571CE3C24ADEF1900083F92 /* ic_custom_angular_unit@3x.png in Resources */,
@@ -17204,6 +17230,7 @@
 				DA45B2422A30B6BF0055055A /* MapillaryWidget.swift in Sources */,
 				DA5A825C26C563A700F274C7 /* OAProfileAppearanceViewController.mm in Sources */,
 				DA5A853226C563A900F274C7 /* OAResourcesUIHelper.mm in Sources */,
+				FA44BF692A72F810000D2F5F /* SceneDelegate.mm in Sources */,
 				DA5A84EF26C563A900F274C7 /* OAHelpViewController.mm in Sources */,
 				DA5A812926C563A700F274C7 /* OAMapillaryTilesProvider.mm in Sources */,
 				DA5A855626C563A900F274C7 /* OALocationServices.mm in Sources */,
@@ -17295,6 +17322,7 @@
 				DA8DC3942A0CDAF1006C116B /* IntermediateTimeControlWidgetState.swift in Sources */,
 				DA5A814E26C563A700F274C7 /* OACarPlayMarkersListController.mm in Sources */,
 				DA5A853926C563A900F274C7 /* OAAppSettings.m in Sources */,
+				FA44BF5A2A72A91C000D2F5F /* InstrumentClusterCarPlaySceneDelegate.swift in Sources */,
 				DA5A853D26C563A900F274C7 /* OACurrentPositionHelper.mm in Sources */,
 				DA5A81AC26C563A700F274C7 /* OASearchUICore.mm in Sources */,
 				DA5A817C26C563A700F274C7 /* OAAddOSMBugAction.mm in Sources */,
@@ -17623,6 +17651,7 @@
 				DA5A825226C563A700F274C7 /* OANavigationTypeViewController.mm in Sources */,
 				DA5A830C26C563A800F274C7 /* OAEmptySearchCell.m in Sources */,
 				DA5A850426C563A900F274C7 /* OATargetPointView.mm in Sources */,
+				FA69F2852A73948B0044CFCA /* main.m in Sources */,
 				461A3F0A29F6E68F008EE079 /* OAColorCollectionHandler.m in Sources */,
 				DA5A84F226C563A900F274C7 /* OALocationConvert.mm in Sources */,
 				DA5A81DA26C563A700F274C7 /* OAFirstUsageWizardController.mm in Sources */,
@@ -17919,7 +17948,6 @@
 				DA5A856726C563A900F274C7 /* OAAmenityLocationPoint.mm in Sources */,
 				DA5A84C426C563A900F274C7 /* OAUploadProgressBottomSheetViewController.mm in Sources */,
 				DA5A83D226C563A800F274C7 /* OACollapsableLabelView.m in Sources */,
-				DA5A817026C563A700F274C7 /* main.m in Sources */,
 				DA5A825426C563A700F274C7 /* OAAutoZoomMapViewController.m in Sources */,
 				DA4ABF262876DA6800B996EF /* OADataSettingsItem.mm in Sources */,
 				DAA9F45127ECA5F6002BB1A8 /* OABackupError.m in Sources */,
@@ -17974,6 +18002,7 @@
 				DA5A838E26C563A800F274C7 /* OAOsmAndLiveViewController.mm in Sources */,
 				DA5A83B726C563A800F274C7 /* OAFloatingButtonsHudViewController.mm in Sources */,
 				DA5A81D626C563A700F274C7 /* OACommandBuilder.mm in Sources */,
+				FA44BF5B2A72A91C000D2F5F /* CarPlaySceneDelegate.swift in Sources */,
 				DA5A843526C563A800F274C7 /* OARouteDetailsViewController.mm in Sources */,
 				DA5A852A26C563A900F274C7 /* OALocationParser.mm in Sources */,
 				DA5A848A26C563A900F274C7 /* OARoadSegmentData.mm in Sources */,
@@ -18172,6 +18201,7 @@
 				CA4ED3D4E92007B8D20ECBC5 /* OAWeatherCacheSettingsViewController.mm in Sources */,
 				CA4ED855557936D7E91423FC /* OAWeatherHelper.mm in Sources */,
 				CA4ED34FEE569EF38DAC35F6 /* OAWeatherWebClient.mm in Sources */,
+				FA44BF5C2A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift in Sources */,
 				DA8DC3902A0CCFCB006C116B /* DistanceToDestinationWidget.swift in Sources */,
 				CA4ED6FF8F7B115D3C5DC810 /* OAWeatherForecastViewController.mm in Sources */,
 				CA4EDA76E3361F7FEB8D4A1E /* OAWeatherForecastDetailsViewController.mm in Sources */,

@@ -28,6 +28,7 @@
 #import "Localization.h"
 #import "OABackupHelper.h"
 #import "OACloudAccountVerificationViewController.h"
+#import "SceneDelegate.h"
 
 #define _(name) OARootViewController__##name
 #define commonInit _(commonInit)
@@ -87,8 +88,11 @@ typedef enum : NSUInteger {
 
 + (OARootViewController*) instance
 {
-    OAAppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
-    return appDelegate.rootViewController;
+    UIScene *scene = [UIApplication.sharedApplication.connectedScenes.allObjects firstObject];
+    SceneDelegate *sd = (SceneDelegate *)scene.delegate;
+    return sd.rootViewController;
+//    OAAppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
+//    return appDelegate.rootViewController;
 }
 
 - (void) restoreCenterPanel:(UIViewController *)viewController

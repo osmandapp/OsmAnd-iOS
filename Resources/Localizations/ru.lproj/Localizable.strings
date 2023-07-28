@@ -2688,3 +2688,5 @@
 "rotate_map_manual_opt" = "поворот вручную (фикс.)";
 "visible_in_3d_mode" = "Видно при включении 3D";
 "map_3d_mode_description" = "Для изменения перспективы коснитесь карты двумя пальцами и двигайте вверх или вниз.";
+"rendering_value_caiScale_description" = "Итальянский альпийский клуб (CAI)";
+"rendering_value_sacScale_description" = "Швейцарский альпийский клуб (SAC)";

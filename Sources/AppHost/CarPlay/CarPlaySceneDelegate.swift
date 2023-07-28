@@ -10,7 +10,7 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
         print(#function)
         
         OsmAndApp.swiftInstance().carPlayActive = true
-        
+        // FIXME:
         if let appDelegate = UIApplication.shared.delegate as? OAAppDelegate,
            !appDelegate.appInitDone, !appDelegate.appInitializing {
             appDelegate.initialize()

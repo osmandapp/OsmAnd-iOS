@@ -83,8 +83,6 @@
 @synthesize appInitDone = _appInitDone;
 @synthesize appInitializing = _appInitializing;
 
-
-
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
         
     UIWindowScene *windowScene = (UIWindowScene *)scene;
@@ -93,22 +91,22 @@
    // self.window.frame = windowScene.coordinateSpace.bounds;
     [self.window makeKeyAndVisible];
 //
-//    if (!_dataFetchQueue)
-//    {
-//        // Set the background fetch
-//        _dataFetchQueue = [[NSOperationQueue alloc] init];
-//        @try
-//        {
-//            NSLog(@"BGTaskScheduler registerForTaskWithIdentifier");
-//            [BGTaskScheduler.sharedScheduler registerForTaskWithIdentifier:kFetchDataUpdatesId usingQueue:nil launchHandler:^(__kindof BGTask * _Nonnull task) {
-//                [self handleBackgroundDataFetch:(BGProcessingTask *)task];
-//            }];
-//        }
-//        @catch (NSException *e)
-//        {
-//            NSLog(@"Failed to schedule background fetch. Reason: %@", e.reason);
-//        }
-//    }
+    if (!_dataFetchQueue)
+    {
+        // Set the background fetch
+        _dataFetchQueue = [[NSOperationQueue alloc] init];
+        @try
+        {
+            NSLog(@"BGTaskScheduler registerForTaskWithIdentifier");
+            [BGTaskScheduler.sharedScheduler registerForTaskWithIdentifier:kFetchDataUpdatesId usingQueue:nil launchHandler:^(__kindof BGTask * _Nonnull task) {
+                [self handleBackgroundDataFetch:(BGProcessingTask *)task];
+            }];
+        }
+        @catch (NSException *e)
+        {
+            NSLog(@"Failed to schedule background fetch. Reason: %@", e.reason);
+        }
+    }
     
 //    UIWindowScene *windowScene = (UIWindowScene *)scene;
 //    if (!windowScene) {
@@ -224,7 +222,7 @@
 
     _appInitializing = YES;
 
-    NSLog(@"OAAppDelegate initialize start");
+    NSLog(@"SceneDelegate initialize start");
 
     // Configure device
     UIDevice* device = [UIDevice currentDevice];
@@ -247,7 +245,7 @@
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        NSLog(@"OAAppDelegate beginBackgroundTask");
+        NSLog(@"SceneDelegate beginBackgroundTask");
 
         // Initialize OsmAnd core
         [_app initializeCore];
@@ -307,7 +305,7 @@
             [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
             _appInitTask = UIBackgroundTaskInvalid;
 
-            NSLog(@"OAAppDelegate endBackgroundTask");
+            NSLog(@"SceneDelegate endBackgroundTask");
 
             // Check for updates every hour when the app is in the foreground
             _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesInterval target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
@@ -324,7 +322,7 @@
         });
     });
     
-    NSLog(@"OAAppDelegate initialize finish");
+    NSLog(@"SceneDelegate initialize finish");
     return YES;
 }
 

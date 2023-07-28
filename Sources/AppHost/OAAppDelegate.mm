@@ -561,6 +561,7 @@
 //        return NO;
 //
 //    return [self initialize];
+    NSLog(@"");
     return YES;
 }
 
@@ -680,10 +681,10 @@
 
 - (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options
 {
-    UISceneConfiguration *configuration = [[UISceneConfiguration alloc] init];
+   // UISceneConfiguration *configuration = [[UISceneConfiguration alloc] init];
    // configuration.delegateClass = SceneDelegate.class;
-    return configuration;
-//    return [UISceneConfiguration configurationWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
+   // return configuration;
+    return [UISceneConfiguration configurationWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
 }
 
 - (void)application:(UIApplication *)application didDiscardSceneSessions:(NSSet<UISceneSession *> *)sceneSessions

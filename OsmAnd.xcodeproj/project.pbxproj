@@ -3563,7 +3563,6 @@
 		FA44BF5C2A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */; };
 		FA44BF692A72F810000D2F5F /* SceneDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF672A72F810000D2F5F /* SceneDelegate.mm */; };
 		FA69F2852A73948B0044CFCA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79BF26C563A000F274C7 /* main.m */; };
-		FA69F2872A739B7A0044CFCA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA69F2862A739B790044CFCA /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -8275,7 +8274,6 @@
 		FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardCarPlaySceneDelegate.swift; sourceTree = "<group>"; };
 		FA44BF672A72F810000D2F5F /* SceneDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SceneDelegate.mm; sourceTree = "<group>"; };
 		FA44BF682A72F810000D2F5F /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
-		FA69F2862A739B790044CFCA /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -11641,7 +11639,6 @@
 		DA5A79B426C563A000F274C7 /* AppHost */ = {
 			isa = PBXGroup;
 			children = (
-				FA69F2862A739B790044CFCA /* Main.storyboard */,
 				FA44BF682A72F810000D2F5F /* SceneDelegate.h */,
 				FA44BF672A72F810000D2F5F /* SceneDelegate.mm */,
 				FA44BF562A72A8FC000D2F5F /* CarPlay */,
@@ -15584,7 +15581,6 @@
 				DA22DC5625C05F130070FFCA /* ic_custom_join_segments@2x.png in Resources */,
 				DA5A842626C563A800F274C7 /* OATargetHistoryItemViewController.xib in Resources */,
 				325D713F2A1B71EB00F81ECE /* ic_custom_arrow_direction@2x.png in Resources */,
-				FA69F2872A739B7A0044CFCA /* Main.storyboard in Resources */,
 				DA32BBF225C443F200ED7100 /* ic_custom_attach_track@2x.png in Resources */,
 				843257BB1A9DAEE400A7964E /* ic_update@3x.png in Resources */,
 				1571CE3C24ADEF1900083F92 /* ic_custom_angular_unit@3x.png in Resources */,

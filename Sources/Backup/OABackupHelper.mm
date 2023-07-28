@@ -451,24 +451,14 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 
 - (void) updateOrderId:(void(^)(NSInteger status, NSString *message, NSString *error))listener
 {
-    NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
-    params[@"email"] = [self getEmail];
-    
     NSString *orderId = [self getOrderId];
     if (orderId.length == 0)
     {
-        if (listener)
-        {
-            NSString *message = @"Order id is empty";
-            NSString *error = [NSString stringWithFormat:@"{\"error\":{\"errorCode\":%d,\"message\":\"%@\"}}", STATUS_NO_ORDER_ID_ERROR, message];
-            listener(STATUS_NO_ORDER_ID_ERROR, message, error);
-        }
         return;
     }
-    else
-    {
-        params[@"orderid"] = orderId;
-    }
+    NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
+    params[@"email"] = [self getEmail];
+    params[@"orderid"] = orderId;
     NSString *iosId = [self getIosId];
     if (iosId.length > 0)
         params[@"deviceid"] = iosId;

@@ -22,6 +22,8 @@
 #import "Localization.h"
 #import <SafariServices/SafariServices.h>
 
+#define OSMAND_START @"OsmAnd Start"
+
 @interface OAPurchaseDetailsViewController () <SFSafariViewControllerDelegate>
 
 @end
@@ -33,6 +35,7 @@
     OAAppSettings *_settings;
     
     BOOL _isCrossplatform;
+    BOOL _isFreeStart;
     BOOL _isPromo;
 }
 
@@ -45,6 +48,16 @@
     {
         _isCrossplatform = YES;
         _isPromo = ((EOASubscriptionOrigin) [_settings.proSubscriptionOrigin get]) == EOASubscriptionOriginPromo;
+    }
+    return self;
+}
+
+- (instancetype)initForFreeStartSubscription
+{
+    self = [super init];
+    if (self)
+    {
+        _isFreeStart = YES;
     }
     return self;
 }
@@ -72,11 +85,19 @@
     {
         return _isPromo ? OALocalizedString(@"promo_subscription") : OALocalizedString(@"product_title_pro");
     }
+    else if (_isFreeStart) {
+        return OSMAND_START;
+    }
     else
     {
         BOOL isDepthContours = [_product.productIdentifier isEqualToString:kInAppId_Addon_Nautical];
         return isDepthContours ? OALocalizedString(@"rendering_attr_depthContours_name") : _product.localizedTitle;
     }
+}
+
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_close");
 }
 
 #pragma mark - Table data
@@ -86,8 +107,42 @@
     _data = [OATableDataModel model];
     if (_isCrossplatform)
         [self generateDataForCrossplatform];
+    else if (_isFreeStart)
+        [self generateDataForFreeStart];
     else
         [self generateDataForProduct];
+}
+
+- (void)generateDataForFreeStart
+{
+    OATableSectionData *productSection = [_data createNewSection];
+
+    [productSection addRowFromDictionary:@{
+        kCellTypeKey : [OATitleDescriptionBigIconCell getCellIdentifier],
+        kCellTitleKey : OSMAND_START,
+        @"icon" : [UIImage imageNamed:@"ic_custom_osmand_start_logo_big"]
+    }];
+
+    [productSection addRowFromDictionary:@{
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"shared_string_type"),
+        kCellDescrKey : OALocalizedString(@"free_account")
+    }];
+    NSDate *purchasedDate = [NSDate dateWithTimeIntervalSince1970:[OAAppSettings.sharedManager.backupFreePlanRegistrationTime get]];
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    formatter.dateStyle = NSDateFormatterMediumStyle;
+
+    [productSection addRowFromDictionary:@{
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"shared_string_purchased"),
+        kCellDescrKey : [formatter stringFromDate:purchasedDate]
+    }];
+
+    [productSection addRowFromDictionary:@{
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"purchase_origin"),
+        kCellDescrKey : @"-"
+    }];
 }
 
 - (void)generateDataForProduct

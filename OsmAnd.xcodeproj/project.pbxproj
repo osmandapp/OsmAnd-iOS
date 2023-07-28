@@ -3559,6 +3559,21 @@
 		DAFE4D3722169B4D009731CA /* map_osm_note_resolved@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D2C22169B4B009731CA /* map_osm_note_resolved@2x.png */; };
 		DAFE4D3B22169B4D009731CA /* map_osm_note_unresolved@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D2E22169B4C009731CA /* map_osm_note_unresolved@2x.png */; };
 		DAFE4D3F22169B4D009731CA /* map_osm_note_resolved@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D3022169B4C009731CA /* map_osm_note_resolved@3x.png */; };
+		FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */; };
+		FA44BF3B2A71123D000D2F5F /* ic_banner_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF2F2A71123B000D2F5F /* ic_banner_close@2x.png */; };
+		FA44BF3C2A71123D000D2F5F /* ic_custom_osmand_start_logo_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF302A71123B000D2F5F /* ic_custom_osmand_start_logo_big@3x.png */; };
+		FA44BF3D2A71123D000D2F5F /* ic_payment_label_pro@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF312A71123C000D2F5F /* ic_payment_label_pro@2x.png */; };
+		FA44BF3E2A71123D000D2F5F /* ic_payment_label_pro@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF322A71123C000D2F5F /* ic_payment_label_pro@3x.png */; };
+		FA44BF3F2A71123D000D2F5F /* ic_custom_osmand_start_logo_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF332A71123C000D2F5F /* ic_custom_osmand_start_logo_big@2x.png */; };
+		FA44BF402A71123D000D2F5F /* ic_custom_osmand_start@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF342A71123C000D2F5F /* ic_custom_osmand_start@3x.png */; };
+		FA44BF412A71123D000D2F5F /* ic_custom_osmand_start@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF352A71123C000D2F5F /* ic_custom_osmand_start@2x.png */; };
+		FA44BF422A71123D000D2F5F /* ic_custom_folder_cloud_colored@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF362A71123D000D2F5F /* ic_custom_folder_cloud_colored@2x.png */; };
+		FA44BF432A71123D000D2F5F /* ic_custom_folder_cloud_colored@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF372A71123D000D2F5F /* ic_custom_folder_cloud_colored@3x.png */; };
+		FA44BF442A71123D000D2F5F /* ic_banner_close@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF382A71123D000D2F5F /* ic_banner_close@3x.png */; };
+		FA44BF452A71123D000D2F5F /* ic_custom_settings_cloud_colored@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF392A71123D000D2F5F /* ic_custom_settings_cloud_colored@2x.png */; };
+		FA44BF462A71123D000D2F5F /* ic_custom_settings_cloud_colored@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF3A2A71123D000D2F5F /* ic_custom_settings_cloud_colored@3x.png */; };
+		FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */; };
+		FA4768B52A67B86400D533E8 /* FreeBackupBanner.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -8265,6 +8280,21 @@
 		DAFE4D2E22169B4C009731CA /* map_osm_note_unresolved@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_osm_note_unresolved@2x.png"; path = "Resources/Icons/map_osm_note_unresolved@2x.png"; sourceTree = "<group>"; };
 		DAFE4D3022169B4C009731CA /* map_osm_note_resolved@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_osm_note_resolved@3x.png"; path = "Resources/Icons/map_osm_note_resolved@3x.png"; sourceTree = "<group>"; };
 		F905FB9C7B198BF071D402C0 /* Pods-OsmAnd Maps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.release.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.release.xcconfig"; sourceTree = "<group>"; };
+		FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBannerCell.swift; sourceTree = "<group>"; };
+		FA44BF2F2A71123B000D2F5F /* ic_banner_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_banner_close@2x.png"; path = "Resources/Icons/ic_banner_close@2x.png"; sourceTree = "<group>"; };
+		FA44BF302A71123B000D2F5F /* ic_custom_osmand_start_logo_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osmand_start_logo_big@3x.png"; path = "Resources/Icons/ic_custom_osmand_start_logo_big@3x.png"; sourceTree = "<group>"; };
+		FA44BF312A71123C000D2F5F /* ic_payment_label_pro@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_payment_label_pro@2x.png"; path = "Resources/Icons/ic_payment_label_pro@2x.png"; sourceTree = "<group>"; };
+		FA44BF322A71123C000D2F5F /* ic_payment_label_pro@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_payment_label_pro@3x.png"; path = "Resources/Icons/ic_payment_label_pro@3x.png"; sourceTree = "<group>"; };
+		FA44BF332A71123C000D2F5F /* ic_custom_osmand_start_logo_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osmand_start_logo_big@2x.png"; path = "Resources/Icons/ic_custom_osmand_start_logo_big@2x.png"; sourceTree = "<group>"; };
+		FA44BF342A71123C000D2F5F /* ic_custom_osmand_start@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osmand_start@3x.png"; path = "Resources/Icons/ic_custom_osmand_start@3x.png"; sourceTree = "<group>"; };
+		FA44BF352A71123C000D2F5F /* ic_custom_osmand_start@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osmand_start@2x.png"; path = "Resources/Icons/ic_custom_osmand_start@2x.png"; sourceTree = "<group>"; };
+		FA44BF362A71123D000D2F5F /* ic_custom_folder_cloud_colored@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_folder_cloud_colored@2x.png"; path = "Resources/Icons/ic_custom_folder_cloud_colored@2x.png"; sourceTree = "<group>"; };
+		FA44BF372A71123D000D2F5F /* ic_custom_folder_cloud_colored@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_folder_cloud_colored@3x.png"; path = "Resources/Icons/ic_custom_folder_cloud_colored@3x.png"; sourceTree = "<group>"; };
+		FA44BF382A71123D000D2F5F /* ic_banner_close@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_banner_close@3x.png"; path = "Resources/Icons/ic_banner_close@3x.png"; sourceTree = "<group>"; };
+		FA44BF392A71123D000D2F5F /* ic_custom_settings_cloud_colored@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_settings_cloud_colored@2x.png"; path = "Resources/Icons/ic_custom_settings_cloud_colored@2x.png"; sourceTree = "<group>"; };
+		FA44BF3A2A71123D000D2F5F /* ic_custom_settings_cloud_colored@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_settings_cloud_colored@3x.png"; path = "Resources/Icons/ic_custom_settings_cloud_colored@3x.png"; sourceTree = "<group>"; };
+		FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBanner.swift; sourceTree = "<group>"; };
+		FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FreeBackupBanner.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -8520,6 +8550,18 @@
 		3AFEEE231A0E343600900A47 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				FA44BF2F2A71123B000D2F5F /* ic_banner_close@2x.png */,
+				FA44BF382A71123D000D2F5F /* ic_banner_close@3x.png */,
+				FA44BF362A71123D000D2F5F /* ic_custom_folder_cloud_colored@2x.png */,
+				FA44BF372A71123D000D2F5F /* ic_custom_folder_cloud_colored@3x.png */,
+				FA44BF332A71123C000D2F5F /* ic_custom_osmand_start_logo_big@2x.png */,
+				FA44BF302A71123B000D2F5F /* ic_custom_osmand_start_logo_big@3x.png */,
+				FA44BF352A71123C000D2F5F /* ic_custom_osmand_start@2x.png */,
+				FA44BF342A71123C000D2F5F /* ic_custom_osmand_start@3x.png */,
+				FA44BF392A71123D000D2F5F /* ic_custom_settings_cloud_colored@2x.png */,
+				FA44BF3A2A71123D000D2F5F /* ic_custom_settings_cloud_colored@3x.png */,
+				FA44BF312A71123C000D2F5F /* ic_payment_label_pro@2x.png */,
+				FA44BF322A71123C000D2F5F /* ic_payment_label_pro@3x.png */,
 				321251422A4B2080006C44BD /* ic_custom_2d@2x.png */,
 				3212513F2A4B207F006C44BD /* ic_custom_2d@3x.png */,
 				3212513D2A4B207E006C44BD /* ic_custom_3d@2x.png */,
@@ -13849,6 +13891,7 @@
 		DA5A804326C563A500F274C7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FA4768B02A66E6DB00D533E8 /* Banners */,
 				DA5A804526C563A500F274C7 /* OAButton.h */,
 				DA5A806626C563A500F274C7 /* OAButton.m */,
 				DA5A806326C563A500F274C7 /* OADownloadProgressView.h */,
@@ -14416,6 +14459,24 @@
 			path = WidgetSettings;
 			sourceTree = "<group>";
 		};
+		FA4768B02A66E6DB00D533E8 /* Banners */ = {
+			isa = PBXGroup;
+			children = (
+				FA4768B12A66E70E00D533E8 /* FreeFavoritesBackupBanner */,
+			);
+			path = Banners;
+			sourceTree = "<group>";
+		};
+		FA4768B12A66E70E00D533E8 /* FreeFavoritesBackupBanner */ = {
+			isa = PBXGroup;
+			children = (
+				FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */,
+				FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */,
+				FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */,
+			);
+			path = FreeFavoritesBackupBanner;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -14962,6 +15023,7 @@
 				DA86607F2268A2870041F57D /* ic_custom_show_on_map@3x.png in Resources */,
 				DA5A828026C563A700F274C7 /* OATargetInfoViewCell.xib in Resources */,
 				BBA3AF97197FC4BB0039D991 /* Localizable.strings in Resources */,
+				FA44BF3F2A71123D000D2F5F /* ic_custom_osmand_start_logo_big@2x.png in Resources */,
 				DA2EC6E629FBBE0300ECEB37 /* widget_coordinates_longitude_night@3x.png in Resources */,
 				8A7672232281A5150098DE84 /* ic_action_location_color@3x.png in Resources */,
 				DACBB99625D690DC00378C47 /* btn_map_zoom_in_day@3x.png in Resources */,
@@ -15070,6 +15132,7 @@
 				8AFC2C2124334A4E0095BA9F /* map_location_default_center@3x.png in Resources */,
 				46BA4840281C2EF900C04F14 /* ic_custom_internet_access_fee@2x.png in Resources */,
 				DA2EC7AC29FBBE0400ECEB37 /* warnings_border_control@2x.png in Resources */,
+				FA44BF452A71123D000D2F5F /* ic_custom_settings_cloud_colored@2x.png in Resources */,
 				DA2EC72F29FBBE0300ECEB37 /* widget_altitude_location_day@2x.png in Resources */,
 				DA71B7EC214B9F4A00FE8B7E /* ski-plugin.html in Resources */,
 				84E442071AF8A07500F87542 /* parking_position@2x.png in Resources */,
@@ -15153,6 +15216,7 @@
 				8420C1CE1B42F2AC004EDAE6 /* ic_dialog_rename@2x.png in Resources */,
 				DA83602D23449C6B003374B5 /* ic_custom_options@3x.png in Resources */,
 				C588D1F32992A448001FEDBD /* ic_custom_history_disabled_48@3x.png in Resources */,
+				FA44BF412A71123D000D2F5F /* ic_custom_osmand_start@2x.png in Resources */,
 				DA2EC6C129FBBE0300ECEB37 /* widget_coordinates_location_day@2x.png in Resources */,
 				DA5A857326C567B400F274C7 /* OAPluginPopupViewController.xib in Resources */,
 				0A31AFCD26FBAC39000EE842 /* ic_small_speed@2x.png in Resources */,
@@ -15274,6 +15338,7 @@
 				DA54AA8524EFEFBE001E6560 /* ic_custom_elevation@3x.png in Resources */,
 				845E069D1B5FF17400DFC2A7 /* ic_plugin_nautical@2x.png in Resources */,
 				C5E202942A2102D800BFC32C /* ic_navbar_add@3x.png in Resources */,
+				FA44BF422A71123D000D2F5F /* ic_custom_folder_cloud_colored@2x.png in Resources */,
 				336CAAB024AF63520085BF0A /* ic_custom_transport_subway@3x.png in Resources */,
 				8A755A5121CBF92400E42699 /* ic_live_nautical_depth@2x.png in Resources */,
 				84C41E011AB8600D0089EABB /* ic_destination_pin_3@3x.png in Resources */,
@@ -15349,6 +15414,7 @@
 				3296B49327F8790800108AF7 /* ic_navbar_pencil@2x.png in Resources */,
 				326B4FAB257FD02F00ABAB1D /* ic_action_kayak@3x.png in Resources */,
 				DA6BF95A24DBF21B00F7DC7B /* ic_custom_export@2x.png in Resources */,
+				FA44BF3C2A71123D000D2F5F /* ic_custom_osmand_start_logo_big@3x.png in Resources */,
 				844E07D61E42319700EFC525 /* ic_action_building@2x.png in Resources */,
 				DA2EC6E229FBBE0300ECEB37 /* ic_action_widget_collapse@3x.png in Resources */,
 				DAE79D3A260E1B4800E2EE11 /* ic_system_checkbox_selected@3x.png in Resources */,
@@ -15593,6 +15659,7 @@
 				B247455827E6470A00C18C3F /* OATwoFilledButtonsTableViewCell.xib in Resources */,
 				DA68B3BA233B81DB00F5ACCC /* ic_custom_home@2x.png in Resources */,
 				DA2EC6F029FBBE0300ECEB37 /* widget_coordinates_utm_night@2x.png in Resources */,
+				FA44BF432A71123D000D2F5F /* ic_custom_folder_cloud_colored@3x.png in Resources */,
 				8476E2C81F6C1EEC00EC274F /* map_pedestrian_location_lost@2x.png in Resources */,
 				845E06111B5956E800DFC2A7 /* ic_destination_pin_4_small@3x.png in Resources */,
 				841222481B39CC5200F80F9E /* map_bicycle_bearing@3x.png in Resources */,
@@ -15681,6 +15748,7 @@
 				DA71B7EE214B9F4A00FE8B7E /* start.html in Resources */,
 				84CCE8081B7509A90059A82A /* ic_dialog_edit@3x.png in Resources */,
 				DA2EC69229FBBE0300ECEB37 /* widget_developer_camera_tilt_day@3x.png in Resources */,
+				FA44BF3D2A71123D000D2F5F /* ic_payment_label_pro@2x.png in Resources */,
 				8458BB791B0F1E7A00738132 /* ic_description@2x.png in Resources */,
 				0AA396A927597126006A9EC6 /* bg_color_chessboard_pattern@2x.png in Resources */,
 				DA2EC70D29FBBE0300ECEB37 /* widget_monitoring_rec_big_day@3x.png in Resources */,
@@ -15877,6 +15945,7 @@
 				DA5A828A26C563A700F274C7 /* OADirectionTableViewCell.xib in Resources */,
 				DA5A827126C563A700F274C7 /* OAShapesTableViewCell.xib in Resources */,
 				157F3CD324A1F36D000A66F0 /* ic_custom_import@2x.png in Resources */,
+				FA44BF3B2A71123D000D2F5F /* ic_banner_close@2x.png in Resources */,
 				DA6BF94A24DBF21B00F7DC7B /* ic_custom_copy@2x.png in Resources */,
 				DA13420E243DC5A90039D214 /* map_action_snowmobile@3x.png in Resources */,
 				46AEDB9A27F4AC15006D90E8 /* ic_custom_thermometer@2x.png in Resources */,
@@ -16029,6 +16098,7 @@
 				843E5D951AB341E000BE14BE /* menu_share_icon@3x.png in Resources */,
 				DA1341A4243DC5A80039D214 /* ic_action_ski_touring@3x.png in Resources */,
 				46BA4846281C2F3500C04F14 /* ic_custom_poi_name@2x.png in Resources */,
+				FA44BF462A71123D000D2F5F /* ic_custom_settings_cloud_colored@3x.png in Resources */,
 				DA1341C8243DC5A90039D214 /* map_action_shuttle_bus@2x.png in Resources */,
 				8441CB5B1B1370580033AC95 /* selection_checked@2x.png in Resources */,
 				DA134122243DC5A80039D214 /* ic_action_shuttle_bus@3x.png in Resources */,
@@ -16244,6 +16314,7 @@
 				0A8D1A1826FBA1750042444C /* ic_small_descent@3x.png in Resources */,
 				46AEDB9B27F4AC15006D90E8 /* ic_custom_thermometer@3x.png in Resources */,
 				3219705925FA0DCE00C3FED6 /* ic_custom_replace@2x.png in Resources */,
+				FA44BF3E2A71123D000D2F5F /* ic_payment_label_pro@3x.png in Resources */,
 				DA2EC72629FBBE0300ECEB37 /* widget_street_name_day@3x.png in Resources */,
 				15B4E4B124AB401C00119365 /* ic_custom_length_limit@3x.png in Resources */,
 				0AA2F04727356BC7008EAF35 /* ic_custom_folder_points@2x.png in Resources */,
@@ -16293,6 +16364,7 @@
 				DA1341A6243DC5A80039D214 /* ic_action_campervan@3x.png in Resources */,
 				DA68B3F0233B824D00F5ACCC /* ic_custom_destination@2x.png in Resources */,
 				DA1340EE243DC5A80039D214 /* ic_world_globe_dark@2x.png in Resources */,
+				FA44BF442A71123D000D2F5F /* ic_banner_close@3x.png in Resources */,
 				DA5A82C326C563A800F274C7 /* OARangeSliderCell.xib in Resources */,
 				DA1BC12C233F9B01004DAF78 /* ic_custom_sort_door_to_door@3x.png in Resources */,
 				8412222A1B395D2C00F80F9E /* ic_travel_time@2x.png in Resources */,
@@ -16350,6 +16422,7 @@
 				DA2EC76F29FBBE0400ECEB37 /* widget_time_day@2x.png in Resources */,
 				DA2EC67029FBBE0300ECEB37 /* widget_target_day@2x.png in Resources */,
 				DA0132E32A1E4A6300920C14 /* ic_custom20_screen_side_bottom@3x.png in Resources */,
+				FA4768B52A67B86400D533E8 /* FreeBackupBanner.xib in Resources */,
 				DA1BC11E233F9B01004DAF78 /* ic_custom_reverse@2x.png in Resources */,
 				DA5A851C26C563A900F274C7 /* OptionsPanel.xib in Resources */,
 				84F3A8C51B4DA93100D16EBC /* ic_group@3x.png in Resources */,
@@ -16908,6 +16981,7 @@
 				0A2571A226F253620079774F /* OATrackMenuHeaderView.xib in Resources */,
 				0CBDD0A7245038EC00C94BC2 /* map_marker_direction_arrow_p2_color_pin_4@2x.png in Resources */,
 				32119B40284776CF005E1E0C /* ic_custom_laptop@3x.png in Resources */,
+				FA44BF402A71123D000D2F5F /* ic_custom_osmand_start@3x.png in Resources */,
 				DA5A82B426C563A800F274C7 /* OAColorsCollectionViewCell.xib in Resources */,
 				DA0D162A281BEEF500CEEF58 /* map_turn_forward@2x.png in Resources */,
 				DA1341DA243DC5A90039D214 /* ic_action_offroad@2x.png in Resources */,
@@ -17554,6 +17628,7 @@
 				DA5A812726C563A700F274C7 /* OACoreResourcesAmenityIconProvider.mm in Sources */,
 				DA5A856C26C563A900F274C7 /* OARouteImporter.mm in Sources */,
 				DA5A83B426C563A800F274C7 /* OAOsmEditsListViewController.mm in Sources */,
+				FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */,
 				DA5A81AF26C563A700F274C7 /* OASearchCoreFactory.mm in Sources */,
 				DA5A849626C563A900F274C7 /* InitialRoutePlanningBottomSheetViewController.mm in Sources */,
 				DA5A81EC26C563A700F274C7 /* OARendererRegistry.mm in Sources */,
@@ -17874,6 +17949,7 @@
 				DA5A849D26C563A900F274C7 /* OARemovePointCommand.mm in Sources */,
 				DA5A819926C563A700F274C7 /* OAGPXAction.mm in Sources */,
 				DA5A816E26C563A700F274C7 /* OASharedVariables.m in Sources */,
+				FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */,
 				DA5A850B26C563A900F274C7 /* OAButton.m in Sources */,
 				DA5A81C126C563A700F274C7 /* OAPOIParser.m in Sources */,
 				DA5A824C26C563A700F274C7 /* OANavigationLanguageViewController.m in Sources */,
@@ -18531,6 +18607,7 @@
 					"-lpng_static",
 					"-lz_static",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = net.osmand.maps;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "Generic OsmAnd Profile";
@@ -18591,6 +18668,7 @@
 					"-lpng_static",
 					"-lz_static",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = net.osmand.maps;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "Generic OsmAnd Profile";

@@ -20,6 +20,9 @@
 #import "OABackupHelper.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
+#import "OAButtonTableViewCell.h"
+#import "OAIAPHelper.h"
+#import "OAChoosePlanHelper.h"
 
 @implementation OABackupTypesViewController
 {
@@ -54,6 +57,18 @@
 - (NSString *)getTitle
 {
     return OALocalizedString(@"backup_data");
+}
+
+- (void)registerNotifications {
+    [self addNotification:OAIAPProductPurchasedNotification selector:@selector(productPurchased:)];
+}
+
+- (void)productPurchased:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self generateData];
+        [self.tableView reloadData];
+    });
 }
 
 #pragma mark - Table data
@@ -108,7 +123,23 @@
         {
             NSMutableDictionary *itemData = [NSMutableDictionary dictionary];
             itemData[@"key"] = [type.name stringByAppendingString:@"_cell"];
-            itemData[@"type"] = [OASwitchTableViewCell getCellIdentifier];
+            if ([OAIAPHelper isOsmAndProAvailable])
+            {
+                itemData[@"type"] = [OASwitchTableViewCell getCellIdentifier];
+            }
+            else
+            {
+                if (type.isAllowedInFreeVersion)
+                {
+                    itemData[@"type"] = [OASwitchTableViewCell getCellIdentifier];
+                }
+                else
+                {
+                    itemData[@"type"] = [OAButtonTableViewCell getCellIdentifier];
+                    itemData[@"action"] = @"onPurchaseButtonTap";
+                }
+            }
+ 
             itemData[@"setting"] = type;
             itemData[@"category"] = categoryItems;
 
@@ -147,6 +178,11 @@
 
 #pragma mark - Selectors
 
+- (void)onPurchaseButtonTap
+{
+    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.OSMAND_CLOUD navController:self.navigationController];
+}
+
 - (void)onCellSelected
 {
     NSDictionary *item = [self getItem:[self getSelectedIndexPath]];
@@ -156,6 +192,13 @@
         OAManageStorageViewController *manageStorageViewController = [[OAManageStorageViewController alloc] init];
         manageStorageViewController.backupTypesDelegate = self;
         [self.navigationController pushViewController:manageStorageViewController animated:YES];
+    }
+    else
+    {
+        if (![OAIAPHelper isOsmAndProAvailable])
+        {
+            [self onPurchaseButtonTap];
+        }
     }
 }
 

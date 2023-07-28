@@ -686,6 +686,7 @@
 "shared_string_includes" = "Includes";
 "shared_string_purchased" = "Purchased";
 "shared_string_control_start" = "Start";
+"free_account" = "Free account";
 "map_2d_mode_action" = "2D Mode";
 "map_3d_mode_action" = "3D Mode";
 "compass_always_visible" = "Always visible";
@@ -2995,6 +2996,11 @@
 "subscription_banner_free_maps_description" = "Get unlimited map downloads and updates.";
 "subscription_banner_no_free_maps_title" = "You spent all free downloads";
 "subscription_banner_osmand_pro_title" = "Get hourly, daily or weekly map updates with OsmAnd Pro.";
+
+"free_favorites_backup_description" = "Register in OsmAnd Cloud to get free backup for favorites and settings";
+"free_favorites_backup" = "Free Favorites Backup";
+"banner_payment_free_backup_settings_title" = "Free Settings Backup";
+"get_osmand_cloud" = "Get OsmAnd Cloud";
 
 "compass_visible_if_map_rotated" = "Visible if map is rotated";
 "compass_visible_in_rotated_mode_descr" = "Hidden when north is up";

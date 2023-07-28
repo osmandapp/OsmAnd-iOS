@@ -300,20 +300,23 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
             if (_status.warningTitle != nil || _error.length > 0)
             {
-                BOOL hasWarningStatus = _status.warningTitle != nil;
-                BOOL hasDescr = _error || _status.warningDescription;
-                NSString *descr = hasDescr && hasWarningStatus ? _status.warningDescription : [_error stringByAppendingFormat:@"\n%@", OALocalizedString(@"error_contact_support")];
-                NSInteger color = _status == OABackupStatus.CONFLICTS || _status == OABackupStatus.ERROR ? _status.iconColor
-                        : _status == OABackupStatus.MAKE_BACKUP ? profile_icon_color_green_light : -1;
-                NSDictionary *makeBackupWarningCell = @{
-                    kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
-                    kCellKeyKey: @"makeBackupWarning",
-                    kCellTitleKey: hasWarningStatus ? _status.warningTitle : OALocalizedString(@"osm_failed_uploads"),
-                    kCellDescrKey: descr ? descr : @"",
-                    kCellIconTint: @(color),
-                    kCellIconNameKey: _status.warningIconName
-                };
-                [backupRows addRowFromDictionary:makeBackupWarningCell];
+                if ([self isExpiredPurchase])
+                {
+                    BOOL hasWarningStatus = _status.warningTitle != nil;
+                    BOOL hasDescr = _error || _status.warningDescription;
+                    NSString *descr = hasDescr && hasWarningStatus ? _status.warningDescription : [_error stringByAppendingFormat:@"\n%@", OALocalizedString(@"error_contact_support")];
+                    NSInteger color = _status == OABackupStatus.CONFLICTS || _status == OABackupStatus.ERROR ? _status.iconColor
+                    : _status == OABackupStatus.MAKE_BACKUP ? profile_icon_color_green_light : -1;
+                    NSDictionary *makeBackupWarningCell = @{
+                        kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
+                        kCellKeyKey: @"makeBackupWarning",
+                        kCellTitleKey: hasWarningStatus ? _status.warningTitle : OALocalizedString(@"osm_failed_uploads"),
+                        kCellDescrKey: descr ? descr : @"",
+                        kCellIconTint: @(color),
+                        kCellIconNameKey: _status.warningIconName
+                    };
+                    [backupRows addRowFromDictionary:makeBackupWarningCell];
+                }
             }
         }
 
@@ -378,6 +381,24 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             [backupRows addRowFromDictionary:purchaseCell];
         }
     }
+}
+
+- (BOOL)isExpiredPurchase {
+    NSArray<OAProduct *> *mainPurchases = [OAIAPHelper.sharedInstance getEverMadeMainPurchases];
+    NSArray<OAProduct *> *inAppsPurchases = [OAIAPHelper.sharedInstance inAppsPurchased];
+    
+    for (OAProduct *product in mainPurchases)
+    {
+        if (product.purchaseState == PSTATE_NOT_PURCHASED)
+            return YES;
+    }
+    for (OAProduct *product in inAppsPurchases)
+    {
+        if (product.purchaseState == PSTATE_NOT_PURCHASED)
+            return YES;
+    }
+    
+    return NO;
 }
 
 - (OATitleIconProgressbarCell *) getProgressBarCell

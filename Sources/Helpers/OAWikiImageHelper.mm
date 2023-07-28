@@ -64,6 +64,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
 {
     NSString *imageName = [imageFileName stringByRemovingPercentEncoding];
     imageFileName = [imageName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+    imageFileName = [imageName stringByReplacingOccurrencesOfString:@"File:" withString:@""];
     imageName = [imageName substringToIndex:[imageName lastIndexOf:@"."]];
     NSString *urlSafeFileName = [imageFileName stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
 
@@ -77,7 +78,8 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
 {
     if (wikidataTagContent && [wikidataTagContent hasPrefix:WIKIDATA_PREFIX])
     {
-        NSURL *urlObj = [[NSURL alloc] initWithString: [NSString stringWithFormat:@"%@%@%@%@", WIKIDATA_API_ENDPOINT, WIKIDATA_ACTION, wikidataTagContent, FORMAT_JSON]];
+        NSString *safeWikidataTagContent = [wikidataTagContent stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        NSURL *urlObj = [[NSURL alloc] initWithString: [NSString stringWithFormat:@"%@%@%@%@", WIKIDATA_API_ENDPOINT, WIKIDATA_ACTION, safeWikidataTagContent, FORMAT_JSON]];
         NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
         [[aSession dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
             OAWikiImageCard *resultCard = nil;
@@ -138,6 +140,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
     else if (wikiMediaTagContent && [wikiMediaTagContent hasPrefix:WIKIMEDIA_CATEGORY])
     {
         NSString *url = [NSString stringWithFormat:@"%@%@%@%@%@", WIKIMEDIA_API_ENDPOINT, WIKIMEDIA_ACTION, wikiMediaTagContent, CM_LIMIT, FORMAT_JSON];
+        url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
         NSURL *urlObj = [[NSURL alloc] initWithString:url];
         NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
         [[aSession dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {

@@ -304,7 +304,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                 BOOL hasDescr = _error || _status.warningDescription;
                 NSString *descr = hasDescr && hasWarningStatus ? _status.warningDescription : [_error stringByAppendingFormat:@"\n%@", OALocalizedString(@"error_contact_support")];
                 NSInteger color = _status == OABackupStatus.CONFLICTS || _status == OABackupStatus.ERROR ? _status.iconColor
-                        : _status == OABackupStatus.MAKE_BACKUP ? profile_icon_color_green_light : -1;
+                : _status == OABackupStatus.MAKE_BACKUP ? profile_icon_color_green_light : -1;
                 NSDictionary *makeBackupWarningCell = @{
                     kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
                     kCellKeyKey: @"makeBackupWarning",

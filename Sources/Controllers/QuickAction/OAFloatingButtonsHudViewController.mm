@@ -23,6 +23,7 @@
 #import "OAMap3DModeVisibilityType.h"
 
 #import <AudioToolbox/AudioServices.h>
+#import "OsmAnd_Maps-Swift.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -399,7 +400,7 @@
     _actionsView.frame = CGRectMake(OAUtilities.getLeftMargin, DeviceScreenHeight, _actionsView.frame.size.width, _actionsView.frame.size.height);
     [UIView animateWithDuration:.3 animations:^{
         _quickActionPin.hidden = NO;
-        [[UIApplication sharedApplication].keyWindow addSubview:_actionsView];
+        [[UIApplication sharedApplication].mainWindow addSubview:_actionsView];
         [_actionsView layoutSubviews];
         _cachedYViewPort = [OARootViewController instance].mapPanel.mapViewController.mapView.viewportYScale;
         [self adjustMapViewPort];

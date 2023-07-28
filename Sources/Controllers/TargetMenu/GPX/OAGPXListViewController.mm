@@ -33,6 +33,7 @@
 #import "OAOsmUploadGPXViewConroller.h"
 #import "OAValueTableViewCell.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -478,7 +479,7 @@ static UIViewController *parentController;
             wasVisible = YES;
             [_progressHUD hide:NO];
         }
-        UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+        UIView *topView = [UIApplication sharedApplication].mainWindow;
         _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
         _progressHUD.minShowTime = .5f;
         [topView addSubview:_progressHUD];

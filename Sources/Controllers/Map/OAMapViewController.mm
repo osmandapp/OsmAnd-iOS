@@ -69,6 +69,7 @@
 #import "OASubscriptionCancelViewController.h"
 #import "OAWhatsNewBottomSheetViewController.h"
 #import "OAAppVersionDependentConstants.h"
+#import "OsmAnd_Maps-Swift.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
@@ -670,7 +671,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
             wasVisible = YES;
             [_progressHUD hide:NO];
         }
-        UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+        UIView *topView = [UIApplication sharedApplication].mainWindow;
         _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
         _progressHUD.minShowTime = .5f;
         _progressHUD.removeFromSuperViewOnHide = YES;
@@ -689,7 +690,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
             wasVisible = YES;
             [_progressHUD hide:NO];
         }
-        UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+        UIView *topView = [UIApplication sharedApplication].mainWindow;
         _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
         _progressHUD.minShowTime = 1.0f;
         _progressHUD.labelText = message;

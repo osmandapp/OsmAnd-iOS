@@ -207,7 +207,7 @@
 					<key>UISceneConfigurationName</key>
 					<string>CarPlay-Instrumen-Cluster</string>
 					<key>UISceneDelegateClassName</key>
-					<string>InstrumentClusterCarPlaySceneDelegate</string>
+					<string>${PRODUCT_MODULE_NAME}.InstrumentClusterCarPlaySceneDelegate</string>
 				</dict>
 			</array>
 			<key>CPTemplateApplicationDashboardSceneSessionRoleApplication</key>
@@ -218,7 +218,7 @@
 					<key>UISceneConfigurationName</key>
 					<string>CarPlay-Dashboard</string>
 					<key>UISceneDelegateClassName</key>
-					<string>DashboardCarPlaySceneDelegate</string>
+					<string>${PRODUCT_MODULE_NAME}.DashboardCarPlaySceneDelegate</string>
 				</dict>
 			</array>
 			<key>CPTemplateApplicationSceneSessionRoleApplication</key>
@@ -229,7 +229,7 @@
 					<key>UISceneConfigurationName</key>
 					<string>CarPlay Configuration</string>
 					<key>UISceneDelegateClassName</key>
-					<string>CarPlaySceneDelegate</string>
+					<string>${PRODUCT_MODULE_NAME}.CarPlaySceneDelegate</string>
 				</dict>
 			</array>
 			<key>UIWindowSceneSessionRoleApplication</key>

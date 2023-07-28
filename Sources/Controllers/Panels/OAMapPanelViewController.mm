@@ -2901,7 +2901,7 @@ typedef enum
     [self closeDashboard];
     [self closeRouteInfoWithTopControlsVisibility:NO bottomsControlHeight:nil onComplete:nil];
     
-    [UIApplication.sharedApplication.keyWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    [UIApplication.sharedApplication.mainWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
@@ -2936,7 +2936,7 @@ typedef enum
     [_mapViewController hideContextPinMarker];
     [self closeDashboard];
     [self closeRouteInfo];
-    [UIApplication.sharedApplication.keyWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    [UIApplication.sharedApplication.mainWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];

@@ -29,6 +29,7 @@
 #import "OABackupHelper.h"
 #import "OACloudAccountVerificationViewController.h"
 #import "SceneDelegate.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define _(name) OARootViewController__##name
 #define commonInit _(commonInit)
@@ -558,7 +559,7 @@ typedef enum : NSUInteger {
 
 - (MBProgressHUD *) showProgress:(EOAProgressType)progressType
 {
-    UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+    UIView *topView = [UIApplication sharedApplication].mainWindow;
     MBProgressHUD *currentProgress;
     MBProgressHUD *newProgress = [[MBProgressHUD alloc] initWithView:topView];
     switch (progressType)

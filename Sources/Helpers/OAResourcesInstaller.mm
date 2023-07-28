@@ -21,6 +21,7 @@
 #import "OAIAPHelper.h"
 #import "OAGPXDocument.h"
 #import "OAGPXDatabase.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 
@@ -217,7 +218,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                     
                     if (!_progressHUD)
                     {
-                        UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+                        UIView *topView = [UIApplication sharedApplication].mainWindow;
                         _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
                         _progressHUD.removeFromSuperViewOnHide = YES;
                         _progressHUD.labelText = OALocalizedString(@"res_installing");

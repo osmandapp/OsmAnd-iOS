@@ -10,15 +10,26 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
         print(#function)
         
         OsmAndApp.swiftInstance().carPlayActive = true
-        // FIXME:
-        if let appDelegate = UIApplication.shared.delegate as? OAAppDelegate,
-           !appDelegate.appInitDone, !appDelegate.appInitializing {
-            appDelegate.initialize()
+        
+        if let scene = UIApplication.shared.connectedScenes.filter({ $0.activationState == .foregroundActive }).first(where: { $0 is UIWindowScene }), let delegate = scene.delegate as? SceneDelegate,
+           !delegate.appInitDone,
+           !delegate.appInitializing {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.presentInCarPlay(interfaceController: interfaceController, window: window)
             }
             return
         }
+        // FIXME:
+       //UIScene *scene = [UIApplication.sharedApplication.connectedScenes.allObjects firstObject];
+      //  SceneDelegate *sd = (SceneDelegate *)scene.delegate;
+//        if let appDelegate = UIApplication.shared.delegate as? OAAppDelegate,
+//           !appDelegate.appInitDone, !appDelegate.appInitializing {
+//            appDelegate.initialize()
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                self.presentInCarPlay(interfaceController: interfaceController, window: window)
+//            }
+//            return
+//        }
 
         self.presentInCarPlay(interfaceController: interfaceController, window: window)
 
@@ -37,7 +48,7 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
         print(#function)
         
         OsmAndApp.swiftInstance().carPlayActive = false
-        OAAppSettings.sharedManager() .setApplicationModePref(OAAppSettings.sharedManager().defaultApplicationMode.get(), markAsLastUsed: false)
+        OAAppSettings.sharedManager().setApplicationModePref(OAAppSettings.sharedManager().defaultApplicationMode.get(), markAsLastUsed: false)
 
         OARootViewController.instance().mapPanel.onCarPlayDisconnected { [weak self] in
             guard let self else { return }

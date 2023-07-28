@@ -39,7 +39,7 @@
 
 
 #define _(name) OAFavoriteListViewController__##name
-#define kWasClodedFreeBackupFavoritesBannerKey @"wasClodedFreeBackupFavoritesBanner"
+#define kWasClosedFreeBackupFavoritesBannerKey @"wasClosedFreeBackupFavoritesBanner"
 
 typedef enum
 {
@@ -152,7 +152,7 @@ static UIViewController *parentController;
 
 - (BOOL)isAvailablePaymentBanner
 {
-    return ![[NSUserDefaults standardUserDefaults] boolForKey:kWasClodedFreeBackupFavoritesBannerKey]
+    return ![[NSUserDefaults standardUserDefaults] boolForKey:kWasClosedFreeBackupFavoritesBannerKey]
     && ![OAIAPHelper isOsmAndProAvailable]
     && !OABackupHelper.sharedInstance.isRegistered;
 }
@@ -197,7 +197,7 @@ static UIViewController *parentController;
     self.favoriteTableView.tableHeaderView = nil;
     [self changeContentInsetTop:-20];
     _freeBackupBanner = nil;
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kWasClodedFreeBackupFavoritesBannerKey];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kWasClosedFreeBackupFavoritesBannerKey];
 }
 
 - (void)changeContentInsetTop:(CGFloat)top

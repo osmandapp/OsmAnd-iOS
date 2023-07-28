@@ -49,7 +49,7 @@
 #define kSidePadding 16.
 #define BACKUP_INDEX_DIR @"backup"
 #define OSMAND_SETTINGS_FILE_EXT @"osf"
-#define kWasClodedFreeBackupSettingsBannerKey @"wasClodedFreeBackupSettingsBanner"
+#define kWasClosedFreeBackupSettingsBannerKey @"wasClosedFreeBackupSettingsBanner"
 
 typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeNone = 0,
@@ -474,7 +474,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (BOOL)isAvailablePaymentBanner
 {
-    return ![[NSUserDefaults standardUserDefaults] boolForKey:kWasClodedFreeBackupSettingsBannerKey]
+    return ![[NSUserDefaults standardUserDefaults] boolForKey:kWasClosedFreeBackupSettingsBannerKey]
     && ![OAIAPHelper isOsmAndProAvailable]
     && !OABackupHelper.sharedInstance.isRegistered;
 }
@@ -482,7 +482,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void)closeFreeBackupBanner
 {
     _freeBackupBanner = nil;
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kWasClodedFreeBackupSettingsBannerKey];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kWasClosedFreeBackupSettingsBannerKey];
     [self generateData];
     [self.tableView reloadData];
 }

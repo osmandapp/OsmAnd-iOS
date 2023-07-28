@@ -18607,7 +18607,6 @@
 					"-lpng_static",
 					"-lz_static",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = net.osmand.maps;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "Generic OsmAnd Profile";
@@ -18668,7 +18667,6 @@
 					"-lpng_static",
 					"-lz_static",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = net.osmand.maps;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "Generic OsmAnd Profile";

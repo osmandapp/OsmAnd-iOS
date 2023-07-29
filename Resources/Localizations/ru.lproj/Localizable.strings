@@ -2267,7 +2267,7 @@
 "backup_error_token_is_not_valid_or_expired" = "Неверный или просроченный токен";
 "start_point" = "Старт";
 "routing_attr_only_permitted_ways_name" = "Разрешённые дороги";
-"restore_from_file" = "Восстановление из файла";
+"restore_from_file" = "Восстановить из файла";
 "register_opr_have_account" = "У меня уже есть аккаунт";
 "backup_error_subscription_was_expired_descr" = "Срок действия вашей подписки OsmAnd Pro истёк, возобновите её, чтобы использовать резервное копирование. Вы по-прежнему можете восстановить данные из облака.";
 "routing_attr_only_permitted_ways_description" = "Использовать только специально разрешённые лесные и сельскохозяйственные дороги, а также тропы.";

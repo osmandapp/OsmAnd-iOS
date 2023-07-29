@@ -1055,7 +1055,7 @@
 "rendering_attr_lessDetailed_name" = "Meno dettagli";
 "rendering_attr_smoothness_intermediate_name" = "Intermedio";
 "rendering_attr_contourDensity_name" = "Densità linee isoipse";
-"rendering_attr_alpineHiking_name" = "Classificazione delle difficoltà";
+"rendering_attr_alpineHiking_name" = "Classificazione della difficoltà";
 "rendering_attr_smoothness_bad_name" = "Cattiva";
 "routing_attr_avoid_bus_description" = "Evita gli autobus e i filobus";
 "routing_attr_avoid_unpaved_description" = "Evita le strade non pavimentate";
@@ -2973,9 +2973,9 @@
 "true_bearing_widget_desc" = "Angolo fra il nord reale e il punto di destinazione osservato dalla tua posizione.";
 "parking_widget_desc" = "Mostra la distanza dal centro dello schermo alla posizione di parcheggio.";
 "time_to_intermediate_widget_desc" = "Il widget mostra \"Ora di arrivo\" o \"Tempo mancante\" al primo punto intermedio. Il tempo è costantemente aggiornato durante la navigazione, quando il punto intermedio viene raggiunto, il tempo verrà aggiornato al successivo punto intermedio.";
-"rendering_value_sacScale_description" = "Swiss Alpine Club";
+"rendering_value_sacScale_description" = "Club Alpino Svizzero";
 "rendering_value_caiScale_name" = "cai";
-"rendering_value_caiScale_description" = "Club Alpino Italiano";
+"rendering_value_caiScale_description" = "Club Alpino Italiano (Club Alpino Italiano)";
 "map_2d_mode_action" = "Modalità 2D";
 "map_3d_mode_action" = "Modalità 3D";
 "shared_string_hidden" = "Nascosto";

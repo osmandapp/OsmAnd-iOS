@@ -445,7 +445,7 @@
 "city_type_village" = "Село";
 "city_type_town" = "Город";
 "city_type_city" = "Город";
-"city_type_district" = "Округ";
+"city_type_district" = "Район";
 "postcode" = "Почтовый индекс";
 "shared_string_address" = "Адрес";
 "selected_categories" = "Выбранные категории";

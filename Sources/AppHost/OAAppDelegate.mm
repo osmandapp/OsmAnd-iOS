@@ -85,31 +85,10 @@
 @synthesize appInitDone = _appInitDone;
 @synthesize appInitializing = _appInitializing;
 
-
-//- (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-//{
-//    if (!_dataFetchQueue)
-//    {
-//        // Set the background fetch
-//        _dataFetchQueue = [[NSOperationQueue alloc] init];
-//        @try
-//        {
-//            NSLog(@"BGTaskScheduler registerForTaskWithIdentifier");
-//            [BGTaskScheduler.sharedScheduler registerForTaskWithIdentifier:kFetchDataUpdatesId usingQueue:nil launchHandler:^(__kindof BGTask * _Nonnull task) {
-//                [self handleBackgroundDataFetch:(BGProcessingTask *)task];
-//            }];
-//        }
-//        @catch (NSException *e)
-//        {
-//            NSLog(@"Failed to schedule background fetch. Reason: %@", e.reason);
-//        }
-//    }
-//
-//    if (application.applicationState == UIApplicationStateBackground)
-//        return NO;
-//
-////    return YES;
-//}
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    return YES;
+}
 
 - (BOOL) initialize
 {
@@ -538,33 +517,6 @@
     [_app checkAndDownloadWeatherForecastsUpdates];
 }
 
-- (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-//    if (!_dataFetchQueue)
-//    {
-//        // Set the background fetch
-//        _dataFetchQueue = [[NSOperationQueue alloc] init];
-//        @try
-//        {
-//            NSLog(@"BGTaskScheduler registerForTaskWithIdentifier");
-//            [BGTaskScheduler.sharedScheduler registerForTaskWithIdentifier:kFetchDataUpdatesId usingQueue:nil launchHandler:^(__kindof BGTask * _Nonnull task) {
-//                [self handleBackgroundDataFetch:(BGProcessingTask *)task];
-//            }];
-//        }
-//        @catch (NSException *e)
-//        {
-//            NSLog(@"Failed to schedule background fetch. Reason: %@", e.reason);
-//        }
-//    }
-//
-//    if (application.applicationState == UIApplicationStateBackground)
-//        return NO;
-//
-//    return [self initialize];
-    NSLog(@"");
-    return YES;
-}
-
 - (void) handleBackgroundDataFetch:(BGProcessingTask *)task
 {
     [self scheduleBackgroundDataFetch];
@@ -599,16 +551,6 @@
         NSLog(@"Could not schedule app refresh: %@", e.reason);
     }
     
-}
-
-- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler
-{
-    completionHandler();
-}
-
-- (BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
-{
-    return [self openURL:url];
 }
 
 - (void) applicationWillResignActive:(UIApplication *)application
@@ -672,19 +614,21 @@
     [device endGeneratingDeviceOrientationNotifications];
 }
 
-- (void) application:(UIApplication *)application willChangeStatusBarFrame:(CGRect)newStatusBarFrame
-{
-    [OASharedVariables setStatusBarHeight:newStatusBarFrame.size.height];
-}
-
 #pragma mark - UISceneSession Lifecycle
 
 - (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options
 {
-   // UISceneConfiguration *configuration = [[UISceneConfiguration alloc] init];
-   // configuration.delegateClass = SceneDelegate.class;
-   // return configuration;
-    return [UISceneConfiguration configurationWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
+    if (connectingSceneSession.role == CPTemplateApplicationSceneSessionRoleApplication) {
+        UISceneConfiguration *scene = [[UISceneConfiguration alloc] initWithName:@"CarPlay Configuration" sessionRole:connectingSceneSession.role];
+        scene.delegateClass = [CarPlaySceneDelegate class];
+        return scene;
+    } else {
+        return [[UISceneConfiguration alloc] initWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
+    }
+    
+    
+
+   // return [UISceneConfiguration configurationWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
 }
 
 - (void)application:(UIApplication *)application didDiscardSceneSessions:(NSSet<UISceneSession *> *)sceneSessions
@@ -759,6 +703,21 @@
 //}
 //
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options
+{
+    return [self openURL:url];
+}
+
+- (void) application:(UIApplication *)application willChangeStatusBarFrame:(CGRect)newStatusBarFrame
+{
+    [OASharedVariables setStatusBarHeight:newStatusBarFrame.size.height];
+}
+
+- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler
+{
+    completionHandler();
+}
+
+- (BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     return [self openURL:url];
 }

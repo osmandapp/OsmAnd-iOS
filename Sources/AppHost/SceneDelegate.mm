@@ -108,40 +108,20 @@
         }
     }
     
-//    UIWindowScene *windowScene = (UIWindowScene *)scene;
-//    if (!windowScene) {
-//        return;
-//    }
-//
-//    UIWindow *window = [[UIWindow alloc] initWithWindowScene:windowScene];
-//
-//    NSURL *url = connectionOptions.URLContexts[0].url
-//    if (url) {
-//        [ApplicationURLHandler handleURL:url];
-//    }
-//
-//    NSUserActivity *userActivity = connectionOptions.userActivities[0];
-//    if (userActivity.activityType == NSUserActivityTypeBrowsingWeb) {
-//        NSURL *webpageURL = userActivity.webpageURL;
-//        if (webpageURL && [[UIApplication sharedApplication] canOpenURL:webpageURL]) {
-//            [ApplicationURLHandler handleURL:webpageURL];
-//        }
-//    }
+    if (connectionOptions.URLContexts.count > 0) {
+        NSURL *url = [connectionOptions.URLContexts allObjects].firstObject.URL;
+        [self openURL:url];
+    }
     
-//    guard let scene = (scene as? UIWindowScene) else { return }
-//    let window = UIWindow(windowScene: scene)
-//    window.backgroundColor = AppColor.background
-//
-//    if let url = connectionOptions.urlContexts.first?.url {
-//        _ = ApplicationURLHandler.handle(url: url)
-//    }
-//
-//    if let userActivity = connectionOptions.userActivities.first,
-//       userActivity.activityType == NSUserActivityTypeBrowsingWeb,
-//       let webpageURL = userActivity.webpageURL,
-//       UIApplication.shared.canOpenURL(webpageURL) {
-//       _ = ApplicationURLHandler.handle(url: webpageURL)
-//    }
+    if (connectionOptions.userActivities.count > 0) {
+        NSUserActivity *userActivity = [connectionOptions.userActivities allObjects].firstObject;
+        if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
+            NSURL *webpageURL = userActivity.webpageURL;
+            if ([[UIApplication sharedApplication] canOpenURL:webpageURL]) {
+                [self openURL:webpageURL];
+            }
+        }
+    }
 
     [self initialize];
 }
@@ -671,35 +651,15 @@
     
 }
 
-////
-///
-//
-- (BOOL) application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
-{
-    return [self openURL:userActivity.webpageURL];
+- (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts {
+    if ([URLContexts allObjects].count > 0) {
+        NSURL *url = [[URLContexts allObjects] firstObject].URL;
+        [self openURL:url];
+    }
 }
 
-
-- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler
-{
-    completionHandler();
+- (void)scene:(UIScene *)scene continueUserActivity:(NSUserActivity *)userActivity {
+    [self openURL:userActivity.webpageURL];
 }
-
-- (BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
-{
-    return [self openURL:url];
-}
-
-- (void) application:(UIApplication *)application willChangeStatusBarFrame:(CGRect)newStatusBarFrame
-{
-    [OASharedVariables setStatusBarHeight:newStatusBarFrame.size.height];
-}
-
-- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options
-{
-    return [self openURL:url];
-}
-
-
 
 @end

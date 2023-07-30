@@ -3560,7 +3560,7 @@
 		DAFE4D3F22169B4D009731CA /* map_osm_note_resolved@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D3022169B4C009731CA /* map_osm_note_resolved@3x.png */; };
 		FA12A6C72A73EED600FCB656 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */; };
 		FA44BF5A2A72A91C000D2F5F /* InstrumentClusterCarPlaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF572A72A91B000D2F5F /* InstrumentClusterCarPlaySceneDelegate.swift */; };
-		FA44BF5B2A72A91C000D2F5F /* CarPlaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF582A72A91C000D2F5F /* CarPlaySceneDelegate.swift */; };
+		FA44BF5B2A72A91C000D2F5F /* CarPlaySceneDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF582A72A91C000D2F5F /* CarPlaySceneDelegates.swift */; };
 		FA44BF5C2A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */; };
 		FA44BF692A72F810000D2F5F /* SceneDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF672A72F810000D2F5F /* SceneDelegate.mm */; };
 		FA69F2852A73948B0044CFCA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79BF26C563A000F274C7 /* main.m */; };
@@ -8272,7 +8272,7 @@
 		F905FB9C7B198BF071D402C0 /* Pods-OsmAnd Maps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.release.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.release.xcconfig"; sourceTree = "<group>"; };
 		FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
 		FA44BF572A72A91B000D2F5F /* InstrumentClusterCarPlaySceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstrumentClusterCarPlaySceneDelegate.swift; sourceTree = "<group>"; };
-		FA44BF582A72A91C000D2F5F /* CarPlaySceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPlaySceneDelegate.swift; sourceTree = "<group>"; };
+		FA44BF582A72A91C000D2F5F /* CarPlaySceneDelegates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPlaySceneDelegates.swift; sourceTree = "<group>"; };
 		FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardCarPlaySceneDelegate.swift; sourceTree = "<group>"; };
 		FA44BF672A72F810000D2F5F /* SceneDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SceneDelegate.mm; sourceTree = "<group>"; };
 		FA44BF682A72F810000D2F5F /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
@@ -11641,13 +11641,13 @@
 		DA5A79B426C563A000F274C7 /* AppHost */ = {
 			isa = PBXGroup;
 			children = (
-				FA44BF682A72F810000D2F5F /* SceneDelegate.h */,
-				FA44BF672A72F810000D2F5F /* SceneDelegate.mm */,
-				FA44BF562A72A8FC000D2F5F /* CarPlay */,
-				DA5A79B526C563A000F274C7 /* Localization.h */,
-				DA5A79BF26C563A000F274C7 /* main.m */,
 				DA5A79C126C563A000F274C7 /* OAAppDelegate.h */,
 				DA5A79BE26C563A000F274C7 /* OAAppDelegate.mm */,
+				FA44BF682A72F810000D2F5F /* SceneDelegate.h */,
+				FA44BF672A72F810000D2F5F /* SceneDelegate.mm */,
+				FA44BF562A72A8FC000D2F5F /* CarPlayDelegate */,
+				DA5A79B526C563A000F274C7 /* Localization.h */,
+				DA5A79BF26C563A000F274C7 /* main.m */,
 				DA5A79BB26C563A000F274C7 /* OALog.h */,
 				DA5A79C226C563A000F274C7 /* OALog.mm */,
 				DA5A79B626C563A000F274C7 /* OASharedVariables.h */,
@@ -14431,14 +14431,14 @@
 			path = WidgetSettings;
 			sourceTree = "<group>";
 		};
-		FA44BF562A72A8FC000D2F5F /* CarPlay */ = {
+		FA44BF562A72A8FC000D2F5F /* CarPlayDelegate */ = {
 			isa = PBXGroup;
 			children = (
-				FA44BF582A72A91C000D2F5F /* CarPlaySceneDelegate.swift */,
+				FA44BF582A72A91C000D2F5F /* CarPlaySceneDelegates.swift */,
 				FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */,
 				FA44BF572A72A91B000D2F5F /* InstrumentClusterCarPlaySceneDelegate.swift */,
 			);
-			path = CarPlay;
+			path = CarPlayDelegate;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -18002,7 +18002,7 @@
 				DA5A838E26C563A800F274C7 /* OAOsmAndLiveViewController.mm in Sources */,
 				DA5A83B726C563A800F274C7 /* OAFloatingButtonsHudViewController.mm in Sources */,
 				DA5A81D626C563A700F274C7 /* OACommandBuilder.mm in Sources */,
-				FA44BF5B2A72A91C000D2F5F /* CarPlaySceneDelegate.swift in Sources */,
+				FA44BF5B2A72A91C000D2F5F /* CarPlaySceneDelegates.swift in Sources */,
 				DA5A843526C563A800F274C7 /* OARouteDetailsViewController.mm in Sources */,
 				DA5A852A26C563A900F274C7 /* OALocationParser.mm in Sources */,
 				DA5A848A26C563A900F274C7 /* OARoadSegmentData.mm in Sources */,

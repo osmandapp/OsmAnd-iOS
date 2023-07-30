@@ -5,6 +5,7 @@ class DashboardCarPlaySceneDelegate: NSObject, CPTemplateApplicationSceneDelegat
     // CarPlayRootVC()
     
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didConnect dashboardController: CPDashboardController, to window: UIWindow) {
+        print("")
 //        window.rootViewController = dashboardVC
 //
 //        dashboardController.shortcutButtons = [

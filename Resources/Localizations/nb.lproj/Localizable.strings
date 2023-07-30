@@ -2602,3 +2602,4 @@
 "generate_slope_from_3d_maps" = "Generer helningsrasterkart fra 3D-kart";
 "rendering_value_caiScale_description" = "Club Alpino Italiano (Italiensk alpinforening)";
 "rendering_value_sacScale_description" = "Sveitsisk alpinklubb";
+"map_3d_mode_hint" = "Med langt trykk på knappen kan knappeposisjon endres.";

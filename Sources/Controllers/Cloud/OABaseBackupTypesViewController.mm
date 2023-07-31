@@ -21,6 +21,7 @@
 #import "OASettingsHelper.h"
 #import "OAColors.h"
 #import "OASizes.h"
+#import "OAButtonTableViewCell.h"
 
 @interface OABaseBackupTypesViewController ()
 
@@ -189,6 +190,32 @@
             [cell setSecondValue:[item[@"second_progress"] integerValue]];
             [cell setThirdValue:[item[@"third_progress"] integerValue]];
         }
+        outCell = cell;
+    }
+    else if ([cellType isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
+    {
+        OAButtonTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellType];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:cellType owner:self options:nil];
+            cell = nib[0];
+            [cell leftIconVisibility:YES];
+            [cell titleVisibility:YES];
+            [cell descriptionVisibility:NO];
+            [cell leftEditButtonVisibility:NO];
+            UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
+            conf.contentInsets = NSDirectionalEdgeInsetsMake(0., 0, -7, 0.);
+            cell.button.configuration = conf;
+            [cell.button setImage:[UIImage imageNamed:@"ic_payment_label_pro"] forState:UIControlStateNormal];
+            [cell.button setTitle:@"" forState:UIControlStateNormal];
+            cell.button.imageView.tintColor = [UIColor clearColor];
+            cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
+            [cell.button addTarget:self action:NSSelectorFromString(item[@"action"]) forControlEvents:UIControlEventTouchUpInside];
+        }
+        cell.titleLabel.text = settingsType.title;
+        cell.leftIconView.image = settingsType.icon;
+
+        
         outCell = cell;
     }
 

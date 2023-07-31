@@ -14,5 +14,6 @@
 
 - (instancetype)initWithProduct:(OAProduct *)product;
 - (instancetype)initForCrossplatformSubscription;
+- (instancetype)initForFreeStartSubscription;
 
 @end

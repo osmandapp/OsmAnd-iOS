@@ -47,6 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSString *itemName;
 @property (nonatomic, readonly) NSString *title;
 @property (nonatomic, readonly) UIImage *icon;
+@property (nonatomic, readonly) BOOL isAllowedInFreeVersion;
 
 - (BOOL) isSettingsCategory;
 - (BOOL) isMyPlacesCategory;

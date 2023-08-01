@@ -270,6 +270,14 @@
     _driveModeActive = NO;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (self.toolbarViewController)
+        [self.toolbarViewController onViewDidAppear:self.mapHudType];
+}
+
 - (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -316,9 +324,6 @@
     }
 
     [self updateMapRulerDataWithDelay];
-    
-    if (self.toolbarViewController)
-        [self.toolbarViewController onViewDidAppear:self.mapHudType];
 
     if (hasInitialURL)
         _app.initialURLMapState = nil;

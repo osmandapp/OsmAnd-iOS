@@ -270,7 +270,7 @@
     _driveModeActive = NO;
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     

@@ -975,9 +975,12 @@
             OAIAPHelper *helper = [OAIAPHelper sharedInstance];
             if ([helper.wiki isPurchased])
             {
+                CGRect cellFrame = [tableView rectForRowAtIndexPath:indexPath];
                 [OAWikiArticleHelper showWikiArticle:[[CLLocation alloc] initWithLatitude:self.location.latitude
                                                                                 longitude:self.location.longitude]
-                                                 url:info.text];
+                                                 url:info.text
+                                          sourceView:self.tableView
+                                         sourceFrame:cellFrame];
             }
             else
             {

@@ -43,7 +43,7 @@ static NSArray<OAExportSettingsType *> *allValues;
 
 @interface OAExportSettingsType ()
 
-- (instancetype) initWithTitle:(NSString *)title name:(NSString *)name itemName:(NSString *)itemName icon:(UIImage *)icon;
+- (instancetype)initWithTitle:(NSString *)title name:(NSString *)name itemName:(NSString *)itemName icon:(UIImage *)icon;
 
 @end
 
@@ -169,7 +169,11 @@ static NSArray<OAExportSettingsType *> *allValues;
     return [[self getEnabledTypes] containsObject:type];
 }
 
-- (instancetype)initWithTitle:(NSString *)title name:(NSString *)name itemName:(NSString *)itemName icon:(UIImage *)icon
+- (instancetype)initWithTitle:(NSString *)title
+                         name:(NSString *)name
+                     itemName:(NSString *)itemName
+                         icon:(UIImage *)icon
+       isAllowedInFreeVersion:(BOOL)isAllowedInFreeVersion
 {
     self = [super init];
     if (self) {
@@ -177,6 +181,7 @@ static NSArray<OAExportSettingsType *> *allValues;
         _name = name;
         _itemName = itemName;
         _icon = icon;
+        _isAllowedInFreeVersion = isAllowedInFreeVersion;
     }
     return self;
 }
@@ -184,63 +189,63 @@ static NSArray<OAExportSettingsType *> *allValues;
 + (OAExportSettingsType *)PROFILE
 {
     if (!PROFILE)
-        PROFILE = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_profiles") name:@"PROFILE" itemName:@"PROFILE" icon:[UIImage templateImageNamed:@"ic_custom_manage_profiles"]];
+        PROFILE = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_profiles") name:@"PROFILE" itemName:@"PROFILE" icon:[UIImage templateImageNamed:@"ic_custom_manage_profiles"] isAllowedInFreeVersion:YES];
     return PROFILE;
 }
 
 + (OAExportSettingsType *)GLOBAL
 {
     if (!GLOBAL)
-        GLOBAL = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"general_settings_2") name:@"GLOBAL" itemName:@"GLOBAL" icon:[UIImage templateImageNamed:@"left_menu_icon_settings"]];
+        GLOBAL = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"general_settings_2") name:@"GLOBAL" itemName:@"GLOBAL" icon:[UIImage templateImageNamed:@"left_menu_icon_settings"] isAllowedInFreeVersion:YES];
     return GLOBAL;
 }
 
 + (OAExportSettingsType *)QUICK_ACTIONS
 {
     if (!QUICK_ACTIONS)
-        QUICK_ACTIONS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_quick_actions") name:@"QUICK_ACTIONS" itemName:@"QUICK_ACTIONS" icon:[UIImage templateImageNamed:@"ic_custom_quick_action"]];
+        QUICK_ACTIONS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_quick_actions") name:@"QUICK_ACTIONS" itemName:@"QUICK_ACTIONS" icon:[UIImage templateImageNamed:@"ic_custom_quick_action"] isAllowedInFreeVersion:NO];
     return QUICK_ACTIONS;
 }
 
 + (OAExportSettingsType *)POI_TYPES
 {
     if (!POI_TYPES)
-        POI_TYPES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_poi_types") name:@"POI_TYPES" itemName:@"POI_UI_FILTERS" icon:[UIImage templateImageNamed:@"ic_custom_search_categories"]];
+        POI_TYPES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_poi_types") name:@"POI_TYPES" itemName:@"POI_UI_FILTERS" icon:[UIImage templateImageNamed:@"ic_custom_search_categories"] isAllowedInFreeVersion:NO];
     return POI_TYPES;
 }
 
 + (OAExportSettingsType *)AVOID_ROADS
 {
     if (!AVOID_ROADS)
-        AVOID_ROADS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"avoid_road") name:@"AVOID_ROADS" itemName:@"AVOID_ROADS" icon:[UIImage templateImageNamed:@"ic_custom_alert"]];
+        AVOID_ROADS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"avoid_road") name:@"AVOID_ROADS" itemName:@"AVOID_ROADS" icon:[UIImage templateImageNamed:@"ic_custom_alert"] isAllowedInFreeVersion:NO];
     return AVOID_ROADS;
 }
 
 + (OAExportSettingsType *)FAVORITES
 {
     if (!FAVORITES)
-        FAVORITES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"favorites_item") name:@"FAVORITES" itemName:@"FAVOURITES" icon:[UIImage templateImageNamed:@"ic_custom_my_places"]];
+        FAVORITES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"favorites_item") name:@"FAVORITES" itemName:@"FAVOURITES" icon:[UIImage templateImageNamed:@"ic_custom_my_places"] isAllowedInFreeVersion:YES];
     return FAVORITES;
 }
 
 + (OAExportSettingsType *)TRACKS
 {
     if (!TRACKS)
-        TRACKS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_gpx_tracks") name:@"TRACKS" itemName:@"GPX" icon:[UIImage templateImageNamed:@"ic_custom_trip"]];
+        TRACKS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_gpx_tracks") name:@"TRACKS" itemName:@"GPX" icon:[UIImage templateImageNamed:@"ic_custom_trip"] isAllowedInFreeVersion:NO];
     return TRACKS;
 }
 
 + (OAExportSettingsType *)OSM_NOTES
 {
     if (!OSM_NOTES)
-        OSM_NOTES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"osm_notes") name:@"OSM_NOTES" itemName:@"OSM_NOTES" icon:[UIImage templateImageNamed:@"ic_action_osm_note"]];
+        OSM_NOTES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"osm_notes") name:@"OSM_NOTES" itemName:@"OSM_NOTES" icon:[UIImage templateImageNamed:@"ic_action_osm_note"] isAllowedInFreeVersion:YES];
     return OSM_NOTES;
 }
 
 + (OAExportSettingsType *)OSM_EDITS
 {
     if (!OSM_EDITS)
-        OSM_EDITS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"osm_edits_title") name:@"OSM_EDITS" itemName:@"OSM_EDITS" icon:[UIImage templateImageNamed:@"ic_custom_osm_edits"]];
+        OSM_EDITS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"osm_edits_title") name:@"OSM_EDITS" itemName:@"OSM_EDITS" icon:[UIImage templateImageNamed:@"ic_custom_osm_edits"] isAllowedInFreeVersion:YES];
     return OSM_EDITS;
 }
 
@@ -252,56 +257,56 @@ static NSArray<OAExportSettingsType *> *allValues;
 + (OAExportSettingsType *)ACTIVE_MARKERS
 {
     if (!ACTIVE_MARKERS)
-        ACTIVE_MARKERS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"map_markers") name:@"ACTIVE_MARKERS" itemName:@"ACTIVE_MARKERS" icon:[UIImage templateImageNamed:@"ic_custom_marker"]];
+        ACTIVE_MARKERS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"map_markers") name:@"ACTIVE_MARKERS" itemName:@"ACTIVE_MARKERS" icon:[UIImage templateImageNamed:@"ic_custom_marker"] isAllowedInFreeVersion:NO];
     return ACTIVE_MARKERS;
 }
 
 + (OAExportSettingsType *)HISTORY_MARKERS
 {
     if (!HISTORY_MARKERS)
-        HISTORY_MARKERS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"markers_history") name:@"HISTORY_MARKERS" itemName:@"HISTORY_MARKERS" icon:[UIImage templateImageNamed:@"ic_custom_marker"]];
+        HISTORY_MARKERS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"markers_history") name:@"HISTORY_MARKERS" itemName:@"HISTORY_MARKERS" icon:[UIImage templateImageNamed:@"ic_custom_marker"] isAllowedInFreeVersion:NO];
     return HISTORY_MARKERS;
 }
 
 + (OAExportSettingsType *)SEARCH_HISTORY
 {
     if (!SEARCH_HISTORY)
-        SEARCH_HISTORY = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_search_history") name:@"SEARCH_HISTORY" itemName:@"SEARCH_HISTORY" icon:[UIImage templateImageNamed:@"ic_custom_search"]];
+        SEARCH_HISTORY = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_search_history") name:@"SEARCH_HISTORY" itemName:@"SEARCH_HISTORY" icon:[UIImage templateImageNamed:@"ic_custom_search"] isAllowedInFreeVersion:NO];
     return SEARCH_HISTORY;
 }
 
 + (OAExportSettingsType *)NAVIGATION_HISTORY
 {
     if (!NAVIGATION_HISTORY)
-        NAVIGATION_HISTORY = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"navigation_history") name:@"NAVIGATION_HISTORY" itemName:@"NAVIGATION_HISTORY" icon:[UIImage templateImageNamed:@"ic_custom_navigation"]];
+        NAVIGATION_HISTORY = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"navigation_history") name:@"NAVIGATION_HISTORY" itemName:@"NAVIGATION_HISTORY" icon:[UIImage templateImageNamed:@"ic_custom_navigation"] isAllowedInFreeVersion:NO];
     return NAVIGATION_HISTORY;
 }
 
 + (OAExportSettingsType *)CUSTOM_RENDER_STYLE
 {
     if (!CUSTOM_RENDER_STYLE)
-        CUSTOM_RENDER_STYLE = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_rendering_style") name:@"CUSTOM_RENDER_STYLE" itemName:@"FILE" icon:[UIImage templateImageNamed:@"ic_custom_map_style"]];
+        CUSTOM_RENDER_STYLE = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_rendering_style") name:@"CUSTOM_RENDER_STYLE" itemName:@"FILE" icon:[UIImage templateImageNamed:@"ic_custom_map_style"] isAllowedInFreeVersion:NO];
     return CUSTOM_RENDER_STYLE;
 }
 
 + (OAExportSettingsType *)CUSTOM_ROUTING
 {
     if (!CUSTOM_ROUTING)
-        CUSTOM_ROUTING = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_routing") name:@"CUSTOM_ROUTING" itemName:@"FILE" icon:[UIImage templateImageNamed:@"ic_custom_file_routing"]];
+        CUSTOM_ROUTING = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_routing") name:@"CUSTOM_ROUTING" itemName:@"FILE" icon:[UIImage templateImageNamed:@"ic_custom_file_routing"] isAllowedInFreeVersion:NO];
     return CUSTOM_ROUTING;
 }
 
 + (OAExportSettingsType *)MAP_SOURCES
 {
     if (!MAP_SOURCES)
-        MAP_SOURCES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"quick_action_map_source_title") name:@"MAP_SOURCES" itemName:@"MAP_SOURCES" icon:[UIImage templateImageNamed:@"ic_custom_globe_latitude"]];
+        MAP_SOURCES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"quick_action_map_source_title") name:@"MAP_SOURCES" itemName:@"MAP_SOURCES" icon:[UIImage templateImageNamed:@"ic_custom_globe_latitude"] isAllowedInFreeVersion:NO];
     return MAP_SOURCES;
 }
 
 + (OAExportSettingsType *)OFFLINE_MAPS
 {
     if (!OFFLINE_MAPS)
-        OFFLINE_MAPS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"offline_maps") name:@"OFFLINE_MAPS" itemName:@"FILE" icon:[UIImage templateImageNamed:@"ic_custom_map"]];
+        OFFLINE_MAPS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"offline_maps") name:@"OFFLINE_MAPS" itemName:@"FILE" icon:[UIImage templateImageNamed:@"ic_custom_map"] isAllowedInFreeVersion:NO];
     return OFFLINE_MAPS;
 }
 

@@ -35,6 +35,7 @@
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/GpxAdditionalIconsProvider.h>
+#include <OsmAndCore/SingleSkImage.h>
 
 @interface OAGPXLayer ()
 
@@ -409,8 +410,8 @@ colorizationScheme:(int)colorizationScheme
         {
             // Use black arrows for gradient colorization
             UIColor *color = gpx.coloringType.length != 0 && ![gpx.coloringType isEqualToString:@"solid"] ? UIColor.whiteColor : UIColorFromARGB(gpx.color);
-            builder.setPathIcon([self bitmapForColor:color fileName:@"map_direction_arrow"])
-                .setSpecialPathIcon([self specialBitmapWithColor:colorARGB])
+            builder.setPathIcon(OsmAnd::SingleSkImage([self bitmapForColor:color fileName:@"map_direction_arrow"]))
+                .setSpecialPathIcon(OsmAnd::SingleSkImage([self specialBitmapWithColor:colorARGB]))
                 .setShouldShowArrows(true)
                 .setScreenScale(UIScreen.mainScreen.scale);
         }
@@ -475,8 +476,8 @@ colorizationScheme:(int)colorizationScheme
             {
                 // Use black arrows for gradient colorization
                 UIColor *color = gpx.coloringType.length != 0 && ![gpx.coloringType isEqualToString:@"solid"] ? UIColor.whiteColor : UIColorFromARGB(gpx.color);
-                builder.setPathIcon([self bitmapForColor:color fileName:@"map_direction_arrow"])
-                    .setSpecialPathIcon([self specialBitmapWithColor:colorARGB])
+                builder.setPathIcon(OsmAnd::SingleSkImage([self bitmapForColor:color fileName:@"map_direction_arrow"]))
+                    .setSpecialPathIcon(OsmAnd::SingleSkImage([self specialBitmapWithColor:colorARGB]))
                     .setShouldShowArrows(true)
                     .setScreenScale(UIScreen.mainScreen.scale);
             }
@@ -659,12 +660,12 @@ colorizationScheme:(int)colorizationScheme
                                                                           UIScreen.mainScreen.scale,
                                                                           _startFinishPoints,
                                                                           _splitLabels,
-                                                                          [OANativeUtilities getScaledSkImage:startIcon
-                                                                                                  scaleFactor:_textScaleFactor],
-                                                                          [OANativeUtilities getScaledSkImage:finishIcon
-                                                                                                  scaleFactor:_textScaleFactor],
-                                                                          [OANativeUtilities getScaledSkImage:startFinishIcon
-                                                                                                  scaleFactor:_textScaleFactor]
+                                                                          OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:startIcon
+                                                                                                  scaleFactor:_textScaleFactor]),
+                                                                          OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:finishIcon
+                                                                                                  scaleFactor:_textScaleFactor]),
+                                                                          OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:startFinishIcon
+                                                                                                  scaleFactor:_textScaleFactor])
                                                                           ));
 
         [self.mapView addTiledSymbolsProvider:_startFinishProvider];

@@ -190,7 +190,7 @@
                 [OAWikiArticleHelper showWikiArticle:@[[[CLLocation alloc] initWithLatitude:_poi.latitude longitude:_poi.longitude]] url:newUrl onStart:^{
                     [spinner startAnimating];
                     [self presentViewController:alert animated:YES completion:nil];
-                } onComplete:^{
+                } sourceView:nil sourceFrame:CGRectZero onComplete:^{
                     [alert.view removeSpinner];
                     [alert dismissViewControllerAnimated:YES completion:nil];
                     alert = nil;

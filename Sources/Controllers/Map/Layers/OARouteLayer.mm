@@ -31,6 +31,7 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/SkiaUtilities.h>
+#include <OsmAndCore/SingleSkImage.h>
 #include <SkCGUtils.h>
 
 #define kTurnArrowsColoringByAttr 0xffffffff
@@ -163,7 +164,7 @@
     transportMarkerBuilder.setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
     transportMarkerBuilder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
     OsmAnd::LatLon startLatLon(routeSegment->getStart().lat, routeSegment->getStart().lon);
-    transportMarkerBuilder.setPinIcon(_transportTransferIcon);
+    transportMarkerBuilder.setPinIcon(OsmAnd::SingleSkImage(_transportTransferIcon));
     
     auto marker = transportMarkerBuilder.buildAndAddToCollection(_transportRouteMarkers);
     marker->setPosition(OsmAnd::Utilities::convertLatLonTo31(startLatLon));
@@ -185,7 +186,7 @@
         icon = OsmAnd::SkiaUtilities::mergeImages(composition);
     }
     
-    transportMarkerBuilder.setPinIcon(icon ? icon : _transportShieldIcon);
+    transportMarkerBuilder.setPinIcon(OsmAnd::SingleSkImage(icon ? icon : _transportShieldIcon));
     for (int i = routeSegment->start + 1; i < routeSegment->end; i++)
     {
         const auto& stop = routeSegment->getStop(i);
@@ -193,7 +194,7 @@
         const auto& marker = transportMarkerBuilder.buildAndAddToCollection(_transportRouteMarkers);
         marker->setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon));
     }
-    transportMarkerBuilder.setPinIcon(_transportTransferIcon);
+    transportMarkerBuilder.setPinIcon(OsmAnd::SingleSkImage(_transportTransferIcon));
     OsmAnd::LatLon endLatLon(routeSegment->getEnd().lat, routeSegment->getEnd().lon);
     marker = transportMarkerBuilder.buildAndAddToCollection(_transportRouteMarkers);
     marker->setPosition(OsmAnd::Utilities::convertLatLonTo31(endLatLon));
@@ -304,9 +305,9 @@
                     || _routeLineColor == kDefaultRouteLineNightColor;
 
             builder.setFillColor(lineColor)
-                   .setPathIcon([self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color
-                                            fileName:@"map_direction_arrow"])
-                   .setSpecialPathIcon([self specialBitmapWithColor:lineColor])
+                   .setPathIcon(OsmAnd::SingleSkImage([self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color
+                                            fileName:@"map_direction_arrow"]))
+                   .setSpecialPathIcon(OsmAnd::SingleSkImage([self specialBitmapWithColor:lineColor]))
                    .setShouldShowArrows(true)
                    .setScreenScale(UIScreen.mainScreen.scale);
 

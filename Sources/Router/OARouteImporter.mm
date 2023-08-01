@@ -78,7 +78,7 @@
 
 - (void) parseRoute:(OATrkSegment *)segment segmentRoutePoints:(NSArray<OAWptPt *> *)segmentRoutePoints
 {
-    RoutingIndex *region = new RoutingIndex();
+    auto region = std::make_shared<RoutingIndex>();
     auto resources = std::make_shared<RouteDataResources>();
     
     [self collectLocations:resources segment:segment];
@@ -127,7 +127,7 @@
     }
 }
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) collectRouteSegments:(RoutingIndex *)region resources:(std::shared_ptr<RouteDataResources> &)resources segment:(OATrkSegment *)segment
+- (std::vector<std::shared_ptr<RouteSegmentResult>>) collectRouteSegments:(const std::shared_ptr<RoutingIndex>&)region resources:(std::shared_ptr<RouteDataResources> &)resources segment:(OATrkSegment *)segment
 {
     std::vector<std::shared_ptr<RouteSegmentResult>> route;
     for (OARouteSegment *routeSegment in segment.routeSegments)
@@ -145,15 +145,10 @@
             NSLog(@"%s", ex.what());
         }
     }
-    if (!route.empty())
-    {
-        // Take ownership over region only for one RouteDataObject
-        route.back()->object->ownsRegion = true;
-    }
     return route;
 }
 
-- (void) collectRouteTypes:(RoutingIndex *)region segment:(OATrkSegment *)segment
+- (void) collectRouteTypes:(const std::shared_ptr<RoutingIndex>&)region segment:(OATrkSegment *)segment
 {
     int i = 0;
     for (OARouteType *routeType in segment.routeTypes)

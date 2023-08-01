@@ -55,6 +55,7 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
                 row.setObj(icon, forKey: "kIconKey")
             }
             row.setObj(NSNumber(booleanLiteral: resource.isInstalled()), forKey: "kIsInstalledKey")
+            row.setObj(resource, forKey: "kResource")
         }
         
     }
@@ -68,6 +69,18 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
     
     func onRowItemClicked(indexPath: IndexPath) {
         print("onRowItemClicked")
+        let item = tableData.item(for: indexPath)
+        if item.cellType == "kDownloadCellKey" {
+            if let resource = item.obj(forKey: "kResource") {
+//                OAResourcesUISwiftHelper.toggleDownload(for: resource as? OAResourceSwiftItem) {
+//
+//                    self.generateData()
+//                    UIView.transition(with: self.tableView, duration: 0.35, options: .transitionCrossDissolve) {
+//                        self.tableView.reloadData()
+//                    }
+//                }
+            }
+        }
     }
     
     func accessoryButtonPressed(button: UIControl , event: UIEvent) {
@@ -106,7 +119,7 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
             let isInstalled = item.bool(forKey: "kIsInstalledKey")
             if (!isInstalled) {
                 let iconImage = UIImage.templateImageNamed("ic_custom_download")!
-                var btnAcc = UIButton(type: .system)
+                let btnAcc = UIButton(type: .system)
                 btnAcc.addTarget(self, action: #selector(self.accessoryButtonPressed(button:event:)), for: .touchUpInside)
                 btnAcc.setImage(iconImage, for: .normal)
                 btnAcc.tintColor = UIColor(rgb: color_primary_purple)
@@ -115,6 +128,7 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
             }
             
             outCell = cell
+            
         } else if item.cellType == OARightIconTableViewCell.getIdentifier() {
             var cell = tableView.dequeueReusableCell(withIdentifier: OARightIconTableViewCell.getIdentifier()) as? OARightIconTableViewCell
             if cell == nil {

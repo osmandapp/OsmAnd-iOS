@@ -21,6 +21,7 @@
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
+#include <OsmAndCore/SingleSkImage.h>
 
 #define kMapillaryOpacity 1.0f
 #define kSearchRadius 100
@@ -56,10 +57,10 @@
     
     _imageMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
     imageAndCourseMarkerBuilder.addOnMapSurfaceIcon(_imageMainIconKey,
-                                                       [OANativeUtilities skImageFromPngResource:@"map_mapillary_location"]);
+                                                       OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:@"map_mapillary_location"]));
     _imageHeadingIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(2);
     imageAndCourseMarkerBuilder.addOnMapSurfaceIcon(_imageHeadingIconKey,
-                                                       [OANativeUtilities skImageFromPngResource:@"map_mapillary_location_view_angle"]);
+                                                    OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:@"map_mapillary_location_view_angle"]));
     _imageMarker = imageAndCourseMarkerBuilder.buildAndAddToCollection(_currentImagePosition);
     
     _mapillaryChangeObserver = [[OAAutoObserverProxy alloc] initWith:self

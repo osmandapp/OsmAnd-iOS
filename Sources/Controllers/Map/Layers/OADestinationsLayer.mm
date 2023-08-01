@@ -23,6 +23,7 @@
 
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
+#include <OsmAndCore/SingleSkImage.h>
 
 #define firstLineId 11
 #define firstOutlineId 10
@@ -220,7 +221,7 @@
     builder.setIsAccuracyCircleSupported(false)
     .setBaseOrder(self.pointsOrder)
     .setIsHidden(false)
-    .setPinIcon([OANativeUtilities skImageFromPngResource:markerResourceName])
+    .setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:markerResourceName]))
     .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
     .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
     .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)

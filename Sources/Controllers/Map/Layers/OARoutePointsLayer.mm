@@ -28,6 +28,7 @@
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 #include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
+#include <OsmAndCore/SingleSkImage.h>
 
 @interface OARoutePointsLayer () <OAStateChangedListener>
 
@@ -83,7 +84,7 @@
         .setIsAccuracyCircleSupported(false)
         .setBaseOrder(self.pointsOrder)
         .setIsHidden(false)
-        .setPinIcon([OANativeUtilities skImageFromPngResource:@"map_start_point"])
+        .setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:@"map_start_point"]))
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
         .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
         .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
@@ -97,7 +98,7 @@
         .setIsAccuracyCircleSupported(false)
         .setBaseOrder(self.pointsOrder + 1)
         .setIsHidden(false)
-        .setPinIcon([self getIntermediateImage:point])
+        .setPinIcon(OsmAnd::SingleSkImage([self getIntermediateImage:point]))
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
         .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
         .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
@@ -112,7 +113,7 @@
         .setIsAccuracyCircleSupported(false)
         .setBaseOrder(self.pointsOrder + 2)
         .setIsHidden(false)
-        .setPinIcon([OANativeUtilities skImageFromPngResource:@"map_target_point"])
+        .setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:@"map_target_point"]))
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
         .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
         .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))

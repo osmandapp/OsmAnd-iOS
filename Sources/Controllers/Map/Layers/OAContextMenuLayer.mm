@@ -32,6 +32,7 @@
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
 #include <OsmAndCore/ObfDataInterface.h>
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
+#include <OsmAndCore/SingleSkImage.h>
 
 @interface OAContextMenuLayer () <CAAnimationDelegate>
 @end
@@ -73,7 +74,7 @@
     .setIsAccuracyCircleSupported(false)
     .setBaseOrder(self.pointsOrder)
     .setIsHidden(true)
-    .setPinIcon([OANativeUtilities skImageFromPngResource:@"ic_map_pin"])
+    .setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:@"ic_map_pin"]))
     .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
     .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
     .buildAndAddToCollection(_contextPinMarkersCollection);

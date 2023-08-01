@@ -28,6 +28,7 @@
 #include <OsmAndCore/Map/OnSurfaceRasterMapSymbol.h>
 #include <OsmAndCore/Map/MapStylesCollection.h>
 #include <OsmAndCore/Map/ResolvedMapStyle.h>
+#include <OsmAndCore/SingleSkImage.h>
 
 #include <SkCanvas.h>
 
@@ -68,7 +69,7 @@
     
     _locationIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
     locationMarkerBuilder.addOnMapSurfaceIcon(_locationIconKey,
-                                                       [OANativeUtilities skImageFromPngResource:@"map_pedestrian_location"]);
+        OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:@"map_pedestrian_location"]));
     _locationMarker = locationMarkerBuilder.buildAndAddToCollection(_currentGraphPosition);
     
     [self.mapView addKeyedSymbolsProvider:_currentGraphPosition];
@@ -258,9 +259,7 @@
         
         for (CLLocation *location in trackPoints.xAxisPoints)
         {
-            xAxisMarkerBuilder.addOnMapSurfaceIcon(_locationIconKey,
-                                                   _xAxisLocationIcon);
-            
+            xAxisMarkerBuilder.addOnMapSurfaceIcon(_locationIconKey, OsmAnd::SingleSkImage(_xAxisLocationIcon));
             const auto& marker = xAxisMarkerBuilder.buildAndAddToCollection(_currentGraphXAxisPositions);
             marker->setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude)));
         }

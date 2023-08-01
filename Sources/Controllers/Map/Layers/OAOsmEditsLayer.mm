@@ -35,6 +35,7 @@
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
+#include <OsmAndCore/SingleSkImage.h>
 
 @implementation OAOsmEditsLayer
 {
@@ -123,7 +124,7 @@
         builder.setIsAccuracyCircleSupported(false)
         .setBaseOrder(self.pointsOrder)
         .setIsHidden(false)
-        .setPinIcon([self getIcon:point])
+        .setPinIcon(OsmAnd::SingleSkImage([self getIcon:point]))
         .setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon([point getLatitude], [point getLongitude])))
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
         .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);

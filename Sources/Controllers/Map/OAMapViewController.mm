@@ -11,7 +11,6 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 
-#import <UIActionSheet+Blocks.h>
 #import <UIViewController+JASidePanel.h>
 #import <MBProgressHUD.h>
 

@@ -12,7 +12,6 @@
 
 @optional
 - (void)indexPathForSwipingCellChanged:(NSIndexPath *)indexPath;
-- (void)showActiveSheet:(UIActionSheet *)activeSheet;
 
 - (void)refreshSwipeButtons:(NSInteger)section;
 - (void)refreshFirstRow:(NSInteger)section;

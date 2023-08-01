@@ -35,11 +35,6 @@ typedef enum
     MAP_DOWNLOAD,
 } WizardType;
 
-//typedef enum
-//{
-//    ALERT_SKIP,
-//} AlertType;
-
 
 @interface OAFirstUsageWizardController () <UITextViewDelegate, SFSafariViewControllerDelegate>
 
@@ -281,42 +276,15 @@ typedef enum
 - (IBAction)skipPress:(id)sender
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"skip_map_downloading") message:OALocalizedString(@"skip_map_downloading_desc_ios") preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_skip") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self closeWizard];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_select") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self selectMapPress:nil];
     }]];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
-    
-//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"skip_map_downloading") message:OALocalizedString(@"skip_map_downloading_desc_ios") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"shared_string_skip"), OALocalizedString(@"shared_string_select"), nil];
-//    alert.tag = ALERT_SKIP;
-//    [alert show];
 }
-
-//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-//{
-//    switch (alertView.tag)
-//    {
-//        case ALERT_SKIP:
-//            if (buttonIndex != alertView.cancelButtonIndex)
-//            {
-//                if (buttonIndex == 1)
-//                {   // skip
-//                    [self closeWizard];
-//                }
-//                else
-//                {   // select
-//                    [self selectMapPress:nil];
-//                }
-//            }
-//            break;
-//
-//        default:
-//            break;
-//    }
-//}
 
 - (void) closeWizard
 {

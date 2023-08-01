@@ -40,9 +40,6 @@
 #include <OsmAndCore/Utilities.h>
 
 #define _(name) OAGPXListViewController__##name
-#define kAlertViewRemoveId -3
-#define kAlertViewShareId -4
-#define kAlertViewCancelButtonIndex -1
 #define kMaxCancelButtonWidth 100
 
 #define GPX_EXT @"gpx"

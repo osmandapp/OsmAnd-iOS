@@ -519,11 +519,6 @@
     indexPathForSwipingCell = indexPath;
 }
 
-- (void)showActiveSheet:(UIActionSheet *)activeSheet
-{
-    [activeSheet showInView:self.view];
-}
-
 - (BOOL)isDecelerating
 {
     return isDecelerating;

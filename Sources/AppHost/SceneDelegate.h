@@ -16,8 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) UIWindow * window;
 @property (strong, nonatomic, readonly) OARootViewController* rootViewController;
-@property (assign, nonatomic, readonly) BOOL appInitDone;
-@property (assign, nonatomic, readonly) BOOL appInitializing;
 
 - (BOOL)openURL:(NSURL *)url;
 

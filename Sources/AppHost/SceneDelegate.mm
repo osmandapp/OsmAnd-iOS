@@ -70,12 +70,12 @@
     NSURL *_loadedURL;
     NSTimer *_checkUpdatesTimer;
     NSOperationQueue *_dataFetchQueue;
+    BOOL _appInitDone;
+    BOOL _appInitializing;
 }
 
 @synthesize window = _window;
 @synthesize rootViewController = _rootViewController;
-@synthesize appInitDone = _appInitDone;
-@synthesize appInitializing = _appInitializing;
 
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions
 {

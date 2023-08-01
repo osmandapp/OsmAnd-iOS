@@ -92,7 +92,6 @@
 #import "OASearchUICore.h"
 #import "OASearchPhrase.h"
 #import "OAQuickSearchHelper.h"
-#import <UIAlertView+Blocks.h>
 #import "OAEditPointViewController.h"
 #import "OARoutePlanningHudViewController.h"
 #import "OAPOIUIFilter.h"
@@ -1938,8 +1937,7 @@ typedef enum
     }
     else
     {
-        [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_add_destination") message:OALocalizedString(@"cannot_add_marker_desc") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil
-          ] show];
+        [self showDistinationAlert];
     }
 }
 
@@ -1987,12 +1985,18 @@ typedef enum
         }
         else
         {
-            [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_add_destination") message:OALocalizedString(@"cannot_add_marker_desc") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil
-              ] show];
+            [self showDistinationAlert];
         }
     }
     
     [self hideTargetPointMenu];
+}
+
+- (void)showDistinationAlert
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"cannot_add_destination") message:OALocalizedString(@"cannot_add_marker_desc") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void) targetPointParking

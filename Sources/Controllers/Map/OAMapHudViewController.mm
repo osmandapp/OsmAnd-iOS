@@ -268,6 +268,24 @@
     }
     [self applyCorrectViewSize];
     _driveModeActive = NO;
+    
+    BOOL hasInitialURL = _app.initialURLMapState != nil;
+    if ([[OAAppSettings sharedManager] settingShowZoomButton])
+    {
+        [self.zoomButtonsView setHidden: NO];
+        if (!hasInitialURL && ![_mapPanelViewController isContextMenuVisible])
+            [self showBottomControls:0 animated:NO];
+    }
+    else if (!hasInitialURL && ![_mapPanelViewController isContextMenuVisible])
+    {
+        [self.zoomButtonsView setHidden: YES];
+        [self hideBottomControls:0 animated:NO];
+    }
+    
+    [self updateMapRulerDataWithDelay];
+    
+    if (hasInitialURL)
+        _app.initialURLMapState = nil;
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -309,24 +327,6 @@
             _overlayUnderlayView.frame = CGRectMake(x1, CGRectGetMinY(_driveModeButton.frame) - 16. - h, w, h);
         }
     }
-    
-    BOOL hasInitialURL = _app.initialURLMapState != nil;
-    if ([[OAAppSettings sharedManager] settingShowZoomButton])
-    {
-        [self.zoomButtonsView setHidden: NO];
-        if (!hasInitialURL && ![_mapPanelViewController isContextMenuVisible])
-            [self showBottomControls:0 animated:NO];
-    }
-    else if (!hasInitialURL && ![_mapPanelViewController isContextMenuVisible])
-    {
-        [self.zoomButtonsView setHidden: YES];
-        [self hideBottomControls:0 animated:NO];
-    }
-
-    [self updateMapRulerDataWithDelay];
-
-    if (hasInitialURL)
-        _app.initialURLMapState = nil;
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

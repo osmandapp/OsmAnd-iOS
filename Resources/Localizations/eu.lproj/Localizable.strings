@@ -2548,3 +2548,6 @@
 "app_mode_moped" = "Ziklomotorra";
 "weather_forecast" = "Eguraldi iragarpena";
 "weather_forecast_is_outdated" = "Iragarpena zaharkituta dago.";
+"rendering_attr_alpineHiking_name" = "Zailtasunen sailkapena";
+"rendering_value_sacScale_description" = "Suitzako Alpino Kluba";
+"rendering_value_caiScale_description" = "Italiako Alpino Kluba";

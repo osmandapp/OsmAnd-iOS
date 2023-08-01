@@ -268,12 +268,7 @@
     }
     [self applyCorrectViewSize];
     _driveModeActive = NO;
-}
-
-- (void) viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-
+    
     BOOL hasInitialURL = _app.initialURLMapState != nil;
     if ([[OAAppSettings sharedManager] settingShowZoomButton])
     {
@@ -286,14 +281,19 @@
         [self.zoomButtonsView setHidden: YES];
         [self hideBottomControls:0 animated:NO];
     }
-
+    
     [self updateMapRulerDataWithDelay];
+    
+    if (hasInitialURL)
+        _app.initialURLMapState = nil;
+}
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
     
     if (self.toolbarViewController)
         [self.toolbarViewController onViewDidAppear:self.mapHudType];
-
-    if (hasInitialURL)
-        _app.initialURLMapState = nil;
 }
 
 - (void) viewWillDisappear:(BOOL)animated

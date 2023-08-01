@@ -36,5 +36,6 @@ API_AVAILABLE(ios(12.0))
 @property (nonatomic, weak) id<OACarPlayDashboardDelegate> delegate;
 
 - (void)openSearch;
+- (void)openNavigation;
 
 @end

@@ -48,6 +48,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         
         if str.contains("search") {
             carPlayDashboardController?.openSearch()
+        } else if str.contains("navigation") {
+            carPlayDashboardController?.openNavigation()
         }
     }
     

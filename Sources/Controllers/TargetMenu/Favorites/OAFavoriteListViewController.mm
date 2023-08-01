@@ -1090,6 +1090,7 @@ static UIViewController *parentController;
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointHeaderTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAPointHeaderTableViewCell *)[nib objectAtIndex:0];
         cell.folderIcon.image = [UIImage templateImageNamed:@"ic_custom_folder"];
+        [cell.valueLabel setHidden:YES];
     }
     if (cell)
     {

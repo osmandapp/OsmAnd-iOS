@@ -8,15 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import "OARootViewController.h"
+#import <CarPlay/CarPlay.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface SceneDelegate : UIResponder <UIWindowSceneDelegate>
 
 @property (strong, nonatomic) UIWindow * window;
-@property (strong, readonly, nonatomic) OARootViewController* rootViewController;
+@property (strong, nonatomic, readonly) OARootViewController* rootViewController;
 @property (assign, nonatomic, readonly) BOOL appInitDone;
 @property (assign, nonatomic, readonly) BOOL appInitializing;
+
+- (BOOL)openURL:(NSURL *)url;
 
 @end
 

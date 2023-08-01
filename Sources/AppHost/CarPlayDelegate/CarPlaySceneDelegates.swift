@@ -1,53 +1,29 @@
 import CarPlay
 import CoreLocation
 
-class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
+final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
     
     private var carPlayMapController: OACarPlayMapViewController?
     private var carPlayDashboardController: OACarPlayDashboardInterfaceController?
-
+    private var windowToAttach: CPWindow?
+    private var carPlayInterfaceController: CPInterfaceController?
+    
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didConnect interfaceController: CPInterfaceController, to window: CPWindow) {
         print(#function)
-        
         OsmAndApp.swiftInstance().carPlayActive = true
+        windowToAttach = window
+        carPlayInterfaceController = interfaceController
         
-        if let scene = UIApplication.shared.connectedScenes.filter({ $0.activationState == .foregroundActive }).first(where: { $0 is UIWindowScene }), let delegate = scene.delegate as? SceneDelegate,
-           !delegate.appInitDone,
-           !delegate.appInitializing {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.presentInCarPlay(interfaceController: interfaceController, window: window)
-            }
-            return
-        }
-        // FIXME:
-       //UIScene *scene = [UIApplication.sharedApplication.connectedScenes.allObjects firstObject];
-      //  SceneDelegate *sd = (SceneDelegate *)scene.delegate;
-//        if let appDelegate = UIApplication.shared.delegate as? OAAppDelegate,
-//           !appDelegate.appInitDone, !appDelegate.appInitializing {
-//            appDelegate.initialize()
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-//                self.presentInCarPlay(interfaceController: interfaceController, window: window)
-//            }
-//            return
-//        }
-
-        self.presentInCarPlay(interfaceController: interfaceController, window: window)
-
-        let carPlayMode = OAAppSettings.sharedManager()?.isCarPlayModeDefault.get() == true
-            ? OAApplicationMode.getFirstAvailableNavigation()
-            : OAAppSettings.sharedManager()?.carPlayMode.get()
-
-        OAAppSettings.sharedManager()?.setApplicationModePref(carPlayMode, markAsLastUsed: false)
-    }
-
-    func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didConnect interfaceController: CPInterfaceController) {
-        print(#function)
+        NotificationCenter.default.addObserver(self, selector: #selector(configureScene), name: NSNotification.Name("kAppInitDone"), object: nil)
     }
 
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didDisconnect interfaceController: CPInterfaceController, from window: CPWindow) {
         print(#function)
         
         OsmAndApp.swiftInstance().carPlayActive = false
+        NotificationCenter
+            .default
+            .removeObserver(self, name: NSNotification.Name("kAppInitDone"), object: nil)
         OAAppSettings.sharedManager().setApplicationModePref(OAAppSettings.sharedManager().defaultApplicationMode.get(), markAsLastUsed: false)
 
         OARootViewController.instance().mapPanel.onCarPlayDisconnected { [weak self] in
@@ -57,19 +33,32 @@ class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
             carPlayMapController?.navigationController?.popViewController(animated: true)
             window.rootViewController = nil
             carPlayMapController = nil
+            windowToAttach = nil
+            carPlayInterfaceController = nil
         }
     }
-
-    func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didDisconnectInterfaceController interfaceController: CPInterfaceController) {
-        print(#function)
+    
+    func sceneWillEnterForeground(_ scene: UIScene) {
+        carPlayMapController?.detachFromCarPlayWindow()
+        configureScene()
     }
-
-    func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didSelect navigationAlert: CPNavigationAlert) {
-        print(#function)
+    
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let str = URLContexts.first?.url.absoluteString else { return }
+        
+        if str.contains("search") {
+            carPlayDashboardController?.openSearch()
+        }
     }
+    
+    @objc private func configureScene() {
+        guard let carPlayInterfaceController, let windowToAttach else { return }
+        presentInCarPlay(interfaceController: carPlayInterfaceController, window: windowToAttach)
+        let carPlayMode = OAAppSettings.sharedManager()?.isCarPlayModeDefault.get() == true
+        ? OAApplicationMode.getFirstAvailableNavigation()
+        : OAAppSettings.sharedManager()?.carPlayMode.get()
 
-    func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didSelect maneuver: CPManeuver) {
-        print(#function)
+        OAAppSettings.sharedManager()?.setApplicationModePref(carPlayMode, markAsLastUsed: false)
     }
 }
 

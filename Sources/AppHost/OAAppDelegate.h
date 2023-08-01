@@ -7,17 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <CarPlay/CarPlay.h>
 
-#import "OARootViewController.h"
-
-@interface OAAppDelegate : UIResponder <UIApplicationDelegate /*CPApplicationDelegate*/>
-
-@property(strong, readonly, nonatomic) OARootViewController* rootViewController;
-
-@property (assign, nonatomic, readonly) BOOL appInitDone;
-@property (assign, nonatomic, readonly) BOOL appInitializing;
-
-- (BOOL)initialize;
+@interface OAAppDelegate : UIResponder <UIApplicationDelegate>
 
 @end

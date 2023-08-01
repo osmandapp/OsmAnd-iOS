@@ -189,6 +189,13 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     }
 }
 
+- (void)openSearch
+{
+    OADirectionsGridController *directionsGrid = [[OADirectionsGridController alloc] initWithInterfaceController:self.interfaceController];
+    [directionsGrid present];
+    [directionsGrid openSearch];
+}
+
 - (CPMapButton *) createMapButton:(EOACarPlayButtonType)type
 {
     CPMapButton *mapButton = [[CPMapButton alloc] initWithHandler:^(CPMapButton * _Nonnull mapButton) {

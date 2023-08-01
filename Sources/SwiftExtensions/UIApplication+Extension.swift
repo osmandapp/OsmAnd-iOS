@@ -11,15 +11,16 @@ import Foundation
 extension UIApplication {
     
     @objc var mainWindow: UIWindow? {
-        // Get connected scenes
-        return connectedScenes
-        // Keep only active scenes, onscreen and visible to the user
-            .filter { $0.activationState == .foregroundActive }
-        // Keep only the first `UIWindowScene`
-            .first(where: { $0 is UIWindowScene })
+        mainScene
         // Get its associated windows
             .flatMap({ $0 as? UIWindowScene })?.windows
         // Finally, keep only the key window
             .first(where: \.isKeyWindow)
+    }
+    
+    @objc var mainScene: UIScene? {
+        connectedScenes
+            .filter { $0.activationState == .foregroundActive }
+            .first(where: { $0 is UIWindowScene })
     }
 }

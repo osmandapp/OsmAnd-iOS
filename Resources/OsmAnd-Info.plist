@@ -199,17 +199,6 @@
 		<true/>
 		<key>UISceneConfigurations</key>
 		<dict>
-			<key>CPTemplateApplicationInstrumentClusterSceneSessionRoleApplication</key>
-			<array>
-				<dict>
-					<key>UISceneClassName</key>
-					<string>CPTemplateApplicationInstrumentClusterScene</string>
-					<key>UISceneConfigurationName</key>
-					<string>CarPlay-Instrumen-Cluster</string>
-					<key>UISceneDelegateClassName</key>
-					<string>${PRODUCT_MODULE_NAME}.InstrumentClusterCarPlaySceneDelegate</string>
-				</dict>
-			</array>
 			<key>CPTemplateApplicationDashboardSceneSessionRoleApplication</key>
 			<array>
 				<dict>

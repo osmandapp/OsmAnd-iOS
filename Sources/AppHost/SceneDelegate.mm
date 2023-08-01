@@ -69,12 +69,6 @@
     UIBackgroundTaskIdentifier _appInitTask;
     NSURL *_loadedURL;
     NSTimer *_checkUpdatesTimer;
-
-//    OACarPlayMapViewController *_carPlayMapController API_AVAILABLE(ios(12.0));
-//    OACarPlayDashboardInterfaceController *_carPlayDashboardController API_AVAILABLE(ios(12.0));
-//    CPWindow *_windowToAttach API_AVAILABLE(ios(12.0));
-//    CPInterfaceController *_carPlayInterfaceController API_AVAILABLE(ios(12.0));
-    
     NSOperationQueue *_dataFetchQueue;
 }
 
@@ -83,14 +77,13 @@
 @synthesize appInitDone = _appInitDone;
 @synthesize appInitializing = _appInitializing;
 
-- (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
-        
+- (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions
+{
     UIWindowScene *windowScene = (UIWindowScene *)scene;
     self.window = [[UIWindow alloc] initWithWindowScene:windowScene];
     self.window.rootViewController = [[OALaunchScreenViewController alloc] init];
-   // self.window.frame = windowScene.coordinateSpace.bounds;
     [self.window makeKeyAndVisible];
-//
+    
     if (!_dataFetchQueue)
     {
         // Set the background fetch
@@ -126,13 +119,8 @@
     [self initialize];
 }
 
-
-- (void)sceneDidDisconnect:(UIScene *)scene {
-    // Called as the scene is being released by the system.
-    // This occurs shortly after the scene enters the background, or when its session is discarded.
-    // Release any resources associated with this scene that can be re-created the next time the scene connects.
-    // The scene may re-connect later, as its session was not neccessarily discarded (see `application:didDiscardSceneSessions` instead).
-    
+- (void)sceneDidDisconnect:(UIScene *)scene
+{
     [_app shutdown];
     OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
     [mapVc onApplicationDestroyed];
@@ -145,10 +133,8 @@
     [device endGeneratingDeviceOrientationNotifications];
 }
 
-
-- (void)sceneDidBecomeActive:(UIScene *)scene {
-    // Called when the scene has moved from an inactive state to an active state.
-    // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+- (void)sceneDidBecomeActive:(UIScene *)scene
+{
     if (_appInitDone)
     {
         _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesInterval target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
@@ -156,31 +142,23 @@
     }
 }
 
-- (void)sceneWillResignActive:(UIScene *)scene {
-    // Called when the scene will move from an active state to an inactive state.
-    // This may occur due to temporary interruptions (ex. an incoming phone call).
-    
+- (void)sceneWillResignActive:(UIScene *)scene
+{
     if (_appInitDone)
         [_app onApplicationWillResignActive];
 }
 
 
-- (void)sceneWillEnterForeground:(UIScene *)scene {
-    // Called as the scene transitions from the background to the foreground.
-    // Use this method to undo the changes made on entering the background.
-    
+- (void)sceneWillEnterForeground:(UIScene *)scene
+{
     if (_appInitDone)
         [_app onApplicationWillEnterForeground];
     else
         [self initialize];
 }
 
-
-- (void)sceneDidEnterBackground:(UIScene *)scene {
-    // Called as the scene transitions from the foreground to the background.
-    // Use this method to save data, release shared resources, and store enough scene-specific state information
-    // to restore the scene back to its current state.
-    
+- (void)sceneDidEnterBackground:(UIScene *)scene
+{
     if (_checkUpdatesTimer)
     {
         [_checkUpdatesTimer invalidate];
@@ -209,11 +187,6 @@
     
     // Create instance of OsmAnd application
     _app = (id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol>)[OsmAndApp instance];
-    
-    // Create window
-//    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-//    self.window.rootViewController = [[OALaunchScreenViewController alloc] init];
-//    [self.window makeKeyAndVisible];
     
     _appInitTask = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"appInitTask" expirationHandler:^{
         
@@ -287,16 +260,10 @@
 
             // Check for updates every hour when the app is in the foreground
             _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesInterval target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
-
-            // show map in carPlay if it is a cold start
-//            if (_windowToAttach && _carPlayInterfaceController)
-//            {
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    [self presentInCarPlay:_carPlayInterfaceController window:_windowToAttach];
-//                    _carPlayInterfaceController = nil;
-//                    _windowToAttach = nil;
-//                });
-//            }
+            
+            if (_app.carPlayActive) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"kAppInitDone" object:self];
+            }
         });
     });
     
@@ -648,17 +615,18 @@
     } @catch (NSException *e) {
         NSLog(@"Could not schedule app refresh: %@", e.reason);
     }
-    
 }
 
-- (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts {
+- (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts
+{
     if ([URLContexts allObjects].count > 0) {
         NSURL *url = [[URLContexts allObjects] firstObject].URL;
         [self openURL:url];
     }
 }
 
-- (void)scene:(UIScene *)scene continueUserActivity:(NSUserActivity *)userActivity {
+- (void)scene:(UIScene *)scene continueUserActivity:(NSUserActivity *)userActivity
+{
     [self openURL:userActivity.webpageURL];
 }
 

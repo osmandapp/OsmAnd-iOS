@@ -4059,11 +4059,10 @@ typedef enum
 
 - (void) onCarPlayConnected
 {
-    if (_carPlayActiveController && _carPlayActiveController.presentingViewController == self)
+    if (_carPlayActiveController)
         return;
     _carPlayActiveController = [[OACarPlayActiveViewController alloc] init];
     _carPlayActiveController.messageText = OALocalizedString(@"carplay_active_message");
-    
     [self addChildViewController:_carPlayActiveController];
     [self.view insertSubview:_carPlayActiveController.view atIndex:0];
 }

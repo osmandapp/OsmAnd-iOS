@@ -89,7 +89,7 @@ typedef enum : NSUInteger {
 
 + (OARootViewController*) instance
 {
-    UIScene *scene = [UIApplication.sharedApplication.connectedScenes.allObjects lastObject];
+    UIScene *scene = UIApplication.sharedApplication.mainScene;
     SceneDelegate *sd = (SceneDelegate *)scene.delegate;
     return sd.rootViewController;
 }

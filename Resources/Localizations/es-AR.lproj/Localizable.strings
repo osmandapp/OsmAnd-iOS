@@ -3016,3 +3016,8 @@
 "add_row" = "Añadir fila";
 "no_widgets_here_yet" = "Todavía sin widgets aquí";
 "no_widgets_descr" = "Añade uno o más widgets de la lista de widgets disponibles.";
+"free_account" = "Cuenta gratuita";
+"free_favorites_backup" = "Copia de seguridad gratuita de favoritos";
+"banner_payment_free_backup_settings_title" = "Copia de seguridad gratuita de los ajustes";
+"get_osmand_cloud" = "Obtener OsmAnd Cloud";
+"free_favorites_backup_description" = "Regístrate en OsmAnd Cloud para obtener una copia de seguridad gratuita de los favoritos y ajustes";

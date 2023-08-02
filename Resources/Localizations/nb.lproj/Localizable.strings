@@ -749,7 +749,7 @@
 "add_destination" = "Add destination";
 "route_add_start_point" = "Legg til startpunkt";
 "add_intermediate" = "Legg til mellomliggende punkt";
-"add_home" = "Legg til bosted";
+"add_home" = "Legg til hjem";
 "add_work" = "Legg til arbeidssted";
 "favorite_home_category" = "Hjem";
 "work_button" = "Arbeid";
@@ -1428,7 +1428,7 @@
 "rendering_attr_depthContours_description" = "Vis dybdekonturer og punkter.";
 "rendering_attr_surface_wood_name" = "Tre";
 "routeInfo_smoothness_name" = "Jevnhet";
-"routing_attr_freeride_policy_description" = "Frikjøring og terrengkjøring er uoffisielle ruter og passasjer. Typisk upreparert, ikke vedlikeholdt av bakkepersonell, og ikke sjekket på kveldene. Kjør på egen risiko.";
+"routing_attr_freeride_policy_description" = "Frikjøring og terrengkjøring er uoffisielle ruter og passasjer. Typisk upreparert, ikke vedlikeholdt og ikke sjekket på kveldene. Kjør på egen risiko.";
 "rendering_attr_trainLightrailRoutes_name" = "Togruter";
 "rendering_attr_hideUnderground_name" = "Objekter under bakken";
 "routing_attr_driving_style_balance_name" = "Balansert";
@@ -2347,7 +2347,7 @@
 "shared_string_expires" = "Utløper";
 "reset_to_default_category_button_promo" = "«Tilbakestill til forvalg» gjenoppretter sorteringsrekkefølgen til installasjonsforvalg.";
 "quick_action_transport_descr" = "Knapp for vising eller skjuling av offentlig transport på kartet.";
-"nautical_depth_points" = "Sjødybder";
+"nautical_depth_points" = "Sjødybdepunkter";
 "weather_wind_knots" = "Knop";
 "shared_string_selected" = "Valgt";
 "create_custom_categories_list_promo" = "Endre listens sorteringsrekkefølge, skjul unødvendige kategorier. Du kan importere eller eksportere alle endringer med profiler.";

@@ -2070,3 +2070,7 @@
 "shared_string_keep_active" = "Obdrži aktivno";
 "icon_group_service" = "Storitev";
 "route_info" = "Informacije o poti";
+"rendering_attr_alpineHiking_name" = "Klasifikacije težavnosti";
+"rendering_value_caiScale_description" = "Club Alpino Italiano (Italijanska planinska zveza)";
+"map_widget_distance_to_intermediate" = "Razdalja do vmesne točke";
+"rendering_value_sacScale_description" = "Swiss Alpine Club (Švicarska planinska zveza)";

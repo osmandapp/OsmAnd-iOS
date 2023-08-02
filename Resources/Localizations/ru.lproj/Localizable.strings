@@ -620,7 +620,7 @@
 "speak_cameras" = "Камеры контроля скорости";
 "speak_traffic_warnings" = "Дорожные предупреждения";
 "voice_pref_title" = "Голос";
-"map_widget_compass" = "Компас";
+"map_widget_compass" = "Компас / режим ориентации";
 "map_widget_next_turn" = "Следующий поворот";
 "rotate_map_to" = "Ориентация карты";
 "rotate_map_compass_opt" = "по направлению компаса";
@@ -1891,7 +1891,7 @@
 "profile_type_osmand_string" = "Профиль OsmAnd";
 "quick_action_remove_next_destination_descr" = "Следующая точка маршрута будет удалена. Если это конечный пункт, навигация завершится.";
 "gpx_export_failed" = "Не удалось сохранить созданный маршрут";
-"shared_string_visible" = "На карте";
+"shared_string_visible" = "На экране";
 "hide_compass_ruler" = "Скрыть компас-линейку";
 "show_compass_ruler" = "Показать компас-линейку";
 "address_search_desc" = "Поиск по адресу";
@@ -2452,16 +2452,16 @@
 "private_access_routing_req" = "Пункт назначения расположен на частной территории. Разрешить использование частных дорог на маршруте?";
 "expired" = "Срок истёк";
 "share_geo" = "гео:";
-"compass_always_hidden" = "Всегда скрыт";
+"compass_always_hidden" = "Всегда скрыто";
 "restore_from_osmand_cloud" = "Восстановить из OsmAnd Cloud";
 "lang_ckb" = "Центральный курдский";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Без ограничений)";
 "shared_string_delete_all" = "Удалить все";
 "in_grace_period" = "В льготный период";
 "on_hold" = "Приостановлено";
-"compass_always_visible" = "Всегда виден";
+"compass_always_visible" = "Всегда на экране";
 "shared_string_paused" = "Приостановлено";
-"compass_visible_if_map_rotated" = "Виден, если карта повернута";
+"compass_visible_if_map_rotated" = "На экране, если карта повернута";
 "data_settings" = "Данные";
 "shared_string_undefined" = "Неопределённо";
 "map_widget_rendering_fps" = "FPS отрисовки карты";
@@ -2686,7 +2686,8 @@
 "announcement_time_title" = "Время оповещения";
 "announcement_time_descr" = "Время голосового оповещения определяется его типом, текущей скоростью навигации и скоростью навигации по умолчанию.";
 "rotate_map_manual_opt" = "поворот вручную (фикс.)";
-"visible_in_3d_mode" = "Видно при включении 3D";
+"visible_in_3d_mode" = "На экране, когда 3D включён";
 "map_3d_mode_description" = "Для изменения перспективы коснитесь карты двумя пальцами и двигайте вверх или вниз.";
 "rendering_value_caiScale_description" = "Итальянский альпийский клуб (CAI)";
 "rendering_value_sacScale_description" = "Швейцарский альпийский клуб (SAC)";
+"shared_string_hidden" = "Скрыто";

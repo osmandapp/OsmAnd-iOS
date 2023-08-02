@@ -296,7 +296,7 @@
 "app_mode_aircraft" = "Flyg";
 "gpx_option_calculate_first_last_segment" = "Beräkna OsmAnd-rutt för första och sista ruttsegmentet";
 "gpx_option_from_start_point" = "Passera längs hela spåret";
-"gpx_option_reverse_route" = "Omvänd GPX-riktning";
+"gpx_option_reverse_route" = "Omvänd spår-riktning";
 "use_points_as_intermediates" = "Beräkna rutt mellan punkter";
 "calculate_osmand_route_without_internet" = "Offlineberäkning av OsmAnd-ruttsegment";
 "routing_settings_2" = "Navigeringsinställningar";
@@ -2600,3 +2600,4 @@
 "simulation_real_mode_desc" = "På raksträckor kommer hastigheten att vara ungefär den högsta tillåtna hastigheten.\nVid korsningar saktar simuleringen ner.\nExtra tidstillägg kommer att tillämpas vid trafiksignaler, stoppskyltar mm.";
 "routing_attr_freeride_policy_only_if_necessary_name" = "Endast om det är nödvändigt";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "Åk inte offpist";
+"map_widget_distance_to_intermediate" = "Avstånd till mellanstopp";

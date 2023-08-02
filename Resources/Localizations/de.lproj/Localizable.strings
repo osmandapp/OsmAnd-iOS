@@ -3022,3 +3022,8 @@
 "visible_in_3d_mode" = "Sichtbar im 3D-Modus";
 "map_3d_mode_description" = "Berühren Sie die Karte mit zwei Fingern und bewegen Sie sie nach oben und unten, um die Kartenneigung anzupassen.";
 "map_3d_mode_hint" = "Durch langes Tippen auf die Schaltfläche kann die Position der Schaltfläche geändert werden.";
+"free_favorites_backup_description" = "Registrieren Sie sich in OsmAnd Cloud, um ein kostenloses Backup Ihrer Favoriten und Einstellungen zu erhalten.";
+"free_favorites_backup" = "Kostenloses Backup ihrer Favoriten";
+"banner_payment_free_backup_settings_title" = "Kostenloses Backup ihrer Einstellungen";
+"get_osmand_cloud" = "Holen Sie sich OsmAnd Cloud";
+"free_account" = "Kostenloses Konto";

@@ -14,8 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SceneDelegate : UIResponder <UIWindowSceneDelegate>
 
-@property (strong, nonatomic) UIWindow * window;
-@property (strong, nonatomic, readonly) OARootViewController* rootViewController;
+@property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic, readonly) OARootViewController *rootViewController;
+@property (strong, nonatomic, nullable) NSURL *loadedURL;
 
 - (BOOL)openURL:(NSURL *)url;
 

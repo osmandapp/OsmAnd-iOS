@@ -61,16 +61,7 @@
 @end
 
 @implementation SceneDelegate
-{
-    id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol> _app;
-    
-    UIBackgroundTaskIdentifier _appInitTask;
-    NSURL *_loadedURL;
-    NSTimer *_checkUpdatesTimer;
-    NSOperationQueue *_dataFetchQueue;
-    BOOL _appInitDone;
-    BOOL _appInitializing;
-}
+
 
 @synthesize window = _window;
 @synthesize rootViewController = _rootViewController;
@@ -81,9 +72,6 @@
     if (!windowScene) {
         return;
     }
-    self.window = [[UIWindow alloc] initWithWindowScene:windowScene];
-    self.window.rootViewController = [[OALaunchScreenViewController alloc] init];
-    [self.window makeKeyAndVisible];
     
     if (connectionOptions.URLContexts.count > 0) {
         NSURL *url = [connectionOptions.URLContexts allObjects].firstObject.URL;
@@ -99,180 +87,55 @@
             }
         }
     }
-
-    [self initialize];
-}
-
-- (void)sceneDidBecomeActive:(UIScene *)scene
-{
-    if (_appInitDone)
-    {
-        _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesInterval target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
-        [_app onApplicationDidBecomeActive];
-    }
-}
-
-- (void)sceneWillResignActive:(UIScene *)scene
-{
-    if (_appInitDone)
-        [_app onApplicationWillResignActive];
-}
-
-
-- (void)sceneWillEnterForeground:(UIScene *)scene
-{
-    if (_appInitDone)
-        [_app onApplicationWillEnterForeground];
-    else
-        [self initialize];
-}
-
-- (void)sceneDidEnterBackground:(UIScene *)scene
-{
-    if (_checkUpdatesTimer)
-    {
-        [_checkUpdatesTimer invalidate];
-        _checkUpdatesTimer = nil;
-    }
-    if (_appInitDone)
-        [_app onApplicationDidEnterBackground];
-    
-    [BGTaskScheduler.sharedScheduler cancelAllTaskRequests];
-    OAAppDelegate *appDelegate = (OAAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate scheduleBackgroundDataFetch];
-}
-
-- (BOOL) initialize
-{
-    if (_appInitDone || _appInitializing)
-        return YES;
-
-    _appInitializing = YES;
-
-    NSLog(@"SceneDelegate initialize start");
-
-    // Configure device
-    UIDevice* device = [UIDevice currentDevice];
-    [device beginGeneratingDeviceOrientationNotifications];
-    device.batteryMonitoringEnabled = YES;
-    
-    // Create instance of OsmAnd application
-    _app = (id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol>)[OsmAndApp instance];
-    
-    _appInitTask = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"appInitTask" expirationHandler:^{
-        [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
-        _appInitTask = UIBackgroundTaskInvalid;
-    }];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        NSLog(@"SceneDelegate beginBackgroundTask");
-
-        // Initialize OsmAnd core
-        [_app initializeCore];
-
-        // Initialize application in background
-        //[_app initialize];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            // Initialize application in main thread
-            [_app initialize];
-
-            [self askReview];
-
-            // Update app execute counter
-            NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-            NSInteger execCount = [settings integerForKey:kAppExecCounter];
-            [settings setInteger:++execCount forKey:kAppExecCounter];
-            
-            if ([settings doubleForKey:kAppInstalledDate] == 0)
-                [settings setDouble:[[NSDate date] timeIntervalSince1970] forKey:kAppInstalledDate];
-            
-            [settings synchronize];
-            
-            // Create root view controller
-            _rootViewController = [[OARootViewController alloc] init];
-            self.window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
-            
-            BOOL mapInstalled = NO;
-            for (const auto& resource : _app.resourcesManager->getLocalResources())
-            {
-                if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
-                {
-                    mapInstalled = YES;
-                    break;
-                }
-            }
-            // Show intro screen
-            if (execCount == 1 || !mapInstalled)
-            {
-                OAFirstUsageWelcomeController* welcome = [[OAFirstUsageWelcomeController alloc] init];
-                [self.rootViewController.navigationController pushViewController:welcome animated:NO];
-            }
-            
-            if (_loadedURL)
-            {
-                [self openURL:_loadedURL];
-                _loadedURL = nil;
-            }
-            [OAUtilities clearTmpDirectory];
-
-            [self requestUpdatesOnNetworkReachable];
-
-            _appInitDone = YES;
-            _appInitializing = NO;
-            
-            [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
-            _appInitTask = UIBackgroundTaskInvalid;
-
-            NSLog(@"SceneDelegate endBackgroundTask");
-
-            // Check for updates every hour when the app is in the foreground
-            _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesInterval target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
-            
-            if (_app.carPlayActive) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"kAppInitDone" object:self];
-            }
-        });
-    });
-    
-    NSLog(@"SceneDelegate initialize finish");
-    return YES;
-}
-
-- (void) requestUpdatesOnNetworkReachable
-{
-    [AFNetworkReachabilityManager.sharedManager startMonitoring];
-    [AFNetworkReachabilityManager.sharedManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-        [NSNotificationCenter.defaultCenter postNotificationName:kReachabilityChangedNotification object:nil];
-
-        if (status == AFNetworkReachabilityStatusReachableViaWWAN || status == AFNetworkReachabilityStatusReachableViaWiFi)
-        {
-            [_app checkAndDownloadOsmAndLiveUpdates];
-            [_app checkAndDownloadWeatherForecastsUpdates];
+    [[self appDelegate] initialize:^(InitStep step) {
+        switch (step) {
+            case InitStepStart:
+                _window = [[UIWindow alloc] initWithWindowScene:windowScene];
+                _window.rootViewController = [OALaunchScreenViewController new];
+                [_window makeKeyAndVisible];
+                [self appDelegate].savedWindow = _window;
+                break;
+            case InitStepRestoreSession:
+                _window = [[UIWindow alloc] initWithWindowScene:windowScene];
+                _window.rootViewController = [self appDelegate].savedWindow.rootViewController;
+                [_window makeKeyAndVisible];
+                break;
+            case InitStepSetupRoot:
+                _rootViewController = [OARootViewController new];
+                _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
+                break;
+            case InitStepFirstLaunch:
+                [_rootViewController.navigationController pushViewController:[OAFirstUsageWelcomeController new] animated:NO];
+                break;
         }
     }];
 }
 
-- (void) askReview
+- (void)sceneDidBecomeActive:(UIScene *)scene
 {
-    NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
-    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-    double appInstalledTime = [settings doubleForKey:kAppInstalledDate];
-    int appInstalledDays = (int)((currentTime - appInstalledTime) / (24 * 60 * 60));
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    BOOL isReviewed = [userDefaults boolForKey:@"isReviewed"];
-    if (appInstalledDays < 15 || appInstalledDays > 45)
-        return;
-    if (!isReviewed)
-    {
-        [SKStoreReviewController requestReview];
-        [userDefaults setBool:true forKey:@"isReviewed"];
-    }
+    [[self appDelegate] applicationDidBecomeActive];
 }
 
-- (BOOL) openURL:(NSURL *)url
+- (void)sceneWillResignActive:(UIScene *)scene
+{
+    [[self appDelegate] applicationWillResignActive];
+}
+
+- (void)sceneWillEnterForeground:(UIScene *)scene
+{
+    [[self appDelegate] applicationWillEnterForeground];
+}
+
+- (void)sceneDidEnterBackground:(UIScene *)scene
+{
+    [[self appDelegate] applicationDidEnterBackground];
+}
+
+- (OAAppDelegate *)appDelegate {
+    return (OAAppDelegate *)[[UIApplication sharedApplication] delegate];
+}
+
+- (BOOL)openURL:(NSURL *)url
 {
     if (_rootViewController)
     {
@@ -287,12 +150,12 @@
     }
     else
     {
-        _loadedURL = url;
+        self.loadedURL = url;
         return NO;
     }
 }
 
-- (BOOL) handleIncomingActionsURL:(NSURL *)url
+- (BOOL)handleIncomingActionsURL:(NSURL *)url
 {
     // osmandmaps://?lat=45.6313&lon=34.9955&z=8&title=New+York
     if (_rootViewController && [url.scheme.lowercaseString isEqualToString:kOsmAndActionScheme])
@@ -323,14 +186,14 @@
     return NO;
 }
 
-- (BOOL) handleIncomingFileURL:(NSURL *)url
+- (BOOL)handleIncomingFileURL:(NSURL *)url
 {
     if (_rootViewController && [url.scheme.lowercaseString isEqualToString:kFileScheme])
         return [_rootViewController handleIncomingURL:url];
     return NO;
 }
 
-- (BOOL) handleIncomingNavigationURL:(NSURL *)url
+- (BOOL)handleIncomingNavigationURL:(NSURL *)url
 {
     NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:YES];
     NSArray<NSURLQueryItem *> *queryItems = components.queryItems;
@@ -423,7 +286,7 @@
     return NO;
 }
 
-- (BOOL) handleIncomingMoveMapToLocationURL:(NSURL *)url
+- (BOOL)handleIncomingMoveMapToLocationURL:(NSURL *)url
 {
     NSString *pathPrefix = @"/map#";
     NSInteger pathStartIndex = [url.absoluteString indexOf:pathPrefix];
@@ -442,7 +305,7 @@
     return NO;
 }
 
-- (BOOL) handleIncomingOpenLocationMenuURL:(NSURL *)url
+- (BOOL)handleIncomingOpenLocationMenuURL:(NSURL *)url
 {
     if ([OAUtilities isOsmAndGoUrl:url])
     {
@@ -478,7 +341,7 @@
     return NO;
 }
 
-- (BOOL) handleIncomingTileSourceURL:(NSURL *)url
+- (BOOL)handleIncomingTileSourceURL:(NSURL *)url
 {
     if (_rootViewController && [OAUtilities isOsmAndSite:url] && [OAUtilities isPathPrefix:url pathPrefix:@ "/add-tile-source"])
     {
@@ -491,7 +354,7 @@
     return NO;
 }
 
-- (BOOL) handleIncomingOsmAndCloudURL:(NSURL *)url
+- (BOOL)handleIncomingOsmAndCloudURL:(NSURL *)url
 {
     if (![OAUtilities isOsmAndSite:url] || ![OAUtilities isPathPrefix:url pathPrefix:@ "/premium/device-registration"])
         return NO;
@@ -526,7 +389,7 @@
     return YES;
 }
 
-- (void) moveMapToLat:(double)lat lon:(double)lon zoom:(int)zoom withTitle:(NSString *)title
+- (void)moveMapToLat:(double)lat lon:(double)lon zoom:(int)zoom withTitle:(NSString *)title
 {
     Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -538,18 +401,12 @@
             state.target31 = pos31;
             state.zoom = zoom;
             state.azimuth = 0.0f;
-            _app.initialURLMapState = state;
+            [OsmAndApp instance].initialURLMapState = state;
             return;
         }
 
         [_rootViewController.mapPanel moveMapToLat:lat lon:lon zoom:zoom withTitle:title];
     });
-}
-
-- (void) performUpdatesCheck
-{
-    [_app checkAndDownloadOsmAndLiveUpdates];
-    [_app checkAndDownloadWeatherForecastsUpdates];
 }
 
 - (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts

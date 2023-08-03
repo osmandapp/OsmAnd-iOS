@@ -620,7 +620,7 @@
 "speak_cameras" = "Камеры контроля скорости";
 "speak_traffic_warnings" = "Дорожные предупреждения";
 "voice_pref_title" = "Голос";
-"map_widget_compass" = "Компас / режим ориентации";
+"map_widget_compass" = "Компас";
 "map_widget_next_turn" = "Следующий поворот";
 "rotate_map_to" = "Ориентация карты";
 "rotate_map_compass_opt" = "по направлению компаса";
@@ -1692,7 +1692,7 @@
 "select_nav_profile_dialog_message" = "«Режим навигации» определяет правила расчёта маршрутов с использованием автономных или онлайн-маршрутизаторов.";
 "change_map_behavior" = "Изменение поведения карты во время навигации";
 "map_during_navigation" = "Карта во время навигации";
-"vehicle_parameters" = "Физические параметры";
+"vehicle_parameters" = "Параметры транспортного средства";
 "screen_alerts" = "Экранные оповещения";
 "voice_anounces" = "Голосовые анонсы";
 "downloading" = "Скачивание";
@@ -1891,7 +1891,7 @@
 "profile_type_osmand_string" = "Профиль OsmAnd";
 "quick_action_remove_next_destination_descr" = "Следующая точка маршрута будет удалена. Если это конечный пункт, навигация завершится.";
 "gpx_export_failed" = "Не удалось сохранить созданный маршрут";
-"shared_string_visible" = "На экране";
+"shared_string_visible" = "Visible";
 "hide_compass_ruler" = "Скрыть компас-линейку";
 "show_compass_ruler" = "Показать компас-линейку";
 "address_search_desc" = "Поиск по адресу";
@@ -2459,9 +2459,9 @@
 "shared_string_delete_all" = "Удалить все";
 "in_grace_period" = "В льготный период";
 "on_hold" = "Приостановлено";
-"compass_always_visible" = "Всегда на экране";
+"compass_always_visible" = "Всегда виден";
 "shared_string_paused" = "Приостановлено";
-"compass_visible_if_map_rotated" = "На экране, если карта повернута";
+"compass_visible_if_map_rotated" = "Visible if map is rotated";
 "data_settings" = "Данные";
 "shared_string_undefined" = "Неопределённо";
 "map_widget_rendering_fps" = "FPS отрисовки карты";
@@ -2681,7 +2681,7 @@
 "weather_forecast" = "Прогноз погоды";
 "speak_route_recalculation" = "Пересчёт маршрута";
 "speak_gps_signal_status" = "Потеря связи с GPS";
-"speak_route_deviation" = "Отклонение от маршрута";
+"speak_route_deviation" = "Оповещать об отклонении от маршрута";
 "announce_when_exceeded" = "Оповещать о превышении";
 "announcement_time_title" = "Время оповещения";
 "announcement_time_descr" = "Время голосового оповещения определяется его типом, текущей скоростью навигации и скоростью навигации по умолчанию.";

@@ -2559,7 +2559,7 @@
 "position_on_map_bottom" = "Внизу";
 "contact_support" = "Служба поддержки";
 "shared_string_not_included" = "Не включает";
-"duration_ago" = "%@назад";
+"duration_ago" = "%@ назад";
 "rendering_attr_showMtbScaleIMBATrails_name" = "Показать маршруты MTB IMBA";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "backup_delete_all_data" = "Удалить все мои данные";

@@ -206,7 +206,7 @@
 {
 }
 
-- (void)onButtonPressed:(OAGPXBaseTableData *)tableData
+- (void)onButtonPressed:(OAGPXBaseTableData *)tableData sourceView:(UIView *)sourceView
 {
     if ([tableData.key isEqualToString:@"control_appearance"] && self.trackMenuDelegate)
         [self.trackMenuDelegate openAppearance];

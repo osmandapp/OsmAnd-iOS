@@ -600,7 +600,7 @@
 {
 }
 
-- (void)onButtonPressed:(OAGPXBaseTableData *)tableData
+- (void)onButtonPressed:(OAGPXBaseTableData *)tableData sourceView:(UIView *)sourceView
 {
     if ([tableData.key hasPrefix:@"segment_buttons_"] && self.trackMenuDelegate)
     {

@@ -190,7 +190,7 @@
                 [OAWikiArticleHelper showWikiArticle:@[[[CLLocation alloc] initWithLatitude:_poi.latitude longitude:_poi.longitude]] url:newUrl onStart:^{
                     [spinner startAnimating];
                     [self presentViewController:alert animated:YES completion:nil];
-                } sourceView:nil sourceFrame:CGRectZero onComplete:^{
+                } sourceView:webView onComplete:^{
                     [alert.view removeSpinner];
                     [alert dismissViewControllerAnimated:YES completion:nil];
                     alert = nil;
@@ -199,7 +199,7 @@
             }
             else if ([newUrl hasPrefix:kPagePrefixHttp] || [newUrl hasPrefix:kPagePrefixHttps])
             {
-                [OAWikiArticleHelper warnAboutExternalLoad:newUrl];
+                [OAWikiArticleHelper warnAboutExternalLoad:newUrl sourceView:webView];
                 decisionHandler(WKNavigationActionPolicyCancel);
             }
             else

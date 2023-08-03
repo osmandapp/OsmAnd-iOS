@@ -476,7 +476,7 @@
 {
 }
 
-- (void)onButtonPressed:(OAGPXBaseTableData *)tableData
+- (void)onButtonPressed:(OAGPXBaseTableData *)tableData sourceView:(UIView *)sourceView
 {
     if ([tableData.key isEqualToString:@"add_description"] && self.trackMenuDelegate)
     {
@@ -492,11 +492,11 @@
     }
     else if ([tableData.key isEqualToString:@"wiki"] && self.trackMenuDelegate)
     {
-        [self.trackMenuDelegate openURL:((OAGPXTableCellData *) tableData).desc];
+        [self.trackMenuDelegate openURL:((OAGPXTableCellData *) tableData).desc sourceView:sourceView];
     }
     else if ([tableData.key isEqualToString:@"website"] && self.trackMenuDelegate)
     {
-        [self.trackMenuDelegate openURL:((OAGPXTableCellData *) tableData).desc];
+        [self.trackMenuDelegate openURL:((OAGPXTableCellData *) tableData).desc sourceView:sourceView];
     }
 }
 

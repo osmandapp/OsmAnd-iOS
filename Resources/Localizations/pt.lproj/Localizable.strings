@@ -3009,3 +3009,8 @@
 "no_widgets_here_yet" = "Ainda sem widgets aqui";
 "no_widgets_descr" = "Adicionar um ou mais widgets da lista de widgets disponíveis.";
 "reset_all_settings_desc" = "Repor todas as configurações de origem?";
+"free_favorites_backup" = "Cópia de segurança gratuita de favoritos";
+"banner_payment_free_backup_settings_title" = "Cópia de segurança gratuita das configurações";
+"get_osmand_cloud" = "Obter o OsmAnd Cloud";
+"free_account" = "Conta gratuita";
+"free_favorites_backup_description" = "Resgiste-se no OsmAnd Cloud para obter gratuitamente uma cópia de segurança dos seus favoritos e configurações";

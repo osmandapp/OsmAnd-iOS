@@ -10,4 +10,6 @@
 
 @interface OAAppDelegate : UIResponder <UIApplicationDelegate>
 
+- (void)scheduleBackgroundDataFetch;
+
 @end

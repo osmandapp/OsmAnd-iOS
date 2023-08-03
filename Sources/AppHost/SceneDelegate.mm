@@ -56,8 +56,6 @@
 
 #define kCheckUpdatesInterval 3600
 
-#define kFetchDataUpdatesId @"net.osmand.fetchDataUpdates"
-
 @interface SceneDelegate()
 
 @end
@@ -80,26 +78,12 @@
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions
 {
     UIWindowScene *windowScene = (UIWindowScene *)scene;
+    if (!windowScene) {
+        return;
+    }
     self.window = [[UIWindow alloc] initWithWindowScene:windowScene];
     self.window.rootViewController = [[OALaunchScreenViewController alloc] init];
     [self.window makeKeyAndVisible];
-    
-    if (!_dataFetchQueue)
-    {
-        // Set the background fetch
-        _dataFetchQueue = [[NSOperationQueue alloc] init];
-        @try
-        {
-            NSLog(@"BGTaskScheduler registerForTaskWithIdentifier");
-            [BGTaskScheduler.sharedScheduler registerForTaskWithIdentifier:kFetchDataUpdatesId usingQueue:nil launchHandler:^(__kindof BGTask * _Nonnull task) {
-                [self handleBackgroundDataFetch:(BGProcessingTask *)task];
-            }];
-        }
-        @catch (NSException *e)
-        {
-            NSLog(@"Failed to schedule background fetch. Reason: %@", e.reason);
-        }
-    }
     
     if (connectionOptions.URLContexts.count > 0) {
         NSURL *url = [connectionOptions.URLContexts allObjects].firstObject.URL;
@@ -117,20 +101,6 @@
     }
 
     [self initialize];
-}
-
-- (void)sceneDidDisconnect:(UIScene *)scene
-{
-    [_app shutdown];
-    OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
-    [mapVc onApplicationDestroyed];
-    // Release OsmAnd core
-    OsmAnd::ReleaseCore();
-    
-    // Deconfigure device
-    UIDevice* device = [UIDevice currentDevice];
-    device.batteryMonitoringEnabled = NO;
-    [device endGeneratingDeviceOrientationNotifications];
 }
 
 - (void)sceneDidBecomeActive:(UIScene *)scene
@@ -168,7 +138,8 @@
         [_app onApplicationDidEnterBackground];
     
     [BGTaskScheduler.sharedScheduler cancelAllTaskRequests];
-    [self scheduleBackgroundDataFetch];
+    OAAppDelegate *appDelegate = (OAAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate scheduleBackgroundDataFetch];
 }
 
 - (BOOL) initialize
@@ -189,7 +160,6 @@
     _app = (id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol>)[OsmAndApp instance];
     
     _appInitTask = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"appInitTask" expirationHandler:^{
-        
         [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
         _appInitTask = UIBackgroundTaskInvalid;
     }];
@@ -580,41 +550,6 @@
 {
     [_app checkAndDownloadOsmAndLiveUpdates];
     [_app checkAndDownloadWeatherForecastsUpdates];
-}
-
-- (void) handleBackgroundDataFetch:(BGProcessingTask *)task
-{
-    [self scheduleBackgroundDataFetch];
-    
-    OAFetchBackgroundDataOperation *operation = [[OAFetchBackgroundDataOperation alloc] init];
-    [task setExpirationHandler:^{
-        [operation cancel];
-    }];
-    __weak OAFetchBackgroundDataOperation *weakOperation = operation;
-    [operation setCompletionBlock:^{
-        [task setTaskCompletedWithSuccess:!weakOperation.isCancelled];
-    }];
-    
-    [_dataFetchQueue addOperation:operation];
-}
-
-- (void) scheduleBackgroundDataFetch
-{
-    BGProcessingTaskRequest *request = [[BGProcessingTaskRequest alloc] initWithIdentifier:kFetchDataUpdatesId];
-    request.requiresNetworkConnectivity = YES;
-    // Check for updates every hour
-    request.earliestBeginDate = [NSDate dateWithTimeIntervalSinceNow:kCheckUpdatesInterval];
-    @try
-    {
-        NSLog(@"BGTaskScheduler submitTaskRequest");
-        NSError *error = nil;
-        // e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"net.osmand.fetchDataUpdates"]
-        [BGTaskScheduler.sharedScheduler submitTaskRequest:request error:&error];
-        if (error)
-            NSLog(@"Could not schedule app refresh: %@", error.description);
-    } @catch (NSException *e) {
-        NSLog(@"Could not schedule app refresh: %@", e.reason);
-    }
 }
 
 - (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext *> *)URLContexts

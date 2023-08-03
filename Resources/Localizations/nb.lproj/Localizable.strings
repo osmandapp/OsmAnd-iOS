@@ -2603,3 +2603,4 @@
 "rendering_value_caiScale_description" = "Club Alpino Italiano (Italiensk alpinforening)";
 "rendering_value_sacScale_description" = "Sveitsisk alpinklubb";
 "map_3d_mode_hint" = "Med langt trykk på knappen kan knappeposisjon endres.";
+"angular_measeurement_descr" = "Endre hva asimut måles i.";

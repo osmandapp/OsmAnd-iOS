@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Lhe-yk-sVD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Lhe-yk-sVD">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -44,7 +44,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="Lhe-yk-sVD" kind="push" identifier="openInstalledResourcesSegue" id="dMO-Tr-KOi"/>
+                                            <segue destination="Lhe-yk-sVD" kind="show" identifier="openInstalledResourcesSegue" id="dMO-Tr-KOi"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="outdatedResourcesSubmenuCell" textLabel="Iuf-YW-Fq0" detailTextLabel="tZN-sY-UAX" style="IBUITableViewCellStyleSubtitle" id="VZF-Hd-TvM">
@@ -71,7 +71,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="w8S-Nb-zGN" kind="push" identifier="openOutdatedResourcesSegue" id="uGo-KX-98T"/>
+                                            <segue destination="w8S-Nb-zGN" kind="show" identifier="openOutdatedResourcesSegue" id="uGo-KX-98T"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="subregionCell" textLabel="D8A-PV-RHr" detailTextLabel="imh-ai-plr" style="IBUITableViewCellStyleSubtitle" id="3fb-BT-U8K">
@@ -98,7 +98,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="Lhe-yk-sVD" kind="push" identifier="openSubregionSegue" id="f3E-yf-8Vo"/>
+                                            <segue destination="Lhe-yk-sVD" kind="show" identifier="openSubregionSegue" id="f3E-yf-8Vo"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="localResourceCell" textLabel="aFw-z6-EH8" detailTextLabel="3vQ-wj-3nf" style="IBUITableViewCellStyleSubtitle" id="8fx-0s-lN4">
@@ -126,7 +126,7 @@
                                         </tableViewCellContentView>
                                         <color key="tintColor" red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
-                                            <segue destination="huq-qE-lWI" kind="push" identifier="openDetailsSegue" id="u69-45-Dwv"/>
+                                            <segue destination="huq-qE-lWI" kind="show" identifier="openDetailsSegue" id="u69-45-Dwv"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -152,7 +152,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wb8-1N-k7N" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1811.2" y="465.96701649175418"/>
+            <point key="canvasLocation" x="-2897.9200000000001" y="419.16073447534114"/>
         </scene>
         <!--Updates-->
         <scene sceneID="bH0-Wi-w2f">
@@ -162,26 +162,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="50" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="vN3-1c-cfU" userLabel="tableView">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="10" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="vN3-1c-cfU" userLabel="tableView">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="liveUpdatesCell" textLabel="oMf-rx-iRa" detailTextLabel="nqE-dZ-YsZ" style="IBUITableViewCellStyleSubtitle" id="nHz-ID-XKd">
-                                        <rect key="frame" x="0.0" y="55.5" width="375" height="50"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="375" height="57.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nHz-ID-XKd" id="3UP-ni-npE">
-                                            <rect key="frame" x="0.0" y="0.0" width="348.5" height="50"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="348.5" height="57.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" id="oMf-rx-iRa">
-                                                    <rect key="frame" x="16" y="8" width="33" height="20.5"/>
+                                                    <rect key="frame" x="16" y="9" width="33" height="20.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" id="nqE-dZ-YsZ">
-                                                    <rect key="frame" x="16" y="28.5" width="44" height="14.5"/>
+                                                    <rect key="frame" x="16" y="32.5" width="44" height="14.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                                     <color key="textColor" red="0.50025969739999998" green="0.50024467709999998" blue="0.50025320049999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -190,7 +190,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="ywk-bf-9Aq" kind="push" identifier="openLiveUpdatesSegue" id="nug-7T-dYU"/>
+                                            <segue destination="ywk-bf-9Aq" kind="show" identifier="openLiveUpdatesSegue" id="nug-7T-dYU"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -204,12 +204,11 @@
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="vN3-1c-cfU" firstAttribute="top" secondItem="CML-Vt-67j" secondAttribute="top" id="Fsg-2P-659"/>
-                            <constraint firstItem="gzt-J4-M2N" firstAttribute="trailing" secondItem="vN3-1c-cfU" secondAttribute="trailing" id="GWg-B8-LLx"/>
-                            <constraint firstItem="gzt-J4-M2N" firstAttribute="bottom" secondItem="vN3-1c-cfU" secondAttribute="bottom" id="apc-Ka-e7C"/>
+                            <constraint firstAttribute="trailing" secondItem="vN3-1c-cfU" secondAttribute="trailing" id="GWg-B8-LLx"/>
+                            <constraint firstAttribute="bottom" secondItem="vN3-1c-cfU" secondAttribute="bottom" id="apc-Ka-e7C"/>
                             <constraint firstItem="vN3-1c-cfU" firstAttribute="leading" secondItem="CML-Vt-67j" secondAttribute="leading" id="d79-AJ-xpR"/>
                         </constraints>
                     </view>
-                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" id="lU9-tG-nZJ"/>
                     <connections>
                         <outlet property="tableView" destination="vN3-1c-cfU" id="sSL-OD-y2i"/>
@@ -217,7 +216,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cmf-Ht-NON" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-887" y="466"/>
+            <point key="canvasLocation" x="-1419.2" y="419.19040479760122"/>
         </scene>
         <!--Details-->
         <scene sceneID="FxH-qT-l4s">
@@ -294,7 +293,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6t8-o6-bo5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1734" y="1343"/>
+            <point key="canvasLocation" x="-2774.4000000000001" y="1208.095952023988"/>
         </scene>
         <!--Live Updates-->
         <scene sceneID="Kmq-kl-M3u">
@@ -329,7 +328,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x2T-oM-adT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="22" y="466"/>
+            <point key="canvasLocation" x="35.200000000000003" y="419.19040479760122"/>
         </scene>
     </scenes>
 </document>

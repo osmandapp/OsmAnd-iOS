@@ -32,13 +32,12 @@
     NSString *_lang;
     NSString *_name;
     UIView *_sourceView;
-    CGRect _sourceFrame;
     BOOL _isCanceled;
     OAWikiArticleSearchTaskBlockType _onStart;
     OAWikiArticleSearchTaskBlockType _onComplete;
 }
 
-- (instancetype) initWithLocations:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart sourceView:(UIView *)sourceView sourceFrame:(CGRect)sourceFrame onComplete:(void (^)())onComplete
+- (instancetype) initWithLocations:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart sourceView:(UIView *)sourceView onComplete:(void (^)())onComplete
 {
     self = [super init];
     if (self)
@@ -49,7 +48,6 @@
         _onComplete = onComplete;
         _isCanceled = NO;
         _sourceView = sourceView;
-        _sourceFrame = sourceFrame;
     }
     return self;
 }
@@ -116,7 +114,7 @@
         if (foundRepository && results.count == 0)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [OAWikiArticleHelper showHowToOpenWikiAlert:foundRepository url:_url sourceView:_sourceView sourceFrame:_sourceFrame];
+                [OAWikiArticleHelper showHowToOpenWikiAlert:foundRepository url:_url sourceView:_sourceView];
             });
         }
     }
@@ -135,7 +133,7 @@
     }
     else
     {
-        [OAWikiArticleHelper warnAboutExternalLoad:_url];
+        [OAWikiArticleHelper warnAboutExternalLoad:_url sourceView:_sourceView];
     }
 }
 
@@ -253,18 +251,18 @@
     return nil;
 }
 
-+ (void) showWikiArticle:(CLLocation *)location url:(NSString *)url sourceView:(UIView *)sourceView sourceFrame:(CGRect)sourceFrame
++ (void) showWikiArticle:(CLLocation *)location url:(NSString *)url sourceView:(UIView *)sourceView
 {
-    [self showWikiArticle:@[location] url:url onStart:nil sourceView:sourceView sourceFrame:sourceFrame onComplete:nil];
+    [self showWikiArticle:@[location] url:url onStart:nil sourceView:sourceView onComplete:nil];
 }
 
-+ (void) showWikiArticle:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart sourceView:(UIView *)sourceView sourceFrame:(CGRect)sourceFrame onComplete:(void (^)())onComplete
++ (void) showWikiArticle:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart sourceView:(UIView *)sourceView onComplete:(void (^)())onComplete
 {
-    OAWikiArticleSearchTask *task = [[OAWikiArticleSearchTask alloc] initWithLocations:locations url:url onStart:onStart sourceView:sourceView sourceFrame:sourceFrame onComplete:onComplete];
+    OAWikiArticleSearchTask *task = [[OAWikiArticleSearchTask alloc] initWithLocations:locations url:url onStart:onStart sourceView:sourceView onComplete:onComplete];
     [task execute];
 }
 
-+ (void) showHowToOpenWikiAlert:(OARepositoryResourceItem *)item url:(NSString *)url sourceView:(UIView *)sourceView sourceFrame:(CGRect)sourceFrame
++ (void) showHowToOpenWikiAlert:(OARepositoryResourceItem *)item url:(NSString *)url sourceView:(UIView *)sourceView
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"how_to_open_wiki_title")
                                                                    message:OALocalizedString(url)
@@ -305,19 +303,23 @@
     
     UIPopoverPresentationController *popPresenter = [alert popoverPresentationController];
     popPresenter.sourceView = sourceView;
-    popPresenter.sourceRect = sourceFrame;
-    popPresenter.permittedArrowDirections = UIPopoverArrowDirectionUp;
+    popPresenter.permittedArrowDirections = UIPopoverArrowDirectionAny;
     
     [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
 }
 
-+ (void) warnAboutExternalLoad:(NSString *)url
++ (void) warnAboutExternalLoad:(NSString *)url sourceView:(UIView *)sourceView
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:url message:OALocalizedString(@"online_webpage_warning") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [OAUtilities callUrl:url];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+
+    UIPopoverPresentationController *popPresenter = [alert popoverPresentationController];
+    popPresenter.sourceView = sourceView;
+    popPresenter.permittedArrowDirections = UIPopoverArrowDirectionAny;
+
     [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
 }
 

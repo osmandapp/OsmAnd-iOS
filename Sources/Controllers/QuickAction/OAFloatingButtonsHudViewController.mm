@@ -81,6 +81,8 @@
     [_quickActionFloatingButton addGestureRecognizer:_quickActionsButtonDragRecognizer];
     _quickActionFloatingButton.accessibilityLabel = OALocalizedString(@"configure_screen_quick_action");
     
+    _map3dModeFloatingButton.alpha = 0;
+    
     [self onMap3dModeUpdated];
     [self setQuickActionButtonMargin];
     

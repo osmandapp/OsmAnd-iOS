@@ -1495,8 +1495,7 @@ typedef enum
         {
             if (isNone)
             {
-                [_mapViewController hideContextPinMarker];
-                [self hideScrollableHudViewController];
+                [self.scrollableHudViewController hide];
                 return NO;
             }
             else if (!isWaypoint)

@@ -1659,7 +1659,7 @@
     }];
 }
 
-- (void)openURL:(NSString *)url
+- (void)openURL:(NSString *)url sourceView:(UIView *)sourceView
 {
     if ([url containsString:OAWikiAlgorithms.wikipediaDomain])
     {
@@ -1675,7 +1675,7 @@
             {
                 [OAWikiArticleHelper showWikiArticle:[self collectTrackPoints] url:url onStart:^{
                     [progressHUD show:YES];
-                } sourceView:nil sourceFrame:CGRectZero onComplete:^{
+                } sourceView:sourceView onComplete:^{
                     [progressHUD hide:YES];
                 }];
             }
@@ -2510,9 +2510,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
-    
-    [_uiBuilder onButtonPressed:cellData];
-
+    [_uiBuilder onButtonPressed:cellData sourceView:[tableView cellForRowAtIndexPath:indexPath]];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -2549,7 +2547,7 @@
     UIButton *button = (UIButton *) sender;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
-    [_uiBuilder onButtonPressed:cellData];
+    [_uiBuilder onButtonPressed:cellData sourceView:[self.tableView cellForRowAtIndexPath:indexPath]];
 }
 
 - (void)cellButtonPressed:(id)sender
@@ -2567,7 +2565,7 @@
                 BOOL isLeftButton = [recognizer locationInView:self.view].x < self.tableView.frame.size.width / 2;
                 BOOL isRTL = [button isDirectionRTL];
                 cellData.values[@"is_left_button_selected"] = @(((isLeftButton && !isRTL) || (!isLeftButton && isRTL)));
-                [_uiBuilder onButtonPressed:cellData];
+                [_uiBuilder onButtonPressed:cellData sourceView:button];
                 [cellData.values removeObjectForKey:@"is_left_button_selected"];
                 break;
             }
@@ -2575,7 +2573,7 @@
     }
     else if (![cellData.key hasPrefix:@"cell_waypoints_group_"])
     {
-        [_uiBuilder onButtonPressed:cellData];
+        [_uiBuilder onButtonPressed:cellData sourceView:button];
     }
 }
 

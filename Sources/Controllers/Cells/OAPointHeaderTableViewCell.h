@@ -12,6 +12,7 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *folderIcon;
 @property (weak, nonatomic) IBOutlet UILabel *groupTitle;
+@property (weak, nonatomic) IBOutlet UILabel *valueLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *arrowImage;
 @property (weak, nonatomic) IBOutlet UIButton *openCloseGroupButton;
 

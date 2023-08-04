@@ -92,7 +92,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     
     _downloadingCellHelper.fetchResourcesBlock = ^(){
         
-        NSArray<OAResourceItem *> *allSuggestedMaps = _plugin getSuggestedMaps;
+        NSArray<OAResourceItem *> *allSuggestedMaps = [_plugin getSuggestedMaps];
         NSMutableArray<OAResourceItem *> *regularMaps = [NSMutableArray new];
         NSMutableArray<OAResourceItem *> *srtmMaps = [NSMutableArray new];
         

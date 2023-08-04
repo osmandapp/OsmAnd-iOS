@@ -191,7 +191,9 @@
             OAResourceItem *subItem = [self getActiveItemForIndexPath:indexPath useDefautValue:NO];
             if (subItem.downloadTask != nil)
             {
-                [OAResourcesUIHelper offerCancelDownloadOf:subItem];
+                [OAResourcesUIHelper offerCancelDownloadOf:subItem onTaskStop:nil completionHandler:^(UIAlertController *alert) {
+                    [_hostViewController presentViewController:alert animated:YES completion:nil];
+                }];
             }
             else
             {
@@ -207,7 +209,7 @@
                         OADownloadMultipleResourceViewController *controller = [[OADownloadMultipleResourceViewController alloc] initWithResource:mapMultipleItems[indexPath.row]];
                         controller.delegate = self;
                         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-                        [OARootViewController.instance presentViewController:navigationController animated:YES completion:nil];
+                        [_hostViewController presentViewController:navigationController animated:YES completion:nil];
                     }
                 }
             }
@@ -217,7 +219,9 @@
             //Regular cell
             if (mapItem.downloadTask != nil)
             {
-                [OAResourcesUIHelper offerCancelDownloadOf:mapItem];
+                [OAResourcesUIHelper offerCancelDownloadOf:mapItem onTaskStop:nil completionHandler:^(UIAlertController *alert) {
+                    [_hostViewController presentViewController:alert animated:YES completion:nil];
+                }];
             }
             else if ([mapItem isKindOfClass:[OARepositoryResourceItem class]])
             {
@@ -301,7 +305,6 @@
             OATableSectionData *section = [tableDataModel sectionDataForIndex:sectionIndex];
             for (int rowIndex = 0; rowIndex < section.rowCount; rowIndex++)
             {
-                //OATableRowData *row = [section getRow:rowIndex];
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
                 if (_getResouceByIndexBlock)
                 {

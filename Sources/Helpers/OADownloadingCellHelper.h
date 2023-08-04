@@ -1,0 +1,42 @@
+//
+//  OADownloadingCellHelper.h
+//  OsmAnd
+//
+//  Created by nnngrach on 31.07.2023.
+//  Copyright © 2023 OsmAnd. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "OAAutoObserverProxy.h"
+
+@class OAResourceItem, OAMultipleResourceItem, OATableDataModel;
+
+typedef void(^ OAFetchResourcesBlock)();
+typedef OAResourceItem *(^ OAGetResouceByIndexBlock)(NSIndexPath *);
+typedef NSArray<NSArray <NSDictionary *> *> *(^ OAGetTableDataBlock)();
+typedef OATableDataModel *(^ OAGetTableModelBlock)();
+//typedef NSArray<OAMultipleResourceItem *> *(^ OAGetMultipleResourcesBlock)();
+typedef NSArray<OAResourceItem *> *(^ OAGetMultipleResourcesBlock)();
+
+
+@interface OADownloadingCellHelper : NSObject
+
+@property (nonatomic, copy) OAFetchResourcesBlock fetchResourcesBlock;
+@property (nonatomic, copy) OAGetResouceByIndexBlock getResouceByIndexBlock;
+@property (nonatomic, copy) OAGetTableDataBlock getTableDataBlock;
+@property (nonatomic, copy) OAGetTableModelBlock getTableDataModelBlock;
+@property (nonatomic, copy) OAGetMultipleResourcesBlock getMultipleResourcesBlock;
+
+@property (weak, nonatomic) UITableView *hostTableView;
+@property (weak, nonatomic) UIViewController *hostViewController;
+@property (weak, nonatomic) NSObject *hostDataLock;
+
+- (UITableViewCell *)setupCell:(OAResourceItem *)mapItem indexPath:(NSIndexPath *)indexPath;
+
+- (void)onItemClicked:(NSIndexPath *)indexPath;
+
+- (void)updateAvailableMaps;
+
+- (void) refreshMultipleDownloadTasks;
+
+@end

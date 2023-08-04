@@ -773,6 +773,11 @@ forcedUpdate:(BOOL)forcedUpdate
     _renderer->setSkyColor(skyColor);
 }
 
+- (void) setFogColor:(OsmAnd::FColorRGB)fogColor
+{
+    _renderer->setFogColor(fogColor);
+}
+
 - (void) allocateRenderAndFrameBuffers
 {
     OALog(@"[OAMapRendererView %p] Allocating render and frame buffers", self);

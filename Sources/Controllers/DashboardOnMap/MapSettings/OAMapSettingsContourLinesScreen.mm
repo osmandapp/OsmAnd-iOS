@@ -177,10 +177,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }];
     };
     
-    _downloadingCellHelper.getAllResourcesBlock = ^NSArray<OAMultipleResourceItem *> *{
-        return _mapMultipleItems;
-    };
-    
     _downloadingCellHelper.getResourceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
         
         NSDictionary *item = [weakself getItem:indexPath];

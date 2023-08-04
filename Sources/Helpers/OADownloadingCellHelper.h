@@ -12,7 +12,6 @@
 @class OAResourceItem, OAMultipleResourceItem, OATableDataModel;
 
 typedef void(^ OAFetchResourcesBlock)();
-typedef NSArray<OAResourceItem *> *(^ OAGetAllResourcesBlock)();
 typedef OAResourceItem *(^ OAGetResourceByIndexBlock)(NSIndexPath *);
 typedef NSArray<NSArray <NSDictionary *> *> *(^ OAGetTableDataBlock)();
 typedef OATableDataModel *(^ OAGetTableModelBlock)();
@@ -21,11 +20,9 @@ typedef OATableDataModel *(^ OAGetTableModelBlock)();
 @interface OADownloadingCellHelper : NSObject
 
 @property (nonatomic, copy) OAFetchResourcesBlock fetchResourcesBlock;
-@property (nonatomic, copy) OAGetAllResourcesBlock getAllResourcesBlock;
 @property (nonatomic, copy) OAGetResourceByIndexBlock getResourceByIndexBlock;
+@property (nonatomic, copy) OAGetTableModelBlock getTableDataModelBlock; 
 @property (nonatomic, copy) OAGetTableDataBlock getTableDataBlock;
-@property (nonatomic, copy) OAGetTableModelBlock getTableDataModelBlock;
-
 
 @property (weak, nonatomic) UITableView *hostTableView;
 @property (weak, nonatomic) UIViewController *hostViewController;

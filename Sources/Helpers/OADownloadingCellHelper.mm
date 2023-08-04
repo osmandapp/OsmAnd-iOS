@@ -203,13 +203,16 @@
                 }
                 else
                 {
-                    if (_getAllResourcesBlock)
+                    if (_getResourceByIndexBlock)
                     {
-                        NSArray<OAMultipleResourceItem *> *mapMultipleItems = _getAllResourcesBlock();
-                        OADownloadMultipleResourceViewController *controller = [[OADownloadMultipleResourceViewController alloc] initWithResource:mapMultipleItems[indexPath.row]];
-                        controller.delegate = self;
-                        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-                        [_hostViewController presentViewController:navigationController animated:YES completion:nil];
+                        OAMultipleResourceItem *item = (OAMultipleResourceItem *)_getResourceByIndexBlock(indexPath);
+                        if (item)
+                        {
+                            OADownloadMultipleResourceViewController *controller = [[OADownloadMultipleResourceViewController alloc] initWithResource:item];
+                            controller.delegate = self;
+                            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+                            [_hostViewController presentViewController:navigationController animated:YES completion:nil];
+                        }
                     }
                 }
             }
@@ -259,76 +262,6 @@
     } completion:nil];
 }
 
-- (void)refreshDownloadingContent:(NSString *)downloadTaskKey
-{
-    if (_getTableDataBlock)
-    {
-        __weak NSArray<NSArray <NSDictionary *> *> *tableData = _getTableDataBlock();
-        if (tableData)
-            [self refreshDownloadingContent:downloadTaskKey tableData:tableData];
-    }
-    else if (_getTableDataModelBlock)
-    {
-        __weak OATableDataModel *tableDataModel = _getTableDataModelBlock();
-        if (tableDataModel)
-            [self refreshDownloadingContent:downloadTaskKey tableDataModel:tableDataModel];
-    }
-}
-
-- (void)refreshDownloadingContent:(NSString *)downloadTaskKey tableData:(NSArray<NSArray <NSDictionary *> *> *)tableData
-{
-    @synchronized(_hostDataLock)
-    {
-        if (tableData)
-        {
-            for (int sectionIndex = 0; sectionIndex < tableData.count; sectionIndex++)
-            {
-                NSArray<NSDictionary *> *section = tableData[sectionIndex];
-                for (int rowIndex = 0; rowIndex < section.count; rowIndex++)
-                {
-                    OAResourceItem *item = section[rowIndex][@"item"];
-                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
-                    
-                    [self refreshDownloadingContent:downloadTaskKey mapItem:item indexPath:indexPath];
-                }
-            }
-        }
-    }
-}
-
-- (void)refreshDownloadingContent:(NSString *)downloadTaskKey tableDataModel:(OATableDataModel *)tableDataModel
-{
-    @synchronized(_hostDataLock)
-    {
-        for (int sectionIndex = 0; sectionIndex < tableDataModel.sectionCount; sectionIndex++)
-        {
-            OATableSectionData *section = [tableDataModel sectionDataForIndex:sectionIndex];
-            for (int rowIndex = 0; rowIndex < section.rowCount; rowIndex++)
-            {
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
-                if (_getResourceByIndexBlock)
-                {
-                    OAResourceItem *mapItem = _getResourceByIndexBlock(indexPath);
-                    if (mapItem)
-                        [self refreshDownloadingContent:downloadTaskKey mapItem:mapItem indexPath:indexPath];
-                }
-                
-            }
-        }
-    }
-}
-
-- (void)refreshDownloadingContent:(NSString *)downloadTaskKey mapItem:(OAResourceItem *)mapItem indexPath:(NSIndexPath *)indexPath
-{
-    if ([mapItem isKindOfClass:OAMultipleResourceItem.class])
-        mapItem = [self getActiveItemForIndexPath:indexPath useDefautValue:NO];
-    
-    if (mapItem && [[mapItem.downloadTask key] isEqualToString:downloadTaskKey])
-    {
-        [self updateDownloadingCellAtIndexPath:indexPath mapItem:mapItem];
-    }
-}
-
 - (void)updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath mapItem:(OAResourceItem *)mapItem
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -372,33 +305,41 @@
     }
 }
 
+- (void)refreshDownloadingContent:(NSString *)downloadTaskKey
+{
+    [self iterateAllCellsWithAction:^(OAResourceItem *item, NSIndexPath *indexPath) {
+        if ([item isKindOfClass:OAMultipleResourceItem.class])
+            item = [self getActiveItemForIndexPath:indexPath useDefautValue:NO];
+        
+        if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey])
+        {
+            [self updateDownloadingCellAtIndexPath:indexPath mapItem:item];
+        }
+    }];
+}
 
 - (void) refreshMultipleDownloadTasks
 {
-    if (_getAllResourcesBlock)
-    {
-        NSArray<OAResourceItem *> *items = _getAllResourcesBlock();
-        for (OAResourceItem *item in items)
+    [self iterateAllCellsWithAction:^(OAResourceItem *item, NSIndexPath *indexPath) {
+        if ([item isKindOfClass:OAMultipleResourceItem.class])
         {
-            if ([item isKindOfClass:OAMultipleResourceItem.class])
-            {
-                OAMultipleResourceItem *multipleItem = (OAMultipleResourceItem *)item;
-                for (OARepositoryResourceItem *resourceItem in multipleItem.items)
-                    resourceItem.downloadTask = [self getDownloadTaskFor:resourceItem.resource->id.toNSString()];
-            }
+            for (OARepositoryResourceItem *subitem in ((OAMultipleResourceItem *)item).items)
+                subitem.downloadTask = [self getDownloadTaskFor:subitem.resource->id.toNSString()];
         }
-    }
+    }];
 }
+
+#pragma mark - Helpers
 
 - (OAResourceItem *) getActiveItemForIndexPath:(NSIndexPath *)indexPath useDefautValue:(BOOL)useDefautValue
 {
-    if (_getAllResourcesBlock)
+    if (_getResourceByIndexBlock)
     {
-        NSArray<OAResourceItem *> *items = _getAllResourcesBlock();
+        OAResourceItem *item = _getResourceByIndexBlock(indexPath);
     
-        if ([items[indexPath.row] isKindOfClass:OAMultipleResourceItem.class])
+        if ([item isKindOfClass:OAMultipleResourceItem.class])
         {
-            OAMultipleResourceItem *mapItem = (OAMultipleResourceItem *)items[indexPath.row];
+            OAMultipleResourceItem *mapItem = (OAMultipleResourceItem *)item;
             for (OARepositoryResourceItem *resourceItem in mapItem.items)
             {
                 if (resourceItem.downloadTask != nil)
@@ -409,14 +350,59 @@
         }
         else
         {
-            return items[indexPath.row];
+            return item;
         }
     }
     return nil;
 }
 
+- (void)iterateAllCellsWithAction:(void (^)(OAResourceItem *, NSIndexPath *))action
+{
+    @synchronized(_hostDataLock)
+    {
+        if (_getResourceByIndexBlock)
+        {
+            if (_getTableDataBlock)
+            {
+                __weak NSArray<NSArray <NSDictionary *> *> *tableData = _getTableDataBlock();
+                if (tableData)
+                {
+                    for (int sectionIndex = 0; sectionIndex < tableData.count; sectionIndex++)
+                    {
+                        for (int rowIndex = 0; rowIndex < tableData[sectionIndex].count; rowIndex++)
+                        {
+                            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
+                            OAResourceItem *item = _getResourceByIndexBlock(indexPath);
+                            if (item && action)
+                                action(item, indexPath);
+                        }
+                    }
+                }
+            }
+            else if (_getTableDataModelBlock)
+            {
+                __weak OATableDataModel *tableDataModel = _getTableDataModelBlock();
+                if (tableDataModel)
+                {
+                    for (int sectionIndex = 0; sectionIndex < tableDataModel.sectionCount; sectionIndex++)
+                    {
+                        OATableSectionData *section = [tableDataModel sectionDataForIndex:sectionIndex];
+                        for (int rowIndex = 0; rowIndex < section.rowCount; rowIndex++)
+                        {
+                            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
+                            OAResourceItem *item = _getResourceByIndexBlock(indexPath);
+                            if (item && action)
+                                action(item, indexPath);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
-#pragma mark - Downloading cell progress observr's methods
+
+#pragma mark - Downloading cell progress observer's methods
 
 - (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {

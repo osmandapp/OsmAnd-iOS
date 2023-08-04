@@ -137,13 +137,6 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         [weakself.tableView reloadData];
     };
     
-    _downloadingCellHelper.getAllResourcesBlock = ^NSArray<OAResourceItem *> *{
-        NSMutableArray<OAResourceItem *> *items = [NSMutableArray array];
-        [items addObjectsFromArray:_suggestedMaps];
-        [items addObjectsFromArray:_mapMultipleItems];
-        return items;
-    };
-    
     _downloadingCellHelper.getResourceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
         return [weakself getMapItem:indexPath];
     };

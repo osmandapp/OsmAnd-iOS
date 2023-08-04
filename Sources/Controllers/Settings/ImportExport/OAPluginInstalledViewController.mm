@@ -81,70 +81,6 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     return self;
 }
 
-- (void)setupDownloadingCellHelper
-{
-    __weak OAPluginInstalledViewController *weakself = self;
-    _downloadingCellHelper = [[OADownloadingCellHelper alloc] init];
-    _downloadingCellHelper.hostViewController = weakself;
-    _downloadingCellHelper.hostTableView = weakself.tableView;
-    _downloadingCellHelper.hostDataLock = _dataLock;
-    
-    _downloadingCellHelper.fetchResourcesBlock = ^(){
-        
-        NSArray<OAResourceItem *> *allSuggestedMaps = [_plugin getSuggestedMaps];
-        NSMutableArray<OAResourceItem *> *regularMaps = [NSMutableArray new];
-        NSMutableArray<OAResourceItem *> *srtmMaps = [NSMutableArray new];
-        
-        for (OAResourceItem *map in allSuggestedMaps)
-        {
-            if (map.resourceType == OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion)
-                [srtmMaps addObject:map];
-            else
-                [regularMaps addObject:map];
-        }
-        
-        _suggestedMaps = [NSArray arrayWithArray:regularMaps];
-        
-        NSArray *sortedSrtmMaps = [srtmMaps sortedArrayUsingComparator:^NSComparisonResult(OARepositoryResourceItem* obj1, OARepositoryResourceItem* obj2) {
-            return [obj1.worldRegion.localizedName.lowercaseString compare:obj2.worldRegion.localizedName.lowercaseString];
-        }];
-        
-        _collectedRegionMultipleMapItems = [NSMutableArray new];
-        _collectedRegionMaps = [NSMutableArray new];
-        _collectiongPreviousRegionId = nil;
-        
-        for (OARepositoryResourceItem *map in sortedSrtmMaps)
-        {
-            if (!_collectiongPreviousRegionId)
-            {
-                [weakself startCollectingNewItem:_collectedRegionMaps map:map collectiongPreviousRegionId:_collectiongPreviousRegionId];
-            }
-            else if (!_collectiongPreviousRegionId || ![map.worldRegion.regionId isEqualToString:_collectiongPreviousRegionId])
-            {
-                [weakself saveCollectedItemIfNeeded];
-                [weakself startCollectingNewItem:_collectedRegionMaps map:map collectiongPreviousRegionId:_collectiongPreviousRegionId];
-            }
-            else
-            {
-                [weakself appendToCollectingItem:map];
-            }
-        }
-        [weakself saveCollectedItemIfNeeded];
-        
-        _mapMultipleItems = [NSArray arrayWithArray:_collectedRegionMultipleMapItems];
-        [weakself generateData];
-        [weakself.tableView reloadData];
-    };
-    
-    _downloadingCellHelper.getResourceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
-        return [weakself getMapItem:indexPath];
-    };
-    
-    _downloadingCellHelper.getTableDataBlock = ^NSArray<NSArray<NSDictionary *> *> *{
-        return _data;
-    };
-}
-
 - (void)applyLocalization
 {
     [self.closeButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
@@ -233,6 +169,79 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         [data addObject:addedAppModesSection];
     
     _data = [NSArray arrayWithArray:data];
+}
+
+- (void)setupDownloadingCellHelper
+{
+    __weak OAPluginInstalledViewController *weakself = self;
+    _downloadingCellHelper = [[OADownloadingCellHelper alloc] init];
+    _downloadingCellHelper.hostViewController = weakself;
+    _downloadingCellHelper.hostTableView = weakself.tableView;
+    _downloadingCellHelper.hostDataLock = _dataLock;
+    
+    _downloadingCellHelper.fetchResourcesBlock = ^(){
+        [weakself fetchResources];
+    };
+    
+    _downloadingCellHelper.getResourceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
+        return [weakself getMapItem:indexPath];
+    };
+    
+    _downloadingCellHelper.getTableDataBlock = ^NSArray<NSArray<NSDictionary *> *> *{
+        return [weakself data];
+    };
+}
+
+- (NSArray<NSArray <NSDictionary *> *> *)data
+{
+    return _data;
+}
+
+- (void)fetchResources
+{
+    NSArray<OAResourceItem *> *allSuggestedMaps = [_plugin getSuggestedMaps];
+    NSMutableArray<OAResourceItem *> *regularMaps = [NSMutableArray new];
+    NSMutableArray<OAResourceItem *> *srtmMaps = [NSMutableArray new];
+    
+    for (OAResourceItem *map in allSuggestedMaps)
+    {
+        if (map.resourceType == OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion)
+            [srtmMaps addObject:map];
+        else
+            [regularMaps addObject:map];
+    }
+    
+    _suggestedMaps = [NSArray arrayWithArray:regularMaps];
+    
+    NSArray *sortedSrtmMaps = [srtmMaps sortedArrayUsingComparator:^NSComparisonResult(OARepositoryResourceItem* obj1, OARepositoryResourceItem* obj2) {
+        return [obj1.worldRegion.localizedName.lowercaseString compare:obj2.worldRegion.localizedName.lowercaseString];
+    }];
+    
+    _collectedRegionMultipleMapItems = [NSMutableArray new];
+    _collectedRegionMaps = [NSMutableArray new];
+    _collectiongPreviousRegionId = nil;
+    
+    for (OARepositoryResourceItem *map in sortedSrtmMaps)
+    {
+        if (!_collectiongPreviousRegionId)
+        {
+            [self startCollectingNewItem:_collectedRegionMaps map:map collectiongPreviousRegionId:_collectiongPreviousRegionId];
+        }
+        else if (!_collectiongPreviousRegionId || ![map.worldRegion.regionId isEqualToString:_collectiongPreviousRegionId])
+        {
+            [self saveCollectedItemIfNeeded];
+            [self startCollectingNewItem:_collectedRegionMaps map:map collectiongPreviousRegionId:_collectiongPreviousRegionId];
+        }
+        else
+        {
+            [self appendToCollectingItem:map];
+        }
+    }
+    [self saveCollectedItemIfNeeded];
+    
+    _mapMultipleItems = [NSArray arrayWithArray:_collectedRegionMultipleMapItems];
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 - (void) startCollectingNewItem:(NSMutableArray<OARepositoryResourceItem *> *)collectedRegionMaps map:(OARepositoryResourceItem *)map collectiongPreviousRegionId:(NSString *)collectiongPreviousRegionId

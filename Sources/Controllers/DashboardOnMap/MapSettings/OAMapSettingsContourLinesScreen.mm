@@ -125,74 +125,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
 }
 
-- (void)setupDownloadingCellHelper
-{
-    __weak OAMapSettingsContourLinesScreen *weakself = self;
-    _downloadingCellHelper = [[OADownloadingCellHelper alloc] init];
-    
-    _downloadingCellHelper.hostViewController = weakself.vwController;
-    _downloadingCellHelper.hostTableView = weakself.tblView;
-    _downloadingCellHelper.hostDataLock = _dataLock;
-    
-    _downloadingCellHelper.fetchResourcesBlock = ^(){
-        
-        CLLocationCoordinate2D loc = [OAResourcesUIHelper getMapLocation];
-        [OAResourcesUIHelper getMapsForType:OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion latLon:loc onComplete:^(NSArray<OARepositoryResourceItem *>* res) {
-            @synchronized(_dataLock)
-            {
-                if (!res || res.count == 0)
-                    return;
-                
-                NSArray *sortedMaps = [res sortedArrayUsingComparator:^NSComparisonResult(OARepositoryResourceItem* obj1, OARepositoryResourceItem* obj2) {
-                    return [obj1.worldRegion.localizedName.lowercaseString compare:obj2.worldRegion.localizedName.lowercaseString];
-                }];
-                
-                _collectedRegionMultipleMapItems = [NSMutableArray new];
-                _collectedRegionMaps = [NSMutableArray new];
-                _collectiongPreviousRegionId = nil;
-                
-                for (OARepositoryResourceItem *map in sortedMaps)
-                {
-                    if (!_collectiongPreviousRegionId)
-                    {
-                        [self startCollectingNewItem:_collectedRegionMaps map:map collectiongPreviousRegionId:_collectiongPreviousRegionId];
-                    }
-                    else if (!_collectiongPreviousRegionId || ![map.worldRegion.regionId isEqualToString:_collectiongPreviousRegionId])
-                    {
-                        [self saveCollectedItemIfNeeded];
-                        [self startCollectingNewItem:_collectedRegionMaps map:map collectiongPreviousRegionId:_collectiongPreviousRegionId];
-                    }
-                    else
-                    {
-                        [self appendToCollectingItem:map];
-                    }
-                }
-                [self saveCollectedItemIfNeeded];
-                
-                _mapMultipleItems = [NSArray arrayWithArray:_collectedRegionMultipleMapItems];
-                [self generateData];
-                [tblView reloadData];
-            }
-        }];
-    };
-    
-    _downloadingCellHelper.getResourceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
-        
-        NSDictionary *item = [weakself getItem:indexPath];
-        if (item)
-        {
-            OAResourceItem *mapItem = item[@"item"];
-            if (mapItem)
-                return mapItem;
-        }
-        return nil;
-    };
-    
-    _downloadingCellHelper.getTableDataBlock = ^NSArray<NSArray<NSDictionary *> *> *{
-        return _data;
-    };
-}
-
 - (void) setupView
 {
     _styleSettings = [OAMapStyleSettings sharedInstance];
@@ -406,6 +338,82 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }];
     }
     _sectionHeaderFooterTitles = [NSArray arrayWithArray:sectionArr];
+}
+
+- (void)setupDownloadingCellHelper
+{
+    __weak OAMapSettingsContourLinesScreen *weakself = self;
+    _downloadingCellHelper = [[OADownloadingCellHelper alloc] init];
+    _downloadingCellHelper.hostViewController = weakself.vwController;
+    _downloadingCellHelper.hostTableView = weakself.tblView;
+    _downloadingCellHelper.hostDataLock = _dataLock;
+    
+    _downloadingCellHelper.fetchResourcesBlock = ^(){
+        [weakself fetchResources];
+    };
+    
+    _downloadingCellHelper.getResourceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
+        
+        NSDictionary *item = [weakself getItem:indexPath];
+        if (item)
+        {
+            OAResourceItem *mapItem = item[@"item"];
+            if (mapItem)
+                return mapItem;
+        }
+        return nil;
+    };
+    
+    _downloadingCellHelper.getTableDataBlock = ^NSArray<NSArray<NSDictionary *> *> *{
+        return [weakself data];
+    };
+}
+
+- (NSArray<NSArray <NSDictionary *> *> *)data
+{
+    return _data;
+}
+
+- (void) fetchResources
+{
+    CLLocationCoordinate2D loc = [OAResourcesUIHelper getMapLocation];
+    [OAResourcesUIHelper getMapsForType:OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion latLon:loc onComplete:^(NSArray<OARepositoryResourceItem *>* res) {
+        @synchronized(_dataLock)
+        {
+            if (!res || res.count == 0)
+                return;
+            
+            NSArray *sortedMaps = [res sortedArrayUsingComparator:^NSComparisonResult(OARepositoryResourceItem* obj1, OARepositoryResourceItem* obj2) {
+                return [obj1.worldRegion.localizedName.lowercaseString compare:obj2.worldRegion.localizedName.lowercaseString];
+            }];
+            
+            _collectedRegionMultipleMapItems = [NSMutableArray new];
+            _collectedRegionMaps = [NSMutableArray new];
+            _collectiongPreviousRegionId = nil;
+            
+            for (OARepositoryResourceItem *map in sortedMaps)
+            {
+                if (!_collectiongPreviousRegionId)
+                {
+                    [self startCollectingNewItem:_collectedRegionMaps map:map collectiongPreviousRegionId:_collectiongPreviousRegionId];
+                }
+                else if (!_collectiongPreviousRegionId || ![map.worldRegion.regionId isEqualToString:_collectiongPreviousRegionId])
+                {
+                    [self saveCollectedItemIfNeeded];
+                    [self startCollectingNewItem:_collectedRegionMaps map:map collectiongPreviousRegionId:_collectiongPreviousRegionId];
+                }
+                else
+                {
+                    [self appendToCollectingItem:map];
+                }
+            }
+            [self saveCollectedItemIfNeeded];
+            
+            _mapMultipleItems = [NSArray arrayWithArray:_collectedRegionMultipleMapItems];
+            [self generateData];
+            [tblView reloadData];
+        }
+    }];
 }
 
 - (void) startCollectingNewItem:(NSMutableArray<OARepositoryResourceItem *> *)collectedRegionMaps map:(OARepositoryResourceItem *)map collectiongPreviousRegionId:(NSString *)collectiongPreviousRegionId

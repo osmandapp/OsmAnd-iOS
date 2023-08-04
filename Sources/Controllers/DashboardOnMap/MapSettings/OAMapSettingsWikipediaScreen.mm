@@ -103,8 +103,13 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     };
     
     _downloadingCellHelper.getTableDataBlock = ^NSArray<NSArray<NSDictionary *> *> *{
-        return _data;
+        return [weakself data];
     };
+}
+
+- (NSArray<NSArray <NSDictionary *> *> *)data
+{
+    return _data;
 }
 
 - (void)initData

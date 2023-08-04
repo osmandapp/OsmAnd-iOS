@@ -29,9 +29,7 @@ typedef OATableDataModel *(^ OAGetTableModelBlock)();
 @property (weak, nonatomic) NSObject *hostDataLock;
 
 - (UITableViewCell *)setupCell:(OAResourceItem *)mapItem indexPath:(NSIndexPath *)indexPath;
-
 - (void)onItemClicked:(NSIndexPath *)indexPath;
-
 - (void)updateAvailableMaps;
 
 @end

@@ -207,20 +207,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         
         CLLocationCoordinate2D coordinate = [OAResourcesUIHelper getMapLocation];
         OsmAnd::ResourcesManager::ResourceType resType = _app.data.terrainType == EOATerrainTypeHillshade ? OsmAndResourceType::HillshadeRegion : OsmAndResourceType::SlopeRegion;
-        _mapItems = [OAResourcesUIHelper findIndexItemsAt:coordinate
-                                                     type:resType
-                                        includeDownloaded:NO
-                                                    limit:-1
-                                      skipIfOneDownloaded:YES];
+        _mapItems = (NSArray<OARepositoryResourceItem *> *) [OAResourcesUIHelper findIndexItemsAt:coordinate type:resType includeDownloaded:NO limit:-1 skipIfOneDownloaded:YES];
         [weakself initData];
     };
     
     _downloadingCellHelper.getResourceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
         
-        OATableRowData *row = [_data itemForIndexPath:indexPath];
+        OATableRowData *row = [[weakself data] itemForIndexPath:indexPath];
         if (row && [row.key isEqualToString:@"mapItem"])
         {
-            OAResourceItem *mapItem = _mapItems[indexPath.row];
+            OAResourceItem *mapItem = [weakself mapItems][indexPath.row];
             if (mapItem)
                 return mapItem;
         }
@@ -229,8 +225,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     };
     
     _downloadingCellHelper.getTableDataModelBlock = ^OATableDataModel *{
-        return _data;
+        return [weakself data];
     };
+}
+
+- (OATableDataModel *)data
+{
+    return _data;
+}
+
+- (NSArray<OAResourceItem *> *)mapItems
+{
+    return _mapItems;
 }
 
 - (void)generateValueForIndexPath:(NSIndexPath *)indexPath

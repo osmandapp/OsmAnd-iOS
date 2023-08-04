@@ -170,7 +170,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 [self saveCollectedItemIfNeeded];
                 
                 _mapMultipleItems = [NSArray arrayWithArray:_collectedRegionMultipleMapItems];
-                [_downloadingCellHelper refreshMultipleDownloadTasks];
                 [self generateData];
                 [tblView reloadData];
             }

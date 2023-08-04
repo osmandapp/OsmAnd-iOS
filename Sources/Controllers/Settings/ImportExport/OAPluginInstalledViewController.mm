@@ -132,7 +132,6 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         [weakself saveCollectedItemIfNeeded];
         
         _mapMultipleItems = [NSArray arrayWithArray:_collectedRegionMultipleMapItems];
-        [_downloadingCellHelper refreshMultipleDownloadTasks];
         [weakself generateData];
         [weakself.tableView reloadData];
     };
@@ -183,7 +182,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 
 - (void) setupView
 {
-    [self updateAvailableMaps];
+    [_downloadingCellHelper updateAvailableMaps];
     [self generateData];
 }
 
@@ -234,54 +233,6 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         [data addObject:addedAppModesSection];
     
     _data = [NSArray arrayWithArray:data];
-}
-
-- (void) updateAvailableMaps
-{
-    NSArray<OAResourceItem *> *allSuggestedMaps = [_plugin getSuggestedMaps];
-    NSMutableArray<OAResourceItem *> *regularMaps = [NSMutableArray new];
-    NSMutableArray<OAResourceItem *> *srtmMaps = [NSMutableArray new];
-    
-    for (OAResourceItem *map in allSuggestedMaps)
-    {
-        if (map.resourceType == OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion)
-            [srtmMaps addObject:map];
-        else
-            [regularMaps addObject:map];
-    }
-    
-    _suggestedMaps = [NSArray arrayWithArray:regularMaps];
-    
-    NSArray *sortedSrtmMaps = [srtmMaps sortedArrayUsingComparator:^NSComparisonResult(OARepositoryResourceItem* obj1, OARepositoryResourceItem* obj2) {
-        return [obj1.worldRegion.localizedName.lowercaseString compare:obj2.worldRegion.localizedName.lowercaseString];
-    }];
-    
-    _collectedRegionMultipleMapItems = [NSMutableArray new];
-    _collectedRegionMaps = [NSMutableArray new];
-    _collectiongPreviousRegionId = nil;
-    
-    for (OARepositoryResourceItem *map in sortedSrtmMaps)
-    {
-        if (!_collectiongPreviousRegionId)
-        {
-            [self startCollectingNewItem:_collectedRegionMaps map:map collectiongPreviousRegionId:_collectiongPreviousRegionId];
-        }
-        else if (!_collectiongPreviousRegionId || ![map.worldRegion.regionId isEqualToString:_collectiongPreviousRegionId])
-        {
-            [self saveCollectedItemIfNeeded];
-            [self startCollectingNewItem:_collectedRegionMaps map:map collectiongPreviousRegionId:_collectiongPreviousRegionId];
-        }
-        else
-        {
-            [self appendToCollectingItem:map];
-        }
-    }
-    [self saveCollectedItemIfNeeded];
-    
-    _mapMultipleItems = [NSArray arrayWithArray:_collectedRegionMultipleMapItems];
-    [self refreshDownloadTasks];
-    [self generateData];
-    [self.tableView reloadData];
 }
 
 - (void) startCollectingNewItem:(NSMutableArray<OARepositoryResourceItem *> *)collectedRegionMaps map:(OARepositoryResourceItem *)map collectiongPreviousRegionId:(NSString *)collectiongPreviousRegionId

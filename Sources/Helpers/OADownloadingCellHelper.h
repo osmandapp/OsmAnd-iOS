@@ -34,6 +34,4 @@ typedef OATableDataModel *(^ OAGetTableModelBlock)();
 
 - (void)updateAvailableMaps;
 
-- (void)refreshMultipleDownloadTasks;
-
 @end

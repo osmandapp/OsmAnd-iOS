@@ -254,6 +254,7 @@
 
 - (void)updateAvailableMaps
 {
+    [self refreshMultipleDownloadTasks];
     if (_fetchResourcesBlock)
         _fetchResourcesBlock();
     

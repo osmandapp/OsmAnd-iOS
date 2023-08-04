@@ -491,6 +491,20 @@
     return matches.count == 1 && matches[0].URL && [matches[0].URL.absoluteString containsString:@"mailto:"];
 }
 
+- (BOOL) isValidURL
+{
+    NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:nil];
+    NSArray<NSTextCheckingResult *> *matches = [detector matchesInString:self options:0 range:NSMakeRange(0, self.length)];
+    
+    for (NSTextCheckingResult *match in matches)
+    {
+        NSURL *url = match.URL;
+        if (url.host)
+            return YES;
+    }
+    return NO;
+}
+
 - (NSString *) escapeUrl
 {
     return (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(

@@ -180,8 +180,8 @@
 - (void)onItemClicked:(NSIndexPath *)indexPath
 {
     OAResourceItem *mapItem;
-    if (_getResouceByIndexBlock)
-        mapItem = _getResouceByIndexBlock(indexPath);
+    if (_getResourceByIndexBlock)
+        mapItem = _getResourceByIndexBlock(indexPath);
     
     if (mapItem)
     {
@@ -203,9 +203,9 @@
                 }
                 else
                 {
-                    if (_getMultipleResourcesBlock)
+                    if (_getAllResourcesBlock)
                     {
-                        NSArray<OAMultipleResourceItem *> *mapMultipleItems = _getMultipleResourcesBlock();
+                        NSArray<OAMultipleResourceItem *> *mapMultipleItems = _getAllResourcesBlock();
                         OADownloadMultipleResourceViewController *controller = [[OADownloadMultipleResourceViewController alloc] initWithResource:mapMultipleItems[indexPath.row]];
                         controller.delegate = self;
                         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
@@ -306,9 +306,9 @@
             for (int rowIndex = 0; rowIndex < section.rowCount; rowIndex++)
             {
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
-                if (_getResouceByIndexBlock)
+                if (_getResourceByIndexBlock)
                 {
-                    OAResourceItem *mapItem = _getResouceByIndexBlock(indexPath);
+                    OAResourceItem *mapItem = _getResourceByIndexBlock(indexPath);
                     if (mapItem)
                         [self refreshDownloadingContent:downloadTaskKey mapItem:mapItem indexPath:indexPath];
                 }
@@ -375,9 +375,9 @@
 
 - (void) refreshMultipleDownloadTasks
 {
-    if (_getMultipleResourcesBlock)
+    if (_getAllResourcesBlock)
     {
-        NSArray<OAResourceItem *> *items = _getMultipleResourcesBlock();
+        NSArray<OAResourceItem *> *items = _getAllResourcesBlock();
         for (OAResourceItem *item in items)
         {
             if ([item isKindOfClass:OAMultipleResourceItem.class])
@@ -392,9 +392,9 @@
 
 - (OAResourceItem *) getActiveItemForIndexPath:(NSIndexPath *)indexPath useDefautValue:(BOOL)useDefautValue
 {
-    if (_getMultipleResourcesBlock)
+    if (_getAllResourcesBlock)
     {
-        NSArray<OAResourceItem *> *items = _getMultipleResourcesBlock();
+        NSArray<OAResourceItem *> *items = _getAllResourcesBlock();
     
         if ([items[indexPath.row] isKindOfClass:OAMultipleResourceItem.class])
         {

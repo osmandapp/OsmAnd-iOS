@@ -177,7 +177,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }];
     };
     
-    _downloadingCellHelper.getResouceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
+    _downloadingCellHelper.getAllResourcesBlock = ^NSArray<OAMultipleResourceItem *> *{
+        return _mapMultipleItems;
+    };
+    
+    _downloadingCellHelper.getResourceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
         
         NSDictionary *item = [weakself getItem:indexPath];
         if (item)
@@ -191,10 +195,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     _downloadingCellHelper.getTableDataBlock = ^NSArray<NSArray<NSDictionary *> *> *{
         return _data;
-    };
-    
-    _downloadingCellHelper.getMultipleResourcesBlock = ^NSArray<OAMultipleResourceItem *> *{
-        return _mapMultipleItems;
     };
 }
 

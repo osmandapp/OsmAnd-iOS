@@ -90,7 +90,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
         [weakself initData];
     };
     
-    _downloadingCellHelper.getResouceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
+    _downloadingCellHelper.getResourceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
         
         NSDictionary *item = [weakself getItem:indexPath];
         if (item)

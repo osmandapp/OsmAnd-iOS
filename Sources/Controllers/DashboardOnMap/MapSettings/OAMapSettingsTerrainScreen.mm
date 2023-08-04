@@ -215,7 +215,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [weakself initData];
     };
     
-    _downloadingCellHelper.getResouceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
+    _downloadingCellHelper.getResourceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
         
         OATableRowData *row = [_data itemForIndexPath:indexPath];
         if (row && [row.key isEqualToString:@"mapItem"])

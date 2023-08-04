@@ -85,7 +85,6 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 {
     __weak OAPluginInstalledViewController *weakself = self;
     _downloadingCellHelper = [[OADownloadingCellHelper alloc] init];
-    
     _downloadingCellHelper.hostViewController = weakself;
     _downloadingCellHelper.hostTableView = weakself.tableView;
     _downloadingCellHelper.hostDataLock = _dataLock;
@@ -138,19 +137,19 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         [weakself.tableView reloadData];
     };
     
-    _downloadingCellHelper.getResouceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
+    _downloadingCellHelper.getAllResourcesBlock = ^NSArray<OAResourceItem *> *{
+        NSMutableArray<OAResourceItem *> *items = [NSMutableArray array];
+        [items addObjectsFromArray:_suggestedMaps];
+        [items addObjectsFromArray:_mapMultipleItems];
+        return items;
+    };
+    
+    _downloadingCellHelper.getResourceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
         return [weakself getMapItem:indexPath];
     };
     
     _downloadingCellHelper.getTableDataBlock = ^NSArray<NSArray<NSDictionary *> *> *{
         return _data;
-    };
-    
-    _downloadingCellHelper.getMultipleResourcesBlock = ^NSArray<OAResourceItem *> *{
-        NSMutableArray<OAResourceItem *> *items = [NSMutableArray array];
-        [items addObjectsFromArray:_suggestedMaps];
-        [items addObjectsFromArray:_mapMultipleItems];
-        return items;
     };
 }
 

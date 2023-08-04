@@ -880,11 +880,11 @@
                               if (![processedPoi containsObject:@(am->id.id)])
                               {
                                   [processedPoi addObject:@(am->id.id)];
-                                  OAPOI *poi = [OAPOIHelper parsePOI:resultEntry];
-                                  if (poi && (!tagName || [poi.values valueForKey:tagName]) && (!name || [poi.nameLocalized isEqualToString:name]))
+                                  OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:tagName != nil withContent:NO];
+                                  if (poi && (!tagName || [poi.values valueForKey:tagName]) && (!name || [poi.name isEqualToString:name] || [poi.localizedNames.allValues containsObject:name]))
                                   {
-                                      const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-                                      poi.distanceMeters = OsmAnd::Utilities::squareDistance31(location, amenity->position31);
+                                      poi.distanceMeters = OsmAnd::Utilities::squareDistance31(location, am->position31);
+                                      [OAPOIHelper fetchValuesContentPOIByAmenity:am poi:poi];
                                       [arr addObject:poi];
                                   }
                               }
@@ -1164,9 +1164,14 @@
 
 + (OAPOI *) parsePOI:(const OsmAnd::ISearch::IResultEntry&)resultEntry
 {
-    const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+    return [self.class parsePOI:resultEntry withValues:YES withContent:YES];
+}
+
++ (OAPOI *) parsePOI:(const OsmAnd::ISearch::IResultEntry&)resultEntry withValues:(BOOL)withValues withContent:(BOOL)withContent
+{
+    const auto& amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
     OAPOIType *type = [self.class parsePOITypeByAmenity:amenity];
-    return [self.class parsePOIByAmenity:amenity type:type];
+    return [self.class parsePOIByAmenity:amenity type:type withValues:withValues withContent:withContent];
 }
 
 + (OAPOIType *) parsePOITypeByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
@@ -1194,13 +1199,18 @@
     return type;
 }
 
-+ (OAPOI *) parsePOIByAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity
++ (OAPOI *) parsePOIByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
 {
     OAPOIType *type = [self.class parsePOITypeByAmenity:amenity];
     return [self.class parsePOIByAmenity:amenity type:type];
 }
 
-+ (OAPOI *) parsePOIByAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity type:(OAPOIType *)type
++ (OAPOI *) parsePOIByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity type:(OAPOIType *)type
+{
+    return [self.class parsePOIByAmenity:amenity type:type withValues:YES withContent:YES];
+}
+
++ (OAPOI *) parsePOIByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity type:(OAPOIType *)type withValues:(BOOL)withValues withContent:(BOOL)withContent
 {
     if (!type || type.mapOnly || [[OAAppSettings sharedManager] isTypeDisabled:amenity->subType.toNSString()])
         return nil;
@@ -1220,7 +1230,7 @@
     
     NSMutableDictionary *content = [NSMutableDictionary dictionary];
     NSMutableDictionary *values = [NSMutableDictionary dictionary];
-    [OAPOIHelper processDecodedValues:amenity->getDecodedValues() content:content values:values];
+    [OAPOIHelper processDecodedValues:amenity->getDecodedValues() content:(withContent ? content : nil) values:(withValues ? values : nil)];
     poi.values = values;
     poi.localizedContent = content;
     
@@ -1246,6 +1256,15 @@
     poi.localizedNames = names;
     
     return poi;
+}
+
++ (void) fetchValuesContentPOIByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity poi:(OAPOI *)poi
+{
+    NSMutableDictionary *content = [NSMutableDictionary dictionary];
+    NSMutableDictionary *values = [NSMutableDictionary dictionary];
+    [OAPOIHelper processDecodedValues:amenity->getDecodedValues() content:content values:values];
+    poi.values = values;
+    poi.localizedContent = content;
 }
 
 + (UIImage *)getCustomFilterIcon:(OAPOIUIFilter *) filter
@@ -1344,7 +1363,7 @@
     }
 }
 
-+ (NSString *)processLocalizedNames:(QHash<QString, QString>)localizedNames nativeName:(QString)nativeName names:(NSMutableDictionary *)names
++ (NSString *)processLocalizedNames:(const QHash<QString, QString> &)localizedNames nativeName:(const QString &)nativeName names:(NSMutableDictionary *)names
 {
     NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
     BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
@@ -1353,7 +1372,7 @@
     QString nameLocalized;
     BOOL hasEnName = NO;
     QString enName;
-    for(const auto& entry : OsmAnd::rangeOf(localizedNames))
+    for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(localizedNames)))
     {
         if (!lang.isNull() && entry.key() == lang)
             nameLocalized = entry.value();
@@ -1383,22 +1402,28 @@
     return nameLocalized.isNull() ? @"" : nameLocalized.toNSString();
 }
 
-+ (void) processDecodedValues:(QList<OsmAnd::Amenity::DecodedValue>)decodedValues content:(NSMutableDictionary *)content values:(NSMutableDictionary *)values
++ (void) processDecodedValues:(const QList<OsmAnd::Amenity::DecodedValue> &)decodedValues content:(NSMutableDictionary *)content values:(NSMutableDictionary *)values
 {
-    for (const auto& entry : decodedValues)
+    for (const auto& entry : OsmAnd::constOf(decodedValues))
     {
-        if (entry.declaration->tagName.startsWith(QString("content")))
+        if (entry.declaration->tagName.startsWith(QStringLiteral("content")))
         {
-            NSString *key = entry.declaration->tagName.toNSString();
-            NSString *loc;
-            if (key.length > 8)
-                loc = [[key substringFromIndex:8] lowercaseString];
-            else
-                loc = @"";
-            
-            [content setObject:entry.value.toNSString() forKey:loc];
+            if (content)
+            {
+                NSString *loc;
+                if (entry.declaration->tagName.length() > 8)
+                {
+                    NSString *key = entry.declaration->tagName.toNSString();
+                    loc = [[key substringFromIndex:8] lowercaseString];
+                }
+                else
+                {
+                    loc = @"";
+                }
+                [content setObject:entry.value.toNSString() forKey:loc];
+            }
         }
-        else
+        else if (values)
         {
             [values setObject:entry.value.toNSString() forKey:entry.declaration->tagName.toNSString()];
         }

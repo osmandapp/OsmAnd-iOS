@@ -3007,3 +3007,8 @@
 "reset_all_settings_desc" = "Réinitialiser tous les paramètres ?";
 "no_widgets_here_yet" = "Pas encore de gadget ici";
 "no_widgets_descr" = "Ajouter un ou plusieurs gadgets depuis la liste des gadgets disponibles.";
+"free_account" = "Compte gratuit";
+"free_favorites_backup_description" = "S'inscrire au cloud OsmAnd pour obtenir une sauvegarde gratuite de vos favoris et de vos paramètres";
+"get_osmand_cloud" = "Obtenir OsmAnd Cloud";
+"free_favorites_backup" = "Sauvegarde gratuite des favoris";
+"banner_payment_free_backup_settings_title" = "Sauvegarde gratuite des paramètres";

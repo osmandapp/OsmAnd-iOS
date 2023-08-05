@@ -3013,3 +3013,12 @@
 "visible_in_3d_mode" = "Visible en el modo 3D";
 "map_3d_mode_description" = "Pulsa en el mapa con 2 dedos y mueve hacia arriba o abajo para ajustar la inclinación del mapa.";
 "map_3d_mode_hint" = "Mantén pulsado para cambiar la ubicación del botón.";
+"add_row" = "Añadir fila";
+"free_account" = "Cuenta gratuita";
+"free_favorites_backup_description" = "Regístrate en OsmAnd Cloud para obtener una copia de seguridad gratuita de los favoritos y ajustes";
+"banner_payment_free_backup_settings_title" = "Copia de seguridad gratuita de los ajustes";
+"free_favorites_backup" = "Copia de seguridad gratuita de favoritos";
+"get_osmand_cloud" = "Obtener OsmAnd Cloud";
+"reset_all_settings_desc" = "¿Restablecer todos los ajustes a los predefinidos?";
+"no_widgets_here_yet" = "Todavía sin widgets aquí";
+"no_widgets_descr" = "Añade uno o más widgets de la lista de widgets disponibles.";

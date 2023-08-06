@@ -489,19 +489,6 @@
     }
 }
 
-+ (NSString *) getDescription:(EOAMap3DModeVisibility)mode
-{
-    switch (mode)
-    {
-        case EOAMap3DModeVisibilityHidden:
-            return OALocalizedString(@"shared_string_hidden");
-        case EOAMap3DModeVisibilityVisible:
-            return @"";
-        default:
-            return OALocalizedString(@"visible_in_3d_mode");
-    }
-}
-
 + (NSString *) getIconName:(EOAMap3DModeVisibility)mode
 {
     switch (mode)

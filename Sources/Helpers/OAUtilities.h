@@ -68,6 +68,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 - (NSString *) lowerCase;
 - (NSString *) upperCase;
 - (BOOL) isValidEmail;
+- (BOOL) isValidURL;
 - (NSString *) escapeUrl;
 - (NSString *) sanitizeFileName;
 - (NSString *) xmlStringToString;

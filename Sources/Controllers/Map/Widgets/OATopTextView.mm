@@ -209,6 +209,7 @@
     BOOL showShield = _shieldIcon.image && !_shieldIcon.isHidden;
     BOOL showTurn = !_turnView.isHidden && _turnView.subviews.count > 0;
     BOOL showExit = !_exitRefTextContainer.isHidden && _exitRefText.text.length > 0;
+    BOOL showAddress = !_addressText.isHidden && _addressText.text.length > 0;
     CGRect shieldFrame = _shieldIcon.frame;
     if (showShield)
     {
@@ -233,7 +234,7 @@
     margin += showShield ? shieldFrame.size.width + 2 : 0;
     margin += showExit ? exitRefFrame.size.width + 2 : 0;
     CGFloat maxTextWidth = w - margin * 2;
-    CGSize size = [OAUtilities calculateTextBounds:_addressText.text width:maxTextWidth height:h font:_textFont];
+    CGSize size = [OAUtilities calculateTextBounds:showAddress ? _addressText.text : @"" width:maxTextWidth height:h font:_textFont];
     if (size.width > maxTextWidth)
         size.width = maxTextWidth;
     
@@ -322,11 +323,8 @@
     }
     _addressTextShadow.attributedText = stringShadow;
     _addressText.attributedText = string;
-    
-    [self updateFrame];
-    [self setNeedsLayout];
-    if (self.delegate)
-        [self.delegate widgetChanged:self];
+
+    [self refreshLayout];
 }
 
 - (void) updateTextColor:(UIColor *)textColor textShadowColor:(UIColor *)textShadowColor bold:(BOOL)bold shadowRadius:(float)shadowRadius nightMode:(BOOL)nightMode
@@ -477,14 +475,17 @@
     }
     
     if (changed || updated)
-    {
-        [self updateFrame];
-        [self setNeedsLayout];
-        if (self.delegate)
-            [self.delegate widgetChanged:self];
-    }
+        [self refreshLayout];
     
     return res;
+}
+
+- (void) refreshLayout
+{
+    [self updateFrame];
+    [self setNeedsLayout];
+    if (self.delegate)
+        [self.delegate widgetChanged:self];
 }
 
 - (BOOL) updateInfo
@@ -567,7 +568,7 @@
     {
         if ([streetName isEqual:_prevStreetName])
             return YES;
-        
+
         [self updateVisibility:YES];
         [self updateVisibility:_waypointInfoBar visible:NO];
         [self updateVisibility:_addressText visible:YES];
@@ -624,6 +625,8 @@
         {
             _addressTextShadow.text = @"";
             _addressText.text = @"";
+
+            [self refreshLayout];
         }
         else if (![streetName.text isEqualToString:_addressText.text])
         {

@@ -66,7 +66,6 @@ typedef NS_ENUM(NSInteger, EOAMap3DModeVisibility)
 
 + (instancetype) withModeConstant:(EOAMap3DModeVisibility)mode;
 + (NSString *) getTitle:(EOAMap3DModeVisibility)mode;
-+ (NSString *) getDescription:(EOAMap3DModeVisibility)mode;
 + (NSString *) getIconName:(EOAMap3DModeVisibility)mode;
 
 @end

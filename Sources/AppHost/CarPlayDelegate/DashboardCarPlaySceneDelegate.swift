@@ -27,15 +27,18 @@ final class DashboardCarPlaySceneDelegate: NSObject, CPTemplateApplicationSceneD
                 guard let url = URL(string: "osmandmaps://navigation") else { return }
                 templateApplicationDashboardScene.open(url, options: nil, completionHandler: nil)
             }),
-            CPDashboardButton(titleVariants: [ localizedString("address_search_desc")], subtitleVariants: [""], image: UIImage(named: nightMode ? "ic_carplay_search_night" : "ic_carplay_search")!, handler: { _ in
+            CPDashboardButton(titleVariants: [localizedString("address_search_desc")], subtitleVariants: [""], image: UIImage(named: nightMode ? "ic_carplay_search_night" : "ic_carplay_search")!, handler: { _ in
                 guard let url = URL(string: "osmandmaps://search") else { return }
                 templateApplicationDashboardScene.open(url, options: nil, completionHandler: nil)
             })]
     }
     
     func sceneWillEnterForeground(_ scene: UIScene) {
-        guard let mapVC else { return }
+        guard let mapVC, let window else { return }
+        let widthOffset: CGFloat = 1 - (window.frame.width - max(window.safeAreaInsets.left, window.safeAreaInsets.right)) / mapVC.view.frame.width
+        let heightOffset = 1 - (window.frame.height / mapVC.view.frame.height)
+        mapVC.viewportX(1.0 - widthOffset, y: 1.0 - heightOffset)
         dashboardVC.add(mapVC)
-        window?.rootViewController = dashboardVC
+        window.rootViewController = dashboardVC
     }
 }

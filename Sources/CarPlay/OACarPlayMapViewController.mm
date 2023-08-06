@@ -29,8 +29,8 @@
     CGFloat _originalViewportX;
     CGFloat _originalViewportY;
     
-    CGFloat _cachedViewportX;
-    CGFloat _cachedViewportY;
+//    CGFloat _cachedViewportX;
+//    CGFloat _cachedViewportY;
     
     CGFloat _cachedWidthOffset;
     CGFloat _cachedHeightOffset;
@@ -66,25 +66,38 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    _mapVc.mapView.viewportXScale = [self isLeftSideDriving] ? 1.5 : 0.5;
-    if ([self isLeftSideDriving]) {
+    
+    BOOL isLeftSideDriving = [self isLeftSideDriving];
+    if (isLeftSideDriving)
+    {
         [rightHandDrivingAlarmWidgetConstraint setActive:NO];
         [leftHandDrivingAlarmWidgetConstraint setActive:YES];
-    } else {
+    }
+    else
+    {
         [leftHandDrivingAlarmWidgetConstraint setActive:NO];
         [rightHandDrivingAlarmWidgetConstraint setActive:YES];
     }
     
     UIEdgeInsets insets = _window.safeAreaInsets;
 
+    CGFloat w = self.view.frame.size.width;
+    CGFloat widthOffset = insets.left / w;
+    NSLog(@"viewDidLayoutSubviews: ", insets);
+    
+    if (widthOffset != 0 && !_isInNavigationMode)
+    {
+        _mapVc.mapView.viewportXScale = isLeftSideDriving ? (1.5 + widthOffset) : (0.5 + widthOffset);
+    }
+    else
+    {
+        _mapVc.mapView.viewportXScale = isLeftSideDriving ? 1.5 : 0.5;
+    }
     CGFloat h = self.view.frame.size.height;
     CGFloat heightOffset = insets.top / h;
-
-    if (heightOffset != _cachedHeightOffset && heightOffset != 0 && !_isInNavigationMode)
+    if (heightOffset != 0 && !_isInNavigationMode)
     {
         _mapVc.mapView.viewportYScale = 1.0 + heightOffset;
-        _cachedHeightOffset = heightOffset;
-        _cachedViewportY = _mapVc.mapView.viewportYScale;
     }
 }
 
@@ -128,8 +141,8 @@
 {
     if (_mapVc)
     {
-        _mapVc.mapView.viewportXScale = kViewportXNonShifted;
-        _mapVc.mapView.viewportYScale = _cachedViewportY;
+//        _mapVc.mapView.viewportXScale = kViewportXNonShifted;
+//        _mapVc.mapView.viewportYScale = _cachedViewportY;
         
         [_mapVc.mapView suspendRendering];
         
@@ -238,14 +251,17 @@
     return _alarmWidget.frame.origin.x > self.view.frame.size.width / 2.0;
 }
 
-- (void) enterNavigationMode
+- (void)enterNavigationMode
 {
     _isInNavigationMode = YES;
 }
 
-- (void) exitNavigationMode
+- (void)exitNavigationMode
 {
     _isInNavigationMode = NO;
+    [self.view layoutIfNeeded];
+//    _mapVc.mapView.viewportYScale = 1.0;
+//    _mapVc.mapView.viewportXScale = 1.0;//[self isLeftSideDriving] ? 1.5 : 0.5;
 }
 
 - (void)onLocationChanged

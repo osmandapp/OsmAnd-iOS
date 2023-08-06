@@ -29,8 +29,8 @@
     CGFloat _originalViewportX;
     CGFloat _originalViewportY;
     
-//    CGFloat _cachedViewportX;
-//    CGFloat _cachedViewportY;
+    CGFloat _cachedViewportX;
+    CGFloat _cachedViewportY;
     
     CGFloat _cachedWidthOffset;
     CGFloat _cachedHeightOffset;
@@ -82,22 +82,20 @@
     UIEdgeInsets insets = _window.safeAreaInsets;
 
     CGFloat w = self.view.frame.size.width;
-    CGFloat widthOffset = insets.left / w;
-    NSLog(@"viewDidLayoutSubviews: ", insets);
-    
-    if (widthOffset != 0 && !_isInNavigationMode)
-    {
-        _mapVc.mapView.viewportXScale = isLeftSideDriving ? (1.5 + widthOffset) : (0.5 + widthOffset);
-    }
-    else
-    {
-        _mapVc.mapView.viewportXScale = isLeftSideDriving ? 1.5 : 0.5;
-    }
     CGFloat h = self.view.frame.size.height;
+    
+    CGFloat widthOffset = MAX(insets.right, insets.left) / w;
     CGFloat heightOffset = insets.top / h;
-    if (heightOffset != 0 && !_isInNavigationMode)
+    
+    if (widthOffset != _cachedWidthOffset && heightOffset != _cachedHeightOffset && widthOffset != 0 && heightOffset != 0 && !_isInNavigationMode)
     {
+        _mapVc.mapView.viewportXScale = isLeftSideDriving ? 1.0 + widthOffset : 1.0 - widthOffset;
         _mapVc.mapView.viewportYScale = 1.0 + heightOffset;
+        _cachedWidthOffset = widthOffset;
+        _cachedHeightOffset = heightOffset;
+        
+        _cachedViewportX = _mapVc.mapView.viewportXScale;
+        _cachedViewportY = _mapVc.mapView.viewportYScale;
     }
 }
 
@@ -141,8 +139,8 @@
 {
     if (_mapVc)
     {
-//        _mapVc.mapView.viewportXScale = kViewportXNonShifted;
-//        _mapVc.mapView.viewportYScale = _cachedViewportY;
+        _mapVc.mapView.viewportXScale = kViewportXNonShifted;
+        _mapVc.mapView.viewportYScale = _cachedViewportY;
         
         [_mapVc.mapView suspendRendering];
         
@@ -253,15 +251,14 @@
 
 - (void)enterNavigationMode
 {
+    _mapVc.mapView.viewportXScale = [self isLeftSideDriving] ? 1.5 : 0.5;
     _isInNavigationMode = YES;
 }
 
 - (void)exitNavigationMode
 {
+    _mapVc.mapView.viewportXScale = _cachedViewportX;
     _isInNavigationMode = NO;
-    [self.view layoutIfNeeded];
-//    _mapVc.mapView.viewportYScale = 1.0;
-//    _mapVc.mapView.viewportXScale = 1.0;//[self isLeftSideDriving] ? 1.5 : 0.5;
 }
 
 - (void)onLocationChanged

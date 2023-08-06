@@ -2691,3 +2691,4 @@
 "rendering_value_caiScale_description" = "Итальянский альпийский клуб (CAI)";
 "rendering_value_sacScale_description" = "Швейцарский альпийский клуб (SAC)";
 "shared_string_hidden" = "Скрыто";
+"get_osmand_cloud" = "Получить OsmAnd Cloud";

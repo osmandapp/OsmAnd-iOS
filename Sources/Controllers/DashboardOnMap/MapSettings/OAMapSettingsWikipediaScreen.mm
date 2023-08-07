@@ -22,6 +22,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAPluginPopupViewController.h"
 #import "OAManageResourcesViewController.h"
+#import "OADownloadingCellHelper.h"
 
 #define kCellTypeMap @"MapCell"
 
@@ -41,13 +42,10 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     OsmAndAppInstance _app;
     OAIAPHelper *_iapHelper;
     OAMapViewController *_mapViewController;
+    OADownloadingCellHelper *_downloadingCellHelper;
 
     OAWikipediaPlugin *_wikiPlugin;
     NSArray<OARepositoryResourceItem *> *_mapItems;
-
-    OAAutoObserverProxy* _downloadTaskProgressObserver;
-    OAAutoObserverProxy* _downloadTaskCompletedObserver;
-    OAAutoObserverProxy* _localResourcesChangedObserver;
 
     NSObject *_dataLock;
     BOOL _wikipediaEnabled;
@@ -70,36 +68,48 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
         _dataLock = [[NSObject alloc] init];
         _wikipediaEnabled = _app.data.wikipedia;
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-        [self commonInit];
+        
+        [self setupDownloadingCellHelper];
         [self initData];
     }
     return self;
 }
 
-- (void)dealloc
+- (void)setupDownloadingCellHelper
 {
-    if (_downloadTaskProgressObserver)
-    {
-        [_downloadTaskProgressObserver detach];
-        _downloadTaskProgressObserver = nil;
-    }
-    if (_downloadTaskCompletedObserver)
-    {
-        [_downloadTaskCompletedObserver detach];
-        _downloadTaskCompletedObserver = nil;
-    }
-    if (_localResourcesChangedObserver)
-    {
-        [_localResourcesChangedObserver detach];
-        _localResourcesChangedObserver = nil;
-    }
+    __weak OAMapSettingsWikipediaScreen *weakself = self;
+    _downloadingCellHelper = [[OADownloadingCellHelper alloc] init];
+    _downloadingCellHelper.hostViewController = self.vwController;
+    _downloadingCellHelper.hostTableView = self.tblView;
+    _downloadingCellHelper.hostDataLock = _dataLock;
+    
+    _downloadingCellHelper.fetchResourcesBlock = ^(){
+        
+        CLLocationCoordinate2D coordinate = [OAResourcesUIHelper getMapLocation];
+        _mapItems = (NSArray<OARepositoryResourceItem *> *) [OAResourcesUIHelper findIndexItemsAt:coordinate type:OsmAndResourceType::WikiMapRegion includeDownloaded:NO limit:-1 skipIfOneDownloaded:YES];
+        [weakself initData];
+    };
+    
+    _downloadingCellHelper.getResourceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
+        
+        NSDictionary *item = [weakself getItem:indexPath];
+        if (item)
+        {
+            OAResourceItem *mapItem = item[@"item"];
+            if (mapItem)
+                return mapItem;
+        }
+        return nil;
+    };
+    
+    _downloadingCellHelper.getTableDataBlock = ^NSArray<NSArray<NSDictionary *> *> *{
+        return [weakself data];
+    };
 }
 
-- (void)commonInit
+- (NSArray<NSArray <NSDictionary *> *> *)data
 {
-    _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:) andObserve:_app.downloadsManager.progressCompletedObservable];
-    _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onDownloadTaskFinished:withKey:andValue:) andObserve:_app.downloadsManager.completedObservable];
-    _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onLocalResourcesChanged:withKey:) andObserve:_app.localResourcesChangedObservable];
+    return _data;
 }
 
 - (void)initData
@@ -145,7 +155,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     [self.tblView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     self.tblView.estimatedRowHeight = kEstimatedRowHeight;
 
-    [self updateAvailableMaps];
+    [_downloadingCellHelper updateAvailableMaps];
 }
 
 - (void)onRotation
@@ -154,27 +164,6 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     [self.tblView reloadData];
 }
 
-- (void)updateAvailableMaps
-{
-    CLLocationCoordinate2D coordinate = [OAResourcesUIHelper getMapLocation];
-    _mapItems = [OAResourcesUIHelper findIndexItemsAt:coordinate
-                                                 type:OsmAndResourceType::WikiMapRegion
-                                    includeDownloaded:NO
-                                                limit:-1
-                                  skipIfOneDownloaded:YES];
-
-    [self initData];
-    [UIView transitionWithView:self.tblView
-                      duration:0.35f
-                       options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^(void)
-                    {
-        [self.tblView reloadData];
-                    }
-                    completion:nil];
-}
-
-
 - (void)applyParameter:(id)sender
 {
     if ([sender isKindOfClass:[UISwitch class]])
@@ -182,7 +171,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
         UISwitch *sw = (UISwitch *) sender;
         [(OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class] wikipediaChanged:sw.isOn];
         _wikipediaEnabled = _app.data.wikipedia;
-        [self updateAvailableMaps];
+        [_downloadingCellHelper updateAvailableMaps];
     }
 }
 
@@ -282,81 +271,8 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     }
     else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {
-        static NSString* const repositoryResourceCell = @"repositoryResourceCell";
-        static NSString* const downloadingResourceCell = @"downloadingResourceCell";
         OAResourceItem *mapItem = item[@"item"];
-        NSString* cellTypeId = mapItem.downloadTask ? downloadingResourceCell : repositoryResourceCell;
-
-        uint64_t _sizePkg = mapItem.sizePkg;
-        if ((mapItem.resourceType == OsmAndResourceType::WikiMapRegion) && ![_iapHelper.wiki isActive])
-            mapItem.disabled = YES;
-        NSString *subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourceType resourceTypeLocalized:mapItem.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
-
-        UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
-        if (cell == nil)
-        {
-            if ([cellTypeId isEqualToString:repositoryResourceCell])
-            {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellTypeId];
-
-                cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-                cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-                cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
-
-                UIImage* iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
-                UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-                [btnAcc removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-                [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
-                [btnAcc setImage:iconImage forState:UIControlStateNormal];
-                btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
-                btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
-                [cell setAccessoryView:btnAcc];
-            }
-            else if ([cellTypeId isEqualToString:downloadingResourceCell])
-            {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellTypeId];
-
-                cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-                cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-                cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
-
-                FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
-                progressView.iconView = [[UIView alloc] init];
-
-                cell.accessoryView = progressView;
-            }
-        }
-        if ([cellTypeId isEqualToString:repositoryResourceCell])
-        {
-            if (!mapItem.disabled)
-            {
-                cell.textLabel.textColor = [UIColor blackColor];
-                UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
-                UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-                [btnAcc removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-                [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
-                [btnAcc setImage:iconImage forState:UIControlStateNormal];
-                btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
-                btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
-                [cell setAccessoryView:btnAcc];
-            }
-            else
-            {
-                cell.textLabel.textColor = [UIColor lightGrayColor];
-                cell.accessoryView = nil;
-            }
-        }
-
-        cell.imageView.image = [UIImage templateImageNamed:@"ic_custom_wikipedia"];
-        cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
-        cell.textLabel.text = mapItem.title;;
-        if (cell.detailTextLabel != nil)
-            cell.detailTextLabel.text = subtitle;
-
-        if ([cellTypeId isEqualToString:downloadingResourceCell])
-            [self updateDownloadingCell:cell indexPath:indexPath];
-
-        return cell;
+        return [_downloadingCellHelper setupCell:mapItem indexPath:indexPath];
     }
 
     return nil;
@@ -450,137 +366,8 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     }
     else if (indexPath.section == EOAMapSettingsWikipediaSectionAvailable && [item[@"type"] isEqualToString:kCellTypeMap])
     {
-        OAResourceItem *mapItem = item[@"item"];
-        if (mapItem.downloadTask != nil)
-        {
-            [OAResourcesUIHelper offerCancelDownloadOf:mapItem];
-        }
-        else if ([mapItem isKindOfClass:[OARepositoryResourceItem class]])
-        {
-            OARepositoryResourceItem *resItem = (OARepositoryResourceItem *) mapItem;
-            if ((resItem.resourceType == OsmAndResourceType::WikiMapRegion) && ![_iapHelper.wiki isActive])
-            {
-                [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
-            }
-            else
-            {
-                [OAResourcesUIHelper offerDownloadAndInstallOf:resItem onTaskCreated:^(id<OADownloadTask> task) {
-                    [self updateAvailableMaps];
-                } onTaskResumed:nil];
-            }
-        }
+        [_downloadingCellHelper onItemClicked:indexPath];
     }
-}
-
-#pragma mark - Downloading cell progress methods
-
-- (void)updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tblView cellForRowAtIndexPath:indexPath];
-    [self updateDownloadingCell:cell indexPath:indexPath];
-}
-
-- (void)updateDownloadingCell:(UITableViewCell *)cell indexPath:(NSIndexPath *)indexPath
-{
-    OAResourceItem *mapItem = [self getItem:indexPath][@"item"];
-    if (mapItem.downloadTask)
-    {
-        FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
-
-        float progressCompleted = mapItem.downloadTask.progressCompleted;
-        if (progressCompleted >= 0.001f && mapItem.downloadTask.state == OADownloadTaskStateRunning)
-        {
-            progressView.iconPath = nil;
-            if (progressView.isSpinning)
-                [progressView stopSpinProgressBackgroundLayer];
-            progressView.progress = progressCompleted - 0.001;
-        }
-        else if (mapItem.downloadTask.state == OADownloadTaskStateFinished)
-        {
-            progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
-            if (!progressView.isSpinning)
-                [progressView startSpinProgressBackgroundLayer];
-            progressView.progress = 0.0f;
-        }
-        else
-        {
-            progressView.iconPath = [UIBezierPath bezierPath];
-            progressView.progress = 0.0;
-            if (!progressView.isSpinning)
-                [progressView startSpinProgressBackgroundLayer];
-        }
-        progressView.tintColor = UIColorFromRGB(color_primary_purple);
-    }
-}
-
-- (void)refreshDownloadingContent:(NSString *)downloadTaskKey
-{
-    @synchronized(_dataLock)
-    {
-        for (int i = 0; i < _mapItems.count; i++)
-        {
-            OAResourceItem *item = _mapItems[i];
-            if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey])
-                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:EOAMapSettingsWikipediaSectionAvailable]];
-        }
-    }
-}
-
-- (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
-{
-    id<OADownloadTask> task = key;
-
-    // Skip all downloads that are not resources
-    if (![task.key hasPrefix:@"resource:"])
-        return;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!vwController.isViewLoaded || vwController.view.window == nil)
-            return;
-
-        [self refreshDownloadingContent:task.key];
-    });
-}
-
-- (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
-{
-    id<OADownloadTask> task = key;
-
-    // Skip all downloads that are not resources
-    if (![task.key hasPrefix:@"resource:"])
-        return;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!vwController.isViewLoaded || vwController.view.window == nil)
-            return;
-
-        if (task.progressCompleted < 1.0)
-        {
-            if ([_app.downloadsManager.keysOfDownloadTasks count] > 0)
-            {
-                id<OADownloadTask> nextTask = [_app.downloadsManager firstDownloadTasksWithKey:_app.downloadsManager.keysOfDownloadTasks[0]];
-                [nextTask resume];
-            }
-            [self updateAvailableMaps];
-        }
-        else
-        {
-            [self refreshDownloadingContent:task.key];
-        }
-    });
-}
-
-- (void)onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!vwController.isViewLoaded || vwController.view.window == nil)
-            return;
-
-        [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
-
-        [OAManageResourcesViewController prepareData];
-        [self updateAvailableMaps];
-    });
 }
 
 #pragma mark - OAWikipediaScreenDelegate

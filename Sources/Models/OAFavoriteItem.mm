@@ -624,6 +624,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     [fp setDescription:pt.desc];
     [fp setComment:pt.comment];
     [fp setAmenityOriginName:pt.getAmenityOriginName];
+    [fp setAmenity:[pt getAmenity]];
     
     // TODO: sync with Android
 

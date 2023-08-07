@@ -186,12 +186,35 @@ static UIViewController *parentController;
                 [weakSelf closeFreeBackupBanner];
             };
             [_freeBackupBanner configureWithBannerType:BannerTypeFavorite];
+            
+            [self configureSeparator:[UIView new] top:YES];
+            [self configureSeparator:[UIView new] top:NO];
+
             [self changeContentInsetTop:20];
         }
     }
     else if (_freeBackupBanner) {
         [self closeFreeBackupBanner];
     }
+}
+
+- (void)configureSeparator:(UIView *)view top:(BOOL)top
+{
+    view.translatesAutoresizingMaskIntoConstraints = NO;
+    view.backgroundColor = UIColorFromRGB(color_tint_gray);
+    [_freeBackupBanner addSubview:view];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [view.leadingAnchor constraintEqualToAnchor:_freeBackupBanner.leadingAnchor],
+        [view.trailingAnchor constraintEqualToAnchor:_freeBackupBanner.trailingAnchor],
+        [view.heightAnchor constraintEqualToConstant:1.0 / [UIScreen mainScreen].scale]
+    ]];
+    
+    if (top)
+        [view.topAnchor constraintEqualToAnchor:_freeBackupBanner.topAnchor].active = YES;
+    else
+        [view.bottomAnchor constraintEqualToAnchor:_freeBackupBanner.bottomAnchor].active = YES;
+
 }
 
 - (void)closeFreeBackupBanner

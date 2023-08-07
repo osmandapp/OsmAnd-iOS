@@ -10,18 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol OACloudIntroductionDelegate <NSObject>
-
-- (void)getOrRegisterButtonPressed;
-- (void)logInButtonPressed;
-
-@end
-
 @interface OACloudIntroductionHeaderView : UIView
 
-@property (nonatomic, weak) id<OACloudIntroductionDelegate> delegate;
-
-- (void)setUpViewWithTitle:(NSString *)title description:(NSString *)description image:(UIImage *)image topButtonTitle:(NSString *)topButtonTitle bottomButtonTitle:(NSString *)bottomButtonTitle;
+- (void)setUpViewWithTitle:(NSString *)title description:(NSString *)description image:(UIImage *)image;
 - (CGFloat)calculateViewHeight;
 
 - (void)addAnimatedViews;

@@ -72,11 +72,11 @@
 
     OATableSectionData *credentialSection = [_data createNewSection];
     credentialSection.headerText = OALocalizedString(@"login_account");
-
+    NSString *userName = [OAOsmOAuthHelper isOAuthAuthorised] ? [_settings.osmUserDisplayName get] : [_settings.osmUserName get];
     [credentialSection addRowFromDictionary:@{
         kCellKeyKey : @"edit_credentials",
         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
-        kCellTitleKey : _isAuthorised ? [_settings.osmUserName get] : OALocalizedString(@"login_open_street_map_org"),
+        kCellTitleKey : _isAuthorised ? userName : OALocalizedString(@"login_open_street_map_org"),
         kCellIconNameKey : @"ic_custom_user_profile",
         kCellAccessoryType : _isAuthorised ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone),
         @"titleColor" : _isAuthorised ? UIColor.blackColor : UIColorFromRGB(color_primary_purple),
@@ -173,7 +173,7 @@
         if (cell)
         {
             NSString *title = item.title;
-            [cell titleVisibility:title && title.length > 0];
+            [cell titleVisibility:title];
             cell.titleLabel.text = title;
 
             cell.titleLabel.textColor = [item objForKey:@"titleColor"];
@@ -333,7 +333,7 @@
         if (_credentialIndexPath && _mappersIndexPath)
         {
             OATableRowData *credentialRow = [_data itemForIndexPath:_credentialIndexPath];
-            credentialRow.title = _isAuthorised ? [_settings.osmUserName get] : OALocalizedString(@"login_open_street_map_org");
+            credentialRow.title = _isAuthorised ? [_settings.osmUserDisplayName get] : OALocalizedString(@"login_open_street_map_org");
             credentialRow.accessoryType = _isAuthorised ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
             [credentialRow setObj:_isAuthorised ? UIColor.blackColor : UIColorFromRGB(color_primary_purple) forKey:@"titleColor"];
             [credentialRow setObj:[UIFont scaledSystemFontOfSize:17. weight:_isAuthorised ? UIFontWeightRegular : UIFontWeightMedium] forKey:@"titleFont"];

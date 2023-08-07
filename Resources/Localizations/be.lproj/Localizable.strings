@@ -974,7 +974,6 @@
 "routing_attr_avoid_unpaved_name" = "Без грунтавых дарог";
 "rendering_attr_piste_difficulty_connection_name" = "Злучэнне";
 "routing_attr_difficulty_preference_description" = "Аддаваць перавагу трасам гэтай складанаці, але не выключаць прастейшыя, калі шлях будзе карацейшым.";
-"rendering_attr_alpineHiking_name" = "Пешы горны турызм";
 "rendering_value_translucent_lightblue_name" = "Празрысты блакітны";
 "rendering_attr_piste_difficulty_expert_name" = "Экспертная";
 "rendering_value_translucent_red_name" = "Празрысты чырвоны";
@@ -2533,3 +2532,8 @@
 "speed_camera_pois" = "POIкамер кантролю хуткасці";
 "uninstall_speed_cameras" = "Выдаліць камеры кантролю хуткасці";
 "icon_group_service" = "Паслугі";
+"disable_vertex_hillshade_3d" = "Адключыць цень вяршынь ў 3D";
+"test_heightmap" = "Тэст карты вышынь";
+"speak_route_deviation" = "Апавясціць аб адхіленні ад маршруту";
+"generate_slope_from_3d_maps" = "Стварыць растравыя карты схілаў з 3D карт";
+"generate_hillshade_from_3d_maps" = "Стварыць растравыя карты рэльефу з 3D карт";

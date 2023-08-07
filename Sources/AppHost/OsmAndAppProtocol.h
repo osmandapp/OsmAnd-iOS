@@ -110,6 +110,8 @@
 - (void) loadRoutingFiles;
 
 - (NSString *) favoritesStorageFilename:(NSString *)groupName;
+- (NSString *) getGroupFileName:(NSString *)groupName;
+- (NSString *) getGroupName:(NSString *)fileName;
 
 - (NSString *) getUserIosId;
 

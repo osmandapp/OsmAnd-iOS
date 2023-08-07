@@ -66,7 +66,6 @@ typedef NS_ENUM(NSInteger, EOAMap3DModeVisibility)
 
 + (instancetype) withModeConstant:(EOAMap3DModeVisibility)mode;
 + (NSString *) getTitle:(EOAMap3DModeVisibility)mode;
-+ (NSString *) getDescription:(EOAMap3DModeVisibility)mode;
 + (NSString *) getIconName:(EOAMap3DModeVisibility)mode;
 
 @end
@@ -991,6 +990,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *oprUseDevUrl;
 @property (nonatomic) OACommonBoolean *offlineEditing;
 @property (nonatomic) OACommonBoolean *osmUseDevUrl;
+@property (nonatomic) OACommonString *osmUserDisplayName;
+@property (nonatomic) OACommonUploadVisibility *osmUploadVisibility;
 
 // Mapillary
 @property (nonatomic) OACommonBoolean *showMapillary;
@@ -1133,9 +1134,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @property (nonatomic) OACommonBoolean *webglSupported;
 
-@property (nonatomic) OACommonString *osmUserDisplayName;
-@property (nonatomic) OACommonUploadVisibility *osmUploadVisibility;
-
 @property (nonatomic) OACommonBoolean *inappsRead;
 
 // Cloud backup
@@ -1145,6 +1143,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonString *backupNativeDeviceId;
 @property (nonatomic) OACommonString *backupAccessToken;
 @property (nonatomic) OACommonString *backupAccessTokenUpdateTime;
+@property (nonatomic) OACommonLong *backupFreePlanRegistrationTime;
 
 @property (nonatomic) OACommonString *backupPromocode;
 @property (nonatomic) OACommonBoolean *backupPurchaseActive;

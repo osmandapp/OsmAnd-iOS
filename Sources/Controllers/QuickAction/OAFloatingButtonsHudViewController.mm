@@ -81,6 +81,8 @@
     [_quickActionFloatingButton addGestureRecognizer:_quickActionsButtonDragRecognizer];
     _quickActionFloatingButton.accessibilityLabel = OALocalizedString(@"configure_screen_quick_action");
     
+    _map3dModeFloatingButton.alpha = 0;
+    
     [self onMap3dModeUpdated];
     [self setQuickActionButtonMargin];
     
@@ -127,12 +129,12 @@
         [_map3dModeFloatingButton updateColorsForPressedState: NO];
         if ([OAMapViewTrackingUtilities.instance isIn3dMode])
         {
-            [_map3dModeFloatingButton setImage:[UIImage templateImageNamed:@"ic_custom_3d"] forState:UIControlStateNormal];
+            [_map3dModeFloatingButton setImage:[UIImage templateImageNamed:@"ic_custom_2d"] forState:UIControlStateNormal];
             _map3dModeFloatingButton.accessibilityLabel = OALocalizedString(@"map_3d_mode_action");
         }
         else
         {
-            [_map3dModeFloatingButton setImage:[UIImage templateImageNamed:@"ic_custom_2d"] forState:UIControlStateNormal];
+            [_map3dModeFloatingButton setImage:[UIImage templateImageNamed:@"ic_custom_3d"] forState:UIControlStateNormal];
             _map3dModeFloatingButton.accessibilityLabel = OALocalizedString(@"map_2d_mode_action");
         }
         EOAMap3DModeVisibility visibilityMode = ((EOAMap3DModeVisibility) [_settings.map3dMode get]);

@@ -24,6 +24,7 @@ UIKIT_EXTERN NSString *const OATransportStopRouteArrow;
 @property (nonatomic) NSString *desc;
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::TransportRoute> route;
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::TransportStop> stop;
+@property (nonatomic) int stopIndex;
 @property (nonatomic) int distance;
 @property (nonatomic) BOOL showWholeRoute;
 
@@ -31,6 +32,10 @@ UIKIT_EXTERN NSString *const OATransportStopRouteArrow;
 - (OAGpxBounds) calculateBounds:(int)startPosition;
 - (UIColor *) getColor:(BOOL)nightMode;
 - (NSString *) getTypeStr;
+
+- (void) initStopIndex;
+- (int) getStopIndex;
+- (void) setStopIndex:(int)stopIndex;
 
 - (OATransportStopRoute *) clone;
 

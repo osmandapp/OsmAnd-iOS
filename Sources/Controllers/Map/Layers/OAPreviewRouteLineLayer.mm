@@ -25,6 +25,7 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/SkiaUtilities.h>
+#include <OsmAndCore/SingleSkImage.h>
 
 #define kTurnArrowsColoringByAttr 0xffffffff
 #define kOutlineId 1001
@@ -120,7 +121,7 @@
         locationMarkerBuilder.setIsHidden(true);
         _locationMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
         locationMarkerBuilder.addOnMapSurfaceIcon(_locationMainIconKey,
-                                                  [OANativeUtilities skImageFromCGImage:[navIcon iconWithColor:iconColor].CGImage]);
+                                                  OsmAnd::SingleSkImage([OANativeUtilities skImageFromCGImage:[navIcon iconWithColor:iconColor].CGImage]));
         _locationMarker = locationMarkerBuilder.buildAndAddToCollection(_centerMarkerCollection);
         [self.mapView addKeyedSymbolsProvider:_centerMarkerCollection];
     }
@@ -194,9 +195,9 @@
                     || _routeLineColor == kDefaultRouteLineNightColor;
 
             builder.setFillColor(lineColor)
-                   .setPathIcon([self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color
-                                            fileName:@"map_direction_arrow"])
-                   .setSpecialPathIcon([self specialBitmapWithColor:lineColor])
+                   .setPathIcon(OsmAnd::SingleSkImage([self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color
+                                            fileName:@"map_direction_arrow"]))
+                   .setSpecialPathIcon(OsmAnd::SingleSkImage([self specialBitmapWithColor:lineColor]))
                    .setShouldShowArrows(true)
                    .setScreenScale(UIScreen.mainScreen.scale);
 

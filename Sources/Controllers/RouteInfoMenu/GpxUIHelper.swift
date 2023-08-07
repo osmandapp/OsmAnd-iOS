@@ -8,7 +8,6 @@
 
 import UIKit
 import Charts
-import Charts.Swift
 
 @objc public enum GPXDataSetType: Int {
     case ALTITUDE = 0

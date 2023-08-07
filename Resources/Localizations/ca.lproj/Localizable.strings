@@ -1517,7 +1517,6 @@
 "routing_attr_avoid_bus_description" = "Evita autobús i troleibús";
 "rendering_attr_showAccess_name" = "Mostra les restriccions d\'accés i els peatges";
 "rendering_attr_hmRendered_name" = "Mostra més detalls al mapa";
-"rendering_attr_alpineHiking_name" = "Escala senderista SAC (Club Alpí Suís)";
 "routeInfo_steepness_name" = "Inclinació";
 "routing_attr_avoid_unpaved_description" = "Evita les vies sense pavimentar";
 "rendering_attr_coloredBuildings_name" = "Edificis amb colors codificats per tipus";

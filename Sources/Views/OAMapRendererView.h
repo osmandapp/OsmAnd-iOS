@@ -117,6 +117,8 @@ struct CLLocationCoordinate2D;
 
 - (void) setSkyColor:(OsmAnd::FColorRGB)skyColor;
 
+- (void) setFogColor:(OsmAnd::FColorRGB)fogColor;
+
 // Misc properties:
 @property(nonatomic, readonly) QVector<OsmAnd::TileId> visibleTiles;
 

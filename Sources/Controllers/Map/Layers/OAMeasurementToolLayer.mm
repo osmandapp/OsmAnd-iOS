@@ -21,6 +21,7 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/SkiaUtilities.h>
+#include <OsmAndCore/SingleSkImage.h>
 
 #define MIN_POINTS_PERCENTILE 5
 #define START_ZOOM 8
@@ -159,7 +160,7 @@
         pointMarkerBuilder.setIsHidden(false);
         pointMarkerBuilder.setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
         pointMarkerBuilder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
-        pointMarkerBuilder.setPinIcon(bitmap);
+        pointMarkerBuilder.setPinIcon(OsmAnd::SingleSkImage(bitmap));
         pointMarkerBuilder.setMarkerId(collection->getMarkers().count());
         
         auto marker = pointMarkerBuilder.buildAndAddToCollection(collection);
@@ -319,7 +320,7 @@
     pointMarkerBuilder.setIsHidden(false);
     pointMarkerBuilder.setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
     pointMarkerBuilder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
-    pointMarkerBuilder.setPinIcon(_pointMarkerIcon);
+    pointMarkerBuilder.setPinIcon(OsmAnd::SingleSkImage(_pointMarkerIcon));
     
     if (_editingCtx.getPointsCount > 500)
     {

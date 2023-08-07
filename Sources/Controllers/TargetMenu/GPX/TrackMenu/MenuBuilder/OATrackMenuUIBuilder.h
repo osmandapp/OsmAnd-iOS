@@ -30,6 +30,6 @@
 - (BOOL)isOn:(OAGPXBaseTableData *)tableData;
 - (void)updateData:(OAGPXBaseTableData *)tableData;
 - (void)updateProperty:(id)value tableData:(OAGPXBaseTableData *)tableData;
-- (void)onButtonPressed:(OAGPXBaseTableData *)tableData;
+- (void)onButtonPressed:(OAGPXBaseTableData *)tableData sourceView:(UIView *)sourceView;
 
 @end

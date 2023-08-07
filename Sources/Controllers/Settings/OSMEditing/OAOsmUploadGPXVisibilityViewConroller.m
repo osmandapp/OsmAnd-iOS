@@ -7,7 +7,7 @@
 //
 
 #import "OAOsmUploadGPXVisibilityViewConroller.h"
-#import "OASettingsTitleTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
@@ -50,25 +50,25 @@
     section.footerText = [self localizedDescriptionForVisibilityType:_selectedVisibility];
     
     OATableRowData *publicCell = [section createNewRow];
-    [publicCell setCellType:[OASettingsTitleTableViewCell getCellIdentifier]];
+    [publicCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
     [publicCell setTitle:[self.class localizedNameForVisibilityType:EOAOsmUploadGPXVisibilityPublic]];
     [publicCell setObj:@(_selectedVisibility == EOAOsmUploadGPXVisibilityPublic) forKey:@"selected"];
     [publicCell setObj: (^void(){ [weakSelf onVisibilityChanged:EOAOsmUploadGPXVisibilityPublic]; }) forKey:@"actionBlock"];
     
     OATableRowData *identifiableCell = [section createNewRow];
-    [identifiableCell setCellType:[OASettingsTitleTableViewCell getCellIdentifier]];
+    [identifiableCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
     [identifiableCell setTitle:[self.class localizedNameForVisibilityType:EOAOsmUploadGPXVisibilityIdentifiable]];
     [identifiableCell setObj:@(_selectedVisibility == EOAOsmUploadGPXVisibilityIdentifiable) forKey:@"selected"];
     [identifiableCell setObj: (^void(){ [weakSelf onVisibilityChanged:EOAOsmUploadGPXVisibilityIdentifiable]; }) forKey:@"actionBlock"];
     
     OATableRowData *trackableCell = [section createNewRow];
-    [trackableCell setCellType:[OASettingsTitleTableViewCell getCellIdentifier]];
+    [trackableCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
     [trackableCell setTitle:[self.class localizedNameForVisibilityType:EOAOsmUploadGPXVisibilityTrackable]];
     [trackableCell setObj:@(_selectedVisibility == EOAOsmUploadGPXVisibilityTrackable) forKey:@"selected"];
     [trackableCell setObj: (^void(){ [weakSelf onVisibilityChanged:EOAOsmUploadGPXVisibilityTrackable]; }) forKey:@"actionBlock"];
     
     OATableRowData *privateCell = [section createNewRow];
-    [privateCell setCellType:[OASettingsTitleTableViewCell getCellIdentifier]];
+    [privateCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
     [privateCell setTitle:[self.class localizedNameForVisibilityType:EOAOsmUploadGPXVisibilityPrivate]];
     [privateCell setObj:@(_selectedVisibility == EOAOsmUploadGPXVisibilityPrivate) forKey:@"selected"];
     [privateCell setObj: (^void(){ [weakSelf onVisibilityChanged:EOAOsmUploadGPXVisibilityPrivate]; }) forKey:@"actionBlock"];
@@ -132,19 +132,20 @@
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     NSString *cellType = item.cellType;
-    if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OASettingsTitleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
-            cell.iconView.hidden = YES;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+            [cell descriptionVisibility:NO];
+            [cell leftIconVisibility:NO];
             cell.tintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)
         {
-            cell.textView.text = item.title;
+            cell.titleLabel.text = item.title;
             BOOL selected = [item boolForKey:@"selected"];
             cell.accessoryType = selected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
             cell.accessibilityValue = selected ? OALocalizedString(@"shared_string_selected") : OALocalizedString(@"shared_string_not_selected");

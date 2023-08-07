@@ -2039,7 +2039,6 @@
 "rendering_value_disabled_name" = "Išjungtas";
 "rendering_attr_contourColorScheme_name" = "Kontūro linijų spalvų schema";
 "routing_attr_short_way_name" = "Taupus kelias";
-"rendering_attr_alpineHiking_name" = "Kalnų žygiai (SAC)";
 "rendering_attr_showLez_name" = "Rodyti mažos taršos zonas";
 "rendering_value_green_name" = "Žalia";
 "routing_attr_piste_type_nordic_description" = "Trails for nordic or cross-country skiing.";

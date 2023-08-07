@@ -1268,7 +1268,7 @@
 "routing_attr_height_description" = "Określa dozwoloną wysokość pojazdu na trasach.";
 "rendering_attr_surface_sett_name" = "Kostka brukowa";
 "routing_attr_max_num_changes_name" = "Liczba zmian";
-"rendering_attr_alpineHiking_name" = "Klasyfikacja trudności wspinaczki alpinistycznej (SAC)";
+"rendering_attr_alpineHiking_name" = "Klasyfikacja trudności";
 "rendering_attr_highway_class_street_name" = "Ulica";
 "rendering_attr_hideProposed_name" = "Proponowane obiekty";
 "routing_attr_avoid_share_taxi_name" = "Bez taksówek zbiorowych";
@@ -2670,3 +2670,7 @@
 "search_favorites" = "Wyszukiwanie ulubionych";
 "speak_route_deviation" = "Zapowiedź zbaczania z trasy";
 "compass_click_desc" = "Stuknij w kompas, aby przełączyć tryb orientacji mapy.";
+"rendering_value_sacScale_description" = "Szwajcarski Klub Alpejski";
+"free_favorites_backup" = "Darmowa kopia zapasowa ulubionych";
+"free_account" = "Darmowe konto";
+"get_osmand_cloud" = "Pozyskaj OsmAnd Cloud";

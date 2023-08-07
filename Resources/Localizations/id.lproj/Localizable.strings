@@ -2039,7 +2039,7 @@
 "rendering_value_disabled_name" = "Dinonaktifkan";
 "rendering_attr_contourColorScheme_name" = "Skema warna garis kontur";
 "routing_attr_short_way_name" = "Cara hemat bahan bakar";
-"rendering_attr_alpineHiking_name" = "Skala pendakian Alpine (SAC)";
+"rendering_attr_alpineHiking_name" = "Klasifikasi kesulitan";
 "rendering_attr_showLez_name" = "Tampilkan Zona Emisi Rendah";
 "rendering_value_green_name" = "Hijau";
 "routing_attr_piste_type_nordic_description" = "Jalur untuk ski nordik atau lintas negara.";
@@ -2619,3 +2619,5 @@
 "speed_cameras_alert" = "Peringatan kamera pengukur kecepatan di beberapa negara dilarang oleh undang-undang.";
 "icon_group_service" = "Layanan";
 "map_widget_distance_to_intermediate" = "Jarak ke perantara";
+"rendering_value_sacScale_description" = "Klub Alpen Swiss";
+"rendering_value_caiScale_description" = "Club Alpino Italiano (Klub Alpen Italia)";

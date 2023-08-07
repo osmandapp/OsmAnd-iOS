@@ -1021,7 +1021,6 @@
 "routing_attr_prefer_motorway_name" = "高速公路优先";
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "routing_attr_avoid_ferries_description" = "避开轮渡";
-"rendering_attr_alpineHiking_name" = "高山远足量表（SAC）";
 "rendering_attr_OSMMapperAssistant_name" = "OSM制图助手";
 "rendering_attr_roadStyle_description" = "道路风格";
 "rendering_attr_hmRendered_description" = "增加地图显示的详细信息量。";
@@ -2154,3 +2153,9 @@
 "cloud_recent_changes" = "变更";
 "cloud_all_changes_downloaded" = "已下载所有变更";
 "last_sync" = "上次同步";
+"reset_all_settings_desc" = "重置所有设置为默认值吗？";
+"restart_is_required_title" = "需要重新启动";
+"restart_is_required" = "需要重新启动以应用更改。";
+"wikipedia_language_settings_descr" = "选择地图上维基百科文章将显示的语言。你可以在阅读文章时切换为其它可用语言。";
+"dont_download" = "不要下载";
+"wikivoyage_download_pics" = "下载图像";

@@ -2025,7 +2025,7 @@
 "rendering_attr_surface_snow_name" = "Nieve";
 "rendering_attr_highway_class_cycleway_name" = "Ciclovía o bicisenda";
 "routing_attr_piste_type_downhill_description" = "Pistas de esquí alpino o de descenso y acceso a remontes mecánicos.";
-"rendering_attr_hideWaterPolygons_name" = "Ocultar agua";
+"rendering_attr_hideWaterPolygons_name" = "Cuerpos de agua";
 "routing_attr_avoid_stairs_name" = "Sin escaleras";
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_attr_piste_type_skitour_name" = "Esquí de travesía";
@@ -2039,7 +2039,7 @@
 "rendering_value_disabled_name" = "Desactivado";
 "rendering_attr_contourColorScheme_name" = "Esquema de color de las curvas de nivel";
 "routing_attr_short_way_name" = "Ruta de bajo consumo (corta)";
-"rendering_attr_alpineHiking_name" = "Escala de senderismo alpino (SAC)";
+"rendering_attr_alpineHiking_name" = "Clasificación de dificultad";
 "rendering_attr_showLez_name" = "Mostrar zonas de baja emisión";
 "rendering_value_green_name" = "Verde";
 "routing_attr_piste_type_nordic_description" = "Senderos para esquí nórdico o de travesía.";
@@ -2778,7 +2778,7 @@
 "rendering_attr_weatherPrecipitationContours_name" = "Isolíneas de precipitación";
 "rendering_attr_depthContourColorScheme_description" = "Esquema de color para las curvas de nivel de profundidad";
 "routing_attr_allow_streams_description" = "Permite arroyos y desagües";
-"rendering_attr_hideMilitaryAreas_name" = "Ocultaráreas militares";
+"rendering_attr_hideMilitaryAreas_name" = "Áreas militares";
 "rendering_attr_showTrolleybusRoutes_name" = "Rutas de trolebús";
 "routing_attr_avoid_4wd_only_name" = "Evitar caminos para 4x4";
 "routing_attr_hazmat_category_description" = "Categoría de materiales peligrosos / Considera los permisos de acceso para vehículos con materiales peligrosos";
@@ -3007,3 +3007,17 @@
 "map_3d_mode_description" = "Pulsa en el mapa con 2 dedos y mueve hacia arriba o abajo para ajustar la inclinación del mapa.";
 "map_3d_mode_hint" = "Mantén pulsado para cambiar la ubicación del botón.";
 "visible_in_3d_mode" = "Visible en el modo 3D";
+"rendering_value_sacScale_description" = "Club Alpino Suizo";
+"rendering_value_sacScale_name" = "sac";
+"rendering_value_caiScale_name" = "cai";
+"rendering_value_caiScale_description" = "Club Alpino Italiano";
+"rendering_attr_alpineHikingScaleScheme_description" = "Tipos de clasificación de dificultad para rutas.";
+"reset_all_settings_desc" = "¿Restablecer todos los ajustes a los predefinidos?";
+"add_row" = "Añadir fila";
+"no_widgets_here_yet" = "Todavía sin widgets aquí";
+"no_widgets_descr" = "Añade uno o más widgets de la lista de widgets disponibles.";
+"free_account" = "Cuenta gratuita";
+"free_favorites_backup" = "Copia de seguridad gratuita de favoritos";
+"banner_payment_free_backup_settings_title" = "Copia de seguridad gratuita de los ajustes";
+"get_osmand_cloud" = "Obtener OsmAnd Cloud";
+"free_favorites_backup_description" = "Regístrate en OsmAnd Cloud para obtener una copia de seguridad gratuita de los favoritos y ajustes";

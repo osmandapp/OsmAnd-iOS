@@ -25,20 +25,16 @@ class Map3dModeButtonVisibilityViewController: OABaseNavbarViewController {
     
     override func generateData() {
         let section = tableData.createNewSection()
-        section.headerText = localizedString("map_3d_mode_description")
         section.footerText = localizedString("map_3d_mode_hint")
         for i in 0 ..< 3 {
             let row = section.createNewRow()
             let visibilityMode = EOAMap3DModeVisibility(rawValue: i)!
             let title = OAMap3DModeVisibility.getTitle(visibilityMode) ?? ""
-            let descr = OAMap3DModeVisibility.getDescription(visibilityMode)
             row.setObj(NSNumber(value: i), forKey: "map_3d_mode")
             row.title = title
-            row.descr = descr
             row.iconName = OAMap3DModeVisibility.getIconName(visibilityMode)
             row.cellType = OASimpleTableViewCell.getIdentifier()
             row.accessibilityLabel = title
-            row.accessibilityValue = descr
         }
     }
     
@@ -49,11 +45,10 @@ class Map3dModeButtonVisibilityViewController: OABaseNavbarViewController {
             let nib = Bundle.main.loadNibNamed(OASimpleTableViewCell.getIdentifier(), owner: self, options: nil)
             cell = nib?.first as? OASimpleTableViewCell
             cell?.tintColor = UIColor(rgb: Int(color_primary_purple))
+            cell?.descriptionVisibility(false)
         }
         if let cell = cell {
             let isSelected = compassMode == EOAMap3DModeVisibility(rawValue: (item.obj(forKey: "map_3d_mode") as! NSNumber).intValue)
-            cell.descriptionLabel.text = item.descr
-            cell.descriptionVisibility(item.descr?.count ?? 0 > 0)
             cell.titleLabel.text = item.title
             cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
             cell.leftIconView.tintColor = UIColor(rgb: (isSelected ? Int(OAAppSettings.sharedManager()!.applicationMode.get().getIconColor()) : Int(color_tint_gray)))
@@ -69,6 +64,18 @@ class Map3dModeButtonVisibilityViewController: OABaseNavbarViewController {
     
     override func getLeftNavbarButtonTitle() -> String! {
         localizedString("shared_string_close")
+    }
+    
+    override func getTableHeaderDescription() -> String! {
+        localizedString("map_3d_mode_description")
+    }
+    
+    override func hideFirstHeader() -> Bool {
+        true
+    }
+    
+    override func isNavbarSeparatorVisible() -> Bool {
+        false
     }
     
     override func onRowSelected(_ indexPath: IndexPath!) {

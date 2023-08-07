@@ -7,7 +7,7 @@
 //
 
 #import "OACoordinatesFormatViewController.h"
-#import "OASettingsTitleTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OARootViewController.h"
 #import "OALinks.h"
 #import "OsmAndApp.h"
@@ -63,21 +63,21 @@
         @"title" : OALocalizedString(@"navigate_point_format_D"),
         @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_FORMAT_DEGREES),
         @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_DEGREES]],
-        @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+        @"type" : [OASimpleTableViewCell getCellIdentifier],
     },
     @{
         @"name" : @"navigate_point_format_DM",
         @"title" : OALocalizedString(@"navigate_point_format_DM"),
         @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_FORMAT_MINUTES),
         @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MINUTES]],
-        @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+        @"type" : [OASimpleTableViewCell getCellIdentifier],
     },
     @{
        @"name" : @"navigate_point_format_DMS",
        @"title" : OALocalizedString(@"navigate_point_format_DMS"),
        @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_FORMAT_SECONDS),
        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_SECONDS]],
-       @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+       @"type" : [OASimpleTableViewCell getCellIdentifier],
     },
     @{
         @"name" : @"utm_format",
@@ -85,7 +85,7 @@
         @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_UTM_FORMAT),
         @"description" : [NSString stringWithFormat:@"%@: %@\n%@\n%@\n", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_UTM], OALocalizedString(@"utm_description"), OALocalizedString(@"shared_string_read_more")],
         @"url" : kUrlWikipediaUtmFormat,
-        @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+        @"type" : [OASimpleTableViewCell getCellIdentifier],
     },
     @{
        @"name" : @"olc_format",
@@ -94,7 +94,7 @@
        @"description" : [NSString stringWithFormat:@"%@: %@. %@\n", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_OLC], OALocalizedString(@"shared_string_read_more")],
        @"url" : kUrlWikipediaOpenLocationCode,
        @"icon" : @"ic_custom_direction_compass",
-       @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+       @"type" : [OASimpleTableViewCell getCellIdentifier],
     },
     @{
         @"name" : @"mgrs_format",
@@ -102,7 +102,7 @@
         @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_MGRS_FORMAT),
         @"description" : [NSString stringWithFormat:@"%@: %@\n%@\n%@\n", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MGRS], OALocalizedString(@"mgrs_format_descr"), OALocalizedString(@"shared_string_read_more")],
         @"url" : kUrlWikipediaMgrsFormat,
-        @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+        @"type" : [OASimpleTableViewCell getCellIdentifier],
     }];
 }
 
@@ -120,20 +120,20 @@
 {
     NSDictionary *item = [self getItem:indexPath.section];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OASettingsTitleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+            [cell descriptionVisibility:NO];
+            [cell leftIconVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.iconView.hidden = ![item[@"selected"] boolValue];
+            cell.titleLabel.text = item[@"title"];
+            cell.accessoryType = [item[@"selected"] boolValue] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         return cell;
     }

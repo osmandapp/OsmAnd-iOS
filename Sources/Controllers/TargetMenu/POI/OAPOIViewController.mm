@@ -663,7 +663,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         [sb deleteCharactersInRange:NSMakeRange(lastIdx, 1)];
 
     // It cannot be username
-    if ([sb containsString:@"/"])
+    if ([sb isValidURL])
         return [@"https://" stringByAppendingString:value];
 
     NSMutableDictionary<NSString *, NSString *> *urls = [NSMutableDictionary dictionary];

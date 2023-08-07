@@ -653,7 +653,7 @@
     
     std::vector<std::shared_ptr<RouteSegmentResult>> list;
     if (includeFirstSegment)
-        list.push_back(_segments[startIndex++]);
+        list.push_back(_segments[startIndex]);
     
     for (int i = ++startIndex; i < endIndex; i++)
     {

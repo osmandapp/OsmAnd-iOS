@@ -63,9 +63,10 @@
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    __weak OACloudIntroductionViewController *weakSelf = self;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self setUpTableHeaderView];
-        self.tableView.tableHeaderView = _headerView;
+        [weakSelf setUpTableHeaderView];
+        weakSelf.tableView.tableHeaderView = _headerView;
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [_headerView addAnimatedViews];
     }];
@@ -89,8 +90,8 @@
 - (void)setUpTableHeaderView
 {
     _headerView = [[OACloudIntroductionHeaderView alloc] init];
-    NSString *topButtonTitle = [OAIAPHelper isSubscribedToOsmAndPro] ? OALocalizedString(@"cloud_create_account") : OALocalizedString(@"shared_string_get");
-    [_headerView setUpViewWithTitle:OALocalizedString(@"osmand_cloud") description:OALocalizedString(@"osmand_cloud_authorize_descr") image:[UIImage imageNamed:@"ic_custom_cloud_upload_colored_day_big"] topButtonTitle:topButtonTitle bottomButtonTitle:OALocalizedString(@"register_opr_have_account")];
+    [_headerView setUpViewWithTitle:OALocalizedString(@"osmand_cloud") description:OALocalizedString(@"osmand_cloud_authorize_descr")
+                              image:[UIImage imageNamed:@"ic_custom_cloud_upload_colored_day_big"] topButtonTitle:OALocalizedString(@"cloud_create_account") bottomButtonTitle:OALocalizedString(@"register_opr_have_account")];
     CGRect frame = _headerView.frame;
     frame.size.height = [_headerView calculateViewHeight];
     _headerView.frame = frame;
@@ -157,8 +158,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.section][@"rows"][indexPath.row];
-    NSString *itemId = item[@"name"];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -166,15 +165,7 @@
 
 - (void)getOrRegisterButtonPressed
 {
-    if ([OAIAPHelper isSubscribedToOsmAndPro])
-    {
-        OACloudAccountCreateViewController *vc = [[OACloudAccountCreateViewController alloc] init];
-        [self.navigationController pushViewController:vc animated:YES];
-    }
-    else
-    {
-        [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.OSMAND_CLOUD navController:self.navigationController];
-    }
+    [self.navigationController pushViewController:[OACloudAccountCreateViewController new] animated:YES];
 }
 
 - (void)logInButtonPressed

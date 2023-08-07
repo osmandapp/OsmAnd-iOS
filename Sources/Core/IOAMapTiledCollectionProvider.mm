@@ -17,6 +17,7 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/SkiaUtilities.h>
+#include <OsmAndCore/SingleSkImage.h>
 
 static const int kSkipTilesZoom = 13;
 static const int kSkipTileDivider = 16;
@@ -152,7 +153,7 @@ QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> IOAMapTiledCollectionProvider::b
             {
                 img = getImageBitmap(i);
             }
-            builder.setPinIcon(img);
+            builder.setPinIcon(OsmAnd::SingleSkImage(img));
             builder.buildAndAddToCollection(collection);
         }
     }

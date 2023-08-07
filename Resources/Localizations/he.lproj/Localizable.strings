@@ -2582,7 +2582,7 @@
 "sync_now" = "לסנכרן כעת";
 "icon_group_service" = "שירות";
 "weather_precip_milimeters" = "מילימטר";
-"show_map_symbols" = "הצג סמלי מפה";
+"show_map_symbols" = "הצגת סמלי מפה";
 "shared_string_layers" = "שכבות";
 "measurement_units" = "יחידות מידה";
 "weather_temperature_fahrenheit" = "פרנהייט";

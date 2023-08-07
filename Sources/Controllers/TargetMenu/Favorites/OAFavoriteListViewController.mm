@@ -160,11 +160,13 @@ static UIViewController *parentController;
 - (void)resizeHeaderBanner {
     if ([self isAvailablePaymentBanner] && _freeBackupBanner)
     {
-        CGFloat height = [OAUtilities calculateTextBounds:_freeBackupBanner.descriptionLabel.text width:self.favoriteTableView.frame.size.width - _freeBackupBanner.leadingTrailingOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
+        CGFloat titleHeight = [OAUtilities calculateTextBounds:_freeBackupBanner.titleLabel.text width:self.favoriteTableView.frame.size.width - _freeBackupBanner.leadingTrailingOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
+        
+        CGFloat descriptionHeight = [OAUtilities calculateTextBounds:_freeBackupBanner.descriptionLabel.text width:self.favoriteTableView.frame.size.width - _freeBackupBanner.leadingTrailingOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
         _freeBackupBanner.frame = CGRectMake(0,
                                              0,
                                              self.favoriteTableView.frame.size.width,
-                                             _freeBackupBanner.defaultFrameHeight + height);
+                                             _freeBackupBanner.defaultFrameHeight + titleHeight + descriptionHeight);
         self.favoriteTableView.tableHeaderView = _freeBackupBanner;
     }
 }

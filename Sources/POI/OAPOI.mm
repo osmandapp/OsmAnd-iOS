@@ -356,7 +356,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
                 {
                     subType = map[key];
                 }
-                else if ([shortKey isEqualToString:OPENING_HOURS])
+                else if ([shortKey isEqualToString:OPENING_HOURS] && map[key].length > 0)
                 {
                     openingHours = map[key];
                     additionalInfo[shortKey] = openingHours;
@@ -370,7 +370,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
             else
             {
                 NSString *shortKey = [key componentsSeparatedByString:@":"].lastObject;
-                if (![HIDDEN_EXTENSIONS containsObject:shortKey] && ![HIDDEN_EXTENSIONS containsObject:key])
+                if (![HIDDEN_EXTENSIONS containsObject:shortKey] && ![HIDDEN_EXTENSIONS containsObject:key] && map[key].length > 0)
                     additionalInfo[key] = map[key];
             }
         }

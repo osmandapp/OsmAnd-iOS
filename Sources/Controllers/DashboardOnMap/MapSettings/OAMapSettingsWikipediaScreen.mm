@@ -79,8 +79,8 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 {
     __weak OAMapSettingsWikipediaScreen *weakself = self;
     _downloadingCellHelper = [[OADownloadingCellHelper alloc] init];
-    _downloadingCellHelper.hostViewController = weakself.vwController;
-    _downloadingCellHelper.hostTableView = weakself.tblView;
+    _downloadingCellHelper.hostViewController = self.vwController;
+    _downloadingCellHelper.hostTableView = self.tblView;
     _downloadingCellHelper.hostDataLock = _dataLock;
     
     _downloadingCellHelper.fetchResourcesBlock = ^(){

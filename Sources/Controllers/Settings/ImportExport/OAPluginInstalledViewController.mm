@@ -175,8 +175,8 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 {
     __weak OAPluginInstalledViewController *weakself = self;
     _downloadingCellHelper = [[OADownloadingCellHelper alloc] init];
-    _downloadingCellHelper.hostViewController = weakself;
-    _downloadingCellHelper.hostTableView = weakself.tableView;
+    _downloadingCellHelper.hostViewController = self;
+    _downloadingCellHelper.hostTableView = self.tableView;
     _downloadingCellHelper.hostDataLock = _dataLock;
     
     _downloadingCellHelper.fetchResourcesBlock = ^(){

@@ -22,6 +22,7 @@
 #import "OAUtilities.h"
 #import "OAQuickActionRegistry.h"
 #import "OAResourcesUISwiftHelper.h"
+#import "OADownloadingCellHelper.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

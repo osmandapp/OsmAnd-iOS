@@ -68,6 +68,15 @@
 
 #pragma mark - Cell setup
 
+- (UITableViewCell *)setupSwiftCell:(OAResourceSwiftItem *)swiftMapItem indexPath:(NSIndexPath *)indexPath
+{
+    if (swiftMapItem)
+    {
+        return [self setupCell:swiftMapItem.objcResourceItem indexPath:indexPath];
+    }
+    return nil;
+}
+
 - (UITableViewCell *)setupCell:(OAResourceItem *)mapItem indexPath:(NSIndexPath *)indexPath
 {
     if ([mapItem isKindOfClass:OAMultipleResourceItem.class])
@@ -95,11 +104,14 @@
             UIImage* iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
             [btnAcc removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
-            [btnAcc setImage:iconImage forState:UIControlStateNormal];
-            btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
-            btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
-            [cell setAccessoryView:btnAcc];
+            if (![mapItem isInstalled])
+            {
+                [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+                [btnAcc setImage:iconImage forState:UIControlStateNormal];
+                btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
+                btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
+                [cell setAccessoryView:btnAcc];
+            }
         }
         else if ([cellTypeId isEqualToString:downloadingResourceCell])
         {
@@ -121,11 +133,14 @@
             UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
             [btnAcc removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
-            [btnAcc setImage:iconImage forState:UIControlStateNormal];
-            btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
-            btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
-            [cell setAccessoryView:btnAcc];
+            if (![mapItem isInstalled])
+            {
+                [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+                [btnAcc setImage:iconImage forState:UIControlStateNormal];
+                btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
+                btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
+                [cell setAccessoryView:btnAcc];
+            }
         }
         else
         {
@@ -135,7 +150,7 @@
     }
 
     cell.imageView.image = [OAResourceType getIcon:mapItem.resourceType templated:YES];
-    cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
+    cell.imageView.tintColor = [mapItem isInstalled] ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
     cell.textLabel.text = title;
     if (cell.detailTextLabel != nil)
         cell.detailTextLabel.text = subtitle;
@@ -179,10 +194,7 @@
 
 - (void)onItemClicked:(NSIndexPath *)indexPath
 {
-    OAResourceItem *mapItem;
-    if (_getResourceByIndexBlock)
-        mapItem = _getResourceByIndexBlock(indexPath);
-    
+    OAResourceItem *mapItem = [self getResourceByIndex:indexPath];
     if (mapItem)
     {
         if ([mapItem isKindOfClass:OAMultipleResourceItem.class])
@@ -203,16 +215,13 @@
                 }
                 else
                 {
-                    if (_getResourceByIndexBlock)
+                    OAMultipleResourceItem *item = (OAMultipleResourceItem *)[self getResourceByIndex:indexPath];
+                    if (item)
                     {
-                        OAMultipleResourceItem *item = (OAMultipleResourceItem *)_getResourceByIndexBlock(indexPath);
-                        if (item)
-                        {
-                            OADownloadMultipleResourceViewController *controller = [[OADownloadMultipleResourceViewController alloc] initWithResource:item];
-                            controller.delegate = self;
-                            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-                            [_hostViewController presentViewController:navigationController animated:YES completion:nil];
-                        }
+                        OADownloadMultipleResourceViewController *controller = [[OADownloadMultipleResourceViewController alloc] initWithResource:item];
+                        controller.delegate = self;
+                        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+                        [_hostViewController presentViewController:navigationController animated:YES completion:nil];
                     }
                 }
             }
@@ -332,27 +341,41 @@
 
 #pragma mark - Helpers
 
-- (OAResourceItem *) getActiveItemForIndexPath:(NSIndexPath *)indexPath useDefautValue:(BOOL)useDefautValue
+- (OAResourceItem *)getResourceByIndex:(NSIndexPath *)indexPath
 {
+    OAResourceItem *item = nil;
     if (_getResourceByIndexBlock)
     {
-        OAResourceItem *item = _getResourceByIndexBlock(indexPath);
-    
-        if ([item isKindOfClass:OAMultipleResourceItem.class])
+        item = _getResourceByIndexBlock(indexPath);
+    }
+    if (_getSwiftResourceByIndexBlock)
+    {
+        OAResourceSwiftItem *swiftItem = _getSwiftResourceByIndexBlock(indexPath);
+        if (swiftItem)
         {
-            OAMultipleResourceItem *mapItem = (OAMultipleResourceItem *)item;
-            for (OARepositoryResourceItem *resourceItem in mapItem.items)
-            {
-                if (resourceItem.downloadTask != nil)
-                    return resourceItem;
-            }
-            if (useDefautValue)
-                return mapItem.items[0];
+            item = swiftItem.objcResourceItem;
         }
-        else
+    }
+    return item;
+}
+
+- (OAResourceItem *) getActiveItemForIndexPath:(NSIndexPath *)indexPath useDefautValue:(BOOL)useDefautValue
+{
+    OAResourceItem *item = [self getResourceByIndex:indexPath];
+    if (item && [item isKindOfClass:OAMultipleResourceItem.class])
+    {
+        OAMultipleResourceItem *mapItem = (OAMultipleResourceItem *)item;
+        for (OARepositoryResourceItem *resourceItem in mapItem.items)
         {
-            return item;
+            if (resourceItem.downloadTask != nil)
+                return resourceItem;
         }
+        if (useDefautValue)
+            return mapItem.items[0];
+    }
+    else
+    {
+        return item;
     }
     return nil;
 }
@@ -361,40 +384,37 @@
 {
     @synchronized(_hostDataLock)
     {
-        if (_getResourceByIndexBlock)
+        if (_getTableDataBlock)
         {
-            if (_getTableDataBlock)
+            __weak NSArray<NSArray <NSDictionary *> *> *tableData = _getTableDataBlock();
+            if (tableData)
             {
-                __weak NSArray<NSArray <NSDictionary *> *> *tableData = _getTableDataBlock();
-                if (tableData)
+                for (int sectionIndex = 0; sectionIndex < tableData.count; sectionIndex++)
                 {
-                    for (int sectionIndex = 0; sectionIndex < tableData.count; sectionIndex++)
+                    for (int rowIndex = 0; rowIndex < tableData[sectionIndex].count; rowIndex++)
                     {
-                        for (int rowIndex = 0; rowIndex < tableData[sectionIndex].count; rowIndex++)
-                        {
-                            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
-                            OAResourceItem *item = _getResourceByIndexBlock(indexPath);
-                            if (item && action)
-                                action(item, indexPath);
-                        }
+                        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
+                        OAResourceItem *item = _getResourceByIndexBlock(indexPath);
+                        if (item && action)
+                            action(item, indexPath);
                     }
                 }
             }
-            else if (_getTableDataModelBlock)
+        }
+        else if (_getTableDataModelBlock)
+        {
+            __weak OATableDataModel *tableDataModel = _getTableDataModelBlock();
+            if (tableDataModel)
             {
-                __weak OATableDataModel *tableDataModel = _getTableDataModelBlock();
-                if (tableDataModel)
+                for (int sectionIndex = 0; sectionIndex < tableDataModel.sectionCount; sectionIndex++)
                 {
-                    for (int sectionIndex = 0; sectionIndex < tableDataModel.sectionCount; sectionIndex++)
+                    OATableSectionData *section = [tableDataModel sectionDataForIndex:sectionIndex];
+                    for (int rowIndex = 0; rowIndex < section.rowCount; rowIndex++)
                     {
-                        OATableSectionData *section = [tableDataModel sectionDataForIndex:sectionIndex];
-                        for (int rowIndex = 0; rowIndex < section.rowCount; rowIndex++)
-                        {
-                            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
-                            OAResourceItem *item = _getResourceByIndexBlock(indexPath);
-                            if (item && action)
-                                action(item, indexPath);
-                        }
+                        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:sectionIndex];
+                        OAResourceItem *item = [self getResourceByIndex:indexPath];
+                        if (item && action)
+                            action(item, indexPath);
                     }
                 }
             }

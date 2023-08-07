@@ -13,6 +13,47 @@ import Foundation
 @objcMembers
 class TravelGuidesViewConroller: OABaseNavbarViewController {
     
+    var downloadingCellHelper: OADownloadingCellHelper = OADownloadingCellHelper()
+    var dataLock: NSObject = NSObject()
+    var downloadingResources: [OAResourceSwiftItem] = []
+
+    override func viewDidLoad() {
+        setupDownloadingCellHelper()
+        super.viewDidLoad()
+    }
+
+    func setupDownloadingCellHelper() {
+        downloadingCellHelper = OADownloadingCellHelper()
+        downloadingCellHelper.hostViewController = self
+        downloadingCellHelper.hostTableView = self.tableView
+        downloadingCellHelper.hostDataLock = dataLock
+        weak var weakself = self
+        
+        downloadingCellHelper.fetchResourcesBlock = {
+            var downloadingResouces = OAResourcesUISwiftHelper.getResourcesInRepositoryIds(byRegionId: "travel", resourceTypeNames: ["travel"])
+            if (downloadingResouces != nil) {
+                downloadingResouces!.sort(by: { a, b in
+                    a.title() < b.title()
+                })
+                weakself!.downloadingResources = downloadingResouces!
+            }
+        }
+        
+        downloadingCellHelper.getSwiftResourceByIndexBlock = { (indexPath: IndexPath?) -> OAResourceSwiftItem? in
+            
+            let headerCellsCountInResourcesSection = weakself!.headerCellsCountInResourcesSection()
+            if (indexPath != nil && indexPath!.row >= headerCellsCountInResourcesSection) {
+                return weakself!.downloadingResources[indexPath!.row - headerCellsCountInResourcesSection]
+            }
+            return nil
+        }
+        
+        downloadingCellHelper.getTableDataModelBlock = {
+            return weakself!.tableData
+        }
+    }
+    
+    
     //MARK: Data
     
     override func getTitle() -> String! {
@@ -25,7 +66,13 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
         return [button!]
     }
     
+    func headerCellsCountInResourcesSection() -> Int {
+        return 2
+    }
+    
     override func generateData() {
+        downloadingCellHelper.fetchResourcesBlock()
+        
         tableData.clearAllData()
         
         let downloadSection = tableData.createNewSection()
@@ -41,23 +88,10 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
         downloadDescrRow.descr = localizedString("travel_card_download_descr")
         downloadDescrRow.setObj(NSNumber(booleanLiteral: false), forKey: "kHideSeparator")
         
-        var downloadingResouces = OAResourcesUISwiftHelper.getResourcesInRepositoryIds(byRegionId: "travel", resourceTypeNames: ["travel"])
-        downloadingResouces?.sort(by: { a, b in
-            a.title() < b.title()
-        })
-        for resource in downloadingResouces! {
+        for resource in downloadingResources {
             let row = downloadSection.createNewRow()
             row.cellType = "kDownloadCellKey"
-            row.title = resource.title()
-            row.descr = resource.type() + "  •  " + resource.formatedSize()
-            row.iconTint = resource.isInstalled() ? Int(color_primary_purple) : Int(color_tint_gray)
-            if let icon = resource.icon() {
-                row.setObj(icon, forKey: "kIconKey")
-            }
-            row.setObj(NSNumber(booleanLiteral: resource.isInstalled()), forKey: "kIsInstalledKey")
-            row.setObj(resource, forKey: "kResource")
         }
-        
     }
 
 
@@ -66,34 +100,6 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
     func onOptionsButtonClicked() {
         print("onOptionsButtonClicked")
     }
-    
-    func onRowItemClicked(indexPath: IndexPath) {
-        print("onRowItemClicked")
-        let item = tableData.item(for: indexPath)
-        if item.cellType == "kDownloadCellKey" {
-            if let resource = item.obj(forKey: "kResource") {
-//                OAResourcesUISwiftHelper.toggleDownload(for: resource as? OAResourceSwiftItem) {
-//
-//                    self.generateData()
-//                    UIView.transition(with: self.tableView, duration: 0.35, options: .transitionCrossDissolve) {
-//                        self.tableView.reloadData()
-//                    }
-//                }
-            }
-        }
-    }
-    
-    func accessoryButtonPressed(button: UIControl , event: UIEvent) {
-        if let touches = event.touches(for: button) {
-            if touches.count > 0 {
-                let point = touches.first!.location(in: self.tableView)
-                if let indexPath = self.tableView.indexPathForRow(at: point) {
-                    self.tableView.delegate?.tableView?(self.tableView, accessoryButtonTappedForRowWith: indexPath)
-                }
-            }
-        }
-    }
-
 
     //MARK: TableView
 
@@ -102,33 +108,8 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
         var outCell: UITableViewCell? = nil
         
         if item.cellType == "kDownloadCellKey" {
-            var cell = UITableViewCell.init(style: .subtitle, reuseIdentifier: "kDownloadCellKey")
-            
-            cell.textLabel?.text = item.title
-            cell.textLabel?.font = UIFont.preferredFont(forTextStyle: .body)
-            
-            cell.detailTextLabel?.text = item.descr
-            cell.detailTextLabel?.font = UIFont.preferredFont(forTextStyle: .caption1)
-            cell.detailTextLabel?.textColor = UIColor(rgb: 0x929292)
-            
-            if let icon: UIImage = item.obj(forKey: "kIconKey") as? UIImage {
-                cell.imageView?.image = icon
-                cell.imageView?.tintColor = UIColor(rgb: item.iconTint)
-            }
-            
-            let isInstalled = item.bool(forKey: "kIsInstalledKey")
-            if (!isInstalled) {
-                let iconImage = UIImage.templateImageNamed("ic_custom_download")!
-                let btnAcc = UIButton(type: .system)
-                btnAcc.addTarget(self, action: #selector(self.accessoryButtonPressed(button:event:)), for: .touchUpInside)
-                btnAcc.setImage(iconImage, for: .normal)
-                btnAcc.tintColor = UIColor(rgb: color_primary_purple)
-                btnAcc.frame = CGRect(x: 0, y: 0, width: 30, height: 50)
-                cell.accessoryView = btnAcc
-            }
-            
-            outCell = cell
-            
+            let resource = downloadingCellHelper.getSwiftResourceByIndexBlock(indexPath)
+            outCell = downloadingCellHelper.setupSwiftCell(resource, indexPath: indexPath)
         } else if item.cellType == OARightIconTableViewCell.getIdentifier() {
             var cell = tableView.dequeueReusableCell(withIdentifier: OARightIconTableViewCell.getIdentifier()) as? OARightIconTableViewCell
             if cell == nil {
@@ -177,11 +158,7 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
     }
     
     override func onRowSelected(_ indexPath: IndexPath!) {
-        onRowItemClicked(indexPath: indexPath)
-    }
-
-    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-        onRowItemClicked(indexPath: indexPath)
+        downloadingCellHelper.onItemClicked(indexPath)
     }
 
 }

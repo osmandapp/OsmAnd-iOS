@@ -2588,3 +2588,10 @@
 "weather_temperature_fahrenheit" = "פרנהייט";
 "weather_precip_inches" = "אינץ'";
 "weather_temperature_celsius" = "צלסיוס";
+"compass_visible_if_map_rotated" = "גלוי אם המפה מסובבת";
+"nautical_depth_points" = "נקודות עומק ימיות";
+"shared_string_switch_mode" = "החלף מצב";
+"developer_widgets" = "ווידג'טים למפתחים";
+"map_widget_camera_distance" = "גובה מצלמה";
+"compass_always_hidden" = "תמיד מוסתר";
+"compass_always_visible" = "תמיד מוצג";

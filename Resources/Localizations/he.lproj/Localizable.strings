@@ -2590,7 +2590,7 @@
 "weather_temperature_celsius" = "צלזיוס";
 "compass_visible_if_map_rotated" = "גלוי אם המפה מסובבת";
 "nautical_depth_points" = "נקודות עומק ימיות";
-"shared_string_switch_mode" = "החלף מצב";
+"shared_string_switch_mode" = "החלפת מצב";
 "developer_widgets" = "ווידג'טים למפתחים";
 "map_widget_camera_distance" = "גובה מצלמה";
 "compass_always_hidden" = "תמיד מוסתר";

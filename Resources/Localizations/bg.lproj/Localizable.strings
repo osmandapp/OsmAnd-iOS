@@ -2250,7 +2250,7 @@
 "backup_error_gzip_only_supported_upload" = "Файлът трябва да бъде изпратен във формат .gzip";
 "verify_email_address_descr" = "Изпратихме код за проверка на %@, моля, въведете го в полето по-долу.";
 "resend_verification_code" = "Повторно изпращане";
-"cloud_email_already_registered" = "Този адрес на електронна поща вече е регистриран.";
+"cloud_email_already_registered" = "Тази адрес на електронна поща вече е регистриран.";
 "cloud_email_not_registered" = "Този адрес на електронна поща не е регистриран в OsmAnd Cloud";
 "backup_error_file_not_available" = "Файлът не е наличен";
 "any_poi" = "Всички";

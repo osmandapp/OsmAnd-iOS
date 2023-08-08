@@ -1041,7 +1041,7 @@
 "save_track_to_gpx" = "Автозапись трека при навигации";
 "save_track_to_gpx_descrp" = "Автозапуск записи трека во время навигации и автосохранение по завершении.";
 "import_from_docs" = "Импортировать из документов";
-"live_updates" = "Автообновления";
+"live_updates" = "Live обновления";
 "osmand_live_last_changed" = "Последнее изменение карты: %@";
 "osmand_live_reports" = "Отчеты";
 "osmand_live_server_date" = "Последнее обновление сервера: %@";

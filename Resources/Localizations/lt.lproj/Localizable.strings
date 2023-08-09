@@ -2307,7 +2307,6 @@
 "shared_string_changed" = "Pakeista";
 "shared_string_available_until" = "Galimas iki";
 "shared_string_updates_size" = "Atnaujinimų dydis";
-"shared_string_updates_frequency" = "Atnaujinimų dažnumas";
 "shared_string_delete_data" = "Ištrinti duomenis";
 "shared_string_hide_all" = "Paslėpti viską";
 "duration_ago" = "%@ prieš";

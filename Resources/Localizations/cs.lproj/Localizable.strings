@@ -2447,7 +2447,6 @@
 "simulation_real_mode_desc" = "Na rovných úsecích cest bude rychlost přizpůsobena maximální povolené rychlosti.\nNa křižovatkách simulace zpomalí.\nNa semaforech, značkách stop, atd. se aplikuje dodatečné zdržení.";
 "simulation_preview_mode_desc" = "Rychlost simulace bude maximální na rovných úsecích a zpomalí se pouze na křižovatkách.";
 "carplay_available_in_sub_plans" = "Zakupte si OsmAnd Pro nebo Maps+, abyste mohli používat OsmAnd s CarPlay.";
-"shared_string_updates_frequency" = "Frekvence aktualizací";
 "gpx_import_already_exists_short" = "Vybraný soubor stopy již v seznamu je.";
 "backup_and_restore" = "Zálohování&obnovení";
 "toggle_precipitation" = "Zobrazit/skrýt - Srážková vrstva";

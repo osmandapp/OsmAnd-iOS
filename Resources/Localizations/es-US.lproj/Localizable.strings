@@ -2611,7 +2611,6 @@
 "shared_string_next_update" = "Próxima actualización";
 "shared_string_available_until" = "Disponible hasta el";
 "shared_string_updates_size" = "Tamaño de las actualizaciones";
-"shared_string_updates_frequency" = "Frecuencia de actualización";
 "purchases_feature_weather" = "Pronóstico coloreado en el mapa de 24 horas con 7 días de antelación";
 "weather_forecast" = "Previsión meteorológica";
 "shared_string_unavailable" = "No disponible";

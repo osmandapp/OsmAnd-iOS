@@ -2641,7 +2641,6 @@
 "map_settings_clear_raster_cache" = "Wyczyść kafelki rastrowe";
 "shared_string_countries" = "Kraje";
 "shared_string_updated" = "Zaktualizowano";
-"shared_string_updates_frequency" = "Częstotliwość aktualizacji";
 "shared_string_delete_data" = "Usuń dane";
 "shared_string_unavailable" = "Niedostępne";
 "gpx_import_already_exists_short" = "Określony plik ścieżki już istnieje na liście.";

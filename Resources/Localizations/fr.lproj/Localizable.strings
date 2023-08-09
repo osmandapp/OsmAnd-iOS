@@ -2535,7 +2535,6 @@
 "restore_backup_descr" = "Restaurer les données de l'appareil en utilisant des sauvegardes en ligne";
 "service_is_not_available_please_try_later" = "Le service est indisponible actuellement, veuillez réessayer plus tard.";
 "weather_forecast" = "Prévisions météo";
-"shared_string_updates_frequency" = "Fréquence des mises à jour";
 "shared_string_clear_offline_cache" = "Effacer le cache hors-ligne";
 "tomorrow" = "Demain";
 "update_parameters" = "Mettre à jours les paramètres";

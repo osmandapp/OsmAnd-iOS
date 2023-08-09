@@ -2541,7 +2541,6 @@
 "shared_string_next_update" = "Næste opdatering";
 "shared_string_available_until" = "Tilgængelig indtil";
 "shared_string_updates_size" = "Opdateringsstørrelse";
-"shared_string_updates_frequency" = "Opdateringsfrekvens";
 "tomorrow" = "I morgen";
 "weather_clear_offline_cache" = "Dette vil rydde al cache for offline vejrfliser.";
 "weather_clear_offline_cache_for" = "Dette vil rydde al cache for offline vejrfliser for %@.";

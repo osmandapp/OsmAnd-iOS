@@ -2471,7 +2471,6 @@
 "shared_string_status" = "Estado";
 "shared_string_next_update" = "Próxima actualización";
 "shared_string_updates_size" = "Tamaño de las actualizaciones";
-"shared_string_updates_frequency" = "Frecuencia de actualización";
 "shared_string_logout" = "Cerrar sesión";
 "shared_string_progress" = "Progreso";
 "shared_string_contributions" = "Contribuciones";

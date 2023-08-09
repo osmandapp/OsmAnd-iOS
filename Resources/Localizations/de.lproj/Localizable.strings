@@ -2561,7 +2561,6 @@
 "weather_forecast" = "Wettervorhersage";
 "update_parameters" = "Parameter aktualisieren";
 "shared_string_selected" = "Ausgewählte";
-"shared_string_updates_frequency" = "Aktualisierungshäufigkeit";
 "tomorrow" = "Morgen";
 "shared_string_status" = "Status";
 "weather_clear_offline_cache" = "Dadurch wird der gesamte Cache für die Offline-Wetterkachel gelöscht.";

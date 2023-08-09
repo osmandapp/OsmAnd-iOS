@@ -2525,7 +2525,6 @@
 "shared_string_selected" = "Selecionado";
 "shared_string_next_update" = "Próxima atualização";
 "shared_string_updates_size" = "Tamanho das atualizações";
-"shared_string_updates_frequency" = "Frequência das atualizações";
 "weather_precip_enable_descr" = "Ative para ver a camada de precipitação no mapa.";
 "weather_contours_enable_descr" = "Ative para ver a camada de isolinhas no mapa.";
 "delete_tracks_bottom_sheet_description_regular_part" = "Quer mesmo excluir ";

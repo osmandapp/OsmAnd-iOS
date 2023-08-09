@@ -101,7 +101,6 @@
 - (void) showRoutePreferences;
 - (void) showConfigureScreen;
 - (void) showConfigureScreen:(OAApplicationMode *)targetMode;
-- (void) setBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated;
 - (void) showMapStylesScreen;
 - (void) showWeatherLayersScreen;
 
@@ -109,12 +108,13 @@
 
 - (BOOL) isTopToolbarActive;
 - (BOOL) isTopToolbarSearchVisible;
+- (BOOL) isTargetMapRulerNeeds;
+- (CGFloat) getTargetToolbarHeight;
+- (CGFloat) getTargetMenuHeight;
+- (CGFloat) getTargetContainerWidth;
 
 - (BOOL) isTopControlsVisible;
-- (void) setTopControlsVisible:(BOOL)visible;
-- (void) setTopControlsVisible:(BOOL)visible
-      onlyMapSettingsAndSearch:(BOOL)onlyMapSettingsAndSearch
-          customStatusBarStyle:(UIStatusBarStyle)customStatusBarStyle;
+- (void) targetUpdateControlsLayout:(UIStatusBarStyle)customStatusBarStyle;
 - (void) updateToolbar;
 - (void) updateOverlayUnderlayView;
 - (BOOL) isOverlayUnderlayViewVisible;

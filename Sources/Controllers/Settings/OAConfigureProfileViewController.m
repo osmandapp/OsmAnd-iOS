@@ -626,7 +626,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) updateCopiedOrResetPrefs
 {
     [[OAPOIFiltersHelper sharedInstance] loadSelectedPoiFilters];
-    [[OARootViewController instance].mapPanel.mapWidgetRegistry updateVisibleWidgets];
+    [[OARootViewController instance].mapPanel recreateAllControls];
     [OAMapStyleSettings.sharedInstance loadParameters];
     [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:nil];

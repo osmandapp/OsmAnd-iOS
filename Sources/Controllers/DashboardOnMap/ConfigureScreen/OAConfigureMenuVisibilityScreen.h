@@ -8,6 +8,8 @@
 
 #import "OAConfigureMenuScreen.h"
 
+//TODO remove
+
 @interface OAConfigureMenuVisibilityScreen : NSObject<OAConfigureMenuScreen>
 
 @property (nonatomic, readonly) NSString *key;

@@ -901,7 +901,7 @@
 
         self.buttonBack.alpha = backButtonAlpha;
         if (![OAUtilities isLandscape] && ![OAUtilities isIPad])
-            [OARootViewController.instance.mapPanel.hudViewController setTopControlsAlpha:1 - backButtonAlpha];
+            [OARootViewController.instance.mapPanel.hudViewController updateTopControlsVisibility];
 
         if (self.topToolbarType == ETopToolbarTypeMiddleFixed)
         {

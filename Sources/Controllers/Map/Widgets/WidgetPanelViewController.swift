@@ -17,6 +17,7 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
     private static let borderWidth: CGFloat = 2
     
     private var isInTransition = false
+    public let isHorizontal: Bool
     
     @IBOutlet var pageControlHeightConstraint: NSLayoutConstraint!
 
@@ -36,7 +37,22 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
     var dayNightObserver: OAAutoObserverProxy!
     
     weak var delegate: WidgetPanelDelegate?
-    
+
+    init() {
+        self.isHorizontal = false
+        super.init(nibName: "OAWidgetPanelViewController", bundle: nil)
+    }
+
+    init(horizontal: Bool) {
+        self.isHorizontal = horizontal
+        super.init(nibName: "OAWidgetPanelViewController", bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        self.isHorizontal = false
+        super.init(coder: coder)
+    }
+
     deinit {
         dayNightObserver.detach()
     }
@@ -46,8 +62,8 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
         pageViewController.dataSource = self
         pageViewController.delegate = self
         
-        contentView.layer.borderWidth = Self.borderWidth
-        contentView.layer.borderColor = UIColor.black.withAlphaComponent(0.3).cgColor
+        contentView.layer.borderWidth = isHorizontal ? 0 : Self.borderWidth
+        contentView.layer.borderColor = isHorizontal ? nil : UIColor.black.withAlphaComponent(0.3).cgColor
         
         // Add the container view to the view hierarchy
         view.addSubview(pageContainerView)
@@ -55,9 +71,9 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
         // Set up constraints
         pageContainerView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            pageContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Self.borderWidth),
-            pageContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Self.borderWidth),
-            pageContainerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Self.borderWidth),
+            pageContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: isHorizontal ? 0 : Self.borderWidth),
+            pageContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: isHorizontal ? 0 : -Self.borderWidth),
+            pageContainerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: isHorizontal ? 0 : Self.borderWidth),
             pageContainerView.bottomAnchor.constraint(equalTo: pageControl.topAnchor),
             pageContainerView.widthAnchor.constraint(equalToConstant: 0),
             pageContainerView.heightAnchor.constraint(equalToConstant: Self.contentHeight)
@@ -111,7 +127,7 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
         }
     }
     
-    private func calculateContentSize() -> (width: CGFloat, height: CGFloat) {
+    func calculateContentSize() -> CGSize {
         var width: CGFloat = 0
         var height: CGFloat = pages.isEmpty ? 0 : Self.contentHeight
         for (idx, page) in pages.enumerated() {
@@ -121,10 +137,13 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
             }
             width = max(width, widgetSize.0)
         }
-        if !widgetPages.isEmpty {
+        if hasWidgets() {
             height = max(height, Self.contentHeight)
         }
-        return (width + 2, height)
+        if !isHorizontal {
+            width += 2
+        }
+        return CGSize(width: width, height: height)
     }
     
     private func updateContainerSize() {
@@ -140,7 +159,7 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
                 }
             }
         }
-        self.view.isHidden = widgetPages.isEmpty
+        self.view.isHidden = !hasWidgets()
         self.view.layoutIfNeeded()
     }
     
@@ -189,7 +208,16 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
     }
     
     func hasWidgets() -> Bool {
-        return !widgetPages.isEmpty
+        if !widgetPages.isEmpty {
+            for widgetPage in widgetPages {
+                for widget in widgetPage {
+                    if !widget.isHidden {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
     }
     
     func updateWidgetSizes() {

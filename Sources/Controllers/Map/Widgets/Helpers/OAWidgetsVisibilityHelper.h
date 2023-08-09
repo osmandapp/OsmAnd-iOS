@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OAWidgetsVisibilityHelper : NSObject
 
 - (BOOL)shouldShowQuickActionButton;
+- (BOOL)shouldShowMap3DButton;
+- (BOOL)shouldShowFabButton;
 - (BOOL)shouldShowTopMapCenterCoordinatesWidget;
 - (BOOL)shouldShowTopCurrentLocationCoordinatesWidget;
 - (BOOL)shouldHideMapMarkersWidget;

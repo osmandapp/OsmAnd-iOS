@@ -8,6 +8,8 @@
 
 #import "OAConfigureMenuScreen.h"
 
+//TODO remove
+
 @interface OAConfigureMenuMainScreen : NSObject<OAConfigureMenuScreen>
 
 @end

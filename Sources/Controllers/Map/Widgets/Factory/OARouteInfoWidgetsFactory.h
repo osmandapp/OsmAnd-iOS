@@ -19,6 +19,8 @@
 
 @interface OARouteInfoWidgetsFactory : NSObject
 
+//TODO remove
+
 - (OATextInfoWidget *) createTimeControl:(BOOL)intermediate;
 - (OATextInfoWidget *) createPlainTimeControl;
 - (OATextInfoWidget *) createBatteryControl;

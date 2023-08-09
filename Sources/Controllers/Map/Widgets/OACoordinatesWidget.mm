@@ -120,8 +120,8 @@
     }
 
     OAMapHudViewController *mapHud = [OARootViewController instance].mapPanel.hudViewController;
-    BOOL topVisible = [mapHud.topCoordinatesWidget isVisible];
-    BOOL bottomVisible = [mapHud.coordinatesMapCenterWidget isVisible];
+    BOOL topVisible = NO; //[mapHud.topCoordinatesWidget isVisible];
+    BOOL bottomVisible = NO; //[mapHud.coordinatesMapCenterWidget isVisible];
     BOOL bothVisible = topVisible && bottomVisible;
     _horisontalSeparator.hidden = !(bothVisible && _type == EOACoordinatesWidgetTypeMapCenter);
 

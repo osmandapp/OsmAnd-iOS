@@ -102,7 +102,7 @@
                      @"cells" : controlsList,
                      } ];
     
-    [self addControls:controlsList widgets:[_mapWidgetRegistry getRightWidgetSet] mode:_settings.applicationMode.get];
+//    [self addControls:controlsList widgets:[_mapWidgetRegistry getRightWidgetSet] mode:_settings.applicationMode.get];
     
     if (controlsList.count > 0)
         [arr addObjectsFromArray:controls];
@@ -113,7 +113,7 @@
                      @"cells" : controlsList,
                      } ];
     
-    [self addControls:controlsList widgets:[_mapWidgetRegistry getLeftWidgetSet] mode:_settings.applicationMode.get];
+//    [self addControls:controlsList widgets:[_mapWidgetRegistry getLeftWidgetSet] mode:_settings.applicationMode.get];
 
     if (controlsList.count > 0)
         [arr addObjectsFromArray:controls];
@@ -249,7 +249,7 @@
     }
 
     [self setVisibility:indexPath visible:sw.on collapsed:NO];
-    OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:key];
+    OAMapWidgetRegInfo *r;// = [_mapWidgetRegistry widgetByKey:key];
     if (r && r.widget)
         [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     
@@ -262,10 +262,10 @@
     NSString *key = data[@"key"];
     if (key)
     {
-        OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:key];
+        OAMapWidgetRegInfo *r;// = [_mapWidgetRegistry widgetByKey:key];
         if (r)
         {
-            [_mapWidgetRegistry setVisibility:r visible:visible collapsed:collapsed];
+//            [_mapWidgetRegistry setVisibility:r visible:visible collapsed:collapsed];
             [[OARootViewController instance].mapPanel recreateControls];
         }
         else if ([key isEqualToString:@"coordinates_widget_current_location"])
@@ -466,7 +466,7 @@
     }
     else if ([data[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [data[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:data[@"key"]];
+        OAMapWidgetRegInfo *r; // = [_mapWidgetRegistry widgetByKey:data[@"key"]];
         if (r && (r.widget || [r.key isEqualToString:@"compass"]))
         {
             configureMenuViewController = [[OAConfigureMenuViewController alloc] initWithConfigureMenuScreen:EConfigureMenuScreenVisibility param:data[@"key"]];

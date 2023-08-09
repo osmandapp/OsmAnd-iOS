@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class OABaseWidgetView, OAWidgetType, OAWidgetState, OAApplicationMode, OACommonBoolean, OACommonPreference, OATableDataModel;
+@class OABaseWidgetView, OAWidgetType, OAWidgetState, OAWidgetsPanel, OAApplicationMode, OACommonBoolean, OACommonPreference, OATableDataModel, OATextState;
 
 @protocol OAWidgetListener <NSObject>
 
@@ -31,6 +31,8 @@
 - (instancetype _Nonnull )initWithType:(OAWidgetType * _Nonnull)type;
 
 - (BOOL) updateInfo;
+- (void) updateColors:(OATextState * _Nonnull)textState;
+- (BOOL) isNightMode;
 - (BOOL) isTopText;
 
 - (OACommonBoolean * _Nullable ) getWidgetVisibilityPref;
@@ -38,9 +40,11 @@
 - (void) copySettings:(OAApplicationMode *_Nonnull)appMode customId:(NSString *_Nullable)customId;
 - (OAWidgetState *_Nullable) getWidgetState;
 - (BOOL) isExternal;
-- (OATableDataModel *_Nullable) getSettingsData:(OAApplicationMode *)appMode;
+- (OATableDataModel *_Nullable) getSettingsData:(OAApplicationMode * _Nonnull)appMode;
 
+- (void) adjustViewSize;
 - (void) attachView:(UIView *_Nonnull)container order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *_Nullable)followingWidgets;
+- (void) detachView:(OAWidgetsPanel * _Nonnull)widgetsPanel;
 
 @end
 

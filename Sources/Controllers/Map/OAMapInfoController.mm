@@ -45,21 +45,6 @@
 
 #import "OsmAnd_Maps-Swift.h"
 
-@interface OATextState : NSObject
-
-@property (nonatomic) BOOL textBold;
-@property (nonatomic) BOOL night;
-@property (nonatomic) UIColor *textColor;
-@property (nonatomic) UIColor *textShadowColor;
-@property (nonatomic) int boxTop;
-@property (nonatomic) UIColor *rightColor;
-@property (nonatomic) UIColor *leftColor;
-@property (nonatomic) NSString *expand;
-@property (nonatomic) int boxFree;
-@property (nonatomic) float textShadowRadius;
-
-@end
-
 @implementation OATextState
 @end
 
@@ -71,21 +56,12 @@
 {
     OAMapHudViewController __weak *_mapHudViewController;
     UIView __weak *_widgetsView;
-    UIView __weak *_leftWidgetsView;
-    UIView __weak *_rightWidgetsView;
-    
-    OAWidgetPanelViewController *_leftPanelController;
-    OAWidgetPanelViewController *_rightPanelController;
 
     OAMapWidgetRegistry *_mapWidgetRegistry;
     BOOL _expanded;
     BOOL _isBordersOfDownloadedMaps;
-    OATopTextView *_streetNameView;
-    OABaseWidgetView *_topCoordinatesView;
-    OABaseWidgetView *_coordinatesMapCenterWidget;
     OADownloadMapWidget *_downloadMapWidget;
     OAWeatherToolbar *_weatherToolbar;
-    OALanesControl *_lanesControl;
     OAAlarmWidget *_alarmControl;
     OARulerWidget *_rulerControl;
 
@@ -95,17 +71,13 @@
     OAAutoObserverProxy* _locationServicesUpdateObserver;
     OAAutoObserverProxy* _mapZoomObserver;
     OAAutoObserverProxy* _mapSourceUpdatedObserver;
-    OAAutoObserverProxy* _rightWidgetSuperviewDidLayoutObserver;
 
     NSTimeInterval _lastUpdateTime;
     int _themeId;
-    
+
     NSArray<OABaseWidgetView *> *_widgetsToUpdate;
     NSTimer *_framePreparedTimer;
-    
-    NSLayoutConstraint *_leftTopConstraint;
-    NSLayoutConstraint *_rightTopConstraint;
-    
+
     CGRect _leftRect;
 }
 
@@ -118,36 +90,57 @@
         _dayNightHelper = [OADayNightHelper instance];
 
         _mapHudViewController = mapHudViewController;
-        _widgetsView = mapHudViewController.widgetsView;
+        _topPanelController = [[OAWidgetPanelViewController alloc] initWithHorizontal:YES];
         _leftPanelController = [[OAWidgetPanelViewController alloc] init];
         _leftPanelController.delegate = self;
+        _bottomPanelController = [[OAWidgetPanelViewController alloc] initWithHorizontal:YES];
         _rightPanelController = [[OAWidgetPanelViewController alloc] init];
-        
+
+        [mapHudViewController addChildViewController:_topPanelController];
         [mapHudViewController addChildViewController:_leftPanelController];
+        [mapHudViewController addChildViewController:_bottomPanelController];
         [mapHudViewController addChildViewController:_rightPanelController];
-        [_widgetsView addSubview:_leftPanelController.view];
-        [_widgetsView addSubview:_rightPanelController.view];
-        
-        _leftPanelController.view.translatesAutoresizingMaskIntoConstraints = false;
-        _leftTopConstraint = [_leftPanelController.view.topAnchor constraintEqualToAnchor:_widgetsView.topAnchor];
-        _leftTopConstraint.active = YES;
-        if ([_mapHudViewController.view isDirectionRTL])
-            [_leftPanelController.view.trailingAnchor constraintEqualToAnchor:_widgetsView.trailingAnchor constant:-2.].active = YES;
-        else
-            [_leftPanelController.view.leadingAnchor constraintEqualToAnchor:_widgetsView.leadingAnchor constant:-2.].active = YES;
-        
-        _rightPanelController.view.translatesAutoresizingMaskIntoConstraints = false;
-        _rightTopConstraint = [_rightPanelController.view.topAnchor constraintEqualToAnchor:_widgetsView.topAnchor];
-        _rightTopConstraint.active = YES;
-        if ([_mapHudViewController.view isDirectionRTL])
-            [_rightPanelController.view.leadingAnchor constraintEqualToAnchor:_widgetsView.leadingAnchor constant:2.].active = YES;
-        else
-            [_rightPanelController.view.trailingAnchor constraintEqualToAnchor:_widgetsView.trailingAnchor constant:2.].active = YES;
-        
+
+        [mapHudViewController.topWidgetsView addSubview:_topPanelController.view];
+        [mapHudViewController.leftWidgetsView addSubview:_leftPanelController.view];
+        [mapHudViewController.bottomWidgetsView addSubview:_bottomPanelController.view];
+        [mapHudViewController.rightWidgetsView addSubview:_rightPanelController.view];
+
+        _topPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
+        _leftPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
+        _bottomPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
+        _rightPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
+
+        [NSLayoutConstraint activateConstraints:@[
+
+            [_topPanelController.view.topAnchor constraintEqualToAnchor:mapHudViewController.topWidgetsView.topAnchor constant:0.],
+            [_topPanelController.view.leftAnchor constraintEqualToAnchor:mapHudViewController.topWidgetsView.leftAnchor constant:0.],
+            [_topPanelController.view.bottomAnchor constraintEqualToAnchor:mapHudViewController.topWidgetsView.bottomAnchor constant:0.],
+            [_topPanelController.view.rightAnchor constraintEqualToAnchor:mapHudViewController.topWidgetsView.rightAnchor constant:0.],
+
+            [_leftPanelController.view.topAnchor constraintEqualToAnchor:mapHudViewController.leftWidgetsView.topAnchor constant:0.],
+            [_leftPanelController.view.leftAnchor constraintEqualToAnchor:mapHudViewController.leftWidgetsView.leftAnchor constant:0.],
+            [_leftPanelController.view.bottomAnchor constraintEqualToAnchor:mapHudViewController.leftWidgetsView.bottomAnchor constant:0.],
+            [_leftPanelController.view.rightAnchor constraintEqualToAnchor:mapHudViewController.leftWidgetsView.rightAnchor constant:0.],
+
+            [_bottomPanelController.view.topAnchor constraintEqualToAnchor:mapHudViewController.bottomWidgetsView.topAnchor constant:0.],
+            [_bottomPanelController.view.leftAnchor constraintEqualToAnchor:mapHudViewController.bottomWidgetsView.leftAnchor constant:0.],
+            [_bottomPanelController.view.bottomAnchor constraintEqualToAnchor:mapHudViewController.bottomWidgetsView.bottomAnchor constant:0.],
+            [_bottomPanelController.view.rightAnchor constraintEqualToAnchor:mapHudViewController.bottomWidgetsView.rightAnchor constant:0.],
+
+            [_rightPanelController.view.topAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.topAnchor constant:0.],
+            [_rightPanelController.view.leftAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.leftAnchor constant:0.],
+            [_rightPanelController.view.bottomAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.bottomAnchor constant:0.],
+            [_rightPanelController.view.rightAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.rightAnchor constant:0.]
+
+        ]];
+
+        [_topPanelController didMoveToParentViewController:mapHudViewController];
         [_leftPanelController didMoveToParentViewController:mapHudViewController];
+        [_bottomPanelController didMoveToParentViewController:mapHudViewController];
         [_rightPanelController didMoveToParentViewController:mapHudViewController];
 
-        _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
+        _mapWidgetRegistry = [OAMapWidgetRegistry sharedInstance];
         _expanded = NO;
         _themeId = -1;
 
@@ -169,11 +162,6 @@
         _mapSourceUpdatedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                      withHandler:@selector(onMapSourceUpdated)
                                                       andObserve:[OARootViewController instance].mapPanel.mapViewController.mapSourceUpdatedObservable];
-        
-//        if (_rightWidgetsView.superview && [_rightWidgetsView.superview isKindOfClass:OAUserInteractionPassThroughView.class])
-//            _rightWidgetSuperviewDidLayoutObserver = [[OAAutoObserverProxy alloc] initWith:self
-//                                                         withHandler:@selector(onRightWidgetSuperviewLayout)
-//                                                          andObserve:((OAUserInteractionPassThroughView *)_rightWidgetsView.superview).didLayoutObservable];
     }
     return self;
 }
@@ -228,9 +216,11 @@
 - (void) onDraw
 {
     [self updateColorShadowsOfText];
-    [_mapWidgetRegistry updateInfo:_settings.applicationMode.get expanded:_expanded];
-//    for (OABaseWidgetView *widget in _widgetsToUpdate)
-//         [widget updateInfo];
+    [_mapWidgetRegistry updateInfo:[_settings.applicationMode get] expanded:_expanded];
+    for (OABaseWidgetView *widget in _widgetsToUpdate)
+    {
+        [widget updateInfo];
+    }
 }
 
 - (void) updateCurrentLocationAddress
@@ -256,152 +246,83 @@
     int calcThemeId = (transparent ? 4 : 0) | (nightMode ? 2 : 0) | (following ? 1 : 0);
     if (_themeId != calcThemeId) {
         _themeId = calcThemeId;
-        OATextState *ts = [self calculateTextState];
-        for (OAMapWidgetInfo *reg in [_mapWidgetRegistry getWidgetsForPanel:OAWidgetsPanel.leftPanel])
-            [self updateReg:ts reg:reg];
+        OATextState *state = [self calculateTextState];
+        for (OAMapWidgetInfo *widgetInfo in [_mapWidgetRegistry getAllWidgets])
+        {
+            [widgetInfo.widget updateColors:state];
+        }
 
-        for (OAMapWidgetInfo *reg in [_mapWidgetRegistry getWidgetsForPanel:OAWidgetsPanel.rightPanel])
-            [self updateReg:ts reg:reg];
+        for (OAMapWidgetInfo *widgetInfo in [_mapWidgetRegistry getWidgetsForPanel:OAWidgetsPanel.leftPanel])
+        {
+            [self updateColors:state sideWidget:widgetInfo.widget];
+        }
 
-        [self updateStreetName:nightMode ts:ts];
-        //updateTopToolbar(nightMode);
-        _lanesControl.backgroundColor = ts.leftColor;
-        [_lanesControl updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius];
-        //rulerControl.updateTextSize(nightMode, ts.textColor, ts.textShadowColor,  (int) (2 * view.getDensity()));
+        for (OAMapWidgetInfo *widgetInfo in [_mapWidgetRegistry getWidgetsForPanel:OAWidgetsPanel.rightPanel])
+        {
+            [self updateColors:state sideWidget:widgetInfo.widget];
+        }
     }
 }
 
-- (BOOL)topTextViewVisible
+- (void) layoutWidgets
 {
-    return _streetNameView && _streetNameView.superview && !_streetNameView.hidden;
-}
-
-- (void) layoutWidgets:(OABaseWidgetView *)widget
-{
-    
     BOOL portrait = ![OAUtilities isLandscape];
-    CGFloat maxContainerHeight = 0;
-    CGFloat yPos = 0;
-    BOOL hasStreetName = NO;
-    if ([self topTextViewVisible])
-    {
-        hasStreetName = YES;
-        if (portrait)
-        {
-            yPos += _streetNameView.frame.size.height + 2;
-            maxContainerHeight += _streetNameView.frame.size.height + 2;
-        }
-    }
-    else
-    {
-        yPos += 1;
-    }
-    
-    BOOL hasLeftWidgets = _leftPanelController.hasWidgets;
-    BOOL hasRightWidgets = _rightPanelController.hasWidgets;
 
-    _leftRect = _leftPanelController.view.frame;
-    [_leftPanelController updateWidgetSizes];
-    [_rightPanelController updateWidgetSizes];
-    
-    CGFloat maxWidth = fmax(_leftPanelController.view.frame.size.width, _rightPanelController.view.frame.size.width);
-    CGFloat widgetsHeight = fmax(_leftPanelController.view.frame.size.height, _rightPanelController.view.frame.size.height);
-    
-    maxContainerHeight = fmax(maxContainerHeight, widgetsHeight);
-    
-    if (self.delegate && !CGRectEqualToRect(_leftRect, _leftPanelController.view.frame))
-        [self.delegate leftWidgetsLayoutDidChange:_leftPanelController.view animated:YES];
-    
-    if (hasStreetName)
-    {
-        CGFloat streetNameViewHeight = _streetNameView.bounds.size.height;
-        CGRect f = _streetNameView.superview.frame;
-        if (portrait)
-        {
-            _streetNameView.frame = CGRectMake(0, 0, f.size.width, streetNameViewHeight);
-            _leftTopConstraint.constant = streetNameViewHeight;
-            _rightTopConstraint.constant = streetNameViewHeight;
-        }
-        else
-        {
-            CGRect leftFrame = _leftPanelController.view.frame;
-            CGRect rightFrame = _rightPanelController.view.frame;
-            CGFloat w = f.size.width - (hasRightWidgets ? rightFrame.size.width + 2 : 0) - (hasLeftWidgets ? leftFrame.size.width + 2 : 0);
-            _streetNameView.frame = CGRectMake(hasLeftWidgets ? leftFrame.size.width + 2 : 0, yPos, w, streetNameViewHeight);
-        }
-        [self.delegate streetViewLayoutDidChange:_streetNameView animate:YES];
-        if (maxContainerHeight < streetNameViewHeight)
-            maxContainerHeight = streetNameViewHeight;
-    }
-    else
-    {
-        _leftTopConstraint.constant = 0;
-        _rightTopConstraint.constant = 0;
-    }
-    
-    if (_lanesControl && _lanesControl.superview && !_lanesControl.hidden)
-    {
-        CGRect f = _lanesControl.superview.frame;
-        CGFloat y = yPos + (!portrait && hasStreetName ? _streetNameView.frame.origin.y + _streetNameView.frame.size.height + 2 : 0);
-        _lanesControl.center = CGPointMake(f.size.width / 2, y + _lanesControl.bounds.size.height / 2);
-    }
+    BOOL hasTopWidgets = [_topPanelController hasWidgets];
+    BOOL hasLeftWidgets = [_leftPanelController hasWidgets];
+    BOOL hasBottomWidgets = [_bottomPanelController hasWidgets];
+    BOOL hasRightWidgets = [_rightPanelController hasWidgets];
 
     if (_alarmControl && _alarmControl.superview && !_alarmControl.hidden)
     {
         CGRect optionsButtonFrame = _mapHudViewController.optionsMenuButton.frame;
         _alarmControl.center = CGPointMake(_alarmControl.bounds.size.width / 2, optionsButtonFrame.origin.y - _alarmControl.bounds.size.height / 2);
     }
-    
+
     if (_rulerControl && _rulerControl.superview && !_rulerControl.hidden)
     {
         CGRect superFrame = _rulerControl.superview.frame;
         _rulerControl.frame = CGRectMake(superFrame.origin.x, superFrame.origin.y, superFrame.size.width, superFrame.size.height);
         _rulerControl.center = _rulerControl.superview.center;
     }
-    
-    CGRect f = _widgetsView.frame;
-    _widgetsView.frame = CGRectMake(f.origin.x, f.origin.y, f.size.width, maxContainerHeight);
-    
-    BOOL showTopCoordinatesView = _topCoordinatesView && _topCoordinatesView.superview && !_topCoordinatesView.hidden;
-    BOOL showCoordinatesMapCenterWidget = _coordinatesMapCenterWidget && _coordinatesMapCenterWidget.superview && !_coordinatesMapCenterWidget.hidden;
-    
-    if (showTopCoordinatesView || showCoordinatesMapCenterWidget)
+
+    if (hasTopWidgets)
     {
         if (_lastUpdateTime == 0)
             [[OARootViewController instance].mapPanel updateToolbar];
-        
-        BOOL hasTopWidgetsPanel = _mapHudViewController.toolbarViewController.view.alpha != 0;
-        if (portrait)
-        {
-            if (showTopCoordinatesView)
-            {
-                _topCoordinatesView.frame = CGRectMake(0, _mapHudViewController.statusBarView.frame.size.height, DeviceScreenWidth, 52);
-                if (showCoordinatesMapCenterWidget)
-                    _coordinatesMapCenterWidget.frame = CGRectMake(0, _mapHudViewController.statusBarView.frame.size.height + 52, DeviceScreenWidth, 52);
-            }
-            else if (showCoordinatesMapCenterWidget)
-            {
-                _coordinatesMapCenterWidget.frame = CGRectMake(0, _mapHudViewController.statusBarView.frame.size.height, DeviceScreenWidth, 52);
-            }
-        }
-        else
-        {
-            CGFloat widgetWidth = DeviceScreenWidth / 2 - [OAUtilities getLeftMargin];
-            CGFloat withMarkersLeftOffset = [_topCoordinatesView isDirectionRTL] ? DeviceScreenWidth / 2 : [OAUtilities getLeftMargin];
-            CGFloat leftOffset = hasTopWidgetsPanel ? withMarkersLeftOffset : (DeviceScreenWidth - widgetWidth) / 2;
-            if (showTopCoordinatesView)
-            {
-                _topCoordinatesView.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], _mapHudViewController.statusBarView.frame.size.height, widgetWidth, 50);
-                if (showCoordinatesMapCenterWidget)
-                    _coordinatesMapCenterWidget.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], _mapHudViewController.statusBarView.frame.size.height + 50, widgetWidth, 50);
-            }
-            else if (showCoordinatesMapCenterWidget)
-            {
-                _coordinatesMapCenterWidget.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], _mapHudViewController.statusBarView.frame.size.height, widgetWidth, 50);
-            }
-        }
+        _mapHudViewController.topWidgetsViewHeightConstraint.constant = [_topPanelController calculateContentSize].height;
     }
-    
+    else
+    {
+        _mapHudViewController.topWidgetsViewHeightConstraint.constant = 0.;
+    }
+
+    if (hasLeftWidgets)
+    {
+        CGSize leftSize = [_leftPanelController calculateContentSize];
+        _mapHudViewController.leftWidgetsViewHeightConstraint.constant = leftSize.height;
+        _mapHudViewController.leftWidgetsViewWidthConstraint.constant = leftSize.width;
+    }
+    else
+    {
+        _mapHudViewController.leftWidgetsViewHeightConstraint.constant = 0.;
+        _mapHudViewController.leftWidgetsViewWidthConstraint.constant = 0.;
+    }
+
+    _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = hasBottomWidgets ? [_bottomPanelController calculateContentSize].height : 0.;
+
+    if (hasRightWidgets)
+    {
+        CGSize rightSize = [_rightPanelController calculateContentSize];
+        _mapHudViewController.rightWidgetsViewHeightConstraint.constant = rightSize.height;
+        _mapHudViewController.rightWidgetsViewWidthConstraint.constant = rightSize.width;
+    }
+    else
+    {
+        _mapHudViewController.rightWidgetsViewHeightConstraint.constant = 0.;
+        _mapHudViewController.rightWidgetsViewWidthConstraint.constant = 0.;
+    }
+
     if (_downloadMapWidget && _downloadMapWidget.superview && !_downloadMapWidget.hidden)
     {
         if (_lastUpdateTime == 0)
@@ -421,6 +342,8 @@
 
     if (_weatherToolbar && _weatherToolbar.superview)
         [self updateWeatherToolbarVisible];
+
+    [self.delegate widgetsLayoutDidChange:YES];
 }
 
 - (void)updateWeatherToolbarVisible
@@ -449,7 +372,7 @@
         _weatherToolbar.hidden = NO;
         [_mapHudViewController updateWeatherButtonVisibility];
     }
-    
+
     _isBordersOfDownloadedMaps = [_settings.mapSettingShowBordersOfDownloadedMaps get];
     if (_isBordersOfDownloadedMaps)
     {
@@ -459,19 +382,9 @@
 
     [UIView animateWithDuration:.3 animations:^{
         [_weatherToolbar moveToScreen];
-
-        [_mapHudViewController showBottomControls:[OAUtilities isLandscape] ? 0. : _weatherToolbar.frame.size.height - [OAUtilities getBottomMargin]
-                                         animated:YES];
-        [mapPanel setTopControlsVisible:YES];
+        [mapPanel targetUpdateControlsLayout:NO customStatusBarStyle:UIStatusBarStyleDefault];
         [_mapHudViewController.floatingButtonsController updateViewVisibility];
         [self recreateControls];
-
-        CGFloat height = [OAUtilities isLandscape] ? 0. : _weatherToolbar.frame.size.height;
-        CGFloat leftMargin = [OAUtilities isLandscape]
-                ? _weatherToolbar.frame.size.width - [OAUtilities getLeftMargin] + 20.
-                : _mapHudViewController.driveModeButton.frame.origin.x + _mapHudViewController.driveModeButton.frame.size.width + 16.;
-        [_mapHudViewController updateRulerPosition:[OAUtilities isLandscape] ? 0. : -(height - [OAUtilities getBottomMargin] + 20.)
-                                              left:leftMargin];
     }];
 }
 
@@ -482,11 +395,10 @@
     if (!needsSettingsForToolbar)
     {
         mapPanel.mapViewController.mapLayers.weatherDate = [NSDate date];
-        [mapPanel setTopControlsVisible:YES];
-        [_mapHudViewController showBottomControls:0. animated:YES];
+        [mapPanel targetUpdateControlsLayout:NO customStatusBarStyle:UIStatusBarStyleDefault];
     }
     [mapPanel.weatherToolbarStateChangeObservable notifyEvent];
-    
+
     if (_isBordersOfDownloadedMaps)
     {
         [_settings.mapSettingShowBordersOfDownloadedMaps set:YES];
@@ -506,21 +418,8 @@
             [mapPanel showScrollableHudViewController:weatherLayerSettingsViewController];
         }
     }];
-    [_mapHudViewController resetToDefaultRulerLayout];
     [_mapHudViewController.floatingButtonsController updateViewVisibility];
     [self recreateControls];
-}
-
-- (CGFloat) getLeftBottomY
-{
-    CGFloat res = 0;
-    if (!_streetNameView.hidden)
-        res += _streetNameView.frame.origin.y + _streetNameView.frame.size.height;
-    
-    if (!_leftPanelController.view.hidden && _leftPanelController.view.frame.size.height > 0)
-        res += _leftPanelController.view.frame.size.height;
-        
-    return res;
 }
 
 - (void) recreateAllControls
@@ -534,20 +433,10 @@
 - (void) recreateControls
 {
     OAApplicationMode *appMode = _settings.applicationMode.get;
-    
-    [_mapHudViewController setCoordinatesWidget:_topCoordinatesView];
-    [_mapHudViewController setCenterCoordinatesWidget:_coordinatesMapCenterWidget];
+
     [_mapHudViewController setDownloadMapWidget:_downloadMapWidget];
     [_mapHudViewController setWeatherToolbarMapWidget:_weatherToolbar];
 
-    [_streetNameView removeFromSuperview];
-    _streetNameView.delegate = self;
-    [_widgetsView addSubview:_streetNameView];
-
-    [_lanesControl removeFromSuperview];
-    _lanesControl.delegate = self;
-    [_widgetsView addSubview:_lanesControl];
-    
     [_rulerControl removeFromSuperview];
     [[OARootViewController instance].mapPanel.mapViewController.view insertSubview:_rulerControl atIndex:0];
     [self updateRuler];
@@ -556,30 +445,33 @@
     _alarmControl.delegate = self;
     [_mapHudViewController.view addSubview:_alarmControl];
 
-    for (UIView *widget in _leftWidgetsView.subviews)
-        [widget removeFromSuperview];
-    
-    for (UIView *widget in _rightWidgetsView.subviews)
-        [widget removeFromSuperview];
-    
-    [_leftPanelController clearWidgets];
-    [_rightPanelController clearWidgets];
-    
-    //[self.view insertSubview:self.widgetsView belowSubview:_toolbarViewController.view];
-//    [_mapWidgetRegistry populateStackControl:_leftWidgetsView mode:appMode left:YES expanded:_expanded];
-//    [_mapWidgetRegistry populateStackControl:_rightWidgetsView mode:appMode left:NO expanded:_expanded];
-    
-//    [_mapWidgetRegistry clearWidgets];
-//    [_mapWidgetRegistry registerAllControls];
-//    [_mapWidgetRegistry reorderWidgets];
-    [_mapWidgetRegistry updateWidgetsInfo:OAAppSettings.sharedManager.applicationMode.get];
-    
-    [_mapWidgetRegistry populateStackControl:_leftPanelController mode:appMode widgetPanel:OAWidgetsPanel.leftPanel];
-    [_mapWidgetRegistry populateStackControl:_rightPanelController mode:appMode widgetPanel:OAWidgetsPanel.rightPanel];
-    
+    [_mapWidgetRegistry updateWidgetsInfo:[[OAAppSettings sharedManager].applicationMode get]];
+
+    [self recreateWidgetsPanel:_topPanelController panel:OAWidgetsPanel.topPanel appMode:appMode];
+    [self recreateWidgetsPanel:_bottomPanelController panel:OAWidgetsPanel.bottomPanel appMode:appMode];
+    [self recreateWidgetsPanel:_leftPanelController panel:OAWidgetsPanel.leftPanel appMode:appMode];
+    [self recreateWidgetsPanel:_rightPanelController panel:OAWidgetsPanel.rightPanel appMode:appMode];
+
     _themeId = -1;
     [self updateColorShadowsOfText];
-    [self layoutWidgets:nil];
+    [self layoutWidgets];
+}
+
+- (void)recreateTopWidgetsPanel
+{
+    OAApplicationMode *appMode = [[OAAppSettings sharedManager].applicationMode get];
+    [_mapWidgetRegistry updateWidgetsInfo:appMode];
+    [self recreateWidgetsPanel:_topPanelController panel:OAWidgetsPanel.topPanel appMode:appMode];
+}
+
+- (void)recreateWidgetsPanel:(OAWidgetPanelViewController *)container panel:(OAWidgetsPanel *)panel appMode:(OAApplicationMode *)appMode
+{
+    if (container)
+    {
+        [container clearWidgets];
+        [_mapWidgetRegistry populateControlsContainer:container mode:appMode widgetPanel:panel];
+        [container updateWidgetSizes];
+    }
 }
 
 - (void) expandClicked:(id)sender
@@ -632,33 +524,15 @@
     return ts;
 }
 
-- (void) updateReg:(OATextState *)ts reg:(OAMapWidgetInfo *)reg
+- (void) updateColors:(OATextState *)state sideWidget:(OABaseWidgetView *)sideWidget
 {
-    if ([reg.widget isKindOfClass:OATextInfoWidget.class])
+    if ([sideWidget isKindOfClass:OATextInfoWidget.class])
     {
-        OATextInfoWidget *widget = (OATextInfoWidget *) reg.widget;
-        widget.backgroundColor = ts.leftColor;
-        [widget updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius];
-        [widget updateIconMode:ts.night];
+        OATextInfoWidget *widget = (OATextInfoWidget *) sideWidget;
+        widget.backgroundColor = state.leftColor;
+        [widget updateTextColor:state.textColor textShadowColor:state.textShadowColor bold:state.textBold shadowRadius:state.textShadowRadius];
+        [widget updateIconMode:state.night];
     }
-}
-
-- (OAMapWidgetRegInfo *) registerSideWidget:(OATextInfoWidget *)widget imageId:(NSString *)imageId message:(NSString *)message key:(NSString *)key left:(BOOL)left priorityOrder:(int)priorityOrder
-{
-    return [self registerSideWidget:widget imageId:imageId message:message description:nil key:key left:left priorityOrder:priorityOrder];
-}
-
-- (OAMapWidgetRegInfo *) registerSideWidget:(OATextInfoWidget *)widget imageId:(NSString *)imageId message:(NSString *)message description:(NSString *)description key:(NSString *)key left:(BOOL)left priorityOrder:(int)priorityOrder
-{
-    OAMapWidgetRegInfo *reg = [_mapWidgetRegistry registerSideWidgetInternal:widget imageId:imageId message:message description:description key:key left:left priorityOrder:priorityOrder];
-//    [self updateReg:[self calculateTextState] reg:reg];
-    return reg;
-}
-
-- (void) registerSideWidget:(OATextInfoWidget *)widget widgetState:(OAWidgetState *)widgetState key:(NSString *)key left:(BOOL)left priorityOrder:(int)priorityOrder
-{
-    OAMapWidgetRegInfo *reg = [_mapWidgetRegistry registerSideWidgetInternal:widget widgetState:widgetState key:key left:left priorityOrder:priorityOrder];
-//    [self updateReg:[self calculateTextState] reg:reg];
 }
 
 - (void) removeSideWidget:(OATextInfoWidget *)widget
@@ -753,23 +627,23 @@
     
     [_mapWidgetRegistry registerAllControls];
     // TODO: Refactor this logic to use a stack view and get rid of the references entirely
-    _topCoordinatesView = [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.coordinatesCurrentLocation.id].widget;
-    _topCoordinatesView.delegate = self;
-    _coordinatesMapCenterWidget = [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.coordinatesMapCenter.id].widget;
-    _coordinatesMapCenterWidget.delegate = self;
-    _lanesControl = (OALanesControl *) [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.lanes.id].widget;
-    _streetNameView = (OATopTextView *) [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.streetName.id].widget;
-    OATextState *ts = [self calculateTextState];
-    [self updateStreetName:NO ts:ts];
+//    _topCoordinatesView = [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.coordinatesCurrentLocation.id].widget;
+//    _topCoordinatesView.delegate = self;
+//    _coordinatesMapCenterWidget = [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.coordinatesMapCenter.id].widget;
+//    _coordinatesMapCenterWidget.delegate = self;
+//    _lanesControl = (OALanesControl *) [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.lanes.id].widget;
+//    _streetNameView = (OATopTextView *) [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.streetName.id].widget;
+//    OATextState *ts = [self calculateTextState];
+//    [self updateStreetName:NO ts:ts];
     _themeId = -1;
     [self updateColorShadowsOfText];
 }
 
-- (void) updateStreetName:(BOOL)nightMode ts:(OATextState *)ts
-{
-    _streetNameView.backgroundColor = ts.leftColor;
-    [_streetNameView updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius nightMode:nightMode];
-}
+//- (void) updateStreetName:(BOOL)nightMode ts:(OATextState *)ts
+//{
+//    _streetNameView.backgroundColor = ts.leftColor;
+//    [_streetNameView updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius nightMode:nightMode];
+//}
 
 - (void) onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
 {
@@ -781,12 +655,12 @@
 - (void) widgetChanged:(OABaseWidgetView *)widget
 {
     if (widget.isTopText)
-        [self layoutWidgets:widget];
+        [self layoutWidgets];
 }
 
 - (void) widgetVisibilityChanged:(OABaseWidgetView *)widget visible:(BOOL)visible
 {
-    [self layoutWidgets:widget.isTopText ? nil : widget];
+    [self layoutWidgets];
 }
 
 - (void) widgetClicked:(OABaseWidgetView *)widget
@@ -813,7 +687,7 @@
 {
     if (self.delegate && !CGRectEqualToRect(_leftRect, _leftPanelController.view.frame))
     {
-        [self.delegate leftWidgetsLayoutDidChange:_leftPanelController.view animated:YES];
+        [self.delegate widgetsLayoutDidChange:YES];
         _leftRect = _leftPanelController.view.frame;
     }
 }

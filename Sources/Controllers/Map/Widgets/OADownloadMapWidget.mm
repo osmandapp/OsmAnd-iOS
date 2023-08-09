@@ -242,7 +242,7 @@
         if (self.delegate)
             [self.delegate widgetVisibilityChanged:self visible:visible];
         OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
-        [mapPanel.hudViewController updateToolbarLayout:YES];
+        [mapPanel.hudViewController updateControlsLayout:YES];
         [mapPanel updateToolbar];
         
         return YES;

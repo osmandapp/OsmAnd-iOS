@@ -32,11 +32,11 @@ class WidgetsAvailabilityHelper: NSObject {
     }
     
     static func initRegVisibility() {
-        let exceptDefault: [OAApplicationMode] = [.car(), .bicycle(), .pedestrian(), .public_TRANSPORT(), .boat(), .aircraft(), .ski(), .truck(), .motorcycle(), .horse(), .moped()]
+        let exceptDefault: [OAApplicationMode] = [.car(), .bicycle(), .pedestrian(), .public_TRANSPORT(), .boat(), .aircraft(), .ski(), .truck(), .motorcycle(), .horse(), .moped(), .train()]
         
         // left
         let navigationSet1: [OAApplicationMode] = [.car(), .bicycle(), .boat(), .ski(), .truck(), .motorcycle(), .horse(), .moped()]
-        let navigationSet2: [OAApplicationMode] = [.pedestrian(), .public_TRANSPORT(), .aircraft()]
+        let navigationSet2: [OAApplicationMode] = [.pedestrian(), .public_TRANSPORT(), .aircraft(), .train()]
         
         regWidgetVisibility(widgetType: .nextTurn, appModes: navigationSet1)
         regWidgetVisibility(widgetType: .smallNextTurn, appModes: navigationSet2)
@@ -50,7 +50,7 @@ class WidgetsAvailabilityHelper: NSObject {
         regWidgetVisibility(widgetType: .distanceToDestination)
         regWidgetVisibility(widgetType: .timeToIntermediate)
         regWidgetVisibility(widgetType: .timeToDestination)
-        regWidgetVisibility(widgetType: .currentSpeed, appModes: [.car(), .bicycle(), .boat(), .ski(), .public_TRANSPORT(), .aircraft(), .truck(), .motorcycle(), .horse(), .moped()])
+        regWidgetVisibility(widgetType: .currentSpeed, appModes: [.car(), .bicycle(), .boat(), .ski(), .public_TRANSPORT(), .aircraft(), .truck(), .motorcycle(), .horse(), .moped(), .train()])
         regWidgetVisibility(widgetType: .maxSpeed, appModes: [.car(), .truck(), .motorcycle(), .moped()])
         regWidgetVisibility(widgetType: .altitudeMapCenter, appModes: [.pedestrian(), .bicycle()])
         regWidgetVisibility(widgetType: .altitudeMyLocation, appModes: [.pedestrian(), .bicycle()])
@@ -66,6 +66,11 @@ class WidgetsAvailabilityHelper: NSObject {
         regWidgetAvailability(widgetType: .sunrise)
         regWidgetAvailability(widgetType: .sunset)
         
+        // vertical
+        regWidgetVisibility(widgetType: .streetName, appModes: [.car()])
+        regWidgetVisibility(widgetType: .lanes, appModes: [.car(), .bicycle()])
+        regWidgetVisibility(widgetType: .markersTopBar)
+
         // all = nil everything
         regWidgetAvailability(widgetType: .sideMarker1)
         regWidgetAvailability(widgetType: .sideMarker2)

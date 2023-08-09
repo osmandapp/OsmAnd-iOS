@@ -38,8 +38,8 @@
         _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
 
         _key = param;
-        if (_key)
-            _r = [_mapWidgetRegistry widgetByKey:_key];
+//        if (_key)
+//            _r = [_mapWidgetRegistry widgetByKey:_key];
         
         if (_r)
             title = [_r getMessage];
@@ -179,7 +179,7 @@
 {
     if (_r)
     {
-        [_mapWidgetRegistry setVisibility:_r visible:visible collapsed:collapsed];
+//        [_mapWidgetRegistry setVisibility:_r visible:visible collapsed:collapsed];
         [[OARootViewController instance].mapPanel recreateControls];
     }
 }

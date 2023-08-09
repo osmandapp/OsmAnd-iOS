@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "OABaseWidgetView.h"
 
+//TODO remove
+
 typedef NS_ENUM(NSInteger, EOACoordinatesWidgetType) {
     EOACoordinatesWidgetTypeCurrentLocation = 0,
     EOACoordinatesWidgetTypeMapCenter

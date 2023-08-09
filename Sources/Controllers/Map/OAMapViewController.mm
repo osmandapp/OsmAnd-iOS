@@ -1493,9 +1493,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         if ([mapPanel gpxModeActive])
         {
             [mapPanel hideScrollableHudViewController];
-            [mapPanel.hudViewController resetToDefaultRulerLayout];
-            [mapPanel setTopControlsVisible:YES];
-            [mapPanel setBottomControlsVisible:YES menuHeight:0 animated:YES];
+            [mapPanel.hudViewController updateControlsLayout:YES];
         }
         [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress forceHide:[recognizer isKindOfClass:UITapGestureRecognizer.class] && recognizer.numberOfTouches == 1];
         

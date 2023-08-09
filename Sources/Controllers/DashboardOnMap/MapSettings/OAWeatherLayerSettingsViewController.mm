@@ -129,11 +129,8 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [_mapPanel setTopControlsVisible:NO
-            onlyMapSettingsAndSearch:NO
-                customStatusBarStyle:[OAAppSettings sharedManager].nightMode
-     ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
-    [_mapPanel.hudViewController hideBottomControls:_menuHeight animated:YES];
+    [_mapPanel targetUpdateControlsLayout:YES
+                     customStatusBarStyle:[OAAppSettings sharedManager].nightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

@@ -406,8 +406,7 @@
     }];
     [self setPinPosition];
     _isActionsViewVisible = YES;
-    [_mapHudController hideTopControls];
-    [_mapHudController showBottomControls:0. animated:YES];
+    [_mapHudController updateControlsLayout:YES];
     [self updateColors:NO];
 }
 
@@ -423,8 +422,7 @@
         [self restoreMapViewPort];
     } completion:^(BOOL finished) {
         [_actionsView removeFromSuperview];
-        [_mapHudController showTopControls:NO];
-        [_mapHudController showBottomControls:0. animated:YES];
+        [_mapHudController updateControlsLayout:YES];
     }];
     [self updateColors:NO];
 }

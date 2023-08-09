@@ -716,7 +716,7 @@
 "features_menu_group" = "Возможности";
 "map_viewing_item" = "Обзор карты";
 "help_search" = "Поиск по карте";
-"planning_trip_item" = "Ручное составление маршрута";
+"planning_trip_item" = "Ручное планирование маршрута";
 "map_legend" = "Легенда";
 "other_location" = "Другие";
 "instalation_troubleshooting_item" = "Установка и решение проблем";
@@ -1847,7 +1847,7 @@
 "move_point_descr" = "Переместите карту, чтобы изменить положение этой точки.";
 
 // Route planning
-"plan_route" = "Составление маршрута";
+"plan_route" = "Планирование маршрута";
 "listed_exist" = "Указанные %@ уже существуют в OsmAnd.";
 "keep_both_desc" = "Импортированные элементы будут добавлены с префиксом";
 "shared_string_max" = "Макс.";

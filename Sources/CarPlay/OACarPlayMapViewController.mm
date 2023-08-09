@@ -68,6 +68,11 @@
     [super viewDidLayoutSubviews];
     
     BOOL isLeftSideDriving = [self isLeftSideDriving];
+    
+    if (_isInNavigationMode) {
+        _mapVc.mapView.viewportXScale = isLeftSideDriving ? 1.5 : 0.5;
+    }
+   
     if (isLeftSideDriving)
     {
         [rightHandDrivingAlarmWidgetConstraint setActive:NO];
@@ -251,8 +256,8 @@
 
 - (void)enterNavigationMode
 {
-    _mapVc.mapView.viewportXScale = [self isLeftSideDriving] ? 1.5 : 0.5;
     _isInNavigationMode = YES;
+    [self.view layoutIfNeeded];
 }
 
 - (void)exitNavigationMode

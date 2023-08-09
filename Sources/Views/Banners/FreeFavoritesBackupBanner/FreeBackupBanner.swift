@@ -21,6 +21,9 @@ final class FreeBackupBanner: UIView {
         }
     }
     
+    @IBOutlet weak var leadingSubviewConstraint: NSLayoutConstraint!
+    @IBOutlet weak var trailingSubviewConstraint: NSLayoutConstraint!
+    
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var osmAndCloudButton: UIButton! {
         didSet {
@@ -37,7 +40,7 @@ final class FreeBackupBanner: UIView {
     var didCloseButtonAction: (() -> Void)? = nil
     var didOsmAndCloudButtonAction: (() -> Void)? = nil
     
-    var defaultFrameHeight = 120
+    var defaultFrameHeight = 100
     var leadingTrailingOffset = 137
     
     func configure(bannerType: BannerType) {

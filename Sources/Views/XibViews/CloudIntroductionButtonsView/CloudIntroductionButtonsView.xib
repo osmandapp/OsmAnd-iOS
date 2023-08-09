@@ -68,8 +68,8 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="logInButton" destination="sEi-jo-dss" id="a2A-Wq-noo"/>
-                <outlet property="registerButton" destination="jIh-uA-G9s" id="Jdd-s2-8Vv"/>
+                <outlet property="logInButton" destination="sEi-jo-dss" id="9aO-ol-eoz"/>
+                <outlet property="registerButton" destination="jIh-uA-G9s" id="jcB-1O-yIM"/>
             </connections>
             <point key="canvasLocation" x="5.343511450381679" y="170.42253521126761"/>
         </view>

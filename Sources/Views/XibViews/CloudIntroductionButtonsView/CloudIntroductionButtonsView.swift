@@ -13,14 +13,14 @@ final class CloudIntroductionButtonsView: UIView {
     
     @IBOutlet private weak var registerButton: UIButton! {
         didSet {
-            registerButton.titleLabel?.text = localizedString("cloud_create_account")
+            registerButton.setTitle(localizedString("cloud_create_account"), for: .normal)
             registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         }
     }
     
     @IBOutlet private weak var logInButton: UIButton! {
         didSet {
-            logInButton.titleLabel?.text = localizedString("register_opr_have_account")
+            logInButton.setTitle(localizedString("register_opr_have_account"), for: .normal)
             logInButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         }
     }

@@ -41,9 +41,8 @@
     NSCalendar *_currentTimezoneCalendar;
     OAWeatherToolbarLayersHandler *_layersHandler;
     OAWeatherToolbarDatesHandler *_datesHandler;
-    NSArray<NSDate *> *_timeInGMTTimezoneValues;
+    NSArray<NSDate *> *_timeValues;
     NSInteger _previousSelectedDayIndex;
-    BOOL _isOpening;
     float _prevZoom;
     OsmAnd::PointI _prevTarget31;
 }
@@ -199,7 +198,6 @@
     if (visible == self.hidden)
     {
         OAMapRendererView *mapRenderer = (OAMapRendererView *) [OARootViewController instance].mapPanel.mapViewController.view;
-        OsmAnd::ZoomLevel zoomLevel = mapRenderer.zoomLevel;
         float zoom = mapRenderer.zoom;
         OsmAnd::PointI target31 = mapRenderer.target31;
 
@@ -214,7 +212,6 @@
             }
 
             _selectedLayerIndex = -1;
-            _isOpening = YES;
             if ([OAUtilities isLandscape])
                 self.topControlsVisibleInLandscape = [[OARootViewController instance].mapPanel isTopControlsVisible];
         }
@@ -234,7 +231,8 @@
 
 - (NSInteger)getSelectedTimeIndex:(NSDate *)date
 {
-    return [_currentTimezoneCalendar components:NSCalendarUnitHour fromDate:date].hour;
+    NSDate *roundedDate = [OAWeatherHelper roundForecastTimeToHour:date];
+    return [_currentTimezoneCalendar components:NSCalendarUnitHour fromDate:roundedDate].hour;
 }
 
 - (NSDate *)getSelectedGMTDate
@@ -271,7 +269,6 @@
 - (void)updateTimeValues:(NSDate *)date
 {
     NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
-    calendar.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
     NSDate *selectedNextDate = [calendar startOfDayForDate:date];
     NSMutableArray<NSDate *> *selectedTimeValues = [NSMutableArray array];
     [selectedTimeValues addObject:selectedNextDate];
@@ -287,7 +284,7 @@
         [selectedTimeValues addObject:selectedNextDate];
     }
 
-    _timeInGMTTimezoneValues = selectedTimeValues;
+    _timeValues = selectedTimeValues;
 }
 
 - (void)moveToScreen
@@ -385,7 +382,7 @@
 - (void)timeChanged:(UISlider *)sender
 {
     NSInteger index = self.timeSliderView.selectedMark;
-    NSDate *selectedDate = _timeInGMTTimezoneValues[index];
+    NSDate *selectedDate = _timeValues[index];
     [[OARootViewController instance].mapPanel.mapViewController.mapLayers updateWeatherDate:selectedDate];
 
     if ([_layersHandler isAllLayersDisabled])
@@ -414,10 +411,7 @@
             selectedTimeIndex *= 3;
 
         self.timeSliderView.selectedMark = selectedTimeIndex;
-        if (_isOpening)
-            _isOpening = NO;
-        else
-            [self timeChanged:nil];
+        [self timeChanged:nil];
 
         [self.dateCollectionView setValues:data withSelectedIndex:index];
         [self.dateCollectionView reloadData];

@@ -260,6 +260,10 @@
 		3205EC4026E807E80090B491 /* OAQuickSearchCoordinatesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3205EC3F26E8079E0090B491 /* OAQuickSearchCoordinatesViewController.xib */; };
 		32076B1229014678001A86AF /* ic_custom_fps@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32076B0C29014677001A86AF /* ic_custom_fps@2x.png */; };
 		32076B1429014678001A86AF /* ic_custom_fps@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32076B0E29014677001A86AF /* ic_custom_fps@3x.png */; };
+		320F71242A823E210071C0E7 /* TravelObfHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71232A823E210071C0E7 /* TravelObfHelper.swift */; };
+		320F71272A823FB20071C0E7 /* PopularArticles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71262A823FB20071C0E7 /* PopularArticles.swift */; };
+		320F71292A8251730071C0E7 /* TravelArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71282A8251730071C0E7 /* TravelArticle.swift */; };
+		320F712C2A8268B50071C0E7 /* OATravelObfHelperBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320F712B2A8268B50071C0E7 /* OATravelObfHelperBridge.mm */; };
 		321126FF2800710800ED8D52 /* OAExternalTimeFormatter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */; };
 		32119B3D28477142005E1E0C /* OAOsmandDevelopmentPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32119B3C28477142005E1E0C /* OAOsmandDevelopmentPlugin.mm */; };
 		32119B40284776CF005E1E0C /* ic_custom_laptop@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32119B3E284776CF005E1E0C /* ic_custom_laptop@3x.png */; };
@@ -3880,6 +3884,11 @@
 		32076B0E29014677001A86AF /* ic_custom_fps@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_fps@3x.png"; path = "Resources/Icons/ic_custom_fps@3x.png"; sourceTree = "<group>"; };
 		320EADAA29A77A96002F9883 /* OAAmenityExtendedNameFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAmenityExtendedNameFilter.h; sourceTree = "<group>"; };
 		320EADAB29A77AAB002F9883 /* OAAmenityExtendedNameFilter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAmenityExtendedNameFilter.mm; sourceTree = "<group>"; };
+		320F71232A823E210071C0E7 /* TravelObfHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelObfHelper.swift; sourceTree = "<group>"; };
+		320F71262A823FB20071C0E7 /* PopularArticles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularArticles.swift; sourceTree = "<group>"; };
+		320F71282A8251730071C0E7 /* TravelArticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelArticle.swift; sourceTree = "<group>"; };
+		320F712A2A82689B0071C0E7 /* OATravelObfHelperBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATravelObfHelperBridge.h; sourceTree = "<group>"; };
+		320F712B2A8268B50071C0E7 /* OATravelObfHelperBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATravelObfHelperBridge.mm; sourceTree = "<group>"; };
 		321126FD280070F500ED8D52 /* OAExternalTimeFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAExternalTimeFormatter.h; sourceTree = "<group>"; };
 		321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalTimeFormatter.mm; sourceTree = "<group>"; };
 		3211355E2753FB500050242B /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -8448,6 +8457,18 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		320F71252A823F980071C0E7 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				320F71232A823E210071C0E7 /* TravelObfHelper.swift */,
+				320F712A2A82689B0071C0E7 /* OATravelObfHelperBridge.h */,
+				320F712B2A8268B50071C0E7 /* OATravelObfHelperBridge.mm */,
+				320F71262A823FB20071C0E7 /* PopularArticles.swift */,
+				320F71282A8251730071C0E7 /* TravelArticle.swift */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
 		32119B3A28477112005E1E0C /* Development */ = {
 			isa = PBXGroup;
 			children = (
@@ -8482,6 +8503,7 @@
 		32464B7C2A6FCC3200DA6980 /* TravelGuides */ = {
 			isa = PBXGroup;
 			children = (
+				320F71252A823F980071C0E7 /* data */,
 				32464B7D2A6FCC6700DA6980 /* TravelGuidesViewConroller.swift */,
 			);
 			path = TravelGuides;
@@ -17535,6 +17557,7 @@
 				DA5A824D26C563A700F274C7 /* OAScreenAlertsViewController.m in Sources */,
 				DA4ABF172876DA6800B996EF /* OAGlobalSettingsItem.mm in Sources */,
 				DA5A81AA26C563A700F274C7 /* OASearchSettings.mm in Sources */,
+				320F71242A823E210071C0E7 /* TravelObfHelper.swift in Sources */,
 				46B0CC5A299CEB99003D9F40 /* OABaseButtonsViewController.m in Sources */,
 				DA5A839826C563A800F274C7 /* OAResourcesBaseViewController.mm in Sources */,
 				DA5A823826C563A700F274C7 /* OAGlobalSettingsViewController.mm in Sources */,
@@ -17616,6 +17639,7 @@
 				DA5A849F26C563A900F274C7 /* OAChangeRouteModeCommand.mm in Sources */,
 				DA5A847F26C563A900F274C7 /* OAAlarmWidget.mm in Sources */,
 				DACF784427E3441700A8A218 /* OABackupHelper.mm in Sources */,
+				320F712C2A8268B50071C0E7 /* OATravelObfHelperBridge.mm in Sources */,
 				DA5A831726C563A800F274C7 /* OAHeaderRoundCell.m in Sources */,
 				DA5A81F626C563A700F274C7 /* OAChoosePlanHelper.mm in Sources */,
 				DA5A83C826C563A800F274C7 /* OACollapsableCoordinatesView.mm in Sources */,
@@ -17765,6 +17789,7 @@
 				DA5A818826C563A700F274C7 /* OANavAutoZoomMapAction.m in Sources */,
 				DA5A838526C563A800F274C7 /* OADestinationCardsViewController.mm in Sources */,
 				DA5A816626C563A700F274C7 /* OAAppVersionDependentConstants.m in Sources */,
+				320F71292A8251730071C0E7 /* TravelArticle.swift in Sources */,
 				DA5A84E526C563A900F274C7 /* OAWaypointsMainScreen.mm in Sources */,
 				DA5A82E426C563A800F274C7 /* OAColorsTableViewCell.m in Sources */,
 				DA5A854926C563A900F274C7 /* OAJsonHelper.m in Sources */,
@@ -17972,6 +17997,7 @@
 				DA5A819926C563A700F274C7 /* OAGPXAction.mm in Sources */,
 				DA5A816E26C563A700F274C7 /* OASharedVariables.m in Sources */,
 				FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */,
+				320F71272A823FB20071C0E7 /* PopularArticles.swift in Sources */,
 				DA5A850B26C563A900F274C7 /* OAButton.m in Sources */,
 				DA5A81C126C563A700F274C7 /* OAPOIParser.m in Sources */,
 				DA5A824C26C563A700F274C7 /* OANavigationLanguageViewController.m in Sources */,

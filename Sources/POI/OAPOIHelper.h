@@ -17,6 +17,8 @@
 #define SPEED_CAMERA @"speed_camera"
 #define WIKI_LANG @"wiki_lang"
 #define WIKI_PLACE @"wiki_place"
+#define ROUTE_ARTICLE @"route_article"
+#define ROUTE_ARTICLE_POINT @"route_article_point"
 
 #define kSearchLimit 200
 const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
@@ -102,6 +104,8 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 + (NSArray<OAPOI *> *) searchPOIsOnThePath:(NSArray<CLLocation *> *)locations radius:(double)radius filter:(OASearchPoiTypeFilter *)filter matcher:(OAResultMatcher<OAPOI *> *)matcher;
 + (UIImage *)getCustomFilterIcon:(OAPOIUIFilter *) filter;
 + (void) fetchValuesContentPOIByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity poi:(OAPOI *)poi;
+
++ (NSArray<OAPOI *> *) findTravelGuides:(NSString *)categoryName location:(OsmAnd::PointI)location radius:(int)radius;
 
 - (BOOL) breakSearch;
 

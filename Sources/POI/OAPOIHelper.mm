@@ -894,6 +894,58 @@
     return [NSArray arrayWithArray:arr];
 }
 
++ (NSArray<OAPOI *> *) findTravelGuides:(NSString *)categoryName location:(OsmAnd::PointI)location radius:(int)radius
+{
+    OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, location);
+    
+    OsmAndAppInstance _app = [OsmAndApp instance];
+    const auto& obfsCollection = _app.resourcesManager->obfsCollection;
+    
+    std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+    ctrl.reset(new OsmAnd::FunctorQueryController([]
+                                                  (const OsmAnd::FunctorQueryController* const controller)
+                                                  {
+                                                      // should break?
+                                                      return false;
+                                                  }));
+    
+    const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
+    
+    auto categoriesFilter = QHash<QString, QStringList>();
+    categoriesFilter.insert(QString::fromNSString(@"routes"), QStringList(QString::fromNSString(categoryName)));
+    
+    searchCriteria->categoriesFilter = categoriesFilter;
+    searchCriteria->bbox31 = bbox31;
+    
+    const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
+    NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
+    NSMutableSet<NSNumber *> *processedPoi = [NSMutableSet set];
+  
+    search->performTravelGuidesSearch(*searchCriteria,
+                          [&arr, &location, &processedPoi](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                          {
+                                NSLog(@"!!! Found");
+        
+                                const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                                if (![processedPoi containsObject:@(am->id.id)])
+                                {
+                                    [processedPoi addObject:@(am->id.id)];
+                                    
+                                    //OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:tagName != nil withContent:NO];
+                                    OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:NO];
+//                                    if (poi && (!tagName || [poi.values valueForKey:tagName]) && (!name || [poi.name isEqualToString:name] || [poi.localizedNames.allValues containsObject:name]))
+//                                    {
+                                        poi.distanceMeters = OsmAnd::Utilities::squareDistance31(location, am->position31);
+                                        [OAPOIHelper fetchValuesContentPOIByAmenity:am poi:poi];
+                                        [arr addObject:poi];
+//                                    }
+                                }
+                          },
+                          ctrl);
+    
+    return [NSArray arrayWithArray:arr];
+}
+
 + (OAPOIRoutePoint *) distFromLat:(double)latitude longitude:(double)longitude locations:(NSArray<CLLocation *> *)locations radius:(double)radius
 {
     double dist = radius + 0.1;

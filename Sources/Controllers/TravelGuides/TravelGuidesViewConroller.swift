@@ -88,17 +88,25 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
         downloadDescrRow.descr = localizedString("travel_card_download_descr")
         downloadDescrRow.setObj(NSNumber(booleanLiteral: false), forKey: "kHideSeparator")
         
-        for resource in downloadingResources {
+        for _ in downloadingResources {
             let row = downloadSection.createNewRow()
             row.cellType = "kDownloadCellKey"
         }
     }
 
+    func foobar() {
+        let task = LoadWikivoyageDataAsyncTask(resetData: true)
+        task.execute()
+    }
+    
 
     //MARK: Actions
     
     func onOptionsButtonClicked() {
         print("onOptionsButtonClicked")
+        
+        
+        foobar()
     }
 
     //MARK: TableView
@@ -161,4 +169,33 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
         downloadingCellHelper.onItemClicked(indexPath)
     }
 
+}
+
+
+class LoadWikivoyageDataAsyncTask {
+    //var vc.delegate
+    var travelHelper: TravelObfHelper
+    var resetData: Bool
+    
+    init (resetData: Bool) {
+        travelHelper = TravelObfHelper.shared;
+        self.resetData = resetData
+    }
+    
+    func execute() {
+        DispatchQueue.global(qos: .default).async {
+            self.doInBackground()
+            DispatchQueue.main.async {
+                self.onPostExecute()
+            }
+        }
+    }
+    
+    func doInBackground() {
+        travelHelper.initializeDataToDisplay(resetData: resetData)
+    }
+    
+    func onPostExecute() {
+        //TODO: vc.delegate.reloadData()
+    }
 }

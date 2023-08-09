@@ -229,6 +229,18 @@
         }
         if (cell)
         {
+            // FIXME
+//            if ([item[@"key"] isEqualToString: @"remove_forecast_cell"])
+//            {
+//                [cell textIndentsStyle:EOATableViewCellTextIncreasedTopCenterIndentStyle];
+//                [cell anchorContent:EOATableViewCellContentCenterStyle];
+//            }
+//            else
+//            {
+//                [cell textIndentsStyle:EOATableViewCellTextNormalIndentsStyle];
+//                [cell anchorContent:EOATableViewCellContentCenterStyle];
+//            }
+
             cell.titleLabel.text = item[@"title"];
             cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
             cell.titleLabel.textAlignment = [item.allKeys containsObject:@"title_alignment"] ? (NSTextAlignment) [item[@"title_alignment"] integerValue] : NSTextAlignmentNatural;

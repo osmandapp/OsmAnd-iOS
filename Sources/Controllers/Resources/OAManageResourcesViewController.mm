@@ -512,11 +512,16 @@ static BOOL _repositoryUpdated = NO;
                 cell = [_tableView cellForRowAtIndexPath:indexPath];
             }
 
-            FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
             NSInteger progressDownloading = [_weatherHelper getOfflineForecastProgressInfo:regionId];
             NSInteger progressDownloadDestination = [_weatherHelper getProgressDestination:regionId];
             CGFloat progressCompleted = (CGFloat) progressDownloading / progressDownloadDestination;
             EOAWeatherForecastDownloadState state = [OAWeatherHelper getPreferenceDownloadState:regionId];
+            FFCircularProgressView *progressView = (FFCircularProgressView *)cell.accessoryView;
+            if (state == EOAWeatherForecastDownloadStateFinished && ![progressView isKindOfClass: [FFCircularProgressView class]])
+            {
+                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                return;
+            }
             if (progressCompleted >= 0.001 && state == EOAWeatherForecastDownloadStateInProgress)
             {
                 progressView.iconPath = nil;

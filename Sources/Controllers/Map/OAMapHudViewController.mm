@@ -1206,15 +1206,16 @@
     BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetGPX
                               || _mapPanelViewController.activeTargetType == OATargetWeatherLayerSettings;
     BOOL isInContextMenuVisible = self.contextMenuMode && !isTargetToHideVisible;
+    BOOL isTargetBackButtonVisible = [_mapPanelViewController isTargetBackButtonVisible];
     BOOL isToolbarVisible = _toolbarViewController.view.alpha != 0.;
     BOOL isButtonsVisible = isInContextMenuVisible || (!isWeatherToolbarVisible && !isDashboardVisible && !isRouteInfoVisible && !isTargetToHideVisible);
     BOOL isBarVisible = isButtonsVisible && !self.contextMenuMode && !isScrollableHudVisible && !isToolbarVisible && _mapPanelViewController.activeTargetType != OATargetChangePosition;
 
     [UIView animateWithDuration:.3 animations:^{
         _statusBarView.alpha = isButtonsVisible && (isTopPanelVisible || isToolbarVisible) ? 1. : 0.;
-        _mapSettingsButton.alpha = isButtonsVisible ? 1. : 0.;
+        _mapSettingsButton.alpha = isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
         _compassBox.alpha = ([self shouldShowCompass] && isButtonsVisible ? 1. : 0.);
-        _searchButton.alpha = isButtonsVisible ? 1. : 0.;
+        _searchButton.alpha = isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
         _downloadView.alpha = isButtonsVisible ? 1. : 0.;
         if (self.toolbarViewController)
             self.toolbarViewController.view.alpha = isBarVisible ? 1. : 0.;

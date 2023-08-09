@@ -267,8 +267,6 @@
     _textShadowView.attributedText = _primaryShadowColor && _shadowRadius > 0 ? shadowString : nil;
     _textView.attributedText = string;
     self.accessibilityValue = string.string;
-    if (self.delegate)
-        [self.delegate widgetChanged:self];
 }
 
 - (void) addAccessibilityLabelsWithValue:(NSString *)value

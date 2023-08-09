@@ -261,9 +261,7 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
     // MARK: OAWidgetListener
     
     func widgetChanged(_ widget: OABaseWidgetView?) {
-        if delegate != nil {
-            updateWidgetSizes()
-        }
+        updateWidgetSizes()
     }
     
     func widgetVisibilityChanged(_ widget: OABaseWidgetView, visible: Bool) {

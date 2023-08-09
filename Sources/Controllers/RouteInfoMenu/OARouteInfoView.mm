@@ -1070,7 +1070,6 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [self adjustFrame];
     [self.tableView reloadData];
     
-    BOOL isNight = _settings.nightMode;
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     [mapPanel.hudViewController updateControlsLayout:YES];
 

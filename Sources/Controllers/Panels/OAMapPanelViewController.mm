@@ -3364,6 +3364,11 @@ typedef enum
     return _targetMenuView && _targetMenuView.customController && [_targetMenuView.customController needsMapRuler];
 }
 
+- (BOOL) isTargetBackButtonVisible
+{
+    return _targetMenuView && _targetMenuView.customController && _targetMenuView.customController.buttonBack.alpha > .4;
+}
+
 - (CGFloat) getTargetToolbarHeight
 {
     return _targetMenuView ? [_targetMenuView toolbarHeight] : 0.;
@@ -3442,8 +3447,6 @@ typedef enum
 {
     [_toolbars removeObject:toolbarController];
     [self updateToolbar];
-    if ((_scrollableHudViewController && [_scrollableHudViewController getNavbarHeight] > 0))
-        [self.hudViewController updateControlsLayout:YES];
 }
 
 - (void)showPoiToolbar:(OAPOIUIFilter *)filter latitude:(double)latitude longitude:(double)longitude

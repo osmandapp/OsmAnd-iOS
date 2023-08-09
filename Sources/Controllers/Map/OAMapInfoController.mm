@@ -77,8 +77,6 @@
 
     NSArray<OABaseWidgetView *> *_widgetsToUpdate;
     NSTimer *_framePreparedTimer;
-
-    CGRect _leftRect;
 }
 
 - (instancetype) initWithHudViewController:(OAMapHudViewController *)mapHudViewController
@@ -91,10 +89,13 @@
 
         _mapHudViewController = mapHudViewController;
         _topPanelController = [[OAWidgetPanelViewController alloc] initWithHorizontal:YES];
+        _topPanelController.delegate = self;
         _leftPanelController = [[OAWidgetPanelViewController alloc] init];
         _leftPanelController.delegate = self;
         _bottomPanelController = [[OAWidgetPanelViewController alloc] initWithHorizontal:YES];
+        _bottomPanelController.delegate = self;
         _rightPanelController = [[OAWidgetPanelViewController alloc] init];
+        _rightPanelController.delegate = self;
 
         [mapHudViewController addChildViewController:_topPanelController];
         [mapHudViewController addChildViewController:_leftPanelController];
@@ -626,24 +627,9 @@
 //    [self registerSideWidget:sunsetWidget widgetState:sunsetState key:@"sunset" left:NO priorityOrder:45];
     
     [_mapWidgetRegistry registerAllControls];
-    // TODO: Refactor this logic to use a stack view and get rid of the references entirely
-//    _topCoordinatesView = [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.coordinatesCurrentLocation.id].widget;
-//    _topCoordinatesView.delegate = self;
-//    _coordinatesMapCenterWidget = [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.coordinatesMapCenter.id].widget;
-//    _coordinatesMapCenterWidget.delegate = self;
-//    _lanesControl = (OALanesControl *) [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.lanes.id].widget;
-//    _streetNameView = (OATopTextView *) [_mapWidgetRegistry getWidgetInfoById:OAWidgetType.streetName.id].widget;
-//    OATextState *ts = [self calculateTextState];
-//    [self updateStreetName:NO ts:ts];
     _themeId = -1;
     [self updateColorShadowsOfText];
 }
-
-//- (void) updateStreetName:(BOOL)nightMode ts:(OATextState *)ts
-//{
-//    _streetNameView.backgroundColor = ts.leftColor;
-//    [_streetNameView updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius nightMode:nightMode];
-//}
 
 - (void) onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
 {
@@ -685,11 +671,7 @@
 
 - (void)onPanelSizeChanged
 {
-    if (self.delegate && !CGRectEqualToRect(_leftRect, _leftPanelController.view.frame))
-    {
-        [self.delegate widgetsLayoutDidChange:YES];
-        _leftRect = _leftPanelController.view.frame;
-    }
+    [self layoutWidgets];
 }
 
 @end

@@ -2989,3 +2989,7 @@
 "reset_all_settings_desc" = "Resetați toate setările la setările implicite?";
 "add_row" = "Adăugați rând";
 "free_account" = "Cont gratuit";
+"free_favorites_backup_description" = "Înregistrează-te în OsmAnd Cloud pentru a obține backup gratuit pentru favorite și setări";
+"free_favorites_backup" = "Backup gratuit pentru favorite";
+"banner_payment_free_backup_settings_title" = "Backup gratuit pentru setări";
+"get_osmand_cloud" = "Descărcați OsmAnd Cloud";

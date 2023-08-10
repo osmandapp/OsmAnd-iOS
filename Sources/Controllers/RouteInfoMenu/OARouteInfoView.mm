@@ -40,7 +40,7 @@
 #import "OARoutingSettingsCell.h"
 #import "OAHomeWorkCell.h"
 #import "OAGPXDatabase.h"
-#import "OAMultiIconTextDescCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OAStateChangedListener.h"
 #import "OADividerCell.h"
@@ -337,7 +337,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             doc.path = gpx.absolutePath;
             [section addObject:@{
-                @"cell" : [OAMultiIconTextDescCell getCellIdentifier],
+                @"cell" : [OARightIconTableViewCell getCellIdentifier],
                 @"title" : gpx.getNiceTitle,
                 @"descr" : [OAGPXUIHelper getDescription:gpx],
                 @"img" : @"ic_custom_trip",
@@ -402,7 +402,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             OADestination *item = markers[i];
             [section addObject:@{
-                @"cell" : [OAMultiIconTextDescCell getCellIdentifier],
+                @"cell" : [OARightIconTableViewCell getCellIdentifier],
                 @"title" : item.desc,
                 @"img" : [item.markerResourceName ? item.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"],
                 @"item" : item
@@ -437,7 +437,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         for (OAHistoryItem *item in allItems)
         {
             [section addObject:@{
-                @"cell" : [OAMultiIconTextDescCell getCellIdentifier],
+                @"cell" : [OARightIconTableViewCell getCellIdentifier],
                 @"title" : item.name,
                 @"img" : @"ic_custom_history",
                 @"item" : item
@@ -1522,25 +1522,25 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
+    else if ([item[@"cell"] isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OAMultiIconTextDescCell* cell;
-        cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
+        OARightIconTableViewCell* cell;
+        cell = (OARightIconTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
-            cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
-            [cell setOverflowVisibility:YES];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
+            [cell rightIconVisibility:NO];
         }
         
         if (cell)
         {
-            [cell.textView setText:item[@"title"]];
-            [cell.descView setText:item[@"descr"]];
-            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            NSString *descr = item[@"descr"];
+            [cell.titleLabel setText:item[@"title"]];
+            [cell.descriptionLabel setText:descr];
+            [cell descriptionVisibility:descr.length != 0];
+            [cell.leftIconView setImage:[UIImage imageNamed:item[@"img"]]];
         }
-        if ([cell needsUpdateConstraints])
-            [cell updateConstraints];
         return cell;
     }
     else if ([item[@"cell"] isEqualToString:[OADividerCell getCellIdentifier]])
@@ -1705,7 +1705,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     {
         [[OARootViewController instance].mapPanel openTargetViewWithRouteDetails:_gpx analysis:_trackAnalysis];
     }
-    else if ([item[@"cell"] isEqualToString:@"OAMultiIconTextDescCell"])
+    else if ([item[@"cell"] isEqualToString:@"OARightIconTableViewCell"])
     {
         id obj = item[@"item"];
         if (!obj)

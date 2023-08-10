@@ -29,7 +29,6 @@
 #import "OACustomRegion.h"
 #import "OADownloadDescriptionInfo.h"
 #import "OATextMultilineTableViewCell.h"
-#import "OAMultiIconTextDescCell.h"
 #import "OAColors.h"
 #import "OANauticalMapsPlugin.h"
 #import "Localization.h"
@@ -2138,7 +2137,6 @@ static BOOL _repositoryUpdated = NO;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *const descriptionButtonIconCell = @"OAMultiIconTextDescCell";
     static NSString *const subregionCell = @"subregionCell";
     static NSString *const outdatedResourceCell = @"outdatedResourceCell";
     static NSString *const localResourceCell = @"localResourceCell";
@@ -2251,10 +2249,6 @@ static BOOL _repositoryUpdated = NO;
             {
                 cellTypeId = [OATextMultilineTableViewCell getCellIdentifier];
                 title = nil;
-            }
-            else
-            {
-                cellTypeId = descriptionButtonIconCell;
             }
         }
         else if (indexPath.section == _otherMapsSection)
@@ -2599,12 +2593,6 @@ static BOOL _repositoryUpdated = NO;
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
         }
-        else if ([cellTypeId isEqualToString:descriptionButtonIconCell])
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:descriptionButtonIconCell owner:self options:nil];
-            cell = nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
-        }
         else if ([cellTypeId isEqualToString:repositoryResourceCell])
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
@@ -2850,21 +2838,6 @@ static BOOL _repositoryUpdated = NO;
         textViewCell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
         [textViewCell.textView sizeToFit];
     }
-    else if ([cellTypeId isEqualToString:descriptionButtonIconCell])
-    {
-        OAMultiIconTextDescCell *buttonCell = (OAMultiIconTextDescCell *) cell;
-        OADownloadActionButton *button = _downloadDescriptionInfo.getActionButtons[indexPath.row - 1];
-        buttonCell.textView.text = button.name;
-        buttonCell.descView.text = button.url;
-        buttonCell.textView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
-        buttonCell.textView.textColor = UIColorFromRGB(color_primary_purple);
-        [buttonCell.overflowButton setImage:[UIImage templateImageNamed:@"ic_custom_safari"] forState:UIControlStateNormal];
-        buttonCell.overflowButton.tag = indexPath.row - 1;
-        buttonCell.overflowButton.tintColor = UIColorFromRGB(color_primary_purple);
-        [buttonCell.overflowButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-        [buttonCell.overflowButton addTarget:self action:@selector(onWebPagePressed:) forControlEvents:UIControlEventTouchUpInside];
-    }
-
     return cell;
 }
 

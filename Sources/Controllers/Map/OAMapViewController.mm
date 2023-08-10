@@ -1486,9 +1486,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     accepted |= !longPress && recognizer.state == UIGestureRecognizerStateEnded;
     if (accepted)
     {
-        
-        OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-        OAFloatingButtonsHudViewController *quickAction = mapPanel.hudViewController.floatingButtonsController;
+        OAFloatingButtonsHudViewController *quickAction = [OARootViewController instance].mapPanel.hudViewController.floatingButtonsController;
         [quickAction hideActionsSheetAnimated];
         if ([mapPanel gpxModeActive])
         {
@@ -2139,11 +2137,13 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                 if (settings.nightMode)
                 {
                     newSettings[QString::fromLatin1("nightMode")] = "true";
-                    [_mapView setSkyColor:OsmAnd::ColorRGB(5, 20, 46)];
+                    [_mapView setSkyColor:OsmAnd::ColorRGB(48, 64, 128)];
+                    [_mapView setFogColor:OsmAnd::ColorRGB(36, 48, 96)];
                 }
                 else
                 {
-                    [_mapView setSkyColor:OsmAnd::ColorRGB(140, 190, 214)];
+                    [_mapView setSkyColor:OsmAnd::ColorRGB(255, 255, 255)];
+                    [_mapView setFogColor:OsmAnd::ColorRGB(235, 231, 228)];
                 }
                 
                 // --- Apply Map Style Settings

@@ -116,8 +116,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     }
 }
 
--(NSString *)sendRequest:(NSString *)url requestMethod:(NSString *)requestMethod requestBody:(NSString *)requestBody userOperation:(NSString *)userOperation
-          doAuthenticate:(BOOL) doAuthenticate
+-(NSString *)sendRequest:(NSString *)url requestMethod:(NSString *)requestMethod requestBody:(NSString *)requestBody userOperation:(NSString *)userOperation doAuthenticate:(BOOL)doAuthenticate
 {
     NSLog(@"Sending request: %@", url);
     NSURL *urlObj = [[NSURL alloc] initWithString:url];
@@ -127,6 +126,8 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     [request setHTTPMethod:requestMethod];
     NSString *version = OAAppVersionDependentConstants.getVersion;
     [request addValue:[NSString stringWithFormat:@"OsmAndiOS %@", version] forHTTPHeaderField:@"User-Agent"];
+    if (doAuthenticate)
+        [request setValue:[OAOsmOAuthHelper getAutorizationHeader] forHTTPHeaderField:@"Authorization"];
 
     if ([requestMethod isEqualToString:@"PUT"] || [requestMethod isEqualToString:@"POST"] || [requestMethod isEqualToString:@"DELETE"])
     {

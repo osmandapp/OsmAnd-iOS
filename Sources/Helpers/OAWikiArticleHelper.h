@@ -22,7 +22,7 @@ typedef void(^OAWikiArticleSearchTaskBlockType)(void);
 
 @interface OAWikiArticleSearchTask : NSObject
 
-- (instancetype)initWithLocations:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart onComplete:(void (^)())onComplete;
+- (instancetype) initWithLocations:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart sourceView:(UIView *)sourceView onComplete:(void (^)())onComplete;
 - (void) execute;
 - (void) cancel;
 
@@ -33,12 +33,12 @@ typedef void(^OAWikiArticleSearchTaskBlockType)(void);
 
 + (OAWorldRegion *) findWikiRegion:(OAWorldRegion *)mapRegion;
 + (OARepositoryResourceItem *) findResourceItem:(OAWorldRegion *)worldRegion;
-+ (void) showWikiArticle:(CLLocation *)location url:(NSString *)url;
-+ (void) showWikiArticle:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart onComplete:(void (^)())onComplete;
-+ (void)showHowToOpenWikiAlert:(OARepositoryResourceItem *)item url:(NSString *)url;
++ (void) showWikiArticle:(CLLocation *)location url:(NSString *)url sourceView:(UIView *)sourceView;
++ (void) showWikiArticle:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart sourceView:(UIView *)sourceView onComplete:(void (^)())onComplete;
++ (void) showHowToOpenWikiAlert:(OARepositoryResourceItem *)item url:(NSString *)url sourceView:(UIView *)sourceView;
 + (NSString *) getFirstParagraph:(NSString *)descriptionHtml;
 + (NSString *) getPartialContent:(NSString *)source;
-+ (void) warnAboutExternalLoad:(NSString *)url;
++ (void) warnAboutExternalLoad:(NSString *)url sourceView:(UIView *)sourceView;
 + (NSString *) normalizeFileUrl:(NSString *)url;
 + (NSString *) getLang:(NSString *)url;
 + (NSString *) getArticleNameFromUrl:(NSString *)url lang:(NSString *)lang;

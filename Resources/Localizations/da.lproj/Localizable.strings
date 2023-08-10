@@ -3009,3 +3009,8 @@
 "no_widgets_here_yet" = "Ingen moduler her endnu";
 "reset_all_settings_desc" = "Nulstil alle indstillinger til standard?";
 "no_widgets_descr" = "Tilføj et eller flere moduler fra listen over tilgængelige moduler.";
+"get_osmand_cloud" = "Få OsmAnd Cloud";
+"free_favorites_backup_description" = "Registrér dig hos OsmAnd Cloud for at få gratis sikkerhedskopiering af favoritter og indstillinger";
+"free_favorites_backup" = "Gratis sikkerhedskopiering af favoritter";
+"free_account" = "Gratis konto";
+"banner_payment_free_backup_settings_title" = "Gratis sikkerhedskopiering af indstillinger";

@@ -974,7 +974,6 @@
 "routing_attr_avoid_unpaved_name" = "Без грунтавых дарог";
 "rendering_attr_piste_difficulty_connection_name" = "Злучэнне";
 "routing_attr_difficulty_preference_description" = "Аддаваць перавагу трасам гэтай складанаці, але не выключаць прастейшыя, калі шлях будзе карацейшым.";
-"rendering_attr_alpineHiking_name" = "Пешы горны турызм";
 "rendering_value_translucent_lightblue_name" = "Празрысты блакітны";
 "rendering_attr_piste_difficulty_expert_name" = "Экспертная";
 "rendering_value_translucent_red_name" = "Празрысты чырвоны";

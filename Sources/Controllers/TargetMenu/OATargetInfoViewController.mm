@@ -977,7 +977,8 @@
             {
                 [OAWikiArticleHelper showWikiArticle:[[CLLocation alloc] initWithLatitude:self.location.latitude
                                                                                 longitude:self.location.longitude]
-                                                 url:info.text];
+                                                 url:info.text
+                                          sourceView:[tableView cellForRowAtIndexPath:indexPath]];
             }
             else
             {

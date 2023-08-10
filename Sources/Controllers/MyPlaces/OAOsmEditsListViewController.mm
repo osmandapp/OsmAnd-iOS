@@ -17,7 +17,7 @@
 #import "OAPOIHelper.h"
 #import "OAPOIType.h"
 #import "OAEditPOIData.h"
-#import "OAMultiIconTextDescCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OAColors.h"
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
@@ -256,26 +256,26 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     NSDictionary *item = [self getItem:indexPath];
     NSDictionary *translatedNames = [_poiHelper getAllTranslatedNames:NO];
     OAPOIType *poiType = translatedNames[item[@"poi_type"]];
-    OAMultiIconTextDescCell* cell;
-    cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
+    OAButtonTableViewCell* cell;
+    cell = (OAButtonTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
-        cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OAButtonTableViewCell *)[nib objectAtIndex:0];
+        [cell.button setTitle:nil forState:UIControlStateNormal];
+        [cell.button setTintColor:UIColorFromRGB(color_icon_color_light)];
+        [cell.button.imageView setContentMode:UIViewContentModeCenter];
     }
     
     if (cell)
     {
-        [cell.textView setText:item[@"title"]];
-        [cell.descView setText:item[@"description"]];
-        [cell.iconView setImage:poiType ? poiType.icon : [UIImage imageNamed:@"ic_custom_osm_note_unresolved"]];
-        [cell.overflowButton setImage:[UIImage templateImageNamed:@"ic_custom_overflow_menu.png"] forState:UIControlStateNormal];
-        [cell.overflowButton setTintColor:UIColorFromRGB(color_icon_color_light)];
-        [cell.overflowButton setTag:indexPath.row];
-        [cell.overflowButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-        [cell.overflowButton addTarget:self action:@selector(overflowButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [cell.overflowButton.imageView setContentMode:UIViewContentModeCenter];
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
+        [cell.titleLabel setText:item[@"title"]];
+        [cell.descriptionLabel setText:item[@"description"]];
+        [cell.leftIconView setImage:poiType ? poiType.icon : [UIImage imageNamed:@"ic_custom_osm_note_unresolved"]];
+        [cell.button setImage:[UIImage templateImageNamed:@"ic_custom_overflow_menu.png"] forState:UIControlStateNormal];
+        [cell.button setTag:indexPath.row];
+        [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+        [cell.button addTarget:self action:@selector(overflowButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return cell;
 }

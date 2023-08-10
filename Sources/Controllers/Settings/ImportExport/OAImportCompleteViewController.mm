@@ -23,7 +23,7 @@
 #import "OASQLiteTileSource.h"
 #import "OAPOIUIFilter.h"
 #import "OAAvoidRoadInfo.h"
-#import "OAMultiIconTextDescCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OAIndexConstants.h"
 #import "OAIAPHelper.h"
 #import "OAPluginPopupViewController.h"
@@ -376,23 +376,21 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
 {
     NSDictionary *item = _data[indexPath.row];
       
-    OAMultiIconTextDescCell *cell = (OAMultiIconTextDescCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
+    OARightIconTableViewCell *cell = (OARightIconTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
-        cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
+        [cell leftIconVisibility:NO];
     }
     if (cell)
     {
-        [cell.textView setText:item[@"label"]];
+        [cell.titleLabel setText:item[@"label"]];
         NSString *countString = [NSString stringWithFormat:OALocalizedString(@"added_items"), item[@"count"]];
-        [cell.descView setText:countString];
-        cell.iconView.hidden = YES;
-        cell.overflowButton.enabled = NO;
-        [cell.overflowButton setImage:[UIImage templateImageNamed:item[@"iconName"]] forState:UIControlStateDisabled];
-        [cell.overflowButton setTintColor:UIColorFromRGB(color_primary_purple)];
-        [cell.overflowButton.imageView setContentMode:UIViewContentModeCenter];
-        cell.separatorInset = UIEdgeInsetsMake(0.0, [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0.0, 0.0);
+        [cell.descriptionLabel setText:countString];
+        [cell.rightIconView setImage:[UIImage templateImageNamed:item[@"iconName"]]];
+        [cell.rightIconView setTintColor:UIColorFromRGB(color_primary_purple)];
+        cell.rightIconView.contentMode = UIViewContentModeCenter;
     }
     return cell;
 }

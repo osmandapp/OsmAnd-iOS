@@ -22,6 +22,7 @@
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 #include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
+#include <OsmAndCore/SingleSkImage.h>
 
 #include <binaryRead.h>
 
@@ -78,7 +79,7 @@
             .setIsAccuracyCircleSupported(false)
             .setBaseOrder(self.pointsOrder + 1)
             .setIsHidden(false)
-            .setPinIcon([OANativeUtilities skImageFromPngResource:@"map_pin_avoid_road"])
+            .setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:@"map_pin_avoid_road"]))
             .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
             .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
             .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))

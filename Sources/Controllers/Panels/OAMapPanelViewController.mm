@@ -400,20 +400,6 @@ typedef enum
 
 - (void) showScrollableHudViewController:(OABaseScrollableHudViewController *)controller
 {
-    if (self.targetMenuView.superview)
-    {
-        [self hideTargetPointMenu:.2 onComplete:^{
-            [self onShowScrollableHudViewController:controller];
-        }];
-    }
-    else
-    {
-        [self onShowScrollableHudViewController:controller];
-    }
-}
-
-- (void)onShowScrollableHudViewController:(OABaseScrollableHudViewController *)controller
-{
     [self.hudViewController hideWeatherToolbarIfNeeded];
 
     self.sidePanelController.recognizesPanGesture = NO;
@@ -898,7 +884,7 @@ typedef enum
     
     [self removeGestureRecognizers];
 
-    if (_scrollableHudViewController && _activeTargetType == OATargetRoutePlanning)
+    if (_scrollableHudViewController)
     {
         _prevScrollableHudViewController = _scrollableHudViewController;
         [self hideScrollableHudViewController];
@@ -1290,6 +1276,9 @@ typedef enum
 
 - (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints
 {
+	if (_activeTargetType == OATargetGPX)
+        [self hideScrollableHudViewController];
+
     if (self.isNewContextMenuDisabled)
         return;
 
@@ -1340,6 +1329,7 @@ typedef enum
     || _activeTargetType == OATargetRouteDetailsGraph
     || _activeTargetType == OATargetRouteDetails
     || (_activeTargetType == OATargetRoutePlanning && !_isNewContextMenuStillEnabled)
+    || _activeTargetType == OATargetGPX
     || _activeTargetType == OATargetRouteLineAppearance
     || _activeTargetType == OATargetWeatherLayerSettings
     || _activeTargetType == OATargetWeatherToolbar;
@@ -1347,8 +1337,12 @@ typedef enum
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState
 {
+    if (_activeTargetType == OATargetGPX)
+        [self hideScrollableHudViewController];
+
     if (self.isNewContextMenuDisabled)
         return;
+
     _isNewContextMenuStillEnabled = NO;
     
     if (targetPoint.type == OATargetMapillaryImage)
@@ -1492,12 +1486,15 @@ typedef enum
     
     switch (_activeTargetType)
     {
-        // while we are in view GPX mode - waypoints can be pressed only
         case OATargetGPX:
         {
-            if (!isWaypoint && !isNone)
+            if (isNone)
             {
-                [_mapViewController hideContextPinMarker];
+                [self.scrollableHudViewController hide];
+                return NO;
+            }
+            else if (!isWaypoint)
+            {
                 return NO;
             }
             break;
@@ -1840,6 +1837,11 @@ typedef enum
         OATransportStop *transportStop = self.targetMenuView.targetPoint.targetObj;
         poi = transportStop.poi;
     }
+    else if ([self.targetMenuView.targetPoint.targetObj isKindOfClass:OAGpxWptItem.class])
+    {
+        OAGpxWptItem *wptItem = self.targetMenuView.targetPoint.targetObj;
+        poi = [wptItem.point getAmenity];
+    }
     return poi;
 }
 
@@ -2122,9 +2124,11 @@ typedef enum
     [self.hudViewController hideWeatherToolbarIfNeeded];
     [self hideMultiMenuIfNeeded];
 
-    if (_scrollableHudViewController && _activeTargetType == OATargetRoutePlanning)
+    if (_scrollableHudViewController)
+    {
         _prevScrollableHudViewController = _scrollableHudViewController;
-    [self hideScrollableHudViewController];
+        [self hideScrollableHudViewController];
+    }
 
     if (_activeTargetActive)
     {

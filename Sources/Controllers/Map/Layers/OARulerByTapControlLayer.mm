@@ -26,6 +26,7 @@
 #include <OsmAndCore/Map/VectorLine.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
+#include <OsmAndCore/SingleSkImage.h>
 
 #define DRAW_TIME 2
 #define LABEL_OFFSET 15
@@ -181,7 +182,7 @@
         builder.setIsAccuracyCircleSupported(false)
         .setBaseOrder(self.pointsOrder)
         .setIsHidden(false)
-        .setPinIcon(settings.nightMode ? _centerIconNight : _centerIconDay)
+        .setPinIcon(OsmAnd::SingleSkImage(settings.nightMode ? _centerIconNight : _centerIconDay))
         .setPosition(p)
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
         .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);

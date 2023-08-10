@@ -1122,7 +1122,6 @@
 "routing_attr_prefer_motorway_name" = "Voorkeur voor snelwegen";
 "rendering_value_lightgreen_name" = "Lichtgroen";
 "rendering_attr_surface_concrete_name" = "Beton";
-"rendering_attr_alpineHiking_name" = "Alpinewandelschaal (SAC)";
 "routing_attr_allow_private_description" = "Ga ook over privé-terreinen.";
 "rendering_attr_highway_class_track_name" = "Veld- of bosweg";
 "routing_attr_avoid_share_taxi_name" = "Geen gedeelde taxis";
@@ -2291,3 +2290,10 @@
 "speak_route_deviation" = "Kondig afwijking van de route aan";
 "weather_forecast" = "Weersvoorspelling";
 "weather_forecast_is_outdated" = "Voorspelling is verouderd.";
+"free_favorites_backup" = "Gratis favorieten back-up";
+"free_account" = "Gratis account";
+"map_widget_distance_to_intermediate" = "Afstand tot tussenstop";
+"map_widget_time_to_intermediate" = "Tijd tot tussenstop";
+"rendering_attr_alpineHiking_name" = "Moeilijkheidsgraad classificatie";
+"map_widget_time_to_destination" = "Tijd tot bestemming";
+"get_osmand_cloud" = "Neem OsmAnd Cloud";

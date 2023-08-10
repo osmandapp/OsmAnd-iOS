@@ -195,16 +195,23 @@
             BOOL isPassword = [item[@"key"] isEqualToString:@"password_input_cell"];
             
             if (isEmail)
+            {
                 cell.titleLabel.text = [OAOsmOAuthHelper isOAuthAuthorised] ? OALocalizedString(@"user_name") : OALocalizedString(@"shared_string_email");
+                cell.inputField.text = [OAOsmOAuthHelper isOAuthAuthorised] ? _settings.osmUserDisplayName.get : _settings.osmUserName.get;
+                cell.inputField.placeholder = OALocalizedString(@"email_example_hint");
+                cell.inputField.textContentType = UITextContentTypeUsername;
+                cell.inputField.secureTextEntry = NO;
+            }
             else
+            {
                 cell.titleLabel.text = OALocalizedString(@"user_password");
+                cell.inputField.text = _settings.osmUserPassword.get;
+                cell.inputField.placeholder = OALocalizedString(@"shared_string_required");
+                cell.inputField.textContentType = UITextContentTypePassword;
+                cell.inputField.secureTextEntry = YES;
+            }
             cell.titleLabel.textColor = [UIColor blackColor];
-
             cell.inputField.userInteractionEnabled = !_isAuthorised;
-            cell.inputField.text = isEmail ? _settings.osmUserName.get : _settings.osmUserPassword.get;
-            cell.inputField.placeholder = isEmail ? OALocalizedString(@"email_example_hint") : OALocalizedString(@"shared_string_required");
-            cell.inputField.textContentType = isEmail ? UITextContentTypeUsername : UITextContentTypePassword;
-            cell.inputField.secureTextEntry = isPassword;
             cell.inputField.tag = indexPath.section << 10 | indexPath.row;;
             cell.inputField.returnKeyType = UIReturnKeyDone;
         }
@@ -380,6 +387,8 @@
             [self dismissViewControllerAnimated:YES completion:^{
                 if (self.accountDelegate)
                     [self.accountDelegate onAccountInformationUpdated];
+
+                [OAOsmOAuthHelper sendNotifications];
             }];
         }
     }

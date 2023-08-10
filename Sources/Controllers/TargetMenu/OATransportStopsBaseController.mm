@@ -234,6 +234,7 @@
             }
             
             r.distance = dist;
+            [r initStopIndex];
             [routes addObject:r];
         }
     }

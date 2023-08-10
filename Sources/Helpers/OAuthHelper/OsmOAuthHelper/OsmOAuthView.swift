@@ -22,40 +22,46 @@ struct OsmOAuthView: View {
     var body: some View {
         
         GeometryReader { geometry in
-            NavigationView {
-                VStack(spacing: 0) {
-                    
-                    OsmOAuthImageView()
-                    
-                    OsmOAuthTextHeaderView(screenWidth: geometry.size.width)
-                    
-                    OsmOAuthTextDescriptionView(screenWidth: geometry.size.width)
-                    
-                    Spacer()
-                    
-                    OsmOAuthButtonOAuthView(session: webAuthenticationSession, screenWidth: geometry.size.width, dismiss: dismiss)
-                    
-                    OsmOAuthButtonLoginPasswordView(isPresented: isLoginPaswordVCPresented, screenWidth: geometry.size.width, dismiss: dismiss)
-                    
-                }
-                .navigationBarTitleDisplayMode(NavigationBarItem.TitleDisplayMode.inline)
-                .navigationBarItems(
-                    leading: Button(
-                        action: { dismiss() },
-                        label: {
-                            Text(localizedString("shared_string_cancel"))
-                                .font(.body)
-                                .fontWeight(.semibold)
-                                .foregroundColor(Color.init(UIColor(rgbValue: color_primary_purple)))
-                        }
-                    )
-                )
+
+            VStack(alignment: .center, spacing: 0) {
+
+                OsmOAuthButtonCancelView(dismiss: dismiss)
+
+                OsmOAuthImageView()
+
+                OsmOAuthTextHeaderView()
+
+                OsmOAuthTextDescriptionView()
+
+                Spacer()
+
+                OsmOAuthButtonOAuthView(session: webAuthenticationSession, dismiss: dismiss)
+
+                OsmOAuthButtonLoginPasswordView(isPresented: isLoginPaswordVCPresented, dismiss: dismiss)
             }
         }
     }
 }
 
+struct OsmOAuthButtonCancelView: View {
+    var dismiss: DismissAction
 
+    var body: some View {
+        Button(
+            action: { dismiss() },
+            label: {
+                Text(localizedString("shared_string_cancel"))
+                    .font(.body)
+                    .foregroundColor(Color.init(UIColor(rgbValue: color_primary_purple)))
+                    .padding(.leading, 16)
+                    .padding(.trailing, 16)
+            }
+        )
+        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 44, alignment: .leading)
+        .padding(.top, 6)
+        .padding(.bottom, 6)
+    }
+}
 
 struct OsmOAuthImageView: View {
     var body: some View {
@@ -63,7 +69,7 @@ struct OsmOAuthImageView: View {
             .resizable()
             .scaledToFit()
             .frame(width: 90.0, height: 90.0)
-            .padding(.top, 8)
+            .padding(.top, 0)
             .padding(.bottom, 20)
     }
 }
@@ -71,13 +77,15 @@ struct OsmOAuthImageView: View {
 
 @available(iOS 16.0, *)
 struct OsmOAuthTextHeaderView: View {
-    var screenWidth: CGFloat
     var body: some View {
         Text(localizedString("login_open_street_map_org"))
             .font(.system(size: 30))
             .multilineTextAlignment(.center)
             .fontWeight(.semibold)
-            .frame(width: (screenWidth - 16))
+            .frame(maxWidth: .infinity)
+            .padding(.leading, 16)
+            .padding(.trailing, 16)
+            .padding(.top, 0)
             .padding(.bottom, 20)
     }
 }
@@ -85,11 +93,13 @@ struct OsmOAuthTextHeaderView: View {
 
 @available(iOS 16.0, *)
 struct OsmOAuthTextDescriptionView: View {
-    var screenWidth: CGFloat
-    
     var body: some View {
         Text(localizedString("open_street_map_login_mode_simple"))
-            .frame(width: (screenWidth - 16))
+            .frame(maxWidth: .infinity)
+            .padding(.leading, 16)
+            .padding(.trailing, 16)
+            .padding(.top, 0)
+            .padding(.bottom, 0)
             .font(.body)
             .multilineTextAlignment(.center)
     }
@@ -99,62 +109,64 @@ struct OsmOAuthTextDescriptionView: View {
 @available(iOS 16.4, *)
 struct OsmOAuthButtonOAuthView: View {
     var session: WebAuthenticationSession
-    var screenWidth: CGFloat
     var dismiss: DismissAction
     
     var body: some View {
-        Button {
-            Task {
-                let _ = await OsmOAuthHelper.performOAuth(session: session)
-                dismiss()
+        Button(
+            action: {
+                Task {
+                    let _ = await OsmOAuthHelper.performOAuth(session: session)
+                    dismiss()
+                }
+            },
+            label: {
+                Text(localizedString("sign_in_with_open_street_map"))
+                    .frame(maxWidth: .infinity, minHeight: 42)
             }
-        } label: {
-            Text(localizedString("sign_in_with_open_street_map"))
-        }
-        .frame(width: (screenWidth - 32), height: 42)
+        )
         .background(Color.init(UIColor(rgbValue: color_primary_purple)))
         .foregroundColor(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 9))
-        .padding(.bottom, 16)
+        .padding(.leading, 16)
+        .padding(.trailing, 16)
+        .padding(.top, 9)
+        .padding(.bottom, 8)
     }
 }
 
 
 struct OsmOAuthButtonLoginPasswordView: View {
     @State var isPresented: Bool
-    var screenWidth: CGFloat
     var dismiss: DismissAction
     
     var body: some View {
-        Button {
-            Task {
-                isPresented = true
-                NavigationLink(destination: AccountSettingsVCWrapper()) {
-                    EmptyView()
-                }
+        Button(
+            action: { isPresented = true },
+            label: {
+                Text(localizedString("use_login_and_password"))
+                	.frame(maxWidth: .infinity, minHeight: 42)
             }
-        } label: {
-            Text(localizedString("use_login_and_password"))
-        }
-        .frame(width: (screenWidth - 32), height: 42)
+        )
         .background(Color.init(UIColor(rgbValue: color_button_gray_background)))
         .foregroundColor(Color.init(UIColor(rgbValue: color_primary_purple)))
         .clipShape(RoundedRectangle(cornerRadius: 9))
-        .padding(.bottom, 10)
+        .padding(.leading, 16)
+        .padding(.trailing, 16)
+        .padding(.top, 8)
+        .padding(.bottom, 21)
         .sheet(isPresented: $isPresented) {
             
             NavigationView {
-                AccountSettingsVCWrapper()
+                AccountSettingsVCWrapper(self)
                     .ignoresSafeArea()
                     .navigationBarTitleDisplayMode(NavigationBarItem.TitleDisplayMode.inline)
                     .navigationTitle(Text(localizedString("shared_string_account_add")))
                     .navigationBarItems(
                         leading: Button(
-                            action: { dismiss() },
+                            action: { isPresented = false },
                             label: {
                                 Text(localizedString("shared_string_cancel"))
                                     .font(.body)
-                                    .fontWeight(.semibold)
                                     .foregroundColor(Color.init(UIColor(rgbValue: color_primary_purple)))
                             }
                         )
@@ -183,17 +195,43 @@ class OsmOAuthSwiftUIViewWrapper: NSObject {
     }
 }
 
-
 //Wrapper to open ViewController from this SwiftUI view
 struct AccountSettingsVCWrapper: UIViewControllerRepresentable {
-    
-    typealias UIViewControllerType = OAOsmAccountSettingsViewController
-    
-    func makeUIViewController(context: Context) -> OAOsmAccountSettingsViewController {
-        return OAOsmAccountSettingsViewController()
+
+    class Coordinator: NSObject, OAAccountSettingDelegate {
+
+        var parent: OsmOAuthButtonLoginPasswordView
+
+        init(_ parent: OsmOAuthButtonLoginPasswordView) {
+            self.parent = parent
+        }
+
+        // MARK: - <OAAccountSettingDelegate>
+
+        func onAccountInformationUpdated() {
+            parent.dismiss()
+        }
     }
-    
+
+    typealias UIViewControllerType = OAOsmAccountSettingsViewController
+
+    var parent: OsmOAuthButtonLoginPasswordView
+
+    init(_ parent: OsmOAuthButtonLoginPasswordView) {
+        self.parent = parent
+    }
+
+    func makeUIViewController(context: Context) -> OAOsmAccountSettingsViewController {
+        let vc: OAOsmAccountSettingsViewController = OAOsmAccountSettingsViewController()
+        vc.accountDelegate = context.coordinator
+        return vc
+    }
+
     func updateUIViewController(_ uiViewController: OAOsmAccountSettingsViewController, context: Context) {
         //Do nothing
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(parent)
     }
 }

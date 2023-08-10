@@ -1229,7 +1229,6 @@
 "rendering_value_default13_name" = "Predefinido (13)";
 "rendering_attr_surface_snow_name" = "Neve";
 "rendering_attr_OSMMapperAssistant_name" = "Assistente de mapeador OSM";
-"rendering_attr_alpineHiking_name" = "Escala de montanhismo (SAC)";
 "rendering_attr_highway_class_cycleway_name" = "Ciclovia";
 "rendering_attr_alpineHiking_description" = "Renderizar caminhos de acordo com a escala de SAC.";
 "rendering_attr_currentTrackWidth_description" = "Largura do GPX";
@@ -2902,3 +2901,23 @@
 "shared_string_coloring" = "Colorindo";
 "user_name" = "Nome de usuário";
 "perform_oauth_authorization" = "Entrar via OAuth";
+"rendering_value_sacScale_description" = "Clube Alpino Suíço";
+"rendering_attr_alpineHiking_name" = "Classificação de dificuldade";
+"rendering_value_caiScale_description" = "Clube Alpino Italiano";
+"first_marker_widget_desc" = "Você pode configurar o widget para mostrar a distância ou o tempo estimado de chegada até o primeiro marcador do mapa.";
+"time_to_intermediate_widget_desc" = "O widget mostra \"Hora de chegada\" ou \"Hora de ir\" para o primeiro ponto intermediário. O tempo é atualizado constantemente durante a navegação, uma vez que os pontos intermediários são passados, o tempo será atualizado para o próximo ponto intermediário.";
+"trip_recording_distance_widget_desc" = "Mostra a distância decorrida da viagem atual a ser gravada.";
+"true_bearing_widget_desc" = "Ângulo entre o norte verdadeiro e o ponto alvo observado a partir da sua localização.";
+"relative_bearing_widget_desc" = "Mostra o ângulo entre a direção do seu movimento para frente e o ponto alvo.";
+"distance_circles" = "Círculos de distância";
+
+// Widget descriptions
+"coordinates_widget_current_location_desc" = "Mostra as coordenadas geográficas da geolocalização atual";
+"av_notes_video_widget_desc" = "Tocar no widget permite gravar um vídeo.";
+"trip_recording_downhill_widget_desc" = "Mostra a soma de todos os descendentes da viagem atualmente gravada.";
+"trip_recording_uphill_widget_desc" = "Mostra a soma de todas as subidas da viagem atualmente registrada.";
+"av_notes_photo_widget_desc" = "Tocar no widget permite tirar uma foto.";
+"second_marker_widget_desc" = "Você pode configurar o widget para mostrar a distância ou o tempo estimado de chegada até o segundo marcador do mapa.";
+"av_notes_audio_widget_desc" = "Tocar no widget permite que você faça uma nota de áudio.";
+"trip_recording_duration_widget_desc" = "Mostra o tempo decorrido da viagem atual a ser gravada.";
+"time_to_destination_widget_desc" = "O widget mostra \"Hora de chegada\" ou \"Hora de ir\" até o último ponto de destino. O tempo é constantemente atualizado durante a navegação e é igual ao tempo da rota a partir do local atual.";

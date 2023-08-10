@@ -988,7 +988,7 @@
 "routing_attr_avoid_ice_roads_fords_name" = "No strade di ghiaccio e guadi";
 "routing_attr_driving_style_balance_name" = "Bilanciato";
 "rendering_attr_moreDetailed_name" = "Più dettagli";
-"rendering_attr_contourLines_description" = "Visualizza dal livello di zoom (necessita dei dati delle isoipse):";
+"rendering_attr_contourLines_description" = "Visualizzazione dal livello di zoom (necessita dei dati della linea di contorno):";
 "rendering_attr_highway_class_track_grade4_name" = "Grado 4";
 "rendering_value_white_name" = "Bianco";
 "rendering_attr_piste_difficulty_connection_name" = "Connessione";
@@ -1055,7 +1055,7 @@
 "rendering_attr_lessDetailed_name" = "Meno dettagli";
 "rendering_attr_smoothness_intermediate_name" = "Intermedio";
 "rendering_attr_contourDensity_name" = "Densità linee isoipse";
-"rendering_attr_alpineHiking_name" = "Classificazione delle difficoltà";
+"rendering_attr_alpineHiking_name" = "Classificazione della difficoltà";
 "rendering_attr_smoothness_bad_name" = "Cattiva";
 "routing_attr_avoid_bus_description" = "Evita gli autobus e i filobus";
 "routing_attr_avoid_unpaved_description" = "Evita le strade non pavimentate";
@@ -2973,9 +2973,9 @@
 "true_bearing_widget_desc" = "Angolo fra il nord reale e il punto di destinazione osservato dalla tua posizione.";
 "parking_widget_desc" = "Mostra la distanza dal centro dello schermo alla posizione di parcheggio.";
 "time_to_intermediate_widget_desc" = "Il widget mostra \"Ora di arrivo\" o \"Tempo mancante\" al primo punto intermedio. Il tempo è costantemente aggiornato durante la navigazione, quando il punto intermedio viene raggiunto, il tempo verrà aggiornato al successivo punto intermedio.";
-"rendering_value_sacScale_description" = "Swiss Alpine Club";
+"rendering_value_sacScale_description" = "Club Alpino Svizzero";
 "rendering_value_caiScale_name" = "cai";
-"rendering_value_caiScale_description" = "Club Alpino Italiano";
+"rendering_value_caiScale_description" = "Club Alpino Italiano (Club Alpino Italiano)";
 "map_2d_mode_action" = "Modalità 2D";
 "map_3d_mode_action" = "Modalità 3D";
 "shared_string_hidden" = "Nascosto";
@@ -2986,3 +2986,15 @@
 "shared_string_edit_color" = "Modifica colore";
 "shared_string_delete_color" = "Elimina colore";
 "navigation_points_desc" = "I widget di navigazione sono abilitati durante la navigazione per mostrare informazioni quali distanza, tempo di arrivo o rimanente, prossime svolte, direzione, il nome della strada attuale o successiva, indicazione di corsia, velocità massima, avvisi di avvicinamento, PDI, punti intermedi.";
+"add_row" = "Aggiungi riga";
+"no_widgets_here_yet" = "Nessun widget qui ancora";
+"ruler_circles" = "Cerchi righello";
+"shared_string_coloring" = "Colorazione";
+"shared_string_rearrange" = "Riordinare";
+"free_account" = "Account gratuito";
+"free_favorites_backup_description" = "Registrati in OsmAnd Cloud per ottenere il backup gratuito dei preferiti e delle impostazioni";
+"free_favorites_backup" = "Backup gratuito dei preferiti";
+"no_widgets_descr" = "Aggiungi uno o più widget dall'elenco dei widget disponibili.";
+"banner_payment_free_backup_settings_title" = "Backup gratuito delle impostazioni";
+"get_osmand_cloud" = "Ottieni OsmAnd Cloud";
+"reset_all_settings_desc" = "Ripristinare tutte le impostazioni predefinite?";

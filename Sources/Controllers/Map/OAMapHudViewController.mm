@@ -246,12 +246,7 @@
     }
     [self updateMapModeButton];
     _driveModeActive = NO;
-}
-
-- (void) viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-
+    
     BOOL hasInitialURL = _app.initialURLMapState != nil;
     if (_settings.settingShowZoomButton || (!hasInitialURL && ![_mapPanelViewController isContextMenuVisible]))
         [self updateControlsLayout:YES];
@@ -263,6 +258,14 @@
 
     if (hasInitialURL)
         _app.initialURLMapState = nil;
+}
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (self.toolbarViewController)
+        [self.toolbarViewController onViewDidAppear:self.mapHudType];
 }
 
 - (void) viewWillDisappear:(BOOL)animated

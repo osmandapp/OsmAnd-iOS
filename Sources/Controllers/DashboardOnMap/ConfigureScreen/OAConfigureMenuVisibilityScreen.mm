@@ -11,7 +11,6 @@
 #import "OAMapWidgetRegInfo.h"
 #import "OAConfigureMenuViewController.h"
 #import "Localization.h"
-#import "OAIconTextDescCell.h"
 #import "OARootViewController.h"
 #import "OAColors.h"
 #import "OASimpleTableViewCell.h"
@@ -86,7 +85,7 @@
             @"img": icon,
             @"selected": @(selected),
             @"color": selected ? UIColorFromRGB(color_osmand_orange) : UIColorFromRGB(color_footer_icon_gray),
-            @"type": [OAIconTextDescCell getCellIdentifier]
+//            @"type": [OAIconTextDescCell getCellIdentifier]
     };
 }
 
@@ -200,51 +199,51 @@
 {
     NSDictionary *item = _data[_data.allKeys[indexPath.section]][indexPath.row];
     NSString *description = item[@"description"];
-    if ([item[@"type"] isEqualToString:[OAIconTextDescCell getCellIdentifier]])
-    {
-        OAIconTextDescCell *cell = [tblView dequeueReusableCellWithIdentifier:[OAIconTextDescCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextDescCell *) nib[0];
-            cell.textView.numberOfLines = 0;
-            cell.descView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
-            [cell.arrowIconView setHidden:YES];
-        }
-        if (cell)
-        {
-            cell.textView.text = item[@"title"];
-            cell.descView.hidden = description.length == 0;
-            cell.descView.text = description;
-            
-            NSString *imageName = item[@"img"];
-            if (imageName)
-            {
-                UIColor *color = nil;
-                if (item[@"color"] != [NSNull null])
-                    color = item[@"color"];
-                
-                if (color)
-                    cell.iconView.image = [UIImage templateImageNamed:imageName];
-                else
-                    cell.iconView.image = [UIImage rtlImageNamed:imageName];
-                
-                cell.iconView.tintColor = color;
-            }
-            cell.textView.text = item[@"title"];
-            
-            if ([item[@"selected"] boolValue])
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            else
-                cell.accessoryType = UITableViewCellAccessoryNone;
-            
-            if ([cell needsUpdateConstraints])
-                [cell updateConstraints];
-        }
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+//    if ([item[@"type"] isEqualToString:[OAIconTextDescCell getCellIdentifier]])
+//    {
+//        OAIconTextDescCell *cell = [tblView dequeueReusableCellWithIdentifier:[OAIconTextDescCell getCellIdentifier]];
+//        if (cell == nil)
+//        {
+//            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescCell getCellIdentifier] owner:self options:nil];
+//            cell = (OAIconTextDescCell *) nib[0];
+//            cell.textView.numberOfLines = 0;
+//            cell.descView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+//            cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
+//            [cell.arrowIconView setHidden:YES];
+//        }
+//        if (cell)
+//        {
+//            cell.textView.text = item[@"title"];
+//            cell.descView.hidden = description.length == 0;
+//            cell.descView.text = description;
+//
+//            NSString *imageName = item[@"img"];
+//            if (imageName)
+//            {
+//                UIColor *color = nil;
+//                if (item[@"color"] != [NSNull null])
+//                    color = item[@"color"];
+//
+//                if (color)
+//                    cell.iconView.image = [UIImage templateImageNamed:imageName];
+//                else
+//                    cell.iconView.image = [UIImage rtlImageNamed:imageName];
+//
+//                cell.iconView.tintColor = color;
+//            }
+//            cell.textView.text = item[@"title"];
+//
+//            if ([item[@"selected"] boolValue])
+//                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+//            else
+//                cell.accessoryType = UITableViewCellAccessoryNone;
+//
+//            if ([cell needsUpdateConstraints])
+//                [cell updateConstraints];
+//        }
+//        return cell;
+//    }
+    if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
         OASimpleTableViewCell *cell = [tblView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)

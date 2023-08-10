@@ -31,7 +31,7 @@
 #import "OAIndexConstants.h"
 #import "OsmAndApp.h"
 #import "OAOsmUploadGPXViewConroller.h"
-#import "OAValueTableViewCell.h"
+#import "OAPointHeaderTableViewCell.h"
 #import "OAGPXAppearanceCollection.h"
 
 #include <OsmAndCore/ArchiveReader.h>
@@ -861,8 +861,6 @@ static UIViewController *parentController;
     [self.gpxTableView setDelegate:self];
     self.gpxTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.gpxTableView reloadData];
-    self.gpxTableView.allowsMultipleSelectionDuringEditing = YES;
-    
 }
 
 - (void) didReceiveMemoryWarning {
@@ -1299,34 +1297,35 @@ static UIViewController *parentController;
     {
         if (indexPath.row == kGPXGroupHeaderRow && !_isSearchActive)
         {
-            OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+            OAPointHeaderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAPointHeaderTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
-                cell = (OAValueTableViewCell *) nib[0];
-                [cell descriptionVisibility:NO];
-                [cell valueVisibility:YES];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointHeaderTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OAPointHeaderTableViewCell *) nib[0];
+                cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
+                cell.folderIcon.tintColor = UIColorFromRGB(color_chart_orange);
+                cell.valueLabel.textColor = UIColorFromRGB(color_text_footer);
+                cell.arrowImage.tintColor = UIColorFromRGB(color_tint_gray);
             }
             if (cell)
             {
-                cell.titleLabel.text = item.groupName;
-                
-                cell.leftIconView.image = [UIImage templateImageNamed:item.groupIcon];
-                cell.leftIconView.tintColor = UIColorFromRGB(color_chart_orange);
+                cell.groupTitle.text = item.groupName;
+                cell.folderIcon.image = [UIImage templateImageNamed:item.groupIcon];
                 cell.valueLabel.text = [NSString stringWithFormat:@"%ld", item.groupItems.count];
-                cell.valueLabel.textColor = UIColorFromRGB(color_text_footer);
-                if (item.isOpen)
-                {
-                    cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_arrow_down"]];
-                }
+                
+                cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
+                [cell.openCloseGroupButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+                [cell.openCloseGroupButton addTarget:self action:@selector(openCloseGroupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+                
+                if ([self.gpxTableView isEditing])
+                    [cell.openCloseGroupButton setHidden:NO];
                 else
-                {
-                    UIImageView *icon = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_arrow_right"]];
-                    if ([cell isDirectionRTL])
-                        [icon setImage:icon.image.imageFlippedForRightToLeftLayoutDirection];
-                    cell.accessoryView = icon;
-                }
-                cell.accessoryView.tintColor = UIColorFromRGB(color_icon_inactive);
+                    [cell.openCloseGroupButton setHidden:YES];
+                
+                if (item.isOpen)
+                    cell.arrowImage.image = [UIImage templateImageNamed:@"ic_custom_arrow_down"];
+                else
+                    cell.arrowImage.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             }
             return cell;
         }

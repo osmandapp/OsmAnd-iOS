@@ -2670,3 +2670,7 @@
 "search_favorites" = "Wyszukiwanie ulubionych";
 "speak_route_deviation" = "Zapowiedź zbaczania z trasy";
 "compass_click_desc" = "Stuknij w kompas, aby przełączyć tryb orientacji mapy.";
+"rendering_value_sacScale_description" = "Szwajcarski Klub Alpejski";
+"free_favorites_backup" = "Darmowa kopia zapasowa ulubionych";
+"free_account" = "Darmowe konto";
+"get_osmand_cloud" = "Pozyskaj OsmAnd Cloud";

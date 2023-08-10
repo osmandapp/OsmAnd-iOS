@@ -24,6 +24,9 @@
 #import "OALinks.h"
 #import <SafariServices/SafariServices.h>
 #import <MessageUI/MFMailComposeViewController.h>
+#import "OABackupHelper.h"
+
+#define OSMAND_START @"OsmAnd Start"
 
 @interface OAPurchasesViewController () <SFSafariViewControllerDelegate, MFMailComposeViewControllerDelegate>
 
@@ -94,6 +97,24 @@ static BOOL _purchasesUpdated;
 
 #pragma mark - Table data
 
+- (void)createStartFreeSubscription
+{
+    OATableSectionData *activeSection = [_data createNewSection];
+    activeSection.headerText = OALocalizedString(@"osm_live_active");
+    NSDate *purchasedDate = [NSDate dateWithTimeIntervalSince1970:[OAAppSettings.sharedManager.backupFreePlanRegistrationTime get]];
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    formatter.dateStyle = NSDateFormatterMediumStyle;
+    NSString *descriptionString = [NSString stringWithFormat:@"%@\n%@", OALocalizedString(@"free_account"), [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), OALocalizedString(@"shared_string_purchased"), [formatter stringFromDate:purchasedDate]]];
+    
+    [activeSection addRowFromDictionary:@{
+        kCellKeyKey : @"product_osmand_start",
+        kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
+        kCellIconNameKey : @"ic_custom_osmand_start",
+        kCellTitleKey : OSMAND_START,
+        kCellDescrKey : descriptionString
+    }];
+}
+
 - (void) generateData
 {
     _data = [OATableDataModel model];
@@ -123,26 +144,33 @@ static BOOL _purchasesUpdated;
         BOOL isProSubscriptionAvailable = [settings.backupPurchaseActive get];
         if (activeProducts.count == 0 && expiredProducts.count == 0 && !isProSubscriptionAvailable)
         {
-            OATableSectionData *noPurchasesSection = [_data createNewSection];
-            [noPurchasesSection addRowFromDictionary:@{
-                kCellTypeKey : [OALargeImageTitleDescrTableViewCell getCellIdentifier],
-                kCellIconNameKey : @"ic_custom_shop_bag_48",
-                kCellIconTint : @(color_tint_gray),
-                kCellTitleKey : OALocalizedString(@"no_purchases"),
-                kCellDescrKey : [NSString stringWithFormat:OALocalizedString(@"empty_purchases_description"), OALocalizedString(@"restore_purchases")]
-            }];
+            if (OABackupHelper.sharedInstance.isRegistered)
+            {
+                [self createStartFreeSubscription];
+            }
+            else
+            {
+                OATableSectionData *noPurchasesSection = [_data createNewSection];
+                [noPurchasesSection addRowFromDictionary:@{
+                    kCellTypeKey : [OALargeImageTitleDescrTableViewCell getCellIdentifier],
+                    kCellIconNameKey : @"ic_custom_shop_bag_48",
+                    kCellIconTint : @(color_tint_gray),
+                    kCellTitleKey : OALocalizedString(@"no_purchases"),
+                    kCellDescrKey : [NSString stringWithFormat:OALocalizedString(@"empty_purchases_description"), OALocalizedString(@"restore_purchases")]
+                }];
 
-            OATableSectionData *osmAndProSection = [_data createNewSection];
-            [osmAndProSection addRowFromDictionary:@{
-                kCellKeyKey : @"get_osmand_pro",
-                kCellTypeKey : [OACardButtonCell getCellIdentifier],
-                kCellIconNameKey : @"ic_custom_osmand_pro_logo_colored",
-                kCellTitleKey : OALocalizedString(@"product_title_pro"),
-                kCellDescrKey : OALocalizedString(@"osm_live_banner_desc"),
-                @"button_title": OALocalizedString(@"shared_string_get"),
-                @"button_icon_name": @"ic_custom_arrow_forward",
-                @"button_icon_color": @(color_primary_purple)
-            }];
+                OATableSectionData *osmAndProSection = [_data createNewSection];
+                [osmAndProSection addRowFromDictionary:@{
+                    kCellKeyKey : @"get_osmand_pro",
+                    kCellTypeKey : [OACardButtonCell getCellIdentifier],
+                    kCellIconNameKey : @"ic_custom_osmand_pro_logo_colored",
+                    kCellTitleKey : OALocalizedString(@"product_title_pro"),
+                    kCellDescrKey : OALocalizedString(@"osm_live_banner_desc"),
+                    @"button_title": OALocalizedString(@"shared_string_get"),
+                    @"button_icon_name": @"ic_custom_arrow_forward",
+                    @"button_icon_color": @(color_primary_purple)
+                }];
+            }
         }
         else
         {
@@ -189,6 +217,12 @@ static BOOL _purchasesUpdated;
             }
             if (expiredProducts.count > 0)
             {
+                if (OABackupHelper.sharedInstance.isRegistered
+                    && !isProSubscriptionAvailable
+                    && activeProducts.count == 0)
+                {
+                    [self createStartFreeSubscription];
+                }
                 OATableSectionData *expiredSection = [_data createNewSection];
                 expiredSection.headerText = OALocalizedString(@"expired");
                 for (NSInteger i = 0; i < expiredProducts.count; i++)
@@ -426,6 +460,8 @@ static BOOL _purchasesUpdated;
         [self sendEmail];
     else if ([key isEqualToString:@"product_pro_crossplatform"])
         [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initForCrossplatformSubscription]];
+    else if ([key isEqualToString:@"product_osmand_start"])
+        [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initForFreeStartSubscription]];
     else if ([key hasPrefix:@"product_"])
         [self showModalViewController:[[OAPurchaseDetailsViewController alloc] initWithProduct:[item objForKey:@"product"]]];
 }

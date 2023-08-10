@@ -2554,6 +2554,7 @@
 "shared_string_selected" = "المحدد";
 "shared_string_next_update" = "التحديث التالي";
 "shared_string_available_until" = "متاح حتى";
+"shared_string_updates_frequency" = "تكرار التحديث";
 "tomorrow" = "غدا";
 "weather_clear_offline_cache" = "سيؤدي ذلك إلى مسح كل ذاكرة التخزين المؤقت لطبقات الطقس في وضع عدم الاتصال.";
 "with_offline_maps" = "مع خرائط غير متصلة بالإنترنت";

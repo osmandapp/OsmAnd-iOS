@@ -2273,6 +2273,7 @@
 "route_preferred_terrain_hilly" = "Percors que montan e devalan.";
 "shared_string_available_until" = "Disponible fins a";
 "shared_string_updates_size" = "Dimension deis actualizacions";
+"shared_string_updates_frequency" = "Frequéncia de l'actualizacion";
 "shared_string_recorded" = "Enregistrat";
 "shared_string_status" = "Estament";
 "turn_arrows_descr" = "Reglar la visualizacion dei sagetas de virada sus la linha de percors.";

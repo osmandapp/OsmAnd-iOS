@@ -2548,6 +2548,7 @@
 "shared_string_selected" = "Вибрані";
 "shared_string_updated" = "Оновлено";
 "shared_string_next_update" = "Наступне оновлення";
+"shared_string_updates_frequency" = "Частота оновлень";
 "tomorrow" = "Завтра";
 "update_parameters" = "Оновити параметри";
 "weather_generates_new_forecast_description" = "OsmAnd генерує новий прогноз що 6 годин. Чим ближче до поточної дати, тим точнішим він буде.";

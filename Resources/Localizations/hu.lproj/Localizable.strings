@@ -2065,6 +2065,7 @@
 "shared_string_selected" = "Kiválasztva";
 "shared_string_updated" = "Frissítve";
 "shared_string_next_update" = "Következő frissítés";
+"shared_string_updates_frequency" = "Frissítés gyakorisága";
 "gpx_import_already_exists_short" = "A megadott útvonalfájl már létezik a listában.";
 "shared_string_unavailable" = "Nem elérhető";
 "measurement_units" = "Mértékegységek";

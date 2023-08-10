@@ -2550,6 +2550,7 @@
 "shared_string_selected" = "Selecionado";
 "shared_string_updated" = "Atualizado";
 "shared_string_next_update" = "Próxima atualização";
+"shared_string_updates_frequency" = "Frequência das atualizações";
 "with_offline_maps" = "Com mapas offline";
 "shared_string_available_until" = "Disponível até";
 "shared_string_updates_size" = "Tamanho das atualizações";

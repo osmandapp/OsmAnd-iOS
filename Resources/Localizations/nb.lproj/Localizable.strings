@@ -2563,6 +2563,7 @@
 "shared_string_available_until" = "Tilgjengelig til";
 "err_profile_import" = "Kunne ikke lese elementdata: %@";
 "shared_string_updates_size" = "Oppdateringsstørrelse";
+"shared_string_updates_frequency" = "Oppdateringsfrekvens";
 "simulate_in_progress" = "Underveis";
 "history_preferences_descr" = "Du kan skru av historikklogging individuelt for hver av historikktypene.";
 "road_speeds" = "Veihastigheter";

@@ -2568,6 +2568,7 @@
 "shared_string_status" = "Istadu";
 "shared_string_selected" = "Seletzionadu";
 "shared_string_updates_size" = "Mannària de s'agiornamentu";
+"shared_string_updates_frequency" = "Frecuèntzia de s'agiornamentu";
 "tomorrow" = "Cras";
 "service_is_not_available_please_try_later" = "Su servìtziu no est a disponimentu. Torra a proare prus a tardu.";
 "weather_forecast" = "Previsiones mèteu";

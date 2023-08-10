@@ -2255,6 +2255,7 @@
 "shared_string_countries" = "國家";
 "shared_string_available_until" = "有效至";
 "shared_string_updates_size" = "更新大小";
+"shared_string_updates_frequency" = "更新頻率";
 "osm_note_upload_immediately" = "立即上載";
 "change_map_behavior" = "更改導航時地圖的反應";
 "select_work_point" = "選擇公司標點";

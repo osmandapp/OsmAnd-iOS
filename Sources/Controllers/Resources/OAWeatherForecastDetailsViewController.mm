@@ -12,7 +12,6 @@
 #import "OASimpleTableViewCell.h"
 #import "OARightIconTableViewCell.h"
 #import "OAValueTableViewCell.h"
-#import "OASwitchTableViewCell.h"
 #import "MBProgressHUD.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OAResourcesUIHelper.h"
@@ -20,8 +19,9 @@
 #import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "OAWeatherAutoUpdateSettingsViewController.h"
 
-@interface OAWeatherForecastDetailsViewController  () <OAWeatherCacheSettingsDelegate, OAWeatherFrequencySettingsDelegate>
+@interface OAWeatherForecastDetailsViewController  () <OAWeatherCacheSettingsDelegate, OAWeatherFrequencySettingsDelegate, OAWeatherAutoUpdateSettingsViewControllerDelegate>
 
 @end
 
@@ -163,21 +163,33 @@
     [data addObject:updatesCells];
     _headers[@(data.count - 1)] = OALocalizedString(@"update_parameters");
     _footers[@(data.count - 1)] = OALocalizedString(@"weather_updates_automatically");
-
-    NSMutableDictionary *updatesFrequencyData = [NSMutableDictionary dictionary];
-    updatesFrequencyData[@"key"] = @"updates_frequency_cell";
-    updatesFrequencyData[@"type"] = [OAValueTableViewCell getCellIdentifier];
-    updatesFrequencyData[@"title"] = OALocalizedString(@"shared_string_updates_frequency");
-    updatesFrequencyData[@"value"] = [OAWeatherHelper getFrequencyFormat:[OAWeatherHelper getPreferenceFrequency:regionId]];
-    updatesFrequencyData[@"value_color"] = UIColorFromRGB(color_text_footer);
-    updatesFrequencyData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
-    [updatesCells addObject:updatesFrequencyData];
-
+    
     NSMutableDictionary *updateOnlyWiFiData = [NSMutableDictionary dictionary];
     updateOnlyWiFiData[@"key"] = @"update_only_wifi_cell";
-    updateOnlyWiFiData[@"type"] = [OASwitchTableViewCell getCellIdentifier];
+    updateOnlyWiFiData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     updateOnlyWiFiData[@"title"] = OALocalizedString(@"update_only_over_wi_fi");
+    updateOnlyWiFiData[@"value"] = [OAWeatherHelper getPreferenceWeatherAutoUpdateString:[OAWeatherHelper getPreferenceWeatherAutoUpdate:regionId]];
+    updateOnlyWiFiData[@"value_color"] = UIColorFromRGB(color_text_footer);
+    updateOnlyWiFiData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
     [updatesCells addObject:updateOnlyWiFiData];
+    
+    EOAWeatherAutoUpdate state = [OAWeatherHelper getPreferenceWeatherAutoUpdate:regionId];
+    if (state != EOAWeatherAutoUpdateDisabled)
+    {
+        NSMutableDictionary *updatesFrequencyData = [NSMutableDictionary dictionary];
+        updatesFrequencyData[@"key"] = @"updates_frequency_cell";
+        updatesFrequencyData[@"type"] = [OAValueTableViewCell getCellIdentifier];
+        updatesFrequencyData[@"title"] = OALocalizedString(@"shared_string_updates_frequency");
+        updatesFrequencyData[@"value"] = [OAWeatherHelper getFrequencyFormat:[OAWeatherHelper getPreferenceFrequency:regionId]];
+        updatesFrequencyData[@"value_color"] = UIColorFromRGB(color_text_footer);
+        updatesFrequencyData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
+        [updatesCells addObject:updatesFrequencyData];
+        _footers[@(data.count - 1)] = OALocalizedString(@"weather_updates_automatically");
+    }
+    else
+    {
+        _footers[@(data.count - 1)] = OALocalizedString(@"weather_updates_manual");
+    }
 
     NSMutableArray<NSMutableDictionary *> *removeCells = [NSMutableArray array];
     [data addObject:removeCells];
@@ -305,27 +317,6 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-    {
-        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = item[@"title"];
-
-            cell.switchView.on = [self isEnabled:item[@"key"]];
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
-        }
-        return cell;
-    }
 
     return nil;
 }
@@ -425,6 +416,12 @@
         frequencySettingsViewController.frequencyDelegate = self;
         [self showModalViewController:frequencySettingsViewController];
     }
+    else if ([item[@"key"] isEqualToString:@"update_only_wifi_cell"])
+    {
+        OAWeatherAutoUpdateSettingsViewController *controller = [[OAWeatherAutoUpdateSettingsViewController alloc] initWithRegion:_region];
+        controller.autoUpdateDelegate = self;
+        [self showModalViewController:controller];
+    }
 }
 
 #pragma mark - Selectors
@@ -497,27 +494,6 @@
     }
 }
 
-- (BOOL)isEnabled:(NSString *)key
-{
-    if ([key isEqualToString:@"update_only_wifi_cell"])
-        return [OAWeatherHelper getPreferenceWifi:[OAWeatherHelper checkAndGetRegionId:_region]];
-
-    return NO;
-}
-
-- (void)onSwitchPressed:(id)sender
-{
-    UISwitch *switchView = (UISwitch *) sender;
-    if (switchView)
-    {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
-        NSDictionary *item = [self getItem:indexPath];
-
-        if ([item[@"key"] isEqualToString:@"update_only_wifi_cell"])
-            [OAWeatherHelper setPreferenceWifi:[OAWeatherHelper checkAndGetRegionId:_region] value:switchView.isOn];
-    }
-}
-
 #pragma mark - OAWeatherCacheSettingsDelegate
 
 - (void)onCacheClear
@@ -525,6 +501,14 @@
     [_weatherHelper calculateCacheSize:_region onComplete:nil];
     if (self.delegate)
         [self.delegate onClearForecastCache];
+}
+
+#pragma mark - OAWeatherAutoUpdateSettingsViewControllerDelegate
+
+- (void)onAutoUpdateSelected
+{
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 #pragma mark - OAWeatherFrequencySettingsDelegate
@@ -550,6 +534,13 @@
                 [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:j inSection:i]]
                                       withRowAnimation:UITableViewRowAnimationAutomatic];
             }
+            else if ([cell[@"key"] isEqualToString:@"update_only_wifi_cell"])
+            {
+                cell[@"value"] = [OAWeatherHelper getPreferenceWeatherAutoUpdateString:[OAWeatherHelper getPreferenceWeatherAutoUpdate:regionId]];
+                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:j inSection:i]]
+                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
+            
         }
     }
 }

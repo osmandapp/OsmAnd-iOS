@@ -23,6 +23,13 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastUpdatesFrequency)
     EOAWeatherForecastUpdatesWeekly,
 };
 
+typedef NS_ENUM(NSInteger, EOAWeatherAutoUpdate)
+{
+    EOAWeatherAutoUpdateDisabled,
+    EOAWeatherAutoUpdateOverWIFIOnly,
+    EOAWeatherAutoUpdateOverAnyNetwork
+};
+
 typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 {
     EOAWeatherForecastDownloadStateUndefined = -1,
@@ -87,6 +94,10 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 + (NSString *)getUpdatesDateFormat:(NSString *)regionId next:(BOOL)next;
 + (NSString *)getFrequencyFormat:(EOAWeatherForecastUpdatesFrequency)frequency;
 
++ (EOAWeatherAutoUpdate)getPreferenceWeatherAutoUpdate:(NSString *)regionId;
++ (void)setPreferenceWeatherAutoUpdate:(NSString *)regionId value:(EOAWeatherAutoUpdate)value;
++ (NSString *)getPreferenceWeatherAutoUpdateString:(EOAWeatherAutoUpdate)value;
+
 + (EOAWeatherForecastDownloadState)getPreferenceDownloadState:(NSString *)regionId;
 + (void)setPreferenceDownloadState:(NSString *)regionId value:(EOAWeatherForecastDownloadState)value;
 
@@ -95,9 +106,6 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 
 + (NSArray<NSArray<NSNumber *> *> *)getPreferenceTileIds:(NSString *)regionId;
 + (void)setPreferenceTileIds:(NSString *)regionId value:(NSArray<NSArray<NSNumber *> *> *)value;
-
-+ (BOOL)getPreferenceWifi:(NSString *)regionId;
-+ (void)setPreferenceWifi:(NSString *)regionId value:(BOOL)value;
 
 + (EOAWeatherForecastUpdatesFrequency)getPreferenceFrequency:(NSString *)regionId;
 + (void)setPreferenceFrequency:(NSString *)regionId value:(EOAWeatherForecastUpdatesFrequency)value;

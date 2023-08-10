@@ -3029,11 +3029,16 @@
 "weather_miss_forecasts" = "You don’t have offline forecasts";
 "weather_miss_forecasts_description" = "Offline forecast is available per country. Duration up to 7 days. You need to select needed countries.";
 "weather_updates_automatically" = "OsmAnd will be download updates automatically when it is running.";
+"weather_updates_manual" = "Weather forecast must be updated manually.";
 "weather_accuracy_forecast_description" = "Offline forecast is available until: %@.\nAccuracy: %@, hourly. %@ for every 3 hours.";
 "weather_generates_new_forecast_description" = "OsmAnd generates a new forecast every 6 hours. The closer to the current date, the more accurate it will be.";
 
-"update_only_over_wi_fi" = "Update only over Wi-Fi";
+"update_only_over_wi_fi" = "Auto-update";
 "update_parameters" = "Update parameters";
+
+"update_parameters_disabled" = "Auto-updates will be disabled.";
+"update_parameters_wifi" = "Weather forecast will be updates only if Wi-Fi network is available.";
+"update_parameters_any_network" = "Weather forecast will be updates over any network. Mobile data can be used.";
 
 "recording_delete_confirm" = "Delete this item?";
 

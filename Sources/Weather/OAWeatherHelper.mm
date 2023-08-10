@@ -18,6 +18,7 @@
 #import "OAWeatherPlugin.h"
 #import "OAColors.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/WeatherTileResourceProvider.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
@@ -27,7 +28,9 @@
 #define kWeatherForecastDownloadStatePrefix @"forecast_download_state_"
 #define kWeatherForecastLastUpdatePrefix @"forecast_last_update_"
 #define kWeatherForecastFrequencyPrefix @"forecast_frequency_"
+#define kWeatherForecastAutoUpdatePrefix @"forecast_auto_update_"
 #define kWeatherForecastTileIdsPrefix @"forecast_tile_ids_"
+// needed for flag compatibility kWeatherForecastAutoUpdatePrefix
 #define kWeatherForecastWifiPrefix @"forecast_download_via_wifi_"
 
 #define kTileSize 40000
@@ -169,7 +172,8 @@
         if ([regionIds containsObject:regionId])
         {
             forecastsDownloading++;
-            if (!networkManager.isReachableViaWiFi && [self.class getPreferenceWifi:regionId])
+            EOAWeatherAutoUpdate state = [OAWeatherHelper getPreferenceWeatherAutoUpdate:regionId];
+            if (!networkManager.isReachableViaWiFi && state == EOAWeatherAutoUpdateOverWIFIOnly)
                 continue;
 
             NSTimeInterval lastUpdateTime = [self.class getPreferenceLastUpdate:regionId];
@@ -213,7 +217,7 @@
     AFNetworkReachabilityManager *networkManager = [AFNetworkReachabilityManager sharedManager];
     if (!networkManager.isReachable)
         return;
-    else if (!networkManager.isReachableViaWiFi && [self.class getPreferenceWifi:regionId])
+    else if (!networkManager.isReachableViaWiFi && [OAWeatherHelper getPreferenceWeatherAutoUpdate:regionId] == EOAWeatherAutoUpdateOverWIFIOnly)
         return;
 
     BOOL isEntireWorld = [regionId isEqualToString:kWeatherEntireWorldRegionId];
@@ -855,6 +859,49 @@
     [[NSUserDefaults standardUserDefaults] setInteger:value forKey:prefKey];
 }
 
++ (EOAWeatherAutoUpdate)getPreferenceWeatherAutoUpdate:(NSString *)regionId
+{
+    NSString *prefKey = [kWeatherForecastAutoUpdatePrefix stringByAppendingString:regionId];
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:prefKey])
+    {
+        return (EOAWeatherAutoUpdate)[[NSUserDefaults standardUserDefaults] integerForKey:prefKey];
+    }
+    else
+    {   // compatibility with old api
+        BOOL isWIFI = [self getPreferenceWifi:regionId];
+        if (isWIFI) {
+            [[self class] setPreferenceWeatherAutoUpdate:regionId value:EOAWeatherAutoUpdateOverWIFIOnly];
+            return EOAWeatherAutoUpdateOverWIFIOnly;
+        }
+        else
+        {
+            [[self class] setPreferenceWeatherAutoUpdate:regionId value:EOAWeatherAutoUpdateDisabled];
+            return EOAWeatherAutoUpdateDisabled;
+        }
+    }
+}
+
++ (void)setPreferenceWeatherAutoUpdate:(NSString *)regionId value:(EOAWeatherAutoUpdate)value
+{
+    NSString *prefKey = [kWeatherForecastAutoUpdatePrefix stringByAppendingString:regionId];
+    [[NSUserDefaults standardUserDefaults] setInteger:value forKey:prefKey];
+}
+
++ (NSString *)getPreferenceWeatherAutoUpdateString:(EOAWeatherAutoUpdate)value
+{
+    NSString *result = @"Disabled";
+    switch (value) {
+        case EOAWeatherAutoUpdateOverWIFIOnly:
+            result = @"Over WIFI only";
+            break;
+        case EOAWeatherAutoUpdateOverAnyNetwork:
+            result = @"Over Any Network";
+            break;
+        default:break;
+    }
+    return result;
+}
+
 + (NSArray<NSArray<NSNumber *> *> *)getPreferenceTileIds:(NSString *)regionId
 {
     NSString *prefKey = [kWeatherForecastTileIdsPrefix stringByAppendingString:regionId];
@@ -906,7 +953,8 @@
         [kWeatherForecastLastUpdatePrefix stringByAppendingString:regionId],
         [kWeatherForecastFrequencyPrefix stringByAppendingString:regionId],
         [kWeatherForecastTileIdsPrefix stringByAppendingString:regionId],
-        [kWeatherForecastWifiPrefix stringByAppendingString:regionId]
+        [kWeatherForecastWifiPrefix stringByAppendingString:regionId],
+        [kWeatherForecastAutoUpdatePrefix stringByAppendingString:regionId]
     ];
 }
 

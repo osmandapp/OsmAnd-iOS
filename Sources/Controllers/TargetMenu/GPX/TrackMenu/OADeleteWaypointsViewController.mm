@@ -340,8 +340,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([_tableData.subjects[section].key isEqualToString:@"actions_section"]
-            || [_tableData.subjects[section].key isEqualToString:[NSString stringWithFormat:@"group_%@_section", OALocalizedString(@"route_points")]])
+    if ([_tableData.subjects[section].key isEqualToString:@"actions_section"] || [_tableData.subjects[section].key isEqualToString: [NSString stringWithFormat:@"section_waypoints_group_%@", OALocalizedString(@"route_points")]])
         return 0;
 
     return _tableData.subjects[section].subjects.firstObject.toggle ? _tableData.subjects[section].subjects.count : 1;

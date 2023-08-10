@@ -21,6 +21,8 @@
     [super awakeFromNib];
     if ([self isDirectionRTL])
         self.valueLabel.textAlignment = NSTextAlignmentLeft;
+    self.valueLabel.adjustsFontSizeToFitWidth = YES;
+    self.valueLabel.minimumScaleFactor = 0.8;
     [self layoutIfNeeded];
 }
 

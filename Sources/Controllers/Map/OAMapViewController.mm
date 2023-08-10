@@ -1486,7 +1486,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     accepted |= !longPress && recognizer.state == UIGestureRecognizerStateEnded;
     if (accepted)
     {
-        OAFloatingButtonsHudViewController *quickAction = [OARootViewController instance].mapPanel.hudViewController.floatingButtonsController;
+        OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+        OAFloatingButtonsHudViewController *quickAction = mapPanel.hudViewController.floatingButtonsController;
         [quickAction hideActionsSheetAnimated];
         if ([mapPanel gpxModeActive])
         {

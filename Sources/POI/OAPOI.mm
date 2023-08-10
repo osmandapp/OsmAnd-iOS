@@ -213,6 +213,16 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return nil;
 }
 
+- (NSString *)getTagSuffix:(NSString *)tagPrefix
+{
+    for (NSString *infoTag in [self getAdditionalInfo].allKeys)
+    {
+        if ([infoTag hasPrefix:tagPrefix])
+            return [infoTag substringFromIndex:tagPrefix.length];
+    }
+    return nil;
+}
+
 - (NSString *)getDescription:(NSString *)lang
 {
     NSString *info = [self getTagContent:@"description" lang:lang];
@@ -234,6 +244,16 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
             res[key] = _values[key];
     }
     return res;
+}
+
+- (NSString *)getSite
+{
+    return [self getAdditionalInfo][@"website"];
+}
+
+- (NSString *)getColor
+{
+    return [self getAdditionalInfo][@"color"];
 }
 
 - (NSString *)toStringEn

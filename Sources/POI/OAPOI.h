@@ -92,9 +92,13 @@
 - (NSString *)getTagContent:(NSString *)tag lang:(NSString *)lang;
 - (NSString *)getDescription:(NSString *)lang;
 
+- (NSString *)getSite;
+- (NSString *)getColor;
+
 - (NSString *) toStringEn;
 
 - (NSDictionary<NSString *, NSString *> *) toTagValue:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;
 + (OAPOI *) fromTagValue:(NSDictionary<NSString *, NSString *> *)map privatePrefix:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;
+- (NSString *)getTagSuffix:(NSString *)tagPrefix;
 
 @end

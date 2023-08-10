@@ -8,13 +8,13 @@
 
 import Foundation
 
-class TravelArticle {
+class TravelArticle: Equatable {
     
     let IMAGE_ROOT_URL = "https://upload.wikimedia.org/wikipedia/commons/"
     let THUMB_PREFIX = "320px-"
     let REGULAR_PREFIX = "1280px-" //1280, 1024, 800
     
-    var file: String?;
+    var file: String?
     var title: String?
     var content: String?
     var isPartOf: String?
@@ -101,10 +101,7 @@ class TravelArticle {
         return "route_article_point"
     }
     
-    func createWptPt() {
-        //TODO: implement
-    }
-    
+    //public GPXTrackAnalysis getAnalysis() {return null;}
     
     func getHash(s: String) -> [String]? {
         if let md5 = OAUtilities.toMD5(s) {
@@ -117,6 +114,19 @@ class TravelArticle {
         return nil
     }
     
+    func equals(obj: TravelArticle?) -> Bool {
+        if (obj == nil) {
+            return false
+        }
+        return TravelArticleIdentifier.areLatLonEqual(lat1: self.lat, lon1: self.lon, lat2: obj!.lat, lon2: obj!.lon) &&
+            self.file == obj!.file &&
+            self.routeId == obj!.routeId &&
+            self.routeSource == obj!.routeSource
+    }
+    
+    static func == (lhs: TravelArticle, rhs: TravelArticle) -> Bool {
+        return lhs.equals(obj: rhs)
+    }
     
     func fileModificationDate(path: String) -> Date? {
         do {

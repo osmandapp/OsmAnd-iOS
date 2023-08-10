@@ -242,16 +242,10 @@
         if (cell)
         {
             // FIXME
-//            if ([item[@"key"] isEqualToString: @"remove_forecast_cell"])
-//            {
-//                [cell textIndentsStyle:EOATableViewCellTextIncreasedTopCenterIndentStyle];
-//                [cell anchorContent:EOATableViewCellContentCenterStyle];
-//            }
-//            else
-//            {
-//                [cell textIndentsStyle:EOATableViewCellTextNormalIndentsStyle];
-//                [cell anchorContent:EOATableViewCellContentCenterStyle];
-//            }
+            if ([item[@"key"] isEqualToString: @"remove_forecast_cell"])
+            {
+                [cell anchorContenttextStackView:EOATableViewCellContentCenterStyle];
+            }
 
             cell.titleLabel.text = item[@"title"];
             cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;

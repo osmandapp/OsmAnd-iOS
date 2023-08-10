@@ -46,6 +46,11 @@
 
 #pragma mark - Base UI
 
+- (BOOL)hideFirstHeader
+{
+    return YES;
+}
+
 - (NSString *)getLeftNavbarButtonTitle
 {
     return OALocalizedString(@"shared_string_close");

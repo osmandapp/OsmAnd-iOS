@@ -110,6 +110,18 @@
     self.textCustomMarginBottomStackView.spacing = 5.;
 }
 
+- (void)anchorContenttextStackView:(EOATableViewCellContentStyle)style
+{
+    if (style == EOATableViewCellContentCenterStyle)
+    {
+        self.textStackView.alignment = UIStackViewAlignmentCenter;
+    }
+    else if (style == EOATableViewCellContentTopStyle)
+    {
+        self.textStackView.alignment = UIStackViewAlignmentTop;
+    }
+}
+
 - (void)anchorContent:(EOATableViewCellContentStyle)style
 {
     if (style == EOATableViewCellContentCenterStyle)

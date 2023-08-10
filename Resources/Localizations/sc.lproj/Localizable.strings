@@ -2584,7 +2584,6 @@
 "weather_miss_forecasts_description" = "Sas previsiones non in lìnia sunt a disponimentu pro istadu. Sa durada est de finas a 7 dies. Depes seletzionare sos istados chi ti serbint.";
 "weather_updates_automatically" = "OsmAnd at a iscarrigare sos agiornamentos in automàticu durante s'esecutzione.";
 "weather_generates_new_forecast_description" = "OsmAnd ingendrat una previsione noa cada 6 oras. Prus a curtzu at a èssere a sa data atuale, prus pretzisa at a èssere.";
-"update_only_over_wi_fi" = "Agiorna petzi impreende su Wi-Fi";
 "update_parameters" = "Agiorna sos paràmetros";
 "contact_support" = "Cuntata su suportu";
 "contact_support_description" = "Si tenes preguntas cuntata·nos a su %@.";

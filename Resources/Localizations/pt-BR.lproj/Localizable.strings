@@ -2548,7 +2548,6 @@
 "other_countries" = "Outros países";
 "weather_accuracy_forecast_description" = "A previsão offline está disponível até: %@.\nPrecisão: %@, por hora. %@ para cada 3 horas.";
 "weather_generates_new_forecast_description" = "O OsmAnd gera uma nova previsão a cada 6 horas. Quanto mais próximo da data atual, mais preciso será.";
-"update_only_over_wi_fi" = "Atualizar apenas no Wi-Fi";
 "update_parameters" = "Parâmetros de atualização";
 "map_settings_weather_wind" = "Vento";
 "map_settings_weather_cloud" = "Nuvem";

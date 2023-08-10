@@ -2588,7 +2588,6 @@
 "backup_remove_old_versions_finished" = "Eldri útgáfum hefur verið eytt af OsmAnd-tölvuskýinu.";
 "backup_delete_types_descr" = "Viltu eyða gögnum frá úreltum gagnagerðum úr OsmAnd-tölvuskýi\?";
 "cloud_confirm_delete_type" = "Ertu viss um að þú viljir eyða \"%@\" af OsmAnd-tölvuskýinu?";
-"update_only_over_wi_fi" = "Uppfæra einungis í gegnum Wi-Fi";
 "subscription_banner_free_maps_title" = "Þú getur sótt %i kort ókeypis.";
 "compass_options_description" = "Smelltu á áttavitann til að breyta stefnu kortsins";
 "map_widget_rendering_fps" = "Rammatíðni myndgerðar korts";

@@ -29,6 +29,7 @@
 #import "OAWeatherToolbar.h"
 #import "Localization.h"
 #import "OAProfileGeneralSettingsParametersViewController.h"
+#import "OADestinationCardsViewController.h"
 #import "OAReverseGeocoder.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -52,6 +53,7 @@
 @implementation OAMapHudViewController
 {
     OsmAndAppInstance _app;
+    OAAppSettings *_settings;
 
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _mapAzimuthObserver;
@@ -107,6 +109,7 @@
     _mapHudType = EOAMapHudBrowse;
     
     _app = [OsmAndApp instance];
+    _settings = [OAAppSettings sharedManager];
 
     _mapPanelViewController = [OARootViewController instance].mapPanel;
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
@@ -175,50 +178,49 @@
     _driveModeButton.userInteractionEnabled = YES;
     [self updateRouteButton:NO followingMode:NO];
 
-    _toolbarTopPosition = [OAUtilities getStatusBarHeight];
     self.statusBarViewHeightConstraint.constant = [OAUtilities isLandscape] ? 0. : [OAUtilities getStatusBarHeight];
     self.bottomBarViewHeightConstraint.constant = [OAUtilities getBottomMargin];
-    
+
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
     _compassBox.alpha = ([self shouldShowCompass] ? 1.0 : 0.0);
     _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
 
     [self updateWeatherButtonVisibility];
-    
+
     _zoomInButton.enabled = [_mapViewController canZoomIn];
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
-    
+
     self.floatingButtonsController = [[OAFloatingButtonsHudViewController alloc] initWithMapHudViewController:self];
     self.floatingButtonsController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self addChildViewController:self.floatingButtonsController];
-    
+
     self.floatingButtonsController.view.frame = self.view.frame;
     [self.view addSubview:self.floatingButtonsController.view];
-    
+
     self.weatherButton.alpha = 0.;
 
     // IOS-218
     self.rulerLabel = [[OAMapRulerView alloc] initWithFrame:CGRectMake(120, DeviceScreenHeight - 42, kMapRulerMinWidth, 25)];
     self.rulerLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.rulerLabel];
-    
+
     // Constraints
     _bottomRulerConstraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:-17.0f];
     [self.view addConstraint:_bottomRulerConstraint];
-    
+
     _leftRulerConstraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:148.0f];
     [self.view addConstraint:_leftRulerConstraint];
-    
+
     NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:25];
     [self.view addConstraint:constraint];
     self.rulerLabel.hidden = YES;
     self.rulerLabel.userInteractionEnabled = NO;
-    
+
     [self updateColors];
     [self addAccessibilityLabels];
 
     _mapInfoController.delegate = self;
-    
+
     _longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressCompass:)];
     _longPress.delaysTouchesBegan = YES;
     [self.compassBox addGestureRecognizer:_longPress];
@@ -234,26 +236,15 @@
     [super viewWillAppear:animated];
     
     if (self.toolbarViewController)
-    {
         [self.toolbarViewController onViewWillAppear:self.mapHudType];
-        //[self showToolbar];
-    }
     
     //IOS-222
     if ([[NSUserDefaults standardUserDefaults] objectForKey:kUDLastMapModePositionTrack] && !_driveModeActive)
     {
-        OAMapMode mapMode = (OAMapMode)[[NSUserDefaults standardUserDefaults] integerForKey:kUDLastMapModePositionTrack];
+        OAMapMode mapMode = (OAMapMode) [[NSUserDefaults standardUserDefaults] integerForKey:kUDLastMapModePositionTrack];
         [_app setMapMode:mapMode];
     }
     [self updateMapModeButton];
-    
-    if (![self.view.subviews containsObject:_widgetsView])
-    {
-        if (self.toolbarViewController && self.toolbarViewController.view.superview)
-            [self.view insertSubview:_widgetsView belowSubview:self.toolbarViewController.view];
-        else
-            [self.view addSubview:_widgetsView];
-    }
     _driveModeActive = NO;
 }
 
@@ -262,7 +253,7 @@
     [super viewDidAppear:animated];
 
     BOOL hasInitialURL = _app.initialURLMapState != nil;
-    if ([[OAAppSettings sharedManager] settingShowZoomButton] || (!hasInitialURL && ![_mapPanelViewController isContextMenuVisible]))
+    if (_settings.settingShowZoomButton || (!hasInitialURL && ![_mapPanelViewController isContextMenuVisible]))
         [self updateControlsLayout:YES];
 
     [self updateMapRulerDataWithDelay];
@@ -343,7 +334,7 @@
 - (void) resetToDefaultRulerLayout
 {
     BOOL isLandscape = [OAUtilities isLandscape];
-    CGFloat bottomOffset = isLandscape ? (kButtonOffset + [self getHudMinBottomOffset]) : (DeviceScreenHeight - [self getBottomHudOffset]);
+    CGFloat bottomOffset = DeviceScreenHeight - [self getBottomHudOffset];
     CGFloat leftOffset = kButtonOffset;
 
     BOOL isTrackMenuVisible = _mapPanelViewController.activeTargetType == OATargetGPX;
@@ -360,7 +351,7 @@
     else if (isWeatherVisible)
         leftOffset += isLandscape ? self.weatherToolbar.frame.size.width : (kButtonWidth + kButtonOffset);
     else if (!self.contextMenuMode)
-        leftOffset += _driveModeButton.frame.origin.x + _driveModeButton.frame.size.width;
+        leftOffset +=  _driveModeButton.frame.origin.x + _driveModeButton.frame.size.width;
     else if (isTrackMenuVisible && isLandscape)
         leftOffset += isLandscape ? [_mapPanelViewController.scrollableHudViewController getLandscapeViewWidth] : 0.;
 
@@ -414,8 +405,8 @@
 
 - (BOOL) shouldShowCompass:(float)azimuth
 {
-    NSInteger rotateMap = [[OAAppSettings sharedManager].rotateMap get];
-    NSInteger compassMode = [[OAAppSettings sharedManager].compassMode get];
+    NSInteger rotateMap = [_settings.rotateMap get];
+    NSInteger compassMode = [_settings.compassMode get];
     return (((azimuth != 0.0 || rotateMap != ROTATE_MAP_NONE) && compassMode == EOACompassRotated) || compassMode == EOACompassVisible) && _mapSettingsButton.alpha == 1.0;
 }
 
@@ -426,8 +417,8 @@
 
 - (void) updateOverlayUnderlayView
 {
-    BOOL shouldOverlaySliderBeVisible = _app.data.overlayMapSource && [[OAAppSettings sharedManager] getOverlayOpacitySliderVisibility];
-    BOOL shouldUnderlaySliderBeVisible = _app.data.underlayMapSource && [[OAAppSettings sharedManager] getUnderlayOpacitySliderVisibility];
+    BOOL shouldOverlaySliderBeVisible = _app.data.overlayMapSource && [_settings getOverlayOpacitySliderVisibility];
+    BOOL shouldUnderlaySliderBeVisible = _app.data.underlayMapSource && [_settings getUnderlayOpacitySliderVisibility];
     
     if (shouldOverlaySliderBeVisible || shouldUnderlaySliderBeVisible)
     {
@@ -492,10 +483,6 @@
 
 - (void) updateColors
 {
-    BOOL isNight = [OAAppSettings sharedManager].nightMode;
-    
-    [_floatingButtonsController updateColors:isNight];
-
     [self updateMapSettingsButton];
     [self updateCompassButton];
 
@@ -517,13 +504,13 @@
     [_optionsMenuButton setImage:[UIImage templateImageNamed:@"ic_custom_drawer"] forState:UIControlStateNormal];
     [_optionsMenuButton updateColorsForPressedState:NO];
     _optionsMenuButton.layer.cornerRadius = 6;
-    
+
+    BOOL isNight = _settings.nightMode;
+    [_floatingButtonsController updateColors:isNight];
     [self.rulerLabel updateColors];
-    
     [_mapPanelViewController updateColors];
-    
     _statusBarView.backgroundColor = [self getStatusBarBackgroundColor];
-    _bottomBarView.backgroundColor = [self getStatusBarBackgroundColor];
+    _bottomBarView.backgroundColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColor.whiteColor;
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
@@ -744,10 +731,10 @@
 - (void) onProfileSettingSet:(NSNotification *)notification
 {
     OACommonPreference *obj = notification.object;
-    OACommonInteger *rotateMap = [OAAppSettings sharedManager].rotateMap;
-    OACommonBoolean *transparentMapTheme = [OAAppSettings sharedManager].transparentMapTheme;
-    OACommonInteger *map3dMode = [OAAppSettings sharedManager].map3dMode;
-    OACommonInteger *compassMode = [OAAppSettings sharedManager].compassMode;
+    OACommonInteger *rotateMap = _settings.rotateMap;
+    OACommonBoolean *transparentMapTheme = _settings.transparentMapTheme;
+    OACommonInteger *map3dMode = _settings.map3dMode;
+    OACommonInteger *compassMode = _settings.compassMode;
     if (obj)
     {
         if (obj == rotateMap)
@@ -837,8 +824,8 @@
 
 - (void) updateCompassButton
 {
-    OACommonInteger *rotateMap = [OAAppSettings sharedManager].rotateMap;
-    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    OACommonInteger *rotateMap = _settings.rotateMap;
+    BOOL isNight = _settings.nightMode;
     BOOL showCompass = [self shouldShowCompass];
     if ([rotateMap get] == ROTATE_MAP_NONE)
     {
@@ -883,14 +870,9 @@
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
     if (_toolbarViewController && _toolbarViewController.view.alpha > 0.5)
-    {
         return [_toolbarViewController getPreferredStatusBarStyle];
-    }
     else
-    {
-        BOOL isNight = [OAAppSettings sharedManager].nightMode;
-        return isNight ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
-    }
+        return _settings.nightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
 }
 
 - (void) setToolbar:(OAToolbarViewController *)toolbarController
@@ -899,24 +881,11 @@
         [_toolbarViewController.view removeFromSuperview];
 
     _toolbarViewController = toolbarController;
-    if (_statusBarView.alpha > 0)
-    {
-        _toolbarViewController.view.alpha = 1.0;
-        _toolbarViewController.view.userInteractionEnabled = YES;
-    }
+    _toolbarViewController.view.alpha = 1.;
+    _toolbarViewController.view.userInteractionEnabled = YES;
 
     if (![self.view.subviews containsObject:_toolbarViewController.view])
-    {
-        [self.view addSubview:_toolbarViewController.view];
-        [self.view insertSubview:_topWidgetsView aboveSubview:_toolbarViewController.view];
-        [self.view insertSubview:self.statusBarView aboveSubview:_topWidgetsView];
-        
-        if (_widgetsView && _widgetsView.superview)
-        {
-            UIView *shadeView = _mapPanelViewController.shadeView;
-            [self.view insertSubview:_widgetsView belowSubview:shadeView && shadeView.superview ? shadeView : _toolbarViewController.view];
-        }
-    }
+        [self.view insertSubview:_toolbarViewController.view belowSubview:self.statusBarView];
 }
 
 - (void) removeToolbar
@@ -955,27 +924,32 @@
 
 - (void) updateControlsLayout:(BOOL)animated
 {
-    if (animated)
+    BOOL isToolbarVisible = _toolbarViewController && _toolbarViewController.view.superview;
+    if (isToolbarVisible)
     {
-        [UIView animateWithDuration:.2 animations:^{
-            [self updateTopControlsVisibility];
-            [self updateBottomControlsVisibility:YES];
-        }];
+        BOOL isMapMarkerVisibility = [OADestinationsHelper instance].sortedDestinations.count > 0
+        && [_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisibility get];
+        BOOL isAllowToolbarsVisible = isToolbarVisible && ((isMapMarkerVisibility && ![[OADestinationCardsViewController sharedInstance] isVisible]) || [_mapPanelViewController isTopToolbarSearchVisible]);
+        if (isAllowToolbarsVisible)
+            self.topWidgetsViewYConstraint.constant = _toolbarViewController.view.frame.size.height;
+        else
+            self.topWidgetsViewYConstraint.constant = 0.;
     }
     else
     {
-        [self updateTopControlsVisibility];
-        [self updateBottomControlsVisibility:YES];
+        self.topWidgetsViewYConstraint.constant = 0.;
     }
+
+    [self updateTopControlsVisibility:animated];
+    [self updateBottomControlsVisibility:animated];
 
     if (_downloadView)
         _downloadView.frame = [self getDownloadViewFrame];
     if (_routingProgressView)
         _routingProgressView.frame = [self getRoutingProgressViewFrame];
 
-    UIColor *statusBarColor = [self getStatusBarBackgroundColor];
-    _statusBarView.backgroundColor = statusBarColor;
-    _bottomBarView.backgroundColor = statusBarColor;
+    _statusBarView.backgroundColor = [self getStatusBarBackgroundColor];
+    _bottomBarView.backgroundColor = _settings.nightMode ? UIColorFromRGB(nav_bar_night) : UIColor.whiteColor;
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
@@ -1006,7 +980,7 @@
     BOOL hasWidgets = _mapInfoController.bottomPanelController && [_mapInfoController.bottomPanelController hasWidgets];
     if ((hasWidgets && !CGRectEqualToRect(_optionsMenuButton.frame, CGRectMake(x, buttonsY, frame.size.width, frame.size.height)))
      || (!hasWidgets && !CGRectEqualToRect(_optionsMenuButton.frame, CGRectMake(x, origButtonsY, frame.size.width, frame.size.height))))
-        [self setupBottomContolMarginsForHeight];
+        [self updateBottomContolMarginsForHeight];
 }
 
 - (CGFloat) getHudMinTopOffset
@@ -1020,29 +994,28 @@
             ? [_mapPanelViewController.scrollableHudViewController getNavbarHeight]
             : [_mapPanelViewController isTopToolbarActive] ? [_mapPanelViewController getTargetToolbarHeight] : 0.;
     CGFloat offset = [OAUtilities isLandscape] ? 0. : contextMenuToolbarHeight > 0 ? contextMenuToolbarHeight : [self getHudMinTopOffset];
-    BOOL isToolbarVisible = _toolbarViewController.view.alpha != 0.;
-    CGFloat toolbarHeight = _toolbarViewController.view.frame.size.height;
+    BOOL isToolbarAllowed = !_mapInfoController.weatherToolbarVisible;
+    BOOL isToolbarVisible = isToolbarAllowed && _toolbarViewController && _toolbarViewController.view.superview;
     BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetChangePosition;
     BOOL isTopWidgetsVisible = _mapInfoController.topPanelController && [_mapInfoController.topPanelController hasWidgets] && !isTargetToHideVisible;
-    CGFloat topWidgetsHeight = self.topWidgetsViewHeightConstraint.constant;
-
     BOOL isLeftWidgetsVisible = [_mapInfoController.leftPanelController hasWidgets];
-    CGFloat leftWidgetsHeight = self.leftWidgetsViewHeightConstraint.constant;
 
     BOOL isMapDownloadVisible = [_downloadMapWidget isVisible] && _downloadMapWidget.alpha != 0;
-    CGFloat downloadWidgetHeight = _downloadMapWidget.frame.size.height + _downloadMapWidget.shadowOffset;
     if (isMapDownloadVisible)
     {
-        offset += downloadWidgetHeight;
+        offset += _downloadMapWidget.frame.size.height + _downloadMapWidget.shadowOffset;
     }
     else
     {
-        if (isToolbarVisible)
-            offset += toolbarHeight;
+        if (!self.contextMenuMode)
+        {
+            if (isTopWidgetsVisible && contextMenuToolbarHeight == 0.)
+                offset += self.topWidgetsViewHeightConstraint.constant;
+            if (isToolbarVisible)
+                offset += _toolbarViewController.view.frame.size.height;
+        }
         if (isLeftWidgetsVisible)
-            offset += leftWidgetsHeight;
-        if (!self.contextMenuMode && isTopWidgetsVisible && contextMenuToolbarHeight == 0.)
-            offset += topWidgetsHeight;
+            offset += self.leftWidgetsViewHeightConstraint.constant;
     }
     return offset;
 }
@@ -1055,7 +1028,7 @@
 - (CGFloat) getHudBottomOffset
 {
     CGFloat offset = [self getHudMinBottomOffset];
-    BOOL isBottomWidgetsVisible = [_mapInfoController.bottomPanelController hasWidgets];
+    BOOL isBottomWidgetsVisible = _mapInfoController.bottomPanelController && [_mapInfoController.bottomPanelController hasWidgets];
     CGFloat bottomWidgetsHeight = self.bottomWidgetsViewHeightConstraint.constant;
     
     if (isBottomWidgetsVisible)
@@ -1066,18 +1039,19 @@
 
 - (UIColor *) getStatusBarBackgroundColor
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    BOOL isNight = settings.nightMode;
-    BOOL transparent = [settings.transparentMapTheme get];
+    BOOL isNight = _settings.nightMode;
+    BOOL transparent = [_settings.transparentMapTheme get];
     UIColor *statusBarColor;
-    if (self.contextMenuMode && !_toolbarViewController)
+    if ([_mapPanelViewController isDashboardVisible])
+        statusBarColor = UIColor.clearColor;
+    else if (self.contextMenuMode)
         statusBarColor = isNight ? UIColor.clearColor : [UIColor colorWithWhite:1.0 alpha:0.5];
     else if (_downloadMapWidget.isVisible)
         statusBarColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColorFromRGB(color_primary_table_background);
-    else if (_mapInfoController.topPanelController && [_mapInfoController.topPanelController hasWidgets])
-        statusBarColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColor.whiteColor;
     else if (_toolbarViewController)
         statusBarColor = [_toolbarViewController getStatusBarColor];
+    else if (_mapInfoController.topPanelController && [_mapInfoController.topPanelController hasWidgets])
+        statusBarColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColor.whiteColor;
     else
         statusBarColor = isNight ? (transparent ? UIColor.clearColor : UIColor.blackColor) : [UIColor colorWithWhite:1.0 alpha:(transparent ? 0.5 : 1.0)];
     
@@ -1194,7 +1168,7 @@
     });
 }
 
-- (void) updateTopControlsVisibility
+- (void) updateTopControlsVisibility:(BOOL)animated
 {
     BOOL isDashboardVisible = [_mapPanelViewController isDashboardVisible];
     BOOL isRouteInfoVisible = [_mapPanelViewController isRouteInfoVisible];
@@ -1204,92 +1178,58 @@
     BOOL isLeftPanelVisible = _mapInfoController.leftPanelController && [_mapInfoController.leftPanelController hasWidgets];
     BOOL isRightPanelVisible = _mapInfoController.rightPanelController && [_mapInfoController.rightPanelController hasWidgets];
     BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetGPX
-                              || _mapPanelViewController.activeTargetType == OATargetWeatherLayerSettings;
+        || _mapPanelViewController.activeTargetType == OATargetWeatherLayerSettings
+        || _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance;
     BOOL isInContextMenuVisible = self.contextMenuMode && !isTargetToHideVisible;
     BOOL isTargetBackButtonVisible = [_mapPanelViewController isTargetBackButtonVisible];
-    BOOL isToolbarVisible = _toolbarViewController.view.alpha != 0.;
-    BOOL isButtonsVisible = isInContextMenuVisible || (!isWeatherToolbarVisible && !isDashboardVisible && !isRouteInfoVisible && !isTargetToHideVisible);
-    BOOL isBarVisible = isButtonsVisible && !self.contextMenuMode && !isScrollableHudVisible && !isToolbarVisible && _mapPanelViewController.activeTargetType != OATargetChangePosition;
+    BOOL isMapMarkerVisibility = [OADestinationsHelper instance].sortedDestinations.count > 0
+        && [_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisibility get];
+    BOOL isToolbarAllowed = !self.contextMenuMode && !isDashboardVisible && !isWeatherToolbarVisible;
+    BOOL isToolbarVisible = isToolbarAllowed && _toolbarViewController && _toolbarViewController.view.superview;
+    BOOL isAllowToolbarsVisible = isToolbarVisible && ((isMapMarkerVisibility && ![[OADestinationCardsViewController sharedInstance] isVisible]) || [_mapPanelViewController isTopToolbarSearchVisible]);
+    BOOL isButtonsVisible = isToolbarVisible ? isAllowToolbarsVisible
+        : (isInContextMenuVisible || (!isWeatherToolbarVisible && !isDashboardVisible && !isRouteInfoVisible && !isTargetToHideVisible));
+    BOOL isPanelAllowed = isButtonsVisible && !self.contextMenuMode && !isScrollableHudVisible && _mapPanelViewController.activeTargetType != OATargetChangePosition;
 
-    [UIView animateWithDuration:.3 animations:^{
-        _statusBarView.alpha = isButtonsVisible && (isTopPanelVisible || isToolbarVisible) ? 1. : 0.;
+    void (^mainBlock)(void) = ^{
+        _statusBarView.alpha = isTopPanelVisible || isToolbarVisible ? 1. : 0.;
         _mapSettingsButton.alpha = isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
         _compassBox.alpha = ([self shouldShowCompass] && isButtonsVisible ? 1. : 0.);
         _searchButton.alpha = isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
         _downloadView.alpha = isButtonsVisible ? 1. : 0.;
-        if (self.toolbarViewController)
-            self.toolbarViewController.view.alpha = isBarVisible ? 1. : 0.;
+        
+        if (_toolbarViewController && _toolbarViewController.view.superview)
+            _toolbarViewController.view.alpha = isToolbarAllowed ? 1. : 0.;
         if (self.mapInfoController.topPanelController)
-            self.mapInfoController.topPanelController.view.alpha = isBarVisible && isTopPanelVisible ? 1. : 0.;
+            self.mapInfoController.topPanelController.view.alpha = isPanelAllowed && isTopPanelVisible && (!isToolbarVisible || isAllowToolbarsVisible) ? 1. : 0.;
         if (self.mapInfoController.leftPanelController)
-            self.mapInfoController.leftPanelController.view.alpha = (isBarVisible || isWeatherToolbarVisible) && isLeftPanelVisible ? 1. : 0.;
+            self.mapInfoController.leftPanelController.view.alpha = (isPanelAllowed || isWeatherToolbarVisible) && isLeftPanelVisible ? 1. : 0.;
         if (self.mapInfoController.rightPanelController)
-            self.mapInfoController.rightPanelController.view.alpha = (isBarVisible || isWeatherToolbarVisible) && isRightPanelVisible ? 1. : 0.;
+            self.mapInfoController.rightPanelController.view.alpha = (isPanelAllowed || isWeatherToolbarVisible) && isRightPanelVisible ? 1. : 0.;
         if (self.downloadMapWidget)
             self.downloadMapWidget.alpha = isButtonsVisible ? 1. : 0.;
-
+        
         [self updateTopButtonsLayoutY];
 
-    } completion:^(BOOL finished) {
-        _statusBarView.userInteractionEnabled = _statusBarView.alpha > 0.0;
-        _mapSettingsButton.userInteractionEnabled = _mapSettingsButton.alpha > 0.0;
-        _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
-        _searchButton.userInteractionEnabled = _searchButton.alpha > 0.0;
-        _downloadView.userInteractionEnabled = _downloadView.alpha > 0.0;
-        if (self.toolbarViewController)
-            self.toolbarViewController.view.userInteractionEnabled = self.toolbarViewController.view.alpha > 0.0;
-        if (self.mapInfoController.topPanelController)
-            self.mapInfoController.topPanelController.view.userInteractionEnabled = self.mapInfoController.topPanelController.view.alpha > 0.0;
-        if (self.mapInfoController.leftPanelController)
-            self.mapInfoController.leftPanelController.view.userInteractionEnabled = self.mapInfoController.leftPanelController.view.alpha > 0.0;
-        if (self.mapInfoController.rightPanelController)
-            self.mapInfoController.rightPanelController.view.userInteractionEnabled = self.mapInfoController.rightPanelController.view.alpha > 0.0;
-        if (self.downloadMapWidget)
-            self.downloadMapWidget.userInteractionEnabled = self.downloadMapWidget.alpha > 0.0;
-    }];
-}
-
-- (void) updateBottomControlsVisibility:(BOOL)animated
-{
-    BOOL isDashboardVisible = [_mapPanelViewController isDashboardVisible];
-    BOOL isRouteInfoVisible = [_mapPanelViewController isRouteInfoVisible];
-    BOOL isWeatherToolbarVisible = _mapInfoController.weatherToolbarVisible;
-    BOOL scrollableHudVisible = _mapPanelViewController.scrollableHudViewController != nil || _mapPanelViewController.prevScrollableHudViewController != nil;
-    BOOL isTargetMultiMenuViewVisible = [_mapPanelViewController isTargetMultiMenuViewVisible];
-    BOOL isBottomPanelVisible = _mapInfoController.bottomPanelController && [_mapInfoController.bottomPanelController hasWidgets];
-    BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetChangePosition;
-    BOOL visible = !self.contextMenuMode && !isWeatherToolbarVisible && !scrollableHudVisible && !isDashboardVisible && !isRouteInfoVisible && !isTargetMultiMenuViewVisible && !isTargetToHideVisible;
-    BOOL zoomMapModeVisible = !isDashboardVisible && !isRouteInfoVisible && !isTargetMultiMenuViewVisible;
-
-    void (^mainBlock)(void) = ^{
-        _bottomBarView.alpha = visible && isBottomPanelVisible ? 1.0 : 0.0;
-        _optionsMenuButton.alpha = visible ? 1. : 0.;
-        _zoomButtonsView.alpha = zoomMapModeVisible ? 1. : 0.;
-        _mapModeButton.alpha = zoomMapModeVisible ? 1. : 0.;
-        _driveModeButton.alpha = visible ? 1. : 0.;
-        if (self.mapInfoController.bottomPanelController)
-            self.mapInfoController.bottomPanelController.view.alpha = visible && isBottomPanelVisible ? 1. : 0.;
-        [self setupBottomContolMarginsForHeight];
-
-        CGFloat offsetValue = DeviceScreenWidth;
-        if (_optionsMenuButton.alpha == 0)
-            [self addOffsetToView:_optionsMenuButton x:-offsetValue y:0];
-        if (_driveModeButton.alpha == 0)
-            [self addOffsetToView:_driveModeButton x:-offsetValue y:0];
-        if (_mapModeButton.alpha == 0)
-            [self addOffsetToView:_mapModeButton x:offsetValue y:0];
-        if (_zoomButtonsView.alpha == 0)
-            [self addOffsetToView:_zoomButtonsView x:offsetValue y:0];
     };
 
-    void (^completionBlock)(BOOL) = ^(BOOL finished){
-        _bottomBarView.userInteractionEnabled = _bottomBarView.alpha > 0.0;
-        _optionsMenuButton.userInteractionEnabled = _optionsMenuButton.alpha > 0.0;
-        _zoomButtonsView.userInteractionEnabled = YES;
-        _mapModeButton.userInteractionEnabled = YES;
-        _driveModeButton.userInteractionEnabled = _driveModeButton.alpha > 0.0;
-        if (self.mapInfoController.bottomPanelController)
-            self.mapInfoController.bottomPanelController.view.userInteractionEnabled = self.mapInfoController.bottomPanelController.view.alpha > 0.0;
+    void (^completionBlock)(BOOL) = ^(BOOL finished) {
+
+        _statusBarView.userInteractionEnabled = _statusBarView.alpha > 0.;
+        _mapSettingsButton.userInteractionEnabled = _mapSettingsButton.alpha > 0.;
+        _compassBox.userInteractionEnabled = _compassBox.alpha > 0.;
+        _searchButton.userInteractionEnabled = _searchButton.alpha > 0.;
+        _downloadView.userInteractionEnabled = _downloadView.alpha > 0.;
+
+        if (self.mapInfoController.topPanelController)
+            self.mapInfoController.topPanelController.view.userInteractionEnabled = self.mapInfoController.topPanelController.view.alpha > 0.;
+        if (self.mapInfoController.leftPanelController)
+            self.mapInfoController.leftPanelController.view.userInteractionEnabled = self.mapInfoController.leftPanelController.view.alpha > 0.;
+        if (self.mapInfoController.rightPanelController)
+            self.mapInfoController.rightPanelController.view.userInteractionEnabled = self.mapInfoController.rightPanelController.view.alpha > 0.;
+        if (self.downloadMapWidget)
+            self.downloadMapWidget.userInteractionEnabled = self.downloadMapWidget.alpha > 0.;
+
     };
 
     if (animated)
@@ -1303,7 +1243,76 @@
     }
 }
 
-- (void) setupBottomContolMarginsForHeight
+- (void) updateBottomControlsVisibility:(BOOL)animated
+{
+    BOOL isDashboardVisible = [_mapPanelViewController isDashboardVisible];
+    BOOL isRouteInfoVisible = [_mapPanelViewController isRouteInfoVisible];
+    BOOL isWeatherToolbarVisible = _mapInfoController.weatherToolbarVisible;
+    BOOL isScrollableHudVisible = _mapPanelViewController.scrollableHudViewController != nil || _mapPanelViewController.prevScrollableHudViewController != nil;
+    BOOL isTargetMultiMenuViewVisible = [_mapPanelViewController isTargetMultiMenuViewVisible];
+    BOOL isBottomPanelVisible = _mapInfoController.bottomPanelController && [_mapInfoController.bottomPanelController hasWidgets];
+    BOOL isAllHidden = _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance;
+    BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetChangePosition
+        || _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance;
+    BOOL isMapMarkerVisibility = [OADestinationsHelper instance].sortedDestinations.count > 0
+        && [_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisibility get];
+    BOOL isToolbarAllowed = !self.contextMenuMode && !isDashboardVisible & !isTargetMultiMenuViewVisible && !isWeatherToolbarVisible;
+    BOOL isToolbarVisible = isToolbarAllowed && _toolbarViewController && _toolbarViewController.view.superview;
+    BOOL isAllowToolbarsVisible = isToolbarVisible && ((isMapMarkerVisibility && ![[OADestinationCardsViewController sharedInstance] isVisible]));
+    BOOL visible = isToolbarVisible ? isAllowToolbarsVisible
+        : !self.contextMenuMode && !isWeatherToolbarVisible && !isScrollableHudVisible && !isDashboardVisible && !isRouteInfoVisible && !isTargetMultiMenuViewVisible && !isTargetToHideVisible;
+    BOOL isZoomMapModeVisible = !isDashboardVisible && !isRouteInfoVisible && !isTargetMultiMenuViewVisible;
+
+    void (^mainBlock)(void) = ^{
+
+        _bottomBarView.alpha = visible && isBottomPanelVisible ? 1.0 : 0.0;
+        _optionsMenuButton.alpha = visible ? 1. : 0.;
+        _zoomButtonsView.alpha = isToolbarVisible ? isAllowToolbarsVisible : (isZoomMapModeVisible && !isAllHidden) ? 1. : 0.;
+        _mapModeButton.alpha = isToolbarVisible ? isAllowToolbarsVisible : (isZoomMapModeVisible && !isAllHidden) ? 1. : 0.;
+        _driveModeButton.alpha = visible ? 1. : 0.;
+        _rulerLabel.alpha = ([_mapPanelViewController isContextMenuVisible] && !isScrollableHudVisible) || isAllHidden || isDashboardVisible || isMapMarkerVisibility ? 0. : 1.;
+
+        if (self.mapInfoController.bottomPanelController)
+            self.mapInfoController.bottomPanelController.view.alpha = visible && isBottomPanelVisible && (!isToolbarVisible || isAllowToolbarsVisible) ? 1. : 0.;
+        [self updateBottomContolMarginsForHeight];
+
+        CGFloat offsetValue = DeviceScreenWidth;
+        if (_optionsMenuButton.alpha == 0.)
+            [self addOffsetToView:_optionsMenuButton x:-offsetValue y:0.];
+        if (_driveModeButton.alpha == 0.)
+            [self addOffsetToView:_driveModeButton x:-offsetValue y:0.];
+        if (_mapModeButton.alpha == 0.)
+            [self addOffsetToView:_mapModeButton x:offsetValue y:0.];
+        if (_zoomButtonsView.alpha == 0.)
+            [self addOffsetToView:_zoomButtonsView x:offsetValue y:0.];
+
+    };
+
+    void (^completionBlock)(BOOL) = ^(BOOL finished) {
+
+        _bottomBarView.userInteractionEnabled = _bottomBarView.alpha > 0.;
+        _optionsMenuButton.userInteractionEnabled = _optionsMenuButton.alpha > 0.;
+        _zoomButtonsView.userInteractionEnabled = _zoomButtonsView.alpha > 0.;
+        _mapModeButton.userInteractionEnabled = _mapModeButton.alpha > 0.;
+        _driveModeButton.userInteractionEnabled = _driveModeButton.alpha > 0.;
+
+        if (self.mapInfoController.bottomPanelController)
+            self.mapInfoController.bottomPanelController.view.userInteractionEnabled = self.mapInfoController.bottomPanelController.view.alpha > 0.;
+
+    };
+
+    if (animated)
+    {
+        [UIView animateWithDuration:.3 animations:mainBlock completion:completionBlock];
+    }
+    else
+    {
+        mainBlock();
+        completionBlock(YES);
+    }
+}
+
+- (void) updateBottomContolMarginsForHeight
 {
     CGFloat bottomOffset = [self getBottomHudOffset];
 
@@ -1322,6 +1331,7 @@
 
 - (CGFloat) getBottomHudOffset
 {
+    BOOL isScrollableHudVisible = _mapPanelViewController.scrollableHudViewController && _mapPanelViewController.scrollableHudViewController.view.superview;
     CGFloat bottomOffset = DeviceScreenHeight - kButtonOffset;
     if ([_mapPanelViewController isContextMenuVisible] && ![OAUtilities isLandscape])
     {
@@ -1337,7 +1347,7 @@
     {
         if (_mapInfoController.weatherToolbarVisible && ![OAUtilities isLandscape])
             bottomOffset -= self.weatherToolbar.frame.size.height;
-        else if (_mapInfoController.bottomPanelController && [_mapInfoController.bottomPanelController hasWidgets])
+        else if ([_mapPanelViewController isContextMenuVisible] ? !isScrollableHudVisible : (_mapInfoController.bottomPanelController && [_mapInfoController.bottomPanelController hasWidgets]))
             bottomOffset -= [self getHudBottomOffset];
         else
             bottomOffset -= [self getHudMinBottomOffset];
@@ -1364,7 +1374,7 @@
 
 - (void) updateMapSettingsButton
 {
-    OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode.get;
+    OAApplicationMode *mode = [_settings.applicationMode get];
     [_mapSettingsButton setImage:mode.getIcon forState:UIControlStateNormal];
     _mapSettingsButton.tintColorDay = UIColorFromRGB(mode.getIconColor);
     _mapSettingsButton.tintColorNight = UIColorFromRGB(mode.getIconColor);
@@ -1374,7 +1384,7 @@
 
 - (void) updateMapSettingsButtonAccessibilityValue
 {
-    NSString *stringKey = [OAAppSettings sharedManager].applicationMode.get.stringKey;
+    NSString *stringKey = [_settings.applicationMode get].stringKey;
     
     if ([stringKey isEqualToString:@"default"])
         _mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_default");
@@ -1409,17 +1419,7 @@
 - (void) enterContextMenuMode
 {
     if (!self.contextMenuMode)
-    {
         self.contextMenuMode = YES;
-        
-        [UIView animateWithDuration:.3 animations:^{
-            _optionsMenuButton.alpha = 0.0;
-            _driveModeButton.alpha = 0.0;
-        } completion:^(BOOL finished) {
-            _optionsMenuButton.userInteractionEnabled = NO;
-            _driveModeButton.userInteractionEnabled = NO;
-        }];
-    }
     [self updateMapModeButton];
 }
 

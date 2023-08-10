@@ -49,7 +49,11 @@
 
 - (void)updateFrame:(BOOL)animated
 {
-    self.view.frame = CGRectMake(0.0, [self.delegate toolbarTopPosition], DeviceScreenWidth - OAUtilities.getLeftMargin * 2, self.navBarView.bounds.size.height);
+    self.view.frame = CGRectMake(
+                                 0.0,
+                                 self.delegate ? [self.delegate toolbarTopPosition] : [OAUtilities getStatusBarHeight],
+                                 DeviceScreenWidth - OAUtilities.getLeftMargin * 2,
+                                 self.navBarView.bounds.size.height);
     [self.delegate toolbarLayoutDidChange:self animated:animated];
 }
 

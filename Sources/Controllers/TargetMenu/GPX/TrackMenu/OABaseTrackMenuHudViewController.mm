@@ -439,7 +439,7 @@
 
 - (void)changeHud:(CGFloat)height
 {
-    [_mapPanelViewController.hudViewController updateControlsLayout:YES];
+    [_mapPanelViewController.hudViewController updateBottomContolMarginsForHeight];
 }
 
 - (NSLayoutConstraint *)createBaseEqualConstraint:(UIView *)firstItem

@@ -40,6 +40,7 @@
 @property (weak, nonatomic) IBOutlet UIView *bottomWidgetsView;
 @property (weak, nonatomic) IBOutlet UIView *rightWidgetsView;
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *topWidgetsViewYConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *topWidgetsViewHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomWidgetsViewHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftWidgetsViewHeightConstraint;
@@ -69,8 +70,6 @@
 @property (nonatomic, assign) BOOL contextMenuMode;
 @property (nonatomic, assign) EOAMapModeButtonType mapModeButtonType;
 
-@property (nonatomic, readonly) CGFloat toolbarTopPosition;
-
 - (void) enterContextMenuMode;
 - (void) restoreFromContextMenuMode;
 - (void) updateRulerPosition:(CGFloat)bottom left:(CGFloat)left;
@@ -96,8 +95,9 @@
 - (BOOL) isOverlayUnderlayViewVisible;
 - (void) updateOverlayUnderlayView;
 
-- (void) updateTopControlsVisibility;
+- (void) updateTopControlsVisibility:(BOOL)animated;
 - (void) updateBottomControlsVisibility:(BOOL)animated;
+- (void) updateBottomContolMarginsForHeight;
 
 - (CGFloat) getHudMinTopOffset;
 - (CGFloat) getHudTopOffset;

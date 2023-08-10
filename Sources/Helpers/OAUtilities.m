@@ -24,6 +24,7 @@
 #import <mach/mach.h>
 #import <mach/mach_host.h>
 #include <CommonCrypto/CommonDigest.h>
+#import <CocoaSecurity.h>
 
 #define kBlurViewTag -999
 #define kSpinnerViewTag -998
@@ -2630,6 +2631,11 @@ static const double d180PI = 180.0 / M_PI_2;
                    digest[12], digest[13],
                    digest[14], digest[15]];
     return s;
+}
+
++ (NSString *) toMD5:(NSString *)text
+{
+    return [CocoaSecurity md5:text].hexLower;
 }
 
 + (void) showMenuInView:(UIView *)parentView fromView:(UIView *)targetView

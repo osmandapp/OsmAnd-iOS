@@ -10,4 +10,158 @@ import Foundation
 
 class TravelArticle {
     
+    let IMAGE_ROOT_URL = "https://upload.wikimedia.org/wikipedia/commons/"
+    let THUMB_PREFIX = "320px-"
+    let REGULAR_PREFIX = "1280px-" //1280, 1024, 800
+    
+    var file: String?;
+    var title: String?
+    var content: String?
+    var isPartOf: String?
+    var isParentOf: String? = ""
+    var lat: Double = Double.nan
+    var lon: Double = Double.nan
+    var imageTitle: String?
+//    GPXFile gpxFile;
+    var routeId: String?
+    var routeRadius = -1
+    var ref: String?
+    var routeSource: String?
+    var originalId: UInt64 = 0 //long
+    var lang: String?
+    var contentsJson: String?
+    var aggregatedPartOf: String?
+    var description: String?
+    
+    var lastModified: TimeInterval = 0 //long
+    var gpxFileReading: Bool = false
+    var gpxFileRead: Bool = false
+    
+    func generateIdentifier() -> TravelArticleIdentifier {
+        return TravelArticleIdentifier(article: self)
+    }
+    
+    func getTravelBook(file: String) -> String {
+        let dir = OsmAndApp.swiftInstance().dataPath
+        
+        //TODO: check it
+        //dir = appPath + WIKIVOYAGE_INDEX_DIR + "/"
+        
+        return file.replacingOccurrences(of: dir!, with: "")
+    }
+    
+    func getLastModified() -> TimeInterval {
+        if lastModified > 0 {
+            return lastModified
+        }
+        
+        if let file {
+            if let date = fileModificationDate(path: file) {
+                return date.timeIntervalSince1970;
+            }
+        }
+        return 0
+    }
+    
+    func getGeoDescription() -> String? {
+        if (aggregatedPartOf == nil || aggregatedPartOf?.length == 0) {
+            return nil
+        }
+        
+        if let parts = aggregatedPartOf?.components(separatedBy: ",") {
+            if parts.count > 0 {
+                var res = ""
+                res.append(parts[parts.count - 1])
+                
+                if parts.count > 1 {
+                    res.append(" \u{2022} ")
+                    res.append(parts[0])
+                }
+                return res
+            }
+        }
+        return nil
+    }
+    
+    func getImageUrl(imageTitle: String, thumbnail: Bool) -> String {
+        var title: String? = imageTitle.replacingOccurrences(of: " ", with: "_")
+        if let title = decodeUrl(url: title!) {
+            if let hash = getHash(s: title) {
+                if let title = encodeUrl(url: title) {
+                    let prefix = thumbnail ? THUMB_PREFIX : REGULAR_PREFIX
+                    let suffix = title.hasSuffix(".svg") ? ".png" : ""
+                    return IMAGE_ROOT_URL + "thumb/" + hash[0] + "/" + hash[1] + "/" + title + "/" + prefix + title + suffix
+                }
+            }
+        }
+        return ""
+    }
+    
+    func getPointFilterString() -> String {
+        return "route_article_point"
+    }
+    
+    func createWptPt() {
+        //TODO: implement
+    }
+    
+    
+    func getHash(s: String) -> [String]? {
+        if let md5 = OAUtilities.toMD5(s) {
+            let index1 = md5.index(md5.startIndex, offsetBy: 1)
+            let index2 = md5.index(md5.startIndex, offsetBy: 2)
+            let substring1 = md5[..<index1]
+            let substring2 = md5[..<index2]
+            return [String(substring1), String(substring2)]
+        }
+        return nil
+    }
+    
+    
+    func fileModificationDate(path: String) -> Date? {
+        do {
+            let attr = try FileManager.default.attributesOfItem(atPath: path)
+            return attr[FileAttributeKey.modificationDate] as? Date
+        } catch {
+            return nil
+        }
+    }
+    
+    func encodeUrl(url: String) -> String?
+    {
+        return url.addingPercentEncoding( withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
+    }
+    func decodeUrl(url: String) -> String?
+    {
+        return url.removingPercentEncoding
+    }
+    
+    
+    class TravelArticleIdentifier {
+        var file: String?
+        var lat: Double = Double.nan
+        var lon: Double = Double.nan
+        var title: String?
+        var routeId: String?
+        var routeSource: String?
+        
+        init(article: TravelArticle) {
+            file = article.file;
+            lat = article.lat
+            lon = article.lon
+            title = article.title
+            routeId = article.routeId
+            routeSource = article.routeSource
+        }
+        
+        static func areLatLonEqual(lat1: Double, lon1: Double, lat2: Double, lon2: Double) -> Bool {
+            let latEqual = (lat1 == Double.nan && lat2 == Double.nan) || (abs(lat1 - lat2) < 0.00001)
+            let lonEqual = (lon1 == Double.nan && lon2 == Double.nan) || (abs(lon1 - lon2) < 0.00001)
+            return latEqual && lonEqual
+        }
+        
+        //TODO: add read/wirite to Parcel methods if it needed. In Swift it can be called Codable. Or just Dict
+        
+    }
+    
 }

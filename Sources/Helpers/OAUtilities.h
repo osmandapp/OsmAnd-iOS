@@ -367,6 +367,8 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (void) collectDirFiles:(NSString *)filePath list:(NSMutableArray<NSString *> *)list;
 + (NSString*) fileMD5:(NSString*)path;
 
++ (NSString *) toMD5:(NSString *)text;
+
 + (void) showMenuInView:(UIView *)parentView fromView:(UIView *)targetView;
 
 + (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit;

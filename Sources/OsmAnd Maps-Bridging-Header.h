@@ -21,11 +21,12 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OAUtilities.h"
 #import "OAQuickActionRegistry.h"
-#import "OAResourcesUISwiftHelper.h"
 #import "OADownloadingCellHelper.h"
-#import "OATravelObfHelperBridge.h"
 
-//#import "OAPOIHelper.h"
+// Adapters
+#import "OAResourcesUISwiftHelper.h"
+#import "OATravelObfHelperBridge.h"
+#import "OAGPXDocumentAdapter.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -88,7 +89,7 @@
 
 // Other
 #import "OAIndexConstants.h"
-//#import "OAPOI.h"
+#import "QuadRect.h"
 
 // Apple
 #import <SafariServices/SafariServices.h>

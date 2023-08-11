@@ -22,7 +22,7 @@ class TravelArticle: Equatable {
     var lat: Double = Double.nan
     var lon: Double = Double.nan
     var imageTitle: String?
-//    GPXFile gpxFile;
+    var gpxFile: OAGPXDocumentAdapter?;
     var routeId: String?
     var routeRadius = -1
     var ref: String?
@@ -101,7 +101,9 @@ class TravelArticle: Equatable {
         return "route_article_point"
     }
     
-    //public GPXTrackAnalysis getAnalysis() {return null;}
+    func getAnalysis() -> OAGPXTrackAnalysis? {
+        return nil
+    }
     
     func getHash(s: String) -> [String]? {
         if let md5 = OAUtilities.toMD5(s) {
@@ -146,32 +148,32 @@ class TravelArticle: Equatable {
         return url.removingPercentEncoding
     }
     
-    
-    class TravelArticleIdentifier {
-        var file: String?
-        var lat: Double = Double.nan
-        var lon: Double = Double.nan
-        var title: String?
-        var routeId: String?
-        var routeSource: String?
-        
-        init(article: TravelArticle) {
-            file = article.file;
-            lat = article.lat
-            lon = article.lon
-            title = article.title
-            routeId = article.routeId
-            routeSource = article.routeSource
-        }
-        
-        static func areLatLonEqual(lat1: Double, lon1: Double, lat2: Double, lon2: Double) -> Bool {
-            let latEqual = (lat1 == Double.nan && lat2 == Double.nan) || (abs(lat1 - lat2) < 0.00001)
-            let lonEqual = (lon1 == Double.nan && lon2 == Double.nan) || (abs(lon1 - lon2) < 0.00001)
-            return latEqual && lonEqual
-        }
-        
         //TODO: add read/wirite to Parcel methods if it needed. In Swift it can be called Codable. Or just Dict
-        
+    
+}
+
+
+class TravelArticleIdentifier {
+    var file: String?
+    var lat: Double = Double.nan
+    var lon: Double = Double.nan
+    var title: String?
+    var routeId: String?
+    var routeSource: String?
+    
+    init(article: TravelArticle) {
+        file = article.file;
+        lat = article.lat
+        lon = article.lon
+        title = article.title
+        routeId = article.routeId
+        routeSource = article.routeSource
+    }
+    
+    static func areLatLonEqual(lat1: Double, lon1: Double, lat2: Double, lon2: Double) -> Bool {
+        let latEqual = (lat1 == Double.nan && lat2 == Double.nan) || (abs(lat1 - lat2) < 0.00001)
+        let lonEqual = (lon1 == Double.nan && lon2 == Double.nan) || (abs(lon1 - lon2) < 0.00001)
+        return latEqual && lonEqual
     }
     
 }

@@ -2591,9 +2591,12 @@
 "compass_visible_if_map_rotated" = "גלוי אם המפה מסובבת";
 "nautical_depth_points" = "נקודות עומק ימיות";
 "shared_string_switch_mode" = "החלפת מצב";
-"developer_widgets" = "ווידג'טים למפתחים";
+"developer_widgets" = "וידג׳טים למפתחים";
 "map_widget_camera_distance" = "גובה מצלמה";
 "compass_always_hidden" = "תמיד מוסתר";
 "compass_always_visible" = "תמיד מוצג";
 "map_3d_mode_hint" = "לחיצה ארוכה על הכפתור מאפשרת לשנות את מיקומו.";
 "visible_in_3d_mode" = "גלוי במצב תלת־ממד";
+"shared_string_bearing" = "תכווין";
+"map_widget_current_speed" = "מהירות נוכחית";
+"map_widget_gps_info" = "פרטי GPS";

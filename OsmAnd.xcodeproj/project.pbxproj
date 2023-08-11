@@ -263,12 +263,15 @@
 		320F71242A823E210071C0E7 /* TravelObfHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71232A823E210071C0E7 /* TravelObfHelper.swift */; };
 		320F71272A823FB20071C0E7 /* PopularArticles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71262A823FB20071C0E7 /* PopularArticles.swift */; };
 		320F71292A8251730071C0E7 /* TravelArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71282A8251730071C0E7 /* TravelArticle.swift */; };
-		320F712C2A8268B50071C0E7 /* OATravelObfHelperBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320F712B2A8268B50071C0E7 /* OATravelObfHelperBridge.mm */; };
+		320F712C2A8268B50071C0E7 /* OATravelGuidesHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320F712B2A8268B50071C0E7 /* OATravelGuidesHelper.mm */; };
 		320F712E2A862BC90071C0E7 /* TravelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F712D2A862BC90071C0E7 /* TravelHelper.swift */; };
 		320F71302A862C660071C0E7 /* TravelLocalDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F712F2A862C660071C0E7 /* TravelLocalDataHelper.swift */; };
 		320F71322A862DE90071C0E7 /* WikivoyageSearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71312A862DE90071C0E7 /* WikivoyageSearchResult.swift */; };
 		320F71342A863A8E0071C0E7 /* TravelGpx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71332A863A8E0071C0E7 /* TravelGpx.swift */; };
 		320F71372A86438B0071C0E7 /* OAGPXDocumentAdapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320F71362A86438B0071C0E7 /* OAGPXDocumentAdapter.mm */; };
+		320F713A2A8661430071C0E7 /* OAGPXDocumentPrimitivesAdapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320F71392A8661430071C0E7 /* OAGPXDocumentPrimitivesAdapter.mm */; };
+		320F713D2A866ABA0071C0E7 /* OAPOIAdapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320F713C2A866ABA0071C0E7 /* OAPOIAdapter.mm */; };
+		320F713F2A867D930071C0E7 /* WikivoyageSearchHistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F713E2A867D930071C0E7 /* WikivoyageSearchHistoryItem.swift */; };
 		321126FF2800710800ED8D52 /* OAExternalTimeFormatter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */; };
 		32119B3D28477142005E1E0C /* OAOsmandDevelopmentPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32119B3C28477142005E1E0C /* OAOsmandDevelopmentPlugin.mm */; };
 		32119B40284776CF005E1E0C /* ic_custom_laptop@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32119B3E284776CF005E1E0C /* ic_custom_laptop@3x.png */; };
@@ -3892,14 +3895,19 @@
 		320F71232A823E210071C0E7 /* TravelObfHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelObfHelper.swift; sourceTree = "<group>"; };
 		320F71262A823FB20071C0E7 /* PopularArticles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularArticles.swift; sourceTree = "<group>"; };
 		320F71282A8251730071C0E7 /* TravelArticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelArticle.swift; sourceTree = "<group>"; };
-		320F712A2A82689B0071C0E7 /* OATravelObfHelperBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATravelObfHelperBridge.h; sourceTree = "<group>"; };
-		320F712B2A8268B50071C0E7 /* OATravelObfHelperBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATravelObfHelperBridge.mm; sourceTree = "<group>"; };
+		320F712A2A82689B0071C0E7 /* OATravelGuidesHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATravelGuidesHelper.h; sourceTree = "<group>"; };
+		320F712B2A8268B50071C0E7 /* OATravelGuidesHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATravelGuidesHelper.mm; sourceTree = "<group>"; };
 		320F712D2A862BC90071C0E7 /* TravelHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelHelper.swift; sourceTree = "<group>"; };
 		320F712F2A862C660071C0E7 /* TravelLocalDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelLocalDataHelper.swift; sourceTree = "<group>"; };
 		320F71312A862DE90071C0E7 /* WikivoyageSearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikivoyageSearchResult.swift; sourceTree = "<group>"; };
 		320F71332A863A8E0071C0E7 /* TravelGpx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGpx.swift; sourceTree = "<group>"; };
 		320F71352A8643550071C0E7 /* OAGPXDocumentAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXDocumentAdapter.h; sourceTree = "<group>"; };
 		320F71362A86438B0071C0E7 /* OAGPXDocumentAdapter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXDocumentAdapter.mm; sourceTree = "<group>"; };
+		320F71382A8661260071C0E7 /* OAGPXDocumentPrimitivesAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXDocumentPrimitivesAdapter.h; sourceTree = "<group>"; };
+		320F71392A8661430071C0E7 /* OAGPXDocumentPrimitivesAdapter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXDocumentPrimitivesAdapter.mm; sourceTree = "<group>"; };
+		320F713B2A866AA80071C0E7 /* OAPOIAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPOIAdapter.h; sourceTree = "<group>"; };
+		320F713C2A866ABA0071C0E7 /* OAPOIAdapter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPOIAdapter.mm; sourceTree = "<group>"; };
+		320F713E2A867D930071C0E7 /* WikivoyageSearchHistoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikivoyageSearchHistoryItem.swift; sourceTree = "<group>"; };
 		321126FD280070F500ED8D52 /* OAExternalTimeFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAExternalTimeFormatter.h; sourceTree = "<group>"; };
 		321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalTimeFormatter.mm; sourceTree = "<group>"; };
 		3211355E2753FB500050242B /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -8471,8 +8479,8 @@
 		320F71252A823F980071C0E7 /* data */ = {
 			isa = PBXGroup;
 			children = (
-				320F712A2A82689B0071C0E7 /* OATravelObfHelperBridge.h */,
-				320F712B2A8268B50071C0E7 /* OATravelObfHelperBridge.mm */,
+				320F712A2A82689B0071C0E7 /* OATravelGuidesHelper.h */,
+				320F712B2A8268B50071C0E7 /* OATravelGuidesHelper.mm */,
 				320F71262A823FB20071C0E7 /* PopularArticles.swift */,
 				320F71282A8251730071C0E7 /* TravelArticle.swift */,
 				320F71332A863A8E0071C0E7 /* TravelGpx.swift */,
@@ -8480,6 +8488,7 @@
 				320F712F2A862C660071C0E7 /* TravelLocalDataHelper.swift */,
 				320F71232A823E210071C0E7 /* TravelObfHelper.swift */,
 				320F71312A862DE90071C0E7 /* WikivoyageSearchResult.swift */,
+				320F713E2A867D930071C0E7 /* WikivoyageSearchHistoryItem.swift */,
 			);
 			path = data;
 			sourceTree = "<group>";
@@ -11970,6 +11979,8 @@
 				DA5A7A5826C563A000F274C7 /* OAPhrasesParser.m */,
 				DA5A7A6F26C563A000F274C7 /* OAPOI.h */,
 				DA5A7A5B26C563A000F274C7 /* OAPOI.mm */,
+				320F713B2A866AA80071C0E7 /* OAPOIAdapter.h */,
+				320F713C2A866ABA0071C0E7 /* OAPOIAdapter.mm */,
 				DA5A7A5426C563A000F274C7 /* OAPOIBaseType.h */,
 				DA5A7A5526C563A000F274C7 /* OAPOIBaseType.mm */,
 				DA5A7A5F26C563A000F274C7 /* OAPOICategory.h */,
@@ -12107,6 +12118,8 @@
 				320F71362A86438B0071C0E7 /* OAGPXDocumentAdapter.mm */,
 				DA5A7ABD26C563A100F274C7 /* OAGPXDocumentPrimitives.h */,
 				DA5A7AB726C563A100F274C7 /* OAGPXDocumentPrimitives.mm */,
+				320F71382A8661260071C0E7 /* OAGPXDocumentPrimitivesAdapter.h */,
+				320F71392A8661430071C0E7 /* OAGPXDocumentPrimitivesAdapter.mm */,
 				DA5A7ABA26C563A100F274C7 /* OAGpxInfo.h */,
 				DA5A7AB526C563A100F274C7 /* OAGpxInfo.m */,
 				DA5A7AC226C563A100F274C7 /* OAGPXMutableDocument.h */,
@@ -17579,6 +17592,7 @@
 				DA5A839826C563A800F274C7 /* OAResourcesBaseViewController.mm in Sources */,
 				DA5A823826C563A700F274C7 /* OAGlobalSettingsViewController.mm in Sources */,
 				DA5A835326C563A800F274C7 /* OANoImagesCell.mm in Sources */,
+				320F713D2A866ABA0071C0E7 /* OAPOIAdapter.mm in Sources */,
 				DA5A81B726C563A700F274C7 /* OAPhrasesParser.m in Sources */,
 				DA5A814526C563A700F274C7 /* OAOsmEditsDBHelper.m in Sources */,
 				DA2EC7B529FBCD1700ECEB37 /* WidgetsPanel.swift in Sources */,
@@ -17656,13 +17670,14 @@
 				DA5A849F26C563A900F274C7 /* OAChangeRouteModeCommand.mm in Sources */,
 				DA5A847F26C563A900F274C7 /* OAAlarmWidget.mm in Sources */,
 				DACF784427E3441700A8A218 /* OABackupHelper.mm in Sources */,
-				320F712C2A8268B50071C0E7 /* OATravelObfHelperBridge.mm in Sources */,
+				320F712C2A8268B50071C0E7 /* OATravelGuidesHelper.mm in Sources */,
 				DA5A831726C563A800F274C7 /* OAHeaderRoundCell.m in Sources */,
 				DA5A81F626C563A700F274C7 /* OAChoosePlanHelper.mm in Sources */,
 				DA5A83C826C563A800F274C7 /* OACollapsableCoordinatesView.mm in Sources */,
 				DA5A837226C563A800F274C7 /* OARoutingSettingsCell.mm in Sources */,
 				DA5A833726C563A800F274C7 /* OATableViewCustomFooterView.m in Sources */,
 				461A3F0D29F6E859008EE079 /* OABaseCollectionHandler.m in Sources */,
+				320F713A2A8661430071C0E7 /* OAGPXDocumentPrimitivesAdapter.mm in Sources */,
 				DA5A84EC26C563A900F274C7 /* OAConfigureMenuViewController.mm in Sources */,
 				DA4ABF162876DA6800B996EF /* OASettingsItem.mm in Sources */,
 				DA5A84E926C563A900F274C7 /* OADashboardViewController.mm in Sources */,
@@ -17930,6 +17945,7 @@
 				DA5A839326C563A800F274C7 /* OACustomSourceDetailsViewController.mm in Sources */,
 				4686F94F2954F07C000FC204 /* OATextMultilineTableViewCell.m in Sources */,
 				DA5A82EA26C563A800F274C7 /* OAPasswordInputFieldCell.mm in Sources */,
+				320F713F2A867D930071C0E7 /* WikivoyageSearchHistoryItem.swift in Sources */,
 				DA5A819B26C563A700F274C7 /* OAContourLinesAction.mm in Sources */,
 				DA5A817726C563A700F274C7 /* MGSwipeTableCell.m in Sources */,
 				DA4ABEEA2876DA5D00B996EF /* OAImportExportSettingsConverter.m in Sources */,

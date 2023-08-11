@@ -930,15 +930,10 @@
                                 if (![processedPoi containsObject:@(am->id.id)])
                                 {
                                     [processedPoi addObject:@(am->id.id)];
-                                    
-                                    //OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:tagName != nil withContent:NO];
                                     OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:NO];
-//                                    if (poi && (!tagName || [poi.values valueForKey:tagName]) && (!name || [poi.name isEqualToString:name] || [poi.localizedNames.allValues containsObject:name]))
-//                                    {
                                         poi.distanceMeters = OsmAnd::Utilities::squareDistance31(location, am->position31);
                                         [OAPOIHelper fetchValuesContentPOIByAmenity:am poi:poi];
                                         [arr addObject:poi];
-//                                    }
                                 }
                           },
                           ctrl);

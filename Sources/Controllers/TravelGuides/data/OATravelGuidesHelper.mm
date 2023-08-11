@@ -1,12 +1,12 @@
 //
-//  OATravelObfHelperBridge.m
+//  OATravelGuidesHelper.m
 //  OsmAnd Maps
 //
 //  Created by nnngrach on 08.08.2023.
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OATravelObfHelperBridge.h"
+#import "OATravelGuidesHelper.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAPOIHelper.h"
 #import "OsmAndApp.h"
@@ -14,14 +14,21 @@
 
 #include <OsmAndCore/Utilities.h>
 
-@implementation OATravelObfHelperBridge
+@implementation OATravelGuidesHelper
+
+
++ (NSArray<OAPOI *> *) searchAmenity:(double)lat lon:(double)lon radius:(double)radius searchFilter:(NSString *)searchFilter
+{
+    OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
+    return [OAPOIHelper findTravelGuides:searchFilter location:locI radius:radius];
+}
 
 
 + (void) foo:(double)lat lon:(double)lon
 {
     OsmAndAppInstance _app = [OsmAndApp instance];
     
-    const auto& obfsCollection = _app.resourcesManager->obfsCollection;
+    //const auto& obfsCollection = _app.resourcesManager->obfsCollection;
     OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
     NSArray<OAPOI *> *points1 = [OAPOIHelper findTravelGuides:@"route_article" location:locI radius:100000];
     //NSArray<OAPOI *> *points2 = [OAPOIHelper findTravelGuides:@"route_track" location:locI radius:100000];

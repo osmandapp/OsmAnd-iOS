@@ -41,13 +41,17 @@ class TravelArticle: Equatable {
         return TravelArticleIdentifier(article: self)
     }
     
-    func getTravelBook(file: String) -> String {
+    static func getTravelBook(file: String) -> String {
         let dir = OsmAndApp.swiftInstance().dataPath
         
         //TODO: check it
         //dir = appPath + WIKIVOYAGE_INDEX_DIR + "/"
         
         return file.replacingOccurrences(of: dir!, with: "")
+    }
+    
+    func getTravelBook() -> String? {
+        return file != nil ? TravelArticle.getTravelBook(file: file!) : nil
     }
     
     func getLastModified() -> TimeInterval {
@@ -153,7 +157,8 @@ class TravelArticle: Equatable {
 }
 
 
-class TravelArticleIdentifier {
+class TravelArticleIdentifier : Hashable {
+   
     var file: String?
     var lat: Double = Double.nan
     var lon: Double = Double.nan
@@ -176,4 +181,18 @@ class TravelArticleIdentifier {
         return latEqual && lonEqual
     }
     
+    static func == (lhs: TravelArticleIdentifier, rhs: TravelArticleIdentifier) -> Bool {
+        return areLatLonEqual(lat1: lhs.lat, lon1: lhs.lon, lat2: rhs.lat, lon2: rhs.lon) &&
+        lhs.file == rhs.file &&
+        lhs.routeId == rhs.routeId &&
+        lhs.routeSource == rhs.routeSource
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(lat)
+        hasher.combine(lon)
+        hasher.combine(file)
+        hasher.combine(routeId)
+        hasher.combine(routeSource)
+    }
 }

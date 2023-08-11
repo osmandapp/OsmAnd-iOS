@@ -47,4 +47,15 @@ class TravelGpx : TravelArticle {
         }
         return analysis
     }
+    
+    func createWptPt(amenity: OAPOIAdapter, lang: String) -> OAWptPtAdapter {
+        var wptPt = OAWptPtAdapter()
+        wptPt.setPosition(CLLocationCoordinate2D(latitude: amenity.latitude(), longitude: amenity.longitude()))
+        wptPt.setName(amenity.name())
+        return wptPt
+    }
+    
+    override func getPointFilterString() -> String {
+        return "route_track_point";
+    }
 }

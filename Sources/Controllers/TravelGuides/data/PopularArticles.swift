@@ -10,7 +10,7 @@ import Foundation
 
 class PopularArticles : NSObject {
     
-    let ARTICLES_PER_PAGE = 30
+    static let ARTICLES_PER_PAGE = 30
     var articles = [TravelArticle]()
     
     override init() {
@@ -31,7 +31,7 @@ class PopularArticles : NSObject {
     
     func add(article: TravelArticle) -> Bool {
         articles.append(article)
-        return articles.count % ARTICLES_PER_PAGE != 0
+        return articles.count % PopularArticles.ARTICLES_PER_PAGE != 0
     }
     
     func contains(article: TravelArticle) -> Bool {

@@ -25,8 +25,10 @@
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"
-#import "OATravelObfHelperBridge.h"
+#import "OATravelGuidesHelper.h"
 #import "OAGPXDocumentAdapter.h"
+#import "OAGPXDocumentPrimitivesAdapter.h"
+#import "OAPOIAdapter.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

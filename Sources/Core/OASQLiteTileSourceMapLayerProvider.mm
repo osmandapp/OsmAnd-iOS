@@ -150,15 +150,16 @@ QByteArray OASQLiteTileSourceMapLayerProvider::downloadTile(
     const auto& tileUrl = getUrlToLoad(tileId, zoom);
     if (!tileUrl.isEmpty())
     {
-        std::shared_ptr<const OsmAnd::IWebClient::IRequestResult> requestResult;
-        const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult, nullptr, queryController, _userAgent);
+        OsmAnd::IWebClient::DataRequest dataRequest;
+        dataRequest.queryController = queryController;
+        const auto& downloadResult = _webClient->downloadData(tileUrl, dataRequest, _userAgent);
         
         // If there was error, check what the error was
-        if (!requestResult || !requestResult->isSuccessful() || downloadResult.isEmpty())
+        if (!dataRequest.requestResult || !dataRequest.requestResult->isSuccessful() || downloadResult.isEmpty())
         {
-            if (requestResult)
+            if (dataRequest.requestResult)
             {
-                const auto httpStatus = std::dynamic_pointer_cast<const OsmAnd::IWebClient::IHttpRequestResult>(requestResult)->getHttpStatusCode();
+                const auto httpStatus = std::dynamic_pointer_cast<const OsmAnd::IWebClient::IHttpRequestResult>(dataRequest.requestResult)->getHttpStatusCode();
                 
                 LogPrintf(OsmAnd::LogSeverityLevel::Warning,
                           "Failed to download tile from %s (HTTP status %d)",
@@ -169,11 +170,11 @@ QByteArray OASQLiteTileSourceMapLayerProvider::downloadTile(
                 if (httpStatus == 404)
                     db->removeTileData(tileId, zoom);
             }
-            requestResult.reset();
+            dataRequest.requestResult.reset();
             return nullptr;
         }
         db->storeTileData(tileId, zoom, downloadResult, QDateTime::currentMSecsSinceEpoch());
-        requestResult.reset();
+        dataRequest.requestResult.reset();
         return downloadResult;
     }
     return nullptr;

@@ -605,7 +605,7 @@
 
 - (NSString *) getValue
 {
-    return OALocalizedString(@"shared_string_select");
+    return @"";
 }
 
 - (NSString *) getCellType

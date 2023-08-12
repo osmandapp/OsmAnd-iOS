@@ -3575,6 +3575,8 @@
 		FA44BF462A71123D000D2F5F /* ic_custom_settings_cloud_colored@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF3A2A71123D000D2F5F /* ic_custom_settings_cloud_colored@3x.png */; };
 		FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */; };
 		FA4768B52A67B86400D533E8 /* FreeBackupBanner.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */; };
+		FA740D422A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA740D412A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib */; };
+		FA740D452A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -8298,6 +8300,8 @@
 		FA44BF3A2A71123D000D2F5F /* ic_custom_settings_cloud_colored@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_settings_cloud_colored@3x.png"; path = "Resources/Icons/ic_custom_settings_cloud_colored@3x.png"; sourceTree = "<group>"; };
 		FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBanner.swift; sourceTree = "<group>"; };
 		FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FreeBackupBanner.xib; sourceTree = "<group>"; };
+		FA740D412A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CloudIntroductionButtonsView.xib; sourceTree = "<group>"; };
+		FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudIntroductionButtonsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -13972,6 +13976,7 @@
 		DA5A807326C563A500F274C7 /* XibViews */ = {
 			isa = PBXGroup;
 			children = (
+				FA740D432A80DC2A00BD12DC /* CloudIntroductionButtonsView */,
 				DA5A807626C563A500F274C7 /* LaunchScreen.xib */,
 				DA5A808226C563A500F274C7 /* OAAlarmWidget.xib */,
 				B247453D27E3A8D000C18C3F /* OACloudIntroductionHeaderView.xib */,
@@ -14480,6 +14485,15 @@
 				FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */,
 			);
 			path = FreeFavoritesBackupBanner;
+			sourceTree = "<group>";
+		};
+		FA740D432A80DC2A00BD12DC /* CloudIntroductionButtonsView */ = {
+			isa = PBXGroup;
+			children = (
+				FA740D412A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib */,
+				FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */,
+			);
+			path = CloudIntroductionButtonsView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -15536,6 +15550,7 @@
 				DA08A0D2227096DA000A53BA /* offroad.render.xml in Resources */,
 				DA6D0790255173C5004FE017 /* ic_custom_add_point_after@2x.png in Resources */,
 				DA1341AE243DC5A80039D214 /* map_action_ufo@2x.png in Resources */,
+				FA740D422A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib in Resources */,
 				0A31AFCA26FBAC39000EE842 /* ic_small_speed@3x.png in Resources */,
 				84342E081CFD872B00EF04ED /* left_menu_icon_waypoints@2x.png in Resources */,
 				B24745A327F4A7A200C18C3F /* ic_custom_wifi_off@2x.png in Resources */,
@@ -17747,6 +17762,7 @@
 				DA4ABF232876DA6800B996EF /* OACollectionSettingsItem.mm in Sources */,
 				DA5A838D26C563A800F274C7 /* OAPluginDetailsViewController.mm in Sources */,
 				DA5A818826C563A700F274C7 /* OANavAutoZoomMapAction.m in Sources */,
+				FA740D452A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift in Sources */,
 				DA5A838526C563A800F274C7 /* OADestinationCardsViewController.mm in Sources */,
 				DA5A816626C563A700F274C7 /* OAAppVersionDependentConstants.m in Sources */,
 				DA5A84E526C563A900F274C7 /* OAWaypointsMainScreen.mm in Sources */,

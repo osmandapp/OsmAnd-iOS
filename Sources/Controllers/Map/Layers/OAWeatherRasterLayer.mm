@@ -121,7 +121,8 @@
 
         //[self showProgressHUD];
 
-        int64_t dateTime = _date.timeIntervalSince1970 * 1000;
+        NSDate *roundedDate = [OAWeatherHelper roundForecastTimeToHour:_date];
+        int64_t dateTime = roundedDate.timeIntervalSince1970 * 1000;
         OsmAnd::WeatherLayer layer;
         switch (_weatherLayer) {
             case WEATHER_LAYER_LOW:

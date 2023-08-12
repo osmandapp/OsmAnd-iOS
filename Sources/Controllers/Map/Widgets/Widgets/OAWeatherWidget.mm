@@ -14,20 +14,22 @@
 #import "OAMapLayers.h"
 #import "OsmAndApp.h"
 #import "OAAppData.h"
+#import "OANativeUtilities.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 
 @interface OAWeatherWidget ()
 
 @property (nonatomic, assign) EOAWeatherBand band;
-@property (nonatomic) NSNumber *undefined;
-@property (nonatomic) NSMutableArray *cachedValue;
+@property (nonatomic) double undefined;
+@property (nonatomic) double cachedValue;
 
 @end
 
 @implementation OAWeatherWidget
 {
     OsmAnd::PointI _cachedTarget31;
+    OsmAnd::PointI _cachedFixedPixel;
     OsmAnd::ZoomLevel _cachedZoom;
     NSDate *_cachedDate;
     CGSize _cachedViewFrame;
@@ -45,8 +47,8 @@
         [self setIcons:type];
         _app = OsmAndApp.instance;
         _band = band;
-        _undefined = @(-10000);
-        _cachedValue = @[_undefined].mutableCopy;
+        _undefined = -10000.0;
+        _cachedValue = _undefined;
         _formatter = [[NSMeasurementFormatter alloc] init];
         _formatter.unitStyle = NSFormattingUnitStyleShort;
         _formatter.locale = NSLocale.autoupdatingCurrentLocale;
@@ -60,6 +62,7 @@
     OAMapViewController *mapCtrl = [OARootViewController instance].mapPanel.mapViewController;
                                     
     OsmAnd::PointI target31 = mapCtrl.mapView.target31;
+    OsmAnd::PointI fixedPixel = mapCtrl.mapView.fixedPixel;
     OsmAnd::ZoomLevel zoom = mapCtrl.mapView.zoomLevel;
     NSDate *date = mapCtrl.mapLayers.weatherDate;
     NSString *bandUnit = [_formatter displayStringFromUnit:[[OAWeatherBand withWeatherBand:_band] getBandUnit]];
@@ -67,7 +70,7 @@
     CGSize viewFrame = mapCtrl.view.frame.size;
     BOOL frameChanged = !CGSizeEqualToSize(_cachedViewFrame, viewFrame);
 
-    if (_cachedTarget31 == target31 && _cachedZoom == zoom && !frameChanged && _cachedDate && [_cachedDate isEqualToDate:date] && !needToUpdate)
+    if (_cachedTarget31 == target31 && _cachedFixedPixel == fixedPixel && _cachedZoom == zoom && !frameChanged && _cachedDate && [_cachedDate isEqualToDate:date] && !needToUpdate)
         return false;
 
     if (frameChanged)
@@ -77,17 +80,23 @@
     }
 
     _cachedTarget31 = target31;
+    _cachedFixedPixel = fixedPixel;
     _cachedZoom = zoom;
     _cachedDate = date;
     _cachedBandUnit = bandUnit;
     _cachedViewFrame = viewFrame;
 
+    CGFloat scale = mapCtrl.view.contentScaleFactor;
+    OsmAnd::PointI elevated31 = [OANativeUtilities get31FromElevatedPixel:OsmAnd::PointI(viewFrame.width / 2.0 * scale, viewFrame.height / 2.0 * scale)];
+
     OsmAnd::WeatherTileResourcesManager::ValueRequest _request;
+    _request.clientId = QStringLiteral("OAWeatherWidget");
     _request.dateTime = date.timeIntervalSince1970 * 1000;
-    _request.point31 = target31;
+    _request.point31 = elevated31;
     _request.zoom = zoom;
     _request.band = (OsmAnd::BandIndex)_band;
     _request.localData = _app.data.weatherUseOfflineData;
+    _request.abortIfNotRecent = true;
     
     __weak OAWeatherWidget *selfWeak = self;
     
@@ -102,9 +111,9 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (succeeded)
                 {
-                    if (![selfWeak.cachedValue[0] isEqual:@(value)] || needToUpdate)
+                    if (selfWeak.cachedValue != value || needToUpdate)
                     {
-                        selfWeak.cachedValue[0] = @(value);
+                        selfWeak.cachedValue = value;
                         const auto bandValue = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getConvertedBandValue(selfWeak.band, value);
                         const auto bandValueStr = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getFormattedBandValue(selfWeak.band, bandValue, true);
 
@@ -121,9 +130,9 @@
                         [selfWeak setMapCenterMarkerVisibility:YES];
                     }
                 }
-                else if (selfWeak.cachedValue[0] != selfWeak.undefined)
+                else if (selfWeak.cachedValue != selfWeak.undefined)
                 {
-                    selfWeak.cachedValue[0] = selfWeak.undefined;
+                    selfWeak.cachedValue = selfWeak.undefined;
                     [selfWeak setText:nil subtext:nil];
                     [selfWeak setMapCenterMarkerVisibility:NO];
                 }

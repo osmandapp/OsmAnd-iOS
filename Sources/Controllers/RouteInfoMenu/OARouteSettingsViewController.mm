@@ -135,13 +135,17 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
-            [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         
-        if (cell) {
+        if (cell)
+        {
             [cell.titleLabel setText:text];
+            [cell valueVisibility:value || value.length > 0];
             [cell.valueLabel setText:value];
+            cell.leftIconView.image = [param isKindOfClass:OAHazmatRoutingParameter.class] ? [param getIcon] : [[param getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftIconView.tintColor = UIColorFromRGB([appMode getIconColor]);
         }
         return cell;
     }

@@ -2680,3 +2680,5 @@
 "weather_forecast" = "Временске прилике";
 "weather_forecast_is_outdated" = "Временске прилике су застареле.";
 "speak_route_deviation" = "Најави одступање од пута";
+"map_widget_distance_to_intermediate" = "Удаљеност до посредне тачке";
+"rendering_attr_alpineHiking_name" = "Разврставање по тежини";

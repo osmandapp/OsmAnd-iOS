@@ -168,6 +168,12 @@ static UIViewController *parentController;
                                              self.favoriteTableView.frame.size.width,
                                              _freeBackupBanner.defaultFrameHeight + titleHeight + descriptionHeight);
         self.favoriteTableView.tableHeaderView = _freeBackupBanner;
+        UIEdgeInsets insets = self.favoriteTableView.layoutMargins;
+        if (insets.left != 0 || insets.right != 0)
+        {
+            _freeBackupBanner.leadingSubviewConstraint.constant = insets.left;
+            _freeBackupBanner.trailingSubviewConstraint.constant = insets.right;
+        }
     }
 }
 

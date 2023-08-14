@@ -77,7 +77,7 @@
                 <constraint firstItem="X7E-aX-qVf" firstAttribute="top" secondItem="xJm-7d-FQ5" secondAttribute="bottom" constant="1" id="DOj-OS-LW1"/>
                 <constraint firstItem="kUA-vC-GQM" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="16" id="OTN-Et-HWL"/>
                 <constraint firstAttribute="bottom" secondItem="X7E-aX-qVf" secondAttribute="bottom" id="Qoh-uC-sNX"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Teq-n2-r4u" secondAttribute="trailing" constant="11" id="SYj-qk-wc1"/>
+                <constraint firstAttribute="trailing" secondItem="Teq-n2-r4u" secondAttribute="trailing" constant="11" id="SYj-qk-wc1"/>
                 <constraint firstItem="Jsj-N2-R29" firstAttribute="leading" secondItem="qXa-fC-2qj" secondAttribute="leading" id="cwI-6V-SIk"/>
                 <constraint firstAttribute="trailing" secondItem="xJm-7d-FQ5" secondAttribute="trailing" id="dyJ-1d-wGP"/>
                 <constraint firstAttribute="trailing" secondItem="X7E-aX-qVf" secondAttribute="trailing" constant="20" id="eSw-UF-u0U"/>
@@ -93,9 +93,11 @@
             <connections>
                 <outlet property="descriptionLabel" destination="Jsj-N2-R29" id="45i-I4-r6H"/>
                 <outlet property="imageView" destination="kUA-vC-GQM" id="XNS-Vq-iZJ"/>
+                <outlet property="leadingSubviewConstraint" destination="9In-jS-AVq" id="ANB-4m-aoO"/>
                 <outlet property="osmAndCloudButton" destination="Teq-n2-r4u" id="LEF-sY-YdP"/>
                 <outlet property="separatorViewHeightConstraint" destination="S8A-0R-Dxs" id="VFc-Gp-Q0u"/>
                 <outlet property="titleLabel" destination="qXa-fC-2qj" id="npZ-GU-kOI"/>
+                <outlet property="trailingSubviewConstraint" destination="SYj-qk-wc1" id="pB0-P6-tet"/>
             </connections>
             <point key="canvasLocation" x="99.236641221374043" y="-85.211267605633807"/>
         </view>

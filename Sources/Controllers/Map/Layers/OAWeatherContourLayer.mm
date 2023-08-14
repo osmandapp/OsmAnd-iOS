@@ -180,8 +180,9 @@
     [self deinitProviders];
     
     OAMapRendererEnvironment *env = self.mapViewController.mapRendererEnv;
-    
-    int64_t dateTime = date.timeIntervalSince1970 * 1000;
+
+    NSDate *roundedDate = [OAWeatherHelper roundForecastTimeToHour:date];
+    int64_t dateTime = roundedDate.timeIntervalSince1970 * 1000;
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
     int cacheSize = (screenSize.width * 2 / _resourcesManager->getTileSize()) * (screenSize.height * 2 / _resourcesManager->getTileSize());
     int rasterTileSize = (int) (_resourcesManager->getTileSize() * _resourcesManager->getDensityFactor());

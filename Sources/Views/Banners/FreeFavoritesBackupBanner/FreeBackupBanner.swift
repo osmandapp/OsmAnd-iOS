@@ -13,18 +13,24 @@ final class FreeBackupBanner: UIView {
     @objc enum BannerType: Int {
         case favorite
         case settings
-        
     }
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var descriptionLabel: UILabel! {
+        didSet {
+            descriptionLabel.text = localizedString("free_favorites_backup_description")
+        }
+    }
+    
     @IBOutlet private weak var imageView: UIImageView!
-    @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var osmAndCloudButton: UIButton! {
         didSet {
             osmAndCloudButton.titleLabel?.text = localizedString("banner_payment_free_backup_cloud_button_title")
         }
     }
-    @IBOutlet weak var descriptionLabel: UILabel! {
+    
+    @IBOutlet private weak var separatorViewHeightConstraint: NSLayoutConstraint! {
         didSet {
-            descriptionLabel.text = localizedString("free_favorites_backup_description")
+            separatorViewHeightConstraint.constant = 1.0 / UIScreen.main.scale
         }
     }
     

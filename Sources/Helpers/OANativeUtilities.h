@@ -62,5 +62,6 @@
 
 + (double)getAltitudeForPixelPoint:(OsmAnd::PointI)screenPoint;
 + (double)getAltitudeForElevatedPoint:(OsmAnd::PointI)elevatedPoint;
++ (OsmAnd::PointI)get31FromElevatedPixel:(OsmAnd::PointI)screenPoint;
 
 @end

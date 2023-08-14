@@ -455,8 +455,10 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     if ([item[@"type"] isEqualToString:[FreeBackupBannerCell getCellIdentifier]])
     {
-        CGFloat height = [OAUtilities calculateTextBounds:_freeBackupBanner.descriptionLabel.text width:tableView.frame.size.width - _freeBackupBanner.leadingTrailingOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
-        return _freeBackupBanner.defaultFrameHeight + height;
+        CGFloat titleHeight = [OAUtilities calculateTextBounds:_freeBackupBanner.titleLabel.text width:tableView.frame.size.width - _freeBackupBanner.leadingTrailingOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
+                
+        CGFloat descriptionHeight = [OAUtilities calculateTextBounds:_freeBackupBanner.descriptionLabel.text width:tableView.frame.size.width - _freeBackupBanner.leadingTrailingOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
+        return _freeBackupBanner.defaultFrameHeight + titleHeight + descriptionHeight;
     }
     else
     {

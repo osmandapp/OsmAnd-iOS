@@ -1489,11 +1489,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
         OAFloatingButtonsHudViewController *quickAction = mapPanel.hudViewController.floatingButtonsController;
         [quickAction hideActionsSheetAnimated];
-        if ([mapPanel gpxModeActive])
-        {
-            [mapPanel hideScrollableHudViewController];
-            [mapPanel.hudViewController updateControlsLayout:YES];
-        }
         [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress forceHide:[recognizer isKindOfClass:UITapGestureRecognizer.class] && recognizer.numberOfTouches == 1];
         
         // Handle route planning touch events

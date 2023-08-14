@@ -253,9 +253,6 @@
 
     [self updateMapRulerDataWithDelay];
 
-    if (self.toolbarViewController)
-        [self.toolbarViewController onViewDidAppear:self.mapHudType];
-
     if (hasInitialURL)
         _app.initialURLMapState = nil;
 }

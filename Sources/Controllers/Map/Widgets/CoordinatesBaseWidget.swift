@@ -28,9 +28,9 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         self.widgetType = type
         commonInit()
 
-//        view.setOnClickListener { _ in
-//            copyCoordinates()
-//        }
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(copyCoordinates))
+        self.addGestureRecognizer(gesture)
+
         updateVisibility(visible: false)
     }
     
@@ -60,18 +60,14 @@ class CoordinatesBaseWidget: OABaseWidgetView {
             coordinates += ", \(secondCoordinate.text ?? "")"
         }
 
-//        if ShareMenu.copyToClipboard(app: app, text: coordinates) {
-//            self?.shareCoordinates(coordinates: coordinates)
-//        }
-    }
+        let pasteboard: UIPasteboard  = UIPasteboard.general
+        pasteboard.string = coordinates
 
-//    private func shareCoordinates(coordinates: String) {
-//        let intent = Intent(action: .send)
-//        intent.putExtra(Intent.EXTRA_TEXT, value: coordinates)
-//        intent.setType("text/plain")
-//        let chooserIntent = Intent.createChooser(intent, title: getString(R.string.send_location))
-//        AndroidUtils.startActivityIfSafe(mapActivity, intent: intent, chooserIntent: chooserIntent)
-//    }
+        OAUtilities.showToast(String(format: localizedString("ltr_or_rtl_combine_via_colon"), arguments: ["copied_to_clipboard", coordinates]),
+                              details: nil,
+                              duration: 4,
+                              in: OARootViewController.instance().view)
+    }
 
     func showFormattedCoordinates(lat: Double, lon: Double) {
         let format = OAAppSettings.sharedManager().settingGeoFormat.get()
@@ -192,9 +188,6 @@ class CoordinatesBaseWidget: OABaseWidgetView {
             if self.delegate != nil {
                 self.delegate!.widgetVisibilityChanged(self, visible: visible)
             }
-//            if visible, widgetType?.getPanel() == .topPanel {
-//                OARootViewController.instance().mapPanel?.hudViewController?.mapInfoController?.recreateTopWidgetsPanel()
-//            }
             return true
         }
         return false
@@ -223,4 +216,5 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         selfFrame.size.height = 52
         frame = selfFrame
     }
+
 }

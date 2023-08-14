@@ -32,21 +32,9 @@ class CoordinatesCurrentLocationWidget: CoordinatesBaseWidget {
             if let lastKnownLocation = OsmAndApp.swiftInstance().locationServices.lastKnownLocation {
                 showFormattedCoordinates(lat: lastKnownLocation.coordinate.latitude,
                                          lon: lastKnownLocation.coordinate.longitude)
-            } else {
-                showSearchingGpsMessage()
             }
         }
         return true
-    }
-
-    private func showSearchingGpsMessage() {
-        firstIcon.isHidden = true
-        divider.isHidden = true
-        secondContainer.isHidden = true
-
-//        let gpsInfo = locationProvider.getGPSInfo()
-//        let message = "\(getString(R.string.searching_gps))… \(gpsInfo.usedSatellites)/\(gpsInfo.foundSatellites)"
-        firstCoordinate.text = "message"
     }
 
 }

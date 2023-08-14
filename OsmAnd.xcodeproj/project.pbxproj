@@ -418,7 +418,6 @@
 		32A001A026131FEA00ABE0D2 /* ic_custom_clipboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A0019E26131FEA00ABE0D2 /* ic_custom_clipboard@2x.png */; };
 		32A001A126131FEA00ABE0D2 /* ic_custom_clipboard@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A0019F26131FEA00ABE0D2 /* ic_custom_clipboard@3x.png */; };
 		32A0D6B32A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A0D6B22A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift */; };
-		32A585BA29BF66C100ACEE84 /* OACoordinatesWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A585B929BF66C100ACEE84 /* OACoordinatesWidget.mm */; };
 		32A7EE0F261BBF5D00F7A697 /* bg_point_circle_contour@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A7EE0D261BBF5C00F7A697 /* bg_point_circle_contour@2x.png */; };
 		32A7EE10261BBF5D00F7A697 /* bg_point_circle_contour@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A7EE0E261BBF5D00F7A697 /* bg_point_circle_contour@3x.png */; };
 		32A7EE15261BBF6C00F7A697 /* bg_point_octagon_contour@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A7EE13261BBF6B00F7A697 /* bg_point_octagon_contour@3x.png */; };
@@ -2900,7 +2899,6 @@
 		DA5A848126C563A900F274C7 /* OADistanceToMapMarkerControl.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F3E26C563A400F274C7 /* OADistanceToMapMarkerControl.mm */; };
 		DA5A848226C563A900F274C7 /* OADistanceToPointWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F3F26C563A400F274C7 /* OADistanceToPointWidget.mm */; };
 		DA5A848326C563A900F274C7 /* OAMapInfoWidgetsFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F4126C563A400F274C7 /* OAMapInfoWidgetsFactory.mm */; };
-		DA5A848426C563A900F274C7 /* OARouteInfoWidgetsFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F4226C563A400F274C7 /* OARouteInfoWidgetsFactory.mm */; };
 		DA5A848526C563A900F274C7 /* OAMapWidgetRegInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F4726C563A400F274C7 /* OAMapWidgetRegInfo.mm */; };
 		DA5A848626C563A900F274C7 /* OAMapInfoController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F4826C563A400F274C7 /* OAMapInfoController.mm */; };
 		DA5A848726C563A900F274C7 /* OANavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F4926C563A400F274C7 /* OANavigationController.m */; };
@@ -2995,9 +2993,6 @@
 		DA5A84E826C563A900F274C7 /* OAWaypointsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A801B26C563A500F274C7 /* OAWaypointsViewController.mm */; };
 		DA5A84E926C563A900F274C7 /* OADashboardViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A801E26C563A500F274C7 /* OADashboardViewController.mm */; };
 		DA5A84EA26C563A900F274C7 /* OADashboardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A801F26C563A500F274C7 /* OADashboardViewController.xib */; };
-		DA5A84EB26C563A900F274C7 /* OAConfigureMenuVisibilityScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A802426C563A500F274C7 /* OAConfigureMenuVisibilityScreen.mm */; };
-		DA5A84EC26C563A900F274C7 /* OAConfigureMenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A802526C563A500F274C7 /* OAConfigureMenuViewController.mm */; };
-		DA5A84ED26C563A900F274C7 /* OAConfigureMenuMainScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A802826C563A500F274C7 /* OAConfigureMenuMainScreen.mm */; };
 		DA5A84EE26C563A900F274C7 /* OASuperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A802926C563A500F274C7 /* OASuperViewController.m */; };
 		DA5A84EF26C563A900F274C7 /* OAHelpViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A802C26C563A500F274C7 /* OAHelpViewController.mm */; };
 		DA5A84F126C563A900F274C7 /* OAMapSource.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A803026C563A500F274C7 /* OAMapSource.m */; };
@@ -4111,8 +4106,6 @@
 		32A0019E26131FEA00ABE0D2 /* ic_custom_clipboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clipboard@2x.png"; path = "Resources/Icons/ic_custom_clipboard@2x.png"; sourceTree = "<group>"; };
 		32A0019F26131FEA00ABE0D2 /* ic_custom_clipboard@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clipboard@3x.png"; path = "Resources/Icons/ic_custom_clipboard@3x.png"; sourceTree = "<group>"; };
 		32A0D6B22A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map3dModeButtonVisibilityViewController.swift; sourceTree = "<group>"; };
-		32A585B829BF66AD00ACEE84 /* OACoordinatesWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACoordinatesWidget.h; sourceTree = "<group>"; };
-		32A585B929BF66C100ACEE84 /* OACoordinatesWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACoordinatesWidget.mm; sourceTree = "<group>"; };
 		32A7863D27452C4E00FE7881 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		32A7EE0D261BBF5C00F7A697 /* bg_point_circle_contour@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_circle_contour@2x.png"; path = "Resources/Icons/bg_point_circle_contour@2x.png"; sourceTree = "<group>"; };
 		32A7EE0E261BBF5D00F7A697 /* bg_point_circle_contour@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_circle_contour@3x.png"; path = "Resources/Icons/bg_point_circle_contour@3x.png"; sourceTree = "<group>"; };
@@ -7389,9 +7382,7 @@
 		DA5A7F3F26C563A400F274C7 /* OADistanceToPointWidget.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADistanceToPointWidget.mm; sourceTree = "<group>"; };
 		DA5A7F4026C563A400F274C7 /* OADistanceToMapMarkerControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADistanceToMapMarkerControl.h; sourceTree = "<group>"; };
 		DA5A7F4126C563A400F274C7 /* OAMapInfoWidgetsFactory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapInfoWidgetsFactory.mm; sourceTree = "<group>"; };
-		DA5A7F4226C563A400F274C7 /* OARouteInfoWidgetsFactory.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteInfoWidgetsFactory.mm; sourceTree = "<group>"; };
 		DA5A7F4326C563A400F274C7 /* OADistanceToPointWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADistanceToPointWidget.h; sourceTree = "<group>"; };
-		DA5A7F4426C563A400F274C7 /* OARouteInfoWidgetsFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteInfoWidgetsFactory.h; sourceTree = "<group>"; };
 		DA5A7F4526C563A400F274C7 /* OAFingerRulerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAFingerRulerDelegate.h; sourceTree = "<group>"; };
 		DA5A7F4626C563A400F274C7 /* OATopTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATopTextView.h; sourceTree = "<group>"; };
 		DA5A7F4726C563A400F274C7 /* OAMapWidgetRegInfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapWidgetRegInfo.mm; sourceTree = "<group>"; };
@@ -7575,13 +7566,6 @@
 		DA5A801E26C563A500F274C7 /* OADashboardViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADashboardViewController.mm; sourceTree = "<group>"; };
 		DA5A801F26C563A500F274C7 /* OADashboardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADashboardViewController.xib; sourceTree = "<group>"; };
 		DA5A802026C563A500F274C7 /* OADashboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADashboardViewController.h; sourceTree = "<group>"; };
-		DA5A802226C563A500F274C7 /* OAConfigureMenuVisibilityScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAConfigureMenuVisibilityScreen.h; sourceTree = "<group>"; };
-		DA5A802326C563A500F274C7 /* OAConfigureMenuScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAConfigureMenuScreen.h; sourceTree = "<group>"; };
-		DA5A802426C563A500F274C7 /* OAConfigureMenuVisibilityScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAConfigureMenuVisibilityScreen.mm; sourceTree = "<group>"; };
-		DA5A802526C563A500F274C7 /* OAConfigureMenuViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAConfigureMenuViewController.mm; sourceTree = "<group>"; };
-		DA5A802626C563A500F274C7 /* OAConfigureMenuMainScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAConfigureMenuMainScreen.h; sourceTree = "<group>"; };
-		DA5A802726C563A500F274C7 /* OAConfigureMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAConfigureMenuViewController.h; sourceTree = "<group>"; };
-		DA5A802826C563A500F274C7 /* OAConfigureMenuMainScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAConfigureMenuMainScreen.mm; sourceTree = "<group>"; };
 		DA5A802926C563A500F274C7 /* OASuperViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASuperViewController.m; sourceTree = "<group>"; };
 		DA5A802A26C563A500F274C7 /* OAMenuOriginViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMenuOriginViewControllerProtocol.h; sourceTree = "<group>"; };
 		DA5A802C26C563A500F274C7 /* OAHelpViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAHelpViewController.mm; sourceTree = "<group>"; };
@@ -13411,8 +13395,6 @@
 				C56FAB4F29B226C60096192F /* OACameraDistanceWidget.mm */,
 				C56FAB4929B226A40096192F /* OACameraTiltWidget.h */,
 				C56FAB4A29B226A40096192F /* OACameraTiltWidget.mm */,
-				32A585B829BF66AD00ACEE84 /* OACoordinatesWidget.h */,
-				32A585B929BF66C100ACEE84 /* OACoordinatesWidget.mm */,
 				DABC7F1D27B65C36005C76E2 /* OACurrentStreetName.h */,
 				DABC7F1E27B65C36005C76E2 /* OACurrentStreetName.mm */,
 				DA5A7F3A26C563A400F274C7 /* OADestinationLineDelegate.h */,
@@ -13500,8 +13482,6 @@
 				DA5A7F3F26C563A400F274C7 /* OADistanceToPointWidget.mm */,
 				DA5A7F3D26C563A400F274C7 /* OAMapInfoWidgetsFactory.h */,
 				DA5A7F4126C563A400F274C7 /* OAMapInfoWidgetsFactory.mm */,
-				DA5A7F4426C563A400F274C7 /* OARouteInfoWidgetsFactory.h */,
-				DA5A7F4226C563A400F274C7 /* OARouteInfoWidgetsFactory.mm */,
 				DA842ECE2A0BA2420030866E /* MapWidgetsFactory.swift */,
 			);
 			path = Factory;
@@ -13765,7 +13745,6 @@
 		DA5A7FED26C563A500F274C7 /* DashboardOnMap */ = {
 			isa = PBXGroup;
 			children = (
-				DA5A802126C563A500F274C7 /* ConfigureScreen */,
 				DA5A7FEE26C563A500F274C7 /* MapSettings */,
 				DA5A801326C563A500F274C7 /* OADashboardScreen.h */,
 				DA5A802026C563A500F274C7 /* OADashboardViewController.h */,
@@ -13843,20 +13822,6 @@
 				DA5A801D26C563A500F274C7 /* OAWaypointsRadiusScreen.h */,
 			);
 			path = Waypoints;
-			sourceTree = "<group>";
-		};
-		DA5A802126C563A500F274C7 /* ConfigureScreen */ = {
-			isa = PBXGroup;
-			children = (
-				DA5A802626C563A500F274C7 /* OAConfigureMenuMainScreen.h */,
-				DA5A802826C563A500F274C7 /* OAConfigureMenuMainScreen.mm */,
-				DA5A802326C563A500F274C7 /* OAConfigureMenuScreen.h */,
-				DA5A802726C563A500F274C7 /* OAConfigureMenuViewController.h */,
-				DA5A802526C563A500F274C7 /* OAConfigureMenuViewController.mm */,
-				DA5A802226C563A500F274C7 /* OAConfigureMenuVisibilityScreen.h */,
-				DA5A802426C563A500F274C7 /* OAConfigureMenuVisibilityScreen.mm */,
-			);
-			path = ConfigureScreen;
 			sourceTree = "<group>";
 		};
 		DA5A802B26C563A500F274C7 /* Help */ = {
@@ -17302,7 +17267,6 @@
 				DA5A831126C563A800F274C7 /* OARouteInfoCell.m in Sources */,
 				DA5A835A26C563A800F274C7 /* OABottomSheetHeaderButtonCell.m in Sources */,
 				DA5A83A226C563A800F274C7 /* OAOsmEditingViewController.mm in Sources */,
-				DA5A848426C563A900F274C7 /* OARouteInfoWidgetsFactory.mm in Sources */,
 				DA5A845F26C563A900F274C7 /* OAImpassableRoadsLayer.mm in Sources */,
 				DA5A81CD26C563A700F274C7 /* QuadTree.m in Sources */,
 				DA4ABF2F2876E4C200B996EF /* OAItemExporter.m in Sources */,
@@ -17619,7 +17583,6 @@
 				DA5A837226C563A800F274C7 /* OARoutingSettingsCell.mm in Sources */,
 				DA5A833726C563A800F274C7 /* OATableViewCustomFooterView.m in Sources */,
 				461A3F0D29F6E859008EE079 /* OABaseCollectionHandler.m in Sources */,
-				DA5A84EC26C563A900F274C7 /* OAConfigureMenuViewController.mm in Sources */,
 				DA4ABF162876DA6800B996EF /* OASettingsItem.mm in Sources */,
 				DA5A84E926C563A900F274C7 /* OADashboardViewController.mm in Sources */,
 				DA5A848126C563A900F274C7 /* OADistanceToMapMarkerControl.mm in Sources */,
@@ -17839,14 +17802,12 @@
 				DAA61CB72A0102EC00AFF65D /* MapMarkerSideWidgetState.swift in Sources */,
 				DA5A838826C563A800F274C7 /* OAPurchasesViewController.m in Sources */,
 				DA5A836026C563A800F274C7 /* OAGPXTableViewCell.m in Sources */,
-				DA5A84ED26C563A900F274C7 /* OAConfigureMenuMainScreen.mm in Sources */,
 				DA5A83F526C563A800F274C7 /* OADeleteCustomFiltersViewController.mm in Sources */,
 				DA5A818126C563A700F274C7 /* OATerrainAction.m in Sources */,
 				DA5A842326C563A800F274C7 /* OAGPXWptListViewController.mm in Sources */,
 				DA5A817F26C563A700F274C7 /* OAUnsupportedAction.m in Sources */,
 				DA5A833E26C563A800F274C7 /* OAWaypointCell.m in Sources */,
 				DA5A81DF26C563A700F274C7 /* OAAddress.mm in Sources */,
-				DA5A84EB26C563A900F274C7 /* OAConfigureMenuVisibilityScreen.mm in Sources */,
 				DA5A84FF26C563A900F274C7 /* OAMapRendererView.mm in Sources */,
 				DA5A833826C563A800F274C7 /* OAPublicTransportCollapsableCell.m in Sources */,
 				DA5A818526C563A700F274C7 /* OAShowHideOSMBugAction.m in Sources */,
@@ -18173,7 +18134,6 @@
 				DA5A852626C563A900F274C7 /* OAFreeMemoryView.m in Sources */,
 				DA5A84C626C563A900F274C7 /* OAUploadFinishedBottomSheetViewController.mm in Sources */,
 				DA5A81D326C563A700F274C7 /* OATTSCommandPlayerImpl.mm in Sources */,
-				32A585BA29BF66C100ACEE84 /* OACoordinatesWidget.mm in Sources */,
 				DA5A819426C563A700F274C7 /* OAParkingAction.mm in Sources */,
 				DA5A84A426C563A900F274C7 /* OAJoinPointsCommand.mm in Sources */,
 				DA5A815726C563A700F274C7 /* OANauticalMapsPlugin.m in Sources */,

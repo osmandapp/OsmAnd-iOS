@@ -716,7 +716,7 @@
 "features_menu_group" = "Возможности";
 "map_viewing_item" = "Обзор карты";
 "help_search" = "Поиск по карте";
-"planning_trip_item" = "Ручное планирование маршрута";
+"planning_trip_item" = "Planning a trip";
 "map_legend" = "Легенда";
 "other_location" = "Другие";
 "instalation_troubleshooting_item" = "Установка и решение проблем";

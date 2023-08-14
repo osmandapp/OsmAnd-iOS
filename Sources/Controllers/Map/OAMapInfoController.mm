@@ -21,7 +21,6 @@
 #import "OAMapWidgetRegInfo.h"
 #import "OAMapInfoWidgetsFactory.h"
 #import "OANextTurnWidget.h"
-#import "OACoordinatesWidget.h"
 #import "OALanesControl.h"
 #import "OATopTextView.h"
 #import "OAAlarmWidget.h"

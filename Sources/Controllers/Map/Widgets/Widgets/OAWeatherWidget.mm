@@ -62,6 +62,7 @@
     OsmAnd::PointI target31 = mapCtrl.mapView.target31;
     OsmAnd::ZoomLevel zoom = mapCtrl.mapView.zoomLevel;
     NSDate *date = mapCtrl.mapLayers.weatherDate;
+    NSLog(@"%@", [[OAWeatherBand withWeatherBand:_band] getBandUnit]);
     NSString *bandUnit = [_formatter displayStringFromUnit:[[OAWeatherBand withWeatherBand:_band] getBandUnit]];
     BOOL needToUpdate = ![_cachedBandUnit isEqualToString:bandUnit];
     CGSize viewFrame = mapCtrl.view.frame.size;

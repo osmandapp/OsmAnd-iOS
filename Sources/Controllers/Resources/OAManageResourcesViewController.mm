@@ -2114,6 +2114,10 @@ static BOOL _repositoryUpdated = NO;
     {
         OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
         FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
+        if (![progressView isKindOfClass: [FFCircularProgressView class]])
+        {
+            return;
+        }
 
         float progressCompleted = item.downloadTask.progressCompleted;
         if (progressCompleted >= 0.001f && item.downloadTask.state == OADownloadTaskStateRunning)

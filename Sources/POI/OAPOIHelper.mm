@@ -905,7 +905,6 @@
     ctrl.reset(new OsmAnd::FunctorQueryController([]
                                                   (const OsmAnd::FunctorQueryController* const controller)
                                                   {
-                                                      // should break?
                                                       return false;
                                                   }));
     
@@ -924,16 +923,14 @@
     search->performTravelGuidesSearch(*searchCriteria,
                           [&arr, &location, &processedPoi](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
-                                NSLog(@"!!! Found");
-        
                                 const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
                                 if (![processedPoi containsObject:@(am->id.id)])
                                 {
                                     [processedPoi addObject:@(am->id.id)];
                                     OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:NO];
-                                        poi.distanceMeters = OsmAnd::Utilities::squareDistance31(location, am->position31);
-                                        [OAPOIHelper fetchValuesContentPOIByAmenity:am poi:poi];
-                                        [arr addObject:poi];
+                                    poi.distanceMeters = OsmAnd::Utilities::squareDistance31(location, am->position31);
+                                    [OAPOIHelper fetchValuesContentPOIByAmenity:am poi:poi];
+                                    [arr addObject:poi];
                                 }
                           },
                           ctrl);

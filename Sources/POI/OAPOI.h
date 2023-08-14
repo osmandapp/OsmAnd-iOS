@@ -94,6 +94,8 @@
 
 - (NSString *)getSite;
 - (NSString *)getColor;
+- (NSString *)getRef;
+- (NSString *)getRouteId;
 
 - (NSString *) toStringEn;
 

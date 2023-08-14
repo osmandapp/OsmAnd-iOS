@@ -6,16 +6,13 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-@class OAWptPt, OAPOI;
-
+#import "OAPOIAdapter.h"
+#import "OAGPXDocumentPrimitivesAdapter.h"
 
 @interface OATravelGuidesHelper : NSObject
 
++ (NSArray<OAPOIAdapter *> *) searchAmenity:(double)lat lon:(double)lon radius:(int)radius searchFilter:(NSString *)searchFilter;
 
-//TODO: replace OAPOI & OAWptPt to adapters
-
-+ (NSArray<OAPOI *> *) searchAmenity:(double)lat lon:(double)lon radius:(double)radius searchFilter:(NSString *)searchFilter;
-
-+ (OAWptPt *) createWptPt:(OAPOI *)amenity lang:(NSString *)lang;
++ (OAWptPtAdapter *) createWptPt:(OAPOIAdapter *)amenity lang:(NSString *)lang;
 
 @end

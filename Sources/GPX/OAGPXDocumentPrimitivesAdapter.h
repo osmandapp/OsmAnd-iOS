@@ -11,6 +11,8 @@
 
 @property (nonatomic) id object;
 
+- (instancetype) initWithWpt:(id)wptPt;
+
 - (CLLocationCoordinate2D) position;
 - (void) setPosition:(CLLocationCoordinate2D)position;
 

@@ -30,7 +30,7 @@ protocol TravelHelper {
     func getArticleByTitle(title: String, rect: QuadRect, lang: String, readGpx: Bool, callback: GpxReadCallback?) -> TravelArticle?
     func getArticleId(title: String, lang: String) -> TravelArticleIdentifier?
     func getArticleLangs(articleId: TravelArticleIdentifier) -> [String]
-    func searchGpx(latLon:CLLocationCoordinate2D, fileName: String?, ref: String?) -> TravelGpx?
+    func searchGpx(latLon:CLLocationCoordinate2D, filter: String?, ref: String?) -> TravelGpx?
     func openTrackMenu(article: TravelArticle, gpxFileName: String, latLon:CLLocationCoordinate2D)
     func getGPXName(article: TravelArticle) -> String
     func createGpxFile(article: TravelArticle) -> String

@@ -19,6 +19,14 @@
     return self;
 }
 
+- (instancetype) initWithPOI:(id)poi
+{
+    self = [super init];
+    if (self)
+        _object = poi;
+    return self;
+}
+
 - (OAPOI *)getObject
 {
     if (_object && [_object isKindOfClass:OAPOI.class])
@@ -63,6 +71,24 @@
     OAPOI *obj = [self getObject];
     if (obj)
         obj.longitude = longitude;
+}
+
+- (NSDictionary<NSString *, NSString *> *)getAdditionalInfo
+{
+    OAPOI *obj = [self getObject];
+    return obj ? [obj getAdditionalInfo] : nil;
+}
+
+- (NSString *)getRef
+{
+    OAPOI *obj = [self getObject];
+    return obj ? [obj getRef] : nil;
+}
+
+- (NSString *) getRouteId
+{
+    OAPOI *obj = [self getObject];
+    return obj ? [obj getRouteId] : nil;
 }
 
 @end

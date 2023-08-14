@@ -19,6 +19,14 @@
     return self;
 }
 
+- (instancetype) initWithWpt:(id)wptPt
+{
+    self = [super init];
+    if (self)
+        _object = wptPt;
+    return self;
+}
+
 - (OAWptPt *)getObject
 {
     if (_object && [_object isKindOfClass:OAWptPt.class])

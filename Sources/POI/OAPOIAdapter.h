@@ -10,6 +10,8 @@
 
 @property (nonatomic) id object;
 
+- (instancetype) initWithPOI:(id)poi;
+
 - (NSString *) name;
 - (void) setName:(NSString *)name;
 
@@ -17,5 +19,8 @@
 - (void) setLatitude:(double)latitude;
 - (double) longitude;
 - (void) setLongitude:(double)longitude;
+- (NSDictionary<NSString *, NSString *> *)getAdditionalInfo;
+- (NSString *)getRef;
+- (NSString *) getRouteId;
 
 @end

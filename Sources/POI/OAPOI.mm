@@ -256,6 +256,16 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return [self getAdditionalInfo][@"color"];
 }
 
+- (NSString *)getRef
+{
+    return [self getAdditionalInfo][@"ref"];
+}
+
+- (NSString *)getRouteId
+{
+    return [self getAdditionalInfo][@"route_id"];
+}
+
 - (NSString *)toStringEn
 {
     NSString *nameEn = self.localizedNames[@"en"] ? self.localizedNames[@"en"] : @"";

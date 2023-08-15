@@ -116,7 +116,7 @@
     CALayer *_horizontalLine;
     
     BOOL _editActive;
-    NSArray *_visible;
+    NSArray<NSString *> *_visibleCurrentTracks;
     
     NSString *_importGpxPath;
     
@@ -554,6 +554,7 @@ static UIViewController *parentController;
     _selectedIndexPaths = [[NSMutableArray alloc] init];
     _selectedItems = [[NSMutableArray alloc] init];
     _gpxFolders = [NSMutableDictionary dictionary];
+    _visibleCurrentTracks = [NSArray arrayWithArray:[_settings.mapSettingVisibleGpx get]];
     
     _editToolbarView.hidden = YES;
     _horizontalLine = [CALayer layer];
@@ -626,7 +627,7 @@ static UIViewController *parentController;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     self.definesPresentationContext = NO;
     
-    if (![_visible isEqualToArray:[_settings.mapSettingVisibleGpx get]])
+    if (![_visibleCurrentTracks isEqualToArray:[_settings.mapSettingVisibleGpx get]])
         [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
 }
 
@@ -721,7 +722,7 @@ static UIViewController *parentController;
     self.menuItems = [[NSArray alloc] init];
     NSMutableArray *tableData = [NSMutableArray array];
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-    _visible = _settings.mapSettingVisibleGpx.get;
+    NSArray<NSString *> *visible = _settings.mapSettingVisibleGpx.get;
     self.gpxList = [NSMutableArray arrayWithArray:db.gpxList];
     _displayingTracksCount = 0;
     
@@ -764,7 +765,7 @@ static UIViewController *parentController;
         visibleGroup.header = @"";
         for (OAGPX *item in _gpxList)
         {
-            if ([_visible containsObject:item.gpxFilePath])
+            if ([visible containsObject:item.gpxFilePath])
             {
                 [visibleGroup.groupItems addObject:
                  @{

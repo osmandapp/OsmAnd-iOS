@@ -15,6 +15,8 @@
 - (NSString *) name;
 - (void) setName:(NSString *)name;
 
+- (NSString *) subtype;
+
 - (double) latitude;
 - (void) setLatitude:(double)latitude;
 - (double) longitude;
@@ -22,5 +24,8 @@
 - (NSDictionary<NSString *, NSString *> *)getAdditionalInfo;
 - (NSString *)getRef;
 - (NSString *) getRouteId;
+
+- (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag;
+- (NSString *)getTagContent:(NSString *)tag;
 
 @end

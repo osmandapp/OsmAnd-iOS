@@ -47,6 +47,12 @@
         obj.name = name;
 }
 
+- (NSString *) subtype
+{
+    OAPOI *obj = [self getObject];
+    return obj ? obj.subType : nil;
+}
+
 - (double) latitude
 {
     OAPOI *obj = [self getObject];
@@ -89,6 +95,12 @@
 {
     OAPOI *obj = [self getObject];
     return obj ? [obj getRouteId] : nil;
+}
+
+- (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag
+{
+    OAPOI *obj = [self getObject];
+    return obj ? [obj getNames:tag defTag:defTag] : nil;
 }
 
 @end

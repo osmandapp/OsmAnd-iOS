@@ -89,6 +89,7 @@
 
 - (NSString *)getContentLanguage:(NSString *)tag lang:(NSString *)lang defLang:(NSString *)defLang;
 - (NSString *)getStrictTagContent:(NSString *)tag lang:(NSString *)lang;
+- (NSString *)getTagContent:(NSString *)tag;
 - (NSString *)getTagContent:(NSString *)tag lang:(NSString *)lang;
 - (NSString *)getDescription:(NSString *)lang;
 

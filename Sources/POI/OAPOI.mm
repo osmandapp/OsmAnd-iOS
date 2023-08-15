@@ -199,6 +199,11 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return nil;
 }
 
+- (NSString *)getTagContent:(NSString *)tag
+{
+    return [self getTagContent:tag lang:nil];
+}
+
 - (NSString *)getTagContent:(NSString *)tag lang:(NSString *)lang
 {
     NSString *translateName = [self getStrictTagContent:tag lang:lang];

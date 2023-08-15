@@ -113,9 +113,10 @@ class TravelObfHelper : NSObject {
                     if amenity.getRouteId() == filter ||
                         amenity.name() == filter ||
                         amenity.getRef() == ref {
-                        
-                        //travelGpx = getTravelGpx(foundGpx.first, amenity);
-                        travelGpx = getTravelGpx(amenity: amenity)
+                         
+                        //TODO: check it
+                        //travelGpx =  getTravelGpx(foundGpx.first, amenity);
+                        travelGpx = getTravelGpx(file:nil, amenity: amenity)
                         break
                     }
                 }
@@ -130,21 +131,63 @@ class TravelObfHelper : NSObject {
     }
     
     func cacheTravelArticles(file: String?, amenity: OAPOIAdapter, lang: String, readPoints: Bool, callback: GpxReadCallback?) -> TravelArticle? {
-        
-        //TODO: implement
-        return nil
+        var article: TravelArticle? = nil
+        var articles: [String: TravelArticle]? = [:]
+        if amenity.subtype() == "route_track" {
+            articles = readRoutePoint(file: file!, amenity: amenity)
+        } else {
+            articles = readArticles(file: file!, amenity: amenity)
+        }
+        if articles != nil && articles!.count > 0 {
+            var i = articles!.values.makeIterator()
+            let newArticleId = i.next()!.generateIdentifier()
+            cachedArticles[newArticleId] = articles
+            article = getCachedArticle(articleId: newArticleId, lang: lang, readGpx: readPoints, callback: callback)
+        }
+        return article
     }
     
     func readRoutePoint(file: String, amenity: OAPOIAdapter) -> [String : TravelArticle] {
-        
-        //TODO: implement
-        return [:]
+        var articles: [String : TravelArticle] = [:]
+        var res = getTravelGpx(file:file, amenity: amenity)
+        articles[""] = res
+        return articles
     }
     
-    func getTravelGpx(amenity: OAPOIAdapter) -> TravelGpx {
+    func getTravelGpx(file: String?, amenity: OAPOIAdapter) -> TravelGpx {
+        
+        var travelGpx = TravelGpx()
+        //TODO: check it
+        travelGpx.file = file
+        //TODO: check it
+        //String title = amenity.getName("en");
+        let title = amenity.name()
+        
+        travelGpx.lat = amenity.latitude()
+        travelGpx.lon = amenity.longitude()
+        travelGpx.description = amenity.getTagContent("description")
+        travelGpx.routeId = amenity.getTagContent("route_id")
+        travelGpx.user = amenity.getTagContent("user")
+        travelGpx.activityType = amenity.getTagContent("route_activity_type")
+        travelGpx.ref = amenity.getRef()
+        
+        travelGpx.totalDistance = Float(amenity.getTagContent("distance")) ?? 0
+        travelGpx.diffElevationUp = Double(amenity.getTagContent("diff_ele_up")) ?? 0
+        travelGpx.diffElevationDown = Double(amenity.getTagContent("diff_ele_down")) ?? 0
+        travelGpx.maxElevation = Double(amenity.getTagContent("max_ele")) ?? 0
+        travelGpx.minElevation = Double(amenity.getTagContent("min_ele")) ?? 0
+        travelGpx.avgElevation = Double(amenity.getTagContent("avg_ele")) ?? 0
+        
+        let radius: String = amenity.getTagContent("route_radius")
+        if radius != nil {
+//            travelGpx.routeRadius = MapUtils.convertCharToDist(radius.charAt(0), TRAVEL_GPX_CONVERT_FIRST_LETTER,
+//                                    TRAVEL_GPX_CONVERT_FIRST_DIST, TRAVEL_GPX_CONVERT_MULT_1, TRAVEL_GPX_CONVERT_MULT_2);
+        }
         
         //TODO: implement
-        return TravelGpx()
+        //TODO: replace strings to consts
+        
+        return travelGpx
     }
     
     func getSearchFilter(filterSubcategory: String) -> OASearchPoiTypeFilter {

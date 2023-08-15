@@ -2999,3 +2999,8 @@
 "shared_string_hidden" = "Skryté";
 "visible_in_3d_mode" = "Viditelné ve 3D režimu";
 "map_2d_mode_action" = "2D režim";
+"free_favorites_backup_description" = "Zaregistrujte se do OsmAnd Cloud a získejte bezplatné zálohování oblíbených bodů a nastavení";
+"free_favorites_backup" = "Bezplatné zálohování oblíbených bodů";
+"banner_payment_free_backup_settings_title" = "Bezplatné zálohování nastavení";
+"get_osmand_cloud" = "Získejte OsmAnd Cloud";
+"free_account" = "Bezplatný účet";

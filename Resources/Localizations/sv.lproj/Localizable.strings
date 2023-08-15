@@ -1657,7 +1657,7 @@
 "shared_string_total" = "Totalt";
 "shared_string_walk" = "Gå";
 "board_at" = "Board at";
-"exit_at" = "Exit at";
+"exit_at" = "Gå av vid";
 "by_transport_type" = "By %@";
 "transport_stops" = "hållplatser";
 "total_time" = "Total time";
@@ -2206,7 +2206,7 @@
 "app_mode_horse" = "Häst";
 "app_mode_helicopter" = "Helikopter";
 "app_mode_skiing" = "Skidåkning";
-"app_mode_personal_transporter" = "Personal transporter";
+"app_mode_personal_transporter" = "";
 "app_mode_monowheel" = "Monowheel";
 "app_mode_scooter" = "Skoter";
 "app_mode_ufo" = "UFO";
@@ -2601,3 +2601,14 @@
 "routing_attr_freeride_policy_only_if_necessary_name" = "Endast om det är nödvändigt";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "Åk inte offpist";
 "map_widget_distance_to_intermediate" = "Avstånd till mellanstopp";
+"rendering_attr_horse_scale_dangerous_name" = "Farlig";
+"rendering_attr_alpineHiking_name" = "Svårighetsgrad";
+"routing_attr_motor_type_lpg_name" = "Motorgas (gasol)";
+"routing_attr_motor_type_electric_name" = "Elektrisk";
+"routing_attr_motor_type_gas_name" = "CNG, komprimerad naturgas";
+"routing_attr_motor_type_hybrid_name" = "Hybrid";
+"rendering_value_all_name" = "Alla";
+"rendering_value_omit_name" = "Utelämna";
+"rendering_attr_horse_scale_impossible_name" = "Omöjlig";
+"rendering_attr_horse_scale_critical_name" = "Kritisk";
+"shared_string_duplicate" = "Duplicera";

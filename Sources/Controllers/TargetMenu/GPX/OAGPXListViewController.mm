@@ -625,6 +625,9 @@ static UIViewController *parentController;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     self.definesPresentationContext = NO;
+    
+    if (![_visible isEqualToArray:[_settings.mapSettingVisibleGpx get]])
+        [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
 }
 
 -(UIView *) getBottomView
@@ -1106,9 +1109,9 @@ static UIViewController *parentController;
     NSDictionary* item = [groupData.groupItems objectAtIndex:dataIndex];
     OAGPX *gpx = item[@"track"];
     if (sw.isOn)
-        [_settings showGpx:@[gpx.gpxFilePath] update:YES];
+        [_settings showGpx:@[gpx.gpxFilePath] update:NO];
     else if ([_settings.mapSettingVisibleGpx.get containsObject:gpx.gpxFilePath])
-        [_settings hideGpx:@[gpx.gpxFilePath] update:YES];
+        [_settings hideGpx:@[gpx.gpxFilePath] update:NO];
     [self.gpxTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.gpxTableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, [self.gpxTableView numberOfSections] - 1)] withRowAnimation:UITableViewRowAnimationNone];
     return NO;

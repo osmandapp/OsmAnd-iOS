@@ -63,7 +63,8 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         let pasteboard: UIPasteboard  = UIPasteboard.general
         pasteboard.string = coordinates
 
-        OAUtilities.showToast(String(format: localizedString("ltr_or_rtl_combine_via_colon"), arguments: ["copied_to_clipboard", coordinates]),
+        OAUtilities.showToast(String(format: localizedString("ltr_or_rtl_combine_via_colon"),
+                                     arguments: [localizedString("copied_to_clipboard"), coordinates]),
                               details: nil,
                               duration: 4,
                               in: OARootViewController.instance().view)

@@ -285,6 +285,8 @@
         _rulerControl.center = _rulerControl.superview.center;
     }
 
+    _mapHudViewController.topWidgetsViewWidthConstraint.constant = [OAUtilities isLandscapeIpadAware] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
+
     if (hasTopWidgets)
     {
         if (_lastUpdateTime == 0)
@@ -307,6 +309,7 @@
         _mapHudViewController.leftWidgetsViewHeightConstraint.constant = 0.;
         _mapHudViewController.leftWidgetsViewWidthConstraint.constant = 0.;
     }
+    _mapHudViewController.leftWidgetsViewTopConstraint.constant = [OAUtilities isLandscapeIpadAware] ? -_mapHudViewController.topWidgetsViewHeightConstraint.constant : 0.;
 
     _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = hasBottomWidgets ? [_bottomPanelController calculateContentSize].height : 0.;
 
@@ -321,6 +324,7 @@
         _mapHudViewController.rightWidgetsViewHeightConstraint.constant = 0.;
         _mapHudViewController.rightWidgetsViewWidthConstraint.constant = 0.;
     }
+    _mapHudViewController.rightWidgetsViewTopConstraint.constant = [OAUtilities isLandscapeIpadAware] ? -_mapHudViewController.topWidgetsViewHeightConstraint.constant : 0.;
 
     if (_downloadMapWidget && _downloadMapWidget.superview && !_downloadMapWidget.hidden)
     {

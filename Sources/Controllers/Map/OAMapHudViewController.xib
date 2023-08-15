@@ -19,12 +19,14 @@
                 <outlet property="driveModeButton" destination="QPn-ok-Vxm" id="puw-oM-kqp"/>
                 <outlet property="leftWidgetsView" destination="cig-0C-vFU" id="kOW-zQ-hHM"/>
                 <outlet property="leftWidgetsViewHeightConstraint" destination="RhQ-H2-T0u" id="Jev-6W-7ba"/>
+                <outlet property="leftWidgetsViewTopConstraint" destination="xJK-OC-uYa" id="t0r-kZ-4OC"/>
                 <outlet property="leftWidgetsViewWidthConstraint" destination="2n4-AE-rWI" id="qtB-58-XNE"/>
                 <outlet property="mapModeButton" destination="Tol-6L-Amr" id="0Lv-8x-10z"/>
                 <outlet property="mapSettingsButton" destination="Ezz-bP-gmB" id="fQV-HX-alr"/>
                 <outlet property="optionsMenuButton" destination="4" id="Kh9-5L-HB6"/>
                 <outlet property="rightWidgetsView" destination="8m9-Ym-Yya" id="MSs-ab-0bH"/>
                 <outlet property="rightWidgetsViewHeightConstraint" destination="kCf-O8-I5o" id="yFb-hu-1fU"/>
+                <outlet property="rightWidgetsViewTopConstraint" destination="cXy-oN-mfY" id="Osz-2N-ysJ"/>
                 <outlet property="rightWidgetsViewWidthConstraint" destination="ggL-oY-QsM" id="JGK-pK-wNy"/>
                 <outlet property="searchButton" destination="gMm-Ly-WJo" id="4xn-OZ-rlS"/>
                 <outlet property="statusBarView" destination="lga-DK-9T5" id="i0N-tA-Gsh"/>
@@ -70,6 +72,7 @@
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="52" id="22d-Ah-0dl"/>
+                                <constraint firstAttribute="width" constant="414" id="yax-4w-LsJ"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2RZ-GK-954" userLabel="bottomPanel" customClass="OAUserInteractionPassThroughView">
@@ -98,16 +101,17 @@
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="trailingMargin" secondItem="K8g-PT-gdL" secondAttribute="trailing" constant="-8" id="3LD-NT-9Ml"/>
+                        <constraint firstAttribute="trailingMargin" secondItem="K8g-PT-gdL" secondAttribute="trailing" priority="999" constant="-8" id="3LD-NT-9Ml"/>
                         <constraint firstItem="cig-0C-vFU" firstAttribute="leading" secondItem="w1v-g4-GFe" secondAttribute="leadingMargin" constant="-10" id="H90-Re-Dif"/>
                         <constraint firstItem="cig-0C-vFU" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="2RZ-GK-954" secondAttribute="top" priority="999" id="QVk-GZ-SmH"/>
                         <constraint firstItem="2RZ-GK-954" firstAttribute="leading" secondItem="w1v-g4-GFe" secondAttribute="leadingMargin" constant="-8" id="SGi-I2-Hsf"/>
-                        <constraint firstItem="K8g-PT-gdL" firstAttribute="leading" secondItem="w1v-g4-GFe" secondAttribute="leadingMargin" constant="-8" id="W4e-2v-DSu"/>
+                        <constraint firstItem="K8g-PT-gdL" firstAttribute="leading" secondItem="w1v-g4-GFe" secondAttribute="leadingMargin" priority="999" constant="-8" id="W4e-2v-DSu"/>
                         <constraint firstAttribute="bottom" secondItem="2RZ-GK-954" secondAttribute="bottom" id="bNi-In-1bI"/>
                         <constraint firstItem="8m9-Ym-Yya" firstAttribute="top" secondItem="K8g-PT-gdL" secondAttribute="bottom" id="cXy-oN-mfY"/>
                         <constraint firstAttribute="trailingMargin" secondItem="8m9-Ym-Yya" secondAttribute="trailing" constant="-10" id="cbg-nq-EYB"/>
                         <constraint firstItem="8m9-Ym-Yya" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="2RZ-GK-954" secondAttribute="top" priority="999" id="kSQ-Gc-881"/>
                         <constraint firstItem="K8g-PT-gdL" firstAttribute="top" secondItem="w1v-g4-GFe" secondAttribute="top" id="l7W-kJ-xAQ"/>
+                        <constraint firstItem="K8g-PT-gdL" firstAttribute="centerX" secondItem="w1v-g4-GFe" secondAttribute="centerX" id="nd0-KQ-Ihp"/>
                         <constraint firstAttribute="trailingMargin" secondItem="2RZ-GK-954" secondAttribute="trailing" constant="-8" id="oaV-Cz-WGl"/>
                         <constraint firstItem="cig-0C-vFU" firstAttribute="top" secondItem="K8g-PT-gdL" secondAttribute="bottom" id="xJK-OC-uYa"/>
                     </constraints>
@@ -233,9 +237,9 @@
             <constraints>
                 <constraint firstItem="w1v-g4-GFe" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Fvl-Pq-OZu"/>
                 <constraint firstItem="w1v-g4-GFe" firstAttribute="top" secondItem="lga-DK-9T5" secondAttribute="bottom" id="KAU-gU-5eZ"/>
-                <constraint firstItem="2Fb-ez-Rsg" firstAttribute="leading" secondItem="1" secondAttribute="leadingMargin" constant="-20" id="ZQz-tI-ohe"/>
+                <constraint firstItem="2Fb-ez-Rsg" firstAttribute="leading" secondItem="w1v-g4-GFe" secondAttribute="leadingMargin" constant="-8" id="ZQz-tI-ohe"/>
                 <constraint firstItem="lga-DK-9T5" firstAttribute="top" secondItem="1" secondAttribute="top" id="bo6-Hw-8Mb"/>
-                <constraint firstAttribute="trailingMargin" secondItem="2Fb-ez-Rsg" secondAttribute="trailing" constant="-20" id="dQ4-jK-VzO"/>
+                <constraint firstItem="w1v-g4-GFe" firstAttribute="trailingMargin" secondItem="2Fb-ez-Rsg" secondAttribute="trailing" constant="-8" id="dQ4-jK-VzO"/>
                 <constraint firstAttribute="trailingMargin" secondItem="lga-DK-9T5" secondAttribute="trailing" constant="-20" id="eaz-gu-NgY"/>
                 <constraint firstAttribute="trailing" secondItem="w1v-g4-GFe" secondAttribute="trailing" id="gNR-PQ-r7U"/>
                 <constraint firstItem="w1v-g4-GFe" firstAttribute="bottom" secondItem="2Fb-ez-Rsg" secondAttribute="top" id="ndj-lr-Ert"/>

@@ -178,7 +178,7 @@
     _driveModeButton.userInteractionEnabled = YES;
     [self updateRouteButton:NO followingMode:NO];
 
-    self.statusBarViewHeightConstraint.constant = [OAUtilities isLandscape] ? 0. : [OAUtilities getStatusBarHeight];
+    self.statusBarViewHeightConstraint.constant = [OAUtilities isIPad] || ![OAUtilities isLandscape] ? [OAUtilities getStatusBarHeight] : 0.;
     self.bottomBarViewHeightConstraint.constant = [OAUtilities getBottomMargin];
 
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
@@ -301,7 +301,7 @@
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        self.statusBarViewHeightConstraint.constant = [OAUtilities isLandscape] ? 0. : [OAUtilities getStatusBarHeight];
+        self.statusBarViewHeightConstraint.constant = [OAUtilities isIPad] || ![OAUtilities isLandscape] ? [OAUtilities getStatusBarHeight] : 0.;
         self.bottomBarViewHeightConstraint.constant = [OAUtilities getBottomMargin];
         if (_mapInfoController.weatherToolbarVisible)
             [_mapInfoController updateWeatherToolbarVisible];
@@ -993,7 +993,7 @@
     CGFloat contextMenuToolbarHeight = _mapPanelViewController.scrollableHudViewController
             ? [_mapPanelViewController.scrollableHudViewController getNavbarHeight]
             : [_mapPanelViewController isTopToolbarActive] ? [_mapPanelViewController getTargetToolbarHeight] : 0.;
-    CGFloat offset = [OAUtilities isLandscape] ? 0. : contextMenuToolbarHeight > 0 ? contextMenuToolbarHeight : [self getHudMinTopOffset];
+    CGFloat offset = [OAUtilities isLandscape] && ![OAUtilities isIPad] ? 0. : contextMenuToolbarHeight > 0 ? contextMenuToolbarHeight : [self getHudMinTopOffset];
     BOOL isToolbarAllowed = !_mapInfoController.weatherToolbarVisible;
     BOOL isToolbarVisible = isToolbarAllowed && _toolbarViewController && _toolbarViewController.view.superview;
     BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetChangePosition;
@@ -1009,7 +1009,7 @@
     {
         if (!self.contextMenuMode)
         {
-            if (isTopWidgetsVisible && contextMenuToolbarHeight == 0.)
+            if (isTopWidgetsVisible && contextMenuToolbarHeight == 0. && ![OAUtilities isLandscapeIpadAware])
                 offset += self.topWidgetsViewHeightConstraint.constant;
             if (isToolbarVisible)
                 offset += _toolbarViewController.view.frame.size.height;
@@ -1334,14 +1334,26 @@
     BOOL isLandscape = [OAUtilities isLandscape];
     BOOL isScrollableHudVisible = _mapPanelViewController.scrollableHudViewController && _mapPanelViewController.scrollableHudViewController.view.superview;
     CGFloat bottomOffset = DeviceScreenHeight - kButtonOffset;
-    if (self.contextMenuMode && !isLandscape)
+    BOOL isIPad = [OAUtilities isIPad];
+    BOOL isPlanRoute = _mapPanelViewController.activeTargetType == OATargetRoutePlanning;
+    BOOL isIPadAllowed = isPlanRoute;
+    if (self.contextMenuMode && (!isLandscape || isIPadAllowed))
     {
         CGFloat contextMenuHeight = 0.;
-        if (_mapPanelViewController.scrollableHudViewController && _mapPanelViewController.scrollableHudViewController.view.superview)
-            contextMenuHeight = [_mapPanelViewController.scrollableHudViewController getViewHeight];
-        else
-            contextMenuHeight = [_mapPanelViewController getTargetMenuHeight];
-
+        if (!isIPad || isIPadAllowed)
+        {
+            if (_mapPanelViewController.scrollableHudViewController && _mapPanelViewController.scrollableHudViewController.view.superview)
+            {
+                if (isPlanRoute && isLandscape)
+                    contextMenuHeight = [_mapPanelViewController.scrollableHudViewController getToolbarHeight] + [OAUtilities getBottomMargin];
+                else
+                    contextMenuHeight = [_mapPanelViewController.scrollableHudViewController getViewHeight];
+            }
+            else
+            {
+                contextMenuHeight = [_mapPanelViewController getTargetMenuHeight];
+            }
+        }
         bottomOffset -= contextMenuHeight;
     }
     else

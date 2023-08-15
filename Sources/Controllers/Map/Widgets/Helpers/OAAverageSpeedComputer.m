@@ -199,7 +199,7 @@ static long BIGGEST_MEASURED_INTERVAL;
 
 - (BOOL)isEnabled
 {
-    OAMapWidgetRegistry *widgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
+    OAMapWidgetRegistry *widgetRegistry = [OAMapWidgetRegistry sharedInstance];
     OAApplicationMode *appMode = _settings.applicationMode.get;
     NSArray<OAMapWidgetInfo *> *widgetInfos = [widgetRegistry getAllWidgets];
 

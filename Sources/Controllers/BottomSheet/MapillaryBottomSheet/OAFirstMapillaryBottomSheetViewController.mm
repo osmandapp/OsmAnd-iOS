@@ -23,6 +23,7 @@
 #import "OAMapWidgetRegistry.h"
 #import "OAProducts.h"
 #import "OAMapWidgetRegInfo.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kButtonsDividerTag 150
 
@@ -82,16 +83,16 @@
                      }];
     
     [arr addObject:@{ @"type" : [OADividerCell getCellIdentifier] } ];
-    
+
+    OAMapWidgetInfo *mapWidgetInfo = [_mapWidgetRegistry getWidgetInfoById:kInAppId_Addon_Mapillary];
     [arr addObject:@{
-                     @"type" : [OASwitchTableViewCell getCellIdentifier],
-                     @"name" : @"enable_mapil_widget",
-                     @"title" : OALocalizedString(@"mapillary_turn_on_widget"),
-                     @"description" : OALocalizedString(@"mapillary_turn_on_widget_descr"),
-                     @"value" : @([_mapWidgetRegistry isVisible:kInAppId_Addon_Mapillary])
-                     }];
-    
-    
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
+        @"name" : @"enable_mapil_widget",
+        @"title" : OALocalizedString(@"mapillary_turn_on_widget"),
+        @"description" : OALocalizedString(@"mapillary_turn_on_widget_descr"),
+        @"value" : @([mapWidgetInfo isEnabledForAppMode:[[OAAppSettings sharedManager].applicationMode get]])
+    }];
+
     _data = [NSArray arrayWithArray:arr];
 }
 
@@ -129,9 +130,14 @@
             BOOL isChecked = sw.on;
             if ([name isEqualToString:@"enable_mapil_widget"])
             {
-                OAMapWidgetRegInfo *info = [_mapWidgetRegistry widgetByKey:kInAppId_Addon_Mapillary];
-                [_mapWidgetRegistry setVisibility:info visible:isChecked collapsed:NO];
-                [[OARootViewController instance].mapPanel recreateControls];
+                OAMapWidgetInfo *info = [_mapWidgetRegistry getWidgetInfoById:kInAppId_Addon_Mapillary];
+                if (info)
+                {
+                    [_mapWidgetRegistry enableDisableWidgetForMode:[[OAAppSettings sharedManager].applicationMode get]
+                                                        widgetInfo:info
+                                                           enabled:@(isChecked)
+                                                  recreateControls:YES];
+                }
             }
         }
     }

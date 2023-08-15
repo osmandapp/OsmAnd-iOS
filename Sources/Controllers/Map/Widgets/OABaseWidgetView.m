@@ -7,9 +7,13 @@
 //
 
 #import "OABaseWidgetView.h"
+#import "OAMapInfoController.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @implementation OABaseWidgetView
+{
+    BOOL _nightMode;
+}
 
 - (instancetype)initWithType:(OAWidgetType *)type
 {
@@ -66,14 +70,34 @@
     return NO; // override
 }
 
+- (void)updateColors:(OATextState *)textState
+{
+    _nightMode = textState.night;
+}
+
+- (BOOL)isNightMode
+{
+    return _nightMode;
+}
+
 - (BOOL)isTopText
 {
     return NO;
 }
 
+- (void)adjustViewSize
+{
+}
+
 - (void) attachView:(UIView *)container order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *)followingWidgets
 {
     [container addSubview:self];
+}
+
+- (void) detachView:(OAWidgetsPanel *)widgetsPanel
+{
+    if (self.superview)
+        [self removeFromSuperview];
 }
 
 @end

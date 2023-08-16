@@ -17,6 +17,7 @@
 #import "OASearchSettings.h"
 #import "OASearchPhrase.h"
 #import "OANameStringMatcher.h"
+#import "OAResourcesUIHelper.h"
 
 #import "OsmAnd_Maps-Swift.h"
 
@@ -25,10 +26,10 @@
 @implementation OATravelGuidesHelper
 
 
-+ (NSArray<OAPOIAdapter *> *) searchAmenity:(double)lat lon:(double)lon radius:(int)radius searchFilter:(NSString *)searchFilter
++ (NSArray<OAPOIAdapter *> *) searchAmenity:(double)lat lon:(double)lon reader:(NSString *)reader radius:(int)radius searchFilter:(NSString *)searchFilter
 {
     OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
-    NSArray<OAPOI *> *foundPoints = [OAPOIHelper findTravelGuides:searchFilter location:locI radius:radius];
+    NSArray<OAPOI *> *foundPoints = [OAPOIHelper findTravelGuides:searchFilter location:locI radius:radius reader:reader];
     
     NSMutableArray<OAPOIAdapter *> *result = [NSMutableArray array];
     for (OAPOI *point in foundPoints)
@@ -39,9 +40,9 @@
     return result;
 }
 
-+ (NSArray<OAPOIAdapter *> *) searchAmenity:(NSString *)searchQuerry
++ (NSArray<OAPOIAdapter *> *) searchAmenity:(NSString *)searchQuerry reader:(NSString *)reader
 {
-    [OAPOIHelper.sharedInstance findTravelGuidessByKeyword:searchQuerry categoryName:nil poiTypeName:nil];
+    [OAPOIHelper.sharedInstance findTravelGuidessByKeyword:searchQuerry categoryName:nil poiTypeName:nil reader:reader];
     
     //TODO: add result filling callback
     
@@ -99,12 +100,28 @@
     OASearchSettings *settings = [searchUICore getSearchSettings];
     OASearchPhrase *phrase = [[searchUICore getPhrase] generateNewPhrase:searchQuery settings:settings];
     OANameStringMatcher *matcher = [phrase getFirstUnknownNameStringMatcher];
-
-
+    
     //TODO: check this part. Differ from android?
-    [self searchAmenity:searchQuery];
+    for (NSString *reader in [self.class getObfList])
+    {
+        [self searchAmenity:searchQuery reader:reader];
+    }
 
     return [NSArray array];
+}
+
++ (NSArray<NSString *> *) getTravelGuidesObfList
+{
+    OsmAndAppInstance app = OsmAndApp.instance;
+    NSMutableArray<NSString *> *obfFilenames = [NSMutableArray array];
+    for (const auto& resource : app.resourcesManager->getLocalResources())
+    {
+        if (resource->type == OsmAnd::ResourcesManager::ResourceType::Travel)
+        {
+            [obfFilenames addObject:resource->id.toNSString()];
+        }
+    }
+    return obfFilenames;
 }
 
 @end

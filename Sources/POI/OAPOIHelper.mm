@@ -894,7 +894,7 @@
     return [NSArray arrayWithArray:arr];
 }
 
-+ (NSArray<OAPOI *> *) findTravelGuides:(NSString *)categoryName location:(OsmAnd::PointI)location radius:(int)radius
++ (NSArray<OAPOI *> *) findTravelGuides:(NSString *)categoryName location:(OsmAnd::PointI)location radius:(int)radius reader:(NSString *)reader
 {
     OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, location);
     
@@ -920,7 +920,7 @@
     NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
     NSMutableSet<NSNumber *> *processedPoi = [NSMutableSet set];
   
-    search->performTravelGuidesSearch(*searchCriteria,
+    search->performTravelGuidesSearch(QString::fromNSString(reader), *searchCriteria,
                           [&arr, &location, &processedPoi](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
                                 const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
@@ -938,7 +938,7 @@
     return [NSArray arrayWithArray:arr];
 }
 
-- (void) findTravelGuidessByKeyword:(NSString *)keyword categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName
+- (void) findTravelGuidessByKeyword:(NSString *)keyword categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName reader:(NSString *)reader
 {
     _isSearchDone = NO;
     _breakSearch = NO;
@@ -968,7 +968,8 @@
     
     const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
     
-    search->performTravelGuidesSearch(*searchCriteria,
+    search->performTravelGuidesSearch(QString::fromNSString(reader),
+                                      *searchCriteria,
                                       [self, &processedPoi, &arr]
                                         (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                                         {

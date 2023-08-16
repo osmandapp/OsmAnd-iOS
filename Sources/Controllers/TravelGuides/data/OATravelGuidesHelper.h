@@ -13,10 +13,12 @@
 
 @interface OATravelGuidesHelper : NSObject
 
-+ (NSArray<OAPOIAdapter *> *) searchAmenity:(double)lat lon:(double)lon radius:(int)radius searchFilter:(NSString *)searchFilter;
++ (NSArray<OAPOIAdapter *> *) searchAmenity:(double)lat lon:(double)lon reader:(NSString *)reader radius:(int)radius searchFilter:(NSString *)searchFilter;
 
 + (OAWptPtAdapter *) createWptPt:(OAPOIAdapter *)amenity lang:(NSString *)lang;
 
 + (NSArray<OAWikivoyageSearchResult *> *) search:(NSString *)searchQuery;
+
++ (NSArray<NSString *> *) getTravelGuidesObfList;
 
 @end

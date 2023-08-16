@@ -188,7 +188,7 @@
 "map_settings_over" = "Шар";
 "map_settings_under" = "Підкладка";
 "shared_string_none" = "Нічого";
-"map_settings_offline" = "Стилі оффлайн мап";
+"map_settings_offline" = "Стилі офлайн мап";
 "shared_string_online_maps" = "Онлайн-мапи";
 "map_settings_avail_lay" = "Доступні шари";
 "intro_download" = "Завантажити\nмапу";
@@ -434,7 +434,7 @@
 "free" = "Вільно %@";
 "try_again" = "Спробуйте ще раз";
 "search_map" = "Пошук мапи…";
-"skip_map_downloading_desc_ios" = "У Вас немає встановлених оффлайн мап. Ви можете вибрати мапу з переліку або завантажити мапи пізніше через меню — Керування файлами мап";
+"skip_map_downloading_desc_ios" = "У Вас немає встановлених офлайн мап. Ви можете вибрати мапу з переліку або завантажити мапи пізніше через меню — Керування файлами мап";
 "search_categories" = "Категорії";
 "items_selected" = "%d вибрано";
 "poi_filter_custom_filter" = "Власний фільтр";

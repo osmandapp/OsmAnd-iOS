@@ -8,21 +8,15 @@
 
 import Foundation
 
-
-class WikivoyageSearchResult : Hashable {
+@objc(OAWikivoyageSearchResult)
+@objcMembers
+class WikivoyageSearchResult : NSObject {
     
     var foo: String = ""
-    
-    
     
     static func == (lhs: WikivoyageSearchResult, rhs: WikivoyageSearchResult) -> Bool {
         //TODO: implement
         return false
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        //TODO: implement
-        hasher.combine(foo)
     }
     
 }

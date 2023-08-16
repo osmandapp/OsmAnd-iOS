@@ -383,4 +383,6 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 + (NSString *) getRoutingStringPropertyName:(NSString *)propertyName defaultName:(NSString *)defaultName;
 
++ (int) convertCharToDist:(NSString *)ch firstLetter:(NSString *)firstLetter firstDist:(int)firstDist mult1:(int)mult1 mult2:(int)mult2;
+
 @end

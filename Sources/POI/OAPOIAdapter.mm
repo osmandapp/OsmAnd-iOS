@@ -103,4 +103,16 @@
     return obj ? [obj getNames:tag defTag:defTag] : nil;
 }
 
+- (NSString *)getStrictTagContent:(NSString *)tag lang:(NSString *)lang
+{
+    OAPOI *obj = [self getObject];
+    return obj ? [obj getStrictTagContent:tag lang:lang] : nil;
+}
+
+- (NSString *)getTagContent:(NSString *)tag
+{
+    OAPOI *obj = [self getObject];
+    return obj ? [obj getTagContent:tag] : nil;
+}
+
 @end

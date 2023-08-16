@@ -938,6 +938,52 @@
     return [NSArray arrayWithArray:arr];
 }
 
+- (void) findTravelGuidessByKeyword:(NSString *)keyword categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName
+{
+    _isSearchDone = NO;
+    _breakSearch = NO;
+
+    const auto& obfsCollection = _app.resourcesManager->obfsCollection;
+    
+    std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+    ctrl.reset(new OsmAnd::FunctorQueryController([self]
+                                       (const OsmAnd::FunctorQueryController* const controller)
+                                       {
+                                           // should break?
+                                           //return (_radius == 0.0 && _limitCounter < 0) || _breakSearch;
+                                            return false;
+                                       }));
+    
+    _limitCounter = _searchLimit;
+    
+    _prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+    
+    const std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(new OsmAnd::AmenitiesByNameSearch::Criteria);
+    
+    searchCriteria->name = QString::fromNSString(keyword ? keyword : @"");
+    searchCriteria->obfInfoAreaFilter = _visibleArea;
+    
+    NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
+    NSMutableSet<NSNumber *> *processedPoi = [NSMutableSet set];
+    
+    const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
+    
+    search->performTravelGuidesSearch(*searchCriteria,
+                                      [self, &processedPoi, &arr]
+                                        (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                                        {
+                                            const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                                            int a = 0;
+                                            [self onPOIFound:resultEntry];
+                                        },
+                                        ctrl);
+    
+    _isSearchDone = YES;
+    
+    if (_delegate)
+        [_delegate searchDone:_breakSearch];
+}
+
 + (OAPOIRoutePoint *) distFromLat:(double)latitude longitude:(double)longitude locations:(NSArray<CLLocation *> *)locations radius:(double)radius
 {
     double dist = radius + 0.1;

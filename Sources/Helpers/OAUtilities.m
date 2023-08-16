@@ -2725,5 +2725,20 @@ static const double d180PI = 180.0 / M_PI_2;
         res = defaultName;
     return res;
 }
+
++ (int) convertCharToDist:(NSString *)ch firstLetter:(NSString *)firstLetter firstDist:(int)firstDist mult1:(int)mult1 mult2:(int)mult2
+{
+    int dist = firstDist;
+    
+    const char *chChar = [ch UTF8String];
+    const char *firstLetterChar = [firstLetter UTF8String];
+    
+    for(int iteration = 1; iteration < chChar - firstLetterChar + 1; ++iteration)
+    {
+        dist *= iteration % 2 == 1 ? mult1 : mult2;
+    }
+    
+    return dist;;
+}
  
 @end

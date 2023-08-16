@@ -93,6 +93,7 @@
 #import "OAIndexConstants.h"
 #import "QuadRect.h"
 #import "OASearchPoiTypeFilter.h"
+#import "OAPOI.h"
 
 // Apple
 #import <SafariServices/SafariServices.h>

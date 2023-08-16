@@ -10,15 +10,15 @@ import Foundation
 
 class TravelGpx : TravelArticle {
     
-    let DISTANCE = "distance"
-    let DIFF_ELEVATION_UP = "diff_ele_up"
-    let DIFF_ELEVATION_DOWN = "diff_ele_down"
-    let MAX_ELEVATION = "max_ele"
-    let MIN_ELEVATION = "min_ele"
-    let AVERAGE_ELEVATION = "avg_ele"
-    let ROUTE_RADIUS = "route_radius"
-    let USER = "user"
-    let ACTIVITY_TYPE = "route_activity_type"
+    static let DISTANCE = "distance"
+    static let DIFF_ELEVATION_UP = "diff_ele_up"
+    static let DIFF_ELEVATION_DOWN = "diff_ele_down"
+    static let MAX_ELEVATION = "max_ele"
+    static let MIN_ELEVATION = "min_ele"
+    static let AVERAGE_ELEVATION = "avg_ele"
+    static let ROUTE_RADIUS = "route_radius"
+    static let USER = "user"
+    static let ACTIVITY_TYPE = "route_activity_type"
     
     var user: String?
     var activityType: String?
@@ -56,6 +56,6 @@ class TravelGpx : TravelArticle {
     }
     
     override func getPointFilterString() -> String {
-        return "route_track_point";
+        return ROUTE_TRACK_POINT;
     }
 }

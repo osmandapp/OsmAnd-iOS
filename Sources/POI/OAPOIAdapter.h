@@ -26,6 +26,7 @@
 - (NSString *) getRouteId;
 
 - (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag;
+- (NSString *)getStrictTagContent:(NSString *)tag lang:(NSString *)lang;
 - (NSString *)getTagContent:(NSString *)tag;
 
 @end

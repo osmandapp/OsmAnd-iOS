@@ -9,10 +9,14 @@
 #import "OAPOIAdapter.h"
 #import "OAGPXDocumentPrimitivesAdapter.h"
 
+@class OAWikivoyageSearchResult;
+
 @interface OATravelGuidesHelper : NSObject
 
 + (NSArray<OAPOIAdapter *> *) searchAmenity:(double)lat lon:(double)lon radius:(int)radius searchFilter:(NSString *)searchFilter;
 
 + (OAWptPtAdapter *) createWptPt:(OAPOIAdapter *)amenity lang:(NSString *)lang;
+
++ (NSArray<OAWikivoyageSearchResult *> *) search:(NSString *)searchQuery;
 
 @end

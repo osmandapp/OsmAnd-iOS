@@ -11,6 +11,14 @@
 #import "OAPOIHelper.h"
 #import "OsmAndApp.h"
 #import "OAPOI.h"
+#import "OAUtilities.h"
+#import "OAQuickSearchHelper.h"
+#import "OASearchUICore.h"
+#import "OASearchSettings.h"
+#import "OASearchPhrase.h"
+#import "OANameStringMatcher.h"
+
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -29,6 +37,15 @@
         [result addObject:poiAdapter];
     }
     return result;
+}
+
++ (NSArray<OAPOIAdapter *> *) searchAmenity:(NSString *)searchQuerry
+{
+    [OAPOIHelper.sharedInstance findTravelGuidessByKeyword:searchQuerry categoryName:nil poiTypeName:nil];
+    
+    //TODO: add result filling callback
+    
+    return [NSArray array];
 }
 
 
@@ -71,6 +88,23 @@
     
     OAWptPtAdapter *wptAdapter = [[OAWptPtAdapter alloc] initWithWpt:wptPt];
     return wptAdapter;
+}
+
++ (NSArray<OAWikivoyageSearchResult *> *) search:(NSString *)searchQuery
+{
+    NSMutableArray<OAWikivoyageSearchResult *> *res = [NSMutableArray array];
+    NSMutableDictionary<NSString *, NSArray<OAPOIAdapter *> *> *amenityMap = [NSMutableDictionary dictionary];
+    NSString *appLang = [OAUtilities currentLang];
+    OASearchUICore *searchUICore = [OAQuickSearchHelper.instance getCore];
+    OASearchSettings *settings = [searchUICore getSearchSettings];
+    OASearchPhrase *phrase = [[searchUICore getPhrase] generateNewPhrase:searchQuery settings:settings];
+    OANameStringMatcher *matcher = [phrase getFirstUnknownNameStringMatcher];
+
+
+    //TODO: check this part. Differ from android?
+    [self searchAmenity:searchQuery];
+
+    return [NSArray array];
 }
 
 @end

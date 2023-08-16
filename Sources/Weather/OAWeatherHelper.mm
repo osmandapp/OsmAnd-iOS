@@ -424,6 +424,9 @@
     _offlineCacheSize = 0.;
     _onlineCacheSize = 0.;
     NSMutableArray<NSArray<NSNumber *> *> *tileIds = [NSMutableArray array];
+    NSString *docPath = [OsmAndApp instance].documentsPath;
+    // Weather Algeria africa.tifsqlite
+    // africa_benin
     for (NSString *regionId in regionIds)
     {
         NSArray<NSArray<NSNumber *> *> *regionTileIds = [self.class getPreferenceTileIds:regionId];
@@ -439,12 +442,23 @@
         [self setOfflineForecastSizeInfo:regionId
                                    value:kTileSize * originalTileIds.count * kForecastDatesCount
                                    local:NO];
+        NSString *nameFirstLetterUpperCase = [regionId stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:[[regionId substringToIndex:1] capitalizedString]];
+        NSString *clearName = [nameFirstLetterUpperCase stringByReplacingOccurrencesOfString:@"_"
+                                             withString:@" "];
+        NSString *fileName = [NSString stringWithFormat:@"Weather %@.tifsqlite", clearName];
+//        Weather Benin africa.tifsqlite
+//        Weather Africa benin.tifsqlite
+        NSString *filePath = [docPath stringByAppendingPathComponent:[NSString stringWithFormat:@"Resources/%@", fileName]];
+        if ([NSFileManager.defaultManager fileExistsAtPath:filePath])
+            [NSFileManager.defaultManager removeItemAtPath:filePath error:nil];
     }
 
     QList<OsmAnd::TileId> qTileIds = [OANativeUtilities convertToQListTileIds:tileIds];
     OsmAnd::ZoomLevel zoom = OsmAnd::WeatherTileResourceProvider::getGeoTileZoom();
     if (!qTileIds.isEmpty())
         _weatherResourcesManager->clearDbCache(qTileIds, QList<OsmAnd::TileId>(), zoom);
+    
+
 
     dispatch_async(dispatch_get_main_queue(), ^{
         if (refreshMap)

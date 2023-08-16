@@ -1540,55 +1540,55 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast)
     {
-//        if (![[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled] || ![OAIAPHelper isOsmAndProAvailable])
-//            return;
-//
-//        NSString *regionId = [OAWeatherHelper checkAndGetRegionId:item.worldRegion];
-//
-//        AFNetworkReachabilityManager *networkManager = [AFNetworkReachabilityManager sharedManager];
-//        if (!networkManager.isReachable)
-//            return;
-//        else if (!networkManager.isReachableViaWiFi && [OAWeatherHelper getPreferenceWeatherAutoUpdate:regionId] == EOAWeatherAutoUpdateOverWIFIOnly)
-//            return;
-//
-//        NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-//   // https://osmand.net/download?&weather=yes&file=Weather_Angola_africa.tifsqlite.zip
-//        NSString *downloadsIdPrefix = [item.worldRegion.downloadsIdPrefix stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:[[item.worldRegion.downloadsIdPrefix substringToIndex:1] capitalizedString]];
-//        NSString *pureUrlString = [[NSString alloc] initWithFormat:@"https://osmand.net/download?&weather=yes&file=Weather_%@%@", downloadsIdPrefix, @"tifsqlite.zip"];
-//        NSString *params = [[NSString stringWithFormat:@"&event=2&osmandver=OsmAndIOs+%@", ver] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-//        NSString *urlString = [[NSString alloc] initWithFormat:@"%@%@", pureUrlString, params];
-//        NSURL *url = [NSURL URLWithString:urlString];
-//        NSURLRequest *request = [NSURLRequest requestWithURL:url];
-//
-//        NSLog(@"%@", url);
-//        NSString* name = [self.class titleOfResourceType:item.resourceType
-//                                                inRegion:item.worldRegion
-//                                          withRegionName:YES
-//                                        withResourceType:YES];
-//        OsmAndAppInstance app = [OsmAndApp instance];
-//        id<OADownloadTask> task;
-//        if (!item.downloadTask)
-//            item.downloadTask = task = [app.downloadsManager downloadTaskWithRequest:request
-//                                                                              andKey:[@"resource:" stringByAppendingString:[NSString stringWithFormat:@"%@%@", [item.worldRegion.downloadsIdPrefix lowerCase], @"tifsqlite"]] andName:name];
-//        else
-//            task = item.downloadTask;
-//
-//        if (onTaskCreated)
-//            onTaskCreated(task);
-//
-//        // Resume task only if it's other resource download tasks are not running
-//        if ([app.downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil)
-//        {
-//            [task resume];
-//            if (onTaskResumed)
-//                onTaskResumed(task);
-//        }
-        
+        if (![[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled] || ![OAIAPHelper isOsmAndProAvailable])
+            return;
+
+        NSString *regionId = [OAWeatherHelper checkAndGetRegionId:item.worldRegion];
+
+        AFNetworkReachabilityManager *networkManager = [AFNetworkReachabilityManager sharedManager];
+        if (!networkManager.isReachable)
+            return;
+        else if (!networkManager.isReachableViaWiFi && [OAWeatherHelper getPreferenceWeatherAutoUpdate:regionId] == EOAWeatherAutoUpdateOverWIFIOnly)
+            return;
+
+        NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+   // https://osmand.net/download?&weather=yes&file=Weather_Angola_africa.tifsqlite.zip
+        NSString *downloadsIdPrefix = [item.worldRegion.downloadsIdPrefix stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:[[item.worldRegion.downloadsIdPrefix substringToIndex:1] capitalizedString]];
+        NSString *pureUrlString = [[NSString alloc] initWithFormat:@"https://osmand.net/download?&weather=yes&file=Weather_%@%@", downloadsIdPrefix, @"tifsqlite.zip"];
+        NSString *params = [[NSString stringWithFormat:@"&event=2&osmandver=OsmAndIOs+%@", ver] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        NSString *urlString = [[NSString alloc] initWithFormat:@"%@%@", pureUrlString, params];
+        NSURL *url = [NSURL URLWithString:urlString];
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+
+        NSLog(@"%@", url);
+        NSString* name = [self.class titleOfResourceType:item.resourceType
+                                                inRegion:item.worldRegion
+                                          withRegionName:YES
+                                        withResourceType:YES];
+        OsmAndAppInstance app = [OsmAndApp instance];
+        id<OADownloadTask> task;
+        if (!item.downloadTask)
+            item.downloadTask = task = [app.downloadsManager downloadTaskWithRequest:request
+                                                                              andKey:[@"resource:" stringByAppendingString:[NSString stringWithFormat:@"%@%@", [item.worldRegion.downloadsIdPrefix lowerCase], @"tifsqlite"]] andName:name];
+        else
+            task = item.downloadTask;
+
+        if (onTaskCreated)
+            onTaskCreated(task);
+
+        // Resume task only if it's other resource download tasks are not running
+        if ([app.downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil)
+        {
+            [task resume];
+            if (onTaskResumed)
+                onTaskResumed(task);
+        }
+
         // https://download.osmand.net/download.php?srtmcountry=yes&file=Benin_africa_2.srtmf.obf.zip&event=2&osmandver=OsmAndIOs+4.4.1
-    
-        [[OAWeatherHelper sharedInstance] downloadForecastByRegion:item.worldRegion];
-        if (onTaskResumed)
-            onTaskResumed(nil);
+
+//        [[OAWeatherHelper sharedInstance] downloadForecastByRegion:item.worldRegion];
+//        if (onTaskResumed)
+//            onTaskResumed(nil);
     }
     else
     {

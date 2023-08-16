@@ -941,11 +941,11 @@ static BOOL _repositoryUpdated = NO;
         }
     }
 
-    if ([self shouldDisplayWeatherForecast:region])
-    {
-        OAResourceItem *item = [_weatherHelper generateResourceItem:region];
-        [regionMapArray addObject:item];
-    }
+//    if ([self shouldDisplayWeatherForecast:region])
+//    {
+//        OAResourceItem *item = [_weatherHelper generateResourceItem:region];
+//        [regionMapArray addObject:item];
+//    }
 
     [_regionMapItems addObjectsFromArray:regionMapArray];
 
@@ -1496,8 +1496,8 @@ static BOOL _repositoryUpdated = NO;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast && self.region == item.worldRegion)
     {
-        OAResourceItem *newItem = [_weatherHelper generateResourceItem:item.worldRegion];
-        _regionMapItems[_weatherForecastRow] = newItem;
+//        OAResourceItem *newItem = [_weatherHelper generateResourceItem:item.worldRegion];
+//        _regionMapItems[_weatherForecastRow] = newItem;
         dispatch_async(dispatch_get_main_queue(), ^{
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_weatherForecastRow inSection:_regionMapSection];
             [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];

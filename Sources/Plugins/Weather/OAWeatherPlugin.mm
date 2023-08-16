@@ -12,7 +12,6 @@
 #import "OAMapHudViewController.h"
 #import "OAWeatherWidget.h"
 #import "OAMapInfoWidgetsFactory.h"
-#import "OAMapWidgetRegistry.h"
 #import "OAMapWidgetRegInfo.h"
 #import "OAIAPHelper.h"
 #import "OsmAndApp.h"

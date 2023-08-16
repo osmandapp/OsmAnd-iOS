@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
@@ -9,20 +9,34 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAMapHudViewController">
             <connections>
+                <outlet property="bottomBarView" destination="2Fb-ez-Rsg" id="0en-6T-4Vn"/>
+                <outlet property="bottomBarViewHeightConstraint" destination="vDy-Bj-0RM" id="H0Q-8R-MR7"/>
+                <outlet property="bottomWidgetsView" destination="2RZ-GK-954" id="aQF-fs-YDY"/>
+                <outlet property="bottomWidgetsViewHeightConstraint" destination="SO9-In-c4y" id="Jay-Vo-S03"/>
                 <outlet property="compassBox" destination="zKf-ZI-4L4" id="8yD-MW-KXd"/>
                 <outlet property="compassButton" destination="duk-mu-8Hu" id="vvC-Wd-07Q"/>
                 <outlet property="compassImage" destination="qfF-4i-ios" id="lwK-mx-JcJ"/>
                 <outlet property="driveModeButton" destination="QPn-ok-Vxm" id="puw-oM-kqp"/>
-                <outlet property="leftWidgetsView" destination="aXd-Ik-jGG" id="Rq9-t7-En2"/>
+                <outlet property="leftWidgetsView" destination="cig-0C-vFU" id="kOW-zQ-hHM"/>
+                <outlet property="leftWidgetsViewHeightConstraint" destination="RhQ-H2-T0u" id="Jev-6W-7ba"/>
+                <outlet property="leftWidgetsViewTopConstraint" destination="xJK-OC-uYa" id="t0r-kZ-4OC"/>
+                <outlet property="leftWidgetsViewWidthConstraint" destination="2n4-AE-rWI" id="qtB-58-XNE"/>
                 <outlet property="mapModeButton" destination="Tol-6L-Amr" id="0Lv-8x-10z"/>
                 <outlet property="mapSettingsButton" destination="Ezz-bP-gmB" id="fQV-HX-alr"/>
                 <outlet property="optionsMenuButton" destination="4" id="Kh9-5L-HB6"/>
-                <outlet property="rightWidgetsView" destination="WK4-Aa-5Eu" id="hkS-AV-r4O"/>
+                <outlet property="rightWidgetsView" destination="8m9-Ym-Yya" id="MSs-ab-0bH"/>
+                <outlet property="rightWidgetsViewHeightConstraint" destination="kCf-O8-I5o" id="yFb-hu-1fU"/>
+                <outlet property="rightWidgetsViewTopConstraint" destination="cXy-oN-mfY" id="Osz-2N-ysJ"/>
+                <outlet property="rightWidgetsViewWidthConstraint" destination="ggL-oY-QsM" id="JGK-pK-wNy"/>
                 <outlet property="searchButton" destination="gMm-Ly-WJo" id="4xn-OZ-rlS"/>
                 <outlet property="statusBarView" destination="lga-DK-9T5" id="i0N-tA-Gsh"/>
+                <outlet property="statusBarViewHeightConstraint" destination="IvW-Gf-meU" id="Zio-ov-kE7"/>
+                <outlet property="topWidgetsView" destination="K8g-PT-gdL" id="ul7-YR-TLk"/>
+                <outlet property="topWidgetsViewHeightConstraint" destination="22d-Ah-0dl" id="JpG-v2-OYy"/>
+                <outlet property="topWidgetsViewYConstraint" destination="l7W-kJ-xAQ" id="Jsx-7s-avC"/>
                 <outlet property="view" destination="1" id="3"/>
                 <outlet property="weatherButton" destination="Kft-AO-Hcd" id="8Mb-KG-ple"/>
-                <outlet property="widgetsView" destination="6pw-WI-HAJ" id="vac-Sj-Qjx"/>
+                <outlet property="widgetsView" destination="w1v-g4-GFe" id="rXE-hx-5bY"/>
                 <outlet property="zoomButtonsView" destination="o72-6U-6Av" id="dzB-hp-3xi"/>
                 <outlet property="zoomInButton" destination="GgY-iA-GiG" id="pBy-3y-5hp"/>
                 <outlet property="zoomOutButton" destination="l4t-EI-ihD" id="3j2-Rn-C1L"/>
@@ -30,16 +44,77 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="1" userLabel="root" customClass="OAUserInteractionPassThroughView">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <userGuides>
-                <userLayoutGuide location="391" affinity="minY"/>
+                <userLayoutGuide location="448" affinity="minY"/>
             </userGuides>
             <subviews>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lga-DK-9T5" userLabel="statusBar">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="20"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lga-DK-9T5" userLabel="statusBar" customClass="OAUserInteractionPassThroughView">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="48"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="48" id="IvW-Gf-meU"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Fb-ez-Rsg" userLabel="bottomBar" customClass="OAUserInteractionPassThroughView">
+                    <rect key="frame" x="0.0" y="862" width="414" height="34"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="34" id="vDy-Bj-0RM"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w1v-g4-GFe" userLabel="widgetsView" customClass="OAUserInteractionPassThroughView">
+                    <rect key="frame" x="0.0" y="48" width="414" height="814"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K8g-PT-gdL" userLabel="topPanel" customClass="OAUserInteractionPassThroughView">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="52"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="52" id="22d-Ah-0dl"/>
+                                <constraint firstAttribute="width" constant="414" id="yax-4w-LsJ"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2RZ-GK-954" userLabel="bottomPanel" customClass="OAUserInteractionPassThroughView">
+                            <rect key="frame" x="0.0" y="762" width="414" height="52"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="52" id="SO9-In-c4y"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cig-0C-vFU" userLabel="leftPanel" customClass="OAUserInteractionPassThroughView">
+                            <rect key="frame" x="-2" y="52" width="150" height="36"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="150" id="2n4-AE-rWI"/>
+                                <constraint firstAttribute="height" constant="36" id="RhQ-H2-T0u"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8m9-Ym-Yya" userLabel="rightPanel" customClass="OAUserInteractionPassThroughView">
+                            <rect key="frame" x="266" y="52" width="150" height="36"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="150" id="ggL-oY-QsM"/>
+                                <constraint firstAttribute="height" constant="36" id="kCf-O8-I5o"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="trailingMargin" secondItem="K8g-PT-gdL" secondAttribute="trailing" priority="999" constant="-8" id="3LD-NT-9Ml"/>
+                        <constraint firstItem="cig-0C-vFU" firstAttribute="leading" secondItem="w1v-g4-GFe" secondAttribute="leadingMargin" constant="-10" id="H90-Re-Dif"/>
+                        <constraint firstItem="cig-0C-vFU" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="2RZ-GK-954" secondAttribute="top" priority="999" id="QVk-GZ-SmH"/>
+                        <constraint firstItem="2RZ-GK-954" firstAttribute="leading" secondItem="w1v-g4-GFe" secondAttribute="leadingMargin" constant="-8" id="SGi-I2-Hsf"/>
+                        <constraint firstItem="K8g-PT-gdL" firstAttribute="leading" secondItem="w1v-g4-GFe" secondAttribute="leadingMargin" priority="999" constant="-8" id="W4e-2v-DSu"/>
+                        <constraint firstAttribute="bottom" secondItem="2RZ-GK-954" secondAttribute="bottom" id="bNi-In-1bI"/>
+                        <constraint firstItem="8m9-Ym-Yya" firstAttribute="top" secondItem="K8g-PT-gdL" secondAttribute="bottom" id="cXy-oN-mfY"/>
+                        <constraint firstAttribute="trailingMargin" secondItem="8m9-Ym-Yya" secondAttribute="trailing" constant="-10" id="cbg-nq-EYB"/>
+                        <constraint firstItem="8m9-Ym-Yya" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="2RZ-GK-954" secondAttribute="top" priority="999" id="kSQ-Gc-881"/>
+                        <constraint firstItem="K8g-PT-gdL" firstAttribute="top" secondItem="w1v-g4-GFe" secondAttribute="top" id="l7W-kJ-xAQ"/>
+                        <constraint firstItem="K8g-PT-gdL" firstAttribute="centerX" secondItem="w1v-g4-GFe" secondAttribute="centerX" id="nd0-KQ-Ihp"/>
+                        <constraint firstAttribute="trailingMargin" secondItem="2RZ-GK-954" secondAttribute="trailing" constant="-8" id="oaV-Cz-WGl"/>
+                        <constraint firstItem="cig-0C-vFU" firstAttribute="top" secondItem="K8g-PT-gdL" secondAttribute="bottom" id="xJK-OC-uYa"/>
+                    </constraints>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zKf-ZI-4L4" userLabel="compassBox">
                     <rect key="frame" x="16" y="103" width="50" height="50"/>
@@ -62,20 +137,6 @@
                         </imageView>
                     </subviews>
                 </view>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6pw-WI-HAJ" userLabel="widgetsView" customClass="OAUserInteractionPassThroughView">
-                    <rect key="frame" x="0.0" y="20" width="375" height="41"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aXd-Ik-jGG" customClass="OAUserInteractionPassThroughView">
-                            <rect key="frame" x="0.0" y="0.0" width="152" height="41"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        </view>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WK4-Aa-5Eu" customClass="OAUserInteractionPassThroughView">
-                            <rect key="frame" x="195" y="0.0" width="180" height="41"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        </view>
-                    </subviews>
-                </view>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ezz-bP-gmB" userLabel="mapSettingsButton" customClass="OAHudButton">
                     <rect key="frame" x="16" y="36" width="50" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -87,7 +148,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QPn-ok-Vxm" userLabel="driveModeButton" customClass="OAHudButton">
-                    <rect key="frame" x="82" y="604" width="50" height="50"/>
+                    <rect key="frame" x="82" y="833" width="50" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <state key="normal" image="ic_custom_navigation.png">
@@ -98,7 +159,7 @@
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o72-6U-6Av" userLabel="zoomButtons">
-                    <rect key="frame" x="309" y="538" width="50" height="116"/>
+                    <rect key="frame" x="348" y="767" width="50" height="116"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GgY-iA-GiG" userLabel="zoomInButton" customClass="OAHudButton">
@@ -126,7 +187,7 @@
                     </subviews>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4" userLabel="optionsMenuButton" customClass="OAHudButton">
-                    <rect key="frame" x="16" y="604" width="50" height="50"/>
+                    <rect key="frame" x="16" y="833" width="50" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <state key="normal" image="ic_custom_drawer.png">
@@ -138,7 +199,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tol-6L-Amr" userLabel="mapModeButton" customClass="OAHudButton">
-                    <rect key="frame" x="243" y="604" width="50" height="50"/>
+                    <rect key="frame" x="282" y="833" width="50" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <state key="normal" image="ic_custom_map_location_position.png">
@@ -149,7 +210,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="Kft-AO-Hcd" userLabel="weatherButton" customClass="OAHudButton">
-                    <rect key="frame" x="16" y="538" width="50" height="50"/>
+                    <rect key="frame" x="16" y="767" width="50" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
@@ -173,7 +234,19 @@
                 </button>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-            <point key="canvasLocation" x="36.956521739130437" y="35.15625"/>
+            <constraints>
+                <constraint firstItem="w1v-g4-GFe" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Fvl-Pq-OZu"/>
+                <constraint firstItem="w1v-g4-GFe" firstAttribute="top" secondItem="lga-DK-9T5" secondAttribute="bottom" id="KAU-gU-5eZ"/>
+                <constraint firstItem="2Fb-ez-Rsg" firstAttribute="leading" secondItem="w1v-g4-GFe" secondAttribute="leadingMargin" constant="-8" id="ZQz-tI-ohe"/>
+                <constraint firstItem="lga-DK-9T5" firstAttribute="top" secondItem="1" secondAttribute="top" id="bo6-Hw-8Mb"/>
+                <constraint firstItem="w1v-g4-GFe" firstAttribute="trailingMargin" secondItem="2Fb-ez-Rsg" secondAttribute="trailing" constant="-8" id="dQ4-jK-VzO"/>
+                <constraint firstAttribute="trailingMargin" secondItem="lga-DK-9T5" secondAttribute="trailing" constant="-20" id="eaz-gu-NgY"/>
+                <constraint firstAttribute="trailing" secondItem="w1v-g4-GFe" secondAttribute="trailing" id="gNR-PQ-r7U"/>
+                <constraint firstItem="w1v-g4-GFe" firstAttribute="bottom" secondItem="2Fb-ez-Rsg" secondAttribute="top" id="ndj-lr-Ert"/>
+                <constraint firstItem="lga-DK-9T5" firstAttribute="leading" secondItem="1" secondAttribute="leadingMargin" constant="-20" id="rA4-ES-GVa"/>
+                <constraint firstAttribute="bottom" secondItem="2Fb-ez-Rsg" secondAttribute="bottom" id="zz9-RU-fTB"/>
+            </constraints>
+            <point key="canvasLocation" x="36" y="34.632683658170919"/>
         </view>
     </objects>
     <resources>

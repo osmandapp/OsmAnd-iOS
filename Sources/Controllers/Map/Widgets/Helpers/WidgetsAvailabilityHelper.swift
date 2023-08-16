@@ -66,6 +66,11 @@ class WidgetsAvailabilityHelper: NSObject {
         regWidgetAvailability(widgetType: .sunrise)
         regWidgetAvailability(widgetType: .sunset)
         
+        // vertical
+        regWidgetVisibility(widgetType: .streetName, appModes: [.car()])
+        regWidgetVisibility(widgetType: .lanes, appModes: [.car(), .bicycle()])
+        regWidgetVisibility(widgetType: .markersTopBar)
+
         // all = nil everything
         regWidgetAvailability(widgetType: .sideMarker1)
         regWidgetAvailability(widgetType: .sideMarker2)

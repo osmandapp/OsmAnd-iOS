@@ -110,16 +110,11 @@ class WidgetsPanel: NSObject, NSCopying {
         orderPreference.set(pagedOrder, mode: appMode)
     }
 
-
     func contains(widgetId: String, appMode: OAApplicationMode = OAAppSettings.sharedManager().applicationMode.get()!) -> Bool {
         return getWidgetOrder(widgetId, appMode: appMode) != WidgetsPanel.DEFAULT_ORDER
     }
 
     func isPagingAllowed() -> Bool {
-        return self == .leftPanel || self == .rightPanel
-    }
-
-    func isDuplicatesAllowed() -> Bool {
         return self == .leftPanel || self == .rightPanel
     }
 
@@ -138,12 +133,10 @@ class WidgetsPanel: NSObject, NSCopying {
     }
 
     func getMergedPanels() -> [WidgetsPanel] {
-        if (self == .leftPanel || self == .rightPanel) {
+        if self == .leftPanel || self == .rightPanel {
             return [.leftPanel, .rightPanel]
-        } else if (self == .topPanel) {
-            return [.topPanel]
-        } else if (self == .bottomPanel) {
-            return [.bottomPanel]
+        } else if self == .topPanel || self == .bottomPanel {
+            return [.topPanel, .bottomPanel]
         }
         fatalError("Unsupported widgets panel")
     }

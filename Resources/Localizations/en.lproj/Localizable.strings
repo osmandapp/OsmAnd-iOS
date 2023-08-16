@@ -176,7 +176,13 @@
 "distance_circles" = "Distance circles";
 
 // Widget descriptions
+"coordinates_widget_map_center_desc" = "Shows the geographic coordinates of the current map center";
 "coordinates_widget_current_location_desc" = "Shows the geographic coordinates of the current geolocation";
+"map_widget_rendering_fps_desc" = "Shows how fast the map and map elements are displayed and refreshed, expressed in frames per second (FPS).";
+"map_widget_camera_tilt_desc" = "Shows the camera tilt angle in perspective mode. Default is 90° (no tilt).";
+"map_widget_camera_distance_desc" = "Shows the camera elevation above the surface level.";
+"map_widget_zoom_level_desc" = "Shows the current map zoom level.";
+"map_widget_target_distance_desc" = "Shows the distance between camera and target location.";
 "av_notes_photo_widget_desc" = "Tapping the widget lets you take a photo.";
 "av_notes_video_widget_desc" = "Tapping the widget lets you record a video.";
 "av_notes_audio_widget_desc" = "Tapping the widget lets you take an audio note.";

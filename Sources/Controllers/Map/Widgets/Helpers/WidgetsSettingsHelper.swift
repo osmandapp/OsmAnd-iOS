@@ -20,7 +20,7 @@ class WidgetsSettingsHelper: NSObject {
 
     init(appMode: OAApplicationMode) {
         self.appMode = appMode
-        widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
+        widgetRegistry = OAMapWidgetRegistry.sharedInstance()
         widgetsFactory = MapWidgetsFactory()
         settings = OAAppSettings.sharedManager()
     }
@@ -72,7 +72,7 @@ class WidgetsSettingsHelper: NSObject {
             }
 
             let widgetTypeToCopy = info.widget.widgetType
-            let duplicateNotPossible = widgetTypeToCopy == nil || !panel.isDuplicatesAllowed()
+            let duplicateNotPossible = widgetTypeToCopy == nil
             let defaultWidgetId = WidgetType.getDefaultWidgetId(info.key)
             let defaultWidgetInfo = getWidgetInfoById(widgetId: defaultWidgetId, widgetInfos: defaultWidgetInfos)
 
@@ -81,7 +81,7 @@ class WidgetsSettingsHelper: NSObject {
                 let disabled = !defaultWidgetInfo.isEnabledForAppMode(appMode)
                 let inAnotherPanel = defaultWidgetInfo.widgetPanel != panel
                 if duplicateNotPossible || (disabled && !inAnotherPanel) {
-                    widgetRegistry.enableDisableWidget(for: appMode, widgetInfo: defaultWidgetInfo, enabled: true, recreateControls: false)
+                    widgetRegistry.enableDisableWidget(for: appMode, widgetInfo: defaultWidgetInfo, enabled:NSNumber(value: true), recreateControls: false)
                     widgetIdToAdd = defaultWidgetInfo.key
                 } else {
                     let duplicateWidgetInfo = createDuplicateWidgetInfo(widgetType: widgetTypeToCopy!, panel: panel)
@@ -139,7 +139,7 @@ class WidgetsSettingsHelper: NSObject {
             let creator = WidgetInfoCreator(appMode: appMode)
             settings.customWidgetKeys.add(duplicateWidgetId, appMode: appMode)
             let duplicateWidgetInfo = creator.createCustomWidgetInfo(widgetId: duplicateWidgetId, widget: duplicateWidget, widgetType: widgetType, panel: panel)
-            widgetRegistry.enableDisableWidget(for: appMode, widgetInfo: duplicateWidgetInfo, enabled: true, recreateControls: false)
+            widgetRegistry.enableDisableWidget(for: appMode, widgetInfo: duplicateWidgetInfo, enabled: NSNumber(value: true), recreateControls: false)
             return duplicateWidgetInfo
         }
         return nil

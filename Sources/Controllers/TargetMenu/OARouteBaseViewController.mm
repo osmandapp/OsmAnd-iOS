@@ -514,6 +514,11 @@
     return NO;
 }
 
+- (BOOL)showTopControls
+{
+    return YES;
+}
+
 + (NSAttributedString *) getFormattedElevationString:(OAGPXTrackAnalysis *)analysis
 {
     UIFont *textFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];

@@ -127,12 +127,12 @@
 "save_global_track_interval_descr" = "Ange loggningsintervallet för den allmänna spårinspelningen (aktiverad via widgeten \'Trip recording\' på kartan).";
 "save_track_interval" = "Loggningsintervall under navigering";
 "logging_interval_navigation_descr" = "Välj loggningsintervall för spårregistrering under navigering";
-"monitoring_min_distance" = "Minsta förskjutning";
+"monitoring_min_distance" = "Minsta avstånd";
 "logging_min_distance_descr" = "Filter: minsta avstånd för att logga en ny punkt";
 "save_track_logging_accuracy" = "Loggningsnoggrannhet";
-"monitoring_min_accuracy" = "Minsta noggrannhet";
+"monitoring_min_accuracy" = "Miniminoggrannhet";
 "logging_min_accuracy_descr" = "Filter: ingen loggning om inte noggrannheten uppnås";
-"monitoring_min_speed" = "Minsta hastighet";
+"monitoring_min_speed" = "Minimihastighet";
 "logging_min_speed_descr" = "Filter: ingen loggning under vald hastighet";
 "auto_split_recording_title" = "Auto-split-inspelningar efter lucka";
 "auto_split_gap_descr" = "Starta ett nytt segment efter 6 minuters mellanrum, nytt spår efter 2 timmars mellanrum, eller ny fil efter ett längre mellanrum";
@@ -890,14 +890,14 @@
 "export_profile_select_descr" = "Select the data to be exported.";
 "selected_of" = "Selected - %d/%d";
 "nav_type_hint" = "Navigeringstyp";
-"shared_string_nothing_selected" = "Nothing selected";
+"shared_string_nothing_selected" = "Ingenting valt";
 "export_failed" = "Could not export profile";
 "custom_osmand_plugin" = "Anpassad OsmAnd-plugin";
 "custom_plugins" = "Custom plugins";
-"extra_maps_menu_group" = "Extra maps";
+"extra_maps_menu_group" = "Extra kartor";
 "import_duplicates_title" = "Some items already exist";
 "import_duplicates_description" = "OsmAnd already has elements with the same names as those imported.\n\nSelect an action.";
-"keep_both" = "Keep both";
+"keep_both" = "Behåll båda";
 "keep_both_desc" = "Imported items will be added with prefix";
 "replace_all" = "Ersätt alla";
 "replace_all_desc" = "Current items will be replaced with items from the file";
@@ -906,7 +906,7 @@
 "shared_string_poi_types" = "POI-typer";
 "quick_action_map_source_title" = "Kartkällor";
 "shared_string_routing" = "Routing";
-"shared_string_rendering_style" = "Rendering styles";
+"shared_string_rendering_style" = "Renderingsstil";
 "avoid_road" = "Undvik väg";
 "shared_string_importing" = "Importerar";
 "importing_from" = "Importerar data från %@";
@@ -916,7 +916,7 @@
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "listed_exist" = "Listed %@ already exist in OsmAnd.";
-"shared_string_import_complete" = "Import complete";
+"shared_string_import_complete" = "Importen slutförd";
 "import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
 "app_restart_required" = "Omstart av program krävs för att tillämpa vissa inställningar.";
 "shared_string_finish" = "Avsluta";
@@ -926,7 +926,7 @@
 "profile_alert_delete_title" = "Ta bort profil";
 "profile_alert_delete_msg" = "Radera profilen \"%@\"";
 "select_base_profile_dialog_message" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";
-"profile_type_custom_string" = "Custom profile";
+"profile_type_custom_string" = "Anpassad profil";
 "new_profile" = "Ny profil";
 "configure_profile" = "Konfigurera profil";
 "profile_settings" = "Profilspecifika inställningar";
@@ -1781,7 +1781,7 @@
 "create_custom_poi" = "Skapa eget filter";
 "selected_categories" = "Markerade kategorier";
 "new_filter_desc" = "Ange ett namn på det nya filtret. Det kommer att läggas till på fliken ’Kategorier’.";
-"rearrange_categories" = "Rearrange categories";
+"rearrange_categories" = "Omorganisera kategorier";
 "visible_categories" = "Visible categories";
 "hidden_categories" = "Hidden categories";
 "create_custom_categories_list_promo" = "You can add custom categories, hide categories that you don’t find necessary, and change the sort order of the list. Custom categories can be imported and exported with profiles.";
@@ -1938,7 +1938,7 @@
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Slätt";
 "rendering_attr_surface_concrete_name" = "Betong";
 "rendering_attr_piste_difficulty_intermediate_name" = "Medel";
-"routeInfo_piste_difficulty_name" = "Piste difficulty";
+"routeInfo_piste_difficulty_name" = "Pistens svårighetsgrad";
 "routing_attr_short_way_description" = "Optimerad kortare rutt (energibesparing)";
 "rendering_attr_highway_class_track_grade3_name" = "Grade 3";
 "routing_attr_freeride_policy_description" = "\'Freeride\' and \'Off-piste\' are unofficial routes and passages. Typically ungroomed, unmaintained and not checked in the evening. Enter at your own risk.";
@@ -2072,7 +2072,7 @@
 "rendering_attr_piste_difficulty_novice_name" = "Nybörjare";
 "rendering_attr_hideUnderground_name" = "Underjordiska objekt";
 "rendering_value_dark_brown_name" = "Mörkbrun";
-"routeInfo_piste_type_name" = "Piste type";
+"routeInfo_piste_type_name" = "Pisttyp";
 "routing_attr_driving_style_safety_name" = "Föredra småvägar";
 "rendering_attr_surface_paving_stones_name" = "Gatstenar";
 "rendering_attr_depthContours_name" = "Nautiska djupkurvor";

@@ -2607,3 +2607,4 @@
 "free_favorites_backup" = "Gratis favoritt-sikkerhetskopiering";
 "free_account" = "Gratiskonto";
 "get_osmand_cloud" = "Skaff OsmAnd-sky";
+"true_bearing_wdiget_desc" = "Vinkel mellom sann nord og målpunktet observert fra din posisjon.";

@@ -171,21 +171,25 @@
     NSString *nsResourceId = [task.key substringFromIndex:[@"resource:" length]];
     if ([nsResourceId hasSuffix:@".tifsqlite"])
     {
-        NSString *regionId = nsResourceId;//[self.class checkAndGetRegionId:region];
-        if ([self.class getPreferenceDownloadState:regionId] != EOAWeatherForecastDownloadStateInProgress)
-        {
-            OALog(@"Weather offline forecast download %@ : cancel", regionId);
-            return;
-        }
+        OAWorldRegion *region = [OAResourcesUIHelper findRegionOrAnySubregionOf:_app.worldRegion thatContainsResource:QString([nsResourceId UTF8String])];
+        NSString *regionId = [self.class checkAndGetRegionId:region];
+//        if ([self.class getPreferenceDownloadState:regionId] != EOAWeatherForecastDownloadStateInProgress)
+//        {
+//            OALog(@"Weather offline forecast download %@ : cancel", regionId);
+//            return;
+//        }
 
        // NSInteger progressDestination = [self getProgressDestination:regionId];
         NSInteger progressDownloading = [self getOfflineForecastProgressInfo:regionId];
         [self setOfflineForecastProgressInfo:regionId value:++progressDownloading];
+        [_weatherForecastDownloadingObserver notifyEventWithKey:self andValue:region];
+        
        // CGFloat progress = (CGFloat) progressDownloading / progressDestination;
 
        // OALog(@"Weather offline forecast download %@ : %f %@", regionId, progress, success ? @"done" : @"error");
         // FIXME:
-        //[_weatherForecastDownloadingObserver notifyEventWithKey:self andValue:region];
+//        OAWorldRegion *region = [OAResourcesUIHelper findRegionOrAnySubregionOf:_app.worldRegion thatContainsResource:QString([regionId UTF8String])];
+//        [_weatherForecastDownloadingObserver notifyEventWithKey:self andValue:region];
     }
 //    NSNumber* progressCompleted = (NSNumber*)value;
 //    OALog(@"Resource download task %@: %@ done", nsResourceId, progressCompleted);
@@ -333,7 +337,7 @@
     else if ([self.class getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress)
     {
         if ([self getOfflineForecastProgressInfo:regionId] > 0)
-            dispatch_group_leave(_forecastGroupDownloader);
+           // dispatch_group_leave(_forecastGroupDownloader);
 
         [self.class setPreferenceDownloadState:regionId value:EOAWeatherForecastDownloadStateUndefined];
         if ([self.class getPreferenceLastUpdate:regionId] == -1)
@@ -467,7 +471,7 @@
     _offlineCacheSize = 0.;
     _onlineCacheSize = 0.;
     NSMutableArray<NSArray<NSNumber *> *> *tileIds = [NSMutableArray array];
-    NSString *docPath = [OsmAndApp instance].documentsPath;
+   // NSString *docPath = [OsmAndApp instance].documentsPath;
     for (NSString *regionId in regionIds)
     {
         NSArray<NSArray<NSNumber *> *> *regionTileIds = [self.class getPreferenceTileIds:regionId];

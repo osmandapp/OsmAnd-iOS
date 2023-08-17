@@ -37,6 +37,7 @@
     MBProgressHUD *_progressHUD;
     NSIndexPath *_sizeIndexPath;
     NSIndexPath *_updateNowIndexPath;
+    OAResourceItem *_localResourceItem;
 
     OAAutoObserverProxy *_weatherSizeCalculatedObserver;
     OAAutoObserverProxy *_weatherForecastDownloadingObserver;
@@ -44,12 +45,13 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithRegion:(OAWorldRegion *)region
+- (instancetype)initWithRegion:(OAWorldRegion *)region localResourceItem:(OAResourceItem *)item
 {
     self = [super init];
     if (self)
     {
         _region = region;
+        _localResourceItem = item;
     }
     return self;
 }
@@ -141,7 +143,7 @@
     updatesSizeData[@"key"] = @"updates_size_cell";
     updatesSizeData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     updatesSizeData[@"title"] = OALocalizedString(@"shared_string_updates_size");
-    updatesSizeData[@"value"] = [NSByteCountFormatter stringFromByteCount:[[OAWeatherHelper sharedInstance]getOfflineForecastSizeInfo:regionId local:YES]
+    updatesSizeData[@"value"] = [NSByteCountFormatter stringFromByteCount:[[OAWeatherHelper sharedInstance] getOfflineForecastSizeInfo:regionId local:YES]
                                                                countStyle:NSByteCountFormatterCountStyleFile];
     updatesSizeData[@"value_color"] = UIColorFromRGB(color_text_footer);
     updatesSizeData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
@@ -367,7 +369,14 @@
         }
         else
         {
-            [_weatherHelper downloadForecastByRegion:_region];
+            [OAResourcesUIHelper offerDownloadAndInstallOf:(OARepositoryResourceItem *)_localResourceItem onTaskCreated:^(id<OADownloadTask> task) {
+//               if (!isWeatherForecast)
+//                   [self updateContent];
+           } onTaskResumed:^(id<OADownloadTask> task) {
+//               if (!isWeatherForecast)
+//                   [self showDownloadViewForTask:task];
+           }];
+           // [_weatherHelper downloadForecastByRegion:_region];
         }
     }
     else if ([item[@"key"] isEqualToString:@"remove_forecast_cell"])

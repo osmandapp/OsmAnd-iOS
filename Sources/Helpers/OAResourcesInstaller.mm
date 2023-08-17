@@ -251,7 +251,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                     else if (nsResourceId && [[nsResourceId lowercaseString] hasSuffix:@".tifsqlite"])
                     {
                         OAWorldRegion* match = [OAResourcesUIHelper findRegionOrAnySubregionOf:_app.worldRegion thatContainsResource:QString([nsResourceId UTF8String])];
-                        [[OAWeatherHelper sharedInstance] setupDownloadStateFinished:match regionId:nsResourceId];
+                        [[OAWeatherHelper sharedInstance] setupDownloadStateFinished:match regionId:match.regionId];
                     }
                     
                     [[NSNotificationCenter defaultCenter] postNotificationName:OAResourceInstalledNotification object:nsResourceId userInfo:nil];

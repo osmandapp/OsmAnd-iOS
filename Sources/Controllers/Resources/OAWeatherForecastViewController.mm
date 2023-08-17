@@ -1098,9 +1098,9 @@
         NSString *regionId = [OAWeatherHelper checkAndGetRegionId:region];
         if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished)
         {
-            OAWeatherForecastDetailsViewController *forecastDetailsViewController = [[OAWeatherForecastDetailsViewController alloc] initWithRegion:item[@"region"]];
-            forecastDetailsViewController.delegate = self;
-            [self.navigationController pushViewController:forecastDetailsViewController animated:YES];
+//            OAWeatherForecastDetailsViewController *forecastDetailsViewController = [[OAWeatherForecastDetailsViewController alloc] initWithRegion:item[@"region"]];
+//            forecastDetailsViewController.delegate = self;
+//            [self.navigationController pushViewController:forecastDetailsViewController animated:YES];
         }
         else if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress)
         {

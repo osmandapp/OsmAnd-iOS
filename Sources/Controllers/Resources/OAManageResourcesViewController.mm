@@ -323,6 +323,7 @@ static BOOL _repositoryUpdated = NO;
             [[OAAutoObserverProxy alloc] initWith:self
                                       withHandler:@selector(onWeatherSizeCalculated:withKey:andValue:)
                                        andObserve:_weatherHelper.weatherSizeCalculatedObserver];
+//    _weatherForecastDownloadingObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onWeatherForecastDownloading:withKey:andValue:) andObserve:_app.downloadsManager.progressCompletedObservable];
     _weatherForecastDownloadingObserver =
             [[OAAutoObserverProxy alloc] initWith:self
                                       withHandler:@selector(onWeatherForecastDownloading:withKey:andValue:)
@@ -1812,7 +1813,7 @@ static BOOL _repositoryUpdated = NO;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast)
     {
-        OAWeatherForecastDetailsViewController *forecastDetailsViewController = [[OAWeatherForecastDetailsViewController alloc] initWithRegion:item.worldRegion];
+        OAWeatherForecastDetailsViewController *forecastDetailsViewController = [[OAWeatherForecastDetailsViewController alloc] initWithRegion:item.worldRegion localResourceItem:item];
         forecastDetailsViewController.delegate = self;
         [self.navigationController pushViewController:forecastDetailsViewController animated:YES];
     }
@@ -2482,8 +2483,17 @@ static BOOL _repositoryUpdated = NO;
                 if (item.resourceType == OsmAndResourceType::WeatherForecast && ![_weatherHelper isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:item.worldRegion]])
                    subtitle = OALocalizedString(@"shared_string_download_update");
                 else if (_sizePkg >= 0)
-                    subtitle = [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile];
-
+                {
+                    // Package already downloaded, use _size
+                    if (_sizePkg == 0 && item.resourceType == OsmAndResourceType::WeatherForecast)
+                    {
+                        subtitle = [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile];
+                    }
+                    else
+                    {
+                        subtitle = [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile];
+                    }
+                }
                 if ([item isKindOfClass:OAMultipleResourceItem.class] && ([self.region hasGroupItems] || [OAResourceType isSRTMResourceItem:item]))
                 {
                     OAMultipleResourceItem *multipleItem = (OAMultipleResourceItem *) item;

@@ -1,5 +1,5 @@
 //
-//  WikivoyageSearchHistoryItem.swift
+//  TravelSearchHistoryItem.swift
 //  OsmAnd Maps
 //
 //  Created by nnngrach on 11.08.2023.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class WikivoyageSearchHistoryItem {
+class TravelSearchHistoryItem {
     
     var articleFile: String? = ""
     var articleTitle: String = ""
@@ -23,7 +23,7 @@ class WikivoyageSearchHistoryItem {
     }
     
     func getKey() -> String {
-        return WikivoyageSearchHistoryItem.getKey(lang: lang, title: articleTitle, file: articleFile)
+        return TravelSearchHistoryItem.getKey(lang: lang, title: articleTitle, file: articleFile)
     }
     
     func getTravelBook() -> String? {

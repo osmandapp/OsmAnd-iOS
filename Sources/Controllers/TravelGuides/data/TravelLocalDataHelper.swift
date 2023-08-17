@@ -11,8 +11,8 @@ import Foundation
 class TravelLocalDataHelper {
     
     private static let HISTORY_ITEMS_LIMIT = 300
-    private let dbHelper: WikivoyageLocalDataDbHelper
-    private var historyMap: [String : WikivoyageSearchHistoryItem] = [:]
+    private let dbHelper: TravelLocalDataDbHelper
+    private var historyMap: [String : TravelSearchHistoryItem] = [:]
     private var savedArticles: [TravelArticle] = []
     
 //    private final Set<Listener> listeners = new HashSet<>();
@@ -21,7 +21,7 @@ class TravelLocalDataHelper {
 
     
     init() {
-        dbHelper = WikivoyageLocalDataDbHelper()
+        dbHelper = TravelLocalDataDbHelper()
     }
     
     func refreshCachedData() {
@@ -32,7 +32,7 @@ class TravelLocalDataHelper {
     
     
     
-    private class WikivoyageLocalDataDbHelper {
+    private class TravelLocalDataDbHelper {
         
         //TODO: continue here
         

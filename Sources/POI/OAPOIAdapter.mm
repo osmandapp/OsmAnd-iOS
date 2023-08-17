@@ -47,6 +47,24 @@
         obj.name = name;
 }
 
+- (NSString *) getDescription:(NSString *)lang
+{
+    OAPOI *obj = [self getObject];
+    if (obj)
+    {
+        NSString *info = [obj getTagContent:@"description" lang:lang];
+        if (!info || info.length == 0)
+        {
+            return [obj getTagContent:@"content" lang:lang];
+        }
+        else
+        {
+            return info;
+        }
+    }
+    return nil;
+}
+
 - (NSString *) subtype
 {
     OAPOI *obj = [self getObject];
@@ -100,7 +118,14 @@
 - (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag
 {
     OAPOI *obj = [self getObject];
-    return obj ? [obj getNames:tag defTag:defTag] : nil;
+    //return obj ? [obj getNames:tag defTag:defTag] : nil;
+    
+    if (obj)
+    {
+        NSString *name =  obj.localizedNames[tag] ? obj.localizedNames[tag] : obj.localizedNames[defTag];
+        return name ? @[name] : @[@""];
+    }
+    return @[@""];
 }
 
 - (NSString *)getStrictTagContent:(NSString *)tag lang:(NSString *)lang

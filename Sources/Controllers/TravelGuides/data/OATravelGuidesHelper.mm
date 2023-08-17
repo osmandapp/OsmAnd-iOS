@@ -23,30 +23,44 @@
 
 #include <OsmAndCore/Utilities.h>
 
+@implementation OAFoundAmenity
+
+- (instancetype) initWithFile:(NSString *)file amenity:(OAPOIAdapter *)amenity
+{
+    self = [super init];
+    if (self)
+    {
+        self.file = file;
+        self.amenity = amenity;
+    }
+    return self;
+}
+
+@end
+
+
 @implementation OATravelGuidesHelper
 
 
-+ (NSArray<OAPOIAdapter *> *) searchAmenity:(double)lat lon:(double)lon reader:(NSString *)reader radius:(int)radius searchFilter:(NSString *)searchFilter
++ (NSArray<OAFoundAmenity *> *) searchAmenity:(double)lat lon:(double)lon reader:(NSString *)reader radius:(int)radius searchFilter:(NSString *)searchFilter publish:(BOOL(^)(OAPOIAdapter *poi))publish
 {
     OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
-    NSArray<OAPOI *> *foundPoints = [OAPOIHelper findTravelGuides:searchFilter location:locI radius:radius reader:reader];
+    NSArray<OAPOI *> *foundPoints = [OAPOIHelper findTravelGuides:searchFilter location:locI radius:radius reader:reader publish:publish];
     
-    NSMutableArray<OAPOIAdapter *> *result = [NSMutableArray array];
+    NSMutableArray<OAFoundAmenity *> *result = [NSMutableArray array];
     for (OAPOI *point in foundPoints)
     {
-        OAPOIAdapter *poiAdapter = [[OAPOIAdapter alloc] initWithPOI:point];
-        [result addObject:poiAdapter];
+        OAPOIAdapter *amenity = [[OAPOIAdapter alloc] initWithPOI:point];
+        OAFoundAmenity *found = [[OAFoundAmenity alloc] initWithFile:reader amenity: amenity];
+        [result addObject:found];
     }
     return result;
 }
 
-+ (NSArray<OAPOIAdapter *> *) searchAmenity:(NSString *)searchQuerry reader:(NSString *)reader
++ (void) searchAmenity:(NSString *)searchQuerry categoryName:(NSString *)categoryName radius:(int)radius lat:(double)lat lon:(double)lon reader:(NSString *)reader publish:(BOOL(^)(OAPOIAdapter *poi))publish
 {
-    [OAPOIHelper.sharedInstance findTravelGuidessByKeyword:searchQuerry categoryName:nil poiTypeName:nil reader:reader];
-    
-    //TODO: add result filling callback
-    
-    return [NSArray array];
+    OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
+    [OAPOIHelper.sharedInstance findTravelGuidessByKeyword:searchQuerry categoryName:nil poiTypeName:nil location:locI radius:0 reader:reader publish:publish];
 }
 
 
@@ -91,9 +105,9 @@
     return wptAdapter;
 }
 
-+ (NSArray<OAWikivoyageSearchResult *> *) search:(NSString *)searchQuery
++ (NSArray<OATravelSearchResult *> *) search:(NSString *)searchQuery
 {
-    NSMutableArray<OAWikivoyageSearchResult *> *res = [NSMutableArray array];
+    NSMutableArray<OATravelSearchResult *> *res = [NSMutableArray array];
     NSMutableDictionary<NSString *, NSArray<OAPOIAdapter *> *> *amenityMap = [NSMutableDictionary dictionary];
     NSString *appLang = [OAUtilities currentLang];
     OASearchUICore *searchUICore = [OAQuickSearchHelper.instance getCore];
@@ -102,9 +116,9 @@
     OANameStringMatcher *matcher = [phrase getFirstUnknownNameStringMatcher];
     
     //TODO: check this part. Differ from android?
-    for (NSString *reader in [self.class getObfList])
+    for (NSString *reader in [self.class getTravelGuidesObfList])
     {
-        [self searchAmenity:searchQuery reader:reader];
+        //[self searchAmenity:searchQuery categoryName:<#(NSString *)#> radius:<#(int)#> lat:<#(double)#> lon:<#(double)#> reader:reader publish:<#^BOOL(OAPOIAdapter *poi)publish#>
     }
 
     return [NSArray array];
@@ -122,6 +136,14 @@
         }
     }
     return obfFilenames;
+}
+
++ (CLLocation *) getMapCenter
+{
+    OsmAndAppInstance app = OsmAndApp.instance;
+    Point31 mapCenter = app.data.mapLastViewedState.target31;
+    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(OsmAnd::PointI(mapCenter.x, mapCenter.y));
+    return [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
 }
 
 @end

@@ -992,7 +992,7 @@ typedef enum
 - (void) showTravelGuides
 {
     [OAAnalyticsHelper logEvent:@"travel_guides_open"];
-    OATravelGuidesViewConroller *vc = [[OATravelGuidesViewConroller alloc] init];
+    OATravelExploreViewController *vc = [[OATravelExploreViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

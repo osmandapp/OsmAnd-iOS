@@ -1,5 +1,5 @@
 //
-//  TravelGuidesViewConroller.swift
+//  TravelExploreViewController.swift
 //  OsmAnd Maps
 //
 //  Created by nnngrach on 24.07.2023.
@@ -8,10 +8,14 @@
 
 import Foundation
 
+protocol TravelExploreViewControllerDelegate : AnyObject {
+    func onDataLoaded()
+}
 
-@objc(OATravelGuidesViewConroller)
+
+@objc(OATravelExploreViewController)
 @objcMembers
-class TravelGuidesViewConroller: OABaseNavbarViewController {
+class TravelExploreViewController: OABaseNavbarViewController, TravelExploreViewControllerDelegate {
     
     var downloadingCellHelper: OADownloadingCellHelper = OADownloadingCellHelper()
     var dataLock: NSObject = NSObject()
@@ -20,6 +24,7 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
     override func viewDidLoad() {
         setupDownloadingCellHelper()
         super.viewDidLoad()
+        populateData()
     }
 
     func setupDownloadingCellHelper() {
@@ -51,6 +56,13 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
         downloadingCellHelper.getTableDataModelBlock = {
             return weakself!.tableData
         }
+    }
+    
+    func populateData() {
+        //showLoadingIndicator
+        let task = LoadWikivoyageDataAsyncTask(resetData: true)
+        task.delegate = self;
+        task.execute()
     }
     
     
@@ -93,20 +105,13 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
             row.cellType = "kDownloadCellKey"
         }
     }
-
-    func foobar() {
-        let task = LoadWikivoyageDataAsyncTask(resetData: true)
-        task.execute()
-    }
     
-
     //MARK: Actions
     
     func onOptionsButtonClicked() {
         print("onOptionsButtonClicked")
         
-        
-        foobar()
+        //populateData()
     }
 
     //MARK: TableView
@@ -168,12 +173,55 @@ class TravelGuidesViewConroller: OABaseNavbarViewController {
     override func onRowSelected(_ indexPath: IndexPath!) {
         downloadingCellHelper.onItemClicked(indexPath)
     }
+    
+    
+    //MARK: TravelExploreViewControllerDelegate
+    
+    func onDataLoaded() {
+        //Hide loading indicator
+        updateTabs()
+        
+        testPrintPopArticles()
+    }
+    
+    func updateTabs() {
+        //let exploreTabVC = ()
+        //let savedArticlesTabVC = ()
+        //if exploreTabVC && savedArticlesTabVC
+        //  exploreTabFragment.populateData();
+        //  savedArticlesTabFragment.savedArticlesUpdated();
+    }
+    
+    func testPrintPopArticles() {
+        
+        print("!!! <==============================")
+        
+        let travelHelper = TravelObfHelper.shared;
+        let articles = travelHelper.getPopularArticles()
+        for article in articles {
+            if article is TravelGpx {
+                let item: TravelGpx = article as! TravelGpx
+                let title = (item.description != nil && item.description!.count > 0) ? item.description! : item.title
+                print("!!! gpxTitle: " + (title ?? "nil") + "   distance: " + String(item.totalDistance))
+            } else {
+                let item: TravelArticle = article
+                let titile = item.title ?? "nil"
+                var content = item.content ?? "nil"
+                content = content.substring(to: 100)
+                print("!!! articleTitle:" + titile + "  content: "  + content)
+            }
+            
+            print("!!! ============================")
+        }
+        
+        print("!!! ==============================>")
+    }
 
 }
 
 
 class LoadWikivoyageDataAsyncTask {
-    //var vc.delegate
+    weak var delegate: TravelExploreViewControllerDelegate?
     var travelHelper: TravelObfHelper
     var resetData: Bool
     
@@ -196,6 +244,8 @@ class LoadWikivoyageDataAsyncTask {
     }
     
     func onPostExecute() {
-        //TODO: vc.delegate.reloadData()
+        if delegate != nil {
+            delegate!.onDataLoaded()
+        }
     }
 }

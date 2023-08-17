@@ -9,16 +9,31 @@
 #import "OAPOIAdapter.h"
 #import "OAGPXDocumentPrimitivesAdapter.h"
 
-@class OAWikivoyageSearchResult;
+@class OATravelSearchResult, OAPOIAdapter;
+
+
+@interface OAFoundAmenity : NSObject
+
+@property (nonatomic) NSString *file;
+@property (nonatomic) OAPOIAdapter *amenity;
+
+- (instancetype) initWithFile:(NSString *)file amenity:(OAPOIAdapter *)amenity;
+
+@end
+
 
 @interface OATravelGuidesHelper : NSObject
 
-+ (NSArray<OAPOIAdapter *> *) searchAmenity:(double)lat lon:(double)lon reader:(NSString *)reader radius:(int)radius searchFilter:(NSString *)searchFilter;
++ (NSArray<OAFoundAmenity *> *) searchAmenity:(double)lat lon:(double)lon reader:(NSString *)reader radius:(int)radius searchFilter:(NSString *)searchFilter publish:(BOOL(^)(OAPOIAdapter *poi))publish;
+
++ (void) searchAmenity:(NSString *)searchQuerry categoryName:(NSString *)categoryName radius:(int)radius lat:(double)lat lon:(double)lon reader:(NSString *)reader publish:(BOOL(^)(OAPOIAdapter *poi))publish;
 
 + (OAWptPtAdapter *) createWptPt:(OAPOIAdapter *)amenity lang:(NSString *)lang;
 
-+ (NSArray<OAWikivoyageSearchResult *> *) search:(NSString *)searchQuery;
++ (NSArray<OATravelSearchResult *> *) search:(NSString *)searchQuery;
 
 + (NSArray<NSString *> *) getTravelGuidesObfList;
+
++ (CLLocation *) getMapCenter;
 
 @end

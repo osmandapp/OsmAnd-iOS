@@ -24,6 +24,7 @@
 - (NSDictionary<NSString *, NSString *> *)getAdditionalInfo;
 - (NSString *)getRef;
 - (NSString *) getRouteId;
+- (NSString *) getDescription:(NSString *)lang;
 
 - (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag;
 - (NSString *)getStrictTagContent:(NSString *)tag lang:(NSString *)lang;

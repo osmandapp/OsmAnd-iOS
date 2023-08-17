@@ -20,9 +20,9 @@ protocol TravelHelper {
     func initializeDataOnAppStartup()
     func initializeDataToDisplay(resetData: Bool)
     func isAnyTravelBookPresent() -> Bool
-    func search(searchQuery: String) -> [WikivoyageSearchResult]
+    func search(searchQuery: String) -> [TravelSearchResult]
     func getPopularArticles() -> [TravelArticle]
-    func getNavigationMap(article: TravelArticle) -> [WikivoyageSearchResult : [WikivoyageSearchResult]]
+    func getNavigationMap(article: TravelArticle) -> [TravelSearchResult : [TravelSearchResult]]
     func getArticleById(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadCallback?) -> TravelArticle?
     func findSavedArticle(savedArticle: TravelArticle) -> TravelArticle?
     func getArticleByTitle(title: String, lang: String, readGpx: Bool, callback: GpxReadCallback?) -> TravelArticle?

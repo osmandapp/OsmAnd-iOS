@@ -73,13 +73,16 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 
 - (void)clearCache:(BOOL)localData regionIds:(NSArray<NSString *> *)regionIds;
 - (void)clearOutdatedCache;
-- (void)removeLocalForecast:(NSString *)regionId refreshMap:(BOOL)refreshMap;
-- (void)removeLocalForecasts:(NSArray<NSString *> *)regionIds refreshMap:(BOOL)refreshMap;
+- (void)removeLocalForecast:(NSString *)regionId region:(OAWorldRegion *)region refreshMap:(BOOL)refreshMap;
+- (void)removeLocalForecasts:(NSArray<NSString *> *)regionIds region:(OAWorldRegion *)region refreshMap:(BOOL)refreshMap;
+- (void)preparingForDownloadForecastByRegion:(OAWorldRegion *)region regionId:(NSString *)regionId;
+- (void)setupDownloadStateFinished:(OAWorldRegion *)region regionId:(NSString *)regionId;
+- (void)onDownloadTaskProgressChangedWithKey:(id)key andValue:(id)value;
 
 - (BOOL)isContainsInOfflineRegions:(NSArray<NSNumber *> *)tileId excludeRegion:(NSString *)excludeRegionId;
 
 + (BOOL)isForecastOutdated:(NSString *)regionId;
-- (void)firstInitForecast:(NSString *)region;
+- (void)firstInitForecast:(NSString *)regionId region:(OAWorldRegion *)region;
 
 - (NSArray<NSString *> *)getTempForecastsWithDownloadStates:(NSArray<NSNumber *> *)states;
 

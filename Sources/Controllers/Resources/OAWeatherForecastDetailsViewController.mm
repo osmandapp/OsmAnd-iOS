@@ -387,7 +387,8 @@
                                                                  {
                                                                      [_progressHUD showAnimated:YES whileExecutingBlock:^{
                                                                          [_weatherHelper prepareToStopDownloading:regionId];
-                                                                         [_weatherHelper removeLocalForecast:regionId refreshMap:YES];
+                                                                         [_weatherHelper removeLocalForecast:regionId region:_region refreshMap:YES];
+                                                                        // [_weatherHelper removeLocalForecast:regionId refreshMap:YES];
                                                                      } completionBlock:^{
                                                                          [self dismissViewController];
                                                                          if (self.delegate)

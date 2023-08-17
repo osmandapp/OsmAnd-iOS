@@ -1550,6 +1550,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return;
         else if (!networkManager.isReachableViaWiFi && [OAWeatherHelper getPreferenceWeatherAutoUpdate:regionId] == EOAWeatherAutoUpdateOverWIFIOnly)
             return;
+        
+        [[OAWeatherHelper sharedInstance] preparingForDownloadForecastByRegion:item.worldRegion regionId:regionId];
 
         NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
    // https://osmand.net/download?&weather=yes&file=Weather_Angola_africa.tifsqlite.zip
@@ -1768,7 +1770,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             NSString *regionId = [OAWeatherHelper checkAndGetRegionId:item.worldRegion];
             [[OAWeatherHelper sharedInstance] prepareToStopDownloading:regionId];
             if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined)
-                [[OAWeatherHelper sharedInstance] removeLocalForecast:regionId refreshMap:NO];
+                [[OAWeatherHelper sharedInstance] removeLocalForecast:regionId region: item.worldRegion refreshMap:NO];
             else if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished)
                 [[OAWeatherHelper sharedInstance] calculateCacheSize:item.worldRegion onComplete:nil];
         } completionBlock:^{
@@ -1845,7 +1847,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             {
                 NSString *regionId = [OAWeatherHelper checkAndGetRegionId:item.worldRegion];
                 [[OAWeatherHelper sharedInstance] prepareToStopDownloading:regionId];
-                [[OAWeatherHelper sharedInstance] removeLocalForecast:regionId refreshMap:item == items.lastObject];
+                [[OAWeatherHelper sharedInstance] removeLocalForecast:regionId region:item.worldRegion refreshMap:item == items.lastObject];
             }
             else if ([item isKindOfClass:[OASqliteDbResourceItem class]])
             {

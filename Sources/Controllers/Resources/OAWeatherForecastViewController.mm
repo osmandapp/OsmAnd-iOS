@@ -747,12 +747,20 @@
         {
             progressTitle = OALocalizedString(@"res_deleting");
             deletionBlock = ^{
+                
+                NSUInteger index = 0;
                 for (NSString *regionId in forecastsToDelete)
                 {
                     [_weatherHelper prepareToStopDownloading:regionId];
+                    [_weatherHelper removeLocalForecasts:@[regionId] region:_regionsWithOfflineMaps[index] refreshMap:YES];
+                    index++;
                 }
+//                for (NSString *regionId in forecastsToDelete)
+//                {
+//                    [_weatherHelper prepareToStopDownloading:regionId];
+//                }
 
-                [_weatherHelper removeLocalForecasts:forecastsToDelete refreshMap:YES];
+             //   [_weatherHelper removeLocalForecasts:forecastsToDelete region: region refreshMap:YES];
                 [forecastsToDelete removeAllObjects];
             };
         }
@@ -1116,7 +1124,7 @@
                                                             [_weatherHelper prepareToStopDownloading:regionId];
                                                             if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined)
                                                             {
-                                                                [_weatherHelper removeLocalForecast:regionId refreshMap:NO];
+                                                                [_weatherHelper removeLocalForecast:regionId region:item[@"region"] refreshMap:NO];
                                                                 [((NSMutableArray *) _data[indexPath.section][@"cells"]) removeObjectAtIndex:indexPath.row];
                                                                 [_regionsOtherCountries addObject:item[@"region"]];
                                                                 [_regionsOtherCountries sortUsingComparator:_regionsComparator];

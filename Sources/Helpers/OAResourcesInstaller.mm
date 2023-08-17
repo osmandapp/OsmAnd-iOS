@@ -21,6 +21,7 @@
 #import "OAIAPHelper.h"
 #import "OAGPXDocument.h"
 #import "OAGPXDatabase.h"
+#import "OAWeatherHelper.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 
@@ -247,6 +248,11 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                                 [OAIAPHelper decreaseFreeMapsCount];
                         }
                     }
+                    else if (nsResourceId && [[nsResourceId lowercaseString] hasSuffix:@".tifsqlite"])
+                    {
+                        OAWorldRegion* match = [OAResourcesUIHelper findRegionOrAnySubregionOf:_app.worldRegion thatContainsResource:QString([nsResourceId UTF8String])];
+                        [[OAWeatherHelper sharedInstance] setupDownloadStateFinished:match regionId:nsResourceId];
+                    }
                     
                     [[NSNotificationCenter defaultCenter] postNotificationName:OAResourceInstalledNotification object:nsResourceId userInfo:nil];
                     
@@ -410,6 +416,10 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     NSString* nsResourceId = [task.key substringFromIndex:[@"resource:" length]];
     NSNumber* progressCompleted = (NSNumber*)value;
     OALog(@"Resource download task %@: %@ done", nsResourceId, progressCompleted);
+    if ([nsResourceId hasSuffix:@".tifsqlite"])
+    {
+        [[OAWeatherHelper sharedInstance] onDownloadTaskProgressChangedWithKey:key andValue:value];
+    }
 }
 
 @end

@@ -1395,6 +1395,11 @@
 "osmand_live_server_date" = "Last server update: %@";
 "update_frequency" = "Update frequency";
 "osmand_live_wifi_only" = "Update only via WiFi";
+
+"weather_update_disabled" = "Disabled";
+"weather_update_over_wifi_only" = "Over WIFI only";
+"weather_update_over_any_network" = "Over Any Network";
+
 "osmand_live_donation_header" = "Donation settings";
 "donations" = "Donations";
 "osmand_live_donation_switch_title" = "Donation to OpenStreetMap community";

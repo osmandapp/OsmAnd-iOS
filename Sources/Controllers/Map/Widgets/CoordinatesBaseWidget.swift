@@ -12,6 +12,8 @@ import Foundation
 @objcMembers
 class CoordinatesBaseWidget: OABaseWidgetView {
 
+    private static let widgetHeight: CGFloat = 44
+
     @IBOutlet var divider: UIView!
     @IBOutlet var secondContainer: UIStackView!
 
@@ -24,7 +26,7 @@ class CoordinatesBaseWidget: OABaseWidgetView {
     var lastLocation: CLLocation?
 
     override init(type: WidgetType) {
-        super.init(frame: CGRect(x: 0, y: 0, width: 414, height: 50))
+        super.init(frame: CGRect(x: 0, y: 0, width: 414, height: Self.widgetHeight))
         self.widgetType = type
         commonInit()
 
@@ -214,7 +216,7 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         
         var selfFrame: CGRect = frame
         selfFrame.size.width = OAUtilities.calculateScreenWidth()
-        selfFrame.size.height = 52
+        selfFrame.size.height = Self.widgetHeight
         frame = selfFrame
     }
 

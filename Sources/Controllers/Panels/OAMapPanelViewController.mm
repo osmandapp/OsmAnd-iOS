@@ -46,7 +46,6 @@
 #import "OATransportRoutingHelper.h"
 #import "OAMainSettingsViewController.h"
 #import "OABaseScrollableHudViewController.h"
-#import "OACoordinatesWidget.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAFavoritesHelper.h"
 #import "OADownloadMapWidget.h"
@@ -85,7 +84,6 @@
 #import "OAStreet.h"
 #import "OAStreetIntersection.h"
 #import "OACity.h"
-#import "OAConfigureMenuViewController.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAMapLayers.h"
 #import "OACarPlayActiveViewController.h"
@@ -179,7 +177,6 @@ typedef enum
     BOOL _mapStateSaved;
         
     NSMutableArray<OAToolbarViewController *> *_toolbars;
-    BOOL _topControlsVisible;
     
     BOOL _reopenSettings;
     OAApplicationMode *_targetAppMode;
@@ -187,6 +184,7 @@ typedef enum
     OACarPlayActiveViewController *_carPlayActiveController;
 
     BOOL _isNewContextMenuStillEnabled;
+    BOOL _wasRotated;
     
     MBProgressHUD *_gpxProgress;
     OANetworkRouteSelectionTask *_gpxNetworkTask;
@@ -211,7 +209,7 @@ typedef enum
     _mapActions = [[OAMapActions alloc] init];
     _routingHelper = [OARoutingHelper sharedInstance];
     _mapViewTrackingUtilities = [OAMapViewTrackingUtilities instance];
-    _mapWidgetRegistry = [[OAMapWidgetRegistry alloc] init];
+    _mapWidgetRegistry = [OAMapWidgetRegistry sharedInstance];
     _weatherToolbarStateChangeObservable = [[OAObservable alloc] init];
 
     _addonsSwitchObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -237,7 +235,6 @@ typedef enum
     [OATransportRoutingHelper.sharedInstance addProgressBar:self];
     
     _toolbars = [NSMutableArray array];
-    _topControlsVisible = YES;
 }
 
 // Used if the app was initiated via CarPlay
@@ -313,10 +310,10 @@ typedef enum
 
 - (void) viewWillLayoutSubviews
 {
-    if (([self contextMenuMode] && ![self.targetMenuView needsManualContextMode]) || (_scrollableHudViewController
-            && [_scrollableHudViewController getNavbarHeight] > 0))
+    if (([self contextMenuMode] && ![self.targetMenuView needsManualContextMode])
+        || (_scrollableHudViewController && [_scrollableHudViewController getNavbarHeight] > 0))
     {
-        [self doUpdateContextMenuToolbarLayout];
+        [self.hudViewController updateControlsLayout:YES];
     }
     else
     {
@@ -331,18 +328,10 @@ typedef enum
         _shadowButton.frame = [self shadowButtonRect];
     
     if (_shadeView)
-        _shadeView.frame = CGRectMake(0 - OAUtilities.getLeftMargin, 0, DeviceScreenWidth, DeviceScreenHeight);
+        _shadeView.frame = CGRectMake(0., 0., DeviceScreenWidth, DeviceScreenHeight);
 }
  
 @synthesize mapViewController = _mapViewController;
-
-- (void) doUpdateContextMenuToolbarLayout
-{
-    CGFloat contextMenuToolbarHeight = _scrollableHudViewController
-            ? [_scrollableHudViewController getNavbarHeight]
-            : [self.targetMenuView toolbarHeight];
-    [self.hudViewController updateContextMenuToolbarLayout:contextMenuToolbarHeight animated:YES];
-}
 
 - (void) updateHUD:(BOOL)animated
 {
@@ -363,12 +352,18 @@ typedef enum
     {
         self.hudViewController = [[OAMapHudViewController alloc] initWithNibName:@"OAMapHudViewController"
                                                                                              bundle:nil];
-        self.hudViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+
+        self.hudViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
         [self addChildViewController:self.hudViewController];
         
-        // Switch views
-        self.hudViewController.view.frame = self.view.frame;
         [self.view addSubview:self.hudViewController.view];
+        [NSLayoutConstraint activateConstraints:@[
+            [self.view.topAnchor constraintEqualToAnchor:self.hudViewController.view.topAnchor constant:0.],
+            [self.view.leftAnchor constraintEqualToAnchor:self.hudViewController.view.leftAnchor constant:0.],
+            [self.view.bottomAnchor constraintEqualToAnchor:self.hudViewController.view.bottomAnchor constant:0.],
+            [self.view.rightAnchor constraintEqualToAnchor:self.hudViewController.view.rightAnchor constant:0.],
+        ]];
+
     }
     
     if (!self.mapillaryController)
@@ -426,9 +421,8 @@ typedef enum
         [_scrollableHudViewController.view removeFromSuperview];
         [_scrollableHudViewController removeFromParentViewController];
         _scrollableHudViewController = nil;
+        [self resetActiveTargetMenu];
     }
-    [self resetActiveTargetMenu];
-    [self restoreFromContextMenuMode];
     [_hudViewController updateDependentButtonsVisibility];
 }
 
@@ -817,9 +811,7 @@ typedef enum
     if (self.routeInfoView.superview)
     {
         [self.routeInfoView hide:YES duration:.2 onComplete:^{
-            [self setTopControlsVisible:topControlsVisibility];
-            if (bottomsControlHeight)
-                [self setBottomControlsVisible:YES menuHeight:bottomsControlHeight.floatValue animated:YES];
+            [_hudViewController updateControlsLayout:YES];
             [_hudViewController updateDependentButtonsVisibility];
             if (onComplete)
                 onComplete();
@@ -835,10 +827,8 @@ typedef enum
 {
     if (self.routeInfoView.superview)
     {
-        [self setBottomControlsVisible:YES menuHeight:0 animated:YES];
-        
         [self.routeInfoView hide:YES duration:.2 onComplete:^{
-            [self setTopControlsVisible:NO];
+            [_hudViewController updateControlsLayout:YES];
             [_hudViewController updateDependentButtonsVisibility];
             if (onComplete)
                 onComplete();
@@ -1285,7 +1275,7 @@ typedef enum
 
 - (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints
 {
-	if (_activeTargetType == OATargetGPX)
+    if (_activeTargetType == OATargetGPX)
         [self hideScrollableHudViewController];
 
     if (self.isNewContextMenuDisabled)
@@ -1378,6 +1368,10 @@ typedef enum
     
     [self applyTargetPoint:targetPoint];
     [_targetMenuView setTargetPoint:targetPoint];
+
+    _activeTargetType = targetPoint.type;
+    _targetMenuView.activeTargetType = _activeTargetType;
+
     [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
         
         if (targetPoint.centerMap)
@@ -1674,49 +1668,18 @@ typedef enum
         [_mapViewController simulateContextMenuPress:gesture];
 }
 
-- (void) showTopControls:(BOOL)onlyMapSettingsAndSearch
+- (void) targetUpdateControlsLayout:(BOOL)customStatusBarStyleNeeded
+               customStatusBarStyle:(UIStatusBarStyle)customStatusBarStyle
 {
-    [self.hudViewController showTopControls:onlyMapSettingsAndSearch];
-    
-    _topControlsVisible = YES;
-}
-
-- (void) hideTopControls
-{
-    [self.hudViewController hideTopControls];
-
-    _topControlsVisible = NO;
-}
-
-- (void) setTopControlsVisible:(BOOL)visible
-{
-    [self setTopControlsVisible:visible
-       onlyMapSettingsAndSearch:NO
-           customStatusBarStyle:UIStatusBarStyleLightContent];
-}
-
-- (void) setTopControlsVisible:(BOOL)visible
-      onlyMapSettingsAndSearch:(BOOL)onlyMapSettingsAndSearch
-          customStatusBarStyle:(UIStatusBarStyle)customStatusBarStyle
-{
-    if (visible)
-    {
-        [self showTopControls:onlyMapSettingsAndSearch];
-        _customStatusBarStyleNeeded = NO;
-        [self setNeedsStatusBarAppearanceUpdate];
-    }
-    else
-    {
-        [self hideTopControls];
-        _customStatusBarStyle = customStatusBarStyle;
-        _customStatusBarStyleNeeded = YES;
-        [self setNeedsStatusBarAppearanceUpdate];
-    }
+    [_hudViewController updateControlsLayout:YES];
+    _customStatusBarStyle = customStatusBarStyle;
+    _customStatusBarStyleNeeded = customStatusBarStyleNeeded;
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (BOOL) isTopControlsVisible
 {
-    return _topControlsVisible;
+    return _hudViewController.mapSettingsButton.alpha > 0;
 }
 
 - (BOOL) contextMenuMode
@@ -1736,24 +1699,6 @@ typedef enum
 - (void) restoreFromContextMenuMode
 {
     [self.hudViewController restoreFromContextMenuMode];
-}
-
-- (void) showBottomControls:(CGFloat)menuHeight animated:(BOOL)animated
-{
-    [self.hudViewController showBottomControls:menuHeight animated:animated];
-}
-
-- (void) hideBottomControls:(CGFloat)menuHeight animated:(BOOL)animated
-{
-    [self.hudViewController hideBottomControls:menuHeight animated:animated];
-}
-
-- (void) setBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated
-{
-    if (visible)
-        [self showBottomControls:menuHeight animated:animated];
-    else
-        [self hideBottomControls:menuHeight animated:animated];
 }
 
 - (void) restoreActiveTargetMenu
@@ -1802,10 +1747,10 @@ typedef enum
         _shadeView = nil;
     }
     
-    _shadeView = [[UIView alloc] initWithFrame:CGRectMake(0.0 - OAUtilities.getLeftMargin, 0.0, DeviceScreenWidth, DeviceScreenHeight)];
+    _shadeView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, DeviceScreenHeight)];
     _shadeView.backgroundColor = UIColorFromRGBA(0x00000060);
     _shadeView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    _shadeView.alpha = 0.0;
+    _shadeView.alpha = 0.;
 }
 
 - (void) removeShade
@@ -2368,24 +2313,9 @@ typedef enum
     [self hideTargetPointMenu:.2 onComplete:nil hideActiveTarget:NO mapGestureAction:YES];
 }
 
-- (void) targetSetTopControlsVisible:(BOOL)visible
-{
-    [self setTopControlsVisible:visible];
-}
-
-- (void) targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated
-{
-    [self setBottomControlsVisible:visible menuHeight:menuHeight animated:animated];
-}
-
 - (void) targetStatusBarChanged
 {
     [self setNeedsStatusBarAppearanceUpdate];
-}
-
-- (void) targetSetMapRulerPosition:(CGFloat)bottom left:(CGFloat)left
-{
-    [self.hudViewController updateRulerPosition:bottom left:left];
 }
 
 - (void) targetResetRulerPosition
@@ -2477,7 +2407,7 @@ typedef enum
         }
     }];
     
-    [self showTopControls:NO];
+    [_hudViewController updateControlsLayout:YES];
     _customStatusBarStyleNeeded = NO;
     [self setNeedsStatusBarAppearanceUpdate];
 
@@ -2528,7 +2458,7 @@ typedef enum
         [_hudViewController updateDependentButtonsVisibility];
     }];
     
-    [self showTopControls:NO];
+    [_hudViewController updateControlsLayout:YES];
     _customStatusBarStyleNeeded = NO;
     [self setNeedsStatusBarAppearanceUpdate];
     
@@ -2548,7 +2478,12 @@ typedef enum
     [self.targetMenuView.customController viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self.targetMultiMenuView transitionToSize];
-    } completion:nil];
+        if (_destinationViewController && _destinationViewController.view.superview)
+            _wasRotated = YES;
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        if (_destinationViewController && _destinationViewController.view.superview)
+            [self toolbarLayoutDidChange:_destinationViewController animated:YES];
+    }];
 }
 
 - (OATargetPoint *) getCurrentTargetPoint
@@ -3372,7 +3307,7 @@ typedef enum
         return;
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-	
+    
     _targetZoom = (zoom <= 0 ? [self getZoomForBounds:bounds mapSize:screenBBox] : zoom);
     _targetMode = (_targetZoom > 0.0 ? EOATargetBBOX : EOATargetPoint);
     
@@ -3424,6 +3359,8 @@ typedef enum
 - (BOOL) isTopToolbarActive
 {
     OAToolbarViewController *toolbar = [self getTopToolbar];
+    if ([toolbar isKindOfClass:OADestinationViewController.class] && ![[OADestinationCardsViewController sharedInstance] isVisible])
+        return NO;
     return toolbar || [_targetMenuView isToolbarVisible];
 }
 
@@ -3431,6 +3368,32 @@ typedef enum
 {
     OAToolbarViewController *toolbar = [self getTopToolbar];
     return toolbar && [toolbar isKindOfClass:OASearchToolbarViewController.class];
+}
+
+- (BOOL) isTargetMapRulerNeeds
+{
+    return _targetMenuView && _targetMenuView.customController && [_targetMenuView.customController needsMapRuler];
+}
+
+- (BOOL) isTargetBackButtonVisible
+{
+    return _targetMenuView && _targetMenuView.customController && _targetMenuView.customController.buttonBack.alpha > .4;
+}
+
+- (CGFloat) getTargetToolbarHeight
+{
+    return _targetMenuView ? [_targetMenuView toolbarHeight] : 0.;
+}
+
+- (CGFloat) getTargetMenuHeight
+{
+    return [self isTargetMultiMenuViewVisible] ? _targetMultiMenuView.frame.size.height
+        : _targetMenuView ? [_targetMenuView getVisibleHeight] : 0.;
+}
+
+- (CGFloat) getTargetContainerWidth
+{
+    return _targetMenuView && [_targetMenuView.customController getMiddleView] ? [_targetMenuView.customController getMiddleView].frame.size.width : 0.;
 }
 
 - (OAToolbarViewController *) getTopToolbar
@@ -3496,8 +3459,6 @@ typedef enum
 {
     [_toolbars removeObject:toolbarController];
     [self updateToolbar];
-    if ((_scrollableHudViewController && [_scrollableHudViewController getNavbarHeight] > 0))
-        [self doUpdateContextMenuToolbarLayout];
 }
 
 - (void)showPoiToolbar:(OAPOIUIFilter *)filter latitude:(double)latitude longitude:(double)longitude
@@ -3522,68 +3483,38 @@ typedef enum
 
 - (CGFloat) toolbarTopPosition
 {
-    return OAUtilities.getStatusBarHeight;
+    return self.hudViewController ? self.hudViewController.statusBarViewHeightConstraint.constant : [OAUtilities getStatusBarHeight];
 }
 
 - (void) toolbarLayoutDidChange:(OAToolbarViewController *)toolbarController animated:(BOOL)animated
 {
     if (self.hudViewController)
-        [self.hudViewController updateToolbarLayout:animated];
+        [self.hudViewController updateControlsLayout:animated];
 
     if ([toolbarController isKindOfClass:[OADestinationViewController class]])
     {
-        BOOL isTopCoordinatesVisible = [self.hudViewController.topCoordinatesWidget isVisible];
-        BOOL isBottomCoordinatesVisible = [self.hudViewController.coordinatesMapCenterWidget isVisible];
-        
-        CGFloat coordinateWidgetHeight = self.hudViewController.topCoordinatesWidget.frame.size.height;
-        CGFloat markersLandscapeWidth = DeviceScreenWidth / 2;
-        
-        CGFloat coordinateWidgetTopOffset;
-        CGFloat markersHeaderLeftOffset;
-        CGFloat markersHeaderWidth;
-        
-        if (isTopCoordinatesVisible || isBottomCoordinatesVisible)
-        {
-            BOOL bothVisible = isTopCoordinatesVisible && isBottomCoordinatesVisible;
-            coordinateWidgetTopOffset = [OAUtilities isLandscape] ? 0 : coordinateWidgetHeight * (bothVisible ? 2 : 1);
-            CGFloat horisontalLeftOffset = [toolbarController.view isDirectionRTL] ? OAUtilities.getLeftMargin : DeviceScreenWidth / 2;
-            markersHeaderLeftOffset = [OAUtilities isLandscape] ? horisontalLeftOffset : 0;
-            markersHeaderWidth = [OAUtilities isLandscape] ? (DeviceScreenWidth / 2 - OAUtilities.getLeftMargin) : DeviceScreenWidth;
-        }
-        else
-        {
-            coordinateWidgetTopOffset = [OAUtilities isLandscape] ? 0 : 0;
-            markersHeaderLeftOffset = [OAUtilities isLandscape] ? ((DeviceScreenWidth - markersLandscapeWidth) / 2) : 0;
-            markersHeaderWidth = [OAUtilities isLandscape] ? markersLandscapeWidth : DeviceScreenWidth;
-        }
-        
-        _destinationViewController.view.frame = CGRectMake( markersHeaderLeftOffset - OAUtilities.getLeftMargin, coordinateWidgetTopOffset + self.hudViewController.statusBarView.frame.size.height, markersHeaderWidth, 50);
-        _destinationViewController.titleLabel.frame = CGRectMake( 0, 0, markersHeaderWidth, 44);
-        
         OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
-        
-        CGFloat bottomMargin = [OAUtilities getBottomMargin];
-        cardsController.toolBarHeight.constant = 48 + bottomMargin;
-        cardsController.leftTableViewPadding.constant = 8 + OAUtilities.getLeftMargin;
-        cardsController.rightTableViewPadding.constant = 8 + OAUtilities.getLeftMargin;
-        cardsController.leftToolbarPadding.constant = OAUtilities.getLeftMargin;
-        cardsController.rightToolbarPadding.constant = OAUtilities.getLeftMargin;
         CGFloat y = _destinationViewController.view.frame.origin.y + [_destinationViewController getHeight];
         CGFloat h = DeviceScreenHeight - y;
-        CGFloat w = DeviceScreenWidth;
-        
-        CGFloat toolbarHeight = cardsController.toolBarHeight.constant;
+        CGFloat tableWidth = DeviceScreenWidth - ([OAUtilities getLeftMargin] + 8.) * 2;
+        CGFloat toolbarHeight = 48. + [OAUtilities getBottomMargin];
         CGFloat cardsTableHeight = h - toolbarHeight;
-        
         if (cardsController.view.superview && !cardsController.isHiding && [OADestinationsHelper instance].sortedDestinations.count > 0)
         {
-            cardsController.view.frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, y, w, h);
-            [UIView animateWithDuration:(animated ? .25 : 0.0) animations:^{
-                cardsController.cardsView.frame = CGRectMake(0.0, 0.0, w, cardsTableHeight);
-                _shadeView.frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, 0, DeviceScreenWidth, DeviceScreenHeight);
+            cardsController.view.frame = CGRectMake(0., y, DeviceScreenWidth, h);
+            void (^mainBlock)(void) = ^{
+                cardsController.cardsView.frame = CGRectMake(0., 0., DeviceScreenWidth, cardsTableHeight);
+                cardsController.tableView.frame = CGRectMake([OAUtilities getLeftMargin] + 8., 0., tableWidth, cardsTableHeight);
+                cardsController.bottomView.frame = CGRectMake(0., h - toolbarHeight, DeviceScreenWidth, toolbarHeight);
+                _shadeView.frame = CGRectMake(0., 0., DeviceScreenWidth, DeviceScreenHeight);
                 _shadeView.alpha = 1.0;
                 [cardsController.tableView reloadData];
-            }];
+            };
+
+            if (animated)
+                [UIView animateWithDuration:.3 animations:mainBlock];
+            else
+                mainBlock();
         }
     }
 }
@@ -3688,44 +3619,40 @@ typedef enum
     [self.hudViewController hideWeatherToolbarIfNeeded];
 
     OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
-    
     if (!cardsController.view.superview)
     {
-        [self hideTargetPointMenu];
         CGFloat y = _destinationViewController.view.frame.origin.y + [_destinationViewController getHeight];
         CGFloat h = DeviceScreenHeight - y;
-        CGFloat w = DeviceScreenWidth;
-        CGFloat toolbarHeight = cardsController.toolBarHeight.constant;
+        CGFloat tableWidth = DeviceScreenWidth - ([OAUtilities getLeftMargin] + 8.) * 2;
+        CGFloat toolbarHeight = 48. + [OAUtilities getBottomMargin];
         CGFloat cardsTableHeight = h - toolbarHeight;
-    
-        cardsController.view.frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, 0.0, w, DeviceScreenHeight);
-        cardsController.cardsView.frame = CGRectMake(0.0, y - h, w, h - toolbarHeight);
-        cardsController.bottomView.frame = CGRectMake(0.0, DeviceScreenHeight + 1, DeviceScreenWidth, toolbarHeight);
-        [cardsController.cardsView setHidden:YES];
-        [cardsController.bottomView setHidden:YES];
-        BOOL isHistoryOn = [_settings.mapMarkersHistory get];
-        cardsController.historyViewButton.enabled = isHistoryOn;
 
+        cardsController.cardsView.hidden = YES;
+        cardsController.bottomView.hidden = YES;
+        cardsController.view.frame = CGRectMake(-[OAUtilities getLeftMargin], 0., DeviceScreenWidth, DeviceScreenHeight);
+        cardsController.cardsView.frame = CGRectMake(0., y - h, DeviceScreenWidth, h - toolbarHeight);
+        cardsController.tableView.frame = CGRectMake([OAUtilities getLeftMargin] + 8., 0., tableWidth, h);
+        cardsController.bottomView.frame = CGRectMake(0., h + 1, DeviceScreenWidth, toolbarHeight);
+        cardsController.historyViewButton.enabled = [_settings.mapMarkersHistory get];
         [self.hudViewController addChildViewController:cardsController];
-        
+
         [self createShade];
-        
         [self.hudViewController.view insertSubview:_shadeView belowSubview:_destinationViewController.view];
-        
         [self.hudViewController.view insertSubview:cardsController.view belowSubview:_destinationViewController.view];
         
         if (_destinationViewController)
             [self.destinationViewController updateCloseButton];
-        
-        cardsController.view.frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, y, w, h);
-        
+
+        cardsController.cardsView.hidden = NO;
+        cardsController.bottomView.hidden = NO;
+        cardsController.view.frame = CGRectMake(0., y, DeviceScreenWidth, h);
         [UIView animateWithDuration:.25 animations:^{
-            cardsController.cardsView.frame = CGRectMake(0.0, 0.0, w, cardsTableHeight);
-            cardsController.bottomView.frame = CGRectMake(0.0, DeviceScreenHeight - toolbarHeight, DeviceScreenWidth, toolbarHeight);
+            cardsController.cardsView.frame = CGRectMake(0., 0., DeviceScreenWidth, cardsTableHeight);
+            cardsController.tableView.frame = CGRectMake([OAUtilities getLeftMargin] + 8., 0., tableWidth, h);
+            cardsController.bottomView.frame = CGRectMake(0., h - toolbarHeight, DeviceScreenWidth, toolbarHeight);
+            _shadeView.frame = CGRectMake(0., 0., DeviceScreenWidth, DeviceScreenHeight);
             _shadeView.alpha = 1.0;
         }];
-        [cardsController.cardsView setHidden:NO];
-        [cardsController.bottomView setHidden:NO];
     }
     [self toolbarLayoutDidChange:_destinationViewController animated:YES];
 }
@@ -3740,16 +3667,10 @@ typedef enum
     OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
     BOOL wasOnTop = _destinationViewController.showOnTop;
     _destinationViewController.showOnTop = NO;
-    
+
     if (cardsController.view.superview)
     {
-        CGFloat y = _destinationViewController.view.frame.origin.y + [_destinationViewController getHeight];
-        CGFloat h = DeviceScreenHeight - y;
-        CGFloat w = DeviceScreenWidth;
-        CGFloat cardsTableHeight = h - cardsController.toolBarHeight.constant;
-    
         [cardsController doViewWillDisappear];
-
         if ([OADestinationsHelper instance].sortedDestinations.count == 0 || !([_settings.distanceIndicationVisibility get]) || ([_settings.mapMarkersDisplayMode get] == WIDGET_DISPLAY))
         {
             [self hideToolbar:_destinationViewController];
@@ -3760,19 +3681,21 @@ typedef enum
             if (wasOnTop)
                 [self updateToolbar];
         }
-        
+
         if (animated)
         {
             [UIView animateWithDuration:.25 animations:^{
-                cardsController.cardsView.frame = CGRectMake(0.0, y - h, w, cardsTableHeight);
-                cardsController.bottomView.frame = CGRectMake(0.0, DeviceScreenHeight, w, cardsController.toolBarHeight.constant);
+                CGFloat w = DeviceScreenWidth;
+                cardsController.cardsView.frame = CGRectMake(0., -DeviceScreenHeight, w, cardsController.cardsView.frame.size.height);
+                cardsController.bottomView.frame = CGRectMake(0., DeviceScreenHeight, w, cardsController.bottomView.frame.size.height);
                 _shadeView.alpha = 0.0;
-                
             } completion:^(BOOL finished) {
                 [self removeShade];
                 [cardsController.view removeFromSuperview];
                 [cardsController removeFromParentViewController];
-                [self toolbarLayoutDidChange:_destinationViewController animated:YES];
+                [self toolbarLayoutDidChange:_destinationViewController animated:!_wasRotated];
+                _wasRotated = NO;
+                [self recreateControls];
             }];
         }
         else
@@ -3780,7 +3703,9 @@ typedef enum
             [self removeShade];
             [cardsController.view removeFromSuperview];
             [cardsController removeFromParentViewController];
-            [self toolbarLayoutDidChange:_destinationViewController animated:YES];
+            [self toolbarLayoutDidChange:_destinationViewController animated:!_wasRotated];
+            _wasRotated = NO;
+            [self recreateControls];
         }
     }
 }
@@ -3938,6 +3863,7 @@ typedef enum
                     [_app.locationServices.locationSimulation startStopRouteAnimation];
             }
             
+            [self recreateControls];
             [self updateRouteButton];
             [self updateToolbar];
         }

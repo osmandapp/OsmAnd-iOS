@@ -41,7 +41,6 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableHeaderView = _headerView;
-    self.tableView.scrollEnabled = NO;
     self.tableView.backgroundColor = [UIColor whiteColor];
     [self configureCloudIntroductionButtonsView];
 }

@@ -11,7 +11,7 @@
 
 #define kBorderWidth 2.
 
-#define kFixedHeight 200.
+#define kFixedHeight 300
 #define kLabelOffset 40.
 
 #define kImageWidth 52.

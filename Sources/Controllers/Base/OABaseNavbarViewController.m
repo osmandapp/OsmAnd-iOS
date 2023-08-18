@@ -61,8 +61,6 @@
     
     if (!self.refreshOnAppear)
         [self generateData];
-
-    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
     
     if ([self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle)
         [self.navigationItem hideTitleInStackView:YES defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
@@ -322,7 +320,7 @@
 
         iconContainer.backgroundColor = UIColor.whiteColor;
         iconView.contentMode = UIViewContentModeCenter;
-        iconView.image = rightIconLargeTitle;
+        iconView.image = rightIconLargeTitle.imageFlippedForRightToLeftLayoutDirection;
         UIColor *tintColor = [self getRightIconTintColorLargeTitle];
         if (tintColor)
             iconView.tintColor = tintColor;
@@ -331,8 +329,14 @@
         iconContainer.layer.cornerRadius = baseIconSize / 2;
         iconContainer.clipsToBounds = YES;
         iconContainer.translatesAutoresizingMaskIntoConstraints = NO;
+        NSLayoutConstraint *horizontalConstraint;
+        if ([self.view isDirectionRTL])
+            horizontalConstraint = [iconContainer.leftAnchor constraintEqualToAnchor:self.navigationController.navigationBar.leftAnchor constant:16. + [OAUtilities getLeftMargin]];
+        else
+            horizontalConstraint = [iconContainer.rightAnchor constraintEqualToAnchor:self.navigationController.navigationBar.rightAnchor constant:-(16. + [OAUtilities getLeftMargin])];
+        
         [NSLayoutConstraint activateConstraints:@[
-            [iconContainer.rightAnchor constraintEqualToAnchor:self.navigationController.navigationBar.rightAnchor constant:-(16. + [OAUtilities getLeftMargin])],
+            horizontalConstraint,
             [iconContainer.bottomAnchor constraintEqualToAnchor:self.navigationController.navigationBar.bottomAnchor constant:-((navbarHeight - baseIconSize) / 2)],
             [iconContainer.heightAnchor constraintEqualToConstant:baseIconSize],
             [iconContainer.widthAnchor constraintEqualToAnchor:iconContainer.heightAnchor]

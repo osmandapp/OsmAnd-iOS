@@ -93,7 +93,7 @@ class WidgetType: NSObject {
 
     func isPurchased() -> Bool {
         if (WidgetType.getProWidgets().contains(where: { $0 == self } )) {
-            return OAIAPHelper.isSubscribedToOsmAndPro()
+            return OAIAPHelper.isOsmAndProAvailable()
         }
         return true
     }
@@ -107,12 +107,14 @@ class WidgetType: NSObject {
     }
 
     func getPanel(_ widgetId: String, appMode: OAApplicationMode) -> WidgetsPanel {
-        if (defaultPanel == .topPanel || defaultPanel == .bottomPanel) {
-            return defaultPanel
-        } else if (defaultPanel == .leftPanel) {
-            return WidgetsPanel.rightPanel.contains(widgetId: widgetId, appMode: appMode) ? WidgetsPanel.rightPanel : WidgetsPanel.leftPanel
-        } else if (defaultPanel == .rightPanel) {
-            return WidgetsPanel.leftPanel.contains(widgetId: widgetId, appMode: appMode) ? WidgetsPanel.leftPanel : WidgetsPanel.rightPanel;
+        if defaultPanel == .topPanel {
+            return WidgetsPanel.bottomPanel.contains(widgetId: widgetId, appMode: appMode) ? .bottomPanel : .topPanel
+        } else if defaultPanel == .bottomPanel {
+            return WidgetsPanel.topPanel.contains(widgetId: widgetId, appMode: appMode) ? .topPanel : .bottomPanel
+        } else if defaultPanel == .leftPanel {
+            return WidgetsPanel.rightPanel.contains(widgetId: widgetId, appMode: appMode) ? .rightPanel : .leftPanel
+        } else if defaultPanel == .rightPanel {
+            return WidgetsPanel.leftPanel.contains(widgetId: widgetId, appMode: appMode) ? .leftPanel : .rightPanel;
         }
         fatalError("Unsupported panel")
     }

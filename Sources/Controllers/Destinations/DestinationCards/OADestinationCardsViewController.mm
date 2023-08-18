@@ -161,28 +161,12 @@
     tapRec.delegate = self;
     
     [self.tableView addGestureRecognizer:tapRec];
-    _leftTableViewPadding.constant += OAUtilities.getLeftMargin;
-    _rightTableViewPadding.constant += OAUtilities.getLeftMargin;
     [self configureBottomToolbar];
 }
 
 - (void) configureBottomToolbar
 {
-    if (!UIAccessibilityIsReduceTransparencyEnabled())
-    {
-        self.bottomView.backgroundColor = UIColor.clearColor;
-        
-        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
-        blurEffectView.frame = self.view.frame;
-        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        _navBarBackgroundView = blurEffectView;
-        [self.bottomView insertSubview:_navBarBackgroundView atIndex:0];
-        self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    }
-    [self.bottomToolBar setBackgroundImage:[UIImage new] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
-    [self.bottomToolBar setShadowImage:[UIImage new] forToolbarPosition:UIBarPositionAny];
-    CGFloat bottomMargin = [OAUtilities getBottomMargin];
-    _toolBarHeight.constant += bottomMargin;
+    [self.bottomView addBlurEffect:YES cornerRadius:0. padding:0.];
     _historyViewButton.title = OALocalizedString(@"shared_string_history");
     _appearanceViewButton.title = OALocalizedString(@"shared_string_appearance");
 }
@@ -209,7 +193,6 @@
     _historyPointAddObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onHistoryPointAdded:withKey:)
                                                           andObserve:[OAHistoryHelper sharedInstance].historyPointAddObservable];
-
 }
 
 -(void)viewDidDisappear:(BOOL)animated

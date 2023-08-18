@@ -262,10 +262,8 @@ static BOOL dataInvalidated = NO;
         return;
 
     [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:^(id<OADownloadTask> task) {
-        //if (!isWeatherForecast)
             [self updateContent];
     } onTaskResumed:^(id<OADownloadTask> task) {
-      //  if (!isWeatherForecast)
             [self showDownloadViewForTask:task];
     }];
 }

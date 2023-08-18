@@ -487,14 +487,6 @@
         [self setOfflineForecastSizeInfo:regionId
                                    value:kTileSize * originalTileIds.count * kForecastDatesCount
                                    local:NO];
-//        NSString *nameFirstLetterUpperCase = [region.downloadsIdPrefix stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:[[region.downloadsIdPrefix substringToIndex:1] capitalizedString]];
-//        NSString *clearName = [nameFirstLetterUpperCase stringByReplacingOccurrencesOfString:@"_"
-//                                             withString:@" "];
-//        NSString *fileName = [NSString stringWithFormat:@"Weather %@tifsqlite", clearName];
-//        // Weather Ghana africa.tifsqlite
-//        NSString *filePath = [docPath stringByAppendingPathComponent:[NSString stringWithFormat:@"Resources/%@", fileName]];
-//        if ([NSFileManager.defaultManager fileExistsAtPath:filePath])
-//            [NSFileManager.defaultManager removeItemAtPath:filePath error:nil];
         OsmAndAppInstance app = [OsmAndApp instance];
         QString regionIdString = QString::fromNSString(region.downloadsIdPrefix).append("tifsqlite");
         const auto success = app.resourcesManager->uninstallResource(regionIdString);

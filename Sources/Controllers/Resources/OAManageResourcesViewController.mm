@@ -323,7 +323,6 @@ static BOOL _repositoryUpdated = NO;
             [[OAAutoObserverProxy alloc] initWith:self
                                       withHandler:@selector(onWeatherSizeCalculated:withKey:andValue:)
                                        andObserve:_weatherHelper.weatherSizeCalculatedObserver];
-//    _weatherForecastDownloadingObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onWeatherForecastDownloading:withKey:andValue:) andObserve:_app.downloadsManager.progressCompletedObservable];
     _weatherForecastDownloadingObserver =
             [[OAAutoObserverProxy alloc] initWith:self
                                       withHandler:@selector(onWeatherForecastDownloading:withKey:andValue:)

@@ -1080,6 +1080,12 @@
 
 #pragma mark - UITableViewDelegate
 
+
+- (id<OADownloadTask>) getDownloadTaskFor:(NSString*)resourceId
+{
+    return [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]] firstObject];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
@@ -1098,9 +1104,30 @@
         NSString *regionId = [OAWeatherHelper checkAndGetRegionId:region];
         if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished)
         {
-//            OAWeatherForecastDetailsViewController *forecastDetailsViewController = [[OAWeatherForecastDetailsViewController alloc] initWithRegion:item[@"region"]];
-//            forecastDetailsViewController.delegate = self;
-//            [self.navigationController pushViewController:forecastDetailsViewController animated:YES];
+            //if antarctica.tifsqlite
+            NSString *resourceId = [region.downloadsIdPrefix stringByAppendingString:@"tifsqlite"];
+            const auto localResource = _app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
+            OAResourceItem *localResourceItem;
+            if (localResource) {
+                OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
+                item.resourceId = localResource->id;
+                item.resourceType = localResource->type;
+//                item.title = [OAResourcesUIHelper titleOfResource:resource
+//                                                         inRegion:region
+//                                                   withRegionName:YES
+//                                                 withResourceType:NO];
+                item.resource = localResource;
+                item.downloadTask = [self getDownloadTaskFor:localResource->id.toNSString()];
+                item.size = localResource->size;
+                item.worldRegion = region;
+
+                NSString *localResourcePath = _app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString();
+                item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];
+                localResourceItem = item;
+            }
+            OAWeatherForecastDetailsViewController *forecastDetailsViewController = [[OAWeatherForecastDetailsViewController alloc] initWithRegion:item[@"region"] localResourceItem:localResourceItem];
+            forecastDetailsViewController.delegate = self;
+            [self.navigationController pushViewController:forecastDetailsViewController animated:YES];
         }
         else if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress)
         {

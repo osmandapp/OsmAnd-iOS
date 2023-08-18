@@ -65,12 +65,15 @@
 
 - (void)registerObservers
 {
-    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
-                                                withHandler:@selector(onWeatherSizeCalculated:withKey:andValue:)
-                                                 andObserve:[OAWeatherHelper sharedInstance].weatherSizeCalculatedObserver]];
+//    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+//                                                withHandler:@selector(onWeatherSizeCalculated:withKey:andValue:)
+//                                                 andObserve:[OAWeatherHelper sharedInstance].weatherSizeCalculatedObserver]];
     [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
                                                 withHandler:@selector(onWeatherForecastDownloading:withKey:andValue:)
                                                  andObserve:[OAWeatherHelper sharedInstance].weatherForecastDownloadingObserver]];
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)
+                                                 andObserve:[OsmAndApp instance].downloadsManager.completedObservable]];
 }
 
 #pragma mark - UIViewController
@@ -83,6 +86,15 @@
 
     _progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:_progressHUD];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self generateData];
+    [self.tableView reloadData];
+    if (self.delegate)
+        [self.delegate onUpdateForecast];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -143,8 +155,9 @@
     updatesSizeData[@"key"] = @"updates_size_cell";
     updatesSizeData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     updatesSizeData[@"title"] = OALocalizedString(@"shared_string_updates_size");
-    updatesSizeData[@"value"] = [NSByteCountFormatter stringFromByteCount:[[OAWeatherHelper sharedInstance] getOfflineForecastSizeInfo:regionId local:YES]
-                                                               countStyle:NSByteCountFormatterCountStyleFile];
+//    updatesSizeData[@"value"] = [NSByteCountFormatter stringFromByteCount:[[OAWeatherHelper sharedInstance] getOfflineForecastSizeInfo:regionId local:YES] countStyle:NSByteCountFormatterCountStyleFile];
+    updatesSizeData[@"value"] = [NSByteCountFormatter stringFromByteCount:_localResourceItem.size countStyle:NSByteCountFormatterCountStyleFile];
+    
     updatesSizeData[@"value_color"] = UIColorFromRGB(color_text_footer);
     updatesSizeData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
     [infoCells addObject:updatesSizeData];
@@ -366,17 +379,11 @@
         {
             [_weatherHelper prepareToStopDownloading:regionId];
             [_weatherHelper calculateCacheSize:_region onComplete:nil];
+            [_localResourceItem.downloadTask stop];
         }
         else
         {
-            [OAResourcesUIHelper offerDownloadAndInstallOf:(OARepositoryResourceItem *)_localResourceItem onTaskCreated:^(id<OADownloadTask> task) {
-//               if (!isWeatherForecast)
-//                   [self updateContent];
-           } onTaskResumed:^(id<OADownloadTask> task) {
-//               if (!isWeatherForecast)
-//                   [self showDownloadViewForTask:task];
-           }];
-           // [_weatherHelper downloadForecastByRegion:_region];
+            [OAResourcesUIHelper offerDownloadAndInstallOf:(OARepositoryResourceItem *)_localResourceItem onTaskCreated:nil onTaskResumed:nil];
         }
     }
     else if ([item[@"key"] isEqualToString:@"remove_forecast_cell"])
@@ -496,6 +503,24 @@
             }
         });
     }
+}
+
+- (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+{
+    id<OADownloadTask> task = key;
+    
+    // Skip all downloads that are not resources
+    if (![task.key hasPrefix:@"resource:"])
+        return;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded)
+            return;
+        [OAWeatherHelper setPreferenceDownloadState:_region.regionId value:EOAWeatherForecastDownloadStateFinished];
+        [self generateData];
+        [self.tableView reloadData];
+        if (self.delegate)
+            [self.delegate onUpdateForecast];
+    });
 }
 
 #pragma mark - OAWeatherCacheSettingsDelegate

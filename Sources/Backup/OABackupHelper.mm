@@ -31,7 +31,6 @@
 #import "OARegisterUserCommand.h"
 #import "OARegisterDeviceCommand.h"
 #import "OAURLSessionProgress.h"
-#import "OACloudBackupViewController.h"
 
 #define kUpdateIdOperation @"Update order id"
 
@@ -884,10 +883,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 - (void)onBackupPreparing
 {
     for (id<OAOnPrepareBackupListener> listener in _prepareBackupListeners)
-    {
-        if (![listener isKindOfClass:[OACloudBackupViewController class]])
-            [listener onBackupPreparing];
-    }
+        [listener onBackupPreparing];
 }
 
 - (void)onBackupPrepared:(OAPrepareBackupResult *)backupResult

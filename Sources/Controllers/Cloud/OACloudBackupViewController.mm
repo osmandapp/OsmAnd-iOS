@@ -740,6 +740,10 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     });
 }
 
+- (void)onBackupPreparing
+{
+}
+
 #pragma mark - OABackupTypesDelegate
 
 - (void)onCompleteTasks

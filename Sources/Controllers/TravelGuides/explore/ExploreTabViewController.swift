@@ -1,32 +1,30 @@
 //
-//  TravelExploreViewController.swift
+//  ExploreTabViewController.swift
 //  OsmAnd Maps
 //
-//  Created by nnngrach on 24.07.2023.
+//  Created by nnngrach on 18.08.2023.
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
 import Foundation
 
-protocol TravelExploreViewControllerDelegate : AnyObject {
-    func onDataLoaded()
-}
-
-
-@objc(OATravelExploreViewController)
-@objcMembers
-class TravelExploreViewController: OABaseNavbarViewController, TravelExploreViewControllerDelegate {
+class ExploreTabViewController: OABaseNavbarViewController {
     
     var downloadingCellHelper: OADownloadingCellHelper = OADownloadingCellHelper()
     var dataLock: NSObject = NSObject()
     var downloadingResources: [OAResourceSwiftItem] = []
-
+    
+    
     override func viewDidLoad() {
         setupDownloadingCellHelper()
         super.viewDidLoad()
-        populateData()
     }
-
+    
+    func update() {
+        generateData()
+        tableView.reloadData()
+    }
+    
     func setupDownloadingCellHelper() {
         downloadingCellHelper = OADownloadingCellHelper()
         downloadingCellHelper.hostViewController = self
@@ -58,24 +56,11 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         }
     }
     
-    func populateData() {
-        //showLoadingIndicator
-        let task = LoadWikivoyageDataAsyncTask(resetData: true)
-        task.delegate = self;
-        task.execute()
-    }
-    
     
     //MARK: Data
     
     override func getTitle() -> String! {
-        localizedString("shared_string_travel_guides")
-    }
-    
-    override func getRightNavbarButtons() -> [UIBarButtonItem]! {
-        let button = createRightNavbarButton(localizedString("shared_string_options"), iconName: nil, action: #selector(onOptionsButtonClicked), menu: nil)
-        button?.accessibilityLabel = localizedString("shared_string_options")
-        return [button!]
+        localizedString("shared_string_explore")
     }
     
     func headerCellsCountInResourcesSection() -> Int {
@@ -83,36 +68,83 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     }
     
     override func generateData() {
+        
         downloadingCellHelper.fetchResourcesBlock()
         
         tableData.clearAllData()
         
-        let downloadSection = tableData.createNewSection()
+        if TravelObfHelper.shared.isOnlyDefaultTravelBookPresent() {
+            
+            let downloadSection = tableData.createNewSection()
+            
+            let downloadHeaderRow = downloadSection.createNewRow()
+            downloadHeaderRow.cellType = OARightIconTableViewCell.getIdentifier()
+            downloadHeaderRow.title = localizedString("download_file")
+            downloadHeaderRow.iconName = "ic_custom_import"
+            downloadHeaderRow.setObj(NSNumber(booleanLiteral: true), forKey: "kHideSeparator")
+            
+            let downloadDescrRow = downloadSection.createNewRow()
+            downloadDescrRow.cellType = OARightIconTableViewCell.getIdentifier()
+            downloadDescrRow.descr = localizedString("travel_card_download_descr")
+            downloadDescrRow.setObj(NSNumber(booleanLiteral: false), forKey: "kHideSeparator")
+            
+            for _ in downloadingResources {
+                let row = downloadSection.createNewRow()
+                row.cellType = "kDownloadCellKey"
+            }
+            
+        } else {
+            
+            
+            
+            //        if (!Version.isPaidVersion(app) && !OpenBetaTravelCard.isClosed()) {
+            //            items.add(new OpenBetaTravelCard(activity, nightMode));
+            //        }
+            
         
-        let downloadHeaderRow = downloadSection.createNewRow()
-        downloadHeaderRow.cellType = OARightIconTableViewCell.getIdentifier()
-        downloadHeaderRow.title = localizedString("download_file")
-        downloadHeaderRow.iconName = "ic_custom_import"
-        downloadHeaderRow.setObj(NSNumber(booleanLiteral: true), forKey: "kHideSeparator")
-        
-        let downloadDescrRow = downloadSection.createNewRow()
-        downloadDescrRow.cellType = OARightIconTableViewCell.getIdentifier()
-        downloadDescrRow.descr = localizedString("travel_card_download_descr")
-        downloadDescrRow.setObj(NSNumber(booleanLiteral: false), forKey: "kHideSeparator")
-        
-        for _ in downloadingResources {
-            let row = downloadSection.createNewRow()
-            row.cellType = "kDownloadCellKey"
+            
+            let articles = TravelObfHelper.shared.getPopularArticles()
+            if articles.count > 0 {
+                
+                let articlesSection = tableData.createNewSection()
+                articlesSection.headerText = localizedString("popular_destinations")
+                
+                for article in articles {
+                    if article is TravelGpx {
+                        let item: TravelGpx = article as! TravelGpx
+                        let title = (item.description != nil && item.description!.count > 0) ? item.description! : item.title
+                        print("!!! gpxTitle: " + (title ?? "nil") + "   distance: " + String(item.totalDistance))
+                    } else {
+                        
+                        let item: TravelArticle = article
+                        let articleRow = articlesSection.createNewRow()
+                        articleRow.cellType = ArticleTravelCell.getIdentifier()
+                        articleRow.title = item.title ?? "nil"
+                        articleRow.descr = OATravelGuidesHelper.getPatrialContent(item.content)
+                        articleRow.iconName = item.getImageUrl(imageTitle: item.imageTitle ?? "", thumbnail: false)
+                        articleRow.setObj(item.getGeoDescription() ?? "", forKey: "isPartOf")
+                        
+
+                    }
+                }
+            }
+            
+            //TODO:  add TravelNeededMaps Card
+            
+            
         }
+        
+        //TODO:  add EditWiki card
     }
+    
+    
     
     //MARK: Actions
     
-    func onOptionsButtonClicked() {
-        print("onOptionsButtonClicked")
-        
-        //populateData()
-    }
+    //onShowMoreMapsClicked()
+    
+    
+    
 
     //MARK: TableView
 
@@ -165,6 +197,27 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
             }
             
             outCell = cell
+            
+        } else if item.cellType == ArticleTravelCell.getIdentifier() {
+            var cell = tableView.dequeueReusableCell(withIdentifier: ArticleTravelCell.getIdentifier()) as? ArticleTravelCell
+            if cell == nil {
+                let nib = Bundle.main.loadNibNamed("ArticleTravelCell", owner: self, options: nil)
+                cell = nib?.first as? ArticleTravelCell
+                cell!.selectionStyle = .none
+                
+                cell!.imagePreview.layer.cornerRadius = cell!.imagePreview.frame.width / 2
+                cell!.leftButtonIcon.image = UIImage.templateImageNamed("ic_custom_clear_list")
+                cell!.rightButtonIcon.image = UIImage.templateImageNamed("ic_custom_save_to_file")
+                cell!.leftButtonIcon.tintColor = UIColor(rgb: color_purple_border)
+                cell!.rightButtonIcon.tintColor = UIColor(rgb: color_purple_border)
+                cell!.leftButtonLabel.textColor = UIColor(rgb: color_purple_border)
+                cell!.rightButtonLabel.textColor = UIColor(rgb: color_purple_border)
+            }
+            
+            cell!.arcticleTitle.text = item.title
+            cell!.arcticleDescription.text = item.descr
+            cell!.regionLabel.text = item.string(forKey: "isPartOf")
+            outCell = cell
         }
         
         return outCell
@@ -174,78 +227,4 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         downloadingCellHelper.onItemClicked(indexPath)
     }
     
-    
-    //MARK: TravelExploreViewControllerDelegate
-    
-    func onDataLoaded() {
-        //Hide loading indicator
-        updateTabs()
-        
-        testPrintPopArticles()
-    }
-    
-    func updateTabs() {
-        //let exploreTabVC = ()
-        //let savedArticlesTabVC = ()
-        //if exploreTabVC && savedArticlesTabVC
-        //  exploreTabFragment.populateData();
-        //  savedArticlesTabFragment.savedArticlesUpdated();
-    }
-    
-    func testPrintPopArticles() {
-        
-        print("!!! <==============================")
-        
-        let travelHelper = TravelObfHelper.shared;
-        let articles = travelHelper.getPopularArticles()
-        for article in articles {
-            if article is TravelGpx {
-                let item: TravelGpx = article as! TravelGpx
-                let title = (item.description != nil && item.description!.count > 0) ? item.description! : item.title
-                print("!!! gpxTitle: " + (title ?? "nil") + "   distance: " + String(item.totalDistance))
-            } else {
-                let item: TravelArticle = article
-                let titile = item.title ?? "nil"
-                var content = item.content ?? "nil"
-                content = content.substring(to: 100)
-                print("!!! articleTitle:" + titile + "  content: "  + content)
-            }
-            
-            print("!!! ============================")
-        }
-        
-        print("!!! ==============================>")
-    }
-
-}
-
-
-class LoadWikivoyageDataAsyncTask {
-    weak var delegate: TravelExploreViewControllerDelegate?
-    var travelHelper: TravelObfHelper
-    var resetData: Bool
-    
-    init (resetData: Bool) {
-        travelHelper = TravelObfHelper.shared;
-        self.resetData = resetData
-    }
-    
-    func execute() {
-        DispatchQueue.global(qos: .default).async {
-            self.doInBackground()
-            DispatchQueue.main.async {
-                self.onPostExecute()
-            }
-        }
-    }
-    
-    func doInBackground() {
-        travelHelper.initializeDataToDisplay(resetData: resetData)
-    }
-    
-    func onPostExecute() {
-        if delegate != nil {
-            delegate!.onDataLoaded()
-        }
-    }
 }

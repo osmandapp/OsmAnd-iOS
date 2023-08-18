@@ -36,4 +36,6 @@
 
 + (CLLocation *) getMapCenter;
 
++ (NSString *) getPatrialContent:(NSString *)content;
+
 @end

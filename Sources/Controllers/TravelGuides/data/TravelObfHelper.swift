@@ -16,6 +16,7 @@ class TravelObfHelper : NSObject {
     static let shared = TravelObfHelper()
     
     let WORLD_WIKIVOYAGE_FILE_NAME = "World_wikivoyage.travel.obf"
+    let DEFAULT_WIKIVOYAGE_TRAVEL_OBF = "Default_wikivoyage.travel.obf"
     let ARTICLE_SEARCH_RADIUS = 50 * 1000
     let SAVED_ARTICLE_SEARCH_RADIUS = 30 * 1000
     let MAX_SEARCH_RADIUS = 800 * 1000
@@ -249,6 +250,15 @@ class TravelObfHelper : NSObject {
     
     func isAnyTravelBookPresent() -> Bool {
         return getReaders().count > 0
+    }
+    
+    func isOnlyDefaultTravelBookPresent() -> Bool {
+        let books = TravelObfHelper.shared.getReaders()
+        if (books.count == 0 ||
+            books.count == 1 && books[0] == DEFAULT_WIKIVOYAGE_TRAVEL_OBF) {
+            return true
+        }
+        return false
     }
     
     func search(searchQuery: String) -> [TravelSearchResult] {

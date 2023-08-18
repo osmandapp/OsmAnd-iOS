@@ -736,17 +736,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         _status = [OABackupStatus getBackupStatus:_backup];
         _error = _backup.error;
         [self refreshContent];
-        _settingsButton.enabled = YES;
-        _settingsButton.tintColor = UIColor.whiteColor;
         [self.tblView.refreshControl endRefreshing];
-    });
-}
-
-- (void)onBackupPreparing
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        _settingsButton.enabled = NO;
-        _settingsButton.tintColor = UIColorFromRGB(color_tint_gray);
     });
 }
 

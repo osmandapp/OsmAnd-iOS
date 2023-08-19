@@ -33,6 +33,7 @@
                 <outlet property="statusBarViewHeightConstraint" destination="IvW-Gf-meU" id="Zio-ov-kE7"/>
                 <outlet property="topWidgetsView" destination="K8g-PT-gdL" id="ul7-YR-TLk"/>
                 <outlet property="topWidgetsViewHeightConstraint" destination="22d-Ah-0dl" id="JpG-v2-OYy"/>
+                <outlet property="topWidgetsViewWidthConstraint" destination="yax-4w-LsJ" id="HkI-5d-3J5"/>
                 <outlet property="topWidgetsViewYConstraint" destination="l7W-kJ-xAQ" id="Jsx-7s-avC"/>
                 <outlet property="view" destination="1" id="3"/>
                 <outlet property="weatherButton" destination="Kft-AO-Hcd" id="8Mb-KG-ple"/>

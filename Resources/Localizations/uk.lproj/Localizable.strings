@@ -767,7 +767,7 @@
 "instalation_troubleshooting_item" = "Встановлення та розвʼязання проблем";
 "techical_articles_item" = "Технічні статті";
 "versions_item" = "Версії";
-"help_contact_us" = "Зв’яжіться з нами";
+"help_contact_us" = "Зв’язок з нами";
 "shared_string_about" = "Про застосунок";
 "follow_us" = "Слідкуйте за нами";
 "context_menu_item_directions_from" = "Маршрут від";
@@ -3022,3 +3022,11 @@
 "banner_payment_free_backup_settings_title" = "Безплатне резервне копіювання налаштувань";
 "get_osmand_cloud" = "Отримати OsmAnd Cloud";
 "free_account" = "Безплатний обліковий запис";
+"map_widget_zoom_level_desc" = "Показує поточний масштаб мапи.";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "Показує географічні координати поточного центру мапи";
+"map_widget_rendering_fps_desc" = "Показує швидкість появи й оновлення мапи та її елементів (у кадрах на секунду, або FPS).";
+"map_widget_camera_distance_desc" = "Показує висоту камери над рівнем поверхні.";
+"map_widget_target_distance_desc" = "Показує відстань між камерою і ціллю.";
+"map_widget_camera_tilt_desc" = "Показує кут нахилу камери в режимі перспективи. Стандартно 90° (без нахилу).";

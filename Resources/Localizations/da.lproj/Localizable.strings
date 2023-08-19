@@ -3014,3 +3014,11 @@
 "free_favorites_backup" = "Gratis sikkerhedskopiering af favoritter";
 "free_account" = "Gratis konto";
 "banner_payment_free_backup_settings_title" = "Gratis sikkerhedskopiering af indstillinger";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "Viser de geografiske koordinater for det aktuelle kortcentrum";
+"map_widget_target_distance_desc" = "Viser afstanden mellem kameraet og målpositionen.";
+"map_widget_rendering_fps_desc" = "Viser, hvor hurtigt kortet og kortelementerne vises og opdateres, udtrykt i billeder pr. sekund (BPS).";
+"map_widget_camera_tilt_desc" = "Viser kameraets hældningsvinkel i perspektivtilstand. Standard er 90° (ingen hældning).";
+"map_widget_camera_distance_desc" = "Viser kameraets højde over overfladeniveauet.";
+"map_widget_zoom_level_desc" = "Viser det aktuelle zoomniveau på kortet.";

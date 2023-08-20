@@ -3011,3 +3011,11 @@
 "get_osmand_cloud" = "Obten OsmAnd Cloud";
 "free_favorites_backup_description" = "Regístrate en OsmAnd Cloud para obtener una copia de seguridad gratuita de tus favoritos y configuraciones";
 "banner_payment_free_backup_settings_title" = "Copia de seguridad gratuita de los ajustes";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "Muestra las coordenadas geográficas del centro del mapa actual";
+"map_widget_rendering_fps_desc" = "Muestra la rapidez a la que se muestra y actualiza el mapa y los elementos del mapa, expresada en fotogramas por segundo (FPS).";
+"map_widget_camera_tilt_desc" = "Muestra el ángulo de inclinación de la cámara en modo perspectiva. Por defecto es 90° (sin inclinación).";
+"map_widget_camera_distance_desc" = "Muestra la elevación de la cámara sobre el nivel de la superficie.";
+"map_widget_zoom_level_desc" = "Muestra el nivel actual de zoom del mapa.";
+"map_widget_target_distance_desc" = "Muestra la distancia entre la cámara y la ubicación del objetivo.";

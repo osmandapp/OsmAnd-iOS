@@ -161,8 +161,18 @@
         _mapSourceUpdatedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                      withHandler:@selector(onMapSourceUpdated)
                                                       andObserve:[OARootViewController instance].mapPanel.mapViewController.mapSourceUpdatedObservable];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+             selector:@selector(layoutWidgetsNotification:)
+             name:kNotificationLayoutWidgets
+             object:nil];
     }
     return self;
+}
+
+- (void)layoutWidgetsNotification:(NSNotification *) notification
+{
+    [self layoutWidgets];
 }
 
 - (void) updateRuler {

@@ -266,6 +266,7 @@
     
     _textShadowView.attributedText = _primaryShadowColor && _shadowRadius > 0 ? shadowString : nil;
     _textView.attributedText = string;
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationLayoutWidgets object:self];
     self.accessibilityValue = string.string;
 }
 

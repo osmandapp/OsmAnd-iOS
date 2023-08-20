@@ -14,7 +14,7 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
     
     private static let controlHeight: CGFloat = 26
     private static let contentHeight: CGFloat = 32
-    private static let borderWidth: CGFloat = 2
+    private static let borderWidth: CGFloat = 1
     
     private var isInTransition = false
     public let isHorizontal: Bool
@@ -63,7 +63,12 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
         pageViewController.delegate = self
         
         contentView.layer.borderWidth = isHorizontal ? 0 : Self.borderWidth
-        contentView.layer.borderColor = isHorizontal ? nil : UIColor.black.withAlphaComponent(0.3).cgColor
+        contentView.layer.borderColor = isHorizontal ? nil : UIColor.lightGray.withAlphaComponent(0.8).cgColor
+        contentView.layer.shadowColor = isHorizontal ? UIColor.clear.cgColor : UIColor.black.cgColor;
+        contentView.layer.shadowOpacity = isHorizontal ? 1.0 : 0.5
+        contentView.layer.shadowOffset = isHorizontal ? CGSize(width: 0, height: 0) : CGSize(width: 1, height: 1)
+        contentView.layer.shouldRasterize = true
+        contentView.layer.rasterizationScale = UIScreen.main.scale
         
         // Add the container view to the view hierarchy
         view.addSubview(pageContainerView)

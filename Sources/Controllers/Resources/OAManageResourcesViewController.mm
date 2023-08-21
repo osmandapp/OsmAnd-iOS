@@ -874,12 +874,6 @@ static BOOL _repositoryUpdated = NO;
         }
     }
 
-//    if ([self shouldDisplayWeatherForecast:region])
-//    {
-//        OAResourceItem *item = [_weatherHelper generateResourceItem:region];
-//        [regionMapArray addObject:item];
-//    }
-
     [_regionMapItems addObjectsFromArray:regionMapArray];
 
     NSString *northAmericaRegionId = OsmAnd::WorldRegions::NorthAmericaRegionId.toNSString();
@@ -2414,15 +2408,7 @@ static BOOL _repositoryUpdated = NO;
                    subtitle = OALocalizedString(@"shared_string_download_update");
                 else if (_sizePkg >= 0)
                 {
-                    // Package already downloaded, use _size
-                    if (_sizePkg == 0 && item.resourceType == OsmAndResourceType::WeatherForecast)
-                    {
-                        subtitle = [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile];
-                    }
-                    else
-                    {
-                        subtitle = [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile];
-                    }
+                    subtitle = [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile];
                 }
                 if ([item isKindOfClass:OAMultipleResourceItem.class] && ([self.region hasGroupItems] || [OAResourceType isSRTMResourceItem:item]))
                 {

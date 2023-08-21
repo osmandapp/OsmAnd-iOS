@@ -400,6 +400,7 @@
                                                                  {
                                                                      [_progressHUD showAnimated:YES whileExecutingBlock:^{
                                                                          [_weatherHelper prepareToStopDownloading:regionId];
+                                                                         [_localResourceItem.downloadTask stop];
                                                                          [_weatherHelper removeLocalForecast:regionId region:_region refreshMap:YES];
                                                                      } completionBlock:^{
                                                                          [self dismissViewController];

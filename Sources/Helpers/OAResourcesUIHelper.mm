@@ -1772,8 +1772,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                 onTaskStop(item.downloadTask);
 
             [item.downloadTask stop];
-//            if (onTaskStop)
-//                onTaskStop(nil);
             [progressHUD removeFromSuperview];
         }];
     }

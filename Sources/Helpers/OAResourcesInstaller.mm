@@ -185,7 +185,6 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         }
         nsResourceId = [nsResourceId stringByDeletingPathExtension];
     }
-    // [nsResourceId hasSuffix:@"tifsqlite"]
     if ([nsResourceId hasSuffix:@"sqlitedb"])
         [self installSqliteResource:unzippedFilePath fileName:fileName];
     else if ([nsResourceId hasSuffix:@"obf.zip"])

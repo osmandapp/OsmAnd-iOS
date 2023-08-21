@@ -1,8 +1,8 @@
 //
-//  OAWeatherFrequencySettingsViewController.swift
+//  OAWeatherAutoUpdateSettingsViewController.h
 //  OsmAnd Maps
 //
-//  Created by Oleksandr Panchenko on 10.08.2023.
+//  Created by Oleksandr Panchenko on 21.08.2023.
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 

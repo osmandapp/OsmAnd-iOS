@@ -1,9 +1,9 @@
 //
-//  OAWeatherFrequencySettingsViewController.h
-//  OsmAnd
+//  OAWeatherAutoUpdateSettingsViewController.h
+//  OsmAnd Maps
 //
-//  Created by Skalii on 11.08.2022.
-//  Copyright (c) 2022 OsmAnd. All rights reserved.
+//  Created by Oleksandr Panchenko on 21.08.2023.
+//  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
 #import "OABaseNavbarViewController.h"

@@ -22,6 +22,7 @@
 #import "OAMoreOptionsBottomSheetViewController.h"
 #import "OATransportStopRoute.h"
 #import "OARootViewController.h"
+#import "OAMapHudViewController.h"
 #import "OAMapLayers.h"
 #import "OANativeUtilities.h"
 #import "OATransportRouteController.h"
@@ -133,7 +134,6 @@ static const NSInteger _buttonsCount = 4;
     OATargetPointType _previousTargetType;
     UIImage *_previousTargetIcon;
     
-    BOOL _toolbarVisible;
     CGFloat _toolbarHeight;
     
     BOOL _bottomBarVisible;
@@ -406,10 +406,9 @@ static const NSInteger _buttonsCount = 4;
     [self.parentView addSubview:self.customController.navBar];
     
     BOOL showTopControls = [self.customController showTopControls];
-    _toolbarVisible = YES;
     _toolbarHeight = showTopControls ? _customController.getNavBarHeight : OAUtilities.getStatusBarHeight;
     
-    [self.menuViewDelegate targetSetTopControlsVisible:showTopControls];
+    [self.menuViewDelegate targetUpdateControlsLayout:showTopControls customStatusBarStyle:UIStatusBarStyleLightContent];
     
     if (self.customController.topToolbarType == ETopToolbarTypeFloating || self.customController.topToolbarType == ETopToolbarTypeMiddleFixed || self.customController.topToolbarType == ETopToolbarTypeFloatingFixedButton)
     {
@@ -456,10 +455,9 @@ static const NSInteger _buttonsCount = 4;
         else
             newTopToolbarFrame.origin.y = -newTopToolbarFrame.size.height;
      
-        _toolbarVisible = NO;
         _toolbarHeight = OAUtilities.getStatusBarHeight;
 
-        [self.menuViewDelegate targetSetTopControlsVisible:YES];
+        [self.menuViewDelegate targetUpdateControlsLayout:NO customStatusBarStyle:UIStatusBarStyleDefault];
 
         if (animated)
         {
@@ -561,7 +559,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (BOOL) isToolbarVisible
 {
-    return _toolbarVisible;
+    return self.superview && [self getTopToolbarAlpha] == 1.;
 }
 
 - (CGFloat) toolbarHeight
@@ -606,7 +604,6 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) clearCustomControllerIfNeeded
 {
-    _toolbarVisible = NO;
     _toolbarHeight = OAUtilities.getStatusBarHeight;
     
     _bottomBarVisible = NO;
@@ -932,7 +929,7 @@ static const NSInteger _buttonsCount = 4;
 {
     _hiding = YES;
     
-    [self.menuViewDelegate targetSetBottomControlsVisible:YES menuHeight:0 animated:YES];
+    [[OARootViewController instance].mapPanel.hudViewController updateControlsLayout:YES];
     
     _visibleTransportRoutes = nil;
 
@@ -2106,15 +2103,10 @@ static const NSInteger _buttonsCount = 4;
 - (void) applyMapInteraction:(CGFloat)height animated:(BOOL)animated
 {
     if (!_showFullScreen && self.customController && [self.customController supportMapInteraction])
-    {
         [self.menuViewDelegate targetViewEnableMapInteraction];
-        [self.menuViewDelegate targetSetBottomControlsVisible:[self.customController isBottomsControlVisible] menuHeight:([self isLandscape] ? 0 : height) animated:animated];
-    }
     else
-    {
         [self.menuViewDelegate targetViewDisableMapInteraction];
-        [self.menuViewDelegate targetSetBottomControlsVisible:NO menuHeight:0 animated:animated];
-    }
+    [[OARootViewController instance].mapPanel.hudViewController updateControlsLayout:YES];
 }
 
 - (UIStatusBarStyle) getStatusBarStyle:(BOOL)contextMenuMode defaultStyle:(UIStatusBarStyle)defaultStyle
@@ -2316,7 +2308,7 @@ static const NSInteger _buttonsCount = 4;
     if (self.customController)
     {
         BOOL showTopControls = [self.customController showTopControls];
-        [self.menuViewDelegate targetSetTopControlsVisible:showTopControls];
+        [self.menuViewDelegate targetUpdateControlsLayout:showTopControls customStatusBarStyle:UIStatusBarStyleLightContent];
         if (!showTopControls)
             [self.menuViewDelegate targetResetCustomStatusBarStyle];
     }
@@ -2588,7 +2580,7 @@ static const NSInteger _buttonsCount = 4;
         if (self.customController && self.customController.needsMapRuler)
         {
             CGFloat rulerHeight = 25.0;
-            [self.menuViewDelegate targetSetMapRulerPosition:landscape ? kDefaultMapRulerMarginBottom : -[self getVisibleHeight] + OAUtilities.getBottomMargin - rulerHeight left:landscape ? _containerView.frame.size.width - OAUtilities.getLeftMargin + 16.0 : 16.0];
+            [self.menuViewDelegate targetResetRulerPosition];
         }
         if (self.customController && self.customController.additionalAccessoryView)
         {

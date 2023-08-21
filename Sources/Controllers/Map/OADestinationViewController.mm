@@ -60,7 +60,7 @@
 
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
-    {        
+    {
         self.destinationCells = [NSMutableArray array];
         
         self.parkingColor = UIColorFromRGB(parking_pin_color_blue);
@@ -344,8 +344,8 @@
     self.navBarView.hidden = _navBarHidden;
     CGFloat navBarHeight = !_navBarHidden ? self.navBarView.bounds.size.height : 0.0;
     
-    CGFloat top = [OAUtilities getStatusBarHeight];
-    CGFloat w = DeviceScreenWidth;
+    CGFloat top = self.delegate ? [self.delegate toolbarTopPosition] : [OAUtilities getStatusBarHeight];
+    CGFloat w = DeviceScreenWidth - [OAUtilities getLeftMargin] * 2;
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -355,7 +355,7 @@
             if (_destinationCells.count == 0)
                 h = navBarHeight;
             
-            frame = CGRectMake(0.0, top, w, h);
+            frame = CGRectMake([OAUtilities getLeftMargin], top, w, h);
             
             if (_multiCell)
             {
@@ -380,7 +380,7 @@
             if (h < 0.0)
                 h = 0.0;
             
-            frame = CGRectMake(0.0, top, w, h);
+            frame = CGRectMake([OAUtilities getLeftMargin], top, w, h);
 
             if (_multiCell)
                 _multiCell.contentView.hidden = YES;
@@ -398,7 +398,7 @@
             if (_destinationCells.count == 0)
                 h = navBarHeight;
             
-            frame = CGRectMake(0.0, top, w, h);
+            frame = CGRectMake([OAUtilities getLeftMargin], top, w, h);
             
             if (_multiCell)
             {
@@ -417,7 +417,7 @@
             if (_destinationCells.count == 0)
                 h = navBarHeight;
             
-            frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, top, w, h);
+            frame = CGRectMake(OAUtilities.getLeftMargin, top, w, h);
             
             if (_multiCell)
             {
@@ -432,8 +432,6 @@
     }
     
     self.view.frame = frame;
-    
-    [self.delegate toolbarLayoutDidChange:self animated:animated];
 }
 
 - (void)updateLayout

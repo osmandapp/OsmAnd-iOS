@@ -13,25 +13,34 @@ final class FreeBackupBanner: UIView {
     @objc enum BannerType: Int {
         case favorite
         case settings
-        
     }
-    @IBOutlet private weak var imageView: UIImageView!
-    @IBOutlet private weak var titleLabel: UILabel!
-    @IBOutlet private weak var osmAndCloudButton: UIButton! {
-        didSet {
-            osmAndCloudButton.titleLabel?.text = localizedString("banner_payment_free_backup_cloud_button_title")
-        }
-    }
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel! {
         didSet {
             descriptionLabel.text = localizedString("free_favorites_backup_description")
         }
     }
     
+    @IBOutlet weak var leadingSubviewConstraint: NSLayoutConstraint!
+    @IBOutlet weak var trailingSubviewConstraint: NSLayoutConstraint!
+    
+    @IBOutlet private weak var imageView: UIImageView!
+    @IBOutlet private weak var osmAndCloudButton: UIButton! {
+        didSet {
+            osmAndCloudButton.titleLabel?.text = localizedString("banner_payment_free_backup_cloud_button_title")
+        }
+    }
+    
+    @IBOutlet private weak var separatorViewHeightConstraint: NSLayoutConstraint! {
+        didSet {
+            separatorViewHeightConstraint.constant = 1.0 / UIScreen.main.scale
+        }
+    }
+    
     var didCloseButtonAction: (() -> Void)? = nil
     var didOsmAndCloudButtonAction: (() -> Void)? = nil
     
-    var defaultFrameHeight = 120
+    var defaultFrameHeight = 100
     var leadingTrailingOffset = 137
     
     func configure(bannerType: BannerType) {

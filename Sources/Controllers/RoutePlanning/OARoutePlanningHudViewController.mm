@@ -278,7 +278,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     _titleView.text = OALocalizedString(@"plan_route");
     
     [self adjustMapViewPort];
-    [self changeMapRulerPosition];
     [self adjustActionButtonsPosition:self.getViewHeight];
     [self adjustNavbarPosition];
 
@@ -310,9 +309,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 	if (_showSnapWarning)
 		[self enterApproximationMode];
 
-    [_mapPanel setTopControlsVisible:YES
-            onlyMapSettingsAndSearch:YES
-                customStatusBarStyle:self.preferredStatusBarStyle];
+    [_mapPanel targetUpdateControlsLayout:NO customStatusBarStyle:UIStatusBarStyleDefault];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -459,13 +456,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         buttonsFrame.origin = CGPointMake(0., DeviceScreenHeight - height - buttonsFrame.size.height - 15.);
     }
     _actionButtonsContainer.frame = buttonsFrame;
-}
-
-- (void) changeMapRulerPosition
-{
-    CGFloat bottomMargin = [self isLeftSidePresentation] ? (-[self getToolbarHeight] - 16.) : (-self.getViewHeight + OAUtilities.getBottomMargin - 16.);
-    CGFloat leftMargin = _actionButtonsContainer.frame.origin.x + _actionButtonsContainer.frame.size.width;
-    [_mapPanel targetSetMapRulerPosition:bottomMargin left:leftMargin];
 }
 
 - (void) changeCenterOffset:(CGFloat)contentHeight
@@ -838,7 +828,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self updateView:YES];
     
     self.actionButtonsContainer.hidden = YES;
-    [self changeMapRulerPosition];
 }
 
 - (void)exitApproximationMode
@@ -1241,10 +1230,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         else
             offset = height - 16;
     }
-    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:offset animated:YES];
-    
+    [_mapPanel.hudViewController updateControlsLayout:YES];
+
     [self adjustActionButtonsPosition:height];
-    [self changeMapRulerPosition];
     [self adjustMapViewPort];
     [self adjustNavbarPosition];
 }
@@ -1892,7 +1880,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [self updateView:YES];
     }
     self.actionButtonsContainer.hidden = NO;
-    [self changeMapRulerPosition];
 }
 
 - (void)onCancelSnapApproximation:(BOOL)hasApproximationStarted

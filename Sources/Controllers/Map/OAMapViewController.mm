@@ -241,7 +241,10 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     OATouchLocation *_carPlayMapTouchLocation;
 
     CLLocationCoordinate2D _centerLocationForMapArrows;
-    
+    OsmAnd::PointI _cachedTarget31;
+    OsmAnd::PointI _cachedFixedPixel;
+    CLLocation *_cachedMapLocation;
+
     MBProgressHUD *_progressHUD;
     BOOL _rotationAnd3DViewDisabled;
 }
@@ -712,8 +715,25 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (CLLocation *) getMapLocation
 {
-    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(_mapView.target31);
-    return [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
+    OsmAnd::PointI target31 = _mapView.target31;
+    OsmAnd::PointI fixedPixel = _mapView.fixedPixel;
+
+	if (target31 == _cachedTarget31 && fixedPixel == _cachedFixedPixel && _cachedMapLocation)
+    {
+        return _cachedMapLocation;
+    }
+    else
+    {
+        _cachedTarget31 = target31;
+        _cachedFixedPixel = fixedPixel;
+
+        auto centerPixel = _mapView.getCenterPixel;
+        OsmAnd::PointI elevated31 = [OANativeUtilities get31FromElevatedPixel:centerPixel];
+        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(elevated31);
+        CLLocation *mapLocation = [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
+        _cachedMapLocation = mapLocation;
+        return mapLocation;
+    }
 }
 
 - (float) getMapZoom
@@ -1486,7 +1506,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     accepted |= !longPress && recognizer.state == UIGestureRecognizerStateEnded;
     if (accepted)
     {
-        OAFloatingButtonsHudViewController *quickAction = [OARootViewController instance].mapPanel.hudViewController.floatingButtonsController;
+        OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+        OAFloatingButtonsHudViewController *quickAction = mapPanel.hudViewController.floatingButtonsController;
         [quickAction hideActionsSheetAnimated];
         [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress forceHide:[recognizer isKindOfClass:UITapGestureRecognizer.class] && recognizer.numberOfTouches == 1];
         

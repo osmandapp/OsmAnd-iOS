@@ -197,27 +197,8 @@ extension WidgetConfigurationViewController {
     }
     
     override func onBottomButtonPressed() {
-        onWidgetsSelectedToAdd(widgetsIds: [widgetInfo.key], panel: widgetPanel, shouldAdd: true)
-    }
-    
-    func onWidgetsSelectedToAdd(widgetsIds: [String], panel: WidgetsPanel, shouldAdd: Bool) {
-        let filter = KWidgetModeAvailable | kWidgetModeEnabled
-        let widgetsFactory = MapWidgetsFactory()
-        for widgetId in widgetsIds {
-            var widgetInfo = widgetRegistry.getWidgetInfo(byId: widgetId)
-            
-            let widgetInfos = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(filter), panels: WidgetsPanel.values)
-            if panel.isDuplicatesAllowed() && (widgetInfo == nil || widgetInfos!.contains(widgetInfo!)) && shouldAdd {
-                widgetInfo = createDuplicateWidget(widgetId, panel: panel, widgetsFactory: widgetsFactory, selectedAppMode: selectedAppMode)
-            }
-            
-            if let widgetInfo, shouldAdd {
-                addWidgetToEnd(widgetInfo, widgetsPanel: panel)
-            }
-            widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: NSNumber(value: shouldAdd), recreateControls: false)
-        }
-        
-        OARootViewController.instance().mapPanel.recreateControls()
+        WidgetUtils.addSelectedWidgets(widgetsIds: [widgetInfo.key], panel: widgetPanel, selectedAppMode: selectedAppMode)
+
         if let viewControllers = navigationController?.viewControllers {
             for viewController in viewControllers {
                 if let targetViewController = viewController as? WidgetsListViewController {
@@ -228,72 +209,7 @@ extension WidgetConfigurationViewController {
         }
 //        onWidgetsConfigurationChanged()
     }
-    
-    private func createDuplicateWidget(_ widgetId: String, panel: WidgetsPanel,
-                                             widgetsFactory: MapWidgetsFactory, selectedAppMode: OAApplicationMode) -> MapWidgetInfo? {
-        guard let widgetType = WidgetType.getById(widgetId) else {
-            return nil
-        }
-        
-        let id = widgetId.contains(MapWidgetInfo.DELIMITER) ? widgetId : WidgetType.getDuplicateWidgetId(widgetId)
-        guard let widget = widgetsFactory.createMapWidget(customId: id, widgetType: widgetType) else {
-            return nil
-        }
-        
-        OAAppSettings.sharedManager()!.customWidgetKeys.add(id, appMode: selectedAppMode)
-        let creator = WidgetInfoCreator(appMode: selectedAppMode)
-        return creator.createCustomWidgetInfo(widgetId: id, widget: widget, widgetType: widgetType, panel: panel)
-    }
 
-    
-    func addWidgetToEnd(_ targetWidget: MapWidgetInfo, widgetsPanel: WidgetsPanel) {
-        var pagedOrder = [Int: [String]]()
-        let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(kWidgetModeEnabled), panels: [widgetsPanel])!
-        
-        widgetRegistry.getWidgetsFor(targetWidget.widgetPanel).remove(targetWidget)
-        targetWidget.widgetPanel = widgetsPanel
-        
-        for widget in enabledWidgets {
-            guard let widget = widget as? MapWidgetInfo else { continue }
-            let page = widget.pageIndex
-            var orders = pagedOrder[page] ?? [String]()
-            orders.append(widget.key)
-            pagedOrder[page] = orders
-        }
-        
-        if pagedOrder.isEmpty {
-            targetWidget.pageIndex = 0
-            targetWidget.priority = 0
-            widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
-            
-            let flatOrder: [[String]] = [[targetWidget.key]]
-            widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode)
-        } else {
-            var pages = Array(pagedOrder.keys)
-            var orders = Array(pagedOrder.values)
-            
-            orders[orders.count - 1].append(targetWidget.key)
-            var lastPageOrder = orders[orders.count - 1]
-            
-            let previousLastWidgetId = lastPageOrder[lastPageOrder.count - 2]
-            if let previousLastVisibleWidgetInfo = widgetRegistry.getWidgetInfo(byId: previousLastWidgetId) {
-                let lastPage = previousLastVisibleWidgetInfo.pageIndex
-                let lastOrder = previousLastVisibleWidgetInfo.priority + 1
-                targetWidget.pageIndex = lastPage
-                targetWidget.priority = lastOrder
-            } else {
-                let lastPage = pages[pages.count - 1]
-                let lastOrder = lastPageOrder.count - 1
-                targetWidget.pageIndex = lastPage
-                targetWidget.priority = lastOrder
-            }
-            
-            widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
-            
-            widgetsPanel.setWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode)
-        }
-    }
-    
     override func getBottomButtonTitleAttr() -> NSAttributedString! {
         
         guard createNew else { return nil }

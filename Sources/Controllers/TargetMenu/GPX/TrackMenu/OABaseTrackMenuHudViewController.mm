@@ -331,9 +331,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [_mapPanelViewController setTopControlsVisible:NO
-                          onlyMapSettingsAndSearch:NO
-                              customStatusBarStyle:self.preferredStatusBarStyle];
+    [_mapPanelViewController targetUpdateControlsLayout:YES customStatusBarStyle:self.preferredStatusBarStyle];
     [_mapPanelViewController.hudViewController updateMapRulerDataWithDelay];
     [self changeHud:[self getViewHeight]];
 }
@@ -439,21 +437,9 @@
     return mapView.viewportYScale != _cachedYViewPort && mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE;
 }
 
-- (void)changeMapRulerPosition:(CGFloat)height
-{
-    CGFloat leftMargin = [self isLandscape]
-            ? [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 20.
-            : [OAUtilities getLeftMargin] + 20.;
-    [_mapPanelViewController targetSetMapRulerPosition:[self isLandscape] ? 0. : -(height - [OAUtilities getBottomMargin] + 20.)
-                                                  left:leftMargin];
-}
-
 - (void)changeHud:(CGFloat)height
 {
-    [_mapPanelViewController targetSetBottomControlsVisible:YES
-                                                 menuHeight:[self isLandscape] ? 0 : height - [OAUtilities getBottomMargin]
-                                                   animated:YES];
-    [self changeMapRulerPosition:height];
+    [_mapPanelViewController.hudViewController updateBottomContolMarginsForHeight];
 }
 
 - (NSLayoutConstraint *)createBaseEqualConstraint:(UIView *)firstItem

@@ -194,6 +194,9 @@
 #define text_secondary_night 0x727075
 #define color_button_active_night 0x203BE9
 
+#define divider_color_light 0xE6E6E6
+#define divider_color_dark 0x2C3033
+
 #define plugin_icon_green 0x67AC5B
 
 #define color_place_open 0x2BBE31

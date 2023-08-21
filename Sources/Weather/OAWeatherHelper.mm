@@ -1097,4 +1097,10 @@
     }
 }
 
++ (NSDate *) roundForecastTimeToHour:(NSDate *)date
+{
+    NSTimeInterval hour = 3600.0;
+    return [NSDate dateWithTimeIntervalSince1970:round(date.timeIntervalSince1970 / hour) * hour];
+}
+
 @end

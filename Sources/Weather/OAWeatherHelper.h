@@ -115,6 +115,8 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 + (NSArray<NSString *> *)getPreferenceKeys:(NSString *)regionId;
 + (void)removePreferences:(NSString *)regionId;
 
++ (NSDate *) roundForecastTimeToHour:(NSDate *)date;
+
 @end
 
 //NS_ASSUME_NONNULL_END

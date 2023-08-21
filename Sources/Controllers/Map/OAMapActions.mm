@@ -225,6 +225,7 @@
 {
     [_app stopNavigation];
     [[OAWaypointHelper sharedInstance].deletedPoints removeAllObjects];
+    [[OARootViewController instance].mapPanel recreateControls];
     [[OARootViewController instance].mapPanel refreshMap];
     
     NSArray<OAApplicationMode *> * modes = OAApplicationMode.allPossibleValues;

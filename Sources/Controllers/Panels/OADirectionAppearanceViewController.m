@@ -40,7 +40,7 @@
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
-    _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
+    _mapWidgetRegistry = [OAMapWidgetRegistry sharedInstance];
     _mapPanel = [OARootViewController instance].mapPanel;
 }
 
@@ -326,14 +326,29 @@
 
 - (void)setWidgetVisibility:(BOOL)visible collapsed:(BOOL)collapsed
 {
-    OAMapWidgetRegInfo *marker1st = [_mapWidgetRegistry widgetByKey:@"map_marker_1st"];
-    OAMapWidgetRegInfo *marker2nd = [_mapWidgetRegistry widgetByKey:@"map_marker_2nd"];
+    OAMapWidgetInfo *marker1st = [_mapWidgetRegistry getWidgetInfoById:@"map_marker_1st"];
     if (marker1st)
-        [_mapWidgetRegistry setVisibility:marker1st visible:visible collapsed:collapsed];
-    if (marker2nd && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
-        [_mapWidgetRegistry setVisibility:marker2nd visible:visible collapsed:collapsed];
+    {
+        [_mapWidgetRegistry enableDisableWidgetForMode:[_settings.applicationMode get]
+                                            widgetInfo:marker1st
+                                               enabled:@(visible)
+                                      recreateControls:NO];
+    }
+    OAMapWidgetInfo *marker2st = [_mapWidgetRegistry getWidgetInfoById:@"map_marker_2st"];
+    if (marker2st && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
+    {
+        [_mapWidgetRegistry enableDisableWidgetForMode:[_settings.applicationMode get]
+                                            widgetInfo:marker2st
+                                               enabled:@(visible)
+                                      recreateControls:NO];
+    }
     else
-        [_mapWidgetRegistry setVisibility:marker2nd visible:NO collapsed:collapsed];
+    {
+        [_mapWidgetRegistry enableDisableWidgetForMode:[_settings.applicationMode get]
+                                            widgetInfo:marker2st
+                                               enabled:@(NO)
+                                      recreateControls:NO];
+    }
 }
 
 #pragma mark - Selectors

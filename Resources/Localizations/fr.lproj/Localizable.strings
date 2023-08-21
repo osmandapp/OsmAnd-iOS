@@ -3012,3 +3012,11 @@
 "get_osmand_cloud" = "Obtenir OsmAnd Cloud";
 "free_favorites_backup" = "Sauvegarde gratuite des favoris";
 "banner_payment_free_backup_settings_title" = "Sauvegarde gratuite des paramètres";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "Affiche les coordonnées du centre de la carte";
+"map_widget_camera_tilt_desc" = "Indique l'angle de l'appareil photo en mode perspective. La valeur par défaut est 90° (aucune inclinaison).";
+"map_widget_camera_distance_desc" = "Indique l'altitude de l'appareil photo au-dessus de la surface.";
+"map_widget_rendering_fps_desc" = "Affiche la vitesse d'affichage et d’actualisation de la carte et de ses éléments, exprimé en images par seconde (FPS).";
+"map_widget_zoom_level_desc" = "Indique le niveau de zoom actuel.";
+"map_widget_target_distance_desc" = "Indique la distance entre l'appareil photo et la destination.";

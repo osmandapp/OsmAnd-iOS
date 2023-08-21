@@ -158,7 +158,6 @@ struct RegionResources
     NSArray<OAResourceItem *> *_multipleItems;
 
     OAAutoObserverProxy *_weatherSizeCalculatedObserver;
-    OAAutoObserverProxy *_weatherForecastDownloadingObserver;
 }
 
 static QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > _resourcesInRepository;
@@ -323,10 +322,6 @@ static BOOL _repositoryUpdated = NO;
             [[OAAutoObserverProxy alloc] initWith:self
                                       withHandler:@selector(onWeatherSizeCalculated:withKey:andValue:)
                                        andObserve:_weatherHelper.weatherSizeCalculatedObserver];
-    _weatherForecastDownloadingObserver =
-            [[OAAutoObserverProxy alloc] initWith:self
-                                      withHandler:@selector(onWeatherForecastDownloading:withKey:andValue:)
-                                       andObserve:_weatherHelper.weatherForecastDownloadingObserver];
 
     if ([self shouldDisplayWeatherForecast:self.region] && ![_weatherHelper isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:self.region]])
         [_weatherHelper calculateCacheSize:self.region onComplete:nil];
@@ -383,11 +378,6 @@ static BOOL _repositoryUpdated = NO;
     {
         [_weatherSizeCalculatedObserver detach];
         _weatherSizeCalculatedObserver = nil;
-    }
-    if (_weatherForecastDownloadingObserver)
-    {
-        [_weatherForecastDownloadingObserver detach];
-        _weatherForecastDownloadingObserver = nil;
     }
 
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -491,63 +481,6 @@ static BOOL _repositoryUpdated = NO;
             }
         });
     }
-}
-
-- (void)onWeatherForecastDownloading:(id)sender withKey:(id)key andValue:(id)value
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (value == self.region)
-        {
-            NSString *regionId = [OAWeatherHelper checkAndGetRegionId:self.region];
-            BOOL statusSizeCalculating = ![_weatherHelper isOfflineForecastSizesInfoCalculated:regionId];
-            if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined && !statusSizeCalculating)
-                return;
-
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_weatherForecastRow inSection:_regionMapSection];
-            UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
-
-            if (![cell.reuseIdentifier isEqualToString:@"downloadingResourceCell"])
-            {
-                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                cell = [_tableView cellForRowAtIndexPath:indexPath];
-            }
-
-            NSInteger progressDownloading = [_weatherHelper getOfflineForecastProgressInfo:regionId];
-            NSInteger progressDownloadDestination = [_weatherHelper getProgressDestination:regionId];
-            CGFloat progressCompleted = (CGFloat) progressDownloading / progressDownloadDestination;
-            EOAWeatherForecastDownloadState state = [OAWeatherHelper getPreferenceDownloadState:regionId];
-            FFCircularProgressView *progressView = (FFCircularProgressView *)cell.accessoryView;
-            if (state == EOAWeatherForecastDownloadStateFinished && ![progressView isKindOfClass: [FFCircularProgressView class]])
-            {
-                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                return;
-            }
-            if (progressCompleted >= 0.001 && state == EOAWeatherForecastDownloadStateInProgress)
-            {
-                progressView.iconPath = nil;
-                if (progressView.isSpinning)
-                    [progressView stopSpinProgressBackgroundLayer];
-                progressView.progress = progressCompleted - 0.001;
-            }
-            else if (state == EOAWeatherForecastDownloadStateFinished && !statusSizeCalculating)
-            {
-                progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
-                progressView.progress = 0.;
-                if (!progressView.isSpinning)
-                    [progressView startSpinProgressBackgroundLayer];
-
-                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-            }
-            else
-            {
-                progressView.iconPath = [UIBezierPath bezierPath];
-                progressView.progress = 0.;
-                if (!progressView.isSpinning)
-                    [progressView startSpinProgressBackgroundLayer];
-                [progressView setNeedsDisplay];
-            }
-        }
-    });
 }
 
 - (void) updateContentIfNeeded
@@ -1496,8 +1429,6 @@ static BOOL _repositoryUpdated = NO;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast && self.region == item.worldRegion)
     {
-//        OAResourceItem *newItem = [_weatherHelper generateResourceItem:item.worldRegion];
-//        _regionMapItems[_weatherForecastRow] = newItem;
         dispatch_async(dispatch_get_main_queue(), ^{
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_weatherForecastRow inSection:_regionMapSection];
             [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
@@ -3372,17 +3303,26 @@ static BOOL _repositoryUpdated = NO;
 
 - (void)onRemoveForecast
 {
-    [self updateDisplayItem:_regionMapItems[_weatherForecastRow]];
+    if (_regionMapItems.count > _weatherForecastRow)
+    {
+        [self updateDisplayItem:_regionMapItems[_weatherForecastRow]];
+    }
 }
 
 - (void)onUpdateForecast
 {
-    [self updateDisplayItem:_regionMapItems[_weatherForecastRow]];
+    if (_regionMapItems.count > _weatherForecastRow)
+    {
+        [self updateDisplayItem:_regionMapItems[_weatherForecastRow]];
+    }
 }
 
 - (void)onClearForecastCache;
 {
-    [self updateDisplayItem:_regionMapItems[_weatherForecastRow]];
+    if (_regionMapItems.count > _weatherForecastRow)
+    {
+        [self updateDisplayItem:_regionMapItems[_weatherForecastRow]];
+    }
 }
 
 @end

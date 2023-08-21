@@ -63,8 +63,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 + (NSString *)checkAndGetRegionName:(OAWorldRegion *)region;
 
 - (void)checkAndDownloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds;
-- (void)downloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds;
-- (void)downloadForecastByRegion:(OAWorldRegion *)region;
+- (void)downloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds isArchive:(BOOL)isArchive;
 - (void)prepareToStopDownloading:(NSString *)regionId;
 
 - (void)calculateCacheSize:(OAWorldRegion *)region onComplete:(void (^)())onComplete;

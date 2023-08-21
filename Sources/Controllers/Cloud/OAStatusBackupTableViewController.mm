@@ -768,9 +768,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (void)onBackupPreparing
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateData];
-    });
 }
 
 // MARK: Sync callbacks

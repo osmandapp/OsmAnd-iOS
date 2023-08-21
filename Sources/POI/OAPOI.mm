@@ -146,6 +146,28 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return l;
 }
 
+- (NSDictionary<NSString *, NSString *> *)getNamesMap:(BOOL)includeEn
+{
+    if ((!includeEn || !_name || _name.length == 0) && (!_localizedNames || _localizedNames.count == 0))
+    {
+        return [NSDictionary dictionary];
+    }
+    else
+    {
+        NSMutableDictionary *mp = [NSMutableDictionary dictionary];
+        if (_localizedNames || _localizedNames.count != 0)
+        {
+            for (NSString *key in _localizedNames.allKeys)
+                mp[key] = _localizedNames[key];
+        }
+        
+        if (includeEn && !_name && _name.length > 0)
+            mp[@"en"] = _name;
+        
+        return mp;
+    }
+}
+
 - (NSString *)getContentLanguage:(NSString *)tag lang:(NSString *)lang defLang:(NSString *)defLang
 {
     if (lang)

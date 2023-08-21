@@ -937,11 +937,13 @@
                                     OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:YES];
                                     poi.distanceMeters = OsmAnd::Utilities::squareDistance31(location, am->position31);
                                     [OAPOIHelper fetchValuesContentPOIByAmenity:am poi:poi];
-                                    [arr addObject:poi];
-                                    
                                     if (publish)
                                     {
                                         done = publish([[OAPOIAdapter alloc] initWithPOI:poi]);
+                                    }
+                                    else
+                                    {
+                                        [arr addObject:poi];
                                     }
                                 }
                           },

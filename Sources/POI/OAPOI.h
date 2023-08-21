@@ -87,6 +87,7 @@
 - (BOOL) isClosed;
 - (NSSet<NSString *> *)getSupportedContentLocales;
 - (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag;
+- (NSDictionary<NSString *, NSString *> *)getNamesMap:(BOOL)includeEn;
 
 - (NSDictionary<NSString *, NSString *> *) getAdditionalInfo;
 

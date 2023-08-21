@@ -118,7 +118,6 @@
 - (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag
 {
     OAPOI *obj = [self getObject];
-    //return obj ? [obj getNames:tag defTag:defTag] : nil;
     
     if (obj)
     {
@@ -126,6 +125,12 @@
         return name ? @[name] : @[@""];
     }
     return @[@""];
+}
+
+- (NSDictionary<NSString *, NSString *> *)getNamesMap:(BOOL)includeEn
+{
+    OAPOI *obj = [self getObject];
+    return obj ? [obj getNamesMap:includeEn] : nil;
 }
 
 - (NSString *)getStrictTagContent:(NSString *)tag lang:(NSString *)lang

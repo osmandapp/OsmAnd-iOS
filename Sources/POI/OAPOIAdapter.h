@@ -27,6 +27,7 @@
 - (NSString *) getDescription:(NSString *)lang;
 
 - (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag;
+- (NSDictionary<NSString *, NSString *> *)getNamesMap:(BOOL)includeEn;
 - (NSString *)getStrictTagContent:(NSString *)tag lang:(NSString *)lang;
 - (NSString *)getTagContent:(NSString *)tag;
 

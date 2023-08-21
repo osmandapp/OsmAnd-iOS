@@ -13,9 +13,12 @@ class ExploreTabViewController: OABaseNavbarViewController {
     var downloadingCellHelper: OADownloadingCellHelper = OADownloadingCellHelper()
     var dataLock: NSObject = NSObject()
     var downloadingResources: [OAResourceSwiftItem] = []
+    var cachedPreviewImages: ImageCache = ImageCache(itemsLimit: 100)
     
     
     override func viewDidLoad() {
+        cachedPreviewImages = ImageCache(itemsLimit: 100)
+        downloadingResources = []
         setupDownloadingCellHelper()
         super.viewDidLoad()
     }
@@ -121,10 +124,10 @@ class ExploreTabViewController: OABaseNavbarViewController {
                         articleRow.cellType = ArticleTravelCell.getIdentifier()
                         articleRow.title = item.title ?? "nil"
                         articleRow.descr = OATravelGuidesHelper.getPatrialContent(item.content)
-                        articleRow.iconName = item.getImageUrl(imageTitle: item.imageTitle ?? "", thumbnail: false)
                         articleRow.setObj(item.getGeoDescription() ?? "", forKey: "isPartOf")
-                        
-
+                        if (item.imageTitle != nil && item.imageTitle!.length > 0) {
+                            articleRow.iconName = item.getImageUrl(imageTitle: item.imageTitle ?? "", thumbnail: false)
+                        }
                     }
                 }
             }
@@ -147,7 +150,7 @@ class ExploreTabViewController: OABaseNavbarViewController {
     
 
     //MARK: TableView
-
+    
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let item = tableData.item(for: indexPath)
         var outCell: UITableViewCell? = nil
@@ -205,6 +208,7 @@ class ExploreTabViewController: OABaseNavbarViewController {
                 cell = nib?.first as? ArticleTravelCell
                 cell!.selectionStyle = .none
                 
+                cell!.imagePreview.contentMode = .scaleAspectFill
                 cell!.imagePreview.layer.cornerRadius = cell!.imagePreview.frame.width / 2
                 cell!.leftButtonIcon.image = UIImage.templateImageNamed("ic_custom_clear_list")
                 cell!.rightButtonIcon.image = UIImage.templateImageNamed("ic_custom_save_to_file")
@@ -217,14 +221,58 @@ class ExploreTabViewController: OABaseNavbarViewController {
             cell!.arcticleTitle.text = item.title
             cell!.arcticleDescription.text = item.descr
             cell!.regionLabel.text = item.string(forKey: "isPartOf")
+            
+            if let iconName = item.iconName {
+                startAsyncImageDownloading(iconName, cell)
+            }
+            
             outCell = cell
         }
         
         return outCell
     }
     
+    private func startAsyncImageDownloading(_ iconName: String, _ cell: ArticleTravelCell?) {
+        if let imageUrl = URL(string: iconName) {
+            if let cachedImage = cachedPreviewImages.get(url: iconName) {
+                cell!.imagePreview.image = UIImage(data: cachedImage)
+            } else {
+                DispatchQueue.global().async {
+                    if let data = try? Data(contentsOf: imageUrl) {
+                        DispatchQueue.main.async {
+                            self.cachedPreviewImages.set(url: iconName, imageData: data)
+                            cell!.imagePreview.image = UIImage(data: data)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     override func onRowSelected(_ indexPath: IndexPath!) {
         downloadingCellHelper.onItemClicked(indexPath)
     }
     
+}
+
+class ImageCache {
+    
+    private var cache: [String : Data]
+    private var itemsLimit: Int
+    
+    init(itemsLimit: Int) {
+        cache = [:]
+        self.itemsLimit = itemsLimit
+    }
+    
+    func get(url: String) -> Data? {
+        return cache[url]
+    }
+    
+    func set(url: String, imageData: Data) {
+        if cache.count > itemsLimit {
+            cache.removeAll()
+        }
+        cache[url] = imageData
+    }
 }

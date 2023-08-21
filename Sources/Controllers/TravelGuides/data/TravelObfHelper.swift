@@ -76,16 +76,12 @@ class TravelObfHelper : NSObject {
                     }
                     
                     if foundAmenities.count > 0 {
-                        
-                        
-                        let a = "breakpoint";
-                        
                         foundAmenities.sort { a, b in
                             let d1 = location!.distance(from: CLLocation(latitude: a.amenity.latitude(), longitude: a.amenity.longitude()))
                             let d2 = location!.distance(from: CLLocation(latitude: b.amenity.latitude(), longitude: b.amenity.longitude()))
                             
                             //TODO: check. Invert if needed
-                            return d1 <= d2
+                            return d1 < d2
                         }
                     }
                 }
@@ -142,7 +138,17 @@ class TravelObfHelper : NSObject {
     }
     
     func searchAmenity(lat: Double, lon: Double, reader: String, searchRadius: Int, zoom: Int, searchFilter: String, lang: String?) -> [OAFoundAmenity] {
-        return OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(searchRadius), searchFilter: searchFilter, publish:nil)
+        
+        var results: [OAFoundAmenity] = []
+        func publish(poi: OAPOIAdapter?) -> Bool {
+            if lang == nil || lang?.length == 0 || poi!.getNamesMap(true)!.keys.contains(lang!) {
+                results.append(OAFoundAmenity(file: reader, amenity: poi))
+            }
+            return false
+        }
+        
+        OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(searchRadius), searchFilter: searchFilter, publish:publish)
+        return results
     }
     
     func cacheTravelArticles(file: String?, amenity: OAPOIAdapter, lang: String?, readPoints: Bool, callback: GpxReadCallback?) -> TravelArticle? {
@@ -316,14 +322,14 @@ class TravelObfHelper : NSObject {
         var article: TravelArticle? = nil
         var articles = cachedArticles[articleId]
         if (articles != nil) {
-            if (lang != nil && lang!.length > 0) {
+            if (lang == nil || lang!.length == 0) {
                 var ac = articles!.values
                 if (!ac.isEmpty) {
                     var it = ac.makeIterator()
                     article = it.next()
                 }
             } else {
-                article = articles![lang ?? ""]
+                article = articles![lang!]
                 if article == nil {
                     article = articles![""]
                 }

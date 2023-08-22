@@ -145,12 +145,9 @@
     manageStorageProgressData[@"second_progress"] = @(myPlacesSize);
     manageStorageProgressData[@"third_progress"] = @(settingsSize);
 
-    resourcesData[@"description"] = isBackupPreparing ? OALocalizedString(@"calculating_progress") : [NSByteCountFormatter stringFromByteCount:resourcesSize
-                                       countStyle:NSByteCountFormatterCountStyleFile];
-    myPlacesData[@"description"] = isBackupPreparing ? OALocalizedString(@"calculating_progress") : [NSByteCountFormatter stringFromByteCount:myPlacesSize
-                                       countStyle:NSByteCountFormatterCountStyleFile];
-    settingsData[@"description"] = isBackupPreparing ? OALocalizedString(@"calculating_progress") : [NSByteCountFormatter stringFromByteCount:settingsSize
-                                       countStyle:NSByteCountFormatterCountStyleFile];
+    resourcesData[@"description"] = isBackupPreparing ? OALocalizedString(@"calculating_progress") : [NSByteCountFormatter stringFromByteCount:resourcesSize countStyle:NSByteCountFormatterCountStyleFile];
+    myPlacesData[@"description"] = isBackupPreparing ? OALocalizedString(@"calculating_progress") : [NSByteCountFormatter stringFromByteCount:myPlacesSize countStyle:NSByteCountFormatterCountStyleFile];
+    settingsData[@"description"] = isBackupPreparing ? OALocalizedString(@"calculating_progress") : [NSByteCountFormatter stringFromByteCount:settingsSize countStyle:NSByteCountFormatterCountStyleFile];
 
     NSMutableDictionary *emptyData = [NSMutableDictionary dictionary];
     if (myPlacesCells.count == 0)

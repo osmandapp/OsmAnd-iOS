@@ -128,7 +128,7 @@
     NSString *sizeBackupDataString = [NSByteCountFormatter stringFromByteCount:
             [OABaseBackupTypesViewController calculateItemsSize:_uniqueRemoteFiles.allValues]
                                                      countStyle:NSByteCountFormatterCountStyleFile];
-    backupData[@"description"] = sizeBackupDataString;
+    backupData[@"description"] = [_backupHelper isBackupPreparing] ? OALocalizedString(@"calculating_progress") : sizeBackupDataString;
     [osmAndCloudCells addObject:backupData];
     _backupDataIndexPath = [NSIndexPath indexPathForRow:[osmAndCloudCells indexOfObject:backupData]
                                               inSection:[data indexOfObject:osmAndCloudCells]];
@@ -177,7 +177,7 @@
         NSString *sizeBackupDataString = [NSByteCountFormatter stringFromByteCount:
                 [OABaseBackupTypesViewController calculateItemsSize:_uniqueRemoteFiles.allValues]
                                                                         countStyle:NSByteCountFormatterCountStyleFile];
-        _data[_backupDataIndexPath.section][_backupDataIndexPath.row][@"description"] = sizeBackupDataString;
+        _data[_backupDataIndexPath.section][_backupDataIndexPath.row][@"description"] = [_backupHelper isBackupPreparing] ? OALocalizedString(@"calculating_progress") : sizeBackupDataString;
         [UIView performWithoutAnimation:^{
             [self.tableView reloadRowsAtIndexPaths:@[_backupDataIndexPath]
                                   withRowAnimation:UITableViewRowAnimationNone];

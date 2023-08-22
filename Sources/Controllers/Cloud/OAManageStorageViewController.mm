@@ -26,6 +26,7 @@
 
 - (void)commonInit
 {
+    [super commonInit];
     _backupHelper = [OABackupHelper sharedInstance];
 }
 
@@ -131,31 +132,32 @@
             }
         }
     }
-
+    
+    BOOL isBackupPreparing = [_backupHelper isBackupPreparing];
     NSInteger totalSize = [_backupHelper getMaximumAccountSize];
     NSString *totalSizeStr = [NSByteCountFormatter stringFromByteCount:[_backupHelper getMaximumAccountSize]
                                                             countStyle:NSByteCountFormatterCountStyleFile];
     NSString *usedSizeStr = [NSByteCountFormatter stringFromByteCount:resourcesSize + myPlacesSize + settingsSize
                                                            countStyle:NSByteCountFormatterCountStyleFile];
-    manageStorageProgressData[@"title"] = [NSString stringWithFormat:OALocalizedString(@"cloud_storage_used"), usedSizeStr, totalSizeStr];
+    manageStorageProgressData[@"title"] = isBackupPreparing ? OALocalizedString(@"calculating_progress") : [NSString stringWithFormat:OALocalizedString(@"cloud_storage_used"), usedSizeStr, totalSizeStr];
     manageStorageProgressData[@"total_progress"] = @(totalSize);
     manageStorageProgressData[@"first_progress"] = @(resourcesSize);
     manageStorageProgressData[@"second_progress"] = @(myPlacesSize);
     manageStorageProgressData[@"third_progress"] = @(settingsSize);
 
-    resourcesData[@"description"] = [NSByteCountFormatter stringFromByteCount:resourcesSize
-                                                                   countStyle:NSByteCountFormatterCountStyleFile];
-    myPlacesData[@"description"] = [NSByteCountFormatter stringFromByteCount:myPlacesSize
-                                                                   countStyle:NSByteCountFormatterCountStyleFile];
-    settingsData[@"description"] = [NSByteCountFormatter stringFromByteCount:settingsSize
-                                                                   countStyle:NSByteCountFormatterCountStyleFile];
+    resourcesData[@"description"] = isBackupPreparing ? OALocalizedString(@"calculating_progress") : [NSByteCountFormatter stringFromByteCount:resourcesSize
+                                       countStyle:NSByteCountFormatterCountStyleFile];
+    myPlacesData[@"description"] = isBackupPreparing ? OALocalizedString(@"calculating_progress") : [NSByteCountFormatter stringFromByteCount:myPlacesSize
+                                       countStyle:NSByteCountFormatterCountStyleFile];
+    settingsData[@"description"] = isBackupPreparing ? OALocalizedString(@"calculating_progress") : [NSByteCountFormatter stringFromByteCount:settingsSize
+                                       countStyle:NSByteCountFormatterCountStyleFile];
 
     NSMutableDictionary *emptyData = [NSMutableDictionary dictionary];
     if (myPlacesCells.count == 0)
     {
         emptyData[@"key"] = @"empty_cell_my_places_section";
         emptyData[@"type"] = [OAValueTableViewCell getCellIdentifier];
-        emptyData[@"title"] = OALocalizedString(@"backup_empty_data_from_category");
+        emptyData[@"title"] = isBackupPreparing ? OALocalizedString(@"calculating_progress") : OALocalizedString(@"backup_empty_data_from_category");
         [myPlacesCells addObject:emptyData];
     }
 
@@ -163,7 +165,7 @@
     {
         emptyData[@"key"] = @"empty_cell_resources_section";
         emptyData[@"type"] = [OAValueTableViewCell getCellIdentifier];
-        emptyData[@"title"] = OALocalizedString(@"backup_empty_data_from_category");
+        emptyData[@"title"] = isBackupPreparing ? OALocalizedString(@"calculating_progress") : OALocalizedString(@"backup_empty_data_from_category");
         [resourcesCells addObject:emptyData];
     }
 
@@ -171,7 +173,7 @@
     {
         emptyData[@"key"] = @"empty_cell_settings_section";
         emptyData[@"type"] = [OAValueTableViewCell getCellIdentifier];
-        emptyData[@"title"] = OALocalizedString(@"backup_empty_data_from_category");
+        emptyData[@"title"] = isBackupPreparing ? OALocalizedString(@"calculating_progress") : OALocalizedString(@"backup_empty_data_from_category");
         [settingsCells addObject:emptyData];
     }
 

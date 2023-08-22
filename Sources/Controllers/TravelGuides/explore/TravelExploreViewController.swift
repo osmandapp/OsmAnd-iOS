@@ -9,6 +9,7 @@
 import Foundation
 
 protocol TravelExploreViewControllerDelegate : AnyObject {
+    func populateData(resetData: Bool)
     func onDataLoaded()
 }
 
@@ -20,6 +21,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     var tabBarVC: UITabBarController?
     var exploreVC: ExploreTabViewController?
     var savedArticlesVC: SavedArticlesTabViewController?
+    var spinner = UIActivityIndicatorView(style: .whiteLarge)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +31,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
 
         exploreVC = ExploreTabViewController()
         exploreVC!.tabBarItem = UITabBarItem.init(title: localizedString("shared_string_explore"), image: UIImage.templateImageNamed("ic_custom_map_location_follow"), tag: 0)
+        exploreVC!.tabViewDelegate = self
 
         savedArticlesVC = SavedArticlesTabViewController()
         savedArticlesVC!.tabBarItem = UITabBarItem.init(title: localizedString("saved_articles"), image: UIImage.templateImageNamed("ic_custom_save_to_file"), tag: 1)
@@ -36,7 +39,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         tabBarVC!.viewControllers = [exploreVC!, savedArticlesVC!]
         self.view.addSubview(tabBarVC!.view)
         
-        populateData()
+        populateData(resetData: true)
     }
     
     override func viewWillLayoutSubviews() {
@@ -69,9 +72,9 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         return [button!]
     }
     
-    func populateData() {
-        //showLoadingIndicator
-        let task = LoadWikivoyageDataAsyncTask(resetData: true)
+    func populateData(resetData: Bool) {
+        self.view.addSpinner()
+        let task = LoadWikivoyageDataAsyncTask(resetData: resetData)
         task.delegate = self;
         task.execute()
     }
@@ -87,8 +90,8 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     //MARK: TravelExploreViewControllerDelegate
     
     func onDataLoaded() {
-        //Hide loading indicator
         updateTabs()
+        self.view.removeSpinner()
     }
 
 }

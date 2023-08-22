@@ -10,6 +10,8 @@ import Foundation
 
 class ExploreTabViewController: OABaseNavbarViewController {
     
+    weak var tabViewDelegate: TravelExploreViewControllerDelegate?
+    
     var downloadingCellHelper: OADownloadingCellHelper = OADownloadingCellHelper()
     var dataLock: NSObject = NSObject()
     var downloadingResources: [OAResourceSwiftItem] = []
@@ -104,6 +106,7 @@ class ExploreTabViewController: OABaseNavbarViewController {
             //            items.add(new OpenBetaTravelCard(activity, nightMode));
             //        }
             
+            //TODO:  add TravelNeededMaps Card for bookmarks
         
             
             let articles = TravelObfHelper.shared.getPopularArticles()
@@ -130,11 +133,12 @@ class ExploreTabViewController: OABaseNavbarViewController {
                         }
                     }
                 }
+                
+                let showMoreButtonRow = articlesSection.createNewRow()
+                showMoreButtonRow.cellType = OAFilledButtonCell.getIdentifier()
+                showMoreButtonRow.title = localizedString("show_more")
+                showMoreButtonRow.setObj("onShowMoreMapsClicked", forKey: "actionName")
             }
-            
-            //TODO:  add TravelNeededMaps Card
-            
-            
         }
         
         //TODO:  add EditWiki card
@@ -144,9 +148,11 @@ class ExploreTabViewController: OABaseNavbarViewController {
     
     //MARK: Actions
     
-    //onShowMoreMapsClicked()
-    
-    
+    @objc func onShowMoreMapsClicked() {
+        if ((tabViewDelegate) != nil) {
+            tabViewDelegate!.populateData(resetData: false)
+        }
+    }
     
 
     //MARK: TableView
@@ -158,6 +164,21 @@ class ExploreTabViewController: OABaseNavbarViewController {
         if item.cellType == "kDownloadCellKey" {
             let resource = downloadingCellHelper.getSwiftResourceByIndexBlock(indexPath)
             outCell = downloadingCellHelper.setupSwiftCell(resource, indexPath: indexPath)
+            
+        } else if item.cellType == OAFilledButtonCell.getIdentifier() {
+            var cell = tableView.dequeueReusableCell(withIdentifier: OAFilledButtonCell.getIdentifier()) as? OAFilledButtonCell
+            if cell == nil {
+                let nib = Bundle.main.loadNibNamed(OAFilledButtonCell.getIdentifier(), owner: self, options: nil)
+                cell = nib?.first as? OAFilledButtonCell
+                cell?.selectionStyle = .none
+            }
+            cell?.button.setTitle(item.title, for: .normal)
+            cell?.button.removeTarget(nil, action: nil, for: .allEvents)
+            if let actionName = item.string(forKey: "actionName") {
+                cell?.button.addTarget(self, action: Selector(actionName), for: .touchUpInside)
+            }
+            outCell = cell
+            
         } else if item.cellType == OARightIconTableViewCell.getIdentifier() {
             var cell = tableView.dequeueReusableCell(withIdentifier: OARightIconTableViewCell.getIdentifier()) as? OARightIconTableViewCell
             if cell == nil {
@@ -222,8 +243,11 @@ class ExploreTabViewController: OABaseNavbarViewController {
             cell!.arcticleDescription.text = item.descr
             cell!.regionLabel.text = item.string(forKey: "isPartOf")
             
+            cell?.imageVisibility(true)
             if let iconName = item.iconName {
                 startAsyncImageDownloading(iconName, cell)
+            } else {
+                cell?.imageVisibility(false)
             }
             
             outCell = cell
@@ -235,14 +259,23 @@ class ExploreTabViewController: OABaseNavbarViewController {
     private func startAsyncImageDownloading(_ iconName: String, _ cell: ArticleTravelCell?) {
         if let imageUrl = URL(string: iconName) {
             if let cachedImage = cachedPreviewImages.get(url: iconName) {
-                cell!.imagePreview.image = UIImage(data: cachedImage)
+                if cachedImage.count != Data().count {
+                    cell!.imagePreview.image = UIImage(data: cachedImage)
+                    cell?.imageVisibility(true)
+                } else {
+                    cell?.imageVisibility(false)
+                }
             } else {
                 DispatchQueue.global().async {
                     if let data = try? Data(contentsOf: imageUrl) {
                         DispatchQueue.main.async {
                             self.cachedPreviewImages.set(url: iconName, imageData: data)
                             cell!.imagePreview.image = UIImage(data: data)
+                            cell?.imageVisibility(true)
                         }
+                    } else {
+                        self.cachedPreviewImages.set(url: iconName, imageData: Data())
+                        cell?.imageVisibility(false)
                     }
                 }
             }
@@ -250,7 +283,10 @@ class ExploreTabViewController: OABaseNavbarViewController {
     }
     
     override func onRowSelected(_ indexPath: IndexPath!) {
-        downloadingCellHelper.onItemClicked(indexPath)
+        let item = tableData.item(for: indexPath)
+        if item.cellType == "kDownloadCellKey" {
+            downloadingCellHelper.onItemClicked(indexPath)
+        }
     }
     
 }

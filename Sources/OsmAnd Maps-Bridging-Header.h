@@ -88,6 +88,7 @@
 #import "OASimpleTableViewCell.h"
 #import "OALargeImageTitleDescrTableViewCell.h"
 #import "OARightIconTableViewCell.h"
+#import "OAFilledButtonCell.h"
 
 // Other
 #import "OAIndexConstants.h"

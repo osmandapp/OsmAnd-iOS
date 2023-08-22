@@ -33,4 +33,8 @@ class ArticleTravelCell: UITableViewCell {
     @IBAction func rightButtonTapped(_ sender: Any) {
         print("rightButtonTapped")
     }
+    
+    func imageVisibility(_ show: Bool) {
+        imagePreview.isHidden = !show
+    }
 }

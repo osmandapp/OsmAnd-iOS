@@ -22,7 +22,7 @@
 {
     OAWorldRegion *_region;
     NSMutableArray<NSMutableDictionary<NSString *, id> *> *_data;
-    NSInteger _indexSelected;
+    EOAWeatherAutoUpdate _autoUpdateStateSelected;
 }
 
 #pragma mark - Initialization
@@ -40,7 +40,7 @@
 
 - (void)configure
 {
-    _indexSelected = [OAWeatherHelper getPreferenceWeatherAutoUpdate:[OAWeatherHelper checkAndGetRegionId:_region]];
+    _autoUpdateStateSelected = [OAWeatherHelper getPreferenceWeatherAutoUpdate:[OAWeatherHelper checkAndGetRegionId:_region]];
 }
 
 #pragma mark - Base UI
@@ -81,18 +81,21 @@
     disabledData[@"key"] = @"disabled_cell";
     disabledData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     disabledData[@"title"] = [OAWeatherHelper getPreferenceWeatherAutoUpdateString:EOAWeatherAutoUpdateDisabled];
+    disabledData[@"auto_update_type"] = @(EOAWeatherAutoUpdateDisabled);
     [autoUpdateCells addObject:disabledData];
 
     NSMutableDictionary *wifiData = [NSMutableDictionary dictionary];
     wifiData[@"key"] = @"wifi_cell";
     wifiData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     wifiData[@"title"] = [OAWeatherHelper getPreferenceWeatherAutoUpdateString:EOAWeatherAutoUpdateOverWIFIOnly];
+    wifiData[@"auto_update_type"] = @(EOAWeatherAutoUpdateOverWIFIOnly);
     [autoUpdateCells addObject:wifiData];
 
     NSMutableDictionary *anyNetworkData = [NSMutableDictionary dictionary];
     anyNetworkData[@"key"] = @"weekly_cell";
     anyNetworkData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
-    anyNetworkData[@"title"] = [OAWeatherHelper getPreferenceWeatherAutoUpdateString:EOAWeatherAutoUpdateOverAnyNetwork];;
+    anyNetworkData[@"title"] = [OAWeatherHelper getPreferenceWeatherAutoUpdateString:EOAWeatherAutoUpdateOverAnyNetwork];
+    anyNetworkData[@"auto_update_type"] = @(EOAWeatherAutoUpdateOverAnyNetwork);
     [autoUpdateCells addObject:anyNetworkData];
 
     _data = data;
@@ -154,7 +157,9 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            cell.accessoryType = indexPath.row == _indexSelected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            cell.accessoryType = [item[@"auto_update_type"] integerValue] == _autoUpdateStateSelected
+            ? UITableViewCellAccessoryCheckmark
+            : UITableViewCellAccessoryNone;
         }
         return cell;
     }
@@ -168,8 +173,9 @@
 
 - (void)onRowSelected:(NSIndexPath *)indexPath
 {
-    _indexSelected = indexPath.row;
-    [OAWeatherHelper setPreferenceWeatherAutoUpdate:[OAWeatherHelper checkAndGetRegionId:_region] value:(EOAWeatherAutoUpdate)_indexSelected];
+    NSDictionary *item = [self getItem:indexPath];
+    _autoUpdateStateSelected = (EOAWeatherAutoUpdate)[item[@"auto_update_type"] integerValue];
+    [OAWeatherHelper setPreferenceWeatherAutoUpdate:[OAWeatherHelper checkAndGetRegionId:_region] value:_autoUpdateStateSelected];
     if (self.autoUpdateDelegate)
         [self.autoUpdateDelegate onAutoUpdateSelected];
 

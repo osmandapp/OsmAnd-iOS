@@ -46,7 +46,6 @@
     std::shared_ptr<OsmAnd::WeatherTileResourcesManager> _weatherResourcesManager;
     NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, id> *> *_offlineForecastsInfo;
     dispatch_queue_t _forecastSerialDownloader;
-    dispatch_group_t _forecastGroupDownloader;
     OAAutoObserverProxy* _downloadTaskProgressObserver;
 }
 
@@ -72,7 +71,6 @@
         _weatherResourcesManager = _app.resourcesManager->getWeatherResourcesManager();
         _offlineForecastsInfo = [NSMutableDictionary dictionary];
         _forecastSerialDownloader = dispatch_queue_create("forecast_downloader", DISPATCH_QUEUE_SERIAL);
-        _forecastGroupDownloader = dispatch_group_create();
 
         _bands = @[
             [OAWeatherBand withWeatherBand:WEATHER_BAND_TEMPERATURE],
@@ -215,7 +213,7 @@
     return [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]] firstObject];
 }
 
-- (void)downloadForecastArchiveByRegion:(OAWorldRegion *)region
+- (void)downloadForecastByRegion:(OAWorldRegion *)region
 {
     if (![[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled] || ![OAIAPHelper isOsmAndProAvailable])
         return;
@@ -285,23 +283,14 @@
     
 }
 
-- (void)downloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds
-                           isArchive:(BOOL)isArchive;
+- (void)downloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds;
 {
     NSInteger forecastsDownloading = 0;
     for (OAWorldRegion *region in [@[_app.worldRegion] arrayByAddingObjectsFromArray:_app.worldRegion.flattenedSubregions])
     {
         if ([regionIds containsObject:[self.class checkAndGetRegionId:region]])
         {
-            if (isArchive)
-            {
-                [self downloadForecastArchiveByRegion:region];
-            }
-            else
-            {
-                [self downloadForecastByRegion:region];
-            }
-            
+            [self downloadForecastByRegion:region];
             forecastsDownloading++;
         }
 
@@ -317,75 +306,6 @@
     [self setOfflineForecastProgressInfo:regionId value:0];
     [self.class setPreferenceDownloadState:regionId value:EOAWeatherForecastDownloadStateInProgress];
     [_weatherForecastDownloadingObserver notifyEventWithKey:self andValue:region];
-}
-
-- (void)downloadForecastByRegion:(OAWorldRegion *)region
-{
-    if (![[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled] || ![OAIAPHelper isOsmAndProAvailable])
-        return;
-
-    NSString *regionId = [self.class checkAndGetRegionId:region];
-
-    AFNetworkReachabilityManager *networkManager = [AFNetworkReachabilityManager sharedManager];
-    if (!networkManager.isReachable)
-        return;
-    else if (!networkManager.isReachableViaWiFi && [OAWeatherHelper getPreferenceWeatherAutoUpdate:regionId] == EOAWeatherAutoUpdateOverWIFIOnly)
-        return;
-
-    BOOL isEntireWorld = [regionId isEqualToString:kWeatherEntireWorldRegionId];
-    OsmAnd::LatLon latLonTopLeft = OsmAnd::LatLon(isEntireWorld ? 90. : region.bboxTopLeft.latitude, isEntireWorld ? -180. : region.bboxTopLeft.longitude);
-    OsmAnd::LatLon latLonBottomRight = OsmAnd::LatLon(isEntireWorld ? -90. : region.bboxBottomRight.latitude, isEntireWorld ? 180. : region.bboxBottomRight.longitude);
-    
-    [self preparingForDownloadForecastByRegion:region regionId:regionId];
-
-    std::shared_ptr<const OsmAnd::IQueryController> queryController;
-    queryController.reset(new OsmAnd::FunctorQueryController(
-            [self, regionId]
-            (const OsmAnd::IQueryController *const controller) -> bool
-            {
-                return [self.class getPreferenceDownloadState:regionId] != EOAWeatherForecastDownloadStateInProgress;
-            }
-    ));
-
-    dispatch_block_t forecastDownload = ^{
-        dispatch_group_wait(_forecastGroupDownloader, DISPATCH_TIME_FOREVER);
-        dispatch_group_enter(_forecastGroupDownloader);
-
-        NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
-        calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
-        NSDate *date = [calendar startOfDayForDate:[NSDate date]];
-        for (NSInteger i = 0; i < kForecastDatesCount; i++)
-        {
-            int64_t dateTime = date.timeIntervalSince1970 * 1000;
-
-            OsmAnd::WeatherTileResourcesManager::DownloadGeoTileRequest request;
-            request.dateTime = dateTime;
-            request.topLeft = latLonTopLeft;
-            request.bottomRight = latLonBottomRight;
-            request.forceDownload = true;
-            request.localData = true;
-            request.queryController = queryController;
-            OsmAnd::WeatherTileResourcesManager::DownloadGeoTilesAsyncCallback callback =
-                                 [self, region]
-                                 (bool succeeded,
-                                  const uint64_t downloadedTiles,
-                                  const uint64_t totalTiles,
-                                  const std::shared_ptr<OsmAnd::Metric> &metric)
-                                 {
-                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                         [self onProgressUpdate:region success:succeeded];
-                                     });
-                                 };
-
-            _weatherResourcesManager->downloadGeoTilesAsync(request, callback);
-
-            date = [calendar dateByAddingUnit:NSCalendarUnitHour value:(i < 24 ? 1 : 3) toDate:date options:0];
-        }
-    };
-
-    dispatch_group_notify(_forecastGroupDownloader, _forecastSerialDownloader, ^{
-        dispatch_async(_forecastSerialDownloader, forecastDownload);
-    });
 }
 
 - (void)prepareToStopDownloading:(NSString *)regionId
@@ -429,6 +349,7 @@
             [self setOfflineForecastSizeInfo:regionId
                                        value:_weatherResourcesManager->calculateDbCacheSize(qTileIds, QList<OsmAnd::TileId>(), zoom)
                                        local:YES];
+            // FIXME: get res
             [self setOfflineForecastSizeInfo:regionId
                                        value:kTileSize * tileIds.count * kForecastDatesCount
                                        local:NO];
@@ -746,47 +667,6 @@
 
         [self calculateCacheSize:region onComplete:nil];
     });
-}
-
-- (void)onProgressUpdate:(OAWorldRegion *)region success:(BOOL)success
-{
-    NSString *regionId = [self.class checkAndGetRegionId:region];
-    if ([self.class getPreferenceDownloadState:regionId] != EOAWeatherForecastDownloadStateInProgress)
-    {
-        OALog(@"Weather offline forecast download %@ : cancel", regionId);
-        return;
-    }
-
-    NSInteger progressDestination = [self getProgressDestination:regionId];
-    NSInteger progressDownloading = [self getOfflineForecastProgressInfo:regionId];
-    [self setOfflineForecastProgressInfo:regionId value:++progressDownloading];
-    CGFloat progress = (CGFloat) progressDownloading / progressDestination;
-
-    OALog(@"Weather offline forecast download %@ : %f %@", regionId, progress, success ? @"done" : @"error");
-    [_weatherForecastDownloadingObserver notifyEventWithKey:self andValue:region];
-
-    if (progress == 1.)
-    {
-        [self.class setPreferenceDownloadState:regionId value:EOAWeatherForecastDownloadStateFinished];
-        NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
-        calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
-        NSTimeInterval timeInterval = [NSDate date].timeIntervalSince1970;
-        [self.class setPreferenceLastUpdate:regionId value:timeInterval];
-        _offlineCacheSize = 0.;
-        _onlineCacheSize = 0.;
-        [_weatherForecastDownloadingObserver notifyEventWithKey:self andValue:region];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-            [mapViewController.mapLayers.weatherLayerLow updateWeatherLayer];
-            [mapViewController.mapLayers.weatherLayerHigh updateWeatherLayer];
-            [mapViewController.mapLayers.weatherContourLayer updateWeatherLayer];
-
-            [self calculateCacheSize:region onComplete:^() {
-                dispatch_group_leave(_forecastGroupDownloader);
-            }];
-        });
-    }
 }
 
 - (OAResourceItem *)generateResourceItem:(OAWorldRegion *)region

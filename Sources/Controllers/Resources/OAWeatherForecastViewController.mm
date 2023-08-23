@@ -807,7 +807,7 @@
                 }
                 else if (AFNetworkReachabilityManager.sharedManager.isReachableViaWiFi)
                 {
-                    [_weatherHelper downloadForecastsByRegionIds:forecastsToDownload isArchive:YES];
+                    [_weatherHelper downloadForecastsByRegionIds:forecastsToDownload];
                     [forecastsToDownload removeAllObjects];
                 }
                 else
@@ -835,7 +835,7 @@
                                                               style:UIAlertActionStyleDefault
                                                             handler:^(UIAlertAction * _Nonnull action)
                     {
-                        [_weatherHelper downloadForecastsByRegionIds:forecastsToDownload isArchive:YES];
+                        [_weatherHelper downloadForecastsByRegionIds:forecastsToDownload];
                         [forecastsToDownload removeAllObjects];
                     }]];
                     [self presentViewController:alert animated:YES completion:nil];
@@ -1124,8 +1124,7 @@
     _selectedIndexPath = indexPath;
     if ([item[@"key"] isEqualToString:@"update_cell_all"])
     {
-        [_weatherHelper downloadForecastsByRegionIds:[_weatherHelper getTempForecastsWithDownloadStates:@[@(EOAWeatherForecastDownloadStateFinished)]]
-                                           isArchive:YES];
+        [_weatherHelper downloadForecastsByRegionIds:[_weatherHelper getTempForecastsWithDownloadStates:@[@(EOAWeatherForecastDownloadStateFinished)]]];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self setupView];
             [self.tableView reloadData];

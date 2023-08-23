@@ -2039,10 +2039,6 @@ static BOOL _repositoryUpdated = NO;
     {
         OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
         FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
-        if (![progressView isKindOfClass: [FFCircularProgressView class]])
-        {
-            return;
-        }
 
         float progressCompleted = item.downloadTask.progressCompleted;
         if (progressCompleted >= 0.001f && item.downloadTask.state == OADownloadTaskStateRunning)
@@ -3287,7 +3283,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (void)onRemoveForecast
 {
-    if (_regionMapItems.count > _weatherForecastRow)
+    if (_weatherForecastRow != -1)
     {
         [self updateDisplayItem:_regionMapItems[_weatherForecastRow]];
     }
@@ -3295,7 +3291,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (void)onUpdateForecast
 {
-    if (_regionMapItems.count > _weatherForecastRow)
+    if (_weatherForecastRow != -1)
     {
         [self updateDisplayItem:_regionMapItems[_weatherForecastRow]];
     }
@@ -3303,7 +3299,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (void)onClearForecastCache;
 {
-    if (_regionMapItems.count > _weatherForecastRow)
+    if (_weatherForecastRow != -1)
     {
         [self updateDisplayItem:_regionMapItems[_weatherForecastRow]];
     }

@@ -1071,12 +1071,6 @@
     return [[NSUserDefaults standardUserDefaults] objectForKey:prefKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:prefKey] : NO;
 }
 
-+ (void)setPreferenceWifi:(NSString *)regionId value:(BOOL)value
-{
-    NSString *prefKey = [kWeatherForecastWifiPrefix stringByAppendingString:regionId];
-    [[NSUserDefaults standardUserDefaults] setBool:value forKey:prefKey];
-}
-
 + (NSArray<NSString *> *)getPreferenceKeys:(NSString *)regionId
 {
     return @[

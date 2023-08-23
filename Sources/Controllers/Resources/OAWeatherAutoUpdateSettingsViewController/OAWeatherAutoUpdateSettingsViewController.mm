@@ -40,7 +40,6 @@
 
 - (void)configure
 {
-    
     _indexSelected = [OAWeatherHelper getPreferenceWeatherAutoUpdate:[OAWeatherHelper checkAndGetRegionId:_region]];
 }
 
@@ -58,7 +57,7 @@
 
 - (NSString *)getTitle
 {
-    return OALocalizedString(@"update_only_over_wi_fi");
+    return OALocalizedString(@"auto_update");
 }
 
 - (NSString *)getTableHeaderDescription
@@ -103,13 +102,13 @@
 {
     EOAWeatherAutoUpdate state = [OAWeatherHelper getPreferenceWeatherAutoUpdate:[OAWeatherHelper checkAndGetRegionId:_region]];
     
-    NSString *result = @"update_parameters_disabled";
+    NSString *result = @"weather_update_parameters_disabled";
     switch (state) {
         case EOAWeatherAutoUpdateOverWIFIOnly:
-            result = @"update_parameters_wifi";
+            result = @"weather_update_parameters_wifi";
             break;
         case EOAWeatherAutoUpdateOverAnyNetwork:
-            result = @"update_parameters_any_network";
+            result = @"weather_update_parameters_any_network";
             break;
         default:break;
     }

@@ -177,14 +177,14 @@
     _headers[@(data.count - 1)] = OALocalizedString(@"update_parameters");
     _footers[@(data.count - 1)] = OALocalizedString(@"weather_updates_automatically");
     
-    NSMutableDictionary *updateOnlyWiFiData = [NSMutableDictionary dictionary];
-    updateOnlyWiFiData[@"key"] = @"update_only_wifi_cell";
-    updateOnlyWiFiData[@"type"] = [OAValueTableViewCell getCellIdentifier];
-    updateOnlyWiFiData[@"title"] = OALocalizedString(@"update_only_over_wi_fi");
-    updateOnlyWiFiData[@"value"] = [OAWeatherHelper getPreferenceWeatherAutoUpdateString:[OAWeatherHelper getPreferenceWeatherAutoUpdate:regionId]];
-    updateOnlyWiFiData[@"value_color"] = UIColorFromRGB(color_text_footer);
-    updateOnlyWiFiData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
-    [updatesCells addObject:updateOnlyWiFiData];
+    NSMutableDictionary *autoUpdateData = [NSMutableDictionary dictionary];
+    autoUpdateData[@"key"] = @"update_only_wifi_cell";
+    autoUpdateData[@"type"] = [OAValueTableViewCell getCellIdentifier];
+    autoUpdateData[@"title"] = OALocalizedString(@"auto_update");
+    autoUpdateData[@"value"] = [OAWeatherHelper getPreferenceWeatherAutoUpdateString:[OAWeatherHelper getPreferenceWeatherAutoUpdate:regionId]];
+    autoUpdateData[@"value_color"] = UIColorFromRGB(color_text_footer);
+    autoUpdateData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
+    [updatesCells addObject:autoUpdateData];
     
     EOAWeatherAutoUpdate state = [OAWeatherHelper getPreferenceWeatherAutoUpdate:regionId];
     if (state != EOAWeatherAutoUpdateDisabled)
@@ -256,7 +256,7 @@
         {
             if ([item[@"key"] isEqualToString: @"remove_forecast_cell"])
             {
-                [cell anchorContenttextStackView:EOATableViewCellContentCenterStyle];
+                [cell anchorContentTextStackView:EOATableViewCellContentCenterStyle];
             }
 
             cell.titleLabel.text = item[@"title"];

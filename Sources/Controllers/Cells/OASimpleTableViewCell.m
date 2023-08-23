@@ -110,7 +110,7 @@
     self.textCustomMarginBottomStackView.spacing = 5.;
 }
 
-- (void)anchorContenttextStackView:(EOATableViewCellContentStyle)style
+- (void)anchorContentTextStackView:(EOATableViewCellContentStyle)style
 {
     if (style == EOATableViewCellContentCenterStyle)
     {

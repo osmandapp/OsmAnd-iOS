@@ -2407,9 +2407,7 @@ static BOOL _repositoryUpdated = NO;
                 if (item.resourceType == OsmAndResourceType::WeatherForecast && ![_weatherHelper isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:item.worldRegion]])
                    subtitle = OALocalizedString(@"shared_string_download_update");
                 else if (_sizePkg >= 0)
-                {
                     subtitle = [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile];
-                }
                 if ([item isKindOfClass:OAMultipleResourceItem.class] && ([self.region hasGroupItems] || [OAResourceType isSRTMResourceItem:item]))
                 {
                     OAMultipleResourceItem *multipleItem = (OAMultipleResourceItem *) item;

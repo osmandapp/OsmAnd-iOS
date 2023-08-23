@@ -3017,3 +3017,11 @@
 "banner_payment_free_backup_settings_title" = "نسخ احتياطي مجاني للإعدادات";
 "get_osmand_cloud" = "احصل على سحابة أوسماند";
 "free_favorites_backup_description" = "سجل في سحابة أوسماند للحصول على نسخة احتياطية مجانية للمفضلة والإعدادات";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "يبين الإحداثيات الجغرافية لمركز الخريطة الحالي";
+"map_widget_rendering_fps_desc" = "ويبين مدى سرعة عرض الخريطة وعناصرها وتجديدها، معبرا عنها في إطارات في الثانية (FPS).";
+"map_widget_camera_distance_desc" = "يظهر ارتفاع الكاميرا فوق المستوى السطحي.";
+"map_widget_zoom_level_desc" = "يظهر مستوى تكبير/تصغير الخريطة الحالي.";
+"map_widget_camera_tilt_desc" = "تعرض زاوية إمالة الكاميرا في وضع المنظور. الافتراضي هو 90 درجة (بدون إمالة).";
+"map_widget_target_distance_desc" = "تظهر المسافة بين الكاميرا والموقع المستهدف.";

@@ -706,7 +706,7 @@
 "shared_string_search" = "Suchen";
 "shared_string_target_points" = "Ziele";
 "search_radius_proximity" = "Innerhalb";
-"poi" = "POI";
+"poi" = "OVI";
 // Shared Strings
 "shared_string_apply" = "Anwenden";
 "keep_and_add_destination_point" = "Als weiteres Ziel hinzufügen";
@@ -724,7 +724,7 @@
 "first_intermediate_dest_description" = "Fügt ersten Halt hinzu";
 "add_as_last_destination_point" = "Als letztes Zwischenziel hinzufügen";
 "last_intermediate_dest_description" = "Fügt Zwischenhalt ein";
-"show_poi_over_map" = "POI-Overlay anzeigen";
+"show_poi_over_map" = "OVI-Overlay anzeigen";
 "search_radius" = "Suchradius";
 "transport_Routes" = "Strecken";
 "transport_nearby_routes_within" = "Nahe gelegene Routen innerhalb von";
@@ -3027,3 +3027,11 @@
 "banner_payment_free_backup_settings_title" = "Kostenloses Backup ihrer Einstellungen";
 "get_osmand_cloud" = "Holen Sie sich OsmAnd Cloud";
 "free_account" = "Kostenloses Konto";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "Zeigt die geografischen Koordinaten des aktuellen Kartenmittelpunkts an";
+"map_widget_rendering_fps_desc" = "Zeigt an, wie schnell die Karte und Kartenelemente angezeigt und aktualisiert werden, ausgedrückt in Bildern pro Sekunde (FPS).";
+"map_widget_camera_tilt_desc" = "Zeigt den Neigungswinkel der Kamera im perspektivischen Modus an. Die Voreinstellung ist 90° (keine Neigung).";
+"map_widget_camera_distance_desc" = "Zeigt die Höhe der Kamera über der Oberfläche an.";
+"map_widget_zoom_level_desc" = "Zeigt die aktuelle Zoomstufe der Karte an.";
+"map_widget_target_distance_desc" = "Zeigt die Entfernung zwischen Kamera und Zielort an.";

@@ -447,6 +447,7 @@
 		32AD5D5C2A2F11A200A51B60 /* OsmUserDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AD5D5B2A2F11A200A51B60 /* OsmUserDataModel.swift */; };
 		32ADB42B25D2EC2900F5C634 /* ic_dialog_move@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32ADB42825D2EC2700F5C634 /* ic_dialog_move@3x.png */; };
 		32ADB42F25D2EC2900F5C634 /* ic_dialog_move@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32ADB42A25D2EC2900F5C634 /* ic_dialog_move@2x.png */; };
+		32AFDC7E2A9500D800809EE0 /* TravelArticleDialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AFDC7D2A9500D800809EE0 /* TravelArticleDialogViewController.swift */; };
 		32B50ABD26BBDA0D002E6C92 /* ic_custom_shop_bag@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32B50ABB26BBDA0A002E6C92 /* ic_custom_shop_bag@2x.png */; };
 		32B50ABE26BBDA0D002E6C92 /* ic_custom_shop_bag@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32B50ABC26BBDA0B002E6C92 /* ic_custom_shop_bag@3x.png */; };
 		32B50AD926BBE3C7002E6C92 /* ic_custom_map_location_free@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32B50AD126BBE3C3002E6C92 /* ic_custom_map_location_free@2x.png */; };
@@ -4161,6 +4162,7 @@
 		32AD5D5B2A2F11A200A51B60 /* OsmUserDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmUserDataModel.swift; sourceTree = "<group>"; };
 		32ADB42825D2EC2700F5C634 /* ic_dialog_move@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_dialog_move@3x.png"; path = "Resources/Icons/ic_dialog_move@3x.png"; sourceTree = "<group>"; };
 		32ADB42A25D2EC2900F5C634 /* ic_dialog_move@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_dialog_move@2x.png"; path = "Resources/Icons/ic_dialog_move@2x.png"; sourceTree = "<group>"; };
+		32AFDC7D2A9500D800809EE0 /* TravelArticleDialogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelArticleDialogViewController.swift; sourceTree = "<group>"; };
 		32B50ABB26BBDA0A002E6C92 /* ic_custom_shop_bag@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_shop_bag@2x.png"; path = "Resources/Icons/ic_custom_shop_bag@2x.png"; sourceTree = "<group>"; };
 		32B50ABC26BBDA0B002E6C92 /* ic_custom_shop_bag@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_shop_bag@3x.png"; path = "Resources/Icons/ic_custom_shop_bag@3x.png"; sourceTree = "<group>"; };
 		32B50AD126BBE3C3002E6C92 /* ic_custom_map_location_free@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_location_free@2x.png"; path = "Resources/Icons/ic_custom_map_location_free@2x.png"; sourceTree = "<group>"; };
@@ -8535,6 +8537,7 @@
 		32464B7C2A6FCC3200DA6980 /* TravelGuides */ = {
 			isa = PBXGroup;
 			children = (
+				32AFDC7C2A9500B700809EE0 /* article */,
 				327D68A62A8F9BD30076D1E0 /* explore */,
 				320F71252A823F980071C0E7 /* data */,
 			);
@@ -8579,6 +8582,14 @@
 				32AD5D5B2A2F11A200A51B60 /* OsmUserDataModel.swift */,
 			);
 			path = OsmOAuthHelper;
+			sourceTree = "<group>";
+		};
+		32AFDC7C2A9500B700809EE0 /* article */ = {
+			isa = PBXGroup;
+			children = (
+				32AFDC7D2A9500D800809EE0 /* TravelArticleDialogViewController.swift */,
+			);
+			path = article;
 			sourceTree = "<group>";
 		};
 		32C21CB427E0A62200DE4266 /* RecordSettingsBottomSheet */ = {
@@ -17338,7 +17349,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Download the new version each build (does not fail the buld if there's no Internet)\ncurl -o ${SRCROOT}/Resources/Shipped/regions.ocbf https://creator.osmand.net/basemap/regions.ocbf ||:\n";
+			shellScript = "# Download the new version each build (does not fail the buld if there's no Internet)\n# curl -o ${SRCROOT}/Resources/Shipped/regions.ocbf https://creator.osmand.net/basemap/regions.ocbf ||:\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -18333,6 +18344,7 @@
 				DA7B18E02A1227A30029967F /* CurrentTimeWidget.swift in Sources */,
 				B0D610DBE05EACD61CFE6859 /* OATrackMenuTabSegments.mm in Sources */,
 				46E9AD9728DC8B1200CC55F9 /* OASwitchTableViewCell.m in Sources */,
+				32AFDC7E2A9500D800809EE0 /* TravelArticleDialogViewController.swift in Sources */,
 				B0D61E373B1DC253E7C0BB0C /* OAFoldersCollectionView.mm in Sources */,
 				CA4EDC45F03787B5F481123A /* OASlider.mm in Sources */,
 				CA4EDE42CED78CB3617A9FFB /* OACollectionViewFlowLayout.m in Sources */,

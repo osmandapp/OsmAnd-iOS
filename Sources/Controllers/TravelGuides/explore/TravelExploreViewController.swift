@@ -11,6 +11,7 @@ import Foundation
 protocol TravelExploreViewControllerDelegate : AnyObject {
     func populateData(resetData: Bool)
     func onDataLoaded()
+    func openArticle(article: TravelArticle, lang: String) 
 }
 
 
@@ -86,7 +87,13 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         print("onOptionsButtonClicked")
     }
     
+    func openArticle(article: TravelArticle, lang: String) {
+        let vc = TravelArticleDialogViewController.init(article: article, lang: lang)
+        //self.showModalViewController(vc)
+        self.show(vc)
+    }
     
+    	
     //MARK: TravelExploreViewControllerDelegate
     
     func onDataLoaded() {

@@ -1925,6 +1925,8 @@
 "saved_articles" = "Bookmarked articles";
 "shared_string_explore" = "Explore";
 "popular_destinations" = "Popular destinations";
+"shared_string_contents" = "Contents";
+"shared_string_bookmark" = "Bookmark";
 
 // Help
 "help_quiz" = "Quiz";

@@ -128,6 +128,9 @@ class ExploreTabViewController: OABaseNavbarViewController {
                         articleRow.title = item.title ?? "nil"
                         articleRow.descr = OATravelGuidesHelper.getPatrialContent(item.content)
                         articleRow.setObj(item.getGeoDescription() ?? "", forKey: "isPartOf")
+                        //articleRow.setObj(item.generateIdentifier(), forKey: "articleId")
+                        articleRow.setObj(item, forKey: "article")
+                        articleRow.setObj(item.lang, forKey: "lang")
                         if (item.imageTitle != nil && item.imageTitle!.length > 0) {
                             articleRow.iconName = item.getImageUrl(imageTitle: item.imageTitle ?? "", thumbnail: false)
                         }
@@ -227,7 +230,6 @@ class ExploreTabViewController: OABaseNavbarViewController {
             if cell == nil {
                 let nib = Bundle.main.loadNibNamed("ArticleTravelCell", owner: self, options: nil)
                 cell = nib?.first as? ArticleTravelCell
-                cell!.selectionStyle = .none
                 
                 cell!.imagePreview.contentMode = .scaleAspectFill
                 cell!.imagePreview.layer.cornerRadius = cell!.imagePreview.frame.width / 2
@@ -238,6 +240,9 @@ class ExploreTabViewController: OABaseNavbarViewController {
                 cell!.leftButtonLabel.textColor = UIColor(rgb: color_purple_border)
                 cell!.rightButtonLabel.textColor = UIColor(rgb: color_purple_border)
             }
+            cell!.tabViewDelegate = tabViewDelegate
+            cell!.article = item.obj(forKey: "article") as? TravelArticle
+            cell!.articleLang = item.string(forKey: "lang")
             
             cell!.arcticleTitle.text = item.title
             cell!.arcticleDescription.text = item.descr
@@ -286,6 +291,15 @@ class ExploreTabViewController: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
         if item.cellType == "kDownloadCellKey" {
             downloadingCellHelper.onItemClicked(indexPath)
+            
+        } else if item.cellType == ArticleTravelCell.getIdentifier() {
+            if let article = item.obj(forKey: "article") as? TravelArticle {
+                if let lang = item.string(forKey: "lang") {
+                    if tabViewDelegate != nil {
+                        tabViewDelegate!.openArticle(article: article, lang: lang)
+                    }
+                }
+            }
         }
     }
     

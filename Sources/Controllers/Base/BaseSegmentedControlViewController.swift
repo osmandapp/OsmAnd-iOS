@@ -23,14 +23,6 @@ class BaseSegmentedControlViewController: OABaseButtonsViewController {
         return view
     }()
 
-    //MARK: - UIViewController
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-//        view.backgroundColor = tableView.backgroundColor
-    }
-
     //MARK: - Base setup UI
 
     override func updateNavbar() {

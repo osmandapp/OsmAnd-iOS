@@ -10,10 +10,81 @@ import UIKit
 
 class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewControllerDelegate {
     
-    var articleId: TravelArticleIdentifier?
-    var lang: String?
-    var langs: [String]?
+    let rtlLanguages = ["ar", "dv", "he", "iw", "fa", "nqo", "ps", "sd", "ug", "ur", "yi"]
+    static let EMPTY_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4//"
+    
+    let HEADER_INNER = """
+    <html><head>\n
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n
+    <meta http-equiv=\"cleartype\" content=\"on\" />\n
+    <style>\n
+    {{css-file-content}}
+    </style>\n
+    <script type=\"text/javascript\">
+    function showNavigation() {
+        Android.showNavigation();
+    }
+    </script>
+    </head>
+    """
+    
+    let FOOTER_INNER = """
+    <script>var coll = document.getElementsByTagName("H2");
+    var i;
+    for (i = 0; i < coll.length; i++) {
+      coll[i].addEventListener(\"click\", function() {
+        this.classList.toggle(\"active\");
+        var content = this.nextElementSibling;
+        if (content.style.display === \"block\") {
+          content.style.display = \"none\";
+        } else {
+          content.style.display = \"block\";
+        }
+      });
+    }
+    document.addEventListener(\"DOMContentLoaded\", function(event) {\n
+        document.querySelectorAll('img').forEach(function(img) {\n
+            img.onerror = function() {\n
+                this.style.display = 'none';\n
+                var caption = img.parentElement.nextElementSibling;\n
+                if (caption.className == \"thumbnailcaption\") {\n
+                    caption.style.display = 'none';\n
+                }\n
+            };\n
+        })\n
+    });
+    function scrollAnchor(id, title) {
+    openContent(title);
+    window.location.hash = id;}\n
+    function openContent(id) {\n
+        var doc = document.getElementById(id).parentElement;\n
+        doc.classList.toggle(\"active\");\n
+        var content = doc.nextElementSibling;\n
+        content.style.display = \"block\";\n
+        collapseActive(doc);
+    }
+    function collapseActive(doc) {
+        var coll = document.getElementsByTagName(\"H2\");
+        var i;
+        for (i = 0; i < coll.length; i++) {
+            var item = coll[i];
+            if (item != doc && item.classList.contains(\"active\")) {
+                item.classList.toggle(\"active\");
+                var content = item.nextElementSibling;
+                if (content.style.display === \"block\") {
+                    content.style.display = \"none\";
+                }
+            }
+        }
+    }</script>
+    </body></html>
+    """
+    
     var article: TravelArticle?
+    var articleId: TravelArticleIdentifier?
+    var selectedLang: String?
+    var langs: [String]?
+    var nightMode = false
     
     var bottomView: UIView?
     var bottomStackView: UIStackView?
@@ -26,22 +97,19 @@ class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewC
         super.init()
     }
     
-    init(articleId: TravelArticleIdentifier, lang: String) {
-        super.init()
-        self.articleId = articleId
-        self.lang = lang
-        self.langs = TravelObfHelper.shared.getArticleLangs(articleId: articleId)
-    }
-    
     init(article: TravelArticle, lang: String) {
         super.init()
         self.article = article
-        self.lang = lang
+        self.selectedLang = lang
     }
+    
+    
+    //MARK: Base UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupBottomButtonsView()
+        populateArticle()
     }
     
     func setupBottomButtonsView() {
@@ -82,7 +150,7 @@ class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewC
         bookmarkButton = UIButton()
         bookmarkButton!.setTitle(localizedString("shared_string_bookmark"), for: .normal)
         bookmarkButton!.setTitleColor(UIColor(rgb: color_primary_purple), for: .normal)
-        contentButton!.titleLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
+        bookmarkButton!.titleLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
         bookmarkButton!.setImage(UIImage.templateImageNamed("ic_small_waypoints"), for: .normal)
         bookmarkButton!.tintColor = UIColor(rgb: color_primary_purple)
         contentButton!.contentHorizontalAlignment = .right
@@ -127,6 +195,9 @@ class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewC
         return ""
     }
     
+    
+    //MARK: Actions
+    
     @objc func onOptionsButtonClicked() {
         print("onOptionsButtonClicked")
     }
@@ -147,15 +218,104 @@ class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewC
         print("onBookmarkButtonClicked")
     }
     
+    
+    //MARK: Data
+    
     override func getContent() -> String! {
         return createHtmlContent()
     }
     
-    func createHtmlContent() -> String? {
+    func populateArticle() {
         if article != nil {
-            return article!.content
+            articleId = article!.generateIdentifier()
+            langs = TravelObfHelper.shared.getArticleLangs(articleId: articleId!)
         }
-        return ""
+        guard (article != nil && articleId != nil && langs != nil && langs!.count > 0) else { return }
+        
+        if selectedLang == nil {
+            selectedLang = langs![0]
+        }
+        
+        //TODO: implement
+        //TravelLocalDataHelper ldh = app.getTravelHelper().getBookmarksHelper();
+        //ldh.addToHistory(article);
+        
+        updateSaveButton()
+        
+        //loadHtml()
+        
     }
     
+    func createHtmlContent() -> String? {
+        
+        var sb = HEADER_INNER
+        
+        if let cssFilePath = Bundle.main.path(forResource: "article_style", ofType: "css") {
+            if var cssFileContent = try? String.init(contentsOfFile: cssFilePath) {
+                cssFileContent = cssFileContent.replacingOccurrences(of: "\n", with: " ")
+                sb = sb.replacingOccurrences(of:"{{css-file-content}}", with: cssFileContent)
+            }
+        }
+        
+        let bodyTag =  rtlLanguages.contains(article!.lang!) ? "<body dir=\"rtl\">\n" : "<body>\n"
+        sb += bodyTag
+        let nightModeClass = nightMode ? " nightmode" : ""
+        let imageTitle = article!.imageTitle
+        
+        if article!.aggregatedPartOf != nil && article!.aggregatedPartOf!.count > 0 {
+            let aggregatedPartOfArrayOrig = article!.aggregatedPartOf!.split(separator: ",")
+            if aggregatedPartOfArrayOrig.count > 0 {
+                let current = aggregatedPartOfArrayOrig[0]
+                sb += "<div class=\"nav-bar" + nightModeClass + "\" onClick=\"showNavigation()\">"
+                for i in 0..<aggregatedPartOfArrayOrig.count {
+                    if i > 0 {
+                        sb += "&nbsp;&nbsp;•&nbsp;&nbsp;" + aggregatedPartOfArrayOrig[i]
+                    } else {
+                        if String(current).length > 0 {
+                            sb += "<span class=\"nav-bar-current\">" + current + "</span>"
+                        }
+                    }
+                }
+                sb += "</div>"
+            }
+        }
+        
+        
+        if imageTitle != nil && imageTitle!.length > 0 {
+            let url = TravelArticle.getImageUrl(imageTitle: imageTitle!, thumbnail: false)
+            
+            //TODO: add menu for Image Downloading settings. And uncomment.
+            //if OAAppSettings.sharedManager().wikivoyageShowImgs.get() != EOAWikiArticleShowConstant.off && !url.hasPrefix(TravelArticleDialogViewController.EMPTY_URL) {
+                sb += "<div class=\"title-image" + nightModeClass + "\" style=\"background-image: url(" + url + ")\"></div>"
+            //}
+        }
+        
+        sb += "<div class=\"main" + nightModeClass + "\">\n"
+        sb += "<h1>" +  (article!.title ?? "")  + "</h1>"
+        sb += article!.content ?? ""
+        sb += FOOTER_INNER
+        
+        printHtmlToDebugFileIfEnabled(sb)
+        
+        return sb
+    }
+    
+    func printHtmlToDebugFileIfEnabled(_ content: String) {
+        let developmentPlugin = OAPlugin.getPlugin(OAOsmandDevelopmentPlugin.self) as? OAOsmandDevelopmentPlugin
+        if (developmentPlugin != nil && developmentPlugin!.isEnabled()) {
+            let filepath = OsmAndApp.swiftInstance().documentsPath + "/TravelGuidesDebug.html"
+            do {
+                try content.write(toFile: filepath, atomically: true, encoding: String.Encoding.utf8)
+            } catch {
+            }
+        }
+    }
+    
+    func updateSaveButton() {
+        //TODO implement
+    }
+    
+    func updateTrackButton() {
+        //TODO implement
+    }
 }

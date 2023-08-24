@@ -132,7 +132,7 @@ class ExploreTabViewController: OABaseNavbarViewController {
                         articleRow.setObj(item, forKey: "article")
                         articleRow.setObj(item.lang, forKey: "lang")
                         if (item.imageTitle != nil && item.imageTitle!.length > 0) {
-                            articleRow.iconName = item.getImageUrl(imageTitle: item.imageTitle ?? "", thumbnail: false)
+                            articleRow.iconName = TravelArticle.getImageUrl(imageTitle: item.imageTitle ?? "", thumbnail: false)
                         }
                     }
                 }

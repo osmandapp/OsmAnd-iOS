@@ -17349,7 +17349,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Download the new version each build (does not fail the buld if there's no Internet)\n# curl -o ${SRCROOT}/Resources/Shipped/regions.ocbf https://creator.osmand.net/basemap/regions.ocbf ||:\n";
+			shellScript = "# Download the new version each build (does not fail the buld if there's no Internet)\ncurl -o ${SRCROOT}/Resources/Shipped/regions.ocbf https://creator.osmand.net/basemap/regions.ocbf ||:\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -10,9 +10,9 @@ import Foundation
 
 class TravelArticle: Equatable {
     
-    let IMAGE_ROOT_URL = "https://upload.wikimedia.org/wikipedia/commons/"
-    let THUMB_PREFIX = "320px-"
-    let REGULAR_PREFIX = "1280px-" //1280, 1024, 800
+    static let IMAGE_ROOT_URL = "https://upload.wikimedia.org/wikipedia/commons/"
+    static let THUMB_PREFIX = "320px-"
+    static let REGULAR_PREFIX = "1280px-" //1280, 1024, 800
     
     var file: String?
     var title: String?
@@ -87,7 +87,7 @@ class TravelArticle: Equatable {
         return nil
     }
     
-    func getImageUrl(imageTitle: String, thumbnail: Bool) -> String {
+    static func getImageUrl(imageTitle: String, thumbnail: Bool) -> String {
         var title: String? = imageTitle.replacingOccurrences(of: " ", with: "_")
         if let title = decodeUrl(url: title!) {
             if let hash = getHash(s: title) {
@@ -109,7 +109,7 @@ class TravelArticle: Equatable {
         return nil
     }
     
-    func getHash(s: String) -> [String]? {
+    static func getHash(s: String) -> [String]? {
         if let md5 = OAUtilities.toMD5(s) {
             let index1 = md5.index(md5.startIndex, offsetBy: 1)
             let index2 = md5.index(md5.startIndex, offsetBy: 2)
@@ -143,11 +143,12 @@ class TravelArticle: Equatable {
         }
     }
     
-    func encodeUrl(url: String) -> String?
+    static func encodeUrl(url: String) -> String?
     {
         return url.addingPercentEncoding( withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
     }
-    func decodeUrl(url: String) -> String?
+    
+    static func decodeUrl(url: String) -> String?
     {
         return url.removingPercentEncoding
     }

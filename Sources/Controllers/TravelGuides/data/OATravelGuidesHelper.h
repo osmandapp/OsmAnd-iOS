@@ -38,4 +38,6 @@
 
 + (NSString *) getPatrialContent:(NSString *)content;
 
++ (NSString *) normalizeFileUrl:(NSString *)url;
+
 @end

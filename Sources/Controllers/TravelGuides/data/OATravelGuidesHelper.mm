@@ -141,4 +141,9 @@
     return [OAWikiArticleHelper getPartialContent:content];
 }
 
++ (NSString *) normalizeFileUrl:(NSString *)url
+{
+    return [OAWikiArticleHelper normalizeFileUrl:url];
+}
+
 @end

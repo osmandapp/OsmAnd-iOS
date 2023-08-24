@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import WebKit
 
-class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewControllerDelegate {
+class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewControllerDelegate  {
     
     let rtlLanguages = ["ar", "dv", "he", "iw", "fa", "nqo", "ps", "sd", "ug", "ur", "yi"]
     static let EMPTY_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4//"
+    let emptyUrl = "about:blank"
     
     let HEADER_INNER = """
     <html><head>\n
@@ -20,11 +22,6 @@ class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewC
     <style>\n
     {{css-file-content}}
     </style>\n
-    <script type=\"text/javascript\">
-    function showNavigation() {
-        Android.showNavigation();
-    }
-    </script>
     </head>
     """
     
@@ -85,6 +82,7 @@ class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewC
     var selectedLang: String?
     var langs: [String]?
     var nightMode = false
+    var isFirstLaunch = true
     
     var bottomView: UIView?
     var bottomStackView: UIStackView?
@@ -101,6 +99,7 @@ class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewC
         super.init()
         self.article = article
         self.selectedLang = lang
+        self.isFirstLaunch = true
     }
     
     
@@ -218,6 +217,10 @@ class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewC
         print("onBookmarkButtonClicked")
     }
     
+    @objc func showNavigation() {
+        print("showNavigation")
+    }
+    
     
     //MARK: Data
     
@@ -266,7 +269,7 @@ class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewC
             let aggregatedPartOfArrayOrig = article!.aggregatedPartOf!.split(separator: ",")
             if aggregatedPartOfArrayOrig.count > 0 {
                 let current = aggregatedPartOfArrayOrig[0]
-                sb += "<div class=\"nav-bar" + nightModeClass + "\" onClick=\"showNavigation()\">"
+                sb += "<a href=\"#showNavigation\" style=\"text-decoration: none\"> <div class=\"nav-bar" + nightModeClass + "\">"
                 for i in 0..<aggregatedPartOfArrayOrig.count {
                     if i > 0 {
                         sb += "&nbsp;&nbsp;•&nbsp;&nbsp;" + aggregatedPartOfArrayOrig[i]
@@ -276,7 +279,7 @@ class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewC
                         }
                     }
                 }
-                sb += "</div>"
+                sb += "</div> </a>"
             }
         }
         
@@ -311,6 +314,8 @@ class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewC
         }
     }
     
+ 
+    
     func updateSaveButton() {
         //TODO implement
     }
@@ -318,4 +323,40 @@ class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewC
     func updateTrackButton() {
         //TODO implement
     }
+    
+    override func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        let a = navigationAction.request.url?.absoluteString
+        let newUrl = OATravelGuidesHelper.normalizeFileUrl(navigationAction.request.url?.absoluteString) ?? ""
+        var currentUrl = OATravelGuidesHelper.normalizeFileUrl(webView.url?.absoluteString) ?? ""
+        let wikiUrlEndIndndex = Int(currentUrl.index(of: "#"))
+        if wikiUrlEndIndndex > 0 {
+            currentUrl = currentUrl.substring(to: wikiUrlEndIndndex)
+        }
+        
+        if isFirstLaunch {
+            isFirstLaunch = false
+            decisionHandler(.allow)
+            
+        } else {
+            
+            if newUrl.hasPrefix(currentUrl) {
+                
+                if newUrl.hasSuffix("showNavigation") {
+                    //Clicked on Breadcrumbs navigation pannel
+                    showNavigation()
+                    decisionHandler(.cancel)
+                } else {
+                    //Navigation inside one page by anchors
+                    decisionHandler(.allow)
+                }
+                
+            } else {
+                
+                //TODO: implement new urls opening
+                decisionHandler(.cancel)
+            }
+        }
+        
+    }
+    
 }

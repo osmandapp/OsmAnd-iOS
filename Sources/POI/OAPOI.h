@@ -32,7 +32,7 @@
 #define IS_PART @"is_part"
 #define IS_PARENT_OF @"is_parent_of"
 #define IS_AGGR_PART @"is_aggr_part"
-#define CONTENT_JSON @"content_json"
+#define CONTENT_JSON @"json"
 #define ROUTE_ID @"route_id"
 #define ROUTE_SOURCE @"route_source"
 #define ROUTE_NAME @"route_name"
@@ -95,6 +95,7 @@
 - (NSString *)getStrictTagContent:(NSString *)tag lang:(NSString *)lang;
 - (NSString *)getTagContent:(NSString *)tag;
 - (NSString *)getTagContent:(NSString *)tag lang:(NSString *)lang;
+- (NSString *)getLocalizedContent:(NSString *)tag lang:(NSString *)lang;
 - (NSString *)getDescription:(NSString *)lang;
 
 - (NSString *)getSite;

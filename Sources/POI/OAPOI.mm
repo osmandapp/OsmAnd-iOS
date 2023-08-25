@@ -240,6 +240,31 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return nil;
 }
 
+- (NSString *)getLocalizedContent:(NSString *)tag lang:(NSString *)lang
+{
+    NSString *selectedLang = lang;
+    if (!selectedLang || selectedLang.length == 0)
+        selectedLang = @"en";
+    
+    NSString *key = [NSString stringWithFormat:@"%@:%@", tag, selectedLang];
+    NSString *result = _localizedContent[key];
+    if (result && result.length > 0)
+        return result;
+    
+    key = [NSString stringWithFormat:@"%@:en", tag];
+    result = _localizedContent[key];
+    if (result && result.length > 0)
+        return result;
+        
+    for (NSString *key in [_localizedContent allKeys])
+    {
+        if ([key hasPrefix:[NSString stringWithFormat:@"%@:", tag]])
+            return _localizedContent[key];
+    }
+    
+    return nil;
+}
+
 - (NSString *)getTagSuffix:(NSString *)tagPrefix
 {
     for (NSString *infoTag in [self getAdditionalInfo].allKeys)

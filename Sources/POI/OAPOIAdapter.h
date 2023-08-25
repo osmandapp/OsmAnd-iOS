@@ -30,5 +30,7 @@
 - (NSDictionary<NSString *, NSString *> *)getNamesMap:(BOOL)includeEn;
 - (NSString *)getStrictTagContent:(NSString *)tag lang:(NSString *)lang;
 - (NSString *)getTagContent:(NSString *)tag;
+- (NSString *)getTagContent:(NSString *)tag lang:(NSString *)lang;
+- (NSString *)getLocalizedContent:(NSString *)tag lang:(NSString *)lang;
 
 @end

@@ -95,25 +95,6 @@
     return wptAdapter;
 }
 
-+ (NSArray<OATravelSearchResult *> *) search:(NSString *)searchQuery
-{
-    NSMutableArray<OATravelSearchResult *> *res = [NSMutableArray array];
-    NSMutableDictionary<NSString *, NSArray<OAPOIAdapter *> *> *amenityMap = [NSMutableDictionary dictionary];
-    NSString *appLang = [OAUtilities currentLang];
-    OASearchUICore *searchUICore = [OAQuickSearchHelper.instance getCore];
-    OASearchSettings *settings = [searchUICore getSearchSettings];
-    OASearchPhrase *phrase = [[searchUICore getPhrase] generateNewPhrase:searchQuery settings:settings];
-    OANameStringMatcher *matcher = [phrase getFirstUnknownNameStringMatcher];
-    
-    //TODO: check this part. Differ from android?
-    for (NSString *reader in [self.class getTravelGuidesObfList])
-    {
-        //[self searchAmenity:searchQuery categoryName:<#(NSString *)#> radius:<#(int)#> lat:<#(double)#> lon:<#(double)#> reader:reader publish:<#^BOOL(OAPOIAdapter *poi)publish#>
-    }
-
-    return [NSArray array];
-}
-
 + (NSArray<NSString *> *) getTravelGuidesObfList
 {
     OsmAndAppInstance app = OsmAndApp.instance;

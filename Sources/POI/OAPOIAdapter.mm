@@ -145,4 +145,16 @@
     return obj ? [obj getTagContent:tag] : nil;
 }
 
+- (NSString *)getTagContent:(NSString *)tag lang:(NSString *)lang
+{
+    OAPOI *obj = [self getObject];
+    return obj ? [obj getTagContent:tag lang:lang] : nil;
+}
+
+- (NSString *)getLocalizedContent:(NSString *)tag lang:(NSString *)lang
+{
+    OAPOI *obj = [self getObject];
+    return obj ? [obj getLocalizedContent:tag lang:lang] : nil;
+}
+
 @end

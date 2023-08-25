@@ -240,8 +240,8 @@ class TravelObfHelper : NSObject {
         }
         res.title = title
         res.content = amenity.getDescription(lang)
-        res.isPartOf = amenity.getTagContent(IS_PART) ?? ""
-        res.isParentOf = amenity.getTagContent(IS_PARENT_OF) ?? ""
+        res.isPartOf = amenity.getTagContent(IS_PART, lang:lang) ?? ""
+        res.isParentOf = amenity.getTagContent(IS_PARENT_OF, lang:lang) ?? ""
         res.lat = amenity.latitude()
         res.lon = amenity.longitude()
         res.imageTitle = amenity.getTagContent(IMAGE_TITLE) ?? ""
@@ -249,7 +249,7 @@ class TravelObfHelper : NSObject {
         res.routeSource = amenity.getTagContent(ROUTE_SOURCE) ?? ""
         res.originalId = 0
         res.lang = lang
-        res.contentsJson = amenity.getTagContent(CONTENT_JSON) ?? ""
+        res.contentsJson = amenity.getLocalizedContent(CONTENT_JSON, lang:lang) ?? ""
         res.aggregatedPartOf = amenity.getStrictTagContent(IS_AGGR_PART, lang: lang)
         return res
     }

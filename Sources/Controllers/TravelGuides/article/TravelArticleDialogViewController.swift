@@ -207,6 +207,8 @@ class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewC
     
     @objc func onContentsButtonClicked() {
         print("onContentsButtonClicked")
+        let vc = TravelGuidesContentsViewController(article: article!, selectedLang: selectedLang!)
+        self.showModalViewController(vc)
     }
     
     @objc func onPointsButtonClicked() {

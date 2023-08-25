@@ -30,8 +30,6 @@
 
 + (OAWptPtAdapter *) createWptPt:(OAPOIAdapter *)amenity lang:(NSString *)lang;
 
-+ (NSArray<OATravelSearchResult *> *) search:(NSString *)searchQuery;
-
 + (NSArray<NSString *> *) getTravelGuidesObfList;
 
 + (CLLocation *) getMapCenter;

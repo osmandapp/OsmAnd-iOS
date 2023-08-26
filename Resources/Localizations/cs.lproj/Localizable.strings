@@ -3004,3 +3004,11 @@
 "banner_payment_free_backup_settings_title" = "Bezplatné zálohování nastavení";
 "get_osmand_cloud" = "Získejte OsmAnd Cloud";
 "free_account" = "Bezplatný účet";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "Zobrazuje zeměpisné souřadnice aktuálního středu mapy";
+"map_widget_rendering_fps_desc" = "Ukazuje, jak rychle se zobrazuje a obnovuje mapa a její prvky, vyjádřeno ve snímcích za sekundu (FPS).";
+"map_widget_camera_tilt_desc" = "Zobrazuje úhel náklonu kamery v režimu perspektivy. Výchozí hodnota je 90° (bez náklonu).";
+"map_widget_zoom_level_desc" = "Zobrazuje aktuální úroveň přiblížení mapy.";
+"map_widget_camera_distance_desc" = "Zobrazuje výšku kamery nad úrovní povrchu.";
+"map_widget_target_distance_desc" = "Zobrazuje vzdálenost mezi kamerou a cílovým místem.";

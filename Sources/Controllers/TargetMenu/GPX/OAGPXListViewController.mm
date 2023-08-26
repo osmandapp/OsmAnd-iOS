@@ -923,6 +923,7 @@ static UIViewController *parentController;
     }];
     
     [self.gpxTableView setEditing:YES animated:YES];
+    [self.gpxTableView deleteSections:[NSIndexSet indexSetWithIndex:_data.count - 1] withRowAnimation:UITableViewRowAnimationFade];
     [self.gpxTableView reloadData];
     [self updateHeaderLabels];
     [self updateButtons];
@@ -942,6 +943,7 @@ static UIViewController *parentController;
     [self.gpxTableView setEditing:NO animated:YES];
     [_selectedItems removeAllObjects];
     [_selectedIndexPaths removeAllObjects];
+    [self.gpxTableView insertSections:[NSIndexSet indexSetWithIndex:_data.count - 1] withRowAnimation:UITableViewRowAnimationFade];
     [self updateHeaderLabels];
     [self updateButtons];
     [self updateRecButtonsAnimated];
@@ -1195,7 +1197,7 @@ static UIViewController *parentController;
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _data.count;
+    return _editActive ? _data.count - 1 : _data.count;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section

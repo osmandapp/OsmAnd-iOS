@@ -34,7 +34,6 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     OsmAndAppInstance _app;
 
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
-    OAAutoObserverProxy* _downloadTaskProgressObserver;
 
     MBProgressHUD* _progressHUD;
     
@@ -51,8 +50,6 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         _app = [OsmAndApp instance];
 
         _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onDownloadTaskFinished:withKey:andValue:) andObserve:_app.downloadsManager.completedObservable];
-
-        _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:) andObserve:_app.downloadsManager.progressCompletedObservable];
     }
     return self;
 }
@@ -402,23 +399,6 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         }
     }
      */
-}
-
-- (void) onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
-{
-    id<OADownloadTask> task = key;
-
-    // Skip all downloads that are not resources
-    if (![task.key hasPrefix:@"resource:"])
-        return;
-
-    NSString* nsResourceId = [task.key substringFromIndex:[@"resource:" length]];
-    NSNumber* progressCompleted = (NSNumber*)value;
-    OALog(@"Resource download task %@: %@ done", nsResourceId, progressCompleted);
-    if ([nsResourceId hasSuffix:@".tifsqlite"])
-    {
-        [[OAWeatherHelper sharedInstance] onDownloadTaskProgressChangedWithKey:key andValue:value];
-    }
 }
 
 @end

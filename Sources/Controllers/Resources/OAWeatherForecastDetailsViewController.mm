@@ -99,8 +99,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    if (![_weatherHelper isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:_region]])
-        [_weatherHelper calculateCacheSize:_region onComplete:nil];
+    [_weatherHelper calculateCacheSize:_region onComplete:nil];
 }
 
 #pragma mark - Base UI
@@ -154,10 +153,10 @@
     updatesSizeData[@"key"] = @"updates_size_cell";
     updatesSizeData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     updatesSizeData[@"title"] = OALocalizedString(@"shared_string_updates_size");
-    updatesSizeData[@"value"] = [NSByteCountFormatter stringFromByteCount:[[OAWeatherHelper sharedInstance] getOfflineForecastSizeInfo:regionId local:YES] countStyle:NSByteCountFormatterCountStyleFile];
+    updatesSizeData[@"value"] = [NSByteCountFormatter stringFromByteCount:[[OAWeatherHelper sharedInstance] getOfflineForecastSize:_region forUpdate:YES] countStyle:NSByteCountFormatterCountStyleFile];
     
     updatesSizeData[@"value_color"] = UIColorFromRGB(color_text_footer);
-    updatesSizeData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
+    updatesSizeData[@"selection_style"] = @(UITableViewCellSelectionStyleNone);
     [infoCells addObject:updatesSizeData];
     _sizeIndexPath = [NSIndexPath indexPathForRow:infoCells.count - 1 inSection:data.count - 1];
 
@@ -283,7 +282,7 @@
             cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
             BOOL hasRightIcon = [item.allKeys containsObject:@"right_icon"];
-            if (([item[@"key"] isEqualToString:@"update_now_cell"] && [OAWeatherHelper getPreferenceDownloadState:[OAWeatherHelper checkAndGetRegionId:_region]] == EOAWeatherForecastDownloadStateInProgress))
+            if (([item[@"key"] isEqualToString:@"update_now_cell"] && _localResourceItem.downloadTask != nil && _localResourceItem.downloadTask.state == OADownloadTaskStateRunning))
             {
                 FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0., 0., 25., 25.)];
                 progressView.iconView = [[UIView alloc] init];
@@ -372,9 +371,8 @@
     }
     else if ([item[@"key"] isEqualToString:@"update_now_cell"])
     {
-        if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress)
+        if (_localResourceItem.downloadTask != nil && _localResourceItem.downloadTask.state == OADownloadTaskStateRunning)
         {
-            [_weatherHelper prepareToStopDownloading:regionId];
             [_weatherHelper calculateCacheSize:_region onComplete:nil];
             [_localResourceItem.downloadTask stop];
         }
@@ -399,7 +397,6 @@
                                                                  handler:^(UIAlertAction * _Nonnull action)
                                                                  {
                                                                      [_progressHUD showAnimated:YES whileExecutingBlock:^{
-                                                                         [_weatherHelper prepareToStopDownloading:regionId];
                                                                          [_localResourceItem.downloadTask stop];
                                                                          [_weatherHelper removeLocalForecast:regionId region:_region refreshMap:YES];
                                                                      } completionBlock:^{
@@ -447,6 +444,17 @@
     });
 }
 
+- (id<OADownloadTask>)getDownloadTaskFor:(NSString*)resourceId
+{
+    return [[[OsmAndApp instance].downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]] firstObject];
+}
+
+- (BOOL)isUndefinedDownloadState
+{
+    auto state = [self getDownloadTaskFor:[_region.downloadsIdPrefix stringByAppendingString:@"tifsqlite"]].state;
+    return state != OADownloadTaskStateRunning && state != OADownloadTaskStateFinished;
+}
+
 - (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
     id<OADownloadTask> task = key;
@@ -460,12 +468,10 @@
         
         if (_updateNowIndexPath && _sizeIndexPath)
         {
-            NSString *regionId = [OAWeatherHelper checkAndGetRegionId:_region];
-            BOOL statusSizeCalculating = ![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:regionId];
-            if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined && !statusSizeCalculating)
+            if ([self isUndefinedDownloadState])
                 return;
             
-            NSIndexPath *indexPath = statusSizeCalculating ? _sizeIndexPath : _updateNowIndexPath;
+            NSIndexPath *indexPath = _updateNowIndexPath;
             UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
             if (!cell.accessoryView)
             {
@@ -485,7 +491,7 @@
                     [progressView stopSpinProgressBackgroundLayer];
                 progressView.progress = progressCompleted - 0.001;
             }
-            else if (task.state == OADownloadTaskStateFinished && !statusSizeCalculating)
+            else if (task.state == OADownloadTaskStateFinished)
             {
                 progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
                 progressView.progress = .0f;
@@ -516,7 +522,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded)
             return;
-        [OAWeatherHelper setPreferenceDownloadState:_region.regionId value:EOAWeatherForecastDownloadStateFinished];
         [self generateData];
         [self.tableView reloadData];
         if (self.delegate)

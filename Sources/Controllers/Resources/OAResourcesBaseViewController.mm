@@ -257,10 +257,6 @@ static BOOL dataInvalidated = NO;
 
 - (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
 {
-    BOOL isWeatherForecast = item.resourceType == OsmAndResourceType::WeatherForecast;
-    if (isWeatherForecast && ![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:item.worldRegion]])
-        return;
-
     [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:^(id<OADownloadTask> task) {
             [self updateContent];
     } onTaskResumed:^(id<OADownloadTask> task) {
@@ -272,9 +268,6 @@ static BOOL dataInvalidated = NO;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast)
     {
-        if (![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:item.worldRegion]])
-            return;
-
         OARepositoryResourceItem *repositoryItem = [[OARepositoryResourceItem alloc] init];
         repositoryItem.resourceId = item.resourceId;
         repositoryItem.resourceType = item.resourceType;
@@ -385,14 +378,6 @@ static BOOL dataInvalidated = NO;
         if (item_.downloadTask != nil)
         {
             [OAResourcesUIHelper offerCancelDownloadOf:item_];
-        }
-        else if (item_.resourceType == OsmAndResourceType::WeatherForecast && [OAWeatherHelper getPreferenceDownloadState:[OAWeatherHelper checkAndGetRegionId:item_.worldRegion]] == EOAWeatherForecastDownloadStateInProgress)
-        {
-            [OAResourcesUIHelper offerCancelDownloadOf:item_ onTaskStop:^(id<OADownloadTask>)
-            {
-                [self updateDisplayItem:item_];
-                [[OAWeatherHelper sharedInstance] calculateCacheSize:item_.worldRegion onComplete:nil];
-            }];
         }
         else if ([item_ isKindOfClass:[OAOutdatedResourceItem class]] && item_.resourceType != OsmAndResourceType::WeatherForecast)
         {

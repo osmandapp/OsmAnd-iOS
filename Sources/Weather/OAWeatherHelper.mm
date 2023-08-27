@@ -25,7 +25,6 @@
 #include <OsmAndCore/FunctorQueryController.h>
 #include <OsmAndCore/WorldRegions.h>
 
-#define kWeatherForecastDownloadStatePrefix @"forecast_download_state_"
 #define kWeatherForecastLastUpdatePrefix @"forecast_last_update_"
 #define kWeatherForecastFrequencyPrefix @"forecast_frequency_"
 #define kWeatherForecastAutoUpdatePrefix @"forecast_auto_update_"
@@ -33,7 +32,6 @@
 // needed for flag compatibility kWeatherForecastAutoUpdatePrefix
 #define kWeatherForecastWifiPrefix @"forecast_download_via_wifi_"
 
-#define kTileSize 40000
 #define kForecastDatesCount (24 + (6 * 8) + 1)
 
 #define kWeatherForecastFrequencyHalfDay 43200
@@ -44,7 +42,6 @@
 {
     OsmAndAppInstance _app;
     std::shared_ptr<OsmAnd::WeatherTileResourcesManager> _weatherResourcesManager;
-    NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, id> *> *_offlineForecastsInfo;
     dispatch_queue_t _forecastSerialDownloader;
     OAAutoObserverProxy* _downloadTaskProgressObserver;
 }
@@ -69,7 +66,6 @@
     {
         _app = [OsmAndApp instance];
         _weatherResourcesManager = _app.resourcesManager->getWeatherResourcesManager();
-        _offlineForecastsInfo = [NSMutableDictionary dictionary];
         _forecastSerialDownloader = dispatch_queue_create("forecast_downloader", DISPATCH_QUEUE_SERIAL);
 
         _bands = @[
@@ -158,24 +154,6 @@
     return region.regionId == nil ? OALocalizedString(@"weather_entire_world") : region.name;
 }
 
-- (void)onDownloadTaskProgressChangedWithKey:(id)key andValue:(id)value
-{
-    id<OADownloadTask> task = key;
-
-    // Skip all downloads that are not resources
-    if (![task.key hasPrefix:@"resource:"])
-        return;
-
-    NSString *nsResourceId = [task.key substringFromIndex:[@"resource:" length]];
-    if ([nsResourceId hasSuffix:@".tifsqlite"])
-    {
-        OAWorldRegion *region = [OAResourcesUIHelper findRegionOrAnySubregionOf:_app.worldRegion thatContainsResource:QString([nsResourceId UTF8String])];
-        NSString *regionId = [self.class checkAndGetRegionId:region];
-        NSInteger progressDownloading = [self getOfflineForecastProgressInfo:regionId];
-        [self setOfflineForecastProgressInfo:regionId value:++progressDownloading];
-    }
-}
-
 - (void)checkAndDownloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds
 {
     AFNetworkReachabilityManager *networkManager = [AFNetworkReachabilityManager sharedManager];
@@ -247,40 +225,21 @@
     {
         const auto& resource = _app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
         if (resource) {
-            if (_app.resourcesManager->isResourceInstalled(resource->id))
-            {
-                OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
-                item.resourceId = resource->id;
-                item.resourceType = resource->type;
-                item.downloadTask = [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
-                item.size = resource->size;
-                item.worldRegion = region;
-
-                const auto localResource = _app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
-                item.resource = localResource;
-                item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
-                localResourceItem = item;
-            }
-            else
-            {
-                OARepositoryResourceItem* item = [[OARepositoryResourceItem alloc] init];
-                item.resourceId = resource->id;
-                item.resourceType = resource->type;
-                item.resource = resource;
-                item.downloadTask = [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
-                item.size = resource->size;
-                item.sizePkg = resource->packageSize;
-                item.worldRegion = region;
-                item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
-                localResourceItem = item;
-            }
+            OARepositoryResourceItem* item = [[OARepositoryResourceItem alloc] init];
+            item.resourceId = resource->id;
+            item.resourceType = resource->type;
+            item.resource = resource;
+            item.downloadTask = [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
+            item.size = resource->size;
+            item.sizePkg = resource->packageSize;
+            item.worldRegion = region;
+            item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
+            localResourceItem = item;
         }
-
     }
     if (localResourceItem) {
         [OAResourcesUIHelper offerDownloadAndInstallOf:(OARepositoryResourceItem *)localResourceItem onTaskCreated:nil onTaskResumed:nil];
     }
-    
 }
 
 - (void)downloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds;
@@ -302,109 +261,106 @@
 - (void)preparingForDownloadForecastByRegion:(OAWorldRegion *)region regionId:(NSString *)regionId
 {
     [self.class updatePreferenceTileIdsIfNeeded:region];
-
-    [self setOfflineForecastProgressInfo:regionId value:0];
-    [self.class setPreferenceDownloadState:regionId value:EOAWeatherForecastDownloadStateInProgress];
     [_weatherForecastDownloadingObserver notifyEventWithKey:self andValue:region];
-}
-
-- (void)prepareToStopDownloading:(NSString *)regionId
-{
-    _offlineCacheSize = 0.;
-    if ([self.class getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished)
-    {
-        return;
-    }
-    else if ([self.class getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress)
-    {
-        if ([self getOfflineForecastProgressInfo:regionId] > 0)
-
-        [self.class setPreferenceDownloadState:regionId value:EOAWeatherForecastDownloadStateUndefined];
-        if ([self.class getPreferenceLastUpdate:regionId] == -1)
-        {
-            [self removeOfflineForecastInfo:regionId];
-        }
-        else
-        {
-            [self.class setPreferenceDownloadState:regionId value:EOAWeatherForecastDownloadStateFinished];
-            [self setOfflineForecastProgressInfo:regionId value:[self getProgressDestination:regionId]];
-        }
-    }
 }
 
 - (void)calculateCacheSize:(OAWorldRegion *)region onComplete:(void (^)())onComplete
 {
-    NSString *regionId = [self.class checkAndGetRegionId:region];
-    [self setOfflineForecastSizeInfo:regionId value:0 local:YES];
-    [self setOfflineForecastSizeInfo:regionId value:0 local:NO];
-    [self setOfflineForecastSizesInfoCalculated:regionId value:NO];
     [self.class updatePreferenceTileIdsIfNeeded:region];
-
-    NSArray<NSArray<NSNumber *> *> *tileIds = [self.class getPreferenceTileIds:regionId];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        QList<OsmAnd::TileId> qTileIds = [OANativeUtilities convertToQListTileIds:tileIds];
-        OsmAnd::ZoomLevel zoom = OsmAnd::WeatherTileResourceProvider::getGeoTileZoom();
-        if (!qTileIds.isEmpty())
-        {
-            [self setOfflineForecastSizeInfo:regionId
-                                       value:_weatherResourcesManager->calculateDbCacheSize(qTileIds, QList<OsmAnd::TileId>(), zoom)
-                                       local:YES];
-            // FIXME: get res
-            [self setOfflineForecastSizeInfo:regionId
-                                       value:kTileSize * tileIds.count * kForecastDatesCount
-                                       local:NO];
-            [self setOfflineForecastSizesInfoCalculated:regionId value:YES];
-        }
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [_weatherSizeCalculatedObserver notifyEventWithKey:self andValue:region];
-            if (onComplete)
-                onComplete();
-        });
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_weatherSizeCalculatedObserver notifyEventWithKey:self andValue:region];
+        if (onComplete)
+            onComplete();
     });
 }
 
 - (void)calculateFullCacheSize:(BOOL)localData
-                    onComplete:(void (^)(unsigned long long))onComplete
+                    onComplete:(void (^)(unsigned long long))onComplete;
+
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        QList<OsmAnd::TileId> qTileIds = [OANativeUtilities convertToQListTileIds:[self getOfflineTileIds:nil]];
-        OsmAnd::ZoomLevel zoom = OsmAnd::WeatherTileResourceProvider::getGeoTileZoom();;
-        unsigned long long size = localData ? self.offlineCacheSize : self.onlineCacheSize;
-        if (size == 0 && (!localData || (localData && !qTileIds.isEmpty())))
-        {
-            size = _weatherResourcesManager->calculateDbCacheSize(
-                    localData ? qTileIds : QList<OsmAnd::TileId>(),
-                    localData ? QList<OsmAnd::TileId>() : qTileIds,
-                    zoom);
-
-            if (localData)
-                _offlineCacheSize = size;
-            else
-                _onlineCacheSize = size;
-        }
-
+    if (localData)
+    {
         if (onComplete)
-            onComplete(size);
-    });
+            onComplete([self getOfflineWeatherForecastCacheSize]);
+    }
+    else
+    {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            QList<OsmAnd::TileId> qTileIds = [OANativeUtilities convertToQListTileIds:[self getOfflineTileIds:nil]];
+            OsmAnd::ZoomLevel zoom = OsmAnd::WeatherTileResourceProvider::getGeoTileZoom();;
+            unsigned long long size = self.onlineCacheSize;
+            if (size == 0)
+            {
+                size = _weatherResourcesManager->calculateDbCacheSize(QList<OsmAnd::TileId>(), qTileIds, zoom);
+                _onlineCacheSize = size;
+            }
+
+            if (onComplete)
+                onComplete(size);
+        });
+    }
 }
 
-- (void)clearCache:(BOOL)localData regionIds:(NSArray<NSString *> *)regionIds
+- (BOOL)isUndefinedDownloadStateFor:(OAWorldRegion *)region
+{
+    auto state = [self getDownloadTaskFor:[region.downloadsIdPrefix stringByAppendingString:@"tifsqlite"]].state;
+    return state != OADownloadTaskStateRunning && state != OADownloadTaskStateFinished;
+}
+
+- (BOOL)isDownloadedWeatherForecastForRegionId:(NSString *)regionId
+{
+    auto regionIds = [self getRegionIdsForDownloadedWeatherForecast];
+    return [regionIds containsObject:regionId];
+}
+
+- (NSArray<NSString *> *)getRegionIdsForDownloadedWeatherForecast
+{
+    NSMutableArray<NSString *> *regionIds = [NSMutableArray new];
+    for (OAWorldRegion *region in [@[[OsmAndApp instance].worldRegion] arrayByAddingObjectsFromArray:[OsmAndApp instance].worldRegion.flattenedSubregions])
+    {
+        for (const auto& localResource : [OsmAndApp instance].resourcesManager->getLocalResources())
+        {
+            if (localResource->type == OsmAndResourceType::WeatherForecast && [localResource->id.toLower().toNSString() hasPrefix:region.downloadsIdPrefix])
+            {
+                [regionIds addObject:region.regionId];
+            }
+        }
+    }
+    return regionIds;
+}
+
+- (uint64_t)getOfflineWeatherForecastCacheSize
+{
+    uint64_t size = 0;
+    for (const auto& localResource : [OsmAndApp instance].resourcesManager->getLocalResources())
+    {
+        if (localResource->type == OsmAndResourceType::WeatherForecast)
+        {
+            NSString *resourceId = localResource->id.toLower().toNSString();
+            const auto repositoryResource = _app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+            size += repositoryResource != nil ? repositoryResource->size : localResource->size;
+        }
+    }
+    return size;
+}
+
+- (void)clearCache:(BOOL)localData regionIds:(NSArray<NSString *> *)regionIds region:(OAWorldRegion *)region
 {
     if (localData)
     {
         if (!regionIds)
         {
-            regionIds = [self getTempForecastsWithDownloadStates:@[
-                    @(EOAWeatherForecastDownloadStateInProgress),
-                    @(EOAWeatherForecastDownloadStateFinished)
-            ]];
+            regionIds = [self getRegionIdsForDownloadedWeatherForecast];
         }
-
-        for (NSString *regionId in regionIds)
+        
+        if (region)
         {
-            [self setOfflineForecastSizeInfo:regionId value:0 local:YES];
-            [self prepareToStopDownloading:regionId];
+            QString regionIdString = QString::fromNSString(region.downloadsIdPrefix).append("tifsqlite");
+            const auto success = [OsmAndApp instance].resourcesManager->uninstallResource(regionIdString);
+            if (!success)
+            {
+                OALog(@"[ERROR] clearCache fail uninstallResource for regionId: %@", regionIdString.toNSString());
+            }
         }
     }
     _onlineCacheSize = 0.;
@@ -426,7 +382,6 @@
 
 - (void)clearOutdatedCache
 {
-    _offlineCacheSize = 0.;
     _onlineCacheSize = 0.;
     NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
     calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
@@ -434,7 +389,7 @@
     int64_t dateTime = date.timeIntervalSince1970 * 1000;
     _weatherResourcesManager->clearDbCache(dateTime);
 
-    NSArray<NSString *> *downloadedRegionIds = [self getTempForecastsWithDownloadStates:@[@(EOAWeatherForecastDownloadStateFinished)]];
+    NSArray<NSString *> *downloadedRegionIds = [self getRegionIdsForDownloadedWeatherForecast];
     for (OAWorldRegion *region in [@[_app.worldRegion] arrayByAddingObjectsFromArray:_app.worldRegion.flattenedSubregions])
     {
         if ([downloadedRegionIds containsObject:[self.class checkAndGetRegionId:region]])
@@ -449,7 +404,6 @@
 
 - (void)removeLocalForecasts:(NSArray<NSString *> *)regionIds region:(OAWorldRegion *)region refreshMap:(BOOL)refreshMap
 {
-    _offlineCacheSize = 0.;
     _onlineCacheSize = 0.;
     NSMutableArray<NSArray<NSNumber *> *> *tileIds = [NSMutableArray array];
     for (NSString *regionId in regionIds)
@@ -461,12 +415,7 @@
                 [tileIds addObject:tileId];
         }
 
-        NSArray<NSArray<NSNumber *> *> *originalTileIds = [self.class getPreferenceTileIds:regionId];
         [self.class removePreferences:regionId];
-        [self removeOfflineForecastInfo:regionId];
-        [self setOfflineForecastSizeInfo:regionId
-                                   value:kTileSize * originalTileIds.count * kForecastDatesCount
-                                   local:NO];
         OsmAndAppInstance app = [OsmAndApp instance];
         QString regionIdString = QString::fromNSString(region.downloadsIdPrefix).append("tifsqlite");
         const auto success = app.resourcesManager->uninstallResource(regionIdString);
@@ -492,10 +441,7 @@
 {
     if (!regionIds)
     {
-        regionIds = [self getTempForecastsWithDownloadStates:@[
-                @(EOAWeatherForecastDownloadStateInProgress),
-                @(EOAWeatherForecastDownloadStateFinished)
-        ]];
+        regionIds = [self getRegionIdsForDownloadedWeatherForecast];
     }
 
     NSMutableArray<NSArray<NSNumber *> *> *offlineTileIds = [NSMutableArray array];
@@ -513,7 +459,7 @@
 
 + (BOOL)isForecastOutdated:(NSString *)regionId
 {
-    if ([self getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished)
+    if ([[OAWeatherHelper sharedInstance] isDownloadedWeatherForecastForRegionId:regionId])
     {
         NSInteger daysGone = 0;
         NSTimeInterval timeInterval = [self.class getPreferenceLastUpdate:regionId];
@@ -530,26 +476,9 @@
     return NO;
 }
 
-- (void)firstInitForecast:(NSString *)regionId region:(OAWorldRegion *)region
-{
-    EOAWeatherForecastDownloadState downloadState = [self.class getPreferenceDownloadState:regionId];
-    if (downloadState == EOAWeatherForecastDownloadStateInProgress)
-    {
-        if ([self.class getPreferenceLastUpdate:regionId] == -1)
-            [self removeLocalForecast:regionId region: region refreshMap:NO];
-    }
-    else if (downloadState == EOAWeatherForecastDownloadStateFinished)
-    {
-        [self setOfflineForecastProgressInfo:regionId value:[self getProgressDestination:regionId]];
-    }
-}
-
 - (BOOL)isContainsInOfflineRegions:(NSArray<NSNumber *> *)tileId excludeRegion:(NSString *)excludeRegionId
 {
-    NSArray<NSString *> *regionIds = [self getTempForecastsWithDownloadStates:@[
-            @(EOAWeatherForecastDownloadStateInProgress),
-            @(EOAWeatherForecastDownloadStateFinished)
-    ]];
+    NSArray<NSString *> *regionIds = [self getRegionIdsForDownloadedWeatherForecast];
     for (NSString *regionId in regionIds)
     {
         if (![regionId isEqualToString:excludeRegionId])
@@ -565,82 +494,22 @@
     return NO;
 }
 
-- (NSArray<NSString *> *)getTempForecastsWithDownloadStates:(NSArray<NSNumber *> *)states
+- (uint64_t)getOfflineForecastSize:(OAWorldRegion *)region forUpdate:(BOOL)forUpdate
 {
-    NSMutableArray<NSString *> *forecasts = [NSMutableArray array];
-    for (NSString *regionId in _offlineForecastsInfo.allKeys)
+    NSString *resourceId = [region.downloadsIdPrefix stringByAppendingString:@"tifsqlite"];
+    const auto repositoryResource = _app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+    if (repositoryResource)
     {
-        if ([states containsObject:@([self.class getPreferenceDownloadState:regionId])])
-            [forecasts addObject:regionId];
+        if (forUpdate)
+            return repositoryResource->packageSize;
+        else
+            return repositoryResource->size;
     }
-    return forecasts;
-}
-
-- (void)removeOfflineForecastInfo:(NSString *)regionId
-{
-    [_offlineForecastsInfo removeObjectForKey:regionId];
-}
-
-- (void)setOfflineForecastSizeInfo:(NSString *)regionId value:(uint64_t)value local:(BOOL)local
-{
-    NSMutableDictionary<NSString *, id> *forecastInfo = _offlineForecastsInfo[regionId];
-    if (!forecastInfo)
+    else
     {
-        forecastInfo = [NSMutableDictionary dictionary];
-        _offlineForecastsInfo[regionId] = forecastInfo;
+        OALog(@"[WARNING] -> getOfflineForecastSize localResource is empty");
+        return 0;
     }
-    forecastInfo[local ? @"local_size" : @"updates_size"] = @(value);
-}
-
-- (uint64_t)getOfflineForecastSizeInfo:(NSString *)regionId local:(BOOL)local
-{
-    NSMutableDictionary<NSString *, id> *forecastInfo = _offlineForecastsInfo[regionId];
-    if (forecastInfo && ((local && [forecastInfo.allKeys containsObject:@"local_size"]) || (!local && [forecastInfo.allKeys containsObject:@"updates_size"])))
-        return [forecastInfo[local ? @"local_size" : @"updates_size"] unsignedLongLongValue];
-
-    return 0;
-}
-
-- (void)setOfflineForecastSizesInfoCalculated:(NSString *)regionId value:(BOOL)value
-{
-    NSMutableDictionary<NSString *, id> *forecastInfo = _offlineForecastsInfo[regionId];
-    if (!forecastInfo)
-    {
-        forecastInfo = [NSMutableDictionary dictionary];
-        _offlineForecastsInfo[regionId] = forecastInfo;
-    }
-    forecastInfo[@"sizes_calculated"] = @(value);
-}
-
-- (BOOL)isOfflineForecastSizesInfoCalculated:(NSString *)regionId
-{
-    NSMutableDictionary<NSString *, id> *forecastInfo = _offlineForecastsInfo[regionId];
-    if (forecastInfo && [forecastInfo.allKeys containsObject:@"sizes_calculated"])
-        return [forecastInfo[@"sizes_calculated"] boolValue];
-
-    return NO;
-}
-
-- (void)setOfflineForecastProgressInfo:(NSString *)regionId value:(NSInteger)value
-{
-    NSMutableDictionary<NSString *, id> *forecastInfo = _offlineForecastsInfo[regionId];
-    if (!forecastInfo)
-    {
-        forecastInfo = [NSMutableDictionary dictionary];
-        _offlineForecastsInfo[regionId] = forecastInfo;
-    }
-    forecastInfo[@"progress_download"] = @(value);
-}
-
-- (NSInteger)getOfflineForecastProgressInfo:(NSString *)regionId
-{
-    NSMutableDictionary<NSString *, id> *forecastInfo = _offlineForecastsInfo[regionId];
-    if (forecastInfo && [forecastInfo.allKeys containsObject:@"progress_download"])
-    {
-        return [forecastInfo[@"progress_download"] integerValue];
-    }
-
-    return 0;
 }
 
 - (NSInteger)getProgressDestination:(NSString *)regionId
@@ -650,12 +519,10 @@
 
 - (void)setupDownloadStateFinished:(OAWorldRegion *)region regionId:(NSString *)regionId
 {
-    [self.class setPreferenceDownloadState:regionId value:EOAWeatherForecastDownloadStateFinished];
     NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
     calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
     NSTimeInterval timeInterval = [NSDate date].timeIntervalSince1970;
     [self.class setPreferenceLastUpdate:regionId value:timeInterval];
-    _offlineCacheSize = 0.;
     _onlineCacheSize = 0.;
     [_weatherForecastDownloadingObserver notifyEventWithKey:self andValue:region];
 
@@ -674,8 +541,8 @@
     NSString *regionId = [self.class checkAndGetRegionId:region];
     BOOL isEntireWorld = [regionId isEqualToString:kWeatherEntireWorldRegionId];
     OAResourceItem *item;
-    if ([self.class getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined
-            || [self.class getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress)
+    auto state = [self getDownloadTaskFor:[region.downloadsIdPrefix stringByAppendingString:@"tifsqlite"]].state;
+    if (state == OADownloadTaskStateRunning || state != OADownloadTaskStateFinished)
     {
         item = [[OARepositoryResourceItem alloc] init];
         NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
@@ -684,7 +551,7 @@
     }
     else
     {
-        if ([self.class getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished)
+        if ([self isDownloadedWeatherForecastForRegionId:regionId])
             item = [[OALocalResourceItem alloc] init];
         else
             item = [[OAOutdatedResourceItem alloc] init];
@@ -696,8 +563,8 @@
         item.resourceId = QString::fromNSString([regionId stringByAppendingString:@"_weather_forecast"]);
         item.resourceType = OsmAndResourceType::WeatherForecast;
         item.title = isEntireWorld ? OALocalizedString(@"weather_forecast_entire_world") : OALocalizedString(@"weather_forecast");
-        item.size = [self getOfflineForecastSizeInfo:regionId local:YES];
-        item.sizePkg = [self getOfflineForecastSizeInfo:regionId local:NO];
+        item.size = [self getOfflineForecastSize:region forUpdate:NO];
+        item.sizePkg = [self getOfflineForecastSize:region forUpdate:YES];
         item.worldRegion = region;
     }
     return item;
@@ -706,7 +573,7 @@
 + (NSAttributedString *)getStatusInfoDescription:(NSString *)regionId
 {
     NSMutableAttributedString *attributedDescription = [NSMutableAttributedString new];
-    BOOL downloaded = [self getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished;
+    BOOL downloaded = [[OAWeatherHelper sharedInstance] isDownloadedWeatherForecastForRegionId:regionId];
     BOOL outdated = [self isForecastOutdated:regionId];
     NSString *statusStr = outdated ? OALocalizedString(@"weather_forecast_is_outdated") : @"";
     if (outdated)
@@ -832,20 +699,6 @@
     }
 }
 
-+ (EOAWeatherForecastDownloadState)getPreferenceDownloadState:(NSString *)regionId
-{
-    NSString *prefKey = [kWeatherForecastDownloadStatePrefix stringByAppendingString:regionId];
-    return [[NSUserDefaults standardUserDefaults] objectForKey:prefKey]
-            ? (EOAWeatherForecastDownloadState) [[NSUserDefaults standardUserDefaults] integerForKey:prefKey]
-            : EOAWeatherForecastDownloadStateUndefined;
-}
-
-+ (void)setPreferenceDownloadState:(NSString *)regionId value:(EOAWeatherForecastDownloadState)value
-{
-    NSString *prefKey = [kWeatherForecastDownloadStatePrefix stringByAppendingString:regionId];
-    [[NSUserDefaults standardUserDefaults] setInteger:value forKey:prefKey];
-}
-
 + (NSTimeInterval)getPreferenceLastUpdate:(NSString *)regionId
 {
     NSString *prefKey = [kWeatherForecastLastUpdatePrefix stringByAppendingString:regionId];
@@ -954,7 +807,6 @@
 + (NSArray<NSString *> *)getPreferenceKeys:(NSString *)regionId
 {
     return @[
-        [kWeatherForecastDownloadStatePrefix stringByAppendingString:regionId],
         [kWeatherForecastLastUpdatePrefix stringByAppendingString:regionId],
         [kWeatherForecastFrequencyPrefix stringByAppendingString:regionId],
         [kWeatherForecastTileIdsPrefix stringByAppendingString:regionId],

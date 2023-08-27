@@ -1762,10 +1762,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         [view addSubview:progressHUD];
         [progressHUD showAnimated:YES whileExecutingBlock:^{
             NSString *regionId = [OAWeatherHelper checkAndGetRegionId:item.worldRegion];
-            [[OAWeatherHelper sharedInstance] prepareToStopDownloading:regionId];
-            if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined)
+            if ([[OAWeatherHelper sharedInstance] isUndefinedDownloadStateFor:item.worldRegion])
                 [[OAWeatherHelper sharedInstance] removeLocalForecast:regionId region: item.worldRegion refreshMap:NO];
-            else if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished)
+            else if ([[OAWeatherHelper sharedInstance] isDownloadedWeatherForecastForRegionId:regionId])
                 [[OAWeatherHelper sharedInstance] calculateCacheSize:item.worldRegion onComplete:nil];
         } completionBlock:^{
             if (onTaskStop)
@@ -1842,7 +1841,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             if (item.resourceType == OsmAndResourceType::WeatherForecast)
             {
                 NSString *regionId = [OAWeatherHelper checkAndGetRegionId:item.worldRegion];
-                [[OAWeatherHelper sharedInstance] prepareToStopDownloading:regionId];
                 [[OAWeatherHelper sharedInstance] removeLocalForecast:regionId region:item.worldRegion refreshMap:item == items.lastObject];
             }
             else if ([item isKindOfClass:[OASqliteDbResourceItem class]])

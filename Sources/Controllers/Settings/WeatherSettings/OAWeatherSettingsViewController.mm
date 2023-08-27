@@ -110,9 +110,11 @@
             @"type": [OAValueTableViewCell getCellIdentifier]
     }];
     _onlineDataIndexPath = [NSIndexPath indexPathForRow:cacheData.count - 1 inSection:data.count - 1];
+    
+    uint64_t offlineCacheSize = [_weatherHelper getOfflineWeatherForecastCacheSize];
 
-    NSString *offlineCacheSizeString = _weatherHelper.offlineCacheSize > 0
-            ? [NSByteCountFormatter stringFromByteCount:_weatherHelper.offlineCacheSize
+    NSString *offlineCacheSizeString = offlineCacheSize > 0
+            ? [NSByteCountFormatter stringFromByteCount:offlineCacheSize
                                              countStyle:NSByteCountFormatterCountStyleFile]
             : OALocalizedString(@"calculating_progress");
     [cacheData addObject:@{

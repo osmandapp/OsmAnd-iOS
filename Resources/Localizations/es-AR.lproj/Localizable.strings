@@ -226,7 +226,7 @@
 "voice_announces" = "Indicaciones por voz";
 "screen_alerts" = "Alertas en pantalla";
 "vehicle_parameters" = "Parámetros del vehículo";
-"map_during_navigation" = "Mapa durante la navegación";
+"map_during_navigation" = "Mapa al navegar";
 "change_map_behavior" = "Cambiar el comportamiento del mapa durante la navegación";
 "nav_type_descr" = "Elige cómo calcular una ruta para este perfil";
 "nav_type_osmand" = "OsmAnd (navegación sin conexión)";
@@ -270,7 +270,7 @@
 "choose_audio_stream_descr" = "Elige que altavoz reproducirá indicaciones por voz.";
 "use_osm_live_routing" = "Navegación con OsmAnd Live";
 "osm_live_routing_descr" = "Usa las actualizaciones de OsmAnd Live para la navegación";
-"select_nav_profile_dialog_message" = "El«Tipo de navegación» determina cómo se calculan las rutas, entre motores de navegación en línea o sin conexión.";
+"select_nav_profile_dialog_message" = "El «Tipo de navegación» determina cómo se calculan las rutas, entre motores de navegación en línea o sin conexión.";
 "osmand_default_routing" = "Navegación de OsmAnd";
 "special_routing_type" = "Navegación especial";
 "import_routing_file_descr" = "Puedes importar un archivo de navegación desde cualquier aplicación de almacenamiento en la nube abriéndolo en OsmAnd.";
@@ -294,7 +294,7 @@
 "app_mode_motorcycle" = "Motocicleta";
 "app_mode_boat" = "Barco";
 "app_mode_aircraft" = "Avión";
-"gpx_option_calculate_first_last_segment" = "Calcular la ruta OsmAnd para el primer yúltimo segmento de ruta";
+"gpx_option_calculate_first_last_segment" = "Calcular la ruta OsmAnd para el primer y último segmento de ruta";
 "gpx_option_from_start_point" = "Pasar a lo largo de la traza completa";
 "gpx_option_reverse_route" = "Invertir la dirección de la traza";
 "use_points_as_intermediates" = "Calcular ruta entre puntos";
@@ -492,7 +492,7 @@
 "update_tile" = "Actualizar mapa";
 "download_pending" = "Descarga pendiente";
 "download_suggestion" = "Descarga el mapa detallado de «%@», para ver esta área";
-"move_map_to_select_area" = "Mover el mapa para elegir elárea necesaria.";
+"move_map_to_select_area" = "Mover el mapa para elegir el área necesaria.";
 "number_of_tiles" = "Número de teselas";
 "download_size" = "Tamaño de descarga";
 "preview_of_selected_zoom_levels" = "Vista previa de los niveles de zum elegidos";
@@ -613,7 +613,7 @@
 "gpx_updown" = "Arriba/Abajo";
 "gpx_uphills_total" = "Ascenso total";
 "distance_moving" = "Distancia recorrida";
-"track_recording" = "Grabación de traza";
+"track_recording" = "Grabación de trazas";
 "shared_string_currently_recording_track" = "Grabando traza actual";
 "track_stop_rec" = "Parar grabación";
 "gpx_start_new_segment" = "Iniciar nuevo segmento";
@@ -638,7 +638,7 @@
 "gpxup_trackable" = "Trazable";
 "gpxup_private" = "Privado";
 "gpx_upload_public_visibility_descr" = "«Público» significa que la traza se mostrará públicamente en tus trazas GPS y en las lista públicas de trazas GPS y con marcas de tiempo en crudo. Los datos servidos a través de la API no harán referencia a tu página de trazas. Las marcas de tiempo de los puntos no estarán disponibles a través de la API pública de GPS, y los puntos de la ruta no se ordenarán de manera cronológica.";
-"gpx_upload_identifiable_visibility_descr" = "«Identificable» significa que la traza se mostrará públicamente en tus trazas GPS y en las listas públicas de trazas GPS, es decir que otros usuarios podrán descargar la traza en bruto y asociarla a tu nombre de usuario. Los datos públicos servidos a través de la API con marcas de tiempo GPSharán referencia a la página original de la traza.";
+"gpx_upload_identifiable_visibility_descr" = "«Identificable» significa que la traza se mostrará públicamente en tus trazas GPS y en las listas públicas de trazas GPS, es decir que otros usuarios podrán descargar la traza en bruto y asociarla a tu nombre de usuario. Los datos públicos servidos a través de la API con marcas de tiempo GPS harán referencia a la página original de la traza.";
 "gpx_upload_trackable_visibility_descr" = "«Trazable» significa que la traza no aparece en ninguna lista pública, pero el conjunto de puntos procesados con marcas de tiempo (no se pueden asociar directamente con usted) estarán disponibles a través de la API pública de GPS.";
 "gpx_upload_private_visibility_descr" = "«Privado» significa que la traza no aparecerá en ninguna lista pública, pero el conjunto de puntos seguirá estando disponible en orden cronológico a través de la API pública de GPS y sin marcas de tiempo.";
 "save_track_to_gpx" = "Grabar la traza automáticamente al navegar";
@@ -646,7 +646,7 @@
 "gpx_distance_points" = "Distancia (puntos)";
 "gpx_max_speed" = "Velocidad máx.";
 "shared_string_speed" = "Velocidad";
-"shared_string_slope" = "Pendiente";
+"shared_string_slope" = "Pendientes";
 "stats_select_graph_data" = "Elegir datos del gráfico";
 
 // Map settings
@@ -1263,7 +1263,7 @@
 "mapil_select_user" = "Elegir usuario";
 
 // Coordinate widget
-"coordinates_widget_current_location" = "Widget de coordenadas";
+"coordinates_widget_current_location" = "Coordenadas: ubicación actual";
 "searching_gps" = "Buscando GPS";
 "copied_to_clipboard" = "Copiado al portapapeles";
 // Quick action
@@ -1894,7 +1894,7 @@
 "routing_attr_height_description" = "Indica la altura permitida del vehículo en rutas.";
 "touting_specified_vehicle_parameters_descr" = "Los parámetros definidos del vehículo pueden afectar la navegación.";
 "routing_attr_height_obstacles_name" = "Usar datos de elevación";
-"routing_attr_avoid_toll_name" = "Sin cabinas de peajes";
+"routing_attr_avoid_toll_name" = "Sin peajes";
 "rendering_attr_appMode_description" = "Optimizar mapa para";
 "routing_attr_avoid_ice_roads_fords_name" = "Sin caminos de hielo ni vados";
 "rendering_value_germanRoadAtlas_name" = "Estilo vial alemán";
@@ -2044,7 +2044,7 @@
 "rendering_value_green_name" = "Verde";
 "routing_attr_piste_type_nordic_description" = "Senderos para esquí nórdico o de travesía.";
 "rendering_attr_surface_unpaved_name" = "Sin pavimento";
-"rendering_attr_noAdminboundaries_description" = "Ocultar fronteras regionales (niveles administrativos 5– 9).";
+"rendering_attr_noAdminboundaries_description" = "Ocultar fronteras regionales (niveles administrativos 5 – 9).";
 "rendering_value_bicycle_name" = "Bicicleta";
 "rendering_value_translucent_lightgreen_name" = "Verde claro translúcido";
 "rendering_attr_contourLines_name" = "Mostrar curvas de nivel";
@@ -2119,7 +2119,7 @@
 "routing_attr_weight_description" = "Indica el peso del vehículo permitido en rutas.";
 "rendering_attr_surface_salt_name" = "Sal";
 "rendering_value_yellow_name" = "Amarillo";
-"routing_attr_allow_private_description" = "Permite acceder aáreas privadas.";
+"routing_attr_allow_private_description" = "Permite acceder a áreas privadas.";
 "rendering_attr_alpineHiking_description" = "Dibujar senderos según la escala SAC.";
 "rendering_attr_highway_class_bridleway_name" = "Camino ecuestre";
 "routing_attr_avoid_share_taxi_name" = "Sin taxis compartidos";
@@ -2381,7 +2381,7 @@
 "backup_error_user_is_not_registered" = "Ningún usuario se encuentra registrado con ese correo electrónico";
 "backup_error_size_is_exceeded" = "Tamaño máximo de OsmAnd Cloud excedido (%@)";
 "backup_error_subscription_was_expired_descr" = "La suscripción a «OsmAnd Pro» ha caducado, renuévala para usar la copia de seguridad. Todavía se pueden restaurar los datos de la nube.";
-"backup_error_gzip_only_supported_upload" = "El archivo debe enviarse en formato«.gzip»";
+"backup_error_gzip_only_supported_upload" = "El archivo debe enviarse en formato «.gzip»";
 "backup_error_user_is_already_registered" = "Esta dirección de correo electrónico se usa en otra cuenta";
 "backup_error_token_is_not_valid_or_expired" = "Clave inválida o vencida";
 "backup_error_file_not_available" = "Archivo no disponible";
@@ -2418,7 +2418,7 @@
 "copy_coordinates" = "Copiar coordenadas";
 "share_geo" = "geo:";
 "toast_empty_name_error" = "Ubicación sin nombre";
-"routing_attr_allow_private_for_truck_description" = "Permitir el acceso aáreas privadas para camiones.";
+"routing_attr_allow_private_for_truck_description" = "Permitir el acceso a áreas privadas para camiones.";
 "routing_attr_allow_private_for_truck_name" = "Permitir el acceso privado (camión)";
 "osmand_depelopment_simulate_location_section" = "Simular";
 "simulate_in_progress" = "En curso";
@@ -2478,7 +2478,7 @@
 "restore_purchases" = "Restaurar compras";
 "transport_hazmat_no_desc" = "En algunos caminos y túneles se prohíbe el transporte de materiales peligrosos.";
 "purchases_feature_desc_nautical" = "Obtén acceso a la información de profundidad náutica";
-"pro_features" = "Funciones«Pro»";
+"pro_features" = "Funciones «Pro»";
 "unlimited_map_downloads" = "Descargas de mapas ilimitadas";
 "wikipedia_and_wikivoyage_offline" = "Wikipedia y Wikiviajes sin conexión";
 "nautical_depth" = "Profundidad náutica";
@@ -2489,7 +2489,7 @@
 "purchases_feature_desc_combined_wiki" = "Explora los artículos de Wikipedia sobre la marcha, sin conexión a Internet. Datos sin conexión divididos por países y disponibles en todos los idiomas.";
 "purchases_feature_desc_wikivoyage" = "Explora Wikiviajes sin conexión. Artículos divididos por países y regiones y disponibles en todos los idiomas.";
 "purchases_feature_desc_terrain" = "Curvas de nivel del terreno, mapa completo de sombreados con tonos oscuros y mapas de pendientes con colores para mostrar picos y tierras bajas.";
-"private_access_routing_req" = "El destino se ubica en unárea de acceso privado. ¿Permitir el uso de caminos privados para este viaje\?";
+"private_access_routing_req" = "El destino se ubica en un área de acceso privado. ¿Permitir el uso de caminos privados para este viaje?";
 "subscription" = "Suscripción";
 "google_play" = "Google Play";
 "app_store" = "App Store";
@@ -2714,13 +2714,13 @@
 "routing_attr_difficulty_preference_advanced_name" = "Avanzado";
 "routing_attr_avoid_4wd_only_description" = "Evita los caminos adecuados para vehículos todo terreno 4x4";
 "rendering_attr_horse_scale_impossible_name" = "Imposible";
-"rendering_attr_OSMMapperAssistantNote_name" = "Etiquetas«note» (nota)";
+"rendering_attr_OSMMapperAssistantNote_name" = "Etiquetas «note» (nota)";
 "rendering_attr_OSMMapperAssistantNote_description" = "Muestra etiquetas con información no obvia sobre algún elemento (note)";
 "rendering_attr_horseScale_name" = "Dificultad de los senderos ecuestres";
 "rendering_attr_weatherCloudContours_name" = "Isolíneas de nubes";
 "rendering_attr_showMtbScaleIMBATrails_description" = "Mostrar senderos dedicados al ciclismo de montaña.";
 "routing_attr_avoid_footways_description" = "Evita pasar por veredas o aceras";
-"rendering_attr_hideMilitaryAreas_description" = "Oculta lasáreas militares";
+"rendering_attr_hideMilitaryAreas_description" = "Oculta las áreas militares";
 "rendering_value_omit_name" = "Omitir";
 "rendering_attr_horse_scale_demanding_name" = "Exigente";
 "routing_attr_avoid_fords_description" = "Evitar pasar por vados";
@@ -2744,14 +2744,14 @@
 "rendering_attr_weatherWindSpeedContours_name" = "Isolíneas de las ráfagas de viento";
 "routing_attr_avoid_footways_name" = "Evitar veredas o aceras";
 "rendering_attr_horse_scale_common_name" = "Común";
-"rendering_attr_OSMMapperAssistantFixme_name" = "Etiquetas«fixme» (arréglame)";
+"rendering_attr_OSMMapperAssistantFixme_name" = "Etiquetas «fixme» (arréglame)";
 "rendering_attr_showWaterwayTunnels_name" = "Túneles fluviales";
 "rendering_attr_depthContourWidth_description" = "La anchura para las curvas de nivel de profundidad";
 "rendering_attr_showTramRoutes_name" = "Rutas de tranvía";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "No salirse de la pista";
 "rendering_attr_horse_scale_dangerous_name" = "Peligroso";
 "rendering_attr_seabedDetail_name" = "Detalle del fondo marino";
-"rendering_attr_natureReserves_description" = "Mostrar reservas naturales,áreas protegidas y parques nacionales.";
+"rendering_attr_natureReserves_description" = "Mostrar reservas naturales, áreas protegidas y parques nacionales.";
 "rendering_attr_weatherPressureContours_name" = "Isolíneas de presión";
 "routing_attr_prefer_tactile_paving_description" = "Preferir el pavimento táctil";
 "rendering_attr_showMtbScaleUphill_name" = "Mostrar escala MTB de ascenso";

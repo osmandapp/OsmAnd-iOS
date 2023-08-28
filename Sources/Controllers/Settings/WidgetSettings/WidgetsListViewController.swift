@@ -422,7 +422,6 @@ extension WidgetsListViewController {
                         createWidgetItem(widget, lastSection!)
                     }
                 }
-//                widgetsToAdd.removeAll()
             }
         }
     }

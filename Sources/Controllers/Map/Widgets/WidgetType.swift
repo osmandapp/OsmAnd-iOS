@@ -40,8 +40,8 @@ class WidgetType: NSObject {
 
     func getGroup() -> WidgetGroup? {
         if (group == .altitude) {
-            let plugin = OAPlugin.getPlugin(OAOsmandDevelopmentPlugin.self) as? OAOsmandDevelopmentPlugin
-            if plugin == nil || !plugin!.is3DMapsEnabled() {
+            let plugin: OAOsmandDevelopmentPlugin? = OAPlugin.getPlugin(OAOsmandDevelopmentPlugin.self) as? OAOsmandDevelopmentPlugin
+            if plugin == nil || !(plugin?.is3DMapsEnabled() ?? false) {
                 return nil
             }
         }

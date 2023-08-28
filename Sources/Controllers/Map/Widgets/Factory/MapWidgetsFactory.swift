@@ -12,7 +12,7 @@ import Foundation
 class MapWidgetsFactory: NSObject {
     
     func createMapWidget(widgetType: WidgetType) -> OABaseWidgetView? {
-        return createMapWidgetImpl(customId: nil, widgetType: widgetType)
+        return createMapWidget(customId: nil, widgetType: widgetType)
     }
     
     func createMapWidget(customId: String?, widgetType: WidgetType) -> OABaseWidgetView? {
@@ -97,7 +97,7 @@ class MapWidgetsFactory: NSObject {
         case .elevationProfile:
             return /*ElevationProfileWidget(mapActivity: mapActivity)*/nil
         default:
-            return nil /*PluginsHelper.createOABaseWidgetView(mapActivity: mapActivity, widgetType: widgetType)*/
+            return OAPlugin.createMapWidget(widgetType, customId: customId)
         }
     }
     

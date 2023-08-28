@@ -418,6 +418,11 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     }
 }
 
+- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(NSString *)customId
+{
+    return nil;
+}
+
 /*
 private static void checkMarketPlugin(OsmandApplication app, OsmandPlugin srtm, boolean paid, NSString *id, NSString *id2) {
     boolean marketEnabled = Version.isMarketEnabled(app);
@@ -887,5 +892,16 @@ public static void addMyPlacesTabPlugins(FavoritesActivity favoritesActivity, Li
     }
 }
  */
+
++ (OABaseWidgetView *)createMapWidget:(OAWidgetType *)widgetType customId:(NSString *)customId
+{
+    for (OAPlugin *plugin in [self getEnabledPlugins])
+    {
+        OABaseWidgetView *widget = [plugin createMapWidgetForParams:widgetType customId:customId];
+        if (widget)
+            return widget;
+    }
+    return nil;
+}
 
 @end

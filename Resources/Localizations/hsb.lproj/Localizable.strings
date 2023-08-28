@@ -457,7 +457,7 @@
 "save_track_interval_globally" = "Interwal nahrawanja";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start trip recording";
-"track_rec_addon_q" = "Please activate Trip recording addon to record and save your trips";
+"track_rec_addon_q" = "Please activate Trip recording plugin to record and save your trips";
 "track_interval_remember" = "Remember my choice";
 "track_clear" = "Clear current trip";
 "track_clear_q" = "Do you want to clear current trip?";
@@ -993,8 +993,8 @@
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "shared_string_get" = "Get";
 "srtm_plugin_disabled" = "Wysokostne linije wupinjene";
-"prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
-"prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
+"prch_wiki_info" = "Wikipedia plugin enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
+"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Wotewrjenskečasy";
 "time_closed" = "Closed";
 "time_will_open" = "Will open in";

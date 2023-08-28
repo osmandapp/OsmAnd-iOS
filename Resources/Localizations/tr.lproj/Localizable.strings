@@ -323,7 +323,7 @@
 "show_alt_in_drive" = "İrtifa sürücü modunda göster";
 "shared_string_get" = "Al";
 "srtm_plugin_disabled" = "Eş yükselti eğrileri devre dışı";
-"prch_wiki_info" = "Vikipedi addon haritalar size başlıklı satın aldığınız veya ücretsiz limit dahilinde indirilen için wikipedia bilgileri sağlar.";
+"prch_wiki_info" = "Vikipedi plugin haritalar size başlıklı satın aldığınız veya ücretsiz limit dahilinde indirilen için wikipedia bilgileri sağlar.";
 "prch_srtm_info" = "Eş yükselti eğrileri eklentisi, kazandığınız, satın alınan veya ücretsiz sınırlar içinde indirdiğiniz haritalar için eş yükselti eğrilerini etkinleştirir.";
 "shared_string_open" = "Aç";
 "time_closed" = "Kapalı";

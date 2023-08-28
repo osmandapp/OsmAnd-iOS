@@ -42,7 +42,6 @@
 {
     OsmAndAppInstance _app;
     std::shared_ptr<OsmAnd::WeatherTileResourcesManager> _weatherResourcesManager;
-    dispatch_queue_t _forecastSerialDownloader;
     OAAutoObserverProxy* _downloadTaskProgressObserver;
 }
 
@@ -66,7 +65,6 @@
     {
         _app = [OsmAndApp instance];
         _weatherResourcesManager = _app.resourcesManager->getWeatherResourcesManager();
-        _forecastSerialDownloader = dispatch_queue_create("forecast_downloader", DISPATCH_QUEUE_SERIAL);
 
         _bands = @[
             [OAWeatherBand withWeatherBand:WEATHER_BAND_TEMPERATURE],

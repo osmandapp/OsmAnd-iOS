@@ -1046,7 +1046,7 @@
     {
         NSLog(@"Prepare checkAndDownloadWeatherForecastsUpdates start");
         OAWeatherHelper *weatherHelper = [OAWeatherHelper sharedInstance];
-        NSArray<NSString *> *regionIds = [weatherHelper getTempForecastsWithDownloadStates:@[@(EOAWeatherForecastDownloadStateFinished)]];
+        NSArray<NSString *> *regionIds = [weatherHelper getRegionIdsForDownloadedWeatherForecast];
         [weatherHelper checkAndDownloadForecastsByRegionIds:regionIds];
         NSLog(@"Prepare checkAndDownloadWeatherForecastsUpdates finish");
     }

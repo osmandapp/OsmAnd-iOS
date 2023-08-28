@@ -12,6 +12,8 @@ import Foundation
 @objcMembers
 class CoordinatesBaseWidget: OABaseWidgetView {
 
+    private static let widgetHeight: CGFloat = 44
+
     @IBOutlet var divider: UIView!
     @IBOutlet var secondContainer: UIStackView!
 
@@ -19,12 +21,12 @@ class CoordinatesBaseWidget: OABaseWidgetView {
     @IBOutlet var secondCoordinate: UILabel!
 
     @IBOutlet var firstIcon: UIImageView!
-    @IBOutlet var secondIcon: UIImageView!
 
     var lastLocation: CLLocation?
+    var coloredUnit = false
 
     override init(type: WidgetType) {
-        super.init(frame: CGRect(x: 0, y: 0, width: 414, height: 50))
+        super.init(frame: CGRect(x: 0, y: 0, width: 360, height: Self.widgetHeight))
         self.widgetType = type
         commonInit()
 
@@ -135,51 +137,49 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         firstIcon.isHidden = false
         divider.isHidden = true
         secondContainer.isHidden = true
-        firstIcon.image = getUtmIcon()
+        firstIcon.image = getCoordinateIcon()
+        coloredUnit = false
     }
 
     private func showStandardCoordinates(lat: Double, lon: Double, format: Int) {
         self.firstIcon.isHidden = false
         self.divider.isHidden = false
         self.secondContainer.isHidden = false
+        coloredUnit = true
 
-        let latitude = OALocationConvert.convertLatitude(lat, outputType: format, addCardinalDirection: true)
-        let longitude = OALocationConvert.convertLongitude(lon, outputType: format, addCardinalDirection: true)
+        firstIcon.image = getCoordinateIcon()
 
-        firstIcon.image = getLatitudeIcon(lat: lat)
-        secondIcon.image = getLongitudeIcon(lon: lon)
+        var latitude = OALocationConvert.convertLatitude(lat, outputType: format, addCardinalDirection: true)
+        var longitude = OALocationConvert.convertLongitude(lon, outputType: format, addCardinalDirection: true)
 
-        firstCoordinate.text = latitude
-        secondCoordinate.text = longitude
+        if (latitude == nil) {
+            latitude = ""
+        }
+        if (longitude == nil) {
+            longitude = ""
+        }
+
+        let coordColor: UIColor = isNightMode() ? .white : .black
+        let unitColor = UIColor(rgb: 0x7D738C)
+
+            let attributedLat = NSMutableAttributedString(string: latitude!)
+        if (latitude!.length > 2) {
+            attributedLat.addAttribute(.foregroundColor, value: coordColor, range: NSRange(location: 0, length: latitude!.length - 2))
+            attributedLat.addAttribute(.foregroundColor, value: unitColor, range: NSRange(location: latitude!.length - 1, length: 1))
+        }
+
+        let attributedLon = NSMutableAttributedString(string: longitude!)
+        if (longitude!.length > 2) {
+            attributedLon.addAttribute(.foregroundColor, value: coordColor, range: NSRange(location: 0, length: longitude!.length - 2))
+            attributedLon.addAttribute(.foregroundColor, value: unitColor, range: NSRange(location: longitude!.length - 1, length: 1))
+        }
+
+        firstCoordinate.attributedText = attributedLat
+        secondCoordinate.attributedText = attributedLon
     }
 
-    func getUtmIcon() -> UIImage {
-        let utmIconId = OAAppSettings.sharedManager().nightMode
-            ? "widget_coordinates_utm_night"
-            : "widget_coordinates_utm_day"
-        return UIImage.init(named: utmIconId)!
-    }
-
-    func getLatitudeIcon(lat: Double) -> UIImage {
-        let latDayIconId = lat >= 0
-            ? "widget_coordinates_latitude_north_day"
-            : "widget_coordinates_latitude_south_day"
-        let latNightIconId = lat >= 0
-            ? "widget_coordinates_latitude_north_night"
-            : "widget_coordinates_latitude_south_night"
-        let latIconId = OAAppSettings.sharedManager().nightMode ? latNightIconId : latDayIconId
-        return UIImage.init(named: latIconId)!
-    }
-
-    func getLongitudeIcon(lon: Double) -> UIImage {
-        let lonDayIconId = lon >= 0
-            ? "widget_coordinates_longitude_east_day"
-            : "widget_coordinates_longitude_west_day"
-        let lonNightIconId = lon >= 0
-            ? "widget_coordinates_longitude_east_night"
-            : "widget_coordinates_longitude_west_night"
-        let lonIconId = OAAppSettings.sharedManager().nightMode ? lonNightIconId : lonDayIconId
-        return UIImage.init(named: lonIconId)!
+    func getCoordinateIcon() -> UIImage? {
+        return nil // override it
     }
 
     func updateVisibility(visible: Bool) -> Bool {
@@ -205,17 +205,20 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         firstCoordinate.textColor = textColor
         secondCoordinate.textColor = textColor
 
-        let typefaceStyle: UIFont.Weight = textState.textBold ? .bold : .regular
-        firstCoordinate.font = UIFont.systemFont(ofSize: UIFont.labelFontSize, weight: typefaceStyle)
-        secondCoordinate.font = UIFont.systemFont(ofSize: UIFont.labelFontSize, weight: typefaceStyle)
+        let typefaceStyle: UIFont.Weight = textState.textBold ? .bold : .semibold
+        firstCoordinate.font = UIFont.systemFont(ofSize: firstCoordinate.font.pointSize, weight: typefaceStyle)
+        secondCoordinate.font = UIFont.systemFont(ofSize: secondCoordinate.font.pointSize, weight: typefaceStyle)
+
+        let lastLocation = lastLocation
+        if (coloredUnit && lastLocation != nil) {
+            showFormattedCoordinates(lat: lastLocation!.coordinate.latitude, lon: lastLocation!.coordinate.longitude)
+        }
     }
 
     override func adjustSize() {
-        
         var selfFrame: CGRect = frame
         selfFrame.size.width = OAUtilities.calculateScreenWidth()
-        selfFrame.size.height = 52
+        selfFrame.size.height = Self.widgetHeight
         frame = selfFrame
     }
-
 }

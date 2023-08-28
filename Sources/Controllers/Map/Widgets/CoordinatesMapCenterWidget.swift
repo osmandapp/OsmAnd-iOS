@@ -35,33 +35,10 @@ class CoordinatesMapCenterWidget: CoordinatesBaseWidget {
         return true
     }
 
-    override func getUtmIcon() -> UIImage {
-        let utmIconId = OAAppSettings.sharedManager().nightMode
-            ? "widget_coordinates_map_center_utm_night"
-            : "widget_coordinates_map_center_utm_day"
-        return UIImage.init(named: utmIconId)!
+    override func getCoordinateIcon() -> UIImage {
+        let iconId = OAAppSettings.sharedManager().nightMode
+            ? "widget_coordinates_map_center_night"
+            : "widget_coordinates_map_center_day"
+        return UIImage.init(named: iconId)!
     }
-
-    override func getLatitudeIcon(lat: Double) -> UIImage {
-        let latDayIconId = lat >= 0
-            ? "widget_coordinates_map_center_latitude_north_day"
-            : "widget_coordinates_map_center_latitude_south_day"
-        let latNightIconId = lat >= 0
-            ? "widget_coordinates_map_center_latitude_north_night"
-            : "widget_coordinates_map_center_latitude_south_night"
-        let latIconId = OAAppSettings.sharedManager().nightMode ? latNightIconId : latDayIconId
-        return UIImage.init(named: latIconId)!
-    }
-
-    override func getLongitudeIcon(lon: Double) -> UIImage {
-        let lonDayIconId = lon >= 0
-            ? "widget_coordinates_map_center_longitude_east_day"
-            : "widget_coordinates_map_center_longitude_west_day"
-        let lonNightIconId = lon >= 0
-            ? "widget_coordinates_map_center_longitude_east_night"
-            : "widget_coordinates_map_center_longitude_west_night"
-        let lonIconId = OAAppSettings.sharedManager().nightMode ? lonNightIconId : lonDayIconId
-        return UIImage.init(named: lonIconId)!
-    }
-
 }

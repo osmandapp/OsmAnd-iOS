@@ -37,4 +37,10 @@ class CoordinatesCurrentLocationWidget: CoordinatesBaseWidget {
         return true
     }
 
+    override func getCoordinateIcon() -> UIImage {
+        let iconId = OAAppSettings.sharedManager().nightMode
+            ? "widget_coordinates_location_night"
+            : "widget_coordinates_location_day"
+        return UIImage.init(named: iconId)!
+    }
 }

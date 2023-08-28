@@ -154,7 +154,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     
     OACloudBackupViewController *navigationController = (OACloudBackupViewController *)self.navigationController.topViewController;
     _settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_settings"] style:UIBarButtonItemStylePlain target:self action:@selector(onSettingsButtonPressed)];
-    _backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
+    _backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
     [navigationController.navigationItem setRightBarButtonItem:_settingsButton];
     [navigationController.navigationItem setLeftBarButtonItem:_backButton];
 }
@@ -736,18 +736,12 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         _status = [OABackupStatus getBackupStatus:_backup];
         _error = _backup.error;
         [self refreshContent];
-        _settingsButton.enabled = YES;
-        _settingsButton.tintColor = UIColor.whiteColor;
         [self.tblView.refreshControl endRefreshing];
     });
 }
 
 - (void)onBackupPreparing
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        _settingsButton.enabled = NO;
-        _settingsButton.tintColor = UIColorFromRGB(color_tint_gray);
-    });
 }
 
 #pragma mark - OABackupTypesDelegate

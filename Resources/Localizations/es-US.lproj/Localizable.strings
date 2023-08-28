@@ -925,7 +925,7 @@
 "copy_from_other_profile_descr" = "Puedes copiar todos los ajustes de cualquier perfil al perfil elegido: ";
 "profile_alert_delete_title" = "Borrar perfil";
 "profile_alert_delete_msg" = "¿Borrar el perfil «%@»\?";
-"select_base_profile_dialog_message" = "El perfil personalizado se basa en uno de los perfiles de aplicación predefinidos, lo que define los ajustes básicos como la visibilidad predefinida de los widgets, las unidades de velocidad y distancia. Estos son los perfiles de aplicación predefinidos, junto con ejemplos de perfiles personalizados a los que se pueden ampliar:";
+"select_base_profile_dialog_message" = "El perfil personalizado se basa en uno de los perfiles de aplicación predefinidos, que define los ajustes básicos como la visibilidad predefinida de los widgets, las unidades de velocidad y distancia. Estos son los perfiles de aplicación predefinidos, junto con ejemplos de perfiles personalizados que se pueden ampliar:";
 "profile_type_custom_string" = "Perfil personalizado";
 "new_profile" = "Nuevo perfil";
 "configure_profile" = "Configurar perfil";
@@ -1136,7 +1136,7 @@
 "res_source_format" = "Formato de fuente";
 "sqlite_db_file" = "Archivo SQLiteDB";
 "one_image_per_tile" = "Un archivo de imagen por tesela";
-"res_zoom_levels_desc" = "Estos parámetros afectarán a la visualización del mapa cuando se utilice como un tipo de mapa o como superposición/subyacencia.\n\nTipo de mapa: el mapa se limitará a los zums elegidos.\n\nSuperposición/Subyacencia: Niveles de zum en los que las teselas serán visibles. Se producirá un aumento o disminución de la escala por encima o por debajo de los valores definidos.";
+"res_zoom_levels_desc" = "Estos parámetros afectarán a la visualización del mapa cuando se utilice como un tipo de mapa o como superposición/subyacencia.\n\nTipo de mapa: el mapa se limitará a los zums elegidos.\n\nSuperposición/Subyacencia: Niveles de zum donde se verán las teselas. Se producirá un aumento o disminución de la escala por encima o por debajo de los valores definidos.";
 "res_expire_time_desc" = "Tiempo de expiración en minutos. Las teselas almacenadas serán recargadas luego del tiempo definido. Deja este campo vacío si no necesitas recargar las teselas para este repositorio.\nUn día son 1440 minutos.\nUna semana son 10080 minutos.\n30 días son 43200 minutos.";
 "res_name_warning" = "El nombre del archivo no puede estar vacío";
 "res_url_warning" = "La URL no puede estar vacía";
@@ -2237,7 +2237,7 @@
 "ios_release_3_80" = "• Se ha añadido «Perfiles de aplicación» con ajustes independientes\n• Nueva disposición de ajustes por perfiles y tipos: navegación, general, mapa y pantalla\n• Posibilidad de importar o exportar ajustes de perfil\n• Se han añadido respositorios de datos para las fotos en línea\n• Se ha añadido capacidad para descargar mapas en línea y almacenar en caché\n• Algoritmos de búsqueda mejorados\n";
 "ios_release_3_90" = "• Se ha añadido la función de «Planificar una ruta» para planificar futuros viajes con la posibilidad de crear segmentos de ruta utilizando diferentes tipos de navegación\n• Se ha añadido una opción para activar una brújula sobre la herramienta «Regla radial».\n• Se ha añadido la opción «Superposición de etiquetas de PDI» que permite mostrar los nombres de los favoritos, los puntos de referencia de las trazas y los marcadores en el mapa\n• Se han añadido nuevas acciones rápidas para la visibilidad de las curvas de nivel y el terreno en el mapa, el cambio de un perfil de aplicación y el borrado de un punto intermedio más cercano\n• Se han solucionado problemas con la falta de la categoría de búsqueda de Wikipedia\n• Importación de ajustes: se han corregido errores y se ha añadido soporte para todos los tipos de datos disponibles en OsmAnd\n• Edición de OpenStreetMap: se ha corregido el selector de tiempo y la imposibilidad de cambiar el comentario del conjunto de cambios\n";
 "ios_release_4_0" = "• ¡Nuevo! Se ha añadido la opción para elegir un icono, color y forma propia en «Añadir favorito»\n• Se ha añadido el nuevo widget de coordenadas con las coordenadas de la ubicación actual\n• Se ha añadido la posibilidad de importar complementos personalizados definidos por el usuario\n• Se ha ampliado significativamente la funcionalidad de importar/exportar\n• La función «Distancia al pulsar» se ha movido de la regla radial a una opción separada\n• Se ha corregido el bloqueo de la aplicación CarPlay cuando se apaga la pantalla del iPhone\n• Se han trasladado al menú principal los complementos desde «Mapas y Recursos»\n• Se ha añadido el idioma finlandés\n• Se ha corregido la interfaz de usuario en orientación horizontal para la función «Planificar ruta»\n• Se ha añadido soporte para los archivos personalizados de navegación y visualización\n• Se ha corregido el rendimiento de la línea de dirección de los marcadores\n• Se ha solucionado un problema con la importación de archivos GPX con extensiones en mayúsculas\n• Se ha corregido un problema con el menú «Seguir traza».\n• Se ha corregido la importación de archivos OBF\n";
-"ios_release_4_1" = "• Interacción con trazas completamente rediseñada: un nuevo menú con gráficos, estadísticas, posibilidad de cambiar el aspecto, coloración por velocidad, altura y pendiente, y marcación de trazas en el mapa.\n• Nueva pantalla de búsqueda por coordenadas en diferentes formatos\n• Mejoras de la búsqueda por coordenadas en formato OLC\n• Nuevo menú de fácil manejo para elegir los idiomas en los que se muestran los artículos de Wikipedia en el mapa\n• Se ha añadido la posibilidad de cargar fácilmente los mapas de todas las regiones del país con un par de clics\n• Se han añadido curvas de nivel en pies (es deben descargar archivos adicionales)\n• Se ha añadido la posibilidad de descargar mapas marcando la región o el país deseado en el mapa, así como la adición de un cuadro de diálogo con la sugerencia de cargar un mapa faltante en la región visualizada\n• Nueva apariencia de los botones en el mapa y posibilidad de cambiar el zum del mapa pulsando dos veces y deslizando el dedo.\n• Los ajustes de visibilidad de las rutas se mueven más arriba en la sección «Configurar mapa» y se reorganizan para una mayor flexibilidad\n";
+"ios_release_4_1" = "• Interacción con trazas completamente rediseñada: un nuevo menú con gráficos, estadísticas, posibilidad de cambiar el aspecto, coloración por velocidad, altura y pendiente, y marcación de trazas en el mapa.\n• Nueva pantalla de búsqueda por coordenadas en diferentes formatos\n• Mejoras de la búsqueda por coordenadas en formato OLC\n• Nuevo menú de fácil manejo para elegir los idiomas a mostrar los artículos de Wikipedia en el mapa\n• Se ha añadido la posibilidad de cargar fácilmente los mapas de todas las regiones del país con un par de clics\n• Se han añadido curvas de nivel en pies (es deben descargar archivos adicionales)\n• Se ha añadido la posibilidad de descargar mapas marcando la región o el país deseado en el mapa, así como la adición de un cuadro de diálogo con la sugerencia de cargar un mapa faltante en la región visualizada\n• Nueva apariencia de los botones en el mapa y posibilidad de cambiar el zum del mapa pulsando dos veces y deslizando el dedo.\n• Los ajustes de visibilidad de las rutas se mueven más arriba en la sección «Configurar mapa» y se reorganizan para una mayor flexibilidad\n";
 "shared_string_hide_all" = "Ocultar todo";
 "connect_rp" = "Conectar puntos de ruta";
 "points_delete_multiple" = "¿Borrar %d punto(s)\?";
@@ -2865,7 +2865,7 @@
 "show_map_center" = "Mostrar «Coordenadas: centro del mapa»";
 "hide_map_center" = "Ocultar «Coordenadas: centro del mapa»";
 "quick_action_map_center_widget_descr" = "Un botón que muestra u oculta en el mapa el widget de coordenadas.";
-"wikipedia_language_settings_descr" = "Marca los idiomas en los que los artículos de Wikipedia aparecerán en el mapa. Puedes cambiar entre todos los idiomas disponibles mientras lees el artículo.";
+"wikipedia_language_settings_descr" = "Marca los idiomas donde los artículos de Wikipedia aparecerán en el mapa. Puedes cambiar entre todos los idiomas disponibles mientras lees el artículo.";
 "dont_download" = "No descargar";
 "over_wifi_only" = "Sólo por Wi-Fi";
 "download_over_cellular_network" = "¿Descargar imágenes a través de la red móvil? Esto puede incurrir en altos cargos.";
@@ -2937,7 +2937,7 @@
 "gps_info_widget_desc" = "Muestra el número de satélites que el dispositivo detecta y usa en ese momento.";
 "current_speed_widget_desc" = "Muestra la velocidad actual detectada por el GPS.";
 "magnetic_bearing_widget_desc" = "Ángulo entre el norte magnético y el punto objetivo observado desde la ubicación.";
-"lanes_widgets_desc" = "Muestra la disposición actual de los carriles del camino y destaca por los que se debe circular al navegar.";
+"lanes_widgets_desc" = "Muestra la disposición actual de los carriles del camino y destaca por cual se debe circular al navegar.";
 "time_to_go_desc" = "Tiempo en minutos u horas necesario para llegar al destino.";
 "arrival_time_widget_desc" = "Hora de llegada al punto de destino.";
 "map_markers_bar_widget_desc" = "Muestra la distancia y la dirección al siguiente marcador desde la ubicación actual. Puede configurarse para ver 1 o 2 marcadores.";
@@ -3022,3 +3022,11 @@
 "reset_all_settings_desc" = "¿Restablecer todos los ajustes a los predefinidos?";
 "no_widgets_here_yet" = "Todavía sin widgets aquí";
 "no_widgets_descr" = "Añade uno o más widgets de la lista de widgets disponibles.";
+"map_widget_rendering_fps_desc" = "Muestra que tan rápido se ven y actualizan el mapa y sus elementos , expresada en fotogramas por segundo (FPS).";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "Muestra las coordenadas geográficas del centro del mapa actual";
+"map_widget_camera_tilt_desc" = "Muestra el ángulo de inclinación de la cámara en modo perspectiva. El valor predefinido es 90° (sin inclinación).";
+"map_widget_camera_distance_desc" = "Muestra la elevación de la cámara sobre el nivel de la superficie.";
+"map_widget_zoom_level_desc" = "Muestra el nivel de zum actual del mapa.";
+"map_widget_target_distance_desc" = "Muestra la distancia entre la cámara y la ubicación del objetivo.";

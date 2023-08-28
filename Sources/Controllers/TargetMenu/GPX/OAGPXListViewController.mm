@@ -112,6 +112,7 @@
     NSMutableArray<OAGpxInfo *> *_gpxList;
     NSMutableDictionary<NSString *, NSArray<OAGpxInfo *> *> *_gpxFolders;
     int _displayingTracksCount;
+    NSInteger _actionsGroupIndex;
     
     CALayer *_horizontalLine;
     
@@ -855,6 +856,7 @@ static UIViewController *parentController;
         actionsGroup.groupItems = [NSMutableArray arrayWithArray:self.menuItems];
         
         [tableData addObject:actionsGroup];
+        _actionsGroupIndex = [tableData indexOfObject:actionsGroup];
     }
     _data = [NSMutableArray arrayWithArray:tableData];
 }
@@ -923,7 +925,7 @@ static UIViewController *parentController;
     }];
     
     [self.gpxTableView setEditing:YES animated:YES];
-    [self.gpxTableView deleteSections:[NSIndexSet indexSetWithIndex:_data.count - 1] withRowAnimation:UITableViewRowAnimationFade];
+    [self.gpxTableView deleteSections:[NSIndexSet indexSetWithIndex:_actionsGroupIndex] withRowAnimation:UITableViewRowAnimationFade];
     [self.gpxTableView reloadData];
     [self updateHeaderLabels];
     [self updateButtons];
@@ -943,7 +945,7 @@ static UIViewController *parentController;
     [self.gpxTableView setEditing:NO animated:YES];
     [_selectedItems removeAllObjects];
     [_selectedIndexPaths removeAllObjects];
-    [self.gpxTableView insertSections:[NSIndexSet indexSetWithIndex:_data.count - 1] withRowAnimation:UITableViewRowAnimationFade];
+    [self.gpxTableView insertSections:[NSIndexSet indexSetWithIndex:_actionsGroupIndex] withRowAnimation:UITableViewRowAnimationFade];
     [self updateHeaderLabels];
     [self updateButtons];
     [self updateRecButtonsAnimated];

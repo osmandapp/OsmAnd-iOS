@@ -3573,6 +3573,7 @@
 		FA44BF462A71123D000D2F5F /* ic_custom_settings_cloud_colored@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF3A2A71123D000D2F5F /* ic_custom_settings_cloud_colored@3x.png */; };
 		FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */; };
 		FA4768B52A67B86400D533E8 /* FreeBackupBanner.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */; };
+		FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */; };
 		FA740D422A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA740D412A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib */; };
 		FA740D452A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */; };
 /* End PBXBuildFile section */
@@ -8289,6 +8290,7 @@
 		FA44BF3A2A71123D000D2F5F /* ic_custom_settings_cloud_colored@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_settings_cloud_colored@3x.png"; path = "Resources/Icons/ic_custom_settings_cloud_colored@3x.png"; sourceTree = "<group>"; };
 		FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBanner.swift; sourceTree = "<group>"; };
 		FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FreeBackupBanner.xib; sourceTree = "<group>"; };
+		FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		FA740D412A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CloudIntroductionButtonsView.xib; sourceTree = "<group>"; };
 		FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudIntroductionButtonsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -14333,6 +14335,7 @@
 			isa = PBXGroup;
 			children = (
 				DAABE4ED2A1657AF00569F71 /* Color+INT.swift */,
+				FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */,
 			);
 			path = SwiftExtensions;
 			sourceTree = "<group>";
@@ -17323,6 +17326,7 @@
 				C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */,
 				DA5A819A26C563A700F274C7 /* OAMapOverlayAction.mm in Sources */,
 				DA5A82F726C563A800F274C7 /* OARangeSliderCell.m in Sources */,
+				FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */,
 				DA5A825826C563A700F274C7 /* OASpeedLimitToleranceViewController.m in Sources */,
 				DA5A84AE26C563A900F274C7 /* OAHistoryViewController.mm in Sources */,
 				4643322A291D5FE7005AEF12 /* OAMapSettingsNauticalDepthScreen.m in Sources */,

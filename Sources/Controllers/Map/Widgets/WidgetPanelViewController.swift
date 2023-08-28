@@ -22,7 +22,11 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
     @IBOutlet var pageControlHeightConstraint: NSLayoutConstraint!
 
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var pageControl: UIPageControl!
+    @IBOutlet weak var pageControl: UIPageControl! {
+        didSet {
+            pageControl.backgroundStyle = .minimal
+        }
+    }
     
     var pageViewController: UIPageViewController!
     var pages: [UIViewController] = []
@@ -61,14 +65,6 @@ class WidgetPanelViewController: UIViewController, UIPageViewControllerDataSourc
         pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         pageViewController.dataSource = self
         pageViewController.delegate = self
-        
-        contentView.layer.borderWidth = isHorizontal ? 0 : Self.borderWidth
-        contentView.layer.borderColor = isHorizontal ? nil : UIColor.lightGray.withAlphaComponent(0.8).cgColor
-        contentView.layer.shadowColor = isHorizontal ? UIColor.clear.cgColor : UIColor.black.cgColor;
-        contentView.layer.shadowOpacity = isHorizontal ? 1.0 : 0.5
-        contentView.layer.shadowOffset = isHorizontal ? CGSize(width: 0, height: 0) : CGSize(width: 1, height: 1)
-        contentView.layer.shouldRasterize = true
-        contentView.layer.rasterizationScale = UIScreen.main.scale
         
         // Add the container view to the view hierarchy
         view.addSubview(pageContainerView)

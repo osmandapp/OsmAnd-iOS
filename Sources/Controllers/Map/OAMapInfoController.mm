@@ -104,6 +104,7 @@
         [mapHudViewController.leftWidgetsView addSubview:_leftPanelController.view];
         [mapHudViewController.bottomWidgetsView addSubview:_bottomPanelController.view];
         [mapHudViewController.rightWidgetsView addSubview:_rightPanelController.view];
+        [mapHudViewController.rightWidgetsView.layer addWidgetLayerDecoratorWithMask: kCALayerMinXMinYCorner | kCALayerMinXMaxYCorner];
 
         _topPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
         _leftPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
@@ -326,7 +327,7 @@
     if (hasRightWidgets)
     {
         CGSize rightSize = [_rightPanelController calculateContentSize];
-        _mapHudViewController.rightWidgetsViewHeightConstraint.constant = rightSize.height;
+        _mapHudViewController.rightWidgetsViewHeightConstraint.constant = rightSize.height + 26;
         _mapHudViewController.rightWidgetsViewWidthConstraint.constant = rightSize.width;
     }
     else

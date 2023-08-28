@@ -49,6 +49,7 @@
 #define KMZ_EXT @"kmz"
 
 #define kImportFolderName @"import"
+#define kactionsGrupId @"actionsGrup"
 
 #define kRecordTrackRow 0
 #define kRecordTrackSection 0
@@ -63,6 +64,7 @@
     @property NSString *type;
     @property BOOL isOpen;
     @property NSString *groupName;
+    @property NSString *groupId;
     @property NSMutableArray *groupItems;
     @property NSString *groupIcon;
     @property BOOL isMenu;
@@ -838,39 +840,79 @@ static UIViewController *parentController;
             [tableData addObject:tracksGroup];
         }
     }
-    if (!_isSearchActive)
+    if (!_isSearchActive && !_editActive)
     {
-        // Generate menu items
-        OAGpxTableGroup* actionsGroup = [[OAGpxTableGroup alloc] init];
-        actionsGroup.isMenu = YES;
-        actionsGroup.type = [OASimpleTableViewCell getCellIdentifier];
-        actionsGroup.header = OALocalizedString(@"shared_string_actions");
-        self.menuItems = @[@{@"type" : [OASimpleTableViewCell getCellIdentifier],
-                             @"key" : @"import_track",
-                             @"title": OALocalizedString(@"import_tracks"),
-                             @"icon": @"ic_custom_import",
-                             @"header" : OALocalizedString(@"shared_string_actions")},
-                           @{@"type" : [OASimpleTableViewCell getCellIdentifier],
-                             @"key" : @"create_new_trip",
-                             @"title": OALocalizedString(@"create_new_trip"),
-                             @"icon": @"ic_custom_trip.png"}];
-        actionsGroup.groupItems = [NSMutableArray arrayWithArray:self.menuItems];
-        
-        [tableData addObject:actionsGroup];
-        _actionsGroupIndex = tableData.count - 1;
+        [self addActionsGrup:tableData];
     }
     _data = [NSMutableArray arrayWithArray:tableData];
 }
 
--(void) setupView {
+-(void) addActionsGrup:(NSMutableArray *)tableData
+{
+    // Generate menu items
+    OAGpxTableGroup* actionsGroup = [[OAGpxTableGroup alloc] init];
+    actionsGroup.isMenu = YES;
+    actionsGroup.groupId = kactionsGrupId;
+    actionsGroup.type = [OASimpleTableViewCell getCellIdentifier];
+    actionsGroup.header = OALocalizedString(@"shared_string_actions");
+    self.menuItems = @[@{@"type" : [OASimpleTableViewCell getCellIdentifier],
+                         @"key" : @"import_track",
+                         @"title": OALocalizedString(@"import_tracks"),
+                         @"icon": @"ic_custom_import",
+                         @"header" : OALocalizedString(@"shared_string_actions")},
+                       @{@"type" : [OASimpleTableViewCell getCellIdentifier],
+                         @"key" : @"create_new_trip",
+                         @"title": OALocalizedString(@"create_new_trip"),
+                         @"icon": @"ic_custom_trip.png"}];
+    actionsGroup.groupItems = [NSMutableArray arrayWithArray:self.menuItems];
     
+    [tableData addObject:actionsGroup];
+    _actionsGroupIndex = tableData.count - 1;
+}
+
+-(void) updateData
+{
+    NSMutableArray *mutableDataCopy = [NSMutableArray arrayWithArray:_data];
+    OAGpxTableGroup* groupActions = nil;
+    
+    for (OAGpxTableGroup *group in mutableDataCopy)
+    {
+        if ([group.groupId isEqualToString:kactionsGrupId])
+        {
+            groupActions = group;
+            break;
+        }
+    }
+    
+    if (!_isSearchActive)
+        [self manageGroup:groupActions inData:mutableDataCopy];
+    
+    _data = mutableDataCopy;
+}
+
+-(void) manageGroup:(OAGpxTableGroup *)groupActions inData:(NSMutableArray *)data
+{
+    if (groupActions && _editActive)
+    {
+        [data removeObject:groupActions];
+        _actionsGroupIndex = -1;
+    }
+    else if (!groupActions && !_editActive)
+    {
+        [self addActionsGrup:data];
+    }
+}
+
+-(void) setupView
+{
     [self.gpxTableView setDataSource:self];
     [self.gpxTableView setDelegate:self];
     self.gpxTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.gpxTableView reloadData];
 }
 
-- (void) didReceiveMemoryWarning {
+- (void) didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -926,6 +968,7 @@ static UIViewController *parentController;
     }];
     
     [self.gpxTableView setEditing:YES animated:YES];
+    [self updateData];
     if (_actionsGroupIndex != -1)
         [self.gpxTableView deleteSections:[NSIndexSet indexSetWithIndex:_actionsGroupIndex] withRowAnimation:UITableViewRowAnimationFade];
     [self.gpxTableView reloadData];
@@ -947,6 +990,7 @@ static UIViewController *parentController;
     [self.gpxTableView setEditing:NO animated:YES];
     [_selectedItems removeAllObjects];
     [_selectedIndexPaths removeAllObjects];
+    [self updateData];
     if (_actionsGroupIndex != -1)
         [self.gpxTableView insertSections:[NSIndexSet indexSetWithIndex:_actionsGroupIndex] withRowAnimation:UITableViewRowAnimationFade];
     [self updateHeaderLabels];
@@ -1202,7 +1246,7 @@ static UIViewController *parentController;
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _editActive && _actionsGroupIndex != -1 ? _actionsGroupIndex : _data.count;
+    return _data.count;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section

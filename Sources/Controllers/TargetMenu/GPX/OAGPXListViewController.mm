@@ -726,6 +726,7 @@ static UIViewController *parentController;
     NSArray<NSString *> *visible = _settings.mapSettingVisibleGpx.get;
     self.gpxList = [NSMutableArray arrayWithArray:db.gpxList];
     _displayingTracksCount = 0;
+    _actionsGroupIndex = -1;
     
     if (!_isSearchActive)
     {
@@ -925,7 +926,8 @@ static UIViewController *parentController;
     }];
     
     [self.gpxTableView setEditing:YES animated:YES];
-    [self.gpxTableView deleteSections:[NSIndexSet indexSetWithIndex:_actionsGroupIndex] withRowAnimation:UITableViewRowAnimationFade];
+    if (_actionsGroupIndex != -1)
+        [self.gpxTableView deleteSections:[NSIndexSet indexSetWithIndex:_actionsGroupIndex] withRowAnimation:UITableViewRowAnimationFade];
     [self.gpxTableView reloadData];
     [self updateHeaderLabels];
     [self updateButtons];
@@ -945,7 +947,8 @@ static UIViewController *parentController;
     [self.gpxTableView setEditing:NO animated:YES];
     [_selectedItems removeAllObjects];
     [_selectedIndexPaths removeAllObjects];
-    [self.gpxTableView insertSections:[NSIndexSet indexSetWithIndex:_actionsGroupIndex] withRowAnimation:UITableViewRowAnimationFade];
+    if (_actionsGroupIndex != -1)
+        [self.gpxTableView insertSections:[NSIndexSet indexSetWithIndex:_actionsGroupIndex] withRowAnimation:UITableViewRowAnimationFade];
     [self updateHeaderLabels];
     [self updateButtons];
     [self updateRecButtonsAnimated];
@@ -1199,7 +1202,7 @@ static UIViewController *parentController;
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _editActive ? _data.count - 1 : _data.count;
+    return _editActive && _actionsGroupIndex != -1 ? _actionsGroupIndex : _data.count;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section

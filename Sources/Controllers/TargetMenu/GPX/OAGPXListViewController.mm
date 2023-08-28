@@ -856,7 +856,7 @@ static UIViewController *parentController;
         actionsGroup.groupItems = [NSMutableArray arrayWithArray:self.menuItems];
         
         [tableData addObject:actionsGroup];
-        _actionsGroupIndex = [tableData indexOfObject:actionsGroup];
+        _actionsGroupIndex = tableData.count - 1;
     }
     _data = [NSMutableArray arrayWithArray:tableData];
 }

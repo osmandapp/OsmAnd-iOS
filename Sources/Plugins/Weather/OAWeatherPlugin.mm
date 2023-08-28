@@ -81,25 +81,35 @@
 {
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
 
-    _weatherTempControl = [self createMapWidgetForParams:OAWidgetType.weatherTemperatureWidget band:WEATHER_BAND_TEMPERATURE];
+    _weatherTempControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherTemperatureWidget customId:nil];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherTempControl]];
-    
-    _weatherPressureControl = [self createMapWidgetForParams:OAWidgetType.weatherAirPressureWidget band:WEATHER_BAND_PRESSURE];
+
+    _weatherPressureControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherAirPressureWidget customId:nil];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherPressureControl]];
-    
-    _weatherWindSpeedControl = [self createMapWidgetForParams:OAWidgetType.weatherWindWidget band:WEATHER_BAND_WIND_SPEED];
+
+    _weatherWindSpeedControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherWindWidget customId:nil];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherWindSpeedControl]];
-    
-    _weatherCloudControl = [self createMapWidgetForParams:OAWidgetType.weatherCloudsWidget band:WEATHER_BAND_CLOUD];
+
+    _weatherCloudControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherCloudsWidget customId:nil];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherCloudControl]];
-    
-    _weatherPrecipControl = [self createMapWidgetForParams:OAWidgetType.weatherPrecipitationWidget band:WEATHER_BAND_PRECIPITATION];
+
+    _weatherPrecipControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherPrecipitationWidget customId:nil];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherPrecipControl]];
 }
 
-- (OAWeatherWidget *) createMapWidgetForParams:(OAWidgetType *)widgetType band:(EOAWeatherBand)band
+- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(NSString *)customId
 {
-    return [[OAWeatherWidget alloc] initWithType:widgetType band:band];
+    if (widgetType == OAWidgetType.weatherTemperatureWidget)
+        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_TEMPERATURE];
+    else if (widgetType == OAWidgetType.weatherAirPressureWidget)
+        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_PRESSURE];
+    else if (widgetType == OAWidgetType.weatherWindWidget)
+        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_WIND_SPEED];
+    else if (widgetType == OAWidgetType.weatherCloudsWidget)
+        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_CLOUD];
+    else if (widgetType == OAWidgetType.weatherPrecipitationWidget)
+        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_PRECIPITATION];
+    return nil;
 }
 
 - (void) updateLayers

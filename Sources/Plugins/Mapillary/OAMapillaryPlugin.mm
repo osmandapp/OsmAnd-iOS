@@ -103,8 +103,15 @@
 - (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
 {
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
-    OABaseWidgetView *widget = [[OAMapillaryWidget alloc] init];
+    OABaseWidgetView *widget = [self createMapWidgetForParams:OAWidgetType.mapillary customId:nil];
     [delegate addWidget:[creator createWidgetInfoWithWidget:widget]];
+}
+
+- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(NSString *)customId
+{
+    if (widgetType == OAWidgetType.mapillary)
+        return [[OAMapillaryWidget alloc] init];
+    return nil;
 }
 
 - (BOOL) isVisible

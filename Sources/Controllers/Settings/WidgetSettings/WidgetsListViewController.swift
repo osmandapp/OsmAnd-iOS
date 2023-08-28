@@ -13,12 +13,18 @@ import SafariServices
 @objcMembers
 class WidgetsListViewController: BaseSegmentedControlViewController {
 
+    static let kWidgetAddedNotification = "onWidgetAdded"
+
     private let kPageKey = "page_"
     private let kNoWidgetsKey = "noWidgets"
     private let kWidgetsInfoKey = "widget_info"
     private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled)
+    
 
     let panels = WidgetsPanel.values
+
+    private var widgetsToDelete: [MapWidgetInfo] = []
+    private var widgetsToAdd: [MapWidgetInfo] = []
 
     private var widgetPanel: WidgetsPanel! {
         didSet {
@@ -55,8 +61,15 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
         super.init(coder: coder)
     }
 
-    override func registerObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(onWidgetStateChanged), name: NSNotification.Name(kWidgetVisibilityChangedMotification), object: nil)
+    override func registerNotifications() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(onWidgetStateChanged),
+                                               name: NSNotification.Name(kWidgetVisibilityChangedMotification),
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(onWidgetAdded(notification:)),
+                                               name: NSNotification.Name(Self.kWidgetAddedNotification),
+                                               object: nil)
     }
 
     //MARK: - Base setup UI
@@ -75,7 +88,7 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
         return segmentedControl
     }
 
-    func segmentedControlValueChanged(_ control: UISegmentedControl) {
+    @objc private func segmentedControlValueChanged(_ control: UISegmentedControl) {
         widgetPanel = panels[control.selectedSegmentIndex]
     }
 
@@ -83,6 +96,8 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
 
     override func onLeftNavbarButtonPressed() {
         if editMode {
+            widgetsToDelete.removeAll()
+            widgetsToAdd.removeAll()
             editMode = false
             return
         }
@@ -91,6 +106,18 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
 
     override func onRightNavbarButtonPressed() {
         if editMode {
+            if !widgetsToDelete.isEmpty {
+                for widget in widgetsToDelete {
+                    deleteWidget(widget)
+                }
+                widgetsToDelete.removeAll()
+            }
+            if !widgetsToAdd.isEmpty {
+                for widget in widgetsToAdd {
+                    WidgetUtils.addSelectedWidgets(widgetsIds: [widget.key], panel: widgetPanel, selectedAppMode: selectedAppMode)
+                }
+                widgetsToAdd.removeAll()
+            }
             reorderWidgets()
             editMode = false
         }
@@ -115,8 +142,23 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
         }
     }
 
-    @objc func onWidgetStateChanged() {
-        updateUI(true)
+    @objc private func onWidgetAdded(notification: NSNotification) {
+        let widget = (notification.object as? MapWidgetInfo) ?? nil
+        if widget != nil {
+            if editMode {
+                widgetsToAdd.append(widget!)
+                updateUI(true)
+            } else {
+                WidgetUtils.addSelectedWidgets(widgetsIds: [widget!.key], panel: widgetPanel, selectedAppMode: selectedAppMode)
+                reorderWidgets()
+            }
+        }
+    }
+
+    @objc private func onWidgetStateChanged() {
+        if !editMode {
+            updateUI(true)
+        }
     }
 
     @objc func onButtonClicked(sender: UIButton) {
@@ -129,7 +171,7 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
 
     // MARK: Additions
 
-    func reorderWidgets() {
+    private func reorderWidgets() {
         var arr = [MapWidgetInfo]()
         var orders = [[String]]()
         var currPage = [String]()
@@ -309,7 +351,11 @@ extension WidgetsListViewController {
             else if let widgetInfo = item.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo {
                 tableData.removeRow(at: indexPath)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
-                deleteWidget(widgetInfo)
+                if !editMode {
+                    deleteWidget(widgetInfo)
+                } else {
+                    widgetsToDelete.append(widgetInfo)
+                }
             }
         }
     }
@@ -327,7 +373,7 @@ extension WidgetsListViewController {
         return proposedDestinationIndexPath
     }
 
-    func updateEnabledWidgets() {
+    private func updateEnabledWidgets() {
         let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Self.enabledWidgetsFilter, panels: [widgetPanel])!
         let noEnabledWidgets = enabledWidgets.count == 0
         if noEnabledWidgets && !editMode {
@@ -349,17 +395,32 @@ extension WidgetsListViewController {
             row.iconTint = Int(color_tint_gray)
             row.setObj(localizedString("add_widget"), forKey: "buttonTitle")
         } else {
+            var lastSection: OATableSectionData?
             if (widgetPanel.isPagingAllowed()) {
                 let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: selectedAppMode, panel: widgetPanel, filterModes: Self.enabledWidgetsFilter)!
                 for (i, obj) in pagedWidgets.enumerated() {
                     let section = tableData.createNewSection()
                     createWidgetItems(obj, section, i + 1)
+                    if i == pagedWidgets.count - 1 {
+                        lastSection = section
+                    }
                 }
             } else {
                 let section = tableData.createNewSection()
                 let widgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Self.enabledWidgetsFilter, panels: [widgetPanel])
                 if let widgets {
                     createWidgetItems(widgets, section)
+                }
+                lastSection = section
+            }
+            if !widgetsToAdd.isEmpty {
+                if lastSection == nil {
+                    lastSection = tableData.createNewSection()
+                    createWidgetItems(NSOrderedSet(array: widgetsToAdd), lastSection!)
+                } else {
+                    for widget in widgetsToAdd {
+                        createWidgetItem(widget, lastSection!)
+                    }
                 }
             }
         }
@@ -370,15 +431,20 @@ extension WidgetsListViewController {
         row.key = kPageKey + String(page)
         row.title = String(format:localizedString("shared_string_page_number"), page)
         row.cellType = OASimpleTableViewCell.getIdentifier()
-        for widget in obj {
-            guard let widget = widget as? MapWidgetInfo else { continue }
-            let row = section.createNewRow()
-            row.setObj(widget, forKey: kWidgetsInfoKey)
-            row.iconName = widget.widget.widgetType?.getIconName(OAAppSettings.sharedManager().nightMode)
-            row.title = widget.getTitle()
-            row.descr = widget.getMessage()
-            row.cellType = OASimpleTableViewCell.getIdentifier()
+
+        let sortedWidgets = (obj.array as! [MapWidgetInfo]).sorted { $0.priority < $1.priority }
+        for widget in sortedWidgets {
+            createWidgetItem(widget, section)
         }
+    }
+
+    private func createWidgetItem(_ widget: MapWidgetInfo, _ section: OATableSectionData) {
+        let row = section.createNewRow()
+        row.setObj(widget, forKey: kWidgetsInfoKey)
+        row.iconName = widget.widget.widgetType?.getIconName(OAAppSettings.sharedManager().nightMode)
+        row.title = widget.getTitle()
+        row.descr = widget.getMessage()
+        row.cellType = OASimpleTableViewCell.getIdentifier()
     }
 
     private func deleteWidget(_ widgetInfo: MapWidgetInfo) {

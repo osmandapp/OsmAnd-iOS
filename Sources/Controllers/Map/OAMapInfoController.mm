@@ -327,7 +327,8 @@
     if (hasRightWidgets)
     {
         CGSize rightSize = [_rightPanelController calculateContentSize];
-        _mapHudViewController.rightWidgetsViewHeightConstraint.constant = rightSize.height + 26;
+        CGFloat pageControlHeight = _rightPanelController.pageControl.isHidden ? 0 : 26;
+        _mapHudViewController.rightWidgetsViewHeightConstraint.constant = rightSize.height + pageControlHeight;
         _mapHudViewController.rightWidgetsViewWidthConstraint.constant = rightSize.width;
     }
     else

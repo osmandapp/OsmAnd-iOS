@@ -21,6 +21,7 @@ static OAFeature * CARPLAY;
 static OAFeature * COMBINED_WIKI;
 static OAFeature * WIKIPEDIA;
 static OAFeature * WIKIVOYAGE;
+static OAFeature * RELIEF_3D;
 static OAFeature * TERRAIN;
 static OAFeature * NAUTICAL;
 static OAFeature * WEATHER;
@@ -69,6 +70,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return OALocalizedString(@"wikipedia_offline");
         case EOAFeatureWikivoyage:
             return OALocalizedString(@"wikivoyage_offline");
+        case EOAFeatureRelief3D:
+            return OALocalizedString(@"shared_string_relief_3d");
         case EOAFeatureTerrain:
             return OALocalizedString(@"contour_lines_hillshade_maps");
         case EOAFeatureNautical:
@@ -131,6 +134,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return OALocalizedString(@"purchases_feature_desc_wikipedia");
         case EOAFeatureWikivoyage:
             return OALocalizedString(@"purchases_feature_desc_wikivoyage");
+        case EOAFeatureRelief3D:
+            return OALocalizedString(@"purchases_feature_relief_3d_description");
         case EOAFeatureTerrain:
             return OALocalizedString(@"purchases_feature_desc_terrain");
         case EOAFeatureNautical:
@@ -174,6 +179,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return [UIImage imageNamed:@"ic_custom_wikipedia_download_colored"];
         case EOAFeatureWikivoyage:
             return [UIImage imageNamed:@"ic_custom_backpack_colored_day"];
+        case EOAFeatureRelief3D:
+            return [UIImage imageNamed:@"ic_custom_3d_relief_colored_day"];
         case EOAFeatureTerrain:
             return [UIImage imageNamed:@"ic_custom_contour_lines_colored"];
         case EOAFeatureNautical:
@@ -217,6 +224,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return [UIImage imageNamed:@"ic_custom_wikipedia_download_colored_big"];
         case EOAFeatureWikivoyage:
             return [UIImage imageNamed:@"ic_custom_backpack_colored_day_big"];
+        case EOAFeatureRelief3D:
+            return [UIImage imageNamed:@"ic_custom_3d_relief_colored_day_big"];
         case EOAFeatureTerrain:
             return [UIImage imageNamed:@"ic_custom_contour_lines_colored_big"];
         case EOAFeatureNautical:
@@ -308,6 +317,13 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
     return WIKIVOYAGE;
 }
 
++ (OAFeature *)RELIEF_3D
+{
+    if (!RELIEF_3D)
+        RELIEF_3D = [[OAFeature alloc] initWithFeature:EOAFeatureRelief3D];
+    return RELIEF_3D;
+}
+
 + (OAFeature *)TERRAIN
 {
     if (!TERRAIN)
@@ -339,6 +355,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
                 OAFeature.WEATHER,
                 OAFeature.HOURLY_MAP_UPDATES,
                 OAFeature.CROSS_BUY,
+                OAFeature.RELIEF_3D,
                 OAFeature.MONTHLY_MAP_UPDATES,
                 OAFeature.UNLIMITED_MAP_DOWNLOADS,
                 OAFeature.CARPLAY,
@@ -437,6 +454,8 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
             return OAFeature.WIKIPEDIA;
         case EOAFeatureWikivoyage:
             return OAFeature.WIKIVOYAGE;
+        case EOAFeatureRelief3D:
+            return OAFeature.RELIEF_3D;
         case EOAFeatureTerrain:
             return OAFeature.TERRAIN;
         case EOAFeatureNautical:

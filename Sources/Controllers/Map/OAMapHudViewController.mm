@@ -1266,24 +1266,28 @@
     void (^mainBlock)(void) = ^{
 
         _bottomBarView.alpha = visible && isBottomPanelVisible ? 1.0 : 0.0;
-        _optionsMenuButton.alpha = visible ? 1. : 0.;
-        _zoomButtonsView.alpha = isToolbarVisible ? isAllowToolbarsVisible : (isZoomMapModeVisible && !isAllHidden) ? 1. : 0.;
-        _mapModeButton.alpha = isToolbarVisible ? isAllowToolbarsVisible : (isZoomMapModeVisible && !isAllHidden) ? 1. : 0.;
-        _driveModeButton.alpha = visible ? 1. : 0.;
+        BOOL optionsMenuButtonVisible = visible;
+        _optionsMenuButton.alpha = optionsMenuButtonVisible ? 1. : 0.;
+        BOOL zoomButtonsVisible = isToolbarVisible ? isAllowToolbarsVisible : (isZoomMapModeVisible && !isAllHidden);
+        _zoomButtonsView.alpha = zoomButtonsVisible ? 1. : 0.;
+        BOOL mapModeButtonVisible = isToolbarVisible ? isAllowToolbarsVisible : (isZoomMapModeVisible && !isAllHidden);
+        _mapModeButton.alpha = mapModeButtonVisible ? 1. : 0.;
+        BOOL driveModeButtonVisible = visible;
+        _driveModeButton.alpha = driveModeButtonVisible ? 1. : 0.;
         _rulerLabel.alpha = (self.contextMenuMode && !isScrollableHudVisible) || isAllHidden || isDashboardVisible || [[OADestinationCardsViewController sharedInstance] isVisible] ? 0. : 1.;
 
         if (self.mapInfoController.bottomPanelController)
             self.mapInfoController.bottomPanelController.view.alpha = visible && isBottomPanelVisible && (!isToolbarVisible || isAllowToolbarsVisible) ? 1. : 0.;
         [self updateBottomContolMarginsForHeight];
 
-        CGFloat offsetValue = DeviceScreenWidth;
-        if (_optionsMenuButton.alpha == 0.)
+        CGFloat offsetValue = 50;
+        if (!optionsMenuButtonVisible)
             [self addOffsetToView:_optionsMenuButton x:-offsetValue y:0.];
-        if (_driveModeButton.alpha == 0.)
+        if (!driveModeButtonVisible)
             [self addOffsetToView:_driveModeButton x:-offsetValue y:0.];
-        if (_mapModeButton.alpha == 0.)
+        if (!mapModeButtonVisible)
             [self addOffsetToView:_mapModeButton x:offsetValue y:0.];
-        if (_zoomButtonsView.alpha == 0.)
+        if (!zoomButtonsVisible)
             [self addOffsetToView:_zoomButtonsView x:offsetValue y:0.];
 
     };

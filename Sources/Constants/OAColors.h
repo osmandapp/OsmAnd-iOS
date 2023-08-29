@@ -244,6 +244,6 @@
 #define color_control_day 0xE5E4E7
 #define color_control_night 0x323036
 
-
+#define color_extra_text_gray 0x7D738C
 
 #endif /* OAColors_h */

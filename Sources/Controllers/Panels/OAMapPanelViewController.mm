@@ -421,8 +421,9 @@ typedef enum
         [_scrollableHudViewController.view removeFromSuperview];
         [_scrollableHudViewController removeFromParentViewController];
         _scrollableHudViewController = nil;
-        [self resetActiveTargetMenu];
     }
+    [self resetActiveTargetMenu];
+    [self restoreFromContextMenuMode];
     [_hudViewController updateDependentButtonsVisibility];
 }
 
@@ -1368,9 +1369,6 @@ typedef enum
     
     [self applyTargetPoint:targetPoint];
     [_targetMenuView setTargetPoint:targetPoint];
-
-    _activeTargetType = targetPoint.type;
-    _targetMenuView.activeTargetType = _activeTargetType;
 
     [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
         

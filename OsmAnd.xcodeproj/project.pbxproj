@@ -3574,6 +3574,7 @@
 		FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */; };
 		FA4768B52A67B86400D533E8 /* FreeBackupBanner.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */; };
 		FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */; };
+		FA5A21A82A9E17DB00319695 /* UIPageViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */; };
 		FA740D422A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA740D412A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib */; };
 		FA740D452A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */; };
 /* End PBXBuildFile section */
@@ -8291,6 +8292,7 @@
 		FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBanner.swift; sourceTree = "<group>"; };
 		FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FreeBackupBanner.xib; sourceTree = "<group>"; };
 		FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
+		FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageViewController+Extension.swift"; sourceTree = "<group>"; };
 		FA740D412A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CloudIntroductionButtonsView.xib; sourceTree = "<group>"; };
 		FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudIntroductionButtonsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -14336,6 +14338,7 @@
 			children = (
 				DAABE4ED2A1657AF00569F71 /* Color+INT.swift */,
 				FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */,
+				FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */,
 			);
 			path = SwiftExtensions;
 			sourceTree = "<group>";
@@ -17833,6 +17836,7 @@
 				DA8DC3A32A0E4EBB006C116B /* OABearingWidget.m in Sources */,
 				DA5A836426C563A800F274C7 /* OACompoundViewController.m in Sources */,
 				46F0746F294C8F3400E641E9 /* OAEmissionHelper.mm in Sources */,
+				FA5A21A82A9E17DB00319695 /* UIPageViewController+Extension.swift in Sources */,
 				DA5A83F626C563A800F274C7 /* OASelectSubcategoryViewController.mm in Sources */,
 				DA5A842A26C563A800F274C7 /* OAImpassableRoadSelectionViewController.mm in Sources */,
 				DA238BF92A1C9A04006A1E0E /* AppModeSelectionViewController.swift in Sources */,

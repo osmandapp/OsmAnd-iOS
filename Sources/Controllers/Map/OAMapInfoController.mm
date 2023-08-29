@@ -104,7 +104,11 @@
         [mapHudViewController.leftWidgetsView addSubview:_leftPanelController.view];
         [mapHudViewController.bottomWidgetsView addSubview:_bottomPanelController.view];
         [mapHudViewController.rightWidgetsView addSubview:_rightPanelController.view];
-        [mapHudViewController.rightWidgetsView.layer addWidgetLayerDecoratorWithMask: kCALayerMinXMinYCorner | kCALayerMinXMaxYCorner];
+        
+        [mapHudViewController.topWidgetsView.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner | kCALayerMaxXMaxYCorner];
+        [mapHudViewController.bottomWidgetsView.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner];
+        [mapHudViewController.rightWidgetsView.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner];
+        [mapHudViewController.leftWidgetsView.layer addWidgetLayerDecoratorWithMask:kCALayerMaxXMaxYCorner];
 
         _topPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
         _leftPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
@@ -128,10 +132,10 @@
             [_bottomPanelController.view.bottomAnchor constraintEqualToAnchor:mapHudViewController.bottomWidgetsView.bottomAnchor constant:0.],
             [_bottomPanelController.view.rightAnchor constraintEqualToAnchor:mapHudViewController.bottomWidgetsView.rightAnchor constant:0.],
 
-            [_rightPanelController.view.topAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.topAnchor constant:0.],
-            [_rightPanelController.view.leftAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.leftAnchor constant:0.],
-            [_rightPanelController.view.bottomAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.bottomAnchor constant:0.],
-            [_rightPanelController.view.rightAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.rightAnchor constant:0.]
+            [_rightPanelController.view.topAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.topAnchor constant:0],
+            [_rightPanelController.view.leftAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.leftAnchor constant:0],
+            [_rightPanelController.view.bottomAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.bottomAnchor constant:0],
+            [_rightPanelController.view.rightAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.rightAnchor constant:0]
 
         ]];
 
@@ -327,7 +331,7 @@
     if (hasRightWidgets)
     {
         CGSize rightSize = [_rightPanelController calculateContentSize];
-        CGFloat pageControlHeight = _rightPanelController.pageControl.isHidden ? 0 : 26;
+        CGFloat pageControlHeight = _rightPanelController.pages.count > 1 ? 16 : 0;
         _mapHudViewController.rightWidgetsViewHeightConstraint.constant = rightSize.height + pageControlHeight;
         _mapHudViewController.rightWidgetsViewWidthConstraint.constant = rightSize.width;
     }

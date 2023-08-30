@@ -15,7 +15,5 @@ extension CALayer {
         masksToBounds = true
         borderColor =  UIColor.lightGray.cgColor
         maskedCorners = mask
-        shouldRasterize = true
-        rasterizationScale = UIScreen.main.scale
     }
 }

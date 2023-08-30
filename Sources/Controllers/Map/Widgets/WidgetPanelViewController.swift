@@ -292,6 +292,7 @@ extension WidgetPanelViewController: UIPageViewControllerDelegate {
 }
 
 // MARK: - UIPageViewControllerDataSource
+
 extension WidgetPanelViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let vcIndex = pages.firstIndex(of: viewController ) else { return nil }

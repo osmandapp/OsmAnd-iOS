@@ -200,22 +200,6 @@
             @"key": @"show_borders_of_downloaded_maps"
     }];
 
-    BOOL useDepthContours = [_iapHelper.nautical isActive] && ([OAIAPHelper isPaidVersion] || [OAIAPHelper isDepthContoursPurchased]);
-    if (useDepthContours)
-    {
-        OAMapStyleParameter *nauticalDepthControursParameter = [_styleSettings getParameter:NAUTICAL_DEPTH_CONTOURS];
-        if (nauticalDepthControursParameter)
-        {
-            [showSectionData addObject:@{
-                @"name": OALocalizedString(@"nautical_depth"),
-                @"image": @"ic_custom_nautical_depth_colored_day",
-                @"type": [OAValueTableViewCell getCellIdentifier],
-                @"key": @"nautical_depth",
-                @"value": OALocalizedString([nauticalDepthControursParameter.value isEqualToString:@"true"] ? @"shared_string_on" : @"shared_string_off")
-            }];
-        }
-    }
-
     [data addObject:@{
             @"group_name": OALocalizedString(@"shared_string_show_on_map"),
             @"cells": showSectionData
@@ -461,34 +445,56 @@
             }
         }
 
-        if (hasSRTM && !_iapHelper.srtm.disabled)
-        {
-            [mapStyleSectionData addObject:@{
-                    @"name": OALocalizedString(@"srtm_plugin_name"),
-                    @"image": @"ic_custom_contour_lines",
-                    @"has_options": @YES,
-                    @"type": [OASwitchTableViewCell getCellIdentifier],
-                    @"key": @"contour_lines_layer"
-            }];
-        }
-
         [data addObject:@{
                 @"group_name": OALocalizedString(@"map_widget_renderer"),
                 @"cells": mapStyleSectionData
         }];
     }
-
-    NSMutableArray *overlayUnderlaySectionData = [NSMutableArray array];
+    
+    NSMutableArray *topographySectionData = [NSMutableArray array];
+    if (hasSRTM && !_iapHelper.srtm.disabled)
+    {
+        [topographySectionData addObject:@{
+                @"name": OALocalizedString(@"srtm_plugin_name"),
+                @"image": @"ic_custom_contour_lines",
+                @"has_options": @YES,
+                @"type": [OASwitchTableViewCell getCellIdentifier],
+                @"key": @"contour_lines_layer"
+        }];
+    }
     if (!hasSRTM || !_iapHelper.srtm.disabled)
     {
-        [overlayUnderlaySectionData addObject:@{
+        [topographySectionData addObject:@{
                 @"name": OALocalizedString(@"shared_string_terrain"),
-                @"image": hasSRTM ? @"ic_custom_hillshade" : @"ic_custom_contour_lines_colored",
+                @"image": hasSRTM ? @"ic_custom_terrain" : @"ic_custom_contour_lines_colored",
                 hasSRTM ? @"has_options" : @"desc": hasSRTM ? @YES : OALocalizedString(@"contour_lines_hillshades_slope"),
                 @"type": hasSRTM ? [OASwitchTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
                 @"key": @"terrain_layer"
         }];
     }
+    BOOL useDepthContours = [_iapHelper.nautical isActive] && ([OAIAPHelper isPaidVersion] || [OAIAPHelper isDepthContoursPurchased]);
+    if (useDepthContours)
+    {
+        OAMapStyleParameter *nauticalDepthControursParameter = [_styleSettings getParameter:NAUTICAL_DEPTH_CONTOURS];
+        if (nauticalDepthControursParameter)
+        {
+            [topographySectionData addObject:@{
+                @"name": OALocalizedString(@"nautical_depth"),
+                @"image": @"ic_custom_nautical_depth",
+                @"has_options": @YES,
+                @"type": [OASwitchTableViewCell getCellIdentifier],
+                @"key": @"nautical_depth"
+            }];
+        }
+    }
+
+    [data addObject:@{
+            @"group_name": OALocalizedString(@"map_settings_topography"),
+            @"cells": topographySectionData
+    }];
+
+    NSMutableArray *overlayUnderlaySectionData = [NSMutableArray array];
+    
     [overlayUnderlaySectionData addObject:@{
             @"name": OALocalizedString(@"map_settings_over"),
             @"image": @"ic_custom_overlay_map",
@@ -997,7 +1003,7 @@
         {
             cell.selectionStyle = hasOptions ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + (isLastGroupIndex ? kPaddingOnSideOfContent : kPaddingToLeftOfContentWithIcon), 0., 0.);
-            [cell dividerVisibility:hasOptions];
+            [cell dividerVisibility:![item[@"key"] isEqualToString:@"nautical_depth"] ? hasOptions : NO];
             cell.titleLabel.text = item[@"name"];
 
             [cell leftIconVisibility:item[@"image"] != nil || item[@"has_empty_icon"]];
@@ -1208,6 +1214,8 @@
         [self underlayChanged:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"weather_layer"])
         [self weatherChanged:switchView.isOn];
+    else if ([item[@"key"] isEqualToString:@"nautical_depth"])
+        [self nauticalDepthChanged:switchView.isOn];
 
     [tblView beginUpdates];
     [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -1273,6 +1281,16 @@
     {
         _app.data.lastTerrainType = _app.data.terrainType;
         _app.data.terrainType = EOATerrainTypeDisabled;
+    }
+}
+
+- (void)nauticalDepthChanged:(BOOL)isOn
+{
+    OAMapStyleParameter *parameter = [_styleSettings getParameter:NAUTICAL_DEPTH_CONTOURS];
+    if (parameter)
+    {
+        parameter.value = isOn ? @"true" : @"false";
+        [_styleSettings save:parameter];
     }
 }
 

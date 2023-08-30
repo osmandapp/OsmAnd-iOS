@@ -396,7 +396,7 @@ static BOOL dataInvalidated = NO;
             if (item.resource && [item isFree])
                 return [self offerDownloadAndInstallOf:item];
             
-            if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion) && ![_iapHelper.srtm isActive])
+            if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion || item.resourceType == OsmAndResourceType::HeightmapRegionLegacy || item.resourceType == OsmAndResourceType::GeoTiffRegion) && ![_iapHelper.srtm isActive])
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
             else if (item.resourceType == OsmAndResourceType::WikiMapRegion && ![_iapHelper.wiki isActive])
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];

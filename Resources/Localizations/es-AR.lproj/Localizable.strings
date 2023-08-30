@@ -1588,7 +1588,7 @@
 "some_articles_may_not_available_in_lang" = "Es posible que algunos artículos de Wikipedia no estén disponibles en tu idioma.";
 "available_languages" = "Idiomas disponibles";
 "preferred_languages" = "Idiomas preferidos";
-"srtm_plugin_name" = "Curvas de nivel";
+"srtm_plugin_name" = "Topografía";
 "product_desc_srtm" = "Evaluación visual de la forma de la superficie terrestre";
 "srtm_plugin_description" = "La información topográfica, como las curvas de nivel, los sombreados y las pendientes, ayudan a evaluar visualmente la disposición del terreno y el relieve, la navegabilidad y más. La información topográfica en un mapa puede representarse mediante el sombreado de la pendiente, las curvas de nivel y/o el color de la inclinación.\n\nLos datos subyacentes provienen de SRTM y ASTER.\n\nVéase - http://osmand.net/docs/user/plugins/contour-lines .";
 "wikivoyage_travel_guide" = "Guías turísticas";
@@ -1640,9 +1640,9 @@
 "from_location" = "desde lejos";
 "show_alt_in_drive" = "Ver altitud en modo conducción";
 "shared_string_get" = "Obtener";
-"srtm_plugin_disabled" = "Curvas de nivel desactivadas";
+"srtm_plugin_disabled" = "Topografía desactivada";
 "prch_wiki_info" = "El complemento de Wikipedia activa la información de Wikipedia para los mapas que tiene descargados o comprados con un límite gratuito.";
-"prch_srtm_info" = "El complemento de Curvas de nivel activa las curvas de nivel para los mapas que tiene comprados o descargados con un límite gratuito.";
+"prch_srtm_info" = "El complemento de la topografía, activa las curvas de nivel para los mapas comprados o descargados con un límite gratuito.";
 "shared_string_open" = "Abrir";
 "time_closed" = "Cerrado";
 "time_will_open" = "Abrirá a las";
@@ -1698,8 +1698,8 @@
 "plugin_popup_wiki_desc" = "Para usar el complemento de Wikipedia, descarga primero los datos Wikipedia de una región";
 "plugin_popup_wiki_ask" = "Para descargar los datos de Wikipedia, necesita activar el complemento: <b>Wikipedia</b>";
 "plugin_popup_srtm_title" = "Descargar curvas de nivel";
-"plugin_popup_srtm_desc" = "Para usar la función de Curvas de nivel, descargue primero los datos de Curvas de nivel de una región";
-"plugin_popup_srtm_ask" = "Para descargar las Curvas de nivel, necesita activar el complemento: <b>Curvas de nivel</b>";
+"plugin_popup_srtm_desc" = "Para usar la función de Topografía, descarga primero los datos de Curvas de nivel de una región";
+"plugin_popup_srtm_ask" = "Para descargar las Curvas de nivel, necesitas activar el complemento: <b>Topografía</b>";
 "plugin_popup_nautical_title" = "Descargar mapas náuticos";
 "plugin_popup_nautical_desc" = "Primero descargue los mapas náuticos.\nLuego vaya a los <b>Ajustes del mapa</b> > <b>Tipo de mapa</b> y active el estilo <b>Náutico</b>";
 "plugin_popup_osm_editing_title" = "Activar la edición de OpenStreetMap";

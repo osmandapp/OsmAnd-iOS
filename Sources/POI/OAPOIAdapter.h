@@ -26,6 +26,7 @@
 - (NSString *) getRouteId;
 - (NSString *) getDescription:(NSString *)lang;
 
+- (NSString *)getName:(NSString *)lang transliterate:(BOOL)transliterate;
 - (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag;
 - (NSDictionary<NSString *, NSString *> *)getNamesMap:(BOOL)includeEn;
 - (NSString *)getStrictTagContent:(NSString *)tag lang:(NSString *)lang;

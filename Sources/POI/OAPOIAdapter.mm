@@ -115,6 +115,12 @@
     return obj ? [obj getRouteId] : nil;
 }
 
+- (NSString *)getName:(NSString *)lang transliterate:(BOOL)transliterate
+{
+    OAPOI *obj = [self getObject];
+    return obj ? [obj getName:lang transliterate:transliterate] : nil;
+}
+
 - (NSArray<NSString *> *)getNames:(NSString *)tag defTag:(NSString *)defTag
 {
     OAPOI *obj = [self getObject];

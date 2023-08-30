@@ -11,6 +11,8 @@
 #import "OAPOIHelper.h"
 #import "OAGPXDocumentPrimitives.h"
 
+#include <OsmAndCore/ICU.h>
+
 #define TYPE @"type"
 #define SUBTYPE @"subtype"
 #define POI_NAME @"name"
@@ -144,6 +146,26 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
             [l addObject:defTag];
     }
     return l;
+}
+
+- (NSString *)getName:(NSString *)lang transliterate:(BOOL)transliterate
+{
+    if (lang != nil && lang.length > 0)
+    {
+        NSString *nm;
+        if ([lang isEqualToString:@"en"])
+        {
+            nm = _localizedNames[@"en"];
+            if (!nm || nm.length == 0)
+                nm = OsmAnd::ICU::transliterateToLatin(QString::fromNSString(_name)).toNSString();
+            return nm;
+        }
+        nm = _localizedNames[lang];
+        if (transliterate)
+            nm = OsmAnd::ICU::transliterateToLatin(QString::fromNSString(nm)).toNSString();
+        return nm;
+    }
+    return _name;
 }
 
 - (NSDictionary<NSString *, NSString *> *)getNamesMap:(BOOL)includeEn

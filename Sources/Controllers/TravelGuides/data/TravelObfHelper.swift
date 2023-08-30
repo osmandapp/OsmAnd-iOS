@@ -294,7 +294,9 @@ class TravelObfHelper : NSObject {
     func sortSearchResults(results: [TravelSearchResult]) -> [TravelSearchResult] {
         var sortedResults = results
         sortedResults.sort { a, b in
-            return a.getArticleTitle() < b.getArticleTitle()
+            let titleA = a.getArticleTitle() ?? ""
+            let titleB = b.getArticleTitle() ?? ""
+            return titleA < titleB
         }
         return sortedResults
     }
@@ -304,13 +306,97 @@ class TravelObfHelper : NSObject {
     }
     
     func getNavigationMap(article: TravelArticle) -> [TravelSearchResult : [TravelSearchResult]] {
-        //TODO: implement
-        return [:]
+        let lang = article.lang
+        let title = article.title
+        if lang == nil || lang!.isEmpty || title == nil || title!.isEmpty {
+            return [:]
+        }
+        
+        var parts = [String]()
+        let aggregatedPartOf = article.aggregatedPartOf
+        if (aggregatedPartOf != nil && !aggregatedPartOf!.isEmpty) {
+            let originalParts = aggregatedPartOf!.split(separator: ",")
+            if (originalParts.count > 1) {
+                parts = [String].init(repeating: "", count: originalParts.count)
+                for i in 0..<originalParts.count {
+                    parts[i] = String(originalParts[originalParts.count - i - 1])
+                }
+            } else {
+                parts[0] = String(originalParts[0])
+            }
+        } else {
+            parts = []
+        }
+        
+        var navMap = [String : [TravelSearchResult]]()
+        var headers = [String]()
+        var headerObjs = [String : TravelSearchResult]()
+        if parts.count > 0 {
+            headers.append(contentsOf: parts)
+            if article.isParentOf != nil && !article.isParentOf!.isEmpty {
+                headers.append(title!)
+            }
+        }
+        
+        for header in headers {
+            
+            let parentArticle = getParentArticleByTitle(title: header, lang: lang!)
+            if parentArticle == nil {
+                continue
+            }
+            navMap[header] = [TravelSearchResult]()
+            let isParentOf = parentArticle!.isParentOf!.split(separator: ";")
+            for childSubsequence in isParentOf {
+                let childTitle = String(childSubsequence)
+                if !childTitle.isEmpty {
+                    let searchResult = TravelSearchResult(routeId: "", articleTitle: childTitle, isPartOf: nil, imageTitle: nil, langs: [lang!])
+                    var resultList = navMap[header]
+                    if resultList == nil {
+                        resultList = []
+                    }
+                    resultList!.append(searchResult)
+                    navMap[header] = resultList
+                    if headers.contains(childTitle) {
+                        headerObjs[childTitle] = searchResult
+                    }
+                }
+            }
+        }
+        
+        var res: [TravelSearchResult : [TravelSearchResult]] = [:]
+        for header in headers {
+            var searchResult = headerObjs[header]
+            var results = navMap[header]
+            if results != nil {
+                results = sortSearchResults(results: results!)
+                let emptyResult = TravelSearchResult(routeId: "", articleTitle: header, isPartOf: nil, imageTitle: nil, langs: nil)
+                searchResult = searchResult != nil ? searchResult : emptyResult
+                res[searchResult!] = results
+            }
+        }
+        
+        return res
     }
     
-    func getParentArticleByTitle(title: String, lang: String) -> TravelArticle {
-        //TODO: implement
-        return TravelArticle()
+    func getParentArticleByTitle(title: String, lang: String) -> TravelArticle? {
+        var article: TravelArticle? = nil
+        var amenities = [OAPOIAdapter]()
+        
+        for reader in getReaders() {
+            OATravelGuidesHelper.searchAmenity(-1, lon: -1, reader: reader, radius: -1, searchFilter: ROUTE_ARTICLE) { amenity in
+                if title == amenity!.getName(lang, transliterate: false) {
+                    amenities.append(amenity!)
+                    return true
+                }
+                return false
+            }
+            
+            if amenities.count > 0 {
+                article = readArticle(file: reader, amenity: amenities[0], lang: lang)
+            }
+        }
+    
+        return article
     }
     
     func getArticleById(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadCallback?) -> TravelArticle? {

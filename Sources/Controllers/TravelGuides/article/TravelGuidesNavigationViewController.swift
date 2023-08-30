@@ -1,24 +1,24 @@
 //
-//  TravelGuidesContentsViewController.swift
+//  TravelGuidesNavigationViewController.swift
 //  OsmAnd Maps
 //
-//  Created by nnngrach on 25.08.2023.
+//  Created by nnngrach on 28.08.2023.
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
 import UIKit
 
-class TravelGuidesContentsViewController : OABaseButtonsViewController {
+class TravelGuidesNavigationViewController : OABaseButtonsViewController {
     
     var article: TravelArticle
     var selectedLang: String
-    var items: TravelContentItem
     var cellOpeningStatuses: [Bool]
+    var navigationMap: [TravelSearchResult : [TravelSearchResult]]
     
     required init?(coder: NSCoder) {
         self.article = TravelArticle()
         self.selectedLang = ""
-        self.items = TravelContentItem(name: "", link: nil)
+        self.navigationMap = [:]
         self.cellOpeningStatuses = []
         super.init(coder: coder)
     }
@@ -26,54 +26,101 @@ class TravelGuidesContentsViewController : OABaseButtonsViewController {
     init(article: TravelArticle, selectedLang: String) {
         self.article = article
         self.selectedLang = selectedLang
-        self.items = TravelJsonParser.parseJsonContents(jsonText: article.contentsJson ?? "")
-        
+        self.navigationMap = [:]
         self.cellOpeningStatuses = []
-        for _ in self.items.subItems {
-            self.cellOpeningStatuses.append(false)
-        }
-        
         super.init()
     }
     
     
     //MARK: Data
     
+    func fetchData() {
+        self.view.addSpinner()
+        DispatchQueue.global(qos: .default).async {
+            self.navigationMap = TravelObfHelper.shared.getNavigationMap(article: self.article)
+            DispatchQueue.main.async {
+                let count = self.navigationMap.count
+                self.cellOpeningStatuses = Array(repeating: false, count: count)
+                self.cellOpeningStatuses[count - 1] = true
+                self.generateData()
+                self.tableView.reloadData()
+                self.view.removeSpinner()
+            }
+        }
+    }
+    
     override func generateData() {
         tableData.clearAllData()
-
-        for i in 0..<items.subItems.count {
+        guard navigationMap.count > 0 else { return }
+        
+        let regionNames = getRegionNames()
+        for i in 0..<regionNames.count {
             
             let section = tableData.createNewSection()
             let opened = cellOpeningStatuses[i]
+            let headerItem = getHeaderItemByTitle(title: regionNames[i])
             
-            let headerItem = items.subItems[i]
             let headerRow = section.createNewRow()
             headerRow.cellType = OASelectionCollapsableCell.getIdentifier()
-            headerRow.title = headerItem.name
+            headerRow.title = headerItem!.articleId.title
             headerRow.iconName = "ic_action_route_first_intermediate"
             headerRow.setObj(true, forKey: "isHeader")
-            if headerItem.subItems.count > 0 {
+            
+            let subItems = navigationMap[headerItem!]!
+            if subItems.count > 0 {
                 let arrowIconName = opened ? "ic_custom_arrow_up" : "ic_custom_arrow_down"
                 headerRow.setObj(arrowIconName, forKey: "rightIconName")
             }
             
-            if opened && headerItem.subItems.count > 0 {
-                for subheaderItem in headerItem.subItems {
+            if opened && subItems.count > 0 {
+                for subheaderItem in subItems {
                     let subheaderRow = section.createNewRow()
                     subheaderRow.cellType = OASelectionCollapsableCell.getIdentifier()
-                    subheaderRow.title = subheaderItem.name
+                    subheaderRow.title = subheaderItem.articleId.title
                     subheaderRow.setObj(false, forKey: "isHeader")
                 }
             }
         }
     }
     
+    func getRegionNames() -> [String] {
+        var names = [String]()
+        if let parts = article.aggregatedPartOf {
+            names = parts
+                .split(separator: ",")
+                .reversed()
+                .map({ substring in
+                    return String(substring)
+                })
+            if navigationMap.count > names.count && article.title != nil {
+                names.append(article.title!)
+            }
+        }
+        return names
+    }
+    
+    func getHeaderItemByTitle(title: String) -> TravelSearchResult? {
+        var headerItem: TravelSearchResult? = nil
+        for item in navigationMap.keys {
+            let navItem = item
+            if navItem.articleId.title == title {
+                headerItem = item
+                break
+            }
+        }
+        return headerItem
+    }
+    
     
     //MARK: Base UI setup
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        fetchData()
+    }
+    
     override func getTitle() -> String! {
-        return localizedString("shared_string_contents")
+        return localizedString("shared_string_navigation")
     }
     
     override func getBottomButtonTitle() -> String! {
@@ -171,3 +218,4 @@ class TravelGuidesContentsViewController : OABaseButtonsViewController {
         tableView.endUpdates()
     }
 }
+

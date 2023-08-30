@@ -626,7 +626,7 @@
 "clear_all_intermediates" = "Tüm başlangıç noktalarını temizle";
 "cancel_navigation" = "Navigasyonu durdur";
 "intermediate_items_sort_by_distance" = "kapıdan kapıya sırala";
-"switch_start_finish" = "Rotayı tersine çevir";
+"switch_start_finish" = "Başlangıç ve hedefi ters çevir";
 "shared_string_options" = "Ayarlar";
 "shared_string_search" = "Arama";
 "shared_string_target_points" = "Varış noktaları";
@@ -753,7 +753,7 @@
 "unit_of_length_descr" = "Mesafeölçüm birimini değiştir.";
 "do_not_show_discount_desc" = "Uygulama indirimlerinin ve özel yerel etkinlik mesajlarının görüntülenmesini engeller.";
 "save_global_track_interval_descr" = "Genel yol kaydı için kayıt aralığını belirtin (haritadaki \'Seyahat kaydetme\' widget\'ı aracılığıyla açıldı).";
-"driving_region_descr" = "Sürüş bölgesini seçin: ABD, Avrupa, İngiltere, Asya ve diğerleri.";
+"driving_region_descr" = "Sürüş bölgesini seçin: ABD, Avrupa, Birleşik Krallık, Asya ve diğerleri.";
 "shared_string_select_avoid_road_on_map" = "Yönlendirme sırasında kaçınılması gereken bir yol seçin";
 "avoid_roads_msg" = "Kaçınılması gereken yolları seçerek alternatif bir rota tetikleyin";
 "will_open_at" = "Açılış saati";
@@ -1690,7 +1690,7 @@
 "routing_profile_ski" = "Kayak";
 "nav_type_brouter" = "BRouter";
 "voice_announces" = "Sesli uyarılar";
-"max_speed" = "En yüksek hız";
+"max_speed" = "Maksimum hız";
 "shared_string_min_speed" = "En düşük hız";
 "default_speed_setting_title" = "Varsayılan hız";
 "units_and_formats" = "Birimler ve biçimler";

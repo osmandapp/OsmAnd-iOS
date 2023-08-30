@@ -10,6 +10,7 @@
 		05028F792A12A12A003FECD0 /* color_slope.txt in Resources */ = {isa = PBXBuildFile; fileRef = 05028F762A12A12A003FECD0 /* color_slope.txt */; };
 		05028F7A2A12A12A003FECD0 /* hillshade_main.txt in Resources */ = {isa = PBXBuildFile; fileRef = 05028F772A12A12A003FECD0 /* hillshade_main.txt */; };
 		05028F7B2A12A12A003FECD0 /* slopes_main.txt in Resources */ = {isa = PBXBuildFile; fileRef = 05028F782A12A12A003FECD0 /* slopes_main.txt */; };
+		0513AA382A9B530A00CFA2A0 /* OADestinationBarWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0513AA372A9B530A00CFA2A0 /* OADestinationBarWidget.mm */; };
 		05541D95299267900014AEF8 /* contourlines.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 05541D94299267900014AEF8 /* contourlines.addon.render.xml */; };
 		0575058E292D254500FEECD4 /* weather.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0575058D292D254500FEECD4 /* weather.addon.render.xml */; };
 		0A0C6EBF26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */; };
@@ -2875,7 +2876,6 @@
 		DA5A846926C563A900F274C7 /* OADiscountToolbarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7F0E26C563A400F274C7 /* OADiscountToolbarViewController.xib */; };
 		DA5A846A26C563A900F274C7 /* OADestination.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F1026C563A400F274C7 /* OADestination.mm */; };
 		DA5A846B26C563A900F274C7 /* OAToolbarViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F1126C563A400F274C7 /* OAToolbarViewController.mm */; };
-		DA5A846C26C563A900F274C7 /* OADestinationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F1226C563A400F274C7 /* OADestinationViewController.mm */; };
 		DA5A846D26C563A900F274C7 /* OASelectedGPXHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F1426C563A400F274C7 /* OASelectedGPXHelper.mm */; };
 		DA5A846E26C563A900F274C7 /* OAWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F1726C563A400F274C7 /* OAWidgetState.m */; };
 		DA5A846F26C563A900F274C7 /* OABearingWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F1926C563A400F274C7 /* OABearingWidgetState.m */; };
@@ -3111,7 +3111,7 @@
 		DA5A856F26C563A900F274C7 /* OAAlarmInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A811E26C563A600F274C7 /* OAAlarmInfo.mm */; };
 		DA5A857026C563A900F274C7 /* OARouteCalculationParams.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A811F26C563A600F274C7 /* OARouteCalculationParams.mm */; };
 		DA5A857326C567B400F274C7 /* OAPluginPopupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A857226C567B400F274C7 /* OAPluginPopupViewController.xib */; };
-		DA5A857526C5680700F274C7 /* OADestinationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A857426C5680700F274C7 /* OADestinationViewController.xib */; };
+		DA5A857526C5680700F274C7 /* OADestinationBarWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A857426C5680700F274C7 /* OADestinationBarWidget.xib */; };
 		DA5A857726C5683900F274C7 /* OAMapHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A857626C5683900F274C7 /* OAMapHudViewController.xib */; };
 		DA5A857D26C568EF00F274C7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DA5A857C26C568EE00F274C7 /* GoogleService-Info.plist */; };
 		DA5A857F26C5692200F274C7 /* article_style.css in Resources */ = {isa = PBXBuildFile; fileRef = DA5A857E26C5692100F274C7 /* article_style.css */; };
@@ -3619,6 +3619,8 @@
 		05028F762A12A12A003FECD0 /* color_slope.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = color_slope.txt; path = ../resources/heightmap/color_slope.txt; sourceTree = "<group>"; };
 		05028F772A12A12A003FECD0 /* hillshade_main.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = hillshade_main.txt; path = ../resources/heightmap/hillshade_main.txt; sourceTree = "<group>"; };
 		05028F782A12A12A003FECD0 /* slopes_main.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = slopes_main.txt; path = ../resources/heightmap/slopes_main.txt; sourceTree = "<group>"; };
+		0513AA362A9B530A00CFA2A0 /* OADestinationBarWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADestinationBarWidget.h; sourceTree = "<group>"; };
+		0513AA372A9B530A00CFA2A0 /* OADestinationBarWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADestinationBarWidget.mm; sourceTree = "<group>"; };
 		05541D94299267900014AEF8 /* contourlines.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = contourlines.addon.render.xml; path = ../resources/rendering_styles/contourlines.addon.render.xml; sourceTree = "<group>"; };
 		0575058D292D254500FEECD4 /* weather.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = weather.addon.render.xml; path = ../resources/rendering_styles/weather.addon.render.xml; sourceTree = "<group>"; };
 		0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAGpxStatBlockCollectionViewCell.xib; sourceTree = "<group>"; };
@@ -7323,7 +7325,6 @@
 		DA5A7F0026C563A400F274C7 /* OAToolbarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAToolbarViewController.xib; sourceTree = "<group>"; };
 		DA5A7F0126C563A400F274C7 /* OAMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapViewController.h; sourceTree = "<group>"; };
 		DA5A7F0226C563A400F274C7 /* OADestination.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADestination.h; sourceTree = "<group>"; };
-		DA5A7F0326C563A400F274C7 /* OADestinationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADestinationViewController.h; sourceTree = "<group>"; };
 		DA5A7F0426C563A400F274C7 /* OAMapViewTrackingUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapViewTrackingUtilities.h; sourceTree = "<group>"; };
 		DA5A7F0526C563A400F274C7 /* OAMapActions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapActions.h; sourceTree = "<group>"; };
 		DA5A7F0626C563A400F274C7 /* OADiscountToolbarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADiscountToolbarViewController.h; sourceTree = "<group>"; };
@@ -7338,7 +7339,6 @@
 		DA5A7F0F26C563A400F274C7 /* OAToolbarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAToolbarViewController.h; sourceTree = "<group>"; };
 		DA5A7F1026C563A400F274C7 /* OADestination.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADestination.mm; sourceTree = "<group>"; };
 		DA5A7F1126C563A400F274C7 /* OAToolbarViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAToolbarViewController.mm; sourceTree = "<group>"; };
-		DA5A7F1226C563A400F274C7 /* OADestinationViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADestinationViewController.mm; sourceTree = "<group>"; };
 		DA5A7F1326C563A400F274C7 /* OAMultiDestinationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMultiDestinationCell.h; sourceTree = "<group>"; };
 		DA5A7F1426C563A400F274C7 /* OASelectedGPXHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASelectedGPXHelper.mm; sourceTree = "<group>"; };
 		DA5A7F1726C563A400F274C7 /* OAWidgetState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAWidgetState.m; sourceTree = "<group>"; };
@@ -7786,7 +7786,7 @@
 		DA5A811F26C563A600F274C7 /* OARouteCalculationParams.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteCalculationParams.mm; sourceTree = "<group>"; };
 		DA5A857126C5643000F274C7 /* OsmAnd Maps-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OsmAnd Maps-Bridging-Header.h"; sourceTree = "<group>"; };
 		DA5A857226C567B400F274C7 /* OAPluginPopupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAPluginPopupViewController.xib; sourceTree = "<group>"; };
-		DA5A857426C5680700F274C7 /* OADestinationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADestinationViewController.xib; sourceTree = "<group>"; };
+		DA5A857426C5680700F274C7 /* OADestinationBarWidget.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADestinationBarWidget.xib; sourceTree = "<group>"; };
 		DA5A857626C5683900F274C7 /* OAMapHudViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAMapHudViewController.xib; sourceTree = "<group>"; };
 		DA5A857C26C568EE00F274C7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Resources/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DA5A857E26C5692100F274C7 /* article_style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; name = article_style.css; path = Resources/article_style.css; sourceTree = "<group>"; };
@@ -13272,9 +13272,7 @@
 				DA5A7ECC26C563A400F274C7 /* OADestinationCell.mm */,
 				DA5A7F0726C563A400F274C7 /* OADestinationsHelper.h */,
 				DA5A7ECB26C563A400F274C7 /* OADestinationsHelper.mm */,
-				DA5A7F0326C563A400F274C7 /* OADestinationViewController.h */,
-				DA5A7F1226C563A400F274C7 /* OADestinationViewController.mm */,
-				DA5A857426C5680700F274C7 /* OADestinationViewController.xib */,
+				DA5A857426C5680700F274C7 /* OADestinationBarWidget.xib */,
 				DA5A7F0626C563A400F274C7 /* OADiscountToolbarViewController.h */,
 				DA5A7EC826C563A400F274C7 /* OADiscountToolbarViewController.mm */,
 				DA5A7F0E26C563A400F274C7 /* OADiscountToolbarViewController.xib */,
@@ -13448,6 +13446,8 @@
 				DA69ED5A2A385B1B001022C7 /* WidgetPanelViewController.swift */,
 				DA69ED5B2A385B1B001022C7 /* OAWidgetPanelViewController.xib */,
 				DA69ED5E2A385DA6001022C7 /* WidgetPageViewController.swift */,
+				0513AA362A9B530A00CFA2A0 /* OADestinationBarWidget.h */,
+				0513AA372A9B530A00CFA2A0 /* OADestinationBarWidget.mm */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -16503,7 +16503,7 @@
 				844499BA1AAF816E00ACA20D /* skimap.render.xml in Resources */,
 				B24745B627F7465D00C18C3F /* ic_custom_air_pressure@3x.png in Resources */,
 				84669642207CD7DF00BA971B /* ic_action_plus@3x.png in Resources */,
-				DA5A857526C5680700F274C7 /* OADestinationViewController.xib in Resources */,
+				DA5A857526C5680700F274C7 /* OADestinationBarWidget.xib in Resources */,
 				46453B1C2835243F001F9A3A /* ic_custom_osmand_maps_plus_bw@3x.png in Resources */,
 				0A0C6EBF26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib in Resources */,
 				DA1341E8243DC5A90039D214 /* map_action_campervan@3x.png in Resources */,
@@ -17675,7 +17675,6 @@
 				DA5A81B826C563A700F274C7 /* OAPOI.mm in Sources */,
 				DA5A814B26C563A700F274C7 /* OABaseCarPlayInterfaceController.mm in Sources */,
 				DA5A84B826C563A900F274C7 /* OAFollowTrackBottomSheetViewController.mm in Sources */,
-				DA5A846C26C563A900F274C7 /* OADestinationViewController.mm in Sources */,
 				DA5A831B26C563A800F274C7 /* OAIconTitleIconRoundCell.m in Sources */,
 				DA5A81F026C563A700F274C7 /* OALocationIcon.m in Sources */,
 				DA5A81B526C563A700F274C7 /* OAPOIHelper.mm in Sources */,
@@ -17815,6 +17814,7 @@
 				DA5A818126C563A700F274C7 /* OATerrainAction.m in Sources */,
 				DA5A842326C563A800F274C7 /* OAGPXWptListViewController.mm in Sources */,
 				DA5A817F26C563A700F274C7 /* OAUnsupportedAction.m in Sources */,
+				0513AA382A9B530A00CFA2A0 /* OADestinationBarWidget.mm in Sources */,
 				DA5A833E26C563A800F274C7 /* OAWaypointCell.m in Sources */,
 				DA5A81DF26C563A700F274C7 /* OAAddress.mm in Sources */,
 				DA5A84FF26C563A900F274C7 /* OAMapRendererView.mm in Sources */,

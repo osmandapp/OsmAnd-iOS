@@ -44,6 +44,7 @@
 #import "OASunriseSunsetWidget.h"
 #import "OASunriseSunsetWidgetState.h"
 #import "OAAverageSpeedComputer.h"
+#import "OADestinationBarWidget.h"
 
 // Plugins
 #import "OAPlugin.h"

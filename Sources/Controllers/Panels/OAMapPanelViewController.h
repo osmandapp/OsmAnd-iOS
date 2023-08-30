@@ -63,10 +63,8 @@
 
 - (BOOL) gpxModeActive;
 
-- (void) destinationsAdded;
 - (void) openDestinationCardsView;
 - (void) hideDestinationCardsView;
-- (void) hideDestinationCardsViewAnimated:(BOOL)animated;
 - (void) openHideDestinationCardsView;
 
 - (void) swapStartAndFinish;
@@ -231,8 +229,6 @@
 - (BOOL) switchToRoutePlanningLayout;
 - (void) startNavigation;
 - (void) stopNavigation;
-
-- (void) refreshToolbar;
 
 - (void) onHandleIncomingURL:(NSString *)ext;
 

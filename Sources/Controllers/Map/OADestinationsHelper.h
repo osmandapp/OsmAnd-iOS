@@ -26,8 +26,11 @@
 
 - (void) addDestination:(OADestination *)destination;
 - (void) removeDestination:(OADestination *)destination;
+- (void) markAsVisited:(OADestination *)destination;
 - (void) moveDestinationOnTop:(OADestination *)destination wasSelected:(BOOL)wasSelected;
 - (void) apply2ndRowAutoSelection;
+- (UIColor *) generateColorForDestination:(OADestination *)destination;
+- (UIColor *) addDestinationWithNewColor:(OADestination *)destination;
 
 - (NSArray *) sortedDestinationsWithoutParking;
 

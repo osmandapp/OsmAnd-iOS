@@ -724,7 +724,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateColors];
         [self updateDependentButtonsVisibility];
-        [_mapPanelViewController refreshToolbar];
     });
 }
 
@@ -927,9 +926,7 @@
     BOOL isToolbarVisible = _toolbarViewController && _toolbarViewController.view.superview;
     if (isToolbarVisible)
     {
-        BOOL isMapMarkerVisibility = [OADestinationsHelper instance].sortedDestinations.count > 0
-        && [_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisibility get];
-        BOOL isAllowToolbarsVisible = isToolbarVisible && ((isMapMarkerVisibility && ![[OADestinationCardsViewController sharedInstance] isVisible]) || [_mapPanelViewController isTopToolbarSearchVisible]);
+        BOOL isAllowToolbarsVisible = isToolbarVisible && [_mapPanelViewController isTopToolbarSearchVisible];
         if (isAllowToolbarsVisible)
             self.topWidgetsViewYConstraint.constant = _toolbarViewController.view.frame.size.height;
         else
@@ -1182,11 +1179,9 @@
         || _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance;
     BOOL isInContextMenuVisible = self.contextMenuMode && !isTargetToHideVisible;
     BOOL isTargetBackButtonVisible = [_mapPanelViewController isTargetBackButtonVisible];
-    BOOL isMapMarkerVisibility = [OADestinationsHelper instance].sortedDestinations.count > 0
-        && [_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisibility get];
     BOOL isToolbarAllowed = !self.contextMenuMode && !isDashboardVisible && !isWeatherToolbarVisible;
     BOOL isToolbarVisible = isToolbarAllowed && _toolbarViewController && _toolbarViewController.view.superview;
-    BOOL isAllowToolbarsVisible = isToolbarVisible && ((isMapMarkerVisibility && ![[OADestinationCardsViewController sharedInstance] isVisible]) || [_mapPanelViewController isTopToolbarSearchVisible]);
+    BOOL isAllowToolbarsVisible = isToolbarVisible && [_mapPanelViewController isTopToolbarSearchVisible];
     BOOL isButtonsVisible = isToolbarVisible ? isAllowToolbarsVisible
         : (isInContextMenuVisible || (!isWeatherToolbarVisible && !isDashboardVisible && !isRouteInfoVisible && !isTargetToHideVisible));
     BOOL isPanelAllowed = isButtonsVisible && !self.contextMenuMode && !isScrollableHudVisible && _mapPanelViewController.activeTargetType != OATargetChangePosition;
@@ -1254,11 +1249,9 @@
     BOOL isAllHidden = _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance;
     BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetChangePosition
         || _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance;
-    BOOL isMapMarkerAllowed = [OADestinationsHelper instance].sortedDestinations.count > 0
-        && [_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisibility get];
     BOOL isToolbarAllowed = !self.contextMenuMode && !isDashboardVisible & !isTargetMultiMenuViewVisible && !isWeatherToolbarVisible;
     BOOL isToolbarVisible = isToolbarAllowed && _toolbarViewController && _toolbarViewController.view.superview;
-    BOOL isAllowToolbarsVisible = isToolbarVisible && ((isMapMarkerAllowed && ![[OADestinationCardsViewController sharedInstance] isVisible]));
+    BOOL isAllowToolbarsVisible = isToolbarVisible;
     BOOL visible = isToolbarVisible ? isAllowToolbarsVisible
         : !self.contextMenuMode && !isWeatherToolbarVisible && !isScrollableHudVisible && !isDashboardVisible && !isRouteInfoVisible && !isTargetMultiMenuViewVisible && !isTargetToHideVisible;
     BOOL isZoomMapModeVisible = !isDashboardVisible && !isRouteInfoVisible && !isTargetMultiMenuViewVisible;

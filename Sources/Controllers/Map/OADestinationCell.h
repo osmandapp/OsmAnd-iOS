@@ -15,8 +15,6 @@
 @protocol OADestinatioCellProtocol <NSObject>
 @optional
 
-- (void)markAsVisited:(OADestination *)destination;
-- (void)removeDestination:(OADestination *)destination;
 - (void)openHideDestinationCardsView:(id)sender;
 
 @end

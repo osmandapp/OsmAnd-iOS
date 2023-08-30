@@ -12,6 +12,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OADestinationCardsViewController.h"
+#import "OADestinationsHelper.h"
 
 #import <OsmAndCore.h>
 #import <OsmAndCore/Utilities.h>
@@ -265,7 +266,7 @@
     
 }
 
-- (void)setDestinations:(NSArray *)destinations
+- (void) setDestinations:(NSArray *)destinations
 {
     _destinations = destinations;
     if (_destinations)
@@ -276,7 +277,7 @@
     }
 }
 
-- (void)updateMapCenterArrow:(BOOL)arrow
+- (void) updateMapCenterArrow:(BOOL)arrow
 {
     if (arrow)
     {
@@ -299,7 +300,7 @@
     [self updateMapCenterArrow:mapCenterArrow];
 }
 
-+ (NSString *)parkingTimeStr:(NSDate *)pickupDate shortText:(BOOL)shortText
++ (NSString *) parkingTimeStr:(NSDate *)pickupDate shortText:(BOOL)shortText
 {
     if (!pickupDate)
         return nil;
@@ -340,7 +341,7 @@
     }
 }
 
-+ (void)setParkingTimerStr:(NSDate *)pickupDate creationDate:(NSDate *)creationDate label:(UILabel *)label shortText:(BOOL)shortText
++ (void) setParkingTimerStr:(NSDate *)pickupDate creationDate:(NSDate *)creationDate label:(UILabel *)label shortText:(BOOL)shortText
 {
     NSString *remainingTimeText = @"";
     NSTimeInterval timeInterval = 0;
@@ -377,7 +378,7 @@
     label.attributedText = attributedString;
 }
 
-- (void)reloadData
+- (void) reloadData
 {
     for (int i = 0; i < _destinations.count; i++) {
         OADestination *destination = _destinations[i];
@@ -407,7 +408,7 @@
     }
 }
 
-- (void)updateOkButton:(OADestination *)destination
+- (void) updateOkButton:(OADestination *)destination
 {
     if (!self.mapCenterArrow)
     {
@@ -416,7 +417,7 @@
     }
 }
 
-- (void)updateDistanceLabel:(OADestination *)destination
+- (void) updateDistanceLabel:(OADestination *)destination
 {
     NSString *text = [destination distanceStr:_currentLocation.latitude longitude:_currentLocation.longitude];
     if (!_firstRow)
@@ -463,7 +464,7 @@
     self.distanceLabel.attributedText = string;
 }
 
-- (void)updateDirections:(CLLocationCoordinate2D)myLocation direction:(CLLocationDirection)direction
+- (void) updateDirections:(CLLocationCoordinate2D)myLocation direction:(CLLocationDirection)direction
 {
     if (!isnan(myLocation.latitude))
     {
@@ -491,7 +492,7 @@
 }
 
 
--(void)setButtonOkVisible:(BOOL)buttonOkVisible
+- (void) setButtonOkVisible:(BOOL)buttonOkVisible
 {
     if (_buttonOkVisible == buttonOkVisible)
         return;
@@ -500,7 +501,7 @@
     [self updateLayout:_contentView.frame];
 }
 
-- (void)updateDirection:(OADestination *)destination imageView:(UIImageView *)imageView
+- (void) updateDirection:(OADestination *)destination imageView:(UIImageView *)imageView
 {
     CGFloat itemDirection = [[OsmAndApp instance].locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:destination.latitude longitude:destination.longitude] sourceLocation:[[CLLocation alloc] initWithLatitude:self.currentLocation.latitude longitude:self.currentLocation.longitude]];
     
@@ -508,21 +509,13 @@
     imageView.transform = CGAffineTransformMakeRotation(direction);
 }
 
-- (void)closeDestination:(id)sender
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.delegate)
-            [_delegate removeDestination:_destinations[0]];
-    });
-}
-
-- (void)openHideDestinationsView:(id)sender
+- (void) openHideDestinationsView:(id)sender
 {
     if (self.delegate)
         [_delegate openHideDestinationCardsView:sender];
 }
 
-- (void)updateCloseButton
+- (void) updateCloseButton
 {
     if (!self.btnClose)
         return;
@@ -541,10 +534,9 @@
     }
 }
 
-- (void)buttonOKClicked
+- (void) buttonOKClicked
 {
-    if (self.delegate)
-        [self.delegate markAsVisited:_destinations[0]];
+    [OADestinationsHelper.instance markAsVisited:_destinations[0]];
 }
 
 @end

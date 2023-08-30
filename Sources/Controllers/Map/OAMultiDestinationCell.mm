@@ -13,6 +13,7 @@
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
 #import "OAColors.h"
+#import "OADestinationsHelper.h"
 
 #import <OsmAndCore.h>
 #import <OsmAndCore/Utilities.h>
@@ -45,8 +46,8 @@
     self = [super init];
     if (self)
     {
-        self.destinations = destinations;
         _settings = [OAAppSettings sharedManager];
+        self.destinations = destinations;
     }
     return self;
 }
@@ -799,7 +800,7 @@
     [self updateLayout:_contentView.frame];
 }
 
--(void)setButtonOkVisible3:(BOOL)buttonOkVisible
+- (void) setButtonOkVisible3:(BOOL)buttonOkVisible
 {
     if (_buttonOkVisible3 == buttonOkVisible)
         return;
@@ -808,7 +809,7 @@
     [self updateLayout:_contentView.frame];
 }
 
-- (void)updateOkButton2:(OADestination *)destination
+- (void) updateOkButton2:(OADestination *)destination
 {
     if (!self.mapCenterArrow)
     {
@@ -817,7 +818,7 @@
     }
 }
 
-- (void)updateOkButton3:(OADestination *)destination
+- (void) updateOkButton3:(OADestination *)destination
 {
     if (!self.mapCenterArrow)
     {
@@ -826,27 +827,16 @@
     }
 }
 
-- (void)buttonOkClicked:(id)sender
+- (void) buttonOkClicked:(id)sender
 {
     UIButton *btn = sender;
-    
-    if (self.delegate)
-        [self.delegate markAsVisited:_destinations[btn.tag]];
+    [OADestinationsHelper.instance markAsVisited:_destinations[btn.tag]];
 }
 
-- (void)closeDestination:(id)sender
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_delegate)
-            [_delegate removeDestination:_destinations[0]];
-    });
-}
-
-
-- (void)openHideDestinationsView:(id)sender
+- (void) openHideDestinationsView:(id)sender
 {
     if (self.delegate)
-        [_delegate openHideDestinationCardsView:sender];
+        [self.delegate openHideDestinationCardsView:sender];
 }
 
 @end

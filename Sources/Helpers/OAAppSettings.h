@@ -528,24 +528,6 @@ typedef NS_ENUM(NSInteger, EOAActiveMarkerConstant)
 
 @end
 
-typedef NS_ENUM(NSInteger, EOADistanceIndicationConstant)
-{
-    TOP_BAR_DISPLAY = 0,
-    WIDGET_DISPLAY,
-    NONE_DISPLAY
-};
-
-@interface OACommonDistanceIndicationConstant : OACommonInteger
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOADistanceIndicationConstant)defValue;
-
-- (EOADistanceIndicationConstant) get;
-- (EOADistanceIndicationConstant) get:(OAApplicationMode *)mode;
-- (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant;
-- (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant mode:(OAApplicationMode *)mode;
-
-@end
-
 @interface OACommonDrivingRegion : OACommonInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOADrivingRegion)defValue;
@@ -1090,11 +1072,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 // Direction Appearance
 
 @property (nonatomic) OACommonActiveMarkerConstant* activeMarkers;
-@property (nonatomic) OACommonBoolean *distanceIndicationVisibility;
-@property (nonatomic) OACommonDistanceIndicationConstant *mapMarkersDisplayMode;
 @property (nonatomic) OACommonBoolean *arrowsOnMap;
 @property (nonatomic) OACommonBoolean *directionLines;
-@property (nonatomic) OACommonBoolean *showMapMarkersBarWidget;
 
 // global
 

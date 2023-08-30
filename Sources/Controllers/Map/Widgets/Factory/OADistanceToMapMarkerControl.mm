@@ -67,7 +67,7 @@
 
 - (BOOL) updateInfo
 {
-    if ([OADestinationsHelper instance].sortedDestinations.count == 0 || ![_settings.distanceIndicationVisibility get])
+    if ([OADestinationsHelper instance].sortedDestinations.count == 0)
     {
         [self updateVisibility:NO];
         return NO;

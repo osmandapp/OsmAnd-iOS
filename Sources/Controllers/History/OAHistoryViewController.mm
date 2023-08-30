@@ -471,7 +471,6 @@
     HistoryTableGroup* groupData = [self.groupsAndItems objectAtIndex:indexPath.section];
     HistoryTableItem* dataItem = [groupData.groupItems objectAtIndex:indexPath.row];
     
-    [[OARootViewController instance].mapPanel hideDestinationCardsViewAnimated:NO];
     [self dismissViewController];
     [[OARootViewController instance].mapPanel openTargetViewWithHistoryItem:dataItem.item pushed:NO];
 }

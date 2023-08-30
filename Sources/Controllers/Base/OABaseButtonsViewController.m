@@ -79,8 +79,8 @@
     self.bottomStackView.axis = axisMode;
     self.aboveBottomMarginView.hidden = !isVertical;
     self.aboveBottomMarginVertivalConstraint.active = isVertical;
-    self.leftBottomMarginConstraint.constant = isVertical ? kPaddingOnSideOfContent : kSmallPaddingOnSideOfContent;
-    self.rightBottomMarginConstraint.constant = isVertical ? kPaddingOnSideOfContent : kSmallPaddingOnSideOfContent;
+    self.leftBottomMarginConstraint.constant = isVertical ? kPaddingOnSideOfContent : (kSmallPaddingOnSideOfContent / 2);
+    self.rightBottomMarginConstraint.constant = isVertical ? kPaddingOnSideOfContent : (kSmallPaddingOnSideOfContent / 2);
     self.middleBottomMarginStackView.axis = axisMode;
     self.middleBottomMarginStackView.distribution = isVertical ? UIStackViewDistributionFill : UIStackViewDistributionEqualSpacing;
     self.middleFirstMarginViewVerticalConstraint.active = isVertical;
@@ -115,9 +115,15 @@
     BOOL hasTopButtonIcon = topButtonIconName && topButtonIconName.length > 0;
     BOOL hasTopButton = (topButtonTitle && topButtonTitle.length > 0) || (topButtonTitleAttr && topButtonTitleAttr.length > 0) || hasTopButtonIcon;
     if (axisMode == UILayoutConstraintAxisVertical)
+    {
         self.topButton.hidden = !hasTopButton;
+        self.topButton.contentEdgeInsets = UIEdgeInsetsMake(10., kSmallPaddingOnSideOfContent, 10., kSmallPaddingOnSideOfContent);
+    }
     else
+    {
         self.topButton.userInteractionEnabled = hasTopButton;
+        self.topButton.contentEdgeInsets = UIEdgeInsetsMake(10., kSmallPaddingOnSideOfContent / 2, 10., kSmallPaddingOnSideOfContent / 2);
+    }
 
     if (topButtonTitleAttr && topButtonTitleAttr.length > 0)
     {
@@ -137,9 +143,15 @@
     BOOL hasBottomButtonIcon = bottomButtonIconName && bottomButtonIconName.length > 0;
     BOOL hasBottomButton = (bottomButtonTitle && bottomButtonTitle.length > 0) || (bottomButtonTitleAttr && bottomButtonTitleAttr.length > 0) || hasBottomButtonIcon;
     if (axisMode == UILayoutConstraintAxisVertical)
+    {
         self.bottomButton.hidden = !hasBottomButton;
+        self.bottomButton.contentEdgeInsets = UIEdgeInsetsMake(10., kSmallPaddingOnSideOfContent, 10., kSmallPaddingOnSideOfContent);
+    }
     else
+    {
         self.bottomButton.userInteractionEnabled = hasBottomButton;
+        self.bottomButton.contentEdgeInsets = UIEdgeInsetsMake(10., kSmallPaddingOnSideOfContent / 2, 10., kSmallPaddingOnSideOfContent / 2);
+    }
 
     if (bottomButtonTitleAttr && bottomButtonTitleAttr.length > 0)
     {

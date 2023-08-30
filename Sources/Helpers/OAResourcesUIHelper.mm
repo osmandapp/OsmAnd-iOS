@@ -24,6 +24,7 @@
 #import "OAPlugin.h"
 #import "OAWeatherHelper.h"
 #import "Localization.h"
+#import "OAWeatherPlugin.h"
 
 #include <OsmAndCore/WorldRegions.h>
 
@@ -1539,9 +1540,51 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast)
     {
-        [[OAWeatherHelper sharedInstance] downloadForecastByRegion:item.worldRegion];
-        if (onTaskResumed)
-            onTaskResumed(nil);
+        if (![[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled] || ![OAIAPHelper isOsmAndProAvailable])
+            return;
+
+        NSString *regionId = [OAWeatherHelper checkAndGetRegionId:item.worldRegion];
+
+        AFNetworkReachabilityManager *networkManager = [AFNetworkReachabilityManager sharedManager];
+        if (!networkManager.isReachable)
+            return;
+        else if (!networkManager.isReachableViaWiFi && [OAWeatherHelper getPreferenceWeatherAutoUpdate:regionId] == EOAWeatherAutoUpdateOverWIFIOnly)
+            return;
+        [[OAWeatherHelper sharedInstance] preparingForDownloadForecastByRegion:item.worldRegion regionId:regionId];
+
+        NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+        // https://osmand.net/download?&weather=yes&file=Weather_Angola_africa.tifsqlite.zip
+        NSString *downloadsIdPrefix = [item.worldRegion.downloadsIdPrefix stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:[[item.worldRegion.downloadsIdPrefix substringToIndex:1] capitalizedString]];
+        NSString *pureUrlString = [[NSString alloc] initWithFormat:@"https://osmand.net/download?&weather=yes&file=Weather_%@%@", downloadsIdPrefix, @"tifsqlite.zip"];
+        NSString *params = [[NSString stringWithFormat:@"&event=2&osmandver=OsmAndIOs+%@", ver]
+                            stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        NSString *urlString = [[NSString alloc] initWithFormat:@"%@%@", pureUrlString, params];
+        NSURL *url = [NSURL URLWithString:urlString];
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+
+        NSLog(@"%@", url);
+        NSString* name = [self.class titleOfResourceType:item.resourceType
+                                                inRegion:item.worldRegion
+                                          withRegionName:YES
+                                        withResourceType:YES];
+        OsmAndAppInstance app = [OsmAndApp instance];
+        id<OADownloadTask> task;
+        if (!item.downloadTask)
+            item.downloadTask = task = [app.downloadsManager downloadTaskWithRequest:request
+                                                                              andKey:[@"resource:" stringByAppendingString:[NSString stringWithFormat:@"%@%@", [item.worldRegion.downloadsIdPrefix lowerCase], @"tifsqlite"]] andName:name];
+        else
+            task = item.downloadTask;
+
+        if (onTaskCreated)
+            onTaskCreated(task);
+
+        // Resume task only if it's other resource download tasks are not running
+        if ([app.downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil)
+        {
+            [task resume];
+            if (onTaskResumed)
+                onTaskResumed(task);
+        }
     }
     else
     {
@@ -1719,14 +1762,15 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         [view addSubview:progressHUD];
         [progressHUD showAnimated:YES whileExecutingBlock:^{
             NSString *regionId = [OAWeatherHelper checkAndGetRegionId:item.worldRegion];
-            [[OAWeatherHelper sharedInstance] prepareToStopDownloading:regionId];
-            if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined)
-                [[OAWeatherHelper sharedInstance] removeLocalForecast:regionId refreshMap:NO];
-            else if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished)
+            if ([[OAWeatherHelper sharedInstance] isUndefinedDownloadStateFor:item.worldRegion])
+                [[OAWeatherHelper sharedInstance] removeLocalForecast:regionId region: item.worldRegion refreshMap:NO];
+            else if ([[OAWeatherHelper sharedInstance] isDownloadedWeatherForecastForRegionId:regionId])
                 [[OAWeatherHelper sharedInstance] calculateCacheSize:item.worldRegion onComplete:nil];
         } completionBlock:^{
             if (onTaskStop)
-                onTaskStop(nil);
+                onTaskStop(item.downloadTask);
+
+            [item.downloadTask stop];
             [progressHUD removeFromSuperview];
         }];
     }
@@ -1797,8 +1841,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             if (item.resourceType == OsmAndResourceType::WeatherForecast)
             {
                 NSString *regionId = [OAWeatherHelper checkAndGetRegionId:item.worldRegion];
-                [[OAWeatherHelper sharedInstance] prepareToStopDownloading:regionId];
-                [[OAWeatherHelper sharedInstance] removeLocalForecast:regionId refreshMap:item == items.lastObject];
+                [[OAWeatherHelper sharedInstance] removeLocalForecast:regionId region:item.worldRegion refreshMap:item == items.lastObject];
             }
             else if ([item isKindOfClass:[OASqliteDbResourceItem class]])
             {

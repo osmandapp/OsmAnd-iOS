@@ -199,8 +199,15 @@
 - (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
 {
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
-    _parkingPlaceControl = [self createParkingPlaceInfoControl];
+    _parkingPlaceControl = [self createMapWidgetForParams:OAWidgetType.parking customId:nil];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_parkingPlaceControl]];
+}
+
+- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(NSString *)customId
+{
+    if (widgetType == OAWidgetType.parking)
+        return [self createParkingPlaceInfoControl];
+    return nil;
 }
 
 - (void) updateLayers

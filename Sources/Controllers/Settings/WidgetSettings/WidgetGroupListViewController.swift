@@ -63,10 +63,11 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
         var result: [WidgetType] = []
         
         for widget in widgets {
-            if let group = widget.getGroup(), !visitedGroups.contains(group) {
-                visitedGroups.append(group)
+            let group = widget.getGroup()
+            if group != nil, !visitedGroups.contains(group!) {
+                visitedGroups.append(group!)
                 result.append(widget)
-            } else if widget.getGroup() == nil {
+            } else if group == nil {
                 individualWidgets.append(widget)
             }
         }
@@ -110,12 +111,9 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
     private func listDefaultWidgets(_ widgets: NSOrderedSet) -> [WidgetType] {
         var defaultWidgets: [Int: WidgetType] = [:]
         for widgetInfo in widgets {
-            if let widgetInfo = widgetInfo as? MapWidgetInfo {
-                
-                let widgetType = widgetInfo.getWidgetType()
-                if let widgetType {
-                    defaultWidgets[widgetType.ordinal] = widgetType
-                }
+            let widgetType: WidgetType? = (widgetInfo as? MapWidgetInfo)?.getWidgetType()
+            if widgetType != nil {
+                defaultWidgets[widgetType!.ordinal] = widgetType
             }
         }
         return Array(defaultWidgets.values)

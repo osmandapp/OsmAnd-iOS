@@ -2835,7 +2835,7 @@
 "weather_accuracy_forecast_description" = "Offline forecast is available until: %@.\nAccuracy: %@, hourly. %@ for every 3 hours.";
 "weather_generates_new_forecast_description" = "OsmAnd generates a new forecast every 6 hours. The closer to the current date, the more accurate it will be.";
 
-"update_only_over_wi_fi" = "Update only over Wi-Fi";
+"auto_update" = "Auto-update";
 "update_parameters" = "Update parameters";
 
 "recording_delete_confirm" = "Delete this item?";

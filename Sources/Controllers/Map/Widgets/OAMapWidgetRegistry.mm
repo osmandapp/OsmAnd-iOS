@@ -59,7 +59,11 @@
         NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *pagedWidgets = [self getPagedWidgetsForPanel:mode panel:widgetPanel filterModes:(KWidgetModeAvailable | kWidgetModeEnabled)];
         for (NSOrderedSet<OAMapWidgetInfo *> *page in pagedWidgets)
         {
-            for (OAMapWidgetInfo *widgetInfo in page)
+            NSArray<OAMapWidgetInfo *> *sortedWidgets =
+                [page.array sortedArrayUsingComparator:^NSComparisonResult(OAMapWidgetInfo * _Nonnull w1, OAMapWidgetInfo * _Nonnull w2) {
+                    return [OAUtilities compareInt:(int) w1.priority y:(int) w2.priority];
+                }];
+            for (OAMapWidgetInfo *widgetInfo in sortedWidgets)
             {
                 if ([widgetInfo isEnabledForAppMode:mode] || weatherToolbarVisible)
                     [currentPage addObject:widgetInfo.widget];

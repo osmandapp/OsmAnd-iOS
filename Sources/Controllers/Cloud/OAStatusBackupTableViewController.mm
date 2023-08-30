@@ -523,6 +523,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                         BOOL hasConflict = (EOABackupSyncOperationType) [item integerForKey:@"operation"] == EOABackupSyncOperationNone;
                         [item setIconTint:color_primary_purple];
                         [item setObj:hasConflict ? @(color_primary_red) : @(color_primary_purple) forKey:@"secondaryIconColor"];
+                        cell.accessoryView = nil;
                         [self.tableView reloadRowsAtIndexPaths:@[indPath] withRowAnimation:UITableViewRowAnimationNone];
                     });
                 }
@@ -644,6 +645,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             }
             else
             {
+                cell.rightIconView.image = nil;
                 [cell rightIconVisibility:NO];
             }
         }
@@ -768,9 +770,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (void)onBackupPreparing
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateData];
-    });
 }
 
 // MARK: Sync callbacks

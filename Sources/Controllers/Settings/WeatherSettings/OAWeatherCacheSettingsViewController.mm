@@ -89,17 +89,14 @@
                 {
                     NSMutableDictionary *countryData = countryCells[j];
                     OAWorldRegion *region = countryData[@"region"];
-                    if (![_weatherHelper isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:region]])
-                    {
                         [_weatherHelper calculateCacheSize:region onComplete:^()
                         {
-                            uint64_t size = [_weatherHelper getOfflineForecastSizeInfo:[OAWeatherHelper checkAndGetRegionId:region] local:YES];
+                            uint64_t size = [_weatherHelper getOfflineForecastSize:region forUpdate:NO];
                             countryData[@"description"] = [NSByteCountFormatter stringFromByteCount:size
                                                                                          countStyle:NSByteCountFormatterCountStyleFile];
                             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:j inSection:i]]
                                                   withRowAnimation:UITableViewRowAnimationNone];
                         }];
-                    }
                 }
             }
         }
@@ -132,7 +129,7 @@
     if (_region)
     {
         sizeTitle = OALocalizedString(@"shared_string_total");
-        size = [_weatherHelper getOfflineForecastSizeInfo:[OAWeatherHelper checkAndGetRegionId:_region] local:YES];
+        size = [_weatherHelper getOfflineForecastSize:_region forUpdate:NO];
     }
     else if (_type == EOAWeatherOnlineData)
     {
@@ -142,7 +139,7 @@
     else if (_type == EOAWeatherOfflineData)
     {
         sizeTitle = OALocalizedString(@"shared_string_total_size");
-        size = _weatherHelper.offlineCacheSize;
+        size = [_weatherHelper getOfflineWeatherForecastCacheSize];
     }
 
     NSString *sizeString = _region != nil || size > 0
@@ -187,10 +184,7 @@
         countriesSection[@"cells"] = countryCells;
         [data addObject:countriesSection];
 
-        NSArray<NSString *> *regionIds = [_weatherHelper getTempForecastsWithDownloadStates:@[
-                @(EOAWeatherForecastDownloadStateFinished),
-                @(EOAWeatherForecastDownloadStateInProgress)]
-        ];
+        NSArray<NSString *> *regionIds = [_weatherHelper getRegionIdsForDownloadedWeatherForecast];
         OsmAndAppInstance app = [OsmAndApp instance];
         for (OAWorldRegion *region in [@[app.worldRegion] arrayByAddingObjectsFromArray:app.worldRegion.flattenedSubregions])
         {
@@ -201,7 +195,7 @@
                 regionData[@"key"] = [@"region_cell_" stringByAppendingString:regionId];
                 regionData[@"type"] = [OARightIconTableViewCell getCellIdentifier];
                 regionData[@"region"] = region;
-                regionData[@"description"] = [NSByteCountFormatter stringFromByteCount:[_weatherHelper getOfflineForecastSizeInfo:regionId local:YES]
+                regionData[@"description"] = [NSByteCountFormatter stringFromByteCount:[_weatherHelper getOfflineForecastSize:region forUpdate:NO]
                                                                             countStyle:NSByteCountFormatterCountStyleFile];;
                 [countryCells addObject:regionData];
             }
@@ -360,39 +354,25 @@
 {
     if (_region)
     {
-        if ([_weatherHelper isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:_region]])
-        {
-            uint64_t size = [_weatherHelper getOfflineForecastSizeInfo:[OAWeatherHelper checkAndGetRegionId:_region] local:YES];
-            _clearButtonActive = size > 0;
-            if (_clearIndexPath)
+        [_weatherHelper calculateCacheSize:_region onComplete:^() {
+            if (_sizeIndexPath)
             {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.tableView reloadRowsAtIndexPaths:@[_clearIndexPath] withRowAnimation:UITableViewRowAnimationNone];
-                });
+                uint64_t size = [_weatherHelper getOfflineForecastSize:_region forUpdate:NO];
+                NSMutableArray<NSDictionary *> *cells = _data[_sizeIndexPath.section][@"cells"];
+                NSString *sizeString = [NSByteCountFormatter stringFromByteCount:size
+                                                                      countStyle:NSByteCountFormatterCountStyleFile];
+                cells[_sizeIndexPath.row] = @{
+                    @"key": @"size",
+                    @"title": OALocalizedString(@"shared_string_total"),
+                    @"value": sizeString,
+                    @"type": [OAValueTableViewCell getCellIdentifier]
+                };
+                _clearButtonActive = size > 0;
+                
+                NSArray<NSIndexPath *> *indexPaths = _clearIndexPath != nil ? @[_sizeIndexPath, _clearIndexPath] : @[_sizeIndexPath];
+                [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
             }
-        }
-        else
-        {
-            [_weatherHelper calculateCacheSize:_region onComplete:^() {
-                if (_sizeIndexPath)
-                {
-                    uint64_t size = [_weatherHelper getOfflineForecastSizeInfo:[OAWeatherHelper checkAndGetRegionId:_region] local:YES];
-                    NSMutableArray<NSDictionary *> *cells = _data[_sizeIndexPath.section][@"cells"];
-                    NSString *sizeString = [NSByteCountFormatter stringFromByteCount:size
-                                                                          countStyle:NSByteCountFormatterCountStyleFile];
-                    cells[_sizeIndexPath.row] = @{
-                        @"key": @"size",
-                        @"title": OALocalizedString(@"shared_string_total"),
-                        @"value": sizeString,
-                        @"type": [OAValueTableViewCell getCellIdentifier]
-                    };
-                    _clearButtonActive = size > 0;
-
-                    NSArray<NSIndexPath *> *indexPaths = _clearIndexPath != nil ? @[_sizeIndexPath, _clearIndexPath] : @[_sizeIndexPath];
-                    [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-                }
-            }];
-        }
+        }];
     }
     else
     {
@@ -422,6 +402,7 @@
 - (void)clearCache
 {
     BOOL selectedRegionList = _selectedRegionIndexPath != nil;
+    BOOL isOffline = _type == EOAWeatherOfflineData;
     [_progressHUD showAnimated:YES whileExecutingBlock:^{
         if (_region || selectedRegionList)
         {
@@ -435,22 +416,51 @@
             {
                 region = _region;
             }
-            [_weatherHelper clearCache:YES regionIds:@[[OAWeatherHelper checkAndGetRegionId:region]]];
-            [self updateCacheSize];
+            if (isOffline)
+            {
+                [_weatherHelper removeLocalForecast:region.regionId region:region refreshMap:YES];
+            }
+            else
+            {
+                [_weatherHelper clearCache:YES regionIds:@[[OAWeatherHelper checkAndGetRegionId:region]] region:_region];
+            }
         }
         else
         {
-            [_weatherHelper clearCache:_type == EOAWeatherOfflineData regionIds:nil];
+            if (isOffline)
+            {
+                NSArray<NSString *> *regionIds = [_weatherHelper getRegionIdsForDownloadedWeatherForecast];
+                OsmAndAppInstance app = [OsmAndApp instance];
+                for (OAWorldRegion *region in [@[app.worldRegion] arrayByAddingObjectsFromArray:app.worldRegion.flattenedSubregions])
+                {
+                    NSString *regionId = [OAWeatherHelper checkAndGetRegionId:region];
+                    if ([regionIds containsObject:regionId])
+                    {
+                        [_weatherHelper removeLocalForecast:region.regionId region:region refreshMap:YES];
+                    }
+                }
+            }
+            else
+            {
+                [_weatherHelper clearCache:NO regionIds:nil region:nil];
+            }
         }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self generateData];
+            [self.tableView reloadData];
+        });
     } completionBlock:^{
         if (selectedRegionList)
         {
             NSMutableArray<NSMutableDictionary *> *countryCells = _data[_selectedRegionIndexPath.section][@"cells"];
-            countryCells[_selectedRegionIndexPath.row][@"description"] = [NSByteCountFormatter stringFromByteCount:0
-                                                                                                        countStyle:NSByteCountFormatterCountStyleFile];
-            [self.tableView reloadRowsAtIndexPaths:@[_selectedRegionIndexPath]
-                                  withRowAnimation:UITableViewRowAnimationAutomatic];
-            _selectedRegionIndexPath = nil;
+            if (countryCells.count > 0)
+            {
+                _selectedRegionIndexPath = nil;
+            }
+            else
+            {
+                [self dismissViewController];
+            }
         }
         else
         {

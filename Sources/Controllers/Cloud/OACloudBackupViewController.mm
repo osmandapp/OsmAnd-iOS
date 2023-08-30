@@ -154,7 +154,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     
     OACloudBackupViewController *navigationController = (OACloudBackupViewController *)self.navigationController.topViewController;
     _settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_settings"] style:UIBarButtonItemStylePlain target:self action:@selector(onSettingsButtonPressed)];
-    _backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
+    _backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
     [navigationController.navigationItem setRightBarButtonItem:_settingsButton];
     [navigationController.navigationItem setLeftBarButtonItem:_backButton];
 }
@@ -595,7 +595,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             cell.button.tintColor = UIColorFromRGB(color_primary_purple);
         }
         BOOL collapsed = item.rowType == EOATableRowTypeCollapsable && ((OATableCollapsableRowData *) item).collapsed;
-        [cell.button setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"] forState:UIControlStateNormal];
+        [cell.button setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
         [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         [cell.button addTarget:self action:@selector(onCollapseButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         cell.titleLabel.text = item.title;

@@ -639,6 +639,11 @@
     return @"";
 }
 
+- (CGFloat)getNavbarHeight
+{
+    return [OAUtilities getTopMargin] + _navbarHeightCurrent;
+}
+
 #pragma mark - Table data
 
 - (void)generateData

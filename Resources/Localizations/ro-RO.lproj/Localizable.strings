@@ -2521,7 +2521,6 @@
 "weather_miss_forecasts" = "Nu aveți previziuni offline";
 "weather_miss_forecasts_description" = "Prognoza offline este disponibilă pentru fiecare țară. Durata până la 7 zile. Trebuie să selectați țările necesare.";
 "weather_generates_new_forecast_description" = "OsmAnd generează o nouă prognoză la fiecare 6 ore. Cu cât este mai aproape de data curentă, cu atât va fi mai precisă.";
-"update_only_over_wi_fi" = "Actualizare numai prin Wi-Fi";
 "update_parameters" = "Parametrii de actualizare";
 "shared_string_updates_size" = "Actualizează dimensiunea";
 "shared_string_available_until" = "Disponibil până la";

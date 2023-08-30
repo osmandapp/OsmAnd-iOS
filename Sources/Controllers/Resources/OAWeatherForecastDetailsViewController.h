@@ -8,7 +8,7 @@
 
 #import "OABaseNavbarViewController.h"
 
-@class OAWorldRegion;
+@class OAWorldRegion, OAResourceItem;
 
 @protocol OAWeatherForecastDetails <NSObject>
 
@@ -22,7 +22,7 @@
 
 @interface OAWeatherForecastDetailsViewController : OABaseNavbarViewController
 
-- (instancetype)initWithRegion:(OAWorldRegion *)region;
+- (instancetype)initWithRegion:(OAWorldRegion *)region localResourceItem:(OAResourceItem *)item;
 
 @property (nonatomic, weak) id<OAWeatherForecastDetails> delegate;
 

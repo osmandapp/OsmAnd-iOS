@@ -341,6 +341,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         OAPOIType *type = nil;
         NSString *subType = nil;
         NSString *openingHours = nil;
+        NSString *typeStr = nil;
         NSMutableDictionary<NSString *, NSString *> *additionalInfo = [NSMutableDictionary dictionary];
 
         for (NSString *key in map.allKeys)
@@ -350,6 +351,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
                 NSString *shortKey = [key stringByReplacingOccurrencesOfString:privatePrefix withString:@""];
                 if ([shortKey isEqualToString:TYPE])
                 {
+                    typeStr = map[key];
                     type = [OAPOIHelper.sharedInstance getPoiTypeByName:map[key]];
                 }
                 else if ([shortKey isEqualToString:SUBTYPE])
@@ -375,6 +377,9 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
             }
         }
 
+        if (!type)
+            type = [OAPOIHelper.sharedInstance getPoiType:typeStr value:subType];
+        
         if (!type)
             type = [OAPOIHelper.sharedInstance getDefaultOtherCategoryType];
 

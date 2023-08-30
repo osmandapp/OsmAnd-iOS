@@ -234,9 +234,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         
         EOARulerWidgetMode mode = _settings.rulerMode.get;
         BOOL showCompass = _settings.showCompassControlRuler.get && [_mapViewController getMapZoom] > SHOW_COMPASS_MIN_ZOOM;
-        
-        _imageView.center = CGPointMake(self.frame.size.width * 0.5,
-                                        self.frame.size.height * 0.5 * _mapViewController.mapView.viewportYScale);
+        _imageView.center = circleCenterPoint;
         
         if (mode == RULER_MODE_DARK || mode == RULER_MODE_LIGHT )
         {
@@ -850,8 +848,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (void) changeCenter
 {
-    _imageView.center = CGPointMake(self.frame.size.width * 0.5,
-                                    self.frame.size.height * 0.5 * _mapViewController.mapView.viewportYScale);
+    CGPoint circleCenterPoint = [self getCenterPoint];
+    _imageView.center = circleCenterPoint;
 }
 
 - (void) onMapSourceUpdated

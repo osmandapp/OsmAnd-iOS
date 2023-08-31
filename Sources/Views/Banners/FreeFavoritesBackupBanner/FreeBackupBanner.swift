@@ -13,6 +13,7 @@ final class FreeBackupBanner: UIView {
     @objc enum BannerType: Int {
         case favorite
         case settings
+        case mapSettingsTopography
     }
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel! {
@@ -25,6 +26,7 @@ final class FreeBackupBanner: UIView {
     @IBOutlet weak var trailingSubviewConstraint: NSLayoutConstraint!
     
     @IBOutlet private weak var imageView: UIImageView!
+    @IBOutlet private weak var closeButton: UIButton!
     @IBOutlet private weak var osmAndCloudButton: UIButton! {
         didSet {
             osmAndCloudButton.titleLabel?.text = localizedString("banner_payment_free_backup_cloud_button_title")
@@ -51,6 +53,13 @@ final class FreeBackupBanner: UIView {
         case .settings:
             titleLabel.text = localizedString("banner_payment_free_backup_settings_title")
             imageView.image = UIImage(named: "ic_custom_settings_cloud_colored")
+        case .mapSettingsTopography:
+            titleLabel.text = localizedString("map_settings_topography")
+            descriptionLabel.text = localizedString("purchases_feature_desc_terrain")
+            imageView.image = UIImage.templateImageNamed("ic_custom_terrain")
+            imageView.tintColor = UIColor(rgb: Int(color_primary_purple))
+            closeButton.isHidden = true
+            osmAndCloudButton.setTitle(localizedString("shared_string_get"), for: .normal)
         }
     }
     

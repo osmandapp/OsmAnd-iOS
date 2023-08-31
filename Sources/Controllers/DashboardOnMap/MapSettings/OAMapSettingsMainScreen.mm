@@ -32,6 +32,7 @@
 #import "OAWeatherPlugin.h"
 #import "OAAutoObserverProxy.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "OsmAnd_Maps-Swift.h"
 
 #define kContourLinesDensity @"contourDensity"
 #define kContourLinesWidth @"contourWidth"
@@ -74,6 +75,7 @@
 
     OAAppModeCell *_appModeCell;
     OAAutoObserverProxy *_applicationModeObserver;
+    FreeBackupBanner *_freeBackupBanner;
 }
 
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
@@ -452,6 +454,12 @@
     }
     
     NSMutableArray *topographySectionData = [NSMutableArray array];
+    if (!hasSRTM)
+    {
+        [topographySectionData addObject:@{
+                @"type": [FreeBackupBannerCell getCellIdentifier]
+        }];
+    }
     if (hasSRTM && !_iapHelper.srtm.disabled)
     {
         [topographySectionData addObject:@{
@@ -462,13 +470,13 @@
                 @"key": @"contour_lines_layer"
         }];
     }
-    if (!hasSRTM || !_iapHelper.srtm.disabled)
+    if (hasSRTM && !_iapHelper.srtm.disabled)
     {
         [topographySectionData addObject:@{
                 @"name": OALocalizedString(@"shared_string_terrain"),
-                @"image": hasSRTM ? @"ic_custom_terrain" : @"ic_custom_contour_lines_colored",
-                hasSRTM ? @"has_options" : @"desc": hasSRTM ? @YES : OALocalizedString(@"contour_lines_hillshades_slope"),
-                @"type": hasSRTM ? [OASwitchTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
+                @"image": @"ic_custom_terrain",
+                @"has_options": @YES,
+                @"type": [OASwitchTableViewCell getCellIdentifier],
                 @"key": @"terrain_layer"
         }];
     }
@@ -1063,6 +1071,32 @@
         }
         return cell;
     }
+    else if ([item[@"type"] isEqualToString:[FreeBackupBannerCell getCellIdentifier]])
+    {
+        FreeBackupBannerCell *cell = (FreeBackupBannerCell *)[tableView dequeueReusableCellWithIdentifier:[FreeBackupBannerCell getCellIdentifier]];
+        if (!_freeBackupBanner)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"FreeBackupBanner" owner:self options:nil];
+            _freeBackupBanner = (FreeBackupBanner *)nib[0];
+            _freeBackupBanner.didOsmAndCloudButtonAction = ^{
+                OAProduct *product;
+                if ([item[@"key"] isEqualToString:@"terrain_layer"])
+                    product = _iapHelper.srtm;
+                [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:[OARootViewController instance].navigationController];
+            };
+            
+            [_freeBackupBanner configureWithBannerType:BannerTypeMapSettingsTopography];
+            _freeBackupBanner.translatesAutoresizingMaskIntoConstraints = NO;
+            [cell.contentView addSubview:_freeBackupBanner];
+            [NSLayoutConstraint activateConstraints:@[
+                [_freeBackupBanner.topAnchor constraintEqualToAnchor:cell.contentView.topAnchor],
+                [_freeBackupBanner.bottomAnchor constraintEqualToAnchor:cell.contentView.bottomAnchor],
+                [_freeBackupBanner.leadingAnchor constraintEqualToAnchor:cell.contentView.leadingAnchor],
+                [_freeBackupBanner.trailingAnchor constraintEqualToAnchor:cell.contentView.trailingAnchor],
+            ]];
+        }
+        return cell;
+    }
     else if (group)
     {
         OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
@@ -1096,6 +1130,22 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return [self heightForHeader:section];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:[FreeBackupBannerCell getCellIdentifier]])
+    {
+        CGFloat titleHeight = [OAUtilities calculateTextBounds:_freeBackupBanner.titleLabel.text width:tableView.frame.size.width - _freeBackupBanner.leadingTrailingOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
+        
+        CGFloat descriptionHeight = [OAUtilities calculateTextBounds:_freeBackupBanner.descriptionLabel.text width:tableView.frame.size.width - _freeBackupBanner.leadingTrailingOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
+        return _freeBackupBanner.defaultFrameHeight + titleHeight + descriptionHeight;
+    }
+    else
+    {
+        return UITableViewAutomaticDimension;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1377,8 +1427,6 @@
     OAProduct *product;
     if ([item[@"key"] isEqualToString:@"wikipedia_layer"])
         product = _iapHelper.wiki;
-    else if ([item[@"key"] isEqualToString:@"terrain_layer"])
-        product = _iapHelper.srtm;
     else if ([item[@"key"] isEqualToString:@"weather_layer"])
         product = _iapHelper.weather;
 

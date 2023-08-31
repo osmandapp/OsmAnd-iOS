@@ -952,8 +952,8 @@
 "shared_string_terrain" = "Terrain";
 "map_settings_layer_transparency" = "Layer transparency";
 "map_settings_slopes_legend" = "You can read more about the slopes on Wikipedia";
-"map_settings_slopes_description" = "Slope maps use different colors to visualize the terrain";
-"map_settings_hillshade_description" = "Hillshade maps visualize slopes, peaks and lowlands using different levels of gray";
+"map_settings_slopes_description" = "Slope is colorized visualisations on terrain.";
+"map_settings_hillshade_description" = "Hillshade map using dark shades to show slopes, peaks and lowlands.";
 "map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
 "map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
 "map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
@@ -1773,7 +1773,7 @@
 "quick_action_contour_lines_descr" = "Button showing or hiding contour lines on the map.";
 "hide_contour_lines" = "Hide contour lines";
 "enable_contour_lines" = "Enable to view contour lines on the map";
-"enable_hillshade" = "Enable to view terrain data";
+"enable_hillshade" = "Enable to view terrain data from hillshade or slope map.";
 "contour_lines_hillshades_slope" = "Contour lines, hillshades, slope";
 "quick_action_dir_from_descr" = "Tap this action to navigate from the current screen center point.";
 "quick_action_transport_descr" = "Button showing or hiding public transport on the map.";

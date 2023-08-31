@@ -2570,7 +2570,6 @@
 "weather_clear_offline_cache_for" = "Damit wird der gesamte Cache für die Offline-Wetterkachel für %@ gelöscht.";
 "weather_forecast_is_outdated" = "Die Vorhersage ist veraltet.";
 "weather_remove_forecast" = "Prognose entfernen";
-"update_only_over_wi_fi" = "Aktualisieren nur über Wi-Fi";
 "contact_support" = "Support kontaktieren";
 "loading_purchase_information" = "Kaufinformationen werden geladen";
 "contact_support_description" = "Wenn Sie Fragen haben, kontaktieren Sie uns bitte unter %@.";

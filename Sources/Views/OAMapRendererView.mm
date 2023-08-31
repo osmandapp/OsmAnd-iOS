@@ -37,12 +37,6 @@
 #define commonInit _(commonInit)
 #define deinit _(deinit)
 
-#if TARGET_IPHONE_SIMULATOR
-#define kSimulatorAnimationCoef 3.0f
-#else
-#define kSimulatorAnimationCoef 1.0f
-#endif
-
 @implementation OAMapRendererView
 {
     EAGLSharegroup* _glShareGroup;
@@ -62,6 +56,7 @@
 
     CGRect prevBounds;
     int _frameId;
+    NSTimeInterval _lastUpdateTime;
 }
 
 + (Class) layerClass
@@ -909,9 +904,17 @@ forcedUpdate:(BOOL)forcedUpdate
         return;
     }
 
+    NSTimeInterval currentTime = CACurrentMediaTime();
+    if (_lastUpdateTime == 0) {
+        _lastUpdateTime = currentTime;
+        return;
+    }
+    NSTimeInterval timePassed = currentTime - _lastUpdateTime;
+    _lastUpdateTime = CACurrentMediaTime();
+
     // Update animators
-    _mapAnimator->update(displayLink.duration * displayLink.frameInterval * kSimulatorAnimationCoef);
-    _mapMarkersAnimator->update(displayLink.duration * displayLink.frameInterval * kSimulatorAnimationCoef);
+    _mapAnimator->update(timePassed);
+    _mapMarkersAnimator->update(timePassed);
 
     // Allocate buffers if they are not yet allocated
     if (_framebuffer == 0)

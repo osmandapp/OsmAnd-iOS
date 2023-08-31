@@ -197,17 +197,18 @@ extension WidgetConfigurationViewController {
     }
     
     override func onBottomButtonPressed() {
-        WidgetUtils.addSelectedWidgets(widgetsIds: [widgetInfo.key], panel: widgetPanel, selectedAppMode: selectedAppMode)
-
-        if let viewControllers = navigationController?.viewControllers {
-            for viewController in viewControllers {
-                if let targetViewController = viewController as? WidgetsListViewController {
-                    navigationController?.popToViewController(targetViewController, animated: true)
-                    break
+        UIView.animate(withDuration: 0) {
+            if let viewControllers = self.navigationController?.viewControllers {
+                for viewController in viewControllers {
+                    if let targetViewController = viewController as? WidgetsListViewController {
+                        self.navigationController?.popToViewController(targetViewController, animated: true)
+                        break
+                    }
                 }
             }
+        } completion: { Bool in
+            NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification), object: self.widgetInfo)
         }
-//        onWidgetsConfigurationChanged()
     }
 
     override func getBottomButtonTitleAttr() -> NSAttributedString! {

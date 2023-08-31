@@ -2566,7 +2566,6 @@
 "shared_string_expires" = "Caduca en";
 "compass_visible_if_map_rotated" = "Visible al girar el mapa";
 "weather_plugin" = "Complemento del clima";
-"update_only_over_wi_fi" = "Actualizar sólo con Wi-Fi";
 "benefits_for_contributors" = "Beneficios para colaboradores activos de OSM";
 "benefits_for_contributors_primary_descr" = "Los colaboradores activos de OpenStreetMap.org pueden beneficiarse de actualizaciones ilimitadas de los mapas cada hora.";
 "shared_string_not_included" = "No incluido";

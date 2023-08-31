@@ -2541,7 +2541,6 @@
 "update_parameters" = "Mettre à jours les paramètres";
 "other_countries" = "Autres pays";
 "with_offline_maps" = "Avec les cartes hors-ligne";
-"update_only_over_wi_fi" = "Mettre à jour par Wifi";
 "weather_miss_forecasts" = "Vous n'avez pas de prévision hors-ligne";
 "weather_remove_forecast_description" = "Êtes-vous sûr(e) de supprimer les prévisions pour %@";
 "weather_remove_forecasts_description" = "Êtes-vous sûr(e) de supprimer les prévisions pour les pays : %d.";

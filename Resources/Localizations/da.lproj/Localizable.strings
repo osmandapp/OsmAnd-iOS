@@ -2556,7 +2556,6 @@
 "weather_forecast_is_outdated" = "Prognosen er forældet.";
 "weather_remove_forecast" = "Fjern prognose";
 "weather_updates_automatically" = "OsmAnd downloader automatisk opdateringer, når den kører.";
-"update_only_over_wi_fi" = "Opdater kun via Wi-Fi";
 "update_parameters" = "Opdater parametre";
 "contact_support" = "Kontakt support";
 "contact_support_description" = "Hvis du har spørgsmål, bedes du kontakte os på %@.";

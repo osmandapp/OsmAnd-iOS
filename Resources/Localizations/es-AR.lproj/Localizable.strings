@@ -2543,7 +2543,6 @@
 "weather_forecast" = "Previsión meteorológica";
 "other_countries" = "Otros países";
 "weather_clear_offline_cache_for" = "Esto vaciará toda la memoria caché de las teselas meteorológicas sin conexión de %@.";
-"update_only_over_wi_fi" = "Actualizar sólo con Wi-Fi";
 "update_parameters" = "Actualizar parámetros";
 "weather_accuracy_forecast_description" = "Pronóstico sin conexión disponible hasta: %@.\nPrecisión: %@, por hora. %@ por cada 3 horas.";
 "shared_string_clear_offline_cache" = "Vaciar caché sin conexión";

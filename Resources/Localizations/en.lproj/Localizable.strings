@@ -1401,6 +1401,11 @@
 "osmand_live_server_date" = "Last server update: %@";
 "update_frequency" = "Update frequency";
 "osmand_live_wifi_only" = "Update only via WiFi";
+
+"weather_update_disabled" = "Disabled";
+"weather_update_over_wifi_only" = "Over WIFI only";
+"weather_update_over_any_network" = "Over Any Network";
+
 "osmand_live_donation_header" = "Donation settings";
 "donations" = "Donations";
 "osmand_live_donation_switch_title" = "Donation to OpenStreetMap community";
@@ -1473,7 +1478,7 @@
 "res_zoom_invalid_value" = "Zoom values should be in range 1 - 22";
 "res_offlineSQL_URL_warning" = "Not supported for this map type";
 "clear_tiles_warning" = "Applying these changes will clear the cached data for this tile source";
-"download_heightmap_maps" = "Heightmap";
+"download_heightmap_maps" = "Terrain map";
 "welmode_download_maps" = "Download maps";
 "srtm_unit_format" = "Contour lines unit variant";
 "srtm_download_single_help_message" = "Please select the variant. You will need to re-download the file to change the format.";
@@ -2939,6 +2944,7 @@
 "nautical_depth" = "Nautical depth";
 "terrain_maps" = "Terrain maps";
 "shared_string_cross_buy" = "Cross-buy";
+"shared_string_relief_3d" = "3D Relief";
 
 "track_has_no_needed_data" = "The track is missing the respective data.";
 "select_another_colorization" = "Please select another type of coloring.";
@@ -2947,6 +2953,7 @@
 "purchases_feature_desc_pro_widgets" = "Get access to OsmAnd Pro features: Route coloring and more.";
 "purchases_feature_desc_hourly_map_updates" = "Get access to more frequent map updates. Hourly, daily, or weekly updates. Updates are downloaded incrementally, only for the changed area.";
 "purchases_feature_desc_cross_buy" = "Use your subscription features on different platforms (Android/iOS/web) at no additional cost.";
+"purchases_feature_relief_3d_description" = "Own and observe the scale model of your neighborhood or the whole continent.";
 "purchases_feature_desc_monthly_map_updates" = "Get access to regular monthly updates for offline maps.";
 "purchases_feature_desc_unlimited_map_download" = "Get unlimited downloads for all continents and regions offline maps.";
 "purchases_feature_desc_carplay" = "Brings OsmAnd offline maps and navigation to your vehicle screen and integrates with your vehicle\'s controls.";
@@ -3035,11 +3042,16 @@
 "weather_miss_forecasts" = "You don’t have offline forecasts";
 "weather_miss_forecasts_description" = "Offline forecast is available per country. Duration up to 7 days. You need to select needed countries.";
 "weather_updates_automatically" = "OsmAnd will be download updates automatically when it is running.";
+"weather_updates_manual" = "Weather forecast must be updated manually.";
 "weather_accuracy_forecast_description" = "Offline forecast is available until: %@.\nAccuracy: %@, hourly. %@ for every 3 hours.";
 "weather_generates_new_forecast_description" = "OsmAnd generates a new forecast every 6 hours. The closer to the current date, the more accurate it will be.";
 
-"update_only_over_wi_fi" = "Update only over Wi-Fi";
+"auto_update" = "Auto-update";
 "update_parameters" = "Update parameters";
+
+"weather_update_parameters_disabled" = "Auto-updates will be disabled.";
+"weather_update_parameters_wifi" = "Weather forecast will be updates only if Wi-Fi network is available.";
+"weather_update_parameters_any_network" = "Weather forecast will be updates over any network. Mobile data can be used.";
 
 "recording_delete_confirm" = "Delete this item?";
 

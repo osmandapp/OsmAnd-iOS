@@ -2560,7 +2560,6 @@
 "with_offline_maps" = "مع خرائط غير متصلة بالإنترنت";
 "weather_accuracy_forecast_description" = "التوقعات دون اتصال بالإنترنت متاحة حتى: %@.\nالدقة: %@, كل ساعة. %@ fكل ثلاث ساعات.";
 "weather_generates_new_forecast_description" = "أوسماند الطقس يزودك بتوقعات جديدة كل 6 ساعات. كلما اقتربنا من التاريخ الحالي ، كان ذلك أكثر دقة.";
-"update_only_over_wi_fi" = "قم بالتحديث عبر شبكة Wi-Fi فقط";
 "update_parameters" = "تحديث المحددات";
 "contact_support" = "اتصل بالدعم";
 "contact_support_description" = "إذا كان لديك أي أسئلة ، يرجى الاتصال بنا على %@.";

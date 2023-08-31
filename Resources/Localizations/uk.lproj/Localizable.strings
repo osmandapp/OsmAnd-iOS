@@ -2552,7 +2552,6 @@
 "tomorrow" = "Завтра";
 "update_parameters" = "Оновити параметри";
 "weather_generates_new_forecast_description" = "OsmAnd генерує новий прогноз що 6 годин. Чим ближче до поточної дати, тим точнішим він буде.";
-"update_only_over_wi_fi" = "Оновлювати лише через Wi-Fi";
 "weather_clear_offline_cache" = "Це очистить весь кеш офлайн-плитки погоди.";
 "weather_remove_forecast" = "Вилучити прогноз";
 "weather_remove_forecast_description" = "Ви впевнені, що хочете вилучити прогноз для %@";

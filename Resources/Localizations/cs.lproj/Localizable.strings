@@ -2671,7 +2671,6 @@
 "enough_contributions_descr" = "Gratulujeme, dostatečně přispíváte do OpenStreetMap, a proto můžete nyní využívat neomezené aktualizace map v OsmAnd!";
 "weather_miss_forecasts" = "Nemáte offline předpovědi";
 "weather_remove_forecasts_description" = "Opravdu chcete odstranit předpověď pro země: %d.";
-"update_only_over_wi_fi" = "Aktualizace pouze přes Wi-Fi";
 "update_parameters" = "Aktualizovat parametry";
 "open_street_map_login_mode_simple" = "Pro nahrání změn se musíte přihlásit.";
 "weather_forecast_is_outdated" = "Předpověď je zastaralá.";

@@ -335,6 +335,7 @@
                @"ic_action_inline_skates",
                @"ic_action_wheelchair",
                @"ic_action_wheelchair_forward",
+               @"ic_action_baby_transport",
                @"ic_action_sail_boat_dark",
                @"ic_action_aircraft",
                @"ic_action_camper",

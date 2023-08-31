@@ -85,6 +85,11 @@
     return NO;
 }
 
+- (BOOL)isTextInfo
+{
+    return NO;
+}
+
 - (void)adjustViewSize
 {
 }

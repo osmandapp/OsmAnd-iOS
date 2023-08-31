@@ -30,21 +30,22 @@
 
 - (instancetype _Nonnull )initWithType:(OAWidgetType * _Nonnull)type;
 
-- (BOOL) updateInfo;
-- (void) updateColors:(OATextState * _Nonnull)textState;
-- (BOOL) isNightMode;
-- (BOOL) isTopText;
+- (BOOL)updateInfo;
+- (void)updateColors:(OATextState * _Nonnull)textState;
+- (BOOL)isNightMode;
+- (BOOL)isTopText;
+- (BOOL)isTextInfo;
 
 - (OACommonBoolean * _Nullable ) getWidgetVisibilityPref;
 - (OACommonPreference * _Nullable ) getWidgetSettingsPrefToReset:(OAApplicationMode *_Nonnull)appMode;
 - (void) copySettings:(OAApplicationMode *_Nonnull)appMode customId:(NSString *_Nullable)customId;
 - (OAWidgetState *_Nullable) getWidgetState;
-- (BOOL) isExternal;
+- (BOOL)isExternal;
 - (OATableDataModel *_Nullable) getSettingsData:(OAApplicationMode * _Nonnull)appMode;
 
-- (void) adjustViewSize;
-- (void) attachView:(UIView *_Nonnull)container order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *_Nullable)followingWidgets;
-- (void) detachView:(OAWidgetsPanel * _Nonnull)widgetsPanel;
+- (void)adjustViewSize;
+- (void)attachView:(UIView *_Nonnull)container order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *_Nullable)followingWidgets;
+- (void)detachView:(OAWidgetsPanel * _Nonnull)widgetsPanel;
 
 @end
 

@@ -2691,7 +2691,7 @@
 "local_changes_will_be_dismissed" = "Локальні зміни буде відхилено";
 "local_file_will_be_restored" = "Локальний файл буде відновлено";
 "checking_progress" = "Перевірка…";
-"download_heightmap_maps" = "Мапа висот";
+"download_heightmap_maps" = "Мапа місцевості";
 "use_heightmap_setting" = "Використовувати 3D-мапи висот";
 "depth_contours" = "Ізолінії глибин";
 "huawei_appgallery" = "Huawei AppGallery";
@@ -3029,3 +3029,13 @@
 "map_widget_camera_distance_desc" = "Показує висоту камери над рівнем поверхні.";
 "map_widget_target_distance_desc" = "Показує відстань між камерою і ціллю.";
 "map_widget_camera_tilt_desc" = "Показує кут нахилу камери в режимі перспективи. Стандартно 90° (без нахилу).";
+"weather_updates_manual" = "Прогноз погоди потрібно оновлювати вручну.";
+"purchases_feature_relief_3d_description" = "Придбайте та спостерігайте за масштабною моделлю вашого району або цілого континенту.";
+"weather_update_disabled" = "Вимкнено";
+"shared_string_relief_3d" = "3D-рельєф";
+"weather_update_parameters_wifi" = "Прогноз погоди оновлюватиметься лише за наявності мережі Wi-Fi.";
+"weather_update_over_wifi_only" = "Лише через Wi-Fi";
+"weather_update_parameters_disabled" = "Автооновлення буде вимкнено.";
+"auto_update" = "Автооновлення";
+"weather_update_over_any_network" = "Через будь-яку мережу";
+"weather_update_parameters_any_network" = "Прогноз погоди оновлюватиметься через будь-яку мережу. Можна використовувати мобільні дані.";

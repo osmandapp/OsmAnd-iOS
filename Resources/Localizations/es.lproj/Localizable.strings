@@ -223,7 +223,7 @@
 "save_track_interval_globally" = "Intervalo de registro";
 "rec_interval_minimum" = "Mínimo";
 "track_start_rec" = "Iniciar grabación de traza";
-"track_rec_addon_q" = "Activa el complemento «Grabación de traza» para registrar y guardar las trazas";
+"track_rec_addon_q" = "Por favor, activa el complemento para la grabación de las pistas para grabarlas y guardarlas";
 "track_interval_remember" = "Recordar mi elección";
 "other_options" = "Otras opciones";
 "add_parking" = "Añadir como ubicación de aparcamiento";
@@ -290,7 +290,7 @@
 "make_call" = "Hacer llamada";
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Artículos de Wikipedia basados en la ubicación del mapa";
-"srtm_plugin_name" = "Curvas de nivel";
+"srtm_plugin_name" = "Topografía";
 "product_desc_srtm" = "Evaluación visual de la forma de la superficie terrestre";
 "enter_description" = "Añade una descripción";
 "shared_string_description" = "Descripción";
@@ -313,7 +313,7 @@
 "shared_string_hillshade" = "Sombreado";
 "show_alt_in_drive" = "Ver altitud en modo conducción";
 "shared_string_get" = "Obtener";
-"srtm_plugin_disabled" = "Curvas de nivel desactivadas";
+"srtm_plugin_disabled" = "Topografía desactivada";
 "shared_string_remove" = "Quitar";
 "my_favorites" = "Mis favoritos";
 "layer_route" = "Ruta";
@@ -322,8 +322,8 @@
 "gpx_max_speed" = "Velocidad máx.";
 "shared_string_speed" = "Velocidad";
 "menu_my_trips" = "Mis trazas";
-"prch_wiki_info" = "El complemento de Wikipedia activa la información de Wikipedia para los mapas que tiene descargados o comprados con un límite gratuito.";
-"prch_srtm_info" = "El complemento de Curvas de nivel activa las curvas de nivel para los mapas que tiene comprados o descargados con un límite gratuito.";
+"prch_wiki_info" = "El complemento para la Wikipedia permite obtener la información de la wikipedia para los mapas que usas, comprado o descargado dentro del límite gratuito.";
+"prch_srtm_info" = "El complemento para la topografía habilita las curvas de nivel de los mapas a los que se tienes derecho de usar, comprados o descargados dentro del período gratuito.";
 "shared_string_open" = "Abrir";
 "time_closed" = "Cerrado";
 "will_close_at" = "Cierra a las";
@@ -365,7 +365,7 @@
 "plugin_popup_wiki_title" = "Descargar Wikipedia";
 "plugin_popup_wiki_desc" = "Para usar el complemento de Wikipedia, descarga primero los datos Wikipedia de una región";
 "plugin_popup_srtm_title" = "Descargar curvas de nivel";
-"plugin_popup_srtm_desc" = "Para usar la función de Curvas de nivel, descargue primero los datos de Curvas de nivel de una región";
+"plugin_popup_srtm_desc" = "Para empezar a utilizar la función Topografía, descarga primero las curvas a nivel de una región";
 "plugin_popup_nautical_title" = "Descargar mapas náuticos";
 "plugin_popup_nautical_desc" = "Primero descargue los mapas náuticos.\nLuego vaya a los <b>Ajustes del mapa</b> > <b>Tipo de mapa</b> y active el estilo <b>Náutico</b>";
 "go_to_downloads" = "Ir a descargas";
@@ -373,7 +373,7 @@
 "plugin_ski_descr" = "Diseñado para navegar por zonas de deportes de invierno: Vea las pistas de esquí y los remontes, así como las pistas de esquí de fondo, con líneas de color que indican los grados de dificultad. Para utilizarlo, activa este plugin y ve también a \"Configurar mapa\" y elige el estilo de mapa \"Invierno y esquí\".";
 "product_title_trip_planning" = "Planificación de viaje";
 "plugin_popup_wiki_ask" = "Para descargar los datos de Wikipedia, necesita activar el complemento: <b>Wikipedia</b>";
-"plugin_popup_srtm_ask" = "Para descargar las Curvas de nivel, necesita activar el complemento: <b>Curvas de nivel</b>";
+"plugin_popup_srtm_ask" = "Para descargar las líneas del contorno necesitas activar el complemento: <b>Topografía</b>";
 "plugin_popup_trip_planning_ask" = "Para planificar un viaje, necesita activar el complemento: <b>Planificación de viaje</b>";
 "turn_on_plugin" = "Activar complemento";
 "all_world_popup_desc" = "Descargar el «Mapa base mundial» para ver los nombres de los estados, fronteras y otra información";

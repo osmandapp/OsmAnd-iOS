@@ -2683,7 +2683,7 @@
 "shared_string_uploaded" = "Uploadet";
 "last_synchronization" = "Seneste synkronisering";
 "cloud_conflict_descr" = "De lokale og cloud-versioner indeholder ændringer siden den sidste synkronisering.";
-"download_heightmap_maps" = "Højdekort";
+"download_heightmap_maps" = "Terrænkort";
 "depth_contours" = "Dybdekonturer";
 "use_heightmap_setting" = "Brug højdekort med 3D-relief";
 "nautical_depth_points" = "Nautiske dybdepunkter";
@@ -3021,3 +3021,13 @@
 "map_widget_camera_tilt_desc" = "Viser kameraets hældningsvinkel i perspektivtilstand. Standard er 90° (ingen hældning).";
 "map_widget_camera_distance_desc" = "Viser kameraets højde over overfladeniveauet.";
 "map_widget_zoom_level_desc" = "Viser det aktuelle zoomniveau på kortet.";
+"weather_updates_manual" = "Vejrudsigten skal opdateres manuelt.";
+"purchases_feature_relief_3d_description" = "Ej og se skalamodellen af dit nabolag eller hele kontinentet.";
+"weather_update_disabled" = "Deaktiveret";
+"shared_string_relief_3d" = "3D-relief";
+"weather_update_parameters_wifi" = "Vejrudsigten opdateres kun, hvis der er et WiFi-netværk tilgængeligt.";
+"weather_update_over_wifi_only" = "Kun over WiFi";
+"weather_update_parameters_disabled" = "Auto-opdateringer vil blive deaktiveret.";
+"auto_update" = "Auto-opdater";
+"weather_update_over_any_network" = "Via ethvert netværk";
+"weather_update_parameters_any_network" = "Vejrudsigten vil blive opdateret over ethvert netværk. Mobildata kan bruges.";

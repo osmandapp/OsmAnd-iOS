@@ -88,8 +88,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     }
     
     func openArticle(article: TravelArticle, lang: String) {
-        let vc = TravelArticleDialogViewController.init(article: article, lang: lang)
-        //self.showModalViewController(vc)
+        let vc = TravelArticleDialogViewController.init(articleId: article.generateIdentifier(), lang: lang)
         self.show(vc)
     }
     

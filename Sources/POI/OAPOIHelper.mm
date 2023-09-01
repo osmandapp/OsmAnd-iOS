@@ -895,7 +895,7 @@
     return [NSArray arrayWithArray:arr];
 }
 
-+ (NSArray<OAPOI *> *) findTravelGuides:(NSString *)categoryName location:(OsmAnd::PointI)location radius:(int)radius reader:(NSString *)reader publish:(BOOL(^)(OAPOIAdapter *poi))publish
++ (NSArray<OAPOI *> *) findTravelGuides:(NSString *)categoryName location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOIAdapter *poi))publish
 {
     OsmAndAppInstance _app = [OsmAndApp instance];
     const auto& obfsCollection = _app.resourcesManager->obfsCollection;
@@ -917,9 +917,8 @@
         searchCriteria->categoriesFilter = categoriesFilter;
     }
     
-    if (radius != -1)
+    if (bbox31.width() != 0 && bbox31.height() != 0)
     {
-        OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, location);
         searchCriteria->bbox31 = bbox31;
     }
     
@@ -952,7 +951,7 @@
     return [NSArray arrayWithArray:arr];
 }
 
-- (NSArray<OAPOI *> *) findTravelGuidessByKeyword:(NSString *)keyword categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName location:(OsmAnd::PointI)location radius:(int)radius reader:(NSString *)reader publish:(BOOL(^)(OAPOIAdapter *poi))publish
+- (NSArray<OAPOI *> *) findTravelGuidesByKeyword:(NSString *)keyword categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName location:(OsmAnd::PointI)location radius:(int)radius reader:(NSString *)reader publish:(BOOL(^)(OAPOIAdapter *poi))publish
 {
     _isSearchDone = NO;
     _breakSearch = NO;

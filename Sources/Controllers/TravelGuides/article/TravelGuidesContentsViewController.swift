@@ -15,6 +15,8 @@ class TravelGuidesContentsViewController : OABaseButtonsViewController {
     var items: TravelContentItem
     var cellOpeningStatuses: [Bool]
     
+    weak var delegate: TravelArticleDialogProtocol?
+    
     required init?(coder: NSCoder) {
         self.article = TravelArticle()
         self.selectedLang = ""
@@ -49,8 +51,9 @@ class TravelGuidesContentsViewController : OABaseButtonsViewController {
             
             let headerItem = items.subItems[i]
             let headerRow = section.createNewRow()
-            headerRow.cellType = OASelectionCollapsableCell.getIdentifier()
+            headerRow.cellType = OAButtonTableViewCell.getIdentifier()
             headerRow.title = headerItem.name
+            headerRow.setObj(headerItem.link!, forKey: "link")
             headerRow.iconName = "ic_action_route_first_intermediate"
             headerRow.setObj(true, forKey: "isHeader")
             if headerItem.subItems.count > 0 {
@@ -61,9 +64,11 @@ class TravelGuidesContentsViewController : OABaseButtonsViewController {
             if opened && headerItem.subItems.count > 0 {
                 for subheaderItem in headerItem.subItems {
                     let subheaderRow = section.createNewRow()
-                    subheaderRow.cellType = OASelectionCollapsableCell.getIdentifier()
+                    subheaderRow.cellType = OAButtonTableViewCell.getIdentifier()
                     subheaderRow.title = subheaderItem.name
+                    subheaderRow.setObj(subheaderItem.link!, forKey: "link")
                     subheaderRow.setObj(false, forKey: "isHeader")
+                    subheaderRow.setObj("subheaderItem.articleId", forKey: "article")
                 }
             }
         }
@@ -87,24 +92,27 @@ class TravelGuidesContentsViewController : OABaseButtonsViewController {
         let item = tableData.item(for: indexPath)
         var outCell: UITableViewCell? = nil
         
-        if item.cellType == OASelectionCollapsableCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OASelectionCollapsableCell.getIdentifier()) as? OASelectionCollapsableCell
+        if item.cellType == OAButtonTableViewCell.getIdentifier() {
+            var cell = tableView.dequeueReusableCell(withIdentifier: OAButtonTableViewCell.getIdentifier()) as? OAButtonTableViewCell
             if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OASelectionCollapsableCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OASelectionCollapsableCell
-                cell?.selectionStyle = .none
+                let nib = Bundle.main.loadNibNamed(OAButtonTableViewCell.getIdentifier(), owner: self, options: nil)
+                cell = nib?.first as? OAButtonTableViewCell
                 cell?.separatorInset = .zero
-                cell?.showOptionsButton(false)
-                cell?.makeSelectable(false)
+                cell?.descriptionVisibility(false)
+                cell?.buttonVisibility(true)
+                cell?.leftIconVisibility(true)
+                cell?.leftEditButtonVisibility(false)
+                cell?.leftIconView.contentMode = .center
+                
             }
             if let cell {
-                cell.titleView.text = item.title
+                cell.titleLabel.text = item.title
                 
                 let isHeader = item.bool(forKey: "isHeader")
                 
                 if isHeader {
-                    cell.titleView.font = UIFont.preferredFont(forTextStyle: .headline)
-                    cell.titleView.textColor = UIColor(rgb: color_primary_purple)
+                    cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+                    cell.titleLabel.textColor = UIColor(rgb: color_primary_purple)
                     
                     if let leftIconName = item.iconName {
                         cell.leftIconView.image = UIImage.templateImageNamed(leftIconName)
@@ -113,27 +121,29 @@ class TravelGuidesContentsViewController : OABaseButtonsViewController {
                         cell.leftIconView.image = nil
                     }
                     
+                    cell.button.setTitle(nil, for: .normal)
                     if let rightIconName = item.string(forKey: "rightIconName") {
-                        cell.arrowIconView.image = UIImage.templateImageNamed(rightIconName)
-                        cell.arrowIconView.tintColor = UIColor(rgb: color_primary_purple)
+                        cell.button.setImage(UIImage.templateImageNamed(rightIconName), for: .normal)
+                        cell.button.tintColor = UIColor(rgb: color_primary_purple)
                     } else {
-                        cell.arrowIconView.image = nil
+                        cell.button.setImage(nil, for: .normal)
                     }
                     
                     let tag = indexPath.section << 10 | indexPath.row
-                    cell.openCloseGroupButton.tag = tag
-                    cell.openCloseGroupButton.removeTarget(nil, action: nil, for: .allEvents)
-                    cell.openCloseGroupButton.addTarget(self, action: #selector(openCloseGroupButtonAction(_:)), for: .touchUpInside)
+                    cell.button.tag = tag
+                    cell.button.removeTarget(nil, action: nil, for: .allEvents)
+                    cell.button.addTarget(self, action: #selector(openCloseGroupButtonAction(_:)), for: .touchUpInside)
                     cell.separatorInset = .zero
                     
                 } else {
                     
-                    cell.titleView.font = UIFont.preferredFont(forTextStyle: .subheadline)
-                    cell.titleView.textColor = UIColor(rgb: color_primary_purple)
+                    cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+                    cell.titleLabel.textColor = UIColor(rgb: color_primary_purple)
                     cell.leftIconView.image = nil
-                    cell.arrowIconView.image = nil
-                    cell.openCloseGroupButton.removeTarget(nil, action: nil, for: .allEvents)
-                    cell.separatorInset = .init(top: 0, left: OAUtilities.getLeftMargin() + 20, bottom: 0, right: 0)
+                    cell.button.setTitle(nil, for: .normal)
+                    cell.button.setImage(nil, for: .normal)
+                    cell.button.removeTarget(nil, action: nil, for: .allEvents)
+                    cell.separatorInset = .init(top: 0, left: OAUtilities.getLeftMargin(), bottom: 0, right: 0)
                 }
                 
                 outCell = cell
@@ -141,6 +151,16 @@ class TravelGuidesContentsViewController : OABaseButtonsViewController {
         }
         
         return outCell
+    }
+    
+    override func onRowSelected(_ indexPath: IndexPath!) {
+        let item = tableData.item(for: indexPath)
+        if let link = item.string(forKey: "link") {
+            if delegate != nil {
+                delegate?.moveToAnchor(link: link, title: selectedLang)
+            }
+        }
+        self.dismiss()
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

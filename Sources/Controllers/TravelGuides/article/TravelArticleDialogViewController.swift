@@ -9,7 +9,13 @@
 import UIKit
 import WebKit
 
-class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewControllerDelegate  {
+protocol TravelArticleDialogProtocol : AnyObject {
+    func moveToAnchor(link: String, title: String)
+    func openArticleByTitle(title: String, selectedLang: String)
+}
+
+
+class TravelArticleDialogViewController : OABaseWebViewController, TravelArticleDialogProtocol, SFSafariViewControllerDelegate  {
     
     let rtlLanguages = ["ar", "dv", "he", "iw", "fa", "nqo", "ps", "sd", "ug", "ur", "yi"]
     static let EMPTY_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4//"
@@ -95,9 +101,9 @@ class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewC
         super.init()
     }
     
-    init(article: TravelArticle, lang: String) {
+    init(articleId: TravelArticleIdentifier, lang: String) {
         super.init()
-        self.article = article
+        self.articleId = articleId
         self.selectedLang = lang
         self.isFirstLaunch = true
     }
@@ -205,8 +211,15 @@ class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewC
         print("onLanguagesButtonClicked")
     }
     
+    @objc func showNavigation() {
+        let vc = TravelGuidesNavigationViewController(article: article!, selectedLang: selectedLang!)
+        vc.delegate = self
+        self.showModalViewController(vc)
+    }
+    
     @objc func onContentsButtonClicked() {
         let vc = TravelGuidesContentsViewController(article: article!, selectedLang: selectedLang!)
+        vc.delegate = self
         self.showModalViewController(vc)
     }
     
@@ -218,11 +231,6 @@ class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewC
         print("onBookmarkButtonClicked")
     }
     
-    @objc func showNavigation() {
-        let vc = TravelGuidesNavigationViewController(article: article!, selectedLang: selectedLang!)
-        self.showModalViewController(vc)
-    }
-    
     
     //MARK: Data
     
@@ -231,27 +239,35 @@ class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewC
     }
     
     func populateArticle() {
-        if article != nil {
-            articleId = article!.generateIdentifier()
-            langs = TravelObfHelper.shared.getArticleLangs(articleId: articleId!)
+        article = nil
+        if articleId == nil {
+            return
         }
-        guard (article != nil && articleId != nil && langs != nil && langs!.count > 0) else { return }
-        
-        if selectedLang == nil {
+        langs = TravelObfHelper.shared.getArticleLangs(articleId: articleId!)
+        if (selectedLang == nil && langs != nil && langs!.count > 0) {
             selectedLang = langs![0]
         }
+        
+        article = TravelObfHelper.shared.getArticleById(articleId: articleId!, lang: selectedLang, readGpx: false, callback: nil)
+        //TODO: add readGpx callback here
+        
+        if article == nil {
+            return
+        }
+        
+        title = getTitle()
         
         //TODO: implement
         //TravelLocalDataHelper ldh = app.getTravelHelper().getBookmarksHelper();
         //ldh.addToHistory(article);
         
         updateSaveButton()
-        
-        //loadHtml()
-        
+        loadWebView()
     }
     
     func createHtmlContent() -> String? {
+        
+        guard article != nil else { return "" }
         
         var sb = HEADER_INNER
         
@@ -359,6 +375,20 @@ class TravelArticleDialogViewController : OABaseWebViewController, SFSafariViewC
             }
         }
         
+    }
+    
+    
+    //MARK: TravelArticleDialogProtocol
+    
+    func moveToAnchor(link: String, title: String) {
+        print("moveToAnchor")
+        webView.evaluateJavaScript("javascript:scrollAnchor(\"" + link + "\", \"" + title + "\")")
+    }
+    
+    func openArticleByTitle(title: String, selectedLang: String) {
+        self.articleId = TravelObfHelper.shared.getArticleId(title: title, lang: selectedLang)
+        self.selectedLang = selectedLang
+        populateArticle()
     }
     
 }

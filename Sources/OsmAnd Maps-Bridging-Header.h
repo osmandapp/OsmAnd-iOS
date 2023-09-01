@@ -91,6 +91,7 @@
 #import "OARightIconTableViewCell.h"
 #import "OAFilledButtonCell.h"
 #import "OASelectionCollapsableCell.h"
+#import "OAButtonTableViewCell.h"
 
 // Other
 #import "OAIndexConstants.h"

@@ -2681,7 +2681,7 @@
 "use_heightmap_setting" = "Utilizar mapas de altura en relieve 3D";
 "depth_contours" = "Curvas de profundidad";
 "huawei_appgallery" = "Huawei AppGallery";
-"download_heightmap_maps" = "Mapa de alturas";
+"download_heightmap_maps" = "Mapa del terreno";
 "nautical_depth_points" = "Puntos de profundidad náutica";
 "amazon_appstore" = "Amazon Appstore";
 "position_on_map" = "Posición en la pantalla";
@@ -3018,3 +3018,13 @@
 "map_widget_camera_distance_desc" = "Muestra la elevación de la cámara sobre el nivel de la superficie.";
 "map_widget_zoom_level_desc" = "Muestra el nivel actual de zoom del mapa.";
 "map_widget_target_distance_desc" = "Muestra la distancia entre la cámara y la ubicación del objetivo.";
+"weather_updates_manual" = "La previsión meteorológica debe actualizarse manualmente.";
+"purchases_feature_relief_3d_description" = "Ten y observa la maqueta de tu barrio o de todo el continente.";
+"weather_update_disabled" = "Desactivado";
+"shared_string_relief_3d" = "Relieve en 3D";
+"weather_update_parameters_wifi" = "La previsión meteorológica sólo se actualizará si hay una red WiFi disponible.";
+"weather_update_over_wifi_only" = "Sólo mediante WIFI";
+"weather_update_parameters_disabled" = "Se desactivarán las actualizaciones automáticas.";
+"auto_update" = "Actualización automática";
+"weather_update_over_any_network" = "En cualquier red";
+"weather_update_parameters_any_network" = "La previsión meteorológica se actualizará a través de cualquier red. Se pueden utilizar los datos móviles.";

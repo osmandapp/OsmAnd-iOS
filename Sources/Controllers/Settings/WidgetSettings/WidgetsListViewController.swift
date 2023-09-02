@@ -23,7 +23,6 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
 
     let panels = WidgetsPanel.values
 
-    private var widgetsToDelete: [MapWidgetInfo] = []
     private var widgetsToAdd: [MapWidgetInfo] = []
 
     private var widgetPanel: WidgetsPanel! {
@@ -96,7 +95,6 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
 
     override func onLeftNavbarButtonPressed() {
         if editMode {
-            widgetsToDelete.removeAll()
             widgetsToAdd.removeAll()
             editMode = false
             return
@@ -106,18 +104,7 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
 
     override func onRightNavbarButtonPressed() {
         if editMode {
-            if !widgetsToDelete.isEmpty {
-                for widget in widgetsToDelete {
-                    deleteWidget(widget)
-                }
-                widgetsToDelete.removeAll()
-            }
-            if !widgetsToAdd.isEmpty {
-                for widget in widgetsToAdd {
-                    WidgetUtils.addSelectedWidgets(widgetsIds: [widget.key], panel: widgetPanel, selectedAppMode: selectedAppMode)
-                }
-                widgetsToAdd.removeAll()
-            }
+            widgetsToAdd.removeAll()
             reorderWidgets()
             editMode = false
         }
@@ -149,7 +136,7 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
                 widgetsToAdd.append(widget!)
                 updateUI(true)
             } else {
-                WidgetUtils.addSelectedWidgets(widgetsIds: [widget!.key], panel: widgetPanel, selectedAppMode: selectedAppMode)
+                widgetsToAdd.append(widget!)
                 reorderWidgets()
             }
         }
@@ -172,7 +159,6 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
     // MARK: Additions
 
     private func reorderWidgets() {
-        var arr = [MapWidgetInfo]()
         var orders = [[String]]()
         var currPage = [String]()
         for sec in 0..<tableData.sectionCount() {
@@ -181,15 +167,18 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
                 let rowData = section.getRow(r)
                 if let row = rowData.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo {
                     currPage.append(row.key)
-                    arr.append(row)
                 }
             }
             orders.append(currPage)
             currPage = [String]()
         }
-        widgetPanel.setWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode)
-        widgetRegistry.reorderWidgets()
-        OARootViewController.instance().mapPanel.recreateControls()
+        if !widgetsToAdd.isEmpty, widgetsToAdd.count == 1 {
+            orders[orders.count - 1].append(widgetsToAdd.first!.key)
+            widgetsToAdd.removeAll()
+        }
+        WidgetUtils.setEnabledWidgets(orderedWidgets: orders,
+                                      panel: widgetPanel,
+                                      selectedAppMode: selectedAppMode)
     }
 
 }
@@ -352,9 +341,7 @@ extension WidgetsListViewController {
                 tableData.removeRow(at: indexPath)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
                 if !editMode {
-                    deleteWidget(widgetInfo)
-                } else {
-                    widgetsToDelete.append(widgetInfo)
+                    reorderWidgets()
                 }
             }
         }
@@ -445,10 +432,6 @@ extension WidgetsListViewController {
         row.title = widget.getTitle()
         row.descr = widget.getMessage()
         row.cellType = OASimpleTableViewCell.getIdentifier()
-    }
-
-    private func deleteWidget(_ widgetInfo: MapWidgetInfo) {
-        widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: NSNumber(value: false), recreateControls: true)
     }
 
 }

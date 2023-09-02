@@ -105,10 +105,10 @@
         [mapHudViewController.bottomWidgetsView addSubview:_bottomPanelController.view];
         [mapHudViewController.rightWidgetsView addSubview:_rightPanelController.view];
         
-        [mapHudViewController.topWidgetsView.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner | kCALayerMaxXMaxYCorner];
-        [mapHudViewController.bottomWidgetsView.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner];
-        [mapHudViewController.rightWidgetsView.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner];
-        [mapHudViewController.leftWidgetsView.layer addWidgetLayerDecoratorWithMask:kCALayerMaxXMaxYCorner];
+        [_topPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner | kCALayerMaxXMaxYCorner];
+        [_bottomPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner];
+        [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner];
+        [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMaxXMaxYCorner];
 
         _topPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
         _leftPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;

@@ -18,6 +18,8 @@
 #import "OrderedDictionary.h"
 #import "OAIndexConstants.h"
 #import "OARoutePreferencesParameters.h"
+#import "OAMapWidgetRegistry.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAProfileSettingsItem
 {
@@ -186,6 +188,23 @@
                 [setting setValueFromString:value appMode:_appMode];
                 if ([key isEqualToString:@"voice_mute"])
                     [OARoutingHelper.sharedInstance.getVoiceRouter setMute:[OAAppSettings.sharedManager.voiceMute get:_appMode]];
+                else if ([key isEqualToString:@"map_info_controls"])
+                {
+                    NSMutableSet<NSString *> *enabledWidgets = [NSMutableSet set];
+                    for (key in [value componentsSeparatedByString:@";"])
+                    {
+                        if (![key hasPrefix:HIDE_PREFIX])
+                        {
+                            NSInteger indexOfDelimiter = [key indexOf:OAMapWidgetInfo.DELIMITER];
+                            if (indexOfDelimiter > -1)
+                                [enabledWidgets addObject:[key substringToIndex:indexOfDelimiter]];
+                            else
+                                [enabledWidgets addObject:key];
+                        }
+                    }
+                    if (enabledWidgets.count > 0)
+                        [OAPlugin enabledPluginsByMapWidgets:enabledWidgets];
+                }
             }
         }
         else if ([key isEqualToString:@"terrain_layer"])

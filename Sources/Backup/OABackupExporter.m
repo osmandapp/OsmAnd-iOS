@@ -24,6 +24,8 @@
 
 @interface OAItemWriterTask : NSOperation
 
+@property (nonatomic, readonly) NSString *error;
+
 @end
 
 @implementation OAItemWriterTask
@@ -45,7 +47,14 @@
 
 - (void)main
 {
-    [_writer write:_item];
+    @try
+    {
+        [_writer write:_item];
+    }
+    @catch (NSException *e)
+    {
+        _error = e.reason;
+    }
 }
 
 - (void)cancel
@@ -156,23 +165,24 @@
         _executor = [[NSOperationQueue alloc] init];
         _executor.maxConcurrentOperationCount = 10;
         [_executor addOperations:lightTasks waitUntilFinished:YES];
-        
-//        if (!executor.getExceptions().isEmpty()) {
-//            log.finishOperation();
-//            Throwable t = executor.getExceptions().values().iterator().next();
-//            throw new IOException(t.getMessage(), t);
-//        }
+        for (OAItemWriterTask *task in lightTasks)
+            if (task.error)
+            {
+                [log finishOperation];
+                @throw [NSException exceptionWithName:@"IOException" reason:task.error userInfo:nil];
+            }
     }
     if (heavyTasks.count > 0)
     {
         _executor = [[NSOperationQueue alloc] init];
         _executor.maxConcurrentOperationCount = 1;
         [_executor addOperations:heavyTasks waitUntilFinished:YES];
-//        if (!executor.getExceptions().isEmpty()) {
-//            log.finishOperation();
-//            Throwable t = executor.getExceptions().values().iterator().next();
-//            throw new IOException(t.getMessage(), t);
-//        }
+        for (OAItemWriterTask *task in heavyTasks)
+            if (task.error)
+            {
+                [log finishOperation];
+                @throw [NSException exceptionWithName:@"IOException" reason:task.error userInfo:nil];
+            }
     }
     [log finishOperation];
 }

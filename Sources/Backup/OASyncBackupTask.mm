@@ -47,7 +47,9 @@
         _operation = operation;
         _singleOperation = operation != EOABackupSyncOperationSync;
         _backupHelper = OABackupHelper.sharedInstance;
-        [_backupHelper addPrepareBackupListener:self];
+        if (!_singleOperation)
+        	[_backupHelper addPrepareBackupListener:self];
+
         _importProgress = 0;
         _exportProgress = 0;
         _maxProgress = 0;

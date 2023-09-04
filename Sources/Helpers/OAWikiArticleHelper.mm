@@ -7,6 +7,7 @@
 //
 
 #import "OAWikiArticleHelper.h"
+#import "OAWikiArticleHelper+cpp.h"
 #import "OAWorldRegion.h"
 #import "OsmAndApp.h"
 #import "OAManageResourcesViewController.h"

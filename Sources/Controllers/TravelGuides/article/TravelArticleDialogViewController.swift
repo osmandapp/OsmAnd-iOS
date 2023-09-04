@@ -10,8 +10,10 @@ import UIKit
 import WebKit
 
 protocol TravelArticleDialogProtocol : AnyObject {
+    func getWebView() -> WKWebView
     func moveToAnchor(link: String, title: String)
     func openArticleByTitle(title: String, selectedLang: String)
+    func openArticleById(articleId: TravelArticleIdentifier, selectedLang: String)
 }
 
 
@@ -19,7 +21,13 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     
     let rtlLanguages = ["ar", "dv", "he", "iw", "fa", "nqo", "ps", "sd", "ug", "ur", "yi"]
     static let EMPTY_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4//"
-    let emptyUrl = "about:blank"
+    let PREFIX_GEO = "geo:"
+    let PAGE_PREFIX_HTTP = "http://"
+    let PAGE_PREFIX_HTTPS = "https://"
+    let WIKIVOYAGE_DOMAIN = ".wikivoyage.org/wiki/"
+    let WIKI_DOMAIN = ".wikipedia.org/wiki/"
+    let PAGE_PREFIX_FILE = "file://"
+    let blankUrl = "about:blank"
     
     let HEADER_INNER = """
     <html><head>\n
@@ -88,7 +96,9 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     var selectedLang: String?
     var langs: [String]?
     var nightMode = false
-    var isFirstLaunch = true
+    
+    var historyArticleIds: [TravelArticleIdentifier] = []
+    var historyLangs: [String] = []
     
     var bottomView: UIView?
     var bottomStackView: UIStackView?
@@ -105,7 +115,6 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         super.init()
         self.articleId = articleId
         self.selectedLang = lang
-        self.isFirstLaunch = true
     }
     
     
@@ -231,6 +240,16 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         print("onBookmarkButtonClicked")
     }
     
+    override func dismiss() {
+        if historyArticleIds.count > 0 {
+            self.articleId = historyArticleIds.popLast()
+            self.selectedLang = historyLangs.popLast()
+            populateArticle()
+        } else {
+            super.dismiss()
+        }
+    }
+    
     
     //MARK: Data
     
@@ -249,6 +268,7 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         }
         
         article = TravelObfHelper.shared.getArticleById(articleId: articleId!, lang: selectedLang, readGpx: false, callback: nil)
+        
         //TODO: add readGpx callback here
         
         if article == nil {
@@ -343,42 +363,44 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     }
     
     override func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        let a = navigationAction.request.url?.absoluteString
+        
         let newUrl = OATravelGuidesHelper.normalizeFileUrl(navigationAction.request.url?.absoluteString) ?? ""
-        var currentUrl = OATravelGuidesHelper.normalizeFileUrl(webView.url?.absoluteString) ?? ""
-        let wikiUrlEndIndndex = Int(currentUrl.index(of: "#"))
-        if wikiUrlEndIndndex > 0 {
-            currentUrl = currentUrl.substring(to: wikiUrlEndIndndex)
-        }
+        let isWebPage = newUrl.hasPrefix(PAGE_PREFIX_HTTP) || newUrl.hasPrefix(PAGE_PREFIX_HTTPS)
         
-        if isFirstLaunch {
-            isFirstLaunch = false
+        if newUrl.hasSuffix("showNavigation") {
+            //Clicked on Breadcrumbs navigation pannel
+            showNavigation()
+            decisionHandler(.cancel)
+        } else if newUrl == blankUrl {
+            //On open new TravelGuides page via code
             decisionHandler(.allow)
-            
+        } else if newUrl.contains(WIKIVOYAGE_DOMAIN) && isWebPage {
+            TravelGuidesUtils.processWikivoyageDomain(url: newUrl, delegate: self)
+            decisionHandler(.cancel)
+        } else if newUrl.contains(WIKI_DOMAIN) && isWebPage && article != nil {
+            self.webView.addSpinner()
+            let defaultCoordinates = CLLocation(latitude: article!.lat, longitude: article!.lon)
+            TravelGuidesUtils.processWikipediaDomain(defaultLocation: defaultCoordinates, url: newUrl, delegate: self)
+            decisionHandler(.cancel)
+        } else if isWebPage {
+            OAWikiArticleHelper.warnAboutExternalLoad(newUrl, sourceView: self.webView)
+            decisionHandler(.cancel)
+        } else if newUrl.hasPrefix(PREFIX_GEO) {
+
+            //TODO: implement
+            decisionHandler(.cancel)
+
         } else {
-            
-            if newUrl.hasPrefix(currentUrl) {
-                
-                if newUrl.hasSuffix("showNavigation") {
-                    //Clicked on Breadcrumbs navigation pannel
-                    showNavigation()
-                    decisionHandler(.cancel)
-                } else {
-                    //Navigation inside one page by anchors
-                    decisionHandler(.allow)
-                }
-                
-            } else {
-                
-                //TODO: implement new urls opening
-                decisionHandler(.cancel)
-            }
+            decisionHandler(.cancel)
         }
-        
     }
     
     
     //MARK: TravelArticleDialogProtocol
+    
+    func getWebView() -> WKWebView {
+        return webView
+    }
     
     func moveToAnchor(link: String, title: String) {
         print("moveToAnchor")
@@ -386,7 +408,17 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     }
     
     func openArticleByTitle(title: String, selectedLang: String) {
+        historyArticleIds.append(self.articleId!)
+        historyLangs.append(self.selectedLang!)
         self.articleId = TravelObfHelper.shared.getArticleId(title: title, lang: selectedLang)
+        self.selectedLang = selectedLang
+        populateArticle()
+    }
+    
+    func openArticleById(articleId: TravelArticleIdentifier, selectedLang: String) {
+        historyArticleIds.append(self.articleId!)
+        historyLangs.append(self.selectedLang!)
+        self.articleId = articleId
         self.selectedLang = selectedLang
         populateArticle()
     }

@@ -512,24 +512,24 @@ class TravelObfHelper : NSObject {
     func getArticleByTitle(title: String, rect: QuadRect, lang: String, readGpx: Bool, callback: GpxReadCallback?) -> TravelArticle? {
         var article: TravelArticle? = nil
         var amenities: [OAPOIAdapter] = []
-        var x = 0
-        var y = 0
-        var left = 0
-        var right = Int.max
-        var top = 0
-        var bottom = Int.max
+        var x: Int32 = 0
+        var y: Int32 = 0
+        var left: Int32 = 0
+        var right: Int32 = Int32.max
+        var top: Int32 = 0
+        var bottom: Int32 = Int32.max
         if rect.height() > 0 && rect.width() > 0 {
-            x = Int(rect.centerX())
-            y = Int(rect.centerY())
-            left = Int(rect.left)
-            right = Int(rect.right)
-            top = Int(rect.top)
-            bottom = Int(rect.bottom)
+            x = Int32(rect.centerX())
+            y = Int32(rect.centerY())
+            left = Int32(rect.left)
+            right = Int32(rect.right)
+            top = Int32(rect.top)
+            bottom = Int32(rect.bottom)
         }
         
         for reader in getReaders() {
             
-            OATravelGuidesHelper.searchAmenity(Int32(x), y: Int32(y), left: Int32(left), right: Int32(right), top: Int32(top), bottom: Int32(bottom), reader: reader, searchFilter: ROUTE_ARTICLE) { amenity in
+            OATravelGuidesHelper.searchAmenity(x, y: y, left: left, right: right, top: top, bottom: bottom, reader: reader, searchFilter: ROUTE_ARTICLE) { amenity in
                 
                 if title == amenity!.getName(lang, transliterate: false) {
                     amenities.append(amenity!)

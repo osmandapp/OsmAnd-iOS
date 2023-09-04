@@ -6,7 +6,6 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OAResourcesBaseViewController.h"
 #import <Foundation/Foundation.h>
 
 #define kPagePrefixHttp @"http://"
@@ -32,10 +31,8 @@ typedef void(^OAWikiArticleSearchTaskBlockType)(void);
 @interface OAWikiArticleHelper : NSObject
 
 + (OAWorldRegion *) findWikiRegion:(OAWorldRegion *)mapRegion;
-+ (OARepositoryResourceItem *) findResourceItem:(OAWorldRegion *)worldRegion;
 + (void) showWikiArticle:(CLLocation *)location url:(NSString *)url sourceView:(UIView *)sourceView;
 + (void) showWikiArticle:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart sourceView:(UIView *)sourceView onComplete:(void (^)())onComplete;
-+ (void) showHowToOpenWikiAlert:(OARepositoryResourceItem *)item url:(NSString *)url sourceView:(UIView *)sourceView;
 + (NSString *) getFirstParagraph:(NSString *)descriptionHtml;
 + (NSString *) getPartialContent:(NSString *)source;
 + (void) warnAboutExternalLoad:(NSString *)url sourceView:(UIView *)sourceView;

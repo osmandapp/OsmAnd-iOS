@@ -113,6 +113,11 @@
     _cachedAngularUnits = -1;
 }
 
+- (BOOL)isTextInfo
+{
+    return YES;
+}
+
 - (void) onWidgetClicked:(id)sender
 {
     if (self.onClickFunction)
@@ -267,6 +272,13 @@
     _textShadowView.attributedText = _primaryShadowColor && _shadowRadius > 0 ? shadowString : nil;
     _textView.attributedText = string;
     self.accessibilityValue = string.string;
+    [self refreshLayout];
+}
+
+- (void)refreshLayout
+{
+    if (self.delegate)
+        [self.delegate widgetChanged:self];
 }
 
 - (void) addAccessibilityLabelsWithValue:(NSString *)value

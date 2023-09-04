@@ -54,6 +54,7 @@ class TravelGuidesContentsViewController : OABaseButtonsViewController {
             headerRow.cellType = OAButtonTableViewCell.getIdentifier()
             headerRow.title = headerItem.name
             headerRow.setObj(headerItem.link!, forKey: "link")
+            headerRow.setObj(headerItem.link!.substring(from: 1), forKey: "sublink")
             headerRow.iconName = "ic_action_route_first_intermediate"
             headerRow.setObj(true, forKey: "isHeader")
             if headerItem.subItems.count > 0 {
@@ -67,6 +68,7 @@ class TravelGuidesContentsViewController : OABaseButtonsViewController {
                     subheaderRow.cellType = OAButtonTableViewCell.getIdentifier()
                     subheaderRow.title = subheaderItem.name
                     subheaderRow.setObj(subheaderItem.link!, forKey: "link")
+                    subheaderRow.setObj(headerItem.link!.substring(from: 1), forKey: "sublink")
                     subheaderRow.setObj(false, forKey: "isHeader")
                     subheaderRow.setObj("subheaderItem.articleId", forKey: "article")
                 }
@@ -156,8 +158,10 @@ class TravelGuidesContentsViewController : OABaseButtonsViewController {
     override func onRowSelected(_ indexPath: IndexPath!) {
         let item = tableData.item(for: indexPath)
         if let link = item.string(forKey: "link") {
-            if delegate != nil {
-                delegate?.moveToAnchor(link: link, title: selectedLang)
+            if let sublink = item.string(forKey: "sublink") {
+                if delegate != nil {
+                    delegate!.moveToAnchor(link: link, title: sublink)
+                }
             }
         }
         self.dismiss()

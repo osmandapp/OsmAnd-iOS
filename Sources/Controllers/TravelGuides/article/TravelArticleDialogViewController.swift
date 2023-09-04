@@ -8,6 +8,7 @@
 
 import UIKit
 import WebKit
+import JavaScriptCore
 
 protocol TravelArticleDialogProtocol : AnyObject {
     func getWebView() -> WKWebView
@@ -391,7 +392,7 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
             decisionHandler(.cancel)
 
         } else {
-            decisionHandler(.cancel)
+            decisionHandler(.allow)
         }
     }
     
@@ -403,8 +404,8 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     }
     
     func moveToAnchor(link: String, title: String) {
-        print("moveToAnchor")
-        webView.evaluateJavaScript("javascript:scrollAnchor(\"" + link + "\", \"" + title + "\")")
+        webView.evaluateJavaScript("scrollAnchor(\"" + link + "\", \"" + title + "\")")
+        webView.load(URLRequest(url: URL(string: link)!))
     }
     
     func openArticleByTitle(title: String, selectedLang: String) {

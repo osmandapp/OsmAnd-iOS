@@ -18,7 +18,7 @@ protocol TravelArticleDialogProtocol : AnyObject {
 }
 
 
-class TravelArticleDialogViewController : OABaseWebViewController, TravelArticleDialogProtocol, SFSafariViewControllerDelegate  {
+class TravelArticleDialogViewController : OABaseWebViewController, TravelArticleDialogProtocol, OAWikiLanguagesWebDelegate, SFSafariViewControllerDelegate  {
     
     let rtlLanguages = ["ar", "dv", "he", "iw", "fa", "nqo", "ps", "sd", "ug", "ur", "yi"]
     static let EMPTY_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4//"
@@ -192,7 +192,9 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem]! {
-        let languageButton = createRightNavbarButton(nil, iconName: "ic_navbar_languge", action: #selector(onLanguagesButtonClicked), menu: nil)
+        let menu = OAWikiArticleHelper.createLanguagesMenu(langs, selectedLocale: selectedLang, delegate: self)
+        let languageButton = createRightNavbarButton(nil, iconName: "ic_navbar_languge", action: #selector(onLanguagesButtonClicked), menu: menu)
+        
         let optionsButton = createRightNavbarButton(nil, iconName: "ic_navbar_overflow_menu_stroke", action: #selector(onOptionsButtonClicked), menu: nil)
         
         //TODO: add accessibilityLabels
@@ -218,7 +220,9 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     }
     
     @objc func onLanguagesButtonClicked() {
-        print("onLanguagesButtonClicked")
+        if langs == nil || langs!.count <= 1 {
+            OARootViewController.showInfoAlert(withTitle: nil, message: localizedString("no_other_translations"), in: self)
+        }
     }
     
     @objc func showNavigation() {
@@ -282,8 +286,13 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         //TravelLocalDataHelper ldh = app.getTravelHelper().getBookmarksHelper();
         //ldh.addToHistory(article);
         
-        updateSaveButton()
-        loadWebView()
+        UIView.transition(with: self.view, duration: 0.2) {
+            self.updateNavbar()
+            self.applyLocalization()
+            self.updateSaveButton()
+            self.loadWebView()
+        }
+        
     }
     
     func createHtmlContent() -> String? {
@@ -422,6 +431,20 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         self.articleId = articleId
         self.selectedLang = selectedLang
         populateArticle()
+    }
+    
+    
+    //MARK: OAWikiLanguagesWebDelegate
+    
+    func onLocaleSelected(_ locale: String!) {
+        historyArticleIds.append(self.articleId!)
+        historyLangs.append(self.selectedLang!)
+        self.selectedLang = locale
+        populateArticle()
+    }
+    
+    func showLocalesVC(_ vc: UIViewController!) {
+        showModalViewController(vc)
     }
     
 }

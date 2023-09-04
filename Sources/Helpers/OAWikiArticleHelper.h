@@ -27,6 +27,13 @@ typedef void(^OAWikiArticleSearchTaskBlockType)(void);
 
 @end
 
+@protocol OAWikiLanguagesWebDelegate
+
+- (void)onLocaleSelected:(NSString *)locale;
+- (void)showLocalesVC:(UIViewController *)vc;
+
+@end
+
 
 @interface OAWikiArticleHelper : NSObject
 
@@ -39,5 +46,6 @@ typedef void(^OAWikiArticleSearchTaskBlockType)(void);
 + (NSString *) normalizeFileUrl:(NSString *)url;
 + (NSString *) getLang:(NSString *)url;
 + (NSString *) getArticleNameFromUrl:(NSString *)url lang:(NSString *)lang;
++ (UIMenu *)createLanguagesMenu:(NSArray<NSString *> *)availableLocales selectedLocale:(NSString *)selectedLocale delegate:(id<OAWikiLanguagesWebDelegate>)delegate;
 
 @end

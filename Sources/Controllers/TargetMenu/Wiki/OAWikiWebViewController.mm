@@ -235,70 +235,9 @@
     return _poi.localizedNames[_contentLocale] ? _poi.localizedNames[_contentLocale] : OALocalizedString(@"download_wikipedia_maps");
 }
 
-- (void)createLanguagesNavbarButton
+-(void)createLanguagesNavbarButton
 {
-    UIMenu *languageMenu;
-    NSMutableArray<UIMenuElement *> *languageOptions = [NSMutableArray array];
-    if (_poi.localizedContent.allKeys.count > 1)
-    {
-        NSMutableSet<NSString *> *preferredLocales = [NSMutableSet set];
-        NSArray<NSString *> *preferredLanguages = [NSLocale preferredLanguages];
-        for (NSInteger i = 0; i < preferredLanguages.count; i ++)
-        {
-            NSString *preferredLocale = preferredLanguages[i];
-            if ([preferredLocale containsString:@"-"])
-                preferredLocale = [preferredLocale substringToIndex:[preferredLocale indexOf:@"-"]];
-            if ([preferredLocale isEqualToString:@"en"])
-                preferredLocale = @"";
-            [preferredLocales addObject:preferredLocale];
-        }
-
-        NSMutableArray<NSString *> *possibleAvailableLocale = [NSMutableArray array];
-        NSMutableArray<NSString *> *possiblePreferredLocale = [NSMutableArray array];
-        for (NSString *contentLocale in _poi.localizedContent.allKeys)
-        {
-            if ([preferredLocales containsObject:contentLocale])
-            {
-                UIAction *languageAction = [UIAction actionWithTitle:[OAUtilities translatedLangName:contentLocale.length > 0 ? contentLocale : @"en"].capitalizedString
-                                                       image:nil
-                                                  identifier:nil
-                                                     handler:^(__kindof UIAction * _Nonnull action) {
-                    [self updateWikiData:contentLocale];
-                }];
-                if ([contentLocale isEqualToString:_contentLocale])
-                    languageAction.state = UIMenuElementStateOn;
-                [languageOptions addObject:languageAction];
-                [possiblePreferredLocale addObject:contentLocale];
-            }
-            else
-            {
-                [possibleAvailableLocale addObject:contentLocale];
-            }
-        }
-        if (possibleAvailableLocale.count > 0)
-        {
-            UIAction *availableLanguagesAction = [UIAction actionWithTitle:OALocalizedString(@"available_languages")
-                                                                     image:[UIImage systemImageNamed:@"globe"]
-                                                                identifier:nil
-                                                                   handler:^(__kindof UIAction * _Nonnull action) {
-                OAWikiLanguagesWebViewContoller *wikiLanguagesViewController =
-                            [[OAWikiLanguagesWebViewContoller alloc] initWithSelectedLocale:_contentLocale
-                                                                           availableLocales:possibleAvailableLocale
-                                                                           preferredLocales:possiblePreferredLocale];
-                wikiLanguagesViewController.delegate = self;
-                [self showModalViewController:wikiLanguagesViewController];
-            }];
-            if (![preferredLocales containsObject:_contentLocale])
-                availableLanguagesAction.state = UIMenuElementStateOn;
-            UIMenu *availableLanguagesMenu = [UIMenu menuWithTitle:@""
-                                                             image:nil
-                                                        identifier:nil
-                                                           options:UIMenuOptionsDisplayInline
-                                                          children:@[availableLanguagesAction]];
-            [languageOptions addObject:availableLanguagesMenu];
-        }
-        languageMenu = [UIMenu menuWithChildren:languageOptions];
-    }
+    UIMenu *languageMenu = [OAWikiArticleHelper createLanguagesMenu:_poi.localizedContent.allKeys selectedLocale:_contentLocale delegate:self];
     _languageBarButtonItem = [self createRightNavbarButton:nil iconName:@"ic_navbar_languge" action:@selector(onLanguageNavbarButtonPressed) menu:languageMenu];
 }
 
@@ -619,6 +558,11 @@
 - (void)onLocaleSelected:(NSString *)locale
 {
     [self updateWikiData:locale];
+}
+
+- (void)showLocalesVC:(UIViewController *)vc
+{
+    [self showModalViewController:vc];
 }
 
 @end

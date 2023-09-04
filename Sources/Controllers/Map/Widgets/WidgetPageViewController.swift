@@ -25,7 +25,11 @@ class WidgetPageViewController: UIViewController {
         stackView.spacing = 0
         
         // Add the widget views to the stack view
+        let lastVisibleItem = widgetViews.last(where: { !$0.isHidden })
         for widgetView in widgetViews {
+            if let textInfo = widgetView as? OATextInfoWidget {
+                textInfo.showSeparator(widgetView != lastVisibleItem)
+            }
             widgetView.adjustSize()
             let constraint = widgetView.heightAnchor.constraint(greaterThanOrEqualToConstant: widgetView.frame.size.height)
             constraint.priority = .defaultHigh

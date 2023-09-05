@@ -203,7 +203,7 @@
                         }
                     }
                     if (enabledWidgets.count > 0)
-                        [OAPlugin enabledPluginsByMapWidgets:enabledWidgets];
+                        [OAPlugin enablePluginsByMapWidgets:enabledWidgets];
                 }
             }
         }

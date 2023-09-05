@@ -63,7 +63,7 @@
 + (void) updateLocationPlugins:(CLLocation *)location;
 + (void) registerQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)types disabled:(BOOL)disabled;
 + (void) createMapWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode;
-+ (void) enabledPluginsByMapWidgets:(NSSet<NSString *> *)widgetIds;
++ (void) enablePluginsByMapWidgets:(NSSet<NSString *> *)widgetIds;
 
 + (NSArray<OACustomPlugin *> *) getCustomPlugins;
 + (void) addCustomPlugin:(OACustomPlugin *)plugin;

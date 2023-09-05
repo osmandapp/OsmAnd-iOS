@@ -915,7 +915,7 @@ public static void addMyPlacesTabPlugins(FavoritesActivity favoritesActivity, Li
     return nil;
 }
 
-+ (void)enabledPluginsByMapWidgets:(NSSet<NSString *> *)widgetIds
++ (void)enablePluginsByMapWidgets:(NSSet<NSString *> *)widgetIds
 {
     for (OAPlugin *plugin in allPlugins)
     {

@@ -15,8 +15,6 @@ class BaseSegmentedControlViewController: OABaseButtonsViewController {
     private static let segmentHeight: CGFloat = 46
 
     private var containerView: UIView?
-    private var blurEffectView: UIVisualEffectView!
-
     private let separatorView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.separator
@@ -27,16 +25,7 @@ class BaseSegmentedControlViewController: OABaseButtonsViewController {
 
     override func updateNavbar() {
         super.updateNavbar()
-        setupBlurView()
         setupSegmentedControl()
-    }
-
-    private func setupBlurView() {
-        if getNavbarColorScheme() == .gray, !UIAccessibility.isReduceTransparencyEnabled {
-            let blurEffect = UIBlurEffect(style: .systemThickMaterial)
-            blurEffectView = UIVisualEffectView(effect: blurEffect)
-            blurEffectView.translatesAutoresizingMaskIntoConstraints = false
-        }
     }
 
     private func setupSegmentedControl() {
@@ -46,7 +35,7 @@ class BaseSegmentedControlViewController: OABaseButtonsViewController {
     private func setupContainerAppearance(_ container: UIView) {
         switch getNavbarColorScheme() {
         case .gray:
-            container.backgroundColor = .clear
+            container.backgroundColor = tableView.backgroundColor
         case .orange:
             container.backgroundColor = UIColor(rgb: Int(color_osmand_orange))
         case .white:
@@ -62,6 +51,10 @@ class BaseSegmentedControlViewController: OABaseButtonsViewController {
 
     //MARK: - Base UI
 
+    override func isNavbarBlurring() -> Bool {
+        false
+    }
+    
     override func isNavbarSeparatorVisible() -> Bool {
         false
     }
@@ -74,17 +67,6 @@ class BaseSegmentedControlViewController: OABaseButtonsViewController {
     
     override func onRotation() {
         updateSegmentedControl(true)
-    }
-
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // Check if the table view offset is greater than 0
-        let offset = scrollView.contentOffset.y
-        let scrollOffset = -getNavbarHeight()
-        if offset > scrollOffset {
-            blurEffectView.alpha = 1
-        } else if offset <= scrollOffset {
-            blurEffectView.alpha = 0
-        }
     }
 
     //MARK: - Additions
@@ -125,16 +107,6 @@ class BaseSegmentedControlViewController: OABaseButtonsViewController {
                 separatorView.heightAnchor.constraint(equalToConstant: 0.5)
             ])
             tableView.contentInset = UIEdgeInsets(top: Self.segmentHeight, left: 0, bottom: 0, right: 0)
-            if let blurEffectView {
-                containerView.insertSubview(blurEffectView, at: 0)
-                NSLayoutConstraint.activate([
-                    blurEffectView.topAnchor.constraint(equalTo: containerView.topAnchor),
-                    blurEffectView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-                    blurEffectView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-                    blurEffectView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-                ])
-                blurEffectView.alpha = 0
-            }
             self.containerView = containerView
             let scrollOffset = -getNavbarHeight()
             if tableView.contentOffset.y == scrollOffset + Self.segmentHeight {

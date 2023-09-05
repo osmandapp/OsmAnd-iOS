@@ -11637,16 +11637,16 @@
 		DA5A798C26C563A000F274C7 /* Monitoring */ = {
 			isa = PBXGroup;
 			children = (
-				DA5A798D26C563A000F274C7 /* OAMonitoringPlugin.h */,
 				DA5A798E26C563A000F274C7 /* OALiveMonitoringHelper.h */,
-				DA5A798F26C563A000F274C7 /* OAMonitoringPlugin.mm */,
 				DA5A799026C563A000F274C7 /* OALiveMonitoringHelper.m */,
+				DA5A798D26C563A000F274C7 /* OAMonitoringPlugin.h */,
+				DA5A798F26C563A000F274C7 /* OAMonitoringPlugin.mm */,
 				328BD49329D5AC5500045871 /* OATripRecordingDistanceWidget.h */,
 				328BD49429D5AC6400045871 /* OATripRecordingDistanceWidget.m */,
-				326B770829D9CA5200FB23DF /* OATripRecordingTimeWidget.h */,
-				326B770929D9CA6400FB23DF /* OATripRecordingTimeWidget.mm */,
 				328EECD429DC5F91002922AA /* OATripRecordingElevationWidget.h */,
 				328EECD529DC5FA7002922AA /* OATripRecordingElevationWidget.mm */,
+				326B770829D9CA5200FB23DF /* OATripRecordingTimeWidget.h */,
+				326B770929D9CA6400FB23DF /* OATripRecordingTimeWidget.mm */,
 			);
 			path = Monitoring;
 			sourceTree = "<group>";

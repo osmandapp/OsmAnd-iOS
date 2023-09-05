@@ -77,6 +77,11 @@
     [[OsmAndApp instance].data setWeather:isOn];
 }
 
+- (NSArray<NSString *> *) getWidgetIds
+{
+    return @[OAWidgetType.weatherTemperatureWidget.id, OAWidgetType.weatherAirPressureWidget.id, OAWidgetType.weatherWindWidget.id, OAWidgetType.weatherCloudsWidget.id, OAWidgetType.weatherPrecipitationWidget.id];
+}
+
 - (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
 {
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];

@@ -107,10 +107,12 @@ struct RegionResources
     NSInteger _localSqliteSection;
     NSInteger _resourcesSection;
     NSInteger _localOnlineTileSourcesSection;
+    NSInteger _localTerrainMapSourcesSection;
     NSMutableArray *_allResourceItems;
     NSMutableArray *_localResourceItems;
     NSMutableArray *_localSqliteItems;
     NSMutableArray *_localOnlineTileSources;
+    NSMutableArray *_localTerrainMapSources;
 
     NSInteger _weatherForecastRow;
 
@@ -208,6 +210,7 @@ static BOOL _repositoryUpdated = NO;
         _localResourceItems = [NSMutableArray array];
         _localSqliteItems = [NSMutableArray array];
         _localOnlineTileSources = [NSMutableArray array];
+        _localTerrainMapSources = [NSMutableArray array];
 
         _regionMapItems = [NSMutableArray array];
         _localRegionMapItems = [NSMutableArray array];
@@ -744,8 +747,6 @@ static BOOL _repositoryUpdated = NO;
                         hasSrtm = YES;
                     case OsmAndResourceType::MapRegion:
                     case OsmAndResourceType::WikiMapRegion:
-                    case OsmAndResourceType::HillshadeRegion:
-                    case OsmAndResourceType::SlopeRegion:
                     case OsmAndResourceType::DepthContourRegion:
                     case OsmAndResourceType::DepthMapRegion:
                     case OsmAndResourceType::HeightmapRegionLegacy:
@@ -1135,6 +1136,7 @@ static BOOL _repositoryUpdated = NO;
     
     // Outdated Resources
     [_localResourceItems removeAllObjects];
+    [_localTerrainMapSources removeAllObjects];
     _outdatedMapsCount = 0;
     _totalOutdatedSize = 0;
     for (const auto& outdatedResource : _outdatedResources)
@@ -1221,8 +1223,13 @@ static BOOL _repositoryUpdated = NO;
             }
             else
             {
-                if (![_localResourceItems containsObject:item])
-                    [_localResourceItems addObject:item];
+                if (![_localResourceItems containsObject:item] && ![_localTerrainMapSources containsObject:item])
+                {
+                    if (item.resourceType != OsmAndResourceType::GeoTiffRegion && item.resourceType != OsmAndResourceType::HeightmapRegionLegacy)
+                        [_localResourceItems addObject:item];
+                    else
+                        [_localTerrainMapSources addObject:item];
+                }
             }
         }
     }
@@ -1256,6 +1263,7 @@ static BOOL _repositoryUpdated = NO;
         _resourcesSection = -1;
         _localSqliteSection = -1;
         _localOnlineTileSourcesSection = -1;
+        _localTerrainMapSourcesSection = -1;
         _freeMemorySection = -1;
 
         _weatherForecastRow = -1;
@@ -1310,6 +1318,9 @@ static BOOL _repositoryUpdated = NO;
         
         if (_currentScope == kLocalResourcesScope && _localOnlineTileSources.count > 0)
             _localOnlineTileSourcesSection = _lastUnusedSectionIndex++;
+        
+        if (_currentScope == kLocalResourcesScope && _localTerrainMapSources.count > 0)
+            _localTerrainMapSourcesSection = _lastUnusedSectionIndex++;
         
         if (_currentScope == kAllResourcesScope && self.region == _app.worldRegion && [_app.worldRegion containsSubregion:_otherRegionId])
         {
@@ -1432,7 +1443,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (BOOL)hasLocalResources
 {
-    return _localResourceItems.count > 0 || _localRegionMapItems.count > 0 || _localSqliteItems.count > 0 || _localOnlineTileSources.count > 0;
+    return _localResourceItems.count > 0 || _localRegionMapItems.count > 0 || _localSqliteItems.count > 0 || _localOnlineTileSources.count > 0  || _localTerrainMapSources.count > 0;
 }
 
 - (NSMutableArray *) getResourceItems
@@ -1787,7 +1798,7 @@ static BOOL _repositoryUpdated = NO;
     if ([senderItem isKindOfClass:OAMultipleResourceItem.class])
     {
         OAMultipleResourceItem *multipleItem = (OAMultipleResourceItem *) senderItem;
-        if ((multipleItem.resourceType == OsmAndResourceType::SrtmMapRegion || multipleItem.resourceType == OsmAndResourceType::HillshadeRegion || multipleItem.resourceType == OsmAndResourceType::SlopeRegion) && ![_iapHelper.srtm isActive])
+        if ((multipleItem.resourceType == OsmAndResourceType::SrtmMapRegion || multipleItem.resourceType == OsmAndResourceType::HeightmapRegionLegacy || multipleItem.resourceType == OsmAndResourceType::GeoTiffRegion) && ![_iapHelper.srtm isActive])
         {
             [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
         }
@@ -1870,7 +1881,7 @@ static BOOL _repositoryUpdated = NO;
         return 1;
 
     if (_currentScope == kLocalResourcesScope)
-        return ([_localResourceItems count] > 0 ? 1 : 0) + ([_localRegionMapItems count] > 0 ? 1 : 0) + (_localSqliteItems.count > 0 ? 1 : 0) + (_displaySubscribeEmailView ? 1 : 0) + (_localOnlineTileSources.count > 0 ? 1 : 0) + 1;
+        return ([_localResourceItems count] > 0 ? 1 : 0) + ([_localRegionMapItems count] > 0 ? 1 : 0) + (_localSqliteItems.count > 0 ? 1 : 0) + (_displaySubscribeEmailView ? 1 : 0) + (_localOnlineTileSources.count > 0 ? 1 : 0) + (_localTerrainMapSources.count > 0 ? 1 : 0) + 1;
 
     NSInteger sectionsCount = 0;
 
@@ -1925,6 +1936,8 @@ static BOOL _repositoryUpdated = NO;
         return _localSqliteItems.count;
     if (section == _localOnlineTileSourcesSection)
         return [_localOnlineTileSources count];
+    if (section == _localTerrainMapSourcesSection)
+        return [_localTerrainMapSources count];
     if (section == _otherMapsSection)
         return 1;
     if (section == _nauticalMapsSection)
@@ -1948,6 +1961,8 @@ static BOOL _repositoryUpdated = NO;
                 return OALocalizedString(@"offline_raster_maps");
             else if (section == _localOnlineTileSourcesSection)
                 return OALocalizedString(@"online_raster_maps");
+            else if (section == _localTerrainMapSourcesSection)
+                return OALocalizedString(@"terrain_3D_maps");
             else
                 return OALocalizedString(@"res_mapsres");
         }
@@ -2191,9 +2206,9 @@ static BOOL _repositoryUpdated = NO;
             cellTypeId = subregionCell;
             title = OALocalizedString(@"nautical_maps");
         }
-        else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
+        else if ((indexPath.section == _resourcesSection && _resourcesSection >= 0) || indexPath.section == _localTerrainMapSourcesSection)
         {
-            item_ = [self getResourceItems][indexPath.row];
+            item_ = indexPath.section == _localTerrainMapSourcesSection ? _localTerrainMapSources[indexPath.row] : [self getResourceItems][indexPath.row];
 
             if ([item_ isKindOfClass:[OAWorldRegion class]])
             {
@@ -2226,7 +2241,13 @@ static BOOL _repositoryUpdated = NO;
                 }
                 
                 BOOL mapDownloaded = NO;
-                for (OAResourceItem *it in [self getRegionMapItems])
+                NSArray *selectedArray = nil;
+                if (item.resourceType == OsmAndResourceType::GeoTiffRegion || item.resourceType == OsmAndResourceType::HeightmapRegionLegacy)
+                    selectedArray = _localTerrainMapSources;
+                else
+                    selectedArray = [self getRegionMapItems];
+
+                for (OAResourceItem *it in selectedArray)
                 {
                     if (it.resourceType == OsmAndResourceType::MapRegion && ([it isKindOfClass:[OALocalResourceItem class]] || [it isKindOfClass:[OAOutdatedResourceItem class]]))
                     {
@@ -2237,7 +2258,7 @@ static BOOL _repositoryUpdated = NO;
                 
                 if (!item.isFree)
                 {
-                    if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
+                    if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HeightmapRegionLegacy || item.resourceType == OsmAndResourceType::GeoTiffRegion)
                         && ![_iapHelper.srtm isActive] && ![self.region isInPurchasedArea])
                     {
                         disabled = YES;
@@ -2354,7 +2375,7 @@ static BOOL _repositoryUpdated = NO;
 
             if (![item isFree])
             {
-                if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
+                if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HeightmapRegionLegacy || item.resourceType == OsmAndResourceType::GeoTiffRegion)
                     && ![_iapHelper.srtm isActive] && ![self.region isInPurchasedArea])
                 {
                     disabled = YES;
@@ -2791,6 +2812,8 @@ static BOOL _repositoryUpdated = NO;
         item = _localSqliteItems[indexPath.row];
     else if (indexPath.section == _localOnlineTileSourcesSection)
         item = _localOnlineTileSources[indexPath.row];
+    else if (indexPath.section == _localTerrainMapSourcesSection)
+        item = _localTerrainMapSources[indexPath.row];
     else if (indexPath.section == _otherMapsSection)
         item = [_app.worldRegion getSubregion:_otherRegionId];
     else if (indexPath.section == _nauticalMapsSection)
@@ -3097,6 +3120,8 @@ static BOOL _repositoryUpdated = NO;
                 item = _localSqliteItems[cellPath.row];
             if (cellPath.section == _localOnlineTileSourcesSection)
                 item = _localOnlineTileSources[cellPath.row];
+            if (cellPath.section == _localTerrainMapSourcesSection)
+                item = _localTerrainMapSources[cellPath.row];
         }
 
         if (item)

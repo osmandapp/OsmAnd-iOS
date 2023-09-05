@@ -595,7 +595,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             cell.button.tintColor = UIColorFromRGB(color_primary_purple);
         }
         BOOL collapsed = item.rowType == EOATableRowTypeCollapsable && ((OATableCollapsableRowData *) item).collapsed;
-        [cell.button setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"] forState:UIControlStateNormal];
+        [cell.button setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
         [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         [cell.button addTarget:self action:@selector(onCollapseButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         cell.titleLabel.text = item.title;

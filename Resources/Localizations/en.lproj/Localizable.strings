@@ -937,6 +937,7 @@
 "daynight_mode_night" = "Night";
 "map_widget_renderer" = "Map style";
 "map_settings_overunder" = "Overlay / Underlay";
+"map_settings_topography" = "Topography";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
 "map_settings_install_maps" = "Choose maps to install or update";
@@ -951,8 +952,8 @@
 "shared_string_terrain" = "Terrain";
 "map_settings_layer_transparency" = "Layer transparency";
 "map_settings_slopes_legend" = "You can read more about the slopes on Wikipedia";
-"map_settings_slopes_description" = "Slope maps use different colors to visualize the terrain";
-"map_settings_hillshade_description" = "Hillshade maps visualize slopes, peaks and lowlands using different levels of gray";
+"map_settings_slopes_description" = "Slope is colorized visualisations on terrain.";
+"map_settings_hillshade_description" = "Hillshade map using dark shades to show slopes, peaks and lowlands.";
 "map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
 "map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
 "map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
@@ -1478,7 +1479,7 @@
 "res_zoom_invalid_value" = "Zoom values should be in range 1 - 22";
 "res_offlineSQL_URL_warning" = "Not supported for this map type";
 "clear_tiles_warning" = "Applying these changes will clear the cached data for this tile source";
-"download_heightmap_maps" = "Heightmap";
+"download_heightmap_maps" = "Terrain map";
 "welmode_download_maps" = "Download maps";
 "srtm_unit_format" = "Contour lines unit variant";
 "srtm_download_single_help_message" = "Please select the variant. You will need to re-download the file to change the format.";
@@ -1772,7 +1773,7 @@
 "quick_action_contour_lines_descr" = "Button showing or hiding contour lines on the map.";
 "hide_contour_lines" = "Hide contour lines";
 "enable_contour_lines" = "Enable to view contour lines on the map";
-"enable_hillshade" = "Enable to view terrain data";
+"enable_hillshade" = "Enable to view terrain data from hillshade or slope map.";
 "contour_lines_hillshades_slope" = "Contour lines, hillshades, slope";
 "quick_action_dir_from_descr" = "Tap this action to navigate from the current screen center point.";
 "quick_action_transport_descr" = "Button showing or hiding public transport on the map.";
@@ -2944,6 +2945,7 @@
 "nautical_depth" = "Nautical depth";
 "terrain_maps" = "Terrain maps";
 "shared_string_cross_buy" = "Cross-buy";
+"shared_string_relief_3d" = "3D Relief";
 
 "track_has_no_needed_data" = "The track is missing the respective data.";
 "select_another_colorization" = "Please select another type of coloring.";
@@ -2952,6 +2954,7 @@
 "purchases_feature_desc_pro_widgets" = "Get access to OsmAnd Pro features: Route coloring and more.";
 "purchases_feature_desc_hourly_map_updates" = "Get access to more frequent map updates. Hourly, daily, or weekly updates. Updates are downloaded incrementally, only for the changed area.";
 "purchases_feature_desc_cross_buy" = "Use your subscription features on different platforms (Android/iOS/web) at no additional cost.";
+"purchases_feature_relief_3d_description" = "Own and observe the scale model of your neighborhood or the whole continent.";
 "purchases_feature_desc_monthly_map_updates" = "Get access to regular monthly updates for offline maps.";
 "purchases_feature_desc_unlimited_map_download" = "Get unlimited downloads for all continents and regions offline maps.";
 "purchases_feature_desc_carplay" = "Brings OsmAnd offline maps and navigation to your vehicle screen and integrates with your vehicle\'s controls.";

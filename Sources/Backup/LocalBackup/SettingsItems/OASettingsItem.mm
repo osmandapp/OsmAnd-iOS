@@ -263,9 +263,9 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
     if ([object isKindOfClass:self.class])
     {
         OASettingsItem *item = (OASettingsItem *) object;
-        return _type == item.type
-            && (item.name == _name || [item.name isEqualToString:_name])
-            && (item.fileName == self.fileName || [item.fileName isEqualToString:self.fileName])
+        return item.type == self.type 
+        	&& (item.name == self.name || [item.name isEqualToString:self.name])
+        	&& (item.fileName == self.fileName || [item.fileName isEqualToString:self.fileName])
             && (item.pluginId == self.pluginId || [item.pluginId isEqualToString:self.pluginId]);
     }
     return NO;

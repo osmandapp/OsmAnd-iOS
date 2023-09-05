@@ -24,6 +24,7 @@ typedef NS_ENUM(NSUInteger, EOAFeature)
     EOAFeatureCombinedWiki,
     EOAFeatureWikipedia,
     EOAFeatureWikivoyage,
+    EOAFeatureRelief3D,
     EOAFeatureTerrain,
     EOAFeatureNautical,
     EOAFeatureWeather,
@@ -62,6 +63,7 @@ typedef NS_ENUM(NSUInteger, EOAFeature)
 + (OAFeature *)COMBINED_WIKI;
 + (OAFeature *)WIKIPEDIA;
 + (OAFeature *)WIKIVOYAGE;
++ (OAFeature *)RELIEF_3D;
 + (OAFeature *)TERRAIN;
 + (OAFeature *)NAUTICAL;
 + (OAFeature *)WEATHER;

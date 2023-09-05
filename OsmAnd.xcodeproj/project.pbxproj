@@ -1319,6 +1319,12 @@
 		C558A29E29B1355A00E79DDB /* ic_custom_direction_manual@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C558A29829B1355900E79DDB /* ic_custom_direction_manual@3x.png */; };
 		C558A29F29B1355A00E79DDB /* ic_custom_direction_manual_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C558A29929B1355900E79DDB /* ic_custom_direction_manual_day@2x.png */; };
 		C558A2A029B1355A00E79DDB /* ic_custom_direction_manual_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C558A29A29B1355A00E79DDB /* ic_custom_direction_manual_day@3x.png */; };
+		C5693B802A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B7C2A9DD1F5007EA552 /* ic_custom_3d_relief_colored_day_big@3x.png */; };
+		C5693B812A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B7D2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day@3x.png */; };
+		C5693B822A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B7E2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day@2x.png */; };
+		C5693B832A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B7F2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day_big@2x.png */; };
+		C5693B882A9F5A09007EA552 /* ic_custom_terrain@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B862A9F5A08007EA552 /* ic_custom_terrain@2x.png */; };
+		C5693B892A9F5A09007EA552 /* ic_custom_terrain@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5693B872A9F5A08007EA552 /* ic_custom_terrain@3x.png */; };
 		C56FAB4C29B226A40096192F /* OACameraTiltWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56FAB4A29B226A40096192F /* OACameraTiltWidget.mm */; };
 		C56FAB5129B226C60096192F /* OACameraDistanceWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56FAB4F29B226C60096192F /* OACameraDistanceWidget.mm */; };
 		C56FAB5629B226F10096192F /* OAZoomLevelWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56FAB5429B226F10096192F /* OAZoomLevelWidget.mm */; };
@@ -3581,6 +3587,8 @@
 		FA44BF462A71123D000D2F5F /* ic_custom_settings_cloud_colored@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF3A2A71123D000D2F5F /* ic_custom_settings_cloud_colored@3x.png */; };
 		FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */; };
 		FA4768B52A67B86400D533E8 /* FreeBackupBanner.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */; };
+		FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */; };
+		FA5A21A82A9E17DB00319695 /* UIPageViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */; };
 		FA6797EF2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA6797EE2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm */; };
 		FA740D422A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA740D412A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib */; };
 		FA740D452A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */; };
@@ -5145,6 +5153,12 @@
 		C558A29829B1355900E79DDB /* ic_custom_direction_manual@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_manual@3x.png"; path = "Resources/Icons/ic_custom_direction_manual@3x.png"; sourceTree = "<group>"; };
 		C558A29929B1355900E79DDB /* ic_custom_direction_manual_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_manual_day@2x.png"; path = "Resources/Icons/ic_custom_direction_manual_day@2x.png"; sourceTree = "<group>"; };
 		C558A29A29B1355A00E79DDB /* ic_custom_direction_manual_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_manual_day@3x.png"; path = "Resources/Icons/ic_custom_direction_manual_day@3x.png"; sourceTree = "<group>"; };
+		C5693B7C2A9DD1F5007EA552 /* ic_custom_3d_relief_colored_day_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief_colored_day_big@3x.png"; path = "Resources/Icons/ic_custom_3d_relief_colored_day_big@3x.png"; sourceTree = "<group>"; };
+		C5693B7D2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief_colored_day@3x.png"; path = "Resources/Icons/ic_custom_3d_relief_colored_day@3x.png"; sourceTree = "<group>"; };
+		C5693B7E2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief_colored_day@2x.png"; path = "Resources/Icons/ic_custom_3d_relief_colored_day@2x.png"; sourceTree = "<group>"; };
+		C5693B7F2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief_colored_day_big@2x.png"; path = "Resources/Icons/ic_custom_3d_relief_colored_day_big@2x.png"; sourceTree = "<group>"; };
+		C5693B862A9F5A08007EA552 /* ic_custom_terrain@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain@2x.png"; path = "Resources/Icons/ic_custom_terrain@2x.png"; sourceTree = "<group>"; };
+		C5693B872A9F5A08007EA552 /* ic_custom_terrain@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain@3x.png"; path = "Resources/Icons/ic_custom_terrain@3x.png"; sourceTree = "<group>"; };
 		C56FAB4929B226A40096192F /* OACameraTiltWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACameraTiltWidget.h; sourceTree = "<group>"; };
 		C56FAB4A29B226A40096192F /* OACameraTiltWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACameraTiltWidget.mm; sourceTree = "<group>"; };
 		C56FAB4E29B226C60096192F /* OACameraDistanceWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACameraDistanceWidget.h; sourceTree = "<group>"; };
@@ -8306,6 +8320,8 @@
 		FA44BF3A2A71123D000D2F5F /* ic_custom_settings_cloud_colored@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_settings_cloud_colored@3x.png"; path = "Resources/Icons/ic_custom_settings_cloud_colored@3x.png"; sourceTree = "<group>"; };
 		FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBanner.swift; sourceTree = "<group>"; };
 		FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FreeBackupBanner.xib; sourceTree = "<group>"; };
+		FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
+		FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageViewController+Extension.swift"; sourceTree = "<group>"; };
 		FA6797ED2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherAutoUpdateSettingsViewController.h; sourceTree = "<group>"; };
 		FA6797EE2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherAutoUpdateSettingsViewController.mm; sourceTree = "<group>"; };
 		FA740D412A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CloudIntroductionButtonsView.xib; sourceTree = "<group>"; };
@@ -8565,6 +8581,12 @@
 		3AFEEE231A0E343600900A47 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				C5693B862A9F5A08007EA552 /* ic_custom_terrain@2x.png */,
+				C5693B872A9F5A08007EA552 /* ic_custom_terrain@3x.png */,
+				C5693B7F2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day_big@2x.png */,
+				C5693B7C2A9DD1F5007EA552 /* ic_custom_3d_relief_colored_day_big@3x.png */,
+				C5693B7E2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day@2x.png */,
+				C5693B7D2A9DD1F6007EA552 /* ic_custom_3d_relief_colored_day@3x.png */,
 				FA44BF2F2A71123B000D2F5F /* ic_banner_close@2x.png */,
 				FA44BF382A71123D000D2F5F /* ic_banner_close@3x.png */,
 				FA44BF362A71123D000D2F5F /* ic_custom_folder_cloud_colored@2x.png */,
@@ -14361,6 +14383,8 @@
 			isa = PBXGroup;
 			children = (
 				DAABE4ED2A1657AF00569F71 /* Color+INT.swift */,
+				FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */,
+				FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */,
 			);
 			path = SwiftExtensions;
 			sourceTree = "<group>";
@@ -14838,6 +14862,7 @@
 				DA2EC6BD29FBBE0300ECEB37 /* widget_lanes_day@3x.png in Resources */,
 				46B0E77227F5E88A00D5A075 /* img_plugin_weather.jpg in Resources */,
 				DAA4EDF3240E85B800F16073 /* ic_custom_close@3x.png in Resources */,
+				C5693B822A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day@2x.png in Resources */,
 				DA2EC64729FBBE0200ECEB37 /* widget_lanes_night@3x.png in Resources */,
 				DA5A83CE26C563A800F274C7 /* OATransportStopViewController.xib in Resources */,
 				333168BA2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */,
@@ -15724,6 +15749,7 @@
 				DA5A82C226C563A800F274C7 /* OAPasswordInputFieldCell.xib in Resources */,
 				DA2EC70829FBBE0300ECEB37 /* widget_intermediate_time_day@3x.png in Resources */,
 				DA8660832268A2870041F57D /* ic_custom_remove@2x.png in Resources */,
+				C5693B892A9F5A09007EA552 /* ic_custom_terrain@3x.png in Resources */,
 				46453B1B2835243F001F9A3A /* ic_custom_osmand_maps_plus@2x.png in Resources */,
 				97BCFBED287D97C3003AFFB2 /* ic_navbar_reset@3x.png in Resources */,
 				DAF345CD22F4482C009E2EB6 /* ic_action_create_poi@2x.png in Resources */,
@@ -16299,6 +16325,7 @@
 				DA2EC68D29FBBE0300ECEB37 /* widget_coordinates_map_center_latitude_north_night@3x.png in Resources */,
 				DA6471B522CF5433008F937F /* ic_custom_unlimited_downloads@2x.png in Resources */,
 				DA5A843026C563A800F274C7 /* OARouteTargetSelectionViewController.xib in Resources */,
+				C5693B812A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day@3x.png in Resources */,
 				842431F41AEFDD1900925821 /* ic_action_rec_start@2x.png in Resources */,
 				0A7C7F312703955200F779E4 /* ic_custom_track_line_thin@3x.png in Resources */,
 				DA5A82BA26C563A800F274C7 /* OADownloadProgressBarCell.xib in Resources */,
@@ -16365,6 +16392,7 @@
 				DA2EC63C29FBBE0200ECEB37 /* widget_bearing_day@2x.png in Resources */,
 				DA45DA68230EE05A0083DFA2 /* img_mapstyle_default@2x.png in Resources */,
 				46BA4849281C2F3500C04F14 /* ic_custom_poi_brand@2x.png in Resources */,
+				C5693B802A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day_big@3x.png in Resources */,
 				0AA3BB9826EBC00200A9885D /* OATrackMenuHudViewController.xib in Resources */,
 				DAF3455322F4482B009E2EB6 /* ic_custom_compound_action_remove@2x.png in Resources */,
 				0A7C7F39270395ED00F779E4 /* ic_small_time_interval@3x.png in Resources */,
@@ -17030,6 +17058,7 @@
 				0CEF2C2824B717CD00BAAC4B /* ic_action_enduro_motorcycle@2x.png in Resources */,
 				C5D8F809292F5B2900C01065 /* ic_custom_download_map@2x.png in Resources */,
 				0A8F544E263949FC0020F5CF /* ic_custom_search_categories@3x.png in Resources */,
+				C5693B882A9F5A09007EA552 /* ic_custom_terrain@2x.png in Resources */,
 				845E05C51B55129100DFC2A7 /* ic_destination_pin_2_small@2x.png in Resources */,
 				843E5CC91AB341E000BE14BE /* icon_direction@3x.png in Resources */,
 				DA2EC6CF29FBBE0300ECEB37 /* widget_altitude_location_night@2x.png in Resources */,
@@ -17164,6 +17193,7 @@
 				DA1341E6243DC5A90039D214 /* ic_action_horse@2x.png in Resources */,
 				8AE0194C24505C8B00DA5C33 /* ic_custom_offline@3x.png in Resources */,
 				8480E6A91F7BF8FC009A0FDE /* left_menu_icon_resources@3x.png in Resources */,
+				C5693B832A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day_big@2x.png in Resources */,
 				DA2EC67429FBBE0300ECEB37 /* warnings_traffic_calming_us@3x.png in Resources */,
 				DA2EC72129FBBE0300ECEB37 /* list_stop@2x.png in Resources */,
 				DAF2F804254825BA00967935 /* map_plan_route_point_movable@3x.png in Resources */,
@@ -17368,6 +17398,7 @@
 				C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */,
 				DA5A819A26C563A700F274C7 /* OAMapOverlayAction.mm in Sources */,
 				DA5A82F726C563A800F274C7 /* OARangeSliderCell.m in Sources */,
+				FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */,
 				DA5A825826C563A700F274C7 /* OASpeedLimitToleranceViewController.m in Sources */,
 				DA5A84AE26C563A900F274C7 /* OAHistoryViewController.mm in Sources */,
 				4643322A291D5FE7005AEF12 /* OAMapSettingsNauticalDepthScreen.m in Sources */,
@@ -17875,6 +17906,7 @@
 				DA8DC3A32A0E4EBB006C116B /* OABearingWidget.m in Sources */,
 				DA5A836426C563A800F274C7 /* OACompoundViewController.m in Sources */,
 				46F0746F294C8F3400E641E9 /* OAEmissionHelper.mm in Sources */,
+				FA5A21A82A9E17DB00319695 /* UIPageViewController+Extension.swift in Sources */,
 				DA5A83F626C563A800F274C7 /* OASelectSubcategoryViewController.mm in Sources */,
 				DA5A842A26C563A800F274C7 /* OAImpassableRoadSelectionViewController.mm in Sources */,
 				DA238BF92A1C9A04006A1E0E /* AppModeSelectionViewController.swift in Sources */,

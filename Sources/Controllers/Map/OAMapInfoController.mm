@@ -107,8 +107,6 @@
         
         [_topPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner | kCALayerMaxXMaxYCorner];
         [_bottomPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner];
-        [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner];
-        [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMaxXMaxYCorner];
 
         _topPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
         _leftPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
@@ -268,6 +266,28 @@
     }
 }
 
+- (void)configureLayerWidgets:(BOOL)hasTopWidgets
+{
+    if (hasTopWidgets) {
+        [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner];
+        [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMaxXMaxYCorner];
+    }
+    else
+    {
+        if ([OAUtilities isLandscapeIpadAware])
+        {
+            CACornerMask maskedCorners = kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner | kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner;
+            [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners];
+            [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners];
+        }
+        else
+        {
+            [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner];
+            [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner];
+        }
+    }
+}
+
 - (void) layoutWidgets
 {
     BOOL portrait = ![OAUtilities isLandscape];
@@ -276,6 +296,7 @@
     BOOL hasLeftWidgets = [_leftPanelController hasWidgets];
     BOOL hasBottomWidgets = [_bottomPanelController hasWidgets];
     BOOL hasRightWidgets = [_rightPanelController hasWidgets];
+    [self configureLayerWidgets:hasTopWidgets];
 
     if (_alarmControl && _alarmControl.superview && !_alarmControl.hidden)
     {
@@ -306,7 +327,8 @@
     if (hasLeftWidgets)
     {
         CGSize leftSize = [_leftPanelController calculateContentSize];
-        _mapHudViewController.leftWidgetsViewHeightConstraint.constant = leftSize.height;
+        CGFloat pageControlHeight = _leftPanelController.pages.count > 1 ? 16 : 0;
+        _mapHudViewController.leftWidgetsViewHeightConstraint.constant = leftSize.height + pageControlHeight;
         _mapHudViewController.leftWidgetsViewWidthConstraint.constant = leftSize.width;
     }
     else

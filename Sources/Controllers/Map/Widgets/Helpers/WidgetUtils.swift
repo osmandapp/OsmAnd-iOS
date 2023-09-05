@@ -89,11 +89,15 @@ class WidgetUtils: NSObject {
                 }
                 if let newWidgetInfo = mapWidgetInfo, needToAdd {
                     newOrder.append(newWidgetInfo.key)
-                    widgetRegistry.getWidgetsFor(panel)?.add(newWidgetInfo)
-                    widgetRegistry.enableDisableWidget(for: selectedAppMode,
-                                                       widgetInfo: newWidgetInfo,
-                                                       enabled: NSNumber(value: true),
-                                                       recreateControls: false)
+                    if !widgetRegistry.isWidgetVisible(newWidgetInfo.key) {
+                        newWidgetInfo.priority = newOrder.firstIndex(of: newWidgetInfo.key) ?? newOrder.count - 1
+                        newWidgetInfo.pageIndex = newOrders.firstIndex(of: newOrder) ?? newOrders.count
+                        widgetRegistry.getWidgetsFor(panel)?.add(newWidgetInfo)
+                        widgetRegistry.enableDisableWidget(for: selectedAppMode,
+                                                           widgetInfo: newWidgetInfo,
+                                                           enabled: NSNumber(value: true),
+                                                           recreateControls: false)
+                    }
                 }
             }
             if !newOrder.isEmpty {

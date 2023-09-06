@@ -12,24 +12,100 @@ import Foundation
 @objcMembers
 class WidgetUtils: NSObject {
 
-    static func addSelectedWidgets(widgetsIds: [String], panel: WidgetsPanel, selectedAppMode: OAApplicationMode) {
+    static func setEnabledWidgets(orderedWidgets: [[String]],
+                                  panel: WidgetsPanel,
+                                  selectedAppMode: OAApplicationMode) {
         let widgetsFactory = MapWidgetsFactory()
         let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
         let filter = KWidgetModeAvailable | kWidgetModeEnabled
-        
-        for widgetId in widgetsIds {
-            var widgetInfo: MapWidgetInfo? = widgetRegistry.getWidgetInfo(byId: widgetId)
-            let widgetInfos: NSMutableOrderedSet = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(filter), panels: WidgetsPanel.values)
-            
-            if widgetInfo == nil || widgetInfos.contains(widgetInfo!) {
-                widgetInfo = createDuplicateWidget(widgetId: widgetId, panel: panel, widgetsFactory: widgetsFactory, selectedAppMode: selectedAppMode)
-            }
-            if let newWidgetInfo = widgetInfo {
-                addWidgetToEnd(targetWidget: newWidgetInfo, widgetsPanel: panel, selectedAppMode: selectedAppMode)
-                widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: newWidgetInfo, enabled: NSNumber(value: true), recreateControls: false)
+        let mergedPanels = panel.getMergedPanels().filter { $0 != panel }
+        let enabledWidgets: [String] = orderedWidgets.flatMap { $0 }
+        var mergedWidgetInfos: NSMutableOrderedSet = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(filter), panels: mergedPanels)
+        var currentWidgetInfos: NSMutableOrderedSet = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(filter), panels: [panel])
+        var alreadyExist: [String] = []
+        for mapWidgetInfo in currentWidgetInfos {
+            if let widgetInfo = mapWidgetInfo as? MapWidgetInfo {
+                if enabledWidgets.contains(widgetInfo.key), !alreadyExist.contains(widgetInfo.key) {
+                    alreadyExist.append(widgetInfo.key)
+                } else {
+                    widgetRegistry.getWidgetsFor(panel)?.remove(widgetInfo)
+                    if !mergedWidgetInfos.contains(widgetInfo), widgetInfo.isEnabledForAppMode(selectedAppMode) {
+                        widgetRegistry.enableDisableWidget(for: selectedAppMode,
+                                                           widgetInfo: widgetInfo,
+                                                           enabled: NSNumber(value: false),
+                                                           recreateControls: false)
+                    }
+                }
             }
         }
-    
+        mergedWidgetInfos = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(filter), panels: mergedPanels)
+        currentWidgetInfos = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(filter), panels: [panel])
+        let defaultWidgetInfos = (widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: 0, panels: panel.getMergedPanels()).array as? [MapWidgetInfo] ?? [])
+            .filter { !$0.key.contains(MapWidgetInfo.DELIMITER) }
+        var newOrders: [[String]] = []
+        alreadyExist.removeAll()
+        for page in orderedWidgets {
+            var newOrder: [String] = []
+            for enabledWidget in page {
+                var needToAdd = false
+                var mapWidgetInfo: MapWidgetInfo? = widgetRegistry.getWidgetInfo(byId: enabledWidget)
+                if mapWidgetInfo == nil {
+                    let isCustom = enabledWidget.contains(MapWidgetInfo.DELIMITER)
+                    if isCustom {
+                        mapWidgetInfo = createDuplicateWidget(widgetId: enabledWidget,
+                                                              panel: panel,
+                                                              widgetsFactory: widgetsFactory,
+                                                              selectedAppMode: selectedAppMode)
+                        if let newWidgetInfo = mapWidgetInfo {
+                            alreadyExist.append(newWidgetInfo.key)
+                            needToAdd = true
+                        }
+                    } else if WidgetType.getById(enabledWidget) != nil {
+                        for defaultWidgetInfo in defaultWidgetInfos {
+                            if defaultWidgetInfo.key == enabledWidget {
+                                mapWidgetInfo = defaultWidgetInfo
+                                if let newWidgetInfo = mapWidgetInfo {
+                                    alreadyExist.append(newWidgetInfo.key)
+                                    needToAdd = true
+                                }
+                                break
+                            }
+                        }
+                    }
+                } else if let widgetInfo = mapWidgetInfo {
+                    if !mergedWidgetInfos.contains(widgetInfo), !alreadyExist.contains(widgetInfo.key) {
+                        alreadyExist.append(widgetInfo.key)
+                        needToAdd = true
+                    } else if alreadyExist.contains(widgetInfo.key) || mergedWidgetInfos.contains(widgetInfo) {
+                        mapWidgetInfo = createDuplicateWidget(widgetId: WidgetType.getDefaultWidgetId(enabledWidget),
+                                                              panel: panel,
+                                                              widgetsFactory: widgetsFactory,
+                                                              selectedAppMode: selectedAppMode)
+                        if let newWidgetInfo = mapWidgetInfo {
+                            alreadyExist.append(newWidgetInfo.key)
+                            needToAdd = true
+                        }
+                    }
+                }
+                if let newWidgetInfo = mapWidgetInfo, needToAdd {
+                    newOrder.append(newWidgetInfo.key)
+                    if !widgetRegistry.isWidgetVisible(newWidgetInfo.key) {
+                        newWidgetInfo.priority = newOrder.firstIndex(of: newWidgetInfo.key) ?? newOrder.count - 1
+                        newWidgetInfo.pageIndex = newOrders.firstIndex(of: newOrder) ?? newOrders.count
+                        widgetRegistry.getWidgetsFor(panel)?.add(newWidgetInfo)
+                        widgetRegistry.enableDisableWidget(for: selectedAppMode,
+                                                           widgetInfo: newWidgetInfo,
+                                                           enabled: NSNumber(value: true),
+                                                           recreateControls: false)
+                    }
+                }
+            }
+            if !newOrder.isEmpty {
+                newOrders.append(newOrder)
+            }
+        }
+        panel.setWidgetsOrder(pagedOrder: newOrders, appMode: selectedAppMode)
+        widgetRegistry.reorderWidgets()
         OARootViewController.instance().mapPanel.recreateControls()
     }
 
@@ -43,59 +119,6 @@ class WidgetUtils: NSObject {
             }
         }
         return nil
-    }
-
-    static func addWidgetToEnd(targetWidget: MapWidgetInfo, widgetsPanel: WidgetsPanel, selectedAppMode: OAApplicationMode) {
-        let widgetRegistry: OAMapWidgetRegistry = OAMapWidgetRegistry.sharedInstance()
-        var pagedOrder: [Int: [String]] = [:]
-
-        let enabledWidgets: NSMutableOrderedSet = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(kWidgetModeEnabled), panels: [widgetsPanel])
-
-        widgetRegistry.getWidgetsFor(targetWidget.widgetPanel)?.remove(targetWidget)
-        targetWidget.widgetPanel = widgetsPanel
-
-        for enabledWidget in enabledWidgets {
-            guard let widget = enabledWidget as? MapWidgetInfo else { continue }
-            let page = widget.pageIndex
-            if var orders = pagedOrder[page] {
-                orders.append(widget.key)
-                pagedOrder[page] = orders
-            } else {
-                pagedOrder[page] = [widget.key]
-            }
-        }
-
-        if pagedOrder.isEmpty {
-            targetWidget.pageIndex = 0
-            targetWidget.priority = 0
-            widgetRegistry.getWidgetsFor(widgetsPanel)?.add(targetWidget)
-
-            let flatOrder: [[String]] = [ [targetWidget.key] ]
-            widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode)
-        } else {
-            let pages = Array(pagedOrder.keys)
-            var orders = Array(pagedOrder.values)
-            var lastPageOrder = orders.last ?? []
-
-            lastPageOrder.append(targetWidget.key)
-
-            if let previousLastWidgetId = lastPageOrder.dropLast().last,
-               let previousLastVisibleWidgetInfo = widgetRegistry.getWidgetInfo(byId:previousLastWidgetId) {
-                let lastPage = previousLastVisibleWidgetInfo.pageIndex
-                let lastOrder = previousLastVisibleWidgetInfo.priority + 1
-                targetWidget.pageIndex = lastPage
-                targetWidget.priority = lastOrder
-            } else {
-                let lastPage = pages.last ?? 0
-                let lastOrder = lastPageOrder.count - 1
-                targetWidget.pageIndex = lastPage
-                targetWidget.priority = lastOrder
-            }
-
-            widgetRegistry.getWidgetsFor(widgetsPanel)?.add(targetWidget)
-
-            widgetsPanel.setWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode)
-        }
     }
 
 }

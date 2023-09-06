@@ -174,7 +174,7 @@ class WidgetType: NSObject {
     }
 
     static func getDuplicateWidgetId(_ widgetId: String) -> String {
-        return getDefaultWidgetId(widgetId) + MapWidgetInfo.DELIMITER + String(Date.now.timeIntervalSince1970 * 1000);
+        return getDefaultWidgetId(widgetId) + MapWidgetInfo.DELIMITER + String(UInt64(Date.now.timeIntervalSince1970 * 1000))
     }
 }
 

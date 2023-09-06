@@ -81,9 +81,17 @@
     self.backgroundColor = [UIColor whiteColor];
 
     _separatorView = [[UIView alloc] init];
+    _separatorView.hidden = YES;
     _separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
-    _separatorView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - .5, CGRectGetWidth(self.frame), .5);
     [self addSubview:_separatorView];
+    
+    _separatorView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [_separatorView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
+        [_separatorView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [_separatorView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-0.5],
+        [_separatorView.heightAnchor constraintEqualToConstant:.5]
+    ]];
 
     _largeFont = [UIFont systemFontOfSize:21 weight:UIFontWeightSemibold];
     _largeBoldFont = [UIFont systemFontOfSize:21 weight:UIFontWeightBold];
@@ -111,6 +119,16 @@
     _angularUnitsDepended = NO;
     _cachedMetricSystem = -1;
     _cachedAngularUnits = -1;
+}
+
+- (BOOL)isTextInfo
+{
+    return YES;
+}
+
+- (void)showSeparator:(BOOL)show
+{
+    _separatorView.hidden = !show;
 }
 
 - (void) onWidgetClicked:(id)sender
@@ -267,6 +285,13 @@
     _textShadowView.attributedText = _primaryShadowColor && _shadowRadius > 0 ? shadowString : nil;
     _textView.attributedText = string;
     self.accessibilityValue = string.string;
+    [self refreshLayout];
+}
+
+- (void)refreshLayout
+{
+    if (self.delegate)
+        [self.delegate widgetChanged:self];
 }
 
 - (void) addAccessibilityLabelsWithValue:(NSString *)value
@@ -294,8 +319,6 @@
     f.size.width = tf.origin.x + tf.size.width + 4;
     f.size.height = [self getWidgetHeight];
     self.frame = f;
-    
-    _separatorView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - .5, CGRectGetWidth(self.frame), .5);
 }
 
 - (BOOL) updateVisibility:(BOOL)visible

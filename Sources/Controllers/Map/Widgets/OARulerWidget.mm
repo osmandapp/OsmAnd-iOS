@@ -62,7 +62,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     double _maxRadius;
     double _roundedDist;
     
-    float _cachedViewportScale;
+    float _cachedViewportYScale;
+    float _cachedViewportXScale;
     CGFloat _cachedWidth;
     CGFloat _cachedHeight;
     float _cachedMapElevation;
@@ -106,6 +107,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     
     UIImage *_centerIconDay;
     UIImage *_centerIconNight;
+    BOOL _needUpdate;
 }
 
 - (instancetype) init
@@ -234,9 +236,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         
         EOARulerWidgetMode mode = _settings.rulerMode.get;
         BOOL showCompass = _settings.showCompassControlRuler.get && [_mapViewController getMapZoom] > SHOW_COMPASS_MIN_ZOOM;
-        
-        _imageView.center = CGPointMake(self.frame.size.width * 0.5,
-                                        self.frame.size.height * 0.5 * _mapViewController.mapView.viewportYScale);
+        _imageView.center = circleCenterPoint;
         
         if (mode == RULER_MODE_DARK || mode == RULER_MODE_LIGHT )
         {
@@ -312,7 +312,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     _cachedHeading = _app.locationServices.lastKnownHeading;
     _cachedMapAzimuth = _mapViewController.mapView.azimuth;
     _cachedTimestamp = [[NSDate date] timeIntervalSince1970];
-    _cachedViewportScale = _mapViewController.mapView.viewportYScale;
+    _cachedViewportYScale = _mapViewController.mapView.viewportYScale;
+    _cachedViewportXScale = _mapViewController.mapView.viewportXScale;
     _cachedWidth = self.bounds.size.width;
     _cachedHeight = self.bounds.size.height;
     
@@ -768,14 +769,19 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         
         OAMapRendererView *mapRendererView = _mapViewController.mapView;
         visible = [_mapViewController calculateMapRuler] != 0
-            && !_mapViewController.zoomingByGesture
-            && !_mapViewController.rotatingByGesture;
+        && !_mapViewController.zoomingByGesture
+        && !_mapViewController.rotatingByGesture;
         
         CGSize viewSize = self.bounds.size;
-        float viewportScale = mapRendererView.viewportYScale;
-        BOOL centerChanged  = _cachedViewportScale != viewportScale || _cachedWidth != viewSize.width || _cachedHeight != viewSize.height;
-        if (centerChanged)
+        float viewportYScale = mapRendererView.viewportYScale;
+        float viewportXScale = mapRendererView.viewportXScale;
+        BOOL centerChanged = _cachedViewportYScale != viewportYScale
+        || _cachedViewportXScale != viewportXScale
+        || _cachedWidth != viewSize.width
+        || _cachedHeight != viewSize.height;
+        if (centerChanged) {
             [self changeCenter];
+        }
         
         BOOL modeChanged = _cachedRulerMode != _settings.rulerMode.get;
         if ((visible && _cachedRulerMode != RULER_MODE_NO_CIRCLES) || modeChanged)
@@ -820,15 +826,21 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             _cachedHeight = viewSize.height;
             _cachedHeading = heading;
             _cachedMapAzimuth = mapAzimuth;
-            _cachedViewportScale = viewportScale;
+            _cachedViewportYScale = viewportYScale;
+            _cachedViewportXScale = viewportXScale;
             _cachedHeading = _app.locationServices.lastKnownHeading;
             _mapScaleUnrounded = fullMapScale;
             _mapScale = [OAOsmAndFormatter calculateRoundedDist:_mapScaleUnrounded];
             _radius = (_mapScale / _cachedMapDensity) / [[UIScreen mainScreen] scale];
             _maxRadius = [self calculateMaxRadiusInPx];
             
-            if ((mapMoved || shouldUpdateCompass) && !wasUpdatedRecently )
+             _needUpdate |= mapMoved || shouldUpdateCompass;
+            
+            if (_needUpdate && !wasUpdatedRecently)
+            {
+                _needUpdate = NO;
                 [self setNeedsDisplay];
+            }
         }
         _cachedRulerMode = _settings.rulerMode.get;
     }
@@ -838,7 +850,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (float) calculateMaxRadiusInPx
 {
-    float centerY = self.center.y * _cachedViewportScale;
+    float centerY = self.center.y * _cachedViewportYScale;
     float centerX = self.center.x;
     return MAX(centerY, centerX);
 }
@@ -850,8 +862,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (void) changeCenter
 {
-    _imageView.center = CGPointMake(self.frame.size.width * 0.5,
-                                    self.frame.size.height * 0.5 * _mapViewController.mapView.viewportYScale);
+    CGPoint circleCenterPoint = [self getCenterPoint];
+    _imageView.center = circleCenterPoint;
 }
 
 - (void) onMapSourceUpdated

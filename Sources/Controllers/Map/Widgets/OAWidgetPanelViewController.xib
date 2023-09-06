@@ -24,7 +24,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                     <subviews>
                         <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="skp-uv-S5T">
-                            <rect key="frame" x="2" y="824" width="389" height="26"/>
+                            <rect key="frame" x="0.0" y="826" width="393" height="26"/>
                             <color key="backgroundColor" red="0.89803921568627454" green="0.89411764705882346" blue="0.90588235294117647" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
@@ -36,9 +36,9 @@
                         </pageControl>
                     </subviews>
                     <constraints>
-                        <constraint firstAttribute="bottom" secondItem="skp-uv-S5T" secondAttribute="bottom" constant="2" id="Q6U-lP-hgl"/>
-                        <constraint firstItem="skp-uv-S5T" firstAttribute="leading" secondItem="PVB-gi-Qrg" secondAttribute="leading" constant="2" id="kmS-9A-Kcj"/>
-                        <constraint firstAttribute="trailing" secondItem="skp-uv-S5T" secondAttribute="trailing" constant="2" id="zPn-gh-3vl"/>
+                        <constraint firstAttribute="bottom" secondItem="skp-uv-S5T" secondAttribute="bottom" id="Q6U-lP-hgl"/>
+                        <constraint firstItem="skp-uv-S5T" firstAttribute="leading" secondItem="PVB-gi-Qrg" secondAttribute="leading" id="kmS-9A-Kcj"/>
+                        <constraint firstAttribute="trailing" secondItem="skp-uv-S5T" secondAttribute="trailing" id="zPn-gh-3vl"/>
                     </constraints>
                 </view>
             </subviews>

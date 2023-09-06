@@ -104,6 +104,9 @@
         [mapHudViewController.leftWidgetsView addSubview:_leftPanelController.view];
         [mapHudViewController.bottomWidgetsView addSubview:_bottomPanelController.view];
         [mapHudViewController.rightWidgetsView addSubview:_rightPanelController.view];
+        
+        [_topPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner | kCALayerMaxXMaxYCorner];
+        [_bottomPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner];
 
         _topPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
         _leftPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
@@ -127,10 +130,10 @@
             [_bottomPanelController.view.bottomAnchor constraintEqualToAnchor:mapHudViewController.bottomWidgetsView.bottomAnchor constant:0.],
             [_bottomPanelController.view.rightAnchor constraintEqualToAnchor:mapHudViewController.bottomWidgetsView.rightAnchor constant:0.],
 
-            [_rightPanelController.view.topAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.topAnchor constant:0.],
-            [_rightPanelController.view.leftAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.leftAnchor constant:0.],
-            [_rightPanelController.view.bottomAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.bottomAnchor constant:0.],
-            [_rightPanelController.view.rightAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.rightAnchor constant:0.]
+            [_rightPanelController.view.topAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.topAnchor constant:0],
+            [_rightPanelController.view.leftAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.leftAnchor constant:0],
+            [_rightPanelController.view.bottomAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.bottomAnchor constant:0],
+            [_rightPanelController.view.rightAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.rightAnchor constant:0]
 
         ]];
 
@@ -263,6 +266,28 @@
     }
 }
 
+- (void)configureLayerWidgets:(BOOL)hasTopWidgets
+{
+    if (hasTopWidgets) {
+        [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner];
+        [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMaxXMaxYCorner];
+    }
+    else
+    {
+        if ([OAUtilities isLandscapeIpadAware])
+        {
+            CACornerMask maskedCorners = kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner | kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner;
+            [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners];
+            [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners];
+        }
+        else
+        {
+            [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner];
+            [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner];
+        }
+    }
+}
+
 - (void) layoutWidgets
 {
     BOOL portrait = ![OAUtilities isLandscape];
@@ -271,6 +296,7 @@
     BOOL hasLeftWidgets = [_leftPanelController hasWidgets];
     BOOL hasBottomWidgets = [_bottomPanelController hasWidgets];
     BOOL hasRightWidgets = [_rightPanelController hasWidgets];
+    [self configureLayerWidgets:hasTopWidgets];
 
     if (_alarmControl && _alarmControl.superview && !_alarmControl.hidden)
     {
@@ -301,7 +327,8 @@
     if (hasLeftWidgets)
     {
         CGSize leftSize = [_leftPanelController calculateContentSize];
-        _mapHudViewController.leftWidgetsViewHeightConstraint.constant = leftSize.height;
+        CGFloat pageControlHeight = _leftPanelController.pages.count > 1 ? 16 : 0;
+        _mapHudViewController.leftWidgetsViewHeightConstraint.constant = leftSize.height + pageControlHeight;
         _mapHudViewController.leftWidgetsViewWidthConstraint.constant = leftSize.width;
     }
     else
@@ -316,7 +343,8 @@
     if (hasRightWidgets)
     {
         CGSize rightSize = [_rightPanelController calculateContentSize];
-        _mapHudViewController.rightWidgetsViewHeightConstraint.constant = rightSize.height;
+        CGFloat pageControlHeight = _rightPanelController.pages.count > 1 ? 16 : 0;
+        _mapHudViewController.rightWidgetsViewHeightConstraint.constant = rightSize.height + pageControlHeight;
         _mapHudViewController.rightWidgetsViewWidthConstraint.constant = rightSize.width;
     }
     else
@@ -577,7 +605,7 @@
 
 - (void) widgetChanged:(OABaseWidgetView *)widget
 {
-    if (widget.isTopText)
+    if (widget.isTopText || widget.isTextInfo)
         [self layoutWidgets];
 }
 

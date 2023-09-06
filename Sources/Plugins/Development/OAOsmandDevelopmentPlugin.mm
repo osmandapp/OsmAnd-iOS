@@ -82,6 +82,11 @@
 //    [self registerWidget];
 }
 
+- (NSArray<NSString *> *) getWidgetIds
+{
+    return @[OAWidgetType.devFps.id, OAWidgetType.devCameraTilt.id, OAWidgetType.devCameraDistance, OAWidgetType.devZoomLevel.id, OAWidgetType.devTargetDistance.id];
+}
+
 - (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
 {
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];

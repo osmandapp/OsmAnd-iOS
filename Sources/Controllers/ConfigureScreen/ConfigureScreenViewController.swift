@@ -28,7 +28,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
     }
     
     override func registerObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(onWidgetStateChanged), name: NSNotification.Name(kWidgetVisibilityChangedMotification), object: nil)
+        addNotification(NSNotification.Name(kWidgetVisibilityChangedMotification), selector: #selector(onWidgetStateChanged))
     }
     
     override func generateData() {
@@ -272,7 +272,7 @@ extension ConfigureScreenViewController {
             let panel = data.obj(forKey: "panel") as? WidgetsPanel
             if let panel {
                 let vc = WidgetsListViewController(widgetPanel: panel)
-                self.navigationController?.pushViewController(vc, animated: true)
+                show(vc)
             }
         }
     }

@@ -1843,6 +1843,11 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                             item.resourceId.toNSString(),
                             item.resource != nullptr ? item.resource->localPath.toNSString() : @"?");
                 }
+                else
+                {
+                    if (item.resourceType == OsmAndResourceType::HeightmapRegionLegacy || item.resourceType == OsmAndResourceType::GeoTiffRegion)
+                        [app.data.terrainResourcesChangeObservable notifyEvent];
+                }
 
                 if (item.resourceType == OsmAndResourceType::MapRegion)
                     [app.data.mapLayerChangeObservable notifyEvent];

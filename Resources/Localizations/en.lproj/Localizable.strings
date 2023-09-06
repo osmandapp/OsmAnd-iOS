@@ -664,6 +664,7 @@
 "shared_string_on" = "On";
 "shared_string_off" = "Off";
 "shared_string_clear_cache" = "Clear cache";
+"shared_string_cache" = "Cache";
 "shared_string_maximum" = "Maximum";
 "osmand_parking_warning" = "Warning";
 "shared_string_copy" = "Copy";
@@ -955,8 +956,8 @@
 "map_settings_slopes_description" = "Slope is colorized visualisations on terrain.";
 "map_settings_hillshade_description" = "Hillshade map using dark shades to show slopes, peaks and lowlands.";
 "map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
-"map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
-"map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
+"map_settings_add_maps_hillshade" = "Additional maps are needed to view Hillshades on the map.";
+"map_settings_add_maps_slopes" = "Additional maps are needed to view Slopes on the map.";
 "shared_string_legend" = "Legend";
 
 "map_settings_show_slider_map" = "Show slider on the map";
@@ -1479,7 +1480,7 @@
 "res_zoom_invalid_value" = "Zoom values should be in range 1 - 22";
 "res_offlineSQL_URL_warning" = "Not supported for this map type";
 "clear_tiles_warning" = "Applying these changes will clear the cached data for this tile source";
-"download_heightmap_maps" = "Terrain map";
+"download_heightmap_maps" = "Terrain map (3D)";
 "welmode_download_maps" = "Download maps";
 "srtm_unit_format" = "Contour lines unit variant";
 "srtm_download_single_help_message" = "Please select the variant. You will need to re-download the file to change the format.";
@@ -2204,6 +2205,7 @@
 "offline_raster_map" = "Offline raster map";
 "offline_raster_maps" = "Offline raster maps";
 "online_raster_maps" = "Online raster maps";
+"terrain_3D_maps" = "Terrain maps";
 "online_map" = "Online map";
 "calculating_progress" = "Calculating...";
 "local_map_names" = "Local names";

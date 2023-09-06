@@ -71,10 +71,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return OALocalizedString(@"download_wikipedia_maps");
         case OsmAndResourceType::RoadMapRegion:
             return OALocalizedString(@"roads");
-        case OsmAndResourceType::HillshadeRegion:
-            return OALocalizedString(@"shared_string_hillshade");
-        case OsmAndResourceType::SlopeRegion:
-            return OALocalizedString(@"shared_string_slope");
         case OsmAndResourceType::SqliteFile:
             return OALocalizedString(@"online_map");
         case OsmAndResourceType::WeatherForecast:
@@ -98,12 +94,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::SrtmMapRegion:
         case OsmAndResourceType::DepthContourRegion:
             imageNamed = @"ic_custom_contour_lines";
-            break;
-        case OsmAndResourceType::HillshadeRegion:
-            imageNamed = @"ic_custom_hillshade";
-            break;
-        case OsmAndResourceType::SlopeRegion:
-            imageNamed = @"ic_action_slope";
             break;
         case OsmAndResourceType::WikiMapRegion:
             imageNamed = @"ic_custom_wikipedia";
@@ -153,10 +143,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::DepthContourRegion:
         case OsmAndResourceType::DepthMapRegion:
             return 45;
-        case OsmAndResourceType::HillshadeRegion:
-            return 50;
-        case OsmAndResourceType::SlopeRegion:
-            return 55;
         case OsmAndResourceType::WikiMapRegion:
             return 60;
 //        case WIKIVOYAGE_FILE:
@@ -192,10 +178,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         return OsmAndResourceType::DepthContourRegion;
     else if ([scopeId isEqualToString:@"depthmap"])
         return OsmAndResourceType::DepthMapRegion;
-    else if ([scopeId isEqualToString:@"hillshade"])
-        return OsmAndResourceType::HillshadeRegion;
-    else if ([scopeId isEqualToString:@"slope"])
-        return OsmAndResourceType::SlopeRegion;
     else if ([scopeId isEqualToString:@"wikimap"])
         return OsmAndResourceType::WikiMapRegion;
 //    else if ([scopeId isEqualToString:@"wikivoyage"])
@@ -235,8 +217,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             [self.class toValue:OsmAndResourceType::SrtmMapRegion],
             [self.class toValue:OsmAndResourceType::DepthContourRegion],
             [self.class toValue:OsmAndResourceType::DepthMapRegion],
-            [self.class toValue:OsmAndResourceType::HillshadeRegion],
-            [self.class toValue:OsmAndResourceType::SlopeRegion],
             [self.class toValue:OsmAndResourceType::WikiMapRegion],
             [self.class toValue:OsmAndResourceType::LiveUpdateRegion],
             [self.class toValue:OsmAndResourceType::GpxFile],
@@ -256,8 +236,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             [self.class toValue:OsmAndResourceType::MapRegion],
             [self.class toValue:OsmAndResourceType::RoadMapRegion],
             [self.class toValue:OsmAndResourceType::SrtmMapRegion],
-            [self.class toValue:OsmAndResourceType::HillshadeRegion],
-            [self.class toValue:OsmAndResourceType::SlopeRegion],
             [self.class toValue:OsmAndResourceType::WikiMapRegion],
             [self.class toValue:OsmAndResourceType::WeatherForecast]
     ];
@@ -719,8 +697,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::RoadMapRegion:
         case OsmAndResourceType::SrtmMapRegion:
         case OsmAndResourceType::WikiMapRegion:
-        case OsmAndResourceType::HillshadeRegion:
-        case OsmAndResourceType::SlopeRegion:
         case OsmAndResourceType::WeatherForecast:
         case OsmAndResourceType::HeightmapRegionLegacy:
         case OsmAndResourceType::GeoTiffRegion:
@@ -1869,7 +1845,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                 }
                 else
                 {
-                    if (item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
+                    if (item.resourceType == OsmAndResourceType::HeightmapRegionLegacy || item.resourceType == OsmAndResourceType::GeoTiffRegion)
                         [app.data.terrainResourcesChangeObservable notifyEvent];
                 }
 

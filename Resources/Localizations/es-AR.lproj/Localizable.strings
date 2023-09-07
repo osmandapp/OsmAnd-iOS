@@ -676,8 +676,8 @@
 "shared_string_terrain" = "Terreno";
 "map_settings_layer_transparency" = "Transparencia de la capa";
 "map_settings_slopes_legend" = "Puedes leer más sobre las pendientes en Wikipedia";
-"map_settings_slopes_description" = "Los mapas de pendientes utilizan diferentes colores para visualizar el terreno";
-"map_settings_hillshade_description" = "Los mapas de sombreado visualizan las pendientes, los picos y las tierras bajas usando diferentes niveles de gris";
+"map_settings_slopes_description" = "Las pendientes se colorean sobre el terreno.";
+"map_settings_hillshade_description" = "El mapa de sombreado usa sombras oscuras para mostrar las pendientes, picos y tierras bajas.";
 "map_settings_zoom_level_description" = "Define el nivel de zum mínimo y máximo para mostrar la capa";
 "map_settings_add_maps_hillshade" = "Se necesitan mapas adicionales para ver el sombreado en el mapa";
 "map_settings_add_maps_slopes" = "Se necesitan mapas adicionales para ver las pendientes en el mapa";
@@ -1383,7 +1383,7 @@
 "quick_action_contour_lines_descr" = "Un botón que muestra u oculta las curvas de nivel en el mapa.";
 "hide_contour_lines" = "Ocultar curvas de nivel";
 "enable_contour_lines" = "Activar para ver las curvas de nivel en el mapa";
-"enable_hillshade" = "Activar para ver datos del terreno";
+"enable_hillshade" = "Activar para ver datos del terreno con el mapa de sombreado o pendientes.";
 "contour_lines_hillshades_slope" = "Curvas de nivel, sombreados, pendientes";
 "quick_action_dir_from_descr" = "Pulsa esta acción para navegar desde el punto central de la pantalla actual.";
 "quick_action_transport_descr" = "Botón que muestra u oculta el transporte público en el mapa.";
@@ -3038,3 +3038,4 @@
 "auto_update" = "Actualización automática";
 "weather_update_over_any_network" = "Sobre cualquier red";
 "weather_update_parameters_any_network" = "El pronóstico del tiempo será actualizado sobre cualquier red. Pueden usarse los datos móviles.";
+"map_settings_topography" = "Topografía";

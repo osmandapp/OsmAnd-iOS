@@ -2693,7 +2693,7 @@
 "huawei_appgallery" = "Huawei AppGallery";
 "nautical_depth_points" = "Puntos de profundidad náuticos";
 "use_heightmap_setting" = "Usar mapas de altura del relieve 3D";
-"download_heightmap_maps" = "Mapa de alturas";
+"download_heightmap_maps" = "Mapa del terreno";
 "amazon_appstore" = "Amazon Appstore";
 "routing_attr_motor_type_name" = "Motor del vehículo";
 "routing_attr_motor_type_diesel_name" = "Diésel";
@@ -3028,3 +3028,13 @@
 "map_widget_zoom_level_desc" = "Muestra el nivel de zum actual del mapa.";
 "map_widget_target_distance_desc" = "Muestra la distancia entre la cámara y la ubicación del objetivo.";
 "map_widget_rendering_fps_desc" = "Muestra que tan rápido se ven y actualizan el mapa y sus elementos , expresada en fotogramas por segundo (FPS).";
+"weather_updates_manual" = "El pronóstico del tiempo debe actualizarse manualmente.";
+"purchases_feature_relief_3d_description" = "Obtén y observa el modelo a escala de tu barrio o de todo el continente.";
+"weather_update_disabled" = "Desactivado";
+"shared_string_relief_3d" = "Relieve 3D";
+"weather_update_parameters_wifi" = "El pronóstico del tiempo será actualizado sólo con una red Wi-Fi activa.";
+"weather_update_over_wifi_only" = "Sólo por Wi-Fi";
+"weather_update_parameters_disabled" = "Las actualizaciones automáticas serán desactivadas.";
+"auto_update" = "Actualización automática";
+"weather_update_over_any_network" = "Sobre cualquier red";
+"weather_update_parameters_any_network" = "El pronóstico del tiempo será actualizado sobre cualquier red. Pueden usarse los datos móviles.";

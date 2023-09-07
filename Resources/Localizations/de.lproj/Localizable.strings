@@ -296,7 +296,7 @@
 "menu_my_trips" = "Meine Tracks";
 "product_title_trip_planning" = "Streckenplanung";
 "product_desc_wiki" = "Standortbezogene Wikipedia-Artikel auf der Karte";
-"srtm_plugin_name" = "Höhenlinien";
+"srtm_plugin_name" = "Topographie";
 "product_desc_srtm" = "Visuelle Übersetzung der Form der Landoberfläche";
 "enter_description" = "Beschreibung eingeben";
 "shared_string_description" = "Beschreibung";
@@ -319,7 +319,7 @@
 "from_location" = "abwesend";
 "show_alt_in_drive" = "Höhe im Fahrmodus anzeigen";
 "shared_string_get" = "Erwerben";
-"srtm_plugin_disabled" = "Höhenlinien deaktiviert";
+"srtm_plugin_disabled" = "Topographie deaktiviert";
 "shared_string_open" = "Öffnen";
 "time_closed" = "Geschlossen";
 "will_close_at" = "Schließt um";
@@ -394,8 +394,8 @@
 "purchases_feature_desc_wikipedia" = "Stellt alle ortsbezogenen Wikipedia-Artikel offline bereit und hilft Ihnen, mehr über die Orte zu erfahren, die Sie auf Ihrer Reise besuchen, indem Sie einfach auf die Karte tippen. Vergessen Sie nicht, die Wikipedia-Kartendateien für die jeweiligen Regionen herunterzuladen.";
 "prch_wiki_info" = "Wikipedia-plugin aktiviert Wikipedia-Informationen für berechtigte Karten welche sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
 "prch_srtm_info" = "Höhenlinien-plugin aktiviert Höhenlinien für berechtigte Karten, die Sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
-"plugin_popup_srtm_desc" = "Um die Höhenlinien zu nutzen zu können, bitte die entsprechenden Höhendaten herunterladen";
-"plugin_popup_srtm_ask" = "Um Höhendaten herunterladen zu können, bitte das <b>Höhenlinien Plugin</b> aktivieren";
+"plugin_popup_srtm_desc" = "Um Topographie zu nutzen, bitte die entsprechenden Höhendaten herunterladen";
+"plugin_popup_srtm_ask" = "Um Höhendaten herunterzuladen, bitte das Modul <b>Topographie</b> aktivieren";
 "plugin_popup_nautical_desc" = "Bitte erst die Seekarten herunterladen.\nDann unter <b>Karte konfigurieren</b> > <b>Kartendarstellung</b> die Darstellung <b>Nautical</b> aktiviere";
 "plugin_popup_trip_planning_ask" = "Um eine Strecke planen zu können, bitte das <b>Streckenplaner-Plugin</b> aktivieren";
 "product_desc_ext_trip_planning" = "Das Entfernungsmesser & Routen-Planer Plugin ermöglicht es dir deine Routen auf der Karte zu planen, zu speichern, die gerade Strecke zwischen Punkten zu messen, uvm. Erstellt eine vorläufige Routenplanung anstatt einer genauen Route.";
@@ -2695,7 +2695,7 @@
 "checking_progress" = "Prüfung…";
 "cloud_conflict_descr" = "Die lokale und die Cloud-Version enthalten Änderungen seit der letzten Synchronisierung.";
 "local_changes_will_be_dismissed" = "LokaleÄnderungen werden verworfen";
-"download_heightmap_maps" = "Höhenkarte";
+"download_heightmap_maps" = "Geländekarte";
 "use_heightmap_setting" = "3D-Reliefhöhenkarten verwenden";
 "nautical_depth_points" = "Nautische Tiefenpunkte";
 "depth_contours" = "Tiefenlinien";
@@ -3034,3 +3034,6 @@
 "map_widget_camera_distance_desc" = "Zeigt die Höhe der Kamera über der Oberfläche an.";
 "map_widget_zoom_level_desc" = "Zeigt die aktuelle Zoomstufe der Karte an.";
 "map_widget_target_distance_desc" = "Zeigt die Entfernung zwischen Kamera und Zielort an.";
+"weather_update_disabled" = "Deaktiviert";
+"weather_update_over_wifi_only" = "Nur über WLAN";
+"weather_update_over_any_network" = "Über jedes Netzwerk";

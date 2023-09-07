@@ -283,7 +283,7 @@
 "gpx_start_new_segment" = "Débuter un nouveau segment";
 "save_current_track" = "Enregistrer la trace en cours";
 "track_start_rec" = "Commencer l'enregistrement de la trace";
-"track_rec_addon_q" = "Veuillez activer le greffon d'enregistrement de traces pour les enregistrer et les sauvegarder";
+"track_rec_addon_q" = "Veuillez activer l'extension d'enregistrement de traces pour les enregistrer et les sauvegarder";
 "track_clear" = "Effacer la trace actuelle";
 "track_clear_q" = "Voulez-vous effacer la trace actuelle ?";
 "map_settings_offline" = "Styles de cartes hors ligne";
@@ -339,7 +339,7 @@
 "product_desc_track_recording" = "Enregistre et sauvegarde vos trajets dans des traces GPX";
 "product_desc_trip_planning" = "Planifiez votre trajets, ajoutez des points de passage, mesurez la distance à votre destination avec ce greffon";
 "product_desc_allworld" = "Cartes du Monde";
-"srtm_plugin_name" = "Courbes de niveau";
+"srtm_plugin_name" = "Topographie";
 "product_desc_srtm" = "Visualiser les formes de la surface du terrain";
 "track_save_short_q" = "La trace est trop courte, voulez-vous l'enregistrer ?";
 "enter_fav_name" = "Entrez le nom du favoris";
@@ -348,7 +348,7 @@
 "gpx_select_track" = "Sélectionnez la trace";
 "access_hint_enter_name" = "Saisissez un nom";
 "show_alt_in_drive" = "Afficher l'altitude en mode conduite";
-"srtm_plugin_disabled" = "Courbes de niveau désactivées";
+"srtm_plugin_disabled" = "Topographie désactivée";
 "wpt_select" = "Veuillez sélectionner des points de passage";
 "gpx_remove_wpts_q" = "Supprimer les points de passage sélectionnés ?";
 "editing_waypoints" = "Modifier les points de passage";
@@ -685,8 +685,8 @@
 "map_mode" = "Mode Carte";
 "plugin_popup_ski_title" = "Activer le style de carte Ski";
 "plugin_popup_ski_desc" = "Pour activer <b>le style de carte Ski</b>, veuillez aller dans <b>les Paramètres de la carte</b> > <b>Type de carte</b>";
-"plugin_popup_srtm_desc" = "Pour utiliser la fonctionnalité courbes de niveaux, veuillez d'abord télécharger les courbes de niveaux pour une région";
-"plugin_popup_srtm_ask" = "Pour télécharger des courbes de niveaux, vous devez d'abord activer l'extension : <b>courbes de niveaux</b>";
+"plugin_popup_srtm_desc" = "Pour utiliser la fonctionnalité Topographie, veuillez d'abord télécharger les courbes de niveaux pour une région";
+"plugin_popup_srtm_ask" = "Pour télécharger des courbes de niveaux, vous devez d'abord activer l'extension : <b>Topographie</b>";
 "plugin_popup_nautical_desc" = "Veuillez d'abord télécharger des Cartes Marines.\nAllez ensuite dans <b>les Paramètres de la carte</b> > <b>Type de carte</b> et activer le style <b>Marine</b>";
 "all_world_popup_desc" = "Téléchargez le fond de carte mondial pour voir le nom des états, les frontières et d'autres informations";
 "items_selected" = "%d sélectionné(s)";
@@ -933,8 +933,8 @@
 "srtm_plugin_description" = "Fournit des informations sur le terrain (ombrage du relief, courbes de niveau, pente) pour vous aiderà mieux interpréter le relief et l’accessibilité. Ces informations topographiques peuvent être représentées sur la carte par des ombres, des lignes d\'altitude et des couleurs variant selon la pente.\n\nLes données proviennent de SRTM et ASTER.\n\nPlus d\'informations sur http://osmand.net/docs/user/plugins/contour-lines.";
 "wikivoyage_travel_guide_descr" = "Guides des lieux les plus intéressants au monde depuis OsmAnd et sans connexion Internet.";
 "product_desc_sea_depth_contours" = "Bathymétrie et balisage maritime";
-"prch_wiki_info" = "L'extension Wikipédia permet d'activer les informations wikipédia pour les cartes que vous avez le droit, achetées ou téléchargées dans les limites de la limite de la gratuité.";
-"prch_srtm_info" = "L'extension courbes de niveau permet d'activer l'affichage des courbes de niveau pour les cartes auxquelles vous avez droit, achetées ou téléchargées dans les limites de l'offre gratuite.";
+"prch_wiki_info" = "L'extension Wikipédia permet d'activer les informations Wikipédia pour les cartes que vous avez le droit, achetées ou téléchargées dans les limites de la limite de la gratuité.";
+"prch_srtm_info" = "L'extension Topographie permet d'activer l'affichage des courbes de niveau pour les cartes auxquelles vous avez droit, achetées ou téléchargées dans les limites de l'offre gratuite.";
 "poi_category_and_type" = "Catégorie et type de POI";
 "poi_select_type" = "Sélectionner le type";
 "purchase_dialog_travel_description" = "Achetez l\'une des options suivantes pour obtenir la fonctionnalité guide de voyage hors ligne :";
@@ -2684,7 +2684,7 @@
 "modified_file" = "Fichier modifié";
 "last_synchronization" = "Dernière synchronisation";
 "use_heightmap_setting" = "Utiliser les cartes de hauteur en relief 3D";
-"download_heightmap_maps" = "Carte des altitudes";
+"download_heightmap_maps" = "Carte des reliefs";
 "nautical_depth_points" = "Points de sonde marine";
 "depth_contours" = "Lignes de profondeur";
 "amazon_appstore" = "Boutique Amazon";
@@ -3019,3 +3019,13 @@
 "map_widget_rendering_fps_desc" = "Affiche la vitesse d'affichage et d’actualisation de la carte et de ses éléments, exprimé en images par seconde (FPS).";
 "map_widget_zoom_level_desc" = "Indique le niveau de zoom actuel.";
 "map_widget_target_distance_desc" = "Indique la distance entre l'appareil photo et la destination.";
+"weather_updates_manual" = "Les prévisions météo doivent être mises à jour manuellement.";
+"purchases_feature_relief_3d_description" = "Possédez et observez la maquette de votre quartier ou du continent tout entier.";
+"weather_update_disabled" = "Désactivé";
+"shared_string_relief_3d" = "Relief 3D";
+"weather_update_parameters_wifi" = "Les prévisions météo seront mises à jour seulement si le réseau Wi-Fi est disponible.";
+"weather_update_over_wifi_only" = "En Wi-Fi uniquement";
+"weather_update_parameters_disabled" = "Les mises à jour automatiques seront désactivées.";
+"auto_update" = "Mettre à jour automatiquement";
+"weather_update_over_any_network" = "Sur n'importe quel réseau";
+"weather_update_parameters_any_network" = "Les prévisions météo seront mises à jour sur n'importe quel réseau. Les données mobiles peuvent être utilisées.";

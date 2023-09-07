@@ -368,7 +368,7 @@
 "save_track_interval_globally" = "الفاصل الزمني للتسجيل";
 "rec_interval_minimum" = "الحد الأدنى";
 "track_start_rec" = "بدء تسجيل المسار";
-"track_rec_addon_q" = "يرجى تفعيل سجل السفر الملحق والدخول لتسجيل وحفظ رحلتك";
+"track_rec_addon_q" = "يرجى تفعيل ملحق سجل السفر لتسجيل وحفظ رحلتك";
 "track_interval_remember" = "تذكر اختياري";
 "track_clear" = "مسح المسارالحالي";
 "track_clear_q" = "هل تريد مسح المسار الحالي؟";
@@ -3024,3 +3024,13 @@
 "map_widget_zoom_level_desc" = "يظهر مستوى تكبير/تصغير الخريطة الحالي.";
 "map_widget_camera_tilt_desc" = "تعرض زاوية إمالة الكاميرا في وضع المنظور. الافتراضي هو 90 درجة (بدون إمالة).";
 "map_widget_target_distance_desc" = "تظهر المسافة بين الكاميرا والموقع المستهدف.";
+"weather_updates_manual" = "يجب تحديث توقعات الطقس يدويا.";
+"purchases_feature_relief_3d_description" = "امتلك وراقب نموذج مقياس لمنطقتك أو القارة بأكملها.";
+"shared_string_relief_3d" = "تضاريس 3D";
+"weather_update_parameters_wifi" = "سيتم تحديث توقعات الطقس فقط في حالة توفر شبكة Wi-Fi.";
+"weather_update_parameters_disabled" = "سيتم تعطيل التحديثات التلقائية.";
+"auto_update" = "تحديث تلقائي";
+"weather_update_parameters_any_network" = "سيتم تحديث توقعات الطقس عبر أي شبكة. يمكن استخدام بيانات الهاتف المحمول.";
+"weather_update_disabled" = "مٌعطل";
+"weather_update_over_wifi_only" = "عبر WIFI فقط";
+"weather_update_over_any_network" = "عبر أي شبكة";

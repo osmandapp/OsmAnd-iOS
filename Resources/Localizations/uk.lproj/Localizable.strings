@@ -1609,15 +1609,15 @@
 "help_travel" = "Подорожі (Wikipedia та Wikivoyage)";
 "subscription_osmandlive_item" = "Передплата — OsmAnd Live";
 "osmand_purchases_item" = "Покупки в OsmAnd";
-"enable_hillshade" = "Увімкнути для перегляду даних про рельєф";
+"enable_hillshade" = "Увімкнути для перегляду даних про місцевість з мап рельєфу та схилів.";
 "hide_terrain" = "Сховати рельєф";
 "show_terrain" = "Показувати рельєф";
 "shared_string_legend" = "Позначення";
 "map_settings_add_maps_slopes" = "Для перегляду схилів потрібні додаткові мапи";
 "map_settings_add_maps_hillshade" = "Потрібні додаткові мапи для перегляду пагорбів";
 "map_settings_zoom_level_description" = "Встановіть мінімальний і максимальний рівень масштабування для зображення шару";
-"map_settings_hillshade_description" = "Карти пагорбів візуалізують схили, вершини та низини, використовуючи різні відтінки сірого кольору";
-"map_settings_slopes_description" = "Карти схилів використовують різні кольори для візуалізації ландшафту";
+"map_settings_hillshade_description" = "Мапа рельєфу використовує темні відтінки, щоб показати схили, вершини та низини.";
+"map_settings_slopes_description" = "Схили — це кольорова візуалізація рельєфу.";
 "map_settings_slopes_legend" = "Ви можете дізнатися більше про схили у Вікіпедії";
 "map_settings_layer_transparency" = "Прозорість шару";
 "arrows_direction_to_markers" = "Стрілки вказують напрямок до активної позначки, якщо він розташований поза екраном. Лінії напрямку показують шлях до активних позначок.";
@@ -3039,3 +3039,4 @@
 "auto_update" = "Автооновлення";
 "weather_update_over_any_network" = "Через будь-яку мережу";
 "weather_update_parameters_any_network" = "Прогноз погоди оновлюватиметься через будь-яку мережу. Можна використовувати мобільні дані.";
+"map_settings_topography" = "Топографія";

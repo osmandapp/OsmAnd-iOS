@@ -1805,12 +1805,12 @@
 "map_update_warning" = "¿Actualizar los datos de las teselas en línea?";
 "map_settings_zoom_level_description" = "Define el nivel de zum mínimo y máximo para mostrar la capa";
 "map_settings_slopes_legend" = "Puedes leer más sobre las pendientes en Wikipedia";
-"map_settings_slopes_description" = "Los mapas de pendientes utilizan diferentes colores para visualizar el terreno";
+"map_settings_slopes_description" = "La pendiente se visualiza coloreada sobre el terreno.";
 "map_settings_show_slider_map" = "Mostrar deslizador en el mapa";
 "map_settings_line_density_slowdown_warning" = "La alta densidad de líneas puede ralentizar la visualización del mapa";
 "map_settings_line_density" = "Densidad de la línea";
 "map_settings_layer_transparency" = "Transparencia de la capa";
-"map_settings_hillshade_description" = "Los mapas de sombreado visualizan las pendientes, los picos y las tierras bajas usando diferentes niveles de gris";
+"map_settings_hillshade_description" = "Los mapas de las colinas utilizan tonos oscuros para mostrar laderas, picos y planicies.";
 "map_settings_hide_polygons_desc" = "Esta opción sólo afecta a los mapas vectoriales sin conexión de OsmAnd";
 "map_settings_hide_polygons" = "Ocultar polígonos";
 "map_settings_contour_zoom_level_descr" = "Elige el nivel de zum, desde el cual se mostrarán las curvas de nivel";
@@ -1848,7 +1848,7 @@
 "follow_track" = "Seguir traza";
 "export_profile_descr" = "Puedes exportar todos los ajustes del perfil, copiar todos los ajustes de otro perfil o restablecer todos los ajustes del perfil al estado predefinido.";
 "err_profile_import" = "Error al leer los datos del elemento: %@";
-"enable_hillshade" = "Activar para ver datos del terreno";
+"enable_hillshade" = "Permite ver los datos del terreno desde el mapa de las colinas o pendientes.";
 "enable_contour_lines" = "Activar para ver las curvas de nivel en el mapa";
 "empty_profile_name_warning" = "El nombre del perfil no debe estar vacío.";
 "empty_filename" = "Nombre de archivo vacío";
@@ -3028,3 +3028,4 @@
 "auto_update" = "Actualización automática";
 "weather_update_over_any_network" = "En cualquier red";
 "weather_update_parameters_any_network" = "La previsión meteorológica se actualizará a través de cualquier red. Se pueden utilizar los datos móviles.";
+"map_settings_topography" = "Topografía";

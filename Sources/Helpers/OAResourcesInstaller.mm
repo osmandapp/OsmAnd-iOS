@@ -261,7 +261,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
 
                         NSString *ext = [[resource->localPath.toNSString() pathExtension] lowercaseString];
                         NSString *type = [[[nsResourceId stringByDeletingPathExtension] pathExtension] lowercaseString];
-                        if ([ext isEqualToString:@"sqlitedb"] && ([type isEqualToString:@"hillshade"] || [type isEqualToString:@"slope"]))
+                        if ([ext isEqualToString:@"sqlitedb"] && [type isEqualToString:@"heightmap"])
                             [_app.data.terrainResourcesChangeObservable notifyEvent];
 
                         if (resourceId == QString(kWorldSeamarksKey) || resourceId == QString(kWorldSeamarksOldKey))

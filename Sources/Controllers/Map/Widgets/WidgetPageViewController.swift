@@ -25,11 +25,7 @@ class WidgetPageViewController: UIViewController {
         stackView.spacing = 0
         
         // Add the widget views to the stack view
-        let lastVisibleItem = widgetViews.last(where: { !$0.isHidden })
         for widgetView in widgetViews {
-            if let textInfo = widgetView as? OATextInfoWidget {
-                textInfo.showSeparator(widgetView != lastVisibleItem)
-            }
             widgetView.adjustSize()
             let constraint = widgetView.heightAnchor.constraint(greaterThanOrEqualToConstant: widgetView.frame.size.height)
             constraint.priority = .defaultHigh
@@ -52,7 +48,11 @@ class WidgetPageViewController: UIViewController {
     func layoutWidgets() -> (width: CGFloat, height: CGFloat) {
         var width: CGFloat = 0
         var height: CGFloat = 0
+        let lastVisibleWidget = widgetViews.last(where: { !$0.isHidden })
         for widget in widgetViews {
+            if let textInfo = widget as? OATextInfoWidget {
+                textInfo.showSeparator(widget != lastVisibleWidget)
+            }
             widget.translatesAutoresizingMaskIntoConstraints = false
             widget.adjustSize()
             width = max(width, widget.frame.size.width)

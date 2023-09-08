@@ -63,6 +63,11 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         return nil;
 }
 
+- (NSString *)gpxIcon
+{
+    return _values[@"gpx_icon"];
+}
+
 -(void)setValues:(NSDictionary *)values
 {
     _values = values;

@@ -8,7 +8,9 @@
 
 import Foundation
 
-class TravelArticle: Equatable {
+@objc(OATravelArticle)
+@objcMembers
+class TravelArticle: NSObject {
     
     static let IMAGE_ROOT_URL = "https://upload.wikimedia.org/wikipedia/commons/"
     static let THUMB_PREFIX = "320px-"
@@ -31,7 +33,7 @@ class TravelArticle: Equatable {
     var lang: String?
     var contentsJson: String?
     var aggregatedPartOf: String?
-    var description: String?
+    var descr: String?
     
     var lastModified: TimeInterval = 0 //long
     var gpxFileReading: Bool = false

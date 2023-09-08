@@ -8,6 +8,8 @@
 
 import Foundation
 
+@objc(OATravelGpx)
+@objcMembers
 class TravelGpx : TravelArticle {
     
     static let DISTANCE = "distance"
@@ -41,9 +43,10 @@ class TravelGpx : TravelArticle {
             analysis.totalDistance = totalDistance
             analysis.totalDistanceWithoutGaps = totalDistance
             analysis.avgElevation = avgElevation
-            //if maxElevation != Double.nan && minElevation != Double.nan {
-            //    analysis.getElevationData().setHasData(true);
-            //}
+            analysis.elevationData
+            if maxElevation != Double.nan && minElevation != Double.nan {
+                analysis.hasElevationData = true
+            }
         }
         return analysis
     }

@@ -382,6 +382,7 @@
 		3240977B27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */; };
 		3240977F27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */; };
 		3242A46F26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */; };
+		3245133A2AAB714200A5F715 /* TravelGuidesState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324513392AAB714200A5F715 /* TravelGuidesState.swift */; };
 		32464B7E2A6FCC6700DA6980 /* TravelExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32464B7D2A6FCC6700DA6980 /* TravelExploreViewController.swift */; };
 		32464B812A7012D700DA6980 /* OAResourcesUISwiftHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32464B802A7012D700DA6980 /* OAResourcesUISwiftHelper.mm */; };
 		32473DD62A9D06A7008C8041 /* TravelGuidesNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32473DD52A9D06A7008C8041 /* TravelGuidesNavigationViewController.swift */; };
@@ -4071,6 +4072,7 @@
 		3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAGPXListDeletingBottomSheet.m; sourceTree = "<group>"; };
 		3242A46D26CB0F05001CA174 /* OACollapsableNearestPoiTypeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollapsableNearestPoiTypeView.h; sourceTree = "<group>"; };
 		3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACollapsableNearestPoiTypeView.mm; sourceTree = "<group>"; };
+		324513392AAB714200A5F715 /* TravelGuidesState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesState.swift; sourceTree = "<group>"; };
 		32464B7D2A6FCC6700DA6980 /* TravelExploreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelExploreViewController.swift; sourceTree = "<group>"; };
 		32464B7F2A7012C300DA6980 /* OAResourcesUISwiftHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAResourcesUISwiftHelper.h; sourceTree = "<group>"; };
 		32464B802A7012D700DA6980 /* OAResourcesUISwiftHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAResourcesUISwiftHelper.mm; sourceTree = "<group>"; };
@@ -8551,6 +8553,7 @@
 				327D68A62A8F9BD30076D1E0 /* explore */,
 				320F71252A823F980071C0E7 /* data */,
 				3219995C2AA22E910000ADC4 /* TravelGuidesUtils.swift */,
+				324513392AAB714200A5F715 /* TravelGuidesState.swift */,
 			);
 			path = TravelGuides;
 			sourceTree = "<group>";
@@ -18152,6 +18155,7 @@
 				DA5A849226C563A900F274C7 /* OAMeasurementEditingContext.mm in Sources */,
 				DA5A856226C563A900F274C7 /* OAWaypointHelper.mm in Sources */,
 				DA5A838726C563A800F274C7 /* OAManageResourcesViewController.mm in Sources */,
+				3245133A2AAB714200A5F715 /* TravelGuidesState.swift in Sources */,
 				46B619DC29EFE97500950A20 /* OAAltitudeWidget.mm in Sources */,
 				DA5A81C226C563A700F274C7 /* OAPOICategory.m in Sources */,
 				DA5A840D26C563A800F274C7 /* OAFavoriteEditingHandler.mm in Sources */,

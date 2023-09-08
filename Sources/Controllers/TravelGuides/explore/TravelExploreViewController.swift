@@ -11,7 +11,9 @@ import Foundation
 protocol TravelExploreViewControllerDelegate : AnyObject {
     func populateData(resetData: Bool)
     func onDataLoaded()
-    func openArticle(article: TravelArticle, lang: String) 
+    func openArticle(article: TravelArticle, lang: String)
+    func onOpenArticlePoints()
+    func close()
 }
 
 
@@ -40,7 +42,11 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         tabBarVC!.viewControllers = [exploreVC!, savedArticlesVC!]
         self.view.addSubview(tabBarVC!.view)
         
-        populateData(resetData: true)
+        if OAAppSettings.sharedManager().travelGuidesState.wasWatchingGpx {
+            restoreState()
+        } else {
+            populateData(resetData: true)
+        }
     }
     
     override func viewWillLayoutSubviews() {
@@ -80,6 +86,28 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         task.execute()
     }
     
+    func saveState() {
+        if tabBarVC != nil {
+            OAAppSettings.sharedManager().travelGuidesState.mainMenuSelectedTab = tabBarVC!.selectedIndex
+        }
+        if let exploreVC {
+            exploreVC.saveState()
+        }
+    }
+    
+    func restoreState() {
+        if let tabBarVC {
+            tabBarVC.selectedIndex = OAAppSettings.sharedManager().travelGuidesState.mainMenuSelectedTab
+        }
+        if let exploreVC {
+            exploreVC.restoreState()
+        }
+        
+        let vc = TravelArticleDialogViewController.init()
+        vc.delegate = self
+        self.show(vc)
+    }
+    
     
     //MARK: Actions
     
@@ -89,6 +117,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     
     func openArticle(article: TravelArticle, lang: String) {
         let vc = TravelArticleDialogViewController.init(articleId: article.generateIdentifier(), lang: lang)
+        vc.delegate = self
         self.show(vc)
     }
     
@@ -98,6 +127,14 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     func onDataLoaded() {
         updateTabs()
         self.view.removeSpinner()
+    }
+    
+    func close() {
+        self.dismiss()
+    }
+    
+    func onOpenArticlePoints() {
+        saveState()
     }
 
 }

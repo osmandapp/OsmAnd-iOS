@@ -18,7 +18,7 @@ protocol TravelArticleDialogProtocol : AnyObject {
 }
 
 
-class TravelArticleDialogViewController : OABaseWebViewController, TravelArticleDialogProtocol, OAWikiLanguagesWebDelegate, SFSafariViewControllerDelegate  {
+class TravelArticleDialogViewController : OABaseWebViewController, TravelArticleDialogProtocol, OAWikiLanguagesWebDelegate, GpxReadDelegate, SFSafariViewControllerDelegate  {
     
     let rtlLanguages = ["ar", "dv", "he", "iw", "fa", "nqo", "ps", "sd", "ug", "ur", "yi"]
     static let EMPTY_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4//"
@@ -92,6 +92,8 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     </body></html>
     """
     
+    var delegate: TravelExploreViewControllerDelegate?
+    
     var article: TravelArticle?
     var articleId: TravelArticleIdentifier?
     var selectedLang: String?
@@ -100,6 +102,9 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     
     var historyArticleIds: [TravelArticleIdentifier] = []
     var historyLangs: [String] = []
+    
+    var gpxFile: OAGPXDocumentAdapter?
+    var gpx: OAGPX?
     
     var bottomView: UIView?
     var bottomStackView: UIStackView?
@@ -112,19 +117,27 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         super.init()
     }
     
+    override init() {
+        super.init()
+    }
+    
     init(articleId: TravelArticleIdentifier, lang: String) {
         super.init()
         self.articleId = articleId
         self.selectedLang = lang
     }
-    
+
     
     //MARK: Base UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupBottomButtonsView()
-        populateArticle()
+        if OAAppSettings.sharedManager().travelGuidesState.wasWatchingGpx {
+            restoreState()
+        } else {
+            populateArticle()
+        }
     }
     
     func setupBottomButtonsView() {
@@ -238,7 +251,26 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     }
     
     @objc func onPointsButtonClicked() {
-        print("onPointsButtonClicked")
+        if article == nil {
+            return
+        }
+        
+        //TODO: Add article to history here?
+        
+        let file = TravelObfHelper.shared.createGpxFile(article: article!)
+        if gpx == nil {
+            gpx = OATravelGuidesHelper.buildGpx(file, title: article!.title, document: article!.gpxFile)
+        }
+        
+        saveState()
+        delegate?.onOpenArticlePoints()
+        OAAppSettings.sharedManager().travelGuidesState.wasWatchingGpx = true
+        
+        OAAppSettings.sharedManager().showGpx([file], update: true)
+        OARootViewController.instance().mapPanel.openTargetView(with: gpx, selectedTab: .pointsTab, selectedStatisticsTab: .overviewTab, openedFromMap: false)
+        
+        delegate?.close()
+        self.dismiss()
     }
     
     @objc func onBookmarkButtonClicked() {
@@ -258,6 +290,42 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     
     //MARK: Data
     
+    func saveState() {
+        if let state = OAAppSettings.sharedManager().travelGuidesState {
+            state.article = article
+            state.articleId = articleId
+            state.selectedLang = selectedLang
+            state.langs = langs
+            state.nightMode = nightMode
+            state.historyArticleIds = historyArticleIds
+            state.historyLangs = historyLangs
+            state.gpxFile = gpxFile
+            state.gpx = gpx
+        }
+    }
+    
+    func restoreState() {
+        if let state = OAAppSettings.sharedManager().travelGuidesState {
+            article = state.article
+            articleId = state.articleId
+            selectedLang = state.selectedLang
+            langs = state.langs
+            nightMode = state.nightMode
+            historyArticleIds = state.historyArticleIds
+            historyLangs = state.historyLangs
+            gpxFile = state.gpxFile
+            gpx = state.gpx
+            
+            title = getTitle()
+            self.updateNavbar()
+            self.applyLocalization()
+            self.updateSaveButton()
+            self.updateTrackButton(processing: false, gpxFile: state.gpxFile)
+            self.loadWebView()
+        }
+        OAAppSettings.sharedManager().travelGuidesState.resetData()
+    }
+    
     override func getContent() -> String! {
         return createHtmlContent()
     }
@@ -272,9 +340,7 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
             selectedLang = langs![0]
         }
         
-        article = TravelObfHelper.shared.getArticleById(articleId: articleId!, lang: selectedLang, readGpx: false, callback: nil)
-        
-        //TODO: add readGpx callback here
+        article = TravelObfHelper.shared.getArticleById(articleId: articleId!, lang: selectedLang, readGpx: true, callback: self)
         
         if article == nil {
             return
@@ -354,8 +420,11 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     func printHtmlToDebugFileIfEnabled(_ content: String) {
         let developmentPlugin = OAPlugin.getPlugin(OAOsmandDevelopmentPlugin.self) as? OAOsmandDevelopmentPlugin
         if (developmentPlugin != nil && developmentPlugin!.isEnabled()) {
-            let filepath = OsmAndApp.swiftInstance().documentsPath + "/TravelGuidesDebug.html"
+            let filepath = OsmAndApp.swiftInstance().travelGuidesPath + "/TravelGuidesDebug.html"
             do {
+                if !FileManager.default.fileExists(atPath: OsmAndApp.swiftInstance().travelGuidesPath) {
+                    try FileManager.default.createDirectory(atPath: OsmAndApp.swiftInstance().travelGuidesPath, withIntermediateDirectories: true)
+                }
                 try content.write(toFile: filepath, atomically: true, encoding: String.Encoding.utf8)
             } catch {
             }
@@ -368,8 +437,30 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         //TODO implement
     }
     
-    func updateTrackButton() {
-        //TODO implement
+    func updateTrackButton(processing: Bool, gpxFile:  OAGPXDocumentAdapter?) {
+        DispatchQueue.main.async {
+            if (processing)
+            {
+                self.bottomStackView!.addSpinner(inCenterOfCurrentView: true)
+                self.pointsButton!.setTitle("", for: .normal)
+                self.pointsButton!.setImage(nil, for: .normal)
+                self.pointsButton!.isEnabled = false
+            }
+            else
+            {
+                if gpxFile != nil && gpxFile!.pointsCount() > 0 {
+                    let title = localizedString("shared_string_gpx_points") + " (" + String(gpxFile!.pointsCount()) + ")"
+                    self.pointsButton!.setTitle(title , for: .normal)
+                    self.pointsButton!.setImage(UIImage.templateImageNamed("ic_small_map_point"), for: .normal)
+                    self.pointsButton!.isEnabled = true
+                } else {
+                    self.pointsButton!.setTitle("", for: .normal)
+                    self.pointsButton!.setImage(nil, for: .normal)
+                    self.pointsButton!.isEnabled = false
+                }
+                self.bottomStackView!.removeSpinner()
+            }
+        }
     }
     
     override func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -447,4 +538,15 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         showModalViewController(vc)
     }
     
+    
+    //MARK: GpxReadDelegate
+    
+    func onGpxFileReading() {
+        updateTrackButton(processing: true, gpxFile: nil)
+    }
+    
+    func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?) {
+        self.gpxFile = gpxFile
+        updateTrackButton(processing: false, gpxFile: gpxFile)
+    }
 }

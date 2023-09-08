@@ -151,7 +151,7 @@ class TravelObfHelper : NSObject {
         return results
     }
     
-    func cacheTravelArticles(file: String?, amenity: OAPOIAdapter, lang: String?, readPoints: Bool, callback: GpxReadCallback?) -> TravelArticle? {
+    func cacheTravelArticles(file: String?, amenity: OAPOIAdapter, lang: String?, readPoints: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
         var article: TravelArticle? = nil
         var articles: [String: TravelArticle]? = [:]
         if amenity.subtype() == ROUTE_TRACK {
@@ -186,7 +186,7 @@ class TravelObfHelper : NSObject {
         
         travelGpx.lat = amenity.latitude()
         travelGpx.lon = amenity.longitude()
-        travelGpx.description = amenity.getTagContent(DESCRIPTION)
+        travelGpx.descr = amenity.getTagContent(DESCRIPTION)
     
         travelGpx.routeId = amenity.getTagContent(ROUTE_ID)
         travelGpx.user = amenity.getTagContent(TravelGpx.USER)
@@ -399,7 +399,7 @@ class TravelObfHelper : NSObject {
         return article
     }
     
-    func getArticleById(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadCallback?) -> TravelArticle? {
+    func getArticleById(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
         let article = getCachedArticle(articleId: articleId, lang: lang, readGpx: readGpx, callback: callback)
         if article == nil {
             
@@ -412,7 +412,7 @@ class TravelObfHelper : NSObject {
         return article
     }
     
-    func getCachedArticle(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadCallback?) -> TravelArticle? {
+    func getCachedArticle(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
         var article: TravelArticle? = nil
         var articles = cachedArticles[articleId]
         if (articles != nil) {
@@ -442,18 +442,16 @@ class TravelObfHelper : NSObject {
         //TODO: implement
     }
     
-    func readGpxFile(article: TravelArticle, callback: GpxReadCallback?) {
+    func readGpxFile(article: TravelArticle, callback: GpxReadDelegate?) {
         if !article.gpxFileRead {
-            
-            //TODO: implement
-            //new GpxFileReader(article, callback, getReaders()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            
+            let task = GpxFileReader(article: article, callback: callback, readers: getReaders())
+            task.execute()
         } else if callback != nil {
             callback?.onGpxFileRead(gpxFile: article.gpxFile)
         }
     }
     
-    func findArticleById(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadCallback?) -> TravelArticle? {
+    func findArticleById(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
         var article: TravelArticle? = nil
         let isDbArticle = articleId.file != nil && articleId.file!.hasSuffix(BINARY_WIKIVOYAGE_MAP_INDEX_EXT)
         var amenities: [OAPOIAdapter] = []
@@ -495,21 +493,11 @@ class TravelObfHelper : NSObject {
         return TravelArticle()
     }
     
-//    func getEqualsTitleRequest(articleId: TravelArticleIdentifier, lang: String?, amenities: [OAPOIAdapter]) {
-//
-//    }
-    
-    func getArticleByTitle(title: String, lang: String, readGpx: Bool, callback: GpxReadCallback?) -> TravelArticle? {
-        //TODO: implement
+    func getArticleByTitle(title: String, lang: String, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
         return getArticleByTitle(title: title, rect: QuadRect(), lang: lang, readGpx: readGpx, callback: callback)
     }
 
-    func getArticleByTitle(title: String, latLon: CLLocationCoordinate2D, lang: String, readGpx: Bool, callback: GpxReadCallback?) -> TravelArticle? {
-        //TODO: implement
-        return TravelArticle()
-    }
-
-    func getArticleByTitle(title: String, rect: QuadRect, lang: String, readGpx: Bool, callback: GpxReadCallback?) -> TravelArticle? {
+    func getArticleByTitle(title: String, rect: QuadRect, lang: String, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
         var article: TravelArticle? = nil
         var amenities: [OAPOIAdapter] = []
         var x: Int32 = 0
@@ -590,13 +578,15 @@ class TravelObfHelper : NSObject {
     }
     
     func getGPXName(article: TravelArticle) -> String {
-        //TODO: implement
-        return ""
+        return article.title!
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "'/'", with: "_")
+            .replacingOccurrences(of: "\"", with: "_") + ".gpx"
     }
     
     func createGpxFile(article: TravelArticle) -> String {
-        //TODO: implement
-        return ""
+        let fileName = getGPXName(article: article)
+        return OATravelGuidesHelper.createGpxFile(article, fileName: fileName)
     }
     
     func getSelectedTravelBookName() -> String? {
@@ -611,9 +601,8 @@ class TravelObfHelper : NSObject {
         //TODO: implement
     }
     
-    func buildGpxFile(article: TravelArticle) -> OAGPXDocumentAdapter {
-        //TODO: implement
-        return OAGPXDocumentAdapter()
+    func buildGpxFile(readers: [String], article: TravelArticle) -> OAGPXDocumentAdapter {
+        return OATravelGuidesHelper.buildGpxFile(getReaders(), article: article)
     }
     
     func createTitle(name: String) -> String {
@@ -621,6 +610,46 @@ class TravelObfHelper : NSObject {
         return ""
     }
     
-//    private class GpxFileReader extends AsyncTask<Void, Void, GPXFile> {}
+}
+
+
+class GpxFileReader {
     
+    var article: TravelArticle?
+    var callback: GpxReadDelegate?
+    var readers: [String]?
+    
+    init(article: TravelArticle, callback: GpxReadDelegate?, readers: [String]) {
+        self.article = article
+        self.callback = callback
+        self.readers = readers
+    }
+    
+    func execute() {
+        onPreExecute()
+        DispatchQueue.global(qos: .background).async {
+            let file = self.doInBackground()
+            DispatchQueue.main.async {
+                self.onPostExecute(gpxFile: file)
+            }
+        }
+    }
+    
+    func onPreExecute() {
+        if callback != nil {
+            callback!.onGpxFileReading()
+        }
+    }
+    
+    func doInBackground() -> OAGPXDocumentAdapter? {
+        return TravelObfHelper.shared.buildGpxFile(readers: readers!, article: article!)
+    }
+    
+    func onPostExecute(gpxFile: OAGPXDocumentAdapter?) {
+        article!.gpxFileRead = true
+        article!.gpxFile = gpxFile
+        if callback != nil {
+            callback!.onGpxFileRead(gpxFile: gpxFile)
+        }
+    }
 }

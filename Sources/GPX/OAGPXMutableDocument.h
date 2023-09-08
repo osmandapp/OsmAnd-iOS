@@ -17,6 +17,7 @@
 @property (nonatomic) NSTimeInterval modifiedTime;
 
 - (instancetype)init;
+- (instancetype)initWithTitle:(NSString *)title lang:(NSString *)lang descr:(NSString *)descr;
 
 - (const std::shared_ptr<OsmAnd::GpxDocument>&) getDocument;
 

@@ -9,7 +9,7 @@
 import Foundation
 
 
-protocol GpxReadCallback {
+protocol GpxReadDelegate {
     func onGpxFileReading()
     func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?)
 }
@@ -23,11 +23,11 @@ protocol TravelHelper {
     func search(searchQuery: String) -> [TravelSearchResult]
     func getPopularArticles() -> [TravelArticle]
     func getNavigationMap(article: TravelArticle) -> [TravelSearchResult : [TravelSearchResult]]
-    func getArticleById(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadCallback?) -> TravelArticle?
+    func getArticleById(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle?
     func findSavedArticle(savedArticle: TravelArticle) -> TravelArticle?
-    func getArticleByTitle(title: String, lang: String, readGpx: Bool, callback: GpxReadCallback?) -> TravelArticle?
-    func getArticleByTitle(title: String, latLon:CLLocationCoordinate2D, lang: String, readGpx: Bool, callback: GpxReadCallback?) -> TravelArticle?
-    func getArticleByTitle(title: String, rect: QuadRect, lang: String, readGpx: Bool, callback: GpxReadCallback?) -> TravelArticle?
+    func getArticleByTitle(title: String, lang: String, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle?
+    func getArticleByTitle(title: String, latLon:CLLocationCoordinate2D, lang: String, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle?
+    func getArticleByTitle(title: String, rect: QuadRect, lang: String, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle?
     func getArticleId(title: String, lang: String) -> TravelArticleIdentifier?
     func getArticleLangs(articleId: TravelArticleIdentifier) -> [String]
     func searchGpx(latLon:CLLocationCoordinate2D, filter: String?, ref: String?) -> TravelGpx?

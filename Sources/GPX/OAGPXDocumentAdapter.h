@@ -16,5 +16,6 @@
 
 - (OAGPXTrackAnalysis *) getAnalysis:(long)fileTimestamp;
 - (BOOL) hasAltitude;
+- (int) pointsCount;
 
 @end

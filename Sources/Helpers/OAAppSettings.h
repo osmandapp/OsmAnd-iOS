@@ -29,7 +29,7 @@
 
 #define kSimMinSpeed 5 / 3.6f
 
-@class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
+@class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState, OATravelGuidesState;
 
 typedef NS_ENUM(NSInteger, EOAPositionPlacement)
 {
@@ -1032,6 +1032,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 // Custom plugins
 @property (nonatomic) NSString *customPluginsJson;
+
+@property (nonatomic) OATravelGuidesState *travelGuidesState;
 
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode;
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed;

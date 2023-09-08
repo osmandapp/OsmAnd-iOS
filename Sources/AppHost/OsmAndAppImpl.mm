@@ -119,6 +119,8 @@
 @synthesize cachePath = _cachePath;
 @synthesize weatherForecastPath = _weatherForecastPath;
 @synthesize favoritesPath = _favoritesPath;
+@synthesize travelGuidesPath = _travelGuidesPath;
+@synthesize gpxTravelPath = _gpxTravelPath;
 
 @synthesize initialURLMapState = _initialURLMapState;
 
@@ -168,6 +170,8 @@
         _weatherForecastPath = [_cachePath stringByAppendingPathComponent:@"WeatherForecast"];
         _favoritesPath = [_documentsPath stringByAppendingPathComponent:FAVORITES_INDEX_DIR];
         _favoritesBackupPath = [_documentsPath stringByAppendingPathComponent:FAVORITES_BACKUP_DIR];
+        _travelGuidesPath = [_documentsPath stringByAppendingPathComponent:@"Travel"];
+        _gpxTravelPath = [_gpxPath stringByAppendingPathComponent:@"Travel"];
 
         _favoritesFilePrefix = @"favorites";
         _favoritesGroupNameSeparator = @"-";

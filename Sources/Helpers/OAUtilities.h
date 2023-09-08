@@ -118,6 +118,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 - (void) removeBlurEffect;
 - (void) removeBlurEffect:(UIColor *)backgroundColor;
 - (void) addSpinner;
+- (void) addSpinnerInCenterOfCurrentView:(BOOL)inCurrentView;
 - (void) removeSpinner;
 - (UIImage *) toUIImage;
 
@@ -384,5 +385,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (NSString *) getRoutingStringPropertyName:(NSString *)propertyName defaultName:(NSString *)defaultName;
 
 + (int) convertCharToDist:(NSString *)ch firstLetter:(NSString *)firstLetter firstDist:(int)firstDist mult1:(int)mult1 mult2:(int)mult2;
+
++ (BOOL) isValidFileName:(NSString *)name;
 
 @end

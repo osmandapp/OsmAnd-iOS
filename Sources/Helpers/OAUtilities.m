@@ -770,6 +770,11 @@
 
 - (void) addSpinner
 {
+    [self addSpinnerInCenterOfCurrentView:NO];
+}
+
+- (void) addSpinnerInCenterOfCurrentView:(BOOL)inCurrentView
+{
     for (UIView *subview in self.subviews)
     {
         if (subview.tag == kSpinnerViewTag)
@@ -779,7 +784,12 @@
     UIActivityIndicatorViewStyle spinnerStyle = UIActivityIndicatorViewStyleLarge;
 
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:spinnerStyle];
-    spinner.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2);
+    
+    if (inCurrentView)
+        spinner.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2);
+    else
+        spinner.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2);
+    
     spinner.tag = kSpinnerViewTag;
     [self addSubview:spinner];
     [spinner startAnimating];
@@ -2739,6 +2749,25 @@ static const double d180PI = 180.0 / M_PI_2;
     }
     
     return dist;;
+}
+
++ (BOOL) isValidFileName:(NSString *)name
+{
+    NSArray<NSString *> *illegalCharacters = @[ @"[", @"?", @":", @"\"", @"*", @"|", @"/", @"<", @">", @"]" ];
+    if (!name)
+    {
+        return NO;
+    }
+    else
+    {
+        for (NSString *symbol in illegalCharacters)
+        {
+            int index = [name indexOf:symbol];
+            if (index != -1)
+                return NO;
+        }
+    }
+    return YES;
 }
  
 @end

@@ -16,6 +16,7 @@ class ExploreTabViewController: OABaseNavbarViewController {
     var dataLock: NSObject = NSObject()
     var downloadingResources: [OAResourceSwiftItem] = []
     var cachedPreviewImages: ImageCache = ImageCache(itemsLimit: 100)
+    var lastSelectedIndexPath: IndexPath?
     
     
     override func viewDidLoad() {
@@ -118,7 +119,7 @@ class ExploreTabViewController: OABaseNavbarViewController {
                 for article in articles {
                     if article is TravelGpx {
                         let item: TravelGpx = article as! TravelGpx
-                        let title = (item.description != nil && item.description!.count > 0) ? item.description! : item.title
+                        let title = (item.descr != nil && item.descr!.count > 0) ? item.descr! : item.title
                         print("!!! gpxTitle: " + (title ?? "nil") + "   distance: " + String(item.totalDistance))
                     } else {
                         
@@ -147,6 +148,30 @@ class ExploreTabViewController: OABaseNavbarViewController {
         //TODO:  add EditWiki card
     }
     
+    func saveState() {
+        if let state = OAAppSettings.sharedManager().travelGuidesState {
+            state.downloadingResources = downloadingResources
+            state.cachedPreviewImages = cachedPreviewImages
+            state.exploreTabTableData = tableData
+            state.lastSelectedIndexPath = lastSelectedIndexPath
+        }
+    }
+    
+    func restoreState() {
+        if let state = OAAppSettings.sharedManager().travelGuidesState {
+            setupDownloadingCellHelper()
+            downloadingResources = state.downloadingResources
+            cachedPreviewImages = state.cachedPreviewImages!
+            lastSelectedIndexPath = state.lastSelectedIndexPath
+            
+            tableData.clearAllData()
+            for i in 0..<state.exploreTabTableData!.sectionCount() {
+                tableData.addSection(state.exploreTabTableData!.sectionData(for: i))
+            }
+            tableView.reloadData()
+            tableView.scrollToRow(at: state.lastSelectedIndexPath!, at: .middle, animated: false)
+        }
+    }
     
     
     //MARK: Actions
@@ -289,6 +314,7 @@ class ExploreTabViewController: OABaseNavbarViewController {
     
     override func onRowSelected(_ indexPath: IndexPath!) {
         let item = tableData.item(for: indexPath)
+        lastSelectedIndexPath = indexPath
         if item.cellType == "kDownloadCellKey" {
             downloadingCellHelper.onItemClicked(indexPath)
             

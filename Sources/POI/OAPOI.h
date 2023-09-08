@@ -83,6 +83,7 @@
 
 - (UIImage *)icon;
 - (NSString *)iconName;
+- (NSString *)gpxIcon;
 
 - (BOOL) isClosed;
 - (NSSet<NSString *> *)getSupportedContentLocales;

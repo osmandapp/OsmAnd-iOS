@@ -157,6 +157,12 @@
     return obj ? [obj getTagContent:tag lang:lang] : nil;
 }
 
+- (NSString *)getTagSuffix:(NSString *)tagPrefix
+{
+    OAPOI *obj = [self getObject];
+    return obj ? [obj getTagSuffix:tagPrefix] : nil;
+}
+
 - (NSString *)getLocalizedContent:(NSString *)tag lang:(NSString *)lang
 {
     OAPOI *obj = [self getObject];

@@ -23,6 +23,7 @@
 #import "OAQuickActionRegistry.h"
 #import "OADownloadingCellHelper.h"
 #import "OAWikiArticleHelper.h"
+#import "OAGPXDatabase.h"
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"
@@ -83,6 +84,7 @@
 #import "OAOsmLoginMainViewController.h"
 #import "OACopyProfileBottomSheetViewControler.h"
 #import "OABaseWebViewController.h"
+#import "OATrackMenuHudViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

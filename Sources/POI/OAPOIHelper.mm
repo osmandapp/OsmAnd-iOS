@@ -930,6 +930,7 @@
                                       [&arr, &location, &processedPoi, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
                                 const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+        
                                 if (![processedPoi containsObject:@(am->id.id)])
                                 {
                                     [processedPoi addObject:@(am->id.id)];
@@ -998,23 +999,7 @@
                                         (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                                         {
                                             const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-                                            int a = 0;
-//        am->
-        
-//                                            OAPOI *poi = [self.class parsePOI:resultEntry];
-//                                            if (poi)
-//                                            {
-//                                                const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-//                                                poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
-//
-//                                                _limitCounter--;
-//
-//                                                [arr addObject:poi];
-//                                            }
-        
-        
-                                            
-            
+
                                             OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:NO];
                                             poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, am->position31);
                                             [OAPOIHelper fetchValuesContentPOIByAmenity:am poi:poi];
@@ -1026,15 +1011,10 @@
                                             
                                             [arr addObject:poi];
                                             _limitCounter--;
-                                            
-//                                            [self onPOIFound:resultEntry];
                                         },
                                         ctrl);
     
     _isSearchDone = YES;
-    
-//    if (_delegate)
-//        [_delegate searchDone:_breakSearch];
     
     return [NSArray arrayWithArray:arr];
 }

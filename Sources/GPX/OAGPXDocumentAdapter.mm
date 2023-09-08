@@ -30,4 +30,10 @@
     return obj ? [obj hasAltitude] : NO;
 }
 
+- (int) pointsCount
+{
+    OAGPXDocument *obj = [self getObject];
+    return obj ? obj.points.count : 0;
+}
+
 @end

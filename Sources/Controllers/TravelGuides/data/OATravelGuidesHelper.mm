@@ -8,6 +8,9 @@
 
 #import "OATravelGuidesHelper.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OAGPXDocumentPrimitivesAdapter.h"
+#import "OAGPXMutableDocument.h"
+#import "OAGPXDocument.h"
 #import "OAPOIHelper.h"
 #import "OsmAndApp.h"
 #import "OAPOI.h"
@@ -19,6 +22,8 @@
 #import "OANameStringMatcher.h"
 #import "OAResourcesUIHelper.h"
 #import "OAWikiArticleHelper.h"
+#import "OASelectedGPXHelper.h"
+#import "OAGPXDatabase.h"
 
 #import "OsmAnd_Maps-Swift.h"
 
@@ -86,7 +91,7 @@
 }
 
 
-+ (OAWptPtAdapter *) createWptPt:(OAPOIAdapter *)amenity lang:(NSString *)lang
++ (OAWptPt *) createWptPt:(OAPOIAdapter *)amenity lang:(NSString *)lang
 {
     OAPOI *poi;
     if (amenity && [amenity.object isKindOfClass:OAPOI.class])
@@ -98,22 +103,28 @@
     wptPt.desc = poi.desc;
     
     if ([poi getSite])
-        wptPt.links = @[ [poi getSite] ];
+    {
+        OALink *gpxLink = [[OALink alloc] init];
+        gpxLink.url = [[NSURL alloc] initWithString:[poi getSite]];
+        wptPt.links = @[ gpxLink ];
+    }
     
     NSString *color = [poi getColor];
     OAGPXColor *gpxColor = [OAGPXColor getColorFromName:color];
     if (gpxColor)
         [wptPt setColor:gpxColor.color];
     
-    if (poi.iconName)
-        [wptPt setIcon:poi.iconName];
+    if ([poi gpxIcon])
+        [wptPt setIcon:[poi gpxIcon]];
 
     NSString *category = [poi getTagSuffix:@"category_"];
     if (category)
+    {
         wptPt.category = [OAUtilities capitalizeFirstLetter:category];
+        wptPt.type = [OAUtilities capitalizeFirstLetter:category];
+    }
     
-    OAWptPtAdapter *wptAdapter = [[OAWptPtAdapter alloc] initWithWpt:wptPt];
-    return wptAdapter;
+    return wptPt;
 }
 
 + (NSArray<NSString *> *) getTravelGuidesObfList
@@ -147,5 +158,168 @@
 {
     return [OAWikiArticleHelper normalizeFileUrl:url];
 }
+
++ (NSString *) createGpxFile:(OATravelArticle *)article fileName:(NSString *)fileName
+{
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    BOOL exists = [fileManager fileExistsAtPath:OsmAndApp.instance.gpxTravelPath];
+    if (!exists)
+        [fileManager createDirectoryAtPath:OsmAndApp.instance.gpxTravelPath withIntermediateDirectories:YES attributes:nil error:nil];
+    
+    OAGPXDocument *gpx = [article gpxFile].object;
+    NSString *filePath = [OsmAndApp.instance.gpxTravelPath stringByAppendingPathComponent:fileName];
+    BOOL succeed = [gpx saveTo:filePath];
+    return filePath;
+}
+
++ (OAGPXDocumentAdapter *) buildGpxFile:(NSArray<NSString *> *)readers article:(OATravelArticle *)article
+{
+    //TODO: add correct type
+    NSMutableArray<id> *segmentList = [NSMutableArray array];
+    
+    NSMutableArray<OAPOIAdapter *> *pointList = [NSMutableArray array];
+    for (NSString *reader in readers)
+    {
+        if (article.file != nil && ![article.file isEqualToString: reader])
+        {
+            continue;
+        }
+
+        if ([article isKindOfClass:OATravelGpx.class])
+        {
+            OsmAnd::PointI location = OsmAnd::PointI(article.lat, article.lon);
+            OsmAnd::PointI topLeft = OsmAnd::PointI(0, 0);
+            OsmAnd::PointI bottomRight = OsmAnd::PointI(INT_MAX, INT_MAX);
+            OsmAnd::AreaI bbox31 =  OsmAnd::AreaI(topLeft, bottomRight);
+            
+            //TODO: implement or find gpx search in obf
+        }
+        
+        //publish function
+        BOOL (^publish)(OAPOIAdapter *amenity) = ^BOOL(OAPOIAdapter *amenity) {
+            if ([amenity.getRouteId isEqualToString:article.routeId])
+            {
+                if ([[article getPointFilterString] isEqualToString:@"route_track_point"])
+                {
+                    [pointList addObject:amenity];
+                }
+                else
+                {
+                    NSString *amenityLang = [amenity getTagSuffix:@"lang_yes:"];
+                    if ([article.lang isEqualToString:amenityLang])
+                    {
+                        [pointList addObject:amenity];
+                    }
+                }
+            }
+            return NO;
+        };
+        
+        
+        OsmAnd::PointI location = OsmAnd::PointI(0, 0);
+        OsmAnd::PointI topLeft = OsmAnd::PointI(0, 0);
+        OsmAnd::PointI bottomRight = OsmAnd::PointI(INT_MAX, INT_MAX);
+        OsmAnd::AreaI bbox31 =  OsmAnd::AreaI(topLeft, bottomRight);
+        
+        if (article.routeRadius >= 0)
+        {
+            OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(article.lat, article.lon));
+            bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(article.routeRadius, locI);
+        }
+        
+        if (article.title && article.title.length > 0)
+        {
+            [OAPOIHelper.sharedInstance findTravelGuidesByKeyword:article.title categoryName:[article getPointFilterString] poiTypeName:nil location:location radius:article.routeRadius reader:reader publish:publish];
+        }
+        else
+        {
+            [OAPOIHelper findTravelGuides:[article getPointFilterString] location:location bbox31:bbox31 reader:reader publish:publish];
+        }
+        
+        if (segmentList.count > 0)
+        {
+            break;
+        }
+    }
+    
+    OAGPXMutableDocument *gpxFile = nil;
+    NSString *description = article.descr;
+    NSString *title = [OAUtilities isValidFileName:description] ? description : article.title;
+    if (segmentList.count > 0)
+    {
+        BOOL hasAltitude = NO;
+        OATrack *track = [[OATrack alloc] init];
+        
+        //TODO: implement
+        //for (BinaryMapDataObject segment : segmentList) {
+        //}
+        
+    }
+    
+    if (pointList.count > 0)
+    {
+        if (!gpxFile)
+        {
+            gpxFile = [[OAGPXMutableDocument alloc] initWithTitle:title lang:article.lang descr:article.content];
+            if (article.imageTitle && article.imageTitle.length > 0)
+            {
+                NSString *link = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle thumbnail:false];
+                OALink *gpxLink = [[OALink alloc] init];
+                gpxLink.url = [[NSURL alloc] initWithString:link];
+                gpxFile.metadata.links = @[ gpxLink ];
+            }
+        }
+        for (OAPOIAdapter *wayPoint in pointList)
+        {
+            OAWptPt *wpt = [self.class createWptPt:wayPoint lang:article.lang];
+            
+            [gpxFile addWpt:wpt];
+        }
+    }
+    OAGPXDocumentAdapter *gpxAdapter = [[OAGPXDocumentAdapter alloc] init];
+    gpxAdapter.object = gpxFile;
+    article.gpxFile = gpxAdapter;
+    return gpxAdapter;
+}
+
++ (OAGPX *) buildGpx:(NSString *)path title:(NSString *)title document:(OAGPXDocumentAdapter *)document
+{
+//    OAGPXDocument *gpx = document.object;
+//    return [OAGPXDatabase.sharedDb buildGpxItem:path.lastPathComponent path:path title:title desc:gpx.metadata.desc bounds:gpx.bounds document:document.object];
+    
+    OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
+    OAGPXDocument *gpxDoc = document.object;
+    OAGPX *gpx = [OAGPXDatabase.sharedDb buildGpxItem:path.lastPathComponent path:path title:title desc:gpxDoc.metadata.desc bounds:gpxDoc.bounds document:gpxDoc];
+    [gpxDb replaceGpxItem:gpx];
+    [gpxDb save];
+    return gpx;
+}
+
+//+ (void) addGpxToDb:(OAGPX *)gpx path:(NSString *)path
+//{
+//    OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
+//    NSString *gpxFilePath = [OAUtilities getGpxShortPath:path];
+////    OAGPX *oldGpx = [gpxDb getGPXItem:gpxFilePath];
+////    OAGPX *gpx = [gpxDb buildGpxItem:gpxFilePath title:_savedGpxFile.metadata.name desc:_savedGpxFile.metadata.desc bounds:_savedGpxFile.bounds document:_savedGpxFile];
+//    OAGPX *gpx = [gpxDb buildGpxItem:gpxFilePath title:_savedGpxFile.metadata.name desc:_savedGpxFile.metadata.desc bounds:_savedGpxFile.bounds document:_savedGpxFile];
+////    if (oldGpx)
+////    {
+////        gpx.showArrows = oldGpx.showArrows;
+////        gpx.showStartFinish = oldGpx.showStartFinish;
+////        gpx.color = oldGpx.color;
+////        gpx.coloringType = oldGpx.coloringType;
+////        gpx.width = oldGpx.width;
+////        gpx.splitType = oldGpx.splitType;
+////        gpx.splitInterval = oldGpx.splitInterval;
+////    }
+//    [gpxDb replaceGpxItem:gpx];
+//    [gpxDb save];
+//}
+
++ (NSString *) selectedGPXFiles:(NSString *)fileName
+{
+    return [OASelectedGPXHelper.instance selectedGPXFiles:fileName];
+}
+
 
 @end

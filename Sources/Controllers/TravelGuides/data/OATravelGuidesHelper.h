@@ -9,7 +9,7 @@
 #import "OAPOIAdapter.h"
 #import "OAGPXDocumentPrimitivesAdapter.h"
 
-@class OATravelSearchResult, OAPOIAdapter;
+@class OATravelSearchResult, OAPOIAdapter, OATravelArticle, OAGPXDocumentAdapter, OAWptPt, OAGPX;
 
 
 @interface OAFoundAmenity : NSObject
@@ -30,7 +30,7 @@
 
 + (void) searchAmenity:(int)x y:(int)y left:(int)left right:(int)right top:(int)top bottom:(int)bottom  reader:(NSString *)reader searchFilter:(NSString *)searchFilter publish:(BOOL(^)(OAPOIAdapter *poi))publish;
 
-+ (OAWptPtAdapter *) createWptPt:(OAPOIAdapter *)amenity lang:(NSString *)lang;
++ (OAWptPt *) createWptPt:(OAPOIAdapter *)amenity lang:(NSString *)lang;
 
 + (NSArray<NSString *> *) getTravelGuidesObfList;
 
@@ -39,5 +39,13 @@
 + (NSString *) getPatrialContent:(NSString *)content;
 
 + (NSString *) normalizeFileUrl:(NSString *)url;
+
++ (NSString *) createGpxFile:(OATravelArticle *)article fileName:(NSString *)fileName;
+
++ (OAGPXDocumentAdapter *) buildGpxFile:(NSArray<NSString *> *)readers article:(OATravelArticle *)article;
+
++ (OAGPX *) buildGpx:(NSString *)path title:(NSString *)title document:(OAGPXDocumentAdapter *)document;
+
++ (NSString *) selectedGPXFiles:(NSString *)fileName;
 
 @end

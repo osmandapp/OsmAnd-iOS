@@ -561,6 +561,10 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     OAGPXMutableDocument *mutableDocument = nil;
     OASelectedGPXHelper *selectedGpxHelper = OASelectedGPXHelper.instance;
     OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFileName];
+    if (!gpx)
+    {
+        gpx = [[OAGPXDatabase sharedDb] getGPXItemByFileName:gpxFileName];
+    }
     const auto &selectedFile = selectedGpxHelper.activeGpx[QString::fromNSString(gpxFileName.lastPathComponent)];
     if (selectedFile != nullptr)
         mutableDocument = [[OAGPXMutableDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(selectedFile)];

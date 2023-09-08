@@ -1619,7 +1619,7 @@
 "shared_string_max" = "Max";
 "shared_string_min" = "Min";
 "shared_string_meters" = "metri";
-"shared_string_tones" = "toni";
+"shared_string_tones" = "ton";
 "accessibility_announce" = "Annunci";
 "transfers" = "Trasferimenti";
 "temporary_conditional_routing" = "Tieni conto delle limitazioni temporanee";

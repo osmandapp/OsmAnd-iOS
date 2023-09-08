@@ -2126,10 +2126,10 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                                                                                      self.displayDensityFactor,
                                                                                      mapDensity,
                                                                                      [settings.textSize get:settings.applicationMode.get],
-                                                                                     QString::fromNSString(langId),
-                                                                                     langPreferences,
                                                                                      nullptr,
                                                                                      disabledPoiTypes));
+            _mapPresentationEnvironment->setLocaleLanguageId(QString::fromNSString(langId));
+            _mapPresentationEnvironment->setLanguagePreference(langPreferences);
             [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:self.mapPresentationEnv];
             
             _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));
@@ -2286,12 +2286,10 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                                                                                      self.displayDensityFactor,
                                                                                      1.0,
                                                                                      1.0,
-                                                                                     QString::fromNSString(langId),
-                                                                                     langPreferences,
                                                                                      nullptr,
                                                                                      disabledPoiTypes));
-            
-            
+            _mapPresentationEnvironment->setLocaleLanguageId(QString::fromNSString(langId));
+            _mapPresentationEnvironment->setLanguagePreference(langPreferences);
             _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));
             _mapPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_obfMapObjectsProvider,
                                                                            _mapPrimitiviser,

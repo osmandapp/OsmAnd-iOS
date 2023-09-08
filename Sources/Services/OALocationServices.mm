@@ -23,6 +23,7 @@
 #import "OALocationSimulation.h"
 #import "OAWaypointHelper.h"
 #import "OASavingTrackHelper.h"
+#import "OAAverageSpeedComputer.h"
 
 #import <FormatterKit/TTTLocationFormatter.h>
 
@@ -639,6 +640,7 @@
     if (location)
     {
         [OASavingTrackHelper.sharedInstance updateLocation:location heading:_lastHeading];
+        [OAAverageSpeedComputer.sharedInstance updateLocation:location];
         //OsmandPlugin.updateLocationPlugins(location);
     }
     

@@ -77,9 +77,16 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
     }
 
     private func inflateAvailableDefaultWidgets(_ widgets: [WidgetType], section: OATableSectionData, hasExternalWidgets: Bool) {
+        let sortedWidgets = widgets.sorted( by: { w0, w1 in
+            let group0 = w0.getGroup()
+            let group1 = w1.getGroup()
+            let title0 = group0 != nil ? group0!.title : w0.title
+            let title1 = group1 != nil ? group1!.title : w1.title
+            return title0 < title1
+        })
         let nightMode = OAAppSettings.sharedManager().nightMode
-        for i in 0..<widgets.count {
-            let widgetType = widgets[i]
+        for i in 0..<sortedWidgets.count {
+            let widgetType = sortedWidgets[i]
             let widgetGroup = widgetType.getGroup()
             let row = section.createNewRow()
             row.setObj(widgetType, forKey: "widget_type")
@@ -96,8 +103,9 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
     }
 
     private func inflateAvailableExternalWidgets(_ externalWidgets: [MapWidgetInfo], section: OATableSectionData) {
-        for i in 0..<externalWidgets.count {
-            let widgetInfo = externalWidgets[i]
+        let sortedWidgets = externalWidgets.sorted { $0.key < $1.key }
+        for i in 0..<sortedWidgets.count {
+            let widgetInfo = sortedWidgets[i]
             
             let row = section.createNewRow()
             row.setObj(widgetInfo, forKey: "widget_info")

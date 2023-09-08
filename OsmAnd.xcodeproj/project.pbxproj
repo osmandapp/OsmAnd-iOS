@@ -3577,6 +3577,7 @@
 		DAFE4D3B22169B4D009731CA /* map_osm_note_unresolved@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D2E22169B4C009731CA /* map_osm_note_unresolved@2x.png */; };
 		DAFE4D3F22169B4D009731CA /* map_osm_note_resolved@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D3022169B4C009731CA /* map_osm_note_resolved@3x.png */; };
 		FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */; };
+		FA4195592AAB55E6007CBBAB /* ShadowTransporentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4195582AAB55E6007CBBAB /* ShadowTransporentView.swift */; };
 		FA44BF3B2A71123D000D2F5F /* ic_banner_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF2F2A71123B000D2F5F /* ic_banner_close@2x.png */; };
 		FA44BF3C2A71123D000D2F5F /* ic_custom_osmand_start_logo_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF302A71123B000D2F5F /* ic_custom_osmand_start_logo_big@3x.png */; };
 		FA44BF3D2A71123D000D2F5F /* ic_payment_label_pro@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF312A71123C000D2F5F /* ic_payment_label_pro@2x.png */; };
@@ -8314,6 +8315,7 @@
 		DAFE4D3022169B4C009731CA /* map_osm_note_resolved@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_osm_note_resolved@3x.png"; path = "Resources/Icons/map_osm_note_resolved@3x.png"; sourceTree = "<group>"; };
 		F905FB9C7B198BF071D402C0 /* Pods-OsmAnd Maps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.release.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.release.xcconfig"; sourceTree = "<group>"; };
 		FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBannerCell.swift; sourceTree = "<group>"; };
+		FA4195582AAB55E6007CBBAB /* ShadowTransporentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowTransporentView.swift; sourceTree = "<group>"; };
 		FA44BF2F2A71123B000D2F5F /* ic_banner_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_banner_close@2x.png"; path = "Resources/Icons/ic_banner_close@2x.png"; sourceTree = "<group>"; };
 		FA44BF302A71123B000D2F5F /* ic_custom_osmand_start_logo_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osmand_start_logo_big@3x.png"; path = "Resources/Icons/ic_custom_osmand_start_logo_big@3x.png"; sourceTree = "<group>"; };
 		FA44BF312A71123C000D2F5F /* ic_payment_label_pro@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_payment_label_pro@2x.png"; path = "Resources/Icons/ic_payment_label_pro@2x.png"; sourceTree = "<group>"; };
@@ -13934,6 +13936,7 @@
 		DA5A804326C563A500F274C7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FA4195572AAB55D4007CBBAB /* ShadowTransporentView */,
 				FA4768B02A66E6DB00D533E8 /* Banners */,
 				DA5A804526C563A500F274C7 /* OAButton.h */,
 				DA5A806626C563A500F274C7 /* OAButton.m */,
@@ -14503,6 +14506,14 @@
 				DAD3FD252A4AEE7C00BFA03A /* WidgetGroupItemsViewController.swift */,
 			);
 			path = WidgetSettings;
+			sourceTree = "<group>";
+		};
+		FA4195572AAB55D4007CBBAB /* ShadowTransporentView */ = {
+			isa = PBXGroup;
+			children = (
+				FA4195582AAB55E6007CBBAB /* ShadowTransporentView.swift */,
+			);
+			path = ShadowTransporentView;
 			sourceTree = "<group>";
 		};
 		FA4768B02A66E6DB00D533E8 /* Banners */ = {
@@ -17956,6 +17967,7 @@
 				DA5A82F326C563A800F274C7 /* OATargetPointViewCell.mm in Sources */,
 				DA5A845226C563A900F274C7 /* OAMapLayers.mm in Sources */,
 				DA4ABEEB2876DA5D00B996EF /* OASettingsCategoryItems.m in Sources */,
+				FA4195592AAB55E6007CBBAB /* ShadowTransporentView.swift in Sources */,
 				DA5A81DE26C563A700F274C7 /* OAStreet.mm in Sources */,
 				DA5A814426C563A700F274C7 /* OAOsmNotePoint.m in Sources */,
 				DA5A841F26C563A800F274C7 /* OAGPXEditWptViewController.mm in Sources */,

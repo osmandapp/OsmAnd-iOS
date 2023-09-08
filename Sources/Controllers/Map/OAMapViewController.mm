@@ -1449,7 +1449,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     }
     
     CGPoint translation = [recognizer translationInView:self.view];
-    CGFloat angleDelta = translation.y / static_cast<CGFloat>(kElevationGesturePointsPerDegree);
+    CGFloat angleDelta = -translation.y / static_cast<CGFloat>(kElevationGesturePointsPerDegree);
     CGFloat angle = _mapView.elevationAngle;
     angle -= angleDelta;
     if (angle < kElevationMinAngle)

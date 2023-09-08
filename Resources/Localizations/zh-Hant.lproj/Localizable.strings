@@ -290,7 +290,7 @@
 "res_installing" = "正在安裝…";
 "download_wikipedia_maps" = "維基百科";
 "product_desc_wiki" = "基於位置的維基百科文章在地圖上";
-"srtm_plugin_name" = "等高線";
+"srtm_plugin_name" = "地形";
 "product_desc_srtm" = "對地表形狀的視覺評估";
 "roads" = "道路";
 "select_language" = "選擇語言";
@@ -309,9 +309,9 @@
 "show_alt_in_drive" = "在駕駛時顯示海拔高度";
 "shared_string_hillshade" = "地形陰影";
 "shared_string_get" = "取得";
-"srtm_plugin_disabled" = "等高線已停用";
+"srtm_plugin_disabled" = "地形圖已停用";
 "prch_wiki_info" = "維基百科外掛您有資格為地圖啟用維基百科資訊，購買或在免費的期限內下載。";
-"prch_srtm_info" = "等高線外掛您有資格為地圖啟用等高線，購買或在免費的期限內下載。";
+"prch_srtm_info" = "地形圖外掛您有資格為地圖啟用等高線，購買或在免費的期限內下載。";
 "shared_string_open" = "開啟";
 "time_closed" = "已關閉";
 "will_close_at" = "結束於";
@@ -357,9 +357,9 @@
 "plugin_popup_wiki_title" = "下載維基百科";
 "plugin_popup_wiki_ask" = "要下載維基百科資料，您需要啟用外掛元件：<b>維基百科</b>";
 "plugin_popup_srtm_title" = "下載等高線";
-"plugin_popup_srtm_desc" = "要開始使用等高線功能，請先下載區域的等高線";
+"plugin_popup_srtm_desc" = "要開始使用地形圖功能，請先下載區域的等高線";
 "plugin_popup_wiki_desc" = "要開始使用維基百科外掛元件，請先下載維基百科資料的區域";
-"plugin_popup_srtm_ask" = "要下載等高線，您需要啟用外掛元件：<b>等高線</b>";
+"plugin_popup_srtm_ask" = "要下載等高線，您需要啟用外掛元件：<b>地形圖</b>";
 "plugin_popup_nautical_title" = "下載航海地圖";
 "plugin_popup_nautical_desc" = "請先下載航海地圖。\n然後去 <b>地圖設定</b> > <b>地圖類型</b> 並打開 <b>航海</b> 樣式";
 "go_to_downloads" = "去下載";
@@ -2026,7 +2026,7 @@
 "shared_string_cross_buy" = "跨平台購買";
 "shared_string_recorded" = "已記錄";
 "quick_action_contour_lines_descr" = "在地圖上顯示或隱藏等高線的按鈕。";
-"download_heightmap_maps" = "高度圖";
+"download_heightmap_maps" = "地形圖";
 "sign_in_with_open_street_map" = "使用 OpenStreetMap 登入";
 "gpx_upload_private_visibility_descr" = "「私有」代表軌跡不會顯示在任何公開的清單中，但其軌跡點仍可透過公開的 GPS API 取得，但沒有時間戳，也不會按時間順序排列。";
 "choose_what_to_restore" = "選擇要復原的內容。";
@@ -2392,7 +2392,7 @@
 "weather_cloud_enable_descr" = "啟用以在地圖上檢視雲層。";
 "next_seg_dist" = "下一個區段 %@";
 "compass_options_description" = "點選指南針切換地圖方向模式";
-"enable_hillshade" = "啟用以檢視地形資料";
+"enable_hillshade" = "啟用以從山地陰影或是斜坡圖檢視地形資料。";
 "weather_forecast_is_outdated" = "預報已過期。";
 "cloud_storage_used" = "已使用 %@ / %@";
 "short_min" = "分";
@@ -2486,7 +2486,7 @@
 "shared_string_duplicate" = "複製";
 "shared_string_location_unknown" = "位置未知";
 "map_settings_add_maps_slopes" = "需要額外的地圖才能在地圖上檢視斜坡";
-"map_settings_slopes_description" = "斜坡地圖使用不同的顏色來視覺化地形";
+"map_settings_slopes_description" = "斜坡使用不同的顏色來視覺化地形。";
 "map_settings_zoom_level_description" = "設定顯示圖層的最小和最大縮放等級";
 "map_settings_hide_polygons" = "隱藏多邊形";
 "map_settings_hide_polygons_desc" = "此選項僅影響 OsmAnd 離線向量地圖";
@@ -2992,3 +2992,27 @@
 "toggle_public_transport" = "顯示/隱藏大眾運輸";
 "shared_string_app_profile" = "應用程式設定檔";
 "desert" = "沙漠";
+"free_favorites_backup_description" = "註冊 OsmAnd 雲端，來取得免費備份最愛與設定功能";
+"weather_updates_manual" = "天氣預報需要手動更新。";
+"map_widget_target_distance_desc" = "顯示鏡頭與目標位置的距離。";
+"purchases_feature_relief_3d_description" = "擁有以及觀察你所在社區或整個大陸的比例模型。";
+"weather_update_disabled" = "未啟用";
+"get_osmand_cloud" = "取得 OsmAnd 雲端";
+"map_widget_camera_tilt_desc" = "顯示透視模式鏡頭傾斜角度。預設是 90° (沒有傾斜)。";
+"banner_payment_free_backup_settings_title" = "免費設定備份";
+"shared_string_relief_3d" = "3D 浮雕";
+"weather_update_parameters_wifi" = "只有連到 Wi-Fi 時天氣預報才會更新。";
+"map_widget_zoom_level_desc" = "顯示目前地圖縮放層級。";
+"weather_update_over_wifi_only" = "只有透過 WiFi";
+"free_favorites_backup" = "免費最愛備份";
+"weather_update_parameters_disabled" = "自動更新將會被停用。";
+"map_widget_camera_distance_desc" = "顯示鏡頭在地面上的海拔高度。";
+"map_settings_topography" = "地形";
+"auto_update" = "自動更新";
+"weather_update_over_any_network" = "透過任何網路";
+"weather_update_parameters_any_network" = "連到任何網路時會更新天氣預報，手機網路也會使用。";
+"free_account" = "免費帳號";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "顯示目前地圖中心的地理經緯度";
+"map_widget_rendering_fps_desc" = "顯示地圖與地圖元素能多快呈現與重新整理，採用影格速率(FPS)來顯示。";

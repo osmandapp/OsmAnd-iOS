@@ -247,14 +247,14 @@ extension WidgetsListViewController {
         let item = tableData.item(for: indexPath)
         let isFirstPageCell = item.key == kPageKey && indexPath.section == 0
         let isNoWidgetsCell = item.key == kNoWidgetsKey
-        return !isNoWidgetsCell && !isFirstPageCell
+        return editMode && !isNoWidgetsCell && !isFirstPageCell
     }
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let item = tableData.item(for: indexPath)
         let isFirstPageCell = item.key == kPageKey && indexPath.section == 0
         let isNoWidgetsCell = item.key == kNoWidgetsKey
-        return !isNoWidgetsCell && !isFirstPageCell
+        return editMode && !isNoWidgetsCell && !isFirstPageCell
     }
 
     // TODO: delete section reorder logic is in ReorderWidgetsAdapter, ReorderWidgetsAdapterHelper in Android
@@ -329,7 +329,7 @@ extension WidgetsListViewController {
                     reorderWidgets()
                 }
             }
-            else if let widgetInfo = item.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo {
+            else if item.obj(forKey: kWidgetsInfoKey) is MapWidgetInfo {
                 tableData.removeRow(at: indexPath)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
                 if !editMode {
@@ -343,20 +343,24 @@ extension WidgetsListViewController {
     override func tableView(_ tableView: UITableView,
                             targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
                             toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        var res = proposedDestinationIndexPath
         let isSourcePageCell = tableData.item(for: sourceIndexPath).key == kPageKey
         let isProposedPageCell = tableData.sectionCount() > proposedDestinationIndexPath.section
             ? tableData.item(for: proposedDestinationIndexPath).key == kPageKey
             : false
 
         if isSourcePageCell, proposedDestinationIndexPath.section > sourceIndexPath.section {
-            return IndexPath(row: Int(tableData.rowCount(UInt(sourceIndexPath.section))) - 1, section: sourceIndexPath.section)
+            res = IndexPath(row: Int(tableData.rowCount(UInt(sourceIndexPath.section))) - 1, section: sourceIndexPath.section)
         } else if isSourcePageCell, proposedDestinationIndexPath.section < sourceIndexPath.section {
-            return IndexPath(row: isProposedPageCell || proposedDestinationIndexPath.section < sourceIndexPath.section - 1 ? 1 : proposedDestinationIndexPath.row,
+            res = IndexPath(row: isProposedPageCell || proposedDestinationIndexPath.section < sourceIndexPath.section - 1 ? 1 : proposedDestinationIndexPath.row,
                              section: sourceIndexPath.section - 1)
         } else if !isSourcePageCell, isProposedPageCell {
-            return IndexPath(row: 1, section: proposedDestinationIndexPath.section)
+            res = IndexPath(row: 1, section: proposedDestinationIndexPath.section)
+        } else if !isSourcePageCell, !isProposedPageCell, tableData.sectionCount() <= proposedDestinationIndexPath.section {
+            let lastSection = tableData.sectionCount() - 1;
+            res = IndexPath(row: Int(tableData.rowCount(lastSection)) - 1, section: Int(lastSection))
         }
-        return proposedDestinationIndexPath
+        return res
     }
 
     private func updateEnabledWidgets() {

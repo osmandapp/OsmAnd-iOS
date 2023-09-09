@@ -84,22 +84,39 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
 
     // MARK: Selectors
 
+    override func onGestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer!) -> Bool {
+        if (gestureRecognizer == self.navigationController?.interactivePopGestureRecognizer) {
+            if editMode, tableData.hasChanged {
+                showUnsavedChangesAlert(shouldDismiss: true)
+                return false
+            }
+        }
+        return true
+    }
+
+    private func showUnsavedChangesAlert(shouldDismiss: Bool) {
+        let alert: UIAlertController = UIAlertController.init(title: localizedString("unsaved_changes"),
+                                                              message: localizedString("unsaved_changes_will_be_lost_discard"),
+                                                              preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_discard"), style: .destructive) { [weak self] _ in
+            guard let self = self else { return }
+            self.editMode = false
+            if (shouldDismiss) {
+                self.dismiss()
+            }
+        })
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        let popPresenter = alert.popoverPresentationController
+        popPresenter?.barButtonItem = self.getLeftNavbarButton();
+        popPresenter?.permittedArrowDirections = UIPopoverArrowDirection.any;
+
+        self.present(alert, animated: true)
+    }
+
     override func onLeftNavbarButtonPressed() {
         if editMode {
             if tableData.hasChanged {
-                let alert: UIAlertController = UIAlertController.init(title: localizedString("unsaved_changes"),
-                                                                      message: localizedString("unsaved_changes_will_be_lost_discard"),
-                                                                      preferredStyle: .actionSheet)
-                alert.addAction(UIAlertAction(title: localizedString("shared_string_discard"), style: .destructive) { [weak self] _ in
-                    guard let self = self else { return }
-                    self.editMode = false
-                })
-                alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
-                let popPresenter = alert.popoverPresentationController
-                popPresenter?.barButtonItem = self.getLeftNavbarButton();
-                popPresenter?.permittedArrowDirections = UIPopoverArrowDirection.any;
-
-                self.present(alert, animated: true)
+                showUnsavedChangesAlert(shouldDismiss: false)
             } else {
                 self.editMode = false
             }

@@ -82,6 +82,7 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 - (void)onRightNavbarButtonPressed;
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView;
 - (void)onRotation;
+- (BOOL)onGestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer;
 
 // Use to refresh button appearance
 - (void)setupNavbarButtons;

@@ -613,7 +613,12 @@
 "on_hold" = "On hold";
 "shared_string_paused" = "Paused";
 
+"unsaved_changes" = "Unsaved changes";
+"unsaved_changes_will_be_lost_discard" = "Any unsaved changes will be lost. Discard changes?";
+
+
 // Shared Strings
+"shared_string_discard" = "Discard";
 "shared_string_cancelled" = "Cancelled";
 "shared_string_undefined" = "Undefined";
 "shared_string_custom" = "Custom";

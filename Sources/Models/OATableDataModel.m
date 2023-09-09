@@ -13,6 +13,7 @@
 @implementation OATableDataModel
 {
     NSMutableArray<OATableSectionData *> *_sectionData;
+    BOOL _hasChanged;
 }
 
 + (instancetype) model
@@ -25,6 +26,7 @@
     self = [super init];
     if (self) {
         _sectionData = [NSMutableArray array];
+        _hasChanged = NO;
     }
     return self;
 }
@@ -39,6 +41,7 @@
 - (void)addSection:(OATableSectionData *)sectionData
 {
     [_sectionData addObject:sectionData];
+    _hasChanged = YES;
 }
 
 - (void)addSection:(OATableSectionData *)sectionData atIndex:(NSInteger)index
@@ -50,6 +53,7 @@
 - (void)removeSection:(NSUInteger)section
 {
     [_sectionData removeObjectAtIndex:section];
+    _hasChanged = YES;
 }
 
 - (void)removeRowAt:(NSIndexPath *)indexPath
@@ -109,6 +113,25 @@
 - (void) clearAllData
 {
     _sectionData.removeAllObjects;
+}
+
+- (BOOL) hasChanged
+{
+    if (_hasChanged)
+        return YES;
+
+    for (OATableSectionData *data in _sectionData)
+		if (data.hasChanged)
+            return YES;
+
+    return NO;
+}
+
+- (void) resetChanges
+{
+    _hasChanged = NO;
+    for (OATableSectionData *data in _sectionData)
+        [data resetChanges];
 }
 
 @end

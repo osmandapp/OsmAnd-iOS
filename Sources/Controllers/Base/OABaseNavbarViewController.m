@@ -553,6 +553,11 @@
     return nil;
 }
 
+- (UIBarButtonItem *)getLeftNavbarButton
+{
+    return _leftNavbarButton;
+}
+
 - (UIImage *)getCustomIconForLeftNavbarButton
 {
     return nil;

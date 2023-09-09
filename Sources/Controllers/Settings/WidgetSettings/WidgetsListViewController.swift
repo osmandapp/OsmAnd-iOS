@@ -86,7 +86,23 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
 
     override func onLeftNavbarButtonPressed() {
         if editMode {
-            editMode = false
+            if tableData.hasChanged {
+                let alert: UIAlertController = UIAlertController.init(title: localizedString("unsaved_changes"),
+                                                                      message: localizedString("unsaved_changes_will_be_lost_discard"),
+                                                                      preferredStyle: .actionSheet)
+                alert.addAction(UIAlertAction(title: localizedString("shared_string_discard"), style: .destructive) { [weak self] _ in
+                    guard let self = self else { return }
+                    self.editMode = false
+                })
+                alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+                let popPresenter = alert.popoverPresentationController
+                popPresenter?.barButtonItem = self.getLeftNavbarButton();
+                popPresenter?.permittedArrowDirections = UIPopoverArrowDirection.any;
+
+                self.present(alert, animated: true)
+            } else {
+                self.editMode = false
+            }
             return
         }
         super.onLeftNavbarButtonPressed()
@@ -178,6 +194,7 @@ extension WidgetsListViewController {
     override func generateData() {
         tableData.clearAllData()
         updateEnabledWidgets()
+        tableData.resetChanges()
     }
 
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {

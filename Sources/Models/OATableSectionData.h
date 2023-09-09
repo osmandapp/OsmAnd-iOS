@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) NSString *headerText;
 @property (nonatomic) NSString *footerText;
+@property (nonatomic, readonly) BOOL hasChanged;
 
 - (OATableRowData *) createNewRow;
 - (OATableRowData *) getRow:(NSUInteger)index;
@@ -30,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeAllRows;
 
 - (NSUInteger) rowCount;
+- (void) resetChanges;
 
 @end
 

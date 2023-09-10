@@ -2682,3 +2682,8 @@
 "speak_route_deviation" = "Најави одступање од пута";
 "map_widget_distance_to_intermediate" = "Удаљеност до посредне тачке";
 "rendering_attr_alpineHiking_name" = "Разврставање по тежини";
+"get_osmand_cloud" = "Добавите Облак ОсмАнда";
+"rendering_value_caiScale_description" = "Club Alpino Italiano (Италијанско планинарско удружење)";
+"free_favorites_backup" = "Бесплатно складиште омиљених";
+"rendering_value_sacScale_description" = "Швајцарско планинарско удружење";
+"free_account" = "Бесплатни налог";

@@ -164,6 +164,7 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
                 }
             } else {
                 reorderWidgets()
+                updateUI(true)
             }
         }
     }

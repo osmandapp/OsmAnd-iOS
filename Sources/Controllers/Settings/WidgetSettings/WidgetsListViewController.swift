@@ -364,9 +364,10 @@ extension WidgetsListViewController {
                     reorderWidgets()
                 }
             }
-            else if item.obj(forKey: kWidgetsInfoKey) is MapWidgetInfo {
+            else if let widgetInfo = item.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo {
                 tableData.removeRow(at: indexPath)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
+                widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: NSNumber(value: false), recreateControls: true)
                 if !editMode {
                     reorderWidgets()
                 }

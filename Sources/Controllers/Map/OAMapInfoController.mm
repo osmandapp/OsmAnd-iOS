@@ -384,10 +384,10 @@
     {
         if (hasLeftWidgets)
         {
-            leftRightWidgetsViewTopConstraintConstant = _mapHudViewController.topWidgetsViewHeightConstraint.constant > 0 ? -_mapHudViewController.topWidgetsViewHeightConstraint.constant - 1 : 10;
+            leftRightWidgetsViewTopConstraintConstant = _mapHudViewController.topWidgetsViewHeightConstraint.constant > 0 ? -_mapHudViewController.topWidgetsViewHeightConstraint.constant : 10;
         } else
         {
-            leftRightWidgetsViewTopConstraintConstant = [_mapHudViewController getHudTopOffset] + 16;
+            leftRightWidgetsViewTopConstraintConstant = -_mapHudViewController.topWidgetsViewHeightConstraint.constant + 16;
         }
     }
     

@@ -468,10 +468,10 @@
 "route_kr" = "Serrezà droite";
 "towards" = "vers";
 "route_tr" = "Tournezà droite";
-"route_tshr" = "Tournez franchementà droite";
+"route_tshr" = "Prenez le virage serré à droite et continuez";
 "route_tslr" = "Tournez légèrement vers la droite et continuez";
 "route_tl" = "Tournezà gauche";
-"route_tshl" = "Tournez franchementà gauche";
+"route_tshl" = "Prenez le virage serré à gauche et continuez";
 "route_tsll" = "Tournez légèrement vers la gauche et continuez";
 "route_tu" = "Faites demi-tour et continuez";
 "route_head" = "Avancez";

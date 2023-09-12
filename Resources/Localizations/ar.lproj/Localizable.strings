@@ -3034,3 +3034,4 @@
 "weather_update_disabled" = "مٌعطل";
 "weather_update_over_wifi_only" = "عبر WIFI فقط";
 "weather_update_over_any_network" = "عبر أي شبكة";
+"map_settings_topography" = "طوبوغرافيا";

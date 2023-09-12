@@ -24,7 +24,7 @@
 - (NSString *)getContent;
 - (OADownloadMode *)getImagesDownloadMode;
 - (BOOL)isDownloadImagesOnlyNow;
-- (void)resetDownloadImagesOnlyNow;
+- (void)setDownloadImagesOnlyNow:(BOOL)onlyNow;
 
 - (void)loadHeaderImage:(void(^)(NSString *content))loadWebView;
 - (void)loadWebView;

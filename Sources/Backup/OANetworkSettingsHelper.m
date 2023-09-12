@@ -56,6 +56,11 @@
     return _exportAsyncTasks[key];
 }
 
+- (OASyncBackupTask *)getSyncTask:(NSString *)key
+{
+    return _syncBackupTasks[key];
+}
+
 - (EOAImportType) getImportTaskType:(NSString *)key
 {
     OAImportBackupTask *importTask = [self getImportTask:key];
@@ -114,7 +119,7 @@
 
 - (BOOL) isBackupSyncing
 {
-    return self.syncBackupTasks[kSyncItemsKey] != nil;
+    return self.syncBackupTasks.count > 0;
 }
 
 - (void) updateExportListener:(id<OABackupExportListener>)listener

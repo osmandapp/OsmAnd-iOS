@@ -553,6 +553,11 @@
     return nil;
 }
 
+- (UIBarButtonItem *)getLeftNavbarButton
+{
+    return _leftNavbarButton;
+}
+
 - (UIImage *)getCustomIconForLeftNavbarButton
 {
     return nil;
@@ -741,7 +746,17 @@
 {
 }
 
+- (BOOL)onGestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    return YES;
+}
+
 #pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    return [self onGestureRecognizerShouldBegin:gestureRecognizer];
+}
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {

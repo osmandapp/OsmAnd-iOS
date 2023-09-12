@@ -48,7 +48,11 @@ class WidgetPageViewController: UIViewController {
     func layoutWidgets() -> (width: CGFloat, height: CGFloat) {
         var width: CGFloat = 0
         var height: CGFloat = 0
+        let lastVisibleWidget = widgetViews.last(where: { !$0.isHidden })
         for widget in widgetViews {
+            if let textInfo = widget as? OATextInfoWidget {
+                textInfo.showSeparator(widget != lastVisibleWidget)
+            }
             widget.translatesAutoresizingMaskIntoConstraints = false
             widget.adjustSize()
             width = max(width, widget.frame.size.width)

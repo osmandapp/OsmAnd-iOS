@@ -201,6 +201,8 @@
 "second_next_turn_widget_desc" = "The widget shows information about your second next turn which is enabled if turn within approaching distance.";
 "next_turn_widget_desc" = "The widget shows information about your next turn with a picture of maneuver and distance to it.";
 "average_speed_widget_desc" = "Shows the current trip's average speed.";
+"average_speed_time_interval_desc" = "Specify the time interval for speed averaging.";
+"average_speed_skip_stops" = "Take stops into account";
 "elevation_profile_widget_desc" = "Shows the elevation and slope profile of the current route.";
 "parking_widget_desc" = "Shows the distance from the screen center to your parking spot.";
 "mapillary_widget_desc" = "Provides quick access to the Mapillary app to add street-level imagery.";
@@ -611,7 +613,12 @@
 "on_hold" = "On hold";
 "shared_string_paused" = "Paused";
 
+"unsaved_changes" = "Unsaved changes";
+"unsaved_changes_will_be_lost_discard" = "Any unsaved changes will be lost. Discard changes?";
+
+
 // Shared Strings
+"shared_string_discard" = "Discard";
 "shared_string_cancelled" = "Cancelled";
 "shared_string_undefined" = "Undefined";
 "shared_string_custom" = "Custom";

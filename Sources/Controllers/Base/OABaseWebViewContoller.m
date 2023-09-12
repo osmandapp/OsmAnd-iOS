@@ -59,7 +59,7 @@
     return NO;
 }
 
-- (void)resetDownloadImagesOnlyNow
+- (void)setDownloadImagesOnlyNow:(BOOL)onlyNow
 {
 }
 
@@ -91,7 +91,7 @@
                                     [[configuration userContentController] removeContentRuleList:contentRuleList];
 
                                 [self loadHeaderImage:^(NSString *content) {
-                                    [self resetDownloadImagesOnlyNow];
+                                    [self setDownloadImagesOnlyNow:NO];
                                     dispatch_async(dispatch_get_main_queue(), ^{
                                         [self.webView loadHTMLString:content baseURL:[self getUrl]];
                                     });

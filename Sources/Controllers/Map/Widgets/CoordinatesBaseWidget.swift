@@ -16,9 +16,16 @@ class CoordinatesBaseWidget: OABaseWidgetView {
 
     @IBOutlet var divider: UIView!
     @IBOutlet var secondContainer: UIStackView!
-
-    @IBOutlet var firstCoordinate: UILabel!
-    @IBOutlet var secondCoordinate: UILabel!
+    @IBOutlet var firstCoordinate: UILabel! {
+        didSet {
+            firstCoordinate.adjustsFontForContentSizeCategory = true;
+        }
+    }
+    @IBOutlet var secondCoordinate: UILabel! {
+        didSet {
+            secondCoordinate.adjustsFontForContentSizeCategory = true;
+        }
+    }
 
     @IBOutlet var firstIcon: UIImageView!
 
@@ -206,8 +213,8 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         secondCoordinate.textColor = textColor
 
         let typefaceStyle: UIFont.Weight = textState.textBold ? .bold : .semibold
-        firstCoordinate.font = UIFont.systemFont(ofSize: firstCoordinate.font.pointSize, weight: typefaceStyle)
-        secondCoordinate.font = UIFont.systemFont(ofSize: secondCoordinate.font.pointSize, weight: typefaceStyle)
+        firstCoordinate.font = UIFont.scaledSystemFont(ofSize: firstCoordinate.font.pointSize, weight: typefaceStyle)
+        secondCoordinate.font = UIFont.scaledSystemFont(ofSize: secondCoordinate.font.pointSize, weight: typefaceStyle)
 
         let lastLocation = lastLocation
         if (coloredUnit && lastLocation != nil) {

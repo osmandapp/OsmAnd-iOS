@@ -2736,7 +2736,7 @@
 "rendering_attr_showTramRoutes_name" = "Lignes de tramway";
 "routing_attr_allow_streams_name" = "Autoriser les cours d’eau et les drains";
 "rendering_attr_seabedDetail_description" = "Informations textuelles supplémentaires sur la nature des fonds marins";
-"rendering_attr_OSMMapperAssistantNote_description" = "Afficher lesétiquettes de note";
+"rendering_attr_OSMMapperAssistantNote_description" = "Afficher les étiquettes note";
 "routing_attr_hazmat_category_description" = "Catégorie matières dangereuses / Prenez en compte les interdictions d\'accès";
 "routing_attr_allow_intermittent_description" = "Autoriser les voies navigables intermittentes";
 "rendering_attr_horseScale_name" = "Difficulté des sentiers équestres";
@@ -2764,7 +2764,7 @@
 "routing_attr_avoid_fords_description" = "Éviter les gués";
 "routing_attr_allow_streams_description" = "Autoriser les cours d’eau et les drains";
 "routing_attr_avoid_4wd_only_description" = "Éviter les routes adaptées uniquement aux 4 x 4";
-"rendering_attr_OSMMapperAssistantNote_name" = "Étiquettes de note";
+"rendering_attr_OSMMapperAssistantNote_name" = "Étiquettes note";
 "rendering_attr_noNatureReserveBoundaries_description" = "Masquer les limites des réserves naturelles, des zones protégées et des parcs nationaux.";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "Ne pas faire de hors-piste";
 "rendering_value_all_name" = "Tout";

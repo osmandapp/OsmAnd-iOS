@@ -1179,7 +1179,8 @@
     BOOL isRightPanelVisible = _mapInfoController.rightPanelController && [_mapInfoController.rightPanelController hasWidgets];
     BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetGPX
         || _mapPanelViewController.activeTargetType == OATargetWeatherLayerSettings
-        || _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance;
+        || _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance
+        || _mapPanelViewController.activeTargetType == OATargetTerrainParametersSettings;
     BOOL isInContextMenuVisible = self.contextMenuMode && !isTargetToHideVisible;
     BOOL isTargetBackButtonVisible = [_mapPanelViewController isTargetBackButtonVisible];
     BOOL isMapMarkerVisibility = [OADestinationsHelper instance].sortedDestinations.count > 0

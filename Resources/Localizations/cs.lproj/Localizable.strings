@@ -575,7 +575,7 @@
 "download_wikipedia_maps" = "Wikipedie";
 "product_desc_wiki" = "Články Wikipedie o místech na mapě";
 "purchases_feature_desc_wikipedia" = "Poskytuje offline přístup ke všem článkům z Wikipedie týkajícím se míst, díky čemuž můžete jednoduchým klepnutím na mapě zjistit informace o místech, která navštívíte na své cestě. Nezapomeňte si stáhnout mapové soubory Wikipedie pro příslušné regiony.";
-"srtm_plugin_name" = "Vrstevnice";
+"srtm_plugin_name" = "Topografie";
 "product_desc_srtm" = "Vizuální posouzení tvaru povrchu země";
 "srtm_plugin_description" = "Informace o terénu, jako jsou obrysové čáry, stíny kopců a svahy, vám pomohou vizuálně zhodnotit reliéf terénu, schůdnost a další. Topografické informace mohou být na mapě znázorněny stínováním svahů, vrstevnicemi a/nebo zbarvením strmosti.\n\nPodkladová data pocházejí ze systémů SRTM a ASTER.\n\nDalší informace naleznete na adrese http://osmand.net/docs/user/plugins/contour-lines .";
 "my_location" = "Moje poloha";
@@ -606,9 +606,9 @@
 "from_location" = "vzdálený";
 "show_alt_in_drive" = "Zobrazit nadmořskou výšku v režimu jízdy";
 "shared_string_get" = "Získat";
-"srtm_plugin_disabled" = "Vrstevnice vypnuty";
-"prch_wiki_info" = "Modul Wikipedie zobrazuje informace z Wikipedie k mapám, které máte zakoupené nebo stažené zdarma.";
-"prch_srtm_info" = "Modul Vrstevnice zobrazuje vrstevnice na mapách, které máte zakoupené nebo zdarma stažené.";
+"srtm_plugin_disabled" = "Topografie vypnuta";
+"prch_wiki_info" = "Zásuvný modul Wikipedie umožňuje získat informace z Wikipedie pro mapy, na které máte nárok, které jste si zakoupili nebo stáhli v rámci bezplatného limitu.";
+"prch_srtm_info" = "Zásuvný modul Topografie umožňuje zobrazení vrstevnic pro mapy, na které máte nárok, které jste si zakoupili nebo stáhli v rámci bezplatného limitu.";
 "shared_string_open" = "Otevřeno";
 "time_closed" = "Zavřeno";
 "time_will_open" = "Otevře v";
@@ -1568,8 +1568,8 @@
 "map_settings_add_maps_slopes" = "K zobrazení svahů jsou potřeba další mapy";
 "map_settings_add_maps_hillshade" = "K zobrazení stínování kopců jsou potřeba další mapy";
 "map_settings_zoom_level_description" = "Nastavte minimální a maximální úroveň přiblížení pro zobrazení vrstvy";
-"map_settings_hillshade_description" = "Stínování kopců vizualizuje svahy, vrcholy a nížiny pomocí různých odstínů šedi";
-"map_settings_slopes_description" = "Mapy svahů používají barvy k vizualizaci terénu";
+"map_settings_hillshade_description" = "Mapa kopců s tmavými odstíny pro zobrazení svahů, vrcholů a nížin.";
+"map_settings_slopes_description" = "Sklon je barevná vizualizace v terénu.";
 "map_settings_slopes_legend" = "O svazích si můžete přečíst více na Wikipedii";
 "map_settings_layer_transparency" = "Průhlednost vrstvy";
 "map_settings_install_more" = "Instalovat další...";
@@ -1875,7 +1875,7 @@
 "toggle_public_transport" = "Zobrazit/skrýt veřejnou dopravu";
 "quick_action_transport_descr" = "Tlačítko pro zobrazení nebo skrytí veřejné dopravy na mapě.";
 "quick_action_dir_from_descr" = "Klepněte na toto akce pro navigaci z aktuálního středu obrazovky.";
-"enable_hillshade" = "Zapněte pro zobrazení údajů o terénu";
+"enable_hillshade" = "Umožňuje zobrazit údaje o terénu z mapy kopců nebo svahů.";
 "enable_contour_lines" = "Zapněte pro zobrazení vrstevnic na mapě";
 "quick_action_contour_lines_descr" = "Tlačítko pro zobrazení nebo skrytí vrstevnic na mapě.";
 "toggle_hillshade" = "Zobrazit/skrýt terén";
@@ -2593,7 +2593,7 @@
 "routeInfo_horse_scale_description" = "Vykreslení cest podle obtížnosti koňských stezek";
 "shared_string_cross_buy" = "Křížový nákup";
 "cloud_create_account" = "Vytvořit účet";
-"download_heightmap_maps" = "Výšková mapa";
+"download_heightmap_maps" = "Mapa terénu";
 "use_heightmap_setting" = "Použít 3D reliéfní výškové mapy";
 "nautical_depth_points" = "Plavební hloubkové body";
 "depth_contours" = "Hloubkové vrstevnice";
@@ -3011,3 +3011,7 @@
 "map_widget_zoom_level_desc" = "Zobrazuje aktuální úroveň přiblížení mapy.";
 "map_widget_camera_distance_desc" = "Zobrazuje výšku kamery nad úrovní povrchu.";
 "map_widget_target_distance_desc" = "Zobrazuje vzdálenost mezi kamerou a cílovým místem.";
+"weather_update_disabled" = "Vypnuto";
+"weather_update_over_wifi_only" = "Pouze přes WIFI";
+"map_settings_topography" = "Topografie";
+"weather_update_over_any_network" = "Přes jakoukoli síť";

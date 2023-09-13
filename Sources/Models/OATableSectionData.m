@@ -23,8 +23,10 @@
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _rowData = [NSMutableArray array];
+        _hasChanged = NO;
     }
     return self;
 }
@@ -63,33 +65,39 @@
 - (void)addRow:(OATableRowData *)rowData position:(NSUInteger)position
 {
     [_rowData insertObject:rowData atIndex:position];
+    _hasChanged = YES;
 }
 
 - (void)addRow:(OATableRowData *)rowData
 {
     [_rowData addObject:rowData];
+    _hasChanged = YES;
 }
 
 - (void)addRows:(NSArray<OATableRowData *> *)rows
 {
     [_rowData addObjectsFromArray:rows];
+    _hasChanged = YES;
 }
 
 - (OATableRowData *) addRowFromDictionary:(NSDictionary *)dictionary
 {
     OATableRowData *row = [[OATableRowData alloc] initWithData:dictionary];
     [_rowData addObject:row];
+    _hasChanged = YES;
     return row;
 }
 
 - (void)removeAllRows
 {
     [_rowData removeAllObjects];
+    _hasChanged = YES;
 }
 
 - (void)removeRowAtIndex:(NSInteger)index
 {
     [_rowData removeObjectAtIndex:index];
+    _hasChanged = YES;
 }
 
 - (NSUInteger)rowCount
@@ -102,6 +110,11 @@
             res += row.dependentRowsCount;
     }
     return res;
+}
+
+- (void) resetChanges
+{
+    _hasChanged = NO;
 }
 
 @end

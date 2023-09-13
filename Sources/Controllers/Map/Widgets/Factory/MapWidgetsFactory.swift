@@ -75,7 +75,7 @@ class MapWidgetsFactory: NSObject {
         case .currentSpeed:
             return OACurrentSpeedWidget()
         case .averageSpeed:
-            return /*AverageSpeedWidget(mapActivity: mapActivity, customId: customId)*/nil
+            return AverageSpeedWidget(customId: customId)
         case .maxSpeed:
             return OAMaxSpeedWidget()
         case .altitudeMyLocation:

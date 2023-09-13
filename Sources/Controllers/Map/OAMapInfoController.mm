@@ -77,6 +77,30 @@
     NSTimer *_framePreparedTimer;
 }
 
+- (void)configureShadowForWidgets:(NSArray<UIView *> *)views
+{
+    for (UIView *view in views)
+    {
+        auto containerView = [[ShadowTransporentTouchesPassView alloc] init];
+        containerView.layer.cornerRadius = 7;
+        containerView.layer.shadowOpacity = 1;
+        containerView.layer.shadowColor = [UIColor colorWithRed:0.0 green:0 blue:0 alpha:0.31].CGColor;
+        containerView.layer.shadowOffset = CGSizeMake(0, 4);
+        containerView.layer.shadowRadius = 7;
+        containerView.layer.shouldRasterize = true;
+        containerView.layer.rasterizationScale = [UIScreen mainScreen].scale;
+        
+        containerView.translatesAutoresizingMaskIntoConstraints = NO;
+        [view addSubview:containerView];
+        [NSLayoutConstraint activateConstraints:@[
+            [containerView.topAnchor constraintEqualToAnchor:view.topAnchor],
+            [containerView.leftAnchor constraintEqualToAnchor:view.leftAnchor],
+            [containerView.bottomAnchor constraintEqualToAnchor:view.bottomAnchor],
+            [containerView.rightAnchor constraintEqualToAnchor:view.rightAnchor]
+        ]];
+    }
+}
+
 - (instancetype) initWithHudViewController:(OAMapHudViewController *)mapHudViewController
 {
     self = [super init];
@@ -94,7 +118,8 @@
         _bottomPanelController.delegate = self;
         _rightPanelController = [[OAWidgetPanelViewController alloc] init];
         _rightPanelController.delegate = self;
-
+        _mapHudViewController.view.clipsToBounds = NO;
+        
         [mapHudViewController addChildViewController:_topPanelController];
         [mapHudViewController addChildViewController:_leftPanelController];
         [mapHudViewController addChildViewController:_bottomPanelController];
@@ -114,7 +139,6 @@
         _rightPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
 
         [NSLayoutConstraint activateConstraints:@[
-
             [_topPanelController.view.topAnchor constraintEqualToAnchor:mapHudViewController.topWidgetsView.topAnchor constant:0.],
             [_topPanelController.view.leftAnchor constraintEqualToAnchor:mapHudViewController.topWidgetsView.leftAnchor constant:0.],
             [_topPanelController.view.bottomAnchor constraintEqualToAnchor:mapHudViewController.topWidgetsView.bottomAnchor constant:0.],
@@ -134,13 +158,17 @@
             [_rightPanelController.view.leftAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.leftAnchor constant:0],
             [_rightPanelController.view.bottomAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.bottomAnchor constant:0],
             [_rightPanelController.view.rightAnchor constraintEqualToAnchor:mapHudViewController.rightWidgetsView.rightAnchor constant:0]
-
         ]];
 
         [_topPanelController didMoveToParentViewController:mapHudViewController];
         [_leftPanelController didMoveToParentViewController:mapHudViewController];
         [_bottomPanelController didMoveToParentViewController:mapHudViewController];
         [_rightPanelController didMoveToParentViewController:mapHudViewController];
+        
+        [self configureShadowForWidgets:@[mapHudViewController.topWidgetsView,
+                                          mapHudViewController.leftWidgetsView,
+                                          mapHudViewController.rightWidgetsView,
+                                          mapHudViewController.bottomWidgetsView]];
 
         _mapWidgetRegistry = [OAMapWidgetRegistry sharedInstance];
         _expanded = NO;
@@ -336,7 +364,6 @@
         _mapHudViewController.leftWidgetsViewHeightConstraint.constant = 0.;
         _mapHudViewController.leftWidgetsViewWidthConstraint.constant = 0.;
     }
-    _mapHudViewController.leftWidgetsViewTopConstraint.constant = [OAUtilities isLandscapeIpadAware] ? -_mapHudViewController.topWidgetsViewHeightConstraint.constant : 0.;
 
     _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = hasBottomWidgets ? [_bottomPanelController calculateContentSize].height : 0.;
 
@@ -352,7 +379,20 @@
         _mapHudViewController.rightWidgetsViewHeightConstraint.constant = 0.;
         _mapHudViewController.rightWidgetsViewWidthConstraint.constant = 0.;
     }
-    _mapHudViewController.rightWidgetsViewTopConstraint.constant = [OAUtilities isLandscapeIpadAware] ? -_mapHudViewController.topWidgetsViewHeightConstraint.constant : 0.;
+    CGFloat leftRightWidgetsViewTopConstraintConstant = hasTopWidgets ? 1 : 0;
+    if ([OAUtilities isLandscapeIpadAware])
+    {
+        if (hasLeftWidgets)
+        {
+            leftRightWidgetsViewTopConstraintConstant = _mapHudViewController.topWidgetsViewHeightConstraint.constant > 0 ? -_mapHudViewController.topWidgetsViewHeightConstraint.constant : 10;
+        } else
+        {
+            leftRightWidgetsViewTopConstraintConstant = -_mapHudViewController.topWidgetsViewHeightConstraint.constant + 16;
+        }
+    }
+    
+    _mapHudViewController.leftWidgetsViewTopConstraint.constant =
+    _mapHudViewController.rightWidgetsViewTopConstraint.constant = leftRightWidgetsViewTopConstraintConstant;
 
     if (_downloadMapWidget && _downloadMapWidget.superview && !_downloadMapWidget.hidden)
     {

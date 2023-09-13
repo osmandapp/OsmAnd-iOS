@@ -84,9 +84,42 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
 
     // MARK: Selectors
 
+    override func onGestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer!) -> Bool {
+        if (gestureRecognizer == self.navigationController?.interactivePopGestureRecognizer) {
+            if editMode, tableData.hasChanged {
+                showUnsavedChangesAlert(shouldDismiss: true)
+                return false
+            }
+        }
+        return true
+    }
+
+    private func showUnsavedChangesAlert(shouldDismiss: Bool) {
+        let alert: UIAlertController = UIAlertController.init(title: localizedString("unsaved_changes"),
+                                                              message: localizedString("unsaved_changes_will_be_lost_discard"),
+                                                              preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_discard"), style: .destructive) { [weak self] _ in
+            guard let self = self else { return }
+            self.editMode = false
+            if (shouldDismiss) {
+                self.dismiss()
+            }
+        })
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        let popPresenter = alert.popoverPresentationController
+        popPresenter?.barButtonItem = self.getLeftNavbarButton();
+        popPresenter?.permittedArrowDirections = UIPopoverArrowDirection.any;
+
+        self.present(alert, animated: true)
+    }
+
     override func onLeftNavbarButtonPressed() {
         if editMode {
-            editMode = false
+            if tableData.hasChanged {
+                showUnsavedChangesAlert(shouldDismiss: false)
+            } else {
+                self.editMode = false
+            }
             return
         }
         super.onLeftNavbarButtonPressed()
@@ -131,6 +164,7 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
                 }
             } else {
                 reorderWidgets()
+                updateUI(true)
             }
         }
     }
@@ -178,6 +212,7 @@ extension WidgetsListViewController {
     override func generateData() {
         tableData.clearAllData()
         updateEnabledWidgets()
+        tableData.resetChanges()
     }
 
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
@@ -247,14 +282,14 @@ extension WidgetsListViewController {
         let item = tableData.item(for: indexPath)
         let isFirstPageCell = item.key == kPageKey && indexPath.section == 0
         let isNoWidgetsCell = item.key == kNoWidgetsKey
-        return !isNoWidgetsCell && !isFirstPageCell
+        return editMode && !isNoWidgetsCell && !isFirstPageCell
     }
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let item = tableData.item(for: indexPath)
         let isFirstPageCell = item.key == kPageKey && indexPath.section == 0
         let isNoWidgetsCell = item.key == kNoWidgetsKey
-        return !isNoWidgetsCell && !isFirstPageCell
+        return editMode && !isNoWidgetsCell && !isFirstPageCell
     }
 
     // TODO: delete section reorder logic is in ReorderWidgetsAdapter, ReorderWidgetsAdapterHelper in Android
@@ -332,6 +367,7 @@ extension WidgetsListViewController {
             else if let widgetInfo = item.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo {
                 tableData.removeRow(at: indexPath)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
+                widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: NSNumber(value: false), recreateControls: true)
                 if !editMode {
                     reorderWidgets()
                 }
@@ -343,20 +379,24 @@ extension WidgetsListViewController {
     override func tableView(_ tableView: UITableView,
                             targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
                             toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        var res = proposedDestinationIndexPath
         let isSourcePageCell = tableData.item(for: sourceIndexPath).key == kPageKey
         let isProposedPageCell = tableData.sectionCount() > proposedDestinationIndexPath.section
             ? tableData.item(for: proposedDestinationIndexPath).key == kPageKey
             : false
 
         if isSourcePageCell, proposedDestinationIndexPath.section > sourceIndexPath.section {
-            return IndexPath(row: Int(tableData.rowCount(UInt(sourceIndexPath.section))) - 1, section: sourceIndexPath.section)
+            res = IndexPath(row: Int(tableData.rowCount(UInt(sourceIndexPath.section))) - 1, section: sourceIndexPath.section)
         } else if isSourcePageCell, proposedDestinationIndexPath.section < sourceIndexPath.section {
-            return IndexPath(row: isProposedPageCell || proposedDestinationIndexPath.section < sourceIndexPath.section - 1 ? 1 : proposedDestinationIndexPath.row,
+            res = IndexPath(row: isProposedPageCell || proposedDestinationIndexPath.section < sourceIndexPath.section - 1 ? 1 : proposedDestinationIndexPath.row,
                              section: sourceIndexPath.section - 1)
         } else if !isSourcePageCell, isProposedPageCell {
-            return IndexPath(row: 1, section: proposedDestinationIndexPath.section)
+            res = IndexPath(row: 1, section: proposedDestinationIndexPath.section)
+        } else if !isSourcePageCell, !isProposedPageCell, tableData.sectionCount() <= proposedDestinationIndexPath.section {
+            let lastSection = tableData.sectionCount() - 1;
+            res = IndexPath(row: Int(tableData.rowCount(lastSection)) - 1, section: Int(lastSection))
         }
-        return proposedDestinationIndexPath
+        return res
     }
 
     private func updateEnabledWidgets() {

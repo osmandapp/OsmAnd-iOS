@@ -50,6 +50,7 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 - (NSString *)getTitle;
 - (NSString *)getSubtitle;
 - (NSString *)getLeftNavbarButtonTitle;
+- (UIBarButtonItem *)getLeftNavbarButton;
 - (UIImage *)getCustomIconForLeftNavbarButton;
 - (NSString *)getCustomAccessibilityForLeftNavbarButton;
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons;
@@ -81,6 +82,7 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 - (void)onRightNavbarButtonPressed;
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView;
 - (void)onRotation;
+- (BOOL)onGestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer;
 
 // Use to refresh button appearance
 - (void)setupNavbarButtons;

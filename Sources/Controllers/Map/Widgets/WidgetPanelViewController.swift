@@ -69,7 +69,6 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         dayNightObserver = OAAutoObserverProxy(self, withHandler: #selector(onDayNightModeChanged), andObserve: OsmAndApp.swiftInstance().dayNightModeObservable)
         
         setupViews()
@@ -222,8 +221,8 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
                 }
             }
         }
-        self.view.isHidden = !hasWidgets()
-        self.view.layoutIfNeeded()
+        view.isHidden = !hasWidgets()
+        view.layoutIfNeeded()
     }
     
     @objc private func onDayNightModeChanged() {

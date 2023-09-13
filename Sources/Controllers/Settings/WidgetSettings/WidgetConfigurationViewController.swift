@@ -64,10 +64,12 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             }
             if let cell {
                 let pref = item.obj(forKey: "pref") as! OACommonBoolean
+                let hasIcon = item.iconName != nil
                 cell.titleLabel.text = item.title
                 cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
                 let selected = pref.get(selectedAppMode)
                 cell.switchView.isOn = selected
+                cell.leftIconVisibility(hasIcon)
                 cell.leftIconView.image = UIImage.templateImageNamed(selected ? item.iconName : item.string(forKey: "hide_icon"))
                 cell.leftIconView.tintColor = UIColor(rgb: selected ? Int(selectedAppMode.getIconColor()) : Int(color_tint_gray))
 

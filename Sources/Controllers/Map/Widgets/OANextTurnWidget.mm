@@ -45,7 +45,19 @@
 
 - (instancetype) initWithHorisontalMini:(BOOL)horisontalMini nextNext:(BOOL)nextNext
 {
-    self = [super initWithType:horisontalMini ? OAWidgetType.smallNextTurn : OAWidgetType.nextTurn];
+    OAWidgetType *type;
+    if (horisontalMini)
+    {
+        if (nextNext)
+            type = OAWidgetType.secondNextTurn;
+        else
+            type = OAWidgetType.smallNextTurn;
+    }
+    else
+    {
+        type = OAWidgetType.nextTurn;
+    }
+    self = [super initWithType:type];
     if (self)
     {
         _topView = [[UIView alloc] initWithFrame:CGRectMake(11., 6., kTopViewSide, kTopViewSide)];

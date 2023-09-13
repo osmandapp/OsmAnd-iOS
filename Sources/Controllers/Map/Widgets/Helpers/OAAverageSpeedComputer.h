@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype) sharedInstance;
 
++ (NSArray<NSNumber *> *) MEASURED_INTERVALS;
 + (long) DEFAULT_INTERVAL_MILLIS;
 + (NSArray<NSNumber *> *) MEASURED_INTERVALS;
 

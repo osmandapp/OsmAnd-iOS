@@ -6,14 +6,12 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 extension CALayer {
+    
     @objc func addWidgetLayerDecorator(mask: CACornerMask) {
         borderWidth = 2
         cornerRadius = 7
-        masksToBounds = true
-        borderColor =  UIColor.lightGray.cgColor
+        borderColor = UIColor.lightGray.cgColor
         maskedCorners = mask
     }
 }

@@ -133,18 +133,11 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 vc.delegate = self
                 let section = vc.tableData.createNewSection()
                 section.addRows(possibleValues)
+                section.footerText = (item.obj(forKey: "footer") as? String) ?? ""
                 vc.appMode = selectedAppMode
                 vc.screenTitle = item.descr
-                let navigationController = UINavigationController()
-                navigationController.setViewControllers([vc], animated: true)
-                navigationController.modalPresentationStyle = .pageSheet
-                let sheet = navigationController.sheetPresentationController
-                if let sheet
-                {
-                    sheet.detents = [.medium(), .large()]
-                    sheet.preferredCornerRadius = 20
-                }
-                self.present(navigationController, animated: true)
+                vc.pref = item.obj(forKey: "pref") as? OACommonPreference
+                showMediumSheetViewController(vc, isLargeAvailable: false)
             }
         }
     }
@@ -155,6 +148,11 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     }
     
     func onWidgetStateChanged() {
+        if widgetInfo.key == WidgetType.markersTopBar.id || widgetInfo.key.hasPrefix(WidgetType.markersTopBar.id + MapWidgetInfo.DELIMITER) {
+            OsmAndApp.swiftInstance().data.destinationsChangeObservable.notifyEvent()
+        } else if widgetInfo.key == WidgetType.radiusRuler.id || widgetInfo.key.hasPrefix(WidgetType.radiusRuler.id + MapWidgetInfo.DELIMITER) {
+            (widgetInfo.widget as? RulerDistanceWidget)?.updateRulerObservable.notifyEvent()
+        }
         generateData()
         tableView.reloadData()
     }

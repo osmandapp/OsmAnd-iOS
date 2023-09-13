@@ -26,6 +26,8 @@
 #import "OAAutoObserverProxy.h"
 #import "OALocationConvert.h"
 #import "OAWidgetsVisibilityHelper.h"
+#import "OADistanceAndDirectionsUpdater.h"
+#import "OAHistoryViewController.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -73,12 +75,18 @@
 #import "OAOsmAccountSettingsViewController.h"
 #import "OAOsmLoginMainViewController.h"
 #import "OACopyProfileBottomSheetViewControler.h"
+#import "OADirectionAppearanceViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OASimpleTableViewCell.h"
 #import "OALargeImageTitleDescrTableViewCell.h"
+#import "OADirectionTableViewCell.h"
+#import "OASegmentSliderTableViewCell.h"
+
+// Views
+#import "OASegmentedSlider.h"
 
 // Apple
 #import <SafariServices/SafariServices.h>

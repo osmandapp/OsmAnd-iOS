@@ -16,7 +16,7 @@
 
 @interface OADestinationsHelper : NSObject
 
-@property (nonatomic, readonly) NSMutableArray *sortedDestinations;
+@property (nonatomic, readonly) NSMutableArray<OADestination *> *sortedDestinations;
 @property (nonatomic, readonly) OADestination *dynamic2ndRowDestination;
 
 + (OADestinationsHelper *) instance;
@@ -32,7 +32,7 @@
 - (UIColor *) generateColorForDestination:(OADestination *)destination;
 - (UIColor *) addDestinationWithNewColor:(OADestination *)destination;
 
-- (NSArray *) sortedDestinationsWithoutParking;
+- (NSArray<OADestination *> *) sortedDestinationsWithoutParking;
 
 - (NSInteger) pureDestinationsCount;
 

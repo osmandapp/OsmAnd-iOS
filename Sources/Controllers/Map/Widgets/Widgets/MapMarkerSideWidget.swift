@@ -17,12 +17,13 @@ class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
     private var mapMarkersHelper: OADestinationsHelper = OADestinationsHelper.instance()!
     private var widgetState: MapMarkerSideWidgetState
     private var markerModePref: OACommonString
+    private var averageSpeedIntervalPref: OACommonLong
     private var markerClickBehaviourPref: OACommonString
     
     private var cachedMode: SideMarkerMode?
     private var cachedMeters: Int = 0
     private var lastUpdatedTime: TimeInterval = 0
-    private var cachedMarkerColorIndex: Int = -1
+    private var cachedMarkerColor: UIColor?
     private var cachedNightMode: Bool = false
     
     private var customLatLon: CLLocation?
@@ -34,8 +35,9 @@ class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
         self.widgetType = widgetState.isFirstMarker() ? WidgetType.sideMarker1 : WidgetType.sideMarker2
         self.widgetState = widgetState
         self.markerModePref = widgetState.mapMarkerModePref
+        self.averageSpeedIntervalPref = widgetState.averageSpeedIntervalPref
         self.markerClickBehaviourPref = widgetState.markerClickBehaviourPref
-        self.cachedNightMode = self.nightMode
+        self.cachedNightMode = isNightMode()
         self.cachedMode = SideMarkerMode.markerModeByName(markerModePref.get())
         
         setText(nil, subtext: nil)
@@ -53,6 +55,7 @@ class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
         let widgetState = MapMarkerSideWidgetState(customId: "", firstMarker: true)
         self.widgetState = widgetState
         self.markerModePref = widgetState.mapMarkerModePref
+        self.averageSpeedIntervalPref = widgetState.averageSpeedIntervalPref
         self.markerClickBehaviourPref = widgetState.markerClickBehaviourPref
         super.init(frame: frame)
     }
@@ -142,18 +145,15 @@ class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
     }
     
     private func updateIconIfNeeded(marker: OADestination, newMode: SideMarkerMode, modeChanged: Bool) {
-//        let colorIndex = marker.color
-//        let colorChanged = colorIndex != -1 && (colorIndex != cachedMarkerColorIndex || cachedNightMode != isNightMode())
-//
-//        if colorChanged || modeChanged {
-//            cachedMarkerColorIndex = colorIndex
-//            cachedNightMode = isNightMode()
-//
-//            let backgroundIconId = widgetState.getSettingsIconId(isNightMode: cachedNightMode)
-//            let foregroundColorId = MapMarker.getColorId(colorIndex: colorIndex)
-//            let drawable = iconsCache.getLayeredIcon(backgroundIconId: backgroundIconId, foregroundIconId: newMode.foregroundIconId, secondForegroundIconId: 0, foregroundColorId: foregroundColorId)
-//            setImageDrawable(drawable)
-//        }
+        let colorChanged = marker.color != cachedMarkerColor || cachedNightMode != isNightMode()
+        if colorChanged || modeChanged {
+            let iconName = isNight() ? newMode.dayIconName : newMode.nightIconName
+            cachedMarkerColor = marker.color
+            cachedNightMode = isNightMode()
+            if let cachedMarkerColor = cachedMarkerColor {
+                setImage(UIImage.templateImageNamed(iconName), with: cachedMarkerColor)
+            }
+        }
     }
     
     func getDistance() -> Int {
@@ -166,8 +166,8 @@ class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
     }
     
     private func getPointToNavigate() -> CLLocation? {
-        let markers = mapMarkersHelper.sortedDestinationsWithoutParking() as? [OADestination] ?? [OADestination]()
-        if markers.count > 0 {
+        let destinatoins = mapMarkersHelper.sortedDestinationsWithoutParking()
+        if let markers = destinatoins, !markers.isEmpty {
             var marker: OADestination?
             if widgetState.isFirstMarker() {
                 marker = markers[0]
@@ -182,8 +182,8 @@ class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
     }
     
     private func getMarker() -> OADestination? {
-        let markers = mapMarkersHelper.sortedDestinationsWithoutParking() as? [OADestination] ?? [OADestination]()
-        if (!markers.isEmpty) {
+        let destinatoins = mapMarkersHelper.sortedDestinationsWithoutParking()
+        if let markers = destinatoins, !markers.isEmpty {
             if (widgetState.isFirstMarker()) {
                 return markers[0]
             } else if (markers.count > 1) {
@@ -196,4 +196,90 @@ class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
     override func isMetricSystemDepended() -> Bool {
         return true
     }
+
+    override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
+        let data = OATableDataModel()
+        let section = data.createNewSection()
+        section.headerText = localizedString("shared_string_settings")
+
+        let showRow = section.createNewRow()
+        showRow.cellType = OAValueTableViewCell.getIdentifier()
+        showRow.key = "value_pref"
+        showRow.title = localizedString("recording_context_menu_show")
+        showRow.descr = localizedString("recording_context_menu_show")
+        showRow.iconName = markerModePref.get(appMode) == SideMarkerMode.distance.name ? "widget_marker_day" : "widget_marker_eta_day"
+        showRow.setObj(markerModePref, forKey: "pref")
+        showRow.setObj(getModeTitle(markerModePref, appMode), forKey: "value")
+        showRow.setObj(getPossibleValues(markerModePref, appMode), forKey: "possible_values")
+
+        if markerModePref.get(appMode) == SideMarkerMode.estimatedArrivalTime.name {
+            let intervalRow = section.createNewRow()
+            intervalRow.cellType = OAValueTableViewCell.getIdentifier()
+            intervalRow.key = "value_pref"
+            intervalRow.title = localizedString("shared_string_interval")
+            intervalRow.descr = localizedString("shared_string_interval")
+            intervalRow.iconName = "ic_small_time_interval"
+            intervalRow.setObj(averageSpeedIntervalPref, forKey: "pref")
+            intervalRow.setObj(getModeTitle(averageSpeedIntervalPref, appMode), forKey: "value")
+            intervalRow.setObj(getPossibleValues(averageSpeedIntervalPref, appMode), forKey: "possible_values")
+            intervalRow.setObj(localizedString("map_marker_interval_dialog_desc"), forKey: "footer")
+        }
+
+        let clickRow = section.createNewRow()
+        clickRow.cellType = OAValueTableViewCell.getIdentifier()
+        clickRow.key = "value_pref"
+        clickRow.title = localizedString("click_on_widget")
+        clickRow.descr = localizedString("click_on_widget")
+        clickRow.iconName = "ic_custom_quick_action"
+        clickRow.setObj(markerClickBehaviourPref, forKey: "pref")
+        clickRow.setObj(getModeTitle(markerClickBehaviourPref, appMode), forKey: "value")
+        clickRow.setObj(getPossibleValues(markerClickBehaviourPref, appMode), forKey: "possible_values")
+
+        return data
+    }
+    
+    private func getPossibleValues(_ pref: OACommonPreference, _ appMode: OAApplicationMode) -> [OATableRowData] {
+        var rows = [OATableRowData]()
+        if pref.key == "first_map_marker_mode" || pref.key == "second_map_marker_mode" {
+            for mode in SideMarkerMode.values {
+                let row = OATableRowData()
+                row.cellType = OASimpleTableViewCell.getIdentifier()
+                row.setObj(mode.name, forKey: "value")
+                row.title = mode.title
+                rows.append(row)
+            }
+        } else if pref.key == "first_map_marker_click_behaviour" || pref.key == "second_map_marker_click_behaviour" {
+            for mode in MarkerClickBehaviour.values {
+                let row = OATableRowData()
+                row.cellType = OASimpleTableViewCell.getIdentifier()
+                row.setObj(mode.name, forKey: "value")
+                row.title = mode.title
+                rows.append(row)
+            }
+        } else if pref.key == "first_map_marker_interval" || pref.key == "second_map_marker_interval" {
+            let valuesRow = OATableRowData()
+            valuesRow.key = "values"
+            valuesRow.cellType = OASegmentSliderTableViewCell.getIdentifier()
+            valuesRow.title = localizedString("shared_string_interval")
+            valuesRow.setObj(MapMarkerSideWidgetState.availableIntervals, forKey: "values")
+            rows.append(valuesRow)
+        }
+        return rows
+    }
+
+    private func getModeTitle(_ pref: OACommonPreference, _ appMode: OAApplicationMode) -> String {
+        if let prefStr = pref as? OACommonString {
+            if prefStr.key == "first_map_marker_mode" || prefStr.key == "second_map_marker_mode" {
+                return SideMarkerMode.markerModeByName(prefStr.get(appMode))?.title ?? ""
+            } else if prefStr.key == "first_map_marker_click_behaviour" || prefStr.key == "second_map_marker_click_behaviour" {
+                return MarkerClickBehaviour.behaviorByName(prefStr.get(appMode))?.title ?? ""
+            }
+        } else if let prefLong = pref as? OACommonLong {
+            if prefLong.key == "first_map_marker_interval" || prefLong.key == "second_map_marker_interval" {
+                return MapMarkerSideWidgetState.availableIntervals[Int64(prefLong.get(appMode))] ?? ""
+            }
+        }
+        return ""
+    }
+
 }

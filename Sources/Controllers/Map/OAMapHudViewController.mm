@@ -29,7 +29,6 @@
 #import "OAWeatherToolbar.h"
 #import "Localization.h"
 #import "OAProfileGeneralSettingsParametersViewController.h"
-#import "OADestinationCardsViewController.h"
 #import "OAReverseGeocoder.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -1267,7 +1266,7 @@
         _mapModeButton.alpha = mapModeButtonVisible ? 1. : 0.;
         BOOL driveModeButtonVisible = visible;
         _driveModeButton.alpha = driveModeButtonVisible ? 1. : 0.;
-        _rulerLabel.alpha = (self.contextMenuMode && !isScrollableHudVisible) || isAllHidden || isDashboardVisible || [[OADestinationCardsViewController sharedInstance] isVisible] ? 0. : 1.;
+        _rulerLabel.alpha = (self.contextMenuMode && !isScrollableHudVisible) || isAllHidden || isDashboardVisible ? 0. : 1.;
 
         if (self.mapInfoController.bottomPanelController)
             self.mapInfoController.bottomPanelController.view.alpha = visible && isBottomPanelVisible && (!isToolbarVisible || isAllowToolbarsVisible) ? 1. : 0.;

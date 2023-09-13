@@ -398,7 +398,7 @@
         _btnClose.tintColor = UIColorFromRGB(0x5081a6);
         [_btnClose setTitle:@"" forState:UIControlStateNormal];
         [_btnClose setImage:[UIImage imageNamed:@"ic_arrow_open"] forState:UIControlStateNormal];
-        [_btnClose addTarget:self action:@selector(openHideDestinationsView:) forControlEvents:UIControlEventTouchUpInside];
+        [_btnClose addTarget:self action:@selector(openDestinationViewController:) forControlEvents:UIControlEventTouchUpInside];
         
         [_contentView addSubview:self.btnClose];
     }
@@ -833,10 +833,10 @@
     [OADestinationsHelper.instance markAsVisited:_destinations[btn.tag]];
 }
 
-- (void) openHideDestinationsView:(id)sender
+- (void) openDestinationViewController:(UIButton *)sender
 {
     if (self.delegate)
-        [self.delegate openHideDestinationCardsView:sender];
+        [self.delegate openDestinationViewController];
 }
 
 @end

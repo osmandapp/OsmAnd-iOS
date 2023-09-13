@@ -420,13 +420,6 @@ extension WidgetsListViewController {
 
 extension WidgetsListViewController {
 
-    //MARK: - Base setup UI
-
-    func setupBottomFonts() {
-        topButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
-        bottomButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
-    }
-
     //MARK: - Base UI
 
     override func getTitle() -> String! {

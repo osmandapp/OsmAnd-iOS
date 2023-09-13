@@ -63,7 +63,7 @@ class TimeToNavigationPointWidget: OATextInfoWidget {
         return widgetState
     }
     
-    override func getSettingsData(_ appMode: OAApplicationMode!) -> OATableDataModel? {
+    override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
         let data = OATableDataModel()
         let section = data.createNewSection()
         section.headerText = localizedString("shared_string_settings")
@@ -72,6 +72,7 @@ class TimeToNavigationPointWidget: OATextInfoWidget {
         settingRow.key = "value_pref"
         settingRow.title = widgetType!.title
         settingRow.descr = widgetType!.title
+        settingRow.setObj(arrivalTimeOtherwiseTimeToGoPref, forKey: "pref")
         settingRow.setObj(widgetState!.getPrefValue(), forKey: "value")
         settingRow.setObj(getPossibleValues(), forKey: "possible_values")
         return data
@@ -85,7 +86,6 @@ class TimeToNavigationPointWidget: OATextInfoWidget {
             let pointState = TimeToNavigationPointState.getState(intermediate: isIntermediate, arrivalOtherwiseTimeToGo: !timeToGo)
             let row = OATableRowData()
             row.cellType = OASimpleTableViewCell.getIdentifier()
-            row.setObj(arrivalTimeOtherwiseTimeToGoPref, forKey: "pref")
             row.setObj(timeToGo ? "false" : "true", forKey: "value")
             row.title = pointState.title
             row.iconName = pointState.dayIconName

@@ -11,7 +11,6 @@
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OAUtilities.h"
-#import "OADestinationCardsViewController.h"
 #import "OADestinationsHelper.h"
 
 #import <OsmAndCore.h>
@@ -196,7 +195,7 @@
         _btnClose.tintColor = UIColorFromRGB(0x5081a6);
         [_btnClose setTitle:@"" forState:UIControlStateNormal];
         [_btnClose setImage:[UIImage imageNamed:@"ic_arrow_open"] forState:UIControlStateNormal];
-        [_btnClose addTarget:self action:@selector(openHideDestinationsView:) forControlEvents:UIControlEventTouchUpInside];
+        [_btnClose addTarget:self action:@selector(openDestinationViewController:) forControlEvents:UIControlEventTouchUpInside];
         
         if (self.btnClose)
             [_contentView addSubview:self.btnClose];
@@ -509,29 +508,10 @@
     imageView.transform = CGAffineTransformMakeRotation(direction);
 }
 
-- (void) openHideDestinationsView:(id)sender
+- (void) openDestinationViewController:(UIButton *)sender
 {
     if (self.delegate)
-        [_delegate openHideDestinationCardsView:sender];
-}
-
-- (void) updateCloseButton
-{
-    if (!self.btnClose)
-        return;
-    
-    BOOL cardsVisible = [OADestinationCardsViewController sharedInstance].isVisible;
-    
-    if (!cardsVisible)
-    {
-        [self.btnClose setImage:[UIImage imageNamed:@"ic_arrow_open"] forState:UIControlStateNormal];
-        self.btnClose.tintColor = UIColorFromRGB(0x5081a6);
-    }
-    else
-    {
-        [self.btnClose setImage:[UIImage imageNamed:@"ic_arrow_close"] forState:UIControlStateNormal];
-        self.btnClose.tintColor = UIColorFromRGB(0xffffff);
-    }
+        [self.delegate openDestinationViewController];
 }
 
 - (void) buttonOKClicked

@@ -14,22 +14,19 @@
 #import "OAMapWidgetRegInfo.h"
 #import "OAMapWidgetRegistry.h"
 #import "OAMapPanelViewController.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
 
 #include "Localization.h"
 #include "OAColors.h"
 
-#define kActiveMarkers @"activeMarkers"
-#define kOneActiveMarker @"oneActiveMarker"
-#define kTwoActiveMarkers @"twoActiveMarkers"
 #define kArrowsOnMap @"arrows"
 #define kLinesOnMap @"lines"
 
 @implementation OADirectionAppearanceViewController
 {
-    NSDictionary *_data;
     OAAppSettings *_settings;
-    OAMapWidgetRegistry *_mapWidgetRegistry;
-    OAMapPanelViewController *_mapPanel;
 }
 
 #pragma mark - Initialization
@@ -37,8 +34,6 @@
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
-    _mapWidgetRegistry = [OAMapWidgetRegistry sharedInstance];
-    _mapPanel = [OARootViewController instance].mapPanel;
 }
 
 #pragma mark - UIViewColontroller
@@ -46,9 +41,10 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    [_mapPanel recreateControls];
-    [_mapPanel refreshMap:YES];
+
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    [mapPanel recreateControls];
+    [mapPanel refreshMap:YES];
 }
 
 #pragma mark - Base UI
@@ -67,132 +63,27 @@
 
 - (void)generateData
 {
-    _data = [NSMutableDictionary dictionary];
-    
-    NSMutableArray *activeMarkersArr = [NSMutableArray array];
-    NSMutableArray *appearanceOnMapArr = [NSMutableArray array];
-
-    [activeMarkersArr addObject:@{
-                        @"type" : [OASettingsCheckmarkCell getCellIdentifier],
-                        @"section" : kActiveMarkers,
-                        @"key" : kOneActiveMarker,
-                        @"title" : OALocalizedString(@"shared_string_one"),
-                        @"img" : [self drawDeviceImage:@"ic_custom_direction_topbar_one" bgColor:UIColorFromRGB(color_chart_orange)],
-                        @"img_inactive" : [self drawDeviceImage:@"ic_custom_direction_topbar_one" bgColor:UIColorFromRGB(color_tint_gray)]
-                        }];
-    
-    [activeMarkersArr addObject:@{
-                        @"type" : [OASettingsCheckmarkCell getCellIdentifier],
-                        @"section" : kActiveMarkers,
-                        @"key" : kTwoActiveMarkers,
-                        @"title" : OALocalizedString(@"shared_string_two"),
-                        @"img" : [self drawDeviceImage:@"ic_custom_direction_topbar_two" bgColor:UIColorFromRGB(color_chart_orange)],
-                        @"img_inactive" : [self drawDeviceImage:@"ic_custom_direction_topbar_two"  bgColor:UIColorFromRGB(color_tint_gray)]
-                        }];
-   
-    [appearanceOnMapArr addObject:@{
-                        @"type" : [OASwitchTableViewCell getCellIdentifier],
-                        @"key" : kArrowsOnMap,
-                        @"value" : @([_settings.arrowsOnMap get]),
-                        @"title" : OALocalizedString(@"arrows_on_map"),
-                        }];
-    
-    [appearanceOnMapArr addObject:@{
-                        @"type" : [OASwitchTableViewCell getCellIdentifier],
-                        @"key" : kLinesOnMap,
-                        @"value" : @([_settings.directionLines get]),
-                        @"title" : OALocalizedString(@"direction_lines"),
-                        }];
- 
-    _data = @{ @"appearanceOnMap" : appearanceOnMapArr,
-               @"activeMarkers" : activeMarkersArr
-            };
-}
-
-- (UIImage *)drawDeviceImage:(NSString *)fgImage bgColor:(UIColor *)bgColor
- {
-     UIImage *fgImg = [UIImage templateImageNamed:fgImage];
-     UIImage *bgImg = [UIImage templateImageNamed:@"ic_custom_direction_device"];
-     UIColor *fgColor = UIColorFromRGB(color_primary_purple);
-     UIGraphicsBeginImageContextWithOptions(bgImg.size, NO, 0.0);
-     
-     [bgColor setFill];
-     [bgImg drawInRect:CGRectMake(0.0, 0.0, bgImg.size.width, bgImg.size.height)];
-     [fgColor setFill];
-     [fgImg drawInRect:CGRectMake(0.0, 0.0, fgImg.size.width, fgImg.size.height)];
-     
-     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-     UIGraphicsEndImageContext();
-     return newImage;
- }
-
-- (NSString *)getTitleForHeader:(NSInteger)section
-{
-    switch (section)
-    {
-        case 0:
-            return OALocalizedString(@"active_markers");
-        case 1:
-            return OALocalizedString(@"appearance_on_the_map");
-        default:
-            return @"";
-    }
-}
-
-- (NSString *)getTitleForFooter:(NSInteger)section
-{
-    switch (section)
-    {
-        case 0:
-            return OALocalizedString(@"specify_number_of_dir_indicators");
-        case 1:
-            return OALocalizedString(@"arrows_direction_to_markers");
-        default:
-            return @"";
-    }
-}
-
-- (NSInteger)sectionsCount
-{
-    return _data.count;
-}
-
-- (NSInteger)rowsCount:(NSInteger)section
-{
-    return [_data[_data.allKeys[section]] count];
+    OATableSectionData *section = [self.tableData createNewSection];
+    section.headerText = OALocalizedString(@"appearance_on_the_map");
+    section.footerText = OALocalizedString(@"arrows_direction_to_markers");
+    [section addRowFromDictionary:@{
+        kCellKeyKey : kArrowsOnMap,
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"arrows_on_map"),
+        @"isOn" : @([_settings.arrowsOnMap get])
+    }];
+    [section addRowFromDictionary:@{
+        kCellKeyKey : kLinesOnMap,
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"direction_lines"),
+        @"isOn" : @([_settings.directionLines get])
+    }];
 }
 
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[_data.allKeys[indexPath.section]][indexPath.row];
-    
-    if ([item[@"type"] isEqualToString:[OASettingsCheckmarkCell getCellIdentifier]])
-    {
-        OASettingsCheckmarkCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsCheckmarkCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsCheckmarkCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsCheckmarkCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 50.0, 0.0, 0.0);
-        }
-        NSString *key = item[@"key"];
-        EOAActiveMarkerConstant activeMarkers = [_settings.activeMarkers get];
-        BOOL selected = NO;
-        if ([key isEqualToString:kOneActiveMarker])
-        {
-            selected = activeMarkers == ONE_ACTIVE_MARKER;
-            cell.iconImageView.image = selected ? [item[@"img"] imageFlippedForRightToLeftLayoutDirection] : [item[@"img_inactive"] imageFlippedForRightToLeftLayoutDirection];
-        }
-        else if ([key isEqualToString:kTwoActiveMarkers])
-        {
-            selected = activeMarkers == TWO_ACTIVE_MARKERS;
-            cell.iconImageView.image = selected ? [item[@"img"] imageFlippedForRightToLeftLayoutDirection] : [item[@"img_inactive"] imageFlippedForRightToLeftLayoutDirection];
-        }
-        cell.titleLabel.text = item[@"title"];
-        cell.checkmarkImageView.hidden = !selected;
-        return cell;
-    }
-    else
+    OATableRowData *item = [self.tableData itemForIndexPath:indexPath];
+    if ([item.cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
         OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
@@ -202,50 +93,35 @@
             [cell descriptionVisibility:NO];
             [cell leftIconVisibility:NO];
         }
-        cell.titleLabel.text = item[@"title"];
-        [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-        if ([item[@"key"] isEqualToString:kArrowsOnMap])
+        if (cell)
         {
-            [cell.switchView setOn:[_settings.arrowsOnMap get]];
-            [cell.switchView addTarget:self action:@selector(showArrowsOnMap:) forControlEvents:UIControlEventValueChanged];
-        }
-        else if ([item[@"key"] isEqualToString:kLinesOnMap])
-        {
-            [cell.switchView setOn:[_settings.directionLines get]];
-            [cell.switchView addTarget:self action:@selector(showLinesOnMap:) forControlEvents:UIControlEventValueChanged];
+            cell.titleLabel.text = item.title;
+            cell.switchView.on = [item boolForKey:@"isOn"];
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
     }
-}
-
-- (void)onRowSelected:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[_data.allKeys[indexPath.section]][indexPath.row];
-
-    if ([item[@"section"] isEqualToString:@"activeMarkers"])
-    {
-        if (indexPath.row == 0)
-            [_settings.activeMarkers set:ONE_ACTIVE_MARKER];
-        else
-            [_settings.activeMarkers set:TWO_ACTIVE_MARKERS];
-    }
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0],
-                                             [NSIndexPath indexPathForRow:1 inSection:0]]
-                          withRowAnimation:UITableViewRowAnimationFade];
+    return nil;
 }
 
 #pragma mark - Selectors
 
-- (void)showArrowsOnMap:(UISwitch *)sender
+- (void)onSwitchPressed:(UISwitch *)sender
 {
-    if (sender)
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
+    OATableRowData *item = [self.tableData itemForIndexPath:indexPath];
+    if ([item.key isEqualToString:kArrowsOnMap])
+    {
         [_settings.arrowsOnMap set:sender.isOn];
-}
-
-- (void)showLinesOnMap:(UISwitch *)sender
-{
-    if (sender)
+        [item setObj:@(sender.on) forKey:@"isOn"];
+    }
+    else if ([item.key isEqualToString:kLinesOnMap])
+    {
         [_settings.directionLines set:sender.isOn];
+        [item setObj:@(sender.on) forKey:@"isOn"];
+    }
 }
 
 @end

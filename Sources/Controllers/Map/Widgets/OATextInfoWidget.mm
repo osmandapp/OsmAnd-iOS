@@ -145,6 +145,12 @@
     [_imageView setImage:image];
 }
 
+- (void) setImage:(UIImage *)image withColor:(UIColor *)color
+{
+    [self setImage:image];
+    _imageView.tintColor = color;
+}
+
 - (void) setImageHidden:(BOOL)hidden
 {
     _imageView.hidden = hidden;

@@ -16,9 +16,12 @@
 #import "OAUtilities.h"
 #import "OARootViewController.h"
 #import "OADestinationsHelper.h"
-#import "OADestinationCardsViewController.h"
 #import "OAHistoryHelper.h"
 #import "OAHistoryItem.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
+#import "OAValueTableViewCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OASizes.h"
@@ -259,6 +262,53 @@
         [cell.contentView removeFromSuperview];
         [_destinationCells removeLastObject];
     }
+}
+
+- (OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode
+{
+    OACommonActiveMarkerConstant *pref = _settings.activeMarkers;
+    OATableDataModel *data = [OATableDataModel model];
+    OATableSectionData *section = [data createNewSection];
+    section.headerText = OALocalizedString(@"shared_string_settings");
+    section.footerText = OALocalizedString(@"specify_number_of_dir_indicators_desc");
+
+    OATableRowData *settingRow = [section createNewRow];
+    settingRow.cellType = [OAValueTableViewCell getCellIdentifier];
+    settingRow.key = @"value_pref";
+    settingRow.title = OALocalizedString(@"active_markers");
+    settingRow.descr = OALocalizedString(@"active_markers");
+    [settingRow setObj:pref forKey:@"pref"];
+    [settingRow setObj:[self getTitle:[pref get:appMode]] forKey: @"value"];
+    [settingRow setObj:[self getPossibleValues] forKey: @"possible_values"];
+
+    return data;
+}
+
+- (NSString *)getTitle:(EOAActiveMarkerConstant)amc
+{
+    switch (amc)
+    {
+        case ONE_ACTIVE_MARKER:
+            return OALocalizedString(@"shared_string_one");
+        case TWO_ACTIVE_MARKERS:
+            return OALocalizedString(@"shared_string_two");
+        default:
+            return @"";
+    }
+}
+
+- (NSArray<OATableRowData *> *)getPossibleValues
+{
+    NSMutableArray<OATableRowData *> *res = [NSMutableArray array];
+    for (NSInteger i = ONE_ACTIVE_MARKER; i <= TWO_ACTIVE_MARKERS; i++)
+    {
+        OATableRowData *row = [[OATableRowData alloc] init];
+        row.cellType = OASimpleTableViewCell.getCellIdentifier;
+        [row setObj:@(i) forKey:@"value"];
+        row.title = [self getTitle:(EOAActiveMarkerConstant) i];
+        [res addObject:row];
+    }
+    return res;
 }
 
 - (void) obtainCurrentLocationDirection:(CLLocationCoordinate2D*)location direction:(CLLocationDirection*)direction
@@ -537,26 +587,11 @@
     }
 }
 
-- (void) updateCloseButton
-{
-    for (OADestinationCell *c in _destinationCells)
-        [c updateCloseButton];
-
-    if (_multiCell)
-        [_multiCell updateCloseButton];
-}
-
-- (CGFloat) getHeight
-{
-    NSUInteger extraCellsCount = _destinationCells.count > 0 ? _destinationCells.count - 1 : 0;
-    return [OAUtilities isLandscape] ? 50.0 : 50.0 + 35.0 * extraCellsCount;
-}
-
 #pragma mark - OADestinatioCellProtocol
 
-- (void) openHideDestinationCardsView:(id)sender
+- (void) openDestinationViewController
 {
-    [OARootViewController.instance.mapPanel openHideDestinationCardsView];
+    [OARootViewController.instance.mapPanel openDestinationViewController];
 }
 
 @end

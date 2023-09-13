@@ -137,8 +137,7 @@
 {
     if (_markerDestination.hidden)
         [[OADestinationsHelper instance] showOnMap:_markerDestination];
-    
-    [[OARootViewController instance].mapPanel hideDestinationCardsView];
+
     [[OARootViewController instance].mapPanel openTargetViewWithDestination:_markerDestination];
 }
 

@@ -63,9 +63,7 @@
 
 - (BOOL) gpxModeActive;
 
-- (void) openDestinationCardsView;
-- (void) hideDestinationCardsView;
-- (void) openHideDestinationCardsView;
+- (void) openDestinationViewController;
 
 - (void) swapStartAndFinish;
 
@@ -196,7 +194,7 @@
 - (void) applyTargetPoint:(OATargetPoint *)targetPoint;
 - (void) moveMapToLat:(double)lat lon:(double)lon zoom:(int)zoom withTitle:(NSString *)title;
 
-- (void) showCards;
+- (void) showDestinations;
 
 - (void) showToolbar:(OAToolbarViewController *)toolbarController;
 - (void) hideToolbar:(OAToolbarViewController *)toolbarController;

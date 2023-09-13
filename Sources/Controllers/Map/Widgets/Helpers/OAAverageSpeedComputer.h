@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype) sharedInstance;
 
 + (long) DEFAULT_INTERVAL_MILLIS;
++ (NSArray<NSNumber *> *) MEASURED_INTERVALS;
 
 - (void)updateLocation:(nullable CLLocation *)location;
 - (float)getAverageSpeed:(long)measuredInterval skipLowSpeed:(BOOL)skipLowSpeed;

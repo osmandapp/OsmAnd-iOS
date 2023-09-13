@@ -9,13 +9,6 @@
 #import "OABaseWidgetView.h"
 #import "OADestinationCell.h"
 
-NS_ASSUME_NONNULL_BEGIN
-
 @interface OADestinationBarWidget : OABaseWidgetView<OADestinatioCellProtocol>
 
-- (void) updateCloseButton;
-- (CGFloat) getHeight;
-
 @end
-
-NS_ASSUME_NONNULL_END

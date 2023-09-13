@@ -513,7 +513,7 @@ typedef NS_ENUM(NSInteger, EOATerrainType)
 
 typedef NS_ENUM(NSInteger, EOAActiveMarkerConstant)
 {
-    ONE_ACTIVE_MARKER = 0,
+    ONE_ACTIVE_MARKER = 1,
     TWO_ACTIVE_MARKERS
 };
 

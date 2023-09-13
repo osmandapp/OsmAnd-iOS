@@ -77,7 +77,7 @@
     return self;
 }
 
-- (NSMutableArray *) sortedDestinations
+- (NSMutableArray<OADestination *> *) sortedDestinations
 {
     @synchronized(_syncObj)
     {
@@ -85,7 +85,7 @@
     }
 }
 
-- (NSArray *) sortedDestinationsWithoutParking
+- (NSArray<OADestination *> *) sortedDestinationsWithoutParking
 {
     @synchronized(_syncObj)
     {

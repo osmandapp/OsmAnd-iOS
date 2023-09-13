@@ -17,7 +17,6 @@
 #import "OAIAPHelper.h"
 #import "OAGPXDatabase.h"
 #import <UIViewController+JASidePanel.h>
-#import "OADestinationCardsViewController.h"
 #import "OAPluginPopupViewController.h"
 #import "OATargetDestinationViewController.h"
 #import "OATargetHistoryItemViewController.h"
@@ -701,20 +700,10 @@ typedef enum
     [self.view sendSubviewToBack:_mapViewController.view];
 }
 
-- (void) openDestinationCardsView
+- (void) openDestinationViewController
 {
-	// TODO
-}
-
-- (void) hideDestinationCardsView
-{
-    // TODO
-}
-
-- (void) openHideDestinationCardsView
-{
-    // TODO
-    OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
+    OADestinationsListViewController *destinationsListViewController = [[OADestinationsListViewController alloc] init];
+    [self.navigationController pushViewController:destinationsListViewController animated:YES];
 }
 
 - (void) swapStartAndFinish
@@ -3433,11 +3422,11 @@ typedef enum
     }
 }
 
-- (void) showCards
+- (void) showDestinations
 {
     [OAAnalyticsHelper logEvent:@"destinations_open"];
 
-    [self openDestinationCardsView];
+    [self openDestinationViewController];
 }
 
 - (void) showToolbar:(OAToolbarViewController *)toolbarController

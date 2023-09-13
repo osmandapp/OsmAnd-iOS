@@ -589,7 +589,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentSliderTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASegmentSliderTableViewCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell showLabels:YES topRight:YES bottomLeft:NO bottomRight:NO];
         }
         if (cell)

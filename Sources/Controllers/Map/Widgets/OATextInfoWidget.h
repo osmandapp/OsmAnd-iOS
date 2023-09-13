@@ -35,6 +35,7 @@
 @property (strong) void(^onClickFunction)(id sender);
 
 - (void) setImage:(UIImage *)image;
+- (void) setImage:(UIImage *)image withColor:(UIColor *)color;
 - (void) setImageHidden:(BOOL)visible;
 - (void) setTimeText:(NSTimeInterval)time;
 - (BOOL) isNight;

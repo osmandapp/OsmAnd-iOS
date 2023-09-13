@@ -11,9 +11,15 @@ import Foundation
 @objc(OARulerDistanceWidget)
 @objcMembers
 class RulerDistanceWidget: OATextInfoWidget {
-    
+
+    let updateRulerObservable = OAObservable()
+    private var updateRulerObserver: OAAutoObserverProxy?
+
     init() {
         super.init(type: .radiusRuler)
+        self.updateRulerObserver = OAAutoObserverProxy(self,
+                                                       withHandler: #selector(onRulerUpdate),
+                                                       andObserve: self.updateRulerObservable)
         setIcons(.radiusRuler)
         onClickFunction = { [weak self] _ in
             let settings = OAAppSettings.sharedManager()!
@@ -25,23 +31,25 @@ class RulerDistanceWidget: OATextInfoWidget {
             } else if (mode == .RULER_MODE_NO_CIRCLES) {
                 settings.rulerMode.set(.RULER_MODE_DARK)
             }
-            if (settings.rulerMode.get() == .RULER_MODE_NO_CIRCLES) {
-                self?.setIcons("widget_ruler_circle_hide_day", widgetNightIcon: "widget_ruler_circle_hide_night")
-            } else {
-                self?.setIcons(.radiusRuler)
-            }
-            OARootViewController.instance().mapPanel.hudViewController.mapInfoController.updateRuler()
+            self?.onRulerUpdate()
         }
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.updateRulerObserver = OAAutoObserverProxy(self,
+                                                       withHandler: #selector(onRulerUpdate),
+                                                       andObserve: self.updateRulerObservable)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    deinit {
+        updateRulerObserver?.detach()
+    }
+
     override func updateInfo() -> Bool {
         if let currentLocation = OsmAndApp.swiftInstance().locationServices.lastKnownLocation,
            let centerLocation = OARootViewController.instance().mapPanel.mapViewController.getMapLocation() {
@@ -59,7 +67,16 @@ class RulerDistanceWidget: OATextInfoWidget {
         }
         return true
     }
-    
+
+    @objc private func onRulerUpdate() {
+        if OAAppSettings.sharedManager().rulerMode.get() == .RULER_MODE_NO_CIRCLES {
+            self.setIcons("widget_ruler_circle_hide_day", widgetNightIcon: "widget_ruler_circle_hide_night")
+        } else {
+            self.setIcons(.radiusRuler)
+        }
+        OARootViewController.instance().mapPanel.hudViewController.mapInfoController.updateRuler()
+    }
+
     override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
         let settings = OAAppSettings.sharedManager()!
         let pref = settings.rulerMode!
@@ -73,8 +90,9 @@ class RulerDistanceWidget: OATextInfoWidget {
         settingRow.title = localizedString("distance_circles")
         settingRow.iconName = pref.get(appMode) == .RULER_MODE_NO_CIRCLES ? "ic_action_ruler_circle_hide" : "ic_action_ruler_circle"
         settingRow.descr = localizedString("ruler_circles")
+        settingRow.setObj(pref, forKey: "pref")
         settingRow.setObj(getModeTitle(pref.get(appMode)), forKey: "value")
-        settingRow.setObj(getPossibleValues(pref), forKey: "possible_values")
+        settingRow.setObj(getPossibleValues(), forKey: "possible_values")
         
         let compassRow = section.createNewRow()
         compassRow.cellType = OASwitchTableViewCell.getIdentifier()
@@ -86,23 +104,20 @@ class RulerDistanceWidget: OATextInfoWidget {
         return data
     }
     
-    private func getPossibleValues(_ pref: OACommonPreference) -> [OATableRowData] {
+    private func getPossibleValues() -> [OATableRowData] {
         let darkRow = OATableRowData()
         darkRow.cellType = OASimpleTableViewCell.getIdentifier()
         darkRow.setObj(OACommonRulerWidgetMode.rulerWidgetMode(toString: .RULER_MODE_DARK)!, forKey: "value")
-        darkRow.setObj(pref, forKey: "pref")
         darkRow.title = getModeTitle(.RULER_MODE_DARK)
         
         let lightRow = OATableRowData()
         lightRow.cellType = OASimpleTableViewCell.getIdentifier()
         lightRow.setObj(OACommonRulerWidgetMode.rulerWidgetMode(toString: .RULER_MODE_LIGHT)!, forKey: "value")
-        lightRow.setObj(pref, forKey: "pref")
         lightRow.title = getModeTitle(.RULER_MODE_LIGHT)
         
         let disabledRow = OATableRowData()
         disabledRow.cellType = OASimpleTableViewCell.getIdentifier()
         disabledRow.setObj(OACommonRulerWidgetMode.rulerWidgetMode(toString: .RULER_MODE_NO_CIRCLES)!, forKey: "value")
-        disabledRow.setObj(pref, forKey: "pref")
         disabledRow.title = getModeTitle(.RULER_MODE_NO_CIRCLES)
         
         return [darkRow, lightRow, disabledRow]

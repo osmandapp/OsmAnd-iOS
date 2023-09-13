@@ -97,14 +97,6 @@
     _decelerating = NO;
 }
 
-#pragma mark - Base setup UI
-
-- (void)setupBottomFonts
-{
-    self.topButton.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    self.bottomButton.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-}
-
 #pragma mark - Base UI
 
 - (NSString *)getTitle

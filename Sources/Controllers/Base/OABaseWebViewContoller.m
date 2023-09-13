@@ -7,10 +7,19 @@
 //
 
 #import "OABaseWebViewController.h"
+#import "OATableDataModel.h"
 #import "OAAppSettings.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
+@interface OABaseWebViewController ()
+
+@property (nonatomic) OATableDataModel *tableData;
+
+@end
+
 @implementation OABaseWebViewController
+
+@synthesize tableData;
 
 #pragma mark - Initialization
 
@@ -19,6 +28,7 @@
     self = [super initWithNibName:@"OABaseWebViewController" bundle:nil];
     if (self)
     {
+        self.tableData = [[OATableDataModel alloc] init];
         [self commonInit];
     }
     return self;

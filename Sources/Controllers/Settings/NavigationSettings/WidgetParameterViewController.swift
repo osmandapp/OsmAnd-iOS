@@ -45,7 +45,7 @@ class WidgetParameterViewController: OABaseNavbarViewController {
                 
                 let pref = item.obj(forKey: "pref") as! OACommonPreference
                 let selectedVal = pref.toStringValue(appMode)
-                let val = stringValue(from: item.obj(forKey: "value"), pref: pref)
+                let val = stringValue(from: item.obj(forKey: "value"))
                 cell.accessoryType = selectedVal == val ? .checkmark : .none
                 cell.titleLabel.text = item.title
                 
@@ -57,15 +57,15 @@ class WidgetParameterViewController: OABaseNavbarViewController {
     
     override func onRowSelected(_ indexPath: IndexPath!) {
         let item = tableData.item(for: indexPath)
-        let pref = item.obj(forKey: "pref") as! OACommonPreference
-        let val = stringValue(from: item.obj(forKey: "value"), pref: pref)
-        pref.setValueFrom(val, appMode: appMode)
-        
+        let val = stringValue(from: item.obj(forKey: "value"))
+        if let pref = item.obj(forKey: "pref") as? OACommonPreference {
+            pref.setValueFrom(val, appMode: appMode)
+        }
         delegate?.onWidgetStateChanged()
         dismiss()
     }
     
-    private func stringValue(from value: Any?, pref: OACommonPreference) -> String {
+    private func stringValue(from value: Any?) -> String {
         if let stringValue = value as? String {
             // If the value is already a String, return it
             return stringValue

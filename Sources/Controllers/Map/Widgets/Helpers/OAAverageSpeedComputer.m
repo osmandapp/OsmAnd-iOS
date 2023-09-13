@@ -168,11 +168,6 @@ static long BIGGEST_MEASURED_INTERVAL;
     return DEFAULT_INTERVAL_MILLIS;
 }
 
-+ (NSArray<NSNumber *> *) MEASURED_INTERVALS
-{
-    return MEASURED_INTERVALS;
-}
-
 + (instancetype) sharedInstance
 {
     static dispatch_once_t once;

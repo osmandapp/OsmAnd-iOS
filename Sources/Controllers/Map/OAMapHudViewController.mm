@@ -333,12 +333,13 @@
 - (void) resetToDefaultRulerLayout
 {
     BOOL isLandscape = [OAUtilities isLandscape];
-    CGFloat bottomOffset = DeviceScreenHeight - [self getBottomHudOffset];
+    CGFloat bottomOffset = DeviceScreenHeight - (isLandscape ? (_optionsMenuButton.frame.origin.y - kButtonOffset) : [self getBottomHudOffset]);
     CGFloat leftOffset = kButtonOffset;
 
     BOOL isTrackMenuVisible = _mapPanelViewController.activeTargetType == OATargetGPX;
     BOOL isPlanRouteVisible = _mapPanelViewController.activeTargetType == OATargetRoutePlanning;
     BOOL isWeatherVisible = _mapInfoController.weatherToolbarVisible;
+    BOOL isBottomWidgetsVisible = _mapInfoController.bottomPanelController && [_mapInfoController.bottomPanelController hasWidgets];
 
     if (isPlanRouteVisible && isLandscape)
         bottomOffset = kButtonOffset + [_mapPanelViewController.scrollableHudViewController getToolbarHeight] + OAUtilities.getBottomMargin;
@@ -350,7 +351,7 @@
     else if (isWeatherVisible)
         leftOffset += isLandscape ? self.weatherToolbar.frame.size.width : (kButtonWidth + kButtonOffset);
     else if (!self.contextMenuMode)
-        leftOffset +=  _driveModeButton.frame.origin.x + _driveModeButton.frame.size.width;
+        leftOffset += isLandscape && isBottomWidgetsVisible ? _optionsMenuButton.frame.size.width : (_driveModeButton.frame.origin.x + _driveModeButton.frame.size.width);
     else if (isTrackMenuVisible && isLandscape)
         leftOffset += isLandscape ? [_mapPanelViewController.scrollableHudViewController getLandscapeViewWidth] : 0.;
 
@@ -1357,7 +1358,7 @@
         if (_mapInfoController.weatherToolbarVisible && !isLandscape)
             bottomOffset -= self.weatherToolbar.frame.size.height;
         else if (self.contextMenuMode ? !isScrollableHudVisible : (_mapInfoController.bottomPanelController && [_mapInfoController.bottomPanelController hasWidgets]))
-            bottomOffset -= self.contextMenuMode && isLandscape ? [self getHudMinBottomOffset] : [self getHudBottomOffset];
+            bottomOffset -= self.contextMenuMode || isLandscape ? [self getHudMinBottomOffset] : [self getHudBottomOffset];
         else
             bottomOffset -= [self getHudMinBottomOffset];
     }

@@ -211,6 +211,13 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     
     private func updateContainerSize() {
         let contentSize = calculateContentSize()
+        let mapHudViewController = OARootViewController.instance().mapPanel.hudViewController
+        if self == mapHudViewController?.mapInfoController?.leftPanelController {
+            mapHudViewController?.leftWidgetsViewWidthConstraint.constant = contentSize.width;
+        } else if self == mapHudViewController?.mapInfoController?.rightPanelController {
+            mapHudViewController?.rightWidgetsViewWidthConstraint.constant = contentSize.width;
+        }
+
         // Update the height constraint of the container view
         for constraint in pageContainerView.constraints {
             if constraint.firstItem === pageContainerView {

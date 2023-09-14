@@ -65,9 +65,6 @@
     if ([self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle)
         [self.navigationItem hideTitleInStackView:YES defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
 
-    self.navigationController.interactivePopGestureRecognizer.delegate = self;
-    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = UIColorFromRGB(color_primary_table_background);
@@ -88,7 +85,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+
+    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+
     if (self.refreshOnAppear)
     {
         [self generateData];
@@ -257,6 +257,11 @@
 {
     [self generateData];
     [self reloadData:animated];
+    [self updateWithoutData];
+}
+
+- (void)updateWithoutData
+{
     [self applyLocalization];
     [self updateNavbar];
 }

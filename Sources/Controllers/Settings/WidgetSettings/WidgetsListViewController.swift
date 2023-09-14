@@ -31,8 +31,12 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
 
     private var editMode: Bool = false {
         didSet {
-            tableView.isEditing = editMode
-            updateUI(true)
+            tableView.setEditing(editMode, animated: true)
+            if tableData.hasChanged || tableData.sectionCount() == 0 {
+                updateUI(true)
+            } else {
+                updateWithoutData()
+            }
             updateAppearance()
         }
     }

@@ -7,11 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OATableDataModel.h"
 
 @class OADestinationItem;
 
 @interface OADistanceAndDirectionsUpdater : NSObject
 
-+ (void)updateDistanceAndDirections:(BOOL)focreUpdate items:(NSArray<OADestinationItem *> *)items;
++ (void)updateDistanceAndDirections:(OATableDataModel *)data
+                         indexPaths:(NSArray<NSIndexPath *> *)indexPaths
+                            itemKey:(NSString *)itemKey;
 
 @end

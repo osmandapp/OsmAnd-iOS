@@ -50,9 +50,7 @@ class WidgetPageViewController: UIViewController {
         var height: CGFloat = 0
         let lastVisibleWidget = widgetViews.last(where: { !$0.isHidden })
         for widget in widgetViews {
-            if let textInfo = widget as? OATextInfoWidget {
-                textInfo.showSeparator(widget != lastVisibleWidget)
-            }
+            widget.showSeparator(widget != lastVisibleWidget)
             widget.translatesAutoresizingMaskIntoConstraints = false
             widget.adjustSize()
             width = max(width, widget.frame.size.width)

@@ -10,12 +10,17 @@
 #import "OsmAndApp.h"
 #import "OAOsmAndFormatter.h"
 #import "OADestinationItem.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
 
 #include <OsmAndCore/Utilities.h>
 
 @implementation OADistanceAndDirectionsUpdater
 
-+ (void)updateDistanceAndDirections:(BOOL)focreUpdate items:(NSMutableArray<OADestinationItem *> *)items
++ (void)updateDistanceAndDirections:(OATableDataModel *)data
+                         indexPaths:(NSArray<NSIndexPath *> *)indexPaths
+                            itemKey:(NSString *)itemKey
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     // Obtain fresh location and heading
@@ -29,18 +34,24 @@
     ? newLocation.course
     : newHeading;
 
-    for (OADestinationItem *item in items)
+    for (NSInteger i = 0; i < indexPaths.count; i ++)
     {
-        const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                          newLocation.coordinate.latitude,
-                                                          item.destination.longitude, item.destination.latitude);
-        
-        item.distanceStr = [OAOsmAndFormatter getFormattedDistance:distance];
-        item.distance = distance;
-        CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:
-                                    [[CLLocation alloc] initWithLatitude:item.destination.latitude
-                                                               longitude:item.destination.longitude]];
-        item.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+        OATableRowData *row = [data itemForIndexPath:indexPaths[i]];
+        id rowItem = [row objForKey:itemKey];
+        if (rowItem && [rowItem isKindOfClass:OADestinationItem.class])
+        {
+            OADestinationItem *item = (OADestinationItem *) rowItem;
+            const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
+                                                              newLocation.coordinate.latitude,
+                                                              item.destination.longitude, item.destination.latitude);
+            
+            item.distanceStr = [OAOsmAndFormatter getFormattedDistance:distance];
+            item.distance = distance;
+            CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:
+                                     [[CLLocation alloc] initWithLatitude:item.destination.latitude
+                                                                longitude:item.destination.longitude]];
+            item.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+        }
     }
 }
 

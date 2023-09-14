@@ -72,9 +72,9 @@
         [self.bottomBackgroundView addBlurEffect:YES cornerRadius:0. padding:0.];
 }
 
-- (void)updateUI:(BOOL)animated
+- (void)updateWithoutData
 {
-    [super updateUI:animated];
+    [super updateWithoutData];
     [self updateBottomButtons];
 }
 

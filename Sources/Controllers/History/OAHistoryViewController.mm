@@ -467,11 +467,11 @@
 {
     if ([self.tableView isEditing])
         return;
-    
+
     HistoryTableGroup* groupData = [self.groupsAndItems objectAtIndex:indexPath.section];
     HistoryTableItem* dataItem = [groupData.groupItems objectAtIndex:indexPath.row];
-    
-    [self dismissViewController];
+
+    [self.navigationController popToRootViewControllerAnimated:YES];
     [[OARootViewController instance].mapPanel openTargetViewWithHistoryItem:dataItem.item pushed:NO];
 }
 

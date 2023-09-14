@@ -102,6 +102,17 @@
         {
             [newDestinations addObject:item.destination];
         }
+        for (OADestination *item in _sortedDestinations)
+        {
+            if (![newDestinations containsObject:item])
+            {
+                [self addHistoryItem:item];
+                if (item == _dynamic2ndRowDestination)
+                    _dynamic2ndRowDestination = nil;
+                [_app.data.destinations removeObject:item];
+                [_app.data.destinationRemoveObservable notifyEventWithKey:item];
+            }
+        }
         _sortedDestinations = newDestinations;
         [self refreshDestinationIndexes];
         [_app.data.destinationsChangeObservable notifyEvent];

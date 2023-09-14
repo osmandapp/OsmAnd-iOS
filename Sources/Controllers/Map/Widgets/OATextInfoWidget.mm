@@ -36,8 +36,6 @@
     UIFont *_largeBoldFont;
     UIFont *_smallFont;
     UIFont *_smallBoldFont;
-    
-    UIView *_separatorView;
 
     BOOL _metricSystemDepended;
     BOOL _angularUnitsDepended;
@@ -52,6 +50,7 @@
     if (self)
     {
         self.frame = CGRectMake(0, 0, kTextInfoWidgetWidth, kTextInfoWidgetHeight);
+        [self initSeparatorView];
     }
     return self;
 }
@@ -62,6 +61,7 @@
     if (self)
     {
         self.frame = CGRectMake(0, 0, kTextInfoWidgetWidth, kTextInfoWidgetHeight);
+        [self initSeparatorView];
         [self commonInit];
     }
     
@@ -81,19 +81,6 @@
     [self addSubview:_imageView];
     
     self.backgroundColor = [UIColor whiteColor];
-
-    _separatorView = [[UIView alloc] init];
-    _separatorView.hidden = YES;
-    _separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
-    [self addSubview:_separatorView];
-    
-    _separatorView.translatesAutoresizingMaskIntoConstraints = NO;
-    [NSLayoutConstraint activateConstraints:@[
-        [_separatorView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
-        [_separatorView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
-        [_separatorView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-0.5],
-        [_separatorView.heightAnchor constraintEqualToConstant:.5]
-    ]];
 
     _largeFont = [UIFont scaledSystemFontOfSize:21 weight:UIFontWeightSemibold];
     _largeBoldFont = [UIFont scaledSystemFontOfSize:21 weight:UIFontWeightBold];
@@ -126,11 +113,6 @@
 - (BOOL)isTextInfo
 {
     return YES;
-}
-
-- (void)showSeparator:(BOOL)show
-{
-    _separatorView.hidden = !show;
 }
 
 - (void) onWidgetClicked:(id)sender

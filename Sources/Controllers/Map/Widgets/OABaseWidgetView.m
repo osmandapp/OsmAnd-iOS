@@ -13,6 +13,7 @@
 @implementation OABaseWidgetView
 {
     BOOL _nightMode;
+    UIView *_separatorView;
 }
 
 - (instancetype)initWithType:(OAWidgetType *)type
@@ -20,6 +21,7 @@
     self = [super init];
     if (self) {
         _widgetType = type;
+        [self initSeparatorView];
     }
     return self;
 }
@@ -29,8 +31,25 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.frame = frame;
+        [self initSeparatorView];
     }
     return self;
+}
+
+- (void)initSeparatorView
+{
+    _separatorView = [[UIView alloc] init];
+    _separatorView.hidden = YES;
+    _separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
+    [self addSubview:_separatorView];
+    
+    _separatorView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [_separatorView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
+        [_separatorView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [_separatorView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-0.5],
+        [_separatorView.heightAnchor constraintEqualToConstant:.5]
+    ]];
 }
 
 - (OACommonBoolean * _Nullable ) getWidgetVisibilityPref {
@@ -88,6 +107,11 @@
 - (BOOL)isTextInfo
 {
     return NO;
+}
+
+- (void)showSeparator:(BOOL)show
+{
+    _separatorView.hidden = !show;
 }
 
 - (void)adjustViewSize

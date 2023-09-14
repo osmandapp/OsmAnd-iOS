@@ -20,10 +20,6 @@
 static const NSInteger kMinAllowedZoom = 1;
 static const NSInteger kMaxAllowedZoom = 22;
 static const NSInteger kHeightRowZoomSlider = 88;
-static const double kHillshadeDefAlpha = 0.45;
-static const double kSlopeDefAlpha = 0.35;
-static const NSInteger kDefMinZoom = 3;
-static const NSInteger kDefMaxZoom = 16;
 
 @interface OAMapSettingsTerrainParametersViewController () <UITableViewDelegate, UITableViewDataSource, TTRangeSliderDelegate>
 
@@ -210,17 +206,21 @@ static const NSInteger kDefMaxZoom = 16;
 
 - (void)resetVisibilityValues
 {
-    CGFloat defaultAlpha = (_type == EOATerrainTypeHillshade) ? kHillshadeDefAlpha : kSlopeDefAlpha;
-    
-    if (_currentAlpha != defaultAlpha)
+    double alpha;
+    if (_type == EOATerrainTypeHillshade)
     {
-        _currentAlpha = defaultAlpha;
-        
-        if (_type == EOATerrainTypeHillshade)
-            _app.data.hillshadeAlpha = _currentAlpha;
-        else
-            _app.data.slopeAlpha = _currentAlpha;
-        
+        [_app.data resetHillshadeAlpha];
+        alpha = _app.data.hillshadeAlpha;
+    }
+    else
+    {
+        [_app.data resetSlopeAlpha];
+        alpha = _app.data.slopeAlpha;
+    }
+
+    if (_currentAlpha != alpha)
+    {
+        _currentAlpha = alpha;
         _isValueChange = YES;
         [self updateApplyButton];
     }
@@ -228,31 +228,31 @@ static const NSInteger kDefMaxZoom = 16;
 
 - (void)resetZoomLevels
 {
-    BOOL minZoomChanged = (_minZoom != kDefMinZoom);
-    BOOL maxZoomChanged = (_maxZoom != kDefMaxZoom);
-    
-    if (minZoomChanged || maxZoomChanged)
+    NSInteger minZoom;
+    NSInteger maxZoom;
+    if (_type == EOATerrainTypeHillshade)
     {
-        _minZoom = kDefMinZoom;
-        _maxZoom = kDefMaxZoom;
+        [_app.data resetHillshadeMinZoom];
+        [_app.data resetHillshadeMaxZoom];
+        minZoom = _app.data.hillshadeMinZoom;
+        maxZoom = _app.data.hillshadeMaxZoom;
+    }
+    else
+    {
+        [_app.data resetSlopeMinZoom];
+        [_app.data resetSlopeMaxZoom];
+        minZoom = _app.data.slopeMinZoom;
+        maxZoom = _app.data.slopeMaxZoom;
+    }
+
+    if (_minZoom != minZoom || _maxZoom != maxZoom)
+    {
+        _minZoom = minZoom;
+        _maxZoom = maxZoom;
         _isValueChange = YES;
         [self updateApplyButton];
     }
     
-    if (_type == EOATerrainTypeHillshade)
-    {
-        if (minZoomChanged)
-            _app.data.hillshadeMinZoom = _minZoom;
-        if (maxZoomChanged)
-            _app.data.hillshadeMaxZoom = _maxZoom;
-    }
-    else
-    {
-        if (minZoomChanged)
-            _app.data.slopeMinZoom = _minZoom;
-        if (maxZoomChanged)
-            _app.data.slopeMaxZoom = _maxZoom;
-    }
 }
 
 - (void)applyCurrentVisibility

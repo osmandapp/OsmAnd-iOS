@@ -297,12 +297,12 @@
     _contoursAlphaToolbarProfile = [OACommonDouble withKey:kContoursAlphaToolbarKey defValue:1.];
     _terrainTypeProfile = [OACommonTerrain withKey:kTerrainTypeKey defValue:EOATerrainTypeDisabled];
     _lastTerrainTypeProfile = [OACommonTerrain withKey:kLastTerrainTypeKey defValue:EOATerrainTypeHillshade];
-    _hillshadeAlphaProfile = [OACommonDouble withKey:kHillshadeAlphaKey defValue:0.45];
-    _slopeAlphaProfile = [OACommonDouble withKey:kSlopeAlphaKey defValue:0.35];
-    _hillshadeMinZoomProfile = [OACommonInteger withKey:kHillshadeMinZoomKey defValue:3];
-    _hillshadeMaxZoomProfile = [OACommonInteger withKey:kHillshadeMaxZoomKey defValue:16];
-    _slopeMinZoomProfile = [OACommonInteger withKey:kSlopeMinZoomKey defValue:3];
-    _slopeMaxZoomProfile = [OACommonInteger withKey:kSlopeMaxZoomKey defValue:16];
+    _hillshadeAlphaProfile = [OACommonDouble withKey:kHillshadeAlphaKey defValue:kHillshadeDefAlpha];
+    _slopeAlphaProfile = [OACommonDouble withKey:kSlopeAlphaKey defValue:kSlopeDefAlpha];
+    _hillshadeMinZoomProfile = [OACommonInteger withKey:kHillshadeMinZoomKey defValue:kHillshadeDefMinZoom];
+    _hillshadeMaxZoomProfile = [OACommonInteger withKey:kHillshadeMaxZoomKey defValue:kHillshadeDefMaxZoom];
+    _slopeMinZoomProfile = [OACommonInteger withKey:kSlopeMinZoomKey defValue:kSlopeDefMinZoom];
+    _slopeMaxZoomProfile = [OACommonInteger withKey:kSlopeMaxZoomKey defValue:kSlopeDefMaxZoom];
     _mapillaryProfile = [OACommonBoolean withKey:kMapillaryKey defValue:NO];
     _wikipediaGlobalProfile = [OACommonBoolean withKey:kWikipediaGlobalKey defValue:NO];
     _wikipediaLanguagesProfile = [OACommonStringList withKey:kWikipediaLanguagesKey defValue:@[]];
@@ -1250,6 +1250,11 @@
     }
 }
 
+- (void) resetHillshadeMinZoom
+{
+    [self setHillshadeMinZoom:kHillshadeDefMinZoom];
+}
+
 - (NSInteger) hillshadeMaxZoom
 {
     @synchronized(_lock)
@@ -1265,6 +1270,11 @@
         [_hillshadeMaxZoomProfile set:(int)hillshadeMaxZoom];
         [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
     }
+}
+
+- (void) resetHillshadeMaxZoom
+{
+    [self setHillshadeMaxZoom:kHillshadeDefMaxZoom];
 }
 
 - (NSInteger) slopeMinZoom
@@ -1284,6 +1294,11 @@
     }
 }
 
+- (void) resetSlopeMinZoom
+{
+    [self setSlopeMinZoom:kSlopeDefMinZoom];
+}
+
 - (NSInteger) slopeMaxZoom
 {
     @synchronized(_lock)
@@ -1299,6 +1314,11 @@
         [_slopeMaxZoomProfile set:(int)slopeMaxZoom];
         [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
     }
+}
+
+- (void) resetSlopeMaxZoom
+{
+    [self setSlopeMaxZoom:kSlopeDefMaxZoom];
 }
 
 - (EOATerrainType) terrainType
@@ -1387,6 +1407,11 @@
     }
 }
 
+- (void) resetHillshadeAlpha
+{
+    [self setHillshadeAlpha:kHillshadeDefAlpha];
+}
+
 - (double)slopeAlpha
 {
     @synchronized (_lock)
@@ -1402,6 +1427,11 @@
         [_slopeAlphaProfile set:slopeAlpha];
         [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithDouble:self.slopeAlpha]];
     }
+}
+
+- (void) resetSlopeAlpha
+{
+    [self setSlopeAlpha:kSlopeDefAlpha];
 }
 
 - (BOOL) mapillary

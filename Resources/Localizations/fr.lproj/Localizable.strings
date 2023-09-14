@@ -1512,7 +1512,7 @@
 "shared_string_legend" = "Légende";
 "map_settings_add_maps_hillshade" = "Des cartes supplémentaires sont nécessaires pour visualiser l'ombrage du relief";
 "map_settings_zoom_level_description" = "Définissez le zoom minimal et maximal auquel la couche est visible";
-"map_settings_hillshade_description" = "Les cartes avec ombrage du relief mettent en évidence les pentes, sommets et plaines en utilisant des niveaux de gris";
+"map_settings_hillshade_description" = "Les cartes avec ombrage du relief utilisent des tons foncés pour afficher les pentes, sommets et plaines.";
 "poi_filter_public_transport" = "Transport en commun";
 "displayed_route_save" = "Enregistrer dans OsmAnd Traces";
 "add_group" = "Ajouter un groupe";
@@ -1596,7 +1596,7 @@
 "settings_app_theme" = "Thème de l'application";
 "map_settings_available_srtm_maps_descr" = "Des cartes supplémentaires sont nécessaires pour voir l'ombrage du relief sur la carte";
 "map_settings_add_maps_slopes" = "Des cartes supplémentaires sont nécessaires pour voir les pentes sur la carte";
-"map_settings_slopes_description" = "Les cartes des pentes utilisent différentes couleurs pour représenter le terrain";
+"map_settings_slopes_description" = "Les pentes sont colorisées différemment sur le relief.";
 "map_settings_slopes_legend" = "Vous pouvez en apprendre plus à propos des pentes sur Wikipédia";
 "map_settings_layer_transparency" = "Transparence de la couche";
 "shared_string_terrain" = "Terrain";
@@ -1869,7 +1869,7 @@
 "toggle_public_transport" = "Afficher/Masquer les transports publics";
 "quick_action_transport_descr" = "Bouton pour afficher ou masquer les transports en commun sur la carte.";
 "quick_action_dir_from_descr" = "Appuyez pour naviguer à partir du point central de l'écran actuel.";
-"enable_hillshade" = "Activer pour afficher les données de relief";
+"enable_hillshade" = "Activer pour afficher les données de relief à partir de l'ombrage du relief ou de la carte des pentes.";
 "show_terrain" = "Afficher le relief";
 "quick_action_hillshade_descr" = "Bouton affichant ou masquant l\'ombrage du relief sur la carte.";
 "quick_action_toggle_edits_descr" = "Appuyez pour afficher/masquer les modifications OSM hors-ligne.";
@@ -3029,3 +3029,4 @@
 "auto_update" = "Mettre à jour automatiquement";
 "weather_update_over_any_network" = "Sur n'importe quel réseau";
 "weather_update_parameters_any_network" = "Les prévisions météo seront mises à jour sur n'importe quel réseau. Les données mobiles peuvent être utilisées.";
+"map_settings_topography" = "Topographie";

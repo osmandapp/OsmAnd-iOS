@@ -1349,6 +1349,8 @@
 		C56FAB5129B226C60096192F /* OACameraDistanceWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56FAB4F29B226C60096192F /* OACameraDistanceWidget.mm */; };
 		C56FAB5629B226F10096192F /* OAZoomLevelWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56FAB5429B226F10096192F /* OAZoomLevelWidget.mm */; };
 		C56FAB5B29B227130096192F /* OATargetDistanceWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56FAB5929B227130096192F /* OATargetDistanceWidget.mm */; };
+		C573544F2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C573544D2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.m */; };
+		C57354502AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C573544E2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib */; };
 		C5879A49299FB96300F53249 /* uk_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A48299FB96300F53249 /* uk_tts.js */; };
 		C5879A4B299FBF7A00F53249 /* bg_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A4A299FBF7900F53249 /* bg_tts.js */; };
 		C5879A4D299FC24700F53249 /* id_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A4C299FC24700F53249 /* id_tts.js */; };
@@ -5208,6 +5210,9 @@
 		C56FAB5429B226F10096192F /* OAZoomLevelWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAZoomLevelWidget.mm; sourceTree = "<group>"; };
 		C56FAB5829B227130096192F /* OATargetDistanceWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATargetDistanceWidget.h; sourceTree = "<group>"; };
 		C56FAB5929B227130096192F /* OATargetDistanceWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATargetDistanceWidget.mm; sourceTree = "<group>"; };
+		C573544C2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsTerrainParametersViewController.h; sourceTree = "<group>"; };
+		C573544D2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAMapSettingsTerrainParametersViewController.m; sourceTree = "<group>"; };
+		C573544E2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAMapSettingsTerrainParametersViewController.xib; sourceTree = "<group>"; };
 		C5879A48299FB96300F53249 /* uk_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = uk_tts.js; path = ../resources/voice/uk/uk_tts.js; sourceTree = "<group>"; };
 		C5879A4A299FBF7900F53249 /* bg_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = bg_tts.js; path = ../resources/voice/bg/bg_tts.js; sourceTree = "<group>"; };
 		C5879A4C299FC24700F53249 /* id_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = id_tts.js; path = ../resources/voice/id/id_tts.js; sourceTree = "<group>"; };
@@ -13902,6 +13907,9 @@
 				DA5A7FF226C563A500F274C7 /* OAMapSettingsSettingScreen.mm */,
 				DA5A800826C563A500F274C7 /* OAMapSettingsTerrainScreen.h */,
 				DA5A800226C563A500F274C7 /* OAMapSettingsTerrainScreen.mm */,
+				C573544C2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.h */,
+				C573544D2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.m */,
+				C573544E2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib */,
 				DA5A801126C563A500F274C7 /* OAMapSettingsViewController.h */,
 				DA5A7FF926C563A500F274C7 /* OAMapSettingsViewController.mm */,
 				DA5A7FF826C563A500F274C7 /* OAWikipediaLanguagesViewController.h */,
@@ -15745,6 +15753,7 @@
 				DA2EC66C29FBBE0300ECEB37 /* widget_weather_umbrella_night@3x.png in Resources */,
 				DA5A826226C563A700F274C7 /* OAPointDescCell.xib in Resources */,
 				DA2DC41D23B2116300F40D1D /* ic_custom_arrow_down@2x.png in Resources */,
+				C57354502AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib in Resources */,
 				8454DA1E1B2F16D700E5A5C5 /* ic_coordinates@2x.png in Resources */,
 				DA8AD07C291D3A850092385B /* ic_custom_cloud_download_outline@3x.png in Resources */,
 				DA5A82C726C563A800F274C7 /* OANoImagesCell.xib in Resources */,
@@ -17989,6 +17998,7 @@
 				DA5A833826C563A800F274C7 /* OAPublicTransportCollapsableCell.m in Sources */,
 				DA5A818526C563A700F274C7 /* OAShowHideOSMBugAction.m in Sources */,
 				DA5A814226C563A700F274C7 /* OAOpenStreetMapLocalUtil.mm in Sources */,
+				C573544F2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.m in Sources */,
 				DA5A84FB26C563A900F274C7 /* OADownloadProgressView.m in Sources */,
 				DA5A81EE26C563A700F274C7 /* OANavigationIcon.m in Sources */,
 				DA5A823426C563A700F274C7 /* OAImportCompleteViewController.mm in Sources */,

@@ -20,21 +20,24 @@ class AverageSpeedWidget: OATextInfoWidget {
     
     private let averageSpeedComputer = OAAverageSpeedComputer.sharedInstance()
     
-    private let measuredIntervalPref: OACommonLong
-    private let skipStopsPref: OACommonBoolean
+    private var measuredIntervalPref: OACommonLong
+    private var skipStopsPref: OACommonBoolean
     private var customId: String? = nil
 
     private var lastUpdateTime = 0
 
     private var availableIntervals: [Int: String] = getAvailableIntervals()
 
-    init(customId: String?) {
+    convenience init(customId: String?) {
+        self.init(frame: .zero)
+        
+        widgetType = .averageSpeed
+        setIcons(widgetType)
+        setMetricSystemDepended(true)
+        
         self.customId = customId
         measuredIntervalPref = Self.registerMeasuredIntervalPref(customId)
         skipStopsPref = Self.registerSkipStopsPref(customId)
-        super.init(type: .averageSpeed)
-        setIcons(.averageSpeed)
-        self.setMetricSystemDepended(true)
     }
     
     override init(frame: CGRect) {

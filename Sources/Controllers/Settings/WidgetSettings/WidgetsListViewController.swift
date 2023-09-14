@@ -85,7 +85,7 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
     // MARK: Selectors
 
     override func onGestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer!) -> Bool {
-        if (gestureRecognizer == self.navigationController?.interactivePopGestureRecognizer) {
+        if gestureRecognizer == navigationController?.interactivePopGestureRecognizer {
             if editMode, tableData.hasChanged {
                 showUnsavedChangesAlert(shouldDismiss: true)
                 return false
@@ -95,22 +95,22 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
     }
 
     private func showUnsavedChangesAlert(shouldDismiss: Bool) {
-        let alert: UIAlertController = UIAlertController.init(title: localizedString("unsaved_changes"),
+        let alert = UIAlertController.init(title: localizedString("unsaved_changes"),
                                                               message: localizedString("unsaved_changes_will_be_lost_discard"),
                                                               preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_discard"), style: .destructive) { [weak self] _ in
-            guard let self = self else { return }
-            self.editMode = false
-            if (shouldDismiss) {
-                self.dismiss()
+            guard let self else { return }
+            editMode = false
+            if shouldDismiss {
+                dismiss()
             }
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         let popPresenter = alert.popoverPresentationController
-        popPresenter?.barButtonItem = self.getLeftNavbarButton();
+        popPresenter?.barButtonItem = getLeftNavbarButton();
         popPresenter?.permittedArrowDirections = UIPopoverArrowDirection.any;
 
-        self.present(alert, animated: true)
+        present(alert, animated: true)
     }
 
     override func onLeftNavbarButtonPressed() {
@@ -118,7 +118,7 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
             if tableData.hasChanged {
                 showUnsavedChangesAlert(shouldDismiss: false)
             } else {
-                self.editMode = false
+                editMode = false
             }
             return
         }
@@ -139,7 +139,7 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
     }
 
     override func onBottomButtonPressed() {
-        if (editMode) {
+        if editMode {
             let section = tableData.createNewSection()
             let row = section.createNewRow()
             row.key = kPageKey
@@ -176,9 +176,9 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
     }
 
     @objc func onButtonClicked(sender: UIButton) {
-        let indexPath: IndexPath = IndexPath.init(row: sender.tag & 0x3FF, section:sender.tag >> 10)
+        let indexPath: IndexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
         let item: OATableRowData = tableData.item(for: indexPath)
-        if (item.key == kNoWidgetsKey) {
+        if item.key == kNoWidgetsKey {
             onTopButtonPressed()
         }
     }
@@ -199,7 +199,7 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
             orders.append(currPage)
             currPage = [String]()
         }
-        WidgetUtils.setEnabledWidgets(orderedWidgets: orders,
+        WidgetUtils.reorderWidgets(orderedWidgets: orders,
                                       panel: widgetPanel,
                                       selectedAppMode: selectedAppMode)
     }
@@ -291,7 +291,7 @@ extension WidgetsListViewController {
         let isNoWidgetsCell = item.key == kNoWidgetsKey
         return editMode && !isNoWidgetsCell && !isFirstPageCell
     }
-
+    
     // TODO: delete section reorder logic is in ReorderWidgetsAdapter, ReorderWidgetsAdapterHelper in Android
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let item = tableData.item(for: sourceIndexPath)

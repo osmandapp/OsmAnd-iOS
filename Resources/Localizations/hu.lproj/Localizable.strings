@@ -597,7 +597,7 @@
 "map_markers_other" = "Egyéb jelölők";
 "navigation_over_track" = "Elindítja a navigációt a nyomvonal mentén\?";
 "shared_string_ellipsis" = "…";
-"shared_string_select_on_map" = "Kijelölése a térképen";
+"shared_string_select_on_map" = "Kijelölés a térképen";
 "shared_string_my_location" = "Saját pozícióm";
 // Shared Strings
 "shared_string_apply" = "Alkalmaz";
@@ -734,9 +734,9 @@
 "month" = "hónap";
 "months_2_4" = "hónap";
 "months_5" = "hónap";
-"year" = "évre";
-"years_2_4" = "évre";
-"years_5" = "évre";
+"year" = "év";
+"years_2_4" = "év";
+"years_5" = "év";
 "price_free" = "Ingyenes";
 "save_poi_too_many_uppercase" = "A név túl sok nagybetűt tartalmaz. Folytatja\?";
 "shared_string_read_more" = "Bővebben";

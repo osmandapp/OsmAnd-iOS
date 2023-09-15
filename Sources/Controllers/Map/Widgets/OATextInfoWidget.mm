@@ -291,7 +291,7 @@
 
 - (CGFloat) getWidgetHeight
 {
-    return kTextInfoWidgetHeight;
+    return self.frame.size.height;
 }
 
 - (void) adjustViewSize
@@ -303,16 +303,16 @@
     tf.origin.y = 5;
     CGFloat currentWidth = MAX(tf.size.width, _imageView.hidden ? fullTextWidth : minTextWidth);
     // TODO: need a more flexible solution for OAUtilities.isLandscapeIpadAware (topWidgetsViewWidthConstraint.constant)
-    CGFloat widthLimit = ([[OARootViewController instance].mapPanel hasTopWidget]) ? 120 : [UIScreen mainScreen].bounds.size.width / 2 - 40;
+    CGFloat widthLimit = [[OARootViewController instance].mapPanel hasTopWidget] ? 120 : [UIScreen mainScreen].bounds.size.width / 2 - 40;
     tf.size.width = currentWidth > widthLimit ? widthLimit : currentWidth;
-   
+
     _textView.frame = tf;
     _textShadowView.frame = tf;
-    
+
     CGRect f = self.frame;
     f.size.width = tf.origin.x + tf.size.width + 4;
     f.size.height = tf.size.height + 10;
-    
+
     CGRect imageRect = _imageView.frame;
     imageRect.origin.y = f.size.height / 2 - imageRect.size.height / 2;
     _imageView.frame = imageRect;

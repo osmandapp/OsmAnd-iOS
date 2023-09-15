@@ -759,7 +759,7 @@ forcedUpdate:(BOOL)forcedUpdate
         return;
 
     _viewportYScale = viewportYScale;
-    _originalViewportYScale = _viewportYScale;
+    _originalViewportYScale = viewportYScale;
 
     // Normalize elevation angle
     [self setElevationAngle:self.elevationAngle];

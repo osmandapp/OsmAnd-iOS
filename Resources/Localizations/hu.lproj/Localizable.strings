@@ -731,12 +731,12 @@
 "week" = "hétre";
 "weeks_2_4" = "hétre";
 "weeks_5" = "hétre";
-"month" = "hónap";
-"months_2_4" = "hónap";
-"months_5" = "hónap";
+"month" = "hónapra";
+"months_2_4" = "hónapra";
+"months_5" = "hónapra";
 "year" = "év";
-"years_2_4" = "év";
-"years_5" = "év";
+"years_2_4" = "évre";
+"years_5" = "évre";
 "price_free" = "Ingyenes";
 "save_poi_too_many_uppercase" = "A név túl sok nagybetűt tartalmaz. Folytatja\?";
 "shared_string_read_more" = "Bővebben";

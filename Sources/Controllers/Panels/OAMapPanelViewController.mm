@@ -100,6 +100,7 @@
 #import "OAMapInfoController.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OAMapSettingsTerrainParametersViewController.h"
 
 #import "OARouteKey.h"
 #import "OANetworkRouteSelectionTask.h"
@@ -394,6 +395,8 @@ typedef enum
         _activeTargetType = OATargetRouteLineAppearance;
     else if ([controller isKindOfClass:OAWeatherLayerSettingsViewController.class])
         _activeTargetType = OATargetWeatherLayerSettings;
+    else if ([controller isKindOfClass:OAMapSettingsTerrainParametersViewController.class])
+        _activeTargetType = OATargetTerrainParametersSettings;
 
     [self setupScrollableHud:controller];
 }
@@ -897,6 +900,13 @@ typedef enum
     [mapSettingsViewController show:_dashboard.parentViewController parentViewController:_dashboard animated:YES];
 }
 
+- (void) showTerrainScreen
+{
+    [self showMapSettingsScreen:EMapSettingsScreenMain logEvent:nil];
+    OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenTerrain];
+    [mapSettingsViewController show:_dashboard.parentViewController parentViewController:_dashboard animated:YES];
+}
+
 - (void)showMapSettingsScreen:(EMapSettingsScreen)screen logEvent:(nullable NSString *)event
 {
     if (event)
@@ -1314,7 +1324,8 @@ typedef enum
     || _activeTargetType == OATargetGPX
     || _activeTargetType == OATargetRouteLineAppearance
     || _activeTargetType == OATargetWeatherLayerSettings
-    || _activeTargetType == OATargetWeatherToolbar;
+    || _activeTargetType == OATargetWeatherToolbar
+    || _activeTargetType == OATargetTerrainParametersSettings;
 }
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState

@@ -119,6 +119,10 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::WeatherForecast:
             imageNamed = @"ic_custom_umbrella";
             break;
+        case OsmAndResourceType::GeoTiffRegion:
+        case OsmAndResourceType::HeightmapRegionLegacy:
+            imageNamed = @"ic_custom_terrain";
+            break;
         default:
             imageNamed = @"ic_custom_map";
             break;

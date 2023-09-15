@@ -963,7 +963,7 @@
 "map_settings_slopes_legend" = "You can read more about the slopes on Wikipedia";
 "map_settings_slopes_description" = "Slope is colorized visualisations on terrain.";
 "map_settings_hillshade_description" = "Hillshade map using dark shades to show slopes, peaks and lowlands.";
-"map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
+"map_settings_zoom_level_description" = "Set the minimum and maximum zoom levels at which the layer will be displayed";
 "map_settings_add_maps_hillshade" = "Additional maps are needed to view Hillshades on the map.";
 "map_settings_add_maps_slopes" = "Additional maps are needed to view Slopes on the map.";
 "shared_string_legend" = "Legend";

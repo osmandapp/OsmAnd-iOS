@@ -19,6 +19,11 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     
     lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.setContentOffset(CGPoint(x: 0, y: 1), animated: false)
+    }
+    
     override func generateData() {
         tableData.clearAllData()
         if let settingsData = widgetInfo.getSettingsData(selectedAppMode) {
@@ -158,7 +163,6 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         generateData()
         tableView.reloadData()
     }
-    
 }
 
 // MARK: Appearance
@@ -187,7 +191,7 @@ extension WidgetConfigurationViewController {
         attrStr.addAttribute(.foregroundColor, value: UIColor(rgb: Int(color_text_footer)), range: NSRange(location: 0, length: attrStr.length))
         return attrStr
     }
-    
+
     override func getBottomAxisMode() -> NSLayoutConstraint.Axis {
         .vertical
     }

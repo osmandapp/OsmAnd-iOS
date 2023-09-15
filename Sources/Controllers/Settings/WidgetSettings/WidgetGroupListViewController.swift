@@ -297,9 +297,11 @@ extension WidgetGroupListViewController {
             vc.widgetGroup = widgetGroup
             show(vc)
         } else if let widgetType = item.obj(forKey: "widget_type") as? WidgetType {
-            let vc = WidgetConfigurationViewController()!
-            vc.selectedAppMode = OAAppSettings.sharedManager()!.applicationMode.get()
-            let widgetInfo = widgetRegistry.getWidgetInfo(for: widgetType).first
+            guard let vc = WidgetConfigurationViewController(),
+                  let widgetInfo = widgetRegistry.getWidgetInfo(for: widgetType).first else {
+                return
+            }
+            vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
             vc.widgetInfo = widgetInfo
             vc.widgetPanel = widgetPanel
             vc.createNew = true

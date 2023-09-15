@@ -199,7 +199,7 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
             orders.append(currPage)
             currPage = [String]()
         }
-        WidgetUtils.reorderWidgets(orderedWidgets: orders,
+        WidgetUtils.reorderWidgets(orderedWidgetPages: orders,
                                       panel: widgetPanel,
                                       selectedAppMode: selectedAppMode)
     }

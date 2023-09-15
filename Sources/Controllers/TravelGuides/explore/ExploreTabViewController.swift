@@ -119,8 +119,18 @@ class ExploreTabViewController: OABaseNavbarViewController {
                 for article in articles {
                     if article is TravelGpx {
                         let item: TravelGpx = article as! TravelGpx
+                        let gpxRow = articlesSection.createNewRow()
                         let title = (item.descr != nil && item.descr!.count > 0) ? item.descr! : item.title
-                        print("!!! gpxTitle: " + (title ?? "nil") + "   distance: " + String(item.totalDistance))
+                        item.title = title
+                        gpxRow.cellType = GpxTravelCell.getIdentifier()
+                        gpxRow.title = title
+                        gpxRow.descr = item.user
+                        gpxRow.setObj(item, forKey: "article")
+                        
+                        let analysis = item.getAnalysis()
+                        let statisticsCells = OATrackMenuHeaderView.generateGpxBlockStatistics(analysis, withoutGaps: false)
+                        gpxRow.setObj(statisticsCells, forKey: "statistics_cells")
+                        
                     } else {
                         
                         let item: TravelArticle = article
@@ -129,7 +139,6 @@ class ExploreTabViewController: OABaseNavbarViewController {
                         articleRow.title = item.title ?? "nil"
                         articleRow.descr = OATravelGuidesHelper.getPatrialContent(item.content)
                         articleRow.setObj(item.getGeoDescription() ?? "", forKey: "isPartOf")
-                        //articleRow.setObj(item.generateIdentifier(), forKey: "articleId")
                         articleRow.setObj(item, forKey: "article")
                         articleRow.setObj(item.lang, forKey: "lang")
                         if (item.imageTitle != nil && item.imageTitle!.length > 0) {
@@ -273,11 +282,46 @@ class ExploreTabViewController: OABaseNavbarViewController {
             cell!.arcticleDescription.text = item.descr
             cell!.regionLabel.text = item.string(forKey: "isPartOf")
             
+            cell!.leftButtonLabel.text = localizedString("shared_string_read")
+            cell!.rightButtonLabel.text = localizedString("shared_string_bookmark")
+            
             cell?.imageVisibility(true)
             if let iconName = item.iconName {
                 startAsyncImageDownloading(iconName, cell)
             } else {
                 cell?.imageVisibility(false)
+            }
+            
+            outCell = cell
+            
+        } else if item.cellType == GpxTravelCell.getIdentifier() {
+            var cell = tableView.dequeueReusableCell(withIdentifier: GpxTravelCell.getIdentifier()) as? GpxTravelCell
+            if cell == nil {
+                let nib = Bundle.main.loadNibNamed("GpxTravelCell", owner: self, options: nil)
+                cell = nib?.first as? GpxTravelCell
+                cell!.usernameIcon.contentMode = .scaleAspectFit
+                cell!.usernameIcon.image = UIImage.templateImageNamed("ic_custom_user_profile")
+                cell!.usernameIcon.tintColor = UIColor(rgb: color_purple_border)
+                cell!.usernameLabel.textColor = UIColor(rgb: color_purple_border)
+                cell!.usernameView.layer.borderColor = UIColor(rgb: color_slider_gray).cgColor
+                cell!.usernameView.layer.borderWidth = 1
+                cell!.usernameView.layer.cornerRadius = 4
+                
+                cell!.leftButtonIcon.image = UIImage.templateImageNamed("ic_custom_clear_list")
+                cell!.rightButtonIcon.image = UIImage.templateImageNamed("ic_custom_save_to_file")
+                cell!.leftButtonIcon.tintColor = UIColor(rgb: color_purple_border)
+                cell!.rightButtonIcon.tintColor = UIColor(rgb: color_purple_border)
+                cell!.leftButtonLabel.textColor = UIColor(rgb: color_purple_border)
+                cell!.rightButtonLabel.textColor = UIColor(rgb: color_purple_border)
+            }
+            cell!.tabViewDelegate = tabViewDelegate
+            cell!.arcticleTitle.text = item.title
+            cell!.usernameLabel.text = item.descr
+            cell!.travelGpx = item.obj(forKey: "article") as? TravelGpx
+            cell!.leftButtonLabel.text = localizedString("shared_string_view")
+            cell!.rightButtonLabel.text = localizedString("shared_string_save")
+            if let statisticsCells = item.obj(forKey: "statistics_cells") as? [OAGPXTableCellData] {
+                cell!.statisticsCells = statisticsCells
             }
             
             outCell = cell
@@ -318,12 +362,11 @@ class ExploreTabViewController: OABaseNavbarViewController {
         if item.cellType == "kDownloadCellKey" {
             downloadingCellHelper.onItemClicked(indexPath)
             
-        } else if item.cellType == ArticleTravelCell.getIdentifier() {
+        } else if item.cellType == ArticleTravelCell.getIdentifier() || item.cellType == GpxTravelCell.getIdentifier()  {
             if let article = item.obj(forKey: "article") as? TravelArticle {
-                if let lang = item.string(forKey: "lang") {
-                    if tabViewDelegate != nil {
-                        tabViewDelegate!.openArticle(article: article, lang: lang)
-                    }
+                let lang = item.string(forKey: "lang") ?? ""
+                if tabViewDelegate != nil {
+                    tabViewDelegate!.openArticle(article: article, lang: lang)
                 }
             }
         }

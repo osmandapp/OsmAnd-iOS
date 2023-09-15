@@ -66,21 +66,17 @@ class TravelObfHelper : NSObject {
             var articlesLimitReached = false
             repeat {
                 if foundAmenities.count - foundAmenitiesIndex < PopularArticles.ARTICLES_PER_PAGE {
-                    
-                    //var location = OARootViewController.instance().mapPanel.mapViewController.getMapLocation()
                     let location = OATravelGuidesHelper.getMapCenter()
                     
                     for reader in getReaders() {
                         foundAmenities.append(contentsOf: searchAmenity(lat: location!.coordinate.latitude, lon: location!.coordinate.longitude, reader: reader, searchRadius: searchRadius, zoom: -1, searchFilter: ROUTE_ARTICLE, lang: lang!) )
-                        //foundAmenities.append(contentsOf: searchAmenity(lat: location!.coordinate.latitude, lon: location!.coordinate.longitude, reader: reader, searchRadius: searchRadius / 5, zoom: 15, searchFilter: ROUTE_TRACK, lang: nil) )
+                        foundAmenities.append(contentsOf: searchAmenity(lat: location!.coordinate.latitude, lon: location!.coordinate.longitude, reader: reader, searchRadius: searchRadius / 5, zoom: 15, searchFilter: ROUTE_TRACK, lang: nil) )
                     }
                     
                     if foundAmenities.count > 0 {
                         foundAmenities.sort { a, b in
                             let d1 = location!.distance(from: CLLocation(latitude: a.amenity.latitude(), longitude: a.amenity.longitude()))
                             let d2 = location!.distance(from: CLLocation(latitude: b.amenity.latitude(), longitude: b.amenity.longitude()))
-                            
-                            //TODO: check. Invert if needed
                             return d1 < d2
                         }
                     }
@@ -447,7 +443,7 @@ class TravelObfHelper : NSObject {
             let task = GpxFileReader(article: article, callback: callback, readers: getReaders())
             task.execute()
         } else if callback != nil {
-            callback?.onGpxFileRead(gpxFile: article.gpxFile)
+            callback?.onGpxFileRead(gpxFile: article.gpxFile, article: article)
         }
     }
     
@@ -649,7 +645,7 @@ class GpxFileReader {
         article!.gpxFileRead = true
         article!.gpxFile = gpxFile
         if callback != nil {
-            callback!.onGpxFileRead(gpxFile: gpxFile)
+            callback!.onGpxFileRead(gpxFile: gpxFile, article: article!)
         }
     }
 }

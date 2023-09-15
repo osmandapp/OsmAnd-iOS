@@ -11,7 +11,7 @@ import Foundation
 protocol TravelExploreViewControllerDelegate : AnyObject {
     func populateData(resetData: Bool)
     func onDataLoaded()
-    func openArticle(article: TravelArticle, lang: String)
+    func openArticle(article: TravelArticle, lang: String?)
     func onOpenArticlePoints()
     func close()
 }
@@ -19,12 +19,11 @@ protocol TravelExploreViewControllerDelegate : AnyObject {
 
 @objc(OATravelExploreViewController)
 @objcMembers
-class TravelExploreViewController: OABaseNavbarViewController, TravelExploreViewControllerDelegate {
-    
+class TravelExploreViewController: OABaseNavbarViewController, TravelExploreViewControllerDelegate, GpxReadDelegate {
+
     var tabBarVC: UITabBarController?
     var exploreVC: ExploreTabViewController?
     var savedArticlesVC: SavedArticlesTabViewController?
-    var spinner = UIActivityIndicatorView(style: .whiteLarge)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -103,9 +102,14 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
             exploreVC.restoreState()
         }
         
-        let vc = TravelArticleDialogViewController.init()
-        vc.delegate = self
-        self.show(vc)
+        let wasOpenedTravelGpx = OAAppSettings.sharedManager().travelGuidesState.article == nil
+        if wasOpenedTravelGpx  {
+            OAAppSettings.sharedManager().travelGuidesState.resetData()
+        } else {
+            let vc = TravelArticleDialogViewController.init()
+            vc.delegate = self
+            self.show(vc)
+        }
     }
     
     
@@ -115,10 +119,19 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         print("onOptionsButtonClicked")
     }
     
-    func openArticle(article: TravelArticle, lang: String) {
-        let vc = TravelArticleDialogViewController.init(articleId: article.generateIdentifier(), lang: lang)
-        vc.delegate = self
-        self.show(vc)
+    func openArticle(article: TravelArticle, lang: String?) {
+        if article is TravelGpx {
+            self.view.addSpinner()
+            openGpx(gpx: article as! TravelGpx)
+        } else {
+            let vc = TravelArticleDialogViewController.init(articleId: article.generateIdentifier(), lang: lang!)
+            vc.delegate = self
+            self.show(vc)
+        }
+    }
+    
+    func openGpx(gpx: TravelGpx) {
+        TravelObfHelper.shared.getArticleById(articleId: gpx.generateIdentifier(), lang: nil, readGpx: true, callback: self)
     }
     
     	
@@ -135,6 +148,27 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     
     func onOpenArticlePoints() {
         saveState()
+    }
+    
+    
+    //MARK: GpxReadDelegate
+    
+    func onGpxFileReading() {
+    }
+    
+    func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?, article: TravelArticle) {
+        //Open TravelGpx track
+        article.gpxFile = gpxFile
+        let filename = TravelObfHelper.shared.createGpxFile(article: article)
+        OATravelGuidesHelper.createGpxFile(article, fileName: filename)
+        let gpx = OATravelGuidesHelper.buildGpx(filename, title: article.title, document: gpxFile)
+        
+        saveState()
+        OAAppSettings.sharedManager().travelGuidesState.wasWatchingGpx = true
+        
+        OAAppSettings.sharedManager().showGpx([filename], update: true)
+        OARootViewController.instance().mapPanel.openTargetView(with: gpx, selectedTab: .overviewTab, selectedStatisticsTab: .overviewTab, openedFromMap: false)
+        self.dismiss()
     }
 
 }

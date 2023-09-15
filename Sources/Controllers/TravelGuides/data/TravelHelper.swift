@@ -11,7 +11,7 @@ import Foundation
 
 protocol GpxReadDelegate {
     func onGpxFileReading()
-    func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?)
+    func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?, article: TravelArticle)
 }
 
 

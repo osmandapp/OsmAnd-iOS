@@ -24,10 +24,18 @@
 #import "OAWikiArticleHelper.h"
 #import "OASelectedGPXHelper.h"
 #import "OAGPXDatabase.h"
+#import "OAMapAlgorithms.h"
 
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/Data/Amenity.h>
+#include <OsmAndCore/Data/ObfPoiSectionInfo.h>
+#include <OsmAndCore/Data/ObfMapObject.h>
+#include <OsmAndCore/Map/AmenitySymbolsProvider.h>
+#include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
+#include <OsmAndCore/ObfDataInterface.h>
+#include <OsmAndCore/Data/BinaryMapObject.h>
 
 @implementation OAFoundAmenity
 
@@ -174,9 +182,7 @@
 
 + (OAGPXDocumentAdapter *) buildGpxFile:(NSArray<NSString *> *)readers article:(OATravelArticle *)article
 {
-    //TODO: add correct type
-    NSMutableArray<id> *segmentList = [NSMutableArray array];
-    
+    QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > segmentList;
     NSMutableArray<OAPOIAdapter *> *pointList = [NSMutableArray array];
     for (NSString *reader in readers)
     {
@@ -187,12 +193,7 @@
 
         if ([article isKindOfClass:OATravelGpx.class])
         {
-            OsmAnd::PointI location = OsmAnd::PointI(article.lat, article.lon);
-            OsmAnd::PointI topLeft = OsmAnd::PointI(0, 0);
-            OsmAnd::PointI bottomRight = OsmAnd::PointI(INT_MAX, INT_MAX);
-            OsmAnd::AreaI bbox31 =  OsmAnd::AreaI(topLeft, bottomRight);
-            
-            //TODO: implement or find gpx search in obf
+            segmentList = [self.class searchGpxMapObject:article];
         }
         
         //publish function
@@ -236,7 +237,7 @@
             [OAPOIHelper findTravelGuides:[article getPointFilterString] location:location bbox31:bbox31 reader:reader publish:publish];
         }
         
-        if (segmentList.count > 0)
+        if (segmentList.size() > 0)
         {
             break;
         }
@@ -245,15 +246,60 @@
     OAGPXMutableDocument *gpxFile = nil;
     NSString *description = article.descr;
     NSString *title = [OAUtilities isValidFileName:description] ? description : article.title;
-    if (segmentList.count > 0)
+    if (segmentList.size() > 0)
     {
         BOOL hasAltitude = NO;
         OATrack *track = [[OATrack alloc] init];
-        
-        //TODO: implement
-        //for (BinaryMapDataObject segment : segmentList) {
-        //}
-        
+        NSMutableArray<OATrkSegment *> *segments = [NSMutableArray array];
+        for (auto& binaryMapObject : segmentList)
+        {
+            OATrkSegment *trkSegment = [[OATrkSegment alloc] init];
+            NSMutableArray<OAWptPt *> *points = [NSMutableArray array];
+            for (auto& point : binaryMapObject->points31)
+            {
+                const auto latLon = OsmAnd::Utilities::convert31ToLatLon(point);
+                OAWptPt *wptPt = [[OAWptPt alloc] init];
+                wptPt.position = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+                [points addObject:wptPt];
+            }
+            trkSegment.points = points;
+            
+            QString eleGraphValue;
+            QString startEleValue;
+            for (const auto& captionAttributeId : OsmAnd::constOf(binaryMapObject->captionsOrder))
+            {
+                QString tag = binaryMapObject->attributeMapping->decodeMap[captionAttributeId].tag;
+                const auto& value = OsmAnd::constOf(binaryMapObject->captions)[captionAttributeId];
+                if (tag == QString("ele_graph"))
+                    eleGraphValue = value;
+                if (tag == QString("start_ele"))
+                    startEleValue = value;
+            }
+            
+            if (eleGraphValue.size() > 0)
+            {
+                hasAltitude = YES;
+                auto heightRes = [OAMapAlgorithms decodeIntHeightArrayGraph:eleGraphValue repeatBits:3];
+                double startEle = startEleValue.toDouble();
+                trkSegment = [OAMapAlgorithms augmentTrkSegmentWithAltitudes:trkSegment decodedSteps:heightRes startEle:startEle];
+            }
+           
+            [segments addObject:trkSegment];
+        }
+        track.segments = segments;
+
+        gpxFile = [[OAGPXMutableDocument alloc] initWithTitle:title lang:article.lang descr:article.content];
+        if (article.imageTitle && article.imageTitle.length > 0)
+        {
+            NSString *link = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle thumbnail:false];
+            OALink *gpxLink = [[OALink alloc] init];
+            gpxLink.url = [[NSURL alloc] initWithString:link];
+            gpxFile.metadata.links = @[ gpxLink ];
+        }
+
+        [gpxFile addTrack:track];
+        [gpxFile.metadata setExtension:@"ref" value:article.ref];
+        gpxFile.hasAltitude = hasAltitude;
     }
     
     if (pointList.count > 0)
@@ -284,9 +330,6 @@
 
 + (OAGPX *) buildGpx:(NSString *)path title:(NSString *)title document:(OAGPXDocumentAdapter *)document
 {
-//    OAGPXDocument *gpx = document.object;
-//    return [OAGPXDatabase.sharedDb buildGpxItem:path.lastPathComponent path:path title:title desc:gpx.metadata.desc bounds:gpx.bounds document:document.object];
-    
     OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
     OAGPXDocument *gpxDoc = document.object;
     OAGPX *gpx = [OAGPXDatabase.sharedDb buildGpxItem:path.lastPathComponent path:path title:title desc:gpxDoc.metadata.desc bounds:gpxDoc.bounds document:gpxDoc];
@@ -295,31 +338,52 @@
     return gpx;
 }
 
-//+ (void) addGpxToDb:(OAGPX *)gpx path:(NSString *)path
-//{
-//    OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-//    NSString *gpxFilePath = [OAUtilities getGpxShortPath:path];
-////    OAGPX *oldGpx = [gpxDb getGPXItem:gpxFilePath];
-////    OAGPX *gpx = [gpxDb buildGpxItem:gpxFilePath title:_savedGpxFile.metadata.name desc:_savedGpxFile.metadata.desc bounds:_savedGpxFile.bounds document:_savedGpxFile];
-//    OAGPX *gpx = [gpxDb buildGpxItem:gpxFilePath title:_savedGpxFile.metadata.name desc:_savedGpxFile.metadata.desc bounds:_savedGpxFile.bounds document:_savedGpxFile];
-////    if (oldGpx)
-////    {
-////        gpx.showArrows = oldGpx.showArrows;
-////        gpx.showStartFinish = oldGpx.showStartFinish;
-////        gpx.color = oldGpx.color;
-////        gpx.coloringType = oldGpx.coloringType;
-////        gpx.width = oldGpx.width;
-////        gpx.splitType = oldGpx.splitType;
-////        gpx.splitInterval = oldGpx.splitInterval;
-////    }
-//    [gpxDb replaceGpxItem:gpx];
-//    [gpxDb save];
-//}
-
 + (NSString *) selectedGPXFiles:(NSString *)fileName
 {
     return [OASelectedGPXHelper.instance selectedGPXFiles:fileName];
 }
 
++ (QList< std::shared_ptr<const OsmAnd::BinaryMapObject> >) searchGpxMapObject:(OATravelGpx *)travelGpx
+{
+    OsmAndAppInstance app = OsmAndApp.instance;
+    const auto& obfsDataInterface = app.resourcesManager->obfsCollection->obtainDataInterfaceByFilename(QString::fromNSString(travelGpx.file));
+    
+    QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > loadedBinaryMapObjects;
+    QList< std::shared_ptr<const OsmAnd::Road> > loadedRoads;
+    auto tileSurfaceType = OsmAnd::MapSurfaceType::Undefined;
+    
+    OsmAnd::PointI topLeft = OsmAnd::PointI(0, 0);
+    OsmAnd::PointI bottomRight = OsmAnd::PointI(INT_MAX, INT_MAX);
+    OsmAnd::AreaI bbox31 =  OsmAnd::AreaI(topLeft, bottomRight);
+    
+    obfsDataInterface->loadMapObjects(&loadedBinaryMapObjects, &loadedRoads, &tileSurfaceType, OsmAnd::ZoomLevel15, &bbox31);
+    
+    QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > segmentList;
+    
+    for (auto& binaryMapObject : loadedBinaryMapObjects)
+    {
+        NSString *ref = @"";
+        NSString *routeId = @"";
+        NSString *name = @"";
+                
+        for (const auto& captionAttributeId : OsmAnd::constOf(binaryMapObject->captionsOrder))
+        {
+            QString tag = binaryMapObject->attributeMapping->decodeMap[captionAttributeId].tag;
+            const auto& value = OsmAnd::constOf(binaryMapObject->captions)[captionAttributeId];
+            if (tag == QString("ref"))
+                ref = value.toNSString();
+            if (tag == QString("route_id"))
+                routeId = value.toNSString();
+            if (tag == QString("name"))
+                name = value.toNSString();
+        }
+        
+        if ((ref == travelGpx.ref && routeId == travelGpx.routeId) || name == travelGpx.title)
+        {
+            segmentList.append(binaryMapObject);
+        }
+    }
+    return segmentList;
+}
 
 @end

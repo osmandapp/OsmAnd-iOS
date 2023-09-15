@@ -26,13 +26,11 @@ class ArticleTravelCell: UITableViewCell {
     @IBOutlet weak var rightButtonIcon: UIImageView!
     
     weak var tabViewDelegate: TravelExploreViewControllerDelegate?
-//    var articleId: TravelArticleIdentifier?
     var article: TravelArticle?
     var articleLang: String?
     
     
     @IBAction func leftButtonTapped(_ sender: Any) {
-        print("leftButtonTapped")
         if tabViewDelegate != nil && article != nil && articleLang != nil {
             tabViewDelegate!.openArticle(article: article!, lang: articleLang!)
         }

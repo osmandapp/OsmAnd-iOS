@@ -57,6 +57,7 @@
            routeIcon:(UIImage *)icon
                title:(NSString *)title;
 
++ (NSMutableArray<OAGPXTableCellData *> *)generateGpxBlockStatistics:(OAGPXTrackAnalysis *)analysis withoutGaps:(BOOL)withoutGaps;
 - (void)generateGpxBlockStatistics:(OAGPXTrackAnalysis *)analysis
                        withoutGaps:(BOOL)withoutGaps;
 
@@ -68,5 +69,7 @@
 
 - (void)updateFrame:(CGFloat)width;
 - (CGFloat)getInitialHeight:(CGFloat)additionalHeight;
+
++ (CGSize)getSizeForItem:(NSString *)title value:(NSString *)value isLast:(BOOL)isLast;
 
 @end

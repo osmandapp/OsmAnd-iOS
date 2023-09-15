@@ -85,6 +85,7 @@
 #import "OACopyProfileBottomSheetViewControler.h"
 #import "OABaseWebViewController.h"
 #import "OATrackMenuHudViewController.h"
+#import "OATrackMenuHeaderView.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -95,6 +96,7 @@
 #import "OAFilledButtonCell.h"
 #import "OASelectionCollapsableCell.h"
 #import "OAButtonTableViewCell.h"
+#import "OAGpxStatBlockCollectionViewCell.h"
 
 // Other
 #import "OAIndexConstants.h"

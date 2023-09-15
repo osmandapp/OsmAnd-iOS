@@ -9,7 +9,7 @@
 #import "OAPOIAdapter.h"
 #import "OAGPXDocumentPrimitivesAdapter.h"
 
-@class OATravelSearchResult, OAPOIAdapter, OATravelArticle, OAGPXDocumentAdapter, OAWptPt, OAGPX;
+@class OATravelSearchResult, OAPOIAdapter, OATravelArticle, OAGPXDocumentAdapter, OAWptPt, OAGPX, OATravelGpx;
 
 
 @interface OAFoundAmenity : NSObject

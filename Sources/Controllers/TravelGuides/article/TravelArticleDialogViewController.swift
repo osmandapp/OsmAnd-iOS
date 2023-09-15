@@ -18,7 +18,7 @@ protocol TravelArticleDialogProtocol : AnyObject {
 }
 
 
-class TravelArticleDialogViewController : OABaseWebViewController, TravelArticleDialogProtocol, OAWikiLanguagesWebDelegate, GpxReadDelegate, SFSafariViewControllerDelegate  {
+class TravelArticleDialogViewController : OABaseWebViewController, TravelArticleDialogProtocol, OAWikiLanguagesWebDelegate, GpxReadDelegate, SFSafariViewControllerDelegate {
     
     let rtlLanguages = ["ar", "dv", "he", "iw", "fa", "nqo", "ps", "sd", "ug", "ur", "yi"]
     static let EMPTY_URL = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4//"
@@ -545,7 +545,7 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         updateTrackButton(processing: true, gpxFile: nil)
     }
     
-    func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?) {
+    func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?, article: TravelArticle) {
         self.gpxFile = gpxFile
         updateTrackButton(processing: false, gpxFile: gpxFile)
     }

@@ -17,5 +17,6 @@
 - (OAGPXTrackAnalysis *) getAnalysis:(long)fileTimestamp;
 - (BOOL) hasAltitude;
 - (int) pointsCount;
+- (NSString *) getMetadataValueBy:(NSString *)tag;
 
 @end

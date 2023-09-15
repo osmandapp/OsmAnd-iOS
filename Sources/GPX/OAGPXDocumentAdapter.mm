@@ -36,4 +36,11 @@
     return obj ? obj.points.count : 0;
 }
 
+- (NSString *) getMetadataValueBy:(NSString *)tag
+{
+    OAGPXDocument *obj = [self getObject];
+    OAGpxExtension *extension = [obj.metadata getExtensionByKey:tag];
+    return extension ? extension.value : nil;
+}
+
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "OABaseButtonsViewController.h"
+#import "OATableDataModel.h"
 #import "OAColors.h"
 #import "OASizes.h"
 
@@ -26,9 +27,13 @@
 @property (weak, nonatomic) IBOutlet UIView *belowBottomMarginView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *belowBottomMarginVertivalConstraint;
 
+@property (nonatomic) OATableDataModel *tableData;
+
 @end
 
 @implementation OABaseButtonsViewController
+
+@synthesize tableData;
 
 #pragma mark - Initialization
 
@@ -37,6 +42,7 @@
     self = [super initWithNibName:@"OABaseButtonsViewController" bundle:nil];
     if (self)
     {
+        self.tableData = [OATableDataModel model];
         [self commonInit];
     }
     return self;
@@ -66,9 +72,9 @@
         [self.bottomBackgroundView addBlurEffect:YES cornerRadius:0. padding:0.];
 }
 
-- (void)updateUI:(BOOL)animated
+- (void)updateWithoutData
 {
-    [super updateUI:animated];
+    [super updateWithoutData];
     [self updateBottomButtons];
 }
 
@@ -176,8 +182,12 @@
 
 - (void)setupBottomFonts
 {
-    self.topButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold maximumSize:20.];
-    self.bottomButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold maximumSize:20.];
+    UILayoutConstraintAxis axisMode = [self getBottomAxisMode];
+    UIFont *buttonFont = axisMode == UILayoutConstraintAxisVertical
+        ? [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold maximumSize:20.]
+        : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    self.topButton.titleLabel.font = buttonFont;
+    self.bottomButton.titleLabel.font = buttonFont;
 }
 
 - (UIColor *)getBottomBackgroundColor

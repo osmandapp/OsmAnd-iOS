@@ -365,6 +365,7 @@
         _mapHudViewController.leftWidgetsViewWidthConstraint.constant = 0.;
     }
 
+    _mapHudViewController.bottomWidgetsViewWidthConstraint.constant = [OAUtilities isLandscapeIpadAware] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
     _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = hasBottomWidgets ? [_bottomPanelController calculateContentSize].height : 0.;
 
     if (hasRightWidgets)

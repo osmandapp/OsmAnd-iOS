@@ -972,7 +972,6 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentSliderTableViewCell getCellIdentifier]
                                                          owner:self options:nil];
             cell = (OASegmentSliderTableViewCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {

@@ -67,7 +67,7 @@
 
 - (BOOL) updateInfo
 {
-    if ([OADestinationsHelper instance].sortedDestinations.count == 0 || ![_settings.distanceIndicationVisibility get])
+    if ([OADestinationsHelper instance].sortedDestinations.count == 0)
     {
         [self updateVisibility:NO];
         return NO;
@@ -137,8 +137,7 @@
 {
     if (_markerDestination.hidden)
         [[OADestinationsHelper instance] showOnMap:_markerDestination];
-    
-    [[OARootViewController instance].mapPanel hideDestinationCardsView];
+
     [[OARootViewController instance].mapPanel openTargetViewWithDestination:_markerDestination];
 }
 

@@ -29,6 +29,7 @@
 @property (nonatomic, weak) id<OAWidgetListener> _Nullable delegate;
 
 - (instancetype _Nonnull )initWithType:(OAWidgetType * _Nonnull)type;
+- (void)initSeparatorView;
 
 - (BOOL)updateInfo;
 - (void)updateColors:(OATextState * _Nonnull)textState;
@@ -43,6 +44,7 @@
 - (BOOL)isExternal;
 - (OATableDataModel *_Nullable) getSettingsData:(OAApplicationMode * _Nonnull)appMode;
 
+- (void)showSeparator:(BOOL)show;
 - (void)adjustViewSize;
 - (void)attachView:(UIView *_Nonnull)container order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *_Nullable)followingWidgets;
 - (void)detachView:(OAWidgetsPanel * _Nonnull)widgetsPanel;

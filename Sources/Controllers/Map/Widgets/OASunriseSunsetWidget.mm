@@ -107,6 +107,7 @@
     row.key = @"value_pref";
     row.title = OALocalizedString(@"recording_context_menu_show");
     row.descr = OALocalizedString(@"recording_context_menu_show");
+    [row setObj:_state.getPreference forKey:@"pref"];
     [row setObj:[self.class getTitle:(EOASunriseSunsetMode)[_state.getPreference get:appMode] isSunrise:_state.isSunriseMode] forKey:@"value"];
     [row setObj:self.getPossibleValues forKey:@"possible_values"];
     return data;
@@ -118,7 +119,6 @@
     for (NSInteger i = EOASunriseSunsetTimeLeft; i <= EOASunriseSunsetNext; i++) {
         OATableRowData *row = [[OATableRowData alloc] init];
         row.cellType = OASimpleTableViewCell.getCellIdentifier;
-        [row setObj:_state.getPreference forKey:@"pref"];
         [row setObj:@(i) forKey:@"value"];
         row.title = [self.class getTitle:(EOASunriseSunsetMode) i isSunrise:_state.isSunriseMode];
         row.descr = [self.class getDescription:(EOASunriseSunsetMode) i isSunrise:_state.isSunriseMode];

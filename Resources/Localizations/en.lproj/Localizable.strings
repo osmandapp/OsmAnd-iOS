@@ -364,6 +364,7 @@
 "direction_lines" = "Direction lines";
 "active_markers" = "Active markers";
 "specify_number_of_dir_indicators" = "Specify number of direction indicators, it affects all settings below.";
+"specify_number_of_dir_indicators_desc" = "Specify number of direction indicators.";
 "choose_how_display_distance" = "Choose how to display the distance to active markers";
 "appearance_on_the_map" = "Appearance on the map";
 "arrows_direction_to_markers" = "Arrows show direction to active marker if it’s located outside the screen. Direction lines draw a line to active markers.";
@@ -3307,3 +3308,5 @@
 "reset_all_settings_desc" = "Reset all settings to default?";
 "no_widgets_here_yet" = "No widgets here yet";
 "no_widgets_descr" = "Add one or more widgets from the list of available widgets.";
+"click_on_widget" = "Click on widget";
+"map_marker_interval_dialog_desc" = "Specify the time interval for which the average speed will be measured to calculate estimated time of arrival.";

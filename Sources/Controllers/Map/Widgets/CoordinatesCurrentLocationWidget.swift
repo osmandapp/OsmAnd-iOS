@@ -25,7 +25,7 @@ class CoordinatesCurrentLocationWidget: CoordinatesBaseWidget {
     }
 
     override func updateInfo() -> Bool {
-        let visible = OAWidgetsVisibilityHelper.init().shouldShowTopCurrentLocationCoordinatesWidget()
+        let visible = OAWidgetsVisibilityHelper.sharedInstance().shouldShowTopCurrentLocationCoordinatesWidget()
         updateVisibility(visible: visible)
 
         if visible {

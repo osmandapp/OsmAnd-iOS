@@ -88,13 +88,10 @@
 {
     BOOL shouldShow = [self shouldShowTopCoordinatesWidget];
     if (shouldShow)
-    {
         for (NSString *component in [[_settings.mapInfoControls get] componentsSeparatedByString:SETTINGS_SEPARATOR])
-        {
-            if ([component hasPrefix:@"coordinates_map_center"])
+            if ([component hasPrefix:OAWidgetType.coordinatesMapCenter.id])
                 return YES;
-        }
-    }
+
     return [_settings.showMapCenterCoordinatesWidget get] && [_settings.quickActionIsOn get];
 }
 
@@ -102,13 +99,10 @@
 {
     BOOL shouldShow = [self shouldShowTopCoordinatesWidget];
     if (shouldShow)
-    {
         for (NSString *component in [[_settings.mapInfoControls get] componentsSeparatedByString:SETTINGS_SEPARATOR])
-        {
-            if ([component hasPrefix:@"coordinates_current_location"])
+            if ([component hasPrefix:OAWidgetType.coordinatesCurrentLocation.id])
                 return YES;
-        }
-    }
+
     return [_settings.showCurrentLocationCoordinatesWidget get] && [_settings.quickActionIsOn get];
 }
 
@@ -126,20 +120,26 @@
     ![self isSelectingTilesZone];
 }
 
-- (BOOL)shouldHideMapMarkersWidget
+- (BOOL)shouldShowTopMapMarkersWidget
 {
-    return [self isMapRouteInfoMenuVisible] ||
-    [_mapPanel isTopToolbarActive] ||
-    ![_mapPanel isTopControlsVisible] ||
-    [self isInTrackAppearanceMode] ||
-    [self isInPlanRouteMode] ||
-    [self isInRouteLineAppearanceMode] ||
-    [self isInGpsFilteringMode] ||
-    [self isInWeatherForecastMode] ||
-    [self isSelectingTilesZone];
+    BOOL shouldShow =
+    	![self isMapRouteInfoMenuVisible] &&
+	    [_mapPanel isTopControlsVisible] &&
+	    ![_mapPanel isTopToolbarActive] &&
+	    ![self isInTrackAppearanceMode] &&
+	    ![self isInPlanRouteMode] &&
+        ![self isInRouteLineAppearanceMode] &&
+	    ![self isInGpsFilteringMode] &&
+	    ![self isInWeatherForecastMode] &&
+	    ![self isSelectingTilesZone];
+
+    if (shouldShow)
+        return [self isTopMapMarkersWidgetEnabled];
+
+    return NO;
 }
 
-+ (BOOL)isMapMarkerBarWidgetEnabled
+- (BOOL) isTopMapMarkersWidgetEnabled
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     OAApplicationMode *appMode = [settings.applicationMode get];
@@ -149,13 +149,10 @@
     NSMutableOrderedSet<OAMapWidgetInfo *> *enabledWidgets = [widgetRegistry getWidgetsForPanel:appMode
                                                                                     filterModes:kWidgetModeEnabled
                                                                                          panels:panels];
-
     for (OAMapWidgetInfo *widgetInfo in enabledWidgets)
-    {
-        if ([widgetInfo.key containsString:@"map_markers_top"]) {
+        if ([widgetInfo.key containsString:@"map_markers_top"])
             return YES;
-        }
-    }
+
     return NO;
 }
 

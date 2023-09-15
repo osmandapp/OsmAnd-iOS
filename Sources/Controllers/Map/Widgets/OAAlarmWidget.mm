@@ -284,7 +284,7 @@
     {
         self.hidden = !visible;
         if (self.delegate)
-            [self.delegate widgetVisibilityChanged:nil visible:visible];
+            [self.delegate widgetVisibilityChanged:self visible:visible];
         
         return YES;
     }

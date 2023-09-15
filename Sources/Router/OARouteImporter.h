@@ -20,6 +20,7 @@ struct RouteSegmentResult;
 
 //- (instancetype) initWithFile:(NSString *)file;
 - (instancetype) initWithGpxFile:(OAGPXDocument *)gpxFile;
+- (instancetype) initWithGpxFile:(OAGPXDocument *)gpxFile leftSide:(BOOL)leftSide;
 - (instancetype) initWithTrkSeg:(OATrkSegment *)segment segmentRoutePoints:(NSArray<OAWptPt *> *)segmentRoutePoints;
 
 - (std::vector<std::shared_ptr<RouteSegmentResult>> &) importRoute;

@@ -51,7 +51,7 @@ class RulerDistanceWidget: OATextInfoWidget {
     }
 
     override func updateInfo() -> Bool {
-        if let currentLocation = OsmAndApp.swiftInstance().locationServices.lastKnownLocation,
+        if let currentLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation,
            let centerLocation = OARootViewController.instance().mapPanel.mapViewController.getMapLocation() {
             let trackingUtilities = OAMapViewTrackingUtilities.instance()!
             if trackingUtilities.isMapLinkedToLocation() {

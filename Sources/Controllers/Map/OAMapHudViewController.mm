@@ -971,6 +971,10 @@
     }
 }
 
+- (BOOL)hasTopWidget {
+    return [_mapInfoController.topPanelController hasWidgets];
+}
+
 - (void) updateBottomButtonsLayout
 {
     CGFloat x = [self getExtraScreenOffset];

@@ -37,9 +37,6 @@
 #define kStatsSection 0
 #define kAdditionalRouteDetailsOffset 184.0
 
-#define VIEWPORT_SHIFTED_SCALE 1.5f
-#define VIEWPORT_NON_SHIFTED_SCALE 1.0f
-
 #define VIEWPORT_FULL_SCALE 0.6f
 #define VIEWPORT_MINIMIZED_SCALE 0.2f
 
@@ -220,8 +217,8 @@
 
 - (void) restoreMapViewPort
 {
-    if (_mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE)
-        _mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+    if (_mapView.viewportXScale != kViewportNonShifterScale)
+        _mapView.viewportXScale = kViewportNonShifterScale;
     if (_mapView.viewportYScale != _cachedYViewPort)
         _mapView.viewportYScale = _cachedYViewPort;
 }
@@ -238,16 +235,16 @@
         else if (!self.delegate.isInFullScreenMode && !self.delegate.isInFullMode && _mapView.viewportYScale != VIEWPORT_MINIMIZED_SCALE)
             _mapView.viewportYScale = VIEWPORT_MINIMIZED_SCALE;
         
-        if (_mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE)
-            _mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+        if (_mapView.viewportXScale != kViewportNonShifterScale)
+            _mapView.viewportXScale = kViewportNonShifterScale;
     }
     else
     {
         if (_mapView.viewportYScale != _cachedYViewPort)
             _mapView.viewportYScale = _cachedYViewPort;
         
-        if (_mapView.viewportXScale != VIEWPORT_SHIFTED_SCALE)
-            _mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
+        if (_mapView.viewportXScale != kViewportShifterScale)
+            _mapView.viewportXScale = kViewportShifterScale;
     }
 }
 

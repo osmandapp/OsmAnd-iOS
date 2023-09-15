@@ -49,6 +49,9 @@
     CADisplayLink* _displayLink;
 
     OsmAnd::PointI _viewSize;
+    CGFloat _topOffset;
+    CGFloat _bottomOffset;
+    float _originalViewportYScale;
 
     std::shared_ptr<OsmAnd::IMapRenderer> _renderer;
     std::shared_ptr<OsmAnd::MapAnimator> _mapAnimator;
@@ -102,6 +105,7 @@
 
     _viewportXScale = 1.f;
     _viewportYScale = 1.f;
+    _originalViewportYScale = _viewportYScale;
 
     // Create map renderer instance
     _renderer = OsmAnd::createMapRenderer(OsmAnd::MapRendererClass::AtlasMapRenderer_OpenGLES2plus);
@@ -751,10 +755,11 @@ forcedUpdate:(BOOL)forcedUpdate
 
 - (void) setViewportYScale:(float)viewportYScale
 {
-    if (_viewportYScale == viewportYScale)
+    if (_originalViewportYScale == viewportYScale)
         return;
 
     _viewportYScale = viewportYScale;
+    _originalViewportYScale = _viewportYScale;
 
     // Normalize elevation angle
     [self setElevationAngle:self.elevationAngle];
@@ -803,6 +808,9 @@ forcedUpdate:(BOOL)forcedUpdate
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_viewSize.y);
     validateGL();
     OALog(@"[OAMapRendererView %p] View size %dx%d", self, _viewSize.x, _viewSize.y);
+    _viewportYScale = _originalViewportYScale - _bottomOffset / _viewSize.y;
+    if (_originalViewportYScale == kViewportNonShifterScale)
+        _viewportYScale += _topOffset / _viewSize.y;
 
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _framebufferColorRenderbuffer);
     validateGL();
@@ -884,6 +892,19 @@ forcedUpdate:(BOOL)forcedUpdate
 }
 
 @synthesize settingsObservable = _settingsObservable;
+
+- (void)setTopOffsetOfViewSize:(CGFloat)topOffset bottomOffset:(CGFloat)bottomOffset
+{
+    CGFloat newTopOffset = topOffset * _displayDensityFactor;
+    CGFloat newBottomOffset = bottomOffset * _displayDensityFactor;
+    if (_topOffset != newTopOffset || _bottomOffset != newBottomOffset)
+    {
+        _topOffset = newTopOffset;
+        _bottomOffset = newBottomOffset;
+        // Kill buffers, since viewport was resized
+        [self releaseRenderAndFrameBuffers];
+    }
+}
 
 - (OsmAnd::PointI) getCenterPixel
 {

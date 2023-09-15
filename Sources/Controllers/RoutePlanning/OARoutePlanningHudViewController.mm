@@ -56,9 +56,6 @@
 #import "OATrackMenuHudViewController.h"
 #import "OAAppVersionDependentConstants.h"
 
-#define VIEWPORT_SHIFTED_SCALE 1.5f
-#define VIEWPORT_NON_SHIFTED_SCALE 1.0f
-
 #define kHeaderSectionHeigh 60.0
 
 #define PLAN_ROUTE_MODE 0x1
@@ -482,17 +479,17 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     if ([self isLeftSidePresentation] && self.currentState == EOADraggableMenuStateInitial)
     {
-        mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+        mapView.viewportXScale = kViewportNonShifterScale;
         mapView.viewportYScale = (DeviceScreenHeight - _landscapeHeaderContainerView.frame.size.height) / DeviceScreenHeight;
     }
     else if ([self isLeftSidePresentation])
     {
-        mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
+        mapView.viewportXScale = kViewportShifterScale;
         mapView.viewportYScale = (DeviceScreenHeight - _landscapeHeaderContainerView.frame.size.height) / DeviceScreenHeight;
     }
     else
     {
-        mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+        mapView.viewportXScale = kViewportNonShifterScale;
         mapView.viewportYScale = (DeviceScreenHeight - self.getViewHeight) / DeviceScreenHeight;
     }
 }
@@ -500,8 +497,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void) restoreMapViewPort
 {
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
-    if (mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE)
-        mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+    if (mapView.viewportXScale != kViewportNonShifterScale)
+        mapView.viewportXScale = kViewportNonShifterScale;
     if (mapView.viewportYScale != _cachedYViewPort)
         mapView.viewportYScale = _cachedYViewPort;
 }

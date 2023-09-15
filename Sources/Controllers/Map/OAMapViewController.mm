@@ -745,10 +745,10 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 {
     _mapPosition = mapPosition;
     
-    if (mapPosition == BOTTOM_CONSTANT && _mapView.viewportYScale != 1.5f)
-        _mapView.viewportYScale = 1.5f;
-    else if (mapPosition != BOTTOM_CONSTANT && _mapView.viewportYScale != 1.f)
-        _mapView.viewportYScale = 1.f;
+    if (mapPosition == BOTTOM_CONSTANT && _mapView.viewportYScale != kViewportShifterScale)
+        _mapView.viewportYScale = kViewportShifterScale;
+    else if (mapPosition != BOTTOM_CONSTANT && _mapView.viewportYScale != kViewportNonShifterScale)
+        _mapView.viewportYScale = kViewportNonShifterScale;
 }
 
 - (void) setupMapArrowsLocation

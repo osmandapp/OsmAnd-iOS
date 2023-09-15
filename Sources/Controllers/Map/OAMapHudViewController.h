@@ -117,5 +117,6 @@
 - (void) updateInfo;
 
 - (void) updateCurrentLocationAddress;
+- (BOOL)hasTopWidget;
 
 @end

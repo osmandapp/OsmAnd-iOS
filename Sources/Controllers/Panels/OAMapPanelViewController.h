@@ -121,6 +121,8 @@
 - (void) updateOverlayUnderlayView;
 - (BOOL) isOverlayUnderlayViewVisible;
 
+- (BOOL)hasTopWidget;
+
 - (OATargetPoint *) getCurrentTargetPoint;
 
 - (void) hideTargetPointMenu;

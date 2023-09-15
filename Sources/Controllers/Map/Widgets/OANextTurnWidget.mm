@@ -135,7 +135,7 @@
 - (CGFloat) getWidgetHeight
 {
     if (_horisontalMini)
-        return kTextInfoWidgetHeight;
+        return [super getWidgetHeight];
     else
         return kNextTurnInfoWidgetHeight;
 }
@@ -206,6 +206,9 @@
         leftViewFrame.origin.y = (self.getWidgetHeight - leftViewFrame.size.height) / 2;
         self.leftView.frame = leftViewFrame;
     }
+    CGRect rect = self.frame;
+    rect.size.height += self.textView.frame.origin.y;
+    self.frame = rect;
 }
 
 - (void) updateDistance

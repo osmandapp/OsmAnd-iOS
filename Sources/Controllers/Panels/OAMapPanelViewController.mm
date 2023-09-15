@@ -3503,6 +3503,15 @@ typedef enum
     [self hideToolbar:toolbarController];
 }
 
+- (BOOL)hasTopWidget
+{
+    if (self.hudViewController)
+    {
+        return [self.hudViewController hasTopWidget];
+    }
+    return false;
+}
+
 - (void) recreateAllControls
 {
     if (self.hudViewController)

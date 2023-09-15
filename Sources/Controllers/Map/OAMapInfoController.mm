@@ -297,8 +297,9 @@
 - (void)configureLayerWidgets:(BOOL)hasTopWidgets
 {
     if (hasTopWidgets) {
-        [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner];
-        [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMaxXMaxYCorner];
+        CACornerMask maskedCorners = kCALayerMinXMaxYCorner | kCALayerMaxXMaxYCorner;
+        [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners];
+        [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners];
     }
     else
     {

@@ -29,6 +29,7 @@
     UIView *_rightIconLargeTitle;
 
     UIBarButtonItem *_leftNavbarButton;
+    UILongPressGestureRecognizer *_leftButtonLongTapRecognizer;
 }
 
 #pragma mark - Initialization
@@ -391,6 +392,10 @@
         [leftButton addTarget:self action:@selector(onLeftNavbarButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         leftButton.translatesAutoresizingMaskIntoConstraints = NO;
         [leftButton.widthAnchor constraintLessThanOrEqualToConstant:freeSpaceForNavbarButton].active = YES;
+        
+        _leftButtonLongTapRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLeftNavbarButtonLongtapPressed:)];
+        [leftButton addGestureRecognizer:_leftButtonLongTapRecognizer];
+        leftButton.userInteractionEnabled = YES;
 
         NSString *accessibilityLabel = [self getCustomAccessibilityForLeftNavbarButton];
         if (!accessibilityLabel)
@@ -710,6 +715,16 @@
 }
 
 #pragma mark - Selectors
+
+- (IBAction)onLeftNavbarButtonLongtapPressed:(UIButton *)sender
+{
+    [self onLeftNavbarButtonLongtapPressed];
+}
+
+- (void)onLeftNavbarButtonLongtapPressed
+{
+    [self dismissViewController];
+}
 
 - (void)onRightNavbarButtonPressed
 {

@@ -287,6 +287,10 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         }
     }
     
+    override func onLeftNavbarButtonLongtapPressed() {
+        super.dismiss()
+    }
+    
     
     //MARK: Data
     

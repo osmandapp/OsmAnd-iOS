@@ -42,7 +42,7 @@
 #define kFastAnimationTime 0.5f
 #define kOneSecondAnimatonTime 1.0f
 #define kHalfSecondAnimatonTime 0.5f
-#define kScreensToFlyWithAnimation 4.0
+#define kScreensToFlyWithAnimation 400000.0
 #define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
 

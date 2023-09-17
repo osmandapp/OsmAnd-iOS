@@ -1516,7 +1516,6 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentSliderTableViewCell getCellIdentifier]
                                                          owner:self options:nil];
             cell = (OASegmentSliderTableViewCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.topRightLabel.textColor = UIColorFromRGB(color_primary_purple);
             cell.topRightLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
         }

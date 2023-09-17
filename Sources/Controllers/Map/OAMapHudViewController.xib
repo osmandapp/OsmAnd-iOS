@@ -13,6 +13,7 @@
                 <outlet property="bottomBarViewHeightConstraint" destination="vDy-Bj-0RM" id="H0Q-8R-MR7"/>
                 <outlet property="bottomWidgetsView" destination="2RZ-GK-954" id="aQF-fs-YDY"/>
                 <outlet property="bottomWidgetsViewHeightConstraint" destination="SO9-In-c4y" id="Jay-Vo-S03"/>
+                <outlet property="bottomWidgetsViewWidthConstraint" destination="ZW7-CR-fBK" id="37k-Mc-Egt"/>
                 <outlet property="compassBox" destination="zKf-ZI-4L4" id="8yD-MW-KXd"/>
                 <outlet property="compassButton" destination="duk-mu-8Hu" id="vvC-Wd-07Q"/>
                 <outlet property="compassImage" destination="qfF-4i-ios" id="lwK-mx-JcJ"/>
@@ -81,6 +82,7 @@
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="52" id="SO9-In-c4y"/>
+                                <constraint firstAttribute="width" constant="414" id="ZW7-CR-fBK"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cig-0C-vFU" userLabel="leftPanel" customClass="OAUserInteractionPassThroughView">
@@ -102,10 +104,11 @@
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
+                        <constraint firstItem="2RZ-GK-954" firstAttribute="centerX" secondItem="w1v-g4-GFe" secondAttribute="centerX" id="2Th-rm-hLr"/>
                         <constraint firstAttribute="trailingMargin" secondItem="K8g-PT-gdL" secondAttribute="trailing" priority="999" constant="-8" id="3LD-NT-9Ml"/>
                         <constraint firstItem="cig-0C-vFU" firstAttribute="leading" secondItem="w1v-g4-GFe" secondAttribute="leadingMargin" constant="-10" id="H90-Re-Dif"/>
                         <constraint firstItem="cig-0C-vFU" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="2RZ-GK-954" secondAttribute="top" priority="999" id="QVk-GZ-SmH"/>
-                        <constraint firstItem="2RZ-GK-954" firstAttribute="leading" secondItem="w1v-g4-GFe" secondAttribute="leadingMargin" constant="-8" id="SGi-I2-Hsf"/>
+                        <constraint firstItem="2RZ-GK-954" firstAttribute="leading" secondItem="w1v-g4-GFe" secondAttribute="leadingMargin" priority="999" constant="-8" id="SGi-I2-Hsf"/>
                         <constraint firstItem="K8g-PT-gdL" firstAttribute="leading" secondItem="w1v-g4-GFe" secondAttribute="leadingMargin" priority="999" constant="-8" id="W4e-2v-DSu"/>
                         <constraint firstAttribute="bottom" secondItem="2RZ-GK-954" secondAttribute="bottom" id="bNi-In-1bI"/>
                         <constraint firstItem="8m9-Ym-Yya" firstAttribute="top" secondItem="K8g-PT-gdL" secondAttribute="bottom" id="cXy-oN-mfY"/>
@@ -113,7 +116,7 @@
                         <constraint firstItem="8m9-Ym-Yya" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="2RZ-GK-954" secondAttribute="top" priority="999" id="kSQ-Gc-881"/>
                         <constraint firstItem="K8g-PT-gdL" firstAttribute="top" secondItem="w1v-g4-GFe" secondAttribute="top" id="l7W-kJ-xAQ"/>
                         <constraint firstItem="K8g-PT-gdL" firstAttribute="centerX" secondItem="w1v-g4-GFe" secondAttribute="centerX" id="nd0-KQ-Ihp"/>
-                        <constraint firstAttribute="trailingMargin" secondItem="2RZ-GK-954" secondAttribute="trailing" constant="-8" id="oaV-Cz-WGl"/>
+                        <constraint firstAttribute="trailingMargin" secondItem="2RZ-GK-954" secondAttribute="trailing" priority="999" constant="-8" id="oaV-Cz-WGl"/>
                         <constraint firstItem="cig-0C-vFU" firstAttribute="top" secondItem="K8g-PT-gdL" secondAttribute="bottom" id="xJK-OC-uYa"/>
                     </constraints>
                 </view>

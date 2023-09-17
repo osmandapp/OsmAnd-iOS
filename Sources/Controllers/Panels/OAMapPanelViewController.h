@@ -63,11 +63,7 @@
 
 - (BOOL) gpxModeActive;
 
-- (void) destinationsAdded;
-- (void) openDestinationCardsView;
-- (void) hideDestinationCardsView;
-- (void) hideDestinationCardsViewAnimated:(BOOL)animated;
-- (void) openHideDestinationCardsView;
+- (void) openDestinationViewController;
 
 - (void) swapStartAndFinish;
 
@@ -103,6 +99,7 @@
 - (void) showConfigureScreen:(OAApplicationMode *)targetMode;
 - (void) showMapStylesScreen;
 - (void) showWeatherLayersScreen;
+- (void) showTerrainScreen;
 
 - (void) addWaypoint;
 
@@ -119,6 +116,8 @@
 - (void) updateToolbar;
 - (void) updateOverlayUnderlayView;
 - (BOOL) isOverlayUnderlayViewVisible;
+
+- (BOOL)hasTopWidget;
 
 - (OATargetPoint *) getCurrentTargetPoint;
 
@@ -198,7 +197,7 @@
 - (void) applyTargetPoint:(OATargetPoint *)targetPoint;
 - (void) moveMapToLat:(double)lat lon:(double)lon zoom:(int)zoom withTitle:(NSString *)title;
 
-- (void) showCards;
+- (void) showDestinations;
 
 - (void) showToolbar:(OAToolbarViewController *)toolbarController;
 - (void) hideToolbar:(OAToolbarViewController *)toolbarController;
@@ -231,8 +230,6 @@
 - (BOOL) switchToRoutePlanningLayout;
 - (void) startNavigation;
 - (void) stopNavigation;
-
-- (void) refreshToolbar;
 
 - (void) onHandleIncomingURL:(NSString *)ext;
 

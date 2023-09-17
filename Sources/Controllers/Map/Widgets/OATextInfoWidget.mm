@@ -36,8 +36,6 @@
     UIFont *_largeBoldFont;
     UIFont *_smallFont;
     UIFont *_smallBoldFont;
-    
-    UIView *_separatorView;
 
     BOOL _metricSystemDepended;
     BOOL _angularUnitsDepended;
@@ -52,6 +50,7 @@
     if (self)
     {
         self.frame = CGRectMake(0, 0, kTextInfoWidgetWidth, kTextInfoWidgetHeight);
+        [self initSeparatorView];
     }
     return self;
 }
@@ -62,6 +61,7 @@
     if (self)
     {
         self.frame = CGRectMake(0, 0, kTextInfoWidgetWidth, kTextInfoWidgetHeight);
+        [self initSeparatorView];
         [self commonInit];
     }
     
@@ -71,8 +71,10 @@
 - (void) commonInit
 {
     _textView = [[UILabel alloc] init];
+    _textView.adjustsFontForContentSizeCategory = YES;
     _textShadowView = [[UILabel alloc] init];
-    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(2., 4., imageSide, imageSide)];
+    _textShadowView.adjustsFontForContentSizeCategory = YES;
+    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(3, 4, imageSide, imageSide)];
     
     [self addSubview:_textShadowView];
     [self addSubview:_textView];
@@ -80,17 +82,12 @@
     
     self.backgroundColor = [UIColor whiteColor];
 
-    _separatorView = [[UIView alloc] init];
-    _separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
-    _separatorView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - .5, CGRectGetWidth(self.frame), .5);
-    [self addSubview:_separatorView];
-
-    _largeFont = [UIFont systemFontOfSize:21 weight:UIFontWeightSemibold];
-    _largeBoldFont = [UIFont systemFontOfSize:21 weight:UIFontWeightBold];
+    _largeFont = [UIFont scaledSystemFontOfSize:21 weight:UIFontWeightSemibold];
+    _largeBoldFont = [UIFont scaledSystemFontOfSize:21 weight:UIFontWeightBold];
     _primaryFont = _largeFont;
     _primaryColor = [UIColor blackColor];
-    _smallFont = [UIFont systemFontOfSize:14 weight:UIFontWeightSemibold];
-    _smallBoldFont = [UIFont systemFontOfSize:14 weight:UIFontWeightBold];
+    _smallFont = [UIFont scaledSystemFontOfSize:14 weight:UIFontWeightSemibold];
+    _smallBoldFont = [UIFont scaledSystemFontOfSize:14 weight:UIFontWeightBold];
     _unitsFont = _smallFont;
     _unitsColor = [UIColor grayColor];
     _primaryShadowColor = nil;
@@ -130,6 +127,12 @@
 - (void) setImage:(UIImage *)image
 {
     [_imageView setImage:image];
+}
+
+- (void) setImage:(UIImage *)image withColor:(UIColor *)color
+{
+    [self setImage:image];
+    _imageView.tintColor = color;
 }
 
 - (void) setImageHidden:(BOOL)hidden
@@ -288,7 +291,7 @@
 
 - (CGFloat) getWidgetHeight
 {
-    return kTextInfoWidgetHeight;
+    return self.frame.size.height;
 }
 
 - (void) adjustViewSize
@@ -296,18 +299,24 @@
     [_textView sizeToFit];
     CGRect tf = _textView.frame;
     tf.origin.x = _imageView.hidden ? 4 : 28;
-    tf.size.height = 22;
-    tf.origin.y = ([self getWidgetHeight] - tf.size.height) / 2;
-    tf.size.width = MAX(tf.size.width, _imageView.hidden ? fullTextWidth : minTextWidth);
+    tf.size.height = tf.size.height;
+    tf.origin.y = 5;
+    CGFloat currentWidth = MAX(tf.size.width, _imageView.hidden ? fullTextWidth : minTextWidth);
+    // TODO: need a more flexible solution for OAUtilities.isLandscapeIpadAware (topWidgetsViewWidthConstraint.constant)
+    CGFloat widthLimit = [[OARootViewController instance].mapPanel hasTopWidget] ? 120 : [UIScreen mainScreen].bounds.size.width / 2 - 40;
+    tf.size.width = currentWidth > widthLimit ? widthLimit : currentWidth;
+
     _textView.frame = tf;
     _textShadowView.frame = tf;
 
     CGRect f = self.frame;
     f.size.width = tf.origin.x + tf.size.width + 4;
-    f.size.height = [self getWidgetHeight];
+    f.size.height = tf.size.height + 10;
+
+    CGRect imageRect = _imageView.frame;
+    imageRect.origin.y = f.size.height / 2 - imageRect.size.height / 2;
+    _imageView.frame = imageRect;
     self.frame = f;
-    
-    _separatorView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - .5, CGRectGetWidth(self.frame), .5);
 }
 
 - (BOOL) updateVisibility:(BOOL)visible

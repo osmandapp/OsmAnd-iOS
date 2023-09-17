@@ -201,6 +201,8 @@
 "second_next_turn_widget_desc" = "The widget shows information about your second next turn which is enabled if turn within approaching distance.";
 "next_turn_widget_desc" = "The widget shows information about your next turn with a picture of maneuver and distance to it.";
 "average_speed_widget_desc" = "Shows the current trip's average speed.";
+"average_speed_time_interval_desc" = "Specify the time interval for speed averaging.";
+"average_speed_skip_stops" = "Take stops into account";
 "elevation_profile_widget_desc" = "Shows the elevation and slope profile of the current route.";
 "parking_widget_desc" = "Shows the distance from the screen center to your parking spot.";
 "mapillary_widget_desc" = "Provides quick access to the Mapillary app to add street-level imagery.";
@@ -362,6 +364,7 @@
 "direction_lines" = "Direction lines";
 "active_markers" = "Active markers";
 "specify_number_of_dir_indicators" = "Specify number of direction indicators, it affects all settings below.";
+"specify_number_of_dir_indicators_desc" = "Specify number of direction indicators.";
 "choose_how_display_distance" = "Choose how to display the distance to active markers";
 "appearance_on_the_map" = "Appearance on the map";
 "arrows_direction_to_markers" = "Arrows show direction to active marker if it’s located outside the screen. Direction lines draw a line to active markers.";
@@ -611,7 +614,12 @@
 "on_hold" = "On hold";
 "shared_string_paused" = "Paused";
 
+"unsaved_changes" = "Unsaved changes";
+"unsaved_changes_will_be_lost_discard" = "Any unsaved changes will be lost. Discard changes?";
+
+
 // Shared Strings
+"shared_string_discard" = "Discard";
 "shared_string_cancelled" = "Cancelled";
 "shared_string_undefined" = "Undefined";
 "shared_string_custom" = "Custom";
@@ -664,6 +672,7 @@
 "shared_string_on" = "On";
 "shared_string_off" = "Off";
 "shared_string_clear_cache" = "Clear cache";
+"shared_string_cache" = "Cache";
 "shared_string_maximum" = "Maximum";
 "osmand_parking_warning" = "Warning";
 "shared_string_copy" = "Copy";
@@ -954,9 +963,9 @@
 "map_settings_slopes_legend" = "You can read more about the slopes on Wikipedia";
 "map_settings_slopes_description" = "Slope is colorized visualisations on terrain.";
 "map_settings_hillshade_description" = "Hillshade map using dark shades to show slopes, peaks and lowlands.";
-"map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
-"map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
-"map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
+"map_settings_zoom_level_description" = "Set the minimum and maximum zoom levels at which the layer will be displayed";
+"map_settings_add_maps_hillshade" = "Additional maps are needed to view Hillshades on the map.";
+"map_settings_add_maps_slopes" = "Additional maps are needed to view Slopes on the map.";
 "shared_string_legend" = "Legend";
 
 "map_settings_show_slider_map" = "Show slider on the map";
@@ -1479,7 +1488,7 @@
 "res_zoom_invalid_value" = "Zoom values should be in range 1 - 22";
 "res_offlineSQL_URL_warning" = "Not supported for this map type";
 "clear_tiles_warning" = "Applying these changes will clear the cached data for this tile source";
-"download_heightmap_maps" = "Terrain map";
+"download_heightmap_maps" = "Terrain map (3D)";
 "welmode_download_maps" = "Download maps";
 "srtm_unit_format" = "Contour lines unit variant";
 "srtm_download_single_help_message" = "Please select the variant. You will need to re-download the file to change the format.";
@@ -2204,6 +2213,7 @@
 "offline_raster_map" = "Offline raster map";
 "offline_raster_maps" = "Offline raster maps";
 "online_raster_maps" = "Online raster maps";
+"terrain_3D_maps" = "Terrain maps";
 "online_map" = "Online map";
 "calculating_progress" = "Calculating...";
 "local_map_names" = "Local names";
@@ -3298,3 +3308,5 @@
 "reset_all_settings_desc" = "Reset all settings to default?";
 "no_widgets_here_yet" = "No widgets here yet";
 "no_widgets_descr" = "Add one or more widgets from the list of available widgets.";
+"click_on_widget" = "Click on widget";
+"map_marker_interval_dialog_desc" = "Specify the time interval for which the average speed will be measured to calculate estimated time of arrival.";

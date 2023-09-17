@@ -43,7 +43,6 @@
 
 NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 NSString *const kTestHeightmapKey = @"kTestHeightmapKey";
-NSString *const kUse3dReliefHeightmapsKey = @"kUse3dReliefHeightmapsKey";
 NSString *const kDisableVertexHillshade = @"kDisableVertexHillshade";
 NSString *const kGenerateHillshadeKey = @"kGenerateHillshadeKey";
 NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
@@ -108,14 +107,6 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
         kCellSwitchEnabledKey : @([OAIAPHelper isOsmAndProAvailable]),
         kCellSwitchUserInteractionEnabledKey : @(YES),
         @"actionBlock" : (^void(){ [weakSelf openProPlanScreen]; })
-    }];
-    [heightMapSection addRowFromDictionary:@{
-        kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
-        kCellKeyKey : kUse3dReliefHeightmapsKey,
-        kCellTitleKey : OALocalizedString(@"use_heightmap_setting"),
-        kCellSwitchIsOnKey : @([_plugin.enable3DMaps get]),
-        kCellSwitchEnabledKey : @(YES),
-        kCellSwitchUserInteractionEnabledKey : @(heightmapEnabled)
     }];
     [heightMapSection addRowFromDictionary:@{
         kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
@@ -260,10 +251,6 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
         [_plugin.enableHeightmap set:isOn];
         [self generateData];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
-    else if ([item.key isEqualToString:kUse3dReliefHeightmapsKey])
-    {
-        [_plugin.enable3DMaps set:isOn];
     }
     else if ([item.key isEqualToString:kDisableVertexHillshade])
     {

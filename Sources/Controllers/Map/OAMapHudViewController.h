@@ -43,6 +43,7 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *topWidgetsViewYConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *topWidgetsViewWidthConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *topWidgetsViewHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomWidgetsViewWidthConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomWidgetsViewHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftWidgetsViewTopConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftWidgetsViewHeightConstraint;
@@ -117,5 +118,6 @@
 - (void) updateInfo;
 
 - (void) updateCurrentLocationAddress;
+- (BOOL)hasTopWidget;
 
 @end

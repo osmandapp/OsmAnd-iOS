@@ -275,7 +275,7 @@
         if (!widgetsOfPage)
         {
             widgetsOfPage = [NSMutableOrderedSet orderedSet];
-            widgetsByPages[@(page)] = widgetsOfPage;
+            [widgetsByPages setObject:widgetsOfPage forKey:@(page)];
         }
         [widgetsOfPage addObject:widgetInfo];
     }
@@ -312,7 +312,9 @@
             }
         }
     }
-    return filteredWidgets;
+    NSMutableOrderedSet<OAMapWidgetInfo *> *filteredWidgetsSort = [filteredWidgets mutableCopy];
+    [filteredWidgetsSort sortUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"pageIndex" ascending:YES]]];
+    return filteredWidgetsSort;
 }
 
 - (BOOL) isWeatherToolbarVisible
@@ -333,7 +335,6 @@
 
 - (void) resetDefaultAppearance:(OAApplicationMode *)appMode
 {
-    [_settings.distanceIndicationVisibility resetToDefault];
     [_settings.transparentMapTheme resetToDefault];
     [_settings.showStreetName resetToDefault];
     [_settings.positionPlacementOnMap resetToDefault];

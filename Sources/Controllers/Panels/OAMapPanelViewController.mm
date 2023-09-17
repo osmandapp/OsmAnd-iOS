@@ -17,7 +17,6 @@
 #import "OAIAPHelper.h"
 #import "OAGPXDatabase.h"
 #import <UIViewController+JASidePanel.h>
-#import "OADestinationCardsViewController.h"
 #import "OAPluginPopupViewController.h"
 #import "OATargetDestinationViewController.h"
 #import "OATargetHistoryItemViewController.h"
@@ -51,7 +50,6 @@
 #import "OADownloadMapWidget.h"
 #import "OAMapRendererView.h"
 #import "OANativeUtilities.h"
-#import "OADestinationViewController.h"
 #import "OADestination.h"
 #import "OAMapSettingsViewController.h"
 #import "OAQuickSearchViewController.h"
@@ -102,6 +100,7 @@
 #import "OAMapInfoController.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OAMapSettingsTerrainParametersViewController.h"
 
 #import "OARouteKey.h"
 #import "OANetworkRouteSelectionTask.h"
@@ -125,11 +124,10 @@ typedef enum
     
 } EOATargetMode;
 
-@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, OARouteInformationListener, OAGpxWptEditingHandlerDelegate, OAOpenAddTrackDelegate>
+@interface OAMapPanelViewController () <OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, OARouteInformationListener, OAGpxWptEditingHandlerDelegate, OAOpenAddTrackDelegate>
 
 @property (nonatomic) OAMapHudViewController *hudViewController;
 @property (nonatomic) OAMapillaryImageViewController *mapillaryController;
-@property (nonatomic) OADestinationViewController *destinationViewController;
 
 @property (strong, nonatomic) OATargetPointView* targetMenuView;
 @property (strong, nonatomic) OATargetMultiView* targetMultiMenuView;
@@ -146,6 +144,7 @@ typedef enum
     OASavingTrackHelper *_recHelper;
     OARoutingHelper *_routingHelper;
     OAMapViewTrackingUtilities *_mapViewTrackingUtilities;
+    OADestinationsHelper *_destinationsHelper;
 
     OAAutoObserverProxy* _addonsSwitchObserver;
     OAAutoObserverProxy* _destinationRemoveObserver;
@@ -184,8 +183,7 @@ typedef enum
     OACarPlayActiveViewController *_carPlayActiveController;
 
     BOOL _isNewContextMenuStillEnabled;
-    BOOL _wasRotated;
-    
+
     MBProgressHUD *_gpxProgress;
     OANetworkRouteSelectionTask *_gpxNetworkTask;
 }
@@ -209,6 +207,7 @@ typedef enum
     _mapActions = [[OAMapActions alloc] init];
     _routingHelper = [OARoutingHelper sharedInstance];
     _mapViewTrackingUtilities = [OAMapViewTrackingUtilities instance];
+    _destinationsHelper = [OADestinationsHelper instance];
     _mapWidgetRegistry = [OAMapWidgetRegistry sharedInstance];
     _weatherToolbarStateChangeObservable = [[OAObservable alloc] init];
 
@@ -288,7 +287,6 @@ typedef enum
         _mapNeedsRestore = NO;
         [self restoreMapAfterReuse];
     }
-    [_destinationViewController refreshView];
     self.sidePanelController.recognizesPanGesture = NO; //YES;
 }
 
@@ -335,18 +333,6 @@ typedef enum
 
 - (void) updateHUD:(BOOL)animated
 {
-    if (!_destinationViewController)
-    {
-        _destinationViewController = [[OADestinationViewController alloc] initWithNibName:@"OADestinationViewController" bundle:nil];
-        _destinationViewController.delegate = self;
-        _destinationViewController.destinationDelegate = self;
-        
-        if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisibility get])
-            [self showToolbar:_destinationViewController];
-    }
-    else if ([_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY)
-        [self showToolbar:_destinationViewController];
-    
     // Inflate new HUD controller
     if (!self.hudViewController)
     {
@@ -409,6 +395,8 @@ typedef enum
         _activeTargetType = OATargetRouteLineAppearance;
     else if ([controller isKindOfClass:OAWeatherLayerSettingsViewController.class])
         _activeTargetType = OATargetWeatherLayerSettings;
+    else if ([controller isKindOfClass:OAMapSettingsTerrainParametersViewController.class])
+        _activeTargetType = OATargetTerrainParametersSettings;
 
     [self setupScrollableHud:controller];
 }
@@ -439,15 +427,6 @@ typedef enum
     [self showScrollableHudViewController:controller];
 }
 
-- (void) refreshToolbar
-{
-    [_destinationViewController refreshView];
-    if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.distanceIndicationVisibility get] && [_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY)
-        [self showToolbar:_destinationViewController];
-    else
-        [self hideToolbar:_destinationViewController];
-}
-
 - (void) updateOverlayUnderlayView
 {
     [self.hudViewController updateOverlayUnderlayView];
@@ -460,7 +439,7 @@ typedef enum
 
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
-    if (_dashboard || !_mapillaryController.view.hidden || (_destinationViewController && _destinationViewController.view.superview))
+    if (_dashboard || !_mapillaryController.view.hidden)
         return UIStatusBarStyleLightContent;
     else if (_targetMenuView != nil && _targetMenuView.customController != nil &&
                                         (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection ||
@@ -724,6 +703,12 @@ typedef enum
     [self.view sendSubviewToBack:_mapViewController.view];
 }
 
+- (void) openDestinationViewController
+{
+    OADestinationsListViewController *destinationsListViewController = [[OADestinationsListViewController alloc] init];
+    [self.navigationController pushViewController:destinationsListViewController animated:YES];
+}
+
 - (void) swapStartAndFinish
 {
     [_routeInfoView switchStartAndFinish];
@@ -912,6 +897,13 @@ typedef enum
 {
     [self showMapSettingsScreen:EMapSettingsScreenMain logEvent:nil];
     OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenWeather];
+    [mapSettingsViewController show:_dashboard.parentViewController parentViewController:_dashboard animated:YES];
+}
+
+- (void) showTerrainScreen
+{
+    [self showMapSettingsScreen:EMapSettingsScreenMain logEvent:nil];
+    OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenTerrain];
     [mapSettingsViewController show:_dashboard.parentViewController parentViewController:_dashboard animated:YES];
 }
 
@@ -1332,7 +1324,8 @@ typedef enum
     || _activeTargetType == OATargetGPX
     || _activeTargetType == OATargetRouteLineAppearance
     || _activeTargetType == OATargetWeatherLayerSettings
-    || _activeTargetType == OATargetWeatherToolbar;
+    || _activeTargetType == OATargetWeatherToolbar
+    || _activeTargetType == OATargetTerrainParametersSettings;
 }
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState
@@ -1874,18 +1867,9 @@ typedef enum
 - (void) addMapMarker:(double)lat lon:(double)lon description:(NSString *)descr
 {
     OADestination *destination = [[OADestination alloc] initWithDesc:descr latitude:lat longitude:lon];
-    
-    UIColor *color = [_destinationViewController addDestination:destination];
-    if (color)
-    {
-        [_mapViewController hideContextPinMarker];
-        [[OADestinationsHelper instance] moveDestinationOnTop:destination wasSelected:NO];
-    }
-    else
-    {
-        [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_add_destination") message:OALocalizedString(@"cannot_add_marker_desc") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil
-          ] show];
-    }
+    [_mapViewController hideContextPinMarker];
+    [_destinationsHelper addDestinationWithNewColor:destination];
+    [_destinationsHelper moveDestinationOnTop:destination wasSelected:NO];
 }
 
 - (void) targetPointDirection
@@ -1905,8 +1889,8 @@ typedef enum
         else
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [[OADestinationsHelper instance] addHistoryItem:_targetDestination];
-                [[OADestinationsHelper instance] removeDestination:_targetDestination];
+                [_destinationsHelper addHistoryItem:_targetDestination];
+                [_destinationsHelper removeDestination:_targetDestination];
             });
         }
     }
@@ -1924,11 +1908,11 @@ typedef enum
     {
         OADestination *destination = [[OADestination alloc] initWithDesc:_formattedTargetName latitude:_targetLatitude longitude:_targetLongitude];
 
-        UIColor *color = [_destinationViewController addDestination:destination];
+        UIColor *color = [_destinationsHelper addDestinationWithNewColor:destination];
         if (color)
         {
             [_mapViewController hideContextPinMarker];
-            [[OADestinationsHelper instance] moveDestinationOnTop:destination wasSelected:NO];
+            [_destinationsHelper moveDestinationOnTop:destination wasSelected:NO];
         }
         else
         {
@@ -2476,11 +2460,7 @@ typedef enum
     [self.targetMenuView.customController viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self.targetMultiMenuView transitionToSize];
-        if (_destinationViewController && _destinationViewController.view.superview)
-            _wasRotated = YES;
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        if (_destinationViewController && _destinationViewController.view.superview)
-            [self toolbarLayoutDidChange:_destinationViewController animated:YES];
     }];
 }
 
@@ -3129,7 +3109,37 @@ typedef enum
 
 - (void) openTargetViewWithDestination:(OADestination *)destination
 {
-    [self destinationViewMoveTo:destination];
+    [_mapViewController showContextPinMarker:destination.latitude longitude:destination.longitude animated:YES];
+
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+
+    NSString *caption = destination.desc;
+    UIImage *icon = [UIImage imageNamed:destination.markerResourceName];
+
+    targetPoint.type = OATargetDestination;
+
+    targetPoint.targetObj = destination;
+
+    _targetDestination = destination;
+
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = caption;
+    _targetMode = EOATargetPoint;
+    _targetLatitude = destination.latitude;
+    _targetLongitude = destination.longitude;
+    _targetZoom = 0.0;
+
+    targetPoint.location = CLLocationCoordinate2DMake(destination.latitude, destination.longitude);
+    targetPoint.title = _formattedTargetName;
+    targetPoint.icon = icon;
+    targetPoint.titleAddress = [self findRoadNameByLat:destination.latitude lon:destination.longitude];
+
+    [_targetMenuView setTargetPoint:targetPoint];
+    [self enterContextMenuMode];
+
+    [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
+        [self targetGoToPoint];
+    }];
 }
 
 - (void) openTargetViewWithDownloadMapSource:(BOOL)pushed
@@ -3357,8 +3367,6 @@ typedef enum
 - (BOOL) isTopToolbarActive
 {
     OAToolbarViewController *toolbar = [self getTopToolbar];
-    if ([toolbar isKindOfClass:OADestinationViewController.class] && ![[OADestinationCardsViewController sharedInstance] isVisible])
-        return NO;
     return toolbar || [_targetMenuView isToolbarVisible];
 }
 
@@ -3399,9 +3407,11 @@ typedef enum
     BOOL followingMode = [_routingHelper isFollowingMode];
     for (OAToolbarViewController *toolbar in _toolbars)
     {
-        BOOL isDestinationToolBar = [toolbar isKindOfClass:[OADestinationViewController class]];
-        if (toolbar && (toolbar.showOnTop || ((!followingMode && !self.hudViewController.downloadMapWidget.isVisible) || !isDestinationToolBar)))
+        if (toolbar && (toolbar.showOnTop || ((!followingMode
+        	&& !self.hudViewController.downloadMapWidget.isVisible))))
+        {
             return toolbar;
+        }
     }
     return nil;
 }
@@ -3423,13 +3433,11 @@ typedef enum
     }
 }
 
-- (void) showCards
+- (void) showDestinations
 {
     [OAAnalyticsHelper logEvent:@"destinations_open"];
 
-    _destinationViewController.showOnTop = YES;
-    [self showToolbar:_destinationViewController];
-    [self openDestinationCardsView];
+    [self openDestinationViewController];
 }
 
 - (void) showToolbar:(OAToolbarViewController *)toolbarController
@@ -3488,38 +3496,20 @@ typedef enum
 {
     if (self.hudViewController)
         [self.hudViewController updateControlsLayout:animated];
-
-    if ([toolbarController isKindOfClass:[OADestinationViewController class]])
-    {
-        OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
-        CGFloat y = _destinationViewController.view.frame.origin.y + [_destinationViewController getHeight];
-        CGFloat h = DeviceScreenHeight - y;
-        CGFloat tableWidth = DeviceScreenWidth - ([OAUtilities getLeftMargin] + 8.) * 2;
-        CGFloat toolbarHeight = 48. + [OAUtilities getBottomMargin];
-        CGFloat cardsTableHeight = h - toolbarHeight;
-        if (cardsController.view.superview && !cardsController.isHiding && [OADestinationsHelper instance].sortedDestinations.count > 0)
-        {
-            cardsController.view.frame = CGRectMake(0., y, DeviceScreenWidth, h);
-            void (^mainBlock)(void) = ^{
-                cardsController.cardsView.frame = CGRectMake(0., 0., DeviceScreenWidth, cardsTableHeight);
-                cardsController.tableView.frame = CGRectMake([OAUtilities getLeftMargin] + 8., 0., tableWidth, cardsTableHeight);
-                cardsController.bottomView.frame = CGRectMake(0., h - toolbarHeight, DeviceScreenWidth, toolbarHeight);
-                _shadeView.frame = CGRectMake(0., 0., DeviceScreenWidth, DeviceScreenHeight);
-                _shadeView.alpha = 1.0;
-                [cardsController.tableView reloadData];
-            };
-
-            if (animated)
-                [UIView animateWithDuration:.3 animations:mainBlock];
-            else
-                mainBlock();
-        }
-    }
 }
 
 - (void) toolbarHide:(OAToolbarViewController *)toolbarController;
 {
     [self hideToolbar:toolbarController];
+}
+
+- (BOOL)hasTopWidget
+{
+    if (self.hudViewController)
+    {
+        return [self.hudViewController hasTopWidget];
+    }
+    return false;
 }
 
 - (void) recreateAllControls
@@ -3597,158 +3587,6 @@ typedef enum
         OAWikiWebViewController *wikiWeb = [[OAWikiWebViewController alloc] initWithPoi:(OAPOI *) obj];
         [self.navigationController pushViewController:wikiWeb animated:YES];
     }
-}
-
-#pragma mark - OADestinationViewControllerProtocol
-
-- (void)destinationsAdded
-{
-    if ([_settings.mapMarkersDisplayMode get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisibility get])
-        [self showToolbar:_destinationViewController];
-}
-
-- (void) hideDestinations
-{
-    [self hideToolbar:_destinationViewController];
-}
-
-- (void) openDestinationCardsView
-{
-    [self.hudViewController hideWeatherToolbarIfNeeded];
-
-    OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
-    if (!cardsController.view.superview)
-    {
-        CGFloat y = _destinationViewController.view.frame.origin.y + [_destinationViewController getHeight];
-        CGFloat h = DeviceScreenHeight - y;
-        CGFloat tableWidth = DeviceScreenWidth - ([OAUtilities getLeftMargin] + 8.) * 2;
-        CGFloat toolbarHeight = 48. + [OAUtilities getBottomMargin];
-        CGFloat cardsTableHeight = h - toolbarHeight;
-
-        cardsController.cardsView.hidden = YES;
-        cardsController.bottomView.hidden = YES;
-        cardsController.view.frame = CGRectMake(-[OAUtilities getLeftMargin], 0., DeviceScreenWidth, DeviceScreenHeight);
-        cardsController.cardsView.frame = CGRectMake(0., y - h, DeviceScreenWidth, h - toolbarHeight);
-        cardsController.tableView.frame = CGRectMake([OAUtilities getLeftMargin] + 8., 0., tableWidth, h);
-        cardsController.bottomView.frame = CGRectMake(0., h + 1, DeviceScreenWidth, toolbarHeight);
-        cardsController.historyViewButton.enabled = [_settings.mapMarkersHistory get];
-        [self.hudViewController addChildViewController:cardsController];
-
-        [self createShade];
-        [self.hudViewController.view insertSubview:_shadeView belowSubview:_destinationViewController.view];
-        [self.hudViewController.view insertSubview:cardsController.view belowSubview:_destinationViewController.view];
-        
-        if (_destinationViewController)
-            [self.destinationViewController updateCloseButton];
-
-        cardsController.cardsView.hidden = NO;
-        cardsController.bottomView.hidden = NO;
-        cardsController.view.frame = CGRectMake(0., y, DeviceScreenWidth, h);
-        [UIView animateWithDuration:.25 animations:^{
-            cardsController.cardsView.frame = CGRectMake(0., 0., DeviceScreenWidth, cardsTableHeight);
-            cardsController.tableView.frame = CGRectMake([OAUtilities getLeftMargin] + 8., 0., tableWidth, h);
-            cardsController.bottomView.frame = CGRectMake(0., h - toolbarHeight, DeviceScreenWidth, toolbarHeight);
-            _shadeView.frame = CGRectMake(0., 0., DeviceScreenWidth, DeviceScreenHeight);
-            _shadeView.alpha = 1.0;
-        }];
-    }
-    [self toolbarLayoutDidChange:_destinationViewController animated:YES];
-}
-
-- (void) hideDestinationCardsView
-{
-    [self hideDestinationCardsViewAnimated:YES];
-}
-
-- (void) hideDestinationCardsViewAnimated:(BOOL)animated
-{
-    OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
-    BOOL wasOnTop = _destinationViewController.showOnTop;
-    _destinationViewController.showOnTop = NO;
-
-    if (cardsController.view.superview)
-    {
-        [cardsController doViewWillDisappear];
-        if ([OADestinationsHelper instance].sortedDestinations.count == 0 || !([_settings.distanceIndicationVisibility get]) || ([_settings.mapMarkersDisplayMode get] == WIDGET_DISPLAY))
-        {
-            [self hideToolbar:_destinationViewController];
-        }
-        else
-        {
-            [self.destinationViewController updateCloseButton];
-            if (wasOnTop)
-                [self updateToolbar];
-        }
-
-        if (animated)
-        {
-            [UIView animateWithDuration:.25 animations:^{
-                CGFloat w = DeviceScreenWidth;
-                cardsController.cardsView.frame = CGRectMake(0., -DeviceScreenHeight, w, cardsController.cardsView.frame.size.height);
-                cardsController.bottomView.frame = CGRectMake(0., DeviceScreenHeight, w, cardsController.bottomView.frame.size.height);
-                _shadeView.alpha = 0.0;
-            } completion:^(BOOL finished) {
-                [self removeShade];
-                [cardsController.view removeFromSuperview];
-                [cardsController removeFromParentViewController];
-                [self toolbarLayoutDidChange:_destinationViewController animated:!_wasRotated];
-                _wasRotated = NO;
-                [self recreateControls];
-            }];
-        }
-        else
-        {
-            [self removeShade];
-            [cardsController.view removeFromSuperview];
-            [cardsController removeFromParentViewController];
-            [self toolbarLayoutDidChange:_destinationViewController animated:!_wasRotated];
-            _wasRotated = NO;
-            [self recreateControls];
-        }
-    }
-}
-
-- (void) openHideDestinationCardsView
-{
-    if (![OADestinationCardsViewController sharedInstance].view.superview)
-        [self openDestinationCardsView];
-    else
-        [self hideDestinationCardsView];
-}
-
-- (void) destinationViewMoveTo:(OADestination *)destination
-{
-    [_mapViewController showContextPinMarker:destination.latitude longitude:destination.longitude animated:YES];
-
-    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-    
-    NSString *caption = destination.desc;
-    UIImage *icon = [UIImage imageNamed:destination.markerResourceName];
-    
-    targetPoint.type = OATargetDestination;
-    
-    targetPoint.targetObj = destination;
-    
-    _targetDestination = destination;
-    
-    _targetMenuView.isAddressFound = YES;
-    _formattedTargetName = caption;
-    _targetMode = EOATargetPoint;
-    _targetLatitude = destination.latitude;
-    _targetLongitude = destination.longitude;
-    _targetZoom = 0.0;
-    
-    targetPoint.location = CLLocationCoordinate2DMake(destination.latitude, destination.longitude);
-    targetPoint.title = _formattedTargetName;
-    targetPoint.icon = icon;
-    targetPoint.titleAddress = [self findRoadNameByLat:destination.latitude lon:destination.longitude];
-    
-    [_targetMenuView setTargetPoint:targetPoint];
-    [self enterContextMenuMode];
-    
-    [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
-        [self targetGoToPoint];
-    }];
 }
 
 // Navigation

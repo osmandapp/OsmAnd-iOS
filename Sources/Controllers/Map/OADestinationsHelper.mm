@@ -18,6 +18,7 @@
 #import "OAGPXMutableDocument.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAAppVersionDependentConstants.h"
+#import "OAColors.h"
 
 #define kMarkersChanged @"markers_modified_time"
 
@@ -27,6 +28,9 @@
     OsmAndAppInstance _app;
     
     OACommonLong *_markersModificationDate;
+
+    NSArray *_colors;
+    NSArray *_markerNames;
 }
 
 @synthesize sortedDestinations = _sortedDestinations;
@@ -51,13 +55,29 @@
         
         _sortedDestinations = [NSMutableArray array];
         _markersModificationDate = [[OACommonLong withKey:kMarkersChanged defValue:0] makeGlobal];
-        
+
+        _colors = @[UIColorFromRGB(marker_pin_color_orange),
+                    UIColorFromRGB(marker_pin_color_teal),
+                    UIColorFromRGB(marker_pin_color_green),
+                    UIColorFromRGB(marker_pin_color_red),
+                    UIColorFromRGB(marker_pin_color_light_green),
+                    UIColorFromRGB(marker_pin_color_purple),
+                    UIColorFromRGB(marker_pin_color_blue)];
+
+        _markerNames = @[@"ic_destination_pin_1",
+                         @"ic_destination_pin_2",
+                         @"ic_destination_pin_3",
+                         @"ic_destination_pin_4",
+                         @"ic_destination_pin_5",
+                         @"ic_destination_pin_6",
+                         @"ic_destination_pin_7"];
+
         [self initSortedDestinations];
     }
     return self;
 }
 
-- (NSMutableArray *) sortedDestinations
+- (NSMutableArray<OADestination *> *) sortedDestinations
 {
     @synchronized(_syncObj)
     {
@@ -65,7 +85,7 @@
     }
 }
 
-- (NSArray *) sortedDestinationsWithoutParking
+- (NSArray<OADestination *> *) sortedDestinationsWithoutParking
 {
     @synchronized(_syncObj)
     {
@@ -81,6 +101,17 @@
         for (OADestinationItem *item in reorderedDestinations)
         {
             [newDestinations addObject:item.destination];
+        }
+        for (OADestination *item in _sortedDestinations)
+        {
+            if (![newDestinations containsObject:item])
+            {
+                [self addHistoryItem:item];
+                if (item == _dynamic2ndRowDestination)
+                    _dynamic2ndRowDestination = nil;
+                [_app.data.destinations removeObject:item];
+                [_app.data.destinationRemoveObservable notifyEventWithKey:item];
+            }
         }
         _sortedDestinations = newDestinations;
         [self refreshDestinationIndexes];
@@ -227,6 +258,22 @@
     [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
 }
 
+- (UIColor *) generateColorForDestination:(OADestination *)destination
+{
+    int colorIndex = [self getFreeColorIndex];
+    UIColor *color = _colors[colorIndex];
+    destination.color = color;
+    destination.markerResourceName = _markerNames[colorIndex];
+    return color;
+}
+
+- (UIColor *) addDestinationWithNewColor:(OADestination *)destination
+{
+    UIColor *color = [self generateColorForDestination:destination];
+    [self addDestination:destination];
+    return color;
+}
+
 - (void) addDestination:(OADestination *)destination
 {
     @synchronized(_syncObj)
@@ -279,6 +326,12 @@
     [_app.data.destinationRemoveObservable notifyEventWithKey:destination];
     [_app.data.destinationsChangeObservable notifyEvent];
     [self setMarkersLastModifiedTime:NSDate.date.timeIntervalSince1970];
+}
+
+- (void) markAsVisited:(OADestination *)destination
+{
+    [self addHistoryItem:destination];
+    [self removeDestination:destination];
 }
 
 - (void) showOnMap:(OADestination *)destination
@@ -361,6 +414,52 @@
         [doc addWpt:wpt];
     }
     return doc;
+}
+
+- (int) getFreeColorIndex
+{
+    for (int i = 0; i < _colors.count; i++)
+    {
+        UIColor *c = _colors[i];
+        BOOL colorExists = NO;
+        for (OADestination *destination in _app.data.destinations)
+            if ([UIColor colorRGB:destination.color equalToColorRGB:c])
+            {
+                colorExists = YES;
+                break;
+            }
+
+        if (!colorExists)
+            return i;
+    }
+
+    UIColor *lastUsedColor;
+    for (long i = (long) _app.data.destinations.count - 1; i >= 0; i--)
+    {
+        OADestination *destination = _app.data.destinations[i];
+        if (destination.color)
+        {
+            lastUsedColor = destination.color;
+            break;
+        }
+    }
+
+    if (lastUsedColor)
+    {
+        for (int i = 0; i < _colors.count; i++)
+        {
+            UIColor *c = _colors[i];
+            if ([UIColor colorRGB:lastUsedColor equalToColorRGB:c])
+            {
+                int res = i + 1;
+                if (res >= _colors.count)
+                    res = 0;
+                return res;
+            }
+        }
+    }
+
+    return 0;
 }
 
 @end

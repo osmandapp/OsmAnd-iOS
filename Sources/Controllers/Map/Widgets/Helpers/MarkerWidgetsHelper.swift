@@ -123,13 +123,11 @@ class MarkerWidgetsHelper: NSObject {
     static func showMarkerOnMap(_ index: Int) {
         let markersHelper = OADestinationsHelper.instance()!
         if index < markersHelper.sortedDestinationsWithoutParking().count {
-            let marker = markersHelper.sortedDestinationsWithoutParking()[index] as! OADestinationItem
-            if let pointToNavigate = marker.destination {
-                let location = CLLocation(latitude: pointToNavigate.latitude, longitude: pointToNavigate.longitude)
-                let mapViewHelper = OAMapViewHelper.sharedInstance()
-                let fZoom: CGFloat = max(mapViewHelper.getMapZoom(), 15)
-                mapViewHelper.go(to: location, zoom: fZoom, animated: true)
-            }
+            let marker = markersHelper.sortedDestinationsWithoutParking()[index]
+            let location = CLLocation(latitude: marker.latitude, longitude: marker.longitude)
+            let mapViewHelper = OAMapViewHelper.sharedInstance()
+            let fZoom: CGFloat = max(mapViewHelper.getMapZoom(), 15)
+            mapViewHelper.go(to: location, zoom: fZoom, animated: true)
         }
     }
 }

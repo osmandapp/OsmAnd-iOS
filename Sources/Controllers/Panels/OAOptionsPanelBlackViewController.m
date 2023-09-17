@@ -342,10 +342,10 @@
     [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
 }
 
-- (IBAction) myWaypointsButtonClicked:(id)sender
+- (IBAction) myDestinationsButtonClicked:(id)sender
 {
     [self.sidePanelController toggleLeftPanel:self];
-    [[OARootViewController instance].mapPanel showCards];
+    [[OARootViewController instance].mapPanel showDestinations];
 }
 
 - (IBAction) navigationButtonClicked:(id)sender

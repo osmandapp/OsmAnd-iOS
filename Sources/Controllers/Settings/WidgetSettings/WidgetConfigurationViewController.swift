@@ -19,6 +19,11 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     
     lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.setContentOffset(CGPoint(x: 0, y: 1), animated: false)
+    }
+    
     override func generateData() {
         tableData.clearAllData()
         if let settingsData = widgetInfo.getSettingsData(selectedAppMode) {
@@ -64,10 +69,12 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             }
             if let cell {
                 let pref = item.obj(forKey: "pref") as! OACommonBoolean
+                let hasIcon = item.iconName != nil
                 cell.titleLabel.text = item.title
                 cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
                 let selected = pref.get(selectedAppMode)
                 cell.switchView.isOn = selected
+                cell.leftIconVisibility(hasIcon)
                 cell.leftIconView.image = UIImage.templateImageNamed(selected ? item.iconName : item.string(forKey: "hide_icon"))
                 cell.leftIconView.tintColor = UIColor(rgb: selected ? Int(selectedAppMode.getIconColor()) : Int(color_tint_gray))
 
@@ -133,18 +140,11 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 vc.delegate = self
                 let section = vc.tableData.createNewSection()
                 section.addRows(possibleValues)
+                section.footerText = (item.obj(forKey: "footer") as? String) ?? ""
                 vc.appMode = selectedAppMode
                 vc.screenTitle = item.descr
-                let navigationController = UINavigationController()
-                navigationController.setViewControllers([vc], animated: true)
-                navigationController.modalPresentationStyle = .pageSheet
-                let sheet = navigationController.sheetPresentationController
-                if let sheet
-                {
-                    sheet.detents = [.medium(), .large()]
-                    sheet.preferredCornerRadius = 20
-                }
-                self.present(navigationController, animated: true)
+                vc.pref = item.obj(forKey: "pref") as? OACommonPreference
+                showMediumSheetViewController(vc, isLargeAvailable: false)
             }
         }
     }
@@ -155,10 +155,14 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     }
     
     func onWidgetStateChanged() {
+        if widgetInfo.key == WidgetType.markersTopBar.id || widgetInfo.key.hasPrefix(WidgetType.markersTopBar.id + MapWidgetInfo.DELIMITER) {
+            OsmAndApp.swiftInstance().data.destinationsChangeObservable.notifyEvent()
+        } else if widgetInfo.key == WidgetType.radiusRuler.id || widgetInfo.key.hasPrefix(WidgetType.radiusRuler.id + MapWidgetInfo.DELIMITER) {
+            (widgetInfo.widget as? RulerDistanceWidget)?.updateRulerObservable.notifyEvent()
+        }
         generateData()
         tableView.reloadData()
     }
-    
 }
 
 // MARK: Appearance
@@ -187,7 +191,7 @@ extension WidgetConfigurationViewController {
         attrStr.addAttribute(.foregroundColor, value: UIColor(rgb: Int(color_text_footer)), range: NSRange(location: 0, length: attrStr.length))
         return attrStr
     }
-    
+
     override func getBottomAxisMode() -> NSLayoutConstraint.Axis {
         .vertical
     }

@@ -341,6 +341,8 @@
                @"ic_action_camper",
                @"ic_action_campervan",
                @"ic_action_helicopter",
+               @"ic_action_paragliding",
+               @"ic_aciton_hang_gliding",
                @"ic_action_offroad",
                @"ic_action_pickup_truck",
                @"ic_action_snowmobile",

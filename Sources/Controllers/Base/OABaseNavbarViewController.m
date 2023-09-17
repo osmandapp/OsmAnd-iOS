@@ -38,6 +38,7 @@
     self = [super initWithNibName:@"OABaseNavbarViewController" bundle:nil];
     if (self)
     {
+        _tableData = [[OATableDataModel alloc] init];
         [self commonInit];
     }
     return self;
@@ -45,7 +46,6 @@
 
 - (void)commonInit
 {
-    _tableData = [[OATableDataModel alloc] init];
 }
 
 // use in overridden init method if class properties have complex dependencies
@@ -64,9 +64,6 @@
     
     if ([self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle)
         [self.navigationItem hideTitleInStackView:YES defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
-
-    self.navigationController.interactivePopGestureRecognizer.delegate = self;
-    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -88,7 +85,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+
+    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+
     if (self.refreshOnAppear)
     {
         [self generateData];
@@ -257,6 +257,11 @@
 {
     [self generateData];
     [self reloadData:animated];
+    [self updateWithoutData];
+}
+
+- (void)updateWithoutData
+{
     [self applyLocalization];
     [self updateNavbar];
 }
@@ -553,6 +558,11 @@
     return nil;
 }
 
+- (UIBarButtonItem *)getLeftNavbarButton
+{
+    return _leftNavbarButton;
+}
+
 - (UIImage *)getCustomIconForLeftNavbarButton
 {
     return nil;
@@ -741,7 +751,17 @@
 {
 }
 
+- (BOOL)onGestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    return YES;
+}
+
 #pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    return [self onGestureRecognizerShouldBegin:gestureRecognizer];
+}
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {

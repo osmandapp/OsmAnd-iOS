@@ -135,6 +135,16 @@
     
     _lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:1];
     [_lanesView addSubview:_lanesDrawable];
+
+    _textView.text = @"";
+    _textShadowView.text = @"";
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+
+    _lanesDrawable.frame = CGRectMake(_lanesView.bounds.size.width / 2 - _lanesDrawable.width / 2, 0, _lanesDrawable.width, _lanesDrawable.height);
 }
 
 - (void) refreshLabel:(NSString *)text
@@ -261,23 +271,30 @@
                 [self refreshLabel:[OAOsmAndFormatter getFormattedDistance:dist]];
             
             _textView.hidden = _textView.text.length == 0;
+            _textShadowView.hidden = _textShadowView.text.length == 0;
             needFrameUpdate = YES;
         }
         
         if (needFrameUpdate)
         {
-            BOOL hasText = _textView.text.length > 0;
-            CGRect parentFrame = self.superview.frame;
-            CGFloat minWidth = MAX(kMinWidth, [OAUtilities calculateTextBounds:_textView.text width:1000 font:_textFont].width);
-            CGSize newSize = CGSizeMake(MAX(minWidth, _lanesDrawable.width + kBorder * 2), _lanesDrawable.height + kBorder * 2 + (hasText ? kTextViewHeight : 0));
-            self.frame = (CGRect) { parentFrame.size.width / 2 - newSize.width / 2, self.frame.origin.y, newSize };
-            _lanesDrawable.frame = CGRectMake(_lanesView.bounds.size.width / 2 - _lanesDrawable.width / 2, 0, _lanesDrawable.width, _lanesDrawable.height);
+            [self adjustViewSize];
             [_lanesDrawable setNeedsDisplay];
+            if (self.delegate)
+                [self.delegate widgetChanged:self];
         }
     }
     [self updateVisibility:visible];
     
     return YES;
+}
+
+- (void) adjustViewSize
+{
+    BOOL hasText = _textView.text.length > 0;
+    CGRect parentFrame = self.superview.frame;
+    CGFloat minWidth = MAX(kMinWidth, [OAUtilities calculateTextBounds:_textView.text width:1000 font:_textFont].width);
+    CGSize newSize = CGSizeMake(MAX(minWidth, _lanesDrawable.width + kBorder * 2), _lanesDrawable.height + kBorder * 2 + (hasText ? kTextViewHeight : 0));
+    self.frame = (CGRect) { parentFrame.size.width / 2 - newSize.width / 2, self.frame.origin.y, newSize };
 }
 
 - (BOOL) distChanged:(int)oldDist dist:(int)dist
@@ -291,7 +308,7 @@
     {
         self.hidden = !visible;
         if (self.delegate)
-            [self.delegate widgetVisibilityChanged:nil visible:visible];
+            [self.delegate widgetVisibilityChanged:self visible:visible];
         
         return YES;
     }

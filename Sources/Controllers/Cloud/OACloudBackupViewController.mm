@@ -83,7 +83,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     NSInteger _itemsSection;
     
     UIBarButtonItem *_settingsButton;
-    UIBarButtonItem *_backButton;
 }
 
 - (instancetype) initWithSourceType:(EOACloudScreenSourceType)type
@@ -154,9 +153,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     
     OACloudBackupViewController *navigationController = (OACloudBackupViewController *)self.navigationController.topViewController;
     _settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_settings"] style:UIBarButtonItemStylePlain target:self action:@selector(onSettingsButtonPressed)];
-    _backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
     [navigationController.navigationItem setRightBarButtonItem:_settingsButton];
-    [navigationController.navigationItem setLeftBarButtonItem:_backButton];
 }
 
 - (void)dealloc
@@ -168,7 +165,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 -(void) addAccessibilityLabels
 {
     _settingsButton.accessibilityLabel = OALocalizedString(@"shared_string_settings");
-    _backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
 }
 
 - (void) onRefresh
@@ -406,7 +402,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     if (isSyncButton)
     {
         BOOL hasInfo = _info != nil;
-        BOOL noChanges = _status == OABackupStatus.MAKE_BACKUP && (!hasInfo || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0 && [OABackupHelper getItemsMapForRestore:_info settingsItems:_backup.settingsItems].count == 0));
+        BOOL noChanges = _status == OABackupStatus.MAKE_BACKUP && (!hasInfo || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0 && _info.filteredLocalFilesToDelete.count == 0 && [OABackupHelper getItemsMapForRestore:_info settingsItems:_backup.settingsItems].count == 0));
         actionButtonDisabled = noChanges || _backupHelper.isBackupPreparing || _settingsHelper.isBackupSyncing;
     }
     return actionButtonDisabled;
@@ -709,21 +705,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     if (statusBackupViewController)
         [self.navigationController pushViewController:statusBackupViewController animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-#pragma mark - Selectors
-
-- (void)onLeftNavbarButtonPressed
-{
-    for (UIViewController *controller in self.navigationController.viewControllers)
-    {
-        if ([controller isKindOfClass:[OAMainSettingsViewController class]])
-        {
-            [self.navigationController popToViewController:controller animated:YES];
-            return;
-        }
-    }
-    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 // MARK: OAOnPrepareBackupListener

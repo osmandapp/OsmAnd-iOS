@@ -1608,13 +1608,13 @@
 "help_travel" = "السفر (ويكيبيديا وويكيفويا)";
 "subscription_osmandlive_item" = "اشتراك أوسماند لايف";
 "osmand_purchases_item" = "مشتريات أوسماند";
-"enable_hillshade" = "تمكين عرض بيانات التضاريس";
+"enable_hillshade" = "قم بالتفعيل لعرض بيانات التضاريس من خريطة التلال أو المنحدرات.";
 "hide_terrain" = "إخفاء التضاريس";
 "show_terrain" = "إظهار التضاريس";
 "shared_string_legend" = "عنوان تفسيري";
 "map_settings_zoom_level_description" = "تعيين الحد الأدنى والحد الأقصى لمستوى التكبير لعرض الطبقة";
-"map_settings_hillshade_description" = "خرائط التضاريس تصور سفوح القمم المنخفضة باستخدام مستويات مختلفة من الرمادي";
-"map_settings_slopes_description" = "تستخدم خرائط المنحدرات ألوانًا مختلفة لعرض التضاريس";
+"map_settings_hillshade_description" = "خريطة التضاريس تستخدم الظلال الداكنة لإظهار المنحدرات والقمم والأراضي المنخفضة.";
+"map_settings_slopes_description" = "المنحدر هو تصورات ملونة على التضاريس.";
 "map_settings_slopes_legend" = "يمكنك قراءة المزيد حول المنحدرات على ويكيبيديا";
 "map_settings_layer_transparency" = "شفافية الطبقة";
 "shared_string_terrain" = "التضاريس";

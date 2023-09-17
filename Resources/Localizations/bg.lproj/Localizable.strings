@@ -290,7 +290,7 @@
 "app_mode_bus" = "Автобус";
 "app_mode_train" = "Влак";
 "app_mode_truck" = "Камион";
-"app_mode_hiking" = "Ходене";
+"app_mode_hiking" = "Пешеходен туризъм";
 "app_mode_motorcycle" = "Мотоциклет";
 "app_mode_boat" = "Лодка";
 "app_mode_aircraft" = "Самолет";
@@ -2210,7 +2210,7 @@
 "app_mode_horse" = "Коне";
 "app_mode_helicopter" = "Вертолет";
 "app_mode_skiing" = "Ски";
-"app_mode_personal_transporter" = "Personal transporter";
+"app_mode_personal_transporter" = "Личен транспортьор";
 "app_mode_monowheel" = "Monowheel";
 "app_mode_scooter" = "Тротинетка";
 "app_mode_ufo" = "НЛО";
@@ -2573,3 +2573,12 @@
 "speed_camera_pois" = "POI на камери за контрол на скоростта";
 "speed_cameras_alert" = "Предупрежденията за камери за контрол на скоростта в някои страни са забранени от закона.";
 "map_widget_distance_to_intermediate" = "Разстояние до междинна точка";
+"get_osmand_cloud" = "Вземете OsmAd Cloud";
+"rendering_value_caiScale_description" = "Италиански алпийски клуб (CAI)";
+"activity_type_hiking_name" = "Пешеходен туризъм";
+"free_favorites_backup" = "Резервно копие на избраните точки";
+"rendering_attr_alpineHiking_name" = "Класификация на сложност";
+"rendering_value_sacScale_description" = "Швейцарски алпийски клуб (SAC)";
+"free_account" = "Безплатен профил";
+"save_heading_descr" = "Запазва посоката към всяка записана точка от трасето.";
+"save_heading" = "Включва посоката";

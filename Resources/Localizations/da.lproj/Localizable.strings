@@ -1928,7 +1928,7 @@
 "rendering_value_walkingRoutesOSMC_description" = "Farvelæg ruterne efter deres individuelle lokale farve (hvis de findes på OpenStreetMap) og symbolet for vandreskjoldet.";
 "gpxup_identifiable" = "Identificerbar";
 "suggested_maps_descr" = "Disse kort er nødvendige for udvidelsen.";
-"welmode_download_maps" = "Administrer kort";
+"welmode_download_maps" = "Hent kort";
 "shared_string_navigation" = "Navigation";
 "app_restart_required" = "Det er nødvendigt at genstarte appen for at anvende nogle indstillinger.";
 "navigate_point_easting" = "Østlig";

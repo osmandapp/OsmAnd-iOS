@@ -217,8 +217,8 @@
 
 - (void) restoreMapViewPort
 {
-    if (_mapView.viewportXScale != kViewportNonShifterScale)
-        _mapView.viewportXScale = kViewportNonShifterScale;
+    if (_mapView.viewportXScale != kViewportScale)
+        _mapView.viewportXScale = kViewportScale;
     if (_mapView.viewportYScale != _cachedYViewPort)
         _mapView.viewportYScale = _cachedYViewPort;
 }
@@ -235,16 +235,16 @@
         else if (!self.delegate.isInFullScreenMode && !self.delegate.isInFullMode && _mapView.viewportYScale != VIEWPORT_MINIMIZED_SCALE)
             _mapView.viewportYScale = VIEWPORT_MINIMIZED_SCALE;
         
-        if (_mapView.viewportXScale != kViewportNonShifterScale)
-            _mapView.viewportXScale = kViewportNonShifterScale;
+        if (_mapView.viewportXScale != kViewportScale)
+            _mapView.viewportXScale = kViewportScale;
     }
     else
     {
         if (_mapView.viewportYScale != _cachedYViewPort)
             _mapView.viewportYScale = _cachedYViewPort;
         
-        if (_mapView.viewportXScale != kViewportShifterScale)
-            _mapView.viewportXScale = kViewportShifterScale;
+        if (_mapView.viewportXScale != kViewportBottomScale)
+            _mapView.viewportXScale = kViewportBottomScale;
     }
 }
 

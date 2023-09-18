@@ -479,17 +479,17 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     if ([self isLeftSidePresentation] && self.currentState == EOADraggableMenuStateInitial)
     {
-        mapView.viewportXScale = kViewportNonShifterScale;
+        mapView.viewportXScale = kViewportScale;
         mapView.viewportYScale = (DeviceScreenHeight - _landscapeHeaderContainerView.frame.size.height) / DeviceScreenHeight;
     }
     else if ([self isLeftSidePresentation])
     {
-        mapView.viewportXScale = kViewportShifterScale;
+        mapView.viewportXScale = kViewportBottomScale;
         mapView.viewportYScale = (DeviceScreenHeight - _landscapeHeaderContainerView.frame.size.height) / DeviceScreenHeight;
     }
     else
     {
-        mapView.viewportXScale = kViewportNonShifterScale;
+        mapView.viewportXScale = kViewportScale;
         mapView.viewportYScale = (DeviceScreenHeight - self.getViewHeight) / DeviceScreenHeight;
     }
 }
@@ -497,8 +497,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void) restoreMapViewPort
 {
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
-    if (mapView.viewportXScale != kViewportNonShifterScale)
-        mapView.viewportXScale = kViewportNonShifterScale;
+    if (mapView.viewportXScale != kViewportScale)
+        mapView.viewportXScale = kViewportScale;
     if (mapView.viewportYScale != _cachedYViewPort)
         mapView.viewportYScale = _cachedYViewPort;
 }

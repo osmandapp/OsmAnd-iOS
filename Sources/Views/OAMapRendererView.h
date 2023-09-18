@@ -25,8 +25,8 @@
 #import "OAMapRendererViewProtocol.h"
 #import "OAObservable.h"
 
-#define kViewportShifterScale 1.5f
-#define kViewportNonShifterScale 1.0f
+#define kViewportScale 1.0f
+#define kViewportBottomScale 1.5f
 
 #define kSymbolsUpdateInterval 2000
 

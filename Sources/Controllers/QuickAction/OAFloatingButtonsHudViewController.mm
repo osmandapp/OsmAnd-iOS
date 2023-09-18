@@ -145,12 +145,12 @@
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     if ([OAUtilities isLandscape])
     {
-        mapView.viewportXScale = kViewportShifterScale;
-        mapView.viewportYScale = kViewportNonShifterScale;
+        mapView.viewportXScale = kViewportBottomScale;
+        mapView.viewportYScale = kViewportScale;
     }
     else
     {
-        mapView.viewportXScale = kViewportNonShifterScale;
+        mapView.viewportXScale = kViewportScale;
         mapView.viewportYScale = (DeviceScreenHeight - _actionsView.frame.size.height) / DeviceScreenHeight;
     }
 }
@@ -158,8 +158,8 @@
 - (void) restoreMapViewPort
 {
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
-    if (mapView.viewportXScale != kViewportNonShifterScale)
-        mapView.viewportXScale = kViewportNonShifterScale;
+    if (mapView.viewportXScale != kViewportScale)
+        mapView.viewportXScale = kViewportScale;
     if (mapView.viewportYScale != _cachedYViewPort)
         mapView.viewportYScale = _cachedYViewPort;
 }

@@ -51,7 +51,6 @@
     OsmAnd::PointI _viewSize;
     CGFloat _topOffset;
     CGFloat _bottomOffset;
-    float _originalViewportYScale;
 
     std::shared_ptr<OsmAnd::IMapRenderer> _renderer;
     std::shared_ptr<OsmAnd::MapAnimator> _mapAnimator;
@@ -103,9 +102,8 @@
     _framebuffer = 0;
     _displayLink = nil;
 
-    _viewportXScale = 1.f;
-    _viewportYScale = 1.f;
-    _originalViewportYScale = _viewportYScale;
+    _viewportXScale = kViewportScale;
+    _viewportYScale = kViewportScale;
 
     // Create map renderer instance
     _renderer = OsmAnd::createMapRenderer(OsmAnd::MapRendererClass::AtlasMapRenderer_OpenGLES2plus);
@@ -755,11 +753,10 @@ forcedUpdate:(BOOL)forcedUpdate
 
 - (void) setViewportYScale:(float)viewportYScale
 {
-    if (_originalViewportYScale == viewportYScale)
+    if (_viewportYScale == viewportYScale)
         return;
 
     _viewportYScale = viewportYScale;
-    _originalViewportYScale = viewportYScale;
 
     // Normalize elevation angle
     [self setElevationAngle:self.elevationAngle];
@@ -808,9 +805,6 @@ forcedUpdate:(BOOL)forcedUpdate
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_viewSize.y);
     validateGL();
     OALog(@"[OAMapRendererView %p] View size %dx%d", self, _viewSize.x, _viewSize.y);
-    _viewportYScale = _originalViewportYScale - _bottomOffset / _viewSize.y;
-    if (_originalViewportYScale == kViewportNonShifterScale)
-        _viewportYScale += _topOffset / _viewSize.y;
 
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _framebufferColorRenderbuffer);
     validateGL();
@@ -908,7 +902,10 @@ forcedUpdate:(BOOL)forcedUpdate
 
 - (OsmAnd::PointI) getCenterPixel
 {
-    return OsmAnd::PointI(_viewSize.x * _viewportXScale / 2.0, _viewSize.y * _viewportYScale / 2.0);
+    float viewportYScale = _viewportYScale - _bottomOffset / _viewSize.y;
+    if (_viewportYScale == kViewportScale)
+        viewportYScale += _topOffset / _viewSize.y;
+    return OsmAnd::PointI(_viewSize.x * _viewportXScale / 2.0, _viewSize.y * viewportYScale / 2.0);
 }
 
 - (void)render:(CADisplayLink*)displayLink

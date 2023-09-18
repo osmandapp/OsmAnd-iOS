@@ -371,8 +371,13 @@
     _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = hasBottomWidgets ? [_bottomPanelController calculateContentSize].height : 0.;
     
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
-    [mapView setTopOffsetOfViewSize:_mapHudViewController.topWidgetsViewHeightConstraint.constant
-                       bottomOffset:_mapHudViewController.bottomWidgetsViewHeightConstraint.constant];
+    CGFloat topOffset = _mapHudViewController.topWidgetsViewHeightConstraint.constant;
+    CGFloat bottomOffset = _mapHudViewController.bottomWidgetsViewHeightConstraint.constant;
+    if (topOffset > 0)
+        topOffset += _mapHudViewController.statusBarViewHeightConstraint.constant;
+    if (bottomOffset > 0)
+        bottomOffset += _mapHudViewController.bottomBarViewHeightConstraint.constant;
+    [mapView setTopOffsetOfViewSize:topOffset bottomOffset:bottomOffset];
 
     if (hasRightWidgets)
     {

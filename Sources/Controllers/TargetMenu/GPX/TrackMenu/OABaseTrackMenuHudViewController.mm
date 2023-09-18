@@ -410,10 +410,10 @@
 
 - (void)adjustViewPort:(BOOL)landscape
 {
-    if (landscape && _mapViewController.mapView.viewportXScale != kViewportShifterScale)
-        _mapViewController.mapView.viewportXScale = kViewportShifterScale;
-    else if (!landscape && _mapViewController.mapView.viewportXScale != kViewportNonShifterScale)
-        _mapViewController.mapView.viewportXScale = kViewportNonShifterScale;
+    if (landscape && _mapViewController.mapView.viewportXScale != kViewportBottomScale)
+        _mapViewController.mapView.viewportXScale = kViewportBottomScale;
+    else if (!landscape && _mapViewController.mapView.viewportXScale != kViewportScale)
+        _mapViewController.mapView.viewportXScale = kViewportScale;
     CGFloat newYScale = (DeviceScreenHeight - [self getViewHeight]) / DeviceScreenHeight;
     if (!landscape && _mapViewController.mapView.viewportYScale != newYScale)
         _mapViewController.mapView.viewportYScale = newYScale;
@@ -422,8 +422,8 @@
 - (void)restoreMapViewPort
 {
     OAMapRendererView *mapView = _mapViewController.mapView;
-    if (mapView.viewportXScale != kViewportNonShifterScale)
-        mapView.viewportXScale = kViewportNonShifterScale;
+    if (mapView.viewportXScale != kViewportScale)
+        mapView.viewportXScale = kViewportScale;
     if (mapView.viewportYScale != _cachedYViewPort)
         mapView.viewportYScale = _cachedYViewPort;
 }
@@ -431,7 +431,7 @@
 - (BOOL)isAdjustedMapViewPort
 {
     OAMapRendererView *mapView = _mapViewController.mapView;
-    return mapView.viewportYScale != _cachedYViewPort && mapView.viewportXScale != kViewportNonShifterScale;
+    return mapView.viewportYScale != _cachedYViewPort && mapView.viewportXScale != kViewportScale;
 }
 
 - (void)changeHud:(CGFloat)height

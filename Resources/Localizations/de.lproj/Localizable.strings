@@ -581,7 +581,7 @@
 "layer_map_appearance" = "Anzeige konfigurieren";
 "map_markers" = "Kartenmarkierungen";
 "select_gpx" = "GPX-Datei auswählen…";
-"confirm_usage_speed_cameras" = "In vielen Ländern (Deutschland, Frankreich, Italien und andere) ist die Verwendung von Blitzerwarnern gesetzlich nicht erlaubt. OsmAnd übernimmt keine Verantwortung im Fall von Gesetzesübertretungen. Klicken Sie nur auf \'Ja\', wenn Sie zur Verwendung dieser Funktion berechtigt sind.";
+"confirm_usage_speed_cameras" = "In vielen Ländern (Deutschland, Frankreich, Italien und andere) ist die Verwendung von Blitzerwarnern gesetzlich nicht erlaubt. OsmAnd übernimmt keine Verantwortung im Fall von Gesetzesübertretungen. Klicken Sie nur auf „Ja“, wenn Sie zur Verwendung dieser Funktion berechtigt sind.";
 "show_traffic_warnings" = "Verkehrswarnungen";
 "show_pedestrian_warnings" = "Fußgängerübergänge";
 "show_cameras" = "Blitzer";
@@ -1655,7 +1655,7 @@
 "new_profile" = "Neues Profil";
 "screen_alerts" = "Bildschirmwarnungen";
 "vehicle_parameters" = "Fahrzeugparameter";
-"select_nav_profile_dialog_message" = "\'Navigationsart\' bestimmt, wie Routen mit den verfügbaren Offline- und Online-Routenplanern berechnet werden.";
+"select_nav_profile_dialog_message" = "„Navigationsart“ bestimmt, wie Routen mit den verfügbaren Offline- und Online-Routenplanern berechnet werden.";
 "select_color" = "Farbe wählen";
 "reorder_profiles" = "Profilliste bearbeiten";
 "profile_type_custom_string" = "Benutzerdefiniertes Profil";
@@ -1993,7 +1993,7 @@
 "export_failed" = "Profil konnte nicht exportiert werden";
 "export_profile_select_descr" = "Wählen Sie die Daten aus, die exportiert werden sollen.";
 "delete_custom_categories" = "Benutzerdefinierte Kategorien löschen";
-"reset_to_default_category_button_promo" = "Mit \'Auf Standard zurücksetzen\' wird die Sortierreihenfolge wieder auf den Standard der Installation zurückgesetzt.";
+"reset_to_default_category_button_promo" = "Mit „Auf Standard zurücksetzen“ wird die Sortierreihenfolge wieder auf den Standard der Installation zurückgesetzt.";
 "create_custom_categories_list_promo" = "Ändern Sie die Sortierreihenfolge der Liste und blenden Sie Kategorien aus. Sie können alle Änderungen als Profile importieren oder exportieren.";
 "hidden_categories" = "Ausgeblendete Kategorien";
 "visible_categories" = "Sichtbare Kategorien";
@@ -2412,7 +2412,7 @@
 "copy_poi_name" = "POI-Namen kopieren";
 "routeInfo_horse_scale_name" = "Schwierigkeitsgrad von Reitwegen";
 "routeInfo_horse_scale_description" = "Zeige Reitwege abhängig vom Schwierigkeitsgrad an";
-"routing_attr_allow_private_for_truck_name" = "Erlaube Privatzugang (LKW)";
+"routing_attr_allow_private_for_truck_name" = "Privaten Zugang erlauben (Lkw)";
 "routing_attr_allow_private_for_truck_description" = "Zufahrt zu Privatgrundstücken für Lkw erlauben.";
 "copy_address" = "Adresse kopieren";
 "copy_coordinates" = "Koordinaten kopieren";

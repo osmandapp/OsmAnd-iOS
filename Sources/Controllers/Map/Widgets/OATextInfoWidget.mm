@@ -16,6 +16,7 @@
 #define imageSide 24
 #define minTextWidth 64
 #define fullTextWidth 90
+#define minWidgetHeight 32
 
 
 @implementation OATextInfoWidget
@@ -311,8 +312,8 @@
 
     CGRect f = self.frame;
     f.size.width = tf.origin.x + tf.size.width + 4;
-    f.size.height = tf.size.height + 10;
-
+    CGFloat height = tf.size.height + 10;
+    f.size.height = height < minWidgetHeight ? minWidgetHeight : height;
     CGRect imageRect = _imageView.frame;
     imageRect.origin.y = f.size.height / 2 - imageRect.size.height / 2;
     _imageView.frame = imageRect;

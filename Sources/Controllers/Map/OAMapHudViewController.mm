@@ -112,7 +112,9 @@
 
     _mapPanelViewController = [OARootViewController instance].mapPanel;
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    
+
+    _quickActionModeObservable = [[OAObservable alloc] init];
+
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapModeChanged)
                                                   andObserve:_app.mapModeObservable];

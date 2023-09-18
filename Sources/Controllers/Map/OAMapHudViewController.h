@@ -16,6 +16,7 @@
 @class OAMapInfoController;
 @class OADownloadMapWidget;
 @class OAWeatherToolbar;
+@class OAObservable;
 
 @interface OAMapHudViewController : UIViewController
 
@@ -73,6 +74,8 @@
 
 @property (nonatomic, assign) BOOL contextMenuMode;
 @property (nonatomic, assign) EOAMapModeButtonType mapModeButtonType;
+
+@property(readonly) OAObservable *quickActionModeObservable;
 
 - (void) enterContextMenuMode;
 - (void) restoreFromContextMenuMode;

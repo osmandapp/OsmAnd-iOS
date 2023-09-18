@@ -56,8 +56,8 @@
 
 - (void) onSwitchPressed:(UISwitch *)sender
 {
-    [_settings.quickActionIsOn set:sender.isOn];
-    [[OARootViewController instance].mapPanel.hudViewController.floatingButtonsController updateViewVisibility];
+    [[OARootViewController instance].mapPanel.hudViewController.quickActionModeObservable notifyEventWithKey:nil
+                                                                                                    andValue:@(sender.isOn)];
     [self.delegate onWidgetStateChanged];
 }
 

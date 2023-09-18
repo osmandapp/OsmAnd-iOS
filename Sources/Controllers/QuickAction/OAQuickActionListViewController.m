@@ -9,6 +9,7 @@
 #import "OAQuickActionListViewController.h"
 #import "OAActionConfigurationViewController.h"
 #import "OAAddQuickActionViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
 #import "Localization.h"
 #import "OAQuickActionRegistry.h"
 #import "OAQuickAction.h"
@@ -56,6 +57,7 @@
 - (void) onSwitchPressed:(UISwitch *)sender
 {
     [_settings.quickActionIsOn set:sender.isOn];
+    [[OARootViewController instance].mapPanel.hudViewController.floatingButtonsController updateViewVisibility];
     [self.delegate onWidgetStateChanged];
 }
 

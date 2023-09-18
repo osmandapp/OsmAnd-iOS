@@ -18,12 +18,14 @@ class CoordinatesBaseWidget: OABaseWidgetView {
     @IBOutlet var secondContainer: UIStackView!
     @IBOutlet var firstCoordinate: UILabel! {
         didSet {
-            firstCoordinate.adjustsFontForContentSizeCategory = true;
+            firstCoordinate.adjustsFontForContentSizeCategory = true
+            firstCoordinate.textAlignment = isDirectionRTL() ? .right : .left
         }
     }
     @IBOutlet var secondCoordinate: UILabel! {
         didSet {
-            secondCoordinate.adjustsFontForContentSizeCategory = true;
+            secondCoordinate.adjustsFontForContentSizeCategory = true
+            secondCoordinate.textAlignment = isDirectionRTL() ? .right : .left
         }
     }
 

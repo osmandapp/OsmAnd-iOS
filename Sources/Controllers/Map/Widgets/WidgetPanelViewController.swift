@@ -116,7 +116,9 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         }
         pages.removeAll()
         widgetPages.removeAll()
-        pageViewController.dataSource = self
+        if !isHorizontal {
+            pageViewController.dataSource = self
+        }
         pageViewController.delegate = self
     }
     
@@ -135,7 +137,9 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             pages.append(UIViewController())
         }
         pageViewController.setViewControllers([pages[currentIndex]], direction: .forward, animated: false)
-        pageViewController.dataSource = self
+        if !isHorizontal {
+            pageViewController.dataSource = self
+        }
         pageViewController.delegate = self
         
         // Set up the page control
@@ -169,7 +173,9 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     private func setupViews() {
         view.layer.masksToBounds = true
         pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-        pageViewController.dataSource = self
+        if !isHorizontal {
+            pageViewController.dataSource = self
+        }
         pageViewController.delegate = self
         pageViewController.scrollView?.delegate = self
         

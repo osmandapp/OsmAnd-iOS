@@ -40,6 +40,7 @@
 #import "OASunriseSunsetWidget.h"
 #import "OASunriseSunsetWidgetState.h"
 #import "OAAltitudeWidget.h"
+#import "OAMapRendererView.h"
 
 #import "OsmAnd_Maps-Swift.h"
 
@@ -330,7 +331,7 @@
     if (_alarmControl && _alarmControl.superview && !_alarmControl.hidden)
     {
         CGRect optionsButtonFrame = _mapHudViewController.optionsMenuButton.frame;
-        _alarmControl.center = CGPointMake(_alarmControl.bounds.size.width / 2, optionsButtonFrame.origin.y - _alarmControl.bounds.size.height / 2);
+        _alarmControl.center = CGPointMake(_alarmControl.bounds.size.width / 2 + [OAUtilities getLeftMargin], optionsButtonFrame.origin.y - _alarmControl.bounds.size.height / 2);
     }
 
     if (_rulerControl && _rulerControl.superview && !_rulerControl.hidden)
@@ -368,6 +369,15 @@
 
     _mapHudViewController.bottomWidgetsViewWidthConstraint.constant = [OAUtilities isLandscapeIpadAware] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
     _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = hasBottomWidgets ? [_bottomPanelController calculateContentSize].height : 0.;
+    
+    OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
+    CGFloat topOffset = _mapHudViewController.topWidgetsViewHeightConstraint.constant;
+    CGFloat bottomOffset = _mapHudViewController.bottomWidgetsViewHeightConstraint.constant;
+    if (topOffset > 0)
+        topOffset += _mapHudViewController.statusBarViewHeightConstraint.constant;
+    if (bottomOffset > 0)
+        bottomOffset += _mapHudViewController.bottomBarViewHeightConstraint.constant;
+    [mapView setTopOffsetOfViewSize:topOffset bottomOffset:bottomOffset];
 
     if (hasRightWidgets)
     {

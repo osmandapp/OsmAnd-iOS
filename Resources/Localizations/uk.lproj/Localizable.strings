@@ -1613,9 +1613,9 @@
 "hide_terrain" = "Сховати рельєф";
 "show_terrain" = "Показувати рельєф";
 "shared_string_legend" = "Позначення";
-"map_settings_add_maps_slopes" = "Для перегляду схилів потрібні додаткові мапи";
-"map_settings_add_maps_hillshade" = "Потрібні додаткові мапи для перегляду пагорбів";
-"map_settings_zoom_level_description" = "Встановіть мінімальний і максимальний рівень масштабування для зображення шару";
+"map_settings_add_maps_slopes" = "Для перегляду Схилів потрібні додаткові мапи.";
+"map_settings_add_maps_hillshade" = "Потрібні додаткові мапи для перегляду Рельєфу.";
+"map_settings_zoom_level_description" = "Вкажіть мінімальний і максимальний масштаб за якого буде показано шар";
 "map_settings_hillshade_description" = "Мапа рельєфу використовує темні відтінки, щоб показати схили, вершини та низини.";
 "map_settings_slopes_description" = "Схили — це кольорова візуалізація рельєфу.";
 "map_settings_slopes_legend" = "Ви можете дізнатися більше про схили у Вікіпедії";
@@ -2691,7 +2691,7 @@
 "local_changes_will_be_dismissed" = "Локальні зміни буде відхилено";
 "local_file_will_be_restored" = "Локальний файл буде відновлено";
 "checking_progress" = "Перевірка…";
-"download_heightmap_maps" = "Мапа місцевості";
+"download_heightmap_maps" = "Мапа рельєфу (3D)";
 "use_heightmap_setting" = "Використовувати 3D-мапи висот";
 "depth_contours" = "Ізолінії глибин";
 "huawei_appgallery" = "Huawei AppGallery";
@@ -3015,7 +3015,7 @@
 "add_row" = "Додати рядок";
 "no_widgets_here_yet" = "Тут ще немає віджетів";
 "reset_all_settings_desc" = "Скинути всі налаштування до типових?";
-"no_widgets_descr" = "Додайте один або декілька віджетів зі списку доступних.";
+"no_widgets_descr" = "Додайте один або кілька віджетів зі списку доступних.";
 "free_favorites_backup_description" = "Зареєструйтеся в OsmAnd Cloud, щоб отримати безплатне резервне копіювання закладок і налаштувань";
 "free_favorites_backup" = "Безплатне резервне копіювання закладок";
 "banner_payment_free_backup_settings_title" = "Безплатне резервне копіювання налаштувань";
@@ -3040,3 +3040,16 @@
 "weather_update_over_any_network" = "Через будь-яку мережу";
 "weather_update_parameters_any_network" = "Прогноз погоди оновлюватиметься через будь-яку мережу. Можна використовувати мобільні дані.";
 "map_settings_topography" = "Топографія";
+"click_on_widget" = "Натиснути віджет";
+"shared_string_cache" = "Кеш";
+"unsaved_changes_will_be_lost_discard" = "Усі незбережені зміни будуть втрачені. Відкинути зміни?";
+"terrain_3D_maps" = "Мапи рельєфу";
+"average_speed_skip_stops" = "Враховувати зупинки";
+"average_speed_time_interval_desc" = "Вкажіть інтервал часу для усереднення швидкості.";
+"unsaved_changes" = "Незбережені зміни";
+
+
+// Shared Strings
+"shared_string_discard" = "Відкинути";
+"specify_number_of_dir_indicators_desc" = "Виберіть, скільки індикаторів напрямків показувати.";
+"map_marker_interval_dialog_desc" = "Вкажіть інтервал часу, за який буде вимірюватися середня швидкість для обчислення очікуваного часу прибуття.";

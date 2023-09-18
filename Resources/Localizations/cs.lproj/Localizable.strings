@@ -643,8 +643,8 @@
 "plugin_popup_wiki_desc" = "Chcete-li začít používat modul Wikipedie, stáhněte si prosím nejdříve data z Wikipedie pro daný region";
 "plugin_popup_wiki_ask" = "Abyste mohli stahovat data z Wikipedie, musíte aktivovat modul <b>Wikipedie</b>";
 "plugin_popup_srtm_title" = "Stáhnout vrstevnice";
-"plugin_popup_srtm_desc" = "Chcete-li začít používat funkci Vrstevnice, stáhněte si prosím nejdříve vrstevnicová data pro daný region";
-"plugin_popup_srtm_ask" = "Pro stažení vrstevnicových dat musíte nejprve aktivovat modul: <b>Vrstevnice</b>";
+"plugin_popup_srtm_desc" = "Chcete-li začít používat funkci Topografie, stáhněte si prosím nejdříve vrstevnicová data pro daný region";
+"plugin_popup_srtm_ask" = "Pro stažení vrstevnicových dat musíte nejprve aktivovat modul: <b>Topografie</b>";
 "plugin_popup_nautical_title" = "Stáhnout Námořní mapy";
 "plugin_popup_nautical_desc" = "Nejdříve si prosím stáhněte námořní mapy.\nPak přejděte do <b>Nastavení mapy</b> > <b>Styl mapy</b> a zapněte <b>Námořní</b> styl";
 "plugin_popup_trip_planning_ask" = "Pro spuštění plánování musíte aktivovat modul: <b>Plánování cesty</b>";
@@ -3015,3 +3015,10 @@
 "weather_update_over_wifi_only" = "Pouze přes WIFI";
 "map_settings_topography" = "Topografie";
 "weather_update_over_any_network" = "Přes jakoukoli síť";
+"weather_updates_manual" = "Předpověď počasí je nutné aktualizovat manuálně.";
+"purchases_feature_relief_3d_description" = "Získejte a prohlédněte si model svého okolí nebo celého kontinentu ve věrném měřítku.";
+"shared_string_relief_3d" = "3D reliéf";
+"weather_update_parameters_wifi" = "Předpověď počasí bude aktualizována, jen pokud bude dostupná Wi-Fi síť.";
+"weather_update_parameters_disabled" = "Automatické aktualizace budou vypnuty.";
+"auto_update" = "Automatická aktualizace";
+"weather_update_parameters_any_network" = "Předpověď počasí bude aktualizována přes jakoukoliv síť. Mohou být využita mobilní data.";

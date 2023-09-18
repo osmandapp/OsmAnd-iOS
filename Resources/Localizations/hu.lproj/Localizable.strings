@@ -1598,7 +1598,7 @@
 "lang_ka" = "grúz";
 "backup_error_subscription_was_used" = "Ezt az előfizetést vagy promóciós kódot már felhasználták %@ fiókhoz";
 "lang_scn" = "szicíliai";
-"shared_string_max_height" = "Legnagyobb magasság";
+"shared_string_max_height" = "Max. magasság";
 "lang_gu" = "gudzsaráti";
 "restore_from_file" = "Visszaállítás fájlból";
 "lang_vi" = "vietnami";

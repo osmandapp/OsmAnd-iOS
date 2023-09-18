@@ -296,7 +296,7 @@
 "menu_my_trips" = "Meine Tracks";
 "product_title_trip_planning" = "Streckenplanung";
 "product_desc_wiki" = "Standortbezogene Wikipedia-Artikel auf der Karte";
-"srtm_plugin_name" = "Topographie";
+"srtm_plugin_name" = "Topografie";
 "product_desc_srtm" = "Visuelle Übersetzung der Form der Landoberfläche";
 "enter_description" = "Beschreibung eingeben";
 "shared_string_description" = "Beschreibung";
@@ -576,8 +576,8 @@
 "shared_string_collapse" = "Einklappen";
 "shared_string_topbar" = "Obere Leiste";
 "shared_string_widgets" = "Steuerelemente";
-"map_widget_right" = "Rechtes Panel";
-"map_widget_left" = "Linkes Panel";
+"map_widget_right" = "Rechtes Bedienfeld";
+"map_widget_left" = "Linkes Bedienfeld";
 "layer_map_appearance" = "Anzeige konfigurieren";
 "map_markers" = "Kartenmarkierungen";
 "select_gpx" = "GPX-Datei auswählen…";
@@ -662,7 +662,7 @@
 "unit_of_length" = "Längeneinheiten";
 "unit_of_length_descr" = "Ändern Sie, in welcher Entfernung gemessen wird.";
 "coords_format" = "Koordinatenformat";
-"coords_format_descr" = "Format geographischer Koordinaten.";
+"coords_format_descr" = "Format geografischer Koordinaten.";
 "do_not_show_discount_desc" = "Unterdrückt Meldungen zu App-Sonderangeboten und besonderen lokalen Ereignissen.";
 "save_global_track_interval" = "Intervall für generelle Aufzeichnung";
 "save_global_track_interval_descr" = "Aufzeichnungsintervall für die generelle Track-Aufzeichnung festlegen (wird über die Schaltfläche \'Routenaufzeichnung\' auf dem Kartenbildschirm angeschaltet).";
@@ -821,7 +821,7 @@
 "osm_live_payment_renews_annually" = "Verlängert sich jährlich";
 "default_price_currency_format" = "%.2f %@";
 "osm_live_payment_header" = "Zahlungsintervall:";
-"osm_live_payment_contribute_descr" = "Spenden helfen bei der Finanzierung der OSM-Kartographie.";
+"osm_live_payment_contribute_descr" = "Spenden helfen bei der Finanzierung der OSM-Kartografie.";
 "purchase_dialog_title" = "Plan auswählen";
 "purchase_dialog_travel_description" = "Für die Offline-Reiseführerfunktionalität kaufen Sie einen der folgenden Artikel:";
 "wikivoyage_travel_guide_descr" = "Führt innerhalb von OsmAnd ohne Internetverbindung zu den interessantesten Orten der Welt.";
@@ -2605,7 +2605,7 @@
 "shared_string_contributions" = "Beiträge";
 "shared_string_refresh" = "Aktualisieren";
 "login_open_street_map_org" = "Bei OpenStreetMap.org anmelden";
-"map_updates_for_mappers" = "Kartenaktualisierungen für Kartographen";
+"map_updates_for_mappers" = "Kartenaktualisierungen für Kartografen";
 "open_street_map_login_mode_simple" = "Sie müssen sich anmelden, um Ihre Änderungen hochzuladen.";
 "sign_in_with_open_street_map" = "Mit OpenStreetMap anmelden";
 "benefits_for_contributors" = "Vorteile für aktive OSM-Mitwirkende";
@@ -2867,7 +2867,7 @@
 "map_widget_sunrise_desc" = "Zeigt die Zeit des nächsten Sonnenaufgangs oder die verbleibende Zeit bis zum Sonnenaufgang an.";
 "map_widget_sunset_desc" = "Zeigt die Zeit des nächsten Sonnenuntergangs oder die verbleibende Zeit bis zum Sonnenuntergang an.";
 "press_again_to_change_the_map_orientation" = "Erneut antippen, um die Kartenausrichtung zu ändern";
-"top_widgets_panel" = "Oberes Panel";
+"top_widgets_panel" = "Oberes Bedienfeld";
 "with_permission_my_position_value" = "Karte zum aktuellen Standort verschieben";
 "hide_map_center" = "Koordinaten ausblenden: Kartenmitte";
 "toggle_map_center" = "Koordinaten anzeigen/ausblenden: Kartenmitte";
@@ -3008,9 +3008,9 @@
 "angular_measeurement_descr" = "Ändern, in welcher Einheit Azimut gemessen wird.";
 "add_row" = "Zeile hinzufügen";
 "navigation_points" = "Navigationspunkte";
-"route_maneuvers_desc" = "Navigationswidgets werden während der Navigation aktiviert, um Informationen wie Entfernung, Ankunfts- oder verbleibende Zeit, nächste Abbiegungen, Peilung, aktuellen Straßennamen, Fahrspurinformationen, Höchstgeschwindigkeit, Annäherungswarnungen, POIs und Wegpunkte anzuzeigen.";
+"route_maneuvers_desc" = "Navigationswidgets werden während der Navigation aktiviert, um Informationen wie Entfernung, Ankunfts- oder verbleibende Zeit, nächste Abbiegungen, Peilung, aktueller Straßenname, Fahrspurinformationen, Höchstgeschwindigkeit, Annäherungswarnungen, POIs und Wegpunkte anzuzeigen.";
 "navigation_points_desc" = "Navigationswidgets werden während der Navigation aktiviert, um Informationen wie Entfernung, Ankunfts- oder verbleibende Zeit, nächste Abbiegungen, Peilung, aktueller Straßenname, Fahrspurinformationen, Höchstgeschwindigkeit, Annäherungswarnungen, POIs und Wegpunkte anzuzeigen.";
-"bottom_widgets_panel" = "Unteres Paneel";
+"bottom_widgets_panel" = "Unteres Bedienfeld";
 "shared_string_rearrange" = "Neu anordnen";
 "reset_all_settings_desc" = "Alle Einstellungen auf Standardwerte zurücksetzen?";
 "rendering_value_sacScale_description" = "Schweizer Alpen-Club";

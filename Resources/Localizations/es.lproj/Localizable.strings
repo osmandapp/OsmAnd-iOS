@@ -1803,7 +1803,7 @@
 "move_point_descr" = "Mueve el mapa para cambiar la ubicación de este punto.";
 "move_point" = "Mover el punto";
 "map_update_warning" = "¿Actualizar los datos de las teselas en línea?";
-"map_settings_zoom_level_description" = "Define el nivel de zum mínimo y máximo para mostrar la capa";
+"map_settings_zoom_level_description" = "Establecer los niveles mínimo y máximo de zoom con los que se mostrará la capa";
 "map_settings_slopes_legend" = "Puedes leer más sobre las pendientes en Wikipedia";
 "map_settings_slopes_description" = "La pendiente se visualiza coloreada sobre el terreno.";
 "map_settings_show_slider_map" = "Mostrar deslizador en el mapa";
@@ -1815,8 +1815,8 @@
 "map_settings_hide_polygons" = "Ocultar polígonos";
 "map_settings_contour_zoom_level_descr" = "Elige el nivel de zum, desde el cual se mostrarán las curvas de nivel";
 "map_settings_available_srtm_maps_descr" = "Se necesitan mapas adicionales para ver el sombreado en el mapa";
-"map_settings_add_maps_slopes" = "Se necesitan mapas adicionales para ver las pendientes en el mapa";
-"map_settings_add_maps_hillshade" = "Se necesitan mapas adicionales para ver el sombreado en el mapa";
+"map_settings_add_maps_slopes" = "Se necesitan mapas adicionales para ver las Pendientes en el mapa.";
+"map_settings_add_maps_hillshade" = "Se necesitan mapas adicionales para ver los Hillshades (mapas de sombras de laderas) en el mapa.";
 "map_settings_add_maps_desc" = "Puedes añadir nuevos mapas a través de un enlace o importando archivos SQLite.";
 "map_coords" = "Mapa: Lat %.5f Lon %.5f";
 "lenght_limit_description" = "Proporciona la longitud del vehículo, se pueden aplicar algunas restricciones de rutas para vehículos largos.";
@@ -2681,7 +2681,7 @@
 "use_heightmap_setting" = "Utilizar mapas de altura en relieve 3D";
 "depth_contours" = "Curvas de profundidad";
 "huawei_appgallery" = "Huawei AppGallery";
-"download_heightmap_maps" = "Mapa del terreno";
+"download_heightmap_maps" = "Mapa del terreno (en 3D)";
 "nautical_depth_points" = "Puntos de profundidad náutica";
 "amazon_appstore" = "Amazon Appstore";
 "position_on_map" = "Posición en la pantalla";
@@ -3029,3 +3029,16 @@
 "weather_update_over_any_network" = "En cualquier red";
 "weather_update_parameters_any_network" = "La previsión meteorológica se actualizará a través de cualquier red. Se pueden utilizar los datos móviles.";
 "map_settings_topography" = "Topografía";
+"click_on_widget" = "Haz clic en el widget";
+"shared_string_cache" = "Cache";
+"unsaved_changes_will_be_lost_discard" = "Cualquier cambio no guardado se perderá. ¿Descartar los cambios?";
+"terrain_3D_maps" = "Mapas del terreno";
+"average_speed_skip_stops" = "Tener en cuenta las paradas";
+"average_speed_time_interval_desc" = "Especifica el intervalo de tiempo para calcular el promedio de la velocidad.";
+"unsaved_changes" = "Cambios no guardados";
+
+
+// Shared Strings
+"shared_string_discard" = "Descartar";
+"specify_number_of_dir_indicators_desc" = "Especifica el número de indicadores de dirección.";
+"map_marker_interval_dialog_desc" = "Especifica el intervalo de tiempo durante el cual se medirá la velocidad media para calcular la hora estimada de llegada.";

@@ -3035,3 +3035,16 @@
 "weather_update_over_wifi_only" = "عبر WIFI فقط";
 "weather_update_over_any_network" = "عبر أي شبكة";
 "map_settings_topography" = "طوبوغرافيا";
+"click_on_widget" = "انقر على الويدجت";
+"shared_string_cache" = "الذاكرة المؤقتة";
+"unsaved_changes_will_be_lost_discard" = "سيتم فقدان أي تغييرات غير محفوظة. هل تريد تجاهل التغييرات؟";
+"terrain_3D_maps" = "خرائط التضاريس";
+"average_speed_skip_stops" = "خذ أماكن التوقف في الحسبان";
+"average_speed_time_interval_desc" = "حدد الفاصل الزمني لمتوسط السرعة.";
+"unsaved_changes" = "تغييرات غير محفوظة";
+
+
+// Shared Strings
+"shared_string_discard" = "تجاهل";
+"specify_number_of_dir_indicators_desc" = "حدد عدد مؤشرات الاتجاه.";
+"map_marker_interval_dialog_desc" = "تحديد الفترة الزمنية التي سيقاس فيها متوسط السرعة لحساب الوقت المقدر للوصول.";

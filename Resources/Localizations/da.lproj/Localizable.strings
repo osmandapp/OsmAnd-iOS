@@ -1617,8 +1617,8 @@
 "show_terrain" = "Vis terræn";
 "shared_string_legend" = "Tegnforklaring";
 "map_settings_add_maps_slopes" = "Yderligere kort er nødvendige for at se hældninger på kortet.";
-"map_settings_add_maps_hillshade" = "Yderligere kort er nødvendige for at se terrænskygger på kortet";
-"map_settings_zoom_level_description" = "Indstil minimum og maksimum zoomniveau for at få vist laget";
+"map_settings_add_maps_hillshade" = "Yderligere kort er nødvendige for at se terrænskygger på kortet.";
+"map_settings_zoom_level_description" = "Indstil det minimale og maksimale zoomniveau, som laget skal vises ved";
 "map_settings_slopes_legend" = "Læs mere om skråninger på Wikipedia";
 "map_settings_slopes_description" = "Hældning er farvelagte visualiseringer af terræn.";
 "map_settings_layer_transparency" = "Lagets gennemsigtighed";
@@ -2683,7 +2683,7 @@
 "shared_string_uploaded" = "Uploadet";
 "last_synchronization" = "Seneste synkronisering";
 "cloud_conflict_descr" = "De lokale og cloud-versioner indeholder ændringer siden den sidste synkronisering.";
-"download_heightmap_maps" = "Terrænkort";
+"download_heightmap_maps" = "Terrænkort (3D)";
 "depth_contours" = "Dybdekonturer";
 "use_heightmap_setting" = "Brug højdekort med 3D-relief";
 "nautical_depth_points" = "Nautiske dybdepunkter";
@@ -3032,3 +3032,16 @@
 "weather_update_over_any_network" = "Via ethvert netværk";
 "weather_update_parameters_any_network" = "Vejrudsigten vil blive opdateret over ethvert netværk. Mobildata kan bruges.";
 "map_settings_topography" = "Topografi";
+"click_on_widget" = "Klik på modul";
+"shared_string_cache" = "Cache";
+"unsaved_changes_will_be_lost_discard" = "Alle ikke-gemte ændringer vil gå tabt. Kassér ændringer?";
+"terrain_3D_maps" = "Terrænkort";
+"average_speed_skip_stops" = "Tag højde for stop";
+"average_speed_time_interval_desc" = "Angiv tidsintervallet for hastighedsgennemsnit.";
+"unsaved_changes" = "Ugemte ændringer";
+
+
+// Shared Strings
+"shared_string_discard" = "Kassér";
+"specify_number_of_dir_indicators_desc" = "Angiv antal retningsindikatorer.";
+"map_marker_interval_dialog_desc" = "Angiv det tidsinterval, hvor gennemsnitshastigheden skal måles for at beregne den forventede ankomsttid.";

@@ -13,15 +13,18 @@
 #import "OATableRowData.h"
 #import "OsmAndApp.h"
 #import "OATitleSliderTableViewCell.h"
-#import "OARangeSliderCell.h"
+#import "OACustomPickerTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OARootViewController.h"
 #import "OAColors.h"
+#import "OAMapLayers.h"
+#import "OATerrainMapLayer.h"
 
 static const NSInteger kMinAllowedZoom = 1;
 static const NSInteger kMaxAllowedZoom = 22;
-static const NSInteger kHeightRowZoomSlider = 88;
+static const NSInteger kMaxMissingDataZoomShift = 5;
 
-@interface OAMapSettingsTerrainParametersViewController () <UITableViewDelegate, UITableViewDataSource, TTRangeSliderDelegate>
+@interface OAMapSettingsTerrainParametersViewController () <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *backButtonContainerView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -38,12 +41,18 @@ static const NSInteger kHeightRowZoomSlider = 88;
     EOATerrainType _type;
     OAMapPanelViewController *_mapPanel;
     
+    NSArray<NSString *> *_possibleZoomValues;
+    
     NSInteger _minZoom;
     NSInteger _maxZoom;
     NSInteger _baseMinZoom;
     NSInteger _baseMaxZoom;
     double _baseAlpha;
     double _currentAlpha;
+    
+    NSIndexPath *_minValueIndexPath;
+    NSIndexPath *_maxValueIndexPath;
+    NSIndexPath *_pickerIndexPath;
     
     UIView *_footerView;
     UIButton *_applyButton;
@@ -84,6 +93,8 @@ static const NSInteger kHeightRowZoomSlider = 88;
     [super viewDidLoad];
     
     [self applyLocalization];
+    
+    _possibleZoomValues = [self getPossibleZoomValues];
     [self generateData];
     
     [self.resetButton setImage:[UIImage templateImageNamed:@"ic_navbar_reset"] forState:UIControlStateNormal];
@@ -101,7 +112,8 @@ static const NSInteger kHeightRowZoomSlider = 88;
     [super viewWillLayoutSubviews];
     
     CGFloat btnMargin = MAX(10, [OAUtilities getLeftMargin]);
-    _footerView.subviews[0].frame = CGRectMake(btnMargin, 20, _footerView.frame.size.width - btnMargin * 2, 44.0);
+    CGFloat yPosition = _footerView.frame.size.height - 44.0;
+    _footerView.subviews[0].frame = CGRectMake(btnMargin, yPosition, _footerView.frame.size.width - btnMargin * 2, 44.0);
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -135,7 +147,7 @@ static const NSInteger kHeightRowZoomSlider = 88;
     
     OATableSectionData *topSection = [_data createNewSection];
     topSection.headerText = _terrainType == EOATerrainSettingsTypeVisibility ? OALocalizedString(@"visibility") : OALocalizedString(@"shared_string_zoom_levels");
-    topSection.footerText = OALocalizedString(@"map_settings_zoom_level_description");
+    topSection.footerText = _terrainType == EOATerrainSettingsTypeZoomLevels ? OALocalizedString(@"map_settings_zoom_level_description") : nil;
     if (_terrainType == EOATerrainSettingsTypeVisibility)
     {
         [topSection addRowFromDictionary:@{
@@ -147,15 +159,36 @@ static const NSInteger kHeightRowZoomSlider = 88;
     else
     {
         [topSection addRowFromDictionary:@{
-            kCellKeyKey : @"zoomSlider",
-            kCellTypeKey : [OARangeSliderCell getCellIdentifier]
+            kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+            kCellTitleKey: OALocalizedString(@"rec_interval_minimum"),
+            @"value" : @(_minZoom)
         }];
+        _minValueIndexPath = [NSIndexPath indexPathForRow:[_data rowCount:[_data sectionCount] - 1] - 1 inSection:[_data sectionCount] - 1];
+        if (_pickerIndexPath && _pickerIndexPath.row == _minValueIndexPath.row + 1)
+            [topSection addRowFromDictionary:@{ kCellTypeKey : [OACustomPickerTableViewCell getCellIdentifier] }];
+        
+        [topSection addRowFromDictionary:@{
+            kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+            kCellTitleKey : OALocalizedString(@"shared_string_maximum"),
+            @"value" : @(_maxZoom)
+        }];
+        _maxValueIndexPath = [NSIndexPath indexPathForRow:[_data rowCount:[_data sectionCount] - 1] - 1 inSection:[_data sectionCount] - 1];
+        if (_pickerIndexPath && _pickerIndexPath.row == _maxValueIndexPath.row + 1)
+            [topSection addRowFromDictionary:@{ kCellTypeKey : [OACustomPickerTableViewCell getCellIdentifier] }];
     }
+}
+
+- (void)generateValueForIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath == _minValueIndexPath)
+        [[_data itemForIndexPath:indexPath] setObj:@(_minZoom) forKey:@"value"];
+    else if (indexPath == _maxValueIndexPath)
+        [[_data itemForIndexPath:indexPath] setObj:@(_maxZoom) forKey:@"value"];
 }
 
 - (void)setupBottomButton
 {
-    _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 55.0)];
+    _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, _terrainType == EOATerrainSettingsTypeZoomLevels ? 100.0 : 144.0)];
     _applyButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [_applyButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
     _applyButton.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
@@ -176,7 +209,7 @@ static const NSInteger kHeightRowZoomSlider = 88;
 
 - (CGFloat)initialMenuHeight
 {
-    return self.tableView.contentSize.height + _footerView.frame.size.height + [OAUtilities getBottomMargin];
+    return ([OAUtilities calculateScreenHeight] / 3.0) + [OAUtilities getBottomMargin];
 }
 
 - (CGFloat)getToolbarHeight
@@ -277,6 +310,18 @@ static const NSInteger kHeightRowZoomSlider = 88;
     }
 }
 
+- (NSArray<NSString *> *)getPossibleZoomValues
+{
+    NSMutableArray *res = [NSMutableArray new];
+    OsmAnd::ZoomLevel maxZoom = OARootViewController.instance.mapPanel.mapViewController.mapLayers.terrainMapLayer.getMaxZoom;
+    int maxVisivleZoom = maxZoom + kMaxMissingDataZoomShift;
+    for (int i = 1; i <= maxVisivleZoom; i++)
+    {
+        [res addObject:[NSString stringWithFormat:@"%d", i]];
+    }
+    return res;
+}
+
 #pragma mark - Actions
 
 - (IBAction)backButtonPressed:(UIButton *)sender
@@ -291,6 +336,7 @@ static const NSInteger kHeightRowZoomSlider = 88;
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels)
         [self resetZoomLevels];
     
+    [self generateData];
     [self.tableView reloadData];
 }
 
@@ -408,31 +454,41 @@ static const NSInteger kHeightRowZoomSlider = 88;
         }
         return cell;
     }
-    else if ([item.cellType isEqualToString:[OARangeSliderCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OARangeSliderCell* cell = nil;
-        cell = (OARangeSliderCell *)[self.tableView dequeueReusableCellWithIdentifier:[OARangeSliderCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARangeSliderCell getCellIdentifier] owner:self options:nil];
-            cell = (OARangeSliderCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.valueLabel.textColor = UIColor.blackColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [cell.minValueLabel setHidden:YES];
-            [cell.maxValueLabel setHidden:YES];
-            cell.rangeSlider.lineHeight = 4.0;
-            cell.rangeSlider.handleDiameter = 35.0;
         }
         if (cell)
         {
-            cell.rangeSlider.delegate = self;
-            cell.rangeSlider.minValue = kMinAllowedZoom;
-            cell.rangeSlider.maxValue = kMaxAllowedZoom;
-            
-            cell.rangeSlider.selectedMinimum = _minZoom;
-            cell.rangeSlider.selectedMaximum = _maxZoom;
-            
-            cell.minLabel.text = [NSString stringWithFormat:@"%@: %ld", OALocalizedString(@"shared_string_min"), _minZoom];
-            cell.maxLabel.text = [NSString stringWithFormat:@"%@: %ld", OALocalizedString(@"shared_string_max"), _maxZoom];
+            cell.titleLabel.text = item.title;
+            cell.valueLabel.text = [item stringForKey:@"value"];
+        }
+        return cell;
+    }
+    else if ([item.cellType isEqualToString:[OACustomPickerTableViewCell getCellIdentifier]])
+    {
+        OACustomPickerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomPickerTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
+        }
+        if (cell)
+        {
+            cell.dataArray = _possibleZoomValues;
+            NSInteger minZoom = _minZoom >= kMinAllowedZoom && _minZoom <= kMaxAllowedZoom ? _minZoom : 1;
+            NSInteger maxZoom = _maxZoom >= kMinAllowedZoom && _maxZoom <= kMaxAllowedZoom ? _maxZoom : 1;
+            [cell.picker selectRow:indexPath.row == 1 ? minZoom - 1 : maxZoom - 1 inComponent:0 animated:NO];
+            cell.picker.tag = indexPath.row;
+            cell.delegate = self;
         }
         return cell;
     }
@@ -441,40 +497,87 @@ static const NSInteger kHeightRowZoomSlider = 88;
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OATableRowData *item = [_data itemForIndexPath:indexPath];
-    if ([item.key isEqualToString:@"zoomSlider"])
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (indexPath == _minValueIndexPath || indexPath == _maxValueIndexPath)
     {
-        return kHeightRowZoomSlider;
+        [self.tableView beginUpdates];
+        NSIndexPath *newPickerIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
+        BOOL isThisPicker = _pickerIndexPath == newPickerIndexPath;
+        if (_pickerIndexPath != nil)
+            [self.tableView deleteRowsAtIndexPaths:@[_pickerIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        _pickerIndexPath = isThisPicker ? nil : newPickerIndexPath;
+        [self generateData];
+        if (!isThisPicker)
+            [self.tableView insertRowsAtIndexPaths:@[_pickerIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView endUpdates];
+        [self.tableView scrollToRowAtIndexPath:_minValueIndexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
-    return UITableViewAutomaticDimension;
 }
 
-#pragma mark TTRangeSliderViewDelegate
+#pragma mark - OACustomPickerTableViewCellDelegate
 
-- (void)rangeSlider:(TTRangeSlider *)sender didChangeSelectedMinimumValue:(float)selectedMinimum andMaximumValue:(float)selectedMaximum
+- (void)resetPickerValue:(NSInteger)zoomValue
 {
-    _minZoom = selectedMinimum;
-    _maxZoom = selectedMaximum;
-    
-    if (_type == EOATerrainTypeHillshade)
+    if (_pickerIndexPath)
     {
-        _app.data.hillshadeMinZoom = _minZoom;
-        _app.data.hillshadeMaxZoom = _maxZoom;
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:_pickerIndexPath];
+        if ([cell isKindOfClass:OACustomPickerTableViewCell.class])
+        {
+            OACustomPickerTableViewCell *pickerCell = (OACustomPickerTableViewCell *) cell;
+            [pickerCell.picker selectRow:zoomValue - 1 inComponent:0 animated:YES];
+        }
     }
-    else
+}
+
+- (void)customPickerValueChanged:(NSString *)value tag:(NSInteger)pickerTag
+{
+    NSIndexPath *zoomValueIndexPath;
+    NSInteger intValue = [value integerValue];
+    if (pickerTag == 1)
     {
-        _app.data.slopeMinZoom = _minZoom;
-        _app.data.slopeMaxZoom = _maxZoom;
+        zoomValueIndexPath = _minValueIndexPath;
+        if (intValue <= _maxZoom)
+        {
+            _minZoom = intValue;
+            if (_type == EOATerrainTypeHillshade)
+                _app.data.hillshadeMinZoom = _minZoom;
+            else if (_type == EOATerrainTypeSlope)
+                _app.data.slopeMinZoom = _minZoom;
+        }
+        else
+        {
+            _minZoom = _maxZoom;
+            [self resetPickerValue:_maxZoom];
+        }
+    }
+    else if (pickerTag == 2)
+    {
+        zoomValueIndexPath = _maxValueIndexPath;
+        if (intValue >= _minZoom)
+        {
+            _maxZoom = intValue;
+            if (_type == EOATerrainTypeHillshade)
+                _app.data.hillshadeMaxZoom = _maxZoom;
+            else if (_type == EOATerrainTypeSlope)
+                _app.data.slopeMaxZoom = _maxZoom;
+        }
+        else
+        {
+            _maxZoom = _minZoom;
+            [self resetPickerValue:_minZoom];
+        }
     }
     
-    OARangeSliderCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    cell.minLabel.text = [NSString stringWithFormat:@"%@: %ld", OALocalizedString(@"shared_string_min"), _minZoom];
-    cell.maxLabel.text = [NSString stringWithFormat:@"%@: %ld", OALocalizedString(@"shared_string_max"), _maxZoom];
-    
-    _isValueChange = YES;
-    [self updateApplyButton];
+    if (zoomValueIndexPath)
+    {
+        [self generateValueForIndexPath:zoomValueIndexPath];
+        [self.tableView reloadRowsAtIndexPaths:@[zoomValueIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        _isValueChange = YES;
+        [self updateApplyButton];
+    }
 }
 
 @end

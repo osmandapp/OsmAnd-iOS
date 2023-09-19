@@ -188,7 +188,7 @@ static const NSInteger kMaxMissingDataZoomShift = 5;
 
 - (void)setupBottomButton
 {
-    _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, _terrainType == EOATerrainSettingsTypeZoomLevels ? 100.0 : 144.0)];
+    _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, _terrainType == EOATerrainSettingsTypeZoomLevels ? 80.0 : 120.0)];
     _applyButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [_applyButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
     _applyButton.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];

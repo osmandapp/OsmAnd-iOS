@@ -678,9 +678,9 @@
 "map_settings_slopes_legend" = "Puedes leer más sobre las pendientes en Wikipedia";
 "map_settings_slopes_description" = "Las pendientes se colorean sobre el terreno.";
 "map_settings_hillshade_description" = "El mapa de sombreado usa sombras oscuras para mostrar las pendientes, picos y tierras bajas.";
-"map_settings_zoom_level_description" = "Define el nivel de zum mínimo y máximo para mostrar la capa";
-"map_settings_add_maps_hillshade" = "Se necesitan mapas adicionales para ver el sombreado en el mapa";
-"map_settings_add_maps_slopes" = "Se necesitan mapas adicionales para ver las pendientes en el mapa";
+"map_settings_zoom_level_description" = "Define el nivel de zum mínimo y máximo dónde se verá la capa";
+"map_settings_add_maps_hillshade" = "Se necesitan mapas adicionales para ver el sombreado en el mapa.";
+"map_settings_add_maps_slopes" = "Se necesitan mapas adicionales para ver las pendientes en el mapa.";
 "shared_string_legend" = "Leyenda";
 "map_settings_show_slider_map" = "Mostrar deslizador en el mapa";
 "add_online_source" = "Añadir repositorio en línea";
@@ -2693,7 +2693,7 @@
 "huawei_appgallery" = "Huawei AppGallery";
 "nautical_depth_points" = "Puntos de profundidad náuticos";
 "use_heightmap_setting" = "Usar mapas de altura del relieve 3D";
-"download_heightmap_maps" = "Mapa del terreno";
+"download_heightmap_maps" = "Mapa topográfico (3D)";
 "amazon_appstore" = "Amazon Appstore";
 "routing_attr_motor_type_name" = "Motor del vehículo";
 "routing_attr_motor_type_diesel_name" = "Diésel";
@@ -3039,3 +3039,16 @@
 "weather_update_over_any_network" = "Sobre cualquier red";
 "weather_update_parameters_any_network" = "El pronóstico del tiempo será actualizado sobre cualquier red. Pueden usarse los datos móviles.";
 "map_settings_topography" = "Topografía";
+"click_on_widget" = "Pulsar en el widget";
+"shared_string_cache" = "Caché";
+"unsaved_changes_will_be_lost_discard" = "Los cambios sin guardar se perderán. ¿Descartar cambios?";
+"terrain_3D_maps" = "Mapas topográficos";
+"average_speed_skip_stops" = "Tener en cuenta las paradas";
+"average_speed_time_interval_desc" = "Indica el intervalo de tiempo para la velocidad media.";
+"unsaved_changes" = "Cambios sin guardar";
+
+
+// Shared Strings
+"shared_string_discard" = "Descartar";
+"specify_number_of_dir_indicators_desc" = "Define el número de indicadores de dirección.";
+"map_marker_interval_dialog_desc" = "Indica el intervalo de tiempo a medir con la velocidad media para calcular la hora de llegada estimada.";

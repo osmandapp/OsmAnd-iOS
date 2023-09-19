@@ -1599,8 +1599,8 @@
 "allow_3d_descr" = "قم بتمكين هذا الخيار لتتمكن من عرض الخريطة في منظور 3D";
 "allow_3d" = "السماح بعرض 3D";
 "product_desc_antarctica" = "تنزيلات خريطة غير محدودة للقطب الجنوبي";
-"map_settings_add_maps_slopes" = "تحتاج لخرائط إضافية لعرض المنحدرات على الخريطة";
-"map_settings_add_maps_hillshade" = "تحتاج إلى خرائط إضافية لعرض التضاريس على الخريطة";
+"map_settings_add_maps_slopes" = "تحتاج لخرائط إضافية لعرض المنحدرات على الخريطة.";
+"map_settings_add_maps_hillshade" = "تحتاج إلى خرائط إضافية لعرض التضاريس على الخريطة.";
 "public_transport_try_change_settings" = "حاول تغيير الإعدادات.";
 "public_transport_empty_warning_title" = "لسوء الحظ، تعذر على أوسماند العثور على مسار للإعدادات الخاصة بك.";
 "help_legend_descr" = "دليل رموز الخريطة";
@@ -3045,6 +3045,6 @@
 
 
 // Shared Strings
-"shared_string_discard" = "تجاهل";
+"shared_string_discard" = "إلغاء";
 "specify_number_of_dir_indicators_desc" = "حدد عدد مؤشرات الاتجاه.";
 "map_marker_interval_dialog_desc" = "تحديد الفترة الزمنية التي سيقاس فيها متوسط السرعة لحساب الوقت المقدر للوصول.";

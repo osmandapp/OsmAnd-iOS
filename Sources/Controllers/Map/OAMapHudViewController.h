@@ -16,6 +16,7 @@
 @class OAMapInfoController;
 @class OADownloadMapWidget;
 @class OAWeatherToolbar;
+@class OAObservable;
 
 @interface OAMapHudViewController : UIViewController
 

@@ -25,6 +25,9 @@
 #import "OAMapRendererViewProtocol.h"
 #import "OAObservable.h"
 
+#define kViewportScale 1.0f
+#define kViewportBottomScale 1.5f
+
 #define kSymbolsUpdateInterval 2000
 
 #define kObfRasterLayer 0
@@ -156,6 +159,7 @@ struct CLLocationCoordinate2D;
 @property (nonatomic) int elevationDataTileSize;
 
 - (OsmAnd::PointI) getCenterPixel;
+- (void)setTopOffsetOfViewSize:(CGFloat)topOffset bottomOffset:(CGFloat)bottomOffset;
 - (float)getCameraHeightInMeters;
 - (float)getTargetDistanceInMeters;
 

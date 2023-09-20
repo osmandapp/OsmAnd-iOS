@@ -23,9 +23,6 @@
 #include <OsmAndCore.h>
 #include "Localization.h"
 
-#define VIEWPORT_SHIFTED_SCALE 1.5f
-#define VIEWPORT_NON_SHIFTED_SCALE 1.0f
-
 @interface OAMapillaryImageViewController () <WKScriptMessageHandler, WKNavigationDelegate>
 
 @end
@@ -207,20 +204,20 @@
 {
     if ([self isLandscape])
     {
-        _mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
-        _mapView.viewportYScale = VIEWPORT_NON_SHIFTED_SCALE;
+        _mapView.viewportXScale = kViewportBottomScale;
+        _mapView.viewportYScale = kViewportScale;
     }
     else
     {
-        _mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
-        _mapView.viewportYScale = VIEWPORT_SHIFTED_SCALE;
+        _mapView.viewportXScale = kViewportScale;
+        _mapView.viewportYScale = kViewportBottomScale;
     }
 }
 
 - (void) restoreMapViewPort
 {
-    if (_mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE)
-        _mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+    if (_mapView.viewportXScale != kViewportScale)
+        _mapView.viewportXScale = kViewportScale;
     if (_mapView.viewportYScale != _cachedYViewPort)
         _mapView.viewportYScale = _cachedYViewPort;
 }

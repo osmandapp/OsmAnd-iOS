@@ -18,9 +18,6 @@
 #import "OASavingTrackHelper.h"
 #import "OAGPXTrackAnalysis.h"
 
-#define VIEWPORT_SHIFTED_SCALE 1.5f
-#define VIEWPORT_NON_SHIFTED_SCALE 1.0f
-
 @implementation OAGPXBaseTableData
 
 - (instancetype)init
@@ -413,10 +410,10 @@
 
 - (void)adjustViewPort:(BOOL)landscape
 {
-    if (landscape && _mapViewController.mapView.viewportXScale != VIEWPORT_SHIFTED_SCALE)
-        _mapViewController.mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
-    else if (!landscape && _mapViewController.mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE)
-        _mapViewController.mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+    if (landscape && _mapViewController.mapView.viewportXScale != kViewportBottomScale)
+        _mapViewController.mapView.viewportXScale = kViewportBottomScale;
+    else if (!landscape && _mapViewController.mapView.viewportXScale != kViewportScale)
+        _mapViewController.mapView.viewportXScale = kViewportScale;
     CGFloat newYScale = (DeviceScreenHeight - [self getViewHeight]) / DeviceScreenHeight;
     if (!landscape && _mapViewController.mapView.viewportYScale != newYScale)
         _mapViewController.mapView.viewportYScale = newYScale;
@@ -425,8 +422,8 @@
 - (void)restoreMapViewPort
 {
     OAMapRendererView *mapView = _mapViewController.mapView;
-    if (mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE)
-        mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+    if (mapView.viewportXScale != kViewportScale)
+        mapView.viewportXScale = kViewportScale;
     if (mapView.viewportYScale != _cachedYViewPort)
         mapView.viewportYScale = _cachedYViewPort;
 }
@@ -434,7 +431,7 @@
 - (BOOL)isAdjustedMapViewPort
 {
     OAMapRendererView *mapView = _mapViewController.mapView;
-    return mapView.viewportYScale != _cachedYViewPort && mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE;
+    return mapView.viewportYScale != _cachedYViewPort && mapView.viewportXScale != kViewportScale;
 }
 
 - (void)changeHud:(CGFloat)height

@@ -21,8 +21,9 @@ class WidgetType: NSObject {
     let docsUrl: String?
     let group: WidgetGroup?
     let defaultPanel: WidgetsPanel
+    let special: Bool
 
-    private init(ordinal: Int, id: String, title: String, descr: String, dayIconName: String, nightIconName: String, docsUrl: String? = nil, group: WidgetGroup? = nil, defaultPanel: WidgetsPanel) {
+    private init(ordinal: Int, id: String, title: String, descr: String, dayIconName: String, nightIconName: String, docsUrl: String? = nil, group: WidgetGroup? = nil, defaultPanel: WidgetsPanel, special: Bool = false) {
         self.ordinal = ordinal
         self.id = id
         self.title = title
@@ -32,6 +33,7 @@ class WidgetType: NSObject {
         self.docsUrl = docsUrl
         self.group = group
         self.defaultPanel = defaultPanel
+        self.special = special
     }
 
     func getIconName(_ night: Bool) -> String {
@@ -190,7 +192,7 @@ extension WidgetType {
     static let coordinatesCurrentLocation = WidgetType(ordinal: 5, id: "coordinates_current_location", title: localizedString("coordinates_widget_current_location"), descr: localizedString("coordinates_widget_current_location_desc"), dayIconName: "widget_coordinates_location_day", nightIconName: "widget_coordinates_location_night", docsUrl:docs_widget_coordinates, group: .coordinatesWidget, defaultPanel: .topPanel)
     static let streetName = WidgetType(ordinal: 6, id: "street_name", title: localizedString("map_widget_top_text"), descr: localizedString("street_name_widget_desc"), dayIconName: "widget_street_name_day", nightIconName: "widget_street_name_night", docsUrl:docs_widget_street_name, defaultPanel: .topPanel)
     static let markersTopBar = WidgetType(ordinal: 7, id: "map_markers_top", title: localizedString("map_markers_bar"), descr: localizedString("map_markers_bar_widget_desc"), dayIconName: "widget_markers_topbar_day", nightIconName: "widget_markers_topbar_night", docsUrl:docs_widget_markers, defaultPanel: .topPanel)
-    static let lanes = WidgetType(ordinal: 8, id: "lanes", title: localizedString("show_lanes"), descr: localizedString("lanes_widgets_desc"), dayIconName: "widget_lanes_day", nightIconName: "widget_lanes_night", docsUrl:docs_widget_lanes, defaultPanel: .topPanel)
+    static let lanes = WidgetType(ordinal: 8, id: "lanes", title: localizedString("show_lanes"), descr: localizedString("lanes_widgets_desc"), dayIconName: "widget_lanes_day", nightIconName: "widget_lanes_night", docsUrl:docs_widget_lanes, defaultPanel: .topPanel, special: true)
 
     // Right panel
     static let distanceToDestination = WidgetType(ordinal: 9, id: "distance", title: localizedString("map_widget_distance_to_destination"), descr: localizedString("distance_to_destination_widget_desc"), dayIconName: "widget_target_day", nightIconName: "widget_target_night", group: .navigationPoints, defaultPanel: .rightPanel)

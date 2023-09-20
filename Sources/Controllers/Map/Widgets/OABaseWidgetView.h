@@ -46,7 +46,7 @@
 
 - (void)showSeparator:(BOOL)show;
 - (void)adjustViewSize;
-- (void)attachView:(UIView *_Nonnull)container order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *_Nullable)followingWidgets;
+- (void)attachView:(UIView *_Nonnull)container specialContainer:(UIView *_Nullable)specialContainer order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *_Nullable)followingWidgets;
 - (void)detachView:(OAWidgetsPanel * _Nonnull)widgetsPanel;
 
 @end

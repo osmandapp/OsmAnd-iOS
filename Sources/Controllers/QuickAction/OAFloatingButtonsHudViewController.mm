@@ -48,7 +48,6 @@
     
     CGFloat _cachedYViewPort;
     OAAutoObserverProxy *_map3dModeObserver;
-    OAAutoObserverProxy *_quickActionModeObserver;
 }
 
 - (instancetype) initWithMapHudViewController:(OAMapHudViewController *)mapHudController
@@ -92,9 +91,6 @@
     _map3dModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                    withHandler:@selector(onMap3dModeUpdated)
                                                     andObserve:[OARootViewController instance].mapPanel.mapViewController.elevationAngleObservable];
-    _quickActionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                         withHandler:@selector(onQuickActionModeUpdated:withKey:andValue:)
-                                                          andObserve:[OARootViewController instance].mapPanel.hudViewController.quickActionModeObservable];
 
     [self updateColors:NO];
 }
@@ -105,11 +101,6 @@
     {
         [_map3dModeObserver detach];
         _map3dModeObserver = nil;
-    }
-    if (_quickActionModeObserver)
-    {
-        [_quickActionModeObserver detach];
-        _quickActionModeObserver = nil;
     }
 }
 
@@ -136,18 +127,6 @@
         [_quickActionFloatingButton setImage:[UIImage templateImageNamed:@"ic_custom_quick_action"] forState:UIControlStateNormal];
     
     [self onMap3dModeUpdated];
-}
-
-- (void)onQuickActionModeUpdated:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
-{
-    if ([value isKindOfClass:NSNumber.class])
-    {
-        BOOL quickActionIsOn = [((NSNumber *) value) boolValue];
-        [_settings.quickActionIsOn set:quickActionIsOn];
-    }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self setupQuickActionBtnVisibility];
-    });
 }
 
 - (void) onMap3dModeUpdated

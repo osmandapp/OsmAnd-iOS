@@ -75,8 +75,6 @@
 @property (nonatomic, assign) BOOL contextMenuMode;
 @property (nonatomic, assign) EOAMapModeButtonType mapModeButtonType;
 
-@property(readonly) OAObservable *quickActionModeObservable;
-
 - (void) enterContextMenuMode;
 - (void) restoreFromContextMenuMode;
 - (void) updateRulerPosition:(CGFloat)bottom left:(CGFloat)left;

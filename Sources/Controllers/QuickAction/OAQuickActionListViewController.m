@@ -56,8 +56,7 @@
 
 - (void) onSwitchPressed:(UISwitch *)sender
 {
-    [[OARootViewController instance].mapPanel.hudViewController.quickActionModeObservable notifyEventWithKey:nil
-                                                                                                    andValue:@(sender.isOn)];
+    [_settings.quickActionIsOn set:sender.isOn];
     [self.delegate onWidgetStateChanged];
 }
 

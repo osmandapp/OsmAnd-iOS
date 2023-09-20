@@ -157,11 +157,8 @@
     self.backgroundColor = [UIColor whiteColor];
     self.layer.cornerRadius = radius;
     
-    // drop shadow
-    self.layer.shadowColor = UIColor.blackColor.CGColor;
-    self.layer.shadowOpacity = 0.3;
-    self.layer.shadowRadius = 2.0;
-    self.layer.shadowOffset = CGSizeMake(0.0, 0.0);
+    _turnView.layer.borderWidth = 1.0;
+    _turnView.layer.borderColor = [UIColor redColor].CGColor;
 
     _regularFont = [UIFont systemFontOfSize:23 weight:UIFontWeightSemibold];
     _boldFont = [UIFont systemFontOfSize:23 weight:UIFontWeightBold];
@@ -239,18 +236,16 @@
         size.width = maxTextWidth;
     
     CGFloat x = w / 2 - size.width / 2;
-    _addressText.frame = CGRectMake(w / 2 - size.width / 2, 0, w - x - 4, h);
-    _addressTextShadow.frame = _addressText.frame;
     
-    CGFloat prevX = _addressText.frame.origin.x;
+    CGFloat prevX = x;//_addressText.frame.origin.x;
     if (showShield)
     {
-        [self applyCorrectPositionToView:_shieldIcon prevX:prevX];
+       // [self applyCorrectPositionToView:_shieldIcon prevX:prevX];
         prevX = _shieldIcon.frame.origin.x;
     }
     if (showTurn)
     {
-        [self applyCorrectPositionToView:_turnView prevX:prevX];
+       // [self applyCorrectPositionToView:_turnView prevX:prevX];
         prevX = _turnView.frame.origin.x;
     }
     if (showExit)
@@ -370,6 +365,8 @@
 
         id<OALocationPoint> point = pnt.point;
         _waypointImage.image = [pnt getImage:NO];
+        _waypointImage.layer.borderWidth = 1.0;
+        _waypointImage.layer.borderColor = [UIColor redColor].CGColor;
         
         NSString *descr = @"";
         OAPointDescription *pd = [point getPointDescription];
@@ -608,12 +605,28 @@
             if (streetName.turnType)
             {
                 [_imageView removeFromSuperview];
+                _turnDrawable.translatesAutoresizingMaskIntoConstraints = NO;
                 [_turnView addSubview:_turnDrawable];
+                
+                [NSLayoutConstraint activateConstraints:@[
+                    [_turnDrawable.topAnchor constraintEqualToAnchor:_turnView.topAnchor],
+                    [_turnDrawable.leadingAnchor constraintEqualToAnchor:_turnView.leadingAnchor],
+                    [_turnDrawable.bottomAnchor constraintEqualToAnchor:_turnView.bottomAnchor],
+                    [_turnDrawable.trailingAnchor constraintEqualToAnchor:_turnView.trailingAnchor]
+                ]];
             }
             else if (_showMarker)
             {
                 [_turnDrawable removeFromSuperview];
+                _imageView.translatesAutoresizingMaskIntoConstraints = NO;
                 [_turnView addSubview:_imageView];
+                
+                [NSLayoutConstraint activateConstraints:@[
+                    [_imageView.topAnchor constraintEqualToAnchor:_turnView.topAnchor],
+                    [_imageView.leadingAnchor constraintEqualToAnchor:_turnView.leadingAnchor],
+                    [_imageView.bottomAnchor constraintEqualToAnchor:_turnView.bottomAnchor],
+                    [_imageView.trailingAnchor constraintEqualToAnchor:_turnView.trailingAnchor]
+                ]];
             }
             else
             {

@@ -291,7 +291,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }];
     [menuElements addObject:slope];
                 
-    NSInteger selectedIndex = _app.data.terrainType - 1;
+    NSInteger selectedIndex = _app.data.terrainType == EOATerrainTypeHillshade ? 0 : 1;
     if (selectedIndex >= 0 && selectedIndex < menuElements.count)
         ((UIAction *)menuElements[selectedIndex]).state = UIMenuElementStateOn;
                 

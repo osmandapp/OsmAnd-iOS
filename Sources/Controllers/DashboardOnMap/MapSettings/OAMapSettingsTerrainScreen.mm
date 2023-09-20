@@ -151,9 +151,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         OATableSectionData *titleSection = [_data createNewSection];
         [titleSection addRowFromDictionary:@{
             kCellKeyKey : @"terrainType",
-            kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
-            kCellTitleKey : OALocalizedString(@"srtm_color_scheme"),
-            @"value" : type == EOATerrainTypeHillshade ? OALocalizedString(@"shared_string_hillshade") : OALocalizedString(@"shared_string_slope")
+            kCellTypeKey : [OAButtonTableViewCell getCellIdentifier],
+            kCellTitleKey : OALocalizedString(@"srtm_color_scheme")
         }];
         [titleSection addRowFromDictionary:@{
             kCellKeyKey : @"terrainTypeDesc",
@@ -270,6 +269,37 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [tblView reloadData];
 }
 
+- (UIMenu *)createTerrainTypeMenuForCellButton:(UIButton *)button
+{
+    NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+                
+    UIAction *hillshade = [UIAction actionWithTitle:OALocalizedString(@"shared_string_hillshade")
+                                             image:nil
+                                        identifier:nil
+                                           handler:^(__kindof UIAction * _Nonnull action) {
+        [_app.data setTerrainType: EOATerrainTypeHillshade];
+        [self terrainTypeChanged];
+    }];
+    [menuElements addObject:hillshade];
+                
+    UIAction *slope = [UIAction actionWithTitle:OALocalizedString(@"shared_string_slope")
+                                          image:nil
+                                     identifier:nil
+                                        handler:^(__kindof UIAction * _Nonnull action) {
+        [_app.data setTerrainType: EOATerrainTypeSlope];
+        [self terrainTypeChanged];
+    }];
+    [menuElements addObject:slope];
+                
+    NSInteger selectedIndex = _app.data.terrainType == EOATerrainTypeHillshade ? 0 : 1;
+    if (selectedIndex >= 0 && selectedIndex < menuElements.count)
+        ((UIAction *)menuElements[selectedIndex]).state = UIMenuElementStateOn;
+                
+    [button setTitle:[menuElements[selectedIndex] title] forState:UIControlStateNormal];
+                
+    return [UIMenu menuWithChildren:menuElements];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -319,7 +349,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     else if ([item.cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
         OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
-        BOOL isTerrainTypeCell = [item.key isEqualToString:@"terrainType"];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
@@ -328,12 +357,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (cell)
         {
-            [cell setCustomLeftSeparatorInset:isTerrainTypeCell];
-            if (isTerrainTypeCell)
-                cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
-            else
-                cell.separatorInset = UIEdgeInsetsZero;
-            
             cell.titleLabel.text = item.title;
             cell.valueLabel.text = [item stringForKey:@"value"];
             [cell leftIconVisibility:item.iconName.length > 0];
@@ -363,25 +386,45 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     else if ([item.cellType isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
     {
         OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
+        BOOL isTerrainTypeCell = [item.key isEqualToString:@"terrainType"];
+        
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAButtonTableViewCell *) nib[0];
-            [cell.button setTitle:nil forState:UIControlStateNormal];
             [cell descriptionVisibility:NO];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
+            [cell setCustomLeftSeparatorInset:isTerrainTypeCell];
             cell.titleLabel.text = item.title;
-            cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
-            cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
             
-            UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
-            cell.button.configuration = conf;
-            [cell.button setImage:[UIImage imageNamed:item.secondaryIconName] forState:UIControlStateNormal];
-            
-            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.button addTarget:self action:@selector(showChoosePlanScreen) forControlEvents:UIControlEventTouchUpInside];
+            if (isTerrainTypeCell)
+            {
+                cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
+                [cell leftIconVisibility:NO];
+                cell.leftIconView.image = nil;
+                [cell.button setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateHighlighted];
+                cell.button.menu = [self createTerrainTypeMenuForCellButton:cell.button];
+                cell.button.showsMenuAsPrimaryAction = YES;
+                cell.button.changesSelectionAsPrimaryAction = YES;
+            }
+            else
+            {
+                cell.separatorInset = UIEdgeInsetsZero;
+                [cell leftIconVisibility:YES];
+                cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+                cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
+                [cell.button setTitle:nil forState:UIControlStateNormal];
+                
+                UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
+                conf.image = [UIImage imageNamed:item.secondaryIconName];
+                cell.button.configuration = conf;
+                cell.button.menu = nil;
+                [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+                [cell.button addTarget:self action:@selector(showChoosePlanScreen) forControlEvents:UIControlEventTouchUpInside];
+            }
         }
         return cell;
     }
@@ -544,40 +587,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
         }
     }
-}
-
-- (UIContextMenuConfiguration *)tableView:(UITableView *)tableView contextMenuConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath point:(CGPoint)point
-{
-    OATableRowData *item = [_data itemForIndexPath:indexPath];
-    if ([item.key isEqualToString:@"terrainType"])
-    {
-        NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
-        
-        UIAction *hillshad = [UIAction actionWithTitle:OALocalizedString(@"shared_string_hillshade")
-                                                 image:_app.data.terrainType == EOATerrainTypeHillshade ? [UIImage systemImageNamed:@"checkmark"] : nil
-                                            identifier:nil
-                                               handler:^(__kindof UIAction * _Nonnull action) {
-            [_app.data setTerrainType: EOATerrainTypeHillshade];
-            [self terrainTypeChanged];
-        }];
-        [menuElements addObject:hillshad];
-        
-        UIAction *slope = [UIAction actionWithTitle:OALocalizedString(@"shared_string_slope")
-                                              image:_app.data.terrainType == EOATerrainTypeSlope ? [UIImage systemImageNamed:@"checkmark"] : nil
-                                         identifier:nil
-                                            handler:^(__kindof UIAction * _Nonnull action) {
-            [_app.data setTerrainType: EOATerrainTypeSlope];
-            [self terrainTypeChanged];
-        }];
-        [menuElements addObject:slope];
-        UIMenu *contextMenu = [UIMenu menuWithChildren:menuElements];
-        return [UIContextMenuConfiguration configurationWithIdentifier:nil
-                                                       previewProvider:nil
-                                                        actionProvider:^UIMenu * _Nullable(NSArray<UIMenuElement *> * _Nonnull suggestedActions) {
-            return contextMenu;
-        }];
-    }
-    return nil;
 }
 
 #pragma mark - UITextViewDelegate

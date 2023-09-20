@@ -37,6 +37,7 @@
 // don't annoy users by lots of announcements
 #define APPROACH_POI_LIMIT 1
 #define ANNOUNCE_POI_LIMIT 3
+#define SAME_ALARM_INTERVAL 30//in seconds
 
 @implementation OAWaypointHelper
 {
@@ -48,6 +49,7 @@
     NSMutableArray<NSMutableArray<OALocationPointWrapper *> *> *_locationPoints;
     NSMapTable<id<OALocationPoint>, NSNumber *> *_locationPointsStates;
     NSMapTable<NSNumber *, OAAlarmInfo *> *_lastAnnouncedAlarms;
+    NSMapTable<NSNumber *, NSNumber *> *_lastAnnouncedAlarmsTime;
 
     NSMutableArray<NSNumber *> *_pointsProgress;
     OARouteCalculationResult *_route;
@@ -105,6 +107,7 @@
         _pointsProgress = [NSMutableArray array];
         _locationPointsStates = [NSMapTable strongToStrongObjectsMapTable];
         _lastAnnouncedAlarms = [NSMapTable strongToStrongObjectsMapTable];
+        _lastAnnouncedAlarmsTime = [NSMapTable strongToStrongObjectsMapTable];
         _deletedPoints = [NSMutableArray array];
         
         _appMode = [OAAppSettings sharedManager].applicationMode.get;
@@ -376,6 +379,7 @@
                                 switch (t)
                                 {
                                     case AIT_TRAFFIC_CALMING:
+                                    case AIT_HAZARD:
                                         announceRadius = kStateShortAlarmAnnounce;
                                         filter = YES;
                                         break;
@@ -404,6 +408,17 @@
                                             proceed = NO;
                                         }
                                     }
+                                    NSNumber * timeLastAlarm = [_lastAnnouncedAlarmsTime objectForKey:@(t)];
+                                    if (timeLastAlarm && proceed)
+                                    {
+                                        long ms = CACurrentMediaTime();
+                                        if (ms - [timeLastAlarm longValue] < SAME_ALARM_INTERVAL * 1000)
+                                        {
+                                            [_locationPointsStates setObject:@(ANNOUNCED_ONCE) forKey:point];
+                                            proceed = false;
+                                        }
+                                    }
+                                    
                                 }
                                 if (proceed)
                                 {
@@ -448,6 +463,7 @@
                                 OAAlarmInfo *alarm = (OAAlarmInfo *) pw.point;
                                 [voiceRouter announceAlarm:[[OAAlarmInfo alloc] initWithType:alarm.type locationIndex:-1] speed:lastKnownLocation.speed];
                                 [_lastAnnouncedAlarms setObject:alarm forKey:@(alarm.type)];
+                                [_lastAnnouncedAlarmsTime setObject:@(CACurrentMediaTime()) forKey:@(alarm.type)];
                             }
                         }
                         else if (type == LPW_FAVORITES)
@@ -819,6 +835,7 @@
         _locationPoints = locationPoints;
         _locationPointsStates = [NSMapTable strongToStrongObjectsMapTable];
         _lastAnnouncedAlarms = [NSMapTable strongToStrongObjectsMapTable];
+        _lastAnnouncedAlarmsTime = [NSMapTable strongToStrongObjectsMapTable];
         
         NSMutableArray *list = [NSMutableArray arrayWithCapacity:locationPoints.count];
         for (int i = 0; i < (int)locationPoints.count; i++)
@@ -860,24 +877,10 @@
             {
                 auto typeRule = region->quickGetEncodingRule(pointTypes[r]);
                 OAAlarmInfo *info = [OAAlarmInfo createAlarmInfo:typeRule locInd:0 coordinate:loc.coordinate];
-                
-                // For STOP first check if it has directional info
-                // Looks like has no effect here
-                //if (info != null && info.getType() != null && info.getType() == AlarmInfoType.STOP) {
-                //    if (!ro.isStopApplicable(ro.bearingVsRouteDirection(loc), i)) {
-                //        info = null;
-                //    }
-                //}
-                
                 if (info)
                 {
                     if (info.type != AIT_SPEED_CAMERA || showCameras)
                     {
-                        long ms = CACurrentMediaTime() * 1000;
-                        if (ms - _announcedAlarmTime > 50 * 1000) {
-                            _announcedAlarmTime = ms;
-                            [[self getVoiceRouter] announceAlarm:info speed:loc.speed];
-                        }
                         return info;
                     }
                 }

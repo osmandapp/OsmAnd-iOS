@@ -952,7 +952,7 @@
     return [NSArray arrayWithArray:arr];
 }
 
-- (NSArray<OAPOI *> *) findTravelGuidesByKeyword:(NSString *)keyword categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName location:(OsmAnd::PointI)location radius:(int)radius reader:(NSString *)reader publish:(BOOL(^)(OAPOIAdapter *poi))publish
+- (NSArray<OAPOI *> *) findTravelGuidesByKeyword:(NSString *)keyword categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOIAdapter *poi))publish
 {
     _isSearchDone = NO;
     _breakSearch = NO;
@@ -974,18 +974,13 @@
     
     searchCriteria->name = QString::fromNSString(keyword ? keyword : @"");
     searchCriteria->obfInfoAreaFilter = _visibleArea;
+    searchCriteria->bbox31 = bbox31;
     
     if (categoryName)
     {
         auto categoriesFilter = QHash<QString, QStringList>();
         categoriesFilter.insert(QString::fromNSString(@"routes"), QStringList(QString::fromNSString(categoryName)));
         searchCriteria->categoriesFilter = categoriesFilter;
-    }
-    
-    if (radius != -1)
-    {
-        OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, location);
-        searchCriteria->bbox31 = bbox31;
     }
     
     NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
@@ -1000,7 +995,7 @@
                                         {
                                             const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
 
-                                            OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:NO];
+                                            OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:YES];
                                             poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, am->position31);
                                             [OAPOIHelper fetchValuesContentPOIByAmenity:am poi:poi];
                                             

@@ -735,6 +735,7 @@
 "shared_string_duplicate_color" = "Duplicate color";
 "shared_string_delete_color" = "Delete color";
 "shared_string_duplicate" = "Duplicate";
+"shared_string_result" = "Result";
 
 "restart" = "Restart";
 

@@ -56,7 +56,7 @@
 @implementation OATravelGuidesHelper
 
 
-+ (NSArray<OAFoundAmenity *> *) searchAmenity:(double)lat lon:(double)lon reader:(NSString *)reader radius:(int)radius searchFilter:(NSString *)searchFilter publish:(BOOL(^)(OAPOIAdapter *poi))publish
++ (void) searchAmenity:(double)lat lon:(double)lon reader:(NSString *)reader radius:(int)radius searchFilter:(NSString *)searchFilter publish:(BOOL(^)(OAPOIAdapter *poi))publish
 {
     OsmAnd::AreaI bbox31;
     OsmAnd::PointI locI;
@@ -71,22 +71,7 @@
         OsmAnd::PointI bottomRight = OsmAnd::PointI(INT_MAX, INT_MAX);
         bbox31 =  OsmAnd::AreaI(topLeft, bottomRight);
     }
-    NSArray<OAPOI *> *foundPoints = [OAPOIHelper findTravelGuides:searchFilter location:locI bbox31:bbox31 reader:reader publish:publish];
-    
-    NSMutableArray<OAFoundAmenity *> *result = [NSMutableArray array];
-    for (OAPOI *point in foundPoints)
-    {
-        OAPOIAdapter *amenity = [[OAPOIAdapter alloc] initWithPOI:point];
-        OAFoundAmenity *found = [[OAFoundAmenity alloc] initWithFile:reader amenity: amenity];
-        [result addObject:found];
-    }
-    return result;
-}
-
-+ (void) searchAmenity:(NSString *)searchQuerry categoryName:(NSString *)categoryName radius:(int)radius lat:(double)lat lon:(double)lon reader:(NSString *)reader publish:(BOOL(^)(OAPOIAdapter *poi))publish
-{
-    OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
-    [OAPOIHelper.sharedInstance findTravelGuidesByKeyword:searchQuerry categoryName:nil poiTypeName:nil location:locI radius:radius reader:reader publish:publish];
+    [OAPOIHelper findTravelGuides:searchFilter location:locI bbox31:bbox31 reader:reader publish:publish];
 }
 
 + (void) searchAmenity:(int)x y:(int)y left:(int)left right:(int)right top:(int)top bottom:(int)bottom  reader:(NSString *)reader searchFilter:(NSString *)searchFilter publish:(BOOL(^)(OAPOIAdapter *poi))publish
@@ -96,6 +81,24 @@
     OsmAnd::PointI bottomRight = OsmAnd::PointI(right, bottom);
     OsmAnd::AreaI bbox31 =  OsmAnd::AreaI(topLeft, bottomRight);
     [OAPOIHelper findTravelGuides:searchFilter location:location bbox31:bbox31 reader:reader publish:publish];
+}
+
++ (void) searchAmenity:(NSString *)searchQuerry categoryName:(NSString *)categoryName radius:(int)radius lat:(double)lat lon:(double)lon reader:(NSString *)reader publish:(BOOL(^)(OAPOIAdapter *poi))publish
+{
+    OsmAnd::AreaI bbox31;
+    OsmAnd::PointI locI;
+    if (radius != -1)
+    {
+        OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
+        bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, locI);
+    }
+    else
+    {
+        OsmAnd::PointI topLeft = OsmAnd::PointI(0, 0);
+        OsmAnd::PointI bottomRight = OsmAnd::PointI(INT_MAX, INT_MAX);
+        bbox31 =  OsmAnd::AreaI(topLeft, bottomRight);
+    }
+    [OAPOIHelper.sharedInstance findTravelGuidesByKeyword:searchQuerry categoryName:nil poiTypeName:nil location:locI bbox31:bbox31 reader:reader publish:publish];
 }
 
 
@@ -230,7 +233,7 @@
         
         if (article.title && article.title.length > 0)
         {
-            [OAPOIHelper.sharedInstance findTravelGuidesByKeyword:article.title categoryName:[article getPointFilterString] poiTypeName:nil location:location radius:article.routeRadius reader:reader publish:publish];
+            [OAPOIHelper.sharedInstance findTravelGuidesByKeyword:article.title categoryName:[article getPointFilterString] poiTypeName:nil location:location bbox31:bbox31 reader:reader publish:publish];
         }
         else
         {

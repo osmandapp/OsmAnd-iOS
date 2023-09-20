@@ -264,9 +264,69 @@ class TravelObfHelper : NSObject {
     }
     
     func search(searchQuery: String) -> [TravelSearchResult] {
-       
-        //TODO: implement
-        return []
+        var res = [TravelSearchResult]()
+        let appLang = OAUtilities.currentLang() ?? ""
+        
+        var amenities = [OAPOIAdapter]()
+        var amenityMap = [String : [OAPOIAdapter]]()
+        
+        func publishCallback(amenity: OAPOIAdapter?) -> Bool {
+            if amenity != nil {
+                amenities.append(amenity!)
+            }
+            return false
+        }
+        
+        for reader in getReaders() {
+            amenities = [OAPOIAdapter]()
+            OATravelGuidesHelper.searchAmenity(searchQuery, categoryName: ROUTE_ARTICLE, radius: -1, lat: -1, lon: -1, reader: reader, publish: publishCallback)
+            if amenities.count > 0 {
+                amenityMap[reader] = Array(amenities)
+            }
+        }
+        
+        if amenityMap.count > 0 {
+            let appLangEn = appLang == "en"
+            for entry in amenityMap {
+                let file = entry.key
+                for amenity in entry.value {
+                    let nameLangs = getLanguages(amenity: amenity)
+                    if nameLangs.contains(appLang) || appLang.length == 0 {
+                        let article = readArticle(file: file, amenity: amenity, lang: appLang)
+                        var langs = Array(nameLangs)
+                        
+                        langs = langs.sorted(by: { a, b in
+                            var l1 = a
+                            var l2 = b
+                            if l1 == appLang {
+                                l1 = "1";
+                            }
+                            if l2 == appLang {
+                                l2 = "1";
+                            }
+                            if !appLangEn {
+                                if l1 == "en" {
+                                    l1 = "2";
+                                }
+                                if l2 == "en" {
+                                    l2 = "2";
+                                }
+                            }
+                            return l1 < l2
+                        })
+                        
+                        let r = TravelSearchResult(arcticle: article, langs: langs)
+                        res.append(r)
+                        
+                        cacheTravelArticles(file: file, amenity: amenity, lang: appLang, readPoints: false, callback: nil)
+                    }
+                }
+                
+                
+            }
+            res = sortSearchResults(results: res)
+        }
+        return res
     }
     
     func getLanguages(amenity: OAPOIAdapter) -> Set<String> {

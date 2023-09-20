@@ -191,6 +191,32 @@ class ExploreTabViewController: OABaseNavbarViewController {
         }
     }
     
+    private func startAsyncImageDownloading(_ iconName: String, _ cell: ArticleTravelCell?) {
+        if let imageUrl = URL(string: iconName) {
+            if let cachedImage = cachedPreviewImages.get(url: iconName) {
+                if cachedImage.count != Data().count {
+                    cell!.imagePreview.image = UIImage(data: cachedImage)
+                    cell?.imageVisibility(true)
+                } else {
+                    cell?.imageVisibility(false)
+                }
+            } else {
+                DispatchQueue.global().async {
+                    if let data = try? Data(contentsOf: imageUrl) {
+                        DispatchQueue.main.async {
+                            self.cachedPreviewImages.set(url: iconName, imageData: data)
+                            cell!.imagePreview.image = UIImage(data: data)
+                            cell?.imageVisibility(true)
+                        }
+                    } else {
+                        self.cachedPreviewImages.set(url: iconName, imageData: Data())
+                        cell?.imageVisibility(false)
+                    }
+                }
+            }
+        }
+    }
+    
 
     //MARK: TableView
     
@@ -330,32 +356,6 @@ class ExploreTabViewController: OABaseNavbarViewController {
         return outCell
     }
     
-    private func startAsyncImageDownloading(_ iconName: String, _ cell: ArticleTravelCell?) {
-        if let imageUrl = URL(string: iconName) {
-            if let cachedImage = cachedPreviewImages.get(url: iconName) {
-                if cachedImage.count != Data().count {
-                    cell!.imagePreview.image = UIImage(data: cachedImage)
-                    cell?.imageVisibility(true)
-                } else {
-                    cell?.imageVisibility(false)
-                }
-            } else {
-                DispatchQueue.global().async {
-                    if let data = try? Data(contentsOf: imageUrl) {
-                        DispatchQueue.main.async {
-                            self.cachedPreviewImages.set(url: iconName, imageData: data)
-                            cell!.imagePreview.image = UIImage(data: data)
-                            cell?.imageVisibility(true)
-                        }
-                    } else {
-                        self.cachedPreviewImages.set(url: iconName, imageData: Data())
-                        cell?.imageVisibility(false)
-                    }
-                }
-            }
-        }
-    }
-    
     override func onRowSelected(_ indexPath: IndexPath!) {
         let item = tableData.item(for: indexPath)
         lastSelectedIndexPath = indexPath
@@ -370,6 +370,11 @@ class ExploreTabViewController: OABaseNavbarViewController {
                 }
             }
         }
+    }
+    
+    override func getCustomHeight(forHeader section: Int) -> CGFloat {
+        let searchViewOffset: CGFloat = TravelObfHelper.shared.isOnlyDefaultTravelBookPresent() ? 0 : 84
+        return super.getCustomHeight(forHeader: section) + searchViewOffset
     }
     
 }
@@ -393,5 +398,24 @@ class ImageCache {
             cache.removeAll()
         }
         cache[url] = imageData
+    }
+}
+
+class OATextFieldWithPadding: UITextField {
+    var textPadding = UIEdgeInsets(
+        top: 0,
+        left: 16,
+        bottom: 0,
+        right: 16
+    )
+
+    override func textRect(forBounds bounds: CGRect) -> CGRect {
+        let rect = super.textRect(forBounds: bounds)
+        return rect.inset(by: textPadding)
+    }
+
+    override func editingRect(forBounds bounds: CGRect) -> CGRect {
+        let rect = super.editingRect(forBounds: bounds)
+        return rect.inset(by: textPadding)
     }
 }

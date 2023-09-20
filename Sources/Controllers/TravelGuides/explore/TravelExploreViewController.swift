@@ -13,6 +13,7 @@ protocol TravelExploreViewControllerDelegate : AnyObject {
     func onDataLoaded()
     func openArticle(article: TravelArticle, lang: String?)
     func onOpenArticlePoints()
+
     func close()
 }
 
@@ -24,6 +25,10 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     var tabBarVC: UITabBarController?
     var exploreVC: ExploreTabViewController?
     var savedArticlesVC: SavedArticlesTabViewController?
+    
+    var searchView: UIView?
+    var searchTextField: UITextField?
+    var searchTransparentButton: UIButton?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +46,10 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         tabBarVC!.viewControllers = [exploreVC!, savedArticlesVC!]
         self.view.addSubview(tabBarVC!.view)
         
+        if shouldShowSearch() {
+            setupSearchView()
+        }
+        
         if OAAppSettings.sharedManager().travelGuidesState.wasWatchingGpx {
             restoreState()
         } else {
@@ -51,18 +60,47 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        if tabBarVC != nil {
-            tabBarVC!.view.frame = CGRect(
-                x: self.tableView.frame.origin.x,
-                y: self.getNavbarHeight(),
-                width: self.tableView.frame.size.width,
-                height: self.tableView.frame.size.height - self.getNavbarHeight())
-        }
+        tabBarVC?.view.frame = CGRect(
+            x: self.tableView.frame.origin.x,
+            y: self.getNavbarHeight(),
+            width: self.tableView.frame.size.width,
+            height: self.tableView.frame.size.height - self.getNavbarHeight())
+        
+        let offset: CGFloat = OAUtilities.isLandscape() ? 0 : 8
+        searchView?.frame = CGRect(x: 0, y: super.getNavbarHeight(), width: view.frame.width, height: 46 + offset)
+        searchTextField?.frame = CGRect(x: 8 + OAUtilities.getLeftMargin(), y: offset, width: searchView!.frame.width - 16 - 2 * OAUtilities.getLeftMargin(), height: 38)
+        searchTransparentButton?.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 46 + offset)
     }
     
     func updateTabs() {
         exploreVC?.update()
         savedArticlesVC?.update()
+    }
+    
+    func shouldShowSearch() -> Bool {
+        return !TravelObfHelper.shared.isOnlyDefaultTravelBookPresent()
+    }
+    
+    func setupSearchView() {
+        let offset: CGFloat = OAUtilities.isLandscape() ? 0 : 8
+        searchView = UIView()
+        searchView?.backgroundColor = UIColor(rgb: color_primary_table_background)
+        searchView?.frame = CGRect(x: 0, y: super.getNavbarHeight(), width: view.frame.width, height: 46 + offset)
+        view.addSubview(searchView!)
+        
+        searchTextField = OATextFieldWithPadding()
+        searchTextField?.frame = CGRect(x: 8 + OAUtilities.getLeftMargin(), y: offset, width: searchView!.frame.width - 16 - 2 * OAUtilities.getLeftMargin(), height: 38)
+        searchTextField?.layer.cornerRadius = 8
+        searchTextField?.backgroundColor = .white
+        searchTextField?.placeholder = localizedString("shared_string_search")
+        searchTextField?.isUserInteractionEnabled = false
+        searchView?.addSubview(searchTextField!)
+        
+        searchTransparentButton = UIButton()
+        searchTransparentButton?.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 46 + offset)
+        searchTransparentButton?.backgroundColor = .clear
+        searchTransparentButton?.addTarget(self, action: #selector(onSearchViewClicked), for: .touchUpInside)
+        searchView?.addSubview(searchTransparentButton!)
     }
     
     
@@ -132,6 +170,13 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     
     func openGpx(gpx: TravelGpx) {
         TravelObfHelper.shared.getArticleById(articleId: gpx.generateIdentifier(), lang: nil, readGpx: true, callback: self)
+    }
+    
+    @objc func onSearchViewClicked() {
+        var vc = TravelSearchDialogViewController()
+        vc.tabViewDelegate = self
+        vc.lang = OAUtilities.currentLang()
+        self.show(vc)
     }
     
     	

@@ -214,7 +214,6 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         //optionsButton?.accessibilityLabel = "Label"
         //optionsButton?.accessibilityValue = "value"
         return [optionsButton!, languageButton!]
-
     }
     
     override func getTitle() -> String! {

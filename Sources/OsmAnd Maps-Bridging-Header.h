@@ -24,6 +24,7 @@
 #import "OADownloadingCellHelper.h"
 #import "OAWikiArticleHelper.h"
 #import "OAGPXDatabase.h"
+#import "OASizes.h"
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"

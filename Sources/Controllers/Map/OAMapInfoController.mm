@@ -43,6 +43,8 @@
 
 #import "OsmAnd_Maps-Swift.h"
 
+#define kWidgetsTopPadding 10.0
+
 @implementation OATextState
 @end
 
@@ -112,6 +114,8 @@
         _mapHudViewController = mapHudViewController;
         _topPanelController = [[OAWidgetPanelViewController alloc] initWithHorizontal:YES];
         _topPanelController.delegate = self;
+        _topPanelController.specialPanelController = [[OAWidgetPanelViewController alloc] initWithHorizontal:YES special:YES];
+        _topPanelController.specialPanelController.delegate = self;
         _leftPanelController = [[OAWidgetPanelViewController alloc] init];
         _leftPanelController.delegate = self;
         _bottomPanelController = [[OAWidgetPanelViewController alloc] initWithHorizontal:YES];
@@ -121,19 +125,23 @@
         _mapHudViewController.view.clipsToBounds = NO;
         
         [mapHudViewController addChildViewController:_topPanelController];
+        [mapHudViewController addChildViewController:_topPanelController.specialPanelController];
         [mapHudViewController addChildViewController:_leftPanelController];
         [mapHudViewController addChildViewController:_bottomPanelController];
         [mapHudViewController addChildViewController:_rightPanelController];
 
         [mapHudViewController.topWidgetsView addSubview:_topPanelController.view];
+        [mapHudViewController.middleWidgetsView addSubview:_topPanelController.specialPanelController.view];
         [mapHudViewController.leftWidgetsView addSubview:_leftPanelController.view];
         [mapHudViewController.bottomWidgetsView addSubview:_bottomPanelController.view];
         [mapHudViewController.rightWidgetsView addSubview:_rightPanelController.view];
         
         [_topPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner | kCALayerMaxXMaxYCorner];
+        [_topPanelController.specialPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner | kCALayerMinXMaxYCorner | kCALayerMaxXMaxYCorner];
         [_bottomPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner];
 
         _topPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
+        _topPanelController.specialPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
         _leftPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
         _bottomPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
         _rightPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
@@ -143,6 +151,11 @@
             [_topPanelController.view.leftAnchor constraintEqualToAnchor:mapHudViewController.topWidgetsView.leftAnchor constant:0.],
             [_topPanelController.view.bottomAnchor constraintEqualToAnchor:mapHudViewController.topWidgetsView.bottomAnchor constant:0.],
             [_topPanelController.view.rightAnchor constraintEqualToAnchor:mapHudViewController.topWidgetsView.rightAnchor constant:0.],
+
+            [_topPanelController.specialPanelController.view.topAnchor constraintEqualToAnchor:mapHudViewController.middleWidgetsView.topAnchor constant:0.],
+            [_topPanelController.specialPanelController.view.leftAnchor constraintEqualToAnchor:mapHudViewController.middleWidgetsView.leftAnchor constant:0.],
+            [_topPanelController.specialPanelController.view.bottomAnchor constraintEqualToAnchor:mapHudViewController.middleWidgetsView.bottomAnchor constant:0.],
+            [_topPanelController.specialPanelController.view.rightAnchor constraintEqualToAnchor:mapHudViewController.middleWidgetsView.rightAnchor constant:0.],
 
             [_leftPanelController.view.topAnchor constraintEqualToAnchor:mapHudViewController.leftWidgetsView.topAnchor constant:0.],
             [_leftPanelController.view.leftAnchor constraintEqualToAnchor:mapHudViewController.leftWidgetsView.leftAnchor constant:0.],
@@ -161,11 +174,13 @@
         ]];
 
         [_topPanelController didMoveToParentViewController:mapHudViewController];
+        [_topPanelController.specialPanelController didMoveToParentViewController:mapHudViewController];
         [_leftPanelController didMoveToParentViewController:mapHudViewController];
         [_bottomPanelController didMoveToParentViewController:mapHudViewController];
         [_rightPanelController didMoveToParentViewController:mapHudViewController];
         
         [self configureShadowForWidgets:@[mapHudViewController.topWidgetsView,
+                                          mapHudViewController.middleWidgetsView,
                                           mapHudViewController.leftWidgetsView,
                                           mapHudViewController.rightWidgetsView,
                                           mapHudViewController.bottomWidgetsView]];
@@ -322,6 +337,7 @@
     BOOL portrait = ![OAUtilities isLandscape];
 
     BOOL hasTopWidgets = [_topPanelController hasWidgets];
+    BOOL hasTopSpecialWidgets = [_topPanelController.specialPanelController hasWidgets];
     BOOL hasLeftWidgets = [_leftPanelController hasWidgets];
     BOOL hasBottomWidgets = [_bottomPanelController hasWidgets];
     BOOL hasRightWidgets = [_rightPanelController hasWidgets];
@@ -342,15 +358,28 @@
 
     _mapHudViewController.topWidgetsViewWidthConstraint.constant = [OAUtilities isLandscapeIpadAware] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
 
+    if ((hasTopWidgets || hasTopSpecialWidgets) && _lastUpdateTime == 0)
+        [[OARootViewController instance].mapPanel updateToolbar];
+
     if (hasTopWidgets)
     {
-        if (_lastUpdateTime == 0)
-            [[OARootViewController instance].mapPanel updateToolbar];
         _mapHudViewController.topWidgetsViewHeightConstraint.constant = [_topPanelController calculateContentSize].height;
     }
     else
     {
         _mapHudViewController.topWidgetsViewHeightConstraint.constant = 0.;
+    }
+
+    if (hasTopSpecialWidgets)
+    {
+        _mapHudViewController.middleWidgetsViewYConstraint.constant = kWidgetsTopPadding;
+        CGSize specialPanelSize = [_topPanelController.specialPanelController calculateContentSize];
+        _mapHudViewController.middleWidgetsViewWidthConstraint.constant = specialPanelSize.width;
+        _mapHudViewController.middleWidgetsViewHeightConstraint.constant = specialPanelSize.height;
+    }
+    else
+    {
+        _mapHudViewController.middleWidgetsViewHeightConstraint.constant = 0.;
     }
 
     if (hasLeftWidgets)
@@ -386,7 +415,7 @@
     {
         if (hasLeftWidgets)
         {
-            leftRightWidgetsViewTopConstraintConstant = _mapHudViewController.topWidgetsViewHeightConstraint.constant > 0 ? -_mapHudViewController.topWidgetsViewHeightConstraint.constant : 10;
+            leftRightWidgetsViewTopConstraintConstant = _mapHudViewController.topWidgetsViewHeightConstraint.constant > 0 ? -_mapHudViewController.topWidgetsViewHeightConstraint.constant : kWidgetsTopPadding;
         } else
         {
             leftRightWidgetsViewTopConstraintConstant = -_mapHudViewController.topWidgetsViewHeightConstraint.constant + 16;

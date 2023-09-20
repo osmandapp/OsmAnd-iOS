@@ -118,15 +118,17 @@
 {
 }
 
-- (void) attachView:(UIView *)container order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *)followingWidgets
+- (void) attachView:(UIView *_Nonnull)container specialContainer:(UIView *_Nullable)specialContainer order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *)followingWidgets
 {
-    [container addSubview:self];
+    // Do not remove from superview since WidgetPageViewController populates stackView with widgets on update
+    //[container addSubview:self];
 }
 
 - (void) detachView:(OAWidgetsPanel *)widgetsPanel
 {
-    if (self.superview)
-        [self removeFromSuperview];
+    // Do not remove from superview since WidgetPageViewController populates stackView with widgets on update
+    //if (self.superview)
+    //    [self removeFromSuperview];
 }
 
 @end

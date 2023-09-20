@@ -36,6 +36,7 @@
 
 @property (weak, nonatomic) IBOutlet UIView *widgetsView;
 @property (weak, nonatomic) IBOutlet UIView *topWidgetsView;
+@property (weak, nonatomic) IBOutlet UIView *middleWidgetsView;
 @property (weak, nonatomic) IBOutlet UIView *leftWidgetsView;
 @property (weak, nonatomic) IBOutlet UIView *bottomWidgetsView;
 @property (weak, nonatomic) IBOutlet UIView *rightWidgetsView;
@@ -43,6 +44,9 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *topWidgetsViewYConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *topWidgetsViewWidthConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *topWidgetsViewHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *middleWidgetsViewYConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *middleWidgetsViewWidthConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *middleWidgetsViewHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomWidgetsViewWidthConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomWidgetsViewHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftWidgetsViewTopConstraint;

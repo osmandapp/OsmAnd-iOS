@@ -92,7 +92,17 @@
         NSArray<OABaseWidgetView *> *followingWidgets = i + 1 == currentPage.count
             ? @[]
             : [currentPage subarrayWithRange:NSMakeRange(i + 1, currentPage.count - (i + 1))];
-        [widget attachView:stack.view order:i followingWidgets:followingWidgets];
+        [widget attachView:stack.view specialContainer:stack.specialPanelController.view order:i followingWidgets:followingWidgets];
+    }
+
+    if (widgetsToShow.count == 1)
+    {
+        OABaseWidgetView *lastWidget = widgetsToShow[0].lastObject;
+        if (lastWidget.widgetType && lastWidget.widgetType.special && stack.specialPanelController)
+        {
+            [stack.specialPanelController updateWidgetPages:@[@[lastWidget]]];
+            [widgetsToShow[0] removeLastObject];
+        }
     }
     [stack updateWidgetPages:widgetsToShow];
 }

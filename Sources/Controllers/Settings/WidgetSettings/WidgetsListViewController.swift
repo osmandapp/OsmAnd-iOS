@@ -484,21 +484,22 @@ extension WidgetsListViewController {
 
     override func getRightNavbarButtons() -> [UIBarButtonItem]! {
         var menuElements: [UIMenuElement]?
+        var resetAlert: UIAlertController?
         if !editMode {
+            resetAlert = UIAlertController.init(title: self.widgetPanel.title,
+                                                message: localizedString("reset_all_settings_desc"),
+                                                preferredStyle: .actionSheet)
             let resetAction: UIAction  = UIAction(title: localizedString("reset_to_default"),
                                                   image: UIImage.init(systemName: "gobackward")) { [weak self] _ in
                 guard let self = self else { return }
 
-                let alert: UIAlertController = UIAlertController.init(title: self.widgetPanel.title,
-                                                                      message: localizedString("reset_all_settings_desc"),
-                                                                      preferredStyle: .actionSheet)
-                alert.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { UIAlertAction in
+                resetAlert!.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { UIAlertAction in
                     self.widgetsSettingsHelper.resetWidgetsForPanel(panel: self.widgetPanel)
                     OARootViewController.instance().mapPanel.recreateAllControls()
                     self.updateUI(true)
                 })
-                alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
-                self.present(alert, animated: true)
+                resetAlert!.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+                self.present(resetAlert!, animated: true)
             }
             let copyAction: UIAction  = UIAction(title: localizedString("copy_from_other_profile"),
                                                  image: UIImage.init(systemName: "doc.on.doc")) { [weak self] _ in
@@ -525,6 +526,8 @@ extension WidgetsListViewController {
         if !editMode {
             button?.accessibilityLabel = localizedString("shared_string_options")
         }
+        let popover = resetAlert?.popoverPresentationController
+        popover?.barButtonItem = button
         return [button!]
     }
 

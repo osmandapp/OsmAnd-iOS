@@ -273,14 +273,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
                 
-    UIAction *hillshad = [UIAction actionWithTitle:OALocalizedString(@"shared_string_hillshade")
+    UIAction *hillshade = [UIAction actionWithTitle:OALocalizedString(@"shared_string_hillshade")
                                              image:nil
                                         identifier:nil
                                            handler:^(__kindof UIAction * _Nonnull action) {
         [_app.data setTerrainType: EOATerrainTypeHillshade];
         [self terrainTypeChanged];
     }];
-    [menuElements addObject:hillshad];
+    [menuElements addObject:hillshade];
                 
     UIAction *slope = [UIAction actionWithTitle:OALocalizedString(@"shared_string_slope")
                                           image:nil
@@ -291,7 +291,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }];
     [menuElements addObject:slope];
                 
-    NSInteger selectedIndex = _app.data.terrainType == EOATerrainTypeHillshade ? 0 : 1;
+    NSInteger selectedIndex = _app.data.terrainType - 1;
     if (selectedIndex >= 0 && selectedIndex < menuElements.count)
         ((UIAction *)menuElements[selectedIndex]).state = UIMenuElementStateOn;
                 

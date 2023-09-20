@@ -23,6 +23,8 @@
 static const NSInteger kMinAllowedZoom = 1;
 static const NSInteger kMaxAllowedZoom = 22;
 static const NSInteger kMaxMissingDataZoomShift = 5;
+static const NSInteger kMinZoomPickerRow = 1;
+static const NSInteger kMaxZoomPickerRow = 2;
 
 @interface OAMapSettingsTerrainParametersViewController () <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate>
 
@@ -314,8 +316,8 @@ static const NSInteger kMaxMissingDataZoomShift = 5;
 {
     NSMutableArray *res = [NSMutableArray new];
     OsmAnd::ZoomLevel maxZoom = OARootViewController.instance.mapPanel.mapViewController.mapLayers.terrainMapLayer.getMaxZoom;
-    int maxVisivleZoom = maxZoom + kMaxMissingDataZoomShift;
-    for (int i = 1; i <= maxVisivleZoom; i++)
+    int maxVisibleZoom = maxZoom + kMaxMissingDataZoomShift;
+    for (int i = 1; i <= maxVisibleZoom; i++)
     {
         [res addObject:[NSString stringWithFormat:@"%d", i]];
     }
@@ -536,7 +538,7 @@ static const NSInteger kMaxMissingDataZoomShift = 5;
 {
     NSIndexPath *zoomValueIndexPath;
     NSInteger intValue = [value integerValue];
-    if (pickerTag == 1)
+    if (pickerTag == kMinZoomPickerRow)
     {
         zoomValueIndexPath = _minValueIndexPath;
         if (intValue <= _maxZoom)
@@ -553,7 +555,7 @@ static const NSInteger kMaxMissingDataZoomShift = 5;
             [self resetPickerValue:_maxZoom];
         }
     }
-    else if (pickerTag == 2)
+    else if (pickerTag == kMaxZoomPickerRow)
     {
         zoomValueIndexPath = _maxValueIndexPath;
         if (intValue >= _minZoom)

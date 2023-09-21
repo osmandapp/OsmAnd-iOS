@@ -156,9 +156,6 @@
     CGFloat radius = 3.0;
     self.backgroundColor = [UIColor whiteColor];
     self.layer.cornerRadius = radius;
-    
-    _turnView.layer.borderWidth = 1.0;
-    _turnView.layer.borderColor = [UIColor redColor].CGColor;
 
     _regularFont = [UIFont systemFontOfSize:23 weight:UIFontWeightSemibold];
     _boldFont = [UIFont systemFontOfSize:23 weight:UIFontWeightBold];
@@ -177,8 +174,7 @@
     _imageView.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_action_start_navigation"] color:UIColorFromRGB(color_myloc_distance)];
     _imageView.frame = _turnView.bounds;
     
-    _exitRefTextContainer.layer.cornerRadius = 6.;
-    
+    _exitRefTextContainer.layer.cornerRadius = 6.;    
     _shadowButton = [[UIButton alloc] initWithFrame:self.frame];
     _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_shadowButton addTarget:self action:@selector(onTopTextViewClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -237,15 +233,13 @@
     
     CGFloat x = w / 2 - size.width / 2;
     
-    CGFloat prevX = x;//_addressText.frame.origin.x;
+    CGFloat prevX = x;
     if (showShield)
     {
-       // [self applyCorrectPositionToView:_shieldIcon prevX:prevX];
         prevX = _shieldIcon.frame.origin.x;
     }
     if (showTurn)
     {
-       // [self applyCorrectPositionToView:_turnView prevX:prevX];
         prevX = _turnView.frame.origin.x;
     }
     if (showExit)
@@ -295,7 +289,6 @@
     NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
     
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    //paragraphStyle.alignment = NSTextAlignmentCenter;
     paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
     attributes[NSParagraphStyleAttributeName] = paragraphStyle;
     

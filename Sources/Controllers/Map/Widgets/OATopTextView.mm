@@ -174,7 +174,7 @@
     _imageView.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_action_start_navigation"] color:UIColorFromRGB(color_myloc_distance)];
     _imageView.frame = _turnView.bounds;
     
-    _exitRefTextContainer.layer.cornerRadius = 6.;    
+    _exitRefTextContainer.layer.cornerRadius = 6.;
     _shadowButton = [[UIButton alloc] initWithFrame:self.frame];
     _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_shadowButton addTarget:self action:@selector(onTopTextViewClicked:) forControlEvents:UIControlEventTouchUpInside];

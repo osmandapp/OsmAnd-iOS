@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)shouldHideCompass;
 - (BOOL)shouldShowTopButtons;
 - (BOOL)shouldShowBackToLocationButton;
+- (BOOL)shouldShowTopLanesWidget;
 
 @end
 

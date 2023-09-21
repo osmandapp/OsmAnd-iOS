@@ -119,9 +119,9 @@
     return NO;
 }
 
-- (void) attachView:(UIView *)container order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *)followingWidgets
+- (void) attachView:(UIView *_Nonnull)container specialContainer:(UIView *_Nullable)specialContainer order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *)followingWidgets
 {
-    [super attachView:container order:order followingWidgets:followingWidgets];
+    [super attachView:container specialContainer:specialContainer order:order followingWidgets:followingWidgets];
 
     if (_helper.sortedDestinations.count > 0)
         [self refreshCells];

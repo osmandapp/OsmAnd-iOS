@@ -49,6 +49,8 @@
     CADisplayLink* _displayLink;
 
     OsmAnd::PointI _viewSize;
+    CGFloat _topOffset;
+    CGFloat _bottomOffset;
 
     std::shared_ptr<OsmAnd::IMapRenderer> _renderer;
     std::shared_ptr<OsmAnd::MapAnimator> _mapAnimator;
@@ -100,8 +102,8 @@
     _framebuffer = 0;
     _displayLink = nil;
 
-    _viewportXScale = 1.f;
-    _viewportYScale = 1.f;
+    _viewportXScale = kViewportScale;
+    _viewportYScale = kViewportScale;
 
     // Create map renderer instance
     _renderer = OsmAnd::createMapRenderer(OsmAnd::MapRendererClass::AtlasMapRenderer_OpenGLES2plus);
@@ -890,9 +892,25 @@ forcedUpdate:(BOOL)forcedUpdate
 
 @synthesize settingsObservable = _settingsObservable;
 
+- (void)setTopOffsetOfViewSize:(CGFloat)topOffset bottomOffset:(CGFloat)bottomOffset
+{
+    CGFloat newTopOffset = topOffset * _displayDensityFactor;
+    CGFloat newBottomOffset = bottomOffset * _displayDensityFactor;
+    if (_topOffset != newTopOffset || _bottomOffset != newBottomOffset)
+    {
+        _topOffset = newTopOffset;
+        _bottomOffset = newBottomOffset;
+        // Kill buffers, since viewport was resized
+        [self releaseRenderAndFrameBuffers];
+    }
+}
+
 - (OsmAnd::PointI) getCenterPixel
 {
-    return OsmAnd::PointI(_viewSize.x * _viewportXScale / 2.0, _viewSize.y * _viewportYScale / 2.0);
+    float viewportYScale = _viewportYScale - _bottomOffset / _viewSize.y;
+    if (_viewportYScale == kViewportScale)
+        viewportYScale += _topOffset / _viewSize.y;
+    return OsmAnd::PointI(_viewSize.x * _viewportXScale / 2.0, _viewSize.y * viewportYScale / 2.0);
 }
 
 - (void)render:(CADisplayLink*)displayLink

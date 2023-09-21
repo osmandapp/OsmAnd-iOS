@@ -1043,8 +1043,10 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         velocity.x = -velocityInMapSpace.x * scale31;
         velocity.y = -velocityInMapSpace.y * scale31;
 
+#if !TARGET_OS_SIMULATOR
         _mapView.mapAnimator->animateFlatTargetWith(velocity, OsmAnd::PointD(kTargetMoveDeceleration * scale31, kTargetMoveDeceleration * scale31), kUserInteractionAnimationKey);
         _mapView.mapAnimator->resume();
+#endif
     }
 }
 

@@ -358,8 +358,6 @@
 
         id<OALocationPoint> point = pnt.point;
         _waypointImage.image = [pnt getImage:NO];
-        _waypointImage.layer.borderWidth = 1.0;
-        _waypointImage.layer.borderColor = [UIColor redColor].CGColor;
         
         NSString *descr = @"";
         OAPointDescription *pd = [point getPointDescription];

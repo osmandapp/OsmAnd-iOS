@@ -76,7 +76,11 @@
     }
     else
     {
-        for (OAMapWidgetInfo *widgetInfo in widgets)
+        NSArray<OAMapWidgetInfo *> *sortedWidgets =
+            [widgets sortedArrayUsingComparator:^NSComparisonResult(OAMapWidgetInfo * _Nonnull w1, OAMapWidgetInfo * _Nonnull w2) {
+                return [OAUtilities compareInt:(int) w1.priority y:(int) w2.priority];
+            }];
+        for (OAMapWidgetInfo *widgetInfo in sortedWidgets)
         {
             if ([widgetInfo isEnabledForAppMode:mode])
                 [currentPage addObject:widgetInfo.widget];

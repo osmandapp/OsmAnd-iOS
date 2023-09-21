@@ -1510,8 +1510,8 @@
 "map_settings_line_density" = "Densité de traits";
 "map_settings_show_slider_map" = "Afficher le curseur sur la carte";
 "shared_string_legend" = "Légende";
-"map_settings_add_maps_hillshade" = "Des cartes supplémentaires sont nécessaires pour visualiser l'ombrage du relief";
-"map_settings_zoom_level_description" = "Définissez le zoom minimal et maximal auquel la couche est visible";
+"map_settings_add_maps_hillshade" = "Des cartes supplémentaires sont nécessaires pour visualiser l'ombrage du relief.";
+"map_settings_zoom_level_description" = "Définir le zoom minimal et maximal auxquels la couche sera affichée";
 "map_settings_hillshade_description" = "Les cartes avec ombrage du relief utilisent des tons foncés pour afficher les pentes, sommets et plaines.";
 "poi_filter_public_transport" = "Transport en commun";
 "displayed_route_save" = "Enregistrer dans OsmAnd Traces";
@@ -1595,7 +1595,7 @@
 "light_theme" = "Clair";
 "settings_app_theme" = "Thème de l'application";
 "map_settings_available_srtm_maps_descr" = "Des cartes supplémentaires sont nécessaires pour voir l'ombrage du relief sur la carte";
-"map_settings_add_maps_slopes" = "Des cartes supplémentaires sont nécessaires pour voir les pentes sur la carte";
+"map_settings_add_maps_slopes" = "Des cartes supplémentaires sont nécessaires pour voir les pentes sur la carte.";
 "map_settings_slopes_description" = "Les pentes sont colorisées différemment sur le relief.";
 "map_settings_slopes_legend" = "Vous pouvez en apprendre plus à propos des pentes sur Wikipédia";
 "map_settings_layer_transparency" = "Transparence de la couche";
@@ -2684,7 +2684,7 @@
 "modified_file" = "Fichier modifié";
 "last_synchronization" = "Dernière synchronisation";
 "use_heightmap_setting" = "Utiliser les cartes de hauteur en relief 3D";
-"download_heightmap_maps" = "Carte des reliefs";
+"download_heightmap_maps" = "Carte des reliefs (3D)";
 "nautical_depth_points" = "Points de sonde marine";
 "depth_contours" = "Lignes de profondeur";
 "amazon_appstore" = "Boutique Amazon";
@@ -3030,3 +3030,16 @@
 "weather_update_over_any_network" = "Sur n'importe quel réseau";
 "weather_update_parameters_any_network" = "Les prévisions météo seront mises à jour sur n'importe quel réseau. Les données mobiles peuvent être utilisées.";
 "map_settings_topography" = "Topographie";
+"click_on_widget" = "Cliquer sur le gadget";
+"shared_string_cache" = "Cache";
+"unsaved_changes_will_be_lost_discard" = "Toutes les modifications non enregistrées seront perdues. Abandonner les modifications ?";
+"terrain_3D_maps" = "Cartes de relief";
+"average_speed_skip_stops" = "Prendre en compte les arrêts";
+"average_speed_time_interval_desc" = "Spécifier l'intervalle de temps pour le calcul de la moyenne.";
+"unsaved_changes" = "Modifications non sauvegardées";
+
+
+// Shared Strings
+"shared_string_discard" = "Abandonner";
+"specify_number_of_dir_indicators_desc" = "Spécifier le nombre d'indicateurs de direction.";
+"map_marker_interval_dialog_desc" = "Spécifier l'intervalle de temps pendant lequel la vitesse moyenne sera mesurée pour calculer l'heure d'arrivée estimée.";

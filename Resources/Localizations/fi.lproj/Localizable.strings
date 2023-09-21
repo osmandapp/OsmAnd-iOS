@@ -431,7 +431,7 @@
 "shared_string_delete" = "Poista";
 "shared_string_upload" = "Lähetä";
 "shared_string_remove" = "Poista";
-"shared_string_dismiss" = "Unohda";
+"shared_string_dismiss" = "Hylkää";
 "shared_string_add" = "Lisää";
 "buy" = "Osta";
 "shared_string_buy_for" = "for";
@@ -1469,7 +1469,7 @@
 "gpx_group_select" = "Ryhmän valinta";
 "shared_string_show_all" = "Näytä kaikki";
 "poi_filter_parking" = "Pysäköinti";
-"context_menu_item_directions_from" = "Suunnat lähtien";
+"context_menu_item_directions_from" = "Reittiohjeet täältä";
 "search_nearby" = "Etsi läheltä";
 "change_object_posiotion" = "Change object's position";
 "move_marker_bottom_sheet_title" = "Siirrä karttaa muuttaaksesi markkerin sijaintia";
@@ -2440,3 +2440,7 @@
 "icon_group_service" = "Palvelu";
 "test_heightmap" = "Testaa korkeuskartta";
 "app_mode_moped" = "Mopedi";
+"rendering_attr_hideMilitaryAreas_description" = "Piilota sotilasalueet";
+"poi_operator" = "Toimija";
+"show_borders_of_downloaded_maps" = "Näytä ladattujen karttojen rajat";
+"rendering_attr_hideMilitaryAreas_name" = "Piilota sotilasalueet";

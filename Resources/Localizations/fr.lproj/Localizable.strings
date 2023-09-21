@@ -3035,11 +3035,11 @@
 "unsaved_changes_will_be_lost_discard" = "Toutes les modifications non enregistrées seront perdues. Abandonner les modifications ?";
 "terrain_3D_maps" = "Cartes de relief";
 "average_speed_skip_stops" = "Prendre en compte les arrêts";
-"average_speed_time_interval_desc" = "Spécifier l'intervalle de temps pour le calcul de la moyenne.";
+"average_speed_time_interval_desc" = "Spécifier la durée sur laquelle calculer la moyenne.";
 "unsaved_changes" = "Modifications non sauvegardées";
 
 
 // Shared Strings
 "shared_string_discard" = "Abandonner";
 "specify_number_of_dir_indicators_desc" = "Spécifier le nombre d'indicateurs de direction.";
-"map_marker_interval_dialog_desc" = "Spécifier l'intervalle de temps pendant lequel la vitesse moyenne sera mesurée pour calculer l'heure d'arrivée estimée.";
+"map_marker_interval_dialog_desc" = "Spécifiez la durée sur laquelle mesurer la vitesse moyenne afin d'estimer l'heure d'arrivée.";

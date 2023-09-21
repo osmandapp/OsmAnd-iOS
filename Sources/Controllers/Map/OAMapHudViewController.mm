@@ -512,7 +512,6 @@
     [self.rulerLabel updateColors];
     [_mapPanelViewController updateColors];
     _statusBarView.backgroundColor = [self getStatusBarBackgroundColor];
-    _bottomBarView.backgroundColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColor.whiteColor;
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
@@ -943,7 +942,6 @@
         _routingProgressView.frame = [self getRoutingProgressViewFrame];
 
     _statusBarView.backgroundColor = [self getStatusBarBackgroundColor];
-    _bottomBarView.backgroundColor = _settings.nightMode ? UIColorFromRGB(nav_bar_night) : UIColor.whiteColor;
     [self setNeedsStatusBarAppearanceUpdate];
 }
 

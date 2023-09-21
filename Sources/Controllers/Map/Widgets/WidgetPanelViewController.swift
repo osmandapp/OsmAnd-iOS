@@ -22,16 +22,19 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     
     @IBOutlet var pageControlHeightConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var contentView: UIView!
-    @IBOutlet private weak var pageControl: UIPageControl! {
+    @IBOutlet private var contentView: UIView!
+    @IBOutlet private var pageControl: UIPageControl! {
         didSet {
             pageControl.backgroundStyle = .minimal
             pageControl.isEnabled = false
         }
     }
-    
+
+    var specialPanelController: WidgetPanelViewController? = nil
+
     let isHorizontal: Bool
-    
+    let isSpecial: Bool
+
     var pageViewController: UIPageViewController!
     var pages: [UIViewController] = []
     var widgetPages: [[OABaseWidgetView]] = []
@@ -52,16 +55,25 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     
     init() {
         self.isHorizontal = false
+        self.isSpecial = false
         super.init(nibName: "OAWidgetPanelViewController", bundle: nil)
     }
     
     init(horizontal: Bool) {
         self.isHorizontal = horizontal
+        self.isSpecial = false
         super.init(nibName: "OAWidgetPanelViewController", bundle: nil)
     }
-    
+
+    init(horizontal: Bool, special: Bool) {
+        self.isHorizontal = horizontal
+        self.isSpecial = special
+        super.init(nibName: "OAWidgetPanelViewController", bundle: nil)
+    }
+
     required init?(coder: NSCoder) {
         self.isHorizontal = false
+        self.isSpecial = false
         super.init(coder: coder)
     }
     
@@ -90,14 +102,14 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     func calculateContentSize() -> CGSize {
         var width: CGFloat = 0
         var height: CGFloat = pages.isEmpty ? 0 : Self.contentHeight
-        for (idx, page) in pages.enumerated() {
-            let widgetSize = (page as? WidgetPageViewController)?.layoutWidgets() ?? (0, 0)
-            if idx == pageControl.currentPage {
-                height = widgetSize.1
-            }
-            width = max(width, widgetSize.0)
-        }
         if hasWidgets() {
+            for (idx, page) in pages.enumerated() {
+                let widgetSize = (page as? WidgetPageViewController)?.layoutWidgets() ?? (0, 0)
+                if idx == pageControl.currentPage {
+                    height = widgetSize.1
+                }
+                width = max(width, widgetSize.0)
+            }
             height = max(height, Self.contentHeight)
         }
         if !isHorizontal {
@@ -107,6 +119,8 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     }
     
     func clearWidgets() {
+        specialPanelController?.clearWidgets()
+
         pageViewController.dataSource = nil
         pageViewController.delegate = nil
         for viewController in pageViewController.children {
@@ -148,7 +162,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         pageControl.isHidden = pages.count <= 1;
         pageControlHeightConstraint.constant = pageControl.isHidden ? 0 : Self.controlHeight
     }
-    
+
     func hasWidgets() -> Bool {
         if !widgetPages.isEmpty {
             for widgetPage in widgetPages {
@@ -222,6 +236,9 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             mapHudViewController?.leftWidgetsViewWidthConstraint.constant = contentSize.width;
         } else if self == mapHudViewController?.mapInfoController?.rightPanelController {
             mapHudViewController?.rightWidgetsViewWidthConstraint.constant = contentSize.width;
+        } else if self == mapHudViewController?.mapInfoController?.topPanelController.specialPanelController {
+            mapHudViewController?.middleWidgetsViewWidthConstraint.constant = contentSize.width;
+            mapHudViewController?.middleWidgetsViewHeightConstraint.constant = contentSize.height;
         }
 
         // Update the height constraint of the container view

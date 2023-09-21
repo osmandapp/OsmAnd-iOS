@@ -9,6 +9,7 @@
 #import "OAQuickActionListViewController.h"
 #import "OAActionConfigurationViewController.h"
 #import "OAAddQuickActionViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
 #import "Localization.h"
 #import "OAQuickActionRegistry.h"
 #import "OAQuickAction.h"

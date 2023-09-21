@@ -120,6 +120,20 @@
     ![self isSelectingTilesZone];
 }
 
+- (BOOL)shouldShowTopLanesWidget
+{
+    return [_mapPanel isTopControlsVisible] &&
+    ![_mapPanel isTopToolbarActive] &&
+    ![self isInTrackAppearanceMode] &&
+    ![self isInRouteLineAppearanceMode] &&
+    ![self isInChoosingRoutesMode] &&
+    ![self isInWaypointsChoosingMode] &&
+    ![self isInFollowTrackMode] &&
+    ![self isInGpsFilteringMode] &&
+    ![self isInWeatherForecastMode] &&
+    ![self isSelectingTilesZone];
+}
+
 - (BOOL)shouldShowTopMapMarkersWidget
 {
     BOOL shouldShow =

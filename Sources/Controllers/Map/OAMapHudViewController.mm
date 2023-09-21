@@ -112,7 +112,7 @@
 
     _mapPanelViewController = [OARootViewController instance].mapPanel;
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    
+
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapModeChanged)
                                                   andObserve:_app.mapModeObservable];
@@ -733,11 +733,12 @@
     OACommonPreference *obj = notification.object;
     OACommonInteger *rotateMap = _settings.rotateMap;
     OACommonBoolean *transparentMapTheme = _settings.transparentMapTheme;
-    OACommonInteger *map3dMode = _settings.map3dMode;
+    OACommonMap3dMode *map3dMode = _settings.map3dMode;
+    OACommonBoolean *quickActionIsOn = _settings.quickActionIsOn;
     OACommonInteger *compassMode = _settings.compassMode;
     if (obj)
     {
-        if (obj == rotateMap)
+        if (obj == rotateMap || obj == compassMode)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateCompassButton];
@@ -749,16 +750,10 @@
                 [self updateColors];
             });
         }
-        else if (obj == map3dMode)
+        else if (obj == map3dMode || obj == quickActionIsOn)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateDependentButtonsVisibility];
-            });
-        }
-        else if (obj == compassMode)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateCompassButton];
             });
         }
     }

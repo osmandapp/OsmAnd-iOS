@@ -91,8 +91,17 @@
     _map3dModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                    withHandler:@selector(onMap3dModeUpdated)
                                                     andObserve:[OARootViewController instance].mapPanel.mapViewController.elevationAngleObservable];
-    
+
     [self updateColors:NO];
+}
+
+- (void)dealloc
+{
+    if (_map3dModeObserver)
+    {
+        [_map3dModeObserver detach];
+        _map3dModeObserver = nil;
+    }
 }
 
 - (void) setPinPosition

@@ -255,13 +255,22 @@
 
 - (void)updateUI:(BOOL)animated
 {
-    [self reloadData:animated];
+    [self updateUI:animated completion:nil];
+}
+
+- (void)updateUI:(BOOL)animated completion:(void (^)(void))completion
+{
+    [self reloadData:animated completion:completion];
     [self refreshUI];
 }
 
-- (void)updateUIWithoutData
+- (void)updateUIWithoutData:(void (^)(void))completion
 {
-    [self.tableView reconfigureRowsAtIndexPaths:self.tableView.indexPathsForVisibleRows];
+    [self.tableView performBatchUpdates:^{
+        [self.tableView reconfigureRowsAtIndexPaths:self.tableView.indexPathsForVisibleRows];
+        if (completion)
+            completion();
+    } completion:nil];
     [self refreshUI];
 }
 
@@ -271,7 +280,7 @@
     [self updateNavbar];
 }
 
-- (void) reloadData:(BOOL)animated
+- (void) reloadData:(BOOL)animated completion:(void (^ __nullable)(void))completion
 {
     [self generateData];
     if (animated)
@@ -283,7 +292,12 @@
                         {
                             [self.tableView reloadData];
                         }
-                        completion:nil];
+                        completion:^(BOOL finished)
+                        {
+                            if (completion)
+                                completion();
+                        }
+        ];
     }
     else
     {

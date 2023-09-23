@@ -35,8 +35,9 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
             if tableData.hasChanged || tableData.sectionCount() == 0 {
                 updateUI(true)
             } else {
-                updateUIWithoutData()
+                updateUIWithoutData(nil)
             }
+            updateAppearance()
         }
     }
 
@@ -359,7 +360,7 @@ extension WidgetsListViewController {
                     tableData.addRow(at: movedIndexPath, row: movableItem)
                     tableView.moveRow(at: movableIndexPath, to: movedIndexPath)
                 }
-                tableData.removeSection(UInt(indexPath.section))
+                tableData.removeSection(at: UInt(indexPath.section))
                 tableView.deleteSections(IndexSet(integer: indexPath.section), with: .automatic)
                 if editMode {
                     tableView.reloadData()

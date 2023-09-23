@@ -73,7 +73,7 @@ class WidgetParameterViewController: OABaseNavbarViewController {
                 cell = nib?.first as? OASegmentSliderTableViewCell
             }
             if let cell = cell {
-                if let values = item.obj(forKey: "values") as? [Int64: String], let prefLong = pref as? OACommonLong {
+                if let values = item.obj(forKey: "values") as? [Int: String], let prefLong = pref as? OACommonLong {
                     let sortedValues = values.sorted(by: { $0.key < $1.key })
                     cell.topLeftLabel.text = item.title
                     cell.topRightLabel.text = sortedValues.first { $0.key == prefLong.get(appMode)}?.value
@@ -122,7 +122,7 @@ class WidgetParameterViewController: OABaseNavbarViewController {
         if let cell = tableView.cellForRow(at: indexPath) as? OASegmentSliderTableViewCell {
             let item = tableData.item(for: indexPath)
             let values = item.obj(forKey: "values")
-            if let values = values as? [Int64: String] {
+            if let values = values as? [Int: String] {
                 let sortedValues = values.sorted(by: { $0.key < $1.key })
                 let val = stringValue(from: sortedValues[cell.sliderView.selectedMark].key)
                 pref?.setValueFrom(val, appMode: appMode)

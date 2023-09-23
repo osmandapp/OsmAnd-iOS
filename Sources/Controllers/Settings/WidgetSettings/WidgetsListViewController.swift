@@ -35,9 +35,8 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
             if tableData.hasChanged || tableData.sectionCount() == 0 {
                 updateUI(true)
             } else {
-                updateWithoutData()
+                updateUIWithoutData()
             }
-            updateAppearance()
         }
     }
 

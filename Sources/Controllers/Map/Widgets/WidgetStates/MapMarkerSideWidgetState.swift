@@ -17,7 +17,7 @@ class MapMarkerSideWidgetState: OAWidgetState {
     let markerClickBehaviourPref: OACommonString
     let averageSpeedIntervalPref: OACommonLong
     let firstMarker: Bool
-    static let availableIntervals: [Int64: String] = getAvailableIntervals()
+    static let availableIntervals: [Int: String] = getAvailableIntervals()
     
     init(customId: String?, firstMarker: Bool) {
         self.firstMarker = firstMarker
@@ -74,10 +74,10 @@ class MapMarkerSideWidgetState: OAWidgetState {
         return firstMarker
     }
 
-    private static func getAvailableIntervals() -> [Int64: String] {
-        var intervals = [Int64: String]()
+    private static func getAvailableIntervals() -> [Int: String] {
+        var intervals = [Int: String]()
         for mInterval in OAAverageSpeedComputer.measured_INTERVALS() {
-            let interval = mInterval.int64Value
+            let interval = mInterval.intValue
             let seconds = interval < 60 * 1000
             let timeInterval = seconds
                 ? String(interval / 1000)

@@ -285,7 +285,8 @@ extension WidgetsListViewController {
         let item = tableData.item(for: indexPath)
         let isFirstPageCell = item.key == kPageKey && indexPath.section == 0
         let isNoWidgetsCell = item.key == kNoWidgetsKey
-        return editMode && !isNoWidgetsCell && !isFirstPageCell
+        let isPageCell = item.key == kPageKey
+        return editMode && !isNoWidgetsCell && !isFirstPageCell && !isPageCell
     }
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

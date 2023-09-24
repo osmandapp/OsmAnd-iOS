@@ -80,6 +80,12 @@
     _hasChanged = YES;
 }
 
+- (void)addRows:(NSArray<OATableRowData *> *)rows position:(NSUInteger)position
+{
+    [_rowData insertObjects:rows atIndexes:[NSIndexSet indexSetWithIndex:position]];
+    _hasChanged = YES;
+}
+
 - (OATableRowData *) addRowFromDictionary:(NSDictionary *)dictionary
 {
     OATableRowData *row = [[OATableRowData alloc] initWithData:dictionary];

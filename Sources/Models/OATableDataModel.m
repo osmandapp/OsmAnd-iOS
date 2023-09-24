@@ -50,9 +50,15 @@
         [_sectionData insertObject:sectionData atIndex:index];
 }
 
-- (void)removeSection:(NSUInteger)section
+- (void)removeSectionAt:(NSUInteger)index
 {
-    [_sectionData removeObjectAtIndex:section];
+    [_sectionData removeObjectAtIndex:index];
+    _hasChanged = YES;
+}
+
+- (void)removeSection:(OATableSectionData *)section
+{
+    [_sectionData removeObject:section];
     _hasChanged = YES;
 }
 
@@ -63,6 +69,9 @@
 
 - (void)removeItemsAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths
 {
+    indexPaths = [indexPaths sortedArrayUsingComparator:^NSComparisonResult(NSIndexPath * _Nonnull indexPath1, NSIndexPath *  _Nonnull indexPath2) {
+        return [self compareDescendingNSIndexPath:indexPath1 indexPath2:indexPath2];
+    }];
     for (NSIndexPath *indexPath in indexPaths)
     {
         [_sectionData[indexPath.section] removeRowAtIndex:indexPath.row];
@@ -79,7 +88,7 @@
     {
         for (NSNumber *section in [emptySections sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:nil ascending:NO]]])
         {
-            [self removeSection:section.intValue];
+            [self removeSectionAt:section.intValue];
         }
     }
 }
@@ -132,6 +141,27 @@
     _hasChanged = NO;
     for (OATableSectionData *data in _sectionData)
         [data resetChanges];
+}
+
+- (NSComparisonResult)compareDescendingNSIndexPath:(NSIndexPath *)indexPath1 indexPath2:(NSIndexPath *)indexPath2
+{
+    if (indexPath1.section > indexPath2.section)
+    {
+        return NSOrderedAscending;
+    }
+    else if (indexPath1.section < indexPath2.section)
+    {
+        return NSOrderedDescending;
+    }
+    else
+    {
+        if (indexPath1.row > indexPath2.row)
+            return NSOrderedAscending;
+        else if (indexPath1.row < indexPath2.row)
+            return NSOrderedDescending;
+        else
+            return NSOrderedSame;
+    }
 }
 
 @end

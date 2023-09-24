@@ -56,3 +56,11 @@ extension NSMutableAttributedString {
     }
 
 }
+
+@objc extension NSIndexPath {
+
+    @objc static func getRowsCount(_ section: UInt, at indexPaths: [NSIndexPath]) -> Int {
+        return indexPaths.filter { $0.section == section }.count
+    }
+
+}

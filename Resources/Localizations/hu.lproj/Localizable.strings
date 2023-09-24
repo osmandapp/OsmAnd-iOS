@@ -2365,3 +2365,16 @@
 "free_account" = "Ingyenes fiók";
 "map_markers_bar_widget_desc" = "A felsősávi widget megjeleníti a következő térképjelölő távolságát és az irányát a jelenlegi helytől. Beállítható, hogy 1 vagy 2 jelölő legyen látható.";
 "relative_bearing_widget_desc" = "Megjeleníti a haladási iránya és a célpont közötti szöget.";
+"trip_recording_downhill_widget_desc" = "Összeadja a jelenleg rögzített út lejtőinek hosszát.";
+"distance_circles" = "Távolságkörök";
+"av_notes_audio_widget_desc" = "A widget megérintésével hangjegyzetet készíthet.";
+"coordinates_widget_current_location_desc" = "Megjeleníti a jelenlegi helyzet földrajzi koordinátáit";
+"history_preferences_descr" = "Az előzmények naplózását egyesével kapcsolhatja ki minden előzménytípushoz.";
+"history_actions_footer_text" = "Exportálhatja előzményeit egy fájlba. Törölhet minden eddig rögzített előzményt.";
+"trip_recording_uphill_widget_desc" = "Összeadja a jelenleg rögzített út emelkedőinek hosszát.";
+"compass_click_desc" = "Érintse meg az iránytűt a térkép tájolási módjának váltásához.";
+"av_notes_video_widget_desc" = "A widget megérintésével videót vehet fel.";
+"av_notes_photo_widget_desc" = "A widget megérintésével fényképet készíthet.";
+"trip_recording_duration_widget_desc" = "Megjeleníti a jelenleg rögzített út idejét.";
+"search_favorites" = "Kedvencek keresése";
+"rotate_map_manual_opt" = "Kézzel forgatva (rögzített)";

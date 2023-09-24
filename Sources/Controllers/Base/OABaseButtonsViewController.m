@@ -327,6 +327,73 @@
     [self setupBottomButtons];
 }
 
+#pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section == [self sectionsCount])
+        return 0.001;
+    else if (section == 0 && [self hideFirstHeader])
+        return 0.001;
+
+    return [self getCustomHeightForHeader:section];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if (section == [self sectionsCount])
+        return self.bottomBackgroundView.frame.size.height + kFooterHeightDefault;
+
+    return [self getCustomHeightForFooter:section];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (section == [self sectionsCount])
+        return nil;
+
+    return [self getCustomViewForHeader:section];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    if (section == [self sectionsCount])
+        return nil;
+
+    return [self getCustomViewForFooter:section];
+}
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if (section == [self sectionsCount])
+        return 0.001;
+
+    return [self rowsCount:section];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return [self sectionsCount] + 1;
+}
+
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (section == [self sectionsCount])
+        return nil;
+
+    return [self getTitleForHeader:section];
+}
+
+- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    if (section == [self sectionsCount])
+        return nil;
+
+    return [self getTitleForFooter:section];
+}
+
 @end
 
 // !!!

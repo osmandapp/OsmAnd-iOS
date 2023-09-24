@@ -342,23 +342,13 @@
 
                 if (section == [self.tableData sectionCount] - 1)
                 {
-                    sectionData = [self.tableData createNewSection];
-                    if ([sectionData rowCount] < 6)
+                    NSInteger newSectionCount = ceil(rowsToNextSection.count / 6.);
+                    for (NSInteger newSection = 0; newSection < newSectionCount; newSection++)
                     {
-                        NSRange range = NSMakeRange(0, 6 - [sectionData rowCount]);
+                        sectionData = [self.tableData createNewSection];
+                        NSRange range = NSMakeRange(0, MIN(6, rowsToNextSection.count));
                         [sectionData addRows:[rowsToNextSection subarrayWithRange:range] position:0];
                         [rowsToNextSection removeObjectsInRange:range];
-                    }
-                    NSInteger newSectionCount = ceil(rowsToNextSection.count / 6.);
-                    if (newSectionCount > 1)
-                    {
-                        for (NSInteger newSection = 0; newSection < newSectionCount; newSection++)
-                        {
-                            sectionData = [self.tableData createNewSection];
-                            NSRange range = NSMakeRange(0, 6);
-                            [sectionData addRows:[rowsToNextSection subarrayWithRange:range] position:0];
-                            [rowsToNextSection removeObjectsInRange:range];
-                        }
                     }
                 }
                 else
@@ -366,8 +356,11 @@
                     sectionData = [self.tableData sectionDataForIndex:section + 1];
                 }
 
-                [sectionData addRows:rowsToNextSection position:0];
-                [rowsToNextSection removeAllObjects];
+                if (rowsToNextSection.count > 0)
+                {
+                    [sectionData addRows:rowsToNextSection position:0];
+                    [rowsToNextSection removeAllObjects];
+                }
             }
         }
     }

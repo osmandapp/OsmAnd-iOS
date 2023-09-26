@@ -411,8 +411,8 @@
                                     NSNumber * timeLastAlarm = [_lastAnnouncedAlarmsTime objectForKey:@(t)];
                                     if (timeLastAlarm && proceed)
                                     {
-                                        long ms = CACurrentMediaTime();
-                                        if (ms - [timeLastAlarm longValue] < SAME_ALARM_INTERVAL * 1000)
+                                        NSTimeInterval ms = CACurrentMediaTime();
+                                        if (ms - [timeLastAlarm doubleValue] < SAME_ALARM_INTERVAL)
                                         {
                                             [_locationPointsStates setObject:@(ANNOUNCED_ONCE) forKey:point];
                                             proceed = false;
@@ -463,7 +463,8 @@
                                 OAAlarmInfo *alarm = (OAAlarmInfo *) pw.point;
                                 [voiceRouter announceAlarm:[[OAAlarmInfo alloc] initWithType:alarm.type locationIndex:-1] speed:lastKnownLocation.speed];
                                 [_lastAnnouncedAlarms setObject:alarm forKey:@(alarm.type)];
-                                [_lastAnnouncedAlarmsTime setObject:@(CACurrentMediaTime()) forKey:@(alarm.type)];
+                                NSTimeInterval ms = CACurrentMediaTime();
+                                [_lastAnnouncedAlarmsTime setObject:@(ms) forKey:@(alarm.type)];
                             }
                         }
                         else if (type == LPW_FAVORITES)

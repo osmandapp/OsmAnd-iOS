@@ -2992,3 +2992,13 @@
 "free_favorites_backup" = "Backup gratuit pentru favorite";
 "banner_payment_free_backup_settings_title" = "Backup gratuit pentru setări";
 "get_osmand_cloud" = "Descărcați OsmAnd Cloud";
+"map_widget_target_distance_desc" = "Afișează distanța dintre cameră și locația țintă.";
+"map_widget_camera_tilt_desc" = "Afișează unghiul de înclinare a camerei în modul perspectivă. Valoarea implicită este 90° (fără înclinare).";
+"shared_string_relief_3d" = "Relief 3D";
+"average_speed_time_interval_desc" = "Specificați intervalul de timp pentru medierea vitezei.";
+"map_widget_zoom_level_desc" = "Afișează nivelul actual de zoom al hărții.";
+"map_widget_camera_distance_desc" = "Afișează altitudinea camerei deasupra nivelului suprafeței.";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "Afișează coordonatele geografice ale centrului actual al hărții";
+"map_widget_rendering_fps_desc" = "Arată cât de repede sunt afișate și reîmprospătate harta și elementele hărții, exprimat în cadre pe secundă (FPS).";

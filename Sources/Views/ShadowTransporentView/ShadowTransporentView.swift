@@ -16,17 +16,19 @@ class ShadowTransporentView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
+    
+    override func layoutSublayers(of layer: CALayer) {
+        super.layoutSublayers(of: layer)
+        guard !bounds.isEmpty else {
+            return
+        }
         let path = UIBezierPath(
-             roundedRect: bounds.insetBy(dx: 0, dy: 0),
-             cornerRadius: 4)
+            roundedRect: bounds.insetBy(dx: 0, dy: 0),
+            cornerRadius: 4)
         let hole = UIBezierPath(
             roundedRect: bounds.insetBy(dx: 1, dy: 1),
-             cornerRadius: 4)
-             .reversing()
+            cornerRadius: 4)
+            .reversing()
         path.append(hole)
         layer.shadowPath = path.cgPath
     }

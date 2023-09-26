@@ -10,9 +10,9 @@
 //  git revision c288c75a48a7ddd1d2a9431ec803ed1013452e90
 
 #import "OAUploadOsmPointsAsyncTask.h"
-#import "OAUploadFinishedBottomSheetViewController.h"
+#import "OsmAndApp.h"
 #import "OAOsmEditingPlugin.h"
-#import "OAUploadProgressBottomSheetViewController.h"
+#import "OAProgressUploadOsmPOINoteViewController.h"
 #import "OAOsmPoint.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAOpenStreetMapRemoteUtil.h"
@@ -21,8 +21,9 @@
 #import "OAOsmBugsRemoteUtil.h"
 #import "OAOsmNotePoint.h"
 #import "OAOsmBugResult.h"
+#import "OARootViewController.h"
 
-@interface OAUploadOsmPointsAsyncTask() <OAUploadBottomSheetDelegate>
+@interface OAUploadOsmPointsAsyncTask() <OAProgressUploadDelegate>
 
 @end
 
@@ -36,13 +37,14 @@
     
     id<OAOsmEditingBottomSheetDelegate> _bottomSheetDelegate;
     NSArray<OAOsmPoint *> *_points;
-    OAUploadProgressBottomSheetViewController *_progressBottomSheet;
+    OAProgressUploadOsmPOINoteViewController *_progressUpload;
+    UIViewController *_controller;
     
     OsmAndAppInstance _app;
     
 }
 
-- (id) initWithPlugin:(OAOsmEditingPlugin *)plugin points:(NSArray<OAOsmPoint *> *)points closeChangeset:(BOOL)closeChangeset anonymous:(BOOL)anonymous comment:(NSString *)comment bottomSheetDelegate:(id<OAOsmEditingBottomSheetDelegate>)bottomSheetDelegate
+- (id) initWithPlugin:(OAOsmEditingPlugin *)plugin points:(NSArray<OAOsmPoint *> *)points closeChangeset:(BOOL)closeChangeset anonymous:(BOOL)anonymous comment:(NSString *)comment bottomSheetDelegate:(id<OAOsmEditingBottomSheetDelegate>)bottomSheetDelegate controller:(UIViewController *)controller
 {
     self = [super init];
     if (self) {
@@ -53,14 +55,23 @@
         _points = points;
         _comment = comment;
         _bottomSheetDelegate = bottomSheetDelegate;
+        _controller = controller;
     }
     return self;
 }
 
 - (void) uploadPoints
 {
-    _progressBottomSheet = [[OAUploadProgressBottomSheetViewController alloc] initWithParam:self];
-    [_progressBottomSheet show];
+    _progressUpload = [[OAProgressUploadOsmPOINoteViewController alloc] initWithParam:self];
+    _progressUpload.delegate = self;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_progressUpload];
+    navigationController.modalPresentationStyle = UIModalPresentationCustom;
+    [OARootViewController.instance.navigationController presentViewController:navigationController animated:YES completion:nil];
+    [self uploadingPoints];
+}
+
+- (void) uploadingPoints
+{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSInteger lastIndex = _points.count - 1;
         NSMutableArray<OAOsmPoint *> *failedUploads = [NSMutableArray new];
@@ -103,7 +114,7 @@
                     [failedUploads addObject:p];
             }
             dispatch_async(dispatch_get_main_queue(), ^{
-                [_progressBottomSheet setProgress:((float)(i + 1) / (float)_points.count)];
+                [_progressUpload setProgress:((float)(i + 1) / (float)_points.count)];
             });
         }
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -113,11 +124,8 @@
                 [_bottomSheetDelegate uploadFinished:failedUploads.count > 0];
             if (!_interruptUploading)
             {
-                OAUploadFinishedBottomSheetViewController *uploadFinished = [[OAUploadFinishedBottomSheetViewController alloc] initWithFailedPoints:failedUploads successfulUploads:_points.count - failedUploads.count];
-                uploadFinished.delegate = self;
-                [uploadFinished show];
+                [_progressUpload setUploadResultWithFailedPoints:failedUploads successfulUploads:_points.count - failedUploads.count];
             }
-            [_progressBottomSheet dismiss];
         });
     });
 }
@@ -127,11 +135,16 @@
     _interruptUploading = interrupted;
 }
 
-#pragma mark - OAUploadBottomSheetDelegate
+#pragma mark - OAProgressUploadDelegate
 
 - (void)retryUpload
 {
-    [self uploadPoints];
+    [self uploadingPoints];
+}
+
+- (void)dismissViewController
+{
+    [_controller.navigationController popViewControllerAnimated:YES];
 }
 
 @end

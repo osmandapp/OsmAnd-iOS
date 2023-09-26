@@ -7,7 +7,7 @@
 //
 
 #import "OAOsmEditActionsViewController.h"
-#import "OAOsmNoteBottomSheetViewController.h"
+#import "OACreateUploadOsmNoteViewController.h"
 #import "Localization.h"
 #import "OABottomSheetHeaderCell.h"
 #import "OAUtilities.h"
@@ -24,7 +24,7 @@
 #import "OAOsmNotePoint.h"
 #import "OASimpleTableViewCell.h"
 #import "OABottomSheetTwoButtonsViewController.h"
-#import "OAOsmEditingBottomSheetViewController.h"
+#import "OAOsmUploadPOIViewController.h"
 #import "OAOsmBugsRemoteUtil.h"
 #import "OAOsmBugsDBHelper.h"
 #import "OAOsmBugResult.h"
@@ -235,8 +235,11 @@
         }
         else
         {
-            OAOsmNoteBottomSheetViewController *noteScreen = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_plugin points:[NSArray arrayWithObject:_point] type:TYPE_CREATE];
-            [noteScreen show];
+            OACreateUploadOsmNoteViewController *noteScreen = [[OACreateUploadOsmNoteViewController alloc] initWithEditingPlugin:_plugin points:[NSArray arrayWithObject:_point] type:EOAOsmNoteViewConrollerModeCreate];
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:noteScreen];
+            noteScreen.delegate = vwController.delegate;
+            [[OARootViewController instance].mapPanel.navigationController presentViewController:navigationController animated:YES completion:nil];
+            [self.vwController dismiss];
         }
     }
     else if ([item[@"key"] isEqualToString:@"edit_delete"])
@@ -257,19 +260,15 @@
 {
     if (_point.getGroup == POI)
     {
-        OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
-                                                         initWithEditingUtils:_plugin.getPoiModificationRemoteUtil
-                                                         points:[NSArray arrayWithObject:_point]];
+        OAOsmUploadPOIViewController *dialog = [[OAOsmUploadPOIViewController alloc] initWithPOIItems:[NSArray arrayWithObject:_point]];
         dialog.delegate = vwController.delegate;
-        [dialog show];
+        [[OARootViewController instance].mapPanel.navigationController pushViewController:dialog animated:YES];
     }
     else if (_point.getGroup == BUG)
     {
-        OAOsmNoteBottomSheetViewController *dialog = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_plugin
-                                                                                                                points:[NSArray arrayWithObject:_point]
-                                                                                                                  type:TYPE_UPLOAD];
+        OACreateUploadOsmNoteViewController *dialog = [[OACreateUploadOsmNoteViewController alloc] initWithEditingPlugin:_plugin points:[NSArray arrayWithObject:_point] type:EOAOsmNoteViewConrollerModeUpload];
         dialog.delegate = vwController.delegate;
-        [dialog show];
+        [[OARootViewController instance].mapPanel.navigationController pushViewController:dialog animated:YES];
     }
     [self.vwController dismiss];
 }

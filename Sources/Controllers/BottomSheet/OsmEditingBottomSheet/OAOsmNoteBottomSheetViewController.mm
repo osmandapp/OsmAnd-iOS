@@ -197,7 +197,7 @@
     }
     if (shouldUpload)
     {
-        OAUploadOsmPointsAsyncTask *task = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:_plugin points:_bugPoints closeChangeset:NO anonymous:_uploadAnonymously comment:nil bottomSheetDelegate:vwController.delegate];
+        OAUploadOsmPointsAsyncTask *task = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:_plugin points:_bugPoints closeChangeset:NO anonymous:_uploadAnonymously comment:nil bottomSheetDelegate:vwController.delegate controller:nil];
         [task uploadPoints];
     }
     else

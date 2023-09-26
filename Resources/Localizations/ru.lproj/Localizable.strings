@@ -314,8 +314,8 @@
 "shared_string_edit" = "Редактировать";
 "download_wikipedia_maps" = "Википедия";
 "product_desc_wiki" = "Данные Википедии";
-"srtm_plugin_name" = "Контурные линии";
-"product_desc_srtm" = "Отображать контурные линии";
+"srtm_plugin_name" = "Ландшафт";
+"product_desc_srtm" = "Визуальная оценка формы поверхности земли";
 "enter_description" = "Введите описание";
 "shared_string_description" = "Описание";
 "enter_fav_name" = "Введите имя";
@@ -336,9 +336,9 @@
 "from_location" = " ";
 "show_alt_in_drive" = "Показывать высоту в режиме вождения";
 "shared_string_get" = "Получить";
-"srtm_plugin_disabled" = "Контурные линии выключены";
+"srtm_plugin_disabled" = "Ландшафт выключен";
 "prch_wiki_info" = "Дополнение \"Википедия\" доступно для карт, которые Вы купили или загрузили бесплатно.";
-"prch_srtm_info" = "Дополнение \"Контурные линии\" доступно для карт, которые Вы купили или загрузили бесплатно.";
+"prch_srtm_info" = "Дополнение \"Ландшафт\" доступно для карт, которые Вы купили или загрузили бесплатно.";
 "shared_string_open" = "Открыть";
 "time_closed" = "Закрыто";
 "will_close_at" = "Закроется в";
@@ -389,8 +389,8 @@
 "plugin_popup_wiki_desc" = "Чтобы начать пользоваться плагином Wikipedia, пожалуйста, загрузите данные Wikipedia для какого-либо региона";
 "plugin_popup_wiki_ask" = "Для загрузки данных из Wikipedia вам необходимо активировать плагин: <b>Wikipedia</b>";
 "plugin_popup_srtm_title" = "Загрузите контурные линии";
-"plugin_popup_srtm_desc" = "Чтобы начать пользоваться плагином Контурные линии, пожалуйста, загрузите контурные линии какого-либо региона";
-"plugin_popup_srtm_ask" = "Для загрузки контурных линий Вам необходимо активировать плагин: <b>Контурные линии</b>";
+"plugin_popup_srtm_desc" = "Чтобы начать пользоваться плагином \"Ландшафт\" , пожалуйста, загрузите контурные линии какого-либо региона";
+"plugin_popup_srtm_ask" = "Для загрузки контурных линий Вам необходимо активировать плагин: <b>Ландшафт</b>";
 "plugin_popup_nautical_title" = "Загрузите морские карты";
 "plugin_popup_nautical_desc" = "Пожалуйста, сначала загрузите морские карты.\nЗатем перейдите в <b>Настройки карты</b> > <b>Тип карты</b> и включите стиль <b>Nautical</b>";
 "plugin_popup_trip_planning_ask" = "Пожалуйста, сначала активируйте плагин: <b>Планирование поездок</b>";
@@ -716,7 +716,7 @@
 "features_menu_group" = "Возможности";
 "map_viewing_item" = "Обзор карты";
 "help_search" = "Поиск по карте";
-"planning_trip_item" = "Ручное составление маршрута";
+"planning_trip_item" = "Planning a trip";
 "map_legend" = "Легенда";
 "other_location" = "Другие";
 "instalation_troubleshooting_item" = "Установка и решение проблем";
@@ -1041,7 +1041,7 @@
 "save_track_to_gpx" = "Автозапись трека при навигации";
 "save_track_to_gpx_descrp" = "Автозапуск записи трека во время навигации и автосохранение по завершении.";
 "import_from_docs" = "Импортировать из документов";
-"live_updates" = "Автообновления";
+"live_updates" = "Live обновления";
 "osmand_live_last_changed" = "Последнее изменение карты: %@";
 "osmand_live_reports" = "Отчеты";
 "osmand_live_server_date" = "Последнее обновление сервера: %@";
@@ -1633,7 +1633,7 @@
 "res_source_format" = "Формат источника";
 "pseudo_mercator_projection" = "Псевдо-проекция Меркатора";
 "res_expire_time" = "Срок действия";
-"map_settings_available_srtm_maps_descr" = "Для просмотра холмов необходимы дополнительные карты";
+"map_settings_available_srtm_maps_descr" = "Для просмотра затенения рельефа необходимы дополнительные карты";
 "map_settings_line_density_slowdown_warning" = "Высокая плотность линий может замедлить отрисовку карты";
 "map_settings_line_density" = "Плотность линий";
 "map_settings_add_maps_desc" = "Вы можете добавить новые карты по ссылке или импортировав файлы SQLite.";
@@ -1847,7 +1847,7 @@
 "move_point_descr" = "Переместите карту, чтобы изменить положение этой точки.";
 
 // Route planning
-"plan_route" = "Составление маршрута";
+"plan_route" = "Планирование маршрута";
 "listed_exist" = "Указанные %@ уже существуют в OsmAnd.";
 "keep_both_desc" = "Импортированные элементы будут добавлены с префиксом";
 "shared_string_max" = "Макс.";
@@ -2033,7 +2033,7 @@
 "threshold_distance" = "Предельная дистанция";
 "shared_strings_all_regions" = "Все регионы";
 "shared_string_feet" = "футы";
-"srtm_download_list_help_message" = "OsmAndпредоставляет данные изолиний в метрах и футах. Для изменения формата потребуется повторно загрузить файл.";
+"srtm_download_list_help_message" = "Osmand предоставляет данные изолиний в метрах и футах. Для изменения формата потребуется повторно загрузить файл.";
 "routes_color_by_type" = "Раскраска маршрутов…";
 "rendering_value_walkingRoutesOSMC_description" = "Окраска согласно индивидуальной маркировке на туристических информационных щитах (если задано на OpenStreetMap).";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Окраска согласно принадлежности к сети.";

@@ -465,7 +465,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     }
     else if (dataType == EOAImportDataTypeActiveMarkers)
     {
-        [rootController.mapPanel showCards];
+        [rootController.mapPanel showDestinations];
     }
     else if (dataType == EOAImportDataTypeHistoryMarkers)
     {

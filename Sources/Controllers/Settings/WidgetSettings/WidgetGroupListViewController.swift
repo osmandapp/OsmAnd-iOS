@@ -63,10 +63,11 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
         var result: [WidgetType] = []
         
         for widget in widgets {
-            if let group = widget.getGroup(), !visitedGroups.contains(group) {
-                visitedGroups.append(group)
+            let group = widget.getGroup()
+            if group != nil, !visitedGroups.contains(group!) {
+                visitedGroups.append(group!)
                 result.append(widget)
-            } else if widget.getGroup() == nil {
+            } else if group == nil {
                 individualWidgets.append(widget)
             }
         }
@@ -76,9 +77,16 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
     }
 
     private func inflateAvailableDefaultWidgets(_ widgets: [WidgetType], section: OATableSectionData, hasExternalWidgets: Bool) {
+        let sortedWidgets = widgets.sorted( by: { w0, w1 in
+            let group0 = w0.getGroup()
+            let group1 = w1.getGroup()
+            let title0 = group0 != nil ? group0!.title : w0.title
+            let title1 = group1 != nil ? group1!.title : w1.title
+            return title0 < title1
+        })
         let nightMode = OAAppSettings.sharedManager().nightMode
-        for i in 0..<widgets.count {
-            let widgetType = widgets[i]
+        for i in 0..<sortedWidgets.count {
+            let widgetType = sortedWidgets[i]
             let widgetGroup = widgetType.getGroup()
             let row = section.createNewRow()
             row.setObj(widgetType, forKey: "widget_type")
@@ -95,8 +103,9 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
     }
 
     private func inflateAvailableExternalWidgets(_ externalWidgets: [MapWidgetInfo], section: OATableSectionData) {
-        for i in 0..<externalWidgets.count {
-            let widgetInfo = externalWidgets[i]
+        let sortedWidgets = externalWidgets.sorted { $0.key < $1.key }
+        for i in 0..<sortedWidgets.count {
+            let widgetInfo = sortedWidgets[i]
             
             let row = section.createNewRow()
             row.setObj(widgetInfo, forKey: "widget_info")
@@ -110,12 +119,9 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
     private func listDefaultWidgets(_ widgets: NSOrderedSet) -> [WidgetType] {
         var defaultWidgets: [Int: WidgetType] = [:]
         for widgetInfo in widgets {
-            if let widgetInfo = widgetInfo as? MapWidgetInfo {
-                
-                let widgetType = widgetInfo.getWidgetType()
-                if let widgetType {
-                    defaultWidgets[widgetType.ordinal] = widgetType
-                }
+            let widgetType: WidgetType? = (widgetInfo as? MapWidgetInfo)?.getWidgetType()
+            if widgetType != nil {
+                defaultWidgets[widgetType!.ordinal] = widgetType
             }
         }
         return Array(defaultWidgets.values)
@@ -291,9 +297,11 @@ extension WidgetGroupListViewController {
             vc.widgetGroup = widgetGroup
             show(vc)
         } else if let widgetType = item.obj(forKey: "widget_type") as? WidgetType {
-            let vc = WidgetConfigurationViewController()!
-            vc.selectedAppMode = OAAppSettings.sharedManager()!.applicationMode.get()
-            let widgetInfo = widgetRegistry.getWidgetInfo(for: widgetType).first
+            guard let vc = WidgetConfigurationViewController(),
+                  let widgetInfo = widgetRegistry.getWidgetInfo(for: widgetType).first else {
+                return
+            }
+            vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
             vc.widgetInfo = widgetInfo
             vc.widgetPanel = widgetPanel
             vc.createNew = true

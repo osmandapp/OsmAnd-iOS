@@ -56,9 +56,7 @@ OAWeatherWebClient::~OAWeatherWebClient()
 
 QByteArray OAWeatherWebClient::downloadData(
         const QString& url,
-        std::shared_ptr<const OsmAnd::IWebClient::IRequestResult>* const requestResult/* = nullptr*/,
-        const OsmAnd::IWebClient::RequestProgressCallbackSignature progressCallback/* = nullptr*/,
-        const std::shared_ptr<const OsmAnd::IQueryController>& queryController/* = nullptr*/,
+        IWebClient::DataRequest& dataRequest,
         const QString& userAgent /* = QString()*/) const
 {
     return QByteArray();
@@ -66,9 +64,7 @@ QByteArray OAWeatherWebClient::downloadData(
 
 QString OAWeatherWebClient::downloadString(
         const QString& url,
-        std::shared_ptr<const OsmAnd::IWebClient::IRequestResult>* const requestResult/* = nullptr*/,
-        const OsmAnd::IWebClient::RequestProgressCallbackSignature progressCallback/* = nullptr*/,
-        const std::shared_ptr<const OsmAnd::IQueryController>& queryController/* = nullptr*/) const
+        IWebClient::DataRequest& dataRequest) const
 {
     return QString();
 }
@@ -77,9 +73,7 @@ long long OAWeatherWebClient::downloadFile(
         const QString& url,
         const QString& fileName,
         const long long lastTime,
-        std::shared_ptr<const OsmAnd::IWebClient::IRequestResult>* const requestResult/* = nullptr*/,
-        const OsmAnd::IWebClient::RequestProgressCallbackSignature progressCallback/* = nullptr*/,
-        const std::shared_ptr<const OsmAnd::IQueryController>& queryController/* = nullptr*/) const
+        IWebClient::DataRequest& dataRequest) const
 {
     long long result = -1;
     BOOL success = false;
@@ -108,16 +102,16 @@ long long OAWeatherWebClient::downloadFile(
         ];
         [task resume];
 
-        if (queryController)
+        if (dataRequest.queryController)
         {
             while (dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(100 * NSEC_PER_MSEC))))
             {
-                if (queryController->isAborted())
+                if (dataRequest.queryController->isAborted())
                 {
                     [task cancel];
 
-                    if (requestResult != nullptr)
-                        requestResult->reset(new OAWeatherHttpRequestResult(false, responseCode));
+                    if (dataRequest.requestResult)
+                        dataRequest.requestResult.reset(new OAWeatherHttpRequestResult(false, responseCode));
 
                     return result;
                 }
@@ -171,16 +165,16 @@ long long OAWeatherWebClient::downloadFile(
         ];
         [task resume];
 
-        if (queryController)
+        if (dataRequest.queryController)
         {
             while (dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(100 * NSEC_PER_MSEC))))
             {
-                if (queryController->isAborted())
+                if (dataRequest.queryController->isAborted())
                 {
                     [task cancel];
 
-                    if (requestResult != nullptr)
-                        requestResult->reset(new OAWeatherHttpRequestResult(false, responseCode));
+                    if (dataRequest.requestResult)
+                        dataRequest.requestResult.reset(new OAWeatherHttpRequestResult(false, responseCode));
 
                     return false;
                 }
@@ -196,8 +190,8 @@ long long OAWeatherWebClient::downloadFile(
 
         if (!response || error)
         {
-            if (requestResult != nullptr)
-                requestResult->reset(new OAWeatherHttpRequestResult(false, responseCode));
+            if (dataRequest.requestResult)
+                dataRequest.requestResult.reset(new OAWeatherHttpRequestResult(false, responseCode));
 
             return result;
         }
@@ -213,8 +207,8 @@ long long OAWeatherWebClient::downloadFile(
             success = [data writeToFile:name atomically:YES];
         data = nil;
 
-        if (requestResult != nullptr)
-            requestResult->reset(new OAWeatherHttpRequestResult(success, responseCode));
+        if (dataRequest.requestResult)
+            dataRequest.requestResult.reset(new OAWeatherHttpRequestResult(success, responseCode));
 
         if (success)
             result = lastModified > 0 ? lastModified : 1;

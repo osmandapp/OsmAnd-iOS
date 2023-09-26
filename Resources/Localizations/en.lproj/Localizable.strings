@@ -176,7 +176,13 @@
 "distance_circles" = "Distance circles";
 
 // Widget descriptions
+"coordinates_widget_map_center_desc" = "Shows the geographic coordinates of the current map center";
 "coordinates_widget_current_location_desc" = "Shows the geographic coordinates of the current geolocation";
+"map_widget_rendering_fps_desc" = "Shows how fast the map and map elements are displayed and refreshed, expressed in frames per second (FPS).";
+"map_widget_camera_tilt_desc" = "Shows the camera tilt angle in perspective mode. Default is 90° (no tilt).";
+"map_widget_camera_distance_desc" = "Shows the camera elevation above the surface level.";
+"map_widget_zoom_level_desc" = "Shows the current map zoom level.";
+"map_widget_target_distance_desc" = "Shows the distance between camera and target location.";
 "av_notes_photo_widget_desc" = "Tapping the widget lets you take a photo.";
 "av_notes_video_widget_desc" = "Tapping the widget lets you record a video.";
 "av_notes_audio_widget_desc" = "Tapping the widget lets you take an audio note.";
@@ -195,6 +201,8 @@
 "second_next_turn_widget_desc" = "The widget shows information about your second next turn which is enabled if turn within approaching distance.";
 "next_turn_widget_desc" = "The widget shows information about your next turn with a picture of maneuver and distance to it.";
 "average_speed_widget_desc" = "Shows the current trip's average speed.";
+"average_speed_time_interval_desc" = "Specify the time interval for speed averaging.";
+"average_speed_skip_stops" = "Take stops into account";
 "elevation_profile_widget_desc" = "Shows the elevation and slope profile of the current route.";
 "parking_widget_desc" = "Shows the distance from the screen center to your parking spot.";
 "mapillary_widget_desc" = "Provides quick access to the Mapillary app to add street-level imagery.";
@@ -356,6 +364,7 @@
 "direction_lines" = "Direction lines";
 "active_markers" = "Active markers";
 "specify_number_of_dir_indicators" = "Specify number of direction indicators, it affects all settings below.";
+"specify_number_of_dir_indicators_desc" = "Specify number of direction indicators.";
 "choose_how_display_distance" = "Choose how to display the distance to active markers";
 "appearance_on_the_map" = "Appearance on the map";
 "arrows_direction_to_markers" = "Arrows show direction to active marker if it’s located outside the screen. Direction lines draw a line to active markers.";
@@ -605,7 +614,12 @@
 "on_hold" = "On hold";
 "shared_string_paused" = "Paused";
 
+"unsaved_changes" = "Unsaved changes";
+"unsaved_changes_will_be_lost_discard" = "Any unsaved changes will be lost. Discard changes?";
+
+
 // Shared Strings
+"shared_string_discard" = "Discard";
 "shared_string_cancelled" = "Cancelled";
 "shared_string_undefined" = "Undefined";
 "shared_string_custom" = "Custom";
@@ -658,6 +672,7 @@
 "shared_string_on" = "On";
 "shared_string_off" = "Off";
 "shared_string_clear_cache" = "Clear cache";
+"shared_string_cache" = "Cache";
 "shared_string_maximum" = "Maximum";
 "osmand_parking_warning" = "Warning";
 "shared_string_copy" = "Copy";
@@ -889,7 +904,7 @@
 "save_track_interval_globally" = "Logging interval";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
-"track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
+"track_rec_addon_q" = "Please activate Track recording plugin to record and save your tracks";
 "track_interval_remember" = "Remember my choice";
 "track_clear" = "Clear current track";
 "track_clear_q" = "Do you want to clear current track?";
@@ -932,6 +947,7 @@
 "daynight_mode_night" = "Night";
 "map_widget_renderer" = "Map style";
 "map_settings_overunder" = "Overlay / Underlay";
+"map_settings_topography" = "Topography";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
 "map_settings_install_maps" = "Choose maps to install or update";
@@ -946,11 +962,11 @@
 "shared_string_terrain" = "Terrain";
 "map_settings_layer_transparency" = "Layer transparency";
 "map_settings_slopes_legend" = "You can read more about the slopes on Wikipedia";
-"map_settings_slopes_description" = "Slope maps use different colors to visualize the terrain";
-"map_settings_hillshade_description" = "Hillshade maps visualize slopes, peaks and lowlands using different levels of gray";
-"map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
-"map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
-"map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
+"map_settings_slopes_description" = "Slope is colorized visualisations on terrain.";
+"map_settings_hillshade_description" = "Hillshade map using dark shades to show slopes, peaks and lowlands.";
+"map_settings_zoom_level_description" = "Set the minimum and maximum zoom levels at which the layer will be displayed";
+"map_settings_add_maps_hillshade" = "Additional maps are needed to view Hillshades on the map.";
+"map_settings_add_maps_slopes" = "Additional maps are needed to view Slopes on the map.";
 "shared_string_legend" = "Legend";
 
 "map_settings_show_slider_map" = "Show slider on the map";
@@ -1396,6 +1412,11 @@
 "osmand_live_server_date" = "Last server update: %@";
 "update_frequency" = "Update frequency";
 "osmand_live_wifi_only" = "Update only via WiFi";
+
+"weather_update_disabled" = "Disabled";
+"weather_update_over_wifi_only" = "Over WIFI only";
+"weather_update_over_any_network" = "Over Any Network";
+
 "osmand_live_donation_header" = "Donation settings";
 "donations" = "Donations";
 "osmand_live_donation_switch_title" = "Donation to OpenStreetMap community";
@@ -1468,7 +1489,7 @@
 "res_zoom_invalid_value" = "Zoom values should be in range 1 - 22";
 "res_offlineSQL_URL_warning" = "Not supported for this map type";
 "clear_tiles_warning" = "Applying these changes will clear the cached data for this tile source";
-"download_heightmap_maps" = "Heightmap";
+"download_heightmap_maps" = "Terrain map (3D)";
 "welmode_download_maps" = "Download maps";
 "srtm_unit_format" = "Contour lines unit variant";
 "srtm_download_single_help_message" = "Please select the variant. You will need to re-download the file to change the format.";
@@ -1762,7 +1783,7 @@
 "quick_action_contour_lines_descr" = "Button showing or hiding contour lines on the map.";
 "hide_contour_lines" = "Hide contour lines";
 "enable_contour_lines" = "Enable to view contour lines on the map";
-"enable_hillshade" = "Enable to view terrain data";
+"enable_hillshade" = "Enable to view terrain data from hillshade or slope map.";
 "contour_lines_hillshades_slope" = "Contour lines, hillshades, slope";
 "quick_action_dir_from_descr" = "Tap this action to navigate from the current screen center point.";
 "quick_action_transport_descr" = "Button showing or hiding public transport on the map.";
@@ -2007,7 +2028,7 @@
 "preferred_languages" = "Preferred languages";
 "wiki_article_search_text" = "Searching for the corresponding wiki article";
 
-"srtm_plugin_name" = "Contour lines";
+"srtm_plugin_name" = "Topography";
 "product_desc_srtm" = "Visual assessment of the shape of the land surface";
 "srtm_plugin_description" = "Terrain information like contour lines, hillshades, and slopes, help you to visually assess the lay of the land and relief, navigability, and more. The topographic information can on the map be represented by slope shading, contour lines, and/or steepness coloring.\n\nThe underlying data originates from SRTM and ASTER.\n\nFurther reading at http://osmand.net/docs/user/plugins/contour-lines .";
 
@@ -2076,9 +2097,9 @@
 
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "shared_string_get" = "Get";
-"srtm_plugin_disabled" = "Contour lines disabled";
-"prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
-"prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
+"srtm_plugin_disabled" = "Topography disabled";
+"prch_wiki_info" = "Wikipedia plugin enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
+"prch_srtm_info" = "Topography plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 
 "shared_string_open" = "Open";
 "time_closed" = "Closed";
@@ -2142,8 +2163,8 @@
 "plugin_popup_wiki_desc" = "To start using Wikipedia plugin, please download Wikipedia data of an region first";
 "plugin_popup_wiki_ask" = "In order to download Wikipedia data you need to activate plugin: <b>Wikipedia</b>";
 "plugin_popup_srtm_title" = "Download contour lines";
-"plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
-"plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
+"plugin_popup_srtm_desc" = "To start using Topography feature, please download Contour lines of an region first";
+"plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Topography</b>";
 "plugin_popup_nautical_title" = "Download Nautical maps";
 "plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
 "plugin_popup_nautical_ask" = "Please enable Nautical plugin";
@@ -2206,6 +2227,7 @@
 "offline_raster_map" = "Offline raster map";
 "offline_raster_maps" = "Offline raster maps";
 "online_raster_maps" = "Online raster maps";
+"terrain_3D_maps" = "Terrain maps";
 "online_map" = "Online map";
 "calculating_progress" = "Calculating...";
 "local_map_names" = "Local names";
@@ -2947,6 +2969,7 @@
 "nautical_depth" = "Nautical depth";
 "terrain_maps" = "Terrain maps";
 "shared_string_cross_buy" = "Cross-buy";
+"shared_string_relief_3d" = "3D Relief";
 
 "track_has_no_needed_data" = "The track is missing the respective data.";
 "select_another_colorization" = "Please select another type of coloring.";
@@ -2955,6 +2978,7 @@
 "purchases_feature_desc_pro_widgets" = "Get access to OsmAnd Pro features: Route coloring and more.";
 "purchases_feature_desc_hourly_map_updates" = "Get access to more frequent map updates. Hourly, daily, or weekly updates. Updates are downloaded incrementally, only for the changed area.";
 "purchases_feature_desc_cross_buy" = "Use your subscription features on different platforms (Android/iOS/web) at no additional cost.";
+"purchases_feature_relief_3d_description" = "Own and observe the scale model of your neighborhood or the whole continent.";
 "purchases_feature_desc_monthly_map_updates" = "Get access to regular monthly updates for offline maps.";
 "purchases_feature_desc_unlimited_map_download" = "Get unlimited downloads for all continents and regions offline maps.";
 "purchases_feature_desc_carplay" = "Brings OsmAnd offline maps and navigation to your vehicle screen and integrates with your vehicle\'s controls.";
@@ -3043,11 +3067,16 @@
 "weather_miss_forecasts" = "You don’t have offline forecasts";
 "weather_miss_forecasts_description" = "Offline forecast is available per country. Duration up to 7 days. You need to select needed countries.";
 "weather_updates_automatically" = "OsmAnd will be download updates automatically when it is running.";
+"weather_updates_manual" = "Weather forecast must be updated manually.";
 "weather_accuracy_forecast_description" = "Offline forecast is available until: %@.\nAccuracy: %@, hourly. %@ for every 3 hours.";
 "weather_generates_new_forecast_description" = "OsmAnd generates a new forecast every 6 hours. The closer to the current date, the more accurate it will be.";
 
-"update_only_over_wi_fi" = "Update only over Wi-Fi";
+"auto_update" = "Auto-update";
 "update_parameters" = "Update parameters";
+
+"weather_update_parameters_disabled" = "Auto-updates will be disabled.";
+"weather_update_parameters_wifi" = "Weather forecast will be updates only if Wi-Fi network is available.";
+"weather_update_parameters_any_network" = "Weather forecast will be updates over any network. Mobile data can be used.";
 
 "recording_delete_confirm" = "Delete this item?";
 
@@ -3293,3 +3322,5 @@
 "reset_all_settings_desc" = "Reset all settings to default?";
 "no_widgets_here_yet" = "No widgets here yet";
 "no_widgets_descr" = "Add one or more widgets from the list of available widgets.";
+"click_on_widget" = "Click on widget";
+"map_marker_interval_dialog_desc" = "Specify the time interval for which the average speed will be measured to calculate estimated time of arrival.";

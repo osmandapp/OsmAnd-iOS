@@ -699,7 +699,7 @@
         app.resourcesManager->rescanUnmanagedStoragePaths(true);
         [app.localResourcesChangedObservable notifyEvent];
     }
-    [[OARootViewController instance].mapPanel.mapWidgetRegistry reorderWidgets];
+    [[OARootViewController instance].mapPanel recreateAllControls];
 }
 
 - (void) onPostExecute:(BOOL)success

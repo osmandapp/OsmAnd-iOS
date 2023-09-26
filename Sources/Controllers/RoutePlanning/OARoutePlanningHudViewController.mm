@@ -56,9 +56,6 @@
 #import "OATrackMenuHudViewController.h"
 #import "OAAppVersionDependentConstants.h"
 
-#define VIEWPORT_SHIFTED_SCALE 1.5f
-#define VIEWPORT_NON_SHIFTED_SCALE 1.0f
-
 #define kHeaderSectionHeigh 60.0
 
 #define PLAN_ROUTE_MODE 0x1
@@ -278,7 +275,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     _titleView.text = OALocalizedString(@"plan_route");
     
     [self adjustMapViewPort];
-    [self changeMapRulerPosition];
     [self adjustActionButtonsPosition:self.getViewHeight];
     [self adjustNavbarPosition];
 
@@ -310,9 +306,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 	if (_showSnapWarning)
 		[self enterApproximationMode];
 
-    [_mapPanel setTopControlsVisible:YES
-            onlyMapSettingsAndSearch:YES
-                customStatusBarStyle:self.preferredStatusBarStyle];
+    [_mapPanel targetUpdateControlsLayout:NO customStatusBarStyle:UIStatusBarStyleDefault];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -461,13 +455,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     _actionButtonsContainer.frame = buttonsFrame;
 }
 
-- (void) changeMapRulerPosition
-{
-    CGFloat bottomMargin = [self isLeftSidePresentation] ? (-[self getToolbarHeight] - 16.) : (-self.getViewHeight + OAUtilities.getBottomMargin - 16.);
-    CGFloat leftMargin = _actionButtonsContainer.frame.origin.x + _actionButtonsContainer.frame.size.width;
-    [_mapPanel targetSetMapRulerPosition:bottomMargin left:leftMargin];
-}
-
 - (void) changeCenterOffset:(CGFloat)contentHeight
 {
     if ([self isLeftSidePresentation] && self.currentState == EOADraggableMenuStateInitial)
@@ -492,17 +479,17 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     if ([self isLeftSidePresentation] && self.currentState == EOADraggableMenuStateInitial)
     {
-        mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+        mapView.viewportXScale = kViewportScale;
         mapView.viewportYScale = (DeviceScreenHeight - _landscapeHeaderContainerView.frame.size.height) / DeviceScreenHeight;
     }
     else if ([self isLeftSidePresentation])
     {
-        mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
+        mapView.viewportXScale = kViewportBottomScale;
         mapView.viewportYScale = (DeviceScreenHeight - _landscapeHeaderContainerView.frame.size.height) / DeviceScreenHeight;
     }
     else
     {
-        mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+        mapView.viewportXScale = kViewportScale;
         mapView.viewportYScale = (DeviceScreenHeight - self.getViewHeight) / DeviceScreenHeight;
     }
 }
@@ -510,8 +497,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void) restoreMapViewPort
 {
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
-    if (mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE)
-        mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+    if (mapView.viewportXScale != kViewportScale)
+        mapView.viewportXScale = kViewportScale;
     if (mapView.viewportYScale != _cachedYViewPort)
         mapView.viewportYScale = _cachedYViewPort;
 }
@@ -571,6 +558,10 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     OAGPXMutableDocument *mutableDocument = nil;
     OASelectedGPXHelper *selectedGpxHelper = OASelectedGPXHelper.instance;
     OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFileName];
+    if (!gpx)
+    {
+        gpx = [[OAGPXDatabase sharedDb] getGPXItemByFileName:gpxFileName];
+    }
     const auto &selectedFile = selectedGpxHelper.activeGpx[QString::fromNSString(gpxFileName.lastPathComponent)];
     if (selectedFile != nullptr)
         mutableDocument = [[OAGPXMutableDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(selectedFile)];
@@ -838,7 +829,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self updateView:YES];
     
     self.actionButtonsContainer.hidden = YES;
-    [self changeMapRulerPosition];
 }
 
 - (void)exitApproximationMode
@@ -1241,10 +1231,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         else
             offset = height - 16;
     }
-    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:offset animated:YES];
-    
+    [_mapPanel.hudViewController updateControlsLayout:YES];
+
     [self adjustActionButtonsPosition:height];
-    [self changeMapRulerPosition];
     [self adjustMapViewPort];
     [self adjustNavbarPosition];
 }
@@ -1892,7 +1881,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [self updateView:YES];
     }
     self.actionButtonsContainer.hidden = NO;
-    [self changeMapRulerPosition];
 }
 
 - (void)onCancelSnapApproximation:(BOOL)hasApproximationStarted

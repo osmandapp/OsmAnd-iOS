@@ -296,7 +296,7 @@
 "menu_my_trips" = "Meine Tracks";
 "product_title_trip_planning" = "Streckenplanung";
 "product_desc_wiki" = "Standortbezogene Wikipedia-Artikel auf der Karte";
-"srtm_plugin_name" = "Höhenlinien";
+"srtm_plugin_name" = "Topografie";
 "product_desc_srtm" = "Visuelle Übersetzung der Form der Landoberfläche";
 "enter_description" = "Beschreibung eingeben";
 "shared_string_description" = "Beschreibung";
@@ -319,7 +319,7 @@
 "from_location" = "abwesend";
 "show_alt_in_drive" = "Höhe im Fahrmodus anzeigen";
 "shared_string_get" = "Erwerben";
-"srtm_plugin_disabled" = "Höhenlinien deaktiviert";
+"srtm_plugin_disabled" = "Topographie deaktiviert";
 "shared_string_open" = "Öffnen";
 "time_closed" = "Geschlossen";
 "will_close_at" = "Schließt um";
@@ -392,10 +392,10 @@
 "sqlitedb_import_already_exists" = "Die angegebene sqlitedb Datei gibt es bereits. Bitte Aktion auswählen.";
 "plugin_ski_descr" = "Entwickelt für die Navigation in Wintersportgebieten: Sehen Sie Skipisten, Skilifte und Langlaufloipen, mit farbigen Linien, die Schwierigkeitsgrade anzeigen. Um diese Erweiterung zu verwenden, aktivieren Sie sie und wählen Sie unter \"Karte konfigurieren\" den Kartenstil \"Winter und Ski\".";
 "purchases_feature_desc_wikipedia" = "Stellt alle ortsbezogenen Wikipedia-Artikel offline bereit und hilft Ihnen, mehr über die Orte zu erfahren, die Sie auf Ihrer Reise besuchen, indem Sie einfach auf die Karte tippen. Vergessen Sie nicht, die Wikipedia-Kartendateien für die jeweiligen Regionen herunterzuladen.";
-"prch_wiki_info" = "Wikipedia-Addon aktiviert Wikipedia-Informationen für berechtigte Karten welche sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
-"prch_srtm_info" = "Höhenlinien-Addon aktiviert Höhenlinien für berechtigte Karten, die Sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
-"plugin_popup_srtm_desc" = "Um die Höhenlinien zu nutzen zu können, bitte die entsprechenden Höhendaten herunterladen";
-"plugin_popup_srtm_ask" = "Um Höhendaten herunterladen zu können, bitte das <b>Höhenlinien Plugin</b> aktivieren";
+"prch_wiki_info" = "Wikipedia-plugin aktiviert Wikipedia-Informationen für berechtigte Karten welche sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
+"prch_srtm_info" = "Höhenlinien-plugin aktiviert Höhenlinien für berechtigte Karten, die Sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
+"plugin_popup_srtm_desc" = "Um Topographie zu nutzen, bitte die entsprechenden Höhendaten herunterladen";
+"plugin_popup_srtm_ask" = "Um Höhendaten herunterzuladen, bitte das Modul <b>Topographie</b> aktivieren";
 "plugin_popup_nautical_desc" = "Bitte erst die Seekarten herunterladen.\nDann unter <b>Karte konfigurieren</b> > <b>Kartendarstellung</b> die Darstellung <b>Nautical</b> aktiviere";
 "plugin_popup_trip_planning_ask" = "Um eine Strecke planen zu können, bitte das <b>Streckenplaner-Plugin</b> aktivieren";
 "product_desc_ext_trip_planning" = "Das Entfernungsmesser & Routen-Planer Plugin ermöglicht es dir deine Routen auf der Karte zu planen, zu speichern, die gerade Strecke zwischen Punkten zu messen, uvm. Erstellt eine vorläufige Routenplanung anstatt einer genauen Route.";
@@ -576,12 +576,12 @@
 "shared_string_collapse" = "Einklappen";
 "shared_string_topbar" = "Obere Leiste";
 "shared_string_widgets" = "Steuerelemente";
-"map_widget_right" = "Rechtes Panel";
-"map_widget_left" = "Linkes Panel";
+"map_widget_right" = "Rechtes Bedienfeld";
+"map_widget_left" = "Linkes Bedienfeld";
 "layer_map_appearance" = "Anzeige konfigurieren";
 "map_markers" = "Kartenmarkierungen";
 "select_gpx" = "GPX-Datei auswählen…";
-"confirm_usage_speed_cameras" = "In vielen Ländern (Deutschland, Frankreich, Italien und andere) ist die Verwendung von Blitzerwarnern gesetzlich nicht erlaubt. OsmAnd übernimmt keine Verantwortung im Fall von Gesetzesübertretungen. Klicken Sie nur auf \'Ja\', wenn Sie zur Verwendung dieser Funktion berechtigt sind.";
+"confirm_usage_speed_cameras" = "In vielen Ländern (Deutschland, Frankreich, Italien und andere) ist die Verwendung von Blitzerwarnern gesetzlich nicht erlaubt. OsmAnd übernimmt keine Verantwortung im Fall von Gesetzesübertretungen. Klicken Sie nur auf „Ja“, wenn Sie zur Verwendung dieser Funktion berechtigt sind.";
 "show_traffic_warnings" = "Verkehrswarnungen";
 "show_pedestrian_warnings" = "Fußgängerübergänge";
 "show_cameras" = "Blitzer";
@@ -662,7 +662,7 @@
 "unit_of_length" = "Längeneinheiten";
 "unit_of_length_descr" = "Ändern Sie, in welcher Entfernung gemessen wird.";
 "coords_format" = "Koordinatenformat";
-"coords_format_descr" = "Format geographischer Koordinaten.";
+"coords_format_descr" = "Format geografischer Koordinaten.";
 "do_not_show_discount_desc" = "Unterdrückt Meldungen zu App-Sonderangeboten und besonderen lokalen Ereignissen.";
 "save_global_track_interval" = "Intervall für generelle Aufzeichnung";
 "save_global_track_interval_descr" = "Aufzeichnungsintervall für die generelle Track-Aufzeichnung festlegen (wird über die Schaltfläche \'Routenaufzeichnung\' auf dem Kartenbildschirm angeschaltet).";
@@ -706,7 +706,7 @@
 "shared_string_search" = "Suchen";
 "shared_string_target_points" = "Ziele";
 "search_radius_proximity" = "Innerhalb";
-"poi" = "POI";
+"poi" = "OVI";
 // Shared Strings
 "shared_string_apply" = "Anwenden";
 "keep_and_add_destination_point" = "Als weiteres Ziel hinzufügen";
@@ -724,7 +724,7 @@
 "first_intermediate_dest_description" = "Fügt ersten Halt hinzu";
 "add_as_last_destination_point" = "Als letztes Zwischenziel hinzufügen";
 "last_intermediate_dest_description" = "Fügt Zwischenhalt ein";
-"show_poi_over_map" = "POI-Overlay anzeigen";
+"show_poi_over_map" = "OVI-Overlay anzeigen";
 "search_radius" = "Suchradius";
 "transport_Routes" = "Strecken";
 "transport_nearby_routes_within" = "Nahe gelegene Routen innerhalb von";
@@ -821,7 +821,7 @@
 "osm_live_payment_renews_annually" = "Verlängert sich jährlich";
 "default_price_currency_format" = "%.2f %@";
 "osm_live_payment_header" = "Zahlungsintervall:";
-"osm_live_payment_contribute_descr" = "Spenden helfen bei der Finanzierung der OSM-Kartographie.";
+"osm_live_payment_contribute_descr" = "Spenden helfen bei der Finanzierung der OSM-Kartografie.";
 "purchase_dialog_title" = "Plan auswählen";
 "purchase_dialog_travel_description" = "Für die Offline-Reiseführerfunktionalität kaufen Sie einen der folgenden Artikel:";
 "wikivoyage_travel_guide_descr" = "Führt innerhalb von OsmAnd ohne Internetverbindung zu den interessantesten Orten der Welt.";
@@ -1635,7 +1635,7 @@
 "map_settings_add_maps_slopes" = "Zusätzliche Karten sind erforderlich, um Hangneigungen auf der Karte anzuzeigen";
 "map_settings_add_maps_hillshade" = "Zusätzliche Karten sind erforderlich, um das Relief auf der Karte anzuzeigen";
 "map_settings_hillshade_description" = "Reliefkarten stellen Hangneigungen, Gipfel und Flachland in verschiedenen Graustufen dar";
-"map_settings_slopes_description" = "Hangneigungskarten verwenden unterschiedliche Farben, um das Gelände zu visualisieren";
+"map_settings_slopes_description" = "Gefälle ist eine farbige Visualisierung des Geländes.";
 "map_settings_slopes_legend" = "Sie können mehr über Hangneigungen auf Wikipedia lesen";
 "routing_profile_direct_to" = "Auf direktem Weg";
 "routing_profile_straightline" = "Direkte Verbindungslinie";
@@ -1655,7 +1655,7 @@
 "new_profile" = "Neues Profil";
 "screen_alerts" = "Bildschirmwarnungen";
 "vehicle_parameters" = "Fahrzeugparameter";
-"select_nav_profile_dialog_message" = "\'Navigationsart\' bestimmt, wie Routen mit den verfügbaren Offline- und Online-Routenplanern berechnet werden.";
+"select_nav_profile_dialog_message" = "„Navigationsart“ bestimmt, wie Routen mit den verfügbaren Offline- und Online-Routenplanern berechnet werden.";
 "select_color" = "Farbe wählen";
 "reorder_profiles" = "Profilliste bearbeiten";
 "profile_type_custom_string" = "Benutzerdefiniertes Profil";
@@ -1993,7 +1993,7 @@
 "export_failed" = "Profil konnte nicht exportiert werden";
 "export_profile_select_descr" = "Wählen Sie die Daten aus, die exportiert werden sollen.";
 "delete_custom_categories" = "Benutzerdefinierte Kategorien löschen";
-"reset_to_default_category_button_promo" = "Mit \'Auf Standard zurücksetzen\' wird die Sortierreihenfolge wieder auf den Standard der Installation zurückgesetzt.";
+"reset_to_default_category_button_promo" = "Mit „Auf Standard zurücksetzen“ wird die Sortierreihenfolge wieder auf den Standard der Installation zurückgesetzt.";
 "create_custom_categories_list_promo" = "Ändern Sie die Sortierreihenfolge der Liste und blenden Sie Kategorien aus. Sie können alle Änderungen als Profile importieren oder exportieren.";
 "hidden_categories" = "Ausgeblendete Kategorien";
 "visible_categories" = "Sichtbare Kategorien";
@@ -2412,7 +2412,7 @@
 "copy_poi_name" = "POI-Namen kopieren";
 "routeInfo_horse_scale_name" = "Schwierigkeitsgrad von Reitwegen";
 "routeInfo_horse_scale_description" = "Zeige Reitwege abhängig vom Schwierigkeitsgrad an";
-"routing_attr_allow_private_for_truck_name" = "Erlaube Privatzugang (LKW)";
+"routing_attr_allow_private_for_truck_name" = "Privaten Zugang erlauben (Lkw)";
 "routing_attr_allow_private_for_truck_description" = "Zufahrt zu Privatgrundstücken für Lkw erlauben.";
 "copy_address" = "Adresse kopieren";
 "copy_coordinates" = "Koordinaten kopieren";
@@ -2570,7 +2570,6 @@
 "weather_clear_offline_cache_for" = "Damit wird der gesamte Cache für die Offline-Wetterkachel für %@ gelöscht.";
 "weather_forecast_is_outdated" = "Die Vorhersage ist veraltet.";
 "weather_remove_forecast" = "Prognose entfernen";
-"update_only_over_wi_fi" = "Aktualisieren nur über Wi-Fi";
 "contact_support" = "Support kontaktieren";
 "loading_purchase_information" = "Kaufinformationen werden geladen";
 "contact_support_description" = "Wenn Sie Fragen haben, kontaktieren Sie uns bitte unter %@.";
@@ -2606,7 +2605,7 @@
 "shared_string_contributions" = "Beiträge";
 "shared_string_refresh" = "Aktualisieren";
 "login_open_street_map_org" = "Bei OpenStreetMap.org anmelden";
-"map_updates_for_mappers" = "Kartenaktualisierungen für Kartographen";
+"map_updates_for_mappers" = "Kartenaktualisierungen für Kartografen";
 "open_street_map_login_mode_simple" = "Sie müssen sich anmelden, um Ihre Änderungen hochzuladen.";
 "sign_in_with_open_street_map" = "Mit OpenStreetMap anmelden";
 "benefits_for_contributors" = "Vorteile für aktive OSM-Mitwirkende";
@@ -2696,7 +2695,7 @@
 "checking_progress" = "Prüfung…";
 "cloud_conflict_descr" = "Die lokale und die Cloud-Version enthalten Änderungen seit der letzten Synchronisierung.";
 "local_changes_will_be_dismissed" = "LokaleÄnderungen werden verworfen";
-"download_heightmap_maps" = "Höhenkarte";
+"download_heightmap_maps" = "Geländekarte";
 "use_heightmap_setting" = "3D-Reliefhöhenkarten verwenden";
 "nautical_depth_points" = "Nautische Tiefenpunkte";
 "depth_contours" = "Tiefenlinien";
@@ -2868,7 +2867,7 @@
 "map_widget_sunrise_desc" = "Zeigt die Zeit des nächsten Sonnenaufgangs oder die verbleibende Zeit bis zum Sonnenaufgang an.";
 "map_widget_sunset_desc" = "Zeigt die Zeit des nächsten Sonnenuntergangs oder die verbleibende Zeit bis zum Sonnenuntergang an.";
 "press_again_to_change_the_map_orientation" = "Erneut antippen, um die Kartenausrichtung zu ändern";
-"top_widgets_panel" = "Oberes Panel";
+"top_widgets_panel" = "Oberes Bedienfeld";
 "with_permission_my_position_value" = "Karte zum aktuellen Standort verschieben";
 "hide_map_center" = "Koordinaten ausblenden: Kartenmitte";
 "toggle_map_center" = "Koordinaten anzeigen/ausblenden: Kartenmitte";
@@ -3009,9 +3008,9 @@
 "angular_measeurement_descr" = "Ändern, in welcher Einheit Azimut gemessen wird.";
 "add_row" = "Zeile hinzufügen";
 "navigation_points" = "Navigationspunkte";
-"route_maneuvers_desc" = "Navigationswidgets werden während der Navigation aktiviert, um Informationen wie Entfernung, Ankunfts- oder verbleibende Zeit, nächste Abbiegungen, Peilung, aktuellen Straßennamen, Fahrspurinformationen, Höchstgeschwindigkeit, Annäherungswarnungen, POIs und Wegpunkte anzuzeigen.";
+"route_maneuvers_desc" = "Navigationswidgets werden während der Navigation aktiviert, um Informationen wie Entfernung, Ankunfts- oder verbleibende Zeit, nächste Abbiegungen, Peilung, aktueller Straßenname, Fahrspurinformationen, Höchstgeschwindigkeit, Annäherungswarnungen, POIs und Wegpunkte anzuzeigen.";
 "navigation_points_desc" = "Navigationswidgets werden während der Navigation aktiviert, um Informationen wie Entfernung, Ankunfts- oder verbleibende Zeit, nächste Abbiegungen, Peilung, aktueller Straßenname, Fahrspurinformationen, Höchstgeschwindigkeit, Annäherungswarnungen, POIs und Wegpunkte anzuzeigen.";
-"bottom_widgets_panel" = "Unteres Paneel";
+"bottom_widgets_panel" = "Unteres Bedienfeld";
 "shared_string_rearrange" = "Neu anordnen";
 "reset_all_settings_desc" = "Alle Einstellungen auf Standardwerte zurücksetzen?";
 "rendering_value_sacScale_description" = "Schweizer Alpen-Club";
@@ -3027,3 +3026,15 @@
 "banner_payment_free_backup_settings_title" = "Kostenloses Backup ihrer Einstellungen";
 "get_osmand_cloud" = "Holen Sie sich OsmAnd Cloud";
 "free_account" = "Kostenloses Konto";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "Zeigt die geografischen Koordinaten des aktuellen Kartenmittelpunkts an";
+"map_widget_rendering_fps_desc" = "Zeigt an, wie schnell die Karte und Kartenelemente angezeigt und aktualisiert werden, ausgedrückt in Bildern pro Sekunde (FPS).";
+"map_widget_camera_tilt_desc" = "Zeigt den Neigungswinkel der Kamera im perspektivischen Modus an. Die Voreinstellung ist 90° (keine Neigung).";
+"map_widget_camera_distance_desc" = "Zeigt die Höhe der Kamera über der Oberfläche an.";
+"map_widget_zoom_level_desc" = "Zeigt die aktuelle Zoomstufe der Karte an.";
+"map_widget_target_distance_desc" = "Zeigt die Entfernung zwischen Kamera und Zielort an.";
+"weather_update_disabled" = "Deaktiviert";
+"weather_update_over_wifi_only" = "Nur über WLAN";
+"weather_update_over_any_network" = "Über jedes Netzwerk";
+"map_settings_topography" = "Topografie";

@@ -174,7 +174,7 @@
 "arrival_distance_factor_at_last" = "De siste meterne";
 "route_parameters" = "Ruteparametere";
 "fast_route_mode" = "Raskeste rute";
-"fast_route_mode_descr" = "Aktiver forå beregne raskeste rute eller deaktiver for drivstoffbesparende rute.";
+"fast_route_mode_descr" = "Aktiver for å beregne raskeste rute eller deaktiver for drivstoffbesparende rute.";
 "avoid_in_routing_title" = "Unngå…";
 "avoid_in_routing_descr_" = "Unngå visse ruter og veityper";
 "prefer_in_routing_title" = "Foretrekk…";
@@ -457,7 +457,7 @@
 "save_track_interval_globally" = "Loggeintervall";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start trip recording";
-"track_rec_addon_q" = "Please activate Trip recording addon to record and save your trips";
+"track_rec_addon_q" = "Please activate Trip recording plugin to record and save your trips";
 "track_interval_remember" = "Remember my choice";
 "track_clear" = "Clear current trip";
 "track_clear_q" = "Do you want to clear current trip?";
@@ -989,8 +989,8 @@
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "shared_string_get" = "Hent";
 "srtm_plugin_disabled" = "Koter deaktivert";
-"prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
-"prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
+"prch_wiki_info" = "Wikipedia plugin enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
+"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Åpne";
 "time_closed" = "Closed";
 "time_will_open" = "Will open in";
@@ -2304,7 +2304,7 @@
 "backup_restore_data" = "Gjenopprett data";
 "srtm_download_single_help_message" = "Velg varianten. Du vil måtte laste ned igjen filen for å endre formatet.";
 "weather_precip_milimeters" = "Millimeter";
-"routing_attr_motor_type_description" = "Velg drivstofftype brukt at din motor, forå regne ut CO2-utslipp.";
+"routing_attr_motor_type_description" = "Velg din motors drivstofftype, dette trengs for å beregne CO2-utslipp.";
 "offline_edition_descr" = "Hvis redigering uten nett er aktivert, lagres endringer lokalt først og lastes opp på forespørsel, ellers vil endringer bli lastet opp umiddelbart.";
 "compass_always_hidden" = "Alltid skjult";
 "benefits_for_contributors_secondary_descr" = "Logg inn på OpenStreetMap for å sjekke at du kan få ubegrensede månedlige og timevise kartoppdateringer.";
@@ -2607,3 +2607,4 @@
 "free_favorites_backup" = "Gratis favoritt-sikkerhetskopiering";
 "free_account" = "Gratiskonto";
 "get_osmand_cloud" = "Skaff OsmAnd-sky";
+"true_bearing_wdiget_desc" = "Vinkel mellom sann nord og målpunktet observert fra din posisjon.";

@@ -14,9 +14,9 @@
 @class OAToolbarViewController;
 @class OAMapRulerView;
 @class OAMapInfoController;
-@class OACoordinatesWidget;
 @class OADownloadMapWidget;
 @class OAWeatherToolbar;
+@class OAObservable;
 
 @interface OAMapHudViewController : UIViewController
 
@@ -24,6 +24,10 @@
 @property (nonatomic) OAFloatingButtonsHudViewController *floatingButtonsController;
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarView;
+@property (weak, nonatomic) IBOutlet UIView *bottomBarView;
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *statusBarViewHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomBarViewHeightConstraint;
 
 @property (weak, nonatomic) IBOutlet UIView *compassBox;
 @property (weak, nonatomic) IBOutlet OAHudButton *compassButton;
@@ -32,8 +36,26 @@
 @property (weak, nonatomic) IBOutlet OAHudButton *weatherButton;
 
 @property (weak, nonatomic) IBOutlet UIView *widgetsView;
+@property (weak, nonatomic) IBOutlet UIView *topWidgetsView;
+@property (weak, nonatomic) IBOutlet UIView *middleWidgetsView;
 @property (weak, nonatomic) IBOutlet UIView *leftWidgetsView;
+@property (weak, nonatomic) IBOutlet UIView *bottomWidgetsView;
 @property (weak, nonatomic) IBOutlet UIView *rightWidgetsView;
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *topWidgetsViewYConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *topWidgetsViewWidthConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *topWidgetsViewHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *middleWidgetsViewYConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *middleWidgetsViewWidthConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *middleWidgetsViewHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomWidgetsViewWidthConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomWidgetsViewHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftWidgetsViewTopConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftWidgetsViewHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftWidgetsViewWidthConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *rightWidgetsViewTopConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *rightWidgetsViewHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *rightWidgetsViewWidthConstraint;
 
 @property (weak, nonatomic) IBOutlet OAHudButton *mapSettingsButton;
 @property (weak, nonatomic) IBOutlet OAHudButton *searchButton;
@@ -51,15 +73,11 @@
 
 @property (nonatomic) OAToolbarViewController *toolbarViewController;
 @property (nonatomic) OAMapInfoController *mapInfoController;
-@property (nonatomic) OACoordinatesWidget *topCoordinatesWidget;
-@property (nonatomic) OACoordinatesWidget *coordinatesMapCenterWidget;
 @property (nonatomic) OADownloadMapWidget *downloadMapWidget;
 @property (nonatomic) OAWeatherToolbar *weatherToolbar;
 
 @property (nonatomic, assign) BOOL contextMenuMode;
 @property (nonatomic, assign) EOAMapModeButtonType mapModeButtonType;
-
-@property (nonatomic, readonly) CGFloat toolbarTopPosition;
 
 - (void) enterContextMenuMode;
 - (void) restoreFromContextMenuMode;
@@ -77,26 +95,23 @@
 - (void) updateWeatherButtonVisibility;
 
 - (void) setToolbar:(OAToolbarViewController *)toolbarController;
-- (void) updateToolbarLayout:(BOOL)animated;
+- (void) updateControlsLayout:(BOOL)animated;
 - (void) removeToolbar;
 
-- (void) setCoordinatesWidget:(OACoordinatesWidget *)widget;
-- (void) setCenterCoordinatesWidget:(OACoordinatesWidget *)widget;
 - (void) setDownloadMapWidget:(OADownloadMapWidget *)widget;
 - (void) setWeatherToolbarMapWidget:(OAWeatherToolbar *)widget;
-
-- (void) updateContextMenuToolbarLayout:(CGFloat)toolbarHeight animated:(BOOL)animated;
 
 - (BOOL) isOverlayUnderlayViewVisible;
 - (void) updateOverlayUnderlayView;
 
-- (void) setTopControlsAlpha:(CGFloat)alpha;
-- (void) showTopControls:(BOOL)onlyMapSettingsAndSearch;
-- (void) hideTopControls;
-- (void) showBottomControls:(CGFloat)menuHeight animated:(BOOL)animated;
-- (void) hideBottomControls:(CGFloat)menuHeight animated:(BOOL)animated;
+- (void) updateTopControlsVisibility:(BOOL)animated;
+- (void) updateBottomControlsVisibility:(BOOL)animated;
+- (void) updateBottomContolMarginsForHeight;
+
 - (CGFloat) getHudMinTopOffset;
 - (CGFloat) getHudTopOffset;
+- (CGFloat) getHudMinBottomOffset;
+- (CGFloat) getHudBottomOffset;
 
 - (void) onRoutingProgressChanged:(int)progress;
 - (void) onRoutingProgressFinished;
@@ -108,5 +123,6 @@
 - (void) updateInfo;
 
 - (void) updateCurrentLocationAddress;
+- (BOOL)hasTopWidget;
 
 @end

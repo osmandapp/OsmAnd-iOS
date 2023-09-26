@@ -45,7 +45,19 @@
 
 - (instancetype) initWithHorisontalMini:(BOOL)horisontalMini nextNext:(BOOL)nextNext
 {
-    self = [super initWithType:horisontalMini ? OAWidgetType.smallNextTurn : OAWidgetType.nextTurn];
+    OAWidgetType *type;
+    if (horisontalMini)
+    {
+        if (nextNext)
+            type = OAWidgetType.secondNextTurn;
+        else
+            type = OAWidgetType.smallNextTurn;
+    }
+    else
+    {
+        type = OAWidgetType.nextTurn;
+    }
+    self = [super initWithType:type];
     if (self)
     {
         _topView = [[UIView alloc] initWithFrame:CGRectMake(11., 6., kTopViewSide, kTopViewSide)];
@@ -123,7 +135,7 @@
 - (CGFloat) getWidgetHeight
 {
     if (_horisontalMini)
-        return kTextInfoWidgetHeight;
+        return [super getWidgetHeight];
     else
         return kNextTurnInfoWidgetHeight;
 }
@@ -194,6 +206,9 @@
         leftViewFrame.origin.y = (self.getWidgetHeight - leftViewFrame.size.height) / 2;
         self.leftView.frame = leftViewFrame;
     }
+    CGRect rect = self.frame;
+    rect.size.height += self.textView.frame.origin.y;
+    self.frame = rect;
 }
 
 - (void) updateDistance

@@ -75,7 +75,8 @@ bool OAOsmNotesMapLayerProvider::queryOsmNotes(const OsmAnd::AreaI &bbox31, cons
     double left = OsmAnd::Utilities::get31LongitudeX(bbox31.left());
     QString url = "https://api.openstreetmap.org/api/0.6/notes?bbox=";
     url.append(QString::number(left)).append(",").append(QString::number(bottom)).append(",").append(QString::number(right)).append(",").append(QString::number(top));
-    const auto data = webClient->downloadData(url);
+    OsmAnd::IWebClient::DataRequest dataRequest;
+    const auto data = webClient->downloadData(url, dataRequest);
     return data.size() > 0 ? parseResponse(data, bbox31, zoom) : false;
 }
 

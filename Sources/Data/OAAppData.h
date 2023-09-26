@@ -20,6 +20,13 @@
 #define kWeatherSettingsReseting @"weather_settings_reseting"
 #define kWeatherSettingsReset @"weather_settings_reset"
 
+static const double kHillshadeDefAlpha = 0.45;
+static const double kSlopeDefAlpha = 0.35;
+static const NSInteger kHillshadeDefMinZoom = 3;
+static const NSInteger kHillshadeDefMaxZoom = 16;
+static const NSInteger kSlopeDefMinZoom = 3;
+static const NSInteger kSlopeDefMaxZoom = 16;
+
 @class MutableOrderedDictionary, NSUnitCloud;
 
 @interface OAAppData : NSObject <NSCoding>
@@ -178,6 +185,13 @@
 
 - (EOATerrainType) getTerrainType:(OAApplicationMode *)mode;
 - (void) setTerrainType:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode;
+
+- (void) resetHillshadeAlpha;
+- (void) resetSlopeAlpha;
+- (void) resetHillshadeMinZoom;
+- (void) resetHillshadeMaxZoom;
+- (void) resetSlopeMinZoom;
+- (void) resetSlopeMaxZoom;
 
 - (EOATerrainType) getLastTerrainType:(OAApplicationMode *)mode;
 - (void) setLastTerrainType:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode;

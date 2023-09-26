@@ -51,6 +51,7 @@ typedef NS_ENUM(NSInteger, EOABackupSyncOperationType) {
 
 - (OAImportBackupTask *)getImportTask:(NSString *)key;
 - (OAExportBackupTask *)getExportTask:(NSString *)key;
+- (OASyncBackupTask *)getSyncTask:(NSString *)key;
 
 - (EOAImportType) getImportTaskType:(NSString *)key;
 

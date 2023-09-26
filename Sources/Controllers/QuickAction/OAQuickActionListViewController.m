@@ -9,6 +9,7 @@
 #import "OAQuickActionListViewController.h"
 #import "OAActionConfigurationViewController.h"
 #import "OAAddQuickActionViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
 #import "Localization.h"
 #import "OAQuickActionRegistry.h"
 #import "OAQuickAction.h"
@@ -57,14 +58,6 @@
 {
     [_settings.quickActionIsOn set:sender.isOn];
     [self.delegate onWidgetStateChanged];
-}
-
-#pragma mark - Base setup UI
-
-- (void)setupBottomFonts
-{
-    self.topButton.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    self.bottomButton.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 }
 
 #pragma mark - Base UI

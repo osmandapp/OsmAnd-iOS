@@ -431,7 +431,7 @@
 "shared_string_delete" = "Poista";
 "shared_string_upload" = "Lähetä";
 "shared_string_remove" = "Poista";
-"shared_string_dismiss" = "Unohda";
+"shared_string_dismiss" = "Hylkää";
 "shared_string_add" = "Lisää";
 "buy" = "Osta";
 "shared_string_buy_for" = "for";
@@ -598,7 +598,7 @@
 "save_track_interval_globally" = "Keruuväli";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
-"track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
+"track_rec_addon_q" = "Please activate Track recording plugin to record and save your tracks";
 "track_interval_remember" = "Remember my choice";
 "track_clear" = "Clear current track";
 "track_clear_q" = "Do you want to clear current track?";
@@ -1431,8 +1431,8 @@
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "shared_string_get" = "Lataa";
 "srtm_plugin_disabled" = "Korkeuskäyrät poistettu käytöstä";
-"prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
-"prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
+"prch_wiki_info" = "Wikipedia plugin enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
+"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Avoinna";
 "time_closed" = "Suljettu";
 "time_will_open" = "Will open in";
@@ -1469,7 +1469,7 @@
 "gpx_group_select" = "Ryhmän valinta";
 "shared_string_show_all" = "Näytä kaikki";
 "poi_filter_parking" = "Pysäköinti";
-"context_menu_item_directions_from" = "Suunnat lähtien";
+"context_menu_item_directions_from" = "Reittiohjeet täältä";
 "search_nearby" = "Etsi läheltä";
 "change_object_posiotion" = "Change object's position";
 "move_marker_bottom_sheet_title" = "Siirrä karttaa muuttaaksesi markkerin sijaintia";
@@ -2440,3 +2440,7 @@
 "icon_group_service" = "Palvelu";
 "test_heightmap" = "Testaa korkeuskartta";
 "app_mode_moped" = "Mopedi";
+"rendering_attr_hideMilitaryAreas_description" = "Piilota sotilasalueet";
+"poi_operator" = "Toimija";
+"show_borders_of_downloaded_maps" = "Näytä ladattujen karttojen rajat";
+"rendering_attr_hideMilitaryAreas_name" = "Piilota sotilasalueet";

@@ -23,6 +23,7 @@
 #import "OALocationSimulation.h"
 #import "OAWaypointHelper.h"
 #import "OASavingTrackHelper.h"
+#import "OAAverageSpeedComputer.h"
 
 #import <FormatterKit/TTTLocationFormatter.h>
 
@@ -639,6 +640,7 @@
     if (location)
     {
         [OASavingTrackHelper.sharedInstance updateLocation:location heading:_lastHeading];
+        [OAAverageSpeedComputer.sharedInstance updateLocation:location];
         //OsmandPlugin.updateLocationPlugins(location);
     }
     
@@ -672,11 +674,15 @@
 
 #pragma mark - CLLocationManagerDelegate
 
-- (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+- (void) locationManagerDidChangeAuthorization:(CLLocationManager *)manager
 {
+    CLAuthorizationStatus status = manager.authorizationStatus;
+
     // If services were running, but now authorization was revoked, stop them
     if (status != kCLAuthorizationStatusAuthorizedAlways && status != kCLAuthorizationStatusAuthorizedWhenInUse && status != kCLAuthorizationStatusNotDetermined && (_locationActive || _compassActive))
         [self stop];
+    else if (status == kCLAuthorizationStatusAuthorizedAlways || status == kCLAuthorizationStatusAuthorizedWhenInUse)
+        [self start];
 
     [_stateObservable notifyEvent];
 }

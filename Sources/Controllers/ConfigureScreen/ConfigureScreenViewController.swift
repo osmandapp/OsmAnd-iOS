@@ -28,7 +28,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
     }
     
     override func registerObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(onWidgetStateChanged), name: NSNotification.Name(kWidgetVisibilityChangedMotification), object: nil)
+        addNotification(NSNotification.Name(kWidgetVisibilityChangedMotification), selector: #selector(onWidgetStateChanged))
     }
     
     override func generateData() {
@@ -51,6 +51,9 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
             row.descr = String(widgetsCount)
             row.accessibilityLabel = panel.title
             row.accessibilityValue = String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("shared_string_widgets"), String(widgetsCount))
+            if panel == WidgetsPanel.values.last {
+                row.setObj(NSNumber(true), forKey: "isCustomLeftSeparatorInset")
+            }
         }
         let transparencyRow = widgetsSection.createNewRow()
         transparencyRow.title = localizedString("map_widget_transparent")
@@ -125,6 +128,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
     
     override func getRightNavbarButtons() -> [UIBarButtonItem]! {
         let button = createRightNavbarButton(nil, iconName: appMode?.getIconName(), action: #selector(onRightNavbarButtonPressed), menu: nil)
+        button?.customView?.tintColor = UIColor(rgb: Int(appMode!.getIconColor()))
         button?.accessibilityLabel = localizedString("selected_profile")
         button?.accessibilityValue = appMode?.toHumanString()
         return [button!]
@@ -178,7 +182,6 @@ extension ConfigureScreenViewController {
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let item = tableData!.item(for: indexPath)
-        var outCell: UITableViewCell? = nil
         if item.cellType == OAValueTableViewCell.getIdentifier() {
             var cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.getIdentifier()) as? OAValueTableViewCell
             if cell == nil {
@@ -188,13 +191,16 @@ extension ConfigureScreenViewController {
                 cell?.descriptionVisibility(false)
             }
             if let cell {
+                let isCustomLeftSeparatorInset = item.bool(forKey: "isCustomLeftSeparatorInset")
+                cell.setCustomLeftSeparatorInset(isCustomLeftSeparatorInset)
+                cell.separatorInset = UIEdgeInsets.zero
                 cell.valueLabel.text = item.descr
                 cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
                 cell.leftIconView.tintColor = UIColor(rgb: item.iconTint)
                 cell.titleLabel.text = item.title
                 applyAccessibility(cell, item)
             }
-            outCell = cell
+            return cell
         } else if item.cellType == OASwitchTableViewCell.getIdentifier() {
             var cell = tableView.dequeueReusableCell(withIdentifier: OASwitchTableViewCell.getIdentifier()) as? OASwitchTableViewCell
             if cell == nil {
@@ -207,20 +213,20 @@ extension ConfigureScreenViewController {
                 if !cell.leftIconView.isHidden {
                     cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
                 }
-                cell.titleLabel.text = item.title
-                cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
                 let selected = item.bool(forKey: Self.selectedKey)
-                cell.switchView.isOn = selected
                 cell.leftIconView.tintColor = UIColor(rgb: selected ? item.iconTint :Int(color_tint_gray))
+                cell.titleLabel.text = item.title
 
+                cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
+                cell.switchView.isOn = selected
                 cell.switchView.tag = indexPath.section << 10 | indexPath.row
                 cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
-                
+
                 applyAccessibility(cell, item)
-                outCell = cell
+                return cell
             }
         }
-        return outCell
+        return nil
     }
     
     @objc func onSwitchClick(_ sender: Any) -> Bool {
@@ -257,34 +263,16 @@ extension ConfigureScreenViewController {
         } else if data.key == "compass" {
             let vc = CompassVisibilityViewController()
             vc.delegate = self
-            let navigationController = UINavigationController()
-            navigationController.setViewControllers([vc], animated: true)
-            navigationController.modalPresentationStyle = .pageSheet
-            let sheet = navigationController.sheetPresentationController
-            if let sheet
-            {
-                sheet.detents = [.medium()]
-                sheet.preferredCornerRadius = 20
-            }
-            self.navigationController?.present(navigationController, animated: true)
+            showMediumSheetViewController(vc, isLargeAvailable: false)
         } else if data.key == "map_3d_mode" {
             let vc = Map3dModeButtonVisibilityViewController()
             vc.delegate = self
-            let navigationController = UINavigationController()
-            navigationController.setViewControllers([vc], animated: true)
-            navigationController.modalPresentationStyle = .pageSheet
-            let sheet = navigationController.sheetPresentationController
-            if let sheet
-            {
-                sheet.detents = [.medium()]
-                sheet.preferredCornerRadius = 20
-            }
-            self.navigationController?.present(navigationController, animated: true)
+            showMediumSheetViewController(vc, isLargeAvailable: false)
         } else {
             let panel = data.obj(forKey: "panel") as? WidgetsPanel
             if let panel {
                 let vc = WidgetsListViewController(widgetPanel: panel)
-                self.navigationController?.pushViewController(vc, animated: true)
+                show(vc)
             }
         }
     }

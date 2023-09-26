@@ -1946,7 +1946,7 @@
 "rendering_attr_surface_grass_name" = "Трава";
 "routing_attr_piste_type_skitour_description" = "Путање скијашке.";
 "rendering_attr_surface_fine_gravel_name" = "Ситан шљунак";
-"rendering_value_orange_name" = "Поморанџаста";
+"rendering_value_orange_name" = "Наранџаста";
 "rendering_value_medium_w_name" = "Средња";
 "rendering_attr_contourDensity_description" = "Густина линије изохипсе";
 "rendering_attr_currentTrackWidth_name" = "Ширина ГПИкс-а";
@@ -2169,7 +2169,7 @@
 "rendering_attr_roadColors_description" = "Изаберите образац боја путева:";
 "rendering_value_browse_map_name" = "Прегледај карту";
 "rendering_attr_surface_asphalt_name" = "Асфалт";
-"rendering_value_translucent_orange_name" = "Прозирна поморанџаста";
+"rendering_value_translucent_orange_name" = "Прозирна наранџаста";
 "rendering_attr_depthContours_description" = "Приказуј тачке и изобате.";
 "rendering_value_thick_name" = "Дебело";
 "routing_attr_avoid_ferry_name" = "Без трајеката";
@@ -2680,3 +2680,10 @@
 "weather_forecast" = "Временске прилике";
 "weather_forecast_is_outdated" = "Временске прилике су застареле.";
 "speak_route_deviation" = "Најави одступање од пута";
+"map_widget_distance_to_intermediate" = "Удаљеност до посредне тачке";
+"rendering_attr_alpineHiking_name" = "Разврставање по тежини";
+"get_osmand_cloud" = "Добавите Облак ОсмАнда";
+"rendering_value_caiScale_description" = "Club Alpino Italiano (Италијанско планинарско удружење)";
+"free_favorites_backup" = "Бесплатно складиште омиљених";
+"rendering_value_sacScale_description" = "Швајцарско планинарско удружење";
+"free_account" = "Бесплатни налог";

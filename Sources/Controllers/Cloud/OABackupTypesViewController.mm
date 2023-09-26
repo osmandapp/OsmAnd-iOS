@@ -59,7 +59,8 @@
     return OALocalizedString(@"backup_data");
 }
 
-- (void)registerNotifications {
+- (void)registerNotifications
+{
     [self addNotification:OAIAPProductPurchasedNotification selector:@selector(productPurchased:)];
 }
 
@@ -167,7 +168,7 @@
                                                             countStyle:NSByteCountFormatterCountStyleFile];
     NSString *usedSizeStr = [NSByteCountFormatter stringFromByteCount:resourcesSize + myPlacesSize + settingsSize
                                                            countStyle:NSByteCountFormatterCountStyleFile];
-    manageStorageProgressData[@"title"] = [NSString stringWithFormat:OALocalizedString(@"cloud_storage_used"), usedSizeStr, totalSizeStr];
+    manageStorageProgressData[@"title"] = [_backupHelper isBackupPreparing] ? OALocalizedString(@"calculating_progress") : [NSString stringWithFormat:OALocalizedString(@"cloud_storage_used"), usedSizeStr, totalSizeStr];
     manageStorageProgressData[@"total_progress"] = @(totalSize);
     manageStorageProgressData[@"first_progress"] = @(resourcesSize);
     manageStorageProgressData[@"second_progress"] = @(myPlacesSize);

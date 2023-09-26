@@ -256,6 +256,11 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return @[];
 }
 
+- (NSArray<NSString *> *) getWidgetIds
+{
+    return @[];
+}
+
 /*
  * Return true in case if plugin should fill the map context menu with buildContextMenuRows method.
  */
@@ -418,6 +423,11 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     }
 }
 
+- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(NSString *)customId
+{
+    return nil;
+}
+
 /*
 private static void checkMarketPlugin(OsmandApplication app, OsmandPlugin srtm, boolean paid, NSString *id, NSString *id2) {
     boolean marketEnabled = Version.isMarketEnabled(app);
@@ -443,6 +453,11 @@ private static void checkMarketPlugin(OsmandApplication app, OsmandPlugin srtm, 
 
 + (BOOL) enablePlugin:(OAPlugin *)plugin enable:(BOOL)enable
 {
+    return [self enablePlugin:plugin enable:enable recreateControls:YES];
+}
+
++ (BOOL) enablePlugin:(OAPlugin *)plugin enable:(BOOL)enable recreateControls:(BOOL)recreateControls
+{
     if (enable)
     {
         if (![plugin initPlugin])
@@ -462,7 +477,8 @@ private static void checkMarketPlugin(OsmandApplication app, OsmandPlugin srtm, 
     }
     [[OAAppSettings sharedManager] enablePlugin:[plugin getId] enable:enable];
     [OAQuickActionRegistry.sharedInstance updateActionTypes];
-    [OARootViewController.instance.mapPanel.hudViewController.mapInfoController recreateControls];
+    if (recreateControls)
+        [OARootViewController.instance.mapPanel.hudViewController.mapInfoController recreateAllControls];
     [plugin updateLayers];
     
     return YES;
@@ -887,5 +903,44 @@ public static void addMyPlacesTabPlugins(FavoritesActivity favoritesActivity, Li
     }
 }
  */
+
++ (OABaseWidgetView *)createMapWidget:(OAWidgetType *)widgetType customId:(NSString *)customId
+{
+    for (OAPlugin *plugin in [self getEnabledPlugins])
+    {
+        OABaseWidgetView *widget = [plugin createMapWidgetForParams:widgetType customId:customId];
+        if (widget)
+            return widget;
+    }
+    return nil;
+}
+
++ (void)enablePluginsByMapWidgets:(NSSet<NSString *> *)widgetIds
+{
+    for (OAPlugin *plugin in allPlugins)
+    {
+        NSArray<NSString *> *pluginWidgetIds = [plugin getWidgetIds];
+        for (NSString *pluginWidgetId in pluginWidgetIds)
+        {
+            if ([widgetIds containsObject:pluginWidgetId])
+            {
+                if (![plugin isEnabled])
+                {
+                    NSString *identifier = [plugin getId];
+                    OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
+                    if ([product isPurchased])
+                    {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if ([product disabled])
+                                [[OAIAPHelper sharedInstance] enableProduct:product.productIdentifier];
+                            else
+                                [OAPlugin enablePlugin:plugin enable:YES recreateControls:NO];
+                        });
+                    }
+                }
+            }
+        }
+    }
+}
 
 @end

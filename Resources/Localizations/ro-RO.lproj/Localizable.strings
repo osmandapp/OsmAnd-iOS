@@ -1296,7 +1296,7 @@
 "track_clear_q" = "Doriți să ștergeți track-ul curent?";
 "track_clear" = "Ștergeți track-ul curent";
 "track_interval_remember" = "Amintește-ți alegerea mea";
-"track_rec_addon_q" = "Vă rugăm să activați addon-ul de înregistrare a pieselor pentru a înregistra și salva piesele dumneavoastră";
+"track_rec_addon_q" = "Vă rugăm să activați plugin-ul de înregistrare a pieselor pentru a înregistra și salva piesele dumneavoastră";
 "track_start_rec" = "Începeți înregistrarea track-ului";
 "rec_interval_minimum" = "Minim";
 "track_continue_rec_q" = "Doriți să continuați înregistrarea?";
@@ -1605,7 +1605,7 @@
 "time_will_open" = "Se va deschide în";
 "time_closed" = "Închis";
 "prch_srtm_info" = "Extensia „Izolinii” activează curbele de nivel pentru hărțile la care aveți dreptul, le-ați achiziționat sau descărcat în limita gratuită.";
-"prch_wiki_info" = "Wikipedia addon permite obținerea de informații despre Wikipedia pentru hărțile la care aveți dreptul, achiziționate sau descărcate în limita gratuită.";
+"prch_wiki_info" = "Wikipedia plugin permite obținerea de informații despre Wikipedia pentru hărțile la care aveți dreptul, achiziționate sau descărcate în limita gratuită.";
 "show_alt_in_drive" = "Afișarea altitudinii în modul Drive";
 "from_location" = "departe";
 "you_searching" = "Sunteți în căutare";
@@ -2521,7 +2521,6 @@
 "weather_miss_forecasts" = "Nu aveți previziuni offline";
 "weather_miss_forecasts_description" = "Prognoza offline este disponibilă pentru fiecare țară. Durata până la 7 zile. Trebuie să selectați țările necesare.";
 "weather_generates_new_forecast_description" = "OsmAnd generează o nouă prognoză la fiecare 6 ore. Cu cât este mai aproape de data curentă, cu atât va fi mai precisă.";
-"update_only_over_wi_fi" = "Actualizare numai prin Wi-Fi";
 "update_parameters" = "Parametrii de actualizare";
 "shared_string_updates_size" = "Actualizează dimensiunea";
 "shared_string_available_until" = "Disponibil până la";
@@ -2989,3 +2988,7 @@
 "reset_all_settings_desc" = "Resetați toate setările la setările implicite?";
 "add_row" = "Adăugați rând";
 "free_account" = "Cont gratuit";
+"free_favorites_backup_description" = "Înregistrează-te în OsmAnd Cloud pentru a obține backup gratuit pentru favorite și setări";
+"free_favorites_backup" = "Backup gratuit pentru favorite";
+"banner_payment_free_backup_settings_title" = "Backup gratuit pentru setări";
+"get_osmand_cloud" = "Descărcați OsmAnd Cloud";

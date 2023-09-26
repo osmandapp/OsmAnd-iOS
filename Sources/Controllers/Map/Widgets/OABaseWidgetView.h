@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class OABaseWidgetView, OAWidgetType, OAWidgetState, OAApplicationMode, OACommonBoolean, OACommonPreference, OATableDataModel;
+@class OABaseWidgetView, OAWidgetType, OAWidgetState, OAWidgetsPanel, OAApplicationMode, OACommonBoolean, OACommonPreference, OATableDataModel, OATextState;
 
 @protocol OAWidgetListener <NSObject>
 
@@ -29,18 +29,25 @@
 @property (nonatomic, weak) id<OAWidgetListener> _Nullable delegate;
 
 - (instancetype _Nonnull )initWithType:(OAWidgetType * _Nonnull)type;
+- (void)initSeparatorView;
 
-- (BOOL) updateInfo;
-- (BOOL) isTopText;
+- (BOOL)updateInfo;
+- (void)updateColors:(OATextState * _Nonnull)textState;
+- (BOOL)isNightMode;
+- (BOOL)isTopText;
+- (BOOL)isTextInfo;
 
 - (OACommonBoolean * _Nullable ) getWidgetVisibilityPref;
 - (OACommonPreference * _Nullable ) getWidgetSettingsPrefToReset:(OAApplicationMode *_Nonnull)appMode;
 - (void) copySettings:(OAApplicationMode *_Nonnull)appMode customId:(NSString *_Nullable)customId;
 - (OAWidgetState *_Nullable) getWidgetState;
-- (BOOL) isExternal;
-- (OATableDataModel *_Nullable) getSettingsData:(OAApplicationMode *)appMode;
+- (BOOL)isExternal;
+- (OATableDataModel *_Nullable) getSettingsData:(OAApplicationMode * _Nonnull)appMode;
 
-- (void) attachView:(UIView *_Nonnull)container order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *_Nullable)followingWidgets;
+- (void)showSeparator:(BOOL)show;
+- (void)adjustViewSize;
+- (void)attachView:(UIView *_Nonnull)container specialContainer:(UIView *_Nullable)specialContainer order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *_Nullable)followingWidgets;
+- (void)detachView:(OAWidgetsPanel * _Nonnull)widgetsPanel;
 
 @end
 

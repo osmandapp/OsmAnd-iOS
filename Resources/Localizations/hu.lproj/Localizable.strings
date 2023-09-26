@@ -597,7 +597,7 @@
 "map_markers_other" = "Egyéb jelölők";
 "navigation_over_track" = "Elindítja a navigációt a nyomvonal mentén\?";
 "shared_string_ellipsis" = "…";
-"shared_string_select_on_map" = "Kijelölése a térképen";
+"shared_string_select_on_map" = "Kijelölés a térképen";
 "shared_string_my_location" = "Saját pozícióm";
 // Shared Strings
 "shared_string_apply" = "Alkalmaz";
@@ -732,9 +732,9 @@
 "weeks_2_4" = "hétre";
 "weeks_5" = "hétre";
 "month" = "hónap";
-"months_2_4" = "hónap";
-"months_5" = "hónap";
-"year" = "évre";
+"months_2_4" = "hónapra";
+"months_5" = "hónapra";
+"year" = "év";
 "years_2_4" = "évre";
 "years_5" = "évre";
 "price_free" = "Ingyenes";
@@ -1598,7 +1598,7 @@
 "lang_ka" = "grúz";
 "backup_error_subscription_was_used" = "Ezt az előfizetést vagy promóciós kódot már felhasználták %@ fiókhoz";
 "lang_scn" = "szicíliai";
-"shared_string_max_height" = "Legnagyobb magasság";
+"shared_string_max_height" = "Max. magasság";
 "lang_gu" = "gudzsaráti";
 "restore_from_file" = "Visszaállítás fájlból";
 "lang_vi" = "vietnami";
@@ -2365,3 +2365,16 @@
 "free_account" = "Ingyenes fiók";
 "map_markers_bar_widget_desc" = "A felsősávi widget megjeleníti a következő térképjelölő távolságát és az irányát a jelenlegi helytől. Beállítható, hogy 1 vagy 2 jelölő legyen látható.";
 "relative_bearing_widget_desc" = "Megjeleníti a haladási iránya és a célpont közötti szöget.";
+"trip_recording_downhill_widget_desc" = "Összeadja a jelenleg rögzített út lejtőinek hosszát.";
+"distance_circles" = "Távolságkörök";
+"av_notes_audio_widget_desc" = "A widget megérintésével hangjegyzetet készíthet.";
+"coordinates_widget_current_location_desc" = "Megjeleníti a jelenlegi helyzet földrajzi koordinátáit";
+"history_preferences_descr" = "Az előzmények naplózását egyesével kapcsolhatja ki minden előzménytípushoz.";
+"history_actions_footer_text" = "Exportálhatja előzményeit egy fájlba. Törölhet minden eddig rögzített előzményt.";
+"trip_recording_uphill_widget_desc" = "Összeadja a jelenleg rögzített út emelkedőinek hosszát.";
+"compass_click_desc" = "Érintse meg az iránytűt a térkép tájolási módjának váltásához.";
+"av_notes_video_widget_desc" = "A widget megérintésével videót vehet fel.";
+"av_notes_photo_widget_desc" = "A widget megérintésével fényképet készíthet.";
+"trip_recording_duration_widget_desc" = "Megjeleníti a jelenleg rögzített út idejét.";
+"search_favorites" = "Kedvencek keresése";
+"rotate_map_manual_opt" = "Kézzel forgatva (rögzített)";

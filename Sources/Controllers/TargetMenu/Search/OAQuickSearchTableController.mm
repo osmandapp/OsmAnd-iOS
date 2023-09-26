@@ -215,8 +215,22 @@
             [item resetMapCenterSearch];
 }
 
+- (BOOL)isEqualFirstItemDataSource:(NSArray<NSArray<OAQuickSearchListItem *> *> *)data
+{
+    if (_dataGroups.count > 0
+        && _dataGroups[0].count > 0
+        && data.count > 0
+        && data[0].count > 0
+        && data[0].count == _dataGroups[0].count)
+    {
+        return [_dataGroups[0].firstObject isEqual:data[0].firstObject];
+    }
+    return NO;
+}
+
 - (void) updateData:(NSArray<NSArray<OAQuickSearchListItem *> *> *)data append:(BOOL)append
 {
+    BOOL needUpdateScrollPosition = ![self isEqualFirstItemDataSource:data];
     _dataGroups = [NSMutableArray arrayWithArray:data];
     if (self.searchNearMapCenter)
     {
@@ -226,7 +240,7 @@
     }
     _tableView.separatorInset = UIEdgeInsetsMake(0, 62, 0, 0);
     [_tableView reloadData];
-    if (!append && _dataGroups.count > 0 && _dataGroups[0].count > 0)
+    if (!append && _dataGroups.count > 0 && _dataGroups[0].count > 0 && needUpdateScrollPosition)
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 

@@ -16,6 +16,7 @@
 
 @property (nonatomic) NSString * _Nullable tableHeaderText;
 @property (nonatomic) NSString * _Nullable tableFooterText;
+@property (nonatomic, readonly) BOOL hasChanged;
 
 - (OATableSectionData * _Nonnull) createNewSection;
 - (void) addSection:(OATableSectionData *_Nonnull)sectionData;
@@ -32,5 +33,6 @@
 - (NSUInteger) rowCount:(NSUInteger)section;
 
 - (void) clearAllData;
+- (void) resetChanges;
 
 @end

@@ -19,6 +19,11 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     
     lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.setContentOffset(CGPoint(x: 0, y: 1), animated: false)
+    }
+    
     override func generateData() {
         tableData.clearAllData()
         if let settingsData = widgetInfo.getSettingsData(selectedAppMode) {
@@ -64,10 +69,12 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             }
             if let cell {
                 let pref = item.obj(forKey: "pref") as! OACommonBoolean
+                let hasIcon = item.iconName != nil
                 cell.titleLabel.text = item.title
                 cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
                 let selected = pref.get(selectedAppMode)
                 cell.switchView.isOn = selected
+                cell.leftIconVisibility(hasIcon)
                 cell.leftIconView.image = UIImage.templateImageNamed(selected ? item.iconName : item.string(forKey: "hide_icon"))
                 cell.leftIconView.tintColor = UIColor(rgb: selected ? Int(selectedAppMode.getIconColor()) : Int(color_tint_gray))
 
@@ -133,18 +140,11 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 vc.delegate = self
                 let section = vc.tableData.createNewSection()
                 section.addRows(possibleValues)
+                section.footerText = (item.obj(forKey: "footer") as? String) ?? ""
                 vc.appMode = selectedAppMode
                 vc.screenTitle = item.descr
-                let navigationController = UINavigationController()
-                navigationController.setViewControllers([vc], animated: true)
-                navigationController.modalPresentationStyle = .pageSheet
-                let sheet = navigationController.sheetPresentationController
-                if let sheet
-                {
-                    sheet.detents = [.medium(), .large()]
-                    sheet.preferredCornerRadius = 20
-                }
-                self.present(navigationController, animated: true)
+                vc.pref = item.obj(forKey: "pref") as? OACommonPreference
+                showMediumSheetViewController(vc, isLargeAvailable: false)
             }
         }
     }
@@ -155,10 +155,14 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     }
     
     func onWidgetStateChanged() {
+        if widgetInfo.key == WidgetType.markersTopBar.id || widgetInfo.key.hasPrefix(WidgetType.markersTopBar.id + MapWidgetInfo.DELIMITER) {
+            OsmAndApp.swiftInstance().data.destinationsChangeObservable.notifyEvent()
+        } else if widgetInfo.key == WidgetType.radiusRuler.id || widgetInfo.key.hasPrefix(WidgetType.radiusRuler.id + MapWidgetInfo.DELIMITER) {
+            (widgetInfo.widget as? RulerDistanceWidget)?.updateRulerObservable.notifyEvent()
+        }
         generateData()
         tableView.reloadData()
     }
-    
 }
 
 // MARK: Appearance
@@ -187,7 +191,7 @@ extension WidgetConfigurationViewController {
         attrStr.addAttribute(.foregroundColor, value: UIColor(rgb: Int(color_text_footer)), range: NSRange(location: 0, length: attrStr.length))
         return attrStr
     }
-    
+
     override func getBottomAxisMode() -> NSLayoutConstraint.Axis {
         .vertical
     }
@@ -197,103 +201,20 @@ extension WidgetConfigurationViewController {
     }
     
     override func onBottomButtonPressed() {
-        onWidgetsSelectedToAdd(widgetsIds: [widgetInfo.key], panel: widgetPanel, shouldAdd: true)
-    }
-    
-    func onWidgetsSelectedToAdd(widgetsIds: [String], panel: WidgetsPanel, shouldAdd: Bool) {
-        let filter = KWidgetModeAvailable | kWidgetModeEnabled
-        let widgetsFactory = MapWidgetsFactory()
-        for widgetId in widgetsIds {
-            var widgetInfo = widgetRegistry.getWidgetInfo(byId: widgetId)
-            
-            let widgetInfos = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(filter), panels: WidgetsPanel.values)
-            if panel.isDuplicatesAllowed() && (widgetInfo == nil || widgetInfos!.contains(widgetInfo!)) && shouldAdd {
-                widgetInfo = createDuplicateWidget(widgetId, panel: panel, widgetsFactory: widgetsFactory, selectedAppMode: selectedAppMode)
-            }
-            
-            if let widgetInfo, shouldAdd {
-                addWidgetToEnd(widgetInfo, widgetsPanel: panel)
-            }
-            widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: NSNumber(value: shouldAdd), recreateControls: false)
-        }
-        
-        OARootViewController.instance().mapPanel.recreateControls()
-        if let viewControllers = navigationController?.viewControllers {
-            for viewController in viewControllers {
-                if let targetViewController = viewController as? WidgetsListViewController {
-                    navigationController?.popToViewController(targetViewController, animated: true)
-                    break
+        UIView.animate(withDuration: 0) {
+            if let viewControllers = self.navigationController?.viewControllers {
+                for viewController in viewControllers {
+                    if let targetViewController = viewController as? WidgetsListViewController {
+                        self.navigationController?.popToViewController(targetViewController, animated: true)
+                        break
+                    }
                 }
             }
+        } completion: { Bool in
+            NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification), object: self.widgetInfo)
         }
-//        onWidgetsConfigurationChanged()
-    }
-    
-    private func createDuplicateWidget(_ widgetId: String, panel: WidgetsPanel,
-                                             widgetsFactory: MapWidgetsFactory, selectedAppMode: OAApplicationMode) -> MapWidgetInfo? {
-        guard let widgetType = WidgetType.getById(widgetId) else {
-            return nil
-        }
-        
-        let id = widgetId.contains(MapWidgetInfo.DELIMITER) ? widgetId : WidgetType.getDuplicateWidgetId(widgetId)
-        guard let widget = widgetsFactory.createMapWidget(customId: id, widgetType: widgetType) else {
-            return nil
-        }
-        
-        OAAppSettings.sharedManager()!.customWidgetKeys.add(id, appMode: selectedAppMode)
-        let creator = WidgetInfoCreator(appMode: selectedAppMode)
-        return creator.createCustomWidgetInfo(widgetId: id, widget: widget, widgetType: widgetType, panel: panel)
     }
 
-    
-    func addWidgetToEnd(_ targetWidget: MapWidgetInfo, widgetsPanel: WidgetsPanel) {
-        var pagedOrder = [Int: [String]]()
-        let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(kWidgetModeEnabled), panels: [widgetsPanel])!
-        
-        widgetRegistry.getWidgetsFor(targetWidget.widgetPanel).remove(targetWidget)
-        targetWidget.widgetPanel = widgetsPanel
-        
-        for widget in enabledWidgets {
-            guard let widget = widget as? MapWidgetInfo else { continue }
-            let page = widget.pageIndex
-            var orders = pagedOrder[page] ?? [String]()
-            orders.append(widget.key)
-            pagedOrder[page] = orders
-        }
-        
-        if pagedOrder.isEmpty {
-            targetWidget.pageIndex = 0
-            targetWidget.priority = 0
-            widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
-            
-            let flatOrder: [[String]] = [[targetWidget.key]]
-            widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode)
-        } else {
-            var pages = Array(pagedOrder.keys)
-            var orders = Array(pagedOrder.values)
-            
-            orders[orders.count - 1].append(targetWidget.key)
-            var lastPageOrder = orders[orders.count - 1]
-            
-            let previousLastWidgetId = lastPageOrder[lastPageOrder.count - 2]
-            if let previousLastVisibleWidgetInfo = widgetRegistry.getWidgetInfo(byId: previousLastWidgetId) {
-                let lastPage = previousLastVisibleWidgetInfo.pageIndex
-                let lastOrder = previousLastVisibleWidgetInfo.priority + 1
-                targetWidget.pageIndex = lastPage
-                targetWidget.priority = lastOrder
-            } else {
-                let lastPage = pages[pages.count - 1]
-                let lastOrder = lastPageOrder.count - 1
-                targetWidget.pageIndex = lastPage
-                targetWidget.priority = lastOrder
-            }
-            
-            widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
-            
-            widgetsPanel.setWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode)
-        }
-    }
-    
     override func getBottomButtonTitleAttr() -> NSAttributedString! {
         
         guard createNew else { return nil }

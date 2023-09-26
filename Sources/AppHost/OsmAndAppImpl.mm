@@ -80,6 +80,7 @@
 #define VERSION_3_10 3.10
 #define VERSION_3_14 3.14
 #define VERSION_4_2 4.2
+#define VERSION_4_4_1 4.41
 
 #define kMaxLogFiles 3
 
@@ -537,8 +538,18 @@
                 }
             }
         }
-        [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
-        [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
+        if (prevVersion < VERSION_4_4_1)
+        {
+            OAAppSettings *app = [OAAppSettings sharedManager];
+            for (OAApplicationMode *appMode in OAApplicationMode.values)
+            {
+                NSInteger value = [app.activeMarkers get:appMode];
+                if (value == 0)
+                    [app.activeMarkers set:ONE_ACTIVE_MARKER mode:appMode];
+                else if (value == 1)
+                    [app.activeMarkers set:TWO_ACTIVE_MARKERS mode:appMode];
+            }
+        }
     }
     [self migrateResourcesToDocumentsIfNeeded];
     
@@ -1050,7 +1061,7 @@
     {
         NSLog(@"Prepare checkAndDownloadWeatherForecastsUpdates start");
         OAWeatherHelper *weatherHelper = [OAWeatherHelper sharedInstance];
-        NSArray<NSString *> *regionIds = [weatherHelper getTempForecastsWithDownloadStates:@[@(EOAWeatherForecastDownloadStateFinished)]];
+        NSArray<NSString *> *regionIds = [weatherHelper getRegionIdsForDownloadedWeatherForecast];
         [weatherHelper checkAndDownloadForecastsByRegionIds:regionIds];
         NSLog(@"Prepare checkAndDownloadWeatherForecastsUpdates finish");
     }

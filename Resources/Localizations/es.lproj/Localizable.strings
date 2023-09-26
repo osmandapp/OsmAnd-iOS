@@ -223,7 +223,7 @@
 "save_track_interval_globally" = "Intervalo de registro";
 "rec_interval_minimum" = "Mínimo";
 "track_start_rec" = "Iniciar grabación de traza";
-"track_rec_addon_q" = "Activa el complemento «Grabación de traza» para registrar y guardar las trazas";
+"track_rec_addon_q" = "Por favor, activa el complemento para la grabación de las pistas para grabarlas y guardarlas";
 "track_interval_remember" = "Recordar mi elección";
 "other_options" = "Otras opciones";
 "add_parking" = "Añadir como ubicación de aparcamiento";
@@ -290,7 +290,7 @@
 "make_call" = "Hacer llamada";
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Artículos de Wikipedia basados en la ubicación del mapa";
-"srtm_plugin_name" = "Curvas de nivel";
+"srtm_plugin_name" = "Topografía";
 "product_desc_srtm" = "Evaluación visual de la forma de la superficie terrestre";
 "enter_description" = "Añade una descripción";
 "shared_string_description" = "Descripción";
@@ -313,7 +313,7 @@
 "shared_string_hillshade" = "Sombreado";
 "show_alt_in_drive" = "Ver altitud en modo conducción";
 "shared_string_get" = "Obtener";
-"srtm_plugin_disabled" = "Curvas de nivel desactivadas";
+"srtm_plugin_disabled" = "Topografía desactivada";
 "shared_string_remove" = "Quitar";
 "my_favorites" = "Mis favoritos";
 "layer_route" = "Ruta";
@@ -322,8 +322,8 @@
 "gpx_max_speed" = "Velocidad máx.";
 "shared_string_speed" = "Velocidad";
 "menu_my_trips" = "Mis trazas";
-"prch_wiki_info" = "El complemento de Wikipedia activa la información de Wikipedia para los mapas que tiene descargados o comprados con un límite gratuito.";
-"prch_srtm_info" = "El complemento de Curvas de nivel activa las curvas de nivel para los mapas que tiene comprados o descargados con un límite gratuito.";
+"prch_wiki_info" = "El complemento para la Wikipedia permite obtener la información de la wikipedia para los mapas que usas, comprado o descargado dentro del límite gratuito.";
+"prch_srtm_info" = "El complemento para la topografía habilita las curvas de nivel de los mapas a los que se tienes derecho de usar, comprados o descargados dentro del período gratuito.";
 "shared_string_open" = "Abrir";
 "time_closed" = "Cerrado";
 "will_close_at" = "Cierra a las";
@@ -365,7 +365,7 @@
 "plugin_popup_wiki_title" = "Descargar Wikipedia";
 "plugin_popup_wiki_desc" = "Para usar el complemento de Wikipedia, descarga primero los datos Wikipedia de una región";
 "plugin_popup_srtm_title" = "Descargar curvas de nivel";
-"plugin_popup_srtm_desc" = "Para usar la función de Curvas de nivel, descargue primero los datos de Curvas de nivel de una región";
+"plugin_popup_srtm_desc" = "Para empezar a utilizar la función Topografía, descarga primero las curvas a nivel de una región";
 "plugin_popup_nautical_title" = "Descargar mapas náuticos";
 "plugin_popup_nautical_desc" = "Primero descargue los mapas náuticos.\nLuego vaya a los <b>Ajustes del mapa</b> > <b>Tipo de mapa</b> y active el estilo <b>Náutico</b>";
 "go_to_downloads" = "Ir a descargas";
@@ -373,7 +373,7 @@
 "plugin_ski_descr" = "Diseñado para navegar por zonas de deportes de invierno: Vea las pistas de esquí y los remontes, así como las pistas de esquí de fondo, con líneas de color que indican los grados de dificultad. Para utilizarlo, activa este plugin y ve también a \"Configurar mapa\" y elige el estilo de mapa \"Invierno y esquí\".";
 "product_title_trip_planning" = "Planificación de viaje";
 "plugin_popup_wiki_ask" = "Para descargar los datos de Wikipedia, necesita activar el complemento: <b>Wikipedia</b>";
-"plugin_popup_srtm_ask" = "Para descargar las Curvas de nivel, necesita activar el complemento: <b>Curvas de nivel</b>";
+"plugin_popup_srtm_ask" = "Para descargar las líneas del contorno necesitas activar el complemento: <b>Topografía</b>";
 "plugin_popup_trip_planning_ask" = "Para planificar un viaje, necesita activar el complemento: <b>Planificación de viaje</b>";
 "turn_on_plugin" = "Activar complemento";
 "all_world_popup_desc" = "Descargar el «Mapa base mundial» para ver los nombres de los estados, fronteras y otra información";
@@ -1803,20 +1803,20 @@
 "move_point_descr" = "Mueve el mapa para cambiar la ubicación de este punto.";
 "move_point" = "Mover el punto";
 "map_update_warning" = "¿Actualizar los datos de las teselas en línea?";
-"map_settings_zoom_level_description" = "Define el nivel de zum mínimo y máximo para mostrar la capa";
+"map_settings_zoom_level_description" = "Establecer los niveles mínimo y máximo de zoom con los que se mostrará la capa";
 "map_settings_slopes_legend" = "Puedes leer más sobre las pendientes en Wikipedia";
-"map_settings_slopes_description" = "Los mapas de pendientes utilizan diferentes colores para visualizar el terreno";
+"map_settings_slopes_description" = "La pendiente se visualiza coloreada sobre el terreno.";
 "map_settings_show_slider_map" = "Mostrar deslizador en el mapa";
 "map_settings_line_density_slowdown_warning" = "La alta densidad de líneas puede ralentizar la visualización del mapa";
 "map_settings_line_density" = "Densidad de la línea";
 "map_settings_layer_transparency" = "Transparencia de la capa";
-"map_settings_hillshade_description" = "Los mapas de sombreado visualizan las pendientes, los picos y las tierras bajas usando diferentes niveles de gris";
+"map_settings_hillshade_description" = "Los mapas de las colinas utilizan tonos oscuros para mostrar laderas, picos y planicies.";
 "map_settings_hide_polygons_desc" = "Esta opción sólo afecta a los mapas vectoriales sin conexión de OsmAnd";
 "map_settings_hide_polygons" = "Ocultar polígonos";
 "map_settings_contour_zoom_level_descr" = "Elige el nivel de zum, desde el cual se mostrarán las curvas de nivel";
 "map_settings_available_srtm_maps_descr" = "Se necesitan mapas adicionales para ver el sombreado en el mapa";
-"map_settings_add_maps_slopes" = "Se necesitan mapas adicionales para ver las pendientes en el mapa";
-"map_settings_add_maps_hillshade" = "Se necesitan mapas adicionales para ver el sombreado en el mapa";
+"map_settings_add_maps_slopes" = "Se necesitan mapas adicionales para ver las Pendientes en el mapa.";
+"map_settings_add_maps_hillshade" = "Se necesitan mapas adicionales para ver los Hillshades (mapas de sombras de laderas) en el mapa.";
 "map_settings_add_maps_desc" = "Puedes añadir nuevos mapas a través de un enlace o importando archivos SQLite.";
 "map_coords" = "Mapa: Lat %.5f Lon %.5f";
 "lenght_limit_description" = "Proporciona la longitud del vehículo, se pueden aplicar algunas restricciones de rutas para vehículos largos.";
@@ -1848,7 +1848,7 @@
 "follow_track" = "Seguir traza";
 "export_profile_descr" = "Puedes exportar todos los ajustes del perfil, copiar todos los ajustes de otro perfil o restablecer todos los ajustes del perfil al estado predefinido.";
 "err_profile_import" = "Error al leer los datos del elemento: %@";
-"enable_hillshade" = "Activar para ver datos del terreno";
+"enable_hillshade" = "Permite ver los datos del terreno desde el mapa de las colinas o pendientes.";
 "enable_contour_lines" = "Activar para ver las curvas de nivel en el mapa";
 "empty_profile_name_warning" = "El nombre del perfil no debe estar vacío.";
 "empty_filename" = "Nombre de archivo vacío";
@@ -2566,7 +2566,6 @@
 "shared_string_expires" = "Caduca en";
 "compass_visible_if_map_rotated" = "Visible al girar el mapa";
 "weather_plugin" = "Complemento del clima";
-"update_only_over_wi_fi" = "Actualizar sólo con Wi-Fi";
 "benefits_for_contributors" = "Beneficios para colaboradores activos de OSM";
 "benefits_for_contributors_primary_descr" = "Los colaboradores activos de OpenStreetMap.org pueden beneficiarse de actualizaciones ilimitadas de los mapas cada hora.";
 "shared_string_not_included" = "No incluido";
@@ -2682,7 +2681,7 @@
 "use_heightmap_setting" = "Utilizar mapas de altura en relieve 3D";
 "depth_contours" = "Curvas de profundidad";
 "huawei_appgallery" = "Huawei AppGallery";
-"download_heightmap_maps" = "Mapa de alturas";
+"download_heightmap_maps" = "Mapa del terreno (en 3D)";
 "nautical_depth_points" = "Puntos de profundidad náutica";
 "amazon_appstore" = "Amazon Appstore";
 "position_on_map" = "Posición en la pantalla";
@@ -3011,3 +3010,35 @@
 "get_osmand_cloud" = "Obten OsmAnd Cloud";
 "free_favorites_backup_description" = "Regístrate en OsmAnd Cloud para obtener una copia de seguridad gratuita de tus favoritos y configuraciones";
 "banner_payment_free_backup_settings_title" = "Copia de seguridad gratuita de los ajustes";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "Muestra las coordenadas geográficas del centro del mapa actual";
+"map_widget_rendering_fps_desc" = "Muestra la rapidez a la que se muestra y actualiza el mapa y los elementos del mapa, expresada en fotogramas por segundo (FPS).";
+"map_widget_camera_tilt_desc" = "Muestra el ángulo de inclinación de la cámara en modo perspectiva. Por defecto es 90° (sin inclinación).";
+"map_widget_camera_distance_desc" = "Muestra la elevación de la cámara sobre el nivel de la superficie.";
+"map_widget_zoom_level_desc" = "Muestra el nivel actual de zoom del mapa.";
+"map_widget_target_distance_desc" = "Muestra la distancia entre la cámara y la ubicación del objetivo.";
+"weather_updates_manual" = "La previsión meteorológica debe actualizarse manualmente.";
+"purchases_feature_relief_3d_description" = "Ten y observa la maqueta de tu barrio o de todo el continente.";
+"weather_update_disabled" = "Desactivado";
+"shared_string_relief_3d" = "Relieve en 3D";
+"weather_update_parameters_wifi" = "La previsión meteorológica sólo se actualizará si hay una red WiFi disponible.";
+"weather_update_over_wifi_only" = "Sólo mediante WIFI";
+"weather_update_parameters_disabled" = "Se desactivarán las actualizaciones automáticas.";
+"auto_update" = "Actualización automática";
+"weather_update_over_any_network" = "En cualquier red";
+"weather_update_parameters_any_network" = "La previsión meteorológica se actualizará a través de cualquier red. Se pueden utilizar los datos móviles.";
+"map_settings_topography" = "Topografía";
+"click_on_widget" = "Haz clic en el widget";
+"shared_string_cache" = "Cache";
+"unsaved_changes_will_be_lost_discard" = "Cualquier cambio no guardado se perderá. ¿Descartar los cambios?";
+"terrain_3D_maps" = "Mapas del terreno";
+"average_speed_skip_stops" = "Tener en cuenta las paradas";
+"average_speed_time_interval_desc" = "Especifica el intervalo de tiempo para calcular el promedio de la velocidad.";
+"unsaved_changes" = "Cambios no guardados";
+
+
+// Shared Strings
+"shared_string_discard" = "Descartar";
+"specify_number_of_dir_indicators_desc" = "Especifica el número de indicadores de dirección.";
+"map_marker_interval_dialog_desc" = "Especifica el intervalo de tiempo durante el cual se medirá la velocidad media para calcular la hora estimada de llegada.";

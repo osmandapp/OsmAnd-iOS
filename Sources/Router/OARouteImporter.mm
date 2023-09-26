@@ -21,6 +21,7 @@
     OAGPXDocument *_gpxFile;
     OATrkSegment *_segment;
     NSArray<OAWptPt *> *_segmentRoutePoints;
+    BOOL _leftSide;
 
     std::vector<std::shared_ptr<RouteSegmentResult>> _route;
 }
@@ -30,6 +31,17 @@
     self = [super init];
     if (self) {
         _gpxFile = gpxFile;
+        _leftSide = false;
+    }
+    return self;
+}
+
+- (instancetype) initWithGpxFile:(OAGPXDocument *)gpxFile leftSide:(BOOL)leftSide
+{
+    self = [super init];
+    if (self) {
+        _gpxFile = gpxFile;
+        _leftSide = leftSide;
     }
     return self;
 }
@@ -133,7 +145,7 @@
     for (OARouteSegment *routeSegment in segment.routeSegments)
     {
         auto object = std::make_shared<RouteDataObject>(region);
-        auto segmentResult = std::make_shared<RouteSegmentResult>(object);
+        auto segmentResult = std::make_shared<RouteSegmentResult>(object, _leftSide);
 		auto bundle = std::make_shared<RouteDataBundle>(resources, routeSegment.toStringBundle);
         try
         {

@@ -7,15 +7,21 @@
 //
 
 #import "OABaseWidgetView.h"
+#import "OAMapInfoController.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @implementation OABaseWidgetView
+{
+    BOOL _nightMode;
+    UIView *_separatorView;
+}
 
 - (instancetype)initWithType:(OAWidgetType *)type
 {
     self = [super init];
     if (self) {
         _widgetType = type;
+        [self initSeparatorView];
     }
     return self;
 }
@@ -25,8 +31,25 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.frame = frame;
+        [self initSeparatorView];
     }
     return self;
+}
+
+- (void)initSeparatorView
+{
+    _separatorView = [[UIView alloc] init];
+    _separatorView.hidden = YES;
+    _separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
+    [self addSubview:_separatorView];
+    
+    _separatorView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [_separatorView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
+        [_separatorView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [_separatorView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-0.5],
+        [_separatorView.heightAnchor constraintEqualToConstant:.5]
+    ]];
 }
 
 - (OACommonBoolean * _Nullable ) getWidgetVisibilityPref {
@@ -66,14 +89,46 @@
     return NO; // override
 }
 
+- (void)updateColors:(OATextState *)textState
+{
+    _nightMode = textState.night;
+}
+
+- (BOOL)isNightMode
+{
+    return _nightMode;
+}
+
 - (BOOL)isTopText
 {
     return NO;
 }
 
-- (void) attachView:(UIView *)container order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *)followingWidgets
+- (BOOL)isTextInfo
 {
-    [container addSubview:self];
+    return NO;
+}
+
+- (void)showSeparator:(BOOL)show
+{
+    _separatorView.hidden = !show;
+}
+
+- (void)adjustViewSize
+{
+}
+
+- (void) attachView:(UIView *_Nonnull)container specialContainer:(UIView *_Nullable)specialContainer order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *)followingWidgets
+{
+    // Do not remove from superview since WidgetPageViewController populates stackView with widgets on update
+    //[container addSubview:self];
+}
+
+- (void) detachView:(OAWidgetsPanel *)widgetsPanel
+{
+    // Do not remove from superview since WidgetPageViewController populates stackView with widgets on update
+    //if (self.superview)
+    //    [self removeFromSuperview];
 }
 
 @end

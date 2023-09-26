@@ -241,7 +241,10 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     OATouchLocation *_carPlayMapTouchLocation;
 
     CLLocationCoordinate2D _centerLocationForMapArrows;
-    
+    OsmAnd::PointI _cachedTarget31;
+    OsmAnd::PointI _cachedFixedPixel;
+    CLLocation *_cachedMapLocation;
+
     MBProgressHUD *_progressHUD;
     BOOL _rotationAnd3DViewDisabled;
 }
@@ -712,8 +715,25 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (CLLocation *) getMapLocation
 {
-    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(_mapView.target31);
-    return [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
+    OsmAnd::PointI target31 = _mapView.target31;
+    OsmAnd::PointI fixedPixel = _mapView.fixedPixel;
+
+	if (target31 == _cachedTarget31 && fixedPixel == _cachedFixedPixel && _cachedMapLocation)
+    {
+        return _cachedMapLocation;
+    }
+    else
+    {
+        _cachedTarget31 = target31;
+        _cachedFixedPixel = fixedPixel;
+
+        auto centerPixel = _mapView.getCenterPixel;
+        OsmAnd::PointI elevated31 = [OANativeUtilities get31FromElevatedPixel:centerPixel];
+        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(elevated31);
+        CLLocation *mapLocation = [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
+        _cachedMapLocation = mapLocation;
+        return mapLocation;
+    }
 }
 
 - (float) getMapZoom
@@ -725,10 +745,10 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 {
     _mapPosition = mapPosition;
     
-    if (mapPosition == BOTTOM_CONSTANT && _mapView.viewportYScale != 1.5f)
-        _mapView.viewportYScale = 1.5f;
-    else if (mapPosition != BOTTOM_CONSTANT && _mapView.viewportYScale != 1.f)
-        _mapView.viewportYScale = 1.f;
+    if (mapPosition == BOTTOM_CONSTANT && _mapView.viewportYScale != kViewportBottomScale)
+        _mapView.viewportYScale = kViewportBottomScale;
+    else if (mapPosition != BOTTOM_CONSTANT && _mapView.viewportYScale != kViewportScale)
+        _mapView.viewportYScale = kViewportScale;
 }
 
 - (void) setupMapArrowsLocation
@@ -1023,8 +1043,10 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         velocity.x = -velocityInMapSpace.x * scale31;
         velocity.y = -velocityInMapSpace.y * scale31;
 
+#if !TARGET_OS_SIMULATOR
         _mapView.mapAnimator->animateFlatTargetWith(velocity, OsmAnd::PointD(kTargetMoveDeceleration * scale31, kTargetMoveDeceleration * scale31), kUserInteractionAnimationKey);
         _mapView.mapAnimator->resume();
+#endif
     }
 }
 
@@ -1429,7 +1451,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     }
     
     CGPoint translation = [recognizer translationInView:self.view];
-    CGFloat angleDelta = translation.y / static_cast<CGFloat>(kElevationGesturePointsPerDegree);
+    CGFloat angleDelta = -translation.y / static_cast<CGFloat>(kElevationGesturePointsPerDegree);
     CGFloat angle = _mapView.elevationAngle;
     angle -= angleDelta;
     if (angle < kElevationMinAngle)
@@ -1486,7 +1508,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     accepted |= !longPress && recognizer.state == UIGestureRecognizerStateEnded;
     if (accepted)
     {
-        OAFloatingButtonsHudViewController *quickAction = [OARootViewController instance].mapPanel.hudViewController.floatingButtonsController;
+        OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+        OAFloatingButtonsHudViewController *quickAction = mapPanel.hudViewController.floatingButtonsController;
         [quickAction hideActionsSheetAnimated];
         [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress forceHide:[recognizer isKindOfClass:UITapGestureRecognizer.class] && recognizer.numberOfTouches == 1];
         
@@ -2105,10 +2128,10 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                                                                                      self.displayDensityFactor,
                                                                                      mapDensity,
                                                                                      [settings.textSize get:settings.applicationMode.get],
-                                                                                     QString::fromNSString(langId),
-                                                                                     langPreferences,
                                                                                      nullptr,
                                                                                      disabledPoiTypes));
+            _mapPresentationEnvironment->setLocaleLanguageId(QString::fromNSString(langId));
+            _mapPresentationEnvironment->setLanguagePreference(langPreferences);
             [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:self.mapPresentationEnv];
             
             _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));
@@ -2265,12 +2288,10 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                                                                                      self.displayDensityFactor,
                                                                                      1.0,
                                                                                      1.0,
-                                                                                     QString::fromNSString(langId),
-                                                                                     langPreferences,
                                                                                      nullptr,
                                                                                      disabledPoiTypes));
-            
-            
+            _mapPresentationEnvironment->setLocaleLanguageId(QString::fromNSString(langId));
+            _mapPresentationEnvironment->setLanguagePreference(langPreferences);
             _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));
             _mapPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_obfMapObjectsProvider,
                                                                            _mapPrimitiviser,

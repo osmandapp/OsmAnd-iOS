@@ -625,7 +625,7 @@
 "save_track_interval_globally" = "Erregistro-tartea";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
-"track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
+"track_rec_addon_q" = "Please activate Track recording plugin to record and save your tracks";
 "track_interval_remember" = "Remember my choice";
 "track_clear" = "Clear current track";
 "track_clear_q" = "Do you want to clear current track?";
@@ -1588,7 +1588,7 @@
 "some_articles_may_not_available_in_lang" = "Wikipediako artikulu batzuk agian ez daude zure hizkuntzan eskuragarri.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"srtm_plugin_name" = "Sestra-kurbak";
+"srtm_plugin_name" = "Topografia";
 "product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "Gehigarri honek OsmAnd-eko lineaz kanpoko mapetan agertu daitezkeen sestra-kurbak eta erliebe-itzalak eskaintzen ditu. Kirolariek, mendizaleek eta orokorrean paisaiaren erliebearen estrukturan interesa duen edonork gogoko izango du. \n \nDatu globalak (iparraldera 70 gradu eta hegoaldera 70 gradu bitartean) STRM (Shuttle Radar Topography Mission) eta ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer) neurrietan oinarrituak daude, espazioko Terra irudi tresna, NASAren Lurra Behatzeko Sistemaren satelite enblematikoa. ASTER NASAren, Japoniako Ekonomi, Merkataritza eta Industria Ministerioaren (EMIM), eta Japoneko Espazio Sistemaren (J-espaziosistema) elkarlanaren ondorioz sortua izan da.";
 "wikivoyage_travel_guide" = "Bidai-gidak";
@@ -1641,8 +1641,8 @@
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "shared_string_get" = "Eskuratu";
 "srtm_plugin_disabled" = "Sestra-kurbak desgaituta";
-"prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
-"prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
+"prch_wiki_info" = "Wikipedia plugin enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
+"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Ireki";
 "time_closed" = "Closed";
 "time_will_open" = "Will open in";
@@ -2551,3 +2551,4 @@
 "rendering_attr_alpineHiking_name" = "Zailtasunen sailkapena";
 "rendering_value_sacScale_description" = "Suitzako Alpino Kluba";
 "rendering_value_caiScale_description" = "Italiako Alpino Kluba";
+"search_favorites" = "Gogokoenetan bilatu";

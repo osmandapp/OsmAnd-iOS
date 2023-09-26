@@ -375,7 +375,6 @@
 
 #define routeMapMarkersStartMyLocKey @"routeMapMarkersStartMyLoc"
 #define routeMapMarkersRoundTripKey @"routeMapMarkersRoundTrip"
-#define showMapMarkersBarWidgetKey @"showMapMarkersBarWidget"
 
 #define osmandUsageSpaceKey @"osmandUsageSpace"
 
@@ -2641,78 +2640,6 @@
 
 @end
 
-@implementation OACommonDistanceIndicationConstant
-
-@dynamic defValue;
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOADistanceIndicationConstant)defValue
-{
-    OACommonDistanceIndicationConstant *obj = [[OACommonDistanceIndicationConstant alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (EOADistanceIndicationConstant) get
-{
-    return [super get];
-}
-
-- (EOADistanceIndicationConstant) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant
-{
-    [super set:distanceIndicationConstant];
-}
-
-- (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant mode:(OAApplicationMode *)mode
-{
-    [super set:distanceIndicationConstant mode:mode];
-}
-
-- (void) resetToDefault
-{
-    EOADistanceIndicationConstant defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOADistanceIndicationConstant)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
-}
-
-- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
-{
-    if ([strValue isEqualToString:@"TOOLBAR"])
-        return [self set:TOP_BAR_DISPLAY mode:mode];
-    else if ([strValue isEqualToString:@"WIDGETS"])
-        return [self set:WIDGET_DISPLAY mode:mode];
-    else if ([strValue isEqualToString:@"NONE"])
-        return [self set:NONE_DISPLAY mode:mode];
-}
-
-- (NSString *)toStringValue:(OAApplicationMode *)mode
-{
-    switch ([self get:mode])
-    {
-        case TOP_BAR_DISPLAY:
-            return @"TOOLBAR";
-        case WIDGET_DISPLAY:
-            return @"WIDGETS";
-        case NONE_DISPLAY:
-            return @"NONE";
-        default:
-            return @"TOOLBAR";
-    }
-}
-
-@end
-
 @implementation OACommonDrivingRegion
 
 @dynamic defValue;
@@ -4408,16 +4335,10 @@
         // Direction Appearance
         _activeMarkers = [OACommonActiveMarkerConstant withKey:activeMarkerKey defValue:ONE_ACTIVE_MARKER];
         [_profilePreferences setObject:_activeMarkers forKey:@"displayed_markers_widgets_count"];
-        _distanceIndicationVisibility = [OACommonBoolean withKey:mapDistanceIndicationVisabilityKey defValue:YES];
-        [_profilePreferences setObject:_distanceIndicationVisibility forKey:@"markers_distance_indication_enabled"];
-        _mapMarkersDisplayMode = [OACommonDistanceIndicationConstant withKey:mapDistanceIndicationKey defValue:TOP_BAR_DISPLAY];
-        [_profilePreferences setObject:_mapMarkersDisplayMode forKey:@"map_markers_mode"];
         _arrowsOnMap = [OACommonBoolean withKey:mapArrowsOnMapKey defValue:NO];
         [_profilePreferences setObject:_arrowsOnMap forKey:@"show_arrows_to_first_markers"];
         _directionLines = [OACommonBoolean withKey:mapDirectionLinesKey defValue:YES];
         [_profilePreferences setObject:_directionLines forKey:@"show_lines_to_first_markers"];
-        _showMapMarkersBarWidget = [OACommonBoolean withKey:showMapMarkersBarWidgetKey defValue:YES];
-        [_profilePreferences setObject:_showMapMarkersBarWidget forKey:@"markers_distance_indication_enabled"];
 
         // global
 

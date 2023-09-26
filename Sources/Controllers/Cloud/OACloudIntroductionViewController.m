@@ -16,8 +16,9 @@
 #import "OACloudAccountCreateViewController.h"
 #import "OACloudAccountLoginViewController.h"
 #import "OAChoosePlanHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
-@interface OACloudIntroductionViewController () <UITableViewDelegate, UITableViewDataSource, OACloudIntroductionDelegate>
+@interface OACloudIntroductionViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
 
@@ -26,22 +27,43 @@
     NSArray<NSDictionary *> *_data;
     
     OACloudIntroductionHeaderView *_headerView;
+    CloudIntroductionButtonsView *_cloudIntroductionButtonsView;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-        
     [self.backImageButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     self.backImageButton.tintColor = UIColorFromRGB(color_primary_purple);
     
     [self setUpTableHeaderView];
     [self generateData];
-    
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableHeaderView = _headerView;
-    
+    self.tableView.backgroundColor = [UIColor whiteColor];
+    [self configureCloudIntroductionButtonsView];
+}
+
+- (void)configureCloudIntroductionButtonsView
+{
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"CloudIntroductionButtonsView" owner:self options:nil];
+    _cloudIntroductionButtonsView = (CloudIntroductionButtonsView *)nib[0];
+    __weak OACloudIntroductionViewController *weakSelf = self;
+    _cloudIntroductionButtonsView.didRegisterButtonAction = ^{
+        [weakSelf.navigationController pushViewController:[OACloudAccountCreateViewController new] animated:YES];
+    };
+    _cloudIntroductionButtonsView.didLogInButtonAction = ^{
+        [weakSelf.navigationController pushViewController:[OACloudAccountLoginViewController new] animated:YES];
+    };
+    _cloudIntroductionButtonsView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:_cloudIntroductionButtonsView];
+    [NSLayoutConstraint activateConstraints:@[
+        [_cloudIntroductionButtonsView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],
+        [_cloudIntroductionButtonsView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+        [_cloudIntroductionButtonsView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+        [_cloudIntroductionButtonsView.heightAnchor constraintEqualToConstant:110],
+    ]];
 }
 
 - (void)registerNotifications
@@ -91,11 +113,10 @@
 {
     _headerView = [[OACloudIntroductionHeaderView alloc] init];
     [_headerView setUpViewWithTitle:OALocalizedString(@"osmand_cloud") description:OALocalizedString(@"osmand_cloud_authorize_descr")
-                              image:[UIImage imageNamed:@"ic_custom_cloud_upload_colored_day_big"] topButtonTitle:OALocalizedString(@"cloud_create_account") bottomButtonTitle:OALocalizedString(@"register_opr_have_account")];
+                              image:[UIImage imageNamed:@"ic_custom_cloud_upload_colored_day_big"]];
     CGRect frame = _headerView.frame;
     frame.size.height = [_headerView calculateViewHeight];
     _headerView.frame = frame;
-    _headerView.delegate = self;
 }
 
 - (UIColor *)navBarBackgroundColor
@@ -159,19 +180,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-// MARK: OACloudIntroductionDelegate
-
-- (void)getOrRegisterButtonPressed
-{
-    [self.navigationController pushViewController:[OACloudAccountCreateViewController new] animated:YES];
-}
-
-- (void)logInButtonPressed
-{
-    OACloudAccountLoginViewController *vc = [[OACloudAccountLoginViewController alloc] init];
-    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end

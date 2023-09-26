@@ -47,6 +47,7 @@
 
 typedef NS_ENUM(NSInteger, EOAItemStatusType)
 {
+    EOAItemStatusNone = -1,
     EOAItemStatusStartedType = 0,
     EOAItemStatusInProgressType,
     EOAItemStatusFinishedType
@@ -418,6 +419,21 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                                                                               localFile:localFile
                                                                              remoteFile:remoteFile]];
 
+    NSMutableString *fileName = [NSMutableString string];
+    NSArray<NSString *> *pathComponents = key.pathComponents;
+    if (pathComponents.count > 2)
+    {
+        for (int i = 1; i < pathComponents.count; i++)
+        {
+            [fileName appendString:pathComponents[i]];
+            if (i < pathComponents.count - 1)
+                [fileName appendString:@"/"];
+        }
+    }
+    else
+    {
+        [fileName appendString:key.lastPathComponent];
+    }
     OATableRowData *rowData = [[OATableRowData alloc] initWithData:@{
         kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey: name,
@@ -425,7 +441,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         kCellIconTint: @(mainTint),
         @"secondaryIconColor": @(secondaryTint),
         @"operation": @(operation),
-        @"fileName": key.lastPathComponent,
+        @"fileName": fileName,
         @"settingsItem": settingsItem
     }];
     [self setRowIcon:rowData item:settingsItem];
@@ -480,55 +496,77 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         NSArray *rowIndex = [self rowAndIndexForType:type fileName:fileName];
         if (rowIndex)
         {
-            NSIndexPath *indPath = [NSIndexPath indexPathForRow:[rowIndex.lastObject integerValue] inSection:_itemsSection];
-            OATableRowData *item = [_data itemForIndexPath:indPath];
-            BOOL hasConflict = (EOABackupSyncOperationType) [item integerForKey:@"operation"] == EOABackupSyncOperationNone;
-            OARightIconTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indPath];
-            if (cell)
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[rowIndex.lastObject integerValue] inSection:_itemsSection];
+            OATableRowData *item = [_data itemForIndexPath:indexPath];
+            [item setObj:@(itemProgressType) forKey:@"progressType"];
+            [item setObj:@(value) forKey:@"progressValue"];
+            if ([self.tableView.indexPathsForVisibleRows containsObject:indexPath])
             {
-                [cell rightIconVisibility:hasConflict];
-                FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
-                if (!progressView)
+                OARightIconTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+                if (cell)
                 {
-                    progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0., 0., 25., 25.)];
-                    progressView.iconView = [[UIView alloc] init];
-                    progressView.tintColor = UIColorFromRGB(color_primary_purple);
-                    cell.accessoryView = progressView;
-                }
-
-                if (itemProgressType == EOAItemStatusStartedType)
-                {
-                    progressView.iconPath = [UIBezierPath bezierPath];
-                    progressView.progress = 0.;
-                    if (!progressView.isSpinning)
-                        [progressView startSpinProgressBackgroundLayer];
-                    [progressView setNeedsDisplay];
-                }
-                else if (itemProgressType == EOAItemStatusInProgressType)
-                {
-                    progressView.iconPath = nil;
-                    if (progressView.isSpinning)
-                        [progressView stopSpinProgressBackgroundLayer];
-                    progressView.progress = value / 100. - 0.001;
-                }
-                else if (itemProgressType == EOAItemStatusFinishedType)
-                {
-                    progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
-                    progressView.progress = 0.;
-                    if (!progressView.isSpinning)
-                        [progressView startSpinProgressBackgroundLayer];
-
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (1. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        [cell rightIconVisibility:YES];
-                        BOOL hasConflict = (EOABackupSyncOperationType) [item integerForKey:@"operation"] == EOABackupSyncOperationNone;
-                        [item setIconTint:color_primary_purple];
-                        [item setObj:hasConflict ? @(color_primary_red) : @(color_primary_purple) forKey:@"secondaryIconColor"];
-                        [self.tableView reloadRowsAtIndexPaths:@[indPath] withRowAnimation:UITableViewRowAnimationNone];
-                    });
+                    if (itemProgressType == EOAItemStatusInProgressType)
+                    	[self updateProgressCell:cell indexPath:indexPath item:item];
+                    else
+                        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
                 }
             }
         }
     });
+}
+
+- (void) updateProgressCell:(OARightIconTableViewCell *)cell indexPath:(NSIndexPath *)indexPath item:(OATableRowData *)item
+{
+    if (![item objForKey:@"progressType"])
+    {
+        cell.accessoryView = nil;
+        return;
+    }
+
+    EOAItemStatusType itemProgressType = (EOAItemStatusType)[item integerForKey:@"progressType"];
+    NSInteger value = [item integerForKey:@"progressValue"];
+
+    BOOL hasConflict = (EOABackupSyncOperationType) [item integerForKey:@"operation"] == EOABackupSyncOperationNone;
+    [cell rightIconVisibility:hasConflict];
+    FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
+    if (!progressView && itemProgressType != EOAItemStatusFinishedType)
+    {
+        progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0., 0., 25., 25.)];
+        progressView.iconView = [[UIView alloc] init];
+        progressView.tintColor = UIColorFromRGB(color_primary_purple);
+        cell.accessoryView = progressView;
+    }
+
+    if (itemProgressType == EOAItemStatusStartedType)
+    {
+        progressView.iconPath = [UIBezierPath bezierPath];
+        progressView.progress = 0.;
+        if (!progressView.isSpinning)
+            [progressView startSpinProgressBackgroundLayer];
+    }
+    else if (itemProgressType == EOAItemStatusInProgressType)
+    {
+        progressView.iconPath = nil;
+        if (progressView.isSpinning)
+            [progressView stopSpinProgressBackgroundLayer];
+        progressView.progress = value / 100. - 0.001;
+    }
+    else if (itemProgressType == EOAItemStatusFinishedType)
+    {
+        if (progressView)
+        {
+            progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
+            progressView.progress = 0.;
+            if (!progressView.isSpinning)
+                [progressView startSpinProgressBackgroundLayer];
+        }
+        [cell rightIconVisibility:NO];
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        [item setIconTint:color_primary_purple];
+        [item setObj:hasConflict ? @(color_primary_red) : @(color_primary_purple) forKey:@"secondaryIconColor"];
+        cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
+        cell.accessoryView = nil;
+    }
 }
 
 // MARK: OAStatusBackupDelegate
@@ -644,8 +682,11 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             }
             else
             {
+                cell.rightIconView.image = nil;
                 [cell rightIconVisibility:NO];
             }
+
+            [self updateProgressCell:cell indexPath:indexPath item:item];
         }
         return cell;
     }
@@ -738,23 +779,37 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!_backupHelper.isBackupPreparing)
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    EOAItemStatusType itemProgressType = EOAItemStatusNone;
+    if ([item objForKey:@"progressType"])
+        itemProgressType = (EOAItemStatusType)[item integerForKey:@"progressType"];
+
+    if ([item objForKey:@"settingsItem"] && [item objForKey:@"operation"] && itemProgressType == EOAItemStatusNone && ![self isSyncing:item])
     {
-        OATableRowData *item = [_data itemForIndexPath:indexPath];
-        if ([item objForKey:@"settingsItem"] && [item objForKey:@"operation"] && ![_settingsHelper isBackupSyncing])
-        {
-            OAStatusBackupConflictDetailsViewController *statusDetailsViewController =
-            [[OAStatusBackupConflictDetailsViewController alloc] initWithLocalFile:[item objForKey:@"localFile"]
-                                                                        remoteFile:[item objForKey:@"remoteFile"]
-                                                                         operation:(EOABackupSyncOperationType) [item integerForKey:@"operation"]
-                                                                 recentChangesType:_tableType];
-            statusDetailsViewController.delegate = self;
-            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:statusDetailsViewController];
-            [self.navigationController presentViewController:navigationController animated:YES completion:nil];
-        }
+        OAStatusBackupConflictDetailsViewController *statusDetailsViewController =
+        [[OAStatusBackupConflictDetailsViewController alloc] initWithLocalFile:[item objForKey:@"localFile"]
+                                                                    remoteFile:[item objForKey:@"remoteFile"]
+                                                                     operation:(EOABackupSyncOperationType) [item integerForKey:@"operation"]
+                                                             recentChangesType:_tableType];
+        statusDetailsViewController.delegate = self;
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:statusDetailsViewController];
+        [self.navigationController presentViewController:navigationController animated:YES completion:nil];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (BOOL) isSyncing:(OATableRowData *)item
+{
+    NSString *fileName = [item stringForKey:@"fileName"];
+    if (!fileName)
+        return NO;
+
+    OASyncBackupTask *syncTask = [_settingsHelper getSyncTask:fileName];
+    if (!syncTask)
+        syncTask = [_settingsHelper getSyncTask:kSyncItemsKey];
+
+    return syncTask != nil;
 }
 
 // MARK: OAOnPrepareBackupListener
@@ -768,9 +823,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (void)onBackupPreparing
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateData];
-    });
 }
 
 // MARK: Sync callbacks

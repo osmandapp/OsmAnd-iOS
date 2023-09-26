@@ -204,7 +204,7 @@
             [cell descriptionVisibility:NO];
             [cell leftEditButtonVisibility:NO];
             UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
-            conf.contentInsets = NSDirectionalEdgeInsetsMake(0., 0, -7, 0.);
+            conf.contentInsets = NSDirectionalEdgeInsetsMake(0., 0, 0, 0.);
             cell.button.configuration = conf;
             [cell.button setImage:[UIImage imageNamed:@"ic_payment_label_pro"] forState:UIControlStateNormal];
             [cell.button setTitle:@"" forState:UIControlStateNormal];

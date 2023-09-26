@@ -190,7 +190,7 @@
 "speak_favorites" = "Избрани в близост";
 "speak_poi" = "POIнаблизо";
 "speak_pedestrian" = "Пешеходни пътеки";
-"show_tunnels" = "Tunnels";
+"show_tunnels" = "Тунели";
 
 // Dirrection appearance
 "shared_string_one" = "Едно";
@@ -290,7 +290,7 @@
 "app_mode_bus" = "Автобус";
 "app_mode_train" = "Влак";
 "app_mode_truck" = "Камион";
-"app_mode_hiking" = "Ходене";
+"app_mode_hiking" = "Пешеходен туризъм";
 "app_mode_motorcycle" = "Мотоциклет";
 "app_mode_boat" = "Лодка";
 "app_mode_aircraft" = "Самолет";
@@ -625,7 +625,7 @@
 "save_track_interval_globally" = "Интервал за запис";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
-"track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
+"track_rec_addon_q" = "Please activate Track recording plugin to record and save your tracks";
 "track_interval_remember" = "Remember my choice";
 "track_clear" = "Clear current track";
 "track_clear_q" = "Do you want to clear current track?";
@@ -1641,8 +1641,8 @@
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "shared_string_get" = "Получаване";
 "srtm_plugin_disabled" = "Контурните линии са изключени";
-"prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
-"prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
+"prch_wiki_info" = "Wikipedia plugin enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
+"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Отваряне";
 "time_closed" = "Closed";
 "time_will_open" = "Will open in";
@@ -2210,7 +2210,7 @@
 "app_mode_horse" = "Коне";
 "app_mode_helicopter" = "Вертолет";
 "app_mode_skiing" = "Ски";
-"app_mode_personal_transporter" = "Personal transporter";
+"app_mode_personal_transporter" = "Личен транспортьор";
 "app_mode_monowheel" = "Monowheel";
 "app_mode_scooter" = "Тротинетка";
 "app_mode_ufo" = "НЛО";
@@ -2250,7 +2250,7 @@
 "backup_error_gzip_only_supported_upload" = "Файлът трябва да бъде изпратен във формат .gzip";
 "verify_email_address_descr" = "Изпратихме код за проверка на %@, моля, въведете го в полето по-долу.";
 "resend_verification_code" = "Повторно изпращане";
-"cloud_email_already_registered" = "Този адрес на електронна поща вече е регистриран.";
+"cloud_email_already_registered" = "Тази адрес на електронна поща вече е регистриран.";
 "cloud_email_not_registered" = "Този адрес на електронна поща не е регистриран в OsmAnd Cloud";
 "backup_error_file_not_available" = "Файлът не е наличен";
 "any_poi" = "Всички";
@@ -2573,3 +2573,12 @@
 "speed_camera_pois" = "POI на камери за контрол на скоростта";
 "speed_cameras_alert" = "Предупрежденията за камери за контрол на скоростта в някои страни са забранени от закона.";
 "map_widget_distance_to_intermediate" = "Разстояние до междинна точка";
+"get_osmand_cloud" = "Вземете OsmAd Cloud";
+"rendering_value_caiScale_description" = "Италиански алпийски клуб (CAI)";
+"activity_type_hiking_name" = "Пешеходен туризъм";
+"free_favorites_backup" = "Резервно копие на избраните точки";
+"rendering_attr_alpineHiking_name" = "Класификация на сложност";
+"rendering_value_sacScale_description" = "Швейцарски алпийски клуб (SAC)";
+"free_account" = "Безплатен профил";
+"save_heading_descr" = "Запазва посоката към всяка записана точка от трасето.";
+"save_heading" = "Включва посоката";

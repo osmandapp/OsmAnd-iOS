@@ -383,7 +383,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [_mapPanelViewController.hudViewController hideTopControls];
+    [_mapPanelViewController.hudViewController updateControlsLayout:YES];
     [_mapPanelViewController.hudViewController updateMapRulerDataWithDelay];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self refreshPreviewLayer];
@@ -1516,7 +1516,6 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentSliderTableViewCell getCellIdentifier]
                                                          owner:self options:nil];
             cell = (OASegmentSliderTableViewCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.topRightLabel.textColor = UIColorFromRGB(color_primary_purple);
             cell.topRightLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
         }

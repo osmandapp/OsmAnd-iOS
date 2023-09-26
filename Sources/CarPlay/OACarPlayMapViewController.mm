@@ -41,6 +41,8 @@
     
     BOOL _leftSideDriving;
     BOOL _drivingSideChecked;
+    NSLayoutConstraint *leftHandDrivingAlarmWidgetConstraint;
+    NSLayoutConstraint *rightHandDrivingAlarmWidgetConstraint;
 }
 
 - (instancetype) initWithCarPlayWindow:(CPWindow *)window mapViewController:(OAMapViewController *)mapVC
@@ -65,10 +67,25 @@
 {
     [super viewDidLayoutSubviews];
     
+    BOOL isLeftSideDriving = [self isLeftSideDriving];
+    
+    if (_isInNavigationMode) {
+        _mapVc.mapView.viewportXScale = isLeftSideDriving ? 1.5 : 0.5;
+    }
+   
+    if (isLeftSideDriving)
+    {
+        [rightHandDrivingAlarmWidgetConstraint setActive:NO];
+        [leftHandDrivingAlarmWidgetConstraint setActive:YES];
+    }
+    else
+    {
+        [leftHandDrivingAlarmWidgetConstraint setActive:NO];
+        [rightHandDrivingAlarmWidgetConstraint setActive:YES];
+    }
+    
     UIEdgeInsets insets = _window.safeAreaInsets;
-    
-    BOOL leftSide = [self isLeftSideDriving];
-    
+
     CGFloat w = self.view.frame.size.width;
     CGFloat h = self.view.frame.size.height;
     
@@ -77,7 +94,7 @@
     
     if (widthOffset != _cachedWidthOffset && heightOffset != _cachedHeightOffset && widthOffset != 0 && heightOffset != 0 && !_isInNavigationMode)
     {
-        _mapVc.mapView.viewportXScale = leftSide ? 1.0 - widthOffset : 1.0 + widthOffset;
+        _mapVc.mapView.viewportXScale = isLeftSideDriving ? 1.0 + widthOffset : 1.0 - widthOffset;
         _mapVc.mapView.viewportYScale = 1.0 + heightOffset;
         _cachedWidthOffset = widthOffset;
         _cachedHeightOffset = heightOffset;
@@ -85,26 +102,22 @@
         _cachedViewportX = _mapVc.mapView.viewportXScale;
         _cachedViewportY = _mapVc.mapView.viewportYScale;
     }
-    [self setupAlarmPosition];
 }
 
-- (void)setupAlarmPosition
-{
-    UIEdgeInsets insets = _window.safeAreaInsets;
-    CGRect alarmRect = CGRectMake(0., 0., 60., 60.);
-    if ([self isLeftSideDriving])
-        alarmRect.origin = CGPointMake(8.0, insets.top + 8.);
-    else
-        alarmRect.origin = CGPointMake(CGRectGetMaxX(_window.frame) - 68., insets.top + 8.);
-    
-    _alarmWidget.frame = alarmRect;
-}
-
-- (void) setupAlarmWidget
+- (void)setupAlarmWidget
 {
     _alarmWidget = [[OAAlarmWidget alloc] initForCarPlay];
     _alarmWidget.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addSubview:_alarmWidget];
+    [_window addSubview:_alarmWidget];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [_alarmWidget.topAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.topAnchor constant:4.0],
+        [_alarmWidget.heightAnchor constraintEqualToConstant:60.0],
+        [_alarmWidget.widthAnchor constraintEqualToConstant:60.0]
+    ]];
+    // In Right-Hand drive mode, the widget automatically has an X offset of -22 pixels. We add an additional constraint with the desired offset.
+    leftHandDrivingAlarmWidgetConstraint = [_alarmWidget.trailingAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.trailingAnchor constant:8];
+    rightHandDrivingAlarmWidgetConstraint = [_alarmWidget.trailingAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.trailingAnchor constant:22];
 }
 
 - (void) attachMapToWindow
@@ -223,7 +236,7 @@
     [[OAMapViewTrackingUtilities instance] backToLocationImpl];
 }
 
-- (void) centerMapOnRoute:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
+- (void)centerMapOnRoute:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
 {
     CGSize screenBBox = self.view.frame.size;
     [[OARootViewController instance].mapPanel displayAreaOnMap:topLeft
@@ -238,29 +251,16 @@
 
 - (BOOL)isLeftSideDriving
 {
-    if (_drivingSideChecked)
-        return _leftSideDriving;
-    CGFloat r = _window.safeAreaInsets.right;
-    CGFloat l = _window.safeAreaInsets.left;
-    if (r == 0 && l == 0)
-        return _leftSideDriving;
-    if (l > 0 && r == 0)
-        _leftSideDriving = YES;
-    else if (r > 0 && l == 0)
-        _leftSideDriving = NO;
-    else
-        _leftSideDriving = r > l;
-    _drivingSideChecked = YES;
-    return _leftSideDriving;
+    return _alarmWidget.frame.origin.x > self.view.frame.size.width / 2.0;
 }
 
-- (void) enterNavigationMode
+- (void)enterNavigationMode
 {
-    _mapVc.mapView.viewportXScale = [self isLeftSideDriving] ? 0.5 : 1.5;
     _isInNavigationMode = YES;
+    [self.view layoutIfNeeded];
 }
 
-- (void) exitNavigationMode
+- (void)exitNavigationMode
 {
     _mapVc.mapView.viewportXScale = _cachedViewportX;
     _isInNavigationMode = NO;

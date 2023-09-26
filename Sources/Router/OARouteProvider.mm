@@ -56,6 +56,12 @@
                                                         segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
                                                          selectedSegment:(NSInteger)selectedSegment;
 
++ (std::vector<std::shared_ptr<RouteSegmentResult>>) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
+                                                                 gpxFile:(OAGPXDocument *)gpxFile
+                                                        segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
+                                                         selectedSegment:(NSInteger)selectedSegment
+                                                                leftSide:(BOOL)leftSide;
+
 + (void) collectSegmentPointsFromGpx:(OAGPXDocument *)gpxFile points:(NSMutableArray<CLLocation *> *)points
                     segmentEndPoints:(NSMutableArray<CLLocation *> *)segmentEndPoints
                      selectedSegment:(NSInteger)selectedSegment;
@@ -170,7 +176,7 @@
     {
         NSMutableArray<CLLocation *> *points = [NSMutableArray arrayWithArray:_points];
         NSMutableArray<CLLocation *> *endPoints = [NSMutableArray arrayWithArray:_segmentEndPoints];
-        _route = [OARouteProvider parseOsmAndGPXRoute:points gpxFile:file segmentEndpoints:endPoints selectedSegment:selectedSegment];
+        _route = [OARouteProvider parseOsmAndGPXRoute:points gpxFile:file segmentEndpoints:endPoints selectedSegment:selectedSegment leftSide:builder.leftSide];
         _points = points;
         _segmentEndPoints = endPoints;
         
@@ -374,6 +380,7 @@
                                                                  gpxFile:(OAGPXDocument *)gpxFile
                                                         segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
                                                          selectedSegment:(NSInteger)selectedSegment
+                                                                leftSide:(BOOL)leftSide
 {
     NSArray<OATrkSegment *> *segments = [gpxFile getNonEmptyTrkSegments:NO];
     if (selectedSegment != -1 && segments.count > selectedSegment)
@@ -389,9 +396,17 @@
     else
     {
         [self collectPointsFromSegments:segments points:points segmentEndpoints:segmentEndpoints];
-        OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithGpxFile:gpxFile];
+        OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithGpxFile:gpxFile leftSide:leftSide];
         return [routeImporter importRoute];
     }
+}
+
++ (std::vector<std::shared_ptr<RouteSegmentResult>>) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
+                                                                 gpxFile:(OAGPXDocument *)gpxFile
+                                                        segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
+                                                         selectedSegment:(NSInteger)selectedSegment
+{
+    return [self parseOsmAndGPXRoute:points gpxFile:gpxFile segmentEndpoints:segmentEndpoints selectedSegment:selectedSegment leftSide:false];
 }
 
 + (void) collectSegmentPointsFromGpx:(OAGPXDocument *)gpxFile points:(NSMutableArray<CLLocation *> *)points

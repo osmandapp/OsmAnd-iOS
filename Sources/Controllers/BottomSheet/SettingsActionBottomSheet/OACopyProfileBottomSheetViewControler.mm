@@ -19,6 +19,7 @@
 #import "OAColors.h"
 #import "OARendererRegistry.h"
 #import "OARoutePreferencesParameters.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OACopyProfileBottomSheetViewControler()
 
@@ -163,14 +164,14 @@
 
 - (void) copyMapWidgetRegistryPreference
 {
-    OAMapWidgetRegistry *mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
-    for (OAMapWidgetRegInfo *r in [mapWidgetRegistry getLeftWidgetSet])
+    OAMapWidgetRegistry *mapWidgetRegistry = [OAMapWidgetRegistry sharedInstance];
+
+    for (OAMapWidgetInfo *info in [mapWidgetRegistry getAllWidgets])
     {
-        [mapWidgetRegistry setVisibility:_targetAppMode m:r visible:[r visible:_sourceAppMode] collapsed:[r visibleCollapsed:_sourceAppMode]];
-    }
-    for (OAMapWidgetRegInfo *r in [mapWidgetRegistry getRightWidgetSet])
-    {
-        [mapWidgetRegistry setVisibility:_targetAppMode m:r visible:[r visible:_sourceAppMode] collapsed:[r visibleCollapsed:_sourceAppMode]];
+        [mapWidgetRegistry enableDisableWidgetForMode:_targetAppMode
+                                           widgetInfo:info
+                                              enabled:@([info isEnabledForAppMode:_sourceAppMode])
+                                     recreateControls:YES];
     }
 }
 

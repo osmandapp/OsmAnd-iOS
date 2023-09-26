@@ -1619,7 +1619,7 @@
 "shared_string_max" = "Max";
 "shared_string_min" = "Min";
 "shared_string_meters" = "metri";
-"shared_string_tones" = "toni";
+"shared_string_tones" = "ton";
 "accessibility_announce" = "Annunci";
 "transfers" = "Trasferimenti";
 "temporary_conditional_routing" = "Tieni conto delle limitazioni temporanee";
@@ -2156,7 +2156,6 @@
 "rearrange_profiles" = "Riordina profili";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d tracce?";
 "shared_string_leave" = "Abbandona";
-"update_only_over_wi_fi" = "Aggiorna solo con Wi-Fi";
 "gpx_saved_successfully" = "File GPX salvato in %@";
 "tracks_empty" = "La tua lista delle tracce è vuota";
 "other_countries" = "Altri paesi";
@@ -2987,7 +2986,7 @@
 "shared_string_delete_color" = "Elimina colore";
 "navigation_points_desc" = "I widget di navigazione sono abilitati durante la navigazione per mostrare informazioni quali distanza, tempo di arrivo o rimanente, prossime svolte, direzione, il nome della strada attuale o successiva, indicazione di corsia, velocità massima, avvisi di avvicinamento, PDI, punti intermedi.";
 "add_row" = "Aggiungi riga";
-"no_widgets_here_yet" = "Nessun widget qui ancora";
+"no_widgets_here_yet" = "Ancora nessun widget qui";
 "ruler_circles" = "Cerchi righello";
 "shared_string_coloring" = "Colorazione";
 "shared_string_rearrange" = "Riordinare";
@@ -2998,3 +2997,6 @@
 "banner_payment_free_backup_settings_title" = "Backup gratuito delle impostazioni";
 "get_osmand_cloud" = "Ottieni OsmAnd Cloud";
 "reset_all_settings_desc" = "Ripristinare tutte le impostazioni predefinite?";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "Mostra le coordinate geografiche del centro attuale della mappa";

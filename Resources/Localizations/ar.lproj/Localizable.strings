@@ -368,7 +368,7 @@
 "save_track_interval_globally" = "الفاصل الزمني للتسجيل";
 "rec_interval_minimum" = "الحد الأدنى";
 "track_start_rec" = "بدء تسجيل المسار";
-"track_rec_addon_q" = "يرجى تفعيل سجل السفر الملحق والدخول لتسجيل وحفظ رحلتك";
+"track_rec_addon_q" = "يرجى تفعيل ملحق سجل السفر لتسجيل وحفظ رحلتك";
 "track_interval_remember" = "تذكر اختياري";
 "track_clear" = "مسح المسارالحالي";
 "track_clear_q" = "هل تريد مسح المسار الحالي؟";
@@ -685,7 +685,7 @@
 "search_another_country" = "حدد منطقة أخرى";
 "skip_map_downloading" = "تخط تنزيل الخرائط";
 "skip_map_downloading_desc_ios" = "ليس لديك خريطة مثبتة في وضع عدم الاتصال. يمكنك اختيار خريطة من القائمة أو تنزيل الخرائط لاحقًا عبر القائمة - إدارة ملفات الخرائط";
-"wiki_around" = "مقالات ويكيبيديا قريبة";
+"wiki_around" = "مقالات ويكيبيديا القريبة";
 "search_categories" = "الفئات";
 "items_selected" = "%d محدد";
 "custom_search" = "بحث مخصص";
@@ -1599,8 +1599,8 @@
 "allow_3d_descr" = "قم بتمكين هذا الخيار لتتمكن من عرض الخريطة في منظور 3D";
 "allow_3d" = "السماح بعرض 3D";
 "product_desc_antarctica" = "تنزيلات خريطة غير محدودة للقطب الجنوبي";
-"map_settings_add_maps_slopes" = "تحتاج لخرائط إضافية لعرض المنحدرات على الخريطة";
-"map_settings_add_maps_hillshade" = "تحتاج إلى خرائط إضافية لعرض التضاريس على الخريطة";
+"map_settings_add_maps_slopes" = "تحتاج لخرائط إضافية لعرض المنحدرات على الخريطة.";
+"map_settings_add_maps_hillshade" = "تحتاج إلى خرائط إضافية لعرض التضاريس على الخريطة.";
 "public_transport_try_change_settings" = "حاول تغيير الإعدادات.";
 "public_transport_empty_warning_title" = "لسوء الحظ، تعذر على أوسماند العثور على مسار للإعدادات الخاصة بك.";
 "help_legend_descr" = "دليل رموز الخريطة";
@@ -1608,13 +1608,13 @@
 "help_travel" = "السفر (ويكيبيديا وويكيفويا)";
 "subscription_osmandlive_item" = "اشتراك أوسماند لايف";
 "osmand_purchases_item" = "مشتريات أوسماند";
-"enable_hillshade" = "تمكين عرض بيانات التضاريس";
+"enable_hillshade" = "قم بالتفعيل لعرض بيانات التضاريس من خريطة التلال أو المنحدرات.";
 "hide_terrain" = "إخفاء التضاريس";
 "show_terrain" = "إظهار التضاريس";
 "shared_string_legend" = "عنوان تفسيري";
 "map_settings_zoom_level_description" = "تعيين الحد الأدنى والحد الأقصى لمستوى التكبير لعرض الطبقة";
-"map_settings_hillshade_description" = "خرائط التضاريس تصور سفوح القمم المنخفضة باستخدام مستويات مختلفة من الرمادي";
-"map_settings_slopes_description" = "تستخدم خرائط المنحدرات ألوانًا مختلفة لعرض التضاريس";
+"map_settings_hillshade_description" = "خريطة التضاريس تستخدم الظلال الداكنة لإظهار المنحدرات والقمم والأراضي المنخفضة.";
+"map_settings_slopes_description" = "المنحدر هو تصورات ملونة على التضاريس.";
 "map_settings_slopes_legend" = "يمكنك قراءة المزيد حول المنحدرات على ويكيبيديا";
 "map_settings_layer_transparency" = "شفافية الطبقة";
 "shared_string_terrain" = "التضاريس";
@@ -2560,7 +2560,6 @@
 "with_offline_maps" = "مع خرائط غير متصلة بالإنترنت";
 "weather_accuracy_forecast_description" = "التوقعات دون اتصال بالإنترنت متاحة حتى: %@.\nالدقة: %@, كل ساعة. %@ fكل ثلاث ساعات.";
 "weather_generates_new_forecast_description" = "أوسماند الطقس يزودك بتوقعات جديدة كل 6 ساعات. كلما اقتربنا من التاريخ الحالي ، كان ذلك أكثر دقة.";
-"update_only_over_wi_fi" = "قم بالتحديث عبر شبكة Wi-Fi فقط";
 "update_parameters" = "تحديث المحددات";
 "contact_support" = "اتصل بالدعم";
 "contact_support_description" = "إذا كان لديك أي أسئلة ، يرجى الاتصال بنا على %@.";
@@ -3017,3 +3016,35 @@
 "banner_payment_free_backup_settings_title" = "نسخ احتياطي مجاني للإعدادات";
 "get_osmand_cloud" = "احصل على سحابة أوسماند";
 "free_favorites_backup_description" = "سجل في سحابة أوسماند للحصول على نسخة احتياطية مجانية للمفضلة والإعدادات";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "يبين الإحداثيات الجغرافية لمركز الخريطة الحالي";
+"map_widget_rendering_fps_desc" = "ويبين مدى سرعة عرض الخريطة وعناصرها وتجديدها، معبرا عنها في إطارات في الثانية (FPS).";
+"map_widget_camera_distance_desc" = "يظهر ارتفاع الكاميرا فوق المستوى السطحي.";
+"map_widget_zoom_level_desc" = "يظهر مستوى تكبير/تصغير الخريطة الحالي.";
+"map_widget_camera_tilt_desc" = "تعرض زاوية إمالة الكاميرا في وضع المنظور. الافتراضي هو 90 درجة (بدون إمالة).";
+"map_widget_target_distance_desc" = "تظهر المسافة بين الكاميرا والموقع المستهدف.";
+"weather_updates_manual" = "يجب تحديث توقعات الطقس يدويا.";
+"purchases_feature_relief_3d_description" = "امتلك وراقب نموذج مقياس لمنطقتك أو القارة بأكملها.";
+"shared_string_relief_3d" = "تضاريس 3D";
+"weather_update_parameters_wifi" = "سيتم تحديث توقعات الطقس فقط في حالة توفر شبكة Wi-Fi.";
+"weather_update_parameters_disabled" = "سيتم تعطيل التحديثات التلقائية.";
+"auto_update" = "تحديث تلقائي";
+"weather_update_parameters_any_network" = "سيتم تحديث توقعات الطقس عبر أي شبكة. يمكن استخدام بيانات الهاتف المحمول.";
+"weather_update_disabled" = "مٌعطل";
+"weather_update_over_wifi_only" = "عبر WIFI فقط";
+"weather_update_over_any_network" = "عبر أي شبكة";
+"map_settings_topography" = "طوبوغرافيا";
+"click_on_widget" = "انقر على الويدجت";
+"shared_string_cache" = "الذاكرة المؤقتة";
+"unsaved_changes_will_be_lost_discard" = "سيتم فقدان أي تغييرات غير محفوظة. هل تريد تجاهل التغييرات؟";
+"terrain_3D_maps" = "خرائط التضاريس";
+"average_speed_skip_stops" = "خذ أماكن التوقف في الحسبان";
+"average_speed_time_interval_desc" = "حدد الفاصل الزمني لمتوسط السرعة.";
+"unsaved_changes" = "تغييرات غير محفوظة";
+
+
+// Shared Strings
+"shared_string_discard" = "إلغاء";
+"specify_number_of_dir_indicators_desc" = "حدد عدد مؤشرات الاتجاه.";
+"map_marker_interval_dialog_desc" = "تحديد الفترة الزمنية التي سيقاس فيها متوسط السرعة لحساب الوقت المقدر للوصول.";

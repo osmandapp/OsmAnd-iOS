@@ -7,6 +7,7 @@
 //
 
 #import "OABaseButtonsViewController.h"
+#import "OATableDataModel.h"
 #import "OAColors.h"
 #import "OASizes.h"
 
@@ -26,9 +27,13 @@
 @property (weak, nonatomic) IBOutlet UIView *belowBottomMarginView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *belowBottomMarginVertivalConstraint;
 
+@property (nonatomic) OATableDataModel *tableData;
+
 @end
 
 @implementation OABaseButtonsViewController
+
+@synthesize tableData;
 
 #pragma mark - Initialization
 
@@ -37,6 +42,7 @@
     self = [super initWithNibName:@"OABaseButtonsViewController" bundle:nil];
     if (self)
     {
+        self.tableData = [OATableDataModel model];
         [self commonInit];
     }
     return self;
@@ -66,9 +72,9 @@
         [self.bottomBackgroundView addBlurEffect:YES cornerRadius:0. padding:0.];
 }
 
-- (void)updateUI:(BOOL)animated
+- (void)updateWithoutData
 {
-    [super updateUI:animated];
+    [super updateWithoutData];
     [self updateBottomButtons];
 }
 
@@ -79,8 +85,8 @@
     self.bottomStackView.axis = axisMode;
     self.aboveBottomMarginView.hidden = !isVertical;
     self.aboveBottomMarginVertivalConstraint.active = isVertical;
-    self.leftBottomMarginConstraint.constant = isVertical ? kPaddingOnSideOfContent : kSmallPaddingOnSideOfContent;
-    self.rightBottomMarginConstraint.constant = isVertical ? kPaddingOnSideOfContent : kSmallPaddingOnSideOfContent;
+    self.leftBottomMarginConstraint.constant = isVertical ? kPaddingOnSideOfContent : (kSmallPaddingOnSideOfContent / 2);
+    self.rightBottomMarginConstraint.constant = isVertical ? kPaddingOnSideOfContent : (kSmallPaddingOnSideOfContent / 2);
     self.middleBottomMarginStackView.axis = axisMode;
     self.middleBottomMarginStackView.distribution = isVertical ? UIStackViewDistributionFill : UIStackViewDistributionEqualSpacing;
     self.middleFirstMarginViewVerticalConstraint.active = isVertical;
@@ -115,9 +121,15 @@
     BOOL hasTopButtonIcon = topButtonIconName && topButtonIconName.length > 0;
     BOOL hasTopButton = (topButtonTitle && topButtonTitle.length > 0) || (topButtonTitleAttr && topButtonTitleAttr.length > 0) || hasTopButtonIcon;
     if (axisMode == UILayoutConstraintAxisVertical)
+    {
         self.topButton.hidden = !hasTopButton;
+        self.topButton.contentEdgeInsets = UIEdgeInsetsMake(10., kSmallPaddingOnSideOfContent, 10., kSmallPaddingOnSideOfContent);
+    }
     else
+    {
         self.topButton.userInteractionEnabled = hasTopButton;
+        self.topButton.contentEdgeInsets = UIEdgeInsetsMake(10., kSmallPaddingOnSideOfContent / 2, 10., kSmallPaddingOnSideOfContent / 2);
+    }
 
     if (topButtonTitleAttr && topButtonTitleAttr.length > 0)
     {
@@ -137,9 +149,15 @@
     BOOL hasBottomButtonIcon = bottomButtonIconName && bottomButtonIconName.length > 0;
     BOOL hasBottomButton = (bottomButtonTitle && bottomButtonTitle.length > 0) || (bottomButtonTitleAttr && bottomButtonTitleAttr.length > 0) || hasBottomButtonIcon;
     if (axisMode == UILayoutConstraintAxisVertical)
+    {
         self.bottomButton.hidden = !hasBottomButton;
+        self.bottomButton.contentEdgeInsets = UIEdgeInsetsMake(10., kSmallPaddingOnSideOfContent, 10., kSmallPaddingOnSideOfContent);
+    }
     else
+    {
         self.bottomButton.userInteractionEnabled = hasBottomButton;
+        self.bottomButton.contentEdgeInsets = UIEdgeInsetsMake(10., kSmallPaddingOnSideOfContent / 2, 10., kSmallPaddingOnSideOfContent / 2);
+    }
 
     if (bottomButtonTitleAttr && bottomButtonTitleAttr.length > 0)
     {
@@ -164,8 +182,12 @@
 
 - (void)setupBottomFonts
 {
-    self.topButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold maximumSize:20.];
-    self.bottomButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold maximumSize:20.];
+    UILayoutConstraintAxis axisMode = [self getBottomAxisMode];
+    UIFont *buttonFont = axisMode == UILayoutConstraintAxisVertical
+        ? [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold maximumSize:20.]
+        : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    self.topButton.titleLabel.font = buttonFont;
+    self.bottomButton.titleLabel.font = buttonFont;
 }
 
 - (UIColor *)getBottomBackgroundColor

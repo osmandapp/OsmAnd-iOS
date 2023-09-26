@@ -21,8 +21,9 @@ class WidgetType: NSObject {
     let docsUrl: String?
     let group: WidgetGroup?
     let defaultPanel: WidgetsPanel
+    let special: Bool
 
-    private init(ordinal: Int, id: String, title: String, descr: String, dayIconName: String, nightIconName: String, docsUrl: String? = nil, group: WidgetGroup? = nil, defaultPanel: WidgetsPanel) {
+    private init(ordinal: Int, id: String, title: String, descr: String, dayIconName: String, nightIconName: String, docsUrl: String? = nil, group: WidgetGroup? = nil, defaultPanel: WidgetsPanel, special: Bool = false) {
         self.ordinal = ordinal
         self.id = id
         self.title = title
@@ -32,6 +33,7 @@ class WidgetType: NSObject {
         self.docsUrl = docsUrl
         self.group = group
         self.defaultPanel = defaultPanel
+        self.special = special
     }
 
     func getIconName(_ night: Bool) -> String {
@@ -40,8 +42,8 @@ class WidgetType: NSObject {
 
     func getGroup() -> WidgetGroup? {
         if (group == .altitude) {
-            let plugin = OAPlugin.getPlugin(OAOsmandDevelopmentPlugin.self) as? OAOsmandDevelopmentPlugin
-            if plugin == nil || !plugin!.is3DMapsEnabled() {
+            let plugin: OAOsmandDevelopmentPlugin? = OAPlugin.getPlugin(OAOsmandDevelopmentPlugin.self) as? OAOsmandDevelopmentPlugin
+            if plugin == nil || !(plugin?.is3DMapsEnabled() ?? false) {
                 return nil
             }
         }
@@ -93,7 +95,7 @@ class WidgetType: NSObject {
 
     func isPurchased() -> Bool {
         if (WidgetType.getProWidgets().contains(where: { $0 == self } )) {
-            return OAIAPHelper.isSubscribedToOsmAndPro()
+            return OAIAPHelper.isOsmAndProAvailable()
         }
         return true
     }
@@ -107,12 +109,14 @@ class WidgetType: NSObject {
     }
 
     func getPanel(_ widgetId: String, appMode: OAApplicationMode) -> WidgetsPanel {
-        if (defaultPanel == .topPanel || defaultPanel == .bottomPanel) {
-            return defaultPanel
-        } else if (defaultPanel == .leftPanel) {
-            return WidgetsPanel.rightPanel.contains(widgetId: widgetId, appMode: appMode) ? WidgetsPanel.rightPanel : WidgetsPanel.leftPanel
-        } else if (defaultPanel == .rightPanel) {
-            return WidgetsPanel.leftPanel.contains(widgetId: widgetId, appMode: appMode) ? WidgetsPanel.leftPanel : WidgetsPanel.rightPanel;
+        if defaultPanel == .topPanel {
+            return WidgetsPanel.bottomPanel.contains(widgetId: widgetId, appMode: appMode) ? .bottomPanel : .topPanel
+        } else if defaultPanel == .bottomPanel {
+            return WidgetsPanel.topPanel.contains(widgetId: widgetId, appMode: appMode) ? .topPanel : .bottomPanel
+        } else if defaultPanel == .leftPanel {
+            return WidgetsPanel.rightPanel.contains(widgetId: widgetId, appMode: appMode) ? .rightPanel : .leftPanel
+        } else if defaultPanel == .rightPanel {
+            return WidgetsPanel.leftPanel.contains(widgetId: widgetId, appMode: appMode) ? .leftPanel : .rightPanel;
         }
         fatalError("Unsupported panel")
     }
@@ -172,7 +176,7 @@ class WidgetType: NSObject {
     }
 
     static func getDuplicateWidgetId(_ widgetId: String) -> String {
-        return getDefaultWidgetId(widgetId) + MapWidgetInfo.DELIMITER + String(Date.now.timeIntervalSince1970 * 1000);
+        return getDefaultWidgetId(widgetId) + MapWidgetInfo.DELIMITER + String(UInt64(Date.now.timeIntervalSince1970 * 1000))
     }
 }
 
@@ -181,14 +185,14 @@ extension WidgetType {
     static let nextTurn = WidgetType(ordinal: 1, id: "next_turn", title: localizedString("map_widget_next_turn"), descr: localizedString("next_turn_widget_desc"), dayIconName: "widget_next_turn_day", nightIconName: "widget_next_turn_night", group: WidgetGroup.routeManeuvers, defaultPanel: WidgetsPanel.leftPanel)
     
     static let smallNextTurn = WidgetType(ordinal: 2, id: "next_turn_small", title: localizedString("map_widget_next_turn_small"), descr: localizedString("next_turn_widget_desc"), dayIconName: "widget_next_turn_small_day", nightIconName: "widget_next_turn_small_night", group: WidgetGroup.routeManeuvers, defaultPanel: WidgetsPanel.leftPanel)
-    static let secondNextTurn = WidgetType(ordinal: 3, id: "next_next_turn", title: localizedString("map_widget_next_next_turn"), descr: localizedString("second_next_turn_widget_desc"), dayIconName: "widget_second_next_turn_day", nightIconName: "widget_second_next_turn_night", group: .routeManeuvers, defaultPanel: .leftPanel)
+    static let secondNextTurn = WidgetType(ordinal: 3, id: "next_next_turn", title: localizedString("map_widget_next_next_turn"), descr: localizedString("second_next_turn_widget_desc"), dayIconName: "widget_second_next_turn_day", nightIconName: "widget_second_next_turn_night", group: WidgetGroup.routeManeuvers, defaultPanel: WidgetsPanel.leftPanel)
 
     // Top panel
     static let coordinatesMapCenter = WidgetType(ordinal: 4, id: "coordinates_map_center", title: localizedString("coordinates_widget_map_center"), descr: localizedString("coordinates_widget_map_center_desc"), dayIconName: "widget_coordinates_map_center_day", nightIconName: "widget_coordinates_map_center_night", docsUrl:docs_widget_coordinates, group: .coordinatesWidget, defaultPanel: .topPanel)
     static let coordinatesCurrentLocation = WidgetType(ordinal: 5, id: "coordinates_current_location", title: localizedString("coordinates_widget_current_location"), descr: localizedString("coordinates_widget_current_location_desc"), dayIconName: "widget_coordinates_location_day", nightIconName: "widget_coordinates_location_night", docsUrl:docs_widget_coordinates, group: .coordinatesWidget, defaultPanel: .topPanel)
     static let streetName = WidgetType(ordinal: 6, id: "street_name", title: localizedString("map_widget_top_text"), descr: localizedString("street_name_widget_desc"), dayIconName: "widget_street_name_day", nightIconName: "widget_street_name_night", docsUrl:docs_widget_street_name, defaultPanel: .topPanel)
     static let markersTopBar = WidgetType(ordinal: 7, id: "map_markers_top", title: localizedString("map_markers_bar"), descr: localizedString("map_markers_bar_widget_desc"), dayIconName: "widget_markers_topbar_day", nightIconName: "widget_markers_topbar_night", docsUrl:docs_widget_markers, defaultPanel: .topPanel)
-    static let lanes = WidgetType(ordinal: 8, id: "lanes", title: localizedString("show_lanes"), descr: localizedString("lanes_widgets_desc"), dayIconName: "widget_lanes_day", nightIconName: "widget_lanes_night", docsUrl:docs_widget_lanes, defaultPanel: .topPanel)
+    static let lanes = WidgetType(ordinal: 8, id: "lanes", title: localizedString("show_lanes"), descr: localizedString("lanes_widgets_desc"), dayIconName: "widget_lanes_day", nightIconName: "widget_lanes_night", docsUrl:docs_widget_lanes, defaultPanel: .topPanel, special: true)
 
     // Right panel
     static let distanceToDestination = WidgetType(ordinal: 9, id: "distance", title: localizedString("map_widget_distance_to_destination"), descr: localizedString("distance_to_destination_widget_desc"), dayIconName: "widget_target_day", nightIconName: "widget_target_night", group: .navigationPoints, defaultPanel: .rightPanel)

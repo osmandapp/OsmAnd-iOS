@@ -24,6 +24,7 @@
 #import "OAPlugin.h"
 #import "OAWeatherHelper.h"
 #import "Localization.h"
+#import "OAWeatherPlugin.h"
 
 #include <OsmAndCore/WorldRegions.h>
 
@@ -70,10 +71,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return OALocalizedString(@"download_wikipedia_maps");
         case OsmAndResourceType::RoadMapRegion:
             return OALocalizedString(@"roads");
-        case OsmAndResourceType::HillshadeRegion:
-            return OALocalizedString(@"shared_string_hillshade");
-        case OsmAndResourceType::SlopeRegion:
-            return OALocalizedString(@"shared_string_slope");
         case OsmAndResourceType::SqliteFile:
             return OALocalizedString(@"online_map");
         case OsmAndResourceType::WeatherForecast:
@@ -99,12 +96,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::SrtmMapRegion:
         case OsmAndResourceType::DepthContourRegion:
             imageNamed = @"ic_custom_contour_lines";
-            break;
-        case OsmAndResourceType::HillshadeRegion:
-            imageNamed = @"ic_custom_hillshade";
-            break;
-        case OsmAndResourceType::SlopeRegion:
-            imageNamed = @"ic_action_slope";
             break;
         case OsmAndResourceType::WikiMapRegion:
             imageNamed = @"ic_custom_wikipedia";
@@ -132,6 +123,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             break;
         case OsmAndResourceType::Travel:
             imageNamed = @"ic_custom_wikipedia";
+        case OsmAndResourceType::GeoTiffRegion:
+        case OsmAndResourceType::HeightmapRegionLegacy:
+            imageNamed = @"ic_custom_terrain";
             break;
         default:
             imageNamed = @"ic_custom_map";
@@ -157,10 +151,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::DepthContourRegion:
         case OsmAndResourceType::DepthMapRegion:
             return 45;
-        case OsmAndResourceType::HillshadeRegion:
-            return 50;
-        case OsmAndResourceType::SlopeRegion:
-            return 55;
         case OsmAndResourceType::WikiMapRegion:
             return 60;
 //        case WIKIVOYAGE_FILE:
@@ -196,10 +186,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         return OsmAndResourceType::DepthContourRegion;
     else if ([scopeId isEqualToString:@"depthmap"])
         return OsmAndResourceType::DepthMapRegion;
-    else if ([scopeId isEqualToString:@"hillshade"])
-        return OsmAndResourceType::HillshadeRegion;
-    else if ([scopeId isEqualToString:@"slope"])
-        return OsmAndResourceType::SlopeRegion;
     else if ([scopeId isEqualToString:@"wikimap"])
         return OsmAndResourceType::WikiMapRegion;
 //    else if ([scopeId isEqualToString:@"wikivoyage"])
@@ -239,8 +225,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             [self.class toValue:OsmAndResourceType::SrtmMapRegion],
             [self.class toValue:OsmAndResourceType::DepthContourRegion],
             [self.class toValue:OsmAndResourceType::DepthMapRegion],
-            [self.class toValue:OsmAndResourceType::HillshadeRegion],
-            [self.class toValue:OsmAndResourceType::SlopeRegion],
             [self.class toValue:OsmAndResourceType::WikiMapRegion],
             [self.class toValue:OsmAndResourceType::LiveUpdateRegion],
             [self.class toValue:OsmAndResourceType::GpxFile],
@@ -261,8 +245,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             [self.class toValue:OsmAndResourceType::MapRegion],
             [self.class toValue:OsmAndResourceType::RoadMapRegion],
             [self.class toValue:OsmAndResourceType::SrtmMapRegion],
-            [self.class toValue:OsmAndResourceType::HillshadeRegion],
-            [self.class toValue:OsmAndResourceType::SlopeRegion],
             [self.class toValue:OsmAndResourceType::WikiMapRegion],
             [self.class toValue:OsmAndResourceType::WeatherForecast]
     ];
@@ -730,8 +712,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::RoadMapRegion:
         case OsmAndResourceType::SrtmMapRegion:
         case OsmAndResourceType::WikiMapRegion:
-        case OsmAndResourceType::HillshadeRegion:
-        case OsmAndResourceType::SlopeRegion:
         case OsmAndResourceType::WeatherForecast:
         case OsmAndResourceType::HeightmapRegionLegacy:
         case OsmAndResourceType::GeoTiffRegion:
@@ -1551,9 +1531,51 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast)
     {
-        [[OAWeatherHelper sharedInstance] downloadForecastByRegion:item.worldRegion];
-        if (onTaskResumed)
-            onTaskResumed(nil);
+        if (![[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled] || ![OAIAPHelper isOsmAndProAvailable])
+            return;
+
+        NSString *regionId = [OAWeatherHelper checkAndGetRegionId:item.worldRegion];
+
+        AFNetworkReachabilityManager *networkManager = [AFNetworkReachabilityManager sharedManager];
+        if (!networkManager.isReachable)
+            return;
+        else if (!networkManager.isReachableViaWiFi && [OAWeatherHelper getPreferenceWeatherAutoUpdate:regionId] == EOAWeatherAutoUpdateOverWIFIOnly)
+            return;
+        [[OAWeatherHelper sharedInstance] preparingForDownloadForecastByRegion:item.worldRegion regionId:regionId];
+
+        NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+        // https://osmand.net/download?&weather=yes&file=Weather_Angola_africa.tifsqlite.zip
+        NSString *downloadsIdPrefix = [item.worldRegion.downloadsIdPrefix stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:[[item.worldRegion.downloadsIdPrefix substringToIndex:1] capitalizedString]];
+        NSString *pureUrlString = [[NSString alloc] initWithFormat:@"https://osmand.net/download?&weather=yes&file=Weather_%@%@", downloadsIdPrefix, @"tifsqlite.zip"];
+        NSString *params = [[NSString stringWithFormat:@"&event=2&osmandver=OsmAndIOs+%@", ver]
+                            stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        NSString *urlString = [[NSString alloc] initWithFormat:@"%@%@", pureUrlString, params];
+        NSURL *url = [NSURL URLWithString:urlString];
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+
+        NSLog(@"%@", url);
+        NSString* name = [self.class titleOfResourceType:item.resourceType
+                                                inRegion:item.worldRegion
+                                          withRegionName:YES
+                                        withResourceType:YES];
+        OsmAndAppInstance app = [OsmAndApp instance];
+        id<OADownloadTask> task;
+        if (!item.downloadTask)
+            item.downloadTask = task = [app.downloadsManager downloadTaskWithRequest:request
+                                                                              andKey:[@"resource:" stringByAppendingString:[NSString stringWithFormat:@"%@%@", [item.worldRegion.downloadsIdPrefix lowerCase], @"tifsqlite"]] andName:name];
+        else
+            task = item.downloadTask;
+
+        if (onTaskCreated)
+            onTaskCreated(task);
+
+        // Resume task only if it's other resource download tasks are not running
+        if ([app.downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil)
+        {
+            [task resume];
+            if (onTaskResumed)
+                onTaskResumed(task);
+        }
     }
     else
     {
@@ -1731,14 +1753,15 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         [view addSubview:progressHUD];
         [progressHUD showAnimated:YES whileExecutingBlock:^{
             NSString *regionId = [OAWeatherHelper checkAndGetRegionId:item.worldRegion];
-            [[OAWeatherHelper sharedInstance] prepareToStopDownloading:regionId];
-            if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined)
-                [[OAWeatherHelper sharedInstance] removeLocalForecast:regionId refreshMap:NO];
-            else if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished)
+            if ([[OAWeatherHelper sharedInstance] isUndefinedDownloadStateFor:item.worldRegion])
+                [[OAWeatherHelper sharedInstance] removeLocalForecast:regionId region: item.worldRegion refreshMap:NO];
+            else if ([[OAWeatherHelper sharedInstance] isDownloadedWeatherForecastForRegionId:regionId])
                 [[OAWeatherHelper sharedInstance] calculateCacheSize:item.worldRegion onComplete:nil];
         } completionBlock:^{
             if (onTaskStop)
-                onTaskStop(nil);
+                onTaskStop(item.downloadTask);
+
+            [item.downloadTask stop];
             [progressHUD removeFromSuperview];
         }];
     }
@@ -1809,8 +1832,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             if (item.resourceType == OsmAndResourceType::WeatherForecast)
             {
                 NSString *regionId = [OAWeatherHelper checkAndGetRegionId:item.worldRegion];
-                [[OAWeatherHelper sharedInstance] prepareToStopDownloading:regionId];
-                [[OAWeatherHelper sharedInstance] removeLocalForecast:regionId refreshMap:item == items.lastObject];
+                [[OAWeatherHelper sharedInstance] removeLocalForecast:regionId region:item.worldRegion refreshMap:item == items.lastObject];
             }
             else if ([item isKindOfClass:[OASqliteDbResourceItem class]])
             {
@@ -1838,7 +1860,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                 }
                 else
                 {
-                    if (item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
+                    if (item.resourceType == OsmAndResourceType::HeightmapRegionLegacy || item.resourceType == OsmAndResourceType::GeoTiffRegion)
                         [app.data.terrainResourcesChangeObservable notifyEvent];
                 }
 

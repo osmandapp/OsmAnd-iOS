@@ -14,12 +14,13 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OASizes.h"
+#import "OsmAnd_Maps-Swift.h"
 
 const static CGFloat kMapSettingsInitialPosKoeff = 0.35;
 const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 
 @interface OADashboardViewController () <OATableViewDelegate>
-{    
+{
     BOOL isAppearFirstTime;
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
 }
@@ -253,7 +254,10 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
         [rootViewController.view addSubview:self.navbarGradientBackgroundView];
         
         if (_topControlsVisible)
-            [[OARootViewController instance].mapPanel setTopControlsVisible:NO];
+        {
+            [[OARootViewController instance].mapPanel targetUpdateControlsLayout:YES
+                                                            customStatusBarStyle:UIStatusBarStyleLightContent];
+        }
     }
     
     self.navbarView.frame = navbarFrame;
@@ -332,7 +336,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
         [_parentVC setupView];
     
     if (_topControlsVisible && (!_parentVC || hideAll))
-        [[OARootViewController instance].mapPanel setTopControlsVisible:YES];
+        [[OARootViewController instance].mapPanel targetUpdateControlsLayout:NO customStatusBarStyle:UIStatusBarStyleDefault];
     
     if (animated)
     {
@@ -380,7 +384,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
             
             [self deleteParentVC:hideAll];
             _hiding = NO;
-
+            [[OARootViewController instance].mapPanel recreateControls];
         }];
     }
     else
@@ -489,7 +493,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     self.tableView.sectionFooterHeight = 0.01;
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, 40)];
     self.tableView.tableFooterView = footerView;
-    
+    [self.tableView registerClass:[FreeBackupBannerCell class] forCellReuseIdentifier:[FreeBackupBannerCell getCellIdentifier]];
     _backgroundView = [[UIView alloc] initWithFrame:{0, -1, 1, 1}];
     _backgroundView.backgroundColor = UIColor.groupTableViewBackgroundColor;
     _backgroundView.autoresizingMask = UIViewAutoresizingNone;

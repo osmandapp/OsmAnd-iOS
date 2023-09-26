@@ -457,8 +457,6 @@
     {
         [UIView animateWithDuration:0.3 animations:^{
             [mapPanel hideScrollableHudViewController];
-            [mapPanel setTopControlsVisible:YES];
-            [mapPanel setBottomControlsVisible:YES menuHeight:0 animated:YES];
             _scrollableView.frame = frame;
         } completion:^(BOOL finished) {
             [self dismissViewControllerAnimated:NO completion:onComplete];
@@ -467,8 +465,6 @@
     else
     {
         [mapPanel hideScrollableHudViewController];
-        [mapPanel setTopControlsVisible:YES];
-        [mapPanel setBottomControlsVisible:YES menuHeight:0 animated:YES];
         _scrollableView.frame = frame;
         [self dismissViewControllerAnimated:YES completion:onComplete];
     }

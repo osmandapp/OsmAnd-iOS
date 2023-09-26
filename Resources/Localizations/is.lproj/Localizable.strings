@@ -304,7 +304,7 @@
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Staðsetningarháðar Wikipediu-greinar á landakortinu";
 "purchases_feature_desc_wikipedia" = "Útvegar allar Wikipediu-greinar um staðina sem þú heimsækir án nettengingar og birtir þær einfaldlega með því að ýta beint á landakortið. Ekki gleyma að sækja Wikipedia-kortaskrár fyrir svæðin sem þú hefur áhuga á.";
-"srtm_plugin_name" = "Hæðarlínur";
+"srtm_plugin_name" = "Landslag";
 "product_desc_srtm" = "Sjónrænt mat á lögun yfirborðs landsins";
 "srtm_plugin_description" = "Yfirborðsupplýsingar, eins og hæðarlínur, hæðaskygging (relief hillshade) og brekkur, sem birtast ofan á staðalkortum OsmAnd, hjálpa við að meta landslag út frá atriðum á borð við sléttleika, hættur, halla, hæðarmismun og fleira. Yfirborðsupplýsingar á korti er hægt að túlka meðskyggingum fyrir halla, hæðarlínum og litstiglum fyrir nismunandi frávik frá flötu landi. \n\nGögnin koma frá SRTM (Shuttle Radar Topography Mission) og ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer).\n\nLeiðbeiningar - https://osmand.net/docs/user/plugins/contour-lines .";
 "my_location" = "Staðsetning mín";
@@ -335,9 +335,9 @@
 "from_location" = "frá";
 "show_alt_in_drive" = "Birta hæðartölur í akstursham";
 "shared_string_get" = "Sækja";
-"srtm_plugin_disabled" = "Hæðarlínur óvirkar";
+"srtm_plugin_disabled" = "Landslag óvirkt";
 "prch_wiki_info" = "Wikipedia-viðbótin virkjar upplýsingar af Wikipedia á þeim landakortum sem þú átt rétt á, hvort sem er keyptum eða sóttum með frjálsum kvóta.";
-"prch_srtm_info" = "Hæðarlínu-viðbótin virkjar hæðarlínur á þeim landakortum sem þú átt rétt á, hvort sem er keyptum eða sóttum með frjálsum kvóta.";
+"prch_srtm_info" = "Landslag-viðbótin virkjar hæðarlínur á þeim landakortum sem þú átt rétt á, hvort sem er keyptum eða sóttum með frjálsum kvóta.";
 "shared_string_open" = "Opið";
 "time_closed" = "Lokað";
 "will_close_at" = "Lokar klukkan";
@@ -373,8 +373,8 @@
 "plugin_popup_wiki_desc" = "Til að geta notað Wikipedia-viðbótina þarftu fyrst að sækja Wikipedia-gögn fyrir eitthvað svæði";
 "plugin_popup_wiki_ask" = "Til að sækja gögn frá Wikipedia, verðurðu að virkja viðbótina: <b>Wikipedia</b>";
 "plugin_popup_srtm_title" = "Sækja hæðarlínur";
-"plugin_popup_srtm_desc" = "Til að sjá hæðarlínur á kortinu, þarftu fyrst að sækja hæðarlínukort af viðkomandi svæði";
-"plugin_popup_srtm_ask" = "Til að sækja hæðarlínur, verðurðu að virkja viðbótina: <b>Hæðarlínur</b>";
+"plugin_popup_srtm_desc" = "Til að sjá landslagseinkenni á kortinu, þarftu fyrst að sækja hæðarlínukort af viðkomandi svæði";
+"plugin_popup_srtm_ask" = "Til að sækja hæðarlínur, verðurðu að virkja viðbótina: <b>Landslag</b>";
 "plugin_popup_nautical_title" = "Sækja sjókort";
 "plugin_popup_nautical_desc" = "Sæktu fyrst sjókortin.\nFarðu síðan í <b>Stillingar korts</b> > <b>Gerð korts</b> og kveiktu á <b>Sjókort</b>";
 "plugin_popup_trip_planning_ask" = "Til að byrja á skipulagningu ferðar, verðurðu að virkja viðbótina: <b>Skipulagning ferða</b>";
@@ -513,12 +513,12 @@
 "save_global_track_interval" = "Almennt millibil skráninga";
 "rotate_map_to" = "Stefna korts";
 "rotate_map_to_bearing_descr" = "Veldu stefnu korts miðað við skjá.";
-"rotate_map_compass_opt" = "Eftiráttavita";
-"rotate_map_bearing_opt" = "Eftirátt hreyfingar";
+"rotate_map_compass_opt" = "Eftir áttavita";
+"rotate_map_bearing_opt" = "Eftir átt hreyfingar";
 "rotate_map_north_opt" = "Ekki snúa (norður er upp)";
 "driving_region_descr" = "Veldu aksturssvæði: BNA, Evrópa, Bretland, Asía og annað.";
 "map_widget_magnetic_bearing" = "Segulstefna";
-"map_widget_bearing" = "Hlutfallsleg stefna";
+"map_widget_bearing" = "Hlutfallsleg miðun";
 "map_widget_transparent" = "Gegnsæir viðmótshlutar";
 "shared_string_near" = "Nálægt";
 "map_widget_next_turn" = "Næsta beygja";
@@ -1996,7 +1996,7 @@
 "extra_maps_menu_group" = "Aukakort";
 "custom_plugins" = "Sérsniðnar viðbætur";
 "custom_osmand_plugin" = "Sérsniðin OsmAnd-viðbót";
-"shared_string_disable" = "Geraóvirkt";
+"shared_string_disable" = "Gera óvirkt";
 
 // Shared Strings
 "shared_string_enable" = "Virkja";
@@ -2589,7 +2589,6 @@
 "backup_remove_old_versions_finished" = "Eldri útgáfum hefur verið eytt af OsmAnd-tölvuskýinu.";
 "backup_delete_types_descr" = "Viltu eyða gögnum frá úreltum gagnagerðum úr OsmAnd-tölvuskýi\?";
 "cloud_confirm_delete_type" = "Ertu viss um að þú viljir eyða \"%@\" af OsmAnd-tölvuskýinu?";
-"update_only_over_wi_fi" = "Uppfæra einungis í gegnum Wi-Fi";
 "subscription_banner_free_maps_title" = "Þú getur sótt %i kort ókeypis.";
 "compass_options_description" = "Smelltu á áttavitann til að breyta stefnu kortsins";
 "map_widget_rendering_fps" = "Rammatíðni myndgerðar korts";
@@ -2682,7 +2681,7 @@
 "cloud_changes_will_be_dismissed" = "Breytingará tölvuskýinu verða hunsaðar";
 "local_file_will_be_restored" = "Staðvær skrá verður endurheimt";
 "local_changes_will_be_dismissed" = "Staðværar breytingar verða hunsaðar";
-"download_heightmap_maps" = "Hæðakort";
+"download_heightmap_maps" = "Yfirborðskort";
 "upload_change" = "Senda inn breytingu";
 "routing_attr_motor_type_description" = "Veldu gerð eldsneytis sem vélin þín notar, til að reikna losun á CO2.";
 "last_synchronization" = "Síðasta samstilling";
@@ -2950,7 +2949,7 @@
 "clouds_widget_desc" = "Sýnir skýjahulu fyrir núverandi miðju landakortsins.";
 "wind_widget_desc" = "Sýnir vindhraða fyrir núverandi miðju landakortsins.";
 "precipitation_widget_desc" = "Sýnir úrkomu fyrir núverandi miðju landakortsins.";
-"bearing_desc" = "Sýnir algilda eða hlutfallslega stefnu á markpunkt í horneiningum (gráður 180, gráður 360, millíradíanar).";
+"bearing_desc" = "Sýnir algilda eða hlutfallslega miðun á markpunkt í horneiningum (gráður 180, gráður 360, millíradíanar).";
 "map_widget_altitude_desc" = "Sýnir hæð yfir sjávarmáli á fyrirliggjandi hnattstaðsetningu eða á núverandi miðju landakortsins";
 "weather_widget_group_desc" = "Sett viðmótshluta sem birta ýmsar veðurupplýsingar.";
 "map_widget_group_sunrise_sunset_desc" = "Þessir viðmótshlutar birta upplýsingar um næstu sólarupprás og sólsetur.";
@@ -2964,9 +2963,9 @@
 "map_widget_distance_to_destination" = "Fjarlægð á áfangastað";
 "map_marker_1st" = "Fyrsta kortamerki";
 "map_marker_2nd" = "Annað kortamerki";
-"map_widget_true_bearing" = "Réttvísandi";
+"map_widget_true_bearing" = "Réttvísandi miðun";
 "developer_widgets" = "Viðmótshlutir forritara";
-"shared_string_bearing" = "Stefna";
+"shared_string_bearing" = "Miðun";
 "map_markers_desc" = "Viðmótshlutinn sýnir vegalengd eða áætlaðan komutíma (ETA) fyrir fyrstu tvö kortamerkin í kortamerkjalistanum.";
 "route_maneuvers" = "Aðgerðir leiðar";
 "navigation_points" = "Leiðsagnarpunktar";
@@ -2980,3 +2979,51 @@
 "activity_type_cycling_name" = "Hjólreiðar";
 "activity_type_racing_name" = "Kappakstur";
 "activity_type_snowmobile_name" = "Vélsleðar";
+"free_favorites_backup_description" = "Skráðu þig á OsmAnd-tölvuskýið til að fá ókeypis öryggisafrit af eftirlætum og stillingum";
+"weather_updates_manual" = "Veðurspá þarf að uppfæra handvirkt.";
+"map_widget_target_distance_desc" = "Sýnir vegalengdina frá myndavélinni að áfangastaðnum.";
+"purchases_feature_relief_3d_description" = "Skoðaðu kvarðað líkan af þínu næsta nágrenni eða jafnvel heila heimsálfu.";
+"weather_update_disabled" = "Óvirkt";
+"get_osmand_cloud" = "Fáðu OsmAnd Cloud-tölvuský";
+"map_widget_camera_tilt_desc" = "Sýnir halla myndavélar í fjarvíddarham. Sjálfgefið er 90° (enginn halli).";
+"rendering_value_sacScale_name" = "SAC";
+"rendering_value_caiScale_description" = "Club Alpino Italiano (Ítalski Alpaklúbburinn)";
+"distance_circles" = "Fjarlægðarhringir";
+"generate_slope_from_3d_maps" = "Búa til rastakort með brekkum út frá þrívíddarkortum";
+"shared_string_page_number" = "Síða %d";
+"banner_payment_free_backup_settings_title" = "Ókeypis öryggisafrit stillinga";
+"shared_string_relief_3d" = "Þrívíddarupphleyping";
+"weather_update_parameters_wifi" = "Veðurspá verður bara uppfærð ef Wi-Fi netkerfi eru tiltæk.";
+"map_widget_zoom_level_desc" = "Sýnir núverandi aðdráttarstig kortsins.";
+"map_3d_mode_action" = "3D-þrívíddarhamur";
+"weather_update_over_wifi_only" = "Einungis yfir WiFi-net";
+"no_widgets_descr" = "Bættu við einum eða fleiri viðmótshlutum úr listanum yfir tiltæka viðmótshluta.";
+"reset_all_settings_desc" = "Frumstilla allar stillingar á sjálfgefin gildi?";
+"free_favorites_backup" = "Ókeypis öryggisafrit eftirlæta";
+"weather_update_parameters_disabled" = "Sjálfvirkar uppfærslur verða óvirkar.";
+"map_widget_camera_distance_desc" = "Sýnir hæð myndavélar fyrir ofan yfirborðið.";
+"generate_hillshade_from_3d_maps" = "Búa til rastakort með hæðaskyggingum út frá þrívíddarkortum";
+"map_2d_mode_action" = "2D-tvívíddarhamur";
+"auto_update" = "Uppfæra sjálfvirkt";
+"shared_string_light" = "Ljóst";
+"weather_update_over_any_network" = "Um hvaða netkerfi sem er";
+"weather_update_parameters_any_network" = "Veðurspá verður uppfærð á hvaða netkerfi sem er. Notast má við farsímagögn.";
+"add_row" = "Bæta við röð";
+"visible_in_3d_mode" = "Sýnilegt í 3D-ham";
+"shared_string_dark" = "Dökkt";
+"shared_string_hidden" = "Falið";
+"rendering_value_sacScale_description" = "Svissneski Alpaklúbburinn";
+"map_3d_mode_description" = "Snertu kortið með tveimur fingrum og færðu þá upp og niður til að breyta halla kortsins.";
+"disable_vertex_hillshade_3d" = "Gera hæðaskyggingu lína óvirka í þrívídd";
+"rendering_value_caiScale_name" = "CAI";
+"no_widgets_here_yet" = "Engir viðmótshlutar hér ennþá";
+"true_bearing_wdiget_desc" = "Horn milli réttvísandi norðurs og markpunkts miðað við staðsetningu þína.";
+"rendering_attr_alpineHikingScaleScheme_description" = "Flokkun leiða í erfiðleikastig.";
+"free_account" = "Ókeypis aðgangur";
+"compass_on_circles" = "Áttaviti á hringjum";
+"map_3d_mode_hint" = "Ef ýtt er og haldið er hægt að breyta staðsetningu hnappsins.";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "Sýnir landfræðileg hnit núverandi miðju landakortsins";
+"ruler_circles" = "Mælihringir";
+"map_widget_rendering_fps_desc" = "Sýnir hve hratt landakort og kortaeiningar séu birtar og endurlesnar, í römmum á sekúndu (FPS).";

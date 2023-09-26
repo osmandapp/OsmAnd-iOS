@@ -32,15 +32,20 @@
 #import "OAGPXDocumentAdapter.h"
 #import "OAGPXDocumentPrimitivesAdapter.h"
 #import "OAPOIAdapter.h"
+#import "OsmAndApp.h"
+#import "OAObservable.h"
+#import "OAAutoObserverProxy.h"
+#import "OALocationConvert.h"
+#import "OAWidgetsVisibilityHelper.h"
+#import "OADistanceAndDirectionsUpdater.h"
+#import "OAHistoryViewController.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
 #import "OAWidgetState.h"
 #import "OATextInfoWidget.h"
 #import "OABaseWidgetView.h"
-#import "OAMapWidgetRegistry.h"
 #import "OANextTurnWidget.h"
-#import "OACoordinatesWidget.h"
 #import "OATopTextView.h"
 #import "OALanesControl.h"
 #import "OADistanceToPointWidget.h"
@@ -52,10 +57,7 @@
 #import "OASunriseSunsetWidget.h"
 #import "OASunriseSunsetWidgetState.h"
 #import "OAAverageSpeedComputer.h"
-#import "OsmAndApp.h"
-#import "OAObservable.h"
-#import "OAAutoObserverProxy.h"
-#import "OAMapViewController.h"
+#import "OADestinationBarWidget.h"
 
 // Plugins
 #import "OAPlugin.h"
@@ -74,12 +76,12 @@
 // Controllers
 #import "OAMapHudViewController.h"
 #import "OAMapInfoController.h"
+#import "OAMapViewController.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OABaseNavbarViewController.h"
 #import "OABaseButtonsViewController.h"
 #import "OAQuickActionListViewController.h"
-#import "OAConfigureMenuViewController.h"
 #import "OACreateProfileViewController.h"
 #import "OAOsmAccountSettingsViewController.h"
 #import "OAOsmLoginMainViewController.h"
@@ -87,6 +89,7 @@
 #import "OABaseWebViewController.h"
 #import "OATrackMenuHudViewController.h"
 #import "OATrackMenuHeaderView.h"
+#import "OADirectionAppearanceViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -104,6 +107,11 @@
 #import "QuadRect.h"
 #import "OASearchPoiTypeFilter.h"
 #import "OAPOI.h"
+#import "OADirectionTableViewCell.h"
+#import "OASegmentSliderTableViewCell.h"
+
+// Views
+#import "OASegmentedSlider.h"
 
 // Apple
 #import <SafariServices/SafariServices.h>

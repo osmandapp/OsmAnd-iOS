@@ -39,6 +39,7 @@
     self = [super initWithNibName:@"OABaseNavbarViewController" bundle:nil];
     if (self)
     {
+        _tableData = [[OATableDataModel alloc] init];
         [self commonInit];
     }
     return self;
@@ -46,7 +47,6 @@
 
 - (void)commonInit
 {
-    _tableData = [[OATableDataModel alloc] init];
 }
 
 // use in overridden init method if class properties have complex dependencies
@@ -62,14 +62,9 @@
     
     if (!self.refreshOnAppear)
         [self generateData];
-
-    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
     
     if ([self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle)
         [self.navigationItem hideTitleInStackView:YES defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
-
-    self.navigationController.interactivePopGestureRecognizer.delegate = self;
-    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -91,7 +86,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+
+    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+
     if (self.refreshOnAppear)
     {
         [self generateData];
@@ -260,6 +258,11 @@
 {
     [self generateData];
     [self reloadData:animated];
+    [self updateWithoutData];
+}
+
+- (void)updateWithoutData
+{
     [self applyLocalization];
     [self updateNavbar];
 }
@@ -323,7 +326,7 @@
 
         iconContainer.backgroundColor = UIColor.whiteColor;
         iconView.contentMode = UIViewContentModeCenter;
-        iconView.image = rightIconLargeTitle;
+        iconView.image = rightIconLargeTitle.imageFlippedForRightToLeftLayoutDirection;
         UIColor *tintColor = [self getRightIconTintColorLargeTitle];
         if (tintColor)
             iconView.tintColor = tintColor;
@@ -332,8 +335,14 @@
         iconContainer.layer.cornerRadius = baseIconSize / 2;
         iconContainer.clipsToBounds = YES;
         iconContainer.translatesAutoresizingMaskIntoConstraints = NO;
+        NSLayoutConstraint *horizontalConstraint;
+        if ([self.view isDirectionRTL])
+            horizontalConstraint = [iconContainer.leftAnchor constraintEqualToAnchor:self.navigationController.navigationBar.leftAnchor constant:16. + [OAUtilities getLeftMargin]];
+        else
+            horizontalConstraint = [iconContainer.rightAnchor constraintEqualToAnchor:self.navigationController.navigationBar.rightAnchor constant:-(16. + [OAUtilities getLeftMargin])];
+        
         [NSLayoutConstraint activateConstraints:@[
-            [iconContainer.rightAnchor constraintEqualToAnchor:self.navigationController.navigationBar.rightAnchor constant:-(16. + [OAUtilities getLeftMargin])],
+            horizontalConstraint,
             [iconContainer.bottomAnchor constraintEqualToAnchor:self.navigationController.navigationBar.bottomAnchor constant:-((navbarHeight - baseIconSize) / 2)],
             [iconContainer.heightAnchor constraintEqualToConstant:baseIconSize],
             [iconContainer.widthAnchor constraintEqualToAnchor:iconContainer.heightAnchor]
@@ -554,6 +563,11 @@
     return nil;
 }
 
+- (UIBarButtonItem *)getLeftNavbarButton
+{
+    return _leftNavbarButton;
+}
+
 - (UIImage *)getCustomIconForLeftNavbarButton
 {
     return nil;
@@ -638,6 +652,11 @@
 - (NSString *)getTableFooterText
 {
     return @"";
+}
+
+- (CGFloat)getNavbarHeight
+{
+    return [OAUtilities getTopMargin] + _navbarHeightCurrent;
 }
 
 #pragma mark - Table data
@@ -747,7 +766,17 @@
 {
 }
 
+- (BOOL)onGestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    return YES;
+}
+
 #pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    return [self onGestureRecognizerShouldBegin:gestureRecognizer];
+}
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {

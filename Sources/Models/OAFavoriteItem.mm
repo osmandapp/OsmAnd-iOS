@@ -598,8 +598,8 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         e.value = @"true";
         [exts addObject:e];
     }
-    [pt setAmenity:[self getAmenity]];
     pt.extensions = exts;
+    [pt setAmenity:[self getAmenity]];
     pt.name = self.getName;
     pt.desc = self.getDescription;
     if (self.getCategory.length > 0)
@@ -624,6 +624,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     [fp setDescription:pt.desc];
     [fp setComment:pt.comment];
     [fp setAmenityOriginName:pt.getAmenityOriginName];
+    [fp setAmenity:[pt getAmenity]];
     
     // TODO: sync with Android
 

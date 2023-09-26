@@ -11,7 +11,7 @@
 
 #define kBorderWidth 2.
 
-#define kFixedHeight 338.
+#define kFixedHeight 300
 #define kLabelOffset 40.
 
 #define kImageWidth 52.
@@ -25,8 +25,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *bannerMainImageView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
-@property (weak, nonatomic) IBOutlet UIButton *topButton;
-@property (weak, nonatomic) IBOutlet UIButton *bottomButton;
 
 @end
 
@@ -84,8 +82,6 @@
     
     _animatedViews = [NSMutableArray array];
     self.titleLabel.font = [UIFont scaledSystemFontOfSize:34. weight:UIFontWeightBold];
-    self.topButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
-    self.bottomButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (CGFloat)getCompoundImageWidth:(NSInteger)count
@@ -159,13 +155,11 @@
     return [UIColor colorWithPatternImage:resImage];
 }
 
-- (void)setUpViewWithTitle:(NSString *)title description:(NSString *)description image:(UIImage *)image topButtonTitle:(NSString *)topButtonTitle bottomButtonTitle:(NSString *)bottomButtonTitle
+- (void)setUpViewWithTitle:(NSString *)title description:(NSString *)description image:(UIImage *)image
 {
     self.titleLabel.text = title;
     self.descriptionLabel.text = description;
     self.bannerMainImageView.image = image.imageFlippedForRightToLeftLayoutDirection;
-    [self.topButton setTitle:topButtonTitle forState:UIControlStateNormal];
-    [self.bottomButton setTitle:bottomButtonTitle forState:UIControlStateNormal];
     
     // Add border to main image
     self.bannerMainImageView.layer.borderWidth = kBorderWidth;
@@ -178,22 +172,6 @@
     CGFloat titleHeight = [OAUtilities calculateTextBounds:self.titleLabel.text width:labelWidth font:[UIFont scaledSystemFontOfSize:34. weight:UIFontWeightBold]].height;
     CGFloat descriptionHeight = [OAUtilities calculateTextBounds:self.descriptionLabel.text width:labelWidth font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
     return titleHeight + descriptionHeight + kFixedHeight;
-}
-
-- (IBAction)topButtonPressed
-{
-    if (self.delegate)
-    {
-        [self.delegate getOrRegisterButtonPressed];
-    }
-}
-
-- (IBAction)bottomButtonPressed
-{
-    if (self.delegate)
-    {
-        [self.delegate logInButtonPressed];
-    }
 }
 
 @end

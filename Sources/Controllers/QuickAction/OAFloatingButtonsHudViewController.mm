@@ -24,8 +24,6 @@
 
 #import <AudioToolbox/AudioServices.h>
 
-#define VIEWPORT_SHIFTED_SCALE 1.5f
-#define VIEWPORT_NON_SHIFTED_SCALE 1.0f
 #define kHudButtonsOffset 16.0f
 #define kHudQuickActionButtonHeight 50.0f
 
@@ -93,8 +91,17 @@
     _map3dModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                    withHandler:@selector(onMap3dModeUpdated)
                                                     andObserve:[OARootViewController instance].mapPanel.mapViewController.elevationAngleObservable];
-    
+
     [self updateColors:NO];
+}
+
+- (void)dealloc
+{
+    if (_map3dModeObserver)
+    {
+        [_map3dModeObserver detach];
+        _map3dModeObserver = nil;
+    }
 }
 
 - (void) setPinPosition
@@ -147,12 +154,12 @@
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     if ([OAUtilities isLandscape])
     {
-        mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
-        mapView.viewportYScale = VIEWPORT_NON_SHIFTED_SCALE;
+        mapView.viewportXScale = kViewportBottomScale;
+        mapView.viewportYScale = kViewportScale;
     }
     else
     {
-        mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+        mapView.viewportXScale = kViewportScale;
         mapView.viewportYScale = (DeviceScreenHeight - _actionsView.frame.size.height) / DeviceScreenHeight;
     }
 }
@@ -160,8 +167,8 @@
 - (void) restoreMapViewPort
 {
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
-    if (mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE)
-        mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+    if (mapView.viewportXScale != kViewportScale)
+        mapView.viewportXScale = kViewportScale;
     if (mapView.viewportYScale != _cachedYViewPort)
         mapView.viewportYScale = _cachedYViewPort;
 }
@@ -408,8 +415,7 @@
     }];
     [self setPinPosition];
     _isActionsViewVisible = YES;
-    [_mapHudController hideTopControls];
-    [_mapHudController showBottomControls:0. animated:YES];
+    [_mapHudController updateControlsLayout:YES];
     [self updateColors:NO];
 }
 
@@ -425,8 +431,7 @@
         [self restoreMapViewPort];
     } completion:^(BOOL finished) {
         [_actionsView removeFromSuperview];
-        [_mapHudController showTopControls:NO];
-        [_mapHudController showBottomControls:0. animated:YES];
+        [_mapHudController updateControlsLayout:YES];
     }];
     [self updateColors:NO];
 }

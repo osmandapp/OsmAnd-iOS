@@ -20,19 +20,32 @@ class AverageSpeedWidget: OATextInfoWidget {
     
     private let averageSpeedComputer = OAAverageSpeedComputer.sharedInstance()
     
-    private let measuredIntervalPref: OACommonLong
-    private let skipStopsPref: OACommonBoolean
-    
+    private var measuredIntervalPref: OACommonLong
+    private var skipStopsPref: OACommonBoolean
+    private var customId: String? = nil
+
     private var lastUpdateTime = 0
-    
-    init(customId: String) {
+
+    private var availableIntervals: [Int: String] = getAvailableIntervals()
+
+    convenience init(customId: String?) {
+        self.init(frame: .zero)
+        
+        widgetType = .averageSpeed
+        setIcons(widgetType)
+        setMetricSystemDepended(true)
+        
+        self.customId = customId
         measuredIntervalPref = Self.registerMeasuredIntervalPref(customId)
         skipStopsPref = Self.registerSkipStopsPref(customId)
-        super.init(type: .averageSpeed)
-        setIcons(.averageSpeed)
-        self.setMetricSystemDepended(true)
     }
     
+    override init(frame: CGRect) {
+        measuredIntervalPref = Self.registerMeasuredIntervalPref(customId)
+        skipStopsPref = Self.registerSkipStopsPref(customId)
+        super.init(frame: frame)
+    }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -62,7 +75,60 @@ class AverageSpeedWidget: OATextInfoWidget {
         }
         return false
     }
-    
+
+    override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
+        let data = OATableDataModel()
+        let section = data.createNewSection()
+        section.headerText = localizedString("shared_string_settings")
+
+        let settingRow = section.createNewRow()
+        settingRow.cellType = OAValueTableViewCell.getIdentifier()
+        settingRow.key = "value_pref"
+        settingRow.title = localizedString("shared_string_interval")
+        settingRow.iconName = nil // TODO
+        settingRow.descr = localizedString("average_speed_time_interval_desc")
+        settingRow.setObj(getIntervalTitle(measuredIntervalPref.get(appMode)), forKey: "value")
+        settingRow.setObj(getPossibleValues(measuredIntervalPref), forKey: "possible_values")
+
+        let compassRow = section.createNewRow()
+        compassRow.cellType = OASwitchTableViewCell.getIdentifier()
+        compassRow.title = localizedString("average_speed_skip_stops")
+        compassRow.iconName = nil // TODO
+        compassRow.setObj(skipStopsPref, forKey: "pref")
+
+        return data
+    }
+
+    private func getPossibleValues(_ pref: OACommonPreference) -> [OATableRowData] {
+        var rows = [OATableRowData]()
+        for interval in availableIntervals.keys.sorted(by: { $0 < $1 }) {
+            let row = OATableRowData()
+            row.cellType = OASimpleTableViewCell.getIdentifier()
+            row.setObj(interval, forKey: "value")
+            row.setObj(pref, forKey: "pref")
+            row.title = availableIntervals[interval]
+            rows.append(row)
+        }
+        return rows
+    }
+
+    private func getIntervalTitle(_ intervalValue: Int) -> String {
+        return availableIntervals[intervalValue] ?? "-"
+    }
+
+    private static func getAvailableIntervals() -> [Int: String] {
+        var intervals =  [Int: String]()
+        for intervalNum in OAAverageSpeedComputer.measured_INTERVALS() {
+            let interval = intervalNum.intValue
+            let seconds = interval < 60 * 1000
+            let timeInterval = seconds ? String(interval / 1000) : String(interval / 1000 / 60)
+            let timeUnit = interval < 60 * 1000 ? localizedString("shared_string_sec") : localizedString("short_min")
+            let formattedInterval = String(format: localizedString("ltr_or_rtl_combine_via_space"), arguments: [timeInterval, timeUnit])
+            intervals[interval] = formattedInterval
+        }
+        return intervals
+    }
+
     func updateAverageSpeed() {
         let measuredInterval = measuredIntervalPref.get()
         let skipLowSpeed = skipStopsPref.get()

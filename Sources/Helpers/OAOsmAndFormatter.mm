@@ -42,10 +42,10 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
 
 + (NSString*) getFormattedTimeInterval:(NSTimeInterval)interval
 {
-    return [self getFormattedTimeInterval:interval fullForm:YES];
+    return [self getFormattedTimeInterval:interval withUnit:YES];
 }
 
-+ (NSString*) getFormattedTimeInterval:(NSTimeInterval)interval fullForm:(BOOL)fullForm
++ (NSString*) getFormattedTimeInterval:(NSTimeInterval)interval withUnit:(BOOL)withUnit
 {
     NSString *unitsStr;
     double intervalInUnits;
@@ -66,7 +66,10 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
     }
     
     NSString *formattedInterval = [NSString stringWithFormat:@"%d", (int)intervalInUnits];
-    return [NSString stringWithFormat:@"%@ %@", formattedInterval, unitsStr];
+    return withUnit
+    	? [NSString stringWithFormat:@"%@ %@", formattedInterval, unitsStr]
+    	: formattedInterval;
+
 }
 
 + (NSString *) getFormattedPassedTime:(NSTimeInterval)time def:(NSString *)def
@@ -384,7 +387,7 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
         else
         {
             int seconds = round(minPerKm * 60);
-            return [OAUtilities getFormattedValue:[self getFormattedTimeInterval:seconds fullForm:NO] unit:_unitsMinKm];
+            return [OAUtilities getFormattedValue:[self getFormattedTimeInterval:seconds withUnit:NO] unit:_unitsMinKm];
         }
     }
     else if ([settings.speedSystem get] == MINUTES_PER_MILE)

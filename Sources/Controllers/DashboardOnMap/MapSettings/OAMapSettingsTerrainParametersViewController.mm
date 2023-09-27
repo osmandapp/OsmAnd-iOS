@@ -132,14 +132,8 @@ static const NSInteger kMaxZoomPickerRow = 2;
     
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         if (![self isLandscape])
-        {
             [self goMinimized:NO];
-            _footerView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, _terrainType == EOATerrainSettingsTypeZoomLevels ? 220.0 : 120.0);
-        }
-        else
-        {
-            _footerView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, _terrainType == EOATerrainSettingsTypeZoomLevels ? 80.0 : 120.0);
-        }
+        [self adjustFooterViewFrame];
     } completion:nil];
 }
 
@@ -197,7 +191,8 @@ static const NSInteger kMaxZoomPickerRow = 2;
 
 - (void)setupBottomButton
 {
-    _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, _terrainType == EOATerrainSettingsTypeZoomLevels ? 220.0 : 120.0)];
+    _footerView = [[UIView alloc] init];
+    [self adjustFooterViewFrame];
     _applyButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [_applyButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
     _applyButton.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
@@ -207,6 +202,12 @@ static const NSInteger kMaxZoomPickerRow = 2;
     [self updateApplyButton];
     [_footerView addSubview:_applyButton];
     self.tableView.tableFooterView = _footerView;
+}
+
+- (void)adjustFooterViewFrame
+{
+    CGFloat height = _terrainType == EOATerrainSettingsTypeZoomLevels ? ([self isLandscape] ? 80.0 : 220.0) : 120.0;
+    _footerView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, height);
 }
 
 - (void)updateApplyButton

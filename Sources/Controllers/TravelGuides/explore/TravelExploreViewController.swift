@@ -67,7 +67,8 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
             height: self.tableView.frame.size.height - self.getNavbarHeight())
         
         let offset: CGFloat = OAUtilities.isLandscape() ? 0 : 8
-        searchView?.frame = CGRect(x: 0, y: super.getNavbarHeight(), width: view.frame.width, height: 46 + offset)
+        let navbarHeight = navigationController!.navigationBar.frame.height + OAUtilities.getTopMargin()
+        searchView?.frame = CGRect(x: 0, y: navbarHeight, width: view.frame.width, height: 46 + offset)
         searchTextField?.frame = CGRect(x: 8 + OAUtilities.getLeftMargin(), y: offset, width: searchView!.frame.width - 16 - 2 * OAUtilities.getLeftMargin(), height: 38)
         searchTransparentButton?.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 46 + offset)
     }
@@ -83,9 +84,10 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     
     func setupSearchView() {
         let offset: CGFloat = OAUtilities.isLandscape() ? 0 : 8
+        let navbarHeight = navigationController!.navigationBar.frame.height + OAUtilities.getTopMargin()
         searchView = UIView()
         searchView?.backgroundColor = UIColor(rgb: color_primary_table_background)
-        searchView?.frame = CGRect(x: 0, y: super.getNavbarHeight(), width: view.frame.width, height: 46 + offset)
+        searchView?.frame = CGRect(x: 0, y: navbarHeight, width: view.frame.width, height: 46 + offset)
         view.addSubview(searchView!)
         
         searchTextField = OATextFieldWithPadding()

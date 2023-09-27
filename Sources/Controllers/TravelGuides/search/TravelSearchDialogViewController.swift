@@ -17,7 +17,6 @@ class TravelSearchDialogViewController : OABaseNavbarViewController, UITextField
     
     var searchHelper: TravelSearchHelper?
     var searchQuery = ""
-//    var canceled = false
     var searchResults = [TravelSearchResult]()
     
     var cachedPreviewImages: ImageCache = ImageCache(itemsLimit: 100)
@@ -42,15 +41,17 @@ class TravelSearchDialogViewController : OABaseNavbarViewController, UITextField
     
     override func viewWillLayoutSubviews() {
         let offset: CGFloat = OAUtilities.isLandscape() ? 0 : 8
-        searchView?.frame = CGRect(x: 0, y: super.getNavbarHeight(), width: view.frame.width, height: 46 + offset)
+        let navbarHeight = navigationController!.navigationBar.frame.height + OAUtilities.getTopMargin()
+        searchView?.frame = CGRect(x: 0, y: navbarHeight, width: view.frame.width, height: 46 + offset)
         searchTextField?.frame = CGRect(x: 8 + OAUtilities.getLeftMargin(), y: offset, width: searchView!.frame.width - 16 - 2 * OAUtilities.getLeftMargin(), height: 38)
     }
     
     func setupSearchView() {
         let offset: CGFloat = OAUtilities.isLandscape() ? 0 : 8
+        let navbarHeight = navigationController!.navigationBar.frame.height + OAUtilities.getTopMargin()
         searchView = UIView()
         searchView?.backgroundColor = UIColor(rgb: color_primary_table_background)
-        searchView?.frame = CGRect(x: 0, y: super.getNavbarHeight(), width: view.frame.width, height: 46 + offset)
+        searchView?.frame = CGRect(x: 0, y: navbarHeight, width: view.frame.width, height: 46 + offset)
         view.addSubview(searchView!)
         
         searchTextField = OATextFieldWithPadding()

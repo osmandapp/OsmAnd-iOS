@@ -841,7 +841,6 @@ static BOOL _repositoryUpdated = NO;
     NSMutableArray<OAResourceItem *> *srtmResourcesArray = [NSMutableArray array];
 
     OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *) [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
-    BOOL heightmapEnabled = plugin && [plugin isHeightmapEnabled];
     for (const auto& resource_ : regionResources.allResources)
     {
         OAResourceItem *item_ = [self collectSubregionItem:region regionResources:regionResources resource:resource_];
@@ -850,11 +849,6 @@ static BOOL _repositoryUpdated = NO;
             if (nauticalRegion)
             {
                 [allResourcesArray addObject:item_];
-            }
-            else if (item_.resourceType == OsmAndResourceType::GeoTiffRegion && !heightmapEnabled)
-            {
-                // Hide heightmaps if not enabled
-                continue;
             }
             else if (item_.resourceType == OsmAndResourceType::HeightmapRegionLegacy)
             {

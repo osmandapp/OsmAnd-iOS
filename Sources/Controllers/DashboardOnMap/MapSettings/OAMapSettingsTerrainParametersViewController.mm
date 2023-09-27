@@ -133,6 +133,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         if (![self isLandscape])
             [self goMinimized:NO];
+        [self adjustFooterViewFrame];
     } completion:nil];
 }
 
@@ -190,7 +191,8 @@ static const NSInteger kMaxZoomPickerRow = 2;
 
 - (void)setupBottomButton
 {
-    _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, _terrainType == EOATerrainSettingsTypeZoomLevels ? 80.0 : 120.0)];
+    _footerView = [[UIView alloc] init];
+    [self adjustFooterViewFrame];
     _applyButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [_applyButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
     _applyButton.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
@@ -202,6 +204,12 @@ static const NSInteger kMaxZoomPickerRow = 2;
     self.tableView.tableFooterView = _footerView;
 }
 
+- (void)adjustFooterViewFrame
+{
+    CGFloat height = _terrainType == EOATerrainSettingsTypeZoomLevels ? ([self isLandscape] ? 80.0 : 220.0) : 120.0;
+    _footerView.frame = CGRectMake(0, 0, self.tableView.frame.size.width, height);
+}
+
 - (void)updateApplyButton
 {
     _applyButton.backgroundColor = _isValueChange ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_disabled_light);
@@ -211,7 +219,8 @@ static const NSInteger kMaxZoomPickerRow = 2;
 
 - (CGFloat)initialMenuHeight
 {
-    return ([OAUtilities calculateScreenHeight] / 3.0) + [OAUtilities getBottomMargin];
+    CGFloat divider = _terrainType == EOATerrainSettingsTypeVisibility ? 3.0 : 2.0;
+    return ([OAUtilities calculateScreenHeight] / divider) + [OAUtilities getBottomMargin];
 }
 
 - (CGFloat)getToolbarHeight

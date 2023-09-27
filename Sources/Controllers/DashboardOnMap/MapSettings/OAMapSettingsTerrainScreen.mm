@@ -18,7 +18,7 @@
 #import "OARightIconTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAValueTableViewCell.h"
-#import "OASimpleTableViewCell.h"
+#import "OATextLineViewCell.h"
 #import "OAButtonTableViewCell.h"
 #import "OAImageTextViewCell.h"
 #import "OARootViewController.h"
@@ -158,7 +158,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }];
         [titleSection addRowFromDictionary:@{
             kCellKeyKey : @"terrainTypeDesc",
-            kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
+            kCellTypeKey : [OATextLineViewCell getCellIdentifier],
             kCellDescrKey : type == EOATerrainTypeHillshade ? OALocalizedString(@"map_settings_hillshade_description") : OALocalizedString(@"map_settings_slopes_description"),
             
         }];
@@ -389,26 +389,26 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         return cell;
     }
-    else if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OATextLineViewCell getCellIdentifier]])
     {
-        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        OATextLineViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextLineViewCell getCellIdentifier]];
         BOOL isTerrainTypeSlope = _app.data.terrainType == EOATerrainTypeSlope;
         
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASimpleTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            [cell titleVisibility:NO];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextLineViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextLineViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.textTopLargeConstraint.constant = 0;
+            cell.textTopSmallConstraint.constant = 0;
+            [cell layoutIfNeeded];
         }
         if (cell)
         {
-            [cell setCustomLeftSeparatorInset:isTerrainTypeSlope];
-            cell.separatorInset = isTerrainTypeSlope ? UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.) : UIEdgeInsetsZero;
-            cell.descriptionLabel.text = item.descr;
-            cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.descriptionLabel.textColor = UIColorFromRGB(color_extra_text_gray);
+            cell.separatorInset = isTerrainTypeSlope ? UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.) : UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);;
+            cell.textView.text = item.descr;
+            cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+            cell.textView.textColor = UIColorFromRGB(color_extra_text_gray);
         }
         return cell;
     }

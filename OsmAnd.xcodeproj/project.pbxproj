@@ -2195,7 +2195,7 @@
 		DA4ABF1A2876DA6800B996EF /* OAPoiUiFilterSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA4ABEFB2876DA6700B996EF /* OAPoiUiFilterSettingsItem.mm */; };
 		DA4ABF1B2876DA6800B996EF /* OAFavoritesSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA4ABEFF2876DA6700B996EF /* OAFavoritesSettingsItem.mm */; };
 		DA4ABF1C2876DA6800B996EF /* OAMapSourcesSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA4ABF012876DA6700B996EF /* OAMapSourcesSettingsItem.mm */; };
-		DA4ABF1D2876DA6800B996EF /* OAGpxSettingsItem.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4ABF052876DA6700B996EF /* OAGpxSettingsItem.m */; };
+		DA4ABF1D2876DA6800B996EF /* OAGpxSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA4ABF052876DA6700B996EF /* OAGpxSettingsItem.mm */; };
 		DA4ABF1E2876DA6800B996EF /* OAProfileSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA4ABF062876DA6700B996EF /* OAProfileSettingsItem.mm */; };
 		DA4ABF1F2876DA6800B996EF /* OAResourcesSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA4ABF0A2876DA6700B996EF /* OAResourcesSettingsItem.mm */; };
 		DA4ABF202876DA6800B996EF /* OAAvoidRoadsSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA4ABF0B2876DA6700B996EF /* OAAvoidRoadsSettingsItem.mm */; };
@@ -6148,7 +6148,7 @@
 		DA4ABF022876DA6700B996EF /* OASearchHistorySettingsItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASearchHistorySettingsItem.h; sourceTree = "<group>"; };
 		DA4ABF032876DA6700B996EF /* OAPoiUiFilterSettingsItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPoiUiFilterSettingsItem.h; sourceTree = "<group>"; };
 		DA4ABF042876DA6700B996EF /* OAHistoryMarkersSettingsItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHistoryMarkersSettingsItem.h; sourceTree = "<group>"; };
-		DA4ABF052876DA6700B996EF /* OAGpxSettingsItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAGpxSettingsItem.m; sourceTree = "<group>"; };
+		DA4ABF052876DA6700B996EF /* OAGpxSettingsItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxSettingsItem.mm; sourceTree = "<group>"; };
 		DA4ABF062876DA6700B996EF /* OAProfileSettingsItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAProfileSettingsItem.mm; sourceTree = "<group>"; };
 		DA4ABF072876DA6700B996EF /* OASettingsItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASettingsItem.h; sourceTree = "<group>"; };
 		DA4ABF082876DA6700B996EF /* OACollectionSettingsItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACollectionSettingsItem.h; sourceTree = "<group>"; };
@@ -11347,7 +11347,7 @@
 				DA4ABEF02876DA6700B996EF /* OAGlobalSettingsItem.h */,
 				DA4ABEF62876DA6700B996EF /* OAGlobalSettingsItem.mm */,
 				DA4ABEF12876DA6700B996EF /* OAGpxSettingsItem.h */,
-				DA4ABF052876DA6700B996EF /* OAGpxSettingsItem.m */,
+				DA4ABF052876DA6700B996EF /* OAGpxSettingsItem.mm */,
 				DA4ABF042876DA6700B996EF /* OAHistoryMarkersSettingsItem.h */,
 				DA4ABEF82876DA6700B996EF /* OAHistoryMarkersSettingsItem.mm */,
 				DA4ABF0C2876DA6700B996EF /* OAMapSourcesSettingsItem.h */,
@@ -17785,7 +17785,7 @@
 				32119B3D28477142005E1E0C /* OAOsmandDevelopmentPlugin.mm in Sources */,
 				3242A46F26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm in Sources */,
 				DA5A835D26C563A800F274C7 /* OATextLineViewCell.m in Sources */,
-				DA4ABF1D2876DA6800B996EF /* OAGpxSettingsItem.m in Sources */,
+				DA4ABF1D2876DA6800B996EF /* OAGpxSettingsItem.mm in Sources */,
 				DA5A836326C563A800F274C7 /* OAHomeWorkCollectionViewCell.mm in Sources */,
 				DA3DBC2E2976E631003803D8 /* OATransportStopsBaseController.mm in Sources */,
 				DA5A848326C563A900F274C7 /* OAMapInfoWidgetsFactory.mm in Sources */,

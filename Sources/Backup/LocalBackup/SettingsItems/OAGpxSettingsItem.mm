@@ -11,6 +11,7 @@
 #import "OAGPXUIHelper.h"
 #import "OsmAndApp.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OAGPXDocument.h"
 
 @interface OAGpxSettingsItem()
 
@@ -134,7 +135,13 @@
 
 - (void)updateGpxParams:(NSString *)filePath
 {
-    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.filePath]];
+    OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
+    OAGPX *gpx = [gpxDb getGPXItem:[OAUtilities getGpxShortPath:self.filePath]];
+    if (!gpx)
+    {
+        OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:filePath];
+        gpx = [gpxDb addGpxItem:filePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds document:doc];
+    }
     gpx.color = _appearanceInfo.color;
     gpx.coloringType = _appearanceInfo.coloringType;
     gpx.width = _appearanceInfo.width;
@@ -142,33 +149,13 @@
     gpx.showStartFinish = _appearanceInfo.showStartFinish;
     gpx.splitType = _appearanceInfo.splitType;
     gpx.splitInterval = _appearanceInfo.splitInterval;
-    [[OAGPXDatabase sharedDb] save];
+    [gpxDb save];
     if (gpx.color != 0)
     {
         OAGPXAppearanceCollection *gpxAppearance = [OAGPXAppearanceCollection sharedInstance];
         [gpxAppearance selectColor:[gpxAppearance getColorItemWithValue:gpx.color]];
     }
 }
-
- /*
-    private void createGpxAppearanceInfo() {
-        GpxDataItem dataItem = app.getGpxDbHelper().getItem(file, new GpxDataItemCallback() {
-            @Override
-            public boolean isCancelled() {
-                return false;
-            }
-
-            @Override
-            public void onGpxDataItemReady(GPXDatabase.GpxDataItem item) {
-                appearanceInfo = new GpxAppearanceInfo(item);
-            }
-        });
-        if (dataItem != null) {
-            appearanceInfo = new GpxAppearanceInfo(dataItem);
-        }
-    }
-}
-*/
 
 - (void) createGpxAppearanceInfo
 {

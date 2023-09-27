@@ -296,9 +296,22 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSInteger selectedIndex = _app.data.terrainType == EOATerrainTypeHillshade ? 0 : 1;
     if (selectedIndex >= 0 && selectedIndex < menuElements.count)
         ((UIAction *)menuElements[selectedIndex]).state = UIMenuElementStateOn;
-                
-    [button setTitle:[menuElements[selectedIndex] title] forState:UIControlStateNormal];
-                
+    
+    NSString *title = [menuElements[selectedIndex] title];
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:title];
+    
+    NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+    UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithPointSize:16 weight:UIImageSymbolWeightBold];
+    UIImage *image = [UIImage systemImageNamed:@"chevron.up.chevron.down" withConfiguration:config];
+    image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    attachment.image = image;
+    
+    NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
+    [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
+    [attributedString appendAttributedString:attachmentString];
+    
+    [button setAttributedTitle:attributedString forState:UIControlStateNormal];
+    
     return [UIMenu menuWithChildren:menuElements];
 }
 
@@ -422,17 +435,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 [cell leftIconVisibility:NO];
                 cell.leftIconView.image = nil;
                 [cell.button setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateHighlighted];
+                cell.button.tintColor = UIColorFromRGB(color_primary_purple);
                 cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
                 
                 cell.button.menu = [self createTerrainTypeMenuForCellButton:cell.button];
                 cell.button.showsMenuAsPrimaryAction = YES;
                 cell.button.changesSelectionAsPrimaryAction = YES;
-                
-                UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithPointSize:12 weight:UIImageSymbolWeightBold];
-                UIImage *image = [UIImage systemImageNamed:@"chevron.up.chevron.down" withConfiguration:config];
-                [cell.button setImage:image forState:UIControlStateNormal];
-                cell.button.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
-                cell.button.imageEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
             }
             else
             {

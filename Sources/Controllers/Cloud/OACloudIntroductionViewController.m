@@ -62,7 +62,7 @@
         [_cloudIntroductionButtonsView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],
         [_cloudIntroductionButtonsView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
         [_cloudIntroductionButtonsView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
-        [_cloudIntroductionButtonsView.heightAnchor constraintEqualToConstant:110],
+        [_cloudIntroductionButtonsView.heightAnchor constraintEqualToConstant:132],
     ]];
 }
 

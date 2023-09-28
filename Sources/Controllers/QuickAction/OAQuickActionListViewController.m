@@ -256,18 +256,25 @@
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
-    if (_data.count == 1)
+    if (_data.count == 1 || sourceIndexPath == destinationIndexPath)
+    {
         return;
+    }
     
     AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-    
     OAQuickAction *sourceAction = [self getAction:sourceIndexPath];
-    OAQuickAction *destAction = [self getAction:destinationIndexPath];
-    destinationIndexPath = [NSIndexPath indexPathForRow:destinationIndexPath.row inSection:destinationIndexPath.section - 1];
-    sourceIndexPath = [NSIndexPath indexPathForRow:sourceIndexPath.row inSection:sourceIndexPath.section - 1];
-    [_data setObject:sourceAction atIndexedSubscript:destinationIndexPath.section * kRowsPerSection + destinationIndexPath.row];
-    [_data setObject:destAction atIndexedSubscript:sourceIndexPath.section * kRowsPerSection + sourceIndexPath.row];
-    [self.tableView reloadData];
+    NSInteger destinationIndex = kRowsPerSection * (destinationIndexPath.section - 1) + destinationIndexPath.row;
+    if (sourceIndexPath.section != destinationIndexPath.section && destinationIndex == _data.count)
+    {
+        destinationIndex--;
+    }
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        [self.tableView reloadData];
+    }];
+    [_data removeObjectAtIndex:(sourceIndexPath.section - 1) * kRowsPerSection + sourceIndexPath.row];
+    [_data insertObject:sourceAction atIndex:destinationIndex];
+    [CATransaction commit];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
@@ -282,7 +289,12 @@
 
 - (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
 {
-    if(proposedDestinationIndexPath.section == kEnableSection)
+    if (proposedDestinationIndexPath.section == kEnableSection)
+    {
+        return sourceIndexPath;
+    }
+    NSInteger lastSectionIndex = [tableView numberOfSections] - 1;
+    if (proposedDestinationIndexPath.section == lastSectionIndex)
     {
         return sourceIndexPath;
     }
@@ -353,8 +365,8 @@
 
 - (void)donePressed
 {
-    [self disableEditing];
     [self saveChanges];
+    [self disableEditing];
 }
 
 - (void)addActionPressed

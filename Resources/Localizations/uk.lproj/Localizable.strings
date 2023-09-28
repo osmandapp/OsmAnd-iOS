@@ -220,7 +220,7 @@
 "prch_failed" = "Не вдалося придбати «%@»";
 "prch_items_failed" = "об'єкти не були відновлені. Спробуйте ще раз.";
 // Resources
-"res_mapsres" = "Мапи та ресурси";
+"res_mapsres" = "Мапи й ресурси";
 "download_tab_local" = "Локальні";
 "res_search_world" = "Шукати по всьому світу";
 "res_region_map" = "Мапа області";

@@ -2436,7 +2436,7 @@
 "shared_string_learn_more" = "En savoir plus";
 "purchases_feature_desc_pro_widgets" = "Accédez aux fonctionnalités d\'OsmAnd Pro comme les itinéraires colorés et bien plus encore.";
 "shared_string_includes" = "Inclus";
-"terrain_maps" = "Cartes du terrain";
+"terrain_maps" = "Cartes de terrain";
 "osm_live_banner_desc" = "Téléchargez un nombre illimité de cartes et obtenez des mises à jour plus fréquentes (hebdomadaires ou quotidiennes voire horaires).";
 "debugging_and_development" = "Débogage et développement OsmAnd";
 "purchases_feature_desc_unlimited_map_download" = "Téléchargez en illimité des cartes hors ligne pour tous les continents et toutes les régions.";

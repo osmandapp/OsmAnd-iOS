@@ -49,6 +49,7 @@
 #import "OASimpleTableViewCell.h"
 #import "OAEmptySearchCell.h"
 #import "OARightIconTableViewCell.h"
+#import "OAValueTableViewCell.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -837,16 +838,16 @@
         }
         else if ([item getType] == HEADER)
         {
-            OASimpleTableViewCell *cell;
-            cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+            OAValueTableViewCell *cell;
+            cell = (OAValueTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
-                cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
                 [cell descriptionVisibility:NO];
                 [cell leftIconVisibility:NO];
+                [cell valueVisibility:NO];
             }
-            
             if (cell)
             {
                 [cell.titleLabel setText:[item getName]];

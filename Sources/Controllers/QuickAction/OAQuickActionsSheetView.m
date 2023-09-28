@@ -18,6 +18,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAActionConfigurationViewController.h"
 #import "OAQuickActionType.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kButtonContainerHeight 60.0
 #define kMargin 16.0
@@ -114,8 +115,8 @@
     _controlBtnPrev.layer.cornerRadius = 9.;
     _controlBtnNext.layer.cornerRadius = 9.;
     [_controlBtnPrev setImage:[UIImage templateImageNamed:@"ic_custom_arrow_back"] forState:UIControlStateNormal];
-    [_controlBtnNext setImage:[UIImage templateImageNamed:@"ic_custom_arrow_forward"] forState:UIControlStateNormal];
-    
+    [_controlBtnNext addRightImage:[UIImage templateImageNamed:@"ic_custom_arrow_forward"] offset:0.0 withRTL:NO];
+
     [self setupPageControls];
     
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];

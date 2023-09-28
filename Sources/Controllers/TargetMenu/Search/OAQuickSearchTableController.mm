@@ -49,7 +49,6 @@
 #import "OASimpleTableViewCell.h"
 #import "OAEmptySearchCell.h"
 #import "OARightIconTableViewCell.h"
-#import "OAValueTableViewCell.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -786,6 +785,7 @@
             if (cell)
             {
                 OAQuickSearchButtonListItem *buttonItem = (OAQuickSearchButtonListItem *) item;
+                [cell leftIconVisibility:YES];
                 cell.leftIconView.image = [buttonItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
                 cell.leftIconView.contentMode = UIViewContentModeCenter;
                 if ([buttonItem getName])
@@ -838,18 +838,20 @@
         }
         else if ([item getType] == HEADER)
         {
-            OAValueTableViewCell *cell;
-            cell = (OAValueTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+            OASimpleTableViewCell *cell;
+            cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
-                cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
                 [cell descriptionVisibility:NO];
-                [cell leftIconVisibility:NO];
-                [cell valueVisibility:NO];
             }
             if (cell)
             {
+                [cell leftIconVisibility:NO];
+                cell.leftIconView.image = nil;
+                cell.titleLabel.attributedText = nil;
+                cell.titleLabel.textColor = UIColor.blackColor;
                 [cell.titleLabel setText:[item getName]];
             }
             return cell;

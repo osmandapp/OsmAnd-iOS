@@ -137,7 +137,7 @@
 "shared_string_description" = "Descriere";
 "osm_live_active" = "Activ";
 "choose_auto_follow_route" = "Auto centrare hartă";
-"route_tshr" = "Virați brusc la dreapta și continuați";
+"route_tshr" = "Virați puternic la dreapta și continuați";
 "rendering_category_transport" = "Transport";
 "filter_current_poiButton" = "Filtrează";
 "feedback" = "Părere";
@@ -195,7 +195,7 @@
 "postcode" = "Cod poștal";
 "unknown_location" = "Poziția nu este încă cunoscută.";
 "traffic_warning_hazard" = "Pericol";
-"route_tshl" = "Virați brusc al stânga și continuați";
+"route_tshl" = "Virați puternic la stânga și continuați";
 "rendering_category_routes" = "Rute";
 "shared_string_skip" = "Omiteți";
 "in_app_purchase_desc" = "O singură plată";
@@ -267,7 +267,7 @@
 "shared_string_world" = "Lume";
 "shared_string_slope" = "Pantă";
 "no_address_found" = "Nici o adresă determinată";
-"route_kl" = "Țineți pe stânga și mergeți";
+"route_kl" = "Păstrați banda stângă și continuați";
 "search_another_country" = "Alege altă regiune";
 "app_mode_train" = "Tren";
 "si_m_s" = "Metri pe secundă";
@@ -344,7 +344,7 @@
 "online_map" = "Hartă online";
 "foot" = "picior";
 "shared_string_save" = "Salvați";
-"rendering_value_category_name" = "Categoria";
+"rendering_value_category_name" = "Categorie";
 "shared_string_clear" = "Curăță";
 "save_track_interval_globally" = "Interval de salvare";
 "route_kr" = "Țineți pe dreapta și mergeți";
@@ -427,7 +427,7 @@
 "cancel_navigation" = "Oprește navigarea";
 "city_type_town" = "Oraș";
 "quick_action_start_stop_nav_descr" = "Atingeți acest buton pentru pornire sau incheiere navigație.";
-"route_head" = "Îndreptați-vă";
+"route_head" = "Mergeți înainte";
 "context_menu_item_directions_from" = "Direcții de la";
 "osm_edit_created_note" = "Nota OSM creată";
 "si_mi_meters" = "Mile/metri";
@@ -1284,7 +1284,7 @@
 "stats_select_graph_data" = "Selectați datele din grafic";
 "gpx_max_speed" = "Viteza maximă";
 "gpx_distance_points" = "Distanța (puncte)";
-"save_track_to_gpx_descrp" = "Pornirea automată a înregistrării pieselor în timpul navigării și salvarea automată după aceea.";
+"save_track_to_gpx_descrp" = "Pornește automat înregistrarea traseelor în timpul navigației și salvează automat după aceea.";
 "save_track_to_gpx" = "Înregistrează automat traseul în timpul navigării";
 "gpxup_private" = "Privat";
 "gpxup_trackable" = "Urmăribil";
@@ -1326,7 +1326,7 @@
 "gpx_overwrite" = "Suprascrieți";
 "gpx_add_new" = "Adăugați un nou fișier";
 "gpx_import_already_exists" = "Fișierul de track specificat există deja în listă. Vă rugăm să alegeți o acțiune.";
-"import_tracks" = "Importați piese";
+"import_tracks" = "Importă trasee";
 "import_export" = "Import/Export";
 "gpx_points" = "Punct (e)";
 "poi_search_near_center" = "Căutarea se efectuează în apropierea centrului hărții";
@@ -1381,7 +1381,7 @@
 "select_online_source" = "Selectați sursa";
 "preview_of_selected_zoom_levels" = "Previzualizare a nivelurilor de zoom selectate";
 "download_size" = "Dimensiunea de descărcare";
-"number_of_tiles" = "Număr de plăci";
+"number_of_tiles" = "Număr de porțiuni de hartă";
 "move_map_to_select_area" = "Mutați harta pentru a selecta zona necesară.";
 "download_pending" = "Descărcare în așteptare";
 "offline_maps" = "Hărți offline";
@@ -2241,7 +2241,7 @@
 "routing_attr_prefer_horse_routes_name" = "Preferă traseele cu cai";
 "horseback_riding" = "Echitație";
 "turn_arrows_descr" = "Selectați dacă săgețile de viraj sunt indicate pe linia traseului.";
-"turn_arrows" = "Săgeți de întoarcere";
+"turn_arrows" = "Săgeți pentru viraje";
 "routeInfo_winter_ice_road_description" = "Colorați traseul sau linia de cale ferată în funcție de clasificarea sa ca drum de iarnă.";
 "routeInfo_roadClass_description" = "Colorați traseul sau linia de cale ferată în funcție de clasificarea drumului.";
 "routing_attr_only_permitted_streets_description" = "Utilizați numai străzile care sunt permise în mod expres";
@@ -2290,7 +2290,7 @@
 "cloud_email_already_registered" = "Această adresă de e-mail este deja înregistrată.";
 "rendering_attr_showFitnessTrails_name" = "Trasee de fitness";
 "last_backup" = "Ultima copie de siguranță";
-"rendering_attr_showFitnessTrails_description" = "Afișați trasee de fitness";
+"rendering_attr_showFitnessTrails_description" = "Arată trasee de fitness";
 "backup_error_no_valid_subscription" = "Nu există un abonament valabil";
 "backup_error_file_not_available" = "Fișier indisponibil";
 "osmand_cloud_authorize_descr" = "Nu vă pierdeți niciodată datele. Faceți copii de siguranță și restaurați toate informațiile cu ușurință.";
@@ -2431,7 +2431,7 @@
 "product_title_plus" = "Hărți+";
 "subscription_cancel_description" = "Anulați oricând în AppStore.";
 "shared_string_expires" = "Expiră";
-"simulation_real_mode_desc" = "Pe tronsoane drepte, viteza va fi aproape de viteza maximă permisă.\nLa intersecții, simularea va încetini.\nSimularea va încetinii și mai mult la semafoare, semne de oprire, etc.";
+"simulation_real_mode_desc" = "Pe tronsoane drepte, viteza va fi aproximată cu viteza maximă permisă.\nLa intersecții, simularea va încetini.\nSimularea va încetini și mai mult la semafoare, semne de oprire, etc.";
 "weather_temp_enable_descr" = "Activați pentru a vizualiza stratul de temperatură pe hartă.";
 "weather_contours_enable_descr" = "Activați vizualizarea stratului de izolinii pe hartă.";
 "simulate_location_movement_speed" = "Viteza de mișcare";
@@ -2675,15 +2675,15 @@
 "routing_attr_difficulty_preference_expert_name" = "Expert";
 "routing_attr_allow_streams_name" = "Permiteți cursuri de apă și canale de scurgere";
 "rendering_attr_weatherPressureContours_name" = "Curbe izobare";
-"rendering_attr_seabedDetail_description" = "Info text suplimentare privind calificarea_calificarea suprafeței fundului mării, tipurile de suprafețe combinate, categoria și taxonul de buruieni sau ierburi marine";
-"rendering_attr_OSMMapperAssistantFixme_description" = "Afișează etichetele fixme";
+"rendering_attr_seabedDetail_description" = "Informații text suplimentare privind calificarea suprafeței fundului mării, tipurile de suprafețe combinate, categoria și taxonul de buruieni sau ierburi marine";
+"rendering_attr_OSMMapperAssistantFixme_description" = "Arată etichetele fixme";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "Nu merge în afara pârtiei";
 "routing_attr_difficulty_preference_no_preference_name" = "Fără preferință";
 "routing_attr_prefer_hiking_routes_description" = "Preferați traseele de drumeție";
 "routing_attr_prefer_hiking_routes_name" = "Preferați traseele de drumeție";
 "routing_attr_prefer_tactile_paving_name" = "Preferați pavajul tactil";
 "routing_attr_freeride_policy_prefer_offpiste_name" = "Preferă în afara pârtiei";
-"rendering_attr_showWaterwayTunnels_description" = "Nu ascundeți tunelurile căilor navigabile";
+"rendering_attr_showWaterwayTunnels_description" = "Nu ascunde tunelurile căilor navigabile";
 "rendering_value_all_name" = "Toate";
 "routing_attr_carriage_restrictions_name" = "Restricții pentru trăsuri";
 "rendering_attr_natureReserves_name" = "Rezervație naturală";
@@ -2691,7 +2691,7 @@
 "rendering_attr_weatherTempContours_name" = "Curbe izoterme";
 "rendering_attr_horse_scale_dangerous_name" = "Periculos";
 "routing_attr_avoid_highway_description" = "Evită autostrăzile";
-"rendering_value_omit_name" = "Omiteți";
+"rendering_value_omit_name" = "Omite";
 "rendering_attr_natureReserves_description" = "Afișează rezervații naturale, zone protejate și parcuri naționale.";
 "routing_attr_carriage_restrictions_description" = "Ia în considerare permisiunile de acces pentru vehiculele trase de cai";
 "routing_attr_avoid_fords_description" = "Evită vadurile";
@@ -2713,15 +2713,15 @@
 "routing_attr_avoid_highway_name" = "Evită autostrăzile";
 "rendering_attr_showTrainRoutes_name" = "Rute de tren";
 "routing_attr_allow_intermittent_description" = "Permiteți căi navigabile intermitente";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Afișarea schematică a pictogramelor la măriri mici";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Afișare schematică a pictogramelor la niveluri reduse de mărire";
 "rendering_attr_showMtbScaleUphill_name" = "Arată scara MTB în urcare";
 "rendering_attr_OSMMapperAssistantNote_name" = "Etichete pentru note";
 "rendering_attr_noNatureReserveBoundaries_description" = "Ascundeți limitele rezervațiilor naturale, ale zonelor protejate și ale parcurilor naționale.";
-"rendering_attr_OSMMapperAssistantNote_description" = "Afișează etichetele note";
+"rendering_attr_OSMMapperAssistantNote_description" = "Arată etichetele note";
 "rendering_attr_horse_scale_difficult_name" = "Dificil";
 "routing_attr_allow_streams_description" = "Permiteți cursuri de apă și canale de scurgere";
 "routing_attr_driving_style_description" = "Selectați scopul conducerii pentru a obține un traseu mai scurt, mai rapid sau mai sigur";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Pictograme la mărimi reduse";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Pictograme la niveluri reduse de mărire";
 "rendering_attr_showTrolleybusRoutes_name" = "Rute de troleibuz";
 "rendering_attr_showTramRoutes_name" = "Rute de tramvai";
 "routing_attr_goods_restrictions_description" = "Luați în considerare autorizațiile de acces pentru vehiculele ușoare de marfă (mărfuri)";

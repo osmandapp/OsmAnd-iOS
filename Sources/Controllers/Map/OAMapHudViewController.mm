@@ -1197,7 +1197,7 @@
         if (self.mapInfoController.topPanelController)
             self.mapInfoController.topPanelController.view.alpha = isPanelAllowed && isTopPanelVisible && (!isToolbarVisible || isAllowToolbarsVisible) ? 1. : 0.;
         if (self.mapInfoController.leftPanelController)
-            self.mapInfoController.leftPanelController.view.alpha = (isPanelAllowed || isWeatherToolbarVisible) && isLeftPanelVisible ? 1. : 0.;
+            self.mapInfoController.leftPanelController.view.alpha = (isPanelAllowed || !isWeatherToolbarVisible) && isLeftPanelVisible ? 1. : 0.;
         if (self.mapInfoController.rightPanelController)
             self.mapInfoController.rightPanelController.view.alpha = (isPanelAllowed || isWeatherToolbarVisible) && isRightPanelVisible ? 1. : 0.;
         if (self.downloadMapWidget)

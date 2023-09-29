@@ -180,7 +180,7 @@
 "yesterday" = "Ieri";
 "coords_format_descr" = "Formatul pentru coordonate geografice.";
 "osm_live_hide_user_name" = "Nu afișa numele meu în rapoarte";
-"srtm_plugin_disabled" = "Dezactivarea curbelor (izoliniilor)";
+"srtm_plugin_disabled" = "Dezactivare topografie";
 "guidance_preferences_descr" = "Preferințe navigație";
 "app_mode_bus" = "Autobuz";
 "intermediate_point" = "Destinație intermediară %@";
@@ -245,7 +245,7 @@
 "shared_string_control_stop" = "Stop";
 "upload_anonymously" = "Încarcă anonim";
 "search_address_street" = "Stradă";
-"srtm_plugin_name" = "Izolinii";
+"srtm_plugin_name" = "Topografie";
 "keep_informing" = "Repetați instrucțiunile de navigare";
 "default_speed_system_descr" = "Definiți unitatea de viteză.";
 "speak_pedestrian" = "Treceri pietonale";
@@ -1265,11 +1265,11 @@
 "map_settings_hide_polygons" = "Ascundeți poligoanele";
 "map_settings_show_slider_map" = "Afișați cursorul pe hartă";
 "shared_string_legend" = "Legenda";
-"map_settings_add_maps_slopes" = "Sunt necesare hărți suplimentare pentru a vizualiza pantele pe hartă";
-"map_settings_add_maps_hillshade" = "Sunt necesare hărți suplimentare pentru a vizualiza dealurile pe hartă";
-"map_settings_zoom_level_description" = "Setați nivelul minim și maxim de zoom pentru afișarea stratului";
-"map_settings_hillshade_description" = "Hărțile Hillshade vizualizează pantele, vârfurile și zonele joase folosind diferite niveluri de gri";
-"map_settings_slopes_description" = "Hărțile de pantă folosesc culori diferite pentru a vizualiza terenul";
+"map_settings_add_maps_slopes" = "Sunt necesare hărți suplimentare pentru a vizualiza pantele pe hartă.";
+"map_settings_add_maps_hillshade" = "Sunt necesare hărți suplimentare pentru a vizualiza Hillshades pe hartă.";
+"map_settings_zoom_level_description" = "Setați nivelul minim și maxim de zoom la care se va afișa stratul";
+"map_settings_hillshade_description" = "Hărțile Hillshade folosesc culori întunecate pentru a arăta pantele, vârfurile și zonele joase.";
+"map_settings_slopes_description" = "Harta este colorată conform pantei terenului.";
 "map_settings_slopes_legend" = "Puteți citi mai multe despre pârtii pe Wikipedia";
 "map_settings_layer_transparency" = "Transparența stratului";
 "map_settings_avail_lay" = "Straturi disponibile";
@@ -1567,8 +1567,8 @@
 "plugin_popup_osm_editing_title" = "Activați editarea OpenStreetMap";
 "plugin_popup_nautical_desc" = "Vă rugăm să descărcați mai întâi hărțile nautice.\nApoi, mergeți la <b>Parametrii hărții</b> > <b>Tip hartă</b> și activați stilul <b>Nautic</b>";
 "plugin_popup_nautical_title" = "Descărcați hărți nautice";
-"plugin_popup_srtm_ask" = "Pentru a descărca curbe de nivel trebuie să activați plugin-ul: <b>Izolinii</b>";
-"plugin_popup_srtm_desc" = "Pentru a începe să utilizați funcția Curbe de nivel, vă rugăm să descărcați mai întâi curbele de nivel ale unei regiuni";
+"plugin_popup_srtm_ask" = "Pentru a descărca curbe de nivel trebuie să activați plugin-ul: <b>Topografie</b>";
+"plugin_popup_srtm_desc" = "Pentru a începe să utilizați funcția Topografie, vă rugăm să descărcați mai întâi curbele de nivel ale unei regiuni";
 "plugin_popup_srtm_title" = "Descărcați curbe de nivel";
 "plugin_popup_wiki_ask" = "Pentru a descărca datele Wikipedia trebuie să activați plugin-ul: <b>Wikipedia</b>";
 "plugin_popup_wiki_desc" = "Pentru a începe să utilizați pluginul Wikipedia, vă rugăm să descărcați mai întâi datele Wikipedia ale unei regiuni";
@@ -1604,7 +1604,7 @@
 "menu_all_trips" = "Toate track-urile";
 "time_will_open" = "Se va deschide în";
 "time_closed" = "Închis";
-"prch_srtm_info" = "Extensia „Izolinii” activează curbele de nivel pentru hărțile la care aveți dreptul, le-ați achiziționat sau descărcat în limita gratuită.";
+"prch_srtm_info" = "Extensia „Topografie” activează curbele de nivel pentru hărțile la care aveți dreptul, le-ați achiziționat sau descărcat în limita gratuită.";
 "prch_wiki_info" = "Wikipedia plugin permite obținerea de informații despre Wikipedia pentru hărțile la care aveți dreptul, achiziționate sau descărcate în limita gratuită.";
 "show_alt_in_drive" = "Afișarea altitudinii în modul Drive";
 "from_location" = "departe";
@@ -1757,7 +1757,7 @@
 "toggle_public_transport" = "Afișați / ascundeți transportul public";
 "quick_action_transport_descr" = "Buton care afișează sau ascunde transportul public pe hartă.";
 "quick_action_dir_from_descr" = "Atingeți această acțiune pentru a naviga din punctul central actual al ecranului.";
-"enable_hillshade" = "Activați vizualizarea datelor privind terenul";
+"enable_hillshade" = "Activați vizualizarea datelor privind terenul din setările hillshade sau pante.";
 "enable_contour_lines" = "Activați pentru a vizualiza curbele (izolinii) pe hartă";
 "parking_place" = "Spotul de parcare";
 "quick_action_add_parking" = "Adăugați loc de parcare";
@@ -2657,7 +2657,7 @@
 "si_nm_mt" = "Mile nautice/metri";
 "si_nm_ft" = "Mile nautice/picioare";
 "position_on_map_bottom" = "Jos";
-"download_heightmap_maps" = "Hartă înălțime";
+"download_heightmap_maps" = "Hartă înălțime (3D)";
 "routing_attr_motor_type_petrol_name" = "Benzină";
 "rendering_attr_showMtbScale_name" = "Afișează dificultatea MTB";
 "routing_attr_motor_type_diesel_name" = "Motorină";
@@ -3005,3 +3005,22 @@
 "shared_string_cache" = "Cache";
 "average_speed_skip_stops" = "Ia în considerare opririle";
 "map_marker_interval_dialog_desc" = "Specificați intervalul de timp în care viteza medie va fi măsurată pentru a putea estimara ora de sosire.";
+"weather_updates_manual" = "Prognoza meteo trebuie actualizată manual.";
+"click_on_widget" = "Atingeți widgetul";
+"purchases_feature_relief_3d_description" = "Deține și observă modelul la scală a cartierului sau a întregului continent.";
+"weather_update_disabled" = "Dezactivat";
+"unsaved_changes_will_be_lost_discard" = "Modificările nesalvate vor fi pierdute. Doriți să renunțați la ele?";
+"terrain_3D_maps" = "Hărți teren";
+"weather_update_parameters_wifi" = "Prognoza meteo va fi actualizată doar când este disponibilă o rețea Wi-Fi.";
+"unsaved_changes" = "Modificări nesalvate";
+"weather_update_over_wifi_only" = "Doar prin WIFI";
+
+
+// Shared Strings
+"shared_string_discard" = "Renunță";
+"weather_update_parameters_disabled" = "Actualizarea automată va fi dezactivată.";
+"map_settings_topography" = "Topografie";
+"auto_update" = "Actualizare automată";
+"specify_number_of_dir_indicators_desc" = "Specificați numărul de indicatori de direcție.";
+"weather_update_over_any_network" = "Prin orice rețea";
+"weather_update_parameters_any_network" = "Prognoza meteo va fi actualizată folosind orice rețea. Se pot consuma date mobile.";

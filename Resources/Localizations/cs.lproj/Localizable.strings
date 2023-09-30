@@ -3022,3 +3022,4 @@
 "weather_update_parameters_disabled" = "Automatické aktualizace budou vypnuty.";
 "auto_update" = "Automatická aktualizace";
 "weather_update_parameters_any_network" = "Předpověď počasí bude aktualizována přes jakoukoliv síť. Mohou být využita mobilní data.";
+"shared_string_cache" = "Mezipaměť";

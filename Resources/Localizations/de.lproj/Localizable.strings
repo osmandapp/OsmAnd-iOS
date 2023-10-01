@@ -2436,7 +2436,7 @@
 "new_device_account" = "Neues Gerät / neues Konto";
 "nautical_depth" = "Nautische Tiefe";
 "private_access_routing_req" = "Ihr Ziel liegt in einem Gebiet mit Privatzugang. Betreten von Privatwegen für diese Reise zulassen?";
-"terrain_maps" = "Terrainkarten";
+"terrain_maps" = "Geländekarten";
 "not_available_with" = "Nicht verfügbar mit %@";
 "transport_hazmat_no_desc" = "Straßen und Tunnel können den Transport gefährlicher Güter einschränken.";
 "annual_subscription" = "Jahresabonnement";
@@ -3038,3 +3038,4 @@
 "weather_update_over_wifi_only" = "Nur über WLAN";
 "weather_update_over_any_network" = "Über jedes Netzwerk";
 "map_settings_topography" = "Topografie";
+"shared_string_cache" = "Zwischenspeicher";

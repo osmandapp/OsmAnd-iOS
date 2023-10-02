@@ -1229,6 +1229,7 @@ static BOOL _repositoryUpdated = NO;
     }
     [_localResourceItems sortUsingComparator:self.resourceItemsComparator];
     [_localRegionMapItems sortUsingComparator:self.resourceItemsComparator];
+    [_localTerrainMapSources sortUsingComparator:self.resourceItemsComparator];
     
     for (OAResourceItem *item in _regionMapItems)
     {

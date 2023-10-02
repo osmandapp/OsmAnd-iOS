@@ -18,7 +18,7 @@
 
 @implementation OAColorCollectionHandler
 {
-    NSArray<NSArray<OAColorItem *> *> *_data;
+    NSMutableArray<NSMutableArray<OAColorItem *> *> *_data;
     NSIndexPath *_selectedIndexPath;
 }
 
@@ -79,12 +79,19 @@
 
 #pragma mark - Data
 
-- (void)addAndSelectColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
+- (void)addAndSelectColor:(NSIndexPath *)indexPath
+                  newItem:(OAColorItem *)newItem
+           collectionView:(UICollectionView *)collectionView
 {
+    NSIndexPath *prevSelectedIndexPath = indexPath.row <= _selectedIndexPath.row
+        ? [NSIndexPath indexPathForRow:_selectedIndexPath.row + 1 inSection:_selectedIndexPath.section]
+        : _selectedIndexPath;
     _selectedIndexPath = indexPath;
     [collectionView performBatchUpdates:^{
+        [_data[indexPath.section] insertObject:newItem atIndex:indexPath.row];
         [collectionView insertItemsAtIndexPaths:@[_selectedIndexPath]];
     } completion:^(BOOL finished) {
+        [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, _selectedIndexPath]];
         if (self.delegate)
         {
             [self.delegate onCollectionItemSelected:_selectedIndexPath];
@@ -174,7 +181,12 @@
 
 - (void)generateData:(NSArray<NSArray<OAColorItem *> *> *)data
 {
-    _data = data;
+    NSMutableArray<NSMutableArray<OAColorItem *> *> *newData = [NSMutableArray array];
+    for (NSArray *items in data)
+    {
+        [newData addObject:[NSMutableArray arrayWithArray:items]];
+    }
+    _data = newData;
 }
 
 - (NSInteger)itemsCount:(NSInteger)section

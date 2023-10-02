@@ -347,12 +347,13 @@
     [self.tableView reloadRowsAtIndexPaths:@[_colorIndexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
-- (void)onColorCollectionNewItemAdded:(UIColor *)color
+- (OAColorItem *)onColorCollectionNewItemAdded:(UIColor *)color
 {
-    [_appearanceCollection addNewSelectedColor:color];
+    OAColorItem *newColorItem = [_appearanceCollection addNewSelectedColor:color];
     _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
     if (self.delegate)
         [self.delegate onFavoriteGroupColorsRefresh];
+    return newColorItem;
 }
 
 - (void)onColorCollectionItemChanged:(OAColorItem *)colorItem withColor:(UIColor *)color
@@ -443,10 +444,11 @@
     }
     else
     {
-        [self onColorCollectionNewItemAdded:viewController.selectedColor];
+        OAColorItem *newColorItem = [self onColorCollectionNewItemAdded:viewController.selectedColor];
         _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
 
         [colorHandler addAndSelectColor:[NSIndexPath indexPathForRow:0 inSection:0]
+                                newItem:newColorItem
                          collectionView:colorCell.collectionView];
         [colorHandler updateData:@[_sortedColorItems] collectionView:colorCell.collectionView];
     }

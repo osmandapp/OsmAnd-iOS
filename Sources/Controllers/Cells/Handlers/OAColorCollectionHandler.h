@@ -8,6 +8,8 @@
 
 #import "OABaseCollectionHandler.h"
 
+@class OAColorItem;
+
 @protocol OAColorsCollectionCellDelegate <OACollectionCellDelegate>
 
 - (void)onContextMenuItemEdit:(NSIndexPath *)indexPath;
@@ -20,7 +22,9 @@
 
 @property (nonatomic, weak) id<OAColorsCollectionCellDelegate> delegate;
 
-- (void)addAndSelectColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
+- (void)addAndSelectColor:(NSIndexPath *)indexPath
+                  newItem:(OAColorItem *)newItem
+           collectionView:(UICollectionView *)collectionView;
 - (void)replaceOldColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
 - (void)addDuplicatedColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
 - (void)removeColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;

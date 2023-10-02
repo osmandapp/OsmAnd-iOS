@@ -14,7 +14,7 @@
 
 - (NSArray<OAColorItem *> *)generateDataForColorCollection;
 - (void)onColorCollectionItemSelected:(OAColorItem *)colorItem;
-- (void)onColorCollectionNewItemAdded:(UIColor *)color;
+- (OAColorItem *)onColorCollectionNewItemAdded:(UIColor *)color;
 - (void)onColorCollectionItemChanged:(OAColorItem *)colorItem withColor:(UIColor *)color;
 - (void)onColorCollectionItemDuplicated:(OAColorItem *)colorItem;
 - (void)onColorCollectionItemDeleted:(OAColorItem *)colorItem;

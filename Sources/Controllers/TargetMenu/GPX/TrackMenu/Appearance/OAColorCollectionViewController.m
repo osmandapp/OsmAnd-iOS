@@ -247,10 +247,11 @@
             }
             else
             {
-                [self.delegate onColorCollectionNewItemAdded:viewController.selectedColor];
+                OAColorItem *newColorItem = [self.delegate onColorCollectionNewItemAdded:viewController.selectedColor];
                 _colorItems = [self.delegate generateDataForColorCollection];
                 
                 [colorHandler addAndSelectColor:[NSIndexPath indexPathForRow:_colorItems.count - 1 inSection:0]
+                                        newItem:newColorItem
                                  collectionView:colorCell.collectionView];
                 [colorHandler updateData:@[_colorItems] collectionView:colorCell.collectionView];
             }

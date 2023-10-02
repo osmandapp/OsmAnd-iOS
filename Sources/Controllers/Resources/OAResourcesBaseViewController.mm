@@ -85,7 +85,7 @@ static BOOL dataInvalidated = NO;
                 if (item.resourceId.startsWith(QStringLiteral("world_")))
                     str1 = [NSString stringWithFormat:@"!%@%d", item.title, item.resourceType];
                 else
-                    str1 = [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
+                    str1 = [NSString stringWithFormat:@"%@%d", [OAResourcesUIHelper getCountryName:item] ?: item.title, item.resourceType];
             }
 
             if ([obj2 isKindOfClass:[OAWorldRegion class]])
@@ -100,7 +100,7 @@ static BOOL dataInvalidated = NO;
                 if (item.resourceId.startsWith(QStringLiteral("world_")))
                     str2 = [NSString stringWithFormat:@"!%@%d", item.title, item.resourceType];
                 else
-                    str2 = [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
+                    str2 = [NSString stringWithFormat:@"%@%d", [OAResourcesUIHelper getCountryName:item] ?: item.title, item.resourceType];
             }
             
             return [str1 localizedCaseInsensitiveCompare:str2];

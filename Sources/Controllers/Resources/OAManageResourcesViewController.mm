@@ -1227,8 +1227,16 @@ static BOOL _repositoryUpdated = NO;
             }
         }
     }
-    [_localResourceItems sortUsingComparator:self.resourceItemsComparator];
+    [_localTerrainMapSources sortUsingComparator:self.resourceItemsComparator];
     [_localRegionMapItems sortUsingComparator:self.resourceItemsComparator];
+    [_localResourceItems sortUsingComparator:^NSComparisonResult(OALocalResourceItem *item1, OALocalResourceItem *item2) {
+        NSString *countryName1 = [OAResourcesUIHelper getCountryName:item1] ?: item1.title;
+        NSString *countryName2 = [OAResourcesUIHelper getCountryName:item2] ?: item2.title;
+        NSComparisonResult result = [countryName1 localizedCaseInsensitiveCompare:countryName2];
+        if (result != NSOrderedSame)
+            return result;
+        return [item1.title localizedCaseInsensitiveCompare:item2.title];
+    }];
     
     for (OAResourceItem *item in _regionMapItems)
     {

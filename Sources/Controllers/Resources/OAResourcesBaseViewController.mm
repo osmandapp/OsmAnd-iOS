@@ -72,6 +72,10 @@ static BOOL dataInvalidated = NO;
         _resourceItemsComparator = ^NSComparisonResult(id obj1, id obj2) {
             NSString *str1;
             NSString *str2;
+            NSString *countryName1;
+            NSString *countryName2;
+            NSString *title1;
+            NSString *title2;
             
             if ([obj1 isKindOfClass:[OAWorldRegion class]])
             {
@@ -81,11 +85,19 @@ static BOOL dataInvalidated = NO;
             {
                 OAResourceItem *item = obj1;
                 if (item.resourceId == QString::fromUtf8(kWorldSeamarksKey))
+                {
                     return NSOrderedAscending;
+                }
                 if (item.resourceId.startsWith(QStringLiteral("world_")))
+                {
                     str1 = [NSString stringWithFormat:@"!%@%d", item.title, item.resourceType];
+                }
                 else
-                    str1 = [NSString stringWithFormat:@"%@%d", [OAResourcesUIHelper getCountryName:item] ?: item.title, item.resourceType];
+                {
+                    countryName1 = [OAResourcesUIHelper getCountryName:item];
+                    title1 = countryName1 ? [NSString stringWithFormat:@"%@ - %@", countryName1, item.title] : item.title;
+                    str1 = [NSString stringWithFormat:@"%@%d", title1, item.resourceType];
+                }
             }
 
             if ([obj2 isKindOfClass:[OAWorldRegion class]])
@@ -96,13 +108,23 @@ static BOOL dataInvalidated = NO;
             {
                 OAResourceItem *item = obj2;
                 if (item.resourceId == QString::fromUtf8(kWorldSeamarksKey))
+                {
                     return NSOrderedDescending;
+                }
                 if (item.resourceId.startsWith(QStringLiteral("world_")))
+                {
                     str2 = [NSString stringWithFormat:@"!%@%d", item.title, item.resourceType];
+                }
                 else
-                    str2 = [NSString stringWithFormat:@"%@%d", [OAResourcesUIHelper getCountryName:item] ?: item.title, item.resourceType];
+                {
+                    countryName2 = [OAResourcesUIHelper getCountryName:item];
+                    title2 = countryName2 ? [NSString stringWithFormat:@"%@ - %@", countryName2, item.title] : item.title;
+                    str2 = [NSString stringWithFormat:@"%@%d", title2, item.resourceType];
+                }
             }
             
+            if (countryName1 && countryName2 && [countryName1 isEqualToString:countryName2])
+                return [title1 localizedCaseInsensitiveCompare:title2];
             return [str1 localizedCaseInsensitiveCompare:str2];
         };
     }

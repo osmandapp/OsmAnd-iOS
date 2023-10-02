@@ -2058,7 +2058,7 @@
 "coords_format_descr_quick_search" = "Puteți schimba formatul coordonatelor pentru profil în Setări generale";
 "shared_string_width" = "Lățime";
 "navigate_point_format_unknown" = "Format necunoscut";
-"track_coloring_solid" = "Masiv";
+"track_coloring_solid" = "Solidă";
 "attribute" = "Atribut";
 "gpx_split_interval" = "Interval de divizare";
 "reset_to_original" = "Resetare la original";
@@ -2243,10 +2243,10 @@
 "turn_arrows_descr" = "Selectați dacă săgețile de viraj sunt indicate pe linia traseului.";
 "turn_arrows" = "Săgeți pentru viraje";
 "routeInfo_winter_ice_road_description" = "Colorează ruta sau linia traseului după clasificarea sa ca drum de iarnă.";
-"routeInfo_roadClass_description" = "Colorează ruta sau linia traseului după clasificarea drumului.";
+"routeInfo_roadClass_description" = "Colorați traseul sau linia de cale ferată în funcție de clasificarea drumului.";
 "routing_attr_only_permitted_streets_description" = "Folosește numai străzile care sunt permise în mod expres";
 "routing_attr_only_permitted_ways_name" = "Căi permise în mod expres";
-"customize_route_line" = "Personalizați linia de rută";
+"customize_route_line" = "Personalizați linia de traseu";
 "route_line_use_map_style_color" = "Utilizați culoarea implicită a stilului de hartă (%@).";
 "route_line_use_map_style_width" = "Utilizați lățimea implicită a stilului de hartă (%@).";
 "shared_string_min_height" = "Înălțime minimă";
@@ -2536,7 +2536,7 @@
 "weather_forecast" = "Prognoza meteo";
 "weather_updates_automatically" = "OsmAnd va descărca automat actualizări atunci când este în funcțiune.";
 "shared_string_recorded" = "Înregistrat";
-"backup_pause_all" = "Pauză toate";
+"backup_pause_all" = "Pauză la toate";
 "shared_string_changed" = "Modificat";
 "shared_string_refresh" = "Reîmprospătare";
 "upload_local_version" = "Încărcă versiunea locală";
@@ -2584,7 +2584,7 @@
 "cloud_conflict" = "Conflictul";
 "logout_from_osmand_cloud_decsr" = "Vă deconectați\?\nVa trebui să vă conectați din nou pentru a face backup sau a restaura date.";
 "backup_delete_all_data_in_progress" = "Vă rugăm să așteptați până când OsmAnd va șterge toate datele dumneavoastră din cloud. Toate datele de pe dispozitiv rămân neatinse.";
-"backup_delete_types_descr" = "Șterge toate datele despre tipurile de date învechite din OsmAnd Cloud?";
+"backup_delete_types_descr" = "Ștergeți toate datele pentru tipurile de date depreciate din OsmAnd Cloud?";
 "auth_failed" = "Autorizarea a eșuat";
 "weather_entire_world" = "Întreaga lume";
 "weather_forecast_entire_world" = "Prognoza meteo pentru întreaga lume";
@@ -2782,7 +2782,7 @@
 "announcement_time_arrive" = "Ajungeți la destinație";
 "announcement_time_off_route" = "În afara traseului";
 "announcement_time_prepare" = "Pregătiți-vă";
-"announcement_time_prepare_long" = "Pregătiți-vă din timp";
+"announcement_time_prepare_long" = "Pregătire lungă";
 "announcement_time_approach" = "Abordare";
 "announcement_time_passing" = "Trecere";
 "osm_upload_gpx_description_footer" = "Se va folosi numele piesei în locul unei descrieri goale. Descrierea introdusă va fi aplicată pentru fiecare piesă.";

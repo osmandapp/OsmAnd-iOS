@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_custom_moon.svg",
+      "idiom" : "universal",
+      "language-direction" : "left-to-right"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -11,18 +11,18 @@ import Foundation
 @objc(OAMapWidgetsFactory)
 class MapWidgetsFactory: NSObject {
     
-    func createMapWidget(widgetType: WidgetType, dictionary: [String: Any]? = nil) -> OABaseWidgetView? {
-        return createMapWidget(customId: nil, widgetType: widgetType, dictionary: dictionary)
+    func createMapWidget(widgetType: WidgetType, widgetParams: [String: Any]? = nil) -> OABaseWidgetView? {
+        return createMapWidget(customId: nil, widgetType: widgetType, widgetParams: widgetParams)
     }
     
-    func createMapWidget(customId: String?, widgetType: WidgetType, dictionary: [String: Any]? = nil) -> OABaseWidgetView? {
+    func createMapWidget(customId: String?, widgetType: WidgetType, widgetParams: [String: Any]? = nil) -> OABaseWidgetView? {
         if isWidgetCreationAllowed(widgetType: widgetType) {
-            return createMapWidgetImpl(customId: customId, widgetType: widgetType, dictionary: dictionary)
+            return createMapWidgetImpl(customId: customId, widgetType: widgetType, widgetParams: widgetParams)
         }
         return nil
     }
     
-    private func createMapWidgetImpl(customId: String?, widgetType: WidgetType, dictionary: ([String: Any])? = nil) -> OABaseWidgetView? {
+    private func createMapWidgetImpl(customId: String?, widgetType: WidgetType, widgetParams: ([String: Any])? = nil) -> OABaseWidgetView? {
         switch widgetType {
         case .nextTurn:
             return OANextTurnWidget(horisontalMini: false, nextNext: false)
@@ -75,13 +75,11 @@ class MapWidgetsFactory: NSObject {
         case .currentSpeed:
             return OACurrentSpeedWidget()
         case .averageSpeed:
-            if let dictionary {
+            if let widgetParams {
                 return AverageSpeedWidget(customId: customId,
-                                          switchState: dictionary["switchState"] as? Bool,
-                                          interval: dictionary["value"] as? Int,
-                                          mode: dictionary["selectedAppMode"] as? OAApplicationMode)
+                                          widgetParams: widgetParams)
             } else {
-                return AverageSpeedWidget(customId: customId, switchState: nil, interval: nil, mode: nil)
+                return AverageSpeedWidget(customId: customId)
             }
         case .maxSpeed:
             return OAMaxSpeedWidget()

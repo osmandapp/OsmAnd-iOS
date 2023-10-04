@@ -16,7 +16,7 @@ class WidgetParameterViewController: OABaseNavbarViewController {
     var appMode: OAApplicationMode!
     var delegate: WidgetStateDelegate?
     var pref: OACommonPreference?
-    var widgetConfigurationParams: WidgetConfigurationParams?
+    var widgetConfigurationSelectedValue: String?
     var onWidgetConfigurationParamsAction: ((String?) -> Void)? = nil
 
     //MARK: - Base UI
@@ -62,8 +62,8 @@ class WidgetParameterViewController: OABaseNavbarViewController {
                     cell.descriptionVisibility(false)
                 }
                 let selectedVal: String?
-                if let widgetConfigurationParams {
-                    selectedVal = widgetConfigurationParams.value
+                if let widgetConfigurationSelectedValue {
+                    selectedVal = widgetConfigurationSelectedValue
                 } else {
                     selectedVal = pref?.toStringValue(appMode)
                 }
@@ -85,7 +85,7 @@ class WidgetParameterViewController: OABaseNavbarViewController {
                     if let prefLong = pref as? OACommonLong {
                         long = Int(prefLong.get(appMode))
                     } else {
-                        long = Int(widgetConfigurationParams?.value ?? "0")!
+                        long = Int(widgetConfigurationSelectedValue ?? "0")!
                     }
   
                     let sortedValues = values.sorted(by: { $0.key < $1.key })
@@ -112,7 +112,7 @@ class WidgetParameterViewController: OABaseNavbarViewController {
             if let pref {
                 pref.setValueFrom(val, appMode: appMode)
             } else {
-                widgetConfigurationParams?.value = val
+                widgetConfigurationSelectedValue = val
             }
             delegate?.onWidgetStateChanged()
             dismiss()
@@ -146,7 +146,7 @@ class WidgetParameterViewController: OABaseNavbarViewController {
                 if let pref {
                     pref.setValueFrom(val, appMode: appMode)
                 } else {
-                    widgetConfigurationParams?.value = val
+                    widgetConfigurationSelectedValue = val
                     onWidgetConfigurationParamsAction?(val)
                 }
                
@@ -155,5 +155,4 @@ class WidgetParameterViewController: OABaseNavbarViewController {
             }
         }
     }
-
 }

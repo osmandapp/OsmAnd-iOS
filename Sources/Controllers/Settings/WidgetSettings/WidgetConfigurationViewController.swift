@@ -8,12 +8,6 @@
 
 import Foundation
 
-struct WidgetConfigurationParams {
-    var selectedAppMode: OAApplicationMode
-    var switchState = false
-    var value = ""
-}
-
 @objc(OAWidgetConfigurationViewController)
 @objcMembers
 class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStateDelegate {
@@ -24,7 +18,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     var createNew = false
     var similarAlreadyExist = false
     var widgetKey = ""
-    var widgetConfigurationParams: WidgetConfigurationParams?
+    var widgetConfigurationParams: [String: Any]?
     var isFirstGenerateData = true
     
     lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
@@ -34,7 +28,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         tableView.setContentOffset(CGPoint(x: 0, y: 1), animated: false)
         
         if isCreateNewAndSimilarAlreadyExist {
-            widgetConfigurationParams = WidgetConfigurationParams(selectedAppMode: selectedAppMode)
+            widgetConfigurationParams = ["selectedAppMode": selectedAppMode!]
         }
     }
     
@@ -88,10 +82,14 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
                 var selected = pref.get(selectedAppMode)
                 if isCreateNewAndSimilarAlreadyExist {
-                    if isFirstGenerateData {
-                        widgetConfigurationParams?.switchState = selected
+                    if widgetKey == WidgetType.averageSpeed.id {
+                        if isFirstGenerateData {
+                            widgetConfigurationParams?[AverageSpeedWidget.SKIP_STOPS_PREF_ID] = selected
+                        } else {
+                            selected = widgetConfigurationParams?[AverageSpeedWidget.SKIP_STOPS_PREF_ID] as? Bool ?? false
+                        }
                     } else {
-                        selected = widgetConfigurationParams?.switchState ?? false
+                        fatalError("You need implement value handler for widgetKey")
                     }
                 }
                 cell.switchView.isOn = selected
@@ -118,10 +116,15 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                     var value: String
                     if isFirstGenerateData {
                         value = item.string(forKey: "value")!
-                        widgetConfigurationParams?.value = value
-                    } else {
-                        let _value = widgetConfigurationParams?.value ?? "0"
                         if widgetKey == WidgetType.averageSpeed.id {
+                            widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = value
+                        } else {
+                            fatalError("You need implement value handler for widgetKey")
+                        }
+                    } else {
+                        var _value = ""
+                        if widgetKey == WidgetType.averageSpeed.id {
+                            _value = widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] as? String ?? "0"
                             value = AverageSpeedWidget.getIntervalTitle(Int(_value)!)
                         } else {
                             fatalError("You need implement value handler for widgetKey")
@@ -157,7 +160,11 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         let data = tableData!.item(for: indexPath)
         
         if isCreateNewAndSimilarAlreadyExist {
-            widgetConfigurationParams?.switchState = sw.isOn
+            if widgetKey == WidgetType.averageSpeed.id {
+                widgetConfigurationParams?[AverageSpeedWidget.SKIP_STOPS_PREF_ID] = sw.isOn
+            } else {
+                fatalError("You need implement value handler for widgetKey")
+            }
         } else {
             let pref = data.obj(forKey: "pref") as! OACommonBoolean
             pref.set(sw.isOn, mode: selectedAppMode)
@@ -193,13 +200,27 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                           let prefLong = pref as? OACommonLong else {
                         return
                     }
+                    var value: Int?
                     if isFirstGenerateData {
-                        let value = Int(prefLong.get(selectedAppMode))
-                        widgetConfigurationParams?.value = String(value)
+                        value = Int(prefLong.get(selectedAppMode))
+                        if widgetKey == WidgetType.averageSpeed.id {
+                            widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = String(value ?? 0)
+                        } else {
+                            fatalError("You need implement value handler for widgetKey")
+                        }
                     }
-                    vc.widgetConfigurationParams = widgetConfigurationParams
+                    if widgetKey == WidgetType.averageSpeed.id {
+                        vc.widgetConfigurationSelectedValue = widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] as? String ?? ""
+                    } else {
+                        fatalError("You need implement value handler for widgetKey")
+                    }
                     vc.onWidgetConfigurationParamsAction = { [weak self] result in
-                        self?.widgetConfigurationParams?.value = result ?? ""
+                        guard let self else { return }
+                        if widgetKey == WidgetType.averageSpeed.id {
+                            widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = result ?? ""
+                        } else {
+                            fatalError("You need implement value handler for widgetKey")
+                        }
                     }
                 } else {
                     vc.pref = item.obj(forKey: "pref") as? OACommonPreference
@@ -275,15 +296,8 @@ extension WidgetConfigurationViewController {
         } completion: { Bool in
             NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification),
                                             object: self.widgetInfo,
-                                            userInfo: self.widgetConfigurationParamsToDic())
+                                            userInfo: self.widgetConfigurationParams)
         }
-    }
-    
-    private func widgetConfigurationParamsToDic() -> [String: Any]? {
-        guard let widgetConfigurationParams else { return nil }
-        return ["selectedAppMode": widgetConfigurationParams.selectedAppMode,
-                "switchState": widgetConfigurationParams.switchState,
-                "value": Int(widgetConfigurationParams.value) ?? 0 ]
     }
 
     override func getBottomButtonTitleAttr() -> NSAttributedString! {

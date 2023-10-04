@@ -192,7 +192,7 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
 
     // MARK: Additions
 
-    private func reorderWidgets(with dictionary: [String: Any]? = nil) {
+    private func reorderWidgets(with widgetParams: [String: Any]? = nil) {
         var orders = [[String]]()
         var currPage = [String]()
         for sec in 0..<tableData.sectionCount() {
@@ -209,7 +209,7 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
         WidgetUtils.reorderWidgets(orderedWidgetPages: orders,
                                       panel: widgetPanel,
                                    selectedAppMode: selectedAppMode,
-                                   dictionary: dictionary)
+                                   widgetParams: widgetParams)
     }
 
 }

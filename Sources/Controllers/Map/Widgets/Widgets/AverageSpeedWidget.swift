@@ -10,10 +10,9 @@ import Foundation
 
 @objc(OAAverageSpeedWidget)
 @objcMembers
-class AverageSpeedWidget: OATextInfoWidget {
-    
-    private static let MEASURED_INTERVAL_PREF_ID = "average_speed_measured_interval_millis"
-    private static let SKIP_STOPS_PREF_ID = "average_speed_skip_stops"
+final class AverageSpeedWidget: OATextInfoWidget {
+    static let MEASURED_INTERVAL_PREF_ID = "average_speed_measured_interval_millis"
+    static let SKIP_STOPS_PREF_ID = "average_speed_skip_stops"
     
     private static let UPDATE_INTERVAL_MILLIS = 1000
     private static let DASH = "—"
@@ -28,7 +27,7 @@ class AverageSpeedWidget: OATextInfoWidget {
 
     private static var availableIntervals: [Int: String] = getAvailableIntervals()
 
-    convenience init(customId: String?, switchState: Bool?, interval: Int?, mode: OAApplicationMode?) {
+    convenience init(customId: String?, widgetParams: [String: Any]? = nil) {
         self.init(frame: .zero)
         
         widgetType = .averageSpeed
@@ -38,11 +37,14 @@ class AverageSpeedWidget: OATextInfoWidget {
         self.customId = customId
         measuredIntervalPref = Self.registerMeasuredIntervalPref(customId)
         skipStopsPref = Self.registerSkipStopsPref(customId)
-        if let interval {
-            measuredIntervalPref.set(interval, mode: mode)
-        }
-        if let switchState {
-            skipStopsPref.set(switchState, mode: mode)
+        
+        if let widgetParams, let mode = widgetParams["selectedAppMode"] as? OAApplicationMode {
+            if let param = widgetParams[Self.MEASURED_INTERVAL_PREF_ID] as? String, let interval = Int(param)  {
+                measuredIntervalPref.set(interval, mode: mode)
+            }
+            if let skipStop = widgetParams[Self.SKIP_STOPS_PREF_ID] as? Bool {
+                skipStopsPref.set(skipStop, mode: mode)
+            }
         }
     }
     

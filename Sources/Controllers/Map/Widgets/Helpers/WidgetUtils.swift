@@ -10,7 +10,7 @@ final class WidgetUtils {
     static func reorderWidgets(orderedWidgetPages: [[String]],
                                panel: WidgetsPanel,
                                selectedAppMode: OAApplicationMode,
-                               dictionary: [String: Any]? = nil) {
+                               widgetParams: [String: Any]? = nil) {
         guard let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry else {
             return
         }
@@ -41,7 +41,7 @@ final class WidgetUtils {
                                                panel: panel,
                                                selectedAppMode: selectedAppMode,
                                                widgetRegistry: widgetRegistry,
-                                               dictionary: dictionary)
+                                               widgetParams: widgetParams)
         panel.setWidgetsOrder(pagedOrder: reorderWidgets, appMode: selectedAppMode)
         widgetRegistry.reorderWidgets()
         OARootViewController.instance().mapPanel.recreateControls()
@@ -51,12 +51,12 @@ final class WidgetUtils {
                                      panel: WidgetsPanel,
                                      widgetsFactory: MapWidgetsFactory,
                                      selectedAppMode: OAApplicationMode,
-                                     dictionary: [String: Any]? = nil) -> MapWidgetInfo? {
+                                     widgetParams: [String: Any]? = nil) -> MapWidgetInfo? {
         guard let widgetType = WidgetType.getById(widgetId) else {
             return nil
         }
         let id = widgetId.contains(MapWidgetInfo.DELIMITER) ? widgetId : WidgetType.getDuplicateWidgetId(widgetId)
-        guard let widget = widgetsFactory.createMapWidget(customId: id, widgetType: widgetType, dictionary: dictionary) else {
+        guard let widget = widgetsFactory.createMapWidget(customId: id, widgetType: widgetType, widgetParams: widgetParams) else {
             return nil
         }
         OAAppSettings.sharedManager().customWidgetKeys.add(id)
@@ -133,7 +133,7 @@ final class WidgetUtils {
                                           panel: WidgetsPanel,
                                           selectedAppMode: OAApplicationMode,
                                           widgetRegistry: OAMapWidgetRegistry,
-                                          dictionary: [String: Any]? = nil) -> [[String]] {
+                                          widgetParams: [String: Any]? = nil) -> [[String]] {
         let widgetsFactory = MapWidgetsFactory()
         let defaultWidgetInfos = getDefaultWidgetInfos(widgetRegistry: widgetRegistry,
                                                        selectedAppMode: selectedAppMode,
@@ -153,7 +153,7 @@ final class WidgetUtils {
                         mapWidgetInfo = createWidget(widgetId: WidgetType.getDefaultWidgetId(enabledWidget),
                                                      panel: panel,
                                                      widgetsFactory: widgetsFactory,
-                                                     selectedAppMode: selectedAppMode, dictionary: dictionary)
+                                                     selectedAppMode: selectedAppMode, widgetParams: widgetParams)
                         addWidgetInfoKeyIfNeeded(info: mapWidgetInfo, alreadyExist: &alreadyExist, needToAdd: &needToAdd)
                     }
                 } else {
@@ -161,7 +161,7 @@ final class WidgetUtils {
                         mapWidgetInfo = createWidget(widgetId: enabledWidget,
                                                      panel: panel,
                                                      widgetsFactory: widgetsFactory,
-                                                     selectedAppMode: selectedAppMode, dictionary: dictionary)
+                                                     selectedAppMode: selectedAppMode, widgetParams: widgetParams)
                         addWidgetInfoKeyIfNeeded(info: mapWidgetInfo, alreadyExist: &alreadyExist, needToAdd: &needToAdd)
                     } else if WidgetType.getById(enabledWidget) != nil {
                         for defaultWidgetInfo in defaultWidgetInfos where defaultWidgetInfo.key == enabledWidget {

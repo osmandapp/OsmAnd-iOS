@@ -70,10 +70,6 @@
     [collectionView reloadData];
 }
 
-- (void)addDataItem:(id)item
-{
-}
-
 - (void)generateData:(NSArray<NSArray *> *)data
 {
 }

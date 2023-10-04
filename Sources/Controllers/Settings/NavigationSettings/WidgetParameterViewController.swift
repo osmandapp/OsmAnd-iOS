@@ -16,6 +16,8 @@ class WidgetParameterViewController: OABaseNavbarViewController {
     var appMode: OAApplicationMode!
     var delegate: WidgetStateDelegate?
     var pref: OACommonPreference?
+    var widgetConfigurationParams: WidgetConfigurationParams?
+    var onWidgetConfigurationParamsAction: ((String?) -> Void)? = nil
 
     //MARK: - Base UI
 
@@ -59,9 +61,14 @@ class WidgetParameterViewController: OABaseNavbarViewController {
                 } else {
                     cell.descriptionVisibility(false)
                 }
-
-                let selectedVal = pref?.toStringValue(appMode)
+                let selectedVal: String?
+                if let widgetConfigurationParams {
+                    selectedVal = widgetConfigurationParams.value
+                } else {
+                    selectedVal = pref?.toStringValue(appMode)
+                }
                 let val = stringValue(from: item.obj(forKey: "value"))
+
                 cell.accessoryType = selectedVal == val ? .checkmark : .none
                 cell.titleLabel.text = item.title
             }
@@ -73,14 +80,21 @@ class WidgetParameterViewController: OABaseNavbarViewController {
                 cell = nib?.first as? OASegmentSliderTableViewCell
             }
             if let cell = cell {
-                if let values = item.obj(forKey: "values") as? [Int: String], let prefLong = pref as? OACommonLong {
+                if let values = item.obj(forKey: "values") as? [Int: String] {
+                    let long: Int
+                    if let prefLong = pref as? OACommonLong {
+                        long = Int(prefLong.get(appMode))
+                    } else {
+                        long = Int(widgetConfigurationParams?.value ?? "0")!
+                    }
+  
                     let sortedValues = values.sorted(by: { $0.key < $1.key })
                     cell.topLeftLabel.text = item.title
-                    cell.topRightLabel.text = sortedValues.first { $0.key == prefLong.get(appMode)}?.value
+                    cell.topRightLabel.text = sortedValues.first { $0.key == Int(long) }?.value
                     cell.bottomLeftLabel.text = sortedValues.first?.value
                     cell.bottomRightLabel.text = sortedValues.last?.value
                     cell.sliderView.setNumberOfMarks(sortedValues.count, additionalMarksBetween: 0)
-                    cell.sliderView.selectedMark = sortedValues.firstIndex(where: { $0.key == prefLong.get(appMode) }) ?? 0
+                    cell.sliderView.selectedMark = sortedValues.firstIndex(where: { $0.key == long }) ?? 0
                     cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
                     cell.sliderView.removeTarget(self, action: nil, for: [.touchUpInside , .touchUpOutside])
                     cell.sliderView.addTarget(self, action: #selector(sliderChanged(sender:)), for: [.touchUpInside , .touchUpOutside])
@@ -95,7 +109,11 @@ class WidgetParameterViewController: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
         if item.cellType != OASegmentSliderTableViewCell.getIdentifier() {
             let val = stringValue(from: item.obj(forKey: "value"))
-            pref?.setValueFrom(val, appMode: appMode)
+            if let pref {
+                pref.setValueFrom(val, appMode: appMode)
+            } else {
+                widgetConfigurationParams?.value = val
+            }
             delegate?.onWidgetStateChanged()
             dismiss()
         }
@@ -125,7 +143,13 @@ class WidgetParameterViewController: OABaseNavbarViewController {
             if let values = values as? [Int: String] {
                 let sortedValues = values.sorted(by: { $0.key < $1.key })
                 let val = stringValue(from: sortedValues[cell.sliderView.selectedMark].key)
-                pref?.setValueFrom(val, appMode: appMode)
+                if let pref {
+                    pref.setValueFrom(val, appMode: appMode)
+                } else {
+                    widgetConfigurationParams?.value = val
+                    onWidgetConfigurationParamsAction?(val)
+                }
+               
                 delegate?.onWidgetStateChanged()
                 tableView.reloadRows(at: [indexPath], with: .none)
             }

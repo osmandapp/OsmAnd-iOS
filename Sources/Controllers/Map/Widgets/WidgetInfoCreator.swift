@@ -18,16 +18,16 @@ class WidgetInfoCreator: NSObject {
         self.appMode = appMode
     }
     
-    func createWidgetInfo(factory: MapWidgetsFactory, widgetType: WidgetType) -> MapWidgetInfo? {
-        let mapWidget = factory.createMapWidget(widgetType: widgetType)
+    func createWidgetInfo(factory: MapWidgetsFactory, widgetType: WidgetType, dictionary: [String: Any]? = nil) -> MapWidgetInfo? {
+        let mapWidget = factory.createMapWidget(widgetType: widgetType, dictionary: dictionary)
         if let mapWidget {
             return createWidgetInfo(widget: mapWidget)
         }
         return nil
     }
     
-    func createCustomWidgetInfo(factory: MapWidgetsFactory, key: String, widgetType: WidgetType) -> MapWidgetInfo? {
-        let widget = factory.createMapWidget(customId: key, widgetType: widgetType)
+    func createCustomWidgetInfo(factory: MapWidgetsFactory, key: String, widgetType: WidgetType, dictionary: [String: Any]? = nil) -> MapWidgetInfo? {
+        let widget = factory.createMapWidget(customId: key, widgetType: widgetType, dictionary: dictionary)
         if let widget = widget {
             let panel = widgetType.getPanel(key, appMode: appMode)
             return createCustomWidgetInfo(widgetId: key, widget: widget, widgetType: widgetType, panel: panel)

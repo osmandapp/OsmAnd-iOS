@@ -26,9 +26,9 @@ class AverageSpeedWidget: OATextInfoWidget {
 
     private var lastUpdateTime = 0
 
-    private var availableIntervals: [Int: String] = getAvailableIntervals()
+    private static var availableIntervals: [Int: String] = getAvailableIntervals()
 
-    convenience init(customId: String?) {
+    convenience init(customId: String?, switchState: Bool?, interval: Int?, mode: OAApplicationMode?) {
         self.init(frame: .zero)
         
         widgetType = .averageSpeed
@@ -38,6 +38,12 @@ class AverageSpeedWidget: OATextInfoWidget {
         self.customId = customId
         measuredIntervalPref = Self.registerMeasuredIntervalPref(customId)
         skipStopsPref = Self.registerSkipStopsPref(customId)
+        if let interval {
+            measuredIntervalPref.set(interval, mode: mode)
+        }
+        if let switchState {
+            skipStopsPref.set(switchState, mode: mode)
+        }
     }
     
     override init(frame: CGRect) {
@@ -87,7 +93,7 @@ class AverageSpeedWidget: OATextInfoWidget {
         settingRow.title = localizedString("shared_string_interval")
         settingRow.descr = localizedString("shared_string_interval")
         settingRow.setObj(measuredIntervalPref, forKey: "pref")
-        settingRow.setObj(getIntervalTitle(measuredIntervalPref.get(appMode)), forKey: "value")
+        settingRow.setObj(Self.getIntervalTitle(measuredIntervalPref.get(appMode)), forKey: "value")
         settingRow.setObj(getPossibleValues(measuredIntervalPref), forKey: "possible_values")
         settingRow.setObj(localizedString("average_speed_time_interval_desc"), forKey: "footer")
 
@@ -105,12 +111,12 @@ class AverageSpeedWidget: OATextInfoWidget {
         valuesRow.key = "values"
         valuesRow.cellType = OASegmentSliderTableViewCell.getIdentifier()
         valuesRow.title = localizedString("shared_string_interval")
-        valuesRow.setObj(availableIntervals, forKey: "values")
+        valuesRow.setObj(Self.availableIntervals, forKey: "values")
         rows.append(valuesRow)
         return rows
     }
 
-    private func getIntervalTitle(_ intervalValue: Int) -> String {
+    static func getIntervalTitle(_ intervalValue: Int) -> String {
         return availableIntervals[intervalValue] ?? "-"
     }
 

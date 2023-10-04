@@ -8,6 +8,12 @@
 
 import Foundation
 
+struct WidgetConfigurationParams {
+    var selectedAppMode: OAApplicationMode
+    var switchState = false
+    var value = ""
+}
+
 @objc(OAWidgetConfigurationViewController)
 @objcMembers
 class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStateDelegate {
@@ -16,12 +22,20 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     var widgetPanel: WidgetsPanel!
     var selectedAppMode: OAApplicationMode!
     var createNew = false
+    var similarAlreadyExist = false
+    var widgetKey = ""
+    var widgetConfigurationParams: WidgetConfigurationParams?
+    var isFirstGenerateData = true
     
     lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.setContentOffset(CGPoint(x: 0, y: 1), animated: false)
+        
+        if isCreateNewAndSimilarAlreadyExist {
+            widgetConfigurationParams = WidgetConfigurationParams(selectedAppMode: selectedAppMode)
+        }
     }
     
     override func generateData() {
@@ -72,7 +86,14 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 let hasIcon = item.iconName != nil
                 cell.titleLabel.text = item.title
                 cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
-                let selected = pref.get(selectedAppMode)
+                var selected = pref.get(selectedAppMode)
+                if isCreateNewAndSimilarAlreadyExist {
+                    if isFirstGenerateData {
+                        widgetConfigurationParams?.switchState = selected
+                    } else {
+                        selected = widgetConfigurationParams?.switchState ?? false
+                    }
+                }
                 cell.switchView.isOn = selected
                 cell.leftIconVisibility(hasIcon)
                 cell.leftIconView.image = UIImage.templateImageNamed(selected ? item.iconName : item.string(forKey: "hide_icon"))
@@ -93,7 +114,23 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 cell?.leftIconView.tintColor = UIColor(rgb: Int(selectedAppMode.getIconColor()))
             }
             if let cell {
-                cell.valueLabel.text = item.string(forKey: "value")
+                if isCreateNewAndSimilarAlreadyExist {
+                    var value: String
+                    if isFirstGenerateData {
+                        value = item.string(forKey: "value")!
+                        widgetConfigurationParams?.value = value
+                    } else {
+                        let _value = widgetConfigurationParams?.value ?? "0"
+                        if widgetKey == WidgetType.averageSpeed.id {
+                            value = AverageSpeedWidget.getIntervalTitle(Int(_value)!)
+                        } else {
+                            fatalError("You need implement value handler for widgetKey")
+                        }
+                    }
+                    cell.valueLabel.text = value
+                } else {
+                    cell.valueLabel.text = item.string(forKey: "value")
+                }
                 if let iconName = item.iconName, !iconName.isEmpty {
                     cell.leftIconVisibility(true)
                     cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
@@ -107,6 +144,10 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         return outCell
     }
     
+    var isCreateNewAndSimilarAlreadyExist: Bool {
+        createNew && similarAlreadyExist
+    }
+    
     @objc func onSwitchClick(_ sender: Any) -> Bool {
         guard let sw = sender as? UISwitch else {
             return false
@@ -115,8 +156,12 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
         let data = tableData!.item(for: indexPath)
         
-        let pref = data.obj(forKey: "pref") as! OACommonBoolean
-        pref.set(sw.isOn, mode: selectedAppMode)
+        if isCreateNewAndSimilarAlreadyExist {
+            widgetConfigurationParams?.switchState = sw.isOn
+        } else {
+            let pref = data.obj(forKey: "pref") as! OACommonBoolean
+            pref.set(sw.isOn, mode: selectedAppMode)
+        }
         
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
             UIView.animate(withDuration: 0.2) {
@@ -143,7 +188,23 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 section.footerText = (item.obj(forKey: "footer") as? String) ?? ""
                 vc.appMode = selectedAppMode
                 vc.screenTitle = item.descr
-                vc.pref = item.obj(forKey: "pref") as? OACommonPreference
+                if isCreateNewAndSimilarAlreadyExist {
+                    guard let pref = item.obj(forKey: "pref") as? OACommonPreference,
+                          let prefLong = pref as? OACommonLong else {
+                        return
+                    }
+                    if isFirstGenerateData {
+                        let value = Int(prefLong.get(selectedAppMode))
+                        widgetConfigurationParams?.value = String(value)
+                    }
+                    vc.widgetConfigurationParams = widgetConfigurationParams
+                    vc.onWidgetConfigurationParamsAction = { [weak self] result in
+                        self?.widgetConfigurationParams?.value = result ?? ""
+                    }
+                } else {
+                    vc.pref = item.obj(forKey: "pref") as? OACommonPreference
+                }
+                
                 showMediumSheetViewController(vc, isLargeAvailable: false)
             }
         }
@@ -155,6 +216,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     }
     
     func onWidgetStateChanged() {
+        isFirstGenerateData = false
         if widgetInfo.key == WidgetType.markersTopBar.id || widgetInfo.key.hasPrefix(WidgetType.markersTopBar.id + MapWidgetInfo.DELIMITER) {
             OsmAndApp.swiftInstance().data.destinationsChangeObservable.notifyEvent()
         } else if widgetInfo.key == WidgetType.radiusRuler.id || widgetInfo.key.hasPrefix(WidgetType.radiusRuler.id + MapWidgetInfo.DELIMITER) {
@@ -211,8 +273,17 @@ extension WidgetConfigurationViewController {
                 }
             }
         } completion: { Bool in
-            NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification), object: self.widgetInfo)
+            NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification),
+                                            object: self.widgetInfo,
+                                            userInfo: self.widgetConfigurationParamsToDic())
         }
+    }
+    
+    private func widgetConfigurationParamsToDic() -> [String: Any]? {
+        guard let widgetConfigurationParams else { return nil }
+        return ["selectedAppMode": widgetConfigurationParams.selectedAppMode,
+                "switchState": widgetConfigurationParams.switchState,
+                "value": Int(widgetConfigurationParams.value) ?? 0 ]
     }
 
     override func getBottomButtonTitleAttr() -> NSAttributedString! {

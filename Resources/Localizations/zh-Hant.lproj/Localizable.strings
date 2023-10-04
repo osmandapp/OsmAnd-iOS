@@ -3016,3 +3016,4 @@
 // Widget descriptions
 "coordinates_widget_map_center_desc" = "顯示目前地圖中心的地理經緯度";
 "map_widget_rendering_fps_desc" = "顯示地圖與地圖元素能多快呈現與重新整理，採用影格速率(FPS)來顯示。";
+"shared_string_cache" = "快取";

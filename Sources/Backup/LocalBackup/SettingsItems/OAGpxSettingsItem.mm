@@ -151,10 +151,7 @@
     gpx.splitInterval = _appearanceInfo.splitInterval;
     [gpxDb save];
     if (gpx.color != 0)
-    {
-        OAGPXAppearanceCollection *gpxAppearance = [OAGPXAppearanceCollection sharedInstance];
-        [gpxAppearance selectColor:[gpxAppearance getColorItemWithValue:gpx.color]];
-    }
+        [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:gpx.color];
 }
 
 - (void) createGpxAppearanceInfo

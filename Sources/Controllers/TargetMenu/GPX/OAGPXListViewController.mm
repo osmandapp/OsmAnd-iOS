@@ -443,10 +443,7 @@ static UIViewController *parentController;
     }
     [[OAGPXDatabase sharedDb] save];
     if (item.color != 0)
-    {
-        OAGPXAppearanceCollection *gpxAppearance = [OAGPXAppearanceCollection sharedInstance];
-        [gpxAppearance selectColor:[gpxAppearance getColorItemWithValue:item.color]];
-    }
+        [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:item.color];
 
     [OAUtilities denyAccessToFile:_importUrl.path removeFromInbox:YES];
 

@@ -1730,7 +1730,7 @@
 "osm_live_banner_desc" = "获取无限的地图下载，添加每周，每日甚至每小时的更新。";
 "wikipedia_and_wikivoyage_offline" = "离线维基百科和维基导游";
 "routing_attr_allow_private_for_truck_description" = "允许卡车进入私人区域。";
-"terrain_maps" = "地形图";
+"terrain_maps" = "地形地图";
 "copy_coordinates" = "复制坐标";
 "annual_subscription" = "年度订阅";
 "cubic_m" = "立方米";
@@ -2185,3 +2185,4 @@
 "elevation_profile_widget_desc" = "显示当前路线的海拔和坡度剖面。";
 "map_3d_mode_hint" = "长按按钮可更改按钮位置。";
 "speak_route_recalculation" = "播报路线的重新计算";
+"shared_string_cache" = "缓存";

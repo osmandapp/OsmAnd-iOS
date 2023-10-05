@@ -2043,11 +2043,8 @@
 "product_desc_mapillary" = "Bilder auf Straßenebene, um die Umgebung zu erkunden";
 "shared_string_turn_off" = "Ausschalten";
 "suggested_maps_descr" = "Diese Karten werden für das Plugin benötigt.";
-"open_place_reviews_plugin_description" = "Tragen Sie zum OpenPlaceReviews-Projekt bei, z. B. mit Fotos, Bewertungen oder Links für öffentliche Orte wie Restaurants, Hotels oder Museen.\n\nAuf unserer Website https://osmand.net/docs/user/plugins/openplacereviews finden Sie Anweisungen, wie Sie einen Beitrag leisten können.";
 "plugin_mapillary_descr" = "Bildmaterial von Straßenansichten. Sie können auch selbst einen Beitrag leisten. Um die vorhandenen Daten als Kartenebene zu sehen, aktivieren Sie \"Straßenbilder\" im Menü \"Karte konfigurieren\".";
 "suggested_maps" = "Vorgeschlagene Karten";
-"product_desc_openplacereviews" = "Teilen Sie Ihre Meinung zu öffentlichen Orten";
-"open_place_reviews" = "OpenPlaceReviews";
 "welmode_download_maps" = "Kartenverwaltung";
 "shared_strings_all_regions" = "Alle Regionen";
 "srtm_download_single_help_message" = "Bitte Variante auswählen. Sie müssen die Datei erneut herunterladen, um das Format zu ändern.";

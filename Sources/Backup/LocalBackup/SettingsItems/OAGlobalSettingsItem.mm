@@ -29,7 +29,6 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
         @"skimaps.plugin": kInAppId_Addon_SkiMap,
         @"osmand.srtm.paid": kInAppId_Addon_Srtm,
         @"osmand.wikipedia": kInAppId_Addon_Wiki,
-        @"osmand.openplacereviews": kInAppId_Addon_OpenPlaceReview,
         @"osmand.weather": kInAppId_Addon_Weather
         //        @"osmand.antplus"
         //        @"osmand.accessibility":

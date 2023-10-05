@@ -2,8 +2,8 @@
 // Shared Strings
 "shared_string_back" = "Zurück";
 "shared_string_cancel" = "Abbrechen";
-"shared_string_no" = "nein";
-"shared_string_yes" = "ja";
+"shared_string_no" = "Nein";
+"shared_string_yes" = "Ja";
 "shared_string_save" = "Speichern";
 "shared_string_done" = "Fertig";
 "shared_string_update" = "Aktualisieren";
@@ -828,7 +828,7 @@
 "update_now" = "Jetzt aktualisieren";
 "product_desc_sea_depth_contours" = "Meeresbodenkonturlinien und Seezeichen";
 "free_version_message" = "%@ Karten zum Herunterladen oder Aktualisieren.";
-"get_osmand_live" = "Holen Sie sich OsmAnd Live, um alle Funktionen freizuschalten: Tägliche Karten-Updates mit unbegrenzten Downloads, alle kostenpflichtigen und kostenlosen Plugins, Wikipedia, Wikivoyage und vieles mehr.";
+"get_osmand_live" = "Holen Sie sich OsmAnd Live, um alle Funktionen freizuschalten: tägliche Karten-Updates mit unbegrenzten Downloads, alle kostenpflichtigen und kostenlosen Plugins, Wikipedia, Wikivoyage und vieles mehr.";
 "osm_live_subscription" = "OsmAnd-Live-Abonnement";
 "wikivoyage_offline" = "Wikivoyage offline";
 "unlimited_downloads" = "Unbegrenzte Downloads";
@@ -1976,7 +1976,7 @@
 "searching_gps" = "Suche GPS";
 
 // Coordinate widget
-"coordinates_widget_current_location" = "Koordinaten-Widget";
+"coordinates_widget_current_location" = "Koordinaten: aktueller Standort";
 "coordinates" = "Koordinaten";
 "shared_string_gpx_points" = "Punkte";
 "download_regular_maps" = "Standardkarte";
@@ -2411,7 +2411,7 @@
 "weather_contours_enable_descr" = "Zeige Ebene mit isobaren Linien auf der Karte.";
 "copy_poi_name" = "POI-Namen kopieren";
 "routeInfo_horse_scale_name" = "Schwierigkeitsgrad von Reitwegen";
-"routeInfo_horse_scale_description" = "Zeige Reitwege abhängig vom Schwierigkeitsgrad an";
+"routeInfo_horse_scale_description" = "Reitwege nach ihrem Schwierigkeitsgrad darstellen";
 "routing_attr_allow_private_for_truck_name" = "Privaten Zugang erlauben (Lkw)";
 "routing_attr_allow_private_for_truck_description" = "Zufahrt zu Privatgrundstücken für Lkw erlauben.";
 "copy_address" = "Adresse kopieren";
@@ -2935,7 +2935,7 @@
 "distance_to_intermediate_widget_desc" = "Das Widget zeigt die verbleibende Entfernung zum ersten Zwischenpunkt an. Sobald Zwischenpunkte passiert sind, wird die Distanz bis zum nächsten Zwischenpunkt aktualisiert.";
 "distance_to_destination_widget_desc" = "Das Widget zeigt die verbleibende Entfernung zum letzten Zielpunkt an.";
 "second_next_turn_widget_desc" = "Das Widget zeigt Informationen über Ihre übernächste Abbiegung an, die aktiviert wird, wenn sich die Abbiegung in unmittelbarer Nähe befindet.";
-"next_turn_widget_desc" = "Das Widget zeigt Informationen zu Ihrer nächsten Abbiegung an, mit einem Bild des Manövers und entsprechender Entfernungsangabe.";
+"next_turn_widget_desc" = "Das Widget zeigt Informationen über Ihrer nächsten Abbiegung mit einem Bild des Manövers und der Entfernung dazu an.";
 "time_to_intermediate_widget_desc" = "Das Widget zeigt \"Ankunftszeit\" oder \"Verbleibende Zeit\" zum ersten Zwischenpunkt an. Die Zeit wird während der Navigation ständig aktualisiert, sobald Zwischenpunkte passiert sind, wird die Zeit auf den nächsten Zwischenpunkt aktualisiert.";
 "elevation_profile_widget_desc" = "Zeigt Höhenprofil und Hangneigung der aktuellen Route an.";
 "map_widget_distance_to_intermediate" = "Entfernung bis zum Zwischenstopp";

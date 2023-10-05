@@ -1607,7 +1607,7 @@
 "avoid_transport_type" = "Transportarten vermeiden";
 "allow_3d_descr" = "Aktivieren Sie diese Option, um die Karte in der 2.5D-Perspektive betrachten zu können";
 "allow_3d" = "2½D-Ansicht zulassen";
-"map_settings_zoom_level_description" = "Legen Sie die minimale und maximale Zoomstufe für die Anzeige der Ebene fest";
+"map_settings_zoom_level_description" = "Lege die minimalen und maximalen Zoomstufen fest, auf denen die Ebene angezeigt wird";
 "map_settings_layer_transparency" = "Transparenz der Ebene";
 "shared_string_terrain" = "Gelände";
 "arrows_direction_to_markers" = "Pfeile zeigen die Richtung zur aktiven Markierung an, wenn sie sich außerhalb des Bildschirms befindet. Richtungslinien zeichnen eine Linie zu aktiven Markierungen.";
@@ -1628,13 +1628,13 @@
 "help_travel" = "Reisen (Wikipedia & Wikivoyage)";
 "subscription_osmandlive_item" = "Abonnement - OsmAnd Live";
 "osmand_purchases_item" = "OsmAnd-Einkäufe";
-"enable_hillshade" = "Aktivieren zum Anzeigen von Geländedaten";
+"enable_hillshade" = "Aktiviere die Anzeige von Geländedaten aus der Höhenschatten- oder Hangneigungskarte.";
 "hide_terrain" = "Gelände ausblenden";
 "show_terrain" = "Gelände anzeigen";
 "shared_string_legend" = "Legende";
-"map_settings_add_maps_slopes" = "Zusätzliche Karten sind erforderlich, um Hangneigungen auf der Karte anzuzeigen";
-"map_settings_add_maps_hillshade" = "Zusätzliche Karten sind erforderlich, um das Relief auf der Karte anzuzeigen";
-"map_settings_hillshade_description" = "Reliefkarten stellen Hangneigungen, Gipfel und Flachland in verschiedenen Graustufen dar";
+"map_settings_add_maps_slopes" = "Zusätzliche Karten sind erforderlich, um Hangneigungen auf der Karte anzuzeigen.";
+"map_settings_add_maps_hillshade" = "Zusätzliche Karten sind erforderlich, um Höhenschattierungen auf der Karte anzuzeigen.";
+"map_settings_hillshade_description" = "Reliefkarte, die dunkle Schattierungen verwendet, um Hänge, Gipfel und Niederungen anzuzeigen.";
 "map_settings_slopes_description" = "Gefälle ist eine farbige Visualisierung des Geländes.";
 "map_settings_slopes_legend" = "Sie können mehr über Hangneigungen auf Wikipedia lesen";
 "routing_profile_direct_to" = "Auf direktem Weg";
@@ -2695,7 +2695,7 @@
 "checking_progress" = "Prüfung…";
 "cloud_conflict_descr" = "Die lokale und die Cloud-Version enthalten Änderungen seit der letzten Synchronisierung.";
 "local_changes_will_be_dismissed" = "LokaleÄnderungen werden verworfen";
-"download_heightmap_maps" = "Geländekarte";
+"download_heightmap_maps" = "Geländekarte (3D)";
 "use_heightmap_setting" = "3D-Reliefhöhenkarten verwenden";
 "nautical_depth_points" = "Nautische Tiefenpunkte";
 "depth_contours" = "Tiefenlinien";
@@ -3039,3 +3039,22 @@
 "weather_update_over_any_network" = "Über jedes Netzwerk";
 "map_settings_topography" = "Topografie";
 "shared_string_cache" = "Zwischenspeicher";
+"weather_updates_manual" = "Die Wettervorhersage muss manuell aktualisiert werden.";
+"click_on_widget" = "Klicke auf das Widget";
+"purchases_feature_relief_3d_description" = "Besitze und beobachte das maßstabsgetreue Modell deiner Nachbarschaft oder des gesamten Kontinents.";
+"unsaved_changes_will_be_lost_discard" = "Alle nicht gespeicherten Änderungen gehen verloren. Änderungen verwerfen?";
+"terrain_3D_maps" = "Geländekarten";
+"average_speed_skip_stops" = "Berücksichtige Zwischenstopps";
+"shared_string_relief_3d" = "3D-Relief";
+"average_speed_time_interval_desc" = "Gib das Zeitintervall für die Durchschnittsberechnung der Geschwindigkeit an.";
+"weather_update_parameters_wifi" = "Die Wettervorhersage wird nur aktualisiert, wenn ein Wi-Fi-Netzwerk verfügbar ist.";
+"unsaved_changes" = "Ungesicherte Änderungen";
+
+
+// Shared Strings
+"shared_string_discard" = "Verwerfen";
+"weather_update_parameters_disabled" = "Automatische Aktualisierungen werden deaktiviert.";
+"auto_update" = "Automatische Aktualisierung";
+"specify_number_of_dir_indicators_desc" = "Gib die Anzahl der Richtungsanzeiger an.";
+"weather_update_parameters_any_network" = "Die Wettervorhersage wird über ein beliebiges Netz aktualisiert. Mobile Daten können verwendet werden.";
+"map_marker_interval_dialog_desc" = "Gib das Zeitintervall an, für das die Durchschnittsgeschwindigkeit gemessen wird, um die geschätzte Ankunftszeit zu berechnen.";

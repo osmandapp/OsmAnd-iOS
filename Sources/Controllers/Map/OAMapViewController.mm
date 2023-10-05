@@ -983,6 +983,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         CGPoint firstPoint = [self getTouchPoint:recognizer touchIndex:0];
         if (!CGPointEqualToPoint(firstPoint, CGPointZero) && _moveTouchLocations.count > 0 && !_rotatingByGesture && !_zoomingByGesture)
         {
+            _app.mapMode = OAMapModeFree;
             OATouchLocation *firstTouch = _moveTouchLocations[0];
             OsmAnd::PointI touchLocation31 = [OANativeUtilities convertFromPoint31:firstTouch.touchLocation31];
             [_mapView setMapTarget:OsmAnd::PointI((int)firstPoint.x, (int)firstPoint.y) location31:touchLocation31];

@@ -451,20 +451,6 @@
 - (IBAction) onMapModeButtonClicked:(id)sender
 {
     [self updateMapModeButton];
-    
-    switch (self.mapModeButtonType)
-    {
-        case EOAMapModeButtonTypeShowMap:
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [_mapViewController keepTempGpxTrackVisible];
-            });
-            [[OARootViewController instance].mapPanel hideContextMenu];
-            return;
-        }
-        default:
-            break;
-    }
 
     [[OAMapViewTrackingUtilities instance] backToLocationImpl];
 }
@@ -535,20 +521,6 @@
 
 - (void) updateMapModeButton
 {
-    if (self.contextMenuMode)
-    {
-        switch (self.mapModeButtonType)
-        {
-            case EOAMapModeButtonTypeShowMap:
-                [_mapModeButton setImage:[UIImage templateImageNamed:@"ic_custom_show_on_map"] forState:UIControlStateNormal];
-                break;
-                
-            default:
-                break;
-        }
-        return;
-    }
-    
     if ([self isLocationAvailable])
     {
         switch (_app.mapMode)
@@ -1437,7 +1409,6 @@
     if (self.contextMenuMode)
     {
         self.contextMenuMode = NO;
-        self.mapModeButtonType = EOAMapModeButtonRegular;
         [self updateMapModeButton];
         [self updateControlsLayout:YES];
     }

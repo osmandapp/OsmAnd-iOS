@@ -73,7 +73,6 @@
     
     OARowInfo *_nearbyImagesRowInfo;
     BOOL _otherCardsReady;
-    BOOL _openPlaceCardsReady;
     BOOL _wikiCardsReady;
 }
 
@@ -461,15 +460,6 @@
         mapillaryTagContent = poi.values[@"mapillary"];
     }
     
-    if (![openPlaceReviewsTagContent isEqualToString:@"0"])
-    {
-        _openPlaceCardsReady = NO;
-    }
-    else
-    {
-        _openPlaceCardsReady = YES;
-    }
-    
     _otherCardsReady = NO;
     [self addOtherCards:imageTagContent mapillary:mapillaryTagContent cards:cards rowInfo:_nearbyImagesRowInfo];
 }
@@ -504,12 +494,6 @@
         if (onComplete)
             onComplete(nil);
     }
-}
-
-- (void)onOpenPlaceCardsReady:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
-{
-    _openPlaceCardsReady = YES;
-    [self updateDisplayingCards:cards rowInfo:nearbyImagesRowInfo];
 }
 
 - (void)addOtherCards:(NSString *)imageTagContent mapillary:(NSString *)mapillaryTagContent cards:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
@@ -577,7 +561,7 @@
 
 - (void)updateDisplayingCards:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
 {
-    if (_otherCardsReady && _openPlaceCardsReady && _wikiCardsReady)
+    if (_otherCardsReady && _wikiCardsReady)
     {
         if (cards.count == 0)
             [cards addObject:[[OANoImagesCard alloc] init]];
@@ -587,7 +571,7 @@
         if (nearbyImagesRowInfo)
             [((OACollapsableCardsView *) nearbyImagesRowInfo.collapsableView) setCards:cards];
         
-        _otherCardsReady = _openPlaceCardsReady = _wikiCardsReady = NO;
+        _otherCardsReady = _wikiCardsReady = NO;
     }
 }
 

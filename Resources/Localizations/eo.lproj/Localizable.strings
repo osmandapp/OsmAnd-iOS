@@ -1556,9 +1556,6 @@
 "osm_editing_plugin_description" = "Ebligas kontribui al OpenStreetMap– tutmonda komunumo, kies celo estas prizorgi detalan mapon de la mondo kaj liveri aktualajn malfermajn datumojn por ĉiu uzanto.\n\nPliaj informoj pri kiel redakti la mapon OSM: https://osmand.net/docs/user/plugins/osm-editing.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Liveras strat-nivelan fotaron. Vi ankaŭ povas kontribui per aldoni fotojn al la projekto. Por vidigi la ekzistajn datumojn kiel map-tavolon, aktivigu la agordon “Start-nivela fotaro” en la menuo “Agordi mapon”.";
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"open_place_reviews_plugin_description" = "Ebligas kontribui al la projekto OpenPlaceReviews– per aldoni fotojn, opiniojn kaj ligilojn pri publikaj ejoj: restoracioj, hoteloj, muzeoj kaj pli.\n\nInstrukcioj (en la angla) pri kiel kontribui troviĝas sur la retpaĝo https://osmand.net/docs/user/plugins/openplacereviews.";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";

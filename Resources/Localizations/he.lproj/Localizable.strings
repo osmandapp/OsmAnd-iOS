@@ -1572,11 +1572,6 @@
 "osm_editing_plugin_description" = "ניתן לתרום ל־OSM למשל על ידי שינוי פריטי נקודות עניין ב־OSM או ליצור הערות OSM ולתרום קובצי הקלטות GPX ל־OsmAnd על ידי ציון שם המשתמש והססמה שלך. OpenStreetMap.org הוא מיזם מיפוי גלובלי, בהנהגה קהילתית לרווחת הציבור.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "תמונות ברמת הרחוב לכולם. להכיר מקומות, לשתף פעולה ולצלם את העולם.";
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"open_place_reviews_plugin_description" = "ניתן לשלוח תמונות, סקירות וקישורים לגבי מקומות ציבוריים כגון מסעדות, מלונות, מוזיאונים ונקודות דרך כנתונים פתוחים אל https://openplacereviews.org/data/‎.
-\n
-\nניתן לקרוא עוד באתר: https://openplacereviews.org";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";

@@ -1964,50 +1964,6 @@
 
 @end
 
-@implementation OAOpenPlaceReviewsProduct
-
-- (instancetype) init
-{
-    self = [super initWithIdentifier:kInAppId_Addon_OpenPlaceReview];
-    if (self)
-    {
-        self.free = YES;
-        [self commonInit];
-    }
-    return self;
-}
-
-- (NSDecimalNumber *) getDefaultPrice
-{
-    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Addon_OpenPlaceReviews_Default_Price];
-}
-
-- (NSString *) productIconName
-{
-    return @"ic_custom_openplacereview_logo";
-}
-
-- (NSString *) productScreenshotName
-{
-    return @"img_plugin_openplacereviews.jpg";
-}
-
-- (NSString *) localizedTitle
-{
-    return OALocalizedString(@"open_place_reviews");
-}
-
-- (NSString *) localizedDescription
-{
-    return OALocalizedString(@"product_desc_openplacereviews");
-}
-
-- (NSString *) localizedDescriptionExt
-{
-    return OALocalizedString(@"open_place_reviews_plugin_description");
-}
-
-@end
 
 @implementation OAWeatherProduct
 
@@ -2374,7 +2330,6 @@
 @property (nonatomic) OAProduct *srtm;
 @property (nonatomic) OAProduct *osmEditing;
 @property (nonatomic) OAProduct *mapillary;
-@property (nonatomic) OAProduct *openPlaceReviews;
 @property (nonatomic) OAProduct *weather;
 @property (nonatomic) OAProduct *carplay;
 @property (nonatomic) OAProduct *osmandDevelopment;
@@ -2424,7 +2379,6 @@
         self.srtm = [[OASrtmProduct alloc] init];
         self.osmEditing = [[OAOsmEditingProduct alloc] init];
         self.mapillary = [[OAMapillaryProduct alloc] init];
-        self.openPlaceReviews = [[OAOpenPlaceReviewsProduct alloc] init];
         self.weather = [[OAWeatherProduct alloc] init];
         self.carplay = [[OACarPlayProduct alloc] init];
         self.osmandDevelopment = [[OAOsmandDevelopmentProduct alloc] init];
@@ -2448,7 +2402,6 @@
                              self.srtm,
                              self.osmEditing,
                              self.mapillary,
-                             self.openPlaceReviews,
                              self.weather,
                              self.osmandDevelopment
         ];
@@ -2676,13 +2629,6 @@
         [arr addObject:addon];
     }
     
-    if ([self.openPlaceReviews isPurchased])
-    {
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_OpenPlaceReview titleShort:OALocalizedString(@"open_place_reviews") titleWide:OALocalizedString(@"open_place_reviews") imageName:@"ic_custom_mapillary_symbol"];
-        addon.sortIndex = 3;
-        [arr addObject:addon];
-    }
-
     if ([self.osmandDevelopment isPurchased])
     {
         OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_OsmandDevelopment titleShort:OALocalizedString(@"debugging_and_development") titleWide:OALocalizedString(@"debugging_and_development") imageName:@"ic_custom_laptop"];

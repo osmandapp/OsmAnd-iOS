@@ -266,7 +266,12 @@
         [self sendSubviewToBack:mark];
         [_markViews addObject:mark];
     }
-
+    
+    if ([self isDirectionRTL])
+    {
+        _titleViews = [[[_titleViews reverseObjectEnumerator] allObjects] mutableCopy];
+    }
+       
     [self layoutMarks];
     [self paintMarks];
 }

@@ -1432,9 +1432,6 @@
 "osmand_parking_plugin_name" = "주차 위치";
 "osmand_parking_plugin_description" = "이 플러그인은 주차된 차의 위치를 쉽게 기억하도록 개발되었습니다.";
 "kg" = "킬로그램";
-"open_place_reviews_plugin_description" = "식당, 호텔, 박물관 및 경유지와 같은 공공장소에 대한 사진, 리뷰 및 링크를 열린 데이터로 보냅니다 여기에 https://openplacereviews.org/data/.
-\n
-\nRead more at https://openplacereviews.org";
 "km" = "km";
 "plugin_nautical_name" = "항해 지도 보기";
 "record_plugin_description" = "\"이 플러그인은 지도 화면에서 GPX 기록 위젯을 터치하여 수동으로 경로를 기록하고 저장하기 위해 , 또는 GPX 파일에 운행 경로의 모든 것을 자동으로 기록하기 위해, 기능을 활성화합니다.

@@ -53,9 +53,6 @@
 
 #define kRecordTrackRow 0
 #define kRecordTrackSection 0
-#define kActionsSection 3
-#define kActionsImportRow 0
-#define kActionsNewTrackRow 1
 #define kGPXGroupHeaderRow 0
 #define kVisibleTracksWithoutRoutePlanningSection 1
 #define kRoutePlanningSection 1
@@ -1216,6 +1213,7 @@ static UIViewController *parentController;
         
         [self generateData];
         [self updateRecButtonsAnimated];
+        _actionsGroupIndex = -1;
         [self.gpxTableView reloadData];
         
         [self doneButtonClick:nil];
@@ -1324,11 +1322,12 @@ static UIViewController *parentController;
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OASimpleTableViewCell *) nib[0];
-                [cell leftIconVisibility:isImportCreateTrack];
                 [cell descriptionVisibility:NO];
             }
             if (cell)
             {
+                [cell leftIconVisibility:isImportCreateTrack];
+                
                 if (isImportCreateTrack)
                 {
                     cell.titleLabel.text = menuItem[@"title"];
@@ -1500,11 +1499,6 @@ static UIViewController *parentController;
     {
         if (indexPath.section == kRecordTrackSection && indexPath.row == kRecordTrackRow)
             return;
-        if (indexPath.section == kActionsSection && (indexPath.row == kActionsImportRow || indexPath.row == kActionsNewTrackRow))
-        {
-            [self didSelectGpxTableGroupItem:item indexPath:indexPath];
-            [tableView deselectRowAtIndexPath:indexPath animated:YES];
-        }
         else if (indexPath.row == kGPXGroupHeaderRow)
             [self selectAllGroup:indexPath.section];
         else
@@ -1652,7 +1646,7 @@ static UIViewController *parentController;
 - (void) selectDeselectGroupHeader:(NSIndexPath *)indexPath select:(BOOL)select
 {
     NSInteger section = kVisibleTracksWithoutRoutePlanningSection;
-    for (; section < [self.gpxTableView numberOfSections] - 1; section++)
+    for (; section < [self.gpxTableView numberOfSections]; section++)
     {
         OAGpxTableGroup* groupData = [_data objectAtIndex:section];
         BOOL isGroupHeaderSelected = [self.gpxTableView.indexPathsForSelectedRows containsObject:[NSIndexPath indexPathForRow:0 inSection:section]];

@@ -58,7 +58,7 @@
 - (OAColorItem *)getDefaultPointColorItem;
 
 - (void)changeColor:(OAColorItem *)colorItem newColor:(UIColor *)newColor;
-- (void)addNewSelectedColor:(UIColor *)newColor;
+- (OAColorItem *)addNewSelectedColor:(UIColor *)newColor;
 - (void)duplicateColor:(OAColorItem *)colorItem;
 - (void)deleteColor:(OAColorItem *)colorItem;
 - (void)selectColor:(OAColorItem *)colorItem;

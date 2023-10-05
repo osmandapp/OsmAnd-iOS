@@ -1710,9 +1710,6 @@
 "osm_editing_plugin_description" = "Allows you to make contributions to OpenStreetMap, a global community aimed at creating a comprehensive map of the world and providing up-to date open-source data to every user. \n\nYou can find instruction on how to edit the map on out website https://osmand.net/docs/user/plugins/osm-editing";
 "product_desc_mapillary" = "Street-level views to check out the surroundings";
 "plugin_mapillary_descr" = "Brings street-level views. Where imagery is missing, you can just add it yourself so that others can make use of it. To enable the Mapillary layer turn on the \"Street-level imagery\" in Configure map menu.";
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Share your opinion about public places";
-"open_place_reviews_plugin_description" = "Allows you to make contributions to OpenPlaceReviews project. Such as photos, reviews, links about public places such as restaurants, hotels, museums and waypoints. \n\nYou can find instruction on how to contribute on out website - https://osmand.net/docs/user/plugins/openplacereviews";
 "debugging_and_development" = "OsmAnd development";
 "product_desc_development" = "For developers and experienced users";
 "osmand_development_plugin_description" = "Allows to configure OsmAnd for testing: simulate navigation routes, check the screen rendering performance, etc. Plugin is not required for normal application use.";

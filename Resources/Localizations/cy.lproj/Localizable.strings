@@ -1572,11 +1572,6 @@
 "osm_editing_plugin_description" = "Gwnewch gyfraniadau OSM fel creu neu addasu gwrthrychau OSM POI, agor neu roi sylwadau ar nodiadau OSM, a chyfrannu ffeiliau GPX wedi\'u recordio yn OsmAnd trwy gyflenwi\'ch enw defnyddiwr a\'ch cyfrinair. Mae OpenStreetMap.org yn brosiect mapio parth cyhoeddus byd-eang a yrrir gan y gymuned.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Lluniau lefel stryd ar-lein i bawb. Darganfod lleoedd, cydweithio, cipio\'r byd.";
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"open_place_reviews_plugin_description" = "Anfon lluniau, adolygiadau, a dolenni am lefydd cyhoeddus megis bwytai, gwestai, amgueddfeydd, a mannau o ddiddordeb fel data agored https://openplacereviews.org/data/.
-\n
-\nDarllenwch mwy ar https://openplacereviews.org";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";

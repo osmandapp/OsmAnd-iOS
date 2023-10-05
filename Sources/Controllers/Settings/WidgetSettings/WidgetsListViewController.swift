@@ -166,7 +166,11 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
                     self?.updateBottomButtons()
                 }
             } else {
-                reorderWidgets()
+                if let userInfo = notification.userInfo as? [String: Any] {
+                    reorderWidgets(with: userInfo)
+                } else {
+                    reorderWidgets()
+                }
                 updateUI(true)
             }
         }
@@ -188,7 +192,7 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
 
     // MARK: Additions
 
-    private func reorderWidgets() {
+    private func reorderWidgets(with widgetParams: [String: Any]? = nil) {
         var orders = [[String]]()
         var currPage = [String]()
         for sec in 0..<tableData.sectionCount() {
@@ -204,7 +208,8 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
         }
         WidgetUtils.reorderWidgets(orderedWidgetPages: orders,
                                       panel: widgetPanel,
-                                      selectedAppMode: selectedAppMode)
+                                   selectedAppMode: selectedAppMode,
+                                   widgetParams: widgetParams)
     }
 
 }

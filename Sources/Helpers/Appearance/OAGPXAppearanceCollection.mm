@@ -480,7 +480,7 @@
     [_settings.customTrackColorsLastUsed set:customTrackColorsLastUsed];
 }
 
-- (void)addNewSelectedColor:(UIColor *)newColor
+- (OAColorItem *)addNewSelectedColor:(UIColor *)newColor
 {
     NSString *newHexColor = [newColor toHexARGBString];
     NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[_settings.customTrackColors get]];
@@ -496,6 +496,7 @@
     colorItem.sortedPosition = [_availableColors indexOfObject:colorItem];
     [colorItem generateId];
     [self regenerateSortedPosition];
+    return colorItem;
 }
 
 - (void)duplicateColor:(OAColorItem *)colorItem

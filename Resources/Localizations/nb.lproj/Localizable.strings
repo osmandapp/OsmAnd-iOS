@@ -1787,7 +1787,7 @@
 "join_segments" = "Bind sammen segmenter";
 "shared_string_disable" = "Deaktiver";
 "change_folder" = "Endre mappe";
-"fav_point_dublicate" = "Duplisert av favorittnavn angitt";
+"fav_point_dublicate" = "Duplisert favorittnavn angitt";
 "icon_group_transport" = "Transport";
 "transport" = "Transport";
 "shared_string_enable" = "Aktiver";
@@ -2606,3 +2606,6 @@
 "free_account" = "Gratiskonto";
 "get_osmand_cloud" = "Skaff OsmAnd-sky";
 "true_bearing_wdiget_desc" = "Vinkel mellom sann nord og målpunktet observert fra din posisjon.";
+"street_name_widget_desc" = "Gatenavnmodulen viser det aktuelle gatenavnet med en rett posisjonspil eller det neste gatenavnet med en pil som indikerer en kommende sving.";
+"shared_string_cache" = "Hurtiglager";
+"map_markers_bar_widget_desc" = "Topplinjemodulen viser avstanden og retningen til den neste kartmarkøren fra din nåværende posisjon. Modulen kan stilles inn til å vise 1 eller 2 markører.";

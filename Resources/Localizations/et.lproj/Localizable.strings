@@ -2044,11 +2044,6 @@
 "added_profiles" = "Lisatud profiilid";
 "suggested_maps_descr" = "Need kaardid on laienduse kasutamisel nõutud.";
 "suggested_maps" = "Soovitatud kaardid";
-"open_place_reviews_plugin_description" = "Saada fotosid,ülevaateid ja viitu avalikest kohtadest nagu restranid, hotellid, muuseumid ja teeviidad kui avalikud andmed http://openplacereviews.org/data/.
-\n
-\nTäiendavalt saad lugeda aadressil http://openplacereviews.org";
-"product_desc_openplacereviews" = "Saada fotosid, ülevaateid ja linke avalike kohtade kohta";
-"open_place_reviews" = "OpenPlaceReviews";
 "plugin_mapillary_descr" = "Tänavataseme fotod kõigile. Avasta kohti, tee kaastööd, jäädvusta maailma.";
 "product_desc_mapillary" = "Tänavatasemel fotod veebis kõigile";
 "population_num" = "Rahvaarv";

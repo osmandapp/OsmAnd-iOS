@@ -1639,7 +1639,6 @@
 "suggested_maps" = "نقشه‌های پیشنهادی";
 "added_profiles" = "نمایه‌های افزوده";
 "rendering_value_walkingRoutesScopeOSMC_description" = "بر اساس وابستگی شبکه رنگ‌آمیزی کن.";
-"open_place_reviews" = "OpenPlaceReviews";
 "navigate_point_easting" = "به‌طرف شرق";
 "shared_strings_all_regions" = "همهٔ مناطق";
 "lang_lv" = "لتونیایی";
@@ -2112,9 +2111,6 @@
 "osm_editing_plugin_description" = "با ایجاد یا اصلاح نقاط توجه (POI)، ایجاد یادداشت‌های OSM یا نظردادن روی آن‌ها و بارگذاری پرونده‌های GPXای که ضبط کرده‌اید در تکمیل نقشهٔ OSM مشارکت کنید. برای این منظور لازم است نام کاربری و گذرواژهٔ خود را در OsmAnd وارد کنید. OpenStreetMap.org یک پروژهٔ نقشه‌کشی جامعه‌محور، جهانی و در مالکیت عمومی است.";
 "kg" = "کیلوگرم";
 "m" = "m";
-"open_place_reviews_plugin_description" = "برای مکان‌های عمومی مانند رستوران‌ها، هتل‌ها، موزه‌ها و نقاط بین‌راهی نگاره بفرستید، دیدگاه بنویسید و پیوند ثبت کنید؛ همگی این‌ها به‌عنوان دادهٔ باز ثبت خواهدشد. http://openplacereviews.org/data
-\n
-\nاینجا بیشتر بخوانید: http://openplacereviews.org";
 "km" = "km";
 "shared_string_height" = "ارتفاع";
 "speed_cameras_alert" = "قانونِ برخی از کشورها استفاده از هشداردهندهٔ دوربین سرعت را ممنوع کرده است.";

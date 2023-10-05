@@ -1635,10 +1635,6 @@
 "osm_editing_plugin_description" = "Այս OsmAnd-ի plugin-ի միջոցով կարելի է ներդրում կատարել OSM-ի, ինչպիսիք են OSM POI-ի օբյեկտների ստեղծում կամ փոփոխում, OSM նշումների բացումը կամ մեկնաբանումը և վերբեռնում արձանագրված GPX ֆայլերը: OSM-ն գլոբալ հանրային քարտեզագրման նախագիծ է, որը կառավարվում է OSM համայնքի կողմից: Մանրամասների համար այցելեք https://openstreetmap.org: Ակտիվ մասնակցությունըգնահատվում է, և ներդրումները կարող են կատարվել ուղղակիորեն OsmAnd-ից, եթե նշեք ձեր անձնական OSM-ի հավատարմագրերը հավելվածում:";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Փողոցային նկարներ բոլորի համար: Բացահայտեք վայրերը, համագործակցեք, նկարեք աշխարհը:";
-
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"open_place_reviews_plugin_description" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";

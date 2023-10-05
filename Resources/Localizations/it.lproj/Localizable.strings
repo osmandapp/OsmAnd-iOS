@@ -1771,7 +1771,6 @@
 "srtm_download_list_help_message" = "OsmAnd fornisce i dati delle curve di livello in metri e in piedi. Dovrai scaricare di nuovo il file per cambiarne il formato.";
 "added_profiles_descr" = "Profilo aggiunto dal componente aggiuntivo";
 "routes_color_by_type" = "Colora i percorsi per…";
-"open_place_reviews" = "OpenPlaceReviews";
 "some_articles_may_not_available_in_lang" = "Alcuni articoli di Wikipedia potrebbero non essere disponibili nella tua lingua.";
 "dialogs_and_notifications_title" = "Notifiche e finestre di dialogo";
 "added_profiles" = "Profilo aggiunto";
@@ -2471,14 +2470,12 @@
 "route_line_color_elevation_description" = "La linea del percorso verrà colorata in base al profilo altimetrico.";
 "product_desc_centralamerica_short" = "Mappe della regione dell'America centrale";
 "product_desc_development" = "Per sviluppatori e utenti esperti";
-"product_desc_openplacereviews" = "Condividi la tua opinione sui luoghi pubblici";
 "product_desc_antarctica" = "Download illimitato di mappe per l'Antartide";
 "product_desc_russia_short" = "Mappe delle regioni della Russia";
 "record_plugin_description" = "Registra i tuoi viaggi o allenamenti e analizza i dati come velocità, dislivello cumulativo, profilo di elevazione, ecc. Le tracce registrate possono essere archiviate, condivise con gli amici, modificate e rielaborate.\n\nUlteriori informazioni su https://osmand.net/docs/user/plugins/trip-recording .";
 "product_desc_mapillary" = "Viste a livello stradale per controllare i dintorni";
 "depth_contour_lines" = "Linee batimetriche";
 "srtm_plugin_description" = "Informazioni sul terreno come curve di livello, ombreggiature e pendii ti aiutano a valutare visivamente la conformazione del terreno e il rilievo, la navigabilità e altro ancora. Le informazioni topografiche possono essere rappresentate mediante ombreggiatura della pendenza, curve di livello e/o colorazione della pendenza.\n\nI dati di base sono forniti da SRTM e ASTER.\n\nUlteriori approfondimenti su http://osmand.net/docs/user/plugins/contour-lines.";
-"open_place_reviews_plugin_description" = "Contribuisci al progetto OpenPlaceReviews con foto, recensioni o link di luoghi pubblici come ristoranti, hotel, o musei.\n\nTrova informazioni su come contribuire nel nostro sito: https://osmand.net/docs/user/plugins/openplacereviews .";
 "nautical_depth_points" = "Punti di profondità nautici";
 "read_full_description" = "Leggi la descrizione completa";
 "public_transport_warning_descr_blog" = "Leggi di più sul calcolo dei percorsi di OsmAnd sul nostro blog.";

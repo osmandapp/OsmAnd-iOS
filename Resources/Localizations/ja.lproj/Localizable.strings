@@ -2007,7 +2007,6 @@
 "wiki_menu_download_descr" = "ウィキペディアPOIをマップ上に表示するには、追加マップが必要です。";
 "shared_string_navigation" = "ナビゲーション";
 "gpxup_trackable" = "追跡可能";
-"open_place_reviews" = "OpenPlaceReviews";
 "shared_string_turn_off" = "OFFにする";
 "navigate_point_northing" = "北進";
 "srtm_download_list_help_message" = "OsmAndはメートルとフィートでの等高線データを提供します。フォーマットを変更するには、ファイルを再ダウンロードする必要があります。";
@@ -2511,7 +2510,6 @@
 "mgrs_format_descr" = "OsmAndは、UTM NATO形式類似のMGRSを使用します。";
 "m" = "m";
 "km" = "km";
-"open_place_reviews_plugin_description" = "レストラン、ホテル、美術館、中途経由地点などの公共の場所に関する写真、レビュー、リンクをオープンデータとして https://openplacereviews.org/data/ へ送信します。\n\n詳細は以下サイトをご覧ください。https://openplacereviews.org";
 "speed_cameras_legal_descr" = "一部の国や地域では、スピードカメラ警告機能の使用が法律で禁止されています。\n\n国の法律に基づいて、使用を望むかどうかを決定する必要があります。\n\n『%@』を選択すると、スピードカメラに関するアラートと警告機能を使用できます。\n\n『%@』を選択すると、スピードカメラに関するすべてのデータ(警告、通知、POI)が、OsmAndの再インストールを行うまで削除されます。";
 "lang_zh-Hant" = "中国語 (繁体字)";
 "privacy_and_security" = "プライバシーとセキュリティ";

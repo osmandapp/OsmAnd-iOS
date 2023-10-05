@@ -2047,9 +2047,6 @@
 "wiki_menu_download_descr" = "Lisäkarttoja tarvitaan Wikipedian KP:iden tarkastelemiseen kartalla.";
 "select_wikipedia_article_langs" = "Valitse kielet, joilla Wikipedia-artikkelit näkyvät kartalla. Voit vaihtaa kaikkien käytettävissä olevien kielten välillä lukiessasi artikkelia.";
 "shared_string_all_languages" = "Kaikki kielet";
-"open_place_reviews_plugin_description" = "Lähetä valokuvia, arvosteluja ja linkkejä julkisista paikoista, kuten ravintoloista, hotelleista, museoista ja väyläpisteistä avoimena datana https://openplacereviews.org/data/.\n\nLue lisää osoitteessa: https://openplacereviews.org";
-"product_desc_openplacereviews" = "Lähetä valokuvia, arvosteluja ja linkkejä julkisista paikoista";
-"open_place_reviews" = "OpenPlaceReviews";
 "plugin_mapillary_descr" = "Katutason valokuvia kaikille. Tutustu paikkoihin, tee yhteistyötä, kaappaa maailma.";
 "product_desc_mapillary" = "Katutason valokuvia verkossa kaikille";
 "map_widget_parking" = "Pysäköinti";

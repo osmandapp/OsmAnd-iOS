@@ -25,6 +25,7 @@
 {
     NSMutableDictionary<OAWidgetsPanel *, NSMutableOrderedSet<OAMapWidgetInfo *> *> *_allWidgets;
     OAAppSettings *_settings;
+    OAApplicationMode *_cachedAppMode;
 }
 
 + (OAMapWidgetRegistry *)sharedInstance
@@ -322,10 +323,15 @@
                                                         panels:(NSArray<OAWidgetsPanel *> *)panels
 {
     NSMutableArray<OAMapWidgetInfo *> *widgetInfos = [NSMutableArray array];
-    if (_settings.applicationMode.get == appMode)
+    if (_cachedAppMode == appMode)
+    {
         [widgetInfos addObjectsFromArray:self.getAllWidgets];
+    }
     else
+    {
+        _cachedAppMode = appMode;
         [widgetInfos addObjectsFromArray:[OAWidgetsInitializer createAllControlsWithAppMode:appMode]];
+    }
     NSMutableOrderedSet<OAMapWidgetInfo *> *filteredWidgets = [NSMutableOrderedSet orderedSet];
     for (OAMapWidgetInfo *widget in widgetInfos)
     {

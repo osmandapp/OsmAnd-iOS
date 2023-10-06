@@ -518,7 +518,7 @@
 "shared_string_widgets" = "Виджеты";
 "map_widget_right" = "Правая панель";
 "map_widget_left" = "Левая панель";
-"layer_map_appearance" = "Экран";
+"layer_map_appearance" = "Настройки экрана";
 "select_gpx" = "Выберите GPX…";
 "confirm_usage_speed_cameras" = "Во многих странах (Германия, Франция, Италия и другие) использование предупреждений о камерах контроля скорости незаконно. OsmAnd не несёт никакой ответственности, если вы нарушите закон. Нажимайте «Да» только если вы имеете право использовать эту функцию.";
 "app_mode_bus" = "Автобус";
@@ -554,11 +554,11 @@
 "speak_poi" = "Ближайшие POI";
 "speak_pedestrian" = "Пешеходные переходы";
 "shared_string_never" = "Никогда";
-"general_settings_2" = "Общие";
+"general_settings_2" = "Общие настройки";
 "speed_limit_exceed" = "Допустимое превышение скорости";
 "speed_limit_exceed_message" = "Значение, при превышении которого прозвучит голосовое предупреждение.";
 "wake_on_voice" = "Автовключение экрана перед поворотом";
-"routing_settings_2" = "Навигация";
+"routing_settings_2" = "Настройки навигации";
 "impassable_road" = "Исключить дороги…";
 "shared_string_do_not_use" = "Не использовать";
 "voice_provider" = "Голосовые данные";
@@ -694,7 +694,7 @@
 "shared_string_apply" = "Применить";
 "show_traffic_warnings" = "Ограничения скорости";
 "show_lanes" = "Полосы движения";
-"configure_map" = "Карта";
+"configure_map" = "Настройки карты";
 "int_seconds" = "с";
 "settings_preset" = "Профиль по умолчанию";
 "info_button" = "Информация";
@@ -1752,7 +1752,7 @@
 "profile_import_success" = "Профиль приложения был успешно импортирован";
 "err_profile_import" = "Ошибка чтения данных об элементе: %@";
 "ui_customization_short_descr" = "Элементы главного и контекстного меню";
-"ui_customization" = "Интерфейс";
+"ui_customization" = "Настройки интерфейса";
 "profile_appearance_descr" = "Значок, цвет и имя";
 "profile_settings" = "Настройки профиля";
 "plugin_settings_descr" = "Настройки плагина для выбранного профиля.";

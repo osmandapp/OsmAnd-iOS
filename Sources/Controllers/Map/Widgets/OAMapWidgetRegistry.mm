@@ -67,12 +67,12 @@
                 NSPredicate *keyPredicate = [NSPredicate predicateWithFormat:@"key = %@", key];
                 NSArray<OAMapWidgetInfo *> *filteredWidgets = [[self getAllWidgets] filteredArrayUsingPredicate:keyPredicate];
                 if (filteredWidgets.count > 0)
-                 {
-                     OAMapWidgetInfo *item = filteredWidgets.firstObject;
-                     item.priority = priority;
-                     priority ++;
-                     [pageWeatherWidget addObject:filteredWidgets.firstObject];
-                 }
+                {
+                    OAMapWidgetInfo *item = filteredWidgets.firstObject;
+                    item.priority = priority;
+                    priority ++;
+                    [pageWeatherWidget addObject:filteredWidgets.firstObject];
+                }
             }
             if (pageWeatherWidget.count > 0)
             {

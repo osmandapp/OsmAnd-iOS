@@ -3054,4 +3054,4 @@
 "auto_update" = "Automatische Aktualisierung";
 "specify_number_of_dir_indicators_desc" = "Gib die Anzahl der Richtungsanzeiger an.";
 "weather_update_parameters_any_network" = "Die Wettervorhersage wird über ein beliebiges Netz aktualisiert. Mobile Daten können verwendet werden.";
-"map_marker_interval_dialog_desc" = "Gib das Zeitintervall an, für das die Durchschnittsgeschwindigkeit gemessen wird, um die geschätzte Ankunftszeit zu berechnen.";
+"map_marker_interval_dialog_desc" = "Geben Sie das Zeitintervall an, für das die Durchschnittsgeschwindigkeit gemessen wird, um die geschätzte Ankunftszeit zu berechnen.";

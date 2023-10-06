@@ -255,12 +255,17 @@
 
 - (void)updateUI:(BOOL)animated
 {
-    [self generateData];
     [self reloadData:animated];
-    [self updateWithoutData];
+    [self refreshUI];
 }
 
-- (void)updateWithoutData
+- (void)updateUIWithoutData
+{
+    [self.tableView reconfigureRowsAtIndexPaths:self.tableView.indexPathsForVisibleRows];
+    [self refreshUI];
+}
+
+- (void)refreshUI
 {
     [self applyLocalization];
     [self updateNavbar];
@@ -268,6 +273,7 @@
 
 - (void) reloadData:(BOOL)animated
 {
+    [self generateData];
     if (animated)
     {
         [UIView transitionWithView:self.view

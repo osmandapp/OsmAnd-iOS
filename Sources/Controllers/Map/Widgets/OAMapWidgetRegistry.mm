@@ -25,6 +25,7 @@
 {
     NSMutableDictionary<OAWidgetsPanel *, NSMutableOrderedSet<OAMapWidgetInfo *> *> *_allWidgets;
     OAAppSettings *_settings;
+    OAApplicationMode *_cachedAppMode;
 }
 
 + (OAMapWidgetRegistry *)sharedInstance
@@ -57,6 +58,27 @@
     if (widgetPanel.isPagingAllowed)
     {
         NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *pagedWidgets = [self getPagedWidgetsForPanel:mode panel:widgetPanel filterModes:(KWidgetModeAvailable | kWidgetModeEnabled)];
+        if (weatherToolbarVisible)
+        {
+            NSArray *weatherWidgets = @[kWeatherTemp, kWeatherPressure, kWeatherWind, kWeatherCloud, kWeatherPrecip];
+            NSMutableOrderedSet<OAMapWidgetInfo *> *pageWeatherWidget = [NSMutableOrderedSet orderedSet];
+            int priority = 0;
+            for (NSString *key in weatherWidgets) {
+                NSPredicate *keyPredicate = [NSPredicate predicateWithFormat:@"key = %@", key];
+                NSOrderedSet<OAMapWidgetInfo *> *filteredWidgets = [widgets filteredOrderedSetUsingPredicate:keyPredicate];
+                if (filteredWidgets.count > 0)
+                {
+                    OAMapWidgetInfo *item = filteredWidgets.firstObject;
+                    item.priority = priority;
+                    priority ++;
+                    [pageWeatherWidget addObject:filteredWidgets.firstObject];
+                }
+            }
+            if (pageWeatherWidget.count > 0)
+            {
+                pagedWidgets = @[pageWeatherWidget];
+            }
+        }
         for (NSOrderedSet<OAMapWidgetInfo *> *page in pagedWidgets)
         {
             NSArray<OAMapWidgetInfo *> *sortedWidgets =
@@ -76,7 +98,11 @@
     }
     else
     {
-        for (OAMapWidgetInfo *widgetInfo in widgets)
+        NSArray<OAMapWidgetInfo *> *sortedWidgets =
+            [widgets sortedArrayUsingComparator:^NSComparisonResult(OAMapWidgetInfo * _Nonnull w1, OAMapWidgetInfo * _Nonnull w2) {
+                return [OAUtilities compareInt:(int) w1.priority y:(int) w2.priority];
+            }];
+        for (OAMapWidgetInfo *widgetInfo in sortedWidgets)
         {
             if ([widgetInfo isEnabledForAppMode:mode])
                 [currentPage addObject:widgetInfo.widget];
@@ -297,10 +323,15 @@
                                                         panels:(NSArray<OAWidgetsPanel *> *)panels
 {
     NSMutableArray<OAMapWidgetInfo *> *widgetInfos = [NSMutableArray array];
-    if (_settings.applicationMode.get == appMode)
+    if (_cachedAppMode == appMode)
+    {
         [widgetInfos addObjectsFromArray:self.getAllWidgets];
+    }
     else
+    {
+        _cachedAppMode = appMode;
         [widgetInfos addObjectsFromArray:[OAWidgetsInitializer createAllControlsWithAppMode:appMode]];
+    }
     NSMutableOrderedSet<OAMapWidgetInfo *> *filteredWidgets = [NSMutableOrderedSet orderedSet];
     for (OAMapWidgetInfo *widget in widgetInfos)
     {

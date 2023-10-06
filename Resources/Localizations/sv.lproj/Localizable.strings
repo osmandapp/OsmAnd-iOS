@@ -1557,9 +1557,6 @@
 "osm_editing_plugin_description" = "Ge OSM-bidrag som att skapa eller modifiera OSM POI-objekt,öppna eller kommentera OSM-anteckningar och bidra med inspelade GPX-filer i OsmAnd genom att ange ditt användarnamn och lösenord. OpenStreetMap.org är ett community-driven, globalt kartläggningsprojekt för allmän domän.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Gatunivå bilder för alla. Upptäck platser, samarbeta, fånga världen.";
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"open_place_reviews_plugin_description" = "Skicka in foton, recensioner och länkar om offentliga platser som restauranger, hotell, museer och vägpunkter som öppen data https://openplacereviews.org/data/.\n\nLäs mer på: http://openplacereviews.org";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";

@@ -2012,9 +2012,6 @@
 "wiki_menu_download_descr" = "Wikipedia POI\'lerini haritada görüntülemek için ek haritalara ihtiyaç vardır.";
 "select_wikipedia_article_langs" = "Haritadaki Wikipedia makalelerinin dillerini seçin. Makaleyi okurken kullanılabilir herhangi bir dile geçiş yapın.";
 "shared_string_all_languages" = "Tüm diller";
-"open_place_reviews_plugin_description" = "OpenPlaceReviews projesine katkıda bulunmanızı sağlar. Fotoğraflar, yorumlar, restoranlar, oteller, müzeler ve yol noktaları gibi halka açık yerler hakkında bağlantılar gibi.\n\nNasıl katkıda bulunacağınıza ilişkin talimatları web sitemizde bulabilirsiniz - https://osmand.net/docs/user/plugins/openplacereviews";
-"product_desc_openplacereviews" = "Halka açık yerler hakkında fotoğraflar, incelemeler ve bağlantılar gönderin";
-"open_place_reviews" = "OpenPlaceReviews";
 "plugin_mapillary_descr" = "Sokak düzeyinde görüntüler sunar. Görüntülerin eksik olduğu yerlerde, başkalarının kullanabilmesi için kendiniz görüntü ekleyebilirsiniz. Mapillary katmanını etkinleştirmek için Haritayı yapılandır menüsünden \"Sokak düzeyinde görüntüleri\" açın.";
 "product_desc_mapillary" = "Herkes için çevrim içi sokak düzeyinde fotoğraflar";
 "no_waypoints_found" = "Uğranacak ara nokta bulunamadı";

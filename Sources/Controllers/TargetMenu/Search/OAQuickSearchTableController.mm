@@ -785,6 +785,7 @@
             if (cell)
             {
                 OAQuickSearchButtonListItem *buttonItem = (OAQuickSearchButtonListItem *) item;
+                [cell leftIconVisibility:YES];
                 cell.leftIconView.image = [buttonItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
                 cell.leftIconView.contentMode = UIViewContentModeCenter;
                 if ([buttonItem getName])
@@ -844,11 +845,13 @@
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
                 [cell descriptionVisibility:NO];
-                [cell leftIconVisibility:NO];
             }
-            
             if (cell)
             {
+                [cell leftIconVisibility:NO];
+                cell.leftIconView.image = nil;
+                cell.titleLabel.attributedText = nil;
+                cell.titleLabel.textColor = UIColor.blackColor;
                 [cell.titleLabel setText:[item getName]];
             }
             return cell;

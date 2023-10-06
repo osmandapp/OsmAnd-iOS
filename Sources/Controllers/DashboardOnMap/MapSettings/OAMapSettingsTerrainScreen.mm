@@ -18,7 +18,7 @@
 #import "OARightIconTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAValueTableViewCell.h"
-#import "OASimpleTableViewCell.h"
+#import "OATextLineViewCell.h"
 #import "OAButtonTableViewCell.h"
 #import "OAImageTextViewCell.h"
 #import "OARootViewController.h"
@@ -34,6 +34,8 @@
 #import "OALinks.h"
 #import "OASizes.h"
 #import <SafariServices/SafariServices.h>
+
+#define kRelief3DCellRowHeight 48.3
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
@@ -156,7 +158,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }];
         [titleSection addRowFromDictionary:@{
             kCellKeyKey : @"terrainTypeDesc",
-            kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
+            kCellTypeKey : [OATextLineViewCell getCellIdentifier],
             kCellDescrKey : type == EOATerrainTypeHillshade ? OALocalizedString(@"map_settings_hillshade_description") : OALocalizedString(@"map_settings_slopes_description"),
 
         }];
@@ -174,7 +176,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"visibility"),
             kCellIconNameKey : @"ic_custom_visibility",
-            kCellIconTint : @(color_tint_gray),
+            kCellIconTint : @(color_icon_inactive),
             @"value" : alphaValueString
         }];
         [titleSection addRowFromDictionary:@{
@@ -182,7 +184,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_zoom_levels"),
             kCellIconNameKey : @"ic_custom_overlay_map",
-            kCellIconTint : @(color_tint_gray),
+            kCellIconTint : @(color_icon_inactive),
             @"value" : zoomRangeString
         }];
         OATableSectionData *relief3DSection = [_data createNewSection];
@@ -191,7 +193,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTypeKey : isRelief3D ? [OASwitchTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_relief_3d"),
             kCellIconNameKey : @"ic_custom_3d_relief",
-            kCellIconTint : @(![_plugin.enable3DMaps get] || !isRelief3D ? color_tint_gray : color_chart_orange),
+            kCellIconTint : @(![_plugin.enable3DMaps get] || !isRelief3D ? color_icon_inactive : color_chart_orange),
             kCellSecondaryIconName : @"ic_payment_label_pro",
             @"value" : @([_plugin.enable3DMaps get]),
         }];
@@ -202,7 +204,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_cache"),
             kCellIconNameKey : @"ic_custom_storage",
-            kCellIconTint : @(color_tint_gray),
+            kCellIconTint : @(color_icon_inactive),
             @"value" : @"300 MB",
         }];
         if (_mapItems.count > 0)
@@ -294,9 +296,22 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSInteger selectedIndex = _app.data.terrainType == EOATerrainTypeHillshade ? 0 : 1;
     if (selectedIndex >= 0 && selectedIndex < menuElements.count)
         ((UIAction *)menuElements[selectedIndex]).state = UIMenuElementStateOn;
-
-    [button setTitle:[menuElements[selectedIndex] title] forState:UIControlStateNormal];
-
+    
+    NSString *title = [menuElements[selectedIndex] title];
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:title];
+    
+    NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+    UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithPointSize:16 weight:UIImageSymbolWeightBold];
+    UIImage *image = [UIImage systemImageNamed:@"chevron.up.chevron.down" withConfiguration:config];
+    image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    attachment.image = image;
+    
+    NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
+    [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
+    [attributedString appendAttributedString:attachmentString];
+    
+    [button setAttributedTitle:attributedString forState:UIControlStateNormal];
+    
     return [UIMenu menuWithChildren:menuElements];
 }
 
@@ -320,6 +335,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [_data rowCount:section];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OATableRowData *item =  [_data itemForIndexPath:indexPath];
+    if ([item.key isEqualToString:@"relief3D"])
+        return kRelief3DCellRowHeight;
+    return UITableViewAutomaticDimension;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -366,20 +389,26 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         return cell;
     }
-    else if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OATextLineViewCell getCellIdentifier]])
     {
-        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        OATextLineViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextLineViewCell getCellIdentifier]];
+        BOOL isTerrainTypeSlope = _app.data.terrainType == EOATerrainTypeSlope;
+        
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASimpleTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            [cell titleVisibility:NO];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextLineViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextLineViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.textTopLargeConstraint.constant = 0;
+            cell.textTopSmallConstraint.constant = 0;
+            [cell layoutIfNeeded];
         }
         if (cell)
         {
-            cell.descriptionLabel.text = item.descr;
+            cell.separatorInset = isTerrainTypeSlope ? UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.) : UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);;
+            cell.textView.text = item.descr;
+            cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+            cell.textView.textColor = UIColorFromRGB(color_extra_text_gray);
         }
         return cell;
     }
@@ -406,6 +435,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 [cell leftIconVisibility:NO];
                 cell.leftIconView.image = nil;
                 [cell.button setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateHighlighted];
+                cell.button.tintColor = UIColorFromRGB(color_primary_purple);
+                cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+                
                 cell.button.menu = [self createTerrainTypeMenuForCellButton:cell.button];
                 cell.button.showsMenuAsPrimaryAction = YES;
                 cell.button.changesSelectionAsPrimaryAction = YES;
@@ -435,7 +467,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OARightIconTableViewCell *) nib[0];
-            cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
             cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)

@@ -19,7 +19,7 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
     
     override func generateData() {
         let section = tableData.createNewSection()
-        let sortedWidgets = widgetGroup.getWidgets().sorted { $0.title < $1.title }
+        let sortedWidgets = widgetGroup.getWidgets().sorted { $0.ordinal < $1.ordinal }
         for widget in sortedWidgets {
             let widgetInfo = widgetRegistry.getWidgetInfo(for: widget).first
             guard let widgetInfo else { continue }

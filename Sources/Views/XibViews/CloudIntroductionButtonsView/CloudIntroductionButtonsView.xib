@@ -12,11 +12,11 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="CloudIntroductionButtonsView" customModule="OsmAnd_Maps" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="110"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="132"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="HBD-Nn-Upz">
-                    <rect key="frame" x="20" y="10" width="335" height="100"/>
+                    <rect key="frame" x="20" y="16" width="335" height="100"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jIh-uA-G9s">
                             <rect key="frame" x="0.0" y="0.0" width="335" height="42"/>
@@ -63,7 +63,7 @@
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="HBD-Nn-Upz" secondAttribute="trailing" constant="20" id="KV7-xF-coB"/>
-                <constraint firstAttribute="bottom" secondItem="HBD-Nn-Upz" secondAttribute="bottom" id="eye-6c-yCi"/>
+                <constraint firstAttribute="bottom" secondItem="HBD-Nn-Upz" secondAttribute="bottom" constant="16" id="eye-6c-yCi"/>
                 <constraint firstItem="HBD-Nn-Upz" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="gdU-hd-oKn"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

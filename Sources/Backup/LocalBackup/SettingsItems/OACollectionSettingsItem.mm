@@ -80,6 +80,11 @@
     return nil;
 }
 
+- (BOOL)shouldReadOnCollecting
+{
+    return YES;
+}
+
 - (BOOL)shouldShowDuplicates
 {
     return YES;

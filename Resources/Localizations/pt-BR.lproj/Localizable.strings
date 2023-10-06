@@ -2030,9 +2030,6 @@
 "added_profiles" = "Perfis adicionados";
 "suggested_maps_descr" = "Esses mapas são necessários para o complemento.";
 "suggested_maps" = "Mapas sugeridos";
-"open_place_reviews_plugin_description" = "Faça contribuições para o projeto OpenPlaceReviews, como fotos, comentários ou hiperligações para locais públicos, como restaurantes, hotéis ou museus.\n\nVeja as instruções sobre como contribuir em https://osmand.net/docs/user/plugins/openplacereviews .";
-"product_desc_openplacereviews" = "Compartilhe sua opinião sobre lugares públicos";
-"open_place_reviews" = "OpenPlaceReviews";
 "plugin_mapillary_descr" = "Imagens de vistas no nível da rua. Você também pode contribuir com si mesmo. Para ver os dados existentes como uma camada de mapa, ligue \"imagens no nível da rua\" no menu \"configure mapa\".";
 "product_desc_mapillary" = "Vistas no nível da rua para conferir os arredores";
 "shared_string_turn_off" = "Desligar";

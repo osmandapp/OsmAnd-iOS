@@ -65,7 +65,7 @@
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Fb-ez-Rsg" userLabel="bottomBar" customClass="OAUserInteractionPassThroughView">
                     <rect key="frame" x="0.0" y="862" width="414" height="34"/>
-                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="34" id="vDy-Bj-0RM"/>
                     </constraints>
@@ -119,14 +119,14 @@
                         <constraint firstItem="2RZ-GK-954" firstAttribute="centerX" secondItem="w1v-g4-GFe" secondAttribute="centerX" id="2Th-rm-hLr"/>
                         <constraint firstAttribute="trailingMargin" secondItem="K8g-PT-gdL" secondAttribute="trailing" priority="999" constant="-8" id="3LD-NT-9Ml"/>
                         <constraint firstItem="0Nq-xj-KuM" firstAttribute="top" secondItem="K8g-PT-gdL" secondAttribute="bottom" constant="10" id="H1E-b4-VNm"/>
-                        <constraint firstItem="cig-0C-vFU" firstAttribute="leading" secondItem="w1v-g4-GFe" secondAttribute="leadingMargin" constant="-10" id="H90-Re-Dif"/>
+                        <constraint firstItem="cig-0C-vFU" firstAttribute="left" secondItem="w1v-g4-GFe" secondAttribute="leftMargin" constant="-10" id="H90-Re-Dif"/>
                         <constraint firstItem="0Nq-xj-KuM" firstAttribute="centerX" secondItem="w1v-g4-GFe" secondAttribute="centerX" id="K4D-Il-atJ"/>
                         <constraint firstItem="cig-0C-vFU" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="2RZ-GK-954" secondAttribute="top" priority="999" id="QVk-GZ-SmH"/>
                         <constraint firstItem="2RZ-GK-954" firstAttribute="leading" secondItem="w1v-g4-GFe" secondAttribute="leadingMargin" priority="999" constant="-8" id="SGi-I2-Hsf"/>
                         <constraint firstItem="K8g-PT-gdL" firstAttribute="leading" secondItem="w1v-g4-GFe" secondAttribute="leadingMargin" priority="999" constant="-8" id="W4e-2v-DSu"/>
                         <constraint firstAttribute="bottom" secondItem="2RZ-GK-954" secondAttribute="bottom" id="bNi-In-1bI"/>
                         <constraint firstItem="8m9-Ym-Yya" firstAttribute="top" secondItem="K8g-PT-gdL" secondAttribute="bottom" id="cXy-oN-mfY"/>
-                        <constraint firstAttribute="trailingMargin" secondItem="8m9-Ym-Yya" secondAttribute="trailing" constant="-10" id="cbg-nq-EYB"/>
+                        <constraint firstAttribute="rightMargin" secondItem="8m9-Ym-Yya" secondAttribute="right" constant="-10" id="cbg-nq-EYB"/>
                         <constraint firstItem="8m9-Ym-Yya" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="2RZ-GK-954" secondAttribute="top" priority="999" id="kSQ-Gc-881"/>
                         <constraint firstItem="K8g-PT-gdL" firstAttribute="top" secondItem="w1v-g4-GFe" secondAttribute="top" id="l7W-kJ-xAQ"/>
                         <constraint firstItem="K8g-PT-gdL" firstAttribute="centerX" secondItem="w1v-g4-GFe" secondAttribute="centerX" id="nd0-KQ-Ihp"/>

@@ -175,6 +175,8 @@
         
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 
+        [session finishTasksAndInvalidate];
+        
         NSFileManager *manager = [NSFileManager defaultManager];
         if (![manager fileExistsAtPath:[fileName stringByDeletingLastPathComponent]])
             success = [manager createDirectoryAtPath:[fileName stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:nil];

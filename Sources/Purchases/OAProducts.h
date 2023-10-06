@@ -43,7 +43,6 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInAppId_Addon_Srtm @"net.osmand.maps.inapp.addon.srtm"
 #define kInAppId_Addon_OsmEditing @"net.osmand.maps.inapp.addon.osm_editing"
 #define kInAppId_Addon_Mapillary @"net.osmand.maps.inapp.addon.mapillary"
-#define kInAppId_Addon_OpenPlaceReview @"net.osmand.maps.inapp.addon.openplacereviews"
 #define kInAppId_Addon_Weather @"net.osmand.maps.inapp.addon.weather"
 #define kInAppId_Addon_DepthContours @"net.osmand.maps.inapp.addon.depth_contours"
 #define kInAppId_Addon_CarPlay @"net.osmand.maps.inapp.addon.carplay"
@@ -59,7 +58,6 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInApp_Addon_Srtm_Default_Price 3.49
 #define kInApp_Addon_OsmEditing_Default_Price 0.0
 #define kInApp_Addon_Mapillary_Default_Price 0.0
-#define kInApp_Addon_OpenPlaceReviews_Default_Price 0.0
 #define kInApp_Addon_OsmandDevelopment_Default_Price 0.0
 
 // Subscriptions ids
@@ -325,9 +323,6 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @interface OAMapillaryProduct : OAProduct
 @end
 
-@interface OAOpenPlaceReviewsProduct : OAProduct
-@end
-
 @interface OAWeatherProduct : OAProduct
 @end
 
@@ -382,7 +377,6 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @property (nonatomic, readonly) OAProduct *srtm;
 @property (nonatomic, readonly) OAProduct *osmEditing;
 @property (nonatomic, readonly) OAProduct *mapillary;
-@property (nonatomic, readonly) OAProduct *openPlaceReviews;
 @property (nonatomic, readonly) OAProduct *weather;
 @property (nonatomic, readonly) OAProduct *carplay;
 @property (nonatomic, readonly) OAProduct *osmandDevelopment;

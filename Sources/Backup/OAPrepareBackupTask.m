@@ -163,7 +163,7 @@ static OABackupTaskType *GENERATE_BACKUP_INFO;
 {
     @try
     {
-        [OANetworkSettingsHelper.sharedInstance collectSettings:kPrepareBackupKey readData:YES listener:self];
+        [OANetworkSettingsHelper.sharedInstance collectSettings:kPrepareBackupKey readData:NO listener:self];
     }
     @catch (NSException *e)
     {

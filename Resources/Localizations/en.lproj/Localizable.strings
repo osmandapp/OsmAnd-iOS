@@ -1976,10 +1976,6 @@
 "product_desc_mapillary" = "Street-level views to check out the surroundings";
 "plugin_mapillary_descr" = "Imagery of street-level views. You can also contribute yourself. To see the existing data as a map layer, turn on \"Street-level imagery\" in the \"Configure map\" menu.";
 
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Share your opinion about public places";
-"open_place_reviews_plugin_description" = "Make contributions to the OpenPlaceReviews project, like photos, reviews, or links for public places such as restaurants, hotels, or museums. \n\nFind instructions on how to contribute on our website https://osmand.net/docs/user/plugins/openplacereviews .";
-
 "debugging_and_development" = "OsmAnd development";
 "product_desc_development" = "For developers and experienced users";
 "osmand_development_plugin_description" = "Provides functionality to test and debug OsmAnd: simulate navigation routes, monitor the screen rendering, check performance, etc. This plugin is not required for normal app use.";
@@ -3202,6 +3198,17 @@
 • Map orientation: added manually rotated mode\n
 • New Moped profile\n
 • Minimum iOS version is increased to 15.0\n";
+
+"ios_release_4_5" = "• Completely redesigned widget experience: added ability to change widget position, added grouping by pages, one list of widgets for left and right panel\n
+• Redesigned configure screen\n
+• Free backup of favourites, settings and OSM edits to OsmAnd Cloud\n
+• Added \"CAI\" scale for \"Difficulty classification of the routes\"\n
+• \"Contour lines plugin\" renamed to \"Topography\", added support for the new terrain map format\n
+• Added 3D Relief\n
+• Added OAuth authorization for OpenStreetMap Editing plugin\n
+• Added separate button to switch between 2D or 3D Mode\n
+• Changed direction of tilt gesture\n
+• Fixed issue with favorites export, that could lead to data loss\n";
 
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Don\'t hide waterway tunnels";

@@ -1521,7 +1521,6 @@
 "context_menu_item_edit_waypoint" = "GPX-routepunt bewerken";
 "gpxup_public" = "Openbaar";
 "plugin_mapillary_descr" = "Foto\'s op straatniveau voor iedereen. Ontdek plaatsen, werk samen, leg de wereld vast.";
-"open_place_reviews" = "OpenPlaceReviews";
 "suggested_maps_descr" = "Deze kaarten zijn nodig voor de plugin.";
 "app_restart_required" = "Herstarten van de applicatie is vereist om bepaalde instellingen toe te passen.";
 "suggested_maps" = "Voorgestelde kaarten";
@@ -2215,7 +2214,6 @@
 "weather_plugin_description" = "Toont\n- 24-uurs en 7-daagse weersvoorspelling met 5 lagen\n- widgets afgesteld op locatie\n- hoogtelijnen van temperatuur / luchtdruk\n\nDe weersgegevens worden geleverd door de Global Forecast System (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
 "kg" = "kg";
 "m" = "m";
-"open_place_reviews_plugin_description" = "OpenPlaceReviews is een gemeenschaps gestuurd project over openbare plaatsen zoals restaurants, hotels, musea, way-points. Het verzamelt alle openbare informatie over hen, zoals foto\'s, recensies, links naar andere systemen die OpenStreetMap, Wikipedia linken.\n\nAlle OpenPlaceReview-gegevens zijn open en voor iedereen beschikbaar: http://openplacereviews.org/data.\n\nU kunt meer lezen op: http://openplacereviews.org";
 "routeInfo_tracktype_description" = "Kleur de route of tracklijn op basis van de samenstelling van het oppervlak. Typisch aangezet wanneer het wegennet grotendeels onverhard is.";
 "speed_cameras_legal_descr" = "In sommige landen of regio’s is het gebruik van toepassingen om te waarschuwen voor snelheidscamera’s in strijd met de wet.\n\nMaak een keuze op basis van de geldende wet.\n\nKies %@ om meldingen en waarschuwingen te ontvangen over snelheidscamera’s.\n\nKies %@ om alle gegevens over snelheidscamera’s te verwijderen: waarschuwingen, meldingen en POI’s worden verwijderd tot OsmAnd volledig opnieuw geïnstalleerd wordt.";
 "lang_zh-Hant" = "Chinees (traditioneel)";

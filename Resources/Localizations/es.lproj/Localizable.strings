@@ -1984,7 +1984,6 @@
 "shared_string_last_used" = "Último usado";
 "shared_string_feet" = "pies";
 "routes_color_by_type" = "Colorear rutas por…";
-"open_place_reviews" = "OpenPlaceReviews";
 "suggested_maps_descr" = "Estos mapas deben usarse con el complemento.";
 "gpxup_identifiable" = "Identificable";
 "gpxup_trackable" = "Trazable";
@@ -2232,7 +2231,6 @@
 "select_profile" = "Elige un perfil";
 "hide_current_location" = "Ocultar coordenadas";
 "cloud_show" = "Mostrar nubes";
-"product_desc_openplacereviews" = "Comparte tus opiniones sobre lugares públicos";
 "shared_string_weather" = "Meteorología";
 "backup_and_restore" = "Copia de seguridad y restauración";
 "approximate_file_size" = "Tamaño aproximado del archivo";
@@ -2338,7 +2336,6 @@
 "weather_wind_enable_descr" = "Permite ver la capa de viento en el mapa.";
 "weather_contours_enable_descr" = "Permite ver la capa de isolíneas en el mapa.";
 "replace_waypoint_confirmation" = "¿Reemplazar el punto de ruta «%@»?";
-"open_place_reviews_plugin_description" = "Haz contribuciones al proyecto OpenPlaceReviews, como fotos, reseñas o enlaces de lugares públicos como restaurantes, hoteles o museos.\n\nEncuentra las instrucciones sobre cómo haber las contribuciones nuestro sitio web https://osmand.net/docs/user/plugins/openplacereviews .";
 "route_line_color_elevation_description" = "La línea de la ruta se coloreará en función del perfil de elevación de la ruta.";
 "parked_at" = "aparcado a las";
 "plugin_popup_weather_title" = "Mostrar el clima";

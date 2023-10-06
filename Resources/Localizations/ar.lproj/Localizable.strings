@@ -2035,10 +2035,7 @@
 "added_profiles" = "الأوضاع المضافة";
 "suggested_maps" = "خرائط مقترحة";
 "population_num" = "تعداد السكان";
-"open_place_reviews" = "موقع OpenPlaceReviews";
 "suggested_maps_descr" = "هذه الخرائط مطلوبة لاستخدامها مع الأداة الملحقة.";
-"open_place_reviews_plugin_description" = "قدم مساهمات في مشروع OpenPlaceReviews ، مثل الصور أو المراجعات أو الروابط للأماكن العامة مثل المطاعم أو الفنادق أو المتاحف.\n\nاعثر على إرشادات حول كيفية المساهمة على موقعناhttps://osmand.net/docs/user/plugins/openplacereviews.";
-"product_desc_openplacereviews" = "شارك برأيك حول الأماكن العامة";
 "plugin_mapillary_descr" = "صور شوارع متاحة للجميع. اكتشف أماكن، تعاون، والتقط صورا للعالم.";
 "product_desc_mapillary" = "صورللشارع لمعرفة المحيط به";
 "shared_strings_all_regions" = "كل المناطق";

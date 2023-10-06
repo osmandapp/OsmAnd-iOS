@@ -1933,7 +1933,6 @@
 "app_restart_required" = "Det er nødvendigt at genstarte appen for at anvende nogle indstillinger.";
 "navigate_point_easting" = "Østlig";
 "added_profiles_descr" = "Profiler tilføjet af udvidelse";
-"open_place_reviews" = "OpenPlaceReviews";
 "wiki_menu_download_descr" = "Yderligere kort er nødvendige for at se Wikipedia-interessepunkter på kortet.";
 "navigate_point_olc" = "Open Location Code (OLC)";
 "contour_lines_hillshades_slope" = "Højdekurver, terrænskygger, hældning";
@@ -1973,7 +1972,6 @@
 "quick_action_transport_descr" = "En knap til at vise eller skjule offentlig transport på kortet.";
 "unsupported_action_descr" = "Denne genvej understøttes ikke aktuelt. Dette kan blive rettet i nye appversioner.";
 "replace_waypoint_confirmation" = "Er du sikker på, at du ønsker at erstatte rutepunkt %@?";
-"product_desc_openplacereviews" = "Del din mening om offentlige steder";
 "gpx_split_interval_descr" = "Vælg det interval, hvormed markeringer med afstand eller tid skal vises på sporet.";
 "select_wikipedia_article_langs" = "Vælg sprog for Wikipedia-artikler på kortet. Skift mellem alle tilgængelige sprog, mens artiklen læses.";
 "gpx_join_gaps" = "Sammenføj mellemrum";
@@ -2023,7 +2021,6 @@
 "unsupported_action_title" = "Handlingen understøttes ikke (%@)";
 "unsupported_action" = "Handling ikke understøttet";
 "product_desc_mapillary" = "Billeder på gadeniveau til at tjekke omgivelserne";
-"open_place_reviews_plugin_description" = "Lav bidrag til OpenPlaceReviews-projektet som f.eks. fotos, anmeldelser, links for offentlige steder som restauranter, hoteller eller museer.\n\nFind vejledninger om, hvordan du bidrager, på vores websted https://osmand.net/docs/user/plugins/openplacereviews.";
 "plugin_popup_osm_editing_ask" = "Aktiver udvidelse til redigering af OpenStreetMap for at tilføje og administrere kortredigeringer og noter";
 "key_hint_recenter_map" = "Centrer kortet igen";
 "select_application_profile" = "Vælg applikationsprofil";

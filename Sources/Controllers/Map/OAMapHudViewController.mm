@@ -451,20 +451,6 @@
 - (IBAction) onMapModeButtonClicked:(id)sender
 {
     [self updateMapModeButton];
-    
-    switch (self.mapModeButtonType)
-    {
-        case EOAMapModeButtonTypeShowMap:
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [_mapViewController keepTempGpxTrackVisible];
-            });
-            [[OARootViewController instance].mapPanel hideContextMenu];
-            return;
-        }
-        default:
-            break;
-    }
 
     [[OAMapViewTrackingUtilities instance] backToLocationImpl];
 }
@@ -512,7 +498,6 @@
     [self.rulerLabel updateColors];
     [_mapPanelViewController updateColors];
     _statusBarView.backgroundColor = [self getStatusBarBackgroundColor];
-    _bottomBarView.backgroundColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColor.whiteColor;
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
@@ -536,20 +521,6 @@
 
 - (void) updateMapModeButton
 {
-    if (self.contextMenuMode)
-    {
-        switch (self.mapModeButtonType)
-        {
-            case EOAMapModeButtonTypeShowMap:
-                [_mapModeButton setImage:[UIImage templateImageNamed:@"ic_custom_show_on_map"] forState:UIControlStateNormal];
-                break;
-                
-            default:
-                break;
-        }
-        return;
-    }
-    
     if ([self isLocationAvailable])
     {
         switch (_app.mapMode)
@@ -725,7 +696,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateColors];
-        [self updateDependentButtonsVisibility];
+        [self recreateAllControls];
     });
 }
 
@@ -943,7 +914,6 @@
         _routingProgressView.frame = [self getRoutingProgressViewFrame];
 
     _statusBarView.backgroundColor = [self getStatusBarBackgroundColor];
-    _bottomBarView.backgroundColor = _settings.nightMode ? UIColorFromRGB(nav_bar_night) : UIColor.whiteColor;
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
@@ -1200,7 +1170,7 @@
         if (self.mapInfoController.topPanelController)
             self.mapInfoController.topPanelController.view.alpha = isPanelAllowed && isTopPanelVisible && (!isToolbarVisible || isAllowToolbarsVisible) ? 1. : 0.;
         if (self.mapInfoController.leftPanelController)
-            self.mapInfoController.leftPanelController.view.alpha = (isPanelAllowed || isWeatherToolbarVisible) && isLeftPanelVisible ? 1. : 0.;
+            self.mapInfoController.leftPanelController.view.alpha = (isPanelAllowed || !isWeatherToolbarVisible) && isLeftPanelVisible ? 1. : 0.;
         if (self.mapInfoController.rightPanelController)
             self.mapInfoController.rightPanelController.view.alpha = (isPanelAllowed || isWeatherToolbarVisible) && isRightPanelVisible ? 1. : 0.;
         if (self.downloadMapWidget)
@@ -1440,7 +1410,6 @@
     if (self.contextMenuMode)
     {
         self.contextMenuMode = NO;
-        self.mapModeButtonType = EOAMapModeButtonRegular;
         [self updateMapModeButton];
         [self updateControlsLayout:YES];
     }

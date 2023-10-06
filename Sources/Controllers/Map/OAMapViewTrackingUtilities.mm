@@ -591,7 +591,6 @@
 
 - (void) onMapGestureAction:(NSNotification *)notification
 {
-    _app.mapMode = OAMapModeFree;
 }
 
 - (void) setMapViewController:(OAMapViewController *)mapViewController

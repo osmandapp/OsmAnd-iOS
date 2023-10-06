@@ -298,16 +298,15 @@ extension WidgetGroupListViewController {
             show(vc)
         } else if let widgetType = item.obj(forKey: "widget_type") as? WidgetType {
             guard let vc = WidgetConfigurationViewController(),
-                  let widgetInfos = widgetRegistry.getWidgetInfo(for: widgetType),
-                  !widgetInfos.isEmpty else {
+                  let widgetInfo = widgetRegistry.getWidgetInfo(for: widgetType).first else {
                 return
             }
-            let similarAlreadyExist = widgetInfos.count > 1
-            if let widgetInfo = widgetInfos.first {
+            if let enabledWidgets = widgetRegistry.getWidgetsForPanel(OAAppSettings.sharedManager().applicationMode.get(), filterModes: Self.enabledWidgetsFilter, panels: WidgetsPanel.values).array as? [MapWidgetInfo] {
+                let similarAlreadyExist = enabledWidgets.contains { $0.key == widgetInfo.key }
                 let possibleSimilarWidgetArray = [WidgetType.averageSpeed.id]
                 if similarAlreadyExist, possibleSimilarWidgetArray.contains(widgetInfo.key) {
-                  vc.similarAlreadyExist = similarAlreadyExist
-                  vc.widgetKey = widgetInfo.key
+                    vc.similarAlreadyExist = similarAlreadyExist
+                    vc.widgetKey = widgetInfo.key
                 }
                 vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
                 vc.widgetInfo = widgetInfo

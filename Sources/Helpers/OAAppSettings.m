@@ -3710,6 +3710,9 @@
         [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_DAY) mode:OAApplicationMode.PEDESTRIAN];
         [_profilePreferences setObject:_appearanceMode forKey:@"daynight_mode"];
         
+        _appearanceProfileTheme = [OACommonInteger withKey:appearanceProfileThemeKay];
+        [_profilePreferences setObject:_appearanceProfileTheme forKey:appearanceProfileThemeKay];
+        
         _mapManuallyRotatingAngle = [OACommonDouble withKey:mapManuallyRotatingAngleKey defValue:0];
         [_profilePreferences setObject:_appearanceMode forKey:mapManuallyRotatingAngleKey];
         

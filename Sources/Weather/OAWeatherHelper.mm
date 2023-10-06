@@ -166,6 +166,9 @@
         {
             forecastsDownloading++;
             EOAWeatherAutoUpdate state = [OAWeatherHelper getPreferenceWeatherAutoUpdate:regionId];
+            if (state == EOAWeatherAutoUpdateDisabled)
+                continue;
+            
             if (!networkManager.isReachableViaWiFi && state == EOAWeatherAutoUpdateOverWIFIOnly)
                 continue;
 

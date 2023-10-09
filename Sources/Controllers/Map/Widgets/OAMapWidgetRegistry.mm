@@ -58,14 +58,14 @@
     if (widgetPanel.isPagingAllowed)
     {
         NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *pagedWidgets = [self getPagedWidgetsForPanel:mode panel:widgetPanel filterModes:(KWidgetModeAvailable | kWidgetModeEnabled)];
-        if (weatherToolbarVisible)
+        if (weatherToolbarVisible && widgetPanel == OAWidgetsPanel.rightPanel)
         {
             NSArray *weatherWidgets = @[kWeatherTemp, kWeatherPressure, kWeatherWind, kWeatherCloud, kWeatherPrecip];
             NSMutableOrderedSet<OAMapWidgetInfo *> *pageWeatherWidget = [NSMutableOrderedSet orderedSet];
             int priority = 0;
             for (NSString *key in weatherWidgets) {
                 NSPredicate *keyPredicate = [NSPredicate predicateWithFormat:@"key = %@", key];
-                NSOrderedSet<OAMapWidgetInfo *> *filteredWidgets = [widgets filteredOrderedSetUsingPredicate:keyPredicate];
+                NSArray<OAMapWidgetInfo *> *filteredWidgets = [[self getAllWidgets] filteredArrayUsingPredicate:keyPredicate];
                 if (filteredWidgets.count > 0)
                 {
                     OAMapWidgetInfo *item = filteredWidgets.firstObject;

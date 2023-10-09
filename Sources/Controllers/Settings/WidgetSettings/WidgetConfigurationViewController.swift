@@ -115,9 +115,14 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 if isCreateNewAndSimilarAlreadyExist {
                     var value: String
                     if isFirstGenerateData {
+                        guard let pref = item.obj(forKey: "pref") as? OACommonPreference,
+                              let prefLong = pref as? OACommonLong else {
+                            return nil
+                        }
+                        let param = String(prefLong.get(selectedAppMode))
                         value = item.string(forKey: "value")!
                         if widgetKey == WidgetType.averageSpeed.id {
-                            widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = value
+                            widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = param
                         } else {
                             fatalError("You need implement value handler for widgetKey")
                         }

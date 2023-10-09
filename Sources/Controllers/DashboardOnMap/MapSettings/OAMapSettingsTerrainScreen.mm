@@ -89,6 +89,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     if (_downloadTaskProgressObserver)
     {
         [_downloadTaskProgressObserver detach];
@@ -252,7 +254,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) setupView
 {
     title = OALocalizedString(@"shared_string_terrain");
-
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                               withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:)
                                                                andObserve:_app.downloadsManager.progressCompletedObservable];
@@ -676,7 +680,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)showChoosePlanScreen
 {
-    [OAChoosePlanHelper showChoosePlanScreen:[OARootViewController instance].navigationController];
+    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.RELIEF_3D navController:[OARootViewController instance].navigationController];
 }
 
 - (void) terrainTypeChanged
@@ -802,6 +806,24 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
         [OAManageResourcesViewController prepareData];
         [self updateAvailableMaps];
+    });
+}
+
+#pragma mark - OAIAPProductNotification
+
+- (void)productPurchased:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self initData];
+        [self.tblView reloadData];
+    });
+}
+
+- (void)productsRestored:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self initData];
+        [self.tblView reloadData];
     });
 }
 

@@ -18588,6 +18588,7 @@
 					"$(inherited)",
 					"$(PLATFORM_DEFINITIONS)",
 					"GLES_SILENCE_DEPRECATION=1",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -18671,6 +18672,7 @@
 					"$(inherited)",
 					"$(PLATFORM_DEFINITIONS)",
 					"GLES_SILENCE_DEPRECATION=1",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

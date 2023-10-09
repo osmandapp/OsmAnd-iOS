@@ -9,10 +9,10 @@
 import UIKit
 
 extension UIColor {
-    static var buttonBgColorDisabled: UIColor { UIColor(named: #function)! }
-    static var buttonBgColorDisruptive: UIColor { UIColor(named: #function)! }
-    static var buttonBgColorPrimary: UIColor { UIColor(named: #function)! }
-    static var buttonBgColorSecondary: UIColor { UIColor(named: #function)! }
+    @objc static var buttonBgColorDisabled: UIColor { UIColor(named: #function)! }
+    @objc static var buttonBgColorDisruptive: UIColor { UIColor(named: #function)! }
+    @objc static var buttonBgColorPrimary: UIColor { UIColor(named: #function)! }
+    @objc static var buttonBgColorSecondary: UIColor { UIColor(named: #function)! }
 #warning ("add all colors from asset")
 }
 

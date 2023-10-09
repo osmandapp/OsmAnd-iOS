@@ -40,7 +40,6 @@
 #import "OAFetchBackgroundDataOperation.h"
 #import "OACloudAccountVerificationViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
-#import "OsmAnd_Maps-Swift.h"
 
 #include <QDir>
 #include <QFile>

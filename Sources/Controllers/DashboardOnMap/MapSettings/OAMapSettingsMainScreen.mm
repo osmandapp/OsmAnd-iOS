@@ -457,7 +457,8 @@
     if (!hasSRTM)
     {
         [topographySectionData addObject:@{
-                @"type": [FreeBackupBannerCell getCellIdentifier]
+                @"type": [FreeBackupBannerCell getCellIdentifier],
+                @"key": @"terrain_layer"
         }];
     }
     if (hasSRTM && !_iapHelper.srtm.disabled)

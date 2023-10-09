@@ -353,9 +353,7 @@
             }
         }
     }
-    NSMutableOrderedSet<OAMapWidgetInfo *> *filteredWidgetsSort = [filteredWidgets mutableCopy];
-    [filteredWidgetsSort sortUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"pageIndex" ascending:YES]]];
-    return filteredWidgetsSort;
+    return [NSMutableOrderedSet orderedSetWithArray:[filteredWidgets sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"pageIndex" ascending:YES]]]];
 }
 
 - (BOOL) isWeatherToolbarVisible

@@ -18,7 +18,7 @@
 #define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"
 
 #define settingAppModeKey @"settingAppModeKey"
-#define appearanceProfileThemeKay @"appearanceProfileThemeKay"
+#define appearanceProfileThemeKey @"appearanceProfileThemeKey"
 
 #define mapDensityKey @"mapDensity"
 #define textSizeKey @"textSize"

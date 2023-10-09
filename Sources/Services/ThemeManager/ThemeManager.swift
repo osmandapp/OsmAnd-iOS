@@ -16,9 +16,9 @@ extension Notification.Name {
 final class ThemeManager: NSObject {
     static let shared = ThemeManager()
     private override init() {}
-
+    
     var currentTheme: Theme {
-       let appMode = OAAppSettings.sharedManager().applicationMode.get()
+       let appMode = OAAppSettings.sharedManager().currentMode
        let savedTheme = OAAppSettings.sharedManager().appearanceProfileTheme.get(appMode)
         guard let theme = Theme(rawValue: Int(savedTheme)) else {
             return .system
@@ -29,7 +29,7 @@ final class ThemeManager: NSObject {
     func configure(appMode: OAApplicationMode) {
         let savedTheme = OAAppSettings.sharedManager().appearanceProfileTheme.get(appMode)
         guard let theme = Theme(rawValue: Int(savedTheme)) else {
-            return
+            fatalError("theme rawValue is wrong")
         }
         UIWindow.key.overrideUserInterfaceStyle = theme.overrideUserInterfaceStyle
     }
@@ -38,6 +38,8 @@ final class ThemeManager: NSObject {
         guard currentTheme != theme else {
             return
         }
+        let appMode = OAAppSettings.sharedManager().currentMode
+        OAAppSettings.sharedManager().appearanceProfileTheme.set(Int32(theme.rawValue), mode: appMode)
         UIWindow.key.overrideUserInterfaceStyle = theme.overrideUserInterfaceStyle
         if withNotification {
             NotificationCenter.default.post(name: .ThemeDidChange, object: self)

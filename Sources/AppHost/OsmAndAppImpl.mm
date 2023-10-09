@@ -718,15 +718,15 @@
                                                                                     settings.defaultApplicationMode.get;
     [settings setApplicationModePref:initialAppMode];
     
-    // Configure ThemeManager
-    [[ThemeManager shared] configureWithAppMode:initialAppMode];
-    
     [OAPlugin initPlugins];
     [OAPOIHelper sharedInstance];
     [OAQuickSearchHelper instance];
     OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
     [helper reloadAllPoiFilters];
     [helper loadSelectedPoiFilters];
+    
+    // Configure ThemeManager
+    [[ThemeManager shared] configureWithAppMode:initialAppMode];
 
     _initialized = YES;
     NSLog(@"OsmAndApp initialize finish");

@@ -15,3 +15,8 @@ extension UIColor {
     static var buttonBgColorSecondary: UIColor { UIColor(named: #function)! }
 #warning ("add all colors from asset")
 }
+
+extension UIColor {
+    var dark: UIColor { resolvedColor(with: .init(userInterfaceStyle: .dark)) }
+    var light: UIColor { resolvedColor(with: .init(userInterfaceStyle: .light)) }
+}

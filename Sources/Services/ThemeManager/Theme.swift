@@ -42,11 +42,6 @@ extension Theme {
     }
 }
 
-extension UIColor {
-    var dark: UIColor { resolvedColor(with: .init(userInterfaceStyle: .dark)) }
-    var light: UIColor { resolvedColor(with: .init(userInterfaceStyle: .light)) }
-}
-
 extension UIWindow {
     static var key: UIWindow! {
 #warning("will change after use Scene")

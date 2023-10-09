@@ -249,6 +249,8 @@
 #define map3dModePortraitYKey @"map3dModePortraitY"
 #define map3dModeVisibilityKey @"map_3d_mode_visibility"
 
+#define appThemeKey @"osmand_theme"
+
 #define contourLinesZoomKey @"contourLinesZoom"
 #define hikingRoutesParameterKey @"hikingRoutesParameter"
 #define cycleRoutesParameterKey @"cycleRoutesParameter"
@@ -3034,6 +3036,78 @@
 
 @end
 
+@implementation OACommonAppThemeMode
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAAppThemeMode)defValue
+{
+    OACommonAppThemeMode *obj = [[OACommonAppThemeMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOAAppThemeMode) get
+{
+    return [super get];
+}
+
+- (void) set:(EOAAppThemeMode)appTheme
+{
+    [super set:appTheme];
+}
+
+- (EOAAppThemeMode) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOAAppThemeMode)appTheme mode:(OAApplicationMode *)mode
+{
+    [super set:appTheme mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"LIGHT"])
+        return [self set:EOAAppThemeModeLight mode:mode];
+    else if ([strValue isEqualToString:@"DARK"])
+        return [self set:EOAAppThemeModeDark mode:mode];
+    else if ([strValue isEqualToString:@"SYSTEM_DEFAULT"])
+        return [self set:EOAAppThemeModeSystemDefault mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case EOAAppThemeModeLight:
+            return @"LIGHT";
+        case EOAAppThemeModeDark:
+            return @"DARK";
+        case EOAAppThemeModeSystemDefault:
+            return @"SYSTEM_DEFAULT";
+        default:
+            return @"SYSTEM_DEFAULT";
+    }
+}
+
+- (void) resetToDefault
+{
+    EOAAppThemeMode defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAAppThemeMode)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+@end
+
 @implementation OACommonRateUsState
 
 @dynamic defValue;
@@ -3712,6 +3786,9 @@
         
         _mapManuallyRotatingAngle = [OACommonDouble withKey:mapManuallyRotatingAngleKey defValue:0];
         [_profilePreferences setObject:_appearanceMode forKey:mapManuallyRotatingAngleKey];
+        
+        _appTheme = [[OACommonAppThemeMode withKey:appThemeKey defValue:EOAAppThemeModeSystemDefault] makeShared];
+        [_profilePreferences setObject:_appTheme forKey:appThemeKey];
         
         _settingShowZoomButton = YES;//[[NSUserDefaults standardUserDefaults] objectForKey:settingZoomButtonKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingZoomButtonKey] : YES;
         _settingMapArrows = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapArrowsKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingMapArrowsKey] : MAP_ARROWS_LOCATION;

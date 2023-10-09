@@ -85,6 +85,9 @@
         case EOAProfileGeneralSettingsExternalInputDevices:
             _title = OALocalizedString(@"external_input_device");
             break;
+        case EOAProfileGeneralSettingsAppTheme:
+            _title = OALocalizedString(@"settings_app_theme");
+            break;
         default:
             break;
     }
@@ -99,11 +102,13 @@
 
 - (NSString *)getSubtitle
 {
-    return _settingsType == EOAProfileGeneralSettingsMapOrientation && _openFromMap ? @"" : [self.appMode toHumanString];
+    return (_settingsType == EOAProfileGeneralSettingsMapOrientation && _openFromMap) || _settingsType == EOAProfileGeneralSettingsAppTheme ? @"" : [self.appMode toHumanString];
 }
 
 - (BOOL)isNavbarSeparatorVisible
 {
+    if (_settingsType == EOAProfileGeneralSettingsAppTheme)
+        return NO;
     return !_openFromMap;
 }
 
@@ -114,7 +119,12 @@
 
 - (NSString *)getLeftNavbarButtonTitle
 {
-    return _openFromMap ? OALocalizedString(@"shared_string_close") : nil;
+    if (_openFromMap)
+        return OALocalizedString(@"shared_string_close");
+    else if (_settingsType == EOAProfileGeneralSettingsAppTheme)
+        return OALocalizedString(@"shared_string_cancel");
+    else
+        return nil;
 }
 
 #pragma mark - Table data
@@ -123,6 +133,7 @@
 {
     NSMutableArray *dataArr = [NSMutableArray array];
     NSInteger rotateMap = [_settings.rotateMap get:self.appMode];
+    NSInteger appTheme = [_settings.appTheme get:self.appMode];
     EOAPositionPlacement positionMap = [_settings.positionPlacementOnMap get:self.appMode];
     BOOL automatic = [_settings.drivingRegionAutomatic get:self.appMode];
     NSInteger drivingRegion = [_settings.drivingRegion get:self.appMode];
@@ -134,6 +145,30 @@
     EOAAngularConstant angularUnits = [_settings.angularUnits get:self.appMode];
     
     switch (_settingsType) {
+        case EOAProfileGeneralSettingsAppTheme:
+            [dataArr addObject:@{
+                @"name" : @"light",
+                @"title" : OALocalizedString(@"shared_string_light"),
+                @"selected" : @(appTheme == EOAAppThemeModeLight),
+                @"icon" : @"ic_checkmark_default",
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+            }];
+            [dataArr addObject:@{
+                @"name" : @"dark",
+                @"title" : OALocalizedString(@"shared_string_dark"),
+                @"selected" : @(appTheme == EOAAppThemeModeDark),
+                @"icon" : @"ic_checkmark_default",
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+            }];
+            [dataArr addObject:@{
+               @"name" : @"system",
+               @"title" : OALocalizedString(@"shared_string_system_default"),
+               @"selected" : @(appTheme == EOAAppThemeModeSystemDefault),
+               @"icon" : @"ic_checkmark_default",
+               @"type" : [OASimpleTableViewCell getCellIdentifier],
+            }];
+            break;
+            
         case EOAProfileGeneralSettingsMapOrientation:
             [dataArr addObject:@{
                 @"name" : @"none",
@@ -417,7 +452,11 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            if (_settingsType != EOAProfileGeneralSettingsMapOrientation)
+            if (_settingsType == EOAProfileGeneralSettingsAppTheme)
+            {
+                cell.leftIconView.image = [item[@"selected"] boolValue] ? [UIImage templateImageNamed:item[@"icon"]] : nil;
+            }
+            else if (_settingsType != EOAProfileGeneralSettingsMapOrientation)
             {
                 cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
                 cell.leftIconView.tintColor = [item[@"selected"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
@@ -426,8 +465,7 @@
             {
                 cell.leftIconView.image = [UIImage imageNamed:item[@"icon"]];
             }
-            if ([item[@"selected"] boolValue])
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            cell.accessoryType = [item[@"selected"] boolValue] && _settingsType != EOAProfileGeneralSettingsAppTheme ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         return cell;
     }
@@ -449,6 +487,9 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *name = item[@"name"];
     switch (_settingsType) {
+        case EOAProfileGeneralSettingsAppTheme:
+            [self selectAppThemeMode:name];
+            break;
         case EOAProfileGeneralSettingsMapOrientation:
             [self selectMapOrientation:name];
             break;
@@ -494,6 +535,16 @@
     
     [[OAMapViewTrackingUtilities instance] updateSettings];
     [OARootViewController.instance.mapPanel.mapViewController refreshMap];
+}
+
+- (void) selectAppThemeMode:(NSString *)name
+{
+    if ([name isEqualToString:@"light"])
+        [_settings.appTheme set:EOAAppThemeModeLight mode:self.appMode];
+    else if ([name isEqualToString:@"dark"])
+        [_settings.appTheme set:EOAAppThemeModeDark mode:self.appMode];
+    else
+        [_settings.appTheme set:EOAAppThemeModeSystemDefault mode:self.appMode];
 }
 
 - (void) selectDisplayPosition:(int)idx

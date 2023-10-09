@@ -86,6 +86,24 @@
 
 - (void)generateData
 {
+    NSString *appThemeValue;
+    NSString *appThemeIcon;
+    if ([_settings.appTheme get:self.appMode] == EOAAppThemeModeLight)
+    {
+        appThemeValue = OALocalizedString(@"shared_string_light");
+        appThemeIcon = @"ic_custom_sun";
+    }
+    else if ([_settings.appTheme get:self.appMode] == EOAAppThemeModeDark)
+    {
+        appThemeValue = OALocalizedString(@"shared_string_dark");
+        appThemeIcon = @"ic_custom_moon";
+    }
+    else
+    {
+        appThemeValue = OALocalizedString(@"shared_string_system_default");
+        appThemeIcon = @"ic_custom_device";
+    }
+    
     NSString *rotateMapValue;
     NSString *rotateMapIcon;
     if ([_settings.rotateMap get:self.appMode] == ROTATE_MAP_BEARING)
@@ -227,13 +245,13 @@
     NSMutableArray *appearanceArr = [NSMutableArray array];
     NSMutableArray *unitsAndFormatsArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
-//    [appearanceArr addObject:@{
-//        @"type" : [OAValueTableViewCell getCellIdentifier],
-//        @"title" : OALocalizedString(@"settings_app_theme"),
-//        @"value" : OALocalizedString(@"shared_string_light"),
-//        @"icon" : @"ic_custom_contrast",
-//        @"key" : @"app_theme",
-//    }];
+    [appearanceArr addObject:@{
+        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"title" : OALocalizedString(@"settings_app_theme"),
+        @"value" : appThemeValue,
+        @"icon" : appThemeIcon,
+        @"key" : @"app_theme",
+    }];
     [appearanceArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"rotate_map_to"),
@@ -383,7 +401,7 @@
     NSString *itemKey = item[@"key"];
     OABaseSettingsViewController* settingsViewController = nil;
     if ([itemKey isEqualToString:@"app_theme"])
-        settingsViewController = [[OABaseSettingsViewController alloc] init];
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsAppTheme applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"map_orientation"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsMapOrientation applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"position_on_map"])
@@ -403,7 +421,10 @@
     if (settingsViewController != nil)
     {
         settingsViewController.delegate = self;
-        [self showModalViewController:settingsViewController];
+        if ([itemKey isEqualToString:@"app_theme"])
+            [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
+        else
+            [self showModalViewController:settingsViewController];
     }
 }
 

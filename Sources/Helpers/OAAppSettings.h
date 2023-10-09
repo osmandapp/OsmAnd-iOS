@@ -70,6 +70,12 @@ typedef NS_ENUM(NSInteger, EOAMap3DModeVisibility)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOAAppThemeMode)
+{
+    EOAAppThemeModeLight = 0,
+    EOAAppThemeModeDark,
+    EOAAppThemeModeSystemDefault
+};
 
 typedef NS_ENUM(NSInteger, EOASunriseSunsetMode)
 {
@@ -583,6 +589,17 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 @end
 
+@interface OACommonAppThemeMode : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAAppThemeMode)defValue;
+
+- (EOAAppThemeMode) get;
+- (EOAAppThemeMode) get:(OAApplicationMode *)mode;
+- (void) set:(EOAAppThemeMode)map3dMode;
+- (void) set:(EOAAppThemeMode)map3dMode mode:(OAApplicationMode *)mode;
+
+@end
+
 @interface OACommonWikiArticleShowImages : OACommonInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAWikiArticleShowConstant)defValue;
@@ -735,6 +752,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 
 @property (nonatomic) OACommonInteger *appearanceMode; // 0 - Day; 1 - Night; 2 - Auto
+@property (nonatomic) OACommonAppThemeMode *appTheme;
 @property (nonatomic) OACommonDouble *mapManuallyRotatingAngle;
 @property (readonly, nonatomic) BOOL nightMode;
 @property (nonatomic) OACommonMetricSystem *metricSystem;

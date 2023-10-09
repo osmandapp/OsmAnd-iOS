@@ -31,19 +31,23 @@
 #import "OACloudIntroductionViewController.h"
 #import "OACloudBackupViewController.h"
 
-#define kAppModesSection 2
-
 @interface OAMainSettingsViewController () <UIDocumentPickerDelegate>
 
 @end
 
 @implementation OAMainSettingsViewController
 {
-    NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
+
+    NSArray<NSArray *> *_data;
+    int _globalSettingsSection;
+    int _selectedProfileSection;
+    int _applicationProfilesSection;
+    int _localBackupSection;
 
     OAApplicationMode *_targetAppMode;
     NSString *_targetScreenKey;
+    int _lastSwitchedAppModeRow;
 }
 
 #pragma mark - Initialization
@@ -62,6 +66,11 @@
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
+    _globalSettingsSection = -1;
+    _selectedProfileSection = -1;
+    _applicationProfilesSection = -1;
+    _localBackupSection = -1;
+    _lastSwitchedAppModeRow = -1;
 }
 
 - (void)registerObservers
@@ -148,7 +157,8 @@
             @"type" : [OAValueTableViewCell getCellIdentifier]
         }
     ]];
-    
+    _globalSettingsSection = data.count - 1;
+
     [data addObject:@[
         @{
             @"name" : @"current_profile",
@@ -157,7 +167,8 @@
             @"isColored" : @YES
         }
     ]];
-    
+    _selectedProfileSection = data.count - 1;
+
     NSMutableArray *profilesSection = [NSMutableArray new];
     for (int i = 0; i < OAApplicationMode.allPossibleValues.count; i++)
     {
@@ -168,7 +179,7 @@
             @"isColored" : @NO
         }];
     }
-    
+
     [profilesSection addObject:@{
         @"title" : OALocalizedString(@"new_profile"),
         @"img" : @"ic_custom_add",
@@ -184,9 +195,11 @@
     }];
     
     [data addObject:profilesSection];
-    
+    _applicationProfilesSection = data.count - 1;
+
     [data addObject:[self getLocalBackupSectionData]];
-    
+    _localBackupSection = data.count - 1;
+
     _data = [NSArray arrayWithArray:data];
 }
 
@@ -222,11 +235,11 @@
 
 - (NSString *)getTitleForHeader:(NSInteger)section
 {
-    if (section == 1)
+    if (section == _selectedProfileSection)
         return OALocalizedString(@"selected_profile");
-    else if (section == 2)
+    else if (section == _applicationProfilesSection)
         return OALocalizedString(@"application_profiles");
-    else if (section == 3)
+    else if (section == _localBackupSection)
         return OALocalizedString(@"local_backup");
 
     return nil;
@@ -234,11 +247,11 @@
 
 - (NSString *)getTitleForFooter:(NSInteger)section
 {
-    if (section == 0)
+    if (section == _globalSettingsSection)
         return OALocalizedString(@"global_settings_descr");
-    else if (section == 2)
+    else if (section == _applicationProfilesSection)
         return OALocalizedString(@"import_profile_descr");
-    else if (section == 3)
+    else if (section == _localBackupSection)
         return OALocalizedString(@"local_backup_descr");
 
     return nil;
@@ -436,6 +449,7 @@
 {
     if (sender.tag < OAApplicationMode.allPossibleValues.count)
     {
+        _lastSwitchedAppModeRow = (int) sender.tag;
         OAApplicationMode *am = OAApplicationMode.allPossibleValues[sender.tag];
         [OAApplicationMode changeProfileAvailability:am isSelected:sender.isOn];
     }
@@ -445,7 +459,8 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self generateData];
-        [self.tableView reloadData];
+        if (_applicationProfilesSection != -1)
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_lastSwitchedAppModeRow inSection:_applicationProfilesSection]] withRowAnimation:UITableViewRowAnimationFade];
     });
 }
 

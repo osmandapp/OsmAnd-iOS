@@ -36,6 +36,7 @@ static NSMapTable<NSString *, NSMutableSet<OAApplicationMode *> *> *_widgetsAvai
 static NSMutableArray<OAApplicationMode *> *_defaultValues;
 static NSMutableArray<OAApplicationMode *> *_values;
 static NSMutableArray<OAApplicationMode *> *_cachedFilteredValues;
+static NSString *_cachedAvailableApplicationModes;
 static OAAutoObserverProxy* _listener;
 
 
@@ -63,7 +64,8 @@ static int PROFILE_TRUCK = 1000;
     _values = [NSMutableArray array];
     _defaultValues = [NSMutableArray array];
     _cachedFilteredValues = [NSMutableArray array];
-    
+    _cachedAvailableApplicationModes = @"";
+
     _DEFAULT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"rendering_value_browse_map_name") stringKey:@"default"];
     _DEFAULT.descr = OALocalizedString(@"profile_type_base_string");
     [_DEFAULT reg];
@@ -226,17 +228,17 @@ static int PROFILE_TRUCK = 1000;
 
 + (NSArray<OAApplicationMode *> *) values
 {
-    if (_cachedFilteredValues.count == 0)
+    NSString *available = OAAppSettings.sharedManager.availableApplicationModes.get;
+    if (_cachedFilteredValues.count == 0 || ![_cachedAvailableApplicationModes isEqualToString:available])
     {
-        OAAppSettings *settings = [OAAppSettings sharedManager];
         if (!_listener)
         {
             _listener = [[OAAutoObserverProxy alloc] initWith:self
                                                   withHandler:@selector(onAvailableAppModesChanged)
                                                    andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
         }
-        NSString *available = settings.availableApplicationModes.get;
         _cachedFilteredValues = [NSMutableArray array];
+        _cachedAvailableApplicationModes = available;
         for (OAApplicationMode *v in _values)
         {
             if ([available containsString:[v.stringKey stringByAppendingString:@","]] || v == _DEFAULT)

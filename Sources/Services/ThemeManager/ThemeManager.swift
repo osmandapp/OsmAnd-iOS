@@ -2,7 +2,7 @@
 //  ThemeManager.swift
 //  OsmAnd Maps
 //
-//  Created by Oleksandr Panchenko on 06.10.2023.
+//  Created by Oleksandr Panchenko on 09.10.2023.
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
@@ -16,23 +16,28 @@ extension Notification.Name {
 final class ThemeManager: NSObject {
     static let shared = ThemeManager()
     private override init() {}
-    // 1) kSelectedThemeKey" -  в константу
-    // 2) заменить UserDefaults на османд подход
+
     var currentTheme: Theme {
-        if let storedTheme = (UserDefaults.standard.value(forKey: "kSelectedThemeKey") as AnyObject).integerValue {
-            return Theme(rawValue: storedTheme)!
-        } else {
-            return .dark
+       let appMode = OAAppSettings.sharedManager().applicationMode.get()
+       let savedTheme = OAAppSettings.sharedManager().appearanceProfileTheme.get(appMode)
+        guard let theme = Theme(rawValue: Int(savedTheme)) else {
+            return .system
         }
+        return theme
     }
     
     func configure(appMode: OAApplicationMode) {
-        apply(currentTheme, appMode: appMode)
+        let savedTheme = OAAppSettings.sharedManager().appearanceProfileTheme.get(appMode)
+        guard let theme = Theme(rawValue: Int(savedTheme)) else {
+            return
+        }
+        UIWindow.key.overrideUserInterfaceStyle = theme.overrideUserInterfaceStyle
     }
 
-    func apply(_ theme: Theme,
-               appMode: OAApplicationMode,
-               withNotification: Bool = false) {
+    func apply(_ theme: Theme, withNotification: Bool = false) {
+        guard currentTheme != theme else {
+            return
+        }
         UIWindow.key.overrideUserInterfaceStyle = theme.overrideUserInterfaceStyle
         if withNotification {
             NotificationCenter.default.post(name: .ThemeDidChange, object: self)

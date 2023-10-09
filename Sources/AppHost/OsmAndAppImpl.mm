@@ -44,6 +44,7 @@
 #import "OAGPXDatabase.h"
 #import "OAExternalTimeFormatter.h"
 #import "OAFavoritesHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <algorithm>
 
@@ -716,6 +717,9 @@
         [OAApplicationMode valueOfStringKey:[settings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] :
                                                                                     settings.defaultApplicationMode.get;
     [settings setApplicationModePref:initialAppMode];
+    
+    // Configure ThemeManager
+    [[ThemeManager shared] configureWithAppMode:initialAppMode];
     
     [OAPlugin initPlugins];
     [OAPOIHelper sharedInstance];

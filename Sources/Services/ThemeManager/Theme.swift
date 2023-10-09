@@ -2,7 +2,7 @@
 //  Theme.swift
 //  OsmAnd Maps
 //
-//  Created by Oleksandr Panchenko on 06.10.2023.
+//  Created by Oleksandr Panchenko on 09.10.2023.
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 

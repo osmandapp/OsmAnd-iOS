@@ -184,13 +184,6 @@
                     _windowToAttach = nil;
                 });
             }
-            
-            NSInteger carTheme = [[OAAppSettings sharedManager].appearanceProfileTheme get:OAApplicationMode.CAR];
-            [ThemeManager.shared configureWithAppMode:OAApplicationMode.CAR];
-            //[[ThemeManager shared] ]
-            
-            
-            
         });
     });
     

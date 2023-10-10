@@ -108,7 +108,16 @@ class TravelSearchDialogViewController : OABaseNavbarViewController, UITextField
             let section = tableData.createNewSection()
             section.headerText = localizedString("shared_string_history")
             
-            //TODO: Add history items
+            let historyItems = TravelObfHelper.shared.getBookmarksHelper().getAllHistory()
+            for item in historyItems.reversed() {
+                let resultRow = section.createNewRow()
+                resultRow.cellType = OAValueTableViewCell.getIdentifier()
+                resultRow.title = item.articleTitle
+                resultRow.descr = item.isPartOf
+//                resultRow.setObj(item.lang, forKey: "langs")
+//                resultRow.setObj(item., forKey: "articleId")
+//                resultRow.iconName = TravelArticle.getImageUrl(imageTitle: item.imageTitle ?? "", thumbnail: true)
+            }
         }
         
         tableView.reloadData()
@@ -201,7 +210,11 @@ class TravelSearchDialogViewController : OABaseNavbarViewController, UITextField
     override func onRowSelected(_ indexPath: IndexPath!) {
         let item = tableData.item(for: indexPath)
         if item.cellType == OAValueTableViewCell.getIdentifier() {
-            if let articleId = item.obj(forKey: "articleId") as? TravelArticleIdentifier {
+            var articleId = item.obj(forKey: "articleId") as? TravelArticleIdentifier
+            if articleId == nil {
+                articleId = TravelObfHelper.shared.getArticleId(title: item.title ?? "", lang: lang)
+            }
+            if let articleId {
                 let language = lang == "en" ? "" : lang
                 if let article = TravelObfHelper.shared.getArticleById(articleId: articleId, lang: language, readGpx: false, callback: nil) {
                     dismiss()

@@ -44,6 +44,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
 
         savedArticlesVC = SavedArticlesTabViewController()
         savedArticlesVC!.tabBarItem = UITabBarItem.init(title: localizedString("saved_articles"), image: UIImage.templateImageNamed("ic_custom_save_to_file"), tag: 1)
+        savedArticlesVC!.tabViewDelegate = self
         
         tabBarVC!.viewControllers = [exploreVC!, savedArticlesVC!]
         self.view.addSubview(tabBarVC!.view)

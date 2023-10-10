@@ -459,8 +459,15 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self generateData];
-        if (_applicationProfilesSection != -1)
+        if (_lastSwitchedAppModeRow != -1)
+        {
             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_lastSwitchedAppModeRow inSection:_applicationProfilesSection]] withRowAnimation:UITableViewRowAnimationFade];
+            _lastSwitchedAppModeRow = -1;
+        }
+        else
+        {
+            [self.tableView reloadData];
+        }
     });
 }
 

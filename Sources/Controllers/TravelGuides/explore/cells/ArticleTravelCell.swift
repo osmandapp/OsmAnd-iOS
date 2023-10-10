@@ -29,6 +29,23 @@ class ArticleTravelCell: UITableViewCell {
     var article: TravelArticle?
     var articleLang: String?
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateSaveButton()
+    }
+    
+    func imageVisibility(_ show: Bool) {
+        imagePreview.isHidden = !show
+    }
+    
+    func updateSaveButton() {
+        DispatchQueue.main.async {
+            let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: self.article!)
+            let color = isSaved ? UIColor(rgb: color_purple_border) : UIColor(rgb: color_slider_gray)
+            self.rightButtonLabel.textColor = color
+            self.rightButtonIcon.tintColor = color
+        }
+    }
     
     @IBAction func leftButtonTapped(_ sender: Any) {
         if tabViewDelegate != nil && article != nil && articleLang != nil {
@@ -37,10 +54,10 @@ class ArticleTravelCell: UITableViewCell {
     }
     
     @IBAction func rightButtonTapped(_ sender: Any) {
-        print("rightButtonTapped")
+        let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: article!)
+        TravelObfHelper.shared.saveOrRemoveArticle(article: article!, save: !isSaved)
+        updateSaveButton()
     }
     
-    func imageVisibility(_ show: Bool) {
-        imagePreview.isHidden = !show
-    }
+
 }

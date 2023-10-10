@@ -13,6 +13,7 @@
 @interface OAGPXDocumentAdapter : NSObject
 
 @property (nonatomic) id object;
+@property (nonatomic) NSString *path;
 
 - (OAGPXTrackAnalysis *) getAnalysis:(long)fileTimestamp;
 - (BOOL) hasAltitude;

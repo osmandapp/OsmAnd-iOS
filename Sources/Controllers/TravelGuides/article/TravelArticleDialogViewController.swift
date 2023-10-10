@@ -105,6 +105,7 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     
     var gpxFile: OAGPXDocumentAdapter?
     var gpx: OAGPX?
+    var isGpxReading = false
     
     var bottomView: UIView?
     var bottomStackView: UIStackView?
@@ -184,6 +185,16 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         contentButton!.contentHorizontalAlignment = .right
         bookmarkButton!.addTarget(self, action: #selector(self.onBookmarkButtonClicked), for: .touchUpInside)
         bottomStackView!.addArrangedSubview(bookmarkButton!)
+        updateBookmarkButton()
+    }
+    
+    func updateBookmarkButton() {
+        if let article {
+            let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: article)
+            let color = isSaved ? UIColor(rgb: color_purple_border) : UIColor(rgb: color_slider_gray)
+            bookmarkButton!.setTitleColor(color, for: .normal)
+            bookmarkButton!.tintColor = color
+        }
     }
     
     override func viewWillLayoutSubviews() {
@@ -273,7 +284,9 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     }
     
     @objc func onBookmarkButtonClicked() {
-        print("onBookmarkButtonClicked")
+        let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: article!)
+        TravelObfHelper.shared.saveOrRemoveArticle(article: article!, save: !isSaved)
+        updateBookmarkButton()
     }
     
     override func dismiss() {
@@ -350,15 +363,13 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         }
         
         title = getTitle()
-        
-        //TODO: implement
-        //TravelLocalDataHelper ldh = app.getTravelHelper().getBookmarksHelper();
-        //ldh.addToHistory(article);
+        TravelObfHelper.shared.getBookmarksHelper().addToHistory(article: article!)
         
         UIView.transition(with: self.view, duration: 0.2) {
             self.updateNavbar()
             self.applyLocalization()
             self.updateSaveButton()
+            self.updateBookmarkButton()
             self.loadWebView()
         }
         

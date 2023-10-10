@@ -98,7 +98,7 @@
         OsmAnd::PointI bottomRight = OsmAnd::PointI(INT_MAX, INT_MAX);
         bbox31 =  OsmAnd::AreaI(topLeft, bottomRight);
     }
-    [OAPOIHelper.sharedInstance findTravelGuidesByKeyword:searchQuerry categoryName:nil poiTypeName:nil location:locI bbox31:bbox31 reader:reader publish:publish];
+    [OAPOIHelper.sharedInstance findTravelGuidesByKeyword:searchQuerry categoryName:categoryName poiTypeName:nil location:locI bbox31:bbox31 reader:reader publish:publish];
 }
 
 

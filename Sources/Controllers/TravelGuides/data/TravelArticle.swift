@@ -159,8 +159,9 @@ class TravelArticle: NSObject {
     
 }
 
-
-class TravelArticleIdentifier : Hashable {
+@objc(OATravelArticleIdentifier)
+@objcMembers
+class TravelArticleIdentifier : NSObject {
    
     var file: String?
     var lat: Double = Double.nan
@@ -189,13 +190,5 @@ class TravelArticleIdentifier : Hashable {
         lhs.file == rhs.file &&
         lhs.routeId == rhs.routeId &&
         lhs.routeSource == rhs.routeSource
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(lat)
-        hasher.combine(lon)
-        hasher.combine(file)
-        hasher.combine(routeId)
-        hasher.combine(routeSource)
     }
 }

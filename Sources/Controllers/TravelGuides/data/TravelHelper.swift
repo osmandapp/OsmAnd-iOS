@@ -8,8 +8,9 @@
 
 import Foundation
 
-
+@objc(OAGpxReadDelegate)
 protocol GpxReadDelegate {
+    var isGpxReading : Bool { get set }
     func onGpxFileReading()
     func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?, article: TravelArticle)
 }

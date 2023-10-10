@@ -205,6 +205,7 @@ class TravelSearchDialogViewController : OABaseNavbarViewController, UITextField
                 let language = lang == "en" ? "" : lang
                 if let article = TravelObfHelper.shared.getArticleById(articleId: articleId, lang: language, readGpx: false, callback: nil) {
                     dismiss()
+                    TravelObfHelper.shared.getBookmarksHelper().addToHistory(article: article)
                     tabViewDelegate?.openArticle(article: article, lang: lang)
                 }
             }

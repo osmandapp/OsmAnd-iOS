@@ -29,6 +29,8 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     var searchView: UIView?
     var searchTextField: UITextField?
     var searchTransparentButton: UIButton?
+    
+    var isGpxReading = false
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -8,7 +8,9 @@
 
 import Foundation
 
-class TravelSearchHistoryItem {
+@objc(OATravelSearchHistoryItem)
+@objcMembers
+class TravelSearchHistoryItem : NSObject {
     
     var articleFile: String? = ""
     var articleTitle: String = ""

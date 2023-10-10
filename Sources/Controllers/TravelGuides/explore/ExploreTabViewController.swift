@@ -18,17 +18,21 @@ class ExploreTabViewController: OABaseNavbarViewController {
     var cachedPreviewImages: ImageCache = ImageCache(itemsLimit: 100)
     var lastSelectedIndexPath: IndexPath?
     
+    var savedArticlesObserver: OAAutoObserverProxy = OAAutoObserverProxy()
     
     override func viewDidLoad() {
         cachedPreviewImages = ImageCache(itemsLimit: 100)
         downloadingResources = []
         setupDownloadingCellHelper()
+        savedArticlesObserver = OAAutoObserverProxy(self, withHandler: #selector(update), andObserve: TravelObfHelper.shared.getBookmarksHelper().observable)
         super.viewDidLoad()
     }
     
-    func update() {
-        generateData()
-        tableView.reloadData()
+    @objc func update() {
+        DispatchQueue.main.async {
+            self.generateData()
+            self.tableView.reloadData()
+        }
     }
     
     func setupDownloadingCellHelper() {
@@ -317,6 +321,7 @@ class ExploreTabViewController: OABaseNavbarViewController {
             } else {
                 cell?.imageVisibility(false)
             }
+            cell?.updateSaveButton()
             
             outCell = cell
             

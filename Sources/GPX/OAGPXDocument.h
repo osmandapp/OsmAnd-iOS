@@ -45,11 +45,13 @@
 
 - (id)initWithGpxDocument:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument;
 - (id)initWithGpxFile:(NSString *)filename;
+- (instancetype)initWithGpxFileContent:(NSString *)fileContent;
 - (instancetype)initWithTitle:(NSString *)title lang:(NSString *)lang descr:(NSString *)descr;
 
 - (BOOL) loadFrom:(NSString *)filename;
 - (BOOL) fetch:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument;
 
+- (NSString *) saveToStringWith:(NSString *)trackName;
 - (BOOL) saveTo:(NSString *)filename;
 
 - (BOOL) isCloudmadeRouteFile;

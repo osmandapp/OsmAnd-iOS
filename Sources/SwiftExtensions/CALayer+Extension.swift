@@ -7,7 +7,6 @@
 //
 
 extension CALayer {
-    
     @objc func addWidgetLayerDecorator(mask: CACornerMask) {
         borderWidth = 2
         cornerRadius = 7

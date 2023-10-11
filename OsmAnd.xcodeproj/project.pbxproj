@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -3615,6 +3615,9 @@
 		FA740D422A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA740D412A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib */; };
 		FA740D452A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */; };
 		FAB6E7E42AC5A9FD00A82987 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */; };
+		FAF6C89B2AD013F400A3ED94 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */; };
+		FAF6C89F2AD014C900A3ED94 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */; };
+		FAF6C8A02AD014C900A3ED94 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89E2AD014C800A3ED94 /* Theme.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -8368,6 +8371,9 @@
 		FA740D412A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CloudIntroductionButtonsView.xib; sourceTree = "<group>"; };
 		FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudIntroductionButtonsView.swift; sourceTree = "<group>"; };
 		FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
+		FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		FAF6C89E2AD014C800A3ED94 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -14171,6 +14177,7 @@
 		DA5A80E526C563A600F274C7 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				FAF6C89C2AD014C800A3ED94 /* ThemeManager */,
 				DA5A80E726C563A600F274C7 /* OALocationServices.h */,
 				DA5A80E826C563A600F274C7 /* OALocationServices.mm */,
 				DA5A80E926C563A600F274C7 /* OALocationSimulation.h */,
@@ -14430,6 +14437,7 @@
 				FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */,
 				FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */,
 				FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */,
+				FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */,
 			);
 			path = SwiftExtensions;
 			sourceTree = "<group>";
@@ -14580,6 +14588,15 @@
 				FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */,
 			);
 			path = CloudIntroductionButtonsView;
+			sourceTree = "<group>";
+		};
+		FAF6C89C2AD014C800A3ED94 /* ThemeManager */ = {
+			isa = PBXGroup;
+			children = (
+				FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */,
+				FAF6C89E2AD014C800A3ED94 /* Theme.swift */,
+			);
+			path = ThemeManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -17419,6 +17436,7 @@
 				461FB12E298801FA00097673 /* OAAnnounceTimeDistances.m in Sources */,
 				DA5A839226C563A800F274C7 /* OAOnlineTilesEditingViewController.mm in Sources */,
 				465DB48929AF9F6C007F5989 /* OACarPlayFavoriteResultListController.mm in Sources */,
+				FAF6C8A02AD014C900A3ED94 /* Theme.swift in Sources */,
 				326C0BA02A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift in Sources */,
 				DA45B2422A30B6BF0055055A /* MapillaryWidget.swift in Sources */,
 				DA5A825C26C563A700F274C7 /* OAProfileAppearanceViewController.mm in Sources */,
@@ -18098,6 +18116,7 @@
 				FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */,
 				DA5A850B26C563A900F274C7 /* OAButton.m in Sources */,
 				DA5A81C126C563A700F274C7 /* OAPOIParser.m in Sources */,
+				FAF6C89B2AD013F400A3ED94 /* UIColor+Extension.swift in Sources */,
 				DA5A824C26C563A700F274C7 /* OANavigationLanguageViewController.m in Sources */,
 				DA5A84FE26C563A900F274C7 /* OATableView.m in Sources */,
 				DA5A847126C563A900F274C7 /* OATimeWidgetState.m in Sources */,
@@ -18239,6 +18258,7 @@
 				32119B552848D921005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.m in Sources */,
 				DA35963229B0A00A009DF4D6 /* OARouteKey.mm in Sources */,
 				DA5A847B26C563A900F274C7 /* OATurnDrawable.mm in Sources */,
+				FAF6C89F2AD014C900A3ED94 /* ThemeManager.swift in Sources */,
 				DA5A816F26C563A700F274C7 /* OAAppDelegate.mm in Sources */,
 				DAD5B4CF288E80EC009CF611 /* OAOperationLog.m in Sources */,
 				DA5A853826C563A900F274C7 /* OAFavoritesHelper.mm in Sources */,

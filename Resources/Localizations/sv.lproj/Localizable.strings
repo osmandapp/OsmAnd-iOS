@@ -689,7 +689,7 @@
 "map_settings_add_maps_desc" = "You can add new maps via link, or by importing SQLite files.";
 "srtm_color_scheme" = "Färgschema";
 "map_settings_line_density" = "Line density";
-"map_settings_contour_zoom_level_descr" = "Select zoom level, from wich contour lines will be displayed";
+"map_settings_contour_zoom_level_descr" = "Ange från vilken zoomnivå höjdkurvor ska visas";
 "shared_string_appearance" = "Utseende";
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
@@ -1377,12 +1377,12 @@
 "quick_action_hillshade_descr" = "En knapp för att visa eller dölja terrängskuggning på kartan.";
 "show_terrain" = "Show Terrain";
 "hide_terrain" = "Hide Terrain";
-"toggle_contour_lines" = "Show/Hide contour lines";
+"toggle_contour_lines" = "Visa/Dölj höjdkurvor";
 "toggle_hillshade" = "Show/Hide terrain";
 "show_from_zoom_level" = "Visa från zoom-nivå";
 "quick_action_contour_lines_descr" = "Knapp som visar eller döljer höjdkurvor i kartan.";
-"hide_contour_lines" = "Hide contour lines";
-"enable_contour_lines" = "Enable to view contour lines on the map";
+"hide_contour_lines" = "Dölj höjdkurvor";
+"enable_contour_lines" = "Aktivera för att visa höjdkurvor på kartan";
 "enable_hillshade" = "Aktivera för att visa terrängdata från terrängskuggning eller lutningskarta.";
 "contour_lines_hillshades_slope" = "Höjdkurvor, terrängskuggning, lutning";
 "quick_action_dir_from_descr" = "Tap this action to navigate from the current screen center point.";
@@ -1591,7 +1591,7 @@
 "wikivoyage_travel_guide" = "Reseguider";
 "start_editing_card_image_text" = "Den fria, världsomspännande reseguiden som alla kan redigera.";
 "wikivoyage_travel_guide_descr" = "Guider till de mest intressanta platserna i världen, inuti OsmAnd, utan en internetanslutning.";
-"product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
+"product_desc_sea_depth_contours" = "Djupkurvor och sjömärken";
 "my_location" = "Min plats";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Få obegränsad tillgång";
@@ -1639,7 +1639,7 @@
 "shared_string_get" = "Hämta";
 "srtm_plugin_disabled" = "Topografi inaktiverad";
 "prch_wiki_info" = "Wikipedia plugin enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
-"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
+"prch_srtm_info" = "Topografi-modulen möjliggör höjdkurvor för kartor du har tillgång till, köpta eller nedladdade inom fri kvot.";
 "shared_string_open" = "Öppna";
 "time_closed" = "Closed";
 "time_will_open" = "Will open in";
@@ -1694,7 +1694,7 @@
 "plugin_popup_wiki_title" = "Download Wikipedia";
 "plugin_popup_wiki_desc" = "To start using Wikipedia plugin, please download Wikipedia data of an region first";
 "plugin_popup_wiki_ask" = "In order to download Wikipedia data you need to activate plugin: <b>Wikipedia</b>";
-"plugin_popup_srtm_title" = "Download contour lines";
+"plugin_popup_srtm_title" = "Ladda ner höjdkurvor";
 "plugin_popup_srtm_desc" = "För att börja använda Topografi-funktionen, ladda först ner Höjdkurvor för en region";
 "plugin_popup_srtm_ask" = "För att ladda ner Höjdkurvor behöver du först aktivera insticksmodulen: <b>Topografi</b>";
 "plugin_popup_nautical_title" = "Download Nautical maps";
@@ -2615,3 +2615,5 @@
 "recalc_angle_dialog_title" = "Minsta vinkel mellan min position och rutten";
 "get_osmand_cloud" = "Skaffa OsmAnd molntjänst";
 "routeInfo_horse_scale_description" = "Rendera stigar enligt svårighetsgrad för ridvägar";
+"map_settings_topography" = "Topografi";
+"ios_release_4_5" = "• Helt omdesignad widgetmiljö: ändra widgetposition, gruppering av sidor, lista över widgetar för vänster och höger panel\n• Ny design av konfigurationsskärm\n• Gratis säkerhetskopiering av favoriter, inställningar och OSM-redigeringar till OsmAnd Cloud\n• Tillagd \"CAI\"-skala för klassificering av leders svårighetsgrad\n• Insticksmodulen \"Höjdkurvor\" byter namn till \"Topografi\", med stöd för nya terrängkartformat\n• 3D relief tillagd\n• OAuth-autentisering för insticksmodulen OpenStreetMap-redigering\n• Särskild knapp för att växla mellan 2D och 3D-läge\n• Ändrad riktning av tilt-gester\n• Fixat problem med export av favoriter, som kunde leda till dataförlust\n";

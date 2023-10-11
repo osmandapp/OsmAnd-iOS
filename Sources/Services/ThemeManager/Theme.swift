@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum Theme: Int {
+@objc enum Theme: Int {
     case system, light, dark
     
     var overrideUserInterfaceStyle: UIUserInterfaceStyle {
@@ -26,7 +26,24 @@ enum Theme: Int {
 extension Theme {
     var buttonBgColorDisabled: UIColor { getColorTheme(with: UIColor.buttonBgColorDisabled) }
     var buttonBgColorDisruptive: UIColor { getColorTheme(with: UIColor.buttonBgColorDisruptive) }
-#warning("add all color schemes")
+    var buttonBgColorPrimary: UIColor { getColorTheme(with: UIColor.buttonBgColorPrimary) }
+    var buttonBgColorSecondary: UIColor { getColorTheme(with: UIColor.buttonBgColorSecondary) }
+    var buttonBgColorTap: UIColor { getColorTheme(with: UIColor.buttonBgColorTap) }
+    var buttonBgColorTertiary: UIColor { getColorTheme(with: UIColor.buttonBgColorTertiary) }
+    var buttonTextColorPrimary: UIColor { getColorTheme(with: UIColor.buttonTextColorPrimary) }
+    var buttonTextColorSecondary: UIColor { getColorTheme(with: UIColor.buttonTextColorSecondary) }
+    var groupBgColor: UIColor { getColorTheme(with: UIColor.groupBgColor) }
+    var iconColorActive: UIColor { getColorTheme(with: UIColor.iconColorActive) }
+    var iconColorDefault: UIColor { getColorTheme(with: UIColor.iconColorDefault) }
+    var iconColorSecondary: UIColor { getColorTheme(with: UIColor.iconColorSecondary) }
+    var iconColorSelected: UIColor { getColorTheme(with: UIColor.iconColorSelected) }
+    var iconColorTertiary: UIColor { getColorTheme(with: UIColor.iconColorTertiary) }
+    var separatorColor: UIColor { getColorTheme(with: UIColor.separatorColor) }
+    var textColorActive: UIColor { getColorTheme(with: UIColor.textColorActive) }
+    var textColorPrimary: UIColor { getColorTheme(with: UIColor.textColorPrimary) }
+    var textColorSecondary: UIColor { getColorTheme(with: UIColor.textColorSecondary) }
+    var textColorTertiary: UIColor { getColorTheme(with: UIColor.textColorTertiary) }
+    var viewBgColor: UIColor { getColorTheme(with: UIColor.viewBgColor) }
 }
 
 extension Theme {

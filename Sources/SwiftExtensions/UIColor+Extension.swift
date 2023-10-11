@@ -13,7 +13,22 @@ extension UIColor {
     @objc static var buttonBgColorDisruptive: UIColor { UIColor(named: #function)! }
     @objc static var buttonBgColorPrimary: UIColor { UIColor(named: #function)! }
     @objc static var buttonBgColorSecondary: UIColor { UIColor(named: #function)! }
-#warning ("add all colors from asset")
+    @objc static var buttonBgColorTap: UIColor { UIColor(named: #function)! }
+    @objc static var buttonBgColorTertiary: UIColor { UIColor(named: #function)! }
+    @objc static var buttonTextColorPrimary: UIColor { UIColor(named: #function)! }
+    @objc static var buttonTextColorSecondary: UIColor { UIColor(named: #function)! }
+    @objc static var groupBgColor: UIColor { UIColor(named: #function)! }
+    @objc static var iconColorActive: UIColor { UIColor(named: #function)! }
+    @objc static var iconColorDefault: UIColor { UIColor(named: #function)! }
+    @objc static var iconColorSecondary: UIColor { UIColor(named: #function)! }
+    @objc static var iconColorSelected: UIColor { UIColor(named: #function)! }
+    @objc static var iconColorTertiary: UIColor { UIColor(named: #function)! }
+    @objc static var separatorColor: UIColor { UIColor(named: #function)! }
+    @objc static var textColorActive: UIColor { UIColor(named: #function)! }
+    @objc static var textColorPrimary: UIColor { UIColor(named: #function)! }
+    @objc static var textColorSecondary: UIColor { UIColor(named: #function)! }
+    @objc static var textColorTertiary: UIColor { UIColor(named: #function)! }
+    @objc static var viewBgColor: UIColor { UIColor(named: #function)! }
 }
 
 extension UIColor {

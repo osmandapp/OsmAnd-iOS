@@ -3711,7 +3711,7 @@
         [_profilePreferences setObject:_appearanceMode forKey:@"daynight_mode"];
         
         _appearanceProfileTheme = [OACommonInteger withKey:appearanceProfileThemeKey defValue:0];
-        [_profilePreferences setObject:_appearanceProfileTheme forKey:@"appearance_profile_theme_mode"];
+        [_profilePreferences setObject:_appearanceProfileTheme forKey:@"osmand_theme"];
         
         _mapManuallyRotatingAngle = [OACommonDouble withKey:mapManuallyRotatingAngleKey defValue:0];
         [_profilePreferences setObject:_appearanceMode forKey:mapManuallyRotatingAngleKey];

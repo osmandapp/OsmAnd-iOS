@@ -18,8 +18,8 @@ final class ThemeManager: NSObject {
     private override init() {}
     
     var currentTheme: Theme {
-       let appMode = OAAppSettings.sharedManager().currentMode
-       let savedTheme = OAAppSettings.sharedManager().appearanceProfileTheme.get(appMode)
+        let appMode = OAAppSettings.sharedManager().currentMode
+        let savedTheme = OAAppSettings.sharedManager().appearanceProfileTheme.get(appMode)
         guard let theme = Theme(rawValue: Int(savedTheme)) else {
             return .system
         }

@@ -2008,7 +2008,7 @@
 "default_color_descr" = "Ten kolor będzie używany dla wszystkich nowych ulubionych dodanych do grupy.";
 "tracks_on_map" = "Wyświetlane trasy";
 "fav_point_emoticons_message" = "Nazwa ulubionego miejsca została zmieniona na \"%@\", aby móc zapisać do pliku tekst z emotikonami.";
-"fav_point_dublicate_message" = "Nazwa ulubionego miejsca została zmieniona na \"%@\", aby uniknąć powielenia.";
+"fav_point_dublicate_message" = "Nazwa ulubionego miejsca została zmieniona na %@, aby uniknąć powielenia.";
 "carplay_profile_descr" = "Profil, który będzie używany podczas połączenia z CarPlay.";
 "carplay_profile" = "Profil CarPlay";
 "shared_string_last_used" = "Ostatnio używane";
@@ -2675,3 +2675,16 @@
 "rendering_value_caiScale_description" = "Włoski Klub Alpejski (Italian Alpine Club)";
 "shared_string_cache" = "Pamięć podręczna";
 "map_widget_distance_to_intermediate" = "Odległość do punktu pośredniego";
+"map_widget_target_distance_desc" = "Pokazuje odległość między kamerą a miejscem docelowym.";
+"map_widget_camera_tilt_desc" = "Pokazuje kąt nachylenia kamery w trybie perspektywicznym. Domyślnie 90° (brak pochylenia).";
+"distance_circles" = "Kręgi odległości";
+"av_notes_audio_widget_desc" = "Stuknięcie widżetu pozwala na zrobienie notatki dźwiękowej.";
+"coordinates_widget_current_location_desc" = "Pokazuje współrzędne geograficzne bieżącej geolokalizacji";
+"map_widget_zoom_level_desc" = "Pokazuje bieżący poziom powiększenia mapy.";
+"map_widget_camera_distance_desc" = "Pokazuje wysokość kamery nad poziomem powierzchni.";
+"av_notes_video_widget_desc" = "Stuknięcie widżetu umożliwia nagranie filmu.";
+"av_notes_photo_widget_desc" = "Stuknięcie widżetu umożliwia zrobienie zdjęcia.";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "Pokazuje współrzędne geograficzne bieżącego środka mapy";
+"map_widget_rendering_fps_desc" = "Pokazuje, jak szybko mapa i jej elementy są wyświetlane i odświeżane, wyrażone w klatkach na sekundę (FPS).";

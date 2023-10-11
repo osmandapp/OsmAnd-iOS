@@ -282,7 +282,7 @@
 "shared_string_maps" = "Hărţi";
 "si_min_m" = "Minute pe milă";
 "routing_engine_vehicle_type_driving" = "Condus";
-"record_plugin_name" = "Înregistrarea călătoriei";
+"record_plugin_name" = "Înregistrare călătorie";
 "city_type_city" = "Oraș";
 "osm_edit_created_poi" = "Punct de interes OSM creat";
 "shared_string_deselect" = "Deselectați";
@@ -418,7 +418,7 @@
 "traffic_warning_speed_camera" = "Cameră trafic";
 "si_mi_feet" = "Mile/picior";
 "shared_string_export" = "Exportați";
-"get_directions" = "Navigare";
+"get_directions" = "Indicații";
 "destination_point" = "Destinație %@";
 "add_gpx_waypoint" = "Adaugă waypoint GPX";
 "next_proceed" = "Următorul";
@@ -2029,7 +2029,7 @@
 "srtm_unit_format" = "Variantă unități linii de contur";
 "download_suggestion" = "Descărcați harta detaliată %@ pentru a vizualiza această zonă";
 "download_map_dialog" = "Descărcați harta de dialog";
-"shared_string_navigation" = "Navigare";
+"shared_string_navigation" = "Navigație";
 "dialogs_and_notifications_descr" = "Control popups, dialoguriși notificări.";
 "dialogs_and_notifications_title" = "Dialoguriși notificări";
 "contour_lines_hillshades_slope" = "Curbe de nivel, umbrire relief, pante";

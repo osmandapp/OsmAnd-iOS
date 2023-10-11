@@ -123,10 +123,19 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
 
         pageViewController.dataSource = nil
         pageViewController.delegate = nil
+        widgetPages.forEach { $0.forEach {
+            $0.delegate = nil
+            $0.removeFromSuperview()
+        } }
         for viewController in pageViewController.children {
             viewController.willMove(toParent: nil)
             viewController.view.removeFromSuperview()
             viewController.removeFromParent()
+        }
+        for viewController in pages {
+            if let pageViewController = viewController as? WidgetPageViewController {
+                pageViewController.widgetViews = [];
+            }
         }
         pages.removeAll()
         widgetPages.removeAll()
@@ -252,7 +261,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             }
         }
         view.isHidden = !hasWidgets()
-        view.layoutIfNeeded()
+        view.setNeedsLayout()
     }
     
     @objc private func onDayNightModeChanged() {

@@ -1919,7 +1919,7 @@
 "login_account" = "Cont";
 "shared_string_required" = "Necesar";
 "email_example_hint" = "utilizator@example.com";
-"search_poi_types_descr" = "Combinați tipuri de POI din diferite categorii. Atingeți comutatorul pentru a le selecta pe toate, atingeți partea stângă pentru a selecta categoria.";
+"search_poi_types_descr" = "Combinați tipuri de puncte de interes din diferite categorii. Atingeți comutatorul pentru a le selecta pe toate, atingeți partea stângă pentru a selecta categoria.";
 "reset_to_default_category_button_promo" = "\'Reset to default\' va readuce ordinea de sortare la cea implicită de instalare.";
 "create_custom_categories_list_promo" = "Modificați ordinea din listă și ascundeți categoriile. Importați sau exportați toate modificările ca profiluri.";
 "hidden_categories" = "Categorii ascunse";

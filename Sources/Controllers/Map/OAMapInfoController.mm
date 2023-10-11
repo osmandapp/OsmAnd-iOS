@@ -538,12 +538,20 @@
 {
     [_mapWidgetRegistry clearWidgets];
     [self registerAllControls];
-    [_mapWidgetRegistry reorderWidgets];
-    [self recreateControls];
+    //[_mapWidgetRegistry reorderWidgets];
+    [self recreateControls:NO];
 }
 
 - (void) recreateControls
 {
+    [self recreateControls:YES];
+}
+
+- (void) recreateControls:(BOOL)registerWidgets
+{
+    if (registerWidgets)
+        [_mapWidgetRegistry registerAllControls];
+
     OAApplicationMode *appMode = _settings.applicationMode.get;
 
     [_mapHudViewController setDownloadMapWidget:_downloadMapWidget];

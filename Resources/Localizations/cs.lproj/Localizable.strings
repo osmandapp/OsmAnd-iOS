@@ -2025,8 +2025,6 @@
 "navigate_point_easting" = "Souřadnice X";
 "navigate_point_northing" = "Souřadnice Y";
 "navigate_point_zone" = "Zóna";
-"open_place_reviews_plugin_description" = "Přispívejte do projektu OpenPlaceReviews, například fotografiemi, recenzemi nebo odkazy na veřejná místa, jako jsou restaurace, hotely nebo muzea.\n\nNávod, jak přispět, najdete na našich webových stránkách https://osmand.net/docs/user/plugins/openplacereviews .";
-"open_place_reviews" = "OpenPlaceReviews";
 "routes_color_by_type" = "Obarvit trasy podle…";
 "rendering_value_walkingRoutesOSMC_description" = "Obarví trasy podle jejich individuální lokální barvy (pokud je nastavena v OpenStreetMap) a turistického značení.";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Obarví trasy podle síťové příslušnosti.";
@@ -2037,7 +2035,6 @@
 "added_profiles" = "Přidané profily";
 "suggested_maps_descr" = "Tyto mapy jsou potřebné pro modul.";
 "suggested_maps" = "Navrhované mapy";
-"product_desc_openplacereviews" = "Sdílejte své názory na veřejná místa";
 "plugin_mapillary_descr" = "Snímky z úrovně ulice. Přispět můžete i vy. Chcete-li zobrazit existující data jako mapovou vrstvu, zapněte v nabídce \"Nastavení mapy\" možnost \"Snímky z úrovně ulice\".";
 "product_desc_mapillary" = "Snímky z úrovně ulice, abyste si mohli prohlédnout okolí";
 "shared_string_feet" = "stopy";
@@ -3022,3 +3019,4 @@
 "weather_update_parameters_disabled" = "Automatické aktualizace budou vypnuty.";
 "auto_update" = "Automatická aktualizace";
 "weather_update_parameters_any_network" = "Předpověď počasí bude aktualizována přes jakoukoliv síť. Mohou být využita mobilní data.";
+"shared_string_cache" = "Mezipaměť";

@@ -48,6 +48,7 @@
     
     CGFloat _cachedYViewPort;
     OAAutoObserverProxy *_map3dModeObserver;
+    OAAutoObserverProxy *_applicationModeObserver;
 }
 
 - (instancetype) initWithMapHudViewController:(OAMapHudViewController *)mapHudController
@@ -72,7 +73,7 @@
     _quickActionFloatingButton.tintColorDay = UIColorFromRGB(color_primary_purple);
     _quickActionFloatingButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
     [_quickActionFloatingButton updateColorsForPressedState:NO];
-    [self setQuickActionButtonMargin];
+    [self restoreQuickActionButtonPosition];
     
     _quickActionsButtonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onQuickActionButtonDragged:)];
     [_quickActionsButtonDragRecognizer setMinimumPressDuration:0.5];
@@ -82,7 +83,7 @@
     _map3dModeFloatingButton.alpha = 0;
     
     [self onMap3dModeUpdated];
-    [self setQuickActionButtonMargin];
+    [self restoreQuickActionButtonPosition];
     
     _map3dModeButtonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onMap3dModeButtonDragged:)];
     [_map3dModeButtonDragRecognizer setMinimumPressDuration:0.5];
@@ -91,12 +92,20 @@
     _map3dModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                    withHandler:@selector(onMap3dModeUpdated)
                                                     andObserve:[OARootViewController instance].mapPanel.mapViewController.elevationAngleObservable];
+    _applicationModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                         withHandler:@selector(onApplicationModeChanged)
+                                                          andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
 
     [self updateColors:NO];
 }
 
 - (void)dealloc
 {
+    if (_applicationModeObserver)
+    {
+        [_applicationModeObserver detach];
+        _applicationModeObserver = nil;
+    }
     if (_map3dModeObserver)
     {
         [_map3dModeObserver detach];
@@ -104,7 +113,7 @@
     }
 }
 
-- (void) setPinPosition
+- (void) restorePinPosition
 {
     BOOL isLandscape = OAUtilities.isLandscape;
     CGRect pinFrame = _quickActionPin.frame;
@@ -146,6 +155,14 @@
         }
         EOAMap3DModeVisibility visibilityMode = ((EOAMap3DModeVisibility) [_settings.map3dMode get]);
         _map3dModeFloatingButton.accessibilityValue = [OAMap3DModeVisibility getTitle:visibilityMode];
+    });
+}
+
+- (void)onApplicationModeChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateViewVisibility];
+        [self restoreControlsPosition];
     });
 }
 
@@ -223,8 +240,7 @@
     return _quickActionFloatingButton.alpha == 1;
 }
 
-// Android counterpart: setQuickActionButtonMargin()
-- (void) setQuickActionButtonMargin
+- (void) restoreQuickActionButtonPosition
 {
     CGFloat screenHeight = DeviceScreenHeight;
     CGFloat screenWidth = DeviceScreenWidth;
@@ -256,7 +272,7 @@
     }
 }
 
-- (void) setMap3dModeButtonMargin
+- (void) restoreMap3dModeButtonPosition
 {
     CGFloat screenHeight = DeviceScreenHeight;
     CGFloat screenWidth = DeviceScreenWidth;
@@ -311,11 +327,16 @@
     button.frame = CGRectMake(x, y, btnWidth, btnHeight);
 }
 
+- (void)restoreControlsPosition 
+{
+    [self restoreQuickActionButtonPosition];
+    [self restoreMap3dModeButtonPosition];
+    [self restorePinPosition];
+}
+
 - (void)viewWillLayoutSubviews
 {
-    [self setQuickActionButtonMargin];
-    [self setMap3dModeButtonMargin];
-    [self setPinPosition];
+    [self restoreControlsPosition];
     if (_actionsView.superview)
         [self adjustMapViewPort];
 }
@@ -413,7 +434,7 @@
         _cachedYViewPort = [OARootViewController instance].mapPanel.mapViewController.mapView.viewportYScale;
         [self adjustMapViewPort];
     }];
-    [self setPinPosition];
+    [self restorePinPosition];
     _isActionsViewVisible = YES;
     [_mapHudController updateControlsLayout:YES];
     [self updateColors:NO];

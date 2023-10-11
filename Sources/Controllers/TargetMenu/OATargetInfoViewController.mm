@@ -35,7 +35,6 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAMapUtils.h"
 #import "OAWikiImageHelper.h"
-#import "OAIPFSImageCard.h"
 #import "OAWikiImageCard.h"
 #import "OAWikipediaPlugin.h"
 #import "OAOsmAndFormatter.h"
@@ -74,7 +73,6 @@
     
     OARowInfo *_nearbyImagesRowInfo;
     BOOL _otherCardsReady;
-    BOOL _openPlaceCardsReady;
     BOOL _wikiCardsReady;
 }
 
@@ -462,16 +460,6 @@
         mapillaryTagContent = poi.values[@"mapillary"];
     }
     
-    if (!OAIAPHelper.sharedInstance.openPlaceReviews.disabled && ![openPlaceReviewsTagContent isEqualToString:@"0"])
-    {
-        _openPlaceCardsReady = NO;
-        [self addOpenPlaceCards:openPlaceReviewsTagContent cards:cards rowInfo:_nearbyImagesRowInfo];
-    }
-    else
-    {
-        _openPlaceCardsReady = YES;
-    }
-    
     _otherCardsReady = NO;
     [self addOtherCards:imageTagContent mapillary:mapillaryTagContent cards:cards rowInfo:_nearbyImagesRowInfo];
 }
@@ -506,61 +494,6 @@
         if (onComplete)
             onComplete(nil);
     }
-}
-
-- (void)addOpenPlaceCards:(NSString *)openPlaceTagContent cards:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
-{
-    NSString *urlString = [NSString stringWithFormat:@"%@%@%@", OPR_BASE_URL, OPR_OBJECTS_BY_INDEX, openPlaceTagContent];
-    NSURL *urlObj = [[NSURL alloc] initWithString:urlString];
-    NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    [[aSession dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        NSMutableArray<OAAbstractCard *> *resultCards = [NSMutableArray array];
-        if (((NSHTTPURLResponse *)response).statusCode == 200)
-        {
-            if (data && !error)
-            {
-                NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
-                if (jsonDict)
-                {
-                    try
-                    {
-                        NSDictionary *records = ((NSDictionary *) ((NSArray *) jsonDict[@"objects"]).firstObject)[@"images"];
-                        if (records && records.count > 0)
-                        {
-                            for (NSArray *record in records.allValues)
-                            {
-                                if (record.count > 0)
-                                {
-                                    for (NSDictionary *obj in record)
-                                    {
-                                        OAImageCard *card = nil;
-                                        if (obj[@"cid"])
-                                            card = [[OAIPFSImageCard alloc] initWithData:obj];
-                                        if (card)
-                                            [resultCards addObject:card];
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch (NSException *e)
-                    {
-                        NSLog(@"Open Place Reviews image json serialising error");
-                    }
-                }
-            }
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [cards addObjectsFromArray:resultCards];
-            [self onOpenPlaceCardsReady:cards rowInfo:nearbyImagesRowInfo];
-        });
-    }] resume];
-}
-
-- (void)onOpenPlaceCardsReady:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
-{
-    _openPlaceCardsReady = YES;
-    [self updateDisplayingCards:cards rowInfo:nearbyImagesRowInfo];
 }
 
 - (void)addOtherCards:(NSString *)imageTagContent mapillary:(NSString *)mapillaryTagContent cards:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
@@ -628,7 +561,7 @@
 
 - (void)updateDisplayingCards:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
 {
-    if (_otherCardsReady && _openPlaceCardsReady && _wikiCardsReady)
+    if (_otherCardsReady && _wikiCardsReady)
     {
         if (cards.count == 0)
             [cards addObject:[[OANoImagesCard alloc] init]];
@@ -638,7 +571,7 @@
         if (nearbyImagesRowInfo)
             [((OACollapsableCardsView *) nearbyImagesRowInfo.collapsableView) setCards:cards];
         
-        _otherCardsReady = _openPlaceCardsReady = _wikiCardsReady = NO;
+        _otherCardsReady = _wikiCardsReady = NO;
     }
 }
 
@@ -653,8 +586,6 @@
     {
         if ([card isKindOfClass:OAWikiImageCard.class])
             [wikimediaCards addObject:card];
-        if ([card isKindOfClass:OAIPFSImageCard.class])
-            [openPlaceCards addObject:card];
         if ([card isKindOfClass:OAMapillaryImageCard.class])
             [mapilaryCards addObject:card];
         else if ([card isKindOfClass:OAMapillaryContributeCard.class])

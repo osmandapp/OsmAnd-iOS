@@ -1394,7 +1394,7 @@
 "quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
 "quick_action_mapillary_hide" = "Hide Mapillary";
 "quick_action_mapillary_show" = "Show Mapillary";
-"quick_action_remove_next_destination" = "უახლესი დანიშნულების პუნქტის წაშლა";
+"quick_action_remove_next_destination" = "შემდეგი დანიშნულების პუნქტის წაშლა";
 "quick_action_remove_next_destination_descr" = "Deletes the next destination on your route. If that is the final destination, the navigation will stop.";
 "change_application_profile" = "აპის პროფილის შეცვლა";
 "select_application_profile" = "Select application profile";
@@ -1557,9 +1557,6 @@
 "osm_editing_plugin_description" = "";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Online street-level photos for everyone. Discover places, collaborate, capture the world.";
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"open_place_reviews_plugin_description" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1588,7 +1585,7 @@
 "some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"srtm_plugin_name" = "კონტურული ხაზების დამატება";
+"srtm_plugin_name" = "ტოპოგრაფია";
 "product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "";
 "wikivoyage_travel_guide" = "მოგზაურთა გიდები";

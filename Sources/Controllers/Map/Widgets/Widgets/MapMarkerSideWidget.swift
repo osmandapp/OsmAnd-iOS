@@ -237,10 +237,10 @@ class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
 
         return data
     }
-    
+
     private func getPossibleValues(_ pref: OACommonPreference, _ appMode: OAApplicationMode) -> [OATableRowData] {
         var rows = [OATableRowData]()
-        if pref.key == "first_map_marker_mode" || pref.key == "second_map_marker_mode" {
+        if pref.key == markerModePref.key {
             for mode in SideMarkerMode.values {
                 let row = OATableRowData()
                 row.cellType = OASimpleTableViewCell.getIdentifier()
@@ -248,7 +248,7 @@ class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
                 row.title = mode.title
                 rows.append(row)
             }
-        } else if pref.key == "first_map_marker_click_behaviour" || pref.key == "second_map_marker_click_behaviour" {
+        } else if pref.key == markerClickBehaviourPref.key {
             for mode in MarkerClickBehaviour.values {
                 let row = OATableRowData()
                 row.cellType = OASimpleTableViewCell.getIdentifier()
@@ -256,7 +256,7 @@ class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
                 row.title = mode.title
                 rows.append(row)
             }
-        } else if pref.key == "first_map_marker_interval" || pref.key == "second_map_marker_interval" {
+        } else if pref.key == averageSpeedIntervalPref.key {
             let valuesRow = OATableRowData()
             valuesRow.key = "values"
             valuesRow.cellType = OASegmentSliderTableViewCell.getIdentifier()
@@ -276,7 +276,7 @@ class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
             }
         } else if let prefLong = pref as? OACommonLong {
             if prefLong.key == "first_map_marker_interval" || prefLong.key == "second_map_marker_interval" {
-                return MapMarkerSideWidgetState.availableIntervals[Int64(prefLong.get(appMode))] ?? ""
+                return MapMarkerSideWidgetState.availableIntervals[prefLong.get(appMode)] ?? ""
             }
         }
         return ""

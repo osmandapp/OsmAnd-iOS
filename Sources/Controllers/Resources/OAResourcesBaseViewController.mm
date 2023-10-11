@@ -83,11 +83,18 @@ static BOOL dataInvalidated = NO;
             {
                 OAResourceItem *item = obj1;
                 if (item.resourceId == QString::fromUtf8(kWorldSeamarksKey))
+                {
                     return NSOrderedAscending;
+                }
                 if (item.resourceId.startsWith(QStringLiteral("world_")))
+                {
                     str1 = [NSString stringWithFormat:@"!%@%d", item.title, item.resourceType];
+                }
                 else
-                    str1 = [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
+                {
+                    NSString *countryName = [OAResourcesUIHelper getCountryName:item];
+                    str1 = countryName ? [NSString stringWithFormat:@"%@ - %@%d", countryName, item.title, item.resourceType] : [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
+                }
             }
 
             if ([obj2 isKindOfClass:[OAWorldRegion class]])
@@ -98,11 +105,18 @@ static BOOL dataInvalidated = NO;
             {
                 OAResourceItem *item = obj2;
                 if (item.resourceId == QString::fromUtf8(kWorldSeamarksKey))
+                {
                     return NSOrderedDescending;
+                }
                 if (item.resourceId.startsWith(QStringLiteral("world_")))
+                {
                     str2 = [NSString stringWithFormat:@"!%@%d", item.title, item.resourceType];
+                }
                 else
-                    str2 = [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
+                {
+                    NSString *countryName = [OAResourcesUIHelper getCountryName:item];
+                    str2 = countryName ? [NSString stringWithFormat:@"%@ - %@%d", countryName, item.title, item.resourceType] : [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
+                }
             }
             
             return [str1 localizedCaseInsensitiveCompare:str2];

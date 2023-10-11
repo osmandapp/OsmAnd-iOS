@@ -2037,9 +2037,6 @@
 "added_profiles" = "Profils ajoutés";
 "suggested_maps_descr" = "Ces cartes sont nécessaires pour utiliser l\'extension.";
 "suggested_maps" = "Cartes suggérées";
-"open_place_reviews_plugin_description" = "Envoyez vos photos, avis et liens sur des lieux publics tels que les restaurants, les hôtels ou les musées afin de contribuer au projet OpenPlaceReviews.\n\nPour en savoir plus, consultez https://osmand.net/docs/user/plugins/openplacereviews.";
-"product_desc_openplacereviews" = "Partager vos avis sur les lieux publics";
-"open_place_reviews" = "OpenPlaceReviews";
 "plugin_mapillary_descr" = "Photos de rues. Vous pouvez aussi contribuer vous-même. Pour voir les données existantes sous forme de surcouche, activez l\'option correspondante dans le menu \"Paramétrer la carte\".";
 "product_desc_mapillary" = "Des photos des rues pour vérifier les alentours";
 "no_waypoints_found" = "Aucun waypoint trouvé";
@@ -2436,7 +2433,7 @@
 "shared_string_learn_more" = "En savoir plus";
 "purchases_feature_desc_pro_widgets" = "Accédez aux fonctionnalités d\'OsmAnd Pro comme les itinéraires colorés et bien plus encore.";
 "shared_string_includes" = "Inclus";
-"terrain_maps" = "Cartes du terrain";
+"terrain_maps" = "Cartes de terrain";
 "osm_live_banner_desc" = "Téléchargez un nombre illimité de cartes et obtenez des mises à jour plus fréquentes (hebdomadaires ou quotidiennes voire horaires).";
 "debugging_and_development" = "Débogage et développement OsmAnd";
 "purchases_feature_desc_unlimited_map_download" = "Téléchargez en illimité des cartes hors ligne pour tous les continents et toutes les régions.";

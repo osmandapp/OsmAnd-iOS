@@ -1803,12 +1803,6 @@
 "product_desc_mapillary" = "Street-level views to check out the surroundings";
 "plugin_mapillary_descr" = "Fotografii na nivo na ulica za sekogo. Otkrijte mesta, sorabotuvajte, dolovete go svetot.";
 
-"open_place_reviews" = "Otvori PlaceReviews";
-"product_desc_openplacereviews" = "Share your opinion about public places";
-"open_place_reviews_plugin_description" = "Ispraḱajte fotografii, recenzii i vrski za javni mesta kako što se restorani, hoteli, muzei i patni točki kako otvoreni podatoci https://openplacereviews.org/data/.
-\n
-\nPročitajte poveḱe na https://openplacereviews.org";
-
 "debugging_and_development" = "OsmAnd razvoj";
 "product_desc_development" = "For developers and experienced users";
 "osmand_development_plugin_description" = "Postavki za funkcii za razvoj i otstranuvanje greški, kako što se simulacija na navigacija, izvedba na renderiranje ili glasovno pottiknuvanje. Nameneto za programeri, ne e potrebno za normalna upotreba na aplikacii.";

@@ -1521,7 +1521,6 @@
 "gpxup_trackable" = "Követhető";
 "srtm_download_list_help_message" = "Az OsmAnd méterben és lábban adja meg a szintvonalak magasságát. A mértékegység módosításához újra le kell töltenie a fájlt.";
 "shared_string_feet" = "láb";
-"open_place_reviews" = "OpenPlaceReviews";
 "contour_lines_hillshades_slope" = "Szintvonalak, domborzatárnyékolás, lejtésviszonyok";
 "plugin_mapillary_descr" = "Utcaszintű képek. Ön is közreműködhet. A meglévő adatok térképrétegként való megjelenítéséhez kapcsolja be a „Térkép beállítása” menüben az „Utcaszintű képek” lehetőséget.";
 "navigate_point_olc" = "Open Location Code (OLC)";
@@ -2347,7 +2346,6 @@
 "km" = "km";
 "kg" = "kg";
 "plugin_nautical_descr" = "Gazdagítsa a térképet a hajózási útvonalakra, navigációs lámpákra, hajózási veszélyzónákra, hajózási vagy kikötési korlátozásokkal érintett zónákra stb. vonatkozó információkkal. Használatához töltse le a megfelelő tengeri térképeket, és engedélyezze a „Térkép beállítása” menüpontban a „Hajózási térkép” stílust.\n\nTovábbi olvasnivalók a https://osmand.net/docs/user/plugins/nautical-charts oldalon.";
-"open_place_reviews_plugin_description" = "Hozzájárulhat az OpenPlaceReviews projekthez, például éttermekről, szállodákról vagy múzeumokról készült fényképekkel, véleményekkel vagy linkekkel.\n\nA közreműködés módjáról olvashat a https://osmand.net/docs/user/plugins/openplacereviews weboldalunkon.";
 "lang_zh-Hant" = "kínai (hagyományos)";
 "speed_cameras_legal_descr" = "Bizonyos országokban és régiókban jogszabály tiltja a traffipaxra figyelmeztető alkalmazások használatát.\n\nOrszágának törvényei alapján kell döntenie:\n\n%@: figyelmeztetéseket és riasztásokat kap a traffipaxokról.\n\n%@: törlődik összes traffipaxszal kapcsolatos adat (riasztások, értesítések, POI-k), amit csak az OsmAnd teljes újratelepítésével állíthat helyre.";
 "shared_string_height" = "Magasság";
@@ -2378,3 +2376,4 @@
 "trip_recording_duration_widget_desc" = "Megjeleníti a jelenleg rögzített út idejét.";
 "search_favorites" = "Kedvencek keresése";
 "rotate_map_manual_opt" = "Kézzel forgatva (rögzített)";
+"shared_string_cache" = "Gyorsítótár";

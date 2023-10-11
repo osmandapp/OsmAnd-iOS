@@ -1445,7 +1445,6 @@
 "walking_route_osmc_description" = "根据路线各自的本地颜色（如果在OpenStreetMap上存在）和类型（国际、区域、本地）给路线着色。";
 "travel_routes" = "旅行路线";
 "shared_string_all_languages" = "所有语言";
-"open_place_reviews" = "OpenPlaceReviews";
 "gpxup_private" = "私人";
 "wiki_menu_download_descr" = "需要其他地图才能在地图上查看维基百科兴趣点。";
 "gpxup_identifiable" = "可辨认";
@@ -1731,7 +1730,7 @@
 "osm_live_banner_desc" = "获取无限的地图下载，添加每周，每日甚至每小时的更新。";
 "wikipedia_and_wikivoyage_offline" = "离线维基百科和维基导游";
 "routing_attr_allow_private_for_truck_description" = "允许卡车进入私人区域。";
-"terrain_maps" = "地形图";
+"terrain_maps" = "地形地图";
 "copy_coordinates" = "复制坐标";
 "annual_subscription" = "年度订阅";
 "cubic_m" = "立方米";
@@ -2118,7 +2117,6 @@
 "route_add_start_point" = "添加出发地";
 "km" = "千米";
 "weather_plugin_description" = "提供\n- 24小时 x 7天 的天气预报，包括5个图层\n- 基于位置的小工具\n- 等温线/等压线\n\n天气数据由全球预测系统（GFS，https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ）提供。";
-"open_place_reviews_plugin_description" = "为 OpenPlaceReviews 项目做出贡献，例如照片、评论或公共场所（如餐馆、酒店或博物馆）的链接。\n\n在我们的网站上查找有关如何做出贡献的说明 https://osmand.net/docs/user/plugins/openplacereviews。";
 "kg" = "千克";
 "m" = "米";
 "speed_camera_pois" = "测速摄像兴趣点";
@@ -2187,3 +2185,4 @@
 "elevation_profile_widget_desc" = "显示当前路线的海拔和坡度剖面。";
 "map_3d_mode_hint" = "长按按钮可更改按钮位置。";
 "speak_route_recalculation" = "播报路线的重新计算";
+"shared_string_cache" = "缓存";

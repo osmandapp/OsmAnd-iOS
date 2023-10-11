@@ -9,7 +9,6 @@
 #import "OAGPXMutableDocument.h"
 #import "OAUtilities.h"
 #import "OAAppVersionDependentConstants.h"
-#import "OAGPXAppearanceCollection.h"
 
 @implementation OAGPXMutableDocument
 {
@@ -121,9 +120,6 @@
 
 - (void) addWpt:(OAWptPt *)w
 {
-    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[w getColor:0]]];
-
     std::shared_ptr<OsmAnd::GpxDocument::WptPt> wpt;
     std::shared_ptr<OsmAnd::GpxDocument::Link> link;
 

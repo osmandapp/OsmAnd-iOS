@@ -35,9 +35,8 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
             if tableData.hasChanged || tableData.sectionCount() == 0 {
                 updateUI(true)
             } else {
-                updateWithoutData()
+                updateUIWithoutData()
             }
-            updateAppearance()
         }
     }
 
@@ -167,7 +166,11 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
                     self?.updateBottomButtons()
                 }
             } else {
-                reorderWidgets()
+                if let userInfo = notification.userInfo as? [String: Any] {
+                    reorderWidgets(with: userInfo)
+                } else {
+                    reorderWidgets()
+                }
                 updateUI(true)
             }
         }
@@ -189,7 +192,7 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
 
     // MARK: Additions
 
-    private func reorderWidgets() {
+    private func reorderWidgets(with widgetParams: [String: Any]? = nil) {
         var orders = [[String]]()
         var currPage = [String]()
         for sec in 0..<tableData.sectionCount() {
@@ -205,7 +208,8 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
         }
         WidgetUtils.reorderWidgets(orderedWidgetPages: orders,
                                       panel: widgetPanel,
-                                      selectedAppMode: selectedAppMode)
+                                   selectedAppMode: selectedAppMode,
+                                   widgetParams: widgetParams)
     }
 
 }
@@ -286,7 +290,8 @@ extension WidgetsListViewController {
         let item = tableData.item(for: indexPath)
         let isFirstPageCell = item.key == kPageKey && indexPath.section == 0
         let isNoWidgetsCell = item.key == kNoWidgetsKey
-        return editMode && !isNoWidgetsCell && !isFirstPageCell
+        let isPageCell = item.key == kPageKey
+        return editMode && !isNoWidgetsCell && !isFirstPageCell && !isPageCell
     }
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

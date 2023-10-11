@@ -24,6 +24,7 @@
 #import <AudioToolbox/AudioServices.h>
 
 #define kEnableSection 0
+#define kRowsPerSection 6
 
 @interface OAQuickActionListViewController () <MGSwipeTableCellDelegate, OAMultiselectableHeaderDelegate, OAQuickActionListDelegate>
 
@@ -170,10 +171,12 @@
 {
     if (section == kEnableSection)
         return 1;
-    
-    BOOL oneSection = _data.count / 6 < 1;
-    BOOL lastSection = section == _data.count / 6;
-    return oneSection || lastSection ? _data.count % 6 : 6;
+    else if (_data.count <= kRowsPerSection)
+        return _data.count;
+	else if (section == [self getScreensCount] && _data.count % kRowsPerSection > 0)
+        return _data.count % kRowsPerSection;
+    else
+        return kRowsPerSection;
 }
 
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
@@ -253,18 +256,25 @@
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
-    if (_data.count == 1)
+    if (_data.count == 1 || sourceIndexPath == destinationIndexPath)
+    {
         return;
+    }
     
     AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-    
     OAQuickAction *sourceAction = [self getAction:sourceIndexPath];
-    OAQuickAction *destAction = [self getAction:destinationIndexPath];
-    destinationIndexPath = [NSIndexPath indexPathForRow:destinationIndexPath.row inSection:destinationIndexPath.section - 1];
-    sourceIndexPath = [NSIndexPath indexPathForRow:sourceIndexPath.row inSection:sourceIndexPath.section - 1];
-    [_data setObject:sourceAction atIndexedSubscript:destinationIndexPath.section * 6 + destinationIndexPath.row];
-    [_data setObject:destAction atIndexedSubscript:sourceIndexPath.section * 6 + sourceIndexPath.row];
-    [self.tableView reloadData];
+    NSInteger destinationIndex = kRowsPerSection * (destinationIndexPath.section - 1) + destinationIndexPath.row;
+    if (sourceIndexPath.section != destinationIndexPath.section && destinationIndex == _data.count)
+    {
+        destinationIndex--;
+    }
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        [self.tableView reloadData];
+    }];
+    [_data removeObjectAtIndex:(sourceIndexPath.section - 1) * kRowsPerSection + sourceIndexPath.row];
+    [_data insertObject:sourceAction atIndex:destinationIndex];
+    [CATransaction commit];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
@@ -279,7 +289,12 @@
 
 - (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
 {
-    if(proposedDestinationIndexPath.section == kEnableSection)
+    if (proposedDestinationIndexPath.section == kEnableSection)
+    {
+        return sourceIndexPath;
+    }
+    NSInteger lastSectionIndex = [tableView numberOfSections] - 1;
+    if (proposedDestinationIndexPath.section == lastSectionIndex)
     {
         return sourceIndexPath;
     }
@@ -301,13 +316,12 @@
 
 - (NSInteger)getScreensCount
 {
-    NSInteger numOfItems = _data.count;
-    BOOL oneSection = numOfItems / 6 < 1;
-    BOOL hasRemainder = numOfItems % 6 != 0;
-    if (oneSection)
+    if (_data.count == 0)
+        return 0;
+    else if (_data.count <= kRowsPerSection)
         return 1;
     else
-        return (numOfItems / 6) + (hasRemainder ? 1 : 0);
+        return (int)(floor((_data.count - 1.0) / kRowsPerSection)) + 1;
 }
 
 - (void)disableEditing
@@ -320,10 +334,7 @@
 
 - (OAQuickAction *)getAction:(NSIndexPath *)indexPath
 {
-    NSIndexPath *correctedPath = indexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section - 1];
-    if (_data.count == 1)
-        return _data.firstObject;
-    return _data[6 * correctedPath.section + correctedPath.row];
+    return _data[kRowsPerSection * (indexPath.section - 1) + indexPath.row];
 }
 
 - (void)openQuickActionSetupFor:(NSIndexPath *)indexPath
@@ -348,14 +359,14 @@
 - (void)onLeftNavbarButtonPressed
 {
     [self disableEditing];
-    _data = [NSMutableArray arrayWithArray:_registry.getQuickActions];
+    [self generateData];
     [self.tableView reloadData];
 }
 
 - (void)donePressed
 {
-    [self disableEditing];
     [self saveChanges];
+    [self disableEditing];
 }
 
 - (void)addActionPressed
@@ -370,13 +381,11 @@
     NSInteger sections = self.tableView.numberOfSections;
     
     [self.tableView beginUpdates];
-    for (NSInteger section = 0; section < sections; section++)
+    for (NSInteger section = 1; section < sections; section++)
     {
         NSInteger rowsCount = [self.tableView numberOfRowsInSection:section];
         for (NSInteger row = 0; row < rowsCount; row++)
-        {
             [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
-        }
     }
     [self.tableView endUpdates];
 }
@@ -391,12 +400,10 @@
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            NSMutableArray *dataCopy = [NSMutableArray arrayWithArray:_data];
+            NSMutableArray<OAQuickAction *> *dataCopy = [NSMutableArray arrayWithArray:_data];
             for (NSIndexPath *path in indexes)
-            {
-                OAQuickAction *item = [self getAction:path];
-                [dataCopy removeObject:item];
-            }
+                [dataCopy removeObject:[self getAction:path]];
+
             _data = dataCopy;
             [self saveChanges];
             [self.tableView reloadData];
@@ -447,7 +454,7 @@
 
 - (void)updateData
 {
-    _data = [NSMutableArray arrayWithArray:_registry.getQuickActions];
+    [self generateData];
     [self.tableView reloadData];
 }
 

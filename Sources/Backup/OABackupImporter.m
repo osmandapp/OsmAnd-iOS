@@ -153,7 +153,8 @@
         _listener = listener;
         _backupHelper = OABackupHelper.sharedInstance;
         _queue = [[NSOperationQueue alloc] init];
-        
+        _queue.maxConcurrentOperationCount = 10;
+
         _tmpFilesDir = NSTemporaryDirectory();
         _tmpFilesDir = [_tmpFilesDir stringByAppendingPathComponent:@"backupTmp"];
     }
@@ -226,8 +227,8 @@
         }
         if (item != nil)
         {
-            if (!item.shouldReadOnCollecting || forceReadData)
-                [tasks addObject:[[OAItemFileImportTask alloc] initWithRemoteFile:remoteFile item:item importer:self forceReadData:forceReadData]];
+            if (forceReadData)
+                [tasks addObject:[[OAItemFileImportTask alloc] initWithRemoteFile:remoteFile item:item importer:self forceReadData:true]];
             else
                 [_backupHelper updateFileUploadTime:remoteFile.type fileName:remoteFile.name uploadTime:remoteFile.clienttimems];
         }
@@ -390,36 +391,6 @@
         [self updateFilesInfo:remoteItemFilesMap settingsItemList:settingsItemList];
         [items addObjectsFromArray:settingsItemList];
         [operationLog log:@"updateFilesInfo"];
-        
-        if (readItems)
-        {
-            NSMutableDictionary<OARemoteFile *, OASettingsItemReader *> *remoteFilesForRead = [NSMutableDictionary dictionary];
-            for (OASettingsItem *item in settingsItemList)
-            {
-                if (item.shouldReadOnCollecting)
-                {
-                    NSArray<OARemoteFile *> *foundRemoteFiles = [self getItemRemoteFiles:item remoteFiles:remoteItemFilesMap];
-                    for (OARemoteFile *remoteFile in foundRemoteFiles)
-                    {
-                        OASettingsItemReader *reader = item.getReader;
-                        if (reader != nil)
-                        {
-                            remoteFilesForRead[remoteFile] = reader;
-                        }
-                    }
-                }
-            }
-            NSMutableDictionary<NSString *, OARemoteFile *> *remoteFilesForDownload = [NSMutableDictionary dictionary];
-            for (OARemoteFile *remoteFile in remoteFilesForRead.allKeys)
-            {
-                NSString *fileName = remoteFile.getTypeNamePath;
-                remoteFilesForDownload[[_tmpFilesDir stringByAppendingPathComponent:fileName]] = remoteFile;
-            }
-            if (remoteFilesForDownload.count > 0)
-                [self downloadAndReadItemFiles:remoteFilesForRead remoteFilesForDownload:remoteFilesForDownload];
-
-            [operationLog log:@"readItems"];
-        }
         [operationLog finishOperation];
     }
     @catch (NSException *e)
@@ -605,53 +576,6 @@
         }
     }
     return hasError;
-}
-
-- (void) downloadAndReadItemFiles:(NSDictionary<OARemoteFile *, OASettingsItemReader *> *)remoteFilesForRead
-           remoteFilesForDownload:(NSDictionary<NSString *, OARemoteFile *> *)remoteFilesForDownload
-{
-    NSMutableArray<OAFileDownloadTask *> *fileDownloadTasks = [NSMutableArray array];
-    __weak OABackupImporter *weakSelf = self;
-    [remoteFilesForDownload enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, OARemoteFile * _Nonnull obj, BOOL * _Nonnull stop) {
-        [fileDownloadTasks addObject:[[OAFileDownloadTask alloc] initWithFilePath:key remoteFile:obj onDownloadFileListener:weakSelf]];
-    }];
-    [_queue addOperations:fileDownloadTasks waitUntilFinished:YES];
-    
-    BOOL hasDownloadErrors = [self hasDownloadErrors:fileDownloadTasks];
-    if (!hasDownloadErrors)
-    {
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSMutableArray<OAItemFileDownloadTask *> *itemFileDownloadTasks = [NSMutableArray array];
-        [remoteFilesForDownload enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull tempFile, OARemoteFile * _Nonnull remoteFile, BOOL * _Nonnull stop) {
-            if ([fileManager fileExistsAtPath:tempFile])
-            {
-                OASettingsItemReader *reader = remoteFilesForRead[remoteFile];
-                if (reader)
-                {
-                    [itemFileDownloadTasks addObject:[[OAItemFileDownloadTask alloc] initWithFilePath:tempFile reader:reader]];
-                }
-                else
-                {
-                    @throw [NSException exceptionWithName:@"IOException" reason:[@"No reader for: " stringByAppendingString:tempFile.lastPathComponent] userInfo:nil];
-                }
-            }
-            else
-            {
-                @throw [NSException exceptionWithName:@"IOException" reason:[@"No temp item file: " stringByAppendingString:tempFile.lastPathComponent] userInfo:nil];
-            }
-        }];
-        
-        [_queue addOperations:itemFileDownloadTasks waitUntilFinished:YES];
-    }
-    NSFileManager *fileManager = NSFileManager.defaultManager;
-    [remoteFilesForDownload enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull tempFile, OARemoteFile * _Nonnull remoteFile, BOOL * _Nonnull stop) {
-        if ([fileManager fileExistsAtPath:tempFile])
-            [fileManager removeItemAtPath:tempFile error:nil];
-    }];
-    if (hasDownloadErrors)
-    {
-        @throw [NSException exceptionWithName:@"IOException" reason:@"Error downloading temp item files" userInfo:nil];
-    }
 }
 
 // MARK: OAOnDownloadFileListener

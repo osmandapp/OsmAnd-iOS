@@ -220,7 +220,7 @@
 "prch_failed" = "Не вдалося придбати «%@»";
 "prch_items_failed" = "об'єкти не були відновлені. Спробуйте ще раз.";
 // Resources
-"res_mapsres" = "Мапи та ресурси";
+"res_mapsres" = "Мапи й ресурси";
 "download_tab_local" = "Локальні";
 "res_search_world" = "Шукати по всьому світу";
 "res_region_map" = "Мапа області";
@@ -2039,9 +2039,6 @@
 "added_profiles" = "Додані профілі";
 "suggested_maps_descr" = "Ці мапи потрібні для роботи плагіна.";
 "suggested_maps" = "Пропоновані мапи";
-"open_place_reviews_plugin_description" = "Зробіть свій внесок у проєкт OpenPlaceReviews, наприклад, світлини, відгуки або посилання на громадські місця, такі як ресторани, готелі або музеї.\n\nІнструкції про те, як зробити свій внесок, можна знайти на нашому вебсайті https://osmand.net/docs/user/plugins/openplacereviews .";
-"product_desc_openplacereviews" = "Поділіться своєю думкою про громадські місця";
-"open_place_reviews" = "OpenPlaceReviews";
 "plugin_mapillary_descr" = "Зображення вулиць. Ви також можете зробити внесок самостійно. Щоб переглянути наявні дані у вигляді шару мапи, увімкніть параметр «Зображення вулиць» в меню «Налаштувати мапу».";
 "product_desc_mapillary" = "Огляд вулиць для ознайомлення з місцевістю";
 "shared_string_turn_off" = "Вимкнути";

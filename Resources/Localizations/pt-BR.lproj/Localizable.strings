@@ -2030,9 +2030,6 @@
 "added_profiles" = "Perfis adicionados";
 "suggested_maps_descr" = "Esses mapas são necessários para o complemento.";
 "suggested_maps" = "Mapas sugeridos";
-"open_place_reviews_plugin_description" = "Faça contribuições para o projeto OpenPlaceReviews, como fotos, comentários ou hiperligações para locais públicos, como restaurantes, hotéis ou museus.\n\nVeja as instruções sobre como contribuir em https://osmand.net/docs/user/plugins/openplacereviews .";
-"product_desc_openplacereviews" = "Compartilhe sua opinião sobre lugares públicos";
-"open_place_reviews" = "OpenPlaceReviews";
 "plugin_mapillary_descr" = "Imagens de vistas no nível da rua. Você também pode contribuir com si mesmo. Para ver os dados existentes como uma camada de mapa, ligue \"imagens no nível da rua\" no menu \"configure mapa\".";
 "product_desc_mapillary" = "Vistas no nível da rua para conferir os arredores";
 "shared_string_turn_off" = "Desligar";
@@ -3012,3 +3009,28 @@
 "free_favorites_backup" = "Backup gratuito de favoritos";
 "get_osmand_cloud" = "Obter OsmAnd Cloud";
 "banner_payment_free_backup_settings_title" = "Backup gratuito das configurações";
+"click_on_widget" = "Clique no widget";
+"shared_string_cache" = "Cache";
+"map_widget_target_distance_desc" = "Mostra a distância entre a câmera e o local de destino.";
+"purchases_feature_relief_3d_description" = "Possuir e observar a maquete do seu bairro ou de todo o continente.";
+"weather_update_disabled" = "Desativado";
+"map_widget_camera_tilt_desc" = "Mostra o ângulo de inclinação da câmera no modo perspectiva. O padrão é 90° (sem inclinação).";
+"terrain_3D_maps" = "Mapas de terreno";
+"average_speed_skip_stops" = "Faça paradas em consideração";
+"shared_string_relief_3d" = "Relevo 3D";
+"average_speed_time_interval_desc" = "Especifique o intervalo de tempo para a média de velocidade.";
+"map_widget_zoom_level_desc" = "Mostra o nível de zoom do mapa atual.";
+"unsaved_changes" = "Mudanças não salvas";
+
+
+// Shared Strings
+"shared_string_discard" = "Descartar";
+"map_widget_camera_distance_desc" = "Mostra a elevação da câmera acima do nível da superfície.";
+"map_settings_topography" = "Curvas de nível";
+"specify_number_of_dir_indicators_desc" = "Especifique o número de indicadores de direção.";
+"weather_update_over_any_network" = "Em qualquer rede";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "Mostra as coordenadas geográficas do centro do mapa atual";
+"map_marker_interval_dialog_desc" = "Especifique o intervalo de tempo para o qual a velocidade média será medida para calcular o tempo estimado de chegada.";
+"map_widget_rendering_fps_desc" = "Mostra a rapidez com que o mapa e os elementos do mapa são exibidos e atualizados, expressos em quadros por segundo (FPS).";

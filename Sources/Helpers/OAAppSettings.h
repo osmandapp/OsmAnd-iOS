@@ -73,8 +73,8 @@ typedef NS_ENUM(NSInteger, EOAMap3DModeVisibility)
 
 typedef NS_ENUM(NSInteger, EOASunriseSunsetMode)
 {
-    EOASunriseSunsetTimeLeft = 0,
-    EOASunriseSunsetNext
+    EOASunriseSunsetNext = 0,
+    EOASunriseSunsetTimeLeft = 1
 };
 
 typedef NS_ENUM(NSInteger, EOARouteService)

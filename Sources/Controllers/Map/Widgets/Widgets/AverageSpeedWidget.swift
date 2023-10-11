@@ -10,10 +10,9 @@ import Foundation
 
 @objc(OAAverageSpeedWidget)
 @objcMembers
-class AverageSpeedWidget: OATextInfoWidget {
-    
-    private static let MEASURED_INTERVAL_PREF_ID = "average_speed_measured_interval_millis"
-    private static let SKIP_STOPS_PREF_ID = "average_speed_skip_stops"
+final class AverageSpeedWidget: OATextInfoWidget {
+    static let MEASURED_INTERVAL_PREF_ID = "average_speed_measured_interval_millis"
+    static let SKIP_STOPS_PREF_ID = "average_speed_skip_stops"
     
     private static let UPDATE_INTERVAL_MILLIS = 1000
     private static let DASH = "—"
@@ -26,9 +25,9 @@ class AverageSpeedWidget: OATextInfoWidget {
 
     private var lastUpdateTime = 0
 
-    private var availableIntervals: [Int: String] = getAvailableIntervals()
+    private static var availableIntervals: [Int: String] = getAvailableIntervals()
 
-    convenience init(customId: String?) {
+    convenience init(customId: String?, widgetParams: [String: Any]? = nil) {
         self.init(frame: .zero)
         
         widgetType = .averageSpeed
@@ -38,6 +37,15 @@ class AverageSpeedWidget: OATextInfoWidget {
         self.customId = customId
         measuredIntervalPref = Self.registerMeasuredIntervalPref(customId)
         skipStopsPref = Self.registerSkipStopsPref(customId)
+        
+        if let widgetParams, let mode = widgetParams["selectedAppMode"] as? OAApplicationMode {
+            if let param = widgetParams[Self.MEASURED_INTERVAL_PREF_ID] as? String, let interval = Int(param)  {
+                measuredIntervalPref.set(interval, mode: mode)
+            }
+            if let skipStop = widgetParams[Self.SKIP_STOPS_PREF_ID] as? Bool {
+                skipStopsPref.set(skipStop, mode: mode)
+            }
+        }
     }
     
     override init(frame: CGRect) {
@@ -85,15 +93,15 @@ class AverageSpeedWidget: OATextInfoWidget {
         settingRow.cellType = OAValueTableViewCell.getIdentifier()
         settingRow.key = "value_pref"
         settingRow.title = localizedString("shared_string_interval")
-        settingRow.iconName = nil // TODO
-        settingRow.descr = localizedString("average_speed_time_interval_desc")
-        settingRow.setObj(getIntervalTitle(measuredIntervalPref.get(appMode)), forKey: "value")
+        settingRow.descr = localizedString("shared_string_interval")
+        settingRow.setObj(measuredIntervalPref, forKey: "pref")
+        settingRow.setObj(Self.getIntervalTitle(measuredIntervalPref.get(appMode)), forKey: "value")
         settingRow.setObj(getPossibleValues(measuredIntervalPref), forKey: "possible_values")
+        settingRow.setObj(localizedString("average_speed_time_interval_desc"), forKey: "footer")
 
         let compassRow = section.createNewRow()
         compassRow.cellType = OASwitchTableViewCell.getIdentifier()
         compassRow.title = localizedString("average_speed_skip_stops")
-        compassRow.iconName = nil // TODO
         compassRow.setObj(skipStopsPref, forKey: "pref")
 
         return data
@@ -101,18 +109,16 @@ class AverageSpeedWidget: OATextInfoWidget {
 
     private func getPossibleValues(_ pref: OACommonPreference) -> [OATableRowData] {
         var rows = [OATableRowData]()
-        for interval in availableIntervals.keys.sorted(by: { $0 < $1 }) {
-            let row = OATableRowData()
-            row.cellType = OASimpleTableViewCell.getIdentifier()
-            row.setObj(interval, forKey: "value")
-            row.setObj(pref, forKey: "pref")
-            row.title = availableIntervals[interval]
-            rows.append(row)
-        }
+        let valuesRow = OATableRowData()
+        valuesRow.key = "values"
+        valuesRow.cellType = OASegmentSliderTableViewCell.getIdentifier()
+        valuesRow.title = localizedString("shared_string_interval")
+        valuesRow.setObj(Self.availableIntervals, forKey: "values")
+        rows.append(valuesRow)
         return rows
     }
 
-    private func getIntervalTitle(_ intervalValue: Int) -> String {
+    static func getIntervalTitle(_ intervalValue: Int) -> String {
         return availableIntervals[intervalValue] ?? "-"
     }
 
@@ -122,7 +128,7 @@ class AverageSpeedWidget: OATextInfoWidget {
             let interval = intervalNum.intValue
             let seconds = interval < 60 * 1000
             let timeInterval = seconds ? String(interval / 1000) : String(interval / 1000 / 60)
-            let timeUnit = interval < 60 * 1000 ? localizedString("shared_string_sec") : localizedString("short_min")
+            let timeUnit = interval < 60 * 1000 ? localizedString("shared_string_sec") : localizedString("int_min")
             let formattedInterval = String(format: localizedString("ltr_or_rtl_combine_via_space"), arguments: [timeInterval, timeUnit])
             intervals[interval] = formattedInterval
         }

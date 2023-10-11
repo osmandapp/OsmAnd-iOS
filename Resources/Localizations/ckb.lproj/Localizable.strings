@@ -1736,10 +1736,6 @@
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Online street-level photos for everyone. Discover places, collaborate, capture the world.";
 
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"open_place_reviews_plugin_description" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
-
 "debugging_and_development" = "OsmAnd development";
 "product_desc_development" = "Settings for development and debugging features";
 "osmand_development_plugin_description" = "Settings for development and debugging features, like navigation simulation, rendering performance, or voice prompting. Intended for developers, not needed for normal app use.";

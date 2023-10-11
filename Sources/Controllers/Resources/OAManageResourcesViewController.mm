@@ -43,6 +43,7 @@
 #import "OASearchUICore.h"
 #import "OAOsmandDevelopmentPlugin.h"
 #import "OAWikipediaPlugin.h"
+#import "OAButtonTableViewCell.h"
 
 #include <OsmAndCore/WorldRegions.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
@@ -851,7 +852,6 @@ static BOOL _repositoryUpdated = NO;
     NSMutableArray<OAResourceItem *> *srtmResourcesArray = [NSMutableArray array];
 
     OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *) [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
-    BOOL heightmapEnabled = plugin && [plugin isHeightmapEnabled];
     for (const auto& resource_ : regionResources.allResources)
     {
         OAResourceItem *item_ = [self collectSubregionItem:region regionResources:regionResources resource:resource_];
@@ -1276,6 +1276,7 @@ static BOOL _repositoryUpdated = NO;
     [_localResourceItems sortUsingComparator:self.resourceItemsComparator];
     [_localRegionMapItems sortUsingComparator:self.resourceItemsComparator];
     [_localTravelItems sortUsingComparator:self.resourceItemsComparator];
+    [_localTerrainMapSources sortUsingComparator:self.resourceItemsComparator];
     
     for (OAResourceItem *item in _regionMapItems)
     {
@@ -2265,11 +2266,8 @@ static BOOL _repositoryUpdated = NO;
         }
         else if (indexPath.section == _downloadDescriptionSection)
         {
-            if (indexPath.row == 0)
-            {
-                cellTypeId = [OATextMultilineTableViewCell getCellIdentifier];
-                title = nil;
-            }
+            cellTypeId = indexPath.row == 0 ? [OATextMultilineTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier];
+            title = nil;
         }
         else if (indexPath.section == _otherMapsSection)
         {
@@ -2638,6 +2636,19 @@ static BOOL _repositoryUpdated = NO;
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
         }
+        else if ([cellTypeId isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            OAButtonTableViewCell *buttonCell = (OAButtonTableViewCell *) nib[0];
+            cell = buttonCell;
+            buttonCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [buttonCell leftIconVisibility:NO];
+            [buttonCell titleVisibility:NO];
+            [buttonCell descriptionVisibility:NO];
+            buttonCell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            [buttonCell setCustomLeftSeparatorInset:YES];
+            buttonCell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
+        }
         else if ([cellTypeId isEqualToString:repositoryResourceCell])
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
@@ -2883,7 +2894,22 @@ static BOOL _repositoryUpdated = NO;
         textViewCell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
         [textViewCell.textView sizeToFit];
     }
+    else if ([cellTypeId isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
+    {
+        OAButtonTableViewCell *buttonCell = (OAButtonTableViewCell *) cell;
+        [buttonCell.button setTitle:_downloadDescriptionInfo.getActionButtons[indexPath.row - 1].name forState:UIControlStateNormal];
+        [buttonCell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
+        [buttonCell.button addTarget:self action:@selector(downloadDescriptionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        buttonCell.button.tag = indexPath.row;
+    }
     return cell;
+}
+
+- (void) downloadDescriptionButtonPressed:(id)sender
+{
+    UIButton *button = sender;
+    if (button.tag > 0)
+        [self openUrlforIndex:button.tag - 1];
 }
 
 - (void) accessoryButtonPressed:(UIControl *)button withEvent:(UIEvent *)event

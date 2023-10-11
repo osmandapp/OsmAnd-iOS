@@ -127,6 +127,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
     NSIndexPath *_routingInfoIndexPath;
     NSString *_emission;
+    BOOL _closePressed;
 }
 
 - (instancetype) init
@@ -955,6 +956,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (IBAction) closePressed:(id)sender
 {
+    _closePressed = YES;
     [[OARootViewController instance].mapPanel stopNavigation];
 }
 
@@ -1187,10 +1189,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (_switched)
         [mapPanel switchToRouteFollowingLayout];
     
-    if (![_pointsHelper getPointToNavigate] && ![self isSelectingTargetOnMap] && !_optionsMenuSelected)
+    if (!_closePressed && ![_pointsHelper getPointToNavigate] && ![self isSelectingTargetOnMap] && !_optionsMenuSelected)
         [mapPanel.mapActions stopNavigationWithoutConfirm];
 
     [[OARootViewController instance].keyCommandUpdateObserver handleObservedEventFrom:nil withKey:kCommandNavigationScreenClose];
+    _closePressed = NO;
 }
 
 - (void) addWaypoint

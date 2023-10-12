@@ -116,9 +116,9 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem]! {
-        let button = createRightNavbarButton(localizedString("shared_string_options"), iconName: nil, action: #selector(onOptionsButtonClicked), menu: nil)
-        button?.accessibilityLabel = localizedString("shared_string_options")
-        return [button!]
+        let optionsButton = createRightNavbarButton(nil, iconName: "ic_navbar_overflow_menu_stroke", action: #selector(onOptionsButtonClicked), menu: nil)
+        optionsButton?.accessibilityLabel = localizedString("shared_string_options")
+        return [optionsButton!]
     }
     
     func populateData(resetData: Bool) {

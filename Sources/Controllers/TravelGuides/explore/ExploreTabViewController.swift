@@ -200,9 +200,9 @@ class ExploreTabViewController: OABaseNavbarViewController {
             if let cachedImage = cachedPreviewImages.get(url: iconName) {
                 if cachedImage.count != Data().count {
                     cell!.imagePreview.image = UIImage(data: cachedImage)
-                    cell?.imageVisibility(true)
+                    cell?.noImageIconVisibility(false)
                 } else {
-                    cell?.imageVisibility(false)
+                    cell?.noImageIconVisibility(true)
                 }
             } else {
                 DispatchQueue.global().async {
@@ -210,11 +210,11 @@ class ExploreTabViewController: OABaseNavbarViewController {
                         DispatchQueue.main.async {
                             self.cachedPreviewImages.set(url: iconName, imageData: data)
                             cell!.imagePreview.image = UIImage(data: data)
-                            cell?.imageVisibility(true)
+                            cell?.noImageIconVisibility(false)
                         }
                     } else {
                         self.cachedPreviewImages.set(url: iconName, imageData: Data())
-                        cell?.imageVisibility(false)
+                        cell?.noImageIconVisibility(true)
                     }
                 }
             }
@@ -294,15 +294,9 @@ class ExploreTabViewController: OABaseNavbarViewController {
             if cell == nil {
                 let nib = Bundle.main.loadNibNamed("ArticleTravelCell", owner: self, options: nil)
                 cell = nib?.first as? ArticleTravelCell
-                
+                cell?.imageVisibility(true)
                 cell!.imagePreview.contentMode = .scaleAspectFill
-                cell!.imagePreview.layer.cornerRadius = cell!.imagePreview.frame.width / 2
-                cell!.leftButtonIcon.image = UIImage.templateImageNamed("ic_custom_clear_list")
-                cell!.rightButtonIcon.image = UIImage.templateImageNamed("ic_custom_save_to_file")
-                cell!.leftButtonIcon.tintColor = UIColor(rgb: color_purple_border)
-                cell!.rightButtonIcon.tintColor = UIColor(rgb: color_purple_border)
-                cell!.leftButtonLabel.textColor = UIColor(rgb: color_purple_border)
-                cell!.rightButtonLabel.textColor = UIColor(rgb: color_purple_border)
+                cell!.imagePreview.layer.cornerRadius = 11
             }
             cell!.tabViewDelegate = tabViewDelegate
             cell!.article = item.obj(forKey: "article") as? TravelArticle
@@ -311,15 +305,12 @@ class ExploreTabViewController: OABaseNavbarViewController {
             cell!.arcticleTitle.text = item.title
             cell!.arcticleDescription.text = item.descr
             cell!.regionLabel.text = item.string(forKey: "isPartOf")
-            
-            cell!.leftButtonLabel.text = localizedString("shared_string_read")
-            cell!.rightButtonLabel.text = localizedString("shared_string_bookmark")
-            
+
             cell?.imageVisibility(true)
             if let iconName = item.iconName {
                 startAsyncImageDownloading(iconName, cell)
             } else {
-                cell?.imageVisibility(false)
+                cell?.noImageIconVisibility(true)
             }
             cell?.updateSaveButton()
             
@@ -356,6 +347,19 @@ class ExploreTabViewController: OABaseNavbarViewController {
             }
             
             outCell = cell
+        } else if item.cellType == OATitleDescriptionBigIconCell.getIdentifier() {
+            var cell = tableView.dequeueReusableCell(withIdentifier: OATitleDescriptionBigIconCell.getIdentifier()) as? OATitleDescriptionBigIconCell
+            if cell == nil {
+                let nib = Bundle.main.loadNibNamed("OATitleDescriptionBigIconCell", owner: self, options: nil)
+                cell = nib?.first as? OATitleDescriptionBigIconCell
+                cell?.showLeftIcon(false)
+                cell?.showRightIcon(true)
+                cell?.rightIconView.layer.cornerRadius = 5
+            }
+            if let cell {
+                cell.titleView.text = item.title
+                cell.descriptionView.text = item.descr
+            }
         }
         
         return outCell

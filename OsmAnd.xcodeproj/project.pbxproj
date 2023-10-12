@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -477,6 +477,8 @@
 		32C91E5F25A86A5700FA6470 /* ic_custom_compass_widget@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */; };
 		32C91E6525A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5A25A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png */; };
 		32CA48C02A5D50E900DE76FD /* Geomagnetism.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CA48BF2A5D50E900DE76FD /* Geomagnetism.swift */; };
+		32CCE2972AD81AF100AAADFA /* SearchTravelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32CCE2962AD81AF100AAADFA /* SearchTravelCell.xib */; };
+		32CCE2992AD81AFE00AAADFA /* SearchTravelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CCE2982AD81AFE00AAADFA /* SearchTravelCell.swift */; };
 		32D253AD27F336C100324717 /* OACloudAccountVerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D253A027F336BF00324717 /* OACloudAccountVerificationViewController.m */; };
 		32D253AE27F336C100324717 /* OACloudBackupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32D253A127F336BF00324717 /* OACloudBackupViewController.xib */; };
 		32D253AF27F336C100324717 /* OABaseCloudBackupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D253A227F336BF00324717 /* OABaseCloudBackupViewController.m */; };
@@ -4251,6 +4253,8 @@
 		32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget@2x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget@2x.png"; sourceTree = "<group>"; };
 		32C91E5A25A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget_hide@2x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget_hide@2x.png"; sourceTree = "<group>"; };
 		32CA48BF2A5D50E900DE76FD /* Geomagnetism.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geomagnetism.swift; sourceTree = "<group>"; };
+		32CCE2962AD81AF100AAADFA /* SearchTravelCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchTravelCell.xib; sourceTree = "<group>"; };
+		32CCE2982AD81AFE00AAADFA /* SearchTravelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTravelCell.swift; sourceTree = "<group>"; };
 		32D2539D27F336BE00324717 /* OACloudBackupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACloudBackupViewController.h; sourceTree = "<group>"; };
 		32D2539E27F336BF00324717 /* OACloudAccountLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACloudAccountLoginViewController.h; sourceTree = "<group>"; };
 		32D2539F27F336BF00324717 /* OACloudAccountVerificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACloudAccountVerificationViewController.h; sourceTree = "<group>"; };
@@ -8734,6 +8738,8 @@
 		32E1EAA02AB87B7200CE13B6 /* search */ = {
 			isa = PBXGroup;
 			children = (
+				32CCE2962AD81AF100AAADFA /* SearchTravelCell.xib */,
+				32CCE2982AD81AFE00AAADFA /* SearchTravelCell.swift */,
 				32E1EAA12AB87BA100CE13B6 /* TravelSearchDialogViewController.swift */,
 				32E6C7C72AB9BE1A00821F1E /* TravelSearchHelper.swift */,
 			);
@@ -16132,6 +16138,7 @@
 				DAB854CA23058218002566A6 /* ic_custom_poi@3x.png in Resources */,
 				3AC639F81A220A96001D5E57 /* icon_remove@2x.png in Resources */,
 				46AEDB8F27F4ABE2006D90E8 /* ic_custom_air_pressure@2x.png in Resources */,
+				32CCE2972AD81AF100AAADFA /* SearchTravelCell.xib in Resources */,
 				DAF3456522F4482B009E2EB6 /* ic_custom_osm_note_unresolved@3x.png in Resources */,
 				DAC849BA26CFAD9900018091 /* img_download_map_colored@3x.png in Resources */,
 				DA71B7E0214B9F4A00FE8B7E /* navigation.html in Resources */,
@@ -18496,6 +18503,7 @@
 				DA5A84A426C563A900F274C7 /* OAJoinPointsCommand.mm in Sources */,
 				DA5A815726C563A700F274C7 /* OANauticalMapsPlugin.m in Sources */,
 				DA5A83FB26C563A800F274C7 /* OAPOIFilterViewController.mm in Sources */,
+				32CCE2992AD81AFE00AAADFA /* SearchTravelCell.swift in Sources */,
 				C56FAB5129B226C60096192F /* OACameraDistanceWidget.mm in Sources */,
 				DA5A846226C563A900F274C7 /* OAFavoritesLayer.mm in Sources */,
 				DA5A81A526C563A700F274C7 /* OASearchWord.mm in Sources */,

@@ -16,14 +16,9 @@ class ArticleTravelCell: UITableViewCell {
     @IBOutlet weak var regionLabel: UILabel!
     
     @IBOutlet weak var imagePreview: UIImageView!
+    @IBOutlet weak var noImageIcon: UIImageView!
     
-    @IBOutlet weak var leftButton: UIButton!
-    @IBOutlet weak var leftButtonLabel: UILabel!
-    @IBOutlet weak var leftButtonIcon: UIImageView!
-    
-    @IBOutlet weak var rightButton: UIButton!
-    @IBOutlet weak var rightButtonLabel: UILabel!
-    @IBOutlet weak var rightButtonIcon: UIImageView!
+    @IBOutlet weak var bookmarkIcon: UIImageView!
     
     weak var tabViewDelegate: TravelExploreViewControllerDelegate?
     var article: TravelArticle?
@@ -38,26 +33,15 @@ class ArticleTravelCell: UITableViewCell {
         imagePreview.isHidden = !show
     }
     
+    func noImageIconVisibility(_ show: Bool) {
+        noImageIcon.isHidden = !show
+    }
+    
     func updateSaveButton() {
         DispatchQueue.main.async {
             let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: self.article!)
-            let color = isSaved ? UIColor(rgb: color_purple_border) : UIColor(rgb: color_slider_gray)
-            self.rightButtonLabel.textColor = color
-            self.rightButtonIcon.tintColor = color
+            self.bookmarkIcon.image = isSaved ? UIImage.templateImageNamed("ic_custom20_bookmark") : nil
         }
     }
-    
-    @IBAction func leftButtonTapped(_ sender: Any) {
-        if tabViewDelegate != nil && article != nil && articleLang != nil {
-            tabViewDelegate!.openArticle(article: article!, lang: articleLang!)
-        }
-    }
-    
-    @IBAction func rightButtonTapped(_ sender: Any) {
-        let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: article!)
-        TravelObfHelper.shared.saveOrRemoveArticle(article: article!, save: !isSaved)
-        updateSaveButton()
-    }
-    
 
 }

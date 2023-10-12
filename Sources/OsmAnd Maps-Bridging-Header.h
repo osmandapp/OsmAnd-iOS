@@ -102,6 +102,7 @@
 #import "OASelectionCollapsableCell.h"
 #import "OAButtonTableViewCell.h"
 #import "OAGpxStatBlockCollectionViewCell.h"
+#import "OATitleDescriptionBigIconCell.h"
 
 // Other
 #import "OAIndexConstants.h"

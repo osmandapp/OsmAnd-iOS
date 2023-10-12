@@ -80,27 +80,14 @@ class TravelSearchDialogViewController : OABaseNavbarViewController, UITextField
             section.headerText = localizedString("shared_string_result")
             for item in searchResults {
                 let resultRow = section.createNewRow()
-                resultRow.cellType = OAValueTableViewCell.getIdentifier()
+                resultRow.cellType = SearchTravelCell.getIdentifier()
                 resultRow.title = item.getArticleTitle()
                 resultRow.descr = item.isPartOf
                 resultRow.setObj(item.articleId, forKey: "articleId")
                 
-                
+                resultRow.setObj("ic_custom_photo", forKey: "noImageIcon")
                 if (item.imageTitle != nil && item.imageTitle!.length > 0) {
                     resultRow.iconName = TravelArticle.getImageUrl(imageTitle: item.imageTitle ?? "", thumbnail: true)
-                }
-                
-                if let langs = item.langs  {
-                    var langsString = ""
-                    for i in 0..<3 {
-                        if langs.count > i {
-                            langsString += langs[i].capitalized + ", "
-                        }
-                    }
-                    if langsString.hasPrefix(", ") {
-                        langsString = langsString.substring(to: langsString.count - 2)
-                    }
-                    resultRow.setObj(langsString, forKey: "langs")
                 }
             }
             
@@ -111,12 +98,10 @@ class TravelSearchDialogViewController : OABaseNavbarViewController, UITextField
             let historyItems = TravelObfHelper.shared.getBookmarksHelper().getAllHistory()
             for item in historyItems.reversed() {
                 let resultRow = section.createNewRow()
-                resultRow.cellType = OAValueTableViewCell.getIdentifier()
+                resultRow.cellType = SearchTravelCell.getIdentifier()
                 resultRow.title = item.articleTitle
                 resultRow.descr = item.isPartOf
-//                resultRow.setObj(item.lang, forKey: "langs")
-//                resultRow.setObj(item., forKey: "articleId")
-//                resultRow.iconName = TravelArticle.getImageUrl(imageTitle: item.imageTitle ?? "", thumbnail: true)
+                resultRow.setObj("ic_custom_history", forKey: "noImageIcon")
             }
         }
         
@@ -126,26 +111,26 @@ class TravelSearchDialogViewController : OABaseNavbarViewController, UITextField
     
     //MARK: Actions
     
-    private func startAsyncImageDownloading(_ iconName: String, _ cell: OAValueTableViewCell) {
+    private func startAsyncImageDownloading(_ iconName: String, _ cell: SearchTravelCell) {
         if let imageUrl = URL(string: iconName) {
             if let cachedImage = cachedPreviewImages.get(url: iconName) {
                 if cachedImage.count != Data().count {
-                    cell.leftIconView.image = UIImage(data: cachedImage)
-                    cell.leftIconVisibility(true)
+                    cell.imagePreview.image = UIImage(data: cachedImage)
+                    cell.noImageIcon.isHidden = true
                 } else {
-                    cell.leftIconVisibility(false)
+                    cell.noImageIcon.isHidden = false
                 }
             } else {
                 DispatchQueue.global().async {
-                    if let data = try? Data(contentsOf: imageUrl) {
-                        DispatchQueue.main.async {
+                    DispatchQueue.main.async {
+                        if let data = try? Data(contentsOf: imageUrl) {
                             self.cachedPreviewImages.set(url: iconName, imageData: data)
-                            cell.leftIconView.image = UIImage(data: data)
-                            cell.leftIconVisibility(true)
+                            cell.imagePreview.image = UIImage(data: data)
+                            cell.noImageIcon.isHidden = true
+                        } else {
+                            self.cachedPreviewImages.set(url: iconName, imageData: Data())
+                            cell.noImageIcon.isHidden = false
                         }
-                    } else {
-                        self.cachedPreviewImages.set(url: iconName, imageData: Data())
-                        cell.leftIconVisibility(false)
                     }
                 }
             }
@@ -178,30 +163,28 @@ class TravelSearchDialogViewController : OABaseNavbarViewController, UITextField
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let item = tableData.item(for: indexPath)
         var outCell: UITableViewCell? = nil
-        if item.cellType == OAValueTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.getIdentifier()) as? OAValueTableViewCell
+        if item.cellType == SearchTravelCell.getIdentifier() {
+            var cell = tableView.dequeueReusableCell(withIdentifier: SearchTravelCell.getIdentifier()) as? SearchTravelCell
             if cell == nil {
-                let nib = Bundle.main.loadNibNamed("OAValueTableViewCell", owner: self, options: nil)
-                cell = nib?.first as? OAValueTableViewCell
-                cell?.descriptionVisibility(true)
-                cell?.leftIconView.contentMode = .scaleAspectFill
-                cell?.leftIconView.layer.cornerRadius = cell!.leftIconView.frame.width / 2
+                let nib = Bundle.main.loadNibNamed("SearchTravelCell", owner: self, options: nil)
+                cell = nib?.first as? SearchTravelCell
+                cell?.imagePreview.layer.cornerRadius = 5
             }
             if let cell {
-                cell.valueLabel.text = item.title
-                cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-                cell.leftIconView.tintColor = UIColor(rgb: item.iconTint)
                 cell.titleLabel.text = item.title
                 cell.descriptionLabel.text = item.descr
-                cell.valueLabel.text = item.string(forKey: "langs")
+                
+                if let noImageIconName = item.string(forKey: "noImageIcon") {
+                    cell.noImageIcon.image = UIImage.templateImageNamed(noImageIconName)
+                }
+
                 if let iconName = item.iconName {
-                    cell.leftIconVisibility(true)
                     startAsyncImageDownloading(iconName, cell)
                 } else {
-                    cell.leftIconVisibility(false)
+                    cell.noImageIcon.isHidden = false
                 }
-                outCell = cell
             }
+            outCell = cell
         }
         
         return outCell;
@@ -209,7 +192,7 @@ class TravelSearchDialogViewController : OABaseNavbarViewController, UITextField
     
     override func onRowSelected(_ indexPath: IndexPath!) {
         let item = tableData.item(for: indexPath)
-        if item.cellType == OAValueTableViewCell.getIdentifier() {
+        if item.cellType == SearchTravelCell.getIdentifier() {
             var articleId = item.obj(forKey: "articleId") as? TravelArticleIdentifier
             if articleId == nil {
                 articleId = TravelObfHelper.shared.getArticleId(title: item.title ?? "", lang: lang)

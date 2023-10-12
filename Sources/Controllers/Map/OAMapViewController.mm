@@ -1249,7 +1249,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                                 _startZooming = YES;
 
                             if (_startZooming && zoom != 0)
-                                _mapView.zoom = qBound(_mapView.minZoom, _mapView.zoom + (float)zoom, _mapView.maxZoom);
+                                _mapView.flatZoom = qBound(_mapView.minZoom, _mapView.flatZoom + (float)zoom, _mapView.maxZoom);
                         }
                         else
                         {

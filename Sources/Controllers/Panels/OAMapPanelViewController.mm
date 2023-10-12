@@ -1864,43 +1864,11 @@ typedef enum
 
 - (void) addMapMarker:(double)lat lon:(double)lon description:(NSString *)descr
 {
-//    OADestination *destination = [[OADestination alloc] initWithDesc:descr latitude:lat longitude:lon];
-//    UIColor *color = [_destinationViewController addDestination:destination];
-//    if (color)
-//    {
-//        [_mapViewController hideContextPinMarker];
-//        [[OADestinationsHelper instance] moveDestinationOnTop:destination wasSelected:NO];
-//    }
-//    else
-//    {
-//        [self showDistinationAlert];
-//    }
-//    [_mapViewController hideContextPinMarker];
-//    [_destinationsHelper addDestinationWithNewColor:destination];
-//    [_destinationsHelper moveDestinationOnTop:destination wasSelected:NO];
+    OADestination *destination = [[OADestination alloc] initWithDesc:descr latitude:lat longitude:lon];
+    [_mapViewController hideContextPinMarker];
+    [_destinationsHelper addDestinationWithNewColor:destination];
+    [_destinationsHelper moveDestinationOnTop:destination wasSelected:NO];
 }
-
-//- (void) addMapMarker:(double)lat lon:(double)lon description:(NSString *)descr
-//{
-//    OADestination *destination = [[OADestination alloc] initWithDesc:descr latitude:lat longitude:lon];
-//<<<<<<< HEAD
-//
-//    UIColor *color = [_destinationViewController addDestination:destination];
-//    if (color)
-//    {
-//        [_mapViewController hideContextPinMarker];
-//        [[OADestinationsHelper instance] moveDestinationOnTop:destination wasSelected:NO];
-//    }
-//    else
-//    {
-//        [self showDistinationAlert];
-//    }
-//=======
-//    [_mapViewController hideContextPinMarker];
-//    [_destinationsHelper addDestinationWithNewColor:destination];
-//    [_destinationsHelper moveDestinationOnTop:destination wasSelected:NO];
-//>>>>>>> master
-//}
 
 - (void) targetPointDirection
 {

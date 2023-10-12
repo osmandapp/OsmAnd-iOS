@@ -17,6 +17,7 @@ class MapMarkerSideWidgetState: OAWidgetState {
     let markerClickBehaviourPref: OACommonString
     let averageSpeedIntervalPref: OACommonLong
     let firstMarker: Bool
+    static let availableIntervals: [Int: String] = getAvailableIntervals()
     
     init(customId: String?, firstMarker: Bool) {
         self.firstMarker = firstMarker
@@ -46,7 +47,7 @@ class MapMarkerSideWidgetState: OAWidgetState {
         if let customId, !customId.isEmpty {
             prefId += customId
         }
-        return settings.registerStringPreference(customId, defValue: MarkerClickBehaviour.switchMode.name)
+        return settings.registerStringPreference(prefId, defValue: MarkerClickBehaviour.switchMode.name)
     }
     
     override func getMenuTitle() -> String! {
@@ -72,6 +73,24 @@ class MapMarkerSideWidgetState: OAWidgetState {
     func isFirstMarker() -> Bool {
         return firstMarker
     }
+
+    private static func getAvailableIntervals() -> [Int: String] {
+        var intervals = [Int: String]()
+        for mInterval in OAAverageSpeedComputer.measured_INTERVALS() {
+            let interval = mInterval.intValue
+            let seconds = interval < 60 * 1000
+            let timeInterval = seconds
+                ? String(interval / 1000)
+                : String(interval / 1000 / 60)
+            let timeUnit = interval < 60 * 1000
+                ? localizedString("shared_string_sec")
+                : localizedString("int_min")
+            let formattedInterval = String(format: localizedString("ltr_or_rtl_combine_via_space"), timeInterval, timeUnit)
+            intervals[interval] = formattedInterval
+        }
+        return intervals
+    }
+
 }
 
 @objc(OASideMarkerMode)

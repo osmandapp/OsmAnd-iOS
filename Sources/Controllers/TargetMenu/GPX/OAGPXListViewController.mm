@@ -31,7 +31,7 @@
 #import "OAIndexConstants.h"
 #import "OsmAndApp.h"
 #import "OAOsmUploadGPXViewConroller.h"
-#import "OAValueTableViewCell.h"
+#import "OAPointHeaderTableViewCell.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -47,12 +47,10 @@
 #define KMZ_EXT @"kmz"
 
 #define kImportFolderName @"import"
+#define kactionsGrupId @"actionsGrup"
 
 #define kRecordTrackRow 0
 #define kRecordTrackSection 0
-#define kActionsSection 3
-#define kActionsImportRow 0
-#define kActionsNewTrackRow 1
 #define kGPXGroupHeaderRow 0
 #define kVisibleTracksWithoutRoutePlanningSection 1
 #define kRoutePlanningSection 1
@@ -61,6 +59,7 @@
     @property NSString *type;
     @property BOOL isOpen;
     @property NSString *groupName;
+    @property NSString *groupId;
     @property NSMutableArray *groupItems;
     @property NSString *groupIcon;
     @property BOOL isMenu;
@@ -110,11 +109,12 @@
     NSMutableArray<OAGpxInfo *> *_gpxList;
     NSMutableDictionary<NSString *, NSArray<OAGpxInfo *> *> *_gpxFolders;
     int _displayingTracksCount;
+    NSInteger _actionsGroupIndex;
     
     CALayer *_horizontalLine;
     
     BOOL _editActive;
-    NSArray *_visible;
+    NSArray<NSString *> *_visibleCurrentTracks;
     
     NSString *_importGpxPath;
     
@@ -441,10 +441,7 @@ static UIViewController *parentController;
     }
     [[OAGPXDatabase sharedDb] save];
     if (item.color != 0)
-    {
-        OAGPXAppearanceCollection *gpxAppearance = [OAGPXAppearanceCollection sharedInstance];
-        [gpxAppearance selectColor:[gpxAppearance getColorItemWithValue:item.color]];
-    }
+        [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:item.color];
 
     [OAUtilities denyAccessToFile:_importUrl.path removeFromInbox:YES];
 
@@ -552,6 +549,7 @@ static UIViewController *parentController;
     _selectedIndexPaths = [[NSMutableArray alloc] init];
     _selectedItems = [[NSMutableArray alloc] init];
     _gpxFolders = [NSMutableDictionary dictionary];
+    _visibleCurrentTracks = [NSArray arrayWithArray:[_settings.mapSettingVisibleGpx get]];
     
     _editToolbarView.hidden = YES;
     _horizontalLine = [CALayer layer];
@@ -623,6 +621,9 @@ static UIViewController *parentController;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     self.definesPresentationContext = NO;
+    
+    if (![_visibleCurrentTracks isEqualToArray:[_settings.mapSettingVisibleGpx get]])
+        [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
 }
 
 -(UIView *) getBottomView
@@ -716,9 +717,10 @@ static UIViewController *parentController;
     self.menuItems = [[NSArray alloc] init];
     NSMutableArray *tableData = [NSMutableArray array];
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-    _visible = _settings.mapSettingVisibleGpx.get;
+    NSArray<NSString *> *visible = _settings.mapSettingVisibleGpx.get;
     self.gpxList = [NSMutableArray arrayWithArray:db.gpxList];
     _displayingTracksCount = 0;
+    _actionsGroupIndex = -1;
     
     if (!_isSearchActive)
     {
@@ -759,7 +761,7 @@ static UIViewController *parentController;
         visibleGroup.header = @"";
         for (OAGPX *item in _gpxList)
         {
-            if ([_visible containsObject:item.gpxFilePath])
+            if ([visible containsObject:item.gpxFilePath])
             {
                 [visibleGroup.groupItems addObject:
                  @{
@@ -830,40 +832,79 @@ static UIViewController *parentController;
             [tableData addObject:tracksGroup];
         }
     }
-    if (!_isSearchActive)
+    if (!_isSearchActive && !_editActive)
     {
-        // Generate menu items
-        OAGpxTableGroup* actionsGroup = [[OAGpxTableGroup alloc] init];
-        actionsGroup.isMenu = YES;
-        actionsGroup.type = [OASimpleTableViewCell getCellIdentifier];
-        actionsGroup.header = OALocalizedString(@"shared_string_actions");
-        self.menuItems = @[@{@"type" : [OASimpleTableViewCell getCellIdentifier],
-                             @"key" : @"import_track",
-                             @"title": OALocalizedString(@"import_tracks"),
-                             @"icon": @"ic_custom_import",
-                             @"header" : OALocalizedString(@"shared_string_actions")},
-                           @{@"type" : [OASimpleTableViewCell getCellIdentifier],
-                             @"key" : @"create_new_trip",
-                             @"title": OALocalizedString(@"create_new_trip"),
-                             @"icon": @"ic_custom_trip.png"}];
-        actionsGroup.groupItems = [NSMutableArray arrayWithArray:self.menuItems];
-        
-        [tableData addObject:actionsGroup];
+        [self addActionsGrup:tableData];
     }
     _data = [NSMutableArray arrayWithArray:tableData];
 }
 
--(void) setupView {
+-(void) addActionsGrup:(NSMutableArray *)tableData
+{
+    // Generate menu items
+    OAGpxTableGroup* actionsGroup = [[OAGpxTableGroup alloc] init];
+    actionsGroup.isMenu = YES;
+    actionsGroup.groupId = kactionsGrupId;
+    actionsGroup.type = [OASimpleTableViewCell getCellIdentifier];
+    actionsGroup.header = OALocalizedString(@"shared_string_actions");
+    self.menuItems = @[@{@"type" : [OASimpleTableViewCell getCellIdentifier],
+                         @"key" : @"import_track",
+                         @"title": OALocalizedString(@"import_tracks"),
+                         @"icon": @"ic_custom_import",
+                         @"header" : OALocalizedString(@"shared_string_actions")},
+                       @{@"type" : [OASimpleTableViewCell getCellIdentifier],
+                         @"key" : @"create_new_trip",
+                         @"title": OALocalizedString(@"create_new_trip"),
+                         @"icon": @"ic_custom_trip.png"}];
+    actionsGroup.groupItems = [NSMutableArray arrayWithArray:self.menuItems];
     
+    [tableData addObject:actionsGroup];
+    _actionsGroupIndex = tableData.count - 1;
+}
+
+-(void) updateData
+{
+    NSMutableArray *mutableDataCopy = [NSMutableArray arrayWithArray:_data];
+    OAGpxTableGroup* groupActions = nil;
+    
+    for (OAGpxTableGroup *group in mutableDataCopy)
+    {
+        if ([group.groupId isEqualToString:kactionsGrupId])
+        {
+            groupActions = group;
+            break;
+        }
+    }
+    
+    if (!_isSearchActive)
+        [self manageGroup:groupActions inData:mutableDataCopy];
+    
+    _data = mutableDataCopy;
+}
+
+-(void) manageGroup:(OAGpxTableGroup *)groupActions inData:(NSMutableArray *)data
+{
+    if (groupActions && _editActive)
+    {
+        [data removeObject:groupActions];
+        _actionsGroupIndex = -1;
+    }
+    else if (!groupActions && !_editActive)
+    {
+        [self addActionsGrup:data];
+    }
+}
+
+-(void) setupView
+{
     [self.gpxTableView setDataSource:self];
     [self.gpxTableView setDelegate:self];
     self.gpxTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.gpxTableView reloadData];
-    self.gpxTableView.allowsMultipleSelectionDuringEditing = YES;
-    
 }
 
-- (void) didReceiveMemoryWarning {
+- (void) didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -919,6 +960,9 @@ static UIViewController *parentController;
     }];
     
     [self.gpxTableView setEditing:YES animated:YES];
+    [self updateData];
+    if (_actionsGroupIndex != -1)
+        [self.gpxTableView deleteSections:[NSIndexSet indexSetWithIndex:_actionsGroupIndex] withRowAnimation:UITableViewRowAnimationFade];
     [self.gpxTableView reloadData];
     [self updateHeaderLabels];
     [self updateButtons];
@@ -938,6 +982,9 @@ static UIViewController *parentController;
     [self.gpxTableView setEditing:NO animated:YES];
     [_selectedItems removeAllObjects];
     [_selectedIndexPaths removeAllObjects];
+    [self updateData];
+    if (_actionsGroupIndex != -1)
+        [self.gpxTableView insertSections:[NSIndexSet indexSetWithIndex:_actionsGroupIndex] withRowAnimation:UITableViewRowAnimationFade];
     [self updateHeaderLabels];
     [self updateButtons];
     [self updateRecButtonsAnimated];
@@ -1161,6 +1208,7 @@ static UIViewController *parentController;
         
         [self generateData];
         [self updateRecButtonsAnimated];
+        _actionsGroupIndex = -1;
         [self.gpxTableView reloadData];
         
         [self doneButtonClick:nil];
@@ -1269,11 +1317,12 @@ static UIViewController *parentController;
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OASimpleTableViewCell *) nib[0];
-                [cell leftIconVisibility:isImportCreateTrack];
                 [cell descriptionVisibility:NO];
             }
             if (cell)
             {
+                [cell leftIconVisibility:isImportCreateTrack];
+                
                 if (isImportCreateTrack)
                 {
                     cell.titleLabel.text = menuItem[@"title"];
@@ -1297,34 +1346,35 @@ static UIViewController *parentController;
     {
         if (indexPath.row == kGPXGroupHeaderRow && !_isSearchActive)
         {
-            OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+            OAPointHeaderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAPointHeaderTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
-                cell = (OAValueTableViewCell *) nib[0];
-                [cell descriptionVisibility:NO];
-                [cell valueVisibility:YES];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointHeaderTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OAPointHeaderTableViewCell *) nib[0];
+                cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
+                cell.folderIcon.tintColor = UIColorFromRGB(color_chart_orange);
+                cell.valueLabel.textColor = UIColorFromRGB(color_text_footer);
+                cell.arrowImage.tintColor = UIColorFromRGB(color_tint_gray);
             }
             if (cell)
             {
-                cell.titleLabel.text = item.groupName;
-                
-                cell.leftIconView.image = [UIImage templateImageNamed:item.groupIcon];
-                cell.leftIconView.tintColor = UIColorFromRGB(color_chart_orange);
+                cell.groupTitle.text = item.groupName;
+                cell.folderIcon.image = [UIImage templateImageNamed:item.groupIcon];
                 cell.valueLabel.text = [NSString stringWithFormat:@"%ld", item.groupItems.count];
-                cell.valueLabel.textColor = UIColorFromRGB(color_text_footer);
-                if (item.isOpen)
-                {
-                    cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_arrow_down"]];
-                }
+                
+                cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
+                [cell.openCloseGroupButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+                [cell.openCloseGroupButton addTarget:self action:@selector(openCloseGroupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+                
+                if ([self.gpxTableView isEditing])
+                    [cell.openCloseGroupButton setHidden:NO];
                 else
-                {
-                    UIImageView *icon = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_arrow_right"]];
-                    if ([cell isDirectionRTL])
-                        [icon setImage:icon.image.imageFlippedForRightToLeftLayoutDirection];
-                    cell.accessoryView = icon;
-                }
-                cell.accessoryView.tintColor = UIColorFromRGB(color_icon_inactive);
+                    [cell.openCloseGroupButton setHidden:YES];
+                
+                if (item.isOpen)
+                    cell.arrowImage.image = [UIImage templateImageNamed:@"ic_custom_arrow_down"];
+                else
+                    cell.arrowImage.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             }
             return cell;
         }
@@ -1444,11 +1494,6 @@ static UIViewController *parentController;
     {
         if (indexPath.section == kRecordTrackSection && indexPath.row == kRecordTrackRow)
             return;
-        if (indexPath.section == kActionsSection && (indexPath.row == kActionsImportRow || indexPath.row == kActionsNewTrackRow))
-        {
-            [self didSelectGpxTableGroupItem:item indexPath:indexPath];
-            [tableView deselectRowAtIndexPath:indexPath animated:YES];
-        }
         else if (indexPath.row == kGPXGroupHeaderRow)
             [self selectAllGroup:indexPath.section];
         else
@@ -1596,7 +1641,7 @@ static UIViewController *parentController;
 - (void) selectDeselectGroupHeader:(NSIndexPath *)indexPath select:(BOOL)select
 {
     NSInteger section = kVisibleTracksWithoutRoutePlanningSection;
-    for (; section < [self.gpxTableView numberOfSections] - 1; section++)
+    for (; section < [self.gpxTableView numberOfSections]; section++)
     {
         OAGpxTableGroup* groupData = [_data objectAtIndex:section];
         BOOL isGroupHeaderSelected = [self.gpxTableView.indexPathsForSelectedRows containsObject:[NSIndexPath indexPathForRow:0 inSection:section]];

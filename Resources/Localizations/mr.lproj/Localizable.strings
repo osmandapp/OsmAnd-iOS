@@ -625,7 +625,7 @@
 "save_track_interval_globally" = "क्रमलेखन काळांतर";
 "rec_interval_minimum" = "किमान";
 "track_start_rec" = "ट्रॅक मुद्रण चालू करा";
-"track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
+"track_rec_addon_q" = "Please activate Track recording plugin to record and save your tracks";
 "track_interval_remember" = "माझी निवड साठवून ठेवा";
 "track_clear" = "Clear current track";
 "track_clear_q" = "Do you want to clear current track?";
@@ -1557,9 +1557,6 @@
 "osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Online street-level photos for everyone. Discover places, collaborate, capture the world.";
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"open_place_reviews_plugin_description" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1588,7 +1585,7 @@
 "some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"srtm_plugin_name" = "Contour lines";
+"srtm_plugin_name" = "Topography";
 "product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "wikivoyage_travel_guide" = "Travel Guides";
@@ -1641,8 +1638,8 @@
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "shared_string_get" = "Get";
 "srtm_plugin_disabled" = "Contour lines disabled";
-"prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
-"prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
+"prch_wiki_info" = "Wikipedia plugin enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
+"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "\"उघडे असण्याची वेळ\"";
 "time_closed" = "Closed";
 "time_will_open" = "Will open in";

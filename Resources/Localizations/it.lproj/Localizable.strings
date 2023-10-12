@@ -988,7 +988,7 @@
 "routing_attr_avoid_ice_roads_fords_name" = "No strade di ghiaccio e guadi";
 "routing_attr_driving_style_balance_name" = "Bilanciato";
 "rendering_attr_moreDetailed_name" = "Più dettagli";
-"rendering_attr_contourLines_description" = "Visualizza dal livello di zoom (necessita dei dati delle isoipse):";
+"rendering_attr_contourLines_description" = "Visualizzazione dal livello di zoom (necessita dei dati della linea di contorno):";
 "rendering_attr_highway_class_track_grade4_name" = "Grado 4";
 "rendering_value_white_name" = "Bianco";
 "rendering_attr_piste_difficulty_connection_name" = "Connessione";
@@ -1055,7 +1055,7 @@
 "rendering_attr_lessDetailed_name" = "Meno dettagli";
 "rendering_attr_smoothness_intermediate_name" = "Intermedio";
 "rendering_attr_contourDensity_name" = "Densità linee isoipse";
-"rendering_attr_alpineHiking_name" = "Classificazione delle difficoltà";
+"rendering_attr_alpineHiking_name" = "Classificazione della difficoltà";
 "rendering_attr_smoothness_bad_name" = "Cattiva";
 "routing_attr_avoid_bus_description" = "Evita gli autobus e i filobus";
 "routing_attr_avoid_unpaved_description" = "Evita le strade non pavimentate";
@@ -1619,7 +1619,7 @@
 "shared_string_max" = "Max";
 "shared_string_min" = "Min";
 "shared_string_meters" = "metri";
-"shared_string_tones" = "toni";
+"shared_string_tones" = "ton";
 "accessibility_announce" = "Annunci";
 "transfers" = "Trasferimenti";
 "temporary_conditional_routing" = "Tieni conto delle limitazioni temporanee";
@@ -1771,7 +1771,6 @@
 "srtm_download_list_help_message" = "OsmAnd fornisce i dati delle curve di livello in metri e in piedi. Dovrai scaricare di nuovo il file per cambiarne il formato.";
 "added_profiles_descr" = "Profilo aggiunto dal componente aggiuntivo";
 "routes_color_by_type" = "Colora i percorsi per…";
-"open_place_reviews" = "OpenPlaceReviews";
 "some_articles_may_not_available_in_lang" = "Alcuni articoli di Wikipedia potrebbero non essere disponibili nella tua lingua.";
 "dialogs_and_notifications_title" = "Notifiche e finestre di dialogo";
 "added_profiles" = "Profilo aggiunto";
@@ -2156,7 +2155,6 @@
 "rearrange_profiles" = "Riordina profili";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d tracce?";
 "shared_string_leave" = "Abbandona";
-"update_only_over_wi_fi" = "Aggiorna solo con Wi-Fi";
 "gpx_saved_successfully" = "File GPX salvato in %@";
 "tracks_empty" = "La tua lista delle tracce è vuota";
 "other_countries" = "Altri paesi";
@@ -2472,14 +2470,12 @@
 "route_line_color_elevation_description" = "La linea del percorso verrà colorata in base al profilo altimetrico.";
 "product_desc_centralamerica_short" = "Mappe della regione dell'America centrale";
 "product_desc_development" = "Per sviluppatori e utenti esperti";
-"product_desc_openplacereviews" = "Condividi la tua opinione sui luoghi pubblici";
 "product_desc_antarctica" = "Download illimitato di mappe per l'Antartide";
 "product_desc_russia_short" = "Mappe delle regioni della Russia";
 "record_plugin_description" = "Registra i tuoi viaggi o allenamenti e analizza i dati come velocità, dislivello cumulativo, profilo di elevazione, ecc. Le tracce registrate possono essere archiviate, condivise con gli amici, modificate e rielaborate.\n\nUlteriori informazioni su https://osmand.net/docs/user/plugins/trip-recording .";
 "product_desc_mapillary" = "Viste a livello stradale per controllare i dintorni";
 "depth_contour_lines" = "Linee batimetriche";
 "srtm_plugin_description" = "Informazioni sul terreno come curve di livello, ombreggiature e pendii ti aiutano a valutare visivamente la conformazione del terreno e il rilievo, la navigabilità e altro ancora. Le informazioni topografiche possono essere rappresentate mediante ombreggiatura della pendenza, curve di livello e/o colorazione della pendenza.\n\nI dati di base sono forniti da SRTM e ASTER.\n\nUlteriori approfondimenti su http://osmand.net/docs/user/plugins/contour-lines.";
-"open_place_reviews_plugin_description" = "Contribuisci al progetto OpenPlaceReviews con foto, recensioni o link di luoghi pubblici come ristoranti, hotel, o musei.\n\nTrova informazioni su come contribuire nel nostro sito: https://osmand.net/docs/user/plugins/openplacereviews .";
 "nautical_depth_points" = "Punti di profondità nautici";
 "read_full_description" = "Leggi la descrizione completa";
 "public_transport_warning_descr_blog" = "Leggi di più sul calcolo dei percorsi di OsmAnd sul nostro blog.";
@@ -2973,9 +2969,9 @@
 "true_bearing_widget_desc" = "Angolo fra il nord reale e il punto di destinazione osservato dalla tua posizione.";
 "parking_widget_desc" = "Mostra la distanza dal centro dello schermo alla posizione di parcheggio.";
 "time_to_intermediate_widget_desc" = "Il widget mostra \"Ora di arrivo\" o \"Tempo mancante\" al primo punto intermedio. Il tempo è costantemente aggiornato durante la navigazione, quando il punto intermedio viene raggiunto, il tempo verrà aggiornato al successivo punto intermedio.";
-"rendering_value_sacScale_description" = "Swiss Alpine Club";
+"rendering_value_sacScale_description" = "Club Alpino Svizzero";
 "rendering_value_caiScale_name" = "cai";
-"rendering_value_caiScale_description" = "Club Alpino Italiano";
+"rendering_value_caiScale_description" = "Club Alpino Italiano (Club Alpino Italiano)";
 "map_2d_mode_action" = "Modalità 2D";
 "map_3d_mode_action" = "Modalità 3D";
 "shared_string_hidden" = "Nascosto";
@@ -2986,3 +2982,18 @@
 "shared_string_edit_color" = "Modifica colore";
 "shared_string_delete_color" = "Elimina colore";
 "navigation_points_desc" = "I widget di navigazione sono abilitati durante la navigazione per mostrare informazioni quali distanza, tempo di arrivo o rimanente, prossime svolte, direzione, il nome della strada attuale o successiva, indicazione di corsia, velocità massima, avvisi di avvicinamento, PDI, punti intermedi.";
+"add_row" = "Aggiungi riga";
+"no_widgets_here_yet" = "Ancora nessun widget qui";
+"ruler_circles" = "Cerchi righello";
+"shared_string_coloring" = "Colorazione";
+"shared_string_rearrange" = "Riordinare";
+"free_account" = "Account gratuito";
+"free_favorites_backup_description" = "Registrati in OsmAnd Cloud per ottenere il backup gratuito dei preferiti e delle impostazioni";
+"free_favorites_backup" = "Backup gratuito dei preferiti";
+"no_widgets_descr" = "Aggiungi uno o più widget dall'elenco dei widget disponibili.";
+"banner_payment_free_backup_settings_title" = "Backup gratuito delle impostazioni";
+"get_osmand_cloud" = "Ottieni OsmAnd Cloud";
+"reset_all_settings_desc" = "Ripristinare tutte le impostazioni predefinite?";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "Mostra le coordinate geografiche del centro attuale della mappa";

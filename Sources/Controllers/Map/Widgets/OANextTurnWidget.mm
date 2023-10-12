@@ -45,14 +45,34 @@
 
 - (instancetype) initWithHorisontalMini:(BOOL)horisontalMini nextNext:(BOOL)nextNext
 {
-    self = [super initWithType:horisontalMini ? OAWidgetType.smallNextTurn : OAWidgetType.nextTurn];
+    OAWidgetType *type;
+    if (horisontalMini)
+    {
+        if (nextNext)
+            type = OAWidgetType.secondNextTurn;
+        else
+            type = OAWidgetType.smallNextTurn;
+    }
+    else
+    {
+        type = OAWidgetType.nextTurn;
+    }
+    self = [super initWithType:type];
     if (self)
     {
         _topView = [[UIView alloc] initWithFrame:CGRectMake(11., 6., kTopViewSide, kTopViewSide)];
-        _leftView = [[UIView alloc] initWithFrame:CGRectMake(2., 84., kLeftViewSide, kLeftViewSide)];
+        _leftView = [UIView new];
+        _leftView.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:_topView];
         [self addSubview:_leftView];
         
+        [NSLayoutConstraint activateConstraints:@[
+            [_leftView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:2],
+            [_leftView.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:0],
+            [_leftView.heightAnchor constraintEqualToConstant:kLeftViewSide],
+            [_leftView.widthAnchor constraintEqualToConstant:kLeftViewSide]
+        ]];
+
         _app = [OsmAndApp instance];
         _horisontalMini = horisontalMini;
         _nextNext = nextNext;
@@ -123,7 +143,7 @@
 - (CGFloat) getWidgetHeight
 {
     if (_horisontalMini)
-        return kTextInfoWidgetHeight;
+        return [super getWidgetHeight];
     else
         return kNextTurnInfoWidgetHeight;
 }
@@ -183,17 +203,18 @@
     [super adjustViewSize];
     if (!_horisontalMini)
     {
-        CGRect tf = self.textView.frame;
-        tf.origin.y = self.getWidgetHeight - tf.size.height - 6.;
-        self.textView.frame = tf;
-        self.textShadowView.frame = tf;
+        self.topTextAnchor.constant = self.topView.frame.size.height + 5;
     }
     else
     {
+        self.topTextAnchor.constant = 5;
         CGRect leftViewFrame = self.leftView.frame;
         leftViewFrame.origin.y = (self.getWidgetHeight - leftViewFrame.size.height) / 2;
         self.leftView.frame = leftViewFrame;
     }
+    CGRect rect = self.frame;
+    rect.size.height += self.textView.frame.origin.y;
+    self.frame = rect;
 }
 
 - (void) updateDistance

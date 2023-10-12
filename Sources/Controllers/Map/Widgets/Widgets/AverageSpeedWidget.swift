@@ -10,29 +10,50 @@ import Foundation
 
 @objc(OAAverageSpeedWidget)
 @objcMembers
-class AverageSpeedWidget: OATextInfoWidget {
-    
-    private static let MEASURED_INTERVAL_PREF_ID = "average_speed_measured_interval_millis"
-    private static let SKIP_STOPS_PREF_ID = "average_speed_skip_stops"
+final class AverageSpeedWidget: OATextInfoWidget {
+    static let MEASURED_INTERVAL_PREF_ID = "average_speed_measured_interval_millis"
+    static let SKIP_STOPS_PREF_ID = "average_speed_skip_stops"
     
     private static let UPDATE_INTERVAL_MILLIS = 1000
     private static let DASH = "—"
     
     private let averageSpeedComputer = OAAverageSpeedComputer.sharedInstance()
     
-    private let measuredIntervalPref: OACommonLong
-    private let skipStopsPref: OACommonBoolean
-    
+    private var measuredIntervalPref: OACommonLong
+    private var skipStopsPref: OACommonBoolean
+    private var customId: String? = nil
+
     private var lastUpdateTime = 0
-    
-    init(customId: String) {
+
+    private static var availableIntervals: [Int: String] = getAvailableIntervals()
+
+    convenience init(customId: String?, widgetParams: [String: Any]? = nil) {
+        self.init(frame: .zero)
+        
+        widgetType = .averageSpeed
+        setIcons(widgetType)
+        setMetricSystemDepended(true)
+        
+        self.customId = customId
         measuredIntervalPref = Self.registerMeasuredIntervalPref(customId)
         skipStopsPref = Self.registerSkipStopsPref(customId)
-        super.init(type: .averageSpeed)
-        setIcons(.averageSpeed)
-        self.setMetricSystemDepended(true)
+        
+        if let widgetParams, let mode = widgetParams["selectedAppMode"] as? OAApplicationMode {
+            if let param = widgetParams[Self.MEASURED_INTERVAL_PREF_ID] as? String, let interval = Int(param)  {
+                measuredIntervalPref.set(interval, mode: mode)
+            }
+            if let skipStop = widgetParams[Self.SKIP_STOPS_PREF_ID] as? Bool {
+                skipStopsPref.set(skipStop, mode: mode)
+            }
+        }
     }
     
+    override init(frame: CGRect) {
+        measuredIntervalPref = Self.registerMeasuredIntervalPref(customId)
+        skipStopsPref = Self.registerSkipStopsPref(customId)
+        super.init(frame: frame)
+    }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -62,7 +83,58 @@ class AverageSpeedWidget: OATextInfoWidget {
         }
         return false
     }
-    
+
+    override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
+        let data = OATableDataModel()
+        let section = data.createNewSection()
+        section.headerText = localizedString("shared_string_settings")
+
+        let settingRow = section.createNewRow()
+        settingRow.cellType = OAValueTableViewCell.getIdentifier()
+        settingRow.key = "value_pref"
+        settingRow.title = localizedString("shared_string_interval")
+        settingRow.descr = localizedString("shared_string_interval")
+        settingRow.setObj(measuredIntervalPref, forKey: "pref")
+        settingRow.setObj(Self.getIntervalTitle(measuredIntervalPref.get(appMode)), forKey: "value")
+        settingRow.setObj(getPossibleValues(measuredIntervalPref), forKey: "possible_values")
+        settingRow.setObj(localizedString("average_speed_time_interval_desc"), forKey: "footer")
+
+        let compassRow = section.createNewRow()
+        compassRow.cellType = OASwitchTableViewCell.getIdentifier()
+        compassRow.title = localizedString("average_speed_skip_stops")
+        compassRow.setObj(skipStopsPref, forKey: "pref")
+
+        return data
+    }
+
+    private func getPossibleValues(_ pref: OACommonPreference) -> [OATableRowData] {
+        var rows = [OATableRowData]()
+        let valuesRow = OATableRowData()
+        valuesRow.key = "values"
+        valuesRow.cellType = OASegmentSliderTableViewCell.getIdentifier()
+        valuesRow.title = localizedString("shared_string_interval")
+        valuesRow.setObj(Self.availableIntervals, forKey: "values")
+        rows.append(valuesRow)
+        return rows
+    }
+
+    static func getIntervalTitle(_ intervalValue: Int) -> String {
+        return availableIntervals[intervalValue] ?? "-"
+    }
+
+    private static func getAvailableIntervals() -> [Int: String] {
+        var intervals =  [Int: String]()
+        for intervalNum in OAAverageSpeedComputer.measured_INTERVALS() {
+            let interval = intervalNum.intValue
+            let seconds = interval < 60 * 1000
+            let timeInterval = seconds ? String(interval / 1000) : String(interval / 1000 / 60)
+            let timeUnit = interval < 60 * 1000 ? localizedString("shared_string_sec") : localizedString("int_min")
+            let formattedInterval = String(format: localizedString("ltr_or_rtl_combine_via_space"), arguments: [timeInterval, timeUnit])
+            intervals[interval] = formattedInterval
+        }
+        return intervals
+    }
+
     func updateAverageSpeed() {
         let measuredInterval = measuredIntervalPref.get()
         let skipLowSpeed = skipStopsPref.get()

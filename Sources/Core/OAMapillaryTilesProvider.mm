@@ -533,18 +533,19 @@ sk_sp<const SkImage> OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::
     .replace(QLatin1String("${osm_x}"), QString::number(tileId.x))
     .replace(QLatin1String("${osm_y}"), QString::number(tileId.y));
     
-    std::shared_ptr<const OsmAnd::IWebClient::IRequestResult> requestResult;
-    const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult, nullptr, req.queryController);
+    OsmAnd::IWebClient::DataRequest dataRequest;
+    dataRequest.queryController = req.queryController;
+    const auto& downloadResult = _webClient->downloadData(tileUrl, dataRequest);
     
     // Ensure that all directories are created in path to local tile
     localFile.dir().mkpath(QLatin1String("."));
     
     // If there was error, check what the error was
-    if (!requestResult || !requestResult->isSuccessful() || downloadResult.isEmpty())
+    if (!dataRequest.requestResult || !dataRequest.requestResult->isSuccessful() || downloadResult.isEmpty())
     {
-        if (requestResult)
+        if (dataRequest.requestResult)
         {
-            const auto httpStatus = std::dynamic_pointer_cast<const OsmAnd::IWebClient::IHttpRequestResult>(requestResult)->getHttpStatusCode();
+            const auto httpStatus = std::dynamic_pointer_cast<const OsmAnd::IWebClient::IHttpRequestResult>(dataRequest.requestResult)->getHttpStatusCode();
             
             LogPrintf(OsmAnd::LogSeverityLevel::Warning,
                       "Failed to download tile from %s (HTTP status %d)",
@@ -562,7 +563,7 @@ sk_sp<const SkImage> OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::
                     
                     // Unlock the tile
                     unlockTile(req.tileId, req.zoom);
-                    requestResult.reset();
+                    dataRequest.requestResult.reset();
                     return nullptr;
                 }
                 else
@@ -573,14 +574,14 @@ sk_sp<const SkImage> OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::
                     
                     // Unlock the tile
                     unlockTile(req.tileId, req.zoom);
-                    requestResult.reset();
+                    dataRequest.requestResult.reset();
                     return nullptr;
                 }
             }
         }
         // Unlock the tile
         unlockTile(req.tileId, req.zoom);
-        requestResult.reset();
+        dataRequest.requestResult.reset();
         return nullptr;
     }
     
@@ -608,7 +609,7 @@ sk_sp<const SkImage> OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::
                   qPrintable(localFile.absoluteFilePath()));
     }
         
-    requestResult.reset();
+    dataRequest.requestResult.reset();
 
     const auto& geometryTile = readGeometry(localFile, tileId);
 

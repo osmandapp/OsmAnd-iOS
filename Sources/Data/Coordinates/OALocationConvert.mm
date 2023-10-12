@@ -215,17 +215,15 @@
         return nil;
     
     NSMutableString *res = [[NSMutableString alloc] init];
-    
-    // Handle negative values and append cardinal directions if necessary
-    if (addCardinalDirection)
-        [res appendString:latitude < 0 ? @"S" : @"N"];
-    else if (latitude < 0)
-        [res appendString:@"-"];
-
-    if (latitude < 0)
+    bool negative = latitude < 0;
+    if (negative)
         latitude = -latitude;
     
-    return [self.class formatDegrees:latitude outputType:outType string:res];
+    [self.class formatDegrees:latitude outputType:outType string:res];
+    if (addCardinalDirection)
+        [res appendString:negative ? @" S" : @" N"];
+
+    return res;
 }
 
 + (NSString *) convertLongitude:(double) longitude outputType:(NSInteger)outType addCardinalDirection:(BOOL)addCardinalDirection
@@ -237,17 +235,15 @@
     
     
     NSMutableString *res = [[NSMutableString alloc] init];
-    
-    // Handle negative values and append cardinal directions if necessary
-    if (addCardinalDirection)
-        [res appendString:longitude < 0 ? @"W" : @"E"];
-    else if (longitude < 0)
-        [res appendString:@"-"];
-
-    if (longitude < 0)
+    bool negative = longitude < 0;
+    if (negative)
         longitude = -longitude;
-    
-    return [self.class formatDegrees:longitude outputType:outType string:res];
+
+    [self.class formatDegrees:longitude outputType:outType string:res];
+    if (addCardinalDirection)
+        [res appendString:negative ? @" W" : @" E"];
+
+    return res;
 }
 
 + (NSString *) formatDegrees:(double) coordinate outputType:(NSInteger)outputType string:(NSMutableString *)string

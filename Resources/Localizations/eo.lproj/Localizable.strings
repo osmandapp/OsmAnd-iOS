@@ -482,7 +482,7 @@
 "shared_strings_all_regions" = "Ĉiuj regionoj";
 "regions" = "Regionoj";
 "shared_string_width" = "Larĝo";
-"shared_string_interval" = "Intertempo";
+"shared_string_interval" = "Tempodaŭro";
 "shared_string_none" = "Neniu";
 "restart" = "Restartigi";
 "offline_maps" = "Offline Maps";
@@ -624,7 +624,7 @@
 "save_track_interval_globally" = "Intertempo de registrado";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
-"track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
+"track_rec_addon_q" = "Please activate Track recording plugin to record and save your tracks";
 "track_interval_remember" = "Remember my choice";
 "track_clear" = "Clear current track";
 "track_clear_q" = "Do you want to clear current track?";
@@ -1556,9 +1556,6 @@
 "osm_editing_plugin_description" = "Ebligas kontribui al OpenStreetMap– tutmonda komunumo, kies celo estas prizorgi detalan mapon de la mondo kaj liveri aktualajn malfermajn datumojn por ĉiu uzanto.\n\nPliaj informoj pri kiel redakti la mapon OSM: https://osmand.net/docs/user/plugins/osm-editing.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Liveras strat-nivelan fotaron. Vi ankaŭ povas kontribui per aldoni fotojn al la projekto. Por vidigi la ekzistajn datumojn kiel map-tavolon, aktivigu la agordon “Start-nivela fotaro” en la menuo “Agordi mapon”.";
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"open_place_reviews_plugin_description" = "Ebligas kontribui al la projekto OpenPlaceReviews– per aldoni fotojn, opiniojn kaj ligilojn pri publikaj ejoj: restoracioj, hoteloj, muzeoj kaj pli.\n\nInstrukcioj (en la angla) pri kiel kontribui troviĝas sur la retpaĝo https://osmand.net/docs/user/plugins/openplacereviews.";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1640,8 +1637,8 @@
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "shared_string_get" = "Akiri";
 "srtm_plugin_disabled" = "Nivelkurboj kaŝitaj";
-"prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
-"prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
+"prch_wiki_info" = "Wikipedia plugin enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
+"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Malfermi";
 "time_closed" = "Closed";
 "time_will_open" = "Will open in";
@@ -2621,3 +2618,4 @@
 "map_widget_distance_to_intermediate" = "Distanco al intercelo";
 "rendering_value_sacScale_description" = "laŭ skalo de Svisa Alpisma Klubo";
 "rendering_value_caiScale_description" = "laŭ skalo de Itala Alpisma Klubo";
+"shared_string_cache" = "Kaŝmemoro";

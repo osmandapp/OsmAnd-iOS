@@ -1557,9 +1557,6 @@
 "osm_editing_plugin_description" = "Доприносите ОСМ-у, општој заједници која одржава обимну карту света и обезбеђује редовне податке слободним програмима сваком кориснику.\n\nМожете пронаћи упутсвакако уређивати карту на нашим страницама https://osmand.net/docs/user/plugins/osm-editing .";
 "product_desc_mapillary" = "Фотографије на мрежи на нивоу улице за све";
 "plugin_mapillary_descr" = "Мрежне слике улица за све. Откријте места, сарађујте, освојите свет.";
-"open_place_reviews" = "Утисци отворених места (OpenPlaceReviews)";
-"product_desc_openplacereviews" = "Шаљите фотографије, рецензије и везе о јавним местима";
-"open_place_reviews_plugin_description" = "Помозите пројекту ОпенПлацеРевиевс, преко слика, чланака, или веза ка јавним местима као што су гостионе, одмаралишта, музеји.\n\nПронађите упутства како да учествујете на страницама https://osmand.net/docs/user/plugins/openplacereviews .";
 "product_desc_africa" = "Неограничено преузимање мапа за Африку";
 "product_desc_antarctica" = "Неограничено преузимање мапа за Антарктик";
 "product_desc_africa_short" = "Мапе региона Африке";
@@ -1946,7 +1943,7 @@
 "rendering_attr_surface_grass_name" = "Трава";
 "routing_attr_piste_type_skitour_description" = "Путање скијашке.";
 "rendering_attr_surface_fine_gravel_name" = "Ситан шљунак";
-"rendering_value_orange_name" = "Поморанџаста";
+"rendering_value_orange_name" = "Наранџаста";
 "rendering_value_medium_w_name" = "Средња";
 "rendering_attr_contourDensity_description" = "Густина линије изохипсе";
 "rendering_attr_currentTrackWidth_name" = "Ширина ГПИкс-а";
@@ -2169,7 +2166,7 @@
 "rendering_attr_roadColors_description" = "Изаберите образац боја путева:";
 "rendering_value_browse_map_name" = "Прегледај карту";
 "rendering_attr_surface_asphalt_name" = "Асфалт";
-"rendering_value_translucent_orange_name" = "Прозирна поморанџаста";
+"rendering_value_translucent_orange_name" = "Прозирна наранџаста";
 "rendering_attr_depthContours_description" = "Приказуј тачке и изобате.";
 "rendering_value_thick_name" = "Дебело";
 "routing_attr_avoid_ferry_name" = "Без трајеката";
@@ -2680,3 +2677,10 @@
 "weather_forecast" = "Временске прилике";
 "weather_forecast_is_outdated" = "Временске прилике су застареле.";
 "speak_route_deviation" = "Најави одступање од пута";
+"map_widget_distance_to_intermediate" = "Удаљеност до посредне тачке";
+"rendering_attr_alpineHiking_name" = "Разврставање по тежини";
+"get_osmand_cloud" = "Добавите Облак ОсмАнда";
+"rendering_value_caiScale_description" = "Club Alpino Italiano (Италијанско планинарско удружење)";
+"free_favorites_backup" = "Бесплатно складиште омиљених";
+"rendering_value_sacScale_description" = "Швајцарско планинарско удружење";
+"free_account" = "Бесплатни налог";

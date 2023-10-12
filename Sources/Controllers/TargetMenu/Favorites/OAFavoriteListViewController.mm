@@ -160,12 +160,20 @@ static UIViewController *parentController;
 - (void)resizeHeaderBanner {
     if ([self isAvailablePaymentBanner] && _freeBackupBanner)
     {
-        CGFloat height = [OAUtilities calculateTextBounds:_freeBackupBanner.descriptionLabel.text width:self.favoriteTableView.frame.size.width - _freeBackupBanner.leadingTrailingOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
+        CGFloat titleHeight = [OAUtilities calculateTextBounds:_freeBackupBanner.titleLabel.text width:self.favoriteTableView.frame.size.width - _freeBackupBanner.leadingTrailingOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
+        
+        CGFloat descriptionHeight = [OAUtilities calculateTextBounds:_freeBackupBanner.descriptionLabel.text width:self.favoriteTableView.frame.size.width - _freeBackupBanner.leadingTrailingOffset font:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]].height;
         _freeBackupBanner.frame = CGRectMake(0,
                                              0,
                                              self.favoriteTableView.frame.size.width,
-                                             _freeBackupBanner.defaultFrameHeight + height);
+                                             _freeBackupBanner.defaultFrameHeight + titleHeight + descriptionHeight);
         self.favoriteTableView.tableHeaderView = _freeBackupBanner;
+        UIEdgeInsets insets = self.favoriteTableView.layoutMargins;
+        if (insets.left != 0 || insets.right != 0)
+        {
+            _freeBackupBanner.leadingSubviewConstraint.constant = insets.left;
+            _freeBackupBanner.trailingSubviewConstraint.constant = insets.right;
+        }
     }
 }
 
@@ -184,12 +192,35 @@ static UIViewController *parentController;
                 [weakSelf closeFreeBackupBanner];
             };
             [_freeBackupBanner configureWithBannerType:BannerTypeFavorite];
+            
+            [self configureSeparator:[UIView new] top:YES];
+            [self configureSeparator:[UIView new] top:NO];
+
             [self changeContentInsetTop:20];
         }
     }
     else if (_freeBackupBanner) {
         [self closeFreeBackupBanner];
     }
+}
+
+- (void)configureSeparator:(UIView *)view top:(BOOL)top
+{
+    view.translatesAutoresizingMaskIntoConstraints = NO;
+    view.backgroundColor = UIColorFromRGB(color_tint_gray);
+    [_freeBackupBanner addSubview:view];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [view.leadingAnchor constraintEqualToAnchor:_freeBackupBanner.leadingAnchor],
+        [view.trailingAnchor constraintEqualToAnchor:_freeBackupBanner.trailingAnchor],
+        [view.heightAnchor constraintEqualToConstant:1.0 / [UIScreen mainScreen].scale]
+    ]];
+    
+    if (top)
+        [view.topAnchor constraintEqualToAnchor:_freeBackupBanner.topAnchor].active = YES;
+    else
+        [view.bottomAnchor constraintEqualToAnchor:_freeBackupBanner.bottomAnchor].active = YES;
+
 }
 
 - (void)closeFreeBackupBanner
@@ -1090,6 +1121,7 @@ static UIViewController *parentController;
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointHeaderTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAPointHeaderTableViewCell *)[nib objectAtIndex:0];
         cell.folderIcon.image = [UIImage templateImageNamed:@"ic_custom_folder"];
+        [cell.valueLabel setHidden:YES];
     }
     if (cell)
     {

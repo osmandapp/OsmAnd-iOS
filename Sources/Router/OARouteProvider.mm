@@ -56,6 +56,12 @@
                                                         segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
                                                          selectedSegment:(NSInteger)selectedSegment;
 
++ (std::vector<std::shared_ptr<RouteSegmentResult>>) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
+                                                                 gpxFile:(OAGPXDocument *)gpxFile
+                                                        segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
+                                                         selectedSegment:(NSInteger)selectedSegment
+                                                                leftSide:(BOOL)leftSide;
+
 + (void) collectSegmentPointsFromGpx:(OAGPXDocument *)gpxFile points:(NSMutableArray<CLLocation *> *)points
                     segmentEndPoints:(NSMutableArray<CLLocation *> *)segmentEndPoints
                      selectedSegment:(NSInteger)selectedSegment;
@@ -170,7 +176,7 @@
     {
         NSMutableArray<CLLocation *> *points = [NSMutableArray arrayWithArray:_points];
         NSMutableArray<CLLocation *> *endPoints = [NSMutableArray arrayWithArray:_segmentEndPoints];
-        _route = [OARouteProvider parseOsmAndGPXRoute:points gpxFile:file segmentEndpoints:endPoints selectedSegment:selectedSegment];
+        _route = [OARouteProvider parseOsmAndGPXRoute:points gpxFile:file segmentEndpoints:endPoints selectedSegment:selectedSegment leftSide:builder.leftSide];
         _points = points;
         _segmentEndPoints = endPoints;
         
@@ -339,8 +345,25 @@
     if (self)
     {
         _nativeFiles = [NSMutableSet set];
+        [OsmAndApp instance].resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
+            [self]
+            (const OsmAnd::ResourcesManager* const resourcesManager,
+            const QList< QString >& added,
+            const QList< QString >& removed,
+            const QList< QString >& updated)
+            {
+                [self onLocalResourcesChanged];
+            });
     }
     return self;
+}
+
+- (void) onLocalResourcesChanged
+{
+    @synchronized(self)
+    {
+        _nativeFiles = [NSMutableSet set];
+    }
 }
 
 + (NSString *) getExtensionValue:(OAGpxExtensions *)exts key:(NSString *)key
@@ -357,6 +380,7 @@
                                                                  gpxFile:(OAGPXDocument *)gpxFile
                                                         segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
                                                          selectedSegment:(NSInteger)selectedSegment
+                                                                leftSide:(BOOL)leftSide
 {
     NSArray<OATrkSegment *> *segments = [gpxFile getNonEmptyTrkSegments:NO];
     if (selectedSegment != -1 && segments.count > selectedSegment)
@@ -372,9 +396,17 @@
     else
     {
         [self collectPointsFromSegments:segments points:points segmentEndpoints:segmentEndpoints];
-        OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithGpxFile:gpxFile];
+        OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithGpxFile:gpxFile leftSide:leftSide];
         return [routeImporter importRoute];
     }
+}
+
++ (std::vector<std::shared_ptr<RouteSegmentResult>>) parseOsmAndGPXRoute:(NSMutableArray<CLLocation *> *)points
+                                                                 gpxFile:(OAGPXDocument *)gpxFile
+                                                        segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
+                                                         selectedSegment:(NSInteger)selectedSegment
+{
+    return [self parseOsmAndGPXRoute:points gpxFile:gpxFile segmentEndpoints:segmentEndpoints selectedSegment:selectedSegment leftSide:false];
 }
 
 + (void) collectSegmentPointsFromGpx:(OAGPXDocument *)gpxFile points:(NSMutableArray<CLLocation *> *)points
@@ -737,25 +769,42 @@
 
 - (void) checkInitialized:(int)zoom leftX:(int)leftX rightX:(int)rightX bottomY:(int)bottomY topY:(int)topY
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
-    BOOL useOsmLiveForRouting = [OAAppSettings sharedManager].useOsmLiveForRouting;
-    const auto& localResources = app.resourcesManager->getSortedLocalResources();
-    QuadRect *rect = [[QuadRect alloc] initWithLeft:leftX top:topY right:rightX bottom:bottomY];
-    auto dataTypes = OsmAnd::ObfDataTypesMask();
-    dataTypes.set(OsmAnd::ObfDataType::Map);
-    dataTypes.set(OsmAnd::ObfDataType::Routing);
-    for (const auto& resource : localResources)
+    @synchronized (self)
     {
-        if (resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed)
+        OsmAndAppInstance app = [OsmAndApp instance];
+        BOOL useOsmLiveForRouting = [OAAppSettings sharedManager].useOsmLiveForRouting;
+        const auto& localResources = app.resourcesManager->getSortedLocalResources();
+        QuadRect *rect = [[QuadRect alloc] initWithLeft:leftX top:topY right:rightX bottom:bottomY];
+        auto dataTypes = OsmAnd::ObfDataTypesMask();
+        dataTypes.set(OsmAnd::ObfDataType::Map);
+        dataTypes.set(OsmAnd::ObfDataType::Routing);
+        for (const auto& resource : localResources)
         {
-            NSString *localPath = resource->localPath.toNSString();
-            if (![localPath.lowerCase hasSuffix:BINARY_MAP_INDEX_EXT])
-                continue;
-            if (![_nativeFiles containsObject:localPath] && [self containsData:resource->id rect:rect desiredDataTypes:dataTypes zoomLevel:(OsmAnd::ZoomLevel)zoom])
+            if (resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed)
             {
-                [_nativeFiles addObject:localPath];
-                initBinaryMapFile(resource->localPath.toStdString(), useOsmLiveForRouting, true);
+                NSString *localPath = resource->localPath.toNSString();
+                if (![localPath.lowerCase hasSuffix:BINARY_MAP_INDEX_EXT])
+                    continue;
+                if (![_nativeFiles containsObject:localPath] && [self containsData:resource->id rect:rect desiredDataTypes:dataTypes zoomLevel:(OsmAnd::ZoomLevel)zoom])
+                {
+                    [_nativeFiles addObject:localPath];
+                    initBinaryMapFile(resource->localPath.toStdString(), useOsmLiveForRouting, true);
+                }
             }
+        }
+        for (const auto* file : getOpenMapFiles())
+        {
+            BOOL hasLocal = NO;
+            for (const auto& resource : localResources)
+            {
+                if (file->inputName == resource->localPath.toStdString())
+                {
+                    hasLocal = YES;
+                    break;
+                }
+            }
+            if (!hasLocal)
+                closeBinaryMapFile(file->inputName);
         }
     }
 }

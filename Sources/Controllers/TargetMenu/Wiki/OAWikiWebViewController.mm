@@ -190,7 +190,7 @@
                 [OAWikiArticleHelper showWikiArticle:@[[[CLLocation alloc] initWithLatitude:_poi.latitude longitude:_poi.longitude]] url:newUrl onStart:^{
                     [spinner startAnimating];
                     [self presentViewController:alert animated:YES completion:nil];
-                } sourceView:nil sourceFrame:CGRectZero onComplete:^{
+                } sourceView:webView onComplete:^{
                     [alert.view removeSpinner];
                     [alert dismissViewControllerAnimated:YES completion:nil];
                     alert = nil;
@@ -199,7 +199,7 @@
             }
             else if ([newUrl hasPrefix:kPagePrefixHttp] || [newUrl hasPrefix:kPagePrefixHttps])
             {
-                [OAWikiArticleHelper warnAboutExternalLoad:newUrl];
+                [OAWikiArticleHelper warnAboutExternalLoad:newUrl sourceView:webView];
                 decisionHandler(WKNavigationActionPolicyCancel);
             }
             else
@@ -235,6 +235,11 @@
     return _poi.localizedNames[_contentLocale] ? _poi.localizedNames[_contentLocale] : OALocalizedString(@"download_wikipedia_maps");
 }
 
+- (NSString *)getContentLocale
+{
+    return _contentLocale;
+}
+
 - (void)createLanguagesNavbarButton
 {
     UIMenu *languageMenu;
@@ -259,11 +264,12 @@
         {
             if ([preferredLocales containsObject:contentLocale])
             {
+                __weak OAWikiWebViewController *weakSelf = self;
                 UIAction *languageAction = [UIAction actionWithTitle:[OAUtilities translatedLangName:contentLocale.length > 0 ? contentLocale : @"en"].capitalizedString
                                                        image:nil
                                                   identifier:nil
                                                      handler:^(__kindof UIAction * _Nonnull action) {
-                    [self updateWikiData:contentLocale];
+                    [weakSelf updateWikiData:contentLocale];
                 }];
                 if ([contentLocale isEqualToString:_contentLocale])
                     languageAction.state = UIMenuElementStateOn;
@@ -277,16 +283,17 @@
         }
         if (possibleAvailableLocale.count > 0)
         {
+            __weak OAWikiWebViewController *weakSelf = self;
             UIAction *availableLanguagesAction = [UIAction actionWithTitle:OALocalizedString(@"available_languages")
                                                                      image:[UIImage systemImageNamed:@"globe"]
                                                                 identifier:nil
                                                                    handler:^(__kindof UIAction * _Nonnull action) {
                 OAWikiLanguagesWebViewContoller *wikiLanguagesViewController =
-                            [[OAWikiLanguagesWebViewContoller alloc] initWithSelectedLocale:_contentLocale
+                            [[OAWikiLanguagesWebViewContoller alloc] initWithSelectedLocale:[weakSelf getContentLocale]
                                                                            availableLocales:possibleAvailableLocale
                                                                            preferredLocales:possiblePreferredLocale];
-                wikiLanguagesViewController.delegate = self;
-                [self showModalViewController:wikiLanguagesViewController];
+                wikiLanguagesViewController.delegate = weakSelf;
+                [weakSelf showModalViewController:wikiLanguagesViewController];
             }];
             if (![preferredLocales containsObject:_contentLocale])
                 availableLanguagesAction.state = UIMenuElementStateOn;
@@ -309,12 +316,13 @@
     NSArray<OADownloadMode *> *downloadModes = [OADownloadMode getDownloadModes];
     for (OADownloadMode *downloadMode in downloadModes)
     {
+        __weak OAWikiWebViewController *weakSelf = self;
         UIAction *downloadModeAction = [UIAction actionWithTitle:downloadMode.title
                                                            image:nil
                                                       identifier:nil
                                                          handler:^(__kindof UIAction * _Nonnull action) {
-            _app.data.wikipediaImagesDownloadMode = downloadMode;
-            [self updateWikiData];
+            [OsmAndApp instance].data.wikipediaImagesDownloadMode = downloadMode;
+            [weakSelf updateWikiData];
         }];
         if ([downloadMode isEqual:_app.data.wikipediaImagesDownloadMode])
         {
@@ -324,11 +332,12 @@
         [downloadModeOptions addObject:downloadModeAction];
     }
 
+    __weak OAWikiWebViewController *weakSelf = self;
     UIAction *downloadOnlyNowModeAction = [UIAction actionWithTitle:OALocalizedString(@"download_only_now")
                                                               image:[UIImage systemImageNamed:@"square.and.arrow.down"]
                                                          identifier:nil
                                                             handler:^(__kindof UIAction * _Nonnull action) {
-                                    OADownloadMode *imagesDownloadMode = [self getImagesDownloadMode];
+                                    OADownloadMode *imagesDownloadMode = [weakSelf getImagesDownloadMode];
                                     if ([[AFNetworkReachabilityManager sharedManager] isReachableViaWWAN] && ([imagesDownloadMode isDontDownload] || [imagesDownloadMode isDownloadOnlyViaWifi]))
                                     {
                                         UIAlertController *alert =
@@ -341,18 +350,18 @@
                                             UIAlertAction *downloadAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_download")
                                                                                                      style:UIAlertActionStyleDefault
                                                                                                    handler:^(UIAlertAction * _Nonnull action) {
-                                                _isDownloadImagesOnlyNow = YES;
-                                                [self updateWikiData];
+                                                [weakSelf setDownloadImagesOnlyNow:YES];
+                                                [weakSelf updateWikiData];
                                             }];
                                         [alert addAction:cancelAction];
                                         [alert addAction:downloadAction];
                                         alert.preferredAction = downloadAction;
-                                        [self presentViewController:alert animated:YES completion:nil];
+                                        [weakSelf presentViewController:alert animated:YES completion:nil];
                                    }
                                    else if ([[AFNetworkReachabilityManager sharedManager] isReachableViaWiFi])
                                    {
-                                       _isDownloadImagesOnlyNow = YES;
-                                       [self updateWikiData];
+                                       [weakSelf setDownloadImagesOnlyNow:YES];
+                                       [weakSelf updateWikiData];
                                    }
     }];
     if (_isDownloadImagesOnlyNow)
@@ -429,9 +438,9 @@
     return _isDownloadImagesOnlyNow;
 }
 
-- (void)resetDownloadImagesOnlyNow
+- (void)setDownloadImagesOnlyNow:(BOOL)onlyNow
 {
-    _isDownloadImagesOnlyNow = NO;
+    _isDownloadImagesOnlyNow = onlyNow;
 }
 
 #pragma mark - Web load

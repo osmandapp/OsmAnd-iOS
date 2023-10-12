@@ -338,7 +338,9 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     OAPOI *amenity = nil;
     if (map && map.count > 0)
     {
+        NSString *name = nil;
         OAPOIType *type = nil;
+        NSString *typeStr = nil;
         NSString *subType = nil;
         NSString *openingHours = nil;
         NSMutableDictionary<NSString *, NSString *> *additionalInfo = [NSMutableDictionary dictionary];
@@ -348,15 +350,20 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
             if ([key hasPrefix:privatePrefix])
             {
                 NSString *shortKey = [key stringByReplacingOccurrencesOfString:privatePrefix withString:@""];
-                if ([shortKey isEqualToString:TYPE])
+                if ([shortKey isEqualToString:POI_NAME])
                 {
-                    type = [OAPOIHelper.sharedInstance getPoiTypeByName:map[key]];
+                    name = map[key];
+                }
+                else if ([shortKey isEqualToString:TYPE])
+                {
+                    typeStr = map[key];
+                    type = [OAPOIHelper.sharedInstance getPoiTypeByName:typeStr];
                 }
                 else if ([shortKey isEqualToString:SUBTYPE])
                 {
                     subType = map[key];
                 }
-                else if ([shortKey isEqualToString:OPENING_HOURS])
+                else if ([shortKey isEqualToString:OPENING_HOURS] && map[key].length > 0)
                 {
                     openingHours = map[key];
                     additionalInfo[shortKey] = openingHours;
@@ -370,17 +377,18 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
             else
             {
                 NSString *shortKey = [key componentsSeparatedByString:@":"].lastObject;
-                if (![HIDDEN_EXTENSIONS containsObject:shortKey] && ![HIDDEN_EXTENSIONS containsObject:key])
+                if (![HIDDEN_EXTENSIONS containsObject:shortKey] && ![HIDDEN_EXTENSIONS containsObject:key] && map[key].length > 0)
                     additionalInfo[key] = map[key];
             }
         }
-
+        if (!type)
+            type = [OAPOIHelper.sharedInstance getPoiType:typeStr value:subType];
         if (!type)
             type = [OAPOIHelper.sharedInstance getDefaultOtherCategoryType];
-
         if (type)
         {
             amenity = [[OAPOI alloc] init];
+            amenity.name = name;
             amenity.type = type;
             if (subType)
                 amenity.subType = subType;

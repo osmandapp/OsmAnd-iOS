@@ -156,12 +156,6 @@
     CGFloat radius = 3.0;
     self.backgroundColor = [UIColor whiteColor];
     self.layer.cornerRadius = radius;
-    
-    // drop shadow
-    self.layer.shadowColor = UIColor.blackColor.CGColor;
-    self.layer.shadowOpacity = 0.3;
-    self.layer.shadowRadius = 2.0;
-    self.layer.shadowOffset = CGSizeMake(0.0, 0.0);
 
     _regularFont = [UIFont systemFontOfSize:23 weight:UIFontWeightSemibold];
     _boldFont = [UIFont systemFontOfSize:23 weight:UIFontWeightBold];
@@ -181,7 +175,6 @@
     _imageView.frame = _turnView.bounds;
     
     _exitRefTextContainer.layer.cornerRadius = 6.;
-    
     _shadowButton = [[UIButton alloc] initWithFrame:self.frame];
     _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_shadowButton addTarget:self action:@selector(onTopTextViewClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -209,6 +202,7 @@
     BOOL showShield = _shieldIcon.image && !_shieldIcon.isHidden;
     BOOL showTurn = !_turnView.isHidden && _turnView.subviews.count > 0;
     BOOL showExit = !_exitRefTextContainer.isHidden && _exitRefText.text.length > 0;
+    BOOL showAddress = !_addressText.isHidden && _addressText.text.length > 0;
     CGRect shieldFrame = _shieldIcon.frame;
     if (showShield)
     {
@@ -233,23 +227,19 @@
     margin += showShield ? shieldFrame.size.width + 2 : 0;
     margin += showExit ? exitRefFrame.size.width + 2 : 0;
     CGFloat maxTextWidth = w - margin * 2;
-    CGSize size = [OAUtilities calculateTextBounds:_addressText.text width:maxTextWidth height:h font:_textFont];
+    CGSize size = [OAUtilities calculateTextBounds:showAddress ? _addressText.text : @"" width:maxTextWidth height:h font:_textFont];
     if (size.width > maxTextWidth)
         size.width = maxTextWidth;
     
     CGFloat x = w / 2 - size.width / 2;
-    _addressText.frame = CGRectMake(w / 2 - size.width / 2, 0, w - x - 4, h);
-    _addressTextShadow.frame = _addressText.frame;
     
-    CGFloat prevX = _addressText.frame.origin.x;
+    CGFloat prevX = x;
     if (showShield)
     {
-        [self applyCorrectPositionToView:_shieldIcon prevX:prevX];
         prevX = _shieldIcon.frame.origin.x;
     }
     if (showTurn)
     {
-        [self applyCorrectPositionToView:_turnView prevX:prevX];
         prevX = _turnView.frame.origin.x;
     }
     if (showExit)
@@ -299,7 +289,6 @@
     NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
     
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    //paragraphStyle.alignment = NSTextAlignmentCenter;
     paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
     attributes[NSParagraphStyleAttributeName] = paragraphStyle;
     
@@ -322,11 +311,8 @@
     }
     _addressTextShadow.attributedText = stringShadow;
     _addressText.attributedText = string;
-    
-    [self updateFrame];
-    [self setNeedsLayout];
-    if (self.delegate)
-        [self.delegate widgetChanged:self];
+
+    [self refreshLayout];
 }
 
 - (void) updateTextColor:(UIColor *)textColor textShadowColor:(UIColor *)textShadowColor bold:(BOOL)bold shadowRadius:(float)shadowRadius nightMode:(BOOL)nightMode
@@ -477,14 +463,17 @@
     }
     
     if (changed || updated)
-    {
-        [self updateFrame];
-        [self setNeedsLayout];
-        if (self.delegate)
-            [self.delegate widgetChanged:self];
-    }
+        [self refreshLayout];
     
     return res;
+}
+
+- (void) refreshLayout
+{
+    [self updateFrame];
+    [self setNeedsLayout];
+    if (self.delegate)
+        [self.delegate widgetChanged:self];
 }
 
 - (BOOL) updateInfo
@@ -567,7 +556,7 @@
     {
         if ([streetName isEqual:_prevStreetName])
             return YES;
-        
+
         [self updateVisibility:YES];
         [self updateVisibility:_waypointInfoBar visible:NO];
         [self updateVisibility:_addressText visible:YES];
@@ -607,12 +596,28 @@
             if (streetName.turnType)
             {
                 [_imageView removeFromSuperview];
+                _turnDrawable.translatesAutoresizingMaskIntoConstraints = NO;
                 [_turnView addSubview:_turnDrawable];
+                
+                [NSLayoutConstraint activateConstraints:@[
+                    [_turnDrawable.topAnchor constraintEqualToAnchor:_turnView.topAnchor],
+                    [_turnDrawable.leadingAnchor constraintEqualToAnchor:_turnView.leadingAnchor],
+                    [_turnDrawable.bottomAnchor constraintEqualToAnchor:_turnView.bottomAnchor],
+                    [_turnDrawable.trailingAnchor constraintEqualToAnchor:_turnView.trailingAnchor]
+                ]];
             }
             else if (_showMarker)
             {
                 [_turnDrawable removeFromSuperview];
+                _imageView.translatesAutoresizingMaskIntoConstraints = NO;
                 [_turnView addSubview:_imageView];
+                
+                [NSLayoutConstraint activateConstraints:@[
+                    [_imageView.topAnchor constraintEqualToAnchor:_turnView.topAnchor],
+                    [_imageView.leadingAnchor constraintEqualToAnchor:_turnView.leadingAnchor],
+                    [_imageView.bottomAnchor constraintEqualToAnchor:_turnView.bottomAnchor],
+                    [_imageView.trailingAnchor constraintEqualToAnchor:_turnView.trailingAnchor]
+                ]];
             }
             else
             {
@@ -624,6 +629,8 @@
         {
             _addressTextShadow.text = @"";
             _addressText.text = @"";
+
+            [self refreshLayout];
         }
         else if (![streetName.text isEqualToString:_addressText.text])
         {

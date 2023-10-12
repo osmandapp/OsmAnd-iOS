@@ -93,6 +93,11 @@
     }
 }
 
+- (NSArray<NSString *> *) getWidgetIds
+{
+    return @[OAWidgetType.tripRecordingDistance.id, OAWidgetType.tripRecordingTime.id, OAWidgetType.tripRecordingUphill.id, OAWidgetType.tripRecordingDownhill.id];
+}
+
 - (void)createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
 {
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];

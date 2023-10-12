@@ -127,6 +127,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
     NSIndexPath *_routingInfoIndexPath;
     NSString *_emission;
+    BOOL _closePressed;
 }
 
 - (instancetype) init
@@ -955,6 +956,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (IBAction) closePressed:(id)sender
 {
+    _closePressed = YES;
     [[OARootViewController instance].mapPanel stopNavigation];
 }
 
@@ -1070,12 +1072,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [self adjustFrame];
     [self.tableView reloadData];
     
-    BOOL isNight = _settings.nightMode;
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    [mapPanel setTopControlsVisible:NO
-           onlyMapSettingsAndSearch:NO
-               customStatusBarStyle:isNight ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
-    [mapPanel setBottomControlsVisible:NO menuHeight:0 animated:YES];
+    [mapPanel.hudViewController updateControlsLayout:YES];
 
     _switched = [mapPanel switchToRoutePlanningLayout];
     if (animated)
@@ -1191,10 +1189,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (_switched)
         [mapPanel switchToRouteFollowingLayout];
     
-    if (![_pointsHelper getPointToNavigate] && ![self isSelectingTargetOnMap] && !_optionsMenuSelected)
+    if (!_closePressed && ![_pointsHelper getPointToNavigate] && ![self isSelectingTargetOnMap] && !_optionsMenuSelected)
         [mapPanel.mapActions stopNavigationWithoutConfirm];
 
     [[OARootViewController instance].keyCommandUpdateObserver handleObservedEventFrom:nil withKey:kCommandNavigationScreenClose];
+    _closePressed = NO;
 }
 
 - (void) addWaypoint

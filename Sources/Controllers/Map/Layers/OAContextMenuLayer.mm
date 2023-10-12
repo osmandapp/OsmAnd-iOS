@@ -122,33 +122,30 @@
 
 - (void)setupIconCenter
 {
-    CGPoint targetPoint;
-    OsmAnd::PointI targetPositionI = self.mapView.target31;
-    if ([self.mapView convert:&targetPositionI toScreen:&targetPoint])
-    {
-        if (CGPointEqualToPoint(targetPoint, _cachedTargetPoint))
-            return;
+    auto centerPixel = self.mapView.getCenterPixel;
+    CGPoint targetPoint = CGPointMake(centerPixel.x / UIScreen.mainScreen.scale, centerPixel.y / UIScreen.mainScreen.scale);
+    if (CGPointEqualToPoint(targetPoint, _cachedTargetPoint))
+        return;
         
-        _cachedTargetPoint = targetPoint;
-        CGFloat iconHalfHeight = _changePositionPin.frame.size.height /2;
-        CGFloat iconHalfWidth = _changePositionPin.frame.size.width / 2;
-        CGFloat shiftX = iconHalfWidth;
-        CGFloat shiftY = iconHalfHeight;
-        EOAPinVerticalAlignment verticalAlignment = [_selectedObjectContextMenuProvider getPointIconVerticalAlignment];
-        EOAPinHorizontalAlignment horizontalAlignment = [_selectedObjectContextMenuProvider getPointIconHorizontalAlignment];
-        
-        if (horizontalAlignment == EOAPinAlignmentRight)
-            shiftX = -iconHalfWidth;
-        else if (horizontalAlignment == EOAPinAlignmentCenterHorizontal)
-            shiftX = 0;
-        
-        if (verticalAlignment == EOAPinAlignmentBottom)
-            shiftY = -iconHalfHeight;
-        else if (verticalAlignment == EOAPinAlignmentCenterVertical)
-            shiftY = 0;
-        
-        _changePositionPin.center = CGPointMake(targetPoint.x - shiftX, targetPoint.y - shiftY);
-    }
+    _cachedTargetPoint = targetPoint;
+    CGFloat iconHalfHeight = _changePositionPin.frame.size.height /2;
+    CGFloat iconHalfWidth = _changePositionPin.frame.size.width / 2;
+    CGFloat shiftX = iconHalfWidth;
+    CGFloat shiftY = iconHalfHeight;
+    EOAPinVerticalAlignment verticalAlignment = [_selectedObjectContextMenuProvider getPointIconVerticalAlignment];
+    EOAPinHorizontalAlignment horizontalAlignment = [_selectedObjectContextMenuProvider getPointIconHorizontalAlignment];
+
+    if (horizontalAlignment == EOAPinAlignmentRight)
+        shiftX = -iconHalfWidth;
+    else if (horizontalAlignment == EOAPinAlignmentCenterHorizontal)
+        shiftX = 0;
+
+    if (verticalAlignment == EOAPinAlignmentBottom)
+        shiftY = -iconHalfHeight;
+    else if (verticalAlignment == EOAPinAlignmentCenterVertical)
+        shiftY = 0;
+
+    _changePositionPin.center = CGPointMake(targetPoint.x - shiftX, targetPoint.y - shiftY);
 }
 
 - (void) enterChangePositionMode:(id)targetObject
@@ -200,6 +197,7 @@
     }
     _selectedObjectContextMenuProvider = nil;
     _isInChangePositionMode = NO;
+    _cachedTargetPoint = CGPointZero;
 }
 
 - (void) onMapFrameRendered
@@ -638,6 +636,7 @@
     NSArray<OATargetPoint *> *selectedObjects = [self selectObjectsForContextMenu:touchPoint showUnknownLocation:showUnknownLocation];
     if (selectedObjects.count > 0)
     {
+        [OsmAndApp instance].mapMode = OAMapModeFree;
         if (selectedObjects[0].type == OATargetContext)
             [[OARootViewController instance].mapPanel reopenContextMenu];
         else
@@ -645,6 +644,7 @@
     }
     else if (showUnknownLocation)
     {
+        [OsmAndApp instance].mapMode = OAMapModeFree;
         CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
         OATargetPoint *unknownTargetPoint = [self getUnknownTargetPoint:coord.latitude longitude:coord.longitude];
         [[OARootViewController instance].mapPanel showContextMenu:unknownTargetPoint];

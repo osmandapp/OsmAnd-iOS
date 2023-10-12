@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_custom_sun.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

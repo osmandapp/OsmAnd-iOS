@@ -20,9 +20,9 @@
 {
     [super layoutSubviews];
 
-    self.firstValueViewWidth.constant = (float) _firstValue / _totalAvailableValue * self.valuesContainerView.frame.size.width;
-    self.secondValueViewWidth.constant = (float) _secondValue / _totalAvailableValue * self.valuesContainerView.frame.size.width;
-    self.thirdValueViewWidth.constant = (float) _thirdValue / _totalAvailableValue * self.valuesContainerView.frame.size.width;
+    self.firstValueViewWidth.constant = _totalAvailableValue == 0 ? 0 : (float) _firstValue / _totalAvailableValue * self.valuesContainerView.frame.size.width;
+    self.secondValueViewWidth.constant = _totalAvailableValue == 0 ? 0 : (float) _secondValue / _totalAvailableValue * self.valuesContainerView.frame.size.width;
+    self.thirdValueViewWidth.constant = _totalAvailableValue == 0 ? 0 : (float) _thirdValue / _totalAvailableValue * self.valuesContainerView.frame.size.width;
 }
 
 - (void)updateConstraints

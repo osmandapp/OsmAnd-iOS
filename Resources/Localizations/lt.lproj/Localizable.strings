@@ -427,7 +427,7 @@
 "shared_string_select" = "Pasirinkti";
 "shared_string_back" = "Atgal";
 "shared_string_ok" = "Gerai";
-"shared_string_cancel" = "Atšaukti";
+"shared_string_cancel" = "Atsisakyti";
 "shared_string_exit" = "Išeiti";
 "shared_string_close" = "Uždaryti";
 "shared_string_no" = "Ne";
@@ -603,7 +603,7 @@
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "map_widget_average_speed" = "Vidutinis greitis";
-"shared_string_control_start" = "Įrašyti";
+"shared_string_control_start" = "Pradėti";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "average_altitude" = "Vidutinis aukštis virš jūros lygio";
@@ -625,7 +625,7 @@
 "save_track_interval_globally" = "Įrašymo intervalas";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
-"track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
+"track_rec_addon_q" = "Please activate Track recording plugin to record and save your tracks";
 "track_interval_remember" = "Remember my choice";
 "track_clear" = "Clear current track";
 "track_clear_q" = "Do you want to clear current track?";
@@ -1321,7 +1321,7 @@
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
 "quick_action_resume_pause_navigation" = "Pristabdyti/Pratęsti navigaciją";
-"resume_nav" = "Continue navigation";
+"resume_nav" = "Pratęsti navigaciją";
 "pause_nav" = "Pause navigation";
 "quick_action_start_stop_navigation" = "Pradėti/Baigti navigaciją";
 "toggle_day_night" = "Switch Day/Night mode";
@@ -1557,9 +1557,6 @@
 "osm_editing_plugin_description" = "Šis įskiepis leidžia kurti ar redaguoti LV, užregistruoti ar komentuoti OSM Pastabas, dalintis įrašytais GPX failais. OSM yra atviros visuomenės valdomas, viešas žemėlapio žymėjimo projektas. Dėl smulkesnės informacijos prašome kreiptis į https://openstreetmap.org. Aktyvus dalyvavimas yra labai vertinamas, prisidėti galite tiesiai OsmAnd, jei programoje nurodysite savo prisijungimo duomenis.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Internetinės gatvės nuotraukos visiems. Atraskite vietas, bendradarbiaukite, fotografuokite pasaulį.";
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"open_place_reviews_plugin_description" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1641,8 +1638,8 @@
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "shared_string_get" = "Gauti";
 "srtm_plugin_disabled" = "Kontūro linijos išjungtos";
-"prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
-"prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
+"prch_wiki_info" = "Wikipedia plugin enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
+"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Darbo laikas";
 "time_closed" = "Closed";
 "time_will_open" = "Will open in";

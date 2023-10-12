@@ -478,7 +478,7 @@
     }
 }
 
-- (void)onButtonPressed:(OAGPXBaseTableData *)tableData
+- (void)onButtonPressed:(OAGPXBaseTableData *)tableData sourceView:(UIView *)sourceView
 {
     if ([tableData.key hasPrefix:@"cell_waypoints_group_"] && self.trackMenuDelegate)
     {

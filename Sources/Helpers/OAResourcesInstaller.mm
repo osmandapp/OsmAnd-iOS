@@ -22,6 +22,7 @@
 #import "OAGPXDocument.h"
 #import "OAGPXDatabase.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAWeatherHelper.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 
@@ -34,7 +35,6 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     OsmAndAppInstance _app;
 
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
-    OAAutoObserverProxy* _downloadTaskProgressObserver;
 
     MBProgressHUD* _progressHUD;
     
@@ -51,8 +51,6 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         _app = [OsmAndApp instance];
 
         _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onDownloadTaskFinished:withKey:andValue:) andObserve:_app.downloadsManager.completedObservable];
-
-        _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:) andObserve:_app.downloadsManager.progressCompletedObservable];
     }
     return self;
 }
@@ -247,6 +245,11 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                                 [OAIAPHelper decreaseFreeMapsCount];
                         }
                     }
+                    else if (nsResourceId && [[nsResourceId lowercaseString] hasSuffix:@".tifsqlite"])
+                    {
+                        OAWorldRegion* match = [OAResourcesUIHelper findRegionOrAnySubregionOf:_app.worldRegion thatContainsResource:QString([nsResourceId UTF8String])];
+                        [[OAWeatherHelper sharedInstance] setupDownloadStateFinished:match regionId:match.regionId];
+                    }
                     
                     [[NSNotificationCenter defaultCenter] postNotificationName:OAResourceInstalledNotification object:nsResourceId userInfo:nil];
                     
@@ -259,7 +262,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
 
                         NSString *ext = [[resource->localPath.toNSString() pathExtension] lowercaseString];
                         NSString *type = [[[nsResourceId stringByDeletingPathExtension] pathExtension] lowercaseString];
-                        if ([ext isEqualToString:@"sqlitedb"] && ([type isEqualToString:@"hillshade"] || [type isEqualToString:@"slope"]))
+                        if ([ext isEqualToString:@"sqlitedb"] && [type isEqualToString:@"heightmap"])
                             [_app.data.terrainResourcesChangeObservable notifyEvent];
 
                         if (resourceId == QString(kWorldSeamarksKey) || resourceId == QString(kWorldSeamarksOldKey))
@@ -397,19 +400,6 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         }
     }
      */
-}
-
-- (void) onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
-{
-    id<OADownloadTask> task = key;
-
-    // Skip all downloads that are not resources
-    if (![task.key hasPrefix:@"resource:"])
-        return;
-
-    NSString* nsResourceId = [task.key substringFromIndex:[@"resource:" length]];
-    NSNumber* progressCompleted = (NSNumber*)value;
-    OALog(@"Resource download task %@: %@ done", nsResourceId, progressCompleted);
 }
 
 @end

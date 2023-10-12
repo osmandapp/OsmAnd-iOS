@@ -226,7 +226,7 @@
 "voice_announces" = "Indicaciones por voz";
 "screen_alerts" = "Alertas en pantalla";
 "vehicle_parameters" = "Parámetros del vehículo";
-"map_during_navigation" = "Mapa durante la navegación";
+"map_during_navigation" = "Mapa al navegar";
 "change_map_behavior" = "Cambiar el comportamiento del mapa durante la navegación";
 "nav_type_descr" = "Elige cómo calcular una ruta para este perfil";
 "nav_type_osmand" = "OsmAnd (navegación sin conexión)";
@@ -270,7 +270,7 @@
 "choose_audio_stream_descr" = "Elige que altavoz reproducirá indicaciones por voz.";
 "use_osm_live_routing" = "Navegación con OsmAnd Live";
 "osm_live_routing_descr" = "Usa las actualizaciones de OsmAnd Live para la navegación";
-"select_nav_profile_dialog_message" = "El«Tipo de navegación» determina cómo se calculan las rutas, entre motores de navegación en línea o sin conexión.";
+"select_nav_profile_dialog_message" = "El «Tipo de navegación» determina cómo se calculan las rutas, entre motores de navegación en línea o sin conexión.";
 "osmand_default_routing" = "Navegación de OsmAnd";
 "special_routing_type" = "Navegación especial";
 "import_routing_file_descr" = "Puedes importar un archivo de navegación desde cualquier aplicación de almacenamiento en la nube abriéndolo en OsmAnd.";
@@ -294,7 +294,7 @@
 "app_mode_motorcycle" = "Motocicleta";
 "app_mode_boat" = "Barco";
 "app_mode_aircraft" = "Avión";
-"gpx_option_calculate_first_last_segment" = "Calcular la ruta OsmAnd para el primer yúltimo segmento de ruta";
+"gpx_option_calculate_first_last_segment" = "Calcular la ruta OsmAnd para el primer y último segmento de ruta";
 "gpx_option_from_start_point" = "Pasar a lo largo de la traza completa";
 "gpx_option_reverse_route" = "Invertir la dirección de la traza";
 "use_points_as_intermediates" = "Calcular ruta entre puntos";
@@ -492,7 +492,7 @@
 "update_tile" = "Actualizar mapa";
 "download_pending" = "Descarga pendiente";
 "download_suggestion" = "Descarga el mapa detallado de «%@», para ver esta área";
-"move_map_to_select_area" = "Mover el mapa para elegir elárea necesaria.";
+"move_map_to_select_area" = "Mover el mapa para elegir el área necesaria.";
 "number_of_tiles" = "Número de teselas";
 "download_size" = "Tamaño de descarga";
 "preview_of_selected_zoom_levels" = "Vista previa de los niveles de zum elegidos";
@@ -613,7 +613,7 @@
 "gpx_updown" = "Arriba/Abajo";
 "gpx_uphills_total" = "Ascenso total";
 "distance_moving" = "Distancia recorrida";
-"track_recording" = "Grabación de traza";
+"track_recording" = "Grabación de trazas";
 "shared_string_currently_recording_track" = "Grabando traza actual";
 "track_stop_rec" = "Parar grabación";
 "gpx_start_new_segment" = "Iniciar nuevo segmento";
@@ -638,7 +638,7 @@
 "gpxup_trackable" = "Trazable";
 "gpxup_private" = "Privado";
 "gpx_upload_public_visibility_descr" = "«Público» significa que la traza se mostrará públicamente en tus trazas GPS y en las lista públicas de trazas GPS y con marcas de tiempo en crudo. Los datos servidos a través de la API no harán referencia a tu página de trazas. Las marcas de tiempo de los puntos no estarán disponibles a través de la API pública de GPS, y los puntos de la ruta no se ordenarán de manera cronológica.";
-"gpx_upload_identifiable_visibility_descr" = "«Identificable» significa que la traza se mostrará públicamente en tus trazas GPS y en las listas públicas de trazas GPS, es decir que otros usuarios podrán descargar la traza en bruto y asociarla a tu nombre de usuario. Los datos públicos servidos a través de la API con marcas de tiempo GPSharán referencia a la página original de la traza.";
+"gpx_upload_identifiable_visibility_descr" = "«Identificable» significa que la traza se mostrará públicamente en tus trazas GPS y en las listas públicas de trazas GPS, es decir que otros usuarios podrán descargar la traza en bruto y asociarla a tu nombre de usuario. Los datos públicos servidos a través de la API con marcas de tiempo GPS harán referencia a la página original de la traza.";
 "gpx_upload_trackable_visibility_descr" = "«Trazable» significa que la traza no aparece en ninguna lista pública, pero el conjunto de puntos procesados con marcas de tiempo (no se pueden asociar directamente con usted) estarán disponibles a través de la API pública de GPS.";
 "gpx_upload_private_visibility_descr" = "«Privado» significa que la traza no aparecerá en ninguna lista pública, pero el conjunto de puntos seguirá estando disponible en orden cronológico a través de la API pública de GPS y sin marcas de tiempo.";
 "save_track_to_gpx" = "Grabar la traza automáticamente al navegar";
@@ -646,7 +646,7 @@
 "gpx_distance_points" = "Distancia (puntos)";
 "gpx_max_speed" = "Velocidad máx.";
 "shared_string_speed" = "Velocidad";
-"shared_string_slope" = "Pendiente";
+"shared_string_slope" = "Pendientes";
 "stats_select_graph_data" = "Elegir datos del gráfico";
 
 // Map settings
@@ -676,11 +676,11 @@
 "shared_string_terrain" = "Terreno";
 "map_settings_layer_transparency" = "Transparencia de la capa";
 "map_settings_slopes_legend" = "Puedes leer más sobre las pendientes en Wikipedia";
-"map_settings_slopes_description" = "Los mapas de pendientes utilizan diferentes colores para visualizar el terreno";
-"map_settings_hillshade_description" = "Los mapas de sombreado visualizan las pendientes, los picos y las tierras bajas usando diferentes niveles de gris";
-"map_settings_zoom_level_description" = "Define el nivel de zum mínimo y máximo para mostrar la capa";
-"map_settings_add_maps_hillshade" = "Se necesitan mapas adicionales para ver el sombreado en el mapa";
-"map_settings_add_maps_slopes" = "Se necesitan mapas adicionales para ver las pendientes en el mapa";
+"map_settings_slopes_description" = "Las pendientes se colorean sobre el terreno.";
+"map_settings_hillshade_description" = "El mapa de sombreado usa sombras oscuras para mostrar las pendientes, picos y tierras bajas.";
+"map_settings_zoom_level_description" = "Define el nivel de zum mínimo y máximo dónde se verá la capa";
+"map_settings_add_maps_hillshade" = "Se necesitan mapas adicionales para ver el sombreado en el mapa.";
+"map_settings_add_maps_slopes" = "Se necesitan mapas adicionales para ver las pendientes en el mapa.";
 "shared_string_legend" = "Leyenda";
 "map_settings_show_slider_map" = "Mostrar deslizador en el mapa";
 "add_online_source" = "Añadir repositorio en línea";
@@ -925,7 +925,7 @@
 "copy_from_other_profile_descr" = "Puedes copiar todos los ajustes de cualquier perfil al perfil elegido: ";
 "profile_alert_delete_title" = "Borrar perfil";
 "profile_alert_delete_msg" = "¿Borrar el perfil «%@»\?";
-"select_base_profile_dialog_message" = "El perfil personalizado se basa en uno de los perfiles de aplicación predefinidos, lo que define los ajustes básicos como la visibilidad predefinida de los widgets, las unidades de velocidad y distancia. Estos son los perfiles de aplicación predefinidos, junto con ejemplos de perfiles personalizados a los que se pueden ampliar:";
+"select_base_profile_dialog_message" = "El perfil personalizado se basa en uno de los perfiles de aplicación predefinidos, que define los ajustes básicos como la visibilidad predefinida de los widgets, las unidades de velocidad y distancia. Estos son los perfiles de aplicación predefinidos, junto con ejemplos de perfiles personalizados que se pueden ampliar:";
 "profile_type_custom_string" = "Perfil personalizado";
 "new_profile" = "Nuevo perfil";
 "configure_profile" = "Configurar perfil";
@@ -1136,7 +1136,7 @@
 "res_source_format" = "Formato de fuente";
 "sqlite_db_file" = "Archivo SQLiteDB";
 "one_image_per_tile" = "Un archivo de imagen por tesela";
-"res_zoom_levels_desc" = "Estos parámetros afectarán a la visualización del mapa cuando se utilice como un tipo de mapa o como superposición/subyacencia.\n\nTipo de mapa: el mapa se limitará a los zums elegidos.\n\nSuperposición/Subyacencia: Niveles de zum en los que las teselas serán visibles. Se producirá un aumento o disminución de la escala por encima o por debajo de los valores definidos.";
+"res_zoom_levels_desc" = "Estos parámetros afectarán a la visualización del mapa cuando se utilice como un tipo de mapa o como superposición/subyacencia.\n\nTipo de mapa: el mapa se limitará a los zums elegidos.\n\nSuperposición/Subyacencia: Niveles de zum donde se verán las teselas. Se producirá un aumento o disminución de la escala por encima o por debajo de los valores definidos.";
 "res_expire_time_desc" = "Tiempo de expiración en minutos. Las teselas almacenadas serán recargadas luego del tiempo definido. Deja este campo vacío si no necesitas recargar las teselas para este repositorio.\nUn día son 1440 minutos.\nUna semana son 10080 minutos.\n30 días son 43200 minutos.";
 "res_name_warning" = "El nombre del archivo no puede estar vacío";
 "res_url_warning" = "La URL no puede estar vacía";
@@ -1263,7 +1263,7 @@
 "mapil_select_user" = "Elegir usuario";
 
 // Coordinate widget
-"coordinates_widget_current_location" = "Widget de coordenadas";
+"coordinates_widget_current_location" = "Coordenadas: ubicación actual";
 "searching_gps" = "Buscando GPS";
 "copied_to_clipboard" = "Copiado al portapapeles";
 // Quick action
@@ -1383,7 +1383,7 @@
 "quick_action_contour_lines_descr" = "Un botón que muestra u oculta las curvas de nivel en el mapa.";
 "hide_contour_lines" = "Ocultar curvas de nivel";
 "enable_contour_lines" = "Activar para ver las curvas de nivel en el mapa";
-"enable_hillshade" = "Activar para ver datos del terreno";
+"enable_hillshade" = "Activar para ver datos del terreno con el mapa de sombreado o pendientes.";
 "contour_lines_hillshades_slope" = "Curvas de nivel, sombreados, pendientes";
 "quick_action_dir_from_descr" = "Pulsa esta acción para navegar desde el punto central de la pantalla actual.";
 "quick_action_transport_descr" = "Botón que muestra u oculta el transporte público en el mapa.";
@@ -1557,9 +1557,6 @@
 "osm_editing_plugin_description" = "Haz contribuciones en OpenStreetMap, un proyecto de mapeo de dominio público, global, libre, abierto e impulsado por la comunidad.\n\nEn nuestro sitio web, puedes encontrar una guía de como colaborar en el mapa - https://osmand.net/docs/user/plugins/osm-editing .";
 "product_desc_mapillary" = "Vistas a nivel de calle para conocer el entorno";
 "plugin_mapillary_descr" = "Imágenes de vistas a nivel de calle. También puedes contribuir tú mismo. Para ver los datos existentes como una capa en el mapa, activa las «Imágenes a nivel de calle» en el menú «Configurar mapa».";
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Comparte tus opiniones sobre lugares públicos";
-"open_place_reviews_plugin_description" = "Haz contribuciones al proyecto OpenPlaceReviews, como fotos, reseñas o enlaces sobre lugares públicos como restaurantes, hoteles o museos.\n\nEn nuestro sitio web, hay una guía de cómo contribuir - https://osmand.net/docs/user/plugins/openplacereviews .";
 "product_desc_africa" = "Descargas ilimitadas de mapas para África";
 "product_desc_antarctica" = "Descargas ilimitadas de mapas para la Antártida";
 "product_desc_africa_short" = "Mapas regionales de África";
@@ -1588,7 +1585,7 @@
 "some_articles_may_not_available_in_lang" = "Es posible que algunos artículos de Wikipedia no estén disponibles en tu idioma.";
 "available_languages" = "Idiomas disponibles";
 "preferred_languages" = "Idiomas preferidos";
-"srtm_plugin_name" = "Curvas de nivel";
+"srtm_plugin_name" = "Topografía";
 "product_desc_srtm" = "Evaluación visual de la forma de la superficie terrestre";
 "srtm_plugin_description" = "La información topográfica, como las curvas de nivel, los sombreados y las pendientes, ayudan a evaluar visualmente la disposición del terreno y el relieve, la navegabilidad y más. La información topográfica en un mapa puede representarse mediante el sombreado de la pendiente, las curvas de nivel y/o el color de la inclinación.\n\nLos datos subyacentes provienen de SRTM y ASTER.\n\nVéase - http://osmand.net/docs/user/plugins/contour-lines .";
 "wikivoyage_travel_guide" = "Guías turísticas";
@@ -1640,9 +1637,9 @@
 "from_location" = "desde lejos";
 "show_alt_in_drive" = "Ver altitud en modo conducción";
 "shared_string_get" = "Obtener";
-"srtm_plugin_disabled" = "Curvas de nivel desactivadas";
+"srtm_plugin_disabled" = "Topografía desactivada";
 "prch_wiki_info" = "El complemento de Wikipedia activa la información de Wikipedia para los mapas que tiene descargados o comprados con un límite gratuito.";
-"prch_srtm_info" = "El complemento de Curvas de nivel activa las curvas de nivel para los mapas que tiene comprados o descargados con un límite gratuito.";
+"prch_srtm_info" = "El complemento de la topografía, activa las curvas de nivel para los mapas comprados o descargados con un límite gratuito.";
 "shared_string_open" = "Abrir";
 "time_closed" = "Cerrado";
 "time_will_open" = "Abrirá a las";
@@ -1698,8 +1695,8 @@
 "plugin_popup_wiki_desc" = "Para usar el complemento de Wikipedia, descarga primero los datos Wikipedia de una región";
 "plugin_popup_wiki_ask" = "Para descargar los datos de Wikipedia, necesita activar el complemento: <b>Wikipedia</b>";
 "plugin_popup_srtm_title" = "Descargar curvas de nivel";
-"plugin_popup_srtm_desc" = "Para usar la función de Curvas de nivel, descargue primero los datos de Curvas de nivel de una región";
-"plugin_popup_srtm_ask" = "Para descargar las Curvas de nivel, necesita activar el complemento: <b>Curvas de nivel</b>";
+"plugin_popup_srtm_desc" = "Para usar la función de Topografía, descarga primero los datos de Curvas de nivel de una región";
+"plugin_popup_srtm_ask" = "Para descargar las Curvas de nivel, necesitas activar el complemento: <b>Topografía</b>";
 "plugin_popup_nautical_title" = "Descargar mapas náuticos";
 "plugin_popup_nautical_desc" = "Primero descargue los mapas náuticos.\nLuego vaya a los <b>Ajustes del mapa</b> > <b>Tipo de mapa</b> y active el estilo <b>Náutico</b>";
 "plugin_popup_osm_editing_title" = "Activar la edición de OpenStreetMap";
@@ -1894,7 +1891,7 @@
 "routing_attr_height_description" = "Indica la altura permitida del vehículo en rutas.";
 "touting_specified_vehicle_parameters_descr" = "Los parámetros definidos del vehículo pueden afectar la navegación.";
 "routing_attr_height_obstacles_name" = "Usar datos de elevación";
-"routing_attr_avoid_toll_name" = "Sin cabinas de peajes";
+"routing_attr_avoid_toll_name" = "Sin peajes";
 "rendering_attr_appMode_description" = "Optimizar mapa para";
 "routing_attr_avoid_ice_roads_fords_name" = "Sin caminos de hielo ni vados";
 "rendering_value_germanRoadAtlas_name" = "Estilo vial alemán";
@@ -2044,7 +2041,7 @@
 "rendering_value_green_name" = "Verde";
 "routing_attr_piste_type_nordic_description" = "Senderos para esquí nórdico o de travesía.";
 "rendering_attr_surface_unpaved_name" = "Sin pavimento";
-"rendering_attr_noAdminboundaries_description" = "Ocultar fronteras regionales (niveles administrativos 5– 9).";
+"rendering_attr_noAdminboundaries_description" = "Ocultar fronteras regionales (niveles administrativos 5 – 9).";
 "rendering_value_bicycle_name" = "Bicicleta";
 "rendering_value_translucent_lightgreen_name" = "Verde claro translúcido";
 "rendering_attr_contourLines_name" = "Mostrar curvas de nivel";
@@ -2119,7 +2116,7 @@
 "routing_attr_weight_description" = "Indica el peso del vehículo permitido en rutas.";
 "rendering_attr_surface_salt_name" = "Sal";
 "rendering_value_yellow_name" = "Amarillo";
-"routing_attr_allow_private_description" = "Permite acceder aáreas privadas.";
+"routing_attr_allow_private_description" = "Permite acceder a áreas privadas.";
 "rendering_attr_alpineHiking_description" = "Dibujar senderos según la escala SAC.";
 "rendering_attr_highway_class_bridleway_name" = "Camino ecuestre";
 "routing_attr_avoid_share_taxi_name" = "Sin taxis compartidos";
@@ -2237,7 +2234,7 @@
 "ios_release_3_80" = "• Se ha añadido «Perfiles de aplicación» con ajustes independientes\n• Nueva disposición de ajustes por perfiles y tipos: navegación, general, mapa y pantalla\n• Posibilidad de importar o exportar ajustes de perfil\n• Se han añadido respositorios de datos para las fotos en línea\n• Se ha añadido capacidad para descargar mapas en línea y almacenar en caché\n• Algoritmos de búsqueda mejorados\n";
 "ios_release_3_90" = "• Se ha añadido la función de «Planificar una ruta» para planificar futuros viajes con la posibilidad de crear segmentos de ruta utilizando diferentes tipos de navegación\n• Se ha añadido una opción para activar una brújula sobre la herramienta «Regla radial».\n• Se ha añadido la opción «Superposición de etiquetas de PDI» que permite mostrar los nombres de los favoritos, los puntos de referencia de las trazas y los marcadores en el mapa\n• Se han añadido nuevas acciones rápidas para la visibilidad de las curvas de nivel y el terreno en el mapa, el cambio de un perfil de aplicación y el borrado de un punto intermedio más cercano\n• Se han solucionado problemas con la falta de la categoría de búsqueda de Wikipedia\n• Importación de ajustes: se han corregido errores y se ha añadido soporte para todos los tipos de datos disponibles en OsmAnd\n• Edición de OpenStreetMap: se ha corregido el selector de tiempo y la imposibilidad de cambiar el comentario del conjunto de cambios\n";
 "ios_release_4_0" = "• ¡Nuevo! Se ha añadido la opción para elegir un icono, color y forma propia en «Añadir favorito»\n• Se ha añadido el nuevo widget de coordenadas con las coordenadas de la ubicación actual\n• Se ha añadido la posibilidad de importar complementos personalizados definidos por el usuario\n• Se ha ampliado significativamente la funcionalidad de importar/exportar\n• La función «Distancia al pulsar» se ha movido de la regla radial a una opción separada\n• Se ha corregido el bloqueo de la aplicación CarPlay cuando se apaga la pantalla del iPhone\n• Se han trasladado al menú principal los complementos desde «Mapas y Recursos»\n• Se ha añadido el idioma finlandés\n• Se ha corregido la interfaz de usuario en orientación horizontal para la función «Planificar ruta»\n• Se ha añadido soporte para los archivos personalizados de navegación y visualización\n• Se ha corregido el rendimiento de la línea de dirección de los marcadores\n• Se ha solucionado un problema con la importación de archivos GPX con extensiones en mayúsculas\n• Se ha corregido un problema con el menú «Seguir traza».\n• Se ha corregido la importación de archivos OBF\n";
-"ios_release_4_1" = "• Interacción con trazas completamente rediseñada: un nuevo menú con gráficos, estadísticas, posibilidad de cambiar el aspecto, coloración por velocidad, altura y pendiente, y marcación de trazas en el mapa.\n• Nueva pantalla de búsqueda por coordenadas en diferentes formatos\n• Mejoras de la búsqueda por coordenadas en formato OLC\n• Nuevo menú de fácil manejo para elegir los idiomas en los que se muestran los artículos de Wikipedia en el mapa\n• Se ha añadido la posibilidad de cargar fácilmente los mapas de todas las regiones del país con un par de clics\n• Se han añadido curvas de nivel en pies (es deben descargar archivos adicionales)\n• Se ha añadido la posibilidad de descargar mapas marcando la región o el país deseado en el mapa, así como la adición de un cuadro de diálogo con la sugerencia de cargar un mapa faltante en la región visualizada\n• Nueva apariencia de los botones en el mapa y posibilidad de cambiar el zum del mapa pulsando dos veces y deslizando el dedo.\n• Los ajustes de visibilidad de las rutas se mueven más arriba en la sección «Configurar mapa» y se reorganizan para una mayor flexibilidad\n";
+"ios_release_4_1" = "• Interacción con trazas completamente rediseñada: un nuevo menú con gráficos, estadísticas, posibilidad de cambiar el aspecto, coloración por velocidad, altura y pendiente, y marcación de trazas en el mapa.\n• Nueva pantalla de búsqueda por coordenadas en diferentes formatos\n• Mejoras de la búsqueda por coordenadas en formato OLC\n• Nuevo menú de fácil manejo para elegir los idiomas a mostrar los artículos de Wikipedia en el mapa\n• Se ha añadido la posibilidad de cargar fácilmente los mapas de todas las regiones del país con un par de clics\n• Se han añadido curvas de nivel en pies (es deben descargar archivos adicionales)\n• Se ha añadido la posibilidad de descargar mapas marcando la región o el país deseado en el mapa, así como la adición de un cuadro de diálogo con la sugerencia de cargar un mapa faltante en la región visualizada\n• Nueva apariencia de los botones en el mapa y posibilidad de cambiar el zum del mapa pulsando dos veces y deslizando el dedo.\n• Los ajustes de visibilidad de las rutas se mueven más arriba en la sección «Configurar mapa» y se reorganizan para una mayor flexibilidad\n";
 "shared_string_hide_all" = "Ocultar todo";
 "connect_rp" = "Conectar puntos de ruta";
 "points_delete_multiple" = "¿Borrar %d punto(s)\?";
@@ -2371,7 +2368,7 @@
 "rendering_attr_showMonorailRoutes_name" = "Rutas de monorriel";
 "backup_error_no_valid_subscription" = "No hay ninguna suscripción válida";
 "backup_error_subscription_was_used" = "Suscripción o promoción usada en otra cuenta %@";
-"backup_error_gzip_only_supported_upload" = "El archivo debe enviarse en formato«.gzip»";
+"backup_error_gzip_only_supported_upload" = "El archivo debe enviarse en formato «.gzip»";
 "backup_error_token_is_not_valid_or_expired" = "Clave inválida o vencida";
 "ios_release_4_2" = "• Aspecto de las líneas de ruta: se ha añadido la posibilidad de definir el ancho y el color\n• Trazas: se ha añadido la opción de borrar varias trazas a la vez\n• Menú contextual de trazas: se ha añadido una barra de desplazamiento con grupos de puntos de ruta\n• Aspecto del mapa: se han dividido las rutas adicionales por tipo con la posibilidad de activar por separado una de cada categoría\n• Rutas a caballo: se ha añadido un nuevo tipo de navegación y perfil de la aplicación\n• Los archivos de OsmAnd ahora son visibles en desde el gestor de archivos\n• Se ha mejorado la interfaz de las opciones «Usar datos de elevación» y «Elegir fluctuación de elevación», se han combinado y se han renombrado como «Terreno preferido», actualmente disponibles para los perfiles «Bicicleta» y «Peatón».\n• Se ha añadido la opción «Incluir cabecera» para la grabación de trazas\n• Widget del nombre de la calle: ahora muestra el escudo del camino y el número de salida durante la navegación\n• Nuevas rutas de ejercicios «fitness» y «running» en el mapa\n• Corrección de errores de CarPlay, se han añadido gestos para pantallas táctiles\n• Se ha corregido la importación de archivos GPX desde el paquete OSF\n• Se ha corregido la importación de complementos personalizados con archivos incluidos\n• Se ha corregido varios fallos en el modo de planificación de rutas\n• Se ha corregido fallos durante la navegación\n";
 "copy_to_map_favorites" = "Copiar a favoritos";
@@ -2420,7 +2417,7 @@
 "simulation_preview_mode_title" = "Modo de previsualización rápida";
 "speed_mode" = "Modo de velocidad";
 "routing_attr_allow_private_for_truck_name" = "Permitir el acceso privado (camión)";
-"routing_attr_allow_private_for_truck_description" = "Permitir el acceso aáreas privadas para camiones.";
+"routing_attr_allow_private_for_truck_description" = "Permitir el acceso a áreas privadas para camiones.";
 "osmand_pro_tagline" = "Obtén todas las funciones";
 "purchases_feature_desc_nautical" = "Obtén acceso a la información de profundidad náutica";
 "manage_subscription" = "Gestionar suscripción";
@@ -2446,7 +2443,7 @@
 "unlimited_map_downloads" = "Descargas de mapas ilimitadas";
 "new_device_account" = "Nuevo dispositivo / nueva cuenta";
 "ltr_or_rtl_combine_via_or" = "%@ o %@";
-"private_access_routing_req" = "El destino se ubica en unárea de acceso privado. ¿Permitir el uso de caminos privados para este viaje\?";
+"private_access_routing_req" = "El destino se ubica en un área de acceso privado. ¿Permitir el uso de caminos privados para este viaje?";
 "terrain_maps" = "Mapas topográficos";
 "purchases_feature_desc_hourly_map_updates" = "Obtén acceso a actualizaciones de mapas con mayor frecuencia, elige entre: actualizaciones horarias, diarias o semanales. Las actualizaciones se descargan de forma incremental, sólo para el área modificada.";
 "monthly_subscription" = "Suscripción mensual";
@@ -2476,7 +2473,7 @@
 "osm_live_payment_year_cost_descr" = "%@ / año";
 "routing_attr_hazmat_category_name" = "Transporte de materiales peligrosos";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Sin restricciones)";
-"pro_features" = "Funciones«Pro»";
+"pro_features" = "Funciones «Pro»";
 "carplay" = "CarPlay";
 "purchases_feature_desc_carplay" = "Transmite los mapas y navegación sin conexión de OsmAnd en la pantalla del vehículo y se integra con los controles del mismo.";
 "you_can_get_feature_as_part_of_pattern" = "Consigue«%@» como parte del plan %@. Comparación:";
@@ -2539,7 +2536,6 @@
 "backup_deleting_all_data" = "Borrando todos los datos…";
 "cloud_storage_used" = "Utilizado: %@ de %@";
 "loading_purchase_information" = "Cargando datos de compra";
-"update_only_over_wi_fi" = "Actualizar sólo con Wi-Fi";
 "open_street_map_login_mode_simple" = "Debes iniciar sesión para subir los cambios.";
 "benefits_for_contributors_secondary_descr" = "Accede a OpenStreetMap para comprobar si tienes derecho a actualizaciones mensuales y horarias ilimitadas de los mapas.";
 "enough_contributions_descr" = "¡Felicitaciones, has hecho suficientes contribuciones a OpenStreetMap y ahora puedes disfrutar de actualizaciones ilimitadas de los mapas de OsmAnd!";
@@ -2689,7 +2685,7 @@
 "checking_progress" = "Comprobando…";
 "shared_string_uploaded" = "Subido";
 "shared_string_do_not_exist" = "No existe";
-"download_heightmap_maps" = "Mapa de alturas";
+"download_heightmap_maps" = "Mapa topográfico (3D)";
 "new_file" = "Archivo nuevo";
 "cloud_conflict_descr" = "Las versiones en local y en la nube contienen cambios desde la última sincronización.";
 "amazon_appstore" = "Amazon Appstore";
@@ -2732,7 +2728,7 @@
 "rendering_attr_showMtbScaleIMBATrails_description" = "Mostrar senderos dedicados al ciclismo de montaña.";
 "rendering_attr_natureReserves_name" = "Reserva natural";
 "rendering_attr_showShareTaxiRoutes_name" = "Rutas de enlace";
-"rendering_attr_natureReserves_description" = "Mostrar reservas naturales,áreas protegidas y parques nacionales.";
+"rendering_attr_natureReserves_description" = "Mostrar reservas naturales, áreas protegidas y parques nacionales.";
 "rendering_attr_weatherTempContours_name" = "Isolíneas de temperatura";
 "routing_attr_difficulty_preference_intermediate_name" = "Intermedia";
 "routing_attr_difficulty_preference_expert_name" = "Experto";
@@ -2771,14 +2767,14 @@
 "routing_attr_carriage_restrictions_description" = "Considera los permisos de acceso para los vehículos impulsados a caballo";
 "rendering_attr_hideMilitaryAreas_name" = "Áreas militares";
 "routing_attr_allow_streams_description" = "Permite arroyos y desagües";
-"rendering_attr_OSMMapperAssistantFixme_name" = "Etiquetas«fixme» (arréglame)";
-"rendering_attr_OSMMapperAssistantNote_name" = "Etiquetas«note» (nota)";
+"rendering_attr_OSMMapperAssistantFixme_name" = "Etiquetas «fixme» (arréglame)";
+"rendering_attr_OSMMapperAssistantNote_name" = "Etiquetas «note» (nota)";
 "rendering_attr_horse_scale_common_name" = "Común";
 "rendering_attr_showTramRoutes_name" = "Rutas de tranvía";
 "rendering_attr_showWaterwayTunnels_name" = "Túneles fluviales";
 "rendering_attr_noNatureReserveBoundaries_name" = "Fronteras naturales";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "No salirse de la pista";
-"rendering_attr_hideMilitaryAreas_description" = "Oculta lasáreas militares";
+"rendering_attr_hideMilitaryAreas_description" = "Oculta las áreas militares";
 "rendering_attr_horse_scale_critical_name" = "Crítico";
 "routing_attr_allow_intermittent_description" = "Permite cursos de agua intermitentes";
 "rendering_value_all_name" = "Todo";
@@ -2865,7 +2861,7 @@
 "show_map_center" = "Mostrar «Coordenadas: centro del mapa»";
 "hide_map_center" = "Ocultar «Coordenadas: centro del mapa»";
 "quick_action_map_center_widget_descr" = "Un botón que muestra u oculta en el mapa el widget de coordenadas.";
-"wikipedia_language_settings_descr" = "Marca los idiomas en los que los artículos de Wikipedia aparecerán en el mapa. Puedes cambiar entre todos los idiomas disponibles mientras lees el artículo.";
+"wikipedia_language_settings_descr" = "Marca los idiomas donde los artículos de Wikipedia aparecerán en el mapa. Puedes cambiar entre todos los idiomas disponibles mientras lees el artículo.";
 "dont_download" = "No descargar";
 "over_wifi_only" = "Sólo por Wi-Fi";
 "download_over_cellular_network" = "¿Descargar imágenes a través de la red móvil? Esto puede incurrir en altos cargos.";
@@ -2937,7 +2933,7 @@
 "gps_info_widget_desc" = "Muestra el número de satélites que el dispositivo detecta y usa en ese momento.";
 "current_speed_widget_desc" = "Muestra la velocidad actual detectada por el GPS.";
 "magnetic_bearing_widget_desc" = "Ángulo entre el norte magnético y el punto objetivo observado desde la ubicación.";
-"lanes_widgets_desc" = "Muestra la disposición actual de los carriles del camino y destaca por los que se debe circular al navegar.";
+"lanes_widgets_desc" = "Muestra la disposición actual de los carriles del camino y destaca por cual se debe circular al navegar.";
 "time_to_go_desc" = "Tiempo en minutos u horas necesario para llegar al destino.";
 "arrival_time_widget_desc" = "Hora de llegada al punto de destino.";
 "map_markers_bar_widget_desc" = "Muestra la distancia y la dirección al siguiente marcador desde la ubicación actual. Puede configurarse para ver 1 o 2 marcadores.";
@@ -3013,3 +3009,44 @@
 "visible_in_3d_mode" = "Visible en el modo 3D";
 "map_3d_mode_description" = "Pulsa en el mapa con 2 dedos y mueve hacia arriba o abajo para ajustar la inclinación del mapa.";
 "map_3d_mode_hint" = "Mantén pulsado para cambiar la ubicación del botón.";
+"add_row" = "Añadir fila";
+"free_account" = "Cuenta gratuita";
+"free_favorites_backup_description" = "Regístrate en OsmAnd Cloud para obtener una copia de seguridad gratuita de los favoritos y ajustes";
+"banner_payment_free_backup_settings_title" = "Copia de seguridad gratuita de los ajustes";
+"free_favorites_backup" = "Copia de seguridad gratuita de favoritos";
+"get_osmand_cloud" = "Obtener OsmAnd Cloud";
+"reset_all_settings_desc" = "¿Restablecer todos los ajustes a los predefinidos?";
+"no_widgets_here_yet" = "Todavía sin widgets aquí";
+"no_widgets_descr" = "Añade uno o más widgets de la lista de widgets disponibles.";
+"map_widget_rendering_fps_desc" = "Muestra que tan rápido se ven y actualizan el mapa y sus elementos , expresada en fotogramas por segundo (FPS).";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "Muestra las coordenadas geográficas del centro del mapa actual";
+"map_widget_camera_tilt_desc" = "Muestra el ángulo de inclinación de la cámara en modo perspectiva. El valor predefinido es 90° (sin inclinación).";
+"map_widget_camera_distance_desc" = "Muestra la elevación de la cámara sobre el nivel de la superficie.";
+"map_widget_zoom_level_desc" = "Muestra el nivel de zum actual del mapa.";
+"map_widget_target_distance_desc" = "Muestra la distancia entre la cámara y la ubicación del objetivo.";
+"weather_updates_manual" = "El pronóstico del tiempo debe actualizarse manualmente.";
+"click_on_widget" = "Pulsar en el widget";
+"shared_string_cache" = "Caché";
+"purchases_feature_relief_3d_description" = "Obtén y observa el modelo a escala de tu barrio o de todo el continente.";
+"weather_update_disabled" = "Desactivado";
+"unsaved_changes_will_be_lost_discard" = "Los cambios sin guardar se perderán. ¿Descartar cambios?";
+"terrain_3D_maps" = "Mapas topográficos";
+"average_speed_skip_stops" = "Tener en cuenta las paradas";
+"shared_string_relief_3d" = "Relieve 3D";
+"average_speed_time_interval_desc" = "Indica el intervalo de tiempo para la velocidad media.";
+"weather_update_parameters_wifi" = "El pronóstico del tiempo será actualizado sólo con una red Wi-Fi activa.";
+"unsaved_changes" = "Cambios sin guardar";
+"weather_update_over_wifi_only" = "Sólo por Wi-Fi";
+
+
+// Shared Strings
+"shared_string_discard" = "Descartar";
+"weather_update_parameters_disabled" = "Las actualizaciones automáticas serán desactivadas.";
+"map_settings_topography" = "Topografía";
+"auto_update" = "Actualización automática";
+"specify_number_of_dir_indicators_desc" = "Define el número de indicadores de dirección.";
+"weather_update_over_any_network" = "Sobre cualquier red";
+"weather_update_parameters_any_network" = "El pronóstico del tiempo será actualizado sobre cualquier red. Pueden usarse los datos móviles.";
+"map_marker_interval_dialog_desc" = "Indica el intervalo de tiempo a medir con la velocidad media para calcular la hora de llegada estimada.";

@@ -11,18 +11,18 @@ import Foundation
 @objc(OAMapWidgetsFactory)
 class MapWidgetsFactory: NSObject {
     
-    func createMapWidget(widgetType: WidgetType) -> OABaseWidgetView? {
-        return createMapWidgetImpl(customId: nil, widgetType: widgetType)
+    func createMapWidget(widgetType: WidgetType, widgetParams: [String: Any]? = nil) -> OABaseWidgetView? {
+        return createMapWidget(customId: nil, widgetType: widgetType, widgetParams: widgetParams)
     }
     
-    func createMapWidget(customId: String?, widgetType: WidgetType) -> OABaseWidgetView? {
+    func createMapWidget(customId: String?, widgetType: WidgetType, widgetParams: [String: Any]? = nil) -> OABaseWidgetView? {
         if isWidgetCreationAllowed(widgetType: widgetType) {
-            return createMapWidgetImpl(customId: customId, widgetType: widgetType)
+            return createMapWidgetImpl(customId: customId, widgetType: widgetType, widgetParams: widgetParams)
         }
         return nil
     }
     
-    private func createMapWidgetImpl(customId: String?, widgetType: WidgetType) -> OABaseWidgetView? {
+    private func createMapWidgetImpl(customId: String?, widgetType: WidgetType, widgetParams: ([String: Any])? = nil) -> OABaseWidgetView? {
         switch widgetType {
         case .nextTurn:
             return OANextTurnWidget(horisontalMini: false, nextNext: false)
@@ -31,19 +31,21 @@ class MapWidgetsFactory: NSObject {
         case .secondNextTurn:
             return OANextTurnWidget(horisontalMini: true, nextNext: true)
         case .coordinatesCurrentLocation:
-            let widget = OACoordinatesWidget(type: .currentLocation)
-            widget?.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
+            let widget = CoordinatesCurrentLocationWidget()
+            widget.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
             return widget
         case .coordinatesMapCenter:
-            let widget = OACoordinatesWidget(type: .mapCenter)
-            widget?.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
+            let widget = CoordinatesMapCenterWidget()
+            widget.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
             return widget
         case .streetName:
             let widget = OATopTextView()
             widget.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
             return widget
         case .markersTopBar:
-            return nil // MapMarkersBarWidget(mapActivity: mapActivity)
+            let widget = OADestinationBarWidget()
+            widget.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
+            return widget
         case .lanes:
             let widget = OALanesControl()
             widget.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
@@ -73,7 +75,12 @@ class MapWidgetsFactory: NSObject {
         case .currentSpeed:
             return OACurrentSpeedWidget()
         case .averageSpeed:
-            return /*AverageSpeedWidget(mapActivity: mapActivity, customId: customId)*/nil
+            if let widgetParams {
+                return AverageSpeedWidget(customId: customId,
+                                          widgetParams: widgetParams)
+            } else {
+                return AverageSpeedWidget(customId: customId)
+            }
         case .maxSpeed:
             return OAMaxSpeedWidget()
         case .altitudeMyLocation:
@@ -97,7 +104,7 @@ class MapWidgetsFactory: NSObject {
         case .elevationProfile:
             return /*ElevationProfileWidget(mapActivity: mapActivity)*/nil
         default:
-            return nil /*PluginsHelper.createOABaseWidgetView(mapActivity: mapActivity, widgetType: widgetType)*/
+            return OAPlugin.createMapWidget(widgetType, customId: customId)
         }
     }
     

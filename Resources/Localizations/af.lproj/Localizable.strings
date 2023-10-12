@@ -743,7 +743,7 @@
 "save_track_interval_globally" = "Logging interval";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
-"track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
+"track_rec_addon_q" = "Please activate Track recording plugin to record and save your tracks";
 "track_interval_remember" = "Remember my choice";
 "track_clear" = "Clear current track";
 "track_clear_q" = "Do you want to clear current track?";
@@ -1786,10 +1786,6 @@
 "product_desc_mapillary" = "Street-level views to check out the surroundings";
 "plugin_mapillary_descr" = "Brings street-level views. Where imagery is missing, you can just add it yourself so that others can make use of it. To enable the Mapillary layer turn on the \"Street-level imagery\" in Configure map menu.";
 
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Share your opinion about public places";
-"open_place_reviews_plugin_description" = "Allows you to make contributions to OpenPlaceReviews project. Such as photos, reviews, links about public places such as restaurants, hotels, museums and waypoints. \n\nYou can find instruction on how to contribute on out website - https://osmand.net/docs/user/plugins/openplacereviews";
-
 "debugging_and_development" = "OsmAnd ontwikkeling";
 "product_desc_development" = "For developers and experienced users";
 "osmand_development_plugin_description" = "Wys stellings vir ontwikkeling en ontfoutingsfunksies bv. bewegende navigasie of beeldvertoon werkverrigting.";
@@ -1891,9 +1887,9 @@
 
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "shared_string_get" = "Get";
-"srtm_plugin_disabled" = "Contour lines disabled";
-"prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
-"prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
+"srtm_plugin_disabled" = "Topography disabled";
+"prch_wiki_info" = "Wikipedia plugin enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
+"prch_srtm_info" = "Topography plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 
 "shared_string_open" = "Open";
 "time_closed" = "Closed";
@@ -1957,8 +1953,8 @@
 "plugin_popup_wiki_desc" = "To start using Wikipedia plugin, please download Wikipedia data of an region first";
 "plugin_popup_wiki_ask" = "In order to download Wikipedia data you need to activate plugin: <b>Wikipedia</b>";
 "plugin_popup_srtm_title" = "Download contour lines";
-"plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
-"plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
+"plugin_popup_srtm_desc" = "To start using Topography feature, please download Contour lines of an region first";
+"plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Topography</b>";
 "plugin_popup_nautical_title" = "Download Nautical maps";
 "plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
 "plugin_popup_nautical_ask" = "Please enable Nautical plugin";
@@ -2834,7 +2830,7 @@
 "weather_accuracy_forecast_description" = "Offline forecast is available until: %@.\nAccuracy: %@, hourly. %@ for every 3 hours.";
 "weather_generates_new_forecast_description" = "OsmAnd generates a new forecast every 6 hours. The closer to the current date, the more accurate it will be.";
 
-"update_only_over_wi_fi" = "Update only over Wi-Fi";
+"auto_update" = "Auto-update";
 "update_parameters" = "Update parameters";
 
 "recording_delete_confirm" = "Wil jy hierdie opname verwyder?";

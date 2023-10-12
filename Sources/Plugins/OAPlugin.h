@@ -9,8 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OAMapPanelViewController, OAMapInfoController, OAMapViewController, OAQuickActionType, OACustomPlugin, OAWorldRegion, OAResourceItem, OAApplicationMode;
-@class OAPOIUIFilter, OAPOI;
+@class OAMapPanelViewController, OAMapInfoController, OAMapViewController, OAQuickActionType, OACustomPlugin, OAWorldRegion, OAResourceItem, OAApplicationMode, OAPOIUIFilter, OAPOI, OABaseWidgetView, OAWidgetType;
 
 @protocol OAWidgetRegistrationDelegate;
 
@@ -34,6 +33,7 @@
 - (NSArray<OAWorldRegion *> *) getDownloadMaps;
 - (NSArray<OAResourceItem *> *) getSuggestedMaps;
 - (NSArray<OAApplicationMode *> *) getAddedAppModes;
+- (NSArray<NSString *> *) getWidgetIds;
 
 - (BOOL) initPlugin;
 - (void) setEnabled:(BOOL)enabled;
@@ -46,6 +46,7 @@
 
 + (void) initPlugins;
 + (BOOL) enablePlugin:(OAPlugin *)plugin enable:(BOOL)enable;
++ (BOOL) enablePlugin:(OAPlugin *)plugin enable:(BOOL)enable recreateControls:(BOOL)recreateControls;
 + (void) refreshLayers;
 + (NSArray<OAPlugin *> *) getVisiblePlugins;
 + (NSArray<OAPlugin *> *) getAvailablePlugins;
@@ -62,6 +63,7 @@
 + (void) updateLocationPlugins:(CLLocation *)location;
 + (void) registerQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)types disabled:(BOOL)disabled;
 + (void) createMapWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode;
++ (void) enablePluginsByMapWidgets:(NSSet<NSString *> *)widgetIds;
 
 + (NSArray<OACustomPlugin *> *) getCustomPlugins;
 + (void) addCustomPlugin:(OACustomPlugin *)plugin;
@@ -75,6 +77,7 @@
 + (void)onPrepareExtraTopPoiFilters:(NSSet<OAPOIUIFilter *> *)poiUIFilters;
 
 + (NSString *) getAbsoulutePluginPathByRegion:(OAWorldRegion *)region;
++ (OABaseWidgetView *)createMapWidget:(OAWidgetType *)widgetType customId:(NSString *)customId;
 
 - (void) onInstall;
 - (void) updateLayers;
@@ -82,6 +85,5 @@
 - (BOOL) destinationReached;
 - (void) updateLocation:(CLLocation *)location;
 - (void) showInstalledScreen;
-
 
 @end

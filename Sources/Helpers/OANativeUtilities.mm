@@ -240,7 +240,7 @@
 {
     if (screenPoint != OsmAnd::PointI())
     {
-        OAMapRendererView *mapRenderer = (OAMapRendererView *) [OARootViewController instance].mapPanel.mapViewController.view;
+        OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
         OsmAnd::PointI elevatedPoint = OsmAnd::PointI();
         if ([mapRenderer getLocationFromElevatedPoint:screenPoint location31:&elevatedPoint])
             return [self getAltitudeForElevatedPoint:elevatedPoint];
@@ -250,8 +250,20 @@
 
 + (double)getAltitudeForElevatedPoint:(OsmAnd::PointI)elevatedPoint
 {
-    OAMapRendererView *mapRenderer = (OAMapRendererView *) [OARootViewController instance].mapPanel.mapViewController.view;
+    OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
     return [mapRenderer getLocationHeightInMeters:elevatedPoint];
+}
+
++ (OsmAnd::PointI)get31FromElevatedPixel:(OsmAnd::PointI)screenPoint
+{
+    if (screenPoint != OsmAnd::PointI())
+    {
+        OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
+        OsmAnd::PointI elevatedPoint = OsmAnd::PointI();
+        if ([mapRenderer getLocationFromElevatedPoint:screenPoint location31:&elevatedPoint])
+            return elevatedPoint;
+    }
+    return OsmAnd::PointI();
 }
 
 @end

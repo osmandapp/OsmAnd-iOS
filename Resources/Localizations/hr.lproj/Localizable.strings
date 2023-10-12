@@ -626,7 +626,7 @@
 "save_track_interval_globally" = "Interval bilježenja";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
-"track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
+"track_rec_addon_q" = "Please activate Track recording plugin to record and save your tracks";
 "track_interval_remember" = "Remember my choice";
 "track_clear" = "Clear current track";
 "track_clear_q" = "Do you want to clear current track?";
@@ -1558,13 +1558,6 @@
 "osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Online street-level photos for everyone. Discover places, collaborate, capture the world.";
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"open_place_reviews_plugin_description" = "OpenPlaceReviews je projekt, razvijan od strane zajednice, koji daje informacije o mjestima kaošto su restorani, hoteli, muzeji, putne točke. Ovaj projekt sakuplja sve javne informacije o tim mjestima, kao što su slike, recenzije, linkovi na druge sustave OpenStreetMap, Wikipedia.
-\n
-\nSvi OpenPlaceReview podaci su javni i dostupni svima: http://openplacereviews.org/data.
-\n
-\nPročitajteviše na: http://openplacereviews.org";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1646,8 +1639,8 @@
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "shared_string_get" = "Get";
 "srtm_plugin_disabled" = "Contour lines disabled";
-"prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
-"prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
+"prch_wiki_info" = "Wikipedia plugin enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
+"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Otvori";
 "time_closed" = "Closed";
 "time_will_open" = "Will open in";

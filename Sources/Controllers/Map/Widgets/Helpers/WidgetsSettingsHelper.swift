@@ -20,7 +20,7 @@ class WidgetsSettingsHelper: NSObject {
 
     init(appMode: OAApplicationMode) {
         self.appMode = appMode
-        widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
+        widgetRegistry = OAMapWidgetRegistry.sharedInstance()
         widgetsFactory = MapWidgetsFactory()
         settings = OAAppSettings.sharedManager()
     }
@@ -47,9 +47,9 @@ class WidgetsSettingsHelper: NSObject {
         settings.quickActionIsOn.resetMode(toDefault: appMode)
     }
 
-    func copyConfigureScreenSettings(fromAppMode: OAApplicationMode) {
+    func copyConfigureScreenSettings(fromAppMode: OAApplicationMode, widgetParams: [String: Any]) {
         for panel in WidgetsPanel.values {
-            copyWidgetsForPanel(fromAppMode: fromAppMode, panel: panel)
+            copyWidgetsForPanel(fromAppMode: fromAppMode, panel: panel, widgetParams: widgetParams)
         }
         copyPrefFromAppMode(pref: settings.transparentMapTheme, fromAppMode: fromAppMode)
         copyPrefFromAppMode(pref: settings.compassMode, fromAppMode: fromAppMode)
@@ -57,7 +57,7 @@ class WidgetsSettingsHelper: NSObject {
         copyPrefFromAppMode(pref: settings.quickActionIsOn, fromAppMode: fromAppMode)
     }
 
-    func copyWidgetsForPanel(fromAppMode: OAApplicationMode, panel: WidgetsPanel) {
+    func copyWidgetsForPanel(fromAppMode: OAApplicationMode, panel: WidgetsPanel, widgetParams: [String: Any]? = nil) {
         let filter = kWidgetModeEnabled | KWidgetModeAvailable
         let panels = [panel]
         let widgetInfosToCopy = widgetRegistry.getWidgetsForPanel(fromAppMode, filterModes: Int(filter), panels: panels)
@@ -72,7 +72,7 @@ class WidgetsSettingsHelper: NSObject {
             }
 
             let widgetTypeToCopy = info.widget.widgetType
-            let duplicateNotPossible = widgetTypeToCopy == nil || !panel.isDuplicatesAllowed()
+            let duplicateNotPossible = widgetTypeToCopy == nil
             let defaultWidgetId = WidgetType.getDefaultWidgetId(info.key)
             let defaultWidgetInfo = getWidgetInfoById(widgetId: defaultWidgetId, widgetInfos: defaultWidgetInfos)
 
@@ -81,10 +81,10 @@ class WidgetsSettingsHelper: NSObject {
                 let disabled = !defaultWidgetInfo.isEnabledForAppMode(appMode)
                 let inAnotherPanel = defaultWidgetInfo.widgetPanel != panel
                 if duplicateNotPossible || (disabled && !inAnotherPanel) {
-                    widgetRegistry.enableDisableWidget(for: appMode, widgetInfo: defaultWidgetInfo, enabled: true, recreateControls: false)
+                    widgetRegistry.enableDisableWidget(for: appMode, widgetInfo: defaultWidgetInfo, enabled:NSNumber(value: true), recreateControls: false)
                     widgetIdToAdd = defaultWidgetInfo.key
                 } else {
-                    let duplicateWidgetInfo = createDuplicateWidgetInfo(widgetType: widgetTypeToCopy!, panel: panel)
+                    let duplicateWidgetInfo = createDuplicateWidgetInfo(widgetType: widgetTypeToCopy!, panel: panel, widgetParams: widgetParams)
                     widgetIdToAdd = duplicateWidgetInfo != nil ? duplicateWidgetInfo!.key : ""
                 }
 
@@ -132,14 +132,14 @@ class WidgetsSettingsHelper: NSObject {
         return Array(_immutableCocoaArray: widgetInfos!)
     }
 
-    private func createDuplicateWidgetInfo(widgetType: WidgetType, panel: WidgetsPanel) -> MapWidgetInfo? {
+    private func createDuplicateWidgetInfo(widgetType: WidgetType, panel: WidgetsPanel, widgetParams: [String: Any]? = nil) -> MapWidgetInfo? {
         let duplicateWidgetId = WidgetType.getDuplicateWidgetId(widgetType: widgetType)
-        let duplicateWidget = widgetsFactory.createMapWidget(customId: duplicateWidgetId, widgetType: widgetType)
+        let duplicateWidget = widgetsFactory.createMapWidget(customId: duplicateWidgetId, widgetType: widgetType, widgetParams: widgetParams)
         if let duplicateWidget = duplicateWidget {
             let creator = WidgetInfoCreator(appMode: appMode)
             settings.customWidgetKeys.add(duplicateWidgetId, appMode: appMode)
             let duplicateWidgetInfo = creator.createCustomWidgetInfo(widgetId: duplicateWidgetId, widget: duplicateWidget, widgetType: widgetType, panel: panel)
-            widgetRegistry.enableDisableWidget(for: appMode, widgetInfo: duplicateWidgetInfo, enabled: true, recreateControls: false)
+            widgetRegistry.enableDisableWidget(for: appMode, widgetInfo: duplicateWidgetInfo, enabled: NSNumber(value: true), recreateControls: false)
             return duplicateWidgetInfo
         }
         return nil

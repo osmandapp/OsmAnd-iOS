@@ -16,8 +16,21 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     var widgetPanel: WidgetsPanel!
     var selectedAppMode: OAApplicationMode!
     var createNew = false
+    var similarAlreadyExist = false
+    var widgetKey = ""
+    var widgetConfigurationParams: [String: Any]?
+    var isFirstGenerateData = true
     
     lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.setContentOffset(CGPoint(x: 0, y: 1), animated: false)
+        
+        if isCreateNewAndSimilarAlreadyExist {
+            widgetConfigurationParams = ["selectedAppMode": selectedAppMode!]
+        }
+    }
     
     override func generateData() {
         tableData.clearAllData()
@@ -64,10 +77,23 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             }
             if let cell {
                 let pref = item.obj(forKey: "pref") as! OACommonBoolean
+                let hasIcon = item.iconName != nil
                 cell.titleLabel.text = item.title
                 cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
-                let selected = pref.get(selectedAppMode)
+                var selected = pref.get(selectedAppMode)
+                if isCreateNewAndSimilarAlreadyExist {
+                    if widgetKey == WidgetType.averageSpeed.id {
+                        if isFirstGenerateData {
+                            widgetConfigurationParams?[AverageSpeedWidget.SKIP_STOPS_PREF_ID] = selected
+                        } else {
+                            selected = widgetConfigurationParams?[AverageSpeedWidget.SKIP_STOPS_PREF_ID] as? Bool ?? false
+                        }
+                    } else {
+                        fatalError("You need implement value handler for widgetKey")
+                    }
+                }
                 cell.switchView.isOn = selected
+                cell.leftIconVisibility(hasIcon)
                 cell.leftIconView.image = UIImage.templateImageNamed(selected ? item.iconName : item.string(forKey: "hide_icon"))
                 cell.leftIconView.tintColor = UIColor(rgb: selected ? Int(selectedAppMode.getIconColor()) : Int(color_tint_gray))
 
@@ -86,7 +112,33 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 cell?.leftIconView.tintColor = UIColor(rgb: Int(selectedAppMode.getIconColor()))
             }
             if let cell {
-                cell.valueLabel.text = item.string(forKey: "value")
+                if isCreateNewAndSimilarAlreadyExist {
+                    var value: String
+                    if isFirstGenerateData {
+                        guard let pref = item.obj(forKey: "pref") as? OACommonPreference,
+                              let prefLong = pref as? OACommonLong else {
+                            return nil
+                        }
+                        let param = String(prefLong.get(selectedAppMode))
+                        value = item.string(forKey: "value")!
+                        if widgetKey == WidgetType.averageSpeed.id {
+                            widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = param
+                        } else {
+                            fatalError("You need implement value handler for widgetKey")
+                        }
+                    } else {
+                        var _value = ""
+                        if widgetKey == WidgetType.averageSpeed.id {
+                            _value = widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] as? String ?? "0"
+                            value = AverageSpeedWidget.getIntervalTitle(Int(_value)!)
+                        } else {
+                            fatalError("You need implement value handler for widgetKey")
+                        }
+                    }
+                    cell.valueLabel.text = value
+                } else {
+                    cell.valueLabel.text = item.string(forKey: "value")
+                }
                 if let iconName = item.iconName, !iconName.isEmpty {
                     cell.leftIconVisibility(true)
                     cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
@@ -100,6 +152,10 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         return outCell
     }
     
+    var isCreateNewAndSimilarAlreadyExist: Bool {
+        createNew && similarAlreadyExist
+    }
+    
     @objc func onSwitchClick(_ sender: Any) -> Bool {
         guard let sw = sender as? UISwitch else {
             return false
@@ -108,8 +164,16 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
         let data = tableData!.item(for: indexPath)
         
-        let pref = data.obj(forKey: "pref") as! OACommonBoolean
-        pref.set(sw.isOn, mode: selectedAppMode)
+        if isCreateNewAndSimilarAlreadyExist {
+            if widgetKey == WidgetType.averageSpeed.id {
+                widgetConfigurationParams?[AverageSpeedWidget.SKIP_STOPS_PREF_ID] = sw.isOn
+            } else {
+                fatalError("You need implement value handler for widgetKey")
+            }
+        } else {
+            let pref = data.obj(forKey: "pref") as! OACommonBoolean
+            pref.set(sw.isOn, mode: selectedAppMode)
+        }
         
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
             UIView.animate(withDuration: 0.2) {
@@ -133,18 +197,41 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 vc.delegate = self
                 let section = vc.tableData.createNewSection()
                 section.addRows(possibleValues)
+                section.footerText = (item.obj(forKey: "footer") as? String) ?? ""
                 vc.appMode = selectedAppMode
                 vc.screenTitle = item.descr
-                let navigationController = UINavigationController()
-                navigationController.setViewControllers([vc], animated: true)
-                navigationController.modalPresentationStyle = .pageSheet
-                let sheet = navigationController.sheetPresentationController
-                if let sheet
-                {
-                    sheet.detents = [.medium(), .large()]
-                    sheet.preferredCornerRadius = 20
+                if isCreateNewAndSimilarAlreadyExist {
+                    guard let pref = item.obj(forKey: "pref") as? OACommonPreference,
+                          let prefLong = pref as? OACommonLong else {
+                        return
+                    }
+                    var value: Int?
+                    if isFirstGenerateData {
+                        value = Int(prefLong.get(selectedAppMode))
+                        if widgetKey == WidgetType.averageSpeed.id {
+                            widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = String(value ?? 0)
+                        } else {
+                            fatalError("You need implement value handler for widgetKey")
+                        }
+                    }
+                    if widgetKey == WidgetType.averageSpeed.id {
+                        vc.widgetConfigurationSelectedValue = widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] as? String ?? ""
+                    } else {
+                        fatalError("You need implement value handler for widgetKey")
+                    }
+                    vc.onWidgetConfigurationParamsAction = { [weak self] result in
+                        guard let self else { return }
+                        if widgetKey == WidgetType.averageSpeed.id {
+                            widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = result ?? ""
+                        } else {
+                            fatalError("You need implement value handler for widgetKey")
+                        }
+                    }
+                } else {
+                    vc.pref = item.obj(forKey: "pref") as? OACommonPreference
                 }
-                self.present(navigationController, animated: true)
+                
+                showMediumSheetViewController(vc, isLargeAvailable: false)
             }
         }
     }
@@ -155,10 +242,15 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     }
     
     func onWidgetStateChanged() {
+        isFirstGenerateData = false
+        if widgetInfo.key == WidgetType.markersTopBar.id || widgetInfo.key.hasPrefix(WidgetType.markersTopBar.id + MapWidgetInfo.DELIMITER) {
+            OsmAndApp.swiftInstance().data.destinationsChangeObservable.notifyEvent()
+        } else if widgetInfo.key == WidgetType.radiusRuler.id || widgetInfo.key.hasPrefix(WidgetType.radiusRuler.id + MapWidgetInfo.DELIMITER) {
+            (widgetInfo.widget as? RulerDistanceWidget)?.updateRulerObservable.notifyEvent()
+        }
         generateData()
         tableView.reloadData()
     }
-    
 }
 
 // MARK: Appearance
@@ -187,7 +279,7 @@ extension WidgetConfigurationViewController {
         attrStr.addAttribute(.foregroundColor, value: UIColor(rgb: Int(color_text_footer)), range: NSRange(location: 0, length: attrStr.length))
         return attrStr
     }
-    
+
     override func getBottomAxisMode() -> NSLayoutConstraint.Axis {
         .vertical
     }
@@ -197,103 +289,22 @@ extension WidgetConfigurationViewController {
     }
     
     override func onBottomButtonPressed() {
-        onWidgetsSelectedToAdd(widgetsIds: [widgetInfo.key], panel: widgetPanel, shouldAdd: true)
-    }
-    
-    func onWidgetsSelectedToAdd(widgetsIds: [String], panel: WidgetsPanel, shouldAdd: Bool) {
-        let filter = KWidgetModeAvailable | kWidgetModeEnabled
-        let widgetsFactory = MapWidgetsFactory()
-        for widgetId in widgetsIds {
-            var widgetInfo = widgetRegistry.getWidgetInfo(byId: widgetId)
-            
-            let widgetInfos = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(filter), panels: WidgetsPanel.values)
-            if panel.isDuplicatesAllowed() && (widgetInfo == nil || widgetInfos!.contains(widgetInfo!)) && shouldAdd {
-                widgetInfo = createDuplicateWidget(widgetId, panel: panel, widgetsFactory: widgetsFactory, selectedAppMode: selectedAppMode)
-            }
-            
-            if let widgetInfo, shouldAdd {
-                addWidgetToEnd(widgetInfo, widgetsPanel: panel)
-            }
-            widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: NSNumber(value: shouldAdd), recreateControls: false)
-        }
-        
-        OARootViewController.instance().mapPanel.recreateControls()
-        if let viewControllers = navigationController?.viewControllers {
-            for viewController in viewControllers {
-                if let targetViewController = viewController as? WidgetsListViewController {
-                    navigationController?.popToViewController(targetViewController, animated: true)
-                    break
+        UIView.animate(withDuration: 0) {
+            if let viewControllers = self.navigationController?.viewControllers {
+                for viewController in viewControllers {
+                    if let targetViewController = viewController as? WidgetsListViewController {
+                        self.navigationController?.popToViewController(targetViewController, animated: true)
+                        break
+                    }
                 }
             }
+        } completion: { Bool in
+            NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification),
+                                            object: self.widgetInfo,
+                                            userInfo: self.widgetConfigurationParams)
         }
-//        onWidgetsConfigurationChanged()
-    }
-    
-    private func createDuplicateWidget(_ widgetId: String, panel: WidgetsPanel,
-                                             widgetsFactory: MapWidgetsFactory, selectedAppMode: OAApplicationMode) -> MapWidgetInfo? {
-        guard let widgetType = WidgetType.getById(widgetId) else {
-            return nil
-        }
-        
-        let id = widgetId.contains(MapWidgetInfo.DELIMITER) ? widgetId : WidgetType.getDuplicateWidgetId(widgetId)
-        guard let widget = widgetsFactory.createMapWidget(customId: id, widgetType: widgetType) else {
-            return nil
-        }
-        
-        OAAppSettings.sharedManager()!.customWidgetKeys.add(id, appMode: selectedAppMode)
-        let creator = WidgetInfoCreator(appMode: selectedAppMode)
-        return creator.createCustomWidgetInfo(widgetId: id, widget: widget, widgetType: widgetType, panel: panel)
     }
 
-    
-    func addWidgetToEnd(_ targetWidget: MapWidgetInfo, widgetsPanel: WidgetsPanel) {
-        var pagedOrder = [Int: [String]]()
-        let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Int(kWidgetModeEnabled), panels: [widgetsPanel])!
-        
-        widgetRegistry.getWidgetsFor(targetWidget.widgetPanel).remove(targetWidget)
-        targetWidget.widgetPanel = widgetsPanel
-        
-        for widget in enabledWidgets {
-            guard let widget = widget as? MapWidgetInfo else { continue }
-            let page = widget.pageIndex
-            var orders = pagedOrder[page] ?? [String]()
-            orders.append(widget.key)
-            pagedOrder[page] = orders
-        }
-        
-        if pagedOrder.isEmpty {
-            targetWidget.pageIndex = 0
-            targetWidget.priority = 0
-            widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
-            
-            let flatOrder: [[String]] = [[targetWidget.key]]
-            widgetsPanel.setWidgetsOrder(pagedOrder: flatOrder, appMode: selectedAppMode)
-        } else {
-            var pages = Array(pagedOrder.keys)
-            var orders = Array(pagedOrder.values)
-            
-            orders[orders.count - 1].append(targetWidget.key)
-            var lastPageOrder = orders[orders.count - 1]
-            
-            let previousLastWidgetId = lastPageOrder[lastPageOrder.count - 2]
-            if let previousLastVisibleWidgetInfo = widgetRegistry.getWidgetInfo(byId: previousLastWidgetId) {
-                let lastPage = previousLastVisibleWidgetInfo.pageIndex
-                let lastOrder = previousLastVisibleWidgetInfo.priority + 1
-                targetWidget.pageIndex = lastPage
-                targetWidget.priority = lastOrder
-            } else {
-                let lastPage = pages[pages.count - 1]
-                let lastOrder = lastPageOrder.count - 1
-                targetWidget.pageIndex = lastPage
-                targetWidget.priority = lastOrder
-            }
-            
-            widgetRegistry.getWidgetsFor(widgetsPanel).add(targetWidget)
-            
-            widgetsPanel.setWidgetsOrder(pagedOrder: orders, appMode: selectedAppMode)
-        }
-    }
-    
     override func getBottomButtonTitleAttr() -> NSAttributedString! {
         
         guard createNew else { return nil }

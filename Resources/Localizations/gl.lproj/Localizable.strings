@@ -387,7 +387,7 @@
 "save_track_interval_globally" = "Intre de rexistro";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
-"track_rec_addon_q" = "Please activate Trip recording addon to record and save your tracks";
+"track_rec_addon_q" = "Please activate Trip recording plugin to record and save your tracks";
 "track_interval_remember" = "Remember my choice";
 "track_clear" = "Clear current track";
 "track_clear_q" = "Do you want to clear current track?";
@@ -661,8 +661,8 @@
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "shared_string_get" = "Obter";
 "srtm_plugin_disabled" = "As curvas de nivel están desactivadas";
-"prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
-"prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
+"prch_wiki_info" = "Wikipedia plugin enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
+"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Aberto";
 "time_closed" = "Closed";
 "time_will_open" = "Will open in";
@@ -1533,7 +1533,6 @@
 "suggested_maps" = "Mapas suxeridos";
 "shared_strings_all_regions" = "Todas as rexións";
 "shared_string_wifi_only" = "Só co Wi-Fi";
-"open_place_reviews" = "OpenPlaceReviews";
 "navigate_point_northing" = "Ó norte";
 "route_between_points_warning_desc" = "Deseguido, axusta a pistaá estrada permitida máis preto cun perfil de navegación.";
 "no_waypoints_found" = "Non se atoparon puntos de pasaxe";
@@ -1890,11 +1889,6 @@ Lon %@";
 "quick_action_navigation_voice_off" = "Activar a voz";
 "osm_editing_plugin_description" = "Fai contribucións no OSM, como o crear ou modificar obxectos PDI, abrir ou comentar notas do OSM e contribuír con ficheiros de pistas GPX gravados no OsmAnd, fornecendo o teu nome de usuario e contrasinal. O OpenStreetMap.org é un proxecto de cartografado de dominio público, global, ceibe e impulsado pola comunidade.";
 "quick_action_auto_zoom" = "Activar ou desactivar achegamento automático do mapa";
-"open_place_reviews_plugin_description" = "O OpenPlaceReviewsé un proxecto impulsado pola comunidade sobre lugares públicos como restaurantes, hoteis, museos, puntos de referencia. Recolle toda a información pública sobre eles como imaxes, recesións, ligazóns a outros servizos como OpenStreetMap e Wikipedia.
-\n
-\nTodos os datos do OpenPlaceReviews son abertos e están dispoñíbeis para todos: http://openplacereviews.org/data.
-\n
-\nPodes ler máis en: https://openplacereviews.org";
 "m" = "m";
 "km" = "km";
 "weather_plugin_description" = "Proporciona

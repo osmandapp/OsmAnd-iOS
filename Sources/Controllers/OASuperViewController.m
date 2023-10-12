@@ -64,16 +64,12 @@
     [self addAccessibilityLabels];
 
     _observers = [NSMutableArray array];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
 
     // for content size category
     [self addNotification:UIContentSizeCategoryDidChangeNotification selector:@selector(onContentSizeChanged:)];
     // for other
     [self registerNotifications];
+
     [self registerObservers];
 }
 

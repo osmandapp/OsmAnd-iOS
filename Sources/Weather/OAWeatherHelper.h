@@ -23,11 +23,11 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastUpdatesFrequency)
     EOAWeatherForecastUpdatesWeekly,
 };
 
-typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
+typedef NS_ENUM(NSInteger, EOAWeatherAutoUpdate)
 {
-    EOAWeatherForecastDownloadStateUndefined = -1,
-    EOAWeatherForecastDownloadStateInProgress,
-    EOAWeatherForecastDownloadStateFinished
+    EOAWeatherAutoUpdateDisabled,
+    EOAWeatherAutoUpdateOverWIFIOnly,
+    EOAWeatherAutoUpdateOverAnyNetwork
 };
 
 @class OAWorldRegion, OAResourceItem, OAObservable;
@@ -38,7 +38,6 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 
 @property (nonatomic, readonly) NSArray<OAWeatherBand *> *bands;
 @property (nonatomic, readonly) OAMapPresentationEnvironment *mapPresentationEnvironment;
-@property (nonatomic, readonly) CGFloat offlineCacheSize;
 @property (nonatomic, readonly) CGFloat onlineCacheSize;
 
 @property (readonly) OAObservable *weatherSizeCalculatedObserver;
@@ -57,28 +56,28 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 
 - (void)checkAndDownloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds;
 - (void)downloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds;
-- (void)downloadForecastByRegion:(OAWorldRegion *)region;
-- (void)prepareToStopDownloading:(NSString *)regionId;
+
+- (uint64_t)getOfflineForecastSize:(OAWorldRegion *)region forUpdate:(BOOL)forUpdate;
 
 - (void)calculateCacheSize:(OAWorldRegion *)region onComplete:(void (^)())onComplete;
 - (void)calculateFullCacheSize:(BOOL)localData
                     onComplete:(void (^)(unsigned long long))onComplete;
+- (uint64_t)getOfflineWeatherForecastCacheSize;
+- (NSArray<NSString *> *)getRegionIdsForDownloadedWeatherForecast;
+- (BOOL)isDownloadedWeatherForecastForRegionId:(NSString *)regionId;
+- (BOOL)isUndefinedDownloadStateFor:(OAWorldRegion *)region;
 
-- (void)clearCache:(BOOL)localData regionIds:(NSArray<NSString *> *)regionIds;
+- (void)clearCache:(BOOL)localData regionIds:(NSArray<NSString *> *)regionIds region:(OAWorldRegion *)region;
 - (void)clearOutdatedCache;
-- (void)removeLocalForecast:(NSString *)regionId refreshMap:(BOOL)refreshMap;
-- (void)removeLocalForecasts:(NSArray<NSString *> *)regionIds refreshMap:(BOOL)refreshMap;
+- (void)removeLocalForecast:(NSString *)regionId region:(OAWorldRegion *)region refreshMap:(BOOL)refreshMap;
+- (void)removeLocalForecasts:(NSArray<NSString *> *)regionIds region:(OAWorldRegion *)region refreshMap:(BOOL)refreshMap;
+- (void)preparingForDownloadForecastByRegion:(OAWorldRegion *)region regionId:(NSString *)regionId;
+- (void)setupDownloadStateFinished:(OAWorldRegion *)region regionId:(NSString *)regionId;
 
 - (BOOL)isContainsInOfflineRegions:(NSArray<NSNumber *> *)tileId excludeRegion:(NSString *)excludeRegionId;
 
 + (BOOL)isForecastOutdated:(NSString *)regionId;
-- (void)firstInitForecast:(NSString *)region;
 
-- (NSArray<NSString *> *)getTempForecastsWithDownloadStates:(NSArray<NSNumber *> *)states;
-
-- (uint64_t)getOfflineForecastSizeInfo:(NSString *)regionId local:(BOOL)local;
-- (BOOL)isOfflineForecastSizesInfoCalculated:(NSString *)regionId;
-- (NSInteger)getOfflineForecastProgressInfo:(NSString *)regionId;
 - (NSInteger)getProgressDestination:(NSString *)regionId;
 
 - (OAResourceItem *)generateResourceItem:(OAWorldRegion *)region;
@@ -87,8 +86,9 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 + (NSString *)getUpdatesDateFormat:(NSString *)regionId next:(BOOL)next;
 + (NSString *)getFrequencyFormat:(EOAWeatherForecastUpdatesFrequency)frequency;
 
-+ (EOAWeatherForecastDownloadState)getPreferenceDownloadState:(NSString *)regionId;
-+ (void)setPreferenceDownloadState:(NSString *)regionId value:(EOAWeatherForecastDownloadState)value;
++ (EOAWeatherAutoUpdate)getPreferenceWeatherAutoUpdate:(NSString *)regionId;
++ (void)setPreferenceWeatherAutoUpdate:(NSString *)regionId value:(EOAWeatherAutoUpdate)value;
++ (NSString *)getPreferenceWeatherAutoUpdateString:(EOAWeatherAutoUpdate)value;
 
 + (NSTimeInterval)getPreferenceLastUpdate:(NSString *)regionId;
 + (void)setPreferenceLastUpdate:(NSString *)regionId value:(NSTimeInterval)value;
@@ -96,14 +96,13 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 + (NSArray<NSArray<NSNumber *> *> *)getPreferenceTileIds:(NSString *)regionId;
 + (void)setPreferenceTileIds:(NSString *)regionId value:(NSArray<NSArray<NSNumber *> *> *)value;
 
-+ (BOOL)getPreferenceWifi:(NSString *)regionId;
-+ (void)setPreferenceWifi:(NSString *)regionId value:(BOOL)value;
-
 + (EOAWeatherForecastUpdatesFrequency)getPreferenceFrequency:(NSString *)regionId;
 + (void)setPreferenceFrequency:(NSString *)regionId value:(EOAWeatherForecastUpdatesFrequency)value;
 
 + (NSArray<NSString *> *)getPreferenceKeys:(NSString *)regionId;
 + (void)removePreferences:(NSString *)regionId;
+
++ (NSDate *) roundForecastTimeToHour:(NSDate *)date;
 
 @end
 

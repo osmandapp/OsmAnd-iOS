@@ -81,11 +81,18 @@ static BOOL dataInvalidated = NO;
             {
                 OAResourceItem *item = obj1;
                 if (item.resourceId == QString::fromUtf8(kWorldSeamarksKey))
+                {
                     return NSOrderedAscending;
+                }
                 if (item.resourceId.startsWith(QStringLiteral("world_")))
+                {
                     str1 = [NSString stringWithFormat:@"!%@%d", item.title, item.resourceType];
+                }
                 else
-                    str1 = [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
+                {
+                    NSString *countryName = [OAResourcesUIHelper getCountryName:item];
+                    str1 = countryName ? [NSString stringWithFormat:@"%@ - %@%d", countryName, item.title, item.resourceType] : [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
+                }
             }
 
             if ([obj2 isKindOfClass:[OAWorldRegion class]])
@@ -96,11 +103,18 @@ static BOOL dataInvalidated = NO;
             {
                 OAResourceItem *item = obj2;
                 if (item.resourceId == QString::fromUtf8(kWorldSeamarksKey))
+                {
                     return NSOrderedDescending;
+                }
                 if (item.resourceId.startsWith(QStringLiteral("world_")))
+                {
                     str2 = [NSString stringWithFormat:@"!%@%d", item.title, item.resourceType];
+                }
                 else
-                    str2 = [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
+                {
+                    NSString *countryName = [OAResourcesUIHelper getCountryName:item];
+                    str2 = countryName ? [NSString stringWithFormat:@"%@ - %@%d", countryName, item.title, item.resourceType] : [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
+                }
             }
             
             return [str1 localizedCaseInsensitiveCompare:str2];
@@ -257,15 +271,9 @@ static BOOL dataInvalidated = NO;
 
 - (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
 {
-    BOOL isWeatherForecast = item.resourceType == OsmAndResourceType::WeatherForecast;
-    if (isWeatherForecast && ![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:item.worldRegion]])
-        return;
-
     [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:^(id<OADownloadTask> task) {
-        if (!isWeatherForecast)
             [self updateContent];
     } onTaskResumed:^(id<OADownloadTask> task) {
-        if (!isWeatherForecast)
             [self showDownloadViewForTask:task];
     }];
 }
@@ -274,9 +282,6 @@ static BOOL dataInvalidated = NO;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast)
     {
-        if (![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:item.worldRegion]])
-            return;
-
         OARepositoryResourceItem *repositoryItem = [[OARepositoryResourceItem alloc] init];
         repositoryItem.resourceId = item.resourceId;
         repositoryItem.resourceType = item.resourceType;
@@ -388,14 +393,6 @@ static BOOL dataInvalidated = NO;
         {
             [OAResourcesUIHelper offerCancelDownloadOf:item_];
         }
-        else if (item_.resourceType == OsmAndResourceType::WeatherForecast && [OAWeatherHelper getPreferenceDownloadState:[OAWeatherHelper checkAndGetRegionId:item_.worldRegion]] == EOAWeatherForecastDownloadStateInProgress)
-        {
-            [OAResourcesUIHelper offerCancelDownloadOf:item_ onTaskStop:^(id<OADownloadTask>)
-            {
-                [self updateDisplayItem:item_];
-                [[OAWeatherHelper sharedInstance] calculateCacheSize:item_.worldRegion onComplete:nil];
-            }];
-        }
         else if ([item_ isKindOfClass:[OAOutdatedResourceItem class]] && item_.resourceType != OsmAndResourceType::WeatherForecast)
         {
             OAOutdatedResourceItem* item = (OAOutdatedResourceItem *)item_;
@@ -413,7 +410,7 @@ static BOOL dataInvalidated = NO;
             if (item.resource && [item isFree])
                 return [self offerDownloadAndInstallOf:item];
             
-            if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion) && ![_iapHelper.srtm isActive])
+            if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion || item.resourceType == OsmAndResourceType::HeightmapRegionLegacy || item.resourceType == OsmAndResourceType::GeoTiffRegion) && ![_iapHelper.srtm isActive])
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
             else if (item.resourceType == OsmAndResourceType::WikiMapRegion && ![_iapHelper.wiki isActive])
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];

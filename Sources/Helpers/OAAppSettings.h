@@ -66,7 +66,6 @@ typedef NS_ENUM(NSInteger, EOAMap3DModeVisibility)
 
 + (instancetype) withModeConstant:(EOAMap3DModeVisibility)mode;
 + (NSString *) getTitle:(EOAMap3DModeVisibility)mode;
-+ (NSString *) getDescription:(EOAMap3DModeVisibility)mode;
 + (NSString *) getIconName:(EOAMap3DModeVisibility)mode;
 
 @end
@@ -74,8 +73,8 @@ typedef NS_ENUM(NSInteger, EOAMap3DModeVisibility)
 
 typedef NS_ENUM(NSInteger, EOASunriseSunsetMode)
 {
-    EOASunriseSunsetTimeLeft = 0,
-    EOASunriseSunsetNext
+    EOASunriseSunsetNext = 0,
+    EOASunriseSunsetTimeLeft = 1
 };
 
 typedef NS_ENUM(NSInteger, EOARouteService)
@@ -514,7 +513,7 @@ typedef NS_ENUM(NSInteger, EOATerrainType)
 
 typedef NS_ENUM(NSInteger, EOAActiveMarkerConstant)
 {
-    ONE_ACTIVE_MARKER = 0,
+    ONE_ACTIVE_MARKER = 1,
     TWO_ACTIVE_MARKERS
 };
 
@@ -526,24 +525,6 @@ typedef NS_ENUM(NSInteger, EOAActiveMarkerConstant)
 - (EOAActiveMarkerConstant) get:(OAApplicationMode *)mode;
 - (void) set:(EOAActiveMarkerConstant)activeMarkerConstant;
 - (void) set:(EOAActiveMarkerConstant)activeMarkerConstant mode:(OAApplicationMode *)mode;
-
-@end
-
-typedef NS_ENUM(NSInteger, EOADistanceIndicationConstant)
-{
-    TOP_BAR_DISPLAY = 0,
-    WIDGET_DISPLAY,
-    NONE_DISPLAY
-};
-
-@interface OACommonDistanceIndicationConstant : OACommonInteger
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOADistanceIndicationConstant)defValue;
-
-- (EOADistanceIndicationConstant) get;
-- (EOADistanceIndicationConstant) get:(OAApplicationMode *)mode;
-- (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant;
-- (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -725,6 +706,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 #define MAP_GEO_UTM_FORMAT 3
 #define MAP_GEO_OLC_FORMAT 4
 #define MAP_GEO_MGRS_FORMAT 5
+#define SWISS_GRID_FORMAT = 6
+#define SWISS_GRID_PLUS_FORMAT = 7
 
 #define ROTATE_MAP_NONE 0
 #define ROTATE_MAP_BEARING 1
@@ -1089,11 +1072,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 // Direction Appearance
 
 @property (nonatomic) OACommonActiveMarkerConstant* activeMarkers;
-@property (nonatomic) OACommonBoolean *distanceIndicationVisibility;
-@property (nonatomic) OACommonDistanceIndicationConstant *mapMarkersDisplayMode;
 @property (nonatomic) OACommonBoolean *arrowsOnMap;
 @property (nonatomic) OACommonBoolean *directionLines;
-@property (nonatomic) OACommonBoolean *showMapMarkersBarWidget;
 
 // global
 

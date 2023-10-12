@@ -7,83 +7,67 @@
 //
 
 #import "OACurrentSpeedWidget.h"
-#import "OAMapViewTrackingUtilities.h"
-#import "OARoutingHelper.h"
 #import "OACurrentPositionHelper.h"
 #import "OsmAndApp.h"
 #import "OAOsmAndFormatter.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
+const static CLLocationSpeed LOW_SPEED_THRESHOLD_MPS = 6;
+const static CLLocationSpeed UPDATE_THRESHOLD_MPS = .1f;
+const static CLLocationSpeed LOW_SPEED_UPDATE_THRESHOLD_MPS = .015f; // Update more often while walking/running
+
 @implementation OACurrentSpeedWidget
 {
-    float _cachedSpeed;
-    
-    OARoutingHelper *_routingHelper;
-    OAMapViewTrackingUtilities *_trackingUtilities;
     OsmAndAppInstance _app;
     OACurrentPositionHelper *_currentPositionHelper;
+
+    float _cachedSpeed;
 }
 
 - (instancetype)init
 {
     OAWidgetType *type = OAWidgetType.currentSpeed;
     self = [super initWithType:type];
-    if (self) {
+    if (self)
+    {
+        _app = OsmAndApp.instance;
+        _currentPositionHelper = OACurrentPositionHelper.instance;
+
         [self setIcons:type];
         [self setText:nil subtext:nil];
         [self setMetricSystemDepended:YES];
-        _trackingUtilities = [OAMapViewTrackingUtilities instance];
-        _app = OsmAndApp.instance;
-        _routingHelper = OARoutingHelper.sharedInstance;
-        _currentPositionHelper = OACurrentPositionHelper.instance;
     }
     return self;
 }
 
 - (BOOL)updateInfo
 {
-    float mx = 0;
-    if ((!_routingHelper || ![_routingHelper isFollowingMode] || [OARoutingHelper isDeviatedFromRoute] || [_routingHelper getCurrentGPXRoute]) && [_trackingUtilities isMapLinkedToLocation])
+    CLLocation *lastKnownLocation = _app.locationServices.lastKnownLocation;
+    CLLocationSpeed currentSpeed = lastKnownLocation ? lastKnownLocation.speed : -1;
+    if (currentSpeed >= 0)
     {
-        CLLocation *lastKnownLocation = _app.locationServices.lastKnownLocation;
-        std::shared_ptr<RouteDataObject> road;
-        if (lastKnownLocation)
+        float updateThreshold = _cachedSpeed < LOW_SPEED_THRESHOLD_MPS
+            ? LOW_SPEED_UPDATE_THRESHOLD_MPS
+            : UPDATE_THRESHOLD_MPS;
+
+        if ([self isUpdateNeeded] || ABS(currentSpeed - _cachedSpeed) > updateThreshold)
         {
-            road = [_currentPositionHelper getLastKnownRouteSegment:lastKnownLocation];
-            if (road)
-                mx = road->getMaximumSpeed(road->bearingVsRouteDirection(lastKnownLocation.course));
-        }
-    }
-    else if (_routingHelper)
-    {
-        mx = [_routingHelper getCurrentMaxSpeed];
-    }
-    else
-    {
-        mx = 0;
-    }
-    if ([self isUpdateNeeded] || _cachedSpeed != mx)
-    {
-        _cachedSpeed = mx;
-        if (_cachedSpeed == 0)
-        {
-            [self setText:nil subtext:nil];
-        }
-        else if (_cachedSpeed == 40.f /*RouteDataObject::NONE_MAX_SPEED*/)
-        {
-            [self setText:OALocalizedString(@"shared_string_none").lowerCase subtext:@""];
-        }
-        else
-        {
-            NSString *ds = [OAOsmAndFormatter getFormattedSpeed:_cachedSpeed];
+            _cachedSpeed = currentSpeed;
+            NSString *ds = [OAOsmAndFormatter getFormattedSpeed:currentSpeed];
             int ls = [ds indexOf:@" "];
             if (ls == -1)
                 [self setText:ds subtext:nil];
             else
                 [self setText:[ds substringToIndex:ls] subtext:[ds substringFromIndex:ls + 1]];
+
+            return true;
         }
-        return true;
+    }
+    else if (_cachedSpeed != 0)
+    {
+        _cachedSpeed = 0;
+        [self setText:nil subtext:nil];
     }
     return false;
 }

@@ -37,11 +37,12 @@
     if (self)
     {
         _region = region;
+        [self configure];
     }
     return self;
 }
 
-- (void)commonInit
+- (void)configure
 {
     EOAWeatherForecastUpdatesFrequency frequency = [OAWeatherHelper getPreferenceFrequency:[OAWeatherHelper checkAndGetRegionId:_region]];
     _indexSelected = frequency == EOAWeatherForecastUpdatesSemiDaily ? kFrequencySemiDailyIndex
@@ -50,6 +51,11 @@
 }
 
 #pragma mark - Base UI
+
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_close");
+}
 
 - (NSString *)getTitle
 {
@@ -96,6 +102,11 @@
     [frequencyCells addObject:weeklyData];
 
     _data = data;
+}
+
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return 38;
 }
 
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath

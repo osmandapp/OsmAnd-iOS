@@ -625,7 +625,7 @@
 "save_track_interval_globally" = "Interval pencatatan";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
-"track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
+"track_rec_addon_q" = "Please activate Track recording plugin to record and save your tracks";
 "track_interval_remember" = "Remember my choice";
 "track_clear" = "Clear current track";
 "track_clear_q" = "Do you want to clear current track?";
@@ -1557,9 +1557,6 @@
 "osm_editing_plugin_description" = "Buat kontribusi ke OpenStreetMap, sebuah komunitas global yang membuat peta dunia dan menyediakan data sumber terbuka terbaru kepada pengguna siapa pun.\n\nAnda dapat menemukan petunjuk cara menyunting peta di situs web kami https://osmand.net/docs/user/plugins/osm-editing .";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Citra tampilan tingkat jalan. Anda dapat berkontribusi sendiri. Untuk melihat data yang sudah ada sebagai lapisan peta, aktifkan \"Citra tingkat jalan\" dalam menu \"Konfigurasi peta\".";
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"open_place_reviews_plugin_description" = "Buat kontribusi ke proyek OpenPlaceReviews, seperti foto, ulasan, atau tautan untuk tempat publik seperti restoran, hotel, atau museum.\n\nCari petunjuk cara berkontribusi di situs web kami https://osmand.net/docs/user/plugins/openplacereviews .";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1641,8 +1638,8 @@
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "shared_string_get" = "Dapatkan";
 "srtm_plugin_disabled" = "Garis kontur dinonaktifkan";
-"prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
-"prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
+"prch_wiki_info" = "Wikipedia plugin enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
+"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Buka";
 "time_closed" = "Closed";
 "time_will_open" = "Will open in";
@@ -2039,6 +2036,7 @@
 "rendering_value_disabled_name" = "Dinonaktifkan";
 "rendering_attr_contourColorScheme_name" = "Skema warna garis kontur";
 "routing_attr_short_way_name" = "Cara hemat bahan bakar";
+"rendering_attr_alpineHiking_name" = "Klasifikasi kesulitan";
 "rendering_attr_showLez_name" = "Tampilkan Zona Emisi Rendah";
 "rendering_value_green_name" = "Hijau";
 "routing_attr_piste_type_nordic_description" = "Jalur untuk ski nordik atau lintas negara.";
@@ -2618,3 +2616,6 @@
 "speed_cameras_alert" = "Peringatan kamera pengukur kecepatan di beberapa negara dilarang oleh undang-undang.";
 "icon_group_service" = "Layanan";
 "map_widget_distance_to_intermediate" = "Jarak ke perantara";
+"rendering_value_sacScale_description" = "Klub Alpen Swiss";
+"rendering_value_caiScale_description" = "Club Alpino Italiano (Klub Alpen Italia)";
+"shared_string_cache" = "Tembolok";

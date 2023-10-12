@@ -190,7 +190,7 @@
 "speak_favorites" = "Избрани в близост";
 "speak_poi" = "POIнаблизо";
 "speak_pedestrian" = "Пешеходни пътеки";
-"show_tunnels" = "Tunnels";
+"show_tunnels" = "Тунели";
 
 // Dirrection appearance
 "shared_string_one" = "Едно";
@@ -247,7 +247,7 @@
 "auto_zoom_map" = "Авто-мащабиране";
 "auto_zoom_map_descr" = "Увеличението е съобразено със скоростта (само при винаги видимо местоположение).";
 "snap_to_road" = "Придържай мястото към пътя";
-"snap_to_road_descr" = "Иконата за текуща позиция ще се прикрепи към текущия навигационен маршрут.";
+"snap_to_road_descr" = "Иконата за позиция ще се придържа към текущия маршрут";
 "show_warnings_title" = "Показване на предупреждения…";
 "show_warnings_descr" = "Настройте предупреждения (ограничения на скоростта, знак „Стоп“, легнали полицаи, тунели), камери за контрол на скорост и информация за пътни ленти.";
 "speak_title" = "Обявяване…";
@@ -290,7 +290,7 @@
 "app_mode_bus" = "Автобус";
 "app_mode_train" = "Влак";
 "app_mode_truck" = "Камион";
-"app_mode_hiking" = "Ходене";
+"app_mode_hiking" = "Пешеходен туризъм";
 "app_mode_motorcycle" = "Мотоциклет";
 "app_mode_boat" = "Лодка";
 "app_mode_aircraft" = "Самолет";
@@ -625,7 +625,7 @@
 "save_track_interval_globally" = "Интервал за запис";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
-"track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
+"track_rec_addon_q" = "Please activate Track recording plugin to record and save your tracks";
 "track_interval_remember" = "Remember my choice";
 "track_clear" = "Clear current track";
 "track_clear_q" = "Do you want to clear current track?";
@@ -1557,9 +1557,6 @@
 "osm_editing_plugin_description" = "Добавка за изпращане на данни към OSM - обекти (POI), бележки, GPX записани маршрути. За подробности по проекта OSM посетете https://openstreetmap.org. Вашият принос към проекта ще бъдеоценен с благодарности. Необходимо е да се регистрирате на сайта на OSM и да въведете Вашето потребителско име и парола в това приложение.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Снимки от нивото на улицата. Можете да дадете своя принос. За да видите съществуващите данни като слой на картата, включете „Снимки от улицата“ в менюто „Настройки на картата“.";
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"open_place_reviews_plugin_description" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1641,8 +1638,8 @@
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "shared_string_get" = "Получаване";
 "srtm_plugin_disabled" = "Контурните линии са изключени";
-"prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
-"prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
+"prch_wiki_info" = "Wikipedia plugin enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
+"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Отваряне";
 "time_closed" = "Closed";
 "time_will_open" = "Will open in";
@@ -2210,7 +2207,7 @@
 "app_mode_horse" = "Коне";
 "app_mode_helicopter" = "Вертолет";
 "app_mode_skiing" = "Ски";
-"app_mode_personal_transporter" = "Personal transporter";
+"app_mode_personal_transporter" = "Личен транспортьор";
 "app_mode_monowheel" = "Monowheel";
 "app_mode_scooter" = "Тротинетка";
 "app_mode_ufo" = "НЛО";
@@ -2250,7 +2247,7 @@
 "backup_error_gzip_only_supported_upload" = "Файлът трябва да бъде изпратен във формат .gzip";
 "verify_email_address_descr" = "Изпратихме код за проверка на %@, моля, въведете го в полето по-долу.";
 "resend_verification_code" = "Повторно изпращане";
-"cloud_email_already_registered" = "Този адрес на електронна поща вече е регистриран.";
+"cloud_email_already_registered" = "Тази адрес на електронна поща вече е регистриран.";
 "cloud_email_not_registered" = "Този адрес на електронна поща не е регистриран в OsmAnd Cloud";
 "backup_error_file_not_available" = "Файлът не е наличен";
 "any_poi" = "Всички";
@@ -2572,3 +2569,13 @@
 "uninstall_speed_cameras" = "Премахване на камери за контрол на скоростта";
 "speed_camera_pois" = "POI на камери за контрол на скоростта";
 "speed_cameras_alert" = "Предупрежденията за камери за контрол на скоростта в някои страни са забранени от закона.";
+"map_widget_distance_to_intermediate" = "Разстояние до междинна точка";
+"get_osmand_cloud" = "Вземете OsmAd Cloud";
+"rendering_value_caiScale_description" = "Италиански алпийски клуб (CAI)";
+"activity_type_hiking_name" = "Пешеходен туризъм";
+"free_favorites_backup" = "Резервно копие на избраните точки";
+"rendering_attr_alpineHiking_name" = "Класификация на сложност";
+"rendering_value_sacScale_description" = "Швейцарски алпийски клуб (SAC)";
+"free_account" = "Безплатен профил";
+"save_heading_descr" = "Запазва посоката към всяка записана точка от трасето.";
+"save_heading" = "Включва посоката";

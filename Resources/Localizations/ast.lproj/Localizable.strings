@@ -661,7 +661,7 @@
 "save_track_interval_globally" = "Intervalu de rexistru";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
-"track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
+"track_rec_addon_q" = "Please activate Track recording plugin to record and save your tracks";
 "track_interval_remember" = "Remember my choice";
 "track_clear" = "Clear current track";
 "track_clear_q" = "Do you want to clear current track?";
@@ -1640,11 +1640,6 @@
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Semeyes a nivel de cai pa tol mundu. Descubri llugares, collabora y fotografia\'l mundu.";
 
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"open_place_reviews_plugin_description" = "Unvia semeyes, reseñes y enllaces de llugares públicos como restoranes, hoteles, museos y otros puntos a OpenPlaceReviews.
-\n
-\nToos estos datos son abiertos y pues lleer más tocante al proyeutu en https://openplacereviews.org";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1675,7 +1670,7 @@
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
 
-"srtm_plugin_name" = "Contour lines";
+"srtm_plugin_name" = "Topography";
 "product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "This plugin provides both a contour line overlay and a (relief) hillshade layer to be displayed on top of OsmAnd\'s standard maps. This functionality will be much appreciated by athletes, hikers, trekkers, and anybody interested in the relief structure of a landscape. (Please note that contour line and/or relief data are separate, additional downloads available after activating the plugin.)
 \n
@@ -1737,8 +1732,8 @@
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "shared_string_get" = "Consiguir";
 "srtm_plugin_disabled" = "Contour lines disabled";
-"prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
-"prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
+"prch_wiki_info" = "Wikipedia plugin enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
+"prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 
 "shared_string_open" = "Open";
 "time_closed" = "Closed";

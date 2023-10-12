@@ -31,10 +31,13 @@
 @property (nonatomic) UILabel *textShadowView;
 @property (nonatomic) UIImageView *imageView;
 
+@property (nonatomic) NSLayoutConstraint *topTextAnchor;
+
 @property (strong) BOOL(^updateInfoFunction)();
 @property (strong) void(^onClickFunction)(id sender);
 
 - (void) setImage:(UIImage *)image;
+- (void) setImage:(UIImage *)image withColor:(UIColor *)color;
 - (void) setImageHidden:(BOOL)visible;
 - (void) setTimeText:(NSTimeInterval)time;
 - (BOOL) isNight;
@@ -64,5 +67,6 @@
 
 - (CGFloat) getWidgetHeight;
 - (void) adjustViewSize;
+- (void)showSeparator:(BOOL)show;
 
 @end

@@ -239,7 +239,7 @@
     if ([item.key isEqualToString:@"allColors"])
     {
         OAColorCollectionViewController *colorCollectionViewController =
-            [[OAColorCollectionViewController alloc] initWithColorItems:[self generateDataForColorCollection]
+            [[OAColorCollectionViewController alloc] initWithColorItems:[self generateColorItems]
                                                       selectedColorItem:_selectedColorItem];
         colorCollectionViewController.delegate = self;
         [self showViewController:colorCollectionViewController];
@@ -335,27 +335,28 @@
 
 #pragma mark - OAColorCollectionDelegate
 
-- (NSArray<OAColorItem *> *)generateDataForColorCollection
+- (NSArray<OAColorItem *> *)generateColorItems
 {
     return [_appearanceCollection getAvailableColorsSortingByKey];
 }
 
-- (void)onColorCollectionItemSelected:(OAColorItem *)colorItem
+- (void)selectColorItem:(OAColorItem *)colorItem
 {
     _needToScrollToSelectedColor = YES;
     [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0]];
     [self.tableView reloadRowsAtIndexPaths:@[_colorIndexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
-- (void)onColorCollectionNewItemAdded:(UIColor *)color
+- (OAColorItem *)addAndGetNewColorItem:(UIColor *)color
 {
-    [_appearanceCollection addNewSelectedColor:color];
+    OAColorItem *newColorItem = [_appearanceCollection addNewSelectedColor:color];
     _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
     if (self.delegate)
         [self.delegate onFavoriteGroupColorsRefresh];
+    return newColorItem;
 }
 
-- (void)onColorCollectionItemChanged:(OAColorItem *)colorItem withColor:(UIColor *)color
+- (void)changeColorItem:(OAColorItem *)colorItem withColor:(UIColor *)color
 {
     [_appearanceCollection changeColor:colorItem newColor:color];
     _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
@@ -363,7 +364,7 @@
         [self.delegate onFavoriteGroupColorsRefresh];
 }
 
-- (void)onColorCollectionItemDuplicated:(OAColorItem *)colorItem
+- (void)duplicateColorItem:(OAColorItem *)colorItem
 {
     [_appearanceCollection duplicateColor:colorItem];
     _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
@@ -371,7 +372,7 @@
         [self.delegate onFavoriteGroupColorsRefresh];
 }
 
-- (void)onColorCollectionItemDeleted:(OAColorItem *)colorItem
+- (void)deleteColorItem:(OAColorItem *)colorItem
 {
     [_appearanceCollection deleteColor:colorItem];
     _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
@@ -401,7 +402,7 @@
 
 - (void)onContextMenuItemDuplicate:(NSIndexPath *)indexPath
 {
-    [self onColorCollectionItemDuplicated:_sortedColorItems[indexPath.row]];
+    [self duplicateColorItem:_sortedColorItems[indexPath.row]];
     _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
 
     OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorIndexPath];
@@ -413,7 +414,7 @@
 
 - (void)onContextMenuItemDelete:(NSIndexPath *)indexPath
 {
-    [self onColorCollectionItemDeleted:_sortedColorItems[indexPath.row]];
+    [self deleteColorItem:_sortedColorItems[indexPath.row]];
     _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
 
     OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorIndexPath];
@@ -432,7 +433,7 @@
     {
         if (![[_sortedColorItems[_editColorIndexPath.row] getHexColor] isEqualToString:[viewController.selectedColor toHexARGBString]])
         {
-            [self onColorCollectionItemChanged:_sortedColorItems[_editColorIndexPath.row] withColor:viewController.selectedColor];
+            [self changeColorItem:_sortedColorItems[_editColorIndexPath.row] withColor:viewController.selectedColor];
             _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
 
             [colorHandler updateData:@[_sortedColorItems] collectionView:colorCell.collectionView];
@@ -443,10 +444,11 @@
     }
     else
     {
-        [self onColorCollectionNewItemAdded:viewController.selectedColor];
+        OAColorItem *newColorItem = [self addAndGetNewColorItem:viewController.selectedColor];
         _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
 
         [colorHandler addAndSelectColor:[NSIndexPath indexPathForRow:0 inSection:0]
+                                newItem:newColorItem
                          collectionView:colorCell.collectionView];
         [colorHandler updateData:@[_sortedColorItems] collectionView:colorCell.collectionView];
     }

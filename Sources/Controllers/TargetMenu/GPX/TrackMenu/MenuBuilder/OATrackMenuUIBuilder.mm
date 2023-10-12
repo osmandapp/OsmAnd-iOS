@@ -139,9 +139,9 @@
     [_tabs[_selectedTab] updateProperty:value tableData:tableData];
 }
 
-- (void)onButtonPressed:(OAGPXBaseTableData *)tableData
+- (void)onButtonPressed:(OAGPXBaseTableData *)tableData sourceView:(UIView *)sourceView
 {
-    [_tabs[_selectedTab] onButtonPressed:tableData];
+    [_tabs[_selectedTab] onButtonPressed:tableData sourceView:sourceView];
 }
 
 @end

@@ -1702,7 +1702,6 @@
 "simulation_constant_mode_title" = "Fiksna hitrost";
 "rendering_attr_showMonorailRoutes_name" = "Proge enotirnihželeznic";
 "backup_view_conflicts" = "Ogled sporov";
-"open_place_reviews" = "OpenPlaceReviews";
 "vessel_width_limit_description" = "Nastaviširino plovila, da se izogneš ozkim mostovom";
 "wikipedia_and_wikivoyage_offline" = "Wikipedija in Wikivoyage brez povezave";
 "monitoring_min_accuracy" = "Najmanjša natančnost";
@@ -2053,7 +2052,6 @@
 "kg" = "kg";
 "weather_plugin_description" = "Zagotavlja:\n- 24-urno in 7-dnevno vremensko napoved s petimi plastmi\n- gradniki, ki temeljijo na lokaciji\n- izoterme in izobare (izočrte temperature in zračnega tlaka).\n\nVremenske podatke zagotavlja globalni sistem napovedi (Global Forecast System - GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
 "plugin_nautical_descr" = "Obogati zemljevid z informacijami o plovnih poteh, navigacijskih lučeh, navtičnih nevarnih območjih, območjih z omejitvami jadranja ali privezovanja itd. Za uporabo prenesi ustrezne navtične karte in omogočite slog »Navtična karta« pod »Konfiguriraj zemljevid«.\n\nNadaljnje branje na https://osmand.net/docs/user/plugins/nautical-charts .";
-"open_place_reviews_plugin_description" = "Prispevaj k projektu OpenPlaceReviews, kot npr. fotografije, ocene, povezave o javnih mestih, kot so restavracije, hoteli, ali muzeji.\n\nNavodila za prispevanje najdeš na naši spletni strani https://osmand.net/docs/user/plugins/openplacereviews .";
 "m" = "m";
 "km" = "km";
 "record_plugin_description" = "Posnemi svoja potovanja ali treninge in analizirajte podatke v smislu hitrosti, skupnih vzponov in spustov, višinskega profila itd. Posnete poti je mogoče arhivirati, deliti s prijatelji, urejati in naknadno obdelati.\n\nNadaljnje branje na https://osmand.net/docs/user/plugins/trip-recording .";
@@ -2070,3 +2068,7 @@
 "shared_string_keep_active" = "Obdrži aktivno";
 "icon_group_service" = "Storitev";
 "route_info" = "Informacije o poti";
+"rendering_attr_alpineHiking_name" = "Klasifikacije težavnosti";
+"rendering_value_caiScale_description" = "Club Alpino Italiano (Italijanska planinska zveza)";
+"map_widget_distance_to_intermediate" = "Razdalja do vmesne točke";
+"rendering_value_sacScale_description" = "Swiss Alpine Club (Švicarska planinska zveza)";

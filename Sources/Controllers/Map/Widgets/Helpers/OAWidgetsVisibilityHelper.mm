@@ -15,18 +15,11 @@
 #import "OAMapInfoController.h"
 #import "OAMapHudViewController.h"
 #import "OAFloatingButtonsHudViewController.h"
+#import "OATrackMenuAppearanceHudViewController.h"
 #import "OAMeasurementToolLayer.h"
 #import "OAMapLayer.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OsmAnd_Maps-Swift.h"
-
-
-@interface OAWidgetsVisibilityHelper ()
-
-@property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableSet<OAApplicationMode *> *> *widgetsVisibilityMap;
-@property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableSet<OAApplicationMode *> *> *widgetsAvailabilityMap;
-
-@end
 
 @implementation OAWidgetsVisibilityHelper
 {
@@ -63,35 +56,60 @@
 
 - (BOOL)shouldShowQuickActionButton {
     return [self isQuickActionLayerOn] &&
-    ![self isInChangeMarkerPositionMode] &&
-    ![self isInGpxDetailsMode] &&
-    ![self isInMeasurementToolMode] &&
-    ![self isInPlanRouteMode] &&
-    ![self isInTrackAppearanceMode] &&
-    ![self isInTrackMenuMode] &&
-    ![self isInRouteLineAppearanceMode] &&
-    ![self isMapRouteInfoMenuVisible] &&
-    ![self isInChoosingRoutesMode] &&
-    ![self isInWaypointsChoosingMode] &&
-    ![self isInFollowTrackMode] &&
-    ![self isContextMenuFragmentVisible] &&
-    ![self isMultiSelectionMenuFragmentVisible] &&
-    ![self isInGpsFilteringMode] &&
-    ![self isInWeatherForecastMode] &&
-    ![self isSelectingTilesZone];
+    [self shouldShowFabButton];
 }
 
-- (BOOL)shouldShowTopMapCenterCoordinatesWidget {
-    return [_settings.showMapCenterCoordinatesWidget get] && [self shouldShowTopCoordinatesWidget];
+- (BOOL)shouldShowMap3DButton
+{
+    return [self shouldShowFabButton];
 }
 
-- (BOOL)shouldShowTopCurrentLocationCoordinatesWidget {
-    return [_settings.showCurrentLocationCoordinatesWidget get] && [self shouldShowTopCoordinatesWidget];
+- (BOOL)shouldShowFabButton
+{
+    return ![self isInChangeMarkerPositionMode]
+    && ![self isInGpxDetailsMode]
+    && ![self isInMeasurementToolMode]
+    && ![self isInPlanRouteMode]
+    && ![self isInTrackAppearanceMode]
+    && ![self isInTrackMenuMode]
+    && ![self isInRouteLineAppearanceMode]
+    && ![self isMapRouteInfoMenuVisible]
+    && ![self isInChoosingRoutesMode]
+    && ![self isInWaypointsChoosingMode]
+    && ![self isInFollowTrackMode]
+    && ![self isContextMenuFragmentVisible]
+    && ![self isMultiSelectionMenuFragmentVisible]
+    && ![self isInGpsFilteringMode]
+    && ![self isInWeatherForecastMode]
+    && ![self isSelectingTilesZone];
 }
 
-- (BOOL)shouldShowTopCoordinatesWidget {
+- (BOOL)shouldShowTopMapCenterCoordinatesWidget
+{
+    BOOL shouldShow = [self shouldShowTopCoordinatesWidget];
+    if (shouldShow)
+        for (NSString *component in [[_settings.mapInfoControls get] componentsSeparatedByString:SETTINGS_SEPARATOR])
+            if ([component hasPrefix:OAWidgetType.coordinatesMapCenter.id])
+                return YES;
+
+    return [_settings.showMapCenterCoordinatesWidget get] && [_settings.quickActionIsOn get];
+}
+
+- (BOOL)shouldShowTopCurrentLocationCoordinatesWidget
+{
+    BOOL shouldShow = [self shouldShowTopCoordinatesWidget];
+    if (shouldShow)
+        for (NSString *component in [[_settings.mapInfoControls get] componentsSeparatedByString:SETTINGS_SEPARATOR])
+            if ([component hasPrefix:OAWidgetType.coordinatesCurrentLocation.id])
+                return YES;
+
+    return [_settings.showCurrentLocationCoordinatesWidget get] && [_settings.quickActionIsOn get];
+}
+
+- (BOOL)shouldShowTopCoordinatesWidget
+{
     return [_mapPanel isTopControlsVisible] &&
-//    [[_mapActivity getMapRouteInfoMenu] shouldShowTopControls] &&
+    ![_mapPanel isTopToolbarActive] &&
     ![self isInTrackAppearanceMode] &&
     ![self isInRouteLineAppearanceMode] &&
     ![self isInChoosingRoutesMode] &&
@@ -102,23 +120,58 @@
     ![self isSelectingTilesZone];
 }
 
-- (BOOL)shouldHideMapMarkersWidget {
-    return !_settings.showMapMarkersBarWidget.get ||
-    _mapInfoController.topTextViewVisible ||
-    [_routingHelper isFollowingMode] ||
-    [_routingHelper isRoutePlanningMode] ||
-    [self isMapRouteInfoMenuVisible] ||
-    [_mapPanel isTopToolbarActive] ||
-    ![_mapPanel isTopControlsVisible] ||
-    [self isInTrackAppearanceMode] ||
-    [self isInPlanRouteMode] ||
-    [self isInRouteLineAppearanceMode] ||
-    [self isInGpsFilteringMode] ||
-    [self isInWeatherForecastMode] ||
-    [self isSelectingTilesZone];
+- (BOOL)shouldShowTopLanesWidget
+{
+    return [_mapPanel isTopControlsVisible] &&
+    ![_mapPanel isTopToolbarActive] &&
+    ![self isInTrackAppearanceMode] &&
+    ![self isInRouteLineAppearanceMode] &&
+    ![self isInChoosingRoutesMode] &&
+    ![self isInWaypointsChoosingMode] &&
+    ![self isInFollowTrackMode] &&
+    ![self isInGpsFilteringMode] &&
+    ![self isInWeatherForecastMode] &&
+    ![self isSelectingTilesZone];
 }
 
-- (BOOL)shouldShowBottomMenuButtons {
+- (BOOL)shouldShowTopMapMarkersWidget
+{
+    BOOL shouldShow =
+    	![self isMapRouteInfoMenuVisible] &&
+	    [_mapPanel isTopControlsVisible] &&
+	    ![_mapPanel isTopToolbarActive] &&
+	    ![self isInTrackAppearanceMode] &&
+	    ![self isInPlanRouteMode] &&
+        ![self isInRouteLineAppearanceMode] &&
+	    ![self isInGpsFilteringMode] &&
+	    ![self isInWeatherForecastMode] &&
+	    ![self isSelectingTilesZone];
+
+    if (shouldShow)
+        return [self isTopMapMarkersWidgetEnabled];
+
+    return NO;
+}
+
+- (BOOL) isTopMapMarkersWidgetEnabled
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    OAApplicationMode *appMode = [settings.applicationMode get];
+    NSArray<OAWidgetsPanel *> *panels = [OAWidgetsPanel.topPanel getMergedPanels];
+
+    OAMapWidgetRegistry *widgetRegistry = [OAMapWidgetRegistry sharedInstance];
+    NSMutableOrderedSet<OAMapWidgetInfo *> *enabledWidgets = [widgetRegistry getWidgetsForPanel:appMode
+                                                                                    filterModes:kWidgetModeEnabled
+                                                                                         panels:panels];
+    for (OAMapWidgetInfo *widgetInfo in enabledWidgets)
+        if ([widgetInfo.key containsString:@"map_markers_top"])
+            return YES;
+
+    return NO;
+}
+
+- (BOOL)shouldShowBottomMenuButtons
+{
     return [_mapPanel isTopControlsVisible] &&
     ![self isInMovingMarkerMode] &&
     ![self isInGpxDetailsMode] &&
@@ -134,9 +187,9 @@
     ![self isSelectingTilesZone];
 }
 
-- (BOOL)shouldShowZoomButtons {
-    BOOL additionalDialogsHide = ![self isInGpxApproximationMode] &&
-    ![self isInTrackAppearanceMode] &&
+- (BOOL)shouldShowZoomButtons
+{
+    BOOL additionalDialogsHide = ![self isInTrackAppearanceMode] &&
     ![self isInChoosingRoutesMode] &&
     ![self isInWaypointsChoosingMode] &&
     ![self isInRouteLineAppearanceMode] &&
@@ -145,10 +198,12 @@
     BOOL showTopControls = [_mapPanel isTopControlsVisible] || ([self isInTrackMenuMode] && ![self isPortrait]);
     return showTopControls &&
     ![self isInFollowTrackMode] &&
+//    !isInConfigureMapOptionMode() &&
     (additionalDialogsHide || ![self isPortrait]);
 }
 
-- (BOOL)shouldHideCompass {
+- (BOOL)shouldHideCompass
+{
     return ![_mapPanel isTopControlsVisible] ||
     [self isTrackDetailsMenuOpened] ||
     [self isInPlanRouteMode] ||
@@ -175,9 +230,9 @@
     ![self isSelectingTilesZone];
 }
 
-- (BOOL)shouldShowBackToLocationButton {
+- (BOOL)shouldShowBackToLocationButton
+{
     BOOL additionalDialogsHide = ![self isInTrackAppearanceMode] &&
-    ![self isInGpxApproximationMode] &&
     ![self isInChoosingRoutesMode] &&
     ![self isInWaypointsChoosingMode] &&
     ![self isInFollowTrackMode] &&
@@ -191,12 +246,24 @@
     (additionalDialogsHide || ![self isPortrait]);
 }
 
-- (BOOL) shouldShowElevationProfileWidget {
-    return _settings.showElevationProfileWidget.get && [self isRouteCalculated] && [OAWidgetType.elevationProfile isPurchased] && ![self isInChangeMarkerPositionMode] && ![self isInMeasurementToolMode] && ![self isInChoosingRoutesMode] && ![self isInWaypointsChoosingMode] && ![self isInPlanRouteMode] && ![self isSelectingTilesZone];
+- (BOOL) shouldShowElevationProfileWidget
+{
+    return [self isRouteCalculated] && [OAWidgetType.elevationProfile isPurchased] &&
+    ![self isInChangeMarkerPositionMode] &&
+    ![self isInMeasurementToolMode] &&
+    ![self isInChoosingRoutesMode] &&
+    ![self isInWaypointsChoosingMode] &&
+    ![self isInPlanRouteMode] &&
+    ![self isSelectingTilesZone] &&
+    ![self isTrackDetailsMenuOpened];
 }
 
-- (BOOL) shouldShowDownloadMapWidget {
-    return ![self isInRouteLineAppearanceMode] && ![self isInGpsFilteringMode] && ![self isInWeatherForecastMode] && ![self isSelectingTilesZone];
+- (BOOL) shouldShowDownloadMapWidget
+{
+    return ![self isInRouteLineAppearanceMode] &&
+    ![self isInGpsFilteringMode] &&
+    ![self isInWeatherForecastMode] &&
+    ![self isSelectingTilesZone];
 }
 
 - (BOOL) isQuickActionLayerOn {
@@ -208,9 +275,7 @@
 }
 
 - (BOOL) isInMovingMarkerMode {
-//    MapQuickActionLayer *quickActionLayer = [mapLayers getMapQuickActionLayer];
-//    BOOL isInMovingMarkerMode = quickActionLayer != nil && [quickActionLayer isInMovingMarkerMode];
-    return /*isInMovingMarkerMode ||*/ [self isInChangeMarkerPositionMode] || [self isInAddGpxPointMode];
+    return [self isInChangeMarkerPositionMode] || [self isInAddGpxPointMode];
 }
 
 - (BOOL) isInGpxDetailsMode {
@@ -235,7 +300,7 @@
 }
 
 - (BOOL) isInTrackAppearanceMode {
-    return [self isInGpxDetailsMode];/*[[mapLayers getGpxLayer] isInTrackAppearanceMode];*/
+    return [_mapPanel isContextMenuVisible] && [_mapPanel.scrollableHudViewController isKindOfClass:OATrackMenuAppearanceHudViewController.class];/*[[mapLayers getGpxLayer] isInTrackAppearanceMode];*/
 }
 
 - (BOOL) isInGpxApproximationMode {

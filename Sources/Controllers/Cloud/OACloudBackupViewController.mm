@@ -83,7 +83,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     NSInteger _itemsSection;
     
     UIBarButtonItem *_settingsButton;
-    UIBarButtonItem *_backButton;
 }
 
 - (instancetype) initWithSourceType:(EOACloudScreenSourceType)type
@@ -154,9 +153,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     
     OACloudBackupViewController *navigationController = (OACloudBackupViewController *)self.navigationController.topViewController;
     _settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_settings"] style:UIBarButtonItemStylePlain target:self action:@selector(onSettingsButtonPressed)];
-    _backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
     [navigationController.navigationItem setRightBarButtonItem:_settingsButton];
-    [navigationController.navigationItem setLeftBarButtonItem:_backButton];
 }
 
 - (void)dealloc
@@ -168,7 +165,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 -(void) addAccessibilityLabels
 {
     _settingsButton.accessibilityLabel = OALocalizedString(@"shared_string_settings");
-    _backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
 }
 
 - (void) onRefresh
@@ -406,7 +402,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     if (isSyncButton)
     {
         BOOL hasInfo = _info != nil;
-        BOOL noChanges = _status == OABackupStatus.MAKE_BACKUP && (!hasInfo || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0 && [OABackupHelper getItemsMapForRestore:_info settingsItems:_backup.settingsItems].count == 0));
+        BOOL noChanges = _status == OABackupStatus.MAKE_BACKUP && (!hasInfo || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0 && _info.filteredLocalFilesToDelete.count == 0 && [OABackupHelper getItemsMapForRestore:_info settingsItems:_backup.settingsItems].count == 0));
         actionButtonDisabled = noChanges || _backupHelper.isBackupPreparing || _settingsHelper.isBackupSyncing;
     }
     return actionButtonDisabled;
@@ -595,7 +591,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             cell.button.tintColor = UIColorFromRGB(color_primary_purple);
         }
         BOOL collapsed = item.rowType == EOATableRowTypeCollapsable && ((OATableCollapsableRowData *) item).collapsed;
-        [cell.button setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"] forState:UIControlStateNormal];
+        [cell.button setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
         [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         [cell.button addTarget:self action:@selector(onCollapseButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         cell.titleLabel.text = item.title;
@@ -711,21 +707,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-#pragma mark - Selectors
-
-- (void)onLeftNavbarButtonPressed
-{
-    for (UIViewController *controller in self.navigationController.viewControllers)
-    {
-        if ([controller isKindOfClass:[OAMainSettingsViewController class]])
-        {
-            [self.navigationController popToViewController:controller animated:YES];
-            return;
-        }
-    }
-    [self.navigationController popToRootViewControllerAnimated:YES];
-}
-
 // MARK: OAOnPrepareBackupListener
 
 - (void)onBackupPrepared:(nonnull OAPrepareBackupResult *)backupResult
@@ -736,18 +717,12 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         _status = [OABackupStatus getBackupStatus:_backup];
         _error = _backup.error;
         [self refreshContent];
-        _settingsButton.enabled = YES;
-        _settingsButton.tintColor = UIColor.whiteColor;
         [self.tblView.refreshControl endRefreshing];
     });
 }
 
 - (void)onBackupPreparing
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        _settingsButton.enabled = NO;
-        _settingsButton.tintColor = UIColorFromRGB(color_tint_gray);
-    });
 }
 
 #pragma mark - OABackupTypesDelegate

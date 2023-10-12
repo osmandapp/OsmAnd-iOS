@@ -26,9 +26,7 @@ class WidgetPageViewController: UIViewController {
         
         // Add the widget views to the stack view
         for widgetView in widgetViews {
-            if let widget = widgetView as? OATextInfoWidget {
-                widget.adjustViewSize()
-            }
+            widgetView.adjustSize()
             let constraint = widgetView.heightAnchor.constraint(greaterThanOrEqualToConstant: widgetView.frame.size.height)
             constraint.priority = .defaultHigh
             constraint.isActive = true
@@ -50,17 +48,18 @@ class WidgetPageViewController: UIViewController {
     func layoutWidgets() -> (width: CGFloat, height: CGFloat) {
         var width: CGFloat = 0
         var height: CGFloat = 0
+        let lastVisibleWidget = widgetViews.last(where: { !$0.isHidden })
         for widget in widgetViews {
+            widget.showSeparator(widget != lastVisibleWidget)
             widget.translatesAutoresizingMaskIntoConstraints = false
-            if let widget = widget as? OATextInfoWidget {
-                widget.adjustViewSize()
-            } else {
-                widget.sizeToFit()
-            }
+            widget.adjustSize()
             width = max(width, widget.frame.size.width)
             if !widget.isHidden {
                 height += widget.frame.size.height
             }
+            let constraint = widget.heightAnchor.constraint(greaterThanOrEqualToConstant: widget.frame.size.height)
+            constraint.priority = .defaultHigh
+            constraint.isActive = true
         }
         return (width, height)
     }

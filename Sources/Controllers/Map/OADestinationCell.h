@@ -13,11 +13,8 @@
 @class OADestination;
 
 @protocol OADestinatioCellProtocol <NSObject>
-@optional
 
-- (void)markAsVisited:(OADestination *)destination;
-- (void)removeDestination:(OADestination *)destination;
-- (void)openHideDestinationCardsView:(id)sender;
+- (void)openDestinationViewController;
 
 @end
 
@@ -63,11 +60,8 @@
 - (void)updateLayout:(CGRect)frame;
 - (void)reloadData;
 - (void)updateDirections:(CLLocationCoordinate2D)myLocation direction:(CLLocationDirection)direction;
-
 - (void)updateDirection:(OADestination *)destination imageView:(UIImageView *)imageView;
-
 - (void)updateOkButton:(OADestination *)destination;
-- (void)updateCloseButton;
 
 - (OADestination *)destinationByPoint:(CGPoint)point;
 

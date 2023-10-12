@@ -12,7 +12,6 @@ import Foundation
 class CenterWidgetInfo: MapWidgetInfo {
     
     override func getUpdatedPanel() -> WidgetsPanel {
-        let settings = OAAppSettings.sharedManager()!
         let widgetType = getWidgetType()
         
         if let widgetType {

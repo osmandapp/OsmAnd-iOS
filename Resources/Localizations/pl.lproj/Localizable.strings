@@ -2008,7 +2008,7 @@
 "default_color_descr" = "Ten kolor będzie używany dla wszystkich nowych ulubionych dodanych do grupy.";
 "tracks_on_map" = "Wyświetlane trasy";
 "fav_point_emoticons_message" = "Nazwa ulubionego miejsca została zmieniona na \"%@\", aby móc zapisać do pliku tekst z emotikonami.";
-"fav_point_dublicate_message" = "Nazwa ulubionego miejsca została zmieniona na \"%@\", aby uniknąć powielenia.";
+"fav_point_dublicate_message" = "Nazwa ulubionego miejsca została zmieniona na %@, aby uniknąć powielenia.";
 "carplay_profile_descr" = "Profil, który będzie używany podczas połączenia z CarPlay.";
 "carplay_profile" = "Profil CarPlay";
 "shared_string_last_used" = "Ostatnio używane";
@@ -2045,7 +2045,6 @@
 "routes_color_by_type" = "Kolor trasy według…";
 "download_map_dialog" = "Dialog pobierania map";
 "dialogs_and_notifications_title" = "Dialogi i powiadomienia";
-"open_place_reviews" = "OpenPlaceReviews";
 "srtm_download_list_help_message" = "OsmAnd udostępnia dane poziomic w metrach i stopach. Aby zmienić format, należy ponownie pobrać plik.";
 "navigate_point_northing" = "Linia współrzędnych \"y\"";
 "contour_lines_hillshades_slope" = "Poziomice, mapy cieniowane, nachylenie";
@@ -2612,7 +2611,6 @@
 "auth_failed" = "Nie udało się uwierzytelnić";
 "mgrs_format_descr" = "OsmAnd używa formatu MGRS, który jest podobny do UTM NATO.";
 "m" = "m";
-"open_place_reviews_plugin_description" = "Dodaj do projektu OpenPlaceReviews zdjęcia, recenzje i linki do miejsc publicznych takich jak restauracje, hotele czy muzea.\n\nZnajdź instrukcje jak to zrobić na naszej stronie https://osmand.net/docs/user/plugins/openplacereviews .";
 "weather_plugin_description" = "Zapewnia\n- 24-godzinną i 7-dniową prognozę pogody z 5 warstwami\n- widżety oparte na lokalizacji\n- izolinie temperatury / ciśnienia\n\nDane pogodowe są dostarczane przez Globalny System Prognoz (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
 "km" = "km";
 "kg" = "kg";
@@ -2670,3 +2668,23 @@
 "search_favorites" = "Wyszukiwanie ulubionych";
 "speak_route_deviation" = "Zapowiedź zbaczania z trasy";
 "compass_click_desc" = "Stuknij w kompas, aby przełączyć tryb orientacji mapy.";
+"rendering_value_sacScale_description" = "Szwajcarski Klub Alpejski";
+"free_favorites_backup" = "Darmowa kopia zapasowa ulubionych";
+"free_account" = "Darmowe konto";
+"get_osmand_cloud" = "Pozyskaj OsmAnd Cloud";
+"rendering_value_caiScale_description" = "Włoski Klub Alpejski (Italian Alpine Club)";
+"shared_string_cache" = "Pamięć podręczna";
+"map_widget_distance_to_intermediate" = "Odległość do punktu pośredniego";
+"map_widget_target_distance_desc" = "Pokazuje odległość między kamerą a miejscem docelowym.";
+"map_widget_camera_tilt_desc" = "Pokazuje kąt nachylenia kamery w trybie perspektywicznym. Domyślnie 90° (brak pochylenia).";
+"distance_circles" = "Kręgi odległości";
+"av_notes_audio_widget_desc" = "Stuknięcie widżetu pozwala na zrobienie notatki dźwiękowej.";
+"coordinates_widget_current_location_desc" = "Pokazuje współrzędne geograficzne bieżącej geolokalizacji";
+"map_widget_zoom_level_desc" = "Pokazuje bieżący poziom powiększenia mapy.";
+"map_widget_camera_distance_desc" = "Pokazuje wysokość kamery nad poziomem powierzchni.";
+"av_notes_video_widget_desc" = "Stuknięcie widżetu umożliwia nagranie filmu.";
+"av_notes_photo_widget_desc" = "Stuknięcie widżetu umożliwia zrobienie zdjęcia.";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "Pokazuje współrzędne geograficzne bieżącego środka mapy";
+"map_widget_rendering_fps_desc" = "Pokazuje, jak szybko mapa i jej elementy są wyświetlane i odświeżane, wyrażone w klatkach na sekundę (FPS).";

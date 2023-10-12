@@ -22,36 +22,20 @@
 #define kWidgetVisibilityChangedMotification @"onWidgetVisibilityChanged"
 #define kWidgetsCleared @"onWidgetsCleared"
 
-@class OAApplicationMode, OATextInfoWidget, OAMapWidgetRegInfo, OAWidgetState, OAMapWidgetInfo, OAWidgetsPanel, OAWidgetType, OAWidgetPanelViewController;
+@class OAApplicationMode, OATextInfoWidget, OAWidgetState, OAMapWidgetInfo, OAWidgetsPanel, OAWidgetType, OAWidgetPanelViewController;
 
 @interface OAMapWidgetRegistry : NSObject
 
-- (void) populateStackControl:(UIView *)stack mode:(OAApplicationMode *)mode left:(BOOL)left expanded:(BOOL)expanded;
-- (void) populateStackControl:(OAWidgetPanelViewController *)stack mode:(OAApplicationMode *)mode widgetPanel:(OAWidgetsPanel *)widgetPanel;
-- (BOOL) hasCollapsibles:(OAApplicationMode *)mode;
++ (OAMapWidgetRegistry *) sharedInstance;
 
+- (void) populateControlsContainer:(OAWidgetPanelViewController *)stack mode:(OAApplicationMode *)mode widgetPanel:(OAWidgetsPanel *)widgetPanel;
 - (void) updateInfo:(OAApplicationMode *)mode expanded:(BOOL)expanded;
-- (void) removeSideWidget:(NSString *)key;
 - (void) removeSideWidgetInternal:(OATextInfoWidget *)widget;
-
-- (OAMapWidgetRegInfo *) registerSideWidgetInternal:(OATextInfoWidget *)widget widgetState:(OAWidgetState *)widgetState key:(NSString *)key left:(BOOL)left priorityOrder:(int)priorityOrder;
-- (OAMapWidgetRegInfo *) registerSideWidgetInternal:(OATextInfoWidget *)widget imageId:(NSString *)imageId message:(NSString *)message description:(NSString *)description key:(NSString *)key left:(BOOL)left priorityOrder:(int)priorityOrder;
-
-- (BOOL) isVisible:(NSString *)key;
-- (void) setVisibility:(OAMapWidgetRegInfo *)m visible:(BOOL)visible collapsed:(BOOL)collapsed;
-- (void) setVisibility:(OAApplicationMode *)mode m:(OAMapWidgetRegInfo *)m visible:(BOOL)visible collapsed:(BOOL)collapsed;
-- (void) resetToDefault;
-- (void) resetToDefault:(OAApplicationMode *)mode;
-- (void) updateVisibleWidgets;
-
-- (NSOrderedSet<OAMapWidgetRegInfo *> *) getLeftWidgetSet;
-- (NSOrderedSet<OAMapWidgetRegInfo *> *) getRightWidgetSet;
-- (OAMapWidgetRegInfo *) widgetByKey:(NSString *)key;
 
 - (NSArray<OAMapWidgetInfo *> *)getAllWidgets;
 - (NSMutableOrderedSet<OAMapWidgetInfo *> *)getWidgetsForPanel:(OAApplicationMode *)appMode
-                                                            filterModes:(NSInteger) filterModes
-                                                                 panels:(NSArray<OAWidgetsPanel *> *)panels;
+                                                   filterModes:(NSInteger) filterModes
+                                                        panels:(NSArray<OAWidgetsPanel *> *)panels;
 
 - (void) enableDisableWidgetForMode:(OAApplicationMode *)appMode
                          widgetInfo:(OAMapWidgetInfo *)widgetInfo

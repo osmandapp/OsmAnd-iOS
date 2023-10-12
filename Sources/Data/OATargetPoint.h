@@ -54,7 +54,8 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetNewMovableWpt,
     OATargetRouteLineAppearance,
     OATargetWeatherLayerSettings,
-    OATargetWeatherToolbar
+    OATargetWeatherToolbar,
+    OATargetTerrainParametersSettings
 };
 
 @interface OATargetPoint : NSObject

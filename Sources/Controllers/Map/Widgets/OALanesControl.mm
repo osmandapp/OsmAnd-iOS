@@ -20,6 +20,7 @@
 #import "OAUtilities.h"
 #import "OATextInfoWidget.h"
 #import "OAOsmAndFormatter.h"
+#import "OAWidgetsVisibilityHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <CommonCollections.h>
@@ -135,6 +136,22 @@
     
     _lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:1];
     [_lanesView addSubview:_lanesDrawable];
+
+    _textView.text = @"";
+    _textShadowView.text = @"";
+}
+
+- (void) layoutSubviews
+{
+    [super layoutSubviews];
+
+    _lanesView.frame = (CGRect) { kBorder, kBorder, self.bounds.size.width - kBorder * 2,  self.bounds.size.height - 32.0 };
+    _lanesDrawable.frame = CGRectMake(_lanesView.bounds.size.width / 2 - _lanesDrawable.width / 2, 0, _lanesDrawable.width, _lanesDrawable.height);
+}
+
+- (BOOL) isTopText
+{
+    return YES;
 }
 
 - (void) refreshLabel:(NSString *)text
@@ -182,7 +199,7 @@
 
 - (BOOL) updateInfo
 {
-    BOOL visible = false;
+    BOOL visible = [OAWidgetsVisibilityHelper.sharedInstance shouldShowTopLanesWidget];
     int locimminent = -1;
     vector<int> loclanes;
     int dist = 0;
@@ -238,7 +255,7 @@
             }
         }
     }
-    visible = !loclanes.empty();
+    visible &= !loclanes.empty();
     if (visible)
     {
         BOOL needFrameUpdate = NO;
@@ -261,23 +278,30 @@
                 [self refreshLabel:[OAOsmAndFormatter getFormattedDistance:dist]];
             
             _textView.hidden = _textView.text.length == 0;
+            _textShadowView.hidden = _textShadowView.text.length == 0;
             needFrameUpdate = YES;
         }
         
         if (needFrameUpdate)
         {
-            BOOL hasText = _textView.text.length > 0;
-            CGRect parentFrame = self.superview.frame;
-            CGFloat minWidth = MAX(kMinWidth, [OAUtilities calculateTextBounds:_textView.text width:1000 font:_textFont].width);
-            CGSize newSize = CGSizeMake(MAX(minWidth, _lanesDrawable.width + kBorder * 2), _lanesDrawable.height + kBorder * 2 + (hasText ? kTextViewHeight : 0));
-            self.frame = (CGRect) { parentFrame.size.width / 2 - newSize.width / 2, self.frame.origin.y, newSize };
-            _lanesDrawable.frame = CGRectMake(_lanesView.bounds.size.width / 2 - _lanesDrawable.width / 2, 0, _lanesDrawable.width, _lanesDrawable.height);
+            [self adjustViewSize];
             [_lanesDrawable setNeedsDisplay];
+            if (self.delegate)
+                [self.delegate widgetChanged:self];
         }
     }
     [self updateVisibility:visible];
     
     return YES;
+}
+
+- (void) adjustViewSize
+{
+    BOOL hasText = _textView.text.length > 0;
+    CGRect parentFrame = self.superview.frame;
+    CGFloat minWidth = MAX(kMinWidth, [OAUtilities calculateTextBounds:_textView.text width:1000 font:_textFont].width) + 10;
+    CGSize newSize = CGSizeMake(MAX(minWidth, _lanesDrawable.width) + kBorder * 2, _lanesDrawable.height + kBorder * 2 + (hasText ? kTextViewHeight : 0));
+    self.frame = (CGRect) { parentFrame.size.width / 2 - newSize.width / 2, self.frame.origin.y, newSize };
 }
 
 - (BOOL) distChanged:(int)oldDist dist:(int)dist
@@ -291,7 +315,7 @@
     {
         self.hidden = !visible;
         if (self.delegate)
-            [self.delegate widgetVisibilityChanged:nil visible:visible];
+            [self.delegate widgetVisibilityChanged:self visible:visible];
         
         return YES;
     }

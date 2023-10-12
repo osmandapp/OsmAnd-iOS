@@ -158,6 +158,11 @@ static long BIGGEST_MEASURED_INTERVAL;
     BIGGEST_MEASURED_INTERVAL = MEASURED_INTERVALS.lastObject.longValue;
 }
 
++ (NSArray<NSNumber *> *) MEASURED_INTERVALS
+{
+    return MEASURED_INTERVALS;
+}
+
 + (long) DEFAULT_INTERVAL_MILLIS
 {
     return DEFAULT_INTERVAL_MILLIS;
@@ -189,7 +194,7 @@ static long BIGGEST_MEASURED_INTERVAL;
 {
     if (location != nil) {
         long time = [[NSDate date] timeIntervalSince1970] * 1000;
-        BOOL save = [self isEnabled] && [_locationServices isInLocationSimulation];
+        BOOL save = [self isEnabled] && ![_locationServices isInLocationSimulation];
         if (save)
         {
             [self saveLocation:location time:time];
@@ -199,7 +204,7 @@ static long BIGGEST_MEASURED_INTERVAL;
 
 - (BOOL)isEnabled
 {
-    OAMapWidgetRegistry *widgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
+    OAMapWidgetRegistry *widgetRegistry = [OAMapWidgetRegistry sharedInstance];
     OAApplicationMode *appMode = _settings.applicationMode.get;
     NSArray<OAMapWidgetInfo *> *widgetInfos = [widgetRegistry getAllWidgets];
 

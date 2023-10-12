@@ -8,7 +8,6 @@
 
 #import "OASunriseSunsetWidgetState.h"
 #import "Localization.h"
-#import "OAMapWidgetRegistry.h"
 #import "OARootViewController.h"
 #import "OAAppSettings.h"
 #import "OASunriseSunsetWidget.h"

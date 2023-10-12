@@ -82,27 +82,32 @@
 //    [self registerWidget];
 }
 
+- (NSArray<NSString *> *) getWidgetIds
+{
+    return @[OAWidgetType.devFps.id, OAWidgetType.devCameraTilt.id, OAWidgetType.devCameraDistance, OAWidgetType.devZoomLevel.id, OAWidgetType.devTargetDistance.id];
+}
+
 - (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
 {
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
 
-    OABaseWidgetView *fpsWidget = [self createMapWidgetForParams:OAWidgetType.devFps];
+    OABaseWidgetView *fpsWidget = [self createMapWidgetForParams:OAWidgetType.devFps customId:nil];
     [delegate addWidget:[creator createWidgetInfoWithWidget:fpsWidget]];
     
-    OABaseWidgetView *cameraTiltWidget = [self createMapWidgetForParams:OAWidgetType.devCameraTilt];
+    OABaseWidgetView *cameraTiltWidget = [self createMapWidgetForParams:OAWidgetType.devCameraTilt customId:nil];
     [delegate addWidget:[creator createWidgetInfoWithWidget:cameraTiltWidget]];
     
-    OABaseWidgetView *cameraDistanceWidget = [self createMapWidgetForParams:OAWidgetType.devCameraDistance];
+    OABaseWidgetView *cameraDistanceWidget = [self createMapWidgetForParams:OAWidgetType.devCameraDistance customId:nil];
     [delegate addWidget:[creator createWidgetInfoWithWidget:cameraDistanceWidget]];
     
-    OABaseWidgetView *zoomLevelWidget = [self createMapWidgetForParams:OAWidgetType.devZoomLevel];
+    OABaseWidgetView *zoomLevelWidget = [self createMapWidgetForParams:OAWidgetType.devZoomLevel customId:nil];
     [delegate addWidget:[creator createWidgetInfoWithWidget:zoomLevelWidget]];
     
-    OABaseWidgetView *targetDistanceWidget = [self createMapWidgetForParams:OAWidgetType.devTargetDistance];
+    OABaseWidgetView *targetDistanceWidget = [self createMapWidgetForParams:OAWidgetType.devTargetDistance customId:nil];
     [delegate addWidget:[creator createWidgetInfoWithWidget:targetDistanceWidget]];
 }
 
-- (OABaseWidgetView *) createMapWidgetForParams:(OAWidgetType *)widgetType
+- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(NSString *)customId
 {
     if (widgetType == OAWidgetType.devFps) {
         return [[OAFPSTextInfoWidget alloc] init];
@@ -115,7 +120,6 @@
     } else if (widgetType == OAWidgetType.devTargetDistance) {
         return [[OATargetDistanceWidget alloc] init];
     }
-        
     return nil;
 }
 

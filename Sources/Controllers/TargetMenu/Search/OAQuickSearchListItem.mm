@@ -423,4 +423,20 @@
         [_distanceDirection resetMapCenterSearch];
 }
 
+- (BOOL)isEqual:(id)other
+{
+    if (other == self) {
+        return YES;
+    } if (![self isKindOfClass:[other class]]) {
+        return NO;
+    } else {
+        OAQuickSearchListItem *item = (OAQuickSearchListItem *)other;
+        return [_searchResult.localeName isEqualToString:item.getSearchResult.localeName];
+    }
+}
+
+- (NSUInteger)hash {
+    return _searchResult.localeName.hash;
+}
+
 @end

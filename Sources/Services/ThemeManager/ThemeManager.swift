@@ -31,7 +31,7 @@ final class ThemeManager: NSObject {
         guard let theme = Theme(rawValue: Int(savedTheme)) else {
             fatalError("theme rawValue is wrong")
         }
-        UIWindow.key.overrideUserInterfaceStyle = theme.overrideUserInterfaceStyle
+        overrideUserInterfaceStyle(theme)
     }
 
     func apply(_ theme: Theme, appMode: OAApplicationMode, withNotification: Bool = false) {
@@ -41,10 +41,18 @@ final class ThemeManager: NSObject {
         let currentAppMode = OAAppSettings.sharedManager().currentMode
         OAAppSettings.sharedManager().appearanceProfileTheme.set(Int32(theme.rawValue), mode: appMode)
         if appMode == currentAppMode {
-            UIWindow.key.overrideUserInterfaceStyle = theme.overrideUserInterfaceStyle
+            overrideUserInterfaceStyle(theme)
         }
         if withNotification {
-            NotificationCenter.default.post(name: .ThemeDidChange, object: self)
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .ThemeDidChange, object: self)
+            }
+        }
+    }
+    
+    private func overrideUserInterfaceStyle(_ theme: Theme) {
+        DispatchQueue.main.async {
+            UIWindow.key.overrideUserInterfaceStyle = theme.overrideUserInterfaceStyle
         }
     }
 }

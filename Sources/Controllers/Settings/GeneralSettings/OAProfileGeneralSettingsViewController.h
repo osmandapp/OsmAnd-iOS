@@ -18,6 +18,7 @@ typedef enum
     EOAProfileGeneralSettingsAngularMeasurmentUnits,
     EOAProfileGeneralSettingsExternalInputDevices,
     EOAProfileGeneralSettingsScreenCoordsFormat,
+    EOAProfileGeneralSettingsAppTheme
 } EOAProfileGeneralSettingsParameter;
 
 @interface OAProfileGeneralSettingsViewController : OABaseSettingsViewController

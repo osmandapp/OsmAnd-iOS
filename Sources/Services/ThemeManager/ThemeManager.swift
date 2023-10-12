@@ -34,13 +34,15 @@ final class ThemeManager: NSObject {
         UIWindow.key.overrideUserInterfaceStyle = theme.overrideUserInterfaceStyle
     }
 
-    func apply(_ theme: Theme, withNotification: Bool = false) {
-        guard currentTheme != theme else {
+    func apply(_ theme: Theme, appMode: OAApplicationMode, withNotification: Bool = false) {
+        guard Theme(rawValue: Int(OAAppSettings.sharedManager()!.appearanceProfileTheme.get(appMode))) != theme else {
             return
         }
-        let appMode = OAAppSettings.sharedManager().currentMode
+        let currentAppMode = OAAppSettings.sharedManager().currentMode
         OAAppSettings.sharedManager().appearanceProfileTheme.set(Int32(theme.rawValue), mode: appMode)
-        UIWindow.key.overrideUserInterfaceStyle = theme.overrideUserInterfaceStyle
+        if appMode == currentAppMode {
+            UIWindow.key.overrideUserInterfaceStyle = theme.overrideUserInterfaceStyle
+        }
         if withNotification {
             NotificationCenter.default.post(name: .ThemeDidChange, object: self)
         }

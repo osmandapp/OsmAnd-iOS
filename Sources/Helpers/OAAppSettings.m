@@ -4986,6 +4986,7 @@
     {
         if (markAsLastUsed)
             [_lastUsedApplicationMode set:applicationMode.stringKey];
+        [[ThemeManager shared] configureWithAppMode: applicationMode];
         [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:prevAppMode];
     }
 }

@@ -44,7 +44,6 @@
 #import "OAGPXDatabase.h"
 #import "OAExternalTimeFormatter.h"
 #import "OAFavoritesHelper.h"
-#import "OsmAnd_Maps-Swift.h"
 
 #include <algorithm>
 
@@ -724,9 +723,6 @@
     OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
     [helper reloadAllPoiFilters];
     [helper loadSelectedPoiFilters];
-    
-    // Configure ThemeManager
-    [[ThemeManager shared] configureWithAppMode:initialAppMode];
 
     _initialized = YES;
     NSLog(@"OsmAndApp initialize finish");

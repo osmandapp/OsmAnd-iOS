@@ -367,7 +367,7 @@ forcedUpdate:(BOOL)forcedUpdate
 
 - (float)zoom
 {
-    return _renderer->getState().zoomLevel + (_renderer->getState().visualZoom >= 1.0f ? _renderer->getState().visualZoom - 1.0f : (_renderer->getState().visualZoom - 1.0f) * 2.0f);
+    return _renderer->getState().surfaceZoomLevel + (_renderer->getState().surfaceVisualZoom >= 1.0f ? _renderer->getState().surfaceVisualZoom - 1.0f : (_renderer->getState().surfaceVisualZoom - 1.0f) * 2.0f);
 }
 
 - (void)setZoom:(float)zoom
@@ -375,9 +375,19 @@ forcedUpdate:(BOOL)forcedUpdate
     _renderer->setZoom(zoom);
 }
 
+- (float)flatZoom
+{
+    return _renderer->getState().zoomLevel + (_renderer->getState().visualZoom >= 1.0f ? _renderer->getState().visualZoom - 1.0f : (_renderer->getState().visualZoom - 1.0f) * 2.0f);
+}
+
+- (void)setFlatZoom:(float)flatZoom
+{
+    _renderer->setFlatZoom(flatZoom);
+}
+
 - (OsmAnd::ZoomLevel)zoomLevel
 {
-    return _renderer->getState().zoomLevel;
+    return _renderer->getState().surfaceZoomLevel;
 }
 
 - (float)tileSizeOnScreenInPixels

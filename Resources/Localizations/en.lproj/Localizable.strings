@@ -244,6 +244,7 @@
 
 "shared_string_dark" = "Dark";
 "shared_string_light" = "Light";
+"shared_string_system_default" = "System default";
 "shared_string_page_number" = "Page %d";
 "compass_on_circles" = "Compass on circles";
 "add_widget" = "Add widget";
@@ -1003,7 +1004,7 @@
 
 "screen_settings_weather_toolbar" = "Weather toolbar";
 
-"settings_app_theme" = "Application theme";
+"settings_app_theme" = "App theme";
 "do_not_rotate" = "Do not rotate";
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Units of speed";

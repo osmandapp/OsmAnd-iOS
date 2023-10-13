@@ -26,7 +26,7 @@
 "get_discount_short_descr" = "%@ för %d %@, sen %@";
 "get_discount_first_part" = "%@ för de första %@";
 "get_discount_first_few_parts" = "%@ för första %@";
-"get_discount_second_part" = "sen %@";
+"get_discount_second_part" = "Därefter %@";
 "mapillary_image" = "Mapillary-bild";
 "shared_string_milliradians" = "Milliradianer";
 "angular_units" = "Vinkelmåttenheter";
@@ -151,7 +151,7 @@
 "map_widget_intermediate_distance" = "Mellanliggande destination";
 "route_descr_destination" = "Destination";
 "monitoring_control_start" = "Spela in";
-"map_widget_altitude" = "Den aktuella platsens höjd";
+"map_widget_altitude" = "Höjd för den aktuella positionen";
 "map_widget_battery" = "Batterinivå";
 "map_widget_plain_time" = "Aktuell tid";
 "map_widget_max_speed" = "Hastighetsbegränsning";
@@ -210,7 +210,7 @@
 "shared_string_never" = "Aldrig";
 "confirm_every_run" = "Fråga alltid";
 "general_settings_2" = "Allmänna inställningar";
-"general_settings_descr" = "Konfigurera globala inställningar.";
+"general_settings_descr" = "Ställ in visnings- och allmänna inställningar för appen.";
 "routing_settings_descr" = "Ange navigeringsalternativ.";
 "auto_zoom_none" = "Ingen auto-zoom";
 "auto_zoom_close" = "Nära";
@@ -254,7 +254,7 @@
 "speak_descr" = "Konfigurera för uppläsning av gatunamn, trafikvarningar (t.ex. tvingande stopp, farthinder), varningar för fartkameror, hastighetsbegränsningar";
 "keep_informing" = "Upprepa navigationsinstruktioner";
 "repeat_after" = "Repeat after";
-"keep_informing_descr" = "Läs upp navigationsinstruktioner med regelbundna intervall.";
+"keep_informing_descr" = "Upprepa navigeringsinstruktioner med regelbundna intervall.";
 "arrival_distance" = "Ankomstmeddelande";
 "arrival_distance_descr" = "Hur tidigt vill du höra ankomstmeddelandet?";
 "default_speed_system" = "Enhet för hastighet";
@@ -642,7 +642,7 @@
 "gpx_upload_trackable_visibility_descr" = "\"Spårbar\" betyder att spåret inte visas i några offentliga listor, men bearbetade spårpunkter tillsammans med respektive tidsstämplar (som inte kan kopplas direkt till dig) görs genom nedladdningar från det offentliga GPS-API: et.";
 "gpx_upload_private_visibility_descr" = "\"Privat\" betyder att spåret inte visas i några offentliga listor, men spårpunkter från det i okronologisk ordning är tillgängliga via det offentliga GPS-API utan tidsstämplar.";
 "save_track_to_gpx" = "Spela in spår automatiskt under navigering";
-"save_track_to_gpx_descrp" = "Starta spårinspelning automatiskt när navigering pågår. När den är klar sparas spåret automatiskt.";
+"save_track_to_gpx_descrp" = "Starta spårinspelning automatiskt vid navigering och spara spåret automatiskt efteråt.";
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
 "shared_string_speed" = "Hastighet";
@@ -1548,7 +1548,7 @@
 "osmand_parking_plugin_description" = "Låter dig spara var din bil är parkerad, inklusive hur mycket parkeringstid som finns kvar.\nBåde plats och tid är synliga både på instrumentpanelen och i en kartwidget. En larmpåminnelse kan läggas till i Android-kalendern.";
 "plugin_ski_name" = "Skidkartsvy";
 "product_desc_skimap" = "Uppdaterad skidkarta med spår, pister och liftar";
-"plugin_ski_descr" = "Detta plugin för OsmAnd ger dig detaljer om globala utförsåkning, längdskidspår, alpina skidvägar, linbanor och skidliftar. Rutter och pister visas färgkodade av svårigheter och avbildas i en speciell \"vinter\" -stil som liknar ett snöfärgat vinterlandskap.\n\nOm du aktiverar den här vyn ändras kartstilen till \"Vinter och skidor\" och visar alla landskapsfunktioner under vinterförhållanden. Denna vy kan återställas genom att antingen avaktivera den igen här, eller genom att ändra \'Kartstil\' under \'Konfigurera karta\' efter önskemål.";
+"plugin_ski_descr" = "Designad för navigering i vintersportområden: Se alpina pister och liftar samt längdskidspår, färgkodade efter svårighetsgrad eller ledmarkeringar. För att använda, aktivera modulen, gå till 'Konfigurera kartan' och välj kartstilen 'Vinter och skidor'.";
 "record_plugin_name" = "Inspelning av resa";
 "product_desc_track_recording" = "Spela in och spara dina turer som GPX-spår";
 "record_plugin_description" = "Denna modul aktiverar funktionen att antingen spela in och spara dina spår genom att du trycker på widgeten GPX-loggning på kartskärmen eller att alla dina rutter sparas automatiskt i en GPX-fil.\n\nInspelade spår kan delas ut till vänner eller användas som bidrag till OSM. Idrottsmän kan använda inspelade spår för att följa sin träning. Viss grundläggande spåranalys kan göras direkt i OsmAnd, såsom varvtider, genomsnittshastighet o.s.v. och spår kan givetvis också analyseras i efterhand i speciella analysverktyg från tredje part.";
@@ -2361,7 +2361,7 @@
 "manage_subscription" = "Hantera prenumeration";
 "private_access_routing_req" = "Din destinationär belägen i ett område med privat tillträde. Tillåt anvädning av privata vägar för denna resa\?";
 "purchases_feature_desc_monthly_map_updates" = "Få tillgång till regelbundna månatliga uppdateringar av offline-kartor.";
-"osmand_development_plugin_description" = "Inställningar för utvecklings- och felsökningsfunktioner, som simulering av navigation, renderingsprestanda eller röststyrning. Avsedda för utvecklare, behövs ej för den vanliga användaren.";
+"osmand_development_plugin_description" = "Möjliggör funktionalitet för testning, utveckling och felsökning av OsmAnd: simulering av navigation, övervaka skärmrendering och prestanda etc. Behövs inte för normal användning av appen.";
 "purchases_feature_desc_wikivoyage" = "Utforska Wikivoyage i nedkopplat läge. Artiklar uppdelade efter länder och regioner och tillgängliga på alla språk.";
 "osm_live_banner_desc" = "Få obegränsad nedladdning av kartor, lägg till uppdateringar varje vecka, dagligen eller till och med varje timme.";
 "altitude_ascent" = "Uppför";
@@ -2478,7 +2478,7 @@
 "routing_attr_motor_type_name" = "Fordonets motor";
 "rendering_attr_showMtbScale_name" = "Visa MTB-svårighetsgrad";
 "shared_string_layers" = "Lager";
-"offline_edition_descr" = "Använd alltid offline-redigering.";
+"offline_edition_descr" = "Om offline-redigering aktiveras, så sparas ändringar lokalt först och laddas bara upp på begäran. Om inte så laddas ändringar upp direkt.";
 "benefits_for_contributors_primary_descr" = "Engagerade karterare som aktivt bidrar till OpenStreetMap kan vara berättigade till obegränsade kartuppdateringar varje timme.";
 "rendering_attr_depthContourWidth_name" = "Linjebredd";
 "show_map_symbols" = "Visa kartsymboler";

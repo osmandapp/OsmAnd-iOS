@@ -56,6 +56,7 @@
 #import "OAMapPresentationEnvironment.h"
 #import "OAWeatherHelper.h"
 #import "OAOsmandDevelopmentPlugin.h"
+#import "OASRTMPlugin.h"
 #import "OAPlugin.h"
 #import "OAGPXAppearanceCollection.h"
 
@@ -2331,8 +2332,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (void) recreateHeightmapProvider
 {
-    OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *)[OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
-    if (!plugin || ![plugin is3DMapsEnabled])
+    OASRTMPlugin *plugin = (OASRTMPlugin *)[OAPlugin getEnabledPlugin:OASRTMPlugin.class];
+    if (!plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled)
     {
         _mapView.heightmapSupported = NO;
         [_mapView resetElevationDataProvider:YES];
@@ -2345,8 +2346,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (void) updateElevationConfiguration
 {
-    OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *)[OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
-    BOOL disableVertexHillshade = plugin != nil && [plugin isDisableVertexHillshade3D];
+    OASRTMPlugin *plugin = (OASRTMPlugin *)[OAPlugin getPlugin:OASRTMPlugin.class];
+    BOOL disableVertexHillshade = plugin && _app.data.terrainType == EOATerrainTypeHillshade;
     OsmAnd::ElevationConfiguration elevationConfiguration;
     if (disableVertexHillshade)
     {

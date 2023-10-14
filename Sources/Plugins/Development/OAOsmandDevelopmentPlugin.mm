@@ -9,7 +9,6 @@
 #import "OAOsmandDevelopmentPlugin.h"
 #import "OAProducts.h"
 #import "OsmAndApp.h"
-#import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAMapInfoController.h"
 #import "OATextInfoWidget.h"
@@ -33,14 +32,9 @@
 #define DEV_ZOOM_LEVEL @"dev_zoom_level"
 #define DEV_TARGET_DISTANCE @"dev_target_distance"
 
-#define kEnable3dMaps @"enable_3d_maps"
-
 @implementation OAOsmandDevelopmentPlugin
 {
     OsmAndAppInstance _app;
-    OAAppSettings *_settings;
-    
-    OACommonBoolean *_enable3dMap;
 }
 
 - (instancetype) init
@@ -49,19 +43,12 @@
     if (self)
     {
         _app = [OsmAndApp instance];
-        _settings = [OAAppSettings sharedManager];
-        _enable3DMaps = [[[_settings registerBooleanPreference:@"enable_3d_maps" defValue:YES] makeGlobal] makeShared];
-        _disableVertexHillshade3D = [[[_settings registerBooleanPreference:@"disable_vertex_hillshade_3d" defValue:YES] makeGlobal] makeShared];
-        _generateSlopeFrom3DMaps = [[[_settings registerBooleanPreference:@"generate_slope_from_3d_maps" defValue:YES] makeGlobal] makeShared];
-        _generateHillshadeFrom3DMaps = [[[_settings registerBooleanPreference:@"generate_hillshade_from_3d_maps" defValue:YES] makeGlobal] makeShared];
-        
+
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.devFps appModes:@[]];
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.devCameraTilt appModes:@[]];
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.devCameraDistance appModes:@[]];
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.devZoomLevel appModes:@[]];
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.devTargetDistance appModes:@[]];
-
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
     }
     return self;
 }
@@ -209,89 +196,6 @@
 - (NSString *) getDescription
 {
     return OALocalizedString(@"osmand_development_plugin_description");
-}
-
-// If enabled:
-// * heightmap-related setting should be available for configuration
-// * heightmaps should be available for downloads
-- (BOOL) isHeightmapEnabled
-{
-    return [self isHeightmapAllowed];
-}
-
-- (BOOL) isHeightmapAllowed
-{
-    return [OAIAPHelper isOsmAndProAvailable];
-}
-
-// If enabled, map should be rendered with elevation data (in 3D)
-- (BOOL) is3DMapsEnabled
-{
-    return [self isHeightmapEnabled] && [_enable3DMaps get];
-}
-
-- (BOOL) isDisableVertexHillshade3D
-{
-    return [self isHeightmapEnabled] && [_disableVertexHillshade3D get];
-}
-
-- (BOOL) isGenerateSlopeFrom3DMaps
-{
-    return [self isHeightmapEnabled] && [_generateSlopeFrom3DMaps get];
-}
-
-- (BOOL) isGenerateHillshadeFrom3DMaps
-{
-    return [self isHeightmapEnabled] && [_generateHillshadeFrom3DMaps get];
-}
-
-- (void) onProfileSettingSet:(NSNotification *)notification
-{
-    OACommonPreference *obj = notification.object;
-    if (obj == _enable3DMaps)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self onEnable3DMapsChanged];
-        });
-    }
-    else if (obj == _disableVertexHillshade3D)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self onDisableVertexHillshade3DChanged];
-        });
-    }
-    else if (obj == _generateSlopeFrom3DMaps)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self onGenerateSlopeFrom3DMapsChanged];
-        });
-    }
-    else if (obj == _generateHillshadeFrom3DMaps)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self onGenerateHillshadeFrom3DMapsChanged];
-        });
-    }
-}
-
-- (void) onEnable3DMapsChanged
-{
-    [OARootViewController.instance.mapPanel.mapViewController recreateHeightmapProvider];
-}
-
-- (void) onDisableVertexHillshade3DChanged
-{
-    [OARootViewController.instance.mapPanel.mapViewController updateElevationConfiguration];
-}
-
-- (void) onGenerateSlopeFrom3DMapsChanged
-{
-    [_app.data setTerrainType:_app.data.terrainType];
-}
-
-- (void) onGenerateHillshadeFrom3DMapsChanged
-{
-    [_app.data setTerrainType:_app.data.terrainType];
 }
 
 @end

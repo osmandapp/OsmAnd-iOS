@@ -28,7 +28,7 @@
 #import "OAChoosePlanHelper.h"
 #import "OAIAPHelper.h"
 #import "OAPluginPopupViewController.h"
-#import "OAOsmandDevelopmentPlugin.h"
+#import "OASRTMPlugin.h"
 #import "OAManageResourcesViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OALinks.h"
@@ -47,8 +47,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     OsmAndAppInstance _app;
     OAIAPHelper *_iapHelper;
+<<<<<<< HEAD
     OAOsmandDevelopmentPlugin *_plugin;
     
+=======
+    OASRTMPlugin *_plugin;
+
+>>>>>>> 47f7d84df (Drop terrain settings from dev plugin. Terrain UI fixes.)
     OATableDataModel *_data;
     NSInteger _availableMapsSection;
     NSInteger _minZoom;
@@ -71,8 +76,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         _app = [OsmAndApp instance];
         _iapHelper = [OAIAPHelper sharedInstance];
+<<<<<<< HEAD
         _plugin = (OAOsmandDevelopmentPlugin *) [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
         
+=======
+        _plugin = (OASRTMPlugin *) [OAPlugin getPlugin:OASRTMPlugin.class];
+
+>>>>>>> 47f7d84df (Drop terrain settings from dev plugin. Terrain UI fixes.)
         settingsScreen = EMapSettingsScreenTerrain;
         
         vwController = viewController;

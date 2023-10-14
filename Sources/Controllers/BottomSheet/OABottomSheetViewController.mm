@@ -469,7 +469,18 @@
 
 - (NSArray *)keyCommands
 {
-    return @[[UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack)]];
+    NSMutableArray<UIKeyCommand *> *commands = [NSMutableArray array];
+    [commands addObject:[UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack)]];
+
+    if (@available(iOS 15, *))
+    {
+        for (UIKeyCommand *command in commands)
+        {
+            command.wantsPriorityOverSystemBehavior = YES;
+        }
+    }
+
+    return commands;
 }
 
 #pragma mark -  UIGestureRecognizerDelegate

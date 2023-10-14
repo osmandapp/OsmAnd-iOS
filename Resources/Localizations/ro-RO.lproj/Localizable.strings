@@ -184,7 +184,7 @@
 "guidance_preferences_descr" = "Preferințe navigație";
 "app_mode_bus" = "Autobuz";
 "intermediate_point" = "Destinație intermediară %@";
-"context_menu_item_open_note" = "Deschideți OSM Notițe";
+"context_menu_item_open_note" = "Creeză notă OSM";
 "parking_place_limited" = "Timp de parcare limitat la";
 "road_blocked" = "Drum blocat";
 "ending_point_too_far" = "Punctul terminus este prea departe de cel mai apropiat drum.";
@@ -428,7 +428,7 @@
 "city_type_town" = "Oraș";
 "quick_action_start_stop_nav_descr" = "Atingeți acest buton pentru pornire sau incheiere navigație.";
 "route_head" = "Mergeți înainte";
-"context_menu_item_directions_from" = "Navigare pornind din";
+"context_menu_item_directions_from" = "Navigație de la";
 "osm_edit_created_note" = "Nota OSM creată";
 "si_mi_meters" = "Mile/metri";
 "app_mode_motorcycle" = "Motocicletă";
@@ -1760,7 +1760,7 @@
 "enable_hillshade" = "Activați vizualizarea datelor privind terenul din setările hillshade sau pante.";
 "enable_contour_lines" = "Activați pentru a vizualiza curbele (izolinii) pe hartă";
 "parking_place" = "Spotul de parcare";
-"quick_action_add_parking" = "Adăugați loc de parcare";
+"quick_action_add_parking" = "Adaugă loc de parcare";
 "hide_poi_action" = "Ascundeți POI";
 "toggle_poi" = "Afișați / ascundeți POI";
 "fav_hide" = "Ascundeți favoritele";
@@ -1823,7 +1823,7 @@
 "osm_confirm_upload" = "Încărcați modificări?";
 "osm_confirm_delete" = "Ștergeți POI?";
 "osm_confirm_bulk_delete" = "Ștergeți %d editări?";
-"osm_note_reopen_title" = "Redeschideți OSM Note";
+"osm_note_reopen_title" = "Redeschide notă OSM";
 "osm_edit_comment_note" = "Comentează la nota OSM";
 "osm_edit_close_note" = "Închide nota OSM";
 "osm_note_create" = "Creați o notă OSM";

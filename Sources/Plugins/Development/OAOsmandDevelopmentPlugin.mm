@@ -50,7 +50,6 @@
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
-        _enableHeightmap = [[[_settings registerBooleanPreference:@"show_heightmaps" defValue:NO] makeGlobal] makeShared];
         _enable3DMaps = [[[_settings registerBooleanPreference:@"enable_3d_maps" defValue:YES] makeGlobal] makeShared];
         _disableVertexHillshade3D = [[[_settings registerBooleanPreference:@"disable_vertex_hillshade_3d" defValue:YES] makeGlobal] makeShared];
         _generateSlopeFrom3DMaps = [[[_settings registerBooleanPreference:@"generate_slope_from_3d_maps" defValue:YES] makeGlobal] makeShared];
@@ -217,7 +216,7 @@
 // * heightmaps should be available for downloads
 - (BOOL) isHeightmapEnabled
 {
-    return [self isHeightmapAllowed] && [_enableHeightmap get];
+    return [self isHeightmapAllowed];
 }
 
 - (BOOL) isHeightmapAllowed
@@ -249,16 +248,7 @@
 - (void) onProfileSettingSet:(NSNotification *)notification
 {
     OACommonPreference *obj = notification.object;
-    if (obj == _enableHeightmap)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self onEnable3DMapsChanged];
-            [self onDisableVertexHillshade3DChanged];
-            [self onGenerateSlopeFrom3DMapsChanged];
-            [self onGenerateHillshadeFrom3DMapsChanged];
-        });
-    }
-    else if (obj == _enable3DMaps)
+    if (obj == _enable3DMaps)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self onEnable3DMapsChanged];

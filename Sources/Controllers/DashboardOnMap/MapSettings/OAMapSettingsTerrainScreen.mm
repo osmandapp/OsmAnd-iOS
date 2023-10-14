@@ -199,16 +199,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellSecondaryIconName : @"ic_payment_label_pro",
             @"value" : @([_plugin.enable3DMaps get]),
         }];
-        OATableSectionData *cacheSection = [_data createNewSection];
-        cacheSection.footerText = type == EOATerrainTypeHillshade ? OALocalizedString(@"map_settings_add_maps_hillshade") : OALocalizedString(@"map_settings_add_maps_slopes");
-        [cacheSection addRowFromDictionary:@{
-            kCellKeyKey : @"cache",
-            kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
-            kCellTitleKey : OALocalizedString(@"shared_string_cache"),
-            kCellIconNameKey : @"ic_custom_storage",
-            kCellIconTint : @(color_icon_inactive),
-            @"value" : @"300 MB",
-        }];
         if (_mapItems.count > 0)
         {
             OATableSectionData *availableMapsSection = [_data createNewSection];
@@ -381,6 +371,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAValueTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if (cell)
         {
@@ -389,7 +380,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [cell leftIconVisibility:item.iconName.length > 0];
             cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
             cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
-            cell.accessoryType = ![item.key isEqualToString:@"cache"] ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
         }
         return cell;
     }

@@ -14,7 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAOsmandDevelopmentPlugin : OAPlugin
 
-@property (nonatomic) OACommonBoolean *enableHeightmap;
 @property (nonatomic) OACommonBoolean *enable3DMaps;
 @property (nonatomic) OACommonBoolean *disableVertexHillshade3D;
 @property (nonatomic) OACommonBoolean *generateSlopeFrom3DMaps;

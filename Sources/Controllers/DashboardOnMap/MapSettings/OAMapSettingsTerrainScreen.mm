@@ -48,7 +48,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     OsmAndAppInstance _app;
     OAIAPHelper *_iapHelper;
     OASRTMPlugin *_plugin;
-
     OATableDataModel *_data;
     NSInteger _availableMapsSection;
     NSInteger _minZoom;
@@ -72,7 +71,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         _app = [OsmAndApp instance];
         _iapHelper = [OAIAPHelper sharedInstance];
         _plugin = (OASRTMPlugin *) [OAPlugin getPlugin:OASRTMPlugin.class];
-
         settingsScreen = EMapSettingsScreenTerrain;
 
         vwController = viewController;

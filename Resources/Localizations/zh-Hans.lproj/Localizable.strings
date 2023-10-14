@@ -2186,3 +2186,4 @@
 "map_3d_mode_hint" = "长按按钮可更改按钮位置。";
 "speak_route_recalculation" = "播报路线的重新计算";
 "shared_string_cache" = "缓存";
+"over_wifi_only" = "仅通过 Wi-Fi";

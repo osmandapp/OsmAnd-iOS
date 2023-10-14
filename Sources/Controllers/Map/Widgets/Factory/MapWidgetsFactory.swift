@@ -110,7 +110,7 @@ class MapWidgetsFactory: NSObject {
     
     private func isWidgetCreationAllowed(widgetType: WidgetType) -> Bool {
         if widgetType == .altitudeMapCenter {
-            let plugin = OAPlugin.getPlugin(OAOsmandDevelopmentPlugin.self) as? OAOsmandDevelopmentPlugin
+            let plugin = OAPlugin.getEnabledPlugin(OASRTMPlugin.self) as? OASRTMPlugin
             return plugin != nil && plugin!.is3DMapsEnabled()
         }
         return true

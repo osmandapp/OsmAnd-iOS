@@ -18,6 +18,7 @@
 #import "Localization.h"
 #import "OAOsmAndFormatter.h"
 #import "OAOsmandDevelopmentPlugin.h"
+#import "OASRTMPlugin.h"
 
 @interface OAMapDownloadController ()
 
@@ -87,7 +88,7 @@
             {
                 if (resource->type == OsmAndResourceType::GeoTiffRegion)
                 {
-                    OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *) [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
+                    OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPlugin getPlugin:OASRTMPlugin.class];
                     if (!plugin || ![plugin isHeightmapEnabled])
                         continue;
                 }

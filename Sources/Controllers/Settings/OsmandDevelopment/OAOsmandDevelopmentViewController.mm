@@ -13,7 +13,6 @@
 #import "OAColors.h"
 #import "OALocationSimulation.h"
 #import "OAValueTableViewCell.h"
-#import "OASwitchTableViewCell.h"
 #import "OATableRowData.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
@@ -92,29 +91,6 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
         @"actionBlock" : (^void(){ [weakSelf openSimulateLocationSettings]; })
     }];
     [_data addSection:simulationSection];
-    
-    OATableSectionData *heightMapSection = [OATableSectionData sectionData];
-    heightMapSection.headerText = OALocalizedString(@"download_heightmap_maps");
-    
-    [heightMapSection addRowFromDictionary:@{
-        kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
-        kCellKeyKey : kDisableVertexHillshade,
-        kCellTitleKey : OALocalizedString(@"disable_vertex_hillshade_3d"),
-        kCellSwitchIsOnKey : @([_plugin.disableVertexHillshade3D get])
-    }];
-    [heightMapSection addRowFromDictionary:@{
-        kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
-        kCellKeyKey : kGenerateSlopeKey,
-        kCellTitleKey : OALocalizedString(@"generate_slope_from_3d_maps"),
-        kCellSwitchIsOnKey : @([_plugin.generateSlopeFrom3DMaps get])
-    }];
-    [heightMapSection addRowFromDictionary:@{
-        kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
-        kCellKeyKey : kGenerateHillshadeKey,
-        kCellTitleKey : OALocalizedString(@"generate_hillshade_from_3d_maps"),
-        kCellSwitchIsOnKey : @([_plugin.generateHillshadeFrom3DMaps get])
-    }];
-    [_data addSection:heightMapSection];
 }
 
 - (NSInteger)sectionsCount
@@ -160,27 +136,6 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
         }
         return cell;
     }
-    else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-    {
-        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *) nib[0];
-            cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
-            [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = item.title;
-            cell.switchView.on = [item boolForKey:kCellSwitchIsOnKey];
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-        }
-        return cell;
-    }
     return nil;
 }
 
@@ -213,28 +168,6 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
         [self generateData];
         [self.tableView reloadData];
     });
-}
-
-#pragma mark - Selectors
-
-- (void)applyParameter:(UISwitch *)sender
-{
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
-    OATableRowData *item = [_data itemForIndexPath:indexPath];
-    BOOL isOn = sender.isOn;
-    
-    if ([item.key isEqualToString:kDisableVertexHillshade])
-    {
-        [_plugin.disableVertexHillshade3D set:isOn];
-    }
-    else if ([item.key isEqualToString:kGenerateSlopeKey])
-    {
-        [_plugin.generateSlopeFrom3DMaps set:isOn];
-    }
-    else if ([item.key isEqualToString:kGenerateHillshadeKey])
-    {
-        [_plugin.generateHillshadeFrom3DMaps set:isOn];
-    }
 }
 
 #pragma mark - OAOsmandDevelopmentSimulateLocationDelegate

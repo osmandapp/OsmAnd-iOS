@@ -546,6 +546,7 @@
                     [app.activeMarkers set:TWO_ACTIVE_MARKERS mode:appMode];
             }
         }
+        [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
     }
     [self migrateResourcesToDocumentsIfNeeded];
     

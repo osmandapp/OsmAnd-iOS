@@ -11,6 +11,7 @@
 #import "OAResourcesUIHelper.h"
 #import "Localization.h"
 #import "OARootViewController.h"
+#import "OAManageResourcesViewController.h"
 #import "OAMapLayers.h"
 #import "OALog.h"
 #import "OANativeUtilities.h"
@@ -131,15 +132,15 @@
 
 + (BOOL)shouldHaveWeatherForecast:(OAWorldRegion *)region
 {
-    NSString *regionId = [self.class checkAndGetRegionId:region];
-    NSString *unitedKingdomRegionId = [NSString stringWithFormat:@"%@_gb", OsmAnd::WorldRegions::EuropeRegionId.toNSString()];
-    NSString *russiaRegionId = OsmAnd::WorldRegions::RussiaRegionId.toNSString();
-    NSInteger level = [region getLevel];
-    return [regionId isEqualToString:kWeatherEntireWorldRegionId]
-            || (level == 1 && [regionId isEqualToString:russiaRegionId])
-            || (level > 1 && ![regionId hasPrefix:russiaRegionId]
-            && ((level == 2 && ![regionId hasPrefix:unitedKingdomRegionId])
-            || (level == 3 && [regionId hasPrefix:unitedKingdomRegionId])));
+    OsmAndAppInstance app = [OsmAndApp instance];
+    NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:region];
+    for (NSString *resourceId in ids)
+    {
+        const auto& resource = app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+        if (resource && resource->type == OsmAnd::ResourcesManager::ResourceType::WeatherForecast)
+            return YES;
+    }
+    return NO;
 }
 
 + (NSString *)checkAndGetRegionId:(OAWorldRegion *)region
@@ -310,21 +311,35 @@
 
 - (BOOL)isDownloadedWeatherForecastForRegionId:(NSString *)regionId
 {
-    auto regionIds = [self getRegionIdsForDownloadedWeatherForecast];
-    return [regionIds containsObject:regionId];
+    OAWorldRegion *worldRegion = [OsmAndApp instance].worldRegion;
+    OAWorldRegion *region = [worldRegion.regionId isEqualToString:regionId]
+    	? worldRegion : [[OsmAndApp instance].worldRegion getFlattenedSubregion:regionId];
+    if (region && region.downloadsIdPrefix.length > 1)
+    {
+        const auto downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix);
+        const auto& localResources = [OsmAndApp instance].resourcesManager->getLocalResources();
+        for (const auto& localResource : localResources)
+        {
+            const auto localId = localResource->id.toLower();
+            if (localResource->type == OsmAndResourceType::WeatherForecast && localId.startsWith(downloadsIdPrefix))
+                return YES;
+        }
+    }
+    return NO;
 }
 
 - (NSArray<NSString *> *)getRegionIdsForDownloadedWeatherForecast
 {
     NSMutableArray<NSString *> *regionIds = [NSMutableArray new];
+    const auto& localResources = [OsmAndApp instance].resourcesManager->getLocalResources();
     for (OAWorldRegion *region in [@[[OsmAndApp instance].worldRegion] arrayByAddingObjectsFromArray:[OsmAndApp instance].worldRegion.flattenedSubregions])
     {
-        for (const auto& localResource : [OsmAndApp instance].resourcesManager->getLocalResources())
+		if (region.downloadsIdPrefix.length > 1)
         {
-            if (localResource->type == OsmAndResourceType::WeatherForecast && [localResource->id.toLower().toNSString() hasPrefix:region.downloadsIdPrefix])
-            {
-                [regionIds addObject:region.regionId];
-            }
+            const auto downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix);
+            for (const auto& localResource : localResources)
+                if (localResource->type == OsmAndResourceType::WeatherForecast && localResource->id.toLower().startsWith(downloadsIdPrefix))
+                    [regionIds addObject:region.regionId];
         }
     }
     return regionIds;
@@ -333,15 +348,14 @@
 - (uint64_t)getOfflineWeatherForecastCacheSize
 {
     uint64_t size = 0;
-    for (const auto& localResource : [OsmAndApp instance].resourcesManager->getLocalResources())
-    {
+    const auto& localResources = [OsmAndApp instance].resourcesManager->getLocalResources();
+    for (const auto& localResource : localResources)
         if (localResource->type == OsmAndResourceType::WeatherForecast)
         {
-            NSString *resourceId = localResource->id.toLower().toNSString();
-            const auto repositoryResource = _app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+            const auto& repositoryResource = _app.resourcesManager->getResourceInRepository(localResource->id);
             size += repositoryResource != nil ? repositoryResource->size : localResource->size;
         }
-    }
+
     return size;
 }
 

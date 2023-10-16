@@ -39,8 +39,10 @@ class TravelGuidesNavigationViewController : OABaseNavbarViewController {
         if selectedItem != nil {
             self.generateData()
             self.tableView.reloadData()
-        } else {
-            self.view.addSpinner()
+            
+        } else if navigationMap.count == 0  {
+            
+            self.view.addSpinner(inCenterOfCurrentView: true)
             DispatchQueue.global(qos: .default).async {
                 self.navigationMap = TravelObfHelper.shared.getNavigationMap(article: self.article!)
                 DispatchQueue.main.async {
@@ -122,8 +124,8 @@ class TravelGuidesNavigationViewController : OABaseNavbarViewController {
     
     //MARK: Base UI setup
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         fetchData()
     }
     

@@ -123,6 +123,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             break;
         case OsmAndResourceType::Travel:
             imageNamed = @"ic_custom_wikipedia";
+            break;
         case OsmAndResourceType::GeoTiffRegion:
         case OsmAndResourceType::HeightmapRegionLegacy:
             imageNamed = @"ic_custom_terrain";

@@ -857,18 +857,9 @@ static BOOL _repositoryUpdated = NO;
         OAResourceItem *item_ = [self collectSubregionItem:region regionResources:regionResources resource:resource_];
         if (item_)
         {
-            if (nauticalRegion)
+            if (nauticalRegion || travelRegion)
             {
                 [allResourcesArray addObject:item_];
-            }
-            if (travelRegion)
-            {
-                [allResourcesArray addObject:item_];
-            }
-            else if (item_.resourceType == OsmAndResourceType::GeoTiffRegion && !heightmapEnabled)
-            {
-                // Hide heightmaps if not enabled
-                continue;
             }
             else if (item_.resourceType == OsmAndResourceType::HeightmapRegionLegacy)
             {

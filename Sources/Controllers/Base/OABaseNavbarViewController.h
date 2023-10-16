@@ -89,5 +89,6 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 
 // Use to refresh button appearance
 - (void)setupNavbarButtons;
+- (BOOL)forceShowShevron;
 
 @end

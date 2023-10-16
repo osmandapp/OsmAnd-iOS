@@ -113,6 +113,8 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     var pointsButton: UIButton?
     var bookmarkButton: UIButton?
     
+    var contentItems: TravelContentItem? = nil
+    
     
     required init?(coder: NSCoder) {
         super.init()
@@ -154,10 +156,7 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         bottomView!.addSubview(bottomStackView!)
         
         contentButton = UIButton()
-        contentButton!.setTitle(localizedString("shared_string_contents"), for: .normal)
-        contentButton!.setTitleColor(UIColor(rgb: color_primary_purple), for: .normal)
-        contentButton!.titleLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
-        contentButton!.setImage(UIImage.templateImageNamed("ic_action_route_first_intermediate"), for: .normal)
+        contentButton!.setImage(UIImage.templateImageNamed("ic_custom_list"), for: .normal)
         contentButton!.tintColor = UIColor(rgb: color_primary_purple)
         contentButton!.contentHorizontalAlignment = .left
         contentButton!.addTarget(self, action: #selector(self.onContentsButtonClicked), for: .touchUpInside)
@@ -168,19 +167,14 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         pointsButton = UIButton()
         pointsButton!.setTitle(localizedString("shared_string_gpx_points"), for: .normal)
         pointsButton!.setTitleColor(UIColor(rgb: color_primary_purple), for: .normal)
-        pointsButton!.titleLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
-        pointsButton!.setImage(UIImage.templateImageNamed("ic_small_map_point"), for: .normal)
-        pointsButton!.tintColor = UIColor(rgb: color_primary_purple)
+        pointsButton!.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         pointsButton!.addTarget(self, action: #selector(self.onPointsButtonClicked), for: .touchUpInside)
         bottomStackView!.addArrangedSubview(pointsButton!)
         
         bottomStackView!.addArrangedSubview(UIView())
         
         bookmarkButton = UIButton()
-        bookmarkButton!.setTitle(localizedString("shared_string_bookmark"), for: .normal)
-        bookmarkButton!.setTitleColor(UIColor(rgb: color_primary_purple), for: .normal)
-        bookmarkButton!.titleLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
-        bookmarkButton!.setImage(UIImage.templateImageNamed("ic_small_waypoints"), for: .normal)
+        bookmarkButton!.setImage(UIImage.templateImageNamed("ic_navbar_bookmark_outlined"), for: .normal)
         bookmarkButton!.tintColor = UIColor(rgb: color_primary_purple)
         contentButton!.contentHorizontalAlignment = .right
         bookmarkButton!.addTarget(self, action: #selector(self.onBookmarkButtonClicked), for: .touchUpInside)
@@ -191,9 +185,8 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     func updateBookmarkButton() {
         if let article {
             let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: article)
-            let color = isSaved ? UIColor(rgb: color_purple_border) : UIColor(rgb: color_slider_gray)
-            bookmarkButton!.setTitleColor(color, for: .normal)
-            bookmarkButton!.tintColor = color
+            let iconName = isSaved ? "ic_navbar_bookmark" : "ic_navbar_bookmark_outlined"
+            bookmarkButton!.setImage(UIImage.templateImageNamed(iconName), for: .normal)
         }
     }
     
@@ -231,10 +224,18 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         return article?.title ?? ""
     }
     
-    override func getLeftNavbarButtonTitle() -> String! {
-        return ""
+    override func getNavbarStyle() -> EOABaseNavbarStyle {
+        .customLargeTitle
     }
     
+    override func getLeftNavbarButtonTitle() -> String! {
+        return localizedString("shared_string_back")
+    }
+    
+    override func forceShowShevron() -> Bool {
+        return true
+    }
+
     
     //MARK: Actions
     
@@ -249,17 +250,25 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     }
     
     @objc func showNavigation() {
-        let vc = TravelGuidesNavigationViewController(article: article!, selectedLang: selectedLang!)
+//        let vc = TravelGuidesNavigationViewController(article: article!, selectedLang: selectedLang!)
+        let vc = TravelGuidesNavigationViewController()
+        vc.setupWith(article: article!, selectedLang: selectedLang!, navigationMap: [:], regionsNames: [], selectedItem: nil)
         vc.delegate = self
         self.showModalViewController(vc)
     }
     
     @objc func onContentsButtonClicked() {
-        let vc = TravelGuidesContentsViewController(article: article!, selectedLang: selectedLang!)
-        vc.delegate = self
-        self.showModalViewController(vc)
+        if contentItems == nil {
+            contentItems = TravelJsonParser.parseJsonContents(jsonText: article!.contentsJson ?? "")
+        }
+        if let contentItems {
+            let vc = TravelGuidesContentsViewController()
+            vc.setupWith(article: article!, selectedLang: selectedLang!, contentItems: contentItems, selectedSubitemIndex: nil)
+            vc.delegate = self
+            self.showModalViewController(vc)
+        }
     }
-    
+        
     @objc func onPointsButtonClicked() {
         if article == nil {
             return
@@ -463,13 +472,11 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
             else
             {
                 if gpxFile != nil && gpxFile!.pointsCount() > 0 {
-                    let title = localizedString("shared_string_gpx_points") + " (" + String(gpxFile!.pointsCount()) + ")"
+                    let title = localizedString("shared_string_gpx_points") + ": " + String(gpxFile!.pointsCount())
                     self.pointsButton!.setTitle(title , for: .normal)
-                    self.pointsButton!.setImage(UIImage.templateImageNamed("ic_small_map_point"), for: .normal)
                     self.pointsButton!.isEnabled = true
                 } else {
                     self.pointsButton!.setTitle("", for: .normal)
-                    self.pointsButton!.setImage(nil, for: .normal)
                     self.pointsButton!.isEnabled = false
                 }
                 self.bottomStackView!.removeSpinner()

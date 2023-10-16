@@ -18,19 +18,19 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="jag-1I-n5h">
-                        <rect key="frame" x="20" y="16" width="335" height="90"/>
+                        <rect key="frame" x="20" y="16" width="335" height="92"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="TopLeft" axis="vertical" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="yhu-8A-sbm">
-                                <rect key="frame" x="0.0" y="0.0" width="229" height="90"/>
+                                <rect key="frame" x="0.0" y="0.0" width="227" height="92"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" text="Amsterdam" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UQn-I8-jyJ">
-                                        <rect key="frame" x="0.0" y="0.0" width="229" height="18.5"/>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="227" height="20.5"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="278" text="is the capital of the Netherlands' with a population of more than 850,000..." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1cQ-8B-7Pv">
-                                        <rect key="frame" x="0.0" y="25.5" width="229" height="64.5"/>
+                                        <rect key="frame" x="0.0" y="27.5" width="227" height="64.5"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                         <color key="textColor" red="0.47058826679999999" green="0.47058826679999999" blue="0.47058826679999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <nil key="highlightedColor"/>
@@ -38,7 +38,7 @@
                                 </subviews>
                             </stackView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ef8-uX-9Nt" userLabel="Image">
-                                <rect key="frame" x="245" y="0.0" width="90" height="90"/>
+                                <rect key="frame" x="243" y="0.0" width="92" height="92"/>
                                 <color key="backgroundColor" name="viewBgColor"/>
                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -49,7 +49,7 @@
                         </subviews>
                     </stackView>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_photo" translatesAutoresizingMaskIntoConstraints="NO" id="LK7-5G-l79">
-                        <rect key="frame" x="295" y="46" width="30" height="30"/>
+                        <rect key="frame" x="294" y="47" width="30" height="30"/>
                         <color key="tintColor" name="iconColorDefault"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="30" id="aaX-jZ-dBs"/>
@@ -57,7 +57,7 @@
                         </constraints>
                     </imageView>
                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mHV-wI-dNE">
-                        <rect key="frame" x="20" y="116" width="335" height="20"/>
+                        <rect key="frame" x="20" y="118" width="335" height="20"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Continent - Region" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q8m-xt-Rbr">
                                 <rect key="frame" x="0.0" y="0.0" width="315" height="20"/>

@@ -115,6 +115,14 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         localizedString("shared_string_travel_guides")
     }
     
+    override func getLeftNavbarButtonTitle() -> String! {
+        return localizedString("shared_string_back")
+    }
+    
+    override func forceShowShevron() -> Bool {
+        return true
+    }
+    
     override func getRightNavbarButtons() -> [UIBarButtonItem]! {
         let optionsButton = createRightNavbarButton(nil, iconName: "ic_navbar_overflow_menu_stroke", action: #selector(onOptionsButtonClicked), menu: nil)
         optionsButton?.accessibilityLabel = localizedString("shared_string_options")

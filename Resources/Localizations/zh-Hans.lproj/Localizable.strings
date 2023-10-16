@@ -1816,7 +1816,7 @@
 "turn_arrows" = "转向箭头";
 "map_settings_weather_wind" = "风";
 "map_settings_weather_precip" = "降水";
-"lang_de_casual" = "";
+"lang_de_casual" = "德语（非正式）";
 "routeInfo_piste_difficulty_name" = "滑雪道难度";
 "map_during_navigation" = "导航期间的地图";
 "route_parameters" = "路线参数";

@@ -8,6 +8,14 @@
 
 #import "OAPlugin.h"
 
+@class OACommonBoolean;
+
 @interface OASRTMPlugin : OAPlugin
+
+@property (nonatomic) OACommonBoolean *enable3DMaps;
+
+- (BOOL) isHeightmapEnabled;
+- (BOOL) isHeightmapAllowed;
+- (BOOL) is3DMapsEnabled;
 
 @end

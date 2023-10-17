@@ -281,7 +281,10 @@
         _builder = [OAApplicationMode fromModeBean:_modeBean];
         _appMode = [OAApplicationMode saveProfile:_builder];
     }
-    [OAApplicationMode changeProfileAvailability:_appMode isSelected:YES];
+    @synchronized(self.class)
+    {
+        [OAApplicationMode changeProfileAvailability:_appMode isSelected:YES];
+    }
 }
 
 - (BOOL) isNameUnique:(NSArray<OAApplicationMode *> *)values name:(NSString *) name

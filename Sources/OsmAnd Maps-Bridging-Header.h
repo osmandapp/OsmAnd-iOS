@@ -54,6 +54,7 @@
 #import "OAMapillaryPlugin.h"
 #import "OAMonitoringPlugin.h"
 #import "OAOsmAndDevelopmentPlugin.h"
+#import "OASRTMPlugin.h"
 #import "OAWeatherPlugin.h"
 #import "OAMapillaryPlugin.h"
 #import "OAParkingPositionPlugin.h"

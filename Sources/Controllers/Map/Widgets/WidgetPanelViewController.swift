@@ -261,7 +261,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             }
         }
         view.isHidden = !hasWidgets()
-        view.setNeedsLayout()
+        view.layoutIfNeeded()
     }
     
     @objc private func onDayNightModeChanged() {

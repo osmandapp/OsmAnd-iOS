@@ -1,0 +1,15 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_custom_sensor_find.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true
+  }
+}

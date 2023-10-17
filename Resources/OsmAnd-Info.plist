@@ -183,6 +183,8 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Advertisement would like to use bluetooth.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Advertisement would like to use bluetooth.</string>
 	<key>NSCalendarsUsageDescription</key>
@@ -198,6 +200,8 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
+		<string>bluetooth-central</string>
+		<string>bluetooth-peripheral</string>
 		<string>location</string>
 		<string>processing</string>
 	</array>

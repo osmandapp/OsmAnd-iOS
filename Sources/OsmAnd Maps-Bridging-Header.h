@@ -85,6 +85,8 @@
 #import "OALargeImageTitleDescrTableViewCell.h"
 #import "OADirectionTableViewCell.h"
 #import "OASegmentSliderTableViewCell.h"
+#import "OATextMultilineTableViewCell.h"
+
 
 // Views
 #import "OASegmentedSlider.h"

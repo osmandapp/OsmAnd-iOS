@@ -27,6 +27,7 @@ final class ThemeManager: NSObject {
     }
     
     func configure(appMode: OAApplicationMode) {
+        return
         let savedTheme = OAAppSettings.sharedManager().appearanceProfileTheme.get(appMode)
         guard let theme = Theme(rawValue: Int(savedTheme)) else {
             fatalError("theme rawValue is wrong")

@@ -3,7 +3,8 @@
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -14,6 +15,7 @@
                 <outlet property="contentView" destination="n0A-4x-QAp" id="QSa-iw-WIM"/>
                 <outlet property="leftBottomButton" destination="9q6-TF-xEY" id="Pl0-oH-wrs"/>
                 <outlet property="rightBottomButton" destination="OtT-YD-HbK" id="par-fO-hLt"/>
+                <outlet property="segmentContainerView" destination="Fr8-HI-iBu" id="m6B-yN-662"/>
                 <outlet property="segmentControl" destination="uaW-9U-gWu" id="qeE-CE-nWI"/>
                 <outlet property="view" destination="mpS-Ar-qBN" id="wYX-he-WHm"/>
             </connections>
@@ -25,13 +27,14 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fr8-HI-iBu">
                     <rect key="frame" x="0.0" y="47" width="390" height="44"/>
-                    <color key="backgroundColor" red="1" green="0.53333333329999999" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" name="navBarBgColorPrimary"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="M76-iz-wBd"/>
                     </constraints>
                 </view>
                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="uaW-9U-gWu" userLabel="Segmented Control">
                     <rect key="frame" x="16" y="53.666666666666657" width="358" height="32"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <segments>
                         <segment title="Local"/>
                         <segment title="Cloud"/>
@@ -50,7 +53,7 @@
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W8p-yd-t9f" userLabel="Bottom Separator View">
                             <rect key="frame" x="0.0" y="0.0" width="390" height="0.66666666666666663"/>
-                            <color key="backgroundColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="separatorColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="0.5" id="9BX-py-vjK"/>
                             </constraints>
@@ -62,7 +65,7 @@
                             <inset key="contentEdgeInsets" minX="9" minY="11" maxX="9" maxY="11"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal" title="Cancel">
-                                <color key="titleColor" red="0.59215686274509804" green="0.5607843137254902" blue="0.63921568627450975" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="titleColor" name="textColorSecondary"/>
                             </state>
                             <connections>
                                 <action selector="leftButtonPressed:" destination="-1" eventType="touchUpInside" id="zpF-tT-v4J"/>
@@ -75,14 +78,14 @@
                             <inset key="contentEdgeInsets" minX="9" minY="11" maxX="9" maxY="11"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal" title="Backup now">
-                                <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="titleColor" name="textColorActive"/>
                             </state>
                             <connections>
                                 <action selector="rightButtonPressed:" destination="-1" eventType="touchUpInside" id="4e8-Jh-LUq"/>
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" red="0.97254901960784312" green="0.97254901960784312" blue="0.97254901960784312" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" name="groupBgColor"/>
                     <constraints>
                         <constraint firstItem="W8p-yd-t9f" firstAttribute="leading" secondItem="Zcf-ec-NaU" secondAttribute="leading" id="36p-nl-9dG"/>
                         <constraint firstItem="OtT-YD-HbK" firstAttribute="leading" secondItem="9q6-TF-xEY" secondAttribute="trailing" id="7kB-8V-763"/>
@@ -97,7 +100,7 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="nrX-dw-Kr3"/>
-            <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" name="viewBgColor"/>
             <constraints>
                 <constraint firstItem="n0A-4x-QAp" firstAttribute="top" secondItem="Fr8-HI-iBu" secondAttribute="bottom" id="0Zn-7A-nqq"/>
                 <constraint firstAttribute="trailing" secondItem="Fr8-HI-iBu" secondAttribute="trailing" id="Jxj-Fp-v7T"/>
@@ -117,4 +120,24 @@
             <point key="canvasLocation" x="139" y="114"/>
         </view>
     </objects>
+    <resources>
+        <namedColor name="groupBgColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="navBarBgColorPrimary">
+            <color red="1" green="0.53333333333333333" blue="0.0" alpha="0.94000004768371581" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="separatorColor">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorSecondary">
+            <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="viewBgColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

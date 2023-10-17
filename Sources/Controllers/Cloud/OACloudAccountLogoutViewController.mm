@@ -9,7 +9,7 @@
 #import "OACloudAccountLogoutViewController.h"
 #import "OAValueTableViewCell.h"
 #import "OAAppSettings.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 
 @implementation OACloudAccountLogoutViewController
@@ -75,10 +75,10 @@
             [cell leftIconVisibility:!isLogoutCell];
             cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:isLogoutCell ? UIFontWeightMedium : UIFontWeightRegular];
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = isLogoutCell ? UIColorFromRGB(color_support_red) : UIColor.blackColor;
+            cell.titleLabel.textColor = isLogoutCell ? UIColor.buttonBgColorDisruptive : UIColor.textColorPrimary;
             cell.titleLabel.textAlignment = isLogoutCell ? NSTextAlignmentCenter : NSTextAlignmentNatural;
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.leftIconView.tintColor = UIColorFromRGB(color_icon_color);
+            cell.leftIconView.tintColor = UIColor.iconColorDefault;
         }
         outCell = cell;
     }

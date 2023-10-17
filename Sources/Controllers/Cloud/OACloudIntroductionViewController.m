@@ -8,7 +8,6 @@
 
 #import "OACloudIntroductionViewController.h"
 #import "Localization.h"
-#import "OAColors.h"
 #import "OASizes.h"
 #import "OACloudIntroductionHeaderView.h"
 #import "OATitleRightIconCell.h"
@@ -34,14 +33,13 @@
 {
     [super viewDidLoad];
     [self.backImageButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
-    self.backImageButton.tintColor = UIColorFromRGB(color_primary_purple);
     
     [self setUpTableHeaderView];
     [self generateData];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableHeaderView = _headerView;
-    self.tableView.backgroundColor = [UIColor whiteColor];
+    self.tableView.backgroundColor = UIColor.groupBgColor;
     [self configureCloudIntroductionButtonsView];
 }
 
@@ -121,7 +119,7 @@
 
 - (UIColor *)navBarBackgroundColor
 {
-    return UIColor.whiteColor;
+    return UIColor.groupBgColor;
 }
 
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView
@@ -165,7 +163,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.iconView.tintColor = UIColor.iconColorActive;
             cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         }
         cell.titleView.text = item[@"title"];

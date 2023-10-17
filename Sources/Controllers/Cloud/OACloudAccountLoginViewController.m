@@ -15,6 +15,7 @@
 #import "OACloudAccountCreateViewController.h"
 #import "OAChoosePlanHelper.h"
 #import "OAInputTableViewCell.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OACloudAccountLoginViewController () <OAOnRegisterUserListener, OAOnRegisterDeviceListener>
 
@@ -80,7 +81,7 @@
     [data addObject:@[@{
         @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"osmand_cloud_login_descr"),
-        @"color" : UIColorFromRGB(color_text_footer),
+        @"color" : UIColor.iconColorSecondary,
         @"spacing" : @6
     },
     @{ @"type" : [OADividerCell getCellIdentifier] },
@@ -99,7 +100,7 @@
             [otherCells addObject:@{
                 @"type" : [OASimpleTableViewCell getCellIdentifier],
                 @"title" : self.errorMessage,
-                @"color" : UIColorFromRGB(color_support_red),
+                @"color" : UIColor.buttonBgColorDisruptive,
                 @"spacing" : @1
             }];
         }
@@ -108,8 +109,8 @@
             [otherCells addObject: @{
                 @"type" : [OAFilledButtonCell getCellIdentifier],
                 @"title" : OALocalizedString(@"shared_string_continue"),
-                @"buttonColor" : UIColorFromRGB(color_primary_purple),
-                @"textColor" : UIColor.whiteColor,
+                @"buttonColor" : UIColor.buttonBgColorPrimary,
+                @"textColor" : UIColor.buttonTextColorPrimary,
                 @"action" : @"continueButtonPressed",
                 @"inteactive" : @YES,
                 @"topMargin" : !_hasValidSub ? @0 : @20
@@ -120,8 +121,8 @@
             [otherCells addObject: @{
                 @"type" : [OAFilledButtonCell getCellIdentifier],
                 @"title" : OALocalizedString(@"shared_string_continue"),
-                @"buttonColor" : UIColorFromRGB(color_bottom_sheet_secondary),
-                @"textColor" : UIColorFromRGB(color_text_footer),
+                @"buttonColor" : UIColor.buttonBgColorSecondary,
+                @"textColor" : UIColor.textColorSecondary,
                 @"action": @"continueButtonPressed",
                 @"inteactive" : @NO,
                 @"topMargin" : !_hasValidSub ? @0 : @20
@@ -132,8 +133,8 @@
             [otherCells addObject: @{
                 @"type" : [OAFilledButtonCell getCellIdentifier],
                 @"title" : OALocalizedString(@"shared_string_get"),
-                @"buttonColor" : UIColorFromRGB(color_primary_purple),
-                @"textColor" : UIColor.whiteColor,
+                @"buttonColor" : UIColor.buttonBgColorPrimary,
+                @"textColor" : UIColor.textColorPrimary,
                 @"action" : @"getButtonPressed",
                 @"inteactive" : @YES,
             }];
@@ -144,15 +145,15 @@
         [otherCells addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : self.errorMessage,
-            @"color" : UIColorFromRGB(color_support_red),
+            @"color" : UIColor.buttonBgColorDisruptive,
             @"spacing" : @1
         }];
         
         [otherCells addObject: @{
             @"type" : [OAFilledButtonCell getCellIdentifier],
             @"title" : OALocalizedString(@"register_opr_create_new_account"),
-            @"buttonColor" : UIColorFromRGB(color_bottom_sheet_secondary),
-            @"textColor" : UIColorFromRGB(color_primary_purple),
+            @"buttonColor" : UIColor.buttonBgColorSecondary,
+            @"textColor" : UIColor.textColorActive,
             @"action": @"createAccountButtonPressed",
             @"inteactive" : @YES,
             @"topMargin" : @0
@@ -161,8 +162,8 @@
         [otherCells addObject: @{
             @"type" : [OAFilledButtonCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_continue"),
-            @"buttonColor" : UIColorFromRGB(color_bottom_sheet_secondary),
-            @"textColor" : UIColorFromRGB(color_text_footer),
+            @"buttonColor" : UIColor.buttonBgColorSecondary,
+            @"textColor" : UIColor.textColorSecondary,
             @"action": @"continueButtonPressed",
             @"inteactive" : @NO,
         }];

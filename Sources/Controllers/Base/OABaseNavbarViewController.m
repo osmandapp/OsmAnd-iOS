@@ -12,7 +12,7 @@
 #import "OATableRowData.h"
 #import "OAUtilities.h"
 #import "OASizes.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 
 #define kRightIconLargeTitleSmall 34.
@@ -67,16 +67,17 @@
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.backgroundColor = UIColorFromRGB(color_primary_table_background);
-    self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
+    self.tableView.tintColor = UIColor.iconColorActive;
     NSString *tableFooterText = [self getTableFooterText];
     if (tableFooterText && tableFooterText.length > 0)
     {
         self.tableView.tableFooterView = [OAUtilities setupTableHeaderViewWithText:tableFooterText
                                                                               font:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]
-                                                                         textColor:UIColorFromRGB(color_text_footer)
+                                                                         textColor:UIColor.textColorSecondary
                                                                         isBigTitle:NO
                                                                    parentViewWidth:self.view.frame.size.width];
+        
+        self.tableView.tableFooterView.backgroundColor = UIColor.viewBgColor;
     }
 
     [self updateNavbar];
@@ -171,7 +172,7 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    if ([self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange)
+    if ([self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange || self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark)
         return UIStatusBarStyleLightContent;
 
     return UIStatusBarStyleDarkContent;
@@ -196,7 +197,7 @@
                                             titleColor:[self getTitleColor]
                                              titleFont:[UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold maximumSize:22.]
                                               subtitle:sub
-                                         subtitleColor:UIColorFromRGB(color_text_footer)
+                                         subtitleColor:UIColor.textColorSecondary
                                           subtitleFont:[UIFont scaledSystemFontOfSize:13. maximumSize:18.]];
         }
     }
@@ -229,15 +230,17 @@
 
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
     
-    if (![self isNavbarSeparatorVisible])
+    if ([self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange)
     {
-        appearance.shadowImage = nil;
-        appearance.shadowColor = nil;
-        blurAppearance.shadowColor = nil;
-        blurAppearance.shadowImage = nil;
+        blurAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
+        blurAppearance.backgroundColor = UIColor.navBarBgColorPrimary;
+        blurAppearance.titleTextAttributes = @{
+            NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+            NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+        };
     }
     
-    self.navigationController.navigationBar.standardAppearance = [self isNavbarBlurring] ? blurAppearance : appearance;
+    self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
 
     self.navigationController.navigationBar.tintColor = [self getNavbarButtonsTintColor];
@@ -524,9 +527,9 @@
     switch (colorScheme)
     {
         case EOABaseNavbarColorSchemeOrange:
-            return UIColorFromRGB(color_primary_orange_navbar_background);
+            return UIColor.navBarBgColorPrimary;
         case EOABaseNavbarColorSchemeWhite:
-            return UIColor.whiteColor;
+            return UIColor.viewBgColor;
         default:
             return self.tableView.backgroundColor;
     }
@@ -534,17 +537,17 @@
 
 - (UIColor *)getNavbarButtonsTintColor
 {
-    return [self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange ? UIColor.whiteColor : UIColorFromRGB(color_primary_purple);
+    return [self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange ? UIColor.navBarTextColorPrimary : UIColor.textColorActive;
 }
 
 - (UIColor *)getTitleColor
 {
-    return [self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange ? UIColor.whiteColor : UIColor.blackColor;
+    return [self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange ? UIColor.navBarTextColorPrimary : UIColor.textColorPrimary;
 }
 
 - (UIColor *)getLargeTitleColor
 {
-    return UIColor.blackColor;
+    return UIColor.textColorPrimary;
 }
 
 #pragma mark - Base UI
@@ -635,7 +638,7 @@
     {
         tableHeaderView = [OAUtilities setupTableHeaderViewWithText:isCustomLargeTitle ? [self getTitle] : tableHeaderDescription
                                                                font:isCustomLargeTitle ? kHeaderBigTitleFont : kHeaderDescriptionFontSmall
-                                                          textColor:isCustomLargeTitle ? UIColor.blackColor : UIColorFromRGB(color_text_footer)
+                                                          textColor:isCustomLargeTitle ? UIColor.textColorPrimary : UIColor.textColorSecondary
                                                          isBigTitle:isCustomLargeTitle
                                                     parentViewWidth:self.view.frame.size.width];
     }
@@ -648,6 +651,7 @@
                                                     parentViewWidth:self.view.frame.size.width];
     }
     self.tableView.tableHeaderView = tableHeaderView;
+    self.tableView.tableHeaderView.backgroundColor = UIColor.viewBgColor;
 }
 
 - (NSString *)getTableFooterText

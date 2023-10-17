@@ -1368,6 +1368,8 @@
 		C588D1EF298D1ECE001FEDBD /* OASearchHistoryTableGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = C588D1EE298D1ECE001FEDBD /* OASearchHistoryTableGroup.m */; };
 		C588D1F22992A448001FEDBD /* ic_custom_history_disabled_48@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C588D1F02992A447001FEDBD /* ic_custom_history_disabled_48@2x.png */; };
 		C588D1F32992A448001FEDBD /* ic_custom_history_disabled_48@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C588D1F12992A447001FEDBD /* ic_custom_history_disabled_48@3x.png */; };
+		C5ACFCD52AD59F2200EA92F6 /* list_warnings_tunnel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5ACFCD42AD59F2200EA92F6 /* list_warnings_tunnel@3x.png */; };
+		C5ACFCD72AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5ACFCD62AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png */; };
 		C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */ = {isa = PBXBuildFile; fileRef = C5AF90782A25E8A100989A86 /* OAKeyboardHintBar.m */; };
 		C5AF907B2A25E8C400989A86 /* OAKeyboardHintBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = C5AF907A2A25E8C400989A86 /* OAKeyboardHintBar.xib */; };
 		C5CD4CF029EFE6AC00B35C3D /* ic_navbar_trash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CEC29EFE6AB00B35C3D /* ic_navbar_trash@2x.png */; };
@@ -5238,6 +5240,8 @@
 		C588D1EE298D1ECE001FEDBD /* OASearchHistoryTableGroup.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASearchHistoryTableGroup.m; sourceTree = "<group>"; };
 		C588D1F02992A447001FEDBD /* ic_custom_history_disabled_48@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_history_disabled_48@2x.png"; path = "Resources/Icons/ic_custom_history_disabled_48@2x.png"; sourceTree = "<group>"; };
 		C588D1F12992A447001FEDBD /* ic_custom_history_disabled_48@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_history_disabled_48@3x.png"; path = "Resources/Icons/ic_custom_history_disabled_48@3x.png"; sourceTree = "<group>"; };
+		C5ACFCD42AD59F2200EA92F6 /* list_warnings_tunnel@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "list_warnings_tunnel@3x.png"; path = "Resources/Icons/list_warnings_tunnel@3x.png"; sourceTree = "<group>"; };
+		C5ACFCD62AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "list_warnings_tunnel@2x.png"; path = "Resources/Icons/list_warnings_tunnel@2x.png"; sourceTree = "<group>"; };
 		C5AF90772A25E8A100989A86 /* OAKeyboardHintBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAKeyboardHintBar.h; sourceTree = "<group>"; };
 		C5AF90782A25E8A100989A86 /* OAKeyboardHintBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAKeyboardHintBar.m; sourceTree = "<group>"; };
 		C5AF907A2A25E8C400989A86 /* OAKeyboardHintBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAKeyboardHintBar.xib; sourceTree = "<group>"; };
@@ -8629,6 +8633,8 @@
 		3AFEEE231A0E343600900A47 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				C5ACFCD62AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png */,
+				C5ACFCD42AD59F2200EA92F6 /* list_warnings_tunnel@3x.png */,
 				C54260212AA0F90700E76C00 /* ic_custom_3d_relief@2x.png */,
 				C54260222AA0F90700E76C00 /* ic_custom_3d_relief@3x.png */,
 				C542601D2AA0D29F00E76C00 /* ic_custom_visibility@2x.png */,
@@ -16044,6 +16050,7 @@
 				DA2EC7DA29FFB76A00ECEB37 /* ic_custom_screen_side_right@3x.png in Resources */,
 				DA5A82D226C563A800F274C7 /* OACollectionViewCell.xib in Resources */,
 				DA1340E8243DC5A80039D214 /* ic_action_trekking_dark@2x.png in Resources */,
+				C5ACFCD52AD59F2200EA92F6 /* list_warnings_tunnel@3x.png in Resources */,
 				4649427E286DB36800A44103 /* ic_custom_compass_rotated@2x.png in Resources */,
 				DAF3456F22F4482C009E2EB6 /* ic_custom_osm_note_unresolved@2x.png in Resources */,
 				DA2EC67329FBBE0300ECEB37 /* ic_action_intermediate@2x.png in Resources */,
@@ -16183,6 +16190,7 @@
 				DA23424A23477F33003911B8 /* ic_custom_undo@3x.png in Resources */,
 				DA8EE8172470154500069A6D /* osm-editing-plugin.html in Resources */,
 				46453AED28352375001F9A3A /* ic_custom_carplay_colored_big@3x.png in Resources */,
+				C5ACFCD72AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png in Resources */,
 				0AA2F04427356B91008EAF35 /* ic_custom_graph@2x.png in Resources */,
 				843E5DAA1AB341E000BE14BE /* three_dots@3x.png in Resources */,
 				DA45DA86230EE05A0083DFA2 /* img_mapstyle_topo@2x.png in Resources */,

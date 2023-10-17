@@ -21,6 +21,8 @@ typedef NS_ENUM(NSInteger, EOATableRowType) {
 #define kCellDescrKey @"descr"
 #define kCellIconNameKey @"iconName"
 #define kCellIconTint @"iconTint"
+#define kCellIconTintColor @"iconTintColor"
+#define kCellSecondaryIconTintColor @"secondaryIconTintColor"
 #define kCellSecondaryIconName @"secondaryIconName"
 #define kCellAccessoryType @"accessoryType"
 #define kCellAccessibilityLabel @"accessibilityLabel"
@@ -36,6 +38,8 @@ typedef NS_ENUM(NSInteger, EOATableRowType) {
 @property (nonatomic) NSString * _Nullable descr;
 @property (nonatomic) NSString * _Nullable iconName;
 @property (nonatomic) NSInteger iconTint;
+@property (nonatomic) UIColor * _Nullable iconTintColor;
+@property (nonatomic) UIColor * _Nullable secondaryIconTintColor;
 @property (nonatomic) NSString * _Nullable secondaryIconName;
 @property (nonatomic) NSString * _Nullable accessibilityLabel;
 @property (nonatomic) NSString * _Nullable accessibilityValue;

@@ -230,6 +230,14 @@
 
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
     
+    if (![self isNavbarSeparatorVisible])
+    {
+        appearance.shadowImage = nil;
+        appearance.shadowColor = nil;
+        blurAppearance.shadowColor = nil;
+        blurAppearance.shadowImage = nil;
+    }
+    
     if ([self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange)
     {
         blurAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];

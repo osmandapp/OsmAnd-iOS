@@ -8,7 +8,7 @@
 
 import Foundation
 
-class SearchTravelCell : UITableViewCell {
+class SearchTravelCell : UITableViewCell, TravelGuideCellCashable {
     
     
     @IBOutlet weak var titleLabel: UILabel!
@@ -18,5 +18,13 @@ class SearchTravelCell : UITableViewCell {
     @IBOutlet weak var imagePreview: UIImageView!
     
     @IBOutlet weak var noImageIcon: UIImageView!
+    
+    func setImage(data: Data) {
+        imagePreview.image = UIImage(data: data)
+    }
+    
+    func noImageIconVisibility(_ show: Bool) {
+        noImageIcon.isHidden = !show
+    }
     
 }

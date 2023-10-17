@@ -487,7 +487,7 @@ class TravelObfHelper : NSObject {
     }
     
     func readGpxFile(article: TravelArticle, callback: GpxReadDelegate?) {
-        if !article.gpxFileRead && callback!.isGpxReading == false   {
+        if !article.gpxFileRead && callback != nil && callback!.isGpxReading == false   {
             callback!.isGpxReading = true
             let task = GpxFileReader(article: article, callback: callback, readers: getReaders())
             task.execute()

@@ -296,6 +296,10 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: article!)
         TravelObfHelper.shared.saveOrRemoveArticle(article: article!, save: !isSaved)
         updateBookmarkButton()
+        
+        let articleName = article!.title ?? localizedString("shared_string_article")
+        let message = isSaved ? localizedString("article_removed_from_bookmark") : localizedString("article_added_to_bookmark")
+        OAUtilities.showToast(nil, details: articleName + message , duration: 4, in: self.view)
     }
     
     override func dismiss() {

@@ -8,7 +8,12 @@
 
 import UIKit
 
-class ArticleTravelCell: UITableViewCell {
+protocol TravelGuideCellCashable {
+    func setImage(data: Data)
+    func noImageIconVisibility(_ show: Bool)
+}
+
+class ArticleTravelCell: UITableViewCell, TravelGuideCellCashable {
     
 
     @IBOutlet weak var arcticleTitle: UILabel!
@@ -20,13 +25,16 @@ class ArticleTravelCell: UITableViewCell {
     
     @IBOutlet weak var bookmarkIcon: UIImageView!
     
-    weak var tabViewDelegate: TravelExploreViewControllerDelegate?
     var article: TravelArticle?
     var articleLang: String?
     
     override func layoutSubviews() {
         super.layoutSubviews()
         updateSaveButton()
+    }
+    
+    func setImage(data: Data) {
+        imagePreview.image = UIImage(data: data)
     }
     
     func imageVisibility(_ show: Bool) {

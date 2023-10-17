@@ -13,99 +13,71 @@ protocol TravelExploreViewControllerDelegate : AnyObject {
     func onDataLoaded()
     func openArticle(article: TravelArticle, lang: String?)
     func onOpenArticlePoints()
-
     func close()
 }
 
 
 @objc(OATravelExploreViewController)
 @objcMembers
-class TravelExploreViewController: OABaseNavbarViewController, TravelExploreViewControllerDelegate, GpxReadDelegate {
-
-    var tabBarVC: UITabBarController?
-    var exploreVC: ExploreTabViewController?
-    var savedArticlesVC: SavedArticlesTabViewController?
+class TravelExploreViewController: OABaseNavbarViewController, TravelExploreViewControllerDelegate, GpxReadDelegate, UISearchResultsUpdating, UISearchBarDelegate {
     
-    var searchView: UIView?
-    var searchTextField: UITextField?
-    var searchTransparentButton: UIButton?
-    
+    enum ScreenModes {
+        case popularArticles
+        case history
+        case searchResults
+    }
+  
+    var searchController: UISearchController!
+    var downloadingCellHelper: OADownloadingCellHelper = OADownloadingCellHelper()
+    var dataLock: NSObject = NSObject()
+    var downloadingResources: [OAResourceSwiftItem] = []
+    var cachedPreviewImages: ImageCache = ImageCache(itemsLimit: 100)
+    var lastSelectedIndexPath: IndexPath?
+    var savedArticlesObserver: OAAutoObserverProxy = OAAutoObserverProxy()
     var isGpxReading = false
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        tabBarVC = UITabBarController()
-        tabBarVC?.tabBar.tintColor = UIColor(rgb: color_primary_purple)
-
-        exploreVC = ExploreTabViewController()
-        exploreVC!.tabBarItem = UITabBarItem.init(title: localizedString("shared_string_explore"), image: UIImage.templateImageNamed("ic_custom_map_location_follow"), tag: 0)
-        exploreVC!.tabViewDelegate = self
-
-        savedArticlesVC = SavedArticlesTabViewController()
-        savedArticlesVC!.tabBarItem = UITabBarItem.init(title: localizedString("saved_articles"), image: UIImage.templateImageNamed("ic_custom_save_to_file"), tag: 1)
-        savedArticlesVC!.tabViewDelegate = self
-        
-        tabBarVC!.viewControllers = [exploreVC!, savedArticlesVC!]
-        self.view.addSubview(tabBarVC!.view)
-        
+    var searchHelper: TravelSearchHelper?
+    var searchQuery = ""
+    var searchResults = [TravelSearchResult]()
+    var isFiltered = false
+    var screenMode: ScreenModes = .popularArticles
+    var isInited = false
+    
+    override func commonInit() {
+        super.commonInit()
+        searchQuery = ""
+        searchHelper = TravelSearchHelper()
+        searchHelper!.uiCanceled = false
+        searchResults = []
+        cachedPreviewImages = ImageCache(itemsLimit: 100)
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         if shouldShowSearch() {
-            setupSearchView()
+            searchController = UISearchController(searchResultsController: nil)
+            searchController.searchBar.delegate = self
+            searchController.obscuresBackgroundDuringPresentation = false
+            self.navigationItem.searchController = searchController
+            self.navigationItem.hidesSearchBarWhenScrolling = false
+            setupSearchControllerWithFilter(false)
+            isInited = true
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        screenMode = .popularArticles
+        cachedPreviewImages = ImageCache(itemsLimit: 100)
+        downloadingResources = []
+        setupDownloadingCellHelper()
+        savedArticlesObserver = OAAutoObserverProxy(self, withHandler: #selector(update), andObserve: TravelObfHelper.shared.getBookmarksHelper().observable)
         
         if OAAppSettings.sharedManager().travelGuidesState.wasWatchingGpx {
             restoreState()
         } else {
             populateData(resetData: true)
         }
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        
-        tabBarVC?.view.frame = CGRect(
-            x: self.tableView.frame.origin.x,
-            y: self.getNavbarHeight(),
-            width: self.tableView.frame.size.width,
-            height: self.tableView.frame.size.height - self.getNavbarHeight())
-        
-        let offset: CGFloat = OAUtilities.isLandscape() ? 0 : 8
-        let navbarHeight = navigationController!.navigationBar.frame.height + OAUtilities.getTopMargin()
-        searchView?.frame = CGRect(x: 0, y: navbarHeight, width: view.frame.width, height: 46 + offset)
-        searchTextField?.frame = CGRect(x: 8 + OAUtilities.getLeftMargin(), y: offset, width: searchView!.frame.width - 16 - 2 * OAUtilities.getLeftMargin(), height: 38)
-        searchTransparentButton?.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 46 + offset)
-    }
-    
-    func updateTabs() {
-        exploreVC?.update()
-        savedArticlesVC?.update()
-    }
-    
-    func shouldShowSearch() -> Bool {
-        return !TravelObfHelper.shared.isOnlyDefaultTravelBookPresent()
-    }
-    
-    func setupSearchView() {
-        let offset: CGFloat = OAUtilities.isLandscape() ? 0 : 8
-        let navbarHeight = navigationController!.navigationBar.frame.height + OAUtilities.getTopMargin()
-        searchView = UIView()
-        searchView?.backgroundColor = UIColor(rgb: color_primary_table_background)
-        searchView?.frame = CGRect(x: 0, y: navbarHeight, width: view.frame.width, height: 46 + offset)
-        view.addSubview(searchView!)
-        
-        searchTextField = OATextFieldWithPadding()
-        searchTextField?.frame = CGRect(x: 8 + OAUtilities.getLeftMargin(), y: offset, width: searchView!.frame.width - 16 - 2 * OAUtilities.getLeftMargin(), height: 38)
-        searchTextField?.layer.cornerRadius = 8
-        searchTextField?.backgroundColor = .white
-        searchTextField?.placeholder = localizedString("shared_string_search")
-        searchTextField?.isUserInteractionEnabled = false
-        searchView?.addSubview(searchTextField!)
-        
-        searchTransparentButton = UIButton()
-        searchTransparentButton?.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 46 + offset)
-        searchTransparentButton?.backgroundColor = .clear
-        searchTransparentButton?.addTarget(self, action: #selector(onSearchViewClicked), for: .touchUpInside)
-        searchView?.addSubview(searchTransparentButton!)
     }
     
     
@@ -130,27 +102,34 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     }
     
     func populateData(resetData: Bool) {
-        self.view.addSpinner()
+        self.view.addSpinner(inCenterOfCurrentView: true)
         let task = LoadWikivoyageDataAsyncTask(resetData: resetData)
         task.delegate = self;
         task.execute()
     }
     
     func saveState() {
-        if tabBarVC != nil {
-            OAAppSettings.sharedManager().travelGuidesState.mainMenuSelectedTab = tabBarVC!.selectedIndex
-        }
-        if let exploreVC {
-            exploreVC.saveState()
+        if let state = OAAppSettings.sharedManager().travelGuidesState {
+            state.downloadingResources = downloadingResources
+            state.cachedPreviewImages = cachedPreviewImages
+            state.exploreTabTableData = tableData
+            state.lastSelectedIndexPath = lastSelectedIndexPath
         }
     }
     
     func restoreState() {
-        if let tabBarVC {
-            tabBarVC.selectedIndex = OAAppSettings.sharedManager().travelGuidesState.mainMenuSelectedTab
-        }
-        if let exploreVC {
-            exploreVC.restoreState()
+        if let state = OAAppSettings.sharedManager().travelGuidesState {
+            setupDownloadingCellHelper()
+            downloadingResources = state.downloadingResources
+            cachedPreviewImages = state.cachedPreviewImages!
+            lastSelectedIndexPath = state.lastSelectedIndexPath
+            
+            tableData.clearAllData()
+            for i in 0..<state.exploreTabTableData!.sectionCount() {
+                tableData.addSection(state.exploreTabTableData!.sectionData(for: i))
+            }
+            tableView.reloadData()
+            tableView.scrollToRow(at: state.lastSelectedIndexPath!, at: .middle, animated: false)
         }
         
         let wasOpenedTravelGpx = OAAppSettings.sharedManager().travelGuidesState.article == nil
@@ -163,8 +142,171 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         }
     }
     
+    override func generateData() {
+        
+        tableData.clearAllData()
+        
+        if screenMode == .popularArticles {
+            
+            guard isInited  else { return }
+            
+            downloadingCellHelper.fetchResourcesBlock()
+            
+            if TravelObfHelper.shared.isOnlyDefaultTravelBookPresent() {
+                
+                let downloadSection = tableData.createNewSection()
+                
+                let downloadHeaderRow = downloadSection.createNewRow()
+                downloadHeaderRow.cellType = OARightIconTableViewCell.getIdentifier()
+                downloadHeaderRow.title = localizedString("download_file")
+                downloadHeaderRow.iconName = "ic_custom_import"
+                downloadHeaderRow.setObj(NSNumber(booleanLiteral: true), forKey: "kHideSeparator")
+                
+                let downloadDescrRow = downloadSection.createNewRow()
+                downloadDescrRow.cellType = OARightIconTableViewCell.getIdentifier()
+                downloadDescrRow.descr = localizedString("travel_card_download_descr")
+                downloadDescrRow.setObj(NSNumber(booleanLiteral: false), forKey: "kHideSeparator")
+                
+                for _ in downloadingResources {
+                    let row = downloadSection.createNewRow()
+                    row.cellType = "kDownloadCellKey"
+                }
+                
+            } else {
+                
+                //        if (!Version.isPaidVersion(app) && !OpenBetaTravelCard.isClosed()) {
+                //            items.add(new OpenBetaTravelCard(activity, nightMode));
+                //        }
+                
+                //TODO:  add TravelNeededMaps Card for bookmarks
+            
+                
+                let articles = TravelObfHelper.shared.getPopularArticles()
+                if articles.count > 0 {
+                    
+                    let articlesSection = tableData.createNewSection()
+                    articlesSection.headerText = localizedString("popular_destinations")
+                    
+                    for article in articles {
+                        if article is TravelGpx {
+                            let item: TravelGpx = article as! TravelGpx
+                            let gpxRow = articlesSection.createNewRow()
+                            let title = (item.descr != nil && item.descr!.count > 0) ? item.descr! : item.title
+                            item.title = title
+                            gpxRow.cellType = GpxTravelCell.getIdentifier()
+                            gpxRow.title = title
+                            gpxRow.descr = item.user
+                            gpxRow.setObj(item, forKey: "article")
+                            
+                            let analysis = item.getAnalysis()
+                            let statisticsCells = OATrackMenuHeaderView.generateGpxBlockStatistics(analysis, withoutGaps: false)
+                            gpxRow.setObj(statisticsCells, forKey: "statistics_cells")
+                            
+                        } else {
+                            
+                            let item: TravelArticle = article
+                            let articleRow = articlesSection.createNewRow()
+                            articleRow.cellType = ArticleTravelCell.getIdentifier()
+                            articleRow.title = item.title ?? "nil"
+                            articleRow.descr = OATravelGuidesHelper.getPatrialContent(item.content)
+                            articleRow.setObj(item.getGeoDescription() ?? "", forKey: "isPartOf")
+                            articleRow.setObj(item, forKey: "article")
+                            articleRow.setObj(item.lang, forKey: "lang")
+                            if (item.imageTitle != nil && item.imageTitle!.length > 0) {
+                                articleRow.iconName = TravelArticle.getImageUrl(imageTitle: item.imageTitle ?? "", thumbnail: false)
+                            }
+                        }
+                    }
+                    
+                    let showMoreButtonRow = articlesSection.createNewRow()
+                    showMoreButtonRow.cellType = OAFilledButtonCell.getIdentifier()
+                    showMoreButtonRow.title = localizedString("show_more")
+                    showMoreButtonRow.setObj("onShowMoreMapsClicked", forKey: "actionName")
+                }
+            }
+            
+        } else if screenMode == .history {
+            
+            let section = tableData.createNewSection()
+            
+            let historyItems = TravelObfHelper.shared.getBookmarksHelper().getAllHistory()
+            for item in historyItems.reversed() {
+                let resultRow = section.createNewRow()
+                resultRow.cellType = SearchTravelCell.getIdentifier()
+                resultRow.title = item.articleTitle
+                resultRow.descr = item.isPartOf
+                resultRow.setObj("ic_custom_history", forKey: "noImageIcon")
+            }
+            let clearHistoryRow = section.createNewRow()
+            clearHistoryRow.cellType = OASimpleTableViewCell.getIdentifier()
+            clearHistoryRow.title = localizedString("clear_history")
+            clearHistoryRow.iconName = "ic_custom_history"
+            
+        } else if screenMode == .searchResults {
+            
+            let section = tableData.createNewSection()
+            
+            if searchResults.count > 0 && searchQuery.length > 0 {
+                for item in searchResults {
+                    let resultRow = section.createNewRow()
+                    resultRow.cellType = SearchTravelCell.getIdentifier()
+                    resultRow.title = item.getArticleTitle()
+                    resultRow.descr = item.isPartOf
+                    resultRow.setObj(item.articleId, forKey: "articleId")
+                    
+                    resultRow.setObj("ic_custom_photo", forKey: "noImageIcon")
+                    if (item.imageTitle != nil && item.imageTitle!.length > 0) {
+                        resultRow.iconName = TravelArticle.getImageUrl(imageTitle: item.imageTitle ?? "", thumbnail: true)
+                    }
+                }
+            }
+        }
+    }
+    
+    func setupDownloadingCellHelper() {
+        downloadingCellHelper = OADownloadingCellHelper()
+        downloadingCellHelper.hostViewController = self
+        downloadingCellHelper.hostTableView = self.tableView
+        downloadingCellHelper.hostDataLock = dataLock
+        weak var weakself = self
+        
+        downloadingCellHelper.fetchResourcesBlock = {
+            var downloadingResouces = OAResourcesUISwiftHelper.getResourcesInRepositoryIds(byRegionId: "travel", resourceTypeNames: ["travel"])
+            if (downloadingResouces != nil) {
+                downloadingResouces!.sort(by: { a, b in
+                    a.title() < b.title()
+                })
+                weakself!.downloadingResources = downloadingResouces!
+            }
+        }
+        
+        downloadingCellHelper.getSwiftResourceByIndexBlock = { (indexPath: IndexPath?) -> OAResourceSwiftItem? in
+            
+            let headerCellsCountInResourcesSection = weakself!.headerCellsCountInResourcesSection()
+            if (indexPath != nil && indexPath!.row >= headerCellsCountInResourcesSection) {
+                return weakself!.downloadingResources[indexPath!.row - headerCellsCountInResourcesSection]
+            }
+            return nil
+        }
+        
+        downloadingCellHelper.getTableDataModelBlock = {
+            return weakself!.tableData
+        }
+    }
+    
+    func headerCellsCountInResourcesSection() -> Int {
+        return 2
+    }
+    
     
     //MARK: Actions
+    
+    @objc func update() {
+        DispatchQueue.main.async {
+            self.generateData()
+            self.tableView.reloadData()
+        }
+    }
     
     func onOptionsButtonClicked() {
         print("onOptionsButtonClicked")
@@ -172,7 +314,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     
     func openArticle(article: TravelArticle, lang: String?) {
         if article is TravelGpx {
-            self.view.addSpinner()
+            self.view.addSpinner(inCenterOfCurrentView: true)
             openGpx(gpx: article as! TravelGpx)
         } else {
             let vc = TravelArticleDialogViewController.init(articleId: article.generateIdentifier(), lang: lang!)
@@ -187,17 +329,262 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     
     @objc func onSearchViewClicked() {
         var vc = TravelSearchDialogViewController()
-        vc.tabViewDelegate = self
         vc.lang = OAUtilities.currentLang()
         self.show(vc)
     }
     
-    	
+    @objc func onShowMoreMapsClicked() {
+        populateData(resetData: false)
+    }
+    
+    func showClearHistoryAlert() {
+        let alert = UIAlertController(title: localizedString("search_history"), message: localizedString("clear_travel_search_history"), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_clear"), style: .default, handler: { a in
+            TravelObfHelper.shared.getBookmarksHelper().clearHistory()
+            self.screenMode = .popularArticles
+            self.generateData()
+            self.tableView.reloadData()
+        }))
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        self.present(alert, animated: true)
+    }
+    
+    private func startAsyncImageDownloading(_ iconName: String, _ cell: TravelGuideCellCashable?) {
+        if let imageUrl = URL(string: iconName) {
+            if let cachedImage = cachedPreviewImages.get(url: iconName) {
+                if cachedImage.count != Data().count {
+                    cell?.setImage(data: cachedImage)
+                    cell?.noImageIconVisibility(false)
+                } else {
+                    cell?.noImageIconVisibility(true)
+                }
+            } else {
+                DispatchQueue.global().async {
+                    if let data = try? Data(contentsOf: imageUrl) {
+                        DispatchQueue.main.async {
+                            self.cachedPreviewImages.set(url: iconName, imageData: data)
+                            cell?.setImage(data: data)
+                            cell?.noImageIconVisibility(false)
+                        }
+                    } else {
+                        self.cachedPreviewImages.set(url: iconName, imageData: Data())
+                        cell?.noImageIconVisibility(true)
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    //MARK: TableView
+    
+    override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
+        let item = tableData.item(for: indexPath)
+        var outCell: UITableViewCell? = nil
+        
+        if item.cellType == "kDownloadCellKey" {
+            let resource = downloadingCellHelper.getSwiftResourceByIndexBlock(indexPath)
+            outCell = downloadingCellHelper.setupSwiftCell(resource, indexPath: indexPath)
+            
+        } else if item.cellType == OAFilledButtonCell.getIdentifier() {
+            var cell = tableView.dequeueReusableCell(withIdentifier: OAFilledButtonCell.getIdentifier()) as? OAFilledButtonCell
+            if cell == nil {
+                let nib = Bundle.main.loadNibNamed(OAFilledButtonCell.getIdentifier(), owner: self, options: nil)
+                cell = nib?.first as? OAFilledButtonCell
+                cell?.selectionStyle = .none
+            }
+            cell?.button.setTitle(item.title, for: .normal)
+            cell?.button.removeTarget(nil, action: nil, for: .allEvents)
+            if let actionName = item.string(forKey: "actionName") {
+                cell?.button.addTarget(self, action: Selector(actionName), for: .touchUpInside)
+            }
+            outCell = cell
+            
+        } else if item.cellType == OARightIconTableViewCell.getIdentifier() {
+            var cell = tableView.dequeueReusableCell(withIdentifier: OARightIconTableViewCell.getIdentifier()) as? OARightIconTableViewCell
+            if cell == nil {
+                let nib = Bundle.main.loadNibNamed(OARightIconTableViewCell.getIdentifier(), owner: self, options: nil)
+                cell = nib?.first as? OARightIconTableViewCell
+                cell?.selectionStyle = .none
+                cell?.leftIconVisibility(false)
+            }
+            if let cell {
+                if let title = item.title {
+                    cell.titleLabel.text = title
+                    cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+                    cell.titleVisibility(true)
+                } else {
+                    cell.titleVisibility(false)
+                }
+                
+                if let descr = item.descr {
+                    cell.descriptionLabel.text = descr
+                    cell.descriptionLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+                    cell.descriptionVisibility(true)
+                } else {
+                    cell.descriptionVisibility(false)
+                }
+                
+                if let iconName = item.iconName {
+                    cell.rightIconView.image = UIImage.templateImageNamed(iconName)
+                    cell.rightIconVisibility(true)
+                } else {
+                    cell.rightIconVisibility(false)
+                }
+                
+                let hideSeparator = item.bool(forKey: "kHideSeparator")
+                if hideSeparator {
+                    cell.separatorInset = UIEdgeInsets(top: 0, left: CGFloat.greatestFiniteMagnitude, bottom: 0, right: 0)
+                    
+                } else {
+                    cell.separatorInset = .zero
+                }
+            }
+            
+            outCell = cell
+            
+        } else if item.cellType == ArticleTravelCell.getIdentifier() {
+            var cell = tableView.dequeueReusableCell(withIdentifier: ArticleTravelCell.getIdentifier()) as? ArticleTravelCell
+            if cell == nil {
+                let nib = Bundle.main.loadNibNamed("ArticleTravelCell", owner: self, options: nil)
+                cell = nib?.first as? ArticleTravelCell
+                cell?.imageVisibility(true)
+                cell!.imagePreview.contentMode = .scaleAspectFill
+                cell!.imagePreview.layer.cornerRadius = 11
+            }
+            cell!.article = item.obj(forKey: "article") as? TravelArticle
+            cell!.articleLang = item.string(forKey: "lang")
+            
+            cell!.arcticleTitle.text = item.title
+            cell!.arcticleDescription.text = item.descr
+            cell!.regionLabel.text = item.string(forKey: "isPartOf")
+
+            cell?.imageVisibility(true)
+            if let iconName = item.iconName {
+                startAsyncImageDownloading(iconName, cell)
+            } else {
+                cell?.noImageIconVisibility(true)
+            }
+            cell?.updateSaveButton()
+            
+            outCell = cell
+            
+        } else if item.cellType == GpxTravelCell.getIdentifier() {
+            var cell = tableView.dequeueReusableCell(withIdentifier: GpxTravelCell.getIdentifier()) as? GpxTravelCell
+            if cell == nil {
+                let nib = Bundle.main.loadNibNamed("GpxTravelCell", owner: self, options: nil)
+                cell = nib?.first as? GpxTravelCell
+                cell!.usernameIcon.contentMode = .scaleAspectFit
+                cell!.usernameIcon.image = UIImage.templateImageNamed("ic_custom_user_profile")
+                cell!.usernameIcon.tintColor = UIColor(rgb: color_purple_border)
+                cell!.usernameLabel.textColor = UIColor(rgb: color_purple_border)
+                cell!.usernameView.layer.borderColor = UIColor(rgb: color_slider_gray).cgColor
+                cell!.usernameView.layer.borderWidth = 1
+                cell!.usernameView.layer.cornerRadius = 4
+
+            }
+            cell!.arcticleTitle.text = item.title
+            cell!.usernameLabel.text = item.descr
+            cell!.travelGpx = item.obj(forKey: "article") as? TravelGpx
+            if let statisticsCells = item.obj(forKey: "statistics_cells") as? [OAGPXTableCellData] {
+                cell!.statisticsCells = statisticsCells
+            }
+            
+            outCell = cell
+        } else if item.cellType == OATitleDescriptionBigIconCell.getIdentifier() {
+            var cell = tableView.dequeueReusableCell(withIdentifier: OATitleDescriptionBigIconCell.getIdentifier()) as? OATitleDescriptionBigIconCell
+            if cell == nil {
+                let nib = Bundle.main.loadNibNamed("OATitleDescriptionBigIconCell", owner: self, options: nil)
+                cell = nib?.first as? OATitleDescriptionBigIconCell
+                cell?.showLeftIcon(false)
+                cell?.showRightIcon(true)
+                cell?.rightIconView.layer.cornerRadius = 5
+            }
+            if let cell {
+                cell.titleView.text = item.title
+                cell.descriptionView.text = item.descr
+            }
+        } else if item.cellType == SearchTravelCell.getIdentifier() {
+            var cell = tableView.dequeueReusableCell(withIdentifier: SearchTravelCell.getIdentifier()) as? SearchTravelCell
+            if cell == nil {
+                let nib = Bundle.main.loadNibNamed("SearchTravelCell", owner: self, options: nil)
+                cell = nib?.first as? SearchTravelCell
+                cell?.imagePreview.layer.cornerRadius = 5
+            }
+            if let cell {
+                cell.titleLabel.text = item.title
+                cell.descriptionLabel.text = item.descr
+                
+                if let noImageIconName = item.string(forKey: "noImageIcon") {
+                    cell.noImageIcon.image = UIImage.templateImageNamed(noImageIconName)
+                }
+
+                if let iconName = item.iconName {
+                    startAsyncImageDownloading(iconName, cell)
+                } else {
+                    cell.noImageIcon.isHidden = false
+                }
+            }
+            outCell = cell
+        } else if item.cellType == OASimpleTableViewCell.getIdentifier() {
+            var cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier()) as? OASimpleTableViewCell
+            if cell == nil {
+                let nib = Bundle.main.loadNibNamed(OASimpleTableViewCell.getIdentifier(), owner: self, options: nil)
+                cell = nib?.first as? OASimpleTableViewCell
+                cell?.tintColor = UIColor.iconColorActive
+                cell?.descriptionVisibility(false)
+            }
+            if let cell = cell {
+                cell.titleLabel.text = item.title
+                cell.titleLabel.textColor = UIColor.textColorActive
+                cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+                cell.leftIconView.tintColor = UIColor.iconColorActive
+            }
+            outCell = cell
+        }
+        
+        return outCell
+    }
+    
+    override func onRowSelected(_ indexPath: IndexPath!) {
+        let item = tableData.item(for: indexPath)
+        lastSelectedIndexPath = indexPath
+        if item.cellType == "kDownloadCellKey" {
+            downloadingCellHelper.onItemClicked(indexPath)
+            
+        } else if item.cellType == ArticleTravelCell.getIdentifier() || item.cellType == GpxTravelCell.getIdentifier()  {
+            if let article = item.obj(forKey: "article") as? TravelArticle {
+                let lang = item.string(forKey: "lang") ?? ""
+                openArticle(article: article, lang: lang)
+            }
+            
+        } else if item.cellType == SearchTravelCell.getIdentifier() {
+            var articleId = item.obj(forKey: "articleId") as? TravelArticleIdentifier
+            let lang = OAUtilities.currentLang() ?? ""
+            if articleId == nil {
+                articleId = TravelObfHelper.shared.getArticleId(title: item.title ?? "", lang: lang)
+            }
+            if let articleId {
+                let language = lang == "" ? "eng" : lang
+                if let article = TravelObfHelper.shared.getArticleById(articleId: articleId, lang: language, readGpx: false, callback: nil) {
+                    TravelObfHelper.shared.getBookmarksHelper().addToHistory(article: article)
+                    openArticle(article: article, lang: lang)
+                }
+            }
+        } else if item.cellType == OASimpleTableViewCell.getIdentifier() {
+            showClearHistoryAlert()
+        }
+    }
+
+    
     //MARK: TravelExploreViewControllerDelegate
     
     func onDataLoaded() {
-        updateTabs()
-        self.view.removeSpinner()
+        DispatchQueue.main.async {
+            self.generateData()
+            self.tableView.reloadData()
+            self.view.removeSpinner()
+        }
     }
     
     func close() {
@@ -227,6 +614,87 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         OAAppSettings.sharedManager().showGpx([filename], update: true)
         OARootViewController.instance().mapPanel.openTargetView(with: gpx, selectedTab: .overviewTab, selectedStatisticsTab: .overviewTab, openedFromMap: false)
         self.dismiss()
+    }
+    
+    
+    //MARK: Search
+    
+    func shouldShowSearch() -> Bool {
+        return !TravelObfHelper.shared.isOnlyDefaultTravelBookPresent()
+    }
+    
+    private func setupSearchControllerWithFilter(_ isFiltered: Bool) {
+        searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("travel_guides_search_placeholder"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(rgb: color_text_footer)])
+        searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1.0, alpha: 0.3)
+        if isFiltered {
+            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 0, alpha: 0.8)
+        } else {
+            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 0, alpha: 0.3)
+            searchController.searchBar.searchTextField.tintColor = UIColor.gray
+        }
+    }
+    
+    func cancelSearch() {
+        searchHelper!.uiCanceled = true
+        self.view.removeSpinner()
+        searchResults = []
+    }
+    
+    func runSearch() {
+        searchHelper!.uiCanceled = false
+        self.view.addSpinner(inCenterOfCurrentView: true)
+        
+        searchHelper!.search(query: searchQuery) { results in
+            DispatchQueue.main.async {
+                self.searchResults = results
+                self.screenMode = .searchResults
+                self.generateData()
+                self.tableView.reloadData()
+                self.view.removeSpinner()
+            }
+        }
+    }
+    
+    
+    //MARK: UISearchResultsUpdating
+
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        screenMode = .history
+        isFiltered = true
+        generateData()
+        tableView.reloadData()
+    }
+        
+    func updateSearchResults(for searchController: UISearchController) {
+        generateData()
+        tableView.reloadData()
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        cancelSearch()
+        screenMode = .popularArticles
+        isFiltered = false
+        generateData()
+        tableView.reloadData()
+    }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if isFiltered {
+            searchResults = []
+            searchQuery = searchText
+            let trimmedSearchQuery = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            if trimmedSearchQuery.length == 0 {
+                cancelSearch()
+                screenMode = .history
+            } else {
+                runSearch()
+                screenMode = .searchResults
+                generateData()
+            }
+            generateData()
+            tableView.reloadData()
+        }
     }
 
 }
@@ -259,5 +727,48 @@ class LoadWikivoyageDataAsyncTask {
         if delegate != nil {
             delegate!.onDataLoaded()
         }
+    }
+}
+
+
+class ImageCache {
+    
+    private var cache: [String : Data]
+    private var itemsLimit: Int
+    
+    init(itemsLimit: Int) {
+        cache = [:]
+        self.itemsLimit = itemsLimit
+    }
+    
+    func get(url: String) -> Data? {
+        return cache[url]
+    }
+    
+    func set(url: String, imageData: Data) {
+        if cache.count > itemsLimit {
+            cache.removeAll()
+        }
+        cache[url] = imageData
+    }
+}
+
+
+class OATextFieldWithPadding: UITextField {
+    var textPadding = UIEdgeInsets(
+        top: 0,
+        left: 16,
+        bottom: 0,
+        right: 16
+    )
+
+    override func textRect(forBounds bounds: CGRect) -> CGRect {
+        let rect = super.textRect(forBounds: bounds)
+        return rect.inset(by: textPadding)
+    }
+
+    override func editingRect(forBounds bounds: CGRect) -> CGRect {
+        let rect = super.editingRect(forBounds: bounds)
+        return rect.inset(by: textPadding)
     }
 }

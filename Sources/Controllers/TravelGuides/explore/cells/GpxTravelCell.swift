@@ -16,17 +16,7 @@ class GpxTravelCell: UITableViewCell, UICollectionViewDelegate, UICollectionView
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var usernameIcon: UIImageView!
     
-    @IBOutlet weak var leftButton: UIButton!
-    @IBOutlet weak var leftButtonLabel: UILabel!
-    @IBOutlet weak var leftButtonIcon: UIImageView!
-    
-    @IBOutlet weak var rightButton: UIButton!
-    @IBOutlet weak var rightButtonLabel: UILabel!
-    @IBOutlet weak var rightButtonIcon: UIImageView!
-    
     @IBOutlet weak var collectionView: UICollectionView!
-    
-    weak var tabViewDelegate: TravelExploreViewControllerDelegate?
 
     var travelGpx: TravelGpx?
     var statisticsCells : [OAGPXTableCellData]?
@@ -35,20 +25,10 @@ class GpxTravelCell: UITableViewCell, UICollectionViewDelegate, UICollectionView
         super.awakeFromNib()
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
         collectionView.register(UINib(nibName: OAGpxStatBlockCollectionViewCell.getIdentifier(), bundle: nil), forCellWithReuseIdentifier: OAGpxStatBlockCollectionViewCell.getIdentifier())
     }
     
-    
-    @IBAction func leftButtonTapped(_ sender: Any) {
-        if tabViewDelegate != nil && travelGpx != nil {
-            tabViewDelegate!.openArticle(article: travelGpx!, lang: nil)
-        }
-    }
-    
-    @IBAction func rightButtonTapped(_ sender: Any) {
-        print("rightButtonTapped")
-    }
  
     //MARK: UICollectionViewDataSource
     

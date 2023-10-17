@@ -19,6 +19,7 @@
 #import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAUninstallSpeedCamerasViewController
 {
@@ -114,7 +115,9 @@
     NSString *text = [NSString stringWithFormat:OALocalizedString(@"speed_cameras_legal_descr"), keepActiveStr, uninstallStr];
     NSMutableAttributedString *attrText = [[NSMutableAttributedString alloc] initWithString:text
                                                                                  attributes:@{
-                                                                       NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleBody] }];
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleBody],
+        NSForegroundColorAttributeName: UIColor.textColorPrimary
+    }];
     [attrText addAttribute:NSFontAttributeName
                      value:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]
                      range:[text rangeOfString:uninstallStr]];

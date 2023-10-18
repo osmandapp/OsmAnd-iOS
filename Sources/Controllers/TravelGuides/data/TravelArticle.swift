@@ -191,4 +191,14 @@ class TravelArticleIdentifier : NSObject {
         lhs.routeId == rhs.routeId &&
         lhs.routeSource == rhs.routeSource
     }
+    
+    override var hash: Int {
+        var hasher = Hasher()
+        hasher.combine(lat)
+        hasher.combine(lon)
+        hasher.combine(file)
+        hasher.combine(routeId)
+        hasher.combine(routeSource)
+        return hasher.finalize()
+    }
 }

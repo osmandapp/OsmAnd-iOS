@@ -35,6 +35,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     var lastSelectedIndexPath: IndexPath?
     var savedArticlesObserver: OAAutoObserverProxy = OAAutoObserverProxy()
     var isGpxReading = false
+    var isPointsReadingMode = false
     var searchHelper: TravelSearchHelper?
     var searchQuery = ""
     var searchResults = [TravelSearchResult]()
@@ -324,6 +325,8 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     }
     
     func openGpx(gpx: TravelGpx) {
+        isPointsReadingMode = false
+        self.view.addSpinner(inCenterOfCurrentView: true)
         TravelObfHelper.shared.getArticleById(articleId: gpx.generateIdentifier(), lang: nil, readGpx: true, callback: self)
     }
     
@@ -339,13 +342,13 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     
     func showClearHistoryAlert() {
         let alert = UIAlertController(title: localizedString("search_history"), message: localizedString("clear_travel_search_history"), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .default))
         alert.addAction(UIAlertAction(title: localizedString("shared_string_clear"), style: .default, handler: { a in
             TravelObfHelper.shared.getBookmarksHelper().clearHistory()
             self.screenMode = .popularArticles
             self.generateData()
             self.tableView.reloadData()
         }))
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         self.present(alert, animated: true)
     }
     
@@ -575,6 +578,41 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
             showClearHistoryAlert()
         }
     }
+    
+    override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let item = tableData.item(for: indexPath)
+        lastSelectedIndexPath = indexPath
+        if item.cellType == ArticleTravelCell.getIdentifier() {
+            if let article = item.obj(forKey: "article") as? TravelArticle {
+                let lang = item.string(forKey: "lang") ?? ""
+                
+                let menuProvider: UIContextMenuActionProvider = { _ in
+                    let readAction = UIAction(title: localizedString("shared_string_read"), image: UIImage(systemName: "newspaper")) { _ in
+                        self.openArticle(article: article, lang: lang)
+                    }
+                    let bookmarkAction = UIAction(title: localizedString("shared_string_bookmark"), image: UIImage(systemName: "bookmark")) { _ in
+                        let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: article)
+                        if isSaved {
+                            TravelObfHelper.shared.getBookmarksHelper().removeArticleFromSaved(article: article)
+                        } else {
+                            TravelObfHelper.shared.getBookmarksHelper().addArticleToSaved(article: article)
+                        }
+                        self.generateData()
+                        self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                    }
+                    //shared_string_gpx_points
+                    let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: UIImage.templateImageNamed("point.topleft.filled.down.to.point.bottomright.curvepath")) { _ in
+                        self.isPointsReadingMode = true
+                        self.view.addSpinner(inCenterOfCurrentView: true)
+                        let article = TravelObfHelper.shared.getArticleById(articleId: article.generateIdentifier(), lang: lang, readGpx: true, callback: self)
+                    }
+                    return UIMenu(title: "", children: [readAction, bookmarkAction, pointsAction])
+                }
+                return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: menuProvider)
+            }
+        }
+        return nil
+    }
 
     
     //MARK: TravelExploreViewControllerDelegate
@@ -608,11 +646,18 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         OATravelGuidesHelper.createGpxFile(article, fileName: filename)
         let gpx = OATravelGuidesHelper.buildGpx(filename, title: article.title, document: gpxFile)
         
+        self.view.removeSpinner()
+        if isPointsReadingMode && (gpx == nil || gpx?.wptPoints == 0) {
+            OAUtilities.showToast(nil, details: localizedString("article_has_no_points") , duration: 4, in: self.view)
+            return
+        }
+        
         saveState()
         OAAppSettings.sharedManager().travelGuidesState.wasWatchingGpx = true
         
         OAAppSettings.sharedManager().showGpx([filename], update: true)
-        OARootViewController.instance().mapPanel.openTargetView(with: gpx, selectedTab: .overviewTab, selectedStatisticsTab: .overviewTab, openedFromMap: false)
+        let tab: EOATrackMenuHudTab = isPointsReadingMode ? .pointsTab : .overviewTab
+        OARootViewController.instance().mapPanel.openTargetView(with: gpx, selectedTab: tab, selectedStatisticsTab: .overviewTab, openedFromMap: false)
         self.dismiss()
     }
     

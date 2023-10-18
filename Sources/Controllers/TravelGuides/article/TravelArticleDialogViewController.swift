@@ -273,9 +273,7 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         if article == nil {
             return
         }
-        
-        //TODO: Add article to history here?
-        
+ 
         let file = TravelObfHelper.shared.createGpxFile(article: article!)
         if gpx == nil {
             gpx = OATravelGuidesHelper.buildGpx(file, title: article!.title, document: article!.gpxFile)

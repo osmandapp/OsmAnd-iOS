@@ -1959,6 +1959,7 @@
 "clear_history" = "Clear history";
 "search_history" = "Search history";
 "clear_travel_search_history" = "Clear Travel search history?";
+"article_has_no_points" = "Article has no points";
 
 // Help
 "help_quiz" = "Quiz";

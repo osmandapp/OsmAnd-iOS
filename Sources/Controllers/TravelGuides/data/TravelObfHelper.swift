@@ -27,7 +27,7 @@ class TravelObfHelper : NSObject {
     let TRAVEL_GPX_CONVERT_MULT_2 = 5
     
     private var popularArticles = PopularArticles()
-    private var cachedArticles: [TravelArticleIdentifier : [String:TravelArticle] ] = [:]
+    private var cachedArticles: [Int : [String:TravelArticle] ] = [:]
     private let localDataHelper: TravelLocalDataHelper
     private var searchRadius: Int
     private var foundAmenitiesIndex: Int = 0
@@ -156,7 +156,7 @@ class TravelObfHelper : NSObject {
         if articles != nil && articles!.count > 0 {
             var i = articles!.values.makeIterator()
             let newArticleId = i.next()!.generateIdentifier()
-            cachedArticles[newArticleId] = articles
+            cachedArticles[newArticleId.hashValue] = articles
             article = getCachedArticle(articleId: newArticleId, lang: lang, readGpx: readPoints, callback: callback)
         }
         return article
@@ -462,7 +462,7 @@ class TravelObfHelper : NSObject {
     
     func getCachedArticle(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
         var article: TravelArticle? = nil
-        var articles = cachedArticles[articleId]
+        var articles = cachedArticles[articleId.hashValue]
         if (articles != nil) {
             if (lang == nil || lang!.length == 0) {
                 var ac = articles!.values
@@ -752,9 +752,9 @@ class TravelObfHelper : NSObject {
     
     func getArticleLangs(articleId: TravelArticleIdentifier) -> [String] {
         var res = [String]()
-        let article = getArticleById(articleId: articleId, lang: "", readGpx: false, callback: nil)
+        let article = getArticleById(articleId: articleId, lang: "en", readGpx: false, callback: nil)
         if article != nil {
-            let articles = cachedArticles[article!.generateIdentifier()]
+            let articles = cachedArticles[article!.generateIdentifier().hashValue]
             if articles != nil {
                 res.append(contentsOf: articles!.keys)
             }

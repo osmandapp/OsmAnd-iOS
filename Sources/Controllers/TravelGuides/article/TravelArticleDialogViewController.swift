@@ -157,7 +157,7 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         
         contentButton = UIButton()
         contentButton!.setImage(UIImage.templateImageNamed("ic_custom_list"), for: .normal)
-        contentButton!.tintColor = UIColor(rgb: color_primary_purple)
+        contentButton!.tintColor = UIColor.iconColorActive
         contentButton!.contentHorizontalAlignment = .left
         contentButton!.addTarget(self, action: #selector(self.onContentsButtonClicked), for: .touchUpInside)
         bottomStackView!.addArrangedSubview(contentButton!)
@@ -166,7 +166,7 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         
         pointsButton = UIButton()
         pointsButton!.setTitle(localizedString("shared_string_gpx_points"), for: .normal)
-        pointsButton!.setTitleColor(UIColor(rgb: color_primary_purple), for: .normal)
+        pointsButton!.setTitleColor(UIColor.textColorActive, for: .normal)
         pointsButton!.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         pointsButton!.addTarget(self, action: #selector(self.onPointsButtonClicked), for: .touchUpInside)
         bottomStackView!.addArrangedSubview(pointsButton!)
@@ -175,7 +175,7 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         
         bookmarkButton = UIButton()
         bookmarkButton!.setImage(UIImage.templateImageNamed("ic_navbar_bookmark_outlined"), for: .normal)
-        bookmarkButton!.tintColor = UIColor(rgb: color_primary_purple)
+        bookmarkButton!.tintColor = UIColor.iconColorActive
         contentButton!.contentHorizontalAlignment = .right
         bookmarkButton!.addTarget(self, action: #selector(self.onBookmarkButtonClicked), for: .touchUpInside)
         bottomStackView!.addArrangedSubview(bookmarkButton!)
@@ -265,7 +265,6 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     }
     
     @objc func showNavigation() {
-//        let vc = TravelGuidesNavigationViewController(article: article!, selectedLang: selectedLang!)
         let vc = TravelGuidesNavigationViewController()
         vc.setupWith(article: article!, selectedLang: selectedLang!, navigationMap: [:], regionsNames: [], selectedItem: nil)
         vc.delegate = self
@@ -361,7 +360,6 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
             title = getTitle()
             self.updateNavbar()
             self.applyLocalization()
-            self.updateSaveButton()
             self.updateTrackButton(processing: false, gpxFile: state.gpxFile)
             self.loadWebView()
         }
@@ -394,7 +392,6 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         UIView.transition(with: self.view, duration: 0.2) {
             self.updateNavbar()
             self.applyLocalization()
-            self.updateSaveButton()
             self.updateBookmarkButton()
             self.loadWebView()
         }
@@ -469,12 +466,6 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
             } catch {
             }
         }
-    }
-    
- 
-    
-    func updateSaveButton() {
-        //TODO implement
     }
     
     func updateTrackButton(processing: Bool, gpxFile:  OAGPXDocumentAdapter?) {

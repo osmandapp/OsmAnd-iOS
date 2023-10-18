@@ -337,6 +337,8 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     
     func onOptionsButtonClicked() {
         print("onOptionsButtonClicked")
+        let vc = OABaseNavbarViewController()
+        showModalViewController(vc)
     }
     
     func openArticle(article: TravelArticle, lang: String?) {
@@ -354,12 +356,6 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         isPointsReadingMode = false
         self.view.addSpinner(inCenterOfCurrentView: true)
         TravelObfHelper.shared.getArticleById(articleId: gpx.generateIdentifier(), lang: nil, readGpx: true, callback: self)
-    }
-    
-    @objc func onSearchViewClicked() {
-        var vc = TravelSearchDialogViewController()
-        vc.lang = OAUtilities.currentLang()
-        self.show(vc)
     }
     
     @objc func onShowMoreMapsClicked() {
@@ -507,9 +503,9 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
                 cell = nib?.first as? GpxTravelCell
                 cell!.usernameIcon.contentMode = .scaleAspectFit
                 cell!.usernameIcon.image = UIImage.templateImageNamed("ic_custom_user_profile")
-                cell!.usernameIcon.tintColor = UIColor(rgb: color_purple_border)
-                cell!.usernameLabel.textColor = UIColor(rgb: color_purple_border)
-                cell!.usernameView.layer.borderColor = UIColor(rgb: color_slider_gray).cgColor
+                cell!.usernameIcon.tintColor = UIColor.iconColorActive
+                cell!.usernameLabel.textColor = UIColor.iconColorActive
+                cell!.usernameView.layer.borderColor = UIColor.textColorTertiary.cgColor
                 cell!.usernameView.layer.borderWidth = 1
                 cell!.usernameView.layer.cornerRadius = 4
 

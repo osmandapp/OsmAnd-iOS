@@ -51,7 +51,7 @@ class GpxTravelCell: UITableViewCell, UICollectionViewDelegate, UICollectionView
         }
         cell!.valueView.text = cellData.values["string_value"] as? String
         cell!.iconView.image = UIImage.templateImageNamed(cellData.rightIconName)
-        cell!.iconView.tintColor = UIColor(rgb: color_icon_inactive)
+        cell!.iconView.tintColor = UIColor.iconColorDefault
         cell!.titleView.text = cellData.title
         
         cell!.separatorView.isHidden = cell!.isDirectionRTL() ? (indexPath.row == 0) : (indexPath.row == statisticsCells!.count - 1)

@@ -17,6 +17,7 @@ final class BLEHeartRateDevice: Device {
     
     override init() {
         super.init()
+        deviceType = .BLE_HEART_RATE
         sensors.append(BLEHeartRateSensor())
     }
     

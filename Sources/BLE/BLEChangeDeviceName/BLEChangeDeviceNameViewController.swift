@@ -8,121 +8,55 @@
 
 import Foundation
 
-extension BLEChangeDeviceNameViewController: UITextViewDelegate {
-    
-    func textViewDidChange(_ textView: UITextView) {
-        updateFileNameFromEditText(name: textView.text)
-//        generateData()
-//        tableView.reloadData()
-//        [textView sizeToFit];
-//        [self.tableView beginUpdates];
-//        UITableViewHeaderFooterView *footer = [self.tableView footerViewForSection:0];
-//        footer.textLabel.textColor = _inputFieldError != nil ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_text_footer);
-//        footer.textLabel.text = _inputFieldError;
-//        [footer sizeToFit];
-//        [self.tableView endUpdates];
-    }
-    
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
-            textView.resignFirstResponder()
-            return false;
-        }
-        return true;
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    func updateFileNameFromEditText(name: String) {
-        let text = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        if text.isEmpty {
-            
-        } else if isIncorrectFileName(text) {
-            
-        } else {
-            newDeviceName = text
-        }
-    }
-    
-    func isIncorrectFileName(_ fileName: String) -> Bool {
-        let isFileNameEmpty = fileName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        
-        let illegalFileNameCharacters = CharacterSet(charactersIn: "/\\?%*|\"<>:;.,")
-        let hasIncorrectSymbols = fileName.rangeOfCharacter(from: illegalFileNameCharacters) != nil
-        
-        return isFileNameEmpty || hasIncorrectSymbols
-    }
-    
-//    - (void) updateFileNameFromEditText:(NSString *)name
-//    {
-//        _doneButtonEnabled = NO;
-//        NSString *text = name.trim;
-//        if (text.length == 0)
-//        {
-//            _inputFieldError = OALocalizedString(@"empty_filename");
-//        }
-//        else if ([self isIncorrectFileName:name])
-//        {
-//            _inputFieldError = OALocalizedString(@"incorrect_symbols");
-//        }
-//        else if ([self isFolderExist:name])
-//        {
-//            _inputFieldError = OALocalizedString(@"folder_already_exsists");
-//        }
-//        else
-//        {
-//            _inputFieldError = nil;
-//            _newFolderName = text;
-//            _doneButtonEnabled = YES;
-//        }
-//        self.doneButton.enabled = _doneButtonEnabled;
-//    }
-}
-
 final class BLEChangeDeviceNameViewController: OABaseNavbarViewController {
-    
     var device: Device!
     var onSaveAction: (() -> Void)? = nil
     
-    private var isFirstLaunch = true
-    
+    private var textView: UITextView?
     private var newDeviceName = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         newDeviceName = device.deviceName
+        generateData()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        textView?.becomeFirstResponder()
     }
     
     override func getTitle() -> String! {
         "Name"
     }
     
-    override func getRightNavbarButtons() -> [UIBarButtonItem] {
-        let save = UIBarButtonItem(barButtonSystemItem: .save,
-                                  target: self,
-                                  action: #selector(onRightNavbarButtonPressed))
-        save.tintColor = UIColor.buttonBgColorPrimary
-        return [save]
+    override func getLeftNavbarButtonTitle() -> String {
+        localizedString("shared_string_close")
     }
     
-    override func getLeftNavbarButton() -> UIBarButtonItem! {
-        let cancel = UIBarButtonItem(barButtonSystemItem: .cancel,
-                                  target: self,
-                                  action: #selector(onRightNavbarButtonPressed))
-        cancel.tintColor = UIColor.buttonBgColorPrimary
-        return cancel
+    override func getRightNavbarButtons() -> [UIBarButtonItem] {
+        let saveBarButton = createRightNavbarButton(localizedString("shared_string_save"), iconName: nil, action: #selector(onLeftNavbarButtonPressed), menu: nil)
+        return [saveBarButton!]
     }
     
     override func onRightNavbarButtonPressed() {
         #warning("add save")
         onSaveAction?()
+        dismiss()
     }
     
     override func onLeftNavbarButtonPressed() {
         dismiss()
+    }
+    
+    override func generateData() {
+        tableData.clearAllData()
+        let section = tableData.createNewSection()
+        let name = section.createNewRow()
+        
+        name.cellType = OATextMultilineTableViewCell.getIdentifier()
+        name.key = "name_key"
+        name.title = newDeviceName
     }
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
@@ -141,15 +75,11 @@ final class BLEChangeDeviceNameViewController: OABaseNavbarViewController {
                 cell?.textView.enablesReturnKeyAutomatically = true
             }
             if let cell {
-                if isFirstLaunch {
-                    cell.textView.becomeFirstResponder()
-                    isFirstLaunch = false;
-                }
+                textView = cell.textView
                 cell.textView.text = item.title
-                cell.textView.tag = indexPath.section << 10 | indexPath.row;
-                cell.clearButton.tag = cell.textView.tag;
                 cell.clearButton.removeTarget(nil, action: nil, for: .touchUpInside)
                 cell.clearButton.addTarget(self, action: #selector(onClearButtonPressed), for: .touchUpInside)
+                cell.clearButton.tintColor = UIColor.buttonBgColorDisabled
             }
             outCell = cell
         }
@@ -160,15 +90,48 @@ final class BLEChangeDeviceNameViewController: OABaseNavbarViewController {
         newDeviceName = ""
         generateData()
         tableView.reloadData()
+        navigationItem.setRightBarButtonItems(isEnabled: false, with: UIColor.buttonBgColorDisabled)
+    }
+}
+
+private extension UINavigationItem {
+    func setRightBarButtonItems(isEnabled: Bool, with tintColor: UIColor? = nil) {
+        rightBarButtonItems?.forEach {
+            if let button = $0.customView as? UIButton {
+                $0.isEnabled = isEnabled
+                button.isEnabled = isEnabled
+                button.tintColor = tintColor
+                button.setTitleColor(tintColor, for: .normal)
+            }
+        }
+    }
+}
+
+extension BLEChangeDeviceNameViewController: UITextViewDelegate {
+    
+    func textViewDidChange(_ textView: UITextView) {
+        updateFileNameFromEditText(name: textView.text)
     }
     
-    override func generateData() {
-        tableData.clearAllData()
-        let section = tableData.createNewSection()
-        let name = section.createNewRow()
-        
-        name.cellType = OATextMultilineTableViewCell.getIdentifier()
-        name.key = "name_key"
-        name.title = newDeviceName
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false;
+        }
+        return true;
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    private func updateFileNameFromEditText(name: String) {
+        let text = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        navigationItem.setRightBarButtonItems(isEnabled: false, with: UIColor.buttonBgColorDisabled)
+        if !text.isEmpty {
+            newDeviceName = text
+            navigationItem.setRightBarButtonItems(isEnabled: true, with: UIColor.buttonBgColorPrimary)
+        }
     }
 }

@@ -14,13 +14,7 @@ extension Notification.Name {
 }
 
 class Device {
-//    private static let BATTERY_LOW_LEVEL_THRESHOLD = 15
-//    private static let BATTERY_UNKNOWN_LEVEL_VALUE = -1
-    
-    //var onRSSIUpdateAction: (() -> Void)? = nil
-    
-    // let deviceId: String? = nil
-  //  var batteryLevel = BATTERY_UNKNOWN_LEVEL_VALUE
+    var deviceType: DeviceType!
     var peripheral: Peripheral!
     var rssi = -1
     var deviceName: String = ""
@@ -129,7 +123,6 @@ extension Device {
                 if rssi != RSSI {
                     rssi = RSSI
                     NotificationCenter.default.post(name: .DeviceRSSIUpdated, object: nil)
-                    //onRSSIUpdateAction?()
                 }
                 debugPrint(self.rssi)
             }

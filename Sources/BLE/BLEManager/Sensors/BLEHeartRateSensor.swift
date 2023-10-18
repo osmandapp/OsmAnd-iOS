@@ -49,8 +49,11 @@ final class BLEHeartRateSensor: Sensor {
     override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
         switch characteristic.uuid {
         case GattAttributes.CHARACTERISTIC_HEART_RATE_MEASUREMENT.CBUUIDRepresentation:
-            heartRateData.heartRate = heartRate(from: characteristic)
-            result(.success)
+            let heartRate = heartRate(from: characteristic)
+            if heartRateData.heartRate != heartRate {
+                heartRateData.heartRate = heartRate
+                result(.success)
+            }
             debugPrint("bpm: \(heartRateData.heartRate)")
         case GattAttributes.CHARACTERISTIC_HEART_RATE_BODY_PART.CBUUIDRepresentation:
             heartRateData.bodyPart = bodyLocation(from: characteristic)

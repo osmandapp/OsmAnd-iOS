@@ -62,13 +62,13 @@ final class BLEManager {
                     Self.logger.error("BLEManager -> serviceUUIDs is empty")
                     return
                 }
-                let uuids = serviceUUIDs.map{ $0.uuidString.lowercased() }
+                let uuids = serviceUUIDs.map { $0.uuidString.lowercased() }
                 if let device = DeviceFactory.createDevice(with: uuids) {
                     device.peripheral = peripheral
                     device.rssi = rssi
                     device.deviceName = advertisementData["kCBAdvDataLocalName"] as? String ?? ""
                     device.addObservers()
-                    self.discoveredDevices.append(device)
+                    discoveredDevices.append(device)
                     successHandler()
                 }
             case .scanStopped(let peripherals, let error):

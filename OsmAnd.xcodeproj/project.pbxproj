@@ -3595,6 +3595,10 @@
 		DAFE4D3F22169B4D009731CA /* map_osm_note_resolved@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D3022169B4C009731CA /* map_osm_note_resolved@3x.png */; };
 		FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */; };
 		FA359EE02ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EDF2ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift */; };
+		FA359EE52ADF026D0001C11D /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EE42ADF026D0001C11D /* DeviceType.swift */; };
+		FA359EE92ADFC04A0001C11D /* DeviceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EE82ADFC04A0001C11D /* DeviceSettings.swift */; };
+		FA359EEB2ADFC2CF0001C11D /* DevicesSettingsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EEA2ADFC2CF0001C11D /* DevicesSettingsCollection.swift */; };
+		FA359EED2ADFC6910001C11D /* WheelDeviceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EEC2ADFC6910001C11D /* WheelDeviceSettings.swift */; };
 		FA4195592AAB55E6007CBBAB /* ShadowTransporentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4195582AAB55E6007CBBAB /* ShadowTransporentView.swift */; };
 		FA44BF3B2A71123D000D2F5F /* ic_banner_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF2F2A71123B000D2F5F /* ic_banner_close@2x.png */; };
 		FA44BF3C2A71123D000D2F5F /* ic_custom_osmand_start_logo_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF302A71123B000D2F5F /* ic_custom_osmand_start_logo_big@3x.png */; };
@@ -8373,6 +8377,10 @@
 		F905FB9C7B198BF071D402C0 /* Pods-OsmAnd Maps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.release.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.release.xcconfig"; sourceTree = "<group>"; };
 		FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBannerCell.swift; sourceTree = "<group>"; };
 		FA359EDF2ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEChangeDeviceNameViewController.swift; sourceTree = "<group>"; };
+		FA359EE42ADF026D0001C11D /* DeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
+		FA359EE82ADFC04A0001C11D /* DeviceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSettings.swift; sourceTree = "<group>"; };
+		FA359EEA2ADFC2CF0001C11D /* DevicesSettingsCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicesSettingsCollection.swift; sourceTree = "<group>"; };
+		FA359EEC2ADFC6910001C11D /* WheelDeviceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelDeviceSettings.swift; sourceTree = "<group>"; };
 		FA4195582AAB55E6007CBBAB /* ShadowTransporentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowTransporentView.swift; sourceTree = "<group>"; };
 		FA44BF2F2A71123B000D2F5F /* ic_banner_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_banner_close@2x.png"; path = "Resources/Icons/ic_banner_close@2x.png"; sourceTree = "<group>"; };
 		FA44BF302A71123B000D2F5F /* ic_custom_osmand_start_logo_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osmand_start_logo_big@3x.png"; path = "Resources/Icons/ic_custom_osmand_start_logo_big@3x.png"; sourceTree = "<group>"; };
@@ -14603,6 +14611,16 @@
 			path = BLEChangeDeviceName;
 			sourceTree = "<group>";
 		};
+		FA359EE72ADFC0420001C11D /* DeviceSettings */ = {
+			isa = PBXGroup;
+			children = (
+				FA359EE82ADFC04A0001C11D /* DeviceSettings.swift */,
+				FA359EEA2ADFC2CF0001C11D /* DevicesSettingsCollection.swift */,
+				FA359EEC2ADFC6910001C11D /* WheelDeviceSettings.swift */,
+			);
+			path = DeviceSettings;
+			sourceTree = "<group>";
+		};
 		FA4195572AAB55D4007CBBAB /* ShadowTransporentView */ = {
 			isa = PBXGroup;
 			children = (
@@ -14650,6 +14668,7 @@
 		FAA650332ADD42990020DCEA /* BLE */ = {
 			isa = PBXGroup;
 			children = (
+				FA359EE72ADFC0420001C11D /* DeviceSettings */,
 				FA359EDE2ADEA1FE0001C11D /* BLEChangeDeviceName */,
 				FAA650392ADD42C40020DCEA /* BLEManager */,
 				FAA650462ADD42C40020DCEA /* BLEExternalSensors */,
@@ -14680,10 +14699,11 @@
 		FAA650392ADD42C40020DCEA /* BLEManager */ = {
 			isa = PBXGroup;
 			children = (
-				FAA6503A2ADD42C40020DCEA /* Sensors */,
 				FAA6503E2ADD42C40020DCEA /* BLEManager.swift */,
-				FAA650402ADD42C40020DCEA /* Devices */,
 				FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */,
+				FAA650422ADD42C40020DCEA /* GattAttributes.swift */,
+				FAA6503A2ADD42C40020DCEA /* Sensors */,
+				FAA650402ADD42C40020DCEA /* Devices */,
 			);
 			path = BLEManager;
 			sourceTree = "<group>";
@@ -14691,8 +14711,8 @@
 		FAA6503A2ADD42C40020DCEA /* Sensors */ = {
 			isa = PBXGroup;
 			children = (
-				FAA6503B2ADD42C40020DCEA /* BLEBatterySensor.swift */,
 				FAA6503C2ADD42C40020DCEA /* Sensor.swift */,
+				FAA6503B2ADD42C40020DCEA /* BLEBatterySensor.swift */,
 				FAA6503D2ADD42C40020DCEA /* BLEHeartRateSensor.swift */,
 			);
 			path = Sensors;
@@ -14701,11 +14721,11 @@
 		FAA650402ADD42C40020DCEA /* Devices */ = {
 			isa = PBXGroup;
 			children = (
-				FAA650412ADD42C40020DCEA /* BLEHeartRateDevice.swift */,
-				FAA650422ADD42C40020DCEA /* GattAttributes.swift */,
-				FAA650432ADD42C40020DCEA /* BLETemperatureDevice.swift */,
-				FAA650442ADD42C40020DCEA /* DeviceFactory.swift */,
 				FAA650452ADD42C40020DCEA /* Device.swift */,
+				FA359EE42ADF026D0001C11D /* DeviceType.swift */,
+				FAA650442ADD42C40020DCEA /* DeviceFactory.swift */,
+				FAA650412ADD42C40020DCEA /* BLEHeartRateDevice.swift */,
+				FAA650432ADD42C40020DCEA /* BLETemperatureDevice.swift */,
 			);
 			path = Devices;
 			sourceTree = "<group>";
@@ -17805,6 +17825,7 @@
 				DA5A81A826C563A700F274C7 /* OASearchResult.mm in Sources */,
 				DA5A855526C563A900F274C7 /* OASimulationProvider.mm in Sources */,
 				DA5A848226C563A900F274C7 /* OADistanceToPointWidget.mm in Sources */,
+				FA359EE92ADFC04A0001C11D /* DeviceSettings.swift in Sources */,
 				DA5A857026C563A900F274C7 /* OARouteCalculationParams.mm in Sources */,
 				DA5A816D26C563A700F274C7 /* OsmAndAppImpl.mm in Sources */,
 				DA5A856F26C563A900F274C7 /* OAAlarmInfo.mm in Sources */,
@@ -17869,6 +17890,7 @@
 				DA5A81CF26C563A700F274C7 /* QuadRect.m in Sources */,
 				DA5A83F426C563A800F274C7 /* OACategoriesTableViewController.mm in Sources */,
 				DA5A825E26C563A700F274C7 /* OAFilledButtonCell.mm in Sources */,
+				FA359EEB2ADFC2CF0001C11D /* DevicesSettingsCollection.swift in Sources */,
 				DA5A81F326C563A700F274C7 /* OALaunchScreenViewController.m in Sources */,
 				DA4ABF1F2876DA6800B996EF /* OAResourcesSettingsItem.mm in Sources */,
 				DA5A844D26C563A900F274C7 /* OAMapViewController.mm in Sources */,
@@ -18090,6 +18112,7 @@
 				46FB65BA2A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift in Sources */,
 				DA5A845526C563A900F274C7 /* OAOsmEditsLayer.mm in Sources */,
 				DA5A815526C563A700F274C7 /* OACarPlayActiveViewController.m in Sources */,
+				FA359EED2ADFC6910001C11D /* WheelDeviceSettings.swift in Sources */,
 				DA5A82E726C563A800F274C7 /* OAGPXRecTableViewCell.m in Sources */,
 				462F13EC283FD0D400B73795 /* OAOsmLiveFeaturesCardView.m in Sources */,
 				46FB65B92A8BBC2000A21850 /* CoordinatesBaseWidget.swift in Sources */,
@@ -18243,6 +18266,7 @@
 				DA5A854726C563A900F274C7 /* OANetworkUtilities.m in Sources */,
 				B247453827E35E9B00C18C3F /* OACloudIntroductionHeaderView.m in Sources */,
 				C588D1EC298BF2D3001FEDBD /* OASearchHistoryTableItem.m in Sources */,
+				FA359EE52ADF026D0001C11D /* DeviceType.swift in Sources */,
 				DA5A813A26C563A700F274C7 /* OAEntityInfo.m in Sources */,
 				DA5A846A26C563A900F274C7 /* OADestination.mm in Sources */,
 				DA5A816326C563A700F274C7 /* OADaytimeAppearance.m in Sources */,

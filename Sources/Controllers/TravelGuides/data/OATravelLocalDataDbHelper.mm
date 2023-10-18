@@ -494,7 +494,7 @@
         if (sqlite3_open(dbpath, &_travelGuidesDB) == SQLITE_OK)
         {
             sqlite3_stmt *statement;
-            const char *stmt = [[NSString stringWithFormat:@"UPDATE %@ SET %@ = ?, %@ = ? WHERE %@ = ? AND %@ = ? AND %@ = ?)", HISTORY_TABLE_NAME, HISTORY_COL_IS_PART_OF, HISTORY_COL_LAST_ACCESSED, HISTORY_COL_ARTICLE_TITLE, HISTORY_COL_LANG, HISTORY_COL_TRAVEL_BOOK] UTF8String];
+            const char *stmt = [[NSString stringWithFormat:@"UPDATE %@ SET %@ = ?, %@ = ? WHERE %@ = ? AND %@ = ? AND %@ = ?", HISTORY_TABLE_NAME, HISTORY_COL_IS_PART_OF, HISTORY_COL_LAST_ACCESSED, HISTORY_COL_ARTICLE_TITLE, HISTORY_COL_LANG, HISTORY_COL_TRAVEL_BOOK] UTF8String];
             sqlite3_prepare_v2(_travelGuidesDB, stmt, -1, &statement, NULL);
             sqlite3_bind_text(statement, 1, [item.isPartOf UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_bind_double(statement, 2, item.lastAccessed);

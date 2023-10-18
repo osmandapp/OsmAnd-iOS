@@ -209,14 +209,33 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem]! {
-        let menu = OAWikiArticleHelper.createLanguagesMenu(langs, selectedLocale: selectedLang, delegate: self)
-        let languageButton = createRightNavbarButton(nil, iconName: "ic_navbar_languge", action: #selector(onLanguagesButtonClicked), menu: menu)
+        let languageMenu = OAWikiArticleHelper.createLanguagesMenu(langs, selectedLocale: selectedLang, delegate: self)
+        let languageButton = createRightNavbarButton(nil, iconName: "ic_navbar_languge", action: #selector(onLanguagesButtonClicked), menu: languageMenu)
         
-        let optionsButton = createRightNavbarButton(nil, iconName: "ic_navbar_overflow_menu_stroke", action: #selector(onOptionsButtonClicked), menu: nil)
+        let shareAction = UIAction(title: localizedString("shared_string_share"), image: UIImage(systemName: "square.and.arrow.up") ) { _ in
+            print("shareAction")
+        }
         
-        //TODO: add accessibilityLabels
-        //optionsButton?.accessibilityLabel = "Label"
-        //optionsButton?.accessibilityValue = "value"
+        let noDownloadAction = UIAction(title: localizedString("dont_download")) { _ in
+            print("noDownloadAction")
+        }
+        let overWifiAction = UIAction(title: localizedString("over_wifi_only")) { _ in
+            print("overWifiAction")
+        }
+        let anyNetworkAction = UIAction(title: localizedString("over_any_network")) { _ in
+            print("anyNetworkAction")
+        }
+        
+        let imageActionsAboveDivider = [noDownloadAction, overWifiAction, anyNetworkAction]
+        let divider = UIMenu(title: "", options: .displayInline, children: imageActionsAboveDivider)
+        let downloadNowAction = UIAction(title: localizedString("download_only_now"), image: UIImage(systemName: "square.and.arrow.down")) { _ in
+            print("foo")
+        }
+        let imagesMenu = UIMenu(title: localizedString("images"), image: UIImage(systemName: "photo"), children: [divider, downloadNowAction])
+        
+        let optionsMenu = UIMenu(title: "", children: [shareAction, imagesMenu])
+        let optionsButton = createRightNavbarButton(nil, iconName: "ic_navbar_overflow_menu_stroke", action: nil, menu: optionsMenu)
+        
         return [optionsButton!, languageButton!]
     }
     
@@ -238,10 +257,6 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
 
     
     //MARK: Actions
-    
-    @objc func onOptionsButtonClicked() {
-        print("onOptionsButtonClicked")
-    }
     
     @objc func onLanguagesButtonClicked() {
         if langs == nil || langs!.count <= 1 {

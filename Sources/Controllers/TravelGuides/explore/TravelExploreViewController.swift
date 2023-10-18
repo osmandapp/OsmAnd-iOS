@@ -55,15 +55,13 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if shouldShowSearch() {
-            searchController = UISearchController(searchResultsController: nil)
-            searchController.searchBar.delegate = self
-            searchController.obscuresBackgroundDuringPresentation = false
-            self.navigationItem.searchController = searchController
-            self.navigationItem.hidesSearchBarWhenScrolling = false
-            setupSearchControllerWithFilter(false)
-            isInited = true
-        }
+        searchController = UISearchController(searchResultsController: nil)
+        searchController.searchBar.delegate = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        self.navigationItem.searchController = searchController
+        self.navigationItem.hidesSearchBarWhenScrolling = false
+        setupSearchControllerWithFilter(false)
+        isInited = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -230,22 +228,50 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
             
             let section = tableData.createNewSection()
             
-            let historyItems = TravelObfHelper.shared.getBookmarksHelper().getAllHistory()
-            for item in historyItems.reversed() {
-                let resultRow = section.createNewRow()
-                resultRow.cellType = SearchTravelCell.getIdentifier()
-                resultRow.title = item.articleTitle
-                resultRow.descr = item.isPartOf
-                resultRow.setObj("ic_custom_history", forKey: "noImageIcon")
+            if TravelObfHelper.shared.isOnlyDefaultTravelBookPresent() {
+                let headerTitleRow = section.createNewRow()
+                headerTitleRow.cellType = OARightIconTableViewCell.getIdentifier()
+                headerTitleRow.title = localizedString("no_travel_guides_data_title")
+                headerTitleRow.iconName = "ic_custom_import"
+                headerTitleRow.setObj(NSNumber(booleanLiteral: true), forKey: "kHideSeparator")
+                
+                let headerDescrRow = section.createNewRow()
+                headerDescrRow.cellType = OARightIconTableViewCell.getIdentifier()
+                headerDescrRow.descr = localizedString("no_travel_guides_data_descr")
+                headerDescrRow.setObj(NSNumber(booleanLiteral: false), forKey: "kHideSeparator")
+                
+            } else {
+                
+                let historyItems = TravelObfHelper.shared.getBookmarksHelper().getAllHistory()
+                for item in historyItems.reversed() {
+                    let resultRow = section.createNewRow()
+                    resultRow.cellType = SearchTravelCell.getIdentifier()
+                    resultRow.title = item.articleTitle
+                    resultRow.descr = item.isPartOf
+                    resultRow.setObj("ic_custom_history", forKey: "noImageIcon")
+                }
+                let clearHistoryRow = section.createNewRow()
+                clearHistoryRow.cellType = OASimpleTableViewCell.getIdentifier()
+                clearHistoryRow.title = localizedString("clear_history")
+                clearHistoryRow.iconName = "ic_custom_history"
             }
-            let clearHistoryRow = section.createNewRow()
-            clearHistoryRow.cellType = OASimpleTableViewCell.getIdentifier()
-            clearHistoryRow.title = localizedString("clear_history")
-            clearHistoryRow.iconName = "ic_custom_history"
             
         } else if screenMode == .searchResults {
             
             let section = tableData.createNewSection()
+            
+            if TravelObfHelper.shared.isOnlyDefaultTravelBookPresent() {
+                let headerTitleRow = section.createNewRow()
+                headerTitleRow.cellType = OARightIconTableViewCell.getIdentifier()
+                headerTitleRow.title = localizedString("no_travel_guides_data_title")
+                headerTitleRow.iconName = "ic_custom_import"
+                headerTitleRow.setObj(NSNumber(booleanLiteral: true), forKey: "kHideSeparator")
+                
+                let headerDescrRow = section.createNewRow()
+                headerDescrRow.cellType = OARightIconTableViewCell.getIdentifier()
+                headerDescrRow.descr = localizedString("no_travel_guides_data_descr")
+                headerDescrRow.setObj(NSNumber(booleanLiteral: false), forKey: "kHideSeparator")
+            }
             
             if searchResults.count > 0 && searchQuery.length > 0 {
                 for item in searchResults {
@@ -410,11 +436,13 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
                 cell = nib?.first as? OARightIconTableViewCell
                 cell?.selectionStyle = .none
                 cell?.leftIconVisibility(false)
+                cell?.titleLabel.textColor = UIColor.textColorPrimary
+                cell?.descriptionLabel.textColor = UIColor.textColorSecondary
             }
             if let cell {
                 if let title = item.title {
                     cell.titleLabel.text = title
-                    cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+                    cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
                     cell.titleVisibility(true)
                 } else {
                     cell.titleVisibility(false)

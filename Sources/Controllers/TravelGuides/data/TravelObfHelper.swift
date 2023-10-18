@@ -251,7 +251,7 @@ class TravelObfHelper : NSObject {
     func isOnlyDefaultTravelBookPresent() -> Bool {
         let books = TravelObfHelper.shared.getReaders()
         if (books.count == 0 ||
-            books.count == 1 && books[0] == DEFAULT_WIKIVOYAGE_TRAVEL_OBF) {
+            books.count == 1 && books[0].lowercased() == DEFAULT_WIKIVOYAGE_TRAVEL_OBF.lowercased()) {
             return true
         }
         return false

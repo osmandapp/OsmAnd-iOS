@@ -43,8 +43,8 @@
     EAGLContext* _glRenderContext;
     EAGLContext* _glWorkerContext;
     EAGLRenderingAPI _glVersion;
-    GLuint _framebufferDepthTexture;
-    GLuint _framebufferColorRenderbuffer;
+    GLuint _depthRenderBuffer;
+    GLuint _colorRenderBuffer;
     GLuint _framebuffer;
     CADisplayLink* _displayLink;
 
@@ -97,8 +97,8 @@
     _glShareGroup = nil;
     _glRenderContext = nil;
     _glWorkerContext = nil;
-    _framebufferDepthTexture = 0;
-    _framebufferColorRenderbuffer = 0;
+    _depthRenderBuffer = 0;
+    _colorRenderBuffer = 0;
     _framebuffer = 0;
     _displayLink = nil;
 
@@ -803,11 +803,11 @@ forcedUpdate:(BOOL)forcedUpdate
     glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
     validateGL();
 
-    // Setup color component of the frame-buffer
-    glGenRenderbuffers(1, &_framebufferColorRenderbuffer);
+    // Setup color component of renderbuffer
+    glGenRenderbuffers(1, &_colorRenderBuffer);
     validateGL();
-    NSAssert(_framebufferColorRenderbuffer != 0, @"Failed to allocate color component for frame buffer");
-    glBindRenderbuffer(GL_RENDERBUFFER, _framebufferColorRenderbuffer);
+    NSAssert(_colorRenderBuffer != 0, @"Failed to allocate color component for renderbuffer");
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
     validateGL();
     if (![_glRenderContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer])
     {
@@ -821,37 +821,18 @@ forcedUpdate:(BOOL)forcedUpdate
     validateGL();
     OALog(@"[OAMapRendererView %p] View size %dx%d", self, _viewSize.x, _viewSize.y);
 
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _framebufferColorRenderbuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
     validateGL();
 
-    // Setup depth component of the frame-buffer (as a texture to allow reads from it)
-    // Build the texture that will serve as the depth attachment for the framebuffer.
-    glGenTextures(1, &_framebufferDepthTexture);
+    // Setup render buffer (depth component)
+    glGenRenderbuffers(1, &_depthRenderBuffer);
     validateGL();
-    NSAssert(_framebufferDepthTexture != 0, @"Failed to allocate depth component for frame buffer");
-    glBindTexture(GL_TEXTURE_2D, _framebufferDepthTexture);
+    NSAssert(_depthRenderBuffer != 0, @"Failed to allocate render buffer (depth component)");
+    glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
     validateGL();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES, _viewSize.x, _viewSize.y);
     validateGL();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    validateGL();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    validateGL();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    validateGL();
-    if (_glVersion == kEAGLRenderingAPIOpenGLES3)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, _viewSize.x, _viewSize.y, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, nullptr);
-        validateGL();
-    }
-    else
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, _viewSize.x, _viewSize.y, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, nullptr);
-        validateGL();
-    }
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _framebufferDepthTexture, 0);
-    validateGL();
-    glBindTexture(GL_TEXTURE_2D, 0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
     validateGL();
 
     // Check that we've initialized our framebuffer fully
@@ -875,27 +856,22 @@ forcedUpdate:(BOOL)forcedUpdate
         return;
     }
 
-    if (_renderer->isAttachedToRenderTarget())
-    {
-        _renderer->detachFromRenderTarget();
-    }
-
     if (_framebuffer != 0)
     {
         glDeleteFramebuffers(1, &_framebuffer);
         _framebuffer = 0;
         validateGL();
     }
-    if (_framebufferColorRenderbuffer != 0)
+    if (_colorRenderBuffer != 0)
     {
-        glDeleteRenderbuffers(1, &_framebufferColorRenderbuffer);
-        _framebufferColorRenderbuffer = 0;
+        glDeleteRenderbuffers(1, &_colorRenderBuffer);
+        _colorRenderBuffer = 0;
         validateGL();
     }
-    if (_framebufferDepthTexture != 0)
+    if (_depthRenderBuffer != 0)
     {
-        glDeleteTextures(1, &_framebufferDepthTexture);
-        _framebufferDepthTexture = 0;
+        glDeleteRenderbuffers(1, &_depthRenderBuffer);
+        _depthRenderBuffer = 0;
         validateGL();
     }
 }
@@ -963,8 +939,6 @@ forcedUpdate:(BOOL)forcedUpdate
         _renderer->setWindowSize(_viewSize);
         _renderer->setViewport(OsmAnd::AreaI(OsmAnd::PointI(0, 0), _viewSize));
         _renderer->setMapTarget([self getCenterPixel], self.target31);
-
-        _renderer->attachToRenderTarget();
     }
 
     if (self.rendererDelegate)
@@ -1024,7 +998,7 @@ forcedUpdate:(BOOL)forcedUpdate
         validateGL();
 
         // Present results
-        glBindRenderbuffer(GL_RENDERBUFFER, _framebufferColorRenderbuffer);
+        glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
         validateGL();
         [_glRenderContext presentRenderbuffer:GL_RENDERBUFFER];
 

@@ -88,7 +88,7 @@
 "save_track_interval_globally" = "Intervalo de registro";
 "rec_interval_minimum" = "Mínimo";
 "track_start_rec" = "Iniciar gravação do percurso";
-"track_rec_addon_q" = "Por favor, ative o complemento \"Gravar viagem\" para gravar e guardar os seus percursos";
+"track_rec_addon_q" = "Por favor, ative o complemento de gravação de trilhas para gravar e salvar suas trilhas";
 "track_interval_remember" = "Lembrar a minha escolha";
 "track_clear" = "Limpar trilho atual";
 "track_clear_q" = "Quer limpar o trilho atual?";
@@ -613,7 +613,7 @@
 "access_hint_enter_name" = "Digite um nome";
 "shared_string_not_selected" = "Nada selecionado";
 "shared_string_get" = "Obter";
-"srtm_plugin_disabled" = "Curvas de nível desativadas";
+"srtm_plugin_disabled" = "Topografia desativada";
 "shared_string_open" = "Aberto";
 "osm_live_active" = "Ativo";
 "moving_time" = "Tempo em movimento";
@@ -855,7 +855,7 @@
 "osm_editing_plugin_description" = "Faça contribuições para o OpenStreetMap, uma comunidade global que mantém um mapa abrangente do mundo e fornece dados atualizados de código aberto para todos os usuários.\n\nVocê pode encontrar instruções sobre como editar o mapa em nosso site https://osmand.net/docs/user/plugins/osm-editing .";
 "product_desc_wiki" = "Artigos da Wikipédia baseados em localização no mapa";
 "purchases_feature_desc_wikipedia" = "Fornece todos os artigos da Wikipédia relacionados a lugares offline, ajudando você a aprender sobre os lugares que você visita em sua viagem com simples toques no mapa. Não se esqueça de baixar os arquivos de mapas da Wikipedia para as respectivas regiões.";
-"srtm_plugin_name" = "Curvas de nível";
+"srtm_plugin_name" = "Topografia";
 "product_desc_srtm" = "Avaliação visual da forma da superfície terrestre";
 "srtm_plugin_description" = "As informações do terreno, como curvas de nível, sombras e declives, ajudam você a visualizar a forma e a suavidade do terreno, a dirigibilidade e mais. As informações topográficas em um mapa podem ser representadas pelo sombreamento do declive, linhas de contorno e/ou cor da inclinação do plano. \n\nOs dados subjacentes são originários do SRTM e ASTER.\n\nLeia mais em http://osmand.net/docs/user/plugins/contour-lines .";
 "product_desc_sea_depth_contours" = "Curvas de nível e balizas marítimas";
@@ -874,8 +874,8 @@
 "you_searching" = "Está a pesquisar";
 "from_location" = "longe";
 "show_alt_in_drive" = "Mostrar altitude em modo de navegação";
-"prch_wiki_info" = "A extensão Wikipédia ativa informações para mapas da Wikipédia a que tem direito, comprado ou descarregado dentro do limite gratuito.";
-"prch_srtm_info" = "A extensão curvas de nível ativa curvas de nível para os mapas a que tem direito, comprado ou descarregado dentro do limite gratuito.";
+"prch_wiki_info" = "O complemento Wikipédia ativa informações para mapas da Wikipédia a que tem direito, comprado ou descarregado dentro do limite gratuito.";
+"prch_srtm_info" = "O complemento de topografia permite linhas de contorno para mapas aos quais você tem direito, comprados ou baixados dentro do limite gratuito.";
 "time_closed" = "Fechado";
 "time_will_open" = "Abre às";
 "menu_all_trips" = "Todos os trilhos";
@@ -900,8 +900,8 @@
 "plugin_popup_wiki_desc" = "Para usar o complemento Wikipédia, primeiro descarregue os dados da Wikipédia de uma região";
 "plugin_popup_wiki_ask" = "Para descarregar dados da Wikipédia, tem de ativar o complemento: <b>Wikipédia</b>";
 "plugin_popup_srtm_title" = "Descarregar curvas de nível";
-"plugin_popup_srtm_desc" = "Para usar o recurso Curvas de nível, primeiro descarregue as curvas de nível de uma região";
-"plugin_popup_srtm_ask" = "Para descarregar curvas de nível, tem de ativar o complemento: <b>Curvas de nível</b>";
+"plugin_popup_srtm_desc" = "Para usar o recurso Topografia, primeiro baixe as curvas de nível de uma região";
+"plugin_popup_srtm_ask" = "Para descarregar curvas de nível, tem de ativar o complemento: <b>Topografia</b>";
 "plugin_popup_nautical_title" = "Descarregar mapas náuticos";
 "plugin_popup_nautical_desc" = "Descarregue primeiro os mapas náuticos.\nDepois aceda a <b>Configurações de mapa</b> > <b>Tipo de mapa</b> e ative o estilo <b>Náutico</b>";
 "plugin_popup_trip_planning_ask" = "Para começar a planear a viagem, tem de ativar o complemento: <b>Planeamento de viagem</b>";
@@ -1669,9 +1669,9 @@
 "nav_type_brouter" = "BRouter";
 "nav_type_osmand" = "OsmAnd (roteamento offline)";
 "reset_profile_action_descr" = "Resetar todas as configurações de perfil para os padrões de instalação. Ao tocar em Resetar todas as alterações serão descartadas, esta ação não pode ser desfeita.";
-"map_settings_add_maps_slopes" = "São necessários mapas adicionais para visualizar declives no mapa";
-"map_settings_hillshade_description" = "Os mapas de sombras de relevo permitem visualizar declives, picos e planícies usando diferentes níveis de cinzas";
-"map_settings_slopes_description" = "Os mapas de declives usam cores diferentes para visualizar o terreno";
+"map_settings_add_maps_slopes" = "São necessários mapas adicionais para visualizar declives no mapa.";
+"map_settings_hillshade_description" = "Os mapas de sombras Mapa usando tons escuros para mostrar encostas, picos e planícies.";
+"map_settings_slopes_description" = "Declives são visualizações coloridas no terreno.";
 "map_settings_slopes_legend" = "Pode ler mais sobre declives na Wikipédia";
 "ios_release_3_90" = "- Apresentada a funcionalidade \"Planejar uma rota\" para planejar futuras viagens com capacidade de criar segmentos de trilha usando diferentes tipos de navegação\n- Adicionada uma opção para ativar uma bússola sobre a ferramenta \"Raio de Régua\"\n- Adicionada a opção \"Sobreposição de nome dos POI\", permitindo mostrar nomes de favoritos, pontos de trajetos de trilhas e marcadores no mapa\n- Adicionadas novas ações rápidas para visibilidade das curvas de nível e do terreno no mapa, alterando um perfil de aplicação, eliminando um ponto intermédio mais próximo\n- Problemas corrigidos com a categoria de pesquisa da Wikipédia ausentes\n- Importar Configurações: bugs corrigidos, suporte adicionado para todos os tipos de dados disponíveis no OsmAnd\n- Edição do OpenStreetMap: corrigido o seletor de tempo e a incapacidade de alterar o comentário do conjunto de alterações\n";
 "ios_release_3_80" = "• Adicionados \"Perfis da aplicação\" com configurações independentes\n• Nova disposição das configurações por perfis e tipos: navegação, geral, mapa e ecrã\n• Capacidade de importar ou exportar configurações de perfis\n• Adicionadas origens de dados para fotografias online\n• Adicionada a capacidade de descarregar mapas online para a cache\n• Algoritmos de \"Pesquisa\" melhorados\n";
@@ -1738,7 +1738,7 @@
 "toggle_public_transport" = "Mostrar/ocultar transportes públicos";
 "quick_action_transport_descr" = "Botão que mostra ou oculta o transporte público no mapa.";
 "quick_action_dir_from_descr" = "Toque nesta ação para navegar a partir do ponto central do ecrã atual.";
-"enable_hillshade" = "Permite a visualização dos dados do terreno";
+"enable_hillshade" = "Ative a visualização de dados do terreno em mapas de sombras de relevo ou declives.";
 "enable_contour_lines" = "Permite visualizar curvas de nível no mapa";
 "quick_action_contour_lines_descr" = "Botão que mostra ou oculta linhas de contorno no mapa.";
 "toggle_hillshade" = "Mostrar/ocultar terreno";
@@ -1758,7 +1758,7 @@
 "coordinates_widget_current_location" = "Widget de coordenadas";
 "osm_editing_access_descr" = "Pode ver todas as suas edições e notas locais em %@. Os pontos já enviados não são mostrados no OsmAnd.";
 "osm_editing_settings_descr" = "As configurações deste complemento são globais e aplicam-se a todos os perfis.";
-"shared_string_loading" = "A carregar…";
+"shared_string_loading" = "Carregando…";
 "res_offlineSQL_URL_warning" = "Não suportado para este tipo de mapa";
 "res_zoom_invalid_value" = "Os valores de ampliação devem estar no intervalo 1 - 22";
 "res_expire_warning" = "O tempo de expiração deve ser um número entre 0 e 10000000";
@@ -1872,8 +1872,8 @@
 "map_settings_hide_polygons_desc" = "Esta opção afeta apenas os mapas vetoriais offline do OsmAnd";
 "map_settings_hide_polygons" = "Ocultar polígonos";
 "map_settings_show_slider_map" = "Mostrar controlo deslizante no mapa";
-"map_settings_add_maps_hillshade" = "São necessários mapas adicionais para ver as sombras de relevo";
-"map_settings_zoom_level_description" = "Definir o nível mínimo e máximo de ampliação para mostrar a camada";
+"map_settings_add_maps_hillshade" = "São necessários mapas adicionais para ver as sombras de relevo.";
+"map_settings_zoom_level_description" = "Definir os níveis mínimo e máximo de zoom nos quais a camada será exibida";
 "map_settings_layer_transparency" = "Transparência da camada";
 "street_level_imagery" = "Imagens de rua";
 "map_settings_install_more" = "Instalar mais...";
@@ -2672,7 +2672,7 @@
 "shared_string_do_not_exist" = "Não existe";
 "cloud_conflict_descr" = "As versões local e na nuvem contém alterações desde a última sincronização.";
 "local_changes_will_be_dismissed" = "Alterações locais serão descartadas";
-"download_heightmap_maps" = "Mapa de atitudes";
+"download_heightmap_maps" = "Mapa de atitudes (3D)";
 "checking_progress" = "Checando…";
 "use_heightmap_setting" = "Usar mapas de altitude para relevos em 3D";
 "nautical_depth_points" = "Pontos de profundidade náutica";
@@ -3034,3 +3034,10 @@
 "coordinates_widget_map_center_desc" = "Mostra as coordenadas geográficas do centro do mapa atual";
 "map_marker_interval_dialog_desc" = "Especifique o intervalo de tempo para o qual a velocidade média será medida para calcular o tempo estimado de chegada.";
 "map_widget_rendering_fps_desc" = "Mostra a rapidez com que o mapa e os elementos do mapa são exibidos e atualizados, expressos em quadros por segundo (FPS).";
+"weather_updates_manual" = "A previsão do tempo deve ser atualizada manualmente.";
+"unsaved_changes_will_be_lost_discard" = "Quaisquer alterações não salvas serão perdidas. Descartar mudanças?";
+"weather_update_parameters_wifi" = "A previsão do tempo será atualizada apenas se a rede Wi-Fi estiver disponível.";
+"weather_update_over_wifi_only" = "Somente por Wi-Fi";
+"weather_update_parameters_disabled" = "As atualizações automáticas serão desativadas.";
+"auto_update" = "Atualização automática";
+"weather_update_parameters_any_network" = "A previsão do tempo será atualizada em qualquer rede. Dados móveis podem ser usados.";

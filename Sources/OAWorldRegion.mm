@@ -723,6 +723,25 @@
     return nil;
 }
 
+- (OAWorldRegion *) getFlattenedSubregion:(NSString *)regionId
+{
+    for (OAWorldRegion *region in _flattenedSubregions)
+        if ([region.regionId isEqualToString:regionId])
+            return region;
+
+    return nil;
+}
+
+- (NSArray<OAWorldRegion *> *) getFlattenedSubregions:(NSArray<NSString *> *)regionIds
+{
+    NSMutableArray<OAWorldRegion *> *res = [NSMutableArray array];
+    for (OAWorldRegion *region in _flattenedSubregions)
+        if ([regionIds containsObject:region.regionId])
+            [res addObject:region];
+
+    return res;
+}
+
 - (OAWorldRegion *) getRegionDataByDownloadName:(NSString *)downloadName
 {
     if (!downloadName)

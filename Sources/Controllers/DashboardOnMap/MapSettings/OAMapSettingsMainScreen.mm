@@ -497,10 +497,13 @@
         }
     }
 
-    [data addObject:@{
+    if (topographySectionData.count > 0)
+    {
+        [data addObject:@{
             @"group_name": OALocalizedString(@"map_settings_topography"),
             @"cells": topographySectionData
-    }];
+        }];
+    }
 
     NSMutableArray *overlayUnderlaySectionData = [NSMutableArray array];
     

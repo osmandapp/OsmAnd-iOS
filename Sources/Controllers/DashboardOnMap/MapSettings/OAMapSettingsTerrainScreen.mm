@@ -28,7 +28,7 @@
 #import "OAChoosePlanHelper.h"
 #import "OAIAPHelper.h"
 #import "OAPluginPopupViewController.h"
-#import "OAOsmandDevelopmentPlugin.h"
+#import "OASRTMPlugin.h"
 #import "OAManageResourcesViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OALinks.h"
@@ -47,8 +47,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     OsmAndAppInstance _app;
     OAIAPHelper *_iapHelper;
-    OAOsmandDevelopmentPlugin *_plugin;
-
+    OASRTMPlugin *_plugin;
     OATableDataModel *_data;
     NSInteger _availableMapsSection;
     NSInteger _minZoom;
@@ -71,8 +70,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         _app = [OsmAndApp instance];
         _iapHelper = [OAIAPHelper sharedInstance];
-        _plugin = (OAOsmandDevelopmentPlugin *) [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
-
+        _plugin = (OASRTMPlugin *) [OAPlugin getPlugin:OASRTMPlugin.class];
         settingsScreen = EMapSettingsScreenTerrain;
 
         vwController = viewController;
@@ -198,16 +196,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellIconTint : @(![_plugin.enable3DMaps get] || !isRelief3D ? color_icon_inactive : color_chart_orange),
             kCellSecondaryIconName : @"ic_payment_label_pro",
             @"value" : @([_plugin.enable3DMaps get]),
-        }];
-        OATableSectionData *cacheSection = [_data createNewSection];
-        cacheSection.footerText = type == EOATerrainTypeHillshade ? OALocalizedString(@"map_settings_add_maps_hillshade") : OALocalizedString(@"map_settings_add_maps_slopes");
-        [cacheSection addRowFromDictionary:@{
-            kCellKeyKey : @"cache",
-            kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
-            kCellTitleKey : OALocalizedString(@"shared_string_cache"),
-            kCellIconNameKey : @"ic_custom_storage",
-            kCellIconTint : @(color_icon_inactive),
-            @"value" : @"300 MB",
         }];
         if (_mapItems.count > 0)
         {
@@ -381,6 +369,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAValueTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if (cell)
         {
@@ -389,7 +378,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [cell leftIconVisibility:item.iconName.length > 0];
             cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
             cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
-            cell.accessoryType = ![item.key isEqualToString:@"cache"] ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
         }
         return cell;
     }

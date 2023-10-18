@@ -200,14 +200,17 @@
                 }
             }
         }
-        app.favoritesCollection->removeFavoriteLocations(toDelete);
-        NSArray<OAFavoriteItem *> *favourites = [NSArray arrayWithArray:[self getPointsFromGroups:self.appliedItems]];
-        std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoriteCollection(new OsmAnd::FavoriteLocationsGpxCollection());
-        for (OAFavoriteItem *favorite in favourites)
-            favoriteCollection->copyFavoriteLocation(favorite.favorite);
-        app.favoritesCollection->mergeFrom(favoriteCollection);
-        [app saveFavoritesToPermanentStorage];
-        [OAFavoritesHelper loadFavorites];
+        @synchronized(self.class)
+        {
+            app.favoritesCollection->removeFavoriteLocations(toDelete);
+            NSArray<OAFavoriteItem *> *favourites = [NSArray arrayWithArray:[self getPointsFromGroups:self.appliedItems]];
+            std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoriteCollection(new OsmAnd::FavoriteLocationsGpxCollection());
+            for (OAFavoriteItem *favorite in favourites)
+                favoriteCollection->copyFavoriteLocation(favorite.favorite);
+            app.favoritesCollection->mergeFrom(favoriteCollection);
+            [app saveFavoritesToPermanentStorage];
+            [OAFavoritesHelper loadFavorites];
+        }
     }
 }
 

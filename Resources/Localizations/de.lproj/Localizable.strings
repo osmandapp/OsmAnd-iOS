@@ -1720,7 +1720,7 @@
 "default_profile_descr" = "Wählen Sie ein Profil, das beim Start der Anwendung verwendet wird.";
 "shared_string_tones" = "Tonnen";
 "plugin_settings_descr" = "Erweiterungsmodul-Einstellungen für das ausgewählte Profil.";
-"settings_app_theme" = "Thema der Anwendung";
+"settings_app_theme" = "App-Thema";
 "instructions_repeat" = "Tippen Sie auf das Widget \"Nächste Richtungsangabe\", um Anweisungen zu wiederholen";
 "default_speed_dialog_msg" = "Schätzt die Ankunftszeit für unbekannte Straßentypen und begrenzt die Geschwindigkeit für alle Straßen (kann die Navigation beeinflussen)";
 "vessel_width_limit_description" = "Stellen Sie die Schiffsbreite ein, um schmale Brücken zu vermeiden";
@@ -1918,7 +1918,7 @@
 "tracks_on_map" = "Angezeigte Tracks";
 "shared_string_visible" = "Sichtbar";
 "searching" = "Suche…";
-"shared_string_loading" = "Lade…";
+"shared_string_loading" = "Wird geladen…";
 "poi_categories" = "POI Kategorien";
 "route_calc_progress" = "Berechne: %d%%";
 "carplay_active_message" = "Karte wird über CarPlay angezeigt";
@@ -3056,3 +3056,4 @@
 "weather_update_parameters_any_network" = "Die Wettervorhersage wird über ein beliebiges Netz aktualisiert. Mobile Daten können verwendet werden.";
 "map_marker_interval_dialog_desc" = "Geben Sie das Zeitintervall an, für das die Durchschnittsgeschwindigkeit gemessen wird, um die geschätzte Ankunftszeit zu berechnen.";
 "ios_release_4_5" = "- Neu gestaltete Widgets: Möglichkeit, die Position der Widgets zu ändern, Gruppierung nach Seiten, eine Liste von Widgets für das linke und rechte Panel\n- Neu gestalteter Konfigurationsbildschirm\n- Kostenlose Sicherung von Favoriten, Einstellungen und OSM-Bearbeitungen in der OsmAnd Cloud\n- \"CAI\"-Skala für die Schwierigkeitsklassifizierung von Routen hinzugefügt\n- Modul \"Konturlinien\" umbenannt in \"Topographie\", Unterstützung für das neue Geländekartenformat zugefügt\n- 3D-Relief hinzugefügt\n- OAuth-Autorisierung für OpenStreetMap Bearbeitungs-Modul hinzugefügt\n- Separate Schaltfläche zum Umschalten zwischen 2D- und 3D-Modus hinzugefügt\n- Richtung der Kippgesten geändert\n- Fehler beim Export von Favoriten behoben, der zu Datenverlusten führen konnte\n";
+"shared_string_system_default" = "Systemvorgabe";

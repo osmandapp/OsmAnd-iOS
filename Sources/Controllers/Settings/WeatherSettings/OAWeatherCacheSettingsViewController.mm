@@ -32,6 +32,7 @@
     OAWeatherHelper *_weatherHelper;
     OAWorldRegion *_region;
     EOAWeatherCacheType _type;
+    NSComparator _regionsComparator;
 }
 
 #pragma mark - Initialization
@@ -59,6 +60,14 @@
 - (void)commonInit
 {
     _weatherHelper = [OAWeatherHelper sharedInstance];
+
+    _regionsComparator = ^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
+        NSString *name1 = [OAWeatherHelper checkAndGetRegionName:region1];
+        NSString *name2 = [OAWeatherHelper checkAndGetRegionName:region2];
+        return [name1 isEqualToString:OALocalizedString(@"weather_entire_world")] ? NSOrderedAscending
+                : [name2 isEqualToString:OALocalizedString(@"weather_entire_world")] ? NSOrderedDescending
+                    : [name1 localizedCaseInsensitiveCompare:name2];
+    };
 }
 
 #pragma mark - UIViewController
@@ -184,9 +193,13 @@
         countriesSection[@"cells"] = countryCells;
         [data addObject:countriesSection];
 
-        NSArray<NSString *> *regionIds = [_weatherHelper getRegionIdsForDownloadedWeatherForecast];
         OsmAndAppInstance app = [OsmAndApp instance];
-        for (OAWorldRegion *region in [@[app.worldRegion] arrayByAddingObjectsFromArray:app.worldRegion.flattenedSubregions])
+        NSArray<NSString *> *regionIds = [_weatherHelper getRegionIdsForDownloadedWeatherForecast];
+        NSArray<OAWorldRegion *> *regions = [[app.worldRegion getFlattenedSubregions:regionIds] sortedArrayUsingComparator:_regionsComparator];
+        if ([regionIds containsObject:app.worldRegion.regionId])
+            regions = [@[app.worldRegion] arrayByAddingObjectsFromArray:regions];
+
+        for (OAWorldRegion *region in regions)
         {
             NSString *regionId = [OAWeatherHelper checkAndGetRegionId:region];
             if ([regionIds containsObject:regionId])

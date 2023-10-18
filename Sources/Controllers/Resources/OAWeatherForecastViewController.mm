@@ -243,7 +243,7 @@
             forecastData[@"region"] = region;
 
             NSString *regionId = [OAWeatherHelper checkAndGetRegionId:region];
-            BOOL hasStateDownload = [[OAWeatherHelper sharedInstance] isDownloadedWeatherForecastForRegionId:regionId];
+            BOOL hasStateDownload = [forecastsWithDownloadState containsObject:regionId];
             if ([_regionsSelected containsObject:region] || (needInitEditingRegions && hasStateDownload))
             {
                 forecastData[@"key"] = [@"selected_cell_" stringByAppendingString:regionId];

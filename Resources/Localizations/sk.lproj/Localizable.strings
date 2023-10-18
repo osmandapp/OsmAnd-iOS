@@ -2334,3 +2334,4 @@
 "select_segment" = "Zvoľte úsek";
 "add_folder" = "Pridať priečinok";
 "icon_group_service" = "Služby";
+"map_widget_distance_to_intermediate" = "Vzdialenosť k prechodnému cieľu";

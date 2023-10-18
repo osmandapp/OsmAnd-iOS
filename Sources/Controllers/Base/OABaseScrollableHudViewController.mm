@@ -99,11 +99,21 @@
             ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
 }
 
-- (void) applyCornerRadius:(BOOL)enable
+- (void)applyCornerRadius:(BOOL)enable
 {
     CGFloat value = enable ? 9. : 0.;
-    _scrollableView.layer.cornerRadius = value;
-    self.contentContainer.layer.cornerRadius = value;
+    [self applyTopCornersWithRadius:value forView:_scrollableView];
+    [self applyTopCornersWithRadius:value forView:self.contentContainer];
+}
+
+- (void)applyTopCornersWithRadius:(CGFloat)radius forView:(UIView *)view
+{
+    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:view.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerTopRight) cornerRadii:CGSizeMake(radius, radius)];
+    
+    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+    maskLayer.frame = view.bounds;
+    maskLayer.path  = maskPath.CGPath;
+    view.layer.mask = maskLayer;
 }
 
 - (void) setupModeViewShadowVisibility

@@ -1565,9 +1565,9 @@
 "map_settings_hide_polygons_desc" = "Tato možnost ovlivní pouze offline vektorové mapy OsmAnd";
 "map_settings_hide_polygons" = "Skrýt polygony";
 "map_settings_show_slider_map" = "Zobrazit posuvník na mapě";
-"map_settings_add_maps_slopes" = "K zobrazení svahů jsou potřeba další mapy";
-"map_settings_add_maps_hillshade" = "K zobrazení stínování kopců jsou potřeba další mapy";
-"map_settings_zoom_level_description" = "Nastavte minimální a maximální úroveň přiblížení pro zobrazení vrstvy";
+"map_settings_add_maps_slopes" = "K zobrazení svahů jsou potřeba další mapy.";
+"map_settings_add_maps_hillshade" = "K zobrazení stínování kopců jsou potřeba další mapy.";
+"map_settings_zoom_level_description" = "Nastavte minimální a maximální úroveň přiblížení, při které se vrstva zobrazí";
 "map_settings_hillshade_description" = "Mapa kopců s tmavými odstíny pro zobrazení svahů, vrcholů a nížin.";
 "map_settings_slopes_description" = "Sklon je barevná vizualizace v terénu.";
 "map_settings_slopes_legend" = "O svazích si můžete přečíst více na Wikipedii";
@@ -2590,7 +2590,7 @@
 "routeInfo_horse_scale_description" = "Vykreslení cest podle obtížnosti koňských stezek";
 "shared_string_cross_buy" = "Křížový nákup";
 "cloud_create_account" = "Vytvořit účet";
-"download_heightmap_maps" = "Mapa terénu";
+"download_heightmap_maps" = "Mapa terénu (3D)";
 "use_heightmap_setting" = "Použít 3D reliéfní výškové mapy";
 "nautical_depth_points" = "Plavební hloubkové body";
 "depth_contours" = "Hloubkové vrstevnice";
@@ -3020,3 +3020,16 @@
 "auto_update" = "Automatická aktualizace";
 "weather_update_parameters_any_network" = "Předpověď počasí bude aktualizována přes jakoukoliv síť. Mohou být využita mobilní data.";
 "shared_string_cache" = "Mezipaměť";
+"click_on_widget" = "Klikněte na widget";
+"unsaved_changes_will_be_lost_discard" = "Všechny neuložené změny budou ztraceny. Zahodit změny?";
+"terrain_3D_maps" = "Mapy terénu";
+"average_speed_skip_stops" = "Zohlednit zastávky";
+"average_speed_time_interval_desc" = "Zadejte časový interval pro průměrování rychlosti.";
+"unsaved_changes" = "Neuložené změny";
+
+
+// Shared Strings
+"shared_string_discard" = "Zahodit";
+"specify_number_of_dir_indicators_desc" = "Zadejte počet směrových ukazatelů.";
+"ios_release_4_5" = "- Kompletně přepracované prostředí widgetů: přidána možnost změny pozice widgetu, přidáno seskupení podle stránek, jeden seznam widgetů pro levý a pravý panel.\n- Přepracovaná obrazovka konfigurace\n- Bezplatné zálohování oblíbených položek, nastavení a úprav OSM do služby OsmAnd Cloud\n- Přidána stupnice \"CAI\" pro \"Klasifikaci obtížnosti tras\"\n- Zásuvný modul \"Konturní čáry\" přejmenován na \"Topografie\", přidána podpora nového formátu terénních map\n- Přidán 3D reliéf\n- Přidána autorizace OAuth pro zásuvný modul pro úpravy OpenStreetMap\n- Přidáno samostatné tlačítko pro přepínání mezi 2D nebo 3D režimem\n- Změněn směr gesta naklonění\n- Opraven problém s exportem oblíbených položek, který mohl vést ke ztrátě dat\n";
+"map_marker_interval_dialog_desc" = "Zadejte časový interval, ve kterém se bude měřit průměrná rychlost pro výpočet odhadovaného času příjezdu.";

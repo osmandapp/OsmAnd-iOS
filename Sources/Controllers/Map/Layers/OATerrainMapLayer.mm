@@ -76,13 +76,9 @@
     EOATerrainType type = self.app.data.terrainType;
     if (type != EOATerrainTypeDisabled && [[OAPlugin getPlugin:OASRTMPlugin.class] isEnabled])
     {
-        OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *)[OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
-        BOOL slopeFromHeightmap = plugin && [plugin isGenerateSlopeFrom3DMaps];
-        BOOL hillshadeFromHeightmap = plugin && [plugin isGenerateHillshadeFrom3DMaps];
-
-        if (type == EOATerrainTypeSlope && slopeFromHeightmap)
+        if (type == EOATerrainTypeSlope)
             [self setupSlopeLayerProvider];
-        else if (type == EOATerrainTypeHillshade && hillshadeFromHeightmap)
+        else if (type == EOATerrainTypeHillshade)
             [self setupHillshadeLayerProvider];
         else
             [self setupTerrainMapProvider];
@@ -116,6 +112,8 @@
             _slopeLayerProvider.reset();
             _hillshadeLayerProvider.reset();
         }
+        [self.mapViewController recreateHeightmapProvider];
+        [self.mapViewController updateElevationConfiguration];
     }];
 }
 

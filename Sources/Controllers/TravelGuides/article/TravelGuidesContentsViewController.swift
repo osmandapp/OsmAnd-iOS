@@ -30,24 +30,30 @@ class TravelGuidesContentsViewController : OABaseNavbarViewController {
         tableData.clearAllData()
         
         var displayingItems = items!.subItems
-        if let selectedSubitemIndex {
-            displayingItems = items!.subItems[selectedSubitemIndex].subItems
+        if selectedSubitemIndex != nil {
+            displayingItems = items!.subItems[selectedSubitemIndex!].subItems
         }
 
         let section = tableData.createNewSection()
         for item in displayingItems {
-            let headerRow = section.createNewRow()
-            headerRow.cellType = OAButtonTableViewCell.getIdentifier()
-            headerRow.title = item.name
-            headerRow.setObj(item.link!, forKey: "link")
+            let row = section.createNewRow()
+            row.cellType = OAButtonTableViewCell.getIdentifier()
+            row.title = item.name
+            row.setObj(item.link!, forKey: "link")
             if item.parent != nil && item.parent!.link != nil {
-                headerRow.setObj(item.parent!.link!.substring(from: 1), forKey: "sublink")
+                row.setObj(item.parent!.link!.substring(from: 1), forKey: "sublink")
             } else {
-                headerRow.setObj(item.link!.substring(from: 1), forKey: "sublink")
+                row.setObj(item.link!.substring(from: 1), forKey: "sublink")
+            }
+            
+            if selectedSubitemIndex != nil {
+                row.iconName = "ic_custom_file_info"
+            } else {
+                row.iconName = "ic_custom_book_info"
             }
             
             if item.subItems.count > 0 {
-                headerRow.setObj(true, forKey: "hasSubitems")
+                row.setObj(true, forKey: "hasSubitems")
             }
         }
     }
@@ -104,7 +110,8 @@ class TravelGuidesContentsViewController : OABaseNavbarViewController {
             if let cell {
                 cell.titleLabel.text = item.title
                 cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
-                cell.leftIconView.image = UIImage.templateImageNamed("ic_custom_sample")
+                
+                cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
                 cell.leftIconView.tintColor = UIColor.iconColorDefault
                 
                 cell.button.setTitle(nil, for: .normal)

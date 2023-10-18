@@ -67,16 +67,16 @@ class TravelGuidesNavigationViewController : OABaseNavbarViewController {
                 let section = tableData.createNewSection()
                 let headerItem = getHeaderItemByTitle(title: regionNames[i])
                 
-                let headerRow = section.createNewRow()
-                headerRow.cellType = OAButtonTableViewCell.getIdentifier()
-                headerRow.title = headerItem!.articleId.title
-                headerRow.iconName = "ic_action_route_first_intermediate"
-                headerRow.setObj(headerItem!.articleId, forKey: "article")
+                let row = section.createNewRow()
+                row.cellType = OAButtonTableViewCell.getIdentifier()
+                row.title = headerItem!.articleId.title
+                row.iconName = "ic_custom_book_info"
+                row.setObj(headerItem!.articleId, forKey: "article")
                 
                 let subItems = navigationMap[headerItem!]!
                 if subItems.count > 0 {
-                    headerRow.setObj(true, forKey: "hasSubitems")
-                    headerRow.setObj(headerItem, forKey: "item")
+                    row.setObj(true, forKey: "hasSubitems")
+                    row.setObj(headerItem, forKey: "item")
                 }
             }
             
@@ -84,11 +84,12 @@ class TravelGuidesNavigationViewController : OABaseNavbarViewController {
             let section = tableData.createNewSection()
             let subItems = navigationMap[selectedItem!]!
             for subheaderItem in subItems {
-                let subheaderRow = section.createNewRow()
-                subheaderRow.cellType = OAButtonTableViewCell.getIdentifier()
-                subheaderRow.title = subheaderItem.articleId.title
-                subheaderRow.setObj(false, forKey: "isHeader")
-                subheaderRow.setObj(subheaderItem.articleId, forKey: "article")
+                let row = section.createNewRow()
+                row.cellType = OAButtonTableViewCell.getIdentifier()
+                row.title = subheaderItem.articleId.title
+                row.iconName = "ic_custom_file_info"
+                row.setObj(false, forKey: "isHeader")
+                row.setObj(subheaderItem.articleId, forKey: "article")
             }
         }
     }
@@ -179,7 +180,7 @@ class TravelGuidesNavigationViewController : OABaseNavbarViewController {
             if let cell {
                 cell.titleLabel.text = item.title
                 cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
-                cell.leftIconView.image = UIImage.templateImageNamed("ic_custom_sample")
+                cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
                 cell.leftIconView.tintColor = UIColor.iconColorDefault
                 
                 cell.button.setTitle(nil, for: .normal)

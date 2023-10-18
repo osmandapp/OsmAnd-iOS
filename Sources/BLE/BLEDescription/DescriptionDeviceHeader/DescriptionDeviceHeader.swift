@@ -92,6 +92,7 @@ final class DescriptionDeviceHeader: UIView {
             guard let self else { return }
             switch result {
             case .success:
+                DeviceHelper.shared.setDevicePaired(device: item, isPaired: true)
                 configureConnectButtonTitle(with: .disconnected)
                 item.notifyRSSI()
                 discoverServices(serviceUUIDs: nil)

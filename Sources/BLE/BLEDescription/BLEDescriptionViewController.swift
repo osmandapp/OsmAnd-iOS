@@ -176,8 +176,11 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
 extension BLEDescriptionViewController {
     private func showForgetSensorActionSheet() {
         let alert = UIAlertController(title: device.deviceName, message: "Sensor will be removed from the list. You will be able to pair this sensor again at any time.", preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Forget sensor", style: .destructive , handler: { _ in
+        alert.addAction(UIAlertAction(title: "Forget sensor", style: .destructive , handler: { [weak self] _ in
+            guard let self else { return }
             print("Forget sensor")
+            DeviceHelper.shared.setDevicePaired(device: device, isPaired: false)
+            navigationController?.popViewController(animated: true)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel , handler: { _ in
             print("Cancel")

@@ -8,23 +8,38 @@
 
 import Foundation
 
+//protocol DeviceSettingsProtocol: Codable {
+//    var deviceId: String { get }
+//    var deviceType: DeviceType { get }
+//    var deviceName: String { get }
+//    var deviceEnabled: Bool { get }
+//    var additionalParams: Any { get }
+//}
+
+
 class DeviceSettings {
     var deviceId: String
-    var deviceType: DeviceType
+    var deviceType: DeviceType = .BLE_BATTERY
     var deviceName: String = ""
     var deviceEnabled: Bool
-    var additionalParams: Any
+    
+    enum CodingKeys: String, CodingKey {
+         case deviceId
+         case deviceType
+         case deviceName
+         case deviceEnabled
+     }
+  //  var additionalParams: Any
     
     init(deviceId: String,
          deviceType: DeviceType,
          deviceName: String,
-         deviceEnabled: Bool = true,
-         additionalParams: Any? = nil) {
+         deviceEnabled: Bool = true) {
         self.deviceId = deviceId
         self.deviceType = deviceType
         self.deviceName = deviceName
         self.deviceEnabled = deviceEnabled
-        self.additionalParams = additionalParams
+      //  self.additionalParams = additionalParams
     }
 
 //    func setDeviceProperty(property: DeviceChangeableProperties, value: String) {

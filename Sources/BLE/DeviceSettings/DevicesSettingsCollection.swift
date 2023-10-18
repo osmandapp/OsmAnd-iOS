@@ -8,14 +8,91 @@
 
 import Foundation
 
+enum UserDefaultsKey: String {
+    case deviceSettings
+}
+
+extension UserDefaults {
+    func set(_ value: Any, for key: UserDefaultsKey) {
+        set(value, forKey: key.rawValue)
+    }
+    
+    func bool(for key: UserDefaultsKey) -> Bool {
+        bool(forKey: key.rawValue)
+    }
+    
+    func data(for key: UserDefaultsKey) -> Data? {
+        data(forKey: key.rawValue)
+    }
+    
+    func string(for key: UserDefaultsKey) -> String? {
+        string(forKey: key.rawValue)
+    }
+    
+    func integer(for key: UserDefaultsKey) -> Int? {
+        integer(forKey: key.rawValue)
+    }
+    
+    func float(for key: UserDefaultsKey) -> Float? {
+        float(forKey: key.rawValue)
+    }
+    
+    func url(for key: UserDefaultsKey) -> URL? {
+        url(forKey: key.rawValue)
+    }
+    
+    func value(for key: UserDefaultsKey) -> Any? {
+        value(forKey: key.rawValue)
+    }
+}
+
+extension UserDefaults {
+
+    subscript(key: String) -> Any? {
+        get {
+            return object(forKey: key)
+        }
+        set {
+            set(newValue, forKey: key)
+        }
+    }
+
+    /// Retrieves a Codable object from UserDefaults.
+    ///
+    /// - Parameters:
+    ///   - type: Class that conforms to the Codable protocol.
+    ///   - key: Identifier of the object.
+    ///   - decoder: Custom JSONDecoder instance. Defaults to `JSONDecoder()`.
+    /// - Returns: Codable object for key (if exists).
+    func object<T: Codable>(_ type: T.Type, with key: String, usingDecoder decoder: JSONDecoder = JSONDecoder()) -> T? {
+        guard let data = value(forKey: key) as? Data else {
+            return nil
+        }
+        return try? decoder.decode(type.self, from: data)
+    }
+
+    /// Allows storing of Codable objects to UserDefaults.
+    ///
+    /// - Parameters:
+    ///   - object: Codable object to store.
+    ///   - key: Identifier of the object.
+    ///   - encoder: Custom JSONEncoder instance. Defaults to `JSONEncoder()`.
+    func set<T: Codable>(object: T, forKey key: String, usingEncoder encoder: JSONEncoder = JSONEncoder()) {
+        let data = try? encoder.encode(object)
+        set(data, forKey: key)
+    }
+}
+
 final class DevicesSettingsCollection {
+    
+    private let storage = UserDefaults.standard
 
-    private static DEVICES_SETTINGS_PREF_ID = "external_devices_settings"
-
-    private final CommonPreference<String> preference;
-    private final Gson gson;
-    private final Map<String, DeviceSettings> settings = new HashMap<>();
-    private List<DevicePreferencesListener> listeners = new ArrayList<>();
+//    private static DEVICES_SETTINGS_PREF_ID = "external_devices_settings"
+//
+//    private final CommonPreference<String> preference;
+//    private final Gson gson;
+//    private final Map<String, DeviceSettings> settings = new HashMap<>();
+//    private List<DevicePreferencesListener> listeners = new ArrayList<>();
 
 
 //    public interface DevicePreferencesListener {
@@ -30,110 +107,58 @@ final class DevicesSettingsCollection {
 //        readSettings();
 //    }
 
-//    public void addListener(@NonNull DevicePreferencesListener listener) {
-//        if (!listeners.contains(listener)) {
-//            List<DevicePreferencesListener> newListeners = new ArrayList<>(listeners);
-//            newListeners.add(listener);
-//            listeners = newListeners;
-//        }
-//    }
-//
-//    public void removeListener(@NonNull DevicePreferencesListener listener) {
-//        if (listeners.contains(listener)) {
-//            List<DevicePreferencesListener> newListeners = new ArrayList<>(listeners);
-//            newListeners.remove(listener);
-//            listeners = newListeners;
-//        }
-//    }
-
-//    @NonNull
-//    public Set<String> getDeviceIds() {
-//        synchronized (settings) {
-//            return new HashSet<>(settings.keySet());
-//        }
-//    }
-
     func getDeviceSettings(deviceId: String) -> DeviceSettings? {
-        let deviceSettings = settings.get(deviceId)
-        return deviceSettings != null ? createDeviceSettings(deviceSettings) : null;
+        if let deviceSettingsArray = storage[UserDefaultsKey.deviceSettings.rawValue] as? [DeviceSettings],
+           let deviceSettings = deviceSettingsArray.first(where: { $0.deviceId == deviceId }) {
+            return deviceSettings
+            
+        }
+        return nil
     }
-
-//    private DeviceSettings createDeviceSettings(@NonNull DeviceSettings settings) {
-//        switch (settings.getDeviceType()) {
-//            case ANT_BICYCLE_SD:
-//            case BLE_BICYCLE_SCD:
-//                return new WheelDeviceSettings(settings);
-//            default:
-//                return new DeviceSettings(settings);
-//        }
-//    }
-
-    static func createDeviceSettings(deviceId: String, deviceType: DeviceType, name: String, deviceEnabled: Bool) -> DeviceSettings {
-        switch deviceType {
-        case .BLE_BICYCLE_SCD:
-            return WheelDeviceSettings(deviceId: deviceId, deviceType: deviceType, deviceName: name, deviceEnabled: deviceEnabled)
-        default:
-            return DeviceSettings(deviceId: deviceId, deviceType: deviceType, deviceName: name, deviceEnabled: deviceEnabled)
+    
+    func removeDeviceSetting(with id: String) {
+        if var deviceSettingsArray = storage[UserDefaultsKey.deviceSettings.rawValue] as? [DeviceSettings] {
+            if let index = deviceSettingsArray.firstIndex(where: { $0.deviceId == id }) {
+                deviceSettingsArray.remove(at: index)
+                storage[UserDefaultsKey.deviceSettings.rawValue] = deviceSettingsArray
+            }
         }
     }
 
-//    public void setDeviceSettings(
-//            @NonNull String deviceId,
-//            @Nullable DeviceSettings deviceSettings) {
-//        setDeviceSettings(deviceId, deviceSettings, true);
-//    }
-//
-//    public void setDeviceSettings(
-//            @NonNull String deviceId,
-//            @Nullable DeviceSettings deviceSettings,
-//            boolean write) {
-//        boolean stateChanged;
-//        synchronized (settings) {
-//            if (deviceSettings == null) {
-//                settings.remove(deviceId);
-//                stateChanged = true;
-//            } else {
-//                DeviceSettings prevSettings = settings.get(deviceId);
-//                settings.put(deviceId, deviceSettings);
-//                stateChanged = prevSettings != null && prevSettings.getDeviceEnabled() != deviceSettings.getDeviceEnabled();
-//            }
-//            if (write) {
-//                writeSettings();
-//            }
-//        }
-//        if (stateChanged) {
-//            fireDeviceStateChangedEvent(deviceId, deviceSettings != null && deviceSettings.getDeviceEnabled());
-//        }
-//    }
-//
-//    private void fireDeviceStateChangedEvent(@NonNull String deviceId, boolean enabled) {
-//        for (DevicePreferencesListener listener : listeners) {
-//            if (enabled) {
-//                listener.onDeviceEnabled(deviceId);
-//            } else {
-//                listener.onDeviceDisabled(deviceId);
-//            }
-//        }
-//    }
-//
-//    private void readSettings() {
-//        String settingsJson = preference.get();
-//        if (!Algorithms.isEmpty(settingsJson)) {
-//            Map<String, DeviceSettings> settings = gson.fromJson(settingsJson,
-//                    new TypeToken<HashMap<String, DeviceSettings>>() {
-//                    }.getType());
-//            if (settings != null) {
-//                this.settings.clear();
-//                this.settings.putAll(settings);
-//            }
-//        }
-//    }
-//
-//    private void writeSettings() {
-//        String json = gson.toJson(settings,
-//                new TypeToken<HashMap<String, DeviceSettings>>() {
-//                }.getType());
-//        preference.set(json);
-//    }
+    func createDeviceSettings(device: Device, deviceEnabled: Bool) {
+        var deviceSettings: DeviceSettings
+        switch device.deviceType {
+        case .BLE_BICYCLE_SCD:
+            deviceSettings = WheelDeviceSettings(deviceId: device.id, deviceType: device.deviceType, deviceName: device.deviceName, deviceEnabled: deviceEnabled)
+        default:
+            deviceSettings = DeviceSettings(deviceId: device.id, deviceType: device.deviceType, deviceName: device.deviceName, deviceEnabled: deviceEnabled)
+        }
+        addDeviceSettings(item: deviceSettings)
+    }
+    
+    func changeDeviceName(with id: String, name: String) {
+        if let deviceSettings = getDeviceSettings(deviceId: id) {
+            deviceSettings.deviceName = name
+            updateDeviceSettings(item: deviceSettings)
+        }
+    }
+    
+    private func addDeviceSettings(item: DeviceSettings) {
+        if var deviceSettingsArray = storage[UserDefaultsKey.deviceSettings.rawValue] as? [DeviceSettings] {
+            deviceSettingsArray.append(item)
+            storage[UserDefaultsKey.deviceSettings.rawValue] = deviceSettingsArray
+        } else {
+            storage[UserDefaultsKey.deviceSettings.rawValue] = [item]
+        }
+    }
+    
+    private func updateDeviceSettings(item: DeviceSettings) {
+        if var deviceSettingsArray = storage[UserDefaultsKey.deviceSettings.rawValue] as? [DeviceSettings] {
+            if let deviceSettingsIndex = deviceSettingsArray.firstIndex(where: { $0.deviceId == item.deviceId }) {
+                deviceSettingsArray[deviceSettingsIndex] = item
+                storage[UserDefaultsKey.deviceSettings.rawValue] = deviceSettingsArray
+            }
+        }
+    }
 }
 

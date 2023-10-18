@@ -64,9 +64,13 @@ final class BLEManager {
                 }
                 let uuids = serviceUUIDs.map { $0.uuidString.lowercased() }
                 if let device = DeviceFactory.createDevice(with: uuids) {
+                    var deviceName = advertisementData["kCBAdvDataLocalName"] as? String ?? ""
+                    if let savedDevice = DeviceHelper.shared.devicesSettingsCollection.getDeviceSettings(deviceId: peripheral.identifier.uuidString) {
+                        deviceName = savedDevice.deviceName
+                    }
                     device.peripheral = peripheral
                     device.rssi = rssi
-                    device.deviceName = advertisementData["kCBAdvDataLocalName"] as? String ?? ""
+                    device.deviceName = deviceName
                     device.addObservers()
                     discoveredDevices.append(device)
                     successHandler()

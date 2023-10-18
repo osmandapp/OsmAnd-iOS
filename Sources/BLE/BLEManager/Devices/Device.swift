@@ -21,6 +21,10 @@ class Device {
     var didChangeCharacteristic: (() -> Void)? = nil
     private var RSSIUpdateTimer: Timer?
     
+    var id: String {
+        peripheral.identifier.uuidString
+    }
+    
     var sensors: [Sensor] = [BLEBatterySensor()]
     
     var sections: Dictionary<String, Any> = [:]

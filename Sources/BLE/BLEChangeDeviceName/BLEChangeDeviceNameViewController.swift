@@ -40,8 +40,11 @@ final class BLEChangeDeviceNameViewController: OABaseNavbarViewController {
     }
     
     override func onRightNavbarButtonPressed() {
-        #warning("add save")
-        onSaveAction?()
+        if newDeviceName != device.deviceName {
+            device.deviceName = newDeviceName
+            DeviceHelper.shared.changeDeviceName(with: device.id, name: newDeviceName)
+            onSaveAction?()
+        }
         dismiss()
     }
     

@@ -3599,6 +3599,7 @@
 		FA359EE92ADFC04A0001C11D /* DeviceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EE82ADFC04A0001C11D /* DeviceSettings.swift */; };
 		FA359EEB2ADFC2CF0001C11D /* DevicesSettingsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EEA2ADFC2CF0001C11D /* DevicesSettingsCollection.swift */; };
 		FA359EED2ADFC6910001C11D /* WheelDeviceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EEC2ADFC6910001C11D /* WheelDeviceSettings.swift */; };
+		FA359EF12ADFD5310001C11D /* DeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EF02ADFD5310001C11D /* DeviceHelper.swift */; };
 		FA4195592AAB55E6007CBBAB /* ShadowTransporentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4195582AAB55E6007CBBAB /* ShadowTransporentView.swift */; };
 		FA44BF3B2A71123D000D2F5F /* ic_banner_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF2F2A71123B000D2F5F /* ic_banner_close@2x.png */; };
 		FA44BF3C2A71123D000D2F5F /* ic_custom_osmand_start_logo_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF302A71123B000D2F5F /* ic_custom_osmand_start_logo_big@3x.png */; };
@@ -8381,6 +8382,7 @@
 		FA359EE82ADFC04A0001C11D /* DeviceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSettings.swift; sourceTree = "<group>"; };
 		FA359EEA2ADFC2CF0001C11D /* DevicesSettingsCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicesSettingsCollection.swift; sourceTree = "<group>"; };
 		FA359EEC2ADFC6910001C11D /* WheelDeviceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelDeviceSettings.swift; sourceTree = "<group>"; };
+		FA359EF02ADFD5310001C11D /* DeviceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceHelper.swift; sourceTree = "<group>"; };
 		FA4195582AAB55E6007CBBAB /* ShadowTransporentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowTransporentView.swift; sourceTree = "<group>"; };
 		FA44BF2F2A71123B000D2F5F /* ic_banner_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_banner_close@2x.png"; path = "Resources/Icons/ic_banner_close@2x.png"; sourceTree = "<group>"; };
 		FA44BF302A71123B000D2F5F /* ic_custom_osmand_start_logo_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osmand_start_logo_big@3x.png"; path = "Resources/Icons/ic_custom_osmand_start_logo_big@3x.png"; sourceTree = "<group>"; };
@@ -14617,6 +14619,7 @@
 				FA359EE82ADFC04A0001C11D /* DeviceSettings.swift */,
 				FA359EEA2ADFC2CF0001C11D /* DevicesSettingsCollection.swift */,
 				FA359EEC2ADFC6910001C11D /* WheelDeviceSettings.swift */,
+				FA359EF02ADFD5310001C11D /* DeviceHelper.swift */,
 			);
 			path = DeviceSettings;
 			sourceTree = "<group>";
@@ -18281,6 +18284,7 @@
 				DA5A848526C563A900F274C7 /* OAMapWidgetRegInfo.mm in Sources */,
 				DA5A832F26C563A800F274C7 /* OATitleSliderRoundCell.m in Sources */,
 				DA5A823026C563A700F274C7 /* OAImportDuplicatesViewController.mm in Sources */,
+				FA359EF12ADFD5310001C11D /* DeviceHelper.swift in Sources */,
 				DA5A812B26C563A700F274C7 /* OAMapMarker.mm in Sources */,
 				FAA650582ADD42C50020DCEA /* GattAttributes.swift in Sources */,
 				DA5A855C26C563A900F274C7 /* OARoutingHelper.mm in Sources */,

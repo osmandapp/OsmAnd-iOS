@@ -3848,6 +3848,25 @@ typedef enum
         [self startNavigation];
 }
 
+- (void)detachFromCarPlayWindow
+{
+    if (_mapViewController)
+    {
+        [_mapViewController.mapView suspendRendering];
+        
+        [_mapViewController removeFromParentViewController];
+        [_mapViewController.view removeFromSuperview];
+        
+        OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
+        
+        [mapPanel addChildViewController:_mapViewController];
+        [mapPanel.view insertSubview:_mapViewController.view atIndex:0];
+        _mapViewController.view.frame = mapPanel.view.frame;
+        _mapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [_mapViewController.mapView resumeRendering];
+    }
+}
+
 #pragma mark - OAGpxWptEditingHandlerDelegate
 
 - (void)saveGpxWpt:(OAGpxWptItem *)gpxWpt gpxFileName:(NSString *)gpxFileName

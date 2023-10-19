@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -3611,22 +3611,23 @@
 		FA44BF692A72F810000D2F5F /* SceneDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF672A72F810000D2F5F /* SceneDelegate.mm */; };
 		FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */; };
 		FA4768B52A67B86400D533E8 /* FreeBackupBanner.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */; };
+		FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */; };
+		FA5A21A82A9E17DB00319695 /* UIPageViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */; };
+		FA6797EF2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA6797EE2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm */; };
 		FA69F2852A73948B0044CFCA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79BF26C563A000F274C7 /* main.m */; };
 		FA740D3A2A7C006900BD12DC /* OAAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79BE26C563A000F274C7 /* OAAppDelegate.mm */; };
+		FA740D422A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA740D412A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib */; };
+		FA740D452A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */; };
+		FA77E7A72AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA77E7A62AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm */; };
+		FAB6E7E42AC5A9FD00A82987 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */; };
+		FAF6C89B2AD013F400A3ED94 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */; };
+		FAF6C89F2AD014C900A3ED94 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */; };
+		FAF6C8A02AD014C900A3ED94 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89E2AD014C800A3ED94 /* Theme.swift */; };
 		FAF7920A2A77F80900CE5F79 /* ic_carplay_navigation@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF792062A77F80800CE5F79 /* ic_carplay_navigation@3x.png */; };
 		FAF7920B2A77F80900CE5F79 /* ic_carplay_navigation_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF792072A77F80800CE5F79 /* ic_carplay_navigation_night@2x.png */; };
 		FAF7920C2A77F80900CE5F79 /* ic_carplay_navigation_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF792082A77F80900CE5F79 /* ic_carplay_navigation_night@3x.png */; };
 		FAF7920D2A77F80900CE5F79 /* ic_carplay_navigation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF792092A77F80900CE5F79 /* ic_carplay_navigation@2x.png */; };
 		FAF7920F2A780F2500CE5F79 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */; };
-		FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */; };
-		FA5A21A82A9E17DB00319695 /* UIPageViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */; };
-		FA6797EF2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA6797EE2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm */; };
-		FA740D422A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA740D412A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib */; };
-		FA740D452A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */; };
-		FAB6E7E42AC5A9FD00A82987 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */; };
-		FAF6C89B2AD013F400A3ED94 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */; };
-		FAF6C89F2AD014C900A3ED94 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */; };
-		FAF6C8A02AD014C900A3ED94 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89E2AD014C800A3ED94 /* Theme.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -8378,21 +8379,23 @@
 		FA44BF682A72F810000D2F5F /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBanner.swift; sourceTree = "<group>"; };
 		FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FreeBackupBanner.xib; sourceTree = "<group>"; };
-		FAF792062A77F80800CE5F79 /* ic_carplay_navigation@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_navigation@3x.png"; sourceTree = "<group>"; };
-		FAF792072A77F80800CE5F79 /* ic_carplay_navigation_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_navigation_night@2x.png"; sourceTree = "<group>"; };
-		FAF792082A77F80900CE5F79 /* ic_carplay_navigation_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_navigation_night@3x.png"; sourceTree = "<group>"; };
-		FAF792092A77F80900CE5F79 /* ic_carplay_navigation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_navigation@2x.png"; sourceTree = "<group>"; };
-		FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageViewController+Extension.swift"; sourceTree = "<group>"; };
 		FA6797ED2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherAutoUpdateSettingsViewController.h; sourceTree = "<group>"; };
 		FA6797EE2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherAutoUpdateSettingsViewController.mm; sourceTree = "<group>"; };
 		FA740D412A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CloudIntroductionButtonsView.xib; sourceTree = "<group>"; };
 		FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudIntroductionButtonsView.swift; sourceTree = "<group>"; };
+		FA77E7A52AE16E90001BABE2 /* OACarPlayMapDashboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACarPlayMapDashboardViewController.h; sourceTree = "<group>"; };
+		FA77E7A62AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACarPlayMapDashboardViewController.mm; sourceTree = "<group>"; };
 		FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		FAF6C89E2AD014C800A3ED94 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		FAF792062A77F80800CE5F79 /* ic_carplay_navigation@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_navigation@3x.png"; sourceTree = "<group>"; };
+		FAF792072A77F80800CE5F79 /* ic_carplay_navigation_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_navigation_night@2x.png"; sourceTree = "<group>"; };
+		FAF792082A77F80900CE5F79 /* ic_carplay_navigation_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_navigation_night@3x.png"; sourceTree = "<group>"; };
+		FAF792092A77F80900CE5F79 /* ic_carplay_navigation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_navigation@2x.png"; sourceTree = "<group>"; };
+		FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -14571,21 +14574,23 @@
 			path = WidgetSettings;
 			sourceTree = "<group>";
 		};
-		FA44BF562A72A8FC000D2F5F /* CarPlayDelegate */ = {
-			isa = PBXGroup;
-			children = (
-				FA44BF582A72A91C000D2F5F /* CarPlaySceneDelegates.swift */,
-				FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */,
-			);
-			path = CarPlayDelegate;
-			sourceTree = "<group>";
-		};
 		FA4195572AAB55D4007CBBAB /* ShadowTransporentView */ = {
 			isa = PBXGroup;
 			children = (
 				FA4195582AAB55E6007CBBAB /* ShadowTransporentView.swift */,
 			);
 			path = ShadowTransporentView;
+			sourceTree = "<group>";
+		};
+		FA44BF562A72A8FC000D2F5F /* CarPlayDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				FA77E7A52AE16E90001BABE2 /* OACarPlayMapDashboardViewController.h */,
+				FA77E7A62AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm */,
+				FA44BF582A72A91C000D2F5F /* CarPlaySceneDelegates.swift */,
+				FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */,
+			);
+			path = CarPlayDelegate;
 			sourceTree = "<group>";
 		};
 		FA4768B02A66E6DB00D533E8 /* Banners */ = {
@@ -14604,17 +14609,6 @@
 				FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */,
 			);
 			path = FreeFavoritesBackupBanner;
-			sourceTree = "<group>";
-		};
-		FAF792052A77F7F000CE5F79 /* CarPlay */ = {
-			isa = PBXGroup;
-			children = (
-				FAF792072A77F80800CE5F79 /* ic_carplay_navigation_night@2x.png */,
-				FAF792082A77F80900CE5F79 /* ic_carplay_navigation_night@3x.png */,
-				FAF792092A77F80900CE5F79 /* ic_carplay_navigation@2x.png */,
-				FAF792062A77F80800CE5F79 /* ic_carplay_navigation@3x.png */,
-			);
-			path = CarPlay;
 			sourceTree = "<group>";
 		};
 		FA6797EC2A8501C60022F2A9 /* OAWeatherAutoUpdateSettingsViewController */ = {
@@ -14642,6 +14636,17 @@
 				FAF6C89E2AD014C800A3ED94 /* Theme.swift */,
 			);
 			path = ThemeManager;
+			sourceTree = "<group>";
+		};
+		FAF792052A77F7F000CE5F79 /* CarPlay */ = {
+			isa = PBXGroup;
+			children = (
+				FAF792072A77F80800CE5F79 /* ic_carplay_navigation_night@2x.png */,
+				FAF792082A77F80900CE5F79 /* ic_carplay_navigation_night@3x.png */,
+				FAF792092A77F80900CE5F79 /* ic_carplay_navigation@2x.png */,
+				FAF792062A77F80800CE5F79 /* ic_carplay_navigation@3x.png */,
+			);
+			path = CarPlay;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -18311,7 +18316,6 @@
 				DA35963229B0A00A009DF4D6 /* OARouteKey.mm in Sources */,
 				DA5A847B26C563A900F274C7 /* OATurnDrawable.mm in Sources */,
 				FAF6C89F2AD014C900A3ED94 /* ThemeManager.swift in Sources */,
-				DA5A816F26C563A700F274C7 /* OAAppDelegate.mm in Sources */,
 				DAD5B4CF288E80EC009CF611 /* OAOperationLog.m in Sources */,
 				DA5A853826C563A900F274C7 /* OAFavoritesHelper.mm in Sources */,
 				DA5A845426C563A900F274C7 /* OARouteLayer.mm in Sources */,
@@ -18366,6 +18370,7 @@
 				DA5A84DD26C563A900F274C7 /* OAMapSettingsGpxScreen.mm in Sources */,
 				DA4ABF1A2876DA6800B996EF /* OAPoiUiFilterSettingsItem.mm in Sources */,
 				DA5A847626C563A900F274C7 /* OALanesDrawable.mm in Sources */,
+				FA77E7A72AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm in Sources */,
 				DA5A831026C563A800F274C7 /* OARouteProgressBarCell.mm in Sources */,
 				DA5A854B26C563A900F274C7 /* OASettingsHelper.mm in Sources */,
 				DA4ABEE62876DA5D00B996EF /* OASettingsItemReader.m in Sources */,

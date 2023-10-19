@@ -2311,19 +2311,21 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
             _app.data.lastMapSource = [OAAppData defaultMapSource];
             return;
         }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[OAGPXAppearanceCollection sharedInstance] generateAvailableColors];
+            
+            [_mapLayers updateLayers];
 
-        [[OAGPXAppearanceCollection sharedInstance] generateAvailableColors];
-        [_mapLayers updateLayers];
+            if (!_gpxDocFileTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
+                [self showRecGpxTrack:YES];
+            
+            [_selectedGpxHelper buildGpxList];
+            if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty())
+                [self initRendererWithGpxTracks];
 
-        if (!_gpxDocFileTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
-            [self showRecGpxTrack:YES];
-        
-        [_selectedGpxHelper buildGpxList];
-        if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty())
-            [self initRendererWithGpxTracks];
-
-        [self hideProgressHUD];
-        [_mapSourceUpdatedObservable notifyEvent];
+            [self hideProgressHUD];
+            [_mapSourceUpdatedObservable notifyEvent];
+        });
     }
 }
 

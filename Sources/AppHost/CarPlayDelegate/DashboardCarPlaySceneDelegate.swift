@@ -1,26 +1,13 @@
 import CarPlay
 
-final class CarPlayRootVC: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-}
-
 final class DashboardCarPlaySceneDelegate: NSObject, CPTemplateApplicationSceneDelegate, CPTemplateApplicationDashboardSceneDelegate {
-    var dashboardVC = CarPlayRootVC()
+    var dashboardVC: OACarPlayMapDashboardViewController?
     var mapVC: OAMapViewController?
     var window: UIWindow?
     
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didConnect dashboardController: CPDashboardController, to window: UIWindow) {
-        mapVC = OARootViewController.instance()?.mapPanel.mapViewController
+        debugPrint("[CarPlay] templateApplicationDashboardScene didConnect")
         self.window = window
-        if mapVC == nil {
-            mapVC = OAMapViewController()
-            OARootViewController.instance()?.mapPanel.setMap(mapVC)
-        }
-        dashboardVC.add(mapVC!)
-        self.window?.rootViewController = dashboardVC
-        OARootViewController.instance()?.mapPanel.onCarPlayConnected()
         let nightMode = templateApplicationDashboardScene.dashboardWindow.traitCollection.userInterfaceStyle == .dark
         dashboardController.shortcutButtons = [
             CPDashboardButton(titleVariants: [localizedString("shared_string_navigation")], subtitleVariants: [""], image: UIImage(named: nightMode ? "ic_carplay_navigation_night" : "ic_carplay_navigation")!, handler: { _ in
@@ -33,12 +20,37 @@ final class DashboardCarPlaySceneDelegate: NSObject, CPTemplateApplicationSceneD
             })]
     }
     
+    private func configureScene() {
+        mapVC = OARootViewController.instance()?.mapPanel.mapViewController
+        if mapVC == nil {
+            mapVC = OAMapViewController()
+            OARootViewController.instance()?.mapPanel.setMap(mapVC)
+        }
+        if let window, let mapVC {
+            let widthOffset: CGFloat = 1 - (window.frame.width - max(window.safeAreaInsets.left, window.safeAreaInsets.right)) / mapVC.view.frame.width
+            let heightOffset = 1 - (window.frame.height / mapVC.view.frame.height)
+            mapVC.viewportX(1.0 - widthOffset, y: 1.0 - heightOffset)
+            dashboardVC = OACarPlayMapDashboardViewController(carPlay: mapVC)
+            dashboardVC?.attachMapToWindow()
+            self.window?.rootViewController = dashboardVC
+            OARootViewController.instance()?.mapPanel.onCarPlayConnected()
+        }
+    }
+    
     func sceneWillEnterForeground(_ scene: UIScene) {
-        guard let mapVC, let window else { return }
-        let widthOffset: CGFloat = 1 - (window.frame.width - max(window.safeAreaInsets.left, window.safeAreaInsets.right)) / mapVC.view.frame.width
-        let heightOffset = 1 - (window.frame.height / mapVC.view.frame.height)
-        mapVC.viewportX(1.0 - widthOffset, y: 1.0 - heightOffset)
-        dashboardVC.add(mapVC)
-        window.rootViewController = dashboardVC
+        debugPrint("[CarPlay] templateApplicationDashboardScene sceneWillEnterForeground")
+        configureScene()
+    }
+    
+    func sceneWillResignActive(_ scene: UIScene) {
+        debugPrint("[CarPlay] templateApplicationDashboardScene sceneWillResignActive")
+    }
+    
+    func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didDisconnect dashboardController: CPDashboardController, from window: UIWindow) {
+        debugPrint("[CarPlay] templateApplicationDashboardScene didDisconnect")
+        dashboardVC?.detachFromCarPlayWindow()
+        mapVC = nil
+        self.window = nil
+        OARootViewController.instance()?.mapPanel.detachFromCarPlayWindow()
     }
 }

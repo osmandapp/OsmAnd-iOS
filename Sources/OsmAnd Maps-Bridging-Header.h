@@ -83,6 +83,7 @@
 #import "OACarPlayPurchaseViewController.h"
 #import "OAAppDelegate.h"
 #import "OADirectionAppearanceViewController.h"
+#import "OACarPlayMapDashboardViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

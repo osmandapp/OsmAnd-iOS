@@ -1,5 +1,4 @@
 import CarPlay
-import CoreLocation
 
 final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
     
@@ -9,16 +8,16 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     private var carPlayInterfaceController: CPInterfaceController?
     
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didConnect interfaceController: CPInterfaceController, to window: CPWindow) {
-        print(#function)
+        debugPrint("[CarPlay] templateApplicationScene didConnect")
         OsmAndApp.swiftInstance().carPlayActive = true
         windowToAttach = window
         carPlayInterfaceController = interfaceController
         
-        NotificationCenter.default.addObserver(self, selector: #selector(configureScene), name: NSNotification.Name("kAppInitDone"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appInitDoneConfigureScene), name: NSNotification.Name("kAppInitDone"), object: nil)
     }
 
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didDisconnect interfaceController: CPInterfaceController, from window: CPWindow) {
-        print(#function)
+        debugPrint("[CarPlay] templateApplicationScene didDisconnect")
         
         OsmAndApp.swiftInstance().carPlayActive = false
         NotificationCenter
@@ -28,6 +27,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
 
         OARootViewController.instance().mapPanel.onCarPlayDisconnected { [weak self] in
             guard let self else { return }
+            debugPrint("[CarPlay] templateApplicationScene onCarPlayDisconnected")
             carPlayMapController?.detachFromCarPlayWindow()
             carPlayDashboardController = nil
             carPlayMapController?.navigationController?.popViewController(animated: true)
@@ -39,7 +39,16 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     }
     
     func sceneWillEnterForeground(_ scene: UIScene) {
-        carPlayMapController?.detachFromCarPlayWindow()
+        debugPrint("[CarPlay] templateApplicationScene sceneWillEnterForeground")
+        configureScene()
+    }
+    
+    func sceneWillResignActive(_ scene: UIScene) {
+        debugPrint("[CarPlay] templateApplicationScene sceneWillResignActive")
+    }
+    
+    @objc func appInitDoneConfigureScene() {
+        debugPrint("[CarPlay] appInitDoneConfigureScene configureScene")
         configureScene()
     }
     
@@ -53,7 +62,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         }
     }
     
-    @objc private func configureScene() {
+     private func configureScene() {
         guard let carPlayInterfaceController, let windowToAttach else { return }
         presentInCarPlay(interfaceController: carPlayInterfaceController, window: windowToAttach)
         let carPlayMode = OAAppSettings.sharedManager()?.isCarPlayModeDefault.get() == true

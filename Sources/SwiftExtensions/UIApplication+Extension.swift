@@ -9,18 +9,11 @@
 import Foundation
 
 extension UIApplication {
-    
     @objc var mainWindow: UIWindow? {
-        mainScene
-        // Get its associated windows
-            .flatMap({ $0 as? UIWindowScene })?.windows
-        // Finally, keep only the key window
-            .first(where: \.isKeyWindow)
+        (mainScene as? UIWindowScene)?.keyWindow
     }
     
     @objc var mainScene: UIScene? {
-        connectedScenes
-            .filter { $0.activationState == .foregroundActive }
-            .first(where: { $0 is UIWindowScene })
+        connectedScenes.first(where: { $0.session.configuration.name == "Default Configuration" })
     }
 }

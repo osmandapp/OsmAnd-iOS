@@ -570,11 +570,21 @@
     CLLocationManager *manager = self.getLocationManager;
     if (!manager)
         return;
+    
+    OALog(@"Recording track: Is enabled: %@", _settings.mapSettingTrackRecording ? @"YES" : @"NO");
+    OALog(@"Recording track: Is following: %@", [_routingHelper isFollowingMode] ? @"YES" : @"NO");
 
-    if (enable)
+    // Distance filter will use the selected saveTrackMinDistance if not in following mode
+    if (enable && ![_routingHelper isFollowingMode] && _settings.mapSettingTrackRecording) {
+        manager.distanceFilter = (long)[_settings.saveTrackMinDistance get];
+        OALog(@"Recording track: Setting background distance filter to: %ld", (long)[_settings.saveTrackMinDistance get]);
+    } else if (enable) {
         manager.distanceFilter = [_settings.applicationMode.get getBackgroundDistanceFilter];
-    else
+        OALog(@"Setting background distance filter to: %ld", (long)[_settings.applicationMode.get getBackgroundDistanceFilter]);
+    } else {
         manager.distanceFilter = kCLDistanceFilterNone;
+        OALog(@"Setting background distance filter to: none");
+    }
 }
 
 + (BOOL) isPointAccurateForRouting:(CLLocation *)loc

@@ -1149,7 +1149,7 @@
 
 - (void) setMapMode:(OAMapMode)mapMode
 {
-    if (_mapMode == mapMode)
+    if (_mapMode == mapMode || (_mapMode == OAMapModePositionTrack && [[OARoutingHelper sharedInstance] isFollowingMode]))
         return;
     _prevMapMode = _mapMode;
     _mapMode = mapMode;

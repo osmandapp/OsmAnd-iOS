@@ -132,6 +132,7 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 @property (nonatomic) BOOL wikipedia;
 @property (readonly) OAObservable* wikipediaChangeObservable;
 @property (nonatomic) OADownloadMode *wikipediaImagesDownloadMode;
+@property (nonatomic) OADownloadMode *travelGuidesImagesDownloadMode;
 
 @property (readonly) OAObservable* mapLayerChangeObservable;
 
@@ -214,5 +215,8 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 
 - (OADownloadMode *)getWikipediaImagesDownloadMode:(OAApplicationMode *)mode;
 - (void)setWikipediaImagesDownloadMode:(OADownloadMode *)downloadMode mode:(OAApplicationMode *)mode;
+
+- (OADownloadMode *)getTravelGuidesImagesDownloadMode:(OAApplicationMode *)mode;
+- (void)setTravelGuidesImagesDownloadMode:(OADownloadMode *)downloadMode mode:(OAApplicationMode *)mode;
 
 @end

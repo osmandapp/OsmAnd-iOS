@@ -323,6 +323,11 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         return 2
     }
     
+    func notDownloadImages() -> Bool {
+        let imagesDownloadMode = OsmAndApp.swiftInstance().data.travelGuidesImagesDownloadMode
+        return imagesDownloadMode!.isDontDownload() || (imagesDownloadMode!.isDownloadOnlyViaWifi() && AFNetworkReachabilityManagerWrapper.isReachableViaWWAN())
+    }
+    
     
     //MARK: Actions
     
@@ -485,8 +490,8 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
             cell!.regionLabel.text = item.string(forKey: "isPartOf")
 
             cell?.imageVisibility(true)
-            if let iconName = item.iconName {
-                startAsyncImageDownloading(iconName, cell)
+            if item.iconName != nil && !notDownloadImages() {
+                startAsyncImageDownloading(item.iconName!, cell)
             } else {
                 cell?.noImageIconVisibility(true)
             }
@@ -544,8 +549,8 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
                     cell.noImageIcon.image = UIImage.templateImageNamed(noImageIconName)
                 }
 
-                if let iconName = item.iconName {
-                    startAsyncImageDownloading(iconName, cell)
+                if item.iconName != nil && !notDownloadImages() {
+                    startAsyncImageDownloading(item.iconName!, cell)
                 } else {
                     cell.noImageIcon.isHidden = false
                 }

@@ -99,6 +99,7 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     var selectedLang: String?
     var langs: [String]?
     var nightMode = false
+    var isDownloadNow = false
     
     var historyArticleIds: [TravelArticleIdentifier] = []
     var historyLangs: [String] = []
@@ -232,20 +233,30 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
             self.shareArticle()
         }
         
-        let noDownloadAction = UIAction(title: localizedString("dont_download")) { _ in
-            print("noDownloadAction")
+        let mode = getImagesDownloadMode()
+        
+        let noDownloadAction = UIAction(title: localizedString("dont_download"), state: mode == OADownloadMode.none() ? .on : .off) { _ in
+            OsmAndApp.swiftInstance().data.travelGuidesImagesDownloadMode = OADownloadMode.none()
+            self.loadWebView()
+            self.setupNavbarButtons()
         }
-        let overWifiAction = UIAction(title: localizedString("over_wifi_only")) { _ in
-            print("overWifiAction")
+        let overWifiAction = UIAction(title: localizedString("over_wifi_only"), state: mode == OADownloadMode.wifi_ONLY() ? .on : .off) { _ in
+            OsmAndApp.swiftInstance().data.travelGuidesImagesDownloadMode = OADownloadMode.wifi_ONLY()
+            self.loadWebView()
+            self.setupNavbarButtons()
         }
-        let anyNetworkAction = UIAction(title: localizedString("over_any_network")) { _ in
-            print("anyNetworkAction")
+        let anyNetworkAction = UIAction(title: localizedString("over_any_network"), state: mode == OADownloadMode.any_NETWORK() ? .on : .off) { _ in
+            OsmAndApp.swiftInstance().data.travelGuidesImagesDownloadMode = OADownloadMode.any_NETWORK()
+            self.loadWebView()
+            self.setupNavbarButtons()
         }
         
         let imageActionsAboveDivider = [noDownloadAction, overWifiAction, anyNetworkAction]
         let divider = UIMenu(title: "", options: .displayInline, children: imageActionsAboveDivider)
-        let downloadNowAction = UIAction(title: localizedString("download_only_now"), image: UIImage(systemName: "square.and.arrow.down")) { _ in
-            print("foo")
+        let downloadNowAction = UIAction(title: localizedString("download_only_now"), image: UIImage(systemName: "square.and.arrow.down"), state: self.isDownloadImagesOnlyNow() ? .on : .off) { _ in
+            self.setDownloadImagesOnlyNow(true)
+            self.loadWebView()
+            self.setupNavbarButtons()
         }
         let imagesMenu = UIMenu(title: localizedString("images"), image: UIImage(systemName: "photo"), children: [divider, downloadNowAction])
         
@@ -254,7 +265,6 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         
         return [optionsButton!, languageButton!]
     }
-
     
     //MARK: Actions
     
@@ -447,12 +457,13 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         
         
         if imageTitle != nil && imageTitle!.length > 0 {
-            let url = TravelArticle.getImageUrl(imageTitle: imageTitle!, thumbnail: false)
+            let imagesDownloadMode = getImagesDownloadMode()
+            let dontLoadImages = !self.isDownloadImagesOnlyNow() && (imagesDownloadMode!.isDontDownload() || (imagesDownloadMode!.isDownloadOnlyViaWifi() && AFNetworkReachabilityManagerWrapper.isReachableViaWWAN()))
             
-            //TODO: add menu for Image Downloading settings. And uncomment.
-            //if OAAppSettings.sharedManager().wikivoyageShowImgs.get() != EOAWikiArticleShowConstant.off && !url.hasPrefix(TravelArticleDialogViewController.EMPTY_URL) {
+            if !dontLoadImages {
+                let url = TravelArticle.getImageUrl(imageTitle: imageTitle!, thumbnail: false)
                 sb += "<div class=\"title-image" + nightModeClass + "\" style=\"background-image: url(" + url + ")\"></div>"
-            //}
+            }
         }
         
         sb += "<div class=\"main" + nightModeClass + "\">\n"
@@ -531,6 +542,18 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         } else {
             decisionHandler(.allow)
         }
+    }
+    
+    override func getImagesDownloadMode() -> OADownloadMode! {
+        return OsmAndApp.swiftInstance().data.travelGuidesImagesDownloadMode
+    }
+    
+    override func isDownloadImagesOnlyNow() -> Bool {
+        return isDownloadNow
+    }
+    
+    override func setDownloadImagesOnlyNow(_ onlyNow: Bool) {
+        isDownloadNow = onlyNow
     }
     
     

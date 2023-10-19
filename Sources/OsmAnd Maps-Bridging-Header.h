@@ -25,6 +25,7 @@
 #import "OAWikiArticleHelper.h"
 #import "OAGPXDatabase.h"
 #import "OASizes.h"
+#import "AFNetworkReachabilityManagerWrapper.h"
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"

@@ -571,16 +571,20 @@
     if (!manager)
         return;
     
+    // ToDo: Remove Logs
     OALog(@"Recording track: Is enabled: %@", _settings.mapSettingTrackRecording ? @"YES" : @"NO");
     OALog(@"Recording track: Is following: %@", [_routingHelper isFollowingMode] ? @"YES" : @"NO");
+    
+    long defaultBackgroundDistanceFilter = [_settings.applicationMode.get getBackgroundDistanceFilter];
+    long saveTrackMinDistance = (long)[_settings.saveTrackMinDistance get];
 
     // Distance filter will use the selected saveTrackMinDistance if not in following mode
-    if (enable && ![_routingHelper isFollowingMode] && _settings.mapSettingTrackRecording) {
-        manager.distanceFilter = (long)[_settings.saveTrackMinDistance get];
-        OALog(@"Recording track: Setting background distance filter to: %ld", (long)[_settings.saveTrackMinDistance get]);
+    if (enable && ![_routingHelper isFollowingMode] && _settings.mapSettingTrackRecording && saveTrackMinDistance > defaultBackgroundDistanceFilter) {
+        manager.distanceFilter = saveTrackMinDistance;
+        OALog(@"Recording track: Setting background distance filter to: %ld", saveTrackMinDistance);
     } else if (enable) {
-        manager.distanceFilter = [_settings.applicationMode.get getBackgroundDistanceFilter];
-        OALog(@"Setting background distance filter to: %ld", (long)[_settings.applicationMode.get getBackgroundDistanceFilter]);
+        manager.distanceFilter = defaultBackgroundDistanceFilter;
+        OALog(@"Setting background distance filter to: %ld", defaultBackgroundDistanceFilter);
     } else {
         manager.distanceFilter = kCLDistanceFilterNone;
         OALog(@"Setting background distance filter to: none");

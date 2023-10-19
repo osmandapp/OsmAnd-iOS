@@ -157,8 +157,7 @@
     {
         NSString *name = [OATravelObfHelper.shared getGPXNameWithArticle:article];
         gpxFile.path = [OsmAndApp.instance.gpxTravelPath stringByAppendingPathComponent:name];
-        
-        //TODO: implement hiding track from map
+        [OAAppSettings.sharedManager hideGpx:@[gpxFile.path] update:YES];
     }
     
     NSString *dir = OsmAndApp.instance.travelGuidesPath;

@@ -208,12 +208,28 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         }
     }
     
+    override func getTitle() -> String! {
+        return article?.title ?? ""
+    }
+    
+    override func getNavbarStyle() -> EOABaseNavbarStyle {
+        .customLargeTitle
+    }
+    
+    override func getLeftNavbarButtonTitle() -> String! {
+        return localizedString("shared_string_back")
+    }
+    
+    override func forceShowShevron() -> Bool {
+        return true
+    }
+    
     override func getRightNavbarButtons() -> [UIBarButtonItem]! {
         let languageMenu = OAWikiArticleHelper.createLanguagesMenu(langs, selectedLocale: selectedLang, delegate: self)
         let languageButton = createRightNavbarButton(nil, iconName: "ic_navbar_languge", action: #selector(onLanguagesButtonClicked), menu: languageMenu)
         
         let shareAction = UIAction(title: localizedString("shared_string_share"), image: UIImage(systemName: "square.and.arrow.up") ) { _ in
-            print("shareAction")
+            self.shareArticle()
         }
         
         let noDownloadAction = UIAction(title: localizedString("dont_download")) { _ in
@@ -237,22 +253,6 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         let optionsButton = createRightNavbarButton(nil, iconName: "ic_navbar_overflow_menu_stroke", action: nil, menu: optionsMenu)
         
         return [optionsButton!, languageButton!]
-    }
-    
-    override func getTitle() -> String! {
-        return article?.title ?? ""
-    }
-    
-    override func getNavbarStyle() -> EOABaseNavbarStyle {
-        .customLargeTitle
-    }
-    
-    override func getLeftNavbarButtonTitle() -> String! {
-        return localizedString("shared_string_back")
-    }
-    
-    override func forceShowShevron() -> Bool {
-        return true
     }
 
     
@@ -326,6 +326,17 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
     
     override func onLeftNavbarButtonLongtapPressed() {
         super.dismiss()
+    }
+    
+    func shareArticle() {
+        //    https://osmand.net/travel?title=Tashkent&lang=en
+        let title = article!.title!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        let lang = selectedLang == "" ? "en" : selectedLang
+        let articleUrl = "https://osmand.net/travel?title=" + title! + "&lang=" + lang!
+        
+        let items = [URL(string: articleUrl)!]
+        let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        present(ac, animated: true)
     }
     
     
@@ -515,11 +526,8 @@ class TravelArticleDialogViewController : OABaseWebViewController, TravelArticle
         } else if isWebPage {
             OAWikiArticleHelper.warnAboutExternalLoad(newUrl, sourceView: self.webView)
             decisionHandler(.cancel)
-        } else if newUrl.hasPrefix(PREFIX_GEO) {
-
-            //TODO: implement
-            decisionHandler(.cancel)
-
+//        } else if newUrl.hasPrefix(PREFIX_GEO) {
+//            decisionHandler(.cancel)
         } else {
             decisionHandler(.allow)
         }

@@ -433,7 +433,7 @@ class TravelObfHelper : NSObject {
         var amenities = [OAPOIAdapter]()
         
         for reader in getReaders() {
-            OATravelGuidesHelper.searchAmenity(-1, lon: -1, reader: reader, radius: -1, searchFilter: ROUTE_ARTICLE) { amenity in
+            OATravelGuidesHelper.searchAmenity(title, categoryName: ROUTE_ARTICLE, radius: -1, lat: -1, lon: -1, reader: reader) { amenity in
                 if title == amenity!.getName(lang, transliterate: false) {
                     amenities.append(amenity!)
                     return true
@@ -534,7 +534,7 @@ class TravelObfHelper : NSObject {
         return article
     }
     
-    //TODO: check it
+
     func findSavedArticle(savedArticle: TravelArticle) -> TravelArticle? {
         var amenities: [(String, OAPOIAdapter)] = []
         var article: TravelArticle? = nil

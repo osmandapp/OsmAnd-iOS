@@ -173,12 +173,10 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
                 
             } else {
                 
+                // TODO: Add "Start editing Wikivoyage" card
                 //        if (!Version.isPaidVersion(app) && !OpenBetaTravelCard.isClosed()) {
                 //            items.add(new OpenBetaTravelCard(activity, nightMode));
                 //        }
-                
-                //TODO:  add TravelNeededMaps Card for bookmarks
-            
                 
                 let articles = TravelObfHelper.shared.getPopularArticles()
                 if articles.count > 0 {
@@ -337,7 +335,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     
     func onOptionsButtonClicked() {
         print("onOptionsButtonClicked")
-        let vc = OABaseNavbarViewController()
+        let vc = TravelGuidesSettingsViewController()
         showModalViewController(vc)
     }
     
@@ -693,13 +691,12 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     }
     
     private func setupSearchControllerWithFilter(_ isFiltered: Bool) {
-        searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("travel_guides_search_placeholder"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(rgb: color_text_footer)])
-        searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1.0, alpha: 0.3)
+        searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("travel_guides_search_placeholder"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorSecondary])
         if isFiltered {
-            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 0, alpha: 0.8)
+            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor.textColorPrimary
         } else {
-            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor(white: 0, alpha: 0.3)
-            searchController.searchBar.searchTextField.tintColor = UIColor.gray
+            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor.textColorSecondary
+            searchController.searchBar.searchTextField.tintColor = UIColor.textColorSecondary
         }
     }
     

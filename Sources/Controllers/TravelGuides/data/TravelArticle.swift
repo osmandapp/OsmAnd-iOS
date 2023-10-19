@@ -45,10 +45,6 @@ class TravelArticle: NSObject {
     
     static func getTravelBook(file: String) -> String {
         let dir = OsmAndApp.swiftInstance().dataPath
-        
-        //TODO: check it
-        //dir = appPath + WIKIVOYAGE_INDEX_DIR + "/"
-        
         return file.replacingOccurrences(of: dir!, with: "")
     }
     
@@ -153,10 +149,7 @@ class TravelArticle: NSObject {
     static func decodeUrl(url: String) -> String?
     {
         return url.removingPercentEncoding
-    }
-    
-        //TODO: add read/wirite to Parcel methods if it needed. In Swift it can be called Codable. Or just Dict
-    
+    }    
 }
 
 @objc(OATravelArticleIdentifier)

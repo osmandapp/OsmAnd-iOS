@@ -19,8 +19,6 @@ class TravelSearchHistoryItem : NSObject {
     var lastAccessed: TimeInterval = 0
     
     static func getKey(lang: String, title: String, file: String?) -> String {
-        //TODO: implement file.getName()
-        //return lang + ":" + title + (file != null ? ":" + file.getName() : "");
         return lang + ":" + title + ((file != nil) ? (":" + file!) : "")
     }
     

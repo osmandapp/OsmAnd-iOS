@@ -34,11 +34,6 @@ protocol TravelHelper {
     func searchGpx(latLon:CLLocationCoordinate2D, filter: String?, ref: String?) -> TravelGpx?
     func openTrackMenu(article: TravelArticle, gpxFileName: String, latLon:CLLocationCoordinate2D)
     func getGPXName(article: TravelArticle) -> String
-    func createGpxFile(article: TravelArticle) -> String
-    
-    // TODO: this method should be deleted once TravelDBHelper is deleted
-    //String getSelectedTravelBookName();
-    //String getWikivoyageFileName();
-    
+    func createGpxFile(article: TravelArticle) -> String    
     func saveOrRemoveArticle(article: TravelArticle, save: Bool)
 }

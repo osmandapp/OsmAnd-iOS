@@ -494,6 +494,7 @@
 		32E2D30429B9DB5700A17D0B /* ic_custom_coordinates_map_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32E2D30029B9DB5600A17D0B /* ic_custom_coordinates_map_center@3x.png */; };
 		32E2D30529B9DB5700A17D0B /* ic_custom_coordinates_location@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32E2D30129B9DB5700A17D0B /* ic_custom_coordinates_location@2x.png */; };
 		32E6C7C82AB9BE1A00821F1E /* TravelSearchHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E6C7C72AB9BE1A00821F1E /* TravelSearchHelper.swift */; };
+		32EAF9FB2AE0241F00646807 /* TravelGuidesSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EAF9FA2AE0241F00646807 /* TravelGuidesSettingsViewController.swift */; };
 		32EB3DF12AC325780018D9B8 /* OATravelLocalDataDbHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */; };
 		32F6225D29A7AE080069EE04 /* OAAmenityExtendedNameFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320EADAB29A77AAB002F9883 /* OAAmenityExtendedNameFilter.mm */; };
 		333168BA2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
@@ -4279,6 +4280,7 @@
 		32E2D30029B9DB5600A17D0B /* ic_custom_coordinates_map_center@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates_map_center@3x.png"; path = "Resources/Icons/ic_custom_coordinates_map_center@3x.png"; sourceTree = "<group>"; };
 		32E2D30129B9DB5700A17D0B /* ic_custom_coordinates_location@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates_location@2x.png"; path = "Resources/Icons/ic_custom_coordinates_location@2x.png"; sourceTree = "<group>"; };
 		32E6C7C72AB9BE1A00821F1E /* TravelSearchHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelSearchHelper.swift; sourceTree = "<group>"; };
+		32EAF9FA2AE0241F00646807 /* TravelGuidesSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesSettingsViewController.swift; sourceTree = "<group>"; };
 		32EB3DEF2AC3256B0018D9B8 /* OATravelLocalDataDbHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATravelLocalDataDbHelper.h; sourceTree = "<group>"; };
 		32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATravelLocalDataDbHelper.mm; sourceTree = "<group>"; };
 		32ECBEAD2657AD7F005D33BD /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -8651,6 +8653,7 @@
 				320F71252A823F980071C0E7 /* data */,
 				327D68A62A8F9BD30076D1E0 /* explore */,
 				32E1EAA02AB87B7200CE13B6 /* search */,
+				32EAF9F92AE023F000646807 /* settings */,
 				324513392AAB714200A5F715 /* TravelGuidesState.swift */,
 				3219995C2AA22E910000ADC4 /* TravelGuidesUtils.swift */,
 			);
@@ -8744,6 +8747,14 @@
 				32E6C7C72AB9BE1A00821F1E /* TravelSearchHelper.swift */,
 			);
 			path = search;
+			sourceTree = "<group>";
+		};
+		32EAF9F92AE023F000646807 /* settings */ = {
+			isa = PBXGroup;
+			children = (
+				32EAF9FA2AE0241F00646807 /* TravelGuidesSettingsViewController.swift */,
+			);
+			path = settings;
 			sourceTree = "<group>";
 		};
 		3AC639A61A1CF54F001D5E57 /* IntroImages */ = {
@@ -18208,6 +18219,7 @@
 				DA5A825326C563A700F274C7 /* OARouteParameterValuesViewController.mm in Sources */,
 				DA5A814826C563A700F274C7 /* OAOsmBugsRemoteUtil.m in Sources */,
 				DA5A839326C563A800F274C7 /* OACustomSourceDetailsViewController.mm in Sources */,
+				32EAF9FB2AE0241F00646807 /* TravelGuidesSettingsViewController.swift in Sources */,
 				4686F94F2954F07C000FC204 /* OATextMultilineTableViewCell.m in Sources */,
 				DA5A82EA26C563A800F274C7 /* OAPasswordInputFieldCell.mm in Sources */,
 				320F713F2A867D930071C0E7 /* TravelSearchHistoryItem.swift in Sources */,

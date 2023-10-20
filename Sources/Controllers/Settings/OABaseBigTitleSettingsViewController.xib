@@ -63,7 +63,7 @@
                                 <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="KlE-kS-D4d"/>
                             </constraints>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                            <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="tintColor" name="iconColorActive"/>
                             <inset key="titleEdgeInsets" minX="-10" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <state key="normal" image="ic_navbar_chevron.png">
                                 <color key="titleColor" name="iconColorActive"/>

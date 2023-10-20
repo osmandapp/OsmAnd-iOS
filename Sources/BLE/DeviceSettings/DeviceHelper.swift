@@ -24,12 +24,16 @@ final class DeviceHelper {
     
     func setDevicePaired(device: Device, isPaired: Bool) {
         if isPaired {
-            if devicesSettingsCollection.getDeviceSettings(deviceId: device.id) == nil {
+            if !isPairedDevice(id: device.id) {
                 devicesSettingsCollection.createDeviceSettings(device: device, deviceEnabled: true)
             }
         } else {
             dropUnpairedDevice(device: device)
         }
+    }
+    
+    func isPairedDevice(id: String) -> Bool {
+        devicesSettingsCollection.getDeviceSettings(deviceId: id) != nil
     }
     
     func changeDeviceName(with id: String, name: String) {
@@ -39,5 +43,11 @@ final class DeviceHelper {
     private func dropUnpairedDevice(device: Device) {
         device.peripheral.disconnect { result in }
         devicesSettingsCollection.removeDeviceSetting(with: device.id)
+    }
+}
+
+extension DeviceHelper {
+    func clearPairedDevices() {
+        
     }
 }

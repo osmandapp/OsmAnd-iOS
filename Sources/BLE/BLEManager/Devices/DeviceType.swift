@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum DeviceType: String, CodingKey {
+enum DeviceType: String, Codable {
     case BLE_BATTERY, BLE_TEMPERATURE, BLE_HEART_RATE, BLE_BLOOD_PRESSURE, BLE_BICYCLE_SCD, BLE_RUNNING_SCDS
 }
 

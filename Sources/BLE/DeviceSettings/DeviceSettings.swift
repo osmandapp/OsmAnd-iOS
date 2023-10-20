@@ -16,20 +16,34 @@ import Foundation
 //    var additionalParams: Any { get }
 //}
 
+//struct Locomotive: Codable {
+//    var id, name: String
+//    var generation: Int
+//    var livery: Livery?
+//
+////    private enum CodingKeys: String, CodingKey {
+////        case id, name, generation, livery
+////    }
+//
+//    //    enum CodingKeys: String, CodingKey {
+//    //         case deviceId
+//    //         case deviceType
+//    //      //   case deviceName
+//    //         case deviceEnabled
+//    //     }
+//}
+//
+//enum Livery: String, Codable {
+//    case oo, ff
+//}
 
-class DeviceSettings {
+
+class DeviceSettings: Codable {
     var deviceId: String
     var deviceType: DeviceType = .BLE_BATTERY
     var deviceName: String = ""
     var deviceEnabled: Bool
-    
-    enum CodingKeys: String, CodingKey {
-         case deviceId
-         case deviceType
-         case deviceName
-         case deviceEnabled
-     }
-  //  var additionalParams: Any
+   // var additionalParams: Any?
     
     init(deviceId: String,
          deviceType: DeviceType,

@@ -12,48 +12,57 @@ enum UserDefaultsKey: String {
     case deviceSettings
 }
 
-extension UserDefaults {
-    func set(_ value: Any, for key: UserDefaultsKey) {
-        set(value, forKey: key.rawValue)
-    }
-    
-    func bool(for key: UserDefaultsKey) -> Bool {
-        bool(forKey: key.rawValue)
-    }
-    
-    func data(for key: UserDefaultsKey) -> Data? {
-        data(forKey: key.rawValue)
-    }
-    
-    func string(for key: UserDefaultsKey) -> String? {
-        string(forKey: key.rawValue)
-    }
-    
-    func integer(for key: UserDefaultsKey) -> Int? {
-        integer(forKey: key.rawValue)
-    }
-    
-    func float(for key: UserDefaultsKey) -> Float? {
-        float(forKey: key.rawValue)
-    }
-    
-    func url(for key: UserDefaultsKey) -> URL? {
-        url(forKey: key.rawValue)
-    }
-    
-    func value(for key: UserDefaultsKey) -> Any? {
-        value(forKey: key.rawValue)
-    }
-}
+//extension UserDefaults {
+//    func set(_ value: Any, for key: UserDefaultsKey) {
+//        set(value, forKey: key.rawValue)
+//    }
+//
+//    func bool(for key: UserDefaultsKey) -> Bool {
+//        bool(forKey: key.rawValue)
+//    }
+//
+//    func data(for key: UserDefaultsKey) -> Data? {
+//        data(forKey: key.rawValue)
+//    }
+//
+//    func string(for key: UserDefaultsKey) -> String? {
+//        string(forKey: key.rawValue)
+//    }
+//
+//    func integer(for key: UserDefaultsKey) -> Int? {
+//        integer(forKey: key.rawValue)
+//    }
+//
+//    func float(for key: UserDefaultsKey) -> Float? {
+//        float(forKey: key.rawValue)
+//    }
+//
+//    func url(for key: UserDefaultsKey) -> URL? {
+//        url(forKey: key.rawValue)
+//    }
+//
+//    func value(for key: UserDefaultsKey) -> Any? {
+//        value(forKey: key.rawValue)
+//    }
+//}
 
 extension UserDefaults {
 
-    subscript(key: String) -> Any? {
+//    subscript(key: String) -> Any? {
+//        get {
+//            return object(forKey: key)
+//        }
+//        set {
+//            set(newValue, forKey: key)
+//        }
+//    }
+    
+    subscript<T: Codable>(key: UserDefaultsKey) -> T? {
         get {
-            return object(forKey: key)
+            return object(T.self, with: key.rawValue)
         }
         set {
-            set(newValue, forKey: key)
+            set(object: newValue, forKey: key.rawValue)
         }
     }
 
@@ -108,7 +117,7 @@ final class DevicesSettingsCollection {
 //    }
 
     func getDeviceSettings(deviceId: String) -> DeviceSettings? {
-        if let deviceSettingsArray = storage[UserDefaultsKey.deviceSettings.rawValue] as? [DeviceSettings],
+        if let deviceSettingsArray = storage.object([DeviceSettings].self, with: UserDefaultsKey.deviceSettings.rawValue),
            let deviceSettings = deviceSettingsArray.first(where: { $0.deviceId == deviceId }) {
             return deviceSettings
             
@@ -117,10 +126,11 @@ final class DevicesSettingsCollection {
     }
     
     func removeDeviceSetting(with id: String) {
-        if var deviceSettingsArray = storage[UserDefaultsKey.deviceSettings.rawValue] as? [DeviceSettings] {
+        let key = UserDefaultsKey.deviceSettings.rawValue
+        if var deviceSettingsArray = storage.object([DeviceSettings].self, with: key) {
             if let index = deviceSettingsArray.firstIndex(where: { $0.deviceId == id }) {
                 deviceSettingsArray.remove(at: index)
-                storage[UserDefaultsKey.deviceSettings.rawValue] = deviceSettingsArray
+                storage.set(object: deviceSettingsArray, forKey: key)
             }
         }
     }
@@ -144,19 +154,21 @@ final class DevicesSettingsCollection {
     }
     
     private func addDeviceSettings(item: DeviceSettings) {
-        if var deviceSettingsArray = storage[UserDefaultsKey.deviceSettings.rawValue] as? [DeviceSettings] {
+        let key = UserDefaultsKey.deviceSettings.rawValue
+        if var deviceSettingsArray = storage.object([DeviceSettings].self, with: key) {
             deviceSettingsArray.append(item)
-            storage[UserDefaultsKey.deviceSettings.rawValue] = deviceSettingsArray
+            storage.set(object: deviceSettingsArray, forKey: key)
         } else {
-            storage[UserDefaultsKey.deviceSettings.rawValue] = [item]
+            storage.set(object: [item], forKey: key)
         }
     }
     
     private func updateDeviceSettings(item: DeviceSettings) {
-        if var deviceSettingsArray = storage[UserDefaultsKey.deviceSettings.rawValue] as? [DeviceSettings] {
+        let key = UserDefaultsKey.deviceSettings.rawValue
+        if var deviceSettingsArray = storage.object([DeviceSettings].self, with: key) {
             if let deviceSettingsIndex = deviceSettingsArray.firstIndex(where: { $0.deviceId == item.deviceId }) {
                 deviceSettingsArray[deviceSettingsIndex] = item
-                storage[UserDefaultsKey.deviceSettings.rawValue] = deviceSettingsArray
+                storage.set(object: deviceSettingsArray, forKey: key)
             }
         }
     }

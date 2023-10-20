@@ -39,9 +39,15 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = 48
-        tableView.tableFooterView = nil
+       // tableView.tableFooterView = nil
         configureHeader()
         headerView.configure(item: device)
+        headerView.didPaireDevicedAction = { [weak self] in
+            guard let self else { return }
+            generateData()
+            tableView.reloadData()
+            
+        }
         tableView.tableHeaderView = headerView
         registerObservers()
     }
@@ -58,61 +64,71 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
     
     override func generateData() {
         tableData.clearAllData()
-        // Information
-        if let sensor = device.sensors.first(where: { $0 is BLEBatterySensor }) as? BLEBatterySensor {
-            let infoSection = tableData.createNewSection()
-            infoSection.headerText = "Information".uppercased()
-            let batteryRow = infoSection.createNewRow()
-            batteryRow.cellType = OAValueTableViewCell.getIdentifier()
-            batteryRow.key = "battery_row"
-            batteryRow.title = "Battery"
-            batteryRow.descr = sensor.lastBatteryData.batteryLevel != -1 ? String(sensor.lastBatteryData.batteryLevel) + "%" : "-"
-        }
-        // Received Data
-        if let receivedData = device.getDataFields {
-            let receivedDataSection = tableData.createNewSection()
-            receivedDataSection.headerText = "Received Data".uppercased()
-            for (key, value) in receivedData {
-                let row = receivedDataSection.createNewRow()
-                row.cellType = OAValueTableViewCell.getIdentifier()
-                row.key = "row"
-                row.title = key
-                row.descr = value != "0" ? value : "-"
+        if DeviceHelper.shared.isPairedDevice(id: device.id) {
+            tableView.sectionHeaderTopPadding = 20
+            // Information
+            if let sensor = device.sensors.first(where: { $0 is BLEBatterySensor }) as? BLEBatterySensor {
+                let infoSection = tableData.createNewSection()
+                infoSection.headerText = "Information".uppercased()
+                let batteryRow = infoSection.createNewRow()
+                batteryRow.cellType = OAValueTableViewCell.getIdentifier()
+                batteryRow.key = "battery_row"
+                batteryRow.title = "Battery"
+                batteryRow.descr = sensor.lastBatteryData.batteryLevel != -1 ? String(sensor.lastBatteryData.batteryLevel) + "%" : "-"
             }
-        }
-        // Settings
-        let settingsSection = tableData.createNewSection()
-        settingsSection.headerText = "Settings".uppercased()
-        let nameRow = settingsSection.createNewRow()
-        nameRow.cellType = OAValueTableViewCell.getIdentifier()
-        nameRow.key = "name_row"
-        nameRow.title = "Name"
-        nameRow.descr = device?.deviceName ?? ""
-        
-        if let settingsData = device.getSettingsFields {
+            // Received Data
+            if let receivedData = device.getDataFields {
+                let receivedDataSection = tableData.createNewSection()
+                receivedDataSection.headerText = "Received Data".uppercased()
+                for (key, value) in receivedData {
+                    let row = receivedDataSection.createNewRow()
+                    row.cellType = OAValueTableViewCell.getIdentifier()
+                    row.key = "row"
+                    row.title = key
+                    row.descr = value != "0" ? value : "-"
+                }
+            }
+            // Settings
+            let settingsSection = tableData.createNewSection()
+            settingsSection.headerText = "Settings".uppercased()
+            let nameRow = settingsSection.createNewRow()
+            nameRow.cellType = OAValueTableViewCell.getIdentifier()
+            nameRow.key = "name_row"
+            nameRow.title = "Name"
+            nameRow.descr = device?.deviceName ?? ""
             
+            if let settingsData = device.getSettingsFields {
+                #warning("need data")
+            }
+            
+            let forgetSensorSection = tableData.createNewSection()
+            let forgetSensorRow = forgetSensorSection.createNewRow()
+            forgetSensorRow.cellType = OAValueTableViewCell.getIdentifier()
+            forgetSensorRow.key = "forget_sensor_row"
+            forgetSensorRow.title = "Forget sensor"
+        } else {
+            tableView.sectionHeaderTopPadding = 0
+            let footerSection = tableData.createNewSection()
+            footerSection.footerText = "Connect sensor to your device to get information."
         }
-        
-        let forgetSensorSection = tableData.createNewSection()
-        let forgetSensorRow = forgetSensorSection.createNewRow()
-        forgetSensorRow.cellType = OAValueTableViewCell.getIdentifier()
-        forgetSensorRow.key = "forget_sensor_row"
-        forgetSensorRow.title = "Forget sensor"
+        tableData.resetChanges()
     }
     
     override func getCustomHeight(forHeader section: Int) -> CGFloat {
         if let section = Section(rawValue: section), section == .forgetSensor {
             return 10
+        } else if !DeviceHelper.shared.isPairedDevice(id: device.id) {
+            return .leastNonzeroMagnitude
         }
         return UITableView.automaticDimension
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        .leastNonzeroMagnitude
+        DeviceHelper.shared.isPairedDevice(id: device.id) ? .leastNonzeroMagnitude : 34
     }
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
-        let item = tableData!.item(for: indexPath)
+        let item = tableData.item(for: indexPath)
         let isForgetSensorCell = item.key == "forget_sensor_row"
         if item.cellType == OAValueTableViewCell.getIdentifier() {
             var cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.getIdentifier()) as? OAValueTableViewCell
@@ -123,22 +139,47 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
                 cell?.leftIconVisibility(false)
             }
             if let cell {
-                if indexPath.section <= 1 {
-                    cell.selectionStyle = .none
-                    cell.accessoryType = .none
-                } else {
-                    if isForgetSensorCell {
-                        cell.accessoryType = .none
-                    } else {
-                        cell.accessoryType = .disclosureIndicator
-                    }
-                }
                 cell.separatorInset = .zero
                 cell.valueLabel.text = item.descr
                 cell.titleLabel.text = item.title
-                if isForgetSensorCell {
-                    cell.titleLabel.textColor = UIColor.buttonBgColorDisruptive
+                if let section = Section(rawValue: indexPath.section) {
+                    switch section {
+                    case .information, .receivedData:
+                        cell.selectionStyle = .none
+                        cell.accessoryType = .none
+                        cell.titleLabel.textColor = UIColor.textColorPrimary
+                    case .forgetSensor:
+                        cell.selectionStyle = .gray
+                        cell.accessoryType = .none
+                        cell.titleLabel.textColor = UIColor.buttonBgColorDisruptive
+                    case .settings:
+                        cell.selectionStyle = .gray
+                        cell.accessoryType = .disclosureIndicator
+                        cell.titleLabel.textColor = UIColor.textColorPrimary
+                    default:
+                        cell.selectionStyle = .none
+                        cell.accessoryType = .none
+                        cell.titleLabel.textColor = UIColor.textColorPrimary
+                    }
                 }
+//                if indexPath.section <= 1 {
+//                    cell.selectionStyle = .none
+//                    cell.accessoryType = .none
+//                } else {
+//                    if isForgetSensorCell {
+//                        cell.accessoryType = .none
+//                    } else {
+//                        cell.accessoryType = .disclosureIndicator
+//                    }
+//                }
+//                cell.separatorInset = .zero
+//                cell.valueLabel.text = item.descr
+//                cell.titleLabel.text = item.title
+//                if isForgetSensorCell {
+//                    cell.titleLabel.textColor = UIColor.buttonBgColorDisruptive
+//                } else {
+//                    cell.titleLabel.textColor = UIColor.textColorPrimary
+//                }
             }
             return cell
         }
@@ -154,6 +195,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
             nameVC.device = device
             nameVC.onSaveAction = { [weak self] in
                 guard let self else { return }
+                headerView.configure(item: device)
                 generateData()
                 tableView.reloadData()
             }

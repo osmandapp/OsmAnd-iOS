@@ -14745,8 +14745,8 @@
 		FAA650492ADD42C50020DCEA /* BLEDescription */ = {
 			isa = PBXGroup;
 			children = (
-				FAA6504A2ADD42C50020DCEA /* BLEDescriptionViewController.swift */,
 				FAA6504B2ADD42C50020DCEA /* DescriptionDeviceHeader */,
+				FAA6504A2ADD42C50020DCEA /* BLEDescriptionViewController.swift */,
 				FAA6504E2ADD42C50020DCEA /* BLEDescriptionViewController.storyboard */,
 			);
 			path = BLEDescription;

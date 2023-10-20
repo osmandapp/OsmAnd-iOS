@@ -68,6 +68,7 @@ final class BLEManager {
                     if let savedDevice = DeviceHelper.shared.devicesSettingsCollection.getDeviceSettings(deviceId: peripheral.identifier.uuidString) {
                         deviceName = savedDevice.deviceName
                     }
+                    // Cycling Speed and Cadence // 1816
                     device.peripheral = peripheral
                     device.rssi = rssi
                     device.deviceName = deviceName

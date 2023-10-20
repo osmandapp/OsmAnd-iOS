@@ -57,11 +57,7 @@ final class ThemeManager: NSObject {
         case .dark:
             return false
         case .system:
-            if #available(iOS 13.0, *) {
-                return UIScreen.main.traitCollection.userInterfaceStyle != .dark
-            } else {
-                return true
-            }
+            return UIScreen.main.traitCollection.userInterfaceStyle != .dark
         }
     }
     

@@ -276,7 +276,7 @@
             cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
             [cell descriptionVisibility:NO];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.leftIconView.tintColor = UIColor.iconColorActive;
         }
         if (cell)
         {

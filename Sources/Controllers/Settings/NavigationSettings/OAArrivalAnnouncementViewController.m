@@ -7,6 +7,7 @@
 //
 
 #import "OAArrivalAnnouncementViewController.h"
+#import "OASimpleTableViewCell.h"
 #import "OARightIconTableViewCell.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OATableDataModel.h"
@@ -18,6 +19,7 @@
 #import "OAApplicationMode.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kSidePadding 20.
 
@@ -56,7 +58,7 @@
     CGFloat textHeight = [OAUtilities heightForHeaderViewText:text width:textWidth font:kHeaderDescriptionFontSmall lineSpacing:6.0];
 
     UIView *topImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, .5)];
-    topImageDivider.backgroundColor = UIColorFromRGB(color_tint_gray);
+    topImageDivider.backgroundColor = UIColor.iconColorDefault;
 
     UIImage *image = [UIImage imageNamed:@"img_help_announcement_time_day"];
     CGFloat aspectRatio = MIN(self.tableView.frame.size.width, self.tableView.frame.size.height) / image.size.width;
@@ -65,7 +67,7 @@
     imageView.contentMode = UIViewContentModeScaleAspectFit;
 
     UIView *imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, self.tableView.frame.size.width, imageView.frame.size.height)];
-    imageBackgroundView.backgroundColor = UIColor.whiteColor;
+    imageBackgroundView.backgroundColor = UIColor.groupBgColor;
 
     UIView *bottomImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., imageView.frame.origin.y + imageView.frame.size.height, self.tableView.frame.size.width, .5)];
     bottomImageDivider.backgroundColor = UIColorFromRGB(color_tint_gray);
@@ -112,7 +114,7 @@
     {
         NSNumber *value = arrivalValues[i];
         [arrivalSection addRowFromDictionary:@{
-            kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
+            kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
             kCellTitleKey : arrivalNames[i],
             @"value" : value
         }];
@@ -149,7 +151,24 @@
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
-    if ([item.cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
+    if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    {
+        OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item.title;
+            cell.accessoryType = _selectedIndexPath == indexPath ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+        }
+        return cell;
+    }
+    else if ([item.cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
         OARightIconTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
@@ -158,16 +177,12 @@
             cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.rightIconView.tintColor = UIColor.iconColorActive;
         }
         if (cell)
         {
-            if (item.rowType == EOATableRowTypeCollapsable)
-                cell.rightIconView.image = [UIImage templateImageNamed:((OATableCollapsableRowData *) item).collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"];
-            else
-                cell.rightIconView.image = _selectedIndexPath == indexPath ? [UIImage templateImageNamed:@"ic_checkmark_default"] : nil;
-
             cell.titleLabel.text = item.title;
+            cell.rightIconView.image = [UIImage templateImageNamed:((OATableCollapsableRowData *) item).collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"];
         }
         return cell;
     }

@@ -13,7 +13,7 @@
 #import "OASwitchTableViewCell.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OASizes.h"
 #import "OAWeatherBand.h"
 #import "OAWeatherHelper.h"
@@ -160,7 +160,7 @@
             cell = (OAValueTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.leftIconView.tintColor = UIColor.iconColorDefault;
         }
         if (cell)
         {

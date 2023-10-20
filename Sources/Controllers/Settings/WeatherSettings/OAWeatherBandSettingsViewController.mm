@@ -10,7 +10,7 @@
 #import "OATableViewCustomFooterView.h"
 #import "OASimpleTableViewCell.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAWeatherBand.h"
 #import "OAWeatherHelper.h"
 #import "OsmAndApp.h"
@@ -160,11 +160,11 @@
 {
     NSDictionary *nameAttributes = @{
             NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.0],
-            NSForegroundColorAttributeName : UIColor.blackColor
+            NSForegroundColorAttributeName : UIColor.textColorPrimary
     };
     NSDictionary *unitAttributes = @{
             NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.0],
-            NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)
+            NSForegroundColorAttributeName : UIColor.textColorSecondary
     };
 
     NSMutableAttributedString *attributedString = [NSMutableAttributedString new];

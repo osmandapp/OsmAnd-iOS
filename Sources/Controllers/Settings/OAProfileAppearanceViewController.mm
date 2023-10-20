@@ -16,7 +16,7 @@
 #import "OAConfigureProfileViewController.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
-
+#import "OsmAnd_Maps-Swift.h"
 #import "OAInputTableViewCell.h"
 #import "OAColorsTableViewCell.h"
 #import "OAIconsTableViewCell.h"
@@ -553,7 +553,7 @@
         {
             cell.titleLabel.text = item[@"title"];
             cell.valueLabel.text = item[@"value"];
-            cell.valueLabel.tintColor = UIColorFromRGB(color_text_footer);
+            cell.valueLabel.tintColor = UIColor.textColorSecondary;
             cell.currentColor = [_colors indexOfObject:@(_changedProfile.color)];
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
@@ -623,7 +623,7 @@
 {
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
         UITableViewHeaderFooterView * headerView = (UITableViewHeaderFooterView *) view;
-        headerView.textLabel.textColor  = UIColorFromRGB(color_text_footer);
+        headerView.textLabel.textColor  = UIColor.textColorSecondary;
     }
 }
 

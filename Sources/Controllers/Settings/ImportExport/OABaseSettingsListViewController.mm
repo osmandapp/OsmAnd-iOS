@@ -19,6 +19,7 @@
 #import "OAExportSettingsCategory.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OATableCollapsableGroup
 
@@ -176,12 +177,12 @@
                 [cell setCustomLeftSeparatorInset:YES];
                 cell.delegate = self;
                 cell.separatorInset = UIEdgeInsetsZero;
-                cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+                cell.rightIconView.tintColor = UIColor.iconColorActive;
 
                 UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
                 conf.contentInsets = NSDirectionalEdgeInsetsMake(0., -6.5, 0., 0.);
                 cell.leftEditButton.configuration = conf;
-                cell.leftEditButton.layer.shadowColor = UIColorFromRGB(color_tint_gray).CGColor;
+                cell.leftEditButton.layer.shadowColor = UIColor.iconColorDisabled.CGColor;
                 cell.leftEditButton.layer.shadowOffset = CGSizeMake(0., 0.);
                 cell.leftEditButton.layer.shadowOpacity = 1.;
                 cell.leftEditButton.layer.shadowRadius = 1.;
@@ -268,7 +269,7 @@
                         selectedStr = [selectedStr stringByAppendingFormat:@" • %@", [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile]];
                     }
                     
-                    UIColor *color = selectedAmount == 0 ? UIColorFromRGB(color_tint_gray) : item[@"color"];
+                    UIColor *color = selectedAmount == 0 ? UIColor.iconColorDisabled : item[@"color"];
                     cell.leftIconView.tintColor = color;
                     cell.descriptionLabel.text = selectedStr;
                     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -278,7 +279,7 @@
                     [cell descriptionVisibility:NO];
                     cell.titleLabel.text = item[@"title"];
                     cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-                    cell.leftIconView.tintColor = item[@"color"] ? item[@"color"] : UIColorFromRGB(color_tint_gray);
+                    cell.leftIconView.tintColor = item[@"color"] ? item[@"color"] : UIColor.iconColorDisabled;
                     cell.descriptionLabel.text = nil;
                     cell.accessoryType = UITableViewCellAccessoryNone;
                 }

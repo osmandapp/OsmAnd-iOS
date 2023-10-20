@@ -33,7 +33,7 @@
 
 @implementation OABaseButtonsViewController
 {
-    BOOL _isBlurEffect;
+    BOOL _isBottomBackgroundViewBlurred;
 }
 
 @synthesize tableData;
@@ -75,10 +75,10 @@
     }
     else
     {
-        if (!_isBlurEffect)
+        if (!_isBottomBackgroundViewBlurred)
         {
-            [self.bottomBackgroundView addBlurEffect:YES cornerRadius:0. padding:0.];
-            _isBlurEffect = YES;
+            [self.bottomBackgroundView addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
+            _isBottomBackgroundViewBlurred = YES;
         }
     }
 }

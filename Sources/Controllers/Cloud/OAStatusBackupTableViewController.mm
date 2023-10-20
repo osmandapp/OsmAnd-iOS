@@ -44,6 +44,7 @@
 #import "OATableViewCustomHeaderView.h"
 #import "OASizes.h"
 #import "OAResourcesUIHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 typedef NS_ENUM(NSInteger, EOAItemStatusType)
 {
@@ -268,7 +269,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                 EOABackupSyncOperationType operation = deleted ? EOABackupSyncOperationDelete
                     : _tableType == EOARecentChangesLocal ? EOABackupSyncOperationUpload : EOABackupSyncOperationDownload;
                 [itemsSection addRow:[self rowFromKey:it.firstObject
-                                             mainTint:deleted ? color_primary_purple : color_icon_inactive
+                                             mainTint:deleted ? UIColor.iconColorActive : UIColor.iconColorDisabled
                                         secondaryTint:deleted ? color_primary_red : color_primary_purple
                                             operation:operation
                                             localFile:it.lastObject[@"localFile"]
@@ -341,7 +342,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                               remoteFile:(OARemoteFile *)remoteFile
 {
     OATableRowData *rowData = [self rowFromKey:key
-                                      mainTint:color_icon_inactive
+                                      mainTint:UIColor.iconColorDisabled
                                  secondaryTint:color_tint_gray
                                      operation:EOABackupSyncOperationNone
                                      localFile:localFile
@@ -349,20 +350,20 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     NSString *conflictStr = [OALocalizedString(@"cloud_conflict") stringByAppendingString:@". "];
     NSMutableAttributedString *attributedDescr = [[NSMutableAttributedString alloc] initWithString:[conflictStr stringByAppendingString:rowData.descr]];
     [attributedDescr addAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:13 weight:UIFontWeightMedium],
-                                      NSForegroundColorAttributeName : UIColorFromRGB(color_primary_red) }
+                                      NSForegroundColorAttributeName : UIColor.buttonBgColorDisruptive }
                              range:[attributedDescr.string rangeOfString:conflictStr]];
     [attributedDescr addAttributes:@{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote],
-                                      NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer) }
+                                      NSForegroundColorAttributeName : UIColor.textColorSecondary }
                              range:[attributedDescr.string rangeOfString:rowData.descr]];
     [rowData setObj:attributedDescr forKey:@"descrAttr"];
     [rowData setObj:@"ic_custom_alert" forKey:@"secondaryIconConflict"];
     [rowData setObj:@(color_primary_red) forKey:@"secondaryIconColor"];
-    [rowData setIconTint:color_primary_purple];
+    [rowData setIconTintColor:UIColor.iconColorActive];
     return rowData;
 }
 
 - (OATableRowData *)rowFromKey:(NSString *)key
-                      mainTint:(NSInteger)mainTint
+                      mainTint:(UIColor *)mainTint
                  secondaryTint:(NSInteger)secondaryTint
                      operation:(EOABackupSyncOperationType)operation
                      localFile:(OALocalFile *)localFile
@@ -438,7 +439,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey: name,
         kCellDescrKey: description,
-        kCellIconTint: @(mainTint),
+        kCellIconTintColor: mainTint,
         @"secondaryIconColor": @(secondaryTint),
         @"operation": @(operation),
         @"fileName": fileName,
@@ -533,7 +534,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     {
         progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0., 0., 25., 25.)];
         progressView.iconView = [[UIView alloc] init];
-        progressView.tintColor = UIColorFromRGB(color_primary_purple);
+        progressView.tintColor = UIColor.iconColorActive;
         cell.accessoryView = progressView;
     }
 
@@ -671,7 +672,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
             cell.titleLabel.text = item.title;
             cell.leftIconView.image = [[item objForKey:@"icon"] imageFlippedForRightToLeftLayoutDirection];
-            cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
+            cell.leftIconView.tintColor = item.iconTintColor;
 
             NSString *secondaryIconName = hasConflict ? [item stringForKey:@"secondaryIconConflict"] : item.secondaryIconName;
             if (secondaryIconName.length > 0)
@@ -710,7 +711,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             paragraphStyle.lineSpacing = 4;
             paragraphStyle.alignment = NSTextAlignmentCenter;
             [str addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
-            [str addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:range];
+            [str addAttribute:NSForegroundColorAttributeName value:UIColor.textColorSecondary range:range];
             [str addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] range:range];
             cell.descriptionLabel.attributedText = str;
             [cell.cellImageView setImage:[UIImage rtlImageNamed:item.iconName]];
@@ -728,7 +729,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconProgressbarCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconProgressbarCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [cell.progressBar setProgressTintColor:UIColorFromRGB(color_primary_purple)];
+            [cell.progressBar setProgressTintColor:UIColor.iconColorActive];
         }
         if (cell)
         {

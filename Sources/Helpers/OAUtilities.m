@@ -716,6 +716,11 @@
 - (void) addBlurEffect:(BOOL)light cornerRadius:(CGFloat)cornerRadius padding:(CGFloat)padding
 {
     self.backgroundColor = [UIColor clearColor];
+    
+    UIView *existingBlurView = [self viewWithTag:kBlurViewTag];
+    if (existingBlurView)
+        [existingBlurView removeFromSuperview];
+            
     UIBlurEffect *blurEffect;
 
     blurEffect = [UIBlurEffect effectWithStyle:light

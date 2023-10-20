@@ -10,7 +10,7 @@
 #import "OAValueTableViewCell.h"
 #import "OASimpleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
-#import "OATitleRightIconCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAUtilities.h"
@@ -30,6 +30,7 @@
 #import "OAExportItemsViewController.h"
 #import "OACloudIntroductionViewController.h"
 #import "OACloudBackupViewController.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAMainSettingsViewController () <UIDocumentPickerDelegate>
 
@@ -183,14 +184,14 @@
     [profilesSection addObject:@{
         @"title" : OALocalizedString(@"new_profile"),
         @"img" : @"ic_custom_add",
-        @"type" : [OATitleRightIconCell getCellIdentifier],
+        @"type" : [OARightIconTableViewCell getCellIdentifier],
         @"name" : @"add_profile"
     }];
 
     [profilesSection addObject:@{
         @"title" : OALocalizedString(@"reorder_profiles"),
         @"img" : @"ic_custom_edit",
-        @"type" : [OATitleRightIconCell getCellIdentifier],
+        @"type" : [OARightIconTableViewCell getCellIdentifier],
         @"name" : @"edit_profiles"
     }];
     
@@ -207,14 +208,14 @@
 {
     return @[
         @{
-            @"type": OATitleRightIconCell.getCellIdentifier,
+            @"type": OARightIconTableViewCell.getCellIdentifier,
             @"name": @"backupIntoFile",
             @"title": OALocalizedString(@"backup_into_file"),
             @"img": @"ic_custom_save_to_file",
             @"regular_text": @(YES)
         },
         @{
-            @"type": OATitleRightIconCell.getCellIdentifier,
+            @"type": OARightIconTableViewCell.getCellIdentifier,
             @"name": @"restoreFromFile",
             @"title": OALocalizedString(@"restore_from_file"),
             @"img": @"ic_custom_read_from_file",
@@ -307,7 +308,7 @@
             if ([item[@"isColored"] boolValue])
                 cell.backgroundColor = [UIColorFromRGB(am.getIconColor) colorWithAlphaComponent:0.1];
             else
-                cell.backgroundColor = UIColor.whiteColor;
+                cell.backgroundColor = UIColor.groupBgColor;
         }
         return cell;
     }
@@ -325,7 +326,7 @@
         cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? kPaddingToLeftOfContentWithIcon : 0.0, 0.0, 0.0);
         UIImage *img = am.getIcon;
         cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
-        cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : UIColorFromRGB(color_tint_gray);
+        cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : UIColor.iconColorDisabled;
         cell.titleLabel.text = am.toHumanString;
         cell.descriptionLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;
@@ -340,30 +341,31 @@
         [cell dividerVisibility:!isDefault];
         return cell;
     }
-    else if ([type isEqualToString:[OATitleRightIconCell getCellIdentifier]])
+    else if ([type isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OATitleRightIconCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
+        OARightIconTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
-            cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.titleLabel.textColor = UIColor.textColorActive;
+            cell.rightIconView.tintColor = UIColor.iconColorActive;
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
         if ([item[@"regular_text"] boolValue])
         {
-            cell.titleView.textColor = UIColor.blackColor;
-            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.titleLabel.textColor = UIColor.textColorPrimary;
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         }
         else
         {
-            cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+            cell.titleLabel.textColor = UIColor.textColorActive;
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
-        cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
+        cell.titleLabel.text = item[@"title"];
+        [cell.rightIconView setImage:[UIImage templateImageNamed:item[@"img"]]];
         return cell;
     }
     return nil;

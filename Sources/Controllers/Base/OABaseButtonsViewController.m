@@ -8,7 +8,7 @@
 
 #import "OABaseButtonsViewController.h"
 #import "OATableDataModel.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OASizes.h"
 
 @interface OABaseButtonsViewController ()
@@ -32,6 +32,9 @@
 @end
 
 @implementation OABaseButtonsViewController
+{
+    BOOL _isBottomBackgroundViewBlurred;
+}
 
 @synthesize tableData;
 
@@ -67,9 +70,17 @@
 
     UIColor *bottomBackgroundColor = [self getBottomBackgroundColor];
     if (bottomBackgroundColor)
+    {
         self.bottomBackgroundView.backgroundColor = bottomBackgroundColor;
+    }
     else
-        [self.bottomBackgroundView addBlurEffect:YES cornerRadius:0. padding:0.];
+    {
+        if (!_isBottomBackgroundViewBlurred)
+        {
+            [self.bottomBackgroundView addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
+            _isBottomBackgroundViewBlurred = YES;
+        }
+    }
 }
 
 - (void)refreshUI
@@ -195,11 +206,11 @@
     switch ([self getBottomColorScheme])
     {
         case EOABaseBottomColorSchemeBlank:
-            return UIColorFromRGB(color_primary_table_background);
+            return UIColor.viewBgColor;
         case EOABaseBottomColorSchemeGray:
-            return UIColorFromRGB(color_primary_gray_navbar_background);
+            return UIColor.groupBgColor;
         case EOABaseBottomColorSchemeWhite:
-            return UIColor.whiteColor;
+            return UIColor.groupBgColor;
         default:
             return nil;
     }
@@ -210,14 +221,14 @@
     switch (scheme)
     {
         case EOABaseButtonColorSchemeInactive:
-            return UIColorFromRGB(color_text_footer);
+            return UIColor.textColorSecondary;
         case EOABaseButtonColorSchemeGrayAttn:
-            return UIColorFromRGB(color_primary_red);
+            return UIColor.buttonBgColorDisruptive;
         case EOABaseButtonColorSchemePurple:
         case EOABaseButtonColorSchemeRed:
-            return UIColor.whiteColor;
+            return UIColor.buttonTextColorPrimary;
         default:
-            return UIColorFromRGB(color_primary_purple);
+            return UIColor.buttonTextColorSecondary;
     }
 }
 
@@ -229,11 +240,11 @@
     switch (scheme)
     {
         case EOABaseButtonColorSchemePurple:
-            return UIColorFromRGB(color_primary_purple);
+            return UIColor.buttonBgColorPrimary;
         case EOABaseButtonColorSchemeRed:
-            return UIColorFromRGB(color_primary_red);
+            return UIColor.buttonBgColorDisruptive;
         default:
-            return UIColorFromRGB(color_button_gray_background);
+            return UIColor.buttonBgColorDisabled;
     }
 }
 

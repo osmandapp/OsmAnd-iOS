@@ -156,30 +156,8 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
                         cell.selectionStyle = .gray
                         cell.accessoryType = .disclosureIndicator
                         cell.titleLabel.textColor = UIColor.textColorPrimary
-                    default:
-                        cell.selectionStyle = .none
-                        cell.accessoryType = .none
-                        cell.titleLabel.textColor = UIColor.textColorPrimary
                     }
                 }
-//                if indexPath.section <= 1 {
-//                    cell.selectionStyle = .none
-//                    cell.accessoryType = .none
-//                } else {
-//                    if isForgetSensorCell {
-//                        cell.accessoryType = .none
-//                    } else {
-//                        cell.accessoryType = .disclosureIndicator
-//                    }
-//                }
-//                cell.separatorInset = .zero
-//                cell.valueLabel.text = item.descr
-//                cell.titleLabel.text = item.title
-//                if isForgetSensorCell {
-//                    cell.titleLabel.textColor = UIColor.buttonBgColorDisruptive
-//                } else {
-//                    cell.titleLabel.textColor = UIColor.textColorPrimary
-//                }
             }
             return cell
         }
@@ -220,12 +198,12 @@ extension BLEDescriptionViewController {
         let alert = UIAlertController(title: device.deviceName, message: "Sensor will be removed from the list. You will be able to pair this sensor again at any time.", preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Forget sensor", style: .destructive , handler: { [weak self] _ in
             guard let self else { return }
-            print("Forget sensor")
+            debugPrint("Forget sensor")
             DeviceHelper.shared.setDevicePaired(device: device, isPaired: false)
             navigationController?.popViewController(animated: true)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel , handler: { _ in
-            print("Cancel")
+            debugPrint("Cancel")
         }))
         alert.popoverPresentationController?.sourceView = view
         present(alert, animated: true)

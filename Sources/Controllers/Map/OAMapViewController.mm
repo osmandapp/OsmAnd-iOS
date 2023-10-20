@@ -742,7 +742,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     return _mapView.zoom;
 }
 
-- (void)viewportX:(double)x y:(double)y
+- (void)setViewportScaleX:(double)x y:(double)y
 {
     _mapView.viewportXScale = x;
     _mapView.viewportYScale = y;

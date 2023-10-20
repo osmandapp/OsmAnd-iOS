@@ -168,13 +168,11 @@
             _appInitTask = UIBackgroundTaskInvalid;
 
             NSLog(@"OAAppDelegate endBackgroundTask");
-
+            
             // Check for updates every hour when the app is in the foreground
             _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesInterval target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
             
-            if (_app.carPlayActive) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"kAppInitDone" object:self];
-            }
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"kAppInitDone" object:self];
         });
     });
     

@@ -29,7 +29,7 @@ final class DashboardCarPlaySceneDelegate: NSObject, CPTemplateApplicationSceneD
         if let window, let mapVC {
             let widthOffset: CGFloat = 1 - (window.frame.width - max(window.safeAreaInsets.left, window.safeAreaInsets.right)) / mapVC.view.frame.width
             let heightOffset = 1 - (window.frame.height / mapVC.view.frame.height)
-            mapVC.viewportX(1.0 - widthOffset, y: 1.0 - heightOffset)
+            mapVC.setViewportScaleX(1.0 - widthOffset, y: 1.0 - heightOffset)
             dashboardVC = OACarPlayMapDashboardViewController(carPlay: mapVC)
             dashboardVC?.attachMapToWindow()
             self.window?.rootViewController = dashboardVC

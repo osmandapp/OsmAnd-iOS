@@ -45,7 +45,7 @@ class CompassVisibilityViewController: OABaseNavbarViewController {
         if cell == nil {
             let nib = Bundle.main.loadNibNamed(OASimpleTableViewCell.getIdentifier(), owner: self, options: nil)
             cell = nib?.first as? OASimpleTableViewCell
-            cell?.tintColor = UIColor(rgb: Int(color_primary_purple))
+            cell?.tintColor = UIColor.iconColorActive
         }
         if let cell = cell {
             let isSelected = compassMode == EOACompassMode(rawValue: (item.obj(forKey: "compass_mode") as! NSNumber).intValue)
@@ -53,7 +53,7 @@ class CompassVisibilityViewController: OABaseNavbarViewController {
             cell.descriptionVisibility(item.descr?.count ?? 0 > 0)
             cell.titleLabel.text = item.title
             cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-            cell.leftIconView.tintColor = UIColor(rgb: (isSelected ? Int(OAAppSettings.sharedManager()!.applicationMode.get().getIconColor()) : Int(color_tint_gray)))
+            cell.leftIconView.tintColor = isSelected ? UIColor(rgb: Int(OAAppSettings.sharedManager()!.applicationMode.get().getIconColor())) : UIColor.iconColorDisabled
             cell.accessoryType = isSelected ? .checkmark : .none
             cell.accessibilityValue = localizedString(isSelected ? "shared_string_selected" : "shared_string_not_selected")
         }

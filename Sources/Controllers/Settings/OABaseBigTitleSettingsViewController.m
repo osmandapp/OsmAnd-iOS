@@ -128,7 +128,7 @@
         if (!_isHeaderBlurred)
         {
             [UIView animateWithDuration:.2 animations:^{
-                [self.navBarView addBlurEffect:YES cornerRadius:0. padding:0.];
+                [self.navBarView addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
                 _isHeaderBlurred = YES;
             }];
         }

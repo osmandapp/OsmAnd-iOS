@@ -11,7 +11,7 @@
 #import "OAAppSettings.h"
 #import "OAGPXDocument.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OALocationSimulation.h"
 #import "OARootViewController.h"
 #import "OARouteProvider.h"
@@ -22,7 +22,7 @@
 #import "OAOpenAddTrackViewController.h"
 #import "OAOsmandDevelopmentSimulateSpeedSelectorViewController.h"
 #import "OAValueTableViewCell.h"
-#import "OATitleRightIconCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OAAutoObserverProxy.h"
 
 @interface OAOsmandDevelopmentSimulateLocationViewController () <OAOpenAddTrackDelegate, OAOsmandDevelopmentSimulateSpeedSelectorDelegate>
@@ -68,7 +68,7 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
     [super viewDidLoad];
 
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:kHeaderDescriptionFont textColor:UIColorFromRGB(color_text_footer) isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:kHeaderDescriptionFont textColor:UIColor.textColorSecondary isBigTitle:NO parentViewWidth:self.view.frame.size.width];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -114,11 +114,11 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"key" : kTrackSelectKey,
         @"titleText" : OALocalizedString(@"shared_string_gpx_track"),
-        @"titleColor" : isRouteAnimating ? UIColorFromRGB(color_text_footer) : UIColor.blackColor,
+        @"titleColor" : isRouteAnimating ? UIColor.textColorSecondary : UIColor.textColorPrimary,
         @"descText" : trackNameText,
-        @"descColor" : UIColorFromRGB(color_text_footer),
+        @"descColor" : UIColor.textColorSecondary,
         @"icon" : @"ic_custom_trip",
-        @"iconColor" : isRouteAnimating ? UIColorFromRGB(color_text_footer) : UIColorFromRGB(color_primary_purple),
+        @"iconColor" : isRouteAnimating ? UIColor.iconColorDisabled : UIColor.iconColorActive,
         @"actionBlock" : (^void(){ [self openGpxTrackSelector]; }),
         @"isActionEnabled" : @(!isRouteAnimating),
         @"headerTitle" : @" ",
@@ -130,11 +130,11 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"key" : kMovementSpeedKey,
         @"titleText" : OALocalizedString(@"simulate_location_movement_speed"),
-        @"titleColor" : isMovementSpeedButtonActive ? UIColor.blackColor : UIColorFromRGB(color_text_footer),
+        @"titleColor" : isMovementSpeedButtonActive ? UIColor.textColorPrimary : UIColor.textColorSecondary,
         @"descText" : [OASimulateNavigationSpeed toTitle:_selectedSpeedMode],
-        @"descColor" : UIColorFromRGB(color_text_footer),
+        @"descColor" : UIColor.textColorSecondary,
         @"icon" : @"ic_action_max_speed",
-        @"iconColor" : isMovementSpeedButtonActive ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer),
+        @"iconColor" : isMovementSpeedButtonActive ? UIColor.iconColorActive : UIColor.iconColorDisabled,
         @"actionBlock" : (^void(){ [self openMovementSpeedSelector]; }),
         @"isActionEnabled" : @(isMovementSpeedButtonActive),
     }];
@@ -147,11 +147,11 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
     else if (isRouteAnimating)
         buttonSectionFooter = OALocalizedString(@"simulate_in_progress");
     [actionsSection addObject:@{
-        @"type" : [OATitleRightIconCell getCellIdentifier],
+        @"type" : [OARightIconTableViewCell getCellIdentifier],
         @"key" : kStartStopButtonKey,
         @"titleText" : isRouteAnimating ? OALocalizedString(@"shared_string_control_stop") : OALocalizedString(@"shared_string_control_start"),
         @"icon" : isRouteAnimating ? @"ic_custom_stop" : @"ic_custom_play",
-        @"color" : isGpxTrackSelected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer),
+        @"color" : isGpxTrackSelected ? UIColor.iconColorActive : UIColor.iconColorDisabled,
         @"actionBlock" : (^void(){ [self setTrackAnimationEnabled:!isRouteAnimating]; }),
         @"isActionEnabled" : @(isGpxTrackSelected),
         @"headerTitle" : @" ",
@@ -216,20 +216,24 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OATitleRightIconCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OATitleRightIconCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
+        OARightIconTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
-            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
-        cell.titleView.text = item[@"titleText"];
-        cell.titleView.textColor = item[@"color"];
-        cell.iconView.tintColor = item[@"color"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"icon"]]];
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"titleText"];
+            cell.titleLabel.textColor = item[@"color"];
+            cell.rightIconView.tintColor = item[@"color"];
+            [cell.rightIconView setImage:[UIImage templateImageNamed:item[@"icon"]]];
+        }
         return cell;
     }
     return nil;
@@ -254,7 +258,7 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
 
 - (void)onRotation
 {
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:kHeaderDescriptionFont textColor:UIColorFromRGB(color_text_footer) isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:kHeaderDescriptionFont textColor:UIColor.textColorSecondary isBigTitle:NO parentViewWidth:self.view.frame.size.width];
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
 }
 

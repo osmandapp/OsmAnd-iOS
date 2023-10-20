@@ -9,6 +9,7 @@
 #import "OAFeatureCardRow.h"
 #import "OAChoosePlanHelper.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kSeparatorLeftInset 66.
 #define kImageBackgroundSize 40.
@@ -94,14 +95,14 @@
     else if (_type == EOAFeatureCardRowSubscription || _type == EOAFeatureCardRowSimple)
     {
         self.imageViewSecondRightIcon.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-        self.imageViewSecondRightIcon.tintColor = UIColorFromRGB(color_primary_purple);
+        self.imageViewSecondRightIcon.tintColor = UIColor.iconColorActive;
     }
     else if (_type == EOAFeatureCardRowInclude)
     {
         self.imageViewSecondRightIcon.hidden = YES;
         _imageBackground = [[UIView alloc] init];
         _imageBackground.layer.cornerRadius = 9.;
-        _imageBackground.backgroundColor = UIColorFromARGB(color_primary_purple_10);
+        _imageBackground.backgroundColor = UIColor.buttonBgColorTertiary;
         [self insertSubview:_imageBackground belowSubview:self.imageViewLeftIcon];
     }
 
@@ -117,7 +118,7 @@
 
 - (void)updateInfo:(OAFeature *)feature showDivider:(BOOL)showDivider selected:(BOOL)selected
 {
-    self.backgroundColor = selected && _type == EOAFeatureCardRowPlan ? UIColorFromARGB(color_primary_purple_05) : UIColor.whiteColor;
+    self.backgroundColor = selected && _type == EOAFeatureCardRowPlan ? UIColorFromARGB(color_primary_purple_05) : UIColor.groupBgColor;
     self.labelTitle.text = [feature getTitle];
     self.imageViewLeftIcon.image = [feature getIcon];
     if (_type == EOAFeatureCardRowPlan)
@@ -135,12 +136,12 @@
 {
     _dividerLeftMargin = dividerLeftMargin;
 
-    self.backgroundColor = UIColor.whiteColor;
+    self.backgroundColor = UIColor.groupBgColor;
     self.labelTitle.text = title;
-    self.labelTitle.textColor = UIColorFromRGB(color_primary_purple);
+    self.labelTitle.textColor = UIColor.textColorActive;
     self.imageViewLeftIcon.hidden = YES;
     self.imageViewSecondRightIcon.image = [UIImage templateImageNamed:icon];
-    self.imageViewSecondRightIcon.tintColor = UIColorFromRGB(color_primary_purple);
+    self.imageViewSecondRightIcon.tintColor = UIColor.iconColorActive;
 
     self.viewBottomSeparator.hidden = !showDivider;
     CGRect viewBottomSeparatorFrame = self.viewBottomSeparator.frame;
@@ -170,7 +171,7 @@
                                   value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]
                                   range:NSMakeRange(0, attributedDescription.length)];
     [attributedDescription addAttribute:NSForegroundColorAttributeName
-                                  value:UIColorFromRGB(color_text_footer)
+                                  value:UIColor.textColorSecondary
                                   range:NSMakeRange(0, attributedDescription.length)];
     self.labelDescription.attributedText = attributedDescription;
 

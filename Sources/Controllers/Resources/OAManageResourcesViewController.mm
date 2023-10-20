@@ -2503,7 +2503,7 @@ static BOOL _repositoryUpdated = NO;
                 cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 66., 0., 0.);
                 cell.titleLabel.text = OALocalizedString(@"free_downloads");
                 cell.descriptionLabel.text = [self getFreeMapsMessage];
-                cell.leftIconView.image = [UIImage rtlImageNamed:@"ic_custom_map_updates_colored_day"];
+                cell.leftIconView.image = [UIImage rtlImageNamed:@"ic_custom_map_updates_colored"];
             }
             return cell;
         }
@@ -2789,7 +2789,7 @@ static BOOL _repositoryUpdated = NO;
         OATextMultilineTableViewCell *textViewCell = (OATextMultilineTableViewCell *) cell;
         [textViewCell leftIconVisibility:NO];
         [textViewCell clearButtonVisibility:NO];
-        textViewCell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:_downloadDescriptionInfo.getLocalizedDescription fontSize:17];
+        textViewCell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:_downloadDescriptionInfo.getLocalizedDescription fontSize:17 textColor:UIColor.blackColor];
         textViewCell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
         [textViewCell.textView sizeToFit];
     }

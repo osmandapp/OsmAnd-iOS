@@ -37,11 +37,11 @@ class BaseSegmentedControlViewController: OABaseButtonsViewController {
         case .gray:
             container.backgroundColor = tableView.backgroundColor
         case .orange:
-            container.backgroundColor = UIColor(rgb: Int(color_osmand_orange))
+            container.backgroundColor = .navBarBgColorPrimary
         case .white:
-            container.backgroundColor = .white
+            container.backgroundColor = .groupBgColor
         @unknown default:
-            container.backgroundColor = .white
+            container.backgroundColor = .groupBgColor
         }
     }
 

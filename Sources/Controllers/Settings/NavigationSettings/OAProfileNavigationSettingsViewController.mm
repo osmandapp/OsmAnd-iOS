@@ -26,9 +26,8 @@
 #import "OARouteLineAppearanceHudViewController.h"
 #import "OAMainSettingsViewController.h"
 #import "OAConfigureProfileViewController.h"
-
+#import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
-#import "OAColors.h"
 
 #define kOsmAndNavigation @"osmand_navigation"
 
@@ -165,7 +164,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
+            cell.leftIconView.tintColor = UIColor.iconColorDefault;
             [cell descriptionVisibility:NO];
         }
         if (cell)
@@ -190,7 +189,7 @@
             [cell leftIconVisibility:![item[@"key"] isEqualToString:@"mapBehavior"]];
             cell.titleLabel.text = item[@"title"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
+            cell.leftIconView.tintColor = UIColor.iconColorDefault;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         return cell;

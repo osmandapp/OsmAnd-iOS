@@ -16,7 +16,7 @@
 #import "OAPOIUIFilter.h"
 #import "OAPOIBaseType.h"
 #import "OAPOIHelper.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAActionAddCategoryViewController () <UITextFieldDelegate, UISearchBarDelegate>
 
@@ -165,15 +165,13 @@
     }
     if (cell)
     {
-        cell.contentView.backgroundColor = [UIColor whiteColor];
         NSString *name = [self getNameFromCategory:category];
         cell.titleLabel.text = name;
-        [cell.titleLabel setTextColor:[UIColor blackColor]];
         if ([category isKindOfClass:OAPOIBaseType.class])
             cell.leftIconView.image = ((OAPOIBaseType *)category).icon;
         else if ([category isKindOfClass:OAPOIUIFilter.class])
             cell.leftIconView.image = [OAPOIHelper getCustomFilterIcon:(OAPOIUIFilter *)category];
-        cell.leftIconView.tintColor = UIColorFromRGB(color_osmand_orange);
+        cell.leftIconView.tintColor = UIColor.iconColorSelected;
         if ([_initialValues containsObject:name])
         {
             [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];

@@ -40,6 +40,7 @@
 #import "OAEntity.h"
 #import "OAQuickActionListViewController.h"
 #import "OAKeyboardHintBar.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #import <AudioToolbox/AudioServices.h>
 
@@ -196,7 +197,7 @@
     [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
+    textField.clearButton.imageView.tintColor = UIColor.iconColorDefault;
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
     
@@ -256,7 +257,7 @@
         text = [text stringByAppendingString:@"\n"];
         NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:text
                                                                                     attributes:@{NSFontAttributeName : textFont,
-                                                                                                 NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
+                                                                                                 NSForegroundColorAttributeName : UIColor.textColorSecondary}];
         [textStr appendAttributedString:str];
         vw.label.text = nil;
         vw.label.attributedText = textStr;
@@ -321,7 +322,7 @@
             if (!cell.leftIconView.hidden)
             {
                 [cell.leftIconView setImage:[UIImage templateImageNamed:imgName]];
-                cell.leftIconView.tintColor = UIColorFromRGB(color_text_footer);
+                cell.leftIconView.tintColor = UIColor.iconColorDefault;
             }
 
             if ([item.allKeys containsObject:@"hint"] && [item[@"hint"] isEqualToString:OALocalizedString(@"quick_action_template_name")])
@@ -400,7 +401,7 @@
             }
             
             cell.valueLabel.text = item[@"value"];
-            cell.valueLabel.textColor = UIColorFromRGB(color_text_footer);
+            cell.valueLabel.textColor = UIColor.textColorSecondary;
         }
         return cell;
     }
@@ -427,7 +428,7 @@
             NSString *desc = item[@"descr"];
             cell.descriptionLabel.text = desc;
             [cell descriptionVisibility:desc.length != 0];
-            [cell.leftIconView setTintColor:UIColorFromRGB(color_icon_color)];
+            [cell.leftIconView setTintColor:UIColor.iconColorDefault];
             cell.leftIconView.image = img;
             [cell setCustomLeftSeparatorInset:YES];
             cell.separatorInset = UIEdgeInsetsMake(0., 0., 0., 0.);
@@ -1258,12 +1259,12 @@
         {
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
             btn.frame = CGRectMake(xPosition + margin, 6, 0, 0);
-            btn.backgroundColor = UIColorFromRGB(tag_hint_background_color);
+            btn.backgroundColor = UIColor.buttonBgColorSecondary;
             btn.layer.masksToBounds = YES;
             btn.layer.cornerRadius = 4.0;
             btn.titleLabel.numberOfLines = 1;
             [btn setTitle:hint forState:UIControlStateNormal];
-            [btn setTitleColor:UIColorFromRGB(tag_hint_text_color) forState:UIControlStateNormal];
+            [btn setTitleColor:UIColor.buttonTextColorSecondary forState:UIControlStateNormal];
             [btn sizeToFit];
             
             [btn addTarget:self action:@selector(tagHintTapped:) forControlEvents:UIControlEventTouchUpInside];

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "OAGPXDatabase.h"
 
-@class OAColorItem, OAFavoriteGroup;
+@class OAColorItem, OAFavoriteGroup, OAMapViewController;
 
 @interface OAGPXTrackAppearance : NSObject
 
@@ -52,6 +52,7 @@
 
 + (OAGPXAppearanceCollection *)sharedInstance;
 
+- (void)onUpdateMapSource:(OAMapViewController *)mapViewController;
 - (void)generateAvailableColors;
 - (BOOL)saveFavoriteColorsIfNeeded:(NSArray<OAFavoriteGroup *> *)favoriteGroups;
 - (OAColorItem *)getDefaultLineColorItem;

@@ -132,7 +132,7 @@
     backupData[@"key"] = @"backup_data_cell";
     backupData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     backupData[@"title"] = OALocalizedString(@"backup_data");
-    backupData[@"left_icon"] = @"ic_custom_cloud_upload_colored_day";
+    backupData[@"left_icon"] = @"ic_custom_cloud_upload_colored";
     NSString *sizeBackupDataString = [NSByteCountFormatter stringFromByteCount:
             [OABaseBackupTypesViewController calculateItemsSize:_uniqueRemoteFiles.allValues]
                                                      countStyle:NSByteCountFormatterCountStyleFile];

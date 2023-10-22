@@ -7,7 +7,7 @@
 //
 
 #import "OAOsmEditActionsViewController.h"
-#import "OACreateUploadOsmNoteViewController.h"
+#import "OAOsmNoteViewController.h"
 #import "Localization.h"
 #import "OABottomSheetHeaderCell.h"
 #import "OAUtilities.h"
@@ -235,7 +235,7 @@
         }
         else
         {
-            OACreateUploadOsmNoteViewController *noteScreen = [[OACreateUploadOsmNoteViewController alloc] initWithEditingPlugin:_plugin points:[NSArray arrayWithObject:_point] type:EOAOsmNoteViewConrollerModeCreate];
+            OAOsmNoteViewController *noteScreen = [[OAOsmNoteViewController alloc] initWithEditingPlugin:_plugin points:[NSArray arrayWithObject:_point] type:EOAOsmNoteViewConrollerModeCreate];
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:noteScreen];
             noteScreen.delegate = vwController.delegate;
             [[OARootViewController instance].mapPanel.navigationController presentViewController:navigationController animated:YES completion:nil];
@@ -266,7 +266,7 @@
     }
     else if (_point.getGroup == BUG)
     {
-        OACreateUploadOsmNoteViewController *dialog = [[OACreateUploadOsmNoteViewController alloc] initWithEditingPlugin:_plugin points:[NSArray arrayWithObject:_point] type:EOAOsmNoteViewConrollerModeUpload];
+        OAOsmNoteViewController *dialog = [[OAOsmNoteViewController alloc] initWithEditingPlugin:_plugin points:[NSArray arrayWithObject:_point] type:EOAOsmNoteViewConrollerModeUpload];
         dialog.delegate = vwController.delegate;
         [[OARootViewController instance].mapPanel.navigationController pushViewController:dialog animated:YES];
     }

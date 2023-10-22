@@ -37,7 +37,7 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAEditPOIData.h"
 #import "OAOsmNotePoint.h"
-#import "OACreateUploadOsmNoteViewController.h"
+#import "OAOsmNoteViewController.h"
 #import "OAAddPOIAction.h"
 #import "OAAddOSMBugAction.h"
 #import "OAShowHideLocalOSMChanges.h"
@@ -152,7 +152,7 @@
     else
     {
         [p setText:message];
-        OACreateUploadOsmNoteViewController *noteScreen = [[OACreateUploadOsmNoteViewController alloc] initWithEditingPlugin:self points:[NSArray arrayWithObject:p] type:EOAOsmNoteViewConrollerModeCreate];
+        OAOsmNoteViewController *noteScreen = [[OAOsmNoteViewController alloc] initWithEditingPlugin:self points:[NSArray arrayWithObject:p] type:EOAOsmNoteViewConrollerModeCreate];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:noteScreen];
         [[OARootViewController instance].mapPanel.navigationController presentViewController:navigationController animated:YES completion:nil];
     }

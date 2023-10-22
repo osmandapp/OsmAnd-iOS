@@ -256,7 +256,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadViewConrollerMode) {
     if (_uploadTask)
         [_uploadTask setInterrupted:YES];
     
-    [self.delegate dismissViewController];
+    [self.delegate didFinishUploading];
     [super onLeftNavbarButtonPressed];
 }
 
@@ -271,7 +271,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadViewConrollerMode) {
     }
     else
     {
-        [self.delegate dismissViewController];
+        [self.delegate didFinishUploading];
         [super onLeftNavbarButtonPressed];
     }
 }

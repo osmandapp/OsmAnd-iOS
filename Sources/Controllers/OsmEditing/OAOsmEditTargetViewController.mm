@@ -21,7 +21,7 @@
 #import "OAOsmEditsDBHelper.h"
 #import "OAOsmBugsDBHelper.h"
 #import "OAOsmUploadPOIViewController.h"
-#import "OACreateUploadOsmNoteViewController.h"
+#import "OAOsmNoteViewController.h"
 #import "OAOsmEditingPlugin.h"
 
 @interface OAOsmEditTargetViewController () <OAOsmEditingBottomSheetDelegate>
@@ -88,7 +88,7 @@
     }
     else if (_osmPoint.getGroup == BUG)
     {
-        OACreateUploadOsmNoteViewController *dialog = [[OACreateUploadOsmNoteViewController alloc] initWithEditingPlugin:_editingPlugin points:[NSArray arrayWithObject:_osmPoint] type:EOAOsmNoteViewConrollerModeUpload];
+        OAOsmNoteViewController *dialog = [[OAOsmNoteViewController alloc] initWithEditingPlugin:_editingPlugin points:[NSArray arrayWithObject:_osmPoint] type:EOAOsmNoteViewConrollerModeUpload];
         dialog.delegate = self;
         [OARootViewController.instance.navigationController pushViewController:dialog animated:YES];
     }

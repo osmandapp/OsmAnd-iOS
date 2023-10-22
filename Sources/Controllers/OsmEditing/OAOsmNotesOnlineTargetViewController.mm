@@ -7,7 +7,7 @@
 //
 
 #import "OAOsmNotesOnlineTargetViewController.h"
-#import "OACreateUploadOsmNoteViewController.h"
+#import "OAOsmNoteViewController.h"
 #import "OATransportStopRoute.h"
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
@@ -71,14 +71,14 @@
 
 - (void) leftControlButtonPressed
 {
-    OACreateUploadOsmNoteViewController *bottomSheet = [[OACreateUploadOsmNoteViewController alloc] initWithEditingPlugin:_editingPlugin points:[NSArray arrayWithObject:[self getNote:_isOpen ? MODIFY : REOPEN]] type:_isOpen ? EOAOsmNoteViewConrollerModeModify : EOAOsmNoteViewConrollerModeReopen];
+    OAOsmNoteViewController *bottomSheet = [[OAOsmNoteViewController alloc] initWithEditingPlugin:_editingPlugin points:[NSArray arrayWithObject:[self getNote:_isOpen ? MODIFY : REOPEN]] type:_isOpen ? EOAOsmNoteViewConrollerModeModify : EOAOsmNoteViewConrollerModeReopen];
     bottomSheet.delegate = self;
     [[OARootViewController instance].mapPanel.navigationController pushViewController:bottomSheet animated: YES];
 }
 
 - (void) rightControlButtonPressed
 {
-    OACreateUploadOsmNoteViewController *bottomSheet = [[OACreateUploadOsmNoteViewController alloc] initWithEditingPlugin:_editingPlugin points:[NSArray arrayWithObject:[self getNote:DELETE] ]type:EOAOsmNoteViewConrollerModeClose];
+    OAOsmNoteViewController *bottomSheet = [[OAOsmNoteViewController alloc] initWithEditingPlugin:_editingPlugin points:[NSArray arrayWithObject:[self getNote:DELETE] ]type:EOAOsmNoteViewConrollerModeClose];
     bottomSheet.delegate = self;
     [[OARootViewController instance].mapPanel.navigationController pushViewController:bottomSheet animated: YES];
 }

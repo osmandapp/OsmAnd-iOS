@@ -11,17 +11,17 @@
 
 @class OAOsmPoint;
 
-@protocol OAProgressUploadDelegate <NSObject>
+@protocol OAUploadProgressDelegate <NSObject>
 
 @required
 - (void)retryUpload;
-- (void)dismissViewController;
+- (void)didFinishUploading;
 
 @end
 
 @interface OAProgressUploadOsmPOINoteViewController : OABaseButtonsViewController
 
-@property (nonatomic) id<OAProgressUploadDelegate> delegate;
+@property (nonatomic) id<OAUploadProgressDelegate> delegate;
 
 - (void)setProgress:(float)progress;
 - (void)setUploadResultWithFailedPoints:(NSArray<OAOsmPoint *> *)points successfulUploads:(NSInteger)successfulUploads;

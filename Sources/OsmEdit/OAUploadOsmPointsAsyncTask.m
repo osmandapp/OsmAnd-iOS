@@ -23,7 +23,7 @@
 #import "OAOsmBugResult.h"
 #import "OARootViewController.h"
 
-@interface OAUploadOsmPointsAsyncTask() <OAProgressUploadDelegate>
+@interface OAUploadOsmPointsAsyncTask() <OAUploadProgressDelegate>
 
 @end
 
@@ -67,10 +67,10 @@
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_progressUpload];
     navigationController.modalPresentationStyle = UIModalPresentationCustom;
     [OARootViewController.instance.navigationController presentViewController:navigationController animated:YES completion:nil];
-    [self uploadingPoints];
+    [self startUploadingPoints];
 }
 
-- (void) uploadingPoints
+- (void) startUploadingPoints
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSInteger lastIndex = _points.count - 1;
@@ -135,14 +135,14 @@
     _interruptUploading = interrupted;
 }
 
-#pragma mark - OAProgressUploadDelegate
+#pragma mark - OAUploadProgressDelegate
 
 - (void)retryUpload
 {
-    [self uploadingPoints];
+    [self startUploadingPoints];
 }
 
-- (void)dismissViewController
+- (void)didFinishUploading
 {
     [_controller.navigationController popViewControllerAnimated:YES];
 }

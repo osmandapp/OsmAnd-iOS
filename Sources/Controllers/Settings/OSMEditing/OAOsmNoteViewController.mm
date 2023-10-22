@@ -1,12 +1,12 @@
 //
-//  OACreateUploadOsmNoteViewController.m
+//  OAOsmNoteViewController.m
 //  OsmAnd Maps
 //
 //  Created by Dmitry Svetlichny on 22.09.2023.
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OACreateUploadOsmNoteViewController.h"
+#import "OAOsmNoteViewController.h"
 #import "Localization.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
@@ -22,11 +22,11 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAMappersViewController.h"
 
-@interface OACreateUploadOsmNoteViewController () <UITextFieldDelegate, OAAccountSettingDelegate>
+@interface OAOsmNoteViewController () <UITextFieldDelegate, OAAccountSettingDelegate>
 
 @end
 
-@implementation OACreateUploadOsmNoteViewController
+@implementation OAOsmNoteViewController
 {
     OATableDataModel *_data;
     NSArray *_bugPoints;
@@ -113,7 +113,7 @@
 {
     _data = [[OATableDataModel alloc] init];
     _messageText = ((OAOsmNotePoint *)_bugPoints.firstObject).getText;
-    __weak OACreateUploadOsmNoteViewController *weakSelf = self;
+    __weak OAOsmNoteViewController *weakSelf = self;
     
     OATableSectionData *textSection = [_data createNewSection];
     textSection.headerText = OALocalizedString(@"osn_bug_name");

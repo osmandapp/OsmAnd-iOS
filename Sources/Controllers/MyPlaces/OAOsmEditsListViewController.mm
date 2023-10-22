@@ -24,7 +24,7 @@
 #import "OAOsmEditsLayer.h"
 #import "OAOsmEditActionsViewController.h"
 #import "OAMapLayers.h"
-#import "OACreateUploadOsmNoteViewController.h"
+#import "OAOsmNoteViewController.h"
 #import "OAOsmUploadPOIViewController.h"
 #import "OAMultiselectableHeaderView.h"
 #import "OAPlugin.h"
@@ -406,7 +406,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         else if (notes.count > 0)
         {
             _pendingNotes = nil;
-            OACreateUploadOsmNoteViewController *notesBottomsheet = [[OACreateUploadOsmNoteViewController alloc] initWithEditingPlugin:(OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class] points:notes type:EOAOsmNoteViewConrollerModeUpload];
+            OAOsmNoteViewController *notesBottomsheet = [[OAOsmNoteViewController alloc] initWithEditingPlugin:(OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class] points:notes type:EOAOsmNoteViewConrollerModeUpload];
             notesBottomsheet.delegate = self;
             [[OARootViewController instance].mapPanel.navigationController pushViewController:notesBottomsheet animated:YES];
         }
@@ -437,7 +437,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     [self refreshData];
     if (_pendingNotes && _pendingNotes.count > 0 && !hasError)
     {
-        OACreateUploadOsmNoteViewController *notesBottomsheet = [[OACreateUploadOsmNoteViewController alloc] initWithEditingPlugin:(OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class] points:_pendingNotes type:EOAOsmNoteViewConrollerModeUpload];
+        OAOsmNoteViewController *notesBottomsheet = [[OAOsmNoteViewController alloc] initWithEditingPlugin:(OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class] points:_pendingNotes type:EOAOsmNoteViewConrollerModeUpload];
         notesBottomsheet.delegate = self;
         [[OARootViewController instance].mapPanel.navigationController pushViewController:notesBottomsheet animated:YES];
     }

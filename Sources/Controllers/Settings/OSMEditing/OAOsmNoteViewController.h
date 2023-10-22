@@ -1,5 +1,5 @@
 //
-//  OACreateUploadOsmNoteViewController.h
+//  OAOsmNoteViewController.h
 //  OsmAnd Maps
 //
 //  Created by Dmitry Svetlichny on 22.09.2023.
@@ -22,7 +22,7 @@ typedef NS_ENUM(NSInteger, EOAOSMNoteScreenType)
     EOAOsmNoteViewConrollerModeReopen
 };
 
-@interface OACreateUploadOsmNoteViewController : OABaseButtonsViewController
+@interface OAOsmNoteViewController : OABaseButtonsViewController
 
 @property (nonatomic) id<OAOsmEditingBottomSheetDelegate> delegate;
 

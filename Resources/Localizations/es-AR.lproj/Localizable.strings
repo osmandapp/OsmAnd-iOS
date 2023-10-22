@@ -2592,7 +2592,7 @@
 "cloud_storage_used" = "Utilizado: %@ de %@";
 "recording_delete_confirm" = "¿Borrar este elemento?";
 "shared_string_unavailable" = "No disponible";
-"offline_edition_descr" = "Si se activa la edición sin conexión, los cambios serán guardados localmente primero y serán cargados por solicitud, de lo contrario los cambios serán cargados inmediatamente.";
+"offline_edition_descr" = "Si se activa la edición sin conexión, los cambios serán guardados localmente primero y serán cargados por solicitud, de lo contrario los cambios serán cargados de inmediato.";
 "shared_string_contributions" = "Contribuciones";
 "benefits_for_contributors_primary_descr" = "Los colaboradores activos de OpenStreetMap.org pueden beneficiarse de actualizaciones ilimitadas de los mapas cada hora.";
 "benefits_for_contributors_secondary_descr" = "Accede a OpenStreetMap para comprobar si tienes derecho a actualizaciones mensuales y horarias ilimitadas de los mapas.";

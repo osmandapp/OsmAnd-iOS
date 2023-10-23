@@ -435,7 +435,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
         [p setEntity:entity];
         [p setAction:action];
         [p setComment:comment];
-        OAUploadOsmPointsAsyncTask *uploadTask  = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class] points:@[p] closeChangeset:closeChangeset anonymous:NO comment:comment bottomSheetDelegate:nil controller:nil];
+        OAUploadOsmPointsAsyncTask *uploadTask  = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class] points:@[p] closeChangeset:closeChangeset anonymous:NO comment:comment];
         [uploadTask uploadPoints];
     }
 }

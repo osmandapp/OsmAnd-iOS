@@ -7,6 +7,7 @@
 //
 
 #import "OAOsmNoteViewController.h"
+#import "OAProgressUploadOsmPOINoteViewController.h"
 #import "Localization.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
@@ -22,7 +23,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAMappersViewController.h"
 
-@interface OAOsmNoteViewController () <UITextFieldDelegate, OAAccountSettingDelegate>
+@interface OAOsmNoteViewController () <UITextFieldDelegate, OAAccountSettingDelegate, OAUploadTaskDelegate>
 
 @end
 
@@ -33,6 +34,7 @@
     
     OAOsmEditingPlugin *_plugin;
     EOAOSMNoteScreenType _screenType;
+    OAProgressUploadOsmPOINoteViewController *_progressController;
     
     NSString *_messageText;
     
@@ -304,8 +306,15 @@
     }
     if (shouldUpload)
     {
-        OAUploadOsmPointsAsyncTask *task = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:_plugin points:_bugPoints closeChangeset:NO anonymous:_uploadAnonymously comment:nil bottomSheetDelegate:self.delegate controller:self];
-        [task uploadPoints];
+        OAUploadOsmPointsAsyncTask *task = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:_plugin points:_bugPoints closeChangeset:NO anonymous:_uploadAnonymously comment:nil];
+        _progressController = [[OAProgressUploadOsmPOINoteViewController alloc] initWithParam:task];
+        _progressController.delegate = self.delegate;
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_progressController];
+        navigationController.modalPresentationStyle = UIModalPresentationCustom;
+        [self presentViewController:navigationController animated:YES completion:^{
+            task.delegate = self;
+            [task uploadPoints];
+        }];
     }
     else
     {
@@ -386,6 +395,25 @@
         OAMappersViewController *benefitsViewController = [[OAMappersViewController alloc] init];
         [self showModalViewController:benefitsViewController];
     }
+}
+
+#pragma mark - OAUploadTaskDelegate
+
+- (void)uploadDidProgress:(float)progress
+{
+    [_progressController setProgress:progress];
+}
+
+- (void)uploadDidFinishWithFailedPoints:(NSArray<OAOsmPoint *> *)points successfulUploads:(NSInteger)successfulUploads
+{
+    [_progressController setUploadResultWithFailedPoints:points successfulUploads:successfulUploads];
+}
+
+- (void)uploadDidCompleteWithSuccess:(BOOL)success
+{
+    [self dismissViewController];
+    if ([self.delegate respondsToSelector:@selector(uploadFinished:)])
+        [self.delegate uploadFinished:!success];
 }
 
 #pragma mark - Keyboard Notifications

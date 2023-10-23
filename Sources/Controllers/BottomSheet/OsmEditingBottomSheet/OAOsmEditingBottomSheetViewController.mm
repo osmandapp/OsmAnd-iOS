@@ -261,7 +261,7 @@
 {
     OATextInputFloatingCell *cell = _data[kMessageFieldIndex][@"cell"];
     NSString *comment = cell.inputField.text;
-    OAUploadOsmPointsAsyncTask *uploadTask  = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class] points:_osmPoints closeChangeset:_closeChangeset anonymous:NO comment:comment bottomSheetDelegate:vwController.delegate controller:nil];
+    OAUploadOsmPointsAsyncTask *uploadTask  = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class] points:_osmPoints closeChangeset:_closeChangeset anonymous:NO comment:comment];
     [uploadTask uploadPoints];
     [vwController dismiss];
 }

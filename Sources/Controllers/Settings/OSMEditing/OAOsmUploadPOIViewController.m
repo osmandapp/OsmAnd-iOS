@@ -7,6 +7,7 @@
 //
 
 #import "OAOsmUploadPOIViewController.h"
+#import "OAProgressUploadOsmPOINoteViewController.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
@@ -19,7 +20,7 @@
 #import "OAOpenStreetMapPoint.h"
 #import "OAEditPOIData.h"
 
-@interface OAOsmUploadPOIViewController () <UITextFieldDelegate, OAAccountSettingDelegate>
+@interface OAOsmUploadPOIViewController () <UITextFieldDelegate, OAAccountSettingDelegate, OAUploadTaskDelegate>
 
 @end
 
@@ -27,6 +28,8 @@
 {
     OATableDataModel *_data;
     NSArray *_osmPoints;
+    
+    OAProgressUploadOsmPOINoteViewController *_progressController;
     
     NSString *_messageText;
     
@@ -384,8 +387,15 @@
 {
     if (_isAuthorised)
     {
-        OAUploadOsmPointsAsyncTask *uploadTask = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class] points:_osmPoints closeChangeset:_closeChangeset anonymous:NO comment:_messageText bottomSheetDelegate:self.delegate controller:self];
-        [uploadTask uploadPoints];
+        OAUploadOsmPointsAsyncTask *uploadTask = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class] points:_osmPoints closeChangeset:_closeChangeset anonymous:NO comment:_messageText];
+        _progressController = [[OAProgressUploadOsmPOINoteViewController alloc] initWithParam:uploadTask];
+        _progressController.delegate = self.delegate;
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_progressController];
+        navigationController.modalPresentationStyle = UIModalPresentationCustom;
+        [self presentViewController:navigationController animated:YES completion:^{
+            uploadTask.delegate = self;
+            [uploadTask uploadPoints];
+        }];
         
         if ([self.delegate respondsToSelector:@selector(dismissEditingScreen)])
             [self.delegate dismissEditingScreen];
@@ -425,6 +435,25 @@
         OAMappersViewController *benefitsViewController = [[OAMappersViewController alloc] init];
         [self showModalViewController:benefitsViewController];
     }
+}
+
+#pragma mark - OAUploadTaskDelegate
+
+- (void)uploadDidProgress:(float)progress
+{
+    [_progressController setProgress:progress];
+}
+
+- (void)uploadDidFinishWithFailedPoints:(NSArray<OAOsmPoint *> *)points successfulUploads:(NSInteger)successfulUploads
+{
+    [_progressController setUploadResultWithFailedPoints:points successfulUploads:successfulUploads];
+}
+
+- (void)uploadDidCompleteWithSuccess:(BOOL)success
+{
+    [self dismissViewController];
+    if ([self.delegate respondsToSelector:@selector(uploadFinished:)])
+        [self.delegate uploadFinished:!success];
 }
 
 #pragma mark - Keyboard Notifications

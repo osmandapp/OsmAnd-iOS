@@ -27,7 +27,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadViewConrollerMode) {
     EOAOsmUploadViewConrollerModeFailed
 };
 
-@interface OAProgressUploadOsmPOINoteViewController ()
+@interface OAProgressUploadOsmPOINoteViewController () <OAUploadTaskDelegate>
 
 @end
 
@@ -256,7 +256,6 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadViewConrollerMode) {
     if (_uploadTask)
         [_uploadTask setInterrupted:YES];
     
-    [self.delegate didFinishUploading];
     [super onLeftNavbarButtonPressed];
 }
 
@@ -267,13 +266,31 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadViewConrollerMode) {
         _mode = EOAOsmUploadViewConrollerModeUploading;
         [self generateData];
         [self.tableView reloadData];
-        [self.delegate retryUpload];
+        _uploadTask.delegate = self;
+        [_uploadTask retryUpload];
     }
     else
     {
-        [self.delegate didFinishUploading];
         [super onLeftNavbarButtonPressed];
     }
+}
+
+#pragma mark - OAUploadTaskDelegate
+
+- (void)uploadDidProgress:(float)progress
+{
+    [self setProgress:progress];
+}
+
+- (void)uploadDidFinishWithFailedPoints:(NSArray<OAOsmPoint *> *)points successfulUploads:(NSInteger)successfulUploads
+{
+    [self setUploadResultWithFailedPoints:points successfulUploads:successfulUploads];
+}
+
+- (void)uploadDidCompleteWithSuccess:(BOOL)success
+{
+    if ([self.delegate respondsToSelector:@selector(uploadFinished:)])
+        [self.delegate uploadFinished:!success];
 }
 
 @end

@@ -8,20 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "OABaseButtonsViewController.h"
+#import "OAOsmEditingViewController.h"
 
 @class OAOsmPoint;
 
-@protocol OAUploadProgressDelegate <NSObject>
-
-@required
-- (void)retryUpload;
-- (void)didFinishUploading;
-
-@end
-
 @interface OAProgressUploadOsmPOINoteViewController : OABaseButtonsViewController
 
-@property (nonatomic) id<OAUploadProgressDelegate> delegate;
+@property (nonatomic) id<OAOsmEditingBottomSheetDelegate> delegate;
 
 - (void)setProgress:(float)progress;
 - (void)setUploadResultWithFailedPoints:(NSArray<OAOsmPoint *> *)points successfulUploads:(NSInteger)successfulUploads;

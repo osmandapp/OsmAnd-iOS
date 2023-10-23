@@ -12,7 +12,6 @@
 #import "OAUploadOsmPointsAsyncTask.h"
 #import "OsmAndApp.h"
 #import "OAOsmEditingPlugin.h"
-#import "OAProgressUploadOsmPOINoteViewController.h"
 #import "OAOsmPoint.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAOpenStreetMapRemoteUtil.h"
@@ -23,28 +22,21 @@
 #import "OAOsmBugResult.h"
 #import "OARootViewController.h"
 
-@interface OAUploadOsmPointsAsyncTask() <OAUploadProgressDelegate>
-
-@end
-
 @implementation OAUploadOsmPointsAsyncTask
 {
-    BOOL _interruptUploading;
     OAOsmEditingPlugin *_plugin;
-    BOOL _closeChangeSet;
-    BOOL _loadAnonymous;
-    NSString *_comment;
-    
-    id<OAOsmEditingBottomSheetDelegate> _bottomSheetDelegate;
-    NSArray<OAOsmPoint *> *_points;
-    OAProgressUploadOsmPOINoteViewController *_progressUpload;
-    UIViewController *_controller;
-    
     OsmAndAppInstance _app;
     
+    NSArray<OAOsmPoint *> *_points;
+    
+    NSString *_comment;
+    
+    BOOL _interruptUploading;
+    BOOL _closeChangeSet;
+    BOOL _loadAnonymous;
 }
 
-- (id) initWithPlugin:(OAOsmEditingPlugin *)plugin points:(NSArray<OAOsmPoint *> *)points closeChangeset:(BOOL)closeChangeset anonymous:(BOOL)anonymous comment:(NSString *)comment bottomSheetDelegate:(id<OAOsmEditingBottomSheetDelegate>)bottomSheetDelegate controller:(UIViewController *)controller
+- (id) initWithPlugin:(OAOsmEditingPlugin *)plugin points:(NSArray<OAOsmPoint *> *)points closeChangeset:(BOOL)closeChangeset anonymous:(BOOL)anonymous comment:(NSString *)comment
 {
     self = [super init];
     if (self) {
@@ -54,23 +46,11 @@
         _loadAnonymous = anonymous;
         _points = points;
         _comment = comment;
-        _bottomSheetDelegate = bottomSheetDelegate;
-        _controller = controller;
     }
     return self;
 }
 
 - (void) uploadPoints
-{
-    _progressUpload = [[OAProgressUploadOsmPOINoteViewController alloc] initWithParam:self];
-    _progressUpload.delegate = self;
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_progressUpload];
-    navigationController.modalPresentationStyle = UIModalPresentationCustom;
-    [OARootViewController.instance.navigationController presentViewController:navigationController animated:YES completion:nil];
-    [self startUploadingPoints];
-}
-
-- (void) startUploadingPoints
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSInteger lastIndex = _points.count - 1;
@@ -114,17 +94,22 @@
                     [failedUploads addObject:p];
             }
             dispatch_async(dispatch_get_main_queue(), ^{
-                [_progressUpload setProgress:((float)(i + 1) / (float)_points.count)];
+                if ([self.delegate respondsToSelector:@selector(uploadDidProgress:)])
+                {
+                    float progress = (float)(i + 1) / (float)_points.count;
+                    [self.delegate uploadDidProgress:progress];
+                }
             });
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            if ([_bottomSheetDelegate respondsToSelector:@selector(dismissEditingScreen)])
-                [_bottomSheetDelegate dismissEditingScreen];
-            if ([_bottomSheetDelegate respondsToSelector:@selector(uploadFinished:)])
-                [_bottomSheetDelegate uploadFinished:failedUploads.count > 0];
+            if ([self.delegate respondsToSelector:@selector(uploadDidCompleteWithSuccess:)])
+            {
+                [self.delegate uploadDidCompleteWithSuccess:failedUploads.count == 0];
+            }
             if (!_interruptUploading)
             {
-                [_progressUpload setUploadResultWithFailedPoints:failedUploads successfulUploads:_points.count - failedUploads.count];
+                if ([self.delegate respondsToSelector:@selector(uploadDidFinishWithFailedPoints:successfulUploads:)])
+                    [self.delegate uploadDidFinishWithFailedPoints:failedUploads successfulUploads:_points.count - failedUploads.count];
             }
         });
     });
@@ -135,16 +120,9 @@
     _interruptUploading = interrupted;
 }
 
-#pragma mark - OAUploadProgressDelegate
-
 - (void)retryUpload
 {
-    [self startUploadingPoints];
-}
-
-- (void)didFinishUploading
-{
-    [_controller.navigationController popViewControllerAnimated:YES];
+    [self uploadPoints];
 }
 
 @end

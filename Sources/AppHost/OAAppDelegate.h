@@ -7,20 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OARootViewController.h"
 
-typedef NS_ENUM(NSUInteger, InitStep) {
-    InitStepStart,
-    InitStepRestoreSession,
-    InitStepSetupRoot,
-    InitStepFirstLaunch
+typedef NS_ENUM(NSInteger, AppLaunchEvent) {
+    AppLaunchEventNone,
+    AppLaunchEventStart,
+    AppLaunchEventFirstLaunch,
+    AppLaunchEventRestoreSession,
+    AppLaunchEventSetupRoot
 };
 
-typedef void (^_Nullable InitStepHandler)(InitStep step);
+FOUNDATION_EXPORT NSNotificationName _Nonnull const OALaunchUpdateStateNotification;
 
 @interface OAAppDelegate : UIResponder <UIApplicationDelegate>
-@property (strong, nonatomic, nullable) UIWindow *savedWindow;
-
-- (BOOL)initialize:(InitStepHandler)stepHandler;
+@property (strong, nonatomic, nullable) OARootViewController *rootViewController;
+@property (nonatomic, assign) AppLaunchEvent appLaunchEvent;
 
 - (void)scheduleBackgroundDataFetch;
 

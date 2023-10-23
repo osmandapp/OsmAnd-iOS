@@ -89,9 +89,8 @@ typedef enum : NSUInteger {
 
 + (OARootViewController*) instance
 {
-    UIScene *scene = UIApplication.sharedApplication.mainScene;
-    SceneDelegate *sd = (SceneDelegate *)scene.delegate;
-    return sd.rootViewController;
+    OAAppDelegate *appDelegate = (OAAppDelegate *)[[UIApplication sharedApplication] delegate];
+    return appDelegate.rootViewController;
 }
 
 - (void) restoreCenterPanel:(UIViewController *)viewController

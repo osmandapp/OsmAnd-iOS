@@ -41,6 +41,8 @@
 #import "OACloudAccountVerificationViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
+#import "OAAppDelegate.h"
+
 #include <QDir>
 #include <QFile>
 
@@ -60,18 +62,22 @@
 
 @end
 
-@implementation SceneDelegate
-
+@implementation SceneDelegate {
+    UIWindowScene *_windowScene;
+}
 
 @synthesize window = _window;
 @synthesize rootViewController = _rootViewController;
 
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions
 {
-    UIWindowScene *windowScene = (UIWindowScene *)scene;
-    if (!windowScene) {
+    _windowScene = (UIWindowScene *)scene;
+    if (!_windowScene) {
         return;
     }
+    
+    OAAppDelegate *appDelegate = [self appDelegate];
+    _rootViewController = appDelegate.rootViewController;
     
     if (connectionOptions.URLContexts.count > 0) {
         NSURL *url = [connectionOptions.URLContexts allObjects].firstObject.URL;
@@ -87,28 +93,11 @@
             }
         }
     }
-    [[self appDelegate] initialize:^(InitStep step) {
-        switch (step) {
-            case InitStepStart:
-                _window = [[UIWindow alloc] initWithWindowScene:windowScene];
-                _window.rootViewController = [OALaunchScreenViewController new];
-                [_window makeKeyAndVisible];
-                [self appDelegate].savedWindow = _window;
-                break;
-            case InitStepRestoreSession:
-                _window = [[UIWindow alloc] initWithWindowScene:windowScene];
-                _window.rootViewController = [self appDelegate].savedWindow.rootViewController;
-                [_window makeKeyAndVisible];
-                break;
-            case InitStepSetupRoot:
-                _rootViewController = [OARootViewController new];
-                _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
-                break;
-            case InitStepFirstLaunch:
-                [_rootViewController.navigationController pushViewController:[OAFirstUsageWelcomeController new] animated:NO];
-                break;
-        }
-    }];
+    [self configureSceneState:appDelegate.appLaunchEvent];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(launchUpdateStateNotification:)
+                                                     name:OALaunchUpdateStateNotification object:nil];
 }
 
 - (void)sceneDidBecomeActive:(UIScene *)scene
@@ -129,6 +118,48 @@
 - (void)sceneDidEnterBackground:(UIScene *)scene
 {
     [[self appDelegate] applicationDidEnterBackground];
+}
+
+- (void)sceneDidDisconnect:(UIScene *)scene {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)launchUpdateStateNotification:(NSNotification *)notification
+{
+    NSDictionary *info = notification.userInfo;
+    if (info[@"event"]) {
+        NSNumber *num = info[@"event"];
+        [self configureSceneState:(AppLaunchEvent)num.intValue];
+    }
+}
+
+- (void)configureSceneState:(AppLaunchEvent)event
+{
+    switch (event) {
+        case AppLaunchEventStart:
+            _window = [[UIWindow alloc] initWithWindowScene:_windowScene];
+            _window.rootViewController = [OALaunchScreenViewController new];
+            [_window makeKeyAndVisible];
+            break;
+        case AppLaunchEventFirstLaunch:
+            [_rootViewController.navigationController pushViewController:[OAFirstUsageWelcomeController new] animated:NO];
+            break;
+        case AppLaunchEventRestoreSession:
+            _window = [[UIWindow alloc] initWithWindowScene:_windowScene];
+            _rootViewController = [OARootViewController new];
+            [self appDelegate].rootViewController = _rootViewController;
+            _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
+            [_window makeKeyAndVisible];
+            break;
+        case AppLaunchEventSetupRoot:
+            _rootViewController = [OARootViewController new];
+            [self appDelegate].rootViewController = _rootViewController;
+            _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
+            [_window makeKeyAndVisible];
+            break;
+        default:
+            break;
+    }
 }
 
 - (OAAppDelegate *)appDelegate {

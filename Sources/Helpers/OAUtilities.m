@@ -1875,28 +1875,28 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (CGFloat) getTopMargin
 {
-    return [UIApplication sharedApplication].mainWindow.safeAreaInsets.top;
+    return [UIApplication sharedApplication].mainWindow.safeAreaInsets.top ?: 0.0;
 }
 
 + (CGFloat) getBottomMargin
 {
-    return [UIApplication sharedApplication].mainWindow.safeAreaInsets.bottom;
+    return [UIApplication sharedApplication].mainWindow.safeAreaInsets.bottom ?: 0.0;
 }
 
 + (CGFloat) getLeftMargin
 {
-    return [UIApplication sharedApplication].mainWindow.safeAreaInsets.left;
+    return [UIApplication sharedApplication].mainWindow.safeAreaInsets.left ?: 0.0;
 }
 
 
 + (CGFloat) calculateScreenWidth
 {
     if (NSThread.isMainThread)
-        return [UIApplication sharedApplication].mainWindow.bounds.size.width;
+        return UIScreen.mainScreen.bounds.size.width;
     // else dispatch to the main thread
     __block CGFloat result;
     dispatch_sync(dispatch_get_main_queue(), ^{
-        result = [UIApplication sharedApplication].mainWindow.bounds.size.width;
+        result = UIScreen.mainScreen.bounds.size.width;
     });
     return result;
 }
@@ -1906,12 +1906,12 @@ static const double d180PI = 180.0 / M_PI_2;
     if (NSThread.isMainThread)
     {
         CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
-        return [UIApplication sharedApplication].mainWindow.bounds.size.height - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
+        return UIScreen.mainScreen.bounds.size.height - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
     }
     __block CGFloat result;
     dispatch_sync(dispatch_get_main_queue(), ^{
         CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
-        result = [UIApplication sharedApplication].mainWindow.bounds.size.height - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
+        result = UIScreen.mainScreen.bounds.size.height - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
     });
     return result;
 }

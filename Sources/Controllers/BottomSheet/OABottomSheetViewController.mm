@@ -15,6 +15,7 @@
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "OASizes.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kOABottomSheetWidth 320.0
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
@@ -313,6 +314,7 @@
     self.bottomSheetWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.bottomSheetWindow.windowLevel = UIWindowLevelNormal;
     self.bottomSheetWindow.backgroundColor = [UIColor clearColor];
+    self.bottomSheetWindow.windowScene = (UIWindowScene *)UIApplication.sharedApplication.mainScene;
     
     UIInterfaceOrientation interfaceOrientation = CurrentInterfaceOrientation;
 

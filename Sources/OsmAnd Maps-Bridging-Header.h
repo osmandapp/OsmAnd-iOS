@@ -29,6 +29,7 @@
 #import "OAWidgetsVisibilityHelper.h"
 #import "OADistanceAndDirectionsUpdater.h"
 #import "OAHistoryViewController.h"
+#import "OAAppDelegate.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

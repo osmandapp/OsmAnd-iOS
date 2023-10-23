@@ -52,7 +52,7 @@ final class ThemeManager: NSObject {
     
     private func overrideUserInterfaceStyle(_ theme: Theme) {
         DispatchQueue.main.async {
-            UIWindow.key.overrideUserInterfaceStyle = theme.overrideUserInterfaceStyle
+            UIApplication.shared.mainWindow?.overrideUserInterfaceStyle = theme.overrideUserInterfaceStyle
         }
     }
 }

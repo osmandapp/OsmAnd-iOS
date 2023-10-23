@@ -51,6 +51,8 @@
 
 #define kFetchDataUpdatesId @"net.osmand.fetchDataUpdates"
 
+NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateStateNotification";
+
 @implementation OAAppDelegate
 {
     id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol> _app;
@@ -62,22 +64,27 @@
     NSOperationQueue *_dataFetchQueue;
 }
 
-- (BOOL)initialize:(void (^)(InitStep))stepHandler
+- (void)configureAppLaunchEvent:(AppLaunchEvent)event
+{
+    _appLaunchEvent = event;
+    [[NSNotificationCenter defaultCenter] postNotificationName:
+     OALaunchUpdateStateNotification object:nil userInfo:@{@"event": @(_appLaunchEvent)}];
+}
+
+
+@synthesize rootViewController = _rootViewController;
+@synthesize appLaunchEvent = _appLaunchEvent;
+
+- (BOOL)initialize
 {
     if (_appInitDone || _appInitializing)
     {
-        if (stepHandler)
-        {
-            stepHandler(InitStepRestoreSession);
-        }
+        [self configureAppLaunchEvent:AppLaunchEventRestoreSession];
         return YES;
     }
        
     _appInitializing = YES;
-    if (stepHandler)
-    {
-        stepHandler(InitStepStart);
-    }
+    [self configureAppLaunchEvent:AppLaunchEventStart];
 
     NSLog(@"OAAppDelegate initialize start");
 
@@ -129,10 +136,7 @@
             [settings synchronize];
             
             // Create root view controller
-            if (stepHandler)
-            {
-                stepHandler(InitStepSetupRoot);
-            }
+            [self configureAppLaunchEvent:AppLaunchEventSetupRoot];
             BOOL mapInstalled = NO;
             for (const auto& resource : _app.resourcesManager->getLocalResources())
             {
@@ -145,10 +149,7 @@
             // Show intro screen
             if (execCount == 1 || !mapInstalled)
             {
-                if (stepHandler)
-                {
-                    stepHandler(InitStepFirstLaunch);
-                }
+                [self configureAppLaunchEvent:AppLaunchEventFirstLaunch];
             }
             UIScene *scene = UIApplication.sharedApplication.mainScene;
             SceneDelegate *sd = (SceneDelegate *)scene.delegate;
@@ -171,8 +172,6 @@
             
             // Check for updates every hour when the app is in the foreground
             _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesInterval target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"kAppInitDone" object:self];
         });
     });
     
@@ -224,6 +223,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [self initialize];
     if (!_dataFetchQueue)
     {
         // Set the background fetch
@@ -280,7 +280,6 @@
     } @catch (NSException *e) {
         NSLog(@"Could not schedule app refresh: %@", e.reason);
     }
-    
 }
 
 - (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler
@@ -330,7 +329,7 @@
     [mapVc onApplicationDestroyed];
     // Release OsmAnd core
     OsmAnd::ReleaseCore();
-    
+
     // Deconfigure device
     UIDevice* device = [UIDevice currentDevice];
     device.batteryMonitoringEnabled = NO;
@@ -344,22 +343,9 @@
 
 #pragma mark - UISceneSession Lifecycle
 
-- (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options
-{
-    if (connectingSceneSession.role == CPTemplateApplicationSceneSessionRoleApplication)
-    {
-        return [[UISceneConfiguration alloc] initWithName:@"CarPlay Configuration" sessionRole:connectingSceneSession.role];
-    }
-    else if (connectingSceneSession.role == CPTemplateApplicationDashboardSceneSessionRoleApplication)
-    {
-        return [[UISceneConfiguration alloc] initWithName:@"CarPlay-Dashboard" sessionRole:connectingSceneSession.role];
-    }
-    return [[UISceneConfiguration alloc] initWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
-}
-
 - (void)application:(UIApplication *)application didDiscardSceneSessions:(NSSet<UISceneSession *> *)sceneSessions
 {
-    OALog(@"didDiscardSceneSessions");
+    OALog(@"didDiscardSceneSessions: %@", sceneSessions);
 }
 
 #pragma mark - URL's

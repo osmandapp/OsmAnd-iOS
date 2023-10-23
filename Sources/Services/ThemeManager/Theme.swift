@@ -58,10 +58,3 @@ extension Theme {
         }
     }
 }
-
-extension UIWindow {
-    static var key: UIWindow! {
-#warning("will change after use Scene")
-        return UIApplication.shared.windows.first { $0.isKeyWindow }
-    }
-}

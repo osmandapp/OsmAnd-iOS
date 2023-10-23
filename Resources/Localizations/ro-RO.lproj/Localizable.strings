@@ -417,12 +417,12 @@
 "wikivoyage_travel_guide" = "Ghiduri de călătorie";
 "traffic_warning_speed_camera" = "Cameră trafic";
 "si_mi_feet" = "Mile/picior";
-"shared_string_export" = "Exportați";
+"shared_string_export" = "Exportă";
 "get_directions" = "Indicații";
 "destination_point" = "Destinație %@";
 "add_gpx_waypoint" = "Adaugă waypoint GPX";
 "next_proceed" = "Următorul";
-"shared_string_rename" = "Redenumire";
+"shared_string_rename" = "Redenumește";
 "shared_string_commit" = "Comite";
 "cancel_navigation" = "Oprește navigarea";
 "city_type_town" = "Oraș";

@@ -349,7 +349,18 @@
 + (QList< std::shared_ptr<const OsmAnd::BinaryMapObject> >) searchGpxMapObject:(OATravelGpx *)travelGpx
 {
     OsmAndAppInstance app = OsmAndApp.instance;
-    const auto& obfsDataInterface = app.resourcesManager->obfsCollection->obtainDataInterfaceByFilename(QString::fromNSString(travelGpx.file));
+    QList< std::shared_ptr<const OsmAnd::ObfFile> > files = app.resourcesManager->obfsCollection->getObfFiles();
+    std::shared_ptr<const OsmAnd::ObfFile> res;
+    for (std::shared_ptr<const OsmAnd::ObfFile> file : files)
+    {
+        NSString *path = file->filePath.toNSString();
+        if ([path hasSuffix:travelGpx.file])
+        {
+            res = file;
+            break;
+        }
+    }
+    std::shared_ptr<OsmAnd::ObfDataInterface> obfsDataInterface = app.resourcesManager->obfsCollection->obtainDataInterface(res);
     
     QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > loadedBinaryMapObjects;
     QList< std::shared_ptr<const OsmAnd::Road> > loadedRoads;

@@ -34,6 +34,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     var cachedPreviewImages: ImageCache = ImageCache(itemsLimit: 100)
     var lastSelectedIndexPath: IndexPath?
     var savedArticlesObserver: OAAutoObserverProxy = OAAutoObserverProxy()
+    var localResourcesChangedObserver: OAAutoObserverProxy = OAAutoObserverProxy()
     var isGpxReading = false
     var isPointsReadingMode = false
     var searchHelper: TravelSearchHelper?
@@ -71,6 +72,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         downloadingResources = []
         setupDownloadingCellHelper()
         savedArticlesObserver = OAAutoObserverProxy(self, withHandler: #selector(update), andObserve: TravelObfHelper.shared.getBookmarksHelper().observable)
+        localResourcesChangedObserver = OAAutoObserverProxy(self, withHandler: #selector(populateAndUpdate), andObserve: OsmAndApp.swiftInstance().localResourcesChangedObservable)
         
         if OAAppSettings.sharedManager().travelGuidesState.wasWatchingGpx {
             restoreState()
@@ -336,6 +338,11 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
             self.generateData()
             self.tableView.reloadData()
         }
+    }
+    
+    @objc func populateAndUpdate() {
+        TravelObfHelper.shared.loadPopularArticles()
+        update()
     }
     
     func onOptionsButtonClicked() {

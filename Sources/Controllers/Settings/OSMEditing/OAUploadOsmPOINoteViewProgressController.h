@@ -1,5 +1,5 @@
 //
-//  OAProgressUploadOsmPOINoteViewController.h
+//  OAUploadOsmPOINoteViewProgressController.h
 //  OsmAnd Maps
 //
 //  Created by Dmitry Svetlichny on 24.09.2023.
@@ -12,7 +12,7 @@
 
 @class OAOsmPoint;
 
-@interface OAProgressUploadOsmPOINoteViewController : OABaseButtonsViewController
+@interface OAUploadOsmPOINoteViewProgressController : OABaseButtonsViewController
 
 @property (nonatomic) id<OAOsmEditingBottomSheetDelegate> delegate;
 

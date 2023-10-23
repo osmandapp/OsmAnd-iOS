@@ -7,7 +7,7 @@
 //
 
 #import "OAOsmNoteViewController.h"
-#import "OAProgressUploadOsmPOINoteViewController.h"
+#import "OAUploadOsmPOINoteViewProgressController.h"
 #import "Localization.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
@@ -34,7 +34,7 @@
     
     OAOsmEditingPlugin *_plugin;
     EOAOSMNoteScreenType _screenType;
-    OAProgressUploadOsmPOINoteViewController *_progressController;
+    OAUploadOsmPOINoteViewProgressController *_progressController;
     
     NSString *_messageText;
     
@@ -307,7 +307,7 @@
     if (shouldUpload)
     {
         OAUploadOsmPointsAsyncTask *task = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:_plugin points:_bugPoints closeChangeset:NO anonymous:_uploadAnonymously comment:nil];
-        _progressController = [[OAProgressUploadOsmPOINoteViewController alloc] initWithParam:task];
+        _progressController = [[OAUploadOsmPOINoteViewProgressController alloc] initWithParam:task];
         _progressController.delegate = self.delegate;
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_progressController];
         navigationController.modalPresentationStyle = UIModalPresentationCustom;

@@ -7,7 +7,7 @@
 //
 
 #import "OAOsmUploadPOIViewController.h"
-#import "OAProgressUploadOsmPOINoteViewController.h"
+#import "OAUploadOsmPOINoteViewProgressController.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
@@ -29,7 +29,7 @@
     OATableDataModel *_data;
     NSArray *_osmPoints;
     
-    OAProgressUploadOsmPOINoteViewController *_progressController;
+    OAUploadOsmPOINoteViewProgressController *_progressController;
     
     NSString *_messageText;
     
@@ -388,7 +388,7 @@
     if (_isAuthorised)
     {
         OAUploadOsmPointsAsyncTask *uploadTask = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class] points:_osmPoints closeChangeset:_closeChangeset anonymous:NO comment:_messageText];
-        _progressController = [[OAProgressUploadOsmPOINoteViewController alloc] initWithParam:uploadTask];
+        _progressController = [[OAUploadOsmPOINoteViewProgressController alloc] initWithParam:uploadTask];
         _progressController.delegate = self.delegate;
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_progressController];
         navigationController.modalPresentationStyle = UIModalPresentationCustom;

@@ -1,12 +1,12 @@
 //
-//  OAProgressUploadOsmPOINoteViewController.m
+//  OAUploadOsmPOINoteViewProgressController.m
 //  OsmAnd Maps
 //
 //  Created by Dmitry Svetlichny on 24.09.2023.
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OAProgressUploadOsmPOINoteViewController.h"
+#import "OAUploadOsmPOINoteViewProgressController.h"
 #import "Localization.h"
 #import "OAUploadOsmPointsAsyncTask.h"
 #import "OATableDataModel.h"
@@ -27,11 +27,11 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadViewConrollerMode) {
     EOAOsmUploadViewConrollerModeFailed
 };
 
-@interface OAProgressUploadOsmPOINoteViewController () <OAUploadTaskDelegate>
+@interface OAUploadOsmPOINoteViewProgressController () <OAUploadTaskDelegate>
 
 @end
 
-@implementation OAProgressUploadOsmPOINoteViewController
+@implementation OAUploadOsmPOINoteViewProgressController
 {
     OATableDataModel *_data;
     

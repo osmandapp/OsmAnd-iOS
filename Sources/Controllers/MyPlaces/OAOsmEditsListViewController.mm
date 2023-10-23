@@ -24,8 +24,8 @@
 #import "OAOsmEditsLayer.h"
 #import "OAOsmEditActionsViewController.h"
 #import "OAMapLayers.h"
-#import "OAOsmNoteBottomSheetViewController.h"
-#import "OAOsmEditingBottomSheetViewController.h"
+#import "OAOsmNoteViewController.h"
+#import "OAOsmUploadPOIViewController.h"
 #import "OAMultiselectableHeaderView.h"
 #import "OAPlugin.h"
 #import "OAOsmEditingPlugin.h"
@@ -397,18 +397,18 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         }
         if (edits.count > 0)
         {
-            OAOsmEditingBottomSheetViewController *editsBottomsheet = [[OAOsmEditingBottomSheetViewController alloc] initWithEditingUtils:((OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class]).getPoiModificationRemoteUtil points:edits];
+            OAOsmUploadPOIViewController *editsBottomsheet = [[OAOsmUploadPOIViewController alloc] initWithPOIItems:edits];
             editsBottomsheet.delegate = self;
             _pendingNotes = notes;
-            [editsBottomsheet show];
+            [[OARootViewController instance].mapPanel.navigationController pushViewController:editsBottomsheet animated:YES];
             
         }
         else if (notes.count > 0)
         {
             _pendingNotes = nil;
-            OAOsmNoteBottomSheetViewController *notesBottomsheet = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:(OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class] points:notes type:TYPE_UPLOAD];
+            OAOsmNoteViewController *notesBottomsheet = [[OAOsmNoteViewController alloc] initWithEditingPlugin:(OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class] points:notes type:EOAOsmNoteViewConrollerModeUpload];
             notesBottomsheet.delegate = self;
-            [notesBottomsheet show];
+            [[OARootViewController instance].mapPanel.navigationController pushViewController:notesBottomsheet animated:YES];
         }
     
     }
@@ -437,9 +437,9 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     [self refreshData];
     if (_pendingNotes && _pendingNotes.count > 0 && !hasError)
     {
-        OAOsmNoteBottomSheetViewController *notesBottomsheet = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:(OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class] points:_pendingNotes type:TYPE_UPLOAD];
+        OAOsmNoteViewController *notesBottomsheet = [[OAOsmNoteViewController alloc] initWithEditingPlugin:(OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class] points:_pendingNotes type:EOAOsmNoteViewConrollerModeUpload];
         notesBottomsheet.delegate = self;
-        [notesBottomsheet show];
+        [[OARootViewController instance].mapPanel.navigationController pushViewController:notesBottomsheet animated:YES];
     }
     _pendingNotes = nil;
 }

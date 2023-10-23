@@ -1339,6 +1339,9 @@
 		C54260202AA0D2A000E76C00 /* ic_custom_visibility@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C542601E2AA0D29F00E76C00 /* ic_custom_visibility@3x.png */; };
 		C54260232AA0F90700E76C00 /* ic_custom_3d_relief@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C54260212AA0F90700E76C00 /* ic_custom_3d_relief@2x.png */; };
 		C54260242AA0F90700E76C00 /* ic_custom_3d_relief@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C54260222AA0F90700E76C00 /* ic_custom_3d_relief@3x.png */; };
+		C546C0042AC242D600377EDE /* OAOsmUploadPOIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C546C0032AC242D600377EDE /* OAOsmUploadPOIViewController.m */; };
+		C546C0072AC2438F00377EDE /* OAOsmNoteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C546C0062AC2438F00377EDE /* OAOsmNoteViewController.mm */; };
+		C546C00A2AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m in Sources */ = {isa = PBXBuildFile; fileRef = C546C0092AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m */; };
 		C54D7F8829BF357700E14746 /* OASunriseSunsetWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */; };
 		C556C85329BA0844006794D5 /* OASunriseSunsetWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C556C85129BA0844006794D5 /* OASunriseSunsetWidget.mm */; };
 		C558A29B29B1355A00E79DDB /* ic_custom_direction_manual_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C558A29529B1355800E79DDB /* ic_custom_direction_manual_night@2x.png */; };
@@ -5202,6 +5205,12 @@
 		C542601E2AA0D29F00E76C00 /* ic_custom_visibility@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_visibility@3x.png"; path = "Resources/Icons/ic_custom_visibility@3x.png"; sourceTree = "<group>"; };
 		C54260212AA0F90700E76C00 /* ic_custom_3d_relief@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief@2x.png"; path = "Resources/Icons/ic_custom_3d_relief@2x.png"; sourceTree = "<group>"; };
 		C54260222AA0F90700E76C00 /* ic_custom_3d_relief@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d_relief@3x.png"; path = "Resources/Icons/ic_custom_3d_relief@3x.png"; sourceTree = "<group>"; };
+		C546C0022AC242D600377EDE /* OAOsmUploadPOIViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmUploadPOIViewController.h; sourceTree = "<group>"; };
+		C546C0032AC242D600377EDE /* OAOsmUploadPOIViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmUploadPOIViewController.m; sourceTree = "<group>"; };
+		C546C0052AC2438F00377EDE /* OAOsmNoteViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmNoteViewController.h; sourceTree = "<group>"; };
+		C546C0062AC2438F00377EDE /* OAOsmNoteViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmNoteViewController.mm; sourceTree = "<group>"; };
+		C546C0082AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAUploadOsmPOINoteViewProgressController.h; sourceTree = "<group>"; };
+		C546C0092AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAUploadOsmPOINoteViewProgressController.m; sourceTree = "<group>"; };
 		C54D7F8629BF357700E14746 /* OASunriseSunsetWidgetState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunriseSunsetWidgetState.h; sourceTree = "<group>"; };
 		C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASunriseSunsetWidgetState.m; sourceTree = "<group>"; };
 		C556C85029BA0844006794D5 /* OASunriseSunsetWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunriseSunsetWidget.h; sourceTree = "<group>"; };
@@ -10196,6 +10205,12 @@
 				32210DB629893C17005D16CB /* OAOsmUploadGPXViewConroller.m */,
 				329989AE298A90D1003D7A0E /* OAOsmUploadGPXVisibilityViewConroller.h */,
 				329989AF298A90E1003D7A0E /* OAOsmUploadGPXVisibilityViewConroller.m */,
+				C546C0022AC242D600377EDE /* OAOsmUploadPOIViewController.h */,
+				C546C0032AC242D600377EDE /* OAOsmUploadPOIViewController.m */,
+				C546C0052AC2438F00377EDE /* OAOsmNoteViewController.h */,
+				C546C0062AC2438F00377EDE /* OAOsmNoteViewController.mm */,
+				C546C0082AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.h */,
+				C546C0092AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m */,
 			);
 			path = OSMEditing;
 			sourceTree = "<group>";
@@ -17494,6 +17509,7 @@
 				DA5A845E26C563A900F274C7 /* OARoutePointsLayer.mm in Sources */,
 				DA5A852C26C563A900F274C7 /* OAOcbfHelper.m in Sources */,
 				DA5A815426C563A700F274C7 /* OACarPlayMapViewController.mm in Sources */,
+				C546C0072AC2438F00377EDE /* OAOsmNoteViewController.mm in Sources */,
 				32048FC92A26132600AA4B71 /* OsmOAuthView.swift in Sources */,
 				DA5A845826C563A900F274C7 /* OAOverlayMapLayer.mm in Sources */,
 				DA5A853E26C563A900F274C7 /* OADayNightHelper.m in Sources */,
@@ -17705,6 +17721,7 @@
 				DA5A840E26C563A800F274C7 /* OAGpxWptEditingHandler.mm in Sources */,
 				DA5A84A126C563A900F274C7 /* OAApplyGpxApproximationCommand.mm in Sources */,
 				DA5A841626C563A800F274C7 /* OAGPXWptViewController.mm in Sources */,
+				C546C00A2AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m in Sources */,
 				DA5A830026C563A800F274C7 /* OAPublicTransportRouteShieldCell.m in Sources */,
 				325B6A0526D923AA00D8B67C /* OAQuickSearchCoordinateFormatsViewController.m in Sources */,
 				DA5A833426C563A800F274C7 /* OAShapesCollectionViewCell.m in Sources */,
@@ -18108,6 +18125,7 @@
 				DA5A83C726C563A800F274C7 /* OATargetMenuViewController.mm in Sources */,
 				DA5A81BF26C563A700F274C7 /* OAPOIType.m in Sources */,
 				46D38AA229C39D7C000AAE0C /* OARoutingFile.m in Sources */,
+				C546C0042AC242D600377EDE /* OAOsmUploadPOIViewController.m in Sources */,
 				DA5A81CE26C563A700F274C7 /* OATileSource.mm in Sources */,
 				DA5A818026C563A700F274C7 /* OANavAddFirstIntermediateAction.mm in Sources */,
 				32210DB729893C17005D16CB /* OAOsmUploadGPXViewConroller.m in Sources */,

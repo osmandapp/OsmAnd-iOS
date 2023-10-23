@@ -64,21 +64,6 @@
     }
 }
 
-- (instancetype)initWithGpxFileContent:(NSString *)fileContent
-{
-    if (self = [super init])
-    {
-        if ([self loadFromContent:fileContent])
-            return self;
-        else
-            return nil;
-    }
-    else
-    {
-        return nil;
-    }
-}
-
 - (instancetype)initWithTitle:(NSString *)title lang:(NSString *)lang descr:(NSString *)descr
 {
     self = [super init];
@@ -521,11 +506,6 @@
         return false;
 }
 
-- (BOOL) loadFromContent:(NSString *)fileContent
-{
-    return [self fetch:OsmAnd::GpxDocument::loadFromContent(QString::fromNSString(fileContent))];
-}
-
 + (void) fillLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>&)links linkArray:(NSArray *)linkArray
 {
     std::shared_ptr<OsmAnd::GpxDocument::Link> link;
@@ -705,14 +685,6 @@
     [self fillExtensions:document];
     [self fillNetworkRouteKeys:document];
     return document;
-}
-
-- (NSString *) saveToStringWith:(NSString *)trackName
-{
-    auto document = [self getPrepareForSavingDocument];
-    QString result;
-    document->saveToString(result, QString::fromNSString(trackName), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
-    return result.toNSString();
 }
 
 - (BOOL) saveTo:(NSString *)filename

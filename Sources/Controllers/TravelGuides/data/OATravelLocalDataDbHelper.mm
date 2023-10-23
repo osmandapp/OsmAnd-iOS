@@ -84,10 +84,14 @@
     
     OAGPXDocument *gpx = (OAGPXDocument *) article.gpxFile.object;
     [gpx saveTo:tmpFilePath];
-    NSString *gpxFileContent = [gpx saveToStringWith:article.title];
     
     OAArchiveWriter *helper = [[OAArchiveWriter alloc] init];
-    NSData *archivedGpxContent = [helper getArchivedFileContent:gpxFileContent];
+    [helper archiveFile:tmpFilePath destPath:tmpArchivePath dirPath:_tmpDir];
+    
+    NSData *archivedGpxContent = [NSData dataWithContentsOfFile:tmpArchivePath];
+    [[NSFileManager defaultManager] removeItemAtPath:tmpFilePath error:nil];
+    [[NSFileManager defaultManager] removeItemAtPath:tmpArchivePath error:nil];
+    
     QByteArray gpxBlobData;
     if (archivedGpxContent)
         gpxBlobData = QByteArray::fromNSData(archivedGpxContent);
@@ -594,7 +598,11 @@
                         OAArchiveReader *helper = [[OAArchiveReader alloc] init];
                         NSString *gpxContent = [helper getUnarchivedFileContentForData:data];
                         OAGPXDocumentAdapter *adapter = [[OAGPXDocumentAdapter alloc] init];
-                        adapter.object = [[OAGPXDocument alloc] initWithGpxFileContent:gpxContent];
+                        OAGPXDocument *document = [[OAGPXDocument alloc] init];
+                        QString qstringContent = QString::fromNSString(gpxContent);
+                        QXmlStreamReader xmlReader(qstringContent);
+                        [document fetch:OsmAnd::GpxDocument::loadFrom(xmlReader)];
+                        adapter.object = document;
                         dbArticle.gpxFile = adapter;
                     }
                 

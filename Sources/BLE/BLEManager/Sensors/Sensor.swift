@@ -8,6 +8,8 @@
 import CoreBluetooth
 
 class Sensor {
+    public var timestamp: Double = 0
+    
     func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
     }
 }

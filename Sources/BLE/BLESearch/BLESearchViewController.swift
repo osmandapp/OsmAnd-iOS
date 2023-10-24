@@ -67,6 +67,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        generateData()
         tableView.reloadData()
     }
     
@@ -79,9 +80,12 @@ final class BLESearchViewController: OABaseNavbarViewController {
     }
     
     override func generateData() {
-        tableData.clearAllData()
-        let section = tableData.createNewSection()
-        BLEManager.shared.discoveredDevices.forEach { _ in section.createNewRow() }
+        let discoveredDevices = BLEManager.shared.discoveredDevices
+        if discoveredDevices.isEmpty {
+            tableData.clearAllData()
+            let section = tableData.createNewSection()
+            BLEManager.shared.discoveredDevices.forEach { _ in section.createNewRow() }
+        }
     }
     
     override func getTitleForHeader(_ section: Int) -> String! {

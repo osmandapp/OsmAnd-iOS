@@ -3620,6 +3620,10 @@
 		FA6797EF2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA6797EE2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm */; };
 		FA740D422A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA740D412A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib */; };
 		FA740D452A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */; };
+		FA86F4152AE7C56E00DC3B2B /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */; };
+		FA86F4182AE7C5EA00DC3B2B /* UserDefaultsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4172AE7C5EA00DC3B2B /* UserDefaultsKey.swift */; };
+		FA86F41A2AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */; };
+		FA86F41C2AE7CE0100DC3B2B /* BLEBikeSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */; };
 		FAA6504F2ADD42C50020DCEA /* SearchDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650362ADD42C40020DCEA /* SearchDeviceTableViewCell.swift */; };
 		FAA650502ADD42C50020DCEA /* BLESearchViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAA650372ADD42C40020DCEA /* BLESearchViewController.storyboard */; };
 		FAA650512ADD42C50020DCEA /* BLESearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650382ADD42C40020DCEA /* BLESearchViewController.swift */; };
@@ -8404,6 +8408,10 @@
 		FA6797EE2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherAutoUpdateSettingsViewController.mm; sourceTree = "<group>"; };
 		FA740D412A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CloudIntroductionButtonsView.xib; sourceTree = "<group>"; };
 		FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudIntroductionButtonsView.swift; sourceTree = "<group>"; };
+		FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
+		FA86F4172AE7C5EA00DC3B2B /* UserDefaultsKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKey.swift; sourceTree = "<group>"; };
+		FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBikeSCDDevice.swift; sourceTree = "<group>"; };
+		FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBikeSensor.swift; sourceTree = "<group>"; };
 		FAA650362ADD42C40020DCEA /* SearchDeviceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchDeviceTableViewCell.swift; sourceTree = "<group>"; };
 		FAA650372ADD42C40020DCEA /* BLESearchViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = BLESearchViewController.storyboard; sourceTree = "<group>"; };
 		FAA650382ADD42C40020DCEA /* BLESearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLESearchViewController.swift; sourceTree = "<group>"; };
@@ -14132,6 +14140,7 @@
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				FA86F4162AE7C5DC00DC3B2B /* UserDefaultsKey */,
 				46CE64EB2A053B0C009CEE11 /* Appearance */,
 				46DC808329B8884F00C477C3 /* Enums */,
 				DA45B23F2A2F47200055055A /* Extensions.swift */,
@@ -14497,6 +14506,7 @@
 				FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */,
 				FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */,
 				FAA650652ADD4C9F0020DCEA /* UIImage+Extension.swift */,
+				FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */,
 			);
 			path = SwiftExtensions;
 			sourceTree = "<group>";
@@ -14668,6 +14678,14 @@
 			path = CloudIntroductionButtonsView;
 			sourceTree = "<group>";
 		};
+		FA86F4162AE7C5DC00DC3B2B /* UserDefaultsKey */ = {
+			isa = PBXGroup;
+			children = (
+				FA86F4172AE7C5EA00DC3B2B /* UserDefaultsKey.swift */,
+			);
+			path = UserDefaultsKey;
+			sourceTree = "<group>";
+		};
 		FAA650332ADD42990020DCEA /* BLE */ = {
 			isa = PBXGroup;
 			children = (
@@ -14717,6 +14735,7 @@
 				FAA6503C2ADD42C40020DCEA /* Sensor.swift */,
 				FAA6503B2ADD42C40020DCEA /* BLEBatterySensor.swift */,
 				FAA6503D2ADD42C40020DCEA /* BLEHeartRateSensor.swift */,
+				FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */,
 			);
 			path = Sensors;
 			sourceTree = "<group>";
@@ -14729,6 +14748,7 @@
 				FAA650442ADD42C40020DCEA /* DeviceFactory.swift */,
 				FAA650412ADD42C40020DCEA /* BLEHeartRateDevice.swift */,
 				FAA650432ADD42C40020DCEA /* BLETemperatureDevice.swift */,
+				FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */,
 			);
 			path = Devices;
 			sourceTree = "<group>";
@@ -18178,6 +18198,8 @@
 				DA5A842326C563A800F274C7 /* OAGPXWptListViewController.mm in Sources */,
 				DA5A817F26C563A700F274C7 /* OAUnsupportedAction.m in Sources */,
 				0513AA382A9B530A00CFA2A0 /* OADestinationBarWidget.mm in Sources */,
+				FA86F41A2AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift in Sources */,
+				FA86F4152AE7C56E00DC3B2B /* UserDefaults+Extension.swift in Sources */,
 				DA5A833E26C563A800F274C7 /* OAWaypointCell.m in Sources */,
 				DA5A81DF26C563A700F274C7 /* OAAddress.mm in Sources */,
 				DA5A84FF26C563A900F274C7 /* OAMapRendererView.mm in Sources */,
@@ -18327,6 +18349,7 @@
 				32119B502847D807005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.mm in Sources */,
 				DA5A853A26C563A900F274C7 /* OAAvoidSpecificRoads.mm in Sources */,
 				DAAC0EC32801885800867D35 /* OABackupImporter.m in Sources */,
+				FA86F41C2AE7CE0100DC3B2B /* BLEBikeSensor.swift in Sources */,
 				DA5A81DB26C563A700F274C7 /* OACity.mm in Sources */,
 				DA5A84B726C563A900F274C7 /* OATrackSegmentsViewController.mm in Sources */,
 				DAABE4E32A13752000569F71 /* OAAverageSpeedComputer.m in Sources */,
@@ -18578,6 +18601,7 @@
 				B0D611C1BD9A29F6A04945A2 /* OATrackMenuTabActions.mm in Sources */,
 				B0D617D463DFB9B852379893 /* OATrackMenuTabOverview.mm in Sources */,
 				B0D6143C1114AC3D58A2F898 /* OATrackMenuTabPoints.mm in Sources */,
+				FA86F4182AE7C5EA00DC3B2B /* UserDefaultsKey.swift in Sources */,
 				DA7B18E02A1227A30029967F /* CurrentTimeWidget.swift in Sources */,
 				B0D610DBE05EACD61CFE6859 /* OATrackMenuTabSegments.mm in Sources */,
 				46E9AD9728DC8B1200CC55F9 /* OASwitchTableViewCell.m in Sources */,

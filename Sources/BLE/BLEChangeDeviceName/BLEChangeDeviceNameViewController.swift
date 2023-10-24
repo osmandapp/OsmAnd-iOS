@@ -97,19 +97,6 @@ final class BLEChangeDeviceNameViewController: OABaseNavbarViewController {
     }
 }
 
-private extension UINavigationItem {
-    func setRightBarButtonItems(isEnabled: Bool, with tintColor: UIColor? = nil) {
-        rightBarButtonItems?.forEach {
-            if let button = $0.customView as? UIButton {
-                $0.isEnabled = isEnabled
-                button.isEnabled = isEnabled
-                button.tintColor = tintColor
-                button.setTitleColor(tintColor, for: .normal)
-            }
-        }
-    }
-}
-
 extension BLEChangeDeviceNameViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
@@ -135,6 +122,19 @@ extension BLEChangeDeviceNameViewController: UITextViewDelegate {
         if !text.isEmpty {
             newDeviceName = text
             navigationItem.setRightBarButtonItems(isEnabled: true, with: UIColor.buttonBgColorPrimary)
+        }
+    }
+}
+
+private extension UINavigationItem {
+    func setRightBarButtonItems(isEnabled: Bool, with tintColor: UIColor? = nil) {
+        rightBarButtonItems?.forEach {
+            if let button = $0.customView as? UIButton {
+                $0.isEnabled = isEnabled
+                button.isEnabled = isEnabled
+                button.tintColor = tintColor
+                button.setTitleColor(tintColor, for: .normal)
+            }
         }
     }
 }

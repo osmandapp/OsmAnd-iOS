@@ -129,7 +129,6 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let item = tableData.item(for: indexPath)
-        let isForgetSensorCell = item.key == "forget_sensor_row"
         if item.cellType == OAValueTableViewCell.getIdentifier() {
             var cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.getIdentifier()) as? OAValueTableViewCell
             if cell == nil {

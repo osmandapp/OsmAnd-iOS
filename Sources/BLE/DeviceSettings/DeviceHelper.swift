@@ -48,6 +48,6 @@ final class DeviceHelper {
 
 extension DeviceHelper {
     func clearPairedDevices() {
-        
+        // add test func
     }
 }

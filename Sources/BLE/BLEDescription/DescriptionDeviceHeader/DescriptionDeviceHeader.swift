@@ -61,19 +61,14 @@ final class DescriptionDeviceHeader: UIView {
             updateRSSI(with: item.rssi)
             deviceImageView.image = item.getServiceConnectedImage
             configureConnectButtonTitle(with: .disconnected)
-            // FIXME:
-            imageContainerView.backgroundColor = UIColor.textColorSecondary
-           // imageContainerView.backgroundColor = UIColor(red: 0.341, green: 0.078, blue: 0.8, alpha: 0.1).cgColor//UIColor.iconColorTertiary
-            // iconColorTertiary
+            imageContainerView.backgroundColor = UIColor.buttonBgColorTertiary
         default:
             connectStatusLabel.text = "Disconnected"
             signalIndicatorImageView.tintColor = UIColor.iconColorSecondary
             signalIndicatorImageView.image = UIImage(named: "ic_small_signal_not_found")
             deviceImageView.image = item.getServiceConnectedImage.noir
             configureConnectButtonTitle(with: .connected)
-            // FIXME:
-            imageContainerView.backgroundColor = UIColor.iconColorSecondary
-           // imageContainerView.backgroundColor = UIColor(red: 0.949, green: 0.947, blue: 0.952, alpha: 1).cgColor//UIColor.iconColorDefault
+            imageContainerView.backgroundColor = UIColor.viewBgColor
         }
     }
     

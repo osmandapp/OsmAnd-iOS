@@ -23,12 +23,15 @@ extension UIColor {
     @objc static var iconColorSecondary: UIColor { UIColor(named: #function)! }
     @objc static var iconColorSelected: UIColor { UIColor(named: #function)! }
     @objc static var iconColorTertiary: UIColor { UIColor(named: #function)! }
+    @objc static var iconColorDisabled: UIColor { UIColor(named: #function)! }
     @objc static var separatorColor: UIColor { UIColor(named: #function)! }
     @objc static var textColorActive: UIColor { UIColor(named: #function)! }
     @objc static var textColorPrimary: UIColor { UIColor(named: #function)! }
     @objc static var textColorSecondary: UIColor { UIColor(named: #function)! }
     @objc static var textColorTertiary: UIColor { UIColor(named: #function)! }
     @objc static var viewBgColor: UIColor { UIColor(named: #function)! }
+    @objc static var navBarBgColorPrimary: UIColor { UIColor(named: #function)! }
+    @objc static var navBarTextColorPrimary: UIColor { UIColor(named: #function)! }
 }
 
 extension UIColor {

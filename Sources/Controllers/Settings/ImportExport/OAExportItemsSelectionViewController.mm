@@ -36,6 +36,7 @@
 #import "OAPOIHelper.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OAOsmAndFormatter.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 
@@ -84,7 +85,7 @@
     self.tableView.dataSource = self;
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
     [self.tableView setEditing:YES];
-    self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
+    self.tableView.tintColor = UIColor.iconColorActive;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 
     self.cancelButton.layer.cornerRadius = 9.0;
@@ -106,15 +107,15 @@
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = UIColorFromRGB(color_primary_table_background);
-    appearance.shadowColor = UIColorFromRGB(color_primary_table_background);
+    appearance.backgroundColor = UIColor.viewBgColor;
+    appearance.shadowColor = UIColor.viewBgColor;
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.blackColor
+        NSForegroundColorAttributeName : UIColor.textColorPrimary
     };
     self.navigationController.navigationBar.standardAppearance = appearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColorFromRGB(color_primary_purple);
+    self.navigationController.navigationBar.tintColor = UIColor.textColorActive;
     self.navigationController.navigationBar.prefersLargeTitles = NO;
 }
 
@@ -484,13 +485,13 @@
             [cell leftEditButtonVisibility:YES];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.delegate = self;
-            cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
+            cell.titleLabel.textColor = UIColor.textColorActive;
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
 
             UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
             conf.contentInsets = NSDirectionalEdgeInsetsMake(0., -6.5, 0., 0.);
             cell.leftEditButton.configuration = conf;
-            cell.leftEditButton.layer.shadowColor = UIColorFromRGB(color_tint_gray).CGColor;
+            cell.leftEditButton.layer.shadowColor = UIColor.iconColorDefault.CGColor;
             cell.leftEditButton.layer.shadowOffset = CGSizeMake(0., 0.);
             cell.leftEditButton.layer.shadowOpacity = 1.;
             cell.leftEditButton.layer.shadowRadius = 1.;
@@ -519,9 +520,9 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
             [cell rightIconVisibility:NO];
-            cell.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.tintColor = UIColor.iconColorActive;
             UIView *bgColorView = [[UIView alloc] init];
-            bgColorView.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.05];
+            bgColorView.backgroundColor = [UIColor.iconColorActive colorWithAlphaComponent:.05];
             [cell setSelectedBackgroundView:bgColorView];
         }
         if (cell)
@@ -530,8 +531,8 @@
             cell.titleLabel.text = item[@"title"];
             BOOL selected = [_selectedItems containsObject:item[@"object"]];
             UIColor *selectedColor = item[@"color"];
-            selectedColor = selectedColor ? selectedColor : UIColorFromRGB(color_primary_purple);
-            cell.leftIconView.tintColor = selected ? selectedColor : UIColorFromRGB(color_tint_gray);
+            selectedColor = selectedColor ? selectedColor : UIColor.iconColorActive;
+            cell.leftIconView.tintColor = selected ? selectedColor : UIColor.iconColorDisabled;
             cell.descriptionLabel.text = item[@"descr"];
             [cell descriptionVisibility:cell.descriptionLabel.text || cell.descriptionLabel.text.length != 0];
         }

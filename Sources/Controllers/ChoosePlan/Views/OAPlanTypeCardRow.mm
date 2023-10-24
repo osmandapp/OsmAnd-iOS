@@ -13,6 +13,7 @@
 #import "OAChoosePlanHelper.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAPlanTypeCardRow ()
 
@@ -95,39 +96,39 @@
     {
         case EOAPlanTypeChoosePlan:
         {
-            self.backgroundColor = UIColorFromARGB(color_primary_purple_10);
+            self.backgroundColor = UIColor.buttonBgColorTertiary;
             self.imageViewLeftIcon.hidden = NO;
             self.imageViewRightIcon.hidden = YES;
             self.labelTitle.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
             self.labelDescription.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            self.labelTitle.textColor = UIColorFromRGB(color_primary_purple);
-            self.labelDescription.textColor = UIColorFromRGB(color_primary_purple);
+            self.labelTitle.textColor = UIColor.buttonTextColorSecondary;
+            self.labelDescription.textColor = UIColor.buttonTextColorSecondary;
             self.labelTitle.textAlignment = NSTextAlignmentLeft;
             self.labelDescription.textAlignment = NSTextAlignmentLeft;
             break;
         }
         case EOAPlanTypeChooseSubscription:
         {
-            self.backgroundColor = UIColor.whiteColor;
+            self.backgroundColor = UIColor.groupBgColor;
             self.imageViewLeftIcon.hidden = YES;
             self.imageViewRightIcon.hidden = NO;
             self.labelTitle.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             self.labelDescription.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            self.labelTitle.textColor = UIColorFromRGB(color_primary_purple);
-            self.labelDescription.textColor = UIColor.blackColor;
+            self.labelTitle.textColor = UIColor.buttonTextColorSecondary;
+            self.labelDescription.textColor = UIColor.textColorPrimary;
             self.labelTitle.textAlignment = NSTextAlignmentLeft;
             self.labelDescription.textAlignment = NSTextAlignmentLeft;
             break;
         }
         case EOAPlanTypePurchase:
         {
-            self.backgroundColor = UIColorFromRGB(color_primary_purple);
+            self.backgroundColor = UIColor.buttonBgColorPrimary;
             self.imageViewLeftIcon.hidden = YES;
             self.imageViewRightIcon.hidden = YES;
             self.labelTitle.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
             self.labelDescription.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            self.labelTitle.textColor = UIColor.whiteColor;
-            self.labelDescription.textColor = UIColor.whiteColor;
+            self.labelTitle.textColor = UIColor.buttonTextColorPrimary;
+            self.labelDescription.textColor = UIColor.buttonTextColorPrimary;
             self.labelTitle.textAlignment = NSTextAlignmentCenter;
             self.labelDescription.textAlignment = NSTextAlignmentCenter;
             break;
@@ -140,9 +141,9 @@
     if (_type == EOAPlanTypeChooseSubscription)
     {
         self.layer.borderWidth = selected ? 2. : 0.;
-        self.layer.borderColor = selected ? UIColorFromRGB(color_primary_purple).CGColor : UIColor.clearColor.CGColor;
+        self.layer.borderColor = selected ? UIColor.buttonBgColorPrimary.CGColor : UIColor.clearColor.CGColor;
         self.imageViewRightIcon.image = [UIImage imageNamed:selected ? @"ic_system_checkbox_selected" : @"ic_custom_checkbox_unselected"];
-        self.backgroundColor = selected ? UIColorFromARGB(color_primary_purple_10) : UIColor.clearColor;
+        self.backgroundColor = selected ? UIColor.buttonBgColorTertiary : UIColor.clearColor;
     }
 }
 
@@ -193,9 +194,9 @@
                 icon = [UIImage imageNamed:iconName];
             self.imageViewLeftIcon.image = icon;
             self.imageViewRightIcon.image = nil;
-            self.backgroundColor = available && !isPurchased ? UIColorFromARGB(color_primary_purple_10) : UIColorFromRGB(color_button_gray_background);
-            self.labelTitle.textColor = available && !isPurchased ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
-            self.labelDescription.textColor = available && !isPurchased ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_icon_inactive);
+            self.backgroundColor = available && !isPurchased ? UIColor.buttonBgColorTertiary : UIColor.buttonBgColorSecondary;
+            self.labelTitle.textColor = available && !isPurchased ? UIColor.buttonTextColorSecondary : UIColor.textColorSecondary;
+            self.labelDescription.textColor = available && !isPurchased ? UIColor.buttonTextColorSecondary : UIColor.textColorSecondary;
             self.userInteractionEnabled = available && !isPurchased;
             self.layer.borderWidth = 0.;
             break;
@@ -255,8 +256,8 @@
             }
             
             self.imageViewLeftIcon.image = nil;
-            self.labelTitle.textColor = UIColorFromRGB(color_primary_purple);
-            self.labelDescription.textColor = UIColor.blackColor;
+            self.labelTitle.textColor = UIColor.buttonTextColorSecondary;
+            self.labelDescription.textColor = UIColor.textColorPrimary;
             [self updateSelected:selected];
             self.userInteractionEnabled = YES;
             break;
@@ -271,9 +272,9 @@
             self.layer.borderWidth = 0.;
             self.imageViewLeftIcon.image = nil;
             self.imageViewRightIcon.image = nil;
-            self.backgroundColor = UIColorFromRGB(color_primary_purple);
-            self.labelTitle.textColor = UIColor.whiteColor;
-            self.labelDescription.textColor = UIColor.whiteColor;
+            self.backgroundColor = UIColor.buttonBgColorPrimary;
+            self.labelTitle.textColor = UIColor.buttonTextColorPrimary;
+            self.labelDescription.textColor = UIColor.buttonTextColorPrimary;
             self.userInteractionEnabled = YES;
             break;
         }

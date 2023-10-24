@@ -18,9 +18,10 @@
 #import "OASavingTrackHelper.h"
 #import "OAValueTableViewCell.h"
 #import "OASimpleTableViewCell.h"
-#import "OATitleRightIconCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OAColors.h"
 #import "OASizes.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <generalRouter.h>
 
@@ -200,7 +201,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             
             NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"shared_string_menu"), OALocalizedString(@"shared_string_my_places"), OALocalizedString(@"menu_my_trips")];
             NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"trip_rec_actions_descr"), menuPath];
-            NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:actionsDescr attributes:@{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
+            NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:actionsDescr attributes:@{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColor.textColorSecondary}];
             [str addAttributes:@{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold]} range:[actionsDescr rangeOfString:menuPath]];
             
             [dataArr addObject:@[
@@ -210,20 +211,20 @@ static NSArray<NSString *> *minTrackSpeedNames;
                     @"header" : OALocalizedString(@"shared_string_actions")
                 },
                 @{
-                    @"type" : [OATitleRightIconCell getCellIdentifier],
+                    @"type" : [OARightIconTableViewCell getCellIdentifier],
                     @"title" : OALocalizedString(@"shared_string_gpx_tracks"),
                     @"img" : @"ic_custom_folder",
                     @"name" : @"open_trips"
                 },
                 @{
-                    @"type" : [OATitleRightIconCell getCellIdentifier],
+                    @"type" : [OARightIconTableViewCell getCellIdentifier],
                     @"title" : OALocalizedString(@"reset_plugin_to_default"),
                     @"img" : @"ic_custom_reset",
                     @"name" : @"reset_plugin"
                 },
                 // TODO: add copy from profile
 //                @{
-//                    @"type" : [OATitleRightIconCell getCellIdentifier],
+//                    @"type" : [OARightIconTableViewCell getCellIdentifier],
 //                    @"title" : OALocalizedString(@"shared_string_gpx_tracks"),
 //                    @"img" : @"ic_custom_folder",
 //                    @"key" : @"open_trips"
@@ -384,7 +385,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
 
             NSString *iconName = item[@"img"];
             [cell leftIconVisibility:iconName && iconName.length > 0];
-            cell.leftIconView.tintColor = cell.switchView.isOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+            cell.leftIconView.tintColor = cell.switchView.isOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColor.iconColorDisabled;
             cell.leftIconView.image = [UIImage templateImageNamed:iconName];
             cell.separatorInset = UIEdgeInsetsMake(0., iconName && iconName.length > 0 ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent, 0., 0.);
 
@@ -413,7 +414,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                 for (UIView *vw in cell.subviews)
                     vw.alpha = 0.4;
                 cell.userInteractionEnabled = NO;
-                cell.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
+                cell.leftIconView.tintColor = UIColor.iconColorDisabled;
             }
             else
             {
@@ -451,20 +452,24 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         return cell;
     }
-    else if ([type isEqualToString:[OATitleRightIconCell getCellIdentifier]])
+    else if ([type isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OATitleRightIconCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
+        OARightIconTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
-            cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.titleLabel.textColor = UIColor.textColorActive;
+            cell.rightIconView.tintColor = UIColor.iconColorActive;
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
-        cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            [cell.rightIconView setImage:[UIImage templateImageNamed:item[@"img"]]];
+        }
         return cell;
     }
     else if ([type isEqualToString:kCellTypeCheck])

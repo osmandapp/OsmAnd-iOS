@@ -16,6 +16,7 @@
 #import "OADividerCell.h"
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -96,7 +97,8 @@
 
 - (void) setupTableHeaderView
 {
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:[self getTableHeaderTitle] font:kHeaderBigTitleFont textColor:UIColor.blackColor isBigTitle:YES parentViewWidth:self.view.frame.size.width];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:[self getTableHeaderTitle] font:kHeaderBigTitleFont textColor:UIColor.textColorPrimary isBigTitle:YES parentViewWidth:self.view.frame.size.width];
+    self.tableView.tableHeaderView.backgroundColor = UIColor.viewBgColor;
 }
 
 - (void) setupTableFooterView
@@ -108,8 +110,8 @@
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:fullText];
     UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
     [attributedString addAttribute:NSFontAttributeName value:font range:fullRange];
-    [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:fullRange];
-    [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_primary_purple) range:coloredRange];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.textColorSecondary range:fullRange];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.textColorActive range:coloredRange];
     UIView *footer = [OAUtilities setupTableHeaderViewWithText:attributedString tintColor:nil icon:nil iconFrameSize:0. iconBackgroundColor:nil iconContentMode:UIViewContentModeCenter];
     [footer addGestureRecognizer:_tapRecognizer];
     for (UIView *vw in footer.subviews)
@@ -236,7 +238,7 @@
             {
                 NSRange boldRange = [text rangeOfString:boldPart];
                 [attributedString addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:fontSize weight:UIFontWeightSemibold] range:boldRange];
-                [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.blackColor range:boldRange];
+                [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.textColorPrimary range:boldRange];
             }
             
             cell.titleLabel.attributedText = attributedString;
@@ -259,7 +261,7 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"placeholder"];
-            cell.titleLabel.textColor = UIColorFromRGB(color_text_footer);
+            cell.titleLabel.textColor = UIColor.textColorSecondary;
             NSString *text =  item[@"title"];
             cell.inputField.text = text;
             cell.inputField.textContentType = UITextContentTypeEmailAddress;
@@ -307,7 +309,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
-            cell.dividerColor = UIColorFromRGB(color_divider_blur);
+            cell.dividerColor = UIColor.separatorColor;
             cell.dividerInsets = UIEdgeInsetsZero;
             cell.dividerHight = 1.0 / [UIScreen mainScreen].scale;
         }

@@ -12,7 +12,7 @@
 #import "OAAppSettings.h"
 #import "OANetworkUtilities.h"
 #import "OASizes.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import <SafariServices/SafariServices.h>
 
@@ -95,12 +95,12 @@
                     @"attributed_title" : [[NSAttributedString alloc] initWithString:availableTitle
                                                                          attributes:@{
                                                                                  NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleBody],
-                                                                                 NSForegroundColorAttributeName : UIColor.blackColor
+                                                                                 NSForegroundColorAttributeName : UIColor.textColorPrimary
                                                                          }],
                     @"description" : availableDescription,
                     @"description_font" : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
                     @"right_icon" : rightIcon,
-                    @"tint_color" : UIColorFromRGB(color_primary_purple),
+                    @"tint_color" : UIColor.iconColorActive,
                     @"top_right_content" : @(YES)
             },
             @{
@@ -109,10 +109,10 @@
                     @"attributed_title": [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_refresh")
                                                                          attributes:@{
                                                                                  NSFontAttributeName : [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium],
-                                                                                 NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple)
+                                                                                 NSForegroundColorAttributeName : UIColor.textColorActive
                                                                                      }],
                     @"right_icon": @"ic_custom_reset",
-                    @"tint_color" : UIColorFromRGB(color_primary_purple)
+                    @"tint_color" : UIColor.iconColorActive
             }
     ]];
 
@@ -141,10 +141,10 @@
                                    value:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]
                                    range:NSMakeRange(0, dateAttributed.length)];
             [dateAttributed addAttribute:NSForegroundColorAttributeName
-                                   value:UIColor.blackColor
+                                   value:UIColor.textColorPrimary
                                    range:[dateAttributed.string rangeOfString:[formatterMonth stringFromDate:date].capitalizedString]];
             [dateAttributed addAttribute:NSForegroundColorAttributeName
-                                   value:UIColorFromRGB(color_text_footer)
+                                   value:UIColor.textColorSecondary
                                    range:[dateAttributed.string rangeOfString:[formatterYear stringFromDate:date]]];
 
             [dateCells addObject:@{
@@ -167,7 +167,7 @@
             @"attributed_title": [[NSAttributedString alloc] initWithString:OALocalizedString(@"last_two_month_total")
                                                                  attributes:@{
                                                                          NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleBody],
-                                                                         NSForegroundColorAttributeName : UIColor.blackColor
+                                                                         NSForegroundColorAttributeName : UIColor.textColorPrimary
                                                                  }],
             @"value": [NSString stringWithFormat:@"%li", [self getChangesSize]],
             @"description": [self getMonthPeriod]
@@ -184,10 +184,10 @@
             @"attributed_title" : [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_profile")
                                                                  attributes:@{
                                                                          NSFontAttributeName : [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium],
-                                                                         NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple)
+                                                                         NSForegroundColorAttributeName : UIColor.textColorActive
                                                                              }],
             @"right_icon" : @"ic_action_openstreetmap_logo",
-            @"tint_color" : UIColorFromRGB(color_primary_purple),
+            @"tint_color" : UIColor.iconColorActive,
             @"url" : [NSURL URLWithString:url]
     }];
     [data addObject:dateCells];
@@ -260,7 +260,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAValueTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.valueLabel.textColor = UIColor.blackColor;
+            cell.valueLabel.textColor = UIColor.textColorPrimary;
             [cell leftIconVisibility:NO];
         }
         if (cell)

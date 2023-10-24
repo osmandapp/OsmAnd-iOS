@@ -240,7 +240,7 @@ extension WidgetsListViewController {
                 cell.leftIconVisibility(!isPageCell)
                 cell.accessoryType = isPageCell ? .none : .disclosureIndicator
                 cell.selectionStyle = !tableView.isEditing && isPageCell ? .none : .default
-                cell.titleLabel.textColor = isPageCell ? colorFromRGB(Int(color_extra_text_gray)) : .black
+                cell.titleLabel.textColor = isPageCell ? .textColorSecondary : .textColorPrimary
             }
             return cell
         }
@@ -257,7 +257,7 @@ extension WidgetsListViewController {
                 cell.descriptionLabel?.text = item.descr
                 cell.descriptionLabel?.accessibilityLabel = item.descr
                 cell.cellImageView?.image = UIImage.templateImageNamed(item.iconName)
-                cell.cellImageView?.tintColor = colorFromRGB(item.iconTint)
+                cell.cellImageView?.tintColor = item.iconTintColor
                 cell.button?.setTitle(item.obj(forKey: "buttonTitle") as? String, for: .normal)
                 cell.button?.accessibilityLabel = item.obj(forKey: "buttonTitle") as? String
                 cell.button?.removeTarget(nil, action: nil, for: .allEvents)
@@ -427,7 +427,7 @@ extension WidgetsListViewController {
             row.title = localizedString("no_widgets_here_yet")
             row.descr = localizedString("no_widgets_descr")
             row.iconName = iconName
-            row.iconTint = Int(color_tint_gray)
+            row.iconTintColor = UIColor.iconColorDefault
             row.setObj(localizedString("add_widget"), forKey: "buttonTitle")
         } else {
             if (widgetPanel.isPagingAllowed()) {

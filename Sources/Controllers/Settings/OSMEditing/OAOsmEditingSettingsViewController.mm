@@ -19,7 +19,6 @@
 #import "OATableRowData.h"
 #import "OASizes.h"
 #import "Localization.h"
-#import "OAColors.h"
 #import "OAAppSettings.h"
 #import "OAIAPHelper.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -79,7 +78,7 @@
         kCellTitleKey : _isAuthorised ? userName : OALocalizedString(@"login_open_street_map_org"),
         kCellIconNameKey : @"ic_custom_user_profile",
         kCellAccessoryType : _isAuthorised ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone),
-        @"titleColor" : _isAuthorised ? UIColor.blackColor : UIColorFromRGB(color_primary_purple),
+        @"titleColor" : _isAuthorised ? UIColor.textColorPrimary : UIColor.textColorActive,
         @"titleFont" : [UIFont scaledSystemFontOfSize:17. weight:_isAuthorised ? UIFontWeightRegular : UIFontWeightMedium]
     }];
     _credentialIndexPath = [NSIndexPath indexPathForRow:[credentialSection rowCount] - 1 inSection:[_data sectionCount] - 1];
@@ -101,7 +100,7 @@
         kCellTitleKey : OALocalizedString(@"map_updates_for_mappers"),
         kCellDescrKey : [self getMappersDescription],
         kCellAccessoryType : @(UITableViewCellAccessoryDisclosureIndicator),
-        @"titleColor" : UIColor.blackColor,
+        @"titleColor" : UIColor.textColorPrimary,
         @"titleFont" : [UIFont preferredFontForTextStyle:UIFontTextStyleBody]
     }];
     _mappersIndexPath = [NSIndexPath indexPathForRow:[mappersSection rowCount] - 1 inSection:[_data sectionCount] - 1];
@@ -115,7 +114,7 @@
     NSMutableAttributedString *actionsDescrAttr =
             [[NSMutableAttributedString alloc] initWithString:actionsDescr
                                                    attributes:@{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
-                                                                 NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer) }];
+                                                                 NSForegroundColorAttributeName : UIColor.textColorSecondary }];
     [actionsDescrAttr addAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold] }
                               range:[actionsDescr rangeOfString:menuPath]];
     
@@ -129,7 +128,7 @@
         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
         kCellAccessoryType : @(UITableViewCellAccessoryNone),
         @"descriptionAttributed" : actionsDescrAttr,
-        @"titleColor" : UIColor.blackColor,
+        @"titleColor" : UIColor.textColorPrimary,
         @"titleFont" : [UIFont preferredFontForTextStyle:UIFontTextStyleBody]
     }];
 
@@ -138,7 +137,7 @@
         kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"osm_edits_title"),
         kCellSecondaryIconName : @"ic_custom_folder",
-        kCellIconTint : @(color_primary_purple),
+        kCellIconTintColor : UIColor.textColorActive,
         @"titleFont" : [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium]
     }];
 }
@@ -168,7 +167,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
-            cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.leftIconView.tintColor = UIColor.textColorActive;
         }
         if (cell)
         {
@@ -215,10 +214,10 @@
         if (cell)
         {
             cell.titleLabel.text = item.title;
-            cell.titleLabel.textColor = UIColorFromRGB(item.iconTint);
+            cell.titleLabel.textColor = item.iconTintColor;
             cell.titleLabel.font = [item objForKey:@"titleFont"];
             cell.rightIconView.image = [UIImage templateImageNamed:item.secondaryIconName];
-            cell.rightIconView.tintColor = UIColorFromRGB(item.iconTint);
+            cell.rightIconView.tintColor = item.iconTintColor;
         }
         return cell;
     }
@@ -335,7 +334,7 @@
             OATableRowData *credentialRow = [_data itemForIndexPath:_credentialIndexPath];
             credentialRow.title = _isAuthorised ? [_settings.osmUserDisplayName get] : OALocalizedString(@"login_open_street_map_org");
             credentialRow.accessoryType = _isAuthorised ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
-            [credentialRow setObj:_isAuthorised ? UIColor.blackColor : UIColorFromRGB(color_primary_purple) forKey:@"titleColor"];
+            [credentialRow setObj:_isAuthorised ? UIColor.textColorPrimary : UIColor.textColorActive forKey:@"titleColor"];
             [credentialRow setObj:[UIFont scaledSystemFontOfSize:17. weight:_isAuthorised ? UIFontWeightRegular : UIFontWeightMedium] forKey:@"titleFont"];
             
             OATableRowData *mappersRow = [_data itemForIndexPath:_mappersIndexPath];

@@ -112,7 +112,7 @@
     
     if (_item.descriptionInfo.getLocalizedDescription.length > 0)
     {
-        NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:_item.descriptionInfo.getLocalizedDescription fontSize:17];
+        NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:_item.descriptionInfo.getLocalizedDescription fontSize:17 textColor:UIColor.blackColor];
         [data addObject:@{
                 @"type" : [OATextMultilineTableViewCell getCellIdentifier],
                 @"attrText" : attrString

@@ -14,6 +14,7 @@
 #import "OASettingsCategoryItems.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAManageTypeViewController
 {
@@ -99,7 +100,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
-            cell.titleLabel.textColor = UIColorFromRGB(color_support_red);
+            cell.titleLabel.textColor = UIColor.buttonBgColorDisruptive;
             cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
@@ -118,7 +119,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAValueTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.valueLabel.textColor = UIColor.blackColor;
+            cell.valueLabel.textColor = UIColor.textColorPrimary;
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }

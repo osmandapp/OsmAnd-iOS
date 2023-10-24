@@ -38,12 +38,15 @@ extension Theme {
     var iconColorSecondary: UIColor { getColorTheme(with: UIColor.iconColorSecondary) }
     var iconColorSelected: UIColor { getColorTheme(with: UIColor.iconColorSelected) }
     var iconColorTertiary: UIColor { getColorTheme(with: UIColor.iconColorTertiary) }
+    var iconColorDisabled: UIColor { getColorTheme(with: UIColor.iconColorDisabled) }
     var separatorColor: UIColor { getColorTheme(with: UIColor.separatorColor) }
     var textColorActive: UIColor { getColorTheme(with: UIColor.textColorActive) }
     var textColorPrimary: UIColor { getColorTheme(with: UIColor.textColorPrimary) }
     var textColorSecondary: UIColor { getColorTheme(with: UIColor.textColorSecondary) }
     var textColorTertiary: UIColor { getColorTheme(with: UIColor.textColorTertiary) }
     var viewBgColor: UIColor { getColorTheme(with: UIColor.viewBgColor) }
+    var navBarBgColorPrimary: UIColor { getColorTheme(with: UIColor.navBarBgColorPrimary) }
+    var navBarTextColorPrimary: UIColor { getColorTheme(with: UIColor.navBarTextColorPrimary) }
 }
 
 extension Theme {

@@ -3034,3 +3034,4 @@
 "ios_release_4_5" = "• Kompletně přepracované prostředí widgetů: přidána možnost změny pozice widgetu, přidáno seskupení podle stránek, jeden seznam widgetů pro levý a pravý panel.\n• Přepracovaná obrazovka konfigurace\n• Bezplatné zálohování oblíbených položek, nastavení a úprav OSM do služby OsmAnd Cloud\n• Přidána stupnice \"CAI\" pro \"Klasifikaci obtížnosti tras\"\n• Modul \"Vrstevnice\" přejmenován na \"Topografie\", přidána podpora nového formátu terénních map\n• Přidán 3D reliéf\n• Přidána autorizace OAuth pro modul Editace OpenStreetMap\n• Přidáno samostatné tlačítko pro přepínání mezi 2D nebo 3D režimem\n• Změněn směr gesta naklonění\n• Opraven problém s exportem oblíbených položek, který mohl vést ke ztrátě dat\n";
 "map_marker_interval_dialog_desc" = "Zadejte časový interval, ve kterém se bude měřit průměrná rychlost pro výpočet odhadovaného času příjezdu.";
 "shared_string_system_default" = "Výchozí";
+"upload_poi" = "Nahrát POI";

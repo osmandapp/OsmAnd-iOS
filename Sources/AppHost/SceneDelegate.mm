@@ -133,6 +133,7 @@
     NSDictionary *info = notification.userInfo;
     if (info[@"event"]) {
         NSNumber *num = info[@"event"];
+        NSLog(@"launchUpdateStateNotification: %@", num);
         [self configureSceneState:(AppLaunchEvent)num.intValue];
     }
 }
@@ -141,21 +142,23 @@
 {
     switch (event) {
         case AppLaunchEventStart:
-          //  _window = [[UIWindow alloc] initWithWindowScene:_windowScene];
+            NSLog(@"AppLaunchEventStart");
             _window.rootViewController = [OALaunchScreenViewController new];
             [_window makeKeyAndVisible];
             break;
         case AppLaunchEventFirstLaunch:
+            NSLog(@"AppLaunchEventFirstLaunch");
             [_rootViewController.navigationController pushViewController:[OAFirstUsageWelcomeController new] animated:NO];
             break;
         case AppLaunchEventRestoreSession:
-          //  _window = [[UIWindow alloc] initWithWindowScene:_windowScene];
+            NSLog(@"AppLaunchEventRestoreSession");
             _rootViewController = [OARootViewController new];
             [self appDelegate].rootViewController = _rootViewController;
             _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
             [_window makeKeyAndVisible];
             break;
         case AppLaunchEventSetupRoot:
+            NSLog(@"AppLaunchEventSetupRoot");
             [self configureLaunchEventSetupRootState];
             break;
         default:
@@ -165,20 +168,14 @@
 
 - (void)configureLaunchEventSetupRootState
 {
-//    BOOL carPlayActive = [OsmAndApp instance].carPlayActive;
-//    if (carPlayActive)
-//    {
-//        // scene will connect to Session when is carPlayActive, need set _window
-//        _window = [[UIWindow alloc] initWithWindowScene:_windowScene];
-//    }
-    _rootViewController = [OARootViewController new];
-    [self appDelegate].rootViewController = _rootViewController;
+    // setup rootViewController if CarPlay(another scenes) was launched first
+    if ([self appDelegate].rootViewController == nil) {
+        [self appDelegate].rootViewController = [OARootViewController new];
+    }
+    _rootViewController = [self appDelegate].rootViewController;
+    
     _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
     [_window makeKeyAndVisible];
-//    if ([OsmAndApp instance].carPlayActive)
-//    {
-//        [_rootViewController.mapPanel showCarPlayActiveController];
-//    }
 }
 
 - (OAAppDelegate *)appDelegate {

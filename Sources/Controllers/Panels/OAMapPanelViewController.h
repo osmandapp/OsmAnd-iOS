@@ -236,8 +236,6 @@
 - (void) onCarPlayConnected;
 - (void) onCarPlayDisconnected:(void (^ __nullable)(void))onComplete;
 
-- (void)showCarPlayActiveController;
-
 // CarPlay
 - (void) setMapViewController:(OAMapViewController * _Nullable)mapViewController;
 - (void)detachFromCarPlayWindow;

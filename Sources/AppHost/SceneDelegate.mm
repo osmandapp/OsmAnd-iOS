@@ -55,7 +55,6 @@
 
 #import "OAFirstUsageWelcomeController.h"
 #import "OsmAnd_Maps-Swift.h"
-#import "OAMapPanelViewController.h"
 
 #define kCheckUpdatesInterval 3600
 
@@ -169,7 +168,8 @@
 - (void)configureLaunchEventSetupRootState
 {
     // setup rootViewController if CarPlay(another scenes) was launched first
-    if ([self appDelegate].rootViewController == nil) {
+    if ([self appDelegate].rootViewController == nil)
+    {
         [self appDelegate].rootViewController = [OARootViewController new];
     }
     _rootViewController = [self appDelegate].rootViewController;

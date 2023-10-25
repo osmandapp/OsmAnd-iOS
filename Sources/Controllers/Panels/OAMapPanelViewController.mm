@@ -974,8 +974,7 @@ typedef enum
 
 - (void) showTravelGuides
 {
-    [OAAnalyticsHelper logEvent:@"travel_guides_open"];
-    OATravelExploreViewController *vc = [[OATravelExploreViewController alloc] init];
+    OATravelExploreViewController *vc = [OATravelExploreViewController new];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

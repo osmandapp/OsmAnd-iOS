@@ -8,7 +8,7 @@
 
 import Foundation
 
-class TravelSearchHelper {
+final class TravelSearchHelper {
     
     let TIMEOUT_BETWEEN_CHARS: TimeInterval = 700
     let SLEEP_TIME: UInt64 = 50
@@ -39,6 +39,6 @@ class TravelSearchHelper {
     }
     
     func isCanceled(_ req: Int) -> Bool {
-        return requestNumber != req || uiCanceled
+        requestNumber != req || uiCanceled
     }
 }

@@ -12,7 +12,7 @@ protocol Updatable {
     func update()
 }
 
-class TravelGuidesSettingsViewController : OABaseNavbarViewController, Updatable {
+final class TravelGuidesSettingsViewController : OABaseNavbarViewController, Updatable {
     
     override func getTitle() -> String! {
         return localizedString("shared_string_settings")
@@ -35,12 +35,15 @@ class TravelGuidesSettingsViewController : OABaseNavbarViewController, Updatable
         downloadImagesRow.iconName = "ic_custom_photo"
         downloadImagesRow.key = "downloadImagesRow"
         
+        /*
+        //TODO: Uncomment after cache helper implementing
         let cacheSizeRow = imagesSection.createNewRow()
         cacheSizeRow.cellType = OAValueTableViewCell.getIdentifier()
         cacheSizeRow.title = localizedString("cache_size")
         cacheSizeRow.descr = "123 MB"
         cacheSizeRow.iconName = "ic_custom_photo"
         cacheSizeRow.key = "cacheSizeRow"
+        */
         
         let historySection = tableData.createNewSection()
         let clearHistoryRow = historySection.createNewRow()
@@ -62,12 +65,14 @@ class TravelGuidesSettingsViewController : OABaseNavbarViewController, Updatable
                 cell = nib?.first as? OAValueTableViewCell
                 cell?.accessoryType = .disclosureIndicator
                 cell?.descriptionVisibility(false)
+                cell?.leftIconView.tintColor = UIColor.iconColorSecondary
             }
             if let cell {
                 cell.titleLabel.text = item.title
                 cell.valueLabel.text = item.descr
-                cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-                cell.leftIconView.tintColor = UIColor.iconColorSecondary
+                if let iconName = item.iconName {
+                    cell.leftIconView.image = UIImage(named: iconName)
+                }
             }
             outCell = cell
         } else if item.cellType == OAButtonTableViewCell.getIdentifier() {
@@ -77,11 +82,13 @@ class TravelGuidesSettingsViewController : OABaseNavbarViewController, Updatable
                 cell = nib?.first as? OAButtonTableViewCell
                 cell?.descriptionVisibility(false)
                 cell?.buttonVisibility(true)
+                cell?.leftIconView.tintColor = UIColor.iconColorSecondary
             }
             if let cell {
                 cell.titleLabel.text = item.title
-                cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-                cell.leftIconView.tintColor = UIColor.iconColorSecondary
+                if let iconName = item.iconName {
+                    cell.leftIconView.image = UIImage(named: iconName)
+                }
                 cell.button.setTitle(item.descr, for: .normal)
                 cell.button.addTarget(self, action: #selector(showClearHistoryAlert), for: .touchUpInside)
             }
@@ -108,10 +115,12 @@ class TravelGuidesSettingsViewController : OABaseNavbarViewController, Updatable
     @objc func showClearHistoryAlert() {
         let alert = UIAlertController(title: localizedString("search_history"), message: localizedString("clear_travel_search_history"), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .default))
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_clear"), style: .default, handler: { a in
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_clear"), style: .default, handler: { [weak self] a in
+            guard let self else {return}
             TravelObfHelper.shared.getBookmarksHelper().clearHistory()
             self.generateData()
             self.tableView.reloadData()
+            OAUtilities.showToast(nil, details: localizedString("cleared_travel_search_history"), duration: 4, in: self.view)
         }))
         self.present(alert, animated: true)
     }

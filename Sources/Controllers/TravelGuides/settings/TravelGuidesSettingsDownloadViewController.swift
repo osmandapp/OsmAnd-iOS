@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TravelGuidesSettingsDownloadViewController : OABaseNavbarViewController {
+final class TravelGuidesSettingsDownloadViewController : OABaseNavbarViewController {
     
     var delegate: Updatable?
     
@@ -61,7 +61,7 @@ class TravelGuidesSettingsDownloadViewController : OABaseNavbarViewController {
                 let isSelected = item.bool(forKey: "isSelected")
                 cell.accessoryType = isSelected ? .checkmark : .none
             }
-            return cell
+            outCell = cell
         }
         return outCell
     }

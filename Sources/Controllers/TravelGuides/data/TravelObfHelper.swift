@@ -10,8 +10,7 @@ import Foundation
 
 @objc(OATravelObfHelper)
 @objcMembers
-class TravelObfHelper : NSObject {
-//class TravelObfHelper : NSObject, TravelHelper {
+final class TravelObfHelper : NSObject {
     
     static let shared = TravelObfHelper()
     
@@ -39,7 +38,7 @@ class TravelObfHelper : NSObject {
     }
     
     func getBookmarksHelper() -> TravelLocalDataHelper {
-        return localDataHelper
+        localDataHelper
     }
 
     func initializeDataOnAppStartup() {
@@ -64,17 +63,17 @@ class TravelObfHelper : NSObject {
             var articlesLimitReached = false
             repeat {
                 if foundAmenities.count - foundAmenitiesIndex < PopularArticles.ARTICLES_PER_PAGE {
-                    let location = OATravelGuidesHelper.getMapCenter()
+                    guard let location = OATravelGuidesHelper.getMapCenter() else {continue}
                     
                     for reader in getReaders() {
-                        foundAmenities.append(contentsOf: searchAmenity(lat: location!.coordinate.latitude, lon: location!.coordinate.longitude, reader: reader, searchRadius: searchRadius, zoom: -1, searchFilter: ROUTE_ARTICLE, lang: lang!) )
-                        foundAmenities.append(contentsOf: searchAmenity(lat: location!.coordinate.latitude, lon: location!.coordinate.longitude, reader: reader, searchRadius: searchRadius / 5, zoom: 15, searchFilter: ROUTE_TRACK, lang: nil) )
+                        foundAmenities.append(contentsOf: searchAmenity(lat: location.coordinate.latitude, lon: location.coordinate.longitude, reader: reader, searchRadius: searchRadius, zoom: -1, searchFilter: ROUTE_ARTICLE, lang: lang!) )
+                        foundAmenities.append(contentsOf: searchAmenity(lat: location.coordinate.latitude, lon: location.coordinate.longitude, reader: reader, searchRadius: searchRadius / 5, zoom: 15, searchFilter: ROUTE_TRACK, lang: nil) )
                     }
                     
-                    if foundAmenities.count > 0 {
+                    if !foundAmenities.isEmpty {
                         foundAmenities.sort { a, b in
-                            let d1 = location!.distance(from: CLLocation(latitude: a.amenity.latitude(), longitude: a.amenity.longitude()))
-                            let d2 = location!.distance(from: CLLocation(latitude: b.amenity.latitude(), longitude: b.amenity.longitude()))
+                            let d1 = location.distance(from: CLLocation(latitude: a.amenity.latitude(), longitude: a.amenity.longitude()))
+                            let d2 = location.distance(from: CLLocation(latitude: b.amenity.latitude(), longitude: b.amenity.longitude()))
                             return d1 < d2
                         }
                     }
@@ -82,16 +81,18 @@ class TravelObfHelper : NSObject {
                 searchRadius *= 2
                 while foundAmenitiesIndex < foundAmenities.count - 1 {
                     let fileAmenity = foundAmenities[foundAmenitiesIndex]
-                    let file = fileAmenity.file!
-                    let amenity = fileAmenity.amenity!
-                    if amenity.name() != nil && amenity.name().length > 0 {
-                        let routeId = amenity.getAdditionalInfo()[ROUTE_ID] ?? ""
-                        if !popularArticles.containsByRouteId(routeId: routeId) {
-                            let article = cacheTravelArticles(file: file, amenity: amenity, lang: lang!, readPoints: false, callback: nil)
-                            if article != nil && !popularArticles.contains(article: article!) {
-                                if !popularArticles.add(article: article!) {
-                                    articlesLimitReached = true
-                                    break
+                    if let file = fileAmenity.file {
+                        let amenity = fileAmenity.amenity!
+                        if amenity.name() != nil && amenity.name().length > 0 {
+                            let routeId = amenity.getAdditionalInfo()[ROUTE_ID] ?? ""
+                            if !popularArticles.containsByRouteId(routeId: routeId) {
+                                if let article = cacheTravelArticles(file: file, amenity: amenity, lang: lang!, readPoints: false, callback: nil) {
+                                    if !popularArticles.contains(article: article) {
+                                        if !popularArticles.add(article: article) {
+                                            articlesLimitReached = true
+                                            break
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -112,17 +113,20 @@ class TravelObfHelper : NSObject {
         repeat {
             
             for reader in getReaders() {
-                foundAmenities.append(contentsOf: searchAmenity(lat: latLon.latitude, lon: latLon.longitude, reader: reader, searchRadius: searchRadius, zoom: 15, searchFilter: filter!, lang: nil) )
+                if let filter {
+                    foundAmenities.append(contentsOf: searchAmenity(lat: latLon.latitude, lon: latLon.longitude, reader: reader, searchRadius: searchRadius, zoom: 15, searchFilter: filter, lang: nil) )
+                }
             }
             
-            if foundAmenities.count > 0 {
+            if !foundAmenities.isEmpty {
                 for foundGpx in foundAmenities {
-                    let amenity = foundGpx.amenity!
-                    if amenity.getRouteId() == filter ||
-                        amenity.name() == filter ||
-                        amenity.getRef() == ref {
-                        travelGpx = getTravelGpx(file:foundGpx.file!, amenity: amenity)
-                        break
+                    if let amenity = foundGpx.amenity {
+                        if amenity.getRouteId() == filter ||
+                            amenity.name() == filter ||
+                            amenity.getRef() == ref {
+                            travelGpx = getTravelGpx(file:foundGpx.file!, amenity: amenity)
+                            break
+                        }
                     }
                 }
             }
@@ -135,8 +139,10 @@ class TravelObfHelper : NSObject {
         
         var results: [OAFoundAmenity] = []
         func publish(poi: OAPOIAdapter?) -> Bool {
-            if lang == nil || lang?.length == 0 || poi!.getNamesMap(true)!.keys.contains(lang!) {
-                results.append(OAFoundAmenity(file: reader, amenity: poi))
+            if let poi {
+                if lang == nil || lang!.length == 0 || (poi.getNamesMap(true)?.keys.contains(lang!) ?? false) {
+                    results.append(OAFoundAmenity(file: reader, amenity: poi))
+                }
             }
             return false
         }
@@ -148,16 +154,21 @@ class TravelObfHelper : NSObject {
     func cacheTravelArticles(file: String?, amenity: OAPOIAdapter, lang: String?, readPoints: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
         var article: TravelArticle? = nil
         var articles: [String: TravelArticle]? = [:]
+        guard let file else {return nil}
         if amenity.subtype() == ROUTE_TRACK {
-            articles = readRoutePoint(file: file!, amenity: amenity)
+            articles = readRoutePoint(file: file, amenity: amenity)
         } else {
-            articles = readArticles(file: file!, amenity: amenity)
+            articles = readArticles(file: file, amenity: amenity)
         }
-        if articles != nil && articles!.count > 0 {
-            var i = articles!.values.makeIterator()
-            let newArticleId = i.next()!.generateIdentifier()
-            cachedArticles[newArticleId.hashValue] = articles
-            article = getCachedArticle(articleId: newArticleId, lang: lang, readGpx: readPoints, callback: callback)
+        if let articles {
+            if !articles.isEmpty {
+                var i = articles.values.makeIterator()
+                if let next = i.next() {
+                    let newArticleId = next.generateIdentifier()
+                    cachedArticles[newArticleId.hashValue] = articles
+                    article = getCachedArticle(articleId: newArticleId, lang: lang, readGpx: readPoints, callback: callback)
+                }
+            }
         }
         return article
     }
@@ -190,8 +201,7 @@ class TravelObfHelper : NSObject {
         travelGpx.minElevation = Double(amenity.getTagContent(TravelGpx.MIN_ELEVATION)) ?? 0
         travelGpx.avgElevation = Double(amenity.getTagContent(TravelGpx.AVERAGE_ELEVATION)) ?? 0
         
-        let radius: String = amenity.getTagContent(TravelGpx.ROUTE_RADIUS)
-        if radius != nil {
+        if let radius: String = amenity.getTagContent(TravelGpx.ROUTE_RADIUS) {
             OAUtilities.convertChar(toDist: String(radius[0]), firstLetter: String(TRAVEL_GPX_CONVERT_FIRST_LETTER), firstDist: Int32(TRAVEL_GPX_CONVERT_MULT_1), mult1: 0, mult2: Int32(TRAVEL_GPX_CONVERT_MULT_2))
             
         }
@@ -245,13 +255,13 @@ class TravelObfHelper : NSObject {
     }
     
     func isAnyTravelBookPresent() -> Bool {
-        return getReaders().count > 0
+        !getReaders().isEmpty
     }
     
     func isOnlyDefaultTravelBookPresent() -> Bool {
         let books = TravelObfHelper.shared.getReaders()
-        if (books.count == 0 ||
-            books.count == 1 && books[0].lowercased() == DEFAULT_WIKIVOYAGE_TRAVEL_OBF.lowercased()) {
+        if books.isEmpty ||
+            books.count == 1 && books[0].lowercased() == DEFAULT_WIKIVOYAGE_TRAVEL_OBF.lowercased() {
             return true
         }
         return false
@@ -265,8 +275,8 @@ class TravelObfHelper : NSObject {
         var amenityMap = [String : [OAPOIAdapter]]()
         
         func publishCallback(amenity: OAPOIAdapter?) -> Bool {
-            if amenity != nil {
-                amenities.append(amenity!)
+            if let amenity {
+                amenities.append(amenity)
             }
             return false
         }
@@ -274,12 +284,12 @@ class TravelObfHelper : NSObject {
         for reader in getReaders() {
             amenities = [OAPOIAdapter]()
             OATravelGuidesHelper.searchAmenity(searchQuery, categoryName: ROUTE_ARTICLE, radius: -1, lat: -1, lon: -1, reader: reader, publish: publishCallback)
-            if amenities.count > 0 {
+            if !amenities.isEmpty {
                 amenityMap[reader] = Array(amenities)
             }
         }
         
-        if amenityMap.count > 0 {
+        if !amenityMap.isEmpty {
             let appLangEn = appLang == "en"
             for entry in amenityMap {
                 let file = entry.key
@@ -356,23 +366,24 @@ class TravelObfHelper : NSObject {
     }
     
     func getNavigationMap(article: TravelArticle) -> [TravelSearchResult : [TravelSearchResult]] {
-        let lang = article.lang
-        let title = article.title
-        if lang == nil || lang!.isEmpty || title == nil || title!.isEmpty {
+        guard let lang = article.lang else {return [:]}
+        guard let title = article.title else {return [:]}
+        if lang.isEmpty || title.isEmpty {
             return [:]
         }
         
         var parts = [String]()
-        let aggregatedPartOf = article.aggregatedPartOf
-        if (aggregatedPartOf != nil && !aggregatedPartOf!.isEmpty) {
-            let originalParts = aggregatedPartOf!.split(separator: ",")
-            if (originalParts.count > 1) {
-                parts = [String].init(repeating: "", count: originalParts.count)
-                for i in 0..<originalParts.count {
-                    parts[i] = String(originalParts[originalParts.count - i - 1])
+        if let aggregatedPartOf = article.aggregatedPartOf {
+            if !aggregatedPartOf.isEmpty {
+                let originalParts = aggregatedPartOf.split(separator: ",")
+                if originalParts.count > 1 {
+                    parts = [String].init(repeating: "", count: originalParts.count)
+                    for i in 0..<originalParts.count {
+                        parts[i] = String(originalParts[originalParts.count - i - 1])
+                    }
+                } else {
+                    parts[0] = String(originalParts[0])
                 }
-            } else {
-                parts[0] = String(originalParts[0])
             }
         } else {
             parts = []
@@ -381,33 +392,35 @@ class TravelObfHelper : NSObject {
         var navMap = [String : [TravelSearchResult]]()
         var headers = [String]()
         var headerObjs = [String : TravelSearchResult]()
-        if parts.count > 0 {
+        if !parts.isEmpty {
             headers.append(contentsOf: parts)
-            if article.isParentOf != nil && !article.isParentOf!.isEmpty {
-                headers.append(title!)
+            if let isParentOf = article.isParentOf {
+                if !isParentOf.isEmpty {
+                    headers.append(title)
+                }
             }
         }
         
         for header in headers {
             
-            let parentArticle = getParentArticleByTitle(title: header, lang: lang!)
-            if parentArticle == nil {
-                continue
-            }
+            guard let parentArticle = getParentArticleByTitle(title: header, lang: lang) else {continue}
+
             navMap[header] = [TravelSearchResult]()
-            let isParentOf = parentArticle!.isParentOf!.split(separator: ";")
-            for childSubsequence in isParentOf {
-                let childTitle = String(childSubsequence)
-                if !childTitle.isEmpty {
-                    let searchResult = TravelSearchResult(routeId: "", articleTitle: childTitle, isPartOf: nil, imageTitle: nil, langs: [lang!])
-                    var resultList = navMap[header]
-                    if resultList == nil {
-                        resultList = []
-                    }
-                    resultList!.append(searchResult)
-                    navMap[header] = resultList
-                    if headers.contains(childTitle) {
-                        headerObjs[childTitle] = searchResult
+            if let unseparatedText = parentArticle.isParentOf {
+                let isParentOf = unseparatedText.split(separator: ";")
+                for childSubsequence in isParentOf {
+                    let childTitle = String(childSubsequence)
+                    if !childTitle.isEmpty {
+                        let searchResult = TravelSearchResult(routeId: "", articleTitle: childTitle, isPartOf: nil, imageTitle: nil, langs: [lang])
+                        var resultList = navMap[header]
+                        if resultList == nil {
+                            resultList = []
+                        }
+                        resultList!.append(searchResult)
+                        navMap[header] = resultList
+                        if headers.contains(childTitle) {
+                            headerObjs[childTitle] = searchResult
+                        }
                     }
                 }
             }
@@ -434,14 +447,16 @@ class TravelObfHelper : NSObject {
         
         for reader in getReaders() {
             OATravelGuidesHelper.searchAmenity(title, categoryName: ROUTE_ARTICLE, radius: -1, lat: -1, lon: -1, reader: reader) { amenity in
-                if title == amenity!.getName(lang, transliterate: false) {
-                    amenities.append(amenity!)
-                    return true
+                if let amenity {
+                    if title == amenity.getName(lang, transliterate: false) {
+                        amenities.append(amenity)
+                        return true
+                    }
                 }
                 return false
             }
             
-            if amenities.count > 0 {
+            if !amenities.isEmpty {
                 article = readArticle(file: reader, amenity: amenities[0], lang: lang)
             }
         }
@@ -462,18 +477,18 @@ class TravelObfHelper : NSObject {
     
     func getCachedArticle(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
         var article: TravelArticle? = nil
-        var articles = cachedArticles[articleId.hashValue]
-        if (articles != nil) {
-            if (lang == nil || lang!.length == 0) {
-                var ac = articles!.values
-                if (!ac.isEmpty) {
+        let articles = cachedArticles[articleId.hashValue]
+        if let articles {
+            if lang == nil || lang!.length == 0 {
+                let ac = articles.values
+                if !ac.isEmpty {
                     var it = ac.makeIterator()
                     article = it.next()
                 }
             } else {
-                article = articles![lang!]
+                article = articles[lang!]
                 if article == nil {
-                    article = articles![""]
+                    article = articles[""]
                 }
             }
         }
@@ -488,11 +503,11 @@ class TravelObfHelper : NSObject {
     
     func readGpxFile(article: TravelArticle, callback: GpxReadDelegate?) {
         if !article.gpxFileRead && callback != nil && callback!.isGpxReading == false   {
-            callback!.isGpxReading = true
+            callback?.isGpxReading = true
             let task = GpxFileReader(article: article, callback: callback, readers: getReaders())
             task.execute()
         } else if callback != nil && article.gpxFileRead {
-            callback!.isGpxReading = false
+            callback?.isGpxReading = false
             callback?.onGpxFileRead(gpxFile: article.gpxFile, article: article)
         }
     }
@@ -509,16 +524,19 @@ class TravelObfHelper : NSObject {
             
             func publishCallback(amenity: OAPOIAdapter?) -> Bool {
                 var done = false
-                if articleId.routeId == amenity!.getTagContent(ROUTE_ID) || isDbArticle {
-                    amenities.append(amenity!)
-                    done =  true
+                if let amenity {
+                    if articleId.routeId == amenity.getTagContent(ROUTE_ID) || isDbArticle {
+                        amenities.append(amenity)
+                        done =  true
+                    }
                 }
                 return done
             }
             
             if !articleId.lat.isNaN {
                 if articleId.title != nil && articleId.title!.length > 0 {
-                    OATravelGuidesHelper.searchAmenity(articleId.title ?? "", categoryName:ROUTE_ARTICLE, radius:Int32(ARTICLE_SEARCH_RADIUS), lat:articleId.lat, lon:articleId.lon, reader: reader, publish:publishCallback)
+                    let title = articleId.title ?? ""
+                    OATravelGuidesHelper.searchAmenity(title, categoryName:ROUTE_ARTICLE, radius:Int32(ARTICLE_SEARCH_RADIUS), lat:articleId.lat, lon:articleId.lon, reader: reader, publish:publishCallback)
                 } else {
                     OATravelGuidesHelper.searchAmenity(articleId.lat, lon: articleId.lon, reader: reader, radius: Int32(ARTICLE_SEARCH_RADIUS), searchFilter: ROUTE_ARTICLE, publish:publishCallback)
                     
@@ -527,7 +545,7 @@ class TravelObfHelper : NSObject {
                 OATravelGuidesHelper.searchAmenity(Double.nan, lon: Double.nan, reader: reader, radius: -1, searchFilter: ROUTE_ARTICLE, publish:publishCallback)
             }
             
-            if amenities.count > 0 {
+            if !amenities.isEmpty {
                 article = cacheTravelArticles(file: reader, amenity: amenities[0], lang: lang, readPoints: readGpx, callback: callback)
             }
         }
@@ -539,15 +557,33 @@ class TravelObfHelper : NSObject {
         var amenities: [(String, OAPOIAdapter)] = []
         var article: TravelArticle? = nil
         let articleId = savedArticle.generateIdentifier()
-        let lang = savedArticle.lang
+        let lang = savedArticle.lang ?? ""
         let lastModified = savedArticle.lastModified
-        var finalArticleId = articleId
+        let finalArticleId = articleId
+        
+        amenities = findSavedArticlesForWholeWorld(savedArticle: savedArticle, articleId: articleId, finalArticleId: finalArticleId, lastModified: lastModified, lang: lang)
+        
+        if amenities.isEmpty && articleId.title != nil && articleId.title!.length > 0 {
+            amenities = findSavedArticlesInAreaByName(savedArticle: savedArticle, articleId: articleId, finalArticleId: finalArticleId, lastModified: lastModified, lang: lang)
+        }
+        
+        if amenities.isEmpty {
+            amenities = findSavedArticlesInAreaByRouteId(savedArticle: savedArticle, articleId: articleId, finalArticleId: finalArticleId, lastModified: lastModified, lang: lang)
+        }
+        
+        if !amenities.isEmpty {
+            article = cacheTravelArticles(file: amenities[0].0, amenity: amenities[0].1, lang: lang, readPoints: false, callback: nil)
+        }
+        return article
+    }
+    
+    private func findSavedArticlesForWholeWorld(savedArticle: TravelArticle, articleId: TravelArticleIdentifier, finalArticleId: TravelArticleIdentifier, lastModified: TimeInterval, lang: String) -> [(String, OAPOIAdapter)] {
+        var amenities: [(String, OAPOIAdapter)] = []
         
         var filterFunction: ((OAPOIAdapter?) -> Bool)? = nil
         var lat: Double = -1
         var lon: Double = -1
         var radius: Int = -1
-        
         for reader in getReaders() {
             var resorceLastModified = getLastModifiedForResource(filename: reader)
             resorceLastModified = (resorceLastModified != nil) ? resorceLastModified : 0
@@ -587,8 +623,8 @@ class TravelObfHelper : NSObject {
                 }
             }
             
-            if filterFunction != nil {
-                if articleId.lat != Double.nan {
+            if let filterFunction {
+                if !articleId.lat.isNaN {
                     if articleId.title != nil && articleId.title!.length > 0 {
                         OATravelGuidesHelper.searchAmenity(articleId.title, categoryName: ROUTE_ARTICLE, radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
                         OATravelGuidesHelper.searchAmenity(articleId.title, categoryName: ROUTE_TRACK, radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
@@ -603,74 +639,74 @@ class TravelObfHelper : NSObject {
                 break
             }
         }
-        
-        if amenities.count == 0 && articleId.title != nil && articleId.title!.length > 0 {
-            for reader in getReaders() {
-                lat = articleId.lat
-                lon = articleId.lon
-                radius = SAVED_ARTICLE_SEARCH_RADIUS
-                
-                func publish(poi: OAPOIAdapter?) -> Bool {
-                    if let poi {
-                        let name = poi.getName(lang, transliterate: false) ?? ""
-                        if finalArticleId.title == name {
-                            amenities.append((reader, poi))
-                            return true
-                        }
+        return amenities
+    }
+    
+    private func findSavedArticlesInAreaByName(savedArticle: TravelArticle, articleId: TravelArticleIdentifier, finalArticleId: TravelArticleIdentifier, lastModified: TimeInterval, lang: String) -> [(String, OAPOIAdapter)] {
+        var amenities: [(String, OAPOIAdapter)] = []
+        for reader in getReaders() {
+            let lat = articleId.lat
+            let lon = articleId.lon
+            let radius = SAVED_ARTICLE_SEARCH_RADIUS
+            
+            func publish(poi: OAPOIAdapter?) -> Bool {
+                if let poi {
+                    let name = poi.getName(lang, transliterate: false) ?? ""
+                    if finalArticleId.title == name {
+                        amenities.append((reader, poi))
+                        return true
                     }
-                    return false
                 }
-                filterFunction = publish
-                
-                if articleId.lat != Double.nan {
+                return false
+            }
+            let filterFunction = publish
+            
+            if !articleId.lat.isNaN {
+                OATravelGuidesHelper.searchAmenity(articleId.title, categoryName: ROUTE_ARTICLE, radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
+                OATravelGuidesHelper.searchAmenity(articleId.title, categoryName: ROUTE_TRACK, radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
+            } else {
+                OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_ARTICLE, publish: filterFunction)
+                OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_TRACK, publish: filterFunction)
+            }
+        }
+        return amenities
+    }
+    
+    private func findSavedArticlesInAreaByRouteId(savedArticle: TravelArticle, articleId: TravelArticleIdentifier, finalArticleId: TravelArticleIdentifier, lastModified: TimeInterval, lang: String) -> [(String, OAPOIAdapter)] {
+        var amenities: [(String, OAPOIAdapter)] = []
+        for reader in getReaders() {
+            let lat = articleId.lat
+            let lon = articleId.lon
+            let radius = SAVED_ARTICLE_SEARCH_RADIUS
+            
+            func publish(poi: OAPOIAdapter?) -> Bool {
+                if let poi {
+                    let routeId = poi.getTagContent(ROUTE_ID) ?? ""
+                    let routeSource = poi.getTagContent(ROUTE_SOURCE) ?? ""
+                    if finalArticleId.routeId == routeId && finalArticleId.routeSource == routeSource {
+                        amenities.append((reader, poi))
+                        return true
+                    }
+                }
+                return false
+            }
+            let filterFunction = publish
+            
+            if !articleId.lat.isNaN {
+                if articleId.title != nil && articleId.title!.length > 0 {
                     OATravelGuidesHelper.searchAmenity(articleId.title, categoryName: ROUTE_ARTICLE, radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
                     OATravelGuidesHelper.searchAmenity(articleId.title, categoryName: ROUTE_TRACK, radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
                 } else {
                     OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_ARTICLE, publish: filterFunction)
                     OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_TRACK, publish: filterFunction)
                 }
+            } else {
+                OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_ARTICLE, publish: filterFunction)
+                OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_TRACK, publish: filterFunction)
             }
+            break
         }
-        
-        if amenities.count == 0 {
-            for reader in getReaders() {
-                lat = articleId.lat
-                lon = articleId.lon
-                radius = SAVED_ARTICLE_SEARCH_RADIUS
-                
-                func publish(poi: OAPOIAdapter?) -> Bool {
-                    if let poi {
-                        let routeId = poi.getTagContent(ROUTE_ID) ?? ""
-                        let routeSource = poi.getTagContent(ROUTE_SOURCE) ?? ""
-                        if finalArticleId.routeId == routeId && finalArticleId.routeSource == routeSource {
-                            amenities.append((reader, poi))
-                            return true
-                        }
-                    }
-                    return false
-                }
-                filterFunction = publish
-                
-                if articleId.lat != Double.nan {
-                    if articleId.title != nil && articleId.title!.length > 0 {
-                        OATravelGuidesHelper.searchAmenity(articleId.title, categoryName: ROUTE_ARTICLE, radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
-                        OATravelGuidesHelper.searchAmenity(articleId.title, categoryName: ROUTE_TRACK, radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
-                    } else {
-                        OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_ARTICLE, publish: filterFunction)
-                        OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_TRACK, publish: filterFunction)
-                    }
-                } else {
-                    OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_ARTICLE, publish: filterFunction)
-                    OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_TRACK, publish: filterFunction)
-                }
-                break
-            }
-        }
-        
-        if amenities.count > 0 {
-            article = cacheTravelArticles(file: amenities[0].0, amenity: amenities[0].1, lang: lang, readPoints: false, callback: nil)
-        }
-        return article
+        return amenities
     }
     
     func getLastModifiedForResource(filename: String) -> Double? {
@@ -686,7 +722,7 @@ class TravelObfHelper : NSObject {
     }
     
     func getArticleByTitle(title: String, lang: String, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
-        return getArticleByTitle(title: title, rect: QuadRect(), lang: lang, readGpx: readGpx, callback: callback)
+        getArticleByTitle(title: title, rect: QuadRect(), lang: lang, readGpx: readGpx, callback: callback)
     }
 
     func getArticleByTitle(title: String, rect: QuadRect, lang: String, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
@@ -711,14 +747,16 @@ class TravelObfHelper : NSObject {
             
             OATravelGuidesHelper.searchAmenity(x, y: y, left: left, right: right, top: top, bottom: bottom, reader: reader, searchFilter: ROUTE_ARTICLE) { amenity in
                 
-                if title == amenity!.getName(lang, transliterate: false) {
-                    amenities.append(amenity!)
-                    return true
+                if let amenity {
+                    if title == amenity.getName(lang, transliterate: false) {
+                        amenities.append(amenity)
+                        return true
+                    }
                 }
                 return false
             }
             
-            if amenities.count > 0 {
+            if !amenities.isEmpty {
                 article = cacheTravelArticles(file: reader, amenity: amenities[0], lang: lang, readPoints: readGpx, callback: callback)
             }
             
@@ -728,7 +766,7 @@ class TravelObfHelper : NSObject {
     }
     
     func getReaders() -> [String] {
-        return OATravelGuidesHelper.getTravelGuidesObfList()
+        OATravelGuidesHelper.getTravelGuidesObfList()
     }
     
     func getArticleId(title: String, lang: String) -> TravelArticleIdentifier? {
@@ -742,8 +780,7 @@ class TravelObfHelper : NSObject {
             }
         }
         if a == nil {
-            var article = getArticleByTitle(title: title, lang: lang, readGpx: false, callback: nil)
-            if article != nil {
+            if let article = getArticleByTitle(title: title, lang: lang, readGpx: false, callback: nil) {
                 a = article
             }
         }
@@ -752,11 +789,9 @@ class TravelObfHelper : NSObject {
     
     func getArticleLangs(articleId: TravelArticleIdentifier) -> [String] {
         var res = [String]()
-        let article = getArticleById(articleId: articleId, lang: "en", readGpx: false, callback: nil)
-        if article != nil {
-            let articles = cachedArticles[article!.generateIdentifier().hashValue]
-            if articles != nil {
-                res.append(contentsOf: articles!.keys)
+        if let article = getArticleById(articleId: articleId, lang: "en", readGpx: false, callback: nil) {
+            if let articles = cachedArticles[article.generateIdentifier().hashValue] {
+                res.append(contentsOf: articles.keys)
             }
         } else {
             let articles = localDataHelper.getSavedArticles(file: articleId.file ?? "", routeId: articleId.routeId ?? "")
@@ -770,7 +805,8 @@ class TravelObfHelper : NSObject {
     }
     
     func getGPXName(article: TravelArticle) -> String {
-        return article.title!
+        let title = article.title ?? ""
+        return title
             .replacingOccurrences(of: "/", with: "_")
             .replacingOccurrences(of: "'/'", with: "_")
             .replacingOccurrences(of: "\"", with: "_") + ".gpx"
@@ -782,11 +818,11 @@ class TravelObfHelper : NSObject {
     }
     
     func getSelectedTravelBookName() -> String? {
-        return nil
+        nil
     }
     
     func getWikivoyageFileName() -> String? {
-        return WORLD_WIKIVOYAGE_FILE_NAME
+        WORLD_WIKIVOYAGE_FILE_NAME
     }
     
     func saveOrRemoveArticle(article: TravelArticle, save: Bool) {
@@ -798,17 +834,17 @@ class TravelObfHelper : NSObject {
     }
     
     func buildGpxFile(readers: [String], article: TravelArticle) -> OAGPXDocumentAdapter {
-        return OATravelGuidesHelper.buildGpxFile(getReaders(), article: article)
+        OATravelGuidesHelper.buildGpxFile(getReaders(), article: article)
     }
     
     func createTitle(name: String) -> String {
-        return OAUtilities.capitalizeFirstLetter(name)
+        OAUtilities.capitalizeFirstLetter(name)
     }
     
 }
 
 
-class GpxFileReader {
+final class GpxFileReader {
     
     var article: TravelArticle?
     var callback: GpxReadDelegate?
@@ -831,20 +867,27 @@ class GpxFileReader {
     }
     
     func onPreExecute() {
-        if callback != nil {
-            callback!.onGpxFileReading()
+        if let callback {
+            callback.onGpxFileReading?()
         }
     }
     
     func doInBackground() -> OAGPXDocumentAdapter? {
-        return TravelObfHelper.shared.buildGpxFile(readers: readers!, article: article!)
+        if let readers {
+            if let article {
+                return TravelObfHelper.shared.buildGpxFile(readers: readers, article: article)
+            }
+        }
+        return nil
     }
     
     func onPostExecute(gpxFile: OAGPXDocumentAdapter?) {
-        article!.gpxFileRead = true
-        article!.gpxFile = gpxFile
-        if callback != nil {
-            callback!.onGpxFileRead(gpxFile: gpxFile, article: article!)
+        if let article {
+            article.gpxFileRead = true
+            article.gpxFile = gpxFile
+            if let callback {
+                callback.onGpxFileRead(gpxFile: gpxFile, article: article)
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ import Foundation
 
 @objc(OATravelSearchResult)
 @objcMembers
-class TravelSearchResult : NSObject {
+final class TravelSearchResult : NSObject {
     
     static let SHOW_LANGS = 3
     
@@ -23,7 +23,7 @@ class TravelSearchResult : NSObject {
         self.articleId = arcticle.generateIdentifier()
         self.imageTitle = arcticle.imageTitle
         self.isPartOf = arcticle.isPartOf
-        if langs != nil {
+        if let langs {
             self.langs = langs
         }
     }
@@ -35,26 +35,26 @@ class TravelSearchResult : NSObject {
         self.articleId = arcticle.generateIdentifier()
         self.imageTitle = imageTitle
         self.isPartOf = isPartOf
-        if langs != nil {
+        if let langs {
             self.langs = langs
         }
     }
     
     func getArticleTitle() -> String? {
-        return articleId.title
+        articleId.title
     }
     
     func getArticleRouteId() -> String? {
-        return articleId.routeId
+        articleId.routeId
     }
     
     func getFirstLangsString() -> String {
-        guard langs != nil else {return ""}
+        guard let langs else {return ""}
         
         var res = ""
-        let limit = min(TravelSearchResult.SHOW_LANGS, langs!.count)
+        let limit = min(TravelSearchResult.SHOW_LANGS, langs.count)
         for i in 0..<limit {
-            res += OAUtilities.capitalizeFirstLetter(langs![i])
+            res += OAUtilities.capitalizeFirstLetter(langs[i])
             if i != limit - 1 {
                 res += ", "
             }
@@ -64,7 +64,7 @@ class TravelSearchResult : NSObject {
     
     
     static func == (lhs: TravelSearchResult, rhs: TravelSearchResult) -> Bool {
-        return lhs.articleId == rhs.articleId
+        lhs.articleId == rhs.articleId
     }
     
 }

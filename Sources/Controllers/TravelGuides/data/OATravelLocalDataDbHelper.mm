@@ -123,10 +123,6 @@
     });
 }
 
-- (void)onGpxFileReading {
-
-}
-
 @end
 
 
@@ -181,10 +177,6 @@
             sqlite3_close(_travelGuidesDB);
         }
     });
-}
-
-- (void)onGpxFileReading {
-
 }
 
 @end
@@ -248,10 +240,6 @@
             sqlite3_close(_travelGuidesDB);
         }
     });
-}
-
-- (void)onGpxFileReading {
-
 }
 
 @end

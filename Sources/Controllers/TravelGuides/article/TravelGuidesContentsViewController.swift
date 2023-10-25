@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TravelGuidesContentsViewController : OABaseNavbarViewController {
+final class TravelGuidesContentsViewController : OABaseNavbarViewController {
     
     var article: TravelArticle? = nil
     var selectedLang: String = ""
@@ -29,31 +29,28 @@ class TravelGuidesContentsViewController : OABaseNavbarViewController {
     override func generateData() {
         tableData.clearAllData()
         
-        var displayingItems = items!.subItems
-        if selectedSubitemIndex != nil {
-            displayingItems = items!.subItems[selectedSubitemIndex!].subItems
-        }
+        guard let items else {return}
+        var displayingItems = selectedSubitemIndex != nil ? items.subItems[selectedSubitemIndex!].subItems : items.subItems
 
         let section = tableData.createNewSection()
         for item in displayingItems {
             let row = section.createNewRow()
             row.cellType = OAButtonTableViewCell.getIdentifier()
             row.title = item.name
-            row.setObj(item.link!, forKey: "link")
-            if item.parent != nil && item.parent!.link != nil {
-                row.setObj(item.parent!.link!.substring(from: 1), forKey: "sublink")
-            } else {
-                row.setObj(item.link!.substring(from: 1), forKey: "sublink")
-            }
-            
-            if selectedSubitemIndex != nil {
-                row.iconName = "ic_custom_file_info"
-            } else {
-                row.iconName = "ic_custom_book_info"
-            }
-            
-            if item.subItems.count > 0 {
-                row.setObj(true, forKey: "hasSubitems")
+            if let itemLink = item.link {
+                row.setObj(itemLink, forKey: "link")
+                
+                if item.parent != nil && item.parent!.link != nil {
+                    row.setObj(item.parent!.link!.substring(from: 1), forKey: "sublink")
+                } else {
+                    row.setObj(itemLink.substring(from: 1), forKey: "sublink")
+                }
+                
+                row.iconName = selectedSubitemIndex != nil ? "ic_custom_file_info" : "ic_custom_book_info"
+                
+                if !item.subItems.isEmpty {
+                    row.setObj(true, forKey: "hasSubitems")
+                }
             }
         }
     }
@@ -63,22 +60,19 @@ class TravelGuidesContentsViewController : OABaseNavbarViewController {
     
     override func getTitle() -> String! {
         if let selectedSubitemIndex {
-            return items!.subItems[selectedSubitemIndex].name
-        } else {
-            return localizedString("shared_string_contents")
+            if let items {
+                return items.subItems[selectedSubitemIndex].name
+            }
         }
+        return localizedString("shared_string_contents")
     }
     
     override func getLeftNavbarButtonTitle() -> String! {
-        if selectedSubitemIndex != nil {
-            return localizedString("shared_string_contents")
-        } else {
-            return localizedString("shared_string_close")
-        }
+        selectedSubitemIndex != nil ? localizedString("shared_string_contents") : localizedString("shared_string_close")
     }
     
     override func forceShowShevron() -> Bool {
-        return selectedSubitemIndex != nil
+        selectedSubitemIndex != nil
     }
     
     override func onLeftNavbarButtonPressed() {
@@ -111,7 +105,9 @@ class TravelGuidesContentsViewController : OABaseNavbarViewController {
                 cell.titleLabel.text = item.title
                 cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
                 
-                cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+                if let iconName = item.iconName {
+                    cell.leftIconView.image = UIImage(named:iconName)
+                }
                 cell.leftIconView.tintColor = UIColor.iconColorDefault
                 
                 cell.button.setTitle(nil, for: .normal)
@@ -121,7 +117,7 @@ class TravelGuidesContentsViewController : OABaseNavbarViewController {
                 
                 let hasSubitems = item.bool(forKey: "hasSubitems")
                 if hasSubitems {
-                    cell.button.setImage(UIImage.templateImageNamed("ic_custom_arrow_right"), for: .normal)
+                    cell.button.setImage(UIImage(named:"ic_custom_arrow_right"), for: .normal)
                     cell.button.tintColor = UIColor.iconColorDefault
                 }
             }
@@ -138,31 +134,32 @@ class TravelGuidesContentsViewController : OABaseNavbarViewController {
             let vc = TravelGuidesContentsViewController()
             vc.setupWith(article: article!, selectedLang: selectedLang, contentItems: items!, selectedSubitemIndex: indexPath.row)
             vc.delegate = delegate
-            self.navigationController?.pushViewController(vc, animated: true)
+            navigationController?.pushViewController(vc, animated: true)
         } else if let link = item.string(forKey: "link") {
             if let sublink = item.string(forKey: "sublink") {
-                if delegate != nil {
-                    delegate!.moveToAnchor(link: link, title: sublink)
+                if let delegate {
+                    delegate.moveToAnchor(link: link, title: sublink)
                 }
             }
-            self.dismiss()
+            dismiss()
         }
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return .leastNormalMagnitude
+        .leastNormalMagnitude
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return .leastNormalMagnitude
+        .leastNormalMagnitude
     }
     
     
     //MARK: Actions
     
     @objc func onShevronClicked(_ sender: Any) {
-        let button = sender as! UIButton
-        let indexPath = IndexPath(row: button.tag, section: 0)
-        onRowSelected(indexPath)
+        if let button = sender as? UIButton {
+            let indexPath = IndexPath(row: button.tag, section: 0)
+            onRowSelected(indexPath)
+        }
     }
 }

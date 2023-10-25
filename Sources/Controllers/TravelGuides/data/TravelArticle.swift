@@ -40,16 +40,15 @@ class TravelArticle: NSObject {
     var gpxFileRead: Bool = false
     
     func generateIdentifier() -> TravelArticleIdentifier {
-        return TravelArticleIdentifier(article: self)
+        TravelArticleIdentifier(article: self)
     }
     
     static func getTravelBook(file: String) -> String {
-        let dir = OsmAndApp.swiftInstance().dataPath
-        return file.replacingOccurrences(of: dir!, with: "")
+        file.replacingOccurrences(of: OsmAndApp.swiftInstance().dataPath, with: "")
     }
     
     func getTravelBook() -> String? {
-        return file != nil ? TravelArticle.getTravelBook(file: file!) : nil
+        file != nil ? TravelArticle.getTravelBook(file: file!) : nil
     }
     
     func getLastModified() -> TimeInterval {
@@ -66,12 +65,12 @@ class TravelArticle: NSObject {
     }
     
     func getGeoDescription() -> String? {
-        if (aggregatedPartOf == nil || aggregatedPartOf?.length == 0) {
+        if aggregatedPartOf == nil || aggregatedPartOf?.length == 0 {
             return nil
         }
         
         if let parts = aggregatedPartOf?.components(separatedBy: ",") {
-            if parts.count > 0 {
+            if !parts.isEmpty {
                 var res = ""
                 res.append(parts[parts.count - 1])
                 
@@ -86,8 +85,7 @@ class TravelArticle: NSObject {
     }
     
     static func getImageUrl(imageTitle: String, thumbnail: Bool) -> String {
-        var title: String? = imageTitle.replacingOccurrences(of: " ", with: "_")
-        if let title = decodeUrl(url: title!) {
+        if let title = decodeUrl(url: imageTitle.replacingOccurrences(of: " ", with: "_")) {
             if let hash = getHash(s: title) {
                 if let title = encodeUrl(url: title) {
                     let prefix = thumbnail ? THUMB_PREFIX : REGULAR_PREFIX
@@ -100,11 +98,11 @@ class TravelArticle: NSObject {
     }
     
     func getPointFilterString() -> String {
-        return "route_article_point"
+        "route_article_point"
     }
     
     func getAnalysis() -> OAGPXTrackAnalysis? {
-        return nil
+        nil
     }
     
     static func getHash(s: String) -> [String]? {
@@ -119,17 +117,18 @@ class TravelArticle: NSObject {
     }
     
     func equals(obj: TravelArticle?) -> Bool {
-        if (obj == nil) {
+        if let obj {
+            return TravelArticleIdentifier.areLatLonEqual(lat1: self.lat, lon1: self.lon, lat2: obj.lat, lon2: obj.lon) &&
+                self.file == obj.file &&
+                self.routeId == obj.routeId &&
+                self.routeSource == obj.routeSource
+        } else {
             return false
         }
-        return TravelArticleIdentifier.areLatLonEqual(lat1: self.lat, lon1: self.lon, lat2: obj!.lat, lon2: obj!.lon) &&
-            self.file == obj!.file &&
-            self.routeId == obj!.routeId &&
-            self.routeSource == obj!.routeSource
     }
     
     static func == (lhs: TravelArticle, rhs: TravelArticle) -> Bool {
-        return lhs.equals(obj: rhs)
+        lhs.equals(obj: rhs)
     }
     
     func fileModificationDate(path: String) -> Date? {
@@ -143,18 +142,18 @@ class TravelArticle: NSObject {
     
     static func encodeUrl(url: String) -> String?
     {
-        return url.addingPercentEncoding( withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
+        url.addingPercentEncoding( withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
     }
     
     static func decodeUrl(url: String) -> String?
     {
-        return url.removingPercentEncoding
+        url.removingPercentEncoding
     }    
 }
 
 @objc(OATravelArticleIdentifier)
 @objcMembers
-class TravelArticleIdentifier : NSObject {
+final class TravelArticleIdentifier : NSObject {
    
     var file: String?
     var lat: Double = Double.nan

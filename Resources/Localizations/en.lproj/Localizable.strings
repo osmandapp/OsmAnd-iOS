@@ -1959,6 +1959,7 @@
 "clear_history" = "Clear history";
 "search_history" = "Search history";
 "clear_travel_search_history" = "Clear Travel search history?";
+"cleared_travel_search_history" = "History cleared";
 "article_has_no_points" = "Article has no points";
 "no_travel_guides_data_title" = "You don’t have travel data";
 "no_travel_guides_data_descr" = "Download Wikivoyage travel guides to view articles about places around the world without a connection to the Internet.";

@@ -13,7 +13,7 @@ protocol TravelGuideCellCashable {
     func noImageIconVisibility(_ show: Bool)
 }
 
-class ArticleTravelCell: UITableViewCell, TravelGuideCellCashable {
+final class ArticleTravelCell: UITableViewCell, TravelGuideCellCashable {
     
 
     @IBOutlet weak var arcticleTitle: UILabel!
@@ -47,8 +47,10 @@ class ArticleTravelCell: UITableViewCell, TravelGuideCellCashable {
     
     func updateSaveButton() {
         DispatchQueue.main.async {
-            let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: self.article!)
-            self.bookmarkIcon.image = isSaved ? UIImage.templateImageNamed("ic_custom20_bookmark") : nil
+            if let article = self.article {
+                let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: self.article!)
+                self.bookmarkIcon.image = isSaved ? UIImage(named: "ic_custom20_bookmark") : nil
+            }
         }
     }
 

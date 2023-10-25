@@ -11,11 +11,11 @@ import Foundation
 
 @objc(OATravelGuidesState)
 @objcMembers
-class TravelGuidesState : NSObject {
+final class TravelGuidesState : NSObject {
     
     static let shared = TravelGuidesState()
     
-    var wasWatchingGpx: Bool = false
+    var wasWatchingGpx = false
     
     //Tabs VC
     var mainMenuSelectedTab: Int = 0

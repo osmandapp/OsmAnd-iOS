@@ -8,7 +8,7 @@
 
 import Foundation
 
-class PopularArticles : NSObject {
+final class PopularArticles : NSObject {
     
     static let ARTICLES_PER_PAGE = 30
     var articles = [TravelArticle]()
@@ -26,7 +26,7 @@ class PopularArticles : NSObject {
     }
     
     func getArticles() -> [TravelArticle] {
-        return Array(articles)
+        Array(articles)
     }
     
     func add(article: TravelArticle) -> Bool {
@@ -35,7 +35,7 @@ class PopularArticles : NSObject {
     }
     
     func contains(article: TravelArticle) -> Bool {
-        if let index = articles.firstIndex(of: article) {
+        if articles.firstIndex(of: article) != nil {
             return true
         }
         return false

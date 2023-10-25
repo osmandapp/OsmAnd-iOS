@@ -10,7 +10,7 @@ import Foundation
 
 @objc(OATravelGpx)
 @objcMembers
-class TravelGpx : TravelArticle {
+final class TravelGpx : TravelArticle {
     
     static let DISTANCE = "distance"
     static let DIFF_ELEVATION_UP = "diff_ele_up"
@@ -33,7 +33,7 @@ class TravelGpx : TravelArticle {
     
     override func getAnalysis() -> OAGPXTrackAnalysis? {
         var analysis = OAGPXTrackAnalysis()
-        if (gpxFile != nil && gpxFile!.hasAltitude()) {
+        if gpxFile != nil && gpxFile!.hasAltitude() {
             analysis = gpxFile!.getAnalysis(0)
         } else {
             analysis.diffElevationDown = diffElevationDown
@@ -43,7 +43,6 @@ class TravelGpx : TravelArticle {
             analysis.totalDistance = totalDistance
             analysis.totalDistanceWithoutGaps = totalDistance
             analysis.avgElevation = avgElevation
-            analysis.elevationData
             if maxElevation != Double.nan && minElevation != Double.nan {
                 analysis.hasElevationData = true
             }
@@ -52,13 +51,13 @@ class TravelGpx : TravelArticle {
     }
     
     func createWptPt(amenity: OAPOIAdapter, lang: String) -> OAWptPtAdapter {
-        var wptPt = OAWptPtAdapter()
+        let wptPt = OAWptPtAdapter()
         wptPt.setPosition(CLLocationCoordinate2D(latitude: amenity.latitude(), longitude: amenity.longitude()))
         wptPt.setName(amenity.name())
         return wptPt
     }
     
     override func getPointFilterString() -> String {
-        return ROUTE_TRACK_POINT;
+        ROUTE_TRACK_POINT
     }
 }

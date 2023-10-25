@@ -8,7 +8,7 @@
 
 import Foundation
 
-class SearchTravelCell : UITableViewCell, TravelGuideCellCashable {
+final class SearchTravelCell : UITableViewCell, TravelGuideCellCashable {
     
     
     @IBOutlet weak var titleLabel: UILabel!

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class TravelJsonParser {
+final class TravelJsonParser {
     
     static let HEADERS = "headers"
     static let SUBHEADERS = "subheaders"
@@ -27,7 +27,7 @@ class TravelJsonParser {
                         
                         if let headerContent = headers[headerName] as? [String : Any] {
                             let link = headerContent[LINK] as? String
-                            var headerItem = TravelContentItem(name: headerName, link: link, parent: topContentItem)
+                            let headerItem = TravelContentItem(name: headerName, link: link, parent: topContentItem)
                             topContentItem.subItems.append(headerItem)
                             
                             if let subheaders = headerContent[SUBHEADERS] as? [String : Any] {
@@ -35,7 +35,7 @@ class TravelJsonParser {
                                     
                                     if let subheaderContent = subheaders[subheaderName] as? [String : Any] {
                                         let subheaderLink = subheaderContent[LINK] as? String
-                                        var subheaderItem = TravelContentItem(name: subheaderName, link: subheaderLink, parent: headerItem)
+                                        let subheaderItem = TravelContentItem(name: subheaderName, link: subheaderLink, parent: headerItem)
                                         headerItem.subItems.append(subheaderItem)
                                     }
                                 }
@@ -53,17 +53,21 @@ class TravelJsonParser {
     }
     
     static func sortContentItem(topContentItem: TravelContentItem, jsonText: String) -> TravelContentItem {
-        var sortedTopContentItem = topContentItem
+        let sortedTopContentItem = topContentItem
         sortedTopContentItem.subItems.sort { a, b in
-            let indexA = jsonText.range(of: a.name)!.lowerBound
-            let indexB = jsonText.range(of: b.name)!.lowerBound
+            guard let rangeA = jsonText.range(of: a.name) else {return false}
+            guard let rangeB = jsonText.range(of: b.name) else {return false}
+            let indexA = rangeA.lowerBound
+            let indexB = rangeB.lowerBound
             return indexA < indexB
         }
         
         for subitem in sortedTopContentItem.subItems {
             subitem.subItems.sort { a, b in
-                let indexA = jsonText.range(of: a.name)!.lowerBound
-                let indexB = jsonText.range(of: b.name)!.lowerBound
+                guard let rangeA = jsonText.range(of: a.name) else {return false}
+                guard let rangeB = jsonText.range(of: b.name) else {return false}
+                let indexA = rangeA.lowerBound
+                let indexB = rangeB.lowerBound
                 return indexA < indexB
             }
         }
@@ -74,7 +78,7 @@ class TravelJsonParser {
 }
 
 
-class TravelContentItem {
+final class TravelContentItem {
     var name: String
     var link: String?
     var subItems: [TravelContentItem]

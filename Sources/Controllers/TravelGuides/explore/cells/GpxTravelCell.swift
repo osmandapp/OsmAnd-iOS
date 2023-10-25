@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GpxTravelCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+final class GpxTravelCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     @IBOutlet weak var arcticleTitle: UILabel!
     
@@ -33,15 +33,17 @@ class GpxTravelCell: UITableViewCell, UICollectionViewDelegate, UICollectionView
     //MARK: UICollectionViewDataSource
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        1
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return statisticsCells?.count ?? 0
+        statisticsCells?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cellData = statisticsCells![indexPath.row]
+        guard let statisticsCells else {return UICollectionViewCell()}
+        
+        let cellData = statisticsCells[indexPath.row]
         var cell = collectionView.dequeueReusableCell(withReuseIdentifier: OAGpxStatBlockCollectionViewCell.getIdentifier(), for: indexPath) as? OAGpxStatBlockCollectionViewCell
         
         if cell == nil {
@@ -49,21 +51,25 @@ class GpxTravelCell: UITableViewCell, UICollectionViewDelegate, UICollectionView
             cell = nib?.first as? OAGpxStatBlockCollectionViewCell
             cell?.backgroundColor = .clear
         }
-        cell!.valueView.text = cellData.values["string_value"] as? String
-        cell!.iconView.image = UIImage.templateImageNamed(cellData.rightIconName)
-        cell!.iconView.tintColor = UIColor.iconColorDefault
-        cell!.titleView.text = cellData.title
-        
-        cell!.separatorView.isHidden = cell!.isDirectionRTL() ? (indexPath.row == 0) : (indexPath.row == statisticsCells!.count - 1)
-        if cell!.needsUpdateConstraints() {
-            cell!.updateConstraints()
+        if let cell {
+            cell.valueView.text = cellData.values["string_value"] as? String
+            cell.iconView.image = UIImage(named: cellData.rightIconName)
+            cell.iconView.tintColor = UIColor.iconColorDefault
+            cell.titleView.text = cellData.title
+            
+            cell.separatorView.isHidden = cell.isDirectionRTL() ? (indexPath.row == 0) : (indexPath.row == statisticsCells.count - 1)
+            if cell.needsUpdateConstraints() {
+                cell.updateConstraints()
+            }
+            return cell
         }
-        return cell!
+        return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellData = statisticsCells![indexPath.row]
-        let isLast = indexPath.row == statisticsCells!.count - 1
+        guard let statisticsCells else {return CGSize.zero}
+        let cellData = statisticsCells[indexPath.row]
+        let isLast = indexPath.row == statisticsCells.count - 1
         let text = cellData.values["string_value"] as? String
         return OATrackMenuHeaderView.getSizeForItem(cellData.title, value: text, isLast: isLast)
     }

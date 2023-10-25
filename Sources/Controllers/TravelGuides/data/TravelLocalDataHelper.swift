@@ -8,7 +8,7 @@
 
 import Foundation
 
-class TravelLocalDataHelper {
+final class TravelLocalDataHelper {
     
     private static let HISTORY_ITEMS_LIMIT = 300
     private let dbHelper: OATravelLocalDataDbHelper
@@ -27,9 +27,7 @@ class TravelLocalDataHelper {
     }
     
     func getAllHistory() -> [TravelSearchHistoryItem] {
-        return historyMap.values.sorted { a, b in
-            return a.lastAccessed < b.lastAccessed
-        }
+        historyMap.values.sorted { $0.lastAccessed < $1.lastAccessed }
     }
     
     func clearHistory() {
@@ -62,11 +60,11 @@ class TravelLocalDataHelper {
     }
     
     func hasSavedArticles() -> Bool {
-        return !savedArticles.isEmpty || dbHelper.hasSavedArticles()
+        !savedArticles.isEmpty || dbHelper.hasSavedArticles()
     }
     
     func getSavedArticles() -> [TravelArticle] {
-        return Array(savedArticles)
+        Array(savedArticles)
     }
     
     func addArticleToSaved(article: TravelArticle) {
@@ -89,7 +87,7 @@ class TravelLocalDataHelper {
     }
     
     func isArticleSaved(article: TravelArticle) -> Bool {
-        return getArticle(title: article.title ?? "", lang: article.lang ?? "") != nil
+        getArticle(title: article.title ?? "", lang: article.lang ?? "") != nil
     }
     
     func notifySavedUpdated() {

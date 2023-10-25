@@ -10,7 +10,7 @@ import Foundation
 
 @objc(OATravelSearchHistoryItem)
 @objcMembers
-class TravelSearchHistoryItem : NSObject {
+final class TravelSearchHistoryItem : NSObject {
     
     var articleFile: String? = ""
     var articleTitle: String = ""
@@ -19,15 +19,15 @@ class TravelSearchHistoryItem : NSObject {
     var lastAccessed: TimeInterval = 0
     
     static func getKey(lang: String, title: String, file: String?) -> String {
-        return lang + ":" + title + ((file != nil) ? (":" + file!) : "")
+        lang + ":" + title + ((file != nil) ? (":" + file!) : "")
     }
     
     func getKey() -> String {
-        return TravelSearchHistoryItem.getKey(lang: lang, title: articleTitle, file: articleFile)
+        TravelSearchHistoryItem.getKey(lang: lang, title: articleTitle, file: articleFile)
     }
     
     func getTravelBook() -> String? {
-        return articleFile != nil ? TravelArticle.getTravelBook(file: articleFile!) : nil
+        articleFile != nil ? TravelArticle.getTravelBook(file: articleFile!) : nil
     }
     
 }

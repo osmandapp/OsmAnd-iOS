@@ -19,7 +19,7 @@ protocol TravelExploreViewControllerDelegate : AnyObject {
 
 @objc(OATravelExploreViewController)
 @objcMembers
-class TravelExploreViewController: OABaseNavbarViewController, TravelExploreViewControllerDelegate, GpxReadDelegate, UISearchResultsUpdating, UISearchBarDelegate {
+final class TravelExploreViewController: OABaseNavbarViewController, TravelExploreViewControllerDelegate, GpxReadDelegate, UISearchResultsUpdating, UISearchBarDelegate {
     
     enum ScreenModes {
         case popularArticles
@@ -59,8 +59,8 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
-        self.navigationItem.searchController = searchController
-        self.navigationItem.hidesSearchBarWhenScrolling = false
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
         setupSearchControllerWithFilter(false)
         isInited = true
     }
@@ -89,21 +89,23 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     }
     
     override func getLeftNavbarButtonTitle() -> String! {
-        return localizedString("shared_string_back")
+        localizedString("shared_string_back")
     }
     
     override func forceShowShevron() -> Bool {
-        return true
+        true
     }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem]! {
-        let optionsButton = createRightNavbarButton(nil, iconName: "ic_navbar_overflow_menu_stroke", action: #selector(onOptionsButtonClicked), menu: nil)
-        optionsButton?.accessibilityLabel = localizedString("shared_string_options")
-        return [optionsButton!]
+        if let optionsButton = createRightNavbarButton(nil, iconName: "ic_navbar_overflow_menu_stroke", action: #selector(onOptionsButtonClicked), menu: nil) {
+            optionsButton.accessibilityLabel = localizedString("shared_string_options")
+            return [optionsButton]
+        }
+        return []
     }
     
     func populateData(resetData: Bool) {
-        self.view.addSpinner(inCenterOfCurrentView: true)
+        view.addSpinner(inCenterOfCurrentView: true)
         let task = LoadWikivoyageDataAsyncTask(resetData: resetData)
         task.delegate = self;
         task.execute()
@@ -122,15 +124,21 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         if let state = OAAppSettings.sharedManager().travelGuidesState {
             setupDownloadingCellHelper()
             downloadingResources = state.downloadingResources
-            cachedPreviewImages = state.cachedPreviewImages!
             lastSelectedIndexPath = state.lastSelectedIndexPath
+            if let stateImages = state.cachedPreviewImages {
+                self.cachedPreviewImages = stateImages
+            }
             
             tableData.clearAllData()
-            for i in 0..<state.exploreTabTableData!.sectionCount() {
-                tableData.addSection(state.exploreTabTableData!.sectionData(for: i))
+            if let exploreTabTableData = state.exploreTabTableData {
+                for i in 0..<exploreTabTableData.sectionCount() {
+                    tableData.addSection(exploreTabTableData.sectionData(for: i))
+                }
             }
             tableView.reloadData()
-            tableView.scrollToRow(at: state.lastSelectedIndexPath!, at: .middle, animated: false)
+            if let lastSelectedIndexPath = state.lastSelectedIndexPath {
+                tableView.scrollToRow(at: lastSelectedIndexPath, at: .middle, animated: false)
+            }
         }
         
         let wasOpenedTravelGpx = OAAppSettings.sharedManager().travelGuidesState.article == nil
@@ -139,7 +147,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         } else {
             let vc = TravelArticleDialogViewController.init()
             vc.delegate = self
-            self.show(vc)
+            show(vc)
         }
     }
     
@@ -181,25 +189,26 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
                 //        }
                 
                 let articles = TravelObfHelper.shared.getPopularArticles()
-                if articles.count > 0 {
+                if !articles.isEmpty {
                     
                     let articlesSection = tableData.createNewSection()
                     articlesSection.headerText = localizedString("popular_destinations")
                     
                     for article in articles {
                         if article is TravelGpx {
-                            let item: TravelGpx = article as! TravelGpx
-                            let gpxRow = articlesSection.createNewRow()
-                            let title = (item.descr != nil && item.descr!.count > 0) ? item.descr! : item.title
-                            item.title = title
-                            gpxRow.cellType = GpxTravelCell.getIdentifier()
-                            gpxRow.title = title
-                            gpxRow.descr = item.user
-                            gpxRow.setObj(item, forKey: "article")
-                            
-                            let analysis = item.getAnalysis()
-                            let statisticsCells = OATrackMenuHeaderView.generateGpxBlockStatistics(analysis, withoutGaps: false)
-                            gpxRow.setObj(statisticsCells, forKey: "statistics_cells")
+                            if let item: TravelGpx = article as? TravelGpx {
+                                let gpxRow = articlesSection.createNewRow()
+                                let title = (item.descr != nil && !item.descr!.isEmpty) ? item.descr! : item.title
+                                item.title = title
+                                gpxRow.cellType = GpxTravelCell.getIdentifier()
+                                gpxRow.title = title
+                                gpxRow.descr = item.user
+                                gpxRow.setObj(item, forKey: "article")
+                                
+                                let analysis = item.getAnalysis()
+                                let statisticsCells = OATrackMenuHeaderView.generateGpxBlockStatistics(analysis, withoutGaps: false)
+                                gpxRow.setObj(statisticsCells, forKey: "statistics_cells")
+                            }
                             
                         } else {
                             
@@ -211,7 +220,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
                             articleRow.setObj(item.getGeoDescription() ?? "", forKey: "isPartOf")
                             articleRow.setObj(item, forKey: "article")
                             articleRow.setObj(item.lang, forKey: "lang")
-                            if (item.imageTitle != nil && item.imageTitle!.length > 0) {
+                            if item.imageTitle != nil && item.imageTitle!.length > 0 {
                                 articleRow.iconName = TravelArticle.getImageUrl(imageTitle: item.imageTitle ?? "", thumbnail: false)
                             }
                         }
@@ -273,7 +282,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
                 headerDescrRow.setObj(NSNumber(booleanLiteral: false), forKey: "kHideSeparator")
             }
             
-            if searchResults.count > 0 && searchQuery.length > 0 {
+            if !searchResults.isEmpty && !searchQuery.isEmpty {
                 for item in searchResults {
                     let resultRow = section.createNewRow()
                     resultRow.cellType = SearchTravelCell.getIdentifier()
@@ -282,7 +291,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
                     resultRow.setObj(item.articleId, forKey: "articleId")
                     
                     resultRow.setObj("ic_custom_photo", forKey: "noImageIcon")
-                    if (item.imageTitle != nil && item.imageTitle!.length > 0) {
+                    if item.imageTitle != nil && item.imageTitle!.length > 0 {
                         resultRow.iconName = TravelArticle.getImageUrl(imageTitle: item.imageTitle ?? "", thumbnail: true)
                     }
                 }
@@ -295,39 +304,40 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         downloadingCellHelper.hostViewController = self
         downloadingCellHelper.hostTableView = self.tableView
         downloadingCellHelper.hostDataLock = dataLock
-        weak var weakself = self
         
-        downloadingCellHelper.fetchResourcesBlock = {
+        downloadingCellHelper.fetchResourcesBlock = { [weak self] in
+            guard let self else { return }
             var downloadingResouces = OAResourcesUISwiftHelper.getResourcesInRepositoryIds(byRegionId: "travel", resourceTypeNames: ["travel"])
-            if (downloadingResouces != nil) {
+            if downloadingResouces != nil {
                 downloadingResouces!.sort(by: { a, b in
                     a.title() < b.title()
                 })
-                weakself!.downloadingResources = downloadingResouces!
+                self.downloadingResources = downloadingResouces!
             }
         }
         
-        downloadingCellHelper.getSwiftResourceByIndexBlock = { (indexPath: IndexPath?) -> OAResourceSwiftItem? in
-            
-            let headerCellsCountInResourcesSection = weakself!.headerCellsCountInResourcesSection()
-            if (indexPath != nil && indexPath!.row >= headerCellsCountInResourcesSection) {
-                return weakself!.downloadingResources[indexPath!.row - headerCellsCountInResourcesSection]
+        downloadingCellHelper.getSwiftResourceByIndexBlock = { [weak self] (indexPath: IndexPath?) -> OAResourceSwiftItem? in
+            guard let self else { return nil }
+            let headerCellsCountInResourcesSection = self.headerCellsCountInResourcesSection()
+            if indexPath != nil && indexPath!.row >= headerCellsCountInResourcesSection {
+                return self.downloadingResources[indexPath!.row - headerCellsCountInResourcesSection]
             }
             return nil
         }
         
-        downloadingCellHelper.getTableDataModelBlock = {
-            return weakself!.tableData
+        downloadingCellHelper.getTableDataModelBlock = { [weak self] in
+            guard let self else { return nil }
+            return self.tableData
         }
     }
     
     func headerCellsCountInResourcesSection() -> Int {
-        return 2
+        2
     }
     
     func notDownloadImages() -> Bool {
-        let imagesDownloadMode = OsmAndApp.swiftInstance().data.travelGuidesImagesDownloadMode
-        return imagesDownloadMode!.isDontDownload() || (imagesDownloadMode!.isDownloadOnlyViaWifi() && AFNetworkReachabilityManagerWrapper.isReachableViaWWAN())
+        guard let imagesDownloadMode = OsmAndApp.swiftInstance().data.travelGuidesImagesDownloadMode else {return false}
+        return imagesDownloadMode.isDontDownload() || (imagesDownloadMode.isDownloadOnlyViaWifi() && AFNetworkReachabilityManagerWrapper.isReachableViaWWAN())
     }
     
     
@@ -346,25 +356,24 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     }
     
     func onOptionsButtonClicked() {
-        print("onOptionsButtonClicked")
         let vc = TravelGuidesSettingsViewController()
         showModalViewController(vc)
     }
     
     func openArticle(article: TravelArticle, lang: String?) {
         if article is TravelGpx {
-            self.view.addSpinner(inCenterOfCurrentView: true)
+            view.addSpinner(inCenterOfCurrentView: true)
             openGpx(gpx: article as! TravelGpx)
         } else {
-            let vc = TravelArticleDialogViewController.init(articleId: article.generateIdentifier(), lang: lang!)
+            let vc = TravelArticleDialogViewController.init(articleId: article.generateIdentifier(), lang: lang ?? "")
             vc.delegate = self
-            self.show(vc)
+            show(vc)
         }
     }
     
     func openGpx(gpx: TravelGpx) {
         isPointsReadingMode = false
-        self.view.addSpinner(inCenterOfCurrentView: true)
+        view.addSpinner(inCenterOfCurrentView: true)
         TravelObfHelper.shared.getArticleById(articleId: gpx.generateIdentifier(), lang: nil, readGpx: true, callback: self)
     }
     
@@ -375,11 +384,13 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     func showClearHistoryAlert() {
         let alert = UIAlertController(title: localizedString("search_history"), message: localizedString("clear_travel_search_history"), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .default))
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_clear"), style: .default, handler: { a in
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_clear"), style: .default, handler: { [weak self] a in
+            guard let self else { return }
             TravelObfHelper.shared.getBookmarksHelper().clearHistory()
             self.screenMode = .popularArticles
             self.generateData()
             self.tableView.reloadData()
+            OAUtilities.showToast(nil, details: localizedString("cleared_travel_search_history"), duration: 4, in: self.view)
         }))
         self.present(alert, animated: true)
     }
@@ -463,7 +474,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
                 }
                 
                 if let iconName = item.iconName {
-                    cell.rightIconView.image = UIImage.templateImageNamed(iconName)
+                    cell.rightIconView.image = UIImage(named: iconName)
                     cell.rightIconVisibility(true)
                 } else {
                     cell.rightIconVisibility(false)
@@ -486,48 +497,52 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
                 let nib = Bundle.main.loadNibNamed("ArticleTravelCell", owner: self, options: nil)
                 cell = nib?.first as? ArticleTravelCell
                 cell?.imageVisibility(true)
-                cell!.imagePreview.contentMode = .scaleAspectFill
-                cell!.imagePreview.layer.cornerRadius = 11
+                cell?.imagePreview.contentMode = .scaleAspectFill
+                cell?.imagePreview.layer.cornerRadius = 11
             }
-            cell!.article = item.obj(forKey: "article") as? TravelArticle
-            cell!.articleLang = item.string(forKey: "lang")
-            
-            cell!.arcticleTitle.text = item.title
-            cell!.arcticleDescription.text = item.descr
-            cell!.regionLabel.text = item.string(forKey: "isPartOf")
-
-            cell?.imageVisibility(true)
-            if item.iconName != nil && !notDownloadImages() {
-                startAsyncImageDownloading(item.iconName!, cell)
-            } else {
-                cell?.noImageIconVisibility(true)
+            if let cell {
+                cell.article = item.obj(forKey: "article") as? TravelArticle
+                cell.articleLang = item.string(forKey: "lang")
+                
+                cell.arcticleTitle.text = item.title
+                cell.arcticleDescription.text = item.descr
+                cell.regionLabel.text = item.string(forKey: "isPartOf")
+                
+                cell.imageVisibility(true)
+                if item.iconName != nil && !notDownloadImages() {
+                    startAsyncImageDownloading(item.iconName!, cell)
+                } else {
+                    cell.noImageIconVisibility(true)
+                }
+                cell.updateSaveButton()
+                
+                outCell = cell
             }
-            cell?.updateSaveButton()
-            
-            outCell = cell
             
         } else if item.cellType == GpxTravelCell.getIdentifier() {
             var cell = tableView.dequeueReusableCell(withIdentifier: GpxTravelCell.getIdentifier()) as? GpxTravelCell
             if cell == nil {
                 let nib = Bundle.main.loadNibNamed("GpxTravelCell", owner: self, options: nil)
                 cell = nib?.first as? GpxTravelCell
-                cell!.usernameIcon.contentMode = .scaleAspectFit
-                cell!.usernameIcon.image = UIImage.templateImageNamed("ic_custom_user_profile")
-                cell!.usernameIcon.tintColor = UIColor.iconColorActive
-                cell!.usernameLabel.textColor = UIColor.iconColorActive
-                cell!.usernameView.layer.borderColor = UIColor.textColorTertiary.cgColor
-                cell!.usernameView.layer.borderWidth = 1
-                cell!.usernameView.layer.cornerRadius = 4
+                cell?.usernameIcon.contentMode = .scaleAspectFit
+                cell?.usernameIcon.image = UIImage(named: "ic_custom_user_profile")
+                cell?.usernameIcon.tintColor = UIColor.iconColorActive
+                cell?.usernameLabel.textColor = UIColor.iconColorActive
+                cell?.usernameView.layer.borderColor = UIColor.textColorTertiary.cgColor
+                cell?.usernameView.layer.borderWidth = 1
+                cell?.usernameView.layer.cornerRadius = 4
 
             }
-            cell!.arcticleTitle.text = item.title
-            cell!.usernameLabel.text = item.descr
-            cell!.travelGpx = item.obj(forKey: "article") as? TravelGpx
-            if let statisticsCells = item.obj(forKey: "statistics_cells") as? [OAGPXTableCellData] {
-                cell!.statisticsCells = statisticsCells
+            if let cell {
+                cell.arcticleTitle.text = item.title
+                cell.usernameLabel.text = item.descr
+                cell.travelGpx = item.obj(forKey: "article") as? TravelGpx
+                if let statisticsCells = item.obj(forKey: "statistics_cells") as? [OAGPXTableCellData] {
+                    cell.statisticsCells = statisticsCells
+                }
+                
+                outCell = cell
             }
-            
-            outCell = cell
         } else if item.cellType == OATitleDescriptionBigIconCell.getIdentifier() {
             var cell = tableView.dequeueReusableCell(withIdentifier: OATitleDescriptionBigIconCell.getIdentifier()) as? OATitleDescriptionBigIconCell
             if cell == nil {
@@ -553,7 +568,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
                 cell.descriptionLabel.text = item.descr
                 
                 if let noImageIconName = item.string(forKey: "noImageIcon") {
-                    cell.noImageIcon.image = UIImage.templateImageNamed(noImageIconName)
+                    cell.noImageIcon.image = UIImage(named: noImageIconName)
                 }
 
                 if item.iconName != nil && !notDownloadImages() {
@@ -574,7 +589,9 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
             if let cell = cell {
                 cell.titleLabel.text = item.title
                 cell.titleLabel.textColor = UIColor.textColorActive
-                cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+                if let iconName = item.iconName {
+                    cell.leftIconView.image = UIImage(named: iconName)
+                }
                 cell.leftIconView.tintColor = UIColor.iconColorActive
             }
             outCell = cell
@@ -621,10 +638,12 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
                 let lang = item.string(forKey: "lang") ?? ""
                 
                 let menuProvider: UIContextMenuActionProvider = { _ in
-                    let readAction = UIAction(title: localizedString("shared_string_read"), image: UIImage(systemName: "newspaper")) { _ in
+                    let readAction = UIAction(title: localizedString("shared_string_read"), image: UIImage(systemName: "newspaper")) { [weak self] _ in
+                        guard let self else { return }
                         self.openArticle(article: article, lang: lang)
                     }
-                    let bookmarkAction = UIAction(title: localizedString("shared_string_bookmark"), image: UIImage(systemName: "bookmark")) { _ in
+                    let bookmarkAction = UIAction(title: localizedString("shared_string_bookmark"), image: UIImage(systemName: "bookmark")) { [weak self] _ in
+                        guard let self else { return }
                         let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: article)
                         if isSaved {
                             TravelObfHelper.shared.getBookmarksHelper().removeArticleFromSaved(article: article)
@@ -634,11 +653,11 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
                         self.generateData()
                         self.tableView.reloadRows(at: [indexPath], with: .automatic)
                     }
-                    //shared_string_gpx_points
-                    let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: UIImage.templateImageNamed("point.topleft.filled.down.to.point.bottomright.curvepath")) { _ in
+                    let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: UIImage(named: "point.topleft.filled.down.to.point.bottomright.curvepath")) { [weak self] _ in
+                        guard let self else { return }
                         self.isPointsReadingMode = true
                         self.view.addSpinner(inCenterOfCurrentView: true)
-                        let article = TravelObfHelper.shared.getArticleById(articleId: article.generateIdentifier(), lang: lang, readGpx: true, callback: self)
+                        let _ = TravelObfHelper.shared.getArticleById(articleId: article.generateIdentifier(), lang: lang, readGpx: true, callback: self)
                     }
                     return UIMenu(title: "", children: [readAction, bookmarkAction, pointsAction])
                 }
@@ -660,7 +679,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     }
     
     func close() {
-        self.dismiss()
+        dismiss()
     }
     
     func onOpenArticlePoints() {
@@ -670,9 +689,6 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     
     //MARK: GpxReadDelegate
     
-    func onGpxFileReading() {
-    }
-    
     func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?, article: TravelArticle) {
         //Open TravelGpx track
         article.gpxFile = gpxFile
@@ -680,7 +696,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         OATravelGuidesHelper.createGpxFile(article, fileName: filename)
         let gpx = OATravelGuidesHelper.buildGpx(filename, title: article.title, document: gpxFile)
         
-        self.view.removeSpinner()
+        view.removeSpinner()
         if isPointsReadingMode && (gpx == nil || gpx?.wptPoints == 0) {
             OAUtilities.showToast(nil, details: localizedString("article_has_no_points") , duration: 4, in: self.view)
             return
@@ -692,14 +708,14 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
         OAAppSettings.sharedManager().showGpx([filename], update: true)
         let tab: EOATrackMenuHudTab = isPointsReadingMode ? .pointsTab : .overviewTab
         OARootViewController.instance().mapPanel.openTargetView(with: gpx, selectedTab: tab, selectedStatisticsTab: .overviewTab, openedFromMap: false)
-        self.dismiss()
+        dismiss()
     }
     
     
     //MARK: Search
     
     func shouldShowSearch() -> Bool {
-        return !TravelObfHelper.shared.isOnlyDefaultTravelBookPresent()
+        !TravelObfHelper.shared.isOnlyDefaultTravelBookPresent()
     }
     
     private func setupSearchControllerWithFilter(_ isFiltered: Bool) {
@@ -713,22 +729,27 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
     }
     
     func cancelSearch() {
-        searchHelper!.uiCanceled = true
-        self.view.removeSpinner()
-        searchResults = []
+        if let searchHelper {
+            searchHelper.uiCanceled = true
+            view.removeSpinner()
+            searchResults = []
+        }
     }
     
     func runSearch() {
-        searchHelper!.uiCanceled = false
-        self.view.addSpinner(inCenterOfCurrentView: true)
-        
-        searchHelper!.search(query: searchQuery) { results in
-            DispatchQueue.main.async {
-                self.searchResults = results
-                self.screenMode = .searchResults
-                self.generateData()
-                self.tableView.reloadData()
-                self.view.removeSpinner()
+        if let searchHelper {
+            searchHelper.uiCanceled = false
+            view.addSpinner(inCenterOfCurrentView: true)
+            
+            searchHelper.search(query: searchQuery) { [weak self] results in
+                guard let self else { return }
+                DispatchQueue.main.async {
+                    self.searchResults = results
+                    self.screenMode = .searchResults
+                    self.generateData()
+                    self.tableView.reloadData()
+                    self.view.removeSpinner()
+                }
             }
         }
     }
@@ -778,7 +799,7 @@ class TravelExploreViewController: OABaseNavbarViewController, TravelExploreView
 }
 
 
-class LoadWikivoyageDataAsyncTask {
+final class LoadWikivoyageDataAsyncTask {
     weak var delegate: TravelExploreViewControllerDelegate?
     var travelHelper: TravelObfHelper
     var resetData: Bool
@@ -802,14 +823,14 @@ class LoadWikivoyageDataAsyncTask {
     }
     
     func onPostExecute() {
-        if delegate != nil {
-            delegate!.onDataLoaded()
+        if let delegate {
+            delegate.onDataLoaded()
         }
     }
 }
 
 
-class ImageCache {
+final class ImageCache {
     
     private var cache: [String : Data]
     private var itemsLimit: Int
@@ -832,7 +853,7 @@ class ImageCache {
 }
 
 
-class OATextFieldWithPadding: UITextField {
+final class OATextFieldWithPadding: UITextField {
     var textPadding = UIEdgeInsets(
         top: 0,
         left: 16,

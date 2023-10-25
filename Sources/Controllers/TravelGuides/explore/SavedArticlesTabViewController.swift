@@ -8,7 +8,7 @@
 
 import Foundation
 
-class SavedArticlesTabViewController: OABaseNavbarViewController {
+final class SavedArticlesTabViewController: OABaseNavbarViewController {
     
     weak var tabViewDelegate: TravelExploreViewControllerDelegate?
     
@@ -71,8 +71,9 @@ class SavedArticlesTabViewController: OABaseNavbarViewController {
     override func onRowSelected(_ indexPath: IndexPath!) {
         let item = tableData.item(for: indexPath)
         if let article = item.obj(forKey: "article") as? TravelArticle {
-            tabViewDelegate!.openArticle(article: article, lang: article.lang)
+            if let tabViewDelegate {
+                tabViewDelegate.openArticle(article: article, lang: article.lang)
+            }
         }
-        
     }
 }

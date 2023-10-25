@@ -525,13 +525,9 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                 let nib = Bundle.main.loadNibNamed("GpxTravelCell", owner: self, options: nil)
                 cell = nib?.first as? GpxTravelCell
                 cell?.usernameIcon.contentMode = .scaleAspectFit
-                cell?.usernameIcon.image = UIImage(named: "ic_custom_user_profile")
+                cell?.usernameIcon.image = UIImage.templateImageNamed("ic_custom_user_profile")
                 cell?.usernameIcon.tintColor = UIColor.iconColorActive
                 cell?.usernameLabel.textColor = UIColor.iconColorActive
-                cell?.usernameView.layer.borderColor = UIColor.textColorTertiary.cgColor
-                cell?.usernameView.layer.borderWidth = 1
-                cell?.usernameView.layer.cornerRadius = 4
-
             }
             if let cell {
                 cell.arcticleTitle.text = item.title
@@ -540,6 +536,9 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                 if let statisticsCells = item.obj(forKey: "statistics_cells") as? [OAGPXTableCellData] {
                     cell.statisticsCells = statisticsCells
                 }
+                cell.usernameView.layer.borderColor = UIColor.separatorColor.cgColor
+                cell.usernameView.layer.borderWidth = 1
+                cell.usernameView.layer.cornerRadius = 4
                 
                 outCell = cell
             }

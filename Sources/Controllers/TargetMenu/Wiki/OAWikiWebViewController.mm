@@ -148,6 +148,12 @@
         _content = [self appendHeadToContent:_content];
 }
 
+- (void)updateAppearance
+{
+    [super updateAppearance];
+    [self postInit];
+}
+
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
     NSString *newUrl = [OAWikiArticleHelper normalizeFileUrl:[navigationAction.request.URL.absoluteString stringByRemovingPercentEncoding]];
@@ -346,6 +352,11 @@
     return @"ic_custom_safari";
 }
 
+- (UIColor *)getButtonTintColor:(EOABaseButtonColorScheme)scheme
+{
+    return UIColor.textColorActive;
+}
+
 - (EOABaseButtonColorScheme)getTopButtonColorScheme
 {
     return EOABaseButtonColorSchemeGraySimple;
@@ -528,9 +539,10 @@
 {
     if (content == nil)
         return nil;
-
-    NSString *head = @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></header><head></head><div class=\"main\">%@</div>";
-    return [NSString stringWithFormat:head, content];
+    
+    NSString *nightModeClass = [ThemeManager shared].isLightTheme ? @"" : @" nightmode";
+    NSString *head = @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></header><head></head><div class=\"main%@\" >%@</div>";
+    return [NSString stringWithFormat:@"<html><head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" /> <meta http-equiv=\"cleartype\" content=\"on\" />  </head> <div class=\"main%@\">%@ </body></html>", nightModeClass, content];
 }
 
 #pragma mark - WebView

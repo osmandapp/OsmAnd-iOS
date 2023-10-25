@@ -10,6 +10,7 @@
 #import "OATableDataModel.h"
 #import "OAAppSettings.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OABaseWebViewController ()
 
@@ -42,8 +43,16 @@
 
     self.webView.navigationDelegate = self;
     self.webView.scrollView.delegate = self;
+    self.webView.backgroundColor = UIColor.viewBgColor;
 
     self.webView.hidden = YES;
+    [self loadWebView];
+}
+
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    [self updateAppearance];
     [self loadWebView];
 }
 

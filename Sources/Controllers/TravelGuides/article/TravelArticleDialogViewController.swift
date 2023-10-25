@@ -147,7 +147,7 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
     func setupBottomButtonsView() {
         bottomView = UIView()
         guard let bottomView else {return}
-        bottomView.addBlurEffect(true, cornerRadius: 0, padding: 0)
+        bottomView.addBlurEffect(ThemeManager.shared.isLightTheme(), cornerRadius: 0, padding: 0)
         view.addSubview(bottomView)
         
         bottomStackView = UIStackView()
@@ -186,6 +186,13 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
         bookmarkButton.addTarget(self, action: #selector(self.onBookmarkButtonClicked), for: .touchUpInside)
         bottomStackView.addArrangedSubview(bookmarkButton)
         updateBookmarkButton()
+    }
+    
+    override func updateAppearance() {
+        super.updateAppearance()
+        if let bottomView {
+            bottomView.addBlurEffect(ThemeManager.shared.isLightTheme(), cornerRadius: 0, padding: 0)
+        }
     }
     
     func updateBookmarkButton() {
@@ -439,7 +446,7 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
         
         let bodyTag =  rtlLanguages.contains(article.lang ?? "") ? "<body dir=\"rtl\">\n" : "<body>\n"
         sb += bodyTag
-        let nightModeClass = nightMode ? " nightmode" : ""
+        let nightModeClass = ThemeManager.shared.isLightTheme() ? "" : " nightmode"
         let imageTitle = article.imageTitle
         
         guard let aggregatedPartOf = article.aggregatedPartOf else {return ""}

@@ -24,7 +24,7 @@ class DestinationsListViewController: OABaseButtonsViewController {
             if tableData.hasChanged || tableData.sectionCount() == 0 {
                 updateUIAnimated(nil)
             } else {
-                updateWithoutData()
+                updateUIWithoutData()
             }
         }
     }

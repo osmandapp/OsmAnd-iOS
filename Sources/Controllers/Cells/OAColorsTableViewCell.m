@@ -9,6 +9,7 @@
 #import "OAColorsTableViewCell.h"
 #import "OAColorsCollectionViewCell.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kWhiteColor 0x44FFFFFF
 
@@ -85,7 +86,7 @@
         if (indexPath.row == _currentColor)
         {
             cell.backView.layer.borderWidth = 2;
-            cell.backView.layer.borderColor = UIColorFromARGB(color_primary_purple_50).CGColor;
+            cell.backView.layer.borderColor = UIColor.buttonBgColorTertiary.CGColor;
         }
         else
         {

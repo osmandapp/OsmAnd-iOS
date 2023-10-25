@@ -1556,7 +1556,7 @@
 "units_of_speed" = "Jednotky rychlosti";
 "allow_3D_view" = "2.5D zobrazení";
 "do_not_rotate" = "Neotáčet";
-"settings_app_theme" = "Motiv aplikace";
+"settings_app_theme" = "Vzhled aplikace";
 "map_settings_available_srtm_maps_descr" = "Pro zobrazení stínování kopců jsou potřeba další mapy";
 "map_settings_line_density_slowdown_warning" = "Vysoká hustota čar může zpomalit vykreslování mapy";
 "map_settings_contour_zoom_level_descr" = "Zvolte úroveň přiblížení, od které budou zobrazeny vrstevnice";
@@ -1565,9 +1565,9 @@
 "map_settings_hide_polygons_desc" = "Tato možnost ovlivní pouze offline vektorové mapy OsmAnd";
 "map_settings_hide_polygons" = "Skrýt polygony";
 "map_settings_show_slider_map" = "Zobrazit posuvník na mapě";
-"map_settings_add_maps_slopes" = "K zobrazení svahů jsou potřeba další mapy";
-"map_settings_add_maps_hillshade" = "K zobrazení stínování kopců jsou potřeba další mapy";
-"map_settings_zoom_level_description" = "Nastavte minimální a maximální úroveň přiblížení pro zobrazení vrstvy";
+"map_settings_add_maps_slopes" = "K zobrazení svahů jsou potřeba další mapy.";
+"map_settings_add_maps_hillshade" = "K zobrazení stínování kopců jsou potřeba další mapy.";
+"map_settings_zoom_level_description" = "Nastavte minimální a maximální úroveň přiblížení, při které se vrstva zobrazí";
 "map_settings_hillshade_description" = "Mapa kopců s tmavými odstíny pro zobrazení svahů, vrcholů a nížin.";
 "map_settings_slopes_description" = "Sklon je barevná vizualizace v terénu.";
 "map_settings_slopes_legend" = "O svazích si můžete přečíst více na Wikipedii";
@@ -2025,8 +2025,6 @@
 "navigate_point_easting" = "Souřadnice X";
 "navigate_point_northing" = "Souřadnice Y";
 "navigate_point_zone" = "Zóna";
-"open_place_reviews_plugin_description" = "Přispívejte do projektu OpenPlaceReviews, například fotografiemi, recenzemi nebo odkazy na veřejná místa, jako jsou restaurace, hotely nebo muzea.\n\nNávod, jak přispět, najdete na našich webových stránkách https://osmand.net/docs/user/plugins/openplacereviews .";
-"open_place_reviews" = "OpenPlaceReviews";
 "routes_color_by_type" = "Obarvit trasy podle…";
 "rendering_value_walkingRoutesOSMC_description" = "Obarví trasy podle jejich individuální lokální barvy (pokud je nastavena v OpenStreetMap) a turistického značení.";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Obarví trasy podle síťové příslušnosti.";
@@ -2037,7 +2035,6 @@
 "added_profiles" = "Přidané profily";
 "suggested_maps_descr" = "Tyto mapy jsou potřebné pro modul.";
 "suggested_maps" = "Navrhované mapy";
-"product_desc_openplacereviews" = "Sdílejte své názory na veřejná místa";
 "plugin_mapillary_descr" = "Snímky z úrovně ulice. Přispět můžete i vy. Chcete-li zobrazit existující data jako mapovou vrstvu, zapněte v nabídce \"Nastavení mapy\" možnost \"Snímky z úrovně ulice\".";
 "product_desc_mapillary" = "Snímky z úrovně ulice, abyste si mohli prohlédnout okolí";
 "shared_string_feet" = "stopy";
@@ -2593,7 +2590,7 @@
 "routeInfo_horse_scale_description" = "Vykreslení cest podle obtížnosti koňských stezek";
 "shared_string_cross_buy" = "Křížový nákup";
 "cloud_create_account" = "Vytvořit účet";
-"download_heightmap_maps" = "Mapa terénu";
+"download_heightmap_maps" = "Mapa terénu (3D)";
 "use_heightmap_setting" = "Použít 3D reliéfní výškové mapy";
 "nautical_depth_points" = "Plavební hloubkové body";
 "depth_contours" = "Hloubkové vrstevnice";
@@ -3023,3 +3020,17 @@
 "auto_update" = "Automatická aktualizace";
 "weather_update_parameters_any_network" = "Předpověď počasí bude aktualizována přes jakoukoliv síť. Mohou být využita mobilní data.";
 "shared_string_cache" = "Mezipaměť";
+"click_on_widget" = "Klikněte na widget";
+"unsaved_changes_will_be_lost_discard" = "Všechny neuložené změny budou ztraceny. Zahodit změny?";
+"terrain_3D_maps" = "Mapy terénu";
+"average_speed_skip_stops" = "Zohlednit zastávky";
+"average_speed_time_interval_desc" = "Zadejte časový interval pro průměrování rychlosti.";
+"unsaved_changes" = "Neuložené změny";
+
+
+// Shared Strings
+"shared_string_discard" = "Zahodit";
+"specify_number_of_dir_indicators_desc" = "Zadejte počet směrových ukazatelů.";
+"ios_release_4_5" = "• Kompletně přepracované prostředí widgetů: přidána možnost změny pozice widgetu, přidáno seskupení podle stránek, jeden seznam widgetů pro levý a pravý panel.\n• Přepracovaná obrazovka konfigurace\n• Bezplatné zálohování oblíbených položek, nastavení a úprav OSM do služby OsmAnd Cloud\n• Přidána stupnice \"CAI\" pro \"Klasifikaci obtížnosti tras\"\n• Modul \"Vrstevnice\" přejmenován na \"Topografie\", přidána podpora nového formátu terénních map\n• Přidán 3D reliéf\n• Přidána autorizace OAuth pro modul Editace OpenStreetMap\n• Přidáno samostatné tlačítko pro přepínání mezi 2D nebo 3D režimem\n• Změněn směr gesta naklonění\n• Opraven problém s exportem oblíbených položek, který mohl vést ke ztrátě dat\n";
+"map_marker_interval_dialog_desc" = "Zadejte časový interval, ve kterém se bude měřit průměrná rychlost pro výpočet odhadovaného času příjezdu.";
+"shared_string_system_default" = "Výchozí";

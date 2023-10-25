@@ -19,13 +19,13 @@
 #import "OAMonitoringPlugin.h"
 #import "OAPlugin.h"
 #import "Localization.h"
-#include <OsmAndCore/Utilities.h>
+#import "OAGPXAppearanceCollection.h"
 
 #import <sqlite3.h>
 #import <CoreLocation/CoreLocation.h>
 
-#import <OsmAndCore.h>
-#import <OsmAndCore/Utilities.h>
+#include <OsmAndCore.h>
+#include <OsmAndCore/Utilities.h>
 
 #define DATABASE_NAME @"tracks"
 #define DATABASE_VERSION 4
@@ -716,6 +716,9 @@
     
 - (void)addWpt:(OAWptPt *)wpt
 {
+    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[wpt getColor:0]]];
+
     [currentTrack addWpt:wpt];
     currentTrack.modifiedTime = wpt.time;
     

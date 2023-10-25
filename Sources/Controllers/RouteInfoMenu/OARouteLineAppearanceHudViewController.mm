@@ -27,7 +27,7 @@
 #import "OASegmentedControlCell.h"
 #import "OASegmentSliderTableViewCell.h"
 #import "OATextLineViewCell.h"
-#import "OAValueTableViewCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -40,6 +40,7 @@
 #import "OARouteStatisticsHelper.h"
 #import "OAProducts.h"
 #import "OASizes.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kColorDayMode OALocalizedString(@"day")
 #define kColorNightMode OALocalizedString(@"daynight_mode_night")
@@ -493,7 +494,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (void)setupButtonsNavigationBarView
 {
-    [self.statusBarBackgroundView addBlurEffect:YES cornerRadius:0. padding:0.];
+    [self.statusBarBackgroundView addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
     _originalStatusBarHeight = self.statusBarBackgroundView.frame.size.height;
 
     [self.titleNavBarView setText:OALocalizedString(@"customize_route_line")];
@@ -503,14 +504,14 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     UIImage *backImage = [UIImage templateImageNamed:@"ic_custom_arrow_back"];
     [self.backButton setImage:isRTL ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                      forState:UIControlStateNormal];
-    self.backButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
-    [self.backButton addBlurEffect:YES cornerRadius:12. padding:0];
+    self.backButton.imageView.tintColor = UIColor.textColorActive;
+    [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
     self.backButton.accessibilityLabel = localizedString(@"shared_string_dismiss");
     backImage = [UIImage templateImageNamed:@"ic_navbar_chevron"];
 
     [self.backNavBarButton setImage:isRTL ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                            forState:UIControlStateNormal];
-    self.backNavBarButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
+    self.backNavBarButton.imageView.tintColor = UIColor.iconColorActive;
     [self.backNavBarButton setAttributedTitle:
                     [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_back")
                                                     attributes:@{ NSFontAttributeName:[UIFont preferredFontForTextStyle:UIFontTextStyleBody] }]
@@ -523,7 +524,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             [self.backNavBarButton.titleLabel.bottomAnchor constraintEqualToAnchor:self.backNavBarButton.bottomAnchor]
     ]];
 
-    [self.applyButton addBlurEffect:YES cornerRadius:12. padding:0.];
+    [self.applyButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0.];
     [self.applyButton setAttributedTitle:
                     [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_apply")
                                                     attributes:@{ NSFontAttributeName:[UIFont scaledBoldSystemFontOfSize:17.] }]
@@ -646,7 +647,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
         OAGPXTableCellData *resetCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"reset",
-                kCellType: [OAValueTableViewCell getCellIdentifier],
+                kCellType: [OARightIconTableViewCell getCellIdentifier],
                 kCellTitle: OALocalizedString(@"reset_to_original"),
                 kCellRightIconName: @"ic_custom_reset"
         }];
@@ -796,10 +797,10 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     if (!isAvailable)
         [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Advanced_Widgets];
     self.applyButton.userInteractionEnabled = isAvailable;
-    [self.applyButton setTitleColor:isAvailable ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)
+    [self.applyButton setTitleColor:isAvailable ? UIColor.textColorActive : UIColor.textColorSecondary
                            forState:UIControlStateNormal];
     self.applyNavBarButton.userInteractionEnabled = isAvailable;
-    [self.applyNavBarButton setTitleColor:isAvailable ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)
+    [self.applyNavBarButton setTitleColor:isAvailable ? UIColor.textColorActive : UIColor.textColorSecondary
                            forState:UIControlStateNormal];
 }
 
@@ -1346,7 +1347,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             cell.delegate = self;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell showLabels:NO];
-            cell.valueLabel.tintColor = UIColorFromRGB(color_text_footer);
+            cell.valueLabel.tintColor = UIColor.textColorSecondary;
         }
         if (cell)
         {
@@ -1391,8 +1392,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             cell = (OAImageTextViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., DeviceScreenWidth, 0., 0.);
-            cell.descView.textColor = UIColorFromRGB(color_text_footer);
-            cell.extraDescView.textColor = UIColorFromRGB(color_text_footer);
+            cell.descView.textColor = UIColor.textColorSecondary;
+            cell.extraDescView.textColor = UIColor.textColorSecondary;
         }
         if (cell)
         {
@@ -1425,7 +1426,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             cell = (OATextLineViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
-            cell.textView.textColor = UIColorFromRGB(color_text_footer);
+            cell.textView.textColor = UIColor.textColorSecondary;
         }
         if (cell)
         {
@@ -1446,8 +1447,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             cell = (OASegmentedControlCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
-            cell.backgroundColor = UIColor.whiteColor;
-            cell.segmentedControl.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.1];
+            cell.backgroundColor = UIColor.groupBgColor;
+            cell.segmentedControl.backgroundColor = [UIColor.iconColorActive colorWithAlphaComponent:.1];
             [cell changeHeight:YES];
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             [cell.segmentedControl setTitleTextAttributes:@{
@@ -1455,11 +1456,11 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                 NSFontAttributeName : font }
                                                  forState:UIControlStateSelected];
             [cell.segmentedControl setTitleTextAttributes:@{
-                NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple),
+                NSForegroundColorAttributeName : UIColor.textColorActive,
                 NSFontAttributeName : font }
                                                  forState:UIControlStateNormal];
 
-            cell.segmentedControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
+            cell.segmentedControl.selectedSegmentTintColor = UIColor.iconColorActive;
         }
         if (cell)
         {
@@ -1516,7 +1517,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentSliderTableViewCell getCellIdentifier]
                                                          owner:self options:nil];
             cell = (OASegmentSliderTableViewCell *) nib[0];
-            cell.topRightLabel.textColor = UIColorFromRGB(color_primary_purple);
+            cell.topRightLabel.textColor = UIColor.textColorActive;
             cell.topRightLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
         }
         if (cell)
@@ -1535,25 +1536,24 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         }
         outCell = cell;
     }
-    else if ([cellData.type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier]
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier]
                                                          owner:self options:nil];
-            cell = (OAValueTableViewCell *) nib[0];
+            cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            [cell valueVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-            cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
+            cell.titleLabel.textColor = UIColor.textColorActive;
         }
         if (cell)
         {
             cell.titleLabel.text = cellData.title;
-            cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:cellData.rightIconName]];
-            [cell.accessoryView setTintColor:UIColorFromRGB(color_primary_purple)];
+            cell.rightIconView.image = [UIImage templateImageNamed:cellData.rightIconName];
+            cell.rightIconView.tintColor = UIColor.iconColorActive;
         }
         outCell = cell;
     }
@@ -1608,7 +1608,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     UIFont *textFont = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
             NSFontAttributeName: textFont,
-            NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)
+            NSForegroundColorAttributeName: UIColor.textColorSecondary
     }];
     vw.label.attributedText = textStr;
     return vw;

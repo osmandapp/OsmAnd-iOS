@@ -44,14 +44,14 @@ class Map3dModeButtonVisibilityViewController: OABaseNavbarViewController {
         if cell == nil {
             let nib = Bundle.main.loadNibNamed(OASimpleTableViewCell.getIdentifier(), owner: self, options: nil)
             cell = nib?.first as? OASimpleTableViewCell
-            cell?.tintColor = UIColor(rgb: Int(color_primary_purple))
+            cell?.tintColor = UIColor.iconColorActive
             cell?.descriptionVisibility(false)
         }
         if let cell = cell {
             let isSelected = compassMode == EOAMap3DModeVisibility(rawValue: (item.obj(forKey: "map_3d_mode") as! NSNumber).intValue)
             cell.titleLabel.text = item.title
             cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-            cell.leftIconView.tintColor = UIColor(rgb: (isSelected ? Int(OAAppSettings.sharedManager()!.applicationMode.get().getIconColor()) : Int(color_tint_gray)))
+            cell.leftIconView.tintColor = isSelected ? UIColor(rgb: Int(OAAppSettings.sharedManager()!.applicationMode.get().getIconColor())) : UIColor.iconColorDisabled
             cell.accessoryType = isSelected ? .checkmark : .none
             cell.accessibilityValue = localizedString(isSelected ? "shared_string_selected" : "shared_string_not_selected")
         }

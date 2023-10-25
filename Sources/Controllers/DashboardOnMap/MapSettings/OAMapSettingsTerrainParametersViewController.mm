@@ -56,7 +56,6 @@ static const NSInteger kMaxZoomPickerRow = 2;
     NSIndexPath *_maxValueIndexPath;
     NSIndexPath *_pickerIndexPath;
     
-    UIView *_footerView;
     UIButton *_applyButton;
     
     BOOL _isValueChange;
@@ -107,15 +106,6 @@ static const NSInteger kMaxZoomPickerRow = 2;
     self.tableView.dataSource = self;
     
     [self setupBottomButton];
-}
-
-- (void)viewWillLayoutSubviews
-{
-    [super viewWillLayoutSubviews];
-    
-    CGFloat btnMargin = MAX(10, [OAUtilities getLeftMargin]);
-    CGFloat yPosition = _footerView.frame.size.height - 44.0;
-    _footerView.subviews[0].frame = CGRectMake(btnMargin, yPosition, _footerView.frame.size.width - btnMargin * 2, 44.0);
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -190,16 +180,22 @@ static const NSInteger kMaxZoomPickerRow = 2;
 
 - (void)setupBottomButton
 {
-    _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, _terrainType == EOATerrainSettingsTypeZoomLevels ? 80.0 : 120.0)];
     _applyButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [_applyButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
     _applyButton.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
     _applyButton.layer.cornerRadius = 10;
-    _applyButton.frame = CGRectMake(10, 0, _footerView.frame.size.width - 20.0, 44.0);
+    _applyButton.translatesAutoresizingMaskIntoConstraints = NO;
     [_applyButton addTarget:self action:@selector(onApplyButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self updateApplyButton];
-    [_footerView addSubview:_applyButton];
-    self.tableView.tableFooterView = _footerView;
+    [self.toolBarView addSubview:_applyButton];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [_applyButton.centerXAnchor constraintEqualToAnchor:self.toolBarView.centerXAnchor],
+        [_applyButton.topAnchor constraintEqualToAnchor:self.toolBarView.topAnchor],
+        [_applyButton.leadingAnchor constraintEqualToAnchor:self.toolBarView.leadingAnchor constant:20.0],
+        [_applyButton.trailingAnchor constraintEqualToAnchor:self.toolBarView.trailingAnchor constant:-20.0],
+        [_applyButton.heightAnchor constraintEqualToConstant:44.0]
+    ]];
 }
 
 - (void)updateApplyButton
@@ -211,12 +207,13 @@ static const NSInteger kMaxZoomPickerRow = 2;
 
 - (CGFloat)initialMenuHeight
 {
-    return ([OAUtilities calculateScreenHeight] / 3.0) + [OAUtilities getBottomMargin];
+    CGFloat divider = _terrainType == EOATerrainSettingsTypeVisibility ? 3.0 : 2.0;
+    return ([OAUtilities calculateScreenHeight] / divider) + [OAUtilities getBottomMargin];
 }
 
 - (CGFloat)getToolbarHeight
 {
-    return 0.;
+    return 50.;
 }
 
 - (BOOL)supportsFullScreen

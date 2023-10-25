@@ -40,6 +40,7 @@
 #import "OAFetchBackgroundDataOperation.h"
 #import "OACloudAccountVerificationViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "OsmAnd_Maps-Swift.h"
 
 #include <QDir>
 #include <QFile>
@@ -121,6 +122,12 @@
             
             // Initialize application in main thread
             [_app initialize];
+            
+            // Configure ThemeManager
+            OAAppSettings *appSettings = [OAAppSettings sharedManager];
+            OAApplicationMode *initialAppMode = [appSettings.useLastApplicationModeByDefault get] ?
+            [OAApplicationMode valueOfStringKey:[appSettings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] : appSettings.defaultApplicationMode.get;
+            [[ThemeManager shared] configureWithAppMode:initialAppMode];
 
             [self askReview];
 

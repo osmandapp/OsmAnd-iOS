@@ -1629,9 +1629,6 @@
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "എല്ലാവർക്കുമായി ഓൺലൈൻ സ്ട്രീറ്റ്-ലെവൽ ഫോട്ടോകൾ. സ്ഥലങ്ങൾ കണ്ടെത്തുക, സഹകരിക്കുക, ലോകം ചിത്രത്തിലാക്കുക.";
 
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"open_place_reviews_plugin_description" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";

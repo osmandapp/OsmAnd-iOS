@@ -301,11 +301,19 @@ extension WidgetGroupListViewController {
                   let widgetInfo = widgetRegistry.getWidgetInfo(for: widgetType).first else {
                 return
             }
-            vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
-            vc.widgetInfo = widgetInfo
-            vc.widgetPanel = widgetPanel
-            vc.createNew = true
-            show(vc)
+            if let enabledWidgets = widgetRegistry.getWidgetsForPanel(OAAppSettings.sharedManager().applicationMode.get(), filterModes: Self.enabledWidgetsFilter, panels: WidgetsPanel.values).array as? [MapWidgetInfo] {
+                let similarAlreadyExist = enabledWidgets.contains { $0.key == widgetInfo.key }
+                let possibleSimilarWidgetArray = [WidgetType.averageSpeed.id]
+                if similarAlreadyExist, possibleSimilarWidgetArray.contains(widgetInfo.key) {
+                    vc.similarAlreadyExist = similarAlreadyExist
+                    vc.widgetKey = widgetInfo.key
+                }
+                vc.selectedAppMode = OAAppSettings.sharedManager().applicationMode.get()
+                vc.widgetInfo = widgetInfo
+                vc.widgetPanel = widgetPanel
+                vc.createNew = true
+                show(vc)
+            }
         }
     }
 }

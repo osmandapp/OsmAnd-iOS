@@ -11,18 +11,18 @@ import Foundation
 @objc(OAMapWidgetsFactory)
 class MapWidgetsFactory: NSObject {
     
-    func createMapWidget(widgetType: WidgetType) -> OABaseWidgetView? {
-        return createMapWidget(customId: nil, widgetType: widgetType)
+    func createMapWidget(widgetType: WidgetType, widgetParams: [String: Any]? = nil) -> OABaseWidgetView? {
+        return createMapWidget(customId: nil, widgetType: widgetType, widgetParams: widgetParams)
     }
     
-    func createMapWidget(customId: String?, widgetType: WidgetType) -> OABaseWidgetView? {
+    func createMapWidget(customId: String?, widgetType: WidgetType, widgetParams: [String: Any]? = nil) -> OABaseWidgetView? {
         if isWidgetCreationAllowed(widgetType: widgetType) {
-            return createMapWidgetImpl(customId: customId, widgetType: widgetType)
+            return createMapWidgetImpl(customId: customId, widgetType: widgetType, widgetParams: widgetParams)
         }
         return nil
     }
     
-    private func createMapWidgetImpl(customId: String?, widgetType: WidgetType) -> OABaseWidgetView? {
+    private func createMapWidgetImpl(customId: String?, widgetType: WidgetType, widgetParams: ([String: Any])? = nil) -> OABaseWidgetView? {
         switch widgetType {
         case .nextTurn:
             return OANextTurnWidget(horisontalMini: false, nextNext: false)
@@ -75,7 +75,12 @@ class MapWidgetsFactory: NSObject {
         case .currentSpeed:
             return OACurrentSpeedWidget()
         case .averageSpeed:
-            return AverageSpeedWidget(customId: customId)
+            if let widgetParams {
+                return AverageSpeedWidget(customId: customId,
+                                          widgetParams: widgetParams)
+            } else {
+                return AverageSpeedWidget(customId: customId)
+            }
         case .maxSpeed:
             return OAMaxSpeedWidget()
         case .altitudeMyLocation:
@@ -105,7 +110,7 @@ class MapWidgetsFactory: NSObject {
     
     private func isWidgetCreationAllowed(widgetType: WidgetType) -> Bool {
         if widgetType == .altitudeMapCenter {
-            let plugin = OAPlugin.getPlugin(OAOsmandDevelopmentPlugin.self) as? OAOsmandDevelopmentPlugin
+            let plugin = OAPlugin.getEnabledPlugin(OASRTMPlugin.self) as? OASRTMPlugin
             return plugin != nil && plugin!.is3DMapsEnabled()
         }
         return true

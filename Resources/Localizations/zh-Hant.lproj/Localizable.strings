@@ -1603,7 +1603,6 @@
 "gpxup_trackable" = "可追蹤的";
 "suggested_maps" = "建議的地圖";
 "app_restart_required" = "需要重新啟動應用程式才能套用某些設定。";
-"open_place_reviews" = "OpenPlaceReviews";
 "shared_string_last_used" = "最後使用";
 "lang_gl" = "加利西亞語";
 "reset_to_original" = "重設為原始設定";
@@ -2231,7 +2230,6 @@
 "weather_plugin_description" = "提供\n- 五個圖層的24小時與7天天氣預報\n- 以位置為基礎的小工具\n- 等溫線/等壓線\n\n天氣資料由全球預報系統 (GFS，https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast) 提供。";
 "m" = "公尺";
 "km" = "公里";
-"open_place_reviews_plugin_description" = "為 OpenPlaceReviews 專案做出貢獻，例如餐廳、旅館或博物館等公共場所的照片、評論或連結。\n\n在我們的網站上找到關於如何貢獻的說明 https://osmand.net/docs/user/plugins/openplacereviews。";
 "kg" = "公斤";
 "lang_zh-Hant" = "繁體中文";
 "shared_string_height" = "高度";

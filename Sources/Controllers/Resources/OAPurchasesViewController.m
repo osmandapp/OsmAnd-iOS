@@ -20,7 +20,7 @@
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
 #import "OASizes.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OALinks.h"
 #import <SafariServices/SafariServices.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -154,7 +154,7 @@ static BOOL _purchasesUpdated;
                 [noPurchasesSection addRowFromDictionary:@{
                     kCellTypeKey : [OALargeImageTitleDescrTableViewCell getCellIdentifier],
                     kCellIconNameKey : @"ic_custom_shop_bag_48",
-                    kCellIconTint : @(color_tint_gray),
+                    kCellIconTintColor : UIColor.iconColorDefault,
                     kCellTitleKey : OALocalizedString(@"no_purchases"),
                     kCellDescrKey : [NSString stringWithFormat:OALocalizedString(@"empty_purchases_description"), OALocalizedString(@"restore_purchases")]
                 }];
@@ -168,7 +168,7 @@ static BOOL _purchasesUpdated;
                     kCellDescrKey : OALocalizedString(@"osm_live_banner_desc"),
                     @"button_title": OALocalizedString(@"shared_string_get"),
                     @"button_icon_name": @"ic_custom_arrow_forward",
-                    @"button_icon_color": @(color_primary_purple)
+                    @"button_icon_color": UIColor.iconColorActive
                 }];
             }
         }
@@ -242,7 +242,7 @@ static BOOL _purchasesUpdated;
                 kCellTitleKey : OALocalizedString(@"explore_osmnad_plans_to_find_suitable"),
                 @"button_title": OALocalizedString(@"shared_string_learn_more"),
                 @"button_icon_name": @"ic_custom_arrow_forward",
-                @"button_icon_color": @(color_primary_purple)
+                @"button_icon_color": UIColor.iconColorActive
             }];
         }
     }
@@ -255,7 +255,7 @@ static BOOL _purchasesUpdated;
         kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"restore_purchases"),
         kCellIconNameKey : @"ic_custom_reset",
-        kCellIconTint : @(color_primary_purple)
+        kCellIconTintColor : UIColor.iconColorActive
     }];
 
     [helpSection addRowFromDictionary:@{
@@ -263,7 +263,7 @@ static BOOL _purchasesUpdated;
         kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"redeem_promo_code"),
         kCellIconNameKey : @"ic_custom_label_sale",
-        kCellIconTint : @(color_primary_purple)
+        kCellIconTintColor : UIColor.iconColorActive
     }];
 
     [helpSection addRowFromDictionary:@{
@@ -271,21 +271,21 @@ static BOOL _purchasesUpdated;
         kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"new_device_account"),
         kCellIconNameKey : @"ic_navbar_help",
-        kCellIconTint : @(color_primary_purple)
+        kCellIconTintColor : UIColor.iconColorActive
     }];
 
     [helpSection addRowFromDictionary:@{
         kCellKeyKey : @"contact_support_description",
         kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey : [NSString stringWithFormat: OALocalizedString(@"contact_support_description"), kSupportEmail],
-        kCellIconTint : @(color_text_footer),
+        kCellIconTintColor : UIColor.textColorSecondary,
     }];
 
     [helpSection addRowFromDictionary:@{
         kCellKeyKey : @"contact_support",
         kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"contact_support"),
-        kCellIconTint : @(color_primary_purple)
+        kCellIconTintColor : UIColor.iconColorActive
     }];
 }
 
@@ -316,7 +316,7 @@ static BOOL _purchasesUpdated;
         }
         if (cell)
         {
-            UIColor *tintColor = UIColorFromRGB(item.iconTint);
+            UIColor *tintColor = item.iconTintColor;
             cell.titleLabel.text = item.title;
             cell.titleLabel.textColor = tintColor;
 
@@ -355,7 +355,7 @@ static BOOL _purchasesUpdated;
 
             NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:[item stringForKey:@"button_title"]];
             [buttonTitle addAttribute:NSForegroundColorAttributeName
-                                value:UIColorFromRGB(color_primary_purple)
+                                value:UIColor.textColorActive
                                 range:NSMakeRange(0, buttonTitle.string.length)];
             [buttonTitle addAttribute:NSFontAttributeName
                                 value:[UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold]
@@ -363,7 +363,7 @@ static BOOL _purchasesUpdated;
             [cell.buttonView setAttributedTitle:buttonTitle forState:UIControlStateNormal];
 
             [cell.buttonView setImage:[UIImage templateImageNamed:[item stringForKey:@"button_icon_name"]] forState:UIControlStateNormal];
-            cell.buttonView.tintColor = UIColorFromRGB([item integerForKey:@"button_icon_color"]);
+            cell.buttonView.tintColor = [item objForKey:@"button_icon_color"];
 
             cell.buttonView.tag = indexPath.section << 10 | indexPath.row;
             [cell.buttonView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -386,7 +386,7 @@ static BOOL _purchasesUpdated;
             cell.titleLabel.text = item.title;
             cell.descriptionLabel.text = item.descr;
             cell.cellImageView.image = [UIImage templateImageNamed:item.iconName];
-            cell.cellImageView.tintColor = UIColorFromRGB(item.iconTint);
+            cell.cellImageView.tintColor = item.iconTintColor;
         }
         outCell = cell;
     }
@@ -416,7 +416,7 @@ static BOOL _purchasesUpdated;
                 paragraphStyle.lineSpacing = 2.;
                 [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attributedString.length)];
                 [attributedString addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote] range:NSMakeRange(0, attributedString.length)];
-                [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:NSMakeRange(0, attributedString.length)];
+                [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.textColorSecondary range:NSMakeRange(0, attributedString.length)];
                 cell.descriptionLabel.text = nil;
                 cell.descriptionLabel.attributedText = attributedString;
             }
@@ -426,7 +426,7 @@ static BOOL _purchasesUpdated;
                 cell.leftIconView.image = [UIImage imageNamed:item.iconName];
                 cell.descriptionLabel.attributedText = nil;
                 cell.descriptionLabel.text = item.descr;
-                cell.descriptionLabel.textColor = UIColorFromRGB(color_text_footer);
+                cell.descriptionLabel.textColor = UIColor.textColorSecondary;
                 cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
             }
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -539,7 +539,7 @@ static BOOL _purchasesUpdated;
         UILabel *loadingLabel = [[UILabel alloc] init];
         loadingLabel.translatesAutoresizingMaskIntoConstraints = NO;
         loadingLabel.text = OALocalizedString(@"loading_purchase_information");
-        loadingLabel.textColor = UIColorFromRGB(color_text_footer);
+        loadingLabel.textColor = UIColor.textColorSecondary;
         loadingLabel.font = labelFont;
         loadingLabel.adjustsFontForContentSizeCategory = YES;
         [loadingContainerView addSubview:loadingLabel];

@@ -636,6 +636,7 @@
     NSArray<OATargetPoint *> *selectedObjects = [self selectObjectsForContextMenu:touchPoint showUnknownLocation:showUnknownLocation];
     if (selectedObjects.count > 0)
     {
+        [OsmAndApp instance].mapMode = OAMapModeFree;
         if (selectedObjects[0].type == OATargetContext)
             [[OARootViewController instance].mapPanel reopenContextMenu];
         else
@@ -643,6 +644,7 @@
     }
     else if (showUnknownLocation)
     {
+        [OsmAndApp instance].mapMode = OAMapModeFree;
         CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
         OATargetPoint *unknownTargetPoint = [self getUnknownTargetPoint:coord.latitude longitude:coord.longitude];
         [[OARootViewController instance].mapPanel showContextMenu:unknownTargetPoint];

@@ -152,15 +152,15 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
     switch (_feature)
     {
         case EOAFeatureCloud:
-            return [UIImage imageNamed:@"ic_custom_cloud_upload_colored_day"];
+            return [UIImage imageNamed:@"ic_custom_cloud_upload_colored"];
         case EOAFeatureAdvancedWidgets:
             return [UIImage imageNamed:@"ic_custom_pro_features_colored"];
         case EOAFeatureHourlyMapUpdates:
-            return [UIImage imageNamed:@"ic_custom_map_updates_colored_day"];
+            return [UIImage imageNamed:@"ic_custom_map_updates_colored"];
         case EOAFeatureCrossBuy:
-            return [UIImage imageNamed:@"ic_custom_cross_buy_colored_day"];
+            return [UIImage imageNamed:@"ic_custom_cross_buy_colored"];
         case EOAFeatureMonthlyMapUpdates:
-            return [UIImage imageNamed:@"ic_custom_monthly_map_updates_colored_day"];
+            return [UIImage imageNamed:@"ic_custom_monthly_map_updates_colored"];
         case EOAFeatureUnlimitedMapDownloads:
         case EOAFeatureRegionAfrica:
         case EOAFeatureRegionRussia:
@@ -170,7 +170,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         case EOAFeatureRegionCentralAmerica:
         case EOAFeatureRegionNorthAmerica:
         case EOAFeatureRegionSouthAmerica:
-            return [UIImage imageNamed:@"ic_custom_unlimited_downloads_colored_day"];
+            return [UIImage imageNamed:@"ic_custom_unlimited_downloads_colored"];
         case EOAFeatureCarPlay:
             return [UIImage imageNamed:@"ic_custom_carplay_colored"];
         case EOAFeatureCombinedWiki:
@@ -178,13 +178,13 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         case EOAFeatureWikipedia:
             return [UIImage imageNamed:@"ic_custom_wikipedia_download_colored"];
         case EOAFeatureWikivoyage:
-            return [UIImage imageNamed:@"ic_custom_backpack_colored_day"];
+            return [UIImage imageNamed:@"ic_custom_backpack_colored"];
         case EOAFeatureRelief3D:
-            return [UIImage imageNamed:@"ic_custom_3d_relief_colored_day"];
+            return [UIImage imageNamed:@"ic_custom_3d_relief_colored"];
         case EOAFeatureTerrain:
             return [UIImage imageNamed:@"ic_custom_contour_lines_colored"];
         case EOAFeatureNautical:
-            return [UIImage imageNamed:@"ic_custom_nautical_depth_colored_day"];
+            return [UIImage imageNamed:@"ic_custom_nautical_depth_colored"];
         case EOAFeatureWeather:
             return [UIImage imageNamed:@"ic_custom_umbrella_colored"];
         default:
@@ -197,15 +197,15 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
     switch (_feature)
     {
         case EOAFeatureCloud:
-            return [UIImage imageNamed:@"ic_custom_cloud_upload_colored_day_big"];
+            return [UIImage imageNamed:@"ic_custom_cloud_upload_colored"];
         case EOAFeatureAdvancedWidgets:
-            return [UIImage imageNamed:@"ic_custom_pro_features_colored_big"];
+            return [UIImage imageNamed:@"ic_custom_pro_features_colored"];
         case EOAFeatureHourlyMapUpdates:
-            return [UIImage imageNamed:@"ic_custom_map_updates_colored_day_big"];
+            return [UIImage imageNamed:@"ic_custom_map_updates_colored"];
         case EOAFeatureCrossBuy:
-            return [UIImage imageNamed:@"ic_custom_cross_buy_colored_day_big"];
+            return [UIImage imageNamed:@"ic_custom_cross_buy_colored"];
         case EOAFeatureMonthlyMapUpdates:
-            return [UIImage imageNamed:@"ic_custom_monthly_map_updates_colored_day_big"];
+            return [UIImage imageNamed:@"ic_custom_monthly_map_updates_colored"];
         case EOAFeatureUnlimitedMapDownloads:
         case EOAFeatureRegionAfrica:
         case EOAFeatureRegionRussia:
@@ -215,23 +215,23 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         case EOAFeatureRegionCentralAmerica:
         case EOAFeatureRegionNorthAmerica:
         case EOAFeatureRegionSouthAmerica:
-            return [UIImage imageNamed:@"ic_custom_unlimited_downloads_colored_day_big"];
+            return [UIImage imageNamed:@"ic_custom_unlimited_downloads_colored"];
         case EOAFeatureCarPlay:
-            return [UIImage imageNamed:@"ic_custom_carplay_colored_big"];
+            return [UIImage imageNamed:@"ic_custom_carplay_colored"];
         case EOAFeatureCombinedWiki:
-            return [UIImage imageNamed:@"ic_custom_wikipedia_download_colored_big"];
+            return [UIImage imageNamed:@"ic_custom_wikipedia_download_colored"];
         case EOAFeatureWikipedia:
-            return [UIImage imageNamed:@"ic_custom_wikipedia_download_colored_big"];
+            return [UIImage imageNamed:@"ic_custom_wikipedia_download_colored"];
         case EOAFeatureWikivoyage:
-            return [UIImage imageNamed:@"ic_custom_backpack_colored_day_big"];
+            return [UIImage imageNamed:@"ic_custom_backpack_colored"];
         case EOAFeatureRelief3D:
-            return [UIImage imageNamed:@"ic_custom_3d_relief_colored_day_big"];
+            return [UIImage imageNamed:@"ic_custom_3d_relief_colored"];
         case EOAFeatureTerrain:
-            return [UIImage imageNamed:@"ic_custom_contour_lines_colored_big"];
+            return [UIImage imageNamed:@"ic_custom_contour_lines_colored"];
         case EOAFeatureNautical:
-            return [UIImage imageNamed:@"ic_custom_nautical_depth_colored_day_big"];
+            return [UIImage imageNamed:@"ic_custom_nautical_depth_colored"];
         case EOAFeatureWeather:
-            return [UIImage imageNamed:@"ic_custom_umbrella_colored_big"];
+            return [UIImage imageNamed:@"ic_custom_umbrella_colored"];
         default:
             return nil;
     }

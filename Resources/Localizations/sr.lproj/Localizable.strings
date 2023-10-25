@@ -1557,9 +1557,6 @@
 "osm_editing_plugin_description" = "Доприносите ОСМ-у, општој заједници која одржава обимну карту света и обезбеђује редовне податке слободним програмима сваком кориснику.\n\nМожете пронаћи упутсвакако уређивати карту на нашим страницама https://osmand.net/docs/user/plugins/osm-editing .";
 "product_desc_mapillary" = "Фотографије на мрежи на нивоу улице за све";
 "plugin_mapillary_descr" = "Мрежне слике улица за све. Откријте места, сарађујте, освојите свет.";
-"open_place_reviews" = "Утисци отворених места (OpenPlaceReviews)";
-"product_desc_openplacereviews" = "Шаљите фотографије, рецензије и везе о јавним местима";
-"open_place_reviews_plugin_description" = "Помозите пројекту ОпенПлацеРевиевс, преко слика, чланака, или веза ка јавним местима као што су гостионе, одмаралишта, музеји.\n\nПронађите упутства како да учествујете на страницама https://osmand.net/docs/user/plugins/openplacereviews .";
 "product_desc_africa" = "Неограничено преузимање мапа за Африку";
 "product_desc_antarctica" = "Неограничено преузимање мапа за Антарктик";
 "product_desc_africa_short" = "Мапе региона Африке";

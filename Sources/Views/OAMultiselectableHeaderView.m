@@ -8,7 +8,7 @@
 
 #import "OAMultiselectableHeaderView.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAUtilities.h"
 
 #define kMargin 16.0
@@ -51,7 +51,7 @@ static UIFont *_btnFont;
     _selectAllBtn.frame = CGRectMake(width - textSize.width - OAUtilities.getLeftMargin - kMargin, 12.0, textSize.width, 30.0);
     [_selectAllBtn setTitle:[OALocalizedString(@"shared_string_select") uppercaseStringWithLocale:[NSLocale currentLocale]] forState:UIControlStateNormal];
     [_selectAllBtn setTitle:[OALocalizedString(@"shared_string_deselect") uppercaseStringWithLocale:[NSLocale currentLocale]] forState:UIControlStateSelected];
-    [_selectAllBtn setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+    [_selectAllBtn setTitleColor:UIColor.textColorActive forState:UIControlStateNormal];
     [_selectAllBtn.titleLabel setFont:_btnFont];
     [_selectAllBtn addTarget:self action:@selector(checkPress:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.selectAllBtn];

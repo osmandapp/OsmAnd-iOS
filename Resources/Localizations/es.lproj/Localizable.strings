@@ -101,7 +101,7 @@
 "sett_units" = "Unidades";
 "sett_km" = "Kilómetros";
 "sett_ml" = "Millas";
-"sett_zoom" = "Botón de zum";
+"sett_zoom" = "Botón de zoom";
 "recording_context_menu_show" = "Mostrar";
 "sett_notshow" = "No mostrar";
 "sett_loc_fmt" = "Formato de ubicación";
@@ -594,7 +594,7 @@
 "general_settings_2" = "Configuración general";
 "general_settings_descr" = "Configura la pantalla y ajustes globales de la aplicación.";
 "routing_settings_descr" = "Indica las opciones de navegación.";
-"auto_zoom_none" = "Sin zum automático";
+"auto_zoom_none" = "Sin zoom automático";
 "auto_zoom_close" = "Para corto alcance";
 "auto_zoom_far" = "Para mediano alcance";
 "auto_zoom_farthest" = "Para largo alcance";
@@ -613,7 +613,7 @@
 "choose_auto_follow_route" = "Centrado automático del mapa";
 "choose_auto_follow_route_descr" = "Tiempo hasta que la vista del mapa vuelve a sincronizarse con la ubicación actual.";
 "auto_zoom_map" = "Zum automático del mapa";
-"auto_zoom_map_descr" = "Nivel de zum según la velocidad (mientras el mapa se sincroniza con la ubicación actual).";
+"auto_zoom_map_descr" = "Nivel de zoom según la velocidad (mientras el mapa se sincroniza con la ubicación actual).";
 "snap_to_road" = "Ajustar al camino";
 "snap_to_road_descr" = "El icono de la ubicación actual será ajustado a la ruta de navegación";
 "show_warnings_title" = "Mostrar alertas…";
@@ -1094,7 +1094,7 @@
 "quick_action_replace_destination" = "Reemplazar destino";
 "add_destination" = "Añadir destino";
 "quick_action_add_first_intermediate" = "Añadir primer destino intermedio";
-"quick_action_auto_zoom" = "Alternar zum automático del mapa";
+"quick_action_auto_zoom" = "Alternar zoom automático del mapa";
 "quick_action_resume_pause_navigation" = "Pausar o reanudar navegación";
 "quick_action_start_stop_navigation" = "Iniciar o parar navegación";
 "toggle_day_night" = "Alternar modos diurno/nocturno";
@@ -1138,7 +1138,7 @@
 "quick_action_add_dest_descr" = "Este botón de acción, añade un destino en el centro de la pantalla. Cualquier destino previamente elegido, se mueve como último destino intermedio.";
 "quick_action_first_intermediate_descr" = "Este botón de acción, añade el primer destino intermedio en el punto central del mapa.";
 "quick_action_replace_dest_descr" = "Este botón de acción, define el destino en el punto central del mapa y se descarta el destino establecido anteriormente (si lo hubiera).";
-"quick_action_autozoom_descr" = "Este botón de acción, alterna el zum automático del mapa de acuerdo a la velocidad.";
+"quick_action_autozoom_descr" = "Este botón de acción, alterna el zoom automático del mapa de acuerdo a la velocidad.";
 "quick_action_start_stop_nav_descr" = "Este botón de acción, inicia o para la navegación.";
 "quick_action_pause_nav_descr" = "Este botón de acción, pausa o reanuda la navegación.";
 "quick_action_toggle_notes_descr" = "Este botón de acción, alterna la vista de notas OSM en línea.";
@@ -1201,7 +1201,7 @@
 "sett_deg360" = "360 grados";
 "online_map" = "Mapa en línea";
 "download_select_map_types" = "Otros mapas";
-"download_depth_countours" = "Curvas de profundidad náuticas";
+"download_depth_countours" = "Isolíneas";
 "show_from_zoom_level" = "La visualización comienza a nivel de zoom";
 "hide_contour_lines" = "Ocultar curvas de nivel";
 "altitude_range" = "Rango de altitud";
@@ -1323,7 +1323,7 @@
 "routing_attr_allow_classic_only_name" = "Permitir sólo rutas clásicas";
 "rendering_value__name" = "Predefinido";
 "rendering_attr_showSurfaceGrade_name" = "Calidad de los caminos";
-"rendering_attr_contourLines_description" = "Mostrar desde el nivel de zum (requiere datos de curvas de nivel):";
+"rendering_attr_contourLines_description" = "Mostrar desde el nivel de zoom (requiere datos de curvas de nivel):";
 "rendering_attr_showLez_description" = "Mostrar zonas de baja emisión en el mapa. No afecta a la navegación.";
 "rendering_attr_appMode_description" = "Optimizar mapa para";
 "rendering_attr_noAdminboundaries_name" = "Fronteras";
@@ -1495,7 +1495,7 @@
 "rendering_value_germanRoadAtlas_name" = "Estilo vial alemán";
 "rendering_value_disabled_name" = "Desactivado";
 "rendering_attr_piste_difficulty_connection_name" = "Conexión";
-"rendering_attr_buildings15zoom_name" = "Edificios en zum 15";
+"rendering_attr_buildings15zoom_name" = "Edificios en zoom 15";
 "rendering_attr_streetLightingNight_name" = "Mostrar solo de noche";
 "map_settings_install_maps" = "Elige los mapas a instalar o actualizar";
 "map_settings_install_more" = "Instalar más...";
@@ -1522,7 +1522,7 @@
 "open_in_browser_wiki" = "Abrir artículo en línea";
 "app_mode_offroad" = "Todo terreno";
 "app_mode_scooter" = "Escúter (motoneta)";
-"shared_string_zoom_levels" = "Niveles de zum";
+"shared_string_zoom_levels" = "Niveles de zoom";
 "online_webpage_warning" = "La página sólo está disponible en línea. ¿Abrirla en el navegador web?";
 "context_menu_points_of_group" = "Todos los puntos del grupo";
 "osmand_parking_warning" = "Advertencia";
@@ -1594,7 +1594,7 @@
 "import_from_files" = "Importar desde archivos";
 "online_sources" = "Repositorios en línea";
 "select_online_source" = "Elegir repositorio";
-"preview_of_selected_zoom_levels" = "Vista previa de los niveles de zum elegidos";
+"preview_of_selected_zoom_levels" = "Vista previa de los niveles de zoom elegidos";
 "download_size" = "Tamaño de descarga";
 "number_of_tiles" = "Número de teselas";
 "move_map_to_select_area" = "Mover el mapa para elegir elárea necesaria.";
@@ -1730,7 +1730,7 @@
 "shared_string_account_add" = "Añadir cuenta";
 "shared_a_z" = "A - Z";
 "settings_item_read_error" = "No se pudo leer desde«%@».";
-"settings_app_theme" = "Aspecto de la aplicación";
+"settings_app_theme" = "Tema de la aplicación";
 "send_anonymous_data" = "Enviar datos anónimos";
 "only_selected_segment_recalc" = "Sólo el segmento marcado será recalculado usando el perfil elegido.";
 "select_application_profile" = "Elegir perfil de la aplicación";
@@ -1738,9 +1738,9 @@
 "route_between_points_add_track_desc" = "Elige un archivo de traza al que se añadirá un nuevo segmento.";
 "route_betw_points_descr" = "Elige cómo conectar los puntos: con una línea recta o calculando una ruta usando uno de los perfiles listados a continuación.";
 "reset_profile_action_descr" = "Restablecer todos los ajustes del perfil a los valores predefinidos de la instalación. Al pulsar en «Restablecer» serán descartados todos los cambios. Esta acción no se puede deshacer.";
-"res_zoom_warning" = "El valor mínimo de zum no puede ser igual o mayor que el valor máximo de zum";
+"res_zoom_warning" = "El valor mínimo de zoom no puede ser igual o mayor que el valor máximo de zum";
 "res_zoom_levels_desc" = "Estos parámetros afectarán a la visualización del mapa cuando se utilice como un tipo de mapa o como superposición/subyacencia.\n\nTipo de mapa: el mapa se limitará a los zums elegidos.\n\nSuperposición/Subyacencia: Niveles de zum en los que las teselas serán visibles. Se producirá un aumento o disminución de la escala por encima o por debajo de los valores definidos.";
-"res_zoom_invalid_value" = "Los valores de zum deben estar en el rango 1 - 22";
+"res_zoom_invalid_value" = "Los valores de zoom deben estar en el rango 1 - 22";
 "res_url_warning" = "La URL no puede estar vacía";
 "res_source_format" = "Formato de fuente";
 "res_online_url_descr" = "Ingresa o copia y pega la URL del repositorio en línea";
@@ -1813,7 +1813,7 @@
 "map_settings_hillshade_description" = "Los mapas de las colinas utilizan tonos oscuros para mostrar laderas, picos y planicies.";
 "map_settings_hide_polygons_desc" = "Esta opción sólo afecta a los mapas vectoriales sin conexión de OsmAnd";
 "map_settings_hide_polygons" = "Ocultar polígonos";
-"map_settings_contour_zoom_level_descr" = "Elige el nivel de zum, desde el cual se mostrarán las curvas de nivel";
+"map_settings_contour_zoom_level_descr" = "Elige el nivel de zoom, desde el cual se mostrarán las curvas de nivel";
 "map_settings_available_srtm_maps_descr" = "Se necesitan mapas adicionales para ver el sombreado en el mapa";
 "map_settings_add_maps_slopes" = "Se necesitan mapas adicionales para ver las Pendientes en el mapa.";
 "map_settings_add_maps_hillshade" = "Se necesitan mapas adicionales para ver los Hillshades (mapas de sombras de laderas) en el mapa.";
@@ -1892,7 +1892,7 @@
 "plan_route_split_before" = "Dividir antes";
 "plan_route_split_after" = "Dividir después";
 "speed_limit_tolerance_descr" = "Margen de tolerancia sobre el límite de velocidad, en el cual recibirás un aviso de voz.";
-"zoom_levels_difference_description" = "Una gran diferencia entre los niveles de zum, puede aumentar el tamaño de los datos descargados.";
+"zoom_levels_difference_description" = "Mucha diferencia entre niveles de zoom, puede aumentar el tamaño de los datos descargados.";
 "simplified_track_description" = "Sólo se guardará la línea de la ruta, los puntos de referencia serán borrados.";
 "simplified_track" = "Traza simplificada";
 "show_terrain" = "Mostrar terreno";
@@ -1984,10 +1984,9 @@
 "shared_string_last_used" = "Último usado";
 "shared_string_feet" = "pies";
 "routes_color_by_type" = "Colorear rutas por…";
-"open_place_reviews" = "OpenPlaceReviews";
 "suggested_maps_descr" = "Estos mapas deben usarse con el complemento.";
 "gpxup_identifiable" = "Identificable";
-"gpxup_trackable" = "Trazable";
+"gpxup_trackable" = "Trazable / Practicable";
 "some_articles_may_not_available_in_lang" = "Es posible que algunos artículos de Wikipedia no estén disponibles en tu idioma.";
 "shared_string_turn_off" = "Apagar";
 "added_profiles_descr" = "Perfiles añadidos por el complemento";
@@ -1999,7 +1998,7 @@
 "gpxup_public" = "Público";
 "plugin_mapillary_descr" = "Imágenes vistas a pie de calle. También puedes contribuir tú mismo. Para ver los datos existentes como una capa de mapa, active \"Imágenes a nivel de calle\" en el menú \"Configurar mapa\".";
 "travel_routes" = "Rutas turísticas";
-"ios_release_4_1" = "• Interacción con trazas completamente rediseñada: un nuevo menú con gráficos, estadísticas, posibilidad de cambiar el aspecto, coloración por velocidad, altura y pendiente, y marcación de trazas en el mapa.\n• Nueva pantalla de búsqueda por coordenadas en diferentes formatos\n• Mejoras de la búsqueda por coordenadas en formato OLC\n• Nuevo menú de fácil manejo para elegir los idiomas en los que se muestran los artículos de Wikipedia en el mapa\n• Se ha añadido la posibilidad de cargar fácilmente los mapas de todas las regiones del país con un par de clics\n• Se han añadido curvas de nivel en pies (es deben descargar archivos adicionales)\n• Se ha añadido la posibilidad de descargar mapas marcando la región o el país deseado en el mapa, así como la adición de un cuadro de diálogo con la sugerencia de cargar un mapa faltante en la región visualizada\n• Nueva apariencia de los botones en el mapa y posibilidad de cambiar el zum del mapa pulsando dos veces y deslizando el dedo.\n• Los ajustes de visibilidad de las rutas se mueven más arriba en la sección «Configurar mapa» y se reorganizan para una mayor flexibilidad\n";
+"ios_release_4_1" = "• Interacción con trazas completamente rediseñada: un nuevo menú con gráficos, estadísticas, posibilidad de cambiar el aspecto, coloración por velocidad, altura y pendiente, y marcación de trazas en el mapa.\n• Nueva pantalla de búsqueda por coordenadas en diferentes formatos\n• Mejoras de la búsqueda por coordenadas en formato OLC\n• Nuevo menú de fácil manejo para elegir los idiomas en los que se muestran los artículos de Wikipedia en el mapa\n• Se ha añadido la posibilidad de cargar fácilmente los mapas de todas las regiones del país con un par de clics\n• Se han añadido curvas de nivel en pies (es deben descargar archivos adicionales)\n• Se ha añadido la posibilidad de descargar mapas marcando la región o el país deseado en el mapa, así como la adición de un cuadro de diálogo con la sugerencia de cargar un mapa faltante en la región visualizada\n• Nueva apariencia de los botones en el mapa y posibilidad de cambiar el zoom del mapa pulsando dos veces y deslizando el dedo.\n• Los ajustes de visibilidad de las rutas se mueven más arriba en la sección «Configurar mapa» y se reorganizan para una mayor flexibilidad\n";
 "lang_pnb" = "Panyabí";
 "lang_pt" = "Portugués";
 "lang_pt_br" = "Portugués (Brasil)";
@@ -2232,7 +2231,6 @@
 "select_profile" = "Elige un perfil";
 "hide_current_location" = "Ocultar coordenadas";
 "cloud_show" = "Mostrar nubes";
-"product_desc_openplacereviews" = "Comparte tus opiniones sobre lugares públicos";
 "shared_string_weather" = "Meteorología";
 "backup_and_restore" = "Copia de seguridad y restauración";
 "approximate_file_size" = "Tamaño aproximado del archivo";
@@ -2338,7 +2336,6 @@
 "weather_wind_enable_descr" = "Permite ver la capa de viento en el mapa.";
 "weather_contours_enable_descr" = "Permite ver la capa de isolíneas en el mapa.";
 "replace_waypoint_confirmation" = "¿Reemplazar el punto de ruta «%@»?";
-"open_place_reviews_plugin_description" = "Haz contribuciones al proyecto OpenPlaceReviews, como fotos, reseñas o enlaces de lugares públicos como restaurantes, hoteles o museos.\n\nEncuentra las instrucciones sobre cómo haber las contribuciones nuestro sitio web https://osmand.net/docs/user/plugins/openplacereviews .";
 "route_line_color_elevation_description" = "La línea de la ruta se coloreará en función del perfil de elevación de la ruta.";
 "parked_at" = "aparcado a las";
 "plugin_popup_weather_title" = "Mostrar el clima";
@@ -2705,7 +2702,7 @@
 "routing_attr_allow_streams_name" = "Permitir arroyos y desagües";
 "rendering_attr_OSMMapperAssistantNote_description" = "Muestra etiquetas con información no obvia sobre algún elemento (note)";
 "rendering_value_omit_name" = "Omitir";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Visualización esquemática de iconos en zums bajos";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Vista esquemática de iconos en zoom bajo";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "No salirse de la pista";
 "rendering_attr_horse_scale_dangerous_name" = "Peligroso";
 "rendering_attr_weatherCloudContours_name" = "Isolíneas de las nubes";
@@ -2734,7 +2731,7 @@
 "routing_attr_avoid_footways_name" = "Evitar aceras";
 "routing_attr_allow_streams_description" = "Permite arroyos y desagües";
 "routing_attr_freeride_policy_only_if_necessary_name" = "Sólo si es necesario";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Iconos en zums bajos";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Iconos en zoom bajo";
 "rendering_attr_showMtbScaleUphill_description" = "Muestrar los senderos según la escala MTB de ascenso.";
 "routing_attr_avoid_fords_description" = "Evitar pasar por vados";
 "routing_attr_freeride_policy_prefer_offpiste_name" = "Preferir salirse de la pista";
@@ -2969,7 +2966,7 @@
 "map_widget_true_bearing" = "Rodamiento real";
 "map_marker_1st" = "Primer marcador del mapa";
 "shared_string_bearing" = "Rodamiento";
-"map_widget_gps_info" = "Información del GPS";
+"map_widget_gps_info" = "Información GPS";
 "developer_widgets" = "Widgets para desarrolladores";
 "navigation_points" = "Puntos de navegación";
 "route_maneuvers_desc" = "Los widgets de navegación se activan durante la navegación para mostrar información como distancia, hora de llegada o de salida, próximos giros, rumbo, nombre de la calle actual, información de carriles, velocidad máxima, alertas de aproximación, PDI, waypoints.";
@@ -3042,3 +3039,5 @@
 "shared_string_discard" = "Descartar";
 "specify_number_of_dir_indicators_desc" = "Especifica el número de indicadores de dirección.";
 "map_marker_interval_dialog_desc" = "Especifica el intervalo de tiempo durante el cual se medirá la velocidad media para calcular la hora estimada de llegada.";
+"ios_release_4_5" = "• Widgets rediseñados: capacidad de cambiar la posición de los widgets, agruparlos por páginas, una lista de widgets para los paneles izquierdo y derecho\n• Pantalla de configuración rediseñada\n• Copia de seguridad gratuita de los favoritos, configuraciones y ediciones de OSM en OsmAnd Cloud\n• Se agregó la escala \"CAI\" para la clasificación de dificultad de las rutas.\n• Módulo \"Líneas de contorno\" renombrado a \"Topografía\", se agregó soporte para el nuevo formato de mapa de terreno\n• Relieve 3D añadido\n• Se agregó autorización OAuth para el módulo de edición de OpenStreetMap.\n• Se agregó un botón separado para cambiar entre los modos 2D y 3D.\n• Cambios en los gestos de inclinación.\n• Se corrigió un error al exportar favoritos que podría provocar la pérdida de datos.\n";
+"shared_string_system_default" = "Predeterminado del sistema";

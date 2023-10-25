@@ -1557,9 +1557,6 @@
 "osm_editing_plugin_description" = "Haz contribuciones en OpenStreetMap, un proyecto de mapeo de dominio público, global, libre, abierto e impulsado por la comunidad.\n\nEn nuestro sitio web, puedes encontrar una guía de como colaborar en el mapa - https://osmand.net/docs/user/plugins/osm-editing .";
 "product_desc_mapillary" = "Vistas a nivel de calle para conocer el entorno";
 "plugin_mapillary_descr" = "Imágenes de vistas a nivel de calle. También puedes contribuir tú mismo. Para ver los datos existentes como una capa en el mapa, activa las «Imágenes a nivel de calle» en el menú «Configurar mapa».";
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Comparte tus opiniones sobre lugares públicos";
-"open_place_reviews_plugin_description" = "Haz contribuciones al proyecto OpenPlaceReviews, como fotos, reseñas o enlaces sobre lugares públicos como restaurantes, hoteles o museos.\n\nEn nuestro sitio web, hay una guía de cómo contribuir - https://osmand.net/docs/user/plugins/openplacereviews .";
 "product_desc_africa" = "Descargas ilimitadas de mapas para África";
 "product_desc_antarctica" = "Descargas ilimitadas de mapas para la Antártida";
 "product_desc_africa_short" = "Mapas regionales de África";
@@ -2595,7 +2592,7 @@
 "cloud_storage_used" = "Utilizado: %@ de %@";
 "recording_delete_confirm" = "¿Borrar este elemento?";
 "shared_string_unavailable" = "No disponible";
-"offline_edition_descr" = "Si se activa la edición sin conexión, los cambios serán guardados localmente primero y serán cargados por solicitud, de lo contrario los cambios serán cargados inmediatamente.";
+"offline_edition_descr" = "Si se activa la edición sin conexión, los cambios serán guardados localmente primero y serán cargados por solicitud, de lo contrario los cambios serán cargados de inmediato.";
 "shared_string_contributions" = "Contribuciones";
 "benefits_for_contributors_primary_descr" = "Los colaboradores activos de OpenStreetMap.org pueden beneficiarse de actualizaciones ilimitadas de los mapas cada hora.";
 "benefits_for_contributors_secondary_descr" = "Accede a OpenStreetMap para comprobar si tienes derecho a actualizaciones mensuales y horarias ilimitadas de los mapas.";
@@ -3052,3 +3049,5 @@
 "shared_string_discard" = "Descartar";
 "specify_number_of_dir_indicators_desc" = "Define el número de indicadores de dirección.";
 "map_marker_interval_dialog_desc" = "Indica el intervalo de tiempo a medir con la velocidad media para calcular la hora de llegada estimada.";
+"ios_release_4_5" = "• Rediseño completo con la interfaz de widget: ahora se permite cambiar la ubicación de los widget, agrupar por páginas, y una lista de widget para el panel izquierdo y derecho\n• Se ha rediseñado el menú «Configurar pantalla»\n• OsmAnd Cloud: respaldo gratuito de favoritos, ajustes y ediciones de OSM\n• Se ha añadido la escala «CAI» en «Clasificación de dificultad de rutas»\n• Se ha renombrado el complemento «Curvas de nivel» como «Topografía», se admite el nuevo formato del mapa topografico\n• Se ha añadido relieve 3D\n• Se ha añadido la autorización «OAuth» para el complemento «Edición de OpenStreetMap»\n• Se ha añadido un botón separado para alternar entre el modo 2D y 3D\n• Se ha cambiado la dirección del gesto de inclinación\n• Se ha corregido el problema con la exportación de favoritos, que provocaba pérdida de datos\n";
+"shared_string_system_default" = "Predefinido del sistema";

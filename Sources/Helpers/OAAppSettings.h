@@ -18,6 +18,7 @@
 #define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"
 
 #define settingAppModeKey @"settingAppModeKey"
+#define appearanceProfileThemeKey @"appearanceProfileThemeKey"
 
 #define mapDensityKey @"mapDensity"
 #define textSizeKey @"textSize"
@@ -73,8 +74,8 @@ typedef NS_ENUM(NSInteger, EOAMap3DModeVisibility)
 
 typedef NS_ENUM(NSInteger, EOASunriseSunsetMode)
 {
-    EOASunriseSunsetTimeLeft = 0,
-    EOASunriseSunsetNext
+    EOASunriseSunsetNext = 0,
+    EOASunriseSunsetTimeLeft = 1
 };
 
 typedef NS_ENUM(NSInteger, EOARouteService)
@@ -735,6 +736,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 
 @property (nonatomic) OACommonInteger *appearanceMode; // 0 - Day; 1 - Night; 2 - Auto
+@property (nonatomic) OACommonInteger *appearanceProfileTheme; // 0 - System; 1 - Light; 2 - Dark
 @property (nonatomic) OACommonDouble *mapManuallyRotatingAngle;
 @property (readonly, nonatomic) BOOL nightMode;
 @property (nonatomic) OACommonMetricSystem *metricSystem;

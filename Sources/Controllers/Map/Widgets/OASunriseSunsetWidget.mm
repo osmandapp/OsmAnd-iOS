@@ -116,14 +116,22 @@
 - (NSArray<OATableRowData *> *) getPossibleValues
 {
     NSMutableArray<OATableRowData *> *res = [NSMutableArray array];
-    for (NSInteger i = EOASunriseSunsetTimeLeft; i <= EOASunriseSunsetNext; i++) {
-        OATableRowData *row = [[OATableRowData alloc] init];
-        row.cellType = OASimpleTableViewCell.getCellIdentifier;
-        [row setObj:@(i) forKey:@"value"];
-        row.title = [self.class getTitle:(EOASunriseSunsetMode) i isSunrise:_state.isSunriseMode];
-        row.descr = [self.class getDescription:(EOASunriseSunsetMode) i isSunrise:_state.isSunriseMode];
-        [res addObject:row];
-    }
+    BOOL isSunriseMode = _state.isSunriseMode;
+
+    OATableRowData *row = [[OATableRowData alloc] init];
+    row.cellType = OASimpleTableViewCell.getCellIdentifier;
+    [row setObj:@(EOASunriseSunsetTimeLeft) forKey:@"value"];
+    row.title = [self.class getTitle:EOASunriseSunsetTimeLeft isSunrise:isSunriseMode];
+    row.descr = [self.class getDescription:EOASunriseSunsetTimeLeft isSunrise:isSunriseMode];
+    [res addObject:row];
+
+    row = [[OATableRowData alloc] init];
+    row.cellType = OASimpleTableViewCell.getCellIdentifier;
+    [row setObj:@(EOASunriseSunsetNext) forKey:@"value"];
+    row.title = [self.class getTitle:EOASunriseSunsetNext isSunrise:isSunriseMode];
+    row.descr = [self.class getDescription:EOASunriseSunsetNext isSunrise:isSunriseMode];
+    [res addObject:row];
+
     return res;
 }
 

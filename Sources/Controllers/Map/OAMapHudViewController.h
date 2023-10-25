@@ -77,7 +77,6 @@
 @property (nonatomic) OAWeatherToolbar *weatherToolbar;
 
 @property (nonatomic, assign) BOOL contextMenuMode;
-@property (nonatomic, assign) EOAMapModeButtonType mapModeButtonType;
 
 - (void) enterContextMenuMode;
 - (void) restoreFromContextMenuMode;

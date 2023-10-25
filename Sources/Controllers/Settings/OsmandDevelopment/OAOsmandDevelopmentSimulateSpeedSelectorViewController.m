@@ -9,7 +9,6 @@
 #import "OAOsmandDevelopmentSimulateSpeedSelectorViewController.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
-#import "OAColors.h"
 #import "OAOpenAddTrackViewController.h"
 
 @implementation OASimulateNavigationSpeed
@@ -98,7 +97,6 @@ NSString *const kUICellKey = @"kUICellKey";
 {
     [super viewDidLoad];
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
-    self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
 }
 
 - (void) viewWillAppear:(BOOL)animated

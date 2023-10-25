@@ -397,7 +397,7 @@
         _btnClose.opaque = YES;
         _btnClose.tintColor = UIColorFromRGB(0x5081a6);
         [_btnClose setTitle:@"" forState:UIControlStateNormal];
-        [_btnClose setImage:[UIImage imageNamed:@"ic_arrow_open"] forState:UIControlStateNormal];
+        [_btnClose setImage:[UIImage imageNamed:@"ic_navbar_list"] forState:UIControlStateNormal];
         [_btnClose addTarget:self action:@selector(openDestinationViewController:) forControlEvents:UIControlEventTouchUpInside];
         
         [_contentView addSubview:self.btnClose];

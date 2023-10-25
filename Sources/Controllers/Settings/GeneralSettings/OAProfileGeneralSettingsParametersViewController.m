@@ -11,12 +11,11 @@
 #import "OAAppSettings.h"
 #import "OAFileNameTranslationHelper.h"
 #import "OAMapViewTrackingUtilities.h"
-#import "OATitleDescriptionCollapsableCell.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OASimpleTableViewCell.h"
-
+#import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "OAColors.h"
 
@@ -85,6 +84,9 @@
         case EOAProfileGeneralSettingsExternalInputDevices:
             _title = OALocalizedString(@"external_input_device");
             break;
+        case EOAProfileGeneralSettingsAppTheme:
+            _title = OALocalizedString(@"settings_app_theme");
+            break;
         default:
             break;
     }
@@ -99,11 +101,13 @@
 
 - (NSString *)getSubtitle
 {
-    return _settingsType == EOAProfileGeneralSettingsMapOrientation && _openFromMap ? @"" : [self.appMode toHumanString];
+    return (_settingsType == EOAProfileGeneralSettingsMapOrientation && _openFromMap) || _settingsType == EOAProfileGeneralSettingsAppTheme ? @"" : [self.appMode toHumanString];
 }
 
 - (BOOL)isNavbarSeparatorVisible
 {
+    if (_settingsType == EOAProfileGeneralSettingsAppTheme)
+        return NO;
     return !_openFromMap;
 }
 
@@ -114,7 +118,12 @@
 
 - (NSString *)getLeftNavbarButtonTitle
 {
-    return _openFromMap ? OALocalizedString(@"shared_string_close") : nil;
+    if (_openFromMap)
+        return OALocalizedString(@"shared_string_close");
+    else if (_settingsType == EOAProfileGeneralSettingsAppTheme)
+        return OALocalizedString(@"shared_string_cancel");
+    else
+        return nil;
 }
 
 #pragma mark - Table data
@@ -123,6 +132,7 @@
 {
     NSMutableArray *dataArr = [NSMutableArray array];
     NSInteger rotateMap = [_settings.rotateMap get:self.appMode];
+    Theme appTheme = [_settings.appearanceProfileTheme get:self.appMode];
     EOAPositionPlacement positionMap = [_settings.positionPlacementOnMap get:self.appMode];
     BOOL automatic = [_settings.drivingRegionAutomatic get:self.appMode];
     NSInteger drivingRegion = [_settings.drivingRegion get:self.appMode];
@@ -134,6 +144,30 @@
     EOAAngularConstant angularUnits = [_settings.angularUnits get:self.appMode];
     
     switch (_settingsType) {
+        case EOAProfileGeneralSettingsAppTheme:
+            [dataArr addObject:@{
+                @"name" : @"light",
+                @"title" : OALocalizedString(@"shared_string_light"),
+                @"selected" : @(appTheme == ThemeLight),
+                @"icon" : @"ic_checkmark_default",
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+            }];
+            [dataArr addObject:@{
+                @"name" : @"dark",
+                @"title" : OALocalizedString(@"shared_string_dark"),
+                @"selected" : @(appTheme == ThemeDark),
+                @"icon" : @"ic_checkmark_default",
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+            }];
+            [dataArr addObject:@{
+               @"name" : @"system",
+               @"title" : OALocalizedString(@"shared_string_system_default"),
+               @"selected" : @(appTheme == ThemeSystem),
+               @"icon" : @"ic_checkmark_default",
+               @"type" : [OASimpleTableViewCell getCellIdentifier],
+            }];
+            break;
+            
         case EOAProfileGeneralSettingsMapOrientation:
             [dataArr addObject:@{
                 @"name" : @"none",
@@ -197,7 +231,7 @@
                 @"description" : OALocalizedString(@"device_settings"),
                 @"value" : @"",
                 @"selected" : @(automatic),
-                @"type" : [OATitleDescriptionCollapsableCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"DR_EUROPE_ASIA",
@@ -205,7 +239,7 @@
                 @"description" : [OADrivingRegion getDescription:DR_EUROPE_ASIA],
                 @"value" : @"",
                 @"selected" : @(drivingRegion == DR_EUROPE_ASIA),
-                @"type" : [OATitleDescriptionCollapsableCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"DR_US",
@@ -213,35 +247,35 @@
                 @"description" : [OADrivingRegion getDescription:DR_US],
                 @"value" : @"",
                 @"selected" : @(drivingRegion == DR_US),
-                @"type" : [OATitleDescriptionCollapsableCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"DR_CANADA",
                 @"title" : [OADrivingRegion getName:DR_CANADA],
                 @"description" : [OADrivingRegion getDescription:DR_CANADA],
                 @"selected" : @(drivingRegion == DR_CANADA),
-                @"type" : [OATitleDescriptionCollapsableCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"DR_UK_AND_OTHERS",
                 @"title" : [OADrivingRegion getName:DR_UK_AND_OTHERS],
                 @"description" : [OADrivingRegion getDescription:DR_UK_AND_OTHERS],
                 @"selected" : @(drivingRegion == DR_UK_AND_OTHERS),
-                @"type" : [OATitleDescriptionCollapsableCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"DR_JAPAN",
                 @"title" : [OADrivingRegion getName:DR_JAPAN],
                 @"description" : [OADrivingRegion getDescription:DR_JAPAN],
                 @"selected" : @(drivingRegion == DR_JAPAN),
-                @"type" : [OATitleDescriptionCollapsableCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"DR_AUSTRALIA",
                 @"title" : [OADrivingRegion getName:DR_AUSTRALIA],
                 @"description" : [OADrivingRegion getDescription:DR_AUSTRALIA],
                 @"selected" : @(drivingRegion == DR_AUSTRALIA),
-                @"type" : [OATitleDescriptionCollapsableCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             break;
             
@@ -385,24 +419,7 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OATitleDescriptionCollapsableCell getCellIdentifier]])
-    {
-        OATitleDescriptionCollapsableCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OATitleDescriptionCollapsableCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleDescriptionCollapsableCell getCellIdentifier] owner:self options:nil];
-            cell = (OATitleDescriptionCollapsableCell *)[nib objectAtIndex:0];
-            [cell.iconView setHidden:YES];
-        }
-        if (cell)
-        {
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = item[@"description"];
-            if ([item[@"selected"] boolValue])
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        }
-        return cell;
-    }
+    
     if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
         OASimpleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
@@ -410,24 +427,29 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
-            [cell descriptionVisibility:NO];
+            if (!item[@"description"])
+                [cell descriptionVisibility:NO];
             if (!item[@"icon"])
                 [cell leftIconVisibility:NO];
         }
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            if (_settingsType != EOAProfileGeneralSettingsMapOrientation)
+            cell.descriptionLabel.text = item[@"description"];
+            if (_settingsType == EOAProfileGeneralSettingsAppTheme)
+            {
+                cell.leftIconView.image = [item[@"selected"] boolValue] ? [UIImage templateImageNamed:item[@"icon"]] : nil;
+            }
+            else if (_settingsType != EOAProfileGeneralSettingsMapOrientation)
             {
                 cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-                cell.leftIconView.tintColor = [item[@"selected"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+                cell.leftIconView.tintColor = [item[@"selected"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColor.iconColorDisabled;
             }
             else
             {
                 cell.leftIconView.image = [UIImage imageNamed:item[@"icon"]];
             }
-            if ([item[@"selected"] boolValue])
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            cell.accessoryType = [item[@"selected"] boolValue] && _settingsType != EOAProfileGeneralSettingsAppTheme ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         return cell;
     }
@@ -449,6 +471,9 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *name = item[@"name"];
     switch (_settingsType) {
+        case EOAProfileGeneralSettingsAppTheme:
+            [self selectAppThemeMode:name];
+            break;
         case EOAProfileGeneralSettingsMapOrientation:
             [self selectMapOrientation:name];
             break;
@@ -494,6 +519,20 @@
     
     [[OAMapViewTrackingUtilities instance] updateSettings];
     [OARootViewController.instance.mapPanel.mapViewController refreshMap];
+}
+
+- (void) selectAppThemeMode:(NSString *)name
+{
+    Theme currentTheme = [_settings.appearanceProfileTheme get:self.appMode];
+    
+    if ([name isEqualToString:@"light"])
+        currentTheme = ThemeLight;
+    else if ([name isEqualToString:@"dark"])
+        currentTheme = ThemeDark;
+    else
+        currentTheme = ThemeSystem;
+    
+    [[ThemeManager shared] apply:currentTheme appMode:self.appMode withNotification:NO];
 }
 
 - (void) selectDisplayPosition:(int)idx

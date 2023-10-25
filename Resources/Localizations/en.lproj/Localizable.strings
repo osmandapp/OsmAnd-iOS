@@ -244,6 +244,7 @@
 
 "shared_string_dark" = "Dark";
 "shared_string_light" = "Light";
+"shared_string_system_default" = "System default";
 "shared_string_page_number" = "Page %d";
 "compass_on_circles" = "Compass on circles";
 "add_widget" = "Add widget";
@@ -1002,7 +1003,7 @@
 
 "screen_settings_weather_toolbar" = "Weather toolbar";
 
-"settings_app_theme" = "Application theme";
+"settings_app_theme" = "App theme";
 "do_not_rotate" = "Do not rotate";
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Units of speed";
@@ -1526,6 +1527,7 @@
 "exit_without_saving" = "Exit without saving?";
 "unsaved_changes_will_be_lost" = "Any unsaved changes will be lost. Continue?";
 "osm_upload_no_internet" = "Please check your Internet connection and try again.";
+"upload_poi" = "Upload POI";
 "osm_delete_confirmation_descr" = "Are you sure you want to delete this POI?";
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "Failed";
@@ -1975,10 +1977,6 @@
 "osm_editing_plugin_description" = "Make contributions to OpenStreetMap, a global community maintaining a comprehensive map of the world and providing up-to date open-source data to every user. \n\nYou can find instructions on how to edit the map on our website https://osmand.net/docs/user/plugins/osm-editing .";
 "product_desc_mapillary" = "Street-level views to check out the surroundings";
 "plugin_mapillary_descr" = "Imagery of street-level views. You can also contribute yourself. To see the existing data as a map layer, turn on \"Street-level imagery\" in the \"Configure map\" menu.";
-
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Share your opinion about public places";
-"open_place_reviews_plugin_description" = "Make contributions to the OpenPlaceReviews project, like photos, reviews, or links for public places such as restaurants, hotels, or museums. \n\nFind instructions on how to contribute on our website https://osmand.net/docs/user/plugins/openplacereviews .";
 
 "debugging_and_development" = "OsmAnd development";
 "product_desc_development" = "For developers and experienced users";
@@ -3202,6 +3200,17 @@
 • Map orientation: added manually rotated mode\n
 • New Moped profile\n
 • Minimum iOS version is increased to 15.0\n";
+
+"ios_release_4_5" = "• Completely redesigned widget experience: added ability to change widget position, added grouping by pages, one list of widgets for left and right panel\n
+• Redesigned configure screen\n
+• Free backup of favourites, settings and OSM edits to OsmAnd Cloud\n
+• Added \"CAI\" scale for \"Difficulty classification of the routes\"\n
+• \"Contour lines plugin\" renamed to \"Topography\", added support for the new terrain map format\n
+• Added 3D Relief\n
+• Added OAuth authorization for OpenStreetMap Editing plugin\n
+• Added separate button to switch between 2D or 3D Mode\n
+• Changed direction of tilt gesture\n
+• Fixed issue with favorites export, that could lead to data loss\n";
 
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Don\'t hide waterway tunnels";

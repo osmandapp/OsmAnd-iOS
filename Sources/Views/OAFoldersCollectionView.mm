@@ -10,7 +10,7 @@
 #import "OAFoldersCollectionViewCell.h"
 #import "OACollectionViewCellState.h"
 #import "OACollectionViewFlowLayout.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kCellHeight 36
 #define kImageWidth 38
@@ -229,15 +229,15 @@
         [destCell showImage:hasIcon];
         [destCell.imageView setImage:hasIcon ? [UIImage templateImageNamed:item[@"img"]] : nil];
 
-        UIColor *backgroundColor = UIColorFromARGB(color_primary_purple_10);
+        UIColor *backgroundColor = UIColor.buttonBgColorTertiary;
         BOOL selected = [item.allKeys containsObject:@"selected"]
                 ? [item[@"selected"] boolValue]
                 : indexPath.row == _selectionIndex;
         if (selected)
         {
-            backgroundColor = UIColorFromRGB(color_primary_purple);
-            destCell.titleLabel.textColor = UIColor.whiteColor;
-            destCell.imageView.tintColor = UIColor.whiteColor;
+            backgroundColor = UIColor.buttonBgColorPrimary;
+            destCell.titleLabel.textColor = UIColor.buttonTextColorPrimary;
+            destCell.imageView.tintColor = UIColor.buttonTextColorPrimary;
             destCell.layer.borderWidth = 0.;
             destCell.layer.borderColor = UIColor.clearColor.CGColor;
         }
@@ -246,14 +246,14 @@
             if (available && !enabled)
                 backgroundColor = UIColor.clearColor;
             else if (!available && enabled)
-                backgroundColor = UIColorFromRGB(color_button_gray_background);
+                backgroundColor = UIColor.buttonBgColorSecondary;
 
             destCell.titleLabel.textColor = available
-                    ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
+                    ? UIColor.buttonTextColorSecondary : UIColor.textColorSecondary;
             destCell.imageView.tintColor = available
-                    ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
+                    ? UIColor.buttonTextColorSecondary : UIColor.textColorSecondary;
             destCell.layer.borderWidth = enabled ? 0. : 1.;
-            destCell.layer.borderColor = enabled ? UIColor.clearColor.CGColor : UIColorFromRGB(color_tint_gray).CGColor;
+            destCell.layer.borderColor = enabled ? UIColor.clearColor.CGColor : UIColor.buttonBgColorSecondary.CGColor;
         }
 
         [cell setBackgroundColor:backgroundColor];
@@ -278,7 +278,7 @@
                               delay:0
                             options:(UIViewAnimationOptionAllowUserInteraction)
                          animations:^{
-                             [cell setBackgroundColor:UIColorFromRGB(color_tint_gray)];
+                             [cell setBackgroundColor:UIColor.buttonBgColorSecondary];
                          }
                          completion:nil];
     }
@@ -296,8 +296,8 @@
                             options:(UIViewAnimationOptionAllowUserInteraction)
                          animations:^{
                              [cell setBackgroundColor:indexPath.row == _selectionIndex
-                                     ? UIColorFromRGB(color_primary_purple)
-                                     : UIColorFromARGB(color_primary_purple_10)];
+                                     ? UIColor.buttonBgColorPrimary
+                                     : UIColor.buttonBgColorTertiary];
                          }
                          completion:nil];
     }

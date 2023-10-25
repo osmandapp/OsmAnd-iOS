@@ -7,7 +7,7 @@
 //
 
 #import "OABaseBottomSheetViewController.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kOABottomSheetWidth 320.0
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
@@ -91,7 +91,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     
     _sliderView.layer.cornerRadius = 2.;
     
-    [self.bottomSheetView.layer setShadowColor:[UIColor blackColor].CGColor];
+    [self.bottomSheetView.layer setShadowColor:[UIColor textColorPrimary].CGColor];
     [self.bottomSheetView.layer setShadowOpacity:0.3];
     [self.bottomSheetView.layer setShadowRadius:3.0];
     [self.bottomSheetView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
@@ -107,7 +107,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     self.rightButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 
     [self.closeButton setImage:[UIImage templateImageNamed:@"ic_custom_close"] forState:UIControlStateNormal];
-    self.closeButton.tintColor = UIColorFromRGB(color_primary_purple);
+    self.closeButton.tintColor = UIColor.iconColorActive;
     
     _currentState = EOAScrollableMenuStateInitial;
     _isFullScreenAvailable = YES;
@@ -224,7 +224,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (UIColor *)getBackgroundColor
 {
-    return [UIColor.blackColor colorWithAlphaComponent:0.2];
+    return [UIColor.textColorPrimary colorWithAlphaComponent:0.2];
 }
 
 - (void) show:(BOOL)animated

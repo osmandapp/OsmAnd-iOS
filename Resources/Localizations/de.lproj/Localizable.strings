@@ -2,8 +2,8 @@
 // Shared Strings
 "shared_string_back" = "Zurück";
 "shared_string_cancel" = "Abbrechen";
-"shared_string_no" = "nein";
-"shared_string_yes" = "ja";
+"shared_string_no" = "Nein";
+"shared_string_yes" = "Ja";
 "shared_string_save" = "Speichern";
 "shared_string_done" = "Fertig";
 "shared_string_update" = "Aktualisieren";
@@ -828,7 +828,7 @@
 "update_now" = "Jetzt aktualisieren";
 "product_desc_sea_depth_contours" = "Meeresbodenkonturlinien und Seezeichen";
 "free_version_message" = "%@ Karten zum Herunterladen oder Aktualisieren.";
-"get_osmand_live" = "Holen Sie sich OsmAnd Live, um alle Funktionen freizuschalten: Tägliche Karten-Updates mit unbegrenzten Downloads, alle kostenpflichtigen und kostenlosen Plugins, Wikipedia, Wikivoyage und vieles mehr.";
+"get_osmand_live" = "Holen Sie sich OsmAnd Live, um alle Funktionen freizuschalten: tägliche Karten-Updates mit unbegrenzten Downloads, alle kostenpflichtigen und kostenlosen Plugins, Wikipedia, Wikivoyage und vieles mehr.";
 "osm_live_subscription" = "OsmAnd-Live-Abonnement";
 "wikivoyage_offline" = "Wikivoyage offline";
 "unlimited_downloads" = "Unbegrenzte Downloads";
@@ -1607,7 +1607,7 @@
 "avoid_transport_type" = "Transportarten vermeiden";
 "allow_3d_descr" = "Aktivieren Sie diese Option, um die Karte in der 2.5D-Perspektive betrachten zu können";
 "allow_3d" = "2½D-Ansicht zulassen";
-"map_settings_zoom_level_description" = "Legen Sie die minimale und maximale Zoomstufe für die Anzeige der Ebene fest";
+"map_settings_zoom_level_description" = "Lege die minimalen und maximalen Zoomstufen fest, auf denen die Ebene angezeigt wird";
 "map_settings_layer_transparency" = "Transparenz der Ebene";
 "shared_string_terrain" = "Gelände";
 "arrows_direction_to_markers" = "Pfeile zeigen die Richtung zur aktiven Markierung an, wenn sie sich außerhalb des Bildschirms befindet. Richtungslinien zeichnen eine Linie zu aktiven Markierungen.";
@@ -1628,13 +1628,13 @@
 "help_travel" = "Reisen (Wikipedia & Wikivoyage)";
 "subscription_osmandlive_item" = "Abonnement - OsmAnd Live";
 "osmand_purchases_item" = "OsmAnd-Einkäufe";
-"enable_hillshade" = "Aktivieren zum Anzeigen von Geländedaten";
+"enable_hillshade" = "Aktiviere die Anzeige von Geländedaten aus der Höhenschatten- oder Hangneigungskarte.";
 "hide_terrain" = "Gelände ausblenden";
 "show_terrain" = "Gelände anzeigen";
 "shared_string_legend" = "Legende";
-"map_settings_add_maps_slopes" = "Zusätzliche Karten sind erforderlich, um Hangneigungen auf der Karte anzuzeigen";
-"map_settings_add_maps_hillshade" = "Zusätzliche Karten sind erforderlich, um das Relief auf der Karte anzuzeigen";
-"map_settings_hillshade_description" = "Reliefkarten stellen Hangneigungen, Gipfel und Flachland in verschiedenen Graustufen dar";
+"map_settings_add_maps_slopes" = "Zusätzliche Karten sind erforderlich, um Hangneigungen auf der Karte anzuzeigen.";
+"map_settings_add_maps_hillshade" = "Zusätzliche Karten sind erforderlich, um Höhenschattierungen auf der Karte anzuzeigen.";
+"map_settings_hillshade_description" = "Reliefkarte, die dunkle Schattierungen verwendet, um Hänge, Gipfel und Niederungen anzuzeigen.";
 "map_settings_slopes_description" = "Gefälle ist eine farbige Visualisierung des Geländes.";
 "map_settings_slopes_legend" = "Sie können mehr über Hangneigungen auf Wikipedia lesen";
 "routing_profile_direct_to" = "Auf direktem Weg";
@@ -1720,7 +1720,7 @@
 "default_profile_descr" = "Wählen Sie ein Profil, das beim Start der Anwendung verwendet wird.";
 "shared_string_tones" = "Tonnen";
 "plugin_settings_descr" = "Erweiterungsmodul-Einstellungen für das ausgewählte Profil.";
-"settings_app_theme" = "Thema der Anwendung";
+"settings_app_theme" = "App-Thema";
 "instructions_repeat" = "Tippen Sie auf das Widget \"Nächste Richtungsangabe\", um Anweisungen zu wiederholen";
 "default_speed_dialog_msg" = "Schätzt die Ankunftszeit für unbekannte Straßentypen und begrenzt die Geschwindigkeit für alle Straßen (kann die Navigation beeinflussen)";
 "vessel_width_limit_description" = "Stellen Sie die Schiffsbreite ein, um schmale Brücken zu vermeiden";
@@ -1918,7 +1918,7 @@
 "tracks_on_map" = "Angezeigte Tracks";
 "shared_string_visible" = "Sichtbar";
 "searching" = "Suche…";
-"shared_string_loading" = "Lade…";
+"shared_string_loading" = "Wird geladen…";
 "poi_categories" = "POI Kategorien";
 "route_calc_progress" = "Berechne: %d%%";
 "carplay_active_message" = "Karte wird über CarPlay angezeigt";
@@ -1976,7 +1976,7 @@
 "searching_gps" = "Suche GPS";
 
 // Coordinate widget
-"coordinates_widget_current_location" = "Koordinaten-Widget";
+"coordinates_widget_current_location" = "Koordinaten: aktueller Standort";
 "coordinates" = "Koordinaten";
 "shared_string_gpx_points" = "Punkte";
 "download_regular_maps" = "Standardkarte";
@@ -2044,11 +2044,8 @@
 "product_desc_mapillary" = "Bilder auf Straßenebene, um die Umgebung zu erkunden";
 "shared_string_turn_off" = "Ausschalten";
 "suggested_maps_descr" = "Diese Karten werden für das Plugin benötigt.";
-"open_place_reviews_plugin_description" = "Tragen Sie zum OpenPlaceReviews-Projekt bei, z. B. mit Fotos, Bewertungen oder Links für öffentliche Orte wie Restaurants, Hotels oder Museen.\n\nAuf unserer Website https://osmand.net/docs/user/plugins/openplacereviews finden Sie Anweisungen, wie Sie einen Beitrag leisten können.";
 "plugin_mapillary_descr" = "Bildmaterial von Straßenansichten. Sie können auch selbst einen Beitrag leisten. Um die vorhandenen Daten als Kartenebene zu sehen, aktivieren Sie \"Straßenbilder\" im Menü \"Karte konfigurieren\".";
 "suggested_maps" = "Vorgeschlagene Karten";
-"product_desc_openplacereviews" = "Teilen Sie Ihre Meinung zu öffentlichen Orten";
-"open_place_reviews" = "OpenPlaceReviews";
 "welmode_download_maps" = "Kartenverwaltung";
 "shared_strings_all_regions" = "Alle Regionen";
 "srtm_download_single_help_message" = "Bitte Variante auswählen. Sie müssen die Datei erneut herunterladen, um das Format zu ändern.";
@@ -2411,7 +2408,7 @@
 "weather_contours_enable_descr" = "Zeige Ebene mit isobaren Linien auf der Karte.";
 "copy_poi_name" = "POI-Namen kopieren";
 "routeInfo_horse_scale_name" = "Schwierigkeitsgrad von Reitwegen";
-"routeInfo_horse_scale_description" = "Zeige Reitwege abhängig vom Schwierigkeitsgrad an";
+"routeInfo_horse_scale_description" = "Reitwege nach ihrem Schwierigkeitsgrad darstellen";
 "routing_attr_allow_private_for_truck_name" = "Privaten Zugang erlauben (Lkw)";
 "routing_attr_allow_private_for_truck_description" = "Zufahrt zu Privatgrundstücken für Lkw erlauben.";
 "copy_address" = "Adresse kopieren";
@@ -2695,7 +2692,7 @@
 "checking_progress" = "Prüfung…";
 "cloud_conflict_descr" = "Die lokale und die Cloud-Version enthalten Änderungen seit der letzten Synchronisierung.";
 "local_changes_will_be_dismissed" = "LokaleÄnderungen werden verworfen";
-"download_heightmap_maps" = "Geländekarte";
+"download_heightmap_maps" = "Geländekarte (3D)";
 "use_heightmap_setting" = "3D-Reliefhöhenkarten verwenden";
 "nautical_depth_points" = "Nautische Tiefenpunkte";
 "depth_contours" = "Tiefenlinien";
@@ -2935,7 +2932,7 @@
 "distance_to_intermediate_widget_desc" = "Das Widget zeigt die verbleibende Entfernung zum ersten Zwischenpunkt an. Sobald Zwischenpunkte passiert sind, wird die Distanz bis zum nächsten Zwischenpunkt aktualisiert.";
 "distance_to_destination_widget_desc" = "Das Widget zeigt die verbleibende Entfernung zum letzten Zielpunkt an.";
 "second_next_turn_widget_desc" = "Das Widget zeigt Informationen über Ihre übernächste Abbiegung an, die aktiviert wird, wenn sich die Abbiegung in unmittelbarer Nähe befindet.";
-"next_turn_widget_desc" = "Das Widget zeigt Informationen zu Ihrer nächsten Abbiegung an, mit einem Bild des Manövers und entsprechender Entfernungsangabe.";
+"next_turn_widget_desc" = "Das Widget zeigt Informationen über Ihrer nächsten Abbiegung mit einem Bild des Manövers und der Entfernung dazu an.";
 "time_to_intermediate_widget_desc" = "Das Widget zeigt \"Ankunftszeit\" oder \"Verbleibende Zeit\" zum ersten Zwischenpunkt an. Die Zeit wird während der Navigation ständig aktualisiert, sobald Zwischenpunkte passiert sind, wird die Zeit auf den nächsten Zwischenpunkt aktualisiert.";
 "elevation_profile_widget_desc" = "Zeigt Höhenprofil und Hangneigung der aktuellen Route an.";
 "map_widget_distance_to_intermediate" = "Entfernung bis zum Zwischenstopp";
@@ -3039,3 +3036,24 @@
 "weather_update_over_any_network" = "Über jedes Netzwerk";
 "map_settings_topography" = "Topografie";
 "shared_string_cache" = "Zwischenspeicher";
+"weather_updates_manual" = "Die Wettervorhersage muss manuell aktualisiert werden.";
+"click_on_widget" = "Klicke auf das Widget";
+"purchases_feature_relief_3d_description" = "Besitze und beobachte das maßstabsgetreue Modell deiner Nachbarschaft oder des gesamten Kontinents.";
+"unsaved_changes_will_be_lost_discard" = "Alle nicht gespeicherten Änderungen gehen verloren. Änderungen verwerfen?";
+"terrain_3D_maps" = "Geländekarten";
+"average_speed_skip_stops" = "Berücksichtige Zwischenstopps";
+"shared_string_relief_3d" = "3D-Relief";
+"average_speed_time_interval_desc" = "Gib das Zeitintervall für die Durchschnittsberechnung der Geschwindigkeit an.";
+"weather_update_parameters_wifi" = "Die Wettervorhersage wird nur aktualisiert, wenn ein Wi-Fi-Netzwerk verfügbar ist.";
+"unsaved_changes" = "Ungesicherte Änderungen";
+
+
+// Shared Strings
+"shared_string_discard" = "Verwerfen";
+"weather_update_parameters_disabled" = "Automatische Aktualisierungen werden deaktiviert.";
+"auto_update" = "Automatische Aktualisierung";
+"specify_number_of_dir_indicators_desc" = "Gib die Anzahl der Richtungsanzeiger an.";
+"weather_update_parameters_any_network" = "Die Wettervorhersage wird über ein beliebiges Netz aktualisiert. Mobile Daten können verwendet werden.";
+"map_marker_interval_dialog_desc" = "Geben Sie das Zeitintervall an, für das die Durchschnittsgeschwindigkeit gemessen wird, um die geschätzte Ankunftszeit zu berechnen.";
+"ios_release_4_5" = "- Neu gestaltete Widgets: Möglichkeit, die Position der Widgets zu ändern, Gruppierung nach Seiten, eine Liste von Widgets für das linke und rechte Panel\n- Neu gestalteter Konfigurationsbildschirm\n- Kostenlose Sicherung von Favoriten, Einstellungen und OSM-Bearbeitungen in der OsmAnd Cloud\n- \"CAI\"-Skala für die Schwierigkeitsklassifizierung von Routen hinzugefügt\n- Modul \"Konturlinien\" umbenannt in \"Topographie\", Unterstützung für das neue Geländekartenformat zugefügt\n- 3D-Relief hinzugefügt\n- OAuth-Autorisierung für OpenStreetMap Bearbeitungs-Modul hinzugefügt\n- Separate Schaltfläche zum Umschalten zwischen 2D- und 3D-Modus hinzugefügt\n- Richtung der Kippgesten geändert\n- Fehler beim Export von Favoriten behoben, der zu Datenverlusten führen konnte\n";
+"shared_string_system_default" = "Systemvorgabe";

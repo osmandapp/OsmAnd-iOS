@@ -31,6 +31,8 @@
 @property (nonatomic) UILabel *textShadowView;
 @property (nonatomic) UIImageView *imageView;
 
+@property (nonatomic) NSLayoutConstraint *topTextAnchor;
+
 @property (strong) BOOL(^updateInfoFunction)();
 @property (strong) void(^onClickFunction)(id sender);
 

@@ -10,7 +10,7 @@
 #import "OAValueTableViewCell.h"
 #import "OASimpleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
-#import "OATitleRightIconCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAUtilities.h"
@@ -30,8 +30,7 @@
 #import "OAExportItemsViewController.h"
 #import "OACloudIntroductionViewController.h"
 #import "OACloudBackupViewController.h"
-
-#define kAppModesSection 2
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAMainSettingsViewController () <UIDocumentPickerDelegate>
 
@@ -39,11 +38,17 @@
 
 @implementation OAMainSettingsViewController
 {
-    NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
+
+    NSArray<NSArray *> *_data;
+    int _globalSettingsSection;
+    int _selectedProfileSection;
+    int _applicationProfilesSection;
+    int _localBackupSection;
 
     OAApplicationMode *_targetAppMode;
     NSString *_targetScreenKey;
+    int _lastSwitchedAppModeRow;
 }
 
 #pragma mark - Initialization
@@ -62,6 +67,11 @@
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
+    _globalSettingsSection = -1;
+    _selectedProfileSection = -1;
+    _applicationProfilesSection = -1;
+    _localBackupSection = -1;
+    _lastSwitchedAppModeRow = -1;
 }
 
 - (void)registerObservers
@@ -148,7 +158,8 @@
             @"type" : [OAValueTableViewCell getCellIdentifier]
         }
     ]];
-    
+    _globalSettingsSection = data.count - 1;
+
     [data addObject:@[
         @{
             @"name" : @"current_profile",
@@ -157,7 +168,8 @@
             @"isColored" : @YES
         }
     ]];
-    
+    _selectedProfileSection = data.count - 1;
+
     NSMutableArray *profilesSection = [NSMutableArray new];
     for (int i = 0; i < OAApplicationMode.allPossibleValues.count; i++)
     {
@@ -168,25 +180,27 @@
             @"isColored" : @NO
         }];
     }
-    
+
     [profilesSection addObject:@{
         @"title" : OALocalizedString(@"new_profile"),
         @"img" : @"ic_custom_add",
-        @"type" : [OATitleRightIconCell getCellIdentifier],
+        @"type" : [OARightIconTableViewCell getCellIdentifier],
         @"name" : @"add_profile"
     }];
 
     [profilesSection addObject:@{
         @"title" : OALocalizedString(@"reorder_profiles"),
         @"img" : @"ic_custom_edit",
-        @"type" : [OATitleRightIconCell getCellIdentifier],
+        @"type" : [OARightIconTableViewCell getCellIdentifier],
         @"name" : @"edit_profiles"
     }];
     
     [data addObject:profilesSection];
-    
+    _applicationProfilesSection = data.count - 1;
+
     [data addObject:[self getLocalBackupSectionData]];
-    
+    _localBackupSection = data.count - 1;
+
     _data = [NSArray arrayWithArray:data];
 }
 
@@ -194,14 +208,14 @@
 {
     return @[
         @{
-            @"type": OATitleRightIconCell.getCellIdentifier,
+            @"type": OARightIconTableViewCell.getCellIdentifier,
             @"name": @"backupIntoFile",
             @"title": OALocalizedString(@"backup_into_file"),
             @"img": @"ic_custom_save_to_file",
             @"regular_text": @(YES)
         },
         @{
-            @"type": OATitleRightIconCell.getCellIdentifier,
+            @"type": OARightIconTableViewCell.getCellIdentifier,
             @"name": @"restoreFromFile",
             @"title": OALocalizedString(@"restore_from_file"),
             @"img": @"ic_custom_read_from_file",
@@ -222,11 +236,11 @@
 
 - (NSString *)getTitleForHeader:(NSInteger)section
 {
-    if (section == 1)
+    if (section == _selectedProfileSection)
         return OALocalizedString(@"selected_profile");
-    else if (section == 2)
+    else if (section == _applicationProfilesSection)
         return OALocalizedString(@"application_profiles");
-    else if (section == 3)
+    else if (section == _localBackupSection)
         return OALocalizedString(@"local_backup");
 
     return nil;
@@ -234,11 +248,11 @@
 
 - (NSString *)getTitleForFooter:(NSInteger)section
 {
-    if (section == 0)
+    if (section == _globalSettingsSection)
         return OALocalizedString(@"global_settings_descr");
-    else if (section == 2)
+    else if (section == _applicationProfilesSection)
         return OALocalizedString(@"import_profile_descr");
-    else if (section == 3)
+    else if (section == _localBackupSection)
         return OALocalizedString(@"local_backup_descr");
 
     return nil;
@@ -262,7 +276,7 @@
             cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
             [cell descriptionVisibility:NO];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.leftIconView.tintColor = UIColor.iconColorActive;
         }
         if (cell)
         {
@@ -294,7 +308,7 @@
             if ([item[@"isColored"] boolValue])
                 cell.backgroundColor = [UIColorFromRGB(am.getIconColor) colorWithAlphaComponent:0.1];
             else
-                cell.backgroundColor = UIColor.whiteColor;
+                cell.backgroundColor = UIColor.groupBgColor;
         }
         return cell;
     }
@@ -312,7 +326,7 @@
         cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? kPaddingToLeftOfContentWithIcon : 0.0, 0.0, 0.0);
         UIImage *img = am.getIcon;
         cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
-        cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : UIColorFromRGB(color_tint_gray);
+        cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : UIColor.iconColorDisabled;
         cell.titleLabel.text = am.toHumanString;
         cell.descriptionLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;
@@ -327,30 +341,31 @@
         [cell dividerVisibility:!isDefault];
         return cell;
     }
-    else if ([type isEqualToString:[OATitleRightIconCell getCellIdentifier]])
+    else if ([type isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OATitleRightIconCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
+        OARightIconTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
-            cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.titleLabel.textColor = UIColor.textColorActive;
+            cell.rightIconView.tintColor = UIColor.iconColorActive;
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
         if ([item[@"regular_text"] boolValue])
         {
-            cell.titleView.textColor = UIColor.blackColor;
-            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.titleLabel.textColor = UIColor.textColorPrimary;
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         }
         else
         {
-            cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+            cell.titleLabel.textColor = UIColor.textColorActive;
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
-        cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
+        cell.titleLabel.text = item[@"title"];
+        [cell.rightIconView setImage:[UIImage templateImageNamed:item[@"img"]]];
         return cell;
     }
     return nil;
@@ -436,6 +451,7 @@
 {
     if (sender.tag < OAApplicationMode.allPossibleValues.count)
     {
+        _lastSwitchedAppModeRow = (int) sender.tag;
         OAApplicationMode *am = OAApplicationMode.allPossibleValues[sender.tag];
         [OAApplicationMode changeProfileAvailability:am isSelected:sender.isOn];
     }
@@ -445,7 +461,15 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self generateData];
-        [self.tableView reloadData];
+        if (_lastSwitchedAppModeRow != -1)
+        {
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_lastSwitchedAppModeRow inSection:_applicationProfilesSection]] withRowAnimation:UITableViewRowAnimationFade];
+            _lastSwitchedAppModeRow = -1;
+        }
+        else
+        {
+            [self.tableView reloadData];
+        }
     });
 }
 

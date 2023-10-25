@@ -1695,7 +1695,6 @@
 "shared_string_disable" = "Zakázať";
 "gpxup_trackable" = "Stopovateľná";
 "navigate_point_easting" = "Horizontálna súradnica";
-"open_place_reviews" = "OpenPlaceReviews";
 "gpxup_public" = "Verejná";
 "shared_string_wifi_only" = "Len na Wi-Fi";
 "download_map_dialog" = "Okno sťahovania máp";
@@ -2319,7 +2318,6 @@
 "weather_plugin_description" = "Poskytuje\n- 24-hodinové a 7-dňové predpovede počasia na 5 vrstvách\n- nástroje podľa pozície\n- izočiary teploty a tlaku\n\nÚdaje o počasí sú poskytované službou Global Forecast System (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
 "m" = "m";
 "km" = "km";
-"open_place_reviews_plugin_description" = "Prispievajte do projektu OpenPlaceReviews, napríklad fotografiami, recenziami, odkazmi o verejných miestach ako sú reštaurácie, hotely alebo múzeá.\n\nInštrukcie ako prispievať nájdete na našej webstránke https://osmand.net/docs/user/plugins/openplacereviews .";
 "kg" = "kg";
 "shared_string_height" = "Výška";
 "lang_zh-Hant" = "Čínsky (Tradičná)";
@@ -2336,3 +2334,4 @@
 "select_segment" = "Zvoľte úsek";
 "add_folder" = "Pridať priečinok";
 "icon_group_service" = "Služby";
+"map_widget_distance_to_intermediate" = "Vzdialenosť k prechodnému cieľu";

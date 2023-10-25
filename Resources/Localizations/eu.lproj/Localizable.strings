@@ -1557,9 +1557,6 @@
 "osm_editing_plugin_description" = "Egin OSM ekarpenak, esaterako interesgune objektuak sortzea edo eraldatzea, OSM oharrak irekitzea edo komentatzea, eta sortutako GPX fitxategiak bidaltzea, aplikazioan OSM kredentzialak zehaztuta. OpenStreetMap.org elkarlanean egindako, domeinu publikoko mapa proiektu global bat da.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Kale mailako argazkiak denontzat. Deskubritu tokiak, parte hartu, eskuratu mundua.";
-"open_place_reviews" = "OpenPlaceReviews";
-"product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"open_place_reviews_plugin_description" = "Bidali leku publikoei buruzko argazkiak, iritziak eta estekak, hala nola jatetxe, hotel, museo eta bide-puntuei buruzko datu ireki gisa https://openplacereviews.org/data/.\n\nIrakurri gehiago https://openplacereviews.org helbidean";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";

@@ -371,11 +371,6 @@ static OASubscriptionState *EXPIRED;
     return _products.mapillary;
 }
 
-- (OAProduct *) openPlaceReviews
-{
-    return _products.openPlaceReviews;
-}
-
 - (OAProduct *) parking
 {
     return _products.parking;

@@ -42,6 +42,7 @@
     BOOL _angularUnitsDepended;
     int _cachedMetricSystem;
     int _cachedAngularUnits;
+    NSLayoutConstraint *_leadingTextAnchor;
 }
 
 - (instancetype) init
@@ -73,13 +74,41 @@
 {
     _textView = [[UILabel alloc] init];
     _textView.adjustsFontForContentSizeCategory = YES;
+    _textView.translatesAutoresizingMaskIntoConstraints = NO;
     _textShadowView = [[UILabel alloc] init];
     _textShadowView.adjustsFontForContentSizeCategory = YES;
-    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(3, 4, imageSide, imageSide)];
-    
+    _textShadowView.translatesAutoresizingMaskIntoConstraints = NO;
+    _imageView = [UIImageView new];
+    _imageView.translatesAutoresizingMaskIntoConstraints = NO;
+
     [self addSubview:_textShadowView];
     [self addSubview:_textView];
     [self addSubview:_imageView];
+    
+   
+    [NSLayoutConstraint activateConstraints:@[
+        [_imageView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:3],
+        [_imageView.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
+        [_imageView.heightAnchor constraintEqualToConstant:imageSide],
+        [_imageView.widthAnchor constraintEqualToConstant:imageSide]
+    ]];
+
+    [NSLayoutConstraint activateConstraints:@[
+        [_textView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-5],
+        [_textView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor]
+    ]];
+    self.topTextAnchor = [_textView.topAnchor constraintEqualToAnchor:self.topAnchor constant:5];
+    self.topTextAnchor.active = YES;
+    
+    _leadingTextAnchor = [_textView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:3];
+    _leadingTextAnchor.active = YES;
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [_textShadowView.topAnchor constraintEqualToAnchor:_textView.topAnchor],
+        [_textShadowView.bottomAnchor constraintEqualToAnchor:_textView.bottomAnchor],
+        [_textShadowView.trailingAnchor constraintEqualToAnchor:_textView.trailingAnchor],
+        [_textShadowView.leadingAnchor constraintEqualToAnchor:_textView.leadingAnchor]
+    ]];
     
     self.backgroundColor = [UIColor whiteColor];
 
@@ -297,26 +326,22 @@
 
 - (void) adjustViewSize
 {
+    CGFloat leadingOffset = _imageView.hidden ? 4 : 28;
+    _leadingTextAnchor.constant = leadingOffset;
+    
     [_textView sizeToFit];
+    
     CGRect tf = _textView.frame;
-    tf.origin.x = _imageView.hidden ? 4 : 28;
-    tf.size.height = tf.size.height;
-    tf.origin.y = 5;
+    
     CGFloat currentWidth = MAX(tf.size.width, _imageView.hidden ? fullTextWidth : minTextWidth);
     // TODO: need a more flexible solution for OAUtilities.isLandscapeIpadAware (topWidgetsViewWidthConstraint.constant)
     CGFloat widthLimit = [[OARootViewController instance].mapPanel hasTopWidget] ? 120 : [UIScreen mainScreen].bounds.size.width / 2 - 40;
     tf.size.width = currentWidth > widthLimit ? widthLimit : currentWidth;
 
-    _textView.frame = tf;
-    _textShadowView.frame = tf;
-
     CGRect f = self.frame;
-    f.size.width = tf.origin.x + tf.size.width + 4;
+    f.size.width = leadingOffset + tf.size.width + 4;
     CGFloat height = tf.size.height + 10;
     f.size.height = height < minWidgetHeight ? minWidgetHeight : height;
-    CGRect imageRect = _imageView.frame;
-    imageRect.origin.y = f.size.height / 2 - imageRect.size.height / 2;
-    _imageView.frame = imageRect;
     self.frame = f;
 }
 

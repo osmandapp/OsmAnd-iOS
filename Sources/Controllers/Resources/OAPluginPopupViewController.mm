@@ -345,7 +345,7 @@ static NSMutableArray *activePopups;
         descText = OALocalizedString(@"plugin_popup_nautical_ask");
         okButtonName = OALocalizedString(@"plugins_menu_group");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
-        iconName = @"ic_custom_nautical_depth_colored_day";
+        iconName = @"ic_custom_nautical_depth_colored";
 
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -357,7 +357,7 @@ static NSMutableArray *activePopups;
         descText = OALocalizedString(@"option_available_only_by_subscription");
         okButtonName = OALocalizedString(@"osm_live_subscriptions");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
-        iconName = @"ic_custom_nautical_depth_colored_day";
+        iconName = @"ic_custom_nautical_depth_colored";
         popup.okButton.tag = EOAFeatureNautical;
 
         [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];
@@ -383,7 +383,7 @@ static NSMutableArray *activePopups;
         descText = OALocalizedString(@"purchases_feature_desc_pro_widgets");
         okButtonName = OALocalizedString(@"osm_live_subscriptions");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
-        iconName = @"ic_custom_advanced_widgets_colored_day";
+        iconName = @"ic_custom_advanced_widgets_colored";
         popup.okButton.tag = EOAFeatureAdvancedWidgets;
 
         [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];

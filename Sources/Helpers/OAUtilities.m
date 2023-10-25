@@ -738,6 +738,11 @@
 - (void) addBlurEffect:(BOOL)light cornerRadius:(CGFloat)cornerRadius padding:(CGFloat)padding
 {
     self.backgroundColor = [UIColor clearColor];
+    
+    UIView *existingBlurView = [self viewWithTag:kBlurViewTag];
+    if (existingBlurView)
+        [existingBlurView removeFromSuperview];
+            
     UIBlurEffect *blurEffect;
 
     blurEffect = [UIBlurEffect effectWithStyle:light
@@ -2525,16 +2530,23 @@ static const double d180PI = 180.0 / M_PI_2;
     }
 }
 
-+ (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize
++ (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize textColor:(UIColor *)textColor
 {
+    if (!textColor)
+        textColor = [UIColor blackColor];
+
+    CGFloat red, green, blue, alpha;
+    [textColor getRed:&red green:&green blue:&blue alpha:&alpha];
+    NSString *textColorString = [NSString stringWithFormat:@"rgba(%.0f, %.0f, %.0f, %.2f)", red*255, green*255, blue*255, alpha];
+
     NSString *modifiedFontHtml =
     @" <style> \n"
     @"   a { color: #5714CC; text-decoration: none;} \n"
-    @"   body { font-family: -apple-system, BlinkMacSystemFont, HelveticaNeue; font-size: %ld} \n"
+    @"   body { font-family: -apple-system, BlinkMacSystemFont, HelveticaNeue; font-size: %ld; color: %@;} \n"
     @" </style> \n"
     @" <p>%@</p>";
     
-    modifiedFontHtml = [NSString stringWithFormat:modifiedFontHtml, fontSize, html];
+    modifiedFontHtml = [NSString stringWithFormat:modifiedFontHtml, fontSize, textColorString, html];
     
     return [[NSMutableAttributedString alloc] initWithData:[modifiedFontHtml dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute:@(NSUTF8StringEncoding)} documentAttributes:nil error:nil];
 }

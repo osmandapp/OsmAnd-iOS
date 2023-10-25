@@ -459,9 +459,9 @@
 {
     id<OADownloadTask> task = key;
     // Skip all downloads that are not resources
-    if (![task.key hasPrefix:@"resource:"])
+    if (![task.key hasPrefix:@"resource:"] || ![task.key containsString:_region.downloadsIdPrefix])
         return;
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
             return;
@@ -517,8 +517,9 @@
     id<OADownloadTask> task = key;
     
     // Skip all downloads that are not resources
-    if (![task.key hasPrefix:@"resource:"])
+    if (![task.key hasPrefix:@"resource:"] || ![task.key containsString:_region.downloadsIdPrefix])
         return;
+
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded)
             return;

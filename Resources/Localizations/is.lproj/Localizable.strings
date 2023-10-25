@@ -2033,9 +2033,6 @@
 "added_profiles" = "Notkunarsniðum bætt við";
 "suggested_maps_descr" = "Þessi kort eru nauðsynleg með forritsviðbótinni.";
 "suggested_maps" = "Kort sem stungið er upp á";
-"product_desc_openplacereviews" = "Deildu skoðunum þínum um opinbera staði";
-"open_place_reviews_plugin_description" = "Leggðu þitt af mörkum til OpenPlaceReviews vekefnisins. Sendu ljósmyndir, umsagnir og tengla í aðrar veitur um opinbera staði á borð við veitingastaði, hótel, söfn og leiðarpunkta.\n\nÞú getur lesið meira um verkefnið á vefsvæðinu: https://osmand.net/docs/user/plugins/openplacereviews .";
-"open_place_reviews" = "OpenPlaceReviews";
 "plugin_mapillary_descr" = "Götumyndir fyrir alla. Þar sem myndefni vantar, geturðu einfaldlega bætt því við sjálf/ur svo aðrir geti nýtt sér það. Til að virkja fyrirliggjandi gögn sem kortalag, skaltu virkja \"Myndefni í götuhæð\" í stillingum landakortsins.";
 "product_desc_mapillary" = "Ljósmyndir í götuhæð til að skoða umhverfið";
 "population_num" = "Íbúafjöldi";

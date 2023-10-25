@@ -16,12 +16,20 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     var widgetPanel: WidgetsPanel!
     var selectedAppMode: OAApplicationMode!
     var createNew = false
+    var similarAlreadyExist = false
+    var widgetKey = ""
+    var widgetConfigurationParams: [String: Any]?
+    var isFirstGenerateData = true
     
     lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.setContentOffset(CGPoint(x: 0, y: 1), animated: false)
+        
+        if isCreateNewAndSimilarAlreadyExist {
+            widgetConfigurationParams = ["selectedAppMode": selectedAppMode!]
+        }
     }
     
     override func generateData() {
@@ -55,7 +63,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 let hasIcon = item.iconName != nil
                 cell.descriptionVisibility(hasDescr)
                 cell.leftIconVisibility(hasIcon)
-                cell.titleLabel.textColor = hasIcon ? .black : UIColor(rgb: Int( color_primary_red))
+                cell.titleLabel.textColor = hasIcon ? .textColorPrimary : .buttonBgColorDisruptive
                 cell.titleLabel.text = item.title
                 cell.leftIconView.image = UIImage(named: item.iconName ?? "")
             }
@@ -72,11 +80,22 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 let hasIcon = item.iconName != nil
                 cell.titleLabel.text = item.title
                 cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
-                let selected = pref.get(selectedAppMode)
+                var selected = pref.get(selectedAppMode)
+                if isCreateNewAndSimilarAlreadyExist {
+                    if widgetKey == WidgetType.averageSpeed.id {
+                        if isFirstGenerateData {
+                            widgetConfigurationParams?[AverageSpeedWidget.SKIP_STOPS_PREF_ID] = selected
+                        } else {
+                            selected = widgetConfigurationParams?[AverageSpeedWidget.SKIP_STOPS_PREF_ID] as? Bool ?? false
+                        }
+                    } else {
+                        fatalError("You need implement value handler for widgetKey")
+                    }
+                }
                 cell.switchView.isOn = selected
                 cell.leftIconVisibility(hasIcon)
                 cell.leftIconView.image = UIImage.templateImageNamed(selected ? item.iconName : item.string(forKey: "hide_icon"))
-                cell.leftIconView.tintColor = UIColor(rgb: selected ? Int(selectedAppMode.getIconColor()) : Int(color_tint_gray))
+                cell.leftIconView.tintColor = selected ? UIColor(rgb: Int(selectedAppMode.getIconColor())) : UIColor.iconColorDisabled
 
                 cell.switchView.tag = indexPath.section << 10 | indexPath.row
                 cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
@@ -93,7 +112,33 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 cell?.leftIconView.tintColor = UIColor(rgb: Int(selectedAppMode.getIconColor()))
             }
             if let cell {
-                cell.valueLabel.text = item.string(forKey: "value")
+                if isCreateNewAndSimilarAlreadyExist {
+                    var value: String
+                    if isFirstGenerateData {
+                        guard let pref = item.obj(forKey: "pref") as? OACommonPreference,
+                              let prefLong = pref as? OACommonLong else {
+                            return nil
+                        }
+                        let param = String(prefLong.get(selectedAppMode))
+                        value = item.string(forKey: "value")!
+                        if widgetKey == WidgetType.averageSpeed.id {
+                            widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = param
+                        } else {
+                            fatalError("You need implement value handler for widgetKey")
+                        }
+                    } else {
+                        var _value = ""
+                        if widgetKey == WidgetType.averageSpeed.id {
+                            _value = widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] as? String ?? "0"
+                            value = AverageSpeedWidget.getIntervalTitle(Int(_value)!)
+                        } else {
+                            fatalError("You need implement value handler for widgetKey")
+                        }
+                    }
+                    cell.valueLabel.text = value
+                } else {
+                    cell.valueLabel.text = item.string(forKey: "value")
+                }
                 if let iconName = item.iconName, !iconName.isEmpty {
                     cell.leftIconVisibility(true)
                     cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
@@ -107,6 +152,10 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         return outCell
     }
     
+    var isCreateNewAndSimilarAlreadyExist: Bool {
+        createNew && similarAlreadyExist
+    }
+    
     @objc func onSwitchClick(_ sender: Any) -> Bool {
         guard let sw = sender as? UISwitch else {
             return false
@@ -115,13 +164,21 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
         let data = tableData!.item(for: indexPath)
         
-        let pref = data.obj(forKey: "pref") as! OACommonBoolean
-        pref.set(sw.isOn, mode: selectedAppMode)
+        if isCreateNewAndSimilarAlreadyExist {
+            if widgetKey == WidgetType.averageSpeed.id {
+                widgetConfigurationParams?[AverageSpeedWidget.SKIP_STOPS_PREF_ID] = sw.isOn
+            } else {
+                fatalError("You need implement value handler for widgetKey")
+            }
+        } else {
+            let pref = data.obj(forKey: "pref") as! OACommonBoolean
+            pref.set(sw.isOn, mode: selectedAppMode)
+        }
         
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
             UIView.animate(withDuration: 0.2) {
                 cell.leftIconView.image = UIImage.templateImageNamed(sw.isOn ? data.iconName : data.string(forKey: "hide_icon"))
-                cell.leftIconView.tintColor = UIColor(rgb: sw.isOn ? Int(self.selectedAppMode.getIconColor()) : Int(color_tint_gray))
+                cell.leftIconView.tintColor = sw.isOn ? UIColor(rgb: Int(self.selectedAppMode.getIconColor())) : UIColor.iconColorDisabled
             }
         }
         
@@ -143,7 +200,37 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 section.footerText = (item.obj(forKey: "footer") as? String) ?? ""
                 vc.appMode = selectedAppMode
                 vc.screenTitle = item.descr
-                vc.pref = item.obj(forKey: "pref") as? OACommonPreference
+                if isCreateNewAndSimilarAlreadyExist {
+                    guard let pref = item.obj(forKey: "pref") as? OACommonPreference,
+                          let prefLong = pref as? OACommonLong else {
+                        return
+                    }
+                    var value: Int?
+                    if isFirstGenerateData {
+                        value = Int(prefLong.get(selectedAppMode))
+                        if widgetKey == WidgetType.averageSpeed.id {
+                            widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = String(value ?? 0)
+                        } else {
+                            fatalError("You need implement value handler for widgetKey")
+                        }
+                    }
+                    if widgetKey == WidgetType.averageSpeed.id {
+                        vc.widgetConfigurationSelectedValue = widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] as? String ?? ""
+                    } else {
+                        fatalError("You need implement value handler for widgetKey")
+                    }
+                    vc.onWidgetConfigurationParamsAction = { [weak self] result in
+                        guard let self else { return }
+                        if widgetKey == WidgetType.averageSpeed.id {
+                            widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = result ?? ""
+                        } else {
+                            fatalError("You need implement value handler for widgetKey")
+                        }
+                    }
+                } else {
+                    vc.pref = item.obj(forKey: "pref") as? OACommonPreference
+                }
+                
                 showMediumSheetViewController(vc, isLargeAvailable: false)
             }
         }
@@ -155,6 +242,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     }
     
     func onWidgetStateChanged() {
+        isFirstGenerateData = false
         if widgetInfo.key == WidgetType.markersTopBar.id || widgetInfo.key.hasPrefix(WidgetType.markersTopBar.id + MapWidgetInfo.DELIMITER) {
             OsmAndApp.swiftInstance().data.destinationsChangeObservable.notifyEvent()
         } else if widgetInfo.key == WidgetType.radiusRuler.id || widgetInfo.key.hasPrefix(WidgetType.radiusRuler.id + MapWidgetInfo.DELIMITER) {
@@ -188,7 +276,7 @@ extension WidgetConfigurationViewController {
         attrStr.addAttribute(.font, value: font, range: NSRange(location: 0, length: attrStr.length))
 
         // Set color attribute
-        attrStr.addAttribute(.foregroundColor, value: UIColor(rgb: Int(color_text_footer)), range: NSRange(location: 0, length: attrStr.length))
+        attrStr.addAttribute(.foregroundColor, value: UIColor.textColorSecondary, range: NSRange(location: 0, length: attrStr.length))
         return attrStr
     }
 
@@ -211,7 +299,9 @@ extension WidgetConfigurationViewController {
                 }
             }
         } completion: { Bool in
-            NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification), object: self.widgetInfo)
+            NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification),
+                                            object: self.widgetInfo,
+                                            userInfo: self.widgetConfigurationParams)
         }
     }
 
@@ -222,7 +312,7 @@ extension WidgetConfigurationViewController {
         let text = "  " + localizedString("add_widget")
         let attributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.systemFont(ofSize: 17),
-            .foregroundColor: UIColor.white
+            .foregroundColor: UIColor.buttonTextColorPrimary
         ]
         let attributedString = NSMutableAttributedString(string: text, attributes: attributes)
 
@@ -230,7 +320,7 @@ extension WidgetConfigurationViewController {
         let configuration = UIImage.SymbolConfiguration(pointSize: 24)
         let plusCircleFillImage = UIImage(systemName: "plus.circle.fill", withConfiguration: configuration)
         let attachment = NSTextAttachment()
-        attachment.image = plusCircleFillImage?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        attachment.image = plusCircleFillImage?.withTintColor(.buttonTextColorPrimary, renderingMode: .alwaysOriginal)
 
         // Set the bounds of the attachment to match the font size of the attributed string
         if let font = attributes[.font] as? UIFont {

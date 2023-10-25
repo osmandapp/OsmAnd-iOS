@@ -97,13 +97,6 @@
 
     _stateObservable = [[OAObservable alloc] init];
 
-    _manager = [[CLLocationManager alloc] init];
-    _manager.delegate = self;
-    _manager.distanceFilter = kCLDistanceFilterNone;
-    _manager.pausesLocationUpdatesAutomatically = NO;
-    if([_manager respondsToSelector:@selector(allowsBackgroundLocationUpdates)])
-        _manager.allowsBackgroundLocationUpdates = YES;
-
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapModeChanged)
                                                   andObserve:_app.mapModeObservable];
@@ -164,7 +157,26 @@
                                 object:nil];
 }
 
-- (BOOL)available
+- (CLLocationManager*) getLocationManager
+{
+    if (_manager)
+        return _manager;
+
+    if ([NSThread isMainThread])
+    {
+        _manager = [[CLLocationManager alloc] init];
+        _manager.delegate = self;
+        _manager.distanceFilter = kCLDistanceFilterNone;
+        _manager.pausesLocationUpdatesAutomatically = NO;
+        if ([_manager respondsToSelector:@selector(allowsBackgroundLocationUpdates)])
+            _manager.allowsBackgroundLocationUpdates = YES;
+
+        return _manager;
+    }
+    return nil;
+}
+
+- (BOOL) available
 {
     return [CLLocationManager locationServicesEnabled];
 }
@@ -176,13 +188,15 @@
 
 - (BOOL) allowed
 {
-    CLAuthorizationStatus authorizationStatus = _manager.authorizationStatus;
+    CLLocationManager *manager = self.getLocationManager;
+    CLAuthorizationStatus authorizationStatus = manager ? manager.authorizationStatus : kCLAuthorizationStatusNotDetermined;
     return authorizationStatus == kCLAuthorizationStatusAuthorizedAlways || authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse;
 }
 
 - (BOOL) denied
 {
-    return _manager.authorizationStatus == kCLAuthorizationStatusDenied;
+    CLLocationManager *manager = self.getLocationManager;
+    return manager ? manager.authorizationStatus == kCLAuthorizationStatusDenied : YES;
 }
 
 @synthesize stateObservable = _stateObservable;
@@ -203,8 +217,10 @@
 
 - (BOOL) doStart
 {
-    // Do nothing if waiting for authorization
-    if (self.status == OALocationServicesStatusAuthorizing)
+    CLLocationManager *manager = self.getLocationManager;
+
+    // Do nothing if manager is not initialized or waiting for authorization
+    if (!manager || self.status == OALocationServicesStatusAuthorizing)
         return NO;
     
     BOOL didChange = NO;
@@ -217,23 +233,23 @@
         _waitingForAuthorization = !self.allowed;
         
         if (!self.allowed &&
-            [_manager respondsToSelector:@selector(requestAlwaysAuthorization)])
+            [manager respondsToSelector:@selector(requestAlwaysAuthorization)])
         {
-            [_manager requestAlwaysAuthorization];
+            [manager requestAlwaysAuthorization];
         }
         
-        _manager.desiredAccuracy = [self desiredAccuracy];
-        [_manager startUpdatingLocation];
+        manager.desiredAccuracy = [self desiredAccuracy];
+        [manager startUpdatingLocation];
         _locationActive = YES;
         didChange = YES;
         
-        OALog(@"Setting desired location accuracy to %f", _manager.desiredAccuracy);
+        OALog(@"Setting desired location accuracy to %f", manager.desiredAccuracy);
     }
     
     // Also, if compass is available, query it for updates
     if (!_compassActive && [CLLocationManager headingAvailable])
     {
-        [_manager startUpdatingHeading];
+        [manager startUpdatingHeading];
         _compassActive = YES;
         didChange = YES;
     }
@@ -256,24 +272,25 @@
 
 - (BOOL) doStop
 {
+    CLLocationManager *manager = self.getLocationManager;
     BOOL didChange = NO;
-    
+
     if (_waitingForAuthorization)
     {
         _waitingForAuthorization = NO;
         didChange = YES;
     }
     
-    if (_locationActive)
+    if (manager && _locationActive)
     {
-        [_manager stopUpdatingLocation];
+        [manager stopUpdatingLocation];
         _locationActive = NO;
         didChange = YES;
     }
     
-    if (_compassActive)
+    if (manager && _compassActive)
     {
-        [_manager stopUpdatingHeading];
+        [manager stopUpdatingHeading];
         _compassActive = NO;
         didChange = YES;
     }
@@ -381,6 +398,10 @@
 
 - (void) updateDeviceOrientation
 {
+    CLLocationManager *manager = self.getLocationManager;
+    if (!manager)
+        return;
+
     const UIDeviceOrientation uiDeviceOrientation = [UIDevice currentDevice].orientation;
     CLDeviceOrientation clDeviceOrientation;
     switch (uiDeviceOrientation)
@@ -409,7 +430,7 @@
             clDeviceOrientation = CLDeviceOrientationUnknown;
             break;
     }
-    _manager.headingOrientation = clDeviceOrientation;
+    manager.headingOrientation = clDeviceOrientation;
 }
 
 - (CLLocationAccuracy) desiredAccuracy
@@ -442,8 +463,12 @@
 
 - (void) updateRequestedAccuracy
 {
+    CLLocationManager *manager = self.getLocationManager;
+    if (!manager)
+        return;
+
     CLLocationAccuracy newDesiredAccuracy = [self desiredAccuracy];
-    if (_manager.desiredAccuracy == newDesiredAccuracy || self.status != OALocationServicesStatusActive)
+    if (manager.desiredAccuracy == newDesiredAccuracy || self.status != OALocationServicesStatusActive)
         return;
 
     @synchronized(_lock)
@@ -542,11 +567,14 @@
 
 - (void) setupDistanceFilter:(BOOL)enable
 {
+    CLLocationManager *manager = self.getLocationManager;
+    if (!manager)
+        return;
+
     if (enable)
-        _manager.distanceFilter = [_settings.applicationMode.get getBackgroundDistanceFilter];
+        manager.distanceFilter = [_settings.applicationMode.get getBackgroundDistanceFilter];
     else
-        _manager.distanceFilter = kCLDistanceFilterNone;
-    
+        manager.distanceFilter = kCLDistanceFilterNone;
 }
 
 + (BOOL) isPointAccurateForRouting:(CLLocation *)loc

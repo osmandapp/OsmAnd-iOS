@@ -24,6 +24,7 @@
 #import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAStatusBackupConflictDetailsViewController
 {
@@ -146,7 +147,7 @@
         kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
         kCellKeyKey: @"itemInfo",
         kCellTitleKey: name,
-        kCellIconTint: @(color_icon_inactive)
+        kCellIconTintColor: UIColor.iconColorDefault
     }];
     [itemInfoSection addRow:itemInfoRow];
 
@@ -239,7 +240,7 @@
             cell.titleLabel.text = title;
             cell.descriptionLabel.text = item.descr;
             cell.leftIconView.image = [[item objForKey:@"icon"] imageFlippedForRightToLeftLayoutDirection];
-            cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
+            cell.leftIconView.tintColor = item.iconTintColor;
         }
         return cell;
     }
@@ -258,11 +259,11 @@
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
             BOOL enabled = [item boolForKey:@"enabled"];
             cell.selectionStyle = enabled ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
-            cell.titleLabel.textColor = enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
+            cell.titleLabel.textColor = enabled ? UIColor.textColorActive : UIColor.textColorSecondary;
             cell.titleLabel.text = item.title;
             cell.descriptionLabel.text = item.descr;
             cell.rightIconView.image = [UIImage templateImageNamed:item.secondaryIconName];
-            cell.rightIconView.tintColor = enabled ? UIColorFromRGB(item.iconTint) : UIColorFromRGB(color_footer_icon_gray);
+            cell.rightIconView.tintColor = enabled ? item.iconTintColor : UIColor.textColorSecondary;
         }
         return cell;
     }
@@ -326,7 +327,7 @@
         kCellTitleKey: title,
         kCellDescrKey: description,
         kCellSecondaryIconName: @"ic_custom_cloud_upload_outline",
-        kCellIconTint: @(color_primary_purple),
+        kCellIconTintColor: UIColor.iconColorActive,
         @"enabled": @(enabled)
     }];
 }
@@ -382,7 +383,7 @@
         kCellTitleKey: OALocalizedString(@"dowload_cloud_version"),
         kCellDescrKey: description,
         kCellSecondaryIconName: @"ic_custom_cloud_download_outline",
-        kCellIconTint: @(color_primary_purple),
+        kCellIconTintColor: UIColor.iconColorActive,
         @"enabled": @(enabled)
     }];
 }

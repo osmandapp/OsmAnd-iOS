@@ -457,7 +457,8 @@
     if (!hasSRTM)
     {
         [topographySectionData addObject:@{
-                @"type": [FreeBackupBannerCell getCellIdentifier]
+                @"type": [FreeBackupBannerCell getCellIdentifier],
+                @"key": @"terrain_layer"
         }];
     }
     if (hasSRTM && !_iapHelper.srtm.disabled)
@@ -496,10 +497,13 @@
         }
     }
 
-    [data addObject:@{
+    if (topographySectionData.count > 0)
+    {
+        [data addObject:@{
             @"group_name": OALocalizedString(@"map_settings_topography"),
             @"cells": topographySectionData
-    }];
+        }];
+    }
 
     NSMutableArray *overlayUnderlaySectionData = [NSMutableArray array];
     

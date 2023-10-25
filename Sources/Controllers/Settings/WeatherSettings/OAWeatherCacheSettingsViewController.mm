@@ -14,7 +14,7 @@
 #import "OsmAndApp.h"
 #import "OAWeatherHelper.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAWeatherCacheSettingsViewController () <UIViewControllerTransitioningDelegate>
 
@@ -32,6 +32,7 @@
     OAWeatherHelper *_weatherHelper;
     OAWorldRegion *_region;
     EOAWeatherCacheType _type;
+    NSComparator _regionsComparator;
 }
 
 #pragma mark - Initialization
@@ -59,6 +60,14 @@
 - (void)commonInit
 {
     _weatherHelper = [OAWeatherHelper sharedInstance];
+
+    _regionsComparator = ^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
+        NSString *name1 = [OAWeatherHelper checkAndGetRegionName:region1];
+        NSString *name2 = [OAWeatherHelper checkAndGetRegionName:region2];
+        return [name1 isEqualToString:OALocalizedString(@"weather_entire_world")] ? NSOrderedAscending
+                : [name2 isEqualToString:OALocalizedString(@"weather_entire_world")] ? NSOrderedDescending
+                    : [name1 localizedCaseInsensitiveCompare:name2];
+    };
 }
 
 #pragma mark - UIViewController
@@ -184,9 +193,13 @@
         countriesSection[@"cells"] = countryCells;
         [data addObject:countriesSection];
 
-        NSArray<NSString *> *regionIds = [_weatherHelper getRegionIdsForDownloadedWeatherForecast];
         OsmAndAppInstance app = [OsmAndApp instance];
-        for (OAWorldRegion *region in [@[app.worldRegion] arrayByAddingObjectsFromArray:app.worldRegion.flattenedSubregions])
+        NSArray<NSString *> *regionIds = [_weatherHelper getRegionIdsForDownloadedWeatherForecast];
+        NSArray<OAWorldRegion *> *regions = [[app.worldRegion getFlattenedSubregions:regionIds] sortedArrayUsingComparator:_regionsComparator];
+        if ([regionIds containsObject:app.worldRegion.regionId])
+            regions = [@[app.worldRegion] arrayByAddingObjectsFromArray:regions];
+
+        for (OAWorldRegion *region in regions)
         {
             NSString *regionId = [OAWeatherHelper checkAndGetRegionId:region];
             if ([regionIds containsObject:regionId])
@@ -233,14 +246,14 @@
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
-            cell.titleLabel.textColor = UIColorFromRGB(color_primary_red);
+            cell.titleLabel.textColor = UIColor.buttonBgColorDisruptive;
         }
         if (cell)
         {
             BOOL isClear = [item[@"key"] isEqualToString:@"clear"];
             cell.selectionStyle = isClear && _clearButtonActive ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = isClear ? _clearButtonActive ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_text_footer) : UIColor.blackColor;
+            cell.titleLabel.textColor = isClear ? _clearButtonActive ? UIColor.buttonBgColorDisruptive : UIColor.textColorSecondary : UIColor.textColorPrimary;
             cell.textStackView.alignment = isClear && _type == EOAWeatherOnlineData ? UIStackViewAlignmentCenter : UIStackViewAlignmentLeading;
         }
         return cell;
@@ -253,7 +266,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
-            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_red);
+            cell.rightIconView.tintColor = UIColor.buttonBgColorDisruptive;
             cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_remove_outlined"];
         }
         if (cell)

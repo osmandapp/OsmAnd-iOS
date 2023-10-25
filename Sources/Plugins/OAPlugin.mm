@@ -28,7 +28,6 @@
 #import "OASRTMPlugin.h"
 #import "OAWikipediaPlugin.h"
 #import "OAPOIUIFilter.h"
-#import "OAOpenPlaceReviews.h"
 #import "OAWeatherPlugin.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -304,7 +303,6 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     [allPlugins addObject:[[OASkiMapsPlugin alloc] init]];
     [allPlugins addObject:[[OAParkingPositionPlugin alloc] init]];
     [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
-    [allPlugins addObject:[[OAOpenPlaceReviews alloc] init]];
     [allPlugins addObject:[[OAMapillaryPlugin alloc] init]];
     [allPlugins addObject:[[OAWeatherPlugin alloc] init]];
     [allPlugins addObject:[[OAOsmandDevelopmentPlugin alloc] init]];

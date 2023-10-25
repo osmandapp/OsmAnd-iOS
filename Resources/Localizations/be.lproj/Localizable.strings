@@ -1891,7 +1891,6 @@
 "context_menu_item_edit_waypoint" = "Рэдагаваць пункт шляху GPX";
 "shared_string_all_languages" = "Усе мовы";
 "plugin_mapillary_descr" = "Вулічныя фотаздымкі для ўсіх. Адкрывайце для сябе месцы, дапамагайце, здымайце свет.";
-"open_place_reviews" = "OpenPlaceReviews";
 "added_profiles" = "Дададзеныя профілі";
 "no_waypoints_found" = "Пунктаў шляху не знойдзена";
 "shared_string_wifi_only" = "Толькі праз Wi-Fi";
@@ -2519,7 +2518,6 @@
 "kg" = "кг";
 "weather_plugin_description" = "Змяшчае:\n- 5-слаёвы прагноз на 24 гадзіны і 7 дзён\n- віджэты на аснове месцазнаходжання\n- ізатэрмы / ізабары\n\nДаныя бяруцца з Global Forecast System (https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast).";
 "km" = "км";
-"open_place_reviews_plugin_description" = "Рабіце ўнёскі у праект OpenPlaceReviews, напрыклад фатаграфіі, агляды або спасылкі на грамадскія месцы (рэстараны, гасцініцы або музеі).\n\nЗнайсці інструкцыі можна на нашым сайце https://osmand.net/docs/user/plugins/openplacereviews .";
 "m" = "м";
 "shared_string_height" = "Вышыня";
 "shared_string_legal" = "Юрыдычная інфармацыя";

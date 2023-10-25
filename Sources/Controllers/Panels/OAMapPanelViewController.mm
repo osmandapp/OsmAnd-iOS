@@ -1683,7 +1683,6 @@ typedef enum
 
 - (void) enterContextMenuMode
 {
-    self.hudViewController.mapModeButtonType = EOAMapModeButtonRegular;
     [self.hudViewController enterContextMenuMode];
 }
 

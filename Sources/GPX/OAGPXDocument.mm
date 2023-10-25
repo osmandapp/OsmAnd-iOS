@@ -706,8 +706,7 @@
     {
         wpt.reset(new OsmAnd::GpxDocument::WptPt());
         [self.class fillWpt:wpt usingWpt:w];
-        OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[w getColor:0]]];
+        [[OAGPXAppearanceCollection sharedInstance] getColorItemWithValue:[w getColor:0]];
         document->points.append(wpt);
         wpt = nullptr;
     }

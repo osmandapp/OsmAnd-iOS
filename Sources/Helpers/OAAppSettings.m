@@ -3710,6 +3710,9 @@
         [_appearanceMode setModeDefaultValue:@(APPEARANCE_MODE_DAY) mode:OAApplicationMode.PEDESTRIAN];
         [_profilePreferences setObject:_appearanceMode forKey:@"daynight_mode"];
         
+        _appearanceProfileTheme = [OACommonInteger withKey:appearanceProfileThemeKey defValue:0];
+        [_profilePreferences setObject:_appearanceProfileTheme forKey:@"osmand_theme"];
+        
         _mapManuallyRotatingAngle = [OACommonDouble withKey:mapManuallyRotatingAngleKey defValue:0];
         [_profilePreferences setObject:_appearanceMode forKey:mapManuallyRotatingAngleKey];
         
@@ -4983,6 +4986,7 @@
     {
         if (markAsLastUsed)
             [_lastUsedApplicationMode set:applicationMode.stringKey];
+        [[ThemeManager shared] configureWithAppMode: applicationMode];
         [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:prevAppMode];
     }
 }

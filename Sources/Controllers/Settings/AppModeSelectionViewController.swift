@@ -89,7 +89,7 @@ class AppModeSelectionViewController: OABaseNavbarViewController {
             let nib = Bundle.main.loadNibNamed(OASimpleTableViewCell.getIdentifier(), owner: self, options: nil)
             cell = nib?.first as? OASimpleTableViewCell
             cell?.descriptionVisibility(false)
-            cell?.tintColor = UIColor(rgb: Int(color_primary_purple))
+            cell?.tintColor = UIColor.iconColorActive
         }
         if let cell = cell {
             cell.titleLabel.text = appMode.toHumanString()

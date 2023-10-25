@@ -379,7 +379,7 @@
 {
     //method to replace Java Html.fromHtml()
     NSString *result;
-    NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:htmlText fontSize:17];
+    NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:htmlText fontSize:17 textColor:nil];
     if (attrString)
         result = attrString.string;
     return result;

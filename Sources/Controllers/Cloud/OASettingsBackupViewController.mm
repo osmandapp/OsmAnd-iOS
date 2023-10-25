@@ -20,6 +20,7 @@
 #import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OASettingsBackupViewController () <UITableViewDelegate, UITableViewDataSource, OACloudAccountLogoutDelegate, OADeleteAllVersionsBackupDelegate, OABackupTypesDelegate, OAOnDeleteFilesListener, OAOnPrepareBackupListener>
 
@@ -81,15 +82,22 @@
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = UIColorFromRGB(color_primary_orange_navbar_background);
-    appearance.shadowColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    appearance.shadowColor = UIColor.navBarBgColorPrimary;
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.whiteColor
+        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
     };
-    self.navigationController.navigationBar.standardAppearance = appearance;
+    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+    blurAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
+    blurAppearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    blurAppearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+    };
+    self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.whiteColor;
+    self.navigationController.navigationBar.tintColor = UIColor.navBarTextColorPrimary;
     self.navigationController.navigationBar.prefersLargeTitles = NO;
 }
 
@@ -124,7 +132,7 @@
     backupData[@"key"] = @"backup_data_cell";
     backupData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     backupData[@"title"] = OALocalizedString(@"backup_data");
-    backupData[@"left_icon"] = @"ic_custom_cloud_upload_colored_day";
+    backupData[@"left_icon"] = @"ic_custom_cloud_upload_colored";
     NSString *sizeBackupDataString = [NSByteCountFormatter stringFromByteCount:
             [OABaseBackupTypesViewController calculateItemsSize:_uniqueRemoteFiles.allValues]
                                                      countStyle:NSByteCountFormatterCountStyleFile];
@@ -152,14 +160,14 @@
     deleteAllData[@"key"] = @"delete_all_cell";
     deleteAllData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     deleteAllData[@"title"] = OALocalizedString(@"backup_delete_all_data");
-    deleteAllData[@"text_color"] = UIColorFromRGB(color_support_red);
+    deleteAllData[@"text_color"] = UIColor.buttonBgColorDisruptive;
     [dangerZoneCells addObject:deleteAllData];
 
     NSMutableDictionary *removeVersionsData = [NSMutableDictionary dictionary];
     removeVersionsData[@"key"] = @"remove_versions_cell";
     removeVersionsData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     removeVersionsData[@"title"] = OALocalizedString(@"backup_delete_old_data");
-    removeVersionsData[@"text_color"] = UIColorFromRGB(color_support_red);
+    removeVersionsData[@"text_color"] = UIColor.buttonBgColorDisruptive;
     [dangerZoneCells addObject:removeVersionsData];
 
     _data = data;
@@ -337,7 +345,7 @@
             cell.descriptionLabel.text = item[@"description"];
 
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = [item.allKeys containsObject:@"text_color"] ? item[@"text_color"] : UIColor.blackColor;
+            cell.titleLabel.textColor = [item.allKeys containsObject:@"text_color"] ? item[@"text_color"] : UIColor.textColorPrimary;
         }
         return cell;
     }

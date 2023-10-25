@@ -1556,7 +1556,7 @@
 "units_of_speed" = "Jednotky rychlosti";
 "allow_3D_view" = "2.5D zobrazení";
 "do_not_rotate" = "Neotáčet";
-"settings_app_theme" = "Motiv aplikace";
+"settings_app_theme" = "Vzhled aplikace";
 "map_settings_available_srtm_maps_descr" = "Pro zobrazení stínování kopců jsou potřeba další mapy";
 "map_settings_line_density_slowdown_warning" = "Vysoká hustota čar může zpomalit vykreslování mapy";
 "map_settings_contour_zoom_level_descr" = "Zvolte úroveň přiblížení, od které budou zobrazeny vrstevnice";
@@ -3031,5 +3031,6 @@
 // Shared Strings
 "shared_string_discard" = "Zahodit";
 "specify_number_of_dir_indicators_desc" = "Zadejte počet směrových ukazatelů.";
-"ios_release_4_5" = "- Kompletně přepracované prostředí widgetů: přidána možnost změny pozice widgetu, přidáno seskupení podle stránek, jeden seznam widgetů pro levý a pravý panel.\n- Přepracovaná obrazovka konfigurace\n- Bezplatné zálohování oblíbených položek, nastavení a úprav OSM do služby OsmAnd Cloud\n- Přidána stupnice \"CAI\" pro \"Klasifikaci obtížnosti tras\"\n- Zásuvný modul \"Konturní čáry\" přejmenován na \"Topografie\", přidána podpora nového formátu terénních map\n- Přidán 3D reliéf\n- Přidána autorizace OAuth pro zásuvný modul pro úpravy OpenStreetMap\n- Přidáno samostatné tlačítko pro přepínání mezi 2D nebo 3D režimem\n- Změněn směr gesta naklonění\n- Opraven problém s exportem oblíbených položek, který mohl vést ke ztrátě dat\n";
+"ios_release_4_5" = "• Kompletně přepracované prostředí widgetů: přidána možnost změny pozice widgetu, přidáno seskupení podle stránek, jeden seznam widgetů pro levý a pravý panel.\n• Přepracovaná obrazovka konfigurace\n• Bezplatné zálohování oblíbených položek, nastavení a úprav OSM do služby OsmAnd Cloud\n• Přidána stupnice \"CAI\" pro \"Klasifikaci obtížnosti tras\"\n• Modul \"Vrstevnice\" přejmenován na \"Topografie\", přidána podpora nového formátu terénních map\n• Přidán 3D reliéf\n• Přidána autorizace OAuth pro modul Editace OpenStreetMap\n• Přidáno samostatné tlačítko pro přepínání mezi 2D nebo 3D režimem\n• Změněn směr gesta naklonění\n• Opraven problém s exportem oblíbených položek, který mohl vést ke ztrátě dat\n";
 "map_marker_interval_dialog_desc" = "Zadejte časový interval, ve kterém se bude měřit průměrná rychlost pro výpočet odhadovaného času příjezdu.";
+"shared_string_system_default" = "Výchozí";

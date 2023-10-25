@@ -20,8 +20,8 @@
 #import "OAEditPOIData.h"
 #import "OAOsmEditsDBHelper.h"
 #import "OAOsmBugsDBHelper.h"
-#import "OAOsmEditingBottomSheetViewController.h"
-#import "OAOsmNoteBottomSheetViewController.h"
+#import "OAOsmUploadPOIViewController.h"
+#import "OAOsmNoteViewController.h"
 #import "OAOsmEditingPlugin.h"
 
 @interface OAOsmEditTargetViewController () <OAOsmEditingBottomSheetDelegate>
@@ -82,19 +82,15 @@
 {
     if (_osmPoint.getGroup == POI)
     {
-        OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
-                                                         initWithEditingUtils:_editingPlugin.getPoiModificationRemoteUtil
-                                                         points:[NSArray arrayWithObject:_osmPoint]];
+        OAOsmUploadPOIViewController *dialog = [[OAOsmUploadPOIViewController alloc] initWithPOIItems:[NSArray arrayWithObject:_osmPoint]];
         dialog.delegate = self;
-        [dialog show];
+        [OARootViewController.instance.navigationController pushViewController:dialog animated:YES];
     }
     else if (_osmPoint.getGroup == BUG)
     {
-        OAOsmNoteBottomSheetViewController *dialog = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_editingPlugin
-                                                                                                                points:[NSArray arrayWithObject:_osmPoint]
-                                                                                                                  type:TYPE_UPLOAD];
+        OAOsmNoteViewController *dialog = [[OAOsmNoteViewController alloc] initWithEditingPlugin:_editingPlugin points:[NSArray arrayWithObject:_osmPoint] type:EOAOsmNoteViewConrollerModeUpload];
         dialog.delegate = self;
-        [dialog show];
+        [OARootViewController.instance.navigationController pushViewController:dialog animated:YES];
     }
 }
 

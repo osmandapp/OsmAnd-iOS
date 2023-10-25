@@ -46,7 +46,7 @@ class WidgetParameterViewController: OABaseNavbarViewController {
             if cell == nil {
                 let nib = Bundle.main.loadNibNamed(OASimpleTableViewCell.getIdentifier(), owner: self, options: nil)
                 cell = nib?.first as? OASimpleTableViewCell
-                cell?.tintColor = UIColor(rgb: Int(color_primary_purple))
+                cell?.tintColor = UIColor.iconColorActive
             }
             if let cell = cell {
                 if let imageName = item.iconName, !imageName.isEmpty {

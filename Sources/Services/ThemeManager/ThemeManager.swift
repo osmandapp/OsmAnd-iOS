@@ -50,6 +50,17 @@ final class ThemeManager: NSObject {
         }
     }
     
+    func isLightTheme() -> Bool {
+        switch currentTheme {
+        case .light:
+            return true
+        case .dark:
+            return false
+        case .system:
+            return UIScreen.main.traitCollection.userInterfaceStyle != .dark
+        }
+    }
+    
     private func overrideUserInterfaceStyle(_ theme: Theme) {
         DispatchQueue.main.async {
             UIWindow.key.overrideUserInterfaceStyle = theme.overrideUserInterfaceStyle

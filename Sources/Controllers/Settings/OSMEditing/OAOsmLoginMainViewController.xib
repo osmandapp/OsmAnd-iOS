@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -12,7 +13,7 @@
             <connections>
                 <outlet property="bottomButton" destination="Lr4-GE-V1B" id="6KL-tV-AXx"/>
                 <outlet property="bottomButtonsContainerView" destination="Ntb-xu-L5o" id="ZQj-cD-azw"/>
-                <outlet property="cancelLabel" destination="k1E-d8-DFj" id="2V7-rZ-Yov"/>
+                <outlet property="cancelLabel" destination="k1E-d8-DFj" id="da3-wj-LWH"/>
                 <outlet property="contentScrollView" destination="zdt-N4-q5O" id="8NO-fD-Obo"/>
                 <outlet property="descriptionLabel" destination="klh-qf-J0z" id="7iL-Zw-dP0"/>
                 <outlet property="logoImageView" destination="KSU-qt-7Fu" id="0nk-Gu-UBY"/>
@@ -32,19 +33,19 @@
                     <rect key="frame" x="0.0" y="0.0" width="414" height="92"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k1E-d8-DFj">
-                            <rect key="frame" x="16" y="49" width="54" height="33"/>
+                            <rect key="frame" x="16" y="49" width="55" height="33"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                            <color key="tintColor" red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal" title="Cancel">
-                                <color key="titleColor" red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="titleColor" name="textColorActive"/>
                             </state>
                             <connections>
                                 <action selector="onLeftNavbarButtonPressed:" destination="-1" eventType="touchUpInside" id="iNi-uy-V8c"/>
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" name="groupBgColor"/>
                     <constraints>
                         <constraint firstItem="k1E-d8-DFj" firstAttribute="leading" secondItem="AsI-Ne-V1n" secondAttribute="leadingMargin" constant="8" id="dmE-Bn-XV3"/>
                         <constraint firstAttribute="bottom" secondItem="k1E-d8-DFj" secondAttribute="bottom" constant="10" id="zqf-s5-mT0"/>
@@ -55,15 +56,15 @@
                     <subviews>
                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fbh-in-U7j" userLabel="Top Button">
                             <rect key="frame" x="16" y="9" width="382" height="42"/>
-                            <color key="backgroundColor" red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="buttonBgColorPrimary"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="42" id="Akf-dd-mGS"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="tintColor" name="buttonTextColorPrimary"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
                             <state key="normal" title="Sing in with OpenStreetMap" image="ic_action_openstreetmap_logo.png">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="titleColor" name="buttonTextColorPrimary"/>
                             </state>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -73,15 +74,15 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lr4-GE-V1B" userLabel="Bottom Button">
                             <rect key="frame" x="16" y="67" width="382" height="42"/>
-                            <color key="backgroundColor" red="0.8784313725490196" green="0.8666666666666667" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="buttonBgColorSecondary"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="42" id="heW-Ro-FdT"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                            <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="tintColor" name="buttonTextColorSecondary"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal" title="Use login and password">
-                                <color key="titleColor" red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="titleColor" name="buttonTextColorSecondary"/>
                             </state>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -123,7 +124,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="klh-qf-J0z" userLabel="Description Label">
-                                    <rect key="frame" x="20" y="208" width="374" height="81.5"/>
+                                    <rect key="frame" x="20" y="208" width="374" height="86.5"/>
                                     <string key="text">You need to login to upload new or modified changes.
 You can log in using the safe OAuth method or use your login and password.</string>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
@@ -159,7 +160,7 @@ You can log in using the safe OAuth method or use your login and password.</stri
                 </scrollView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="bdg-7Y-Gdc"/>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color key="backgroundColor" name="groupBgColor"/>
             <constraints>
                 <constraint firstItem="Ntb-xu-L5o" firstAttribute="trailing" secondItem="NVL-sV-vRh" secondAttribute="trailing" id="0DE-3K-CCT"/>
                 <constraint firstItem="AsI-Ne-V1n" firstAttribute="bottom" secondItem="bdg-7Y-Gdc" secondAttribute="top" constant="44" id="4IV-h3-USp"/>
@@ -180,5 +181,23 @@ You can log in using the safe OAuth method or use your login and password.</stri
     <resources>
         <image name="ic_action_openstreetmap_logo.png" width="30" height="30"/>
         <image name="img_openstreetmap_logo_big.png" width="90" height="90"/>
+        <namedColor name="buttonBgColorPrimary">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="buttonBgColorSecondary">
+            <color red="0.8784313725490196" green="0.8666666666666667" blue="0.8901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="buttonTextColorPrimary">
+            <color red="0.93725490196078431" green="0.90980392156862744" blue="0.99215686274509807" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="buttonTextColorSecondary">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="groupBgColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

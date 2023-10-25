@@ -106,6 +106,26 @@
     _data[kCellIconTint] = @(iconTint);
 }
 
+- (UIColor *)iconTintColor
+{
+    return _data[kCellIconTintColor];
+}
+
+- (void)setIconTintColor:(UIColor *)color;
+{
+    _data[kCellIconTintColor] = color;
+}
+
+- (UIColor *)secondIconTintColor
+{
+    return _data[kCellSecondaryIconTintColor];
+}
+
+- (void)setSecondIconTintColor:(UIColor *)color;
+{
+    _data[kCellSecondaryIconTintColor] = color;
+}
+
 - (UITableViewCellAccessoryType)accessoryType
 {
     return _data[kCellAccessoryType] ? [_data[kCellAccessoryType] integerValue] : UITableViewCellAccessoryNone;

@@ -16,7 +16,7 @@
 #import "OAChoosePlanHelper.h"
 #import "OAProducts.h"
 #import "OAAppSettings.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OALinks.h"
 #import "OASizes.h"
 #import "Localization.h"
@@ -120,7 +120,7 @@
     [productSection addRowFromDictionary:@{
         kCellTypeKey : [OATitleDescriptionBigIconCell getCellIdentifier],
         kCellTitleKey : OSMAND_START,
-        @"icon" : [UIImage imageNamed:@"ic_custom_osmand_start_logo_big"]
+        @"icon" : [UIImage imageNamed:@"ic_custom_osmand_pro_logo_colored"]
     }];
 
     [productSection addRowFromDictionary:@{
@@ -221,7 +221,7 @@
     [productSection addRowFromDictionary:@{
         kCellTypeKey : [OATitleDescriptionBigIconCell getCellIdentifier],
         kCellTitleKey : _isPromo ? OALocalizedString(@"promo_subscription") : OALocalizedString(@"product_title_pro"),
-        @"icon" : [UIImage imageNamed:@"ic_custom_osmand_pro_logo_colored_big"]
+        @"icon" : [UIImage imageNamed:@"ic_custom_osmand_pro_logo_colored"]
     }];
 
     [productSection addRowFromDictionary:@{
@@ -326,14 +326,14 @@
             cell = (OAValueTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.valueLabel.textColor = UIColor.blackColor;
+            cell.valueLabel.textColor = UIColor.textColorPrimary;
         }
         if (cell)
         {
             BOOL isManageSubscription = [item.key isEqualToString:@"manage_subscription"];
             cell.selectionStyle = isManageSubscription ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             
-            UIColor *tintColor = isManageSubscription ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
+            UIColor *tintColor = isManageSubscription ? UIColor.textColorActive : UIColor.textColorSecondary;
             cell.titleLabel.text = item.title;
             cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:isManageSubscription ? UIFontWeightMedium : UIFontWeightRegular];
             cell.titleLabel.textColor = tintColor;

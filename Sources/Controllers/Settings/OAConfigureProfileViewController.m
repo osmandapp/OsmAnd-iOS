@@ -9,10 +9,9 @@
 #import "OAConfigureProfileViewController.h"
 #import "OAApplicationMode.h"
 #import "Localization.h"
-#import "OAColors.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OASwitchTableViewCell.h"
-#import "OATitleRightIconCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OASimpleTableViewCell.h"
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
@@ -305,13 +304,13 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     // Actions
     NSMutableArray<NSDictionary *> *settingsActions = [NSMutableArray new];
     [settingsActions addObject:@{
-        @"type" : [OATitleRightIconCell getCellIdentifier],
+        @"type" : [OARightIconTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"export_profile"),
         @"img" : @"ic_custom_export",
         @"key" : @"export_profile"
     }];
     [settingsActions addObject:@{
-        @"type" : [OATitleRightIconCell getCellIdentifier],
+        @"type" : [OARightIconTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"copy_from_other_profile"),
         @"img" : @"ic_custom_copy",
         @"key" : @"copy_profile"
@@ -320,7 +319,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     if (![_appMode isCustomProfile] || ([_appMode isCustomProfile] && [self getBackupFileForCustomMode:_appMode.stringKey]))
     {
         [settingsActions addObject:@{
-            @"type" : [OATitleRightIconCell getCellIdentifier],
+            @"type" : [OARightIconTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"reset_to_default"),
             @"img" : @"ic_custom_reset",
             @"key" : @"reset_to_default"
@@ -330,7 +329,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     if ([_appMode isCustomProfile])
     {
         [settingsActions addObject:@{
-           @"type" : [OATitleRightIconCell getCellIdentifier],
+           @"type" : [OARightIconTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"profile_alert_delete_title"),
             @"img" : @"ic_custom_remove_outlined",
             @"key" : @"delete_profile"
@@ -395,7 +394,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
             [cell descriptionVisibility:NO];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            [cell.leftIconView setTintColor:UIColorFromRGB(color_icon_inactive)];
+            [cell.leftIconView setTintColor:UIColor.iconColorDefault];
         }
         if (cell)
         {
@@ -404,20 +403,24 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATitleRightIconCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OATitleRightIconCell *cell = (OATitleRightIconCell *)[self.tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
+        OARightIconTableViewCell *cell = (OARightIconTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
-            cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.titleLabel.textColor = UIColor.textColorActive;
+            cell.rightIconView.tintColor = UIColor.textColorActive;
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
-        cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            [cell.rightIconView setImage:[UIImage templateImageNamed:item[@"img"]]];
+        }
         return cell;
     }
     else if ([item[@"type"] isEqualToString:[FreeBackupBannerCell getCellIdentifier]])
@@ -507,7 +510,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         UIFont *labelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         [style setLineSpacing:6];
-        vw.label.attributedText = [[NSAttributedString alloc] initWithString:title attributes:@{NSParagraphStyleAttributeName : style, NSFontAttributeName : labelFont, NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
+        vw.label.attributedText = [[NSAttributedString alloc] initWithString:title attributes:@{NSParagraphStyleAttributeName : style, NSFontAttributeName : labelFont, NSForegroundColorAttributeName : UIColor.textColorSecondary}];
         [vw sizeToFit];
         return vw;
     }
@@ -564,7 +567,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) addUnderlay
 {
     _cpyProfileViewUnderlay = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.view.frame.size.width, self.view.frame.size.height)];
-    [_cpyProfileViewUnderlay setBackgroundColor:UIColor.blackColor];
+    [_cpyProfileViewUnderlay setBackgroundColor:UIColor.viewBgColor];
     [_cpyProfileViewUnderlay setAlpha:0.2];
     
     UITapGestureRecognizer *underlayTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onUnderlayTapped)];

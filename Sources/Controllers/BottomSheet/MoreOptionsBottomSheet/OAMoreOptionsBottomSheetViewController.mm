@@ -25,7 +25,7 @@
 #import "OAOsmNotePoint.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAOsmEditingViewController.h"
-#import "OAOsmNoteBottomSheetViewController.h"
+#import "OAOsmNoteViewController.h"
 #import "OAPOI.h"
 #import "OAMapLayers.h"
 #import "OAContextMenuLayer.h"
@@ -382,8 +382,9 @@
             [mapPanel targetHide];
             BOOL shouldEdit = _targetPoint.type == OATargetOsmNote;
             OAOsmNotePoint *point = shouldEdit ? _targetPoint.targetObj : [self constructFromTargetPoint:_targetPoint];
-            OAOsmNoteBottomSheetViewController *noteScreen = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_editingAddon points:[NSArray arrayWithObject:point] type:TYPE_CREATE];
-            [noteScreen show];
+            OAOsmNoteViewController *noteScreen = [[OAOsmNoteViewController alloc] initWithEditingPlugin:_editingAddon points:[NSArray arrayWithObject:point] type:EOAOsmNoteViewConrollerModeCreate];
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:noteScreen];
+            [mapPanel.navigationController presentViewController:navigationController animated:YES completion:nil];
         }
         else if ([key isEqualToString:@"download_map"])
         {

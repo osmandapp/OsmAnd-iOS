@@ -9,7 +9,7 @@
 #import "OARoadSpeedsViewController.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OsmAndApp.h"
 #import "OsmAndAppImpl.h"
 #import "OARoutingHelper.h"
@@ -160,7 +160,7 @@
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.valueLabel.textColor = UIColor.blackColor;
+            cell.valueLabel.textColor = UIColor.textColorPrimary;
         }
         if (cell)
         {
@@ -217,7 +217,7 @@
     footerDescription.numberOfLines = 0;
     footerDescription.lineBreakMode = NSLineBreakByWordWrapping;
     footerDescription.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    footerDescription.textColor = UIColorFromRGB(color_text_footer);
+    footerDescription.textColor = UIColor.textColorSecondary;
     [vw addSubview:footerDescription];
     return vw;
 }

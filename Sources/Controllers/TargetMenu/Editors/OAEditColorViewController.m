@@ -73,6 +73,7 @@
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+        [cell descriptionVisibility:NO];
         cell.leftIconView.layer.cornerRadius = cell.leftIconView.frame.size.width / 2;
     }
     

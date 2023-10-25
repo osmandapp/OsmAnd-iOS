@@ -14,6 +14,7 @@
 #import "OAIAPHelper.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kIconBigTitleSize 48.
 
@@ -96,10 +97,10 @@
 {
     self.labelTitle.font = [UIFont scaledSystemFontOfSize:34 weight:UIFontWeightBold];
     self.labelDescription.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    self.labelDescription.textColor = UIColorFromRGB(color_text_footer);
+    self.labelDescription.textColor = UIColor.textColorSecondary;
     [self.labelPurchaseDescription setText:OALocalizedString(@"subscription_cancel_description")];
     self.viewChooseSubscriptionButtonsBorder.layer.borderWidth = 1.;
-    self.viewChooseSubscriptionButtonsBorder.layer.borderColor = UIColorFromRGB(color_button_gray_background).CGColor;
+    self.viewChooseSubscriptionButtonsBorder.layer.borderColor = UIColor.iconColorDefault.CGColor;
     self.viewChooseSubscriptionButtonsBorder.layer.cornerRadius = 9.;
 }
 
@@ -347,7 +348,7 @@
                 }
                 row = isPurchaseButton ? _completePurchasePlanCardRow : self.subviews[_selectedSubscriptionIndex];
                 if (row.userInteractionEnabled)
-                    row.backgroundColor = UIColorFromARGB(color_primary_purple_25);
+                    row.backgroundColor = UIColor.buttonBgColorTertiary;
             }                completion:^(BOOL finished) {
                 [UIView animateWithDuration:0.2 animations:^{
                     OAPlanTypeCardRow *row = isPurchaseButton ? _completePurchasePlanCardRow : self.subviews[_selectedSubscriptionIndex];
@@ -372,7 +373,7 @@
             [UIView animateWithDuration:0.2 animations:^{
                 OAPlanTypeCardRow *row = isPurchaseButton ? _completePurchasePlanCardRow : self.subviews[tag];
                 if (row.userInteractionEnabled)
-                    row.backgroundColor = UIColorFromARGB(color_primary_purple_25);
+                    row.backgroundColor = UIColor.buttonBgColorTertiary;
             }                completion:nil];
         }
     }

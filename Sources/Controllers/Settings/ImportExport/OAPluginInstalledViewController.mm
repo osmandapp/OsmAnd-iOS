@@ -21,6 +21,7 @@
 #import "OARootViewController.h"
 #import "OASizes.h"
 #import "OADownloadingCellHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kSidePadding 20.0
 #define kTopPadding 6
@@ -347,8 +348,8 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         }
         if (cell)
         {
-            cell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:item[@"text"] fontSize:[UIFont preferredFontForTextStyle:UIFontTextStyleBody].pointSize];
-            cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
+            cell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:item[@"text"] fontSize:[UIFont preferredFontForTextStyle:UIFontTextStyleBody].pointSize textColor:UIColor.textColorPrimary];
+            cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColor.textColorActive};
             [cell.textView sizeToFit];
         }
         return cell;
@@ -372,7 +373,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? kPaddingToLeftOfContentWithIcon : 0.0, 0.0, 0.0);
         UIImage *img = am.getIcon;
         cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : UIColorFromRGB(color_tint_gray);
+        cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : UIColor.iconColorDisabled;
         cell.titleLabel.text = am.toHumanString;
         cell.descriptionLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;
@@ -410,7 +411,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     NSAttributedString *attrString;
     if (boldFragment && boldFragment.length > 0)
     {
-        attrString = [OAUtilities getStringWithBoldPart:descriptionText mainString:text boldString:boldFragment lineSpacing:0. fontSize:17. boldFontSize:34. boldColor:UIColor.blackColor mainColor:UIColorFromRGB(color_text_footer)];
+        attrString = [OAUtilities getStringWithBoldPart:descriptionText mainString:text boldString:boldFragment lineSpacing:0. fontSize:17. boldFontSize:34. boldColor:UIColor.textColorPrimary mainColor:UIColor.textColorSecondary];
     }
     else
     {
@@ -418,7 +419,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         [style setLineSpacing:6];
         attrString = [[NSAttributedString alloc] initWithString:descriptionText attributes:@{NSParagraphStyleAttributeName : style}];
     }
-    return [OAUtilities setupTableHeaderViewWithText:attrString tintColor:UIColor.whiteColor icon:_plugin.getLogoResource iconFrameSize:48. iconBackgroundColor:UIColorFromRGB(color_primary_purple) iconContentMode:UIViewContentModeScaleAspectFit iconYOffset:48.];
+    return [OAUtilities setupTableHeaderViewWithText:attrString tintColor:UIColor.whiteColor icon:_plugin.getLogoResource iconFrameSize:48. iconBackgroundColor:UIColor.iconColorActive iconContentMode:UIViewContentModeScaleAspectFit iconYOffset:48.];
 }
 
 - (NSInteger) getTypeForSection:(NSInteger)section

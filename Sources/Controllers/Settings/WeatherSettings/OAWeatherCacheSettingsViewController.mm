@@ -14,7 +14,7 @@
 #import "OsmAndApp.h"
 #import "OAWeatherHelper.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAWeatherCacheSettingsViewController () <UIViewControllerTransitioningDelegate>
 
@@ -246,14 +246,14 @@
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
-            cell.titleLabel.textColor = UIColorFromRGB(color_primary_red);
+            cell.titleLabel.textColor = UIColor.buttonBgColorDisruptive;
         }
         if (cell)
         {
             BOOL isClear = [item[@"key"] isEqualToString:@"clear"];
             cell.selectionStyle = isClear && _clearButtonActive ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = isClear ? _clearButtonActive ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_text_footer) : UIColor.blackColor;
+            cell.titleLabel.textColor = isClear ? _clearButtonActive ? UIColor.buttonBgColorDisruptive : UIColor.textColorSecondary : UIColor.textColorPrimary;
             cell.textStackView.alignment = isClear && _type == EOAWeatherOnlineData ? UIStackViewAlignmentCenter : UIStackViewAlignmentLeading;
         }
         return cell;
@@ -266,7 +266,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
-            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_red);
+            cell.rightIconView.tintColor = UIColor.buttonBgColorDisruptive;
             cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_remove_outlined"];
         }
         if (cell)

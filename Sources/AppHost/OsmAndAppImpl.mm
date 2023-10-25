@@ -233,9 +233,9 @@
 
 - (void) createLogFile
 {
-//#if DEBUG
-//    return;
-//#else
+#if DEBUG
+    return;
+#else
     NSFileManager *manager = NSFileManager.defaultManager;
     NSString *logsPath = [_documentsPath stringByAppendingPathComponent:@"Logs"];
     if (![manager fileExistsAtPath:logsPath])
@@ -250,7 +250,7 @@
     [formatter setDateFormat:@"MMM dd, yyyy HH:mm"];
     NSString *destPath = [[logsPath stringByAppendingPathComponent:[formatter stringFromDate:NSDate.date]] stringByAppendingPathExtension:@"log"];
     freopen([destPath fileSystemRepresentation], "a+", stderr);
-//#endif
+#endif
 }
 
 - (void) initOpeningHoursParser

@@ -271,7 +271,7 @@
 "use_osm_live_routing" = "OsmAnd Live-navigering";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "select_nav_profile_dialog_message" = "'Navigeringstyp' avgör hur rutter ska beräknas, med tillgängliga offline och online ruttberäkningsmotorer.";
-"osmand_default_routing" = "OsmAnd routing";
+"osmand_default_routing" = "OsmAnds ruttberäkning";
 "special_routing_type" = "Särskild ruttberäkning";
 "import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
 "recalculate_route" = "Beräkna om rutten";
@@ -925,7 +925,7 @@
 "copy_from_other_profile_descr" = "You can copy all settings from any profile to the selected profile: ";
 "profile_alert_delete_title" = "Ta bort profil";
 "profile_alert_delete_msg" = "Radera profilen \"%@\"";
-"select_base_profile_dialog_message" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";
+"select_base_profile_dialog_message" = "Basera din anpassade profil på en av appens standardprofiler, detta ställer in grunderna som måttenheter och widget-synlighet. Dessa är standardprofilerna, med exempel på anpassade profiler de är kopplade till:";
 "profile_type_custom_string" = "Anpassad profil";
 "new_profile" = "Ny profil";
 "configure_profile" = "Konfigurera profil";
@@ -1264,7 +1264,7 @@
 
 // Coordinate widget
 "coordinates_widget_current_location" = "Coordinates widget";
-"searching_gps" = "Searching GPS";
+"searching_gps" = "Söker GPS";
 "copied_to_clipboard" = "Kopierat till Urklipp";
 // Quick action
 "no_overlay" = "Ingetöverlägg";
@@ -2086,7 +2086,7 @@
 "rendering_value_blue_name" = "Blå";
 "routing_attr_avoid_ice_roads_fords_description" = "Undviker isvägar och vadställen.";
 "routing_attr_allow_advanced_name" = "Tillåt avancerade rutter";
-"rendering_attr_surface_grass_paver_name" = "Grass paver";
+"rendering_attr_surface_grass_paver_name" = "Gräsarmering";
 "rendering_attr_hideAccess_name" = "Tillfartsinskränkningar";
 "rendering_value__name" = "Standard";
 "rendering_attr_smoothness_very_horrible_name" = "Mycket förskräcklig";
@@ -2139,7 +2139,7 @@
 "rendering_attr_tracktype_grade2_name" = "Fast (oasfalterad)";
 "rendering_attr_piste_type_hike_name" = "Vandring";
 "rendering_value_medium_name" = "Mellan";
-"rendering_attr_piste_type_snow_park_name" = "Terrain park";
+"rendering_attr_piste_type_snow_park_name" = "Snöpark";
 "rendering_attr_highway_class_footway_name" = "Gångväg";
 "routing_attr_avoid_tram_description" = "Undvik spårvagnar";
 "rendering_value_default13_name" = "Standard (13)";

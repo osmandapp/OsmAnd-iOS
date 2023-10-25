@@ -3831,10 +3831,25 @@ typedef enum
 {
     if (_carPlayActiveController)
         return;
+  //  [self showCarPlayActiveController];
     _carPlayActiveController = [[OACarPlayActiveViewController alloc] init];
     _carPlayActiveController.messageText = OALocalizedString(@"carplay_active_message");
     [self addChildViewController:_carPlayActiveController];
     [self.view insertSubview:_carPlayActiveController.view atIndex:0];
+}
+
+- (void)showCarPlayActiveController
+{
+    _carPlayActiveController = [[OACarPlayActiveViewController alloc] init];
+    _carPlayActiveController.messageText = OALocalizedString(@"carplay_active_message");
+    [self addChildViewController:_carPlayActiveController];
+    
+//    [_mapViewController.mapView suspendRendering];
+//    [_mapViewController removeFromParentViewController];
+//    [_mapViewController.view removeFromSuperview];
+    
+   // [self.view insertSubview:_carPlayActiveController.view aboveSubview:_mapViewController.view];
+     [self.view insertSubview:_carPlayActiveController.view atIndex:0];
 }
 
 - (void) onCarPlayDisconnected:(void (^ __nullable)(void))onComplete

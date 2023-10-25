@@ -55,6 +55,7 @@
 
 #import "OAFirstUsageWelcomeController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAMapPanelViewController.h"
 
 #define kCheckUpdatesInterval 3600
 
@@ -71,10 +72,13 @@
 
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions
 {
+    NSLog(@"willConnectToSession");
     _windowScene = (UIWindowScene *)scene;
     if (!_windowScene) {
         return;
     }
+    
+    _window = [[UIWindow alloc] initWithWindowScene:_windowScene];
     
     OAAppDelegate *appDelegate = [self appDelegate];
     _rootViewController = appDelegate.rootViewController;
@@ -137,7 +141,7 @@
 {
     switch (event) {
         case AppLaunchEventStart:
-            _window = [[UIWindow alloc] initWithWindowScene:_windowScene];
+          //  _window = [[UIWindow alloc] initWithWindowScene:_windowScene];
             _window.rootViewController = [OALaunchScreenViewController new];
             [_window makeKeyAndVisible];
             break;
@@ -145,21 +149,36 @@
             [_rootViewController.navigationController pushViewController:[OAFirstUsageWelcomeController new] animated:NO];
             break;
         case AppLaunchEventRestoreSession:
-            _window = [[UIWindow alloc] initWithWindowScene:_windowScene];
+          //  _window = [[UIWindow alloc] initWithWindowScene:_windowScene];
             _rootViewController = [OARootViewController new];
             [self appDelegate].rootViewController = _rootViewController;
             _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
             [_window makeKeyAndVisible];
             break;
         case AppLaunchEventSetupRoot:
-            _rootViewController = [OARootViewController new];
-            [self appDelegate].rootViewController = _rootViewController;
-            _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
-            [_window makeKeyAndVisible];
+            [self configureLaunchEventSetupRootState];
             break;
         default:
             break;
     }
+}
+
+- (void)configureLaunchEventSetupRootState
+{
+//    BOOL carPlayActive = [OsmAndApp instance].carPlayActive;
+//    if (carPlayActive)
+//    {
+//        // scene will connect to Session when is carPlayActive, need set _window
+//        _window = [[UIWindow alloc] initWithWindowScene:_windowScene];
+//    }
+    _rootViewController = [OARootViewController new];
+    [self appDelegate].rootViewController = _rootViewController;
+    _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
+    [_window makeKeyAndVisible];
+//    if ([OsmAndApp instance].carPlayActive)
+//    {
+//        [_rootViewController.mapPanel showCarPlayActiveController];
+//    }
 }
 
 - (OAAppDelegate *)appDelegate {

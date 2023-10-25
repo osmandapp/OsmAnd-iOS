@@ -797,10 +797,11 @@
     }
     else
     {
-        [self onColorCollectionNewItemAdded:viewController.selectedColor];
+        OAColorItem *newColorItem = [self addAndGetNewColorItem:viewController.selectedColor];
         _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
 
         [colorHandler addAndSelectColor:[NSIndexPath indexPathForRow:0 inSection:0]
+                                newItem:newColorItem
                          collectionView:colorCell.collectionView];
         [colorHandler updateData:@[_sortedColorItems] collectionView:colorCell.collectionView];
     }

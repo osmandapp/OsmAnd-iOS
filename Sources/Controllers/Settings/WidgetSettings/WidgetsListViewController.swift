@@ -37,7 +37,6 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
             } else {
                 updateWithoutData()
             }
-            updateAppearance()
         }
     }
 
@@ -167,7 +166,11 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
                     self?.updateBottomButtons()
                 }
             } else {
-                reorderWidgets()
+                if let userInfo = notification.userInfo as? [String: Any] {
+                    reorderWidgets(with: userInfo)
+                } else {
+                    reorderWidgets()
+                }
                 updateUIAnimated(nil)
             }
         }
@@ -189,7 +192,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
 
     // MARK: Additions
 
-    private func reorderWidgets() {
+    private func reorderWidgets(with widgetParams: [String: Any]? = nil) {
         var orders = [[String]]()
         var currPage = [String]()
         for sec in 0..<tableData.sectionCount() {
@@ -205,7 +208,8 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         }
         WidgetUtils.reorderWidgets(orderedWidgetPages: orders,
                                       panel: widgetPanel,
-                                      selectedAppMode: selectedAppMode)
+                                   selectedAppMode: selectedAppMode,
+                                   widgetParams: widgetParams)
     }
 
 }
@@ -236,7 +240,7 @@ extension WidgetsListViewController {
                 cell.leftIconVisibility(!isPageCell)
                 cell.accessoryType = isPageCell ? .none : .disclosureIndicator
                 cell.selectionStyle = !tableView.isEditing && isPageCell ? .none : .default
-                cell.titleLabel.textColor = isPageCell ? colorFromRGB(Int(color_extra_text_gray)) : .black
+                cell.titleLabel.textColor = isPageCell ? .textColorSecondary : .textColorPrimary
             }
             return cell
         }
@@ -253,7 +257,7 @@ extension WidgetsListViewController {
                 cell.descriptionLabel?.text = item.descr
                 cell.descriptionLabel?.accessibilityLabel = item.descr
                 cell.cellImageView?.image = UIImage.templateImageNamed(item.iconName)
-                cell.cellImageView?.tintColor = colorFromRGB(item.iconTint)
+                cell.cellImageView?.tintColor = item.iconTintColor
                 cell.button?.setTitle(item.obj(forKey: "buttonTitle") as? String, for: .normal)
                 cell.button?.accessibilityLabel = item.obj(forKey: "buttonTitle") as? String
                 cell.button?.removeTarget(nil, action: nil, for: .allEvents)
@@ -286,7 +290,8 @@ extension WidgetsListViewController {
         let item = tableData.item(for: indexPath)
         let isFirstPageCell = item.key == kPageKey && indexPath.section == 0
         let isNoWidgetsCell = item.key == kNoWidgetsKey
-        return editMode && !isNoWidgetsCell && !isFirstPageCell
+        let isPageCell = item.key == kPageKey
+        return editMode && !isNoWidgetsCell && !isFirstPageCell && !isPageCell
     }
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -422,7 +427,7 @@ extension WidgetsListViewController {
             row.title = localizedString("no_widgets_here_yet")
             row.descr = localizedString("no_widgets_descr")
             row.iconName = iconName
-            row.iconTint = Int(color_tint_gray)
+            row.iconTintColor = UIColor.iconColorDefault
             row.setObj(localizedString("add_widget"), forKey: "buttonTitle")
         } else {
             if (widgetPanel.isPagingAllowed()) {

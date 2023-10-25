@@ -207,9 +207,6 @@
 
 - (void) addWpt:(OAWptPt *)w
 {
-    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[w getColor:0]]];
-
     NSMutableArray<OAGpxExtension *> *extArray = [w.extensions mutableCopy];
 
     int color = [w getColor:0];

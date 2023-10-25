@@ -81,7 +81,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
     
     override func generateData() {
         let discoveredDevices = BLEManager.shared.discoveredDevices
-        if discoveredDevices.isEmpty {
+        if !discoveredDevices.isEmpty {
             tableData.clearAllData()
             let section = tableData.createNewSection()
             BLEManager.shared.discoveredDevices.forEach { _ in section.createNewRow() }

@@ -16,6 +16,7 @@
 #import "OAMapUtils.h"
 #import "OAAppVersionDependentConstants.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OANativeUtilities.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QKeyValueIterator.h>
@@ -328,25 +329,6 @@
         routeKeyTags[it.key().toNSString()] = it.value().toNSString();
     }
     _networkRouteKeyTags = routeKeyTags;
-
-    // Location Marks
-    if (!gpxDocument->points.isEmpty())
-    {
-        const QList<OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>> marks = gpxDocument->points;
-
-        NSMutableArray<OAWptPt *> *_marks = [NSMutableArray array];
-        for (const auto& m : marks)
-        {
-            OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_m = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&m;
-            const std::shared_ptr<const OsmAnd::GpxDocument::WptPt> mark = _m->shared_ptr();
-            
-            OAWptPt *_mark = [self.class fetchWpt:_m->shared_ptr()];
-            [self processBounds:_mark.position];
-
-            [_marks addObject:_mark];
-        }
-        self.points = _marks;
-    }
    
     // Tracks
     if (!gpxDocument->tracks.isEmpty())
@@ -475,6 +457,88 @@
         self.routes = _rts;
     }
 
+    NSMutableArray<OAWptPt *> *_marks = [NSMutableArray array];
+
+    // Points group
+    if (!gpxDocument->pointsGroups.isEmpty())
+    {
+        const QMap<QString, OsmAnd::Ref<OsmAnd::GpxDocument::PointsGroup>> pointsGroups = gpxDocument->pointsGroups;
+
+        NSMutableDictionary<NSString *, OAPointsGroup *> *_pointsGroups = [NSMutableDictionary dictionary];
+        for (auto it = pointsGroups.constBegin(); it != pointsGroups.constEnd(); ++it)
+        {
+            const QString &key = it.key();
+            OsmAnd::Ref<OsmAnd::GpxDocument::PointsGroup> *value = (OsmAnd::Ref<OsmAnd::GpxDocument::PointsGroup>*)&it.value();
+            const std::shared_ptr<const OsmAnd::GpxDocument::PointsGroup> v = value->shared_ptr();
+
+            OAPointsGroup *pointsGroup = [[OAPointsGroup alloc] initWithName:v->name.toNSString()];
+            pointsGroup.iconName = v->iconName.toNSString();
+            pointsGroup.backgroundType = v->backgroundType.toNSString();
+            pointsGroup.color = [UIColor colorWithRed:v->color.r/255.0
+                                                green:v->color.g/255.0
+                                                 blue:v->color.b/255.0
+                                                alpha:v->color.a/255.0];
+
+            if (!v->points.isEmpty())
+            {
+                const QList<OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>> points = v->points;
+
+                NSMutableArray<OAWptPt *> *_points = [NSMutableArray array];
+                for (const auto& p : points)
+                {
+                    OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_p = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&p;
+                    const std::shared_ptr<const OsmAnd::GpxDocument::WptPt> point = _p->shared_ptr();
+                    
+                    OAWptPt *_point = [self.class fetchWpt:_p->shared_ptr()];
+                    [self processBounds:_point.position];
+
+                    [_points addObject:_point];
+                    [_marks addObject:_point];
+                }
+                pointsGroup.points = _points;
+            }
+
+            _pointsGroups[key.toNSString()] = pointsGroup;
+        }
+        self.pointsGroups = _pointsGroups;
+    }
+    else
+    {
+        self.pointsGroups = [NSMutableDictionary dictionary];
+    }
+
+    // Location Marks
+    if (!gpxDocument->points.isEmpty())
+    {
+        const QList<OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>> marks = gpxDocument->points;
+
+        for (const auto& m : marks)
+        {
+            OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_m = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&m;
+            const std::shared_ptr<const OsmAnd::GpxDocument::WptPt> mark = _m->shared_ptr();
+            
+            OAWptPt *_mark = [self.class fetchWpt:_m->shared_ptr()];
+            BOOL alreadyExist = NO;
+            if (self.pointsGroups.count > 0)
+            {
+                for (OAWptPt *wptPt in _marks)
+                {
+                    if ([wptPt isEqual:_mark])
+                    {
+                        alreadyExist = YES;
+                        break;
+                    }
+                }
+            }
+            if (alreadyExist)
+                continue;
+            [self processBounds:_mark.position];
+            [_marks addObject:_mark];
+        }
+    }
+
+    self.points = _marks;
+
     [self applyBounds];
     [self addGeneralTrack];
     [self processPoints];
@@ -548,7 +612,6 @@
     if (w.speed > 0)
         wpt->speed = w.speed;
 
-    OAGpxExtensions *extensions = [[OAGpxExtensions alloc] init];
     NSMutableArray<OAGpxExtension *> *extArray = [w.extensions mutableCopy];
     NSString *profile = [w getProfileType];
     if ([GAP_PROFILE_TYPE isEqualToString:profile])
@@ -557,8 +620,8 @@
         [extArray removeObject:profileExtension];
     }
 
-    extensions.extensions = extArray;
-    [extensions fillExtensions:wpt];
+    w.extensions = extArray;
+    [w fillExtensions:wpt];
 }
 
 + (void)fillTrack:(std::shared_ptr<OsmAnd::GpxDocument::Track>)trk usingTrack:(OATrack *)t
@@ -623,6 +686,7 @@
     std::shared_ptr<OsmAnd::GpxDocument::WptPt> wpt;
     std::shared_ptr<OsmAnd::GpxDocument::Track> trk;
     std::shared_ptr<OsmAnd::GpxDocument::Route> rte;
+    std::shared_ptr<OsmAnd::GpxDocument::PointsGroup> pg;
 
     document.reset(new OsmAnd::GpxDocument());
     document->version = QString::fromNSString(self.version);
@@ -646,6 +710,41 @@
         [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[w getColor:0]]];
         document->points.append(wpt);
         wpt = nullptr;
+    }
+
+    if (self.pointsGroups.count > 0)
+    {
+        OAGpxExtension *ext = [[OAGpxExtension alloc] init];
+        ext.name = @"points_groups";
+
+        for (NSString *key in self.pointsGroups.allKeys)
+        {
+            OAPointsGroup *pointsGroup = self.pointsGroups[key];
+
+            pg.reset(new OsmAnd::GpxDocument::PointsGroup());
+            pg->name = QString::fromNSString(pointsGroup.name);
+            pg->iconName = QString::fromNSString(pointsGroup.iconName);
+            pg->backgroundType = QString::fromNSString(pointsGroup.backgroundType);
+            pg->color = [pointsGroup.color toFColorARGB];
+
+            for (OAWptPt *wptPt in pointsGroup.points)
+            {
+                wpt.reset(new OsmAnd::GpxDocument::WptPt());
+                [self.class fillWpt:wpt usingWpt:wptPt];
+                pg->points.append(wpt);
+                wpt = nullptr;
+            }
+
+            document->pointsGroups.insert(QString::fromNSString(key), pg);
+            pg = nullptr;
+
+            OAGpxExtension *subExt = [[OAGpxExtension alloc] init];
+            subExt.name = @"group";
+            subExt.attributes = [pointsGroup toStringBundle];
+            [ext addSubextension:subExt];
+        }
+
+        [self addExtension:ext];
     }
 
     for (OATrack *t in self.tracks)

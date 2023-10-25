@@ -10,331 +10,302 @@
 #import "OAPointTableViewCell.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
-#import "OAParkingPositionPlugin.h"
+#import "OAGPXDocument.h"
+#import "OAGPXDocumentPrimitives.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
 #import "OAColors.h"
-#import "OsmAndApp.h"
-
-#include <OsmAndCore/Utilities.h>
-#include "Localization.h"
-
-#define kAlertConflictWarning -2
-#define kAlertConflictRename -4
-
-@interface OAFavoriteImportViewController ()
-{
-    OsmAndAppInstance _app;
-    std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> _favoritesCollection;
-    NSURL *_url;
-}
-
-@property (strong, nonatomic) NSMutableArray<OAFavoriteGroup *> *groupsAndFavorites;
-
-@end
+#import "Localization.h"
 
 @implementation OAFavoriteImportViewController
-
-
-- (instancetype)initFor:(NSURL*)url
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
+    NSURL *_url;
+    NSMutableArray<NSString *> *_ignoredNames;
+    OAGPXDocument *_gpxFile;
+    OAWptPt *_conflictedItem;
+}
 
-    _handled = NO;
-    
-    // Try to process as favorites
-    std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoritesCollection;
-    if ([url isFileURL])
+#pragma mark - Initialization
+
+- (instancetype)initFor:(NSURL *)url
+{
+    self = [super init];
+    if (self)
     {
-        // Try to import favorites
-        favoritesCollection = OsmAnd::FavoriteLocationsGpxCollection::tryLoadFrom(QString::fromNSString(url.path));
-        if (favoritesCollection)
-            _handled = YES;
-        
-        self = [super init];
-        if (self) {
-            _url = [url copy];
-            _app = app;
-            if (_handled)
-                _favoritesCollection = favoritesCollection;
-        }
-        
+        _url = url;
+        [self postInit];
     }
     return self;
 }
 
-- (BOOL)isFavoritesValid
+- (void)commonInit
 {
-    for(const auto& favorite : _favoritesCollection->getFavoriteLocations())
+    _ignoredNames = [NSMutableArray array];
+}
+
+- (void)postInit
+{
+    if ([_url isFileURL])
     {
-        NSString* favoriteTitle = favorite->getTitle().toNSString();
-        for(const auto& localFavorite : _app.favoritesCollection->getFavoriteLocations())
-        {
-            if ([favoriteTitle isEqualToString:localFavorite->getTitle().toNSString()] && ![self.ignoredNames containsObject:favoriteTitle] ) {
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:OALocalizedString(@"fav_exists"), favoriteTitle] delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"fav_ignore"), OALocalizedString(@"shared_string_rename"), OALocalizedString(@"update_existing"), OALocalizedString(@"replace_all"), nil];
-                alert.tag = kAlertConflictWarning;
-                [alert show];
-                self.conflictedName = favoriteTitle;
-                return NO;
-            }
-        }
-    }
-    return YES;
-}
-
-#pragma mark - UIAlertViewDelegate
-- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (alertView.tag == kAlertConflictWarning) {
-        
-        // Cancel
-        if (buttonIndex == alertView.cancelButtonIndex) {
-            
-            [self.ignoredNames removeAllObjects];
-            self.conflictedName = @"";
-            _favoritesCollection = OsmAnd::FavoriteLocationsGpxCollection::tryLoadFrom(QString::fromNSString(_url.path));
-            
-        // Ignore
-        } else if (buttonIndex == 1) {
-            
-            [self.ignoredNames addObject:self.conflictedName];
-            [self importClicked:nil];
-            
-        // Rename - ask name
-        } else if (buttonIndex == 2) {
-            
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"fav_rename_q") message:OALocalizedString(@"fav_enter_new_name \"%@\"", self.conflictedName) delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles: OALocalizedString(@"shared_string_ok"), nil];
-            alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-            alert.tag = kAlertConflictRename;
-            [alert show];
-            
-        // Replace current
-        } else if (buttonIndex == 3) {
-            
-            for(const auto& localFavorite : _app.favoritesCollection->getFavoriteLocations()) {
-                NSString* favoriteTitle = localFavorite->getTitle().toNSString();
-                if ([favoriteTitle isEqualToString:self.conflictedName]) {
-                    _app.favoritesCollection->removeFavoriteLocation(localFavorite);
-                    break;
-                }
-            }
-            [self importClicked:nil];
-            
-        // Replace All
-        } else if (buttonIndex == 4) {
-            
-            for(const auto& favorite : _favoritesCollection->getFavoriteLocations()) {
-                for(const auto& localFavorite : _app.favoritesCollection->getFavoriteLocations()) {
-                    NSString* favoriteTitle = favorite->getTitle().toNSString();
-                    NSString* localFavoriteTitle = localFavorite->getTitle().toNSString();
-                    if ([localFavoriteTitle isEqualToString:favoriteTitle]) {
-                        _app.favoritesCollection->removeFavoriteLocation(localFavorite);
-                    }
-                }
-            }
-            [self importClicked:nil];
-        }
-        
-    } else if (alertView.tag == kAlertConflictRename) {
-        
-        if (buttonIndex != alertView.cancelButtonIndex) {
-            NSString* newFavoriteName = [alertView textFieldAtIndex:0].text;
-            
-            for(const auto& favorite : _favoritesCollection->getFavoriteLocations()) {
-                NSString* favoriteTitle = favorite->getTitle().toNSString();
-                if ([favoriteTitle isEqualToString:self.conflictedName]) {
-                    favorite->setTitle(QString::fromNSString(newFavoriteName));
-                    break;
-                }
-            }
-        }
-        [self importClicked:nil];
+        _gpxFile = [OAFavoritesHelper loadGpxFile:_url.path];
+        _handled = YES;
     }
 }
 
-- (void) applyLocalization
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    _titleView.text = OALocalizedString(@"fav_import_title");
-    [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [_importButton setTitle:OALocalizedString(@"shared_string_import") forState:UIControlStateNormal];
+    return OALocalizedString(@"fav_import_title");
 }
 
-- (void) viewDidLoad
+- (NSString *)getLeftNavbarButtonTitle
 {
-    [super viewDidLoad];
-    self.ignoredNames = [[NSMutableArray alloc] init];
-    self.importButton.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
-    self.cancelButton.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
+    return OALocalizedString(@"shared_string_cancel");
 }
 
-- (void) viewWillAppear:(BOOL)animated
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    [self generateData];
-    [self setupView];
-    
-    [super viewWillAppear:animated];
+    UIBarButtonItem *rightButton = [self createRightNavbarButton:OALocalizedString(@"shared_string_import")
+                                                        iconName:nil
+                                                          action:@selector(onRightNavbarButtonPressed)
+                                                            menu:nil];
+    rightButton.accessibilityLabel = OALocalizedString(@"shared_string_import");
+    return @[rightButton];
 }
 
-- (UIView *) getTopView
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
-    return _navBarView;
+    return EOABaseNavbarColorSchemeOrange;
 }
 
-- (UIView *) getMiddleView
+#pragma mark - Table Data
+
+- (void)generateData
 {
-    return _favoriteTableView;
-}
-
-- (void) generateData
-{
-    self.groupsAndFavorites = [[NSMutableArray alloc] init];
-
-    const auto allFavorites = _favoritesCollection->getFavoriteLocations();
-    [self.groupsAndFavorites addObjectsFromArray:[OAFavoritesHelper getGroupedFavorites:allFavorites]];
-    [self.favoriteTableView reloadData];
-}
-
--(void) setupView
-{
-    [self applySafeAreaMargins];
-    [self.favoriteTableView setDataSource:self];
-    [self.favoriteTableView setDelegate:self];
-    self.favoriteTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self.favoriteTableView reloadData];
-}
-
-- (void) didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - Actions
-
-- (IBAction) importClicked:(id)sender
-{
-    if (_favoritesCollection) {
-        // IOS-214
-        if (![self isFavoritesValid])
-            return;
-        
-        _app.favoritesCollection->mergeFrom(_favoritesCollection);
-        [OAFavoritesHelper loadFavorites];
-        // Re-apply parking
-        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
-        if (plugin)
+    if (_gpxFile)
+    {
+        for (NSString *key in _gpxFile.pointsGroups.allKeys)
         {
-            for (OAFavoriteItem *item in [OAFavoritesHelper getFavoriteItems])
+            OAPointsGroup *pointsGroup = _gpxFile.pointsGroups[key];
+            OATableSectionData *section = [self.tableData createNewSection];
+            section.headerText = [OAFavoriteGroup getDisplayName:pointsGroup.name];
+            
+            for (OAWptPt *wptPt in pointsGroup.points)
             {
-                if (item.specialPointType == OASpecialPointType.PARKING)
-                {
-                    NSDate *timestamp = [item getTimestamp];
-                    NSDate *pickupTime = [item getPickupTime];
-                    BOOL isTimeRestricted = pickupTime != nil && [pickupTime timeIntervalSince1970] > 0;
-                    [plugin setParkingType:isTimeRestricted];
-                    [plugin setParkingTime:isTimeRestricted ? pickupTime.timeIntervalSince1970 * 1000 : 0];
-                    if (timestamp)
-                        [plugin setParkingStartTime:timestamp.timeIntervalSince1970 * 1000];
-                    [plugin setParkingPosition:item.getLatitude longitude:item.getLongitude];
-                    [plugin addOrRemoveParkingEvent:item.getCalendarEvent];
-                    if (item.getCalendarEvent)
-                        [OAFavoritesHelper addParkingReminderToCalendar];
-                    else
-                        [OAFavoritesHelper removeParkingReminderFromCalendar];
-                    break;
-                }
+                OATableRowData *row = [section createNewRow];
+                row.cellType = [OAPointTableViewCell getCellIdentifier];
+                [row setObj:wptPt forKey:@"wptPt"];
             }
         }
-        [self.ignoredNames removeAllObjects];
-        self.conflictedName = @"";
-
-        [OAUtilities denyAccessToFile:_url.path removeFromInbox:YES];
-        [OsmAndApp.instance saveFavoritesToPermanentStorage];
-
-        [self.navigationController popViewControllerAnimated:YES];
     }
-}
-
-- (IBAction) cancelClicked:(id)sender
-{
-    [OAUtilities denyAccessToFile:_url.path removeFromInbox:YES];
-
-    [self.navigationController popViewControllerAnimated:YES];
-    //[self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    return [self getUnsortedNumberOfSectionsInTableView];
-}
-
-- (NSInteger) getUnsortedNumberOfSectionsInTableView
-{
-    return [self.groupsAndFavorites count];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 60.;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    OAFavoriteGroup *group = [self.groupsAndFavorites objectAtIndex:section];
-    return [OAFavoriteGroup getDisplayName:group.name];
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [((OAFavoriteGroup*)[self.groupsAndFavorites objectAtIndex:section]).points count];
-}
-
-- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self getUnsortedcellForRowAtIndexPath:indexPath];
-}
-
-- (UITableViewCell*) getUnsortedcellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    OAFavoriteGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
-    
-    OAPointTableViewCell* cell;
-    cell = (OAPointTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
-    if (cell == nil)
+    OATableRowData *item = [self.tableData itemForIndexPath:indexPath];
+    if ([item.cellType isEqualToString:[OAPointTableViewCell getCellIdentifier]])
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
-    }
-    
-    if (cell)
-    {
-        OAFavoriteItem* item = [groupData.points objectAtIndex:indexPath.row];
-        [cell.titleView setText:item.favorite->getTitle().toNSString()];
-        
-        cell.rightArrow.image = nil;
-        cell.directionImageView.image = nil;
-        cell.distanceView.hidden = YES;
-        
-        CGRect titleFrame = CGRectMake(cell.titleView.frame.origin.x, 15.0, cell.titleView.frame.size.width + 20.0, cell.titleView.frame.size.height);
-        cell.titleView.frame = titleFrame;
-        
-        [cell.distanceView setText:item.distance];
-        cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
-        cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
-        cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
-        cell.titleIcon.image = [item getCompositeIcon];
-    }
-    return cell;
-}
+        OAPointTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        if (cell)
+        {
+            OAWptPt *wptPt = [item objForKey:@"wptPt"];
 
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+            cell.titleView.text = wptPt.name;
+            cell.rightArrow.image = nil;
+            cell.directionImageView.image = nil;
+            cell.distanceView.hidden = YES;
+
+            CGRect titleFrame = CGRectMake(cell.titleView.frame.origin.x, 15.0, cell.titleView.frame.size.width + 20.0, cell.titleView.frame.size.height);
+            cell.titleView.frame = titleFrame;
+
+            cell.distanceView.text = @(wptPt.distance).stringValue;
+            cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+            cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
+//            cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
+            cell.titleIcon.image = [OAFavoritesHelper getCompositeIcon:[wptPt getIcon]
+                                                        backgroundIcon:[wptPt getBackgroundIcon]
+                                                                 color:[wptPt getColor]];
+
+        }
+        return cell;
+    }
     return nil;
 }
 
-- (BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+#pragma mark - Selectors
+
+- (void)onLeftNavbarButtonPressed
 {
-    return NO;
+    [OAUtilities denyAccessToFile:_url.path removeFromInbox:YES];
+
+    [super onLeftNavbarButtonPressed];
+}
+
+- (void)onRightNavbarButtonPressed
+{
+    if (_gpxFile && _gpxFile.pointsGroups.count > 0)
+    {
+        // IOS-214
+        if (![self isFavoritesValid])
+            return;
+
+        [OAFavoritesHelper importFavoritesFromGpx:_gpxFile];
+
+        [_ignoredNames removeAllObjects];
+        _conflictedItem = nil;
+
+        [self onLeftNavbarButtonPressed];
+    }
+}
+
+#pragma mark - Additions
+
+- (BOOL)isFavoritesValid
+{
+    if (!_gpxFile)
+        return NO;
+
+    NSArray<OAFavoriteItem *> *favoriteItems = [OAFavoritesHelper getFavoriteItems];
+    for (OAFavoriteItem *localItem in favoriteItems)
+    {
+        for (NSString *key in _gpxFile.pointsGroups.allKeys)
+        {
+            OAPointsGroup *pointGroup = _gpxFile.pointsGroups[key];
+            for (OAWptPt *item in pointGroup.points)
+            {
+                NSString *importItemName = item.name;
+                if ([importItemName isEqualToString:[localItem getName]]
+                    && ![_ignoredNames containsObject:importItemName])
+                {
+                    _conflictedItem = item;
+
+                    UIAlertController *alert =
+                            [UIAlertController alertControllerWithTitle:nil
+                                                                message:[NSString stringWithFormat:OALocalizedString(@"fav_exists"), importItemName]
+                                                         preferredStyle:UIAlertControllerStyleAlert];
+
+                    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                                           style:UIAlertActionStyleDefault
+                                                                         handler:^(UIAlertAction * _Nonnull action)
+                        {
+                            [_ignoredNames removeAllObjects];
+                            _conflictedItem = nil;
+                        }
+                    ];
+
+                    UIAlertAction *ignoreAction =
+                        [UIAlertAction actionWithTitle:OALocalizedString(@"fav_ignore")
+                                                 style:UIAlertActionStyleDefault
+                                               handler:^(UIAlertAction * _Nonnull action)
+                        {
+                            [_ignoredNames addObject:_conflictedItem.name];
+                            [self onRightNavbarButtonPressed];
+                        }
+                    ];
+
+                    UIAlertAction *renameAction =
+                        [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_rename")
+                                                 style:UIAlertActionStyleDefault
+                                               handler:^(UIAlertAction * _Nonnull action)
+                        {
+                            UIAlertController *alertRename =
+                                    [UIAlertController alertControllerWithTitle:OALocalizedString(@"fav_rename_q")
+                                                                        message:OALocalizedString(@"fav_enter_new_name \"%@\"", _conflictedItem.name)
+                                                                 preferredStyle:UIAlertControllerStyleAlert];
+
+                            [alertRename addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+                                textField.text = _conflictedItem.name;
+                            }];
+
+                            UIAlertAction *cancelRenameAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                                                   style:UIAlertActionStyleDefault
+                                                                                 handler:nil
+                            ];
+
+                            UIAlertAction *okAction =
+                                [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
+                                                         style:UIAlertActionStyleDefault
+                                                       handler:^(UIAlertAction * _Nonnull action)
+                                {
+                                    
+                                    NSString *newFavoriteName = alertRename.textFields[0].text;
+                                    _conflictedItem.name = newFavoriteName;
+                                    [self onRightNavbarButtonPressed];
+                                }
+                            ];
+
+                            [alertRename addAction:cancelRenameAction];
+                            [alertRename addAction:okAction];
+
+                            [self presentViewController:alertRename animated:YES completion:nil];
+                        }
+                    ];
+
+                    UIAlertAction *updateAction =
+                        [UIAlertAction actionWithTitle:OALocalizedString(@"update_existing")
+                                                 style:UIAlertActionStyleDefault
+                                               handler:^(UIAlertAction * _Nonnull action)
+                        {
+                            for (OAFavoriteItem *localFavortite in favoriteItems)
+                            {
+                                if ([[localFavortite getName] isEqualToString:_conflictedItem.name])
+                                {
+                                    [OAFavoritesHelper deleteFavoriteGroups:nil
+                                                          andFavoritesItems:@[localFavortite]];
+                                    break;
+                                }
+                            }
+                            [self onRightNavbarButtonPressed];
+                        }
+                    ];
+
+                    UIAlertAction *replaceAction =
+                        [UIAlertAction actionWithTitle:OALocalizedString(@"replace_all")
+                                                 style:UIAlertActionStyleDefault
+                                               handler:^(UIAlertAction * _Nonnull action)
+                        {
+                            for (NSString *keyGroup in _gpxFile.pointsGroups.allKeys)
+                            {
+                                OAPointsGroup *group = _gpxFile.pointsGroups[keyGroup];
+                                for (OAWptPt *wptPt in group.points)
+                                {
+                                    for (OAFavoriteItem *localFavortite in favoriteItems)
+                                    {
+                                        if ([[localFavortite getName] isEqualToString:wptPt.name])
+                                        {
+                                            [OAFavoritesHelper deleteFavoriteGroups:nil
+                                                                  andFavoritesItems:@[localFavortite]];
+                                        }
+                                    }
+                                }
+                            }
+                            [self onRightNavbarButtonPressed];
+                        }
+                    ];
+
+                    [alert addAction:cancelAction];
+                    [alert addAction:ignoreAction];
+                    [alert addAction:renameAction];
+                    [alert addAction:updateAction];
+                    [alert addAction:replaceAction];
+
+                    [self presentViewController:alert animated:YES completion:nil];
+                    return NO;
+                }
+            }
+        }
+    }
+    return YES;
 }
 
 @end

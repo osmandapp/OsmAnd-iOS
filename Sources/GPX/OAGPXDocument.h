@@ -16,6 +16,8 @@
 #include <QStack>
 #include <OsmAndCore/GpxDocument.h>
 
+#define kDefaultWptGroupName @""
+
 @class OAGPXTrackAnalysis;
 @class OASplitMetric, QuadRect, OAApplicationMode;
 
@@ -25,6 +27,8 @@
 @property (nonatomic) NSArray<OAWptPt *> *points;
 @property (nonatomic) NSArray<OATrack *> *tracks;
 @property (nonatomic) NSArray<OARoute *> *routes;
+@property (nonatomic) NSDictionary<NSString *, OAPointsGroup *> *pointsGroups;
+
 
 @property (nonatomic) NSArray<OARouteSegment *> *routeSegments;
 @property (nonatomic) NSArray<OARouteType *> *routeTypes;

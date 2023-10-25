@@ -287,9 +287,22 @@
 
 - (OASettingsItemWriter *)getWriter
 {
-    NSArray<OAFavoriteItem *> *favorites = [self getPointsFromGroups:self.items];
-    OAGPXDocument *doc = [OAFavoritesHelper asGpxFile:favorites];
-    return [self getGpxWriter:doc];
+    OAGPXMutableDocument *doc = [OAFavoritesHelper asGpxFile:self.items];
+    return [self getGpxWriter:(OAGPXDocument *) doc];
+}
+
++ (NSArray<OAFavoriteItem *> *)wptAsFavourites:(NSArray<OAWptPt *> *)points
+                               defaultCategory:(NSString *)defaultCategory
+{
+    NSMutableArray<OAFavoriteItem *> *favorites = [NSMutableArray array];
+    for (OAWptPt *point in points)
+    {
+        if (!point.name || point.name.length == 0)
+            point.name = OALocalizedString(@"shared_string_waypoint");
+        NSString *category = point.type ? point.type : defaultCategory;
+        [favorites addObject:[OAFavoriteItem fromWpt:point category:category]];
+    }
+    return favorites;
 }
 
 @end
@@ -308,12 +321,39 @@
         return NO;
     }
 
-    const auto favoritesCollection = OsmAnd::FavoriteLocationsGpxCollection::tryLoadFrom(QString::fromNSString(filePath));
-    if (favoritesCollection)
-        [self.item.items addObjectsFromArray:[OAFavoritesHelper getGroupedFavorites:favoritesCollection->getFavoriteLocations()]];
+    OAGPXDocument *gpxFile = [[OAGPXDocument alloc] initWithGpxFile:filePath];
+    if (gpxFile)
+    {
+        NSMutableDictionary<NSString *, OAFavoriteGroup *> *flatGroups = [NSMutableDictionary dictionary];
+        NSArray<OAFavoriteItem *> *favorites = [OAFavoritesSettingsItem wptAsFavourites:gpxFile.points defaultCategory:@""];
+        for (OAFavoriteItem *point in favorites)
+        {
+            OAFavoriteGroup *group = flatGroups[[point getCategory]];
+            if (!group)
+            {
+                group = [self createFavoriteGroup:gpxFile point:point];
+                flatGroups[group.name] = group;
+                [self.item.items addObject:group];
+            }
+            [group.points addObject:point];
+        }
+    }
 
     self.item.read = YES;
     return YES;
+}
+
+- (OAFavoriteGroup *)createFavoriteGroup:(OAGPXDocument *)gpxFile point:(OAFavoriteItem *)point
+{
+    OAFavoriteGroup *favoriteGroup = [[OAFavoriteGroup alloc] initWithPoint:point];
+    OAPointsGroup *pointsGroup = gpxFile.pointsGroups[favoriteGroup.name];
+    if (pointsGroup)
+    {
+        favoriteGroup.color = pointsGroup.color;
+        favoriteGroup.iconName = pointsGroup.iconName;
+        favoriteGroup.backgroundType = pointsGroup.backgroundType;
+    }
+    return favoriteGroup;
 }
 
 @end

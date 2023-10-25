@@ -3056,20 +3056,17 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                     if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:self.foundWpt.position.latitude] &&
                         [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:self.foundWpt.position.longitude])
                     {
-                        [OAGPXDocument fillWpt:w usingWpt:self.foundWpt];
-                        OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[self.foundWpt getColor:0]]];
+                        auto _doc = std::const_pointer_cast<OsmAnd::GpxDocument>(doc);
+                        OAGPXMutableDocument *gpxDocument = [[OAGPXMutableDocument alloc] initWithGpxDocument:_doc];
+                        [gpxDocument addWpt:self.foundWpt];
+                        [gpxDocument saveTo:self.foundWptDocPath];
                         break;
                     }
                 }
-                
-                doc->saveTo(QString::fromNSString(self.foundWptDocPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
-                
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [_mapLayers.gpxMapLayer refreshGpxWaypoints];
                 });
-                
                 return YES;
             }
         }
@@ -3111,21 +3108,13 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
             NSString *path = it.key().toNSString();
             if ([path isEqualToString:gpxFileName])
             {
-                auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
-
-                std::shared_ptr<OsmAnd::GpxDocument::WptPt> p;
-                p.reset(new OsmAnd::GpxDocument::WptPt());
-                [OAGPXDocument fillWpt:p usingWpt:wpt];
-                OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[wpt getColor:0]]];
-
-                doc->points.append(p);
-                doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
-                
-                wpt.wpt = p;
                 self.foundWpt = wpt;
                 self.foundWptDocPath = gpxFileName;
-                
+                auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
+                OAGPXMutableDocument *gpxDocument = [[OAGPXMutableDocument alloc] initWithGpxDocument:doc];
+                [gpxDocument addWpt:self.foundWpt];
+                [gpxDocument saveTo:self.foundWptDocPath];
+
                 [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:doc->points.count()];
                 [[OAGPXDatabase sharedDb] save];
                 
@@ -3150,20 +3139,12 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         if ([_gpxDocFileTemp isEqualToString:[gpxFileName lastPathComponent]])
         {
             auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first());
-
-            std::shared_ptr<OsmAnd::GpxDocument::WptPt> p;
-            p.reset(new OsmAnd::GpxDocument::WptPt());
-            [OAGPXDocument fillWpt:p usingWpt:wpt];
-            OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-            [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[wpt getColor:0]]];
-
-            doc->points.append(p);
-            doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
-            
-            wpt.wpt = p;
             self.foundWpt = wpt;
             self.foundWptDocPath = gpxFileName;
-            
+            OAGPXMutableDocument *gpxDocument = [[OAGPXMutableDocument alloc] initWithGpxDocument:doc];
+            [gpxDocument addWpt:self.foundWpt];
+            [gpxDocument saveTo:self.foundWptDocPath];
+
             [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:doc->points.count()];
             [[OAGPXDatabase sharedDb] save];
             

@@ -7,6 +7,7 @@
 //
 
 #import "OASelectFavoriteGroupViewController.h"
+#import "OAFavoriteGroupEditorViewController.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
 #import "OAColors.h"
@@ -15,13 +16,12 @@
 #import "OADefaultFavorite.h"
 #import "OATitleRightIconCell.h"
 #import "OASimpleTableViewCell.h"
-#import "OAAddFavoriteGroupViewController.h"
 #import "OsmAndApp.h"
 
 #define kAddNewGroupSection 0
 #define kGroupsListSection 1
 
-@interface OASelectFavoriteGroupViewController() <UITableViewDelegate, UITableViewDataSource, OAAddFavoriteGroupDelegate>
+@interface OASelectFavoriteGroupViewController() <UITableViewDelegate, UITableViewDataSource, OAEditorDelegate>
 
 @end
 
@@ -218,9 +218,9 @@
 {
     if (indexPath.section == kAddNewGroupSection)
     {
-        OAAddFavoriteGroupViewController *addGroupVC = [[OAAddFavoriteGroupViewController alloc] init];
-        addGroupVC.delegate = self;
-        [self showModalViewController:addGroupVC];
+        OAFavoriteGroupEditorViewController *groupEditor = [[OAFavoriteGroupEditorViewController alloc] initWithNew];
+        groupEditor.delegate = self;
+        [self showModalViewController:groupEditor];
     }
     else if (indexPath.section == kGroupsListSection)
     {
@@ -241,23 +241,31 @@
             return UITableViewAutomaticDimension;
 }
 
-#pragma mark - OAAddFavoriteGroupDelegate
+#pragma mark - OAEditorDelegate
 
-- (void)onFavoriteGroupAdded:(NSString *)groupName color:(UIColor *)color
+- (void)onEditorAdded:(NSString *)name
+             iconName:(NSString *)iconName
+                color:(UIColor *)color
+   backgroundIconName:(NSString *)backgroundIconName;
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_delegate)
-            [_delegate onNewGroupAdded:groupName color:color];
-        [self dismissViewControllerAnimated:YES completion:nil];
-    });
+    [self dismissViewController];
+    if (_delegate)
+    {
+        [_delegate onNewGroupAdded:name
+                          iconName:iconName
+                             color:color
+                backgroundIconName:backgroundIconName];
+    }
+}
+
+- (void)onEditorUpdated
+{
 }
 
 - (void)onFavoriteGroupColorsRefresh
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_delegate)
-            [_delegate onFavoriteGroupColorsRefresh];
-    });
+    if (_delegate)
+        [_delegate onFavoriteGroupColorsRefresh];
 }
 
 @end

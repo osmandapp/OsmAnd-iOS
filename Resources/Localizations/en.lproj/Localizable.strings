@@ -3310,3 +3310,9 @@
 "no_widgets_descr" = "Add one or more widgets from the list of available widgets.";
 "click_on_widget" = "Click on widget";
 "map_marker_interval_dialog_desc" = "Specify the time interval for which the average speed will be measured to calculate estimated time of arrival.";
+
+"change_appearance" = "Change appearance";
+"default_appearance_desc" = "Default color, icon and shape will apply to the added favorite points into the group.";
+"apply_to_existing" = "Apply to existing";
+"apply_only_to_new_points" = "Apply only to new points";
+"apply_to_existing_favorites_descr" = "Apply changes to the existing favorite points of the group or only to new?";

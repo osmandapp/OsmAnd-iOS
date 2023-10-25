@@ -356,22 +356,25 @@ typedef enum : NSUInteger {
 
 - (void)importAsFavorites:(NSURL *)url
 {
-    UIViewController* incomingURLViewController = [[OAFavoriteImportViewController alloc] initFor:url];
-    if (incomingURLViewController == nil)
-        return;
+    OAFavoriteImportViewController *favoriteImportViewController = [[OAFavoriteImportViewController alloc] initFor:url];
 
-    if (((OAFavoriteImportViewController *)incomingURLViewController).handled == NO)
+    if (favoriteImportViewController.handled == NO)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.class showInfoAlertWithTitle:OALocalizedString(@"import_failed")
                                        message:OALocalizedString(@"import_cannot")
                                   inController:self];
         });
-        incomingURLViewController = nil;
+        favoriteImportViewController = nil;
     }
 
     [self closeMenuAndPanelsAnimated:NO];
-    [self.navigationController pushViewController:incomingURLViewController animated:YES];
+
+    if (favoriteImportViewController)
+    {
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:favoriteImportViewController];
+        [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+    }
 }
 
 - (void)importAsGPX:(NSURL *)url

@@ -14,6 +14,7 @@
 #import "OAColors.h"
 #import "OAFavoritesHelper.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OAGPXDocument.h"
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAPOI.h"
@@ -22,6 +23,8 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/IFavoriteLocationsCollection.h>
 #include <OsmAndCore/Utilities.h>
+
+#define kDelimiter @"__"
 
 @implementation OASpecialPointType
 {
@@ -282,6 +285,11 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 }
 
 #pragma mark - Getters and setters
+
+- (NSString *) getKey
+{
+    return [NSString stringWithFormat:@"%@%@%@", [self getName], kDelimiter, [self getCategory]];
+}
 
 - (NSString *) getName
 {

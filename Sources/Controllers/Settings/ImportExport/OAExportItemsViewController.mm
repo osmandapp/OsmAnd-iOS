@@ -199,7 +199,7 @@
 - (void)shareProfile
 {
     _exportStarted = YES;
-    [self updateUI:NO];
+    [self updateUI];
 
     OASettingsHelper *settingsHelper = OASettingsHelper.sharedInstance;
     NSArray<OASettingsItem *> *settingsItems = [settingsHelper prepareSettingsItems:self.getSelectedItems settingsItems:@[] doExport:YES];

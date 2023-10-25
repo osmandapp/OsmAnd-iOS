@@ -16,11 +16,14 @@
 #import "OADefaultFavorite.h"
 #import "OAAppSettings.h"
 #import "OAGPXMutableDocument.h"
+#import "OAGPXDocumentPrimitives.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAPlugin.h"
 #import "OAIndexConstants.h"
 #import "OAAppVersionDependentConstants.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OANativeUtilities.h"
+#import "OAFavoritesSettingsItem.h"
 
 #import <EventKit/EventKit.h>
 
@@ -49,32 +52,11 @@ static BOOL _favoritesLoaded = NO;
     _cachedFavoritePoints = [NSMutableArray array];
     _favoriteGroups = [NSMutableArray array];
     _flatGroups = [NSMutableDictionary dictionary];
-        
-    const auto& allFavorites = [OsmAndApp instance].favoritesCollection->getFavoriteLocations();
-    
-    NSMutableArray *loadedPoints = [NSMutableArray new];
-    for (const auto& favorite : allFavorites)
-    {
-        OAFavoriteItem* favData = [[OAFavoriteItem alloc] initWithFavorite:favorite];
-        [loadedPoints addObject:favData];
-    }
-    NSArray *sortedLoadedPoints = [loadedPoints sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem *obj1, OAFavoriteItem *obj2) {
-        NSString *title1 = [obj1 getDisplayName];
-        NSString *title2 = [obj2 getDisplayName];
-        return [title1 compare:title2 options:NSCaseInsensitiveSearch];
-    }];
-    
-    //[OAFavoritesHelper createDefaultCategories];
-    
-    for (OAFavoriteItem *favorite : sortedLoadedPoints)
-    {
-        OAFavoriteGroup *group = [OAFavoritesHelper getOrCreateGroup:favorite defColor:nil];
-        [group addPoint:favorite];
-        
-        if (group.points.count == 1)
-            group.color = [favorite getColor];
-    }
-    
+
+    NSMutableDictionary<NSString *, OAFavoriteGroup *> *groups = [self loadGroups];
+    _flatGroups = groups;
+    _favoriteGroups = [NSMutableArray arrayWithArray:groups.allValues];
+
     [OAFavoritesHelper sortAll];
     [OAFavoritesHelper recalculateCachedFavPoints];
     [[OAGPXAppearanceCollection sharedInstance] saveFavoriteColorsIfNeeded:_favoriteGroups];
@@ -82,12 +64,90 @@ static BOOL _favoritesLoaded = NO;
     _favoritesLoaded = YES;
 }
 
-+ (void) createDefaultCategories
++ (NSMutableDictionary<NSString *, OAFavoriteGroup *> *)loadGroups
 {
-    [OAFavoritesHelper addEmptyCategory:OALocalizedString(@"favorite_home_category")];
-    [OAFavoritesHelper addEmptyCategory:OALocalizedString(@"favorite_friends_category")];
-    [OAFavoritesHelper addEmptyCategory:OALocalizedString(@"favorite_places_category")];
-    [OAFavoritesHelper addEmptyCategory:OALocalizedString(@"shared_string_others")];
+    NSMutableDictionary<NSString *, OAFavoriteGroup *> *groups = [NSMutableDictionary dictionary];
+    NSArray<NSString *> *files = [self getGroupFiles];
+    if (files.count > 0)
+    {
+        for (NSString *file in files)
+        {
+            [self loadFileGroups:file groups:groups];
+        }
+    }
+    return groups;
+}
+
++ (void)loadFileGroups:(NSString *)file groups:(NSMutableDictionary<NSString *, OAFavoriteGroup *> *)groups
+{
+    OAGPXDocument *gpx = [self loadGpxFile:file];
+    [self collectFavoriteGroups:gpx favoriteGroups:groups];
+}
+
++ (void)collectFavoriteGroups:(OAGPXDocument *)gpxFile
+               favoriteGroups:(NSMutableDictionary<NSString *, OAFavoriteGroup *> *)favoriteGroups
+{
+    [gpxFile.pointsGroups enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, OAPointsGroup * _Nonnull pointsGroup, BOOL * _Nonnull stop) {
+        OAFavoriteGroup *favoriteGroup = [OAFavoriteGroup fromPointsGroup:pointsGroup];
+        favoriteGroups[key] = favoriteGroup;
+    }];
+}
+
++ (OAGPXDocument *)loadGpxFile:(NSString *)file
+{
+    return [[OAGPXDocument alloc] initWithGpxFile:file];
+}
+
++ (void)importFavoritesFromGpx:(OAGPXDocument *)gpxFile
+{
+    NSString *defCategory = @"";
+    NSArray<OAFavoriteItem *> *favorites = [OAFavoritesSettingsItem wptAsFavourites:gpxFile.points
+                                                                    defaultCategory:defCategory];
+    [self checkDuplicateNames:favorites];
+
+    OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+    NSDictionary<NSString *, OAPointsGroup *> *pointsGroups = gpxFile.pointsGroups;
+
+    for (OAFavoriteItem *favorite in favorites)
+    {
+        [self deleteFavorite:favorite saveImmediately:NO];
+
+        OAPointsGroup *pointsGroup = pointsGroups[[favorite getCategory]];
+        [self addFavorite:favorite lookupAddress:NO sortAndSave:NO pointsGroup:pointsGroup];
+        
+        if (plugin && favorite.specialPointType == OASpecialPointType.PARKING)
+            [plugin updateParkingPoint:favorite];
+    }
+    [self sortAll];
+    [self saveCurrentPointsIntoFile];
+}
+
++ (void)checkDuplicateNames:(NSArray<OAFavoriteItem *> *)favorites
+{
+    for (OAFavoriteItem *item in favorites)
+    {
+        NSInteger number = 1;
+        NSString *index;
+        NSString *name = [item getName];
+        BOOL duplicatesFound = NO;
+        for (OAFavoriteItem *favoriteItem in favorites)
+        {
+            if ([name isEqualToString:[favoriteItem getName]]
+                && [[item getCategory] isEqualToString:[favoriteItem getCategory]]
+                && ![item isEqual:favoriteItem])
+            {
+                if (!duplicatesFound)
+                {
+                    index = [NSString stringWithFormat:@" (%li)", number];
+                    [item setName:[name stringByAppendingString:index]];
+                }
+                duplicatesFound = YES;
+                number++;
+                index = [NSString stringWithFormat:@" (%li)", number];
+                [favoriteItem setName:[[favoriteItem getName] stringByAppendingString:index]];
+            }
+        }
+    }
 }
 
 + (void) recalculateCachedFavPoints
@@ -176,10 +236,16 @@ static BOOL _favoritesLoaded = NO;
 
 + (BOOL) addFavorite:(OAFavoriteItem *)point
 {
-    return [self addFavorite:point saveImmediately:YES];
+    return [self addFavorite:point
+               lookupAddress:YES
+                 sortAndSave:YES
+                 pointsGroup:nil];
 }
 
-+ (BOOL) addFavorite:(OAFavoriteItem *)point saveImmediately:(BOOL)saveImmediately
++ (BOOL)addFavorite:(OAFavoriteItem *)point
+      lookupAddress:(BOOL)lookupAddress
+        sortAndSave:(BOOL)sortAndSave
+        pointsGroup:(OAPointsGroup *)pointsGroup;
 {
     if ([point getAltitude] == 0)
         [point initAltitude];
@@ -187,12 +253,12 @@ static BOOL _favoritesLoaded = NO;
     if ([point getName].length == 0 && _flatGroups[[point getCategory]])
         return YES;
     
-    if (![point isAddressSpecified])
+    if (lookupAddress && ![point isAddressSpecified])
         [OAFavoritesHelper lookupAddress:point];
     
     [[OAAppSettings sharedManager] setShowFavorites:YES];
     
-    OAFavoriteGroup *group = [OAFavoritesHelper getOrCreateGroup:point defColor:nil];
+    OAFavoriteGroup *group = [OAFavoritesHelper getOrCreateGroup:point];
     
     if ([point getName].length > 0)
     {
@@ -208,7 +274,7 @@ static BOOL _favoritesLoaded = NO;
 
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[[point getColor] toARGBNumber]]];
-    if (saveImmediately)
+    if (sortAndSave)
     {
         [OAFavoritesHelper sortAll];
         [OAFavoritesHelper saveCurrentPointsIntoFile];
@@ -282,7 +348,7 @@ static BOOL _favoritesLoaded = NO;
         if (old)
             [old.points removeObject:item];
         
-        OAFavoriteGroup *newGroup = [OAFavoritesHelper getOrCreateGroup:item defColor:nil];
+        OAFavoriteGroup *newGroup = [OAFavoritesHelper getOrCreateGroup:item];
         [item setVisible:newGroup.isVisible];
         
         //TODO: change icon for parking points here
@@ -319,15 +385,222 @@ static BOOL _favoritesLoaded = NO;
     return YES;
 }
 
-+ (BOOL) editFavoriteGroup:(OAFavoriteGroup *)group newName:(NSString *)newName color:(UIColor*)color visible:(BOOL)visible
++ (void)updateGroup:(OAFavoriteGroup *)group
+            newName:(NSString *)newName
+    saveImmediately:(BOOL)saveImmediately
 {
-    //TODO: implement
-    return NO;
+    if (![group.name isEqualToString:newName])
+    {
+        [_flatGroups removeObjectForKey:group.name];
+
+        group.name = newName;
+        OAFavoriteGroup *renamedGroup = _flatGroups[group.name];
+        BOOL existing = renamedGroup != nil;
+        if (!renamedGroup)
+        {
+            renamedGroup = group;
+            _flatGroups[group.name] = group;
+        }
+        else
+        {
+            [_favoriteGroups removeObject:group];
+        }
+        for (OAFavoriteItem *point in group.points)
+        {
+            [point setCategory:newName];
+        }
+        if (existing)
+            [renamedGroup.points addObjectsFromArray:group.points];
+    }
+    if (saveImmediately)
+        [self saveCurrentPointsIntoFile];
+}
+
++ (void)updateGroup:(OAFavoriteGroup *)group
+           iconName:(NSString *)iconName
+       updatePoints:(BOOL)updatePoints
+    saveImmediately:(BOOL)saveImmediately
+{
+    if (updatePoints)
+    {
+        for (OAFavoriteItem *point in group.points)
+        {
+            [point setIcon:iconName];
+        }
+    }
+    group.iconName = iconName;
+    if (saveImmediately)
+        [self saveCurrentPointsIntoFile];
+}
+
++ (void)updateGroup:(OAFavoriteGroup *)group
+              color:(UIColor *)color
+       updatePoints:(BOOL)updatePoints
+    saveImmediately:(BOOL)saveImmediately
+{
+    if (updatePoints)
+    {
+        for (OAFavoriteItem *point in group.points)
+        {
+            [point setColor:color];
+        }
+    }
+    group.color = color;
+    if (saveImmediately)
+        [self saveCurrentPointsIntoFile];
+}
+
++ (void)updateGroup:(OAFavoriteGroup *)group
+ backgroundIconName:(NSString *)backgroundIconName
+       updatePoints:(BOOL)updatePoints
+    saveImmediately:(BOOL)saveImmediately
+{
+    if (updatePoints)
+    {
+        for (OAFavoriteItem *point in group.points)
+        {
+            [point setBackgroundIcon:backgroundIconName];
+        }
+    }
+    group.backgroundType = backgroundIconName;
+    if (saveImmediately)
+        [self saveCurrentPointsIntoFile];
 }
 
 + (void) saveCurrentPointsIntoFile
 {
-    [[OsmAndApp instance] saveFavoritesToPermanentStorage];
+    NSMutableDictionary<NSString *, OAFavoriteGroup *> *deletedGroups = [NSMutableDictionary dictionary];
+    NSMutableDictionary<NSString *, OAFavoriteItem *> *deletedPoints = [NSMutableDictionary dictionary];
+
+    NSArray<NSString *> *files = [self getGroupFiles];
+    if (files.count > 0)
+    {
+        for (NSString *file in files)
+        {
+            [self loadFileGroups:file groups:deletedGroups];
+        }
+    }
+    // Get all points from internal file to filter later
+    for (OAFavoriteGroup *group in deletedGroups.allValues)
+    {
+        for (OAFavoriteItem *point in group.points)
+        {
+            deletedPoints[[point getKey]] = point;
+        }
+    }
+    // Hold only deleted points in map
+    for (OAFavoriteItem *point in [self getPointsFromGroups:_favoriteGroups])
+    {
+        [deletedPoints removeObjectForKey:[point getKey]];
+    }
+    // Hold only deleted groups in map
+    for (OAFavoriteGroup *group in _favoriteGroups)
+    {
+        [deletedGroups removeObjectForKey:group.name];
+    }
+    // Save groups to internal file
+//    [self saveFile:_favoriteGroups file:internalFile];
+    // Save groups to external files
+    [self saveFiles:_favoriteGroups deleted:deletedPoints.allKeys];
+    // Save groups to backup file
+    // backup(groups, getBackupFile()); // creates new, but does not zip
+    [self backup];
+//    backup(fileHelper.getBackupFile(), internalFile); // simply backs up internal file, hence internal name is reflected in gpx <name> metadata
+    }
+
++ (NSArray<OAFavoriteItem *> *)getPointsFromGroups:(NSArray<OAFavoriteGroup *> *)groups
+{
+    NSMutableArray<OAFavoriteItem *> *favouritePoints = [NSMutableArray array];
+    for (OAFavoriteGroup *group in groups)
+    {
+        [favouritePoints addObjectsFromArray:group.points];
+    }
+    return favouritePoints;
+}
+
++ (void)saveFiles:(NSArray<OAFavoriteGroup *> *)localGroups
+          deleted:(NSArray<NSString *> *)deleted
+{
+    NSDictionary<NSString *, OAFavoriteGroup *> *fileGroups = [self loadGroups];
+    [self saveFileGroups:localGroups fileGroups:fileGroups];
+    [self saveLocalGroups:localGroups fileGroups:fileGroups deleted:deleted];
+}
+
++ (void)saveFileGroups:(NSArray<OAFavoriteGroup *> *)localGroups
+            fileGroups:(NSDictionary<NSString *, OAFavoriteGroup *> *)fileGroups
+{
+    for (OAFavoriteGroup *fileGroup in fileGroups.allValues)
+    {
+        // Search corresponding group in memory
+        BOOL hasLocalGroup = NO;
+        for (OAFavoriteGroup *group in localGroups)
+        {
+            if ([group.name isEqualToString:fileGroup.name])
+            {
+                hasLocalGroup = YES;
+                break;
+            }
+        }
+        // Delete external group file if it does not exist in local groups
+        if (!hasLocalGroup)
+        {
+            OsmAndAppInstance app = [OsmAndApp instance];
+            NSString *fileGroupPath = [app.favoritesPath stringByAppendingPathComponent:
+                                       [NSString stringWithFormat:@"%@%@%@%@",
+                                        app.favoritesFilePrefix,
+                                        fileGroup.name.length > 0 ? app.favoritesGroupNameSeparator : @"",
+                                        fileGroup.name,
+                                        GPX_FILE_EXT]];
+            [[NSFileManager defaultManager] removeItemAtPath:fileGroupPath error:nil];
+        }
+    }
+}
+
++ (void)saveLocalGroups:(NSArray<OAFavoriteGroup *> *)localGroups
+             fileGroups:(NSDictionary<NSString *, OAFavoriteGroup *> *)fileGroups
+                deleted:(NSArray<NSString *> *)deleted
+{
+    for (OAFavoriteGroup *localGroup in localGroups)
+    {
+        OAFavoriteGroup *fileGroup = fileGroups[localGroup.name];
+        // Collect non deleted points from external group
+        NSMutableDictionary<NSString *, OAFavoriteItem *> *all = [NSMutableDictionary dictionary];
+        if (fileGroup)
+        {
+            for (OAFavoriteItem *point in fileGroup.points)
+            {
+                NSString *key = [point getKey];
+                if (![deleted containsObject:key])
+                    all[key] = point;
+            }
+        }
+        // Remove already existing in memory
+        NSArray<OAFavoriteItem *> *localPoints = localGroup.points;
+        for (OAFavoriteItem *point in localPoints)
+        {
+            [all removeObjectForKey:[point getKey]];
+        }
+        // save favoritePoints from memory in order to update existing
+        [localGroup.points addObjectsFromArray:all.allValues];
+        // Save file if group changed
+        if (![localGroup isEqual:fileGroup])
+        {
+            OsmAndAppInstance app = [OsmAndApp instance];
+            NSString *fileGroupPath = [app.favoritesPath stringByAppendingPathComponent:
+                                       [NSString stringWithFormat:@"%@%@%@%@",
+                                        app.favoritesFilePrefix,
+                                        localGroup.name.length > 0 ? app.favoritesGroupNameSeparator : @"",
+                                        localGroup.name,
+                                        GPX_FILE_EXT]];
+            [self saveFile:@[localGroup] file:fileGroupPath];
+        }
+    }
+}
+
++ (void)saveFile:(NSArray<OAFavoriteGroup *> *)favoriteGroups file:(NSString *)file
+{
+    OAGPXMutableDocument *gpx = [self asGpxFile:favoriteGroups];
+    [gpx writeGpxFile:file];
 }
 
 + (void) backup
@@ -479,20 +752,35 @@ static BOOL _favoritesLoaded = NO;
     }
 }
 
-+ (OAFavoriteGroup *) getOrCreateGroup:(OAFavoriteItem *)item defColor:(UIColor *)defColor
++ (OAFavoriteGroup *)getOrCreateGroup:(OAFavoriteItem *)item
 {
-    if (_flatGroups[[item getCategory]])
-        return _flatGroups[[item getCategory]];
-    
-    OAFavoriteGroup *group = [[OAFavoriteGroup alloc] initWithName:[item getCategory] isVisible:[item isVisible] color:[item getColor]];
-    
-    [_favoriteGroups addObject:group];
-    _flatGroups[[item getCategory]] = group;
-    
-    if (!group.color)
-        group.color = defColor ? defColor : ((OAFavoriteColor *)[OADefaultFavorite builtinColors][0]).color;
-    
-    return group;
+    return [self getOrCreateGroup:item pointsGroup:nil];
+}
+
++ (OAFavoriteGroup *)getOrCreateGroup:(OAFavoriteItem *)item
+                          pointsGroup:(OAPointsGroup *)pointsGroup
+{
+    OAFavoriteGroup *favoriteGroup = _flatGroups[[item getCategory]];
+    if (!favoriteGroup)
+    {
+        favoriteGroup = [[OAFavoriteGroup alloc] initWithPoint:item];
+        _flatGroups[favoriteGroup.name] = favoriteGroup;
+        [_favoriteGroups addObject:favoriteGroup];
+    }
+    [self updateGroupAppearance:favoriteGroup pointsGroup:pointsGroup];
+
+    return favoriteGroup;
+}
+
++ (void)updateGroupAppearance:(OAFavoriteGroup *)favoriteGroup
+                  pointsGroup:(OAPointsGroup *)pointsGroup
+{
+    if (favoriteGroup && pointsGroup)
+    {
+        favoriteGroup.color = pointsGroup.color;
+        favoriteGroup.iconName = pointsGroup.iconName;
+        favoriteGroup.backgroundType = pointsGroup.backgroundType;
+    }
 }
 
 + (NSMutableArray<OAFavoriteGroup *> *) getFavoriteGroups
@@ -500,19 +788,39 @@ static BOOL _favoritesLoaded = NO;
     return _favoriteGroups;
 }
 
-+ (void) addEmptyCategory:(NSString *)name
++ (void) addFavoriteGroup:(NSString *)name
+                    color:(UIColor *)color
+                 iconName:(NSString *)iconName
+       backgroundIconName:(NSString *)backgroundIconName
 {
-    UIColor *defaultColor = ((OAFavoriteColor *)[OADefaultFavorite builtinColors][4]).color;
-    [OAFavoritesHelper addEmptyCategory:name color:defaultColor visible:YES];
+    OAFavoriteGroup *group = [[OAFavoriteGroup alloc] initWithName:name
+                                                         isVisible:YES
+                                                             color:color];
+    group.iconName = iconName;
+    group.backgroundType = backgroundIconName;
+    [_favoriteGroups addObject:group];
+    _flatGroups[group.name] = group;
+    [[OAGPXAppearanceCollection sharedInstance] saveFavoriteColorsIfNeeded:@[group]];
 }
 
-
-+ (void) addEmptyCategory:(NSString *)name color:(UIColor *)color visible:(BOOL)visible
++ (BOOL)deleteFavorite:(OAFavoriteItem *)p saveImmediately:(BOOL)saveImmediately
 {
-    OAFavoriteGroup *group = [[OAFavoriteGroup alloc] initWithName:name isVisible:visible color:color];
-    [_favoriteGroups addObject:group];
-    _flatGroups[name] = group;
-    [[OAGPXAppearanceCollection sharedInstance] saveFavoriteColorsIfNeeded:@[group]];
+    if (p)
+    {
+        OAFavoriteGroup *group = _flatGroups[[p getCategory]];
+        if (group)
+            [group.points removeObject:p];
+        [self removeFavouritePoint:p];
+    }
+    if (saveImmediately)
+        [self saveCurrentPointsIntoFile];
+
+    return YES;
+}
+
++ (void)removeFavouritePoint:(OAFavoriteItem *)point
+{
+    [_cachedFavoritePoints removeObject:point];
 }
 
 + (BOOL) deleteNewFavoriteItem:(OAFavoriteItem *)favoritesItem
@@ -643,13 +951,13 @@ static BOOL _favoritesLoaded = NO;
     return _flatBackgroundContourIcons;
 }
 
-+ (OAGPXDocument *) asGpxFile:(NSArray<OAFavoriteItem *> *)favoritePoints
++ (OAGPXMutableDocument *) asGpxFile:(NSArray<OAFavoriteGroup *> *)favoriteGroups
 {
     OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
     [gpx setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd", OAAppVersionDependentConstants.getVersion]];
-    for (OAFavoriteItem *p in favoritePoints)
+    for (OAFavoriteGroup *group in favoriteGroups)
     {
-        [gpx addWpt:p.toWpt];
+        [gpx addPointsGroup:[group toPointsGroup]];
     }
     return gpx;
 }
@@ -738,28 +1046,51 @@ static BOOL _favoritesLoaded = NO;
 
 @implementation OAFavoriteGroup
 
-- (instancetype) initWithName:(NSString *)name isVisible:(BOOL)isVisible color:(UIColor *)color
+- (instancetype)init
 {
     self = [super init];
+    if (self)
+    {
+        _points = [NSMutableArray array];
+    }
+    return self;
+}
+
+- (instancetype)initWithPoint:(OAFavoriteItem *)point
+{
+    self = [self init];
+    if (self)
+    {
+        _name = [point getCategory];
+        _color = [point getColor];
+        _isVisible = [point isVisible];
+        _iconName = [point getIcon];
+        _backgroundType = [point getBackgroundIcon];
+    }
+    return self;
+}
+
+- (instancetype) initWithName:(NSString *)name isVisible:(BOOL)isVisible color:(UIColor *)color
+{
+    self = [self init];
     if (self)
     {
         _name = name;
         _isVisible = isVisible;
         _color = color;
-        _points = [NSMutableArray array];
     }
     return self;
 }
 
 - (instancetype) initWithPoints:(NSArray<OAFavoriteItem *> *)points name:(NSString *)name isVisible:(BOOL)isVisible color:(UIColor *)color
 {
-    self = [super init];
+    self = [self init];
     if (self)
     {
+        [_points addObjectsFromArray:points];
         _name = name;
         _isVisible = isVisible;
         _color = color;
-        _points = [NSMutableArray arrayWithArray:points];
     }
     return self;
 }
@@ -806,6 +1137,38 @@ static BOOL _favoritesLoaded = NO;
     else if ([name isEqualToString:OALocalizedString(@"favorites_item")])
         return @"";
     return name;
+}
+
+- (OAPointsGroup *)toPointsGroup
+{
+    OAPointsGroup *pointsGroup = [[OAPointsGroup alloc] initWithName:_name
+                                                            iconName:_iconName
+                                                      backgroundType:_backgroundType
+                                                               color:_color];
+
+    for (OAFavoriteItem *point in _points)
+    {
+        OAWptPt *wptPt = [point toWpt];
+        [pointsGroup.points addObject:wptPt];
+    }
+    return pointsGroup;
+}
+
++ (OAFavoriteGroup *)fromPointsGroup:(OAPointsGroup *)pointsGroup
+{
+    OAFavoriteGroup *favoriteGroup = [[OAFavoriteGroup alloc] init];
+    favoriteGroup.name = pointsGroup.name;
+    favoriteGroup.color = pointsGroup.color;
+    favoriteGroup.iconName = pointsGroup.iconName;
+    favoriteGroup.backgroundType = pointsGroup.backgroundType;
+    for (OAWptPt *point in pointsGroup.points)
+    {
+        [favoriteGroup.points addObject:[OAFavoriteItem fromWpt:point
+                                                       category:nil]];
+    }
+    if (favoriteGroup.points && favoriteGroup.points.count > 0)
+        favoriteGroup.isVisible = favoriteGroup.points[0].isVisible;
+    return favoriteGroup;
 }
 
 @end

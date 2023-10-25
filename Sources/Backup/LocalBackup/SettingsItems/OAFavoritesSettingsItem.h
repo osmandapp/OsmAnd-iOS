@@ -11,7 +11,12 @@
 #import "OASettingsItemWriter.h"
 #import "OAFavoritesHelper.h"
 
+@class OAFavoriteItem, OAWptPt;
+
 @interface OAFavoritesSettingsItem : OACollectionSettingsItem<OAFavoriteGroup *>
+
++ (NSArray<OAFavoriteItem *> *)wptAsFavourites:(NSArray<OAWptPt *> *)points
+                               defaultCategory:(NSString *)defaultCategory;
 
 @end
 

@@ -10,6 +10,7 @@
 #import "OAUtilities.h"
 #import "OAAppVersionDependentConstants.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OANativeUtilities.h"
 
 @implementation OAGPXMutableDocument
 {
@@ -18,7 +19,7 @@
     OAGPXTrackAnalysis *_trackAnalysis;
 }
 
-@dynamic points, tracks, routes;
+@dynamic points, tracks, routes, pointsGroups;
 
 - (instancetype)init
 {
@@ -29,7 +30,9 @@
         self.points = [NSMutableArray array];
         self.tracks = [NSMutableArray array];
         self.routes = [NSMutableArray array];
+        self.pointsGroups = [NSMutableDictionary dictionary];
         _modifiedTime = 0;
+        _pointsModifiedTime = 0;
         
         document.reset(new OsmAnd::GpxDocument());
         
@@ -45,6 +48,7 @@
     {
         document = gpxDocument;
         _modifiedTime = 0;
+        _pointsModifiedTime = 0;
     }
     return self;
 }
@@ -56,6 +60,7 @@
         document = OsmAnd::GpxDocument::loadFrom(QString::fromNSString(filename));
         _trackAnalysis = nil;
         _modifiedTime = 0;
+        _pointsModifiedTime = 0;
         return [self fetch:document];
     }
     else
@@ -73,11 +78,11 @@
 {
     std::shared_ptr<OsmAnd::GpxDocument::Metadata> metadata;
     std::shared_ptr<OsmAnd::GpxDocument::Link> link;
+    std::shared_ptr<OsmAnd::GpxDocument::WptPt> wpt;
+    std::shared_ptr<OsmAnd::GpxDocument::PointsGroup> pg;
 
     document->version = QString::fromNSString(self.version);
     document->creator = QString::fromNSString(self.creator);
-    
-    [self fillExtensions:document];
 
     metadata.reset(new OsmAnd::GpxDocument::Metadata());
     if (self.metadata)
@@ -94,6 +99,103 @@
     }
     document->metadata = metadata;
     metadata = nullptr;
+
+    if (self.pointsGroups.count > 0)
+    {
+        BOOL hasExt = YES;
+        OAGpxExtension *ext = [self getExtensionByKey:@"points_groups"];
+        if (!ext)
+        {
+            hasExt = NO;
+            ext = [[OAGpxExtension alloc] init];
+            ext.name = @"points_groups";
+        }
+
+        for (NSString *key in self.pointsGroups.allKeys)
+        {
+            OAPointsGroup *pointsGroup = self.pointsGroups[key];
+            NSDictionary *attributes = [pointsGroup toStringBundle];
+
+            if ([ext containsSubextension:@"group" attributes:attributes])
+                continue;
+
+            pg.reset(new OsmAnd::GpxDocument::PointsGroup());
+            pg->name = QString::fromNSString(pointsGroup.name);
+            pg->iconName = QString::fromNSString(pointsGroup.iconName);
+            pg->backgroundType = QString::fromNSString(pointsGroup.backgroundType);
+            pg->color = [pointsGroup.color toFColorARGB];
+
+            for (OAWptPt *wptPt in pointsGroup.points)
+            {
+                wpt.reset(new OsmAnd::GpxDocument::WptPt());
+                [self.class fillWpt:wpt usingWpt:wptPt];
+                pg->points.append(wpt);
+                wpt = nullptr;
+            }
+
+            document->pointsGroups.insert(QString::fromNSString(key), pg);
+            pg = nullptr;
+
+            OAGpxExtension *subExt = [[OAGpxExtension alloc] init];
+            subExt.name = @"group";
+            subExt.attributes = attributes;
+            [ext addSubextension:subExt];
+        }
+
+        if (!hasExt)
+            [self addExtension:ext];
+    }
+    [self fillExtensions:document];
+}
+
+- (void)addPointsGroup:(OAPointsGroup *)group
+{
+    [self.points addObjectsFromArray:group.points];
+    self.pointsGroups[group.name] = group;
+    _modifiedTime = [[NSDate date] timeIntervalSince1970];
+    _pointsModifiedTime = _modifiedTime;
+}
+
+- (void)addPointsToGroups:(NSArray<OAWptPt *> *)points
+{
+    for (OAWptPt *point in points)
+    {
+        OAPointsGroup *pointsGroup = [self getOrCreateGroup:point];
+        pointsGroup.pg->points.append(point.wpt);
+        [pointsGroup.points addObject:point];
+    }
+}
+
+- (OAPointsGroup *)getOrCreateGroup:(OAWptPt *)point
+{
+    OAPointsGroup *pointsGroup;
+
+    if (point.type == nil && self.pointsGroups[kDefaultWptGroupName])
+    {
+        pointsGroup = self.pointsGroups[kDefaultWptGroupName];
+    }
+    else if (self.pointsGroups[point.type])
+    {
+        pointsGroup = self.pointsGroups[point.type];
+    }
+    else
+    {
+        pointsGroup = [[OAPointsGroup alloc] initWithWptPt:point];
+        self.pointsGroups[pointsGroup.name] = pointsGroup;
+    }
+    if (pointsGroup.pg == nullptr)
+    {
+        std::shared_ptr<OsmAnd::GpxDocument::PointsGroup> pg;
+        pg.reset(new OsmAnd::GpxDocument::PointsGroup());
+        pg->name = QString::fromNSString(point.type);
+        pg->iconName = QString::fromNSString([point getIcon]);
+        pg->backgroundType = QString::fromNSString([point getBackgroundIcon]);
+        pg->color = [[point getColor] toFColorARGB];
+        pointsGroup.pg = pg;
+    }
+    if (!document->pointsGroups.contains(QString::fromNSString(point.type)))
+        document->pointsGroups.insert(QString::fromNSString(point.type), pointsGroup.pg);
+    return pointsGroup;
 }
 
 - (void) addWpts:(NSArray<OAWptPt *> *)wpts
@@ -108,45 +210,21 @@
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[w getColor:0]]];
 
-    std::shared_ptr<OsmAnd::GpxDocument::WptPt> wpt;
-    std::shared_ptr<OsmAnd::GpxDocument::Link> link;
+    NSMutableArray<OAGpxExtension *> *extArray = [w.extensions mutableCopy];
 
-    wpt.reset(new OsmAnd::GpxDocument::WptPt());
-    wpt->position.latitude = w.position.latitude;
-    wpt->position.longitude = w.position.longitude;
-    wpt->name = QString::fromNSString(w.name);
-    wpt->description = QString::fromNSString(w.desc);
-    wpt->elevation = w.elevation;
-    wpt->timestamp = w.time != 0 ? QDateTime::fromTime_t(w.time).toUTC() : QDateTime().toUTC();
-    wpt->comment = QString::fromNSString(w.comment);
-    wpt->type = QString::fromNSString(w.type);
-    wpt->horizontalDilutionOfPrecision = w.horizontalDilutionOfPrecision;
-    wpt->verticalDilutionOfPrecision = w.verticalDilutionOfPrecision;
-    wpt->heading = w.heading;
-    wpt->speed = w.speed;
-    
-    [self.class fillLinks:wpt->links linkArray:w.links];
-    
-    NSMutableArray *extArray = [NSMutableArray array];
-    for (OAGpxExtension *e in w.extensions)
-    {
-        if (![e.name isEqualToString:@"speed"] && ![e.name isEqualToString:@"color"])
-            [extArray addObject:e];
-    }
-    
     int color = [w getColor:0];
-    if (color != 0)
+    if (color != 0 && ![w getExtensionByKey:@"color"])
     {
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
         e.name = @"color";
         e.value = UIColorFromRGBA(color).toHexRGBAString;
         [extArray addObject:e];
     }
-    
     w.extensions = extArray;
 
-    [w fillExtensions:wpt];
-
+    std::shared_ptr<OsmAnd::GpxDocument::WptPt> wpt;
+    wpt.reset(new OsmAnd::GpxDocument::WptPt());
+    [self.class fillWpt:wpt usingWpt:w];
     w.wpt = wpt;
     document->points.append(wpt);
     wpt = nullptr;
@@ -154,7 +232,9 @@
     [self processBounds:w.position];
     
     [self.points addObject:w];
+    [self addPointsToGroups:@[w]];
     _modifiedTime = [[NSDate date] timeIntervalSince1970];
+    _pointsModifiedTime = _modifiedTime;
 }
 
 - (void)deleteWpt:(OAWptPt *)w
@@ -170,6 +250,7 @@
         }
     }
     _modifiedTime = [[NSDate date] timeIntervalSince1970];
+    _pointsModifiedTime = _modifiedTime;
 }
 
 - (void)deleteAllWpts
@@ -177,6 +258,7 @@
     [self.points removeAllObjects];
     document->points.clear();
     _modifiedTime = [[NSDate date] timeIntervalSince1970];
+    _pointsModifiedTime = _modifiedTime;
 }
 
 - (void) addRoutePoints:(NSArray<OAWptPt *> *)points addRoute:(BOOL)addRoute
@@ -278,6 +360,7 @@
 
     [((NSMutableArray *)route.points) addObject:p];
     _modifiedTime = [[NSDate date] timeIntervalSince1970];
+    _pointsModifiedTime = _modifiedTime;
 }
 
 - (void) addTracks:(NSArray<OATrack *> *)tracks
@@ -493,6 +576,14 @@
     [self updateDocAndMetadata];
     [self applyBounds];
     return document->saveTo(QString::fromNSString(filename), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
+}
+
+- (BOOL) writeGpxFile:(NSString *)filename
+{
+    OAWptPt *pt = [self findPointToShow];
+    if (pt && self.metadata)
+        self.metadata.time = pt.time;
+    return [super saveTo:filename];
 }
 
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp

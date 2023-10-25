@@ -106,6 +106,8 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 - (BOOL)isTitleInStackViewHidden;
 
+- (void)setStackViewWithCenterIcon:(UIImage *)icon;
+
 @end
 
 @interface UIView (util)

@@ -183,6 +183,7 @@
 {
     self.title = [self getTitle];
     NSString *sub = [self getSubtitle];
+    UIImage *centerIcon = [self getCenterIconAboveTitle];
     if ((sub && sub.length > 0))
     {
         BOOL isTitleHidden = [self.navigationItem isTitleInStackViewHidden];
@@ -199,6 +200,10 @@
                                          subtitleColor:UIColorFromRGB(color_text_footer)
                                           subtitleFont:[UIFont scaledSystemFontOfSize:13. maximumSize:18.]];
         }
+    }
+    else if (centerIcon)
+    {
+        [self.navigationItem setStackViewWithCenterIcon:centerIcon];
     }
     if (_leftNavbarButton)
     {
@@ -253,10 +258,20 @@
         [self updateRightIconLargeTitle];
 }
 
-- (void)updateUI:(BOOL)animated
+- (void)updateUI
+{
+    [self updateUI:NO completion:nil];
+}
+
+- (void)updateUIAnimated:(void (^)(BOOL finished))completion
+{
+    [self updateUI:YES completion:completion];
+}
+
+- (void)updateUI:(BOOL)animated completion:(void (^)(BOOL finished))completion
 {
     [self generateData];
-    [self reloadData:animated];
+    [self reloadData:animated completion:completion];
     [self updateWithoutData];
 }
 
@@ -264,9 +279,10 @@
 {
     [self applyLocalization];
     [self updateNavbar];
+    [self.tableView reconfigureRowsAtIndexPaths:self.tableView.indexPathsForVisibleRows];
 }
 
-- (void) reloadData:(BOOL)animated
+- (void)reloadData:(BOOL)animated completion:(void (^)(BOOL finished))completion
 {
     if (animated)
     {
@@ -277,7 +293,7 @@
                         {
                             [self.tableView reloadData];
                         }
-                        completion:nil];
+                        completion:completion];
     }
     else
     {
@@ -591,6 +607,11 @@
 - (BOOL)isNavbarSeparatorVisible
 {
     return [self getNavbarColorScheme] != EOABaseNavbarColorSchemeOrange;
+}
+
+- (UIImage *)getCenterIconAboveTitle
+{
+    return nil;
 }
 
 - (UIImage *)getRightIconLargeTitle

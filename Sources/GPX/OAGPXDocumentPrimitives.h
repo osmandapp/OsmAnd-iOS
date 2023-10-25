@@ -82,6 +82,9 @@ struct RouteDataBundle;
 @property (nonatomic) NSDictionary *attributes;
 @property (nonatomic) NSArray *subextensions;
 
+- (void)addSubextension:(OAGpxExtension *)e;
+- (BOOL)containsSubextension:(NSString *)key attributes:(NSDictionary *)attributes;
+
 @end
 
 @interface OAGpxExtensions : NSObject
@@ -258,5 +261,24 @@ struct RouteDataBundle;
 @property (nonatomic) NSArray<OAWptPt *> *points;
 @property (nonatomic) NSString *source;
 @property (nonatomic) int slotNumber;
+
+@end
+
+@interface OAPointsGroup : NSObject
+
+@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::PointsGroup> pg;
+
+@property (nonatomic, readonly) NSString *name;
+@property (nonatomic) NSString *iconName;
+@property (nonatomic) NSString *backgroundType;
+@property (nonatomic) NSMutableArray<OAWptPt *> *points;
+@property (nonatomic) UIColor *color;
+
+- (instancetype)initWithName:(NSString *)name;
+- (instancetype)initWithName:(NSString *)name iconName:(NSString *)iconName backgroundType:(NSString *)backgroundType color:(UIColor *)color;
+- (instancetype)initWithWptPt:(OAWptPt *)point;
+- (NSUInteger)hash;
+- (BOOL)isEqual:(id)object;
+- (NSDictionary *)toStringBundle;
 
 @end

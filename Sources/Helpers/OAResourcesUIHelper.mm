@@ -943,8 +943,11 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                                            limit:(NSInteger)limit
                              skipIfOneDownloaded:(BOOL)skipIfOneDownloaded
 {
-    NSMutableArray<OAResourceItem *>* res = [NSMutableArray new];
+    NSMutableArray<OAResourceItem *> *res = [NSMutableArray array];
     OAWorldRegion *worldRegion = [[OsmAndApp instance].worldRegion findAtLat:coordinate.latitude lon:coordinate.longitude];
+    if (!worldRegion)
+        return res;
+
     NSArray<OAWorldRegion *> *downloadRegions = [[OsmAndApp instance].worldRegion queryAtLat:coordinate.latitude lon:coordinate.longitude];
 
     for (OAWorldRegion *downloadRegion in downloadRegions)

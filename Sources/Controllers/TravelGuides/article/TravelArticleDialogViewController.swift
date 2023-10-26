@@ -464,16 +464,12 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
         }
         
         
-        if let imageTitle {
-            if !imageTitle.isEmpty {
-                if let imagesDownloadMode = getImagesDownloadMode() {
-                    let dontLoadImages = !self.isDownloadImagesOnlyNow() && (imagesDownloadMode.isDontDownload() || (imagesDownloadMode.isDownloadOnlyViaWifi() && AFNetworkReachabilityManagerWrapper.isReachableViaWWAN()))
-                    
-                    if !dontLoadImages {
-                        let url = TravelArticle.getImageUrl(imageTitle: imageTitle, thumbnail: false)
-                        sb += "<div class=\"title-image" + nightModeClass + "\" style=\"background-image: url(" + url + ")\"></div>"
-                    }
-                }
+        if let imageTitle, !imageTitle.isEmpty, let imagesDownloadMode = getImagesDownloadMode() {
+            let dontLoadImages = !self.isDownloadImagesOnlyNow() && (imagesDownloadMode.isDontDownload() || (imagesDownloadMode.isDownloadOnlyViaWifi() && AFNetworkReachabilityManagerWrapper.isReachableViaWWAN()))
+            
+            if !dontLoadImages {
+                let url = TravelArticle.getImageUrl(imageTitle: imageTitle, thumbnail: false)
+                sb += "<div class=\"title-image" + nightModeClass + "\" style=\"background-image: url(" + url + ")\"></div>"
             }
         }
         
@@ -507,21 +503,19 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
             if self.bottomStackView != nil && self.pointsButton != nil {
                 if processing
                 {
-                    self.bottomStackView!.addSpinner(inCenterOfCurrentView: true)
-                    self.pointsButton!.setTitle("", for: .normal)
-                    self.pointsButton!.setImage(nil, for: .normal)
-                    self.pointsButton!.isEnabled = false
+                    self.bottomStackView?.addSpinner(inCenterOfCurrentView: true)
+                    self.pointsButton?.setTitle("", for: .normal)
+                    self.pointsButton?.setImage(nil, for: .normal)
+                    self.pointsButton?.isEnabled = false
                 }
                 else
                 {
-                    self.pointsButton!.setTitle("", for: .normal)
-                    self.pointsButton!.isEnabled = false
-                    if let gpxFile {
-                        if gpxFile.pointsCount() > 0 {
-                            let title = localizedString("shared_string_gpx_points") + ": " + String(gpxFile.pointsCount())
-                            self.pointsButton!.setTitle(title , for: .normal)
-                            self.pointsButton!.isEnabled = true
-                        }
+                    self.pointsButton?.setTitle("", for: .normal)
+                    self.pointsButton?.isEnabled = false
+                    if let gpxFile, gpxFile.pointsCount() > 0 {
+                        let title = localizedString("shared_string_gpx_points") + ": " + String(gpxFile.pointsCount())
+                        self.pointsButton?.setTitle(title , for: .normal)
+                        self.pointsButton?.isEnabled = true
                     }
                     self.bottomStackView!.removeSpinner()
                 }

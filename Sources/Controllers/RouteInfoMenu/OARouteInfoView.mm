@@ -781,6 +781,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (_isDragging || _isHiding)
         return;
     [super layoutSubviews];
+    if ([[UIApplication sharedApplication] mainScene] == nil)
+        return;
     
     BOOL isLandscape = [self isLandscape];
     _currentState = isLandscape ? EOARouteInfoMenuStateFullScreen : _currentState;

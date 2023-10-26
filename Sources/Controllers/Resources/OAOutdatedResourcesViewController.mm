@@ -8,7 +8,6 @@
 
 #import "OAOutdatedResourcesViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
-#import <UIAlertView+Blocks.h>
 #import "Localization.h"
 #import "OAColors.h"
 #import "OASubscriptionBannerCardView.h"
@@ -341,7 +340,9 @@
     {
         if (needPurchaseAny)
         {
-            [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"res_updates_exp") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_updates_exp") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+            [self presentViewController:alert animated:YES completion:nil];
         }
         return;
     }

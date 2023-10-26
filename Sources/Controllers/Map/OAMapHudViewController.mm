@@ -111,7 +111,7 @@
     _settings = [OAAppSettings sharedManager];
 
     _mapPanelViewController = [OARootViewController instance].mapPanel;
-    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    _mapViewController = _mapPanelViewController.mapViewController;
 
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapModeChanged)
@@ -188,7 +188,7 @@
 
     _zoomInButton.enabled = [_mapViewController canZoomIn];
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
-
+    
     self.floatingButtonsController = [[OAFloatingButtonsHudViewController alloc] initWithMapHudViewController:self];
     self.floatingButtonsController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self addChildViewController:self.floatingButtonsController];

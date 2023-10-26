@@ -8,8 +8,6 @@ workspace 'OsmAnd'
 def defaultPods
     pod 'AFNetworking', '~> 2.7.0', :subspecs => ['Reachability', 'Serialization', 'Security', 'NSURLSession']
     pod 'JASidePanels', '~> 1.3.2'
-    pod 'UIAlertView-Blocks', '~> 1.0'
-    pod 'UIActionSheet-Blocks', '~> 1.0.1'
     pod 'DACircularProgress', '~> 2.2.0'
     pod 'FFCircularProgressView', '~> 0.4'
     pod 'FormatterKit', '~> 1.8.0'

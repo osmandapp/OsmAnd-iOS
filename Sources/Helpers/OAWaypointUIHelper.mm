@@ -29,6 +29,7 @@
 #import "OADestination.h"
 #import "OAFavoriteItem.h"
 #import "OADestinationItem.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -53,7 +54,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+        UIView *topView = [UIApplication sharedApplication].mainWindow;
         MBProgressHUD *progressHUD = [[MBProgressHUD alloc] initWithView:topView];
         progressHUD.removeFromSuperViewOnHide = YES;
         progressHUD.labelText = [OALocalizedString(@"sorting") stringByAppendingString:@"..."];

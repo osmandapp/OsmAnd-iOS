@@ -176,18 +176,16 @@
 
 @implementation OAGPXAppearanceCollection
 {
-    OAMapViewController *_mapViewController;
     OAAppSettings *_settings;
 
     NSMutableArray<OAColorItem *> *_availableColors;
     NSMutableDictionary<NSString *, NSNumber *> *_defaultColorValues;
+    NSDictionary<NSString *, NSArray<NSNumber *> *> *_defaultWidthValues;
     OAColorItem *_defaultPointColorItem;
     OAColorItem *_defaultLineColorItem;
 
     NSArray<OAGPXTrackWidth *> *_availableWidth;
     NSArray<OAGPXTrackSplitInterval *> *_availableSplitInterval;
-
-    NSArray<OAFavoriteGroup *> *_cachedFavoriteGroups;
 }
 
 + (OAGPXAppearanceCollection *)sharedInstance
@@ -212,17 +210,20 @@
 
 - (void)commonInit
 {
-    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
     _settings = [OAAppSettings sharedManager];
-    [self generateAvailableColors];
+}
+
+- (void)onUpdateMapSource:(OAMapViewController *)mapViewController
+{
+    _defaultColorValues = [NSMutableDictionary dictionaryWithDictionary:[mapViewController getGpxColors]];
+    _defaultWidthValues = [mapViewController getGpxWidth];
+    _availableWidth = nil;
 }
 
 - (void)generateAvailableColors
 {
     _availableColors = [NSMutableArray array];
-    if (!_mapViewController)
-        _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    if (!_mapViewController)
+    if (!_defaultColorValues)
         return;
 
     _defaultLineColorItem = nil;
@@ -235,12 +236,11 @@
             if (ids != 0)
                 [possibleTrackColorKeys addObject:parameter.name];
         }];
-
-        _defaultColorValues = [NSMutableDictionary dictionaryWithDictionary:[_mapViewController getGpxColors]];
-        [_defaultColorValues enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, NSNumber *_Nonnull obj, BOOL *_Nonnull stop) {
+        NSMutableDictionary<NSString *, NSNumber *> *defaultColorValues = [NSMutableDictionary dictionaryWithDictionary:_defaultColorValues];
+        [defaultColorValues enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, NSNumber *_Nonnull obj, BOOL *_Nonnull stop) {
             if (![possibleTrackColorKeys containsObject:key])
             {
-                [_defaultColorValues removeObjectForKey:key];
+                [defaultColorValues removeObjectForKey:key];
             }
             else
             {
@@ -252,6 +252,7 @@
                     _defaultLineColorItem = colorItem;
             }
         }];
+        _defaultColorValues = defaultColorValues;
         [_availableColors sortUsingComparator:^NSComparisonResult(OAColorItem *obj1, OAColorItem *obj2) {
             return [@([possibleTrackColorKeys indexOfObject:obj1.key]) compare:@([possibleTrackColorKeys indexOfObject:obj2.key])];
         }];
@@ -282,14 +283,6 @@
         colorItem.sortedPosition = [_availableColors indexOfObject:colorItem];
         [colorItem generateId];
     }
-    BOOL isRegenerated = NO;
-    if (_cachedFavoriteGroups)
-    {
-        isRegenerated = [self saveFavoriteColorsIfNeeded:_cachedFavoriteGroups];
-        _cachedFavoriteGroups = nil;
-    }
-    if (!isRegenerated)
-        [self regenerateSortedPosition];
 }
 
 - (void)regenerateSortedPosition
@@ -336,11 +329,7 @@
 - (BOOL)saveFavoriteColorsIfNeeded:(NSArray<OAFavoriteGroup *> *)favoriteGroups
 {
     BOOL isRegenerated = NO;
-
-    if (!_mapViewController)
-        _cachedFavoriteGroups = favoriteGroups;
-
-    if (_mapViewController && favoriteGroups && favoriteGroups.count > 0)
+    if (favoriteGroups && favoriteGroups.count > 0)
     {
         NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[_settings.customTrackColors get]];
         NSMutableArray<NSString *> *customTrackColorsLastUsed = [NSMutableArray arrayWithArray:[_settings.customTrackColorsLastUsed get]];
@@ -369,7 +358,6 @@
             [self regenerateSortedPosition];
         }
     }
-
     return isRegenerated;
 }
 
@@ -586,8 +574,7 @@
 
     NSMutableArray<NSString *> *possibleTrackWidthKeys = [NSMutableArray new];
     OAMapStyleParameter *currentTrackWidth = [[OAMapStyleSettings sharedInstance] getParameter:CURRENT_TRACK_WIDTH_ATTR];
-
-    if (currentTrackWidth)
+    if (currentTrackWidth && _defaultWidthValues)
     {
         NSArray<OAMapStyleParameterValue *> *currentTrackWidthParameters = currentTrackWidth.possibleValuesUnsorted;
         [currentTrackWidthParameters enumerateObjectsUsingBlock:^(OAMapStyleParameterValue *parameter, NSUInteger ids, BOOL *stop) {
@@ -596,8 +583,7 @@
         }];
 
         NSMutableArray<OAGPXTrackWidth *> *result = [NSMutableArray new];
-        NSDictionary<NSString *, NSArray<NSNumber *> *> *possibleValues = [_mapViewController getGpxWidth];
-        [possibleValues enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, NSArray<NSNumber *> *_Nonnull obj, BOOL *_Nonnull stop) {
+        [_defaultWidthValues enumerateKeysAndObjectsUsingBlock:^(NSString *_Nonnull key, NSArray<NSNumber *> *_Nonnull obj, BOOL *_Nonnull stop) {
             NSString *originalKey = [key substringToIndex:[key indexOf:@"_"]];
             if ([possibleTrackWidthKeys containsObject:originalKey]) {
                 OAGPXTrackWidth *existWidth = _availableWidth ? [self getWidthForValue:originalKey] : nil;

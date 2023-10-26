@@ -582,7 +582,9 @@ static const NSInteger sectionCount = 2;
     if (![OAIAPHelper isSubscribedToLiveUpdates])
     {
         newValue = NO;
-        [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"osm_live_ask_for_purchase") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_live_ask_for_purchase") preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
     }
     [_settings.settingOsmAndLiveEnabled set:newValue];
     [btn setOn:newValue];

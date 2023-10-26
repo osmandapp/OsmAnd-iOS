@@ -9,7 +9,7 @@
 #import "OASaveTrackViewController.h"
 #import "OARootViewController.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OASaveTrackBottomSheetViewController.h"
@@ -203,7 +203,7 @@
 - (void) updateBottomButtons
 {
     self.saveButton.userInteractionEnabled = _rightButtonEnabled;
-    [self.saveButton setBackgroundColor:_rightButtonEnabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_icon_inactive)];
+    [self.saveButton setBackgroundColor:_rightButtonEnabled ? UIColor.buttonBgColorPrimary: UIColor.buttonBgColorDisabled];
 }
 
 - (BOOL) cellValueByKey:(NSString *)key
@@ -339,7 +339,7 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = UIColor.blackColor;
+            cell.titleLabel.textColor = UIColor.textColorPrimary;
             cell.valueLabel.text = item[@"value"];
         }
         return cell;
@@ -355,6 +355,7 @@
             cell.delegate = self;
             cell.cellIndex = indexPath;
             cell.state = _scrollCellsState;
+            cell.backgroundColor = UIColor.groupBgColor;
         }
         if (cell)
         {
@@ -391,7 +392,7 @@
 {
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
         UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *) view;
-        headerView.textLabel.textColor = UIColorFromRGB(color_text_footer);
+        headerView.textLabel.textColor = UIColor.textColorSecondary;
     }
 }
 
@@ -399,7 +400,7 @@
 {
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
         UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *) view;
-        headerView.textLabel.textColor = _inputFieldError != nil && section == 0 ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_text_footer);
+        headerView.textLabel.textColor = _inputFieldError != nil && section == 0 ? UIColor.buttonBgColorDisruptive : UIColor.textColorSecondary;
     }
 }
 
@@ -495,7 +496,7 @@
     
     [self.tableView beginUpdates];
     UITableViewHeaderFooterView *footer = [self.tableView footerViewForSection:0];
-    footer.textLabel.textColor = _inputFieldError != nil ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_text_footer);
+    footer.textLabel.textColor = _inputFieldError != nil ? UIColor.buttonBgColorDisruptive : UIColor.textColorSecondary;
     footer.textLabel.text = _inputFieldError;
     [footer sizeToFit];
     [self.tableView endUpdates];

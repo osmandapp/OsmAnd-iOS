@@ -10,7 +10,7 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <UIAlertView+Blocks.h>
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OASubscriptionBannerCardView.h"
 #import "OAChoosePlanHelper.h"
 #import "OAIAPHelper.h"
@@ -64,7 +64,7 @@
     [super viewDidLoad];
     
     _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
+    _horizontalLine.backgroundColor = [UIColor.separatorColor CGColor];
     
     self.navigationItem.title = OALocalizedString(@"download_tab_updates");
 }
@@ -76,15 +76,22 @@
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = UIColorFromRGB(color_primary_orange_navbar_background);
-    appearance.shadowColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    appearance.shadowColor = UIColor.navBarBgColorPrimary;
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.whiteColor
+        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
     };
-    self.navigationController.navigationBar.standardAppearance = appearance;
+    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+    blurAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
+    blurAppearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    blurAppearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+    };
+    self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.whiteColor;
+    self.navigationController.navigationBar.tintColor = UIColor.navBarTextColorPrimary;
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
     _updateAllButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"res_update_all") style:UIBarButtonItemStylePlain target:self action:@selector(onUpdateAllBarButtonClicked)];
@@ -488,7 +495,7 @@
                                               reuseIdentifier:cellTypeId];
                 UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
                 cell.accessoryView = [[UIImageView alloc] initWithImage:iconImage];
-                [cell.accessoryView setTintColor:UIColorFromRGB(color_primary_purple)];
+                [cell.accessoryView setTintColor:UIColor.iconColorActive];
             }
             else if ([cellTypeId isEqualToString:downloadingResourceCell])
             {
@@ -497,7 +504,7 @@
 
                 FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
                 progressView.iconView = [[UIView alloc] init];
-                progressView.tintColor = UIColorFromRGB(color_primary_purple);
+                progressView.tintColor =UIColor.iconColorActive;
 
                 cell.accessoryView = progressView;
             }
@@ -511,7 +518,7 @@
     if (cell && indexPath.section == _availableMapsSection && item)
     {
         cell.imageView.image = [OAResourceType getIcon:item.resourceType templated:YES];
-        cell.imageView.tintColor = UIColorFromRGB(color_icon_inactive);
+        cell.imageView.tintColor = UIColor.iconColorDisabled;
     }
 
     // Fill cell content
@@ -538,7 +545,7 @@
             {
                 cell.detailTextLabel.text = [OAResourceType resourceTypeLocalized:item.resourceType];
             }
-            cell.detailTextLabel.textColor = UIColorFromRGB(color_text_footer);
+            cell.detailTextLabel.textColor = UIColor.textColorSecondary;
         }
     }
 

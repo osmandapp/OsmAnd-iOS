@@ -14,6 +14,7 @@
 #import "OAFavoriteItem.h"
 #import "OADefaultFavorite.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OARoutingHelper.h"
 #import "OAValueTableViewCell.h"
 #import "OAUtilities.h"
@@ -167,7 +168,7 @@
 
             cell.titleLabel.text = text;
             cell.leftIconView.image = [param.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.leftIconView.tintColor = [param isChecked] ? UIColorFromRGB([appMode getIconColor]) : UIColorFromRGB(color_icon_inactive);
+            cell.leftIconView.tintColor = [param isChecked] ? UIColorFromRGB([appMode getIconColor]) : UIColor.iconColorDisabled;
 
             BOOL showDivider = [param hasOptions];
             [cell dividerVisibility:showDivider];

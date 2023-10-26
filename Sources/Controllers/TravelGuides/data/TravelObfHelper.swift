@@ -868,7 +868,7 @@ final class GpxFileReader {
     }
     
     func doInBackground() -> OAGPXDocumentAdapter? {
-        if let readers. let article {
+        if let readers, let article {
             return TravelObfHelper.shared.buildGpxFile(readers: readers, article: article)
         }
         return nil

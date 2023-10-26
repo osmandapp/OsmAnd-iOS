@@ -29,7 +29,7 @@
 
 #include <OsmAndCore/Utilities.h>
 
-@interface OAHistoryTableViewController () <OAMultiselectableHeaderDelegate, UIAlertViewDelegate, UIGestureRecognizerDelegate>
+@interface OAHistoryTableViewController () <OAMultiselectableHeaderDelegate, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) NSMutableArray* groupsAndItems;
 
@@ -314,13 +314,34 @@
 {
     NSArray *selectedRows = [self.tableView indexPathsForSelectedRows];
     if ([selectedRows count] == 0) {
-        UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"hist_select_remove") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-        [removeAlert show];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:OALocalizedString(@"hist_select_remove") preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
         return;
     }
     
-    UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"hist_remove_q") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_no") otherButtonTitles:OALocalizedString(@"shared_string_yes"), nil];
-    [removeAlert show];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@""
+                                                                   message:OALocalizedString(@"hist_remove_q") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSArray *selectedRows = [self.tableView indexPathsForSelectedRows];
+        NSArray* selectedItems = [self getItemsForRows:selectedRows];
+        
+        NSMutableArray *arr = [NSMutableArray array];
+        for (OASearchHistoryTableItem* dataItem in selectedItems)
+            [arr addObject:dataItem.item];
+        
+        [[OAHistoryHelper sharedInstance] removePoints:arr];
+        
+        _wasAnyDeleted = YES;
+        
+        if (self.delegate)
+        {
+            [self editDone];
+            [self.delegate exitHistoryEditingMode];
+        }
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 -(NSArray*)getItemsForRows:(NSArray*)indexPath
@@ -340,31 +361,6 @@
     OAHistorySettingsViewController* historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOAHistorySettingsTypeSearch];
     [self dismissViewControllerAnimated:YES completion:nil];
     [OARootViewController.instance.navigationController pushViewController:historyViewController animated:YES];
-}
-
-#pragma mark - UIAlertViewDelegate
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex != alertView.cancelButtonIndex)
-    {
-        NSArray *selectedRows = [self.tableView indexPathsForSelectedRows];
-        NSArray* selectedItems = [self getItemsForRows:selectedRows];
-        
-        NSMutableArray *arr = [NSMutableArray array];
-        for (OASearchHistoryTableItem* dataItem in selectedItems)
-            [arr addObject:dataItem.item];
-        
-        [[OAHistoryHelper sharedInstance] removePoints:arr];
-        
-        _wasAnyDeleted = YES;
-        
-        if (self.delegate)
-        {
-            [self editDone];
-            [self.delegate exitHistoryEditingMode];
-        }
-    }
 }
 
 #pragma mark - OAMultiselectableHeaderDelegate

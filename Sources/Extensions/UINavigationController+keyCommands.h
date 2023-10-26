@@ -8,6 +8,6 @@
 
 @interface UINavigationController (keyCommands)
 
-- (NSArray *)keyCommands;
+- (NSArray<UIKeyCommand *> *)keyCommands;
 
 @end

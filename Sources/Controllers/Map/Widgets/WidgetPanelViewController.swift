@@ -239,6 +239,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     }
     
     private func updateContainerSize() {
+        guard UIApplication.shared.mainScene != nil else { return }
         let contentSize = calculateContentSize()
         let mapHudViewController = OARootViewController.instance().mapPanel.hudViewController
         if self == mapHudViewController?.mapInfoController?.leftPanelController {

@@ -26,6 +26,7 @@
 #import "OAGPXDatabase.h"
 #import "OASizes.h"
 #import "AFNetworkReachabilityManagerWrapper.h"
+#import "OAChoosePlanHelper.h"
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"
@@ -34,6 +35,7 @@
 #import "OAGPXDocumentPrimitivesAdapter.h"
 #import "OATravelLocalDataDbHelper.h"
 #import "OAPOIAdapter.h"
+
 #import "OsmAndApp.h"
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
@@ -41,6 +43,7 @@
 #import "OAWidgetsVisibilityHelper.h"
 #import "OADistanceAndDirectionsUpdater.h"
 #import "OAHistoryViewController.h"
+#import "OAAppDelegate.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -92,7 +95,13 @@
 #import "OABaseWebViewController.h"
 #import "OATrackMenuHudViewController.h"
 #import "OATrackMenuHeaderView.h"
+#import "OACarPlayMapViewController.h"
+#import "OACarPlayDashboardInterfaceController.h"
+#import "OACarPlayActiveViewController.h"
+#import "OACarPlayPurchaseViewController.h"
+#import "OAAppDelegate.h"
 #import "OADirectionAppearanceViewController.h"
+#import "OACarPlayMapDashboardViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -119,3 +128,8 @@
 
 // Apple
 #import <SafariServices/SafariServices.h>
+
+// Other
+#import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "SceneDelegate.h"
+#import "OADayNightHelper.h"

@@ -20,6 +20,7 @@
 #import "OAIndexConstants.h"
 #import <MBProgressHUD.h>
 #import "OALinks.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #import <mach/mach.h>
 #import <mach/mach_host.h>
@@ -1890,27 +1891,28 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (CGFloat) getTopMargin
 {
-    return [UIApplication sharedApplication].keyWindow.safeAreaInsets.top;
+    return [UIApplication sharedApplication].mainWindow.safeAreaInsets.top ?: 0.0;
 }
 
 + (CGFloat) getBottomMargin
 {
-    return [UIApplication sharedApplication].keyWindow.safeAreaInsets.bottom;
+    return [UIApplication sharedApplication].mainWindow.safeAreaInsets.bottom ?: 0.0;
 }
 
 + (CGFloat) getLeftMargin
 {
-    return [UIApplication sharedApplication].keyWindow.safeAreaInsets.left;
+    return [UIApplication sharedApplication].mainWindow.safeAreaInsets.left ?: 0.0;
 }
+
 
 + (CGFloat) calculateScreenWidth
 {
     if (NSThread.isMainThread)
-        return UIApplication.sharedApplication.delegate.window.bounds.size.width;
+        return UIScreen.mainScreen.bounds.size.width;
     // else dispatch to the main thread
     __block CGFloat result;
     dispatch_sync(dispatch_get_main_queue(), ^{
-        result = UIApplication.sharedApplication.delegate.window.bounds.size.width;
+        result = UIScreen.mainScreen.bounds.size.width;
     });
     return result;
 }
@@ -1920,12 +1922,12 @@ static const double d180PI = 180.0 / M_PI_2;
     if (NSThread.isMainThread)
     {
         CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
-        return UIApplication.sharedApplication.delegate.window.bounds.size.height - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
+        return UIScreen.mainScreen.bounds.size.height - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
     }
     __block CGFloat result;
     dispatch_sync(dispatch_get_main_queue(), ^{
         CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
-        result = UIApplication.sharedApplication.delegate.window.bounds.size.height - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
+        result = UIScreen.mainScreen.bounds.size.height - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
     });
     return result;
 }
@@ -1934,8 +1936,7 @@ static const double d180PI = 180.0 / M_PI_2;
 {
     BOOL isiOSAppOnMac = [NSProcessInfo processInfo].isiOSAppOnMac;
 
-    return !isiOSAppOnMac && [UIDevice.currentDevice userInterfaceIdiom] == UIUserInterfaceIdiomPad && (DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width ||
-            UIApplication.sharedApplication.delegate.window.bounds.size.height != [[UIScreen mainScreen] bounds].size.height);
+    return !isiOSAppOnMac && [UIDevice.currentDevice userInterfaceIdiom] == UIUserInterfaceIdiomPad && (DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width || [UIApplication sharedApplication].mainWindow.bounds.size.height != [[UIScreen mainScreen] bounds].size.height);
 }
 
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView

@@ -15,6 +15,7 @@
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "OASizes.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kOABottomSheetWidth 320.0
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
@@ -313,6 +314,7 @@
     self.bottomSheetWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.bottomSheetWindow.windowLevel = UIWindowLevelNormal;
     self.bottomSheetWindow.backgroundColor = [UIColor clearColor];
+    self.bottomSheetWindow.windowScene = (UIWindowScene *)UIApplication.sharedApplication.mainScene;
     
     UIInterfaceOrientation interfaceOrientation = CurrentInterfaceOrientation;
 
@@ -467,20 +469,11 @@
 
 #pragma mark - UIResponder
 
-- (NSArray *)keyCommands
+- (NSArray<UIKeyCommand *> *)keyCommands
 {
-    NSMutableArray<UIKeyCommand *> *commands = [NSMutableArray array];
-    [commands addObject:[UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack)]];
-
-    if (@available(iOS 15, *))
-    {
-        for (UIKeyCommand *command in commands)
-        {
-            command.wantsPriorityOverSystemBehavior = YES;
-        }
-    }
-
-    return commands;
+    UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack)];
+    command.wantsPriorityOverSystemBehavior = YES;
+    return @[command];
 }
 
 #pragma mark -  UIGestureRecognizerDelegate

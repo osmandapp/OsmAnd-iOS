@@ -17,9 +17,6 @@
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 
-#define kAlertConflictWarning -2
-#define kAlertConflictRename -4
-
 @interface OAFavoriteImportViewController ()
 {
     OsmAndAppInstance _app;
@@ -68,86 +65,73 @@
         NSString* favoriteTitle = favorite->getTitle().toNSString();
         for(const auto& localFavorite : _app.favoritesCollection->getFavoriteLocations())
         {
-            if ([favoriteTitle isEqualToString:localFavorite->getTitle().toNSString()] && ![self.ignoredNames containsObject:favoriteTitle] ) {
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:OALocalizedString(@"fav_exists"), favoriteTitle] delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"fav_ignore"), OALocalizedString(@"shared_string_rename"), OALocalizedString(@"update_existing"), OALocalizedString(@"replace_all"), nil];
-                alert.tag = kAlertConflictWarning;
-                [alert show];
+            if ([favoriteTitle isEqualToString:localFavorite->getTitle().toNSString()] && ![self.ignoredNames containsObject:favoriteTitle]) {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@""
+                                                                               message:[NSString stringWithFormat:OALocalizedString(@"fav_exists"), favoriteTitle]
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"fav_ignore") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    [self.ignoredNames addObject:self.conflictedName];
+                    [self importClicked:nil];
+                }]];
+                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_rename") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"fav_rename_q")
+                                                                                   message:OALocalizedString(@"fav_enter_new_name \"%@\"", self.conflictedName)
+                                                                            preferredStyle:UIAlertControllerStyleAlert];
+                    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                        textField.textColor = [UIColor blackColor];
+                        textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+                        textField.borderStyle = UITextBorderStyleNone;
+                    }];
+                    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                        UITextField *textField = alert.textFields[0];
+                        for(const auto& favorite : _favoritesCollection->getFavoriteLocations()) {
+                            NSString* favoriteTitle = favorite->getTitle().toNSString();
+                            if ([favoriteTitle isEqualToString:self.conflictedName]) {
+                                favorite->setTitle(QString::fromNSString(textField.text));
+                                break;
+                            }
+                        }
+                        [self importClicked:nil];
+                     }]];
+                    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                        [self importClicked:nil];
+                     }]];
+                    [self presentViewController:alert animated:YES completion:nil];
+                }]];
+                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"update_existing") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    for(const auto& localFavorite : _app.favoritesCollection->getFavoriteLocations()) {
+                        NSString* favoriteTitle = localFavorite->getTitle().toNSString();
+                        if ([favoriteTitle isEqualToString:self.conflictedName]) {
+                            _app.favoritesCollection->removeFavoriteLocation(localFavorite);
+                            break;
+                        }
+                    }
+                    [self importClicked:nil];
+                }]];
+                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"replace_all") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    for(const auto& favorite : _favoritesCollection->getFavoriteLocations()) {
+                        for(const auto& localFavorite : _app.favoritesCollection->getFavoriteLocations()) {
+                            NSString* favoriteTitle = favorite->getTitle().toNSString();
+                            NSString* localFavoriteTitle = localFavorite->getTitle().toNSString();
+                            if ([localFavoriteTitle isEqualToString:favoriteTitle]) {
+                                _app.favoritesCollection->removeFavoriteLocation(localFavorite);
+                            }
+                        }
+                    }
+                    [self importClicked:nil];
+                }]];
+                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    [self.ignoredNames removeAllObjects];
+                    self.conflictedName = @"";
+                    _favoritesCollection = OsmAnd::FavoriteLocationsGpxCollection::tryLoadFrom(QString::fromNSString(_url.path));
+                }]];
+                [self presentViewController:alert animated:YES completion:nil];
                 self.conflictedName = favoriteTitle;
                 return NO;
             }
         }
     }
     return YES;
-}
-
-#pragma mark - UIAlertViewDelegate
-- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (alertView.tag == kAlertConflictWarning) {
-        
-        // Cancel
-        if (buttonIndex == alertView.cancelButtonIndex) {
-            
-            [self.ignoredNames removeAllObjects];
-            self.conflictedName = @"";
-            _favoritesCollection = OsmAnd::FavoriteLocationsGpxCollection::tryLoadFrom(QString::fromNSString(_url.path));
-            
-        // Ignore
-        } else if (buttonIndex == 1) {
-            
-            [self.ignoredNames addObject:self.conflictedName];
-            [self importClicked:nil];
-            
-        // Rename - ask name
-        } else if (buttonIndex == 2) {
-            
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"fav_rename_q") message:OALocalizedString(@"fav_enter_new_name \"%@\"", self.conflictedName) delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles: OALocalizedString(@"shared_string_ok"), nil];
-            alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-            alert.tag = kAlertConflictRename;
-            [alert show];
-            
-        // Replace current
-        } else if (buttonIndex == 3) {
-            
-            for(const auto& localFavorite : _app.favoritesCollection->getFavoriteLocations()) {
-                NSString* favoriteTitle = localFavorite->getTitle().toNSString();
-                if ([favoriteTitle isEqualToString:self.conflictedName]) {
-                    _app.favoritesCollection->removeFavoriteLocation(localFavorite);
-                    break;
-                }
-            }
-            [self importClicked:nil];
-            
-        // Replace All
-        } else if (buttonIndex == 4) {
-            
-            for(const auto& favorite : _favoritesCollection->getFavoriteLocations()) {
-                for(const auto& localFavorite : _app.favoritesCollection->getFavoriteLocations()) {
-                    NSString* favoriteTitle = favorite->getTitle().toNSString();
-                    NSString* localFavoriteTitle = localFavorite->getTitle().toNSString();
-                    if ([localFavoriteTitle isEqualToString:favoriteTitle]) {
-                        _app.favoritesCollection->removeFavoriteLocation(localFavorite);
-                    }
-                }
-            }
-            [self importClicked:nil];
-        }
-        
-    } else if (alertView.tag == kAlertConflictRename) {
-        
-        if (buttonIndex != alertView.cancelButtonIndex) {
-            NSString* newFavoriteName = [alertView textFieldAtIndex:0].text;
-            
-            for(const auto& favorite : _favoritesCollection->getFavoriteLocations()) {
-                NSString* favoriteTitle = favorite->getTitle().toNSString();
-                if ([favoriteTitle isEqualToString:self.conflictedName]) {
-                    favorite->setTitle(QString::fromNSString(newFavoriteName));
-                    break;
-                }
-            }
-        }
-        [self importClicked:nil];
-    }
 }
 
 - (void) applyLocalization

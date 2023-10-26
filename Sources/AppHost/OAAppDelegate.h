@@ -7,12 +7,27 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <CarPlay/CarPlay.h>
-
 #import "OARootViewController.h"
 
-@interface OAAppDelegate : UIResponder <UIApplicationDelegate, CPApplicationDelegate>
+typedef NS_ENUM(NSInteger, AppLaunchEvent) {
+    AppLaunchEventNone,
+    AppLaunchEventStart,
+    AppLaunchEventFirstLaunch,
+    AppLaunchEventRestoreSession,
+    AppLaunchEventSetupRoot
+};
 
-@property(strong, readonly, nonatomic) OARootViewController* rootViewController;
+FOUNDATION_EXPORT NSNotificationName _Nonnull const OALaunchUpdateStateNotification;
+
+@interface OAAppDelegate : UIResponder <UIApplicationDelegate>
+@property (strong, nonatomic, nullable) OARootViewController *rootViewController;
+@property (nonatomic, assign) AppLaunchEvent appLaunchEvent;
+
+- (void)scheduleBackgroundDataFetch;
+
+- (void)applicationDidBecomeActive;
+- (void)applicationWillEnterForeground;
+- (void)applicationDidEnterBackground;
+- (void)applicationWillResignActive;
 
 @end

@@ -14,6 +14,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OASizes.h"
 
 #define kOABottomSheetWidth 320.0
@@ -266,9 +267,9 @@
     _tableView.contentInset = UIEdgeInsetsZero;
     
     _tableBackgroundView = [[UIView alloc] initWithFrame:{0, -1, 1, 1}];
-    _tableBackgroundView.backgroundColor = UIColorFromRGB(bottom_sheet_background_color);
+    _tableBackgroundView.backgroundColor = UIColor.groupBgColor;
     UIView *buttonsView = [[UIView alloc] init];
-    buttonsView.backgroundColor = UIColorFromRGB(bottom_sheet_background_color);
+    buttonsView.backgroundColor = UIColor.groupBgColor;
     buttonsView.frame = _buttonsView.bounds;
     buttonsView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_buttonsView insertSubview:buttonsView atIndex:0];
@@ -292,7 +293,7 @@
     _tableView.clipsToBounds = YES;
     
     //self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
-    _tableView.separatorColor = UIColorFromRGB(color_tint_gray);
+    _tableView.separatorColor = UIColor.separatorColor;
     
     [self setupView];
     

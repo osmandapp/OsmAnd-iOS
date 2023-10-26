@@ -402,6 +402,17 @@ static BOOL _repositoryUpdated = NO;
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 }
 
+- (void) traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+    {
+        [_subscribeEmailView updateColorForCALayer];
+        _horizontalLine.backgroundColor = [UIColor.separatorColor CGColor];
+    }
+}
+
 - (UIView *) getMiddleView
 {
     return _tableView;

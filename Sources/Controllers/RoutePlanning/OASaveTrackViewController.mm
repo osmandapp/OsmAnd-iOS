@@ -44,6 +44,7 @@
     
     NSString *_inputFieldError;
     NSInteger _selectedFolderIndex;
+    NSIndexPath *_selectedFolderIndexPath;
     OACollectionViewCellState *_scrollCellsState;
 }
 
@@ -83,6 +84,17 @@
     self.saveButton.layer.cornerRadius = 9.0;
     
     [self updateBottomButtons];
+}
+
+- (void) traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+    {
+        OAFolderCardsCell *cell = (OAFolderCardsCell *)[self.tableView cellForRowAtIndexPath:_selectedFolderIndexPath];
+        [cell.collectionView reloadData];
+    }
 }
 
 - (void) applyLocalization
@@ -361,6 +373,7 @@
         {
             [cell setValues:item[@"values"] sizes:nil colors:nil addButtonTitle:item[@"addButtonTitle"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
         }
+        _selectedFolderIndexPath = indexPath;
         return cell;
     }
     

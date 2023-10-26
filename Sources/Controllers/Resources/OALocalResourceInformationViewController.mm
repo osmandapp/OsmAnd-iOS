@@ -87,6 +87,14 @@
     [self applySafeAreaMargins];
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        _horizontalLine.backgroundColor = [UIColor.separatorColor CGColor];
+}
+
 -(UIView *) getMiddleView
 {
     return _tableView;

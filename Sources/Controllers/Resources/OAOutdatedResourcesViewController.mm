@@ -128,6 +128,14 @@
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        _horizontalLine.backgroundColor = [UIColor.separatorColor CGColor];
+}
+
 - (void)prepareContent
 {
     @synchronized (_dataLock)

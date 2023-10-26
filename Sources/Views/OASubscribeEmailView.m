@@ -151,4 +151,9 @@
     return f;
 }
 
+- (void) updateColorForCALayer
+{
+    _div.backgroundColor = UIColor.separatorColor.CGColor;
+}
+
 @end

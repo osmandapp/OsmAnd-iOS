@@ -242,8 +242,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     BOOL isActive = _app.data.pointToNavigate != nil;
     _goButton.backgroundColor = isActive ? UIColor.buttonBgColorPrimary : UIColor.buttonBgColorSecondary;
-    [_goButton setTintColor:isActive ? UIColor.buttonTextColorPrimary : UIColor.buttonTextColorSecondary];
-    [_goButton setTitleColor:isActive ? UIColor.buttonTextColorPrimary : UIColor.buttonTextColorSecondary forState:UIControlStateNormal];
+    UIColor *color = isActive ? UIColor.buttonTextColorPrimary : UIColor.buttonTextColorSecondary;
+    [_goButton setTintColor:color];
+    [_goButton setTitleColor:color forState:UIControlStateNormal];
     [_goButton.imageView setTintColor:_goButton.tintColor];
     
     _goButton.userInteractionEnabled = isActive;

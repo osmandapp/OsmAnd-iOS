@@ -1545,7 +1545,7 @@
 "plugin_nautical_descr" = "Denna insticksmodul berikar OsmAnds kart- och navigationsapp för att också producera nautiska kartor för båtliv, segling och andra typer av vattensporter.\n\nEtt speciellt karttillägg för OsmAnd kommer att tillhandahålla alla nautiska navigationsmärken och kartsymboler, både för inland och för närliggande navigering. Beskrivningen av varje navigeringsmärke innehåller de detaljer som behövs för att identifiera dem och deras betydelse (kategori, form, färg, sekvens, referens etc.).\n\nFör att återgå till en av OsmAnds konventionella kartstilar, helt enkelt avaktivera denna insticksmodul igen, eller ändra \'Kartstil\' under \'Konfigurera karta\' efter önskemål.";
 "osmand_parking_plugin_name" = "Parkeringsplats";
 "product_desc_parking" = "Håll koll på parkeringsplatsen och parkeringstiden för din bil";
-"osmand_parking_plugin_description" = "Låter dig spara var din bil är parkerad, inklusive hur mycket parkeringstid som finns kvar.\nBåde plats och tid är synliga både på instrumentpanelen och i en kartwidget. En larmpåminnelse kan läggas till i Android-kalendern.";
+"osmand_parking_plugin_description" = "Markera var din bil är parkerad, och sätt en avisering i kalendern när parkeringstiden tar slut. För att sätta ut markören, välj en plats i kartan, gå till 'Åtgärder' och tryck 'Lägg till parkering'.";
 "plugin_ski_name" = "Skidkartsvy";
 "product_desc_skimap" = "Uppdaterad skidkarta med spår, pister och liftar";
 "plugin_ski_descr" = "Designad för navigering i vintersportområden: Se alpina pister och liftar samt längdskidspår, färgkodade efter svårighetsgrad eller ledmarkeringar. För att använda, aktivera modulen, gå till 'Konfigurera kartan' och välj kartstilen 'Vinter och skidor'.";

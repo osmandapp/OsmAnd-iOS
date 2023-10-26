@@ -116,7 +116,7 @@ final class TravelGuidesSettingsViewController : OABaseNavbarViewController, Upd
         let alert = UIAlertController(title: localizedString("search_history"), message: localizedString("clear_travel_search_history"), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .default))
         alert.addAction(UIAlertAction(title: localizedString("shared_string_clear"), style: .default, handler: { [weak self] a in
-            guard let self else {return}
+            guard let self else { return }
             TravelObfHelper.shared.getBookmarksHelper().clearHistory()
             self.generateData()
             self.tableView.reloadData()

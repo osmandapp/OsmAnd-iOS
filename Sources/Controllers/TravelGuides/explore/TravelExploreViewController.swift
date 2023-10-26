@@ -198,7 +198,10 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                         if article is TravelGpx {
                             if let item: TravelGpx = article as? TravelGpx {
                                 let gpxRow = articlesSection.createNewRow()
-                                let title = (item.descr != nil && !item.descr!.isEmpty) ? item.descr! : item.title
+                                var title = item.title ?? ""
+                                if let descr = item.descr, !descr.isEmpty {
+                                    title = descr
+                                }
                                 item.title = title
                                 gpxRow.cellType = GpxTravelCell.getIdentifier()
                                 gpxRow.title = title
@@ -220,7 +223,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                             articleRow.setObj(item.getGeoDescription() ?? "", forKey: "isPartOf")
                             articleRow.setObj(item, forKey: "article")
                             articleRow.setObj(item.lang, forKey: "lang")
-                            if item.imageTitle != nil && item.imageTitle!.length > 0 {
+                            if let imageTitle = item.imageTitle, !imageTitle.isEmpty {
                                 articleRow.iconName = TravelArticle.getImageUrl(imageTitle: item.imageTitle ?? "", thumbnail: false)
                             }
                         }
@@ -291,7 +294,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                     resultRow.setObj(item.articleId, forKey: "articleId")
                     
                     resultRow.setObj("ic_custom_photo", forKey: "noImageIcon")
-                    if item.imageTitle != nil && item.imageTitle!.length > 0 {
+                    if let imageTitle = item.imageTitle, !imageTitle.isEmpty {
                         resultRow.iconName = TravelArticle.getImageUrl(imageTitle: item.imageTitle ?? "", thumbnail: true)
                     }
                 }
@@ -307,20 +310,19 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         
         downloadingCellHelper.fetchResourcesBlock = { [weak self] in
             guard let self else { return }
-            var downloadingResouces = OAResourcesUISwiftHelper.getResourcesInRepositoryIds(byRegionId: "travel", resourceTypeNames: ["travel"])
-            if downloadingResouces != nil {
-                downloadingResouces!.sort(by: { a, b in
+            if var downloadingResouces = OAResourcesUISwiftHelper.getResourcesInRepositoryIds(byRegionId: "travel", resourceTypeNames: ["travel"]) {
+                downloadingResouces.sort(by: { a, b in
                     a.title() < b.title()
                 })
-                self.downloadingResources = downloadingResouces!
+                self.downloadingResources = downloadingResouces
             }
         }
         
         downloadingCellHelper.getSwiftResourceByIndexBlock = { [weak self] (indexPath: IndexPath?) -> OAResourceSwiftItem? in
             guard let self else { return nil }
             let headerCellsCountInResourcesSection = self.headerCellsCountInResourcesSection()
-            if indexPath != nil && indexPath!.row >= headerCellsCountInResourcesSection {
-                return self.downloadingResources[indexPath!.row - headerCellsCountInResourcesSection]
+            if let indexPath, indexPath.row >= headerCellsCountInResourcesSection {
+                return self.downloadingResources[indexPath.row - headerCellsCountInResourcesSection]
             }
             return nil
         }
@@ -509,8 +511,8 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                 cell.regionLabel.text = item.string(forKey: "isPartOf")
                 
                 cell.imageVisibility(true)
-                if item.iconName != nil && !notDownloadImages() {
-                    startAsyncImageDownloading(item.iconName!, cell)
+                if let iconName = item.iconName, !notDownloadImages() {
+                    startAsyncImageDownloading(iconName, cell)
                 } else {
                     cell.noImageIconVisibility(true)
                 }

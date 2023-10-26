@@ -140,7 +140,10 @@ final class TravelObfHelper : NSObject {
         var results: [OAFoundAmenity] = []
         func publish(poi: OAPOIAdapter?) -> Bool {
             if let poi {
-                if lang == nil || lang!.length == 0 || (poi.getNamesMap(true)?.keys.contains(lang!) ?? false) {
+                if lang == nil {
+                    results.append(OAFoundAmenity(file: reader, amenity: poi))
+                }
+                if let lang, let namesMap = poi.getNamesMap(true), namesMap.keys.contains(lang) {
                     results.append(OAFoundAmenity(file: reader, amenity: poi))
                 }
             }
@@ -160,14 +163,12 @@ final class TravelObfHelper : NSObject {
         } else {
             articles = readArticles(file: file, amenity: amenity)
         }
-        if let articles {
-            if !articles.isEmpty {
-                var i = articles.values.makeIterator()
-                if let next = i.next() {
-                    let newArticleId = next.generateIdentifier()
-                    cachedArticles[newArticleId.hashValue] = articles
-                    article = getCachedArticle(articleId: newArticleId, lang: lang, readGpx: readPoints, callback: callback)
-                }
+        if let articles, !articles.isEmpty {
+            var i = articles.values.makeIterator()
+            if let next = i.next() {
+                let newArticleId = next.generateIdentifier()
+                cachedArticles[newArticleId.hashValue] = articles
+                article = getCachedArticle(articleId: newArticleId, lang: lang, readGpx: readPoints, callback: callback)
             }
         }
         return article
@@ -394,10 +395,8 @@ final class TravelObfHelper : NSObject {
         var headerObjs = [String : TravelSearchResult]()
         if !parts.isEmpty {
             headers.append(contentsOf: parts)
-            if let isParentOf = article.isParentOf {
-                if !isParentOf.isEmpty {
-                    headers.append(title)
-                }
+            if let isParentOf = article.isParentOf, !isParentOf.isEmpty {
+                headers.append(title)
             }
         }
         
@@ -447,11 +446,9 @@ final class TravelObfHelper : NSObject {
         
         for reader in getReaders() {
             OATravelGuidesHelper.searchAmenity(title, categoryName: ROUTE_ARTICLE, radius: -1, lat: -1, lon: -1, reader: reader) { amenity in
-                if let amenity {
-                    if title == amenity.getName(lang, transliterate: false) {
-                        amenities.append(amenity)
-                        return true
-                    }
+                if let amenity, title == amenity.getName(lang, transliterate: false) {
+                    amenities.append(amenity)
+                    return true
                 }
                 return false
             }
@@ -747,11 +744,9 @@ final class TravelObfHelper : NSObject {
             
             OATravelGuidesHelper.searchAmenity(x, y: y, left: left, right: right, top: top, bottom: bottom, reader: reader, searchFilter: ROUTE_ARTICLE) { amenity in
                 
-                if let amenity {
-                    if title == amenity.getName(lang, transliterate: false) {
-                        amenities.append(amenity)
-                        return true
-                    }
+                if let amenity, title == amenity.getName(lang, transliterate: false) {
+                    amenities.append(amenity)
+                    return true
                 }
                 return false
             }
@@ -873,10 +868,8 @@ final class GpxFileReader {
     }
     
     func doInBackground() -> OAGPXDocumentAdapter? {
-        if let readers {
-            if let article {
-                return TravelObfHelper.shared.buildGpxFile(readers: readers, article: article)
-            }
+        if let readers. let article {
+            return TravelObfHelper.shared.buildGpxFile(readers: readers, article: article)
         }
         return nil
     }

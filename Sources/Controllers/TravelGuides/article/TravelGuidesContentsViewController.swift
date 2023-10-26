@@ -29,8 +29,11 @@ final class TravelGuidesContentsViewController : OABaseNavbarViewController {
     override func generateData() {
         tableData.clearAllData()
         
-        guard let items else {return}
-        var displayingItems = selectedSubitemIndex != nil ? items.subItems[selectedSubitemIndex!].subItems : items.subItems
+        guard let items else { return }
+        var displayingItems = items.subItems
+        if let selectedSubitemIndex {
+            displayingItems = items.subItems[selectedSubitemIndex].subItems
+        }
 
         let section = tableData.createNewSection()
         for item in displayingItems {
@@ -40,8 +43,8 @@ final class TravelGuidesContentsViewController : OABaseNavbarViewController {
             if let itemLink = item.link {
                 row.setObj(itemLink, forKey: "link")
                 
-                if item.parent != nil && item.parent!.link != nil {
-                    row.setObj(item.parent!.link!.substring(from: 1), forKey: "sublink")
+                if let parent = item.parent, let link = parent.link {
+                    row.setObj(link.substring(from: 1), forKey: "sublink")
                 } else {
                     row.setObj(itemLink.substring(from: 1), forKey: "sublink")
                 }
@@ -117,7 +120,7 @@ final class TravelGuidesContentsViewController : OABaseNavbarViewController {
                 
                 let hasSubitems = item.bool(forKey: "hasSubitems")
                 if hasSubitems {
-                    cell.button.setImage(UIImage(named:"ic_custom_arrow_right"), for: .normal)
+                    cell.button.setImage(UIImage(named: "ic_custom_arrow_right"), for: .normal)
                     cell.button.tintColor = UIColor.iconColorDefault
                 }
             }
@@ -136,10 +139,8 @@ final class TravelGuidesContentsViewController : OABaseNavbarViewController {
             vc.delegate = delegate
             navigationController?.pushViewController(vc, animated: true)
         } else if let link = item.string(forKey: "link") {
-            if let sublink = item.string(forKey: "sublink") {
-                if let delegate {
-                    delegate.moveToAnchor(link: link, title: sublink)
-                }
+            if let sublink = item.string(forKey: "sublink"), let delegate {
+                delegate.moveToAnchor(link: link, title: sublink)
             }
             dismiss()
         }

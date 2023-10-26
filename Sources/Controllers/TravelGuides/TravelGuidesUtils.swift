@@ -15,18 +15,18 @@ final class TravelGuidesUtils {
     static let ARTICLE_LANG = "article_lang"
     
     static func processWikivoyageDomain(url: String, delegate: TravelArticleDialogProtocol) {
-        if let lang = OAWikiArticleHelper.getLang(url) {
-            if let articleName = OAWikiArticleHelper.getArticleName(fromUrl: url, lang: lang) {
-                let articleId = TravelObfHelper.shared.getArticleId(title: articleName, lang: lang)
-                if let articleId {
-                    delegate.openArticleById(articleId: articleId, selectedLang: lang)
-                } else {
-                    OAWikiArticleHelper.warnAboutExternalLoad(url, sourceView: delegate.getWebView())
-                }
-            }
+        guard let lang = OAWikiArticleHelper.getLang(url), 
+                let articleName = OAWikiArticleHelper.getArticleName(fromUrl: url, lang: lang) else { return }
+        
+        let articleId = TravelObfHelper.shared.getArticleId(title: articleName, lang: lang)
+        if let articleId {
+            delegate.openArticleById(newArticleId: articleId, newSelectedLang: lang)
+        } else {
+            OAWikiArticleHelper.warnAboutExternalLoad(url, sourceView: delegate.getWebView())
         }
     }
-    
+
+
     static func processWikipediaDomain(defaultLocation: CLLocation, url: String, delegate: TravelArticleDialogProtocol) {
         var articleUrl = url
         let articleCoordinates = parseCoordinates(url: url)
@@ -53,10 +53,8 @@ final class TravelGuidesUtils {
             if fristValueStart != -1 && firstValueEnd != -1 && secondValueStart != -1  && firstValueEnd > fristValueStart {
                 let lat = geoPart.substring(from: fristValueStart + 1, to: firstValueEnd)
                 let lon = secondGeoPart.substring(from: fristValueStart)
-                if let doubleLat = Double(lat) {
-                    if let doubleLon = Double(lon) {
-                        return CLLocation(latitude: doubleLat, longitude: doubleLon)
-                    }
+                if let doubleLat = Double(lat), let doubleLon = Double(lon) {
+                    return CLLocation(latitude: doubleLat, longitude: doubleLon)
                 }
             }
         }

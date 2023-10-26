@@ -13,8 +13,8 @@ import JavaScriptCore
 protocol TravelArticleDialogProtocol : AnyObject {
     func getWebView() -> WKWebView
     func moveToAnchor(link: String, title: String)
-    func openArticleByTitle(title: String, selectedLang: String)
-    func openArticleById(articleId: TravelArticleIdentifier, selectedLang: String)
+    func openArticleByTitle(title: String, newSelectedLang: String)
+    func openArticleById(newArticleId: TravelArticleIdentifier, newSelectedLang: String)
 }
 
 
@@ -146,12 +146,12 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
     
     func setupBottomButtonsView() {
         bottomView = UIView()
-        guard let bottomView else {return}
+        guard let bottomView else { return }
         bottomView.addBlurEffect(ThemeManager.shared.isLightTheme(), cornerRadius: 0, padding: 0)
         view.addSubview(bottomView)
         
         bottomStackView = UIStackView()
-        guard let bottomStackView else {return}
+        guard let bottomStackView else { return }
         bottomStackView.axis = .horizontal
         bottomStackView.alignment = .center
         bottomStackView.distribution = .equalCentering
@@ -159,7 +159,7 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
         bottomView.addSubview(bottomStackView)
         
         contentButton = UIButton()
-        guard let contentButton else {return}
+        guard let contentButton else { return }
         contentButton.setImage(UIImage(named: "ic_custom_list"), for: .normal)
         contentButton.tintColor = UIColor.iconColorActive
         contentButton.contentHorizontalAlignment = .left
@@ -169,7 +169,7 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
         bottomStackView.addArrangedSubview(UIView())
         
         pointsButton = UIButton()
-        guard let pointsButton else {return}
+        guard let pointsButton else { return }
         pointsButton.setTitle(localizedString("shared_string_gpx_points"), for: .normal)
         pointsButton.setTitleColor(UIColor.textColorActive, for: .normal)
         pointsButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
@@ -179,8 +179,8 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
         bottomStackView.addArrangedSubview(UIView())
         
         bookmarkButton = UIButton()
-        guard let bookmarkButton else {return}
-        bookmarkButton.setImage(UIImage(named:"ic_navbar_bookmark_outlined"), for: .normal)
+        guard let bookmarkButton else { return }
+        bookmarkButton.setImage(UIImage(named: "ic_navbar_bookmark_outlined"), for: .normal)
         bookmarkButton.tintColor = UIColor.iconColorActive
         contentButton.contentHorizontalAlignment = .right
         bookmarkButton.addTarget(self, action: #selector(self.onBookmarkButtonClicked), for: .touchUpInside)
@@ -196,21 +196,16 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
     }
     
     func updateBookmarkButton() {
-        if let article {
-            if let bookmarkButton {
-                let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: article)
-                let iconName = isSaved ? "ic_navbar_bookmark" : "ic_navbar_bookmark_outlined"
-                bookmarkButton.setImage(UIImage(named:iconName), for: .normal)
-            }
-        }
+        guard let article, let bookmarkButton else { return }
+        let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: article)
+        let iconName = isSaved ? "ic_navbar_bookmark" : "ic_navbar_bookmark_outlined"
+        bookmarkButton.setImage(UIImage(named: iconName), for: .normal)
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        guard let bottomView else {return}
-        guard let bottomStackView else {return}
-        guard let bookmarkButton else {return}
+        guard let bottomView, let bottomStackView, let bookmarkButton else { return }
         let stackHeight = 30.0 + 16.0
         let bottomViewHeight = stackHeight + OAUtilities.getBottomMargin()
         let sideOffset = OAUtilities.getLeftMargin() + 16.0
@@ -290,8 +285,8 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
     }
     
     @objc func showNavigation() {
-        guard let selectedLang else {return}
-        guard let article else {return}
+        guard let selectedLang else { return }
+        guard let article else { return }
         let vc = TravelGuidesNavigationViewController()
         vc.setupWith(article: article, selectedLang: selectedLang, navigationMap: [:], regionsNames: [], selectedItem: nil)
         vc.delegate = self
@@ -299,12 +294,12 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
     }
     
     @objc func onContentsButtonClicked() {
-        guard let article else {return}
-        guard let selectedLang else {return}
+        guard let article else { return }
+        guard let selectedLang else { return }
         if contentItems == nil {
             contentItems = TravelJsonParser.parseJsonContents(jsonText: article.contentsJson ?? "")
         }
-        guard let contentItems else {return}
+        guard let contentItems else { return }
         let vc = TravelGuidesContentsViewController()
         vc.setupWith(article: article, selectedLang: selectedLang, contentItems: contentItems, selectedSubitemIndex: nil)
         vc.delegate = self
@@ -356,9 +351,9 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
     
     func shareArticle() {
         //    https://osmand.net/travel?title=Tashkent&lang=en
-        guard let article else {return}
-        guard let articleTitle = article.title else {return}
-        guard let title = articleTitle.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {return}
+        guard let article else { return }
+        guard let articleTitle = article.title else { return }
+        guard let title = articleTitle.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
         let lang = selectedLang == "" ? "en" : selectedLang
         let articleUrl = "https://osmand.net/travel?title=" + title + "&lang=" + lang!
         
@@ -411,14 +406,14 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
     
     func populateArticle() {
         article = nil
-        guard let articleId else {return}
+        guard let articleId else { return }
         
         langs = TravelObfHelper.shared.getArticleLangs(articleId: articleId)
         if selectedLang == nil && langs != nil && !langs!.isEmpty {
             selectedLang = langs![0]
         }
         
-        guard let article = TravelObfHelper.shared.getArticleById(articleId: articleId, lang: selectedLang, readGpx: true, callback: self) else {return}
+        guard let article = TravelObfHelper.shared.getArticleById(articleId: articleId, lang: selectedLang, readGpx: true, callback: self) else { return }
         self.article = article
         
         title = getTitle()
@@ -469,13 +464,15 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
         }
         
         
-        if imageTitle != nil && !imageTitle!.isEmpty {
-            if let imagesDownloadMode = getImagesDownloadMode() {
-                let dontLoadImages = !self.isDownloadImagesOnlyNow() && (imagesDownloadMode.isDontDownload() || (imagesDownloadMode.isDownloadOnlyViaWifi() && AFNetworkReachabilityManagerWrapper.isReachableViaWWAN()))
-                
-                if !dontLoadImages {
-                    let url = TravelArticle.getImageUrl(imageTitle: imageTitle!, thumbnail: false)
-                    sb += "<div class=\"title-image" + nightModeClass + "\" style=\"background-image: url(" + url + ")\"></div>"
+        if let imageTitle {
+            if !imageTitle.isEmpty {
+                if let imagesDownloadMode = getImagesDownloadMode() {
+                    let dontLoadImages = !self.isDownloadImagesOnlyNow() && (imagesDownloadMode.isDontDownload() || (imagesDownloadMode.isDownloadOnlyViaWifi() && AFNetworkReachabilityManagerWrapper.isReachableViaWWAN()))
+                    
+                    if !dontLoadImages {
+                        let url = TravelArticle.getImageUrl(imageTitle: imageTitle, thumbnail: false)
+                        sb += "<div class=\"title-image" + nightModeClass + "\" style=\"background-image: url(" + url + ")\"></div>"
+                    }
                 }
             }
         }
@@ -517,13 +514,14 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
                 }
                 else
                 {
-                    if gpxFile != nil && gpxFile!.pointsCount() > 0 {
-                        let title = localizedString("shared_string_gpx_points") + ": " + String(gpxFile!.pointsCount())
-                        self.pointsButton!.setTitle(title , for: .normal)
-                        self.pointsButton!.isEnabled = true
-                    } else {
-                        self.pointsButton!.setTitle("", for: .normal)
-                        self.pointsButton!.isEnabled = false
+                    self.pointsButton!.setTitle("", for: .normal)
+                    self.pointsButton!.isEnabled = false
+                    if let gpxFile {
+                        if gpxFile.pointsCount() > 0 {
+                            let title = localizedString("shared_string_gpx_points") + ": " + String(gpxFile.pointsCount())
+                            self.pointsButton!.setTitle(title , for: .normal)
+                            self.pointsButton!.isEnabled = true
+                        }
                     }
                     self.bottomStackView!.removeSpinner()
                 }
@@ -584,27 +582,27 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
         }
     }
     
-    func openArticleByTitle(title: String, selectedLang: String) {
-        if let currentArticleId = self.articleId {
+    func openArticleByTitle(title: String, newSelectedLang: String) {
+        if let currentArticleId = articleId {
             historyArticleIds.append(currentArticleId)
         }
-        if let currentSelectedLang = self.selectedLang {
+        if let currentSelectedLang = selectedLang {
             historyLangs.append(currentSelectedLang)
         }
-        articleId = TravelObfHelper.shared.getArticleId(title: title, lang: selectedLang)
-        self.selectedLang = selectedLang
+        articleId = TravelObfHelper.shared.getArticleId(title: title, lang: newSelectedLang)
+        selectedLang = newSelectedLang
         populateArticle()
     }
     
-    func openArticleById(articleId: TravelArticleIdentifier, selectedLang: String) {
-        if let currentArticleId = self.articleId {
+    func openArticleById(newArticleId: TravelArticleIdentifier, newSelectedLang: String) {
+        if let currentArticleId = articleId {
             historyArticleIds.append(currentArticleId)
         }
-        if let currentSelectedLang = self.selectedLang {
+        if let currentSelectedLang = selectedLang {
             historyLangs.append(currentSelectedLang)
         }
-        self.articleId = articleId
-        self.selectedLang = selectedLang
+        articleId = newArticleId
+        selectedLang = newSelectedLang
         populateArticle()
     }
     
@@ -612,10 +610,10 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
     //MARK: OAWikiLanguagesWebDelegate
     
     func onLocaleSelected(_ locale: String!) {
-        if let currentArticleId = self.articleId {
+        if let currentArticleId = articleId {
             historyArticleIds.append(currentArticleId)
         }
-        if let currentSelectedLang = self.selectedLang {
+        if let currentSelectedLang = selectedLang {
             historyLangs.append(currentSelectedLang)
         }
         selectedLang = locale

@@ -42,7 +42,7 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
             
         } else if navigationMap.isEmpty  {
             
-            guard let article else {return}
+            guard let article else { return }
             view.addSpinner(inCenterOfCurrentView: true)
             DispatchQueue.global(qos: .default).async {
                 self.navigationMap = TravelObfHelper.shared.getNavigationMap(article: article)
@@ -100,18 +100,15 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
     
     func getRegionNames() -> [String] {
         var names = [String]()
-        if let article {
-            if let parts = article.aggregatedPartOf {
-                names = parts
-                    .split(separator: ",")
-                    .reversed()
-                    .map({ substring in
-                        return String(substring)
-                    })
-                if navigationMap.count > names.count {
-                    if let title = article.title {
-                        names.append(title)
-                    }
+        if let article, let parts = article.aggregatedPartOf {
+            names = parts
+                .split(separator: ",")
+                .reversed()
+                .map { String($0) }
+            
+            if navigationMap.count > names.count {
+                if let title = article.title {
+                    names.append(title)
                 }
             }
         }
@@ -192,7 +189,7 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
                 
                 let hasSubitems = item.bool(forKey: "hasSubitems")
                 if hasSubitems {
-                    cell.button.setImage(UIImage(named:"ic_custom_arrow_right"), for: .normal)
+                    cell.button.setImage(UIImage(named: "ic_custom_arrow_right"), for: .normal)
                     cell.button.tintColor = UIColor.iconColorDefault
                 }
 
@@ -217,10 +214,8 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
                     }
                 }
             } else {
-                if let delegate {
-                    if let title = articleId.title {
-                        delegate.openArticleByTitle(title: title, selectedLang: selectedLang)
-                    }
+                if let delegate, let title = articleId.title {
+                    delegate.openArticleByTitle(title: title, newSelectedLang: selectedLang)
                 }
                 dismiss()
             }

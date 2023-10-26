@@ -273,6 +273,12 @@ static OASubscriptionState *EXPIRED;
             || [[OAAppSettings sharedManager].wikipediaPurchased get];
 }
 
++ (BOOL) isSensorPurchased
+{
+    return [self isPaidVersion]
+            || [[OAAppSettings sharedManager].sensorsPurchased get];
+}
+
 + (BOOL)isLiveUpdatesSubscription:(OASubscription *)subscription
 {
     return [subscription.identifierNoVersion isEqualToString:kSubscriptionId_Osm_Live_Subscription_Monthly]
@@ -389,6 +395,11 @@ static OASubscriptionState *EXPIRED;
 - (OAProduct *) weather
 {
     return _products.weather;
+}
+
+- (OAProduct *) sensors
+{
+    return _products.sensors;
 }
 
 - (OAProduct *) carplay
@@ -575,6 +586,7 @@ static OASubscriptionState *EXPIRED;
         [_settings.depthContoursPurchased set:NO];
         [_settings.contourLinesPurchased set:NO];
         [_settings.wikipediaPurchased set:NO];
+        [_settings.sensorsPurchased set:NO];
         for (OAProduct *product in _products.inAppsPaid)
         {
             if ([[NSUserDefaults standardUserDefaults] boolForKey:product.productIdentifier])
@@ -884,6 +896,7 @@ static OASubscriptionState *EXPIRED;
             BOOL depth = NO;
             BOOL contour = NO;
             BOOL wiki = NO;
+            BOOL sensors = NO;
             NSMutableArray<OASubscription *> *purchasedSubs = [NSMutableArray array];
             for (OAProduct *product in products)
             {
@@ -917,6 +930,10 @@ static OASubscriptionState *EXPIRED;
                 else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Wiki])
                 {
                     wiki = YES;
+                }
+                else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Sensor])
+                {
+                    sensors = YES;
                 }
 
                 BOOL wasPurchased = [product isPurchased];
@@ -1007,6 +1024,7 @@ static OASubscriptionState *EXPIRED;
             [_settings.depthContoursPurchased set:depth];
             [_settings.contourLinesPurchased set:contour];
             [_settings.wikipediaPurchased set:wiki];
+            [_settings.sensorsPurchased set:sensors];
 
             for (OAProduct *p in purchased)
             {
@@ -1335,6 +1353,10 @@ static OASubscriptionState *EXPIRED;
             else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Wiki])
             {
                 [_settings.wikipediaPurchased set:YES];
+            }
+            else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Sensor])
+            {
+                [_settings.sensorsPurchased set:YES];
             }
 
             [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];

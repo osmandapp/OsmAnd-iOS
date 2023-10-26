@@ -24,6 +24,7 @@
 #import "OAWeatherSettingsViewController.h"
 #import "OAWikipediaSettingsViewController.h"
 #import <SafariServices/SafariServices.h>
+#import "OsmAnd_Maps-Swift.h"
 
 #define kPriceButtonTextInset 8.0
 #define kPriceButtonMinTextWidth 80.0
@@ -380,6 +381,10 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
         return [[OAOsmandDevelopmentViewController alloc] init];
     else if ([_product isKindOfClass:OAWikiProduct.class])
         return [[OAWikipediaSettingsViewController alloc] initWithAppMode:[OAAppSettings sharedManager].applicationMode.get];
+    else if ([_product isKindOfClass:OASensorsProduct.class])
+    {
+        return [[UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"BLEExternalSensors"];
+    }
     return nil;
 }
 

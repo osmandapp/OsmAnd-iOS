@@ -113,7 +113,7 @@ final class DescriptionDeviceHeader: UIView {
     
     private func discoverServices(serviceUUIDs: [CBUUID]? = nil) {
         guard let item else { return }
-        item.peripheral.discoverServices(withUUIDs: [GattAttributes.SERVICE_HEART_RATE.CBUUIDRepresentation]) { [weak self] result in
+        item.peripheral.discoverServices(withUUIDs: nil) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success(let services):

@@ -79,6 +79,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 @property (nonatomic, readonly) OAProduct *osmEditing;
 @property (nonatomic, readonly) OAProduct *mapillary;
 @property (nonatomic, readonly) OAProduct *weather;
+@property (nonatomic, readonly) OAProduct *sensors;
 @property (nonatomic, readonly) OAProduct *carplay;
 @property (nonatomic, readonly) OAProduct *osmandDevelopment;
 
@@ -160,6 +161,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 + (BOOL) isDepthContoursPurchased;
 + (BOOL) isContourLinesPurchased;
 + (BOOL) isWikipediaPurchased;
++ (BOOL) isSensorPurchased;
 
 + (BOOL) isLiveUpdatesSubscription:(OASubscription *)subscription;
 + (BOOL) isOsmAndProSubscription:(OASubscription *)subscription;

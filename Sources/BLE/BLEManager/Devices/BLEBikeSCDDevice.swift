@@ -44,9 +44,9 @@ final class BLEBikeSCDDevice: Device {
     }
     
     override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
-        guard characteristic.service?.uuid == GattAttributes.SERVICE_CYCLING_SPEED_AND_CADENCE.CBUUIDRepresentation else {
-            return
-        }
+//        guard characteristic.service?.uuid == GattAttributes.SERVICE_CYCLING_SPEED_AND_CADENCE.CBUUIDRepresentation else {
+//            return
+//        }
         sensors.forEach{ $0.update(with: characteristic, result: result)}
     }
     

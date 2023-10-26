@@ -29,19 +29,19 @@ final class BLEHeartRateSensor: Sensor {
         var description: String {
             switch self {
             case .other:
-                return "Other"
+                return localizedString("shared_string_other")
             case .chest:
-                return "Chest"
+                return localizedString("shared_string_chest")
             case .wrist:
-                return "Wrist"
+                return localizedString("shared_string_finger")
             case .finger:
-                return "Finger"
+                return localizedString("shared_string_wrist")
             case .hand:
-                return "Hand"
+                return localizedString("shared_string_hand")
             case .earLobe:
-                return "Ear Lobe"
+                return localizedString("shared_string_ear_lobe")
             case .foot:
-                return "Foot"
+                return localizedString("shared_string_foot")
             }
         }
     }

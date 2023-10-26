@@ -388,6 +388,18 @@ static NSMutableArray *activePopups;
 
         [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];
     }
+    else if ([kInAppId_Addon_Sensor isEqualToString:productIdentifier])
+    {
+        needShow = YES;
+        title = OALocalizedString(@"external_sensors_support");
+        descText = OALocalizedString(@"purchases_feature_desc_external_sensors");
+        okButtonName = OALocalizedString(@"plugins_menu_group");
+        cancelButtonName = OALocalizedString(@"shared_string_cancel");
+        iconName = @"ic_custom_advanced_widgets_colored_day";
+        popup.okButton.tag = EOAFeatureSensors;
+
+        [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];
+    }
     
     if (needShow)
     {

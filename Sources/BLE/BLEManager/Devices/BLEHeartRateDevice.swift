@@ -26,15 +26,15 @@ final class BLEHeartRateDevice: Device {
     
     override var getDataFields: Dictionary<String, String>? {
         if let sensor = sensors.first(where: { $0 is BLEHeartRateSensor }) as? BLEHeartRateSensor {
-            return ["HEART_RATE": String(sensor.heartRateData.heartRate)]
+            return [localizedString("map_widget_ant_heart_rate"): String(sensor.heartRateData.heartRate)]
         }
         return nil
     }
     
     override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
-        guard characteristic.service?.uuid == GattAttributes.SERVICE_HEART_RATE.CBUUIDRepresentation else {
-            return
-        }
+//        guard characteristic.service?.uuid == GattAttributes.SERVICE_HEART_RATE.CBUUIDRepresentation else {
+//            continue
+//        }
         sensors.forEach{ $0.update(with: characteristic, result: result)}
     }
     

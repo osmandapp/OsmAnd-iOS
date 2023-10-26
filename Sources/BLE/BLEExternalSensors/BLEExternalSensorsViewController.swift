@@ -44,9 +44,10 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.layer.borderWidth = 1.0
         headerView.addSubview(imageView)
         headerView.frame.size.height = 201
-        headerView.frame.size.width = view.frame.width//UIScreen.main.bounds.size.width
+        headerView.frame.size.width = view.frame.width
         imageView.frame = headerView.frame
         tableView.tableHeaderView = headerView
     }
@@ -133,19 +134,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
             }
             
         }
-//        if let widgetInfo = item.obj(forKey: "widget_info") as? MapWidgetInfo {
-//            //            let vc = WidgetConfigurationViewController()!
-//            //            vc.selectedAppMode = OAAppSettings.sharedManager()!.applicationMode.get()
-//            //            vc.widgetInfo = widgetInfo
-//            //            vc.widgetPanel = widgetPanel
-//            //            vc.createNew = true
-//            //            show(vc)
-//        }
     }
-    
-    
-    
-    
     
     // MARK: - IBAction
     @IBAction func onPairNewSensorButtonPressed(_ sender: Any) {

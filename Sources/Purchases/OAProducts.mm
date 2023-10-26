@@ -684,6 +684,8 @@
                 purchased = [OAIAPHelper isContourLinesPurchased];
             else if ([self.productIdentifier isEqualToString:kInAppId_Addon_Wiki])
                 purchased = [OAIAPHelper isWikipediaPurchased];
+            else if ([self.productIdentifier isEqualToString:kInAppId_Addon_Sensor])
+                purchased = [OAIAPHelper isSensorPurchased];
 
             if (!purchased && self.feature)
             {
@@ -2005,6 +2007,47 @@
 
 @end
 
+@implementation OASensorsProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Addon_Sensor];
+    return self;
+}
+
+- (OAFeature *) feature
+{
+    return OAFeature.SENSORS;
+}
+
+- (NSString *) productScreenshotName
+{
+    return @"img_plugin_osmand_development.png";
+}
+
+- (NSString *) productIconName
+{
+    return @"ic_custom_laptop";
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"external_sensors_plugin_name");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"external_sensors_plugin_description");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"purchases_feature_desc_external_sensors");
+}
+
+@end
+
+
 @implementation OACarPlayProduct
 
 - (instancetype) init
@@ -2331,6 +2374,7 @@
 @property (nonatomic) OAProduct *osmEditing;
 @property (nonatomic) OAProduct *mapillary;
 @property (nonatomic) OAProduct *weather;
+@property (nonatomic) OAProduct *sensors;
 @property (nonatomic) OAProduct *carplay;
 @property (nonatomic) OAProduct *osmandDevelopment;
 
@@ -2380,6 +2424,7 @@
         self.osmEditing = [[OAOsmEditingProduct alloc] init];
         self.mapillary = [[OAMapillaryProduct alloc] init];
         self.weather = [[OAWeatherProduct alloc] init];
+        self.sensors = [[OASensorsProduct alloc] init];
         self.carplay = [[OACarPlayProduct alloc] init];
         self.osmandDevelopment = [[OAOsmandDevelopmentProduct alloc] init];
 
@@ -2403,6 +2448,7 @@
                              self.osmEditing,
                              self.mapillary,
                              self.weather,
+                             self.sensors,
                              self.osmandDevelopment
         ];
 

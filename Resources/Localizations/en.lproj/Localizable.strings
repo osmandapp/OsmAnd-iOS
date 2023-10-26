@@ -3318,3 +3318,38 @@
 "no_widgets_descr" = "Add one or more widgets from the list of available widgets.";
 "click_on_widget" = "Click on widget";
 "map_marker_interval_dialog_desc" = "Specify the time interval for which the average speed will be measured to calculate estimated time of arrival.";
+
+"external_sensors_plugin_name" = "External Sensors";
+"external_sensors_plugin_description" = "Accesses external sensors to read e.g. your heart rate, bicycle speed, cycling power, or cadence. Requires your device to be connected to respective sensors via the ANT+ wireless personal network protocol.";
+
+
+"map_widget_ant_heart_rate" = "Heart Rate";
+"map_widget_ant_heart_rate_desc" = "Shows user's heart rate during a given activity in real-time";
+"map_widget_ant_bicycle_power" = "Bicycle Power";
+"map_widget_ant_bicycle_power_desc" = "Shows cyclist's power output, which is used to move the bike forward";
+"map_widget_ant_bicycle_cadence" = "Bicycle Cadence";
+"map_widget_ant_bicycle_cadence_desc" = "Shows speed at which the user is pedalling";
+"map_widget_ant_bicycle_speed" = "Bicycle Speed";
+"map_widget_ant_bicycle_speed_desc" = "Shows speed of travelingz";
+"map_widget_ant_bicycle_dist" = "Bicycle Distance";
+"map_widget_ant_bicycle_dist_desc" = "Shows travelled distance";
+
+//"beats_per_minute_short" = "bpm";
+"shared_string_chest" = "Chest";
+"shared_string_wrist" = "Wrist";
+"shared_string_finger" = "Finger";
+"shared_string_hand" = "Hand";
+"shared_string_ear_lobe" = "Ear lobe";
+"shared_string_foot" = "Foot";
+
+
+//"device_disconnected">%1$s disconnected"
+//"device_connected">%1$s connected"
+"running_scds_device_name" = "Running device";
+"bicycle_scd_device_name" = "Bicycle device";
+"external_device_blood_pressure" = "Blood pressure";
+"no_bt_permission" = "Bluetooth permission is not granted";
+
+"purchases_feature_desc_external_sensors" = "Display and record data from external sensors: bicycle speed, bicycle power, cadence, and heart rate.";
+"external_sensors_support" = "External sensors support";
+

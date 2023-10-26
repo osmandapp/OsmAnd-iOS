@@ -99,23 +99,23 @@
     
     // Create window
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-//    self.window.rootViewController = [[OALaunchScreenViewController alloc] init];
-//    [self.window makeKeyAndVisible];
+    self.window.rootViewController = [[OALaunchScreenViewController alloc] init];
+    [self.window makeKeyAndVisible];
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil];
-    BLEExternalSensorsViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"BLEExternalSensors"];
-    if (vc) {
-        [BLEInitHeader configure];
-        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:vc];;
-        [self.window makeKeyAndVisible];
-    }
+//    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil];
+//    BLEExternalSensorsViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"BLEExternalSensors"];
+//    if (vc) {
+//        [BLEInitHeader configure];
+//        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:vc];;
+//        [self.window makeKeyAndVisible];
+//    }
     
     _appInitTask = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"appInitTask" expirationHandler:^{
         
         [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
         _appInitTask = UIBackgroundTaskInvalid;
     }];
-    /*
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         NSLog(@"OAAppDelegate beginBackgroundTask");
@@ -200,8 +200,6 @@
             }
         });
     });
-     */
-     
     
     NSLog(@"OAAppDelegate initialize finish");
     return YES;

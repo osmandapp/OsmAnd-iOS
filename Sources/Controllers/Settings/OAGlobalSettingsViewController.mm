@@ -24,6 +24,7 @@
 #import "OAColors.h"
 #import "OASizes.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAGlobalSettingsViewController () <OAUninstallSpeedCamerasDelegate>
 
@@ -235,7 +236,7 @@
                 kCellKeyKey : @"search_history",
                 kCellTitleKey : OALocalizedString(@"shared_string_search_history"),
                 kCellIconNameKey : @"ic_custom_search",
-                kCellIconTint : @(searchHistory ? color_primary_purple : color_tint_gray),
+                kCellIconTint : (searchHistory ? UIColor.iconColorActive : UIColor.iconColorDefault),
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
                 @"value" : searchHistory
                 ? [NSString stringWithFormat:@"%lu", [historyHelper getPointsCountHavingTypes:historyHelper.searchTypes]]
@@ -246,7 +247,7 @@
                 kCellKeyKey : @"navigation_history",
                 kCellTitleKey : OALocalizedString(@"navigation_history"),
                 kCellIconNameKey : @"ic_custom_navigation",
-                kCellIconTint : @(navigationHistory ? color_primary_purple : color_tint_gray),
+                kCellIconTint : (navigationHistory ? UIColor.iconColorActive : UIColor.iconColorDefault),
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
                 kCellAccessoryType : @(UITableViewCellAccessoryDisclosureIndicator),
                 @"value" : navigationHistory
@@ -257,7 +258,7 @@
                 kCellKeyKey : @"map_markers_history",
                 kCellTitleKey : OALocalizedString(@"map_markers_history"),
                 kCellIconNameKey : @"ic_custom_marker",
-                kCellIconTint : @(mapMarkersHistory ? color_primary_purple : color_tint_gray),
+                kCellIconTint : (mapMarkersHistory ? UIColor.iconColorActive : UIColor.iconColorDefault),
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
                 @"value" : mapMarkersHistory
                     ? [NSString stringWithFormat:@"%lu", [historyHelper getPointsCountHavingTypes:historyHelper.destinationTypes]]
@@ -393,9 +394,9 @@
         {
             BOOL isClearHistory = [item.key isEqualToString:@"clear_history"];
             cell.titleLabel.text = item.title;
-            cell.titleLabel.textColor = isClearHistory ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_primary_purple);
+            cell.titleLabel.textColor = isClearHistory ? UIColor.buttonBgColorDisruptive : UIColor.textColorActive;
             cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
-            cell.rightIconView.tintColor = isClearHistory ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_primary_purple);
+            cell.rightIconView.tintColor = isClearHistory ? UIColor.buttonBgColorDisruptive : UIColor.textColorActive;
         }
         return cell;
     }
@@ -439,7 +440,7 @@
             [cell leftIconVisibility:hasLeftIcon];
             cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:item.iconName] : nil;
             BOOL hasTintColor = item.iconName && item.iconName.length > 0;
-            cell.leftIconView.tintColor = hasTintColor ? UIColorFromRGB(item.iconTint) : UIColorFromRGB(color_primary_purple);
+            cell.leftIconView.tintColor = hasTintColor ? [item objForKey:kCellIconTint] : UIColor.textColorActive;
         }
         return cell;
     }

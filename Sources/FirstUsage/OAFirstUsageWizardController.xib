@@ -3,7 +3,8 @@
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -72,7 +73,7 @@
                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="25" id="vfa-kS-zon"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                                    <nil key="textColor"/>
+                                    <color key="textColor" name="textColorPrimary"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ho0-j3-9RI">
@@ -83,7 +84,9 @@
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="16" maxY="0.0"/>
-                                    <state key="normal" title="Skip"/>
+                                    <state key="normal" title="Skip">
+                                        <color key="titleColor" name="textColorActive"/>
+                                    </state>
                                     <connections>
                                         <action selector="skipPress:" destination="-1" eventType="touchUpInside" id="id7-JX-Kd8"/>
                                     </connections>
@@ -97,12 +100,12 @@
                                         </constraint>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <nil key="textColor"/>
+                                    <color key="textColor" name="textColorPrimary"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dmg-0N-HWk">
                                     <rect key="frame" x="40" y="196.5" width="240" height="50"/>
-                                    <color key="backgroundColor" red="0.91764705879999997" green="0.91764705879999997" blue="0.91764705879999997" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" name="viewBgColor"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="50" id="Mgd-p9-onS"/>
                                     </constraints>
@@ -112,12 +115,12 @@
                                     <constraints>
                                         <constraint firstAttribute="height" constant="80" id="ae8-9U-CHa"/>
                                     </constraints>
-                                    <color key="textColor" red="0.59215686274509804" green="0.5607843137254902" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="textColor" name="textColorSecondary"/>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 </textView>
                             </subviews>
-                            <color key="backgroundColor" red="0.91764705882352937" green="0.91764705882352937" blue="0.91764705882352937" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="viewBgColor"/>
                             <constraints>
                                 <constraint firstAttribute="bottom" secondItem="Xzc-q4-6Ac" secondAttribute="bottom" constant="20" id="36P-XO-gMu"/>
                                 <constraint firstAttribute="trailing" secondItem="dmg-0N-HWk" secondAttribute="trailing" constant="40" id="4E5-8H-ye2"/>
@@ -144,7 +147,7 @@
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" red="0.91764705882352937" green="0.91764705882352937" blue="0.91764705882352937" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" name="viewBgColor"/>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="KGH-xB-uHD" secondAttribute="bottom" id="Muy-es-del"/>
                         <constraint firstItem="KGH-xB-uHD" firstAttribute="top" secondItem="OGE-Cb-Dbb" secondAttribute="top" id="fen-gn-8RY"/>
@@ -153,7 +156,7 @@
                     </constraints>
                 </scrollView>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" name="groupBgColor"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="OGE-Cb-Dbb" secondAttribute="bottom" id="Maa-Ue-KqQ"/>
                 <constraint firstItem="OGE-Cb-Dbb" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="MuV-Lu-FFg"/>
@@ -181,12 +184,12 @@
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="LME-vj-xsy"/>
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                    <nil key="textColor"/>
+                    <color key="textColor" name="textColorPrimary"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dtq-5T-nIy">
                     <rect key="frame" x="0.0" y="60" width="240" height="1"/>
-                    <color key="backgroundColor" red="0.91764705879999997" green="0.91764705879999997" blue="0.91764705879999997" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" name="viewBgColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="Bjb-4v-dCp"/>
                     </constraints>
@@ -198,14 +201,14 @@
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                     <state key="normal" title="Search my location">
-                        <color key="titleColor" red="0.18431372549019609" green="0.47843137254901957" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" name="textColorActive"/>
                     </state>
                     <connections>
                         <action selector="searchLocation:" destination="-1" eventType="touchUpInside" id="cKR-RS-EUZ"/>
                     </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" name="groupBgColor"/>
             <constraints>
                 <constraint firstItem="hcO-3W-9bU" firstAttribute="top" secondItem="PhJ-bF-aCF" secondAttribute="top" constant="8" id="4eb-DT-GDl"/>
                 <constraint firstItem="QJa-zg-tIo" firstAttribute="top" secondItem="Dtq-5T-nIy" secondAttribute="bottom" id="6jR-CC-lmv"/>
@@ -246,7 +249,7 @@
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="25" id="b4Y-fw-aub"/>
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                    <nil key="textColor"/>
+                    <color key="textColor" name="textColorPrimary"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Required to download the map" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jAx-rG-pzj">
@@ -255,12 +258,12 @@
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="18" id="Bdy-Z9-GhB"/>
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
-                    <color key="textColor" red="0.50025969739999998" green="0.50024467709999998" blue="0.50025320049999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="textColor" name="textColorSecondary"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zaB-im-K9B">
                     <rect key="frame" x="0.0" y="60" width="240" height="1"/>
-                    <color key="backgroundColor" red="0.91764705879999997" green="0.91764705879999997" blue="0.91764705879999997" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" name="viewBgColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="VjD-Cn-ytE"/>
                     </constraints>
@@ -272,14 +275,14 @@
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                     <state key="normal" title="Try again">
-                        <color key="titleColor" red="0.1843137255" green="0.47843137250000001" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" name="textColorActive"/>
                     </state>
                     <connections>
                         <action selector="tryAgainPress:" destination="-1" eventType="touchUpInside" id="IVM-bW-guC"/>
                     </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" name="groupBgColor"/>
             <constraints>
                 <constraint firstItem="zaB-im-K9B" firstAttribute="top" secondItem="jAx-rG-pzj" secondAttribute="bottom" constant="8" id="2da-zI-Mgi"/>
                 <constraint firstItem="jAx-rG-pzj" firstAttribute="top" secondItem="N6g-aa-18A" secondAttribute="bottom" id="3I8-b1-2tS"/>
@@ -323,29 +326,29 @@
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="Mu8-Ko-Bed"/>
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                    <nil key="textColor"/>
+                    <color key="textColor" name="textColorPrimary"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tho-b9-zbm">
                     <rect key="frame" x="0.0" y="60" width="240" height="1"/>
-                    <color key="backgroundColor" red="0.91764705879999997" green="0.91764705879999997" blue="0.91764705879999997" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" name="viewBgColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="RVG-Pf-N4W"/>
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Kd-ve-oPV">
                     <rect key="frame" x="0.0" y="61" width="240" height="48"/>
-                    <color key="backgroundColor" red="0.85882352941176465" green="0.85882352941176465" blue="0.85882352941176465" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" name="buttonBgColorSecondary"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="48" id="iE7-Mv-ZTF"/>
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                     <state key="normal" title="Download">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleColor" name="buttonTextColorSecondary"/>
                     </state>
                 </button>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" name="groupBgColor"/>
             <constraints>
                 <constraint firstItem="Tho-b9-zbm" firstAttribute="leading" secondItem="83P-Wa-vWr" secondAttribute="leading" id="3zw-lz-zmE"/>
                 <constraint firstAttribute="trailing" secondItem="5Kd-ve-oPV" secondAttribute="trailing" id="50P-ou-rhu"/>
@@ -387,7 +390,7 @@
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="25" id="Cxo-7G-jhr"/>
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                    <nil key="textColor"/>
+                    <color key="textColor" name="textColorPrimary"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="255 MB" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vid-Tx-j13">
@@ -396,18 +399,18 @@
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="18" id="7pb-Jm-5Hd"/>
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
-                    <color key="textColor" red="0.50025969739999998" green="0.50024467709999998" blue="0.50025320049999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="textColor" name="textColorSecondary"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6w5-4G-R1j">
                     <rect key="frame" x="0.0" y="97" width="240" height="80"/>
-                    <color key="backgroundColor" red="0.91764705879999997" green="0.91764705879999997" blue="0.91764705879999997" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" name="viewBgColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="80" id="meB-Ry-YTE"/>
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                     <state key="normal" title="Select another region">
-                        <color key="titleColor" red="0.1843137255" green="0.47843137250000001" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" name="textColorActive"/>
                     </state>
                     <connections>
                         <action selector="selectMapPress:" destination="-1" eventType="touchUpInside" id="dnH-Yw-v2j"/>
@@ -415,20 +418,20 @@
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xe3-bl-xiy">
                     <rect key="frame" x="0.0" y="60" width="240" height="47"/>
-                    <color key="backgroundColor" red="0.18431372549019609" green="0.47843137254901957" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" name="buttonBgColorPrimary"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="47" id="lMS-yQ-uIo"/>
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                     <state key="normal" title="Download">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleColor" name="buttonTextColorPrimary"/>
                     </state>
                     <connections>
                         <action selector="downloadPress:" destination="-1" eventType="touchUpInside" id="8lN-kY-1j6"/>
                     </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" name="groupBgColor"/>
             <constraints>
                 <constraint firstItem="Xe3-bl-xiy" firstAttribute="top" secondItem="vid-Tx-j13" secondAttribute="bottom" constant="8" id="22f-Tm-tC6"/>
                 <constraint firstItem="vid-Tx-j13" firstAttribute="top" secondItem="chF-rD-cBz" secondAttribute="bottom" id="Bmg-E9-n7t"/>
@@ -473,7 +476,7 @@
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="142" id="dJk-FJ-JP3"/>
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                    <nil key="textColor"/>
+                    <color key="textColor" name="textColorPrimary"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="255 MB" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9ev-C1-2SY">
@@ -483,7 +486,7 @@
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="142" id="vyN-Lv-Aak"/>
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
-                    <color key="textColor" red="0.50025969739999998" green="0.50024467709999998" blue="0.50025320049999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="textColor" name="textColorSecondary"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="stN-xp-72i" userLabel="Restart">
@@ -492,7 +495,7 @@
                         <constraint firstAttribute="height" constant="44" id="D0M-4c-bPb"/>
                         <constraint firstAttribute="width" constant="44" id="E68-sp-a2D"/>
                     </constraints>
-                    <color key="tintColor" red="0.1843137255" green="0.47843137250000001" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="tintColor" name="iconColorActive"/>
                     <state key="normal" image="ic_refresh.png"/>
                     <connections>
                         <action selector="restart1Press:" destination="-1" eventType="touchUpInside" id="83W-wP-qzD"/>
@@ -500,6 +503,7 @@
                 </button>
                 <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gxY-l6-cXV">
                     <rect key="frame" x="54" y="58" width="142" height="2"/>
+                    <color key="tintColor" name="iconColorActive"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="2" id="TaH-sb-wj1"/>
                     </constraints>
@@ -510,7 +514,7 @@
                         <constraint firstAttribute="width" constant="44" id="rC1-yy-l6F"/>
                         <constraint firstAttribute="height" constant="44" id="tzD-vE-OeV"/>
                     </constraints>
-                    <color key="tintColor" red="0.44705882352941173" green="0.44705882352941173" blue="0.44705882352941173" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="tintColor" name="iconColorActive"/>
                     <state key="normal" image="ic_close.png"/>
                     <connections>
                         <action selector="cancel1Press:" destination="-1" eventType="touchUpInside" id="BGe-xI-hnf"/>
@@ -518,34 +522,34 @@
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zs6-qj-2bF">
                     <rect key="frame" x="0.0" y="81" width="240" height="1"/>
-                    <color key="backgroundColor" red="0.91764705879999997" green="0.91764705879999997" blue="0.91764705879999997" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" name="viewBgColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="D99-Yi-EHI"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SrS-1f-rzE">
                     <rect key="frame" x="0.0" y="82" width="240" height="1"/>
-                    <color key="backgroundColor" red="0.91764705879999997" green="0.91764705879999997" blue="0.91764705879999997" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" name="viewBgColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="t36-7Q-U1m"/>
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DDB-xy-UT5">
                     <rect key="frame" x="0.0" y="83" width="240" height="48"/>
-                    <color key="backgroundColor" red="0.1843137255" green="0.47843137250000001" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" name="buttonBgColorPrimary"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="48" id="oiw-nD-lRO"/>
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                     <state key="normal" title="Go to the map">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleColor" name="buttonTextColorPrimary"/>
                     </state>
                     <connections>
                         <action selector="goToMapPress:" destination="-1" eventType="touchUpInside" id="YIC-EZ-WG7"/>
                     </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" name="groupBgColor"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="DDB-xy-UT5" secondAttribute="trailing" id="0T5-mj-Wcq"/>
                 <constraint firstAttribute="trailing" secondItem="SrS-1f-rzE" secondAttribute="trailing" id="16U-VQ-yGR"/>
@@ -599,29 +603,29 @@
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="b1G-lN-4PF"/>
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                    <nil key="textColor"/>
+                    <color key="textColor" name="textColorPrimary"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SU2-jz-oPD">
                     <rect key="frame" x="0.0" y="60" width="240" height="1"/>
-                    <color key="backgroundColor" red="0.91764705879999997" green="0.91764705879999997" blue="0.91764705879999997" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" name="viewBgColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="sm9-co-NER"/>
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gfa-zn-jJc">
                     <rect key="frame" x="0.0" y="61" width="240" height="48"/>
-                    <color key="backgroundColor" red="0.85882352939999995" green="0.85882352939999995" blue="0.85882352939999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" name="buttonBgColorSecondary"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="48" id="l35-qr-QTi"/>
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                     <state key="normal" title="Download">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleColor" name="buttonTextColorSecondary"/>
                     </state>
                 </button>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" name="groupBgColor"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="SU2-jz-oPD" secondAttribute="trailing" id="5Px-Nz-Ocg"/>
                 <constraint firstItem="zli-f3-DJM" firstAttribute="leading" secondItem="BSw-kZ-iET" secondAttribute="leading" constant="17" id="DwN-v4-X9x"/>
@@ -654,5 +658,35 @@
         <image name="ic_refresh.png" width="25" height="25"/>
         <image name="ic_wifi_off.png" width="25" height="25"/>
         <image name="logo_firstscreen.png" width="20" height="20"/>
+        <namedColor name="buttonBgColorPrimary">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="buttonBgColorSecondary">
+            <color red="0.8784313725490196" green="0.8666666666666667" blue="0.8901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="buttonTextColorPrimary">
+            <color red="0.93725490196078431" green="0.90980392156862744" blue="0.99215686274509807" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="buttonTextColorSecondary">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="groupBgColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="iconColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorPrimary">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorSecondary">
+            <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="viewBgColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

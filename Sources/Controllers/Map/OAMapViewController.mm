@@ -11,7 +11,6 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 
-#import <UIActionSheet+Blocks.h>
 #import <UIViewController+JASidePanel.h>
 #import <MBProgressHUD.h>
 
@@ -70,6 +69,7 @@
 #import "OASubscriptionCancelViewController.h"
 #import "OAWhatsNewBottomSheetViewController.h"
 #import "OAAppVersionDependentConstants.h"
+#import "OsmAnd_Maps-Swift.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
@@ -674,7 +674,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
             wasVisible = YES;
             [_progressHUD hide:NO];
         }
-        UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+        UIView *topView = [UIApplication sharedApplication].mainWindow;
         _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
         _progressHUD.minShowTime = .5f;
         _progressHUD.removeFromSuperViewOnHide = YES;
@@ -693,7 +693,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
             wasVisible = YES;
             [_progressHUD hide:NO];
         }
-        UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+        UIView *topView = [UIApplication sharedApplication].mainWindow;
         _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
         _progressHUD.minShowTime = 1.0f;
         _progressHUD.labelText = message;
@@ -740,6 +740,12 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 - (float) getMapZoom
 {
     return _mapView.zoom;
+}
+
+- (void)setViewportScaleX:(double)x y:(double)y
+{
+    _mapView.viewportXScale = x;
+    _mapView.viewportYScale = y;
 }
 
 - (void) setMapPosition:(int)mapPosition
@@ -2305,13 +2311,14 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
             _app.data.lastMapSource = [OAAppData defaultMapSource];
             return;
         }
-
+        [[OAGPXAppearanceCollection sharedInstance] onUpdateMapSource:self];
         [[OAGPXAppearanceCollection sharedInstance] generateAvailableColors];
+
         [_mapLayers updateLayers];
 
         if (!_gpxDocFileTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack.get)
             [self showRecGpxTrack:YES];
-        
+
         [_selectedGpxHelper buildGpxList];
         if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty())
             [self initRendererWithGpxTracks];

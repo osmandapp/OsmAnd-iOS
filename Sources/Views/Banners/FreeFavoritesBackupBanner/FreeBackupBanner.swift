@@ -57,7 +57,7 @@ final class FreeBackupBanner: UIView {
             titleLabel.text = localizedString("map_settings_topography")
             descriptionLabel.text = localizedString("purchases_feature_desc_terrain")
             imageView.image = UIImage.templateImageNamed("ic_custom_terrain")
-            imageView.tintColor = UIColor(rgb: Int(color_primary_purple))
+            imageView.tintColor = UIColor.iconColorActive
             closeButton.isHidden = true
             osmAndCloudButton.setTitle(localizedString("shared_string_get"), for: .normal)
         }

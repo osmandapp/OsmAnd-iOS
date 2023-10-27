@@ -10,7 +10,7 @@
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXDocument.h"
 #import "OsmAndApp.h"
@@ -32,6 +32,7 @@
 #import "OACollectionViewCellState.h"
 #import "OAOsmAndFormatter.h"
 #import "OAFoldersCollectionView.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kAllFoldersIndex 0
 #define kVerticalMargin 16.
@@ -114,7 +115,8 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     if (_screenType == EOAFollowTrack)
         header = OALocalizedString(@"select_track_to_follow");
     if (header)
-        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:header font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:header font:kHeaderDescriptionFont textColor:UIColor.textColorSecondary isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+    self.tableView.tableHeaderView.backgroundColor = UIColor.viewBgColor;
 }
 
 - (void) applyLocalization
@@ -145,7 +147,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     if (_screenType == EOAFollowTrack)
     {
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-            self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_track_to_follow") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+            self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_track_to_follow") font:kHeaderDescriptionFont textColor:UIColor.textColorSecondary isBigTitle:NO parentViewWidth:self.view.frame.size.width];
             [self.tableView reloadData];
         } completion:nil];
     }
@@ -333,10 +335,10 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXTrackCell getCellIdentifier] owner:self options:nil];
             cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
-            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
-            cell.distanceImageView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.timeImageView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.wptImageView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.separatorView.backgroundColor = UIColor.separatorColor;
+            cell.distanceImageView.tintColor = UIColor.textColorSecondary;
+            cell.timeImageView.tintColor = UIColor.textColorSecondary;
+            cell.wptImageView.tintColor = UIColor.textColorSecondary;
         }
         if (cell)
         {
@@ -376,7 +378,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
-            cell.dividerColor = UIColorFromRGB(color_tint_gray);
+            cell.dividerColor = UIColor.separatorColor;
             cell.dividerInsets = UIEdgeInsetsZero;
             cell.dividerHight = 0.5;
         }

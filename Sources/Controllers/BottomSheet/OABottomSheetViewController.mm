@@ -14,7 +14,9 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OASizes.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kOABottomSheetWidth 320.0
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
@@ -266,9 +268,9 @@
     _tableView.contentInset = UIEdgeInsetsZero;
     
     _tableBackgroundView = [[UIView alloc] initWithFrame:{0, -1, 1, 1}];
-    _tableBackgroundView.backgroundColor = UIColorFromRGB(bottom_sheet_background_color);
+    _tableBackgroundView.backgroundColor = UIColor.groupBgColor;
     UIView *buttonsView = [[UIView alloc] init];
-    buttonsView.backgroundColor = UIColorFromRGB(bottom_sheet_background_color);
+    buttonsView.backgroundColor = UIColor.groupBgColor;
     buttonsView.frame = _buttonsView.bounds;
     buttonsView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_buttonsView insertSubview:buttonsView atIndex:0];
@@ -292,7 +294,7 @@
     _tableView.clipsToBounds = YES;
     
     //self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
-    _tableView.separatorColor = UIColorFromRGB(color_tint_gray);
+    _tableView.separatorColor = UIColor.separatorColor;
     
     [self setupView];
     
@@ -313,6 +315,7 @@
     self.bottomSheetWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.bottomSheetWindow.windowLevel = UIWindowLevelNormal;
     self.bottomSheetWindow.backgroundColor = [UIColor clearColor];
+    self.bottomSheetWindow.windowScene = (UIWindowScene *)UIApplication.sharedApplication.mainScene;
     
     UIInterfaceOrientation interfaceOrientation = CurrentInterfaceOrientation;
 
@@ -467,20 +470,11 @@
 
 #pragma mark - UIResponder
 
-- (NSArray *)keyCommands
+- (NSArray<UIKeyCommand *> *)keyCommands
 {
-    NSMutableArray<UIKeyCommand *> *commands = [NSMutableArray array];
-    [commands addObject:[UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack)]];
-
-    if (@available(iOS 15, *))
-    {
-        for (UIKeyCommand *command in commands)
-        {
-            command.wantsPriorityOverSystemBehavior = YES;
-        }
-    }
-
-    return commands;
+    UIKeyCommand *command = [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack)];
+    command.wantsPriorityOverSystemBehavior = YES;
+    return @[command];
 }
 
 #pragma mark -  UIGestureRecognizerDelegate

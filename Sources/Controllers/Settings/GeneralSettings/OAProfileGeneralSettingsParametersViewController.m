@@ -443,7 +443,7 @@
             else if (_settingsType != EOAProfileGeneralSettingsMapOrientation)
             {
                 cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-                cell.leftIconView.tintColor = [item[@"selected"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+                cell.leftIconView.tintColor = [item[@"selected"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColor.iconColorDisabled;
             }
             else
             {

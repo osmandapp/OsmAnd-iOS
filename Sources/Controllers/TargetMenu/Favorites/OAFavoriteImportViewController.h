@@ -8,7 +8,7 @@
 
 #import "OACompoundViewController.h"
 
-@interface OAFavoriteImportViewController : OACompoundViewController<UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, UIScrollViewDelegate>
+@interface OAFavoriteImportViewController : OACompoundViewController<UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UITableView *favoriteTableView;

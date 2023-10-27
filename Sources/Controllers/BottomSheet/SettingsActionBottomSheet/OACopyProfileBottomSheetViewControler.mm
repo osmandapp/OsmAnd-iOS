@@ -87,9 +87,9 @@
     _data = [NSArray arrayWithObject:dataArr];
     
     self.rightButton.userInteractionEnabled = _sourceAppMode;
-    self.rightButton.backgroundColor = _sourceAppMode ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_button_gray_background);
-    [self.rightButton setTintColor:_sourceAppMode ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
-    [self.rightButton setTitleColor:_sourceAppMode ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
+    self.rightButton.backgroundColor = _sourceAppMode ? UIColor.buttonBgColorPrimary : UIColor.buttonBgColorDisabled;
+    [self.rightButton setTintColor:_sourceAppMode ? UIColor.buttonTextColorPrimary : UIColor.textColorSecondary];
+    [self.rightButton setTitleColor:_sourceAppMode ? UIColor.buttonTextColorPrimary : UIColor.textColorSecondary forState:UIControlStateNormal];
 }
 
 - (void) onRightButtonPressed
@@ -225,7 +225,7 @@
             cell = (OAIconTitleIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.secondaryImageView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.secondaryImageView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.secondaryImageView.tintColor = UIColor.iconColorActive;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
@@ -268,7 +268,7 @@
     UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(16., 8., textWidth, heightForHeader)];
     description.attributedText = [OAUtilities getStringWithBoldPart:descriptionString mainString:OALocalizedString(@"copy_from_other_profile_descr") boldString:_targetAppMode.toHumanString lineSpacing:4.];
     description.adjustsFontForContentSizeCategory = YES;
-    description.textColor = UIColorFromRGB(color_text_footer);
+    description.textColor = UIColor.textColorSecondary;
     description.numberOfLines = 0;
     description.lineBreakMode = NSLineBreakByWordWrapping;
     description.autoresizingMask = UIViewAutoresizingFlexibleWidth;

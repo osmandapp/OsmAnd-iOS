@@ -28,6 +28,8 @@
 #import "Localization.h"
 #import "OABackupHelper.h"
 #import "OACloudAccountVerificationViewController.h"
+#import "SceneDelegate.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define _(name) OARootViewController__##name
 #define commonInit _(commonInit)
@@ -87,7 +89,7 @@ typedef enum : NSUInteger {
 
 + (OARootViewController*) instance
 {
-    OAAppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
+    OAAppDelegate *appDelegate = (OAAppDelegate *)[[UIApplication sharedApplication] delegate];
     return appDelegate.rootViewController;
 }
 
@@ -556,7 +558,7 @@ typedef enum : NSUInteger {
 
 - (MBProgressHUD *) showProgress:(EOAProgressType)progressType
 {
-    UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+    UIView *topView = [UIApplication sharedApplication].mainWindow;
     MBProgressHUD *currentProgress;
     MBProgressHUD *newProgress = [[MBProgressHUD alloc] initWithView:topView];
     switch (progressType)
@@ -863,35 +865,31 @@ typedef enum : NSUInteger {
     }
 }
 
-- (NSArray *) keyCommands
+- (NSArray<UIKeyCommand *> *)keyCommands
 {
-    NSMutableArray<UIKeyCommand *> *commands = [NSMutableArray array];
-    [commands addObject:[UIKeyCommand keyCommandWithInput:UIKeyInputDownArrow modifierFlags:0 action:@selector(panDown)]];
-    [commands addObject:[UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow modifierFlags:0 action:@selector(panUp)]];
-    [commands addObject:[UIKeyCommand keyCommandWithInput:UIKeyInputLeftArrow modifierFlags:0 action:@selector(panLeft)]];
-    [commands addObject:[UIKeyCommand keyCommandWithInput:UIKeyInputRightArrow modifierFlags:0 action:@selector(panRight)]];
-    [commands addObject:[UIKeyCommand keyCommandWithInput:@"-" modifierFlags:0 action:@selector(zoomOut)]];
-    [commands addObject:[UIKeyCommand keyCommandWithInput:@"+" modifierFlags:0 action:@selector(zoomIn)]];
-    [commands addObject:[UIKeyCommand keyCommandWithInput:@"=" modifierFlags:0 action:@selector(zoomIn)]];
-    [commands addObject:[UIKeyCommand keyCommandWithInput:@"-" modifierFlags:UIKeyModifierCommand action:@selector(zoomOut)]];
-    [commands addObject:[UIKeyCommand keyCommandWithInput:@"+" modifierFlags:UIKeyModifierCommand action:@selector(zoomIn)]];
-    [commands addObject:[UIKeyCommand keyCommandWithInput:@"=" modifierFlags:UIKeyModifierCommand action:@selector(zoomIn)]];
-    [commands addObject:[UIKeyCommand keyCommandWithInput:@"0" modifierFlags:UIKeyModifierCommand action:@selector(recenterMap)]];
-    [commands addObject:[UIKeyCommand keyCommandWithInput:@"c" modifierFlags:0 action:@selector(recenterMap)]];
-    [commands addObject:[UIKeyCommand keyCommandWithInput:@"d" modifierFlags:0 action:@selector(changeMapOrienation)]];
-    [commands addObject:[UIKeyCommand keyCommandWithInput:@"n" modifierFlags:0 action:@selector(showRouteInfo)]];
-    [commands addObject:[UIKeyCommand keyCommandWithInput:@"o" modifierFlags:0 action:@selector(changeAppModeToPrev)]];
-    [commands addObject:[UIKeyCommand keyCommandWithInput:@"p" modifierFlags:0 action:@selector(changeAppModeToNext)]];
-    [commands addObject:[UIKeyCommand keyCommandWithInput:@"s" modifierFlags:0 action:@selector(openSearch)]];
-
-    if (@available(iOS 15, *))
+    NSArray<UIKeyCommand *> *commands = @[
+        [UIKeyCommand keyCommandWithInput:UIKeyInputDownArrow modifierFlags:0 action:@selector(panDown)],
+        [UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow modifierFlags:0 action:@selector(panUp)],
+        [UIKeyCommand keyCommandWithInput:UIKeyInputLeftArrow modifierFlags:0 action:@selector(panLeft)],
+        [UIKeyCommand keyCommandWithInput:UIKeyInputRightArrow modifierFlags:0 action:@selector(panRight)],
+        [UIKeyCommand keyCommandWithInput:@"-" modifierFlags:0 action:@selector(zoomOut)],
+        [UIKeyCommand keyCommandWithInput:@"+" modifierFlags:0 action:@selector(zoomIn)],
+        [UIKeyCommand keyCommandWithInput:@"=" modifierFlags:0 action:@selector(zoomIn)],
+        [UIKeyCommand keyCommandWithInput:@"-" modifierFlags:UIKeyModifierCommand action:@selector(zoomOut)],
+        [UIKeyCommand keyCommandWithInput:@"+" modifierFlags:UIKeyModifierCommand action:@selector(zoomIn)],
+        [UIKeyCommand keyCommandWithInput:@"=" modifierFlags:UIKeyModifierCommand action:@selector(zoomIn)],
+        [UIKeyCommand keyCommandWithInput:@"0" modifierFlags:UIKeyModifierCommand action:@selector(recenterMap)],
+        [UIKeyCommand keyCommandWithInput:@"c" modifierFlags:0 action:@selector(recenterMap)],
+        [UIKeyCommand keyCommandWithInput:@"d" modifierFlags:0 action:@selector(changeMapOrienation)],
+        [UIKeyCommand keyCommandWithInput:@"n" modifierFlags:0 action:@selector(showRouteInfo)],
+        [UIKeyCommand keyCommandWithInput:@"o" modifierFlags:0 action:@selector(changeAppModeToPrev)],
+        [UIKeyCommand keyCommandWithInput:@"p" modifierFlags:0 action:@selector(changeAppModeToNext)],
+        [UIKeyCommand keyCommandWithInput:@"s" modifierFlags:0 action:@selector(openSearch)]
+    ];
+    for (UIKeyCommand *command in commands)
     {
-        for (UIKeyCommand *command in commands)
-        {
-            command.wantsPriorityOverSystemBehavior = YES;
-        }
+        command.wantsPriorityOverSystemBehavior = YES;
     }
-
     return commands;
 }
 

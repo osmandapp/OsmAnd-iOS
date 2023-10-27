@@ -9,7 +9,7 @@
 #import "OABaseBigTitleSettingsViewController.h"
 #import "Localization.h"
 #import "OASizes.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kSidePadding 16
 
@@ -47,7 +47,7 @@
     {
         _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:label
                                                                           font:kHeaderBigTitleFont
-                                                                     textColor:UIColor.blackColor
+                                                                     textColor:UIColor.textColorSecondary
                                                                     isBigTitle:YES
                                                                parentViewWidth:self.view.frame.size.width];
     }
@@ -109,7 +109,7 @@
 
 - (UIColor *)navBarBackgroundColor
 {
-    return UIColorFromRGB(color_primary_table_background);
+    return UIColor.viewBgColor;
 }
 
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView
@@ -123,16 +123,26 @@
     CGFloat y = scrollView.contentOffset.y;
     CGFloat navbarHeight = self.navBarView.frame.size.height - ([self isModal] ? 0. : [OAUtilities getTopMargin]);
     CGFloat tableHeaderHeight = self.tableView.tableHeaderView.frame.size.height;
-    if (y > -(navbarHeight))
+    if (y > 0)
     {
         if (!_isHeaderBlurred)
         {
             [UIView animateWithDuration:.2 animations:^{
-                [self.navBarView addBlurEffect:YES cornerRadius:0. padding:0.];
+                [self.navBarView addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
                 _isHeaderBlurred = YES;
             }];
         }
-        else if (y + navbarHeight > tableHeaderHeight * .75)
+    }
+    else if (y > -(navbarHeight))
+    {
+        if (_isHeaderBlurred)
+        {
+            [UIView animateWithDuration:0.2 animations:^{
+                [self.navBarView removeBlurEffect:[self navBarBackgroundColor]];
+                _isHeaderBlurred = NO;
+            }];
+        }
+        if (y + navbarHeight > tableHeaderHeight * 0.75)
         {
             if (self.titleLabel.hidden)
             {

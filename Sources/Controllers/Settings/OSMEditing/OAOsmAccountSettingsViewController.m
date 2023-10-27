@@ -18,7 +18,6 @@
 #import "OAOsmBugResult.h"
 #import "OAOsmNotePoint.h"
 #import "OASizes.h"
-#import "OAColors.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -71,7 +70,7 @@
         self.tableView.tableHeaderView =
                 [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"use_login_and_password_description")
                                                      font:kHeaderDescriptionFont
-                                                textColor:UIColorFromRGB(color_text_footer)
+                                                textColor:UIColor.textColorSecondary
                                                isBigTitle:NO
                                           parentViewWidth:self.view.frame.size.width];
     }
@@ -139,7 +138,7 @@
             @"key" : @"error_cell",
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : _errorMessage,
-            @"title_color" : UIColorFromRGB(color_primary_red)
+            @"title_color" : UIColor.buttonBgColorDisruptive
         }];
     }
     else
@@ -210,7 +209,7 @@
                 cell.inputField.textContentType = UITextContentTypePassword;
                 cell.inputField.secureTextEntry = YES;
             }
-            cell.titleLabel.textColor = [UIColor blackColor];
+            cell.titleLabel.textColor = [UIColor textColorPrimary];
             cell.inputField.userInteractionEnabled = !_isAuthorised;
             cell.inputField.tag = indexPath.section << 10 | indexPath.row;;
             cell.inputField.returnKeyType = UIReturnKeyDone;
@@ -234,12 +233,12 @@
         if (cell)
         {
             cell.button.backgroundColor = _isAuthorised || _newUserName.length == 0 || _newPassword.length == 0 || _errorMessage != nil
-                    ? UIColorFromRGB(color_button_gray_background)
-                    : UIColorFromRGB(color_primary_purple);
+                    ? UIColor.buttonBgColorSecondary
+                    : UIColor.buttonBgColorPrimary;
             [cell.button setTitleColor:_isAuthorised
-                            ? UIColorFromRGB(color_primary_purple)
+                            ? UIColor.buttonTextColorSecondary
                             : _newUserName.length == 0 || _newPassword.length == 0 || _errorMessage != nil
-                                    ? UIColorFromRGB(color_text_footer) : UIColor.whiteColor
+                                    ? UIColor.textColorSecondary : UIColor.buttonTextColorPrimary
                               forState:UIControlStateNormal];
             [cell.button setTitle:_isAuthorised > 0 ? OALocalizedString(@"shared_string_logout") : OALocalizedString(@"user_login")
                          forState:UIControlStateNormal];
@@ -256,13 +255,13 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *) nib[0];
-            cell.dividerColor = UIColorFromRGB(color_tint_gray);
+            cell.dividerColor = UIColor.separatorColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
             BOOL isErrorEmptyCell = [item[@"key"] isEqualToString:@"empty_cell"];
-            cell.backgroundColor = isErrorEmptyCell ? UIColor.clearColor : UIColor.whiteColor;
+            cell.backgroundColor = isErrorEmptyCell ? UIColor.clearColor : UIColor.groupBgColor;
             cell.dividerHight = isErrorEmptyCell ? 30. : (1. / [UIScreen mainScreen].scale);
             cell.dividerInsets = UIEdgeInsetsMake(0., isErrorEmptyCell ? CGFLOAT_MAX : [item[@"left_inset"] floatValue], 0., 0.);
         }
@@ -284,7 +283,7 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
+            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.textColorPrimary;
         }
         return cell;
     }

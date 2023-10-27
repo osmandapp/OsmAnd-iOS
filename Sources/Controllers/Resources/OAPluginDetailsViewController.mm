@@ -122,7 +122,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     [super viewDidLoad];
 
     _horizontalLineDesc = [CALayer layer];
-    _horizontalLineDesc.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
+    _horizontalLineDesc.backgroundColor = [UIColor.separatorColor CGColor];
     [self.detailsView.layer addSublayer:_horizontalLineDesc];
     
     self.priceButton.layer.cornerRadius = 4;
@@ -224,7 +224,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     }
     else if (_screenType == EOAPluginScreenTypeCustomPlugin)
     {
-        attrDesc = [OAUtilities attributedStringFromHtmlString:_plugin.getDescription fontSize:17];
+        attrDesc = [OAUtilities attributedStringFromHtmlString:_plugin.getDescription fontSize:17 textColor:UIColor.textColorPrimary];
     }
 
     [self applyLocalization];
@@ -236,7 +236,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     else if (attrDesc)
     {
         self.descTextView.attributedText = attrDesc;
-        self.descTextView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
+        self.descTextView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColor.textColorActive};
     }
     
     BOOL purchased = NO;
@@ -259,23 +259,23 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
         if (!disabled)
         {
             self.priceButton.layer.borderWidth = 0.0;
-            self.priceButton.backgroundColor = UIColorFromRGB(0xff8f00);
+            self.priceButton.backgroundColor = UIColor.iconColorSelected;
             self.priceButton.tintColor = [UIColor whiteColor];
             [self.priceButton setImage:[UIImage imageNamed:@"ic_checkmark_big_enable"] forState:UIControlStateNormal];
         }
         else
         {
             self.priceButton.layer.borderWidth = 0.8;
-            self.priceButton.layer.borderColor = UIColorFromRGB(0xff8f00).CGColor;
+            self.priceButton.layer.borderColor = UIColor.iconColorSelected.CGColor;
             self.priceButton.backgroundColor = [UIColor clearColor];
-            self.priceButton.tintColor = UIColorFromRGB(0xff8f00);
+            self.priceButton.tintColor = UIColor.iconColorSelected;
             [self.priceButton setImage:[UIImage imageNamed:@"ic_checkmark_big_enable"] forState:UIControlStateNormal];
         }
     }
     else
     {
         self.priceButton.layer.borderWidth = 0.0;
-        self.priceButton.backgroundColor = UIColorFromRGB(0xff8f00);
+        self.priceButton.backgroundColor = UIColor.iconColorSelected;
         self.priceButton.tintColor = [UIColor whiteColor];
         [self.priceButton setTitle:price forState:UIControlStateNormal];
     }

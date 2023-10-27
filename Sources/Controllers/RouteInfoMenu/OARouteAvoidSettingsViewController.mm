@@ -13,7 +13,7 @@
 #import "Localization.h"
 #import "OAFavoriteItem.h"
 #import "OADefaultFavorite.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OADestinationItem.h"
 #import "OADestinationsHelper.h"
 #import "OARoutingHelper.h"
@@ -134,7 +134,8 @@
 - (void) setupView
 {
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_avoid_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_avoid_descr") font:kHeaderDescriptionFont textColor:UIColor.textColorSecondary isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+    self.tableView.tableHeaderView.backgroundColor = UIColor.viewBgColor;
     [self.tableView reloadData];
 }
 

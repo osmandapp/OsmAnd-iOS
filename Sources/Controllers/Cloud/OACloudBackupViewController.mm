@@ -50,6 +50,7 @@
 #import "OATableSectionData.h"
 #import "OsmAndApp.h"
 #import "OASizes.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -140,15 +141,22 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = UIColorFromRGB(color_primary_orange_navbar_background);
-    appearance.shadowColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    appearance.shadowColor = UIColor.navBarBgColorPrimary;
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.whiteColor
+        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
     };
-    self.navigationController.navigationBar.standardAppearance = appearance;
+    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+    blurAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
+    blurAppearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    blurAppearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+    };
+    self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.whiteColor;
+    self.navigationController.navigationBar.tintColor = UIColor.navBarTextColorPrimary;
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
     OACloudBackupViewController *navigationController = (OACloudBackupViewController *)self.navigationController.topViewController;
@@ -319,7 +327,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                 kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
                 kCellKeyKey: @"checkingBackup",
                 kCellTitleKey: OALocalizedString(@"checking_progress"),
-                @"titleTint": UIColorFromRGB(color_primary_purple)
+                @"titleTint": UIColor.textColorActive
             };
             [backupRows addRowFromDictionary:checkingCell];
         }
@@ -381,10 +389,11 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconProgressbarCell getCellIdentifier] owner:self options:nil];
     OATitleIconProgressbarCell *resultCell = (OATitleIconProgressbarCell *)[nib objectAtIndex:0];
     [resultCell.progressBar setProgress:0.0 animated:NO];
-    [resultCell.progressBar setProgressTintColor:UIColorFromRGB(color_primary_purple)];
+    [resultCell.progressBar setProgressTintColor:UIColor.iconColorActive];
     resultCell.textView.text = [OALocalizedString(@"syncing_progress") stringByAppendingString:[NSString stringWithFormat:@"%i%%", 0]];
+    resultCell.textView.textColor = UIColor.textColorPrimary;
     resultCell.imgView.image = [UIImage templateImageNamed:@"ic_custom_cloud_upload"];
-    resultCell.imgView.tintColor = UIColorFromRGB(color_primary_purple);
+    resultCell.imgView.tintColor = UIColor.iconColorActive;
     resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
     resultCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return resultCell;
@@ -499,7 +508,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.iconView.tintColor = UIColor.iconColorActive;
             cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         }
         cell.titleView.text = item.title;
@@ -538,7 +547,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         cell.titleLabel.text = item.title;
         cell.valueLabel.text = [item stringForKey:@"value"];
         cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
-        cell.leftIconView.tintColor = UIColorFromRGB((([item integerForKey:@"value"] > 0) ? color_primary_purple : color_tint_gray));
+        cell.leftIconView.tintColor = [item integerForKey:@"value"] > 0 ? UIColor.iconColorActive : UIColor.iconColorDisabled;
         cell.separatorInset = UIEdgeInsetsMake(0., ([item.key isEqualToString:@"conflicts"] ? 0. : 65.), 0., 0.);
         return cell;
     }
@@ -549,8 +558,8 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
-            cell.button.backgroundColor = UIColorFromRGB(color_primary_purple);
-            [cell.button setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+            cell.button.backgroundColor = UIColor.iconColorActive;
+            [cell.button setTitleColor:UIColor.buttonTextColorPrimary forState:UIControlStateNormal];
             cell.button.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
             cell.button.layer.cornerRadius = 9.;
             cell.topMarginConstraint.constant = 9.;
@@ -588,7 +597,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAButtonTableViewCell *)[nib objectAtIndex:0];
             [cell.button setTitle:nil forState:UIControlStateNormal];
-            cell.button.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.button.tintColor = UIColor.iconColorActive;
         }
         BOOL collapsed = item.rowType == EOATableRowTypeCollapsable && ((OATableCollapsableRowData *) item).collapsed;
         [cell.button setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
@@ -597,7 +606,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         cell.titleLabel.text = item.title;
         cell.descriptionLabel.text = item.descr;
         [cell.leftIconView setImage:[UIImage templateImageNamed:item.iconName]];
-        cell.leftIconView.tintColor = item.iconTint != -1 ? UIColorFromRGB(item.iconTint) : UIColorFromRGB(color_primary_purple);
+        cell.leftIconView.tintColor = item.iconTint != -1 ? UIColorFromRGB(item.iconTint) : UIColor.iconColorActive;
         return cell;
     }
     else if ([cellId isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
@@ -620,7 +629,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             cell.selectionStyle = isWarningCell ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
             if (isWarningCell)
             {
-                cell.titleLabel.textColor = UIColor.blackColor;
+                cell.titleLabel.textColor = UIColor.textColorPrimary;
                 NSInteger color = item.iconTint;
                 if (color != -1)
                 {
@@ -636,8 +645,8 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             {
                 BOOL actionButtonDisabled = [self isActionButtonDisabled:item];
                 cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
-                cell.rightIconView.tintColor = actionButtonDisabled ? UIColorFromRGB(color_tint_gray) : UIColorFromRGB(color_primary_purple);
-                cell.titleLabel.textColor = actionButtonDisabled ? UIColorFromRGB(color_text_footer) : UIColorFromRGB(color_primary_purple);
+                cell.rightIconView.tintColor = actionButtonDisabled ? UIColor.iconColorDisabled : UIColor.iconColorActive;
+                cell.titleLabel.textColor = actionButtonDisabled ? UIColor.textColorSecondary : UIColor.textColorActive;
             }
         }
         return cell;
@@ -658,7 +667,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             cell.selectionStyle = isCheckingBackup ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
             if (isCheckingBackup)
             {
-                UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+                UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
                 cell.accessoryView = activityIndicator;
                 [activityIndicator startAnimating];
             }

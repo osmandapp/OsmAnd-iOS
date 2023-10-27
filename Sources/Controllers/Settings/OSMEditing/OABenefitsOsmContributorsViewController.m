@@ -13,7 +13,7 @@
 #import "OAValueTableViewCell.h"
 #import "OAOsmAccountSettingsViewController.h"
 #import "OASizes.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 
 @interface OABenefitsOsmContributorsViewController () <OAAccountSettingDelegate>
@@ -74,7 +74,7 @@
                                   value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]
                                   range:NSMakeRange(0, signInAttributed.length)];
     [signInAttributed addAttribute:NSForegroundColorAttributeName
-                                  value:UIColorFromRGB(color_text_footer)
+                                  value:UIColor.textColorSecondary
                                   range:NSMakeRange(0, signInAttributed.length)];
     [descriptionAttributed appendAttributedString:signInAttributed];
 
@@ -92,7 +92,7 @@
             @{
                     @"type" : [OAValueTableViewCell getCellIdentifier],
                     @"title" : OALocalizedString(@"daily_map_updates"),
-                    @"left_icon": @"ic_custom_map_updates_colored_day",
+                    @"left_icon": @"ic_custom_map_updates_colored",
                     @"right_icon": @"img_openstreetmap_logo"
             },
             @{
@@ -102,7 +102,7 @@
             @{
                     @"type" : [OAValueTableViewCell getCellIdentifier],
                     @"title" : OALocalizedString(@"monthly_map_updates"),
-                    @"left_icon": @"ic_custom_monthly_map_updates_colored_day",
+                    @"left_icon": @"ic_custom_monthly_map_updates_colored",
                     @"right_icon": @"img_openstreetmap_logo"
             },
             @{
@@ -112,7 +112,7 @@
             @{
                     @"type" : [OAValueTableViewCell getCellIdentifier],
                     @"title" : OALocalizedString(@"unlimited_map_downloads"),
-                    @"left_icon": @"ic_custom_unlimited_downloads_colored_day",
+                    @"left_icon": @"ic_custom_unlimited_downloads_colored",
                     @"right_icon": @"img_openstreetmap_logo"
             },
             /*@{
@@ -128,8 +128,8 @@
                     @"key" : @"email_login_button",
                     @"type" : [OAFilledButtonCell getCellIdentifier],
                     @"title" : OALocalizedString(@"use_login_and_password"),
-                    @"background_color": UIColorFromRGB(color_button_gray_background),
-                    @"tint_color": UIColorFromRGB(color_primary_purple),
+                    @"background_color": UIColor.buttonBgColorDisabled,
+                    @"tint_color": UIColor.buttonTextColorSecondary,
                     @"top_margin": @(16.),
                     @"bottom_margin": @(20.)
             },
@@ -203,8 +203,8 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *) nib[0];
-            cell.backgroundColor = UIColor.whiteColor;
-            cell.dividerColor = UIColorFromRGB(color_tint_gray);
+            cell.backgroundColor = UIColor.groupBgColor;
+            cell.dividerColor = UIColor.separatorColor;
         }
         if (cell)
         {
@@ -221,7 +221,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAFilledButtonCell *) nib[0];
-            cell.backgroundColor = UIColor.whiteColor;
+            cell.backgroundColor = UIColor.groupBgColor;
             cell.button.layer.cornerRadius = 9;
             cell.heightConstraint.constant = 42.;
         }

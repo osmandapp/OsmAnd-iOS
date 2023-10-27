@@ -15,7 +15,6 @@
 #import "OAQuickAction.h"
 #import "OATitleDescrDraggableCell.h"
 #import "OAMultiselectableHeaderView.h"
-#import "OAColors.h"
 #import "OAAppSettings.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OASwitchTableViewCell.h"
@@ -215,7 +214,7 @@
     {
         [cell.textView setText:action.getName];
         [cell.iconView setImage:[UIImage templateImageNamed:action.getIconResName]];
-        [cell.iconView setTintColor:UIColorFromRGB(color_poi_orange)];
+        [cell.iconView setTintColor:UIColor.iconColorSelected];
         if (cell.iconView.subviews.count > 0)
             [[cell.iconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
         
@@ -234,10 +233,10 @@
         cell.delegate = self;
         cell.allowsSwipeWhenEditing = NO;
         [cell.overflowButton setImage:[UIImage templateImageNamed:@"menu_cell_pointer"] forState:UIControlStateNormal];
-        [cell.overflowButton setTintColor:UIColorFromRGB(color_tint_gray)];
+        [cell.overflowButton setTintColor:UIColor.iconColorSecondary];
         [cell.overflowButton.imageView setContentMode:UIViewContentModeCenter];
         cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
-        cell.tintColor = UIColorFromRGB(color_primary_purple);
+        cell.tintColor = UIColor.iconColorActive;
         
         [cell updateConstraintsIfNeeded];
     }

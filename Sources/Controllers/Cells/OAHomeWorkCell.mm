@@ -9,6 +9,7 @@
 #import "OAHomeWorkCell.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "OAHomeWorkCollectionViewCell.h"
 #import "OsmAndApp.h"
@@ -146,7 +147,7 @@
                           delay:0
                         options:(UIViewAnimationOptionAllowUserInteraction)
                      animations:^{
-        [cell setBackgroundColor:UIColorFromRGB(color_tint_gray)];
+        [cell setBackgroundColor:UIColor.viewBgColor];
     }
                      completion:nil];
 }
@@ -157,7 +158,7 @@
                           delay:0
                         options:(UIViewAnimationOptionAllowUserInteraction)
                      animations:^{
-        [cell setBackgroundColor:UIColor.whiteColor];
+        [cell setBackgroundColor:UIColor.groupBgColor];
     }
                      completion:nil];
 }

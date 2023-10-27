@@ -52,7 +52,7 @@ struct OsmOAuthButtonCancelView: View {
             label: {
                 Text(localizedString("shared_string_cancel"))
                     .font(.body)
-                    .foregroundColor(Color.init(UIColor(rgbValue: color_primary_purple)))
+                    .foregroundColor(Color(UIColor.textColorActive))
                     .padding(.leading, 16)
                     .padding(.trailing, 16)
             }
@@ -124,8 +124,8 @@ struct OsmOAuthButtonOAuthView: View {
                     .frame(maxWidth: .infinity, minHeight: 42)
             }
         )
-        .background(Color.init(UIColor(rgbValue: color_primary_purple)))
-        .foregroundColor(Color.white)
+        .background(Color(UIColor.buttonBgColorPrimary))
+        .foregroundColor(Color(UIColor.buttonTextColorPrimary))
         .clipShape(RoundedRectangle(cornerRadius: 9))
         .padding(.leading, 16)
         .padding(.trailing, 16)
@@ -147,8 +147,8 @@ struct OsmOAuthButtonLoginPasswordView: View {
                 	.frame(maxWidth: .infinity, minHeight: 42)
             }
         )
-        .background(Color.init(UIColor(rgbValue: color_button_gray_background)))
-        .foregroundColor(Color.init(UIColor(rgbValue: color_primary_purple)))
+        .background(Color(UIColor.buttonBgColorDisabled))
+        .foregroundColor(Color(UIColor.buttonTextColorSecondary))
         .clipShape(RoundedRectangle(cornerRadius: 9))
         .padding(.leading, 16)
         .padding(.trailing, 16)
@@ -167,7 +167,7 @@ struct OsmOAuthButtonLoginPasswordView: View {
                             label: {
                                 Text(localizedString("shared_string_cancel"))
                                     .font(.body)
-                                    .foregroundColor(Color.init(UIColor(rgbValue: color_primary_purple)))
+                                    .foregroundColor(Color(UIColor.textColorActive))
                             }
                         )
                     )

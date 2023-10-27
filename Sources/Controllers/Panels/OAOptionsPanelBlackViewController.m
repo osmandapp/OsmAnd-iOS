@@ -15,7 +15,7 @@
 #import "OAUtilities.h"
 #import "OAHelpViewController.h"
 #import "OAPluginsViewController.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAMapHudViewController.h"
 #import "OAWeatherPlugin.h"
 #import "OAAutoObserverProxy.h"
@@ -187,6 +187,34 @@
     _menuButtonPluginsDiv.frame = CGRectMake(divX, divY, divW, divH);
 }
 
+- (void)applyingAppTheme
+{
+    UIColor *divColor = UIColor.separatorColor;
+
+    _menuButtonMapsDiv.backgroundColor = divColor.CGColor;
+    _menuButtonMyDataDiv.backgroundColor = divColor.CGColor;
+    _menuButtonMyWaypointsDiv.backgroundColor = divColor.CGColor;
+    _menuButtonNavigationDiv.backgroundColor = divColor.CGColor;
+    _menuButtonPlanRouteDiv.backgroundColor = divColor.CGColor;
+    _menuButtonWeatherDiv.backgroundColor = divColor.CGColor;
+    _menuButtonMapsAndResourcesDiv.backgroundColor = divColor.CGColor;
+    _menuButtonConfigureScreenDiv.backgroundColor = divColor.CGColor;
+    _menuButtonSettingsDiv.backgroundColor = divColor.CGColor;
+    _menuButtonPluginsDiv.backgroundColor = divColor.CGColor;
+    
+    [_menuButtonMaps setTintColor:UIColor.iconColorDefault];
+    [_menuButtonMyData setTintColor:UIColor.iconColorDefault];
+    [_menuButtonMyWaypoints setTintColor:UIColor.iconColorDefault];
+    [_menuButtonMapsAndResources setTintColor:UIColor.iconColorDefault];
+    [_menuButtonConfigureScreen setTintColor:UIColor.iconColorDefault];
+    [_menuButtonSettings setTintColor:UIColor.iconColorDefault];
+    [_menuButtonHelp setTintColor:UIColor.iconColorDefault];
+    [_menuButtonNavigation setTintColor:UIColor.iconColorDefault];
+    [_menuButtonPlanRoute setTintColor:UIColor.iconColorDefault];
+    [_menuButtonWeather setTintColor:UIColor.iconColorDefault];
+    [_menuButtonPlugins setTintColor:UIColor.iconColorDefault];
+}
+
 - (void)adjustButtonInsets:(UIButton *)btn
 {
     UIEdgeInsets contentInsets = btn.contentEdgeInsets;
@@ -235,19 +263,6 @@
     _menuButtonConfigureScreenDiv = [[CALayer alloc] init];
     _menuButtonSettingsDiv = [[CALayer alloc] init];
     _menuButtonPluginsDiv = [[CALayer alloc] init];
-
-    UIColor *divColor = UIColorFromRGB(0xe2e1e6);
-
-    _menuButtonMapsDiv.backgroundColor = divColor.CGColor;
-    _menuButtonMyDataDiv.backgroundColor = divColor.CGColor;
-    _menuButtonMyWaypointsDiv.backgroundColor = divColor.CGColor;
-    _menuButtonNavigationDiv.backgroundColor = divColor.CGColor;
-    _menuButtonPlanRouteDiv.backgroundColor = divColor.CGColor;
-    _menuButtonWeatherDiv.backgroundColor = divColor.CGColor;
-    _menuButtonMapsAndResourcesDiv.backgroundColor = divColor.CGColor;
-    _menuButtonConfigureScreenDiv.backgroundColor = divColor.CGColor;
-    _menuButtonSettingsDiv.backgroundColor = divColor.CGColor;
-    _menuButtonPluginsDiv.backgroundColor = divColor.CGColor;
 
     self.navigationController.delegate = self;
     
@@ -309,18 +324,8 @@
     [_menuButtonPlanRoute setImage:[UIImage templateImageNamed:@"ic_custom_routes.png"] forState:UIControlStateNormal];
     [_menuButtonWeather setImage:[UIImage templateImageNamed:@"ic_custom_umbrella.png"] forState:UIControlStateNormal];
     [_menuButtonPlugins setImage:[UIImage templateImageNamed:@"left_menu_icon_plugins"] forState:UIControlStateNormal];
-
-    [_menuButtonMaps setTintColor:UIColorFromRGB(color_options_panel_icon)];
-    [_menuButtonMyData setTintColor:UIColorFromRGB(color_options_panel_icon)];
-    [_menuButtonMyWaypoints setTintColor:UIColorFromRGB(color_options_panel_icon)];
-    [_menuButtonMapsAndResources setTintColor:UIColorFromRGB(color_options_panel_icon)];
-    [_menuButtonConfigureScreen setTintColor:UIColorFromRGB(color_options_panel_icon)];
-    [_menuButtonSettings setTintColor:UIColorFromRGB(color_options_panel_icon)];
-    [_menuButtonHelp setTintColor:UIColorFromRGB(color_options_panel_icon)];
-    [_menuButtonNavigation setTintColor:UIColorFromRGB(color_options_panel_icon)];
-    [_menuButtonPlanRoute setTintColor:UIColorFromRGB(color_options_panel_icon)];
-    [_menuButtonWeather setTintColor:UIColorFromRGB(color_options_panel_icon)];
-    [_menuButtonPlugins setTintColor:UIColorFromRGB(color_options_panel_icon)];
+    
+    [self applyingAppTheme];
 }
 
 - (void) didReceiveMemoryWarning
@@ -398,10 +403,6 @@
 - (IBAction) helpButtonClicked:(id)sender
 {
     [OAAnalyticsHelper logEvent:@"help_open"];
-
-    // Data is powered by OpenStreetMap ODbL, &#169; https://www.openstreetmap.org/copyright
-//    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Copyright OsmAnd 2017\n\nData is powered by OpenStreetMap ODbL, ©\nhttps://www.openstreetmap.org/copyright" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-//    [alert show];
     OAHelpViewController *helpViewController = [[OAHelpViewController alloc] init];
     [self.navigationController pushViewController:helpViewController animated:YES];
 }
@@ -414,6 +415,13 @@
 - (BOOL) prefersStatusBarHidden
 {
     return NO;
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+
+    [self applyingAppTheme];
 }
 
 - (void) navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated

@@ -12,7 +12,7 @@
 #import "OACompoundViewController.h"
 #import "OAResourcesUIHelper.h"
 
-@interface OAResourcesBaseViewController : OACompoundViewController<OADownloadProgressViewDelegate, UIAlertViewDelegate>
+@interface OAResourcesBaseViewController : OACompoundViewController<OADownloadProgressViewDelegate>
 
 @property (nonatomic, assign) BOOL dataInvalidated;
 

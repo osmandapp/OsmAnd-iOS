@@ -13,6 +13,7 @@
 #import "OAButtonTableViewCell.h"
 #import "OASegmentedControlCell.h"
 #import "OADividerCell.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OADownloadMultipleResourceViewController () <OATableViewCellDelegate>
 
@@ -177,8 +178,8 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *) nib[0];
-            cell.backgroundColor = UIColor.whiteColor;
-            cell.dividerColor = UIColorFromRGB(color_tint_gray);
+            cell.backgroundColor = UIColor.groupBgColor;
+            cell.dividerColor = UIColor.separatorColor;
             cell.dividerHight = (1.0 / [UIScreen mainScreen].scale);
         }
         if (cell)
@@ -205,12 +206,12 @@
             cell = nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
-            cell.segmentedControl.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.1];
-            cell.segmentedControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
+            cell.segmentedControl.backgroundColor = [UIColor.iconColorActive colorWithAlphaComponent:.1];
+            cell.segmentedControl.selectedSegmentTintColor = UIColor.iconColorActive;
 
             UIFont *font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
-            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor, NSFontAttributeName : font} forState:UIControlStateSelected];
-            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple), NSFontAttributeName : font} forState:UIControlStateNormal];
+            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.buttonTextColorPrimary, NSFontAttributeName : font} forState:UIControlStateSelected];
+            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.buttonTextColorSecondary, NSFontAttributeName : font} forState:UIControlStateNormal];
         }
         if (cell)
         {
@@ -241,7 +242,7 @@
             UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
             conf.contentInsets = NSDirectionalEdgeInsetsMake(0., -6.5, 0., 0.);
             cell.leftEditButton.configuration = conf;
-            cell.leftEditButton.layer.shadowColor = UIColorFromRGB(color_tint_gray).CGColor;
+            cell.leftEditButton.layer.shadowColor = UIColor.iconColorDisabled.CGColor;
             cell.leftEditButton.layer.shadowOffset = CGSizeMake(0., 0.);
             cell.leftEditButton.layer.shadowOpacity = 1.;
             cell.leftEditButton.layer.shadowRadius = 1.;
@@ -272,11 +273,11 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:cellType owner:self options:nil];
             cell = nib[0];
-            cell.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.tintColor = UIColor.iconColorActive;
             if (!_isSingleSRTM)
             {
                 UIView *bgColorView = [[UIView alloc] init];
-                bgColorView.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.05];
+                bgColorView.backgroundColor = [UIColor.iconColorActive colorWithAlphaComponent:.05];
                 [cell setSelectedBackgroundView:bgColorView];
             }
         }
@@ -286,7 +287,7 @@
             BOOL selected = !_isSingleSRTM && [_selectedItems containsObject:item];
             BOOL installed = item.isInstalled;
             cell.leftIconView.image = [OAResourceType getIcon:_type.type templated:YES];
-            cell.leftIconView.tintColor = selected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB((installed ? resource_installed_icon_color : color_tint_gray));
+            cell.leftIconView.tintColor = selected ? UIColor.iconColorActive :installed  ?  UIColorFromRGB( resource_installed_icon_color) : UIColor.iconColorDisabled;
             cell.leftIconView.contentMode = UIViewContentModeCenter;
             cell.accessoryType = installed ? UITableViewCellAccessoryDetailButton : UITableViewCellAccessoryNone;
             cell.titleLabel.text = item.title;

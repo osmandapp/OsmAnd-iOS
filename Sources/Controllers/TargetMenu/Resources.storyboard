@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,7 +19,9 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="50" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="1LP-5L-xCP" userLabel="tableView">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" name="viewBgColor"/>
+                                <color key="tintColor" name="iconColorActive"/>
+                                <color key="separatorColor" name="separatorColor"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="installedResourcesSubmenuCell" textLabel="C7a-Mu-qLA" detailTextLabel="Kq6-h3-mRI" style="IBUITableViewCellStyleSubtitle" id="WoT-Y1-Bb5">
                                         <rect key="frame" x="0.0" y="55.5" width="375" height="50"/>
@@ -31,18 +34,20 @@
                                                     <rect key="frame" x="16" y="8" width="33" height="20.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" name="textColorPrimary"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" id="Kq6-h3-mRI">
                                                     <rect key="frame" x="16" y="28.5" width="44" height="14.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
-                                                    <color key="textColor" red="0.50025969743728638" green="0.50024467706680298" blue="0.50025320053100586" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" name="textColorSecondary"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" name="groupBgColor"/>
+                                        <color key="tintColor" name="iconColorActive"/>
                                         <connections>
                                             <segue destination="Lhe-yk-sVD" kind="show" identifier="openInstalledResourcesSegue" id="dMO-Tr-KOi"/>
                                         </connections>
@@ -58,18 +63,20 @@
                                                     <rect key="frame" x="16" y="8" width="33" height="20.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" name="textColorPrimary"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" id="tZN-sY-UAX">
                                                     <rect key="frame" x="16" y="28.5" width="44" height="14.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
-                                                    <color key="textColor" red="0.50025969743728638" green="0.50024467706680298" blue="0.50025320053100586" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" name="textColorSecondary"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" name="groupBgColor"/>
+                                        <color key="tintColor" name="iconColorActive"/>
                                         <connections>
                                             <segue destination="w8S-Nb-zGN" kind="show" identifier="openOutdatedResourcesSegue" id="uGo-KX-98T"/>
                                         </connections>
@@ -85,18 +92,20 @@
                                                     <rect key="frame" x="16" y="8" width="33" height="20.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" name="textColorPrimary"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" id="imh-ai-plr">
                                                     <rect key="frame" x="16" y="28.5" width="44" height="14.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
-                                                    <color key="textColor" red="0.50025969743728638" green="0.50024467706680298" blue="0.50025320053100586" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" name="textColorSecondary"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" name="groupBgColor"/>
+                                        <color key="tintColor" name="iconColorActive"/>
                                         <connections>
                                             <segue destination="Lhe-yk-sVD" kind="show" identifier="openSubregionSegue" id="f3E-yf-8Vo"/>
                                         </connections>
@@ -112,19 +121,20 @@
                                                     <rect key="frame" x="16" y="8" width="33" height="20.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" name="textColorPrimary"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" id="3vQ-wj-3nf">
                                                     <rect key="frame" x="16" y="28.5" width="44" height="14.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
-                                                    <color key="textColor" red="0.50025969743728638" green="0.50024467706680298" blue="0.50025320053100586" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" name="textColorSecondary"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <color key="tintColor" red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" name="groupBgColor"/>
+                                        <color key="tintColor" name="iconColorActive"/>
                                         <connections>
                                             <segue destination="huq-qE-lWI" kind="show" identifier="openDetailsSegue" id="u69-45-Dwv"/>
                                         </connections>
@@ -137,7 +147,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="8Qu-hJ-JfY"/>
-                        <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" name="viewBgColor"/>
                         <constraints>
                             <constraint firstItem="1LP-5L-xCP" firstAttribute="leading" secondItem="v5b-3L-kLb" secondAttribute="leading" id="6H3-qT-xDt"/>
                             <constraint firstAttribute="trailing" secondItem="1LP-5L-xCP" secondAttribute="trailing" id="VfI-UB-pdz"/>
@@ -164,7 +174,9 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="10" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="vN3-1c-cfU" userLabel="tableView">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
-                                <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" name="viewBgColor"/>
+                                <color key="tintColor" name="iconColorActive"/>
+                                <color key="separatorColor" name="separatorColor"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="liveUpdatesCell" textLabel="oMf-rx-iRa" detailTextLabel="nqE-dZ-YsZ" style="IBUITableViewCellStyleSubtitle" id="nHz-ID-XKd">
                                         <rect key="frame" x="0.0" y="55.5" width="375" height="57.5"/>
@@ -177,18 +189,19 @@
                                                     <rect key="frame" x="16" y="9" width="33" height="20.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" name="textColorPrimary"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" id="nqE-dZ-YsZ">
                                                     <rect key="frame" x="16" y="32.5" width="44" height="14.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
-                                                    <color key="textColor" red="0.50025969739999998" green="0.50024467709999998" blue="0.50025320049999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" name="textColorSecondary"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" name="groupBgColor"/>
                                         <connections>
                                             <segue destination="ywk-bf-9Aq" kind="show" identifier="openLiveUpdatesSegue" id="nug-7T-dYU"/>
                                         </connections>
@@ -201,7 +214,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="gzt-J4-M2N"/>
-                        <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" name="viewBgColor"/>
                         <constraints>
                             <constraint firstItem="vN3-1c-cfU" firstAttribute="top" secondItem="CML-Vt-67j" secondAttribute="top" id="Fsg-2P-659"/>
                             <constraint firstAttribute="trailing" secondItem="vN3-1c-cfU" secondAttribute="trailing" id="GWg-B8-LLx"/>
@@ -228,7 +241,9 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="50" estimatedRowHeight="50" sectionHeaderHeight="10" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="kbN-LD-cxr">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
-                                <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" name="viewBgColor"/>
+                                <color key="tintColor" name="iconColorActive"/>
+                                <color key="separatorColor" name="separatorColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="OALocalResourceInfoCell" rowHeight="50" id="OAZ-lO-cSC" customClass="OALocalResourceInfoCell">
                                         <rect key="frame" x="0.0" y="55.5" width="375" height="50"/>
@@ -243,7 +258,7 @@
                                                         <constraint firstAttribute="height" constant="22" id="xgI-oI-8J1"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" name="textColorPrimary"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VFQ-UG-w9b">
@@ -252,7 +267,7 @@
                                                         <constraint firstAttribute="height" constant="22" id="Tp6-gM-Hal"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <color key="textColor" red="0.59215686274509804" green="0.5607843137254902" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" name="textColorSecondary"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -265,6 +280,7 @@
                                                 <constraint firstAttribute="trailing" secondItem="VFQ-UG-w9b" secondAttribute="trailing" constant="16" id="y0G-C7-Hhf"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" name="groupBgColor"/>
                                         <connections>
                                             <outlet property="leftLabelView" destination="adt-2f-sfa" id="A99-rn-8R1"/>
                                             <outlet property="rightLabelView" destination="VFQ-UG-w9b" id="UWD-Ts-Tsa"/>
@@ -278,7 +294,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Q8Y-qg-2ES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" name="viewBgColor"/>
                         <constraints>
                             <constraint firstItem="kbN-LD-cxr" firstAttribute="top" secondItem="eW4-T7-AN9" secondAttribute="top" id="O9g-fn-d14"/>
                             <constraint firstItem="kbN-LD-cxr" firstAttribute="leading" secondItem="eW4-T7-AN9" secondAttribute="leading" id="WLQ-ch-Eo9"/>
@@ -305,7 +321,9 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="50" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Q2Z-Wq-dKI">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
-                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" name="viewBgColor"/>
+                                <color key="tintColor" name="iconColorActive"/>
+                                <color key="separatorColor" name="separatorColor"/>
                                 <connections>
                                     <outlet property="dataSource" destination="ywk-bf-9Aq" id="z1o-UN-iEu"/>
                                     <outlet property="delegate" destination="ywk-bf-9Aq" id="Hed-kO-5J9"/>
@@ -313,7 +331,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="qRt-IW-shI"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" name="viewBgColor"/>
                         <constraints>
                             <constraint firstItem="Q2Z-Wq-dKI" firstAttribute="top" secondItem="6Lc-hr-a7q" secondAttribute="top" id="0vR-L9-LuB"/>
                             <constraint firstAttribute="bottom" secondItem="Q2Z-Wq-dKI" secondAttribute="bottom" id="QPX-oE-ESu"/>
@@ -331,4 +349,24 @@
             <point key="canvasLocation" x="35.200000000000003" y="419.19040479760122"/>
         </scene>
     </scenes>
+    <resources>
+        <namedColor name="groupBgColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="iconColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="separatorColor">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorPrimary">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorSecondary">
+            <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="viewBgColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

@@ -17,7 +17,7 @@
 #import "OsmAndApp.h"
 #import "OAUtilities.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAOsmAndFormatter.h"
 
 #define kVerticalMargin 18.
@@ -89,14 +89,14 @@
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"plan_route_create_new_route"),
             @"img" : @"ic_custom_trip",
-            @"tintColor" : UIColorFromRGB(color_primary_purple),
+            @"tintColor" : UIColor.iconColorActive,
             @"key" : @"create_new_route"
         }];
     [actionSection addObject:@{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"plan_route_open_existing_track"),
             @"img" : @"ic_custom_folder_outlined",
-            @"tintColor" : UIColorFromRGB(color_primary_purple),
+            @"tintColor" : UIColor.iconColorActive,
             @"key" : @"open_track"
         }];
     
@@ -157,7 +157,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
-            cell.textColorNormal = UIColor.blackColor;
+            cell.textColorNormal = UIColor.textColorPrimary;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
@@ -175,7 +175,7 @@
                 cell.iconView.image = [UIImage imageNamed:item[@"img"]];
             }
             cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
-            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
+            cell.separatorView.backgroundColor = UIColor.separatorColor;
         }
         return cell;
     }
@@ -215,7 +215,7 @@
             cell.timeLabel.text = item[@"time"];
             cell.wptLabel.text = item[@"wpt"];
             cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
-            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
+            cell.separatorView.backgroundColor = UIColor.separatorColor;
             cell.separatorHeightConstraint.constant = _separatorHeight;
         }
         return cell;

@@ -14,7 +14,7 @@
 #import "OASwitchTableViewCell.h"
 #import "OAValueTableViewCell.h"
 #import "OAWeatherLayerSettingsViewController.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAWeatherPlugin.h"
 #import "OAMapHudViewController.h"
 
@@ -193,7 +193,7 @@
 - (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+    [header.textLabel setTextColor:UIColor.textColorSecondary];
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
@@ -206,7 +206,7 @@
 - (void) tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+    [header.textLabel setTextColor:UIColor.textColorSecondary];
     header.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
 }
 
@@ -229,7 +229,7 @@
 
             NSString *imgName = enabled ? @"ic_custom_umbrella.png" : @"ic_custom_hide.png";
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];
-            cell.leftIconView.tintColor = enabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
+            cell.leftIconView.tintColor = enabled ? UIColor.iconColorSelected : UIColor.iconColorDisabled;
 
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView setOn:enabled];
@@ -266,7 +266,7 @@
             }
             cell.valueLabel.text = valueText;
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"image"]];
-            cell.leftIconView.tintColor = iconEnabled ? UIColorFromRGB(nav_bar_day) : UIColorFromRGB(color_tint_gray);
+            cell.leftIconView.tintColor = iconEnabled ? UIColor.iconColorSelected: UIColor.iconColorDisabled;
         }
         return cell;
     }

@@ -8,6 +8,7 @@
 
 #import "OATableViewCustomFooterView.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OATableViewCustomFooterView ()
 
@@ -54,14 +55,14 @@
     _label.scrollEnabled = NO;
     _label.userInteractionEnabled = YES;
     _label.selectable = YES;
-    _label.textColor = UIColorFromRGB(color_text_footer);
+    _label.textColor = UIColor.textColorSecondary;
     _label.dataDetectorTypes = UIDataDetectorTypeLink;
     _label.textContainerInset = UIEdgeInsetsZero;
     _label.textContainer.lineFragmentPadding = 0;
     _label.textContainer.maximumNumberOfLines = 0;
     _label.textContainer.lineBreakMode = NSLineBreakByWordWrapping;
     
-    NSDictionary *linkAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
+    NSDictionary *linkAttributes = @{NSForegroundColorAttributeName: UIColor.textColorActive};
     _label.linkTextAttributes = linkAttributes;
     
     [self.contentView addSubview:_label];

@@ -24,12 +24,14 @@
 #import "OABackupHelper.h"
 #import "OABackupError.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAStatusBackupViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, OAOnPrepareBackupListener>
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
 @property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UIView *bottomButtonsContainerView;
+@property (weak, nonatomic) IBOutlet UIView *segmentContainerView;
 @property (weak, nonatomic) IBOutlet UIButton *leftBottomButton;
 @property (weak, nonatomic) IBOutlet UIButton *rightBottomButton;
 
@@ -73,6 +75,7 @@
     
     self.navigationItem.title = OALocalizedString(@"cloud_recent_changes");
     
+    self.segmentContainerView.backgroundColor = [self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor colorWithAlphaComponent:1.];
     [_segmentControl setTitleTextAttributes:@{ NSForegroundColorAttributeName : UIColor.whiteColor,
                                                NSFontAttributeName : [UIFont scaledSystemFontOfSize:14.] } forState:UIControlStateNormal];
     [_segmentControl setTitleTextAttributes:@{ NSForegroundColorAttributeName : UIColor.blackColor,
@@ -106,6 +109,10 @@
                               direction:_startType == EOARecentChangesConflicts ? UIPageViewControllerNavigationDirectionReverse : UIPageViewControllerNavigationDirectionForward
                                animated:NO
                              completion:nil];
+    
+    UINavigationBarAppearance *scrollEdgeAppearance = self.navigationController.navigationBar.scrollEdgeAppearance;
+    UIColor *navigationBarColor = [self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor colorWithAlphaComponent:1.];
+    self.segmentContainerView.backgroundColor = [self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor colorWithAlphaComponent:1.];
 }
 
 - (void)setupPageController
@@ -143,15 +150,15 @@
     self.leftBottomButton.userInteractionEnabled = isSyncing && !isPreparing;
     self.leftBottomButton.hidden = !isSyncing;
     [self.leftBottomButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.leftBottomButton setTintColor:isSyncing && !isPreparing ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)];
-    [self.leftBottomButton setTitleColor:isSyncing && !isPreparing ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)
+    [self.leftBottomButton setTintColor:isSyncing && !isPreparing ? UIColor.textColorActive : UIColor.textColorSecondary];
+    [self.leftBottomButton setTitleColor:isSyncing && !isPreparing ? UIColor.textColorActive : UIColor.textColorSecondary
                               forState:UIControlStateNormal];
 
     BOOL isEnabled = !isSyncing && !isPreparing && self.rightButtonEnabled;
     self.rightBottomButton.userInteractionEnabled = isEnabled;
     [self.rightBottomButton setTitle:self.rightButtonTitle forState:UIControlStateNormal];
-    [self.rightBottomButton setTintColor:isEnabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)];
-    [self.rightBottomButton setTitleColor:isEnabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)
+    [self.rightBottomButton setTintColor:isEnabled ? UIColor.textColorActive : UIColor.textColorSecondary];
+    [self.rightBottomButton setTitleColor:isEnabled ? UIColor.textColorActive : UIColor.textColorSecondary
                                forState:UIControlStateNormal];
 }
 

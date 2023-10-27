@@ -10,7 +10,7 @@
 #import "OAMapSettingsViewController.h"
 #import "OAWikipediaPlugin.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OATableViewCustomFooterView.h"
 #import "OASwitchTableViewCell.h"
 #import "OAValueTableViewCell.h"
@@ -241,7 +241,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 
             NSString *imgName = _wikipediaEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];
-            cell.leftIconView.tintColor = _wikipediaEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
+            cell.leftIconView.tintColor = _wikipediaEnabled ? UIColor.iconColorSelected : UIColor.iconColorDisabled;
 
             [cell.switchView setOn:_wikipediaEnabled];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -263,7 +263,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
         {
             cell.titleLabel.text = item[@"title"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
-            cell.leftIconView.tintColor = UIColorFromRGB(color_dialog_buttons_dark);
+            cell.leftIconView.tintColor = UIColor.iconColorSelected;
             cell.valueLabel.text = [_wikiPlugin getLanguagesSummary];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
@@ -303,7 +303,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     if (section == EOAMapSettingsWikipediaSectionAvailable && _mapItems.count > 0 && _wikipediaEnabled)
     {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
-        header.textLabel.textColor = UIColorFromRGB(color_text_footer);
+        header.textLabel.textColor = UIColor.textColorSecondary;
     }
 }
 

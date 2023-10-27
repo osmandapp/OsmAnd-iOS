@@ -13,7 +13,7 @@
 #import "OAProfileNavigationSettingsViewController.h"
 #import "OANavigationLanguageViewController.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OARoutingHelper.h"
 #import "OARouteProvider.h"
 #import "OAGPXDocument.h"
@@ -423,7 +423,7 @@
 -(void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+    [vw.textLabel setTextColor:UIColor.textColorSecondary];
 }
 
 #pragma mark - OANavigationSettingsDelegate

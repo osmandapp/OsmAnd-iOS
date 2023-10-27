@@ -10,9 +10,8 @@
 //  git revision c288c75a48a7ddd1d2a9431ec803ed1013452e90
 
 #import "OAUploadOsmPointsAsyncTask.h"
-#import "OAUploadFinishedBottomSheetViewController.h"
+#import "OsmAndApp.h"
 #import "OAOsmEditingPlugin.h"
-#import "OAUploadProgressBottomSheetViewController.h"
 #import "OAOsmPoint.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAOpenStreetMapRemoteUtil.h"
@@ -21,28 +20,23 @@
 #import "OAOsmBugsRemoteUtil.h"
 #import "OAOsmNotePoint.h"
 #import "OAOsmBugResult.h"
-
-@interface OAUploadOsmPointsAsyncTask() <OAUploadBottomSheetDelegate>
-
-@end
+#import "OARootViewController.h"
 
 @implementation OAUploadOsmPointsAsyncTask
 {
-    BOOL _interruptUploading;
     OAOsmEditingPlugin *_plugin;
-    BOOL _closeChangeSet;
-    BOOL _loadAnonymous;
-    NSString *_comment;
-    
-    id<OAOsmEditingBottomSheetDelegate> _bottomSheetDelegate;
-    NSArray<OAOsmPoint *> *_points;
-    OAUploadProgressBottomSheetViewController *_progressBottomSheet;
-    
     OsmAndAppInstance _app;
     
+    NSArray<OAOsmPoint *> *_points;
+    
+    NSString *_comment;
+    
+    BOOL _interruptUploading;
+    BOOL _closeChangeSet;
+    BOOL _loadAnonymous;
 }
 
-- (id) initWithPlugin:(OAOsmEditingPlugin *)plugin points:(NSArray<OAOsmPoint *> *)points closeChangeset:(BOOL)closeChangeset anonymous:(BOOL)anonymous comment:(NSString *)comment bottomSheetDelegate:(id<OAOsmEditingBottomSheetDelegate>)bottomSheetDelegate
+- (id) initWithPlugin:(OAOsmEditingPlugin *)plugin points:(NSArray<OAOsmPoint *> *)points closeChangeset:(BOOL)closeChangeset anonymous:(BOOL)anonymous comment:(NSString *)comment
 {
     self = [super init];
     if (self) {
@@ -52,15 +46,12 @@
         _loadAnonymous = anonymous;
         _points = points;
         _comment = comment;
-        _bottomSheetDelegate = bottomSheetDelegate;
     }
     return self;
 }
 
 - (void) uploadPoints
 {
-    _progressBottomSheet = [[OAUploadProgressBottomSheetViewController alloc] initWithParam:self];
-    [_progressBottomSheet show];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSInteger lastIndex = _points.count - 1;
         NSMutableArray<OAOsmPoint *> *failedUploads = [NSMutableArray new];
@@ -103,21 +94,23 @@
                     [failedUploads addObject:p];
             }
             dispatch_async(dispatch_get_main_queue(), ^{
-                [_progressBottomSheet setProgress:((float)(i + 1) / (float)_points.count)];
+                if ([self.delegate respondsToSelector:@selector(uploadDidProgress:)])
+                {
+                    float progress = (float)(i + 1) / (float)_points.count;
+                    [self.delegate uploadDidProgress:progress];
+                }
             });
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            if ([_bottomSheetDelegate respondsToSelector:@selector(dismissEditingScreen)])
-                [_bottomSheetDelegate dismissEditingScreen];
-            if ([_bottomSheetDelegate respondsToSelector:@selector(uploadFinished:)])
-                [_bottomSheetDelegate uploadFinished:failedUploads.count > 0];
+            if ([self.delegate respondsToSelector:@selector(uploadDidCompleteWithSuccess:)])
+            {
+                [self.delegate uploadDidCompleteWithSuccess:failedUploads.count == 0];
+            }
             if (!_interruptUploading)
             {
-                OAUploadFinishedBottomSheetViewController *uploadFinished = [[OAUploadFinishedBottomSheetViewController alloc] initWithFailedPoints:failedUploads successfulUploads:_points.count - failedUploads.count];
-                uploadFinished.delegate = self;
-                [uploadFinished show];
+                if ([self.delegate respondsToSelector:@selector(uploadDidFinishWithFailedPoints:successfulUploads:)])
+                    [self.delegate uploadDidFinishWithFailedPoints:failedUploads successfulUploads:_points.count - failedUploads.count];
             }
-            [_progressBottomSheet dismiss];
         });
     });
 }
@@ -126,8 +119,6 @@
 {
     _interruptUploading = interrupted;
 }
-
-#pragma mark - OAUploadBottomSheetDelegate
 
 - (void)retryUpload
 {

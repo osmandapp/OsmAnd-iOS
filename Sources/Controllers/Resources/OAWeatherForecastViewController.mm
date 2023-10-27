@@ -16,7 +16,7 @@
 #import "OALargeImageTitleDescrTableViewCell.h"
 #import "OsmAndApp.h"
 #import "OAWeatherHelper.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "OAResourcesUIHelper.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
@@ -136,15 +136,22 @@
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = UIColorFromRGB(color_primary_orange_navbar_background);
-    appearance.shadowColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    appearance.shadowColor = UIColor.navBarBgColorPrimary;
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.whiteColor
+        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
     };
-    self.navigationController.navigationBar.standardAppearance = appearance;
+    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+    blurAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
+    blurAppearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    blurAppearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+    };
+    self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.whiteColor;
+    self.navigationController.navigationBar.tintColor = UIColor.navBarTextColorPrimary;
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
     _cancelButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_cancel") style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
@@ -280,7 +287,7 @@
             emptyData[@"title"] = OALocalizedString(@"weather_miss_forecasts");
             emptyData[@"description"] = OALocalizedString(@"weather_miss_forecasts_description");
             emptyData[@"icon"] = @"ic_custom_umbrella";
-            emptyData[@"icon_color"] = UIColorFromRGB(color_tint_gray);
+            emptyData[@"icon_color"] = UIColor.iconColorDisabled;
             emptyData[@"button_title"] = OALocalizedString(@"shared_string_select");
             [emptyCells addObject:emptyData];
 
@@ -288,7 +295,7 @@
             selectData[@"key"] = @"select_cell";
             selectData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
             selectData[@"title"] = OALocalizedString(@"shared_string_select");
-            selectData[@"title_color"] = UIColorFromRGB(color_primary_purple);
+            selectData[@"title_color"] = UIColor.iconColorActive;
             selectData[@"title_font"] = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
             [emptyCells addObject:selectData];
 
@@ -331,7 +338,7 @@
                             ? [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_download_update")
                                                               attributes:@{
                                                                       NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote],
-                                                                      NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)
+                                                                      NSForegroundColorAttributeName: UIColor.textColorSecondary
                                                               }]
                             : [OAWeatherHelper getStatusInfoDescription:regionId];
                     [statusCells addObject:offlineForecastData];
@@ -1002,7 +1009,7 @@
             cell.selectionStyle = _editMode ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
 
             cell.titleLabel.text = [item.allKeys containsObject:@"region"] ? [OAWeatherHelper checkAndGetRegionName:region] : item[@"title"];
-            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
+            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.textColorPrimary;
             cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             
             BOOL hasDescription = [item.allKeys containsObject:@"description"];
@@ -1036,7 +1043,7 @@
                     {
                         FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
                         progressView.iconView = [[UIView alloc] init];
-                        progressView.tintColor = UIColorFromRGB(color_primary_purple);
+                        progressView.tintColor = UIColor.iconColorActive;
                         cell.accessoryView = progressView;
                     }
                     else
@@ -1066,10 +1073,10 @@
         {
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20., 0., 0.);
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
+            cell.titleLabel.textColor = UIColor.textColorActive;
             cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
             cell.rightIconView.image = [UIImage templateImageNamed:item[@"right_icon"]];
-            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.rightIconView.tintColor = UIColor.iconColorActive;
         }
         return cell;
     }

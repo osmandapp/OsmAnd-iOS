@@ -10,7 +10,6 @@
 
 @protocol OACarPlayDashboardDelegate;
 
-API_AVAILABLE(ios(12.0))
 @protocol OACarPlayMapViewDelegate <NSObject>
 
 - (void)onMapViewAttached;
@@ -19,7 +18,6 @@ API_AVAILABLE(ios(12.0))
 
 @class CPWindow, OAMapViewController;
 
-API_AVAILABLE(ios(12.0))
 @interface OACarPlayMapViewController : UIViewController <OACarPlayDashboardDelegate>
 
 @property (nonatomic, weak) id<OACarPlayMapViewDelegate> delegate;

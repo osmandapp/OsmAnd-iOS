@@ -7,7 +7,7 @@
 //
 
 #import "OAOsmNotesOnlineTargetViewController.h"
-#import "OAOsmNoteBottomSheetViewController.h"
+#import "OAOsmNoteViewController.h"
 #import "OATransportStopRoute.h"
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
@@ -17,7 +17,6 @@
 #import "OAMapLayers.h"
 #import "OAColors.h"
 #import "OACollapsableLabelView.h"
-#import "OAOsmNoteBottomSheetViewController.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmNotePoint.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
@@ -72,20 +71,16 @@
 
 - (void) leftControlButtonPressed
 {
-    OAOsmNoteBottomSheetViewController *bottomSheet = [[OAOsmNoteBottomSheetViewController alloc]
-                                                       initWithEditingPlugin:_editingPlugin
-                                                       points:[NSArray arrayWithObject:[self getNote:_isOpen ? MODIFY : REOPEN]] type:_isOpen ? TYPE_MODIFY : TYPE_REOPEN];
+    OAOsmNoteViewController *bottomSheet = [[OAOsmNoteViewController alloc] initWithEditingPlugin:_editingPlugin points:[NSArray arrayWithObject:[self getNote:_isOpen ? MODIFY : REOPEN]] type:_isOpen ? EOAOsmNoteViewConrollerModeModify : EOAOsmNoteViewConrollerModeReopen];
     bottomSheet.delegate = self;
-    [bottomSheet show];
+    [[OARootViewController instance].mapPanel.navigationController pushViewController:bottomSheet animated: YES];
 }
 
 - (void) rightControlButtonPressed
 {
-    OAOsmNoteBottomSheetViewController *bottomSheet = [[OAOsmNoteBottomSheetViewController alloc]
-                                                       initWithEditingPlugin:_editingPlugin
-                                                       points:[NSArray arrayWithObject:[self getNote:DELETE]] type:TYPE_CLOSE];
+    OAOsmNoteViewController *bottomSheet = [[OAOsmNoteViewController alloc] initWithEditingPlugin:_editingPlugin points:[NSArray arrayWithObject:[self getNote:DELETE] ]type:EOAOsmNoteViewConrollerModeClose];
     bottomSheet.delegate = self;
-    [bottomSheet show];
+    [[OARootViewController instance].mapPanel.navigationController pushViewController:bottomSheet animated: YES];
 }
 
 - (OAOsmNotePoint *)getNote:(EOAAction)action

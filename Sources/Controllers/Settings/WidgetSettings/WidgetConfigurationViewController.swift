@@ -63,7 +63,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 let hasIcon = item.iconName != nil
                 cell.descriptionVisibility(hasDescr)
                 cell.leftIconVisibility(hasIcon)
-                cell.titleLabel.textColor = hasIcon ? .black : UIColor(rgb: Int( color_primary_red))
+                cell.titleLabel.textColor = hasIcon ? .textColorPrimary : .buttonBgColorDisruptive
                 cell.titleLabel.text = item.title
                 cell.leftIconView.image = UIImage(named: item.iconName ?? "")
             }
@@ -95,7 +95,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 cell.switchView.isOn = selected
                 cell.leftIconVisibility(hasIcon)
                 cell.leftIconView.image = UIImage.templateImageNamed(selected ? item.iconName : item.string(forKey: "hide_icon"))
-                cell.leftIconView.tintColor = UIColor(rgb: selected ? Int(selectedAppMode.getIconColor()) : Int(color_tint_gray))
+                cell.leftIconView.tintColor = selected ? UIColor(rgb: Int(selectedAppMode.getIconColor())) : UIColor.iconColorDisabled
 
                 cell.switchView.tag = indexPath.section << 10 | indexPath.row
                 cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
@@ -178,7 +178,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
             UIView.animate(withDuration: 0.2) {
                 cell.leftIconView.image = UIImage.templateImageNamed(sw.isOn ? data.iconName : data.string(forKey: "hide_icon"))
-                cell.leftIconView.tintColor = UIColor(rgb: sw.isOn ? Int(self.selectedAppMode.getIconColor()) : Int(color_tint_gray))
+                cell.leftIconView.tintColor = sw.isOn ? UIColor(rgb: Int(self.selectedAppMode.getIconColor())) : UIColor.iconColorDisabled
             }
         }
         
@@ -276,7 +276,7 @@ extension WidgetConfigurationViewController {
         attrStr.addAttribute(.font, value: font, range: NSRange(location: 0, length: attrStr.length))
 
         // Set color attribute
-        attrStr.addAttribute(.foregroundColor, value: UIColor(rgb: Int(color_text_footer)), range: NSRange(location: 0, length: attrStr.length))
+        attrStr.addAttribute(.foregroundColor, value: UIColor.textColorSecondary, range: NSRange(location: 0, length: attrStr.length))
         return attrStr
     }
 
@@ -312,7 +312,7 @@ extension WidgetConfigurationViewController {
         let text = "  " + localizedString("add_widget")
         let attributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.systemFont(ofSize: 17),
-            .foregroundColor: UIColor.white
+            .foregroundColor: UIColor.buttonTextColorPrimary
         ]
         let attributedString = NSMutableAttributedString(string: text, attributes: attributes)
 
@@ -320,7 +320,7 @@ extension WidgetConfigurationViewController {
         let configuration = UIImage.SymbolConfiguration(pointSize: 24)
         let plusCircleFillImage = UIImage(systemName: "plus.circle.fill", withConfiguration: configuration)
         let attachment = NSTextAttachment()
-        attachment.image = plusCircleFillImage?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        attachment.image = plusCircleFillImage?.withTintColor(.buttonTextColorPrimary, renderingMode: .alwaysOriginal)
 
         // Set the bounds of the attachment to match the font size of the attributed string
         if let font = attributes[.font] as? UIFont {

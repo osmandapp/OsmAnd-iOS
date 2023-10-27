@@ -71,7 +71,7 @@ typedef enum
 @end
 
 
-@interface OAPOIFilterViewController () <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate, OAPOIFilterRefreshDelegate>
+@interface OAPOIFilterViewController () <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, OAPOIFilterRefreshDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *topView;

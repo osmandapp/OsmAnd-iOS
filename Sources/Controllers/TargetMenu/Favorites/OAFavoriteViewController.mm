@@ -17,7 +17,6 @@
 #import "OAUtilities.h"
 #import "OACollapsableView.h"
 #import "OACollapsableWaypointsView.h"
-#import <UIAlertView+Blocks.h>
 #import "OAPOI.h"
 #import "OAPOIViewController.h"
 #import "OAColors.h"

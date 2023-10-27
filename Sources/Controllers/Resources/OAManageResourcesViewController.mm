@@ -43,6 +43,7 @@
 #import "OASearchUICore.h"
 #import "OAOsmandDevelopmentPlugin.h"
 #import "OAButtonTableViewCell.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/WorldRegions.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
@@ -249,7 +250,7 @@ static BOOL _repositoryUpdated = NO;
     [super viewDidLoad];
 
     _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
+    _horizontalLine.backgroundColor = [UIColor.separatorColor CGColor];
     
     if (self.region != _app.worldRegion)
         self.navigationItem.title = self.region.name;
@@ -295,15 +296,22 @@ static BOOL _repositoryUpdated = NO;
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = UIColorFromRGB(color_primary_orange_navbar_background);
-    appearance.shadowColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    appearance.shadowColor = UIColor.navBarBgColorPrimary;
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.whiteColor
+        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
     };
-    self.navigationController.navigationBar.standardAppearance = appearance;
+    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+    blurAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
+    blurAppearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    blurAppearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+    };
+    self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.whiteColor;
+    self.navigationController.navigationBar.tintColor = UIColor.navBarTextColorPrimary;
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
     if (self.openFromSplash)
@@ -392,6 +400,17 @@ static BOOL _repositoryUpdated = NO;
 {
     [super viewWillLayoutSubviews];
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+}
+
+- (void) traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+    {
+        [_subscribeEmailView updateColorForCALayer];
+        _horizontalLine.backgroundColor = [UIColor.separatorColor CGColor];
+    }
 }
 
 - (UIView *) getMiddleView
@@ -2503,7 +2522,7 @@ static BOOL _repositoryUpdated = NO;
                 cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 66., 0., 0.);
                 cell.titleLabel.text = OALocalizedString(@"free_downloads");
                 cell.descriptionLabel.text = [self getFreeMapsMessage];
-                cell.leftIconView.image = [UIImage rtlImageNamed:@"ic_custom_map_updates_colored_day"];
+                cell.leftIconView.image = [UIImage rtlImageNamed:@"ic_custom_map_updates_colored"];
             }
             return cell;
         }
@@ -2519,13 +2538,13 @@ static BOOL _repositoryUpdated = NO;
                                           reuseIdentifier:cellTypeId];
             cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-            cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
+            cell.detailTextLabel.textColor = UIColor.textColorSecondary;
 
             UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
             [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];
-            [btnAcc setTintColor:UIColorFromRGB(color_primary_purple)];
+            [btnAcc setTintColor:UIColor.iconColorActive];
             btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
             [cell setAccessoryView:btnAcc];
         }
@@ -2552,10 +2571,10 @@ static BOOL _repositoryUpdated = NO;
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
-            cell.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.tintColor = UIColor.iconColorActive;
             cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-            cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
+            cell.detailTextLabel.textColor = UIColor.textColorSecondary;
             BOOL isMultipleItem = [item_ isKindOfClass:OAMultipleResourceItem.class];
             BOOL addInfoAccessory = isMultipleItem && [((OAMultipleResourceItem *) item_) allDownloaded];
             if (addInfoAccessory)
@@ -2570,7 +2589,7 @@ static BOOL _repositoryUpdated = NO;
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
-                btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
+                btnAcc.tintColor = UIColor.iconColorActive;
                 btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
                 [cell setAccessoryView:btnAcc];
             }
@@ -2582,11 +2601,11 @@ static BOOL _repositoryUpdated = NO;
 
             cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-            cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
+            cell.detailTextLabel.textColor = UIColor.textColorSecondary;
 
             FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
             progressView.iconView = [[UIView alloc] init];
-            progressView.tintColor = UIColorFromRGB(color_primary_purple);
+            progressView.tintColor = UIColor.iconColorActive;
 
             cell.accessoryView = progressView;
         }
@@ -2602,7 +2621,7 @@ static BOOL _repositoryUpdated = NO;
     {
         if (!disabled)
         {
-            cell.textLabel.textColor = [UIColor blackColor];
+            cell.textLabel.textColor = [UIColor textColorPrimary];
             BOOL isMultipleItem = [item_ isKindOfClass:OAMultipleResourceItem.class];
             BOOL addInfoAccessory = isMultipleItem && [((OAMultipleResourceItem *) item_) allDownloaded];
             if (addInfoAccessory)
@@ -2617,7 +2636,7 @@ static BOOL _repositoryUpdated = NO;
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
-                btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
+                btnAcc.tintColor = UIColor.iconColorActive;
                 btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
                 [cell setAccessoryView:btnAcc];
             }
@@ -2631,7 +2650,7 @@ static BOOL _repositoryUpdated = NO;
                 UILabel *labelGet = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 100.0)];
                 labelGet.font = [UIFont scaledSystemFontOfSize:13 weight:UIFontWeightSemibold];
                 labelGet.textAlignment = NSTextAlignmentCenter;
-                labelGet.textColor = [UIColor colorWithRed:0.992f green:0.561f blue:0.149f alpha:1.00f];
+                labelGet.textColor = [UIColor iconColorSelected];
                 labelGet.text = [OALocalizedString(@"shared_string_get") uppercaseStringWithLocale:[NSLocale currentLocale]];
                 
                 [labelGet sizeToFit];
@@ -2645,7 +2664,7 @@ static BOOL _repositoryUpdated = NO;
                 itemGetView.layer.cornerRadius = 4;
                 itemGetView.layer.masksToBounds = YES;
                 itemGetView.layer.borderWidth = 0.8;
-                itemGetView.layer.borderColor = [UIColor colorWithRed:0.992f green:0.561f blue:0.149f alpha:1.00f].CGColor;
+                itemGetView.layer.borderColor = [UIColor iconColorSelected].CGColor;
                 
                 [itemGetView addSubview:labelGet];
                 
@@ -2661,7 +2680,7 @@ static BOOL _repositoryUpdated = NO;
     if ([item_ isKindOfClass:OAMultipleResourceItem.class] && ([self.region hasGroupItems] || ((OAResourceItem *) item_).resourceType == OsmAndResourceType::SrtmMapRegion))
     {
         OAMultipleResourceItem *item = (OAMultipleResourceItem *) item_;
-        UIColor *color = UIColorFromRGB(color_tint_gray);
+        UIColor *color = UIColor.iconColorDisabled;
         NSArray<OAResourceItem *> *items = [self.region hasGroupItems] ? [self.region.groupItem getItems:item.resourceType] : item.items;
         for (OAResourceItem *resourceItem in items)
         {
@@ -2677,7 +2696,7 @@ static BOOL _repositoryUpdated = NO;
     else if ([item_ isKindOfClass:OAResourceItem.class] || [item_ isKindOfClass:OASearchResult.class])
     {
         OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
-        UIColor *color = _app.resourcesManager->isResourceInstalled(item.resourceId) ? UIColorFromRGB(resource_installed_icon_color) : UIColorFromRGB(color_tint_gray);
+        UIColor *color = _app.resourcesManager->isResourceInstalled(item.resourceId) ? UIColorFromRGB(resource_installed_icon_color) : UIColor.iconColorDisabled;
         cell.imageView.image = [OAResourceType getIcon:item.resourceType templated:YES];
         cell.imageView.tintColor = color;
     }
@@ -2789,8 +2808,8 @@ static BOOL _repositoryUpdated = NO;
         OATextMultilineTableViewCell *textViewCell = (OATextMultilineTableViewCell *) cell;
         [textViewCell leftIconVisibility:NO];
         [textViewCell clearButtonVisibility:NO];
-        textViewCell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:_downloadDescriptionInfo.getLocalizedDescription fontSize:17];
-        textViewCell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
+        textViewCell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:_downloadDescriptionInfo.getLocalizedDescription fontSize:17 textColor:UIColor.textColorPrimary];
+        textViewCell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColor.textColorActive};
         [textViewCell.textView sizeToFit];
     }
     else if ([cellTypeId isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
@@ -3217,7 +3236,9 @@ static BOOL _repositoryUpdated = NO;
              [_refreshRepositoryProgressHUD hide:YES];
              if (error)
              {
-                 [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"shared_string_unexpected_error") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"shared_string_unexpected_error") preferredStyle:UIAlertControllerStyleAlert];
+                 [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+                 [self presentViewController:alert animated:YES completion:nil];
              }
          });
      }];
@@ -3233,8 +3254,11 @@ static BOOL _repositoryUpdated = NO;
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSString *email = alert.textFields.firstObject.text;
-        if (email.length == 0 || ![email isValidEmail])
-            [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"osm_live_enter_email") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+        if (email.length == 0 || ![email isValidEmail]) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_live_enter_email") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
         else
             [self doSubscribe:email];
     }]];

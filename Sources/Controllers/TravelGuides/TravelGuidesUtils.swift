@@ -18,7 +18,7 @@ final class TravelGuidesUtils {
         guard let lang = OAWikiArticleHelper.getLang(url), 
                 let articleName = OAWikiArticleHelper.getArticleName(fromUrl: url, lang: lang) else { return }
         
-        if let articleId = TravelObfHelper.shared.getArticleId(title: articleName, lang: lang)
+        if let articleId = TravelObfHelper.shared.getArticleId(title: articleName, lang: lang) {
             delegate.openArticleById(newArticleId: articleId, newSelectedLang: lang)
         } else {
             OAWikiArticleHelper.warnAboutExternalLoad(url, sourceView: delegate.getWebView())

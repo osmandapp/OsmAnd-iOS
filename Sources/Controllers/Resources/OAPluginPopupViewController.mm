@@ -395,7 +395,7 @@ static NSMutableArray *activePopups;
         descText = OALocalizedString(@"purchases_feature_desc_external_sensors");
         okButtonName = OALocalizedString(@"plugins_menu_group");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
-        iconName = @"ic_custom_advanced_widgets_colored_day";
+        iconName = @"ic_custom_sensor";
         popup.okButton.tag = EOAFeatureSensors;
 
         [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];

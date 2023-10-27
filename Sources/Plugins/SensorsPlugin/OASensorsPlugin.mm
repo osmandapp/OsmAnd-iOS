@@ -121,6 +121,7 @@
 - (void)updateWidgetsInfo
 {
 }
+// ic_custom_sensor
 
 - (NSString *) getName
 {

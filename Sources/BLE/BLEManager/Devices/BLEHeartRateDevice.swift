@@ -26,7 +26,10 @@ final class BLEHeartRateDevice: Device {
     
     override var getDataFields: Dictionary<String, String>? {
         if let sensor = sensors.first(where: { $0 is BLEHeartRateSensor }) as? BLEHeartRateSensor {
-            return [localizedString("map_widget_ant_heart_rate"): String(sensor.heartRateData.heartRate)]
+            return [localizedString("map_widget_ant_heart_rate"):
+                        sensor.heartRateData.heartRate == 0
+                    ? "-"
+                    : String(sensor.heartRateData.heartRate) + " " + localizedString("beats_per_minute_short")]
         }
         return nil
     }

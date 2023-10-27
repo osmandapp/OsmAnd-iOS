@@ -61,17 +61,17 @@ public postfix func --= <T: SignedInteger>(v: inout T) -> T {
 
 final class BLEBikeSensor: Sensor {
     
-    private(set) var firstWheelRevolutions: UInt32 = 0
-    private(set) var lastWheelRevolutions: UInt32 = 0
-    private(set) var lastWheelEventTime: UInt16 = 0
+    private(set) var firstWheelRevolutions: Float = 0
+    private(set) var lastWheelRevolutions: Float = 0
+    private(set) var lastWheelEventTime: Float = 0
     private(set) var wheelCadence: Float = 0
-    private(set) var lastCrankRevolutions: UInt16 = 0
-    private(set) var lastCrankEventTime: UInt16 = 0
+    private(set) var lastCrankRevolutions: Float = 0
+    private(set) var lastCrankEventTime: Float = 0
 
-    private(set) var wheelSize: Float = 0 //m
+    private(set) var wheelSize: Float = 2.086 //m
 
-    private(set) var lastBikeCadenceData: BikeCadenceData?
-    private(set) var lastBikeSpeedDistanceData: BikeSpeedDistanceData?
+    private(set) var lastBikeCadenceData: BikeCadenceData = BikeCadenceData()
+    private(set) var lastBikeSpeedDistanceData: BikeSpeedDistanceData = BikeSpeedDistanceData()
     
     final class BikeCadenceData: SensorData {
         var timestamp: Double = 0.0
@@ -86,88 +86,114 @@ final class BLEBikeSensor: Sensor {
         var totalDistance: Float = 0.0
     }
     
-//    private func decodeSpeed(from characteristic: CBCharacteristic) {
-//        guard let characteristicData = characteristic.value else { return }
-//        
-//        let bytes = characteristicData.map { $0 }
-//        var index: Int = 0
-//        
-//        let rawFlags: UInt8 = bytes[index++=]
-//        let flags = MeasurementFlags(rawValue: rawFlags)
-//        
-//        
-//       // let flag = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, offset: 0)
-//        let wheelRevPresent = flags.contains(.WheelRevolutionDataPresent)
-//        let crankRevPresent = flags.contains(.CrankRevolutionDataPresent)
-//        var wheelRevolutions: Int
-//        var lastWheelEventTime: Int
-//        
-//        if wheelRevPresent {
+    private func decodeSpeed(from characteristic: CBCharacteristic) {
+        guard let characteristicData = characteristic.value else { return }
+        
+        let bytes = characteristicData.map { $0 }
+        var index: Int = 0
+        
+        let rawFlags: UInt8 = bytes[index++=]
+        let flags = MeasurementFlags(rawValue: rawFlags)
+        
+        
+       // let flag = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, offset: 0)
+        let wheelRevPresent: Bool = flags.contains(.WheelRevolutionDataPresent)
+        let crankRevPresent: Bool = flags.contains(.CrankRevolutionDataPresent)
+        var wheelRevolutions: Float
+        var lastWheelEventTime: Float
+        
+//        public static final int FORMAT_SFLOAT = 50;
+//           public static final int FORMAT_SINT16 = 34;
+//           public static final int FORMAT_SINT32 = 36;
+//           public static final int FORMAT_SINT8 = 33;
+//           public static final int FORMAT_UINT16 = 18;
+//           public static final int FORMAT_UINT32 = 20;
+        
+        if wheelRevPresent {
 //            wheelRevolutions = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT32, offset: 1)
 //            lastWheelEventTime = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, offset: 5)
-//            
-//            let circumference: Float = wheelSize
-//            
-//            if firstWheelRevolutions < 0 {
-//                firstWheelRevolutions = wheelRevolutions
-//            }
-//            
-//            if self.lastWheelEventTime == lastWheelEventTime {
-//                let totalDistance: Float = Float(wheelRevolutions) * circumference
-//                let distance: Float = Float(wheelRevolutions - firstWheelRevolutions) * circumference // m
-//                var speed: Float = 0
-//                
+            
+            var cumulativeWheelRevolutions = UInt32(bytes[index++=])
+            cumulativeWheelRevolutions |= UInt32(bytes[index++=]) << 8
+            cumulativeWheelRevolutions |= UInt32(bytes[index++=]) << 16
+            cumulativeWheelRevolutions |= UInt32(bytes[index++=]) << 24
+            wheelRevolutions = Float(cumulativeWheelRevolutions)
+            lastWheelEventTime = Float(UInt16(bytes[index++=]) | UInt16(bytes[index++=]) << 8)
+            
+            let circumference: Float = wheelSize
+            
+            if firstWheelRevolutions < 0 {
+                firstWheelRevolutions = wheelRevolutions
+            }
+            
+            if self.lastWheelEventTime == lastWheelEventTime {
+                let totalDistance: Float = Float(wheelRevolutions) * circumference
+                let distance: Float = Float(wheelRevolutions - firstWheelRevolutions) * circumference // m
+                var speed: Float = lastBikeSpeedDistanceData.speed
+                
 //                if let lastBikeSpeedDistanceData = lastBikeSpeedDistanceData {
 //                    speed = lastBikeSpeedDistanceData.speed
 //                }
-//                
-//               // getDevice().fireSensorDataEvent(self, createBikeSpeedDistanceData(speed, distance, totalDistance))
-//            } else if lastWheelRevolutions >= 0 {
-//                var timeDifference: Float
-//                
-//                if self.lastWheelEventTime < lastWheelEventTime {
-//                    timeDifference = (65535 + Float(lastWheelEventTime) - Float(self.lastWheelEventTime)) / 1024.0
-//                } else {
-//                    timeDifference = (Float(lastWheelEventTime) - Float(self.lastWheelEventTime)) / 1024.0
-//                }
-//                
-//                let distanceDifference: Float = Float(wheelRevolutions - lastWheelRevolutions) * circumference
-//                let totalDistance: Float = Float(wheelRevolutions) * circumference
-//                let distance: Float = Float(wheelRevolutions - firstWheelRevolutions) * circumference
-//                let speed: Float = distanceDifference / timeDifference
-//                
-//                wheelCadence = (Float(wheelRevolutions - lastWheelRevolutions) * 60.0) / timeDifference
-//                
-//             //   getDevice().fireSensorDataEvent(self, createBikeSpeedDistanceData(speed, distance, totalDistance))
-//            }
-//            
-//            lastWheelRevolutions = wheelRevolutions
-//            self.lastWheelEventTime = lastWheelEventTime
-//        } else if crankRevPreset {
+                
+                lastBikeSpeedDistanceData.distance = distance
+                lastBikeSpeedDistanceData.totalDistance = totalDistance
+                lastBikeSpeedDistanceData.speed = speed
+                lastBikeSpeedDistanceData.timestamp = Date.timeIntervalSinceReferenceDate
+                
+               //// getDevice().fireSensorDataEvent(self, createBikeSpeedDistanceData(speed, distance, totalDistance))
+            } else if lastWheelRevolutions >= 0 {
+                var timeDifference: Float
+                
+                if self.lastWheelEventTime < lastWheelEventTime {
+                    timeDifference = (65535 + Float(lastWheelEventTime) - Float(self.lastWheelEventTime)) / 1024.0
+                } else {
+                    timeDifference = (Float(lastWheelEventTime) - Float(self.lastWheelEventTime)) / 1024.0
+                }
+                
+                let distanceDifference: Float = Float(wheelRevolutions - lastWheelRevolutions) * circumference
+                let totalDistance: Float = Float(wheelRevolutions) * circumference
+                let distance: Float = Float(wheelRevolutions - firstWheelRevolutions) * circumference
+                let speed: Float = distanceDifference / timeDifference
+                
+                wheelCadence = (Float(wheelRevolutions - lastWheelRevolutions) * 60.0) / timeDifference
+                
+                lastBikeSpeedDistanceData.distance = distance
+                lastBikeSpeedDistanceData.totalDistance = totalDistance
+                lastBikeSpeedDistanceData.speed = speed
+                lastBikeSpeedDistanceData.timestamp = Date.timeIntervalSinceReferenceDate
+            }
+            
+            lastWheelRevolutions = wheelRevolutions
+            self.lastWheelEventTime = lastWheelEventTime
+        } else if crankRevPresent {
 //            let crankRevolutions = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, offset: 1)
 //            let lastCrankEventTime = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, offset: 3)
-//            
-//            if lastCrankRevolutions >= 0 {
-//                var timeDifference: Float
-//                
-//                if self.lastCrankEventTime < lastCrankEventTime {
-//                    timeDifference = (65535 + Float(lastCrankEventTime) - Float(self.lastCrankEventTime)) / 1024.0
-//                } else {
-//                    timeDifference = (Float(lastCrankEventTime) - Float(self.lastCrankEventTime)) / 1024.0
-//                }
-//                
-//                let crankCadence: Float = (Float(crankRevolutions) - Float(lastCrankRevolutions)) * 60.0 / timeDifference
-//                
-//                if crankCadence > 0 {
-//                    let gearRatio: Float = wheelCadence / crankCadence
-//                    getDevice().fireSensorDataEvent(self, createBikeCadenceData(gearRatio, roundf(crankCadence)))
-//                }
-//            }
-//            
-//            lastCrankRevolutions = crankRevolutions
-//            self.lastCrankEventTime = lastCrankEventTime
-//        }
-//    }
+            
+            let crankRevolutions = UInt16(bytes[index++=]) | UInt16(bytes[index++=]) << 8
+            let lastCrankEventTime = UInt16(bytes[index++=]) | UInt16(bytes[index++=]) << 8
+            
+            if lastCrankRevolutions >= 0 {
+                var timeDifference: Float
+                
+                if self.lastCrankEventTime < Float(lastCrankEventTime) {
+                    timeDifference = (65535 + Float(lastCrankEventTime) - Float(self.lastCrankEventTime)) / 1024.0
+                } else {
+                    timeDifference = (Float(lastCrankEventTime) - Float(self.lastCrankEventTime)) / 1024.0
+                }
+                
+                let crankCadence: Float = (Float(crankRevolutions) - Float(lastCrankRevolutions)) * 60.0 / timeDifference
+                
+                if crankCadence > 0 {
+                    let gearRatio: Float = wheelCadence / crankCadence
+                    lastBikeCadenceData.cadence = Int(crankCadence.rounded())
+                    lastBikeCadenceData.gearRatio = gearRatio
+                }
+            }
+            
+            lastCrankRevolutions = Float(crankRevolutions)
+            self.lastCrankEventTime = Float(lastCrankEventTime)
+        }
+    }
     
 //    private func decodeSpeed(from characteristic: CBCharacteristic) {
 //        guard let characteristicData = characteristic.value else { return }
@@ -247,8 +273,7 @@ final class BLEBikeSensor: Sensor {
     override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
         switch characteristic.uuid {
         case GattAttributes.CHARACTERISTIC_CYCLING_SPEED_AND_CADENCE_MEASUREMENT.CBUUIDRepresentation:
-            // FIXME:
-           // decodeSpeed(from: characteristic)
+            decodeSpeed(from: characteristic)
             result(.success)
         default:
             debugPrint("Unhandled Characteristic UUID: \(characteristic.uuid)")

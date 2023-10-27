@@ -71,7 +71,6 @@ extension BLEHeartRateSensor {
         guard let characteristicData = characteristic.value else { return -1 }
         let byteArray = [UInt8](characteristicData)
         
-        // See: https://www.bluetooth.com/specifications/gatt/viewer?attributeXmlFile=org.bluetooth.characteristic.heart_rate_measurement.xml
         // The heart rate mesurement is in the 2nd, or in the 2nd and 3rd bytes, i.e. one one or in two bytes
         // The first byte of the first bit specifies the length of the heart rate data, 0 == 1 byte, 1 == 2 bytes
         let firstBitValue = byteArray[0] & 0x01

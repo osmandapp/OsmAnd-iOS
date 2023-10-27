@@ -56,7 +56,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         case EOAFeatureAdvancedWidgets:
             return OALocalizedString(@"pro_features");
         case EOAFeatureSensors:
-            return OALocalizedString(@"pro_features");
+            return OALocalizedString(@"external_sensors_support");
         case EOAFeatureHourlyMapUpdates:
             return OALocalizedString(@"daily_map_updates");
         case EOAFeatureCrossBuy:
@@ -161,7 +161,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         case EOAFeatureAdvancedWidgets:
             return [UIImage imageNamed:@"ic_custom_pro_features_colored"];
         case EOAFeatureSensors:
-            return [UIImage imageNamed:@"ic_custom_pro_features_colored"];
+            return [UIImage imageNamed:@"ic_custom_umbrella_colored"];
         case EOAFeatureHourlyMapUpdates:
             return [UIImage imageNamed:@"ic_custom_map_updates_colored_day"];
         case EOAFeatureCrossBuy:
@@ -369,6 +369,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
                 OAFeature.OSMAND_CLOUD,
 //                OAFeature.ADVANCED_WIDGETS,
                 OAFeature.WEATHER,
+                OAFeature.SENSORS,
                 OAFeature.HOURLY_MAP_UPDATES,
                 OAFeature.CROSS_BUY,
                 OAFeature.RELIEF_3D,

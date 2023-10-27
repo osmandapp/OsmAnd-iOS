@@ -132,12 +132,11 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
             if case .learnMore = item {
 #warning("add push")
             }
-            
         }
     }
     
     // MARK: - IBAction
-    @IBAction func onPairNewSensorButtonPressed(_ sender: Any) {
+    @IBAction private func onPairNewSensorButtonPressed(_ sender: Any) {
         pairNewSensor()
     }
 }

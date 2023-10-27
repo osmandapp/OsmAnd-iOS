@@ -2022,12 +2022,12 @@
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_osmand_development.png";
+    return @"img_help_sensors_day";
 }
 
 - (NSString *) productIconName
 {
-    return @"ic_custom_laptop";
+    return @"ic_custom_sensor";
 }
 
 - (NSString *) localizedTitle

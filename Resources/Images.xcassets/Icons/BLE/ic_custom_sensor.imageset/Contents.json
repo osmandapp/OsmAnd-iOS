@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "img_help_sensors_day (1).png",
+      "filename" : "ic_custom_sensor.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -17,5 +17,9 @@
   "info" : {
     "author" : "xcode",
     "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true,
+    "template-rendering-intent" : "template"
   }
 }

@@ -28,12 +28,15 @@ final class BLEBikeSCDDevice: Device {
     override var getDataFields: Dictionary<String, String>? {
         if let sensor = sensors.first(where: { $0 is BLEBikeSensor }) as? BLEBikeSensor {
             var dic = [String: String]()
-            if let lastBikeSpeedDistanceData = sensor.lastBikeSpeedDistanceData {
-                dic["Speed"] = String(lastBikeSpeedDistanceData.speed)
-            }
-            if let lastBikeCadenceData = sensor.lastBikeCadenceData {
-                dic["Cadence"] = String(lastBikeCadenceData.cadence)
-            }
+            dic["Speed"] = String(sensor.lastBikeSpeedDistanceData.speed)
+            dic["Cadence"] = String(sensor.lastBikeCadenceData.cadence)
+//            if let lastBikeSpeedDistanceData = sensor.lastBikeSpeedDistanceData {
+//                dic["Speed"] = String(sensor.lastBikeSpeedDistanceData.speed)
+//            }
+//            if let lastBikeCadenceData = sensor.lastBikeCadenceData {
+//                dic["Speed"] = String(sensor.lastBikeSpeedDistanceData.speed)
+//                dic["Cadence"] = String(sensor.lastBikeCadenceData.cadence)
+//            }
             return dic.isEmpty ? nil : dic
             
     

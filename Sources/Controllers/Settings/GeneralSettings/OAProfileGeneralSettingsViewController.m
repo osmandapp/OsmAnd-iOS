@@ -131,12 +131,12 @@
     NSString *rotateScreenValue;
     NSString *rotateScreenIcon;
     NSInteger mapScreenOrientation = [_settings.mapScreenOrientation get:self.appMode];
-    if (mapScreenOrientation == kScreenOrientationPortrait)
+    if (mapScreenOrientation == EOAScreenOrientationPortrait)
     {
         rotateScreenValue = OALocalizedString(@"map_orientation_portrait");
         rotateScreenIcon = @"ic_custom_iphone_portrait";
     }
-    else if (mapScreenOrientation == kScreenOrientationSensorLandscape)
+    else if (mapScreenOrientation == EOAScreenOrientationLandscape)
     {
         rotateScreenValue = OALocalizedString(@"map_orientation_landscape");
         rotateScreenIcon = @"ic_custom_iphone_landscape";

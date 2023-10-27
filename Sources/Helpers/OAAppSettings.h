@@ -32,6 +32,13 @@
 
 @class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
 
+typedef NS_ENUM(NSInteger, EOAScreenOrientation)
+{
+    EOAScreenOrientationSystem = -1,
+    EOAScreenOrientationPortrait = 1,
+    EOAScreenOrientationLandscape = 6
+};
+
 typedef NS_ENUM(NSInteger, EOAPositionPlacement)
 {
     EOAPositionPlacementAuto = 0,
@@ -714,10 +721,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 #define ROTATE_MAP_BEARING 1
 #define ROTATE_MAP_COMPASS 2
 #define ROTATE_MAP_MANUAL 3
-
-#define kScreenOrientationUnspecified -1
-#define kScreenOrientationPortrait 1
-#define kScreenOrientationSensorLandscape 6
 
 #define NO_EXTERNAL_DEVICE 0
 #define GENERIC_EXTERNAL_DEVICE 1

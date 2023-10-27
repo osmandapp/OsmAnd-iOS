@@ -4610,7 +4610,7 @@
         
         _lastUUIDChangeTimestamp = [[OACommonLong withKey:lastUUIDChangeTimestampKey defValue:0] makeGlobal];
         
-        _mapScreenOrientation = [OACommonInteger withKey:mapScreenOrientationKey defValue:kScreenOrientationUnspecified];
+        _mapScreenOrientation = [OACommonInteger withKey:mapScreenOrientationKey defValue:EOAScreenOrientationSystem];
         [_profilePreferences setObject:_mapScreenOrientation forKey:@"map_screen_orientation"];
 
         [self fetchImpassableRoads];
@@ -5373,8 +5373,8 @@
 - (UIInterfaceOrientationMask)getScreenOrientationMask
 {
     NSInteger mapScreenOrientation = [_mapScreenOrientation get];
-    return mapScreenOrientation == kScreenOrientationPortrait ? UIInterfaceOrientationMaskPortrait
-        : mapScreenOrientation == kScreenOrientationSensorLandscape ? UIInterfaceOrientationMaskLandscape
+    return mapScreenOrientation == EOAScreenOrientationPortrait ? UIInterfaceOrientationMaskPortrait
+        : mapScreenOrientation == EOAScreenOrientationLandscape ? UIInterfaceOrientationMaskLandscape
         : UIInterfaceOrientationMaskAll;
 }
 

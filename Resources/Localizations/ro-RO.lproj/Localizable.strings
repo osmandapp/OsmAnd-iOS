@@ -241,7 +241,7 @@
 "shared_string_io_error" = "Eroare de citire/scriere";
 "arrival_distance_factor_at_last" = "În ultimii metri";
 "traffic_warning_speed_limit" = "Limită viteză";
-"keep_and_add_destination_point" = "Adăugați ca destinație subsecventă";
+"keep_and_add_destination_point" = "Adăugă ca destinație subsecventă";
 "shared_string_control_stop" = "Stop";
 "upload_anonymously" = "Încarcă anonim";
 "search_address_street" = "Stradă";
@@ -470,8 +470,8 @@
 "shared_string_control_start" = "Start";
 "prefer_in_routing_title" = "Preferă…";
 "wake_on_voice" = "Pornește ecranul";
-"routing_settings_2" = "Setare navigație";
-"shared_string_select_on_map" = "Selectează pe hartă";
+"routing_settings_2" = "Setări navigație";
+"shared_string_select_on_map" = "Selectare pe hartă";
 "shared_string_speed" = "Viteză";
 "close_changeset" = "Închide setul de modificări";
 "shared_string_ok" = "OK";
@@ -792,7 +792,7 @@
 "active_markers" = "Marcaje active";
 "voice_announces" = "Anunțuri vocale";
 "save_as_new_track" = "Salvează ca traseu nou";
-"exit_at" = "Coborâre la";
+"exit_at" = "Coborâre la stația";
 "base_profile_descr_bicycle" = "Mountain bike, moped, cal";
 "user_password" = "Parolă";
 "routing_profile_straightline" = "Linie dreaptă";
@@ -1073,7 +1073,7 @@
 "last_intermediate_dest_description" = "Adaugă o oprire intermediară";
 "first_intermediate_dest_description" = "Adaugă oprirea inițială";
 "subsequent_dest_description" = "Mutați destinația în sus, și creați-o";
-"make_as_start_point" = "Faceți din aceasta punctul de început";
+"make_as_start_point" = "Setează acesta ca punct de plecare";
 "new_destination_point_dialog" = "Aveți setată deja o destinație:";
 "switch_start_finish" = "Inversați punctul de plecare&destinația";
 "start_navigation" = "Începeți navigarea";

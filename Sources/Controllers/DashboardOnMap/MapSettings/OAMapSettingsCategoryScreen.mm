@@ -11,7 +11,7 @@
 #import "OATableViewCustomHeaderView.h"
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "OAMapStyleSettings.h"
 #import "OASizes.h"
@@ -234,7 +234,7 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
                 else
                     icon = [UIImage templateImageNamed:item[@"icon"]];
                 cell.leftIconView.image = icon;
-                cell.leftIconView.tintColor = isOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+                cell.leftIconView.tintColor = isOn ? UIColor.iconColorSelected: UIColor.iconColorDisabled;
             }
             [cell.switchView setOn:isOn];
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];

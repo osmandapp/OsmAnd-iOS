@@ -9,7 +9,7 @@
 #import "OAOnlineTilesEditingViewController.h"
 #import "Localization.h"
 #import "OASQLiteTileSource.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAValueTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
 #import "OAInputTableViewCell.h"
@@ -377,7 +377,7 @@
             {
                 cell.userInteractionEnabled = YES;
                 cell.textView.text = isURL ? _itemURL : _itemName;
-                cell.textView.textColor = [UIColor blackColor];
+                cell.textView.textColor = [UIColor textColorPrimary];
                 [cell clearButtonVisibility:YES];
             }
         }
@@ -433,7 +433,7 @@
                 else
                     cell.valueLabel.text = @"";
                 
-                cell.valueLabel.textColor = UIColor.blackColor;
+                cell.valueLabel.textColor = UIColor.textColorPrimary;
                 cell.selectionStyle = UITableViewCellSelectionStyleDefault;
                 cell.accessoryType = UITableViewCellAccessoryNone;
             }
@@ -454,7 +454,7 @@
                     else
                     {
                         cell.userInteractionEnabled = YES;
-                        cell.titleLabel.textColor = [UIColor blackColor];
+                        cell.titleLabel.textColor = [UIColor textColorPrimary];
                     }
                 }
                 cell.valueLabel.textColor = UIColor.lightGrayColor;

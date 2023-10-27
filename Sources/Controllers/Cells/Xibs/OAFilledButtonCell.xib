@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,13 +19,13 @@
                 <subviews>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ukR-ER-CRQ">
                         <rect key="frame" x="16" y="6" width="288" height="36"/>
-                        <color key="backgroundColor" red="0.8784313725490196" green="0.8666666666666667" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" name="buttonBgColorDisabled"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="36" id="Gx4-Lw-Ewt"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                         <state key="normal" title="Button">
-                            <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="titleColor" name="buttonTextColorSecondary"/>
                         </state>
                     </button>
                 </subviews>
@@ -35,6 +36,7 @@
                     <constraint firstAttribute="bottom" secondItem="ukR-ER-CRQ" secondAttribute="bottom" constant="16" id="z5K-6w-4lu"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" name="groupBgColor"/>
             <connections>
                 <outlet property="bottomMarginConstraint" destination="z5K-6w-4lu" id="9eG-pR-qXh"/>
                 <outlet property="button" destination="ukR-ER-CRQ" id="YCX-ME-WxS"/>
@@ -46,4 +48,15 @@
             <point key="canvasLocation" x="40" y="38.23088455772114"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <namedColor name="buttonBgColorDisabled">
+            <color red="0.8784313725490196" green="0.8666666666666667" blue="0.8901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="buttonTextColorSecondary">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="groupBgColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

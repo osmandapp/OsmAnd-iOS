@@ -21,6 +21,7 @@
 #import "MGSwipeTableCell.h"
 #import "OAOsmAndFormatter.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #import "OsmAndApp.h"
 
@@ -156,36 +157,6 @@
                                                             menu:nil];
     rightButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
     return @[rightButton];
-}
-
-- (UIColor *)getNavbarBackgroundColor
-{
-    return UIColorFromRGB(color_primary_darkblue_navbar_background);
-}
-
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    return UIStatusBarStyleLightContent;
-}
-
-- (UIColor *)getNavbarButtonsTintColor
-{
-    return UIColor.whiteColor;
-}
-
-- (UIColor *)getTitleColor
-{
-    return UIColor.whiteColor;
-}
-
-- (BOOL)isNavbarBlurring
-{
-    return NO;
-}
-
-- (BOOL)isNavbarSeparatorVisible
-{
-    return NO;
 }
 
 #pragma mark - Table data
@@ -457,6 +428,7 @@
         cell.leftIcon.image = [dataItem.item icon];
         
         [cell.descLabel setText:dataItem.distance];
+        cell.descLabel.textColor = UIColor.textColorSecondary;
         cell.descIcon.transform = CGAffineTransformMakeRotation(dataItem.direction);
     }
     

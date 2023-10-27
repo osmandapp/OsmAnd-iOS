@@ -13,7 +13,7 @@
 
 #import "Localization.h"
 #import "OAUtilities.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OASizes.h"
 
 #define kOABottomSheetWidth 320.0
@@ -44,14 +44,14 @@
 - (void) setupButtons
 {
     [self layoutButtons];
-    _doneButton.backgroundColor = UIColorFromRGB(color_primary_purple);
+    _doneButton.backgroundColor = UIColor.buttonBgColorPrimary;
     _doneButton.layer.cornerRadius = 9;
     _doneButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold];
     
-    self.cancelButton.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary);
+    self.cancelButton.backgroundColor = UIColor.buttonBgColorSecondary;
     self.cancelButton.layer.cornerRadius = 9;
     self.cancelButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold];
-    [self.cancelButton setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+    [self.cancelButton setTitleColor:UIColor.buttonTextColorSecondary forState:UIControlStateNormal];
 }
 
 - (void) layoutButtons

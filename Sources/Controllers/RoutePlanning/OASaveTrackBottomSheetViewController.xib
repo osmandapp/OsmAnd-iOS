@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -35,7 +36,7 @@
                         <view contentMode="scaleToFill" id="2kF-Xn-Q9X">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="viewBgColor"/>
                         </view>
                         <view contentMode="scaleToFill" id="peB-wc-MNf">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="338"/>
@@ -43,13 +44,13 @@
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ryz-vM-ydH">
                                     <rect key="frame" x="16" y="267.5" width="382" height="42"/>
-                                    <color key="backgroundColor" red="0.87843137250000003" green="0.86666666670000003" blue="0.89019607840000003" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" name="buttonBgColorSecondary"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="42" id="9qv-L6-FKM"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                     <state key="normal" title="Share">
-                                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="titleColor" name="buttonTextColorSecondary"/>
                                     </state>
                                     <connections>
                                         <action selector="shareButtonPressed:" destination="-1" eventType="touchUpInside" id="OAl-h2-N2I"/>
@@ -57,13 +58,13 @@
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9W3-WQ-zMj">
                                     <rect key="frame" x="16" y="151.5" width="382" height="42"/>
-                                    <color key="backgroundColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" name="buttonBgColorPrimary"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="42" id="0aG-h4-Ue4"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                     <state key="normal" title="Open saved track">
-                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="titleColor" name="buttonTextColorPrimary"/>
                                     </state>
                                     <connections>
                                         <action selector="openSavedTrackPressed:" destination="-1" eventType="touchUpInside" id="En5-EX-WIc"/>
@@ -72,11 +73,12 @@
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track is saved!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pgk-1G-ZD5">
                                     <rect key="frame" x="150.5" y="100" width="113" height="20.5"/>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                    <nil key="textColor"/>
+                                    <color key="textColor" name="textColorPrimary"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_save_complete.png" translatesAutoresizingMaskIntoConstraints="NO" id="ron-Uj-aI4">
                                     <rect key="frame" x="177" y="24" width="60" height="60"/>
+                                    <color key="tintColor" name="iconColorActive"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="60" id="i6e-7b-q5D"/>
                                         <constraint firstAttribute="width" constant="60" id="wA9-a2-IOn"/>
@@ -84,20 +86,20 @@
                                 </imageView>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Eg-V4-YpJ">
                                     <rect key="frame" x="16" y="209.5" width="382" height="42"/>
-                                    <color key="backgroundColor" red="0.87843137250000003" green="0.86666666670000003" blue="0.89019607840000003" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" name="buttonBgColorSecondary"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="42" id="7iv-KV-43x"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                     <state key="normal" title="Create a new route">
-                                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="titleColor" name="buttonTextColorSecondary"/>
                                     </state>
                                     <connections>
                                         <action selector="createNewTrackButtonPressed:" destination="-1" eventType="touchUpInside" id="DvR-cU-mFs"/>
                                     </connections>
                                 </button>
                             </subviews>
-                            <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="viewBgColor"/>
                             <constraints>
                                 <constraint firstItem="ron-Uj-aI4" firstAttribute="top" secondItem="peB-wc-MNf" secondAttribute="top" constant="24" id="31q-W8-2ZO"/>
                                 <constraint firstItem="pgk-1G-ZD5" firstAttribute="centerX" secondItem="peB-wc-MNf" secondAttribute="centerX" id="Izl-lQ-zCS"/>
@@ -119,21 +121,21 @@
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B5O-pm-t5C">
                                     <rect key="frame" x="16" y="9" width="382" height="42"/>
-                                    <color key="backgroundColor" red="0.8784313725490196" green="0.8666666666666667" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" name="buttonBgColorSecondary"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="42" id="5fT-ab-vEU"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                                    <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="tintColor" name="buttonTextColorSecondary"/>
                                     <state key="normal" title="Cancel">
-                                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="titleColor" name="buttonTextColorSecondary"/>
                                     </state>
                                     <connections>
                                         <action selector="leftButtonPressed:" destination="-1" eventType="touchUpInside" id="woV-XC-5We"/>
                                     </connections>
                                 </button>
                             </subviews>
-                            <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="viewBgColor"/>
                             <constraints>
                                 <constraint firstItem="B5O-pm-t5C" firstAttribute="leading" secondItem="W5A-wO-sxs" secondAttribute="leading" constant="16" id="9fS-v6-5Jl"/>
                                 <constraint firstItem="B5O-pm-t5C" firstAttribute="top" secondItem="W5A-wO-sxs" secondAttribute="top" constant="9" id="hKS-TJ-rog"/>
@@ -142,7 +144,7 @@
                         </view>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="7Jz-Hi-s81"/>
-                    <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    <color key="backgroundColor" name="viewBgColor"/>
                     <constraints>
                         <constraint firstItem="7Jz-Hi-s81" firstAttribute="bottom" secondItem="W5A-wO-sxs" secondAttribute="top" priority="750" constant="60" id="7B5-xh-hdF"/>
                         <constraint firstItem="W5A-wO-sxs" firstAttribute="bottom" secondItem="1FR-X2-INg" secondAttribute="bottom" id="EG8-0J-ZYF"/>
@@ -162,5 +164,26 @@
     </objects>
     <resources>
         <image name="ic_custom_save_complete.png" width="30" height="30"/>
+        <namedColor name="buttonBgColorPrimary">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="buttonBgColorSecondary">
+            <color red="0.8784313725490196" green="0.8666666666666667" blue="0.8901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="buttonTextColorPrimary">
+            <color red="0.93725490196078431" green="0.90980392156862744" blue="0.99215686274509807" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="buttonTextColorSecondary">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="iconColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorPrimary">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="viewBgColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

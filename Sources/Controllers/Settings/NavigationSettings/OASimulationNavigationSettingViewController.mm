@@ -12,7 +12,7 @@
 #import "OAAppSettings.h"
 #import "OAApplicationMode.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAOsmAndFormatter.h"
 #import "OASwitchTableViewCell.h"
 #import "OASliderWithValuesCell.h"
@@ -339,6 +339,7 @@
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUICellKey];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.backgroundColor = UIColor.groupBgColor;
         }
         if ([item[@"selected"] boolValue])
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -355,8 +356,8 @@
             NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:fullText];
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             [attributedString addAttribute:NSFontAttributeName value:font range:fullRange];
-            [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.blackColor range:fullRange];
-            [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:coloredRange];
+            [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.textColorPrimary range:fullRange];
+            [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.textColorSecondary range:coloredRange];
             cell.textLabel.attributedText = attributedString;
         }
         else
@@ -397,8 +398,8 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.backgroundColor = UIColor.whiteColor;
-            cell.dividerColor = UIColorFromRGB(color_divider_blur);
+            cell.backgroundColor = UIColor.groupBgColor;
+            cell.dividerColor = UIColor.separatorColor;
             cell.dividerHight = 1.0 / [UIScreen mainScreen].scale;
         }
         cell.dividerInsets = UIEdgeInsetsMake(0, [item[@"inset"] doubleValue], 0, 0);

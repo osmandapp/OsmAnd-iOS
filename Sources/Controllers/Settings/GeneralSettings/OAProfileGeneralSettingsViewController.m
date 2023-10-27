@@ -127,6 +127,25 @@
         rotateMapValue = OALocalizedString(@"rotate_map_north_opt");
         rotateMapIcon = @"ic_custom_direction_north_day";
     }
+
+    NSString *rotateScreenValue;
+    NSString *rotateScreenIcon;
+    NSInteger mapScreenOrientation = [_settings.mapScreenOrientation get:self.appMode];
+    if (mapScreenOrientation == kScreenOrientationPortrait)
+    {
+        rotateScreenValue = OALocalizedString(@"map_orientation_portrait");
+        rotateScreenIcon = @"ic_custom_iphone_portrait";
+    }
+    else if (mapScreenOrientation == kScreenOrientationSensorLandscape)
+    {
+        rotateScreenValue = OALocalizedString(@"map_orientation_landscape");
+        rotateScreenIcon = @"ic_custom_iphone_landscape";
+    }
+    else
+    {
+        rotateScreenValue = OALocalizedString(@"map_orientation_default");
+        rotateScreenIcon = @"ic_custom_iphone_portrait_settings";
+    }
     
     NSString *positionMapValue = [self getLocationPositionValue];
     NSString *positionMapIcon = [self getLocationPositionIcon];
@@ -268,6 +287,13 @@
         @"icon" : positionMapIcon,
         @"key" : @"position_on_map",
     }];
+    [appearanceArr addObject:@{
+        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"title" : OALocalizedString(@"map_screen_orientation"),
+        @"value" : rotateScreenValue,
+        @"icon" : rotateScreenIcon,
+        @"key" : @"screenOrientation",
+    }];
     [unitsAndFormatsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"driving_region"),
@@ -405,6 +431,8 @@
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsAppTheme applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"map_orientation"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsMapOrientation applicationMode:self.appMode];
+    else if ([itemKey isEqualToString:@"screenOrientation"])
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsScreenOrientation applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"position_on_map"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsDisplayPosition applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"drivingRegion"])
@@ -422,7 +450,7 @@
     if (settingsViewController != nil)
     {
         settingsViewController.delegate = self;
-        if ([itemKey isEqualToString:@"app_theme"])
+        if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"])
             [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
         else
             [self showModalViewController:settingsViewController];

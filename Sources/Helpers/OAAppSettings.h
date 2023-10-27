@@ -715,6 +715,10 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 #define ROTATE_MAP_COMPASS 2
 #define ROTATE_MAP_MANUAL 3
 
+#define kScreenOrientationUnspecified -1
+#define kScreenOrientationPortrait 1
+#define kScreenOrientationSensorLandscape 6
+
 #define NO_EXTERNAL_DEVICE 0
 #define GENERIC_EXTERNAL_DEVICE 1
 #define WUNDERLINQ_EXTERNAL_DEVICE 2
@@ -746,6 +750,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonInteger *settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
 @property (nonatomic) OACommonBoolean *metricSystemChangedManually;
+@property (nonatomic) OACommonInteger *mapScreenOrientation;
 
 @property (assign, nonatomic) int settingMapArrows; // 0 - from Location; 1 - from Map Center
 @property (assign, nonatomic) CLLocationCoordinate2D mapCenter;
@@ -1233,5 +1238,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (void)setDisabledTypes:(NSSet<NSString *> *)disabledTypes;
 - (NSSet<NSString *> *)getDisabledTypes;
 - (BOOL)isTypeDisabled:(NSString *)typeName;
+
+- (UIInterfaceOrientationMask)getScreenOrientationMask;
 
 @end

@@ -3319,3 +3319,8 @@
 "no_widgets_descr" = "Add one or more widgets from the list of available widgets.";
 "click_on_widget" = "Click on widget";
 "map_marker_interval_dialog_desc" = "Specify the time interval for which the average speed will be measured to calculate estimated time of arrival.";
+
+"map_orientation_default" = "Same as device";
+"map_orientation_portrait" = "Portrait";
+"map_orientation_landscape" = "Landscape";
+"map_screen_orientation" = "Screen orientation";

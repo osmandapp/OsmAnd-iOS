@@ -254,6 +254,7 @@
 #define cycleRoutesParameterKey @"cycleRoutesParameter"
 #define mountainBikeRoutesParameterKey @"mountainBikeRoutesParameter"
 #define mapManuallyRotatingAngleKey @"mapManuallyRotatingAngle"
+#define mapScreenOrientationKey @"mapScreenOrientation"
 
 #define activeMarkerKey @"activeMarkerKey"
 #define mapDistanceIndicationVisabilityKey @"mapDistanceIndicationVisabilityKey"
@@ -4608,6 +4609,9 @@
         [_globalPreferences setObject:_rateUsState forKey:@"rate_us_state"];
         
         _lastUUIDChangeTimestamp = [[OACommonLong withKey:lastUUIDChangeTimestampKey defValue:0] makeGlobal];
+        
+        _mapScreenOrientation = [OACommonInteger withKey:mapScreenOrientationKey defValue:kScreenOrientationUnspecified];
+        [_profilePreferences setObject:_mapScreenOrientation forKey:@"map_screen_orientation"];
 
         [self fetchImpassableRoads];
 
@@ -5364,6 +5368,14 @@
 - (BOOL)isTypeDisabled:(NSString *)typeName
 {
     return [_disabledTypes containsObject:typeName];
+}
+
+- (UIInterfaceOrientationMask)getScreenOrientationMask
+{
+    NSInteger mapScreenOrientation = [_mapScreenOrientation get];
+    return mapScreenOrientation == kScreenOrientationPortrait ? UIInterfaceOrientationMaskPortrait
+        : mapScreenOrientation == kScreenOrientationSensorLandscape ? UIInterfaceOrientationMaskLandscape
+        : UIInterfaceOrientationMaskAll;
 }
 
 @end

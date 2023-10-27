@@ -367,4 +367,9 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     return [sd openURL:url];
 }
 
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
+{
+    return [[OAAppSettings sharedManager] getScreenOrientationMask];
+}
+
 @end

@@ -199,7 +199,7 @@
 "rendering_category_routes" = "Rute";
 "shared_string_skip" = "Omiteți";
 "in_app_purchase_desc" = "O singură plată";
-"shared_string_near" = "Apropiere";
+"shared_string_near" = "Aproape de";
 "unlock_all_features" = "Deblochează toate funcționalitățile OsmAnd";
 "shared_string_open" = "Deschis";
 "map_widget_appearance_rem" = "Elemente rămase";
@@ -266,7 +266,7 @@
 "route_tl" = "Virați la stânga și continuați pe";
 "shared_string_world" = "Lume";
 "shared_string_slope" = "Pantă";
-"no_address_found" = "Nici o adresă determinată";
+"no_address_found" = "Nu s-a determinat adresa";
 "route_kl" = "Păstrați banda stângă și continuați";
 "search_another_country" = "Alegeți altă regiune";
 "app_mode_train" = "Tren";
@@ -801,7 +801,7 @@
 "profile_alert_delete_title" = "Șterge profil";
 "base_profile_descr_car" = "Mașină, camion, motocicletă";
 "save_track_logging_accuracy" = "Precizie înregistrare";
-"reverse_route" = "Inversează rută";
+"reverse_route" = "Inversează ruta";
 "replace_all" = "Înlocuiți tot";
 "vehicle_parameters" = "Parametrii vehicul";
 "select_base_profile_dialog_message" = "Bazați-vă profilul personalizat pe unul dintre profilurile implicite ale aplicației; acest lucru definește configurarea de bază, cum ar fi vizibilitatea implicită a widgeturilor și unitățile de viteză și distanță. Acestea sunt profiluri implicite din aplicație, împreună cu exemple de profiluri personalizate la care pot fi extinse:";

@@ -161,7 +161,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         case EOAFeatureAdvancedWidgets:
             return [UIImage imageNamed:@"ic_custom_pro_features_colored"];
         case EOAFeatureSensors:
-            return [UIImage imageNamed:@"ic_custom_umbrella_colored"];
+            return [UIImage imageNamed:@"ic_custom_external_sensor_colored"];
         case EOAFeatureHourlyMapUpdates:
             return [UIImage imageNamed:@"ic_custom_map_updates_colored"];
         case EOAFeatureCrossBuy:
@@ -208,7 +208,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         case EOAFeatureAdvancedWidgets:
             return [UIImage imageNamed:@"ic_custom_pro_features_colored_big"];
         case EOAFeatureSensors:
-            return [UIImage imageNamed:@"ic_custom_pro_features_colored_big"];
+            return [UIImage imageNamed:@"ic_custom_external_sensor_colored"];
         case EOAFeatureHourlyMapUpdates:
             return [UIImage imageNamed:@"ic_custom_map_updates_colored"];
         case EOAFeatureCrossBuy:

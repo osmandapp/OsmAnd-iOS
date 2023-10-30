@@ -3652,7 +3652,6 @@
 		FAA6505E2ADD42C50020DCEA /* BLEDescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA6504A2ADD42C50020DCEA /* BLEDescriptionViewController.swift */; };
 		FAA6505F2ADD42C50020DCEA /* DescriptionDeviceHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA6504C2ADD42C50020DCEA /* DescriptionDeviceHeader.swift */; };
 		FAA650602ADD42C50020DCEA /* DescriptionDeviceHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAA6504D2ADD42C50020DCEA /* DescriptionDeviceHeader.xib */; };
-		FAA650612ADD42C50020DCEA /* BLEDescriptionViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAA6504E2ADD42C50020DCEA /* BLEDescriptionViewController.storyboard */; };
 		FAA650642ADD43BE0020DCEA /* SwiftyBluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = FAA650632ADD43BE0020DCEA /* SwiftyBluetooth */; };
 		FAA650662ADD4C9F0020DCEA /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650652ADD4C9F0020DCEA /* UIImage+Extension.swift */; };
 		FAA650682ADD8D0D0020DCEA /* BLEInitHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */; };
@@ -8461,7 +8460,6 @@
 		FAA6504A2ADD42C50020DCEA /* BLEDescriptionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEDescriptionViewController.swift; sourceTree = "<group>"; };
 		FAA6504C2ADD42C50020DCEA /* DescriptionDeviceHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DescriptionDeviceHeader.swift; sourceTree = "<group>"; };
 		FAA6504D2ADD42C50020DCEA /* DescriptionDeviceHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DescriptionDeviceHeader.xib; sourceTree = "<group>"; };
-		FAA6504E2ADD42C50020DCEA /* BLEDescriptionViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = BLEDescriptionViewController.storyboard; sourceTree = "<group>"; };
 		FAA650652ADD4C9F0020DCEA /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEInitHeader.swift; sourceTree = "<group>"; };
 		FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
@@ -14831,7 +14829,6 @@
 			children = (
 				FAA6504B2ADD42C50020DCEA /* DescriptionDeviceHeader */,
 				FAA6504A2ADD42C50020DCEA /* BLEDescriptionViewController.swift */,
-				FAA6504E2ADD42C50020DCEA /* BLEDescriptionViewController.storyboard */,
 			);
 			path = BLEDescription;
 			sourceTree = "<group>";
@@ -15356,7 +15353,6 @@
 				DA0132E22A1E4A6300920C14 /* ic_custom20_screen_side_bottom@2x.png in Resources */,
 				DA5A82CB26C563A800F274C7 /* OATitleDescrDraggableCell.xib in Resources */,
 				8431E7741B380D010063C9AF /* ic_dialog_export@2x.png in Resources */,
-				FAA650612ADD42C50020DCEA /* BLEDescriptionViewController.storyboard in Resources */,
 				3AFEEE361A0E34FD00900A47 /* icon_star_fill@2x.png in Resources */,
 				0A8D1A1626FBA1750042444C /* ic_small_ascent@2x.png in Resources */,
 				DA2EC78A29FBBE0400ECEB37 /* warnings_speed_limit_ca@2x.png in Resources */,

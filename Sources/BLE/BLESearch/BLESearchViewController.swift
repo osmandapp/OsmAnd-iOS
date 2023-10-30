@@ -19,16 +19,54 @@ final class BLESearchViewController: OABaseNavbarViewController {
             bluetoothTurnedOffView.isHidden = true
         }
     }
-    
     @IBOutlet private weak var searchingView: UIView! {
         didSet {
             searchingView.isHidden = true
         }
     }
-    
     @IBOutlet private weak var searchEmptyView: UIView! {
         didSet {
             searchEmptyView.isHidden = true
+        }
+    }
+    @IBOutlet private weak var nothingFoundTitle: UILabel! {
+        didSet {
+            nothingFoundTitle.text = localizedString("ant_plus_nothing_found_text")
+        }
+    }
+    @IBOutlet private weak var nothingFoundDescription: UILabel! {
+        didSet {
+            nothingFoundDescription.text = localizedString("ant_plus_nothing_found_description")
+        }
+    }
+    @IBOutlet private weak var searchAgainButton: UIButton! {
+        didSet {
+            searchAgainButton.setTitle(localizedString("ble_search_again"), for: .normal)
+        }
+    }
+    @IBOutlet private weak var searchingTitle: UILabel! {
+        didSet {
+            searchingTitle.text = localizedString("ant_plus_searching_text")
+        }
+    }
+    @IBOutlet private weak var searchingDescription: UILabel! {
+        didSet {
+            searchingDescription.text = localizedString("ant_plus_searching_text_description")
+        }
+    }
+    @IBOutlet private weak var openSettingButton: UIButton! {
+        didSet {
+            openSettingButton.setTitle(localizedString("ant_plus_open_settings"), for: .normal)
+        }
+    }
+    @IBOutlet private weak var bluetoothOffTitle: UILabel! {
+        didSet {
+            bluetoothOffTitle.text = localizedString("ant_plus_bluetooth_off")
+        }
+    }
+    @IBOutlet private weak var bluetoothOffDescription: UILabel! {
+        didSet {
+            bluetoothOffDescription.text = localizedString("ant_plus_bluetooth_off_description")
         }
     }
     
@@ -40,11 +78,11 @@ final class BLESearchViewController: OABaseNavbarViewController {
         super.init(coder: coder)
         initTableData()
     }
-   
+    
     // MARK: - Life cicle
     
     override func getTitle() -> String! {
-        "Searching"
+        localizedString("ant_plus_searching")
     }
     
     override func viewDidLoad() {
@@ -52,17 +90,9 @@ final class BLESearchViewController: OABaseNavbarViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = 72
-       // tableView.rowHeight = UITableView.automaticDimension
-      //  registerObservers()
         if !hasFirstResult {
             startScan()
         }
-        
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
-//            let tt = SwiftyBluetooth.retrievePeripherals(withUUIDs: GattAttributes.SUPPORTED_SERVICES.map { UUID(uuidString: $0)! })
-//             let xx = SwiftyBluetooth.retrieveConnectedPeripherals(withServiceUUIDs: GattAttributes.SUPPORTED_SERVICES.map { $0.CBUUIDRepresentation })
-//            print("")
-//        })
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -89,7 +119,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
     }
     
     override func getTitleForHeader(_ section: Int) -> String! {
-        "FOUND: \(BLEManager.shared.discoveredDevices.count)"
+        String(format: localizedString("bluetooth_found_title"), BLEManager.shared.discoveredDevices.count).uppercased()
     }
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
@@ -101,11 +131,9 @@ final class BLESearchViewController: OABaseNavbarViewController {
     }
     
     override func onRowSelected(_ indexPath: IndexPath!) {
-        let storyboard = UIStoryboard(name: "BLEDescriptionViewController", bundle: nil)
-        if let controller = storyboard.instantiateViewController(withIdentifier: "BLEDescriptionViewController") as? BLEDescriptionViewController {
-            controller.device = BLEManager.shared.discoveredDevices[indexPath.row]
-            navigationController?.pushViewController(controller, animated: true)
-        }
+        let controller = BLEDescriptionViewController()
+        controller.device = BLEManager.shared.discoveredDevices[indexPath.row]
+        navigationController?.pushViewController(controller, animated: true)
     }
     
     deinit {
@@ -208,8 +236,8 @@ final class BLESearchViewController: OABaseNavbarViewController {
     }
     
     private func showScanErrorAlertWith(message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "ОК", style: .cancel))
+        let alert = UIAlertController(title: localizedString("osm_failed_uploads"), message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .cancel))
         present(alert, animated: true)
     }
     

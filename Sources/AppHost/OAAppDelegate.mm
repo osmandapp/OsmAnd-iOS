@@ -96,19 +96,6 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     // Create instance of OsmAnd application
     _app = (id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol>)[OsmAndApp instance];
     
-    // Create window
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = [[OALaunchScreenViewController alloc] init];
-    [self.window makeKeyAndVisible];
-    
-//    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil];
-//    BLEExternalSensorsViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"BLEExternalSensors"];
-//    if (vc) {
-//        [BLEInitHeader configure];
-//        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:vc];;
-//        [self.window makeKeyAndVisible];
-//    }
-    
     _appInitTask = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"appInitTask" expirationHandler:^{
         
         [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];

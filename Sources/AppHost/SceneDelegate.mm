@@ -176,6 +176,16 @@
     
     _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
     [_window makeKeyAndVisible];
+    
+    /*
+     //    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil];
+     //    BLEExternalSensorsViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"BLEExternalSensors"];
+     //    if (vc) {
+     //        [BLEInitHeader configure];
+     //        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:vc];;
+     //        [self.window makeKeyAndVisible];
+     //    }
+     */
 }
 
 - (OAAppDelegate *)appDelegate {

@@ -931,7 +931,7 @@ static OASubscriptionState *EXPIRED;
                 {
                     wiki = YES;
                 }
-                else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Sensor])
+                else if ([product.productIdentifier isEqualToString:kInAppId_Addon_External_Sensors])
                 {
                     sensors = YES;
                 }
@@ -1354,7 +1354,7 @@ static OASubscriptionState *EXPIRED;
             {
                 [_settings.wikipediaPurchased set:YES];
             }
-            else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Sensor])
+            else if ([product.productIdentifier isEqualToString:kInAppId_Addon_External_Sensors])
             {
                 [_settings.sensorsPurchased set:YES];
             }

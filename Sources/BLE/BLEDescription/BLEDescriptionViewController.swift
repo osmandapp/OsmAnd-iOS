@@ -27,19 +27,13 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
         Bundle.main.loadNibNamed("DescriptionDeviceHeader", owner: self, options: nil)?[0] as! DescriptionDeviceHeader
     }()
     
-    // MARK: - Init
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        initTableData()
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = 48
-       // tableView.tableFooterView = nil
+
         configureHeader()
         headerView.configure(item: device)
         headerView.didPaireDevicedAction = { [weak self] in
@@ -69,17 +63,17 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
             // Information
             if let sensor = device.sensors.first(where: { $0 is BLEBatterySensor }) as? BLEBatterySensor {
                 let infoSection = tableData.createNewSection()
-                infoSection.headerText = "Information".uppercased()
+                infoSection.headerText = localizedString("external_device_details_information").uppercased()
                 let batteryRow = infoSection.createNewRow()
                 batteryRow.cellType = OAValueTableViewCell.getIdentifier()
                 batteryRow.key = "battery_row"
-                batteryRow.title = "Battery"
+                batteryRow.title = localizedString("external_device_details_battery")
                 batteryRow.descr = sensor.lastBatteryData.batteryLevel != -1 ? String(sensor.lastBatteryData.batteryLevel) + "%" : "-"
             }
             // Received Data
             if let receivedData = device.getDataFields {
                 let receivedDataSection = tableData.createNewSection()
-                receivedDataSection.headerText = "Received Data".uppercased()
+                receivedDataSection.headerText = localizedString("external_device_details_received_data").uppercased()
                 for (key, value) in receivedData {
                     let row = receivedDataSection.createNewRow()
                     row.cellType = OAValueTableViewCell.getIdentifier()
@@ -90,11 +84,11 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
             }
             // Settings
             let settingsSection = tableData.createNewSection()
-            settingsSection.headerText = "Settings".uppercased()
+            settingsSection.headerText = localizedString("shared_string_settings").uppercased()
             let nameRow = settingsSection.createNewRow()
             nameRow.cellType = OAValueTableViewCell.getIdentifier()
             nameRow.key = "name_row"
-            nameRow.title = "Name"
+            nameRow.title = localizedString("shared_string_name")
             nameRow.descr = device?.deviceName ?? ""
             
             if let settingsData = device.getSettingsFields {
@@ -105,11 +99,11 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
             let forgetSensorRow = forgetSensorSection.createNewRow()
             forgetSensorRow.cellType = OAValueTableViewCell.getIdentifier()
             forgetSensorRow.key = "forget_sensor_row"
-            forgetSensorRow.title = "Forget sensor"
+            forgetSensorRow.title = localizedString("external_device_forget_sensor")
         } else {
             tableView.sectionHeaderTopPadding = 0
             let footerSection = tableData.createNewSection()
-            footerSection.footerText = "Connect sensor to your device to get information."
+            footerSection.footerText = localizedString("external_device_unpair_description")
         }
         tableData.resetChanges()
     }
@@ -194,16 +188,13 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
 
 extension BLEDescriptionViewController {
     private func showForgetSensorActionSheet() {
-        let alert = UIAlertController(title: device.deviceName, message: "Sensor will be removed from the list. You will be able to pair this sensor again at any time.", preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Forget sensor", style: .destructive , handler: { [weak self] _ in
+        let alert = UIAlertController(title: device.deviceName, message: localizedString("external_device_forget_sensor_description"), preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: localizedString("external_device_forget_sensor"), style: .destructive , handler: { [weak self] _ in
             guard let self else { return }
-            debugPrint("Forget sensor")
             DeviceHelper.shared.setDevicePaired(device: device, isPaired: false)
             navigationController?.popViewController(animated: true)
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel , handler: { _ in
-            debugPrint("Cancel")
-        }))
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         alert.popoverPresentationController?.sourceView = view
         present(alert, animated: true)
     }

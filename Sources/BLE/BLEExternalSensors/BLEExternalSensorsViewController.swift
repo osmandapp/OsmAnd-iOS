@@ -19,6 +19,12 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         }
     }
     
+    @IBOutlet private weak var pairNewSensorButton: UIButton! {
+        didSet {
+            pairNewSensorButton.setTitle(localizedString("ant_plus_pair_new_sensor"), for: .normal)
+        }
+    }
+    
     private let headerView: UIView = UIView(frame: .zero)
     
     required init?(coder: NSCoder) {
@@ -44,7 +50,6 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.layer.borderWidth = 1.0
         headerView.addSubview(imageView)
         headerView.frame.size.height = 201
         headerView.frame.size.width = view.frame.width
@@ -53,7 +58,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     }
     
     override func getTitle() -> String! {
-        "External sensors"
+        localizedString("external_sensors_plugin_name")
     }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
@@ -81,12 +86,12 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         let titleBLE = section.createNewRow()
         titleBLE.cellType = OASimpleTableViewCell.getIdentifier()
         titleBLE.key = ExternalSensorsCellData.title.rawValue
-        titleBLE.title = "You can pair Bluetooth Low Energy (BLE) sensors with OsmAnd."
+        titleBLE.title = localizedString("ant_plus_pair_bluetooth_prompt")
 
         let learnMoreBLE = section.createNewRow()
         learnMoreBLE.cellType = OASimpleTableViewCell.getIdentifier()
         learnMoreBLE.key = ExternalSensorsCellData.learnMore.rawValue
-        learnMoreBLE.title = "Learn more about sensors."
+        learnMoreBLE.title = localizedString("learn_more_about_sensors_link")
     }
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {

@@ -27,7 +27,7 @@ final class BLEChangeDeviceNameViewController: OABaseNavbarViewController {
     }
     
     override func getTitle() -> String! {
-        "Name"
+        localizedString("shared_string_name")
     }
     
     override func getLeftNavbarButtonTitle() -> String {
@@ -126,7 +126,8 @@ extension BLEChangeDeviceNameViewController: UITextViewDelegate {
     }
 }
 
-private extension UINavigationItem {
+extension UINavigationItem {
+    @objc (setRightBarButtonItemsisEnabled:tintColor:)
     func setRightBarButtonItems(isEnabled: Bool, with tintColor: UIColor? = nil) {
         rightBarButtonItems?.forEach {
             if let button = $0.customView as? UIButton {

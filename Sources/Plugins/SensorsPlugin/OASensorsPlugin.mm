@@ -18,7 +18,7 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
-#define PLUGIN_ID kInAppId_Addon_Sensor
+#define PLUGIN_ID kInAppId_Addon_External_Sensors
 
 @implementation OASensorsPlugin
 {

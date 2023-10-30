@@ -388,7 +388,7 @@ static NSMutableArray *activePopups;
 
         [popup.okButton addTarget:popup action:@selector(goToSubscriptions:) forControlEvents:UIControlEventTouchUpInside];
     }
-    else if ([kInAppId_Addon_Sensor isEqualToString:productIdentifier])
+    else if ([kInAppId_Addon_External_Sensors isEqualToString:productIdentifier])
     {
         needShow = YES;
         title = OALocalizedString(@"external_sensors_support");

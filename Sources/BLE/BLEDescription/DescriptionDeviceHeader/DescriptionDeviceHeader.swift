@@ -56,14 +56,14 @@ final class DescriptionDeviceHeader: UIView {
     private func configureConnectUI(item: Device) {
         switch item.peripheral.state {
         case .connected:
-            connectStatusLabel.text = "Connected"
+            connectStatusLabel.text = localizedString("external_device_status_connected")
             signalIndicatorImageView.tintColor = UIColor.buttonBgColorPrimary
             updateRSSI(with: item.rssi)
             deviceImageView.image = item.getServiceConnectedImage
             configureConnectButtonTitle(with: .disconnected)
             imageContainerView.backgroundColor = UIColor.buttonBgColorTertiary
         default:
-            connectStatusLabel.text = "Disconnected"
+            connectStatusLabel.text = localizedString("external_device_status_disconnected")
             signalIndicatorImageView.tintColor = UIColor.iconColorSecondary
             signalIndicatorImageView.image = UIImage(named: "ic_small_signal_not_found")
             deviceImageView.image = item.getServiceConnectedImage.noir
@@ -185,8 +185,8 @@ final class DescriptionDeviceHeader: UIView {
     
     private func showErrorAlertWith(message: String) {
         debugPrint(message)
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "ОК", style: .cancel))
+        let alert = UIAlertController(title: localizedString("osm_failed_uploads"), message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .cancel))
         parentViewController?.present(alert, animated: true)
     }
 }
@@ -194,10 +194,10 @@ final class DescriptionDeviceHeader: UIView {
 extension CBPeripheralState {
     var description: String {
         switch self {
-        case .disconnected: return "Disconnect"
-        case .connecting: return "Connecting"
-        case .connected: return "Connect"
-        case .disconnecting: return "Disconnecting"
+        case .disconnected: return localizedString("external_device_status_disconnect")
+        case .connecting: return localizedString("external_device_status_connecting")
+        case .connected: return localizedString("external_device_status_connect")
+        case .disconnecting: return localizedString("external_device_status_disconnecting")
         @unknown default: return "Unknown"
         }
     }

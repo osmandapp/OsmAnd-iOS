@@ -167,6 +167,13 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     self.icon.image = logo;
     
     [self updatePurchaseButton];
+    [self updateSettingsButtonState];
+}
+
+- (void)updateSettingsButtonState
+{
+    if ([_product.productIdentifier isEqualToString:kInAppId_Addon_External_Sensors])
+    [self.navigationItem setRightBarButtonItemsisEnabled:(_product.isPurchased && !_product.disabled) tintColor:NULL];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -316,6 +323,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updatePurchaseButton];
+        [self updateSettingsButtonState];
         [OAPluginPopupViewController showProductAlert:_product afterPurchase:YES];
     });
 }
@@ -324,6 +332,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updatePurchaseButton];
+        [self updateSettingsButtonState];
     });
 }
 
@@ -353,6 +362,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
                 [_iapHelper disableProduct:_product.productIdentifier];
             }
             [self updatePurchaseButton];
+            [self updateSettingsButtonState];
             
             return;
         }
@@ -364,6 +374,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     {
         [OAPlugin enablePlugin:_plugin enable:![_plugin isEnabled]];
         [self updatePurchaseButton];
+        [self updateSettingsButtonState];
     }
 }
 
@@ -381,7 +392,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
         return [[OAOsmandDevelopmentViewController alloc] init];
     else if ([_product isKindOfClass:OAWikiProduct.class])
         return [[OAWikipediaSettingsViewController alloc] initWithAppMode:[OAAppSettings sharedManager].applicationMode.get];
-    else if ([_product isKindOfClass:OASensorsProduct.class])
+    else if ([_product isKindOfClass:OAExternalSensorsProduct.class])
     {
         return [[UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"BLEExternalSensors"];
     }

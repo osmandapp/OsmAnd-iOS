@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_72" orientation="portrait" appearance="light"/>
     <accessibilityOverrides dynamicTypePreference="8"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -169,8 +169,8 @@
                                                 <color key="textColor" name="textPrimary"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wQV-O7-UKe">
-                                                <rect key="frame" x="19" y="26.333333333333343" width="332" height="58"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wQV-O7-UKe" userLabel="Please hold the device close to the sensor.  You need to activate the sensor so OsmAnd can find it.">
+                                                <rect key="frame" x="4" y="26.333333333333343" width="362" height="58"/>
                                                 <string key="text">Please hold the device close to the sensor. 
 You need to activate the sensor so OsmAnd can find it.</string>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
@@ -213,7 +213,7 @@ You need to activate the sensor so OsmAnd can find it.</string>
                                                 <color key="textColor" name="textPrimary"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EZ4-DN-8HM">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EZ4-DN-8HM" userLabel="Make sure: – Bluetooth is turned on – Sensor is activated – This device is located near sensor">
                                                 <rect key="frame" x="62.666666666666686" y="26.333333333333343" width="245" height="78"/>
                                                 <string key="text">Make sure:
 – Bluetooth is turned on
@@ -280,8 +280,16 @@ You need to activate the sensor so OsmAnd can find it.</string>
                     </view>
                     <navigationItem key="navigationItem" id="65B-f2-fya"/>
                     <connections>
+                        <outlet property="bluetoothOffDescription" destination="zaU-E4-hdZ" id="rWx-gs-reR"/>
+                        <outlet property="bluetoothOffTitle" destination="YJW-qe-YfR" id="OdJ-dE-dya"/>
                         <outlet property="bluetoothTurnedOffView" destination="VYh-in-suY" id="7J0-XF-wgt"/>
+                        <outlet property="nothingFoundDescription" destination="EZ4-DN-8HM" id="c86-Ub-7l5"/>
+                        <outlet property="nothingFoundTitle" destination="Xtp-zN-Lpc" id="u6a-LZ-8nY"/>
+                        <outlet property="openSettingButton" destination="U9q-Cs-scN" id="WwW-h2-B89"/>
+                        <outlet property="searchAgainButton" destination="3oc-bb-wTL" id="A0M-Or-Ih1"/>
                         <outlet property="searchEmptyView" destination="iBq-XT-4rq" id="ao0-4u-Uat"/>
+                        <outlet property="searchingDescription" destination="wQV-O7-UKe" id="8m5-8o-in8"/>
+                        <outlet property="searchingTitle" destination="QzX-76-Tgh" id="RHS-4l-Wzs"/>
                         <outlet property="searchingView" destination="OMj-M0-oTs" id="5cX-oH-iyy"/>
                         <outlet property="tableView" destination="AE6-iV-SNx" id="xc4-mN-1vX"/>
                     </connections>

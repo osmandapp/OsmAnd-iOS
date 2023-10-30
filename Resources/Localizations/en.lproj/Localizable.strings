@@ -3353,13 +3353,42 @@
 
 "purchases_feature_desc_external_sensors" = "Display and record data from external sensors: bicycle speed, bicycle power, cadence, and heart rate.";
 "external_sensors_support" = "External sensors support";
+"learn_more_about_sensors_link" = "Learn more about sensors.";
+"ant_plus_pair_bluetooth_prompt" = "You can pair Bluetooth Low Energy (BLE) sensors with OsmAnd.";
+"ant_plus_pair_new_sensor" = "Pair new sensor";
+"ant_plus_searching" = "Searching";
+"ble_search_again" = "Search again";
+"ant_plus_nothing_found_text" = "Unable to find any sensors";
+"ant_plus_nothing_found_description" = "Make sure:\n– Bluetooth is turned on\n– Sensor is activated\n– This device is located near sensor";
+
+"ant_plus_searching_text" = "Searching for sensors";
+"ant_plus_searching_text_description" = "Please hold the device close to the sensor.\nYou need to activate the sensor so OsmAnd can find it.";
+"ant_plus_open_settings" = "Open settings";
+
+"ant_plus_bluetooth_off" = "Bluetooth is turned off";
+"ant_plus_bluetooth_off_description" = "Turn on Bluetooth find and pair sensors.";
+
+"external_device_forget_sensor" = "Forget sensor";
+"external_device_forget_sensor_description" = "Sensor will be removed from the list. You will be able to pair this sensor again at any time.";
+
+"external_device_details_information" = "Information";
+"external_device_details_battery" = "Battery";
+"external_device_details_received_data" = "Received data";
+"external_device_unpair_description" = "Connect sensor to your device to get information.";
+
+"external_device_status_disconnect" = "Disconnect";
+"external_device_status_connecting" = "Connecting";
+"external_device_status_connect" = "Connect";
+"external_device_status_disconnecting" = "Disconnecting";
+"external_device_status_disconnected" = "Disconnected";
+"external_device_status_connected" = "Connected";
+"bluetooth_found_title" = "Found: %d";
+
+            
 
 /**
- 
+
  <string name="external_device_low_battery">Low battery</string>
-    <string name="external_device_forget_sensor">Forget sensor</string>
-    <string name="external_device_forget_sensor_description">Sensor will be removed from the list.
-You will be able to pair this sensor again at any time.</string>
     <string name="external_device_disconnected">Disconnected</string>
     <string name="external_device_connected">Connected</string>
     <string name="external_device_menu_forget">Forget</string>
@@ -3382,7 +3411,7 @@ You will be able to pair this sensor again at any time.</string>
     <string name="external_device_details_information">Information</string>
     <string name="external_device_details_received_data">Received data</string>
     <string name="external_device_details_connection">Connection</string>
-    <string name="external_device_details_battery">Battery</string>
+   
     <string name="external_device_details_speed">Speed</string>
     <string name="external_device_details_total_distance">Total distance</string>
     <string name="external_device_details_distance">Distance</string>
@@ -3395,21 +3424,12 @@ You will be able to pair this sensor again at any time.</string>
     <string name="external_device_ant">ANT</string>
     <string name="bluetooth_found_title">Found: %d</string>
     <string name="bluetooth_not_supported">Bluetooth not supported</string>
-    <string name="ble_search_again">Search again</string>
+
     <string name="ant_plus_nothing_found_text">Unable to find any sensors</string>
     <string name="ant_plus_nothing_found_description">Make sure:\n– Bluetooth is turned on\n– Sensor is activated\n– This device is located near sensor</string>
-    <string name="ant_plus_bluetooth_off">Bluetooth is turned off</string>
-    <string name="ant_plus_bluetooth_off_description">Turn on Bluetooth find and pair sensors.</string>
-    <string name="ant_plus_searching_text">Searching for sensors</string>
-    <string name="ant_plus_searching_text_description">Please hold the device close to the sensor.
-You need to activate the sensor so OsmAnd can find it.</string>
+
     <string name="ant_plus_help_title">I don\’t know what type of sensor I have</string>
-    <string name="ant_plus_searching">Searching</string>
-    <string name="ant_plus_pair_new_sensor">Pair new sensor</string>
-    <string name="ant_plus_open_settings">Open settings</string>
     <string name="ant_plus_pair_new_sensor_ble">Pair Bluetooth LE sensor</string>
     <string name="ant_plus_pair_new_sensor_ant_plus">Pair ANT+ sensor</string>
-    <string name="ant_plus_pair_bluetooth_prompt">You can pair Bluetooth LE and ANT+ sensors with OsmAnd.</string>
-    <string name="learn_more_about_sensors_link">Learn more about sensors.</string>
  */
 

@@ -684,7 +684,7 @@
                 purchased = [OAIAPHelper isContourLinesPurchased];
             else if ([self.productIdentifier isEqualToString:kInAppId_Addon_Wiki])
                 purchased = [OAIAPHelper isWikipediaPurchased];
-            else if ([self.productIdentifier isEqualToString:kInAppId_Addon_Sensor])
+            else if ([self.productIdentifier isEqualToString:kInAppId_Addon_External_Sensors])
                 purchased = [OAIAPHelper isSensorPurchased];
 
             if (!purchased && self.feature)
@@ -2007,11 +2007,11 @@
 
 @end
 
-@implementation OASensorsProduct
+@implementation OAExternalSensorsProduct
 
 - (instancetype) init
 {
-    self = [super initWithIdentifier:kInAppId_Addon_Sensor];
+    self = [super initWithIdentifier:kInAppId_Addon_External_Sensors];
     return self;
 }
 
@@ -2424,7 +2424,7 @@
         self.osmEditing = [[OAOsmEditingProduct alloc] init];
         self.mapillary = [[OAMapillaryProduct alloc] init];
         self.weather = [[OAWeatherProduct alloc] init];
-        self.sensors = [[OASensorsProduct alloc] init];
+        self.sensors = [[OAExternalSensorsProduct alloc] init];
         self.carplay = [[OACarPlayProduct alloc] init];
         self.osmandDevelopment = [[OAOsmandDevelopmentProduct alloc] init];
 

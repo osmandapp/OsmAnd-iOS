@@ -895,12 +895,12 @@
 "custom_osmand_plugin" = "Anpassad OsmAnd-plugin";
 "custom_plugins" = "Custom plugins";
 "extra_maps_menu_group" = "Extra kartor";
-"import_duplicates_title" = "Some items already exist";
-"import_duplicates_description" = "OsmAnd already has elements with the same names as those imported.\n\nSelect an action.";
+"import_duplicates_title" = "Några objekt finns redan";
+"import_duplicates_description" = "OsmAnd har redan objekt med samma namn som några av de som importeras.\n\nVälj en åtgärd.";
 "keep_both" = "Behåll båda";
-"keep_both_desc" = "Importerade poster kommer att läggas till med ett prefix";
+"keep_both_desc" = "Objekten kommer att importeras med ett prefix";
 "replace_all" = "Ersätt alla";
-"replace_all_desc" = "Nuvarande poster kommer att ersättas med poster från filen";
+"replace_all_desc" = "Nuvarande objekt kommer att ersättas med objekt från filen";
 "shared_string_profiles" = "Profiler";
 "shared_string_quick_actions" = "Snabbåtgärder";
 "shared_string_poi_types" = "POI-typer";
@@ -933,7 +933,7 @@
 "profile_appearance" = "Profilutseende";
 "profile_appearance_descr" = "Icon, color, and name";
 "ui_customization" = "Anpassning av användargränssnittet";
-"ui_customization_short_descr" = "Drawer items, context menu";
+"ui_customization_short_descr" = "Huvudmeny-objekt, kontextmeny";
 "reorder_profiles" = "Redigera profillista";
 "profile_alert_need_profile_name_title" = "Ange profilnamn";
 "select_color" = "Välj färg";
@@ -1399,7 +1399,7 @@
 "change_application_profile" = "Byt app-profil";
 "select_application_profile" = "Select application profile";
 "shared_string_add_profile" = "Lägg till profil";
-"quick_action_switch_profile_descr" = "The action button switches between selected profiles.";
+"quick_action_switch_profile_descr" = "Åtgärdsknappen växlar mellan valda profiler.";
 "profile_type_user_string" = "Användarprofil";
 "profile_type_osmand_string" = "OsmAnd-profil";
 "unsupported_action" = "Unsupported action";
@@ -1581,7 +1581,7 @@
 "purchases_feature_desc_wikipedia" = "Förmedlar alla platsrelaterade Wikipedia-artiklar offline, och hjälper dig lära om platser du besöker på din resa med enkla klick i kartan. Glöm inte att ladda ner WIkipedia-kartfilerna för respektive region.";
 "shared_string_all_languages" = "Alla språk";
 "select_wikipedia_article_langs" = "Välj språk för Wikipedia-artiklar på kartan. Byt till vilket annat tillgängligt språk som helst vid läsning av artikeln.";
-"wiki_menu_download_descr" = "Additional maps are needed to view Wikipedia POIs on the map.";
+"wiki_menu_download_descr" = "Ytterligare kartor behövs för att via Wikipedias intressepunkter på kartan.";
 "some_articles_may_not_available_in_lang" = "Vissa Wikipedia-artiklar finns kanske inte tillgängliga på ditt språk.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";

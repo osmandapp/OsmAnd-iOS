@@ -224,7 +224,7 @@
 "poi_dialog_comment" = "Comentarii";
 "shared_string_on" = "Activ";
 "app_mode_aircraft" = "Avion";
-"exit_without_saving" = "Ieșiți fără să salvați?";
+"exit_without_saving" = "Ieșiți fără a salva?";
 "osm_live_support_region" = "Suport local";
 "speak_cameras" = "Radare de viteză";
 "poi" = "POI";
@@ -516,7 +516,7 @@
 "rendering_attr_smoothness_good_name" = "Bună";
 "rendering_attr_tracktype_grade1_name" = "Solid (pavat)";
 "routing_attr_avoid_tram_description" = "Evită tramvaie";
-"rendering_attr_piste_type_downhill_name" = "Coborâș";
+"rendering_attr_piste_type_downhill_name" = "Coborâre";
 "rendering_value_light_brown_name" = "Maro deschis";
 "routing_attr_short_way_description" = "Traseu mai scurt, optimizat (economie de energie)";
 "rendering_value_orange_name" = "Portocaliu";
@@ -2850,8 +2850,8 @@
 "shared_string_add_color" = "Adăugați culoare";
 "shared_string_edit_color" = "Editați culoarea";
 "shared_string_delete_color" = "Ștergeți culoarea";
-"map_widget_trip_recording_downhill" = "Coborâș";
-"map_widget_trip_recording_uphill" = "Urcuș";
+"map_widget_trip_recording_downhill" = "Coborâre";
+"map_widget_trip_recording_uphill" = "Urcare";
 "map_widget_trip_recording_duration" = "Durată";
 "map_widget_trip_recording_distance" = "Distanță";
 "activity_type_offroad_name" = "Off-road";

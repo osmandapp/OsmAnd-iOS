@@ -183,7 +183,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     CGFloat w;
     
     CGFloat navbarHeight = self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height;
-    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+    if ([OAUtilities isPortrait])
     {
         w = DeviceScreenWidth;
         _screenshot.frame = CGRectMake(0.0, navbarHeight, w, 220.0);

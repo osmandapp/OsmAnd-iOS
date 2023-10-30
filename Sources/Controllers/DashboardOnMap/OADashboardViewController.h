@@ -35,7 +35,6 @@
 
 - (void) deleteParentVC:(BOOL)deleteAll;
 
-- (void) updateLayout:(UIInterfaceOrientation)interfaceOrientation adjustOffset:(BOOL)adjustOffset;
 - (CGRect) contentViewFrame;
 
 - (void) show:(UIViewController *)rootViewController parentViewController:(OADashboardViewController *)parentViewController animated:(BOOL)animated;

@@ -34,9 +34,9 @@
 
 typedef NS_ENUM(NSInteger, EOAScreenOrientation)
 {
-    EOAScreenOrientationSystem = -1,
-    EOAScreenOrientationPortrait = 1,
-    EOAScreenOrientationLandscape = 6
+    EOAScreenOrientationSystem = -1, //ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+    EOAScreenOrientationPortrait = 1, //ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    EOAScreenOrientationLandscape = 6 //ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
 };
 
 typedef NS_ENUM(NSInteger, EOAPositionPlacement)
@@ -1242,6 +1242,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (NSSet<NSString *> *)getDisabledTypes;
 - (BOOL)isTypeDisabled:(NSString *)typeName;
 
-- (UIInterfaceOrientationMask)getScreenOrientationMask;
+- (UIInterfaceOrientationMask)getUserInterfaceOrientationMask;
+- (UIInterfaceOrientation)getCurrentInterfaceOrientation;
 
 @end

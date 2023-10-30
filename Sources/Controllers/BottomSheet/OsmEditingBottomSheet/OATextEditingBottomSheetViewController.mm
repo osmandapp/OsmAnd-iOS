@@ -221,7 +221,7 @@
 {
     [self.tblView beginUpdates];
     [self.tblView endUpdates];
-    [vwController updateTableHeaderView:CurrentInterfaceOrientation];
+    [vwController updateTableHeaderView];
 }
 
 @end

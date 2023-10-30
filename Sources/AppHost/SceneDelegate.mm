@@ -469,4 +469,9 @@
     [self openURL:userActivity.webpageURL];
 }
 
+- (UIInterfaceOrientation)getUIIntefaceOrientation
+{
+    return _windowScene ? _windowScene.interfaceOrientation : UIInterfaceOrientationUnknown;
+}
+
 @end

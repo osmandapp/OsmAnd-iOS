@@ -5370,12 +5370,26 @@
     return [_disabledTypes containsObject:typeName];
 }
 
-- (UIInterfaceOrientationMask)getScreenOrientationMask
+- (UIInterfaceOrientationMask)getUserInterfaceOrientationMask
 {
     NSInteger mapScreenOrientation = [_mapScreenOrientation get];
     return mapScreenOrientation == EOAScreenOrientationPortrait ? UIInterfaceOrientationMaskPortrait
         : mapScreenOrientation == EOAScreenOrientationLandscape ? UIInterfaceOrientationMaskLandscape
         : UIInterfaceOrientationMaskAll;
+}
+
+- (UIInterfaceOrientation)getCurrentInterfaceOrientation
+{
+    UIInterfaceOrientationMask userOrientation = [self getUserInterfaceOrientationMask];
+    UIInterfaceOrientation systemiOrientation = ((OAAppDelegate *) [UIApplication sharedApplication]).interfaceOrientation;
+    if (userOrientation != UIInterfaceOrientationMaskAll)
+    {
+        if (userOrientation == UIInterfaceOrientationMaskLandscape)
+            return UIInterfaceOrientationIsLandscape(systemiOrientation) ? systemiOrientation : UIInterfaceOrientationLandscapeLeft;
+        else if (userOrientation == UIInterfaceOrientationMaskPortrait)
+            return UIInterfaceOrientationIsPortrait(systemiOrientation) ? systemiOrientation : UIInterfaceOrientationPortrait;
+    }
+    return systemiOrientation;
 }
 
 @end

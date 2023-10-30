@@ -1852,11 +1852,6 @@ static const double d180PI = 180.0 / M_PI_2;
     return radians * d180PI;
 }
 
-+ (BOOL) isLeftSideLayout:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (UIInterfaceOrientationIsLandscape(interfaceOrientation) || UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
-}
-
 + (CGFloat) getStatusBarHeight
 {
     if ([NSThread isMainThread])
@@ -1924,8 +1919,7 @@ static const double d180PI = 180.0 / M_PI_2;
 + (BOOL) isWindowed
 {
     BOOL isiOSAppOnMac = [NSProcessInfo processInfo].isiOSAppOnMac;
-
-    return !isiOSAppOnMac && [UIDevice.currentDevice userInterfaceIdiom] == UIUserInterfaceIdiomPad && (DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width || [UIApplication sharedApplication].mainWindow.bounds.size.height != [[UIScreen mainScreen] bounds].size.height);
+    return !isiOSAppOnMac && [self isIPad] && (DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width || [UIApplication sharedApplication].mainWindow.bounds.size.height != [[UIScreen mainScreen] bounds].size.height);
 }
 
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
@@ -1954,10 +1948,19 @@ static const double d180PI = 180.0 / M_PI_2;
     middleView.frame = tableViewFrame;
 }
 
++ (BOOL) isPortrait
+{
+    return UIInterfaceOrientationIsPortrait([[OAAppSettings sharedManager] getCurrentInterfaceOrientation]);
+}
+
 + (BOOL) isLandscape
 {
-    UIInterfaceOrientation orientation = UIApplication.sharedApplication.statusBarOrientation;
-    return orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight;
+    return [self isLandscape:[[OAAppSettings sharedManager] getCurrentInterfaceOrientation]];
+}
+
++ (BOOL) isLandscape:(UIInterfaceOrientation)intefaceOrientation
+{
+    return UIInterfaceOrientationIsLandscape(intefaceOrientation);
 }
 
 + (BOOL) isLandscapeIpadAware
@@ -2174,9 +2177,14 @@ static const double d180PI = 180.0 / M_PI_2;
     return OALocalizedString([NSString stringWithFormat:@"%@_name", properyName]);
 }
 
++ (BOOL) isIPhone
+{
+    return [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone;
+}
+
 + (BOOL) isIPad
 {
-    return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
+    return [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad;
 }
 
 + (BOOL) isColorBright:(UIColor *)color

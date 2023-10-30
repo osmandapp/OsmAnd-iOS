@@ -15,16 +15,13 @@
 @end
 
 @implementation OANavigationController
-{
-    UIInterfaceOrientation _initOrientation;
-}
 
--(instancetype)initWithRootViewController:(UIViewController *)rootViewController
+- (instancetype)initWithRootViewController:(UIViewController *)rootViewController
 {
     self = [super initWithRootViewController:rootViewController];
-    if (self) {
+    if (self)
+    {
         self.navigationBarHidden = YES;
-        _initOrientation = CurrentInterfaceOrientation;
     }
     return self;
 }
@@ -39,26 +36,6 @@
 
 - (BOOL)prefersStatusBarHidden {
     return NO;
-}
-
-#pragma mark - Autorotation
-
-- (BOOL)shouldAutorotate
-{
-    return YES;
-}
-
-- (NSUInteger) supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskAll;
-}
-
-- (UIInterfaceOrientation) preferredInterfaceOrientationForPresentation {
-    if ([self.visibleViewController isKindOfClass:[OAFirstUsageWelcomeController class]]
-        || [self.visibleViewController isKindOfClass:[OAFirstUsageWizardController class]])
-    {
-        return _initOrientation;
-    }
-    return [self.visibleViewController interfaceOrientation];
 }
 
 @end

@@ -287,13 +287,16 @@
         @"icon" : positionMapIcon,
         @"key" : @"position_on_map",
     }];
-    [appearanceArr addObject:@{
-        @"type" : [OAValueTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"map_screen_orientation"),
-        @"value" : rotateScreenValue,
-        @"icon" : rotateScreenIcon,
-        @"key" : @"screenOrientation",
-    }];
+    if (![OAUtilities isIPad])
+    {
+        [appearanceArr addObject:@{
+            @"type" : [OAValueTableViewCell getCellIdentifier],
+            @"title" : OALocalizedString(@"map_screen_orientation"),
+            @"value" : rotateScreenValue,
+            @"icon" : rotateScreenIcon,
+            @"key" : @"screenOrientation",
+        }];
+    }
     [unitsAndFormatsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"driving_region"),

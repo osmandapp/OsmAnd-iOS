@@ -403,30 +403,22 @@
     if (!manager)
         return;
 
-    const UIDeviceOrientation uiDeviceOrientation = [UIDevice currentDevice].orientation;
+    const UIInterfaceOrientation interfaceOrientation = [_settings getCurrentInterfaceOrientation];
     CLDeviceOrientation clDeviceOrientation;
-    switch (uiDeviceOrientation)
+    switch (interfaceOrientation)
     {
-        case UIDeviceOrientationPortrait:
+        case UIInterfaceOrientationPortrait:
             clDeviceOrientation = CLDeviceOrientationPortrait;
             break;
-        case UIDeviceOrientationPortraitUpsideDown:
+        case UIInterfaceOrientationPortraitUpsideDown:
             clDeviceOrientation = CLDeviceOrientationPortraitUpsideDown;
             break;
-        case UIDeviceOrientationLandscapeLeft:
+        case UIInterfaceOrientationLandscapeLeft:
             clDeviceOrientation = CLDeviceOrientationLandscapeLeft;
             break;
-        case UIDeviceOrientationLandscapeRight:
+        case UIInterfaceOrientationLandscapeRight:
             clDeviceOrientation = CLDeviceOrientationLandscapeRight;
             break;
-        case UIDeviceOrientationFaceUp:
-            clDeviceOrientation = CLDeviceOrientationFaceUp;
-            break;
-        case UIDeviceOrientationFaceDown:
-            clDeviceOrientation = CLDeviceOrientationFaceDown;
-            break;
-
-        case UIDeviceOrientationUnknown:
         default:
             clDeviceOrientation = CLDeviceOrientationUnknown;
             break;

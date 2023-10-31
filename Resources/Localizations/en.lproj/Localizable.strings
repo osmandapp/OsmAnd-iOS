@@ -1966,6 +1966,10 @@
 "no_travel_guides_data_descr" = "Download Wikivoyage travel guides to view articles about places around the world without a connection to the Internet.";
 "images" = "Images";
 "cache_size" = "Cache size";
+"image_cache" = "Image cache";
+"remove_cache" = "Remove cache";
+"remove_cache_alert" = "Are you sure you want to clear cache?";
+"cache_cleared" = "Cache cleared";
 "download_images_settings_header" = "Offline Wikipedia files in OsmAnd don’t contain images. But they can be downloaded while viewing articles.";
 "download_images_settings_footer" = "Image downloading is enabling over any network. Mobile data can be used.";
 

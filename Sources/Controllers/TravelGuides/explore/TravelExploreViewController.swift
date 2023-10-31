@@ -28,10 +28,10 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
     }
   
     var searchController: UISearchController!
+    var imagesCacheHelper: TravelGuidesImageCacheHelper?
     var downloadingCellHelper: OADownloadingCellHelper = OADownloadingCellHelper()
     var dataLock: NSObject = NSObject()
     var downloadingResources: [OAResourceSwiftItem] = []
-    var cachedPreviewImages: ImageCache = ImageCache(itemsLimit: 100)
     var lastSelectedIndexPath: IndexPath?
     var savedArticlesObserver: OAAutoObserverProxy = OAAutoObserverProxy()
     var localResourcesChangedObserver: OAAutoObserverProxy = OAAutoObserverProxy()
@@ -50,7 +50,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         searchHelper = TravelSearchHelper()
         searchHelper!.uiCanceled = false
         searchResults = []
-        cachedPreviewImages = ImageCache(itemsLimit: 100)
+        imagesCacheHelper = TravelGuidesImageCacheHelper.sharedDatabase
     }
     
     
@@ -68,7 +68,6 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         screenMode = .popularArticles
-        cachedPreviewImages = ImageCache(itemsLimit: 100)
         downloadingResources = []
         setupDownloadingCellHelper()
         savedArticlesObserver = OAAutoObserverProxy(self, withHandler: #selector(update), andObserve: TravelObfHelper.shared.getBookmarksHelper().observable)
@@ -114,7 +113,6 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
     func saveState() {
         if let state = OAAppSettings.sharedManager().travelGuidesState {
             state.downloadingResources = downloadingResources
-            state.cachedPreviewImages = cachedPreviewImages
             state.exploreTabTableData = tableData
             state.lastSelectedIndexPath = lastSelectedIndexPath
         }
@@ -125,9 +123,6 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
             setupDownloadingCellHelper()
             downloadingResources = state.downloadingResources
             lastSelectedIndexPath = state.lastSelectedIndexPath
-            if let stateImages = state.cachedPreviewImages {
-                self.cachedPreviewImages = stateImages
-            }
             
             tableData.clearAllData()
             if let exploreTabTableData = state.exploreTabTableData {
@@ -397,32 +392,6 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         self.present(alert, animated: true)
     }
     
-    private func startAsyncImageDownloading(_ iconName: String, _ cell: TravelGuideCellCashable?) {
-        if let imageUrl = URL(string: iconName) {
-            if let cachedImage = cachedPreviewImages.get(url: iconName) {
-                if cachedImage.count != Data().count {
-                    cell?.setImage(data: cachedImage)
-                    cell?.noImageIconVisibility(false)
-                } else {
-                    cell?.noImageIconVisibility(true)
-                }
-            } else {
-                DispatchQueue.global().async {
-                    if let data = try? Data(contentsOf: imageUrl) {
-                        DispatchQueue.main.async {
-                            self.cachedPreviewImages.set(url: iconName, imageData: data)
-                            cell?.setImage(data: data)
-                            cell?.noImageIconVisibility(false)
-                        }
-                    } else {
-                        self.cachedPreviewImages.set(url: iconName, imageData: Data())
-                        cell?.noImageIconVisibility(true)
-                    }
-                }
-            }
-        }
-    }
-    
     
     //MARK: TableView
     
@@ -511,11 +480,28 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                 cell.regionLabel.text = item.string(forKey: "isPartOf")
                 
                 cell.imageVisibility(true)
-                if let iconName = item.iconName, !notDownloadImages() {
-                    startAsyncImageDownloading(iconName, cell)
+                
+                if let imageUrl = item.iconName, let downloadMode = OsmAndApp.swiftInstance().data.travelGuidesImagesDownloadMode {
+                    
+                    //fetch image from db. if not found -  start async downloading.
+                    imagesCacheHelper?.fetchSingleImage(byURL: imageUrl, downloadMode: downloadMode, onlyNow: false) { imageAsBase64 in
+                        DispatchQueue.main.async {
+                            
+                            if let imageAsBase64, !imageAsBase64.isEmpty {
+                                if let image = ImageToStringConverter.base64StringToImage(imageAsBase64) {
+                                    cell.imagePreview.image = image
+                                    cell.noImageIconVisibility(false)
+                                }
+                            } else {
+                                cell.noImageIconVisibility(true)
+                            }
+                            
+                        }
+                    }
                 } else {
                     cell.noImageIconVisibility(true)
                 }
+                
                 cell.updateSaveButton()
                 
                 outCell = cell
@@ -572,10 +558,25 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                     cell.noImageIcon.image = UIImage(named: noImageIconName)
                 }
 
-                if item.iconName != nil && !notDownloadImages() {
-                    startAsyncImageDownloading(item.iconName!, cell)
+                if let imageUrl = item.iconName, let downloadMode = OsmAndApp.swiftInstance().data.travelGuidesImagesDownloadMode {
+                    
+                    //fetch image from db. if not found - start async downloading
+                    imagesCacheHelper?.fetchSingleImage(byURL: imageUrl, downloadMode: downloadMode, onlyNow: false) { imageAsBase64 in
+                        DispatchQueue.main.async {
+                            
+                            if let imageAsBase64, !imageAsBase64.isEmpty {
+                                if let image = ImageToStringConverter.base64StringToImage(imageAsBase64) {
+                                    cell.imagePreview.image = image
+                                    cell.noImageIconVisibility(false)
+                                }
+                            } else {
+                                cell.noImageIconVisibility(true)
+                            }
+                            
+                        }
+                    }
                 } else {
-                    cell.noImageIcon.isHidden = false
+                    cell.noImageIconVisibility(true)
                 }
             }
             outCell = cell
@@ -827,29 +828,6 @@ final class LoadWikivoyageDataAsyncTask {
         if let delegate {
             delegate.onDataLoaded()
         }
-    }
-}
-
-
-final class ImageCache {
-    
-    private var cache: [String : Data]
-    private var itemsLimit: Int
-    
-    init(itemsLimit: Int) {
-        cache = [:]
-        self.itemsLimit = itemsLimit
-    }
-    
-    func get(url: String) -> Data? {
-        return cache[url]
-    }
-    
-    func set(url: String, imageData: Data) {
-        if cache.count > itemsLimit {
-            cache.removeAll()
-        }
-        cache[url] = imageData
     }
 }
 

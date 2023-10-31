@@ -22,7 +22,7 @@
 #import "OASimpleTableViewCell.h"
 #import "OAInputTableViewCell.h"
 #import "OASizes.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 typedef enum
 {
@@ -167,7 +167,7 @@ typedef enum
     [_applyView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
     _applyView.hidden = YES;
 
-    _tableView.separatorColor = UIColorFromRGB(color_tint_gray);
+    _tableView.separatorColor = UIColor.separatorColor;
     _tableView.sectionHeaderHeight = 0.001;
     _tableView.sectionFooterHeight = 0.001;
 }
@@ -853,7 +853,7 @@ typedef enum
             cell.inputField.textAlignment = NSTextAlignmentNatural;
             cell.inputField.placeholder = OALocalizedString(@"filter_poi_hint");
             cell.leftIconView.image = [UIImage templateImageNamed:@"search_icon"];
-            cell.leftIconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
+            cell.leftIconView.tintColor = UIColor.iconColorDefault;
             cell.leftIconView.contentMode = UIViewContentModeCenter;
         }
         if (cell)
@@ -879,7 +879,7 @@ typedef enum
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
-                cell.leftIconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
+                cell.leftIconView.tintColor = UIColor.iconColorDefault;
                 [cell descriptionVisibility:NO];
             }
             
@@ -899,7 +899,7 @@ typedef enum
                 if (item.expandable)
                 {
                     cell.rightIconView.image = !item.expanded ? [UIImage templateImageNamed:@"ic_arrow_open.png"] : [UIImage templateImageNamed:@"ic_arrow_close.png"];
-                    cell.rightIconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
+                    cell.rightIconView.tintColor = UIColor.iconColorDefault;
                     [cell rightIconVisibility:YES];
                 }
                 else
@@ -917,7 +917,7 @@ typedef enum
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OASwitchTableViewCell *) nib[0];
-                cell.leftIconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
+                cell.leftIconView.tintColor = UIColor.iconColorDefault;
                 [cell descriptionVisibility:NO];
             }
             if (cell)
@@ -952,7 +952,7 @@ typedef enum
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
-                cell.leftIconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
+                cell.leftIconView.tintColor = UIColor.iconColorDefault;
                 [cell descriptionVisibility:NO];
             }
             if (cell)
@@ -969,7 +969,7 @@ typedef enum
                     [cell leftIconVisibility:NO];
                 }
                 [cell.titleLabel setText:item.text];
-                cell.titleLabel.textColor = UIColorFromRGB(tag_hint_text_color);
+                cell.titleLabel.textColor = UIColor.textColorActive;
             }
             return cell;
         }

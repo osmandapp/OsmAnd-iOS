@@ -230,7 +230,7 @@
     return [OAUtilities createAttributedString:
                     [[OAWikiArticleHelper getFirstParagraph:_description] componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]][0]
                                           font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]
-                                         color:UIColor.blackColor
+                                         color:UIColor.textColorPrimary
                                    strokeColor:nil
                                    strokeWidth:0
                                      alignment:NSTextAlignmentNatural];
@@ -294,7 +294,7 @@
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"add_description"),
             kCellToggle: @YES,
-            kCellTintColor: @color_primary_purple
+            kCellTintColor: UIColor.iconColorActive
     }];
 }
 
@@ -315,7 +315,7 @@
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"context_menu_edit_descr"),
             kCellToggle: @YES,
-            kCellTintColor: @color_primary_purple
+            kCellTintColor: UIColor.iconColorActive
     }];
 }
 
@@ -327,7 +327,7 @@
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"read_full_description"),
             kCellToggle: @YES,
-            kCellTintColor: @color_primary_purple
+            kCellTintColor: UIColor.iconColorActive
     }];
 }
 

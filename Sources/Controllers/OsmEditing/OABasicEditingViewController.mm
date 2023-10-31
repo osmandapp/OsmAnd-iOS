@@ -14,7 +14,7 @@
 #import "OAValueTableViewCell.h"
 #import "OAEntity.h"
 #import "MaterialTextFields.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAPOICategory.h"
 #import "OAPOIType.h"
 #import "OAPoiTypeSelectionViewController.h"
@@ -77,6 +77,7 @@ static const NSInteger _contactInfoSectionCount = 5;
     OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
     
     MDCMultilineTextField *textField = resultCell.inputField;
+    textField.textColor = [UIColor textColorPrimary];
     [textField.underline removeFromSuperview];
     textField.placeholder = hint;
     [textField.textView setText:text];
@@ -87,19 +88,27 @@ static const NSInteger _contactInfoSectionCount = 5;
     [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
+    textField.clearButton.imageView.tintColor = UIColor.iconColorDefault;
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateHighlighted];
     if (!_floatingTextFieldControllers)
         _floatingTextFieldControllers = [NSMutableArray new];
+    
+    MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
+    fieldController.inlinePlaceholderColor = UIColor.textColorSecondary;
+    fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
     if (isFloating)
     {
-        MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
         fieldController.inlinePlaceholderFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
+        [fieldController setFloatingPlaceholderNormalColor:UIColor.textColorSecondary];
         fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
-        fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
+        fieldController.textInput.hidesPlaceholderOnInput = NO;
         [_floatingTextFieldControllers addObject:fieldController];
-        
+    }
+    else
+    {
+        fieldController.textInput.hidesPlaceholderOnInput = YES;
+        fieldController.inlinePlaceholderFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     }
     return resultCell;
 }

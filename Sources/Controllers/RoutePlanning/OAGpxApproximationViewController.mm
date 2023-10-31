@@ -19,6 +19,7 @@
 #import "OsmAndApp.h"
 #import "OAColors.h"
 #import "OAOsmAndFormatter.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kThresholdSection @"thresholdSection"
 #define kProfilesSection @"profilesSection"
@@ -79,7 +80,7 @@
 	_progressBarView = [[UIProgressView alloc] init];
 	_progressBarView.hidden = YES;
 	_progressBarView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	_progressBarView.progressTintColor = UIColorFromRGB(color_primary_purple);
+	_progressBarView.progressTintColor = UIColor.iconColorActive;
 	_progressBarView.frame = CGRectMake(0., -3., self.view.frame.size.width, 3.);
 	[self.buttonsView addSubview:_progressBarView];
 }
@@ -274,7 +275,7 @@
 {
 	dispatch_async(dispatch_get_main_queue(), ^{
 		self.rightButton.userInteractionEnabled = enabled;
-		self.rightButton.backgroundColor = enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_icon_inactive);
+		self.rightButton.backgroundColor = enabled ? UIColor.iconColorActive : UIColor.iconColorDisabled;
 	});
 }
 
@@ -335,9 +336,8 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-			cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+			cell.iconView.tintColor = UIColor.iconColorActive;
         }
         if (cell)
         {
@@ -345,7 +345,7 @@
             if (indexPath.row == 0)
             {
                 cell.titleView.text = [item[@"title"] uppercaseString];
-                cell.titleView.textColor = UIColorFromRGB(color_text_footer);
+                cell.titleView.textColor = UIColor.textColorSecondary;
                 cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
                 cell.secondaryImageView.hidden = YES;
 				cell.secondaryImageView.image = nil;
@@ -356,7 +356,7 @@
 				selected = _snapToRoadAppMode == profile;
 				cell.secondaryImageView.hidden = NO;
                 cell.titleView.text = profile.toHumanString;
-				cell.titleView.textColor = UIColor.blackColor;
+				cell.titleView.textColor = UIColor.textColorPrimary;
 				cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
                 UIImage *img = profile.getIcon;
                 cell.secondaryImageView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];

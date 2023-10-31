@@ -16,7 +16,6 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OAAppSettings.h"
 #import "OAUtilities.h"
-#import "OAColors.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -59,7 +58,7 @@
     [super viewDidLoad];
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.backgroundColor = UIColor.whiteColor;
+    self.tableView.backgroundColor = UIColor.groupBgColor;
 }
 
 #pragma mark - Base UI

@@ -43,6 +43,7 @@
 #import "OACollapsableWaypointsView.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OAEditDescriptionViewController.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -328,9 +329,9 @@
 {
     [super viewDidLoad];
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
-    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
+    self.tableView.separatorColor = UIColor.separatorColor;
     UIView *view = [[UIView alloc] init];
-    view.backgroundColor = UIColorFromRGB(0xffffff);
+    view.backgroundColor = UIColor.groupBgColor;
     self.tableView.backgroundView = view;
     self.tableView.scrollEnabled = NO;
     _calculatedWidth = 0;
@@ -345,6 +346,14 @@
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
+}
+
+- (void) traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        [self.tableView reloadData];
 }
 
 - (void) setContentBackgroundColor:(UIColor *)color
@@ -656,7 +665,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
-            cell.backgroundColor = UIColorFromRGB(color_divider_light);
+            cell.backgroundColor = UIColor.separatorColor;
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.titleLabel.textColor = UIColorFromRGB(color_dialog_buttons_light);
@@ -686,12 +695,12 @@
         {
             cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
             cell.textView.text = info.textPrefix;
-            cell.textView.textColor = [UIColor lightGrayColor];
+            cell.textView.textColor = [UIColor textColorSecondary];
         }
         else
         {
             cell.textView.font = [UIFont scaledSystemFontOfSize:14.0];
-            cell.textView.textColor = [UIColor blackColor];
+            cell.textView.textColor = [UIColor textColorPrimary];
             cell.textView.text = label;
             
             CGSize s = [OAUtilities calculateTextBounds:info.text width:self.tableView.bounds.size.width - 38.0 font:[UIFont scaledSystemFontOfSize:14.0]];

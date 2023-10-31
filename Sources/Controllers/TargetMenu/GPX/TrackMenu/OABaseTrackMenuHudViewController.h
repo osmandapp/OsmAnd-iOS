@@ -53,7 +53,7 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 @property (nonatomic, readonly) UIImage *leftIcon;
 @property (nonatomic, readonly) NSString *rightIconName;
 @property (nonatomic, readonly) BOOL toggle;
-@property (nonatomic, readonly) NSInteger tintColor;
+@property (nonatomic, readonly) UIColor *tintColor;
 @property (nonatomic, readonly) NSMutableArray<OAGPXTableCellData *> *subjects;
 
 + (instancetype)withData:(NSDictionary *)data;

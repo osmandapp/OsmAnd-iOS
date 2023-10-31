@@ -13,6 +13,7 @@
 #import "OATitleSwitchRoundCell.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OADefaultFavorite.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
@@ -194,7 +195,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             kCellTitle: OALocalizedString(@"shared_string_delete"),
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellRightIconName: @"ic_custom_remove_outlined",
-            kCellTintColor: @color_primary_red
+            kCellTintColor: UIColor.buttonBgColorDisruptive
     }];
     [deleteSectionData.subjects addObject:deleteCellData];
 }
@@ -204,7 +205,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     if (_mode == EOAEditTrackScreenWaypointsMode)
     {
         UIImage *leftIcon = [UIImage templateImageNamed:_isShown ? @"ic_custom_folder" : @"ic_custom_folder_hidden"];
-        UIColor *tintColor = _isShown ? _groupColor : UIColorFromRGB(color_footer_icon_gray);
+        UIColor *tintColor = _isShown ? _groupColor : UIColor.iconColorDisabled;
         self.leftIconView.image = leftIcon;
         self.leftIconView.tintColor = tintColor;
     }
@@ -452,18 +453,18 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             cell = (OATitleIconRoundCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
-            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
+            cell.separatorView.backgroundColor = UIColor.separatorColor;
         }
         if (cell)
         {
             cell.titleView.text = cellData.title;
-            cell.textColorNormal = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
+            cell.textColorNormal = cellData.tintColor ? cellData.tintColor : UIColor.textColorPrimary;
 
             cell.titleView.font = [cellData.values.allKeys containsObject:@"font_value"]
                     ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
-            cell.iconColorNormal = cellData.tintColor > 0
-                    ? UIColorFromRGB(cellData.tintColor) : UIColorFromRGB(color_primary_purple);
+            cell.iconColorNormal = cellData.tintColor
+                    ? cellData.tintColor : UIColor.iconColorActive;
             cell.iconView.image = [UIImage templateImageNamed:cellData.rightIconName];
 
             BOOL isLast = indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1;
@@ -484,8 +485,8 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             cell = (OATitleSwitchRoundCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
-            cell.textColorNormal = UIColor.blackColor;
-            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
+            cell.textColorNormal = UIColor.textColorPrimary;
+            cell.separatorView.backgroundColor = UIColor.separatorColor;
         }
         if (cell)
         {

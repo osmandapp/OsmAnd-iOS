@@ -8,7 +8,7 @@
 
 #import "OAEditDescriptionViewController.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OAWebViewCell.h"
 
@@ -72,7 +72,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] init];
-    self.tableView.backgroundColor = UIColorFromRGB(color_primary_table_background);
+    self.tableView.backgroundColor = UIColor.viewBgColor;
     
     [self setupView];
 }
@@ -127,10 +127,10 @@
         _titleView.text = OALocalizedString(@"context_menu_edit_descr");
         _saveButton.hidden = NO;
         _editButton.hidden = YES;
-        _toolbarView.backgroundColor = UIColorFromRGB(color_primary_table_background);
-        _titleView.textColor = UIColor.blackColor;
-        _saveButton.tintColor = UIColorFromRGB(color_primary_purple);
-        _backButton.tintColor = UIColorFromRGB(color_primary_purple);
+        _toolbarView.backgroundColor = UIColor.viewBgColor;
+        _titleView.textColor = UIColor.textColorPrimary;
+        _saveButton.tintColor = UIColor.iconColorActive;
+        _backButton.tintColor =  UIColor.iconColorActive;
         [_backButton setTitle:@"" forState:UIControlStateNormal];
         [_backButton setImage:[UIImage templateImageNamed:@"ic_navbar_close"] forState:UIControlStateNormal];
         _webView.hidden = YES;
@@ -140,7 +140,7 @@
         _titleView.text = _isComment ? OALocalizedString(@"poi_dialog_comment") : OALocalizedString(@"shared_string_description");
         _editButton.hidden = _readOnly;
         _saveButton.hidden = YES;
-        _toolbarView.backgroundColor = UIColorFromRGB(color_chart_orange);
+        _toolbarView.backgroundColor = UIColor.navBarBgColorPrimary;
         _titleView.textColor = UIColor.whiteColor;
         _editButton.tintColor = UIColor.whiteColor;
         [_editButton setImage:[UIImage templateImageNamed:@"ic_navbar_pencil"] forState:UIControlStateNormal];

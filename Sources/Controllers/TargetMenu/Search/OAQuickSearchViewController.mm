@@ -59,6 +59,7 @@
 #import "OAQuickSearchCoordinatesViewController.h"
 
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -1176,8 +1177,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             NSString *selectStreets = OALocalizedString(@"select_street");
             NSString *inCityName = [NSString stringWithFormat:OALocalizedString(@"shared_string_in_name"), lastCityName];
             NSMutableAttributedString *selectStreetsInCityAttr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ %@", selectStreets, inCityName]];
-            [selectStreetsInCityAttr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(0x2f7af5) range:NSMakeRange(0, selectStreets.length)];
-            [selectStreetsInCityAttr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(0x727272) range:NSMakeRange(selectStreets.length + 1, inCityName.length)];
+            [selectStreetsInCityAttr addAttribute:NSForegroundColorAttributeName value:UIColor.textColorActive range:NSMakeRange(0, selectStreets.length)];
+            [selectStreetsInCityAttr addAttribute:NSForegroundColorAttributeName value:UIColor.textColorSecondary range:NSMakeRange(selectStreets.length + 1, inCityName.length)];
 
             [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_action_street_name"] attributedText:selectStreetsInCityAttr onClickFunction:^(id sender) {
                 if (!lastCity)

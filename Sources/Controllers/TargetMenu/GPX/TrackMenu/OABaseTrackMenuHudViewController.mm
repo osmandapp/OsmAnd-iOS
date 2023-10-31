@@ -11,7 +11,7 @@
 #import "OAMapHudViewController.h"
 #import "OAMapRendererView.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXMutableDocument.h"
 #import "OsmAndApp.h"
@@ -93,7 +93,7 @@
     if ([data.allKeys containsObject:kCellToggle])
         _toggle = [data[kCellToggle] boolValue];
     if ([data.allKeys containsObject:kCellTintColor])
-        _tintColor = [data[kCellTintColor] integerValue];
+        _tintColor = data[kCellTintColor];
 }
 
 - (OAGPXTableCellData *)getSubject:(NSString *)key
@@ -308,7 +308,7 @@
     UIImage *backImage = [UIImage templateImageNamed:@"ic_custom_arrow_back"];
     [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                      forState:UIControlStateNormal];
-    self.backButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
+    self.backButton.imageView.tintColor = UIColor.iconColorActive;
     [self.backButton addBlurEffect:YES cornerRadius:12. padding:0];
     self.backButton.accessibilityLabel = localizedString(@"shared_string_dismiss");
 

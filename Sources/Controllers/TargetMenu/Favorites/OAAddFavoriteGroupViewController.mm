@@ -19,7 +19,6 @@
 #import "OAFavoritesHelper.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
-#import "OAColors.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -113,7 +112,7 @@
         kCellKeyKey : @"allColors",
         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"shared_string_all_colors"),
-        kCellIconTint : @color_primary_purple
+        kCellIconTintColor : UIColor.textColorActive
     }];
 }
 
@@ -217,10 +216,9 @@
             [cell setCustomLeftSeparatorInset:YES];
             cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
 
-            NSInteger tintColor = item.iconTint;
             cell.titleLabel.text = item.title;
-            cell.titleLabel.textColor = tintColor != -1 ? UIColorFromRGB(tintColor) : UIColor.blackColor;
-            cell.selectionStyle = tintColor == -1 ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
+            cell.titleLabel.textColor = item.iconTintColor ? item.iconTintColor : UIColor.textColorPrimary;
+            cell.selectionStyle = !item.iconTintColor ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
         }
         return cell;
     }
@@ -455,4 +453,3 @@
 }
 
 @end
-

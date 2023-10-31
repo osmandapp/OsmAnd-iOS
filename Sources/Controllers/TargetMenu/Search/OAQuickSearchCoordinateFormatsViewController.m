@@ -8,7 +8,7 @@
 
 #import "OAQuickSearchCoordinateFormatsViewController.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAPointDescription.h"
 #import "OAAppSettings.h"
 #import "OASimpleTableViewCell.h"
@@ -109,9 +109,9 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
+    self.tableView.separatorColor = UIColor.separatorColor;
     self.tableView.contentInset = UIEdgeInsetsMake(defaultNavBarHeight, 0, 0, 0);
-    self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
+    self.tableView.tintColor = UIColor.iconColorActive;
     self.doneButton.hidden = YES;
     self.doneButton.enabled = NO;
 
@@ -127,7 +127,7 @@
 {
     if (!UIAccessibilityIsReduceTransparencyEnabled())
     {
-        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
+        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:[ThemeManager shared].isLightTheme ? UIBlurEffectStyleSystemUltraThinMaterialLight : UIBlurEffectStyleSystemUltraThinMaterialDark]];
         blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         blurEffectView.alpha = 0;
         return blurEffectView;
@@ -136,7 +136,7 @@
     {
         UIView *res = [[UIView alloc] init];
         res.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        res.backgroundColor = UIColorFromRGB(color_primary_table_background);
+        res.backgroundColor = UIColor.viewBgColor;
         res.alpha = 0;
         return res;
     }
@@ -167,7 +167,7 @@
     text = [text stringByAppendingString:@" > "];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:text
                                                                                 attributes:@{NSFontAttributeName : textFont,
-                                                                                            NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
+                                                                                            NSForegroundColorAttributeName : UIColor.textColorSecondary}];
     [textStr appendAttributedString:str];
     vw.label.attributedText = textStr;
     return vw;
@@ -226,7 +226,7 @@
     else
     {
         [UIView animateWithDuration:.2 animations:^{
-            self.navbarView.backgroundColor = UIColorFromRGB(color_primary_table_background);
+            self.navbarView.backgroundColor = UIColor.viewBgColor;
             _navBarBackgroundView.alpha = 0;
         }];
     }

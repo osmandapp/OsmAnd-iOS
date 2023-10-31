@@ -4992,6 +4992,7 @@
             [_lastUsedApplicationMode set:applicationMode.stringKey];
         [[ThemeManager shared] configureWithAppMode: applicationMode];
         [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:prevAppMode];
+        [[NSNotificationCenter defaultCenter] postNotificationName:OAScreenOrientationHelper.applicationModeChangedKey object:nil];
     }
 }
 
@@ -5368,28 +5369,6 @@
 - (BOOL)isTypeDisabled:(NSString *)typeName
 {
     return [_disabledTypes containsObject:typeName];
-}
-
-- (UIInterfaceOrientationMask)getUserInterfaceOrientationMask
-{
-    NSInteger mapScreenOrientation = [_mapScreenOrientation get];
-    return mapScreenOrientation == EOAScreenOrientationPortrait ? UIInterfaceOrientationMaskPortrait
-        : mapScreenOrientation == EOAScreenOrientationLandscape ? UIInterfaceOrientationMaskLandscape
-        : UIInterfaceOrientationMaskAll;
-}
-
-- (UIInterfaceOrientation)getCurrentInterfaceOrientation
-{
-    UIInterfaceOrientationMask userOrientation = [self getUserInterfaceOrientationMask];
-    UIInterfaceOrientation systemiOrientation = ((OAAppDelegate *) [UIApplication sharedApplication]).interfaceOrientation;
-    if (userOrientation != UIInterfaceOrientationMaskAll)
-    {
-        if (userOrientation == UIInterfaceOrientationMaskLandscape)
-            return UIInterfaceOrientationIsLandscape(systemiOrientation) ? systemiOrientation : UIInterfaceOrientationLandscapeLeft;
-        else if (userOrientation == UIInterfaceOrientationMaskPortrait)
-            return UIInterfaceOrientationIsPortrait(systemiOrientation) ? systemiOrientation : UIInterfaceOrientationPortrait;
-    }
-    return systemiOrientation;
 }
 
 @end

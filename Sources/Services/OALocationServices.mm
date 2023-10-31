@@ -125,7 +125,7 @@
     NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self
                            selector:@selector(onDeviceOrientationDidChange)
-                               name:UIDeviceOrientationDidChangeNotification
+                               name:OAScreenOrientationHelper.screenOrientationChangedKey
                              object:nil];
     [notificationCenter addObserver:self
                            selector:@selector(onDeviceBatteryStateDidChange)
@@ -145,7 +145,7 @@
 {
     NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter removeObserver:self
-                                  name:UIDeviceOrientationDidChangeNotification
+                                  name:OAScreenOrientationHelper.screenOrientationChangedKey
                                 object:nil];
     [notificationCenter removeObserver:self
                                   name:UIDeviceBatteryLevelDidChangeNotification
@@ -403,7 +403,7 @@
     if (!manager)
         return;
 
-    const UIInterfaceOrientation interfaceOrientation = [_settings getCurrentInterfaceOrientation];
+    const UIInterfaceOrientation interfaceOrientation = [[OAScreenOrientationHelper sharedInstance] getCurrentInterfaceOrientation];
     CLDeviceOrientation clDeviceOrientation;
     switch (interfaceOrientation)
     {

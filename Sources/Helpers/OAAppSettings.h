@@ -1242,7 +1242,4 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (NSSet<NSString *> *)getDisabledTypes;
 - (BOOL)isTypeDisabled:(NSString *)typeName;
 
-- (UIInterfaceOrientationMask)getUserInterfaceOrientationMask;
-- (UIInterfaceOrientation)getCurrentInterfaceOrientation;
-
 @end

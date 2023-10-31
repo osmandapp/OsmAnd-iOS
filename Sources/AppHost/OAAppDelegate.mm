@@ -371,7 +371,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
 {
-    return [[OAAppSettings sharedManager] getUserInterfaceOrientationMask];
+    return [[OAScreenOrientationHelper sharedInstance] getUserInterfaceOrientationMask];
 }
 
 - (UIInterfaceOrientation)interfaceOrientation

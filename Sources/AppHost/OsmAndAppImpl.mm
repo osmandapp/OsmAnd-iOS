@@ -44,6 +44,7 @@
 #import "OAGPXDatabase.h"
 #import "OAExternalTimeFormatter.h"
 #import "OAFavoritesHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <algorithm>
 
@@ -717,7 +718,8 @@
         [OAApplicationMode valueOfStringKey:[settings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] :
                                                                                     settings.defaultApplicationMode.get;
     [settings setApplicationModePref:initialAppMode];
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:OAScreenOrientationHelper.applicationModeChangedKey object:nil];
+
     [OAPlugin initPlugins];
     [OAPOIHelper sharedInstance];
     [OAQuickSearchHelper instance];

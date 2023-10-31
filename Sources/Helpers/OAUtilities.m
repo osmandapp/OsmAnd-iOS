@@ -1950,12 +1950,12 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (BOOL) isPortrait
 {
-    return UIInterfaceOrientationIsPortrait([[OAAppSettings sharedManager] getCurrentInterfaceOrientation]);
+    return [[OAScreenOrientationHelper sharedInstance] isPortrait];
 }
 
 + (BOOL) isLandscape
 {
-    return [self isLandscape:[[OAAppSettings sharedManager] getCurrentInterfaceOrientation]];
+    return [[OAScreenOrientationHelper sharedInstance] isLandscape];
 }
 
 + (BOOL) isLandscape:(UIInterfaceOrientation)intefaceOrientation

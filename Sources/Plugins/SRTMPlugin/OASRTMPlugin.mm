@@ -88,11 +88,14 @@
 {
     OACommonPreference *obj = notification.object;
     if (obj == _enable3DMaps)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [OARootViewController.instance.mapPanel.mapViewController recreateHeightmapProvider];
-        });
-    }
+        [self updateLayers];
+}
+
+- (void)updateLayers
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [OARootViewController.instance.mapPanel.mapViewController recreateHeightmapProvider];
+    });
 }
 
 @end

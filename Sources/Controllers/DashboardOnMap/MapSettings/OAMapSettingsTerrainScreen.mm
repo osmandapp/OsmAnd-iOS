@@ -79,10 +79,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         tblView.sectionFooterHeight = UITableViewAutomaticDimension;
         _dataLock = [[NSObject alloc] init];
 
-        [NSNotificationCenter.defaultCenter addObserver:self
-                                               selector:@selector(onProfileSettingSet:)
-                                                   name:kNotificationSetProfileSetting object:nil];
-
         [self setupView];
         [self initData];
     }
@@ -806,23 +802,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)productPurchased:(NSNotification *)notification
 {
-    [_plugin.enable3DMaps set:YES];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self initData];
+        [self.tblView reloadData];
+    });
 }
 
 - (void)productsRestored:(NSNotification *)notification
 {
-    [_plugin.enable3DMaps set:YES];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self initData];
+        [self.tblView reloadData];
+    });
 }
 
-- (void)onProfileSettingSet:(NSNotification *)notification
-{
-    OACommonPreference *obj = notification.object;
-    if (obj == _plugin.enable3DMaps)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self initData];
-            [self.tblView reloadData];
-        });
-    }
-}
 @end

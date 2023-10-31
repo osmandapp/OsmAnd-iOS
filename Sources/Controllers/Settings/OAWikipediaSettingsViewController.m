@@ -19,6 +19,8 @@
 #import "OAColors.h"
 #import "Localization.h"
 
+#import "OsmAnd_Maps-Swift.h"
+
 @interface OAWikipediaSettingsViewController () <OAWikipediaScreenDelegate>
 
 @end
@@ -82,6 +84,13 @@
     imagesItem.title = OALocalizedString(@"wikivoyage_download_pics");
     imagesItem.iconName = [_app.data getWikipediaImagesDownloadMode:self.appMode].iconName;
     [self generateValueForItem:imagesItem];
+    
+    OATableRowData *cacheItem = [languageSection createNewRow];
+    cacheItem.key = @"cache";
+    cacheItem.cellType = [OAValueTableViewCell getCellIdentifier];
+    cacheItem.title = OALocalizedString(@"cache_size");
+    cacheItem.iconName = [_app.data getWikipediaImagesDownloadMode:self.appMode].iconName;
+    [self generateValueForItem:cacheItem];
 }
 
 - (void)generateValueForItem:(OATableRowData *)item
@@ -95,6 +104,11 @@
         OADownloadMode *downloadMode = [_app.data getWikipediaImagesDownloadMode:self.appMode];
         [item setObj:downloadMode.title forKey:@"value"];
         item.iconName = downloadMode.iconName;
+    }
+    else if ([item.key isEqualToString:@"cache"])
+    {
+        OAWikiImageCacheHelper *cacheHelper = [[OAWikiImageCacheHelper alloc] init];
+        [item setObj:[cacheHelper getFormattedFileSize] forKey:@"value"];
     }
 }
 
@@ -153,6 +167,12 @@
     {
         OAWikipediaImagesSettingsViewController *controller = [[OAWikipediaImagesSettingsViewController alloc] initWithAppMode:self.appMode];
         controller.wikipediaDelegate = self;
+        [self showModalViewController:controller];
+    }
+    if ([item.key isEqualToString:@"cache"])
+    {
+        OAWikipediaCacheSizeViewController *controller = [[OAWikipediaCacheSizeViewController alloc] init];
+        controller.delegate = self;
         [self showModalViewController:controller];
     }
 }

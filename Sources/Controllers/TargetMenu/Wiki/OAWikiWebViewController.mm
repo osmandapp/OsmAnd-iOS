@@ -42,6 +42,7 @@
     UIBarButtonItem *_imagesBarButtonItem;
     BOOL _isDownloadImagesOnlyNow;
     BOOL _isFirstLaunch;
+    OAWikiImageCacheHelper *_imageCacheHelper;
 }
 
 #pragma mark - Initialization
@@ -75,6 +76,7 @@
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
+    _imageCacheHelper = [[OAWikiImageCacheHelper alloc] init];
 }
 
 - (void) updateWithPoi:(OAPOI *)poi
@@ -396,57 +398,136 @@
 
 - (void)loadHeaderImage:(void(^)(NSString *content))loadWebView
 {
-    OADownloadMode *imagesDownloadMode = [self getImagesDownloadMode];
-    if (![self isDownloadImagesOnlyNow] && ([imagesDownloadMode isDontDownload] || ([imagesDownloadMode isDownloadOnlyViaWifi] && [[AFNetworkReachabilityManager sharedManager] isReachableViaWWAN])))
+    if (!loadWebView || [self isImageTagAppended])
+        return;
+    
+    NSString *cachedHeaderImage = [_imageCacheHelper readImageByDbKey:[self getHeaderImageCacheDbKey]];
+    if (cachedHeaderImage)
     {
-        if (loadWebView)
-            loadWebView([self getContent]);
+        NSString *html = [self appendHeaderImageTag];
+        [self injectCachedImagesToHtmlAndReload:html loadWebView:loadWebView];
     }
     else
     {
-        NSString *locale = _contentLocale.length == 0 ? @"en" : _contentLocale;
-        NSString *wikipediaTitle = [self getWikipediaTitleURL];
-        NSString *titleImageLink = [NSString stringWithFormat:@"https://%@.wikipedia.org/w/api.php?action=query&titles=%@&prop=pageimages&format=json&pithumbsize=%lu",
-                                    locale,
-                                    wikipediaTitle,
-                                    (NSInteger) self.view.frame.size.width];
-        NSURL *titleImageURL = [NSURL URLWithString:titleImageLink];
-        NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-        [[session dataTaskWithURL:titleImageURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-            NSString *content = [self getContent];
-            NSString *imageSource = @"";
-            if (((NSHTTPURLResponse *) response).statusCode == 200 && data)
+        if ([self isImagesDownloadingAllowed])
+        {
+            [self fetchHeaderImageUrl:^(NSString *headerImageUrl) {
+                
+                //download header image and save it to cache
+                [_imageCacheHelper fetchSingleImageByURL:headerImageUrl customKey:[self getHeaderImageCacheDbKey] downloadMode:[self getImagesDownloadMode] onlyNow:[self isDownloadImagesOnlyNow] onComplete:^(NSString *imageData) {
+                    
+                    NSString *html = [self appendHeaderImageTag];
+                    [self injectCachedImagesToHtmlAndReload:html loadWebView:loadWebView];
+                }];
+                
+            }];
+        }
+        else
+        {
+            loadWebView(_content);
+            [self printHtmlToDebugFileIfEnabled:_content];
+        }
+    }
+}
+
+- (void)fetchHeaderImageUrl:(void (^)(NSString *headerImageUrl))onComplete
+{
+    NSString *locale = _contentLocale.length == 0 ? @"en" : _contentLocale;
+    NSString *wikipediaTitle = [self getWikipediaTitleURL];
+    NSString *titleImageLink = [NSString stringWithFormat:@"https://%@.wikipedia.org/w/api.php?action=query&titles=%@&prop=pageimages&format=json&pithumbsize=%lu",
+                                locale,
+                                wikipediaTitle,
+                                (NSInteger) self.view.frame.size.width];
+    NSURL *titleImageURL = [NSURL URLWithString:titleImageLink];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[session dataTaskWithURL:titleImageURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSString *headerImageUrl = @"";
+        if (((NSHTTPURLResponse *) response).statusCode == 200 && data)
+        {
+            if (data)
             {
-                if (data)
+                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+                if ([result.allKeys containsObject:@"query"])
                 {
-                    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
-                    if ([result.allKeys containsObject:@"query"])
+                    NSDictionary *queryResult = result[@"query"];
+                    if ([queryResult.allKeys containsObject:@"pages"])
                     {
-                        NSDictionary *queryResult = result[@"query"];
-                        if ([queryResult.allKeys containsObject:@"pages"])
+                        NSDictionary *pagesResult = queryResult[@"pages"];
+                        if (pagesResult.allKeys.count > 0)
                         {
-                            NSDictionary *pagesResult = queryResult[@"pages"];
-                            if (pagesResult.allKeys.count > 0)
+                            NSDictionary *sourceResult = pagesResult[pagesResult.allKeys.firstObject];
+                            if ([sourceResult.allKeys containsObject:@"thumbnail"])
                             {
-                                NSDictionary *sourceResult = pagesResult[pagesResult.allKeys.firstObject];
-                                if ([sourceResult.allKeys containsObject:@"thumbnail"])
-                                {
-                                    NSDictionary *thumbnailResult = sourceResult[@"thumbnail"];
-                                    imageSource = thumbnailResult[@"source"];
-                                }
+                                NSDictionary *thumbnailResult = sourceResult[@"thumbnail"];
+                                headerImageUrl = thumbnailResult[@"source"];
                             }
                         }
                     }
                 }
-                if (imageSource && imageSource.length > 0)
-                {
-                    content = [content stringByReplacingOccurrencesOfString:@"</header>"
-                                                                 withString:[NSString stringWithFormat:@"<img src=%@ style=\"object-fit:cover; object-position:center; height:%dpx;\"></header>", imageSource, kHeaderImageHeight]];
-                }
             }
-            if (loadWebView)
-                loadWebView(content);
-        }] resume];
+            if (headerImageUrl && headerImageUrl.length > 0 && onComplete)
+            {
+                onComplete(headerImageUrl);
+                return;
+            }
+        }
+        onComplete(nil);
+    }] resume];
+}
+
+- (NSString *)appendHeaderImageTag
+{
+    if ([self isImageTagAppended])
+    {
+        return _content;
+    }
+    else
+    {
+        return [_content stringByReplacingOccurrencesOfString:@"</head>" withString:[NSString stringWithFormat:@"<img src=\"%@\" style=\"object-fit:cover; object-position:center; height:%dpx;\"></head>", [self getHeaderImageCacheDbKey], kHeaderImageHeight]];
+    }
+}
+
+- (BOOL)isImageTagAppended
+{
+    return [_content containsString:@"px;\"></head>"];
+}
+
+- (void)injectCachedImagesToHtmlAndReload:(NSString *)html loadWebView:(void(^)(NSString *content))loadWebView
+{
+    [_imageCacheHelper processWholeHTML:html downloadMode:[self getImagesDownloadMode] onlyNow:[self isDownloadImagesOnlyNow] onComplete:^(NSString *htmlWithImages) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _content = htmlWithImages;
+            loadWebView(htmlWithImages);
+            [self printHtmlToDebugFileIfEnabled:htmlWithImages];
+        });
+    }];
+}
+
+- (BOOL) isImagesDownloadingAllowed
+{
+    OADownloadMode *imagesDownloadMode = [self getImagesDownloadMode];
+    return [self isDownloadImagesOnlyNow] ||
+        ([imagesDownloadMode isDownloadViaAnyNetwork] && [[AFNetworkReachabilityManager sharedManager] isReachable]) ||
+        ([imagesDownloadMode isDownloadOnlyViaWifi] && [[AFNetworkReachabilityManager sharedManager] isReachableViaWiFi]);
+}
+
+- (NSString *)getHeaderImageCacheDbKey
+{
+    return [_imageCacheHelper getDbKeyByLink:[self getUrl].absoluteString];
+}
+
+- (void) printHtmlToDebugFileIfEnabled:(NSString *)content
+{
+    if ([OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class].isEnabled)
+    {
+        NSString *wikiFolder = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:@"Wiki"];
+        BOOL isDir = YES;
+        if (![[NSFileManager defaultManager] fileExistsAtPath:wikiFolder isDirectory:&isDir])
+            [[NSFileManager defaultManager] createDirectoryAtPath:wikiFolder withIntermediateDirectories:YES attributes:nil error:nil];
+        
+        NSString *filePath = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:@"Wiki/WikiDebug.html"];
+        [content writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
     }
 }
 

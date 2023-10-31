@@ -103,6 +103,7 @@
 #import "OAAppDelegate.h"
 #import "OADirectionAppearanceViewController.h"
 #import "OACarPlayMapDashboardViewController.h"
+#import "OAWikipediaLanguagesViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

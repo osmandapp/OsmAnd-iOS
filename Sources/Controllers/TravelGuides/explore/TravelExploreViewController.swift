@@ -484,7 +484,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                 if let imageUrl = item.iconName, let downloadMode = OsmAndApp.swiftInstance().data.travelGuidesImagesDownloadMode {
                     
                     //fetch image from db. if not found -  start async downloading.
-                    imagesCacheHelper?.fetchSingleImage(byURL: imageUrl, downloadMode: downloadMode, onlyNow: false) { imageAsBase64 in
+                    imagesCacheHelper?.fetchSingleImage(byURL: imageUrl, customKey: nil, downloadMode: downloadMode, onlyNow: false) { imageAsBase64 in
                         DispatchQueue.main.async {
                             
                             if let imageAsBase64, !imageAsBase64.isEmpty {
@@ -561,7 +561,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                 if let imageUrl = item.iconName, let downloadMode = OsmAndApp.swiftInstance().data.travelGuidesImagesDownloadMode {
                     
                     //fetch image from db. if not found - start async downloading
-                    imagesCacheHelper?.fetchSingleImage(byURL: imageUrl, downloadMode: downloadMode, onlyNow: false) { imageAsBase64 in
+                    imagesCacheHelper?.fetchSingleImage(byURL: imageUrl, customKey: nil, downloadMode: downloadMode, onlyNow: false) { imageAsBase64 in
                         DispatchQueue.main.async {
                             
                             if let imageAsBase64, !imageAsBase64.isEmpty {

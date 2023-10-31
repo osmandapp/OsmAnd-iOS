@@ -64,7 +64,7 @@
 }
 
 
-- (void) processWholeHTML:(NSString *)html downloadMode:(OADownloadMode *)downloadMode onlyNow:(BOOL)onlyNow onComplete:(void (^)(NSString *imageData))onComplete
+- (void) processWholeHTML:(NSString *)html downloadMode:(OADownloadMode *)downloadMode onlyNow:(BOOL)onlyNow onComplete:(void (^)(NSString *htmlWithImages))onComplete
 {
     NSArray<NSString *> *imageLinks = [self extractImagesLinksFromHtml:html];
     if (imageLinks.count > 0)
@@ -75,7 +75,7 @@
         {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                 
-                [self fetchSingleImageByURL:link downloadMode:downloadMode onlyNow:onlyNow onComplete:^(NSString *imageData) {
+                [self fetchSingleImageByURL:link customKey:nil downloadMode:downloadMode onlyNow:onlyNow onComplete:^(NSString *imageData) {
                     
                     downloadsCount -= 1;
                     if (downloadsCount == 0)
@@ -96,9 +96,9 @@
 }
 
 
-- (void) fetchSingleImageByURL:(NSString *)url downloadMode:(OADownloadMode *)downloadMode onlyNow:(BOOL)onlyNow onComplete:(void (^)(NSString *imageData))onComplete
+- (void) fetchSingleImageByURL:(NSString *)url customKey:(NSString *)customKey downloadMode:(OADownloadMode *)downloadMode onlyNow:(BOOL)onlyNow onComplete:(void (^)(NSString *imageData))onComplete
 {
-    NSString *key = [self getDbKeyByLink:url];
+    NSString *key = customKey ? customKey : [self getDbKeyByLink:url];
     NSString *savedImageAsBase64 = [self readImageByDbKey:key];
     if (savedImageAsBase64)
     {
@@ -108,7 +108,7 @@
     {
         if ([self isDownloadingAllowedFor:downloadMode onlyNow:onlyNow])
         {
-            [self downloadImage:url onComplete:^(NSString *imageData) {
+            [self downloadImage:url customKey:key onComplete:^(NSString *imageData) {
                 onComplete(imageData);
             }];
         }
@@ -176,7 +176,7 @@
     return NO;
 }
 
-- (void) downloadImage:(NSString *)url onComplete:(void (^)(NSString *imageData))onComplete
+- (void) downloadImage:(NSString *)url customKey:(NSString *)customKey onComplete:(void (^)(NSString *imageData))onComplete
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSData *imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
@@ -188,7 +188,7 @@
                 NSString *base64String = [OAImageToStringConverter imageToBase64String:image];
                 if (base64String)
                 {
-                    NSString *dbKey = [self getDbKeyByLink:url];
+                    NSString *dbKey = customKey ? customKey : [self getDbKeyByLink:url];
                     [self saveImage:base64String dbKey:dbKey];
                     
                     if (onComplete)
@@ -209,7 +209,7 @@
 
 - (NSString *) getDbKeyByLink:(NSString *)url
 {
-    return [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    return url;
 }
 
 - (void) createDB

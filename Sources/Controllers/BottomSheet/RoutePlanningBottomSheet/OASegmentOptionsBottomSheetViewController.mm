@@ -11,6 +11,7 @@
 #import "OASegmentedControlCell.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAApplicationMode.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
@@ -56,8 +57,9 @@
     self.tableView.sectionHeaderHeight = 16.;
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     
-    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_betw_points_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_betw_points_descr") font:kHeaderDescriptionFont textColor:UIColor.textColorSecondary isBigTitle:NO parentViewWidth:self.view.frame.size.width];
     self.tableView.tableHeaderView = _tableHeaderView;
+    self.tableView.tableHeaderView.backgroundColor = UIColor.viewBgColor;
     
     [self.rightButton removeFromSuperview];
     [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_routes"]];
@@ -86,7 +88,7 @@
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"routing_profile_straightline"),
             @"img" : @"ic_custom_straight_line",
-            @"tintColor" : UIColorFromRGB(color_primary_purple),
+            @"tintColor" : UIColor.iconColorActive,
             @"key" : @"straight_line_mode"
         }
     ]];
@@ -258,12 +260,12 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentedControlCell getCellIdentifier] owner:self options:nil];
             cell = (OASegmentedControlCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
-            cell.segmentedControl.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.1];
-            cell.segmentedControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
+            cell.segmentedControl.backgroundColor = [UIColor.buttonBgColorPrimary colorWithAlphaComponent:.1];
+            cell.segmentedControl.selectedSegmentTintColor = UIColor.buttonBgColorPrimary;
 
             UIFont *font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
-            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor, NSFontAttributeName : font} forState:UIControlStateSelected];
-            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple), NSFontAttributeName : font} forState:UIControlStateNormal];
+            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.buttonTextColorPrimary, NSFontAttributeName : font} forState:UIControlStateSelected];
+            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.buttonTextColorSecondary, NSFontAttributeName : font} forState:UIControlStateNormal];
         }
         if (cell)
         {
@@ -283,8 +285,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
-            cell.backgroundColor = UIColor.clearColor;
-            cell.textColorNormal = UIColor.blackColor;
+            cell.textColorNormal = UIColor.textColorPrimary;
         }
         if (cell)
         {
@@ -303,7 +304,7 @@
                 cell.iconView.image = [UIImage imageNamed:item[@"img"]];
             }
             cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
-            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
+            cell.separatorView.backgroundColor = UIColor.separatorColor;
         }
         return cell;
     }

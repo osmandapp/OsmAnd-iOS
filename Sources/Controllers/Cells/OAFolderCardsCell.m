@@ -8,7 +8,7 @@
 
 #import "OAFolderCardsCell.h"
 #import "OAFolderCardCollectionViewCell.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAUtilities.h"
 #import "Localization.h"
 
@@ -52,7 +52,7 @@
         NSString *sizeString;
         NSNumber *size = sizes[i];
         sizeString = size ? [NSString stringWithFormat:@"%i", size.intValue] : @"";
-        UIColor *color = colors[i] ? colors[i] : UIColorFromRGB(color_primary_purple);
+        UIColor *color = colors[i] ? colors[i] : UIColor.textColorActive;
             
         [_data addObject:@{
             @"title" : values[i],
@@ -65,7 +65,7 @@
     [_data addObject:@{
         @"title" : addButtonTitle,
         @"size" : @"",
-        @"color" : UIColorFromRGB(color_primary_purple),
+        @"color" : UIColor.iconColorActive,
         @"img" : @"ic_custom_add",
         @"key" : @"work"}];
 }
@@ -149,16 +149,18 @@
         destCell.descLabel.text = item[@"size"];
         destCell.imageView.tintColor = item[@"color"];
         [destCell.imageView setImage:[UIImage templateImageNamed:item[@"img"]]];
+        destCell.backgroundColor = UIColor.groupBgColor;
+        destCell.titleLabel.textColor = UIColor.textColorActive;
         
         if (indexPath.row == _selectedItemIndex)
         {
             destCell.layer.borderWidth = 2;
-            destCell.layer.borderColor = UIColorFromRGB(color_primary_purple).CGColor;
+            destCell.layer.borderColor = UIColor.iconColorActive.CGColor;
         }
         else
         {
             destCell.layer.borderWidth = 1;
-            destCell.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
+            destCell.layer.borderColor = UIColor.iconColorDisabled.CGColor;
         }
     }
     return cell;
@@ -170,7 +172,7 @@
                           delay:0
                         options:(UIViewAnimationOptionAllowUserInteraction)
                      animations:^{
-        [cell setBackgroundColor:UIColorFromRGB(color_tint_gray)];
+        [cell setBackgroundColor:UIColor.iconColorDisabled];
     }
                      completion:nil];
 }
@@ -181,7 +183,7 @@
                           delay:0
                         options:(UIViewAnimationOptionAllowUserInteraction)
                      animations:^{
-        [cell setBackgroundColor:UIColor.whiteColor];
+        [cell setBackgroundColor:UIColor.groupBgColor];
     }
                      completion:nil];
 }

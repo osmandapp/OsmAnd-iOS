@@ -8,7 +8,7 @@
 
 #import "OAWeatherLayerSettingsViewController.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
@@ -604,7 +604,7 @@
         {
             cell.titleLabel.text = item[@"title"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"image"]];
-            cell.leftIconView.tintColor = _layerEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
+            cell.leftIconView.tintColor = _layerEnabled ? UIColor.iconColorSelected : UIColor.iconColorDisabled;
 
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView setOn:_layerEnabled];
@@ -621,7 +621,7 @@
             cell = (OATextLineViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.textView.textAlignment = NSTextAlignmentCenter;
-            cell.textView.textColor = UIColorFromRGB(color_text_footer);
+            cell.textView.textColor = UIColor.textColorSecondary;
             cell.backgroundColor = UIColor.clearColor;
         }
         if (cell)
@@ -657,9 +657,9 @@
                 else
                     cell.accessoryType = UITableViewCellAccessoryNone;
             }
-            cell.accessoryView.tintColor = isUnitsCell ? UIColorFromRGB(color_tint_gray) : UIColorFromRGB(color_primary_purple);
+            cell.accessoryView.tintColor = isUnitsCell ? UIColor.iconColorDefault: UIColor.iconColorActive;
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"image"]];
-            cell.leftIconView.tintColor = isSelected ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
+            cell.leftIconView.tintColor = isSelected ? UIColor.iconColorSelected : UIColor.iconColorDisabled;
             [cell leftIconVisibility:!isUnitsCell];
         }
         return cell;
@@ -672,7 +672,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleSliderTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleSliderTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.valueLabel.textColor = UIColorFromRGB(color_text_footer);
+            cell.valueLabel.textColor = UIColor.textColorSecondary;
         }
         if (cell)
         {
@@ -693,7 +693,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
         }
-        cell.dividerColor = UIColorFromRGB(color_tint_gray);
+        cell.dividerColor = UIColor.separatorColor;
         CGFloat leftInset = [item[@"inset"] floatValue];
         cell.dividerInsets = UIEdgeInsetsMake(0., leftInset, 0., 0.);
         cell.dividerHight = _dividerHeight;

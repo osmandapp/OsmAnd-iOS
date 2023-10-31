@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -101,7 +102,7 @@
                     </constraints>
                 </view>
                 <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cZ1-QP-9LE" userLabel="doveView">
-                    <rect key="frame" x="334" y="60" width="64" height="42"/>
+                    <rect key="frame" x="334" y="64" width="64" height="42"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fzm-by-GwC">
                             <rect key="frame" x="0.0" y="0.0" width="64" height="42"/>
@@ -124,7 +125,7 @@
                     </constraints>
                 </view>
                 <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7MD-Wz-F5G" userLabel="navbar">
-                    <rect key="frame" x="0.0" y="44" width="414" height="58"/>
+                    <rect key="frame" x="0.0" y="48" width="414" height="58"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="erB-WB-vq9">
                             <rect key="frame" x="190.5" y="27" width="33" height="20.5"/>
@@ -151,7 +152,7 @@
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hwf-gF-YvT" userLabel="Status Bar Background">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="0.0"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="viewBgColor"/>
                         </view>
                         <view contentMode="scaleToFill" id="jw8-H4-X89" userLabel="Content Container">
                             <rect key="frame" x="0.0" y="0.0" width="417" height="338"/>
@@ -159,11 +160,12 @@
                             <subviews>
                                 <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="zFE-tM-QGM">
                                     <rect key="frame" x="0.0" y="0.0" width="417" height="4"/>
+                                    <color key="tintColor" name="iconColorActive"/>
                                 </progressView>
                                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YKP-RZ-ZK0" userLabel="Slider">
                                     <rect key="frame" x="197" y="6" width="32" height="3"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" red="0.79607843140000001" green="0.78039215689999997" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" name="separatorColor"/>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yao-ZD-271" userLabel="Top Header Container">
                                     <rect key="frame" x="0.0" y="12" width="417" height="49.5"/>
@@ -178,13 +180,13 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vxl-Cd-I6M" userLabel="Title">
                                             <rect key="frame" x="70" y="3" width="273" height="20.5"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                            <nil key="textColor"/>
+                                            <color key="textColor" name="textColorPrimary"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2s5-50-fXV" userLabel="Description">
                                             <rect key="frame" x="70" y="26.5" width="273" height="18"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                            <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="textColor" name="textColorSecondary"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1a9-hh-9hN" userLabel="Expand Button">
@@ -193,16 +195,16 @@
                                                 <constraint firstAttribute="height" constant="30" id="PwD-iN-0X4"/>
                                                 <constraint firstAttribute="width" constant="30" id="dZp-V4-kD5"/>
                                             </constraints>
-                                            <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="tintColor" name="iconColorActive"/>
                                             <state key="normal" image="ic_custom_arrow_up.png">
-                                                <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="titleColor" name="textColorActive"/>
                                             </state>
                                             <connections>
                                                 <action selector="onExpandButtonPressed:" destination="-1" eventType="touchUpInside" id="eSt-PP-fB7"/>
                                             </connections>
                                         </button>
                                     </subviews>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="backgroundColor" name="groupBgColor"/>
                                     <constraints>
                                         <constraint firstItem="vxl-Cd-I6M" firstAttribute="leading" secondItem="Aod-ON-ikl" secondAttribute="trailing" constant="20" id="LcY-WO-2nc"/>
                                         <constraint firstItem="Aod-ON-ikl" firstAttribute="centerY" secondItem="yao-ZD-271" secondAttribute="centerY" id="OEc-6A-BWl"/>
@@ -220,10 +222,12 @@
                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" scrollEnabled="NO" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="60" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="kp4-4r-XHO">
                                     <rect key="frame" x="0.0" y="67" width="417" height="268"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" name="viewBgColor"/>
+                                    <color key="tintColor" name="iconColorActive"/>
+                                    <color key="separatorColor" name="separatorColor"/>
                                 </tableView>
                             </subviews>
-                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="groupBgColor"/>
                             <constraints>
                                 <constraint firstAttribute="trailing" secondItem="zFE-tM-QGM" secondAttribute="trailing" id="3AA-5m-PrD"/>
                                 <constraint firstItem="yao-ZD-271" firstAttribute="leading" secondItem="jw8-H4-X89" secondAttribute="leading" id="I8v-S9-lJT"/>
@@ -239,7 +243,7 @@
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VkI-Al-pSd" userLabel="Separator">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
-                                    <color key="backgroundColor" red="0.79607843140000001" green="0.78039215689999997" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" name="separatorColor"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="OgF-qy-IiU"/>
                                     </constraints>
@@ -255,7 +259,7 @@
                                             </constraints>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                             <state key="normal" title="Options">
-                                                <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="titleColor" name="textColorActive"/>
                                             </state>
                                             <connections>
                                                 <action selector="onOptionsButtonPressed:" destination="-1" eventType="touchUpInside" id="6vT-u7-fGy"/>
@@ -270,7 +274,7 @@
                                                         <constraint firstAttribute="width" constant="30" id="CZT-0E-coL"/>
                                                         <constraint firstAttribute="height" constant="30" id="s69-nV-pwI"/>
                                                     </constraints>
-                                                    <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="tintColor" name="iconColorActive"/>
                                                     <state key="normal" image="ic_custom_undo.png"/>
                                                     <connections>
                                                         <action selector="onUndoButtonPressed:" destination="-1" eventType="touchUpInside" id="jqm-Vw-LxM"/>
@@ -282,7 +286,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="L3S-DU-QsV"/>
                                                         <constraint firstAttribute="width" constant="30" id="lHU-3X-sPK"/>
                                                     </constraints>
-                                                    <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="tintColor" name="iconColorActive"/>
                                                     <state key="normal" image="ic_custom_redo.png"/>
                                                     <connections>
                                                         <action selector="onRedoButtonPressed:" destination="-1" eventType="touchUpInside" id="a8U-Rh-ZvR"/>
@@ -307,7 +311,7 @@
                                             </constraints>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                             <state key="normal" title="Add point">
-                                                <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="titleColor" name="textColorActive"/>
                                             </state>
                                             <connections>
                                                 <action selector="onAddPointPressed:" destination="-1" eventType="touchUpInside" id="rGr-lp-LMP"/>
@@ -321,7 +325,7 @@
                                 </stackView>
                             </subviews>
                             <viewLayoutGuide key="safeArea" id="lUe-XT-GXT"/>
-                            <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            <color key="backgroundColor" name="viewBgColor"/>
                             <constraints>
                                 <constraint firstItem="VkI-Al-pSd" firstAttribute="leading" secondItem="rjd-Gq-WEk" secondAttribute="leading" id="4s2-b6-JkR"/>
                                 <constraint firstAttribute="trailingMargin" secondItem="vno-eG-MGA" secondAttribute="trailing" constant="8" id="A8e-0K-65B"/>
@@ -333,7 +337,7 @@
                         </view>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="eW6-l7-OW4"/>
-                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" name="viewBgColor"/>
                 </view>
                 <view contentMode="scaleToFill" id="rgr-DA-wDw" userLabel="Landscape track info view">
                     <rect key="frame" x="0.0" y="228" width="416" height="74"/>
@@ -341,6 +345,7 @@
                     <subviews>
                         <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="7UN-mf-MrJ">
                             <rect key="frame" x="0.0" y="0.0" width="416" height="4"/>
+                            <color key="tintColor" name="iconColorActive"/>
                         </progressView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tEs-WU-Yby" userLabel="Left Container Background Button">
                             <rect key="frame" x="0.0" y="0.0" width="140" height="74"/>
@@ -364,9 +369,9 @@
                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="30" id="j0A-eo-FaY"/>
                                 <constraint firstAttribute="width" constant="30" id="mwN-G5-zE2"/>
                             </constraints>
-                            <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="tintColor" name="iconColorActive"/>
                             <state key="normal" image="ic_custom_arrow_up.png">
-                                <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="titleColor" name="textColorActive"/>
                             </state>
                             <connections>
                                 <action selector="onExpandButtonPressed:" destination="-1" eventType="touchUpInside" id="BFW-W4-P1b"/>
@@ -378,7 +383,7 @@
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="18" id="cg0-BG-xlw"/>
                             </constraints>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                            <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="textColor" name="textColorSecondary"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yyL-Uz-qJh">
@@ -387,19 +392,19 @@
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="5qV-mE-5MF"/>
                             </constraints>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                            <nil key="textColor"/>
+                            <color key="textColor" name="textColorPrimary"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1uP-Yj-PLm" userLabel="Top separator">
                             <rect key="frame" x="0.0" y="0.0" width="416" height="1"/>
-                            <color key="backgroundColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" name="separatorColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="S8z-8O-49J" userLabel="height = 0,5"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1PO-25-egA" userLabel="Side separator">
                             <rect key="frame" x="139" y="1" width="1" height="73"/>
-                            <color key="backgroundColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" name="separatorColor"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="1" id="oyg-9q-vCx" userLabel="width = 0,5"/>
                             </constraints>
@@ -414,7 +419,7 @@
                                     </constraints>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                     <state key="normal" title="Options">
-                                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="titleColor" name="textColorActive"/>
                                     </state>
                                     <connections>
                                         <action selector="onOptionsButtonPressed:" destination="-1" eventType="touchUpInside" id="Au5-6r-huc"/>
@@ -429,7 +434,7 @@
                                                 <constraint firstAttribute="width" constant="30" id="cgO-t2-q39"/>
                                                 <constraint firstAttribute="height" constant="30" id="sBe-tk-0x6"/>
                                             </constraints>
-                                            <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="tintColor" name="iconColorActive"/>
                                             <state key="normal" image="ic_custom_undo.png"/>
                                             <connections>
                                                 <action selector="onUndoButtonPressed:" destination="-1" eventType="touchUpInside" id="BX1-3Z-fMb"/>
@@ -441,7 +446,7 @@
                                                 <constraint firstAttribute="height" constant="30" id="3DT-rb-ubG"/>
                                                 <constraint firstAttribute="width" constant="30" id="WWv-8d-6rx"/>
                                             </constraints>
-                                            <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="tintColor" name="iconColorActive"/>
                                             <state key="normal" image="ic_custom_redo.png"/>
                                             <connections>
                                                 <action selector="onRedoButtonPressed:" destination="-1" eventType="touchUpInside" id="WHl-JB-HKt"/>
@@ -465,7 +470,7 @@
                                     </constraints>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                     <state key="normal" title="Add point">
-                                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="titleColor" name="textColorActive"/>
                                     </state>
                                     <connections>
                                         <action selector="onAddPointPressed:" destination="-1" eventType="touchUpInside" id="20t-7H-eR4"/>
@@ -474,7 +479,7 @@
                             </subviews>
                         </stackView>
                     </subviews>
-                    <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    <color key="backgroundColor" name="viewBgColor"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="7UN-mf-MrJ" secondAttribute="trailing" id="7rF-fa-idS"/>
                         <constraint firstItem="1uP-Yj-PLm" firstAttribute="leading" secondItem="rgr-DA-wDw" secondAttribute="leading" id="9fN-XN-Yhr"/>
@@ -502,7 +507,7 @@
                     </constraints>
                 </view>
                 <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2JT-lW-dRA" userLabel="closeVIew">
-                    <rect key="frame" x="16" y="60" width="64" height="42"/>
+                    <rect key="frame" x="16" y="64" width="64" height="42"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="onx-Gz-iEg">
                             <rect key="frame" x="0.0" y="0.0" width="64" height="42"/>
@@ -551,5 +556,26 @@
         <image name="ic_custom_straight_line.png" width="30" height="30"/>
         <image name="ic_custom_undo.png" width="30" height="30"/>
         <image name="ic_navbar_close.png" width="28" height="28"/>
+        <namedColor name="groupBgColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="iconColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="separatorColor">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorPrimary">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorSecondary">
+            <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="viewBgColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

@@ -12,7 +12,6 @@
 #import "OAAppSettings.h"
 #import "OALog.h"
 #import "OADefaultFavorite.h"
-#import <UIAlertView+Blocks.h>
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
 #import "OAMapViewController.h"

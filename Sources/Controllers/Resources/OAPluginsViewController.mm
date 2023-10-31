@@ -25,7 +25,7 @@
 #define kDefaultPluginsSection 0
 #define kCustomPluginsSection 1
 
-@interface OAPluginsViewController () <UIAlertViewDelegate, OASubscriptionBannerCardViewDelegate, OAPluginDetailsDelegate>
+@interface OAPluginsViewController () <OASubscriptionBannerCardViewDelegate, OAPluginDetailsDelegate>
 
 @end
 

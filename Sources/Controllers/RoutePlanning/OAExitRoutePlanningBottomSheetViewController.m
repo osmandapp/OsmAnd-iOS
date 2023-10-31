@@ -9,7 +9,7 @@
 #import "OAExitRoutePlanningBottomSheetViewController.h"
 
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OATextLineViewCell.h"
 #import "OAFilledButtonCell.h"
 
@@ -106,16 +106,16 @@
     [_data addObject: @{
         @"type" : [OAFilledButtonCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_exit"),
-        @"buttonColor" : UIColorFromRGB(color_button_gray_background),
-        @"textColor" : UIColorFromRGB(color_primary_purple),
+        @"buttonColor" : UIColor.buttonBgColorSecondary,
+        @"textColor" : UIColor.buttonTextColorSecondary,
         @"action": @"exitButtonPressed"
     }];
 
     [_data addObject: @{
         @"type" : [OAFilledButtonCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_save"),
-        @"buttonColor" : UIColorFromRGB(color_primary_purple),
-        @"textColor" : UIColor.whiteColor,
+        @"buttonColor" : UIColor.buttonBgColorPrimary,
+        @"textColor" : UIColor.buttonTextColorPrimary,
         @"action": @"saveButtonPressed"
     }];
 }
@@ -171,7 +171,7 @@
         if (cell)
         {
             cell.backgroundColor = UIColor.clearColor;
-            [cell.textView setTextColor:[UIColor blackColor]];
+            [cell.textView setTextColor:[UIColor textColorSecondary]];
             [cell.textView setText:item[@"title"]];
         }
         return cell;

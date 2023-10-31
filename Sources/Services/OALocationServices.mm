@@ -23,6 +23,7 @@
 #import "OALocationSimulation.h"
 #import "OAWaypointHelper.h"
 #import "OASavingTrackHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAAverageSpeedComputer.h"
 
 #import <FormatterKit/TTTLocationFormatter.h>
@@ -778,11 +779,9 @@
 
 + (void) showDeniedAlert
 {
-    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"loc_access_denied")
-                                message:OALocalizedString(@"loc_access_denied_desc")
-                               delegate:nil
-                      cancelButtonTitle:OALocalizedString(@"shared_string_ok")
-                      otherButtonTitles:nil] show];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"loc_access_denied") message:OALocalizedString(@"loc_access_denied_desc") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+    [UIApplication.sharedApplication.mainWindow.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
 - (NSString *) stringFromBearingToLocation:(CLLocation *)destinationLocation

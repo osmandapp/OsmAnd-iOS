@@ -7,7 +7,7 @@
 //
 
 #import "OAImageTextViewCell.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAImageTextViewCell
 
@@ -16,7 +16,7 @@
     [super awakeFromNib];
     _descView.textContainerInset = UIEdgeInsetsZero;
     _descView.textContainer.lineFragmentPadding = 0;
-    NSDictionary *linkAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
+    NSDictionary *linkAttributes = @{NSForegroundColorAttributeName: UIColor.textColorActive,
                                      NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]};
     _descView.linkTextAttributes = linkAttributes;
 

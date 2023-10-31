@@ -13,7 +13,6 @@
 
 #import <CarPlay/CarPlay.h>
 
-API_AVAILABLE(ios(12.0))
 @protocol OACarPlayDashboardDelegate <NSObject>
 
 - (void) onMapControlPressed:(CPPanDirection)panDirection;
@@ -30,9 +29,11 @@ API_AVAILABLE(ios(12.0))
 
 @class CPInterfaceController;
 
-API_AVAILABLE(ios(12.0))
 @interface OACarPlayDashboardInterfaceController : OABaseCarPlayInterfaceController <OACarPlayMapViewDelegate>
 
 @property (nonatomic, weak) id<OACarPlayDashboardDelegate> delegate;
+
+- (void)openSearch;
+- (void)openNavigation;
 
 @end

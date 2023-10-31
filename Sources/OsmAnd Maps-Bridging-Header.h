@@ -21,6 +21,7 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OAUtilities.h"
 #import "OAQuickActionRegistry.h"
+#import "OAChoosePlanHelper.h"
 #import "OsmAndApp.h"
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
@@ -28,6 +29,7 @@
 #import "OAWidgetsVisibilityHelper.h"
 #import "OADistanceAndDirectionsUpdater.h"
 #import "OAHistoryViewController.h"
+#import "OAAppDelegate.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -77,8 +79,14 @@
 #import "OAOsmAccountSettingsViewController.h"
 #import "OAOsmLoginMainViewController.h"
 #import "OACopyProfileBottomSheetViewControler.h"
+#import "OACarPlayMapViewController.h"
+#import "OACarPlayDashboardInterfaceController.h"
+#import "OACarPlayActiveViewController.h"
+#import "OACarPlayPurchaseViewController.h"
+#import "OAAppDelegate.h"
 #import "OADirectionAppearanceViewController.h"
 #import "OAEditorViewController.h"
+#import "OACarPlayMapDashboardViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -94,3 +102,8 @@
 
 // Apple
 #import <SafariServices/SafariServices.h>
+
+// Other
+#import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "SceneDelegate.h"
+#import "OADayNightHelper.h"

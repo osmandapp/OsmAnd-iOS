@@ -17,6 +17,7 @@
 #import "OAMapViewController.h"
 #import "OASwitchTableViewCell.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAColorsTableViewCell.h"
 #import "OAResourcesUIHelper.h"
 #import "OARootViewController.h"
@@ -486,7 +487,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
             NSString *imgName = [self isContourLinesOn] ? @"ic_custom_show.png" : @"ic_custom_hide.png";
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];
-            cell.leftIconView.tintColor = [self isContourLinesOn] ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
+            cell.leftIconView.tintColor = [self isContourLinesOn] ? UIColor.iconColorSelected : UIColor.iconColorDisabled;
 
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView setOn:[self isContourLinesOn]];
@@ -620,8 +621,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
             cell.titleView.text = item[@"title"];
             cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-            cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.titleView.textColor = UIColor.textColorActive;
+            cell.iconView.tintColor = UIColor.iconColorActive;
         }
         return cell;
     }
@@ -647,7 +648,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if ([view isKindOfClass:[UITableViewHeaderFooterView class]])
     {
         UITableViewHeaderFooterView *v = (UITableViewHeaderFooterView *) view;
-        v.textLabel.textColor = UIColorFromRGB(color_text_footer);
+        v.textLabel.textColor = UIColor.textColorSecondary;
     }
 }
 
@@ -656,7 +657,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if ([view isKindOfClass:[UITableViewHeaderFooterView class]])
     {
         UITableViewHeaderFooterView *v = (UITableViewHeaderFooterView *) view;
-        v.textLabel.textColor = UIColorFromRGB(color_text_footer);
+        v.textLabel.textColor = UIColor.textColorSecondary;
     }
 }
 

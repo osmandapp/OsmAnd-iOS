@@ -16,7 +16,7 @@
 #import "OACustomPickerTableViewCell.h"
 #import "OAValueTableViewCell.h"
 #import "OARootViewController.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAMapLayers.h"
 #import "OATerrainMapLayer.h"
 
@@ -200,8 +200,8 @@ static const NSInteger kMaxZoomPickerRow = 2;
 
 - (void)updateApplyButton
 {
-    _applyButton.backgroundColor = _isValueChange ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_disabled_light);
-    [_applyButton setTitleColor: _isValueChange ? [UIColor whiteColor] : [UIColor lightGrayColor] forState:UIControlStateNormal];
+    _applyButton.backgroundColor = _isValueChange ? UIColor.buttonBgColorPrimary: UIColor.buttonBgColorSecondary;
+    [_applyButton setTitleColor: _isValueChange ? [UIColor buttonTextColorPrimary] : [UIColor lightGrayColor] forState:UIControlStateNormal];
     _applyButton.userInteractionEnabled = _isValueChange;
 }
 
@@ -441,7 +441,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleSliderTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleSliderTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.sliderView.minimumTrackTintColor = UIColor.systemBlueColor;
+            cell.sliderView.minimumTrackTintColor = UIColor.iconColorActive;
         }
         if (cell)
         {
@@ -462,7 +462,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
             cell = (OAValueTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.valueLabel.textColor = UIColor.blackColor;
+            cell.valueLabel.textColor = UIColor.textColorPrimary;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)

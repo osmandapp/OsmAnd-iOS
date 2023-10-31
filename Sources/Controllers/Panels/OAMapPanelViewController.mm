@@ -88,7 +88,6 @@
 #import "OASearchUICore.h"
 #import "OASearchPhrase.h"
 #import "OAQuickSearchHelper.h"
-#import <UIAlertView+Blocks.h>
 #import "OAEditPointViewController.h"
 #import "OARoutePlanningHudViewController.h"
 #import "OAPOIUIFilter.h"
@@ -295,7 +294,7 @@ typedef enum
     [super viewDidAppear:animated];
     
     [self.targetMenuView setNavigationController:self.navigationController];
-
+    
     BOOL carPlayActive = OsmAndApp.instance.carPlayActive;
     if ([_mapViewController parentViewController] != self && !carPlayActive)
         [self doMapRestore];
@@ -1917,12 +1916,18 @@ typedef enum
         }
         else
         {
-            [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_add_destination") message:OALocalizedString(@"cannot_add_marker_desc") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil
-              ] show];
+            [self showDistinationAlert];
         }
     }
     
     [self hideTargetPointMenu];
+}
+
+- (void)showDistinationAlert
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"cannot_add_destination") message:OALocalizedString(@"cannot_add_marker_desc") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void) targetPointParking
@@ -2821,7 +2826,7 @@ typedef enum
     [self closeDashboard];
     [self closeRouteInfoWithTopControlsVisibility:NO bottomsControlHeight:nil onComplete:nil];
     
-    [UIApplication.sharedApplication.keyWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    [UIApplication.sharedApplication.mainWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
@@ -2856,7 +2861,7 @@ typedef enum
     [_mapViewController hideContextPinMarker];
     [self closeDashboard];
     [self closeRouteInfo];
-    [UIApplication.sharedApplication.keyWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    [UIApplication.sharedApplication.mainWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
@@ -3828,11 +3833,10 @@ typedef enum
 
 - (void) onCarPlayConnected
 {
-    if (_carPlayActiveController && _carPlayActiveController.presentingViewController == self)
+    if (_carPlayActiveController)
         return;
     _carPlayActiveController = [[OACarPlayActiveViewController alloc] init];
     _carPlayActiveController.messageText = OALocalizedString(@"carplay_active_message");
-    
     [self addChildViewController:_carPlayActiveController];
     [self.view insertSubview:_carPlayActiveController.view atIndex:0];
 }
@@ -3846,6 +3850,25 @@ typedef enum
         onComplete();
     if (_routingHelper.isFollowingMode)
         [self startNavigation];
+}
+
+- (void)detachFromCarPlayWindow
+{
+    if (_mapViewController)
+    {
+        [_mapViewController.mapView suspendRendering];
+        
+        [_mapViewController removeFromParentViewController];
+        [_mapViewController.view removeFromSuperview];
+        
+        OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
+        
+        [mapPanel addChildViewController:_mapViewController];
+        [mapPanel.view insertSubview:_mapViewController.view atIndex:0];
+        _mapViewController.view.frame = mapPanel.view.frame;
+        _mapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [_mapViewController.mapView resumeRendering];
+    }
 }
 
 #pragma mark - OAGpxWptEditingHandlerDelegate

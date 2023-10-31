@@ -1255,7 +1255,7 @@
 "units_of_speed" = "Unități de viteză";
 "allow_3D_view" = "Vedere 2.5D";
 "do_not_rotate" = "Nu rotiți";
-"settings_app_theme" = "Tema app";
+"settings_app_theme" = "Tema aplicației";
 "map_settings_available_srtm_maps_descr" = "Hărți suplimentare sunt necesare pentru a vedea Hillshade pe hartă";
 "map_settings_line_density_slowdown_warning" = "Densitatea mare a liniilor poate încetini redarea hărților";
 "map_settings_contour_zoom_level_descr" = "Selectați nivelul de zoom, de la care vor fi afișate curbele (izolinii)";
@@ -1844,7 +1844,7 @@
 "osm_editing_settings_descr" = "Setările acestui plugin sunt globale și se aplică tuturor profilurilor.";
 "osm_failed_uploads" = "Eșuată";
 "osm_succsessful_uploads" = "Succes";
-"osm_delete_confirmation_descr" = "Sunteți sigur că doriți să ștergeți acest POI?";
+"osm_delete_confirmation_descr" = "Sunteți sigur că doriți să ștergeți acest punct de interes?";
 "osm_upload_no_internet" = "Vă rugăm să verificați conexiunea la internet și să încercați din nou.";
 "unsaved_changes_will_be_lost" = "Orice modificări nesalvate vor fi pierdute. Continuați\?";
 "osm_upload_failed_descr" = "Vă rugăm să verificați datele de conectare și conexiunea la internet și să încercați din nou.";
@@ -2683,7 +2683,7 @@
 "routing_attr_prefer_hiking_routes_name" = "Preferă traseele de drumeție";
 "routing_attr_prefer_tactile_paving_name" = "Preferă pavaj tactil";
 "routing_attr_freeride_policy_prefer_offpiste_name" = "Preferă în afara pârtiei";
-"rendering_attr_showWaterwayTunnels_description" = "Nu ascundeți tunelurile de căi navigabile";
+"rendering_attr_showWaterwayTunnels_description" = "Nu ascunde tunelurile căilor navigabile";
 "rendering_value_all_name" = "Toate";
 "routing_attr_carriage_restrictions_name" = "Restricții pentru trăsuri";
 "rendering_attr_natureReserves_name" = "Rezervație naturală";
@@ -3024,5 +3024,6 @@
 "specify_number_of_dir_indicators_desc" = "Specificați numărul de indicatori de direcție.";
 "weather_update_over_any_network" = "Prin orice rețea";
 "weather_update_parameters_any_network" = "Prognoza meteo va fi actualizată folosind orice rețea. Se pot consuma date mobile.";
-"upload_poi" = "Încărcați POI";
+"upload_poi" = "Încărcă punct de interes";
 "shared_string_system_default" = "Sistem implicit";
+"ios_release_4_5" = "• Experiența widgeturilor complet reproiectată: a fost adăugată posibilitatea de a schimba poziția widgeturilor, a fost adăugată gruparea pe pagini, o singură listă de widgeturi pentru panoul din stânga și din dreapta.\n• Ecran de configurare reproiectat\n• Copie de rezervă gratuită a preferințelor, setărilor și editărilor OSM în OsmAnd Cloud\n• A fost adăugată scara \"CAI\" pentru \"Clasificarea dificultății traseelor\"\n• \"Plugin pentru curbe de nivel\" redenumit în \"Topografie\", a adăugat suport pentru noul format al hărților de teren.\n• Adăugat 3D Relief\n• A fost adăugată autorizarea OAuth pentru pluginul de editare OpenStreetMap Editing\n• A fost adăugat un buton separat pentru a comuta între modul 2D sau 3D\n• Direcția schimbată a gestului de înclinare\n• S-a rezolvat o problemă cu exportul de favorite, care putea duce la pierderea de date\n";

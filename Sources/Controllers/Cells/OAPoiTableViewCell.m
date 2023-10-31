@@ -10,6 +10,7 @@
 #import "OAPoiCollectionViewCell.h"
 #import "OAFoldersCollectionViewCell.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAUtilities.h"
 #import "Localization.h"
 #import "OATargetInfoViewController.h"
@@ -114,6 +115,14 @@
     self.collectionViewHeight.constant = self.collectionView.contentSize.height;
     [self updateContentOffsetForce:YES];
     return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+}
+
+- (void) traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        [self.collectionView reloadData];
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated
@@ -240,7 +249,7 @@
             OAFoldersCollectionViewCell *destCell = (OAFoldersCollectionViewCell *) cell;
             destCell.layer.cornerRadius = 9;
             destCell.titleLabel.text = item[@"title"];
-            destCell.imageView.tintColor = UIColorFromRGB(color_primary_purple);
+            destCell.imageView.tintColor = UIColor.iconColorActive;
             NSString *iconName = item[@"img"];
 
             BOOL hasIcon = iconName && iconName.length > 0;
@@ -250,15 +259,15 @@
             NSString *categoryName = item[@"categoryName"];
             if ([categoryName isEqualToString:_currentCategory])
             {
-                destCell.layer.backgroundColor = UIColorFromRGB(color_primary_purple).CGColor;
-                destCell.titleLabel.textColor = UIColor.whiteColor;
-                destCell.imageView.tintColor = UIColor.whiteColor;
+                destCell.layer.backgroundColor = UIColor.iconColorActive.CGColor;
+                destCell.titleLabel.textColor = UIColor.buttonTextColorPrimary;
+                destCell.imageView.tintColor = UIColor.buttonTextColorPrimary;
             }
             else
             {
-                destCell.layer.backgroundColor = UIColorFromARGB(color_primary_purple_10).CGColor;
-                destCell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
-                destCell.imageView.tintColor = UIColorFromRGB(color_primary_purple);
+                destCell.layer.backgroundColor = UIColor.buttonBgColorTertiary.CGColor;
+                destCell.titleLabel.textColor = UIColor.buttonTextColorSecondary;
+                destCell.imageView.tintColor = UIColor.buttonTextColorSecondary;
             }
         }
         
@@ -279,13 +288,13 @@
         img = [OAUtilities applyScaleFactorToImage:[UIImage imageNamed:[OAUtilities drawablePath:imgName]]];
         
         cell.iconImageView.image = [[OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:imgName]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.iconImageView.tintColor = UIColorFromRGB(color_icon_inactive);
+        cell.iconImageView.tintColor = UIColor.buttonBgColorTertiary;
         
         if ([_poiData[indexPath.row] isEqualToString:_currentIcon])
         {
             cell.backView.layer.borderWidth = 2;
-            cell.backView.layer.borderColor = UIColorFromRGB(color_primary_purple).CGColor;
-            cell.iconImageView.tintColor = UIColor.whiteColor;
+            cell.backView.layer.borderColor = UIColor.iconColorActive.CGColor;
+            cell.iconImageView.tintColor = UIColor.buttonTextColorPrimary;
             cell.iconView.backgroundColor = UIColorFromRGB(_currentColor);
         }
         else
@@ -293,8 +302,8 @@
             
             cell.backView.layer.borderWidth = 0;
             cell.backView.layer.borderColor = [UIColor clearColor].CGColor;
-            cell.iconView.backgroundColor = UIColorFromARGB(color_primary_purple_10);
-            cell.iconImageView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.iconView.backgroundColor = UIColor.buttonBgColorTertiary;
+            cell.iconImageView.tintColor = UIColor.buttonTextColorSecondary;
         }
         if ([self isDirectionRTL])
             [cell.contentView setTransform:CGAffineTransformMakeScale(-1, 1)];

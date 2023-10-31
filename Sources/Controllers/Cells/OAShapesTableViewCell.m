@@ -9,6 +9,7 @@
 #import "OAShapesTableViewCell.h"
 #import "OAShapesCollectionViewCell.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAShapesTableViewCell
 
@@ -58,13 +59,13 @@
     OAShapesCollectionViewCell* cell = nil;
     cell = (OAShapesCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:[OAShapesCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
     cell.iconImageView.image = [UIImage templateImageNamed:_iconNames[indexPath.row]];
-    cell.iconImageView.tintColor = UIColorFromRGB(color_icon_inactive);
+    cell.iconImageView.tintColor = UIColor.buttonBgColorTertiary;
     
     if (indexPath.row == _currentIcon)
     {
         cell.backgroundImageView.hidden = NO;
         cell.backgroundImageView.image = [UIImage templateImageNamed:_contourIconNames[indexPath.row]];
-        cell.backgroundImageView.tintColor = UIColorFromRGB(color_primary_purple);
+        cell.backgroundImageView.tintColor = UIColor.iconColorActive;
         cell.iconImageView.tintColor = UIColorFromRGB(_currentColor);
     }
     else

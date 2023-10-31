@@ -348,14 +348,6 @@
     return UIStatusBarStyleLightContent;
 }
 
-- (void) traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
-{
-    [super traitCollectionDidChange:previousTraitCollection];
-    
-    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
-        [self.tableView reloadData];
-}
-
 - (void) setContentBackgroundColor:(UIColor *)color
 {
     [super setContentBackgroundColor:color];

@@ -17,7 +17,7 @@
 #import "OAResourcesUIHelper.h"
 #import "OAWeatherHelper.h"
 #import "OASizes.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "OAWeatherAutoUpdateSettingsViewController.h"
 
@@ -136,7 +136,7 @@
     updatedData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     updatedData[@"title"] = OALocalizedString(@"shared_string_updated");
     updatedData[@"value"] = [OAWeatherHelper getUpdatesDateFormat:regionId next:NO];
-    updatedData[@"value_color"] = UIColor.blackColor;
+    updatedData[@"value_color"] = UIColor.textColorPrimary;
     updatedData[@"selection_style"] = @(UITableViewCellSelectionStyleNone);
     [infoCells addObject:updatedData];
 
@@ -145,7 +145,7 @@
     nextUpdateData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     nextUpdateData[@"title"] = OALocalizedString(@"shared_string_next_update");
     nextUpdateData[@"value"] = [OAWeatherHelper getUpdatesDateFormat:regionId next:YES];
-    nextUpdateData[@"value_color"] = UIColor.blackColor;
+    nextUpdateData[@"value_color"] = UIColor.textColorPrimary;
     nextUpdateData[@"selection_style"] = @(UITableViewCellSelectionStyleNone);
     [infoCells addObject:nextUpdateData];
 
@@ -155,7 +155,7 @@
     updatesSizeData[@"title"] = OALocalizedString(@"shared_string_updates_size");
     updatesSizeData[@"value"] = [NSByteCountFormatter stringFromByteCount:[[OAWeatherHelper sharedInstance] getOfflineForecastSize:_region forUpdate:YES] countStyle:NSByteCountFormatterCountStyleFile];
     
-    updatesSizeData[@"value_color"] = UIColorFromRGB(color_text_footer);
+    updatesSizeData[@"value_color"] = UIColor.textColorSecondary;
     updatesSizeData[@"selection_style"] = @(UITableViewCellSelectionStyleNone);
     [infoCells addObject:updatesSizeData];
     _sizeIndexPath = [NSIndexPath indexPathForRow:infoCells.count - 1 inSection:data.count - 1];
@@ -164,10 +164,10 @@
     updateNowData[@"key"] = @"update_now_cell";
     updateNowData[@"type"] = [OARightIconTableViewCell getCellIdentifier];
     updateNowData[@"title"] = OALocalizedString(@"update_now");
-    updateNowData[@"title_color"] = UIColorFromRGB(color_primary_purple);
+    updateNowData[@"title_color"] = UIColor.textColorActive;
     updateNowData[@"title_font"] = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
     updateNowData[@"right_icon"] = @"ic_custom_download";
-    updateNowData[@"right_icon_color"] = UIColorFromRGB(color_primary_purple);
+    updateNowData[@"right_icon_color"] = UIColor.iconColorActive;
     [infoCells addObject:updateNowData];
     _updateNowIndexPath = [NSIndexPath indexPathForRow:infoCells.count - 1 inSection:data.count - 1];
 
@@ -181,7 +181,7 @@
     autoUpdateData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     autoUpdateData[@"title"] = OALocalizedString(@"auto_update");
     autoUpdateData[@"value"] = [OAWeatherHelper getPreferenceWeatherAutoUpdateString:[OAWeatherHelper getPreferenceWeatherAutoUpdate:regionId]];
-    autoUpdateData[@"value_color"] = UIColorFromRGB(color_text_footer);
+    autoUpdateData[@"value_color"] = UIColor.textColorSecondary;
     autoUpdateData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
     [updatesCells addObject:autoUpdateData];
     
@@ -193,7 +193,7 @@
         updatesFrequencyData[@"type"] = [OAValueTableViewCell getCellIdentifier];
         updatesFrequencyData[@"title"] = OALocalizedString(@"shared_string_updates_frequency");
         updatesFrequencyData[@"value"] = [OAWeatherHelper getFrequencyFormat:[OAWeatherHelper getPreferenceFrequency:regionId]];
-        updatesFrequencyData[@"value_color"] = UIColorFromRGB(color_text_footer);
+        updatesFrequencyData[@"value_color"] = UIColor.textColorSecondary;
         updatesFrequencyData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
         [updatesCells addObject:updatesFrequencyData];
         _footers[@(data.count - 1)] = OALocalizedString(@"weather_updates_automatically");
@@ -210,7 +210,7 @@
     removeForecastData[@"key"] = @"remove_forecast_cell";
     removeForecastData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     removeForecastData[@"title"] = OALocalizedString(@"weather_remove_forecast");
-    removeForecastData[@"title_color"] = UIColorFromRGB(color_primary_red);
+    removeForecastData[@"title_color"] = UIColor.buttonBgColorDisruptive;
     removeForecastData[@"title_alignment"] = @(NSTextAlignmentCenter);
     removeForecastData[@"title_font"] = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
     [removeCells addObject:removeForecastData];
@@ -259,7 +259,7 @@
             }
 
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
+            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.textColorPrimary;
             cell.titleLabel.textAlignment = [item.allKeys containsObject:@"title_alignment"] ? (NSTextAlignment) [item[@"title_alignment"] integerValue] : NSTextAlignmentNatural;
             cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         }
@@ -278,7 +278,7 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
+            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.textColorPrimary;
             cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
             BOOL hasRightIcon = [item.allKeys containsObject:@"right_icon"];
@@ -286,7 +286,7 @@
             {
                 FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0., 0., 25., 25.)];
                 progressView.iconView = [[UIView alloc] init];
-                progressView.tintColor = UIColorFromRGB(color_primary_purple);
+                progressView.tintColor = UIColor.iconColorActive;
 
                 cell.accessoryView = progressView;
                 cell.rightIconView.image = nil;

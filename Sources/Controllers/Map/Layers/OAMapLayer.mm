@@ -10,6 +10,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import <MBProgressHUD.h>
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -115,7 +116,7 @@
             wasVisible = YES;
             [_progressHUD hide:NO];
         }
-        UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+        UIView *topView = [UIApplication sharedApplication].mainWindow;
         _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
         _progressHUD.minShowTime = .5f;
         [topView addSubview:_progressHUD];

@@ -14,7 +14,7 @@
 #import "OASwitchTableViewCell.h"
 #import "OARightIconTableViewCell.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OASizes.h"
 #import "OAMapStyleSettings.h"
 
@@ -293,7 +293,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
             }
             
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];
-            cell.leftIconView.tintColor = enabled ? isMountain || isDifficultyClassification ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
+            cell.leftIconView.tintColor = enabled ? isMountain || isDifficultyClassification ? UIColor.iconColorActive : UIColor.iconColorSelected : UIColor.iconColorDisabled;
 
             [cell.switchView setOn:enabled];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -371,7 +371,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
     if (section == EOAMapSettingsRoutesSectionValues && _routesEnabled)
     {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
-        header.textLabel.textColor = UIColorFromRGB(color_text_footer);
+        header.textLabel.textColor = UIColor.textColorSecondary;
     }
 }
 

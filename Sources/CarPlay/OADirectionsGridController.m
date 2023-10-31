@@ -40,6 +40,11 @@
     [self.interfaceController pushTemplate:_gridTemplate animated:YES completion:nil];
 }
 
+- (void)openSearch {
+    _searchController = [[OACarPlayAddressSearchController alloc] initWithInterfaceController:self.interfaceController];
+    [_searchController present];
+}
+
 - (NSArray<CPGridButton *> *) generateGridButtons
 {
     BOOL isNightStyle = self.interfaceController.carTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark;

@@ -127,6 +127,7 @@
 - (void) animatedPanDown;
 - (void) animatedPanLeft;
 - (void) animatedPanRight;
+- (void)setViewportScaleX:(double)x y:(double)y;
 
 - (void) goToPosition:(Point31)position31
             animated:(BOOL)animated;

@@ -1201,7 +1201,7 @@
 "sett_deg360" = "360 grados";
 "online_map" = "Mapa en línea";
 "download_select_map_types" = "Otros mapas";
-"download_depth_countours" = "Isolíneas";
+"download_depth_countours" = "Contorno de profundidad";
 "show_from_zoom_level" = "La visualización comienza a nivel de zoom";
 "hide_contour_lines" = "Ocultar curvas de nivel";
 "altitude_range" = "Rango de altitud";
@@ -1892,7 +1892,7 @@
 "plan_route_split_before" = "Dividir antes";
 "plan_route_split_after" = "Dividir después";
 "speed_limit_tolerance_descr" = "Margen de tolerancia sobre el límite de velocidad, en el cual recibirás un aviso de voz.";
-"zoom_levels_difference_description" = "Mucha diferencia entre niveles de zoom, puede aumentar el tamaño de los datos descargados.";
+"zoom_levels_difference_description" = "La gran diferencia entre los niveles del zoom puede aumentar el tamaño de los datos descargados.";
 "simplified_track_description" = "Sólo se guardará la línea de la ruta, los puntos de referencia serán borrados.";
 "simplified_track" = "Traza simplificada";
 "show_terrain" = "Mostrar terreno";
@@ -1986,7 +1986,7 @@
 "routes_color_by_type" = "Colorear rutas por…";
 "suggested_maps_descr" = "Estos mapas deben usarse con el complemento.";
 "gpxup_identifiable" = "Identificable";
-"gpxup_trackable" = "Trazable / Practicable";
+"gpxup_trackable" = "Rastreable";
 "some_articles_may_not_available_in_lang" = "Es posible que algunos artículos de Wikipedia no estén disponibles en tu idioma.";
 "shared_string_turn_off" = "Apagar";
 "added_profiles_descr" = "Perfiles añadidos por el complemento";
@@ -2702,7 +2702,7 @@
 "routing_attr_allow_streams_name" = "Permitir arroyos y desagües";
 "rendering_attr_OSMMapperAssistantNote_description" = "Muestra etiquetas con información no obvia sobre algún elemento (note)";
 "rendering_value_omit_name" = "Omitir";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Vista esquemática de iconos en zoom bajo";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Visualización esquemática de los iconos con zooms bajos";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "No salirse de la pista";
 "rendering_attr_horse_scale_dangerous_name" = "Peligroso";
 "rendering_attr_weatherCloudContours_name" = "Isolíneas de las nubes";
@@ -2966,7 +2966,7 @@
 "map_widget_true_bearing" = "Rodamiento real";
 "map_marker_1st" = "Primer marcador del mapa";
 "shared_string_bearing" = "Rodamiento";
-"map_widget_gps_info" = "Información GPS";
+"map_widget_gps_info" = "Información del GPS";
 "developer_widgets" = "Widgets para desarrolladores";
 "navigation_points" = "Puntos de navegación";
 "route_maneuvers_desc" = "Los widgets de navegación se activan durante la navegación para mostrar información como distancia, hora de llegada o de salida, próximos giros, rumbo, nombre de la calle actual, información de carriles, velocidad máxima, alertas de aproximación, PDI, waypoints.";
@@ -3041,3 +3041,4 @@
 "map_marker_interval_dialog_desc" = "Especifica el intervalo de tiempo durante el cual se medirá la velocidad media para calcular la hora estimada de llegada.";
 "ios_release_4_5" = "• Widgets rediseñados: capacidad de cambiar la posición de los widgets, agruparlos por páginas, una lista de widgets para los paneles izquierdo y derecho\n• Pantalla de configuración rediseñada\n• Copia de seguridad gratuita de los favoritos, configuraciones y ediciones de OSM en OsmAnd Cloud\n• Se agregó la escala \"CAI\" para la clasificación de dificultad de las rutas.\n• Módulo \"Líneas de contorno\" renombrado a \"Topografía\", se agregó soporte para el nuevo formato de mapa de terreno\n• Relieve 3D añadido\n• Se agregó autorización OAuth para el módulo de edición de OpenStreetMap.\n• Se agregó un botón separado para cambiar entre los modos 2D y 3D.\n• Cambios en los gestos de inclinación.\n• Se corrigió un error al exportar favoritos que podría provocar la pérdida de datos.\n";
 "shared_string_system_default" = "Predeterminado del sistema";
+"upload_poi" = "Cargar un PDI";

@@ -11,6 +11,7 @@
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #include "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 
 @implementation OAMapSettingsLanguageScreen
@@ -200,14 +201,14 @@
                 }
                 else
                 {
-                    cell.titleLabel.textColor = [UIColor blackColor];
+                    cell.titleLabel.textColor = [UIColor textColorPrimary];
                     cell.switchView.enabled = YES;
                 }
             }
             else
             {
                 cell.titleLabel.text = OALocalizedString(@"translit_names");
-                cell.titleLabel.textColor = [UIColor blackColor];
+                cell.titleLabel.textColor = [UIColor textColorPrimary];
 
                 cell.switchView.enabled = YES;
                 [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];

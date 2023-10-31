@@ -20,6 +20,7 @@
 #import "OAWeatherToolbarHandlers.h"
 #import "OAWeatherHelper.h"
 #import "OAWeatherPlugin.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kDefaultZoom 10
 

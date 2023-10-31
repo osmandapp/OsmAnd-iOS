@@ -14,7 +14,7 @@
 #import "OAOcbfHelper.h"
 #import "OAWorldRegion.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "SafariServices/SafariServices.h"
 
 #import <AFNetworking/AFNetworkReachabilityManager.h>
@@ -35,13 +35,8 @@ typedef enum
     MAP_DOWNLOAD,
 } WizardType;
 
-typedef enum
-{
-    ALERT_SKIP,
-} AlertType;
 
-
-@interface OAFirstUsageWizardController ()<UIAlertViewDelegate, UITextViewDelegate, SFSafariViewControllerDelegate>
+@interface OAFirstUsageWizardController () <UITextViewDelegate, SFSafariViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *lbTitle;
 @property (weak, nonatomic) IBOutlet UIButton *btnSkip;
@@ -172,21 +167,21 @@ typedef enum
                                                                              NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
                                                         documentAttributes:nil error:nil];
     [titleStr addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] range:NSMakeRange(0, titleStr.length)];
-    [titleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:NSMakeRange(0, titleStr.length)];
+    [titleStr addAttribute:NSForegroundColorAttributeName value:UIColor.textColorSecondary range:NSMakeRange(0, titleStr.length)];
     [titleStr enumerateAttributesInRange:NSMakeRange(0, titleStr.length) options:0 usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
         if (attrs[@"NSLink"])
         {
             NSString *link = attrs[@"NSLink"];
             [titleStr removeAttribute:attrs[@"NSLink"] range:range];
             [titleStr addAttribute:NSLinkAttributeName value:link  range:range];
-            [titleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_primary_purple) range:range];
+            [titleStr addAttribute:NSForegroundColorAttributeName value:UIColor.textColorActive range:range];
         }
     }];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.alignment = NSTextAlignmentNatural;
     paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
     [titleStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, titleStr.length)];
-    NSDictionary *linkAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
+    NSDictionary *linkAttributes = @{NSForegroundColorAttributeName: UIColor.textColorActive,
                                      NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
                                      NSUnderlineStyleAttributeName: @(NSUnderlineStyleNone)
     };
@@ -280,32 +275,15 @@ typedef enum
 
 - (IBAction)skipPress:(id)sender
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"skip_map_downloading") message:OALocalizedString(@"skip_map_downloading_desc_ios") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"shared_string_skip"), OALocalizedString(@"shared_string_select"), nil];
-    alert.tag = ALERT_SKIP;
-    [alert show];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    switch (alertView.tag)
-    {
-        case ALERT_SKIP:
-            if (buttonIndex != alertView.cancelButtonIndex)
-            {
-                if (buttonIndex == 1)
-                {   // skip
-                    [self closeWizard];
-                }
-                else
-                {   // select
-                    [self selectMapPress:nil];
-                }
-            }
-            break;
-            
-        default:
-            break;
-    }
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"skip_map_downloading") message:OALocalizedString(@"skip_map_downloading_desc_ios") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_skip") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self closeWizard];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_select") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self selectMapPress:nil];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void) closeWizard

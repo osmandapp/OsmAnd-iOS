@@ -3041,3 +3041,4 @@
 "specify_number_of_dir_indicators_desc" = "Spécifier le nombre d'indicateurs de direction.";
 "map_marker_interval_dialog_desc" = "Spécifiez la durée sur laquelle mesurer la vitesse moyenne afin d'estimer l'heure d'arrivée.";
 "shared_string_system_default" = "Par défaut";
+"upload_poi" = "Téléverser les points d'intérêt";

@@ -612,7 +612,7 @@
 "access_hint_enter_name" = "Inserir nome";
 "shared_string_not_selected" = "Não selecionado";
 "shared_string_get" = "Obter";
-"srtm_plugin_disabled" = "Curvas de nível desativadas";
+"srtm_plugin_disabled" = "Topografia desativada";
 "shared_string_open" = "Aberto";
 "osm_live_active" = "Ativo";
 "moving_time" = "Tempo em movimento";
@@ -854,7 +854,7 @@
 "osm_editing_plugin_description" = "Faça contribuições para o OpenStreetMap, uma comunidade global que mantém um mapa abrangente do mundo e fornece dados atualizados sob uma licença livre a todos os utilizadores.\n\nPode encontrar instruções sobre como editar o mapa em https://osmand.net/docs/user/plugins/osm-editing .";
 "product_desc_wiki" = "Artigos da Wikipédia baseados em localização no mapa";
 "purchases_feature_desc_wikipedia" = "Fornece todos os artigos da Wikipédia relacionados a lugares, desligado da Internet, ajudando a aprender sobre os lugares que visita com simples toques no mapa. Não se esqueça de descarregar os ficheiros de mapas da Wikipédia para as respetivas regiões.";
-"srtm_plugin_name" = "Curvas de nível";
+"srtm_plugin_name" = "Topografia";
 "product_desc_srtm" = "Avaliação visual da forma da superfície do terreno";
 "srtm_plugin_description" = "As informações do terreno, como curvas de nível, sombras e declives, ajudam a avaliar visualmente a configuração do terreno e o relevo, a navegabilidade e muito mais. As informações topográficas podem ser representadas no mapa por sombreamento de encostas, linhas de contorno e/ou coloração da declividade.\n\nOs dados subjacentes têm origem em SRTM e ASTER.\n\nVeja mais informações em http://osmand.net/docs/user/plugins/contour-lines .";
 "product_desc_sea_depth_contours" = "Curvas de nível e balizas marítimas";
@@ -873,8 +873,8 @@
 "you_searching" = "Está a pesquisar";
 "from_location" = "longe";
 "show_alt_in_drive" = "Mostrar altitude em modo de navegação";
-"prch_wiki_info" = "A extensão Wikipédia ativa informações para mapas da Wikipédia a que tem direito, comprado ou descarregado dentro do limite gratuito.";
-"prch_srtm_info" = "A extensão curvas de nível ativa curvas de nível para os mapas a que tem direito, comprado ou descarregado dentro do limite gratuito.";
+"prch_wiki_info" = "O complemento Wikipédia ativa informações para mapas da Wikipédia a que tem direito, comprado ou descarregado dentro do limite gratuito.";
+"prch_srtm_info" = "O complemento Topografia ativa as curvas de nível para os mapas a que tem direito, comprado ou descarregado dentro do limite gratuito.";
 "time_closed" = "Fechado";
 "time_will_open" = "Abre às";
 "menu_all_trips" = "Todos os trilhos";
@@ -899,8 +899,8 @@
 "plugin_popup_wiki_desc" = "Para usar o complemento Wikipédia, primeiro descarregue os dados da Wikipédia de uma região";
 "plugin_popup_wiki_ask" = "Para descarregar dados da Wikipédia, tem de ativar o complemento: <b>Wikipédia</b>";
 "plugin_popup_srtm_title" = "Descarregar curvas de nível";
-"plugin_popup_srtm_desc" = "Para usar o recurso Curvas de nível, primeiro descarregue as curvas de nível de uma região";
-"plugin_popup_srtm_ask" = "Para descarregar curvas de nível, tem de ativar o complemento: <b>Curvas de nível</b>";
+"plugin_popup_srtm_desc" = "Para usar o recurso Topografia, primeiro descarregue as curvas de nível de uma região";
+"plugin_popup_srtm_ask" = "Para descarregar as curvas de nível, tem de ativar o complemento: <b>Topografia</b>";
 "plugin_popup_nautical_title" = "Descarregar mapas náuticos";
 "plugin_popup_nautical_desc" = "Descarregue primeiro os mapas náuticos.\nDepois aceda a <b>Configurações de mapa</b> > <b>Tipo de mapa</b> e ative o estilo <b>Náutico</b>";
 "plugin_popup_trip_planning_ask" = "Para começar a planear a viagem, tem de ativar o complemento: <b>Planeamento de viagem</b>";
@@ -1669,9 +1669,9 @@
 "nav_type_brouter" = "BRouter";
 "nav_type_osmand" = "OsmAnd (roteamento offline)";
 "reset_profile_action_descr" = "Repor todas as configurações de perfil nos valores de instalação. Ao tocar em Repor, todas as alterações serão descartadas, esta ação não pode ser desfeita.";
-"map_settings_add_maps_slopes" = "São necessários mapas adicionais para visualizar declives no mapa";
-"map_settings_hillshade_description" = "Os mapas de sombras de relevo permitem visualizar declives, picos e planícies usando diferentes níveis de cinzas";
-"map_settings_slopes_description" = "Os mapas de declives usam cores diferentes para visualizar o terreno";
+"map_settings_add_maps_slopes" = "São necessários mapas adicionais para visualizar declives no mapa.";
+"map_settings_hillshade_description" = "Mapa de sombras de relevo usando sombras escuras para mostrar declives, cumes e planícies.";
+"map_settings_slopes_description" = "Os declives são visualizados por cores no terreno.";
 "map_settings_slopes_legend" = "Pode ler mais sobre declives na Wikipédia";
 "ios_release_3_90" = "- Introduzida a funcionalidade \"Planear uma rota\" para planear viagens futuras com a capacidade de criar segmentos de trilhos utilizando diferentes tipos de navegação\n- Adicionada uma opção para ativar uma bússola sobre a ferramenta \"Raio da régua\"\n- Adicionada a opção \"Nomes dos POI\" que permite mostrar nomes de favoritos, pontos de passagem de trilhos e marcadores no mapa\n- Adicionadas novas ações rápidas para visibilidade das curvas de nível e do terreno no mapa, alterando um perfil de aplicação, eliminando um ponto intermédio mais próximo\n- Problemas corrigidos com a categoria de pesquisa da Wikipédia em falta\n- Importação de configurações: erros corrigidos, suporte adicionado para todos os tipos de dados disponíveis no OsmAnd\n- Edição do OpenStreetMap: corrigido o seletor de tempo e a incapacidade de alterar o comentário do conjunto de alterações\n";
 "ios_release_3_80" = "• Adicionados \"Perfis da aplicação\" com configurações independentes\n• Nova disposição das configurações por perfis e tipos: navegação, geral, mapa e ecrã\n• Capacidade de importar ou exportar configurações de perfis\n• Adicionadas origens de dados para fotografias online\n• Adicionada a capacidade de descarregar mapas online para a cache\n• Algoritmos de \"Pesquisa\" melhorados\n";
@@ -1738,7 +1738,7 @@
 "toggle_public_transport" = "Mostrar/ocultar transportes públicos";
 "quick_action_transport_descr" = "Botão que mostra ou oculta os transportes públicos no mapa.";
 "quick_action_dir_from_descr" = "Toque nesta ação para navegar a partir do ponto central do ecrã atual.";
-"enable_hillshade" = "Permite a visualização dos dados do terreno";
+"enable_hillshade" = "Permite visualizar dados de terreno do mapa de sombras de relevo ou declives.";
 "enable_contour_lines" = "Permite visualizar curvas de nível no mapa";
 "quick_action_contour_lines_descr" = "Botão que mostra ou oculta curvas de nível no mapa.";
 "toggle_hillshade" = "Mostrar/ocultar terreno";
@@ -1872,8 +1872,8 @@
 "map_settings_hide_polygons_desc" = "Esta opção afeta apenas os mapas vetoriais offline do OsmAnd";
 "map_settings_hide_polygons" = "Ocultar polígonos";
 "map_settings_show_slider_map" = "Mostrar controlo deslizante no mapa";
-"map_settings_add_maps_hillshade" = "São necessários mapas adicionais para ver as sombras de relevo";
-"map_settings_zoom_level_description" = "Definir o nível mínimo e máximo de ampliação para mostrar a camada";
+"map_settings_add_maps_hillshade" = "São necessários mapas adicionais para ver as sombras de relevo.";
+"map_settings_zoom_level_description" = "Defina os níveis de ampliação mínimos e máximos em que a camada será mostrada";
 "map_settings_layer_transparency" = "Transparência da camada";
 "street_level_imagery" = "Imagens das ruas";
 "map_settings_install_more" = "Instalar mais...";
@@ -2680,7 +2680,7 @@
 "shared_string_uploaded" = "Enviado";
 "cloud_conflict_descr" = "As versões local e na cloud contêm alterações deste a última sincronização.";
 "amazon_appstore" = "Amazon Appstore";
-"download_heightmap_maps" = "Mapa de atitudes";
+"download_heightmap_maps" = "Mapa de terreno";
 "use_heightmap_setting" = "Usar mapas de altitude em relevo 3D";
 "depth_contours" = "Contornos de profundidade";
 "huawei_appgallery" = "Huawei AppGallery";
@@ -3010,3 +3010,38 @@
 "get_osmand_cloud" = "Obter o OsmAnd Cloud";
 "free_account" = "Conta gratuita";
 "free_favorites_backup_description" = "Resgiste-se no OsmAnd Cloud para obter gratuitamente uma cópia de segurança dos seus favoritos e configurações";
+"weather_updates_manual" = "A previsão meteorológica tem ser atualizada manualmente.";
+"click_on_widget" = "Clique no widget";
+"shared_string_cache" = "Cache";
+"map_widget_target_distance_desc" = "Mostra a distância entre a câmara e o local de destino.";
+"purchases_feature_relief_3d_description" = "Obtenha e observe o modelo à escala da sua vizinhança ou de todo o continente.";
+"weather_update_disabled" = "Desativado";
+"unsaved_changes_will_be_lost_discard" = "Qualquer alteração não guardada será perdida. Descartar alterações?";
+"map_widget_camera_tilt_desc" = "Mostra o ângulo de inclinação da câmara no modo de perspetiva. O padrão é 90° (sem inclinação).";
+"terrain_3D_maps" = "Mapas de terreno";
+"average_speed_skip_stops" = "Ter em conta as paragens";
+"shared_string_relief_3d" = "Relevo 3D";
+"average_speed_time_interval_desc" = "Especifique o intervalo de tempo para calcular a média da velocidade.";
+"weather_update_parameters_wifi" = "A previsão meteorológica será atualizada apenas se a rede Wi-Fi estiver disponível.";
+"map_widget_zoom_level_desc" = "Mostra o nível de ampliação (zoom) do mapa atual.";
+"unsaved_changes" = "Alterações por guardar";
+"weather_update_over_wifi_only" = "Apenas por Wi-Fi";
+
+
+// Shared Strings
+"shared_string_discard" = "Descartar";
+"weather_update_parameters_disabled" = "As atualizações automáticas serão desativadas.";
+"map_widget_camera_distance_desc" = "Mostra a elevação da câmara acima do nível da superfície.";
+"map_settings_topography" = "Topografia";
+"auto_update" = "Atualização automática";
+"specify_number_of_dir_indicators_desc" = "Especifique o número de indicadores de direção.";
+"weather_update_over_any_network" = "Em qualquer rede";
+"weather_update_parameters_any_network" = "A previsão meteorológica será atualizada em qualquer rede. Podem ser utilizados dados móveis.";
+"upload_poi" = "Enviar pontos de interesse (POI)";
+
+// Widget descriptions
+"coordinates_widget_map_center_desc" = "Mostra as coordenadas geográficas do centro do mapa atual";
+"ios_release_4_5" = "• Experiência de widget completamente redesenhada: capacidade adicionada de alterar a posição do widget, agrupamento adicionado por páginas, uma lista de widgets para o painel esquerdo e direito\n• Ecrã de configuração redesenhado\n• Cópia de segurança gratuita dos favoritos, configurações e edições OpenStreetMap no OsmAnd Cloud\n• Adicionada escala \"CAI\" para \"classificação da dificuldade das rotas\"\n• Complemento \"Linhas de contorno\" renomeado para \"Topografia\", adicionado suporte ao novo formato de mapa de terreno\n• Adicionado \"Relevo 3D\"\n• Adicionada autorização OAuth para o complemento de edição do OpenStreetMap\n• Adicionado botão separado para alternar entre o modo 2D ou 3D\n• Alterada direção do gesto de inclinação\n• Corrigido problema com a exportação de favoritos, que podia levar à perda de dados\n";
+"map_marker_interval_dialog_desc" = "Especifique o intervalo de tempo para o qual a velocidade média será medida para calcular o tempo estimado de chegada.";
+"shared_string_system_default" = "Predefinição do sistema";
+"map_widget_rendering_fps_desc" = "Mostra a rapidez com que o mapa e os elementos do mapa são mostrados e atualizados, expressos em fotogramas por segundo (FPS).";

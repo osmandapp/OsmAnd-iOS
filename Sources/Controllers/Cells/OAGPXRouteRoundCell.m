@@ -8,7 +8,7 @@
 
 #import "OAGPXRouteRoundCell.h"
 #import "OAUtilities.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAGPXRouteRoundCell
 {
@@ -25,10 +25,10 @@
     _timeImageView.image = [UIImage templateImageNamed:@"ic_small_time_start"];
     _wptImageView.image = [UIImage templateImageNamed:@"ic_small_waypoints"];
     
-    _rightIconImageVIew.tintColor = UIColorFromRGB(color_primary_purple);
-    _distanceImageView.tintColor = UIColorFromRGB(color_tint_gray);
-    _timeImageView.tintColor = UIColorFromRGB(color_tint_gray);
-    _wptImageView.tintColor = UIColorFromRGB(color_tint_gray);
+    _rightIconImageVIew.tintColor = UIColor.iconColorActive;
+    _distanceImageView.tintColor = UIColor.iconColorSecondary;
+    _timeImageView.tintColor = UIColor.iconColorSecondary;
+    _wptImageView.tintColor = UIColor.iconColorSecondary;
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated
@@ -40,15 +40,15 @@
 {
     if (highlighted)
     {
-        _contentContainer.backgroundColor = UIColorFromRGB(color_primary_purple);
+        _contentContainer.backgroundColor = UIColor.iconColorActive;
         _fileName.textColor = UIColor.whiteColor;
         [_rightIconImageVIew setTintColor:UIColor.whiteColor];
     }
     else
     {
-        _contentContainer.backgroundColor = UIColor.whiteColor;
-        _fileName.textColor = UIColor.blackColor;
-        [_rightIconImageVIew setTintColor: UIColorFromRGB(color_primary_purple)];
+        _contentContainer.backgroundColor = UIColor.groupBgColor;
+        _fileName.textColor = UIColor.textColorPrimary;
+        [_rightIconImageVIew setTintColor: UIColor.iconColorActive];
     }
 }
 

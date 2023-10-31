@@ -18,7 +18,7 @@
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
 #import "OASizes.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 
 @interface OAMapSettingsNauticalDepthScreen () <OANauticalDepthParametersDelegate>
@@ -68,8 +68,8 @@
         kCellTypeKey: [OASwitchTableViewCell getCellIdentifier],
         kCellTitle: OALocalizedString(@"nautical_depth"),
         kCellIconNameKey: @"ic_custom_nautical_depth_colored",
-        kCellIconTint: @(color_primary_purple),
-        @"iconTintDisabled" : @(color_tint_gray)
+        kCellIconTintColor: UIColor.iconColorActive,
+        @"iconTintDisabled" : UIColor.iconColorDisabled
     }];
     [_data addSection:switchSection];
 
@@ -125,7 +125,7 @@
 
             BOOL isOn = [_depthContours.value isEqualToString:@"true"];
             cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
-            cell.leftIconView.tintColor = isOn ? UIColorFromRGB(item.iconTint) : UIColorFromRGB([item integerForKey:@"iconTintDisabled"]);
+            cell.leftIconView.tintColor = isOn ? item.iconTintColor : [item objForKey:@"iconTintDisabled"];
 
             cell.switchView.on = isOn;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;

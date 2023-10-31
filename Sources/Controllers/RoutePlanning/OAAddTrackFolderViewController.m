@@ -7,7 +7,7 @@
 //
 
 #import "OAAddTrackFolderViewController.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OATextMultilineTableViewCell.h"
@@ -41,7 +41,7 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
+    self.tableView.separatorColor = UIColor.separatorColor;
     self.doneButton.hidden = NO;
     self.doneButton.enabled = NO;
     _newFolderName = @"";
@@ -148,7 +148,7 @@
     [textView sizeToFit];
     [self.tableView beginUpdates];
     UITableViewHeaderFooterView *footer = [self.tableView footerViewForSection:0];
-    footer.textLabel.textColor = _inputFieldError != nil ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_text_footer);
+    footer.textLabel.textColor = _inputFieldError != nil ? UIColor.buttonBgColorDisruptive : UIColor.textColorSecondary;
     footer.textLabel.text = _inputFieldError;
     [footer sizeToFit];
     [self.tableView endUpdates];

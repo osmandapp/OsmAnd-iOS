@@ -24,6 +24,7 @@
 #import "OAPlugin.h"
 #import "OAWeatherHelper.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAWeatherPlugin.h"
 
 #include <OsmAndCore/WorldRegions.h>
@@ -1740,7 +1741,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast)
     {
-        UIView *view = [[UIApplication sharedApplication] windows].lastObject;
+        UIView *view = [UIApplication sharedApplication].mainWindow;
         MBProgressHUD *progressHUD = [[MBProgressHUD alloc] initWithView:view];
         [view addSubview:progressHUD];
         [progressHUD showAnimated:YES whileExecutingBlock:^{
@@ -1867,7 +1868,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
     if (progressHUD)
     {
-        [[[[UIApplication sharedApplication] windows] lastObject] addSubview:progressHUD];
+        [[UIApplication sharedApplication].mainWindow addSubview:progressHUD];
         [progressHUD showAnimated:YES whileExecutingBlock:^{
             proc();
         }];

@@ -9,8 +9,8 @@
 #import "OATravelLocalDataDbHelper.h"
 #import "OsmAndApp.h"
 #import "OAGPXDocument.h"
-#import "OAArchiveReader.h"
-#import "OAArchiveWriter.h"
+#include <OsmAndCore/ArchiveReader.h>
+#include <OsmAndCore/ArchiveWriter.h>
 
 #import "OsmAnd_Maps-Swift.h"
 #import <sqlite3.h>
@@ -80,22 +80,15 @@
         return;
 
     NSString *tmpFilePath = [_tmpDir stringByAppendingPathComponent:TEMP_GPX_FILE_NAME];
-    NSString *tmpArchivePath = [_tmpDir stringByAppendingPathComponent:TEMP_GPX_ARCHIVE_NAME];
-    
     OAGPXDocument *gpx = (OAGPXDocument *) article.gpxFile.object;
     [gpx saveTo:tmpFilePath];
     
-    OAArchiveWriter *helper = [[OAArchiveWriter alloc] init];
-    [helper archiveFile:tmpFilePath destPath:tmpArchivePath dirPath:_tmpDir];
-    
-    NSData *archivedGpxContent = [NSData dataWithContentsOfFile:tmpArchivePath];
-    [[NSFileManager defaultManager] removeItemAtPath:tmpFilePath error:nil];
-    [[NSFileManager defaultManager] removeItemAtPath:tmpArchivePath error:nil];
-    
-    QByteArray gpxBlobData;
-    if (archivedGpxContent)
-        gpxBlobData = QByteArray::fromNSData(archivedGpxContent);
-    
+    OsmAnd::ArchiveWriter archiveWriter;
+    BOOL ok = YES;
+    auto gpxBlobData = archiveWriter.createArchive(&ok, {QString::fromNSString(tmpFilePath)}, QString::fromNSString(_tmpDir), true);
+    if (!ok || gpxBlobData.isEmpty())
+        return;
+
     NSString *dir = OsmAndApp.instance.travelGuidesPath;
     const char *dbpath = [[dir stringByAppendingPathComponent:kTravlGuidesDbName] UTF8String];
     dispatch_sync(_dbQueue, ^{
@@ -579,19 +572,34 @@
                     auto blob = QByteArray(
                         static_cast<const char *>(sqlite3_column_blob(statement, 11)),
                         sqlite3_column_bytes(statement, 11));
-                    NSData *data = blob.toNSData();
-            
-                    if (data != nil)
+
+                    if (!blob.isEmpty())
                     {
-                        OAArchiveReader *helper = [[OAArchiveReader alloc] init];
-                        NSString *gpxContent = [helper getUnarchivedFileContentForData:data];
-                        OAGPXDocumentAdapter *adapter = [[OAGPXDocumentAdapter alloc] init];
-                        OAGPXDocument *document = [[OAGPXDocument alloc] init];
-                        QString qstringContent = QString::fromNSString(gpxContent);
-                        QXmlStreamReader xmlReader(qstringContent);
-                        [document fetch:OsmAnd::GpxDocument::loadFrom(xmlReader)];
-                        adapter.object = document;
-                        dbArticle.gpxFile = adapter;
+                        QString stringContent;
+                        OsmAnd::ArchiveReader archive(blob.constData(), blob.size());
+                        bool ok = NO;
+                        const auto archiveItems = archive.getItems(&ok, true);
+                        if (ok)
+                        {
+                            for (const auto& archiveItem : constOf(archiveItems))
+                            {
+                                if (!archiveItem.isValid())
+                                    continue;
+
+                                stringContent = archive.extractItemToString(archiveItem.name, true);
+                                break;
+                            }
+                        }
+
+                        if (!stringContent.isEmpty())
+                        {
+                            OAGPXDocumentAdapter *adapter = [[OAGPXDocumentAdapter alloc] init];
+                            OAGPXDocument *document = [[OAGPXDocument alloc] init];
+                            QXmlStreamReader xmlReader(stringContent);
+                            [document fetch:OsmAnd::GpxDocument::loadFrom(xmlReader)];
+                            adapter.object = document;
+                            dbArticle.gpxFile = adapter;
+                        }
                     }
                 
                     OATravelArticle *article = [OATravelObfHelper.shared findSavedArticleWithSavedArticle:dbArticle];

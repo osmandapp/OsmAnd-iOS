@@ -402,8 +402,6 @@
 		326B4FC1257FD11400ABAB1D /* ic_action_light_aircraft@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 326B4FBC257FD11400ABAB1D /* ic_action_light_aircraft@3x.png */; };
 		326B770A29D9CA6400FB23DF /* OATripRecordingTimeWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 326B770929D9CA6400FB23DF /* OATripRecordingTimeWidget.mm */; };
 		326C0BA02A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326C0B9F2A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift */; };
-		326DF26B2ACDB55B002924F5 /* OAArchiveReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 326DF26A2ACDB55B002924F5 /* OAArchiveReader.mm */; };
-		326DF26E2ACDB57F002924F5 /* OAArchiveWriter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 326DF26D2ACDB57F002924F5 /* OAArchiveWriter.mm */; };
 		3271CC6E2A38C27900DCEBAC /* OAMap3DModeVisibilityType.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321E08072A37794000105DAE /* OAMap3DModeVisibilityType.mm */; };
 		3274BDAD2AB486FD00AC5E34 /* OAMapAlgorithms.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3274BDAC2AB486FD00AC5E34 /* OAMapAlgorithms.mm */; };
 		327A19862A98D57800F4A027 /* TravelJsonParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327A19852A98D57800F4A027 /* TravelJsonParser.swift */; };
@@ -4164,10 +4162,6 @@
 		326B770829D9CA5200FB23DF /* OATripRecordingTimeWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATripRecordingTimeWidget.h; sourceTree = "<group>"; };
 		326B770929D9CA6400FB23DF /* OATripRecordingTimeWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATripRecordingTimeWidget.mm; sourceTree = "<group>"; };
 		326C0B9F2A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeomagnetismObjCBridge.swift; sourceTree = "<group>"; };
-		326DF2692ACDB546002924F5 /* OAArchiveReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAArchiveReader.h; sourceTree = "<group>"; };
-		326DF26A2ACDB55B002924F5 /* OAArchiveReader.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAArchiveReader.mm; sourceTree = "<group>"; };
-		326DF26C2ACDB56C002924F5 /* OAArchiveWriter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAArchiveWriter.h; sourceTree = "<group>"; };
-		326DF26D2ACDB57F002924F5 /* OAArchiveWriter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAArchiveWriter.mm; sourceTree = "<group>"; };
 		3274BDAB2AB486EF00AC5E34 /* OAMapAlgorithms.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapAlgorithms.h; sourceTree = "<group>"; };
 		3274BDAC2AB486FD00AC5E34 /* OAMapAlgorithms.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapAlgorithms.mm; sourceTree = "<group>"; };
 		3275552129758ED80049BC84 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -14290,10 +14284,6 @@
 				DA5A80DD26C563A600F274C7 /* NSData+CRC32.m */,
 				DA5A80E026C563A600F274C7 /* OAAppSettings.h */,
 				DA5A80B226C563A600F274C7 /* OAAppSettings.m */,
-				326DF2692ACDB546002924F5 /* OAArchiveReader.h */,
-				326DF26A2ACDB55B002924F5 /* OAArchiveReader.mm */,
-				326DF26C2ACDB56C002924F5 /* OAArchiveWriter.h */,
-				326DF26D2ACDB57F002924F5 /* OAArchiveWriter.mm */,
 				DA5A80C126C563A600F274C7 /* OAAvoidRoadInfo.h */,
 				DA5A809126C563A500F274C7 /* OAAvoidRoadInfo.m */,
 				DA5A80D726C563A600F274C7 /* OAAvoidSpecificRoads.h */,
@@ -18215,7 +18205,6 @@
 				DA9A2C3726FF0F4D00BEC681 /* OAColoringType.mm in Sources */,
 				DA5A81FD26C563A700F274C7 /* OAFeatureCardRow.m in Sources */,
 				FA6797EF2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm in Sources */,
-				326DF26B2ACDB55B002924F5 /* OAArchiveReader.mm in Sources */,
 				DA5A818C26C563A700F274C7 /* OAQuickAction.m in Sources */,
 				DA5A849826C563A900F274C7 /* OAExitRoutePlanningBottomSheetViewController.m in Sources */,
 				DA5A853B26C563A900F274C7 /* OAFileNameTranslationHelper.m in Sources */,
@@ -18451,7 +18440,6 @@
 				DA5A84C126C563A900F274C7 /* OAProfileSelectionBottomSheetViewController.m in Sources */,
 				DA5A856726C563A900F274C7 /* OAAmenityLocationPoint.mm in Sources */,
 				DA5A84C426C563A900F274C7 /* OAUploadProgressBottomSheetViewController.mm in Sources */,
-				326DF26E2ACDB57F002924F5 /* OAArchiveWriter.mm in Sources */,
 				DA5A83D226C563A800F274C7 /* OACollapsableLabelView.m in Sources */,
 				DA5A825426C563A700F274C7 /* OAAutoZoomMapViewController.m in Sources */,
 				DA4ABF262876DA6800B996EF /* OADataSettingsItem.mm in Sources */,

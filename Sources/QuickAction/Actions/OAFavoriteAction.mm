@@ -12,6 +12,7 @@
 #import "OAMapRendererView.h"
 #import "OAMapViewController.h"
 #import "OAFavoriteViewController.h"
+#import "OAFavoritesHelper.h"
 #import "OADefaultFavorite.h"
 #import "OATargetPoint.h"
 #import "OAReverseGeocoder.h"
@@ -96,29 +97,13 @@ static OAQuickActionType *TYPE;
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors].firstObject;
         color = favCol.color;
     }
-    CGFloat r,g,b,a;
-    [color getRed:&r
-             green:&g
-              blue:&b
-             alpha:&a];
-    
+
     if ([self isItemExists:title])
         title = [self getNewItemName:title];
-    
-    QString elevation = QString();
-    QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
-    QString pickupTime;
-    
-    QString titleStr = QString::fromNSString(title);
-    QString group = QString::fromNSString(groupName);
-    QString description = QString();
-    QString address = QString();
-    QString icon = QString();
-    QString background = QString();
-    
-    app.favoritesCollection->createFavoriteLocation(OsmAnd::LatLon(lat, lon), elevation, time, pickupTime, titleStr, description, address, group, icon, background, OsmAnd::FColorARGB(a,r,g,b));
 
-    [app saveFavoritesToPermanentStorage:@[groupName]];
+    OAFavoriteItem *point = [[OAFavoriteItem alloc] initWithLat:lat lon:lon name:title category:groupName];
+    [point setColor:color];
+    [OAFavoritesHelper addFavorite:point];
 }
 
 - (BOOL) isItemExists:(NSString *)name

@@ -82,16 +82,53 @@ static BOOL _favoritesLoaded = NO;
 + (void)loadFileGroups:(NSString *)file groups:(NSMutableDictionary<NSString *, OAFavoriteGroup *> *)groups
 {
     OAGPXDocument *gpx = [self loadGpxFile:file];
-    [self collectFavoriteGroups:gpx favoriteGroups:groups];
+    [self collectFavoriteGroups:gpx favoriteGroups:groups legacy:NO];
 }
 
 + (void)collectFavoriteGroups:(OAGPXDocument *)gpxFile
                favoriteGroups:(NSMutableDictionary<NSString *, OAFavoriteGroup *> *)favoriteGroups
+                       legacy:(BOOL)legacy
 {
     [gpxFile.pointsGroups enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, OAPointsGroup * _Nonnull pointsGroup, BOOL * _Nonnull stop) {
         OAFavoriteGroup *favoriteGroup = [OAFavoriteGroup fromPointsGroup:pointsGroup];
-        favoriteGroups[key] = favoriteGroup;
+        NSString *groupKey = !legacy ? key : [key stringByAppendingString:@"-old"];
+        favoriteGroups[groupKey] = favoriteGroup;
     }];
+}
+
++ (void) initialLoadFavorites
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    // Sync favorites filename with android version
+    NSString *oldfFavoritesFilename = app.documentsDir.filePath(QLatin1String("Favorites.gpx")).toNSString();
+    NSString *favoritesLegacyFilename = app.documentsDir.filePath(QLatin1String("favourites.gpx")).toNSString();
+    if ([[NSFileManager defaultManager] fileExistsAtPath:oldfFavoritesFilename] && ![[NSFileManager defaultManager] fileExistsAtPath:favoritesLegacyFilename])
+    {
+        NSError *error = nil;
+        [[NSFileManager defaultManager] moveItemAtPath:oldfFavoritesFilename toPath:favoritesLegacyFilename error:&error];
+        if (error)
+            NSLog(@"Error moving file: %@ to %@ - %@", oldfFavoritesFilename, favoritesLegacyFilename, [error localizedDescription]);
+    }
+
+    // Move legacy favorites backup folder to new location
+    NSString *oldFavoritesBackupPath = [app.documentsPath stringByAppendingPathComponent:@"favourites_backup"];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:oldFavoritesBackupPath] && ![[NSFileManager defaultManager] fileExistsAtPath:app.favoritesBackupPath])
+    {
+        NSError *error = nil;
+        [[NSFileManager defaultManager] moveItemAtPath:oldFavoritesBackupPath toPath:app.favoritesBackupPath error:&error];
+        if (error)
+            NSLog(@"Error moving dir: %@ to %@ - %@", oldFavoritesBackupPath, app.favoritesBackupPath, [error localizedDescription]);
+    }
+
+    BOOL legacyFavoritesExists = [[NSFileManager defaultManager] fileExistsAtPath:favoritesLegacyFilename];
+    if (legacyFavoritesExists)
+    {
+        NSMutableDictionary<NSString *, OAFavoriteGroup *> *groups = [NSMutableDictionary dictionary];
+        OAGPXDocument *gpx = [self loadGpxFile:favoritesLegacyFilename];
+        [self collectFavoriteGroups:gpx favoriteGroups:groups legacy:YES];
+        [self saveFile:groups.allValues file:[app favoritesStorageFilename:@"old"]];
+        [[NSFileManager defaultManager] removeItemAtPath:favoritesLegacyFilename error:nil];
+    }
 }
 
 + (OAGPXDocument *)loadGpxFile:(NSString *)file
@@ -255,11 +292,11 @@ static BOOL _favoritesLoaded = NO;
         return YES;
     
     if (lookupAddress && ![point isAddressSpecified])
-        [OAFavoritesHelper lookupAddress:point];
+        [self lookupAddress:point];
     
     [[OAAppSettings sharedManager] setShowFavorites:YES];
     
-    OAFavoriteGroup *group = [OAFavoritesHelper getOrCreateGroup:point];
+    OAFavoriteGroup *group = [self getOrCreateGroup:point pointsGroup:pointsGroup];
     
     if ([point getName].length > 0)
     {
@@ -277,8 +314,8 @@ static BOOL _favoritesLoaded = NO;
     [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[[point getColor] toARGBNumber]]];
     if (sortAndSave)
     {
-        [OAFavoritesHelper sortAll];
-        [OAFavoritesHelper saveCurrentPointsIntoFile];
+        [self sortAll];
+        [self saveCurrentPointsIntoFile];
     }
     
     return YES;
@@ -504,10 +541,8 @@ static BOOL _favoritesLoaded = NO;
     // Save groups to external files
     [self saveFiles:_favoriteGroups deleted:deletedPoints.allKeys];
     // Save groups to backup file
-    // backup(groups, getBackupFile()); // creates new, but does not zip
     [self backup];
-//    backup(fileHelper.getBackupFile(), internalFile); // simply backs up internal file, hence internal name is reflected in gpx <name> metadata
-    }
+}
 
 + (NSArray<OAFavoriteItem *> *)getPointsFromGroups:(NSArray<OAFavoriteGroup *> *)groups
 {

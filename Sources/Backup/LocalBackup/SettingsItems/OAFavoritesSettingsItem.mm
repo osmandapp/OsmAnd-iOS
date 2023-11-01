@@ -17,8 +17,6 @@
 #import "OAParkingPositionPlugin.h"
 #import "OAIndexConstants.h"
 
-#include <OsmAndCore/IFavoriteLocation.h>
-
 #define APPROXIMATE_FAVOURITE_SIZE_BYTES 470
 
 @interface OAFavoritesSettingsItem()
@@ -44,8 +42,7 @@
     [super initialization];
 
     _settings = [OAAppSettings sharedManager];
-    const auto& allFavorites = [OsmAndApp instance].favoritesCollection->getFavoriteLocations();
-    self.existingItems = [NSMutableArray arrayWithArray:[OAFavoritesHelper getGroupedFavorites:allFavorites]];
+    self.existingItems = [OAFavoritesHelper getFavoriteGroups];
 }
 
 - (EOASettingsItemType) type
@@ -151,21 +148,19 @@
     if (newItems.count > 0 || self.duplicateItems.count > 0)
     {
         self.appliedItems = [NSMutableArray arrayWithArray:newItems];
-        QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > toDelete;
         for (OAFavoriteGroup *duplicate in self.duplicateItems)
         {
             BOOL isPersonal = duplicate.isPersonal;
             BOOL shouldReplace = [self shouldReplace] || isPersonal;
             if (shouldReplace)
             {
-                OAFavoriteGroup *existingGroup = [self getGroup:duplicate.name];
+                OAFavoriteGroup *existingGroup = [OAFavoritesHelper getGroupByName:duplicate.name];
                 if (existingGroup)
                 {
-                    [self.existingItems removeObject:existingGroup];
-                    NSArray<OAFavoriteItem *> *favoriteItems = existingGroup.points;
-                    for (OAFavoriteItem *favoriteItem in favoriteItems)
+                    NSArray<OAFavoriteItem *> *favouritePoints = existingGroup.points;
+                    for (OAFavoriteItem *favoriteItem in favouritePoints)
                     {
-                        toDelete.push_back(favoriteItem.favorite);
+                        [OAFavoritesHelper deleteFavorite:favoriteItem saveImmediately:NO];
                     }
                 }
             }
@@ -175,42 +170,28 @@
             }
             else
             {
-                for (OAFavoriteItem *item in duplicate.points)
+                OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *) [OAPlugin getPlugin:OAParkingPositionPlugin.class];
+                for (OAFavoriteItem *point in duplicate.points)
                 {
-                    if (item.specialPointType == OASpecialPointType.PARKING)
+                    if (plugin && point.specialPointType == OASpecialPointType.PARKING)
                     {
-                        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
-                        if (plugin)
-                        {
-                            NSDate *timestamp = [item getTimestamp];
-                            NSDate *pickupTime = [item getPickupTime];
-                            BOOL isTimeRestricted = pickupTime != nil && [pickupTime timeIntervalSince1970] > 0;
-                            [plugin setParkingType:isTimeRestricted];
-                            [plugin setParkingTime:isTimeRestricted ? pickupTime.timeIntervalSince1970 * 1000 : 0];
-                            if (timestamp)
-                                [plugin setParkingStartTime:timestamp.timeIntervalSince1970 * 1000];
-                            [plugin setParkingPosition:item.getLatitude longitude:item.getLongitude];
-                            [plugin addOrRemoveParkingEvent:item.getCalendarEvent];
-                            if (item.getCalendarEvent)
-                                [OAFavoritesHelper addParkingReminderToCalendar];
-                            else
-                                [OAFavoritesHelper removeParkingReminderFromCalendar];
-                        }
+                        [plugin clearParkingPosition];
+                        [plugin updateParkingPoint:point];
                     }
                 }
             }
         }
-        @synchronized(self.class)
+        for (OAFavoriteGroup *group in self.appliedItems)
         {
-            app.favoritesCollection->removeFavoriteLocations(toDelete);
-            NSArray<OAFavoriteItem *> *favourites = [NSArray arrayWithArray:[self getPointsFromGroups:self.appliedItems]];
-            std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoriteCollection(new OsmAnd::FavoriteLocationsGpxCollection());
-            for (OAFavoriteItem *favorite in favourites)
-                favoriteCollection->copyFavoriteLocation(favorite.favorite);
-            app.favoritesCollection->mergeFrom(favoriteCollection);
-            [app saveFavoritesToPermanentStorage];
-            [OAFavoritesHelper loadFavorites];
+            OAPointsGroup *pointsGroup = [group toPointsGroup];
+            for (OAFavoriteItem *point in group.points)
+            {
+                [OAFavoritesHelper addFavorite:point lookupAddress:NO sortAndSave:NO pointsGroup:pointsGroup];
+            }
         }
+        [OAFavoritesHelper sortAll];
+        [OAFavoritesHelper saveCurrentPointsIntoFile];
+        [OAFavoritesHelper loadFavorites];
     }
 }
 
@@ -256,6 +237,7 @@
 - (void)deleteItem:(OAFavoriteGroup *)item
 {
     [OAFavoritesHelper deleteFavoriteGroups:@[item] andFavoritesItems:nil];
+    [OAFavoritesHelper saveCurrentPointsIntoFile];
 }
 
 - (BOOL) shouldReadOnCollecting

@@ -16,6 +16,7 @@
 @interface OAFavoritesHelper : NSObject
 
 + (BOOL) isFavoritesLoaded;
++ (void) initialLoadFavorites;
 + (void) loadFavorites;
 + (void) import:(QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >)favorites;
 
@@ -35,7 +36,7 @@
 + (NSMutableDictionary<NSString *, OAFavoriteGroup *> *) getGroups;
 + (OAFavoriteGroup *) getGroupByName:(NSString *)nameId;
 + (OAFavoriteGroup *) getGroupByPoint:(OAFavoriteItem *)favoriteItem;
-
++ (void) lookupAddress:(OAFavoriteItem *)point;
 
 + (BOOL)addFavorite:(OAFavoriteItem *)point;
 + (BOOL)addFavorite:(OAFavoriteItem *)point
@@ -74,7 +75,7 @@
                  iconName:(NSString *)iconName
        backgroundIconName:(NSString *)backgroundIconName;
 
-- (BOOL)deleteFavorite:(OAFavoriteItem *)p saveImmediately:(BOOL)saveImmediately;
++ (BOOL)deleteFavorite:(OAFavoriteItem *)p saveImmediately:(BOOL)saveImmediately;
 
 + (OAFavoriteGroup *)getOrCreateGroup:(OAFavoriteItem *)item;
 + (OAFavoriteGroup *)getOrCreateGroup:(OAFavoriteItem *)item

@@ -59,44 +59,6 @@
     return self;
 }
 
-- (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation gpxFileName:(NSString *)gpxFileName
-{
-    self = [super init];
-    if (self)
-    {
-        _app = [OsmAndApp instance];
-        
-        _gpxFileName = gpxFileName;
-        
-        // Create wpt
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSInteger defaultColor = 0;
-        if ([userDefaults objectForKey:kWptDefaultColorKey])
-            defaultColor = [userDefaults integerForKey:kWptDefaultColorKey];
-        
-        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][defaultColor];
-        UIColor* color = favCol.color;
-
-        NSString *groupName;
-        if ([userDefaults objectForKey:kWptDefaultGroupKey])
-            groupName = [userDefaults stringForKey:kWptDefaultGroupKey];
-        
-        OAGpxWptItem* wpt = [[OAGpxWptItem alloc] init];
-        OAWptPt* p = [[OAWptPt alloc] init];
-        p.name = formattedLocation;
-        p.position = location;
-        p.type = groupName;
-        p.time = (long)[[NSDate date] timeIntervalSince1970];
-        wpt.point = p;
-        wpt.color = color;
-        
-        self.wpt = wpt;
-        [self acquireOriginObject];
-        self.topToolbarType = ETopToolbarTypeMiddleFixed;
-    }
-    return self;
-}
-
 - (void) acquireOriginObject
 {
     _originObject = [OAPOIHelper findPOIByOriginName:_wpt.getAmenityOriginName lat:_wpt.point.getLatitude lon:_wpt.point.getLongitude];

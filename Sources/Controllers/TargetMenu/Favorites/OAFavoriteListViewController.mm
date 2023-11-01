@@ -731,8 +731,7 @@ static UIViewController *parentController;
                 }
             }
         }
-
-        [app saveFavoritesToPermanentStorage:groupNames.allObjects];
+        [OAFavoritesHelper saveCurrentPointsIntoFile];
     }
     [self finishEditing];
     [self.favoriteTableView reloadData];
@@ -782,8 +781,6 @@ static UIViewController *parentController;
                 [OAFavoritesHelper editFavoriteName:item newName:[item getDisplayName] group:_groupController.groupName descr:[item getDescription] address:[item getAddress]];
             }
         }
-
-        [app saveFavoritesToPermanentStorage:groupNames.allObjects];
     }
     [self finishEditing];
     [self generateData];

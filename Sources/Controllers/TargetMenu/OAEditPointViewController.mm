@@ -1120,7 +1120,7 @@
 
             UIColor *tintColor = item[@"titleTintColor"];
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = tintColor ? tintColor : UIColor.textColorPrimary;
+            cell.titleLabel.textColor = tintColor ?: UIColor.textColorPrimary;
         }
         return cell;
     }

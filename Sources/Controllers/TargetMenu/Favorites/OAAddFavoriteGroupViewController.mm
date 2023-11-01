@@ -217,7 +217,7 @@
             cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
 
             cell.titleLabel.text = item.title;
-            cell.titleLabel.textColor = item.iconTintColor ? item.iconTintColor : UIColor.textColorPrimary;
+            cell.titleLabel.textColor = item.iconTintColor ?: UIColor.textColorPrimary;
             cell.selectionStyle = !item.iconTintColor ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
         }
         return cell;

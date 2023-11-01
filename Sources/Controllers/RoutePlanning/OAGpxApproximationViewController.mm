@@ -275,7 +275,7 @@
 {
 	dispatch_async(dispatch_get_main_queue(), ^{
 		self.rightButton.userInteractionEnabled = enabled;
-		self.rightButton.backgroundColor = enabled ? UIColor.iconColorActive : UIColor.iconColorDisabled;
+		self.rightButton.backgroundColor = enabled ? UIColor.buttonBgColorPrimary : UIColor.buttonBgColorSecondary;
 	});
 }
 

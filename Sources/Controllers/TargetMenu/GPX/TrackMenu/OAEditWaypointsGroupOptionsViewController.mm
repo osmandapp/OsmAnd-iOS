@@ -184,11 +184,6 @@
                     if ([self.delegate respondsToSelector:@selector(getWaypointsGroupColor:)])
                         color = [self.delegate getWaypointsGroupColor:groupName];
                 }
-                
-                UIColor *convertedColor = [UIColor colorWithRed:((color >> 16) & 0xFF) / 255.0
-                                                         green:((color >> 8) & 0xFF) / 255.0
-                                                          blue:(color & 0xFF) / 255.0
-                                                         alpha:1.0];
 
                 if (visible)
                     _tableData.values[@"visible_groups_count"] = @([_tableData.values[@"visible_groups_count"] integerValue] + 1);
@@ -198,10 +193,10 @@
                         kCellType: [OASwitchTableViewCell getCellIdentifier],
                         kCellTitle: groupName,
                         kCellLeftIcon: [UIImage templateImageNamed:visible ? @"ic_custom_folder" : @"ic_custom_folder_hidden"],
-                        kCellTintColor: visible ? convertedColor : UIColor.iconColorDisabled,
+                        kCellTintColor: visible ? UIColorFromRGB(color) : UIColor.iconColorDisabled,
                         kTableValues: @{
                                 @"visible": @(visible),
-                                @"color": convertedColor
+                                @"color": UIColorFromRGB(color)
                         }
                 }];
                 [_tableData.subjects addObject:groupCellData];

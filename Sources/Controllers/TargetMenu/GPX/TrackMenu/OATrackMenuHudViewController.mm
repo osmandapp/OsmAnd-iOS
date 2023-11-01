@@ -2044,7 +2044,7 @@
             cell.separatorInset =
                     UIEdgeInsetsMake(0., _selectedTab == EOATrackMenuHudSegmentsTab ? self.tableView.frame.size.width : 20., 0., 0.);
 
-            UIColor *tintColor = cellData.tintColor ? cellData.tintColor : UIColor.textColorPrimary;
+            UIColor *tintColor = cellData.tintColor ?: UIColor.textColorPrimary;
 
             cell.textLabel.font = [cellData.values.allKeys containsObject:@"font_value"]
                     ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
@@ -2122,10 +2122,9 @@
             cell.titleView.font = [cellData.values.allKeys containsObject:@"font_value"]
                     ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.titleView.text = cellData.title;
-            cell.textColorNormal = cellData.tintColor ? cellData.tintColor : UIColor.textColorPrimary;
+            cell.textColorNormal = cellData.tintColor ?: UIColor.textColorPrimary;
 
-            cell.iconColorNormal = cellData.tintColor
-                    ? cellData.tintColor : UIColor.iconColorActive;
+            cell.iconColorNormal = cellData.tintColor ?: UIColor.iconColorActive;
             cell.iconView.image = [UIImage templateImageNamed:cellData.rightIconName];
 
             BOOL isLast = indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1;

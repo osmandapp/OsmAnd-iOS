@@ -458,7 +458,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         if (cell)
         {
             cell.titleView.text = cellData.title;
-            cell.textColorNormal = cellData.tintColor ? cellData.tintColor : UIColor.textColorPrimary;
+            cell.textColorNormal = cellData.tintColor ?: UIColor.textColorPrimary;
 
             cell.titleView.font = [cellData.values.allKeys containsObject:@"font_value"]
                     ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];

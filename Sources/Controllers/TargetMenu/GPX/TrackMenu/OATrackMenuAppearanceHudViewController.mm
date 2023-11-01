@@ -1006,7 +1006,7 @@
         if (cell)
         {
             cell.titleLabel.text = cellData.title;
-            cell.titleLabel.textColor = cellData.tintColor ? cellData.tintColor : UIColor.textColorPrimary;
+            cell.titleLabel.textColor = cellData.tintColor ?: UIColor.textColorPrimary;
         }
         return cell;
     }

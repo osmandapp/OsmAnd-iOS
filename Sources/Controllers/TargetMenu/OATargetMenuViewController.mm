@@ -470,7 +470,7 @@
 
 - (NSAttributedString *) getAttributedTypeStr:(NSString *)group color:(UIColor *)color
 {
-    UIColor *iconColor = color ? color : UIColor.iconColorDefault;
+    UIColor *iconColor = color ?: UIColor.iconColorDefault;
     
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
     UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];

@@ -495,7 +495,7 @@
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
                 cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
                 cell.button.backgroundColor = [UIColor.buttonBgColorPrimary colorWithAlphaComponent:0.1];
-                [cell.button setTitleColor:[UIColor.buttonTextColorPrimary colorWithAlphaComponent:1.0] forState:UIControlStateHighlighted];
+                [cell.button setTitleColor:UIColor.buttonTextColorPrimary forState:UIControlStateHighlighted];
                 cell.button.titleLabel.font = [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold];
                 cell.button.layer.cornerRadius = 9.;
                 cell.topMarginConstraint.constant = 9.;

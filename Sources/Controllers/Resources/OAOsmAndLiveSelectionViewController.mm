@@ -15,7 +15,7 @@
 #import "OASimpleTableViewCell.h"
 #import "OAIAPHelper.h"
 #import "OAAppSettings.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/IncrementalChangesManager.h>
 
@@ -108,7 +108,7 @@ static const NSInteger groupCount = 1;
         updateNow.userInteractionEnabled = canUpdate;
         [updateNow setAttributedTitle:text forState:UIControlStateNormal];
         [updateNow addTarget:self action:@selector(updateNow) forControlEvents:UIControlEventTouchUpInside];
-        updateNow.backgroundColor = canUpdate ? UIColorFromRGB(color_active_light) : UIColorFromRGB(color_disabled_light);
+        updateNow.backgroundColor = canUpdate ? UIColor.buttonBgColorPrimary : UIColor.buttonBgColorSecondary;
         updateNow.layer.cornerRadius = 5;
         updateNow.frame = CGRectMake(10, 0, _footerView.frame.size.width - 20.0, 44.0);
         [_footerView addSubview:updateNow];
@@ -135,15 +135,22 @@ static const NSInteger groupCount = 1;
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = UIColorFromRGB(color_primary_orange_navbar_background);
-    appearance.shadowColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    appearance.shadowColor = UIColor.navBarBgColorPrimary;
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.whiteColor
+        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
     };
-    self.navigationController.navigationBar.standardAppearance = appearance;
+    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+    blurAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
+    blurAppearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    blurAppearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+    };
+    self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.whiteColor;
+    self.navigationController.navigationBar.tintColor = UIColor.navBarTextColorPrimary;
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
     if (_settingsScreen == ELiveSettingsScreenMain)

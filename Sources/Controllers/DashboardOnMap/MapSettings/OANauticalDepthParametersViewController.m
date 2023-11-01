@@ -9,7 +9,6 @@
 #import "OANauticalDepthParametersViewController.h"
 #import "OARightIconTableViewCell.h"
 #import "OAMapStyleSettings.h"
-#import "OAColors.h"
 
 @implementation OANauticalDepthParametersViewController
 {

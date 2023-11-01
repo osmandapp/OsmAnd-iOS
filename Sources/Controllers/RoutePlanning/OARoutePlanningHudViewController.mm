@@ -55,6 +55,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OATrackMenuHudViewController.h"
 #import "OAAppVersionDependentConstants.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kHeaderSectionHeigh 60.0
 
@@ -244,15 +245,15 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     _optionButtonLandscapeWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"shared_string_options") width:DeviceScreenWidth height:44 font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].width + 16;
     _addButtonLandscapeWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"coord_input_add_point") width:DeviceScreenWidth height:44 font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].width + 16;
     
-    _expandButton.imageView.tintColor = UIColorFromRGB(color_icon_inactive);
+    _expandButton.imageView.tintColor = UIColor.iconColorDisabled;
     [_expandButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_up"] forState:UIControlStateNormal];
-    _landscapeExpandButton.imageView.tintColor = UIColorFromRGB(color_icon_inactive);
+    _landscapeExpandButton.imageView.tintColor = UIColor.iconColorDisabled;
     [_landscapeExpandButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_up"] forState:UIControlStateNormal];
   
     [_undoButton setImage:[UIImage templateImageNamed:@"ic_custom_undo"] forState:UIControlStateNormal];
     [_redoButton setImage:[UIImage templateImageNamed:@"ic_custom_redo"] forState:UIControlStateNormal];
-    _undoButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
-    _redoButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
+    _undoButton.imageView.tintColor = UIColor.iconColorActive;
+    _redoButton.imageView.tintColor = UIColor.iconColorActive;
     
     [self setupModeButton];
     
@@ -532,8 +533,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     else
     {
         img = [UIImage templateImageNamed:@"ic_custom_straight_line"];
-        _modeButton.tintColorDay = UIColorFromRGB(color_chart_orange);
-        _modeButton.tintColorNight = UIColorFromRGB(color_chart_orange);
+        _modeButton.tintColorDay = UIColor.iconColorSelected;
+        _modeButton.tintColorNight = UIColor.iconColorSelected;
     }
     [_modeButton setImage:img forState:UIControlStateNormal];
     [_modeButton updateColorsForPressedState:NO];

@@ -217,7 +217,6 @@
             cell = (OASwitchTableViewCell *) nib[0];
             cell.backgroundColor = [UIColor clearColor];
             [cell leftIconVisibility:NO];
-            cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
         }
         if (cell)
         {

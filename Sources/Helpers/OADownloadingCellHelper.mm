@@ -8,7 +8,7 @@
 
 #import "OADownloadingCellHelper.h"
 #import "OAResourcesUIHelper.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAManageResourcesViewController.h"
 #import "OARootViewController.h"
 #import "OsmAndApp.h"
@@ -99,26 +99,23 @@
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellTypeId];
             cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-            cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
+            cell.detailTextLabel.textColor = UIColor.textColorSecondary;
 
             UIImage* iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
             [btnAcc removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            if (![mapItem isInstalled])
-            {
-                [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
-                [btnAcc setImage:iconImage forState:UIControlStateNormal];
-                btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
-                btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
-                [cell setAccessoryView:btnAcc];
-            }
+            [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+            [btnAcc setImage:iconImage forState:UIControlStateNormal];
+            btnAcc.tintColor = UIColor.iconColorActive;
+            btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
+            [cell setAccessoryView:btnAcc];
         }
         else if ([cellTypeId isEqualToString:downloadingResourceCell])
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellTypeId];
             cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-            cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
+            cell.detailTextLabel.textColor = UIColor.textColorSecondary;
 
             FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
             progressView.iconView = [[UIView alloc] init];
@@ -129,18 +126,15 @@
     {
         if (!mapItem.disabled)
         {
-            cell.textLabel.textColor = [UIColor blackColor];
+            cell.textLabel.textColor = [UIColor textColorPrimary];
             UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
             [btnAcc removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            if (![mapItem isInstalled])
-            {
-                [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
-                [btnAcc setImage:iconImage forState:UIControlStateNormal];
-                btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
-                btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
-                [cell setAccessoryView:btnAcc];
-            }
+            [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+            [btnAcc setImage:iconImage forState:UIControlStateNormal];
+            btnAcc.tintColor = UIColor.iconColorActive;
+            btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
+            [cell setAccessoryView:btnAcc];
         }
         else
         {
@@ -150,7 +144,7 @@
     }
 
     cell.imageView.image = [OAResourceType getIcon:mapItem.resourceType templated:YES];
-    cell.imageView.tintColor = [mapItem isInstalled] ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
+    cell.imageView.tintColor = UIColor.iconColorDefault;
     cell.textLabel.text = title;
     if (cell.detailTextLabel != nil)
         cell.detailTextLabel.text = subtitle;
@@ -311,7 +305,7 @@
             if (!progressView.isSpinning)
                 [progressView startSpinProgressBackgroundLayer];
         }
-        progressView.tintColor = UIColorFromRGB(color_primary_purple);
+        progressView.tintColor = UIColor.iconColorActive;
     }
 }
 

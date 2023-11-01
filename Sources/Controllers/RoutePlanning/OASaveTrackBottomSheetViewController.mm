@@ -12,6 +12,7 @@
 #import "OAMapRendererView.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -56,7 +57,7 @@
     [super viewDidLoad];
 
     [self.iconImageView setImage:[UIImage templateImageNamed:@"ic_custom_save_complete.png"]];
-    self.iconImageView.tintColor = UIColorFromRGB(color_primary_purple);
+    self.iconImageView.tintColor = UIColor.iconColorActive;
     self.openSavedTrackButton.layer.cornerRadius = 9.;
     self.createNewRouteButton.layer.cornerRadius = 9.;
     self.shareButton.layer.cornerRadius = 9.;
@@ -65,7 +66,7 @@
 
     NSString *gpxTitle = _fileName.lastPathComponent.stringByDeletingPathExtension;
     NSString *titleString = [NSString stringWithFormat:OALocalizedString(@"track_is_saved"), gpxTitle];
-    self.titleLabel.attributedText = [OAUtilities getColoredString:titleString highlightedString:gpxTitle highlightColor:UIColorFromRGB(color_primary_purple) fontSize:17. centered:YES];
+    self.titleLabel.attributedText = [OAUtilities getColoredString:titleString highlightedString:gpxTitle highlightColor:UIColor.textColorActive fontSize:17. centered:YES];
 }
 
 - (void) applyLocalization

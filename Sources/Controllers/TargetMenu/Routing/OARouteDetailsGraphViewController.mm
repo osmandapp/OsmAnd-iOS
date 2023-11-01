@@ -10,7 +10,6 @@
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OASizes.h"
-#import "OAColors.h"
 #import "OAStateChangedListener.h"
 #import "OARoutingHelper.h"
 #import "OAGPXTrackAnalysis.h"
@@ -193,7 +192,7 @@
     [self generateData];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    _tableView.backgroundColor = UIColor.whiteColor;
+    _tableView.backgroundColor = UIColor.groupBgColor;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_tableView setScrollEnabled:NO];
     _tableView.rowHeight = UITableViewAutomaticDimension;

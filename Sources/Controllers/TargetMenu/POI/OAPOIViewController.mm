@@ -13,6 +13,7 @@
 #import "OAPOILocationType.h"
 #import "OACollapsableLabelView.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OATransportStopType.h"
 #import "OATransportStopRoute.h"
 #import "OAPlugin.h"
@@ -226,7 +227,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         if ([vl hasPrefix:@"http://"] || [vl hasPrefix:@"https://"] || [vl hasPrefix:@"HTTP://"] || [vl hasPrefix:@"HTTPS://"])
         {
             isUrl = YES;
-            textColor = UIColorFromRGB(color_primary_purple);
+            textColor = UIColor.textColorActive;
         }
         else if (needLinks)
         {
@@ -234,7 +235,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             if (socialMediaUrl)
             {
                 isUrl = YES;
-                textColor = UIColorFromRGB(color_primary_purple);
+                textColor =UIColor.textColorActive;
             }
         }
 
@@ -306,7 +307,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         else if ([kContactPhoneTags containsObject:convertedKey])
         {
             iconId = @"ic_phone_number";
-            textColor = UIColorFromRGB(color_primary_purple);
+            textColor = UIColor.textColorActive;
             isPhoneNumber = YES;
         }
         else if ([convertedKey isEqualToString:WEBSITE] || [convertedKey isEqualToString:URL_KEY] || [kContactUrlTags containsObject:convertedKey])
@@ -318,7 +319,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                     icon = [OATargetInfoViewController getIcon:[OAUtilities drawablePath:[@"mm_" stringByAppendingString:convertedKey]]];
             }
             iconId = @"ic_website";
-            textColor = UIColorFromRGB(color_primary_purple);
+            textColor = UIColor.textColorActive;
             isUrl = YES;
         }
         else if ([convertedKey isEqualToString:CUISINE])
@@ -633,7 +634,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                                   icon:[UIImage imageNamed:@"ic_custom_osm_edits"]
                                             textPrefix:nil
                                                   text:[NSString stringWithFormat:@"%@%llu", link, entityId]
-                                             textColor:UIColorFromRGB(color_primary_purple)
+                                             textColor:UIColor.textColorActive
                                                 isText:YES
                                              needLinks:YES
                                                  order:10000

@@ -10,7 +10,6 @@
 #import "OAOsmUploadGPXVisibilityViewConroller.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
-#import "OAColors.h"
 #import "OASizes.h"
 #import "OAValueTableViewCell.h"
 #import "OAInputTableViewCell.h"
@@ -197,7 +196,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         [accountCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
         [accountCell setTitle: _isAuthorised ? [OAOsmOAuthHelper getUserDisplayName] : OALocalizedString(@"login_open_street_map_org")];
         [accountCell setIconName:@"ic_custom_user_profile"];
-        [accountCell setObj:(_isAuthorised ? UIColor.blackColor : UIColorFromRGB(color_primary_purple)) forKey:@"title_color"];
+        [accountCell setObj:(_isAuthorised ? UIColor.textColorPrimary : UIColor.textColorActive) forKey:@"title_color"];
         [accountCell setObj:([UIFont systemFontOfSize:17. weight:_isAuthorised ? UIFontWeightRegular : UIFontWeightMedium]) forKey:@"title_font"];
         [accountCell setObj:(_isAuthorised ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone)) forKey:@"accessory_type"];
         [accountCell setObj: (^void(){ [weakSelf onAccountButtonPressed]; }) forKey:@"actionBlock"];
@@ -294,7 +293,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     
     OAProgressBarCell *resultCell = (OAProgressBarCell *)[nib objectAtIndex:0];
     [resultCell.progressBar setProgress:0.0 animated:NO];
-    [resultCell.progressBar setProgressTintColor:UIColorFromRGB(color_primary_purple)];
+    [resultCell.progressBar setProgressTintColor:UIColor.iconColorActive];
     resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return resultCell;
 }
@@ -386,7 +385,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
             cell.titleLabel.textColor = [item objForKey:@"title_color"];
             cell.titleLabel.font = [item objForKey:@"title_font"];
             cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
-            cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.leftIconView.tintColor = UIColor.iconColorActive;
             cell.accessoryType = (UITableViewCellAccessoryType) [item integerForKey:@"accessory_type"];
             cell.accessibilityTraits = UIAccessibilityTraitButton;
         }

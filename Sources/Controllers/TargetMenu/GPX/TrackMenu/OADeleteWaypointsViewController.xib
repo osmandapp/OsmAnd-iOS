@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -36,7 +36,7 @@
                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <state key="normal" title="Cancel">
-                                <color key="titleColor" red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="titleColor" name="textColorActive"/>
                             </state>
                             <connections>
                                 <action selector="onLeftNavbarButtonPressed:" destination="-1" eventType="touchUpInside" id="TUg-Xw-s2i"/>
@@ -51,7 +51,7 @@
                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <state key="normal" title="Select All">
-                                <color key="titleColor" red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="titleColor" name="textColorActive"/>
                             </state>
                             <connections>
                                 <action selector="onSelectAllButtonClicked:" destination="-1" eventType="touchUpInside" id="ndh-u6-KEQ"/>
@@ -59,7 +59,7 @@
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nWK-Mj-437">
                             <rect key="frame" x="0.0" y="103" width="414" height="1"/>
-                            <color key="backgroundColor" red="0.76862745099999996" green="0.76862745099999996" blue="0.76862745099999996" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="separatorColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="69F-op-0d5"/>
                             </constraints>
@@ -70,11 +70,11 @@
                                 <constraint firstAttribute="height" constant="22" id="P8V-Y3-w57"/>
                             </constraints>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="textColor" name="textColorPrimary"/>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" name="viewBgColor"/>
                     <constraints>
                         <constraint firstAttribute="centerX" secondItem="eU4-oc-Lsv" secondAttribute="centerX" id="12w-Vf-pgc"/>
                         <constraint firstAttribute="trailing" secondItem="twp-js-XcL" secondAttribute="trailing" constant="16" id="2cQ-pS-JG8"/>
@@ -92,22 +92,23 @@
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" layoutMarginsFollowReadableWidth="YES" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="14" estimatedSectionHeaderHeight="14" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="OGE-fG-Yjv">
                     <rect key="frame" x="0.0" y="104" width="414" height="688"/>
                     <viewLayoutGuide key="safeArea" id="cFw-9L-jrd"/>
-                    <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                    <color key="tintColor" red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" name="viewBgColor"/>
+                    <color key="tintColor" name="iconColorActive"/>
+                    <color key="separatorColor" name="separatorColor"/>
                 </tableView>
                 <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7tK-Lh-ccN">
                     <rect key="frame" x="0.0" y="792" width="414" height="104"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D6M-HL-dAI">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
-                            <color key="backgroundColor" red="0.76862745099999996" green="0.76862745099999996" blue="0.76862745099999996" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="separatorColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="rjP-n5-tdp"/>
                             </constraints>
                         </view>
                         <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="fME-kS-hDv">
                             <rect key="frame" x="20" y="10" width="374" height="60"/>
-                            <color key="backgroundColor" red="1" green="0.27843137254901962" blue="0.050980392156862744" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="buttonBgColorDisruptive"/>
                             <rect key="contentStretch" x="0.0" y="0.0" width="0.94999999999999996" height="1"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="60" id="Dgs-Gh-I7w"/>
@@ -127,7 +128,7 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" name="viewBgColor"/>
                     <constraints>
                         <constraint firstItem="fME-kS-hDv" firstAttribute="top" secondItem="D6M-HL-dAI" secondAttribute="bottom" constant="9" id="6s4-2B-rFn"/>
                         <constraint firstItem="fME-kS-hDv" firstAttribute="leading" secondItem="7tK-Lh-ccN" secondAttribute="leadingMargin" id="IrO-gS-3ig"/>
@@ -139,7 +140,7 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="0nF-K3-EiB"/>
-            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <color key="backgroundColor" name="viewBgColor"/>
             <constraints>
                 <constraint firstItem="7tK-Lh-ccN" firstAttribute="top" secondItem="0nF-K3-EiB" secondAttribute="bottom" priority="750" constant="51" id="2zO-eU-8Oc"/>
                 <constraint firstItem="OGE-fG-Yjv" firstAttribute="leading" secondItem="9vq-51-93s" secondAttribute="leading" id="5Ij-Px-8fV"/>
@@ -159,8 +160,23 @@
         </view>
     </objects>
     <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
+        <namedColor name="buttonBgColorDisruptive">
+            <color red="0.90588235294117647" green="0.11372549019607843" blue="0.21176470588235294" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="iconColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="separatorColor">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorPrimary">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="viewBgColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

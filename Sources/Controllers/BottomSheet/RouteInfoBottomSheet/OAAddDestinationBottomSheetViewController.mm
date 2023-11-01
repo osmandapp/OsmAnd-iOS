@@ -616,6 +616,13 @@
     return [super initWithParam:nil];
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [[ThemeManager shared] configureWithAppMode:[OAAppSettings sharedManager].applicationMode.get];
+}
+
 - (void) setupView
 {
     if (!self.screenObj)

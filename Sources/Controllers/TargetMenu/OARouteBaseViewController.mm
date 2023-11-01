@@ -9,7 +9,7 @@
 #import "OARouteBaseViewController.h"
 #import "Localization.h"
 #import "OARootViewController.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OARoutingHelper.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OANativeUtilities.h"
@@ -522,7 +522,7 @@
 + (NSAttributedString *) getFormattedElevationString:(OAGPXTrackAnalysis *)analysis
 {
     UIFont *textFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-    NSDictionary *textAttrs = @{ NSFontAttributeName: textFont, NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer) };
+    NSDictionary *textAttrs = @{ NSFontAttributeName: textFont, NSForegroundColorAttributeName: UIColor.textColorSecondary };
     if (analysis)
     {
         NSMutableAttributedString *res = [NSMutableAttributedString new];
@@ -532,14 +532,14 @@
         arrowUpAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
         NSMutableAttributedString *uphillIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
                                                  [NSAttributedString attributedStringWithAttachment:arrowUpAttachment]];
-        [uphillIcon setColor:UIColorFromRGB(color_tint_gray) forString:uphillIcon.string];
+        [uphillIcon setColor:UIColor.iconColorDefault forString:uphillIcon.string];
 
         NSTextAttachment *arrowDownAttachment = [[NSTextAttachment alloc] init];
         arrowDownAttachment.image = [UIImage templateImageNamed:@"ic_small_descent"];
         arrowDownAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
         NSMutableAttributedString *downhilIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
                                                   [NSAttributedString attributedStringWithAttachment:arrowDownAttachment]];
-        [downhilIcon setColor:UIColorFromRGB(color_tint_gray) forString:downhilIcon.string];
+        [downhilIcon setColor:UIColor.iconColorDefault forString:downhilIcon.string];
 
         [res appendAttributedString:uphillIcon];
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:
@@ -561,8 +561,8 @@
 {
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
 
-    NSDictionary *numericAttributes = @{NSFontAttributeName: [UIFont scaledSystemFontOfSize:20 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
-    NSDictionary *alphabeticAttributes = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleTitle3], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer) };
+    NSDictionary *numericAttributes = @{NSFontAttributeName: [UIFont scaledSystemFontOfSize:20 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.textColorPrimary};
+    NSDictionary *alphabeticAttributes = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleTitle3], NSForegroundColorAttributeName : UIColor.textColorSecondary };
     NSString *dist = [OAOsmAndFormatter getFormattedDistance:[routingHelper getLeftDistance]];
     NSAttributedString *distance = [self formatDistance:dist numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];
     NSAttributedString *time = [self getFormattedTimeInterval:[routingHelper getLeftTime] numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];

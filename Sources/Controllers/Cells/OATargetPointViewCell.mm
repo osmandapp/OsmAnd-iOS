@@ -18,6 +18,7 @@
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAPOI.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OATargetPointViewCell
 
@@ -94,7 +95,7 @@
     if (_targetPoint.ctrlAttrTypeStr)
     {
         [_descriptionView setAttributedText:_targetPoint.ctrlAttrTypeStr];
-        [_descriptionView setTextColor:UIColorFromRGB(0x969696)];
+        [_descriptionView setTextColor:UIColor.textColorSecondary];
         return;
     }
     else if (_targetPoint.ctrlTypeStr)
@@ -107,7 +108,7 @@
         addressStr = typeStr;
     }
     [_descriptionView setText:addressStr];
-    [_descriptionView setTextColor:UIColorFromRGB(0x969696)];
+    [_descriptionView setTextColor:UIColor.textColorSecondary];
 }
 
 @end

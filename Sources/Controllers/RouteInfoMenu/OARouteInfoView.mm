@@ -238,6 +238,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     self.contentContainer.layer.cornerRadius = value;
 }
 
+- (void) traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        [_tableView reloadData];
+}
+
 - (void) setupGoButton
 {
     BOOL isActive = _app.data.pointToNavigate != nil;
@@ -929,7 +937,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     button.layer.cornerRadius = 42 / 2;
     button.layer.borderWidth = 1.0;
-    button.layer.borderColor = UIColorFromRGB(color_bottom_sheet_secondary).CGColor;
+    button.layer.borderColor = UIColor.separatorColor.CGColor;
 }
 
 - (CGPoint) calculateInitialPoint
@@ -1638,6 +1646,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPublicTransportShieldCell getCellIdentifier] owner:self options:nil];
             cell = (OAPublicTransportShieldCell *)[nib objectAtIndex:0];
+            cell.backgroundColor = UIColor.groupBgColor;
         }
         
         if (cell)

@@ -17,6 +17,7 @@
 #import "OATargetPoint.h"
 #import "OAMapLayers.h"
 #import "OATransportStopsLayer.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -57,7 +58,7 @@
 
 - (UIColor *) getStatusBarColor
 {
-    return UIColorFromRGB(0xFC7B08);
+    return UIColor.navBarBgColorPrimary;
 }
 
 - (void) updateFrame:(BOOL)animated

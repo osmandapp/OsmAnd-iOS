@@ -18,7 +18,7 @@
 #import "OASimpleTableViewCell.h"
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -293,7 +293,7 @@
                 [cell leftIconVisibility:NO];
                 [cell descriptionVisibility:NO];
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                cell.valueLabel.textColor = UIColorFromRGB(color_primary_orange_navbar_background);
+                cell.valueLabel.textColor = UIColor.iconColorSelected;
             }
             if (cell)
             {

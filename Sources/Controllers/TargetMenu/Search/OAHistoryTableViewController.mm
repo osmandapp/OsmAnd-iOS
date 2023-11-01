@@ -17,7 +17,7 @@
 #import "OAUtilities.h"
 #import "OADistanceDirection.h"
 #import "OARootViewController.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
@@ -474,7 +474,7 @@
                 cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 [cell showButton:NO];
-                cell.cellImageView.tintColor = UIColorFromRGB(color_tint_gray);
+                cell.cellImageView.tintColor = UIColor.iconColorDefault;
             }
             if (cell)
             {
@@ -494,8 +494,8 @@
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
                 cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
-                cell.button.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:0.1];
-                [cell.button setTitleColor:[UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:1.0] forState:UIControlStateHighlighted];
+                cell.button.backgroundColor = [UIColor.buttonBgColorPrimary colorWithAlphaComponent:0.1];
+                [cell.button setTitleColor:UIColor.buttonTextColorPrimary forState:UIControlStateHighlighted];
                 cell.button.titleLabel.font = [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold];
                 cell.button.layer.cornerRadius = 9.;
                 cell.topMarginConstraint.constant = 9.;

@@ -697,6 +697,9 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateColors];
         [self recreateAllControls];
+        if (@available(iOS 16.0, *)) {
+            [self setNeedsUpdateOfSupportedInterfaceOrientations];
+        }
     });
 }
 

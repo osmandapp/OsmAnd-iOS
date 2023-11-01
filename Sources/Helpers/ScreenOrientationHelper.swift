@@ -15,7 +15,7 @@ class ScreenOrientationHelper : NSObject {
     private let settings = OAAppSettings.sharedManager()
     
     private var cachedUserInterfaceOrientationMask: UIInterfaceOrientationMask = .all
-    private var cachedCurrentInterfaceOrientation: UIInterfaceOrientation = .unknown
+    private var cachedCurrentInterfaceOrientation: UIInterfaceOrientation = .portrait
     
     private static var sharedHelperInstance: ScreenOrientationHelper?
     static let screenOrientationChangedKey: String = "screenOrientationChangedKey"
@@ -101,16 +101,14 @@ class ScreenOrientationHelper : NSObject {
         }
         
         let deviceOrietation: UIDeviceOrientation = UIDevice.current.orientation
-        if deviceOrietation == .portrait {
-            cachedCurrentInterfaceOrientation = .portrait
-        } else if deviceOrietation == .portraitUpsideDown {
+        if deviceOrietation == .portraitUpsideDown {
             cachedCurrentInterfaceOrientation = .portraitUpsideDown
         } else if deviceOrietation == .landscapeLeft {
             cachedCurrentInterfaceOrientation = .landscapeLeft
         } else if deviceOrietation == .landscapeRight {
             cachedCurrentInterfaceOrientation = .landscapeRight
         } else {
-            cachedCurrentInterfaceOrientation = .unknown
+            cachedCurrentInterfaceOrientation = .portrait
         }
     }
     

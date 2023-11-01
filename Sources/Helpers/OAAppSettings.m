@@ -4992,7 +4992,7 @@
             [_lastUsedApplicationMode set:applicationMode.stringKey];
         [[ThemeManager shared] configureWithAppMode: applicationMode];
         [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:prevAppMode];
-        [[NSNotificationCenter defaultCenter] postNotificationName:OAScreenOrientationHelper.applicationModeChangedKey object:nil];
+        [[OAScreenOrientationHelper sharedInstance] updateSettings];
     }
 }
 

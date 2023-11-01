@@ -471,7 +471,7 @@
 
 - (UIInterfaceOrientation)getUIIntefaceOrientation
 {
-    return _windowScene ? _windowScene.interfaceOrientation : UIInterfaceOrientationUnknown;
+    return _windowScene.interfaceOrientation;
 }
 
 @end

@@ -19,8 +19,9 @@ class ScreenOrientationHelper : NSObject {
     
     private static var sharedHelperInstance: ScreenOrientationHelper?
     static let screenOrientationChangedKey: String = "screenOrientationChangedKey"
-    static let applicationModeChangedKey: String = "applicationModeChangedKey"
-    
+
+    //MARK: Initialization
+
     static var sharedInstance: ScreenOrientationHelper {
         get {
             if sharedHelperInstance == nil {
@@ -32,43 +33,24 @@ class ScreenOrientationHelper : NSObject {
     
     override init() {
         super.init()
-        updateUserInterfaceOrientationMask()
-        updateCurrentInterfaceOrientation()
+        updateCachedUserInterfaceOrientationMask()
+        updateCachedCurrentInterfaceOrientation()
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(onUserOrientationDidChange),
+                                               selector: #selector(onProfileSettingDidChange),
                                                name: NSNotification.Name(kNotificationSetProfileSetting),
                                                object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(onDeviceOrientationDidChange),
                                                name: UIDevice.orientationDidChangeNotification,
                                                object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(onApplicationModeChanged),
-                                               name: NSNotification.Name(Self.applicationModeChangedKey),
-                                               object: nil)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
-    @objc private func onApplicationModeChanged() {
-        updateUserInterfaceOrientationMask()
-        onDeviceOrientationDidChange()
-    }
-    
-    @objc private func onUserOrientationDidChange(notification: Notification) {
-        if let obj = notification.object as? OACommonPreference, obj == settings?.mapScreenOrientation {
-            updateUserInterfaceOrientationMask()
-            onDeviceOrientationDidChange()
-        }
-    }
-    
-    @objc private func onDeviceOrientationDidChange() {
-        updateCurrentInterfaceOrientation()
-        NotificationCenter.default.post(name: NSNotification.Name(Self.screenOrientationChangedKey), object: nil)
-    }
-    
+
+    //MARK: Settings
+
     func isPortrait() -> Bool {
         cachedCurrentInterfaceOrientation.isPortrait
     }
@@ -81,7 +63,23 @@ class ScreenOrientationHelper : NSObject {
         cachedUserInterfaceOrientationMask
     }
     
-    private func updateUserInterfaceOrientationMask() {
+    func getCurrentInterfaceOrientation() -> UIInterfaceOrientation {
+        cachedCurrentInterfaceOrientation
+    }
+
+    //MARK: Updates
+
+    func updateSettings() {
+        updateCachedUserInterfaceOrientationMask()
+        updateDeviceOrientation()
+    }
+
+    private func updateDeviceOrientation() {
+        updateCachedCurrentInterfaceOrientation()
+        NotificationCenter.default.post(name: NSNotification.Name(Self.screenOrientationChangedKey), object: nil)
+    }
+
+    private func updateCachedUserInterfaceOrientationMask() {
         let mapScreenOrientation: Int32 = settings?.mapScreenOrientation.get() ?? Int32(EOAScreenOrientation.system.rawValue)
         cachedUserInterfaceOrientationMask =
             mapScreenOrientation == EOAScreenOrientation.portrait.rawValue ? .portrait
@@ -89,11 +87,7 @@ class ScreenOrientationHelper : NSObject {
             : .all
     }
     
-    func getCurrentInterfaceOrientation() -> UIInterfaceOrientation {
-        return cachedCurrentInterfaceOrientation
-    }
-    
-    private func updateCurrentInterfaceOrientation() {
+    private func updateCachedCurrentInterfaceOrientation() {
         let userOrientation: UIInterfaceOrientationMask = getUserInterfaceOrientationMask()
         let systemiOrientation: UIInterfaceOrientation = (UIApplication.shared.delegate as? OAAppDelegate)?.interfaceOrientation ?? .unknown
         if userOrientation != .all {
@@ -120,4 +114,17 @@ class ScreenOrientationHelper : NSObject {
         }
     }
     
+    //MARK: Selectors
+
+    @objc private func onProfileSettingDidChange(notification: Notification) {
+        if let obj = notification.object as? OACommonPreference, obj == settings?.mapScreenOrientation {
+            updateCachedUserInterfaceOrientationMask()
+            updateDeviceOrientation()
+        }
+    }
+
+    @objc private func onDeviceOrientationDidChange() {
+        updateDeviceOrientation()
+    }
+
 }

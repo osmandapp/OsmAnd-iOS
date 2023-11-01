@@ -351,14 +351,6 @@
                 NSLog(@"Failed to create table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
             }
             if (errMsg != NULL) sqlite3_free(errMsg);
-
-            //add one row with our current database version
-            sqlite3_stmt *statement;
-            const char *stmt = [[NSString stringWithFormat:@"INSERT INTO %@ (%@) VALUES (?)", VERSION_TABLE_NAME, VERSION_COL] UTF8String];
-            sqlite3_prepare_v2(_travelGuidesDB, stmt, -1, &statement, NULL);
-            sqlite3_bind_int(statement, 1, DB_VERSION);
-            sqlite3_step(statement);
-            sqlite3_finalize(statement);
             
             sqlite3_close(_travelGuidesDB);
         }
@@ -370,8 +362,6 @@
     //Add database migrating code here
 }
 
-//Sqlite library in Objc don't have get/set db version methods like Sqlite lib for Java.
-//So we created special table with only one cell for storing version number. And methods.
 - (int) readDBVersion
 {
     const char *dbpath = [_dbFilePath UTF8String];
@@ -380,16 +370,14 @@
         if (sqlite3_open(dbpath, &_travelGuidesDB) == SQLITE_OK)
         {
             sqlite3_stmt *statement;
-            const char *stmt = [[NSString stringWithFormat:@"SELECT * FROM %@", VERSION_TABLE_NAME] UTF8String];
+            const char *stmt = [@"PRAGMA user_version" UTF8String];
             if (sqlite3_prepare_v2(_travelGuidesDB, stmt, -1, &statement, NULL) == SQLITE_OK)
             {
-                while (sqlite3_step(statement) == SQLITE_ROW)
-                {
+                if (sqlite3_step(statement) == SQLITE_ROW) {
                     dbVersion = sqlite3_column_int(statement, 0);
-                    break;
                 }
-                sqlite3_finalize(statement);
             }
+            sqlite3_finalize(statement);
         }
         sqlite3_close(_travelGuidesDB);
     });
@@ -403,9 +391,9 @@
         if (sqlite3_open(dbpath, &_travelGuidesDB) == SQLITE_OK)
         {
             sqlite3_stmt *statement;
-            const char *stmt = [[NSString stringWithFormat:@"UPDATE %@ SET %@ = ?", VERSION_TABLE_NAME, VERSION_COL] UTF8String];
-            sqlite3_prepare_v2(_travelGuidesDB, stmt, -1, &statement, NULL);
-            sqlite3_bind_int(statement, 1, versionNumber);
+            char *errMsg;
+            const char *stmt = [[NSString stringWithFormat:@"PRAGMA user_version = %i", versionNumber] UTF8String];
+            sqlite3_exec(_travelGuidesDB, stmt, NULL, NULL, &errMsg);
             sqlite3_step(statement);
             sqlite3_finalize(statement);
             sqlite3_close(_travelGuidesDB);

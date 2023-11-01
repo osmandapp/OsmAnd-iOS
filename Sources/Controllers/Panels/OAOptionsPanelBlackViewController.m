@@ -218,7 +218,7 @@
     [_menuButtonPlanRoute setTintColor:UIColor.iconColorDefault];
     [_menuButtonWeather setTintColor:UIColor.iconColorDefault];
     [_menuButtonPlugins setTintColor:UIColor.iconColorDefault];
-    [_menuButtonTravelGuides setTintColor:UIColorFromRGB(color_options_panel_icon)];
+    [_menuButtonTravelGuides setTintColor:UIColor.iconColorDefault];
 }
 
 - (void)adjustButtonInsets:(UIButton *)btn
@@ -335,6 +335,7 @@
     [_menuButtonPlanRoute setImage:[UIImage templateImageNamed:@"ic_custom_routes.png"] forState:UIControlStateNormal];
     [_menuButtonWeather setImage:[UIImage templateImageNamed:@"ic_custom_umbrella.png"] forState:UIControlStateNormal];
     [_menuButtonPlugins setImage:[UIImage templateImageNamed:@"left_menu_icon_plugins"] forState:UIControlStateNormal];
+    [_menuButtonTravelGuides setImage:[UIImage templateImageNamed:@"left_menu_icon_plugins"] forState:UIControlStateNormal];
     
     [self applyingAppTheme];
 }

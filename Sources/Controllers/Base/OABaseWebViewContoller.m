@@ -19,6 +19,9 @@
 @end
 
 @implementation OABaseWebViewController
+{
+    BOOL _cachedIsLightTheme;
+}
 
 @synthesize tableData;
 
@@ -47,13 +50,18 @@
 
     self.webView.hidden = YES;
     [self loadWebView];
+    _cachedIsLightTheme = [ThemeManager shared].isLightTheme;
 }
 
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    [self updateAppearance];
-    [self loadWebView];
+    if (_cachedIsLightTheme != [ThemeManager shared].isLightTheme)
+    {
+        [self updateAppearance];
+        [self loadWebView];
+        _cachedIsLightTheme = [ThemeManager shared].isLightTheme;
+    }
 }
 
 #pragma mark - Web data

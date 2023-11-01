@@ -27,6 +27,7 @@
 #import "OASizes.h"
 #import "AFNetworkReachabilityManagerWrapper.h"
 #import "OAChoosePlanHelper.h"
+#import "OAWebImagesCacheHelper.h"
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"
@@ -102,6 +103,7 @@
 #import "OAAppDelegate.h"
 #import "OADirectionAppearanceViewController.h"
 #import "OACarPlayMapDashboardViewController.h"
+#import "OAWikipediaLanguagesViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -114,6 +116,7 @@
 #import "OAButtonTableViewCell.h"
 #import "OAGpxStatBlockCollectionViewCell.h"
 #import "OATitleDescriptionBigIconCell.h"
+#import "OASearchMoreCell.h"
 
 // Other
 #import "OAIndexConstants.h"

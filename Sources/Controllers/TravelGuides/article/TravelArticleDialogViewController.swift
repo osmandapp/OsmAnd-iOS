@@ -116,19 +116,25 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
     
     var contentItems: TravelContentItem? = nil
     
+    var cachedHtml = ""
+    var imagesCacheHelper: TravelGuidesImageCacheHelper?
+    
     
     required init?(coder: NSCoder) {
         super.init()
+        imagesCacheHelper = TravelGuidesImageCacheHelper.sharedDatabase
     }
     
     override init() {
         super.init()
+        imagesCacheHelper = TravelGuidesImageCacheHelper.sharedDatabase
     }
     
     init(articleId: TravelArticleIdentifier, lang: String) {
         super.init()
         self.articleId = articleId
         self.selectedLang = lang
+        imagesCacheHelper = TravelGuidesImageCacheHelper.sharedDatabase
     }
 
     
@@ -401,7 +407,7 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
     }
     
     override func getContent() -> String! {
-        createHtmlContent()
+        cachedHtml
     }
     
     func populateArticle() {
@@ -419,13 +425,26 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
         title = getTitle()
         TravelObfHelper.shared.getBookmarksHelper().addToHistory(article: article)
         
-        UIView.transition(with: self.view, duration: 0.2) {
-            self.updateNavbar()
-            self.applyLocalization()
-            self.updateBookmarkButton()
-            self.loadWebView()
-        }
+        cachedHtml = createHtmlContent() ?? ""
         
+        //fetch images from db. if not found -  start async downloading.
+        imagesCacheHelper?.processWholeHTML(cachedHtml, downloadMode: getImagesDownloadMode(), onlyNow: isDownloadImagesOnlyNow(), onComplete: { htmlWithInjectedImages in
+            DispatchQueue.main.async {
+                
+                if let htmlWithInjectedImages, !htmlWithInjectedImages.isEmpty {
+                    self.cachedHtml = htmlWithInjectedImages
+                    self.printHtmlToDebugFileIfEnabled(htmlWithInjectedImages)
+                }
+                
+                UIView.transition(with: self.view, duration: 0.2) {
+                    self.updateNavbar()
+                    self.applyLocalization()
+                    self.updateBookmarkButton()
+                    self.loadWebView()
+                }
+                
+            }
+        })
     }
     
     func createHtmlContent() -> String? {
@@ -469,7 +488,7 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
             
             if !dontLoadImages {
                 let url = TravelArticle.getImageUrl(imageTitle: imageTitle, thumbnail: false)
-                sb += "<div class=\"title-image" + nightModeClass + "\" style=\"background-image: url(" + url + ")\"></div>"
+                sb += "<div class=\"title-image" + nightModeClass + "\" style=\"background-image\"> <img src=\"" + url + "\"> </div>"
             }
         }
         

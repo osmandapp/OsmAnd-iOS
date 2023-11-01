@@ -65,7 +65,7 @@
 {
     self = [super init];
     if (self) {
-        _dbQueue = dispatch_queue_create("backup_dbQueue", DISPATCH_QUEUE_SERIAL);
+        _dbQueue = dispatch_queue_create("travelGuides_dbQueue", DISPATCH_QUEUE_SERIAL);
         _tmpDir = [NSTemporaryDirectory() stringByAppendingPathComponent:TEMP_DIR_NAME];
         BOOL isDir = YES;
         if (![[NSFileManager defaultManager] fileExistsAtPath:_tmpDir isDirectory:&isDir])

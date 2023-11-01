@@ -35,15 +35,13 @@ final class TravelGuidesSettingsViewController : OABaseNavbarViewController, Upd
         downloadImagesRow.iconName = "ic_custom_photo"
         downloadImagesRow.key = "downloadImagesRow"
         
-        /*
-        //TODO: Uncomment after cache helper implementing
+        TravelGuidesImageCacheHelper.sharedDatabase.getFormattedFileSize()
         let cacheSizeRow = imagesSection.createNewRow()
         cacheSizeRow.cellType = OAValueTableViewCell.getIdentifier()
         cacheSizeRow.title = localizedString("cache_size")
-        cacheSizeRow.descr = "123 MB"
+        cacheSizeRow.descr = TravelGuidesImageCacheHelper.sharedDatabase.getFormattedFileSize()
         cacheSizeRow.iconName = "ic_custom_photo"
         cacheSizeRow.key = "cacheSizeRow"
-        */
         
         let historySection = tableData.createNewSection()
         let clearHistoryRow = historySection.createNewRow()
@@ -106,7 +104,9 @@ final class TravelGuidesSettingsViewController : OABaseNavbarViewController, Upd
             vc.delegate = self
             show(vc)
         } else if item.key == "cacheSizeRow" {
-            //TODO: implement
+            let vc = TravelGuidesSettingsCacheViewController()
+            vc.delegate = self
+            show(vc)
         } else if item.key == "clearHistoryRow" {
             showClearHistoryAlert()
         }

@@ -24,7 +24,6 @@ final class TravelGuidesState : NSObject {
     var exploreTabTableData: OATableDataModel?
     var lastSelectedIndexPath: IndexPath?
     var downloadingResources: [OAResourceSwiftItem] = []
-    var cachedPreviewImages: ImageCache?
     
     //Article view
     var article: TravelArticle?
@@ -46,7 +45,6 @@ final class TravelGuidesState : NSObject {
         exploreTabTableData = nil
         lastSelectedIndexPath = nil
         downloadingResources = []
-        cachedPreviewImages = nil
         article = nil
         articleId = nil
         selectedLang = nil

@@ -196,6 +196,7 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
     
     override func updateAppearance() {
         super.updateAppearance()
+        populateArticle()
         if let bottomView {
             bottomView.addBlurEffect(ThemeManager.shared.isLightTheme(), cornerRadius: 0, padding: 0)
         }

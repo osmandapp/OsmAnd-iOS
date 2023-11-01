@@ -93,7 +93,11 @@
         id localIdentifier = [currentLocal objectForKey:NSLocaleIdentifier];
         _currentLocale = [NSLocale localeWithLocaleIdentifier:localIdentifier];
     }
+    [self updateContent];
+}
 
+- (void)updateContent
+{
     if (_poi.localizedContent.count == 1)
     {
         _contentLocale = _poi.localizedContent.allKeys.firstObject;
@@ -153,7 +157,7 @@
 - (void)updateAppearance
 {
     [super updateAppearance];
-    [self postInit];
+    [self updateContent];
 }
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler

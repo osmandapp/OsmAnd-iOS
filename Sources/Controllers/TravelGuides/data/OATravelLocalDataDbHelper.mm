@@ -65,7 +65,7 @@
 {
     self = [super init];
     if (self) {
-        _dbQueue = dispatch_queue_create("travelGuides_dbQueue", DISPATCH_QUEUE_SERIAL);
+        _dbQueue = dispatch_queue_create("travel_guides_db_queue", DISPATCH_QUEUE_SERIAL);
         _tmpDir = [NSTemporaryDirectory() stringByAppendingPathComponent:TEMP_DIR_NAME];
         BOOL isDir = YES;
         if (![[NSFileManager defaultManager] fileExistsAtPath:_tmpDir isDirectory:&isDir])
@@ -136,7 +136,7 @@
 {
     self = [super init];
     if (self) {
-        _dbQueue = dispatch_queue_create("backup_dbQueue", DISPATCH_QUEUE_SERIAL);
+        _dbQueue = dispatch_queue_create("travel_guides_db_queue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
@@ -194,7 +194,7 @@
 {
     self = [super init];
     if (self) {
-        _dbQueue = dispatch_queue_create("backup_dbQueue", DISPATCH_QUEUE_SERIAL);
+        _dbQueue = dispatch_queue_create("travel_guides_db_queue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
@@ -299,7 +299,7 @@
         if (![[NSFileManager defaultManager] fileExistsAtPath:_tmpDir isDirectory:&isDir])
             [[NSFileManager defaultManager] createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:nil];
         
-        dbQueue = dispatch_queue_create("backup_dbQueue", DISPATCH_QUEUE_SERIAL);
+        dbQueue = dispatch_queue_create("travel_guides_db_queue", DISPATCH_QUEUE_SERIAL);
         
         [self load];
     }

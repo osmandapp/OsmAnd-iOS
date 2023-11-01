@@ -46,6 +46,6 @@
 
 + (OAGPX *) buildGpx:(NSString *)path title:(NSString *)title document:(OAGPXDocumentAdapter *)document;
 
-+ (NSString *) selectedGPXFiles:(NSString *)fileName;
++ (NSString *) getSelectedGPXFilePath:(NSString *)fileName;
 
 @end

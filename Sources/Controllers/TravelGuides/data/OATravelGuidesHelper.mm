@@ -254,11 +254,11 @@
         BOOL hasAltitude = NO;
         OATrack *track = [[OATrack alloc] init];
         NSMutableArray<OATrkSegment *> *segments = [NSMutableArray array];
-        for (auto& binaryMapObject : segmentList)
+        for (const auto& binaryMapObject : segmentList)
         {
             OATrkSegment *trkSegment = [[OATrkSegment alloc] init];
             NSMutableArray<OAWptPt *> *points = [NSMutableArray array];
-            for (auto& point : binaryMapObject->points31)
+            for (const auto& point : binaryMapObject->points31)
             {
                 const auto latLon = OsmAnd::Utilities::convert31ToLatLon(point);
                 OAWptPt *wptPt = [[OAWptPt alloc] init];
@@ -341,9 +341,9 @@
     return gpx;
 }
 
-+ (NSString *) selectedGPXFiles:(NSString *)fileName
++ (NSString *) getSelectedGPXFilePath:(NSString *)fileName
 {
-    return [OASelectedGPXHelper.instance selectedGPXFiles:fileName];
+    return [OASelectedGPXHelper.instance getSelectedGPXFilePath:fileName];
 }
 
 + (QList< std::shared_ptr<const OsmAnd::BinaryMapObject> >) searchGpxMapObject:(OATravelGpx *)travelGpx
@@ -351,7 +351,7 @@
     OsmAndAppInstance app = OsmAndApp.instance;
     QList< std::shared_ptr<const OsmAnd::ObfFile> > files = app.resourcesManager->obfsCollection->getObfFiles();
     std::shared_ptr<const OsmAnd::ObfFile> res;
-    for (std::shared_ptr<const OsmAnd::ObfFile> file : files)
+    for (const auto& file : files)
     {
         NSString *path = file->filePath.toNSString();
         if ([path hasSuffix:travelGpx.file])
@@ -360,7 +360,7 @@
             break;
         }
     }
-    std::shared_ptr<OsmAnd::ObfDataInterface> obfsDataInterface = app.resourcesManager->obfsCollection->obtainDataInterface(res);
+    const auto& obfsDataInterface = app.resourcesManager->obfsCollection->obtainDataInterface(res);
     
     QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > loadedBinaryMapObjects;
     QList< std::shared_ptr<const OsmAnd::Road> > loadedRoads;
@@ -374,7 +374,7 @@
     
     QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > segmentList;
     
-    for (auto& binaryMapObject : loadedBinaryMapObjects)
+    for (const auto& binaryMapObject : loadedBinaryMapObjects)
     {
         NSString *ref = @"";
         NSString *routeId = @"";
@@ -384,11 +384,11 @@
         {
             QString tag = binaryMapObject->attributeMapping->decodeMap[captionAttributeId].tag;
             const auto& value = OsmAnd::constOf(binaryMapObject->captions)[captionAttributeId];
-            if (tag == QString("ref"))
+            if (tag == QStringLiteral("ref"))
                 ref = value.toNSString();
-            if (tag == QString("route_id"))
+            if (tag == QStringLiteral("route_id"))
                 routeId = value.toNSString();
-            if (tag == QString("name"))
+            if (tag == QStringLiteral("name"))
                 name = value.toNSString();
         }
         

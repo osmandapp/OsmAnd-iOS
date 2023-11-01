@@ -171,8 +171,8 @@
         _weatherForecastPath = [_cachePath stringByAppendingPathComponent:@"WeatherForecast"];
         _favoritesPath = [_documentsPath stringByAppendingPathComponent:FAVORITES_INDEX_DIR];
         _favoritesBackupPath = [_documentsPath stringByAppendingPathComponent:FAVORITES_BACKUP_DIR];
-        _travelGuidesPath = [_documentsPath stringByAppendingPathComponent:@"Travel"];
-        _gpxTravelPath = [_gpxPath stringByAppendingPathComponent:@"Travel"];
+        _travelGuidesPath = [_documentsPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
+        _gpxTravelPath = [_gpxPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
 
         _favoritesFilePrefix = @"favorites";
         _favoritesGroupNameSeparator = @"-";

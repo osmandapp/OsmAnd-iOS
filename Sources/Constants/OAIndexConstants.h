@@ -83,7 +83,7 @@
 #define NAUTICAL_INDEX_DIR "nautical"
 #define ROADS_INDEX_DIR @"roads"
 #define WIKI_INDEX_DIR @"wiki"
-#define WIKIVOYAGE_INDEX_DIR @"travel"
+#define WIKIVOYAGE_INDEX_DIR @"Travel"
 //public static final String GPX_TRAVEL_DIR = GPX_INDEX_DIR + WIKIVOYAGE_INDEX_DIR;
 #define AV_INDEX_DIR @"avnotes"
 #define FONT_INDEX_DIR @"fonts"

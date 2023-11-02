@@ -23,7 +23,7 @@
 #define kSearchLimit 200
 const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
-@class OAPOI, OAPOIType, OAPOIBaseType, OAPOICategory, OAPOIFilter, OAPOIAdapter;
+@class OAPOI, OAPOIType, OAPOIBaseType, OAPOICategory, OAPOIFilter;
 @class OASearchPoiTypeFilter, OAPOIUIFilter;
 
 @protocol OAPOISearchDelegate
@@ -93,7 +93,7 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 - (void) findPOIsByKeyword:(NSString *)keyword;
 - (void) findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)category poiTypeName:(NSString *)type radiusIndex:(int *)radiusIndex;
 - (void) findPOIsByFilter:(OAPOIUIFilter *)filter radiusIndex:(int *)radiusIndex;
-- (NSArray<OAPOI *> *) findTravelGuidesByKeyword:(NSString *)keyword categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOIAdapter *poi))publish;
+- (NSArray<OAPOI *> *) findTravelGuidesByKeyword:(NSString *)keyword categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish;
 - (OAPOIType *) getDefaultOtherCategoryType;
 
 -(NSDictionary<NSString *, OAPOIType *> *)getAllTranslatedNames:(BOOL)skipNonEditable;
@@ -106,7 +106,7 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 + (UIImage *)getCustomFilterIcon:(OAPOIUIFilter *) filter;
 + (void) fetchValuesContentPOIByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity poi:(OAPOI *)poi;
 
-+ (NSArray<OAPOI *> *) findTravelGuides:(NSString *)categoryName location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOIAdapter *poi))publish;
++ (NSArray<OAPOI *> *) findTravelGuides:(NSString *)categoryName location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish;
 
 - (BOOL) breakSearch;
 

@@ -39,7 +39,7 @@
 
 @implementation OAFoundAmenity
 
-- (instancetype) initWithFile:(NSString *)file amenity:(OAPOIAdapter *)amenity
+- (instancetype) initWithFile:(NSString *)file amenity:(OAPOI *)amenity
 {
     self = [super init];
     if (self)
@@ -56,7 +56,7 @@
 @implementation OATravelGuidesHelper
 
 
-+ (void) searchAmenity:(double)lat lon:(double)lon reader:(NSString *)reader radius:(int)radius searchFilter:(NSString *)searchFilter publish:(BOOL(^)(OAPOIAdapter *poi))publish
++ (void) searchAmenity:(double)lat lon:(double)lon reader:(NSString *)reader radius:(int)radius searchFilter:(NSString *)searchFilter publish:(BOOL(^)(OAPOI *poi))publish
 {
     OsmAnd::AreaI bbox31;
     OsmAnd::PointI locI;
@@ -74,7 +74,7 @@
     [OAPOIHelper findTravelGuides:searchFilter location:locI bbox31:bbox31 reader:reader publish:publish];
 }
 
-+ (void) searchAmenity:(int)x y:(int)y left:(int)left right:(int)right top:(int)top bottom:(int)bottom  reader:(NSString *)reader searchFilter:(NSString *)searchFilter publish:(BOOL(^)(OAPOIAdapter *poi))publish
++ (void) searchAmenity:(int)x y:(int)y left:(int)left right:(int)right top:(int)top bottom:(int)bottom  reader:(NSString *)reader searchFilter:(NSString *)searchFilter publish:(BOOL(^)(OAPOI *poi))publish
 {
     OsmAnd::PointI location = OsmAnd::PointI(x, y);
     OsmAnd::PointI topLeft = OsmAnd::PointI(left, top);
@@ -83,7 +83,7 @@
     [OAPOIHelper findTravelGuides:searchFilter location:location bbox31:bbox31 reader:reader publish:publish];
 }
 
-+ (void) searchAmenity:(NSString *)searchQuerry categoryName:(NSString *)categoryName radius:(int)radius lat:(double)lat lon:(double)lon reader:(NSString *)reader publish:(BOOL(^)(OAPOIAdapter *poi))publish
++ (void) searchAmenity:(NSString *)searchQuerry categoryName:(NSString *)categoryName radius:(int)radius lat:(double)lat lon:(double)lon reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish
 {
     OsmAnd::AreaI bbox31;
     OsmAnd::PointI locI;
@@ -102,33 +102,29 @@
 }
 
 
-+ (OAWptPt *) createWptPt:(OAPOIAdapter *)amenity lang:(NSString *)lang
++ (OAWptPt *) createWptPt:(OAPOI *)amenity lang:(NSString *)lang
 {
-    OAPOI *poi;
-    if (amenity && [amenity.object isKindOfClass:OAPOI.class])
-        poi = (OAPOI *) amenity.object;
-        
     OAWptPt *wptPt = [[OAWptPt alloc] init];
-    wptPt.name = poi.name;
-    wptPt.position = CLLocationCoordinate2DMake(poi.latitude, poi.longitude);
-    wptPt.desc = poi.desc;
+    wptPt.name = amenity.name;
+    wptPt.position = CLLocationCoordinate2DMake(amenity.latitude, amenity.longitude);
+    wptPt.desc = amenity.desc;
     
-    if ([poi getSite])
+    if ([amenity getSite])
     {
         OALink *gpxLink = [[OALink alloc] init];
-        gpxLink.url = [[NSURL alloc] initWithString:[poi getSite]];
+        gpxLink.url = [[NSURL alloc] initWithString:[amenity getSite]];
         wptPt.links = @[ gpxLink ];
     }
     
-    NSString *color = [poi getColor];
+    NSString *color = [amenity getColor];
     OAGPXColor *gpxColor = [OAGPXColor getColorFromName:color];
     if (gpxColor)
         [wptPt setColor:gpxColor.color];
     
-    if ([poi gpxIcon])
-        [wptPt setIcon:[poi gpxIcon]];
+    if ([amenity gpxIcon])
+        [wptPt setIcon:[amenity gpxIcon]];
 
-    NSString *category = [poi getTagSuffix:@"category_"];
+    NSString *category = [amenity getTagSuffix:@"category_"];
     if (category)
     {
         wptPt.category = [OAUtilities capitalizeFirstLetter:category];
@@ -186,7 +182,7 @@
 + (OAGPXDocumentAdapter *) buildGpxFile:(NSArray<NSString *> *)readers article:(OATravelArticle *)article
 {
     QList< std::shared_ptr<const OsmAnd::BinaryMapObject> > segmentList;
-    NSMutableArray<OAPOIAdapter *> *pointList = [NSMutableArray array];
+    NSMutableArray<OAPOI *> *pointList = [NSMutableArray array];
     for (NSString *reader in readers)
     {
         if (article.file != nil && ![article.file isEqualToString: reader])
@@ -200,7 +196,7 @@
         }
         
         //publish function
-        BOOL (^publish)(OAPOIAdapter *amenity) = ^BOOL(OAPOIAdapter *amenity) {
+        BOOL (^publish)(OAPOI *amenity) = ^BOOL(OAPOI *amenity) {
             if ([amenity.getRouteId isEqualToString:article.routeId])
             {
                 if ([[article getPointFilterString] isEqualToString:@"route_track_point"])
@@ -318,7 +314,7 @@
                 gpxFile.metadata.links = @[ gpxLink ];
             }
         }
-        for (OAPOIAdapter *wayPoint in pointList)
+        for (OAPOI *wayPoint in pointList)
         {
             OAWptPt *wpt = [self.class createWptPt:wayPoint lang:article.lang];
             

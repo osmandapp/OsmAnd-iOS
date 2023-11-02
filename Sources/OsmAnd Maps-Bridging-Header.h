@@ -35,7 +35,7 @@
 #import "OAGPXDocumentAdapter.h"
 #import "OAGPXDocumentPrimitivesAdapter.h"
 #import "OATravelLocalDataDbHelper.h"
-#import "OAPOIAdapter.h"
+#import "OAPOI.h"
 
 #import "OsmAndApp.h"
 #import "OAObservable.h"

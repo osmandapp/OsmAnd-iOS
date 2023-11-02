@@ -6,11 +6,13 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
+@class OAPOI;
+
 @interface OAPOIAdapter : NSObject
 
-@property (nonatomic) id object;
+@property (nonatomic) OAPOI *object;
 
-- (instancetype) initWithPOI:(id)poi;
+- (instancetype) initWithPOI:(OAPOI *)poi;
 
 - (NSString *) name;
 - (void) setName:(NSString *)name;

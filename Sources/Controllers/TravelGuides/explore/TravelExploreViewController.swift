@@ -43,6 +43,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
     var isFiltered = false
     var screenMode: ScreenModes = .popularArticles
     var isInited = false
+    var isGpxPointsOpening = false
     
     override func commonInit() {
         super.commonInit()
@@ -73,10 +74,12 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         savedArticlesObserver = OAAutoObserverProxy(self, withHandler: #selector(update), andObserve: TravelObfHelper.shared.getBookmarksHelper().observable)
         localResourcesChangedObserver = OAAutoObserverProxy(self, withHandler: #selector(populateAndUpdate), andObserve: OsmAndApp.swiftInstance().localResourcesChangedObservable)
         
-        if OAAppSettings.sharedManager().travelGuidesState.wasWatchingGpx {
-            restoreState()
-        } else {
-            populateData(resetData: true)
+        if !isGpxPointsOpening {
+            if OAAppSettings.sharedManager().travelGuidesState.wasWatchingGpx {
+                restoreState()
+            } else {
+                populateData(resetData: true)
+            }
         }
     }
     
@@ -124,8 +127,8 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
             downloadingResources = state.downloadingResources
             lastSelectedIndexPath = state.lastSelectedIndexPath
             
-            tableData.clearAllData()
-            if let exploreTabTableData = state.exploreTabTableData {
+            if let exploreTabTableData = state.exploreTabTableData, tableData != exploreTabTableData {
+                tableData.clearAllData()
                 for i in 0..<exploreTabTableData.sectionCount() {
                     tableData.addSection(exploreTabTableData.sectionData(for: i))
                 }
@@ -681,6 +684,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
     }
     
     func close() {
+        isGpxPointsOpening = true
         dismiss()
     }
     

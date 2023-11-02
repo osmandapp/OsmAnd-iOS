@@ -21,7 +21,6 @@
 #import "OASearchPoiTypeFilter.h"
 #import "OACollatorStringMatcher.h"
 #import "OAMapUtils.h"
-#import "OAPOIAdapter.h"
 
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Data/DataCommonTypes.h>
@@ -895,7 +894,7 @@
     return [NSArray arrayWithArray:arr];
 }
 
-+ (NSArray<OAPOI *> *) findTravelGuides:(NSString *)categoryName location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOIAdapter *poi))publish
++ (NSArray<OAPOI *> *) findTravelGuides:(NSString *)categoryName location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish
 {
     OsmAndAppInstance _app = [OsmAndApp instance];
     const auto& obfsCollection = _app.resourcesManager->obfsCollection;
@@ -939,7 +938,7 @@
                                     [OAPOIHelper fetchValuesContentPOIByAmenity:am poi:poi];
                                     if (publish)
                                     {
-                                        done = publish([[OAPOIAdapter alloc] initWithPOI:poi]);
+                                        done = publish(poi);
                                     }
                                     else
                                     {
@@ -952,7 +951,7 @@
     return [NSArray arrayWithArray:arr];
 }
 
-- (NSArray<OAPOI *> *) findTravelGuidesByKeyword:(NSString *)keyword categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOIAdapter *poi))publish
+- (NSArray<OAPOI *> *) findTravelGuidesByKeyword:(NSString *)keyword categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish
 {
     _isSearchDone = NO;
     _breakSearch = NO;
@@ -1001,7 +1000,7 @@
                                             
                                             if (publish)
                                             {
-                                                _isSearchDone = publish([[OAPOIAdapter alloc] initWithPOI:poi]);
+                                                _isSearchDone = publish(poi);
                                             }
                                             
                                             [arr addObject:poi];

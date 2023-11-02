@@ -3630,6 +3630,9 @@
 		FA740D422A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA740D412A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib */; };
 		FA740D452A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */; };
 		FA77E7A72AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA77E7A62AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm */; };
+		FA7DCF552AF10ABF0045D136 /* BluetoothDisableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7DCF542AF10ABF0045D136 /* BluetoothDisableView.swift */; };
+		FA7DCF572AF11A7D0045D136 /* BluetoothDisableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA7DCF562AF11A7D0045D136 /* BluetoothDisableView.xib */; };
+		FA7DCF592AF246970045D136 /* ExternalSensorWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7DCF582AF246970045D136 /* ExternalSensorWidget.swift */; };
 		FA86F4152AE7C56E00DC3B2B /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */; };
 		FA86F4182AE7C5EA00DC3B2B /* UserDefaultsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4172AE7C5EA00DC3B2B /* UserDefaultsKey.swift */; };
 		FA86F41A2AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */; };
@@ -8438,6 +8441,9 @@
 		FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudIntroductionButtonsView.swift; sourceTree = "<group>"; };
 		FA77E7A52AE16E90001BABE2 /* OACarPlayMapDashboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACarPlayMapDashboardViewController.h; sourceTree = "<group>"; };
 		FA77E7A62AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACarPlayMapDashboardViewController.mm; sourceTree = "<group>"; };
+		FA7DCF542AF10ABF0045D136 /* BluetoothDisableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothDisableView.swift; sourceTree = "<group>"; };
+		FA7DCF562AF11A7D0045D136 /* BluetoothDisableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BluetoothDisableView.xib; sourceTree = "<group>"; };
+		FA7DCF582AF246970045D136 /* ExternalSensorWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalSensorWidget.swift; sourceTree = "<group>"; };
 		FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
 		FA86F4172AE7C5EA00DC3B2B /* UserDefaultsKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKey.swift; sourceTree = "<group>"; };
 		FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBikeSCDDevice.swift; sourceTree = "<group>"; };
@@ -14490,6 +14496,7 @@
 				DA14DC912A31D76A002A91BC /* OAWeatherWidget.mm */,
 				DA08A1492A41DA7400205D7E /* RulerDistanceWidget.swift */,
 				DA8DC3952A0CE32E006C116B /* TimeToNavigationPointWidget.swift */,
+				FA7DCF582AF246970045D136 /* ExternalSensorWidget.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -14740,6 +14747,15 @@
 			path = CloudIntroductionButtonsView;
 			sourceTree = "<group>";
 		};
+		FA7DCF532AF10A800045D136 /* BluetoothDisableView */ = {
+			isa = PBXGroup;
+			children = (
+				FA7DCF542AF10ABF0045D136 /* BluetoothDisableView.swift */,
+				FA7DCF562AF11A7D0045D136 /* BluetoothDisableView.xib */,
+			);
+			path = BluetoothDisableView;
+			sourceTree = "<group>";
+		};
 		FA86F4162AE7C5DC00DC3B2B /* UserDefaultsKey */ = {
 			isa = PBXGroup;
 			children = (
@@ -14818,6 +14834,7 @@
 		FAA650462ADD42C40020DCEA /* BLEExternalSensors */ = {
 			isa = PBXGroup;
 			children = (
+				FA7DCF532AF10A800045D136 /* BluetoothDisableView */,
 				FAA650472ADD42C40020DCEA /* BLEExternalSensorsViewController.swift */,
 				FAA650482ADD42C40020DCEA /* BLEExternalSensors.storyboard */,
 			);
@@ -17387,6 +17404,7 @@
 				46453B01283523DF001F9A3A /* ic_custom_map_updates_colored_day@3x.png in Resources */,
 				32BD81AC259B5C9B00A54BB5 /* ic_custom_manage_profiles@2x.png in Resources */,
 				15BDDE9A24DAF3A800079C83 /* ic_custom_copy@3x.png in Resources */,
+				FA7DCF572AF11A7D0045D136 /* BluetoothDisableView.xib in Resources */,
 				DAF3457322F4482C009E2EB6 /* ic_custom_sound@3x.png in Resources */,
 				DA2EC77D29FBBE0400ECEB37 /* warnings_railways_ca@3x.png in Resources */,
 				158DE49A25AEF32F007C1B57 /* ic_destination_pin_7@3x.png in Resources */,
@@ -17779,6 +17797,7 @@
 				DA5A845826C563A900F274C7 /* OAOverlayMapLayer.mm in Sources */,
 				DA5A853E26C563A900F274C7 /* OADayNightHelper.m in Sources */,
 				FAA6505C2ADD42C50020DCEA /* BLEExternalSensorsViewController.swift in Sources */,
+				FA7DCF552AF10ABF0045D136 /* BluetoothDisableView.swift in Sources */,
 				DA5A83D626C563A800F274C7 /* OAReplaceFavoriteViewController.mm in Sources */,
 				DA5A815D26C563A700F274C7 /* OASRTMPlugin.mm in Sources */,
 				C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */,
@@ -17928,6 +17947,7 @@
 				4655EB3328E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m in Sources */,
 				DAD3FD132A4599F500BFA03A /* WidgetConfigurationViewController.swift in Sources */,
 				DA5A834526C563A800F274C7 /* OAIconTextDescButtonCell.m in Sources */,
+				FA7DCF592AF246970045D136 /* ExternalSensorWidget.swift in Sources */,
 				DA5A824126C563A700F274C7 /* OACoordinatesFormatViewController.m in Sources */,
 				DA5A813726C563A700F274C7 /* OAOsmPoint.m in Sources */,
 				DA5A835826C563A800F274C7 /* OABottomSheetHeaderDescrButtonCell.m in Sources */,

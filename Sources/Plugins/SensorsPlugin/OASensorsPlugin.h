@@ -10,6 +10,6 @@
 
 @interface OASensorsPlugin : OAPlugin
 
-//- (void)updateWidgetsInfo;
+- (void)updateWidgetsInfo;
 
 @end

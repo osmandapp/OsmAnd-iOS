@@ -19,7 +19,7 @@ final class SearchDeviceTableViewCell: UITableViewCell {
     }
     
     private func configureConnectUI(item: Device) {
-        switch item.peripheral.state {
+        switch item.peripheral?.state {
         case .connected:
             connectStatusLabel.text = localizedString("external_device_status_connected")
             signalIndicatorImageView.tintColor = UIColor.buttonBgColorPrimary

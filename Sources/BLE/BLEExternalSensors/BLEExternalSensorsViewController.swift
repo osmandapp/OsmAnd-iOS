@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import SwiftyBluetooth
+import CoreBluetooth
 
 final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     
@@ -13,10 +15,8 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         case title, learnMore
     }
     
-    @IBOutlet private weak var emptyView: UIView! {
-        didSet {
-            emptyView.isHidden = false
-        }
+    private enum ExternalSensorsConnectState: String {
+        case connected, disconnected
     }
     
     @IBOutlet private weak var pairNewSensorButton: UIButton! {
@@ -25,36 +25,39 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         }
     }
     
-    private let headerView: UIView = UIView(frame: .zero)
+    private let headerEmptyView: UIView = UIView(frame: .zero)
+    
+    private var sectionsDevicesData = [ExternalSensorsConnectState: [Device]]()
+    
+    private lazy var bluetoothDisableViewHeader: BluetoothDisableView = .fromNib()
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         initTableData()
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.sectionHeaderTopPadding = 0
-        configureHeader()
+        view.backgroundColor = UIColor.viewBgColor
+        
+        tableView.contentInset.bottom = 64
     }
     
-    override func setupTableHeaderView() {
-        configureHeader()
+    override func useCastomTableViewHeader() -> Bool {
+        true
     }
     
-    private func configureHeader() {
-        headerView.subviews.forEach { $0.removeFromSuperview() }
-        let imageView = UIImageView(image: UIImage(named: "img_help_sensors_day"))
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        headerView.addSubview(imageView)
-        headerView.frame.size.height = 201
-        headerView.frame.size.width = view.frame.width
-        imageView.frame = headerView.frame
-        tableView.tableHeaderView = headerView
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureStartState()
+        generateData()
+        tableView.reloadData()
+    }
+    
+    override func registerObservers() {
+        detectBluetoothState()
     }
     
     override func getTitle() -> String! {
@@ -73,25 +76,25 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         pairNewSensor()
     }
     
-    @objc private func pairNewSensor() {
-        let storyboard = UIStoryboard(name: "BLESearchViewController", bundle: nil)
-        if let vc = storyboard.instantiateViewController(withIdentifier: "BLESearchViewController") as? BLESearchViewController {
-            navigationController?.pushViewController(vc, animated: true)
+    override func generateData() {
+        tableData.clearAllData()
+        if DeviceHelper.shared.hasPairedDevices {
+            configurePairedDevices()
+        } else {
+            configureNoPairedDevices()
         }
     }
     
-    override func generateData() {
-        tableData.clearAllData()
-        let section = tableData.createNewSection()
-        let titleBLE = section.createNewRow()
-        titleBLE.cellType = OASimpleTableViewCell.getIdentifier()
-        titleBLE.key = ExternalSensorsCellData.title.rawValue
-        titleBLE.title = localizedString("ant_plus_pair_bluetooth_prompt")
-
-        let learnMoreBLE = section.createNewRow()
-        learnMoreBLE.cellType = OASimpleTableViewCell.getIdentifier()
-        learnMoreBLE.key = ExternalSensorsCellData.learnMore.rawValue
-        learnMoreBLE.title = localizedString("learn_more_about_sensors_link")
+    override func getTitleForHeader(_ section: Int) -> String! {
+        if DeviceHelper.shared.hasPairedDevices {
+            if let connected = sectionsDevicesData[.connected], !connected.isEmpty {
+                return localizedString("external_device_status_connected").uppercased()
+            }
+            if let disconnected = sectionsDevicesData[.disconnected], !disconnected.isEmpty {
+                return localizedString("external_device_status_disconnected").uppercased()
+            }
+        }
+        return nil
     }
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
@@ -119,12 +122,24 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                 }
             }
             outCell = cell
+        } else if item.cellType == SearchDeviceTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: SearchDeviceTableViewCell.reuseIdentifier) as! SearchDeviceTableViewCell
+            if let key = item.key, let item = ExternalSensorsConnectState(rawValue: key) {
+                if let items = sectionsDevicesData[item], items.count > indexPath.row {
+                    cell.configure(item: items[indexPath.row])
+                }
+            }
+            return cell
         }
+        
         return outCell
     }
     
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        .leastNonzeroMagnitude
+    override func getCustomHeight(forHeader section: Int) -> CGFloat {
+        if DeviceHelper.shared.hasPairedDevices {
+            return 30
+        }
+        return .leastNonzeroMagnitude
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -133,15 +148,204 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     
     override func onRowSelected(_ indexPath: IndexPath!) {
         let item = tableData.item(for: indexPath)
-        if let key = item.key, let item = ExternalSensorsCellData(rawValue: key) {
-            if case .learnMore = item {
-#warning("add push")
+        if let key = item.key {
+            if let item = ExternalSensorsCellData(rawValue: key) {
+                if case .learnMore = item {
+                    guard let settingsURL = URL(string: docs_external_sensors),
+                          UIApplication.shared.canOpenURL(settingsURL) else {
+                        return
+                    }
+                    UIApplication.shared.open(settingsURL)
+                }
+            } else if let item = ExternalSensorsConnectState(rawValue: key) {
+                if let items = sectionsDevicesData[item], items.count > indexPath.row {
+                    let controller = BLEDescriptionViewController()
+                    controller.device = items[indexPath.row]
+                    navigationController?.pushViewController(controller, animated: true)
+                }
             }
+        }
+    }
+    
+    private func configureStartState() {
+        pairNewSensorButton.isHidden = DeviceHelper.shared.hasPairedDevices
+        if !DeviceHelper.shared.hasPairedDevices {
+            tableView.sectionHeaderTopPadding = 0
+            tableView.contentInset.top = 0
+            tableView.contentInset.bottom = 64
+            configureEmptyHeader()
+        } else {
+            tableView.rowHeight = 72
+            tableView.sectionHeaderTopPadding = 26
+            tableView.contentInset.bottom = 0
+            if BLEManager.shared.getBluetoothState() != .poweredOn {
+                tableView.contentInset.top = 34
+                configureBluetoothDisableViewHeader()
+            } else {
+                tableView.contentInset.top = 0
+                tableView.tableHeaderView = nil
+            }
+        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        configureStartState()
+    }
+    
+    private func detectBluetoothState() {
+        NotificationCenter.default.addObserver(forName: Central.CentralStateChange,
+                                               object: Central.sharedInstance,
+                                               queue: nil)
+        { [weak self] _ in
+            guard let self else { return }
+            guard DeviceHelper.shared.hasPairedDevices else { return }
+            configureStartState()
+            generateData()
+            tableView.reloadData()
+        }
+    }
+    
+    private func configureEmptyHeader() {
+        headerEmptyView.subviews.forEach { $0.removeFromSuperview() }
+        let imageView = UIImageView(image: UIImage(named: "img_help_sensors_day"))
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        headerEmptyView.addSubview(imageView)
+        headerEmptyView.frame.size.height = 201
+        headerEmptyView.frame.size.width = view.frame.width
+        imageView.frame = headerEmptyView.frame
+        tableView.tableHeaderView = headerEmptyView
+    }
+    
+    private func configureBluetoothDisableViewHeader() {
+        bluetoothDisableViewHeader.frame.size.height = 157
+        bluetoothDisableViewHeader.frame.size.width = view.frame.width
+        tableView.tableHeaderView = bluetoothDisableViewHeader
+    }
+    
+    private func configureNoPairedDevices() {
+        let section = tableData.createNewSection()
+        let titleBLE = section.createNewRow()
+        titleBLE.cellType = OASimpleTableViewCell.getIdentifier()
+        titleBLE.key = ExternalSensorsCellData.title.rawValue
+        titleBLE.title = localizedString("ant_plus_pair_bluetooth_prompt")
+        
+        let learnMoreBLE = section.createNewRow()
+        learnMoreBLE.cellType = OASimpleTableViewCell.getIdentifier()
+        learnMoreBLE.key = ExternalSensorsCellData.learnMore.rawValue
+        learnMoreBLE.title = localizedString("learn_more_about_sensors_link")
+    }
+    
+    private func configurePairedDevices() {
+        sectionsDevicesData.removeAll()
+        if let pairedDevices = DeviceHelper.shared.getSettingsForPairedDevices() {
+            let peripherals = SwiftyBluetooth.retrievePeripherals(withUUIDs: pairedDevices.map { UUID(uuidString: $0.deviceId)!})
+            let disconnectedPeripherals = peripherals.filter { $0.state == .disconnected }
+            var connectedPeripherals = peripherals.filter { $0.state == .connected }
+            if connectedPeripherals.isEmpty {
+                connectedPeripherals = SwiftyBluetooth.retrieveConnectedPeripherals(withServiceUUIDs: GattAttributes.SUPPORTED_SERVICES.map { $0.CBUUIDRepresentation })
+            }
+            if !connectedPeripherals.isEmpty {
+                let connectedSection = tableData.createNewSection()
+                connectedPeripherals.forEach { _ in
+                    let row = connectedSection.createNewRow()
+                    row.cellType = SearchDeviceTableViewCell.reuseIdentifier
+                    row.key = ExternalSensorsConnectState.connected.rawValue
+                }
+                // TODO: save connected devices
+                sectionsDevicesData[.connected] = DeviceHelper.shared.getDevicesFrom(peripherals: connectedPeripherals,
+                                                                                     pairedDevices: pairedDevices)
+            }
+            if !disconnectedPeripherals.isEmpty {
+                createDesconnectedDevicesSection(disconnectedPeripherals: disconnectedPeripherals, pairedDevices: pairedDevices)
+            }
+        }
+    }
+    
+    private func createDesconnectedDevicesSection(disconnectedPeripherals: [Peripheral], pairedDevices: [DeviceSettings]) {
+        let disconnectedSection = tableData.createNewSection()
+        disconnectedPeripherals.forEach { _ in
+            let row = disconnectedSection.createNewRow()
+            row.cellType = SearchDeviceTableViewCell.reuseIdentifier
+            row.key = ExternalSensorsConnectState.disconnected.rawValue
+        }
+        sectionsDevicesData[.disconnected] = DeviceHelper.shared.getDevicesFrom(peripherals: disconnectedPeripherals,
+                                                                                pairedDevices: pairedDevices)
+    }
+    
+    @objc private func pairNewSensor() {
+        let storyboard = UIStoryboard(name: "BLESearchViewController", bundle: nil)
+        if let vc = storyboard.instantiateViewController(withIdentifier: "BLESearchViewController") as? BLESearchViewController {
+            navigationController?.pushViewController(vc, animated: true)
         }
     }
     
     // MARK: - IBAction
     @IBAction private func onPairNewSensorButtonPressed(_ sender: Any) {
         pairNewSensor()
+    }
+}
+
+// MARK: - UIContextMenuConfiguration
+extension BLEExternalSensorsViewController {
+
+    override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let device = getDeviceFor(indexPath: indexPath) else { return nil }
+        
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
+            guard let self else { return nil }
+            
+            let info = UIAction(title: localizedString("info_button"), image: UIImage(systemName: "info.circle")) { _ in
+                self.showDescriptionViewController(device: device)
+            }
+            let rename = UIAction(title: localizedString("shared_string_rename"), image: UIImage(systemName: "square.and.pencil")) { _ in
+                self.showRenameViewController(device: device)
+            }
+            let forget = UIAction(title: localizedString("external_device_menu_forget"), image: UIImage(systemName: "xmark.circle")) { _ in
+                self.showForgetSensorActionSheet(device: device)
+            }
+            return UIMenu(title: "", options: .displayInline, children: [info, rename, forget])
+        }
+    }
+    
+    private func getDeviceFor(indexPath: IndexPath) -> Device? {
+        let item = tableData.item(for: indexPath)
+        if let key = item.key, let item = ExternalSensorsConnectState(rawValue: key) {
+            if let items = sectionsDevicesData[item], items.count > indexPath.row {
+                return items[indexPath.row]
+            }
+        }
+        return nil
+    }
+    
+    private func showForgetSensorActionSheet(device: Device) {
+        let alert = UIAlertController(title: device.deviceName, message: localizedString("external_device_forget_sensor_description"), preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: localizedString("external_device_forget_sensor"), style: .destructive , handler: {  _ in
+            DeviceHelper.shared.setDevicePaired(device: device, isPaired: false)
+            self.configureStartState()
+            self.generateData()
+            self.tableView.reloadData()
+        }))
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        alert.popoverPresentationController?.sourceView = view
+        present(alert, animated: true)
+    }
+    
+    private func showRenameViewController(device: Device) {
+        let nameVC = BLEChangeDeviceNameViewController()
+        nameVC.device = device
+        nameVC.onSaveAction = { [weak self] in
+            guard let self else { return }
+            generateData()
+            tableView.reloadData()
+        }
+        navigationController?.present(UINavigationController(rootViewController: nameVC), animated: true)
+    }
+    
+    private func showDescriptionViewController(device: Device) {
+        let controller = BLEDescriptionViewController()
+        controller.device = device
+        navigationController?.pushViewController(controller, animated: true)
     }
 }

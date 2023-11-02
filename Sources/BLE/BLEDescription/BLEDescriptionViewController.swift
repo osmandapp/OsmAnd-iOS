@@ -59,7 +59,6 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
     override func generateData() {
         tableData.clearAllData()
         if DeviceHelper.shared.isPairedDevice(id: device.id) {
-            tableView.sectionHeaderTopPadding = 20
             // Information
             if let sensor = device.sensors.first(where: { $0 is BLEBatterySensor }) as? BLEBatterySensor {
                 let infoSection = tableData.createNewSection()
@@ -110,11 +109,11 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
     
     override func getCustomHeight(forHeader section: Int) -> CGFloat {
         if let section = Section(rawValue: section), section == .forgetSensor {
-            return 10
+            return 34
         } else if !DeviceHelper.shared.isPairedDevice(id: device.id) {
             return .leastNonzeroMagnitude
         }
-        return UITableView.automaticDimension
+        return 56
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {

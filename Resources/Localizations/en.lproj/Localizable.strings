@@ -3383,6 +3383,7 @@
 "external_device_status_disconnected" = "Disconnected";
 "external_device_status_connected" = "Connected";
 "bluetooth_found_title" = "Found: %d";
+"external_device_menu_forget" = "Forget";
 
             
 

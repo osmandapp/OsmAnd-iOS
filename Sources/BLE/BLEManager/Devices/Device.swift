@@ -11,18 +11,20 @@ import UIKit
 
 extension Notification.Name {
     static let DeviceRSSIUpdated = NSNotification.Name("DeviceRSSIUpdated")
+    
+    static let DeviceCharacteristicUpdatedSuccess = NSNotification.Name("DeviceCharacteristicUpdatedSuccess")
 }
 
 class Device {
     var deviceType: DeviceType!
-    var peripheral: Peripheral!
+    var peripheral: Peripheral?
     var rssi = -1
     var deviceName: String = ""
     var didChangeCharacteristic: (() -> Void)? = nil
     private var RSSIUpdateTimer: Timer?
     
     var id: String {
-        peripheral.identifier.uuidString
+        peripheral?.identifier.uuidString ?? "unknown"
     }
     
     var sensors: [Sensor] = [BLEBatterySensor()]
@@ -45,12 +47,16 @@ class Device {
         return nil
     }
     
+    var getWidgetValue: String? {
+        return nil
+    }
     
     func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
         
     }
     
     func addObservers() {
+        NotificationCenter.default.removeObserver(self, name: Peripheral.PeripheralCharacteristicValueUpdate, object: nil)
         NotificationCenter.default.addObserver(forName: Peripheral.PeripheralCharacteristicValueUpdate,
                                                object: peripheral,
                                                queue: nil) { [weak self] notification in
@@ -69,12 +75,14 @@ class Device {
         update(with: characteristic) { [weak self] result in
             if case .success = result {
                 self?.didChangeCharacteristic?()
+                NotificationCenter.default.post(name: .DeviceCharacteristicUpdatedSuccess, object: self, userInfo: nil)
             }
         }
     }
     
-    
-
+    deinit {
+        print("")
+    }
     
     /*
      Printing description of advertisementData:
@@ -121,7 +129,7 @@ extension Device {
     }
     
     private func readRSSI() {
-        peripheral.readRSSI { [weak self] result in
+        peripheral?.readRSSI { [weak self] result in
             guard let self else { return }
             if case .success(let RSSI) = result {
                 if rssi != RSSI {

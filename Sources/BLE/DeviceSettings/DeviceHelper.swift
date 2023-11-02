@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftyBluetooth
 
 final class DeviceHelper {
     static let shared = DeviceHelper()
@@ -15,6 +16,42 @@ final class DeviceHelper {
     
     private init() {}
     
+    var hasPairedDevices: Bool {
+        devicesSettingsCollection.hasPairedDevices
+    }
+    
+    func getSettingsForPairedDevices() -> [DeviceSettings]? {
+        devicesSettingsCollection.getSettingsForPairedDevices()
+    }
+    
+    func getDevicesFromDeviceSettings(items: [DeviceSettings]) -> [Device] {
+        return items.map{ item in
+            let device = Device()
+            device.deviceName = item.deviceName
+            device.deviceType = item.deviceType
+            device.addObservers()
+            return device
+        }
+    }
+    
+    func getDevicesFrom(peripherals: [Peripheral], pairedDevices: [DeviceSettings]) -> [Device] {
+        return peripherals.map { item in
+            if let savedDevice = pairedDevices.first(where: { $0.deviceId == item.identifier.uuidString }) {
+                let device = getDeviceFor(type: savedDevice.deviceType)
+                device.deviceName = savedDevice.deviceName
+                device.deviceType = savedDevice.deviceType
+                device.peripheral = item
+                device.addObservers()
+                return device
+            } else {
+                fatalError("getDevicesFrom")
+                // TODO: use services
+               // device.deviceName = item.name ?? ""
+                //device.deviceType = savedDevice.deviceType
+            }
+        }
+    }
+        
     func isDeviceEnabled(for id: String) -> Bool {
         if let deviceSettings = devicesSettingsCollection.getDeviceSettings(deviceId: id) {
             return deviceSettings.deviceEnabled
@@ -41,8 +78,17 @@ final class DeviceHelper {
     }
     
     private func dropUnpairedDevice(device: Device) {
-        device.peripheral.disconnect { result in }
+        device.peripheral?.disconnect { result in }
         devicesSettingsCollection.removeDeviceSetting(with: device.id)
+    }
+    
+    private func getDeviceFor(type: DeviceType) -> Device {
+        switch type {
+        case .BLE_HEART_RATE:
+            return BLEHeartRateDevice()
+        default:
+            fatalError("not impl")
+        }
     }
 }
 

@@ -39,6 +39,7 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 - (void)updateUI:(BOOL)animated;
 - (void)updateUIWithoutData;
 - (void)refreshUI;
+- (BOOL)useCastomTableViewHeader;
 
 - (UIBarButtonItem *)createRightNavbarButton:(NSString *)title
                                     iconName:(NSString *)iconName

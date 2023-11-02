@@ -27,18 +27,36 @@ final class BLEManager {
     
     private init() {
         NotificationCenter.default.addObserver(forName: Central.CentralManagerWillRestoreState,
-                                                object: nil,
-                                                 queue: nil) { notification in
+                                               object: nil,
+                                               queue: nil) { notification in
             if let restoredPeripherals = notification.userInfo?["peripherals"] as? [Peripheral], !restoredPeripherals.isEmpty {
                 debugPrint(restoredPeripherals)
             }
         }
     }
     
-    private(set) var discoveredDevices = [Device]()
-    
     var isScaning: Bool {
         SwiftyBluetooth.isScanning
+    }
+    
+    private(set) var discoveredDevices = [Device]()
+    private(set) var connectedDevices = [Device]()
+    
+    func updateConnected(devices: [Device]) {
+        devices.forEach { item in
+            if let device = connectedDevices.first(where: { $0.id != item.id }) {
+                connectedDevices.append(device)
+            }
+        }
+    }
+    
+    func addConnected(device: Device) {
+        guard connectedDevices.contains(where: { $0.id != device.id }) else { return }
+        connectedDevices.append(device)
+    }
+    
+    func removeDisconnected(device: Device) {
+        connectedDevices = connectedDevices.filter { $0.id == device.id }
     }
     
     func scanForPeripherals(withServiceUUIDs serviceUUIDs: [CBUUID]? = nil,
@@ -120,6 +138,12 @@ final class BLEManager {
         SwiftyBluetooth.asyncState { _ in
             completion(SwiftyBluetooth.Central.sharedInstance.state)
         }
+    }
+}
+
+extension Array where Element: Equatable {
+    func removing(_ obj: Element) -> [Element] {
+        filter { $0 != obj }
     }
 }
 

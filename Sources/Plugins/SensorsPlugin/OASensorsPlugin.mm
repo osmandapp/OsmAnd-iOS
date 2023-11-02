@@ -20,9 +20,13 @@
 
 #define PLUGIN_ID kInAppId_Addon_External_Sensors
 
+#define kLastUsedExternalSensorKey @"kLastUsedExternalSensorKey"
+
 @implementation OASensorsPlugin
 {
-//    OACommonBoolean *_lastUsedWeather;
+    OACommonBoolean *_lastUsedSensor;
+    
+    ExternalSensorWidget *_heartRateTempControl;
 //
 //    OAWeatherWidget *_weatherTempControl;
 //    OAWeatherWidget *_weatherPressureControl;
@@ -36,8 +40,9 @@
     self = [super init];
     if (self)
     {
-//        _lastUsedWeather = [OACommonBoolean withKey:kLastUsedWeatherKey defValue:NO];
-//        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.weatherTemperatureWidget appModes:@[]];
+        _lastUsedSensor = [OACommonBoolean withKey:kLastUsedExternalSensorKey defValue:NO];
+        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.heartRate appModes:@[]];
+        
 //        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.weatherAirPressureWidget appModes:@[]];
 //        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.weatherWindWidget appModes:@[]];
 //        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.weatherCloudsWidget appModes:@[]];
@@ -68,7 +73,6 @@
 - (BOOL)isEnabled
 {
     return [super isEnabled] && [[OAIAPHelper sharedInstance].sensors isActive];
-   // return [super isEnabled] && [[OAIAPHelper sharedInstance].weather isActive];
 }
 
 - (BOOL)hasCustomSettings
@@ -76,50 +80,29 @@
     return YES;
 }
 
+- (NSArray<NSString *> *)getWidgetIds
+{
+    return @[OAWidgetType.heartRate.id];
+}
 
-//- (NSArray<NSString *> *) getWidgetIds
-//{
-//    return @[OAWidgetType.weatherTemperatureWidget.id, OAWidgetType.weatherAirPressureWidget.id, OAWidgetType.weatherWindWidget.id, OAWidgetType.weatherCloudsWidget.id, OAWidgetType.weatherPrecipitationWidget.id];
-//}
+- (void)createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
+{
+    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
+    
+    _heartRateTempControl = (ExternalSensorWidget *) [self createMapWidgetForParams:OAWidgetType.heartRate];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:_heartRateTempControl]];
+}
 
-//- (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
-//{
-//    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
-//
-//    _weatherTempControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherTemperatureWidget customId:nil];
-//    [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherTempControl]];
-//
-//    _weatherPressureControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherAirPressureWidget customId:nil];
-//    [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherPressureControl]];
-//
-//    _weatherWindSpeedControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherWindWidget customId:nil];
-//    [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherWindSpeedControl]];
-//
-//    _weatherCloudControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherCloudsWidget customId:nil];
-//    [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherCloudControl]];
-//
-//    _weatherPrecipControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherPrecipitationWidget customId:nil];
-//    [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherPrecipControl]];
-//}
-
-//- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(NSString *)customId
-//{
-//    if (widgetType == OAWidgetType.weatherTemperatureWidget)
-//        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_TEMPERATURE];
-//    else if (widgetType == OAWidgetType.weatherAirPressureWidget)
-//        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_PRESSURE];
-//    else if (widgetType == OAWidgetType.weatherWindWidget)
-//        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_WIND_SPEED];
-//    else if (widgetType == OAWidgetType.weatherCloudsWidget)
-//        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_CLOUD];
-//    else if (widgetType == OAWidgetType.weatherPrecipitationWidget)
-//        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_PRECIPITATION];
-//    return nil;
-//}
-
+- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType
+{
+   // return [[ExternalSensorWidget alloc] initWithType:widgetType];
+    return [[ExternalSensorWidget alloc] initWithWidgetType:widgetType];
+}
 
 - (void)updateWidgetsInfo
 {
+    if (_heartRateTempControl)
+        [_heartRateTempControl updateInfo];
 }
 // ic_custom_sensor
 
@@ -132,6 +115,5 @@
 {
     return OALocalizedString(@"external_sensors_plugin_description");
 }
-
 
 @end

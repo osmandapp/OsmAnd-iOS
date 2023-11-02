@@ -32,6 +32,18 @@ final class DevicesSettingsCollection {
     //        readSettings();
     //    }
     
+    
+    var hasPairedDevices: Bool {
+        if let deviceSettingsArray: [DeviceSettings] = storage[.deviceSettings], !deviceSettingsArray.isEmpty {
+           return true
+        }
+        return false
+    }
+    
+    func getSettingsForPairedDevices() -> [DeviceSettings]? {
+        storage.object([DeviceSettings].self, with: UserDefaultsKey.deviceSettings.rawValue)
+    }
+    
     func getDeviceSettings(deviceId: String) -> DeviceSettings? {
         guard let deviceSettingsArray: [DeviceSettings] = storage[.deviceSettings],
               let deviceSettings = deviceSettingsArray.first(where: { $0.deviceId == deviceId }) else {

@@ -258,6 +258,9 @@ extension WidgetType {
     // Bottom panel
     static let elevationProfile = WidgetType(ordinal: 45, id: "elevation_profile", title: localizedString("elevation_profile"), descr: localizedString("elevation_profile_widget_desc"), dayIconName: "widget_route_elevation_day", nightIconName: "widget_route_elevation_night", defaultPanel: .bottomPanel)
     
+    // External sensors
+    static let heartRate = WidgetType(ordinal: 46, id: "heartRate", title: localizedString("map_widget_ant_heart_rate"), descr: localizedString("map_widget_ant_heart_rate_desc"), dayIconName: "widget_sensor_heart_rate", nightIconName: "widget_sensor_heart_rate", group: .externalSensors, defaultPanel: .rightPanel)
+    
     static let values = [nextTurn,
                          smallNextTurn,
                          secondNextTurn,
@@ -316,5 +319,8 @@ extension WidgetType {
                          sunrise,
                          sunset,
                          // Bottom panel
-                         elevationProfile]
+                         elevationProfile,
+                         // External sensors
+                         heartRate
+    ]
 }

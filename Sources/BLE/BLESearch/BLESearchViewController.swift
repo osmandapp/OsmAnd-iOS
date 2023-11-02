@@ -90,6 +90,9 @@ final class BLESearchViewController: OABaseNavbarViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = 72
+        tableView.backgroundColor = .clear
+        view.backgroundColor = UIColor.viewBgColor
+        tableView.sectionHeaderTopPadding = 26
         if !hasFirstResult {
             startScan()
         }
@@ -120,6 +123,10 @@ final class BLESearchViewController: OABaseNavbarViewController {
     
     override func getTitleForHeader(_ section: Int) -> String! {
         String(format: localizedString("bluetooth_found_title"), BLEManager.shared.discoveredDevices.count).uppercased()
+    }
+    
+    override func getCustomHeight(forHeader section: Int) -> CGFloat {
+        30
     }
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {

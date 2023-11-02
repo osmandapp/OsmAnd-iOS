@@ -48,22 +48,6 @@
     return self;
 }
 
-- (instancetype)initWithTitle:(NSString *)title lang:(NSString *)lang descr:(NSString *)descr
-{
-    self = [self init];
-    if (self)
-    {
-        self.metadata.time = [NSDate date].timeIntervalSince1970;
-        if (title)
-            [self.metadata setExtension:@"article_title" value:title];
-        if (lang)
-            [self.metadata setExtension:@"article_lang" value:lang];
-        if (descr)
-            [self.metadata setExtension:@"desc" value:descr];
-    }
-    return self;
-}
-
 - (BOOL)loadFrom:(NSString *)filename
 {
     if (filename && filename.length > 0)

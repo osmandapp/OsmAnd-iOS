@@ -6,13 +6,13 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-@class OAGPXTrackAnalysis;
+@class OAGPXTrackAnalysis, OAGPXDocument;
 @class OASplitMetric, QuadRect, OAApplicationMode;
 
 
 @interface OAGPXDocumentAdapter : NSObject
 
-@property (nonatomic) id object;
+@property (nonatomic) OAGPXDocument *object;
 @property (nonatomic) NSString *path;
 
 - (OAGPXTrackAnalysis *) getAnalysis:(long)fileTimestamp;

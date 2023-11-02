@@ -17,7 +17,7 @@ final class TravelLocalDataHelper {
     var observable: OAObservable
     
     init() {
-        dbHelper = OATravelLocalDataDbHelper()
+        dbHelper = OATravelLocalDataDbHelper.sharedDatabase()
         observable = OAObservable()
     }
     

@@ -13,33 +13,27 @@
 
 - (OAGPXDocument *)getObject
 {
-    if (_object && [_object isKindOfClass:OAGPXDocument.class])
-        return (OAGPXDocument *)_object;
-    return nil;
+    return _object;
 }
 
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp
 {
-    OAGPXDocument *obj = [self getObject];
-    return obj ? [obj getAnalysis:fileTimestamp] : nil;
+    return [_object getAnalysis:fileTimestamp];
 }
 
 - (BOOL) hasAltitude
 {
-    OAGPXDocument *obj = [self getObject];
-    return obj ? [obj hasAltitude] : NO;
+    return [_object hasAltitude];
 }
 
 - (int) pointsCount
-{
-    OAGPXDocument *obj = [self getObject];
-    return obj ? obj.points.count : 0;
+{;
+    return _object.points.count;
 }
 
 - (NSString *) getMetadataValueBy:(NSString *)tag
 {
-    OAGPXDocument *obj = [self getObject];
-    OAGpxExtension *extension = [obj.metadata getExtensionByKey:tag];
+    OAGpxExtension *extension = [_object.metadata getExtensionByKey:tag];
     return extension ? extension.value : nil;
 }
 

@@ -12,6 +12,8 @@
 
 @interface OATravelLocalDataDbHelper : NSObject
 
++ (OATravelLocalDataDbHelper *)sharedDatabase;
+
 - (NSDictionary<NSString *, OATravelSearchHistoryItem *> *) getAllHistoryMap;
 - (void) addHistoryItem:(OATravelSearchHistoryItem *)item;
 - (void) updateHistoryItem:(OATravelSearchHistoryItem *)item;

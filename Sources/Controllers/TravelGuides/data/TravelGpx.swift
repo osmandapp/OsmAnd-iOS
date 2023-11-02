@@ -50,13 +50,6 @@ final class TravelGpx : TravelArticle {
         return analysis
     }
     
-    func createWptPt(amenity: OAPOI, lang: String) -> OAWptPtAdapter {
-        let wptPt = OAWptPtAdapter()
-        wptPt.setPosition(CLLocationCoordinate2D(latitude: amenity.latitude, longitude: amenity.longitude))
-        wptPt.setName(amenity.name)
-        return wptPt
-    }
-    
     override func getPointFilterString() -> String {
         ROUTE_TRACK_POINT
     }

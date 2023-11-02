@@ -142,7 +142,6 @@ struct RouteDataBundle;
 @property (nonatomic) NSString *comment;
 @property (nonatomic) NSString *type;
 @property (nonatomic) NSArray *links;
-@property (nonatomic) NSString *category;
 @property (nonatomic) double distance;
 @property (nonatomic) double speed;
 @property (nonatomic) double horizontalDilutionOfPrecision;

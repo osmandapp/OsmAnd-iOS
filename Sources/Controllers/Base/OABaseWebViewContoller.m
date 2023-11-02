@@ -53,9 +53,9 @@
     _cachedIsLightTheme = [ThemeManager shared].isLightTheme;
 }
 
-- (void)viewWillLayoutSubviews
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
 {
-    [super viewWillLayoutSubviews];
+    [super traitCollectionDidChange:previousTraitCollection];
     if (_cachedIsLightTheme != [ThemeManager shared].isLightTheme)
     {
         [self updateAppearance];

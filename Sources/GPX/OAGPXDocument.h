@@ -45,7 +45,6 @@
 
 - (id)initWithGpxDocument:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument;
 - (id)initWithGpxFile:(NSString *)filename;
-- (instancetype)initWithTitle:(NSString *)title lang:(NSString *)lang descr:(NSString *)descr;
 
 - (BOOL) loadFrom:(NSString *)filename;
 - (BOOL) fetch:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument;

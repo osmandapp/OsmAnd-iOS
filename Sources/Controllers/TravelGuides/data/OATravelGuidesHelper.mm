@@ -8,7 +8,6 @@
 
 #import "OATravelGuidesHelper.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OAGPXDocumentPrimitivesAdapter.h"
 #import "OAGPXMutableDocument.h"
 #import "OAGPXDocument.h"
 #import "OAPOIHelper.h"
@@ -83,7 +82,7 @@
     [OAPOIHelper findTravelGuides:searchFilter location:location bbox31:bbox31 reader:reader publish:publish];
 }
 
-+ (void) searchAmenity:(NSString *)searchQuerry categoryName:(NSString *)categoryName radius:(int)radius lat:(double)lat lon:(double)lon reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish
++ (void) searchAmenity:(NSString *)searchQuery categoryName:(NSString *)categoryName radius:(int)radius lat:(double)lat lon:(double)lon reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish
 {
     OsmAnd::AreaI bbox31;
     OsmAnd::PointI locI;
@@ -98,7 +97,7 @@
         OsmAnd::PointI bottomRight = OsmAnd::PointI(INT_MAX, INT_MAX);
         bbox31 =  OsmAnd::AreaI(topLeft, bottomRight);
     }
-    [OAPOIHelper.sharedInstance findTravelGuidesByKeyword:searchQuerry categoryName:categoryName poiTypeName:nil location:locI bbox31:bbox31 reader:reader publish:publish];
+    [OAPOIHelper.sharedInstance findTravelGuidesByKeyword:searchQuery categoryName:categoryName poiTypeName:nil location:locI bbox31:bbox31 reader:reader publish:publish];
 }
 
 
@@ -127,7 +126,6 @@
     NSString *category = [amenity getTagSuffix:@"category_"];
     if (category)
     {
-        wptPt.category = [OAUtilities capitalizeFirstLetter:category];
         wptPt.type = [OAUtilities capitalizeFirstLetter:category];
     }
     
@@ -287,7 +285,15 @@
         }
         track.segments = segments;
 
-        gpxFile = [[OAGPXMutableDocument alloc] initWithTitle:title lang:article.lang descr:article.content];
+        gpxFile = [[OAGPXMutableDocument alloc] init];
+        gpxFile.metadata.time = [NSDate date].timeIntervalSince1970;
+        if (title)
+            [gpxFile.metadata setExtension:@"article_title" value:title];
+        if (article.lang)
+            [gpxFile.metadata setExtension:@"article_lang" value:article.lang];
+        if (article.lang)
+            [gpxFile.metadata setExtension:@"desc" value:article.content];
+        
         if (article.imageTitle && article.imageTitle.length > 0)
         {
             NSString *link = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle thumbnail:false];
@@ -305,7 +311,14 @@
     {
         if (!gpxFile)
         {
-            gpxFile = [[OAGPXMutableDocument alloc] initWithTitle:title lang:article.lang descr:article.content];
+            gpxFile = [[OAGPXMutableDocument alloc] init];
+            gpxFile.metadata.time = [NSDate date].timeIntervalSince1970;
+            if (title)
+                [gpxFile.metadata setExtension:@"article_title" value:title];
+            if (article.lang)
+                [gpxFile.metadata setExtension:@"article_lang" value:article.lang];
+            if (article.lang)
+                [gpxFile.metadata setExtension:@"desc" value:article.content];
             if (article.imageTitle && article.imageTitle.length > 0)
             {
                 NSString *link = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle thumbnail:false];

@@ -33,7 +33,6 @@
 #import "OAResourcesUISwiftHelper.h"
 #import "OATravelGuidesHelper.h"
 #import "OAGPXDocumentAdapter.h"
-#import "OAGPXDocumentPrimitivesAdapter.h"
 #import "OATravelLocalDataDbHelper.h"
 #import "OAPOI.h"
 

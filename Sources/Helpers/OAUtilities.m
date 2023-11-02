@@ -2766,7 +2766,7 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (BOOL) isValidFileName:(NSString *)name
 {
-    NSArray<NSString *> *illegalCharacters = @[ @"[", @"?", @":", @"\"", @"*", @"|", @"/", @"<", @">", @"]" ];
+    NSArray<NSString *> *illegalCharacters = @[ @"?", @":", @"\"", @"*", @"|", @"/", @"<", @">" ];
     if (!name)
     {
         return NO;

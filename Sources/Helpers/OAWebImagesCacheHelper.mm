@@ -156,8 +156,8 @@
         if (!imageAsBase64String && imageAsBase64String.length == 0 )
             imageAsBase64String = @"";
         
-        imageAsBase64String = [@"data:image/png;base64, " stringByAppendingString:imageAsBase64String];
-        resultHtml = [resultHtml stringByReplacingOccurrencesOfString:link withString:imageAsBase64String];
+        NSString *srcTagContent = [OAImageToStringConverter getHtmlImgSrcTagContent:imageAsBase64String];
+        resultHtml = [resultHtml stringByReplacingOccurrencesOfString:link withString:srcTagContent];
     }
     return resultHtml;
 }
@@ -182,18 +182,14 @@
         NSData *imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
         if (imageData)
         {
-            UIImage *image = [[UIImage alloc] initWithData:imageData];
-            if (image)
+            NSString *base64String = [OAImageToStringConverter imageDataToBase64String:imageData];
+            if (base64String)
             {
-                NSString *base64String = [OAImageToStringConverter imageToBase64String:image];
-                if (base64String)
-                {
-                    NSString *dbKey = customKey ? customKey : [self getDbKeyByLink:url];
-                    [self saveImage:base64String dbKey:dbKey];
-                    
-                    if (onComplete)
-                        onComplete(base64String);
-                }
+                NSString *dbKey = customKey ? customKey : [self getDbKeyByLink:url];
+                [self saveImage:base64String dbKey:dbKey];
+                
+                if (onComplete)
+                    onComplete(base64String);
             }
         }
         else

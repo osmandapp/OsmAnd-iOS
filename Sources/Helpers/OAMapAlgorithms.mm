@@ -12,10 +12,10 @@
 
 @implementation OAMapAlgorithms : NSObject
 
-+ (std::vector<int>) decodeIntHeightArrayGraph:(QString)str repeatBits:(int)repeatBits
++ (QList<int>) decodeIntHeightArrayGraph:(const QString &)str repeatBits:(int)repeatBits
 {
     int maxRepeats = (1 << repeatBits) - 1;
-    std::vector<int> res;
+    QList<int> res;
     std::string ch = str.toUtf8().constData();
     res.push_back(ch[0]);
     
@@ -42,7 +42,7 @@
     return res;
 }
 
-+ (OATrkSegment *) augmentTrkSegmentWithAltitudes:(OATrkSegment *)sgm decodedSteps:(std::vector<int>)decodedSteps startEle:(double)startEle
++ (OATrkSegment *) augmentTrkSegmentWithAltitudes:(OATrkSegment *)sgm decodedSteps:(QList<int>)decodedSteps startEle:(double)startEle
 {
     OATrkSegment *segment = sgm;
     NSMutableArray<OAWptPt *> *points = [NSMutableArray arrayWithArray:sgm.points];

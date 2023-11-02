@@ -12,11 +12,8 @@ import Foundation
 @objcMembers
 final class ImageToStringConverter : NSObject {
     
-    static func imageToBase64String(_ image: UIImage) -> String {
-        if let jpegData = image.jpegData(compressionQuality: 1) {
-            return jpegData.base64EncodedString()
-        }
-        return ""
+    static func imageDataToBase64String(_ imageData: Data) -> String {
+        return imageData.base64EncodedString()
     }
     
     static func base64StringToImage(_ base64String: String) -> UIImage? {
@@ -24,5 +21,9 @@ final class ImageToStringConverter : NSObject {
             return UIImage(data: imageData)
         }
         return nil
+    }
+    
+    static func getHtmlImgSrcTagContent(_ base64String: String) -> String {
+        return "data:image/png;base64, " + base64String
     }
 }

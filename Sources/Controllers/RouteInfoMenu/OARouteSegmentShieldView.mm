@@ -7,7 +7,7 @@
 //
 
 #import "OARouteSegmentShieldView.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OATargetInfoViewController.h"
 
 static UIFont *_shieldFont;
@@ -57,11 +57,11 @@ static UIFont *_shieldFont;
     
     if (_type == EOATransportShiledPedestrian)
     {
-        UIColor *primaryColor = UIColorFromRGB(color_primary_purple);
+        UIColor *primaryColor = UIColor.iconColorActive;
         _contentView.layer.borderColor = primaryColor.CGColor;
         _contentView.layer.borderWidth = 2.0;
         _shieldLabel.textColor = primaryColor;
-        _contentView.backgroundColor = UIColor.whiteColor;
+        _contentView.backgroundColor = UIColor.groupBgColor;
         _shieldImage.image = [UIImage templateImageNamed:_iconName];
         _shieldImage.tintColor = primaryColor;
     }
@@ -77,6 +77,14 @@ static UIFont *_shieldFont;
     self.shieldLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
+- (void) traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        _contentView.layer.borderColor = UIColor.iconColorActive.CGColor;
+}
+
 - (CGSize)intrinsicContentSize
 {
     return CGSizeMake(6.0 + 20. + 6.0 + _shieldLabel.frame.size.width + 12.0, 32.0);
@@ -86,9 +94,9 @@ static UIFont *_shieldFont;
     [UIView animateWithDuration:.2 animations:^{
         if (_type == EOATransportShiledPedestrian)
         {
-            [_shieldImage setTintColor:UIColorFromRGB(color_primary_purple)];
-            _shieldLabel.textColor = UIColorFromRGB(color_primary_purple);
-            _contentView.backgroundColor = UIColor.whiteColor;
+            [_shieldImage setTintColor:UIColor.iconColorActive];
+            _shieldLabel.textColor = UIColor.textColorActive;
+            _contentView.backgroundColor = UIColor.groupBgColor;
         }
         else
         {
@@ -106,14 +114,14 @@ static UIFont *_shieldFont;
     [UIView animateWithDuration:.2 animations:^{
         if (_type == EOATransportShiledPedestrian)
         {
-            [_shieldImage setTintColor:UIColor.whiteColor];
-            _shieldLabel.textColor = UIColor.whiteColor;
-            _contentView.backgroundColor = UIColorFromRGB(color_primary_purple);
+            [_shieldImage setTintColor:UIColor.groupBgColor];
+            _shieldLabel.textColor = UIColor.groupBgColor;
+            _contentView.backgroundColor = UIColor.iconColorActive;
         }
         else
         {
-            [_shieldImage setTintColor:UIColor.grayColor];
-            _shieldLabel.textColor = UIColor.grayColor;
+            [_shieldImage setTintColor:UIColor.iconColorDefault];
+            _shieldLabel.textColor = UIColor.iconColorDefault;
         }
     } completion:^(BOOL finished) {
         if (!longPress)

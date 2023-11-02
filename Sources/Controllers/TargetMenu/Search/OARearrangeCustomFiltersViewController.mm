@@ -9,7 +9,7 @@
 #import "OARearrangeCustomFiltersViewController.h"
 #import "OAPOIFiltersHelper.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAQuickSearchHelper.h"
 #import "OARightIconTableViewCell.h"
 #import "OAAppSettings.h"
@@ -262,7 +262,7 @@
             [cell descriptionVisibility:NO];
             cell.delegate = self;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.leftIconView.tintColor = UIColor.iconColorDefault;
             cell.leftIconView.contentMode = UIViewContentModeCenter;
         }
         if (cell)
@@ -299,9 +299,9 @@
             cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
+            cell.titleLabel.textColor = UIColor.textColorActive;
             cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
-            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.rightIconView.tintColor = UIColor.iconColorActive;
         }
         if (cell)
         {

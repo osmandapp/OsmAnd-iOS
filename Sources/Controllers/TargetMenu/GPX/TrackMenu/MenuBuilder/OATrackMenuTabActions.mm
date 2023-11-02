@@ -12,6 +12,7 @@
 #import "OATitleDescriptionIconRoundCell.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OATrackMenuTabActions ()
 
@@ -150,7 +151,7 @@
             kTableValues: @{ @"font_value": [UIFont scaledBoldSystemFontOfSize:17] },
             kCellRightIconName: @"ic_custom_remove_outlined",
             kCellTitle: OALocalizedString(@"shared_string_delete"),
-            kCellTintColor: @color_primary_red
+            kCellTintColor: UIColor.buttonBgColorDisruptive
     }];
     [deleteSectionData.subjects addObject:deleteCellData];
 

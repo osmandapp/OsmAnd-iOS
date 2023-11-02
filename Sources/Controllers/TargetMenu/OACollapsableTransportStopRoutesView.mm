@@ -9,7 +9,7 @@
 #import "OACollapsableTransportStopRoutesView.h"
 #import "OATransportStopViewController.h"
 #import "OATransportStopRoute.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OARootViewController.h"
 #import "OAMapLayers.h"
 #import "OANativeUtilities.h"
@@ -58,9 +58,9 @@
         int imgIndex = [text indexOf:@"<img>"];
         if (imgIndex != -1)
         {
-            UIColor *titleColor = UIColorFromRGB(color_ctx_menu_bottom_view_text_color_light);
-            UIColor *imgColor = UIColorFromRGB(color_ctx_menu_bottom_view_icon_light);
-            UIColor *descrColor = UIColorFromARGB(color_secondary_text_light_argb);
+            UIColor *titleColor = UIColor.textColorSecondary;
+            UIColor *imgColor = UIColor.iconColorSecondary;
+            UIColor *descrColor = UIColor.textColorPrimary;
             [title addAttribute:NSForegroundColorAttributeName value:titleColor range:NSMakeRange(0, imgIndex - 1)];
             [title addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] range:NSMakeRange(0, imgIndex - 1)];
             

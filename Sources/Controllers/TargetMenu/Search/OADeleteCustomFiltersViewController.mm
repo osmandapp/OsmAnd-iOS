@@ -9,7 +9,7 @@
 #import "OADeleteCustomFiltersViewController.h"
 #import "OAPOIFiltersHelper.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OASimpleTableViewCell.h"
 #import "OARightIconTableViewCell.h"
 #import "OAPOIHelper.h"
@@ -109,13 +109,13 @@
             [cell descriptionVisibility:NO];
             [cell leftEditButtonVisibility:YES];
             cell.delegate = self;
-            cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
+            cell.titleLabel.textColor = UIColor.iconColorActive;
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
 
             UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
             conf.contentInsets = NSDirectionalEdgeInsetsMake(0., -6.5, 0., 0.);
             cell.leftEditButton.configuration = conf;
-            cell.leftEditButton.layer.shadowColor = UIColorFromRGB(color_tint_gray).CGColor;
+            cell.leftEditButton.layer.shadowColor = UIColor.iconColorDefault.CGColor;
             cell.leftEditButton.layer.shadowOffset = CGSizeMake(0., 0.);
             cell.leftEditButton.layer.shadowOpacity = 1.;
             cell.leftEditButton.layer.shadowRadius = 1.;
@@ -145,9 +145,9 @@
             cell = nib[0];
             [cell rightIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.tintColor = UIColor.iconColorActive;
             UIView *bgColorView = [[UIView alloc] init];
-            bgColorView.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.05];
+            bgColorView.backgroundColor = [UIColor.iconColorActive colorWithAlphaComponent:.05];
             [cell setSelectedBackgroundView:bgColorView];
         }
         if (cell)
@@ -156,7 +156,7 @@
             BOOL selected = [_selectedItems containsObject:filter];
             UIImage *icon = [[OAPOIHelper getCustomFilterIcon:filter] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             [cell.leftIconView setImage:icon ];
-            UIColor *selectedColor = selected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
+            UIColor *selectedColor = selected ? UIColor.iconColorActive : UIColor.iconColorDisabled;
             cell.leftIconView.tintColor = selectedColor;
             cell.leftIconView.contentMode = UIViewContentModeCenter;
             cell.titleLabel.text = filter.getName ? filter.getName : @"";

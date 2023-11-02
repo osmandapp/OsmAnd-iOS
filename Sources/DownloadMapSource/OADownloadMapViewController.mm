@@ -20,6 +20,7 @@
 
 #include "Localization.h"
 #include "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #include "OASizes.h"
 
 #import "OAValueTableViewCell.h"
@@ -193,7 +194,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                                         andObserve:[OARootViewController instance].mapPanel.mapViewController.framePreparedObservable];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    self.bottomToolBarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
+    self.bottomToolBarView.backgroundColor = UIColor.groupBgColor;
     [self updateToolBar];
     _cancelButton.layer.cornerRadius = 9.0;
     _downloadButton.layer.cornerRadius = 9.0;
@@ -528,7 +529,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell.titleLabel.text = item[@"title"];
             cell.valueLabel.text = item[@"value"];
             if (![item[@"title"] isEqualToString:OALocalizedString(@"map_settings_type")])
-                cell.valueLabel.textColor = [item[@"clickable"] boolValue] ? UIColor.blackColor : UIColorFromRGB(color_text_footer);
+                cell.valueLabel.textColor = [item[@"clickable"] boolValue] ? UIColor.textColorPrimary : UIColor.textColorSecondary;
             if (indexPath.row == kMaxZoomRow && !_maxZoomPickerIsShown)
                 cell.separatorInset = UIEdgeInsetsZero;
             else
@@ -595,13 +596,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+    [vw.textLabel setTextColor:UIColor.textColorSecondary];
 }
 
 - (void) tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+    [vw.textLabel setTextColor:UIColor.textColorSecondary];
 }
 
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath

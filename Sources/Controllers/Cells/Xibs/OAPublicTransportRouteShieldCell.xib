@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -29,11 +31,11 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OEf-VO-Xmx">
                                 <rect key="frame" x="32" y="7" width="191" height="18"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" name="textColorPrimary"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" name="groupBgColor"/>
                         <constraints>
                             <constraint firstItem="8mP-Xc-aIi" firstAttribute="leading" secondItem="VHb-gO-u6g" secondAttribute="leading" constant="6" id="0Ov-d0-3G3"/>
                             <constraint firstItem="OEf-VO-Xmx" firstAttribute="leading" secondItem="8mP-Xc-aIi" secondAttribute="trailing" constant="6" id="0YO-9m-rVX"/>
@@ -45,7 +47,7 @@
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="enb-Nn-aO6">
                         <rect key="frame" x="30" y="0.0" width="2" height="44"/>
-                        <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" systemColor="systemYellowColor"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="2" id="LRN-KW-qKD"/>
                         </constraints>
@@ -61,6 +63,7 @@
                     <constraint firstAttribute="bottom" secondItem="VHb-gO-u6g" secondAttribute="bottom" constant="10" id="wwt-i6-ZjU"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" name="groupBgColor"/>
             <connections>
                 <outlet property="iconView" destination="8mP-Xc-aIi" id="s4H-de-78f"/>
                 <outlet property="routeLineView" destination="enb-Nn-aO6" id="ir9-b3-bHc"/>
@@ -70,4 +73,15 @@
             <point key="canvasLocation" x="299.19999999999999" y="193.4032983508246"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <namedColor name="groupBgColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorPrimary">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>

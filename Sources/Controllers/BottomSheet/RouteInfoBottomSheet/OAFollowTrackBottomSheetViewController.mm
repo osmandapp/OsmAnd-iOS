@@ -11,14 +11,14 @@
 #import "OARoutePlanningHudViewController.h"
 #import "Localization.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAApplicationMode.h"
 #import "OAGPXTrackCell.h"
 #import "OAGPXDatabase.h"
 #import "OASegmentTableViewCell.h"
 #import "OASimpleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
-#import "OATitleRightIconCell.h"
+#import "OAValueTableViewCell.h"
 #import "OsmAndApp.h"
 #import "OARoutingHelper.h"
 #import "OAGPXDocument.h"
@@ -85,7 +85,7 @@
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     [self.rightButton removeFromSuperview];
     [self.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_arrow_back"]];
-    self.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
+    self.leftIconView.tintColor = UIColor.iconColorActive;
     [self.closeButton removeFromSuperview];
     [self.headerDividerView removeFromSuperview];
     
@@ -213,7 +213,7 @@
     BOOL useRtePt = params.useIntermediatePointsRTE;
     [data addObject:@[
         @{
-            @"type" : [OATitleRightIconCell getCellIdentifier],
+            @"type" : [OAValueTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"point_to_navigate")
         },
         @{
@@ -223,7 +223,7 @@
             @"key" : @"point_to_start"
         },
         @{
-            @"type" : [OATitleRightIconCell getCellIdentifier],
+            @"type" : [OAValueTableViewCell getCellIdentifier],
             @"title" : useRtePt ? OALocalizedString(@"connect_rp") : OALocalizedString(@"nav_type_hint")
         },
         @{
@@ -314,7 +314,7 @@
             cell.segmentControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
             UIFont *font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
             [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor, NSFontAttributeName : font} forState:UIControlStateSelected];
-            [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple), NSFontAttributeName : font} forState:UIControlStateNormal];
+            [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.buttonTextColorSecondary, NSFontAttributeName : font} forState:UIControlStateNormal];
         }
         if (cell)
         {
@@ -348,10 +348,10 @@
             [cell setRightButtonVisibility:YES];
             [cell.editButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.editButton addTarget:self action:@selector(openPlanRoute) forControlEvents:UIControlEventTouchUpInside];
-            cell.editButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.distanceImageView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.timeImageView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.wptImageView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.editButton.imageView.tintColor = UIColor.iconColorActive;
+            cell.distanceImageView.tintColor = UIColor.textColorSecondary;
+            cell.timeImageView.tintColor = UIColor.textColorSecondary;
+            cell.wptImageView.tintColor = UIColor.textColorSecondary;
         }
         if (cell)
         {
@@ -376,7 +376,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
             cell.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
-            [cell.leftIconView setTintColor:UIColorFromRGB(color_primary_purple)];
+            [cell.leftIconView setTintColor:UIColor.iconColorActive];
             [cell descriptionVisibility:NO];
         }
         if (cell)
@@ -396,7 +396,7 @@
             cell = (OASwitchTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
             cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
-            cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.leftIconView.tintColor = UIColor.iconColorActive;
         }
         if (cell)
         {
@@ -409,21 +409,21 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:[OATitleRightIconCell getCellIdentifier]])
+    else if ([type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
+        OAValueTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:type owner:self options:nil];
-            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            [cell setIconVisibility:NO];
-            [cell setBottomOffset:0];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            [cell valueVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
         }
         if (cell)
         {
-            cell.titleView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
         }
         return cell;
     }
@@ -509,7 +509,7 @@
         case UIGestureRecognizerStateBegan:
         {
             [UIView animateWithDuration:.1 animations:^{
-                self.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
+                self.leftIconView.tintColor = UIColor.iconColorDisabled;
             }];
             break;
         }

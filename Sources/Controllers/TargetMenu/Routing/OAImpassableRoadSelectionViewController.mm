@@ -10,7 +10,7 @@
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OASizes.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAAvoidSpecificRoads.h"
 #import "OASimpleTableViewCell.h"
 #import "OARouteAvoidSettingsViewController.h"
@@ -84,7 +84,7 @@
     [_tableView setScrollEnabled:NO];
     [_tableView setAllowsSelectionDuringEditing:YES];
     
-    UIColor *eleTint = UIColorFromRGB(color_text_footer);
+    UIColor *eleTint = UIColor.iconColorDefault;
     _eleUpImageView.image = [_eleUpImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     _eleDownImageView.image = [_eleDownImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     _eleUpImageView.tintColor = eleTint;
@@ -138,8 +138,8 @@
     rightBtnFrame.size.width = leftBtnFrame.size.width;
     _selectButton.frame = rightBtnFrame;
     
-    [self setupButtonAppearance:_clearAllButton iconName:@"ic_custom_clear_list" color:UIColorFromRGB(color_primary_purple)];
-    [self setupButtonAppearance:_selectButton iconName:@"ic_custom_add" color:UIColor.whiteColor];
+    [self setupButtonAppearance:_clearAllButton iconName:@"ic_custom_clear_list" color:UIColor.buttonTextColorSecondary];
+    [self setupButtonAppearance:_selectButton iconName:@"ic_custom_add" color:UIColor.buttonTextColorPrimary];
 }
 
 - (void) setupButtonAppearance:(UIButton *) button iconName:(NSString *)iconName color:(UIColor *)color

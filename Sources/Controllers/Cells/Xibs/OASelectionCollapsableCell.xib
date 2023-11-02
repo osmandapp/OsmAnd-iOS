@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -29,7 +30,7 @@
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="ktg-m6-4su"/>
                         </constraints>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="textColor" name="textColorPrimary"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_arrow_up.png" translatesAutoresizingMaskIntoConstraints="NO" id="Gs1-fR-3ze" userLabel="Arrow Icon View">
@@ -41,7 +42,7 @@
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RJs-NT-27z" userLabel="Divider View">
                         <rect key="frame" x="351" y="12" width="1" height="30"/>
-                        <color key="backgroundColor" red="0.79607843140000001" green="0.78039215689999997" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" name="separatorColor"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="1" id="ecO-0R-MxR"/>
                             <constraint firstAttribute="height" constant="30" id="yUf-g0-tCz"/>
@@ -83,6 +84,9 @@
                             <constraint firstAttribute="height" constant="24" id="fKb-Hy-p2H"/>
                             <constraint firstAttribute="width" constant="24" id="sOx-Mg-D5V"/>
                         </constraints>
+                        <state key="normal">
+                            <color key="titleColor" name="iconColorDisabled"/>
+                        </state>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="atX-fb-f5r" userLabel="Selection Group Button">
                         <rect key="frame" x="0.0" y="0.0" width="60" height="54"/>
@@ -125,6 +129,7 @@
                     <constraint firstItem="M9y-XT-vrN" firstAttribute="leading" secondItem="Gs1-fR-3ze" secondAttribute="trailing" constant="12" id="zSe-mT-MQv"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" name="groupBgColor"/>
             <connections>
                 <outlet property="arrowIconNoOptionButtonConstraint" destination="ekl-wT-Ndj" id="TN3-W0-Ts0"/>
                 <outlet property="arrowIconView" destination="Gs1-fR-3ze" id="370-03-M6M"/>
@@ -154,5 +159,17 @@
     <resources>
         <image name="ic_custom_arrow_up.png" width="30" height="30"/>
         <image name="ic_custom_folder.png" width="30" height="30"/>
+        <namedColor name="groupBgColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="iconColorDisabled">
+            <color red="0.84705882352941175" green="0.83529411764705885" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="separatorColor">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorPrimary">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

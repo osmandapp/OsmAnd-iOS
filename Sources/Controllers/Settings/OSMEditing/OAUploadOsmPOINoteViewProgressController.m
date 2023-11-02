@@ -15,7 +15,7 @@
 #import "OAProgressBarCell.h"
 #import "OAValueTableViewCell.h"
 #import "OATextMultilineTableViewCell.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OARootViewController.h"
 
@@ -140,7 +140,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadViewConrollerMode) {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAProgressBarCell getCellIdentifier] owner:self options:nil];
     OAProgressBarCell *resultCell = (OAProgressBarCell *)[nib objectAtIndex:0];
     [resultCell.progressBar setProgress:0.0 animated:NO];
-    [resultCell.progressBar setProgressTintColor:UIColorFromRGB(color_primary_purple)];
+    [resultCell.progressBar setProgressTintColor:UIColor.iconColorActive];
     resultCell.backgroundColor = [UIColor clearColor];
     resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return resultCell;

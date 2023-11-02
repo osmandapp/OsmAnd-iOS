@@ -152,9 +152,11 @@
     _calc1 = [[OANextDirectionInfo alloc] init];
     
     _textRasterizer = OsmAnd::TextRasterizer::getDefault();
+    
+    BOOL isNight = OADayNightHelper.instance.isNightMode;
 
     CGFloat radius = 3.0;
-    self.backgroundColor = [UIColor whiteColor];
+    self.backgroundColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColor.whiteColor;
     self.layer.cornerRadius = radius;
 
     _regularFont = [UIFont systemFontOfSize:23 weight:UIFontWeightSemibold];
@@ -163,7 +165,7 @@
     _boldWaypointFont = [UIFont systemFontOfSize:17 weight:UIFontWeightSemibold];
     _textFont = _regularFont;
     _textWaypointFont = _regularWaypointFont;
-    _textColor = [UIColor blackColor];
+    _textColor = isNight ? UIColor.whiteColor : UIColor.blackColor;
     _textShadowColor = nil;
     _shadowRadius = 0;
     

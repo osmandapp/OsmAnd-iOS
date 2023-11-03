@@ -1610,6 +1610,8 @@
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Without name";
 "local_openstreetmap_uploading" = "Uploading…";
+"shared_string_uploading" = "Uploading";
+"shared_string_discard_changes" = "Discard changes";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Save POI without type?";

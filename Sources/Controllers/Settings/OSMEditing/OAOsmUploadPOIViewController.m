@@ -11,7 +11,7 @@
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
-#import "OAInputTableViewCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAMappersViewController.h"
@@ -20,7 +20,7 @@
 #import "OAOpenStreetMapPoint.h"
 #import "OAEditPOIData.h"
 
-@interface OAOsmUploadPOIViewController () <UITextFieldDelegate, OAAccountSettingDelegate, OAUploadTaskDelegate>
+@interface OAOsmUploadPOIViewController () <UITextViewDelegate, OAAccountSettingDelegate, OAUploadTaskDelegate>
 
 @end
 
@@ -35,6 +35,7 @@
     
     BOOL _closeChangeset;
     BOOL _isAuthorised;
+    BOOL _isMessageTextChanged;
 }
 
 #pragma mark - Initialization
@@ -114,7 +115,7 @@
     OATableSectionData *messageSection = [_data createNewSection];
     messageSection.headerText = OALocalizedString(@"osb_comment_dialog_message");
     OATableRowData *messageTextInputCell = [messageSection createNewRow];
-    [messageTextInputCell setCellType:[OAInputTableViewCell getCellIdentifier]];
+    [messageTextInputCell setCellType:[OATextMultilineTableViewCell getCellIdentifier]];
     [messageTextInputCell setTitle:_messageText];
     
     OATableSectionData *closeChangesetSection = [_data createNewSection];
@@ -270,28 +271,28 @@
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     NSString *cellType = item.cellType;
     
-    if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
     {
-        OAInputTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
+        OATextMultilineTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAInputTableViewCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultilineTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
-            [cell titleVisibility:NO];
             [cell clearButtonVisibility:NO];
-            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
-            [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
-            cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-            cell.inputField.autocorrectionType = UITextAutocorrectionTypeNo;
-            cell.inputField.spellCheckingType = UITextSpellCheckingTypeNo;
-            cell.inputField.textAlignment = NSTextAlignmentNatural;
+            cell.textView.userInteractionEnabled = YES;
+            cell.textView.editable = YES;
+            cell.textView.delegate = self;
+            cell.textView.returnKeyType = UIReturnKeyDone;
+            cell.textView.enablesReturnKeyAutomatically = YES;
+            cell.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            cell.textView.autocorrectionType = UITextAutocorrectionTypeNo;
+            cell.textView.spellCheckingType = UITextSpellCheckingTypeNo;
+            cell.textView.textAlignment = NSTextAlignmentNatural;
         }
         if (cell)
         {
-            cell.inputField.text = item.title;
-            cell.inputField.delegate = self;
-            cell.inputField.tag = [item integerForKey:@"tag"];
+            cell.textView.text = item.title;
         }
         return cell;
     }
@@ -350,6 +351,28 @@
         actionBlock();
 }
 
+#pragma mark - Aditions
+
+- (void)showActionSheet
+{
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *destructiveAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_discard_changes") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [super onLeftNavbarButtonPressed];
+    }];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil];
+    
+    [actionSheet addAction:destructiveAction];
+    [actionSheet addAction:cancelAction];
+    
+    UIPopoverPresentationController *popover = actionSheet.popoverPresentationController;
+    popover.barButtonItem = self.navigationItem.leftBarButtonItem;
+    popover.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    
+    [self presentViewController:actionSheet animated:YES completion:nil];
+}
+
 #pragma mark - Selectors
 
 - (void)applyParameter:(id)sender
@@ -367,6 +390,14 @@
                 _closeChangeset = isChecked;
         }
     }
+}
+
+- (void)onLeftNavbarButtonPressed
+{
+    if (_isMessageTextChanged)
+        [self showActionSheet];
+    else
+        [super onLeftNavbarButtonPressed];
 }
 
 - (void)onAccountButtonPressed
@@ -399,20 +430,26 @@
         
         if ([self.delegate respondsToSelector:@selector(dismissEditingScreen)])
             [self.delegate dismissEditingScreen];
+        
+        _isMessageTextChanged = NO;
     }
 }
 
-#pragma mark - UITextFieldDelegate
+#pragma mark - UITextViewDelegate
 
-- (BOOL)textFieldShouldReturn:(UITextField *)sender
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView
 {
-    [sender resignFirstResponder];
+    [textView resignFirstResponder];
     return YES;
 }
 
 - (void)textViewDidChange:(UITextView *)textView
 {
     _messageText = textView.text;
+    _isMessageTextChanged = YES;
+    [textView sizeToFit];
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
 }
 
 #pragma mark - OAAccontSettingDelegate

@@ -59,7 +59,7 @@
 #import "OAWeatherPlugin.h"
 #import "OAMapillaryPlugin.h"
 #import "OAParkingPositionPlugin.h"
-#import "OASensorsPlugin.h"
+#import "OAExternalSensorsPlugin.h"
 
 // TableView Data
 #import "OATableDataModel.h"

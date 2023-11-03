@@ -13,9 +13,9 @@ final class DeviceFactory {
             if BLEHeartRateDevice.getServiceUUID.contains(uuid) {
                 return BLEHeartRateDevice()
             }
-            if BLEBikeSCDDevice.getServiceUUID.contains(uuid) {
-                return BLEBikeSCDDevice()
-            }
+//            if BLEBikeSCDDevice.getServiceUUID.contains(uuid) {
+//                return BLEBikeSCDDevice()
+//            }
         }
         return nil
 

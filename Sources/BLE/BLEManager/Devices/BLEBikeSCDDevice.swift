@@ -15,11 +15,11 @@ final class BLEBikeSCDDevice: Device {
         GattAttributes.SERVICE_CYCLING_SPEED_AND_CADENCE
     }
     
-    override init() {
-        super.init()
-        deviceType = .BLE_BICYCLE_SCD
-        sensors.append(BLEBikeSensor())
-    }
+//    override init() {
+//        super.init()
+//        deviceType = .BLE_BICYCLE_SCD
+//        sensors.append(BLEBikeSensor())
+//    }
     
     override var getServiceConnectedImage: UIImage {
         UIImage(named: "widget_sensor_bicycle_power")!

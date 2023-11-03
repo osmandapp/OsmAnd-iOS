@@ -8,61 +8,58 @@
 import CoreBluetooth
 
 class Sensor {
-    public var timestamp: Double = 0
+    var timestamp: Double = 0
+    var device: Device!
+    var sensorId: String!
     
-    func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
+    init(timestamp: Double = Date().timeIntervalSince1970,
+         device: Device,
+         sensorId: String) {
+        self.timestamp = timestamp
+        self.device = device
+        self.sensorId = sensorId
+    }
+    
+    func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) { }
+    
+    func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
+        nil
+    }
+    
+    func getLastSensorDataList() -> [SensorData]? {
+        nil
     }
 }
 
-class SensorData {
+protocol SensorData {
+    var dataFields: [SensorDataField] { get }
+    var extraDataFields: [SensorDataField] { get }
+    var widgetFields: [SensorWidgetDataField]? { get }
     
+    func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField?
 }
 
-//public static class BatteryData implements SensorData {
-//
-//    private final long timestamp;
-//    private final int batteryLevel;
-//
-//    BatteryData(long timestamp, int batteryLevel) {
-//        this.timestamp = timestamp;
-//        this.batteryLevel = batteryLevel;
-//    }
-//
-//    public long getTimestamp() {
-//        return timestamp;
-//    }
-//
-//    public int getBatteryLevel() {
-//        return batteryLevel;
-//    }
-//
-//    @NonNull
-//    @Override
-//    public List<SensorDataField> getDataFields() {
-//        return Collections.singletonList(new SensorDataField(R.string.map_widget_battery, -1, batteryLevel));
-//    }
-//
-//    @NonNull
-//    @Override
-//    public List<SensorDataField> getExtraDataFields() {
-//        return Collections.singletonList(new SensorDataField(R.string.shared_string_time, -1, timestamp));
-//    }
-//
-//    @Nullable
-//    @Override
-//    public List<SensorWidgetDataField> getWidgetFields() {
-//        return Collections.singletonList(
-//                new SensorWidgetDataField(SensorWidgetDataFieldType.BATTERY, R.string.map_widget_battery, -1, batteryLevel));
-//    }
-//
-//    @NonNull
-//    @Override
-//    public String toString() {
-//        return "BatteryData {" +
-//                "timestamp=" + timestamp +
-//                ", batteryLevel=" + batteryLevel +
-//                '}';
-//    }
-//}
-
-
+extension SensorData {
+    var dataFields: [SensorDataField] {
+        return []
+    }
+    
+    var extraDataFields: [SensorDataField] {
+        return []
+    }
+    
+    var widgetFields: [SensorWidgetDataField]? {
+        return nil
+    }
+    
+    func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField? {
+        guard let widgetFields else {
+            return nil
+        }
+        
+        for widgetField in widgetFields where widgetField.fieldType == fieldType {
+            return widgetField
+        }
+        return nil
+    }
+}

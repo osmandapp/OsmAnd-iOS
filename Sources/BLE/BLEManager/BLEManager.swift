@@ -31,6 +31,11 @@ final class BLEManager {
                                                queue: nil) { notification in
             if let restoredPeripherals = notification.userInfo?["peripherals"] as? [Peripheral], !restoredPeripherals.isEmpty {
                 debugPrint(restoredPeripherals)
+                if OAIAPHelper.isOsmAndProAvailable()/* && plagin isEnable*/ {
+                    DeviceHelper.shared.restoreConnectedDevices(with: restoredPeripherals)
+                } else {
+                    restoredPeripherals.forEach { $0.disconnect(completion: {_ in }) }
+                }
             }
         }
     }
@@ -40,24 +45,6 @@ final class BLEManager {
     }
     
     private(set) var discoveredDevices = [Device]()
-    private(set) var connectedDevices = [Device]()
-    
-    func updateConnected(devices: [Device]) {
-        devices.forEach { item in
-            if let device = connectedDevices.first(where: { $0.id != item.id }) {
-                connectedDevices.append(device)
-            }
-        }
-    }
-    
-    func addConnected(device: Device) {
-        guard connectedDevices.contains(where: { $0.id != device.id }) else { return }
-        connectedDevices.append(device)
-    }
-    
-    func removeDisconnected(device: Device) {
-        connectedDevices = connectedDevices.filter { $0.id == device.id }
-    }
     
     func scanForPeripherals(withServiceUUIDs serviceUUIDs: [CBUUID]? = nil,
                             timeoutAfter timeout: TimeInterval = 15,
@@ -92,6 +79,9 @@ final class BLEManager {
                     device.deviceName = deviceName
                     device.addObservers()
                     discoveredDevices.append(device)
+                    if device.peripheral?.state == .connected {
+                        DeviceHelper.shared.addConnected(device: device)
+                    }
                     successHandler()
                 }
             case .scanStopped(let peripherals, let error):
@@ -140,11 +130,3 @@ final class BLEManager {
         }
     }
 }
-
-extension Array where Element: Equatable {
-    func removing(_ obj: Element) -> [Element] {
-        filter { $0 != obj }
-    }
-}
-
-

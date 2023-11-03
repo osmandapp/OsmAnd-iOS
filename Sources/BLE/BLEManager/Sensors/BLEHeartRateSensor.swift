@@ -7,15 +7,24 @@
 
 import CoreBluetooth
 
-
 final class BLEHeartRateSensor: Sensor {
     
     final class HeartRateData: SensorData {
         var heartRate: Int = 0
         var bodyPart: BodyPart = .other
+        
+        var widgetFields: [SensorWidgetDataField]? {
+            return [SensorWidgetDataField(fieldType: .heartRate,
+                                          nameId: localizedString("map_widget_ant_heart_rate"),
+                                          unitNameId: "",
+                                          numberValue: nil,
+                                          stringValue: String(heartRate) + " " + localizedString("beats_per_minute_short"))]
+        }
+        
+        func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField? {
+            widgetFields?.first
+        }
     }
-    
-    private(set) var heartRateData = HeartRateData()
     
     enum BodyPart: Int {
         case other
@@ -46,21 +55,44 @@ final class BLEHeartRateSensor: Sensor {
         }
     }
     
+    private(set) var lastHeartRateData: HeartRateData?
+    
     override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
         switch characteristic.uuid {
         case GattAttributes.CHARACTERISTIC_HEART_RATE_MEASUREMENT.CBUUIDRepresentation:
             let heartRate = heartRate(from: characteristic)
-            if heartRateData.heartRate != heartRate {
-                heartRateData.heartRate = heartRate
-                result(.success)
+            if lastHeartRateData == nil {
+                lastHeartRateData = HeartRateData()
             }
-            debugPrint("bpm: \(heartRateData.heartRate)")
+            if let lastHeartRateData {
+                if lastHeartRateData.heartRate != heartRate {
+                    lastHeartRateData.heartRate = heartRate
+                    result(.success)
+                }
+                debugPrint("bpm: \(lastHeartRateData.heartRate)")
+            }
         case GattAttributes.CHARACTERISTIC_HEART_RATE_BODY_PART.CBUUIDRepresentation:
-            heartRateData.bodyPart = bodyLocation(from: characteristic)
-            debugPrint("bodyPart: \(heartRateData.bodyPart.description)")
+            if lastHeartRateData == nil {
+                lastHeartRateData = HeartRateData()
+            }
+            if let lastHeartRateData {
+                lastHeartRateData.bodyPart = bodyLocation(from: characteristic)
+                debugPrint("bodyPart: \(lastHeartRateData.bodyPart.description)")
+            }
         default:
             debugPrint("Unhandled Characteristic UUID: \(characteristic.uuid)")
         }
+    }
+    
+    override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
+        [.heartRate]
+    }
+    
+    override func getLastSensorDataList() -> [SensorData]? {
+        if let lastHeartRateData {
+            return [lastHeartRateData]
+        }
+        return nil
     }
 }
 
@@ -91,6 +123,4 @@ extension BLEHeartRateSensor {
         }
         return .other
     }
-    
 }
-

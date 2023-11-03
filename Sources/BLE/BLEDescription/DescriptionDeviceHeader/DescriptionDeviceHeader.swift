@@ -96,6 +96,7 @@ final class DescriptionDeviceHeader: UIView {
             case .success:
                 let isPairedDevice = DeviceHelper.shared.isPairedDevice(id: item.id)
                 DeviceHelper.shared.setDevicePaired(device: item, isPaired: true)
+                DeviceHelper.shared.addConnected(device: item)
                 if !isPairedDevice {
                     didPaireDevicedAction?()
                 }
@@ -165,6 +166,7 @@ final class DescriptionDeviceHeader: UIView {
             guard let self else { return }
             switch result {
             case .success:
+                DeviceHelper.shared.removeDisconnected(device: item)
                 configureConnectButtonTitle(with: .connected)
                 item.disableRSSI()
                 deviceImageView.image = item.getServiceConnectedImage.noir

@@ -14,10 +14,18 @@ final class BLEHeartRateDevice: Device {
         GattAttributes.SERVICE_HEART_RATE
     }
     
-    override init() {
-        super.init()
-        deviceType = .BLE_HEART_RATE
-        sensors.append(BLEHeartRateSensor())
+    init() {
+        super.init(deviceType: .BLE_HEART_RATE)
+        sensors.append(BLEHeartRateSensor(device: self, sensorId: id + "_heart_rate"))
+    }
+    
+//    override init() {
+//        deviceType = .BLE_HEART_RATE
+//        sensors.append(BLEHeartRateSensor(device: self, sensorId: id + "_heart_rate"))
+//    }
+    
+    override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
+        [.heartRate]
     }
     
     override var getServiceConnectedImage: UIImage {
@@ -26,19 +34,24 @@ final class BLEHeartRateDevice: Device {
     
     override var getWidgetValue: String? {
         if let sensor = sensors.first(where: { $0 is BLEHeartRateSensor }) as? BLEHeartRateSensor {
-            return sensor.heartRateData.heartRate == 0
+            return sensor.lastHeartRateData!.heartRate == 0
             ? "-"
-            : String(sensor.heartRateData.heartRate) + " " + localizedString("beats_per_minute_short")
+            : String(sensor.lastHeartRateData!.heartRate) + " " + localizedString("beats_per_minute_short")
         }
         return nil
     }
     
     override var getDataFields: Dictionary<String, String>? {
         if let sensor = sensors.first(where: { $0 is BLEHeartRateSensor }) as? BLEHeartRateSensor {
-            return [localizedString("map_widget_ant_heart_rate"):
-                        sensor.heartRateData.heartRate == 0
-                    ? "-"
-                    : String(sensor.heartRateData.heartRate) + " " + localizedString("beats_per_minute_short")]
+            if let lastHeartRateData = sensor.lastHeartRateData {
+                return [localizedString("map_widget_ant_heart_rate"):
+                            lastHeartRateData.heartRate == 0
+                        ? "-"
+                        : String(lastHeartRateData.heartRate) + " " + localizedString("beats_per_minute_short")]
+            } else {
+                return [localizedString("map_widget_ant_heart_rate"): "-"];
+            }
+
         }
         return nil
     }

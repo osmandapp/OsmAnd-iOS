@@ -253,9 +253,11 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                     row.cellType = SearchDeviceTableViewCell.reuseIdentifier
                     row.key = ExternalSensorsConnectState.connected.rawValue
                 }
-                // TODO: save connected devices
+                // TODO: not critical but you can optimization this
+                let connectedDevices = DeviceHelper.shared.connectedDevices
                 sectionsDevicesData[.connected] = DeviceHelper.shared.getDevicesFrom(peripherals: connectedPeripherals,
                                                                                      pairedDevices: pairedDevices)
+                DeviceHelper.shared.connectedDevices = sectionsDevicesData[.connected]!
             }
             if !disconnectedPeripherals.isEmpty {
                 createDesconnectedDevicesSection(disconnectedPeripherals: disconnectedPeripherals, pairedDevices: pairedDevices)

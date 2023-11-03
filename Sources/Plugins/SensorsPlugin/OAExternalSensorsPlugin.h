@@ -2,13 +2,13 @@
 //  OAWeatherPlugin.h
 //  OsmAnd
 //
-//  Created by Skalii on 30.03.2022.
+//  Created by Oleksandr Panchenko on 03.11.2023.
 //  Copyright (c) 2022 OsmAnd. All rights reserved.
 //
 
 #import "OAPlugin.h"
 
-@interface OASensorsPlugin : OAPlugin
+@interface OAExternalSensorsPlugin : OAPlugin
 
 - (void)updateWidgetsInfo;
 

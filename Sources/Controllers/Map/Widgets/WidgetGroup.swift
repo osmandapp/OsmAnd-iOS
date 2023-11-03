@@ -102,7 +102,7 @@ class WidgetGroup: NSObject {
         case .developerOptions:
             return WidgetGroup.getPartOfPluginDesc(plugin: OAOsmandDevelopmentPlugin.self)
         case .externalSensors:
-            return WidgetGroup.getPartOfPluginDesc(plugin: OASensorsPlugin.self)
+            return WidgetGroup.getPartOfPluginDesc(plugin: OAExternalSensorsPlugin.self)
         case .weather:
             return WidgetGroup.getPartOfPluginDesc(plugin: OAWeatherPlugin.self)
         default:

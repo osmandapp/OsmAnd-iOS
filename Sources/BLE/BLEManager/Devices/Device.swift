@@ -11,8 +11,6 @@ import UIKit
 
 extension Notification.Name {
     static let DeviceRSSIUpdated = NSNotification.Name("DeviceRSSIUpdated")
-    
-    static let DeviceCharacteristicUpdatedSuccess = NSNotification.Name("DeviceCharacteristicUpdatedSuccess")
 }
 
 class Device {
@@ -23,16 +21,36 @@ class Device {
     var didChangeCharacteristic: (() -> Void)? = nil
     private var RSSIUpdateTimer: Timer?
     
+    
+    
+    init(deviceType: DeviceType!,
+         peripheral: Peripheral? = nil,
+         rssi: Int = 1,
+         deviceName: String = "",
+         didChangeCharacteristic: ( () -> Void)? = nil,
+         RSSIUpdateTimer: Timer? = nil) {
+        self.deviceType = deviceType
+        self.peripheral = peripheral
+        self.rssi = rssi
+        self.deviceName = deviceName
+        self.didChangeCharacteristic = didChangeCharacteristic
+        self.RSSIUpdateTimer = RSSIUpdateTimer
+        self.sensors = [BLEBatterySensor(device: self, sensorId: id + "_battery_level")]
+    }
+    
     var id: String {
         peripheral?.identifier.uuidString ?? "unknown"
     }
     
-    var sensors: [Sensor] = [BLEBatterySensor()]
-    
+    var sensors = [Sensor]()
     var sections: Dictionary<String, Any> = [:]
     
     class var getServiceUUID: String {
         ""
+    }
+    
+    func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
+        return nil
     }
     
     var getServiceConnectedImage: UIImage {
@@ -75,7 +93,6 @@ class Device {
         update(with: characteristic) { [weak self] result in
             if case .success = result {
                 self?.didChangeCharacteristic?()
-                NotificationCenter.default.post(name: .DeviceCharacteristicUpdatedSuccess, object: self, userInfo: nil)
             }
         }
     }

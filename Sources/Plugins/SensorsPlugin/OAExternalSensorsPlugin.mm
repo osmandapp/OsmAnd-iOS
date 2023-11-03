@@ -2,11 +2,11 @@
 //  OASensorsPlugin.mm
 //  OsmAnd
 //
-//  Created by Skalii on 30.03.2022.
-//  Copyright (c) 2022 OsmAnd. All rights reserved.
+//  Created by Oleksandr Panchenko on 03.11.2023.
+//  Copyright (c) 2023 OsmAnd. All rights reserved.
 //
 
-#import "OASensorsPlugin.h"
+#import "OAExternalSensorsPlugin.h"
 #import "OARootViewController.h"
 #import "OAMapInfoController.h"
 #import "OAMapHudViewController.h"
@@ -22,11 +22,11 @@
 
 #define kLastUsedExternalSensorKey @"kLastUsedExternalSensorKey"
 
-@implementation OASensorsPlugin
+@implementation OAExternalSensorsPlugin
 {
     OACommonBoolean *_lastUsedSensor;
     
-    ExternalSensorWidget *_heartRateTempControl;
+    SensorTextWidget *_heartRateTempControl;
 //
 //    OAWeatherWidget *_weatherTempControl;
 //    OAWeatherWidget *_weatherPressureControl;
@@ -89,14 +89,13 @@
 {
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
     
-    _heartRateTempControl = (ExternalSensorWidget *) [self createMapWidgetForParams:OAWidgetType.heartRate];
+    _heartRateTempControl = (SensorTextWidget *) [self createMapWidgetForParams:OAWidgetType.heartRate];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_heartRateTempControl]];
 }
 
 - (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType
 {
-   // return [[ExternalSensorWidget alloc] initWithType:widgetType];
-    return [[ExternalSensorWidget alloc] initWithWidgetType:widgetType];
+    return [[SensorTextWidget alloc] initWithCustomId:@"" widgetType:widgetType];
 }
 
 - (void)updateWidgetsInfo

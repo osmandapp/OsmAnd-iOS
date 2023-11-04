@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -75,9 +75,8 @@
                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3ov-dr-SOd">
                     <rect key="frame" x="16" y="5" width="40" height="40"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="88" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N7L-UG-CDe">
-                            <rect key="frame" x="2" y="2" width="36" height="37"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="88" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N7L-UG-CDe">
+                            <rect key="frame" x="2" y="0.0" width="36" height="40"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
@@ -85,15 +84,19 @@
                     </subviews>
                     <color key="backgroundColor" red="0.13725490196078433" green="0.4823529411764706" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
+                        <constraint firstItem="N7L-UG-CDe" firstAttribute="top" secondItem="3ov-dr-SOd" secondAttribute="top" id="2Yo-Ts-IrC"/>
                         <constraint firstAttribute="height" constant="40" id="3XE-2G-2cK"/>
+                        <constraint firstItem="N7L-UG-CDe" firstAttribute="leading" secondItem="3ov-dr-SOd" secondAttribute="leading" constant="2" id="I7c-ZC-pdc"/>
+                        <constraint firstAttribute="trailing" secondItem="N7L-UG-CDe" secondAttribute="trailing" constant="2" id="PVT-7d-6vQ"/>
                         <constraint firstAttribute="width" constant="40" id="c2u-Jf-ukc"/>
+                        <constraint firstAttribute="bottom" secondItem="N7L-UG-CDe" secondAttribute="bottom" id="sG6-X8-BJ7"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uQr-JH-jhS">
                     <rect key="frame" x="0.0" y="0.0" width="331" height="50"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Z0g-ip-5Wq">
-                            <rect key="frame" x="6" y="13" width="25" height="25"/>
+                            <rect key="frame" x="6" y="12.666666666666664" width="25" height="25"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="25" id="0Vc-eO-0JU"/>
                                 <constraint firstAttribute="width" constant="25" id="JNL-uG-LDn"/>
@@ -211,6 +214,7 @@
                 <outlet property="addressTextShadow" destination="CZQ-bG-6tD" id="OUG-jV-iTo"/>
                 <outlet property="exitRefText" destination="N7L-UG-CDe" id="qMQ-mm-We8"/>
                 <outlet property="exitRefTextContainer" destination="3ov-dr-SOd" id="yHV-0g-beC"/>
+                <outlet property="exitRefTextContainerWidthConstraint" destination="c2u-Jf-ukc" id="ohe-wx-SOP"/>
                 <outlet property="shieldIcon" destination="Z8c-N6-WrV" id="AtL-uY-5pa"/>
                 <outlet property="turnView" destination="7DR-I9-K8G" id="0nc-tE-Svh"/>
                 <outlet property="waypointButtonMore" destination="6Px-uI-aHL" id="sPB-gq-CHR"/>

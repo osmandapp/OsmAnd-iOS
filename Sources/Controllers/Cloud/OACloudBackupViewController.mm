@@ -558,7 +558,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
-            cell.button.backgroundColor = UIColor.iconColorActive;
+            cell.button.backgroundColor = UIColor.buttonBgColorPrimary;
             [cell.button setTitleColor:UIColor.buttonTextColorPrimary forState:UIControlStateNormal];
             cell.button.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
             cell.button.layer.cornerRadius = 9.;

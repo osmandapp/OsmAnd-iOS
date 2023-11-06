@@ -58,6 +58,8 @@
 #import "OASRTMPlugin.h"
 #import "OAPlugin.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OAFavoritesHelper.h"
+#import "OAFavoriteItem.h"
 
 #import "OARoutingHelper.h"
 #import "OATransportRoutingHelper.h"
@@ -2758,10 +2760,10 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (BOOL) hasFavoriteAt:(CLLocationCoordinate2D)location
 {
-    for (const auto& fav : _app.favoritesCollection->getFavoriteLocations())
+    for (OAFavoriteItem *item in [OAFavoritesHelper getFavoriteItems])
     {
-        double lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition31().x);
-        double lat = OsmAnd::Utilities::get31LatitudeY(fav->getPosition31().y);
+        double lon = OsmAnd::Utilities::get31LongitudeX(item.favorite->getPosition31().x);
+        double lat = OsmAnd::Utilities::get31LatitudeY(item.favorite->getPosition31().y);
         if ([OAUtilities isCoordEqual:lat srcLon:lon destLat:location.latitude destLon:location.longitude])
         {
             return YES;

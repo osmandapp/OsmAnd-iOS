@@ -43,21 +43,16 @@
 #define _(name) OAFavoriteListViewController__##name
 #define kWasClosedFreeBackupFavoritesBannerKey @"wasClosedFreeBackupFavoritesBanner"
 
-typedef enum
-{
-    kFavoriteActionNone = 0,
-    kFavoriteActionChangeColor = 1,
-    kFavoriteActionChangeGroup = 2,
-} EFavoriteAction;
-
 #define FavoriteTableGroup _(FavoriteTableGroup)
+
 @interface FavoriteTableGroup : NSObject
     @property BOOL isOpen;
     @property OAFavoriteGroup *favoriteGroup;
 @end
+
 @implementation FavoriteTableGroup
 
--(id) init
+- (instancetype)init
 {
     self = [super init];
     if (self)
@@ -69,7 +64,7 @@ typedef enum
 
 @end
 
-@interface OAFavoriteListViewController () <OAMultiselectableHeaderDelegate, OAEditorDelegate, UIDocumentPickerDelegate, UISearchResultsUpdating, UISearchBarDelegate>
+@interface OAFavoriteListViewController () <OAMultiselectableHeaderDelegate, OAEditorDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, UIDocumentPickerDelegate, UISearchResultsUpdating, UISearchBarDelegate>
 {
 
     BOOL isDecelerating;
@@ -87,7 +82,6 @@ typedef enum
     NSMutableArray<NSArray *> *_data;
     NSMutableArray *_filteredItems;
 
-    EFavoriteAction _favAction;
     OAEditColorViewController *_colorController;
     OAEditGroupViewController *_groupController;
 
@@ -121,7 +115,6 @@ static UIViewController *parentController;
 
     isDecelerating = NO;
     self.sortingType = 0;
-    _favAction = kFavoriteActionNone;
     self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
 
     _sortedHeaderView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
@@ -378,20 +371,11 @@ static UIViewController *parentController;
     });
 }
 
--(void)viewWillAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
 
-    if (_favAction == kFavoriteActionChangeColor)
-        [self setupColor];
-    else if (_favAction == kFavoriteActionChangeGroup)
-        [self setupGroup];
-    else
-        [self setupView];
-
-    if (_favAction != kFavoriteActionNone)
-        return;
-
+    [self setupView];
     [self generateData];
     [self setupView];
     [self updateDistanceAndDirection:YES];
@@ -422,23 +406,9 @@ static UIViewController *parentController;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-
-    if (_favAction != kFavoriteActionNone)
-    {
-        _favAction = kFavoriteActionNone;
-        return;
-    }
-}
-
--(void)viewWillDisappear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-
-    if (_favAction != kFavoriteActionNone)
-        return;
 
     if (self.locationServicesUpdateObserver)
     {
@@ -651,9 +621,10 @@ static UIViewController *parentController;
         return;
     }
 
-    _favAction = kFavoriteActionChangeColor;
     _colorController = [[OAEditColorViewController alloc] init];
-    [self.navigationController pushViewController:_colorController animated:YES];
+    _colorController.delegate = self;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_colorController];
+    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (IBAction) favoriteChangeGroupClicked:(id)sender
@@ -672,28 +643,26 @@ static UIViewController *parentController;
         return;
     }
 
-    _favAction = kFavoriteActionChangeGroup;
-
-    NSMutableArray *groupNames = [NSMutableArray new];
+    NSMutableArray *groupNames = [NSMutableArray array];
     for (OAFavoriteGroup *group in [OAFavoritesHelper getFavoriteGroups])
     {
-        NSString *groupName = [OAFavoriteGroup getDisplayName:group.name];
-        if (groupName.length > 0 && group.name.length != 0)
-            [groupNames addObject:groupName];
+        [groupNames addObject:group.name];
     }
-
     _groupController = [[OAEditGroupViewController alloc] initWithGroupName:nil groups:groupNames];
-    [self.navigationController pushViewController:_groupController animated:YES];
+    _groupController.delegate = self;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_groupController];
+    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
 
-- (void) setupColor
+#pragma mark - OAEditColorViewControllerDelegate
+
+- (void)colorChanged
 {
     if ([_selectedItems count] == 0)
         return;
 
     if (_colorController.saveChanges)
     {
-        OsmAndAppInstance app = [OsmAndApp instance];
         OAFavoriteColor *favCol = [[OADefaultFavorite builtinColors] objectAtIndex:_colorController.colorIndex];
         NSMutableSet<NSString *> *groupNames = [NSMutableSet set];
 
@@ -737,14 +706,15 @@ static UIViewController *parentController;
     [self.favoriteTableView reloadData];
 }
 
-- (void) setupGroup
+#pragma mark - OAEditGroupViewControllerDelegate
+
+- (void)groupChanged
 {
     if ([_selectedItems count] == 0)
         return;
 
     if (_groupController.saveChanges)
     {
-        OsmAndAppInstance app = [OsmAndApp instance];
         NSMutableArray<NSIndexPath *> * sortedSelectedItems = [NSMutableArray arrayWithArray:_selectedItems];
         [sortedSelectedItems sortUsingComparator:^NSComparisonResult(NSIndexPath* obj1, NSIndexPath* obj2) {
             NSNumber *row1 = [NSNumber numberWithInteger:obj1.row];

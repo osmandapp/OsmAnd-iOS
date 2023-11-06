@@ -16,6 +16,7 @@
 #import "OAExportSettingsCategory.h"
 #import "OAPlugin.h"
 #import "OAOsmEditingPlugin.h"
+#import "OAFavoritesHelper.h"
 
 static OAExportSettingsType * PROFILE;
 static OAExportSettingsType * GLOBAL;

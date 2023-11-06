@@ -175,7 +175,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
                 blue:&b
                 alpha:&a];
 
-    std::shared_ptr<OsmAnd::IFavoriteLocation> favorite = [OsmAndApp instance].favoritesCollection->createFavoriteLocation(locationPoint,
+    std::shared_ptr<OsmAnd::IFavoriteLocation> favorite = [OAFavoritesHelper getFavoritesCollection]->createFavoriteLocation(locationPoint,
                                                                      qElevation,
                                                                      qTime,
                                                                      qPickupTime,
@@ -219,10 +219,18 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) setLat:(double)lat lon:(double)lon
 {
-    auto newFavorite = [self createFavoritePointWithLat:lat lon:lon altitude:[self getAltitude] timestamp:[self getTimestamp] name:[self getName] description:[self getDisplayName] address:[self getAddress] category:[self getCategory] iconName:[self getIcon] backgroundIconName:[self getBackgroundIcon] color:[self getColor] visible:[self isVisible]];
-    
-    [OsmAndApp instance].favoritesCollection->removeFavoriteLocation(self.favorite);
-    self.favorite = newFavorite;
+    self.favorite = [self createFavoritePointWithLat:lat
+                                                 lon:lon
+                                            altitude:[self getAltitude]
+                                           timestamp:[self getTimestamp]
+                                                name:[self getName]
+                                         description:[self getDisplayName]
+                                             address:[self getAddress]
+                                            category:[self getCategory]
+                                            iconName:[self getIcon]
+                                  backgroundIconName:[self getBackgroundIcon]
+                                               color:[self getColor]
+                                             visible:[self isVisible]];
 }
 
 - (BOOL) isSpecialPoint
@@ -665,7 +673,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     [fp setColor:UIColorFromARGB([pt getColor:0])];
 
     OAGpxExtension *hiddenExt = [pt getExtensionByKey:EXTENSION_HIDDEN];
-    [fp setVisible:hiddenExt ? [hiddenExt.value isEqualToString:@"true"] : NO];
+    [fp setVisible:hiddenExt ? [hiddenExt.value isEqualToString:@"true"] : YES];
 
     [fp setAddress:[pt getAddress]];
     [fp setIcon:[pt getIcon]];

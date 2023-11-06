@@ -24,6 +24,7 @@
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAInputTableViewCell.h"
+#import "OAFavoritesHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -119,12 +120,11 @@ static OAQuickActionType *TYPE;
 
 - (BOOL) isItemExists:(NSString *)name
 {
-    for(const auto& localFavorite : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
-        if ([name isEqualToString:localFavorite->getTitle().toNSString()])
-        {
+    for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
+    {
+        if ([name isEqualToString:[point getName]])
             return YES;
-        }
-    
+    }
     return NO;
 }
 

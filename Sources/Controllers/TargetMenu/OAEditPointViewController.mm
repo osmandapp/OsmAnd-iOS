@@ -1016,9 +1016,6 @@
             data.category = savingGroup;
             [_pointHandler savePoint:data newPoint:NO];
         }
-
-        [[OARootViewController instance].mapPanel reopenContextMenu];
-        
         if (_editPointType == EOAEditPointTypeFavorite)
             [OAAppSettings.sharedManager.lastFavCategoryEntered set:savingGroup];
     }

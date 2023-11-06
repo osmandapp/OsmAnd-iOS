@@ -7,8 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#include <OsmAndCore/IFavoriteLocation.h>
 
+#include <OsmAndCore/FavoriteLocationsGpxCollection.h>
+
+#define kDefaultCategoryKey @"favorites_item"
 #define kPersonalCategory @"personal"
 
 @class OAFavoriteItem, OAFavoriteGroup, OASpecialPointType, OAGPXDocument, OAGPXMutableDocument, OAPointsGroup;
@@ -18,7 +20,8 @@
 + (BOOL) isFavoritesLoaded;
 + (void) initialLoadFavorites;
 + (void) loadFavorites;
-+ (void) import:(QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >)favorites;
+
++ (std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection>)getFavoritesCollection;
 
 + (void)loadFileGroups:(NSString *)file
                 groups:(NSMutableDictionary<NSString *, OAFavoriteGroup *> *)groups;
@@ -32,7 +35,6 @@
 + (NSArray<OAFavoriteItem *> *) getFavoriteItems;
 + (NSArray<OAFavoriteItem *> *) getVisibleFavoriteItems;
 + (OAFavoriteItem *) getVisibleFavByLat:(double)lat lon:(double)lon;
-+ (NSArray<OAFavoriteGroup *> *) getGroupedFavorites:(QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >)allFavorites;
 + (NSMutableDictionary<NSString *, OAFavoriteGroup *> *) getGroups;
 + (OAFavoriteGroup *) getGroupByName:(NSString *)nameId;
 + (OAFavoriteGroup *) getGroupByPoint:(OAFavoriteItem *)favoriteItem;
@@ -100,7 +102,6 @@
 
 + (void) saveFile:(NSArray<OAFavoriteGroup *> *)favoriteGroups file:(NSString *)file;
 + (void) backup;
-+ (NSArray<NSString *> *) getGroupFiles;
 
 @end
 

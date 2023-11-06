@@ -7,11 +7,8 @@
 //
 
 #import "OACollectionSettingsItem.h"
-#import "OASettingsItemReader.h"
-#import "OASettingsItemWriter.h"
-#import "OAFavoritesHelper.h"
 
-@class OAFavoriteItem, OAWptPt;
+@class OAFavoriteItem, OAFavoriteGroup, OAWptPt;
 
 @interface OAFavoritesSettingsItem : OACollectionSettingsItem<OAFavoriteGroup *>
 

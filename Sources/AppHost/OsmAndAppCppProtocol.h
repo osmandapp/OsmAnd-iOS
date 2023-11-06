@@ -28,7 +28,6 @@
 @property(nonatomic, readonly) QDir documentsDir;
 
 @property(nonatomic, readonly) std::shared_ptr<OsmAnd::ResourcesManager> resourcesManager;
-@property(nonatomic, readonly) std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoritesCollection;
 
 @property(nonatomic, readonly) std::shared_ptr<OsmAnd::MapPresentationEnvironment> defaultRenderer;
 

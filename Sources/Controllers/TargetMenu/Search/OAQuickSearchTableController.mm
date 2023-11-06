@@ -43,7 +43,7 @@
 #import "OAReverseGeocoder.h"
 #import "OAColors.h"
 #import "OASizes.h"
-
+#import "OAFavoritesHelper.h"
 #import "OASearchMoreCell.h"
 #import "OAPointDescCell.h"
 #import "OASimpleTableViewCell.h"
@@ -158,13 +158,13 @@
     }
     else if (item.hType == OAHistoryTypeFavorite)
     {
-        for (const auto& point : app.favoritesCollection->getFavoriteLocations())
+        for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
         {
-            OsmAnd::LatLon latLon = point->getLatLon();
-            if ([OAUtilities isCoordEqual:latLon.latitude srcLon:latLon.longitude destLat:item.latitude destLon:item.longitude] && [item.name isEqualToString:point->getTitle().toNSString()])
+            OsmAnd::LatLon latLon = point.favorite->getLatLon();
+            if ([OAUtilities isCoordEqual:latLon.latitude srcLon:latLon.longitude destLat:item.latitude destLon:item.longitude]
+                && [item.name isEqualToString:[point getName]])
             {
-                OAFavoriteItem *fav = [[OAFavoriteItem alloc] initWithFavorite:point];
-                [[OARootViewController instance].mapPanel openTargetViewWithFavorite:fav pushed:NO saveState:NO];
+                [[OARootViewController instance].mapPanel openTargetViewWithFavorite:point pushed:NO saveState:NO];
                 originFound = YES;
                 break;
             }

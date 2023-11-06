@@ -141,7 +141,6 @@
 
 - (void) apply
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
     NSArray<OAFavoriteGroup *> *newItems = [self getNewItems];
     if (_personalGroup)
         [self.duplicateItems addObject:_personalGroup];

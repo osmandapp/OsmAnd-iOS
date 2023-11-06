@@ -83,7 +83,6 @@ static OAQuickActionType *TYPE;
 
 - (void) addFavoriteSilent:(double)lat lon:(double)lon title:(NSString *)title
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
     NSString *groupName = self.getParams[KEY_CATEGORY_NAME] ? self.getParams[KEY_CATEGORY_NAME] : @"";
     UIColor* color;
     if (self.getParams[KEY_CATEGORY_COLOR])
@@ -108,9 +107,9 @@ static OAQuickActionType *TYPE;
 
 - (BOOL) isItemExists:(NSString *)name
 {
-    for(const auto& localFavorite : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
+    for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
     {
-        if ([name isEqualToString:localFavorite->getTitle().toNSString()])
+        if ([name isEqualToString:[point getName]])
             return YES;
     }
     

@@ -44,15 +44,13 @@
 #import "OAGPXDatabase.h"
 #import "OAExternalTimeFormatter.h"
 #import "OAFavoritesHelper.h"
+#import "OAAppSettings.h"
 
 #include <algorithm>
-
 #include <QList>
 #include <QHash>
 
 #include <OsmAndCore.h>
-#import "OAAppSettings.h"
-#include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/IWebClient.h>
 #include "OAWebClient.h"
 #include "OAWeatherWebClient.h"
@@ -129,8 +127,6 @@
 @synthesize osmAndLiveUpdatedObservable = _osmAndLiveUpdatedObservable;
 @synthesize resourcesRepositoryUpdatedObservable = _resourcesRepositoryUpdatedObservable;
 @synthesize defaultRoutingConfig = _defaultRoutingConfig;
-
-@synthesize favoritesCollection = _favoritesCollection;
 
 @synthesize dayNightModeObservable = _dayNightModeObservable;
 @synthesize mapSettingsChangeObservable = _mapSettingsChangeObservable;
@@ -582,30 +578,6 @@
 
     }
     [self applyExcludedFromBackup:projDbPathLib];
-    
-    // Sync favorites filename with android version
-    NSString *oldfFavoritesFilename = _documentsDir.filePath(QLatin1String("Favorites.gpx")).toNSString();
-    _favoritesLegacyFilename = _documentsDir.filePath(QLatin1String("favourites.gpx")).toNSString();
-    if ([[NSFileManager defaultManager] fileExistsAtPath:oldfFavoritesFilename] && ![[NSFileManager defaultManager] fileExistsAtPath:_favoritesLegacyFilename])
-    {
-        NSError *error = nil;
-        [[NSFileManager defaultManager] moveItemAtPath:oldfFavoritesFilename toPath:_favoritesLegacyFilename error:&error];
-        if (error)
-            NSLog(@"Error moving file: %@ to %@ - %@", oldfFavoritesFilename, _favoritesLegacyFilename, [error localizedDescription]);
-    }
-
-    // Move legacy favorites backup folder to new location
-    NSString *oldFavoritesBackupPath = [_documentsPath stringByAppendingPathComponent:@"favourites_backup"];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:oldFavoritesBackupPath] && ![[NSFileManager defaultManager] fileExistsAtPath:_favoritesBackupPath])
-    {
-        NSError *error = nil;
-        [[NSFileManager defaultManager] moveItemAtPath:oldFavoritesBackupPath toPath:_favoritesBackupPath error:&error];
-        if (error)
-            NSLog(@"Error moving dir: %@ to %@ - %@", oldFavoritesBackupPath, _favoritesBackupPath, [error localizedDescription]);
-    }
-
-    // Load favorites
-    _favoritesCollection.reset(new OsmAnd::FavoriteLocationsGpxCollection());
 
     [OAFavoritesHelper initialLoadFavorites];
     [OAFavoritesHelper loadFavorites];

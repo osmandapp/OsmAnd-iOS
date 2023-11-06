@@ -184,17 +184,17 @@
 		<true/>
 	</dict>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Advertisement would like to use bluetooth.</string>
+	<string></string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>Advertisement would like to create a calendar event.</string>
+	<string></string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This permission is required to use such features as: background GPX recording, navigation etc.</string>
+	<string></string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This permission is required to use such features as: background GPX recording, navigation etc.</string>
+	<string></string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This permission is required to use such features as: background GPX recording, navigation etc. when OsmAnd is in foreground only.</string>
+	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Advertisement would like to store a photo.</string>
+	<string></string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>CPSupportsDashboardNavigationScene</key>

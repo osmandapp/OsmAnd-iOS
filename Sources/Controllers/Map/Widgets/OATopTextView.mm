@@ -226,6 +226,8 @@
         exitRefFrame.size = CGSizeMake(size.width + 6., h - 4);
         if (size.width > 40)
             self.exitRefTextContainerWidthConstraint.constant = size.width;
+        else
+            self.exitRefTextContainerWidthConstraint.constant = 40;
     }
     
     CGFloat margin = _turnView.subviews.count > 0 ? 4 + _turnView.bounds.size.width + 2 : 2;

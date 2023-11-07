@@ -616,7 +616,7 @@
     [r fillExtensions:rte];
 }
 
-- (std::shared_ptr<OsmAnd::GpxDocument> ) getPrepareForSavingDocument
+- (BOOL) saveTo:(NSString *)filename
 {
     std::shared_ptr<OsmAnd::GpxDocument> document;
     std::shared_ptr<OsmAnd::GpxDocument::Metadata> metadata;
@@ -668,12 +668,7 @@
 
     [self fillExtensions:document];
     [self fillNetworkRouteKeys:document];
-    return document;
-}
 
-- (BOOL) saveTo:(NSString *)filename
-{
-    auto document = [self getPrepareForSavingDocument];
     return document->saveTo(QString::fromNSString(filename), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
 }
 

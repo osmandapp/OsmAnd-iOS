@@ -651,14 +651,4 @@
     [OATravelObfHelper.shared getArticleByIdWithArticleId:[oldArticle generateIdentifier] lang:oldArticle.lang readGpx:YES callback:gpxReader];
 }
 
-- (sqlite3 *) getDbInstance
-{
-    return _dbInstance;
-}
-
-- (dispatch_queue_t) getDbQueue
-{
-    return _dbQueue;
-}
-
 @end

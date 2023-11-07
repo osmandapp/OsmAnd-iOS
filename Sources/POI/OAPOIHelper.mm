@@ -894,7 +894,7 @@
     return [NSArray arrayWithArray:arr];
 }
 
-+ (NSArray<OAPOI *> *) findTravelGuides:(NSString *)categoryName location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish
++ (NSArray<OAPOI *> *) findTravelGuides:(NSArray<NSString *> *)categoryNames location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish
 {
     OsmAndAppInstance _app = [OsmAndApp instance];
     const auto& obfsCollection = _app.resourcesManager->obfsCollection;
@@ -909,10 +909,14 @@
     
     const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
     
-    if (categoryName)
+    if (categoryNames)
     {
         auto categoriesFilter = QHash<QString, QStringList>();
-        categoriesFilter.insert(QString::fromNSString(@"routes"), QStringList(QString::fromNSString(categoryName)));
+        QStringList categories = QStringList();
+        for (NSString *categoryName in categoryNames)
+            categories.append(QString::fromNSString(categoryName));
+        
+        categoriesFilter.insert(QString::fromNSString(@"routes"), categories);
         searchCriteria->categoriesFilter = categoriesFilter;
     }
     
@@ -951,7 +955,7 @@
     return [NSArray arrayWithArray:arr];
 }
 
-- (NSArray<OAPOI *> *) findTravelGuidesByKeyword:(NSString *)keyword categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish
+- (NSArray<OAPOI *> *) findTravelGuidesByKeyword:(NSString *)keyword categoryNames:(NSArray<NSString *> *)categoryNames poiTypeName:(NSString *)typeName location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish
 {
     _isSearchDone = NO;
     _breakSearch = NO;
@@ -975,10 +979,14 @@
     searchCriteria->obfInfoAreaFilter = _visibleArea;
     searchCriteria->bbox31 = bbox31;
     
-    if (categoryName)
+    if (categoryNames)
     {
         auto categoriesFilter = QHash<QString, QStringList>();
-        categoriesFilter.insert(QString::fromNSString(@"routes"), QStringList(QString::fromNSString(categoryName)));
+        QStringList categories = QStringList();
+        for (NSString *categoryName in categoryNames)
+            categories.append(QString::fromNSString(categoryName));
+        
+        categoriesFilter.insert(QString::fromNSString(@"routes"), categories);
         searchCriteria->categoriesFilter = categoriesFilter;
     }
     

@@ -268,7 +268,6 @@
 		320F71322A862DE90071C0E7 /* TravelSearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71312A862DE90071C0E7 /* TravelSearchResult.swift */; };
 		320F71342A863A8E0071C0E7 /* TravelGpx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F71332A863A8E0071C0E7 /* TravelGpx.swift */; };
 		320F71372A86438B0071C0E7 /* OAGPXDocumentAdapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320F71362A86438B0071C0E7 /* OAGPXDocumentAdapter.mm */; };
-		320F713D2A866ABA0071C0E7 /* OAPOIAdapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320F713C2A866ABA0071C0E7 /* OAPOIAdapter.mm */; };
 		320F713F2A867D930071C0E7 /* TravelSearchHistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320F713E2A867D930071C0E7 /* TravelSearchHistoryItem.swift */; };
 		321126FF2800710800ED8D52 /* OAExternalTimeFormatter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */; };
 		32119B3D28477142005E1E0C /* OAOsmandDevelopmentPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32119B3C28477142005E1E0C /* OAOsmandDevelopmentPlugin.mm */; };
@@ -3981,8 +3980,6 @@
 		320F71332A863A8E0071C0E7 /* TravelGpx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGpx.swift; sourceTree = "<group>"; };
 		320F71352A8643550071C0E7 /* OAGPXDocumentAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXDocumentAdapter.h; sourceTree = "<group>"; };
 		320F71362A86438B0071C0E7 /* OAGPXDocumentAdapter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXDocumentAdapter.mm; sourceTree = "<group>"; };
-		320F713B2A866AA80071C0E7 /* OAPOIAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPOIAdapter.h; sourceTree = "<group>"; };
-		320F713C2A866ABA0071C0E7 /* OAPOIAdapter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPOIAdapter.mm; sourceTree = "<group>"; };
 		320F713E2A867D930071C0E7 /* TravelSearchHistoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelSearchHistoryItem.swift; sourceTree = "<group>"; };
 		321126FD280070F500ED8D52 /* OAExternalTimeFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAExternalTimeFormatter.h; sourceTree = "<group>"; };
 		321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalTimeFormatter.mm; sourceTree = "<group>"; };
@@ -12229,8 +12226,6 @@
 				DA5A7A5826C563A000F274C7 /* OAPhrasesParser.m */,
 				DA5A7A6F26C563A000F274C7 /* OAPOI.h */,
 				DA5A7A5B26C563A000F274C7 /* OAPOI.mm */,
-				320F713B2A866AA80071C0E7 /* OAPOIAdapter.h */,
-				320F713C2A866ABA0071C0E7 /* OAPOIAdapter.mm */,
 				DA5A7A5426C563A000F274C7 /* OAPOIBaseType.h */,
 				DA5A7A5526C563A000F274C7 /* OAPOIBaseType.mm */,
 				DA5A7A5F26C563A000F274C7 /* OAPOICategory.h */,
@@ -17959,7 +17954,6 @@
 				DA5A839826C563A800F274C7 /* OAResourcesBaseViewController.mm in Sources */,
 				DA5A823826C563A700F274C7 /* OAGlobalSettingsViewController.mm in Sources */,
 				DA5A835326C563A800F274C7 /* OANoImagesCell.mm in Sources */,
-				320F713D2A866ABA0071C0E7 /* OAPOIAdapter.mm in Sources */,
 				DA5A81B726C563A700F274C7 /* OAPhrasesParser.m in Sources */,
 				DA5A814526C563A700F274C7 /* OAOsmEditsDBHelper.m in Sources */,
 				DA2EC7B529FBCD1700ECEB37 /* WidgetsPanel.swift in Sources */,

@@ -42,7 +42,7 @@
     return res;
 }
 
-+ (OATrkSegment *) augmentTrkSegmentWithAltitudes:(OATrkSegment *)sgm decodedSteps:(QList<int>)decodedSteps startEle:(double)startEle
++ (OATrkSegment *) augmentTrkSegmentWithAltitudes:(OATrkSegment *)sgm decodedSteps:(const QList<int> &)decodedSteps startEle:(double)startEle
 {
     OATrkSegment *segment = sgm;
     NSMutableArray<OAWptPt *> *points = [NSMutableArray arrayWithArray:sgm.points];

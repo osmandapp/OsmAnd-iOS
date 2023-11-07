@@ -15,6 +15,6 @@
 @interface OAMapAlgorithms : NSObject
 
 + (QList<int>) decodeIntHeightArrayGraph:(const QString &)str repeatBits:(int)repeatBits;
-+ (OATrkSegment *) augmentTrkSegmentWithAltitudes:(OATrkSegment *)sgm decodedSteps:(QList<int>)decodedSteps startEle:(double)startEle;
++ (OATrkSegment *) augmentTrkSegmentWithAltitudes:(OATrkSegment *)sgm decodedSteps:(const QList<int> &)decodedSteps startEle:(double)startEle;
 
 @end

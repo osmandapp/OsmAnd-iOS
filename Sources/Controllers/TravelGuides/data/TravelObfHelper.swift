@@ -150,7 +150,7 @@ final class TravelObfHelper : NSObject {
             return false
         }
         
-        OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(searchRadius), searchFilter: searchFilter, publish:publish)
+        OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(searchRadius), searchFilters: [searchFilter], publish:publish)
         return results
     }
     
@@ -284,7 +284,7 @@ final class TravelObfHelper : NSObject {
         
         for reader in getReaders() {
             amenities = [OAPOI]()
-            OATravelGuidesHelper.searchAmenity(searchQuery, categoryName: ROUTE_ARTICLE, radius: -1, lat: -1, lon: -1, reader: reader, publish: publishCallback)
+            OATravelGuidesHelper.searchAmenity(searchQuery, categoryNames: [ROUTE_ARTICLE], radius: -1, lat: -1, lon: -1, reader: reader, publish: publishCallback)
             if !amenities.isEmpty {
                 amenityMap[reader] = Array(amenities)
             }
@@ -445,7 +445,7 @@ final class TravelObfHelper : NSObject {
         var amenities = [OAPOI]()
         
         for reader in getReaders() {
-            OATravelGuidesHelper.searchAmenity(title, categoryName: ROUTE_ARTICLE, radius: -1, lat: -1, lon: -1, reader: reader) { amenity in
+            OATravelGuidesHelper.searchAmenity(title, categoryNames: [ROUTE_ARTICLE], radius: -1, lat: -1, lon: -1, reader: reader) { amenity in
                 if let amenity, title == amenity.getName(lang, transliterate: false) {
                     amenities.append(amenity)
                     return true
@@ -533,13 +533,13 @@ final class TravelObfHelper : NSObject {
             if !articleId.lat.isNaN {
                 if articleId.title != nil && articleId.title!.length > 0 {
                     let title = articleId.title ?? ""
-                    OATravelGuidesHelper.searchAmenity(title, categoryName:ROUTE_ARTICLE, radius:Int32(ARTICLE_SEARCH_RADIUS), lat:articleId.lat, lon:articleId.lon, reader: reader, publish:publishCallback)
+                    OATravelGuidesHelper.searchAmenity(title, categoryNames:[ROUTE_ARTICLE], radius:Int32(ARTICLE_SEARCH_RADIUS), lat:articleId.lat, lon:articleId.lon, reader: reader, publish:publishCallback)
                 } else {
-                    OATravelGuidesHelper.searchAmenity(articleId.lat, lon: articleId.lon, reader: reader, radius: Int32(ARTICLE_SEARCH_RADIUS), searchFilter: ROUTE_ARTICLE, publish:publishCallback)
+                    OATravelGuidesHelper.searchAmenity(articleId.lat, lon: articleId.lon, reader: reader, radius: Int32(ARTICLE_SEARCH_RADIUS), searchFilters: [ROUTE_ARTICLE], publish:publishCallback)
                     
                 }
             } else {
-                OATravelGuidesHelper.searchAmenity(Double.nan, lon: Double.nan, reader: reader, radius: -1, searchFilter: ROUTE_ARTICLE, publish:publishCallback)
+                OATravelGuidesHelper.searchAmenity(Double.nan, lon: Double.nan, reader: reader, radius: -1, searchFilters: [ROUTE_ARTICLE], publish:publishCallback)
             }
             
             if !amenities.isEmpty {
@@ -623,15 +623,12 @@ final class TravelObfHelper : NSObject {
             if let filterFunction {
                 if !articleId.lat.isNaN {
                     if articleId.title != nil && articleId.title!.length > 0 {
-                        OATravelGuidesHelper.searchAmenity(articleId.title, categoryName: ROUTE_ARTICLE, radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
-                        OATravelGuidesHelper.searchAmenity(articleId.title, categoryName: ROUTE_TRACK, radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
+                        OATravelGuidesHelper.searchAmenity(articleId.title, categoryNames: [ROUTE_ARTICLE, ROUTE_TRACK], radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
                     } else {
-                        OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_ARTICLE, publish: filterFunction)
-                        OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_TRACK, publish: filterFunction)
+                        OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilters: [ROUTE_ARTICLE, ROUTE_TRACK], publish: filterFunction)
                     }
                 } else {
-                    OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_ARTICLE, publish: filterFunction)
-                    OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_TRACK, publish: filterFunction)
+                    OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilters: [ROUTE_ARTICLE, ROUTE_TRACK], publish: filterFunction)
                 }
                 break
             }
@@ -659,11 +656,9 @@ final class TravelObfHelper : NSObject {
             let filterFunction = publish
             
             if !articleId.lat.isNaN {
-                OATravelGuidesHelper.searchAmenity(articleId.title, categoryName: ROUTE_ARTICLE, radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
-                OATravelGuidesHelper.searchAmenity(articleId.title, categoryName: ROUTE_TRACK, radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
+                OATravelGuidesHelper.searchAmenity(articleId.title, categoryNames: [ROUTE_ARTICLE, ROUTE_TRACK], radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
             } else {
-                OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_ARTICLE, publish: filterFunction)
-                OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_TRACK, publish: filterFunction)
+                OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilters: [ROUTE_ARTICLE, ROUTE_TRACK], publish: filterFunction)
             }
         }
         return amenities
@@ -691,15 +686,12 @@ final class TravelObfHelper : NSObject {
             
             if !articleId.lat.isNaN {
                 if articleId.title != nil && articleId.title!.length > 0 {
-                    OATravelGuidesHelper.searchAmenity(articleId.title, categoryName: ROUTE_ARTICLE, radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
-                    OATravelGuidesHelper.searchAmenity(articleId.title, categoryName: ROUTE_TRACK, radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
+                    OATravelGuidesHelper.searchAmenity(articleId.title, categoryNames: [ROUTE_ARTICLE, ROUTE_TRACK], radius: Int32(radius), lat: lat, lon: lon, reader: reader, publish: filterFunction)
                 } else {
-                    OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_ARTICLE, publish: filterFunction)
-                    OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_TRACK, publish: filterFunction)
+                    OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilters: [ROUTE_ARTICLE, ROUTE_TRACK], publish: filterFunction)
                 }
             } else {
-                OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_ARTICLE, publish: filterFunction)
-                OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilter: ROUTE_TRACK, publish: filterFunction)
+                OATravelGuidesHelper.searchAmenity(lat, lon: lon, reader: reader, radius: Int32(radius), searchFilters: [ROUTE_ARTICLE, ROUTE_TRACK], publish: filterFunction)
             }
             break
         }
@@ -742,7 +734,7 @@ final class TravelObfHelper : NSObject {
         
         for reader in getReaders() {
             
-            OATravelGuidesHelper.searchAmenity(x, y: y, left: left, right: right, top: top, bottom: bottom, reader: reader, searchFilter: ROUTE_ARTICLE) { amenity in
+            OATravelGuidesHelper.searchAmenity(x, y: y, left: left, right: right, top: top, bottom: bottom, reader: reader, searchFilters: [ROUTE_ARTICLE]) { amenity in
                 
                 if let amenity, title == amenity.getName(lang, transliterate: false) {
                     amenities.append(amenity)

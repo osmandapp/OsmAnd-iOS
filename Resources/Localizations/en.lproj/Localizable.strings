@@ -170,7 +170,7 @@
 "auto_split_recording_title" = "Auto-split recordings after gap";
 "auto_split_gap_descr" = "Start a new segment after 6 min gap, new track after 2 h gap, or new file after a longer gap";
 "trip_rec_actions_descr" = "You can find all your recorded tracks in %@";
-"reset_plugin_to_default" = "Reset plugin settings to default";
+"reset_plugin_to_default" = "Reset all plugin settings to installation defaults";
 "save_heading" = "Include heading";
 "save_heading_descr" = "Save heading to each track point while recording.";
 "distance_circles" = "Distance circles";

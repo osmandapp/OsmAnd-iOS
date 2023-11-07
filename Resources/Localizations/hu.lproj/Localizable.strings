@@ -1068,7 +1068,7 @@
 "routeInfo_smoothness_name" = "Útminőség";
 "rendering_attr_hideNonVehicleHighways_name" = "Gyalogutak";
 "routing_attr_allow_classic_only_name" = "Csak klasszikus stílusban használható útvonalak engedélyezése";
-"rendering_attr_hikingRoutesOSMC_name" = "Túraútvonalak";
+"rendering_attr_hikingRoutesOSMC_name" = "Turistautak";
 "rendering_attr_noAdminboundaries_name" = "Határvonalak";
 "rendering_attr_surface_unpaved_name" = "Burkolatlan";
 "routing_attr_avoid_tram_description" = "Elkerüli a villamosokat";
@@ -2269,7 +2269,7 @@
 "rendering_attr_showMtbScale_description" = "Nyomvonalak megjelenítése MTB nehézségi szintek szerint.";
 "routing_attr_allow_intermittent_description" = "Időszakos vízfolyások engedélyezése";
 "routing_attr_allow_streams_description" = "Patakokés vízelvezető árkok engedélyezése";
-"routing_attr_prefer_hiking_routes_name" = "Túraútvonalak előnyben részesítése";
+"routing_attr_prefer_hiking_routes_name" = "Turistautak előnyben részesítése";
 "rendering_attr_OSMMapperAssistantNote_name" = "Jegyzet címkék";
 "routing_attr_difficulty_preference_no_preference_name" = "Nincs preferencia";
 "rendering_attr_showBusRoutes_name" = "Buszvonalak";
@@ -2300,7 +2300,7 @@
 "rendering_attr_horse_scale_demanding_name" = "Figyelmet igénylő";
 "rendering_attr_seabedDetail_description" = "További szöveges információ a tengerfenék felszínének jellegéről, a kombinált felszíntípusokról, valamint az algák és a tengeri füvek kategóriájáról és taxonjáról";
 "routing_attr_carriage_restrictions_description" = "Állati erővel vont jármű korlátozásainak figyelembevétele";
-"routing_attr_prefer_hiking_routes_description" = "Túraútvonalak előnyben részesítése";
+"routing_attr_prefer_hiking_routes_description" = "Turistautak előnyben részesítése";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "Ne térjen le a pályáról";
 "routing_attr_avoid_fords_description" = "Gázlók elkerülése";
 "rendering_attr_showWaterwayTunnels_name" = "Vízi alagutak";

@@ -515,7 +515,7 @@
 		461F4522283E370C00796360 /* ic_custom_arrow_down_short@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F4520283E370B00796360 /* ic_custom_arrow_down_short@3x.png */; };
 		461F4523283E370C00796360 /* ic_custom_arrow_down_short@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F4521283E370C00796360 /* ic_custom_arrow_down_short@2x.png */; };
 		461FB12E298801FA00097673 /* OAAnnounceTimeDistances.m in Sources */ = {isa = PBXBuildFile; fileRef = 461FB12D2987FE0B00097673 /* OAAnnounceTimeDistances.m */; };
-		46220B702AD6D6F2006C3248 /* OAEditorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46220B6F2AD6D6F2006C3248 /* OAEditorViewController.mm */; };
+		46220B702AD6D6F2006C3248 /* OABaseEditorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46220B6F2AD6D6F2006C3248 /* OABaseEditorViewController.mm */; };
 		46220B792AD70AF9006C3248 /* OAGroupEditorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46220B782AD70AF9006C3248 /* OAGroupEditorViewController.mm */; };
 		462545A828D3688900637964 /* ic_custom_cross_buy_colored_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 462545A428D3688700637964 /* ic_custom_cross_buy_colored_day@2x.png */; };
 		462545A928D3688900637964 /* ic_custom_cross_buy_colored_day_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 462545A528D3688700637964 /* ic_custom_cross_buy_colored_day_big@3x.png */; };
@@ -4280,8 +4280,8 @@
 		461F4521283E370C00796360 /* ic_custom_arrow_down_short@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_arrow_down_short@2x.png"; path = "Resources/Icons/ic_custom_arrow_down_short@2x.png"; sourceTree = "<group>"; };
 		461FB12C2987FDFA00097673 /* OAAnnounceTimeDistances.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAnnounceTimeDistances.h; sourceTree = "<group>"; };
 		461FB12D2987FE0B00097673 /* OAAnnounceTimeDistances.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAAnnounceTimeDistances.m; sourceTree = "<group>"; };
-		46220B6E2AD6D6A8006C3248 /* OAEditorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAEditorViewController.h; sourceTree = "<group>"; };
-		46220B6F2AD6D6F2006C3248 /* OAEditorViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEditorViewController.mm; sourceTree = "<group>"; };
+		46220B6E2AD6D6A8006C3248 /* OABaseEditorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseEditorViewController.h; sourceTree = "<group>"; };
+		46220B6F2AD6D6F2006C3248 /* OABaseEditorViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OABaseEditorViewController.mm; sourceTree = "<group>"; };
 		46220B772AD70A7B006C3248 /* OAGroupEditorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGroupEditorViewController.h; sourceTree = "<group>"; };
 		46220B782AD70AF9006C3248 /* OAGroupEditorViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGroupEditorViewController.mm; sourceTree = "<group>"; };
 		462545A428D3688700637964 /* ic_custom_cross_buy_colored_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cross_buy_colored_day@2x.png"; path = "Resources/Icons/ic_custom_cross_buy_colored_day@2x.png"; sourceTree = "<group>"; };
@@ -13276,8 +13276,8 @@
 			children = (
 				DA5A7E6226C563A400F274C7 /* OABasePointEditingHandler.h */,
 				DA5A7E6526C563A400F274C7 /* OABasePointEditingHandler.m */,
-				46220B6E2AD6D6A8006C3248 /* OAEditorViewController.h */,
-				46220B6F2AD6D6F2006C3248 /* OAEditorViewController.mm */,
+				46220B6E2AD6D6A8006C3248 /* OABaseEditorViewController.h */,
+				46220B6F2AD6D6F2006C3248 /* OABaseEditorViewController.mm */,
 				DA5A7E6026C563A400F274C7 /* OAFavoriteEditingHandler.h */,
 				DA5A7E6126C563A400F274C7 /* OAFavoriteEditingHandler.mm */,
 				467D7DC02ADDE95B0037A593 /* OAFavoriteGroupEditorViewController.h */,
@@ -17599,7 +17599,7 @@
 				DA5A834426C563A800F274C7 /* OATitleDescriptionIconRoundCell.m in Sources */,
 				DA5A847D26C563A900F274C7 /* OANextTurnWidget.mm in Sources */,
 				DA5A817326C563A700F274C7 /* OAFavoriteItem.mm in Sources */,
-				46220B702AD6D6F2006C3248 /* OAEditorViewController.mm in Sources */,
+				46220B702AD6D6F2006C3248 /* OABaseEditorViewController.mm in Sources */,
 				DA5A855B26C563A900F274C7 /* OAWorldRegion.mm in Sources */,
 				DAEDAAA12865A0F100CE54D0 /* OABackupInfoGenerationTask.m in Sources */,
 				4663AB412951CB6200D9781E /* OAInputTableViewCell.m in Sources */,

@@ -1,12 +1,12 @@
 //
-//  OAEditorViewController.m
+//  OABaseEditorViewController.m
 //  OsmAnd Maps
 //
 //  Created by Skalii on 11.10.2023.
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OAEditorViewController.h"
+#import "OABaseEditorViewController.h"
 #import "OACollectionSingleLineTableViewCell.h"
 #import "OAColorCollectionViewController.h"
 #import "OATextInputFloatingCell.h"
@@ -34,20 +34,20 @@
 #define kCategoryCellIndex 0
 #define kPoiCellIndex 1
 
-@interface OAEditorViewController () <UIColorPickerViewControllerDelegate, UITextViewDelegate, MDCMultilineTextInputLayoutDelegate, OAColorCollectionDelegate, OAColorsCollectionCellDelegate, OACollectionTableViewCellDelegate, OAPoiTableViewCellDelegate, OAShapesTableViewCellDelegate>
+@interface OABaseEditorViewController () <UIColorPickerViewControllerDelegate, UITextViewDelegate, MDCMultilineTextInputLayoutDelegate, OAColorCollectionDelegate, OAColorsCollectionCellDelegate, OACollectionTableViewCellDelegate, OAPoiTableViewCellDelegate, OAShapesTableViewCellDelegate>
 
 @property(nonatomic) NSString *originalName;
 @property(nonatomic) NSString *editName;
 @property(nonatomic) UIColor *editColor;
 @property(nonatomic) NSString *editIconName;
 @property(nonatomic) NSString *editBackgroundIconName;
-@property(nonatomic) BOOL isNewItemAdding;
+@property(nonatomic) BOOL isNewItem;
 @property(nonatomic) BOOL wasChanged;
 @property(nonatomic) OAGPXAppearanceCollection *appearanceCollection;
 
 @end
 
-@implementation OAEditorViewController
+@implementation OABaseEditorViewController
 {
     MutableOrderedDictionary<NSString *, NSArray<NSString *> *> *_iconCategories;
     NSArray<NSString *> *_currentCategoryIcons;
@@ -84,7 +84,7 @@
     self = [super init];
     if (self)
     {
-        _isNewItemAdding = YES;
+        _isNewItem = YES;
         [self postInit];
     }
     return self;
@@ -118,7 +118,7 @@
 
 - (NSString *)getTitle
 {
-    return _isNewItemAdding ? OALocalizedString(@"fav_add_new_group") : OALocalizedString(@"change_appearance");
+    return _isNewItem ? OALocalizedString(@"fav_add_new_group") : OALocalizedString(@"change_appearance");
 }
 
 - (NSString *)getLeftNavbarButtonTitle
@@ -567,7 +567,7 @@
 
 - (NSString *)getPreselectedIconName
 {
-    return (!_isNewItemAdding) ? nil : self.editIconName;
+    return (!_isNewItem) ? nil : self.editIconName;
 }
 
 - (void)openColorPickerWithColor:(OAColorItem *)colorItem

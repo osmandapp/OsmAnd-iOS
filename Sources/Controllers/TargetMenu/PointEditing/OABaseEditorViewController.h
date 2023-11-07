@@ -1,5 +1,5 @@
 //
-//  OAEditorViewController.h
+//  OABaseEditorViewController.h
 //  OsmAnd
 //
 //  Created by Skalii on 11.10.2023.
@@ -12,10 +12,10 @@
 
 @protocol OAEditorDelegate <NSObject>
 
-- (void)onEditorAdded:(NSString *)name
-             iconName:(NSString *)iconName
-                color:(UIColor *)color
-   backgroundIconName:(NSString *)backgroundIconName;
+- (void)addNewItemWithName:(NSString *)name
+                  iconName:(NSString *)iconName
+                     color:(UIColor *)color
+        backgroundIconName:(NSString *)backgroundIconName;
 
 - (void)onEditorUpdated;
 
@@ -23,14 +23,14 @@
 
 @end
 
-@interface OAEditorViewController : OABaseNavbarSubviewViewController
+@interface OABaseEditorViewController : OABaseNavbarSubviewViewController
 
 @property(nonatomic, readonly) NSString *originalName;
 @property(nonatomic, readonly) NSString *editName;
 @property(nonatomic, readonly) UIColor *editColor;
 @property(nonatomic, readonly) NSString *editIconName;
 @property(nonatomic, readonly) NSString *editBackgroundIconName;
-@property(nonatomic, readonly) BOOL isNewItemAdding;
+@property(nonatomic, readonly) BOOL isNewItem;
 @property(nonatomic, readonly) BOOL wasChanged;
 @property(nonatomic, readonly) OAGPXAppearanceCollection *appearanceCollection;
 @property(nonatomic, weak) id<OAEditorDelegate> delegate;

@@ -102,13 +102,13 @@
 
     if (self.pointsGroups.count > 0)
     {
-        BOOL hasExt = YES;
-        OAGpxExtension *ext = [self getExtensionByKey:@"points_groups"];
-        if (!ext)
+        BOOL hasPointsGroups = YES;
+        OAGpxExtension *pointsGroupsExt = [self getExtensionByKey:@"points_groups"];
+        if (!pointsGroupsExt)
         {
-            hasExt = NO;
-            ext = [[OAGpxExtension alloc] init];
-            ext.name = @"points_groups";
+            hasPointsGroups = NO;
+            pointsGroupsExt = [[OAGpxExtension alloc] init];
+            pointsGroupsExt.name = @"points_groups";
         }
 
         for (NSString *key in self.pointsGroups.allKeys)
@@ -116,7 +116,7 @@
             OAPointsGroup *pointsGroup = self.pointsGroups[key];
             NSDictionary *attributes = [pointsGroup toStringBundle];
 
-            if ([ext containsSubextension:@"group" attributes:attributes])
+            if ([pointsGroupsExt containsSubextension:@"group" attributes:attributes])
                 continue;
 
             pg.reset(new OsmAnd::GpxDocument::PointsGroup());
@@ -130,6 +130,7 @@
                 wpt.reset(new OsmAnd::GpxDocument::WptPt());
                 [self.class fillWpt:wpt usingWpt:wptPt];
                 pg->points.append(wpt);
+                document->points.append(wpt);
                 wpt = nullptr;
             }
 
@@ -139,11 +140,11 @@
             OAGpxExtension *subExt = [[OAGpxExtension alloc] init];
             subExt.name = @"group";
             subExt.attributes = attributes;
-            [ext addSubextension:subExt];
+            [pointsGroupsExt addSubextension:subExt];
         }
 
-        if (!hasExt)
-            [self addExtension:ext];
+        if (!hasPointsGroups)
+            [self addExtension:pointsGroupsExt];
     }
     [self fillExtensions:document];
 }

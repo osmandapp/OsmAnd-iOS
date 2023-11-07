@@ -1668,10 +1668,10 @@ backgroundIconName:(NSString *)backgroundIconName
 
 #pragma mark - OAEditorDelegate
 
-- (void)onEditorAdded:(NSString *)name
-             iconName:(NSString *)iconName
-                color:(UIColor *)color
-   backgroundIconName:(NSString *)backgroundIconName;
+- (void)addNewItemWithName:(NSString *)name
+                  iconName:(NSString *)iconName
+                     color:(UIColor *)color
+        backgroundIconName:(NSString *)backgroundIconName;
 {
     [self addGroup:name
           iconName:iconName

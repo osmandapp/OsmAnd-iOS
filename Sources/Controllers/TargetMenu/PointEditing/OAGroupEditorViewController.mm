@@ -49,7 +49,7 @@
 
 - (void)postInit
 {
-    if (!self.isNewItemAdding)
+    if (!self.isNewItem)
     {
         self.originalName = _group.name;
         self.editName = _group.name;
@@ -60,7 +60,7 @@
 
     [super postInit];
 
-    if (self.isNewItemAdding)
+    if (self.isNewItem)
     {
         _group = [[OAPointsGroup alloc] initWithName:self.editName
                                             iconName:self.editIconName

@@ -22,7 +22,7 @@
 {
     [super postInit];
     
-    if (self.isNewItemAdding)
+    if (self.isNewItem)
     {
         _favoriteGroup = [[OAFavoriteGroup alloc] init];
         _favoriteGroup.name = self.editName;
@@ -41,7 +41,7 @@
 
 - (void)onRightNavbarButtonPressed
 {
-    if (self.isNewItemAdding)
+    if (self.isNewItem)
     {
         [self addPointsGroup];
     }
@@ -81,10 +81,10 @@
     [self dismissViewController];
     if (self.delegate)
     {
-        [self.delegate onEditorAdded:self.editName
-                            iconName:self.editIconName
-                               color:self.editColor
-                  backgroundIconName:self.editBackgroundIconName];
+        [self.delegate addNewItemWithName:self.editName
+                                 iconName:self.editIconName
+                                    color:self.editColor
+                       backgroundIconName:self.editBackgroundIconName];
     }
 }
 

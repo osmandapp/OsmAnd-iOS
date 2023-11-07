@@ -6,11 +6,11 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OAEditorViewController.h"
+#import "OABaseEditorViewController.h"
 
 @class OAPointsGroup;
 
-@interface OAGroupEditorViewController: OAEditorViewController
+@interface OAGroupEditorViewController: OABaseEditorViewController
 
 @property(nonatomic, readonly) OAPointsGroup *group;
 

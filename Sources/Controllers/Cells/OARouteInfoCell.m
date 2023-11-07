@@ -7,7 +7,7 @@
 //
 
 #import "OARouteInfoCell.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import <Charts/Charts-Swift.h>
 
 @implementation OARouteInfoCell
@@ -20,7 +20,7 @@
     // Initialization code
     _showLegend = NO;
     [_expandImageView setImage:[UIImage templateImageNamed:@"ic_custom_arrow_down.png"]];
-    [_expandImageView setTintColor:UIColorFromRGB(color_primary_purple)];
+    [_expandImageView setTintColor:UIColor.iconColorActive];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

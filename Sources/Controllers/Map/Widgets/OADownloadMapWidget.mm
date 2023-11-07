@@ -9,6 +9,7 @@
 #import "OADownloadMapWidget.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAAutoObserverProxy.h"
 #import "OAAppSettings.h"
 #import "OAUtilities.h"
@@ -257,24 +258,13 @@
 
 - (void) updateColors
 {
-    if (!_nightMode)
-    {
-        self.backgroundColor = UIColor.whiteColor;
-        self.titleView.textColor = UIColor.blackColor;
-        self.descrView.textColor = UIColorFromRGB(color_text_footer);
-        self.closeButton.backgroundColor = UIColorFromRGB(color_button_gray_background);
-        [self.closeButton setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
-        self.downloadButton.backgroundColor = UIColorFromRGB(color_primary_purple);
-    }
-    else
-    {
-        self.backgroundColor = UIColorFromRGB(nav_bar_night);
-        self.titleView.textColor = UIColorFromRGB(text_primary_night);
-        self.descrView.textColor = UIColorFromRGB(text_secondary_night);
-        self.closeButton.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary_night);
-        [self.closeButton setTitleColor:UIColorFromRGB(color_chart_orange) forState:UIControlStateNormal];
-        self.downloadButton.backgroundColor = UIColorFromRGB(color_button_active_night);
-    }
+    self.backgroundColor = UIColor.groupBgColor;
+    self.titleView.textColor = UIColor.textColorPrimary;
+    self.descrView.textColor = UIColor.textColorSecondary;
+    self.closeButton.backgroundColor = UIColor.buttonBgColorSecondary;
+    [self.closeButton setTitleColor:UIColor.buttonTextColorSecondary forState:UIControlStateNormal];
+    self.downloadButton.backgroundColor = UIColor.buttonBgColorPrimary;
+    [self.downloadButton setTitleColor:UIColor.buttonTextColorPrimary forState:UIControlStateNormal];
 }
 
 - (IBAction)closeButtonPressed:(id)sender

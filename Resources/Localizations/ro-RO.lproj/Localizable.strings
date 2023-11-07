@@ -22,7 +22,7 @@
 "months_3" = "Trei luni";
 "traffic_warning_railways" = "Trecere de cale ferată";
 "speak_title" = "Anunță…";
-"shared_string_reload" = "Reâncarcă";
+"shared_string_reload" = "Reîncarcă";
 "edit_filter" = "Editează categoriile";
 "shared_string_previous" = "Precedentul";
 "poi_filter_by_name" = "Căutare după nume";
@@ -199,7 +199,7 @@
 "rendering_category_routes" = "Rute";
 "shared_string_skip" = "Omiteți";
 "in_app_purchase_desc" = "O singură plată";
-"shared_string_near" = "Apropiere";
+"shared_string_near" = "Aproape de";
 "unlock_all_features" = "Deblochează toate funcționalitățile OsmAnd";
 "shared_string_open" = "Deschis";
 "map_widget_appearance_rem" = "Elemente rămase";
@@ -224,7 +224,7 @@
 "poi_dialog_comment" = "Comentarii";
 "shared_string_on" = "Activ";
 "app_mode_aircraft" = "Avion";
-"exit_without_saving" = "Ieșiți fără să salvați?";
+"exit_without_saving" = "Ieșiți fără a salva?";
 "osm_live_support_region" = "Suport local";
 "speak_cameras" = "Radare de viteză";
 "poi" = "POI";
@@ -241,7 +241,7 @@
 "shared_string_io_error" = "Eroare de citire/scriere";
 "arrival_distance_factor_at_last" = "În ultimii metri";
 "traffic_warning_speed_limit" = "Limită viteză";
-"keep_and_add_destination_point" = "Adăugați ca destinație subsecventă";
+"keep_and_add_destination_point" = "Adăugă ca destinație subsecventă";
 "shared_string_control_stop" = "Stop";
 "upload_anonymously" = "Încarcă anonim";
 "search_address_street" = "Stradă";
@@ -266,7 +266,7 @@
 "route_tl" = "Virați la stânga și continuați pe";
 "shared_string_world" = "Lume";
 "shared_string_slope" = "Pantă";
-"no_address_found" = "Nici o adresă determinată";
+"no_address_found" = "Nu s-a determinat adresa";
 "route_kl" = "Păstrați banda stângă și continuați";
 "search_another_country" = "Alegeți altă regiune";
 "app_mode_train" = "Tren";
@@ -287,7 +287,7 @@
 "osm_edit_created_poi" = "Punct de interes OSM creat";
 "shared_string_deselect" = "Deselectați";
 "gpx_ascent" = "Ascensiune";
-"confirm_every_run" = "Intreabă intotdeauna";
+"confirm_every_run" = "Întreabă mereu";
 "traffic_warning_stop" = "Stop";
 "quick_action_add_first_intermediate" = "Adaugă primul punct intermediar";
 "shared_string_reset" = "Resetează";
@@ -340,7 +340,7 @@
 "osm_live_subscribe_btn" = "Abonează-te";
 "default_speed_system" = "Unitate de viteză";
 "gpx_descent" = "Descendență";
-"select_map_marker" = "Selectați marcajul pe hartă";
+"select_map_marker" = "Selectați marcajul de hartă";
 "online_map" = "Hartă online";
 "foot" = "picioare";
 "shared_string_save" = "Salvează";
@@ -470,8 +470,8 @@
 "shared_string_control_start" = "Start";
 "prefer_in_routing_title" = "Preferă…";
 "wake_on_voice" = "Pornește ecranul";
-"routing_settings_2" = "Setare navigație";
-"shared_string_select_on_map" = "Selectează pe hartă";
+"routing_settings_2" = "Setări navigație";
+"shared_string_select_on_map" = "Selectare pe hartă";
 "shared_string_speed" = "Viteză";
 "close_changeset" = "Închide setul de modificări";
 "shared_string_ok" = "OK";
@@ -516,7 +516,7 @@
 "rendering_attr_smoothness_good_name" = "Bună";
 "rendering_attr_tracktype_grade1_name" = "Solid (pavat)";
 "routing_attr_avoid_tram_description" = "Evită tramvaie";
-"rendering_attr_piste_type_downhill_name" = "Coborâș";
+"rendering_attr_piste_type_downhill_name" = "Coborâre";
 "rendering_value_light_brown_name" = "Maro deschis";
 "routing_attr_short_way_description" = "Traseu mai scurt, optimizat (economie de energie)";
 "rendering_value_orange_name" = "Portocaliu";
@@ -617,7 +617,7 @@
 "routing_attr_prefer_motorway_name" = "Preferă autostrăzi";
 "rendering_value_defaultTranslucentCyan_name" = "Implicit(cyan translucid)";
 "rendering_attr_piste_type_nordic_name" = "la Nord";
-"rendering_attr_subwayMode_name" = "Rute metrou";
+"rendering_attr_subwayMode_name" = "Rute de metrou";
 "rendering_value_black_name" = "Negru";
 "routing_attr_avoid_subway_description" = "Evită metrouri și transport feroviar ușor";
 "routing_attr_avoid_motorway_name" = "Fără autostrăzi";
@@ -792,7 +792,7 @@
 "active_markers" = "Marcaje active";
 "voice_announces" = "Anunțuri vocale";
 "save_as_new_track" = "Salvează ca traseu nou";
-"exit_at" = "Coborâre la";
+"exit_at" = "Coborâre la stația";
 "base_profile_descr_bicycle" = "Mountain bike, moped, cal";
 "user_password" = "Parolă";
 "routing_profile_straightline" = "Linie dreaptă";
@@ -801,7 +801,7 @@
 "profile_alert_delete_title" = "Șterge profil";
 "base_profile_descr_car" = "Mașină, camion, motocicletă";
 "save_track_logging_accuracy" = "Precizie înregistrare";
-"reverse_route" = "Inversează rută";
+"reverse_route" = "Inversează ruta";
 "replace_all" = "Înlocuiți tot";
 "vehicle_parameters" = "Parametrii vehicul";
 "select_base_profile_dialog_message" = "Bazați-vă profilul personalizat pe unul dintre profilurile implicite ale aplicației; acest lucru definește configurarea de bază, cum ar fi vizibilitatea implicită a widgeturilor și unitățile de viteză și distanță. Acestea sunt profiluri implicite din aplicație, împreună cu exemple de profiluri personalizate la care pot fi extinse:";
@@ -864,7 +864,7 @@
 "shared_string_tones" = "tone";
 "shared_string_nothing_selected" = "Nimic selectat";
 "metric_ton" = "t";
-"personal_category_name" = "Personal";
+"personal_category_name" = "Personale";
 "select_map_icon" = "Selectați icon pentru staționare";
 "coordinates" = "Coordonate";
 "fav_points_not_exist" = "Nu există puncte Favorite";
@@ -993,7 +993,7 @@
 "routing_attr_driving_style_safety_name" = "Preferă drumurile secundare";
 "index_item_depth_contours_osmand_ext" = "Curbe de adâncime nautică";
 "replace_all_desc" = "Elementele curente vor fiînlocuite cu elemente din fișierul";
-"transport_nearby_routes" = "În cadrul";
+"transport_nearby_routes" = "În raza de";
 "transport_nearby_routes_within" = "Rutele apropiate din cadrul";
 "rendering_attr_whiteWaterSports_name" = "Sporturi Whitewater";
 "online_webpage_warning" = "Pagina este disponibilă doar online. Deschideți în browserul web\?";
@@ -1073,7 +1073,7 @@
 "last_intermediate_dest_description" = "Adaugă o oprire intermediară";
 "first_intermediate_dest_description" = "Adaugă oprirea inițială";
 "subsequent_dest_description" = "Mutați destinația în sus, și creați-o";
-"make_as_start_point" = "Faceți din aceasta punctul de început";
+"make_as_start_point" = "Setează acesta ca punct de plecare";
 "new_destination_point_dialog" = "Aveți setată deja o destinație:";
 "switch_start_finish" = "Inversați punctul de plecare&destinația";
 "start_navigation" = "Începeți navigarea";
@@ -1770,7 +1770,7 @@
 "quick_action_add_marker" = "Adaugă marker de hartă";
 "quick_action_add_create_items" = "Creați elemente";
 "unsupported_items" = "Elemente nesuportate";
-"quick_action_new_action" = "Adăugați o acțiune";
+"quick_action_new_action" = "Adăugă acțiune";
 "quick_action_map_styles" = "Stiluri de hartă";
 "quick_action_map_style_action" = "Adăugați un stil de hartă";
 "quick_action_map_source_action" = "Adăugați sursa hărții";
@@ -1844,7 +1844,7 @@
 "osm_editing_settings_descr" = "Setările acestui plugin sunt globale și se aplică tuturor profilurilor.";
 "osm_failed_uploads" = "Eșuată";
 "osm_succsessful_uploads" = "Succes";
-"osm_delete_confirmation_descr" = "Sunteți sigur că doriți să ștergeți acest POI?";
+"osm_delete_confirmation_descr" = "Sunteți sigur că doriți să ștergeți acest punct de interes?";
 "osm_upload_no_internet" = "Vă rugăm să verificați conexiunea la internet și să încercați din nou.";
 "unsaved_changes_will_be_lost" = "Orice modificări nesalvate vor fi pierdute. Continuați\?";
 "osm_upload_failed_descr" = "Vă rugăm să verificați datele de conectare și conexiunea la internet și să încercați din nou.";
@@ -2850,8 +2850,8 @@
 "shared_string_add_color" = "Adăugați culoare";
 "shared_string_edit_color" = "Editați culoarea";
 "shared_string_delete_color" = "Ștergeți culoarea";
-"map_widget_trip_recording_downhill" = "Coborâș";
-"map_widget_trip_recording_uphill" = "Urcuș";
+"map_widget_trip_recording_downhill" = "Coborâre";
+"map_widget_trip_recording_uphill" = "Urcare";
 "map_widget_trip_recording_duration" = "Durată";
 "map_widget_trip_recording_distance" = "Distanță";
 "activity_type_offroad_name" = "Off-road";
@@ -3024,3 +3024,6 @@
 "specify_number_of_dir_indicators_desc" = "Specificați numărul de indicatori de direcție.";
 "weather_update_over_any_network" = "Prin orice rețea";
 "weather_update_parameters_any_network" = "Prognoza meteo va fi actualizată folosind orice rețea. Se pot consuma date mobile.";
+"upload_poi" = "Încărcă punct de interes";
+"shared_string_system_default" = "Sistem implicit";
+"ios_release_4_5" = "• Experiența widgeturilor complet reproiectată: a fost adăugată posibilitatea de a schimba poziția widgeturilor, a fost adăugată gruparea pe pagini, o singură listă de widgeturi pentru panoul din stânga și din dreapta.\n• Ecran de configurare reproiectat\n• Copie de rezervă gratuită a preferințelor, setărilor și editărilor OSM în OsmAnd Cloud\n• A fost adăugată scara \"CAI\" pentru \"Clasificarea dificultății traseelor\"\n• \"Plugin pentru curbe de nivel\" redenumit în \"Topografie\", a adăugat suport pentru noul format al hărților de teren.\n• Adăugat 3D Relief\n• A fost adăugată autorizarea OAuth pentru pluginul de editare OpenStreetMap Editing\n• A fost adăugat un buton separat pentru a comuta între modul 2D sau 3D\n• Direcția schimbată a gestului de înclinare\n• S-a rezolvat o problemă cu exportul de favorite, care putea duce la pierderea de date\n";

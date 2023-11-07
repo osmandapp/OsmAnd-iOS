@@ -9,7 +9,7 @@
 #import "OACollapsableCoordinatesView.h"
 #import "Localization.h"
 #import "OsmAndApp.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OALocationConvert.h"
 #import "OAPointDescription.h"
 #import "OAButton.h"
@@ -53,6 +53,14 @@
     return self;
 }
 
+- (void) traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        [self buildViews];
+}
+
 -(void) setData:(NSDictionary<NSNumber *,NSString *> *)data
 {
     _coordinates = data;
@@ -66,7 +74,7 @@
     _viewLabel.lineBreakMode = NSLineBreakByWordWrapping;
     _viewLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     _viewLabel.adjustsFontForContentSizeCategory = YES;
-    _viewLabel.textColor = UIColorFromRGB(color_text_footer);
+    _viewLabel.textColor = UIColor.textColorSecondary;
     _viewLabel.backgroundColor = [UIColor clearColor];
     _viewLabel.text = OALocalizedString(@"coordinates_copy_descr");
     
@@ -95,10 +103,10 @@
         btn.layer.cornerRadius = 4.0;
         btn.layer.masksToBounds = YES;
         btn.layer.borderWidth = 0.8;
-        btn.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
-        btn.tintColor = UIColorFromRGB(color_primary_purple);
+        btn.layer.borderColor = UIColor.separatorColor.CGColor;
+        btn.tintColor = UIColor.iconColorActive;
         btn.tag = i++;
-        [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(color_coordinates_background)] forState:UIControlStateHighlighted];
+        [btn setBackgroundImage:[OAUtilities imageWithColor:UIColor.iconColorActive] forState:UIControlStateHighlighted];
         btn.delegate = self;
 
         [self addSubview:btn];
@@ -175,14 +183,14 @@
     {
         OAButton *button = _buttons[_selectedButtonIndex];
         [UIView animateWithDuration:0.2 animations:^{
-            button.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
+            button.layer.backgroundColor = UIColor.iconColorActive.CGColor;
             button.layer.borderColor = UIColor.clearColor.CGColor;
             button.tintColor = UIColor.whiteColor;
         }                completion:^(BOOL finished) {
             [UIView animateWithDuration:0.2 animations:^{
                 button.layer.backgroundColor = UIColor.clearColor.CGColor;
-                button.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
-                button.tintColor = UIColorFromRGB(color_primary_purple);
+                button.layer.borderColor = UIColor.separatorColor.CGColor;
+                button.tintColor = UIColor.iconColorActive;
             }];
         }];
         [OAUtilities showMenuInView:self fromView:button];

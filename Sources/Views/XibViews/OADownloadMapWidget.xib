@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -19,23 +20,23 @@
                         <constraint firstAttribute="height" constant="44" id="SRO-qX-56z"/>
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="textColor" name="textColorPrimary"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 MB" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xFa-pf-k7x">
                     <rect key="frame" x="20" y="57" width="262" height="24"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                    <color key="textColor" red="0.59215686274509804" green="0.5607843137254902" blue="0.63921568627450975" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="textColor" name="textColorSecondary"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3XS-G0-mBp">
                     <rect key="frame" x="20" y="97" width="168" height="42"/>
-                    <color key="backgroundColor" red="0.8784313725490196" green="0.8666666666666667" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" name="buttonBgColorSecondary"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="42" id="Hyw-Eu-XVp"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                     <state key="normal" title="Close">
-                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                        <color key="titleColor" name="buttonTextColorSecondary"/>
                     </state>
                     <connections>
                         <action selector="closeButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="Bhg-5X-m18"/>
@@ -43,10 +44,10 @@
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LaG-IY-fkx">
                     <rect key="frame" x="194" y="97" width="168" height="42"/>
-                    <color key="backgroundColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" name="buttonBgColorPrimary"/>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                     <state key="normal" title="Dwonload">
-                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" name="buttonTextColorPrimary"/>
                     </state>
                     <connections>
                         <action selector="downloadButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="sTe-ED-N40"/>
@@ -60,7 +61,7 @@
                     </constraints>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color key="backgroundColor" name="groupBgColor"/>
             <constraints>
                 <constraint firstItem="3XS-G0-mBp" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" multiplier="0.44" id="0T3-cc-Upw"/>
                 <constraint firstItem="94u-n4-Wkq" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="2g7-7Y-gsf"/>
@@ -93,5 +94,26 @@
     </objects>
     <resources>
         <image name="img_download_map_colored.png" width="60" height="60"/>
+        <namedColor name="buttonBgColorPrimary">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="buttonBgColorSecondary">
+            <color red="0.8784313725490196" green="0.8666666666666667" blue="0.8901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="buttonTextColorPrimary">
+            <color red="0.93725490196078431" green="0.90980392156862744" blue="0.99215686274509807" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="buttonTextColorSecondary">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="groupBgColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorPrimary">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorSecondary">
+            <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

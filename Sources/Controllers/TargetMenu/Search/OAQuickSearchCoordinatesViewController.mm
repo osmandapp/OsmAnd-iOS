@@ -8,7 +8,6 @@
 
 #import "OAQuickSearchCoordinatesViewController.h"
 #import "Localization.h"
-#import "OAColors.h"
 #import "OAValueTableViewCell.h"
 #import "OAInputTableViewCell.h"
 #import "OAQuickSearchCoordinateFormatsViewController.h"
@@ -23,7 +22,6 @@
 #import "OAPOIHelper.h"
 #import "OAPOI.h"
 #import "OAQuickSearchResultTableViewCell.h"
-#import "OAColors.h"
 #import "OAAutoObserverProxy.h"
 #import "OAQuickSearchHelper.h"
 #import "OASearchResult.h"
@@ -161,7 +159,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
+    self.tableView.separatorColor = UIColor.separatorColor;
     self.tableView.contentInset = UIEdgeInsetsMake(defaultNavBarHeight, 0, 0, 0);
 
     self.titleLabel.text = OALocalizedString(@"coords_search");
@@ -190,7 +188,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 {
     if (!UIAccessibilityIsReduceTransparencyEnabled())
     {
-        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
+        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:[ThemeManager shared].isLightTheme ? UIBlurEffectStyleSystemUltraThinMaterialLight : UIBlurEffectStyleSystemUltraThinMaterialDark]];
         blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         blurEffectView.alpha = 0;
         return blurEffectView;
@@ -199,7 +197,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     {
         UIView *res = [[UIView alloc] init];
         res.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        res.backgroundColor = UIColorFromRGB(color_primary_table_background);
+        res.backgroundColor = UIColor.viewBgColor;
         res.alpha = 0;
         return res;
     }
@@ -1004,8 +1002,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             cell = (OAQuickSearchResultTableViewCell *)[nib objectAtIndex:0];
             cell.directionIcon.image = [UIImage templateImageNamed:@"ic_small_direction"];
             cell.directionIcon.tintColor = UIColorFromRGB(color_active_light);
-            cell.distanceLabel.textColor = UIColorFromRGB(color_primary_purple);
-            cell.coordinateLabel.textColor = UIColorFromRGB(color_text_footer);
+            cell.distanceLabel.textColor = UIColor.textColorActive;
+            cell.coordinateLabel.textColor = UIColor.textColorSecondary;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
@@ -1017,7 +1015,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
                 cell.coordinateLabel.text = @"";
                 [cell setDesriptionLablesVisible:NO];
                 cell.icon.image = [UIImage templateImageNamed:@"ic_custom_alert"];
-                cell.icon.tintColor = UIColorFromRGB(color_primary_red);
+                cell.icon.tintColor = UIColor.iconColorSelected;
             }
             else
             {
@@ -1026,7 +1024,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
                 cell.coordinateLabel.text = [NSString stringWithFormat:@"  •  %@", item[@"coordinates"]];
                 [cell setDesriptionLablesVisible:YES];
                 cell.icon.image = [UIImage templateImageNamed:@"ic_custom_map_pin"];
-                cell.icon.tintColor = UIColorFromRGB(color_primary_purple);
+                cell.icon.tintColor = UIColor.iconColorActive;
                 cell.directionIcon.transform = CGAffineTransformMakeRotation([item[@"direction"] doubleValue]);
             }
         }
@@ -1093,7 +1091,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     else
     {
         [UIView animateWithDuration:.2 animations:^{
-            self.navbarView.backgroundColor = UIColorFromRGB(color_primary_table_background);
+            self.navbarView.backgroundColor = UIColor.viewBgColor;
             _navBarBackgroundView.alpha = 0;
         }];
     }
@@ -1228,8 +1226,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     [self.scrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     self.scrollView.contentSize = CGSizeMake(margin, self.toolbarView.frame.size.height);
-    self.scrollView.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary);
-    _toolbarView.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary);
+    self.scrollView.backgroundColor = UIColor.viewBgColor;
+    _toolbarView.backgroundColor = UIColor.textColorSecondary;
     
     if (!_shouldHideHintBar)
     {
@@ -1237,14 +1235,14 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         {
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
             btn.frame = CGRectMake(xPosition + margin, 6, 0, 0);
-            btn.backgroundColor = UIColorFromRGB(color_primary_table_background);
+            btn.backgroundColor = UIColor.buttonBgColorTertiary;
             btn.layer.masksToBounds = YES;
             btn.layer.cornerRadius = 6.0;
             btn.titleLabel.numberOfLines = 1;
             btn.titleLabel.font = [UIFont scaledMonospacedSystemFontOfSize:17 weight:UIFontWeightSemibold];
 
             [btn setTitle:hint forState:UIControlStateNormal];
-            [btn setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+            [btn setTitleColor:UIColor.iconColorActive forState:UIControlStateNormal];
             [btn sizeToFit];
             [btn addTarget:self action:@selector(tagHintTapped:) forControlEvents:UIControlEventTouchUpInside];
             

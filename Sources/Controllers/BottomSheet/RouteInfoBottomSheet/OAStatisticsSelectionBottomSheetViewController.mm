@@ -12,6 +12,7 @@
 #import "OABottomSheetHeaderCell.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OASizes.h"
 #import "OAAppSettings.h"
 #import "OATitleIconRoundCell.h"
@@ -67,7 +68,7 @@
 
 - (void) setupView
 {
-    tblView.separatorColor = UIColorFromRGB(color_tint_gray);
+    tblView.separatorColor = UIColor.separatorColor;
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
@@ -196,10 +197,10 @@
             cell.backgroundColor = UIColor.clearColor;
 
             cell.titleView.text = item[@"title"];
-            cell.textColorNormal = (mode == EOARouteStatisticsModeSpeed || mode == EOARouteStatisticsModeAltitudeSpeed) && !vwController.hasSpeed ? UIColorFromRGB(unselected_tab_icon) : UIColor.blackColor;
+            cell.textColorNormal = (mode == EOARouteStatisticsModeSpeed || mode == EOARouteStatisticsModeAltitudeSpeed) && !vwController.hasSpeed ? UIColor.buttonBgColorTertiary : UIColor.textColorPrimary;
 
             [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
-            cell.iconColorNormal = vwController.mode == mode ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_icon_inactive);
+            cell.iconColorNormal = vwController.mode == mode ? UIColor.iconColorActive : UIColor.iconColorDisabled;
 
             [cell roundCorners:[item[@"round_top"] boolValue] bottomCorners:[item[@"round_bottom"] boolValue]];
             cell.separatorInset = UIEdgeInsetsMake(0., 32., 0., 16.);
@@ -276,6 +277,13 @@
     return [super initWithParam:nil];
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [[ThemeManager shared] configureWithAppMode:[OAAppSettings sharedManager].applicationMode.get];
+}
+
 - (void) setupView
 {
     if (!self.screenObj)
@@ -287,8 +295,8 @@
 - (void)additionalSetup
 {
     [super additionalSetup];
-    self.tableBackgroundView.backgroundColor = UIColorFromRGB(color_primary_table_background);
-    self.buttonsView.subviews.firstObject.backgroundColor = UIColorFromRGB(color_primary_table_background);;
+    self.tableBackgroundView.backgroundColor = UIColor.viewBgColor;
+    self.buttonsView.subviews.firstObject.backgroundColor = UIColor.viewBgColor;
     [self hideDoneButton];
 }
 

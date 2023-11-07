@@ -13,7 +13,7 @@
 #import "OsmAndApp.h"
 #import "OAUtilities.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAOsmAndFormatter.h"
 #import "OATextLineViewCell.h"
 
@@ -214,7 +214,7 @@
                 @"type" : [OATitleIconRoundCell getCellIdentifier],
                 @"title" : title,
                 @"img" : image,
-                @"tintColor" : UIColorFromRGB(color_primary_purple),
+                @"tintColor" : UIColor.iconColorActive,
                 @"key" : [NSString stringWithFormat:@"%d", i]
             }];
         }
@@ -246,7 +246,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
-            cell.textColorNormal = UIColor.blackColor;
+            cell.textColorNormal = UIColor.textColorPrimary;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
@@ -269,7 +269,7 @@
                 }
             }
             cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
-            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
+            cell.separatorView.backgroundColor = UIColor.separatorColor;
         }
         return cell;
     }
@@ -286,7 +286,7 @@
         if (cell)
         {
             cell.backgroundColor = UIColor.clearColor;
-            [cell.textView setTextColor:[UIColor blackColor]];
+            [cell.textView setTextColor:[UIColor textColorPrimary]];
             [cell.textView setText:item[@"title"]];
         }
         return cell;

@@ -9,11 +9,11 @@
 #import "OASelectFavoriteGroupViewController.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OADefaultFavorite.h"
-#import "OATitleRightIconCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OASimpleTableViewCell.h"
 #import "OAAddFavoriteGroupViewController.h"
 #import "OsmAndApp.h"
@@ -62,9 +62,10 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_group_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
-    self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
+    self.tableView.separatorColor = UIColor.separatorColor;
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_group_descr") font:kHeaderDescriptionFont textColor:UIColor.textColorSecondary isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+    self.tableView.tableHeaderView.backgroundColor = UIColor.viewBgColor;
+    self.tableView.tintColor = UIColor.iconColorActive;
 }
 
 - (void) applyLocalization
@@ -84,7 +85,7 @@
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
         @{
-            @"type" : [OATitleRightIconCell getCellIdentifier],
+            @"type" : [OARightIconTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"fav_add_new_group"),
             @"img" : @"ic_custom_add",
         },
@@ -132,7 +133,7 @@
                     @"title": group[@"title"],
                     @"description": [NSString stringWithFormat:@"%i", group[@"count"].intValue],
                     @"isSelected": @([group[@"title"] isEqualToString:_selectedGroupName]),
-                    @"color": group[@"color"] ? group[@"color"] : UIColorFromRGB(color_primary_purple).toHexString,
+                    @"color": group[@"color"] ? group[@"color"] : UIColor.iconColorActive.toHexString,
                     @"img": @"ic_custom_folder"
             }];
         }
@@ -149,20 +150,25 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     
-    if ([cellType isEqualToString:[OATitleRightIconCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
+        OARightIconTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.titleLabel.textColor = UIColor.textColorActive;
+            cell.rightIconView.tintColor = UIColor.iconColorActive;
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-        cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            [cell.rightIconView setImage:[UIImage templateImageNamed:item[@"img"]]];
+        }
         return cell;
     }
    
@@ -185,7 +191,7 @@
             UIColor *color;
             if (item[@"color"])
                 color = [item[@"color"] isKindOfClass:NSString.class] ? [UIColor colorFromString:item[@"color"]] : item[@"color"];
-            cell.leftIconView.tintColor = color ? color : UIColorFromRGB(color_primary_purple);
+            cell.leftIconView.tintColor = color ? color : UIColor.iconColorActive;
             
             if ([item[@"isSelected"] boolValue])
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;

@@ -17,6 +17,7 @@
 #import "OADefaultFavorite.h"
 #import "OAFavoritesHelper.h"
 #import "OASizes.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAEditWaypointsGroupOptionsViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, OAColorsTableViewCellDelegate>
 
@@ -76,7 +77,7 @@
     [self generateData];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
+    self.tableView.separatorColor = UIColor.separatorColor;
     self.doneButton.hidden = NO;
     self.doneButton.enabled = _screenType == EOAEditWaypointsGroupCopyToFavoritesScreen;
     _newGroupName = _screenType == EOAEditWaypointsGroupCopyToFavoritesScreen ? _groupName : @"";
@@ -164,7 +165,7 @@
                     kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
                     kCellRightIconName: [_tableData.values[@"visible_groups_count"] integerValue] == 0
                             ? @"ic_custom_show" : @"ic_custom_hide",
-                    kCellTintColor: @color_primary_purple
+                    kCellTintColor:UIColor.iconColorActive
             }];
             [_tableData.subjects addObject:hideShowAllCellData];
 
@@ -192,10 +193,10 @@
                         kCellType: [OASwitchTableViewCell getCellIdentifier],
                         kCellTitle: groupName,
                         kCellLeftIcon: [UIImage templateImageNamed:visible ? @"ic_custom_folder" : @"ic_custom_folder_hidden"],
-                        kCellTintColor: @(visible ? color : color_footer_icon_gray),
+                        kCellTintColor: visible ? UIColorFromRGB(color) : UIColor.iconColorDisabled,
                         kTableValues: @{
                                 @"visible": @(visible),
-                                @"color": @(color)
+                                @"color": UIColorFromRGB(color)
                         }
                 }];
                 [_tableData.subjects addObject:groupCellData];
@@ -295,7 +296,7 @@
         self.doneButton.enabled = YES;
         [tableData setData:@{
                 kCellLeftIcon: [UIImage templateImageNamed:[tableData.values[@"visible"] boolValue] ? @"ic_custom_folder" : @"ic_custom_folder_hidden"],
-                kCellTintColor: @([tableData.values[@"visible"] boolValue] ? [tableData.values[@"color"] integerValue] : color_footer_icon_gray)
+                kCellTintColor: [tableData.values[@"visible"] boolValue] ? tableData.values[@"color"] : UIColor.iconColorDisabled
         }];
     }
     else if ([tableData.key isEqualToString:@"hide_show_all"])
@@ -402,7 +403,7 @@
         {
             cell.titleLabel.text = cellData.title;
             cell.valueLabel.text = cellData.desc;
-            cell.valueLabel.tintColor = UIColorFromRGB(color_text_footer);
+            cell.valueLabel.tintColor = UIColor.textColorSecondary;
             cell.currentColor = [arrayValue indexOfObject:cellData.values[@"int_value"]];
 
             [cell.collectionView reloadData];
@@ -430,7 +431,7 @@
 
             [cell leftIconVisibility:cellData.leftIcon != nil];
             cell.leftIconView.image = cellData.leftIcon;
-            cell.leftIconView.tintColor = UIColorFromRGB(cellData.tintColor);
+            cell.leftIconView.tintColor = cellData.tintColor;
 
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -453,9 +454,9 @@
         if (cell)
         {
             cell.titleLabel.text = cellData.title;
-            cell.titleLabel.textColor = UIColorFromRGB(cellData.tintColor);
+            cell.titleLabel.textColor = cellData.tintColor;
             cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:cellData.rightIconName]];
-            cell.accessoryView.tintColor = UIColorFromRGB(cellData.tintColor);
+            cell.accessoryView.tintColor = cellData.tintColor;
             if ([cellData.values.allKeys containsObject:@"font_value"])
                 cell.titleLabel.font = cellData.values[@"font_value"];
         }

@@ -106,6 +106,43 @@ static NSArray<NSString *> *minTrackSpeedNames;
     return YES;
 }
 
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
+{
+    UIBarButtonItem *rightButton = [self createRightNavbarButton:nil iconName:@"ic_navbar_reset" action:@selector(onRightNavbarButtonPressed) menu:nil];
+    rightButton.accessibilityLabel = OALocalizedString(@"reset_to_default");
+    return @[rightButton];
+}
+
+- (void)onRightNavbarButtonPressed
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"reset_to_default") message:OALocalizedString(@"reset_plugin_to_default") preferredStyle:UIAlertControllerStyleActionSheet];
+
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil];
+
+    UIAlertAction *resetAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_reset") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action)
+    {
+        [_settings.mapSettingSaveTrackIntervalApproved resetToDefault];
+        [_settings.mapSettingSaveTrackIntervalGlobal resetToDefault];
+        [_settings.mapSettingSaveTrackInterval resetToDefault];
+        [_settings.saveTrackMinDistance resetToDefault];
+        [_settings.saveTrackPrecision resetToDefault];
+        [_settings.saveTrackMinSpeed resetToDefault];
+        [_settings.saveHeadingToGpx resetToDefault];
+        [_settings.saveTrackToGPX resetToDefault];
+        [_settings.autoSplitRecording resetToDefault];
+        [_settings.mapSettingSaveTrackIntervalGlobal resetToDefault];
+        [_settings.mapSettingSaveTrackInterval resetToDefault];
+        [self generateData];
+        [self.tableView reloadData];
+    }];
+
+    [alert addAction:resetAction];
+    [alert addAction:cancelAction];
+    alert.preferredAction = resetAction;
+
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 #pragma mark - Table data
 
 - (void)generateData

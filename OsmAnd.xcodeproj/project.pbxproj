@@ -14692,7 +14692,6 @@
 				FA359EE82ADFC04A0001C11D /* DeviceSettings.swift */,
 				FA359EEA2ADFC2CF0001C11D /* DevicesSettingsCollection.swift */,
 				FA359EEC2ADFC6910001C11D /* WheelDeviceSettings.swift */,
-				FA359EF02ADFD5310001C11D /* DeviceHelper.swift */,
 			);
 			path = DeviceSettings;
 			sourceTree = "<group>";
@@ -14772,6 +14771,7 @@
 		FAA650332ADD42990020DCEA /* BLE */ = {
 			isa = PBXGroup;
 			children = (
+				FA359EF02ADFD5310001C11D /* DeviceHelper.swift */,
 				FA359EE72ADFC0420001C11D /* DeviceSettings */,
 				FA359EDE2ADEA1FE0001C11D /* BLEChangeDeviceName */,
 				FAA650392ADD42C40020DCEA /* BLEManager */,

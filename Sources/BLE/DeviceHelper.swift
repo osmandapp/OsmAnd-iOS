@@ -11,7 +11,8 @@ import SwiftyBluetooth
 import CoreBluetooth
 import OSLog
 
-final class DeviceHelper {
+@objcMembers
+final class DeviceHelper: NSObject {
     static let shared = DeviceHelper()
     
     let devicesSettingsCollection = DevicesSettingsCollection()
@@ -21,34 +22,87 @@ final class DeviceHelper {
         category: String(describing: DeviceHelper.self)
     )
     
-    private init() {}
+    private override init() {}
     
     var hasPairedDevices: Bool {
         devicesSettingsCollection.hasPairedDevices
     }
     
-    var connectedDevices = [Device]()
+    private(set) var connectedDevices = [Device]()
+    
+    func disconnectAllDevices() {
+        guard !connectedDevices.isEmpty else { return }
+        connectedDevices.forEach { 
+            $0.disableRSSI()
+            $0.peripheral.disconnect(completion: { _ in })
+        }
+        connectedDevices.removeAll()
+        BLEManager.shared.removeDiscoveredDevices()
+    }
     
     func restoreConnectedDevices(with peripherals: [Peripheral]) {
         if let pairedDevices = DeviceHelper.shared.getSettingsForPairedDevices() {
-           let devices = DeviceHelper.shared.getDevicesFrom(peripherals: peripherals, pairedDevices: pairedDevices)
+            let devices = DeviceHelper.shared.getDevicesFrom(peripherals: peripherals, pairedDevices: pairedDevices)
             updateConnected(devices: devices)
         } else {
             Self.logger.warning("restoreConnectedDevices peripherals is empty")
         }
     }
     
-    func updateConnected(devices: [Device]) {
+    private func updateConnected(devices: [Device]) {
+        print("updateConnected")
         devices.forEach { device in
             if !connectedDevices.contains(where: { $0.id == device.id }) {
-                device.peripheral?.connect(withTimeout: 10) { [weak self] result in
+                device.peripheral.connect(withTimeout: 10) { [weak self] result in
                     guard let self else { return }
-                    if case .success = result {
+                    switch result {
+                    case .success:
+                        print("updateConnected success")
                         device.addObservers()
                         device.notifyRSSI()
                         DeviceHelper.shared.setDevicePaired(device: device, isPaired: true)
+                        connectedDevices.append(device)
+                        discoverServices(device: device)
+                    case .failure(let error):
+                        Self.logger.error("updateConnected connect: \(String(describing: error.localizedDescription))")
                     }
-                    connectedDevices.append(device)
+                }
+            }
+        }
+    }
+    
+    private func discoverServices(device: Device, serviceUUIDs: [CBUUID]? = nil) {
+        device.peripheral.discoverServices(withUUIDs: nil) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let services):
+                discoverCharacteristics(device: device, services: services)
+            case .failure(let error):
+                Self.logger.error("discoverServices: \(String(describing: error.localizedDescription))")
+            }
+        }
+    }
+    
+    private func discoverCharacteristics(device: Device, services: [CBService]) {
+        for service in services {
+            device.peripheral.discoverCharacteristics(withUUIDs: nil, ofServiceWithUUID: service.uuid) { result in
+                switch result {
+                case .success(let characteristics):
+                    for characteristic in characteristics {
+                        debugPrint(characteristic)
+                        if characteristic.properties.contains(.read) {
+                            device.update(with: characteristic) { _ in }
+                        }
+                        if characteristic.properties.contains(.notify) {
+                            debugPrint("\(characteristic.uuid): properties contains .notify")
+                            device.peripheral.setNotifyValue(toEnabled: true, ofCharac: characteristic) { result in
+                                debugPrint(result)
+                            }
+                        }
+                    }
+                case .failure(let error):
+                    Self.logger.error("discoverCharacteristics: \(String(describing: error.localizedDescription))")
+                    break
                 }
             }
         }
@@ -60,26 +114,30 @@ final class DeviceHelper {
         }
         connectedDevices.append(device)
         print("addConnected: \(connectedDevices)")
+        if let discoveredDevice = BLEManager.shared.discoveredDevices.first(where: { $0.id == device.id }) {
+            discoveredDevice.notifyRSSI()
+        }
+        if let connectedDevice = connectedDevices.first(where: { $0.id == device.id }) {
+            connectedDevice.notifyRSSI()
+        }
     }
     
     func removeDisconnected(device: Device) {
         connectedDevices = connectedDevices.filter { $0.id != device.id }
         print("remove: \(connectedDevices)")
+        if let discoveredDevice = BLEManager.shared.discoveredDevices.first(where: { $0.id == device.id }) {
+            discoveredDevice.disableRSSI()
+            discoveredDevice.peripheral.disconnect { _ in }
+        }
+        if let connectedDevice = connectedDevices.first(where: { $0.id == device.id }) {
+            connectedDevice.disableRSSI()
+            connectedDevice.peripheral.disconnect { _ in }
+        }
     }
     
     func getSettingsForPairedDevices() -> [DeviceSettings]? {
         devicesSettingsCollection.getSettingsForPairedDevices()
     }
-    
-//    func getDevicesFromDeviceSettings(items: [DeviceSettings]) -> [Device] {
-//        return items.map{ item in
-//            let device = Device()
-//            device.deviceName = item.deviceName
-//            device.deviceType = item.deviceType
-//            device.addObservers()
-//            return device
-//        }
-//    }
     
     func getDevicesFrom(peripherals: [Peripheral], pairedDevices: [DeviceSettings]) -> [Device] {
         return peripherals.map { item in
@@ -92,13 +150,10 @@ final class DeviceHelper {
                 return device
             } else {
                 fatalError("getDevicesFrom")
-                // TODO: use services
-               // device.deviceName = item.name ?? ""
-                //device.deviceType = savedDevice.deviceType
             }
         }
     }
-        
+    
     func isDeviceEnabled(for id: String) -> Bool {
         if let deviceSettings = devicesSettingsCollection.getDeviceSettings(deviceId: id) {
             return deviceSettings.deviceEnabled
@@ -125,7 +180,9 @@ final class DeviceHelper {
     }
     
     private func dropUnpairedDevice(device: Device) {
-        device.peripheral?.disconnect { result in }
+        device.disableRSSI()
+        device.peripheral.disconnect { result in }
+        removeDisconnected(device: device)
         devicesSettingsCollection.removeDeviceSetting(with: device.id)
     }
     

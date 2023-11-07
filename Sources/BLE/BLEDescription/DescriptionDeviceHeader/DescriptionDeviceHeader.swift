@@ -36,7 +36,7 @@ final class DescriptionDeviceHeader: UIView {
         deviceNameLabel.text = item.deviceName
         updateRSSI(with: item.rssi)
         configureConnectUI(item: item)
-        configureStartStateActivityView(with: item.peripheral?.state ?? .disconnected)
+        configureStartStateActivityView(with: item.peripheral.state)
     }
     
     func updateRSSI(with signal: Int) {
@@ -54,7 +54,7 @@ final class DescriptionDeviceHeader: UIView {
     }
     
     private func configureConnectUI(item: Device) {
-        switch item.peripheral?.state ?? .disconnected {
+        switch item.peripheral.state {
         case .connected:
             connectStatusLabel.text = localizedString("external_device_status_connected")
             signalIndicatorImageView.tintColor = UIColor.buttonBgColorPrimary
@@ -79,7 +79,7 @@ final class DescriptionDeviceHeader: UIView {
     // MARK: - IBAction
     @IBAction func onConnectStatusButtonPressed(_ sender: Any) {
         guard let item else { return }
-        switch item.peripheral?.state {
+        switch item.peripheral.state {
         case .connected: disconnect()
         case .disconnected: connect()
         default: break
@@ -90,10 +90,11 @@ final class DescriptionDeviceHeader: UIView {
         guard let item else { return }
         configureConnectButtonTitle(with: .connecting)
         connectActivityView.startAnimating()
-        item.peripheral?.connect(withTimeout: 10) { [weak self] result in
+        item.peripheral.connect(withTimeout: 10) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success:
+                print("connect success")
                 let isPairedDevice = DeviceHelper.shared.isPairedDevice(id: item.id)
                 DeviceHelper.shared.setDevicePaired(device: item, isPaired: true)
                 DeviceHelper.shared.addConnected(device: item)
@@ -101,20 +102,20 @@ final class DescriptionDeviceHeader: UIView {
                     didPaireDevicedAction?()
                 }
                 configureConnectButtonTitle(with: .disconnected)
-                item.notifyRSSI()
+               // item.notifyRSSI()
                 discoverServices(serviceUUIDs: nil)
                 deviceImageView.image = item.getServiceConnectedImage
             case .failure(let error):
                 configureConnectButtonTitle(with: .connected)
                 showErrorAlertWith(message: error.localizedDescription)
             }
-            update(with: item.peripheral?.state ?? .disconnected)
+            update(with: item.peripheral.state)
         }
     }
     
     private func discoverServices(serviceUUIDs: [CBUUID]? = nil) {
         guard let item else { return }
-        item.peripheral?.discoverServices(withUUIDs: nil) { [weak self] result in
+        item.peripheral.discoverServices(withUUIDs: nil) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success(let services):
@@ -129,7 +130,7 @@ final class DescriptionDeviceHeader: UIView {
     private func discoverCharacteristics(services: [CBService]) {
         guard let item else { return }
         for service in services {
-            item.peripheral?.discoverCharacteristics(withUUIDs: nil, ofServiceWithUUID: service.uuid) { [weak self] result in
+            item.peripheral.discoverCharacteristics(withUUIDs: nil, ofServiceWithUUID: service.uuid) { [weak self] result in
                 guard let self else { return }
                 switch result {
                 case .success(let characteristics):
@@ -144,7 +145,7 @@ final class DescriptionDeviceHeader: UIView {
                         }
                         if characteristic.properties.contains(.notify) {
                             debugPrint("\(characteristic.uuid): properties contains .notify")
-                            item.peripheral?.setNotifyValue(toEnabled: true, ofCharac: characteristic) { result in
+                            item.peripheral.setNotifyValue(toEnabled: true, ofCharac: characteristic) { result in
                                 debugPrint(result)
                             }
                         }
@@ -162,19 +163,19 @@ final class DescriptionDeviceHeader: UIView {
         guard let item else { return }
         configureConnectButtonTitle(with: .disconnecting)
         connectActivityView.startAnimating()
-        item.peripheral?.disconnect { [weak self] result in
+        item.disableRSSI()
+        item.peripheral.disconnect { [weak self] result in
             guard let self else { return }
             switch result {
             case .success:
                 DeviceHelper.shared.removeDisconnected(device: item)
                 configureConnectButtonTitle(with: .connected)
-                item.disableRSSI()
                 deviceImageView.image = item.getServiceConnectedImage.noir
             case .failure(let error):
                 configureConnectButtonTitle(with: .disconnected)
                 showErrorAlertWith(message: error.localizedDescription)
             }
-            update(with: item.peripheral?.state ?? .disconnected)
+            update(with: item.peripheral.state)
         }
     }
     

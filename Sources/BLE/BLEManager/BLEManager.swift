@@ -34,7 +34,8 @@ final class BLEManager {
                 if OAIAPHelper.isOsmAndProAvailable()/* && plagin isEnable*/ {
                     DeviceHelper.shared.restoreConnectedDevices(with: restoredPeripherals)
                 } else {
-                    restoredPeripherals.forEach { $0.disconnect(completion: {_ in }) }
+                    restoredPeripherals.forEach {
+                        $0.disconnect(completion: {_ in }) }
                 }
             }
         }
@@ -67,22 +68,28 @@ final class BLEManager {
                     Self.logger.error("BLEManager -> serviceUUIDs is empty")
                     return
                 }
-                let uuids = serviceUUIDs.map { $0.uuidString.lowercased() }
-                if let device = DeviceFactory.createDevice(with: uuids) {
-                    var deviceName = advertisementData["kCBAdvDataLocalName"] as? String ?? ""
-                    if let savedDevice = DeviceHelper.shared.devicesSettingsCollection.getDeviceSettings(deviceId: peripheral.identifier.uuidString) {
-                        deviceName = savedDevice.deviceName
-                    }
-                    // Cycling Speed and Cadence // 1816
-                    device.peripheral = peripheral
-                    device.rssi = rssi
-                    device.deviceName = deviceName
-                    device.addObservers()
+                if let device = DeviceHelper.shared.connectedDevices.first(where: { $0.id == peripheral.identifier.uuidString }) {
                     discoveredDevices.append(device)
-                    if device.peripheral?.state == .connected {
-                        DeviceHelper.shared.addConnected(device: device)
-                    }
                     successHandler()
+                } else {
+                    let uuids = serviceUUIDs.map { $0.uuidString.lowercased() }
+                    if let device = DeviceFactory.createDevice(with: uuids) {
+                        var deviceName = advertisementData["kCBAdvDataLocalName"] as? String ?? ""
+                        if let savedDevice = DeviceHelper.shared.devicesSettingsCollection.getDeviceSettings(deviceId: peripheral.identifier.uuidString) {
+                            deviceName = savedDevice.deviceName
+                        }
+                        // Cycling Speed and Cadence // 1816
+                        peripheral.disconnect { _ in }
+                        device.peripheral = peripheral
+                        device.rssi = rssi
+                        device.deviceName = deviceName
+                        device.addObservers()
+                        discoveredDevices.append(device)
+    //                    if device.peripheral.state == .connected {
+    //                        DeviceHelper.shared.addConnected(device: device)
+    //                    }
+                        successHandler()
+                    }
                 }
             case .scanStopped(let peripherals, let error):
                 // The scan stopped, an error is passed if the scan stopped unexpectedly
@@ -114,6 +121,14 @@ final class BLEManager {
                 }
             }
         }
+    }
+    
+    func removeDiscoveredDevices() {
+        BLEManager.shared.discoveredDevices.forEach {
+            $0.disableRSSI()
+            $0.peripheral.disconnect(completion: { _ in })
+        }
+        BLEManager.shared.discoveredDevices.removeAll()
     }
     
     func stopScan() {

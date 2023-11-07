@@ -43,7 +43,7 @@
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Upper label Wahoo SPEED 7D64" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OlY-23-VYj">
                                                             <rect key="frame" x="0.0" y="0.0" width="248" height="20.333333333333332"/>
                                                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                            <color key="textColor" name="textPrimary"/>
+                                                            <color key="textColor" name="textColorPrimary"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="LiH-CA-Z13">
@@ -60,7 +60,7 @@
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Disconnected" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fdj-ZX-izt">
                                                                     <rect key="frame" x="23.000000000000007" y="0.0" width="83.666666666666686" height="20"/>
                                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                                                                    <color key="textColor" name="textSecondary"/>
+                                                                    <color key="textColor" name="textColorSecondary"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                             </subviews>
@@ -106,13 +106,13 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bluetooth is turned off" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YJW-qe-YfR">
                                                 <rect key="frame" x="100.00000000000001" y="0.0" width="170.33333333333337" height="20.333333333333332"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                <color key="textColor" name="textPrimary"/>
+                                                <color key="textColor" name="textColorPrimary"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Turn on Bluetooth to find and pair sensors." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zaU-E4-hdZ">
                                                 <rect key="frame" x="39.333333333333343" y="26.333333333333343" width="291.33333333333326" height="18"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                                <color key="textColor" name="textSecondary"/>
+                                                <color key="textColor" name="textColorSecondary"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
@@ -127,7 +127,7 @@
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="Open Settings">
-                                            <color key="titleColor" name="active"/>
+                                            <color key="titleColor" name="textColorActive"/>
                                         </state>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -166,7 +166,7 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Searching for sensors" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QzX-76-Tgh">
                                                 <rect key="frame" x="102.33333333333336" y="0.0" width="165.66666666666663" height="20.333333333333332"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                <color key="textColor" name="textPrimary"/>
+                                                <color key="textColor" name="textColorPrimary"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wQV-O7-UKe" userLabel="Please hold the device close to the sensor.  You need to activate the sensor so OsmAnd can find it.">
@@ -174,7 +174,7 @@
                                                 <string key="text">Please hold the device close to the sensor. 
 You need to activate the sensor so OsmAnd can find it.</string>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                                <color key="textColor" name="textSecondary"/>
+                                                <color key="textColor" name="textColorSecondary"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
@@ -210,7 +210,7 @@ You need to activate the sensor so OsmAnd can find it.</string>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unable to find any sensors" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xtp-zN-Lpc">
                                                 <rect key="frame" x="84" y="0.0" width="202" height="20.333333333333332"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                <color key="textColor" name="textPrimary"/>
+                                                <color key="textColor" name="textColorPrimary"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EZ4-DN-8HM" userLabel="Make sure: – Bluetooth is turned on – Sensor is activated – This device is located near sensor">
@@ -220,7 +220,7 @@ You need to activate the sensor so OsmAnd can find it.</string>
 – Sensor is activated
 – This device is located near sensor</string>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                                <color key="textColor" name="textSecondary"/>
+                                                <color key="textColor" name="textColorSecondary"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
@@ -235,7 +235,7 @@ You need to activate the sensor so OsmAnd can find it.</string>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="Search again">
-                                            <color key="titleColor" name="active"/>
+                                            <color key="titleColor" name="textColorActive"/>
                                         </state>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -309,11 +309,14 @@ You need to activate the sensor so OsmAnd can find it.</string>
         <namedColor name="buttonSecondary">
             <color red="0.87800002098083496" green="0.86699998378753662" blue="0.88999998569488525" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="textPrimary">
+        <namedColor name="textColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="textSecondary">
-            <color red="0.49000000953674316" green="0.45100000500679016" blue="0.54900002479553223" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="textColorSecondary">
+            <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

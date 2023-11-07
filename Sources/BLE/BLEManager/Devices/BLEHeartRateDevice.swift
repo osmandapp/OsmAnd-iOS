@@ -16,13 +16,8 @@ final class BLEHeartRateDevice: Device {
     
     init() {
         super.init(deviceType: .BLE_HEART_RATE)
-        sensors.append(BLEHeartRateSensor(device: self, sensorId: id + "_heart_rate"))
+        sensors.append(BLEHeartRateSensor(device: self, sensorId: "heart_rate"))
     }
-    
-//    override init() {
-//        deviceType = .BLE_HEART_RATE
-//        sensors.append(BLEHeartRateSensor(device: self, sensorId: id + "_heart_rate"))
-//    }
     
     override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
         [.heartRate]

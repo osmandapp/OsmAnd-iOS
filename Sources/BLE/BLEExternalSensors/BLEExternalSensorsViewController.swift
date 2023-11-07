@@ -87,11 +87,18 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     
     override func getTitleForHeader(_ section: Int) -> String! {
         if DeviceHelper.shared.hasPairedDevices {
-            if let connected = sectionsDevicesData[.connected], !connected.isEmpty {
-                return localizedString("external_device_status_connected").uppercased()
-            }
-            if let disconnected = sectionsDevicesData[.disconnected], !disconnected.isEmpty {
-                return localizedString("external_device_status_disconnected").uppercased()
+            switch section {
+            case 0:
+                if let connected = sectionsDevicesData[.connected], !connected.isEmpty {
+                    return localizedString("external_device_status_connected").uppercased()
+                } else if let disconnected = sectionsDevicesData[.disconnected], !disconnected.isEmpty {
+                    return localizedString("external_device_status_disconnected").uppercased()
+                }
+            case 1:
+                if let disconnected = sectionsDevicesData[.disconnected], !disconnected.isEmpty {
+                    return localizedString("external_device_status_disconnected").uppercased()
+                }
+            default: break
             }
         }
         return nil
@@ -241,11 +248,11 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         sectionsDevicesData.removeAll()
         if let pairedDevices = DeviceHelper.shared.getSettingsForPairedDevices() {
             let peripherals = SwiftyBluetooth.retrievePeripherals(withUUIDs: pairedDevices.map { UUID(uuidString: $0.deviceId)!})
-            let disconnectedPeripherals = peripherals.filter { $0.state == .disconnected }
-            var connectedPeripherals = peripherals.filter { $0.state == .connected }
-            if connectedPeripherals.isEmpty {
-                connectedPeripherals = SwiftyBluetooth.retrieveConnectedPeripherals(withServiceUUIDs: GattAttributes.SUPPORTED_SERVICES.map { $0.CBUUIDRepresentation })
-            }
+            let disconnectedPeripherals = peripherals.filter { $0.state != .connected }
+            var connectedPeripherals = DeviceHelper.shared.connectedDevices//SwiftyBluetooth.retrieveConnectedPeripherals(withServiceUUIDs: GattAttributes.SUPPORTED_SERVICES.map { $0.CBUUIDRepresentation })//peripherals.filter { $0.state == .connected }
+//            if connectedPeripherals.isEmpty {
+//                connectedPeripherals = SwiftyBluetooth.retrieveConnectedPeripherals(withServiceUUIDs: GattAttributes.SUPPORTED_SERVICES.map { $0.CBUUIDRepresentation })
+//            }
             if !connectedPeripherals.isEmpty {
                 let connectedSection = tableData.createNewSection()
                 connectedPeripherals.forEach { _ in
@@ -254,14 +261,24 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                     row.key = ExternalSensorsConnectState.connected.rawValue
                 }
                 // TODO: not critical but you can optimization this
-                let connectedDevices = DeviceHelper.shared.connectedDevices
-                sectionsDevicesData[.connected] = DeviceHelper.shared.getDevicesFrom(peripherals: connectedPeripherals,
-                                                                                     pairedDevices: pairedDevices)
-                DeviceHelper.shared.connectedDevices = sectionsDevicesData[.connected]!
+//                let newConnectedPeripherals = connectedPeripherals.filter { item in
+//                    !DeviceHelper.shared.connectedDevices.contains(where: { $0.id == item.identifier.uuidString })
+//                }
+//                if !newConnectedPeripherals.isEmpty {
+//                    let newConnectedDevices = DeviceHelper.shared.getDevicesFrom(peripherals: connectedPeripherals,
+//                                                                                 pairedDevices: pairedDevices)
+//                    newConnectedDevices.forEach { DeviceHelper.shared.addConnected(device: $0) }
+//                   
+//                }
+                sectionsDevicesData[.connected] = connectedPeripherals//DeviceHelper.shared.connectedDevices
+//                sectionsDevicesData[.connected] = DeviceHelper.shared.getDevicesFrom(peripherals: connectedPeripherals,
+//                                                                                     pairedDevices: pairedDevices)
+//                DeviceHelper.shared.connectedDevices = sectionsDevicesData[.connected]!
             }
             if !disconnectedPeripherals.isEmpty {
                 createDesconnectedDevicesSection(disconnectedPeripherals: disconnectedPeripherals, pairedDevices: pairedDevices)
             }
+            tableView.reloadData()
         }
     }
     

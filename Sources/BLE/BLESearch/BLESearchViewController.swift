@@ -112,17 +112,22 @@ final class BLESearchViewController: OABaseNavbarViewController {
                                                object: nil)
     }
     
+    var discoveredDevices: [Device] {
+        let sortedDevices = BLEManager.shared.discoveredDevices.sorted { $0.peripheral.state == .connected && $1.peripheral.state != .connected }
+        return sortedDevices
+    }
+    
     override func generateData() {
-        let discoveredDevices = BLEManager.shared.discoveredDevices
+        tableData.clearAllData()
         if !discoveredDevices.isEmpty {
-            tableData.clearAllData()
             let section = tableData.createNewSection()
-            BLEManager.shared.discoveredDevices.forEach { _ in section.createNewRow() }
+            discoveredDevices.forEach { _ in section.createNewRow() }
         }
+        tableView.reloadData()
     }
     
     override func getTitleForHeader(_ section: Int) -> String! {
-        String(format: localizedString("bluetooth_found_title"), BLEManager.shared.discoveredDevices.count).uppercased()
+        String(format: localizedString("bluetooth_found_title"), discoveredDevices.count).uppercased()
     }
     
     override func getCustomHeight(forHeader section: Int) -> CGFloat {
@@ -131,15 +136,15 @@ final class BLESearchViewController: OABaseNavbarViewController {
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchDeviceTableViewCell.reuseIdentifier) as! SearchDeviceTableViewCell
-        if BLEManager.shared.discoveredDevices.count > indexPath.row {
-            cell.configure(item: BLEManager.shared.discoveredDevices[indexPath.row])
+        if discoveredDevices.count > indexPath.row {
+            cell.configure(item: discoveredDevices[indexPath.row])
         }
         return cell
     }
     
     override func onRowSelected(_ indexPath: IndexPath!) {
         let controller = BLEDescriptionViewController()
-        controller.device = BLEManager.shared.discoveredDevices[indexPath.row]
+        controller.device = discoveredDevices[indexPath.row]
         navigationController?.pushViewController(controller, animated: true)
     }
     
@@ -179,8 +184,15 @@ final class BLESearchViewController: OABaseNavbarViewController {
     
     private func startScan() {
         guard !BLEManager.shared.isScaning else {
+            print("startScan: isScaning")
+            BLEManager.shared.stopScan()
+            scanForPeripherals()
             return
         }
+        scanForPeripherals()
+    }
+    
+    private func scanForPeripherals() {
         showSearchingView()
         BLEManager.shared.scanForPeripherals(withServiceUUIDs: GattAttributes.SUPPORTED_SERVICES.map { $0.CBUUIDRepresentation }) { [weak self] in
             guard let self else { return }
@@ -214,7 +226,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
                 if !hasFirstResult {
                     startScan()
                 }
-                if !BLEManager.shared.discoveredDevices.isEmpty {
+                if !discoveredDevices.isEmpty {
                     showDiscoveredDevices()
                 }
             } else {

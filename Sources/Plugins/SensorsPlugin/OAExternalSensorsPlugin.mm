@@ -59,6 +59,7 @@
 - (void)disable
 {
     [super disable];
+    [[DeviceHelper shared] disconnectAllDevices];
 //    OAAppData *data = [OsmAndApp instance].data;
 //    [_lastUsedWeather set:data.weather];
 //    [data setWeather:NO];
@@ -67,6 +68,7 @@
 - (void)setEnabled:(BOOL)enabled
 {
     [super setEnabled:enabled];
+   
    // [[OsmAndApp instance].data setWeather:enabled ? [_lastUsedWeather get] : NO];
 }
 
@@ -95,7 +97,7 @@
 
 - (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType
 {
-    return [[SensorTextWidget alloc] initWithCustomId:@"" widgetType:widgetType];
+    return [[SensorTextWidget alloc] initWithCustomId:@"" widgetType:widgetType widgetParams:nil];
 }
 
 - (void)updateWidgetsInfo

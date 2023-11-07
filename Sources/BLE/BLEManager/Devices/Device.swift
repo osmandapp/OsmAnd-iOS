@@ -15,31 +15,27 @@ extension Notification.Name {
 
 class Device {
     var deviceType: DeviceType!
-    var peripheral: Peripheral?
+    var peripheral: Peripheral!
     var rssi = -1
     var deviceName: String = ""
     var didChangeCharacteristic: (() -> Void)? = nil
     private var RSSIUpdateTimer: Timer?
     
-    
-    
     init(deviceType: DeviceType!,
-         peripheral: Peripheral? = nil,
          rssi: Int = 1,
          deviceName: String = "",
          didChangeCharacteristic: ( () -> Void)? = nil,
          RSSIUpdateTimer: Timer? = nil) {
         self.deviceType = deviceType
-        self.peripheral = peripheral
         self.rssi = rssi
         self.deviceName = deviceName
         self.didChangeCharacteristic = didChangeCharacteristic
         self.RSSIUpdateTimer = RSSIUpdateTimer
-        self.sensors = [BLEBatterySensor(device: self, sensorId: id + "_battery_level")]
+        self.sensors = [BLEBatterySensor(device: self, sensorId: "battery_level")]
     }
     
     var id: String {
-        peripheral?.identifier.uuidString ?? "unknown"
+        peripheral.identifier.uuidString
     }
     
     var sensors = [Sensor]()
@@ -130,7 +126,7 @@ class Device {
 // RSSI
 extension Device {
     func notifyRSSI() {
-        RSSIUpdateTimer?.invalidate()
+        disableRSSI()
         RSSIUpdateTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { [weak self] timer in
             guard let self else {
                 timer.invalidate()
@@ -146,7 +142,7 @@ extension Device {
     }
     
     private func readRSSI() {
-        peripheral?.readRSSI { [weak self] result in
+        peripheral.readRSSI { [weak self] result in
             guard let self else { return }
             if case .success(let RSSI) = result {
                 if rssi != RSSI {

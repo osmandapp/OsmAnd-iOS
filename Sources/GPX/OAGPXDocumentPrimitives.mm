@@ -90,22 +90,6 @@
     return self;
 }
 
-- (void)addSubextension:(OAGpxExtension *)e
-{
-    if (![self.subextensions containsObject:e])
-        self.subextensions = [self.subextensions arrayByAddingObject:e];
-}
-
-- (BOOL)containsSubextension:(NSString *)key attributes:(NSDictionary *)attributes
-{
-    for (OAGpxExtension *e in self.subextensions)
-    {
-        if ([e.name isEqualToString:key] && [e.attributes isEqual:attributes])
-            return YES;
-    }
-    return NO;
-}
-
 - (id)copyWithZone:(NSZone *)zone
 {
     OAGpxExtension *copy = [[OAGpxExtension allocWithZone:zone] init];

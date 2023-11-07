@@ -82,9 +82,6 @@ struct RouteDataBundle;
 @property (nonatomic) NSDictionary *attributes;
 @property (nonatomic) NSArray *subextensions;
 
-- (void)addSubextension:(OAGpxExtension *)e;
-- (BOOL)containsSubextension:(NSString *)key attributes:(NSDictionary *)attributes;
-
 @end
 
 @interface OAGpxExtensions : NSObject

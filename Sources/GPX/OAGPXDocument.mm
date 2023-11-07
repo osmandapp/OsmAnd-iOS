@@ -562,6 +562,26 @@
     [m fillExtensions:meta];
 }
 
++ (void)fillPointsGroup:(OAWptPt *)wptPt
+               wptPtPtr:(const std::shared_ptr<OsmAnd::GpxDocument::WptPt> &)wptPtPtr
+                    doc:(const std::shared_ptr<OsmAnd::GpxDocument> &)doc
+{
+    std::shared_ptr<OsmAnd::GpxDocument::PointsGroup> pointsGroupRef = doc->pointsGroups[QString::fromNSString(wptPt.type)];
+    if (pointsGroupRef == nullptr)
+    {
+        pointsGroupRef.reset(new OsmAnd::GpxDocument::PointsGroup());
+        pointsGroupRef->name = QString::fromNSString(wptPt.type);
+        pointsGroupRef->iconName = QString::fromNSString([wptPt getIcon]);
+        pointsGroupRef->backgroundType = QString::fromNSString([wptPt getBackgroundIcon]);
+        pointsGroupRef->color = [[wptPt getColor] toFColorARGB];
+        doc->pointsGroups[pointsGroupRef->name] = pointsGroupRef;
+    }
+    if (!pointsGroupRef->points.contains(wptPtPtr))
+        pointsGroupRef->points.append(wptPtPtr);
+    if (!doc->points.contains(wptPtPtr))
+        doc->points.append(wptPtPtr);
+}
+
 + (void)fillWpt:(std::shared_ptr<OsmAnd::GpxDocument::WptPt>)wpt usingWpt:(OAWptPt *)w
 {
     wpt->position.latitude = w.position.latitude;
@@ -684,9 +704,6 @@
 
     if (self.pointsGroups.count > 0)
     {
-        OAGpxExtension *pointsGroupsExt = [[OAGpxExtension alloc] init];
-        pointsGroupsExt.name = @"points_groups";
-
         for (NSString *key in self.pointsGroups.allKeys)
         {
             OAPointsGroup *pointsGroup = self.pointsGroups[key];
@@ -708,13 +725,7 @@
 
             document->pointsGroups.insert(QString::fromNSString(key), pg);
             pg = nullptr;
-
-            OAGpxExtension *subExt = [[OAGpxExtension alloc] init];
-            subExt.name = @"group";
-            subExt.attributes = [pointsGroup toStringBundle];
-            [pointsGroupsExt addSubextension:subExt];
         }
-        [self addExtension:pointsGroupsExt];
     }
 
     for (OATrack *t in self.tracks)

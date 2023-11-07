@@ -102,49 +102,33 @@
 
     if (self.pointsGroups.count > 0)
     {
-        BOOL hasPointsGroups = YES;
-        OAGpxExtension *pointsGroupsExt = [self getExtensionByKey:@"points_groups"];
-        if (!pointsGroupsExt)
+        for (NSString *groupName in self.pointsGroups.allKeys)
         {
-            hasPointsGroups = NO;
-            pointsGroupsExt = [[OAGpxExtension alloc] init];
-            pointsGroupsExt.name = @"points_groups";
-        }
-
-        for (NSString *key in self.pointsGroups.allKeys)
-        {
-            OAPointsGroup *pointsGroup = self.pointsGroups[key];
-            NSDictionary *attributes = [pointsGroup toStringBundle];
-
-            if ([pointsGroupsExt containsSubextension:@"group" attributes:attributes])
-                continue;
-
-            pg.reset(new OsmAnd::GpxDocument::PointsGroup());
-            pg->name = QString::fromNSString(pointsGroup.name);
-            pg->iconName = QString::fromNSString(pointsGroup.iconName);
-            pg->backgroundType = QString::fromNSString(pointsGroup.backgroundType);
-            pg->color = [pointsGroup.color toFColorARGB];
-
-            for (OAWptPt *wptPt in pointsGroup.points)
+            pg = document->pointsGroups[QString::fromNSString(groupName)];
+            if (pg == nullptr)
             {
-                wpt.reset(new OsmAnd::GpxDocument::WptPt());
-                [self.class fillWpt:wpt usingWpt:wptPt];
-                pg->points.append(wpt);
-                document->points.append(wpt);
-                wpt = nullptr;
+                OAPointsGroup *pointsGroup = self.pointsGroups[groupName];
+
+                pg.reset(new OsmAnd::GpxDocument::PointsGroup());
+                pg->name = QString::fromNSString(pointsGroup.name);
+                pg->iconName = QString::fromNSString(pointsGroup.iconName);
+                pg->backgroundType = QString::fromNSString(pointsGroup.backgroundType);
+                pg->color = [pointsGroup.color toFColorARGB];
+
+                QList< std::shared_ptr<OsmAnd::GpxDocument::WptPt> > points;
+                for (OAWptPt *wptPt in pointsGroup.points)
+                {
+                    wpt.reset(new OsmAnd::GpxDocument::WptPt());
+                    [self.class fillWpt:wpt usingWpt:wptPt];
+                    pg->points.append(wpt);
+                    document->points.append(wpt);
+                    wpt = nullptr;
+                }
+
+                document->pointsGroups.insert(QString::fromNSString(groupName), pg);
             }
-
-            document->pointsGroups.insert(QString::fromNSString(key), pg);
             pg = nullptr;
-
-            OAGpxExtension *subExt = [[OAGpxExtension alloc] init];
-            subExt.name = @"group";
-            subExt.attributes = attributes;
-            [pointsGroupsExt addSubextension:subExt];
         }
-
-        if (!hasPointsGroups)
-            [self addExtension:pointsGroupsExt];
     }
     [self fillExtensions:document];
 }

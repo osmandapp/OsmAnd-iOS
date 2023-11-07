@@ -84,6 +84,9 @@
 
 + (OAWptPt *)fetchWpt:(std::shared_ptr<OsmAnd::GpxDocument::WptPt>)mark;
 + (void)fillWpt:(std::shared_ptr<OsmAnd::GpxDocument::WptPt>)wpt usingWpt:(OAWptPt *)w;
++ (void)fillPointsGroup:(OAWptPt *)wptPt
+               wptPtPtr:(const std::shared_ptr<OsmAnd::GpxDocument::WptPt> &)wptPtPtr
+                    doc:(const std::shared_ptr<OsmAnd::GpxDocument> &)doc;
 + (void)fillMetadata:(std::shared_ptr<OsmAnd::GpxDocument::Metadata>)meta usingMetadata:(OAMetadata *)m;
 + (void)fillTrack:(std::shared_ptr<OsmAnd::GpxDocument::Track>)trk usingTrack:(OATrack *)t;
 + (void)fillRoute:(std::shared_ptr<OsmAnd::GpxDocument::Route>)rte usingRoute:(OARoute *)r;

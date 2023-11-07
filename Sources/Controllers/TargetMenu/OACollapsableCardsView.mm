@@ -8,7 +8,7 @@
 
 #import "OACollapsableCardsView.h"
 #import "OAUtilities.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAAbstractCard.h"
@@ -73,7 +73,7 @@ static NSArray<NSString *> *nibNames;
 
 - (void) buildViews
 {
-    _cardCollection.backgroundColor = UIColor.whiteColor;
+    _cardCollection.backgroundColor = UIColor.groupBgColor;
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated

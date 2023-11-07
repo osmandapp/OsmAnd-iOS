@@ -3037,11 +3037,11 @@
 "map_settings_topography" = "Topografie";
 "shared_string_cache" = "Zwischenspeicher";
 "weather_updates_manual" = "Die Wettervorhersage muss manuell aktualisiert werden.";
-"click_on_widget" = "Klicke auf das Widget";
+"click_on_widget" = "Klicken Sie auf das Widget";
 "purchases_feature_relief_3d_description" = "Besitze und beobachte das maßstabsgetreue Modell deiner Nachbarschaft oder des gesamten Kontinents.";
 "unsaved_changes_will_be_lost_discard" = "Alle nicht gespeicherten Änderungen gehen verloren. Änderungen verwerfen?";
 "terrain_3D_maps" = "Geländekarten";
-"average_speed_skip_stops" = "Berücksichtige Zwischenstopps";
+"average_speed_skip_stops" = "Zwischenstopps berücksichtigen";
 "shared_string_relief_3d" = "3D-Relief";
 "average_speed_time_interval_desc" = "Gib das Zeitintervall für die Durchschnittsberechnung der Geschwindigkeit an.";
 "weather_update_parameters_wifi" = "Die Wettervorhersage wird nur aktualisiert, wenn ein Wi-Fi-Netzwerk verfügbar ist.";

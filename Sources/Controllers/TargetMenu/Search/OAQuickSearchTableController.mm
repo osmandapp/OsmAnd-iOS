@@ -41,7 +41,7 @@
 #import "OAPointDescription.h"
 #import "OATargetPointsHelper.h"
 #import "OAReverseGeocoder.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OASizes.h"
 #import "OAFavoritesHelper.h"
 #import "OASearchMoreCell.h"
@@ -709,7 +709,7 @@
                     if (!icon && [filter isKindOfClass:[OAPOIUIFilter class]])
                         icon = [OAPOIHelper getCustomFilterIcon:(OAPOIUIFilter *) filter];
                     OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:@"" icon:icon];
-                    cell.leftIconView.tintColor = UIColorFromRGB(color_osmand_orange);
+                    cell.leftIconView.tintColor = UIColor.iconColorSelected;
                     return cell;
                 }
                 else if ([res.object isKindOfClass:[OAPOIBaseType class]])
@@ -734,7 +734,7 @@
                     if (cell)
                     {
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                        [cell.titleLabel setTextColor:[UIColor blackColor]];
+                        [cell.titleLabel setTextColor:[UIColor textColorPrimary]];
                         [cell.titleLabel setText:[item getName]];
                         [cell.leftIconView setImage:[((OAPOICategory *)res.object) icon]];
                         [cell setCustomLeftSeparatorInset:isLast];
@@ -758,9 +758,9 @@
                 cell = (OARightIconTableViewCell *) nib[0];
                 [cell leftIconVisibility:NO];
                 [cell descriptionVisibility:NO];
-                cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
+                cell.titleLabel.textColor = UIColor.iconColorActive;
                 cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
-                cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+                cell.rightIconView.tintColor = UIColor.iconColorActive;
             }
             if (cell)
             {
@@ -803,7 +803,7 @@
                     cell.titleLabel.attributedText = nil;
                     [cell.titleLabel setText:@""];
                 }
-                cell.titleLabel.textColor = UIColorFromRGB(tag_hint_text_color);
+                cell.titleLabel.textColor = UIColor.iconColorActive;
             }
             return cell;
         }
@@ -851,7 +851,7 @@
                 [cell leftIconVisibility:NO];
                 cell.leftIconView.image = nil;
                 cell.titleLabel.attributedText = nil;
-                cell.titleLabel.textColor = UIColor.blackColor;
+                cell.titleLabel.textColor = UIColor.textColorPrimary;
                 [cell.titleLabel setText:[item getName]];
             }
             return cell;

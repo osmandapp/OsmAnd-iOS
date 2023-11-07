@@ -13,7 +13,7 @@
 #import "OAButtonTableViewCell.h"
 #import "OAEditPOIData.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "MaterialTextFields.h"
 #import "OAOSMSettings.h"
 #import "OAEditPOIData.h"
@@ -69,8 +69,8 @@
         [resultCell leftIconVisibility:NO];
         resultCell.userInteractionEnabled = NO;
         resultCell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-        resultCell.titleLabel.textColor = UIColorFromRGB(color_text_footer);
-        resultCell.descriptionLabel.textColor = UIColor.blackColor;
+        resultCell.titleLabel.textColor = UIColor.textColorSecondary;
+        resultCell.descriptionLabel.textColor = UIColor.textColorPrimary;
         resultCell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     }
     if (resultCell)
@@ -100,10 +100,13 @@
         [resultCell.buttonView addTarget:self action:@selector(deleteSectionPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     else
+    {
         resultCell.buttonView.hidden = YES;
+    }
     
     resultCell.fieldLabel.text = item[@"hint"];
     MDCMultilineTextField *textField = resultCell.textField;
+    textField.textColor = [UIColor textColorPrimary];
     textField.underline.hidden = YES;
     textField.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
     textField.placeholder = @"";
@@ -114,7 +117,7 @@
     [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
+    textField.clearButton.imageView.tintColor =  UIColor.iconColorDefault;
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
     
@@ -535,12 +538,12 @@
         {
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
             btn.frame = CGRectMake(xPosition + margin, 6, 0, 0);
-            btn.backgroundColor = UIColorFromRGB(tag_hint_background_color);
+            btn.backgroundColor = UIColor.buttonBgColorSecondary;
             btn.layer.masksToBounds = YES;
             btn.layer.cornerRadius = 4.0;
             btn.titleLabel.numberOfLines = 1;
             [btn setTitle:hint forState:UIControlStateNormal];
-            [btn setTitleColor:UIColorFromRGB(tag_hint_text_color) forState:UIControlStateNormal];
+            [btn setTitleColor:UIColor.buttonTextColorSecondary forState:UIControlStateNormal];
             [btn sizeToFit];
             
             [btn addTarget:self action:@selector(tagHintTapped:) forControlEvents:UIControlEventTouchUpInside];

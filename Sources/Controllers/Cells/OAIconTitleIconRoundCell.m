@@ -8,7 +8,6 @@
 
 #import "OAIconTitleIconRoundCell.h"
 #import "OAUtilities.h"
-#import "OAColors.h"
 
 #define kTitleTopBottomMargin 13.0
 #define defaultCellHeight 48.0

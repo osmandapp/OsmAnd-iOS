@@ -10,6 +10,7 @@
 #import "Localization.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXDocument.h"
 #import "OAFavoriteItem.h"
@@ -58,6 +59,14 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     return self;
 }
 
+- (void) traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        [self buildViews];
+}
+
 -(void) setData:(id)data
 {
     if ([data isKindOfClass:OAGpxWptItem.class])
@@ -94,10 +103,10 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     btn.layer.cornerRadius = 4.0;
     btn.layer.masksToBounds = YES;
     btn.layer.borderWidth = 0.8;
-    btn.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
-    btn.tintColor = UIColorFromRGB(color_primary_purple);
+    btn.layer.borderColor = UIColor.separatorColor.CGColor;
+    btn.tintColor = UIColor.textColorActive;
     btn.tag = tag;
-    [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(color_coordinates_background)] forState:UIControlStateHighlighted];
+    [btn setBackgroundImage:[OAUtilities imageWithColor:UIColor.iconColorActive] forState:UIControlStateHighlighted];
     btn.delegate = self;
     return btn;
 }
@@ -118,7 +127,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         }
         if ([_data[i] isEqual:_currentWpt] || [_data[i] isEqual:_favorite])
         {
-            btn.tintColor = UIColorFromRGB(color_tint_gray);
+            btn.tintColor = UIColor.iconColorDefault;
             btn.userInteractionEnabled = NO;
         }
         [self addSubview:btn];
@@ -224,14 +233,14 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     {
         OAButton *button = _buttons[tag];
         [UIView animateWithDuration:0.3 animations:^{
-            button.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
+            button.layer.backgroundColor = UIColor.iconColorActive.CGColor;
             button.layer.borderColor = UIColor.clearColor.CGColor;
             button.tintColor = UIColor.whiteColor;
         }                completion:^(BOOL finished) {
             [UIView animateWithDuration:0.2 animations:^{
                 button.layer.backgroundColor = UIColor.clearColor.CGColor;
-                button.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
-                button.tintColor = UIColorFromRGB(color_primary_purple);
+                button.layer.borderColor = UIColor.iconColorDefault.CGColor;
+                button.tintColor = UIColor.iconColorActive;
                 if (_data.count > tag)
                 {
                     OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;

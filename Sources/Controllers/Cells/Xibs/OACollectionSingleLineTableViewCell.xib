@@ -58,20 +58,20 @@
                                     </collectionView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W16-m3-jDw" userLabel="Right Action Button">
                                         <rect key="frame" x="337" y="6" width="36" height="36"/>
-                                        <color key="backgroundColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="0.099635479951397321" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" name="buttonBgColorTertiary"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="36" id="Okc-Mp-aLZ"/>
                                             <constraint firstAttribute="width" constant="36" id="eDI-9M-IgO"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="tintColor" name="buttonTextColorSecondary"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" image="ic_custom_add.png">
                                             <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <buttonConfiguration key="configuration" style="plain" image="ic_custom_add.png">
                                             <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
-                                            <color key="baseForegroundColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="baseForegroundColor" name="buttonTextColorSecondary"/>
                                         </buttonConfiguration>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -125,6 +125,12 @@
     </objects>
     <resources>
         <image name="ic_custom_add.png" width="30" height="30"/>
+        <namedColor name="buttonBgColorTertiary">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="0.15000000596046448" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="buttonTextColorSecondary">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="groupBgColor">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

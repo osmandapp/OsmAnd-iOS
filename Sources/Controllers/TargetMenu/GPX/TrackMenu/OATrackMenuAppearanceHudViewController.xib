@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -44,7 +45,7 @@
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wCQ-jO-kha" userLabel="Status Bar Background">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="viewBgColor"/>
                         </view>
                         <view contentMode="scaleToFill" id="Z2i-nm-ocC" userLabel="Content Container">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="406"/>
@@ -52,7 +53,7 @@
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yei-Pg-q9A" userLabel="Slider">
                                     <rect key="frame" x="197.5" y="6" width="19" height="2"/>
-                                    <color key="backgroundColor" red="0.79607843140000001" green="0.78039215689999997" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" name="separatorColor"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="2" id="5lN-D3-ffw"/>
                                         <constraint firstAttribute="width" constant="19" id="zfz-Kv-gvr"/>
@@ -84,7 +85,7 @@
                                             </constraints>
                                         </view>
                                     </subviews>
-                                    <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" name="viewBgColor"/>
                                     <constraints>
                                         <constraint firstItem="GHB-SE-z0U" firstAttribute="top" secondItem="yzx-9N-ib1" secondAttribute="top" constant="3" id="10m-bT-mDk"/>
                                         <constraint firstItem="WZz-Dd-qQQ" firstAttribute="leading" secondItem="yzx-9N-ib1" secondAttribute="leading" id="8EC-e6-h1O"/>
@@ -100,15 +101,17 @@
                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" scrollEnabled="NO" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="CTy-7m-ux9">
                                     <rect key="frame" x="0.0" y="56" width="414" height="350"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" name="viewBgColor"/>
+                                    <color key="tintColor" name="iconColorActive"/>
+                                    <color key="separatorColor" name="separatorColor"/>
                                 </tableView>
                                 <view hidden="YES" contentMode="scaleToFill" id="FVp-0e-c7g" userLabel="Toolbar">
                                     <rect key="frame" x="0.0" y="406" width="414" height="0.0"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" name="viewBgColor"/>
                                 </view>
                             </subviews>
-                            <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="viewBgColor"/>
                             <constraints>
                                 <constraint firstItem="Yei-Pg-q9A" firstAttribute="top" secondItem="Z2i-nm-ocC" secondAttribute="top" constant="6" id="4mt-s4-X7J"/>
                                 <constraint firstItem="Yei-Pg-q9A" firstAttribute="centerX" secondItem="Z2i-nm-ocC" secondAttribute="centerX" id="ZlC-WC-cbl"/>
@@ -116,17 +119,17 @@
                         </view>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="34I-jS-UdM"/>
-                    <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" name="viewBgColor"/>
                 </view>
                 <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ItH-eF-cbG" userLabel="Back Button Container">
-                    <rect key="frame" x="10" y="54" width="62" height="48"/>
+                    <rect key="frame" x="10" y="58" width="62" height="48"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bLs-VM-5BQ" userLabel="Back Button">
                             <rect key="frame" x="0.0" y="0.0" width="62" height="48"/>
                             <color key="backgroundColor" white="1" alpha="0.80377358489999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="tintColor" name="iconColorActive"/>
                             <state key="normal" image="ic_custom_arrow_back.png">
-                                <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="titleColor" name="textColorActive"/>
                             </state>
                             <connections>
                                 <action selector="onBackButtonPressed:" destination="-1" eventType="touchUpInside" id="1hM-hv-RGL"/>
@@ -144,14 +147,14 @@
                     </constraints>
                 </view>
                 <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZCE-pt-ron" userLabel="Done Button Container">
-                    <rect key="frame" x="330" y="54" width="74" height="48"/>
+                    <rect key="frame" x="330" y="58" width="74" height="48"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xxM-tZ-ruc" userLabel="Done Button">
                             <rect key="frame" x="0.0" y="0.0" width="74" height="48"/>
                             <color key="backgroundColor" white="1" alpha="0.80377358489999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="tintColor" name="iconColorActive"/>
                             <state key="normal" title="Done">
-                                <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="titleColor" name="textColorActive"/>
                             </state>
                             <connections>
                                 <action selector="onDoneButtonPressed:" destination="-1" eventType="touchUpInside" id="HLc-1j-cO6"/>
@@ -184,5 +187,17 @@
     <resources>
         <image name="ic_custom_appearance.png" width="30" height="30"/>
         <image name="ic_custom_arrow_back.png" width="30" height="30"/>
+        <namedColor name="iconColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="separatorColor">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="viewBgColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

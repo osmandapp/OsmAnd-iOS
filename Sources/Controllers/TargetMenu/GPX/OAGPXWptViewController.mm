@@ -18,7 +18,7 @@
 #import "OACollapsableWaypointsView.h"
 #import "OAPOI.h"
 #import "OAPOIViewController.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OACollapsableCoordinatesView.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OAPOIHelper.h"
@@ -184,7 +184,7 @@
     [mutAttributedTypeStr appendAttributedString:attributedTypeStr];
     [mutAttributedTypeStr appendAttributedString:[[NSAttributedString alloc] initWithString:address]];
     [mutAttributedTypeStr addAttributes:@{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
-                                           NSForegroundColorAttributeName : UIColorFromRGB(color_dialog_text_description_color_night) }
+                                           NSForegroundColorAttributeName : UIColor.textColorSecondary }
                                   range:NSMakeRange(0, mutAttributedTypeStr.length)];
     return mutAttributedTypeStr;
 }

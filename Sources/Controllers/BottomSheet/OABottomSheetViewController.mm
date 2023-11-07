@@ -13,10 +13,8 @@
 
 #import "Localization.h"
 #import "OAUtilities.h"
-#import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OASizes.h"
-#import "OsmAnd_Maps-Swift.h"
 
 #define kOABottomSheetWidth 320.0
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
@@ -276,7 +274,7 @@
     [_buttonsView insertSubview:buttonsView atIndex:0];
     UIView *divider = [[UIView alloc] initWithFrame:{0, 0, _buttonsView.bounds.size.width, 0.5}];
     divider.tag = kButtonsDividerTag;
-    divider.backgroundColor = UIColorFromRGB(color_divider_blur);
+    divider.backgroundColor = UIColor.separatorColor;
     divider.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [_buttonsView addSubview:divider];
     _cancelButton.backgroundColor = UIColor.clearColor;
@@ -316,6 +314,7 @@
     self.bottomSheetWindow.windowLevel = UIWindowLevelNormal;
     self.bottomSheetWindow.backgroundColor = [UIColor clearColor];
     self.bottomSheetWindow.windowScene = (UIWindowScene *)UIApplication.sharedApplication.mainScene;
+    [[ThemeManager shared] configureWithAppMode:[OAAppSettings sharedManager].applicationMode.get];
     
     UIInterfaceOrientation interfaceOrientation = CurrentInterfaceOrientation;
 

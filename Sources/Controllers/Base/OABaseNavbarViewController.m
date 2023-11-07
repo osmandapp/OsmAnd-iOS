@@ -554,7 +554,7 @@
         case EOABaseNavbarColorSchemeOrange:
             return UIColor.navBarBgColorPrimary;
         case EOABaseNavbarColorSchemeWhite:
-            return UIColor.viewBgColor;
+            return UIColor.groupBgColor;
         default:
             return self.tableView.backgroundColor;
     }

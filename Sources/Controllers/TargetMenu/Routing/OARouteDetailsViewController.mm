@@ -72,8 +72,8 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell.button setTitle:OALocalizedString(@"gpx_analyze") forState:UIControlStateNormal];
         [cell.button addTarget:self action:@selector(openRouteDetailsGraph) forControlEvents:UIControlEventTouchUpInside];
-        cell.button.backgroundColor = UIColorFromRGB(color_primary_purple);
-        [cell.button setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+        cell.button.backgroundColor = UIColor.buttonBgColorPrimary;
+        [cell.button setTitleColor:UIColor.buttonTextColorPrimary forState:UIControlStateNormal];
     }
     return cell;
 }
@@ -276,7 +276,7 @@
     {
         NSString *emission = [NSString stringWithFormat:@"    |    %@", _emission];
         [attrDescription addString:emission fontWeight:UIFontWeightRegular size:15.];
-        [attrDescription setColor:UIColorFromRGB(color_text_footer) forString:emission];
+        [attrDescription setColor:UIColor.textColorSecondary forString:emission];
     }
     return attrDescription;
 }
@@ -345,7 +345,7 @@
     }
     
     _cancelButton.layer.cornerRadius = 9.;
-    [self setupButtonAppearance:_startButton iconName:@"ic_custom_navigation_arrow.png" color:UIColor.whiteColor];
+    [self setupButtonAppearance:_startButton iconName:@"ic_custom_navigation_arrow.png" color:UIColor.buttonTextColorPrimary];
 }
 
 - (void) setupButtonAppearance:(UIButton *) button iconName:(NSString *)iconName color:(UIColor *)color

@@ -11,6 +11,7 @@
 #import "OARootViewController.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAUtilities.h"
 #import "OAAutoObserverProxy.h"
 #import "OADefaultFavorite.h"
@@ -95,7 +96,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     _sortingMode = EOADistance;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
+    self.tableView.separatorColor = UIColor.separatorColor;
     self.tableView.contentInset = UIEdgeInsetsMake(-16, 0, 0, 0);
     
     _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self

@@ -166,11 +166,11 @@
 "shared_string_widgets" = "Logrīki";
 "map_widget_right" = "Labā puse";
 "map_widget_left" = "Kreisā puse";
-"layer_map_appearance" = "Ekrāns";
+"layer_map_appearance" = "Ekrāna izskats";
 "edit_profile_screen_options_subtitle" = "Izvēlieties ekrāna iestatījumus profilam";
 "map_markers" = "Marķieri";
 "markers_history" = "Marķieru vēsture";
-"confirm_usage_speed_cameras" = "Dažās valstīs (Vācijā, Francijā, Itālijā un citās) brīdinājumi par fotoradariem ir aizliegti. OsmAnd neuzņemas atbildību likuma neievērošanas gadījumā. Apstipriniet tikai tad, ja drīkstat tos izmantot.";
+"confirm_usage_speed_cameras" = "Vairākās valstīs (Vācijā, Francijā, Itālijā un citur) brīdinājumi par ātruma kamerām  ir aizliegti. OsmAnd neuzņemas atbildību likuma neievērošanas gadījumā. Spiediet 'Jā' tikai tādā gadījumā, ja drīkstat lietot šo iespēju.";
 "map_markers_empty" = "You have no active map markers";
 "tracks_empty" = "Your track list is empty";
 "favorites_empty" = "You have not saved any favorite points";
@@ -180,11 +180,11 @@
 "carplay_profile_descr" = "Profile that will be used while connected to CarPlay.";
 "show_traffic_warnings" = "Satiksmes brīdinājumi";
 "show_pedestrian_warnings" = "Gājēju pārejas";
-"show_cameras" = "Fotoradari";
+"show_cameras" = "Ātruma kameras";
 "show_lanes" = "Joslas";
 "speak_street_names" = "Ielu nosaukumi (TTS)";
 "speak_speed_limit" = "Ātruma ierobežojums";
-"speak_cameras" = "Fotoradari";
+"speak_cameras" = "Ātruma kameras";
 "speak_traffic_warnings" = "Satiksmes brīdinājumi";
 "shared_string_gpx_waypoints" = "Treku ceļapunkti";
 "speak_favorites" = "Tuvākās izlases vietas";
@@ -249,7 +249,7 @@
 "snap_to_road" = "Tuvināt ceļam";
 "snap_to_road_descr" = "Snap position to roads during navigation";
 "show_warnings_title" = "Rādīt signālus…";
-"show_warnings_descr" = "Iestatīt satiksmes brīdinājumus (ātruma limitus, apstāšanās vietas, ātrumvaļņus, tuneļus), foto radarus un ceļa joslas.";
+"show_warnings_descr" = "Iestatīt satiksmes brīdinājumus (ātruma ierobežojumi, stop zīmes, ātruma vaļņi, tuneļi), ātruma kameras un ceļu joslas.";
 "speak_title" = "Paziņot…";
 "speak_descr" = "Izrunāt ielu nosaukumus, satiksmes brīdinājumus (piespiedu apstāšanos, ātrumvaļņus), fotoradarus un ātruma ierobežojumus.";
 "keep_informing" = "Atkārtot navigācijas instrukcijas";
@@ -371,7 +371,7 @@
 "traffic_warning_payment" = "Nodevu kabīne";
 "traffic_warning_stop" = "STOP zīme";
 "traffic_warning_calming" = "Satiksmes intensitāte";
-"traffic_warning_speed_camera" = "Fotoradars";
+"traffic_warning_speed_camera" = "Ātruma kameras";
 "traffic_warning" = "Satiksmes brīdinājumi";
 "traffic_warning_railways" = "Dzelzceļa pāreja";
 "traffic_warning_pedestrian" = "Gājēju pāreja";
@@ -1286,7 +1286,7 @@
 "quick_action_new_action" = "Pievienot darbību";
 "unsupported_items" = "Unsupported items";
 "quick_action_add_create_items" = "Izveidot objektus";
-"configure_map" = "Kartes detalizācija";
+"configure_map" = "Konfigurēt karti";
 "map_look_descr" = "Ikonas, logrīki";
 "quick_action_add_marker" = "Pievienot marķieri";
 "select_map_marker" = "Izvēlieties marķieri";
@@ -1402,7 +1402,7 @@
 "shared_string_add_profile" = "Pievienot profilu";
 "quick_action_switch_profile_descr" = "Darbības poga pārslēdz izvēlētos profilus.";
 "profile_type_user_string" = "User profile";
-"profile_type_osmand_string" = "OsmAnd profils";
+"profile_type_osmand_string" = "OsmAnd profili";
 "unsupported_action" = "Unsupported action";
 "unsupported_action_title" = "Unsupported action (%@)";
 "unsupported_action_descr" = "This quick action in not supported now. This can be fixed in new app versions.";
@@ -1542,24 +1542,16 @@
 //inapps
 "plugin_nautical_name" = "Jūras kartes";
 "product_desc_nautical" = "Nautical map of all world";
-"plugin_nautical_descr" = "\"Spraudnis papildina OsmaAnd kartes ar jūras kartēm kuģošanai, ūdenslēpošanai un citiem ūdens sporta veidiem.
-\n
-\nSpeciāls kartes papildinājums rāda navigācijas ceļus, zīmes un simbolus uz ūdens un iekšzemē krastu tuvumā. Katra navigācijas zīme ir aprakstīta, lai to varētu viegli indentificēt un ir dots skaidrojumspar tās nozīmi (kategorija, izmēri, krāsa, secība, atsauces, u.t.t.).
-\n
-\nLai atgrieztos uz OsmAnd standarta kartēm, deaktivizējiet spraudni vai nomainiet karti galvenajā izvēlnē - kartes attēlošana. \"";
+"plugin_nautical_descr" = "\"Spraudnis papildina OsmaAnd kartes ar jūras kartēm kuģošanai, ūdenslēpošanai un citiem ūdens sporta veidiem.\n\nSpeciāls kartes papildinājums rāda navigācijas ceļus, zīmes un simbolus uz ūdens un iekšzemē krastu tuvumā. Katra navigācijas zīme ir aprakstīta, lai to varētu viegli indentificēt un ir dots skaidrojumspar tās nozīmi (kategorija, izmēri, krāsa, secība, atsauces, u.t.t.).\n\nLai atgrieztos uz OsmAnd standarta kartēm, deaktivizējiet spraudni vai nomainiet karti galvenajā izvēlnē - kartes attēlošana. \"";
 "osmand_parking_plugin_name" = "Stāvvieta";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "osmand_parking_plugin_description" = "Viegli pamanāms logrīks uz kartes norāda jūsu auto stāvvietu un atlikušo laiku (ja ir uzlikts laika limits). Vietas koordinātes un laiks redzami arī atsevišķā sadaļā Manā Izvēlnē. Ir iespējams pievienot laika atgādinātāju Android kalendārā.";
 "plugin_ski_name" = "Slēpošanas kartes";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
-"plugin_ski_descr" = "\"Šis OsmAnd spraudnis ļauj piekļūt datiem par slēpošanas trasēm un maršrutiem, trošu vagoniem un pacēlājiem. Maršruti un trases tiek rādīti pēc krāsām, atkarībā no grūtības pakāpes un tiek attēlotas īpašā \"ziemas\" kartes stilā.
-\n
-\nAktivizējot spraudni, kartes stils tiek nomainīts uz \"Ziema un slēpošana,\" attēlojot visus ainavas elementus ziemas apstākļiem atbilstošus. Deaktivizēt spraudni var vai nu šeit vai nomainot kartes stilu kartes uzstādījumos. \"";
+"plugin_ski_descr" = "\"Šis OsmAnd spraudnis ļauj piekļūt datiem par slēpošanas trasēm un maršrutiem, trošu vagoniem un pacēlājiem. Maršruti un trases tiek rādīti pēc krāsām, atkarībā no grūtības pakāpes un tiek attēlotas īpašā \"ziemas\" kartes stilā.\n\nAktivizējot spraudni, kartes stils tiek nomainīts uz \"Ziema un slēpošana,\" attēlojot visus ainavas elementus ziemas apstākļiem atbilstošus. Deaktivizēt spraudni var vai nu šeit vai nomainot kartes stilu kartes uzstādījumos. \"";
 "record_plugin_name" = "Ceļa ieraksts";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"record_plugin_description" = "Aršo spraudni jūs varat manuāli saglabāt trekus, nospiežot GPX ieraksta logrīku uz kartes vai veikt automātisku visu maršrutu ierakstu GPX failā.
-\n
-\nIerakstītie treki vēlāk var tikt izmantoti treka analīzei, koplietošanai ar draugiem vai OSM izstrādei. Atlēti var izmantot trekus, laimonitorētu treniņus. Pamata treku analīze var tikt veikta tieši caur OsmAnd kā piemēram, apļu laiki, vidējais ātrums utt., bet paplašinātai analīzei trekus var atvērt citās programmās.";
+"record_plugin_description" = "Aršo spraudni jūs varat manuāli saglabāt trekus, nospiežot GPX ieraksta logrīku uz kartes vai veikt automātisku visu maršrutu ierakstu GPX failā.\n\nIerakstītie treki vēlāk var tikt izmantoti treka analīzei, koplietošanai ar draugiem vai OSM izstrādei. Atlēti var izmantot trekus, laimonitorētu treniņus. Pamata treku analīze var tikt veikta tieši caur OsmAnd kā piemēram, apļu laiki, vidējais ātrums utt., bet paplašinātai analīzei trekus var atvērt citās programmās.";
 "osm_editing_plugin_name" = "OSM labošana";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Rādīt iestatījumus OSM pilnveidošanai - OSM POI objektu izveidei/labošanai, GPX treku izplatīšanai un ziņošanai par OSM kļūdām. Vairāk uzziniet https://openstreetmap.org vietnē. Ikviens ir aicināts ņemt aktīvu dalību, ko ir iespējams darīt caur OsmAnd aplikāciju, norādot jūsu OSM lietotāja datus.";
@@ -1595,9 +1587,7 @@
 "preferred_languages" = "Preferred languages";
 "srtm_plugin_name" = "Kontūrlīniju spraudnis";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "\"Šis spraudnis dod iespēju rādīt kontūrlīniju un reljefu pārklājus uz standarta OsmAnd kartēm. Šo iespēju novērtēs dabas mīļotāji, aktīvās atpūtas cienītāji un jebkurš ar padziļinātu interesi par zemes reljefu. 
-\n
-\nGlobālie dati (starp 70° Z un 70° D) ir bāzēti uz SRTM(Shuttle Radar Topography Mission) un ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer) mērījumiem, attēlveidošanas rīks uz Terra\'s, vadošais NASA Zemes Novērošanas Sistēmas satelīts. ASTER ir kopējs veikums ar NASA, Japānas Ekonomikas Ministriju, Trade and Industry(METI) un Japānas Izplatījuma Sistēmām (J-spacesystems). \"";
+"srtm_plugin_description" = "\"Šis spraudnis dod iespēju rādīt kontūrlīniju un reljefu pārklājus uz standarta OsmAnd kartēm. Šo iespēju novērtēs dabas mīļotāji, aktīvās atpūtas cienītāji un jebkurš ar padziļinātu interesi par zemes reljefu. \n\nGlobālie dati (starp 70° Z un 70° D) ir bāzēti uz SRTM(Shuttle Radar Topography Mission) un ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer) mērījumiem, attēlveidošanas rīks uz Terra\'s, vadošais NASA Zemes Novērošanas Sistēmas satelīts. ASTER ir kopējs veikums ar NASA, Japānas Ekonomikas Ministriju, Trade and Industry(METI) un Japānas Izplatījuma Sistēmām (J-spacesystems). \"";
 "wikivoyage_travel_guide" = "Ceļojumu gids";
 "start_editing_card_image_text" = "Brīvais pasaules ceļojumu gids, ko ikviens var papildināt.";
 "wikivoyage_travel_guide_descr" = "Interesantāko vietu apraksti uz planētas OsmAnd lietotnē bez pieslēguma internetam.";
@@ -1787,8 +1777,7 @@
 "shared_string_select_all" = "Atlasīt visu";
 "create_custom_poi" = "Izveidot personalizētu filtru";
 "selected_categories" = "Atzīmētās kategorijas";
-"new_filter_desc" = "Ievadiet jaunā filtra vārdu,
-kas tiks pievienots jūsu Kategorijas sadaļai.";
+"new_filter_desc" = "Ievadiet jaunā filtra vārdu,kas tiks pievienots jūsu Kategorijas sadaļai.";
 "rearrange_categories" = "Pārkārtot kategorijas";
 "visible_categories" = "Visible categories";
 "hidden_categories" = "Hidden categories";
@@ -1902,7 +1891,7 @@ kas tiks pievienots jūsu Kategorijas sadaļai.";
 "routing_attr_height_description" = "Transportlīdzekļa maksimālais atļautais augstums maršrutos";
 "touting_specified_vehicle_parameters_descr" = "Specified vehicle parameters may affect routing.";
 "routing_attr_height_obstacles_name" = "Lietot elevācijas datus";
-"routing_attr_avoid_toll_name" = "Izvairīties no maksas ceļiem";
+"routing_attr_avoid_toll_name" = "Bez maksas ceļiem";
 "rendering_attr_appMode_description" = "Kartes optimizēšana atbilstošam lietotāja profilam";
 "routing_attr_avoid_ice_roads_fords_name" = "No ledus ceļiem un brasla";
 "rendering_value_germanRoadAtlas_name" = "Vāciešu kartes stilā";
@@ -1935,7 +1924,7 @@ kas tiks pievienots jūsu Kategorijas sadaļai.";
 "rendering_attr_showSurfaceGrade_name" = "Rādīt ceļa kvalitāti";
 "rendering_attr_currentTrackColor_name" = "GPX krāsa";
 "rendering_attr_contourLines_description" = "Iestatīt minimālo mērogu kontūrlīniju attēlošanai (nepieciešams SRTM-fails):";
-"routing_attr_avoid_stairs_description" = "Izvairīties no kāpnēm";
+"routing_attr_avoid_stairs_description" = "Bez kāpnēm";
 "rendering_attr_surface_mud_name" = "Dubļains";
 "rendering_attr_ice_road_name" = "Ledus ceļi";
 "rendering_attr_highway_class_track_grade4_name" = "4. klase";
@@ -1994,8 +1983,8 @@ kas tiks pievienots jūsu Kategorijas sadaļai.";
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Show node network cycle routes";
 "rendering_attr_hideText_name" = "Teksts";
 "rendering_attr_contourDensity_name" = "Kontūrlīniju biezums";
-"routing_attr_avoid_motorway_description" = "Izvairīties no automaģistrālēm";
-"routing_attr_avoid_motorway_name" = "Izvairīties no automaģistrālēm";
+"routing_attr_avoid_motorway_description" = "Bez automaģistrālēm";
+"routing_attr_avoid_motorway_name" = "Bez automaģistrālēm";
 "rendering_attr_hideWoodScrubs_name" = "Meži un brikšņi";
 "rendering_attr_surface_wood_name" = "Koks";
 "rendering_attr_smoothness_horrible_name" = "Šausmīgs";
@@ -2014,7 +2003,7 @@ kas tiks pievienots jūsu Kategorijas sadaļai.";
 "routing_attr_avoid_sett_description" = "Izvairīties no bruģa un bruģakmens";
 "rendering_attr_hikingRoutesOSMC_description" = "Renderēt ceļus pēc OSMC trasēm";
 "rendering_value_car_name" = "Auto";
-"routing_attr_avoid_unpaved_name" = "Izvairīties no grants ceļiem";
+"routing_attr_avoid_unpaved_name" = "Bez grants ceļiem";
 "rendering_attr_lessDetailed_name" = "Mazāk detaļu";
 "routing_attr_avoid_borders_description" = "Neiebraukt citas valsts teritorijā";
 "rendering_attr_highway_class_steps_name" = "Pakāpieni";
@@ -2034,14 +2023,14 @@ kas tiks pievienots jūsu Kategorijas sadaļai.";
 "rendering_attr_highway_class_cycleway_name" = "Veloceliņi";
 "routing_attr_piste_type_downhill_description" = "Slēpošanai paredzētās nobraucienu vietas un pacēlāji.";
 "rendering_attr_hideWaterPolygons_name" = "Nerādīt ūdenstilpnes";
-"routing_attr_avoid_stairs_name" = "Izvairīties no kāpnēm";
+"routing_attr_avoid_stairs_name" = "Bez kāpnēm";
 "rendering_value_walkingRoutesOSMC_name" = "Krāsas pēc OSMC simbola";
 "rendering_attr_piste_type_skitour_name" = "Skitour";
-"routing_attr_avoid_unpaved_description" = "Izvairīties no grants ceļiem.";
+"routing_attr_avoid_unpaved_description" = "Bez grants ceļiem";
 "routing_attr_prefer_unpaved_description" = "Prefer unpaved roads.";
 "rendering_attr_roadStyle_description" = "Pārklājuma veidi";
 "routing_attr_prefer_motorway_description" = "Maršruta plānošanā vispirms tiks dota priekšroka automaģistrālēm (ātrgaitas šosejām)";
-"routing_attr_avoid_ferries_name" = "Izvairīties no prāmjiem";
+"routing_attr_avoid_ferries_name" = "Bez prāmjiem";
 "rendering_attr_highway_class_track_name" = "Lauku ceļš";
 "rendering_attr_tracktype_grade4_name" = "Pārsvarā mīksts";
 "rendering_value_disabled_name" = "Izslēgts";
@@ -2118,7 +2107,7 @@ kas tiks pievienots jūsu Kategorijas sadaļai.";
 "rendering_attr_buildings15zoom_name" = "15x palielinājums ēkām";
 "rendering_attr_tracktype_grade1_name" = "Ciets (asfaltēts)";
 "routing_attr_avoid_train_description" = "Nelietot vilcienus";
-"routing_attr_avoid_shuttle_train_name" = "Izvairīties no piepilsētas vilcieniem";
+"routing_attr_avoid_shuttle_train_name" = "Izvairīties no starppilsētu vilcieniem";
 "rendering_attr_contourColorScheme_description" = "Kontūrlīniju krāsu shēma";
 "rendering_value_boldOutline_name" = "Biezas kontūras";
 "routing_attr_avoid_toll_description" = "Jāmaksā nodeva par ceļa lietošanu";
@@ -2175,7 +2164,7 @@ kas tiks pievienots jūsu Kategorijas sadaļai.";
 "rendering_value_brown_name" = "brūns";
 "rendering_attr_hideIcons_name" = "POI ikonas";
 "rendering_attr_roadColors_description" = "Izvēlieties ceļu krāsu shēmu:";
-"rendering_value_browse_map_name" = "Izpētīt karti";
+"rendering_value_browse_map_name" = "Skatīt karti";
 "rendering_attr_surface_asphalt_name" = "Asfalts";
 "rendering_value_translucent_orange_name" = "Caurspīdīgi oranžs";
 "rendering_attr_depthContours_description" = "Rādīt dziļuma kontūras un punktus";
@@ -2184,7 +2173,7 @@ kas tiks pievienots jūsu Kategorijas sadaļai.";
 "routing_attr_width_name" = "Width limit";
 "routing_attr_avoid_train_name" = "Nelietot vilcienus";
 "routing_attr_allow_motorway_description" = "Atļaut automağistrāles.";
-"rendering_attr_hmRendered_name" = "Kartes detalizācija";
+"rendering_attr_hmRendered_name" = "Vairāk kartes detaļas";
 "rendering_attr_roadColors_name" = "Ceļu krāsu shēma";
 "weight_limit_description" = "Norādiet transportlīdzekļa svaru, smagākiem transportlīdzekļiem var tik piemēroti maršruta ierobežojumi.";
 "height_limit_description" = "Norādiet transportlīdzekļa augstumu, augstākiem transportlīdzekļiem var tik piemēroti maršruta ierobežojumi.";
@@ -2208,7 +2197,7 @@ kas tiks pievienots jūsu Kategorijas sadaļai.";
 "icon_group_industrial" = "Industrial";
 "icon_group_education" = "Izglītība";
 "settings_item_read_error" = "Could not read %@.";
-"app_mode_default" = "Izpētīt karti";
+"app_mode_default" = "Skatīt karti";
 "app_mode_car" = "Auto";
 "app_mode_bicycle" = "Velobraucējs";
 "app_mode_pedestrian" = "Gājējs";
@@ -2289,8 +2278,7 @@ kas tiks pievienots jūsu Kategorijas sadaļai.";
 "data_settings" = "Dati";
 "shared_string_undefined" = "Nedefinēts";
 "shared_string_paused" = "Nopauzēts";
-"logout_from_osmand_cloud_decsr" = "Izrakstīties\?
-\nJums vajadzēs no jauna pierakstīties, lai dublētu vai atjaunotu datus.";
+"logout_from_osmand_cloud_decsr" = "Izrakstīties\?\nJums vajadzēs no jauna pierakstīties, lai dublētu vai atjaunotu datus.";
 "backup_and_restore" = "Dublēšana un atjaunošana";
 "no_purchases" = "Jums nav pirkumi";
 "map_updates_are_unavailable_yet" = "Karšu atjauninājumi pagaidām nav pieejami. :-(";
@@ -2313,13 +2301,12 @@ kas tiks pievienots jūsu Kategorijas sadaļai.";
 "recording_delete_confirm" = "Vai vēlaties dzēst ierakstu?";
 "shared_string_refresh" = "Atsvaidzināt";
 "download_all" = "Lejupielādēt visu";
-
 "rendering_attr_OSMMapperAssistantFixme_description" = "Rādīt fixme tagus";
-"routing_attr_avoid_footways_description" = "Izvairīties no gājēju celiņiem";
+"routing_attr_avoid_footways_description" = "Izvairīties no gājēju ceļiem";
 "rendering_attr_seabedDetail_name" = "Jūras dibena detaļas";
 "rendering_attr_OSMMapperAssistantFixme_name" = "Fixme tagi";
 "rendering_value_all_name" = "Visu";
-"routing_attr_avoid_footways_name" = "Izvairīties no gājēju celiņiem";
+"routing_attr_avoid_footways_name" = "Izvairīties no gājēju ceļiem";
 "rendering_attr_seabedDetail_description" = "Paplašināts teksts ar dibena klasifikāciju, apvienotiem reljefu tipiem, jūraszāļu kategorijas un taksoni";
 "auth_failed" = "Autorizācija neizdevās";
 "download_wikipedia_data" = "Lejupielādēt Vikipēdijas datus";
@@ -2330,3 +2317,6 @@ kas tiks pievienots jūsu Kategorijas sadaļai.";
 "lang_zh-Hant" = "Ķīniešu (tradicionālā)";
 "shared_string_height" = "Augstums";
 "icon_group_service" = "Serviss";
+"customize_route_line" = "Personalizēt maršruta līniju";
+"speed_camera_pois" = "Ātruma kameras POI's";
+"speed_cameras_alert" = "Dažās valstīs brīdinājumi par ātruma kamerām ir aizliegti ar likumu.";

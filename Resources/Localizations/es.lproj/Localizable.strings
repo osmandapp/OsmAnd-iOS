@@ -3044,3 +3044,4 @@
 "upload_poi" = "Cargar un PDI";
 "shared_string_uploading" = "Subiendo";
 "shared_string_discard_changes" = "Descartar los cambios";
+"ios_release_4_6" = "• Ahora se puede ver el mapa directamente en el panel de control de CarPlay\n• Alterna al tema nocturno para una vista más cómoda en condiciones de baja iluminación\n• Se han mejorado los diálogos tanto para la adición y carga de notas y PDI en OpenStreetMap\n• Restaura fácilmente los ajustes del complemento a valores predefinidos con una nueva opción «Restaurar a valores predefinidos»\n";

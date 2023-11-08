@@ -125,17 +125,17 @@ static NSArray<NSString *> *minTrackSpeedNames;
 
     UIAlertAction *resetAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_reset") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action)
     {
-        [_settings.mapSettingSaveTrackIntervalApproved resetToDefault];
-        [_settings.mapSettingSaveTrackIntervalGlobal resetToDefault];
-        [_settings.mapSettingSaveTrackInterval resetToDefault];
-        [_settings.saveTrackMinDistance resetToDefault];
-        [_settings.saveTrackPrecision resetToDefault];
-        [_settings.saveTrackMinSpeed resetToDefault];
-        [_settings.saveHeadingToGpx resetToDefault];
-        [_settings.saveTrackToGPX resetToDefault];
-        [_settings.autoSplitRecording resetToDefault];
-        [_settings.mapSettingSaveTrackIntervalGlobal resetToDefault];
-        [_settings.mapSettingSaveTrackInterval resetToDefault];
+        [_settings.mapSettingSaveTrackIntervalApproved resetModeToDefault:self.appMode];
+        [_settings.mapSettingSaveTrackIntervalGlobal resetModeToDefault:self.appMode];
+        [_settings.mapSettingSaveTrackInterval resetModeToDefault:self.appMode];
+        [_settings.saveTrackMinDistance resetModeToDefault:self.appMode];
+        [_settings.saveTrackPrecision resetModeToDefault:self.appMode];
+        [_settings.saveTrackMinSpeed resetModeToDefault:self.appMode];
+        [_settings.saveHeadingToGpx resetModeToDefault:self.appMode];
+        [_settings.saveTrackToGPX resetModeToDefault:self.appMode];
+        [_settings.autoSplitRecording resetModeToDefault:self.appMode];
+        [_settings.mapSettingSaveTrackIntervalGlobal resetModeToDefault:self.appMode];
+        [_settings.mapSettingSaveTrackInterval resetModeToDefault:self.appMode];
         [self generateData];
         [self.tableView reloadData];
     }];

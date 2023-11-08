@@ -2618,3 +2618,4 @@
 "rendering_attr_alpineHiking_name" = "難易度の分類";
 "rendering_value_sacScale_description" = "スイス・アルペン・クラブ(スイス山岳会)";
 "map_widget_current_speed" = "現在速度";
+"add_row" = "行を追加";

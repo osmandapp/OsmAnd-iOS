@@ -106,6 +106,47 @@ static NSArray<NSString *> *minTrackSpeedNames;
     return YES;
 }
 
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
+{
+    UIBarButtonItem *rightButton = [self createRightNavbarButton:nil iconName:@"ic_navbar_reset" action:@selector(onRightNavbarButtonPressed) menu:nil];
+    rightButton.accessibilityLabel = OALocalizedString(@"reset_to_default");
+    return @[rightButton];
+}
+
+- (void)onRightNavbarButtonPressed
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"reset_to_default") message:OALocalizedString(@"reset_plugin_to_default") preferredStyle:UIAlertControllerStyleActionSheet];
+    UIPopoverPresentationController *popPresenter = [alert popoverPresentationController];
+    popPresenter.sourceView = self.view;
+    popPresenter.barButtonItem = self.navigationItem.rightBarButtonItem;
+    popPresenter.permittedArrowDirections = UIPopoverArrowDirectionAny;
+
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil];
+
+    UIAlertAction *resetAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_reset") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action)
+    {
+        [_settings.mapSettingSaveTrackIntervalApproved resetModeToDefault:self.appMode];
+        [_settings.mapSettingSaveTrackIntervalGlobal resetModeToDefault:self.appMode];
+        [_settings.mapSettingSaveTrackInterval resetModeToDefault:self.appMode];
+        [_settings.saveTrackMinDistance resetModeToDefault:self.appMode];
+        [_settings.saveTrackPrecision resetModeToDefault:self.appMode];
+        [_settings.saveTrackMinSpeed resetModeToDefault:self.appMode];
+        [_settings.saveHeadingToGpx resetModeToDefault:self.appMode];
+        [_settings.saveTrackToGPX resetModeToDefault:self.appMode];
+        [_settings.autoSplitRecording resetModeToDefault:self.appMode];
+        [_settings.mapSettingSaveTrackIntervalGlobal resetModeToDefault:self.appMode];
+        [_settings.mapSettingSaveTrackInterval resetModeToDefault:self.appMode];
+        [self generateData];
+        [self.tableView reloadData];
+    }];
+
+    [alert addAction:resetAction];
+    [alert addAction:cancelAction];
+    alert.preferredAction = resetAction;
+
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 #pragma mark - Table data
 
 - (void)generateData

@@ -213,6 +213,8 @@
 
     if ([self openedFromMap])
         [self.backButton setImage:[UIImage templateImageNamed:@"ic_custom_cancel"] forState:UIControlStateNormal];
+    
+    [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;

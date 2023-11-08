@@ -1084,6 +1084,56 @@
     }
 }
 
+- (void) resetWeatherSettings
+{
+    @synchronized(_lock)
+    {
+        [_weatherUseOfflineDataProfile resetToDefault];
+        
+        [_weatherTempProfile resetToDefault];
+        [_weatherTempUnitProfile resetToDefault];
+        [_weatherTempUnitAutoProfile resetToDefault];
+        [_weatherTempAlphaProfile resetToDefault];
+        [_weatherTempToolbarAlphaProfile resetToDefault];
+        
+        [_weatherPressureProfile resetToDefault];
+        [_weatherPressureToolbarProfile resetToDefault];
+        [_weatherPressureUnitProfile resetToDefault];
+        [_weatherPressureToolbarUnitProfile resetToDefault];
+        [_weatherPressureUnitAutoProfile resetToDefault];
+        [_weatherPressureToolbarUnitAutoProfile resetToDefault];
+        [_weatherPressureAlphaProfile resetToDefault];
+        [_weatherPressureToolbarAlphaProfile resetToDefault];
+        
+        [_weatherWindProfile resetToDefault];
+        [_weatherWindToolbarProfile resetToDefault];
+        [_weatherWindUnitProfile resetToDefault];
+        [_weatherWindToolbarUnitProfile resetToDefault];
+        [_weatherWindUnitAutoProfile resetToDefault];
+        [_weatherWindToolbarUnitAutoProfile resetToDefault];
+        [_weatherWindAlphaProfile resetToDefault];
+        [_weatherWindToolbarAlphaProfile resetToDefault];
+        
+        [_weatherCloudProfile resetToDefault];
+        [_weatherCloudToolbarProfile resetToDefault];
+        [_weatherCloudUnitProfile resetToDefault];
+        [_weatherCloudToolbarUnitProfile resetToDefault];
+        [_weatherCloudUnitAutoProfile resetToDefault];
+        [_weatherCloudToolbarUnitAutoProfile resetToDefault];
+        [_weatherCloudAlphaProfile resetToDefault];
+        [_weatherCloudToolbarAlphaProfile resetToDefault];
+        
+        [_weatherPrecipProfile resetToDefault];
+        [_weatherPrecipToolbarProfile resetToDefault];
+        [_weatherPrecipUnitProfile resetToDefault];
+        [_weatherPrecipToolbarUnitProfile resetToDefault];
+        [_weatherPrecipUnitAutoProfile resetToDefault];
+        [_weatherPrecipToolbarUnitAutoProfile resetToDefault];
+        [_weatherPrecipAlphaProfile resetToDefault];
+        [_weatherPrecipToolbarAlphaProfile resetToDefault];
+    }
+}
+
 - (OAMapSource*) overlayMapSource
 {
     @synchronized(_lock)
@@ -1603,6 +1653,16 @@
     @synchronized (_lock)
     {
         [_travelGuidesImagesDownloadModeProfile set:downloadMode mode:mode];
+    }
+}
+
+- (void)resetWikipediaSettings
+{
+    @synchronized (_lock)
+    {
+        [_wikipediaGlobalProfile resetToDefault];
+        [_wikipediaLanguagesProfile resetToDefault];
+        [_wikipediaImagesDownloadModeProfile resetToDefault];
     }
 }
 

@@ -2906,3 +2906,9 @@
 "speak_route_recalculation" = "Meddela omberäkning av rutt";
 "over_any_network" = "Via alla nätverk";
 "map_widget_altitude_map_center" = "Höjd: kartans mitt";
+"backup_danger_zone" = "Farozon";
+"verification_code_missing_description" = "Det kan ta 10 minuter. Klicka på knappen nedan om koden inte är i skräppost-mappen.";
+"purchases_feature_desc_nautical" = "Få tillgång till information om havsdjup";
+"backup_delete_old_data_warning" = "Du håller på att radera ändringshistoriken för tidigare inläst data.\n\nAktuell version av datat bevaras på servern, men du kommer inte kunna återgå till tidigare ändringar.";
+"make_backup_descr" = "Det är många ändringar på den här enheten. Gör gärna en säkerhetskopia av dessa data för att inte förlora det.";
+"backup_delete_types_descr" = "Radera alla data för föråldrade datatyper från OsmAnd Cloud?";

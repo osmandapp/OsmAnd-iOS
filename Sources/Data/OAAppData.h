@@ -216,6 +216,9 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 - (OADownloadMode *)getWikipediaImagesDownloadMode:(OAApplicationMode *)mode;
 - (void)setWikipediaImagesDownloadMode:(OADownloadMode *)downloadMode mode:(OAApplicationMode *)mode;
 
+- (void)resetWikipediaSettings;
+- (void)resetWeatherSettings;
+
 - (OADownloadMode *)getTravelGuidesImagesDownloadMode:(OAApplicationMode *)mode;
 - (void)setTravelGuidesImagesDownloadMode:(OADownloadMode *)downloadMode mode:(OAApplicationMode *)mode;
 

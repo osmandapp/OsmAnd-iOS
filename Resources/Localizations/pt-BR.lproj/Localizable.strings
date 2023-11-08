@@ -3041,3 +3041,5 @@
 "weather_update_parameters_disabled" = "As atualizações automáticas serão desativadas.";
 "auto_update" = "Atualização automática";
 "weather_update_parameters_any_network" = "A previsão do tempo será atualizada em qualquer rede. Dados móveis podem ser usados.";
+"upload_poi" = "Subir POI";
+"shared_string_system_default" = "Padrão do sistema";

@@ -3334,6 +3334,8 @@
 "map_widget_ant_bicycle_speed_desc" = "Shows speed of travelingz";
 "map_widget_ant_bicycle_dist" = "Bicycle Distance";
 "map_widget_ant_bicycle_dist_desc" = "Shows travelled distance";
+"shared_string_temperature" = "Temperature";
+"sensor_temperature_desc" = "Shows temperature from sensor";
 
 "beats_per_minute_short" = "bpm";
 "shared_string_chest" = "Chest";

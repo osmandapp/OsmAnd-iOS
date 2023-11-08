@@ -149,9 +149,8 @@ final class BLESearchViewController: OABaseNavbarViewController {
     }
     
     deinit {
-        tableData.clearAllData()
         BLEManager.shared.stopScan()
-        NotificationCenter.default.removeObserver(self)
+        BLEManager.shared.removeAllDiscoveredDevices()
     }
     
     private func showSearchingView() {

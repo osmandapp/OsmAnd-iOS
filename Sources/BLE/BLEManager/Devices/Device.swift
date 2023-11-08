@@ -100,26 +100,26 @@ class Device {
     /*
      Printing description of advertisementData:
      ▿ 6 elements
-       ▿ 0 : 2 elements
-         - key : "kCBAdvDataTimestamp"
-         - value : 717078802.347859
-       ▿ 1 : 2 elements
-         - key : "kCBAdvDataRxSecondaryPHY"
-         - value : 0
-       ▿ 2 : 2 elements
-         - key : "kCBAdvDataIsConnectable"
-         - value : 1
-       ▿ 3 : 2 elements
-         - key : "kCBAdvDataRxPrimaryPHY"
-         - value : 1
-       ▿ 4 : 2 elements
-         - key : "kCBAdvDataLocalName"
-         - value : Heart Rate Test Alex
-       ▿ 5 : 2 elements
-         - key : "kCBAdvDataServiceUUIDs"
-         ▿ value : 2 elements
-           - 0 : Device Information
-           - 1 : Heart Rate
+     ▿ 0 : 2 elements
+     - key : "kCBAdvDataTimestamp"
+     - value : 717078802.347859
+     ▿ 1 : 2 elements
+     - key : "kCBAdvDataRxSecondaryPHY"
+     - value : 0
+     ▿ 2 : 2 elements
+     - key : "kCBAdvDataIsConnectable"
+     - value : 1
+     ▿ 3 : 2 elements
+     - key : "kCBAdvDataRxPrimaryPHY"
+     - value : 1
+     ▿ 4 : 2 elements
+     - key : "kCBAdvDataLocalName"
+     - value : Heart Rate
+     ▿ 5 : 2 elements
+     - key : "kCBAdvDataServiceUUIDs"
+     ▿ value : 2 elements
+     - 0 : Device Information
+     - 1 : Heart Rate
      */
 }
 

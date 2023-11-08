@@ -46,7 +46,11 @@ final class SensorTextWidget: OATextInfoWidget {
                 if cachedValue != formattedValue.value {
                     cachedValue = formattedValue.value
                     print("externalDeviceId: \(externalDeviceId) | value: \(formattedValue.value)")
-                    setText(formattedValue.value, subtext: formattedValue.unit)
+                    if formattedValue.value != "0" {
+                        setText(formattedValue.value, subtext: formattedValue.unit)
+                    } else {
+                        setText("-", subtext: nil)
+                    }
                 }
             } else {
                 setText("-", subtext: nil)

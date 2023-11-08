@@ -36,7 +36,7 @@ class SensorDataField {
         if value == nil, let numberValue {
             value = numberValue.stringValue
         }
-        return FormattedValue(valueSrc: number, value: value ?? "", unit: unitNameId);
+        return FormattedValue(valueSrc: number, value: value ?? "-", unit: unitNameId);
     }
 }
 

@@ -69,6 +69,8 @@ final class BLEManager {
                     return
                 }
                 if let device = DeviceHelper.shared.connectedDevices.first(where: { $0.id == peripheral.identifier.uuidString }) {
+                    device.peripheral = peripheral
+                    device.addObservers()
                     discoveredDevices.append(device)
                     successHandler()
                 } else {
@@ -85,9 +87,6 @@ final class BLEManager {
                         device.deviceName = deviceName
                         device.addObservers()
                         discoveredDevices.append(device)
-    //                    if device.peripheral.state == .connected {
-    //                        DeviceHelper.shared.addConnected(device: device)
-    //                    }
                         successHandler()
                     }
                 }
@@ -123,7 +122,7 @@ final class BLEManager {
         }
     }
     
-    func removeDiscoveredDevices() {
+    func removeAndDisconnectDiscoveredDevices() {
         BLEManager.shared.discoveredDevices.forEach {
             $0.disableRSSI()
             $0.peripheral.disconnect(completion: { _ in })
@@ -143,5 +142,9 @@ final class BLEManager {
         SwiftyBluetooth.asyncState { _ in
             completion(SwiftyBluetooth.Central.sharedInstance.state)
         }
+    }
+    
+    func removeAllDiscoveredDevices() {
+        discoveredDevices.removeAll()
     }
 }

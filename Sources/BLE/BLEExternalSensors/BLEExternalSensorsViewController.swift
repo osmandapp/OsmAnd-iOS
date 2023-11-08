@@ -248,32 +248,24 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         sectionsDevicesData.removeAll()
         if let pairedDevices = DeviceHelper.shared.getSettingsForPairedDevices() {
             let peripherals = SwiftyBluetooth.retrievePeripherals(withUUIDs: pairedDevices.map { UUID(uuidString: $0.deviceId)!})
+            let connectedPeripherals = peripherals.filter { $0.state == .connected }
+            for peripheral in connectedPeripherals {
+                if let index = DeviceHelper.shared.connectedDevices.firstIndex(where: { $0.id == peripheral.identifier.uuidString }) {
+                    DeviceHelper.shared.connectedDevices[index].peripheral = peripheral
+                    DeviceHelper.shared.connectedDevices[index].addObservers()
+                }
+            }
             let disconnectedPeripherals = peripherals.filter { $0.state != .connected }
-            var connectedPeripherals = DeviceHelper.shared.connectedDevices//SwiftyBluetooth.retrieveConnectedPeripherals(withServiceUUIDs: GattAttributes.SUPPORTED_SERVICES.map { $0.CBUUIDRepresentation })//peripherals.filter { $0.state == .connected }
-//            if connectedPeripherals.isEmpty {
-//                connectedPeripherals = SwiftyBluetooth.retrieveConnectedPeripherals(withServiceUUIDs: GattAttributes.SUPPORTED_SERVICES.map { $0.CBUUIDRepresentation })
-//            }
-            if !connectedPeripherals.isEmpty {
+            var connectedDevices = DeviceHelper.shared.connectedDevices
+            
+            if !connectedDevices.isEmpty {
                 let connectedSection = tableData.createNewSection()
-                connectedPeripherals.forEach { _ in
+                connectedDevices.forEach { _ in
                     let row = connectedSection.createNewRow()
                     row.cellType = SearchDeviceTableViewCell.reuseIdentifier
                     row.key = ExternalSensorsConnectState.connected.rawValue
                 }
-                // TODO: not critical but you can optimization this
-//                let newConnectedPeripherals = connectedPeripherals.filter { item in
-//                    !DeviceHelper.shared.connectedDevices.contains(where: { $0.id == item.identifier.uuidString })
-//                }
-//                if !newConnectedPeripherals.isEmpty {
-//                    let newConnectedDevices = DeviceHelper.shared.getDevicesFrom(peripherals: connectedPeripherals,
-//                                                                                 pairedDevices: pairedDevices)
-//                    newConnectedDevices.forEach { DeviceHelper.shared.addConnected(device: $0) }
-//                   
-//                }
-                sectionsDevicesData[.connected] = connectedPeripherals//DeviceHelper.shared.connectedDevices
-//                sectionsDevicesData[.connected] = DeviceHelper.shared.getDevicesFrom(peripherals: connectedPeripherals,
-//                                                                                     pairedDevices: pairedDevices)
-//                DeviceHelper.shared.connectedDevices = sectionsDevicesData[.connected]!
+                sectionsDevicesData[.connected] = connectedDevices
             }
             if !disconnectedPeripherals.isEmpty {
                 createDesconnectedDevicesSection(disconnectedPeripherals: disconnectedPeripherals, pairedDevices: pairedDevices)

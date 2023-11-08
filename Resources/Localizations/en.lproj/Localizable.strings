@@ -3214,6 +3214,11 @@
 • Changed direction of tilt gesture\n
 • Fixed issue with favorites export, that could lead to data loss\n";
 
+"ios_release_4_6" = "• Now you can view map directly on your CarPlay dashboard\n
+• Switch to Night Theme for a more comfortable viewing experience in low light conditions\n
+• Improved dialogs for adding notes and uploading notes and POIs to OpenStreetMap\n
+• Easily restore your plugin settings to the installation defaults with a new \"Reset to Default\" option\n";
+
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Don\'t hide waterway tunnels";
 "rendering_attr_natureReserves_description" = "Show nature reserve, protected areas, and national parks.";

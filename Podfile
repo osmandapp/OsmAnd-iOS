@@ -20,6 +20,7 @@ def defaultPods
     pod 'BRCybertron', '~> 1.1.1'
     pod 'MCBinaryHeap', '~> 0.1'
     pod 'TTRangeSlider', '~> 1.0.6'
+    pod 'SwiftLint', '~> 0.52.4'
 end
 
 target 'OsmAnd Maps' do

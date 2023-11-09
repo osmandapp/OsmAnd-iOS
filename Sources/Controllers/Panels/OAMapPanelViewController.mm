@@ -2094,7 +2094,10 @@ typedef enum
 
 - (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu
 {
-    [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:nil];
+    [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:^{
+        if (_targetMenuView.needsManualContextMode)
+            [self enterContextMenuMode];
+    }];
 }
 
 - (void)hideMultiMenuIfNeeded {

@@ -54,15 +54,14 @@ final class DescriptionDeviceHeader: UIView {
     }
     
     private func configureConnectUI(item: Device) {
-        switch item.peripheral.state {
-        case .connected:
+        if item.isConnected {
             connectStatusLabel.text = localizedString("external_device_status_connected")
             signalIndicatorImageView.tintColor = UIColor.buttonBgColorPrimary
             updateRSSI(with: item.rssi)
             deviceImageView.image = item.getServiceConnectedImage
             configureConnectButtonTitle(with: .disconnected)
             imageContainerView.backgroundColor = UIColor.buttonBgColorTertiary
-        default:
+        } else {
             connectStatusLabel.text = localizedString("external_device_status_disconnected")
             signalIndicatorImageView.tintColor = UIColor.iconColorSecondary
             signalIndicatorImageView.image = UIImage(named: "ic_small_signal_not_found")

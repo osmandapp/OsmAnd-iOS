@@ -113,7 +113,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
     }
     
     var discoveredDevices: [Device] {
-        let sortedDevices = BLEManager.shared.discoveredDevices.sorted { $0.peripheral.state == .connected && $1.peripheral.state != .connected }
+        let sortedDevices = BLEManager.shared.discoveredDevices.sorted { $0.isConnected && !$1.isConnected }
         return sortedDevices
     }
     

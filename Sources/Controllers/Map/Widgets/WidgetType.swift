@@ -269,7 +269,7 @@ extension WidgetType {
     
     static let bicycleSpeed = WidgetType(ordinal: 50, id: "bicycleSpeed", title: localizedString("map_widget_ant_bicycle_speed"), descr: localizedString("map_widget_ant_bicycle_speed_desc"), dayIconName: "widget_sensor_speed", nightIconName: "widget_sensor_speed", group: .externalSensors, defaultPanel: .rightPanel)
     
-    static let temperature = WidgetType(ordinal: 51, id: "temperature", title: localizedString("shared_string_temperature"), descr: localizedString("sensor_temperature_desc"), dayIconName: "", nightIconName: "", group: .externalSensors, defaultPanel: .rightPanel)
+    static let temperature = WidgetType(ordinal: 51, id: "temperature", title: localizedString("shared_string_temperature"), descr: localizedString("sensor_temperature_desc"), dayIconName: "widget_weather_temperature_day", nightIconName: "widget_weather_temperature_night", group: .externalSensors, defaultPanel: .rightPanel)
         
     static let values = [nextTurn,
                          smallNextTurn,
@@ -335,6 +335,7 @@ extension WidgetType {
                          bicycleCadence,
                          bicyclePower,
                          bicycleDistance,
-                         bicycleSpeed
+                         bicycleSpeed,
+                         temperature
     ]
 }

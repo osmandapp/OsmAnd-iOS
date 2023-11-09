@@ -34,7 +34,7 @@ final class SensorTextWidget: OATextInfoWidget {
     private func updateSensorData(sensor: Sensor?) {
         if let sensor, let widgetType {
             let dataList = sensor.getLastSensorDataList()
-            if sensor.device.peripheral.state != .connected || dataList?.isEmpty ?? false {
+            if !sensor.device.isConnected || dataList?.isEmpty ?? false {
                 setText("-", subtext: nil)
                 return
             }
@@ -70,6 +70,22 @@ final class SensorTextWidget: OATextInfoWidget {
     
     override func isMetricSystemDepended() -> Bool {
         return true
+    }
+    
+    override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
+        let data = OATableDataModel()
+        let section = data.createNewSection()
+        section.headerText = localizedString("shared_string_settings")
+
+        let settingRow = section.createNewRow()
+        settingRow.cellType = OAValueTableViewCell.getIdentifier()
+        settingRow.iconName = "ic_custom_sensor"
+        settingRow.iconTintColor = UIColor.iconColorDefault
+        settingRow.key = "external_sensor_key"
+        settingRow.title = localizedString("external_sensors_source_of_data")
+        settingRow.descr = localizedString("shared_string_none")
+
+        return data
     }
     
     private func getCurrentSensor() -> Sensor? {

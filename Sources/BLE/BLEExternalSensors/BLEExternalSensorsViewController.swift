@@ -249,12 +249,8 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         if let pairedDevices = DeviceHelper.shared.getSettingsForPairedDevices() {
             let peripherals = SwiftyBluetooth.retrievePeripherals(withUUIDs: pairedDevices.map { UUID(uuidString: $0.deviceId)!})
             let connectedPeripherals = peripherals.filter { $0.state == .connected }
-            for peripheral in connectedPeripherals {
-                if let index = DeviceHelper.shared.connectedDevices.firstIndex(where: { $0.id == peripheral.identifier.uuidString }) {
-                    DeviceHelper.shared.connectedDevices[index].peripheral = peripheral
-                    DeviceHelper.shared.connectedDevices[index].addObservers()
-                }
-            }
+            DeviceHelper.shared.updatePeripheralsForConnectedDevices(peripherals: connectedPeripherals)
+            
             let disconnectedPeripherals = peripherals.filter { $0.state != .connected }
             var connectedDevices = DeviceHelper.shared.connectedDevices
             

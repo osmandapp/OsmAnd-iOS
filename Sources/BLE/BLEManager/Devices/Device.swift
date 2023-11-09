@@ -38,6 +38,10 @@ class Device {
         peripheral.identifier.uuidString
     }
     
+    var isConnected: Bool {
+        peripheral.state == .connected
+    }
+    
     var sensors = [Sensor]()
     var sections: Dictionary<String, Any> = [:]
     

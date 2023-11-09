@@ -30,6 +30,41 @@ final class DeviceHelper: NSObject {
     
     private override init() {}
     
+    func getConnectedDevicesForWidget(type: WidgetType) -> [Device]? {
+        var devices = connectedDevices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
+        return devices
+    }
+    
+    func updatePeripheralsForConnectedDevices(peripherals: [Peripheral]) {
+        for peripheral in peripherals {
+            if let index = connectedDevices.firstIndex(where: { $0.id == peripheral.identifier.uuidString }) {
+                connectedDevices[index].peripheral = peripheral
+                connectedDevices[index].addObservers()
+            }
+        }
+    }
+    
+    func gatConnectedAndPaireDisconnectedDevicesFor(type: WidgetType) -> [Device]? {
+        if let pairedDevices = getSettingsForPairedDevices() {
+            let peripherals = SwiftyBluetooth.retrievePeripherals(withUUIDs: pairedDevices.map { UUID(uuidString: $0.deviceId)!})
+            let connectedPeripherals = peripherals.filter { $0.state == .connected }
+            updatePeripheralsForConnectedDevices(peripherals: connectedPeripherals)
+            
+            let disconnectedPeripherals = peripherals.filter { $0.state != .connected }
+            let diconnectedDevices = getDevicesFrom(peripherals: disconnectedPeripherals,
+                                                                                    pairedDevices: pairedDevices)
+            
+            let devices = connectedDevices + diconnectedDevices
+            return devices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
+        
+        }
+        return nil
+    }
+    
+    func getConnectedAndDisconnectedDevicesForWidget(type: WidgetType) -> [Device]? {
+        connectedDevices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
+    }
+    
     func getSettingsForPairedDevices() -> [DeviceSettings]? {
         devicesSettingsCollection.getSettingsForPairedDevices()
     }

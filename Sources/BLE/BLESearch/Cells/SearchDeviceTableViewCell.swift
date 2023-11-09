@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class SearchDeviceTableViewCell: UITableViewCell {
+class SearchDeviceTableViewCell: UITableViewCell {
     @IBOutlet private weak var deviceNameLabel: UILabel!
     @IBOutlet private weak var deviceImageView: UIImageView!
     @IBOutlet private weak var signalIndicatorImageView: UIImageView!
@@ -19,13 +19,12 @@ final class SearchDeviceTableViewCell: UITableViewCell {
     }
     
     private func configureConnectUI(item: Device) {
-        switch item.peripheral.state {
-        case .connected:
+        if item.isConnected {
             connectStatusLabel.text = localizedString("external_device_status_connected")
             signalIndicatorImageView.tintColor = UIColor.buttonBgColorPrimary
             signalIndicatorImageView.configureSignalImage(signal: item.rssi)
             deviceImageView.image = item.getServiceConnectedImage
-        default:
+        } else {
             connectStatusLabel.text = localizedString("external_device_status_disconnected")
             signalIndicatorImageView.tintColor = UIColor.iconColorSecondary
             signalIndicatorImageView.image = UIImage(named: "ic_small_signal_not_found")

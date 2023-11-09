@@ -3331,11 +3331,15 @@
 "map_widget_ant_bicycle_cadence" = "Bicycle Cadence";
 "map_widget_ant_bicycle_cadence_desc" = "Shows speed at which the user is pedalling";
 "map_widget_ant_bicycle_speed" = "Bicycle Speed";
-"map_widget_ant_bicycle_speed_desc" = "Shows speed of travelingz";
+"map_widget_ant_bicycle_speed_desc" = "Shows speed of traveling";
 "map_widget_ant_bicycle_dist" = "Bicycle Distance";
 "map_widget_ant_bicycle_dist_desc" = "Shows travelled distance";
 "shared_string_temperature" = "Temperature";
 "sensor_temperature_desc" = "Shows temperature from sensor";
+
+"there_are_no_connected_sensors_of_this_type" = "There are no connected sensors of this type";
+"external_sensors_not_found" = "Sensors not found";
+"external_sensors_source_of_data" = "Source of data";
 
 "beats_per_minute_short" = "bpm";
 "shared_string_chest" = "Chest";
@@ -3386,8 +3390,6 @@
 "external_device_status_connected" = "Connected";
 "bluetooth_found_title" = "Found: %d";
 "external_device_menu_forget" = "Forget";
-
-            
 
 /**
 

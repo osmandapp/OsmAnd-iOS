@@ -27,12 +27,11 @@
     OACommonBoolean *_lastUsedSensor;
     
     SensorTextWidget *_heartRateTempControl;
-//
-//    OAWeatherWidget *_weatherTempControl;
-//    OAWeatherWidget *_weatherPressureControl;
-//    OAWeatherWidget *_weatherWindSpeedControl;
-//    OAWeatherWidget *_weatherCloudControl;
-//    OAWeatherWidget *_weatherPrecipControl;
+    SensorTextWidget *_bicycleCadenceTempControl;
+    SensorTextWidget *_bicyclePowerTempControl;
+    SensorTextWidget *_bicycleDistanceTempControl;
+    SensorTextWidget *_bicycleSpeedTempControl;
+    SensorTextWidget *_temperatureTempControl;
 }
 
 - (instancetype)init
@@ -42,11 +41,11 @@
     {
         _lastUsedSensor = [OACommonBoolean withKey:kLastUsedExternalSensorKey defValue:NO];
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.heartRate appModes:@[]];
-        
-//        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.weatherAirPressureWidget appModes:@[]];
-//        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.weatherWindWidget appModes:@[]];
-//        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.weatherCloudsWidget appModes:@[]];
-//        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.weatherPrecipitationWidget appModes:@[]];
+        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.bicycleCadence appModes:@[]];
+        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.bicyclePower appModes:@[]];
+        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.bicycleDistance appModes:@[]];
+        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.bicycleSpeed appModes:@[]];
+        [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.temperature appModes:@[]];
     }
     return self;
 }
@@ -84,7 +83,12 @@
 
 - (NSArray<NSString *> *)getWidgetIds
 {
-    return @[OAWidgetType.heartRate.id];
+    return @[OAWidgetType.heartRate.id,
+             OAWidgetType.bicycleCadence.id,
+             OAWidgetType.bicyclePower.id,
+             OAWidgetType.bicycleDistance.id,
+             OAWidgetType.bicycleSpeed.id,
+             OAWidgetType.temperature.id];
 }
 
 - (void)createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
@@ -93,6 +97,22 @@
     
     _heartRateTempControl = (SensorTextWidget *) [self createMapWidgetForParams:OAWidgetType.heartRate];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_heartRateTempControl]];
+    
+    _bicycleCadenceTempControl = (SensorTextWidget *) [self createMapWidgetForParams:OAWidgetType.bicycleCadence];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:_bicycleCadenceTempControl]];
+    
+    _bicyclePowerTempControl = (SensorTextWidget *) [self createMapWidgetForParams:OAWidgetType.bicyclePower];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:_bicyclePowerTempControl]];
+    
+    _bicycleDistanceTempControl = (SensorTextWidget *) [self createMapWidgetForParams:OAWidgetType.bicycleDistance];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:_bicycleDistanceTempControl]];
+    
+    _bicycleSpeedTempControl = (SensorTextWidget *) [self createMapWidgetForParams:OAWidgetType.bicycleSpeed];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:_bicycleSpeedTempControl]];
+    
+    _temperatureTempControl = (SensorTextWidget *) [self createMapWidgetForParams:OAWidgetType.temperature];
+    [delegate addWidget:[creator createWidgetInfoWithWidget:_temperatureTempControl]];
+    
 }
 
 - (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType
@@ -104,8 +124,17 @@
 {
     if (_heartRateTempControl)
         [_heartRateTempControl updateInfo];
+    if (_bicycleCadenceTempControl)
+        [_bicycleCadenceTempControl updateInfo];
+    if (_bicyclePowerTempControl)
+        [_bicyclePowerTempControl updateInfo];
+    if (_bicycleDistanceTempControl)
+        [_bicycleDistanceTempControl updateInfo];
+    if (_bicycleSpeedTempControl)
+        [_bicycleSpeedTempControl updateInfo];
+    if (_temperatureTempControl)
+        [_temperatureTempControl updateInfo];
 }
-// ic_custom_sensor
 
 - (NSString *) getName
 {

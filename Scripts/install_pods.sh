@@ -7,7 +7,7 @@ if [ -z "$POD" ]; then
 fi
 if [[ ! -f "$SRCLOC/Podfile.lock" ]]; then
 	echo "Installing dependencies via CocoaPods"
-	(cd "$SRCLOC"/.. && $POD install)
+	(cd "$SRCLOC"/.. && $POD install --repo-update)
 else
 	echo "Updating dependencies via CocoaPods"
 	(cd "$SRCLOC"/.. && $POD update)

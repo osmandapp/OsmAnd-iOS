@@ -47,7 +47,7 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
 }
 
 static const NSArray<NSString *> *kContactUrlTags = @[@"youtube", @"facebook", @"instagram", @"twitter", @"vk", @"ok", @"webcam", @"telegram", @"linkedin", @"pinterest", @"foursquare", @"xing", @"flickr", @"email", @"mastodon", @"diaspora", @"gnusocial", @"skype"];
-static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsapp", @"viber"];
+static const NSArray<NSString *> *kContactPhoneTags = @[PHONE_TAG, MOBILE_TAG, @"whatsapp", @"viber"];
 static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
 - (instancetype) init
@@ -189,7 +189,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         NSString *vl = [self.poi getAdditionalInfo][key];
         NSString *convertedKey = [key stringByReplacingOccurrencesOfString:@"_-_" withString:@":"];
         if ([convertedKey isEqualToString:@"image"]
-                || [convertedKey isEqualToString:MAPILLARY]
+                || [convertedKey isEqualToString:MAPILLARY_TAG]
                 || [convertedKey isEqualToString:@"subway_region"]
                 || ([convertedKey isEqualToString:@"note"] && !osmEditingEnabled)
                 || [convertedKey hasPrefix:@"lang_yes"])
@@ -200,7 +200,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         BOOL collapsable = NO;
         BOOL isText = NO;
         BOOL isDescription = NO;
-        BOOL needLinks = !([convertedKey isEqualToString:@"population"] || [convertedKey isEqualToString:@"height"] || [convertedKey isEqualToString:OPENING_HOURS]);
+        BOOL needLinks = !([convertedKey isEqualToString:@"population"] || [convertedKey isEqualToString:@"height"] || [convertedKey isEqualToString:OPENING_HOURS_TAG]);
         BOOL needIntFormatting = [convertedKey isEqualToString:@"population"];
         BOOL isPhoneNumber = NO;
         BOOL isUrl = NO;
@@ -280,12 +280,12 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         {
             continue;
         }
-        else if ([convertedKey isEqualToString:COLLECTION_TIMES] || [convertedKey isEqualToString:SERVICE_TIMES])
+        else if ([convertedKey isEqualToString:COLLECTION_TIMES_TAG] || [convertedKey isEqualToString:SERVICE_TIMES_TAG])
         {
             iconId = @"ic_action_time";
             needLinks = NO;
         }
-        else if ([convertedKey isEqualToString:OPENING_HOURS])
+        else if ([convertedKey isEqualToString:OPENING_HOURS_TAG])
         {
             iconId = @"ic_action_time";
             collapsableView = [[OACollapsableLabelView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
@@ -310,7 +310,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             textColor = UIColor.textColorActive;
             isPhoneNumber = YES;
         }
-        else if ([convertedKey isEqualToString:WEBSITE] || [convertedKey isEqualToString:URL_KEY] || [kContactUrlTags containsObject:convertedKey])
+        else if ([convertedKey isEqualToString:WEBSITE_TAG] || [convertedKey isEqualToString:URL_TAG] || [kContactUrlTags containsObject:convertedKey])
         {
             if ([kContactUrlTags containsObject:convertedKey])
             {
@@ -322,7 +322,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             textColor = UIColor.textColorActive;
             isUrl = YES;
         }
-        else if ([convertedKey isEqualToString:CUISINE])
+        else if ([convertedKey isEqualToString:CUISINE_TAG])
         {
             isCuisine = YES;
             iconId = @"ic_cuisine";
@@ -342,15 +342,15 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             textPrefix = [_poiHelper getPhraseByName:@"cuisine"];
             vl = sb;
         }
-        else if ([convertedKey containsString:ROUTE]
-                || [convertedKey isEqualToString:WIKIDATA]
-                || [convertedKey isEqualToString:WIKIMEDIA_COMMONS])
+        else if ([convertedKey containsString:ROUTE_TAG]
+                || [convertedKey isEqualToString:WIKIDATA_TAG]
+                || [convertedKey isEqualToString:WIKIMEDIA_COMMONS_TAG])
         {
             continue;
         }
         else
         {
-            if ([convertedKey containsString:DESCRIPTION])
+            if ([convertedKey containsString:DESCRIPTION_TAG])
             {
                 iconId = @"ic_description";
             }
@@ -493,7 +493,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
     if (cuisineRow)
     {
-        BOOL hasCuisineOrDish = poiAdditionalCategories[CUISINE] != nil || poiAdditionalCategories[DISH] != nil;
+        BOOL hasCuisineOrDish = poiAdditionalCategories[CUISINE_TAG] != nil || poiAdditionalCategories[DISH_TAG] != nil;
         if (!hasCuisineOrDish)
             [infoRows addObject:cuisineRow];
     }
@@ -522,7 +522,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                 [sb appendString:pt.nameLocalized];
             }
 
-            BOOL cuisineOrDish = [categoryName isEqualToString:CUISINE] || [categoryName isEqualToString:DISH];
+            BOOL cuisineOrDish = [categoryName isEqualToString:CUISINE_TAG] || [categoryName isEqualToString:DISH_TAG];
             OACollapsableNearestPoiTypeView *collapsableView = [[OACollapsableNearestPoiTypeView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
             collapsableView.collapsed = YES;
             [collapsableView setData:categoryTypes

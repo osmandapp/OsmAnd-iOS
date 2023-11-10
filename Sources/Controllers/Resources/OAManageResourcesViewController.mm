@@ -42,6 +42,7 @@
 #import "QuadRect.h"
 #import "OASearchUICore.h"
 #import "OAOsmandDevelopmentPlugin.h"
+#import "OAWikipediaPlugin.h"
 #import "OAButtonTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -101,6 +102,7 @@ struct RegionResources
     NSInteger _regionMapSection;
     NSInteger _otherMapsSection;
     NSInteger _nauticalMapsSection;
+    NSInteger _travelMapsSection;
 
     NSInteger _outdatedMapsCount;
     uint64_t _totalOutdatedSize;
@@ -109,11 +111,13 @@ struct RegionResources
     NSInteger _localSqliteSection;
     NSInteger _resourcesSection;
     NSInteger _localOnlineTileSourcesSection;
+    NSInteger _localTravelSection;
     NSInteger _localTerrainMapSourcesSection;
     NSMutableArray *_allResourceItems;
     NSMutableArray *_localResourceItems;
     NSMutableArray *_localSqliteItems;
     NSMutableArray *_localOnlineTileSources;
+    NSMutableArray *_localTravelItems;
     NSMutableArray *_localTerrainMapSources;
 
     NSInteger _weatherForecastRow;
@@ -155,6 +159,7 @@ struct RegionResources
 
     NSString *_otherRegionId;
     NSString *_nauticalRegionId;
+    NSString *_travelRegionId;
     
     NSArray<OAWorldRegion *> *_customRegions;
     OADownloadDescriptionInfo *_downloadDescriptionInfo;
@@ -168,6 +173,8 @@ static QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceI
 static QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> > _localResources;
 static QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> > _outdatedResources;
 static QHash< OAWorldRegion *__weak, RegionResources > _resourcesByRegions;
+
+static QHash< OAWorldRegion *__weak, RegionResources > _wikivoyageResources;
 
 static NSMutableArray *_searchableWorldwideRegionItems;
 
@@ -203,6 +210,7 @@ static BOOL _repositoryUpdated = NO;
         self.region = _app.worldRegion;
         _otherRegionId = OsmAnd::WorldRegions::OthersRegionId.toNSString();
         _nauticalRegionId = OsmAnd::WorldRegions::NauticalRegionId.toNSString();
+        _travelRegionId = OsmAnd::WorldRegions::TravelRegionId.toNSString();
 
         _currentScope = kAllResourcesScope;
 
@@ -212,6 +220,7 @@ static BOOL _repositoryUpdated = NO;
         _localResourceItems = [NSMutableArray array];
         _localSqliteItems = [NSMutableArray array];
         _localOnlineTileSources = [NSMutableArray array];
+        _localTravelItems = [NSMutableArray array];
         _localTerrainMapSources = [NSMutableArray array];
 
         _regionMapItems = [NSMutableArray array];
@@ -446,7 +455,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (BOOL) shouldHideBanner
 {
-    return _currentScope == kLocalResourcesScope || [OAIAPHelper isPaidVersion] || (self.region == _app.worldRegion && [_iapHelper inAppMapsPurchased].count > 0) || (self.region != _app.worldRegion && [self.region isInPurchasedArea]) || [self.region.regionId isEqualToString:_otherRegionId] || [self.region isKindOfClass:OACustomRegion.class];
+    return _currentScope == kLocalResourcesScope || [OAIAPHelper isPaidVersion] || (self.region == _app.worldRegion && [_iapHelper inAppMapsPurchased].count > 0) || (self.region != _app.worldRegion && [self.region isInPurchasedArea]) || [self.region.regionId isEqualToString:_otherRegionId] || [self.region.regionId isEqualToString:_travelRegionId] || [self.region isKindOfClass:OACustomRegion.class];
 }
 
 - (BOOL) shouldHideEmailSubscription
@@ -508,7 +517,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (void) updateContentIfNeeded
 {
-    BOOL needUpdateContent = [self isNauticalScope];
+    BOOL needUpdateContent = [self isNauticalScope] || [self isTravelGuidesScope];
     if ([self shouldHideBanner] && _displayBanner)
     {
         _displayBanner = NO;
@@ -824,7 +833,7 @@ static BOOL _repositoryUpdated = NO;
     
     for (OAWorldRegion *subregion in self.region.flattenedSubregions)
     {
-        if (!self.region.superregion && ([subregion.regionId isEqualToString:_otherRegionId] || [subregion.regionId isEqualToString:_nauticalRegionId]))
+        if (!self.region.superregion && ([subregion.regionId isEqualToString:_otherRegionId] || [subregion.regionId isEqualToString:_nauticalRegionId] || [subregion.regionId isEqualToString:_travelRegionId]))
             continue;
 
         if (subregion.superregion == self.region)
@@ -855,6 +864,7 @@ static BOOL _repositoryUpdated = NO;
     const auto& regionResources = *citRegionResources;
 
     BOOL nauticalRegion = region == self.region && [region.regionId isEqualToString:_nauticalRegionId];
+    BOOL travelRegion = region == self.region && [region.regionId isEqualToString:_travelRegionId];
 
     NSMutableArray<OAResourceItem *> *regionMapArray = [NSMutableArray array];
     NSMutableArray<OAResourceItem *> *allResourcesArray = [NSMutableArray array];
@@ -866,7 +876,7 @@ static BOOL _repositoryUpdated = NO;
         OAResourceItem *item_ = [self collectSubregionItem:region regionResources:regionResources resource:resource_];
         if (item_)
         {
-            if (nauticalRegion)
+            if (nauticalRegion || travelRegion)
             {
                 [allResourcesArray addObject:item_];
             }
@@ -961,6 +971,10 @@ static BOOL _repositoryUpdated = NO;
         OAResourceItem *worldSeamarksItem = [self collectWorldSeamarksItem];
         if (worldSeamarksItem)
             [_allResourceItems addObject:worldSeamarksItem];
+    }
+    else if (travelRegion)
+    {
+        [_allResourceItems addObjectsFromArray:allResourcesArray];
     }
     else if (allResourcesArray.count > 1)
     {
@@ -1097,6 +1111,11 @@ static BOOL _repositoryUpdated = NO;
     return [self.region.regionId isEqualToString:_nauticalRegionId];
 }
 
+- (BOOL) isTravelGuidesScope
+{
+    return [self.region.regionId isEqualToString:_travelRegionId];
+}
+
 - (void) collectResourcesDataAndItems
 {
     [self collectSubregionItems:self.region];
@@ -1150,6 +1169,7 @@ static BOOL _repositoryUpdated = NO;
     
     // Outdated Resources
     [_localResourceItems removeAllObjects];
+    [_localTravelItems removeAllObjects];
     [_localTerrainMapSources removeAllObjects];
     _outdatedMapsCount = 0;
     _totalOutdatedSize = 0;
@@ -1178,13 +1198,20 @@ static BOOL _repositoryUpdated = NO;
 
         if (item.title != nil)
         {
-            if (match == self.region)
-                [_localRegionMapItems addObject:item];
+            if ([item.worldRegion.regionId isEqualToString:_travelRegionId])
+            {
+                [_localTravelItems addObject:item];
+            }
             else
-                [_localResourceItems addObject:item];
-
-            _outdatedMapsCount++;
-            _totalOutdatedSize += resourceInRepository->packageSize;
+            {
+                if (match == self.region)
+                    [_localRegionMapItems addObject:item];
+                else
+                    [_localResourceItems addObject:item];
+                
+                _outdatedMapsCount++;
+                _totalOutdatedSize += resourceInRepository->packageSize;
+            }
         }
     }
 
@@ -1229,26 +1256,36 @@ static BOOL _repositoryUpdated = NO;
         
         if (item.title != nil)
         {
-            if (match == self.region)
+            if ([item.worldRegion.regionId isEqualToString:_travelRegionId])
             {
-                if (![_localRegionMapItems containsObject:item])
-                    [_localRegionMapItems addObject:item];
-                
+                [_localTravelItems addObject:item];
             }
             else
             {
-                if (![_localResourceItems containsObject:item] && ![_localTerrainMapSources containsObject:item])
+
+                if (match == self.region)
                 {
-                    if (item.resourceType != OsmAndResourceType::GeoTiffRegion && item.resourceType != OsmAndResourceType::HeightmapRegionLegacy)
-                        [_localResourceItems addObject:item];
-                    else
-                        [_localTerrainMapSources addObject:item];
+                    if (![_localRegionMapItems containsObject:item])
+                        [_localRegionMapItems addObject:item];
+                    
+                }
+                else
+                {
+                    if (![_localResourceItems containsObject:item] && ![_localTerrainMapSources containsObject:item])
+                    {
+                        if (item.resourceType != OsmAndResourceType::GeoTiffRegion && item.resourceType != OsmAndResourceType::HeightmapRegionLegacy)
+                            [_localResourceItems addObject:item];
+                        else
+                            [_localTerrainMapSources addObject:item];
+
+                    }
                 }
             }
         }
     }
     [_localResourceItems sortUsingComparator:self.resourceItemsComparator];
     [_localRegionMapItems sortUsingComparator:self.resourceItemsComparator];
+    [_localTravelItems sortUsingComparator:self.resourceItemsComparator];
     [_localTerrainMapSources sortUsingComparator:self.resourceItemsComparator];
     
     for (OAResourceItem *item in _regionMapItems)
@@ -1271,6 +1308,7 @@ static BOOL _repositoryUpdated = NO;
         _extraMapsSection = -1;
         _otherMapsSection = -1;
         _nauticalMapsSection = -1;
+        _travelMapsSection = -1;
         _regionMapSection = -1;
         _subscriptionBannerSection = -1;
         _subscribeEmailSection = -1;
@@ -1278,6 +1316,7 @@ static BOOL _repositoryUpdated = NO;
         _resourcesSection = -1;
         _localSqliteSection = -1;
         _localOnlineTileSourcesSection = -1;
+        _localTravelSection = -1;
         _localTerrainMapSourcesSection = -1;
         _freeMemorySection = -1;
 
@@ -1334,6 +1373,9 @@ static BOOL _repositoryUpdated = NO;
         if (_currentScope == kLocalResourcesScope && _localOnlineTileSources.count > 0)
             _localOnlineTileSourcesSection = _lastUnusedSectionIndex++;
         
+        if (_currentScope == kLocalResourcesScope && _localTravelItems.count > 0)
+            _localTravelSection = _lastUnusedSectionIndex++;
+
         if (_currentScope == kLocalResourcesScope && _localTerrainMapSources.count > 0)
             _localTerrainMapSourcesSection = _lastUnusedSectionIndex++;
         
@@ -1346,6 +1388,9 @@ static BOOL _repositoryUpdated = NO;
 
         if (_currentScope == kAllResourcesScope && self.region == _app.worldRegion && [_app.worldRegion containsSubregion:_nauticalRegionId] && [[_app.worldRegion getSubregion:_nauticalRegionId] isInPurchasedArea])
             _nauticalMapsSection = _lastUnusedSectionIndex++;
+        
+        if (_currentScope == kAllResourcesScope && self.region == _app.worldRegion)
+            _travelMapsSection = _lastUnusedSectionIndex++;
     }
 }
 
@@ -1458,7 +1503,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (BOOL)hasLocalResources
 {
-    return _localResourceItems.count > 0 || _localRegionMapItems.count > 0 || _localSqliteItems.count > 0 || _localOnlineTileSources.count > 0  || _localTerrainMapSources.count > 0;
+    return _localResourceItems.count > 0 || _localRegionMapItems.count > 0 || _localSqliteItems.count > 0 || _localOnlineTileSources.count > 0 || _localTravelItems.count > 0 || _localTerrainMapSources.count > 0;
 }
 
 - (NSMutableArray *) getResourceItems
@@ -1896,7 +1941,7 @@ static BOOL _repositoryUpdated = NO;
         return 1;
 
     if (_currentScope == kLocalResourcesScope)
-        return ([_localResourceItems count] > 0 ? 1 : 0) + ([_localRegionMapItems count] > 0 ? 1 : 0) + (_localSqliteItems.count > 0 ? 1 : 0) + (_displaySubscribeEmailView ? 1 : 0) + (_localOnlineTileSources.count > 0 ? 1 : 0) + (_localTerrainMapSources.count > 0 ? 1 : 0) + 1;
+        return ([_localResourceItems count] > 0 ? 1 : 0) + ([_localRegionMapItems count] > 0 ? 1 : 0) + (_localSqliteItems.count > 0 ? 1 : 0) + (_displaySubscribeEmailView ? 1 : 0) + (_localOnlineTileSources.count > 0 ? 1 : 0) + (_localTravelItems.count > 0 ? 1 : 0) + (_localTerrainMapSources.count > 0 ? 1 : 0) + 1;
 
     NSInteger sectionsCount = 0;
 
@@ -1921,6 +1966,8 @@ static BOOL _repositoryUpdated = NO;
     if (_otherMapsSection >= 0)
         sectionsCount++;
     if (_nauticalMapsSection >= 0)
+        sectionsCount++;
+    if (_travelMapsSection >= 0)
         sectionsCount++;
 
     return sectionsCount;
@@ -1951,11 +1998,15 @@ static BOOL _repositoryUpdated = NO;
         return _localSqliteItems.count;
     if (section == _localOnlineTileSourcesSection)
         return [_localOnlineTileSources count];
+    if (section == _localTravelSection)
+        return [_localTravelItems count];
     if (section == _localTerrainMapSourcesSection)
         return [_localTerrainMapSources count];
     if (section == _otherMapsSection)
         return 1;
     if (section == _nauticalMapsSection)
+        return 1;
+    if (section == _travelMapsSection)
         return 1;
 
     return 0;
@@ -1976,6 +2027,8 @@ static BOOL _repositoryUpdated = NO;
                 return OALocalizedString(@"offline_raster_maps");
             else if (section == _localOnlineTileSourcesSection)
                 return OALocalizedString(@"online_raster_maps");
+            else if (section == _localTravelSection)
+                return OALocalizedString(@"shared_string_travel_guides");
             else if (section == _localTerrainMapSourcesSection)
                 return OALocalizedString(@"terrain_3D_maps");
             else
@@ -1985,13 +2038,22 @@ static BOOL _repositoryUpdated = NO;
         if (section == _extraMapsSection)
             return OALocalizedString(@"extra_maps_menu_group");
         if (section == _resourcesSection)
-            return OALocalizedString([self isNauticalScope] ? @"nautical_maps" : @"res_worldwide");
+        {
+            if ([self isNauticalScope])
+                return OALocalizedString(@"nautical_maps");
+            else if ([self isTravelGuidesScope])
+                return OALocalizedString(@"shared_string_travel_guides");
+            else
+                return OALocalizedString(@"res_worldwide");
+        }
         if (section == _regionMapSection)
             return OALocalizedString(@"res_world_map");
         if (section == _otherMapsSection)
             return OALocalizedString(@"download_select_map_types");
         if (section == _nauticalMapsSection)
             return OALocalizedString(@"nautical_maps");
+        if (section == _travelMapsSection)
+            return OALocalizedString(@"shared_string_travel_guides");
 
         return nil;
     }
@@ -1999,13 +2061,22 @@ static BOOL _repositoryUpdated = NO;
     if (section == _extraMapsSection)
         return OALocalizedString(@"extra_maps_menu_group");
     if (section == _resourcesSection)
-        return OALocalizedString([self isNauticalScope] ? @"nautical_maps" : @"res_mapsres");
+    {
+        if ([self isNauticalScope])
+            return OALocalizedString(@"nautical_maps");
+        else if ([self isTravelGuidesScope])
+            return OALocalizedString(@"shared_string_travel_guides");
+        else
+            return OALocalizedString(@"res_mapsres");
+    }
     if (section == _regionMapSection)
         return OALocalizedString(@"res_region_map");
     if (section == _otherMapsSection)
         return OALocalizedString(@"download_select_map_types");
     if (section == _nauticalMapsSection)
         return OALocalizedString(@"nautical_maps");
+    if (section == _travelMapsSection)
+        return OALocalizedString(@"shared_string_travel_guides");
 
     return nil;
 }
@@ -2182,7 +2253,7 @@ static BOOL _repositoryUpdated = NO;
             if (isLocalCell)
             {
                 subtitle = [NSString stringWithFormat:@"%lu %@ - %@",
-                        _localResourceItems.count + _localRegionMapItems.count + _localSqliteItems.count + _localOnlineTileSources.count,
+                        _localResourceItems.count + _localRegionMapItems.count + _localSqliteItems.count + _localOnlineTileSources.count + _localTravelItems.count,
                         OALocalizedString(@"res_maps_inst"),
                         [NSByteCountFormatter stringFromByteCount:_totalInstalledSize
                                                        countStyle:NSByteCountFormatterCountStyleFile]];
@@ -2217,6 +2288,11 @@ static BOOL _repositoryUpdated = NO;
         {
             cellTypeId = subregionCell;
             title = OALocalizedString(@"nautical_maps");
+        }
+        else if (indexPath.section == _travelMapsSection)
+        {
+            cellTypeId = subregionCell;
+            title = OALocalizedString(@"shared_string_travel_guides");
         }
         else if ((indexPath.section == _resourcesSection && _resourcesSection >= 0) || indexPath.section == _localTerrainMapSourcesSection)
         {
@@ -2283,6 +2359,11 @@ static BOOL _repositoryUpdated = NO;
                         item.disabled = disabled;
                     }
                     if (item.resourceType == OsmAndResourceType::MapRegion && [self isNauticalScope] && ![OAPlugin isEnabled:OANauticalMapsPlugin.class])
+                    {
+                        disabled = YES;
+                        item.disabled = disabled;
+                    }
+                    if ([self isTravelGuidesScope] && ![OAPlugin isEnabled:OAWikipediaPlugin.class])
                     {
                         disabled = YES;
                         item.disabled = disabled;
@@ -2508,6 +2589,17 @@ static BOOL _repositoryUpdated = NO;
             else
                 subtitle = OALocalizedString(@"online_map");
         }
+        else if (indexPath.section == _localTravelSection)
+        {
+            OALocalResourceItem *item = _localTravelItems[indexPath.row];
+            cellTypeId = localResourceCell;
+            title = item.title;
+            if (item.size > 0)
+                subtitle = [NSString stringWithFormat:@"%@  •  %@", OALocalizedString(@"shared_string_wikivoyage"), [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];
+            else
+                subtitle = OALocalizedString(@"shared_string_wikivoyage");
+        }
+        
         else if (indexPath.section == _freeMapsBannerSection)
         {
             OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
@@ -2858,6 +2950,8 @@ static BOOL _repositoryUpdated = NO;
         item = [_app.worldRegion getSubregion:_otherRegionId];
     else if (indexPath.section == _nauticalMapsSection)
         item = [_app.worldRegion getSubregion:_nauticalRegionId];
+    else if (indexPath.section == _travelMapsSection)
+        item = [_app.worldRegion getSubregion:_travelRegionId];
     else if (indexPath.section == _extraMapsSection)
         item = _customRegions[indexPath.row];
 
@@ -3113,6 +3207,8 @@ static BOOL _repositoryUpdated = NO;
             subregion = [_app.worldRegion getSubregion:_otherRegionId];
         else if (cellPath.section == _nauticalMapsSection)
             subregion = [_app.worldRegion getSubregion:_nauticalRegionId];
+        else if (cellPath.section == _travelMapsSection)
+            subregion = [_app.worldRegion getSubregion:_travelRegionId];
         else if (cellPath.section == _extraMapsSection)
             subregion = _customRegions[cellPath.row];
         else if (tableView == _tableView)
@@ -3160,6 +3256,8 @@ static BOOL _repositoryUpdated = NO;
                 item = _localSqliteItems[cellPath.row];
             if (cellPath.section == _localOnlineTileSourcesSection)
                 item = _localOnlineTileSources[cellPath.row];
+            if (cellPath.section == _localTravelSection)
+                item = _localTravelItems[cellPath.row];
             if (cellPath.section == _localTerrainMapSourcesSection)
                 item = _localTerrainMapSources[cellPath.row];
         }

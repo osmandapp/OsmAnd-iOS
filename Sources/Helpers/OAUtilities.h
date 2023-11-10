@@ -118,6 +118,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 - (void) removeBlurEffect;
 - (void) removeBlurEffect:(UIColor *)backgroundColor;
 - (void) addSpinner;
+- (void) addSpinnerInCenterOfCurrentView:(BOOL)inCurrentView;
 - (void) removeSpinner;
 - (UIImage *) toUIImage;
 
@@ -369,6 +370,8 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (void) collectDirFiles:(NSString *)filePath list:(NSMutableArray<NSString *> *)list;
 + (NSString*) fileMD5:(NSString*)path;
 
++ (NSString *) toMD5:(NSString *)text;
+
 + (void) showMenuInView:(UIView *)parentView fromView:(UIView *)targetView;
 
 + (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit;
@@ -382,5 +385,9 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (NSDate *)getCurrentTimezoneDate:(NSDate *)sourceDate;
 
 + (NSString *) getRoutingStringPropertyName:(NSString *)propertyName defaultName:(NSString *)defaultName;
+
++ (int) convertCharToDist:(NSString *)ch firstLetter:(NSString *)firstLetter firstDist:(int)firstDist mult1:(int)mult1 mult2:(int)mult2;
+
++ (BOOL) isValidFileName:(NSString *)name;
 
 @end

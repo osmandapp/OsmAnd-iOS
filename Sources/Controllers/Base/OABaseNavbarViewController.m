@@ -29,6 +29,7 @@
     UIView *_rightIconLargeTitle;
 
     UIBarButtonItem *_leftNavbarButton;
+    UILongPressGestureRecognizer *_leftButtonLongTapRecognizer;
 }
 
 #pragma mark - Initialization
@@ -371,7 +372,7 @@
 {
     NSString *leftButtonTitle = [self getLeftNavbarButtonTitle];
     UIImage *leftNavbarButtonCustomIcon = [self getCustomIconForLeftNavbarButton];
-    if ((([self isModal] && !leftButtonTitle) || (![self isModal] && leftButtonTitle && leftButtonTitle.length == 0)) && !leftNavbarButtonCustomIcon)
+    if ((([self isModal] && !leftButtonTitle) || (![self isModal] && leftButtonTitle && leftButtonTitle.length == 0)) && !leftNavbarButtonCustomIcon || [self forceShowShevron])
         leftNavbarButtonCustomIcon = [UIImage templateImageNamed:@"ic_navbar_chevron"];
 
     CGFloat freeSpaceForTitle = DeviceScreenWidth - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2;
@@ -417,6 +418,10 @@
         [leftButton addTarget:self action:@selector(onLeftNavbarButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         leftButton.translatesAutoresizingMaskIntoConstraints = NO;
         [leftButton.widthAnchor constraintLessThanOrEqualToConstant:freeSpaceForNavbarButton].active = YES;
+        
+        _leftButtonLongTapRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLeftNavbarButtonLongtapPressed:)];
+        [leftButton addGestureRecognizer:_leftButtonLongTapRecognizer];
+        leftButton.userInteractionEnabled = YES;
 
         NSString *accessibilityLabel = [self getCustomAccessibilityForLeftNavbarButton];
         if (!accessibilityLabel)
@@ -463,6 +468,11 @@
     {
         [self.navigationItem setRightBarButtonItems:nil animated:YES];
     }
+}
+
+- (BOOL)forceShowShevron
+{
+    return NO;
 }
 
 - (UIBarButtonItem *)createRightNavbarButton:(NSString *)title
@@ -747,6 +757,16 @@
 }
 
 #pragma mark - Selectors
+
+- (IBAction)onLeftNavbarButtonLongtapPressed:(UIButton *)sender
+{
+    [self onLeftNavbarButtonLongtapPressed];
+}
+
+- (void)onLeftNavbarButtonLongtapPressed
+{
+    [self dismissViewController];
+}
 
 - (void)onRightNavbarButtonPressed
 {

@@ -26,6 +26,7 @@ typedef void(^ OAOnDuplicatesChecked)(NSArray<OASettingsItem *> *duplicates, NSA
 @interface OASettingsItemsFactory : NSObject
 
 - (instancetype) initWithJSON:(NSString *)jsonStr;
+- (instancetype) initWithJSONData:(NSData *)jsonUtf8Data;
 - (instancetype) initWithParsedJSON:(NSDictionary *)json;
 
 - (NSArray<OASettingsItem *> *) getItems;

@@ -42,6 +42,7 @@
     UIBarButtonItem *_imagesBarButtonItem;
     BOOL _isDownloadImagesOnlyNow;
     BOOL _isFirstLaunch;
+    OAWikiImageCacheHelper *_imageCacheHelper;
 }
 
 #pragma mark - Initialization
@@ -75,6 +76,7 @@
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
+    _imageCacheHelper = [[OAWikiImageCacheHelper alloc] init];
 }
 
 - (void) updateWithPoi:(OAPOI *)poi
@@ -91,7 +93,11 @@
         id localIdentifier = [currentLocal objectForKey:NSLocaleIdentifier];
         _currentLocale = [NSLocale localeWithLocaleIdentifier:localIdentifier];
     }
+    [self updateContent];
+}
 
+- (void)updateContent
+{
     if (_poi.localizedContent.count == 1)
     {
         _contentLocale = _poi.localizedContent.allKeys.firstObject;
@@ -146,6 +152,12 @@
 
     if (_content)
         _content = [self appendHeadToContent:_content];
+}
+
+- (void)updateAppearance
+{
+    [super updateAppearance];
+    [self updateContent];
 }
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
@@ -240,74 +252,12 @@
     return _contentLocale;
 }
 
-- (void)createLanguagesNavbarButton
+-(void)createLanguagesNavbarButton
 {
-    UIMenu *languageMenu;
-    NSMutableArray<UIMenuElement *> *languageOptions = [NSMutableArray array];
-    if (_poi.localizedContent.allKeys.count > 1)
-    {
-        NSMutableSet<NSString *> *preferredLocales = [NSMutableSet set];
-        NSArray<NSString *> *preferredLanguages = [NSLocale preferredLanguages];
-        for (NSInteger i = 0; i < preferredLanguages.count; i ++)
-        {
-            NSString *preferredLocale = preferredLanguages[i];
-            if ([preferredLocale containsString:@"-"])
-                preferredLocale = [preferredLocale substringToIndex:[preferredLocale indexOf:@"-"]];
-            if ([preferredLocale isEqualToString:@"en"])
-                preferredLocale = @"";
-            [preferredLocales addObject:preferredLocale];
-        }
-
-        NSMutableArray<NSString *> *possibleAvailableLocale = [NSMutableArray array];
-        NSMutableArray<NSString *> *possiblePreferredLocale = [NSMutableArray array];
-        for (NSString *contentLocale in _poi.localizedContent.allKeys)
-        {
-            if ([preferredLocales containsObject:contentLocale])
-            {
-                __weak OAWikiWebViewController *weakSelf = self;
-                UIAction *languageAction = [UIAction actionWithTitle:[OAUtilities translatedLangName:contentLocale.length > 0 ? contentLocale : @"en"].capitalizedString
-                                                       image:nil
-                                                  identifier:nil
-                                                     handler:^(__kindof UIAction * _Nonnull action) {
-                    [weakSelf updateWikiData:contentLocale];
-                }];
-                if ([contentLocale isEqualToString:_contentLocale])
-                    languageAction.state = UIMenuElementStateOn;
-                [languageOptions addObject:languageAction];
-                [possiblePreferredLocale addObject:contentLocale];
-            }
-            else
-            {
-                [possibleAvailableLocale addObject:contentLocale];
-            }
-        }
-        if (possibleAvailableLocale.count > 0)
-        {
-            __weak OAWikiWebViewController *weakSelf = self;
-            UIAction *availableLanguagesAction = [UIAction actionWithTitle:OALocalizedString(@"available_languages")
-                                                                     image:[UIImage systemImageNamed:@"globe"]
-                                                                identifier:nil
-                                                                   handler:^(__kindof UIAction * _Nonnull action) {
-                OAWikiLanguagesWebViewContoller *wikiLanguagesViewController =
-                            [[OAWikiLanguagesWebViewContoller alloc] initWithSelectedLocale:[weakSelf getContentLocale]
-                                                                           availableLocales:possibleAvailableLocale
-                                                                           preferredLocales:possiblePreferredLocale];
-                wikiLanguagesViewController.delegate = weakSelf;
-                [weakSelf showModalViewController:wikiLanguagesViewController];
-            }];
-            if (![preferredLocales containsObject:_contentLocale])
-                availableLanguagesAction.state = UIMenuElementStateOn;
-            UIMenu *availableLanguagesMenu = [UIMenu menuWithTitle:@""
-                                                             image:nil
-                                                        identifier:nil
-                                                           options:UIMenuOptionsDisplayInline
-                                                          children:@[availableLanguagesAction]];
-            [languageOptions addObject:availableLanguagesMenu];
-        }
-        languageMenu = [UIMenu menuWithChildren:languageOptions];
-    }
+    __weak OAWikiWebViewController *weakSelf = self;
+    UIMenu *languageMenu = [OAWikiArticleHelper createLanguagesMenu:_poi.localizedContent.allKeys selectedLocale:[weakSelf getContentLocale] delegate:weakSelf];
     _languageBarButtonItem = [self createRightNavbarButton:nil iconName:@"ic_navbar_languge" action:@selector(onLanguageNavbarButtonPressed) menu:languageMenu];
-}
+}  
 
 - (void)createImagesNavbarButton
 {
@@ -408,6 +358,11 @@
     return @"ic_custom_safari";
 }
 
+- (UIColor *)getButtonTintColor:(EOABaseButtonColorScheme)scheme
+{
+    return UIColor.textColorActive;
+}
+
 - (EOABaseButtonColorScheme)getTopButtonColorScheme
 {
     return EOABaseButtonColorSchemeGraySimple;
@@ -447,57 +402,136 @@
 
 - (void)loadHeaderImage:(void(^)(NSString *content))loadWebView
 {
-    OADownloadMode *imagesDownloadMode = [self getImagesDownloadMode];
-    if (![self isDownloadImagesOnlyNow] && ([imagesDownloadMode isDontDownload] || ([imagesDownloadMode isDownloadOnlyViaWifi] && [[AFNetworkReachabilityManager sharedManager] isReachableViaWWAN])))
+    if (!loadWebView || [self isImageTagAppended])
+        return;
+    
+    NSString *cachedHeaderImage = [_imageCacheHelper readImageByDbKey:[self getHeaderImageCacheDbKey]];
+    if (cachedHeaderImage)
     {
-        if (loadWebView)
-            loadWebView([self getContent]);
+        NSString *html = [self appendHeaderImageTag];
+        [self injectCachedImagesToHtmlAndReload:html loadWebView:loadWebView];
     }
     else
     {
-        NSString *locale = _contentLocale.length == 0 ? @"en" : _contentLocale;
-        NSString *wikipediaTitle = [self getWikipediaTitleURL];
-        NSString *titleImageLink = [NSString stringWithFormat:@"https://%@.wikipedia.org/w/api.php?action=query&titles=%@&prop=pageimages&format=json&pithumbsize=%lu",
-                                    locale,
-                                    wikipediaTitle,
-                                    (NSInteger) self.view.frame.size.width];
-        NSURL *titleImageURL = [NSURL URLWithString:titleImageLink];
-        NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-        [[session dataTaskWithURL:titleImageURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-            NSString *content = [self getContent];
-            NSString *imageSource = @"";
-            if (((NSHTTPURLResponse *) response).statusCode == 200 && data)
+        if ([self isImagesDownloadingAllowed])
+        {
+            [self fetchHeaderImageUrl:^(NSString *headerImageUrl) {
+                
+                //download header image and save it to cache
+                [_imageCacheHelper fetchSingleImageByURL:headerImageUrl customKey:[self getHeaderImageCacheDbKey] downloadMode:[self getImagesDownloadMode] onlyNow:[self isDownloadImagesOnlyNow] onComplete:^(NSString *imageData) {
+                    
+                    NSString *html = [self appendHeaderImageTag];
+                    [self injectCachedImagesToHtmlAndReload:html loadWebView:loadWebView];
+                }];
+                
+            }];
+        }
+        else
+        {
+            loadWebView(_content);
+            [self printHtmlToDebugFileIfEnabled:_content];
+        }
+    }
+}
+
+- (void)fetchHeaderImageUrl:(void (^)(NSString *headerImageUrl))onComplete
+{
+    NSString *locale = _contentLocale.length == 0 ? @"en" : _contentLocale;
+    NSString *wikipediaTitle = [self getWikipediaTitleURL];
+    NSString *titleImageLink = [NSString stringWithFormat:@"https://%@.wikipedia.org/w/api.php?action=query&titles=%@&prop=pageimages&format=json&pithumbsize=%lu",
+                                locale,
+                                wikipediaTitle,
+                                (NSInteger) self.view.frame.size.width];
+    NSURL *titleImageURL = [NSURL URLWithString:titleImageLink];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[session dataTaskWithURL:titleImageURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSString *headerImageUrl = @"";
+        if (((NSHTTPURLResponse *) response).statusCode == 200 && data)
+        {
+            if (data)
             {
-                if (data)
+                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+                if ([result.allKeys containsObject:@"query"])
                 {
-                    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
-                    if ([result.allKeys containsObject:@"query"])
+                    NSDictionary *queryResult = result[@"query"];
+                    if ([queryResult.allKeys containsObject:@"pages"])
                     {
-                        NSDictionary *queryResult = result[@"query"];
-                        if ([queryResult.allKeys containsObject:@"pages"])
+                        NSDictionary *pagesResult = queryResult[@"pages"];
+                        if (pagesResult.allKeys.count > 0)
                         {
-                            NSDictionary *pagesResult = queryResult[@"pages"];
-                            if (pagesResult.allKeys.count > 0)
+                            NSDictionary *sourceResult = pagesResult[pagesResult.allKeys.firstObject];
+                            if ([sourceResult.allKeys containsObject:@"thumbnail"])
                             {
-                                NSDictionary *sourceResult = pagesResult[pagesResult.allKeys.firstObject];
-                                if ([sourceResult.allKeys containsObject:@"thumbnail"])
-                                {
-                                    NSDictionary *thumbnailResult = sourceResult[@"thumbnail"];
-                                    imageSource = thumbnailResult[@"source"];
-                                }
+                                NSDictionary *thumbnailResult = sourceResult[@"thumbnail"];
+                                headerImageUrl = thumbnailResult[@"source"];
                             }
                         }
                     }
                 }
-                if (imageSource && imageSource.length > 0)
-                {
-                    content = [content stringByReplacingOccurrencesOfString:@"</header>"
-                                                                 withString:[NSString stringWithFormat:@"<img src=%@ style=\"object-fit:cover; object-position:center; height:%dpx;\"></header>", imageSource, kHeaderImageHeight]];
-                }
             }
-            if (loadWebView)
-                loadWebView(content);
-        }] resume];
+            if (headerImageUrl && headerImageUrl.length > 0 && onComplete)
+            {
+                onComplete(headerImageUrl);
+                return;
+            }
+        }
+        onComplete(nil);
+    }] resume];
+}
+
+- (NSString *)appendHeaderImageTag
+{
+    if ([self isImageTagAppended])
+    {
+        return _content;
+    }
+    else
+    {
+        return [_content stringByReplacingOccurrencesOfString:@"</head>" withString:[NSString stringWithFormat:@"<img src=\"%@\" style=\"object-fit:cover; object-position:center; height:%dpx;\"></head>", [self getHeaderImageCacheDbKey], kHeaderImageHeight]];
+    }
+}
+
+- (BOOL)isImageTagAppended
+{
+    return [_content containsString:@"px;\"></head>"];
+}
+
+- (void)injectCachedImagesToHtmlAndReload:(NSString *)html loadWebView:(void(^)(NSString *content))loadWebView
+{
+    [_imageCacheHelper processWholeHTML:html downloadMode:[self getImagesDownloadMode] onlyNow:[self isDownloadImagesOnlyNow] onComplete:^(NSString *htmlWithImages) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _content = htmlWithImages;
+            loadWebView(htmlWithImages);
+            [self printHtmlToDebugFileIfEnabled:htmlWithImages];
+        });
+    }];
+}
+
+- (BOOL) isImagesDownloadingAllowed
+{
+    OADownloadMode *imagesDownloadMode = [self getImagesDownloadMode];
+    return [self isDownloadImagesOnlyNow] ||
+        ([imagesDownloadMode isDownloadViaAnyNetwork] && [[AFNetworkReachabilityManager sharedManager] isReachable]) ||
+        ([imagesDownloadMode isDownloadOnlyViaWifi] && [[AFNetworkReachabilityManager sharedManager] isReachableViaWiFi]);
+}
+
+- (NSString *)getHeaderImageCacheDbKey
+{
+    return [_imageCacheHelper getDbKeyByLink:[self getUrl].absoluteString];
+}
+
+- (void) printHtmlToDebugFileIfEnabled:(NSString *)content
+{
+    if ([OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class].isEnabled)
+    {
+        NSString *wikiFolder = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:@"Wiki"];
+        BOOL isDir = YES;
+        if (![[NSFileManager defaultManager] fileExistsAtPath:wikiFolder isDirectory:&isDir])
+            [[NSFileManager defaultManager] createDirectoryAtPath:wikiFolder withIntermediateDirectories:YES attributes:nil error:nil];
+        
+        NSString *filePath = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:@"Wiki/WikiDebug.html"];
+        [content writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
     }
 }
 
@@ -590,9 +624,9 @@
 {
     if (content == nil)
         return nil;
-
-    NSString *head = @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></header><head></head><div class=\"main\">%@</div>";
-    return [NSString stringWithFormat:head, content];
+    
+    NSString *nightModeClass = [ThemeManager shared].isLightTheme ? @"" : @" nightmode";
+    return [NSString stringWithFormat:@"<html><head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" /> <meta http-equiv=\"cleartype\" content=\"on\" />  </head> <div class=\"main%@\">%@ </body></html>", nightModeClass, content];
 }
 
 #pragma mark - WebView
@@ -628,6 +662,11 @@
 - (void)onLocaleSelected:(NSString *)locale
 {
     [self updateWikiData:locale];
+}
+
+- (void)showLocalesVC:(UIViewController *)vc
+{
+    [self showModalViewController:vc];
 }
 
 @end

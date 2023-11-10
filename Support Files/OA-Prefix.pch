@@ -36,6 +36,7 @@
 
 #define kShareLinkTemplate @"https://osmand.net/map?pin=%.6f,%.6f#%d/%.4f/%.4f\nThe location was shared with you by OsmAnd"
 #define kShareLink @"https://osmand.net/map?pin=%.6f,%.6f#%d/%.4f/%.4f"
+#define kOsmCoordinatesLink @"https://www.openstreetmap.org/?mlat=%.4f&mlon=%.4f#map=%i/%.4f/%.4f"
 
 #define kBottomToolbarBackgroundColor 0xf9f9f9
 #define kBottomToolbarTopLineColor 0xC4C4C4

@@ -105,6 +105,8 @@
 #import "OANetworkRouteSelectionTask.h"
 #import <MBProgressHUD.h>
 
+#import "OsmAnd_Maps-Swift.h"
+
 #include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/CachingRoadLocator.h>
 #include <OsmAndCore/Data/Road.h>
@@ -967,6 +969,12 @@ typedef enum
     [self.targetMenuView quickHide];
     
     self.sidePanelController.recognizesPanGesture = NO;
+}
+
+- (void) showTravelGuides
+{
+    OATravelExploreViewController *vc = [OATravelExploreViewController new];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void) showRoutePreferences
@@ -2094,7 +2102,10 @@ typedef enum
 
 - (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu
 {
-    [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:nil];
+    [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:^{
+        if (_targetMenuView.needsManualContextMode)
+            [self enterContextMenuMode];
+    }];
 }
 
 - (void)hideMultiMenuIfNeeded {

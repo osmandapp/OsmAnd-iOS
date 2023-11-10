@@ -969,23 +969,19 @@
     BOOL isToolbarVisible = isToolbarAllowed && _toolbarViewController && _toolbarViewController.view.superview;
     BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetChangePosition;
     BOOL isTopWidgetsVisible = _mapInfoController.topPanelController && [_mapInfoController.topPanelController hasWidgets] && !isTargetToHideVisible;
-    BOOL isLeftWidgetsVisible = [_mapInfoController.leftPanelController hasWidgets];
-
+    BOOL isLeftWidgetsVisible = _mapInfoController.leftPanelController && [_mapInfoController.leftPanelController hasWidgets];
     BOOL isMapDownloadVisible = [_downloadMapWidget isVisible] && _downloadMapWidget.alpha != 0;
     if (isMapDownloadVisible)
     {
         offset += _downloadMapWidget.frame.size.height + _downloadMapWidget.shadowOffset;
     }
-    else
+    else if (!self.contextMenuMode)
     {
-        if (!self.contextMenuMode)
-        {
-            if (isTopWidgetsVisible && contextMenuToolbarHeight == 0. && ![OAUtilities isLandscapeIpadAware])
-                offset += self.topWidgetsViewHeightConstraint.constant;
-            if (isToolbarVisible)
-                offset += _toolbarViewController.view.frame.size.height;
-        }
-        if (isLeftWidgetsVisible)
+        if (isTopWidgetsVisible && contextMenuToolbarHeight == 0. && ![OAUtilities isLandscapeIpadAware])
+            offset += self.topWidgetsViewHeightConstraint.constant;
+        if (isToolbarVisible)
+            offset += _toolbarViewController.view.frame.size.height;
+        else if (isLeftWidgetsVisible)
             offset += self.leftWidgetsViewHeightConstraint.constant;
     }
     return offset;
@@ -1151,7 +1147,9 @@
     BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetGPX
         || _mapPanelViewController.activeTargetType == OATargetWeatherLayerSettings
         || _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance
-        || _mapPanelViewController.activeTargetType == OATargetTerrainParametersSettings;
+        || _mapPanelViewController.activeTargetType == OATargetTerrainParametersSettings
+        || _mapPanelViewController.activeTargetType == OATargetRouteDetails
+        || _mapPanelViewController.activeTargetType == OATargetRouteDetailsGraph;
     BOOL isInContextMenuVisible = self.contextMenuMode && !isTargetToHideVisible;
     BOOL isTargetBackButtonVisible = [_mapPanelViewController isTargetBackButtonVisible];
     BOOL isToolbarAllowed = !self.contextMenuMode && !isDashboardVisible && !isWeatherToolbarVisible;
@@ -1171,11 +1169,11 @@
         if (_toolbarViewController && _toolbarViewController.view.superview)
             _toolbarViewController.view.alpha = isToolbarAllowed ? 1. : 0.;
         if (self.mapInfoController.topPanelController)
-            self.mapInfoController.topPanelController.view.alpha = isPanelAllowed && isTopPanelVisible && (!isToolbarVisible || isAllowToolbarsVisible) ? 1. : 0.;
+            self.mapInfoController.topPanelController.view.alpha = !isTopPanelVisible || !isPanelAllowed || isToolbarVisible ? 0. : 1.;
         if (self.mapInfoController.leftPanelController)
-            self.mapInfoController.leftPanelController.view.alpha = (isPanelAllowed || !isWeatherToolbarVisible) && isLeftPanelVisible ? 1. : 0.;
+            self.mapInfoController.leftPanelController.view.alpha = isWeatherToolbarVisible || !isLeftPanelVisible || !isPanelAllowed || isToolbarVisible ? 0. : 1.;
         if (self.mapInfoController.rightPanelController)
-            self.mapInfoController.rightPanelController.view.alpha = (isPanelAllowed || isWeatherToolbarVisible) && isRightPanelVisible ? 1. : 0.;
+            self.mapInfoController.rightPanelController.view.alpha = isWeatherToolbarVisible ? 1. : !isRightPanelVisible || !isPanelAllowed || isToolbarVisible ? 0. : 1.;
         if (self.downloadMapWidget)
             self.downloadMapWidget.alpha = isButtonsVisible ? 1. : 0.;
         

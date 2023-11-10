@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "OAAutoObserverProxy.h"
+#import "OAResourcesUISwiftHelper.h"
 
 @class OAResourceItem, OAMultipleResourceItem, OATableDataModel;
 
 typedef void(^ OAFetchResourcesBlock)();
 typedef OAResourceItem *(^ OAGetResourceByIndexBlock)(NSIndexPath *);
+typedef OAResourceSwiftItem *(^ OAGetSwiftResourceByIndexBlock)(NSIndexPath *);
 typedef NSArray<NSArray <NSDictionary *> *> *(^ OAGetTableDataBlock)();
 typedef OATableDataModel *(^ OAGetTableModelBlock)();
 
@@ -20,6 +22,7 @@ typedef OATableDataModel *(^ OAGetTableModelBlock)();
 @interface OADownloadingCellHelper : NSObject
 
 @property (nonatomic, copy) OAFetchResourcesBlock fetchResourcesBlock;
+@property (nonatomic, copy) OAGetSwiftResourceByIndexBlock getSwiftResourceByIndexBlock;
 @property (nonatomic, copy) OAGetResourceByIndexBlock getResourceByIndexBlock;
 @property (nonatomic, copy) OAGetTableModelBlock getTableDataModelBlock; 
 @property (nonatomic, copy) OAGetTableDataBlock getTableDataBlock;
@@ -28,6 +31,7 @@ typedef OATableDataModel *(^ OAGetTableModelBlock)();
 @property (weak, nonatomic) UIViewController *hostViewController;
 @property (weak, nonatomic) NSObject *hostDataLock;
 
+- (UITableViewCell *)setupSwiftCell:(OAResourceSwiftItem *)swiftMapItem indexPath:(NSIndexPath *)indexPath;
 - (UITableViewCell *)setupCell:(OAResourceItem *)mapItem indexPath:(NSIndexPath *)indexPath;
 - (void)onItemClicked:(NSIndexPath *)indexPath;
 - (void)updateAvailableMaps;

@@ -12,8 +12,8 @@
 
 "NSLocationAlwaysUsageDescription" = "This permission is required to use such features as: background GPX recording, navigation etc.";
 
-"NSBluetoothPeripheralUsageDescription" = "Advertisement would like to use bluetooth.";
+"NSBluetoothPeripheralUsageDescription" = "OsmAnd needs Bluetooth to find and connect to Bluetooth LE sensors.";
 
-"NSCalendarsUsageDescription" = "Advertisement would like to create a calendar event.";
+"NSCalendarsUsageDescription" = "OsmAnd would like to create a calendar event for vehicle pick-up notification.";
 
-"NSPhotoLibraryUsageDescription" = "Advertisement would like to store a photo.";
+"NSPhotoLibraryUsageDescription" = "OsmAnd would like to store a photo.";

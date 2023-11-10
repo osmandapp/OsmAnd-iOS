@@ -188,8 +188,8 @@ final class TravelObfHelper : NSObject {
         
         travelGpx.lat = amenity.latitude
         travelGpx.lon = amenity.longitude
-        travelGpx.descr = amenity.getTagContent(DESCRIPTION)
-    
+        travelGpx.descr = amenity.getTagContent(DESCRIPTION_TAG)
+
         travelGpx.routeId = amenity.getTagContent(ROUTE_ID)
         travelGpx.user = amenity.getTagContent(TravelGpx.USER)
         travelGpx.activityType = amenity.getTagContent(TravelGpx.ACTIVITY_TYPE)
@@ -336,7 +336,7 @@ final class TravelObfHelper : NSObject {
     
     func getLanguages(amenity: OAPOI) -> Set<String> {
         var langs: Set<String> = []
-        let descrStart = DESCRIPTION + ":"
+        let descrStart = DESCRIPTION_TAG + ":"
         let partStart = IS_PART + ":"
         for infoTag in amenity.getAdditionalInfo().keys {
             if infoTag.hasPrefix(descrStart) {

@@ -511,7 +511,7 @@
     return [[OAAmenityExtendedNameFilter alloc] initWithAcceptAmenityFunc:^BOOL(std::shared_ptr<const OsmAnd::Amenity> amenity, QHash<QString, QString> values, OAPOIType *type) {
         
         QString openingHours = nullptr;
-        openingHours = values[QString::fromNSString(OPENING_HOURS)];
+        openingHours = values[QString::fromNSString(OPENING_HOURS_TAG)];
         
         if (allTime)
         {

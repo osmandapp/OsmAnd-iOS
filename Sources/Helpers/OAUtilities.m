@@ -25,6 +25,7 @@
 #import <mach/mach.h>
 #import <mach/mach_host.h>
 #include <CommonCrypto/CommonDigest.h>
+#import <CocoaSecurity.h>
 
 #define kBlurViewTag -999
 #define kSpinnerViewTag -998
@@ -775,6 +776,11 @@
 
 - (void) addSpinner
 {
+    [self addSpinnerInCenterOfCurrentView:NO];
+}
+
+- (void) addSpinnerInCenterOfCurrentView:(BOOL)inCurrentView
+{
     for (UIView *subview in self.subviews)
     {
         if (subview.tag == kSpinnerViewTag)
@@ -784,7 +790,12 @@
     UIActivityIndicatorViewStyle spinnerStyle = UIActivityIndicatorViewStyleLarge;
 
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:spinnerStyle];
-    spinner.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2);
+    
+    if (inCurrentView)
+        spinner.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2);
+    else
+        spinner.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2);
+    
     spinner.tag = kSpinnerViewTag;
     [self addSubview:spinner];
     [spinner startAnimating];
@@ -2647,6 +2658,11 @@ static const double d180PI = 180.0 / M_PI_2;
     return s;
 }
 
++ (NSString *) toMD5:(NSString *)text
+{
+    return [CocoaSecurity md5:text].hexLower;
+}
+
 + (void) showMenuInView:(UIView *)parentView fromView:(UIView *)targetView
 {
     if ([parentView canBecomeFirstResponder])
@@ -2733,6 +2749,40 @@ static const double d180PI = 180.0 / M_PI_2;
     if ([res isEqualToString:key])
         res = defaultName;
     return res;
+}
+
++ (int) convertCharToDist:(NSString *)ch firstLetter:(NSString *)firstLetter firstDist:(int)firstDist mult1:(int)mult1 mult2:(int)mult2
+{
+    int dist = firstDist;
+    
+    const char *chChar = [ch UTF8String];
+    const char *firstLetterChar = [firstLetter UTF8String];
+    
+    for(int iteration = 1; iteration < chChar - firstLetterChar + 1; ++iteration)
+    {
+        dist *= iteration % 2 == 1 ? mult1 : mult2;
+    }
+    
+    return dist;;
+}
+
++ (BOOL) isValidFileName:(NSString *)name
+{
+    NSArray<NSString *> *illegalCharacters = @[ @"?", @":", @"\"", @"*", @"|", @"/", @"<", @">" ];
+    if (!name)
+    {
+        return NO;
+    }
+    else
+    {
+        for (NSString *symbol in illegalCharacters)
+        {
+            int index = [name indexOf:symbol];
+            if (index != -1)
+                return NO;
+        }
+    }
+    return YES;
 }
  
 @end

@@ -751,6 +751,7 @@
 "shared_string_duplicate_color" = "Duplicate color";
 "shared_string_delete_color" = "Delete color";
 "shared_string_duplicate" = "Duplicate";
+"shared_string_result" = "Result";
 
 "restart" = "Restart";
 
@@ -1940,7 +1941,39 @@
 "index_name_russia" = "Russia";
 "index_name_south_america" = "South America";
 "nautical_maps" = "Nautical maps";
+"shared_string_travel_guides" = "Travel guides";
 "download_select_map_types" = "Other maps";
+
+"shared_string_wikivoyage" = "Wikivoyage";
+"travel_guides_beta" = "Travel guides (Beta)";
+"download_file" = "Download file";
+"travel_card_download_descr" = "Download Wikivoyage travel guides to view articles about places around the world without a connection to the Internet.";
+"saved_articles" = "Bookmarked articles";
+"shared_string_explore" = "Explore";
+"popular_destinations" = "Popular destinations";
+"shared_string_contents" = "Contents";
+"shared_string_bookmark" = "Bookmark";
+"shared_string_read" = "Read";
+"shared_string_view" = "View";
+"article_added_to_bookmark" = " added to bookmarks.";
+"article_removed_from_bookmark" = " removed from bookmarks.";
+"shared_string_article" = "Article";
+"travel_guides_search_placeholder" = "Search for country, city or province";
+"clear_history" = "Clear history";
+"search_history" = "Search history";
+"clear_travel_search_history" = "Clear Travel search history?";
+"cleared_travel_search_history" = "History cleared";
+"article_has_no_points" = "Article has no points";
+"no_travel_guides_data_title" = "You don’t have travel data";
+"no_travel_guides_data_descr" = "Download Wikivoyage travel guides to view articles about places around the world without a connection to the Internet.";
+"images" = "Images";
+"cache_size" = "Cache size";
+"image_cache" = "Image cache";
+"remove_cache" = "Remove cache";
+"remove_cache_alert" = "Are you sure you want to clear cache?";
+"cache_cleared" = "Cache cleared";
+"download_images_settings_header" = "Offline Wikipedia files in OsmAnd don’t contain images. But they can be downloaded while viewing articles.";
+"download_images_settings_footer" = "Image downloading is enabling over any network. Mobile data can be used.";
 
 // Help
 "help_quiz" = "Quiz";

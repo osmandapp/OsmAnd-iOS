@@ -894,6 +894,133 @@
     return [NSArray arrayWithArray:arr];
 }
 
++ (NSArray<OAPOI *> *) findTravelGuides:(NSArray<NSString *> *)categoryNames location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish
+{
+    OsmAndAppInstance _app = [OsmAndApp instance];
+    const auto& obfsCollection = _app.resourcesManager->obfsCollection;
+    BOOL done = false;
+    
+    std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+    ctrl.reset(new OsmAnd::FunctorQueryController([&done]
+                                                  (const OsmAnd::FunctorQueryController* const controller)
+                                                  {
+                                                      return done;
+                                                  }));
+    
+    const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
+    
+    if (categoryNames)
+    {
+        auto categoriesFilter = QHash<QString, QStringList>();
+        QStringList categories = QStringList();
+        for (NSString *categoryName in categoryNames)
+            categories.append(QString::fromNSString(categoryName));
+        
+        categoriesFilter.insert(QString::fromNSString(@"routes"), categories);
+        searchCriteria->categoriesFilter = categoriesFilter;
+    }
+    
+    if (bbox31.width() != 0 && bbox31.height() != 0)
+    {
+        searchCriteria->bbox31 = bbox31;
+    }
+    
+    const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
+    NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
+    NSMutableSet<NSNumber *> *processedPoi = [NSMutableSet set];
+  
+    search->performTravelGuidesSearch(QString::fromNSString(reader), *searchCriteria,
+                                      [&arr, &location, &processedPoi, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                          {
+                                const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+        
+                                if (![processedPoi containsObject:@(am->id.id)])
+                                {
+                                    [processedPoi addObject:@(am->id.id)];
+                                    OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:YES];
+                                    poi.distanceMeters = OsmAnd::Utilities::squareDistance31(location, am->position31);
+                                    [OAPOIHelper fetchValuesContentPOIByAmenity:am poi:poi];
+                                    if (publish)
+                                    {
+                                        done = publish(poi);
+                                    }
+                                    else
+                                    {
+                                        [arr addObject:poi];
+                                    }
+                                }
+                          },
+                          ctrl);
+    
+    return [NSArray arrayWithArray:arr];
+}
+
+- (NSArray<OAPOI *> *) findTravelGuidesByKeyword:(NSString *)keyword categoryNames:(NSArray<NSString *> *)categoryNames poiTypeName:(NSString *)typeName location:(OsmAnd::PointI)location bbox31:(OsmAnd::AreaI)bbox31 reader:(NSString *)reader publish:(BOOL(^)(OAPOI *poi))publish
+{
+    _isSearchDone = NO;
+    _breakSearch = NO;
+
+    const auto& obfsCollection = _app.resourcesManager->obfsCollection;
+    
+    std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+    ctrl.reset(new OsmAnd::FunctorQueryController([self]
+                                       (const OsmAnd::FunctorQueryController* const controller)
+                                       {
+                                           // should break?
+                                            return _isSearchDone || _breakSearch || _limitCounter < 0;
+                                       }));
+    
+    _limitCounter = _searchLimit;
+    _prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+    
+    const std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(new OsmAnd::AmenitiesByNameSearch::Criteria);
+    
+    searchCriteria->name = QString::fromNSString(keyword ? keyword : @"");
+    searchCriteria->obfInfoAreaFilter = _visibleArea;
+    searchCriteria->bbox31 = bbox31;
+    
+    if (categoryNames)
+    {
+        auto categoriesFilter = QHash<QString, QStringList>();
+        QStringList categories = QStringList();
+        for (NSString *categoryName in categoryNames)
+            categories.append(QString::fromNSString(categoryName));
+        
+        categoriesFilter.insert(QString::fromNSString(@"routes"), categories);
+        searchCriteria->categoriesFilter = categoriesFilter;
+    }
+    
+    NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
+    NSMutableSet<NSNumber *> *processedPoi = [NSMutableSet set];
+    
+    const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
+    
+    search->performTravelGuidesSearch(QString::fromNSString(reader),
+                                      *searchCriteria,
+                                      [self, &processedPoi, &arr, &publish]
+                                        (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                                        {
+                                            const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+
+                                            OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:YES];
+                                            poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, am->position31);
+                                            [OAPOIHelper fetchValuesContentPOIByAmenity:am poi:poi];
+                                            
+                                            if (publish)
+                                            {
+                                                _isSearchDone = publish(poi);
+                                            }
+                                            
+                                            [arr addObject:poi];
+                                            _limitCounter--;
+                                        },
+                                        ctrl);
+    
+    _isSearchDone = YES;
+    
+    return [NSArray arrayWithArray:arr];
+}
+
 + (OAPOIRoutePoint *) distFromLat:(double)latitude longitude:(double)longitude locations:(NSArray<CLLocation *> *)locations radius:(double)radius
 {
     double dist = radius + 0.1;

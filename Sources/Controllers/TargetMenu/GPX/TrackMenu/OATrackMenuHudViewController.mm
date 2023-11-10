@@ -352,17 +352,25 @@
 
         if (![self openedFromMap])
         {
-            UITabBarController *myPlacesViewController =
-                    [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-            [myPlacesViewController setSelectedIndex:1];
-
-            OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
-            if (gpxController == nil)
-                return;
-
-            [gpxController setShouldPopToParent:YES];
-
-            [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
+            if (OAAppSettings.sharedManager.travelGuidesState.wasWatchingGpx)
+            {
+                OATravelExploreViewController *vc = [[OATravelExploreViewController alloc] init];
+                [[OARootViewController instance].navigationController pushViewController:vc animated:YES];
+            }
+            else
+            {
+                UITabBarController *myPlacesViewController =
+                        [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+                [myPlacesViewController setSelectedIndex:1];
+    
+                OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
+                if (gpxController == nil)
+                    return;
+    
+                [gpxController setShouldPopToParent:YES];
+    
+                [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
+            }
         }
     }];
 }

@@ -6,7 +6,6 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OAResourcesBaseViewController.h"
 #import <Foundation/Foundation.h>
 
 #define kPagePrefixHttp @"http://"
@@ -28,19 +27,25 @@ typedef void(^OAWikiArticleSearchTaskBlockType)(void);
 
 @end
 
+@protocol OAWikiLanguagesWebDelegate
+
+- (void)onLocaleSelected:(NSString *)locale;
+- (void)showLocalesVC:(UIViewController *)vc;
+
+@end
+
 
 @interface OAWikiArticleHelper : NSObject
 
 + (OAWorldRegion *) findWikiRegion:(OAWorldRegion *)mapRegion;
-+ (OARepositoryResourceItem *) findResourceItem:(OAWorldRegion *)worldRegion;
 + (void) showWikiArticle:(CLLocation *)location url:(NSString *)url sourceView:(UIView *)sourceView;
 + (void) showWikiArticle:(NSArray<CLLocation *> *)locations url:(NSString *)url onStart:(void (^)())onStart sourceView:(UIView *)sourceView onComplete:(void (^)())onComplete;
-+ (void) showHowToOpenWikiAlert:(OARepositoryResourceItem *)item url:(NSString *)url sourceView:(UIView *)sourceView;
 + (NSString *) getFirstParagraph:(NSString *)descriptionHtml;
 + (NSString *) getPartialContent:(NSString *)source;
 + (void) warnAboutExternalLoad:(NSString *)url sourceView:(UIView *)sourceView;
 + (NSString *) normalizeFileUrl:(NSString *)url;
 + (NSString *) getLang:(NSString *)url;
 + (NSString *) getArticleNameFromUrl:(NSString *)url lang:(NSString *)lang;
++ (UIMenu *)createLanguagesMenu:(NSArray<NSString *> *)availableLocales selectedLocale:(NSString *)selectedLocale delegate:(id<OAWikiLanguagesWebDelegate>)delegate;
 
 @end

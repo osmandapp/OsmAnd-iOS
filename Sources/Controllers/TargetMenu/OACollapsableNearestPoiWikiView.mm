@@ -19,6 +19,7 @@
 #import "OAPluginDetailsViewController.h"
 #import "OAManageResourcesViewController.h"
 #import "OAWikiArticleHelper.h"
+#import "OAWikiArticleHelper+cpp.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAWikipediaPlugin.h"
 #import "OAOsmAndFormatter.h"

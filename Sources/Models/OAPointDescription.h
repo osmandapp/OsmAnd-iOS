@@ -40,6 +40,7 @@
 #define POINT_TYPE_CUSTOM_POI_FILTER @"custom_poi_filter"
 
 #define POINT_LOCATION_URL 200
+#define OSM_LOCATION_URL 210
 #define POINT_LOCATION_LIST_HEADER 201
 
 @protocol OALocationPoint;

@@ -254,6 +254,7 @@
 #define cycleRoutesParameterKey @"cycleRoutesParameter"
 #define mountainBikeRoutesParameterKey @"mountainBikeRoutesParameter"
 #define mapManuallyRotatingAngleKey @"mapManuallyRotatingAngle"
+#define mapScreenOrientationKey @"mapScreenOrientation"
 
 #define activeMarkerKey @"activeMarkerKey"
 #define mapDistanceIndicationVisabilityKey @"mapDistanceIndicationVisabilityKey"
@@ -4610,6 +4611,9 @@
         [_globalPreferences setObject:_rateUsState forKey:@"rate_us_state"];
         
         _lastUUIDChangeTimestamp = [[OACommonLong withKey:lastUUIDChangeTimestampKey defValue:0] makeGlobal];
+        
+        _mapScreenOrientation = [OACommonInteger withKey:mapScreenOrientationKey defValue:EOAScreenOrientationSystem];
+        [_profilePreferences setObject:_mapScreenOrientation forKey:@"map_screen_orientation"];
 
         [self fetchImpassableRoads];
 
@@ -4990,6 +4994,7 @@
             [_lastUsedApplicationMode set:applicationMode.stringKey];
         [[ThemeManager shared] configureWithAppMode: applicationMode];
         [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:prevAppMode];
+        [[OAScreenOrientationHelper sharedInstance] updateSettings];
     }
 }
 

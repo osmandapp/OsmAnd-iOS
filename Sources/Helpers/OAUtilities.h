@@ -313,7 +313,6 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (float) radToDegf:(float)radians;
 + (double) radToDegd:(double)radians;
 
-+ (BOOL) isLeftSideLayout:(UIInterfaceOrientation)interfaceOrientation;
 + (CGFloat) getStatusBarHeight;
 + (CGFloat) getTopMargin;
 + (CGFloat) getBottomMargin;
@@ -321,10 +320,13 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (CGFloat) calculateScreenHeight;
 + (CGFloat) calculateScreenWidth;
 + (BOOL) isWindowed;
++ (BOOL) isIPhone;
 + (BOOL) isIPad;
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
         navigationBarHeight:(CGFloat)navigationBarHeight toolBarHeight:(CGFloat)toolBarHeight;
++ (BOOL) isPortrait;
 + (BOOL) isLandscape;
++ (BOOL) isLandscape:(UIInterfaceOrientation)interfaceOrientation;
 + (BOOL) isLandscapeIpadAware;
 
 + (NSArray<NSValue *> *) controlPointsFromPoints:(NSArray<NSValue *> *)dataPoints;

@@ -22,6 +22,7 @@ FOUNDATION_EXPORT NSNotificationName _Nonnull const OALaunchUpdateStateNotificat
 @interface OAAppDelegate : UIResponder <UIApplicationDelegate>
 @property (strong, nonatomic, nullable) OARootViewController *rootViewController;
 @property (nonatomic, assign) AppLaunchEvent appLaunchEvent;
+@property (nonatomic, assign) UIInterfaceOrientation interfaceOrientation;
 
 - (void)scheduleBackgroundDataFetch;
 

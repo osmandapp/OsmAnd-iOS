@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic, nullable) NSURL *loadedURL;
 
 - (BOOL)openURL:(NSURL *)url;
+- (UIInterfaceOrientation)getUIIntefaceOrientation;
 
 @end
 

@@ -77,7 +77,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 - (void) viewWillLayoutSubviews
 {
     if (![self.tableView isSliding] && !_showing && !_hiding)
-        [self updateLayout:CurrentInterfaceOrientation adjustOffset:NO];
+        [self updateLayout:NO];
 }
 
 - (CGFloat) calculateTableHeight
@@ -86,25 +86,15 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     return self.tableView.contentSize.height;
 }
 
-- (BOOL) isLeftSideLayout:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (UIInterfaceOrientationIsLandscape(interfaceOrientation) || OAUtilities.isIPad) && !OAUtilities.isWindowed;
-}
-
 - (CGFloat) getInitialPosY
 {
-    return [self getInitialPosY:CurrentInterfaceOrientation];
-}
-
-- (CGFloat) getInitialPosY:(UIInterfaceOrientation)interfaceOrientation
-{
-    BOOL leftSideLayout = [self isLeftSideLayout:interfaceOrientation];
-    CGRect navbarFrame = [self navbarViewFrame:interfaceOrientation];
-    CGSize screenSize = [self screenSize:interfaceOrientation];
+    BOOL leftSideLayout = [OAUtilities isLandscapeIpadAware];
+    CGRect navbarFrame = [self navbarViewFrame];
+    CGSize screenSize = [self screenSize];
     return leftSideLayout ? navbarFrame.size.height : screenSize.height * kMapSettingsInitialPosKoeff;
 }
 
--(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self updateBackgroundViewLayout];
@@ -112,13 +102,13 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
         UIView *headerView = self.tableView.tableHeaderView;
         
         CGRect navbarFrame = [self navbarViewFrame];
-        headerView.frame = CGRectMake(0, 0, navbarFrame.size.width, [self getInitialPosY:CurrentInterfaceOrientation]);
+        headerView.frame = CGRectMake(0, 0, navbarFrame.size.width, [self getInitialPosY]);
         self.tableView.tableHeaderView = headerView;
-        [self updateBackgroundViewLayout:CurrentInterfaceOrientation contentOffset:self.tableView.contentOffset];
-        self.view.frame = [self contentViewFrame:CurrentInterfaceOrientation];
+        [self updateBackgroundViewLayout:self.tableView.contentOffset];
+        self.view.frame = [self contentViewFrame];
         _navbarView.frame = navbarFrame;
         _navbarGradientBackgroundView.frame = navbarFrame;
-        [self updateNavbarBackground:CurrentInterfaceOrientation];
+        [self updateNavbarBackground];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         _rotating = NO;
         [self updateBackgroundViewLayout];
@@ -127,22 +117,22 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 
 - (void) updateBackgroundViewLayout
 {
-    [self updateBackgroundViewLayout:CurrentInterfaceOrientation contentOffset:self.tableView.contentOffset];
+    [self updateBackgroundViewLayout:self.tableView.contentOffset];
 }
 
-- (void) updateBackgroundViewLayout:(UIInterfaceOrientation)interfaceOrientation contentOffset:(CGPoint)contentOffset
+- (void) updateBackgroundViewLayout:(CGPoint)contentOffset
 {
-    CGRect navbarFrame = [self navbarViewFrame:interfaceOrientation];
-    CGRect contentFrame = [self contentViewFrame:interfaceOrientation];
-    if ([self isLeftSideLayout:interfaceOrientation])
+    CGRect navbarFrame = [self navbarViewFrame];
+    CGRect contentFrame = [self contentViewFrame];
+    if ([OAUtilities isLandscapeIpadAware])
         _backgroundView.frame = CGRectMake(0, _rotating ? navbarFrame.size.height : 0, contentFrame.size.width, contentFrame.size.height);
     else
-        _backgroundView.frame = CGRectMake(0, MAX(0, [self getInitialPosY:interfaceOrientation] - contentOffset.y), contentFrame.size.width, contentFrame.size.height);
+        _backgroundView.frame = CGRectMake(0, MAX(0, [self getInitialPosY] - contentOffset.y), contentFrame.size.width, contentFrame.size.height);
 }
 
-- (void) updateLayout:(UIInterfaceOrientation)interfaceOrientation adjustOffset:(BOOL)adjustOffset
+- (void)updateLayout:(BOOL)adjustOffset
 {
-    BOOL leftSideLayout = [self isLeftSideLayout:interfaceOrientation];
+    BOOL leftSideLayout = [OAUtilities isLandscapeIpadAware];
     if (!self.showFull && leftSideLayout)
         self.showFull = YES;
     
@@ -156,52 +146,37 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
         self.tableView.contentOffset = newOffset;
 }
 
-- (CGSize) screenSize:(UIInterfaceOrientation)interfaceOrientation
+- (CGSize)screenSize
 {
-    UIInterfaceOrientation currentInterfaceOrientation = CurrentInterfaceOrientation;
-    BOOL orientationsEqual = UIInterfaceOrientationIsPortrait(currentInterfaceOrientation) == UIInterfaceOrientationIsPortrait(interfaceOrientation) || UIInterfaceOrientationIsLandscape(currentInterfaceOrientation) == UIInterfaceOrientationIsLandscape(interfaceOrientation);
-    if (orientationsEqual)
-        return CGSizeMake(DeviceScreenWidth, DeviceScreenHeight);
-    else
-        return CGSizeMake(DeviceScreenHeight, DeviceScreenWidth);
+    return CGSizeMake(DeviceScreenWidth, DeviceScreenHeight);
 }
 
 - (CGFloat) getViewWidthForPad
 {
-    return OAUtilities.isLandscape ? kInfoViewLandscapeWidthPad : kInfoViewPortraitWidthPad;
+    return [OAUtilities isLandscape] ? kInfoViewLandscapeWidthPad : kInfoViewPortraitWidthPad;
 }
 
-- (CGRect) contentViewFrame:(UIInterfaceOrientation)interfaceOrientation
+- (CGRect)contentViewFrame
 {
-    CGSize screenSize = [self screenSize:interfaceOrientation];
-    CGFloat frameWidth = OAUtilities.isIPad ? [self getViewWidthForPad] : kMapSettingsLandscapeWidth;
-    return CGRectMake(0.0, 0.0, [self isLeftSideLayout:interfaceOrientation] ? frameWidth + [OAUtilities getLeftMargin] : screenSize.width, screenSize.height);
+    CGSize screenSize = [self screenSize];
+    CGFloat frameWidth = [OAUtilities isIPad] ? [self getViewWidthForPad] : kMapSettingsLandscapeWidth;
+    return CGRectMake(0.0, 0.0, [OAUtilities isLandscapeIpadAware] ? frameWidth + [OAUtilities getLeftMargin] : screenSize.width, screenSize.height);
 }
 
-- (CGRect) contentViewFrame
+- (CGRect)navbarViewFrame
 {
-    return [self contentViewFrame:CurrentInterfaceOrientation];
-}
-
-- (CGRect) navbarViewFrame:(UIInterfaceOrientation)interfaceOrientation
-{
-    CGSize screenSize = [self screenSize:interfaceOrientation];
+    CGSize screenSize = [self screenSize];
     CGFloat navBarHeight = [OAUtilities getStatusBarHeight];
     navBarHeight = navBarHeight == inCallStatusBarHeight ? navBarHeight / 2 : navBarHeight;
-    if (![self isLeftSideLayout:interfaceOrientation])
+    if (![OAUtilities isLandscapeIpadAware])
     {
         return CGRectMake(0.0, 0.0, screenSize.width, kOADashboardNavbarHeight + navBarHeight);
     }
     else
     {
-        CGFloat frameWidth = OAUtilities.isIPad ? [self getViewWidthForPad] : kMapSettingsLandscapeWidth;
+        CGFloat frameWidth = [OAUtilities isIPad] ? [self getViewWidthForPad] : kMapSettingsLandscapeWidth;
         return CGRectMake(0.0, 0.0, frameWidth + [OAUtilities getLeftMargin], kOADashboardNavbarHeight + navBarHeight);
     }
-}
-
-- (CGRect) navbarViewFrame
-{
-    return [self navbarViewFrame:CurrentInterfaceOrientation];
 }
 
 - (void) show:(UIViewController *)rootViewController parentViewController:(OADashboardViewController *)parentViewController animated:(BOOL)animated;
@@ -230,7 +205,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     
     CGRect frame = [self contentViewFrame];
     CGRect navbarFrame = [self navbarViewFrame];
-    if ([self isMainScreen] && UIInterfaceOrientationIsPortrait(CurrentInterfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    if ([self isMainScreen] && [OAUtilities isPortrait] && [OAUtilities isIPhone])
     {
         frame.origin.y = DeviceScreenHeight + 10.0;
         navbarFrame.origin.y = -navbarFrame.size.height;
@@ -263,7 +238,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     self.navbarView.frame = navbarFrame;
     [rootViewController.view addSubview:self.navbarView];
 
-    [self updateNavbarBackground:CurrentInterfaceOrientation];
+    [self updateNavbarBackground];
 
     if (animated)
     {
@@ -344,8 +319,8 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
             
             CGRect navbarFrame;
             CGRect contentFrame;
-            
-            if (UIInterfaceOrientationIsPortrait(CurrentInterfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+
+            if ([OAUtilities isPortrait] && [OAUtilities isIPhone])
             {
                 if ([self isMainScreen] || hideAll)
                 {
@@ -442,18 +417,18 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     [_okButton setTitle:OALocalizedString(@"shared_string_ok") forState:UIControlStateNormal];
 }
 
--(void) addAccessibilityLabels
+- (void) addAccessibilityLabels
 {
     self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
 }
 
-- (void) updateNavbarBackground:(UIInterfaceOrientation)interfaceOrientation
+- (void) updateNavbarBackground
 {
     UIView *navbarGradientBackgroundView = [self getNavbarGradientBackgroundView];
     
-    if (UIInterfaceOrientationIsPortrait(interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    if ([OAUtilities isPortrait] && [OAUtilities isIPhone])
     {
-        CGFloat alpha = [self getNavbarAlpha:interfaceOrientation];
+        CGFloat alpha = [self getNavbarAlpha];
         _navbarBackgroundView.alpha = alpha;
         if (navbarGradientBackgroundView)
             navbarGradientBackgroundView.alpha = 1.0 - alpha;
@@ -470,14 +445,13 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 {
     [super viewDidLoad];
     
-    UIInterfaceOrientation interfaceOrientation = CurrentInterfaceOrientation;
-    [self updateNavbarBackground:interfaceOrientation];
+    [self updateNavbarBackground];
 
     [self.backButton setImage:[UIImage imageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
 
     _okButton.hidden = YES;
     
-    CGRect navbarFrame = [self navbarViewFrame:interfaceOrientation];
+    CGRect navbarFrame = [self navbarViewFrame];
     [self.navbarView addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
 
     self.tableView = (OATableView *)self.view;
@@ -504,7 +478,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     self.tableView.backgroundView = view;
     self.tableView.backgroundColor = UIColor.clearColor;
     self.tableView.clipsToBounds = NO;
-    [self updateBackgroundViewLayout:interfaceOrientation contentOffset:{0, 0}];
+    [self updateBackgroundViewLayout:{0, 0}];
 
     //self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
     self.tableView.separatorColor = UIColor.separatorColor;
@@ -521,7 +495,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     [self.navbarBackgroundView.layer setShadowRadius:3.0];
     [self.navbarBackgroundView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
 
-    [self updateLayout:interfaceOrientation adjustOffset:YES];
+    [self updateLayout:YES];
 
     self.okButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
@@ -609,13 +583,13 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     [[OARootViewController instance].mapPanel closeDashboard];
 }
 
-- (CGFloat) getNavbarAlpha:(UIInterfaceOrientation)interfaceOrientation
+- (CGFloat)getNavbarAlpha
 {
     CGFloat alpha = self.view.alpha;
-    if (alpha > 0 && ![self isLeftSideLayout:interfaceOrientation])
+    if (alpha > 0 && ![OAUtilities isLandscapeIpadAware])
     {
-        CGFloat initialPosY = [self getInitialPosY:interfaceOrientation];
-        CGRect navbarFrame = [self navbarViewFrame:interfaceOrientation];
+        CGFloat initialPosY = [self getInitialPosY];
+        CGRect navbarFrame = [self navbarViewFrame];
         CGFloat a = initialPosY - [OAUtilities getStatusBarHeight];
         CGFloat b = initialPosY - navbarFrame.size.height;
         CGFloat c = self.tableView.contentOffset.y;
@@ -636,30 +610,13 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     });
 }
 
-#pragma mark - Orientation
-
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return YES;
-}
-
-- (NSUInteger) supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskAllButUpsideDown;
-}
-
-- (UIInterfaceOrientation) preferredInterfaceOrientationForPresentation
-{
-    return UIInterfaceOrientationPortrait;
-}
-
 #pragma mark - OATableViewDelegate
 
 - (void) tableViewWillEndDragging:(OATableView *)tableView withVelocity:(CGPoint)velocity withStartOffset:(CGPoint)startOffset
 {
     CGFloat offsetY = tableView.contentOffset.y;
     BOOL slidingDown = velocity.y > 500 || offsetY < -50;
-    BOOL landscape = [self isLeftSideLayout:CurrentInterfaceOrientation];
+    BOOL landscape = [OAUtilities isLandscapeIpadAware];
     
     if (slidingDown && offsetY < 0 && !landscape)
         [self closeDashboard];
@@ -669,8 +626,8 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 {
     if (!_rotating && !_showing && !_hiding)
     {
-        [self updateBackgroundViewLayout:CurrentInterfaceOrientation contentOffset:contentOffset];
-        [self updateNavbarBackground:CurrentInterfaceOrientation];
+        [self updateBackgroundViewLayout:contentOffset];
+        [self updateNavbarBackground];
     }
 }
 

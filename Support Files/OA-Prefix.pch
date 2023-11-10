@@ -18,8 +18,6 @@
 #define DeviceScreenWidth ([OAUtilities calculateScreenWidth])
 #define DeviceScreenHeight ([OAUtilities calculateScreenHeight])
 
-#define CurrentInterfaceOrientation [[UIApplication sharedApplication] statusBarOrientation]
-
 #define kWorldBasemapKey "world_basemap.obf"
 #define kWorldMiniBasemapKey @"WorldMiniBasemap.obf"
 #define kWorldSeamarksKey "world_seamarks.obf"

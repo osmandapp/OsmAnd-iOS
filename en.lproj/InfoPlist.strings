@@ -1,0 +1,19 @@
+/* 
+  InfoPlist.strings
+  OsmAnd
+
+  Created by Dmitry Svetlichny on 06.11.2023.
+  Copyright © 2023 OsmAnd. All rights reserved.
+*/
+
+"NSLocationWhenInUseUsageDescription" = "This permission is required to use such features as: background GPX recording, navigation etc. when OsmAnd is in foreground only.";
+
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "This permission is required to use such features as: background GPX recording, navigation etc.";
+
+"NSLocationAlwaysUsageDescription" = "This permission is required to use such features as: background GPX recording, navigation etc.";
+
+"NSBluetoothPeripheralUsageDescription" = "OsmAnd needs Bluetooth to find and connect to Bluetooth LE sensors.";
+
+"NSCalendarsUsageDescription" = "OsmAnd would like to create a calendar event for vehicle pick-up notification.";
+
+"NSPhotoLibraryUsageDescription" = "OsmAnd would like to store a photo.";

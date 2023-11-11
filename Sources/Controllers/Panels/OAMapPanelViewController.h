@@ -99,7 +99,9 @@
 - (void) showConfigureScreen:(OAApplicationMode *)targetMode;
 - (void) showMapStylesScreen;
 - (void) showWeatherLayersScreen;
+- (void) showTravelGuides;
 - (void) showTerrainScreen;
+
 
 - (void) addWaypoint;
 

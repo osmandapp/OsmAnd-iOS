@@ -820,7 +820,7 @@
 "hide_hillshade" = "陰影起伏図を非表示";
 "toggle_contour_lines" = "等高線の表示/非表示";
 "toggle_hillshade" = "地形の表示/非表示";
-"show_from_zoom_level" = "表示はズームレベルで開始";
+"show_from_zoom_level" = "標準ズームレベル";
 "quick_action_contour_lines_descr" = "マップ上の等高線の表示/非表示を切り替えられるボタンです。";
 "hide_contour_lines" = "等高線を非表示";
 "other_options" = "Other options";
@@ -2593,7 +2593,7 @@
 "routing_attr_allow_private_for_truck_description" = "トラック用の私有地へのアクセスを許可します。";
 "rendering_attr_horse_scale_difficult_name" = "Difficult(難しい道)";
 "rendering_attr_horse_scale_dangerous_name" = "Dangerous(危険)";
-"rendering_attr_hideMilitaryAreas_name" = "軍事エリアを非表示";
+"rendering_attr_hideMilitaryAreas_name" = "軍事エリア";
 "rendering_attr_showMtbScale_description" = "MTBスケールに従ってトレイルを表示します。";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "ゲレンデ(圧雪区域)の外に行かない";
 "routing_attr_difficulty_preference_advanced_name" = "上級者";
@@ -2614,3 +2614,8 @@
 "weather_forecast_is_outdated" = "天気予報データが古くなっています。";
 "nautical_depth_points" = "水深点(最高深度)";
 "shared_string_cache" = "キャッシュ";
+"rendering_value_caiScale_description" = "クラブ・アルピノ・イタリアーノ(イタリア山岳会)";
+"rendering_attr_alpineHiking_name" = "難易度の分類";
+"rendering_value_sacScale_description" = "スイス・アルペン・クラブ(スイス山岳会)";
+"map_widget_current_speed" = "現在速度";
+"add_row" = "行を追加";

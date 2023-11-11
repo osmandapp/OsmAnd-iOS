@@ -2343,7 +2343,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (void) recreateHeightmapProvider
 {
-    OASRTMPlugin *plugin = (OASRTMPlugin *)[OAPlugin getEnabledPlugin:OASRTMPlugin.class];
+    OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPlugin getEnabledPlugin:OASRTMPlugin.class];
     if (!plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled)
     {
         _mapView.heightmapSupported = NO;

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ArticleTravelCell" id="mxA-gk-yBb" userLabel="ArticleTravelCell" customClass="ArticleTravelCell" customModule="OsmAnd_Maps" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="149"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mxA-gk-yBb" id="Yki-Io-ywM">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="149"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="jag-1I-n5h">
+                        <rect key="frame" x="20" y="16" width="335" height="92"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="TopLeft" axis="vertical" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="yhu-8A-sbm">
+                                <rect key="frame" x="0.0" y="0.0" width="227" height="92"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" text="Amsterdam" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UQn-I8-jyJ">
+                                        <rect key="frame" x="0.0" y="0.0" width="227" height="20.5"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <color key="textColor" name="textColorPrimary"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="278" text="is the capital of the Netherlands' with a population of more than 850,000..." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1cQ-8B-7Pv">
+                                        <rect key="frame" x="0.0" y="27.5" width="227" height="64.5"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <color key="textColor" name="textColorSecondary"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ef8-uX-9Nt" userLabel="Image">
+                                <rect key="frame" x="243" y="0.0" width="92" height="92"/>
+                                <color key="backgroundColor" name="viewBgColor"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="ef8-uX-9Nt" secondAttribute="height" multiplier="1:1" id="SFQ-Pr-VyR"/>
+                                    <constraint firstAttribute="height" constant="90" id="sm7-4h-tcE"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                    </stackView>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_photo" translatesAutoresizingMaskIntoConstraints="NO" id="LK7-5G-l79">
+                        <rect key="frame" x="294" y="47" width="30" height="30"/>
+                        <color key="tintColor" name="iconColorDefault"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="30" id="aaX-jZ-dBs"/>
+                            <constraint firstAttribute="height" constant="30" id="n0B-ZD-5H9"/>
+                        </constraints>
+                    </imageView>
+                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mHV-wI-dNE">
+                        <rect key="frame" x="20" y="118" width="335" height="20"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Continent - Region" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q8m-xt-Rbr">
+                                <rect key="frame" x="0.0" y="0.0" width="315" height="20"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                <color key="textColor" name="textColorTertiary"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom20_bookmark" translatesAutoresizingMaskIntoConstraints="NO" id="PCT-yN-GFQ">
+                                <rect key="frame" x="315" y="0.0" width="20" height="20"/>
+                                <color key="tintColor" name="iconColorActive"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="Wtr-1X-gXR"/>
+                                    <constraint firstAttribute="width" constant="20" id="dmk-om-tSb"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                    </stackView>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="mHV-wI-dNE" secondAttribute="bottom" constant="12" id="7BD-bD-8ae"/>
+                    <constraint firstItem="mHV-wI-dNE" firstAttribute="top" secondItem="jag-1I-n5h" secondAttribute="bottom" constant="10" id="BdC-7k-xWj"/>
+                    <constraint firstItem="jag-1I-n5h" firstAttribute="top" secondItem="Yki-Io-ywM" secondAttribute="top" constant="16" id="BtD-nZ-NZs"/>
+                    <constraint firstItem="LK7-5G-l79" firstAttribute="centerX" secondItem="ef8-uX-9Nt" secondAttribute="centerX" id="WHm-Gj-oIr"/>
+                    <constraint firstItem="LK7-5G-l79" firstAttribute="centerY" secondItem="ef8-uX-9Nt" secondAttribute="centerY" id="Xbd-wB-u1I"/>
+                    <constraint firstAttribute="trailing" secondItem="jag-1I-n5h" secondAttribute="trailing" constant="20" id="dre-w4-yP9"/>
+                    <constraint firstItem="mHV-wI-dNE" firstAttribute="leading" secondItem="Yki-Io-ywM" secondAttribute="leading" constant="20" id="f5B-c0-kCC"/>
+                    <constraint firstItem="jag-1I-n5h" firstAttribute="leading" secondItem="Yki-Io-ywM" secondAttribute="leading" constant="20" id="lAn-G2-vtN"/>
+                    <constraint firstAttribute="trailing" secondItem="mHV-wI-dNE" secondAttribute="trailing" constant="20" id="txv-QX-rKR"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="arcticleDescription" destination="1cQ-8B-7Pv" id="ucf-9U-EeK"/>
+                <outlet property="arcticleTitle" destination="UQn-I8-jyJ" id="X6T-Z0-9zf"/>
+                <outlet property="bookmarkIcon" destination="PCT-yN-GFQ" id="raA-1c-LGY"/>
+                <outlet property="imagePreview" destination="ef8-uX-9Nt" id="g3Q-lQ-WGa"/>
+                <outlet property="noImageIcon" destination="LK7-5G-l79" id="5tM-Or-pDI"/>
+                <outlet property="regionLabel" destination="Q8m-xt-Rbr" id="iQF-Vs-yV5"/>
+            </connections>
+            <point key="canvasLocation" x="160.80000000000001" y="270.31484257871068"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="ic_custom20_bookmark" width="20" height="20"/>
+        <image name="ic_custom_photo" width="30" height="30"/>
+        <namedColor name="iconColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="iconColorDefault">
+            <color red="0.74509803921568629" green="0.72549019607843135" blue="0.77254901960784317" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorPrimary">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorSecondary">
+            <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorTertiary">
+            <color red="0.64313725490196083" green="0.61568627450980395" blue="0.68627450980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="viewBgColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

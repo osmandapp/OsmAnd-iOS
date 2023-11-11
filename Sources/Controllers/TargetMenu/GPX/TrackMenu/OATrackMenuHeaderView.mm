@@ -243,6 +243,12 @@
 - (void)generateGpxBlockStatistics:(OAGPXTrackAnalysis *)analysis
                        withoutGaps:(BOOL)withoutGaps
 {
+    [self setStatisticsCollection:[self.class generateGpxBlockStatistics:analysis withoutGaps:withoutGaps]];
+}
+
++ (NSMutableArray<OAGPXTableCellData *> *)generateGpxBlockStatistics:(OAGPXTrackAnalysis *)analysis
+                       withoutGaps:(BOOL)withoutGaps
+{
     NSMutableArray<OAGPXTableCellData *> *statisticCells = [NSMutableArray array];
     if (analysis)
     {
@@ -335,7 +341,7 @@
             }]];
         }
     }
-    [self setStatisticsCollection:statisticCells];
+    return statisticCells;
 }
 
 - (void)updateShowHideButton:(BOOL)shownTrack
@@ -603,10 +609,10 @@
 {
     OAGPXTableCellData *cellData = _statisticsCells[indexPath.row];
     BOOL isLast = indexPath.row == [self collectionView:collectionView numberOfItemsInSection:indexPath.section] - 1;
-    return [self getSizeForItem:cellData.title value:cellData.values[@"string_value"] isLast:isLast];
+    return [self.class getSizeForItem:cellData.title value:cellData.values[@"string_value"] isLast:isLast];
 }
 
-- (CGSize)getSizeForItem:(NSString *)title value:(NSString *)value isLast:(BOOL)isLast
++ (CGSize)getSizeForItem:(NSString *)title value:(NSString *)value isLast:(BOOL)isLast
 {
     CGSize sizeByTitle = [OAUtilities calculateTextBounds:title
                                                     width:10000.0

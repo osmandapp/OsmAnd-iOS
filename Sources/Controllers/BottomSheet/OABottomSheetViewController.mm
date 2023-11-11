@@ -44,6 +44,7 @@
 @implementation OABottomSheetViewController
 {
     OsmAndAppInstance _app;
+    OAAppSettings *_settings;
     
     BOOL _appearFirstTime;
     BOOL _showing;
@@ -85,9 +86,9 @@
     return self.tableView.contentSize.height;
 }
 
-- (BOOL) isLandscape:(UIInterfaceOrientation)interfaceOrientation
+- (BOOL) isLandscape
 {
-    return (UIInterfaceOrientationIsLandscape(interfaceOrientation) && !OAUtilities.isWindowed /*|| UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad*/);
+    return ([OAUtilities isLandscape] && ![OAUtilities isWindowed] /*|| UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad*/);
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -96,7 +97,7 @@
         _rotating = YES;
         [self applyCorrectSizes];
         [self adjustViewHeight];
-        [self updateTableHeaderView:CurrentInterfaceOrientation];
+        [self updateTableHeaderView];
         [self updateBackgroundViewLayout];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         _rotating = NO;
@@ -105,12 +106,12 @@
 
 - (void) updateBackgroundViewLayout
 {
-    [self updateBackgroundViewLayout:CurrentInterfaceOrientation contentOffset:self.tableView.contentOffset];
+    [self updateBackgroundViewLayout:self.tableView.contentOffset];
 }
 
-- (void) updateBackgroundViewLayout:(UIInterfaceOrientation)interfaceOrientation contentOffset:(CGPoint)contentOffset
+- (void) updateBackgroundViewLayout:(CGPoint)contentOffset
 {
-    CGRect contentFrame = [self contentViewFrame:interfaceOrientation];
+    CGRect contentFrame = [self contentViewFrame];
     if (_tableView.tableHeaderView)
     {
         _tableBackgroundView.frame = CGRectMake(0, MAX(contentFrame.origin.y, _tableView.tableHeaderView.frame.size.height - contentOffset.y), contentFrame.size.width, contentFrame.size.height);
@@ -121,40 +122,26 @@
     }
 }
 
-- (CGRect) screenFrame:(UIInterfaceOrientation)interfaceOrientation
+- (CGRect)screenFrame
 {
     //return [self frameForOrientation];
-    CGSize size = [self screenSize:interfaceOrientation];
+    CGSize size = [self screenSize];
     return CGRectMake(0, 0, size.width, size.height);
 }
 
-- (CGSize) screenSize:(UIInterfaceOrientation)interfaceOrientation
+- (CGSize) screenSize
 {
-    //return [self frameForOrientation].size;
-    
-    UIInterfaceOrientation currentInterfaceOrientation = CurrentInterfaceOrientation;
-    BOOL orientationsEqual = UIInterfaceOrientationIsPortrait(currentInterfaceOrientation) == UIInterfaceOrientationIsPortrait(interfaceOrientation) || UIInterfaceOrientationIsLandscape(currentInterfaceOrientation) == UIInterfaceOrientationIsLandscape(interfaceOrientation);
-    if (orientationsEqual)
-        return CGSizeMake(DeviceScreenWidth, DeviceScreenHeight);
-    else
-        return CGSizeMake(DeviceScreenHeight, DeviceScreenWidth);
-    
+    return CGSizeMake(DeviceScreenWidth, DeviceScreenHeight);
 }
 
-- (CGRect) contentViewFrame:(UIInterfaceOrientation)interfaceOrientation
+- (CGRect)contentViewFrame
 {
-    CGSize screenSize = [self screenSize:interfaceOrientation];
-    BOOL isIPad = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
-    CGFloat width = isIPad ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
-    if ([self isLandscape:interfaceOrientation])
+    CGSize screenSize = [self screenSize];
+    CGFloat width = [OAUtilities isIPad] ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
+    if ([self isLandscape])
         return CGRectMake(screenSize.width / 2 - width / 2, 0.0, width, screenSize.height - _keyboardHeight);
     else
         return CGRectMake(0.0, 0.0, screenSize.width, screenSize.height - _keyboardHeight);
-}
-
-- (CGRect) contentViewFrame
-{
-    return [self contentViewFrame:CurrentInterfaceOrientation];
 }
 
 - (void) applyLocalization
@@ -260,7 +247,6 @@
 
 - (void) additionalSetup
 {
-    UIInterfaceOrientation interfaceOrientation = CurrentInterfaceOrientation;
     _tableView.oaDelegate = self;
     //_tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0);
     _tableView.contentInset = UIEdgeInsetsZero;
@@ -297,8 +283,8 @@
     [self setupView];
     
     [self adjustViewHeight];
-    [self updateBackgroundViewLayout:interfaceOrientation contentOffset:{0, 0}];
-    [self updateTableHeaderView:interfaceOrientation];
+    [self updateBackgroundViewLayout:{0, 0}];
+    [self updateTableHeaderView];
     
     [self setupGestures];
 }
@@ -307,6 +293,7 @@
 {
     _appearFirstTime = YES;
     _app = [OsmAndApp instance];
+    _settings = [OAAppSettings sharedManager];
     
     _keyboardHeight = 0;
     
@@ -315,21 +302,19 @@
     self.bottomSheetWindow.backgroundColor = [UIColor clearColor];
     self.bottomSheetWindow.windowScene = (UIWindowScene *)UIApplication.sharedApplication.mainScene;
     [[ThemeManager shared] configureWithAppMode:[OAAppSettings sharedManager].applicationMode.get];
-    
-    UIInterfaceOrientation interfaceOrientation = CurrentInterfaceOrientation;
 
-    CGRect frame = [self screenFrame:interfaceOrientation];
+    CGRect frame = [self screenFrame];
     self.view.frame = frame;
-    
-    CGRect contentFrame = [self contentViewFrame:interfaceOrientation];
+
+    CGRect contentFrame = [self contentViewFrame];
     contentFrame.origin.y = frame.size.height + 10.0;
     self.contentView.frame = contentFrame;
     
 }
 
-- (void) updateTableHeaderView:(UIInterfaceOrientation)interfaceOrientation
+- (void)updateTableHeaderView
 {
-    CGRect contentFrame = [self contentViewFrame:interfaceOrientation];
+    CGRect contentFrame = [self contentViewFrame];
     if (_keyboardHeight > 0)
         _tableView.tableHeaderView = nil;
     CGFloat tableContentHeight = [self calculateTableHeight];
@@ -374,10 +359,9 @@
 
 - (void)applyCorrectSizes
 {
-    UIInterfaceOrientation currOrientation = CurrentInterfaceOrientation;
-    CGSize size = [self screenSize:currOrientation];
+    CGSize size = [self screenSize];
     CGRect viewFrame = CGRectMake(0.0, 0.0, size.width, size.height);
-    CGRect contentFrame = [self contentViewFrame:currOrientation];
+    CGRect contentFrame = [self contentViewFrame];
     self.contentView.frame = contentFrame;
     self.view.frame = viewFrame;
 }
@@ -453,7 +437,7 @@
 
 - (void)goBack
 {
-    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
+    if ([_settings.settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
     {
         //Launch WunderLINQ
         NSString *wunderlinqAppURL = @"wunderlinq://datagrid";
@@ -461,7 +445,7 @@
         if (canOpenURL)
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:wunderlinqAppURL] options:@{} completionHandler:nil];
     }
-    else if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
+    else if ([_settings.settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
     {
         [self dismiss];
     }
@@ -497,21 +481,6 @@
     return NO;
 }
 
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return YES;
-}
-
-- (NSUInteger) supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskAll;
-}
-
-- (UIInterfaceOrientation) preferredInterfaceOrientationForPresentation
-{
-    return UIInterfaceOrientationPortrait;
-}
-
 - (void) setTapToDismissEnabled:(BOOL)enabled
 {
     self.tap.enabled = enabled;
@@ -531,7 +500,7 @@
 
 - (void) tableViewContentOffsetChanged:(OATableView *)tableView contentOffset:(CGPoint)contentOffset
 {
-    [self updateBackgroundViewLayout:CurrentInterfaceOrientation contentOffset:contentOffset];
+    [self updateBackgroundViewLayout:contentOffset];
 }
 
 - (BOOL) tableViewScrollAllowed:(OATableView *)tableView
@@ -554,7 +523,7 @@
         [self applyCorrectSizes];
         [self adjustViewHeight];
         [self updateBackgroundViewLayout];
-        [self updateTableHeaderView:CurrentInterfaceOrientation];
+        [self updateTableHeaderView];
     } completion:nil];
 }
 

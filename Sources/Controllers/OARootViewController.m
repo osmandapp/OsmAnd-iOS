@@ -301,7 +301,7 @@ typedef enum : NSUInteger {
         return NO;
 
     // For iPhone/iPod devices check that mentioned view controller is still
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+    if ([OAUtilities isIPhone])
         return [self.navigationController.viewControllers containsObject:_lastMenuViewController];
 
     return YES;

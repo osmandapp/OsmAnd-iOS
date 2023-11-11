@@ -1771,7 +1771,7 @@
 "shared_string_copy" = "Kopieren";
 "recalculate_wrong_dir" = "Neuberechnung der Route im Falle einer Umkehrung der Richtung";
 "repeat_after" = "Wiederholen nach";
-"reset_plugin_to_default" = "Plugin-Einstellungen auf Voreinstellung zurücksetzen";
+"reset_plugin_to_default" = "Alle Plugin-Einstellungen auf die Standardwerte der Installation zurücksetzen";
 "trip_rec_actions_descr" = "Sie finden alle Ihre aufgezeichneten Tracks in %@";
 "save_track_logging_accuracy" = "Genauigkeit der Protokollierung";
 "profile_prefs_reset_successful" = "Alle Profileinstellungen auf Standard zurückgesetzt.";
@@ -3058,3 +3058,6 @@
 "ios_release_4_5" = "- Neu gestaltete Widgets: Möglichkeit, die Position der Widgets zu ändern, Gruppierung nach Seiten, eine Liste von Widgets für das linke und rechte Panel\n- Neu gestalteter Konfigurationsbildschirm\n- Kostenlose Sicherung von Favoriten, Einstellungen und OSM-Bearbeitungen in der OsmAnd Cloud\n- \"CAI\"-Skala für die Schwierigkeitsklassifizierung von Routen hinzugefügt\n- Modul \"Konturlinien\" umbenannt in \"Topographie\", Unterstützung für das neue Geländekartenformat zugefügt\n- 3D-Relief hinzugefügt\n- OAuth-Autorisierung für OpenStreetMap Bearbeitungs-Modul hinzugefügt\n- Separate Schaltfläche zum Umschalten zwischen 2D- und 3D-Modus hinzugefügt\n- Richtung der Kippgesten geändert\n- Fehler beim Export von Favoriten behoben, der zu Datenverlusten führen konnte\n";
 "shared_string_system_default" = "Systemvorgabe";
 "upload_poi" = "POI hochladen";
+"ios_release_4_6" = "• Jetzt kannst du die Karte direkt auf deinem CarPlay-Dashboard anzeigen\n• Wechsele zum Nacht-Thema für eine komfortablere Anzeige bei schlechten Lichtverhältnissen\n• Verbesserte Dialoge zum Hinzufügen von Notizen und Hochladen von Notizen und POIs zu OpenStreetMap\n• Einfache Wiederherstellung der Plugin-Einstellungen auf die Installationsvorgaben mit einer neuen Option \"Auf Standard zurücksetzen\"\n";
+"shared_string_uploading" = "Hochladen";
+"shared_string_discard_changes" = "Änderungen verwerfen";

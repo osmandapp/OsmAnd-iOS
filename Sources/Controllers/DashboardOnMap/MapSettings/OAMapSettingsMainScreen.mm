@@ -1156,7 +1156,7 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     OAMapSettingsViewController *mapSettingsViewController;
-    BOOL isPromoButton = [item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]];
+    BOOL isPromoButton = [item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[FreeBackupBannerCell getCellIdentifier]];
     BOOL isGroup = [self getCollapsableGroup:indexPath.section] != nil;
 
     if (isGroup && [item[@"type"] isEqualToString:[OARightIconTableViewCell getCellIdentifier]])

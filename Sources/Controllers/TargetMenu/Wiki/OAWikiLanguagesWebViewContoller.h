@@ -7,12 +7,7 @@
 //
 
 #import "OABaseNavbarViewController.h"
-
-@protocol OAWikiLanguagesWebDelegate
-
-- (void)onLocaleSelected:(NSString *)locale;
-
-@end
+#import "OAWikiArticleHelper.h"
 
 @interface OAWikiLanguagesWebViewContoller : OABaseNavbarViewController
 

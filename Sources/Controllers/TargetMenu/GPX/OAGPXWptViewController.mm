@@ -51,7 +51,7 @@
             wpt.docPath = [[OASelectedGPXHelper instance] getSelectedGpx:wpt.point].path;
         }
         self.wpt = wpt;
-        OAGpxExtension *openingHoursExt = [self.wpt.point getExtensionByKey:[PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS]];
+        OAGpxExtension *openingHoursExt = [self.wpt.point getExtensionByKey:[PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS_TAG]];
         _openingHoursInfo = OpeningHoursParser::getInfo(openingHoursExt && openingHoursExt.value ? openingHoursExt.value.UTF8String : "");
         [self acquireOriginObject];
         self.topToolbarType = ETopToolbarTypeMiddleFixed;

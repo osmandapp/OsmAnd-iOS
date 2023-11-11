@@ -11,10 +11,11 @@
 #import "OAPOIHelper.h"
 #import "OAGPXDocumentPrimitives.h"
 
+#include <OsmAndCore/ICU.h>
+
 #define TYPE @"type"
 #define SUBTYPE @"subtype"
 #define POI_NAME @"name"
-#define OPENING_HOURS @"opening_hours"
 #define COLLAPSABLE_PREFIX @"collapsable_"
 #define SEPARATOR @";"
 
@@ -59,6 +60,11 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
         return [_type iconName];
     else
         return nil;
+}
+
+- (NSString *)gpxIcon
+{
+    return _values[@"gpx_icon"];
 }
 
 -(void)setValues:(NSDictionary *)values
@@ -146,6 +152,48 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return l;
 }
 
+- (NSString *)getName:(NSString *)lang transliterate:(BOOL)transliterate
+{
+    if (lang != nil && lang.length > 0)
+    {
+        NSString *nm;
+        if ([lang isEqualToString:@"en"])
+        {
+            nm = _localizedNames[@"en"];
+            if (!nm || nm.length == 0)
+                nm = OsmAnd::ICU::transliterateToLatin(QString::fromNSString(_name)).toNSString();
+            return nm;
+        }
+        nm = _localizedNames[lang];
+        if (transliterate)
+            nm = OsmAnd::ICU::transliterateToLatin(QString::fromNSString(nm)).toNSString();
+        return nm;
+    }
+    return _name;
+}
+
+- (NSDictionary<NSString *, NSString *> *)getNamesMap:(BOOL)includeEn
+{
+    if ((!includeEn || !_name || _name.length == 0) && (!_localizedNames || _localizedNames.count == 0))
+    {
+        return [NSDictionary dictionary];
+    }
+    else
+    {
+        NSMutableDictionary *mp = [NSMutableDictionary dictionary];
+        if (_localizedNames || _localizedNames.count != 0)
+        {
+            for (NSString *key in _localizedNames.allKeys)
+                mp[key] = _localizedNames[key];
+        }
+        
+        if (includeEn && !_name && _name.length > 0)
+            mp[@"en"] = _name;
+        
+        return mp;
+    }
+}
+
 - (NSString *)getContentLanguage:(NSString *)tag lang:(NSString *)lang defLang:(NSString *)defLang
 {
     if (lang)
@@ -199,6 +247,11 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return nil;
 }
 
+- (NSString *)getTagContent:(NSString *)tag
+{
+    return [self getTagContent:tag lang:nil];
+}
+
 - (NSString *)getTagContent:(NSString *)tag lang:(NSString *)lang
 {
     NSString *translateName = [self getStrictTagContent:tag lang:lang];
@@ -209,6 +262,41 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     {
         if ([nm hasPrefix:[NSString stringWithFormat:@"%@:", tag]])
             return [self getAdditionalInfo][nm];
+    }
+    return nil;
+}
+
+- (NSString *)getLocalizedContent:(NSString *)tag lang:(NSString *)lang
+{
+    NSString *selectedLang = lang;
+    if (!selectedLang || selectedLang.length == 0)
+        selectedLang = @"en";
+    
+    NSString *key = [NSString stringWithFormat:@"%@:%@", tag, selectedLang];
+    NSString *result = _localizedContent[key];
+    if (result && result.length > 0)
+        return result;
+    
+    key = [NSString stringWithFormat:@"%@:en", tag];
+    result = _localizedContent[key];
+    if (result && result.length > 0)
+        return result;
+        
+    for (NSString *key in [_localizedContent allKeys])
+    {
+        if ([key hasPrefix:[NSString stringWithFormat:@"%@:", tag]])
+            return _localizedContent[key];
+    }
+    
+    return nil;
+}
+
+- (NSString *)getTagSuffix:(NSString *)tagPrefix
+{
+    for (NSString *infoTag in [self getAdditionalInfo].allKeys)
+    {
+        if ([infoTag hasPrefix:tagPrefix])
+            return [infoTag substringFromIndex:tagPrefix.length];
     }
     return nil;
 }
@@ -234,6 +322,26 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
             res[key] = _values[key];
     }
     return res;
+}
+
+- (NSString *)getSite
+{
+    return [self getAdditionalInfo][@"website"];
+}
+
+- (NSString *)getColor
+{
+    return [self getAdditionalInfo][@"color"];
+}
+
+- (NSString *)getRef
+{
+    return [self getAdditionalInfo][@"ref"];
+}
+
+- (NSString *)getRouteId
+{
+    return [self getAdditionalInfo][@"route_id"];
 }
 
 - (NSString *)toStringEn
@@ -265,7 +373,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     }
     if (self.openingHours)
     {
-        NSString *savingKey = [NSString stringWithFormat:@"%@%@", privatePrefix, OPENING_HOURS];
+        NSString *savingKey = [NSString stringWithFormat:@"%@%@", privatePrefix, OPENING_HOURS_TAG];
         result[savingKey] = self.openingHours;
     }
     
@@ -301,7 +409,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
             }
             
             //save all other values to separate lines
-            if ([key hasSuffix:OPENING_HOURS])
+            if ([key hasSuffix:OPENING_HOURS_TAG])
                 return;
             
 //            if (!HIDING_EXTENSIONS_AMENITY_TAGS.contains(key)) {
@@ -363,7 +471,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
                 {
                     subType = map[key];
                 }
-                else if ([shortKey isEqualToString:OPENING_HOURS] && map[key].length > 0)
+                else if ([shortKey isEqualToString:OPENING_HOURS_TAG] && map[key].length > 0)
                 {
                     openingHours = map[key];
                     additionalInfo[shortKey] = openingHours;

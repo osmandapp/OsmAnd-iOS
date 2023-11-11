@@ -541,6 +541,13 @@
                                                   [NSAttributedString attributedStringWithAttachment:arrowDownAttachment]];
         [downhilIcon setColor:UIColor.iconColorDefault forString:downhilIcon.string];
 
+        NSTextAttachment *rangeAttachment = [[NSTextAttachment alloc] init];
+        rangeAttachment.image = [UIImage templateImageNamed:@"ic_small_altitude_range"];
+        rangeAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
+        NSMutableAttributedString *elevationIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
+                                                  [NSAttributedString attributedStringWithAttachment:rangeAttachment]];
+        [elevationIcon setColor:UIColor.iconColorDefault forString:elevationIcon.string];
+
         [res appendAttributedString:uphillIcon];
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:
                                      [NSString stringWithFormat:@" %@", [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationUp]]
@@ -551,7 +558,16 @@
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:
                                      [NSString stringWithFormat:@" %@", [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationDown]]
                                                                     attributes:textAttrs]];
+        [res appendAttributedString:[[NSAttributedString alloc] initWithString:@"    "]];
 
+        [res appendAttributedString:elevationIcon];
+        [res appendAttributedString:[[NSAttributedString alloc] initWithString:
+                                     [NSString stringWithFormat:@" %@", [NSString stringWithFormat:@"%@ - %@",
+                                                                         [OAOsmAndFormatter getFormattedAlt:analysis.minElevation],
+                                                                         [OAOsmAndFormatter getFormattedAlt:analysis.maxElevation]]]
+                                                                    attributes:textAttrs]];
+
+        
         return res;
     }
     return nil;

@@ -44,6 +44,7 @@
 #import "OAGPXDatabase.h"
 #import "OAExternalTimeFormatter.h"
 #import "OAFavoritesHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAAppSettings.h"
 
 #include <algorithm>
@@ -118,6 +119,8 @@
 @synthesize cachePath = _cachePath;
 @synthesize weatherForecastPath = _weatherForecastPath;
 @synthesize favoritesPath = _favoritesPath;
+@synthesize travelGuidesPath = _travelGuidesPath;
+@synthesize gpxTravelPath = _gpxTravelPath;
 
 @synthesize initialURLMapState = _initialURLMapState;
 
@@ -165,6 +168,8 @@
         _weatherForecastPath = [_cachePath stringByAppendingPathComponent:@"WeatherForecast"];
         _favoritesPath = [_documentsPath stringByAppendingPathComponent:FAVORITES_INDEX_DIR];
         _favoritesBackupPath = [_documentsPath stringByAppendingPathComponent:FAVORITES_BACKUP_DIR];
+        _travelGuidesPath = [_documentsPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
+        _gpxTravelPath = [_gpxPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
 
         _favoritesFilePrefix = @"favorites";
         _favoritesGroupNameSeparator = @"-";
@@ -559,6 +564,19 @@
     }
     [self applyExcludedFromBackup:ocbfPathLib];
     
+    // Copy Default_wikivoyage.travel.obf to Documents/Resources if needed
+    NSString *defaultTravelGuidePathBundle = [[NSBundle mainBundle] pathForResource:@"Default_wikivoyage.travel" ofType:@"obf" inDirectory:@"Shipped"];
+    NSString *defaultTravelGuidePathLib = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources/Default_wikivoyage.travel.obf"];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:defaultTravelGuidePathLib])
+    {
+        NSError *error = nil;
+        [[NSFileManager defaultManager] copyItemAtPath:defaultTravelGuidePathBundle toPath:defaultTravelGuidePathLib error:&error];
+        if (error)
+            NSLog(@"Error copying file: %@ to %@ - %@", defaultTravelGuidePathBundle, defaultTravelGuidePathLib, [error localizedDescription]);
+    }
+    [self applyExcludedFromBackup:defaultTravelGuidePathLib];
+    
     // Copy proj.db to Library/Application Support/proj
     NSString *projDbPathBundle = [[NSBundle mainBundle] pathForResource:@"proj" ofType:@"db"];
     NSString *projDbPathLib = [NSHomeDirectory() stringByAppendingString:@"/Library/Application Support/proj/proj.db"];
@@ -656,7 +674,8 @@
         [OAApplicationMode valueOfStringKey:[settings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] :
                                                                                     settings.defaultApplicationMode.get;
     [settings setApplicationModePref:initialAppMode];
-    
+    [[OAScreenOrientationHelper sharedInstance] updateSettings];
+
     [OAPlugin initPlugins];
     [OAPOIHelper sharedInstance];
     [OAQuickSearchHelper instance];

@@ -254,6 +254,7 @@
 #define cycleRoutesParameterKey @"cycleRoutesParameter"
 #define mountainBikeRoutesParameterKey @"mountainBikeRoutesParameter"
 #define mapManuallyRotatingAngleKey @"mapManuallyRotatingAngle"
+#define mapScreenOrientationKey @"mapScreenOrientation"
 
 #define activeMarkerKey @"activeMarkerKey"
 #define mapDistanceIndicationVisabilityKey @"mapDistanceIndicationVisabilityKey"
@@ -3657,6 +3658,7 @@
 
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguageShowLocal=_settingMapLanguageShowLocal;
 @synthesize mapSettingShowFavorites=_mapSettingShowFavorites, mapSettingShowPoiLabel=_mapSettingShowPoiLabel, mapSettingShowOfflineEdits=_mapSettingShowOfflineEdits, mapSettingShowOnlineNotes=_mapSettingShowOnlineNotes, mapSettingTrackRecording=_mapSettingTrackRecording;
+@synthesize travelGuidesState=_travelGuidesState;
 
 + (OAAppSettings*) sharedManager
 {
@@ -3680,6 +3682,7 @@
         _registeredPreferences = [NSMapTable strongToStrongObjectsMapTable];
         _globalPreferences = [NSMapTable strongToStrongObjectsMapTable];
         _profilePreferences = [NSMapTable strongToStrongObjectsMapTable];
+        _travelGuidesState = [OATravelGuidesState shared];
         
         _applicationMode = [[[OACommonAppMode withKey:applicationModeKey defValue:OAApplicationMode.DEFAULT] makeGlobal] makeShared];
         [_globalPreferences setObject:_applicationMode forKey:@"application_mode"];
@@ -4608,6 +4611,9 @@
         [_globalPreferences setObject:_rateUsState forKey:@"rate_us_state"];
         
         _lastUUIDChangeTimestamp = [[OACommonLong withKey:lastUUIDChangeTimestampKey defValue:0] makeGlobal];
+        
+        _mapScreenOrientation = [OACommonInteger withKey:mapScreenOrientationKey defValue:EOAScreenOrientationSystem];
+        [_profilePreferences setObject:_mapScreenOrientation forKey:@"map_screen_orientation"];
 
         [self fetchImpassableRoads];
 
@@ -4988,6 +4994,7 @@
             [_lastUsedApplicationMode set:applicationMode.stringKey];
         [[ThemeManager shared] configureWithAppMode: applicationMode];
         [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:prevAppMode];
+        [[OAScreenOrientationHelper sharedInstance] updateSettings];
     }
 }
 

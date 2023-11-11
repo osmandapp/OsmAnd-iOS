@@ -32,6 +32,8 @@
 @property(nonatomic, readonly) NSString* gpxPath;
 @property(nonatomic, readonly) NSString* inboxPath;
 @property(nonatomic, readonly) NSString* favoritesPath;
+@property(nonatomic, readonly) NSString* travelGuidesPath;
+@property(nonatomic, readonly) NSString* gpxTravelPath;
 
 @property(readonly) OAAppData* data;
 @property(readonly) OAWorldRegion* worldRegion;

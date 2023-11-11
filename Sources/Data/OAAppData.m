@@ -42,6 +42,7 @@
 #define kWikipediaLanguagesKey @"wikipediaLanguages"
 #define kWikipediaGlobalKey @"wikipediaGlobal"
 #define kWikipediaImagesDownloadModeKey @"wikipediaImagesDownloadMode"
+#define kTravelGuidesImagesDownloadModeKey @"travelGuidesImagesDownloadMode"
 
 #define kWeatherKey @"weather"
 #define kWeatherUseOfflineDataKey @"weatherUseOfflineData"
@@ -111,6 +112,7 @@
     OACommonBoolean *_wikipediaGlobalProfile;
     OACommonStringList *_wikipediaLanguagesProfile;
     OACommonDownloadMode *_wikipediaImagesDownloadModeProfile;
+    OACommonDownloadMode *_travelGuidesImagesDownloadModeProfile;
 
     BOOL _weatherToolbarActive;
     OAAutoObserverProxy *_weatherSettingsChangeObserver;
@@ -228,6 +230,10 @@
         {
             [_wikipediaImagesDownloadModeProfile setValueFromString:value appMode:mode];
         }
+        else if ([key isEqualToString:@"travelGuidesImagesDownloadMode"])
+        {
+            [_travelGuidesImagesDownloadModeProfile setValueFromString:value appMode:mode];
+        }
     }
 }
 
@@ -246,6 +252,7 @@
         prefs[@"global_wikipedia_poi_enabled"] = [_wikipediaGlobalProfile toStringValue:mode];
         prefs[@"wikipedia_poi_enabled_languages"] = [_wikipediaLanguagesProfile toStringValue:mode];
         prefs[@"wikipedia_images_download_mode"] = [_wikipediaImagesDownloadModeProfile toStringValue:mode];
+        prefs[@"travelGuidesImagesDownloadMode"] = [_travelGuidesImagesDownloadModeProfile toStringValue:mode];
     }
 }
 
@@ -307,6 +314,7 @@
     _wikipediaGlobalProfile = [OACommonBoolean withKey:kWikipediaGlobalKey defValue:NO];
     _wikipediaLanguagesProfile = [OACommonStringList withKey:kWikipediaLanguagesKey defValue:@[]];
     _wikipediaImagesDownloadModeProfile = [OACommonDownloadMode withKey:kWikipediaImagesDownloadModeKey defValue:OADownloadMode.ANY_NETWORK values:[OADownloadMode getDownloadModes]];
+    _travelGuidesImagesDownloadModeProfile = [OACommonDownloadMode withKey:kTravelGuidesImagesDownloadModeKey defValue:OADownloadMode.ANY_NETWORK values:[OADownloadMode getDownloadModes]];
 
     _weatherSettingsChangeObservable = [[OAObservable alloc] init];
     _weatherSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -394,6 +402,7 @@
     [_registeredPreferences setObject:_wikipediaGlobalProfile forKey:@"global_wikipedia_poi_enabled"];
     [_registeredPreferences setObject:_wikipediaLanguagesProfile forKey:@"wikipedia_poi_enabled_languages"];
     [_registeredPreferences setObject:_wikipediaImagesDownloadModeProfile forKey:@"wikipedia_images_download_mode"];
+    [_registeredPreferences setObject:_travelGuidesImagesDownloadModeProfile forKey:@"travelGuidesImagesDownloadMode"];
 
     [_registeredPreferences setObject:_weatherProfile forKey:@"show_weather"];
     [_registeredPreferences setObject:_weatherUseOfflineDataProfile forKey:@"show_weather_offline_data"];
@@ -1075,6 +1084,56 @@
     }
 }
 
+- (void) resetWeatherSettings
+{
+    @synchronized(_lock)
+    {
+        [_weatherUseOfflineDataProfile resetToDefault];
+        
+        [_weatherTempProfile resetToDefault];
+        [_weatherTempUnitProfile resetToDefault];
+        [_weatherTempUnitAutoProfile resetToDefault];
+        [_weatherTempAlphaProfile resetToDefault];
+        [_weatherTempToolbarAlphaProfile resetToDefault];
+        
+        [_weatherPressureProfile resetToDefault];
+        [_weatherPressureToolbarProfile resetToDefault];
+        [_weatherPressureUnitProfile resetToDefault];
+        [_weatherPressureToolbarUnitProfile resetToDefault];
+        [_weatherPressureUnitAutoProfile resetToDefault];
+        [_weatherPressureToolbarUnitAutoProfile resetToDefault];
+        [_weatherPressureAlphaProfile resetToDefault];
+        [_weatherPressureToolbarAlphaProfile resetToDefault];
+        
+        [_weatherWindProfile resetToDefault];
+        [_weatherWindToolbarProfile resetToDefault];
+        [_weatherWindUnitProfile resetToDefault];
+        [_weatherWindToolbarUnitProfile resetToDefault];
+        [_weatherWindUnitAutoProfile resetToDefault];
+        [_weatherWindToolbarUnitAutoProfile resetToDefault];
+        [_weatherWindAlphaProfile resetToDefault];
+        [_weatherWindToolbarAlphaProfile resetToDefault];
+        
+        [_weatherCloudProfile resetToDefault];
+        [_weatherCloudToolbarProfile resetToDefault];
+        [_weatherCloudUnitProfile resetToDefault];
+        [_weatherCloudToolbarUnitProfile resetToDefault];
+        [_weatherCloudUnitAutoProfile resetToDefault];
+        [_weatherCloudToolbarUnitAutoProfile resetToDefault];
+        [_weatherCloudAlphaProfile resetToDefault];
+        [_weatherCloudToolbarAlphaProfile resetToDefault];
+        
+        [_weatherPrecipProfile resetToDefault];
+        [_weatherPrecipToolbarProfile resetToDefault];
+        [_weatherPrecipUnitProfile resetToDefault];
+        [_weatherPrecipToolbarUnitProfile resetToDefault];
+        [_weatherPrecipUnitAutoProfile resetToDefault];
+        [_weatherPrecipToolbarUnitAutoProfile resetToDefault];
+        [_weatherPrecipAlphaProfile resetToDefault];
+        [_weatherPrecipToolbarAlphaProfile resetToDefault];
+    }
+}
+
 - (OAMapSource*) overlayMapSource
 {
     @synchronized(_lock)
@@ -1561,7 +1620,49 @@
 {
     @synchronized (_lock)
     {
-        [_wikipediaImagesDownloadModeProfile set:downloadMode mode:mode];
+        [_travelGuidesImagesDownloadModeProfile set:downloadMode mode:mode];
+    }
+}
+
+- (OADownloadMode *)travelGuidesImagesDownloadMode
+{
+    @synchronized (_lock)
+    {
+        return [_travelGuidesImagesDownloadModeProfile get];
+    }
+}
+
+- (OADownloadMode *)getTravelGuidesImagesDownloadMode:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        return [_travelGuidesImagesDownloadModeProfile get:mode];
+    }
+}
+
+- (void)setTravelGuidesImagesDownloadMode:(OADownloadMode *)downloadMode
+{
+    @synchronized (_lock)
+    {
+        [_travelGuidesImagesDownloadModeProfile set:downloadMode];
+    }
+}
+
+- (void)setTravelGuidesImagesDownloadMode:(OADownloadMode *)downloadMode mode:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        [_travelGuidesImagesDownloadModeProfile set:downloadMode mode:mode];
+    }
+}
+
+- (void)resetWikipediaSettings
+{
+    @synchronized (_lock)
+    {
+        [_wikipediaGlobalProfile resetToDefault];
+        [_wikipediaLanguagesProfile resetToDefault];
+        [_wikipediaImagesDownloadModeProfile resetToDefault];
     }
 }
 
@@ -1795,6 +1896,7 @@
     [_wikipediaGlobalProfile set:[_wikipediaGlobalProfile get:sourceMode] mode:targetMode];
     [_wikipediaLanguagesProfile set:[_wikipediaLanguagesProfile get:sourceMode] mode:targetMode];
     [_wikipediaImagesDownloadModeProfile set:[_wikipediaImagesDownloadModeProfile get:sourceMode] mode:targetMode];
+    [_travelGuidesImagesDownloadModeProfile set:[_travelGuidesImagesDownloadModeProfile get:sourceMode] mode:targetMode];
 
     [_weatherProfile set:[_weatherProfile get:sourceMode] mode:targetMode];
     [_weatherUseOfflineDataProfile set:[_weatherUseOfflineDataProfile get:sourceMode] mode:targetMode];

@@ -609,7 +609,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) prepareForRotation:(UIInterfaceOrientation)toInterfaceOrientation
 {
-    if ([self isLandscapeSupported] && UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
+    if ([self isLandscapeSupported] && [OAUtilities isLandscape:toInterfaceOrientation])
     {
         [self showTopToolbar:NO];
         [self showBottomToolbar:NO];

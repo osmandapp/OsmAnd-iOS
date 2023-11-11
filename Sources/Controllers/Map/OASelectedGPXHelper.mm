@@ -172,4 +172,17 @@
     [settings.mapSettingVisibleGpx set:[NSArray arrayWithArray:visibleGpx]];
 }
 
+- (NSString *) getSelectedGPXFilePath:(NSString *)fileName
+{
+    NSString *suffix = [NSString stringWithFormat:@"/%@", fileName];
+    for (NSString *selectedGpxFile in _selectedGPXFilesBackup)
+    {
+        if ([selectedGpxFile hasSuffix:suffix])
+        {
+            return fileName;
+        }
+    }
+    return nil;
+}
+
 @end

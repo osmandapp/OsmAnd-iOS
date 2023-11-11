@@ -2999,7 +2999,7 @@
 "coordinates_widget_desc" = "Zeigt die geografischen Koordinaten des aktuellen Standorts an.";
 "clouds_widget_desc" = "Zeigt die Wolkenbedeckung für die aktuelle Kartenmitte an.";
 "quick_action_coordinates_widget_descr" = "Ein Schalter zum Ein- oder Ausblenden des Koordinaten-Widgets auf der Karte.";
-"bearing_desc" = "Zeigt die absolute oder relative Peilung zu einem Ziel in Winkeleinheiten an (im Modus 180 Grad, 360 Grad oder Milliradian).";
+"bearing_desc" = "Zeigt die absolute oder relative Peilung zu einem Ziel in Winkeleinheiten an (im Modus 180 Grad, 360 Grad oder Milliradiant).";
 "map_widget_group_sunrise_sunset_desc" = "Diese Widgets zeigen Informationen über den nächsten Sonnenauf- und -untergang.";
 "map_widget_group_sunrise_sunset" = "Sonnenaufgang, Sonnenuntergang";
 "angular_measeurement_descr" = "Ändern, in welcher Einheit Azimut gemessen wird.";

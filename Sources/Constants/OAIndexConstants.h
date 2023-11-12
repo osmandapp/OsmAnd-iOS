@@ -29,6 +29,8 @@
 #define BINARY_MAP_INDEX_EXT_ZIP @".obf.zip"
 
 #define BINARY_WIKIVOYAGE_MAP_INDEX_EXT @".sqlite"
+#define BINARY_TRAVEL_GUIDE_MAP_INDEX_EXT @".travel.obf"
+#define BINARY_TRAVEL_GUIDE_MAP_INDEX_EXT_ZIP @".travel.obf.zip"
 #define BINARY_WIKI_MAP_INDEX_EXT @".wiki.obf"
 #define BINARY_WIKI_MAP_INDEX_EXT_ZIP @".wiki.obf.zip"
 #define BINARY_ROAD_MAP_INDEX_EXT @".road.obf"
@@ -81,7 +83,7 @@
 #define NAUTICAL_INDEX_DIR "nautical"
 #define ROADS_INDEX_DIR @"roads"
 #define WIKI_INDEX_DIR @"wiki"
-#define WIKIVOYAGE_INDEX_DIR @"travel"
+#define WIKIVOYAGE_INDEX_DIR @"Travel"
 //public static final String GPX_TRAVEL_DIR = GPX_INDEX_DIR + WIKIVOYAGE_INDEX_DIR;
 #define AV_INDEX_DIR @"avnotes"
 #define FONT_INDEX_DIR @"fonts"

@@ -14,7 +14,7 @@
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
 #import "OAProducts.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 
 @implementation OATrackColoringTypeViewController
@@ -94,7 +94,7 @@
             cell.accessoryType = _selectedItem == appearanceItem ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
             cell.accessibilityLabel = appearanceItem.title;
             cell.titleLabel.text = appearanceItem.title;
-            cell.titleLabel.textColor = appearanceItem.isAvailable && appearanceItem.isEnabled ? UIColor.blackColor : UIColorFromRGB(color_text_footer);
+            cell.titleLabel.textColor = appearanceItem.isAvailable && appearanceItem.isEnabled ? UIColor.textColorPrimary : UIColor.textColorSecondary;
         }
         return cell;
     }

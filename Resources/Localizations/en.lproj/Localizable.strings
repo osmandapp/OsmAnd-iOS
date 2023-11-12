@@ -170,7 +170,7 @@
 "auto_split_recording_title" = "Auto-split recordings after gap";
 "auto_split_gap_descr" = "Start a new segment after 6 min gap, new track after 2 h gap, or new file after a longer gap";
 "trip_rec_actions_descr" = "You can find all your recorded tracks in %@";
-"reset_plugin_to_default" = "Reset plugin settings to default";
+"reset_plugin_to_default" = "Reset all plugin settings to installation defaults";
 "save_heading" = "Include heading";
 "save_heading_descr" = "Save heading to each track point while recording.";
 "distance_circles" = "Distance circles";
@@ -751,6 +751,7 @@
 "shared_string_duplicate_color" = "Duplicate color";
 "shared_string_delete_color" = "Delete color";
 "shared_string_duplicate" = "Duplicate";
+"shared_string_result" = "Result";
 
 "restart" = "Restart";
 
@@ -1610,6 +1611,8 @@
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Without name";
 "local_openstreetmap_uploading" = "Uploading…";
+"shared_string_uploading" = "Uploading";
+"shared_string_discard_changes" = "Discard changes";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Save POI without type?";
@@ -1938,7 +1941,39 @@
 "index_name_russia" = "Russia";
 "index_name_south_america" = "South America";
 "nautical_maps" = "Nautical maps";
+"shared_string_travel_guides" = "Travel guides";
 "download_select_map_types" = "Other maps";
+
+"shared_string_wikivoyage" = "Wikivoyage";
+"travel_guides_beta" = "Travel guides (Beta)";
+"download_file" = "Download file";
+"travel_card_download_descr" = "Download Wikivoyage travel guides to view articles about places around the world without a connection to the Internet.";
+"saved_articles" = "Bookmarked articles";
+"shared_string_explore" = "Explore";
+"popular_destinations" = "Popular destinations";
+"shared_string_contents" = "Contents";
+"shared_string_bookmark" = "Bookmark";
+"shared_string_read" = "Read";
+"shared_string_view" = "View";
+"article_added_to_bookmark" = " added to bookmarks.";
+"article_removed_from_bookmark" = " removed from bookmarks.";
+"shared_string_article" = "Article";
+"travel_guides_search_placeholder" = "Search for country, city or province";
+"clear_history" = "Clear history";
+"search_history" = "Search history";
+"clear_travel_search_history" = "Clear Travel search history?";
+"cleared_travel_search_history" = "History cleared";
+"article_has_no_points" = "Article has no points";
+"no_travel_guides_data_title" = "You don’t have travel data";
+"no_travel_guides_data_descr" = "Download Wikivoyage travel guides to view articles about places around the world without a connection to the Internet.";
+"images" = "Images";
+"cache_size" = "Cache size";
+"image_cache" = "Image cache";
+"remove_cache" = "Remove cache";
+"remove_cache_alert" = "Are you sure you want to clear cache?";
+"cache_cleared" = "Cache cleared";
+"download_images_settings_header" = "Offline Wikipedia files in OsmAnd don’t contain images. But they can be downloaded while viewing articles.";
+"download_images_settings_footer" = "Image downloading is enabling over any network. Mobile data can be used.";
 
 // Help
 "help_quiz" = "Quiz";
@@ -3212,6 +3247,11 @@
 • Changed direction of tilt gesture\n
 • Fixed issue with favorites export, that could lead to data loss\n";
 
+"ios_release_4_6" = "• Now you can view map directly on your CarPlay dashboard\n
+• Switch to Night Theme for a more comfortable viewing experience in low light conditions\n
+• Improved dialogs for adding notes and uploading notes and POIs to OpenStreetMap\n
+• Easily restore your plugin settings to the installation defaults with a new \"Reset to Default\" option\n";
+
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Don\'t hide waterway tunnels";
 "rendering_attr_natureReserves_description" = "Show nature reserve, protected areas, and national parks.";
@@ -3433,3 +3473,7 @@
     <string name="ant_plus_pair_new_sensor_ant_plus">Pair ANT+ sensor</string>
  */
 
+"map_orientation_default" = "Same as device";
+"map_orientation_portrait" = "Portrait";
+"map_orientation_landscape" = "Landscape";
+"map_screen_orientation" = "Screen orientation";

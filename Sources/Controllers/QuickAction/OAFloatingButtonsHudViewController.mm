@@ -243,30 +243,24 @@
 
 - (void) restoreQuickActionButtonPosition
 {
-    CGFloat screenHeight = DeviceScreenHeight;
-    CGFloat screenWidth = DeviceScreenWidth;
-    CGFloat btnHeight = kHudQuickActionButtonHeight;
-    CGFloat btnWidth = kHudQuickActionButtonHeight;
-    CGFloat maxRightMargin = screenWidth - btnWidth - 2 * OAUtilities.getLeftMargin;
-    CGFloat maxBottomMargin = screenHeight - btnHeight - OAUtilities.getBottomMargin;
-    
     CGFloat x;
     CGFloat y;
     CGFloat defaultX;
     CGFloat defaultY;
+    CGFloat btnWidth = kHudQuickActionButtonHeight;
     BOOL isLandscape = [OAUtilities isLandscape];
     if (isLandscape)
     {
-        defaultX = maxRightMargin - 2 * btnWidth - 2 * kHudButtonsOffset;
-        defaultY = maxBottomMargin;
+        defaultX = [self getRightMargin] - 2 * btnWidth - 2 * kHudButtonsOffset - [self getHalfSmallButtonWidth];
+        defaultY = [self getBottomMargin] - [self getHalfSmallButtonWidth];
         x = [_settings.quickActionLandscapeX get];
         y = [_settings.quickActionLandscapeY get];
         [self setPositionForButton:_quickActionFloatingButton x:x y:y defaultX:defaultX defaultY:defaultY];
     }
     else
     {
-        defaultX = maxRightMargin - kHudButtonsOffset;
-        defaultY = maxBottomMargin - 2 * btnWidth - 2 * kHudButtonsOffset;
+        defaultX = [self getRightMargin] - [self getHalfSmallButtonWidth];
+        defaultY = [self getBottomMargin] - 2 * btnWidth - 2 * kHudButtonsOffset - [self getHalfSmallButtonWidth];
         x = [_settings.quickActionPortraitX get];
         y = [_settings.quickActionPortraitY get];
         [self setPositionForButton:_quickActionFloatingButton x:x y:y defaultX:defaultX defaultY:defaultY];
@@ -275,30 +269,24 @@
 
 - (void) restoreMap3dModeButtonPosition
 {
-    CGFloat screenHeight = DeviceScreenHeight;
-    CGFloat screenWidth = DeviceScreenWidth;
-    CGFloat btnHeight = kHudQuickActionButtonHeight;
-    CGFloat btnWidth = kHudQuickActionButtonHeight;
-    CGFloat maxRightMargin = screenWidth - btnWidth - 2 * OAUtilities.getLeftMargin;
-    CGFloat maxBottomMargin = screenHeight - btnHeight - OAUtilities.getBottomMargin;
-    
     CGFloat x;
     CGFloat y;
     CGFloat defaultX;
     CGFloat defaultY;
+    CGFloat btnWidth = kHudQuickActionButtonHeight;
     BOOL isLandscape = [OAUtilities isLandscape];
     if (isLandscape)
     {
-        defaultX = maxRightMargin - btnWidth - kHudButtonsOffset;
-        defaultY = maxBottomMargin - btnWidth - kHudButtonsOffset;
+        defaultX = [self getRightMargin] - btnWidth - kHudButtonsOffset - [self getHalfSmallButtonWidth];
+        defaultY = [self getBottomMargin] - btnWidth - kHudButtonsOffset - [self getHalfSmallButtonWidth];
         x = [_settings.map3dModeLandscapeX get];
         y = [_settings.map3dModeLandscapeY get];
         [self setPositionForButton:_map3dModeFloatingButton x:x y:y defaultX:defaultX defaultY:defaultY];
     }
     else
     {
-        defaultX = maxRightMargin - btnWidth - 2 * kHudButtonsOffset;
-        defaultY = maxBottomMargin - btnWidth - kHudButtonsOffset;
+        defaultX = [self getRightMargin] - btnWidth - kHudButtonsOffset - [self getHalfSmallButtonWidth];
+        defaultY = [self getBottomMargin] - btnWidth - kHudButtonsOffset - [self getHalfSmallButtonWidth];
         x = [_settings.map3dModePortraitX get];
         y = [_settings.map3dModePortraitY get];
         [self setPositionForButton:_map3dModeFloatingButton x:x y:y defaultX:defaultX defaultY:defaultY];
@@ -307,25 +295,17 @@
 
 - (void) setPositionForButton:(UIButton*)button x:(CGFloat)x y:(CGFloat)y defaultX:(CGFloat)defaultX defaultY:(CGFloat)defaultY
 {
-    CGFloat screenHeight = DeviceScreenHeight;
-    CGFloat screenWidth = DeviceScreenWidth;
-    CGFloat btnHeight = button.frame.size.height;
-    CGFloat btnWidth = button.frame.size.width;
-    CGFloat maxRightMargin = screenWidth - btnWidth - 2 * OAUtilities.getLeftMargin;
-    CGFloat maxBottomMargin = screenHeight - btnHeight - OAUtilities.getBottomMargin;
-    
-    // check limits
     if (x <= 0)
         x = defaultX;
-    else if (x > maxRightMargin)
-        x = maxRightMargin;
+    else if (x > [self getRightMargin])
+        x = [self getRightMargin];
 
-    if (y <= OAUtilities.getTopMargin)
+    if (y <= 0)
         y = defaultY;
-    else if (y > maxBottomMargin)
-        y = maxBottomMargin;
+    else if (y > [self getBottomMargin])
+        y = [self getBottomMargin];
     
-    button.frame = CGRectMake(x, y, btnWidth, btnHeight);
+    button.frame = CGRectMake(x, y, button.frame.size.width, button.frame.size.height);
 }
 
 - (void)restoreControlsPosition 
@@ -344,28 +324,48 @@
 
 - (void)moveToPoint:(CGPoint)newPosition button:(UIButton *)button
 {
-    CGSize bigButtonSize = button.frame.size;
-    CGFloat halfBigButtonWidth = bigButtonSize.width / 2;
-    CGFloat halfSmallButtonWidth = kHudQuickActionButtonHeight / 2;
-    CGFloat leftSafeMargin = halfSmallButtonWidth + 1;
-    CGFloat rightSafeMargin = DeviceScreenWidth - 2 * OAUtilities.getLeftMargin - halfSmallButtonWidth;
-    CGFloat topSafeMargin = OAUtilities.getStatusBarHeight + halfSmallButtonWidth + 1;
-    CGFloat bottomSafeMargin = DeviceScreenHeight - OAUtilities.getBottomMargin - halfSmallButtonWidth;
+    CGFloat halfBigButtonWidth = button.frame.size.width / 2;
     
     CGFloat x = newPosition.x;
     CGFloat y = newPosition.y;
     
-    if (x <= leftSafeMargin)
-        x = leftSafeMargin;
-    else if (x >= rightSafeMargin)
-        x = rightSafeMargin;
+    if (x <= [self getLeftMargin])
+        x = [self getLeftMargin];
+    else if (x >= [self getRightMargin])
+        x = [self getRightMargin];
     
-    if (y <= topSafeMargin)
-        y = topSafeMargin;
-    else if (y >= bottomSafeMargin)
-        y = bottomSafeMargin;
+    if (y <= [self getTopMargin])
+        y = [self getTopMargin];
+    else if (y >= [self getBottomMargin])
+        y = [self getBottomMargin];
     
     button.frame = CGRectMake(x - halfBigButtonWidth, y - halfBigButtonWidth, button.frame.size.width, button.frame.size.height);
+}
+
+- (CGFloat) getHalfSmallButtonWidth
+{
+    return kHudQuickActionButtonHeight / 2;
+}
+
+- (CGFloat) getLeftMargin
+{
+    return OAUtilities.getLeftMargin + kHudButtonsOffset + [self getHalfSmallButtonWidth];
+}
+
+- (CGFloat) getRightMargin
+{
+    CGFloat halfSmallButtonWidth = kHudQuickActionButtonHeight / 2;
+    return DeviceScreenWidth - OAUtilities.getLeftMargin - kHudButtonsOffset - [self getHalfSmallButtonWidth];
+}
+
+- (CGFloat) getTopMargin
+{
+    return OAUtilities.getStatusBarHeight + kHudButtonsOffset + [self getHalfSmallButtonWidth];
+}
+
+- (CGFloat) getBottomMargin
+{
+    return DeviceScreenHeight - OAUtilities.getBottomMargin - kHudButtonsOffset - [self getHalfSmallButtonWidth];
 }
 
 - (void) onQuickActionButtonDragged:(UILongPressGestureRecognizer *)recognizer

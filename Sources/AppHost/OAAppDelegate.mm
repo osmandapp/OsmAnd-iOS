@@ -367,4 +367,18 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     return [sd openURL:url];
 }
 
+#pragma mark - Orientation
+
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
+{
+    return [[OAScreenOrientationHelper sharedInstance] getUserInterfaceOrientationMask];
+}
+
+- (UIInterfaceOrientation)interfaceOrientation
+{
+    UIScene *scene = UIApplication.sharedApplication.mainScene;
+    SceneDelegate *sd = (SceneDelegate *) scene.delegate;
+    return [sd getUIIntefaceOrientation];
+}
+
 @end

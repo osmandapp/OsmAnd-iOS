@@ -19,6 +19,7 @@
 #import "OAMapRendererView.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAOsmAndFormatter.h"
+#import "OAOsmEditingPlugin.h"
 
 #include <GeographicLib/GeoCoords.hpp>
 
@@ -192,7 +193,13 @@
     int zoom = [OARootViewController instance].mapPanel.mapViewController.mapView.zoomLevel;
     NSString *url = [NSString stringWithFormat:kShareLink, lat, lon, zoom, lat, lon];
     [results setObject:url forKey:@(POINT_LOCATION_URL)];
-    
+
+    if ([OAPlugin isEnabled:OAOsmEditingPlugin.class])
+    {
+        NSString *osmUrl = [NSString stringWithFormat:kOsmCoordinatesLink, lat, lon, zoom, lat, lon];
+        [results setObject:osmUrl forKey:@(OSM_LOCATION_URL)];
+    }
+
     NSInteger f = [self.class coordinatesFormatToFormatterMode:[settings.settingGeoFormat get]];
     
     if (f == MAP_GEO_UTM_FORMAT)

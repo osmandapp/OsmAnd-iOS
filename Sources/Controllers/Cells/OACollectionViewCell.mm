@@ -8,7 +8,7 @@
 
 #import "OACollectionViewCell.h"
 #import "OAUtilities.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OADestinationCollectionViewCell.h"
 
 #define defaultCellHeight 60.0
@@ -119,10 +119,10 @@
     OADestinationCollectionViewCell *cell = (OADestinationCollectionViewCell *) [collectionView cellForItemAtIndexPath:indexPath];
     
     [UIView animateWithDuration:.2 animations:^{
-        cell.titleLabel.textColor = UIColor.whiteColor;
-        cell.descrLabel.textColor = UIColor.whiteColor;
-        cell.backgroundColor = UIColorFromRGB(color_primary_purple);
-        cell.imageView.tintColor = UIColor.whiteColor;
+        cell.titleLabel.textColor = UIColor.groupBgColor;
+        cell.descrLabel.textColor = UIColor.groupBgColor;
+        cell.backgroundColor = UIColor.iconColorActive;
+        cell.imageView.tintColor = UIColor.groupBgColor;
     }];
 }
 
@@ -131,9 +131,9 @@
     OADestinationCollectionViewCell *cell = (OADestinationCollectionViewCell *) [collectionView cellForItemAtIndexPath:indexPath];
     NSDictionary *item = _data[indexPath.row];
     [UIView animateWithDuration:.2 animations:^{
-        cell.titleLabel.textColor = UIColor.blackColor;
-        cell.descrLabel.textColor  = UIColorFromRGB(color_text_footer);
-        cell.backgroundColor = UIColor.whiteColor;
+        cell.titleLabel.textColor = UIColor.textColorPrimary;
+        cell.descrLabel.textColor  = UIColor.textColorSecondary;
+        cell.backgroundColor = UIColor.groupBgColor;
         cell.imageView.tintColor = item[@"color"];
     }];
 }

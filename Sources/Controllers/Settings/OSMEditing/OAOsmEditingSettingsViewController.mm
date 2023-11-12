@@ -23,6 +23,9 @@
 #import "OAIAPHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
+#define kAccountSectionIndex 0
+#define kOfflineEditingSectionIndex 1
+
 @interface OAOsmEditingSettingsViewController () <OAAccountSettingDelegate>
 
 @end
@@ -61,6 +64,39 @@
 - (NSString *)getTableHeaderDescription
 {
     return OALocalizedString(@"osm_editing_settings_descr");
+}
+
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
+{
+    UIBarButtonItem *rightButton = [self createRightNavbarButton:nil iconName:@"ic_navbar_reset" action:@selector(onRightNavbarButtonPressed) menu:nil];
+    rightButton.accessibilityLabel = OALocalizedString(@"reset_to_default");
+    return @[rightButton];
+}
+
+- (void)onRightNavbarButtonPressed
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"reset_to_default") message:OALocalizedString(@"reset_plugin_to_default") preferredStyle:UIAlertControllerStyleActionSheet];
+    UIPopoverPresentationController *popPresenter = [alert popoverPresentationController];
+    popPresenter.sourceView = self.view;
+    popPresenter.barButtonItem = self.navigationItem.rightBarButtonItem;
+    popPresenter.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil];
+
+    UIAlertAction *resetAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_reset") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action)
+    {
+        [OAOsmOAuthHelper logOut];
+        [_settings.offlineEditing resetToDefault];
+        [self generateData];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kAccountSectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kOfflineEditingSectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }];
+
+    [alert addAction:resetAction];
+    [alert addAction:cancelAction];
+    alert.preferredAction = resetAction;
+
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - Table data

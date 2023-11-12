@@ -577,7 +577,7 @@ static OASubscriptionState *EXPIRED;
 {
     if (TEST_LOCAL_PURCHASE)
     {
-        [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"freeMapsAvailable"];
+        [[NSUserDefaults standardUserDefaults] setInteger:kFreeMapsAvailableTotal forKey:@"freeMapsAvailable"];
 
         [_settings.liveUpdatesPurchased set:NO];
         [_settings.osmandProPurchased set:NO];
@@ -859,6 +859,7 @@ static OASubscriptionState *EXPIRED;
     NSLog(@"Loaded list of products...");
     _productsRequest = nil;
     BOOL isPaidVersion = [self.class isPaidVersion];
+    BOOL isOsmAndProAvailable = [self.class isOsmAndProAvailable];
 
     for (SKProduct * skProduct in response.products)
     {
@@ -1035,7 +1036,8 @@ static OASubscriptionState *EXPIRED;
         _wasProductListFetched = success;
 
         BOOL isPaidVersionChecked = [self.class isPaidVersion];
-        if (isPaidVersion != isPaidVersionChecked)
+        BOOL isOsmAndProChecked = [self.class isOsmAndProAvailable];
+        if (isPaidVersion != isPaidVersionChecked || isOsmAndProAvailable != isOsmAndProChecked)
             [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
 
         if (_completionHandler)
@@ -1326,7 +1328,9 @@ static OASubscriptionState *EXPIRED;
         // test - emulate purchase
         if (TEST_LOCAL_PURCHASE)
         {
-            BOOL isPaidVersion = [OAIAPHelper isPaidVersion];
+            BOOL isPaidVersion = [self.class isPaidVersion];
+            BOOL isOsmAndProAvailable = [self.class isOsmAndProAvailable];
+
             [_products setPurchased:productIdentifier];
 
             if ([product isKindOfClass:OASubscription.class])
@@ -1361,8 +1365,9 @@ static OASubscriptionState *EXPIRED;
 
             [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
 
-            BOOL isPaidVersionChecked = [OAIAPHelper isPaidVersion];
-            if (isPaidVersion != isPaidVersionChecked)
+            BOOL isPaidVersionChecked = [self.class isPaidVersion];
+            BOOL isOsmAndProChecked = [self.class isOsmAndProAvailable];
+            if (isPaidVersion != isPaidVersionChecked || isOsmAndProAvailable != isOsmAndProChecked)
                 [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
             return;
         }
@@ -1930,11 +1935,13 @@ static OASubscriptionState *EXPIRED;
 
 - (void) checkBackupPurchase:(void(^)(BOOL))onComplete
 {
-    BOOL isPaidVersion = [OAIAPHelper isPaidVersion];
+    BOOL isPaidVersion = [self.class isPaidVersion];
+    BOOL isOsmAndProAvailable = [self.class isOsmAndProAvailable];
     OACheckBackupSubscriptionTask *t = [[OACheckBackupSubscriptionTask alloc] init];
     [t execute:^(BOOL success) {
-        BOOL isPaidVersionChecked = [OAIAPHelper isPaidVersion];
-        if (isPaidVersion != isPaidVersionChecked)
+        BOOL isPaidVersionChecked = [self.class isPaidVersion];
+        BOOL isOsmAndProChecked = [self.class isOsmAndProAvailable];
+        if (isPaidVersion != isPaidVersionChecked || isOsmAndProAvailable != isOsmAndProChecked)
             [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
 
         if (onComplete)

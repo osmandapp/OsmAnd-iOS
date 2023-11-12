@@ -82,6 +82,7 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 - (void)onRowSelected:(NSIndexPath *)indexPath;
 - (void)onRowDeselected:(NSIndexPath *)indexPath;
 
+- (void)onLeftNavbarButtonLongtapPressed;
 - (void)onRightNavbarButtonPressed;
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView;
 - (void)onRotation;
@@ -89,5 +90,6 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 
 // Use to refresh button appearance
 - (void)setupNavbarButtons;
+- (BOOL)forceShowShevron;
 
 @end

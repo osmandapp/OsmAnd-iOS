@@ -13,7 +13,7 @@
 #import "OAContextMenuLayer.h"
 #import "OAMapLayers.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXDocumentPrimitives.h"
@@ -77,7 +77,7 @@
     [super viewDidLoad];
 
     _iconView.image = [UIImage templateImageNamed:@"ic_custom_location_marker"];
-    _iconView.tintColor = UIColorFromRGB(color_tint_gray);
+    _iconView.tintColor = UIColor.iconColorSecondary;
 
     if (![OAUtilities isLandscapeIpadAware])
         [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];

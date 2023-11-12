@@ -59,6 +59,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *waypointButtonMore;
 @property (weak, nonatomic) IBOutlet UIButton *waypointButtonRemove;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *exitRefTextContainerWidthConstraint;
+
 @end
 
 @implementation OATopTextView
@@ -152,9 +154,11 @@
     _calc1 = [[OANextDirectionInfo alloc] init];
     
     _textRasterizer = OsmAnd::TextRasterizer::getDefault();
+    
+    BOOL isNight = OADayNightHelper.instance.isNightMode;
 
     CGFloat radius = 3.0;
-    self.backgroundColor = [UIColor whiteColor];
+    self.backgroundColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColor.whiteColor;
     self.layer.cornerRadius = radius;
 
     _regularFont = [UIFont systemFontOfSize:23 weight:UIFontWeightSemibold];
@@ -163,7 +167,7 @@
     _boldWaypointFont = [UIFont systemFontOfSize:17 weight:UIFontWeightSemibold];
     _textFont = _regularFont;
     _textWaypointFont = _regularWaypointFont;
-    _textColor = [UIColor blackColor];
+    _textColor = isNight ? UIColor.whiteColor : UIColor.blackColor;
     _textShadowColor = nil;
     _shadowRadius = 0;
     
@@ -216,10 +220,14 @@
     if (showExit)
     {
         CGSize size = [OAUtilities calculateTextBounds:_exitRefText.text width:w font:[UIFont systemFontOfSize:17 weight:UIFontWeightSemibold]];
-        CGRect textFrame = CGRectMake(3., 3., size.width, h - 10);
-        _exitRefText.frame = textFrame;
+        _exitRefText.adjustsFontSizeToFitWidth = YES;
+        _exitRefText.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+        _exitRefText.textAlignment = NSTextAlignmentCenter;
         exitRefFrame.size = CGSizeMake(size.width + 6., h - 4);
-        _exitRefTextContainer.frame = exitRefFrame;
+        if (size.width > 40)
+            self.exitRefTextContainerWidthConstraint.constant = size.width;
+        else
+            self.exitRefTextContainerWidthConstraint.constant = 40;
     }
     
     CGFloat margin = _turnView.subviews.count > 0 ? 4 + _turnView.bounds.size.width + 2 : 2;

@@ -30,7 +30,14 @@
 
 #define kSimMinSpeed 5 / 3.6f
 
-@class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
+@class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState, OATravelGuidesState;
+
+typedef NS_ENUM(NSInteger, EOAScreenOrientation)
+{
+    EOAScreenOrientationSystem = -1, //ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+    EOAScreenOrientationPortrait = 1, //ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    EOAScreenOrientationLandscape = 6 //ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+};
 
 typedef NS_ENUM(NSInteger, EOAPositionPlacement)
 {
@@ -746,6 +753,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonInteger *settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
 @property (nonatomic) OACommonBoolean *metricSystemChangedManually;
+@property (nonatomic) OACommonInteger *mapScreenOrientation;
 
 @property (assign, nonatomic) int settingMapArrows; // 0 - from Location; 1 - from Map Center
 @property (assign, nonatomic) CLLocationCoordinate2D mapCenter;
@@ -1019,6 +1027,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 // Custom plugins
 @property (nonatomic) NSString *customPluginsJson;
+
+@property (nonatomic) OATravelGuidesState *travelGuidesState;
 
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode;
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed;

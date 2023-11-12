@@ -7,6 +7,7 @@
 //
 
 #import "OAWikiArticleHelper.h"
+#import "OAWikiArticleHelper+cpp.h"
 #import "OAWorldRegion.h"
 #import "OsmAndApp.h"
 #import "OAManageResourcesViewController.h"
@@ -16,6 +17,7 @@
 #import "OARootViewController.h"
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OAWikiLanguagesWebViewContoller.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -418,6 +420,79 @@
     
     articleName = [articleName stringByRemovingPercentEncoding];
     return articleName;
+}
+
++ (UIMenu *)createLanguagesMenu:(NSArray<NSString *> *)availableLocales selectedLocale:(NSString *)selectedLocale delegate:(id<OAWikiLanguagesWebDelegate>)delegate
+{
+    UIMenu *languageMenu;
+    NSMutableArray<UIMenuElement *> *languageOptions = [NSMutableArray array];
+    if (availableLocales.count > 1)
+    {
+        NSMutableSet<NSString *> *preferredLocales = [NSMutableSet set];
+        NSArray<NSString *> *preferredLanguages = [NSLocale preferredLanguages];
+        for (NSInteger i = 0; i < preferredLanguages.count; i ++)
+        {
+            NSString *preferredLocale = preferredLanguages[i];
+            if ([preferredLocale containsString:@"-"])
+                preferredLocale = [preferredLocale substringToIndex:[preferredLocale indexOf:@"-"]];
+            if ([preferredLocale isEqualToString:@"en"])
+                preferredLocale = @"";
+            [preferredLocales addObject:preferredLocale];
+        }
+
+        NSMutableArray<NSString *> *possibleAvailableLocale = [NSMutableArray array];
+        NSMutableArray<NSString *> *possiblePreferredLocale = [NSMutableArray array];
+        for (NSString *contentLocale in availableLocales)
+        {
+            NSString *processedLocale = [contentLocale isEqualToString:@"en"] ? @"" : contentLocale;
+            if ([preferredLocales containsObject:processedLocale])
+            {
+                UIAction *languageAction = [UIAction actionWithTitle:[OAUtilities translatedLangName:processedLocale.length > 0 ? processedLocale : @"en"].capitalizedString
+                                                       image:nil
+                                                  identifier:nil
+                                                     handler:^(__kindof UIAction * _Nonnull action) {
+                    
+                    
+                    [delegate onLocaleSelected:contentLocale];
+                    
+                }];
+                if ([contentLocale isEqualToString:selectedLocale])
+                    languageAction.state = UIMenuElementStateOn;
+                [languageOptions addObject:languageAction];
+                [possiblePreferredLocale addObject:processedLocale];
+            }
+            else
+            {
+                [possibleAvailableLocale addObject:contentLocale];
+            }
+        }
+        if (possibleAvailableLocale.count > 0)
+        {
+            UIAction *availableLanguagesAction = [UIAction actionWithTitle:OALocalizedString(@"available_languages")
+                                                                     image:[UIImage systemImageNamed:@"globe"]
+                                                                identifier:nil
+                                                                   handler:^(__kindof UIAction * _Nonnull action) {
+                OAWikiLanguagesWebViewContoller *wikiLanguagesViewController =
+                            [[OAWikiLanguagesWebViewContoller alloc] initWithSelectedLocale:selectedLocale
+                                                                           availableLocales:possibleAvailableLocale
+                                                                           preferredLocales:possiblePreferredLocale];
+
+                wikiLanguagesViewController.delegate = delegate;
+                [delegate showLocalesVC:wikiLanguagesViewController];
+            }];
+            if (![preferredLocales containsObject:selectedLocale])
+                availableLanguagesAction.state = UIMenuElementStateOn;
+            UIMenu *availableLanguagesMenu = [UIMenu menuWithTitle:@""
+                                                             image:nil
+                                                        identifier:nil
+                                                           options:UIMenuOptionsDisplayInline
+                                                          children:@[availableLanguagesAction]];
+            [languageOptions addObject:availableLanguagesMenu];
+        }
+        languageMenu = [UIMenu menuWithChildren:languageOptions];
+    }
+    
+    return languageMenu;
 }
 
 @end

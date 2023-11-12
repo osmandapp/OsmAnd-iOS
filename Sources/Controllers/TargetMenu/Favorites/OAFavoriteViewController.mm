@@ -19,7 +19,7 @@
 #import "OACollapsableWaypointsView.h"
 #import "OAPOI.h"
 #import "OAPOIViewController.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OACollapsableCoordinatesView.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OAPOIHelper.h"
@@ -45,7 +45,7 @@
         _app = [OsmAndApp instance];
         _favorite = favorite;
         _favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getCategory]];
-        _openingHoursInfo = OpeningHoursParser::getInfo(self.favorite.favorite->getExtension(QString::fromNSString([PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS])).toStdString());
+        _openingHoursInfo = OpeningHoursParser::getInfo(self.favorite.favorite->getExtension(QString::fromNSString([PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS_TAG])).toStdString());
 
         if (!OAFavoritesHelper.isFavoritesLoaded)
             [OAFavoritesHelper loadFavorites];
@@ -169,7 +169,7 @@
     if (favoriteGroup && favoriteGroup.points.count > 0)
     {
         UIColor *color = favoriteGroup.color ? favoriteGroup.color : [OADefaultFavorite getDefaultColor];
-        UIColor *disabledColor = UIColorFromRGB(color_text_footer);
+        UIColor *disabledColor = UIColor.textColorSecondary;
         color = favoriteGroup.isVisible ? color : disabledColor;
         UIImage *icon = [UIImage templateImageNamed:@"ic_custom_folder"];
         NSString *name = [self.favorite getCategoryDisplayName];
@@ -233,7 +233,7 @@
         [mutAttributedTypeStr appendAttributedString:[[NSAttributedString alloc] initWithString:address]];
     }
     [mutAttributedTypeStr addAttributes:@{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
-                                           NSForegroundColorAttributeName : UIColorFromRGB(color_dialog_text_description_color_night) }
+                                           NSForegroundColorAttributeName : UIColor.textColorSecondary }
                                   range:NSMakeRange(0, mutAttributedTypeStr.length)];
     return mutAttributedTypeStr;
 }

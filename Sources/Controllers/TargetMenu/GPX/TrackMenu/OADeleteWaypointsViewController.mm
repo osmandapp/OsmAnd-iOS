@@ -14,6 +14,7 @@
 #import "OAGpxWptItem.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAAutoObserverProxy.h"
 #import "OAGPXDocumentPrimitives.h"
 
@@ -116,13 +117,13 @@
 {
     BOOL hasSelection = _selectedWaypointGroups.allKeys.count != 0;
     self.deleteButton.backgroundColor =
-            hasSelection ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_button_gray_background);
-    [self.deleteButton setTintColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
+            hasSelection ? UIColor.buttonBgColorDisruptive : UIColor.buttonBgColorDisabled;
+    [self.deleteButton setTintColor:hasSelection ? UIColor.buttonTextColorPrimary : UIColor.textColorSecondary];
     [self.deleteButton setUserInteractionEnabled:hasSelection];
 
     NSString *textShow = OALocalizedString(@"shared_string_delete");
     UIFont *fontShow = [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold];
-    UIColor *colorShow = hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer);
+    UIColor *colorShow = hasSelection ? UIColor.buttonTextColorPrimary : UIColor.textColorSecondary;
     NSMutableAttributedString *attrShow = [[NSMutableAttributedString alloc] initWithString:textShow attributes:@{NSFontAttributeName: fontShow, NSForegroundColorAttributeName: colorShow}];
 
     NSInteger selectedGroupsCount = 0;
@@ -140,7 +141,7 @@
                                                       selectedWaypointsCount];
 
     UIFont *fontCategories = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-    UIColor *colorCategories = hasSelection != 0 ? UIColor.whiteColor : UIColorFromRGB(color_text_footer);
+    UIColor *colorCategories = hasSelection != 0 ? UIColor.whiteColor : UIColor.textColorSecondary;
     NSMutableAttributedString *attrCategories = [[NSMutableAttributedString alloc] initWithString:textGroups attributes:@{NSFontAttributeName: fontCategories, NSForegroundColorAttributeName: colorCategories}];
 
     [attrShow appendAttributedString:attrCategories];
@@ -362,9 +363,9 @@
             cell = (OAPointWithRegionTableViewCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
 
-            cell.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.tintColor = UIColor.iconColorActive;
             UIView *bgColorView = [[UIView alloc] init];
-            bgColorView.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.05];
+            bgColorView.backgroundColor = [UIColor.iconColorActive colorWithAlphaComponent:.05];
             [cell setSelectedBackgroundView:bgColorView];
         }
         if (cell)
@@ -407,9 +408,9 @@
             [cell.titleView setText:cellData.title];
 
             [cell.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_folder"]];
-            cell.leftIconView.tintColor = UIColorFromRGB(cellData.tintColor);
+            cell.leftIconView.tintColor = cellData.tintColor;
 
-            cell.arrowIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.arrowIconView.tintColor = UIColor.iconColorActive;
             cell.arrowIconView.image = [UIImage templateImageNamed:cellData.rightIconName];
             if (!cellData.toggle && [cell isDirectionRTL])
                 cell.arrowIconView.image = cell.arrowIconView.image.imageFlippedForRightToLeftLayoutDirection;

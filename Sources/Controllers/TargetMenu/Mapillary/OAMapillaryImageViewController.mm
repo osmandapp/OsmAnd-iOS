@@ -75,7 +75,7 @@
 - (void) adjustNavBarWidth
 {
     CGRect frame = _navBarView.frame;
-    frame.size.width = [self isLandscape] ? (DeviceScreenWidth / 2 + OAUtilities.getLeftMargin) : DeviceScreenWidth;
+    frame.size.width = [OAUtilities isLandscape] ? (DeviceScreenWidth / 2 + OAUtilities.getLeftMargin) : DeviceScreenWidth;
     _navBarView.frame = frame;
 }
 
@@ -94,7 +94,7 @@
 - (void) adjustTitlePosition
 {
     CGRect titleFrame = _titleView.frame;
-    if ([self isLandscape])
+    if ([OAUtilities isLandscape])
         titleFrame.size.width = DeviceScreenWidth / 2 - 45.0 * 2 + [OAUtilities getLeftMargin];
     else
         titleFrame.size.width = DeviceScreenWidth - 45.0 * 2;
@@ -112,7 +112,7 @@
 
 - (void) initWebView
 {
-    CGRect frame = [self getWebViewFrame:[self isLandscape]];
+    CGRect frame = [self getWebViewFrame:[OAUtilities isLandscape]];
     
     WKUserContentController *contentController = [[WKUserContentController alloc] init];
     [contentController addScriptMessageHandler:self name:@"iosMessageHandler"];
@@ -194,15 +194,9 @@
     _retryButton.layer.cornerRadius = 9.0;
 }
 
-- (BOOL) isLandscape
-{
-    UIInterfaceOrientation orientation = UIApplication.sharedApplication.statusBarOrientation;
-    return orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight;
-}
-
 - (void)adjustMapViewPort
 {
-    if ([self isLandscape])
+    if ([OAUtilities isLandscape])
     {
         _mapView.viewportXScale = kViewportBottomScale;
         _mapView.viewportYScale = kViewportScale;
@@ -227,7 +221,7 @@
     if (!self.view.hidden)
     {
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-            BOOL toLandscape = [self isLandscape];
+            BOOL toLandscape = [OAUtilities isLandscape];
             [self applySafeAreaMargins];
             [self updateViewOnRotation:toLandscape];
             [self layoutNoInternetView];

@@ -25,6 +25,7 @@
 #import <mach/mach.h>
 #import <mach/mach_host.h>
 #include <CommonCrypto/CommonDigest.h>
+#import <CocoaSecurity.h>
 
 #define kBlurViewTag -999
 #define kSpinnerViewTag -998
@@ -775,6 +776,11 @@
 
 - (void) addSpinner
 {
+    [self addSpinnerInCenterOfCurrentView:NO];
+}
+
+- (void) addSpinnerInCenterOfCurrentView:(BOOL)inCurrentView
+{
     for (UIView *subview in self.subviews)
     {
         if (subview.tag == kSpinnerViewTag)
@@ -784,7 +790,12 @@
     UIActivityIndicatorViewStyle spinnerStyle = UIActivityIndicatorViewStyleLarge;
 
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:spinnerStyle];
-    spinner.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2);
+    
+    if (inCurrentView)
+        spinner.center = CGPointMake(self.frame.size.width / 2, self.frame.size.height / 2);
+    else
+        spinner.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2);
+    
     spinner.tag = kSpinnerViewTag;
     [self addSubview:spinner];
     [spinner startAnimating];
@@ -1852,11 +1863,6 @@ static const double d180PI = 180.0 / M_PI_2;
     return radians * d180PI;
 }
 
-+ (BOOL) isLeftSideLayout:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (UIInterfaceOrientationIsLandscape(interfaceOrientation) || UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
-}
-
 + (CGFloat) getStatusBarHeight
 {
     if ([NSThread isMainThread])
@@ -1897,11 +1903,11 @@ static const double d180PI = 180.0 / M_PI_2;
 + (CGFloat) calculateScreenWidth
 {
     if (NSThread.isMainThread)
-        return UIScreen.mainScreen.bounds.size.width;
+        return [UIApplication sharedApplication].mainWindow ? [UIApplication sharedApplication].mainWindow.frame.size.width : UIScreen.mainScreen.bounds.size.width;
     // else dispatch to the main thread
     __block CGFloat result;
     dispatch_sync(dispatch_get_main_queue(), ^{
-        result = UIScreen.mainScreen.bounds.size.width;
+        result = [UIApplication sharedApplication].mainWindow ? [UIApplication sharedApplication].mainWindow.frame.size.width : UIScreen.mainScreen.bounds.size.width;
     });
     return result;
 }
@@ -1911,12 +1917,14 @@ static const double d180PI = 180.0 / M_PI_2;
     if (NSThread.isMainThread)
     {
         CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
-        return UIScreen.mainScreen.bounds.size.height - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
+        CGFloat screenHeigth = [UIApplication sharedApplication].mainWindow ? [UIApplication sharedApplication].mainWindow.frame.size.height : UIScreen.mainScreen.bounds.size.height;
+        return screenHeigth - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
     }
     __block CGFloat result;
     dispatch_sync(dispatch_get_main_queue(), ^{
         CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
-        result = UIScreen.mainScreen.bounds.size.height - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
+        CGFloat screenHeigth = [UIApplication sharedApplication].mainWindow ? [UIApplication sharedApplication].mainWindow.frame.size.height : UIScreen.mainScreen.bounds.size.height;
+        result = screenHeigth - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
     });
     return result;
 }
@@ -1924,8 +1932,7 @@ static const double d180PI = 180.0 / M_PI_2;
 + (BOOL) isWindowed
 {
     BOOL isiOSAppOnMac = [NSProcessInfo processInfo].isiOSAppOnMac;
-
-    return !isiOSAppOnMac && [UIDevice.currentDevice userInterfaceIdiom] == UIUserInterfaceIdiomPad && (DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width || [UIApplication sharedApplication].mainWindow.bounds.size.height != [[UIScreen mainScreen] bounds].size.height);
+    return !isiOSAppOnMac && [self isIPad] && (DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width || [UIApplication sharedApplication].mainWindow.bounds.size.height != [[UIScreen mainScreen] bounds].size.height);
 }
 
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
@@ -1954,10 +1961,19 @@ static const double d180PI = 180.0 / M_PI_2;
     middleView.frame = tableViewFrame;
 }
 
++ (BOOL) isPortrait
+{
+    return [[OAScreenOrientationHelper sharedInstance] isPortrait];
+}
+
 + (BOOL) isLandscape
 {
-    UIInterfaceOrientation orientation = UIApplication.sharedApplication.statusBarOrientation;
-    return orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight;
+    return [[OAScreenOrientationHelper sharedInstance] isLandscape];
+}
+
++ (BOOL) isLandscape:(UIInterfaceOrientation)intefaceOrientation
+{
+    return UIInterfaceOrientationIsLandscape(intefaceOrientation);
 }
 
 + (BOOL) isLandscapeIpadAware
@@ -2174,9 +2190,14 @@ static const double d180PI = 180.0 / M_PI_2;
     return OALocalizedString([NSString stringWithFormat:@"%@_name", properyName]);
 }
 
++ (BOOL) isIPhone
+{
+    return [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone;
+}
+
 + (BOOL) isIPad
 {
-    return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
+    return [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad;
 }
 
 + (BOOL) isColorBright:(UIColor *)color
@@ -2645,6 +2666,11 @@ static const double d180PI = 180.0 / M_PI_2;
     return s;
 }
 
++ (NSString *) toMD5:(NSString *)text
+{
+    return [CocoaSecurity md5:text].hexLower;
+}
+
 + (void) showMenuInView:(UIView *)parentView fromView:(UIView *)targetView
 {
     if ([parentView canBecomeFirstResponder])
@@ -2731,6 +2757,40 @@ static const double d180PI = 180.0 / M_PI_2;
     if ([res isEqualToString:key])
         res = defaultName;
     return res;
+}
+
++ (int) convertCharToDist:(NSString *)ch firstLetter:(NSString *)firstLetter firstDist:(int)firstDist mult1:(int)mult1 mult2:(int)mult2
+{
+    int dist = firstDist;
+    
+    const char *chChar = [ch UTF8String];
+    const char *firstLetterChar = [firstLetter UTF8String];
+    
+    for(int iteration = 1; iteration < chChar - firstLetterChar + 1; ++iteration)
+    {
+        dist *= iteration % 2 == 1 ? mult1 : mult2;
+    }
+    
+    return dist;;
+}
+
++ (BOOL) isValidFileName:(NSString *)name
+{
+    NSArray<NSString *> *illegalCharacters = @[ @"?", @":", @"\"", @"*", @"|", @"/", @"<", @">" ];
+    if (!name)
+    {
+        return NO;
+    }
+    else
+    {
+        for (NSString *symbol in illegalCharacters)
+        {
+            int index = [name indexOf:symbol];
+            if (index != -1)
+                return NO;
+        }
+    }
+    return YES;
 }
  
 @end

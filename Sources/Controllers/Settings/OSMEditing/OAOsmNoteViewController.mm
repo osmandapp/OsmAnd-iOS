@@ -12,7 +12,7 @@
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
-#import "OAInputTableViewCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAOsmNotePoint.h"
 #import "OAMapPanelViewController.h"
@@ -23,7 +23,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAMappersViewController.h"
 
-@interface OAOsmNoteViewController () <UITextFieldDelegate, OAAccountSettingDelegate, OAUploadTaskDelegate>
+@interface OAOsmNoteViewController () <UITextViewDelegate, OAAccountSettingDelegate, OAUploadTaskDelegate>
 
 @end
 
@@ -54,6 +54,7 @@
         _bugPoints = points;
         _plugin = plugin;
         _screenType = type;
+        _messageText = ((OAOsmNotePoint *)_bugPoints.firstObject).getText;
     }
     
     return self;
@@ -75,7 +76,9 @@
 
 - (NSString *)getTitle
 {
-    if (_screenType == EOAOsmNoteViewConrollerModeCreate)
+    if (_screenType == EOAOsmNoteViewConrollerModeCreate && _messageText.length > 0)
+        return OALocalizedString(@"edit_osm_note");
+    else if (_screenType == EOAOsmNoteViewConrollerModeCreate)
         return OALocalizedString(@"context_menu_item_open_note");
     else if (_screenType == EOAOsmNoteViewConrollerModeUpload)
         return OALocalizedString(@"upload_osm_note");
@@ -114,13 +117,12 @@
 - (void)generateData
 {
     _data = [[OATableDataModel alloc] init];
-    _messageText = ((OAOsmNotePoint *)_bugPoints.firstObject).getText;
     __weak OAOsmNoteViewController *weakSelf = self;
     
     OATableSectionData *textSection = [_data createNewSection];
     textSection.headerText = OALocalizedString(@"osn_bug_name");
     OATableRowData *textInputCell = [textSection createNewRow];
-    [textInputCell setCellType:[OAInputTableViewCell getCellIdentifier]];
+    [textInputCell setCellType:[OATextMultilineTableViewCell getCellIdentifier]];
     [textInputCell setTitle:_messageText];
     
     if (_screenType != EOAOsmNoteViewConrollerModeCreate)
@@ -141,7 +143,7 @@
             [accountCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
             [accountCell setTitle: _isAuthorised ? [OAOsmOAuthHelper getUserDisplayName] : OALocalizedString(@"login_open_street_map_org")];
             [accountCell setIconName:@"ic_custom_user_profile"];
-            [accountCell setObj:(_isAuthorised ? UIColor.blackColor : UIColorFromRGB(color_primary_purple)) forKey:@"title_color"];
+            [accountCell setObj:(_isAuthorised ? UIColor.textColorPrimary : UIColor.iconColorActive) forKey:@"title_color"];
             [accountCell setObj:([UIFont systemFontOfSize:17. weight:_isAuthorised ? UIFontWeightRegular : UIFontWeightMedium]) forKey:@"title_font"];
             [accountCell setObj:(_isAuthorised ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone)) forKey:@"accessory_type"];
             [accountCell setObj: (^void(){ [weakSelf onAccountButtonPressed]; }) forKey:@"actionBlock"];
@@ -174,28 +176,30 @@
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     NSString *cellType = item.cellType;
     
-    if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
     {
-        OAInputTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
+        OATextMultilineTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAInputTableViewCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultilineTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
-            [cell titleVisibility:NO];
             [cell clearButtonVisibility:NO];
-            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
-            [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
-            cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-            cell.inputField.autocorrectionType = UITextAutocorrectionTypeNo;
-            cell.inputField.spellCheckingType = UITextSpellCheckingTypeNo;
-            cell.inputField.textAlignment = NSTextAlignmentNatural;
+            cell.textView.userInteractionEnabled = YES;
+            cell.textView.editable = YES;
+            cell.textView.delegate = self;
+            cell.textView.returnKeyType = UIReturnKeyDone;
+            cell.textView.enablesReturnKeyAutomatically = YES;
+            cell.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            cell.textView.autocorrectionType = UITextAutocorrectionTypeNo;
+            cell.textView.spellCheckingType = UITextSpellCheckingTypeNo;
+            cell.textView.textAlignment = NSTextAlignmentNatural;
         }
         if (cell)
         {
-            cell.inputField.text = item.title;
-            cell.inputField.delegate = self;
-            cell.inputField.placeholder = OALocalizedString(@"rendering_attr_hideText_name");
+            cell.textView.text = item.title;
+            if (_screenType != EOAOsmNoteViewConrollerModeUpload)
+                [cell.textView becomeFirstResponder];
         }
         return cell;
     }
@@ -237,7 +241,7 @@
             cell.titleLabel.textColor = [item objForKey:@"title_color"];
             cell.titleLabel.font = [item objForKey:@"title_font"];
             cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
-            cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.leftIconView.tintColor = UIColor.iconColorActive;
             cell.accessoryType = (UITableViewCellAccessoryType) [item integerForKey:@"accessory_type"];
             cell.accessibilityTraits = UIAccessibilityTraitButton;
         }
@@ -285,10 +289,39 @@
     });
 }
 
+- (void)showActionSheet
+{
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *destructiveAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_discard_changes") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [super onLeftNavbarButtonPressed];
+    }];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil];
+    
+    [actionSheet addAction:destructiveAction];
+    [actionSheet addAction:cancelAction];
+    
+    UIPopoverPresentationController *popover = actionSheet.popoverPresentationController;
+    popover.barButtonItem = self.navigationItem.leftBarButtonItem;
+    popover.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    
+    [self presentViewController:actionSheet animated:YES completion:nil];
+}
+
 #pragma mark - Selectors
+
+- (void)onLeftNavbarButtonPressed
+{
+    if (_isNoteTextChanged)
+        [self showActionSheet];
+    else
+        [super onLeftNavbarButtonPressed];
+}
 
 - (void)onBottomButtonPressed
 {
+    [(OAOsmNotePoint *) _bugPoints.firstObject setText:_messageText];
     BOOL shouldWarn = _screenType != EOAOsmNoteViewConrollerModeUpload;
     BOOL shouldUpload = _screenType != EOAOsmNoteViewConrollerModeCreate;
     if (shouldWarn)
@@ -360,19 +393,22 @@
     [self setupBottomButtons];
 }
 
-#pragma mark - UITextFieldDelegate
+#pragma mark - UITextViewDelegate
 
-- (BOOL)textFieldShouldReturn:(UITextField *)sender
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView
 {
-    [sender resignFirstResponder];
+    [textView resignFirstResponder];
     return YES;
 }
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    [(OAOsmNotePoint *) _bugPoints.firstObject setText:textView.text];
+    _messageText = textView.text;
     _isNoteTextChanged = YES;
     [self setupBottomButtons];
+    [textView sizeToFit];
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
 }
 
 #pragma mark - OAAccontSettingDelegate

@@ -189,17 +189,16 @@
         if (!archiveItem.isValid())
             continue;
         
-        if (archiveItem.name.compare(QStringLiteral("items.json")) == 0)
+        if (archiveItem.name == QStringLiteral("items.json"))
         {
-            NSString *tmpFileName = [_tmpFilesDir stringByAppendingPathComponent:@"items.json"];
-            if (!archive.extractItemToFile(archiveItem.name, QString::fromNSString(tmpFileName)))
+            auto itemsJsonData = archive.extractItemToArray(archiveItem.name);
+            if (itemsJsonData.isEmpty())
             {
                 [fileManager removeItemAtPath:_tmpFilesDir error:nil];
-                NSLog(@"Error reading items.json");
+                NSLog(@"Error reading or empty items.json");
                 return items;
             }
-            NSString *itemsJson = [NSString stringWithContentsOfFile:tmpFileName encoding:NSUTF8StringEncoding error:nil];
-            OASettingsItemsFactory *factory = [[OASettingsItemsFactory alloc] initWithJSON:itemsJson];
+            OASettingsItemsFactory *factory = [[OASettingsItemsFactory alloc] initWithJSONData:itemsJsonData.toRawNSData()];
             [items addObjectsFromArray:factory.getItems];
             break;
         }
@@ -218,12 +217,22 @@
     OsmAndAppInstance _app;
 }
 
-- (instancetype) initWithJSON:(NSString*)jsonStr
+- (instancetype) initWithJSON:(NSString *)jsonStr
 {
     self = [super init];
     if (self) {
         [self commonItit];
         [self collectItems:jsonStr];
+    }
+    return self;
+}
+
+- (instancetype) initWithJSONData:(NSData *)jsonUtf8Data;
+{
+    self = [super init];
+    if (self) {
+        [self commonItit];
+        [self collectItemsFromData:jsonUtf8Data];
     }
     return self;
 }
@@ -298,15 +307,20 @@
 
 - (void) collectItems:(NSString *)jsonStr
 {
-    NSError *jsonError;
     NSData* jsonData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
-    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:&jsonError];
+    [self collectItemsFromData:jsonData];
+}
+
+- (void) collectItemsFromData:(NSData *)jsonUtf8Data
+{
+    NSError *jsonError;
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonUtf8Data options:kNilOptions error:&jsonError];
     if (jsonError)
     {
         NSLog(@"Error reading json");
         return;
     }
-    
+
     [self collectItemsFromDictioanry:json];
 }
 

@@ -66,6 +66,9 @@
         case EOAProfileGeneralSettingsMapOrientation:
             _title = OALocalizedString(@"rotate_map_to");
             break;
+        case EOAProfileGeneralSettingsScreenOrientation:
+            _title = OALocalizedString(@"map_screen_orientation");
+            break;
         case EOAProfileGeneralSettingsDisplayPosition:
             _title = OALocalizedString(@"position_on_map");
             break;
@@ -132,6 +135,7 @@
 {
     NSMutableArray *dataArr = [NSMutableArray array];
     NSInteger rotateMap = [_settings.rotateMap get:self.appMode];
+    NSInteger screenOrientation = [_settings.mapScreenOrientation get:self.appMode];
     Theme appTheme = [_settings.appearanceProfileTheme get:self.appMode];
     EOAPositionPlacement positionMap = [_settings.positionPlacementOnMap get:self.appMode];
     BOOL automatic = [_settings.drivingRegionAutomatic get:self.appMode];
@@ -195,6 +199,30 @@
                @"title" : OALocalizedString(@"rotate_map_manual_opt"),
                @"selected" : @(rotateMap == ROTATE_MAP_MANUAL),
                @"icon" : @"ic_custom_direction_manual_day",
+               @"type" : [OASimpleTableViewCell getCellIdentifier],
+            }];
+            break;
+            
+        case EOAProfileGeneralSettingsScreenOrientation:
+            [dataArr addObject:@{
+                @"name" : @"mapOrientationDefault",
+                @"title" : OALocalizedString(@"map_orientation_default"),
+                @"selected" : [NSNumber numberWithBool:screenOrientation == EOAScreenOrientationSystem],
+                @"icon" : @"ic_checkmark_default",
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+            }];
+            [dataArr addObject:@{
+                @"name" : @"mapOrientationPortrait",
+                @"title" : OALocalizedString(@"map_orientation_portrait"),
+                @"selected" : [NSNumber numberWithBool:screenOrientation == EOAScreenOrientationPortrait],
+                @"icon" : @"ic_checkmark_default",
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+            }];
+            [dataArr addObject:@{
+               @"name" : @"mapOrientationLandscape",
+               @"title" : OALocalizedString(@"map_orientation_landscape"),
+               @"selected" : [NSNumber numberWithBool:screenOrientation == EOAScreenOrientationLandscape],
+               @"icon" : @"ic_checkmark_default",
                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             break;
@@ -427,16 +455,14 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
-            if (!item[@"description"])
-                [cell descriptionVisibility:NO];
-            if (!item[@"icon"])
-                [cell leftIconVisibility:NO];
         }
         if (cell)
         {
+            [cell descriptionVisibility:item[@"description"] != nil];
+            [cell leftIconVisibility:item[@"icon"] != nil];
             cell.titleLabel.text = item[@"title"];
             cell.descriptionLabel.text = item[@"description"];
-            if (_settingsType == EOAProfileGeneralSettingsAppTheme)
+            if (_settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsScreenOrientation)
             {
                 cell.leftIconView.image = [item[@"selected"] boolValue] ? [UIImage templateImageNamed:item[@"icon"]] : nil;
             }
@@ -449,7 +475,7 @@
             {
                 cell.leftIconView.image = [UIImage imageNamed:item[@"icon"]];
             }
-            cell.accessoryType = [item[@"selected"] boolValue] && _settingsType != EOAProfileGeneralSettingsAppTheme ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            cell.accessoryType = [item[@"selected"] boolValue] && (_settingsType != EOAProfileGeneralSettingsAppTheme && _settingsType != EOAProfileGeneralSettingsScreenOrientation) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         return cell;
     }
@@ -476,6 +502,9 @@
             break;
         case EOAProfileGeneralSettingsMapOrientation:
             [self selectMapOrientation:name];
+            break;
+        case EOAProfileGeneralSettingsScreenOrientation:
+            [self selectScreenOrientation:name];
             break;
         case EOAProfileGeneralSettingsDisplayPosition:
             [self selectDisplayPosition:(int)indexPath.row];
@@ -518,6 +547,18 @@
         [_settings.rotateMap set:ROTATE_MAP_NONE mode:self.appMode];
     
     [[OAMapViewTrackingUtilities instance] updateSettings];
+    [OARootViewController.instance.mapPanel.mapViewController refreshMap];
+}
+
+- (void)selectScreenOrientation:(NSString *)name
+{
+    if ([name isEqualToString:@"mapOrientationPortrait"])
+        [_settings.mapScreenOrientation set:EOAScreenOrientationPortrait mode:self.appMode];
+    else if ([name isEqualToString:@"mapOrientationLandscape"])
+        [_settings.mapScreenOrientation set:EOAScreenOrientationLandscape mode:self.appMode];
+    else
+        [_settings.mapScreenOrientation set:EOAScreenOrientationSystem mode:self.appMode];
+
     [OARootViewController.instance.mapPanel.mapViewController refreshMap];
 }
 

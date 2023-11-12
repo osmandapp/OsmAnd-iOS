@@ -37,7 +37,7 @@
 - (void) commonInit;
 - (void) setupView;
 - (void) additionalSetup;
-- (void) updateTableHeaderView:(UIInterfaceOrientation)interfaceOrientation;
+- (void) updateTableHeaderView;
 
 - (void) applyLocalization;
 

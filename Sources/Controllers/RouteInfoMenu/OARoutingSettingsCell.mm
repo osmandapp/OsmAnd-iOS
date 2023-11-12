@@ -13,7 +13,7 @@
 #import "OAAppSettings.h"
 #import "OAVoiceRouter.h"
 #import "OARoutingHelper.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 
 @implementation OARoutingSettingsCell
@@ -43,7 +43,7 @@
 {
     btn.layer.cornerRadius = 6.;
     btn.layer.borderWidth = 1.;
-    btn.layer.borderColor = UIColorFromRGB(color_bottom_sheet_secondary).CGColor;
+    btn.layer.borderColor = UIColor.separatorColor.CGColor;
 }
 - (void) layoutSubviews
 {
@@ -51,6 +51,17 @@
 
     _divider.frame = CGRectMake(0.0, self.contentView.frame.size.height - 0.5, self.contentView.frame.size.width, 0.5);
     [self refreshSoundButton];
+}
+
+- (void) traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+    {
+        [self setupButton:_optionsButton];
+        [self setupButton:_soundButton];
+    }
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated {

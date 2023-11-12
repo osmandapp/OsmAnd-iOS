@@ -17,6 +17,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGpxWptItem.h"
 #import "QuadRect.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #import <OsmAndCore/Utilities.h>
 
@@ -122,7 +123,7 @@
                     }
             }];
             waypointsSectionData.values[@"tint_color"] = [waypointsSectionData.values[@"is_hidden"] boolValue]
-                    ? UIColorFromRGB(color_footer_icon_gray)
+                    ? UIColor.iconColorDisabled
                     : self.trackMenuDelegate
                             ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:groupName])
                             : [OADefaultFavorite getDefaultColor];
@@ -136,7 +137,7 @@
                             ? @"ic_custom_folder_hidden" : @"ic_custom_folder"],
                     kCellRightIconName: @"ic_custom_arrow_up",
                     kCellToggle: @YES,
-                    kCellTintColor: @([waypointsSectionData.values[@"tint_color"] toARGBNumber]),
+                    kCellTintColor: waypointsSectionData.values[@"tint_color"],
                     kTableValues: @{ @"is_rte": @(self.trackMenuDelegate && [self.trackMenuDelegate isRteGroup:groupName]) }
             }];
             [waypointsSectionData.subjects addObject:groupCellData];
@@ -169,7 +170,7 @@
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellRightIconName: @"ic_custom_remove_outlined",
             kCellToggle: @(hasWaypoints),
-            kCellTintColor: hasWaypoints ? @color_primary_purple : @unselected_tab_icon,
+            kCellTintColor: hasWaypoints ? UIColor.iconColorActive : UIColor.iconColorDisabled,
     }];
     [actionsSectionData.subjects addObject:deleteCellData];
 
@@ -180,7 +181,7 @@
             kCellTitle: OALocalizedString(@"add_waypoint"),
             kCellRightIconName: @"ic_custom_add_gpx_waypoint",
             kCellToggle: @YES,
-            kCellTintColor: @color_primary_purple
+            kCellTintColor:UIColor.iconColorActive
     }];
     [actionsSectionData.subjects addObject:addWaypointCellData];
 
@@ -212,7 +213,7 @@
                         : @"",
                 kCellLeftIcon: !isRte ? [waypoint getCompositeIcon]
                         : [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_location_marker"]
-                                                    color:UIColorFromRGB(color_footer_icon_gray)],
+                                                    color:UIColor.iconColorDisabled],
                 kTableValues: @{
                         @"waypoint": waypoint,
                         @"quad_rect_value_point_area": [[QuadRect alloc] initWithLeft:waypoint.point.position.longitude
@@ -287,7 +288,7 @@
                             [self.trackMenuDelegate isDefaultGroup:cellData.title] ? @"" : cellData.title]
                     : NO);
             sectionData.values[@"tint_color"] = [sectionData.values[@"is_hidden"] boolValue]
-                    ? UIColorFromRGB(color_footer_icon_gray)
+                    ? UIColor.iconColorDisabled
                     : self.trackMenuDelegate
                             ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:cellData.title])
                             : [OADefaultFavorite getDefaultColor];
@@ -296,7 +297,7 @@
                     kTableKey: [NSString stringWithFormat:@"cell_waypoints_group_%@", cellData.title],
                     kCellLeftIcon: [UIImage templateImageNamed:[sectionData.values[@"is_hidden"] boolValue]
                             ? @"ic_custom_folder_hidden" : @"ic_custom_folder"],
-                    kCellTintColor: @([sectionData.values[@"tint_color"] toARGBNumber])
+                    kCellTintColor: sectionData.values[@"tint_color"] 
             }];
             cellData.values[@"is_rte"] = @(self.trackMenuDelegate && [self.trackMenuDelegate isRteGroup:cellData.title]);
         }
@@ -320,7 +321,7 @@
         BOOL hasWaypoints = [self hasWaypoints];
         [tableData setData:@{
                 kCellToggle: @(hasWaypoints),
-                kCellTintColor: hasWaypoints ? @color_primary_purple : @unselected_tab_icon
+                kCellTintColor: hasWaypoints ? UIColor.iconColorActive : UIColor.buttonBgColorTertiary
         }];
     }
     else if ([tableData.key hasPrefix:@"actions_section"])

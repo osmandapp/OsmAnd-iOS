@@ -18,7 +18,7 @@
 #import "OACollapsableWaypointsView.h"
 #import "OAPOI.h"
 #import "OAPOIViewController.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OACollapsableCoordinatesView.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OAPOIHelper.h"
@@ -51,7 +51,7 @@
             wpt.docPath = [[OASelectedGPXHelper instance] getSelectedGpx:wpt.point].path;
         }
         self.wpt = wpt;
-        OAGpxExtension *openingHoursExt = [self.wpt.point getExtensionByKey:[PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS]];
+        OAGpxExtension *openingHoursExt = [self.wpt.point getExtensionByKey:[PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS_TAG]];
         _openingHoursInfo = OpeningHoursParser::getInfo(openingHoursExt && openingHoursExt.value ? openingHoursExt.value.UTF8String : "");
         [self acquireOriginObject];
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
@@ -222,7 +222,7 @@
     [mutAttributedTypeStr appendAttributedString:attributedTypeStr];
     [mutAttributedTypeStr appendAttributedString:[[NSAttributedString alloc] initWithString:address]];
     [mutAttributedTypeStr addAttributes:@{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
-                                           NSForegroundColorAttributeName : UIColorFromRGB(color_dialog_text_description_color_night) }
+                                           NSForegroundColorAttributeName : UIColor.textColorSecondary }
                                   range:NSMakeRange(0, mutAttributedTypeStr.length)];
     return mutAttributedTypeStr;
 }

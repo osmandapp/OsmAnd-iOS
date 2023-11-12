@@ -10,7 +10,7 @@
 #import "OANoImagesCell.h"
 #import "Localization.h"
 #import "OAMapillaryPlugin.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OANoImagesCard ()
 
@@ -31,12 +31,13 @@
 {
     if (_collectionCell)
     {
+        _collectionCell.backgroundColor = UIColor.groupBgColor;
         _collectionCell.noImagesLabel.text = OALocalizedString(@"mapil_no_images");
         [_collectionCell.imageView setImage:[UIImage templateImageNamed:@"ic_custom_trouble.png"]];
-        _collectionCell.imageView.tintColor = UIColorFromRGB(color_icon_color);
-        [_collectionCell.addPhotosButton setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(color_primary_purple)] forState:UIControlStateNormal];
+        _collectionCell.imageView.tintColor = UIColor.iconColorDefault;
+        [_collectionCell.addPhotosButton setBackgroundImage:[OAUtilities imageWithColor:UIColor.buttonBgColorPrimary] forState:UIControlStateNormal];
         [_collectionCell.addPhotosButton setImage:[UIImage templateImageNamed:@"ic_custom_add.png"] forState:UIControlStateNormal];
-        _collectionCell.addPhotosButton.imageView.tintColor = [UIColor whiteColor];
+        _collectionCell.addPhotosButton.imageView.tintColor = [UIColor buttonTextColorPrimary];
         [_collectionCell.addPhotosButton setTitle:OALocalizedString(@"shared_string_add_photos") forState:UIControlStateNormal];
         [_collectionCell.addPhotosButton addTarget:self action:@selector(addPhotosButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     }

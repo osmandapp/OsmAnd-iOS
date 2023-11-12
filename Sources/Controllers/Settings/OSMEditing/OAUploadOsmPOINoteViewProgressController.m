@@ -15,7 +15,7 @@
 #import "OAProgressBarCell.h"
 #import "OAValueTableViewCell.h"
 #import "OATextMultilineTableViewCell.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OARootViewController.h"
 
@@ -140,8 +140,8 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadViewConrollerMode) {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAProgressBarCell getCellIdentifier] owner:self options:nil];
     OAProgressBarCell *resultCell = (OAProgressBarCell *)[nib objectAtIndex:0];
     [resultCell.progressBar setProgress:0.0 animated:NO];
-    [resultCell.progressBar setProgressTintColor:UIColorFromRGB(color_primary_purple)];
-    resultCell.backgroundColor = [UIColor clearColor];
+    [resultCell.progressBar setProgressTintColor:UIColor.iconColorActive];
+    resultCell.backgroundColor = [UIColor groupBgColor];
     resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return resultCell;
 }
@@ -152,7 +152,9 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadViewConrollerMode) {
     OAValueTableViewCell *resultCell = (OAValueTableViewCell *)[nib objectAtIndex:0];
     [resultCell descriptionVisibility:NO];
     [resultCell leftIconVisibility:NO];
-    resultCell.titleLabel.text = OALocalizedString(@"local_openstreetmap_uploading");
+    [resultCell setCustomLeftSeparatorInset:YES];
+    resultCell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
+    resultCell.titleLabel.text = OALocalizedString(@"shared_string_uploading");
     resultCell.valueLabel.text = @"0%";
     return resultCell;
 }
@@ -170,6 +172,14 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadViewConrollerMode) {
 - (NSInteger)rowsCount:(NSInteger)section
 {
     return [_data rowCount:section];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    if ([item.cellType isEqualToString:[OAProgressBarCell getCellIdentifier]])
+        return 22;
+    return UITableViewAutomaticDimension;
 }
 
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath

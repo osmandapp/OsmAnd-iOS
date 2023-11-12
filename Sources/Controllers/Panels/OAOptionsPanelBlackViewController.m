@@ -47,6 +47,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonConfigureScreen;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonHelp;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonPlugins;
+@property (weak, nonatomic) IBOutlet UIButton *menuButtonTravelGuides;
 
 @end
 
@@ -62,6 +63,7 @@
     CALayer *_menuButtonSettingsDiv;
     CALayer *_menuButtonPluginsDiv;
     CALayer *_menuButtonMapsAndResourcesDiv;
+    CALayer *_menuButtonTravelGuidesDiv;
 
     OAAutoObserverProxy *_weatherChangeObserver;
 }
@@ -105,6 +107,7 @@
                                               self.menuButtonMyData,
                                               self.menuButtonMyWaypoints,
                                               self.menuButtonMapsAndResources,
+                                              self.menuButtonTravelGuides,
                                               self.menuButtonNavigation,
                                               self.menuButtonPlanRoute,
                                               nil
@@ -185,6 +188,7 @@
     _menuButtonConfigureScreenDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonSettingsDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonPluginsDiv.frame = CGRectMake(divX, divY, divW, divH);
+    _menuButtonTravelGuidesDiv.frame = CGRectMake(divX, divY, divW, divH);
 }
 
 - (void)applyingAppTheme
@@ -201,6 +205,7 @@
     _menuButtonConfigureScreenDiv.backgroundColor = divColor.CGColor;
     _menuButtonSettingsDiv.backgroundColor = divColor.CGColor;
     _menuButtonPluginsDiv.backgroundColor = divColor.CGColor;
+    _menuButtonTravelGuidesDiv.backgroundColor = divColor.CGColor;
     
     [_menuButtonMaps setTintColor:UIColor.iconColorDefault];
     [_menuButtonMyData setTintColor:UIColor.iconColorDefault];
@@ -213,6 +218,7 @@
     [_menuButtonPlanRoute setTintColor:UIColor.iconColorDefault];
     [_menuButtonWeather setTintColor:UIColor.iconColorDefault];
     [_menuButtonPlugins setTintColor:UIColor.iconColorDefault];
+    [_menuButtonTravelGuides setTintColor:UIColor.iconColorDefault];
 }
 
 - (void)adjustButtonInsets:(UIButton *)btn
@@ -263,6 +269,7 @@
     _menuButtonConfigureScreenDiv = [[CALayer alloc] init];
     _menuButtonSettingsDiv = [[CALayer alloc] init];
     _menuButtonPluginsDiv = [[CALayer alloc] init];
+    _menuButtonTravelGuidesDiv = [[CALayer alloc] init];
 
     self.navigationController.delegate = self;
     
@@ -277,6 +284,7 @@
     [_menuButtonPlanRoute setTitle:OALocalizedString(@"plan_route") forState:UIControlStateNormal];
     [_menuButtonWeather setTitle:OALocalizedString(@"shared_string_weather") forState:UIControlStateNormal];
     [_menuButtonPlugins setTitle:OALocalizedString(@"plugins_menu_group") forState:UIControlStateNormal];
+    [_menuButtonTravelGuides setTitle:OALocalizedString(@"travel_guides_beta") forState:UIControlStateNormal];
 
     _menuButtonMaps.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     _menuButtonMyData.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
@@ -289,6 +297,7 @@
     _menuButtonPlanRoute.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     _menuButtonWeather.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     _menuButtonPlugins.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    _menuButtonTravelGuides.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
     _menuButtonMaps.titleLabel.adjustsFontForContentSizeCategory = YES;
     _menuButtonMyData.titleLabel.adjustsFontForContentSizeCategory = YES;
@@ -301,6 +310,7 @@
     _menuButtonPlanRoute.titleLabel.adjustsFontForContentSizeCategory = YES;
     _menuButtonWeather.titleLabel.adjustsFontForContentSizeCategory = YES;
     _menuButtonPlugins.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonTravelGuides.titleLabel.adjustsFontForContentSizeCategory = YES;
 
     [_menuButtonMaps.layer addSublayer:_menuButtonMapsDiv];
     [_menuButtonMyData.layer addSublayer:_menuButtonMyDataDiv];
@@ -312,6 +322,7 @@
     [_menuButtonPlanRoute.layer addSublayer:_menuButtonPlanRouteDiv];
     [_menuButtonWeather.layer addSublayer:_menuButtonWeatherDiv];
     [_menuButtonPlugins.layer addSublayer:_menuButtonPluginsDiv];
+    [_menuButtonTravelGuides.layer addSublayer:_menuButtonTravelGuidesDiv];
     
     [_menuButtonMaps setImage:[UIImage templateImageNamed:@"left_menu_icon_map.png"] forState:UIControlStateNormal];
     [_menuButtonMyData setImage:[UIImage templateImageNamed:@"ic_custom_my_places.png"] forState:UIControlStateNormal];
@@ -324,6 +335,7 @@
     [_menuButtonPlanRoute setImage:[UIImage templateImageNamed:@"ic_custom_routes.png"] forState:UIControlStateNormal];
     [_menuButtonWeather setImage:[UIImage templateImageNamed:@"ic_custom_umbrella.png"] forState:UIControlStateNormal];
     [_menuButtonPlugins setImage:[UIImage templateImageNamed:@"left_menu_icon_plugins"] forState:UIControlStateNormal];
+    [_menuButtonTravelGuides setImage:[UIImage templateImageNamed:@"left_menu_icon_plugins"] forState:UIControlStateNormal];
     
     [self applyingAppTheme];
 }
@@ -405,6 +417,12 @@
     [OAAnalyticsHelper logEvent:@"help_open"];
     OAHelpViewController *helpViewController = [[OAHelpViewController alloc] init];
     [self.navigationController pushViewController:helpViewController animated:YES];
+}
+
+- (IBAction) travelGuidesButtonClicked:(id)sender
+{
+    [self.sidePanelController toggleLeftPanel:self];
+    [[OARootViewController instance].mapPanel showTravelGuides];
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle

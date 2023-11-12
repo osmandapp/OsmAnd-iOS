@@ -12,7 +12,7 @@
 #import "OATargetPointsHelper.h"
 #import "OADividerCell.h"
 #import "OAUtilities.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAIAPHelper.h"
 #import "OAMapPanelViewController.h"
 #import "OARootViewController.h"
@@ -247,7 +247,7 @@
             NSString *desc = item[@"description"];
             cell.descriptionLabel.text = desc;
             [cell descriptionVisibility:desc.length != 0];
-            [cell.leftIconView setTintColor:UIColorFromRGB(color_icon_color)];
+            [cell.leftIconView setTintColor:UIColor.iconColorDefault];
             cell.leftIconView.image = img;
         }
         
@@ -261,7 +261,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
-            cell.dividerColor = UIColorFromRGB(color_divider_blur);
+            cell.dividerColor = UIColor.separatorColor;
             CGFloat leftInset = [cell isDirectionRTL] ? 0 : 70.0;
             CGFloat rightInset = [cell isDirectionRTL] ? 70.0 : 0;
             cell.dividerInsets = UIEdgeInsetsMake(6.0, leftInset, 4.0, rightInset);
@@ -445,6 +445,13 @@
 {
     targetPoint.ctrlTypeStr = targetType;
     return [super initWithParam:targetPoint];
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [[ThemeManager shared] configureWithAppMode:[OAAppSettings sharedManager].applicationMode.get];
 }
 
 - (OATargetPoint *)targetPoint

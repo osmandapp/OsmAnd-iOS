@@ -79,6 +79,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::HeightmapRegionLegacy:
         case OsmAndResourceType::GeoTiffRegion:
             return OALocalizedString(@"download_heightmap_maps");
+        case OsmAndResourceType::Travel:
+            return OALocalizedString(@"shared_string_wikivoyage");
         default:
             return OALocalizedString(@"res_unknown");
     }
@@ -120,6 +122,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::WeatherForecast:
             imageNamed = @"ic_custom_umbrella";
             break;
+        case OsmAndResourceType::Travel:
+            imageNamed = @"ic_custom_wikipedia";
+            break;
         case OsmAndResourceType::GeoTiffRegion:
         case OsmAndResourceType::HeightmapRegionLegacy:
             imageNamed = @"ic_custom_terrain";
@@ -152,8 +157,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return 60;
 //        case WIKIVOYAGE_FILE:
 //            return 65;
-//        case TRAVEL_FILE:
-//            return 66;
+        case OsmAndResourceType::Travel:
+            return 66;
         case OsmAndResourceType::LiveUpdateRegion:
             return 70;
         case OsmAndResourceType::GpxFile:
@@ -187,8 +192,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         return OsmAndResourceType::WikiMapRegion;
 //    else if ([scopeId isEqualToString:@"wikivoyage"])
 //        return OsmAnd::ResourcesManager::ResourceType::MapRegion;
-//    else if ([scopeId isEqualToString:@"travel"])
-//        return OsmAnd::ResourcesManager::ResourceType::MapRegion;
+    else if ([scopeId isEqualToString:@"travel"])
+        return OsmAnd::ResourcesManager::ResourceType::Travel;
     else if ([scopeId isEqualToString:@"live_updates"])
         return OsmAndResourceType::LiveUpdateRegion;
     else if ([scopeId isEqualToString:@"gpx"])
@@ -231,7 +236,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             [self.class toValue:OsmAndResourceType::MapStyle],
             [self.class toValue:OsmAndResourceType::MapStylesPresets],
             [self.class toValue:OsmAndResourceType::OnlineTileSources],
-            [self.class toValue:OsmAndResourceType::WeatherForecast]
+            [self.class toValue:OsmAndResourceType::WeatherForecast],
+            [self.class toValue:OsmAndResourceType::Travel]
     ];
 }
 
@@ -686,6 +692,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         name = name.remove(QStringLiteral(".depth.obf")).replace('_', ' ');
         return name.toNSString().capitalizedString;
     }
+    else if ([region.regionId isEqualToString:OsmAnd::WorldRegions::TravelRegionId.toNSString()])
+    {
+        auto name = resource->id;
+        name = name.remove(QStringLiteral(".travel.obf")).replace('_', ' ');
+        return name.toNSString().capitalizedString;
+    }
 
     return [OAResourcesUIHelper titleOfResourceType:resource->type inRegion:region withRegionName:includeRegionName withResourceType:includeResourceType];
 }
@@ -944,8 +956,11 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                                            limit:(NSInteger)limit
                              skipIfOneDownloaded:(BOOL)skipIfOneDownloaded
 {
-    NSMutableArray<OAResourceItem *>* res = [NSMutableArray new];
+    NSMutableArray<OAResourceItem *> *res = [NSMutableArray array];
     OAWorldRegion *worldRegion = [[OsmAndApp instance].worldRegion findAtLat:coordinate.latitude lon:coordinate.longitude];
+    if (!worldRegion)
+        return res;
+
     NSArray<OAWorldRegion *> *downloadRegions = [[OsmAndApp instance].worldRegion queryAtLat:coordinate.latitude lon:coordinate.longitude];
 
     for (OAWorldRegion *downloadRegion in downloadRegions)

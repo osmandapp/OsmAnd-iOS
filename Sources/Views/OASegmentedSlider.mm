@@ -8,6 +8,7 @@
 
 #import "OASegmentedSlider.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 
 #define kMarkTag 1000
@@ -121,7 +122,7 @@
                     kMarkWidth,
                     kCurrentMarkHeight
             )];
-            _currentMarkView.backgroundColor = UIColorFromRGB(color_primary_purple);
+            _currentMarkView.backgroundColor = UIColor.iconColorActive;
             _currentMarkView.layer.cornerRadius = kMarkWidth / 2.;
             [self addSubview:_currentMarkView];
         }
@@ -377,7 +378,7 @@
 
 - (void)layoutSelectingTitle
 {
-    _selectingMarkTitle.textColor = self.userInteractionEnabled ? UIColor.blackColor : UIColorFromRGB(color_text_footer);
+    _selectingMarkTitle.textColor = self.userInteractionEnabled ? UIColor.textColorPrimary : UIColor.textColorSecondary;
     NSInteger index = [self getIndex];
     NSInteger markValue = _additionalMarksBetween > 0 ? index : index * 3;
     _selectingMarkTitle.text = !self.userInteractionEnabled ? OALocalizedString(@"rendering_value_disabled_name")
@@ -430,7 +431,7 @@
     }
     for (UILabel *titleLabel in _titleViews)
     {
-        titleLabel.textColor = self.userInteractionEnabled ? UIColor.blackColor : UIColorFromRGB(color_text_footer);
+        titleLabel.textColor = self.userInteractionEnabled ? UIColor.textColorPrimary : UIColor.textColorSecondary;
     }
 }
 

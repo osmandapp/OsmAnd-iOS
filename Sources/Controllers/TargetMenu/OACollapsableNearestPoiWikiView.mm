@@ -19,9 +19,11 @@
 #import "OAPluginDetailsViewController.h"
 #import "OAManageResourcesViewController.h"
 #import "OAWikiArticleHelper.h"
+#import "OAWikiArticleHelper+cpp.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAWikipediaPlugin.h"
 #import "OAOsmAndFormatter.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
@@ -58,6 +60,14 @@
         // init
     }
     return self;
+}
+
+- (void) traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        [self buildViews];
 }
 
 - (void)setData:(NSArray<OAPOI *> *)nearestItems hasItems:(BOOL)hasItems latitude:(double)latitude longitude:(double)longitude filter:(OAPOIUIFilter *)filter
@@ -208,9 +218,9 @@
     btn.layer.cornerRadius = 4.0;
     btn.layer.masksToBounds = YES;
     btn.layer.borderWidth = 0.8;
-    btn.layer.borderColor = UIColorFromRGB(0xe6e6e6).CGColor;
-    [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xfafafa)] forState:UIControlStateNormal];
-    btn.tintColor = UIColorFromRGB(0x1b79f8);
+    btn.layer.borderColor = UIColor.separatorColor.CGColor;
+    [btn setBackgroundImage:[OAUtilities imageWithColor:UIColor.clearColor] forState:UIControlStateNormal];
+    btn.tintColor = UIColor.textColorActive;
     btn.delegate = self;
     return btn;
 }

@@ -13,6 +13,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OATrackMenuHudViewController.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kOABottomSheetWidth 320.
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
@@ -60,7 +61,7 @@
     self.tableView.separatorInset = UIEdgeInsetsZero;
 
     self.buttonsView.layoutMargins = UIEdgeInsetsMake(0, 20, 0, 20);
-    self.leftIconView.tintColor = UIColorFromRGB(color_primary_red);
+    self.leftIconView.tintColor = UIColor.buttonBgColorDisruptive;
     [self.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_remove_outlined"]];
     [self hideSliderView];
     [self.rightButton removeFromSuperview];
@@ -91,7 +92,7 @@
                             kCellType: [OAFilledButtonCell getCellIdentifier],
                             kTableValues: @{ @"title_color_value_integer": @color_icon_color_night },
                             kCellTitle: OALocalizedString(@"shared_string_delete"),
-                            kCellTintColor: @color_primary_red
+                            kCellTintColor: UIColor.buttonBgColorDisruptive
                     }]]
             }]
     ];
@@ -172,7 +173,7 @@
             cell = (OATextLineViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
-            cell.textView.textColor = UIColor.blackColor;
+            cell.textView.textColor = UIColor.textColorPrimary;
         }
         if (cell)
         {
@@ -192,7 +193,7 @@
         {
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
-            [cell.button setBackgroundColor:UIColorFromRGB(cellData.tintColor)];
+            [cell.button setBackgroundColor:cellData.tintColor];
             [cell.button setTitleColor:UIColorFromRGB([cellData.values[@"title_color_value_integer"] intValue])
                               forState:UIControlStateNormal];
             [cell.button setTitle:cellData.title forState:UIControlStateNormal];

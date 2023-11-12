@@ -10,6 +10,7 @@
 #import "OATableDataModel.h"
 #import "OAAppSettings.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OABaseWebViewController ()
 
@@ -18,6 +19,9 @@
 @end
 
 @implementation OABaseWebViewController
+{
+    BOOL _cachedIsLightTheme;
+}
 
 @synthesize tableData;
 
@@ -42,9 +46,22 @@
 
     self.webView.navigationDelegate = self;
     self.webView.scrollView.delegate = self;
+    self.webView.backgroundColor = UIColor.viewBgColor;
 
     self.webView.hidden = YES;
     [self loadWebView];
+    _cachedIsLightTheme = [ThemeManager shared].isLightTheme;
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    if (_cachedIsLightTheme != [ThemeManager shared].isLightTheme)
+    {
+        [self updateAppearance];
+        [self loadWebView];
+        _cachedIsLightTheme = [ThemeManager shared].isLightTheme;
+    }
 }
 
 #pragma mark - Web data

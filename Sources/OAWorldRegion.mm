@@ -472,6 +472,12 @@
     [entireWorld addSubregion:nauticalRegion];
     regionsLookupTable[nauticalRegion.regionId] = nauticalRegion;
     
+    OAWorldRegion *travelRegion = [[OAWorldRegion alloc] initWithId:OsmAnd::WorldRegions::TravelRegionId.toNSString()
+                                                 andAcceptedExtension:BINARY_TRAVEL_GUIDE_MAP_INDEX_EXT
+                                                     andLocalizedName:OALocalizedString(@"shared_string_travel_guides")];
+    [entireWorld addSubregion:travelRegion];
+    regionsLookupTable[travelRegion.regionId] = travelRegion;
+    
     OAWorldRegion *othersRegion = [[OAWorldRegion alloc] initWithId:OsmAnd::WorldRegions::OthersRegionId.toNSString()
                                                 andDownloadIdPrefix:@"others_"
                                                    andLocalizedName:OALocalizedString(@"download_select_map_types")];

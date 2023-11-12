@@ -12,7 +12,7 @@
 #import "OAPublicTransportPointCell.h"
 #import "OATransportRoutingHelper.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OsmAndApp.h"
 #import "OATargetPointsHelper.h"
 #import "OARouteCalculationResult.h"
@@ -350,6 +350,14 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
+- (void) traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        [_tableView reloadData];
+}
+
 - (void) onTransportDetailsPressed:(id)sender
 {
     [self.delegate onDetailsRequested];
@@ -381,8 +389,8 @@
     vector<SHARED_PTR<TransportRouteResultSegment>> segments = res->segments;
     NSString *name = [NSString stringWithUTF8String:segments[0]->getStart().name.c_str()];
     
-    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
-    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
+    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColor.textColorSecondary};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.textColorPrimary};
     
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"route_from") stringByAppendingString:@" "] attributes:secondaryAttributes]];
     
@@ -399,8 +407,8 @@
 - (NSAttributedString *) getSecondLineDescrAttributed:(SHARED_PTR<TransportRouteResult>)res
 {
     NSMutableAttributedString *attributedStr = [NSMutableAttributedString new];
-    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
-    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
+    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColor.textColorSecondary};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.textColorPrimary};
     auto& segments = res->segments;
     NSInteger walkTimeReal = [_transportHelper getWalkingTime:segments];
     NSInteger walkTimePT = (NSInteger) res->getWalkTime();
@@ -503,7 +511,7 @@
                     UIImage *img = [[OATargetInfoViewController getIcon:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     img = smallIcon ? [[OAUtilities resizeImage:img newSize:CGSizeMake(16., 16.)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] : img;
                     [cell.iconView setImage:img];
-                    cell.iconView.tintColor = smallIcon ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(color_chart_orange);
+                    cell.iconView.tintColor = smallIcon ? UIColor.iconColorDisabled : UIColor.iconColorSelected;
                     [cell showOutiline:YES];
                     cell.iconView.contentMode = UIViewContentModeCenter;
                 }
@@ -552,7 +560,7 @@
         {
             [cell.iconView setImage:
              [UIImage templateImageNamed:([item[@"collapsed"] boolValue] ? @"ic_custom_arrow_down" : @"ic_custom_arrow_up")]];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.iconView.tintColor = UIColor.iconColorActive;
             
             cell.descView.text = item[@"descr"];
             cell.textView.text = item[@"title"];
@@ -605,8 +613,8 @@
         }
         if (cell)
         {
-            cell.backgroundColor = UIColor.whiteColor;
-            cell.dividerColor = UIColorFromRGB(color_tint_gray);
+            cell.backgroundColor = UIColor.groupBgColor;
+            cell.dividerColor = UIColor.separatorColor;
             CGFloat leftInset = [cell isDirectionRTL] ? 0. : 62.0;
             CGFloat rightInset = [cell isDirectionRTL] ? 62.0 : 0.;
             cell.dividerInsets = [item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., leftInset, 0., rightInset) : UIEdgeInsetsZero;

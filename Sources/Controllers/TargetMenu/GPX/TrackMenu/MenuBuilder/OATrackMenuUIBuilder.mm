@@ -8,7 +8,7 @@
 
 #import "OATrackMenuUIBuilder.h"
 #import "OATabBar.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OABaseTrackMenuTabItem.h"
 #import "OATrackMenuTabOverview.h"
 #import "OATrackMenuTabPoints.h"
@@ -105,12 +105,12 @@
                                                              image:[tab getTabIcon]
                                                                tag:[tab getTabMode]];
     [tabBarItem setTitleTextAttributes:@{
-            NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer),
+            NSForegroundColorAttributeName: UIColor.textColorSecondary,
             NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1]
     } forState:UIControlStateNormal];
 
     [tabBarItem setTitleTextAttributes:@{
-            NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
+            NSForegroundColorAttributeName: UIColor.textColorActive,
             NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1]
     } forState:UIControlStateSelected];
 

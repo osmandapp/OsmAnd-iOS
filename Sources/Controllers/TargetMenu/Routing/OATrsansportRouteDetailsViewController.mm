@@ -10,7 +10,6 @@
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OASizes.h"
-#import "OAColors.h"
 #import "OANativeUtilities.h"
 #import "OsmAndApp.h"
 #import "OAMapLayers.h"

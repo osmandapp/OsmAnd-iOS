@@ -12,7 +12,7 @@
 #import "OAMeasurementEditingContext.h"
 #import "OAGpxApproximationViewController.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OASnapTrackWarningViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -27,9 +27,10 @@
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_attach_track"]];
-    self.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
+    self.leftIconView.tintColor = UIColor.iconColorActive;
     
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_warning_desc") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_warning_desc") font:kHeaderDescriptionFont textColor:UIColor.textColorSecondary isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+    self.tableView.tableHeaderView .backgroundColor = UIColor.viewBgColor;
 }
 
 - (void)applyLocalization

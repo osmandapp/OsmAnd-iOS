@@ -163,6 +163,12 @@
     [_app.data setWikipediaLanguages:languagesToShow mode:mode];
 }
 
+- (void)resetToDefaults
+{
+    [_app.data resetWikipediaSettings];
+    [_lastUsedWikipedia resetToDefault];
+}
+
 - (void)toggleWikipediaPoi:(BOOL)enable
 {
     if (enable)

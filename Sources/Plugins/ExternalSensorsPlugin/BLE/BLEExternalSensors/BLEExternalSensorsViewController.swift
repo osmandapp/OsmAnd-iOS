@@ -203,8 +203,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     private func detectBluetoothState() {
         NotificationCenter.default.addObserver(forName: Central.CentralStateChange,
                                                object: Central.sharedInstance,
-                                               queue: nil)
-        { [weak self] _ in
+                                               queue: nil) { [weak self] _ in
             guard let self else { return }
             guard DeviceHelper.shared.hasPairedDevices else { return }
             configureStartState()

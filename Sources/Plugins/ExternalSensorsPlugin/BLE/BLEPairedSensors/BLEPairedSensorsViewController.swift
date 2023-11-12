@@ -23,6 +23,8 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     @IBOutlet private weak var emptyView: UIView!
     
     var widgetType: WidgetType?
+    var widget: SensorTextWidget?
+    var onSelectDeviceAction: ((String) -> Void)?
     
     private var devices: [Device]?
     
@@ -42,9 +44,36 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        devices = gatConnectedAndPaireDisconnectedDevicesFor()
+        
+        configureDataSource()
         generateData()
         tableView.reloadData()
+    }
+    // Unused
+    func getWidgetForExternalDevice(id: String) -> SensorTextWidget? {
+        if let widgetInfos = OAMapWidgetRegistry.sharedInstance().getAllWidgets(), !widgetInfos.isEmpty {
+            return widgetInfos
+                .filter { $0.widget.widgetType == widgetType }
+                .compactMap { $0.widget as? SensorTextWidget }
+                .first(where: { ($0.externalDeviceId ?? "") == id })
+        }
+        return nil
+    }
+    
+    func configureDataSource() {
+        devices = gatConnectedAndPaireDisconnectedDevicesFor()?.sorted(by: { $0.deviceName < $1.deviceName })
+        // reset to default state for checkbox
+        devices?.forEach { $0.isSelected = false }
+        if let devices {
+            if let device = devices.first(where: { $0.id == widget?.externalDeviceId }) {
+                device.isSelected = true
+            } else {
+                if let device = devices.first {
+                    widget?.configureDevice(id: device.id)
+                    device.isSelected = true
+                }
+            }
+        }
     }
     
     // MARK: - Override's
@@ -80,7 +109,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     }
     
     override func getCustomHeight(forHeader section: Int) -> CGFloat {
-        0
+        10
     }
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
@@ -92,11 +121,17 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     }
     
     override func onRowSelected(_ indexPath: IndexPath!) {
-        if let devices, devices.count > indexPath.row {
-            let controller = BLEDescriptionViewController()
-            controller.device = devices[indexPath.row]
-            navigationController?.pushViewController(controller, animated: true)
+        guard let devices, devices.count > indexPath.row else { return }
+        guard !devices[indexPath.row].isSelected else { return }
+        
+        let currentSelectedDevice = devices[indexPath.row]
+        widget?.configureDevice(id: currentSelectedDevice.id)
+        
+        for (index, item) in devices.enumerated() {
+            item.isSelected = index == indexPath.row
         }
+        onSelectDeviceAction?(currentSelectedDevice.id)
+        tableView.reloadData()
     }
     
     // MARK: - Private func's

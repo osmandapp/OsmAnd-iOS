@@ -11,16 +11,25 @@ import CoreBluetooth
 
 @objcMembers
 final class SensorTextWidget: OATextInfoWidget {
+    static let externalDeviceIdConst = "externalDeviceIdConst"
+    
+    private(set) var externalDeviceId: String?
+    
     private var cachedValue: String?
     private var deviceIdPref: OACommonPreference?
-    private(set) var externalDeviceId: String?
     
     convenience init(customId: String?, widgetType: WidgetType, widgetParams: ([String: Any])? = nil) {
         self.init(frame: .zero)
         setIcons(widgetType)
         self.widgetType = widgetType
         deviceIdPref = registerSensorDevicePref(customId: customId)
-        externalDeviceId = getDeviceId(appMode: OAAppSettings.sharedManager().currentMode)
+        
+        if let id = widgetParams?[SensorTextWidget.externalDeviceIdConst] as? String {
+            // For a newly created widget with selected device(not 1st)
+            externalDeviceId = id
+        } else {
+            externalDeviceId = getDeviceId(appMode: OAAppSettings.sharedManager().currentMode)
+        }
     }
     
     override init(frame: CGRect) {
@@ -93,7 +102,7 @@ final class SensorTextWidget: OATextInfoWidget {
             return nil
         }
         if let externalDeviceId {
-            if let device = DeviceHelper.shared.connectedDevices.first(where: { $0.id == externalDeviceId }) {
+            if let device = gatConnectedAndPaireDisconnectedDevicesFor().first(where: { $0.id == externalDeviceId }) {
                 let sensors = device.sensors.compactMap { $0.getSupportedWidgetDataFieldTypes() != nil ? $0 : nil }
                 return sensors.first(where: { $0.getSupportedWidgetDataFieldTypes()!.contains(widgetType) })
             }
@@ -101,10 +110,14 @@ final class SensorTextWidget: OATextInfoWidget {
         return nil
     }
     
+    private func gatConnectedAndPaireDisconnectedDevicesFor() -> [Device] {
+        DeviceHelper.shared.gatConnectedAndPaireDisconnectedDevicesFor(type: widgetType!) ?? []
+    }
+    
     private func applyDeviceId() {
         if externalDeviceId == nil || externalDeviceId?.isEmpty ?? false {
-            let connectedDevicesWithWidgetType = DeviceHelper.shared.connectedDevices.filter { $0.getSupportedWidgetDataFieldTypes()!.contains(widgetType!)}
-            if connectedDevicesWithWidgetType.isEmpty {
+            let connectedAndPaireDisconnectedDevicesWithWidgetType = gatConnectedAndPaireDisconnectedDevicesFor()
+            if connectedAndPaireDisconnectedDevicesWithWidgetType.isEmpty {
                 externalDeviceId = ""
             } else {
                 if let widgetInfos = OAMapWidgetRegistry.sharedInstance().getAllWidgets(), !widgetInfos.isEmpty {
@@ -117,9 +130,9 @@ final class SensorTextWidget: OATextInfoWidget {
                         }
                     }
                     if visibleWidgetsIdsCurrentType.isEmpty {
-                        externalDeviceId = connectedDevicesWithWidgetType.first?.id ?? ""
+                        externalDeviceId = connectedAndPaireDisconnectedDevicesWithWidgetType.first?.id ?? ""
                     } else {
-                        let devices = connectedDevicesWithWidgetType.filter { !visibleWidgetsIdsCurrentType.contains($0.id) }
+                        let devices = connectedAndPaireDisconnectedDevicesWithWidgetType.filter { !visibleWidgetsIdsCurrentType.contains($0.id) }
                         if devices.isEmpty {
                             externalDeviceId = ""
                         } else {
@@ -127,7 +140,7 @@ final class SensorTextWidget: OATextInfoWidget {
                         }
                     }
                 } else {
-                    externalDeviceId = connectedDevicesWithWidgetType.first?.id ?? ""
+                    externalDeviceId = connectedAndPaireDisconnectedDevicesWithWidgetType.first?.id ?? ""
                 }
             }
             saveDeviceId(deviceId: externalDeviceId!)
@@ -140,6 +153,11 @@ final class SensorTextWidget: OATextInfoWidget {
 
     func getFieldType() -> WidgetType {
         return widgetType!
+    }
+    
+    func configureDevice(id: String) {
+        externalDeviceId = id
+        saveDeviceId(deviceId: id)
     }
     
     private func registerSensorDevicePref(customId: String?) -> OACommonPreference {

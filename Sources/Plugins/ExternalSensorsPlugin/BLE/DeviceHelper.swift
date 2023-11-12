@@ -56,7 +56,6 @@ final class DeviceHelper: NSObject {
             
             let devices = connectedDevices + diconnectedDevices
             return devices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
-        
         }
         return nil
     }
@@ -120,6 +119,8 @@ final class DeviceHelper: NSObject {
         switch type {
         case .BLE_HEART_RATE:
             return BLEHeartRateDevice()
+        case .BLE_TEMPERATURE:
+            return BLETemperatureDevice()
         default:
             fatalError("not impl")
         }

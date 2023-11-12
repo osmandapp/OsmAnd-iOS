@@ -3642,6 +3642,7 @@
 		FA86F41C2AE7CE0100DC3B2B /* BLEBikeSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */; };
 		FA9628E22AFCFB57004B7DEF /* SectionHeaderFooterButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA9628E12AFCFB57004B7DEF /* SectionHeaderFooterButton.xib */; };
 		FA9628E42AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9628E32AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift */; };
+		FA9628E62AFD2F2E004B7DEF /* BLETemperatureSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9628E52AFD2F2E004B7DEF /* BLETemperatureSensor.swift */; };
 		FAA6504F2ADD42C50020DCEA /* SearchDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650362ADD42C40020DCEA /* SearchDeviceTableViewCell.swift */; };
 		FAA650502ADD42C50020DCEA /* BLESearchViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAA650372ADD42C40020DCEA /* BLESearchViewController.storyboard */; };
 		FAA650512ADD42C50020DCEA /* BLESearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650382ADD42C40020DCEA /* BLESearchViewController.swift */; };
@@ -8461,6 +8462,7 @@
 		FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBikeSensor.swift; sourceTree = "<group>"; };
 		FA9628E12AFCFB57004B7DEF /* SectionHeaderFooterButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SectionHeaderFooterButton.xib; sourceTree = "<group>"; };
 		FA9628E32AFCFCE1004B7DEF /* SectionHeaderFooterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderFooterButton.swift; sourceTree = "<group>"; };
+		FA9628E52AFD2F2E004B7DEF /* BLETemperatureSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLETemperatureSensor.swift; sourceTree = "<group>"; };
 		FAA650362ADD42C40020DCEA /* SearchDeviceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchDeviceTableViewCell.swift; sourceTree = "<group>"; };
 		FAA650372ADD42C40020DCEA /* BLESearchViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = BLESearchViewController.storyboard; sourceTree = "<group>"; };
 		FAA650382ADD42C40020DCEA /* BLESearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLESearchViewController.swift; sourceTree = "<group>"; };
@@ -11540,7 +11542,6 @@
 		DA5A78FF26C5639F00F274C7 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				FAA650332ADD42990020DCEA /* BLE */,
 				DAABE4EC2A16578A00569F71 /* SwiftExtensions */,
 				DACF784127E343FF00A8A218 /* Backup */,
 				DA5A7AA726C563A000F274C7 /* Address */,
@@ -11765,7 +11766,7 @@
 		DA5A797626C563A000F274C7 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				FACE409C2AEA9A8000E1E43A /* SensorsPlugin */,
+				FACE409C2AEA9A8000E1E43A /* ExternalSensorsPlugin */,
 				32119B3A28477112005E1E0C /* Development */,
 				DA5A799526C563A000F274C7 /* Mapillary */,
 				DA5A798C26C563A000F274C7 /* Monitoring */,
@@ -14781,8 +14782,8 @@
 		FAA650332ADD42990020DCEA /* BLE */ = {
 			isa = PBXGroup;
 			children = (
-				FAE0B70F2AFCDA3000C02438 /* BLEPairedSensors */,
 				FA359EF02ADFD5310001C11D /* DeviceHelper.swift */,
+				FAE0B70F2AFCDA3000C02438 /* BLEPairedSensors */,
 				FA359EE72ADFC0420001C11D /* DeviceSettings */,
 				FA359EDE2ADEA1FE0001C11D /* BLEChangeDeviceName */,
 				FAA650392ADD42C40020DCEA /* BLEManager */,
@@ -14834,6 +14835,7 @@
 				FAA6503B2ADD42C40020DCEA /* BLEBatterySensor.swift */,
 				FAA6503D2ADD42C40020DCEA /* BLEHeartRateSensor.swift */,
 				FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */,
+				FA9628E52AFD2F2E004B7DEF /* BLETemperatureSensor.swift */,
 			);
 			path = Sensors;
 			sourceTree = "<group>";
@@ -14879,13 +14881,14 @@
 			path = DescriptionDeviceHeader;
 			sourceTree = "<group>";
 		};
-		FACE409C2AEA9A8000E1E43A /* SensorsPlugin */ = {
+		FACE409C2AEA9A8000E1E43A /* ExternalSensorsPlugin */ = {
 			isa = PBXGroup;
 			children = (
+				FAA650332ADD42990020DCEA /* BLE */,
 				FACE409E2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.h */,
 				FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */,
 			);
-			path = SensorsPlugin;
+			path = ExternalSensorsPlugin;
 			sourceTree = "<group>";
 		};
 		FAE0B70F2AFCDA3000C02438 /* BLEPairedSensors */ = {
@@ -18101,6 +18104,7 @@
 				DA5A830226C563A800F274C7 /* OADeviceScreenTableViewCell.m in Sources */,
 				DA5A830326C563A800F274C7 /* OAQuickActionCell.mm in Sources */,
 				DA5A812826C563A700F274C7 /* OAFavoritesMapLayerProvider.mm in Sources */,
+				FA9628E62AFD2F2E004B7DEF /* BLETemperatureSensor.swift in Sources */,
 				DA591EA928D9EAF20068CAC7 /* OATableDataModel.m in Sources */,
 				C56FAB5B29B227130096192F /* OATargetDistanceWidget.mm in Sources */,
 				DA5A82ED26C563A800F274C7 /* OAPointTableViewCell.m in Sources */,

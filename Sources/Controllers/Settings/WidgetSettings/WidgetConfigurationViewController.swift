@@ -243,6 +243,16 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             let storyboard = UIStoryboard(name: "BLEPairedSensors", bundle: nil)
             if let controller = storyboard.instantiateViewController(withIdentifier: "BLEPairedSensors") as? BLEPairedSensorsViewController {
                 controller.widgetType = widgetInfo?.widget.widgetType
+                if let widget = widgetInfo?.widget as? SensorTextWidget {
+                    controller.widget = widget
+                }
+                controller.onSelectDeviceAction = { [weak self] id in
+                    guard let self else { return }
+                    if isCreateNewAndSimilarAlreadyExist {
+                        // Pairing widget with selected device
+                        widgetConfigurationParams?[SensorTextWidget.externalDeviceIdConst] = id
+                    }
+                }
                 navigationController?.pushViewController(controller, animated: true)
             }
         }

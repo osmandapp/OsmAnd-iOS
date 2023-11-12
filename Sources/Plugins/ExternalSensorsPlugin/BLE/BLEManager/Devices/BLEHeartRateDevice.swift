@@ -10,13 +10,13 @@ import UIKit
 
 final class BLEHeartRateDevice: Device {
     
-    override class var getServiceUUID: String {
-        GattAttributes.SERVICE_HEART_RATE
-    }
-    
     init() {
         super.init(deviceType: .BLE_HEART_RATE)
         sensors.append(BLEHeartRateSensor(device: self, sensorId: "heart_rate"))
+    }
+    
+    override class var getServiceUUID: String {
+        GattAttributes.SERVICE_HEART_RATE
     }
     
     override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {

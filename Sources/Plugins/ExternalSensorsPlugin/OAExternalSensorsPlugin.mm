@@ -73,7 +73,7 @@
 
 - (BOOL)isEnabled
 {
-    return [super isEnabled] && [[OAIAPHelper sharedInstance].sensors isActive];
+    return [super isEnabled] && [OAIAPHelper isSensorPurchased];
 }
 
 - (BOOL)hasCustomSettings

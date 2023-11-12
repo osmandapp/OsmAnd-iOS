@@ -27,7 +27,6 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
         Bundle.main.loadNibNamed("DescriptionDeviceHeader", owner: self, options: nil)?[0] as! DescriptionDeviceHeader
     }()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
@@ -35,7 +34,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
         tableView.rowHeight = 48
 
         configureHeader()
-        headerView.configure(item: device)
+        headerView.configure(device: device)
         headerView.didPaireDevicedAction = { [weak self] in
             guard let self else { return }
             generateData()
@@ -165,7 +164,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
             nameVC.device = device
             nameVC.onSaveAction = { [weak self] in
                 guard let self else { return }
-                headerView.configure(item: device)
+                headerView.configure(device: device)
                 generateData()
                 tableView.reloadData()
             }

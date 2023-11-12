@@ -17,11 +17,11 @@ final class СhoicePairedDeviceTableViewCell: SearchDeviceTableViewCell {
     
     override func configure(item: Device) {
         super.configure(item: item)
-        if item.isConnected {
-            // TODO: additional logic
+        if item.isSelected {
             accessoryView = accessoryImageView
         } else {
             accessoryView = nil
+            accessoryType = .none
         }
     }
 }

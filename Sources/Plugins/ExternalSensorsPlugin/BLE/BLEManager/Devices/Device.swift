@@ -19,6 +19,7 @@ class Device {
     var rssi = -1
     var deviceName: String = ""
     var didChangeCharacteristic: (() -> Void)? = nil
+    var isSelected = false
     private var RSSIUpdateTimer: Timer?
     
     init(deviceType: DeviceType!,

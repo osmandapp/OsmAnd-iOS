@@ -2148,7 +2148,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         if ([URL.absoluteString hasSuffix:@"open_transport_settings"])
         {
             OARouteAvoidTransportSettingsViewController *avoidTransportController = [[OARouteAvoidTransportSettingsViewController alloc] init];
-            [OARootViewController.instance.mapPanel presentViewController:avoidTransportController animated:YES completion:nil];
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:avoidTransportController];
+            [OARootViewController.instance.mapPanel presentViewController:navigationController animated:YES completion:nil];
             return NO;
         }
     }

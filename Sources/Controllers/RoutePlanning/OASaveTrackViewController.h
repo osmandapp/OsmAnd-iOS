@@ -22,8 +22,6 @@
 
 @interface OASaveTrackViewController : OACompoundViewController
 
-@property (weak, nonatomic) IBOutlet UIView *navbarView;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;

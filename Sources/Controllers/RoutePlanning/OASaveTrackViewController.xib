@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -12,10 +12,8 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OASaveTrackViewController">
             <connections>
                 <outlet property="cancelButton" destination="lEU-Xt-jjA" id="Qfv-zp-z2Q"/>
-                <outlet property="navbarView" destination="d8b-2J-S1d" id="raZ-Nb-3hG"/>
                 <outlet property="saveButton" destination="smY-jn-jCI" id="rZD-jn-ryL"/>
                 <outlet property="tableView" destination="voN-vv-Xyy" id="dTX-eM-FVU"/>
-                <outlet property="titleLabel" destination="TT9-rO-7kc" id="Y4l-qZ-ePB"/>
                 <outlet property="view" destination="WWe-0c-ywu" id="h2U-MI-1Nj"/>
             </connections>
         </placeholder>
@@ -24,28 +22,12 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d8b-2J-S1d" userLabel="NavBarView">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
-                    <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Save as track file" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TT9-rO-7kc">
-                            <rect key="frame" x="140" y="18" width="134.5" height="20.5"/>
-                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                            <color key="textColor" name="textColorPrimary"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b5j-kO-Tzm">
-                            <rect key="frame" x="0.0" y="87" width="414" height="1"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" name="separatorColor"/>
-                        </view>
-                    </subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="voN-vv-Xyy">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="802"/>
                     <color key="backgroundColor" name="viewBgColor"/>
-                    <constraints>
-                        <constraint firstItem="TT9-rO-7kc" firstAttribute="centerX" secondItem="d8b-2J-S1d" secondAttribute="centerX" id="RPB-N1-Ruu"/>
-                        <constraint firstAttribute="height" constant="56" id="YiG-YX-CfA"/>
-                        <constraint firstItem="TT9-rO-7kc" firstAttribute="centerY" secondItem="d8b-2J-S1d" secondAttribute="centerY" id="ay4-pW-VBv"/>
-                    </constraints>
-                </view>
+                    <color key="tintColor" name="iconColorActive"/>
+                    <color key="separatorColor" name="separatorColor"/>
+                </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lh9-fF-Ev6">
                     <rect key="frame" x="0.0" y="802" width="414" height="94"/>
                     <subviews>
@@ -62,20 +44,6 @@
                         <constraint firstItem="gjX-FC-sw6" firstAttribute="top" secondItem="Lh9-fF-Ev6" secondAttribute="top" id="3hI-Vz-V3T"/>
                         <constraint firstAttribute="trailing" secondItem="gjX-FC-sw6" secondAttribute="trailing" id="OwC-pj-ZDU"/>
                         <constraint firstItem="gjX-FC-sw6" firstAttribute="leading" secondItem="Lh9-fF-Ev6" secondAttribute="leading" id="i2h-8Q-Js0"/>
-                    </constraints>
-                </view>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" contentViewInsetsToSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="voN-vv-Xyy">
-                    <rect key="frame" x="0.0" y="56" width="414" height="746"/>
-                    <color key="backgroundColor" name="viewBgColor"/>
-                    <color key="tintColor" name="iconColorActive"/>
-                    <color key="separatorColor" name="separatorColor"/>
-                </tableView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ja8-jA-h2C">
-                    <rect key="frame" x="0.0" y="55" width="414" height="1"/>
-                    <color key="backgroundColor" name="separatorColor"/>
-                    <constraints>
-                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="IG6-t3-lqO"/>
-                        <constraint firstAttribute="height" constant="1" id="LXg-ok-r6u"/>
                     </constraints>
                 </view>
                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="17" translatesAutoresizingMaskIntoConstraints="NO" id="uUL-p6-P2L">
@@ -115,27 +83,17 @@
             <viewLayoutGuide key="safeArea" id="S3n-Nf-j9A"/>
             <color key="backgroundColor" name="viewBgColor"/>
             <constraints>
-                <constraint firstItem="d8b-2J-S1d" firstAttribute="trailing" secondItem="WWe-0c-ywu" secondAttribute="trailing" id="3O1-l8-Mv9"/>
                 <constraint firstItem="Lh9-fF-Ev6" firstAttribute="top" secondItem="voN-vv-Xyy" secondAttribute="bottom" id="3Y3-au-y4X"/>
-                <constraint firstItem="d8b-2J-S1d" firstAttribute="trailing" secondItem="WWe-0c-ywu" secondAttribute="trailing" id="41v-W1-G0D"/>
-                <constraint firstItem="ja8-jA-h2C" firstAttribute="leading" secondItem="WWe-0c-ywu" secondAttribute="leading" id="4cy-od-haQ"/>
                 <constraint firstItem="Lh9-fF-Ev6" firstAttribute="leading" secondItem="WWe-0c-ywu" secondAttribute="leading" id="8ZQ-tM-dXf"/>
                 <constraint firstItem="voN-vv-Xyy" firstAttribute="trailing" secondItem="WWe-0c-ywu" secondAttribute="trailing" id="Hxr-G1-tcq"/>
                 <constraint firstItem="uUL-p6-P2L" firstAttribute="leading" secondItem="S3n-Nf-j9A" secondAttribute="leading" constant="16" id="IKa-eH-ahe"/>
-                <constraint firstItem="d8b-2J-S1d" firstAttribute="leading" secondItem="WWe-0c-ywu" secondAttribute="leading" id="Jtx-cu-jed"/>
-                <constraint firstItem="voN-vv-Xyy" firstAttribute="top" secondItem="d8b-2J-S1d" secondAttribute="bottom" id="Qif-RI-YFx"/>
                 <constraint firstItem="S3n-Nf-j9A" firstAttribute="bottom" secondItem="Lh9-fF-Ev6" secondAttribute="top" priority="750" constant="60" id="TPM-EJ-f1y"/>
                 <constraint firstItem="Lh9-fF-Ev6" firstAttribute="trailing" secondItem="WWe-0c-ywu" secondAttribute="trailing" id="UvB-tI-qRL"/>
                 <constraint firstItem="voN-vv-Xyy" firstAttribute="leading" secondItem="WWe-0c-ywu" secondAttribute="leading" id="VlJ-py-6KJ"/>
                 <constraint firstAttribute="bottom" secondItem="Lh9-fF-Ev6" secondAttribute="bottom" id="YcQ-6b-o73"/>
-                <constraint firstItem="voN-vv-Xyy" firstAttribute="top" secondItem="ja8-jA-h2C" secondAttribute="bottom" id="Zy2-hL-n08"/>
+                <constraint firstItem="voN-vv-Xyy" firstAttribute="top" secondItem="WWe-0c-ywu" secondAttribute="top" id="fRk-JW-jjP"/>
                 <constraint firstItem="uUL-p6-P2L" firstAttribute="top" secondItem="voN-vv-Xyy" secondAttribute="bottom" constant="9" id="hcu-Vj-F2a"/>
                 <constraint firstItem="S3n-Nf-j9A" firstAttribute="trailing" secondItem="uUL-p6-P2L" secondAttribute="trailing" constant="16" id="kc9-f6-vTf"/>
-                <constraint firstItem="d8b-2J-S1d" firstAttribute="top" secondItem="WWe-0c-ywu" secondAttribute="top" id="nNc-cG-iHn"/>
-                <constraint firstAttribute="trailing" secondItem="ja8-jA-h2C" secondAttribute="trailing" id="oza-mc-1Fi"/>
-                <constraint firstItem="d8b-2J-S1d" firstAttribute="leading" secondItem="WWe-0c-ywu" secondAttribute="leading" id="pWk-yV-yV4"/>
-                <constraint firstItem="d8b-2J-S1d" firstAttribute="top" secondItem="WWe-0c-ywu" secondAttribute="top" id="pfU-YU-uwh"/>
-                <constraint firstItem="voN-vv-Xyy" firstAttribute="top" secondItem="d8b-2J-S1d" secondAttribute="bottom" id="wi2-XP-tJa"/>
             </constraints>
             <point key="canvasLocation" x="57.971014492753625" y="770.75892857142856"/>
         </view>
@@ -158,9 +116,6 @@
         </namedColor>
         <namedColor name="separatorColor">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="textColorPrimary">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="viewBgColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

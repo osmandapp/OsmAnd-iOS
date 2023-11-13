@@ -100,7 +100,7 @@
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"save_as_new_track");
+    self.navigationItem.title = OALocalizedString(@"save_as_new_track");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
@@ -117,6 +117,23 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor = self.tableView.backgroundColor;
+    appearance.shadowColor = UIColor.separatorColor;
+    appearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.textColorPrimary
+    };
+    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+
+    self.navigationController.navigationBar.standardAppearance = blurAppearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.tintColor = UIColor.textColorActive;
+    self.navigationController.navigationBar.prefersLargeTitles = NO;
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
@@ -231,14 +248,16 @@
 {
     OASelectTrackFolderViewController *selectFolderView = [[OASelectTrackFolderViewController alloc] initWithSelectedFolderName:_selectedFolderName];
     selectFolderView.delegate = self;
-    [self presentViewController:selectFolderView animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:selectFolderView];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void) showAddFolderScreen
 {
     OAAddTrackFolderViewController * addFolderVC = [[OAAddTrackFolderViewController alloc] init];
     addFolderVC.delegate = self;
-    [self presentViewController:addFolderVC animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:addFolderVC];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void) showEmptyNameAlert

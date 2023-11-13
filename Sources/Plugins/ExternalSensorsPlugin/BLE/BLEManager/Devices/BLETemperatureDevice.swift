@@ -10,13 +10,17 @@ import CoreBluetooth
 
 final class BLETemperatureDevice: Device {
     
-    override class var getServiceUUID: String {
-        GattAttributes.SERVICE_TEMPERATURE
-    }
-    
     init() {
         super.init(deviceType: .BLE_TEMPERATURE)
         sensors.append(BLETemperatureSensor(device: self, sensorId: "temperature"))
+    }
+    
+    var name: String {
+        "Temperature"
+    }
+    
+    override class var getServiceUUID: String {
+        GattAttributes.SERVICE_TEMPERATURE
     }
     
     override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
@@ -27,27 +31,17 @@ final class BLETemperatureDevice: Device {
         UIImage(named: "widget_weather_temperature_day")!
     }
     
-    override var getWidgetValue: String? {
-        //        if let sensor = sensors.first(where: { $0 is BLEHeartRateSensor }) as? BLEHeartRateSensor {
-        //            return sensor.lastHeartRateData!.heartRate == 0
-        //            ? "-"
-        //            : String(sensor.lastHeartRateData!.heartRate) + " " + localizedString("beats_per_minute_short")
-        //        }
-        return nil
-    }
-    
     override var getDataFields: Dictionary<String, String>? {
-        //        if let sensor = sensors.first(where: { $0 is BLEHeartRateSensor }) as? BLEHeartRateSensor {
-        //            if let lastHeartRateData = sensor.lastHeartRateData {
-        //                return [localizedString("map_widget_ant_heart_rate"):
-        //                            lastHeartRateData.heartRate == 0
-        //                        ? "-"
-        //                        : String(lastHeartRateData.heartRate) + " " + localizedString("beats_per_minute_short")]
-        //            } else {
-        //                return [localizedString("map_widget_ant_heart_rate"): "-"];
-        //            }
-        //
-        //        }
+        if let sensor = sensors.first(where: { $0 is BLETemperatureSensor }) as? BLETemperatureSensor {
+            if let lastTemperatureData = sensor.lastTemperatureData {
+                return [localizedString("shared_string_temperature"):
+                            lastTemperatureData.temperature == 0.0
+                        ? "-"
+                        : String(lastTemperatureData.temperature) + " " + localizedString("degree_celsius")]
+            } else {
+                return [localizedString("shared_string_temperature"): "-"];
+            }
+        }
         return nil
     }
     

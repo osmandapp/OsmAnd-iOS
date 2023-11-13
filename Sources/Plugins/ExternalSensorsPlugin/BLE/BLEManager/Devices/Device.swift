@@ -58,15 +58,11 @@ class Device {
         UIImage()
     }
     
-    var getDataFields: Dictionary<String, String>? {
+    var getDataFields: [String: String]? {
         return nil
     }
     
-    var getSettingsFields: Dictionary<String, Any>? {
-        return nil
-    }
-    
-    var getWidgetValue: String? {
+    var getSettingsFields: [String: Any]? {
         return nil
     }
     

@@ -16,9 +16,9 @@ final class DeviceFactory {
             if BLETemperatureDevice.getServiceUUID.contains(uuid) {
                 return BLETemperatureDevice()
             }
-//            if BLEBikeSCDDevice.getServiceUUID.contains(uuid) {
-//                return BLEBikeSCDDevice()
-//            }
+            if BLEBikeSCDDevice.getServiceUUID.contains(uuid) {
+                return BLEBikeSCDDevice()
+            }
         }
         return nil
 

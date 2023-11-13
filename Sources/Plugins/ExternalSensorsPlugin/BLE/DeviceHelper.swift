@@ -31,8 +31,7 @@ final class DeviceHelper: NSObject {
     private override init() {}
     
     func getConnectedDevicesForWidget(type: WidgetType) -> [Device]? {
-        var devices = connectedDevices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
-        return devices
+        connectedDevices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
     }
     
     func updatePeripheralsForConnectedDevices(peripherals: [Peripheral]) {
@@ -110,7 +109,7 @@ final class DeviceHelper: NSObject {
     
     private func dropUnpairedDevice(device: Device) {
         device.disableRSSI()
-        device.peripheral.disconnect { result in }
+        device.peripheral.disconnect { _ in }
         removeDisconnected(device: device)
         devicesSettingsCollection.removeDeviceSetting(with: device.id)
     }
@@ -121,6 +120,8 @@ final class DeviceHelper: NSObject {
             return BLEHeartRateDevice()
         case .BLE_TEMPERATURE:
             return BLETemperatureDevice()
+        case .BLE_BICYCLE_SCD:
+            return BLEBikeSCDDevice()
         default:
             fatalError("not impl")
         }
@@ -220,7 +221,6 @@ extension DeviceHelper {
                     }
                 case .failure(let error):
                     Self.logger.error("discoverCharacteristics: \(String(describing: error.localizedDescription))")
-                    break
                 }
             }
         }

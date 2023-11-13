@@ -10,33 +10,19 @@ import UIKit
 
 final class BLEHeartRateDevice: Device {
     
-    init() {
-        super.init(deviceType: .BLE_HEART_RATE)
-        sensors.append(BLEHeartRateSensor(device: self, sensorId: "heart_rate"))
+    var name: String {
+        "Heart Rate"
     }
     
     override class var getServiceUUID: String {
         GattAttributes.SERVICE_HEART_RATE
     }
     
-    override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
-        [.heartRate]
-    }
-    
     override var getServiceConnectedImage: UIImage {
         UIImage(named: "widget_sensor_heart_rate")!
     }
     
-    override var getWidgetValue: String? {
-        if let sensor = sensors.first(where: { $0 is BLEHeartRateSensor }) as? BLEHeartRateSensor {
-            return sensor.lastHeartRateData!.heartRate == 0
-            ? "-"
-            : String(sensor.lastHeartRateData!.heartRate) + " " + localizedString("beats_per_minute_short")
-        }
-        return nil
-    }
-    
-    override var getDataFields: Dictionary<String, String>? {
+    override var getDataFields: [String: String]? {
         if let sensor = sensors.first(where: { $0 is BLEHeartRateSensor }) as? BLEHeartRateSensor {
             if let lastHeartRateData = sensor.lastHeartRateData {
                 return [localizedString("map_widget_ant_heart_rate"):
@@ -44,41 +30,22 @@ final class BLEHeartRateDevice: Device {
                         ? "-"
                         : String(lastHeartRateData.heartRate) + " " + localizedString("beats_per_minute_short")]
             } else {
-                return [localizedString("map_widget_ant_heart_rate"): "-"];
+                return [localizedString("map_widget_ant_heart_rate"): "-"]
             }
-
         }
         return nil
     }
     
-    override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
-//        guard characteristic.service?.uuid == GattAttributes.SERVICE_HEART_RATE.CBUUIDRepresentation else {
-//            continue
-//        }
-        sensors.forEach{ $0.update(with: characteristic, result: result)}
+    init() {
+        super.init(deviceType: .BLE_HEART_RATE)
+        sensors.append(BLEHeartRateSensor(device: self, sensorId: "heart_rate"))
     }
     
-//    public List<SensorDataField> getDataFields() {
-//            return Collections.singletonList(
-//                    new SensorDataField(R.string.map_widget_ant_heart_rate, R.string.beats_per_minute_short, heartRate));
-//        }
+    override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
+        [.heartRate]
+    }
     
-    
-    
-//    public BLEHeartRateDevice(@NonNull BluetoothAdapter bluetoothAdapter, @NonNull String deviceId) {
-//        super(bluetoothAdapter, deviceId);
-//        sensors.add(new BLEHeartRateSensor(this));
-//    }
-//
-//    @NonNull
-//    @Override
-//    public DeviceType getDeviceType() {
-//        return DeviceType.BLE_HEART_RATE;
-//    }
-//
-//    @NonNull
-//    public static UUID getServiceUUID() {
-//        return GattAttributes.UUID_SERVICE_HEART_RATE;
-//    }
-    
+    override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
+        sensors.forEach { $0.update(with: characteristic, result: result) }
+    }
 }

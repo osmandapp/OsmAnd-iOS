@@ -3430,6 +3430,11 @@
 "external_device_status_connected" = "Connected";
 "bluetooth_found_title" = "Found: %d";
 "external_device_menu_forget" = "Forget";
+"degree_celsius" = "°C";
+"external_device_characteristic_cadence" = "Cadence";
+"external_device_characteristic_speed" = "Speed";
+"external_device_characteristic_distance" = "Distance";
+"external_device_characteristic_total_distance" = "Total distance";
 
 /**
 
@@ -3441,7 +3446,6 @@
     <string name="proxy_port_max_warning">Maximum port value is %1$s</string>
     <string name="external_device_characteristic_speed">Speed</string>
     <string name="external_device_characteristic_distance">Distance</string>
-    <string name="external_device_characteristic_total_distance">Total distance</string>
     <string name="external_device_characteristic_battery_level">Battery</string>
     <string name="external_device_characteristic_gear_ratio">Gear ratio</string>
     <string name="external_device_characteristic_cadence">Cadence</string>

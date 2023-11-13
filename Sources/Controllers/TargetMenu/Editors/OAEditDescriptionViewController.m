@@ -80,6 +80,9 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    [self setupNavigationBar];
     [self registerForKeyboardNotifications];
     [self applySafeAreaMargins];
 }
@@ -87,6 +90,8 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     [self unregisterKeyboardNotifications];
 }
 
@@ -109,9 +114,40 @@
     // Dispose of any resources that can be recreated.
 }
 
--(UIView *) getTopView
+-(void)setupNavigationBar
 {
-    return _toolbarView;
+    self.navigationItem.title = _isEditing ? OALocalizedString(@"context_menu_edit_descr") : _isComment ? OALocalizedString(@"poi_dialog_comment") : OALocalizedString(@"shared_string_description");
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor = _isEditing ? self.tableView.backgroundColor : UIColor.navBarBgColorPrimary;
+    appearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : _isEditing ? UIColor.textColorPrimary : UIColor.navBarTextColorPrimary
+    };
+    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+
+    self.navigationController.navigationBar.standardAppearance = blurAppearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.tintColor = _isEditing ? UIColor.textColorActive : UIColor.navBarTextColorPrimary;
+    self.navigationController.navigationBar.prefersLargeTitles = NO;
+    
+    if (_isEditing)
+    {
+        UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_close"] style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
+        [self.navigationController.navigationBar.topItem setLeftBarButtonItem:cancelButton animated:YES];
+        
+        UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_save") style:UIBarButtonItemStylePlain target:self action:@selector(saveClicked)];
+        [self.navigationController.navigationBar.topItem setRightBarButtonItem:saveButton animated:YES];
+    }
+    else
+    {
+        if (!_readOnly)
+        {
+            UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_pencil"] style:UIBarButtonItemStylePlain target:self action:@selector(editClicked)];
+            [self.navigationController.navigationBar.topItem setRightBarButtonItem:editButton animated:YES];
+        }
+        [self.navigationController.navigationBar.topItem setLeftBarButtonItem:nil animated:YES];
+    }
 }
 
 -(UIView *) getMiddleView
@@ -123,34 +159,9 @@
 {
     [self generateData];
     if (_isEditing)
-    {
-        _titleView.text = OALocalizedString(@"context_menu_edit_descr");
-        _saveButton.hidden = NO;
-        _editButton.hidden = YES;
-        _toolbarView.backgroundColor = UIColor.viewBgColor;
-        _titleView.textColor = UIColor.textColorPrimary;
-        _saveButton.tintColor = UIColor.iconColorActive;
-        _backButton.tintColor =  UIColor.iconColorActive;
-        [_backButton setTitle:@"" forState:UIControlStateNormal];
-        [_backButton setImage:[UIImage templateImageNamed:@"ic_navbar_close"] forState:UIControlStateNormal];
         _webView.hidden = YES;
-    }
     else
-    {
-        _titleView.text = _isComment ? OALocalizedString(@"poi_dialog_comment") : OALocalizedString(@"shared_string_description");
-        _editButton.hidden = _readOnly;
-        _saveButton.hidden = YES;
-        _toolbarView.backgroundColor = UIColor.navBarBgColorPrimary;
-        _titleView.textColor = UIColor.whiteColor;
-        _editButton.tintColor = UIColor.whiteColor;
-        [_editButton setImage:[UIImage templateImageNamed:@"ic_navbar_pencil"] forState:UIControlStateNormal];
-        _backButton.tintColor = UIColor.whiteColor;
-        [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
-        [_backButton setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
-        if ([self.view isDirectionRTL])
-            _backButton.imageView.image = _backButton.imageView.image.imageFlippedForRightToLeftLayoutDirection;
         _webView.hidden = NO;
-    }
 }
 
 - (void) generateData
@@ -235,7 +246,7 @@
 
 #pragma mark - Actions
 
-- (IBAction)saveClicked:(id)sender
+- (void)saveClicked
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(descriptionChanged:)])
         [self.delegate descriptionChanged:self.desc];
@@ -243,10 +254,11 @@
     [self dismissViewController];
 }
 
-- (IBAction)editClicked:(id)sender
+- (void)editClicked
 {
     _isEditing = YES;
     [self setupView];
+    [self setupNavigationBar];
     [_tableView reloadData];
 }
 

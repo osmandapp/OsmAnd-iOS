@@ -19,8 +19,6 @@
 #import "OATableViewCustomFooterView.h"
 #import "OAOsmAndFormatter.h"
 
-#define defaultNavBarHeight 58
-
 @interface OAQuickSearchCoordinateFormatsViewController() <UITableViewDelegate, UITableViewDataSource>
 
 @end
@@ -30,7 +28,6 @@
     NSInteger _currentFormat;
     CLLocation *_location;
     NSMutableArray *_data;
-    UIView *_navBarBackgroundView;
 }
 
 - (instancetype) initWithCurrentFormat:(NSInteger)currentFormat location:(CLLocation *)location
@@ -106,40 +103,36 @@
 {
     [super viewDidLoad];
     
+    self.navigationItem.title = OALocalizedString(@"coords_format");
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     self.tableView.separatorColor = UIColor.separatorColor;
-    self.tableView.contentInset = UIEdgeInsetsMake(defaultNavBarHeight, 0, 0, 0);
     self.tableView.tintColor = UIColor.iconColorActive;
-    self.doneButton.hidden = YES;
-    self.doneButton.enabled = NO;
-
-    self.titleLabel.text = OALocalizedString(@"coords_format");
-    [self.cancelButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
-    
-    _navBarBackgroundView = [self createNavBarBackgroundView];
-    _navBarBackgroundView.frame = self.navbarView.bounds;
-    [self.navbarView insertSubview:_navBarBackgroundView atIndex:0];
 }
 
-- (UIView *) createNavBarBackgroundView
+- (void) viewWillAppear:(BOOL)animated
 {
-    if (!UIAccessibilityIsReduceTransparencyEnabled())
-    {
-        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:[ThemeManager shared].isLightTheme ? UIBlurEffectStyleSystemUltraThinMaterialLight : UIBlurEffectStyleSystemUltraThinMaterialDark]];
-        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        blurEffectView.alpha = 0;
-        return blurEffectView;
-    }
-    else
-    {
-        UIView *res = [[UIView alloc] init];
-        res.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        res.backgroundColor = UIColor.viewBgColor;
-        res.alpha = 0;
-        return res;
-    }
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor = self.tableView.backgroundColor;
+    appearance.shadowColor = UIColor.separatorColor;
+    appearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.textColorPrimary
+    };
+    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+
+    self.navigationController.navigationBar.standardAppearance = blurAppearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.tintColor = UIColor.textColorActive;
+    self.navigationController.navigationBar.prefersLargeTitles = NO;
+    
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_back") style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
+    [self.navigationController.navigationBar.topItem setLeftBarButtonItem:backButton animated:YES];
 }
 
 #pragma mark - UITableViewDelegate
@@ -209,27 +202,6 @@
     [_delegate onCoordinateFormatChanged:indexPath.row];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self dismissViewController];
-}
-
-#pragma mark - UIScrollViewDelegate
-
-- (void) scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    CGFloat alpha = (self.tableView.contentOffset.y + defaultNavBarHeight) < 0 ? 0 : ((self.tableView.contentOffset.y + defaultNavBarHeight) / (fabs(self.tableView.contentSize.height - self.tableView.frame.size.height)));
-    if (alpha > 0)
-    {
-        [UIView animateWithDuration:.2 animations:^{
-            self.navbarView.backgroundColor = UIColor.clearColor;
-            _navBarBackgroundView.alpha = 1;
-        }];
-    }
-    else
-    {
-        [UIView animateWithDuration:.2 animations:^{
-            self.navbarView.backgroundColor = UIColor.viewBgColor;
-            _navBarBackgroundView.alpha = 0;
-        }];
-    }
 }
 
 @end

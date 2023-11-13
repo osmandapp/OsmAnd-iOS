@@ -6,7 +6,7 @@
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OABaseTableViewController.h"
+#import "OABaseNavbarViewController.h"
 
 @protocol OASelectFavoriteGroupDelegate <NSObject>
 
@@ -16,7 +16,7 @@
 
 @end
 
-@interface OASelectFavoriteGroupViewController : OABaseTableViewController
+@interface OASelectFavoriteGroupViewController : OABaseNavbarViewController
 
 @property (nonatomic, weak) id<OASelectFavoriteGroupDelegate> delegate;
 

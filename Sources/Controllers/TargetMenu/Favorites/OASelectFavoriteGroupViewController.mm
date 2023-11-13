@@ -21,7 +21,7 @@
 #define kAddNewGroupSection 0
 #define kGroupsListSection 1
 
-@interface OASelectFavoriteGroupViewController() <UITableViewDelegate, UITableViewDataSource, OAAddFavoriteGroupDelegate>
+@interface OASelectFavoriteGroupViewController() <OAAddFavoriteGroupDelegate>
 
 @end
 
@@ -33,54 +33,65 @@
     NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
-- (instancetype) initWithSelectedGroupName:(NSString *)selectedGroupName;
+#pragma mark - Initialization
+
+- (instancetype)initWithSelectedGroupName:(NSString *)selectedGroupName;
 {
-    self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
+    self = [super init];
     if (self)
     {
         _selectedGroupName = selectedGroupName;
         [self reloadData:[OAFavoritesHelper getFavoriteGroups] isFavorite:YES];
-        [self generateData];
     }
     return self;
 }
 
-- (instancetype) initWithSelectedGroupName:(NSString *)selectedGroupName gpxWptGroups:(NSArray *)gpxWptGroups;
+- (instancetype)initWithSelectedGroupName:(NSString *)selectedGroupName gpxWptGroups:(NSArray *)gpxWptGroups;
 {
-    self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
+    self = [super init];
     if (self)
     {
         _selectedGroupName = selectedGroupName;
         [self reloadData:gpxWptGroups isFavorite:NO];
-        [self generateData];
     }
     return self;
 }
 
-- (void) viewDidLoad
+#pragma mark - UIViewController
+
+- (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+
     self.tableView.separatorColor = UIColor.separatorColor;
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_group_descr") font:kHeaderDescriptionFont textColor:UIColor.textColorSecondary isBigTitle:NO parentViewWidth:self.view.frame.size.width];
-    self.tableView.tableHeaderView.backgroundColor = UIColor.viewBgColor;
     self.tableView.tintColor = UIColor.iconColorActive;
 }
 
-- (void) applyLocalization
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"select_group");
+    return OALocalizedString(@"select_group");
 }
 
-- (void) reloadData:(NSArray *)data isFavorite:(BOOL)isFavorite
+- (NSString *)getLeftNavbarButtonTitle
 {
-    _groupedFavorites = isFavorite ? data : nil;
-    _groupedGpxWpts = isFavorite ? nil : data;
+    return OALocalizedString(@"shared_string_cancel");
 }
 
-- (void) generateData
+- (NSString *)getTableHeaderDescription
+{
+    return OALocalizedString(@"select_group_descr");
+}
+
+- (BOOL)hideFirstHeader
+{
+    return YES;
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
@@ -98,13 +109,13 @@
         if (![[OAFavoritesHelper getGroups].allKeys containsObject:@""])
         {
             [cellFoldersData addObject:@{
-                    @"type" : [OASimpleTableViewCell getCellIdentifier],
-                    @"header" : OALocalizedString(@"available_groups"),
-                    @"title" : OALocalizedString(@"favorites_item"),
-                    @"description" :@"0",
-                    @"isSelected" : @([@"" isEqualToString:_selectedGroupName]),
-                    @"color" : [OADefaultFavorite getDefaultColor],
-                    @"img" : @"ic_custom_folder"
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+                @"header" : OALocalizedString(@"available_groups"),
+                @"title" : OALocalizedString(@"favorites_item"),
+                @"description" :@"0",
+                @"isSelected" : @([@"" isEqualToString:_selectedGroupName]),
+                @"color" : [OADefaultFavorite getDefaultColor],
+                @"img" : @"ic_custom_folder"
             }];
         }
 
@@ -113,13 +124,13 @@
             NSString *name = [OAFavoriteGroup getDisplayName:group.name];
 
             [cellFoldersData addObject:@{
-                    @"type": [OASimpleTableViewCell getCellIdentifier],
-                    @"header": OALocalizedString(@"available_groups"),
-                    @"title": name,
-                    @"description": [NSString stringWithFormat:@"%ld", (unsigned long) group.points.count],
-                    @"isSelected": @([name isEqualToString:_selectedGroupName]),
-                    @"color": group.color,
-                    @"img": @"ic_custom_folder"
+                @"type": [OASimpleTableViewCell getCellIdentifier],
+                @"header": OALocalizedString(@"available_groups"),
+                @"title": name,
+                @"description": [NSString stringWithFormat:@"%ld", (unsigned long) group.points.count],
+                @"isSelected": @([name isEqualToString:_selectedGroupName]),
+                @"color": group.color,
+                @"img": @"ic_custom_folder"
             }];
         }
     }
@@ -128,13 +139,13 @@
         for (NSDictionary<NSString *, NSString *> *group in _groupedGpxWpts)
         {
             [cellFoldersData addObject:@{
-                    @"type": [OASimpleTableViewCell getCellIdentifier],
-                    @"header": OALocalizedString(@"available_groups"),
-                    @"title": group[@"title"],
-                    @"description": [NSString stringWithFormat:@"%i", group[@"count"].intValue],
-                    @"isSelected": @([group[@"title"] isEqualToString:_selectedGroupName]),
-                    @"color": group[@"color"] ? group[@"color"] : UIColor.iconColorActive.toHexString,
-                    @"img": @"ic_custom_folder"
+                @"type": [OASimpleTableViewCell getCellIdentifier],
+                @"header": OALocalizedString(@"available_groups"),
+                @"title": group[@"title"],
+                @"description": [NSString stringWithFormat:@"%i", group[@"count"].intValue],
+                @"isSelected": @([group[@"title"] isEqualToString:_selectedGroupName]),
+                @"color": group[@"color"] ? group[@"color"] : UIColor.iconColorActive.toHexString,
+                @"img": @"ic_custom_folder"
             }];
         }
     }
@@ -143,16 +154,36 @@
     _data = data;
 }
 
-#pragma mark - UITableViewDataSource
+- (void)reloadData:(NSArray *)data isFavorite:(BOOL)isFavorite
+{
+    _groupedFavorites = isFavorite ? data : nil;
+    _groupedGpxWpts = isFavorite ? nil : data;
+}
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
+
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    NSDictionary *item = _data[section].firstObject;
+    return item[@"header"];
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return _data[section].count;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     
     if ([cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OARightIconTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
+        OARightIconTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
@@ -162,7 +193,6 @@
             cell.titleLabel.textColor = UIColor.textColorActive;
             cell.rightIconView.tintColor = UIColor.iconColorActive;
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
@@ -174,12 +204,11 @@
    
     else if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OASimpleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.titleLabel.numberOfLines = 3;
             cell.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         }
@@ -204,23 +233,7 @@
     return nil;
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _data[section].count;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    NSDictionary *item = _data[section].firstObject;
-    return item[@"header"];
-}
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     if (indexPath.section == kAddNewGroupSection)
     {
@@ -235,16 +248,6 @@
             [_delegate onGroupSelected:item[@"title"]];
         [self dismissViewControllerAnimated:YES completion:nil];
     }
-}
-
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-        NSDictionary *item = _data[indexPath.section][indexPath.row];
-        NSString *cellType = item[@"type"];
-        if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
-            return 60;
-        else
-            return UITableViewAutomaticDimension;
 }
 
 #pragma mark - OAAddFavoriteGroupDelegate
@@ -267,4 +270,3 @@
 }
 
 @end
-

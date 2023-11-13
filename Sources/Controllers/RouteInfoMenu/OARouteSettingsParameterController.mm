@@ -37,7 +37,7 @@
 -(void) applyLocalization
 {
     [super applyLocalization];
-    self.titleView.text = _group.getText;
+    self.navigationItem.title = _group.getText;
 }
 
 - (void) viewDidLoad

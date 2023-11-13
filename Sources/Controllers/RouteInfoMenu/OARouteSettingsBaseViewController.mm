@@ -57,12 +57,6 @@
 {
 }
 
--(void) applyLocalization
-{
-    [_backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
-}
-
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
@@ -82,6 +76,29 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor = self.tableView.backgroundColor;
+    appearance.shadowColor = UIColor.separatorColor;
+    appearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.textColorPrimary
+    };
+    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+
+    self.navigationController.navigationBar.standardAppearance = blurAppearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.tintColor = UIColor.textColorActive;
+    self.navigationController.navigationBar.prefersLargeTitles = NO;
+    
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_cancel") style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
+    [self.navigationController.navigationBar.topItem setLeftBarButtonItem:cancelButton animated:YES];
+    
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_done") style:UIBarButtonItemStylePlain target:self action:@selector(doneButtonPressed)];
+    [self.navigationController.navigationBar.topItem setRightBarButtonItem:doneButton animated:YES];
+    
     [self setupView];
 }
 
@@ -318,13 +335,8 @@
 
 - (void) setCancelButtonAsImage
 {
-    [self.backButton setTitle:nil forState:UIControlStateNormal];
-    [self.backButton setImage:[UIImage imageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
-}
-
-- (IBAction)doneButtonPressed:(id)sender
-{
-    [self doneButtonPressed];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
+    [self.navigationController.navigationBar.topItem setLeftBarButtonItem:backButton animated:YES];
 }
 
 #pragma mark - OARoutePreferencesParametersDelegate
@@ -338,7 +350,8 @@
 - (void) showParameterGroupScreen:(OALocalRoutingParameterGroup *)group
 {
     OARouteSettingsParameterController *paramController = [[OARouteSettingsParameterController alloc] initWithParameterGroup:group];
-    [self presentViewController:paramController animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:paramController];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void) showParameterValuesScreen:(OALocalRoutingParameter *)parameter;
@@ -359,7 +372,8 @@
 {
     OARouteAvoidSettingsViewController *avoidController = [[OARouteAvoidSettingsViewController alloc] init];
     avoidController.delegate = self;
-    [self presentViewController:avoidController animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:avoidController];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void) openNavigationSettings
@@ -386,7 +400,8 @@
 {
     OASimulationNavigationSettingViewController *simulateController = [[OASimulationNavigationSettingViewController alloc] initWithAppMode:[_routingHelper getAppMode]];
     simulateController.delegate = self;
-    [self presentViewController:simulateController animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:simulateController];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void) showTripSettingsScreen
@@ -413,11 +428,17 @@
 {
     OARouteAvoidTransportSettingsViewController *avoidTransportController = [[OARouteAvoidTransportSettingsViewController alloc] init];
     avoidTransportController.delegate = self;
-    [self presentViewController:avoidTransportController animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:avoidTransportController];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void)doneButtonPressed
 {
+}
+
+- (void)onLeftNavbarButtonPressed
+{
+    [self dismissViewController];
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section

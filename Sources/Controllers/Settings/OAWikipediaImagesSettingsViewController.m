@@ -102,6 +102,7 @@
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     OADownloadMode *downloadMode = [item objForKey:@"downloadMode"];
     [_app.data setWikipediaImagesDownloadMode:downloadMode mode:self.appMode];
+    [OsmAndApp instance].data.wikipediaImagesDownloadMode = downloadMode;
 
     if (self.wikipediaDelegate)
         [self.wikipediaDelegate updateWikipediaSettings];

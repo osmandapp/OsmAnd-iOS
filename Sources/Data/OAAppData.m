@@ -1620,7 +1620,7 @@
 {
     @synchronized (_lock)
     {
-        [_travelGuidesImagesDownloadModeProfile set:downloadMode mode:mode];
+        [_wikipediaImagesDownloadModeProfile set:downloadMode mode:mode];
     }
 }
 
@@ -1656,13 +1656,13 @@
     }
 }
 
-- (void)resetWikipediaSettings
+- (void)resetWikipediaSettings:(OAApplicationMode *)mode
 {
     @synchronized (_lock)
     {
-        [_wikipediaGlobalProfile resetToDefault];
-        [_wikipediaLanguagesProfile resetToDefault];
-        [_wikipediaImagesDownloadModeProfile resetToDefault];
+        [_wikipediaGlobalProfile resetModeToDefault:mode];
+        [_wikipediaLanguagesProfile resetModeToDefault:mode];
+        [_wikipediaImagesDownloadModeProfile resetModeToDefault:mode];
     }
 }
 

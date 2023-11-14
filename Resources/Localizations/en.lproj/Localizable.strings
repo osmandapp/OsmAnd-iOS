@@ -1942,6 +1942,7 @@
 "index_name_south_america" = "South America";
 "nautical_maps" = "Nautical maps";
 "shared_string_travel_guides" = "Travel guides";
+"shared_string_travel" = "Travel";
 "download_select_map_types" = "Other maps";
 
 "shared_string_wikivoyage" = "Wikivoyage";
@@ -1953,6 +1954,7 @@
 "popular_destinations" = "Popular destinations";
 "shared_string_contents" = "Contents";
 "shared_string_bookmark" = "Bookmark";
+"shared_string_remove_bookmark" = "Remove bookmark";
 "shared_string_read" = "Read";
 "shared_string_view" = "View";
 "article_added_to_bookmark" = " added to bookmarks.";

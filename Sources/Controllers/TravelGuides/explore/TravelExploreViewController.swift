@@ -647,9 +647,10 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                         guard let self else { return }
                         self.openArticle(article: article, lang: lang)
                     }
-                    let bookmarkAction = UIAction(title: localizedString("shared_string_bookmark"), image: UIImage(systemName: "bookmark")) { [weak self] _ in
+                    
+                    let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: article)
+                    let bookmarkAction = UIAction(title: localizedString(isSaved ? "shared_string_remove_bookmark" : "shared_string_bookmark"), image: UIImage(systemName: "bookmark")) { [weak self] _ in
                         guard let self else { return }
-                        let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: article)
                         if isSaved {
                             TravelObfHelper.shared.getBookmarksHelper().removeArticleFromSaved(article: article)
                         } else {

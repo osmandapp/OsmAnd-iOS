@@ -49,16 +49,6 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         generateData()
         tableView.reloadData()
     }
-    // Unused
-    func getWidgetForExternalDevice(id: String) -> SensorTextWidget? {
-        if let widgetInfos = OAMapWidgetRegistry.sharedInstance().getAllWidgets(), !widgetInfos.isEmpty {
-            return widgetInfos
-                .filter { $0.widget.widgetType == widgetType }
-                .compactMap { $0.widget as? SensorTextWidget }
-                .first(where: { ($0.externalDeviceId ?? "") == id })
-        }
-        return nil
-    }
     
     func configureDataSource() {
         devices = gatConnectedAndPaireDisconnectedDevicesFor()?.sorted(by: { $0.deviceName < $1.deviceName })

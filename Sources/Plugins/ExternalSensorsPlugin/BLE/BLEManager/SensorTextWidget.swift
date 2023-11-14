@@ -97,6 +97,19 @@ final class SensorTextWidget: OATextInfoWidget {
         return data
     }
     
+    func getDeviceId(appMode: OAApplicationMode) -> String? {
+        deviceIdPref?.getProfileDefaultValue(appMode) as? String
+    }
+
+    func getFieldType() -> WidgetType {
+        return widgetType!
+    }
+    
+    func configureDevice(id: String) {
+        externalDeviceId = id
+        saveDeviceId(deviceId: id)
+    }
+    
     private func getCurrentSensor() -> Sensor? {
         guard let widgetType else {
             return nil
@@ -145,19 +158,6 @@ final class SensorTextWidget: OATextInfoWidget {
             }
             saveDeviceId(deviceId: externalDeviceId!)
         }
-    }
-    
-    func getDeviceId(appMode: OAApplicationMode) -> String? {
-        deviceIdPref?.getProfileDefaultValue(appMode) as? String
-    }
-
-    func getFieldType() -> WidgetType {
-        return widgetType!
-    }
-    
-    func configureDevice(id: String) {
-        externalDeviceId = id
-        saveDeviceId(deviceId: id)
     }
     
     private func registerSensorDevicePref(customId: String?) -> OACommonPreference {

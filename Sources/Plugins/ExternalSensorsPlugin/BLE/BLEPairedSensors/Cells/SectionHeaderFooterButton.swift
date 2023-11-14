@@ -18,7 +18,7 @@ final class SectionHeaderFooterButton: UITableViewHeaderFooterView {
     var onBottonAction: (() -> Void)?
     
     func configireButton(title: String) {
-        
+        button.setTitle(title, for: .normal)
     }
     
     @IBAction private func onButtonPressed(_ sender: Any) {

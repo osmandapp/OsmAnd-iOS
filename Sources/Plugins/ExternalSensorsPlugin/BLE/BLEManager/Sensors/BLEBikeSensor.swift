@@ -66,7 +66,9 @@ class BLEBikeSensor: Sensor {
     
     final class BikeSpeedDistanceData: SensorData {
         let timestamp: TimeInterval
+        // m/s
         let speed: Float
+        // m
         let distance: Float
         let totalDistance: Float
         
@@ -137,7 +139,7 @@ class BLEBikeSensor: Sensor {
             currentOffset += length
             
             let wheelRevolutions = Int(CFSwapInt32LittleToHost(wheel))
-            print("wheelRevolutions: \(wheelRevolutions)")
+            debugPrint("wheelRevolutions: \(wheelRevolutions)")
             let lastWheelEventTime = Int(TimeInterval( Double(CFSwapInt16LittleToHost(wheelTime))))
             let circumference = wheelSize
             
@@ -186,7 +188,7 @@ class BLEBikeSensor: Sensor {
             currentOffset += length
             
             let crankRevolutions    = Int(CFSwapInt16LittleToHost(crank))
-            print("crankRevolutions: \(crankRevolutions)")
+            debugPrint("crankRevolutions: \(crankRevolutions)")
             
             let lastCrankEventTime  = Int(TimeInterval( Double(CFSwapInt16LittleToHost(crankTime))))
             
@@ -220,12 +222,12 @@ class BLEBikeSensor: Sensor {
                                                           speed: speed,
                                                           distance: distance,
                                                           totalDistance: totalDistance)
-        print(lastBikeSpeedDistanceData?.description)
+        print(lastBikeSpeedDistanceData?.description as Any)
     }
     
     private func createBikeCadenceData(gearRatio: Float, crankCadence: Int) {
         lastBikeCadenceData = BikeCadenceData(timestamp: Date.now.timeIntervalSince1970, gearRatio: gearRatio, cadence: crankCadence)
-        print(lastBikeCadenceData?.description)
+        print(lastBikeCadenceData?.description as Any)
     }
 }
 

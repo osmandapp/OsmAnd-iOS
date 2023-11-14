@@ -242,8 +242,8 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         } else if item.key == "external_sensor_key" {
             let storyboard = UIStoryboard(name: "BLEPairedSensors", bundle: nil)
             if let controller = storyboard.instantiateViewController(withIdentifier: "BLEPairedSensors") as? BLEPairedSensorsViewController {
-                controller.widgetType = widgetInfo?.widget.widgetType
                 if let widget = widgetInfo?.widget as? SensorTextWidget {
+                    controller.widgetType = widget.widgetType
                     controller.widget = widget
                 }
                 controller.onSelectDeviceAction = { [weak self] id in

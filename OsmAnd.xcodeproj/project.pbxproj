@@ -3659,7 +3659,6 @@
 		FA4768B52A67B86400D533E8 /* FreeBackupBanner.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */; };
 		FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */; };
 		FA5A21A82A9E17DB00319695 /* UIPageViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */; };
-		FA63F24A2AF3D88F0040A0CE /* SensorWidgetDataFieldType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F2492AF3D88E0040A0CE /* SensorWidgetDataFieldType.swift */; };
 		FA63F24C2AF3DAA00040A0CE /* SensorDataField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24B2AF3DAA00040A0CE /* SensorDataField.swift */; };
 		FA63F24E2AF3DC550040A0CE /* SensorWidgetDataField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24D2AF3DC550040A0CE /* SensorWidgetDataField.swift */; };
 		FA63F2502AF3DFF60040A0CE /* SensorTextWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24F2AF3DFF60040A0CE /* SensorTextWidget.swift */; };
@@ -8603,7 +8602,6 @@
 		FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FreeBackupBanner.xib; sourceTree = "<group>"; };
 		FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageViewController+Extension.swift"; sourceTree = "<group>"; };
-		FA63F2492AF3D88E0040A0CE /* SensorWidgetDataFieldType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetDataFieldType.swift; sourceTree = "<group>"; };
 		FA63F24B2AF3DAA00040A0CE /* SensorDataField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorDataField.swift; sourceTree = "<group>"; };
 		FA63F24D2AF3DC550040A0CE /* SensorWidgetDataField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetDataField.swift; sourceTree = "<group>"; };
 		FA63F24F2AF3DFF60040A0CE /* SensorTextWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorTextWidget.swift; sourceTree = "<group>"; };
@@ -15078,7 +15076,6 @@
 				FAA650422ADD42C40020DCEA /* GattAttributes.swift */,
 				FAA6503A2ADD42C40020DCEA /* Sensors */,
 				FAA650402ADD42C40020DCEA /* Devices */,
-				FA63F2492AF3D88E0040A0CE /* SensorWidgetDataFieldType.swift */,
 				FA63F24B2AF3DAA00040A0CE /* SensorDataField.swift */,
 				FA63F24D2AF3DC550040A0CE /* SensorWidgetDataField.swift */,
 				FA63F24F2AF3DFF60040A0CE /* SensorTextWidget.swift */,
@@ -18433,7 +18430,6 @@
 				DA5A837226C563A800F274C7 /* OARoutingSettingsCell.mm in Sources */,
 				DA5A833726C563A800F274C7 /* OATableViewCustomFooterView.m in Sources */,
 				461A3F0D29F6E859008EE079 /* OABaseCollectionHandler.m in Sources */,
-				FA63F24A2AF3D88F0040A0CE /* SensorWidgetDataFieldType.swift in Sources */,
 				DA4ABF162876DA6800B996EF /* OASettingsItem.mm in Sources */,
 				DA5A84E926C563A900F274C7 /* OADashboardViewController.mm in Sources */,
 				DA5A848126C563A900F274C7 /* OADistanceToMapMarkerControl.mm in Sources */,

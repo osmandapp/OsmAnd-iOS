@@ -31,7 +31,7 @@ final class BLEManager {
                                                queue: nil) { notification in
             if let restoredPeripherals = notification.userInfo?["peripherals"] as? [Peripheral], !restoredPeripherals.isEmpty {
                 debugPrint(restoredPeripherals)
-                if OAIAPHelper.isOsmAndProAvailable()/* && plagin isEnable*/ {
+                if OAIAPHelper.isOsmAndProAvailable() {
                     DeviceHelper.shared.restoreConnectedDevices(with: restoredPeripherals)
                 } else {
                     restoredPeripherals.forEach {
@@ -80,7 +80,6 @@ final class BLEManager {
                         if let savedDevice = DeviceHelper.shared.devicesSettingsCollection.getDeviceSettings(deviceId: peripheral.identifier.uuidString) {
                             deviceName = savedDevice.deviceName
                         }
-                        // Cycling Speed and Cadence // 1816
                         peripheral.disconnect { _ in }
                         device.peripheral = peripheral
                         device.rssi = rssi

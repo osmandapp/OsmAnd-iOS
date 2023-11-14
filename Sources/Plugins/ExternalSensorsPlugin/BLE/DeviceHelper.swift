@@ -107,11 +107,28 @@ final class DeviceHelper: NSObject {
         devicesSettingsCollection.changeDeviceName(with: id, name: name)
     }
     
+    private func unpairWidgetsForDevice(id: String) {
+        let widgets = getWidgetsForExternalDevice(id: id)
+        if !widgets.isEmpty {
+            widgets.forEach({$0.configureDevice(id: "")})
+        }
+    }
+    
+    private func getWidgetsForExternalDevice(id: String) -> [SensorTextWidget] {
+        if let widgetInfos = OAMapWidgetRegistry.sharedInstance().getAllWidgets(), !widgetInfos.isEmpty {
+            return widgetInfos
+                .compactMap { $0.widget as? SensorTextWidget }
+                .filter { ($0.externalDeviceId ?? "") == id }
+        }
+        return []
+    }
+    
     private func dropUnpairedDevice(device: Device) {
         device.disableRSSI()
         device.peripheral.disconnect { _ in }
         removeDisconnected(device: device)
         devicesSettingsCollection.removeDeviceSetting(with: device.id)
+        unpairWidgetsForDevice(id: device.id)
     }
     
     private func getDeviceFor(type: DeviceType) -> Device {

@@ -59,16 +59,11 @@
 {
     [super disable];
     [[DeviceHelper shared] disconnectAllDevices];
-//    OAAppData *data = [OsmAndApp instance].data;
-//    [_lastUsedWeather set:data.weather];
-//    [data setWeather:NO];
 }
 
 - (void)setEnabled:(BOOL)enabled
 {
     [super setEnabled:enabled];
-   
-   // [[OsmAndApp instance].data setWeather:enabled ? [_lastUsedWeather get] : NO];
 }
 
 - (BOOL)isEnabled

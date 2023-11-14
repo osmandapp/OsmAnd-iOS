@@ -94,10 +94,6 @@ class Device {
         }
     }
     
-    deinit {
-        print("")
-    }
-    
     /*
      Printing description of advertisementData:
      ▿ 6 elements

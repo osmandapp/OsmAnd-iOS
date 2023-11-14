@@ -11,7 +11,9 @@ import SwiftyBluetooth
 @objcMembers
 final class BLEInitHeader: NSObject {
     static func configure() {
-        SwiftyBluetooth.setSharedCentralInstanceWith(restoreIdentifier: Bundle.main.bundleIdentifier ?? "restoreIdentifier")
-        let _ = BLEManager.shared
+        if UserDefaults.standard.bool(for: .wasAuthorizationRequestBluetooth) {
+            SwiftyBluetooth.setSharedCentralInstanceWith(restoreIdentifier: Bundle.main.bundleIdentifier ?? "restoreIdentifier")
+            let _ = BLEManager.shared
+        }
     }
 }

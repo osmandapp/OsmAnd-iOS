@@ -218,6 +218,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
                                                queue: nil)
         { [weak self] notification in
             guard let self else { return }
+            UserDefaults.standard.set(true, for: .wasAuthorizationRequestBluetooth)
             guard let state = notification.userInfo?["state"] as? CBManagerState else {
                 return
             }

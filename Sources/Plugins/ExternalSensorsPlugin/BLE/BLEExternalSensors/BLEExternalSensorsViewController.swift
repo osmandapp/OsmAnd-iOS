@@ -205,6 +205,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                                                object: Central.sharedInstance,
                                                queue: nil) { [weak self] _ in
             guard let self else { return }
+            UserDefaults.standard.set(true, for: .wasAuthorizationRequestBluetooth)
             guard DeviceHelper.shared.hasPairedDevices else { return }
             configureStartState()
             generateData()
@@ -246,12 +247,12 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     private func configurePairedDevices() {
         sectionsDevicesData.removeAll()
         if let pairedDevices = DeviceHelper.shared.getSettingsForPairedDevices() {
-            let peripherals = SwiftyBluetooth.retrievePeripherals(withUUIDs: pairedDevices.map { UUID(uuidString: $0.deviceId)!})
+            let peripherals = SwiftyBluetooth.retrievePeripherals(withUUIDs: pairedDevices.map { UUID(uuidString: $0.deviceId)! })
             let connectedPeripherals = peripherals.filter { $0.state == .connected }
             DeviceHelper.shared.updatePeripheralsForConnectedDevices(peripherals: connectedPeripherals)
             
             let disconnectedPeripherals = peripherals.filter { $0.state != .connected }
-            var connectedDevices = DeviceHelper.shared.connectedDevices
+            let connectedDevices = DeviceHelper.shared.connectedDevices
             
             if !connectedDevices.isEmpty {
                 let connectedSection = tableData.createNewSection()

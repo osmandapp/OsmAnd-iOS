@@ -8,6 +8,17 @@
 
 enum UserDefaultsKey: String {
     case deviceSettings
+    case wasAuthorizationRequestBluetooth
+}
+
+extension UserDefaults {
+    func set(_ value: Any, for key: UserDefaultsKey) {
+        set(value, forKey: key.rawValue)
+    }
+
+    func bool(for key: UserDefaultsKey) -> Bool {
+        bool(forKey: key.rawValue)
+    }
 }
 
 extension UserDefaults {

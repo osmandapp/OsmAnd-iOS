@@ -3081,3 +3081,8 @@
 "map_orientation_landscape" = "Panorama";
 "map_screen_orientation" = "Orientación de la pantalla";
 "map_orientation_portrait" = "Retrato";
+"apply_to_existing_favorites_descr" = "¿Aplicar los cambios a los puntos favoritos existentes del grupo o sólo a los nuevos?";
+"apply_only_to_new_points" = "Aplicable sólo a puntos nuevos";
+"apply_to_existing" = "Aplicar a los ya existentes";
+"default_appearance_desc" = "El color, el icono y la forma predeterminados se aplicarán a los puntos favoritos añadidos al grupo.";
+"change_appearance" = "Cambiar la apariencia";

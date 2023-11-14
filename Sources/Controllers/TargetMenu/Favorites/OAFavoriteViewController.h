@@ -13,8 +13,8 @@
 @interface OAFavoriteViewController : OATargetInfoViewController
 
 @property (nonatomic) OAFavoriteItem *favorite;
-- (id) initWithItem:(OAFavoriteItem *)favorite headerOnly:(BOOL)headerOnly;
-- (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString *)formattedLocation headerOnly:(BOOL)headerOnly;
+
+- (instancetype) initWithItem:(OAFavoriteItem *)favorite headerOnly:(BOOL)headerOnly;
 
 - (NSString *) getItemName;
 - (NSString *) getItemGroup;

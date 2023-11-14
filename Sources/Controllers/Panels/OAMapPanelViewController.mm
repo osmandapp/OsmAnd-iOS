@@ -1856,7 +1856,8 @@ typedef enum
                                                       pointType:EOAEditPointTypeFavorite
                                                 targetMenuState:nil
                                                             poi:poi];
-    [self presentViewController:controller animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void) targetPointEditFavorite:(OAFavoriteItem *)item
@@ -1864,7 +1865,8 @@ typedef enum
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
     OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithFavorite:item];
-    [self presentViewController:controller animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void) targetPointShare
@@ -2010,7 +2012,8 @@ typedef enum
                                                                                 targetMenuState:_activeViewControllerState
                                                                             poi:poi];
     controller.gpxWptDelegate = self;
-    [self presentViewController:controller animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void) targetPointAddWaypoint:(NSString *)gpxFileName
@@ -2027,7 +2030,8 @@ typedef enum
     item.groups = _mapViewController.foundWptGroups;
     OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithGpxWpt:item];
     controller.gpxWptDelegate = self;
-    [self presentViewController:controller animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void) targetHideContextPinMarker

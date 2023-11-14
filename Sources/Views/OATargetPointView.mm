@@ -230,14 +230,14 @@ static const NSInteger _buttonsCount = 4;
     _buttonRoute.titleLabel.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightSemibold];
     _buttonShowInfo.titleLabel.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightSemibold];
     
-    [OsmAndApp instance].favoritesCollection->collectionChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
+    [OAFavoritesHelper getFavoritesCollection]->collectionChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                                 [self]
                                                                 (const OsmAnd::IFavoriteLocationsCollection* const collection)
                                                                 {
                                                                     [self onFavoritesCollectionChanged];
                                                                 });
 
-    [OsmAndApp instance].favoritesCollection->favoriteLocationChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
+    [OAFavoritesHelper getFavoritesCollection]->favoriteLocationChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                                       [self]
                                                                       (const OsmAnd::IFavoriteLocationsCollection* const collection,
                                                                        const std::shared_ptr<const OsmAnd::IFavoriteLocation> favoriteLocation)
@@ -1870,10 +1870,10 @@ static const NSInteger _buttonsCount = 4;
     if (_targetPoint.type == OATargetFavorite)
     {
         BOOL favoriteOnTarget = NO;
-        for (const auto& favLoc : [OsmAndApp instance].favoritesCollection->getFavoriteLocations()) {
-            
-            if ([OAUtilities doublesEqualUpToDigits:5 source:OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x) destination:_targetPoint.location.longitude] &&
-                [OAUtilities doublesEqualUpToDigits:5 source:OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y) destination:_targetPoint.location.latitude])
+        for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
+        {
+            if ([OAUtilities doublesEqualUpToDigits:5 source:OsmAnd::Utilities::get31LongitudeX(point.favorite->getPosition31().x) destination:_targetPoint.location.longitude] &&
+                [OAUtilities doublesEqualUpToDigits:5 source:OsmAnd::Utilities::get31LatitudeY(point.favorite->getPosition31().y) destination:_targetPoint.location.latitude])
             {
                 favoriteOnTarget = YES;
                 break;

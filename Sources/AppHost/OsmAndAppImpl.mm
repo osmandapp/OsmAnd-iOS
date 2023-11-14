@@ -45,15 +45,13 @@
 #import "OAExternalTimeFormatter.h"
 #import "OAFavoritesHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAAppSettings.h"
 
 #include <algorithm>
-
 #include <QList>
 #include <QHash>
 
 #include <OsmAndCore.h>
-#import "OAAppSettings.h"
-#include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/IWebClient.h>
 #include "OAWebClient.h"
 #include "OAWeatherWebClient.h"
@@ -133,8 +131,6 @@
 @synthesize resourcesRepositoryUpdatedObservable = _resourcesRepositoryUpdatedObservable;
 @synthesize defaultRoutingConfig = _defaultRoutingConfig;
 
-@synthesize favoritesCollection = _favoritesCollection;
-
 @synthesize dayNightModeObservable = _dayNightModeObservable;
 @synthesize mapSettingsChangeObservable = _mapSettingsChangeObservable;
 @synthesize updateGpxTracksOnMapObservable = _updateGpxTracksOnMapObservable;
@@ -172,6 +168,7 @@
         _weatherForecastPath = [_cachePath stringByAppendingPathComponent:@"WeatherForecast"];
         _favoritesPath = [_documentsPath stringByAppendingPathComponent:FAVORITES_INDEX_DIR];
         _favoritesBackupPath = [_documentsPath stringByAppendingPathComponent:FAVORITES_BACKUP_DIR];
+        _favoritesLegacyFilename = _documentsDir.filePath(QLatin1String("favourites.gpx")).toNSString();
         _travelGuidesPath = [_documentsPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
         _gpxTravelPath = [_gpxPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
 
@@ -207,9 +204,6 @@
 {
     _resourcesManager->localResourcesChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
     _resourcesManager->repositoryUpdateObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
-
-    _favoritesCollection->collectionChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
-    _favoritesCollection->favoriteLocationChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
 }
 
 - (void) buildFolders
@@ -603,63 +597,8 @@
 
     }
     [self applyExcludedFromBackup:projDbPathLib];
-    
-    // Sync favorites filename with android version
-    NSString *oldfFavoritesFilename = _documentsDir.filePath(QLatin1String("Favorites.gpx")).toNSString();
-    _favoritesLegacyFilename = _documentsDir.filePath(QLatin1String("favourites.gpx")).toNSString();
-    if ([[NSFileManager defaultManager] fileExistsAtPath:oldfFavoritesFilename] && ![[NSFileManager defaultManager] fileExistsAtPath:_favoritesLegacyFilename])
-    {
-        NSError *error = nil;
-        [[NSFileManager defaultManager] moveItemAtPath:oldfFavoritesFilename toPath:_favoritesLegacyFilename error:&error];
-        if (error)
-            NSLog(@"Error moving file: %@ to %@ - %@", oldfFavoritesFilename, _favoritesLegacyFilename, [error localizedDescription]);
-    }
 
-    // Move legacy favorites backup folder to new location
-    NSString *oldFavoritesBackupPath = [_documentsPath stringByAppendingPathComponent:@"favourites_backup"];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:oldFavoritesBackupPath] && ![[NSFileManager defaultManager] fileExistsAtPath:_favoritesBackupPath])
-    {
-        NSError *error = nil;
-        [[NSFileManager defaultManager] moveItemAtPath:oldFavoritesBackupPath toPath:_favoritesBackupPath error:&error];
-        if (error)
-            NSLog(@"Error moving dir: %@ to %@ - %@", oldFavoritesBackupPath, _favoritesBackupPath, [error localizedDescription]);
-    }
-
-    // Load favorites
-    _favoritesCollectionChangedObservable = [[OAObservable alloc] init];
-    _favoriteChangedObservable = [[OAObservable alloc] init];
-    _favoritesCollection.reset(new OsmAnd::FavoriteLocationsGpxCollection());
-
-    BOOL legacyFavoritesExists = [[NSFileManager defaultManager] fileExistsAtPath:_favoritesLegacyFilename];
-    if (legacyFavoritesExists)
-        _favoritesCollection->loadFrom(QString::fromNSString(_favoritesLegacyFilename));
-
-    NSArray<NSString *> *favoritesGroupFiles = [OAFavoritesHelper getGroupFiles];
-    for (NSString *groupFile in favoritesGroupFiles)
-        _favoritesCollection->loadFrom(QString::fromNSString(groupFile), true);
-
-    if (legacyFavoritesExists || ![[NSFileManager defaultManager] fileExistsAtPath:_favoritesPath])
-    {
-        [self saveFavoritesToPermanentStorage];
-        [[NSFileManager defaultManager] removeItemAtPath:_favoritesLegacyFilename error:nil];
-    }
-
-    _favoritesCollection->collectionChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
-                                                            [self]
-                                                            (const OsmAnd::IFavoriteLocationsCollection* const collection)
-                                                            {
-                                                                [_favoritesCollectionChangedObservable notifyEventWithKey:self];
-                                                            });
-    _favoritesCollection->favoriteLocationChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
-                                                                  [self]
-                                                                  (const OsmAnd::IFavoriteLocationsCollection* const collection,
-                                                                   const std::shared_ptr<const OsmAnd::IFavoriteLocation>& favoriteLocation)
-                                                                  {
-                                                                      [_favoriteChangedObservable notifyEventWithKey:self
-                                                                                                            andValue:favoriteLocation->getTitle().toNSString()];
-                                                                  });
-    
-
+    [OAFavoritesHelper initFavorites];
 
     // Load resources list
     
@@ -1179,9 +1118,6 @@
 
 @synthesize mapModeObservable = _mapModeObservable;
 
-@synthesize favoritesCollectionChangedObservable = _favoritesCollectionChangedObservable;
-@synthesize favoriteChangedObservable = _favoriteChangedObservable;
-
 @synthesize gpxCollectionChangedObservable = _gpxCollectionChangedObservable;
 @synthesize gpxChangedObservable = _gpxChangedObservable;
 
@@ -1232,89 +1168,6 @@
         return [fileName stringByReplacingOccurrencesOfString:kSubfolderPlaceholder withString:@"/"];
 
     return fileName;
-}
-
-- (void) saveFavoritesToPermanentStorage
-{
-    if (![[NSFileManager defaultManager] fileExistsAtPath:_favoritesPath])
-        [[NSFileManager defaultManager] createDirectoryAtPath:_favoritesPath withIntermediateDirectories:NO attributes:nil error:nil];
-
-    // Load collection from files
-    auto favoritesCollection = std::make_shared<OsmAnd::FavoriteLocationsGpxCollection>();
-    NSArray<NSString *> *favoritesGroupFiles = [OAFavoritesHelper getGroupFiles];
-    for (NSString *groupFile in favoritesGroupFiles)
-        favoritesCollection->loadFrom(QString::fromNSString(groupFile), true);
-
-    // Get external and local groups with locations
-    const auto& fileGroups = favoritesCollection->getGroupsLocations();
-    const auto& localGroups = _favoritesCollection->getGroupsLocations();
-
-    // Delete group files that are not in local groups
-    for (const auto& fileGroup : fileGroups.keys())
-        if (!localGroups.contains(fileGroup))
-            [[NSFileManager defaultManager] removeItemAtPath:[self favoritesStorageFilename:fileGroup.toNSString()] error:nil];
-
-    if (localGroups.isEmpty())
-        return;
-
-    // Save only groups that were changed
-    for (const auto& localGroupEntry : rangeOf(localGroups))
-    {
-        const auto& localGroup = localGroupEntry.key();
-        BOOL writeGroup = !fileGroups.contains(localGroup);
-        if (!writeGroup)
-        {
-            const auto& fileLocations = fileGroups[localGroup];
-            const auto& localLocations = localGroupEntry.value();
-            if (fileLocations.size() != localLocations.size())
-            {
-                writeGroup = YES;
-            }
-            else
-            {
-                for (const auto& localLocation : localLocations)
-                {
-                    BOOL sameLocation = NO;
-                    for (const auto& fileLocation : fileLocations)
-                    {
-                        if (fileLocation->isEqual(localLocation.get()))
-                        {
-                            sameLocation = YES;
-                            break;
-                        }
-                    }
-                    if (!sameLocation)
-                    {
-                        writeGroup = YES;
-                        break;
-                    }
-                }
-            }
-        }
-        if (writeGroup)
-            _favoritesCollection->saveTo(QString::fromNSString([self favoritesStorageFilename:localGroup.toNSString()]), localGroup);
-    }
-
-    // Backup favorites
-    [OAFavoritesHelper backup];
-}
-
-- (void) saveFavoritesToPermanentStorage:(NSArray<NSString *> *)groupNames
-{
-    QStringList namesList;
-    for (NSString *name in groupNames)
-        namesList.append(QString::fromNSString(name));
-
-    const auto& groups = _favoritesCollection->getGroups();
-    for (const auto& group : groups)
-        if (namesList.contains(group))
-        {
-            _favoritesCollection->saveTo(QString::fromNSString([self favoritesStorageFilename:group.toNSString()]), group);
-            break;
-        }
-
-    // Backup favorites
-    [OAFavoritesHelper backup];
 }
 
 - (unsigned long long) freeSpaceAvailableOnDevice

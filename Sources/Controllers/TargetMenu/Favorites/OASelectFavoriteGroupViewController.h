@@ -11,7 +11,12 @@
 @protocol OASelectFavoriteGroupDelegate <NSObject>
 
 - (void) onGroupSelected:(NSString *)selectedGroupName;
-- (void) onNewGroupAdded:(NSString *)selectedGroupName color:(UIColor *)color;
+
+- (void) addNewGroupWithName:(NSString *)name
+                    iconName:(NSString *)iconName
+                       color:(UIColor *)color
+          backgroundIconName:(NSString *)backgroundIconName;
+
 - (void) onFavoriteGroupColorsRefresh;
 
 @end

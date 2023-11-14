@@ -3077,3 +3077,7 @@
 "remove_cache" = "Eliminar la cache";
 "shared_string_contents" = "Contenidos";
 "shared_string_view" = "Ver";
+"map_orientation_default" = "Igual que el dispositivo";
+"map_orientation_landscape" = "Panorama";
+"map_screen_orientation" = "Orientación de la pantalla";
+"map_orientation_portrait" = "Retrato";

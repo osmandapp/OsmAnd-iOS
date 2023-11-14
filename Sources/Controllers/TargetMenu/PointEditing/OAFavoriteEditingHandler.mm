@@ -43,51 +43,21 @@
     if (self)
     {
         [self commonInit];
-        
-        // Create favorite
-        OsmAnd::LatLon locationPoint(location.latitude, location.longitude);
-        
-        QString elevation;
-        QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
-        
-        QString title = QString::fromNSString(formattedTitle);
-        QString address = QString::fromNSString(formattedLocation);
-        QString description;
-        QString icon;
-        QString background;
-        
-        NSString *poiIconName = [self.class getPoiIconName:poi];
-        if (poiIconName && poiIconName.length > 0)
-            icon = QString::fromNSString(poiIconName);
-        
-        _iconName = poiIconName;
+
+        _iconName = [self.class getPoiIconName:poi];
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString *groupName = [userDefaults objectForKey:kFavoriteDefaultGroupKey] ? [userDefaults stringForKey:kFavoriteDefaultGroupKey] : @"";
-        QString group = QString::fromNSString(groupName);
 
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors].firstObject;
-        
-        UIColor* color_ = favCol.color;
-        CGFloat r,g,b,a;
-        [color_ getRed:&r
-                 green:&g
-                  blue:&b
-                 alpha:&a];
-
-        auto favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
-                                                                        elevation,
-                                                                        time,
-                                                                        QString(),
-                                                                        title,
-                                                                        description,
-                                                                        address,
-                                                                        group,
-                                                                        icon,
-                                                                        background,
-                                                                        OsmAnd::FColorARGB(a,r,g,b));
-        
-        _favorite = [[OAFavoriteItem alloc] initWithFavorite:favorite];
+        _favorite = [[OAFavoriteItem alloc] initWithLat:location.latitude
+                                                    lon:location.longitude
+                                                   name:formattedTitle
+                                               category:groupName];
+        [_favorite setAddress:formattedLocation];
+        [_favorite setTimestamp:[NSDate date]];
+        [_favorite setIcon:_iconName];
+        [_favorite setColor:favCol.color];
         [_favorite setAmenity:poi];
         [_favorite setAmenityOriginName:poi.toStringEn];
     }
@@ -166,7 +136,6 @@
     {
         [OAFavoritesHelper editFavoriteName:_favorite newName:data.name group:data.category descr:[_favorite getDescription] address:[_favorite getAddress]];
     }
-    [OAFavoritesHelper loadFavorites];
 }
 
 - (OAFavoriteItem *) getFavoriteItem

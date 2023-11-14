@@ -188,12 +188,13 @@
             cell.textView.userInteractionEnabled = YES;
             cell.textView.editable = YES;
             cell.textView.delegate = self;
-            cell.textView.returnKeyType = UIReturnKeyDone;
+            cell.textView.returnKeyType = UIReturnKeyDefault;
             cell.textView.enablesReturnKeyAutomatically = YES;
             cell.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
             cell.textView.autocorrectionType = UITextAutocorrectionTypeNo;
             cell.textView.spellCheckingType = UITextSpellCheckingTypeNo;
             cell.textView.textAlignment = NSTextAlignmentNatural;
+            cell.textView.accessibilityLabel = OALocalizedString(@"osn_bug_name");
         }
         if (cell)
         {
@@ -321,6 +322,8 @@
 
 - (void)onBottomButtonPressed
 {
+    [self.view endEditing:YES];
+    
     [(OAOsmNotePoint *) _bugPoints.firstObject setText:_messageText];
     BOOL shouldWarn = _screenType != EOAOsmNoteViewConrollerModeUpload;
     BOOL shouldUpload = _screenType != EOAOsmNoteViewConrollerModeCreate;

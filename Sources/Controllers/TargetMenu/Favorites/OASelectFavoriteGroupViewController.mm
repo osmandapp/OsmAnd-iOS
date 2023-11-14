@@ -7,6 +7,7 @@
 //
 
 #import "OASelectFavoriteGroupViewController.h"
+#import "OAFavoriteGroupEditorViewController.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -15,13 +16,12 @@
 #import "OADefaultFavorite.h"
 #import "OARightIconTableViewCell.h"
 #import "OASimpleTableViewCell.h"
-#import "OAAddFavoriteGroupViewController.h"
 #import "OsmAndApp.h"
 
 #define kAddNewGroupSection 0
 #define kGroupsListSection 1
 
-@interface OASelectFavoriteGroupViewController() <OAAddFavoriteGroupDelegate>
+@interface OASelectFavoriteGroupViewController() <OAEditorDelegate>
 
 @end
 
@@ -237,9 +237,9 @@
 {
     if (indexPath.section == kAddNewGroupSection)
     {
-        OAAddFavoriteGroupViewController *addGroupVC = [[OAAddFavoriteGroupViewController alloc] init];
-        addGroupVC.delegate = self;
-        [self showModalViewController:addGroupVC];
+        OAFavoriteGroupEditorViewController *groupEditor = [[OAFavoriteGroupEditorViewController alloc] initWithNew];
+        groupEditor.delegate = self;
+        [self showModalViewController:groupEditor];
     }
     else if (indexPath.section == kGroupsListSection)
     {
@@ -250,23 +250,41 @@
     }
 }
 
-#pragma mark - OAAddFavoriteGroupDelegate
-
-- (void)onFavoriteGroupAdded:(NSString *)groupName color:(UIColor *)color
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_delegate)
-            [_delegate onNewGroupAdded:groupName color:color];
-        [self dismissViewControllerAnimated:YES completion:nil];
-    });
+        NSDictionary *item = _data[indexPath.section][indexPath.row];
+        NSString *cellType = item[@"type"];
+        if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+            return 60;
+        else
+            return UITableViewAutomaticDimension;
+}
+
+#pragma mark - OAEditorDelegate
+
+- (void)addNewItemWithName:(NSString *)name
+                  iconName:(NSString *)iconName
+                     color:(UIColor *)color
+        backgroundIconName:(NSString *)backgroundIconName;
+{
+    [self dismissViewController];
+    if (_delegate)
+    {
+        [_delegate addNewGroupWithName:name
+                              iconName:iconName
+                                 color:color
+                    backgroundIconName:backgroundIconName];
+    }
+}
+
+- (void)onEditorUpdated
+{
 }
 
 - (void)onFavoriteGroupColorsRefresh
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_delegate)
-            [_delegate onFavoriteGroupColorsRefresh];
-    });
+    if (_delegate)
+        [_delegate onFavoriteGroupColorsRefresh];
 }
 
 @end

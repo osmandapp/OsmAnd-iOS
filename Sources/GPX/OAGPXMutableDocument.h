@@ -13,8 +13,10 @@
 @property (nonatomic) NSMutableArray<OAWptPt *> *points;
 @property (nonatomic) NSMutableArray<OATrack *> *tracks;
 @property (nonatomic) NSMutableArray<OARoute *> *routes;
+@property (nonatomic) NSMutableDictionary<NSString *, OAPointsGroup *> *pointsGroups;
 
 @property (nonatomic) NSTimeInterval modifiedTime;
+@property (nonatomic) NSTimeInterval pointsModifiedTime;
 
 - (instancetype)init;
 
@@ -33,7 +35,9 @@
 - (void)deleteWpt:(OAWptPt *)w;
 - (void)deleteAllWpts;
 - (void) addWpts:(NSArray<OAWptPt *> *)wpts;
+- (void)addPointsGroup:(OAPointsGroup *)group;
 
 - (BOOL) saveTo:(NSString *)filename;
+- (BOOL) writeGpxFile:(NSString *)filename;
 
 @end

@@ -108,7 +108,6 @@
 - (float) getMapZoom;
 - (void) refreshMap;
 
-- (BOOL) hasFavoriteAt:(CLLocationCoordinate2D)location;
 - (BOOL) hasWptAt:(CLLocationCoordinate2D)location;
 
 - (BOOL) findWpt:(CLLocationCoordinate2D)location;

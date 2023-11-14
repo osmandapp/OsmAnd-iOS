@@ -110,22 +110,9 @@
                 OAPointsGroup *pointsGroup = self.pointsGroups[groupName];
 
                 pg.reset(new OsmAnd::GpxDocument::PointsGroup());
-                pg->name = QString::fromNSString(pointsGroup.name);
-                pg->iconName = QString::fromNSString(pointsGroup.iconName);
-                pg->backgroundType = QString::fromNSString(pointsGroup.backgroundType);
-                pg->color = [pointsGroup.color toFColorARGB];
-
-                QList< std::shared_ptr<OsmAnd::GpxDocument::WptPt> > points;
-                for (OAWptPt *wptPt in pointsGroup.points)
-                {
-                    wpt.reset(new OsmAnd::GpxDocument::WptPt());
-                    [self.class fillWpt:wpt usingWpt:wptPt];
-                    pg->points.append(wpt);
-                    document->points.append(wpt);
-                    wpt = nullptr;
-                }
-
+                [self.class fillPointsGroup:pg usingPointsGroup:pointsGroup];
                 document->pointsGroups.insert(QString::fromNSString(groupName), pg);
+                document->points.append(pg->points);
             }
             pg = nullptr;
         }
@@ -137,6 +124,8 @@
 {
     [self.points addObjectsFromArray:group.points];
     self.pointsGroups[group.name] = group;
+    document->pointsGroups.insert(QString::fromNSString(group.name), group.pg);
+    document->points.append(group.pg->points);
     _modifiedTime = [[NSDate date] timeIntervalSince1970];
     _pointsModifiedTime = _modifiedTime;
 }
@@ -147,7 +136,7 @@
     {
         OAPointsGroup *pointsGroup = [self getOrCreateGroup:point];
         pointsGroup.pg->points.append(point.wpt);
-        [pointsGroup.points addObject:point];
+        pointsGroup.points = [pointsGroup.points arrayByAddingObject:point];
     }
 }
 
@@ -558,14 +547,6 @@
     [self updateDocAndMetadata];
     [self applyBounds];
     return document->saveTo(QString::fromNSString(filename), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
-}
-
-- (BOOL) writeGpxFile:(NSString *)filename
-{
-    OAWptPt *pt = [self findPointToShow];
-    if (pt && self.metadata)
-        self.metadata.time = pt.time;
-    return [super saveTo:filename];
 }
 
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp

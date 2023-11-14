@@ -155,13 +155,7 @@
             {
                 OAFavoriteGroup *existingGroup = [OAFavoritesHelper getGroupByName:duplicate.name];
                 if (existingGroup)
-                {
-                    NSArray<OAFavoriteItem *> *favouritePoints = existingGroup.points;
-                    for (OAFavoriteItem *favoriteItem in favouritePoints)
-                    {
-                        [OAFavoritesHelper deleteFavorite:favoriteItem saveImmediately:NO];
-                    }
-                }
+                    [OAFavoritesHelper deleteFavorites:existingGroup.points.copy saveImmediately:NO];
             }
             if (!isPersonal)
             {
@@ -180,17 +174,16 @@
                 }
             }
         }
-        for (OAFavoriteGroup *group in self.appliedItems)
+        @synchronized (self.class)
         {
-            OAPointsGroup *pointsGroup = [group toPointsGroup];
-            for (OAFavoriteItem *point in group.points)
+            for (OAFavoriteGroup *group in self.appliedItems)
             {
-                [OAFavoritesHelper addFavorite:point lookupAddress:NO sortAndSave:NO pointsGroup:pointsGroup];
+                [OAFavoritesHelper addFavorites:group.points
+                                  lookupAddress:NO
+                                    sortAndSave:group == self.appliedItems.lastObject
+                                    pointsGroup:[group toPointsGroup]];
             }
         }
-        [OAFavoritesHelper sortAll];
-        [OAFavoritesHelper saveCurrentPointsIntoFile];
-        [OAFavoritesHelper loadFavorites];
     }
 }
 
@@ -236,7 +229,6 @@
 - (void)deleteItem:(OAFavoriteGroup *)item
 {
     [OAFavoritesHelper deleteFavoriteGroups:@[item] andFavoritesItems:nil];
-    [OAFavoritesHelper saveCurrentPointsIntoFile];
 }
 
 - (BOOL) shouldReadOnCollecting
@@ -275,20 +267,6 @@
     return [self getGpxWriter:(OAGPXDocument *) doc];
 }
 
-+ (NSArray<OAFavoriteItem *> *)wptAsFavourites:(NSArray<OAWptPt *> *)points
-                               defaultCategory:(NSString *)defaultCategory
-{
-    NSMutableArray<OAFavoriteItem *> *favorites = [NSMutableArray array];
-    for (OAWptPt *point in points)
-    {
-        if (!point.name || point.name.length == 0)
-            point.name = OALocalizedString(@"shared_string_waypoint");
-        NSString *category = point.type ? point.type : defaultCategory;
-        [favorites addObject:[OAFavoriteItem fromWpt:point category:category]];
-    }
-    return favorites;
-}
-
 @end
 
 #pragma mark - OAFavoritesSettingsItemReader
@@ -309,7 +287,7 @@
     if (gpxFile)
     {
         NSMutableDictionary<NSString *, OAFavoriteGroup *> *flatGroups = [NSMutableDictionary dictionary];
-        NSArray<OAFavoriteItem *> *favorites = [OAFavoritesSettingsItem wptAsFavourites:gpxFile.points defaultCategory:@""];
+        NSArray<OAFavoriteItem *> *favorites = [OAFavoritesHelper wptAsFavorites:gpxFile.points defaultCategory:@""];
         for (OAFavoriteItem *point in favorites)
         {
             OAFavoriteGroup *group = flatGroups[[point getCategory]];

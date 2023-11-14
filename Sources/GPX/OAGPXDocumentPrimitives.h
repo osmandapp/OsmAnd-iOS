@@ -268,7 +268,7 @@ struct RouteDataBundle;
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic) NSString *iconName;
 @property (nonatomic) NSString *backgroundType;
-@property (nonatomic) NSMutableArray<OAWptPt *> *points;
+@property (nonatomic) NSArray<OAWptPt *> *points;
 @property (nonatomic) UIColor *color;
 
 - (instancetype)initWithName:(NSString *)name;

@@ -351,9 +351,6 @@
 
     if (_editPointType == EOAEditPointTypeFavorite)
     {
-        if (![OAFavoritesHelper isFavoritesLoaded])
-            [OAFavoritesHelper loadFavorites];
-
         NSArray<OAFavoriteGroup *> *allGroups = [OAFavoritesHelper getFavoriteGroups];
 
         if (![[OAFavoritesHelper getGroups].allKeys containsObject:@""]) {
@@ -1173,18 +1170,18 @@
     }
 }
 
-- (void)onNewGroupAdded:(NSString *)name
-               iconName:(NSString *)iconName
-                  color:(UIColor *)color
-     backgroundIconName:(NSString *)backgroundIconName
+- (void)addNewGroupWithName:(NSString *)name
+                   iconName:(NSString *)iconName
+                      color:(UIColor *)color
+         backgroundIconName:(NSString *)backgroundIconName
 {
-    [self addGroup:name iconName:iconName color:color backgroundIconName:backgroundIconName];
+    [self addGroupWithName:name iconName:iconName color:color backgroundIconName:backgroundIconName];
 }
 
-- (void)  addGroup:(NSString *)name
-          iconName:(NSString *)iconName
-             color:(UIColor *)color
-backgroundIconName:(NSString *)backgroundIconName
+- (void)addGroupWithName:(NSString *)name
+                iconName:(NSString *)iconName
+                   color:(UIColor *)color
+      backgroundIconName:(NSString *)backgroundIconName
 {
     _wasChanged = YES;
     NSString *editedGroupName = [name trim];
@@ -1677,10 +1674,10 @@ backgroundIconName:(NSString *)backgroundIconName
                      color:(UIColor *)color
         backgroundIconName:(NSString *)backgroundIconName;
 {
-    [self addGroup:name
-          iconName:iconName
-             color:color
-backgroundIconName:backgroundIconName];
+    [self addGroupWithName:name
+                  iconName:iconName
+                     color:color
+        backgroundIconName:backgroundIconName];
 }
 
 - (void)onEditorUpdated

@@ -204,11 +204,7 @@
         double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
         double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
         targetPoint.location = CLLocationCoordinate2DMake(favLat, favLon);
-      
-        
-        if (![OAFavoritesHelper isFavoritesLoaded])
-            [OAFavoritesHelper loadFavorites];
-        
+
         OAFavoriteItem *storedItem = [OAFavoritesHelper getVisibleFavByLat:favLat lon:favLon];
         targetPoint.title = storedItem ? [storedItem getDisplayName] : favLoc->getTitle().toNSString();
         targetPoint.titleAddress = storedItem ? [storedItem getAddress] : favLoc->getAddress().toNSString();

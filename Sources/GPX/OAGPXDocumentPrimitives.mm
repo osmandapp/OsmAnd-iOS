@@ -507,6 +507,8 @@
     if (self.time != wptPt.time)
         return NO;
 
+    if (isnan(self.heading) != isnan(wptPt.heading))
+        return NO;
     if (!isnan(self.heading) && !isnan(wptPt.heading))
     {
         if (self.heading != wptPt.heading)
@@ -783,7 +785,7 @@
     self = [super init];
     if (self) {
         _name = name ? name : @"";
-        _points = [NSMutableArray array];
+        _points = [NSArray array];
     }
     return self;
 }

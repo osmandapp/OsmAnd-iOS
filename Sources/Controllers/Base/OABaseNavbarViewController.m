@@ -288,15 +288,13 @@
 
 - (void)updateUI:(BOOL)animated completion:(void (^)(BOOL finished))completion
 {
-    [self generateData];
     [self reloadData:animated completion:completion];
-    [self updateWithoutData];
+    [self refreshUI];
 }
 
 - (void)updateWithoutData
 {
-    [self applyLocalization];
-    [self updateNavbar];
+    [self refreshUI];
     [self.tableView reconfigureRowsAtIndexPaths:self.tableView.indexPathsForVisibleRows];
 }
 

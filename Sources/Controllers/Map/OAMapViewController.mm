@@ -2758,21 +2758,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     [wptApi setWptData:list paths:paths];
 }
 
-- (BOOL) hasFavoriteAt:(CLLocationCoordinate2D)location
-{
-    for (OAFavoriteItem *item in [OAFavoritesHelper getFavoriteItems])
-    {
-        double lon = OsmAnd::Utilities::get31LongitudeX(item.favorite->getPosition31().x);
-        double lat = OsmAnd::Utilities::get31LatitudeY(item.favorite->getPosition31().y);
-        if ([OAUtilities isCoordEqual:lat srcLon:lon destLat:location.latitude destLon:location.longitude])
-        {
-            return YES;
-        }
-    }
-
-    return NO;
-}
-
 - (BOOL) hasWptAt:(CLLocationCoordinate2D)location
 {
     OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
@@ -3069,8 +3054,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                     {
                         [OAGPXDocument fillWpt:w usingWpt:self.foundWpt];
                         [OAGPXDocument fillPointsGroup:self.foundWpt wptPtPtr:w doc:doc];
-                        OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
-                        [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[self.foundWpt getColor:0]]];
+                        OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[self.foundWpt getColor:0]]];
                         break;
                     }
                 }

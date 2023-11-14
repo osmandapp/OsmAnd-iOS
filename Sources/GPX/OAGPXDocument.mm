@@ -511,7 +511,7 @@
                 pointsGroups[pointsGroup.name] = pointsGroup;
             }
 
-            [pointsGroup.points addObject:wptPt];
+            pointsGroup.points = [pointsGroup.points arrayByAddingObject:wptPt];
             [points addObject:wptPt];
         }
     }
@@ -679,6 +679,24 @@
     [r fillExtensions:rte];
 }
 
++ (void)fillPointsGroup:(std::shared_ptr<OsmAnd::GpxDocument::PointsGroup>)pg usingPointsGroup:(OAPointsGroup *)pointsGroup
+{
+    std::shared_ptr<OsmAnd::GpxDocument::WptPt> wpt;
+
+    pg->name = QString::fromNSString(pointsGroup.name);
+    pg->iconName = QString::fromNSString(pointsGroup.iconName);
+    pg->backgroundType = QString::fromNSString(pointsGroup.backgroundType);
+    pg->color = [pointsGroup.color toFColorARGB];
+
+    for (OAWptPt *wptPt in pointsGroup.points)
+    {
+        wpt.reset(new OsmAnd::GpxDocument::WptPt());
+        [self.class fillWpt:wpt usingWpt:wptPt];
+        pg->points.append(wpt);
+        wpt = nullptr;
+    }
+}
+
 - (BOOL) saveTo:(NSString *)filename
 {
     std::shared_ptr<OsmAnd::GpxDocument> document;
@@ -704,26 +722,14 @@
 
     if (self.pointsGroups.count > 0)
     {
-        for (NSString *key in self.pointsGroups.allKeys)
+        for (NSString *groupName in self.pointsGroups.allKeys)
         {
-            OAPointsGroup *pointsGroup = self.pointsGroups[key];
+            OAPointsGroup *pointsGroup = self.pointsGroups[groupName];
 
             pg.reset(new OsmAnd::GpxDocument::PointsGroup());
-            pg->name = QString::fromNSString(pointsGroup.name);
-            pg->iconName = QString::fromNSString(pointsGroup.iconName);
-            pg->backgroundType = QString::fromNSString(pointsGroup.backgroundType);
-            pg->color = [pointsGroup.color toFColorARGB];
-
-            for (OAWptPt *wptPt in pointsGroup.points)
-            {
-                wpt.reset(new OsmAnd::GpxDocument::WptPt());
-                [self.class fillWpt:wpt usingWpt:wptPt];
-                pg->points.append(wpt);
-                document->points.append(wpt);
-                wpt = nullptr;
-            }
-
-            document->pointsGroups.insert(QString::fromNSString(key), pg);
+            [self.class fillPointsGroup:pg usingPointsGroup:pointsGroup];
+            document->pointsGroups.insert(QString::fromNSString(groupName), pg);
+            document->points.append(pg->points);
             pg = nullptr;
         }
     }

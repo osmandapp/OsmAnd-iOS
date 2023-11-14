@@ -47,9 +47,6 @@
         _favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getCategory]];
         _openingHoursInfo = OpeningHoursParser::getInfo(self.favorite.favorite->getExtension(QString::fromNSString([PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS_TAG])).toStdString());
 
-        if (!OAFavoritesHelper.isFavoritesLoaded)
-            [OAFavoritesHelper loadFavorites];
-        
         [self acquireOriginObject];
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
     }

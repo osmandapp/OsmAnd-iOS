@@ -13,15 +13,13 @@
 #define kDefaultCategoryKey @"favorites_item"
 #define kPersonalCategory @"personal"
 
-@class OAFavoriteItem, OAFavoriteGroup, OASpecialPointType, OAGPXDocument, OAGPXMutableDocument, OAPointsGroup;
+@class OAFavoriteItem, OAFavoriteGroup, OASpecialPointType, OAGPXDocument, OAGPXMutableDocument, OAPointsGroup, OAWptPt;
 
 @interface OAFavoritesHelper : NSObject
 
-+ (BOOL) isFavoritesLoaded;
-+ (void) initialLoadFavorites;
-+ (void) loadFavorites;
++ (void) initFavorites;
 
-+ (std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection>)getFavoritesCollection;
++ (const std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> &)getFavoritesCollection;
 
 + (void)loadFileGroups:(NSString *)file
                 groups:(NSMutableDictionary<NSString *, OAFavoriteGroup *> *)groups;
@@ -41,10 +39,11 @@
 + (void) lookupAddress:(OAFavoriteItem *)point;
 
 + (BOOL)addFavorite:(OAFavoriteItem *)point;
-+ (BOOL)addFavorite:(OAFavoriteItem *)point
-      lookupAddress:(BOOL)lookupAddress
-        sortAndSave:(BOOL)sortAndSave
-        pointsGroup:(OAPointsGroup *)pointsGroup;
++ (BOOL)addFavorites:(NSArray<OAFavoriteItem *> *)favorites;
++ (BOOL)addFavorites:(NSArray<OAFavoriteItem *> *)favorites
+       lookupAddress:(BOOL)lookupAddress
+         sortAndSave:(BOOL)sortAndSave
+         pointsGroup:(OAPointsGroup *)pointsGroup;
 
 + (BOOL) editFavoriteName:(OAFavoriteItem *)item newName:(NSString *)newName group:(NSString *)group descr:(NSString *)descr address:(NSString *)address;
 + (BOOL) editFavorite:(OAFavoriteItem *)item lat:(double)lat lon:(double)lon;
@@ -77,7 +76,7 @@
                  iconName:(NSString *)iconName
        backgroundIconName:(NSString *)backgroundIconName;
 
-+ (BOOL)deleteFavorite:(OAFavoriteItem *)p saveImmediately:(BOOL)saveImmediately;
++ (void)deleteFavorites:(NSArray<OAFavoriteItem *> *)favorites saveImmediately:(BOOL)saveImmediately;
 
 + (OAFavoriteGroup *)getOrCreateGroup:(OAFavoriteItem *)item;
 + (OAFavoriteGroup *)getOrCreateGroup:(OAFavoriteItem *)item
@@ -99,6 +98,9 @@
 + (void) removeParkingReminderFromCalendar;
 
 + (UIImage *) getCompositeIcon:(NSString *)icon backgroundIcon:(NSString *)backgroundIcon color:(UIColor *)color;
++ (BOOL) hasFavoriteAt:(CLLocationCoordinate2D)location;
++ (NSArray<OAFavoriteItem *> *)wptAsFavorites:(NSArray<OAWptPt *> *)points
+                              defaultCategory:(NSString *)defaultCategory;
 
 + (void) saveFile:(NSArray<OAFavoriteGroup *> *)favoriteGroups file:(NSString *)file;
 + (void) backup;

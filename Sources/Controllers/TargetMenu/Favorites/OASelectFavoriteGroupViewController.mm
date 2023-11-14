@@ -257,10 +257,10 @@
     [self dismissViewController];
     if (_delegate)
     {
-        [_delegate onNewGroupAdded:name
-                          iconName:iconName
-                             color:color
-                backgroundIconName:backgroundIconName];
+        [_delegate addNewGroupWithName:name
+                              iconName:iconName
+                                 color:color
+                    backgroundIconName:backgroundIconName];
     }
 }
 

@@ -69,7 +69,7 @@ static OAQuickActionType *TYPE;
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     OAMapViewController *mapVC = mapPanel.mapViewController;
     CLLocationCoordinate2D point = CLLocationCoordinate2DMake(lat, lon);
-    if ([mapVC hasFavoriteAt:point])
+    if ([OAFavoritesHelper hasFavoriteAt:point])
         return;
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];

@@ -168,6 +168,7 @@
         _weatherForecastPath = [_cachePath stringByAppendingPathComponent:@"WeatherForecast"];
         _favoritesPath = [_documentsPath stringByAppendingPathComponent:FAVORITES_INDEX_DIR];
         _favoritesBackupPath = [_documentsPath stringByAppendingPathComponent:FAVORITES_BACKUP_DIR];
+        _favoritesLegacyFilename = _documentsDir.filePath(QLatin1String("favourites.gpx")).toNSString();
         _travelGuidesPath = [_documentsPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
         _gpxTravelPath = [_gpxPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
 
@@ -597,8 +598,7 @@
     }
     [self applyExcludedFromBackup:projDbPathLib];
 
-    [OAFavoritesHelper initialLoadFavorites];
-    [OAFavoritesHelper loadFavorites];
+    [OAFavoritesHelper initFavorites];
 
     // Load resources list
     

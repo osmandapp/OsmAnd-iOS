@@ -436,11 +436,7 @@ static UIViewController *parentController;
     NSMutableArray *headerViews = [NSMutableArray array];
     NSMutableArray *tableData = [NSMutableArray array];
 
-    if (![OAFavoritesHelper isFavoritesLoaded])
-        [OAFavoritesHelper loadFavorites];
-
     NSArray *favorites = [NSMutableArray arrayWithArray:[OAFavoritesHelper getFavoriteGroups]];
-
     for (OAFavoriteGroup *group in favorites)
     {
         FavoriteTableGroup* itemData = [[FavoriteTableGroup alloc] init];
@@ -914,7 +910,7 @@ static UIViewController *parentController;
     if (self.sortedFavoriteItems.count == 0)
         return;
 
-    NSString *filename = [OsmAndApp instance].favoritesLegacyStorageFilename.lastPathComponent;
+    NSString *filename = [[OsmAndApp instance].favoritesFilePrefix stringByAppendingString:GPX_FILE_EXT];
     NSString *fullFilename = [NSTemporaryDirectory() stringByAppendingPathComponent:filename];
     [OAFavoritesHelper saveFile:[OAFavoritesHelper getFavoriteGroups] file:fullFilename];
 

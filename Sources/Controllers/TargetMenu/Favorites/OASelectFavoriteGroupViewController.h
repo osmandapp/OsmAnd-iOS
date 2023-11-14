@@ -12,10 +12,10 @@
 
 - (void) onGroupSelected:(NSString *)selectedGroupName;
 
-- (void) onNewGroupAdded:(NSString *)name
-                iconName:(NSString *)iconName
-                   color:(UIColor *)color
-      backgroundIconName:(NSString *)backgroundIconName;
+- (void) addNewGroupWithName:(NSString *)name
+                    iconName:(NSString *)iconName
+                       color:(UIColor *)color
+          backgroundIconName:(NSString *)backgroundIconName;
 
 - (void) onFavoriteGroupColorsRefresh;
 

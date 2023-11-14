@@ -24,6 +24,7 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OADestinationItemsListViewController.h"
+#import "OAFavoritesHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
@@ -107,14 +108,13 @@
     }
     
     
-    NSArray *favorites = [self getSortedFavorites];
+    NSArray<OAFavoriteItem *> *favorites = [self getSortedFavorites];
     for (OAFavoriteItem *item in favorites)
     {
-        NSString *groupName = item.favorite->getGroup().toNSString();
         [arr addObject:@{
-            @"title" : item.favorite->getTitle().toNSString(),
-            @"descr" : groupName == nil || groupName.length == 0 ? OALocalizedString(@"favorites_item") : groupName,
-            @"color" : item.getColor,
+            @"title" : [item getName],
+            @"descr" : [OAFavoriteGroup getDisplayName:[item getCategory]],
+            @"color" : [item getColor],
             @"img" : @"ic_custom_favorites",
             @"point" : item
         }];
@@ -143,21 +143,11 @@
     return [NSArray arrayWithArray:arr];
 }
 
-- (NSArray *) getSortedFavorites
+- (NSArray<OAFavoriteItem *> *) getSortedFavorites
 {
-    NSMutableArray *sortedFavoriteItems = [[NSMutableArray alloc] init];
-    const auto allFavorites = _app.favoritesCollection->getFavoriteLocations();
-    
-    for(const auto& favorite : allFavorites)
-    {
-        OAFavoriteItem* favData = [[OAFavoriteItem alloc] initWithFavorite:favorite];
-        [sortedFavoriteItems addObject:favData];
-    }
-    
-    NSArray *sortedArray = [sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
-        return [[obj1.favorite->getTitle().toNSString() lowerCase] compare:[obj2.favorite->getTitle().toNSString() lowerCase]];
+    NSArray *sortedArray = [[OAFavoritesHelper getFavoriteItems] sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
+        return [[obj1 getName].lowercaseString compare:[obj2 getName].lowercaseString];
     }];
-    
     return sortedArray;
 }
 

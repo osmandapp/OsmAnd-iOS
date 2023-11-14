@@ -9,6 +9,7 @@
 #import "OAEditGroupViewController.h"
 #import "OASimpleTableViewCell.h"
 #import "OAInputTableViewCell.h"
+#import "OAFavoritesHelper.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
 
@@ -68,7 +69,7 @@
 - (NSInteger)rowsCount:(NSInteger)section
 {
     if (section == 0)
-        return [_groups count] + 1;
+        return _groups.count;
     else
         return 1;
 }
@@ -85,24 +86,13 @@
             [cell descriptionVisibility:NO];
             [cell leftIconVisibility:NO];
         }
-        
         if (cell)
         {
-            if (indexPath.row > 0)
-            {
-                NSString* item = [_groups objectAtIndex:indexPath.row - 1];
-                [cell.titleLabel setText:item];
-                cell.accessoryType = UITableViewCellAccessoryNone;
-                if ([item isEqualToString:self.groupName])
-                    cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            }
-            else
-            {
-                [cell.titleLabel setText:OALocalizedString(@"favorites_item")];
-                cell.accessoryType = UITableViewCellAccessoryNone;
-                if (self.groupName.length == 0)
-                    cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            }
+            NSString *item = [_groups objectAtIndex:indexPath.row];
+            [cell.titleLabel setText:[OAFavoriteGroup getDisplayName:item]];
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            if ([[OAFavoriteGroup getDisplayName:item] isEqualToString:[OAFavoriteGroup getDisplayName:self.groupName]])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
         return cell;
     }
@@ -134,10 +124,11 @@
 {
     if (indexPath.section == 0)
     {
-        if (indexPath.row == 0)
+        NSString *groupName = [_groups objectAtIndex:indexPath.row];
+        if ([groupName isEqualToString:OALocalizedString(kDefaultCategoryKey)])
             self.groupName = @"";
         else
-            self.groupName = [_groups objectAtIndex:indexPath.row - 1];
+            self.groupName = groupName;
         
         [self.tableView reloadData];
     }

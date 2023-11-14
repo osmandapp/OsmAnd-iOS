@@ -29,9 +29,13 @@
 
 #define kBlurViewTag -999
 #define kSpinnerViewTag -998
+
 #define kNavItemStackViewWithSubtitleTag -997
 #define kTitleInNavItemStackViewTag -996
 #define kSubtitleInNavItemStackViewTag -995
+
+#define kNavItemStackViewWithCenterIconTag -994
+#define kCenterIconInNavItemStackViewTag -993
 
 @implementation UIBezierPath (util)
 
@@ -678,6 +682,24 @@
             return ((UILabel *) self.titleView.subviews.firstObject).text.length == 0;
     }
     return NO;
+}
+
+- (void)setStackViewWithCenterIcon:(UIImage *)icon
+{
+    UIImageView *iconView = [[UIImageView alloc] init];
+    iconView.tag = kCenterIconInNavItemStackViewTag;
+    iconView.backgroundColor = UIColor.clearColor;
+    iconView.image = icon;
+    UIStackView *stackView = [[UIStackView alloc] initWithArrangedSubviews:@[iconView]];
+
+    stackView.tag = kNavItemStackViewWithCenterIconTag;
+    stackView.backgroundColor = UIColor.clearColor;
+    stackView.distribution = UIStackViewDistributionEqualCentering;
+    stackView.alignment = UIStackViewAlignmentCenter;
+    stackView.axis = UILayoutConstraintAxisVertical;
+    [stackView layoutSubviews];
+
+    self.titleView = stackView;
 }
 
 @end

@@ -8,7 +8,7 @@
 
 #import "OAPlugin.h"
 
-@class CLLocation;
+@class CLLocation, OAFavoriteItem;
 
 @interface OAParkingPositionPlugin : OAPlugin
 
@@ -29,5 +29,6 @@
 
 - (void) setParkingPosition:(double)latitude longitude:(double)longitude limited:(BOOL)limited;
 
+- (void)updateParkingPoint:(OAFavoriteItem *)item;
 
 @end

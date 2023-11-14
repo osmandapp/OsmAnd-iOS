@@ -106,7 +106,8 @@
     NSInteger _colorRowIndex;
     NSInteger _allColorsRowIndex;
     NSInteger _shapeRowIndex;
-    
+    NSIndexPath *_replaceIndexPath;
+
     OACollectionViewCellState *_scrollCellsState;
     NSString *_renamedPointAlertMessage;
     OATargetMenuViewControllerState *_targetMenuState;
@@ -541,6 +542,7 @@
         @"color" : UIColor.iconColorActive,
         @"key" : kReplaceKey
     }];
+    _replaceIndexPath = [NSIndexPath indexPathForRow:section.count - 1 inSection:section.count];
     if (!_isNewItemAdding)
     {
         [section addObject:@{
@@ -1664,6 +1666,12 @@
 
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+
+    UIPopoverPresentationController *popPresenter = alert.popoverPresentationController;
+    popPresenter.sourceView = self.view;
+    popPresenter.sourceRect = [self.tableView rectForRowAtIndexPath:_replaceIndexPath];
+    popPresenter.permittedArrowDirections = UIPopoverArrowDirectionUp;
+
     [self presentViewController:alert animated:YES completion:nil];
 }
 

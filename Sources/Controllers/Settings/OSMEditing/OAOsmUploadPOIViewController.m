@@ -283,12 +283,13 @@
             cell.textView.userInteractionEnabled = YES;
             cell.textView.editable = YES;
             cell.textView.delegate = self;
-            cell.textView.returnKeyType = UIReturnKeyDone;
+            cell.textView.returnKeyType = UIReturnKeyDefault;
             cell.textView.enablesReturnKeyAutomatically = YES;
             cell.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
             cell.textView.autocorrectionType = UITextAutocorrectionTypeNo;
             cell.textView.spellCheckingType = UITextSpellCheckingTypeNo;
             cell.textView.textAlignment = NSTextAlignmentNatural;
+            cell.textView.accessibilityLabel = OALocalizedString(@"osb_comment_dialog_message");
         }
         if (cell)
         {
@@ -418,6 +419,8 @@
 {
     if (_isAuthorised)
     {
+        [self.view endEditing:YES];
+        
         OAUploadOsmPointsAsyncTask *uploadTask = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class] points:_osmPoints closeChangeset:_closeChangeset anonymous:NO comment:_messageText];
         _progressController = [[OAUploadOsmPOINoteViewProgressController alloc] initWithParam:uploadTask];
         _progressController.delegate = self.delegate;

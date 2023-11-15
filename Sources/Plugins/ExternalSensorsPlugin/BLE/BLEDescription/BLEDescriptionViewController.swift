@@ -23,6 +23,8 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
         }
     }
     
+    var wheelSize: Float?
+    
     private lazy var headerView: DescriptionDeviceHeader = {
         Bundle.main.loadNibNamed("DescriptionDeviceHeader", owner: self, options: nil)?[0] as! DescriptionDeviceHeader
     }()
@@ -39,7 +41,6 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
             guard let self else { return }
             generateData()
             tableView.reloadData()
-            
         }
         tableView.tableHeaderView = headerView
         registerObservers()
@@ -62,6 +63,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
             if let sensor = device.sensors.first(where: { $0 is BLEBatterySensor }) as? BLEBatterySensor {
                 let infoSection = tableData.createNewSection()
                 infoSection.headerText = localizedString("external_device_details_information").uppercased()
+                infoSection.key = "information"
                 let batteryRow = infoSection.createNewRow()
                 batteryRow.cellType = OAValueTableViewCell.getIdentifier()
                 batteryRow.key = "battery_row"
@@ -72,6 +74,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
             if let receivedData = device.getDataFields {
                 let receivedDataSection = tableData.createNewSection()
                 receivedDataSection.headerText = localizedString("external_device_details_received_data").uppercased()
+                receivedDataSection.key = "receivedData"
                 for (key, value) in receivedData {
                     let row = receivedDataSection.createNewRow()
                     row.cellType = OAValueTableViewCell.getIdentifier()
@@ -83,17 +86,32 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
             // Settings
             let settingsSection = tableData.createNewSection()
             settingsSection.headerText = localizedString("shared_string_settings").uppercased()
+            settingsSection.key = "settings"
             let nameRow = settingsSection.createNewRow()
             nameRow.cellType = OAValueTableViewCell.getIdentifier()
             nameRow.key = "name_row"
             nameRow.title = localizedString("shared_string_name")
             nameRow.descr = device?.deviceName ?? ""
             
-            if let settingsData = device.getSettingsFields {
-                #warning("need data")
+            if let settingsDataDict = device.getSettingsFields, !settingsDataDict.isEmpty {
+                for (key, value) in settingsDataDict {
+                    let settingRow = settingsSection.createNewRow()
+                    settingRow.cellType = OAValueTableViewCell.getIdentifier()
+                    settingRow.key = key
+                    if key == WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY {
+                        settingRow.title = localizedString("wheel_circumference")
+                    }
+                    if let descr = value as? Float {
+                        if key == WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY {
+                            wheelSize = descr
+                        }
+                        settingRow.descr = String(descr)
+                    }
+                 }
             }
             
             let forgetSensorSection = tableData.createNewSection()
+            forgetSensorSection.key = "forgetSensor"
             let forgetSensorRow = forgetSensorSection.createNewRow()
             forgetSensorRow.cellType = OAValueTableViewCell.getIdentifier()
             forgetSensorRow.key = "forget_sensor_row"
@@ -133,21 +151,19 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
                 cell.separatorInset = .zero
                 cell.valueLabel.text = item.descr
                 cell.titleLabel.text = item.title
-                if let section = Section(rawValue: indexPath.section) {
-                    switch section {
-                    case .information, .receivedData:
-                        cell.selectionStyle = .none
-                        cell.accessoryType = .none
-                        cell.titleLabel.textColor = UIColor.textColorPrimary
-                    case .forgetSensor:
-                        cell.selectionStyle = .gray
-                        cell.accessoryType = .none
-                        cell.titleLabel.textColor = UIColor.buttonBgColorDisruptive
-                    case .settings:
-                        cell.selectionStyle = .gray
-                        cell.accessoryType = .disclosureIndicator
-                        cell.titleLabel.textColor = UIColor.textColorPrimary
-                    }
+                let sectionKey = tableData.sectionData(for: UInt(indexPath.section)).key
+                if sectionKey == "information" || sectionKey == "receivedData" {
+                    cell.selectionStyle = .none
+                    cell.accessoryType = .none
+                    cell.titleLabel.textColor = UIColor.textColorPrimary
+                } else if sectionKey == "settings" {
+                    cell.selectionStyle = .gray
+                    cell.accessoryType = .disclosureIndicator
+                    cell.titleLabel.textColor = UIColor.textColorPrimary
+                } else if sectionKey == "forgetSensor" {
+                    cell.selectionStyle = .gray
+                    cell.accessoryType = .none
+                    cell.titleLabel.textColor = UIColor.buttonBgColorDisruptive
                 }
             }
             return cell
@@ -169,6 +185,15 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
                 tableView.reloadData()
             }
             navigationController?.present(UINavigationController(rootViewController: nameVC), animated: true)
+        } else if item.key == WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY {
+            let wheelVC = BLEWheelSettingsViewController()
+            wheelVC.wheelSize = wheelSize
+            wheelVC.onSaveAction = { [weak self] in
+                guard let self else { return }
+                generateData()
+                tableView.reloadData()
+            }
+            navigationController?.present(UINavigationController(rootViewController: wheelVC), animated: true)
         }
     }
     
@@ -187,7 +212,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
 extension BLEDescriptionViewController {
     private func showForgetSensorActionSheet() {
         let alert = UIAlertController(title: device.deviceName, message: localizedString("external_device_forget_sensor_description"), preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: localizedString("external_device_forget_sensor"), style: .destructive , handler: { [weak self] _ in
+        alert.addAction(UIAlertAction(title: localizedString("external_device_forget_sensor"), style: .destructive, handler: { [weak self] _ in
             guard let self else { return }
             DeviceHelper.shared.setDevicePaired(device: device, isPaired: false)
             navigationController?.popViewController(animated: true)

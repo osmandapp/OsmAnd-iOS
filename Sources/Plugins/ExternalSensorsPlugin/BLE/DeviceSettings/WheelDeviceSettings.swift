@@ -8,11 +8,10 @@
 
 import Foundation
 
-final class WheelDeviceSettings : DeviceSettings {
-//    companion object {
-//        const val DEFAULT_WHEEL_CIRCUMFERENCE = 2.086f
-//    }
-//
+final class WheelDeviceSettings: DeviceSettings {
+    static let WHEEL_CIRCUMFERENCE_KEY = "WHEEL_CIRCUMFERENCE_KEY"
+    static let DEFAULT_WHEEL_CIRCUMFERENCE = 2.086
+
 //    constructor(
 //        deviceId: String, deviceType: DeviceType,
 //        deviceName: String, deviceEnabled: Boolean) : super(
@@ -21,7 +20,7 @@ final class WheelDeviceSettings : DeviceSettings {
 //        additionalParams[DeviceChangeableProperties.WHEEL_CIRCUMFERENCE] =
 //            DEFAULT_WHEEL_CIRCUMFERENCE.toString()
 //    }
-//
+
 //    constructor(settings: DeviceSettings) : super(settings) {
 //        if (!additionalParams.containsKey(DeviceChangeableProperties.WHEEL_CIRCUMFERENCE)) {
 //            additionalParams[DeviceChangeableProperties.WHEEL_CIRCUMFERENCE] =

@@ -3436,6 +3436,8 @@
 "external_device_characteristic_distance" = "Distance";
 "external_device_characteristic_total_distance" = "Total distance";
 
+"wheel_circumference" = "Wheel circumference";
+
 /**
 
  <string name="external_device_low_battery">Low battery</string>

@@ -98,7 +98,7 @@
 {
     BOOL hasSelection = _selectedWaypointGroups.allKeys.count != 0;
 
-    NSString *textShow = OALocalizedString( @"shared_string_delete");
+    NSString *textShow = OALocalizedString(@"shared_string_delete");
     UIFont *fontShow = [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold];
     UIColor *colorShow = hasSelection ? UIColor.buttonTextColorPrimary : UIColor.textColorSecondary;
     NSMutableAttributedString *attrShow = [[NSMutableAttributedString alloc] initWithString:textShow attributes:@{NSFontAttributeName: fontShow, NSForegroundColorAttributeName: colorShow}];

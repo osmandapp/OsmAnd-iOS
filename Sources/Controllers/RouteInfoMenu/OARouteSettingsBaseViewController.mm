@@ -77,6 +77,12 @@
 {
     [super viewWillAppear:animated];
     
+    [self configureNavigationBar];
+    [self setupView];
+}
+
+- (void) configureNavigationBar
+{
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
@@ -98,8 +104,6 @@
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_done") style:UIBarButtonItemStylePlain target:self action:@selector(doneButtonPressed)];
     [self.navigationController.navigationBar.topItem setRightBarButtonItem:doneButton animated:YES];
-    
-    [self setupView];
 }
 
 - (NSArray<OALocalRoutingParameter *> *) getNonAvoidRoutingParameters:(OAApplicationMode *) am

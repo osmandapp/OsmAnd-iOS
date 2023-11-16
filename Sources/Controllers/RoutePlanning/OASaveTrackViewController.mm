@@ -118,21 +118,7 @@
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
-    [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = self.tableView.backgroundColor;
-    appearance.shadowColor = UIColor.separatorColor;
-    appearance.titleTextAttributes = @{
-        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.textColorPrimary
-    };
-    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
-
-    self.navigationController.navigationBar.standardAppearance = blurAppearance;
-    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.textColorActive;
-    self.navigationController.navigationBar.prefersLargeTitles = NO;
+    [self configureNavigationBar];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -171,6 +157,25 @@
     }
 
     [self generateData];
+}
+
+- (void) configureNavigationBar
+{
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor = self.tableView.backgroundColor;
+    appearance.shadowColor = UIColor.separatorColor;
+    appearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.textColorPrimary
+    };
+    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+    
+    self.navigationController.navigationBar.standardAppearance = blurAppearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.tintColor = UIColor.textColorActive;
+    self.navigationController.navigationBar.prefersLargeTitles = NO;
 }
 
 - (void) updateAllFoldersList

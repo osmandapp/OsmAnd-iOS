@@ -115,6 +115,11 @@
 {
     [super viewWillAppear:animated];
     
+    [self configureNavigationBar];
+}
+
+- (void) configureNavigationBar
+{
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];

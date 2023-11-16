@@ -27,7 +27,7 @@
 
 - (NSArray<CPListSection *> *) generateSections
 {
-    NSArray<OAFavoriteGroup *> *favoriteGroups = [OAFavoritesHelper getGroupedFavorites:[OsmAndApp instance].favoritesCollection->getFavoriteLocations()];
+    NSArray<OAFavoriteGroup *> *favoriteGroups = [OAFavoritesHelper getFavoriteGroups];
     if (favoriteGroups.count > 0)
     {
         NSMutableArray<CPListItem *> *listItems = [NSMutableArray new];
@@ -38,7 +38,7 @@
             if (points.count > CPListTemplate.maximumItemCount)
                 [points removeObjectsInRange:NSMakeRange(CPListTemplate.maximumItemCount, points.count - CPListTemplate.maximumItemCount)];
 
-            CPListItem *listItem = [[CPListItem alloc] initWithText:group.name.length == 0 ? OALocalizedString(@"favorites_item") : group.name
+            CPListItem *listItem = [[CPListItem alloc] initWithText:[OAFavoriteGroup getDisplayName:group.name]
                                                          detailText:[NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"),
                                                                                                OALocalizedString(@"points_count"),
                                                                                                @(points.count).stringValue]

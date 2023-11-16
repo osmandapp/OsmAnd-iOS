@@ -88,6 +88,7 @@
 #import "OAMapPanelViewController.h"
 #import "OABaseNavbarViewController.h"
 #import "OABaseButtonsViewController.h"
+#import "OABaseNavbarSubviewViewController.h"
 #import "OAQuickActionListViewController.h"
 #import "OACreateProfileViewController.h"
 #import "OAOsmAccountSettingsViewController.h"
@@ -102,6 +103,7 @@
 #import "OACarPlayPurchaseViewController.h"
 #import "OAAppDelegate.h"
 #import "OADirectionAppearanceViewController.h"
+#import "OABaseEditorViewController.h"
 #import "OACarPlayMapDashboardViewController.h"
 #import "OAWikipediaLanguagesViewController.h"
 
@@ -126,7 +128,7 @@
 #import "OADirectionTableViewCell.h"
 #import "OASegmentSliderTableViewCell.h"
 #import "OATextMultilineTableViewCell.h"
-
+#import "OATextInputFloatingCell.h"
 
 // Views
 #import "OASegmentedSlider.h"

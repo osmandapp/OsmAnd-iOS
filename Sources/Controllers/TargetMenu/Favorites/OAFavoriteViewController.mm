@@ -37,7 +37,7 @@
     std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> _openingHoursInfo;
 }
 
-- (id) initWithItem:(OAFavoriteItem *)favorite headerOnly:(BOOL)headerOnly
+- (instancetype) initWithItem:(OAFavoriteItem *)favorite headerOnly:(BOOL)headerOnly
 {
     self = [super init];
     if (self)
@@ -47,69 +47,6 @@
         _favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getCategory]];
         _openingHoursInfo = OpeningHoursParser::getInfo(self.favorite.favorite->getExtension(QString::fromNSString([PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS_TAG])).toStdString());
 
-        if (!OAFavoritesHelper.isFavoritesLoaded)
-            [OAFavoritesHelper loadFavorites];
-        
-        [self acquireOriginObject];
-        self.topToolbarType = ETopToolbarTypeMiddleFixed;
-    }
-    return self;
-}
-
-- (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation headerOnly:(BOOL)headerOnly
-{
-    self = [super init];
-    if (self)
-    {
-        _app = [OsmAndApp instance];
-        
-        // Create favorite
-        OsmAnd::LatLon locationPoint(location.latitude, location.longitude);
-        
-        QString elevation = QString();
-        QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
-        QString pickupTime = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
-        
-        QString title = QString::fromNSString(formattedLocation);
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString *groupName = [userDefaults objectForKey:kFavoriteDefaultGroupKey] ? [userDefaults stringForKey:kFavoriteDefaultGroupKey] : @"";
-        QString group = QString::fromNSString(groupName);
-
-        NSInteger defaultColor = [[userDefaults objectForKey:kFavoriteDefaultColorKey] integerValue];
-        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][[OADefaultFavorite getValidBuiltInColorNumber:defaultColor]];
-        
-        UIColor* color_ = favCol.color;
-        CGFloat r,g,b,a;
-        [color_ getRed:&r
-                 green:&g
-                  blue:&b
-                 alpha:&a];
-
-        QString description = QString();
-        QString address = QString();
-        QString icon = QString();
-        QString background = QString();
-
-        auto favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
-                                                                        elevation,
-                                                                        time,
-                                                                        pickupTime,
-                                                                        title,
-                                                                        description,
-                                                                        address,
-                                                                        group,
-                                                                        icon,
-                                                                        background,
-                                                                        OsmAnd::FColorARGB(a,r,g,b));
-        
-        OAFavoriteItem* fav = [[OAFavoriteItem alloc] initWithFavorite:favorite];
-        _favorite = fav;
-        [_app saveFavoritesToPermanentStorage:@[self.favorite.getCategory]];
-        if (!OAFavoritesHelper.isFavoritesLoaded)
-            [OAFavoritesHelper loadFavorites];
-        
-        _favoriteGroup = [OAFavoritesHelper getGroupByName:self.favorite.getCategory];
         [self acquireOriginObject];
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
     }

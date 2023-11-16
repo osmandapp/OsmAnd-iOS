@@ -12,6 +12,7 @@
 #import "OAPointDescription.h"
 #import "OADefaultFavorite.h"
 #import "OAPOI.h"
+#import "Osmand_Maps-Swift.h"
 
 #include <routeSegmentResult.h>
 #include <routeDataBundle.h>
@@ -505,9 +506,14 @@
 
     if (self.time != wptPt.time)
         return NO;
-    
-    if (self.heading != wptPt.heading)
+
+    if (isnan(self.heading) != isnan(wptPt.heading))
         return NO;
+    if (!isnan(self.heading) && !isnan(wptPt.heading))
+    {
+        if (self.heading != wptPt.heading)
+            return NO;
+    }
 
     if (!self.type && wptPt.type)
         return NO;
@@ -770,4 +776,86 @@
 @end
 
 @implementation OARoute
+@end
+
+@implementation OAPointsGroup
+
+- (instancetype)initWithName:(NSString *)name
+{
+    self = [super init];
+    if (self) {
+        _name = name ? name : @"";
+        _points = [NSArray array];
+    }
+    return self;
+}
+
+- (instancetype)initWithName:(NSString *)name
+                    iconName:(NSString *)iconName
+              backgroundType:(NSString *)backgroundType
+                       color:(UIColor *)color
+{
+    self = [self initWithName:name];
+    if (self)
+    {
+        _color = color;
+        _iconName = iconName;
+        _backgroundType = backgroundType;
+    }
+    return self;
+}
+
+- (instancetype)initWithWptPt:(OAWptPt *)point
+{
+    self = [self initWithName:point.type];
+    if (self)
+    {
+        _color = UIColorFromARGB([point getColor:0]);
+        _iconName = [point getIcon];
+        _backgroundType = [point getBackgroundIcon];
+    }
+    return self;
+}
+
+- (NSUInteger)hash
+{
+    NSArray *objects = @[_name, _iconName, _backgroundType, _color, _points];
+    return [[NSString stringWithFormat:@"%@%@%@%@%@", objects[0], objects[1], objects[2], objects[3], objects[4]] hash];
+}
+
+- (BOOL)isEqual:(id)object
+{
+    if (self == object)
+    {
+        return YES;
+    }
+    else if ([object isKindOfClass:[OAPointsGroup class]])
+    {
+        OAPointsGroup *that = (OAPointsGroup *)object;
+        return [_color isEqual:that.color]
+            && [_points isEqual:that.points]
+            && [_name isEqualToString:that.name]
+            && [_iconName isEqualToString:that.iconName]
+            && [_backgroundType isEqualToString:that.backgroundType];
+    }
+    else
+    {
+        return NO;
+    }
+}
+
+- (NSDictionary *)toStringBundle
+{
+    NSMutableDictionary *bundle = [NSMutableDictionary dictionary];
+    bundle[@"name"] = _name ?: @"";
+    if (_color != 0)
+        bundle[@"color"] = [_color toHexARGBString];
+    if (_iconName && _iconName.length > 0)
+        bundle[@"icon"] = _iconName;
+    if (_backgroundType && _backgroundType.length > 0)
+        bundle[@"background"] = _backgroundType;
+    return bundle;
+}
+
+
 @end

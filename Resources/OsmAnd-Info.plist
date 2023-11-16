@@ -185,18 +185,18 @@
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Advertisement would like to use bluetooth.</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string></string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>OsmAnd needs Bluetooth to find and connect to Bluetooth LE sensors.</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string></string>
+	<string>OsmAnd would like to create a calendar event for vehicle pick-up notification.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string></string>
+	<string>This permission is required to use such features as: background GPX recording, navigation etc.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string></string>
+	<string>This permission is required to use such features as: background GPX recording, navigation etc.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>This permission is required to use such features as: background GPX recording, navigation etc. when OsmAnd is in foreground only.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string></string>
+	<string>OsmAnd would like to store a photo.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>CPSupportsDashboardNavigationScene</key>

@@ -660,7 +660,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                         self.generateData()
                         self.tableView.reloadRows(at: [indexPath], with: .automatic)
                     }
-                    let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: UIImage(named: "point.topleft.filled.down.to.point.bottomright.curvepath")) { [weak self] _ in
+                    let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: UIImage(named: "ic_travel_guides_points")) { [weak self] _ in
                         guard let self else { return }
                         self.isPointsReadingMode = true
                         self.view.addSpinner(inCenterOfCurrentView: true)

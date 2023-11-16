@@ -137,16 +137,18 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
                 if let imageUrl = item.iconName, let downloadMode = OsmAndApp.swiftInstance().data.travelGuidesImagesDownloadMode {
                     
                     // fetch image from db. if not found -  start async downloading.
-                    imagesCacheHelper?.fetchSingleImage(byURL: imageUrl, customKey: nil, downloadMode: downloadMode, onlyNow: false) { imageAsBase64 in
+                    imagesCacheHelper?.fetchSingleImage(byURL: imageUrl, customKey: nil, downloadMode: downloadMode, onlyNow: false) { [imageUrl] imageAsBase64 in
                         DispatchQueue.main.async {
                             
-                            if let imageAsBase64, !imageAsBase64.isEmpty {
-                                if let image = ImageToStringConverter.base64StringToImage(imageAsBase64) {
-                                    cell.imagePreview.image = image
-                                    cell.noImageIconVisibility(false)
+                            if imageUrl == item.iconName {
+                                if let imageAsBase64, !imageAsBase64.isEmpty {
+                                    if let image = ImageToStringConverter.base64StringToImage(imageAsBase64) {
+                                        cell.imagePreview.image = image
+                                        cell.noImageIconVisibility(false)
+                                    }
+                                } else {
+                                    cell.noImageIconVisibility(true)
                                 }
-                            } else {
-                                cell.noImageIconVisibility(true)
                             }
                         }
                     }
@@ -196,7 +198,7 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
                         self.generateData()
                         self.tableView.deleteRows(at: [indexPath], with: .automatic)
                     }
-                    let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: UIImage(named: "point.topleft.filled.down.to.point.bottomright.curvepath")) { [weak self] _ in
+                    let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: UIImage(named: "ic_travel_guides_points")) { [weak self] _ in
                         guard let self else { return }
                         self.view.addSpinner(inCenterOfCurrentView: true)
                         OAAppSettings.sharedManager().travelGuidesState.article = nil

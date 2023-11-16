@@ -10,7 +10,7 @@ import Foundation
 
 final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDelegate, TravelExploreViewControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate {
     
-    @IBOutlet weak private var tableView: UITableView!
+    @IBOutlet private weak var tableView: UITableView!
     
     var tableData = OATableDataModel()
     var imagesCacheHelper: TravelGuidesImageCacheHelper?

@@ -17,7 +17,7 @@
 #import "OAColors.h"
 #import "OATargetOptionsBottomSheetViewController.h"
 #import "OAWaypointUIHelper.h"
-
+#import "OAFavoritesHelper.h"
 #import "MGSwipeButton.h"
 #import "OARadiusCell.h"
 #import "OARadiusCellEx.h"
@@ -754,7 +754,7 @@
             case LPW_FAVORITES:
             {
                 OAFavoriteItem *favPoint = (OAFavoriteItem *)p.point;
-                pointDescription = favPoint.favorite->getGroup().isEmpty() ? OALocalizedString(@"favorites_item") : favPoint.favorite->getGroup().toNSString();
+                pointDescription = [OAFavoriteGroup getDisplayName:[favPoint getCategory]];
                 break;
             }
         }

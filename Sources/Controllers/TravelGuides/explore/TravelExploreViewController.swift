@@ -8,11 +8,12 @@
 
 import Foundation
 
+@objc(OATravelExploreViewControllerDelegate)
 protocol TravelExploreViewControllerDelegate : AnyObject {
-    func populateData(resetData: Bool)
-    func onDataLoaded()
-    func openArticle(article: TravelArticle, lang: String?)
-    func onOpenArticlePoints()
+    @objc optional func populateData(resetData: Bool)
+    @objc optional func onDataLoaded()
+    @objc optional func openArticle(article: TravelArticle, lang: String?)
+    @objc optional func onOpenArticlePoints()
     func close()
 }
 
@@ -647,9 +648,10 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                         guard let self else { return }
                         self.openArticle(article: article, lang: lang)
                     }
-                    let bookmarkAction = UIAction(title: localizedString("shared_string_bookmark"), image: UIImage(systemName: "bookmark")) { [weak self] _ in
+                    
+                    let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: article)
+                    let bookmarkAction = UIAction(title: localizedString(isSaved ? "shared_string_remove_bookmark" : "shared_string_bookmark"), image: UIImage(systemName: "bookmark")) { [weak self] _ in
                         guard let self else { return }
-                        let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: article)
                         if isSaved {
                             TravelObfHelper.shared.getBookmarksHelper().removeArticleFromSaved(article: article)
                         } else {
@@ -658,7 +660,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                         self.generateData()
                         self.tableView.reloadRows(at: [indexPath], with: .automatic)
                     }
-                    let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: UIImage(named: "point.topleft.filled.down.to.point.bottomright.curvepath")) { [weak self] _ in
+                    let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: UIImage(named: "ic_travel_guides_points")) { [weak self] _ in
                         guard let self else { return }
                         self.isPointsReadingMode = true
                         self.view.addSpinner(inCenterOfCurrentView: true)
@@ -829,8 +831,8 @@ final class LoadWikivoyageDataAsyncTask {
     }
     
     func onPostExecute() {
-        if let delegate {
-            delegate.onDataLoaded()
+        if let onDataLoaded = delegate?.onDataLoaded {
+            onDataLoaded()
         }
     }
 }

@@ -28,10 +28,9 @@
 
 @property (nonatomic, weak) id<OAGPXWptViewControllerDelegate> wptDelegate;
 
-- (id) initWithItem:(OAGpxWptItem *)wpt headerOnly:(BOOL)headerOnly;
-- (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString *)formattedLocation gpxFileName:(NSString *)gpxFileName;
-- (NSString *) getGpxFileName;
+- (instancetype) initWithItem:(OAGpxWptItem *)wpt headerOnly:(BOOL)headerOnly;
 
+- (NSString *) getGpxFileName;
 - (NSString *) getItemName;
 - (NSString *) getItemGroup;
 - (NSString *) getItemDesc;

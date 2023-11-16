@@ -58,6 +58,8 @@
 #import "OASRTMPlugin.h"
 #import "OAPlugin.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OAFavoritesHelper.h"
+#import "OAFavoriteItem.h"
 
 #import "OARoutingHelper.h"
 #import "OATransportRoutingHelper.h"
@@ -2756,21 +2758,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     [wptApi setWptData:list paths:paths];
 }
 
-- (BOOL) hasFavoriteAt:(CLLocationCoordinate2D)location
-{
-    for (const auto& fav : _app.favoritesCollection->getFavoriteLocations())
-    {
-        double lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition31().x);
-        double lat = OsmAnd::Utilities::get31LatitudeY(fav->getPosition31().y);
-        if ([OAUtilities isCoordEqual:lat srcLon:lon destLat:location.latitude destLon:location.longitude])
-        {
-            return YES;
-        }
-    }
-
-    return NO;
-}
-
 - (BOOL) hasWptAt:(CLLocationCoordinate2D)location
 {
     OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
@@ -3055,8 +3042,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
             NSString *path = it.key().toNSString();
             if ([path isEqualToString:self.foundWptDocPath])
             {
-                const auto& doc = it.value();
-                
+                auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
+
                 for (const auto& loc : doc->points)
                 {
                     OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>*)&loc;
@@ -3066,19 +3053,18 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                         [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:self.foundWpt.position.longitude])
                     {
                         [OAGPXDocument fillWpt:w usingWpt:self.foundWpt];
+                        [OAGPXDocument fillPointsGroup:self.foundWpt wptPtPtr:w doc:doc];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
                         [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[self.foundWpt getColor:0]]];
                         break;
                     }
                 }
-                
                 doc->saveTo(QString::fromNSString(self.foundWptDocPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
-                
+
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [_mapLayers.gpxMapLayer refreshGpxWaypoints];
                 });
-                
                 return YES;
             }
         }
@@ -3122,19 +3108,17 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
             {
                 auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
 
-                std::shared_ptr<OsmAnd::GpxDocument::WptPt> p;
-                p.reset(new OsmAnd::GpxDocument::WptPt());
-                [OAGPXDocument fillWpt:p usingWpt:wpt];
-                OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[wpt getColor:0]]];
+                std::shared_ptr<OsmAnd::GpxDocument::WptPt> w(new OsmAnd::GpxDocument::WptPt());
+                [OAGPXDocument fillWpt:w usingWpt:wpt];
+                [OAGPXDocument fillPointsGroup:wpt wptPtPtr:w doc:doc];
+                OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
+                [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor:0]]];
 
-                doc->points.append(p);
                 doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
-                
-                wpt.wpt = p;
+
                 self.foundWpt = wpt;
                 self.foundWptDocPath = gpxFileName;
-                
+
                 [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:doc->points.count()];
                 [[OAGPXDatabase sharedDb] save];
                 
@@ -3160,19 +3144,14 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         {
             auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first());
 
-            std::shared_ptr<OsmAnd::GpxDocument::WptPt> p;
-            p.reset(new OsmAnd::GpxDocument::WptPt());
-            [OAGPXDocument fillWpt:p usingWpt:wpt];
-            OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-            [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[wpt getColor:0]]];
+            std::shared_ptr<OsmAnd::GpxDocument::WptPt> w(new OsmAnd::GpxDocument::WptPt());
+            [OAGPXDocument fillWpt:w usingWpt:wpt];
+            [OAGPXDocument fillPointsGroup:wpt wptPtPtr:w doc:doc];
+            OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
+            [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor:0]]];
 
-            doc->points.append(p);
             doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
-            
-            wpt.wpt = p;
-            self.foundWpt = wpt;
-            self.foundWptDocPath = gpxFileName;
-            
+
             [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:doc->points.count()];
             [[OAGPXDatabase sharedDb] save];
             
@@ -3232,8 +3211,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         NSString *path = it.key().toNSString();
         if ([path isEqualToString:docPath])
         {
-            const auto& doc = it.value();
-         
+            auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
+
             for (OAGpxWptItem *item in items)
             {
                 for (const auto& loc : doc->points)
@@ -3245,6 +3224,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                         [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
                     {
                         [OAGPXDocument fillWpt:w usingWpt:item.point];
+                        [OAGPXDocument fillPointsGroup:item.point wptPtPtr:w doc:doc];
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
                         [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[item.point getColor:0]]];
                         found = YES;
@@ -3272,8 +3252,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     
     if (!_gpxDocsTemp.isEmpty())
     {
-        const auto& doc = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(_gpxDocsTemp.first());
-        
+        auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first());
+
         for (OAGpxWptItem *item in items)
         {
             for (const auto& loc : doc->points)
@@ -3285,6 +3265,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                     [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:item.point.position.longitude])
                 {
                     [OAGPXDocument fillWpt:w usingWpt:item.point];
+                    [OAGPXDocument fillPointsGroup:item.point wptPtPtr:w doc:doc];
                     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
                     [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[item.point getColor:0]]];
                     found = YES;

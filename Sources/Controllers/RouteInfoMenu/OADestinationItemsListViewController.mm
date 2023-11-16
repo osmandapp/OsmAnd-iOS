@@ -10,12 +10,14 @@
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OAFavoriteItem.h"
+#import "OAFavoritesHelper.h"
 #import "OAPointTableViewCell.h"
 #import "OADefaultFavorite.h"
 #import "OAColors.h"
 #import "OADestinationItem.h"
 #import "OADestinationsHelper.h"
 #import "OAOsmAndFormatter.h"
+#import "OAAutoObserverProxy.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -76,6 +78,22 @@ typedef NS_ENUM(NSInteger, EOASortType)
 {
     _sortingType = EOASortTypeByGroup;
     _isDecelerating = NO;
+}
+
+- (void)registerObservers
+{
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:_type == EOADestinationPointTypeFavorite
+                                                            ? @selector(updateDistanceAndDirectionFavorites)
+                                                            : @selector(updateDistanceAndDirectionMarkers)
+                                                 andObserve:[OsmAndApp instance].locationServices.updateObserver]];
+}
+
+#pragma mark - UIViewController
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     
     if (_type == EOADestinationPointTypeFavorite)
         [self updateDistanceAndDirectionFavorites:YES];
@@ -130,90 +148,42 @@ typedef NS_ENUM(NSInteger, EOASortType)
 
 - (void)generateFavoritesData
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
     _groupsAndFavorites = [[NSMutableArray alloc] init];
     _sortedByNameFavoriteItems = [[NSMutableArray alloc] init];
     _sortedByDistFavoriteItems = [[NSMutableArray alloc] init];
-    
-    const auto allFavorites = app.favoritesCollection->getFavoriteLocations();
-    QHash< QString, QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > > groupedFavorites;
-    QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > ungroupedFavorites;
-    QSet<QString> groupNames;
-    
-    // create favorite groups
-    for(const auto& favorite : allFavorites)
+
+    for (OAFavoriteGroup *group in [OAFavoritesHelper getFavoriteGroups])
     {
-        const auto& groupName = favorite->getGroup();
-        if (groupName.isEmpty())
-            ungroupedFavorites.push_back(favorite);
-        else
+        FavTableGroup *itemData = [[FavTableGroup alloc] init];
+        itemData.groupName = [OAFavoriteGroup getDisplayName:group.name];
+        for(OAFavoriteItem *point in group.points)
         {
-            groupNames.insert(groupName);
-            groupedFavorites[groupName].push_back(favorite);
+            [itemData.groupItems addObject:point];
+            [_sortedByNameFavoriteItems addObject:point];
+            [_sortedByDistFavoriteItems addObject:point];
         }
+
+        NSArray *sortedArrayItems = [itemData.groupItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
+            return [[obj1 getName].lowercaseString compare:[obj2 getName].lowercaseString];
+        }];
+        [itemData.groupItems setArray:sortedArrayItems];
+
+        [_groupsAndFavorites addObject:itemData];
     }
-    
-    // Generate groups array
-    if (!groupNames.isEmpty())
-    {
-        for (const auto& groupName : groupNames)
-        {
-            FavTableGroup* itemData = [[FavTableGroup alloc] init];
-            itemData.groupName = groupName.toNSString();
-            for(const auto& favorite : groupedFavorites[groupName]) {
-                OAFavoriteItem* favData = [[OAFavoriteItem alloc] initWithFavorite:favorite];
-                [itemData.groupItems addObject:favData];
-                [_sortedByNameFavoriteItems addObject:favData];
-                [_sortedByDistFavoriteItems addObject:favData];
-            }
-            
-            
-            NSArray *sortedArrayItems = [itemData.groupItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
-                return [[obj1.favorite->getTitle().toNSString() lowercaseString] compare:[obj2.favorite->getTitle().toNSString() lowercaseString]];
-            }];
-            [itemData.groupItems setArray:sortedArrayItems];
-            
-            
-            [_groupsAndFavorites addObject:itemData];
-        }
-    }
-    
+
     // Sort items
     NSArray *sortedArrayGroups = [_groupsAndFavorites sortedArrayUsingComparator:^NSComparisonResult(FavTableGroup* obj1, FavTableGroup* obj2) {
         return [[obj1.groupName lowercaseString] compare:[obj2.groupName lowercaseString]];
     }];
     [_groupsAndFavorites setArray:sortedArrayGroups];
-    
-    // Generate ungrouped array
-    if (!ungroupedFavorites.isEmpty())
-    {
-        FavTableGroup* itemData = [[FavTableGroup alloc] init];
-        itemData.groupName = OALocalizedString(@"favorites_item");
-        
-        for (const auto& favorite : ungroupedFavorites)
-        {
-            OAFavoriteItem* favData = [[OAFavoriteItem alloc] initWithFavorite:favorite];
-            [itemData.groupItems addObject:favData];
-            [_sortedByNameFavoriteItems addObject:favData];
-            [_sortedByDistFavoriteItems addObject:favData];
-        }
-        
-        
-        NSArray *sortedArrayItems = [itemData.groupItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
-            return [[obj1.favorite->getTitle().toNSString() lowercaseString] compare:[obj2.favorite->getTitle().toNSString() lowercaseString]];
-        }];
-        [itemData.groupItems setArray:sortedArrayItems];
-        
-        [_groupsAndFavorites insertObject:itemData atIndex:0];
-    }
-    
+
     NSArray *sortedArray = [_sortedByDistFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
         return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
     }];
     [_sortedByDistFavoriteItems setArray:sortedArray];
-    
+
     sortedArray = [_sortedByNameFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
-        return [obj1.favorite->getTitle().toNSString() compare:obj2.favorite->getTitle().toNSString()];
+        return [[obj1 getName] compare:[obj2 getName]];
     }];
     [_sortedByNameFavoriteItems setArray:sortedArray];
 }
@@ -377,6 +347,11 @@ typedef NS_ENUM(NSInteger, EOASortType)
 
 #pragma mark - Aditions
 
+- (void)updateDistanceAndDirectionMarkers
+{
+    [self updateDistanceAndDirectionMarkers:NO];
+}
+
 - (void)updateDistanceAndDirectionMarkers:(BOOL)forceUpdate
 {
     if ([[NSDate date] timeIntervalSince1970] - _lastUpdate < 0.3 && !forceUpdate)
@@ -413,6 +388,11 @@ typedef NS_ENUM(NSInteger, EOASortType)
         return;
     
     [self refreshVisibleMarkers];
+}
+
+- (void)updateDistanceAndDirectionFavorites
+{
+    [self updateDistanceAndDirectionFavorites:NO];
 }
 
 - (void)updateDistanceAndDirectionFavorites:(BOOL)forceUpdate

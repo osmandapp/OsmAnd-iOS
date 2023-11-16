@@ -16,6 +16,8 @@
 #include <QStack>
 #include <OsmAndCore/GpxDocument.h>
 
+#define kDefaultWptGroupName @""
+
 @class OAGPXTrackAnalysis;
 @class OASplitMetric, QuadRect, OAApplicationMode;
 
@@ -25,6 +27,8 @@
 @property (nonatomic) NSArray<OAWptPt *> *points;
 @property (nonatomic) NSArray<OATrack *> *tracks;
 @property (nonatomic) NSArray<OARoute *> *routes;
+@property (nonatomic) NSDictionary<NSString *, OAPointsGroup *> *pointsGroups;
+
 
 @property (nonatomic) NSArray<OARouteSegment *> *routeSegments;
 @property (nonatomic) NSArray<OARouteType *> *routeTypes;
@@ -80,9 +84,13 @@
 
 + (OAWptPt *)fetchWpt:(std::shared_ptr<OsmAnd::GpxDocument::WptPt>)mark;
 + (void)fillWpt:(std::shared_ptr<OsmAnd::GpxDocument::WptPt>)wpt usingWpt:(OAWptPt *)w;
++ (void)fillPointsGroup:(OAWptPt *)wptPt
+               wptPtPtr:(const std::shared_ptr<OsmAnd::GpxDocument::WptPt> &)wptPtPtr
+                    doc:(const std::shared_ptr<OsmAnd::GpxDocument> &)doc;
 + (void)fillMetadata:(std::shared_ptr<OsmAnd::GpxDocument::Metadata>)meta usingMetadata:(OAMetadata *)m;
 + (void)fillTrack:(std::shared_ptr<OsmAnd::GpxDocument::Track>)trk usingTrack:(OATrack *)t;
 + (void)fillRoute:(std::shared_ptr<OsmAnd::GpxDocument::Route>)rte usingRoute:(OARoute *)r;
++ (void)fillPointsGroup:(std::shared_ptr<OsmAnd::GpxDocument::PointsGroup>)pg usingPointsGroup:(OAPointsGroup *)pointsGroup;
 
 + (void) fillLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>&)links linkArray:(NSArray *)linkArray;
 + (void) fillExtension:(const std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension>&)extension ext:(OAGpxExtension *)e;

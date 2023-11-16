@@ -33,7 +33,7 @@ final class TravelObfHelper : NSObject {
     private var foundAmenities: [OAFoundAmenity] = []
     
     private override init() {
-        localDataHelper = TravelLocalDataHelper();
+        localDataHelper = TravelLocalDataHelper.shared;
         searchRadius = ARTICLE_SEARCH_RADIUS
     }
     

@@ -238,9 +238,6 @@
         if (self.gpxWptDelegate)
             [self.gpxWptDelegate updateGpxWpt:_gpxWpt docPath:_gpxFileName updateMap:YES];
     }
-
-    if (self.gpxWptDelegate)
-        [self.gpxWptDelegate saveItemToStorage:_gpxWpt];
 }
 
 @end

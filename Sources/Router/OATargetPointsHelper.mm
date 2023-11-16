@@ -489,9 +489,6 @@
 
 - (OARTargetPoint *) getHomePoint
 {
-    if (![OAFavoritesHelper isFavoritesLoaded])
-        [OAFavoritesHelper loadFavorites];
-        
     OAFavoriteItem *homeFavorite = [OAFavoritesHelper getSpecialPoint:[OASpecialPointType HOME]];
     if (homeFavorite)
     {
@@ -522,9 +519,6 @@
 
 - (OARTargetPoint *) getWorkPoint
 {
-    if (![OAFavoritesHelper isFavoritesLoaded])
-        [OAFavoritesHelper loadFavorites];
-        
     OAFavoriteItem *workFavorite = [OAFavoritesHelper getSpecialPoint:[OASpecialPointType WORK]];
     if (workFavorite)
     {

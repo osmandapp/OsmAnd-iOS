@@ -2982,7 +2982,7 @@
 "shared_string_edit_color" = "Modifica colore";
 "shared_string_delete_color" = "Elimina colore";
 "navigation_points_desc" = "I widget di navigazione sono abilitati durante la navigazione per mostrare informazioni quali distanza, tempo di arrivo o rimanente, prossime svolte, direzione, il nome della strada attuale o successiva, indicazione di corsia, velocità massima, avvisi di avvicinamento, PDI, punti intermedi.";
-"add_row" = "Aggiungi riga";
+"add_row" = "Aggiungi una riga";
 "no_widgets_here_yet" = "Ancora nessun widget qui";
 "ruler_circles" = "Cerchi righello";
 "shared_string_coloring" = "Colorazione";

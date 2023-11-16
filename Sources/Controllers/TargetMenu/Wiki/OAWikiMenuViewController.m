@@ -8,6 +8,7 @@
 
 #import "OAWikiMenuViewController.h"
 #import "OAPOI.h"
+#import "Localization.h"
 
 @interface OAWikiMenuViewController ()<OARowInfoDelegate>
 
@@ -28,6 +29,8 @@
         contentRow.isHtml = YES;
         contentRow.delegate = self;
         self.additionalRows = @[contentRow];
+        self.leftControlButton = [[OATargetMenuControlButton alloc] init];
+        self.leftControlButton.title = OALocalizedString(@"context_menu_read_article");
     }
     return self;
 }
@@ -36,6 +39,17 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (BOOL) hasControlButtons
+{
+    return YES;
+}
+
+- (void) leftControlButtonPressed
+{
+    if ([self.menuDelegate respondsToSelector:@selector(openWiki:)])
+        [self.menuDelegate openWiki:self];
 }
 
 #pragma mark - OARowInfoDelegate

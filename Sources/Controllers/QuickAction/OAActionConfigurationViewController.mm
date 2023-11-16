@@ -40,6 +40,7 @@
 #import "OAEntity.h"
 #import "OAQuickActionListViewController.h"
 #import "OAKeyboardHintBar.h"
+#import "OAFavoritesHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #import <AudioToolbox/AudioServices.h>
@@ -206,7 +207,12 @@
 
 - (NSArray<NSString *> *)getItemGroups
 {
-    return [OANativeUtilities QListOfStringsToNSArray:[OsmAndApp instance].favoritesCollection->getGroups().values()];
+    NSMutableArray *groupNames = [NSMutableArray array];
+    for (OAFavoriteGroup *group in [OAFavoritesHelper getFavoriteGroups])
+    {
+        [groupNames addObject:group.name];
+    }
+    return groupNames;
 }
 
 - (NSMutableArray *)getItemNames
@@ -526,7 +532,7 @@
     {
         _groupController = [[OAEditGroupViewController alloc] initWithGroupName:item[@"value"] groups:[self getItemGroups]];
         _groupController.delegate = self;
-        [self.navigationController pushViewController:_groupController animated:YES];
+        [self showViewController:_groupController];
         [self.view endEditing:YES];
     }
     else if ([item[@"key"] isEqualToString:@"category_color"])
@@ -534,14 +540,14 @@
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][[item[@"color"] integerValue]];
         _colorController = [[OAEditColorViewController alloc] initWithColor:favCol.color];
         _colorController.delegate = self;
-        [self.navigationController pushViewController:_colorController animated:YES];
+        [self showViewController:_colorController];
         [self.view endEditing:YES];
     }
     else if ([item[@"key"] isEqualToString:@"key_category"])
     {
         OAPoiTypeSelectionViewController *poiTypeSelection = [[OAPoiTypeSelectionViewController alloc] initWithType:POI_TYPE_SCREEN];
         poiTypeSelection.delegate = self;
-        [self.navigationController pushViewController:poiTypeSelection animated:YES];
+        [self showViewController:poiTypeSelection];
         [self.view endEditing:YES];
     }
     else if ([item[@"type"] isEqualToString:[OATextInputFloatingCellWithIcon getCellIdentifier]])
@@ -550,7 +556,6 @@
         if ([cell canBecomeFirstResponder])
             [cell becomeFirstResponder];
     }
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - UITableViewDataSource
@@ -963,7 +968,7 @@
         if ([item[@"key"] isEqualToString:@"category_name"])
         {
             NSMutableDictionary *mutableItem = [NSMutableDictionary dictionaryWithDictionary:item];
-            [mutableItem setObject:_groupController.groupName forKey:@"value"];
+            [mutableItem setObject:[OAFavoriteGroup getDisplayName:_groupController.groupName] forKey:@"value"];
             [newItems addObject:[NSDictionary dictionaryWithDictionary:mutableItem]];
         }
         else

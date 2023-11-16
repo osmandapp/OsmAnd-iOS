@@ -418,11 +418,13 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
 - (void)copyToFavorites:(NSString *)name
 {
     NSArray<OAGpxWptItem *> *waypoints = [self.trackMenuDelegate getWaypointsData][_groupName];
+    NSMutableArray<OAFavoriteItem *> *favoriteItems = [NSMutableArray array];
     for (OAGpxWptItem *waypoint in waypoints)
     {
         OAFavoriteItem *favoriteItem = [OAFavoriteItem fromWpt:waypoint.point category:name];
-        [OAFavoritesHelper addFavorite:favoriteItem];
+        [favoriteItems addObject:favoriteItem];
     }
+    [OAFavoritesHelper addFavorites:favoriteItems];
 }
 
 #pragma mark - UITableViewDataSource

@@ -3087,3 +3087,12 @@
 "remove_cache" = "Vaciar caché";
 "shared_string_contents" = "Contenido";
 "shared_string_view" = "Ver";
+"apply_to_existing_favorites_descr" = "¿Aplicar cambios a los puntos favoritos existentes del grupo o solo a los nuevos?";
+"apply_only_to_new_points" = "Aplicar solo a puntos nuevos";
+"apply_to_existing" = "Aplicar a existentes";
+"map_orientation_default" = "Según dispositivo";
+"map_orientation_landscape" = "Horizontal";
+"default_appearance_desc" = "La forma, el color y el icono predefinido serán aplicados a los puntos favoritos añadidos al grupo.";
+"change_appearance" = "Cambiar aspecto";
+"map_screen_orientation" = "Orientación de pantalla";
+"map_orientation_portrait" = "Vertical";

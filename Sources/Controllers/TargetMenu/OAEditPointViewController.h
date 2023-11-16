@@ -6,7 +6,7 @@
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OABaseTableViewController.h"
+#import "OABaseNavbarSubviewViewController.h"
 #import <CoreLocation/CoreLocation.h>
 
 typedef NS_ENUM(NSInteger, EOAEditPointType) {
@@ -28,11 +28,7 @@ typedef NS_ENUM(NSInteger, EOAEditPointType) {
 
 @end
 
-@interface OAEditPointViewController : OABaseTableViewController
-
-@property (weak, nonatomic) IBOutlet UIImageView *headerIconPoi;
-@property (weak, nonatomic) IBOutlet UIImageView *headerIconBackground;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *navBarHeightConstraint;
+@interface OAEditPointViewController : OABaseNavbarSubviewViewController
 
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *desc;
@@ -43,14 +39,14 @@ typedef NS_ENUM(NSInteger, EOAEditPointType) {
 
 @property (nonatomic, weak) id<OAGpxWptEditingHandlerDelegate> gpxWptDelegate;
 
-- (id)initWithFavorite:(OAFavoriteItem *)favorite;
-- (id)initWithGpxWpt:(OAGpxWptItem *)gpxWpt;
-- (id)initWithLocation:(CLLocationCoordinate2D)location
-                 title:(NSString *)formattedTitle
-               address:(NSString *)address
-           customParam:(NSString *)customParam
-             pointType:(EOAEditPointType)pointType
-       targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
-                   poi:(OAPOI *)poi;
+- (instancetype)initWithFavorite:(OAFavoriteItem *)favorite;
+- (instancetype)initWithGpxWpt:(OAGpxWptItem *)gpxWpt;
+- (instancetype)initWithLocation:(CLLocationCoordinate2D)location
+                           title:(NSString *)formattedTitle
+                         address:(NSString *)address
+                     customParam:(NSString *)customParam
+                       pointType:(EOAEditPointType)pointType
+                 targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
+                             poi:(OAPOI *)poi;
 
 @end

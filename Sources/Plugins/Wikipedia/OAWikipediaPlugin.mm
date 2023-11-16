@@ -163,10 +163,10 @@
     [_app.data setWikipediaLanguages:languagesToShow mode:mode];
 }
 
-- (void)resetToDefaults
+- (void)resetToDefaults:(OAApplicationMode *)mode
 {
-    [_app.data resetWikipediaSettings];
-    [_lastUsedWikipedia resetToDefault];
+    [_app.data resetWikipediaSettings:mode];
+    [_lastUsedWikipedia resetModeToDefault:mode];
 }
 
 - (void)toggleWikipediaPoi:(BOOL)enable

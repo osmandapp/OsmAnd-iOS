@@ -10,24 +10,33 @@
 #import "OAIAPHelper.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAFavoritesTabBarViewController
 
 - (void)viewDidLoad
 {
     OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
+    
+    if (![[OATravelLocalDataHelper shared] hasSavedArticles])
+        [self removeTabAtIndex:3];
+    
     if (!iapHelper.osmEditing.isActive)
-    {
-        NSMutableArray *newTabs = [NSMutableArray arrayWithArray:self.viewControllers];
-        [newTabs removeObjectAtIndex: 2];
-        [self setViewControllers:newTabs];
-    }
+        [self removeTabAtIndex:2];
+    
     [self applyLocalization];
     UITabBarAppearance *appearance = [[UITabBarAppearance alloc] init];
     [appearance configureWithDefaultBackground];
     self.tabBar.standardAppearance = appearance;
     self.tabBar.scrollEdgeAppearance = appearance;
     [super viewDidLoad];
+}
+
+- (void) removeTabAtIndex:(NSInteger)index
+{
+    NSMutableArray *newTabs = [NSMutableArray arrayWithArray:self.viewControllers];
+    [newTabs removeObjectAtIndex: index];
+    [self setViewControllers:newTabs];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -64,8 +73,18 @@
 {
     [[self.viewControllers objectAtIndex:0] setTitle:OALocalizedString(@"favorites_item")];
     [[self.viewControllers objectAtIndex:1] setTitle: OALocalizedString(@"shared_string_gpx_tracks")];
-    if (self.viewControllers.count > 2)
+    
+    if ([OAIAPHelper sharedInstance].osmEditing.isActive)
+    {
         [[self.viewControllers objectAtIndex:2] setTitle: OALocalizedString(@"osm_edits_title")];
+        if ([[OATravelLocalDataHelper shared] hasSavedArticles])
+            [[self.viewControllers objectAtIndex:3] setTitle: OALocalizedString(@"shared_string_travel")];
+    }
+    else
+    {
+        if ([[OATravelLocalDataHelper shared] hasSavedArticles])
+            [[self.viewControllers objectAtIndex:2] setTitle: OALocalizedString(@"shared_string_travel")];
+    }
 }
 
 @end

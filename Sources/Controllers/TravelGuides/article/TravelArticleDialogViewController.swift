@@ -17,7 +17,8 @@ protocol TravelArticleDialogProtocol : AnyObject {
     func openArticleById(newArticleId: TravelArticleIdentifier, newSelectedLang: String)
 }
 
-
+@objc(OATravelArticleDialogViewController)
+@objcMembers
 final class TravelArticleDialogViewController : OABaseWebViewController, TravelArticleDialogProtocol, OAWikiLanguagesWebDelegate, GpxReadDelegate, SFSafariViewControllerDelegate {
     
     let rtlLanguages = ["ar", "dv", "he", "iw", "fa", "nqo", "ps", "sd", "ug", "ur", "yi"]
@@ -321,7 +322,9 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
         }
         
         saveState()
-        delegate?.onOpenArticlePoints()
+        if let onOpenArticlePoints = delegate?.onOpenArticlePoints {
+            onOpenArticlePoints()
+        }
         OAAppSettings.sharedManager().travelGuidesState.wasWatchingGpx = true
         
         OAAppSettings.sharedManager().showGpx([file], update: true)

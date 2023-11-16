@@ -310,4 +310,21 @@
     return OALocalizedString(@"osmand_parking_plugin_description");
 }
 
+- (void)updateParkingPoint:(OAFavoriteItem *)item
+{
+    NSDate *timestamp = [item getTimestamp];
+    NSDate *pickupTime = [item getPickupTime];
+    BOOL isTimeRestricted = pickupTime != nil && [pickupTime timeIntervalSince1970] > 0;
+    [self setParkingType:isTimeRestricted];
+    [self setParkingTime:isTimeRestricted ? pickupTime.timeIntervalSince1970 * 1000 : 0];
+    if (timestamp)
+        [self setParkingStartTime:timestamp.timeIntervalSince1970 * 1000];
+    [self setParkingPosition:item.getLatitude longitude:item.getLongitude];
+    [self addOrRemoveParkingEvent:[item getCalendarEvent]];
+    if ([item getCalendarEvent])
+        [OAFavoritesHelper addParkingReminderToCalendar];
+    else
+        [OAFavoritesHelper removeParkingReminderFromCalendar];
+}
+
 @end

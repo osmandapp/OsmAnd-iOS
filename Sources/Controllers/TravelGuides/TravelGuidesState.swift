@@ -16,6 +16,7 @@ final class TravelGuidesState : NSObject {
     static let shared = TravelGuidesState()
     
     var wasWatchingGpx = false
+    var wasOpenedFromBookmarks = false
     
     //Tabs VC
     var mainMenuSelectedTab: Int = 0

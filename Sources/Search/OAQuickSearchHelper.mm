@@ -25,6 +25,8 @@
 #import "OAGPXDatabase.h"
 #import "OAPointDescription.h"
 #import "OAPOIHelper.h"
+#import "OAFavoritesHelper.h"
+#import "OAFavoriteItem.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -51,17 +53,20 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
 -(BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    for (const auto& point : app.favoritesCollection->getFavoriteLocations())
+    for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
     {
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-        sr.localeName = point->getTitle().toNSString();
-        sr.favorite = point;
+        sr.localeName = [point getName];
+        sr.favorite = point.favorite;
         sr.priority = SEARCH_FAVORITE_OBJECT_PRIORITY;
         sr.objectType = FAVORITE;
-        sr.location = [[CLLocation alloc] initWithLatitude:point->getLatLon().latitude longitude:point->getLatLon().longitude];
+        sr.location = [[CLLocation alloc] initWithLatitude:point.favorite->getLatLon().latitude
+                                                 longitude:point.favorite->getLatLon().longitude];
         sr.preferredZoom = 17;
         if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
+        {
             [resultMatcher publish:sr];
+        }
         else
         {
             OANameStringMatcher *matcher = [[OANameStringMatcher alloc] initWithNamePart:[phrase getFullSearchPhrase] mode:CHECK_CONTAINS];
@@ -93,16 +98,18 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    for (const auto& point : app.favoritesCollection->getFavoriteLocations())
+    for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
     {
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-        sr.localeName = point->getTitle().toNSString();
-        sr.favorite = point;
+        sr.localeName = [point getName];
+        sr.favorite = point.favorite;
         sr.priority = SEARCH_FAVORITE_CATEGORY_PRIORITY;
         sr.objectType = FAVORITE;
-        sr.location = [[CLLocation alloc] initWithLatitude:point->getLatLon().latitude longitude:point->getLatLon().longitude];
+        sr.location = [[CLLocation alloc] initWithLatitude:point.favorite->getLatLon().latitude
+                                                 longitude:point.favorite->getLatLon().longitude];
         sr.preferredZoom = 17;
-        if (!point->getGroup().isNull() && [[phrase getFirstUnknownNameStringMatcher] matches:point->getGroup().toNSString()])
+        NSString *group = [point getCategory];
+        if (group && group.length > 0 && [[phrase getFirstUnknownNameStringMatcher] matches:group])
             [resultMatcher publish:sr];
     }
     return YES;

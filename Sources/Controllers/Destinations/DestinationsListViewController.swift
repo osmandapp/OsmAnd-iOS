@@ -22,9 +22,9 @@ class DestinationsListViewController: OABaseButtonsViewController {
         didSet {
             tableView.setEditing(editMode, animated: true)
             if tableData.hasChanged || tableData.sectionCount() == 0 {
-                updateUI(true)
+                updateUIAnimated(nil)
             } else {
-                updateUIWithoutData()
+                updateWithoutData()
             }
         }
     }

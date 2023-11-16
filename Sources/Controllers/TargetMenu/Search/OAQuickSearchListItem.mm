@@ -375,7 +375,7 @@
         case FAVORITE:
         {
             const auto& fav = searchResult.favorite;
-            return fav->getGroup().isNull() || fav->getGroup().isEmpty() == 0 ? OALocalizedString(@"favorites_item") : fav->getGroup().toNSString();
+            return [OAFavoriteGroup getDisplayName: fav->getGroup().toNSString()];
         }
         case REGION:
         {

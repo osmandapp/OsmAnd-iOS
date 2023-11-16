@@ -30,6 +30,6 @@
 - (NSString *)getLanguagesSummary;
 - (NSString *)getLanguagesSummary:(OAApplicationMode *)mode;
 - (NSString *)getWikiArticleLanguage:(NSSet<NSString *> *)availableArticleLangs preferredLanguage:(NSString *)preferredLanguage;
-- (void)resetToDefaults;
+- (void)resetToDefaults:(OAApplicationMode *)mode;
 
 @end

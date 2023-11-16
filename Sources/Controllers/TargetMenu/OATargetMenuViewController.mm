@@ -11,7 +11,7 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
-
+#import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
 #import "OAPluginPopupViewController.h"
 #import "OAIAPHelper.h"
@@ -102,14 +102,13 @@
             }
             else
             {
-                for (const auto& favLoc : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
+                for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
                 {
-                    double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
-                    double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
-                    
+                    double favLon = OsmAnd::Utilities::get31LongitudeX(point.favorite->getPosition31().x);
+                    double favLat = OsmAnd::Utilities::get31LatitudeY(point.favorite->getPosition31().y);
                     if ([OAUtilities isCoordEqual:lat srcLon:lon destLat:favLat destLon:favLon])
                     {
-                        item = [[OAFavoriteItem alloc] initWithFavorite:favLoc];
+                        item = point;
                         break;
                     }
                 }

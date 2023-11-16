@@ -327,7 +327,7 @@
 {
     [self.tableView beginUpdates];
     [self.tableView setEditing:NO animated:YES];
-    [self updateUI:YES];
+    [self updateUIAnimated:nil];
     [self.tableView endUpdates];
 }
 
@@ -351,7 +351,7 @@
     [self.tableView beginUpdates];
     [self.tableView setEditing:YES animated:YES];
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
-    [self updateUI:YES];
+    [self updateUIAnimated:nil];
     [self.tableView endUpdates];
 }
 

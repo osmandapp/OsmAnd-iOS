@@ -50,6 +50,8 @@
 - (NSString *) getOverlayIconName;
 - (void) setLat:(double)lat lon:(double)lon;
 
+- (NSString *) getKey;
+
 - (NSString *) getName;
 - (NSString *) getDisplayName;
 - (void) setName:(NSString *)name;

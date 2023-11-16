@@ -12,6 +12,7 @@
 #import "OAMapRendererView.h"
 #import "OAMapViewController.h"
 #import "OAFavoriteViewController.h"
+#import "OAFavoritesHelper.h"
 #import "OADefaultFavorite.h"
 #import "OATargetPoint.h"
 #import "OAReverseGeocoder.h"
@@ -60,7 +61,7 @@ static OAQuickActionType *TYPE;
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     OAMapViewController *mapVC = mapPanel.mapViewController;
     CLLocationCoordinate2D point = CLLocationCoordinate2DMake(lat, lon);
-    if ([mapVC hasFavoriteAt:point])
+    if ([OAFavoritesHelper hasFavoriteAt:point])
         return;
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
@@ -82,7 +83,6 @@ static OAQuickActionType *TYPE;
 
 - (void) addFavoriteSilent:(double)lat lon:(double)lon title:(NSString *)title
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
     NSString *groupName = self.getParams[KEY_CATEGORY_NAME] ? self.getParams[KEY_CATEGORY_NAME] : @"";
     UIColor* color;
     if (self.getParams[KEY_CATEGORY_COLOR])
@@ -96,36 +96,20 @@ static OAQuickActionType *TYPE;
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors].firstObject;
         color = favCol.color;
     }
-    CGFloat r,g,b,a;
-    [color getRed:&r
-             green:&g
-              blue:&b
-             alpha:&a];
-    
+
     if ([self isItemExists:title])
         title = [self getNewItemName:title];
-    
-    QString elevation = QString();
-    QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
-    QString pickupTime;
-    
-    QString titleStr = QString::fromNSString(title);
-    QString group = QString::fromNSString(groupName);
-    QString description = QString();
-    QString address = QString();
-    QString icon = QString();
-    QString background = QString();
-    
-    app.favoritesCollection->createFavoriteLocation(OsmAnd::LatLon(lat, lon), elevation, time, pickupTime, titleStr, description, address, group, icon, background, OsmAnd::FColorARGB(a,r,g,b));
 
-    [app saveFavoritesToPermanentStorage:@[groupName]];
+    OAFavoriteItem *point = [[OAFavoriteItem alloc] initWithLat:lat lon:lon name:title category:groupName];
+    [point setColor:color];
+    [OAFavoritesHelper addFavorite:point];
 }
 
 - (BOOL) isItemExists:(NSString *)name
 {
-    for(const auto& localFavorite : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
+    for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
     {
-        if ([name isEqualToString:localFavorite->getTitle().toNSString()])
+        if ([name isEqualToString:[point getName]])
             return YES;
     }
     

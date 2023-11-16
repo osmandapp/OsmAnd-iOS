@@ -8,6 +8,7 @@
 
 #import "OAFavoritesLayer.h"
 #import "OADefaultFavorite.h"
+#import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
 #import "OANativeUtilities.h"
 #import "OAMapViewController.h"
@@ -48,14 +49,14 @@
     _showCaptionsCache = self.showCaptions;
     _textScaleFactor = [[OAAppSettings sharedManager].textSize get];
     
-    self.app.favoritesCollection->collectionChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
+    [OAFavoritesHelper getFavoritesCollection]->collectionChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                                 [self]
                                                                 (const OsmAnd::IFavoriteLocationsCollection* const collection)
                                                                 {
                                                                     [self onFavoritesCollectionChanged];
                                                                 });
     
-    self.app.favoritesCollection->favoriteLocationChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
+    [OAFavoritesHelper getFavoritesCollection]->favoriteLocationChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                                       [self]
                                                                       (const OsmAnd::IFavoriteLocationsCollection* const collection,
                                                                        const std::shared_ptr<const OsmAnd::IFavoriteLocation> favoriteLocation)
@@ -96,8 +97,8 @@
 {
     [super deinitLayer];
     
-    self.app.favoritesCollection->collectionChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
-    self.app.favoritesCollection->favoriteLocationChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
+    [OAFavoritesHelper getFavoritesCollection]->collectionChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
+    [OAFavoritesHelper getFavoritesCollection]->favoriteLocationChangeObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
 }
 
 - (void) show
@@ -113,7 +114,7 @@
         if (_hiddenPointPos31 != OsmAnd::PointI())
             hiddenPoints.append(_hiddenPointPos31);
 
-        _favoritesMapProvider.reset(new OAFavoritesMapLayerProvider(self.app.favoritesCollection->getFavoriteLocations(),
+        _favoritesMapProvider.reset(new OAFavoritesMapLayerProvider([OAFavoritesHelper getFavoritesCollection]->getFavoriteLocations(),
                                                                     self.pointsOrder, hiddenPoints, self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize, _textScaleFactor));
         [self.mapView addTiledSymbolsProvider:_favoritesMapProvider];
     }];
@@ -203,11 +204,7 @@
         double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
         double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
         targetPoint.location = CLLocationCoordinate2DMake(favLat, favLon);
-      
-        
-        if (![OAFavoritesHelper isFavoritesLoaded])
-            [OAFavoritesHelper loadFavorites];
-        
+
         OAFavoriteItem *storedItem = [OAFavoritesHelper getVisibleFavByLat:favLat lon:favLon];
         targetPoint.title = storedItem ? [storedItem getDisplayName] : favLoc->getTitle().toNSString();
         targetPoint.titleAddress = storedItem ? [storedItem getAddress] : favLoc->getAddress().toNSString();
@@ -216,13 +213,11 @@
         targetPoint.symbolGroupId = favLoc->getGroup().toNSString();
         targetPoint.icon = [self getFavoriteImage:favLoc];
         
-        OAFavoriteItem *item;
-        for (const auto& favLocPtr : self.app.favoritesCollection->getFavoriteLocations())
+        for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
         {
-            if (favLoc->isEqual(favLocPtr.get()))
+            if (favLoc->isEqual(point.favorite.get()))
             {
-                item = [[OAFavoriteItem alloc] initWithFavorite:favLocPtr];
-                targetPoint.targetObj = item;
+                targetPoint.targetObj = point;
                 break;
             }
         }
@@ -243,11 +238,11 @@
         if (const auto mapSymbol = dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbolInfo->mapSymbol))
         {
             const auto symbolPos31 = mapSymbol->getPosition31();
-            for (const auto& favLoc : self.app.favoritesCollection->getFavoriteLocations())
+            for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
             {
-                if (favLoc->getPosition31() == symbolPos31)
+                if (point.favorite->getPosition31() == symbolPos31)
                 {
-                    OATargetPoint *targetPoint = [self getTargetPointCpp:favLoc.get()];
+                    OATargetPoint *targetPoint = [self getTargetPointCpp:point.favorite.get()];
                     if (![found containsObject:targetPoint])
                         [found addObject:targetPoint];
                 }
@@ -265,51 +260,12 @@
 
 - (void) applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
 {
-    if (object && [self isObjectMovable:object])
+    if (object && [object isKindOfClass:OAFavoriteItem.class] && [self isObjectMovable:object])
     {
-        OAFavoriteItem *item = (OAFavoriteItem *)object;
         _hiddenPointPos31 = OsmAnd::PointI();
-        const auto& favorite = item.favorite;
-        if (favorite != nullptr)
-        {
-            QString elevation = favorite->getElevation();
-            QString time = favorite->getTime();
-            QString pickupTime = favorite->getPickupTime();
-            QString title = favorite->getTitle();
-            QString description = favorite->getDescription();
-            QString address = favorite->getAddress();
-            QString group = favorite->getGroup();
-            QString icon = favorite->getIcon();
-            QString background = favorite->getBackground();
-            OsmAnd::ColorARGB color = favorite->getColor();
-            QHash<QString, QString> extensions = favorite->getExtensions();
-            bool calendarEvent = favorite->getCalendarEvent();
-            
-            self.app.favoritesCollection->removeFavoriteLocation(favorite);
-            const auto newItem = self.app.favoritesCollection->createFavoriteLocation(OsmAnd::LatLon(position.latitude, position.longitude),
-                                                            elevation,
-                                                            time,
-                                                            pickupTime,
-                                                            title,
-                                                            description,
-                                                            address,
-                                                            group,
-                                                            icon,
-                                                            background,
-                                                            color,
-                                                            extensions,
-                                                            calendarEvent);
-            if (item.specialPointType == OASpecialPointType.PARKING)
-            {
-                OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
-                if (plugin)
-                {
-                    [plugin setParkingPosition:position.latitude longitude:position.longitude];
-                }
-            }
-            [self.app saveFavoritesToPermanentStorage:@[item.getCategory]];
-            [OAFavoritesHelper loadFavorites];
-        }
+        OAFavoriteItem *item = (OAFavoriteItem *) object;
+        [OAFavoritesHelper editFavorite:item lat:position.latitude lon:position.longitude];
+        [OAFavoritesHelper lookupAddress:item];
     }
 }
 

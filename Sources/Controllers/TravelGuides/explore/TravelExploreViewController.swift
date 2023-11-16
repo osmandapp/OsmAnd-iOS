@@ -8,11 +8,12 @@
 
 import Foundation
 
+@objc(OATravelExploreViewControllerDelegate)
 protocol TravelExploreViewControllerDelegate : AnyObject {
-    func populateData(resetData: Bool)
-    func onDataLoaded()
-    func openArticle(article: TravelArticle, lang: String?)
-    func onOpenArticlePoints()
+    @objc optional func populateData(resetData: Bool)
+    @objc optional func onDataLoaded()
+    @objc optional func openArticle(article: TravelArticle, lang: String?)
+    @objc optional func onOpenArticlePoints()
     func close()
 }
 
@@ -830,8 +831,8 @@ final class LoadWikivoyageDataAsyncTask {
     }
     
     func onPostExecute() {
-        if let delegate {
-            delegate.onDataLoaded()
+        if let delegate, let onDataLoaded = delegate.onDataLoaded {
+            onDataLoaded()
         }
     }
 }

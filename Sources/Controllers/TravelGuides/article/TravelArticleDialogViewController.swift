@@ -322,7 +322,9 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
         }
         
         saveState()
-        delegate?.onOpenArticlePoints()
+        if let delegate, let onOpenArticlePoints = delegate.onOpenArticlePoints {
+            onOpenArticlePoints()
+        }
         OAAppSettings.sharedManager().travelGuidesState.wasWatchingGpx = true
         
         OAAppSettings.sharedManager().showGpx([file], update: true)

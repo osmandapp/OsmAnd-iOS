@@ -28,6 +28,7 @@ final class TravelLocalDataHelper : NSObject {
     func refreshCachedData() {
         historyMap = dbHelper.getAllHistoryMap()
         savedArticles = dbHelper.readSavedArticles()
+        observable.notifyEvent()
     }
     
     func getAllHistory() -> [TravelSearchHistoryItem] {

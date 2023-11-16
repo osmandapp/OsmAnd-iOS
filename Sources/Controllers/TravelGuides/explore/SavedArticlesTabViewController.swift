@@ -27,23 +27,21 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
         navigationController?.setNavigationBarHidden(false, animated: false)
         navigationController?.navigationBar.topItem?.setRightBarButtonItems([], animated: false)
         tabBarController?.navigationItem.title = localizedString("shared_string_travel_guides")
-        
-        searchController = UISearchController(searchResultsController: nil)
-        searchController.searchResultsUpdater = self
-        searchController.searchBar.delegate = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        tabBarController?.navigationItem.searchController = searchController
         setupSearchController()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        startAsyncInit()
+    }
+    
+    func startAsyncInit() {
         self.view.addSpinner(inCenterOfCurrentView: true)
         DispatchQueue.global(qos: .default).async {
             self.savedArticlesObserver = OAAutoObserverProxy(self, withHandler: #selector(self.update), andObserve: TravelObfHelper.shared.getBookmarksHelper().observable)
             self.imagesCacheHelper = TravelGuidesImageCacheHelper.sharedDatabase
             TravelObfHelper.shared.getBookmarksHelper().refreshCachedData()
-            self.update()
+            // call update() on finish
         }
     }
     
@@ -58,15 +56,9 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
     func generateData() {
         tableData.clearAllData()
         var savedArticles = TravelObfHelper.shared.getBookmarksHelper().getSavedArticles()
-        
-        savedArticles = savedArticles.sorted { a, b in
-            (a.title ?? "") < (b.title ?? "")
-        }
-        
+        savedArticles = savedArticles.sorted { ($0.title ?? "") < ($1.title ?? "")}
         if isFiltered {
-            savedArticles = savedArticles.filter { item in
-                (item.title?.lowercased() ?? "").contains(searchText.lowercased())
-            }
+            savedArticles = savedArticles.filter { ($0.title?.lowercased() ?? "").contains(searchText.lowercased()) }
         }
         
         let section = tableData.createNewSection()
@@ -82,12 +74,21 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
             articleRow.setObj(item, forKey: "article")
             articleRow.setObj(item.lang, forKey: "lang")
             if let imageTitle = item.imageTitle, !imageTitle.isEmpty {
-                articleRow.iconName = TravelArticle.getImageUrl(imageTitle: item.imageTitle ?? "", thumbnail: false)
+                articleRow.iconName = TravelArticle.getImageUrl(imageTitle: imageTitle, thumbnail: false)
             }
         }
     }
     
     func setupSearchController() {
+        searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        tabBarController?.navigationItem.searchController = searchController
+        updateSearchController()
+    }
+    
+    func updateSearchController() {
         if isFiltered {
             searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
             searchController.searchBar.searchTextField.backgroundColor = UIColor.white
@@ -198,6 +199,7 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
                     let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: UIImage(named: "point.topleft.filled.down.to.point.bottomright.curvepath")) { [weak self] _ in
                         guard let self else { return }
                         self.view.addSpinner(inCenterOfCurrentView: true)
+                        OAAppSettings.sharedManager().travelGuidesState.article = nil
                         _ = TravelObfHelper.shared.getArticleById(articleId: article.generateIdentifier(), lang: lang, readGpx: true, callback: self)
                     }
                     return UIMenu(title: "", children: [readAction, bookmarkAction, pointsAction])
@@ -236,7 +238,7 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
         if searchController.isActive && searchController.searchBar.searchTextField.text?.length == 0 {
             isSearchActive = true
             isFiltered = false
-        } else if searchController.isActive && (searchController.searchBar.searchTextField.text ?? "").length > 0 {
+        } else if searchController.isActive && !(searchController.searchBar.searchTextField.text ?? "").isEmpty {
             isSearchActive = true
             isFiltered = true
             searchText = searchController.searchBar.searchTextField.text ?? ""
@@ -244,7 +246,7 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
             isSearchActive = false
             isFiltered = false
         }
-        setupSearchController()
+        updateSearchController()
         generateData()
         tableView.reloadData()
     }
@@ -254,7 +256,7 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         isSearchActive = false
         isFiltered = false
-        setupSearchController()
+        updateSearchController()
     }
     
     // MARK: TravelExploreViewControllerDelegate
@@ -267,18 +269,6 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
                 _ = TravelObfHelper.shared.getArticleById(articleId: article.generateIdentifier(), lang: lang, readGpx: true, callback: self)
             }
         }
-    }
-    
-    func populateData(resetData: Bool) {
-    }
-    
-    func onDataLoaded() {
-    }
-    
-    func openArticle(article: TravelArticle, lang: String?) {
-    }
-    
-    func onOpenArticlePoints() {
     }
     
 }

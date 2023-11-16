@@ -229,7 +229,13 @@ extension BLEBikeSensor {
         }
         
         func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField? {
-            widgetFields?.first
+            guard let widgetFields, widgetFields.count >= 2 else { return nil }
+            if fieldType == .bicycleSpeed {
+                return widgetFields.first
+            } else if fieldType == .bicycleDistance {
+                return widgetFields[1]
+            }
+            return nil
         }
     }
 }

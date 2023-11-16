@@ -487,7 +487,7 @@
     return colorItem;
 }
 
-- (void)duplicateColor:(OAColorItem *)colorItem
+- (OAColorItem *)duplicateColor:(OAColorItem *)colorItem
 {
     NSString *hexColor = [colorItem getHexColor];
 
@@ -508,6 +508,8 @@
     else
         [_availableColors insertObject:duplicatedColorItem atIndex:[_availableColors indexOfObject:colorItem] + 1];
     [self regenerateSortedPosition];
+
+    return duplicatedColorItem;
 }
 
 - (void)deleteColor:(OAColorItem *)colorItem

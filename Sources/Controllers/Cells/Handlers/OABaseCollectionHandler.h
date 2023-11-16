@@ -18,20 +18,20 @@
 
 @interface OABaseCollectionHandler : NSObject
 
-- (instancetype)initWithData:(NSArray<NSArray *> *)data;
+- (instancetype)initWithData:(NSArray<NSArray *> *)data collectionView:(UICollectionView *)collectionView;
 
 - (NSString *)getCellIdentifier;
 - (CGSize)getItemSize;
+- (UICollectionView *)getCollectionView;
 - (UICollectionViewScrollDirection)getScrollDirection;
 - (void)setScrollDirection:(UICollectionViewScrollDirection)scrollDirection;
 - (UIMenu *)getMenuForItem:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
 
 - (NSIndexPath *)getSelectedIndexPath;
 - (void)setSelectedIndexPath:(NSIndexPath *)selectedIndexPath;
-- (void)updateData:(NSArray<NSArray *> *)data collectionView:(UICollectionView *)collectionView;
 
 - (NSInteger)itemsCount:(NSInteger)section;
-- (UICollectionViewCell *)getCollectionViewCell:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
+- (UICollectionViewCell *)getCollectionViewCell:(NSIndexPath *)indexPath;
 - (NSInteger)sectionsCount;
 - (void)onItemSelected:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
 

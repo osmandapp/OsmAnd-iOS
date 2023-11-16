@@ -53,7 +53,7 @@
                                                identifier:nil
                                                   handler:^(__kindof UIAction * _Nonnull action) {
                  if (self.delegate)
-                     [self.delegate onContextMenuItemDuplicate:indexPath];
+                     [self.delegate duplicateItemFromContextMenu:indexPath];
     }];
     duplicateAction.accessibilityLabel = OALocalizedString(@"shared_string_duplicate_color");
     [menuElements addObject:duplicateAction];
@@ -64,7 +64,7 @@
                                                      image:[UIImage systemImageNamed:@"trash"]
                                                 identifier:nil
                                                    handler:^(__kindof UIAction * _Nonnull action) {
-            [self.delegate onContextMenuItemDelete:indexPath];
+            [self.delegate deleteItemFromContextMenu:indexPath];
         }];
         deleteAction.accessibilityLabel = OALocalizedString(@"shared_string_delete_color");
         [menuElements addObject:[UIMenu menuWithTitle:@""
@@ -79,17 +79,19 @@
 
 #pragma mark - Data
 
-- (void)addAndSelectColor:(NSIndexPath *)indexPath
-                  newItem:(OAColorItem *)newItem
-           collectionView:(UICollectionView *)collectionView
+- (void)addAndSelectColor:(NSIndexPath *)indexPath newItem:(OAColorItem *)newItem
 {
+    UICollectionView *collectionView = [self getCollectionView];
+    if (!collectionView)
+        return;
+
     NSIndexPath *prevSelectedIndexPath = indexPath.row <= _selectedIndexPath.row
         ? [NSIndexPath indexPathForRow:_selectedIndexPath.row + 1 inSection:_selectedIndexPath.section]
         : _selectedIndexPath;
     _selectedIndexPath = indexPath;
     [collectionView performBatchUpdates:^{
-        [_data[indexPath.section] insertObject:newItem atIndex:indexPath.row];
         [collectionView insertItemsAtIndexPaths:@[_selectedIndexPath]];
+        [self addItem:indexPath newItem:newItem];
     } completion:^(BOOL finished) {
         [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, _selectedIndexPath]];
         if (self.delegate)
@@ -108,9 +110,12 @@
     }];
 }
 
-- (void)replaceOldColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
+- (void)replaceOldColor:(NSIndexPath *)indexPath
 {
-    [collectionView reloadItemsAtIndexPaths:@[indexPath]];
+    UICollectionView *collectionView = [self getCollectionView];
+    if (collectionView)
+        [collectionView reloadItemsAtIndexPaths:@[indexPath]];
+
     if (self.delegate)
     {
         if (indexPath == _selectedIndexPath)
@@ -120,10 +125,15 @@
     }
 }
 
-- (void)addDuplicatedColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
+- (void)addColor:(NSIndexPath *)indexPath newItem:(OAColorItem *)newItem
 {
+    UICollectionView *collectionView = [self getCollectionView];
+    if (!collectionView)
+        return;
+
     [collectionView performBatchUpdates:^{
         [collectionView insertItemsAtIndexPaths:@[indexPath]];
+        [self addItem:indexPath newItem:newItem];
     } completion:^(BOOL finished) {
         if (self.delegate)
             [self.delegate reloadCollectionData];
@@ -139,10 +149,15 @@
     }];
 }
 
-- (void)removeColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
+- (void)removeColor:(NSIndexPath *)indexPath
 {
+    UICollectionView *collectionView = [self getCollectionView];
+    if (!collectionView)
+        return;
+
     [collectionView performBatchUpdates:^{
         [collectionView deleteItemsAtIndexPaths:@[indexPath]];
+        [self removeItem:indexPath];
     } completion:^(BOOL finished) {
         if (indexPath == _selectedIndexPath)
         {
@@ -189,16 +204,28 @@
     _data = newData;
 }
 
+- (void)addItem:(NSIndexPath *)indexPath newItem:(id)newItem
+{
+    if (_data.count > indexPath.section && (indexPath.row == 0 || _data[indexPath.section].count > indexPath.row - 1))
+        [_data[indexPath.section] insertObject:newItem atIndex:indexPath.row];
+}
+
+- (void)removeItem:(NSIndexPath *)indexPath
+{
+    if (_data.count > indexPath.section && _data[indexPath.section].count > indexPath.row)
+        [_data[indexPath.section] removeObjectAtIndex:indexPath.row];
+}
+
 - (NSInteger)itemsCount:(NSInteger)section
 {
     return _data[section].count;
 }
 
-- (UICollectionViewCell *)getCollectionViewCell:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
+- (UICollectionViewCell *)getCollectionViewCell:(NSIndexPath *)indexPath
 {
     NSInteger colorValue = _data[indexPath.section][indexPath.row].value;
-    OAColorsCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[OAColorsCollectionViewCell getCellIdentifier]
-                                                                                 forIndexPath:indexPath];
+    OAColorsCollectionViewCell *cell = [[self getCollectionView] dequeueReusableCellWithReuseIdentifier:[OAColorsCollectionViewCell getCellIdentifier]
+                                                                                           forIndexPath:indexPath];
     if (!cell)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAColorsCollectionViewCell getCellIdentifier]

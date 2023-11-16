@@ -87,7 +87,7 @@
     OATrackAppearanceItem *_selectedItem;
     NSArray<OATrackAppearanceItem *> *_availableColoringTypes;
 
-    NSArray<OAColorItem *> *_sortedColorItems;
+    NSMutableArray<OAColorItem *> *_sortedColorItems;
     OAColorItem *_selectedColorItem;
     NSIndexPath *_editColorIndexPath;
     BOOL _isNewColorSelected;
@@ -157,7 +157,7 @@
     _selectedColorItem = [_appearanceCollection getColorItemWithValue:self.gpx.color];
     if (!_selectedColorItem)
         _selectedColorItem = [_appearanceCollection getDefaultLineColorItem];
-    _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
+    _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
 
     _selectedWidth = [_appearanceCollection getWidthForValue:self.gpx.width];
     if (!_selectedWidth)
@@ -839,7 +839,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACollectionSingleLineTableViewCell getCellIdentifier]
                                                          owner:self options:nil];
             cell = nib[0];
-            OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems]];
+            OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_sortedColorItems] collectionView:cell.collectionView];
             colorHandler.delegate = self;
             NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:_selectedColorItem] inSection:0];
             if (selectedIndexPath.row == NSNotFound)
@@ -1494,7 +1494,7 @@
     else if ([tableData.key isEqualToString:@"all_colors"])
     {
         OAColorCollectionViewController *colorCollectionViewController =
-            [[OAColorCollectionViewController alloc] initWithColorItems:[self generateColorItems]
+            [[OAColorCollectionViewController alloc] initWithColorItems:[_appearanceCollection getAvailableColorsSortingByKey]
                                                       selectedColorItem:_selectedColorItem];
         colorCollectionViewController.delegate = self;
         [self.navigationController pushViewController:colorCollectionViewController animated:YES];
@@ -1586,11 +1586,6 @@
 
 #pragma mark - OAColorCollectionDelegate
 
-- (NSArray<OAColorItem *> *)generateColorItems
-{
-    return [_appearanceCollection getAvailableColorsSortingByKey];
-}
-
 - (void)selectColorItem:(OAColorItem *)colorItem
 {
     [self onCollectionItemSelected:[NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0]];
@@ -1599,26 +1594,66 @@
 - (OAColorItem *)addAndGetNewColorItem:(UIColor *)color
 {
     OAColorItem *newColorItem = [_appearanceCollection addNewSelectedColor:color];
-    _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
+    OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
+    if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
+    {
+        NSIndexPath *colorIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
+        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorIndexPath];
+        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
+        
+        [_sortedColorItems insertObject:newColorItem atIndex:0];
+        [colorHandler addAndSelectColor:[NSIndexPath indexPathForRow:0 inSection:0] newItem:newColorItem];
+    }
     return newColorItem;
 }
 
 - (void)changeColorItem:(OAColorItem *)colorItem withColor:(UIColor *)color
 {
-    [_appearanceCollection changeColor:colorItem newColor:color];
-    _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
+    OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
+    if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
+    {
+        NSIndexPath *colorIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
+        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorIndexPath];
+        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0];
+        [_appearanceCollection changeColor:colorItem newColor:color];
+        [colorHandler replaceOldColor:indexPath];
+    }
 }
 
-- (void)duplicateColorItem:(OAColorItem *)colorItem
+- (OAColorItem *)duplicateColorItem:(OAColorItem *)colorItem
 {
-    [_appearanceCollection duplicateColor:colorItem];
-    _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
+    OAColorItem *duplicatedColorItem = [_appearanceCollection duplicateColor:colorItem];
+    OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
+    if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
+    {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0];
+        [_sortedColorItems insertObject:duplicatedColorItem atIndex:indexPath.row + 1];
+
+        NSIndexPath *colorIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
+        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorIndexPath];
+        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
+        NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
+        [colorHandler addColor:newIndexPath newItem:duplicatedColorItem];
+    }
+    return duplicatedColorItem;
 }
 
 - (void)deleteColorItem:(OAColorItem *)colorItem
 {
-    [_appearanceCollection deleteColor:colorItem];
-    _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
+    OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
+    if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
+    {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0];
+        [_appearanceCollection deleteColor:colorItem];
+        [_sortedColorItems removeObject:colorItem];
+
+        NSIndexPath *colorIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
+        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorIndexPath];
+        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
+        [colorHandler removeColor:indexPath];
+    }
 }
 
 #pragma mark - OACollectionCellDelegate
@@ -1652,72 +1687,31 @@
     [self openColorPickerWithColor:_sortedColorItems[indexPath.row]];
 }
 
-- (void)onContextMenuItemDuplicate:(NSIndexPath *)indexPath
+- (void)duplicateItemFromContextMenu:(NSIndexPath *)indexPath
 {
-    OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
-    if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
-    {
-        [self duplicateColorItem:_sortedColorItems[indexPath.row]];
-        _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
-
-        NSIndexPath *colorIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
-        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorIndexPath];
-        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-        NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
-        [colorHandler addDuplicatedColor:newIndexPath collectionView:colorCell.collectionView];
-        [colorHandler updateData:@[_sortedColorItems] collectionView:colorCell.collectionView];
-    }
+    [self duplicateColorItem:_sortedColorItems[indexPath.row]];
 }
 
-- (void)onContextMenuItemDelete:(NSIndexPath *)indexPath
+- (void)deleteItemFromContextMenu:(NSIndexPath *)indexPath
 {
-    OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
-    if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
-    {
-        [self deleteColorItem:_sortedColorItems[indexPath.row]];
-        _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
-
-        NSIndexPath *colorIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
-        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorIndexPath];
-        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-        [colorHandler removeColor:indexPath collectionView:colorCell.collectionView];
-        [colorHandler updateData:@[_sortedColorItems] collectionView:colorCell.collectionView];
-    }
+    [self deleteColorItem:_sortedColorItems[indexPath.row]];
 }
 
 #pragma mark - UIColorPickerViewControllerDelegate
 
 - (void)colorPickerViewControllerDidFinish:(UIColorPickerViewController *)viewController
 {
-    OAGPXTableSectionData *colorSection = _tableData[kColorsSection];
-    if (colorSection.subjects.count - 1 >= kColorGridOrDescriptionCell)
+    if (_editColorIndexPath)
     {
-        NSIndexPath *colorIndexPath = [NSIndexPath indexPathForRow:kColorGridOrDescriptionCell inSection:kColorsSection];
-        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorIndexPath];
-        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-        if (_editColorIndexPath)
+        if (![[_sortedColorItems[_editColorIndexPath.row] getHexColor] isEqualToString:[viewController.selectedColor toHexARGBString]])
         {
-            if (![[_sortedColorItems[_editColorIndexPath.row] getHexColor] isEqualToString:[viewController.selectedColor toHexARGBString]])
-            {
-                [self changeColorItem:_sortedColorItems[_editColorIndexPath.row] withColor:viewController.selectedColor];
-                _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
-
-                [colorHandler updateData:@[_sortedColorItems] collectionView:colorCell.collectionView];
-                if (_editColorIndexPath == [colorHandler getSelectedIndexPath])
-                    [self onCollectionItemSelected:_editColorIndexPath];
-            }
-            _editColorIndexPath = nil;
+            [self changeColorItem:_sortedColorItems[_editColorIndexPath.row] withColor:viewController.selectedColor];
         }
-        else
-        {
-            OAColorItem *newColorItem = [self addAndGetNewColorItem:viewController.selectedColor];
-            _sortedColorItems = [_appearanceCollection getAvailableColorsSortingByLastUsed];
-
-            [colorHandler addAndSelectColor:[NSIndexPath indexPathForRow:0 inSection:0]
-                                    newItem:newColorItem
-                             collectionView:colorCell.collectionView];
-            [colorHandler updateData:@[_sortedColorItems] collectionView:colorCell.collectionView];
-        }
+        _editColorIndexPath = nil;
+    }
+    else
+    {
+        [self addAndGetNewColorItem:viewController.selectedColor];
     }
 }
 

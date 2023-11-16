@@ -155,7 +155,7 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return _collectionHandler ? [_collectionHandler getCollectionViewCell:indexPath collectionView:collectionView] : nil;
+    return _collectionHandler ? [_collectionHandler getCollectionViewCell:indexPath] : nil;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView

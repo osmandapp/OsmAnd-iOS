@@ -28,7 +28,7 @@
     OAAppSettings *_settings;
     OATableDataModel *_data;
     NSIndexPath *_colorCollectionIndexPath;
-    NSArray<OAColorItem *> *_colorItems;
+    NSMutableArray<OAColorItem *> *_colorItems;
     OAColorItem *_selectedColorItem;
     NSIndexPath *_editColorIndexPath;
 }
@@ -40,7 +40,7 @@
     self = [super init];
     if (self)
     {
-        _colorItems = colorItems;
+        _colorItems = [NSMutableArray arrayWithArray:colorItems];
         _selectedColorItem = selectedColorItem;
     }
     return self;
@@ -118,7 +118,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACollectionSingleLineTableViewCell getCellIdentifier]
                                                          owner:self options:nil];
             cell = nib[0];
-            OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_colorItems]];
+            OAColorCollectionHandler *colorHandler = [[OAColorCollectionHandler alloc] initWithData:@[_colorItems] collectionView:cell.collectionView];
             colorHandler.delegate = self;
             [colorHandler setScrollDirection:UICollectionViewScrollDirectionVertical];
             [colorHandler setSelectedIndexPath:[NSIndexPath indexPathForRow:[_colorItems indexOfObject:_selectedColorItem] inSection:0]];
@@ -185,39 +185,31 @@
     [self openColorPickerWithColor:_colorItems[_editColorIndexPath.row]];
 }
 
-- (void)onContextMenuItemDuplicate:(NSIndexPath *)indexPath
+- (void)duplicateItemFromContextMenu:(NSIndexPath *)indexPath
 {
-    if (_colorCollectionIndexPath)
+    if (self.delegate && _colorCollectionIndexPath)
     {
         OAColorItem *colorItem = _colorItems[indexPath.row];
-        if (self.delegate)
-        {
-            [self.delegate duplicateColorItem:colorItem];
-            _colorItems = [self.delegate generateColorItems];
-        }
+        OAColorItem *duplicatedColorItem = [self.delegate duplicateColorItem:colorItem];
+        [_colorItems insertObject:duplicatedColorItem atIndex:indexPath.row + 1];
         OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorCollectionIndexPath];
         OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
         NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:colorItem.isDefault ? [colorCell.collectionView numberOfItemsInSection:indexPath.section] : (indexPath.row + 1)
                                                        inSection:indexPath.section];
-        [colorHandler addDuplicatedColor:newIndexPath collectionView:colorCell.collectionView];
-        [colorHandler updateData:@[_colorItems] collectionView:colorCell.collectionView];
+        [colorHandler addColor:newIndexPath newItem:duplicatedColorItem];
     }
 }
 
-- (void)onContextMenuItemDelete:(NSIndexPath *)indexPath
+- (void)deleteItemFromContextMenu:(NSIndexPath *)indexPath
 {
-    if (_colorCollectionIndexPath)
+    if (self.delegate && _colorCollectionIndexPath)
     {
         OAColorItem *colorItem = _colorItems[indexPath.row];
-        if (self.delegate)
-        {
-            [self.delegate deleteColorItem:colorItem];
-            _colorItems = [self.delegate generateColorItems];
-        }
+        [_colorItems removeObject:colorItem];
+        [self.delegate deleteColorItem:colorItem];
         OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorCollectionIndexPath];
         OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-        [colorHandler removeColor:indexPath collectionView:colorCell.collectionView];
-        [colorHandler updateData:@[_colorItems] collectionView:colorCell.collectionView];
+        [colorHandler removeColor:indexPath];
     }
 }
 
@@ -225,35 +217,25 @@
 
 - (void)colorPickerViewControllerDidFinish:(UIColorPickerViewController *)viewController
 {
-    if (self.delegate)
+    if (self.delegate && _colorCollectionIndexPath)
     {
-        if (_colorCollectionIndexPath)
+        OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorCollectionIndexPath];
+        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
+        if (_editColorIndexPath)
         {
-            OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorCollectionIndexPath];
-            OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-            if (_editColorIndexPath)
+            if (![[_colorItems[_editColorIndexPath.row] getHexColor] isEqualToString:[viewController.selectedColor toHexARGBString]])
             {
-                if (![[_colorItems[_editColorIndexPath.row] getHexColor] isEqualToString:[viewController.selectedColor toHexARGBString]])
-                {
-                    [self.delegate changeColorItem:_colorItems[_editColorIndexPath.row] withColor:viewController.selectedColor];
-                    _colorItems = [self.delegate generateColorItems];
-                    
-                    [colorHandler updateData:@[_colorItems] collectionView:colorCell.collectionView];
-                    if (_editColorIndexPath == [colorHandler getSelectedIndexPath])
-                        [self onCollectionItemSelected:_editColorIndexPath];
-                }
-                _editColorIndexPath = nil;
+                [self.delegate changeColorItem:_colorItems[_editColorIndexPath.row]
+                                     withColor:viewController.selectedColor];
+                [colorHandler replaceOldColor:_editColorIndexPath];
             }
-            else
-            {
-                OAColorItem *newColorItem = [self.delegate addAndGetNewColorItem:viewController.selectedColor];
-                _colorItems = [self.delegate generateColorItems];
-                
-                [colorHandler addAndSelectColor:[NSIndexPath indexPathForRow:_colorItems.count - 1 inSection:0]
-                                        newItem:newColorItem
-                                 collectionView:colorCell.collectionView];
-                [colorHandler updateData:@[_colorItems] collectionView:colorCell.collectionView];
-            }
+            _editColorIndexPath = nil;
+        }
+        else
+        {
+            OAColorItem *newColorItem = [self.delegate addAndGetNewColorItem:viewController.selectedColor];
+            [_colorItems addObject:newColorItem];
+            [colorHandler addAndSelectColor:[NSIndexPath indexPathForRow:_colorItems.count - 1 inSection:0] newItem:newColorItem];
         }
     }
 }

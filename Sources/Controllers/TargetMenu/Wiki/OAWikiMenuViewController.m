@@ -48,7 +48,8 @@
 
 - (void) leftControlButtonPressed
 {
-    [self.menuDelegate openWiki:self];
+    if ([self.menuDelegate respondsToSelector:@selector(openWiki:)])
+        [self.menuDelegate openWiki:self];
 }
 
 #pragma mark - OARowInfoDelegate

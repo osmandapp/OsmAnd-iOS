@@ -3097,3 +3097,8 @@
 "map_orientation_portrait" = "Hochformat";
 "shared_string_contents" = "Inhalt";
 "shared_string_view" = "Anzeigen";
+"apply_to_existing_favorites_descr" = "Änderungen auf die bestehenden Favoritenpunkte der Gruppe anwenden oder nur auf neue?";
+"apply_only_to_new_points" = "Anwenden auf neue Punkte";
+"apply_to_existing" = "Anwenden auf bestehende";
+"default_appearance_desc" = "Standardfarbe, Symbol und Form werden auf die hinzugefügten Favoritenpunkte in der Gruppe angewendet.";
+"change_appearance" = "Erscheinungsbild ändern";

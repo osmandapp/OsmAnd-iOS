@@ -8,7 +8,9 @@
 
 import Foundation
 
-final class TravelLocalDataHelper {
+@objc(OATravelLocalDataHelper)
+@objcMembers
+final class TravelLocalDataHelper : NSObject {
     
     private static let HISTORY_ITEMS_LIMIT = 300
     private let dbHelper: OATravelLocalDataDbHelper
@@ -16,14 +18,17 @@ final class TravelLocalDataHelper {
     private var savedArticles: [TravelArticle] = []
     var observable: OAObservable
     
-    init() {
+    static let shared = TravelLocalDataHelper()
+    
+    override private init() {
         dbHelper = OATravelLocalDataDbHelper.sharedDatabase()
         observable = OAObservable()
     }
     
     func refreshCachedData() {
-        historyMap = dbHelper.getAllHistoryMap();
-        savedArticles = dbHelper.readSavedArticles();
+        historyMap = dbHelper.getAllHistoryMap()
+        savedArticles = dbHelper.readSavedArticles()
+        observable.notifyEvent()
     }
     
     func getAllHistory() -> [TravelSearchHistoryItem] {

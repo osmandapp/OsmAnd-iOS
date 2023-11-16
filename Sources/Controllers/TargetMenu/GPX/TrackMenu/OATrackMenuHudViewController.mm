@@ -354,8 +354,34 @@
         {
             if (OAAppSettings.sharedManager.travelGuidesState.wasWatchingGpx)
             {
-                OATravelExploreViewController *vc = [[OATravelExploreViewController alloc] init];
-                [[OARootViewController instance].navigationController pushViewController:vc animated:YES];
+                if (OAAppSettings.sharedManager.travelGuidesState.wasOpenedFromBookmarks)
+                {
+                    OAAppSettings.sharedManager.travelGuidesState.wasWatchingGpx = false;
+                    OAAppSettings.sharedManager.travelGuidesState.wasOpenedFromBookmarks = false;
+                    UITabBarController *myPlacesViewController =
+                            [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+                    
+                    NSUInteger travelTabIndex = 2;
+                    if ([OAIAPHelper sharedInstance].osmEditing.isActive)
+                        travelTabIndex += 1;
+                    
+                    [myPlacesViewController setSelectedIndex:travelTabIndex];
+                    [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
+                    
+                    if (OAAppSettings.sharedManager.travelGuidesState.article)
+                    {
+                        OATravelArticleIdentifier *articleId = [OAAppSettings.sharedManager.travelGuidesState.article generateIdentifier];
+                        NSString *lang = OAAppSettings.sharedManager.travelGuidesState.article.lang;
+                        OAAppSettings.sharedManager.travelGuidesState.article = nil;
+                        OATravelArticleDialogViewController *articleVc = [[OATravelArticleDialogViewController alloc] initWithArticleId:articleId lang:lang];
+                        [[OARootViewController instance].navigationController pushViewController:articleVc animated:YES];
+                    }
+                }
+                else
+                {
+                    OATravelExploreViewController *vc = [[OATravelExploreViewController alloc] init];
+                    [[OARootViewController instance].navigationController pushViewController:vc animated:YES];
+                }
             }
             else
             {

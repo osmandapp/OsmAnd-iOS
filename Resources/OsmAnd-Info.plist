@@ -183,7 +183,7 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSBluetoothPeripheralUsageDescription</key>
+	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>OsmAnd needs Bluetooth to find and connect to Bluetooth LE sensors.</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>OsmAnd would like to create a calendar event for vehicle pick-up notification.</string>

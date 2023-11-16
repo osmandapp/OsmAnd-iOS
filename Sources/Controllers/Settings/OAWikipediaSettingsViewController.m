@@ -81,7 +81,7 @@
 
     UIAlertAction *resetAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_reset") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action)
     {
-        [_wikiPlugin resetToDefaults];
+        [_wikiPlugin resetToDefaults:self.appMode];
         [self generateData];
         [self.tableView reloadData];
     }];

@@ -5,3 +5,11 @@
   Created by Dmitry Svetlichny on 10.11.2023.
   Copyright © 2023 OsmAnd. All rights reserved.
 */
+
+"NSLocationWhenInUseUsageDescription" = "Posisjonstilgang er nødvendig for navigering og turregistrering.";
+
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Posisjonstilgang er nødvendig for navigasjon og turopptak i bakgrunnen.";
+
+"NSBluetoothAlwaysUsageDescription" = "Tilgang til Bluetooth er nødvendig for å finne og koble til BLE-sensorer.";   
+
+"NSCalendarsUsageDescription" = "OsmAnd ønsker å opprette en kalenderhendelse for varsling om henting av kjøretøy.";

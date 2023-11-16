@@ -5,3 +5,11 @@
   Created by Dmitry Svetlichny on 10.11.2023.
   Copyright © 2023 OsmAnd. All rights reserved.
 */
+
+"NSLocationWhenInUseUsageUsageDescription" = "Accesul la locație este necesar pentru navigație și înregistrarea călătoriei.";
+
+"NSLocationAlwaysAndWhenInUseUsageUsageDescription" = "Accesul la locație este necesar pentru navigație și înregistrarea călătoriei în fundal.";
+
+"NSBluetoothAlwaysUsageDescription" = "Accesul la Bluetooth este necesar pentru a găsi și a se conecta la senzorii BLE.";   
+
+"NSCalendarsUsageDescription" = "OsmAnd ar dori să creeze un eveniment de calendar pentru notificarea de ridicare a vehiculului.";

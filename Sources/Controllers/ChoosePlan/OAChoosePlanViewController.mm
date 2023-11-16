@@ -263,7 +263,7 @@
 
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
-    return _type == EOAChoosePlan ? UIStatusBarStyleDefault : UIStatusBarStyleDarkContent;
+    return _type == EOAChoosePlan ? UIStatusBarStyleDefault : [ThemeManager shared].isLightTheme ? UIStatusBarStyleDarkContent : UIStatusBarStyleLightContent;
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

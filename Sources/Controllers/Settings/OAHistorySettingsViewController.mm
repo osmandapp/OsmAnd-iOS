@@ -463,7 +463,7 @@
     {
         [self.tableView setEditing:NO animated:YES];
         self.tableView.allowsMultipleSelectionDuringEditing = NO;
-        [self updateUI:YES];
+        [self updateUIAnimated:nil];
     }
     else
     {
@@ -504,7 +504,7 @@
     {
         [self.tableView setEditing:YES animated:YES];
         self.tableView.allowsMultipleSelectionDuringEditing = YES;
-        [self updateUI:YES];
+        [self updateUIAnimated:nil];
     }
 }
 
@@ -607,9 +607,10 @@
 - (void)onHistoryItemsDeleted:(id)observable withKey:(id)key
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateUI:YES];
-        if ([self sectionsCount] == 0)
-            [self onLeftNavbarButtonPressed];
+        [self updateUIAnimated:^(BOOL finished) {
+            if ([self sectionsCount] == 0)
+                [self onLeftNavbarButtonPressed];
+        }];
     });
 }
 

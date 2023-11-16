@@ -11,7 +11,7 @@ import SafariServices
 
 @objc(OAWidgetsListViewController)
 @objcMembers
-class WidgetsListViewController: BaseSegmentedControlViewController {
+class WidgetsListViewController: OABaseNavbarSubviewViewController {
 
     static let kWidgetAddedNotification = "onWidgetAdded"
 
@@ -25,7 +25,7 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
     private var widgetPanel: WidgetsPanel! {
         didSet {
             navigationItem.title = getTitle()
-            updateUI(true)
+            updateUIAnimated(nil)
         }
     }
 
@@ -33,9 +33,9 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
         didSet {
             tableView.setEditing(editMode, animated: true)
             if tableData.hasChanged || tableData.sectionCount() == 0 {
-                updateUI(true)
+                updateUIAnimated(nil)
             } else {
-                updateUIWithoutData()
+                updateWithoutData()
             }
         }
     }
@@ -67,7 +67,7 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
 
     //MARK: - Base setup UI
 
-    override func createSegmentControl() -> UISegmentedControl? {
+    override func createSubview() -> UIView! {
         if editMode {
             return nil
         }
@@ -171,14 +171,14 @@ class WidgetsListViewController: BaseSegmentedControlViewController {
                 } else {
                     reorderWidgets()
                 }
-                updateUI(true)
+                updateUIAnimated(nil)
             }
         }
     }
 
     @objc private func onWidgetStateChanged() {
         if !editMode {
-            updateUI(true)
+            updateUIAnimated(nil)
         }
     }
 
@@ -501,7 +501,7 @@ extension WidgetsListViewController {
                 resetAlert!.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { UIAlertAction in
                     self.widgetsSettingsHelper.resetWidgetsForPanel(panel: self.widgetPanel)
                     OARootViewController.instance().mapPanel.recreateAllControls()
-                    self.updateUI(true)
+                    self.updateUIAnimated(nil)
                 })
                 resetAlert!.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
                 self.present(resetAlert!, animated: true)
@@ -598,7 +598,7 @@ extension WidgetsListViewController: OACopyProfileBottomSheetDelegate {
     func onCopyProfile(_ fromAppMode: OAApplicationMode!) {
         widgetsSettingsHelper.copyWidgetsForPanel(fromAppMode: fromAppMode, panel: self.widgetPanel)
         OARootViewController.instance().mapPanel.recreateAllControls()
-        self.updateUI(true)
+        self.updateUIAnimated(nil)
     }
 
 }

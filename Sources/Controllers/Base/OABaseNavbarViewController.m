@@ -185,6 +185,7 @@
 {
     self.title = [self getTitle];
     NSString *sub = [self getSubtitle];
+    UIImage *centerIcon = [self getCenterIconAboveTitle];
     if ((sub && sub.length > 0))
     {
         BOOL isTitleHidden = [self.navigationItem isTitleInStackViewHidden];
@@ -201,6 +202,10 @@
                                          subtitleColor:UIColor.textColorSecondary
                                           subtitleFont:[UIFont scaledSystemFontOfSize:13. maximumSize:18.]];
         }
+    }
+    else if (centerIcon)
+    {
+        [self.navigationItem setStackViewWithCenterIcon:centerIcon];
     }
     if (_leftNavbarButton)
     {
@@ -265,25 +270,35 @@
         [self updateRightIconLargeTitle];
 }
 
-- (void)updateUI:(BOOL)animated
-{
-    [self reloadData:animated];
-    [self refreshUI];
-}
-
-- (void)updateUIWithoutData
-{
-    [self.tableView reconfigureRowsAtIndexPaths:self.tableView.indexPathsForVisibleRows];
-    [self refreshUI];
-}
-
 - (void)refreshUI
 {
     [self applyLocalization];
     [self updateNavbar];
 }
 
-- (void) reloadData:(BOOL)animated
+- (void)updateUI
+{
+    [self updateUI:NO completion:nil];
+}
+
+- (void)updateUIAnimated:(void (^)(BOOL finished))completion
+{
+    [self updateUI:YES completion:completion];
+}
+
+- (void)updateUI:(BOOL)animated completion:(void (^)(BOOL finished))completion
+{
+    [self reloadData:animated completion:completion];
+    [self refreshUI];
+}
+
+- (void)updateWithoutData
+{
+    [self refreshUI];
+    [self.tableView reconfigureRowsAtIndexPaths:self.tableView.indexPathsForVisibleRows];
+}
+
+- (void)reloadData:(BOOL)animated completion:(void (^)(BOOL finished))completion
 {
     [self generateData];
     if (animated)
@@ -295,7 +310,7 @@
                         {
                             [self.tableView reloadData];
                         }
-                        completion:nil];
+                        completion:completion];
     }
     else
     {
@@ -618,6 +633,11 @@
 - (BOOL)isNavbarSeparatorVisible
 {
     return [self getNavbarColorScheme] != EOABaseNavbarColorSchemeOrange;
+}
+
+- (UIImage *)getCenterIconAboveTitle
+{
+    return nil;
 }
 
 - (UIImage *)getRightIconLargeTitle

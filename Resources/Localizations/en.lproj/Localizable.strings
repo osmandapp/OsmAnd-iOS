@@ -3366,3 +3366,9 @@
 "map_orientation_portrait" = "Portrait";
 "map_orientation_landscape" = "Landscape";
 "map_screen_orientation" = "Screen orientation";
+
+"change_appearance" = "Change appearance";
+"default_appearance_desc" = "Default color, icon and shape will apply to the added favorite points into the group.";
+"apply_to_existing" = "Apply to existing";
+"apply_only_to_new_points" = "Apply only to new points";
+"apply_to_existing_favorites_descr" = "Apply changes to the existing favorite points of the group or only to new?";

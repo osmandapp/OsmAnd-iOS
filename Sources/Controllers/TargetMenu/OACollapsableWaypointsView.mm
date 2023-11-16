@@ -14,6 +14,7 @@
 #import "OAGpxWptItem.h"
 #import "OAGPXDocument.h"
 #import "OAFavoriteItem.h"
+#import "OAFavoritesHelper.h"
 #import "OARootViewController.h"
 #import "OAMapLayers.h"
 #import "OAGPXDatabase.h"
@@ -80,13 +81,10 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     {
         _favorite = data;
         NSMutableArray *arr = [NSMutableArray new];
-        for (const auto& fav : _app.favoritesCollection->getFavoriteLocations())
+        for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
         {
-            if (QString::compare(fav->getGroup(), _favorite.favorite->getGroup()) == 0)
-            {
-                OAFavoriteItem *p = [[OAFavoriteItem alloc] initWithFavorite:fav];
-                [arr addObject:p];
-            }
+            if ([[point getCategory] isEqualToString:[_favorite getCategory]])
+                [arr addObject:point];
         }
         _data = [NSArray arrayWithArray:arr];
         _type = EOAWaypointFavorite;

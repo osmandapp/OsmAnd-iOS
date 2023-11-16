@@ -21,9 +21,11 @@
 #import "OAEditGroupViewController.h"
 #import "OARootViewController.h"
 #import "OATargetInfoViewController.h"
+#import "OAFavoriteGroupEditorViewController.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAOsmAndFormatter.h"
+#import "OAIndexConstants.h"
 
 #import "OsmAndApp.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -41,21 +43,16 @@
 #define _(name) OAFavoriteListViewController__##name
 #define kWasClosedFreeBackupFavoritesBannerKey @"wasClosedFreeBackupFavoritesBanner"
 
-typedef enum
-{
-    kFavoriteActionNone = 0,
-    kFavoriteActionChangeColor = 1,
-    kFavoriteActionChangeGroup = 2,
-} EFavoriteAction;
-
 #define FavoriteTableGroup _(FavoriteTableGroup)
+
 @interface FavoriteTableGroup : NSObject
     @property BOOL isOpen;
     @property OAFavoriteGroup *favoriteGroup;
 @end
+
 @implementation FavoriteTableGroup
 
--(id) init
+- (instancetype)init
 {
     self = [super init];
     if (self)
@@ -67,7 +64,7 @@ typedef enum
 
 @end
 
-@interface OAFavoriteListViewController () <OAMultiselectableHeaderDelegate, UIDocumentPickerDelegate, UISearchResultsUpdating, UISearchBarDelegate>
+@interface OAFavoriteListViewController () <OAMultiselectableHeaderDelegate, OAEditorDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, UIDocumentPickerDelegate, UISearchResultsUpdating, UISearchBarDelegate>
 {
 
     BOOL isDecelerating;
@@ -85,7 +82,6 @@ typedef enum
     NSMutableArray<NSArray *> *_data;
     NSMutableArray *_filteredItems;
 
-    EFavoriteAction _favAction;
     OAEditColorViewController *_colorController;
     OAEditGroupViewController *_groupController;
 
@@ -119,7 +115,6 @@ static UIViewController *parentController;
 
     isDecelerating = NO;
     self.sortingType = 0;
-    _favAction = kFavoriteActionNone;
     self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
 
     _sortedHeaderView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
@@ -376,20 +371,11 @@ static UIViewController *parentController;
     });
 }
 
--(void)viewWillAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
 
-    if (_favAction == kFavoriteActionChangeColor)
-        [self setupColor];
-    else if (_favAction == kFavoriteActionChangeGroup)
-        [self setupGroup];
-    else
-        [self setupView];
-
-    if (_favAction != kFavoriteActionNone)
-        return;
-
+    [self setupView];
     [self generateData];
     [self setupView];
     [self updateDistanceAndDirection:YES];
@@ -420,23 +406,9 @@ static UIViewController *parentController;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-
-    if (_favAction != kFavoriteActionNone)
-    {
-        _favAction = kFavoriteActionNone;
-        return;
-    }
-}
-
--(void)viewWillDisappear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-
-    if (_favAction != kFavoriteActionNone)
-        return;
 
     if (self.locationServicesUpdateObserver)
     {
@@ -464,11 +436,7 @@ static UIViewController *parentController;
     NSMutableArray *headerViews = [NSMutableArray array];
     NSMutableArray *tableData = [NSMutableArray array];
 
-    if (![OAFavoritesHelper isFavoritesLoaded])
-        [OAFavoritesHelper loadFavorites];
-
     NSArray *favorites = [NSMutableArray arrayWithArray:[OAFavoritesHelper getFavoriteGroups]];
-
     for (OAFavoriteGroup *group in favorites)
     {
         FavoriteTableGroup* itemData = [[FavoriteTableGroup alloc] init];
@@ -649,9 +617,10 @@ static UIViewController *parentController;
         return;
     }
 
-    _favAction = kFavoriteActionChangeColor;
     _colorController = [[OAEditColorViewController alloc] init];
-    [self.navigationController pushViewController:_colorController animated:YES];
+    _colorController.delegate = self;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_colorController];
+    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (IBAction) favoriteChangeGroupClicked:(id)sender
@@ -670,28 +639,26 @@ static UIViewController *parentController;
         return;
     }
 
-    _favAction = kFavoriteActionChangeGroup;
-
-    NSMutableArray *groupNames = [NSMutableArray new];
+    NSMutableArray *groupNames = [NSMutableArray array];
     for (OAFavoriteGroup *group in [OAFavoritesHelper getFavoriteGroups])
     {
-        NSString *groupName = [OAFavoriteGroup getDisplayName:group.name];
-        if (groupName.length > 0 && group.name.length != 0)
-            [groupNames addObject:groupName];
+        [groupNames addObject:group.name];
     }
-
     _groupController = [[OAEditGroupViewController alloc] initWithGroupName:nil groups:groupNames];
-    [self.navigationController pushViewController:_groupController animated:YES];
+    _groupController.delegate = self;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_groupController];
+    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
 
-- (void) setupColor
+#pragma mark - OAEditColorViewControllerDelegate
+
+- (void)colorChanged
 {
     if ([_selectedItems count] == 0)
         return;
 
     if (_colorController.saveChanges)
     {
-        OsmAndAppInstance app = [OsmAndApp instance];
         OAFavoriteColor *favCol = [[OADefaultFavorite builtinColors] objectAtIndex:_colorController.colorIndex];
         NSMutableSet<NSString *> *groupNames = [NSMutableSet set];
 
@@ -729,21 +696,21 @@ static UIViewController *parentController;
                 }
             }
         }
-
-        [app saveFavoritesToPermanentStorage:groupNames.allObjects];
+        [OAFavoritesHelper saveCurrentPointsIntoFile];
     }
     [self finishEditing];
     [self.favoriteTableView reloadData];
 }
 
-- (void) setupGroup
+#pragma mark - OAEditGroupViewControllerDelegate
+
+- (void)groupChanged
 {
     if ([_selectedItems count] == 0)
         return;
 
     if (_groupController.saveChanges)
     {
-        OsmAndAppInstance app = [OsmAndApp instance];
         NSMutableArray<NSIndexPath *> * sortedSelectedItems = [NSMutableArray arrayWithArray:_selectedItems];
         [sortedSelectedItems sortUsingComparator:^NSComparisonResult(NSIndexPath* obj1, NSIndexPath* obj2) {
             NSNumber *row1 = [NSNumber numberWithInteger:obj1.row];
@@ -780,16 +747,14 @@ static UIViewController *parentController;
                 [OAFavoritesHelper editFavoriteName:item newName:[item getDisplayName] group:_groupController.groupName descr:[item getDescription] address:[item getAddress]];
             }
         }
-
-        [app saveFavoritesToPermanentStorage:groupNames.allObjects];
     }
     [self finishEditing];
     [self generateData];
 }
 
-- (NSArray *) getItemsForRows:(NSArray<NSIndexPath *>*)indexPath
+- (NSArray<OAFavoriteItem *> *)getItemsForRows:(NSArray<NSIndexPath *> *)indexPath
 {
-    NSMutableArray* itemList = [[NSMutableArray alloc] init];
+    NSMutableArray<OAFavoriteItem *> *itemList = [[NSMutableArray alloc] init];
     if (_directionButton.tag == 1)
     { // Sorted
         [indexPath enumerateObjectsUsingBlock:^(NSIndexPath* path, NSUInteger idx, BOOL *stop) {
@@ -867,50 +832,64 @@ static UIViewController *parentController;
 - (IBAction) shareButtonClicked:(id)sender
 {
     // Share selected favorites
-    if ([_selectedItems count] == 0)
+    [self shareItems:_selectedItems];
+    [self finishEditing];
+    [self generateData];
+}
+
+- (void)shareItems:(NSArray<NSIndexPath *> *)selectedItems
+{
+    if ([selectedItems count] == 0)
     {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@""
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@""
                                    message:OALocalizedString(@"fav_export_select")
                                    preferredStyle:UIAlertControllerStyleAlert];
-
-        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
-
+        UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil];
         [alert addAction:defaultAction];
         [self presentViewController:alert animated:YES completion:nil];
-
         return;
     }
 
-    NSArray* selectedFavoriteItems = [self getItemsForRows:_selectedItems];
-    std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> exportCollection(new OsmAnd::FavoriteLocationsGpxCollection());
-    [selectedFavoriteItems enumerateObjectsUsingBlock:^(OAFavoriteItem* obj, NSUInteger idx, BOOL *stop) {
-        exportCollection->copyFavoriteLocation(obj.favorite);
-    }];
+    NSArray<OAFavoriteItem *> *selectedFavoriteItems = [self getItemsForRows:selectedItems];
+    NSMutableDictionary<NSString *, OAFavoriteGroup *> *groups = [NSMutableDictionary dictionary];
+    for (OAFavoriteItem *point in selectedFavoriteItems)
+    {
+        OAFavoriteGroup *group = groups[[point getCategory]];
+        if (!group)
+        {
+            group = [[OAFavoriteGroup alloc] initWithPoint:point];
+            groups[[point getCategory]] = group;
+        }
+        [group.points addObject:point];
+    }
 
-    if (exportCollection->getFavoriteLocationsCount() == 0)
-        return;
+    OsmAndAppInstance app = [OsmAndApp instance];
+    NSString *filename = app.favoritesFilePrefix;
+    if (groups.count == 1)
+    {
+        NSString *groupName = groups.allKeys.firstObject;
+        filename = [NSString stringWithFormat:@"%@%@%@",
+                    filename,
+                    groupName.length > 0 ? app.favoritesGroupNameSeparator : @"",
+                    groupName];
+    }
+    filename = [filename stringByAppendingString:GPX_FILE_EXT];
 
-    NSString* filename = [OsmAndApp instance].favoritesLegacyStorageFilename.lastPathComponent;
-    NSString* fullFilename = [NSTemporaryDirectory() stringByAppendingString:filename];
-    if (!exportCollection->saveTo(QString::fromNSString(fullFilename)))
-        return;
+    NSString *fullFilename = [NSTemporaryDirectory() stringByAppendingPathComponent:filename];
+    [OAFavoritesHelper saveFile:groups.allValues file:fullFilename];
 
-    NSURL* favoritesUrl = [NSURL fileURLWithPath:fullFilename];
+    NSURL *favoritesUrl = [NSURL fileURLWithPath:fullFilename];
     UIActivityViewController *activityViewController =
-    [[UIActivityViewController alloc] initWithActivityItems:@[favoritesUrl]
-                                      applicationActivities:nil];
+    [[UIActivityViewController alloc] initWithActivityItems:@[favoritesUrl] applicationActivities:nil];
     activityViewController.popoverPresentationController.sourceView = self.view;
-    activityViewController.popoverPresentationController.sourceRect = _exportButton.frame;
+    activityViewController.popoverPresentationController.sourceRect = self.view.frame;
     activityViewController.completionWithItemsHandler = ^void(UIActivityType activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
         [NSFileManager.defaultManager removeItemAtURL:favoritesUrl error:nil];
     };
-    
+
     [self presentViewController:activityViewController
                        animated:YES
                      completion:nil];
-
-    [self finishEditing];
-    [self generateData];
 }
 
 - (IBAction)goRootScreen:(id)sender
@@ -926,18 +905,16 @@ static UIViewController *parentController;
     [self presentViewController:documentPickerVC animated:YES completion:nil];
 }
 
--(void)onExportClicked
+- (void)onExportClicked
 {
     if (self.sortedFavoriteItems.count == 0)
         return;
-    
-    const auto& exportCollection = [OsmAndApp instance].favoritesCollection;
-    NSString* filename = [OsmAndApp instance].favoritesLegacyStorageFilename.lastPathComponent;
-    NSString* fullFilename = [NSTemporaryDirectory() stringByAppendingPathComponent:filename];
-    if (!exportCollection->saveTo(QString::fromNSString(fullFilename)))
-        return;
-    
-    NSURL* favoritesUrl = [NSURL fileURLWithPath:fullFilename];
+
+    NSString *filename = [[OsmAndApp instance].favoritesFilePrefix stringByAppendingString:GPX_FILE_EXT];
+    NSString *fullFilename = [NSTemporaryDirectory() stringByAppendingPathComponent:filename];
+    [OAFavoritesHelper saveFile:[OAFavoritesHelper getFavoriteGroups] file:fullFilename];
+
+    NSURL *favoritesUrl = [NSURL fileURLWithPath:fullFilename];
     UIActivityViewController *activityViewController =
     [[UIActivityViewController alloc] initWithActivityItems:@[favoritesUrl]
                                       applicationActivities:nil];
@@ -1038,6 +1015,91 @@ static UIViewController *parentController;
         return 1;
     }
     return _data[section].count;
+}
+
+- (UIContextMenuConfiguration *)tableView:(UITableView *)tableView contextMenuConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath point:(CGPoint)point
+{
+    NSDictionary *item = _data[indexPath.section][0];
+    NSString *cellType = item[@"type"];
+    if (indexPath.row == 0 &&[cellType isEqualToString:@"group"])
+    {
+        NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+
+        UIAction *appearanceAction = [UIAction actionWithTitle:OALocalizedString(@"change_appearance")
+                                                         image:[UIImage systemImageNamed:@"paintpalette"]
+                                                    identifier:nil
+                                                       handler:^(__kindof UIAction * _Nonnull action) {
+            FavoriteTableGroup *groupData = item[@"group"];
+            OAFavoriteGroupEditorViewController *viewController =
+                [[OAFavoriteGroupEditorViewController alloc] initWithGroup:[groupData.favoriteGroup toPointsGroup]];
+            viewController.delegate = self;
+            [self showModalViewController:viewController];
+        }];
+        appearanceAction.accessibilityLabel = OALocalizedString(@"change_appearance");
+        [menuElements addObject:appearanceAction];
+
+        UIAction *shareAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_share")
+                                                    image:[UIImage systemImageNamed:@"square.and.arrow.up"]
+                                               identifier:nil
+                                                  handler:^(__kindof UIAction * _Nonnull action) {
+            NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
+            NSDictionary *item = _data[indexPath.section][0];
+            FavoriteTableGroup *groupData = item[@"group"];
+            for (NSInteger i = 0; i <= groupData.favoriteGroup.points.count; i++)
+            {
+                [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
+            }
+            [self shareItems:indexPaths];
+        }];
+        shareAction.accessibilityLabel = OALocalizedString(@"shared_string_share");
+        [menuElements addObject:shareAction];
+
+        UIAction *deleteAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_delete")
+                                                     image:[UIImage systemImageNamed:@"trash"]
+                                                identifier:nil
+                                                   handler:^(__kindof UIAction * _Nonnull action) {
+
+            UIAlertController *alert = [UIAlertController
+                                        alertControllerWithTitle:nil
+                                        message:OALocalizedString(@"fav_remove_q")
+                                        preferredStyle:UIAlertControllerStyleAlert];
+
+            UIAlertAction *yesButton = [UIAlertAction
+                                        actionWithTitle:OALocalizedString(@"shared_string_yes")
+                                        style:UIAlertActionStyleDefault
+                                        handler:^(UIAlertAction * _Nonnull action) {
+                NSDictionary *item = _data[indexPath.section][0];
+                FavoriteTableGroup *groupData = item[@"group"];
+                for (NSInteger i = 0; i <= groupData.favoriteGroup.points.count; i++)
+                {
+                    [self addIndexPathToSelectedCellsArray:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
+                }
+                [self removeFavoriteItems];
+            }];
+            UIAlertAction *cancelButton = [UIAlertAction
+                                     actionWithTitle:OALocalizedString(@"shared_string_no")
+                                     style:UIAlertActionStyleCancel
+                                     handler:nil];
+            [alert addAction:yesButton];
+            [alert addAction:cancelButton];
+            [self presentViewController:alert animated:YES completion:nil];
+        }];
+        deleteAction.accessibilityLabel = OALocalizedString(@"shared_string_delete");
+        [menuElements addObject:[UIMenu menuWithTitle:@""
+                                           image:nil
+                                      identifier:nil
+                                         options:UIMenuOptionsDisplayInline
+                                        children:@[deleteAction]]];
+
+        UIMenu *contextMenu = [UIMenu menuWithChildren:menuElements];
+        return [UIContextMenuConfiguration configurationWithIdentifier:nil
+                                                        previewProvider:nil
+                                                        actionProvider:^UIMenu * _Nullable(NSArray<UIMenuElement *> * _Nonnull suggestedActions) {
+            return contextMenu;
+        }];
+    }
+
+    return nil;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1802,6 +1864,20 @@ static UIViewController *parentController;
             [self.favoriteTableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
     }
     [self.favoriteTableView endUpdates];
+}
+
+#pragma mark - OAEditorDelegate
+
+- (void)addNewItemWithName:(NSString *)name
+                  iconName:(NSString *)iconName
+                     color:(UIColor *)color
+        backgroundIconName:(NSString *)backgroundIconName
+{
+}
+
+- (void)onEditorUpdated;
+{
+    [self generateData];
 }
 
 #pragma mark - UIDocumentPickerDelegate

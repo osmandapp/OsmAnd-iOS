@@ -35,9 +35,10 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 
 - (void)updateAppearance;
 - (void)updateNavbar;
-- (void)updateUI:(BOOL)animated;
-- (void)updateUIWithoutData;
 - (void)refreshUI;
+- (void)updateUI;
+- (void)updateUIAnimated:(void (^)(BOOL finished))completion;
+- (void)updateWithoutData;
 
 - (UIBarButtonItem *)createRightNavbarButton:(NSString *)title
                                     iconName:(NSString *)iconName
@@ -59,6 +60,7 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 - (EOABaseNavbarColorScheme)getNavbarColorScheme;
 - (BOOL)isNavbarBlurring;
 - (BOOL)isNavbarSeparatorVisible;
+- (UIImage *)getCenterIconAboveTitle;
 - (UIImage *)getRightIconLargeTitle;
 - (UIColor *)getRightIconTintColorLargeTitle;
 - (EOABaseNavbarStyle)getNavbarStyle;

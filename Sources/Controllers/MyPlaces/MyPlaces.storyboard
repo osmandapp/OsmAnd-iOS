@@ -1,13 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="pFL-rP-JjP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="pFL-rP-JjP">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Travel guides-->
+        <scene sceneID="H4P-Zr-3tv">
+            <objects>
+                <viewController id="5lf-ib-SY3" customClass="SavedArticlesTabViewController" customModule="OsmAnd_Maps" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="4sR-lk-4Xy">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="lsw-2B-bAC">
+                                <rect key="frame" x="0.0" y="48" width="414" height="765"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="5lf-ib-SY3" id="jGo-l8-oxc"/>
+                                    <outlet property="delegate" destination="5lf-ib-SY3" id="fja-xr-96a"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Jan-5F-L7o"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Jan-5F-L7o" firstAttribute="bottom" secondItem="lsw-2B-bAC" secondAttribute="bottom" id="Mc0-1b-kck"/>
+                            <constraint firstItem="lsw-2B-bAC" firstAttribute="top" secondItem="Jan-5F-L7o" secondAttribute="top" id="Mi4-wn-d8x"/>
+                            <constraint firstItem="lsw-2B-bAC" firstAttribute="leading" secondItem="Jan-5F-L7o" secondAttribute="leading" id="jaG-23-fpp"/>
+                            <constraint firstItem="Jan-5F-L7o" firstAttribute="trailing" secondItem="lsw-2B-bAC" secondAttribute="trailing" id="tSu-F8-ojl"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Travel guides" image="ic_tabbar_favorites.png" id="3ay-iq-gNx"/>
+                    <connections>
+                        <outlet property="tableView" destination="lsw-2B-bAC" id="rnT-bC-wy8"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oC1-Yt-9sM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-749" y="605"/>
+        </scene>
         <!--OSM Edits-->
         <scene sceneID="TNK-ML-Wew">
             <objects>
@@ -233,6 +269,7 @@
                         <segue destination="o7u-wO-gzA" kind="relationship" relationship="viewControllers" id="OcE-ny-Hd2"/>
                         <segue destination="rfa-sK-jEQ" kind="relationship" relationship="viewControllers" id="IJb-N9-Klj"/>
                         <segue destination="Pg1-zp-xNx" kind="relationship" relationship="viewControllers" id="XZx-7g-Nyl"/>
+                        <segue destination="5lf-ib-SY3" kind="relationship" relationship="viewControllers" id="WSt-yO-vwE"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YDZ-w2-u08" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -252,5 +289,8 @@
         <image name="ic_tabbar_osm_edits.png" width="31" height="28"/>
         <image name="ic_tabbar_trips.png" width="31" height="28"/>
         <image name="move_items.png" width="25" height="25"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

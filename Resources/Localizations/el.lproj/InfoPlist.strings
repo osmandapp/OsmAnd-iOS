@@ -5,3 +5,11 @@
   Created by Dmitry Svetlichny on 10.11.2023.
   Copyright © 2023 OsmAnd. All rights reserved.
 */
+
+"NSLocationWhenInUseUsageDescription" = "Η πρόσβαση στην τοποθεσία είναι απαραίτητη για την πλοήγηση και την καταγραφή του ταξιδιού.";
+
+"NSLocationAlwaysAndWhenInUseUsageUsageDescription" = "Η πρόσβαση στην τοποθεσία είναι απαραίτητη για την πλοήγηση και την καταγραφή ταξιδιού στο παρασκήνιο.";
+
+"NSBluetoothAlwaysUsageDescription" = "Για την εύρεση και τη σύνδεση με αισθητήρες BLE απαιτείται πρόσβαση στο Bluetooth";
+
+"NSCalendarsUsageDescription" = "Το OsmAnd θα ήθελε να δημιουργήσει ένα συμβάν ημερολογίου για την ειδοποίηση παραλαβής οχήματος.";

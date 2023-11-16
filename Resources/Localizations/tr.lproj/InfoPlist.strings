@@ -5,3 +5,11 @@
   Created by Dmitry Svetlichny on 10.11.2023.
   Copyright © 2023 OsmAnd. All rights reserved.
 */
+
+"NSLocationWhenInUseUsageDescription" = "Navigasyon ve gezi kaydı için konum erişimi gereklidir.";
+
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Navigasyon ve arka planda yolculuk kaydı için konum erişimi gereklidir.";
+
+"NSBluetoothAlwaysUsageDescription" = "BLE sensörlerini bulmak ve bunlara bağlanmak için Bluetooth erişimi gereklidir.";   
+
+"NSCalendarsUsageDescription" = "OsmAnd araç teslim alma bildirimi için bir takvim etkinliği oluşturmak istiyor.";

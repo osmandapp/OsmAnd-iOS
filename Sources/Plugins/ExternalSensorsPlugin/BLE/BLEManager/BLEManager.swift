@@ -25,6 +25,12 @@ final class BLEManager {
         category: String(describing: BLEManager.self)
     )
     
+    var isScaning: Bool {
+        SwiftyBluetooth.isScanning
+    }
+    
+    private(set) var discoveredDevices = [Device]()
+    
     private init() {
         NotificationCenter.default.addObserver(forName: Central.CentralManagerWillRestoreState,
                                                object: nil,
@@ -35,17 +41,26 @@ final class BLEManager {
                     DeviceHelper.shared.restoreConnectedDevices(with: restoredPeripherals)
                 } else {
                     restoredPeripherals.forEach {
-                        $0.disconnect(completion: {_ in }) }
+                        $0.disconnect(completion: { _ in }) }
+                }
+            }
+        }
+        
+        NotificationCenter.default.addObserver(forName: Central.CentralStateChange,
+                                               object: Central.sharedInstance,
+                                               queue: nil) { notification in
+            guard let state = notification.userInfo?["state"] as? CBManagerState else {
+                return
+            }
+            if case .poweredOff = state {
+                if OAIAPHelper.isOsmAndProAvailable() {
+                    // Peripheral that are no longer valid must be rediscovered again (happens when for example the Bluetooth is turned off
+                    // from a user's phone and turned back on
+                    DeviceHelper.shared.clearConnectedDevicesList()
                 }
             }
         }
     }
-    
-    var isScaning: Bool {
-        SwiftyBluetooth.isScanning
-    }
-    
-    private(set) var discoveredDevices = [Device]()
     
     func scanForPeripherals(withServiceUUIDs serviceUUIDs: [CBUUID]? = nil,
                             timeoutAfter timeout: TimeInterval = 15,

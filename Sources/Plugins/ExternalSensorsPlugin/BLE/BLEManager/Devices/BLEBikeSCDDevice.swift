@@ -23,17 +23,34 @@ final class BLEBikeSCDDevice: Device {
         UIImage(named: "widget_sensor_bicycle_power")!
     }
     
-    override var getDataFields: [String: String]? {
+    override var getDataFields: [[String: String]]? {
         if let sensor = sensors.first(where: { $0 is BLEBikeSensor }) as? BLEBikeSensor {
-            var dic = [String: String]()
+            var result = [[String: String]]()
             if let lastBikeSpeedDistanceData = sensor.lastBikeSpeedDistanceData {
-                dic[localizedString("external_device_characteristic_speed")] = String(lastBikeSpeedDistanceData.speed)
+                let speedFormatter = MeasurementFormatter.numeric()
+                let distanceFormatter = MeasurementFormatter.numeric(maximumFractionDigits: 2)
+                
+                print("speed-1: \(lastBikeSpeedDistanceData.speed.value)")
+                print("distance-1: \(lastBikeSpeedDistanceData.totalTravelDistance.value)")
+                
+                let speed1 = speedFormatter.string(from: lastBikeSpeedDistanceData.speed)
+                let distance1 = distanceFormatter.string(from: lastBikeSpeedDistanceData.totalTravelDistance)
+                
+                print("speed1: \(speed1)")
+                print("distance1: \(distance1)")
+                
+                let speed = OAOsmAndFormatter.getFormattedSpeed(Float(lastBikeSpeedDistanceData.speed.value))
+                let distance = OAOsmAndFormatter.getFormattedDistance(Float(lastBikeSpeedDistanceData.totalTravelDistance.value), forceTrailingZeroes: false)
+                print("speed: \(speed ?? "")")
+                print("distance: \(distance ?? "")")
+                
+                result.append([localizedString("external_device_characteristic_speed"): String(speed!)])
+                result.append([localizedString("external_device_characteristic_total_distance"): String(distance!)])
             }
             if let lastBikeCadenceData = sensor.lastBikeCadenceData {
-                dic[localizedString("external_device_characteristic_cadence")] = String(lastBikeCadenceData.cadence)
+                result.append([localizedString("external_device_characteristic_cadence"): String(lastBikeCadenceData.cadence)])
             }
-
-            return dic.isEmpty ? nil : dic
+            return result.isEmpty ? nil : result
         }
         return nil
     }
@@ -49,16 +66,16 @@ final class BLEBikeSCDDevice: Device {
         return nil
     }
     
+    init() {
+        super.init(deviceType: .BLE_BICYCLE_SCD)
+        sensors.append(BLEBikeSensor(device: self, sensorId: "bike_scd"))
+    }
+    
     override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
         [.bicycleSpeed, .bicycleCadence, .bicycleDistance]
     }
     
     override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
         sensors.forEach { $0.update(with: characteristic, result: result) }
-    }
-    
-    init() {
-        super.init(deviceType: .BLE_BICYCLE_SCD)
-        sensors.append(BLEBikeSensor(device: self, sensorId: "bike_scd"))
     }
 }

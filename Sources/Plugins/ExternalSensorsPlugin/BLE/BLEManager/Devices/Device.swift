@@ -18,9 +18,37 @@ class Device {
     var peripheral: Peripheral!
     var rssi = -1
     var deviceName: String = ""
-    var didChangeCharacteristic: (() -> Void)? = nil
+    var didChangeCharacteristic: (() -> Void)?
+    var didDisconnect: (() -> Void)?
     var isSelected = false
     private var RSSIUpdateTimer: Timer?
+    
+    var id: String {
+        peripheral.identifier.uuidString
+    }
+    
+    var isConnected: Bool {
+        peripheral.state == .connected
+    }
+    
+    var sensors = [Sensor]()
+    var sections = [String: Any]()
+    
+    class var getServiceUUID: String {
+        ""
+    }
+    
+    var getServiceConnectedImage: UIImage {
+        UIImage()
+    }
+    
+    var getDataFields: [[String: String]]? {
+        return nil
+    }
+    
+    var getSettingsFields: [String: Any]? {
+        return nil
+    }
     
     init(deviceType: DeviceType!,
          rssi: Int = 1,
@@ -35,34 +63,7 @@ class Device {
         self.sensors = [BLEBatterySensor(device: self, sensorId: "battery_level")]
     }
     
-    var id: String {
-        peripheral.identifier.uuidString
-    }
-    
-    var isConnected: Bool {
-        peripheral.state == .connected
-    }
-    
-    var sensors = [Sensor]()
-    var sections: Dictionary<String, Any> = [:]
-    
-    class var getServiceUUID: String {
-        ""
-    }
-    
     func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
-        return nil
-    }
-    
-    var getServiceConnectedImage: UIImage {
-        UIImage()
-    }
-    
-    var getDataFields: [String: String]? {
-        return nil
-    }
-    
-    var getSettingsFields: [String: Any]? {
         return nil
     }
     
@@ -71,11 +72,20 @@ class Device {
     }
     
     func addObservers() {
-        NotificationCenter.default.removeObserver(self, name: Peripheral.PeripheralCharacteristicValueUpdate, object: nil)
+        NotificationCenter.default.removeObserver(self)
         NotificationCenter.default.addObserver(forName: Peripheral.PeripheralCharacteristicValueUpdate,
                                                object: peripheral,
                                                queue: nil) { [weak self] notification in
             self?.peripheralCharacteristicValueUpdate(notification: notification as NSNotification)
+        }
+        
+        NotificationCenter.default.addObserver(forName: Peripheral.PeripheralDisconnected,
+                                               object: peripheral,
+                                               queue: nil) { [weak self] notification in
+            guard let self else { return }
+            if let identifier = notification.userInfo?["identifier"] as? UUID, identifier.uuidString == self.id {
+                didDisconnect?()
+            }
         }
     }
     

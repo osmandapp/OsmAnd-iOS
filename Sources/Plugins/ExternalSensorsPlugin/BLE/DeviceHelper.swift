@@ -147,6 +147,10 @@ final class DeviceHelper: NSObject {
 
 extension DeviceHelper {
     
+    func clearConnectedDevicesList() {
+        connectedDevices.removeAll()
+    }
+    
     func disconnectAllDevices() {
         guard !connectedDevices.isEmpty else { return }
         connectedDevices.forEach {

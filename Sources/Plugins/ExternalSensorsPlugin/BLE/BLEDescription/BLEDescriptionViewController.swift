@@ -71,16 +71,18 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
                 batteryRow.descr = sensor.lastBatteryData.batteryLevel != -1 ? String(sensor.lastBatteryData.batteryLevel) + "%" : "-"
             }
             // Received Data
-            if let receivedData = device.getDataFields {
+            if let receivedData = device.getDataFields, !receivedData.isEmpty {
                 let receivedDataSection = tableData.createNewSection()
                 receivedDataSection.headerText = localizedString("external_device_details_received_data").uppercased()
                 receivedDataSection.key = "receivedData"
-                for (key, value) in receivedData {
-                    let row = receivedDataSection.createNewRow()
-                    row.cellType = OAValueTableViewCell.getIdentifier()
-                    row.key = "row"
-                    row.title = key
-                    row.descr = value != "0" ? value : "-"
+                for array in receivedData {
+                    if let dic = array.first {
+                        let row = receivedDataSection.createNewRow()
+                        row.cellType = OAValueTableViewCell.getIdentifier()
+                        row.key = "row"
+                        row.title = dic.key
+                        row.descr = dic.value != "0" ? dic.value : "-"
+                    }
                 }
             }
             // Settings

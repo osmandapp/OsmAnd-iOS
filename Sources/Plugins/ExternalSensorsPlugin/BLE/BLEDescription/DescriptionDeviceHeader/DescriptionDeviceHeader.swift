@@ -19,8 +19,8 @@ final class DescriptionDeviceHeader: UIView {
     @IBOutlet private weak var connectStatusLabel: UILabel!
     @IBOutlet private weak var connectButton: UIButton!
     
-    var onUpdateConnectStateAction: ((CBPeripheralState) -> Void)? = nil
-    var didPaireDevicedAction: (() -> Void)? = nil
+    var onUpdateConnectStateAction: ((CBPeripheralState) -> Void)?
+    var didPaireDevicedAction: (() -> Void)?
     
     private var device: Device?
     
@@ -31,6 +31,16 @@ final class DescriptionDeviceHeader: UIView {
         updateRSSI(with: device.rssi)
         configureConnectUI(device: device)
         configureStartStateActivityView(with: device.peripheral.state)
+        if BLEManager.shared.getBluetoothState() != .poweredOn {
+            debugPrint("getBluetoothState: is not active")
+            changeDisconnecteState(device: device)
+        }
+    }
+    
+    private func changeDisconnecteState(device: Device) {
+        configureConnectButtonTitle(with: .connected)
+        deviceImageView.image = device.getServiceConnectedImage.noir
+        connectActivityView.stopAnimating()
     }
     
     func updateRSSI(with signal: Int) {
@@ -85,10 +95,16 @@ final class DescriptionDeviceHeader: UIView {
                     didPaireDevicedAction?()
                 }
                 configureConnectButtonTitle(with: .disconnected)
-               // item.notifyRSSI()
                 discoverServices(serviceUUIDs: nil)
                 deviceImageView.image = device.getServiceConnectedImage
             case .failure(let error):
+                if let error = error as? SBError {
+                    switch error {
+                    case .invalidPeripheral:
+                        changeDisconnecteState(device: device)
+                    default: break
+                    }
+                }
                 configureConnectButtonTitle(with: .connected)
                 showErrorAlertWith(message: error.localizedDescription)
             }
@@ -136,7 +152,6 @@ final class DescriptionDeviceHeader: UIView {
                 case .failure(let error):
                     debugPrint("discoverCharacteristics: \(error)")
                     showErrorAlertWith(message: error.localizedDescription)
-                    break
                 }
             }
         }
@@ -155,6 +170,13 @@ final class DescriptionDeviceHeader: UIView {
                 configureConnectButtonTitle(with: .connected)
                 deviceImageView.image = device.getServiceConnectedImage.noir
             case .failure(let error):
+                if let error = error as? SBError {
+                    switch error {
+                    case .invalidPeripheral:
+                        changeDisconnecteState(device: device)
+                    default: break
+                    }
+                }
                 configureConnectButtonTitle(with: .disconnected)
                 showErrorAlertWith(message: error.localizedDescription)
             }
@@ -177,7 +199,7 @@ final class DescriptionDeviceHeader: UIView {
     }
     
     // MARK: - IBAction
-    @IBAction func onConnectStatusButtonPressed(_ sender: Any) {
+    @IBAction private func onConnectStatusButtonPressed(_ sender: Any) {
         guard let device else { return }
         switch device.peripheral.state {
         case .connected: disconnect()

@@ -831,7 +831,7 @@ final class LoadWikivoyageDataAsyncTask {
     }
     
     func onPostExecute() {
-        if let delegate, let onDataLoaded = delegate.onDataLoaded {
+        if let onDataLoaded = delegate?.onDataLoaded {
             onDataLoaded()
         }
     }

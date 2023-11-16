@@ -6,14 +6,12 @@
   Copyright © 2023 OsmAnd. All rights reserved.
 */
 
-"NSLocationWhenInUseUsageDescription" = "This permission is required to use such features as: background GPX recording, navigation etc. when OsmAnd is in foreground only.";
+"NSLocationWhenInUseUsageDescription" = "Location access is needed for navigation and trip recording.";
 
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "This permission is required to use such features as: background GPX recording, navigation etc.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Location access is needed for navigation and trip recording in the background.";
 
-"NSLocationAlwaysUsageDescription" = "This permission is required to use such features as: background GPX recording, navigation etc.";
+//"NSLocationAlwaysUsageDescription" = "Location access is needed for navigation and trip recordings in the background.";
 
-"NSBluetoothPeripheralUsageDescription" = "OsmAnd needs Bluetooth to find and connect to Bluetooth LE sensors.";
+"NSBluetoothAlwaysUsageDescription" = "Access to Bluetooth is required to find and connect to BLE sensors.";
 
 "NSCalendarsUsageDescription" = "OsmAnd would like to create a calendar event for vehicle pick-up notification.";
-
-"NSPhotoLibraryUsageDescription" = "OsmAnd would like to store a photo.";

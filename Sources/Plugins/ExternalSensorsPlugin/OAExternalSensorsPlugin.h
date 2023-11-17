@@ -10,6 +10,4 @@
 
 @interface OAExternalSensorsPlugin : OAPlugin
 
-- (void)updateWidgetsInfo;
-
 @end

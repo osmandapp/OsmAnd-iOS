@@ -84,7 +84,7 @@ final class BLEManager {
                     return
                 }
                 if let device = DeviceHelper.shared.connectedDevices.first(where: { $0.id == peripheral.identifier.uuidString }) {
-                    device.peripheral = peripheral
+                    device.setPeripheral(peripheral: peripheral)
                     device.addObservers()
                     discoveredDevices.append(device)
                     successHandler()
@@ -96,7 +96,7 @@ final class BLEManager {
                             deviceName = savedDevice.deviceName
                         }
                         peripheral.disconnect { _ in }
-                        device.peripheral = peripheral
+                        device.setPeripheral(peripheral: peripheral)
                         device.rssi = rssi
                         device.deviceName = deviceName
                         device.addObservers()

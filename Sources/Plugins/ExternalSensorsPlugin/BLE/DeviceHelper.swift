@@ -30,17 +30,16 @@ final class DeviceHelper: NSObject {
     
     private override init() {}
     
-    func getConnectedDevicesForWidget(type: WidgetType) -> [Device]? {
-        connectedDevices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
+    func getDisconnectedDevices(for pairedDevices: [DeviceSettings]) -> [Device] {
+        let peripherals = SwiftyBluetooth.retrievePeripherals(withUUIDs: pairedDevices.compactMap { UUID(uuidString: $0.deviceId) })
+        updatePeripheralsForConnectedDevices(peripherals: peripherals.filter { $0.state == .connected })
+        let disconnectedPeripherals = peripherals.filter { $0.state != .connected }
+        
+        return getDevicesFrom(peripherals: disconnectedPeripherals, pairedDevices: pairedDevices)
     }
     
-    func updatePeripheralsForConnectedDevices(peripherals: [Peripheral]) {
-        for peripheral in peripherals {
-            if let index = connectedDevices.firstIndex(where: { $0.id == peripheral.identifier.uuidString }) {
-                connectedDevices[index].peripheral = peripheral
-                connectedDevices[index].addObservers()
-            }
-        }
+    func getConnectedDevicesForWidget(type: WidgetType) -> [Device]? {
+        connectedDevices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
     }
     
     func gatConnectedAndPaireDisconnectedDevicesFor(type: WidgetType) -> [Device]? {
@@ -68,12 +67,12 @@ final class DeviceHelper: NSObject {
     }
     
     func getDevicesFrom(peripherals: [Peripheral], pairedDevices: [DeviceSettings]) -> [Device] {
-        return peripherals.map { item in
-            if let savedDevice = pairedDevices.first(where: { $0.deviceId == item.identifier.uuidString }) {
+        return peripherals.map { peripheral in
+            if let savedDevice = pairedDevices.first(where: { $0.deviceId == peripheral.identifier.uuidString }) {
                 let device = getDeviceFor(type: savedDevice.deviceType)
                 device.deviceName = savedDevice.deviceName
                 device.deviceType = savedDevice.deviceType
-                device.peripheral = item
+                device.setPeripheral(peripheral: peripheral)
                 device.addObservers()
                 return device
             } else {
@@ -107,6 +106,15 @@ final class DeviceHelper: NSObject {
         devicesSettingsCollection.changeDeviceName(with: id, name: name)
     }
     
+    private func updatePeripheralsForConnectedDevices(peripherals: [Peripheral]) {
+         for peripheral in peripherals {
+             if let index = connectedDevices.firstIndex(where: { $0.id == peripheral.identifier.uuidString }) {
+                 connectedDevices[index].setPeripheral(peripheral: peripheral)
+                 connectedDevices[index].addObservers()
+             }
+         }
+     }
+    
     private func unpairWidgetsForDevice(id: String) {
         let widgets = getWidgetsForExternalDevice(id: id)
         if !widgets.isEmpty {
@@ -125,7 +133,7 @@ final class DeviceHelper: NSObject {
     
     private func dropUnpairedDevice(device: Device) {
         device.disableRSSI()
-        device.peripheral.disconnect { _ in }
+        device.disconnect { _ in }
         removeDisconnected(device: device)
         devicesSettingsCollection.removeDeviceSetting(with: device.id)
         unpairWidgetsForDevice(id: device.id)
@@ -212,7 +220,7 @@ extension DeviceHelper {
     private func updateConnected(devices: [Device]) {
         devices.forEach { device in
             if !connectedDevices.contains(where: { $0.id == device.id }) {
-                device.peripheral.connect(withTimeout: 10) { [weak self] result in
+                device.connect(withTimeout: 10) { [weak self] result in
                     guard let self else { return }
                     switch result {
                     case .success:
@@ -230,7 +238,7 @@ extension DeviceHelper {
     }
     
     private func discoverServices(device: Device, serviceUUIDs: [CBUUID]? = nil) {
-        device.peripheral.discoverServices(withUUIDs: nil) { [weak self] result in
+        device.discoverServices(withUUIDs: nil) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success(let services):
@@ -243,7 +251,7 @@ extension DeviceHelper {
     
     private func discoverCharacteristics(device: Device, services: [CBService]) {
         for service in services {
-            device.peripheral.discoverCharacteristics(withUUIDs: nil, ofServiceWithUUID: service.uuid) { result in
+            device.discoverCharacteristics(withUUIDs: nil, ofServiceWithUUID: service.uuid) { result in
                 switch result {
                 case .success(let characteristics):
                     for characteristic in characteristics {
@@ -251,7 +259,7 @@ extension DeviceHelper {
                             device.update(with: characteristic) { _ in }
                         }
                         if characteristic.properties.contains(.notify) {
-                            device.peripheral.setNotifyValue(toEnabled: true, ofCharac: characteristic) { _ in }
+                            device.setNotifyValue(toEnabled: true, ofCharac: characteristic) { _ in }
                         }
                     }
                 case .failure(let error):

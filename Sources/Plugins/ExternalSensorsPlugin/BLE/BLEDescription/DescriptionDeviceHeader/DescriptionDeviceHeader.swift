@@ -5,7 +5,6 @@
 //  Created by Oleksandr Panchenko on 09.10.2023.
 //
 
-
 import UIKit
 import CoreBluetooth
 import SwiftyBluetooth
@@ -19,7 +18,7 @@ final class DescriptionDeviceHeader: UIView {
     @IBOutlet private weak var connectStatusLabel: UILabel!
     @IBOutlet private weak var connectButton: UIButton!
     
-    var onUpdateConnectStateAction: ((CBPeripheralState) -> Void)?
+    var onUpdateConnectStateAction: ((DevicelState) -> Void)?
     var didPaireDevicedAction: (() -> Void)?
     
     private var device: Device?
@@ -30,7 +29,7 @@ final class DescriptionDeviceHeader: UIView {
         deviceNameLabel.text = device.deviceName
         updateRSSI(with: device.rssi)
         configureConnectUI(device: device)
-        configureStartStateActivityView(with: device.peripheral.state)
+        configureStartStateActivityView(with: device.state)
         if BLEManager.shared.getBluetoothState() != .poweredOn {
             debugPrint("getBluetoothState: is not active")
             changeDisconnecteState(device: device)
@@ -41,6 +40,7 @@ final class DescriptionDeviceHeader: UIView {
         configureConnectButtonTitle(with: .connected)
         deviceImageView.image = device.getServiceConnectedImage.noir
         connectActivityView.stopAnimating()
+        configureStartStateActivityView(with: device.state)
     }
     
     func updateRSSI(with signal: Int) {
@@ -48,7 +48,7 @@ final class DescriptionDeviceHeader: UIView {
         signalIndicatorImageView.configureSignalImage(signal: signal)
     }
     
-    private func configureStartStateActivityView(with state: CBPeripheralState) {
+    private func configureStartStateActivityView(with state: DevicelState) {
         switch state {
         case .connecting, .disconnecting:
             connectActivityView.startAnimating()
@@ -75,7 +75,7 @@ final class DescriptionDeviceHeader: UIView {
         }
     }
     
-    private func configureConnectButtonTitle(with state: CBPeripheralState) {
+    private func configureConnectButtonTitle(with state: DevicelState) {
         connectButton.setTitle(state.description, for: .normal)
     }
     
@@ -83,7 +83,7 @@ final class DescriptionDeviceHeader: UIView {
         guard let device else { return }
         configureConnectButtonTitle(with: .connecting)
         connectActivityView.startAnimating()
-        device.peripheral.connect(withTimeout: 10) { [weak self] result in
+        device.connect(withTimeout: 10) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success:
@@ -108,13 +108,13 @@ final class DescriptionDeviceHeader: UIView {
                 configureConnectButtonTitle(with: .connected)
                 showErrorAlertWith(message: error.localizedDescription)
             }
-            update(with: device.peripheral.state)
+            update(with: device.state)
         }
     }
     
     private func discoverServices(serviceUUIDs: [CBUUID]? = nil) {
         guard let device else { return }
-        device.peripheral.discoverServices(withUUIDs: nil) { [weak self] result in
+        device.discoverServices(withUUIDs: nil) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success(let services):
@@ -129,7 +129,7 @@ final class DescriptionDeviceHeader: UIView {
     private func discoverCharacteristics(services: [CBService]) {
         guard let device else { return }
         for service in services {
-            device.peripheral.discoverCharacteristics(withUUIDs: nil, ofServiceWithUUID: service.uuid) { [weak self] result in
+            device.discoverCharacteristics(withUUIDs: nil, ofServiceWithUUID: service.uuid) { [weak self] result in
                 guard let self else { return }
                 switch result {
                 case .success(let characteristics):
@@ -144,7 +144,7 @@ final class DescriptionDeviceHeader: UIView {
                         }
                         if characteristic.properties.contains(.notify) {
                             debugPrint("\(characteristic.uuid): properties contains .notify")
-                            device.peripheral.setNotifyValue(toEnabled: true, ofCharac: characteristic) { result in
+                            device.setNotifyValue(toEnabled: true, ofCharac: characteristic) { result in
                                 debugPrint(result)
                             }
                         }
@@ -162,7 +162,7 @@ final class DescriptionDeviceHeader: UIView {
         configureConnectButtonTitle(with: .disconnecting)
         connectActivityView.startAnimating()
         device.disableRSSI()
-        device.peripheral.disconnect { [weak self] result in
+        device.disconnect { [weak self] result in
             guard let self else { return }
             switch result {
             case .success:
@@ -180,11 +180,11 @@ final class DescriptionDeviceHeader: UIView {
                 configureConnectButtonTitle(with: .disconnected)
                 showErrorAlertWith(message: error.localizedDescription)
             }
-            update(with: device.peripheral.state)
+            update(with: device.state)
         }
     }
     
-    private func update(with state: CBPeripheralState) {
+    private func update(with state: DevicelState) {
         guard let device else { return }
         configureConnectUI(device: device)
         connectActivityView.stopAnimating()
@@ -201,22 +201,10 @@ final class DescriptionDeviceHeader: UIView {
     // MARK: - IBAction
     @IBAction private func onConnectStatusButtonPressed(_ sender: Any) {
         guard let device else { return }
-        switch device.peripheral.state {
+        switch device.state {
         case .connected: disconnect()
         case .disconnected: connect()
         default: break
-        }
-    }
-}
-
-extension CBPeripheralState {
-    var description: String {
-        switch self {
-        case .disconnected: return localizedString("external_device_status_disconnect")
-        case .connecting: return localizedString("external_device_status_connecting")
-        case .connected: return localizedString("external_device_status_connect")
-        case .disconnecting: return localizedString("external_device_status_disconnecting")
-        @unknown default: return "Unknown"
         }
     }
 }

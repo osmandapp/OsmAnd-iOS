@@ -27,22 +27,10 @@ final class BLEBikeSCDDevice: Device {
         if let sensor = sensors.first(where: { $0 is BLEBikeSensor }) as? BLEBikeSensor {
             var result = [[String: String]]()
             if let lastBikeSpeedDistanceData = sensor.lastBikeSpeedDistanceData {
-                let speedFormatter = MeasurementFormatter.numeric()
-                let distanceFormatter = MeasurementFormatter.numeric(maximumFractionDigits: 2)
-                
-                print("speed-1: \(lastBikeSpeedDistanceData.speed.value)")
-                print("distance-1: \(lastBikeSpeedDistanceData.totalTravelDistance.value)")
-                
-                let speed1 = speedFormatter.string(from: lastBikeSpeedDistanceData.speed)
-                let distance1 = distanceFormatter.string(from: lastBikeSpeedDistanceData.totalTravelDistance)
-                
-                print("speed1: \(speed1)")
-                print("distance1: \(distance1)")
-                
                 let speed = OAOsmAndFormatter.getFormattedSpeed(Float(lastBikeSpeedDistanceData.speed.value))
                 let distance = OAOsmAndFormatter.getFormattedDistance(Float(lastBikeSpeedDistanceData.totalTravelDistance.value), forceTrailingZeroes: false)
-                print("speed: \(speed ?? "")")
-                print("distance: \(distance ?? "")")
+                debugPrint("speed: \(speed ?? "")")
+                debugPrint("distance: \(distance ?? "")")
                 
                 result.append([localizedString("external_device_characteristic_speed"): String(speed!)])
                 result.append([localizedString("external_device_characteristic_total_distance"): String(distance!)])

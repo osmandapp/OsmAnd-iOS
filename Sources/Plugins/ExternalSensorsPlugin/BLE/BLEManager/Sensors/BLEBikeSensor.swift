@@ -13,9 +13,9 @@ final class BLEBikeSensor: Sensor {
     private var oldCharacteristic: CyclingCharacteristic = .zero
     
     // BikeSpeedDistanceData
-    private var travelDistance = Measurement<UnitLength>(value: 0, unit: .meters) // kilometers
+    private var travelDistance = Measurement<UnitLength>(value: 0, unit: .meters)
     private var totalTravelDistance = Measurement<UnitLength>(value: 0, unit: .meters)
-    private var speed = Measurement<UnitSpeed>(value: 0, unit: .metersPerSecond) //getFormattedSpeed kilometersPerHour
+    private var speed = Measurement<UnitSpeed>(value: 0, unit: .metersPerSecond)
     
     // BikeCadenceData
     private var gearRatio: Double = 1
@@ -72,77 +72,6 @@ final class BLEBikeSensor: Sensor {
         result(.success)
     }
     
-    private func getAppUnitLengthDistance() -> UnitLength {
-        // getFormattedDistance
-//        let settings: OAAppSettings = OAAppSettings.sharedManager()
-//        let mc: EOAMetricsConstant = settings.metricSystem.get()
-//        
-//        if (mc == KILOMETERS_AND_METERS)
-//        {
-//            mainUnitStr = _unitsKm;
-//            mainUnitInMeters = METERS_IN_KILOMETER;
-//        }
-//        else if (mc == NAUTICAL_MILES_AND_METERS || mc == NAUTICAL_MILES_AND_FEET)
-//        {
-//            mainUnitStr = _unitsNm;
-//            mainUnitInMeters = METERS_IN_ONE_NAUTICALMILE;
-//        }
-//        else
-//        {
-//            mainUnitStr = _unitsMi;
-//            mainUnitInMeters = METERS_IN_ONE_MILE;
-//        }
-//        KILOMETERS_AND_METERS = 0,
-//        MILES_AND_FEET,
-//        MILES_AND_YARDS,
-//        MILES_AND_METERS,
-//        NAUTICAL_MILES_AND_METERS,
-//        NAUTICAL_MILES_AND_FEET
-        
-    //    [OAOsmAndFormatter getFormattedDistance:distance];
-        
-//        switch mc {
-//        case EOAMetricsConstant.KILOMETERS_AND_METERS:
-//            return .kilometers
-//        case .MILES_AND_FEET:
-//            return .feet
-//        case .MILES_AND_YARDS:
-//            return .yards
-//        case .MILES_AND_METERS:
-//            return .miles
-//        case .NAUTICAL_MILES_AND_METERS, .NAUTICAL_MILES_AND_FEET:
-//            return .nauticalMiles
-//        @unknown default:
-//             return .kilometers
-//        }
-        
-        return .kilometers
- 
-//        if mc == EOAMetricsConstant.KILOMETERS_AND_METERS {
-//            return
-////            mainUnitStr = OAUtilities.getLocalizedString("km")
-////            mainUnitInMeters = GpxUIHelper.METERS_IN_KILOMETER
-//        } else if (mc == EOAMetricsConstant.NAUTICAL_MILES_AND_METERS || mc == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET) {
-//            mainUnitStr = OAUtilities.getLocalizedString("nm")
-//            mainUnitInMeters = GpxUIHelper.METERS_IN_ONE_NAUTICALMILE
-//        } else {
-//            mainUnitStr = OAUtilities.getLocalizedString("mile")
-//            mainUnitInMeters = GpxUIHelper.METERS_IN_ONE_MILE
-//        }
-    }
-    
-//    let settings: OAAppSettings = OAAppSettings.sharedManager()
-//    let mc: EOAMetricsConstant = settings.metricSystem.get()
-//    var divX: Double = 0
-//    
-//    let format1 = "%.0f"
-//    let format2 = "%.1f"
-//    var fmt: String? = nil
-//    var granularity: Double = 1
-//    var mainUnitStr: String
-//    var mainUnitInMeters: Double
-//    if mc == EOAMetricsConstant.KILOMETERS_AND_METERS {
-    
     private func updateBikeSpeedDistanceData() {
         lastBikeCadenceData = nil
         lastBikeSpeedDistanceData = BikeSpeedDistanceData(timestamp: Date.now.timeIntervalSince1970,
@@ -193,28 +122,25 @@ extension BLEBikeSensor {
     final class BikeSpeedDistanceData: SensorData {
         let timestamp: TimeInterval
         
-        private(set) var travelDistance = Measurement<UnitLength>(value: 0, unit: .kilometers)
-        private(set) var totalTravelDistance = Measurement<UnitLength>(value: 0, unit: .kilometers)
-        private(set) var speed = Measurement<UnitSpeed>(value: 0, unit: .kilometersPerHour)
+        private(set) var travelDistance = Measurement<UnitLength>(value: 0, unit: .meters)
+        private(set) var totalTravelDistance = Measurement<UnitLength>(value: 0, unit: .meters)
+        private(set) var speed = Measurement<UnitSpeed>(value: 0, unit: .metersPerSecond)
         
         var description: String {
             "BikeSpeedDistanceData { timestamp=\(timestamp), speed=\(speed.value), travelDistance=\(travelDistance.value), totalTravelDistance=\(totalTravelDistance.value) }"
         }
         
         var widgetFields: [SensorWidgetDataField]? {
-            let speedFormatter = MeasurementFormatter.numeric()
-            let distanceFormatter = MeasurementFormatter.numeric(maximumFractionDigits: 2)
-            
-            return [SensorWidgetDataField(fieldType: .bicycleSpeed,
-                                          nameId: localizedString("external_device_characteristic_speed"),
-                                          unitNameId: "",
-                                          numberValue: nil,
-                                          stringValue: speedFormatter.string(from: speed)),
-                    SensorWidgetDataField(fieldType: .bicycleDistance,
-                                          nameId: localizedString("external_device_characteristic_distance"),
-                                          unitNameId: "",
-                                          numberValue: nil,
-                                          stringValue: distanceFormatter.string(from: travelDistance))
+            [SensorWidgetDataField(fieldType: .bicycleSpeed,
+                                   nameId: localizedString("external_device_characteristic_speed"),
+                                   unitNameId: "",
+                                   numberValue: nil,
+                                   stringValue: OAOsmAndFormatter.getFormattedSpeed(Float(speed.value))),
+             SensorWidgetDataField(fieldType: .bicycleDistance,
+                                   nameId: localizedString("external_device_characteristic_distance"),
+                                   unitNameId: "",
+                                   numberValue: nil,
+                                   stringValue: OAOsmAndFormatter.getFormattedDistance(Float(totalTravelDistance.value)))
             ]
         }
         

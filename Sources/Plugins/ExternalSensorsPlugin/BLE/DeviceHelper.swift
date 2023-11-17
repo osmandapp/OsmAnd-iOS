@@ -161,8 +161,22 @@ extension DeviceHelper {
         BLEManager.shared.removeAndDisconnectDiscoveredDevices()
     }
     
+    func restoreConectedDevices() {
+        guard OAIAPHelper.isOsmAndProAvailable() else { return }
+        GattAttributes.SUPPORTED_SERVICES
+        
+    }
+    
     func restoreConnectedDevices(with peripherals: [Peripheral]) {
         if let pairedDevices = DeviceHelper.shared.getSettingsForPairedDevices() {
+//            var restorablePeripherals = peripherals
+//            let knownPeripheralUUIDs = pairedDevices.compactMap { UUID(uuidString: $0.deviceId) }
+//            restorablePeripherals += SwiftyBluetooth.retrieveConnectedPeripherals(withServiceUUIDs: <#T##[CBUUIDConvertible]#>)(withUUIDs: knownPeripheralUUIDs).filter { peripheral in
+//                !restorablePeripherals.contains(where: { $0.identifier == peripheral.identifier })
+//            }
+//            restorablePeripherals.forEach {
+//                Self.logger.info("Restored/retrieved \($0.identifier.uuidString) with state \($0.state.rawValue)")
+//            }
             let devices = DeviceHelper.shared.getDevicesFrom(peripherals: peripherals, pairedDevices: pairedDevices)
             updateConnected(devices: devices)
         } else {

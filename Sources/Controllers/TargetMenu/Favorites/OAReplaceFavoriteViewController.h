@@ -6,7 +6,7 @@
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OABaseTableViewController.h"
+#import "OABaseNavbarViewController.h"
 #import "OAFavoriteItem.h"
 #import "OAGpxWptItem.h"
 
@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, EOAReplacePointType) {
 
 @end
 
-@interface OAReplaceFavoriteViewController : OABaseTableViewController
+@interface OAReplaceFavoriteViewController : OABaseNavbarViewController
 
 @property (nonatomic, weak) id<OAReplacePointDelegate> delegate;
 

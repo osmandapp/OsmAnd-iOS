@@ -52,7 +52,7 @@
 -(void) applyLocalization
 {
     [super applyLocalization];
-    self.titleView.text = OALocalizedString(@"impassable_road");
+    self.navigationItem.title = OALocalizedString(@"impassable_road");
 }
 
 - (void) viewDidLoad
@@ -61,7 +61,6 @@
     [self.tableView setDataSource:self];
     [self.tableView setDelegate:self];
     [self.tableView setEditing:YES];
-    [self setCancelButtonAsImage];
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0, 0., 0.);
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
 }
@@ -75,6 +74,8 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self setCancelButtonAsImage];
     [self setupView];
 }
 

@@ -955,7 +955,8 @@
                              groupName:nil
                             groupColor:nil];
     editWaypointsGroupOptions.delegate = self;
-    [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:editWaypointsGroupOptions];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 #pragma mark - OATrackMenuViewControllerDelegate
@@ -1293,7 +1294,8 @@
     OADeleteWaypointsViewController *deleteWaypointsViewController =
             [[OADeleteWaypointsViewController alloc] initWithSectionsData:tableData];
     deleteWaypointsViewController.trackMenuDelegate = self;
-    [self presentViewController:deleteWaypointsViewController animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:deleteWaypointsViewController];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void)openWaypointsGroupOptionsScreen:(NSString *)groupName
@@ -1678,14 +1680,16 @@
                    duplicate:YES];
 
     saveTrackViewController.delegate = self;
-    [self presentViewController:saveTrackViewController animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:saveTrackViewController];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void)openMoveTrack
 {
     OASelectTrackFolderViewController *selectFolderView = [[OASelectTrackFolderViewController alloc] initWithGPX:self.gpx];
     selectFolderView.delegate = self;
-    [self presentViewController:selectFolderView animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:selectFolderView];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void)openWptOnMap:(OAGpxWptItem *)gpxWptItem
@@ -1889,7 +1893,8 @@
                        duplicate:NO];
 
         saveTrackViewController.delegate = self;
-        [self presentViewController:saveTrackViewController animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:saveTrackViewController];
+        [self presentViewController:navigationController animated:YES completion:nil];
     }
 }
 

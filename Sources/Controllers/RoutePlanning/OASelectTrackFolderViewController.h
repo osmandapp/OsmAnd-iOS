@@ -6,7 +6,7 @@
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OABaseTableViewController.h"
+#import "OABaseNavbarViewController.h"
 #import "OAGPXDatabase.h"
 
 @protocol OASelectTrackFolderDelegate <NSObject>
@@ -16,7 +16,7 @@
 
 @end
 
-@interface OASelectTrackFolderViewController : OABaseTableViewController
+@interface OASelectTrackFolderViewController : OABaseNavbarViewController
 
 @property (nonatomic, weak) id<OASelectTrackFolderDelegate> delegate;
 

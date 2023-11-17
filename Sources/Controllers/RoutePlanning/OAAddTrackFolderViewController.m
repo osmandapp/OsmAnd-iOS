@@ -22,33 +22,49 @@
     NSArray<NSArray<NSDictionary *> *> *_data;
     NSString *_newFolderName;
     NSString *_inputFieldError;
+    
+    UIBarButtonItem *_doneBarButton;
+    
     BOOL _doneButtonEnabled;
     BOOL _isFirstLaunch;
 }
 
-- (instancetype) init
-{
-    self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
-    if (self)
-    {
-        [self generateData];
-    }
-    return self;
-}
+#pragma mark - UIViewController
 
-- (void) viewDidLoad
+- (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+
     self.tableView.separatorColor = UIColor.separatorColor;
-    self.doneButton.hidden = NO;
-    self.doneButton.enabled = NO;
     _newFolderName = @"";
     _isFirstLaunch = YES;
 }
 
-- (void) generateData
+#pragma mark - Base UI
+
+- (NSString *)getTitle
+{
+    return OALocalizedString(@"add_folder");
+}
+
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
+{
+    _doneBarButton = [self createRightNavbarButton:OALocalizedString(@"shared_string_done")
+                                          iconName:nil
+                                            action:@selector(onRightNavbarButtonPressed)
+                                              menu:nil];
+    [self changeButtonAvailability:_doneBarButton isEnabled:NO];
+    return @[_doneBarButton];
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
@@ -61,25 +77,32 @@
     _data = data;
 }
 
-- (void) applyLocalization
+- (NSInteger)sectionsCount
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"add_folder");
+    return _data.count;
 }
 
-- (void)onDoneButtonPressed
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
-    [self.delegate onTrackFolderAdded:[_newFolderName trim]];
+    return OALocalizedString(@"shared_string_name");
 }
 
-#pragma mark - UITableViewDataSource
+-(NSString *)getTitleForFooter:(NSInteger)section
+{
+    return (section == 0) ? _inputFieldError : nil;
+}
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return _data[section].count;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     if ([item[@"type"] isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
     {
-        OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
+        OATextMultilineTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
@@ -109,63 +132,9 @@
     return nil;
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _data[section].count;
-}
+#pragma mark - Additions
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return OALocalizedString(@"shared_string_name");
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return (section == 0) ? _inputFieldError : nil;
-}
-
-#pragma mark - UITextViewDelegate
-
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-    if ([text isEqualToString:@"\n"])
-    {
-        [textView resignFirstResponder];
-        return NO;
-    }
-    return YES;
-}
-
-- (void) textViewDidChange:(UITextView *)textView
-{
-    [self updateFileNameFromEditText:textView.text];
-
-    [textView sizeToFit];
-    [self.tableView beginUpdates];
-    UITableViewHeaderFooterView *footer = [self.tableView footerViewForSection:0];
-    footer.textLabel.textColor = _inputFieldError != nil ? UIColor.buttonBgColorDisruptive : UIColor.textColorSecondary;
-    footer.textLabel.text = _inputFieldError;
-    [footer sizeToFit];
-    [self.tableView endUpdates];
-}
-
-#pragma mark - Selectors
-
-- (void)clearButtonPressed:(UIButton *)sender
-{
-    _newFolderName = @"";
-    _inputFieldError= @"";
-    [self generateData];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-    self.doneButton.enabled = NO;
-}
-
-- (void) updateFileNameFromEditText:(NSString *)name
+- (void)updateFileNameFromEditText:(NSString *)name
 {
     _doneButtonEnabled = NO;
     NSString *text = name.trim;
@@ -187,18 +156,18 @@
         _newFolderName = text;
         _doneButtonEnabled = YES;
     }
-    self.doneButton.enabled = _doneButtonEnabled;
+    [self changeButtonAvailability:_doneBarButton isEnabled:_doneButtonEnabled];;
 }
 
-- (BOOL) isFolderExist:(NSString *)name
+- (BOOL)isFolderExist:(NSString *)name
 {
     BOOL hasReservedName = [name.lowerCase isEqualToString:OALocalizedString(@"shared_string_gpx_tracks").lowerCase] ||
-                            [name.lowerCase isEqualToString:@"rec"] ;
+    [name.lowerCase isEqualToString:@"rec"] ;
     NSString *folderPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:name];
     return hasReservedName || [NSFileManager.defaultManager fileExistsAtPath:folderPath];
 }
 
-- (BOOL) isIncorrectFileName:(NSString *)fileName
+- (BOOL)isIncorrectFileName:(NSString *)fileName
 {
     BOOL isFileNameEmpty = [fileName trim].length == 0;
 
@@ -206,6 +175,47 @@
     BOOL hasIncorrectSymbols = [fileName rangeOfCharacterFromSet:illegalFileNameCharacters].length != 0;
     
     return isFileNameEmpty || hasIncorrectSymbols;
+}
+
+#pragma mark - Selectors
+
+- (void)clearButtonPressed:(UIButton *)sender
+{
+    _newFolderName = @"";
+    _inputFieldError= @"";
+    [self generateData];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+    [self changeButtonAvailability:_doneBarButton isEnabled:NO];
+}
+
+- (void)onRightNavbarButtonPressed
+{
+    [self.delegate onTrackFolderAdded:[_newFolderName trim]];
+}
+
+#pragma mark - UITextViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ([text isEqualToString:@"\n"])
+    {
+        [textView resignFirstResponder];
+        return NO;
+    }
+    return YES;
+}
+
+- (void)textViewDidChange:(UITextView *)textView
+{
+    [self updateFileNameFromEditText:textView.text];
+    
+    [textView sizeToFit];
+    [self.tableView beginUpdates];
+    UITableViewHeaderFooterView *footer = [self.tableView footerViewForSection:0];
+    footer.textLabel.textColor = _inputFieldError != nil ? UIColor.buttonBgColorDisruptive : UIColor.textColorSecondary;
+    footer.textLabel.text = _inputFieldError;
+    [footer sizeToFit];
+    [self.tableView endUpdates];
 }
 
 @end

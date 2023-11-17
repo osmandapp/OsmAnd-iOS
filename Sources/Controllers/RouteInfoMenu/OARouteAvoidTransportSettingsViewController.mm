@@ -45,7 +45,7 @@
 -(void) applyLocalization
 {
     [super applyLocalization];
-    self.titleView.text = OALocalizedString(@"avoid_transport_type");
+    self.navigationItem.title = OALocalizedString(@"avoid_transport_type");
 }
 
 - (void) viewDidLoad
@@ -53,7 +53,6 @@
     [super viewDidLoad];
     [self.tableView setDataSource:self];
     [self.tableView setDelegate:self];
-    [self setCancelButtonAsImage];
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0, 0., 0.);
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
 }
@@ -67,6 +66,8 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self setCancelButtonAsImage];
     [self setupView];
 }
 

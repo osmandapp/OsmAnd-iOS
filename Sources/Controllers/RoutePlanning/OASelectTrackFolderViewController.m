@@ -20,7 +20,7 @@
 #define kAddNewFolderSection 0
 #define kFoldersListSection 1
 
-@interface OASelectTrackFolderViewController() <UITableViewDelegate, UITableViewDataSource, OAAddTrackFolderDelegate>
+@interface OASelectTrackFolderViewController() <OAAddTrackFolderDelegate>
 
 @end
 
@@ -31,9 +31,11 @@
     NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
-- (instancetype) initWithGPX:(OAGPX *)gpx
+#pragma mark - Initialization
+
+- (instancetype)initWithGPX:(OAGPX *)gpx
 {
-    self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
+    self = [super init];
     if (self)
     {
         _selectedFolderName = gpx.gpxFolderName;
@@ -44,9 +46,9 @@
     return self;
 }
 
-- (instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName;
+- (instancetype)initWithSelectedFolderName:(NSString *)selectedFolderName;
 {
-    self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
+    self = [super init];
     if (self)
     {
         _selectedFolderName = selectedFolderName;
@@ -55,23 +57,32 @@
     return self;
 }
 
-- (void) viewDidLoad
+#pragma mark - UIViewController
+
+- (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+
     self.tableView.separatorColor = UIColor.separatorColor;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     self.tableView.tintColor = UIColor.iconColorActive;
 }
 
-- (void) applyLocalization
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"select_folder");
+    return OALocalizedString(@"select_folder");
 }
 
-- (void) generateData:(NSMutableArray<NSString *> *)allFolderNames foldersData:(NSMutableDictionary *)foldersData
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
+#pragma mark - Table data
+
+- (void)generateData:(NSMutableArray<NSString *> *)allFolderNames foldersData:(NSMutableDictionary *)foldersData
 {
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
@@ -101,7 +112,7 @@
     _data = data;
 }
 
-- (void) reloadData
+- (void)reloadData
 {
     NSArray<NSString *> *allFoldersNames = [OAUtilities getGpxFoldersListSorted:YES shouldAddTracksFolder:YES];
         
@@ -112,16 +123,45 @@
     }];
 }
 
-#pragma mark - UITableViewDataSource
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    NSDictionary *item = _data[section].firstObject;
+    return item[@"header"] ? item[@"header"] : @" ";
+}
+
+- (UIView *)getCustomViewForHeader:(NSInteger)section
+{
+    NSString *title = [self tableView:self.tableView titleForHeaderInSection:section];
+    OATableViewCustomHeaderView *vw = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+    vw.label.text = [title upperCase];
+    vw.label.textColor = UIColor.textColorSecondary;
+    return vw;
+}
+
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    NSString *title = [self tableView:self.tableView titleForHeaderInSection:section];
+    return [OATableViewCustomHeaderView getHeight:title width:self.tableView.bounds.size.width];
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return _data[section].count;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     
     if ([cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OARightIconTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
+        OARightIconTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
@@ -131,21 +171,19 @@
             cell.titleLabel.textColor = UIColor.textColorActive;
             cell.rightIconView.tintColor = UIColor.textColorActive;
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         cell.titleLabel.text = item[@"title"];
         [cell.rightIconView setImage:[UIImage templateImageNamed:item[@"img"]]];
         return cell;
     }
-   
+
     else if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OASimpleTableViewCell* cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell* cell = (OASimpleTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.titleLabel.numberOfLines = 3;
             cell.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         }
@@ -162,48 +200,17 @@
         }
         return cell;
     }
-    
     return nil;
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _data[section].count;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    NSDictionary *item = _data[section].firstObject;
-    return item[@"header"] ? item[@"header"] : @" ";
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    NSString *title = [self tableView:tableView titleForHeaderInSection:section];
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-    vw.label.text = [title upperCase];
-    vw.label.textColor = UIColor.textColorSecondary;
-    return vw;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    NSString *title = [self tableView:tableView titleForHeaderInSection:section];
-    return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width];
-}
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     if (indexPath.section == kAddNewFolderSection)
     {
         OAAddTrackFolderViewController * addFolderVC = [[OAAddTrackFolderViewController alloc] init];
         addFolderVC.delegate = self;
-        [self presentViewController:addFolderVC animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:addFolderVC];
+        [self presentViewController:navigationController animated:YES completion:nil];
         
     }
     else if (indexPath.section == kFoldersListSection)
@@ -217,10 +224,11 @@
 
 #pragma mark - OAAddTrackFolderDelegate
 
-- (void) onTrackFolderAdded:(NSString *)folderName
+- (void)onTrackFolderAdded:(NSString *)folderName 
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self dismissViewControllerAnimated:YES completion:^{
+        UIViewController *controllerToDismiss = self.presentingViewController ?: self;
+        [controllerToDismiss dismissViewControllerAnimated:YES completion:^{
             [_delegate onFolderAdded:folderName];
         }];
     });

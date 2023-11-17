@@ -45,7 +45,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     EOANameDescending
 };
 
-@interface OAOpenAddTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASegmentSelectionDelegate, OAFoldersCellDelegate, UIAdaptivePresentationControllerDelegate>
+@interface OAOpenAddTrackViewController() <UITextViewDelegate, OASegmentSelectionDelegate, OAFoldersCellDelegate, UIAdaptivePresentationControllerDelegate>
 
 @end
 
@@ -62,98 +62,88 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     BOOL _showCurrentGpx;
 }
 
-- (instancetype) initWithScreenType:(EOAPlanningTrackScreenType)screenType showCurrent:(BOOL)showCurrent
+#pragma mark - Initialization
+
+- (instancetype)initWithScreenType:(EOAPlanningTrackScreenType)screenType showCurrent:(BOOL)showCurrent
 {
-    self = [super initWithNibName:@"OAOpenAddTrackViewController"
-                           bundle:nil];
+    self = [super init];
     if (self)
     {
         _screenType = screenType;
         _showCurrentGpx = showCurrent;
-        [self commonInit];
-        [self generateData];
+        [self postInit];
     }
     return self;
 }
 
-- (instancetype) initWithScreenType:(EOAPlanningTrackScreenType)screenType
+- (instancetype)initWithScreenType:(EOAPlanningTrackScreenType)screenType
 {
-    self = [super initWithNibName:@"OAOpenAddTrackViewController"
-                           bundle:nil];
+    self = [super init];
     if (self)
     {
         _screenType = screenType;
-        [self commonInit];
-        [self generateData];
+        [self postInit];
     }
     return self;
 }
 
-- (void) commonInit
+- (void)postInit
 {
     _selectedFolderIndex = kAllFoldersIndex;
     _scrollCellsState = [[OACollectionViewCellState alloc] init];
-    [self updateAllFoldersList];
-}
-
-- (void) updateAllFoldersList
-{
     _allFolders = [OAUtilities getGpxFoldersListSorted:YES shouldAddTracksFolder:YES];
+    [self generateData];
 }
 
-- (void) viewDidLoad
+#pragma mark - UIViewController
+
+- (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationController.presentationController.delegate = self;
-
-    _sortingMode = EOAModifiedDate;
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.contentInset = UIEdgeInsetsMake(-16, 0, 0, 0);
-    NSString *header;
-    if (_screenType == EOAFollowTrack)
-        header = OALocalizedString(@"select_track_to_follow");
-    if (header)
-        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:header font:kHeaderDescriptionFont textColor:UIColor.textColorSecondary isBigTitle:NO parentViewWidth:self.view.frame.size.width];
-    self.tableView.tableHeaderView.backgroundColor = UIColor.viewBgColor;
-}
-
-- (void) applyLocalization
-{
-    [super applyLocalization];
-    switch (_screenType) {
-        case EOAOpenExistingTrack:
-            self.titleLabel.text = OALocalizedString(@"plan_route_open_existing_track");
-            break;
-        case EOAAddToATrack:
-            self.titleLabel.text = OALocalizedString(@"add_to_a_track");
-            break;
-        case EOAFollowTrack:
-            self.titleLabel.text = OALocalizedString(@"follow_track");
-            break;
-        case EOASelectTrack:
-            self.titleLabel.text = OALocalizedString(@"gpx_select_track");
-            break;
-        default:
-            break;
-    }
-}
-
-- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
-    if (_screenType == EOAFollowTrack)
+    self.navigationController.presentationController.delegate = self;
+    
+    _sortingMode = EOAModifiedDate;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+}
+
+#pragma mark - Base UI
+
+- (NSString *)getTitle
+{
+    switch (_screenType)
     {
-        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-            self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_track_to_follow") font:kHeaderDescriptionFont textColor:UIColor.textColorSecondary isBigTitle:NO parentViewWidth:self.view.frame.size.width];
-            [self.tableView reloadData];
-        } completion:nil];
+        case EOAOpenExistingTrack:
+            return OALocalizedString(@"plan_route_open_existing_track");
+        case EOAAddToATrack:
+            return OALocalizedString(@"add_to_a_track");
+        case EOAFollowTrack:
+            return OALocalizedString(@"follow_track");
+        case EOASelectTrack:
+            return OALocalizedString(@"gpx_select_track");
+        default:
+            return @"";
     }
 }
 
-- (void) generateData
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
+- (NSString *)getTableHeaderDescription
+{
+    return _screenType == EOAFollowTrack ? OALocalizedString(@"select_track_to_follow") : nil;
+}
+
+- (BOOL)hideFirstHeader
+{
+    return _screenType == EOAFollowTrack ? YES : NO;
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     NSMutableArray *data = [NSMutableArray new];
     NSMutableArray *existingTracksSection = [NSMutableArray new];
@@ -182,33 +172,33 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     if (_showCurrentGpx && gpxRecHelper.getIsRecording)
     {
         [existingTracksSection addObject:@{
-                @"type" : [OAGPXTrackCell getCellIdentifier],
-                @"title" : OALocalizedString(@"shared_string_currently_recording_track"),
-                @"distance" : [OAOsmAndFormatter getFormattedDistance:gpxRecHelper.distance],
-                @"time" : [OAOsmAndFormatter getFormattedTimeInterval:0 shortFormat:YES],
-                @"wpt" : [NSString stringWithFormat:@"%d", gpxRecHelper.points],
-                @"key" : @"gpx_route"
-            }];
+            @"type" : [OAGPXTrackCell getCellIdentifier],
+            @"title" : OALocalizedString(@"shared_string_currently_recording_track"),
+            @"distance" : [OAOsmAndFormatter getFormattedDistance:gpxRecHelper.distance],
+            @"time" : [OAOsmAndFormatter getFormattedTimeInterval:0 shortFormat:YES],
+            @"wpt" : [NSString stringWithFormat:@"%d", gpxRecHelper.points],
+            @"key" : @"gpx_route"
+        }];
     }
     
     for (OAGPX *gpx in gpxList)
     {
         [existingTracksSection addObject:@{
-                @"type" : [OAGPXTrackCell getCellIdentifier],
-                @"track" : gpx,
-                @"title" : [gpx getNiceTitle],
-                @"distance" : [OAOsmAndFormatter getFormattedDistance:gpx.totalDistance],
-                @"time" : [OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan shortFormat:YES],
-                @"wpt" : [NSString stringWithFormat:@"%d", gpx.wptPoints],
-                @"key" : @"gpx_route"
-            }];
+            @"type" : [OAGPXTrackCell getCellIdentifier],
+            @"track" : gpx,
+            @"title" : [gpx getNiceTitle],
+            @"distance" : [OAOsmAndFormatter getFormattedDistance:gpx.totalDistance],
+            @"time" : [OAOsmAndFormatter getFormattedTimeInterval:gpx.timeSpan shortFormat:YES],
+            @"wpt" : [NSString stringWithFormat:@"%d", gpx.wptPoints],
+            @"key" : @"gpx_route"
+        }];
     }
     [existingTracksSection addObject:@{ @"type" : [OADividerCell getCellIdentifier] }];
     [data addObject:existingTracksSection];
     _data = data;
 }
 
-- (NSArray<NSDictionary *> *) getFoldersList
+- (NSArray<NSDictionary *> *)getFoldersList
 {
     NSArray *folderNames = _allFolders;
     
@@ -228,7 +218,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     return folderButtonsData;
 }
 
-- (NSArray *) filterData:(NSArray *)data
+- (NSArray *)filterData:(NSArray *)data
 {
     if (_selectedFolderIndex == kAllFoldersIndex)
     {
@@ -246,7 +236,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     }
 }
 
-- (NSArray *) sortData:(NSArray *)data
+- (NSArray *)sortData:(NSArray *)data
 {
     NSArray *sortedData = [data sortedArrayUsingComparator:^NSComparisonResult(OAGPX *obj1, OAGPX *obj2) {
         switch (_sortingMode) {
@@ -267,26 +257,15 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     return sortedData;
 }
 
-- (BOOL) isShowCurrentGpx
+- (NSInteger)sectionsCount
 {
-    return _screenType == EOAAddToATrack;
+    return _data.count;
 }
 
-- (void) closeBottomSheetDelegate
+- (NSInteger)rowsCount:(NSInteger)section
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(closeBottomSheet)])
-        [self.delegate closeBottomSheet];
+    return _data[section].count;
 }
-
-- (void) dismissViewController
-{
-    [self dismissViewControllerAnimated:YES completion:^{
-        if (_screenType == EOAFollowTrack)
-            [self closeBottomSheetDelegate];
-    }];
-}
-
-#pragma mark - TableView
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -299,14 +278,14 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     return UITableViewAutomaticDimension;
 }
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *type = item[@"type"];
     if ([type isEqualToString:[OASegmentTableViewCell getCellIdentifier]])
     {
         OASegmentTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASegmentTableViewCell getCellIdentifier]];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OASegmentTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentTableViewCell getCellIdentifier] owner:self options:nil];
@@ -330,7 +309,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     else if ([type isEqualToString:[OAGPXTrackCell getCellIdentifier]])
     {
         OAGPXTrackCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OAGPXTrackCell getCellIdentifier]];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OAGPXTrackCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXTrackCell getCellIdentifier] owner:self options:nil];
@@ -346,7 +325,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             cell.distanceLabel.text = item[@"distance"];
             cell.timeLabel.text = item[@"time"];
             cell.wptLabel.text = item[@"wpt"];
-            cell.separatorView.hidden = indexPath.row == [tableView numberOfRowsInSection:indexPath.section] - 2;
+            cell.separatorView.hidden = indexPath.row == [self.tableView numberOfRowsInSection:indexPath.section] - 2;
         }
         return cell;
     }
@@ -372,7 +351,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     }
     else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
+        OADividerCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
@@ -388,33 +367,23 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
- {
-     NSDictionary *item = _data[indexPath.section][indexPath.row];
-     NSString *type = item[@"type"];
-     if ([type isEqualToString:[OAFoldersCell getCellIdentifier]])
-     {
-         OAFoldersCell *folderCell = (OAFoldersCell *)cell;
-         [folderCell.collectionView updateContentOffset];
-     }
- }
-
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _data[section].count;
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    NSString *type = item[@"type"];
+    if ([type isEqualToString:[OAFoldersCell getCellIdentifier]])
+    {
+        OAFoldersCell *folderCell = (OAFoldersCell *)cell;
+        [folderCell.collectionView updateContentOffset];
+    }
 }
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     
@@ -442,7 +411,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
                 filename = track.gpxFileName;
             if (self.delegate)
                 [self.delegate onFileSelected:filename];
-            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
             [self dismissViewControllerAnimated:YES completion:nil];
             break;
         }
@@ -486,7 +455,30 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     }
 }
 
-- (void) segmentChanged:(id)sender
+#pragma mark - Aditions
+
+- (BOOL)isShowCurrentGpx
+{
+    return _screenType == EOAAddToATrack;
+}
+
+#pragma mark - Selectors
+
+- (void)closeBottomSheetDelegate
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(closeBottomSheet)])
+        [self.delegate closeBottomSheet];
+}
+
+- (void)onLeftNavbarButtonPressed
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        if (_screenType == EOAFollowTrack)
+            [self closeBottomSheetDelegate];
+    }];
+}
+
+- (void)segmentChanged:(id)sender
 {
     UISegmentedControl *segment = (UISegmentedControl*)sender;
     if (segment)
@@ -505,7 +497,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     }
 }
 
-// MARK: OASegmentSelectionDelegate
+#pragma mark - OASegmentSelectionDelegate
 
 - (void)onSegmentSelected:(NSInteger)position gpx:(OAGPXDocument *)gpx
 {
@@ -518,14 +510,14 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 
 #pragma mark - OAFoldersCellDelegate
 
-- (void) onItemSelected:(NSInteger)index
+- (void)onItemSelected:(NSInteger)index
 {
     _selectedFolderIndex = index;
     [self generateData];
     [self.tableView reloadData];
 }
 
-#pragma mark UIAdaptivePresentationControllerDelegate
+#pragma mark - UIAdaptivePresentationControllerDelegate
 
 - (void)presentationControllerDidDismiss:(UIPresentationController *)presentationController
 {

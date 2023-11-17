@@ -1196,7 +1196,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
                                                     simplifiedTrack:YES
                                                           duplicate:NO];
         saveTrackViewController.delegate = self;
-        [self presentViewController:saveTrackViewController animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:saveTrackViewController];
+        [self presentViewController:navigationController animated:YES completion:nil];
     }
     else
     {
@@ -1208,7 +1209,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     OAOpenAddTrackViewController *saveTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOAAddToATrack];
     saveTrackViewController.delegate = self;
-    [self presentViewController:saveTrackViewController animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:saveTrackViewController];
+    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
 
 #pragma mark - OADraggableViewActions

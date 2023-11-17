@@ -437,7 +437,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     else if (dataType == EOAImportDataTypeAvoidRoads)
     {
         OARouteAvoidSettingsViewController *avoidController = [[OARouteAvoidSettingsViewController alloc] init];
-        [self presentViewController:avoidController animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:avoidController];
+        [self presentViewController:navigationController animated:YES completion:nil];
     }
     else if (dataType == EOAImportDataTypeMaps)
     {

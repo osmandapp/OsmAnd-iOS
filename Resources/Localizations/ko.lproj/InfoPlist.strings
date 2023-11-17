@@ -5,3 +5,11 @@
   Created by Dmitry Svetlichny on 10.11.2023.
   Copyright © 2023 OsmAnd. All rights reserved.
 */
+
+"NSLocationWhenInUseUsageDescription" = "내비게이션 및 여행 기록을 위해 위치 액세스가 필요합니다.";
+
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "백그라운드에서 내비게이션 및 여행 기록을 위해 위치 액세스가 필요합니다.";
+
+"NSBluetoothAlwaysUsageDescription" = "BLE 센서를 찾아 연결하려면 Bluetooth에 대한 액세스가 필요합니다.";   
+
+"NSCalendarsUsageDescription" = "OsmAnd는 차량 픽업 알림을위한 캘린더 이벤트를 만들고 싶습니다.";

@@ -18,7 +18,7 @@ final class DescriptionDeviceHeader: UIView {
     @IBOutlet private weak var connectStatusLabel: UILabel!
     @IBOutlet private weak var connectButton: UIButton!
     
-    var onUpdateConnectStateAction: ((DevicelState) -> Void)?
+    var onUpdateConnectStateAction: ((DeviceState) -> Void)?
     var didPaireDevicedAction: (() -> Void)?
     
     private var device: Device?
@@ -48,7 +48,7 @@ final class DescriptionDeviceHeader: UIView {
         signalIndicatorImageView.configureSignalImage(signal: signal)
     }
     
-    private func configureStartStateActivityView(with state: DevicelState) {
+    private func configureStartStateActivityView(with state: DeviceState) {
         switch state {
         case .connecting, .disconnecting:
             connectActivityView.startAnimating()
@@ -75,7 +75,7 @@ final class DescriptionDeviceHeader: UIView {
         }
     }
     
-    private func configureConnectButtonTitle(with state: DevicelState) {
+    private func configureConnectButtonTitle(with state: DeviceState) {
         connectButton.setTitle(state.description, for: .normal)
     }
     
@@ -184,7 +184,7 @@ final class DescriptionDeviceHeader: UIView {
         }
     }
     
-    private func update(with state: DevicelState) {
+    private func update(with state: DeviceState) {
         guard let device else { return }
         configureConnectUI(device: device)
         connectActivityView.stopAnimating()

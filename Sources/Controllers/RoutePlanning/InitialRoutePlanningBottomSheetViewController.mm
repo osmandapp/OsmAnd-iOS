@@ -254,7 +254,8 @@
     {
         OAOpenAddTrackViewController *openExistingTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOAOpenExistingTrack];
         openExistingTrackViewController.delegate = self;
-        [self presentViewController:openExistingTrackViewController animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:openExistingTrackViewController];
+        [self presentViewController:navigationController animated:YES completion:nil];
         return;
     }
     else if ([key isEqualToString:@"gpx_route"])

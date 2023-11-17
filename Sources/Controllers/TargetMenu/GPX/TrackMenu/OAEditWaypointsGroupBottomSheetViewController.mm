@@ -312,7 +312,8 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                                  groupName:_groupName
                                 groupColor:nil];
         editWaypointsGroupOptions.delegate = self;
-        [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:editWaypointsGroupOptions];
+        [self presentViewController:navigationController animated:YES completion:nil];
     }
     else if ([tableData.key isEqualToString:@"change_color"])
     {
@@ -322,7 +323,8 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                                  groupName:nil
                                 groupColor:_groupColor];
         editWaypointsGroupOptions.delegate = self;
-        [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:editWaypointsGroupOptions];
+        [self presentViewController:navigationController animated:YES completion:nil];
     }
     else if ([tableData.key isEqualToString:@"copy_to_favorites"])
     {
@@ -332,7 +334,8 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                                  groupName:_groupName
                                 groupColor:nil];
         editWaypointsGroupOptions.delegate = self;
-        [self presentViewController:editWaypointsGroupOptions animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:editWaypointsGroupOptions];
+        [self presentViewController:navigationController animated:YES completion:nil];
     }
     else if ([tableData.key isEqualToString:@"analyze_on_map"] && self.trackMenuDelegate)
     {

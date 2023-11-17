@@ -5,3 +5,11 @@
   Created by Dmitry Svetlichny on 10.11.2023.
   Copyright © 2023 OsmAnd. All rights reserved.
 */
+
+"NSLocationWhenInUseUsageDescription" = "Přístup k poloze je potřebný pro navigaci a záznam cesty.";
+
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Přístup k poloze je potřebný pro navigaci a záznam cesty na pozadí.";
+
+"NSBluetoothAlwaysUsageDescription" = "Přístup k Bluetooth je vyžadován pro vyhledání a připojení k senzorům BLE.";
+
+"NSCalendarsUsageDescription" = "OsmAnd by rád vytvořil událost kalendáře pro oznámení o vyzvednutí vozidla.";

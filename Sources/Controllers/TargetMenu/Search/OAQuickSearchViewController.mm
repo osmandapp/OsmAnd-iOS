@@ -1243,7 +1243,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_location_marker"] text:OALocalizedString(@"coords_search") onClickFunction:^(id sender) {
             CLLocation *latLon = [[self.searchUICore getSearchSettings] getOriginalLocation];
             OAQuickSearchCoordinatesViewController *vc = [[OAQuickSearchCoordinatesViewController alloc] initWithLat:latLon.coordinate.latitude lon:latLon.coordinate.longitude];
-            [self presentViewController:vc animated:YES completion:nil];
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
+            [self presentViewController:navigationController animated:YES completion:nil];
 
         }]];
 

@@ -6,10 +6,10 @@
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OABaseTableViewController.h"
+#import "OABaseNavbarViewController.h"
 #import "OABaseSettingsViewController.h"
 
-@interface OASimulationNavigationSettingViewController : OABaseTableViewController
+@interface OASimulationNavigationSettingViewController : OABaseNavbarViewController
 
 @property (weak, nonatomic) id<OASettingsDataDelegate> delegate;
 

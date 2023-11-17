@@ -5,3 +5,11 @@
   Created by Dmitry Svetlichny on 10.11.2023.
   Copyright © 2023 OsmAnd. All rights reserved.
 */
+
+"NSLocationWhenInUseUsageDescription" = "A navigációhoz és az utazás rögzítéséhez szükséges a helymeghatározás.";
+
+"NSLocationAlwaysAndWhenInUseUsageUsageDescription" = "A navigációhoz és az útvonal rögzítéséhez a háttérben helymeghatározási hozzáférés szükséges.";
+
+"NSBluetoothAlwaysUsageDescription" = "A Bluetooth-hozzáférés szükséges a BLE-érzékelők megtalálásához és a BLE-érzékelőkhöz való csatlakozáshoz.";  
+
+"NSCalendarsUsageDescription" = "Az OsmAnd naptáreseményt szeretne létrehozni a járműfelvételi értesítéshez.";

@@ -849,7 +849,8 @@
             selectGroupController = [[OASelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle gpxWptGroups:[(OAGpxWptEditingHandler *)_pointHandler getGroups]];
 
         selectGroupController.delegate = self;
-        [self presentViewController:selectGroupController animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:selectGroupController];
+        [self presentViewController:navigationController animated:YES completion:nil];
     }
     else if ([key isEqualToString:kReplaceKey])
     {
@@ -871,7 +872,8 @@
         }
 
         replaceScreen.delegate = self;
-        [self presentViewController:replaceScreen animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:replaceScreen];
+        [self presentViewController:navigationController animated:YES completion:nil];
     }
     else if ([key isEqualToString:kDeleteKey])
     {

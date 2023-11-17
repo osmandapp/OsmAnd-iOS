@@ -6,7 +6,7 @@
 //  Copyright (c) 2021 OsmAnd. All rights reserved.
 //
 
-#import "OABaseTableViewController.h"
+#import "OABaseNavbarViewController.h"
 
 typedef NS_ENUM(NSUInteger, EOAEditWaypointsGroupScreen)
 {
@@ -34,7 +34,7 @@ typedef NS_ENUM(NSUInteger, EOAEditWaypointsGroupScreen)
 
 @end
 
-@interface OAEditWaypointsGroupOptionsViewController : OABaseTableViewController
+@interface OAEditWaypointsGroupOptionsViewController : OABaseNavbarViewController
 
 - (instancetype)initWithScreenType:(EOAEditWaypointsGroupScreen)screenType
                          groupName:(NSString *)groupName

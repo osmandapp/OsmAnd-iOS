@@ -707,13 +707,11 @@
     if (self.delegate && _colorGridIndexPath)
     {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0];
-        OAColorItem *colorItem = _sortedColorItems[indexPath.row];
         OAColorItem *duplicatedColorItem = [self.delegate duplicateColorItem:colorItem];
         [_sortedColorItems insertObject:duplicatedColorItem atIndex:indexPath.row + 1];
         OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorGridIndexPath];
         OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
-        NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:colorItem.isDefault ? [colorCell.collectionView numberOfItemsInSection:indexPath.section] : (indexPath.row + 1)
-                                                       inSection:indexPath.section];
+        NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
         [colorHandler addColor:newIndexPath newItem:duplicatedColorItem];
         return duplicatedColorItem;
     }
@@ -726,7 +724,7 @@
     {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0];
         OAColorItem *colorItem = _sortedColorItems[indexPath.row];
-        [_sortedColorItems removeObject:colorItem];
+        [_sortedColorItems removeObjectAtIndex:indexPath.row];
         [self.delegate deleteColorItem:colorItem];
         OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorGridIndexPath];
         OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];

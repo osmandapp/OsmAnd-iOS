@@ -135,6 +135,12 @@
         [collectionView insertItemsAtIndexPaths:@[indexPath]];
         [self addItem:indexPath newItem:newItem];
     } completion:^(BOOL finished) {
+        if (indexPath.row <= _selectedIndexPath.row)
+        {
+            NSIndexPath *prevSelectedIndexPath = _selectedIndexPath;
+            _selectedIndexPath = [NSIndexPath indexPathForRow:_selectedIndexPath.row + 1 inSection:_selectedIndexPath.section];
+            [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, _selectedIndexPath]];
+        }
         if (self.delegate)
             [self.delegate reloadCollectionData];
 
@@ -177,9 +183,7 @@
         }
         else if (indexPath.row < _selectedIndexPath.row)
         {
-            NSIndexPath *prevSelectedIndexPath = _selectedIndexPath;
             _selectedIndexPath = [NSIndexPath indexPathForRow:_selectedIndexPath.row - 1 inSection:_selectedIndexPath.section];
-            [collectionView reloadItemsAtIndexPaths:@[prevSelectedIndexPath, _selectedIndexPath]];
         }
     }];
 }

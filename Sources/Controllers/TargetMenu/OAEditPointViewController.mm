@@ -1380,7 +1380,7 @@
 {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_sortedColorItems indexOfObject:colorItem] inSection:0];
     [_appearanceCollection deleteColor:colorItem];
-    [_sortedColorItems removeObject:colorItem];
+    [_sortedColorItems removeObjectAtIndex:indexPath.row];
 
     NSIndexPath *colorIndexPath = [NSIndexPath indexPathForRow:_colorRowIndex inSection:_appearenceSectionIndex];
     OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:colorIndexPath];

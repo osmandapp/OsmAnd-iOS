@@ -190,12 +190,12 @@
     if (self.delegate && _colorCollectionIndexPath)
     {
         OAColorItem *colorItem = _colorItems[indexPath.row];
-        OAColorItem *duplicatedColorItem = [self.delegate duplicateColorItem:colorItem];
-        [_colorItems insertObject:duplicatedColorItem atIndex:indexPath.row + 1];
         OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorCollectionIndexPath];
-        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
         NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:colorItem.isDefault ? [colorCell.collectionView numberOfItemsInSection:indexPath.section] : (indexPath.row + 1)
                                                        inSection:indexPath.section];
+        OAColorItem *duplicatedColorItem = [self.delegate duplicateColorItem:colorItem];
+        [_colorItems insertObject:duplicatedColorItem atIndex:newIndexPath.row];
+        OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];
         [colorHandler addColor:newIndexPath newItem:duplicatedColorItem];
     }
 }
@@ -205,7 +205,7 @@
     if (self.delegate && _colorCollectionIndexPath)
     {
         OAColorItem *colorItem = _colorItems[indexPath.row];
-        [_colorItems removeObject:colorItem];
+        [_colorItems removeObjectAtIndex:indexPath.row];
         [self.delegate deleteColorItem:colorItem];
         OACollectionSingleLineTableViewCell *colorCell = [self.tableView cellForRowAtIndexPath:_colorCollectionIndexPath];
         OAColorCollectionHandler *colorHandler = (OAColorCollectionHandler *) [colorCell getCollectionHandler];

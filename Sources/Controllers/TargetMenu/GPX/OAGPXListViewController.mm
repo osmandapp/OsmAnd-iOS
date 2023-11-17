@@ -18,7 +18,6 @@
 #import "OAIAPHelper.h"
 #import "OARootViewController.h"
 #import "OASizes.h"
-#import "OAColors.h"
 #import "OAKml2Gpx.h"
 #import "OAOsmAndFormatter.h"
 #import "Localization.h"
@@ -539,7 +538,7 @@ static UIViewController *parentController;
     [self commonInit];
     
     _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
+    _horizontalLine.backgroundColor = [UIColor.separatorColor CGColor];
     
     _editActive = NO;
     _isSearchActive = NO;
@@ -552,15 +551,13 @@ static UIViewController *parentController;
     _visibleCurrentTracks = [NSArray arrayWithArray:[_settings.mapSettingVisibleGpx get]];
     
     _editToolbarView.hidden = YES;
-    _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
-    self.editToolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
+    self.editToolbarView.backgroundColor = UIColor.groupBgColor;
     [self.editToolbarView.layer addSublayer:_horizontalLine];
     
-    _exportButton.tintColor = UIColorFromRGB(color_primary_purple);
-    _showOnMapButton.tintColor = UIColorFromRGB(color_primary_purple);
-    _uploadToOSMButton.tintColor = UIColorFromRGB(color_primary_purple);
-    _deleteButton.tintColor = UIColorFromRGB(color_primary_purple);
+    _exportButton.tintColor = UIColor.iconColorActive;
+    _showOnMapButton.tintColor = UIColor.iconColorActive;
+    _uploadToOSMButton.tintColor = UIColor.iconColorActive;
+    _deleteButton.tintColor = UIColor.iconColorActive;
     [_exportButton setImage:[UIImage templateImageNamed:@"ic_custom_export.png"] forState:UIControlStateNormal];
     [_showOnMapButton setImage:[UIImage templateImageNamed:@"ic_custom_map_pin_outlined.png"] forState:UIControlStateNormal];
     [_uploadToOSMButton setImage:[UIImage templateImageNamed:@"ic_custom_upload_to_openstreetmap_outlined.png"] forState:UIControlStateNormal];
@@ -626,6 +623,14 @@ static UIViewController *parentController;
         [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        _horizontalLine.backgroundColor = [UIColor.separatorColor CGColor];
+}
+
 -(UIView *) getBottomView
 {
     return _editActive ? _editToolbarView : nil;
@@ -662,16 +667,16 @@ static UIViewController *parentController;
     }
     else if (isFiltered)
     {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:UIColor.grayColor}];
-        _searchController.searchBar.searchTextField.backgroundColor = UIColor.whiteColor;
-        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.grayColor;
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:UIColor.textColorTertiary}];
+        _searchController.searchBar.searchTextField.backgroundColor = UIColor.groupBgColor;
+        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.textColorTertiary;
     }
     else
     {
         _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
         _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
         _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-        _searchController.searchBar.searchTextField.tintColor = UIColor.grayColor;
+        _searchController.searchBar.searchTextField.tintColor = UIColor.textColorTertiary;
     }
 }
 
@@ -1075,12 +1080,12 @@ static UIViewController *parentController;
     if (recOn)
     {
         [_recCell.btnStartStopRec setImage:[UIImage imageNamed:@"ic_action_rec_stop.png"] forState:UIControlStateNormal];
-        _recCell.btnStartStopRec.tintColor = [UIColor blackColor];
+        _recCell.btnStartStopRec.tintColor = [UIColor textColorPrimary];
     }
     else
     {
         [_recCell.btnStartStopRec setImage:[UIImage imageNamed:@"ic_action_rec_start.png"] forState:UIControlStateNormal];
-        _recCell.btnStartStopRec.tintColor = [UIColor redColor];
+        _recCell.btnStartStopRec.tintColor = [UIColor buttonBgColorDisruptive];
     }
     
     _recCell.btnStartStopRec.alpha = ([self.gpxTableView isEditing] ? 0.0 : 1.0);
@@ -1327,16 +1332,16 @@ static UIViewController *parentController;
                 {
                     cell.titleLabel.text = menuItem[@"title"];
                     cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17.0];
-                    cell.titleLabel.textColor = [UIColor blackColor];
+                    cell.titleLabel.textColor = [UIColor textColorPrimary];
                     cell.leftIconView.image = [UIImage templateImageNamed:menuItem[@"icon"]];
-                    cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
+                    cell.leftIconView.tintColor = UIColor.iconColorActive;
                 }
                 else
                 {
                     cell.leftIconView.image = nil;
                     cell.titleLabel.text = OALocalizedString(@"track_rec_addon_q");
                     cell.titleLabel.font = [UIFont scaledSystemFontOfSize:14.0];
-                    cell.titleLabel.textColor = [UIColor darkGrayColor];
+                    cell.titleLabel.textColor = [UIColor textColorSecondary];
                 }
             }
             return cell;
@@ -1352,9 +1357,9 @@ static UIViewController *parentController;
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointHeaderTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OAPointHeaderTableViewCell *) nib[0];
                 cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-                cell.folderIcon.tintColor = UIColorFromRGB(color_chart_orange);
-                cell.valueLabel.textColor = UIColorFromRGB(color_text_footer);
-                cell.arrowImage.tintColor = UIColorFromRGB(color_tint_gray);
+                cell.folderIcon.tintColor = UIColor.iconColorSelected;
+                cell.valueLabel.textColor = UIColor.textColorSecondary;
+                cell.arrowImage.tintColor = UIColor.iconColorDefault;
             }
             if (cell)
             {
@@ -1398,7 +1403,7 @@ static UIViewController *parentController;
                 {
                     cell.titleLabel.text = groupItem[@"title"];
                     cell.leftIconView.image = [UIImage templateImageNamed:groupItem[@"icon"]];
-                    cell.leftIconView.tintColor = [_settings.mapSettingVisibleGpx.get containsObject:gpx.gpxFilePath] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+                    cell.leftIconView.tintColor = [_settings.mapSettingVisibleGpx.get containsObject:gpx.gpxFilePath] ? UIColor.iconColorSelected : UIColor.iconColorDisabled;
 
                     [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                     cell.switchView.on = [_settings.mapSettingVisibleGpx.get containsObject:gpx.gpxFilePath];
@@ -1426,9 +1431,9 @@ static UIViewController *parentController;
                     cell.wptLabel.text = groupItem[@"wpt"];
                     [cell setRightButtonVisibility:!_editActive];
                     [cell.editButton setImage:[UIImage templateImageNamed:@"ic_custom_arrow_right"] forState:UIControlStateNormal];
-                    cell.editButton.tintColor = UIColorFromRGB(color_tint_gray);
+                    cell.editButton.tintColor = UIColor.iconColorDefault;
                     cell.leftIconImageView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
-                    cell.leftIconImageView.tintColor = [_settings.mapSettingVisibleGpx.get containsObject:gpx.gpxFilePath] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+                    cell.leftIconImageView.tintColor = [_settings.mapSettingVisibleGpx.get containsObject:gpx.gpxFilePath] ? UIColor.iconColorSelected : UIColor.iconColorDisabled;
                 }
                 return cell;
             }
@@ -1451,7 +1456,7 @@ static UIViewController *parentController;
 - (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+    [vw.textLabel setTextColor:UIColor.textColorSecondary];
 }
 
 #pragma mark - UITableViewDelegate

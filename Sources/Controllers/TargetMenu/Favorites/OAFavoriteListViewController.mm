@@ -115,7 +115,7 @@ static UIViewController *parentController;
 
     isDecelerating = NO;
     self.sortingType = 0;
-    self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    self.view.backgroundColor = [UIColor viewBgColor];
 
     _sortedHeaderView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
     _sortedHeaderView.delegate = self;
@@ -128,14 +128,22 @@ static UIViewController *parentController;
     _editToolbarView.hidden = YES;
 
     _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
-    self.editToolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
+    _horizontalLine.backgroundColor = [UIColor.separatorColor CGColor];
+    self.editToolbarView.backgroundColor = UIColor.groupBgColor;
     [self.editToolbarView.layer addSublayer:_horizontalLine];
 
     _selectedItems = [[NSMutableArray alloc] init];
     
     self.tabBarController.navigationItem.title = OALocalizedString(@"my_favorites");
     [self addNotification:OAIAPProductPurchasedNotification selector:@selector(productPurchased:)];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        _horizontalLine.backgroundColor = [UIColor.separatorColor CGColor];
 }
 
 - (void)productPurchased:(NSNotification *)notification
@@ -202,7 +210,7 @@ static UIViewController *parentController;
 - (void)configureSeparator:(UIView *)view top:(BOOL)top
 {
     view.translatesAutoresizingMaskIntoConstraints = NO;
-    view.backgroundColor = UIColorFromRGB(color_tint_gray);
+    view.backgroundColor = UIColor.separatorColor;
     [_freeBackupBanner addSubview:view];
     
     [NSLayoutConstraint activateConstraints:@[
@@ -522,16 +530,16 @@ static UIViewController *parentController;
     }
     else if (isFiltered)
     {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:UIColor.grayColor}];
-        _searchController.searchBar.searchTextField.backgroundColor = UIColor.whiteColor;
-        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.grayColor;
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:UIColor.textColorTertiary}];
+        _searchController.searchBar.searchTextField.backgroundColor = UIColor.groupBgColor;
+        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.textColorTertiary;
     }
     else
     {
         _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
         _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
         _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-        _searchController.searchBar.searchTextField.tintColor = UIColor.grayColor;
+        _searchController.searchBar.searchTextField.tintColor = UIColor.textColorTertiary;
     }
 }
 
@@ -1209,7 +1217,7 @@ static UIViewController *parentController;
             if ([cell isDirectionRTL])
                 [cell.arrowImage setImage:cell.arrowImage.image.imageFlippedForRightToLeftLayoutDirection];
         }
-        cell.arrowImage.tintColor = UIColorFromRGB(color_tint_gray);
+        cell.arrowImage.tintColor = UIColor.iconColorDefault;
     }
     return cell;
 }
@@ -1263,7 +1271,8 @@ static UIViewController *parentController;
     if (cell)
     {
         [cell.titleLabel setText:[item objectForKey:@"text"]];
-        [cell.leftIconView setImage:[UIImage imageNamed:[item objectForKey:@"icon"]]];
+        [cell.leftIconView setImage:[UIImage templateImageNamed:[item objectForKey:@"icon"]]];
+        cell.leftIconView.tintColor = UIColor.iconColorSelected;
     }
     return cell;
 }

@@ -18,7 +18,7 @@
 #import "OAPOIType.h"
 #import "OAEditPOIData.h"
 #import "OAButtonTableViewCell.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAOsmEditsLayer.h"
@@ -37,7 +37,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     EDITS_NOTES
 };
 
-@interface OAOsmEditsListViewController () <UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating, UISearchBarDelegate, OAOsmEditingBottomSheetDelegate, OAMultiselectableHeaderDelegate>
+@interface OAOsmEditsListViewController () <UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating, UISearchBarDelegate, UIScrollViewDelegate, OAOsmEditingBottomSheetDelegate, OAMultiselectableHeaderDelegate>
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *segmentContainerView;
@@ -62,12 +62,15 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     BOOL _isSearchActive;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad 
+{
     [super viewDidLoad];
     _poiHelper = [OAPOIHelper sharedInstance];
     [self applySafeAreaMargins];
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    
+    self.segmentContainerView.backgroundColor = [UIColor.navBarBgColorPrimary colorWithAlphaComponent:1.0];
     
     _headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 55.0)];
     _headerView.delegate = self;
@@ -102,10 +105,6 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     self.tabBarController.navigationItem.searchController = _searchController;
     [self setupSearchController:NO filtered:NO];
     self.definesPresentationContext = YES;
-    
-    UIEdgeInsets insets = [_tableView contentInset];
-    [_tableView setContentInset:UIEdgeInsetsMake(_segmentContainerView.frame.size.height, insets.left, insets.bottom, insets.right)];
-    [_tableView setScrollIndicatorInsets:_tableView.contentInset];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -210,16 +209,16 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     }
     else if (isFiltered)
     {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:UIColor.grayColor}];
-        _searchController.searchBar.searchTextField.backgroundColor = UIColor.whiteColor;
-        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.grayColor;
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:UIColor.textColorTertiary}];
+        _searchController.searchBar.searchTextField.backgroundColor = UIColor.groupBgColor;
+        _searchController.searchBar.searchTextField.leftView.tintColor =UIColor.textColorTertiary;
     }
     else
     {
         _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
         _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
         _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-        _searchController.searchBar.searchTextField.tintColor = UIColor.grayColor;
+        _searchController.searchBar.searchTextField.tintColor = UIColor.textColorTertiary;
     }
 }
 
@@ -263,7 +262,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAButtonTableViewCell *)[nib objectAtIndex:0];
         [cell.button setTitle:nil forState:UIControlStateNormal];
-        [cell.button setTintColor:UIColorFromRGB(color_icon_color_light)];
+        [cell.button setTintColor:UIColor.iconColorDefault];
         [cell.button.imageView setContentMode:UIViewContentModeCenter];
     }
     
@@ -564,6 +563,16 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
     searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
     searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (scrollView.contentOffset.y > 0)
+        self.segmentContainerView.backgroundColor = self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor;
+    else if (scrollView.contentOffset.y <= 0)
+        self.segmentContainerView.backgroundColor = [UIColor.navBarBgColorPrimary colorWithAlphaComponent:1.0];
 }
 
 @end

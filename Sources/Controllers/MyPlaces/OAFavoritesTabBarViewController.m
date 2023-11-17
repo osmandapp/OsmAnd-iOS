@@ -9,7 +9,6 @@
 #import "OAFavoritesTabBarViewController.h"
 #import "OAIAPHelper.h"
 #import "Localization.h"
-#import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @implementation OAFavoritesTabBarViewController
@@ -45,15 +44,23 @@
     
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = UIColorFromRGB(color_primary_orange_navbar_background);
-    appearance.shadowColor = UIColorFromRGB(color_primary_orange_navbar_background);
+    appearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    appearance.shadowColor = UIColor.navBarBgColorPrimary;
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.whiteColor
+        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
     };
-    self.navigationController.navigationBar.standardAppearance = appearance;
+    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+    blurAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
+    blurAppearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    blurAppearance.shadowColor = UIColor.navBarBgColorPrimary;
+    blurAppearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+    };
+    self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.whiteColor;
+    self.navigationController.navigationBar.tintColor = UIColor.navBarTextColorPrimary;
     self.navigationController.navigationBar.prefersLargeTitles = NO;
 }
 

@@ -179,6 +179,14 @@
     return UIStatusBarStyleDarkContent;
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        [self setNeedsStatusBarAppearanceUpdate];
+}
+
 #pragma mark - Base setup UI
 
 - (void)applyLocalization

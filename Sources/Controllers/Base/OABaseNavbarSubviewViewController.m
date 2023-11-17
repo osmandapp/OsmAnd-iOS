@@ -7,7 +7,7 @@
 //
 
 #import "OABaseNavbarSubviewViewController.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import <Foundation/Foundation.h>
 
 @implementation OABaseNavbarSubviewViewController
@@ -47,16 +47,16 @@
     switch ([self getNavbarColorScheme])
     {
         case EOABaseNavbarColorSchemeGray:
-            container.backgroundColor = self.tableView.backgroundColor;
+            container.backgroundColor = UIColor.viewBgColor;
             break;
         case EOABaseNavbarColorSchemeOrange:
-            container.backgroundColor = UIColorFromRGB(color_osmand_orange);
+            container.backgroundColor = [UIColor.navBarBgColorPrimary colorWithAlphaComponent:1.0];
             break;
         case EOABaseNavbarColorSchemeWhite:
-            container.backgroundColor = UIColor.whiteColor;
+            container.backgroundColor = UIColor.groupBgColor;
             break;
         default:
-            container.backgroundColor = UIColor.whiteColor;
+            container.backgroundColor = UIColor.groupBgColor;
             break;
     }
 }

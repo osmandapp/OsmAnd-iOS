@@ -226,7 +226,7 @@
         if (indexPath == _selectedIndexPath)
         {
             cell.backView.layer.borderWidth = 2;
-            cell.backView.layer.borderColor = UIColorFromRGB(color_primary_purple).CGColor;
+            cell.backView.layer.borderColor = UIColor.iconColorActive.CGColor;
         }
         else
         {

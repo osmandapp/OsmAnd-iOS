@@ -42,6 +42,14 @@
     _tapRecognizer.delegate = self;
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        [self.collectionView reloadData];
+}
+
 - (OABaseCollectionHandler *)getCollectionHandler
 {
     return _collectionHandler;

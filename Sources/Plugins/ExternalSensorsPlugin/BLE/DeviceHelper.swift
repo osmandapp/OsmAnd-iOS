@@ -30,6 +30,12 @@ final class DeviceHelper: NSObject {
     
     private override init() {}
     
+    func getDisconnectedPeripherals(pairedDevices: [DeviceSettings]) -> [Peripheral] {
+        let peripherals = SwiftyBluetooth.retrievePeripherals(withUUIDs: pairedDevices.compactMap { UUID(uuidString: $0.deviceId) })
+        updatePeripheralsForConnectedDevices(peripherals: peripherals.filter { $0.state == .connected })
+        return peripherals.filter { $0.state != .connected }
+    }
+    
     func getConnectedDevicesForWidget(type: WidgetType) -> [Device]? {
         connectedDevices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
     }

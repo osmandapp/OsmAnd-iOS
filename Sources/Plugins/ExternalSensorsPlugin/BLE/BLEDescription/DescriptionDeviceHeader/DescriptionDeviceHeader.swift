@@ -187,7 +187,7 @@ final class DescriptionDeviceHeader: UIView {
     }
 }
 
-extension CBPeripheralState {
+private extension CBPeripheralState {
     var description: String {
         switch self {
         case .disconnected: return localizedString("external_device_status_disconnect")

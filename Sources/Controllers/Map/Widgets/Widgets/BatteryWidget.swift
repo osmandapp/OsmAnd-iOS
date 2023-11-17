@@ -48,9 +48,9 @@ class BatteryWidget: OATextInfoWidget {
     
     private func setIcons(charging: Bool) {
         if charging {
-            setIcons("widget_battery_charging_day", widgetNightIcon: "widget_battery_charging_night")
+            setIcon("widget_battery_charging_day")
         } else {
-            setIcons(.battery)
+            setIconFor(.battery)
         }
     }
     

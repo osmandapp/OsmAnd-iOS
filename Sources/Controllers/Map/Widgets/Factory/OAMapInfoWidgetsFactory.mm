@@ -74,16 +74,15 @@
             [settings.rulerMode set:RULER_MODE_DARK];
         
         if (settings.rulerMode.get == RULER_MODE_NO_CIRCLES) {
-            [rulerControlWeak setIcons:@"widget_ruler_circle_hide_day" widgetNightIcon:@"widget_ruler_circle_hide_night"];
+            [rulerControlWeak setIcon:@"widget_ruler_circle_hide"];
         } else {
-            [rulerControlWeak setIcons:@"widget_ruler_circle_day" widgetNightIcon:@"widget_ruler_circle_night"];
+            [rulerControlWeak setIcon:@"widget_ruler_circle"];
         }
         [[OARootViewController instance].mapPanel.hudViewController.mapInfoController updateRuler];
     };
     OAAppSettings *settings = [OAAppSettings sharedManager];
     BOOL circlesShown = settings.rulerMode.get == RULER_MODE_NO_CIRCLES;
-    [rulerControl setIcons:circlesShown ? @"widget_ruler_circle_hide_day" : @"widget_ruler_circle_day"
-           widgetNightIcon:circlesShown ?  @"widget_ruler_circle_hide_night" : @"widget_ruler_circle_night"];
+    [rulerControl setIcon:circlesShown ? @"widget_ruler_circle_hide" : @"widget_ruler_circle"];
     return rulerControl;
 }
 
@@ -172,35 +171,29 @@
     };
     
     [weatherControl setText:nil subtext:nil];
-    NSString *iconNameDay;
-    NSString *iconNameNight;
+    NSString *iconName;
     if (band == WEATHER_BAND_TEMPERATURE)
     {
-        iconNameDay = @"widget_weather_temperature_day";
-        iconNameNight = @"widget_weather_temperature_night";
+        iconName = @"widget_weather_temperature";
     }
     else if (band == WEATHER_BAND_PRESSURE)
     {
-        iconNameDay = @"widget_weather_air_pressure_day";
-        iconNameNight = @"widget_weather_air_pressure_night";
+        iconName = @"widget_weather_air_pressure";
     }
     else if (band == WEATHER_BAND_WIND_SPEED)
     {
-        iconNameDay = @"widget_weather_wind_day";
-        iconNameNight = @"widget_weather_wind_night";
+        iconName = @"widget_weather_wind";
     }
     else if (band == WEATHER_BAND_CLOUD)
     {
-        iconNameDay = @"widget_weather_clouds_day";
-        iconNameNight = @"widget_weather_clouds_night";
+        iconName = @"widget_weather_clouds";
     }
     else if (band == WEATHER_BAND_PRECIPITATION)
     {
-        iconNameDay = @"widget_weather_precipitation_day";
-        iconNameNight = @"widget_weather_precipitation_night";
+        iconName = @"widget_weather_precipitation";
     }
 
-    [weatherControl setIcons:iconNameDay widgetNightIcon:iconNameNight];
+    [weatherControl setIcon:iconName];
     return weatherControl;
 }
 

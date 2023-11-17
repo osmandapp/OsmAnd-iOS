@@ -22,15 +22,13 @@ class MapWidgetInfo: NSObject, Comparable {
     var priority: Int
     var pageIndex: Int
     
-    private let daySettingsIconId: String
-    private let nightSettingsIconId: String
+    private let settingsIconId: String
     private let message: String
     private let widgetState: OAWidgetState?
     
     init(key: String,
          widget: OABaseWidgetView,
-         daySettingsIconId: String,
-         nightSettingsIconId: String,
+         settingsIconId: String,
          message: String,
          page: Int,
          order: Int,
@@ -38,8 +36,7 @@ class MapWidgetInfo: NSObject, Comparable {
         self.key = key
         self.widget = widget
         self.widgetState = widget.getWidgetState()
-        self.daySettingsIconId = daySettingsIconId
-        self.nightSettingsIconId = nightSettingsIconId
+        self.settingsIconId = settingsIconId
         self.message = message
         self.pageIndex = page
         self.priority = order
@@ -58,13 +55,13 @@ class MapWidgetInfo: NSObject, Comparable {
         if let widgetState = widgetState {
             return widgetState.getSettingsIconId(nightMode)
         } else {
-            return nightMode ? nightSettingsIconId : daySettingsIconId
+            return settingsIconId
         }
     }
     
     func getMapIconId(nightMode: Bool) -> String? {
         if let textInfoWidget = widget as? OATextInfoWidget {
-            return textInfoWidget.getIconName(nightMode)
+            return textInfoWidget.getIconName()
         }
         return nil
     }

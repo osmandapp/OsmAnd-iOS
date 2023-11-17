@@ -45,7 +45,7 @@
 {
     self = [super initWithType:type];
     if (self) {
-        [self setIcons:type];
+        [self setIconForWidgetType:type];
         _app = OsmAndApp.instance;
         _band = band;
         _undefined = -10000.0;

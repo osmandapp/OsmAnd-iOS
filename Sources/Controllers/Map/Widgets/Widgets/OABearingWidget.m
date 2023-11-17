@@ -36,7 +36,7 @@ static const int INVALID_BEARING = -1000;
         _locationProvider = OsmAndApp.instance.locationServices;
         _bearingType = bearingType;
         [self setText:nil subtext:nil];
-        [self setIcons:self.widgetType];
+        [self setIconForWidgetType:self.widgetType];
         [self setContentTitle:[self widgetByBearingType:bearingType].title];
     }
     return self;

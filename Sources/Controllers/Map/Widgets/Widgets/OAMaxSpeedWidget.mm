@@ -27,7 +27,7 @@
 {
     self = [super initWithType:OAWidgetType.maxSpeed];
     if (self) {
-        [self setIcons:OAWidgetType.maxSpeed];
+        [self setIconForWidgetType:OAWidgetType.maxSpeed];
         [self setText:nil subtext:nil];
         _trackingUtilities = OAMapViewTrackingUtilities.instance;
         _routingHelper = OARoutingHelper.sharedInstance;

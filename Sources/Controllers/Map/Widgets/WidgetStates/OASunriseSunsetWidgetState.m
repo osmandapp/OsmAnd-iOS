@@ -53,14 +53,14 @@
 - (NSString *) getMenuIconId
 {
     if ([self isSunriseMode])
-        return @"widget_sunrise_day";
+        return @"widget_sunrise";
     else
-        return @"widget_sunset_day";
+        return @"widget_sunset";
 }
 
 - (NSString *)getSettingsIconId:(BOOL)nightMode
 {
-    return [_type getIconName:nightMode];
+    return [_type iconName];
 }
 
 - (NSString *) getMenuItemId

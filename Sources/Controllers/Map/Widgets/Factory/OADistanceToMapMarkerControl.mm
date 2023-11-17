@@ -31,24 +31,21 @@
     OAAppSettings *_settings;
     BOOL _firstWidget;
     
-    NSString *_dayIcon;
-    NSString *_nightIcon;
-    NSString *_dayIconId;
-    NSString *_nightIconId;
+    NSString *_icon;
+    NSString *_iconId;
     NSString *_distance;
     NSString *_innerMarkerColor;
     OADestination *_markerDestination;
 }
 
-- (instancetype) initWithIcons:(NSString *)dayIconId nightIconId:(NSString *)nightIconId firstMarker:(BOOL)firstMarker
+- (instancetype) initWithIcon:(NSString *)iconId firstMarker:(BOOL)firstMarker
 {
     self = [super init];
     if (self)
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
-        _dayIconId = dayIconId;
-        _nightIconId = nightIconId;
+        _iconId = iconId;
         _firstWidget = firstMarker;
         self.colors = @[UIColorFromRGB(marker_pin_color_orange),
                         UIColorFromRGB(marker_pin_color_blue),
@@ -86,7 +83,7 @@
             if ([_markerDestination.color isEqual:self.colors[i]])
                 _innerMarkerColor = _markerNames[i];
         
-        [self setIcons:_dayIconId widgetNightIcon:_nightIconId];
+        [self setIcon:_iconId];
         [self setText:_distance subtext:nil];
     }
     else
@@ -103,7 +100,7 @@
                 if ([_markerDestination.color isEqual:self.colors[i]])
                     _innerMarkerColor = _markerNames[i];
 
-            [self setIcons:_dayIconId widgetNightIcon:_nightIconId];
+            [self setIcon:_iconId];
             [self setText:_distance subtext:nil];
         }
     }
@@ -123,12 +120,11 @@
     return newImage;
 }
 
-- (BOOL) setIcons:(NSString *)widgetDayIcon widgetNightIcon:(NSString *)widgetNightIcon
+- (BOOL) setIcon:(NSString *)widgetIcon
 {
-    _dayIcon = widgetDayIcon;
-    _nightIcon = widgetNightIcon;
+    _icon = widgetIcon;
     UIImage *innerMarkerImage = _innerMarkerColor ? [UIImage imageNamed:_innerMarkerColor] : nil;
-    UIImage *markerIcon = [self drawImage:innerMarkerImage inImage:[UIImage imageNamed:(![self isNight] ? _dayIcon : _nightIcon)]];
+    UIImage *markerIcon = [self drawImage:innerMarkerImage inImage:[UIImage imageNamed:_icon]];
     [self setImage:markerIcon];
     return YES;
 }

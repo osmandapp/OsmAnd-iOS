@@ -19,7 +19,7 @@ final class DescriptionDeviceHeader: UIView {
     @IBOutlet private weak var connectStatusLabel: UILabel!
     @IBOutlet private weak var connectButton: UIButton!
     
-    var onUpdateConnectStateAction: ((CBPeripheralState) -> Void)? = nil
+    var onUpdateConnectStateAction: ((DevicelState) -> Void)? = nil
     var didPaireDevicedAction: (() -> Void)? = nil
     
     private var device: Device?
@@ -38,7 +38,7 @@ final class DescriptionDeviceHeader: UIView {
         signalIndicatorImageView.configureSignalImage(signal: signal)
     }
     
-    private func configureStartStateActivityView(with state: CBPeripheralState) {
+    private func configureStartStateActivityView(with state: DevicelState) {
         switch state {
         case .connecting, .disconnecting:
             connectActivityView.startAnimating()
@@ -65,7 +65,7 @@ final class DescriptionDeviceHeader: UIView {
         }
     }
     
-    private func configureConnectButtonTitle(with state: CBPeripheralState) {
+    private func configureConnectButtonTitle(with state: DevicelState) {
         connectButton.setTitle(state.description, for: .normal)
     }
     
@@ -162,7 +162,7 @@ final class DescriptionDeviceHeader: UIView {
         }
     }
     
-    private func update(with state: CBPeripheralState) {
+    private func update(with state: DevicelState) {
         guard let device else { return }
         configureConnectUI(device: device)
         connectActivityView.stopAnimating()
@@ -183,18 +183,6 @@ final class DescriptionDeviceHeader: UIView {
         case .connected: disconnect()
         case .disconnected: connect()
         default: break
-        }
-    }
-}
-
-private extension CBPeripheralState {
-    var description: String {
-        switch self {
-        case .disconnected: return localizedString("external_device_status_disconnect")
-        case .connecting: return localizedString("external_device_status_connecting")
-        case .connected: return localizedString("external_device_status_connect")
-        case .disconnecting: return localizedString("external_device_status_disconnecting")
-        @unknown default: return "Unknown"
         }
     }
 }

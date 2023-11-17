@@ -30,23 +30,16 @@ final class DeviceHelper: NSObject {
     
     private override init() {}
     
-    func getDisconnectedPeripherals(pairedDevices: [DeviceSettings]) -> [Peripheral] {
+    func getDisconnectedDevices(for pairedDevices: [DeviceSettings]) -> [Device] {
         let peripherals = SwiftyBluetooth.retrievePeripherals(withUUIDs: pairedDevices.compactMap { UUID(uuidString: $0.deviceId) })
         updatePeripheralsForConnectedDevices(peripherals: peripherals.filter { $0.state == .connected })
-        return peripherals.filter { $0.state != .connected }
+        let disconnectedPeripherals = peripherals.filter { $0.state != .connected }
+        
+        return getDevicesFrom(peripherals: disconnectedPeripherals, pairedDevices: pairedDevices)
     }
     
     func getConnectedDevicesForWidget(type: WidgetType) -> [Device]? {
         connectedDevices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
-    }
-    
-    func updatePeripheralsForConnectedDevices(peripherals: [Peripheral]) {
-        for peripheral in peripherals {
-            if let index = connectedDevices.firstIndex(where: { $0.id == peripheral.identifier.uuidString }) {
-                connectedDevices[index].setPeripheral(peripheral: peripheral)
-                connectedDevices[index].addObservers()
-            }
-        }
     }
     
     func gatConnectedAndPaireDisconnectedDevicesFor(type: WidgetType) -> [Device]? {
@@ -112,6 +105,15 @@ final class DeviceHelper: NSObject {
     func changeDeviceName(with id: String, name: String) {
         devicesSettingsCollection.changeDeviceName(with: id, name: name)
     }
+    
+    private func updatePeripheralsForConnectedDevices(peripherals: [Peripheral]) {
+         for peripheral in peripherals {
+             if let index = connectedDevices.firstIndex(where: { $0.id == peripheral.identifier.uuidString }) {
+                 connectedDevices[index].setPeripheral(peripheral: peripheral)
+                 connectedDevices[index].addObservers()
+             }
+         }
+     }
     
     private func unpairWidgetsForDevice(id: String) {
         let widgets = getWidgetsForExternalDevice(id: id)

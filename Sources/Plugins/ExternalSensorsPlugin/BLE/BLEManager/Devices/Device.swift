@@ -13,6 +13,19 @@ extension Notification.Name {
     static let DeviceRSSIUpdated = NSNotification.Name("DeviceRSSIUpdated")
 }
 
+enum DevicelState: Int {
+    case disconnected, connecting, connected, disconnecting
+    
+    var description: String {
+        switch self {
+        case .disconnected: return localizedString("external_device_status_disconnect")
+        case .connecting: return localizedString("external_device_status_connecting")
+        case .connected: return localizedString("external_device_status_connect")
+        case .disconnecting: return localizedString("external_device_status_disconnecting")
+        }
+    }
+}
+
 class Device {
     var deviceType: DeviceType!
     var rssi = -1
@@ -124,8 +137,8 @@ class Device {
 
 extension Device {
     
-    var state: CBPeripheralState {
-        peripheral.state
+    var state: DevicelState {
+        DevicelState(rawValue: peripheral.state.rawValue) ?? .disconnected
     }
     
     func setPeripheral(peripheral: Peripheral) {

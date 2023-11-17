@@ -45,7 +45,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         tableView.contentInset.bottom = 64
     }
     
-    override func useCastomTableViewHeader() -> Bool {
+    override func useCustomTableViewHeader() -> Bool {
         true
     }
     
@@ -247,7 +247,6 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     private func configurePairedDevices() {
         sectionsDevicesData.removeAll()
         if let pairedDevices = DeviceHelper.shared.getSettingsForPairedDevices() {
-            let disconnectedPeripherals = DeviceHelper.shared.getDisconnectedPeripherals(pairedDevices: pairedDevices)
             let connectedDevices = DeviceHelper.shared.connectedDevices
             
             if !connectedDevices.isEmpty {
@@ -259,22 +258,22 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                 }
                 sectionsDevicesData[.connected] = connectedDevices
             }
-            if !disconnectedPeripherals.isEmpty {
-                createDesconnectedDevicesSection(disconnectedPeripherals: disconnectedPeripherals, pairedDevices: pairedDevices)
+            let disconnectedDevices = DeviceHelper.shared.getDisconnectedDevices(for: pairedDevices)
+            if !disconnectedDevices.isEmpty {
+                createDesconnectedDevicesSection(disconnectedDevices: disconnectedDevices)
             }
             tableView.reloadData()
         }
     }
     
-    private func createDesconnectedDevicesSection(disconnectedPeripherals: [Peripheral], pairedDevices: [DeviceSettings]) {
+    private func createDesconnectedDevicesSection(disconnectedDevices: [Device]) {
         let disconnectedSection = tableData.createNewSection()
-        disconnectedPeripherals.forEach { _ in
+        disconnectedDevices.forEach { _ in
             let row = disconnectedSection.createNewRow()
             row.cellType = SearchDeviceTableViewCell.reuseIdentifier
             row.key = ExternalSensorsConnectState.disconnected.rawValue
         }
-        sectionsDevicesData[.disconnected] = DeviceHelper.shared.getDevicesFrom(peripherals: disconnectedPeripherals,
-                                                                                pairedDevices: pairedDevices)
+        sectionsDevicesData[.disconnected] = disconnectedDevices
     }
     
     @objc private func pairNewSensor() {

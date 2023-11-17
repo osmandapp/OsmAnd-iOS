@@ -37,7 +37,7 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 - (void)updateAppearance;
 - (void)updateNavbar;
 - (void)refreshUI;
-- (BOOL)useCastomTableViewHeader;
+- (BOOL)useCustomTableViewHeader;
 - (void)updateUI;
 - (void)updateUIAnimated:(void (^)(BOOL finished))completion;
 - (void)updateWithoutData;

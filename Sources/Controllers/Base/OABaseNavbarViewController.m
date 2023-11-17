@@ -693,7 +693,7 @@
                                                           tintColor:nil
                                                     parentViewWidth:self.view.frame.size.width];
     }
-    if (![self useCastomTableViewHeader ])
+    if (![self useCustomTableViewHeader])
     {
         self.tableView.tableHeaderView = tableHeaderView;
         self.tableView.tableHeaderView.backgroundColor = UIColor.viewBgColor;
@@ -716,7 +716,7 @@
 {
 }
 
-- (BOOL)useCastomTableViewHeader
+- (BOOL)useCustomTableViewHeader
 {
     return NO;
 }

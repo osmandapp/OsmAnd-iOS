@@ -25,13 +25,6 @@
 @implementation OAExternalSensorsPlugin
 {
     OACommonBoolean *_lastUsedSensor;
-    
-    SensorTextWidget *_heartRateTempControl;
-    SensorTextWidget *_bicycleCadenceTempControl;
-    SensorTextWidget *_bicyclePowerTempControl;
-    SensorTextWidget *_bicycleDistanceTempControl;
-    SensorTextWidget *_bicycleSpeedTempControl;
-    SensorTextWidget *_temperatureTempControl;
 }
 
 - (instancetype)init
@@ -89,46 +82,21 @@
 - (void)createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
 {
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
-    
-    _heartRateTempControl = (SensorTextWidget *) [self createMapWidgetForParams:OAWidgetType.heartRate];
-    [delegate addWidget:[creator createWidgetInfoWithWidget:_heartRateTempControl]];
-    
-    _bicycleCadenceTempControl = (SensorTextWidget *) [self createMapWidgetForParams:OAWidgetType.bicycleCadence];
-    [delegate addWidget:[creator createWidgetInfoWithWidget:_bicycleCadenceTempControl]];
-    
-    _bicyclePowerTempControl = (SensorTextWidget *) [self createMapWidgetForParams:OAWidgetType.bicyclePower];
-    [delegate addWidget:[creator createWidgetInfoWithWidget:_bicyclePowerTempControl]];
-    
-    _bicycleDistanceTempControl = (SensorTextWidget *) [self createMapWidgetForParams:OAWidgetType.bicycleDistance];
-    [delegate addWidget:[creator createWidgetInfoWithWidget:_bicycleDistanceTempControl]];
-    
-    _bicycleSpeedTempControl = (SensorTextWidget *) [self createMapWidgetForParams:OAWidgetType.bicycleSpeed];
-    [delegate addWidget:[creator createWidgetInfoWithWidget:_bicycleSpeedTempControl]];
-    
-    _temperatureTempControl = (SensorTextWidget *) [self createMapWidgetForParams:OAWidgetType.temperature];
-    [delegate addWidget:[creator createWidgetInfoWithWidget:_temperatureTempControl]];
-    
+    auto widgetTypeArray = @[OAWidgetType.heartRate,
+                             OAWidgetType.bicycleCadence,
+                             OAWidgetType.bicyclePower,
+                             OAWidgetType.bicycleDistance,
+                             OAWidgetType.bicycleSpeed,
+                             OAWidgetType.temperature];
+    for (OAWidgetType *widgetType in widgetTypeArray)
+    {
+        [delegate addWidget:[creator createWidgetInfoWithWidget:(SensorTextWidget *) [self createMapWidgetForParams:widgetType]]];
+    }
 }
 
 - (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType
 {
     return [[SensorTextWidget alloc] initWithCustomId:@"" widgetType:widgetType widgetParams:nil];
-}
-
-- (void)updateWidgetsInfo
-{
-    if (_heartRateTempControl)
-        [_heartRateTempControl updateInfo];
-    if (_bicycleCadenceTempControl)
-        [_bicycleCadenceTempControl updateInfo];
-    if (_bicyclePowerTempControl)
-        [_bicyclePowerTempControl updateInfo];
-    if (_bicycleDistanceTempControl)
-        [_bicycleDistanceTempControl updateInfo];
-    if (_bicycleSpeedTempControl)
-        [_bicycleSpeedTempControl updateInfo];
-    if (_temperatureTempControl)
-        [_temperatureTempControl updateInfo];
 }
 
 - (NSString *) getName

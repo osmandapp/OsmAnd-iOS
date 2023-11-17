@@ -82,6 +82,8 @@
     OAAppDelegate *appDelegate = [self appDelegate];
     _rootViewController = appDelegate.rootViewController;
     
+    [self configureServices];
+    
     if (connectionOptions.URLContexts.count > 0) {
         NSURL *url = [connectionOptions.URLContexts allObjects].firstObject.URL;
         [self openURL:url];
@@ -176,6 +178,11 @@
     
     _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
     [_window makeKeyAndVisible];
+}
+
+- (void)configureServices
+{
+    [BLEInitHeader configure];
 }
 
 - (OAAppDelegate *)appDelegate {

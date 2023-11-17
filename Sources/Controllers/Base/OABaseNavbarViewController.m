@@ -39,7 +39,7 @@
     self = [super initWithNibName:@"OABaseNavbarViewController" bundle:nil];
     if (self)
     {
-        _tableData = [[OATableDataModel alloc] init];
+        [self initTableData];
         [self commonInit];
     }
     return self;
@@ -52,6 +52,11 @@
 // use in overridden init method if class properties have complex dependencies
 - (void)postInit
 {
+}
+
+- (void)initTableData
+{
+    _tableData = [[OATableDataModel alloc] init];
 }
 
 #pragma mark - UIViewController
@@ -688,8 +693,11 @@
                                                           tintColor:nil
                                                     parentViewWidth:self.view.frame.size.width];
     }
-    self.tableView.tableHeaderView = tableHeaderView;
-    self.tableView.tableHeaderView.backgroundColor = UIColor.viewBgColor;
+    if (![self useCustomTableViewHeader])
+    {
+        self.tableView.tableHeaderView = tableHeaderView;
+        self.tableView.tableHeaderView.backgroundColor = UIColor.viewBgColor;
+    }
 }
 
 - (NSString *)getTableFooterText
@@ -706,6 +714,11 @@
 
 - (void)generateData
 {
+}
+
+- (BOOL)useCustomTableViewHeader
+{
+    return NO;
 }
 
 - (BOOL)hideFirstHeader

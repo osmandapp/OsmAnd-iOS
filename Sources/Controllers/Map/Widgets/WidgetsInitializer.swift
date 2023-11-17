@@ -36,7 +36,7 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
     }
     
     
-    func createCommonWidgets() {
+    private func createCommonWidgets() {
         createTopWidgets()
         createBottomWidgets()
         createLeftWidgets()
@@ -91,7 +91,7 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
         mapWidgetsCache.append(widgetInfo)
     }
     
-    func createCustomWidgets() {
+    private func createCustomWidgets() {
         let settings = OAAppSettings.sharedManager()!
         let widgetKeys = settings.customWidgetKeys.get(appMode)
         if let widgetKeys, !widgetKeys.isEmpty {

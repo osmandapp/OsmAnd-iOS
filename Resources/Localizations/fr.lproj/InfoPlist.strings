@@ -5,3 +5,11 @@
   Created by Dmitry Svetlichny on 10.11.2023.
   Copyright © 2023 OsmAnd. All rights reserved.
 */
+
+"NSLocationWhenInUseUsageDescription" = "L'accès à l'emplacement est nécessaire pour la navigation et l'enregistrement de l'itinéraire";
+
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "L'accès à la localisation est nécessaire pour la navigation et l'enregistrement du trajet en arrière-plan";
+
+"NSCalendarsUsageDescription" = "L'accès à Bluetooth est nécessaire pour trouver des capteurs BLE et s'y connecter";
+
+"NSCalendarsUsageDescription" = "OsmAnd souhaite créer un événement de calendrier pour la notification de prise en charge du véhicule";

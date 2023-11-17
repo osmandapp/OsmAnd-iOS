@@ -5,3 +5,11 @@
   Created by Dmitry Svetlichny on 10.11.2023.
   Copyright © 2023 OsmAnd. All rights reserved.
 */
+
+"NSLocationWhenInUseUsageDescription" = "يلزم الوصول إلى الموقع للملاحة وتسجيل الرحلة.";
+
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "يلزم الوصول إلى الموقع للتنقل وتسجيل الرحلة في الخلفية.";
+
+"NSBluetoothAlwaysUsageDescription" = "يلزم الوصول إلى Bluetooth للعثور على مستشعرات BLE والاتصال بها.";
+
+"NSCalendarsUsageDescription" = "يرغب OsmAnd في إنشاء حدث تقويم لإشعار استلام السيارة.";

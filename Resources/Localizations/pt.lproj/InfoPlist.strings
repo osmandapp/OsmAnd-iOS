@@ -5,3 +5,11 @@
   Created by Dmitry Svetlichny on 10.11.2023.
   Copyright © 2023 OsmAnd. All rights reserved.
 */
+
+"NSLocationWhenInUseUsageDescription" = "O acesso à localização é necessário para a navegação e o registo da viagem.";
+
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "O acesso à localização é necessário para a navegação e o registo da viagem em segundo plano.";
+
+"NSBluetoothAlwaysUsageDescription" = "O acesso ao Bluetooth é necessário para encontrar e ligar a sensores BLE.";   
+
+"NSCalendarsUsageDescription" = "OsmAnd gostaria de criar um evento de calendário para notificação de recolha de veículos.";

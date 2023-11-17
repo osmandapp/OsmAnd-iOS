@@ -70,7 +70,7 @@ class RulerDistanceWidget: OATextInfoWidget {
 
     @objc private func onRulerUpdate() {
         if OAAppSettings.sharedManager().rulerMode.get() == .RULER_MODE_NO_CIRCLES {
-            self.setIcon("widget_ruler_circle_hide")
+            self.setIcon("widget_hidden")
         } else {
             self.setIconFor(.radiusRuler)
         }

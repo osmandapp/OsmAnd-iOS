@@ -74,7 +74,7 @@
             [settings.rulerMode set:RULER_MODE_DARK];
         
         if (settings.rulerMode.get == RULER_MODE_NO_CIRCLES) {
-            [rulerControlWeak setIcon:@"widget_ruler_circle_hide"];
+            [rulerControlWeak setIcon:@"widget_hidden"];
         } else {
             [rulerControlWeak setIcon:@"widget_ruler_circle"];
         }
@@ -82,7 +82,7 @@
     };
     OAAppSettings *settings = [OAAppSettings sharedManager];
     BOOL circlesShown = settings.rulerMode.get == RULER_MODE_NO_CIRCLES;
-    [rulerControl setIcon:circlesShown ? @"widget_ruler_circle_hide" : @"widget_ruler_circle"];
+    [rulerControl setIcon:circlesShown ? @"widget_hidden" : @"widget_ruler_circle"];
     return rulerControl;
 }
 

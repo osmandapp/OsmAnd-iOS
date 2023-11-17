@@ -46,6 +46,7 @@ final class BLEWheelSettingsViewController: OABaseNavbarViewController {
     
     override func onRightNavbarButtonPressed() {
         if wheelSizeString != String(wheelSize) {
+            // TODO: need ui design
           //  device.deviceName = wheelSizeString
            // DeviceHelper.shared.changeDeviceName(with: device.id, name: newDeviceName)
             onSaveAction?()

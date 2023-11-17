@@ -64,7 +64,7 @@ final class DevicesSettingsCollection {
         var deviceSettings: DeviceSettings
         switch device.deviceType {
         case .BLE_BICYCLE_SCD:
-            // ???
+            // TODO: ???
             deviceSettings = WheelDeviceSettings(deviceId: device.id, deviceType: device.deviceType, deviceName: device.deviceName, deviceEnabled: deviceEnabled)
         default:
             deviceSettings = DeviceSettings(deviceId: device.id, deviceType: device.deviceType, deviceName: device.deviceName, deviceEnabled: deviceEnabled)

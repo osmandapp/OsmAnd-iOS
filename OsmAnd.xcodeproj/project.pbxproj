@@ -3631,6 +3631,12 @@
 		DAFE4D3F22169B4D009731CA /* map_osm_note_resolved@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D3022169B4C009731CA /* map_osm_note_resolved@3x.png */; };
 		FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */; };
 		FA12A6C72A73EED600FCB656 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */; };
+		FA359EE02ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EDF2ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift */; };
+		FA359EE52ADF026D0001C11D /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EE42ADF026D0001C11D /* DeviceType.swift */; };
+		FA359EE92ADFC04A0001C11D /* DeviceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EE82ADFC04A0001C11D /* DeviceSettings.swift */; };
+		FA359EEB2ADFC2CF0001C11D /* DevicesSettingsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EEA2ADFC2CF0001C11D /* DevicesSettingsCollection.swift */; };
+		FA359EED2ADFC6910001C11D /* WheelDeviceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EEC2ADFC6910001C11D /* WheelDeviceSettings.swift */; };
+		FA359EF12ADFD5310001C11D /* DeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EF02ADFD5310001C11D /* DeviceHelper.swift */; };
 		FA4195592AAB55E6007CBBAB /* ShadowTransporentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4195582AAB55E6007CBBAB /* ShadowTransporentView.swift */; };
 		FA44BF3B2A71123D000D2F5F /* ic_banner_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF2F2A71123B000D2F5F /* ic_banner_close@2x.png */; };
 		FA44BF3C2A71123D000D2F5F /* ic_custom_osmand_start_logo_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA44BF302A71123B000D2F5F /* ic_custom_osmand_start_logo_big@3x.png */; };
@@ -3657,7 +3663,33 @@
 		FA740D422A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA740D412A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib */; };
 		FA740D452A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */; };
 		FA77E7A72AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA77E7A62AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm */; };
+		FA86F4152AE7C56E00DC3B2B /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */; };
+		FA86F4182AE7C5EA00DC3B2B /* UserDefaultsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4172AE7C5EA00DC3B2B /* UserDefaultsKey.swift */; };
+		FA86F41A2AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */; };
+		FA86F41C2AE7CE0100DC3B2B /* BLEBikeSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */; };
+		FAA6504F2ADD42C50020DCEA /* SearchDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650362ADD42C40020DCEA /* SearchDeviceTableViewCell.swift */; };
+		FAA650502ADD42C50020DCEA /* BLESearchViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAA650372ADD42C40020DCEA /* BLESearchViewController.storyboard */; };
+		FAA650512ADD42C50020DCEA /* BLESearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650382ADD42C40020DCEA /* BLESearchViewController.swift */; };
+		FAA650522ADD42C50020DCEA /* BLEBatterySensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA6503B2ADD42C40020DCEA /* BLEBatterySensor.swift */; };
+		FAA650532ADD42C50020DCEA /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA6503C2ADD42C40020DCEA /* Sensor.swift */; };
+		FAA650542ADD42C50020DCEA /* BLEHeartRateSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA6503D2ADD42C40020DCEA /* BLEHeartRateSensor.swift */; };
+		FAA650552ADD42C50020DCEA /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA6503E2ADD42C40020DCEA /* BLEManager.swift */; };
+		FAA650562ADD42C50020DCEA /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA6503F2ADD42C40020DCEA /* UIView+Extension.swift */; };
+		FAA650572ADD42C50020DCEA /* BLEHeartRateDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650412ADD42C40020DCEA /* BLEHeartRateDevice.swift */; };
+		FAA650582ADD42C50020DCEA /* GattAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650422ADD42C40020DCEA /* GattAttributes.swift */; };
+		FAA650592ADD42C50020DCEA /* BLETemperatureDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650432ADD42C40020DCEA /* BLETemperatureDevice.swift */; };
+		FAA6505A2ADD42C50020DCEA /* DeviceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650442ADD42C40020DCEA /* DeviceFactory.swift */; };
+		FAA6505B2ADD42C50020DCEA /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650452ADD42C40020DCEA /* Device.swift */; };
+		FAA6505C2ADD42C50020DCEA /* BLEExternalSensorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650472ADD42C40020DCEA /* BLEExternalSensorsViewController.swift */; };
+		FAA6505D2ADD42C50020DCEA /* BLEExternalSensors.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAA650482ADD42C40020DCEA /* BLEExternalSensors.storyboard */; };
+		FAA6505E2ADD42C50020DCEA /* BLEDescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA6504A2ADD42C50020DCEA /* BLEDescriptionViewController.swift */; };
+		FAA6505F2ADD42C50020DCEA /* DescriptionDeviceHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA6504C2ADD42C50020DCEA /* DescriptionDeviceHeader.swift */; };
+		FAA650602ADD42C50020DCEA /* DescriptionDeviceHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAA6504D2ADD42C50020DCEA /* DescriptionDeviceHeader.xib */; };
+		FAA650642ADD43BE0020DCEA /* SwiftyBluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = FAA650632ADD43BE0020DCEA /* SwiftyBluetooth */; };
+		FAA650662ADD4C9F0020DCEA /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650652ADD4C9F0020DCEA /* UIImage+Extension.swift */; };
+		FAA650682ADD8D0D0020DCEA /* BLEInitHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */; };
 		FAB6E7E42AC5A9FD00A82987 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */; };
+		FACE409F2AEA9ACB00E1E43A /* OASensorsPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = FACE409D2AEA9ACB00E1E43A /* OASensorsPlugin.mm */; };
 		FAF6C89B2AD013F400A3ED94 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */; };
 		FAF6C89F2AD014C900A3ED94 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */; };
 		FAF6C8A02AD014C900A3ED94 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89E2AD014C800A3ED94 /* Theme.swift */; };
@@ -8531,6 +8563,12 @@
 		F905FB9C7B198BF071D402C0 /* Pods-OsmAnd Maps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.release.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.release.xcconfig"; sourceTree = "<group>"; };
 		FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBannerCell.swift; sourceTree = "<group>"; };
 		FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
+		FA359EDF2ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEChangeDeviceNameViewController.swift; sourceTree = "<group>"; };
+		FA359EE42ADF026D0001C11D /* DeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
+		FA359EE82ADFC04A0001C11D /* DeviceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSettings.swift; sourceTree = "<group>"; };
+		FA359EEA2ADFC2CF0001C11D /* DevicesSettingsCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicesSettingsCollection.swift; sourceTree = "<group>"; };
+		FA359EEC2ADFC6910001C11D /* WheelDeviceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WheelDeviceSettings.swift; sourceTree = "<group>"; };
+		FA359EF02ADFD5310001C11D /* DeviceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceHelper.swift; sourceTree = "<group>"; };
 		FA4195582AAB55E6007CBBAB /* ShadowTransporentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowTransporentView.swift; sourceTree = "<group>"; };
 		FA44BF2F2A71123B000D2F5F /* ic_banner_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_banner_close@2x.png"; path = "Resources/Icons/ic_banner_close@2x.png"; sourceTree = "<group>"; };
 		FA44BF302A71123B000D2F5F /* ic_custom_osmand_start_logo_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osmand_start_logo_big@3x.png"; path = "Resources/Icons/ic_custom_osmand_start_logo_big@3x.png"; sourceTree = "<group>"; };
@@ -8558,7 +8596,33 @@
 		FA740D442A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudIntroductionButtonsView.swift; sourceTree = "<group>"; };
 		FA77E7A52AE16E90001BABE2 /* OACarPlayMapDashboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACarPlayMapDashboardViewController.h; sourceTree = "<group>"; };
 		FA77E7A62AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACarPlayMapDashboardViewController.mm; sourceTree = "<group>"; };
+		FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
+		FA86F4172AE7C5EA00DC3B2B /* UserDefaultsKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKey.swift; sourceTree = "<group>"; };
+		FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBikeSCDDevice.swift; sourceTree = "<group>"; };
+		FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBikeSensor.swift; sourceTree = "<group>"; };
+		FAA650362ADD42C40020DCEA /* SearchDeviceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchDeviceTableViewCell.swift; sourceTree = "<group>"; };
+		FAA650372ADD42C40020DCEA /* BLESearchViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = BLESearchViewController.storyboard; sourceTree = "<group>"; };
+		FAA650382ADD42C40020DCEA /* BLESearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLESearchViewController.swift; sourceTree = "<group>"; };
+		FAA6503B2ADD42C40020DCEA /* BLEBatterySensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEBatterySensor.swift; sourceTree = "<group>"; };
+		FAA6503C2ADD42C40020DCEA /* Sensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sensor.swift; sourceTree = "<group>"; };
+		FAA6503D2ADD42C40020DCEA /* BLEHeartRateSensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEHeartRateSensor.swift; sourceTree = "<group>"; };
+		FAA6503E2ADD42C40020DCEA /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
+		FAA6503F2ADD42C40020DCEA /* UIView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		FAA650412ADD42C40020DCEA /* BLEHeartRateDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEHeartRateDevice.swift; sourceTree = "<group>"; };
+		FAA650422ADD42C40020DCEA /* GattAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GattAttributes.swift; sourceTree = "<group>"; };
+		FAA650432ADD42C40020DCEA /* BLETemperatureDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLETemperatureDevice.swift; sourceTree = "<group>"; };
+		FAA650442ADD42C40020DCEA /* DeviceFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceFactory.swift; sourceTree = "<group>"; };
+		FAA650452ADD42C40020DCEA /* Device.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
+		FAA650472ADD42C40020DCEA /* BLEExternalSensorsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEExternalSensorsViewController.swift; sourceTree = "<group>"; };
+		FAA650482ADD42C40020DCEA /* BLEExternalSensors.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = BLEExternalSensors.storyboard; sourceTree = "<group>"; };
+		FAA6504A2ADD42C50020DCEA /* BLEDescriptionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEDescriptionViewController.swift; sourceTree = "<group>"; };
+		FAA6504C2ADD42C50020DCEA /* DescriptionDeviceHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DescriptionDeviceHeader.swift; sourceTree = "<group>"; };
+		FAA6504D2ADD42C50020DCEA /* DescriptionDeviceHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DescriptionDeviceHeader.xib; sourceTree = "<group>"; };
+		FAA650652ADD4C9F0020DCEA /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEInitHeader.swift; sourceTree = "<group>"; };
 		FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
+		FACE409D2AEA9ACB00E1E43A /* OASensorsPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASensorsPlugin.mm; sourceTree = "<group>"; };
+		FACE409E2AEA9ACB00E1E43A /* OASensorsPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASensorsPlugin.h; sourceTree = "<group>"; };
 		FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		FAF6C89E2AD014C800A3ED94 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
@@ -8590,6 +8654,7 @@
 				8440E2DF1ABEA7370088856A /* libpng_static.a in Frameworks */,
 				8440E2E01ABEA7370088856A /* libprotobuf_static.a in Frameworks */,
 				8440E2E11ABEA7370088856A /* libskia_static.a in Frameworks */,
+				FAA650642ADD43BE0020DCEA /* SwiftyBluetooth in Frameworks */,
 				8440E2E21ABEA7370088856A /* libz_static.a in Frameworks */,
 				8A5A002827735D76002227DD /* libharfbuzz_static.a in Frameworks */,
 				8440E2D01ABEA7200088856A /* libarchive_static.a in Frameworks */,
@@ -11694,6 +11759,7 @@
 		DA5A78FF26C5639F00F274C7 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				FAA650332ADD42990020DCEA /* BLE */,
 				DAABE4EC2A16578A00569F71 /* SwiftExtensions */,
 				DACF784127E343FF00A8A218 /* Backup */,
 				DA5A7AA726C563A000F274C7 /* Address */,
@@ -11918,6 +11984,7 @@
 		DA5A797626C563A000F274C7 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				FACE409C2AEA9A8000E1E43A /* SensorsPlugin */,
 				32119B3A28477112005E1E0C /* Development */,
 				DA5A799526C563A000F274C7 /* Mapillary */,
 				DA5A798C26C563A000F274C7 /* Monitoring */,
@@ -14369,6 +14436,7 @@
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				FA86F4162AE7C5DC00DC3B2B /* UserDefaultsKey */,
 				46CE64EB2A053B0C009CEE11 /* Appearance */,
 				46DC808329B8884F00C477C3 /* Enums */,
 				DA45B23F2A2F47200055055A /* Extensions.swift */,
@@ -14738,6 +14806,7 @@
 		DAABE4EC2A16578A00569F71 /* SwiftExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				FAA6503F2ADD42C40020DCEA /* UIView+Extension.swift */,
 				DAABE4ED2A1657AF00569F71 /* Color+INT.swift */,
 				FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */,
 				FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */,
@@ -14745,6 +14814,8 @@
 				FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */,
 				FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */,
 				FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */,
+				FAA650652ADD4C9F0020DCEA /* UIImage+Extension.swift */,
+				FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */,
 			);
 			path = SwiftExtensions;
 			sourceTree = "<group>";
@@ -14853,6 +14924,25 @@
 			path = WidgetSettings;
 			sourceTree = "<group>";
 		};
+		FA359EDE2ADEA1FE0001C11D /* BLEChangeDeviceName */ = {
+			isa = PBXGroup;
+			children = (
+				FA359EDF2ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift */,
+			);
+			path = BLEChangeDeviceName;
+			sourceTree = "<group>";
+		};
+		FA359EE72ADFC0420001C11D /* DeviceSettings */ = {
+			isa = PBXGroup;
+			children = (
+				FA359EE82ADFC04A0001C11D /* DeviceSettings.swift */,
+				FA359EEA2ADFC2CF0001C11D /* DevicesSettingsCollection.swift */,
+				FA359EEC2ADFC6910001C11D /* WheelDeviceSettings.swift */,
+				FA359EF02ADFD5310001C11D /* DeviceHelper.swift */,
+			);
+			path = DeviceSettings;
+			sourceTree = "<group>";
+		};
 		FA4195572AAB55D4007CBBAB /* ShadowTransporentView */ = {
 			isa = PBXGroup;
 			children = (
@@ -14908,6 +14998,117 @@
 			path = CloudIntroductionButtonsView;
 			sourceTree = "<group>";
 		};
+		FA86F4162AE7C5DC00DC3B2B /* UserDefaultsKey */ = {
+			isa = PBXGroup;
+			children = (
+				FA86F4172AE7C5EA00DC3B2B /* UserDefaultsKey.swift */,
+			);
+			path = UserDefaultsKey;
+			sourceTree = "<group>";
+		};
+		FAA650332ADD42990020DCEA /* BLE */ = {
+			isa = PBXGroup;
+			children = (
+				FA359EE72ADFC0420001C11D /* DeviceSettings */,
+				FA359EDE2ADEA1FE0001C11D /* BLEChangeDeviceName */,
+				FAA650392ADD42C40020DCEA /* BLEManager */,
+				FAA650462ADD42C40020DCEA /* BLEExternalSensors */,
+				FAA650342ADD42C40020DCEA /* BLESearch */,
+				FAA650492ADD42C50020DCEA /* BLEDescription */,
+			);
+			path = BLE;
+			sourceTree = "<group>";
+		};
+		FAA650342ADD42C40020DCEA /* BLESearch */ = {
+			isa = PBXGroup;
+			children = (
+				FAA650352ADD42C40020DCEA /* Cells */,
+				FAA650372ADD42C40020DCEA /* BLESearchViewController.storyboard */,
+				FAA650382ADD42C40020DCEA /* BLESearchViewController.swift */,
+			);
+			path = BLESearch;
+			sourceTree = "<group>";
+		};
+		FAA650352ADD42C40020DCEA /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				FAA650362ADD42C40020DCEA /* SearchDeviceTableViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		FAA650392ADD42C40020DCEA /* BLEManager */ = {
+			isa = PBXGroup;
+			children = (
+				FAA6503E2ADD42C40020DCEA /* BLEManager.swift */,
+				FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */,
+				FAA650422ADD42C40020DCEA /* GattAttributes.swift */,
+				FAA6503A2ADD42C40020DCEA /* Sensors */,
+				FAA650402ADD42C40020DCEA /* Devices */,
+			);
+			path = BLEManager;
+			sourceTree = "<group>";
+		};
+		FAA6503A2ADD42C40020DCEA /* Sensors */ = {
+			isa = PBXGroup;
+			children = (
+				FAA6503C2ADD42C40020DCEA /* Sensor.swift */,
+				FAA6503B2ADD42C40020DCEA /* BLEBatterySensor.swift */,
+				FAA6503D2ADD42C40020DCEA /* BLEHeartRateSensor.swift */,
+				FA86F41B2AE7CE0100DC3B2B /* BLEBikeSensor.swift */,
+			);
+			path = Sensors;
+			sourceTree = "<group>";
+		};
+		FAA650402ADD42C40020DCEA /* Devices */ = {
+			isa = PBXGroup;
+			children = (
+				FAA650452ADD42C40020DCEA /* Device.swift */,
+				FA359EE42ADF026D0001C11D /* DeviceType.swift */,
+				FAA650442ADD42C40020DCEA /* DeviceFactory.swift */,
+				FAA650412ADD42C40020DCEA /* BLEHeartRateDevice.swift */,
+				FAA650432ADD42C40020DCEA /* BLETemperatureDevice.swift */,
+				FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */,
+			);
+			path = Devices;
+			sourceTree = "<group>";
+		};
+		FAA650462ADD42C40020DCEA /* BLEExternalSensors */ = {
+			isa = PBXGroup;
+			children = (
+				FAA650472ADD42C40020DCEA /* BLEExternalSensorsViewController.swift */,
+				FAA650482ADD42C40020DCEA /* BLEExternalSensors.storyboard */,
+			);
+			path = BLEExternalSensors;
+			sourceTree = "<group>";
+		};
+		FAA650492ADD42C50020DCEA /* BLEDescription */ = {
+			isa = PBXGroup;
+			children = (
+				FAA6504B2ADD42C50020DCEA /* DescriptionDeviceHeader */,
+				FAA6504A2ADD42C50020DCEA /* BLEDescriptionViewController.swift */,
+			);
+			path = BLEDescription;
+			sourceTree = "<group>";
+		};
+		FAA6504B2ADD42C50020DCEA /* DescriptionDeviceHeader */ = {
+			isa = PBXGroup;
+			children = (
+				FAA6504C2ADD42C50020DCEA /* DescriptionDeviceHeader.swift */,
+				FAA6504D2ADD42C50020DCEA /* DescriptionDeviceHeader.xib */,
+			);
+			path = DescriptionDeviceHeader;
+			sourceTree = "<group>";
+		};
+		FACE409C2AEA9A8000E1E43A /* SensorsPlugin */ = {
+			isa = PBXGroup;
+			children = (
+				FACE409E2AEA9ACB00E1E43A /* OASensorsPlugin.h */,
+				FACE409D2AEA9ACB00E1E43A /* OASensorsPlugin.mm */,
+			);
+			path = SensorsPlugin;
+			sourceTree = "<group>";
+		};
 		FAF6C89C2AD014C800A3ED94 /* ThemeManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -14952,6 +15153,9 @@
 				DA7F2595231A697200E54F77 /* PBXTargetDependency */,
 			);
 			name = "OsmAnd Maps";
+			packageProductDependencies = (
+				FAA650632ADD43BE0020DCEA /* SwiftyBluetooth */,
+			);
 			productName = OsmAnd;
 			productReference = BBA3AFEE197FC4BB0039D991 /* OsmAnd Maps.app */;
 			productType = "com.apple.product-type.application";
@@ -15091,6 +15295,9 @@
 				ars,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
+			packageReferences = (
+				FAA650622ADD43BE0020DCEA /* XCRemoteSwiftPackageReference "SwiftyBluetooth" */,
+			);
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
@@ -15327,6 +15534,7 @@
 				DA5F21F0229551A300B0D7B6 /* ic_action_wifi_off@2x.png in Resources */,
 				84686AC81E09740500DA09BC /* ic_search_filter@2x.png in Resources */,
 				46494282286DB36800A44103 /* ic_custom_compass_north@3x.png in Resources */,
+				FAA650502ADD42C50020DCEA /* BLESearchViewController.storyboard in Resources */,
 				46453B132835241B001F9A3A /* ic_custom_nautical_depth_colored_day@3x.png in Resources */,
 				8431E7771B380D010063C9AF /* ic_dialog_export@3x.png in Resources */,
 				8A755A6921CBF92400E42699 /* ic_live_srtm@3x.png in Resources */,
@@ -16455,6 +16663,7 @@
 				DA5A828626C563A700F274C7 /* OARouteInfoAltitudeCell.xib in Resources */,
 				DA5A827926C563A700F274C7 /* OARadiusCellEx.xib in Resources */,
 				DA52CE0924AE087F00CC309D /* ic_custom_direction_north@2x.png in Resources */,
+				FAA6505D2ADD42C50020DCEA /* BLEExternalSensors.storyboard in Resources */,
 				DAF50C70299D111B006AAF2E /* osmassistant.addon.render.xml in Resources */,
 				DA134198243DC5A80039D214 /* map_action_utv@3x.png in Resources */,
 				849E81AE1AFA5D6700549953 /* btn_map_type_icon_walk@3x.png in Resources */,
@@ -17262,6 +17471,7 @@
 				DA8AD07F291D3A850092385B /* ic_custom_cloud_upload_outline@2x.png in Resources */,
 				46AEDB8E27F4ABE2006D90E8 /* ic_custom_air_pressure@3x.png in Resources */,
 				DA2EC75129FBBE0400ECEB37 /* widget_weather_clouds_day@3x.png in Resources */,
+				FAA650602ADD42C50020DCEA /* DescriptionDeviceHeader.xib in Resources */,
 				8AFC2BEF24334A4E0095BA9F /* map_navigation_default_center@2x.png in Resources */,
 				DA2EC70F29FBBE0300ECEB37 /* widget_coordinates_map_center_night@2x.png in Resources */,
 				DA68B3B8233B81DB00F5ACCC /* ic_custom_home@3x.png in Resources */,
@@ -17865,6 +18075,7 @@
 				32048FC92A26132600AA4B71 /* OsmOAuthView.swift in Sources */,
 				DA5A845826C563A900F274C7 /* OAOverlayMapLayer.mm in Sources */,
 				DA5A853E26C563A900F274C7 /* OADayNightHelper.m in Sources */,
+				FAA6505C2ADD42C50020DCEA /* BLEExternalSensorsViewController.swift in Sources */,
 				DA5A83D626C563A800F274C7 /* OAReplaceFavoriteViewController.mm in Sources */,
 				DA5A815D26C563A700F274C7 /* OASRTMPlugin.mm in Sources */,
 				C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */,
@@ -17923,6 +18134,7 @@
 				46E9AD9128DC869300CC55F9 /* OARightIconTableViewCell.m in Sources */,
 				DA5A815626C563A700F274C7 /* OAWikipediaPlugin.mm in Sources */,
 				DA5A84CC26C563A900F274C7 /* OAWhatsNewBottomSheetViewController.m in Sources */,
+				FAA650592ADD42C50020DCEA /* BLETemperatureDevice.swift in Sources */,
 				DA5A81D426C563A700F274C7 /* OAAbstractCommandPlayer.mm in Sources */,
 				32F6225D29A7AE080069EE04 /* OAAmenityExtendedNameFilter.mm in Sources */,
 				DA5A83A826C563A800F274C7 /* OAOsmNotesOnlineTargetViewController.mm in Sources */,
@@ -17991,6 +18203,7 @@
 				DA5A84AD26C563A900F274C7 /* OARootViewController.m in Sources */,
 				DA5A81BC26C563A700F274C7 /* OAPOIMyLocationType.m in Sources */,
 				DA5A845B26C563A900F274C7 /* OADestinationsLayer.mm in Sources */,
+				FAA6505E2ADD42C50020DCEA /* BLEDescriptionViewController.swift in Sources */,
 				DA5A83BB26C563A800F274C7 /* OAActionAddMapStyleViewController.mm in Sources */,
 				DA5A817226C563A700F274C7 /* OALog.mm in Sources */,
 				DA5A838C26C563A800F274C7 /* OAOnlineTilesSettingsViewController.mm in Sources */,
@@ -18022,6 +18235,7 @@
 				DA5A81A826C563A700F274C7 /* OASearchResult.mm in Sources */,
 				DA5A855526C563A900F274C7 /* OASimulationProvider.mm in Sources */,
 				DA5A848226C563A900F274C7 /* OADistanceToPointWidget.mm in Sources */,
+				FA359EE92ADFC04A0001C11D /* DeviceSettings.swift in Sources */,
 				DA5A857026C563A900F274C7 /* OARouteCalculationParams.mm in Sources */,
 				DA5A816D26C563A700F274C7 /* OsmAndAppImpl.mm in Sources */,
 				DA5A856F26C563A900F274C7 /* OAAlarmInfo.mm in Sources */,
@@ -18042,6 +18256,7 @@
 				DA5A846126C563A900F274C7 /* OAContextMenuLayer.mm in Sources */,
 				DA5A813E26C563A700F274C7 /* OANode.m in Sources */,
 				B24745C027F862C300C18C3F /* OAWeatherLayerSettingsViewController.mm in Sources */,
+				FAA6505F2ADD42C50020DCEA /* DescriptionDeviceHeader.swift in Sources */,
 				DA5A839C26C563A800F274C7 /* OADirectionAppearanceViewController.m in Sources */,
 				DA5A844626C563A900F274C7 /* OABaseScrollableHudViewController.mm in Sources */,
 				DA5A841826C563A800F274C7 /* OAGPXEditWptListViewController.mm in Sources */,
@@ -18088,6 +18303,7 @@
 				DA5A81CF26C563A700F274C7 /* QuadRect.m in Sources */,
 				DA5A83F426C563A800F274C7 /* OACategoriesTableViewController.mm in Sources */,
 				DA5A825E26C563A700F274C7 /* OAFilledButtonCell.mm in Sources */,
+				FA359EEB2ADFC2CF0001C11D /* DevicesSettingsCollection.swift in Sources */,
 				DA5A81F326C563A700F274C7 /* OALaunchScreenViewController.m in Sources */,
 				DA4ABF1F2876DA6800B996EF /* OAResourcesSettingsItem.mm in Sources */,
 				DA5A844D26C563A900F274C7 /* OAMapViewController.mm in Sources */,
@@ -18130,6 +18346,7 @@
 				DA5A84B626C563A900F274C7 /* OAStatisticsSelectionBottomSheetViewController.mm in Sources */,
 				DA5A814D26C563A700F274C7 /* OASearchCategoriesListController.mm in Sources */,
 				DA5A81F726C563A700F274C7 /* OAChoosePlanViewController.mm in Sources */,
+				FAA6505A2ADD42C50020DCEA /* DeviceFactory.swift in Sources */,
 				DA5A84F126C563A900F274C7 /* OAMapSource.m in Sources */,
 				DA5A825526C563A700F274C7 /* OAArrivalAnnouncementViewController.m in Sources */,
 				DA5A816B26C563A700F274C7 /* OANoImagesCard.m in Sources */,
@@ -18141,6 +18358,7 @@
 				DA5A831726C563A800F274C7 /* OAHeaderRoundCell.m in Sources */,
 				DA5A81F626C563A700F274C7 /* OAChoosePlanHelper.mm in Sources */,
 				DA5A83C826C563A800F274C7 /* OACollapsableCoordinatesView.mm in Sources */,
+				FAA650662ADD4C9F0020DCEA /* UIImage+Extension.swift in Sources */,
 				32CA13202AF1475200DD6EF5 /* WikipediaCacheSizeViewController.swift in Sources */,
 				DA5A837226C563A800F274C7 /* OARoutingSettingsCell.mm in Sources */,
 				DA5A833726C563A800F274C7 /* OATableViewCustomFooterView.m in Sources */,
@@ -18205,8 +18423,10 @@
 				DA5A81A926C563A700F274C7 /* OAAbbreviations.mm in Sources */,
 				DAD3FD242A4ACB2E00BFA03A /* WidgetGroupListViewController.swift in Sources */,
 				DA5A818426C563A700F274C7 /* OANavAddDestinationAction.mm in Sources */,
+				FAA650532ADD42C50020DCEA /* Sensor.swift in Sources */,
 				DA5A832626C563A800F274C7 /* OALineChartCell.m in Sources */,
 				DA5A842F26C563A800F274C7 /* OATargetTurnViewController.m in Sources */,
+				FAA6504F2ADD42C50020DCEA /* SearchDeviceTableViewCell.swift in Sources */,
 				DA5A856926C563A900F274C7 /* OARouteProvider.mm in Sources */,
 				DA5A848F26C563A900F274C7 /* OABaseTableViewController.m in Sources */,
 				DA5A849326C563A900F274C7 /* OAGpxApproximationViewController.mm in Sources */,
@@ -18313,6 +18533,7 @@
 				46FB65BA2A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift in Sources */,
 				DA5A845526C563A900F274C7 /* OAOsmEditsLayer.mm in Sources */,
 				DA5A815526C563A700F274C7 /* OACarPlayActiveViewController.m in Sources */,
+				FA359EED2ADFC6910001C11D /* WheelDeviceSettings.swift in Sources */,
 				DA5A82E726C563A800F274C7 /* OAGPXRecTableViewCell.m in Sources */,
 				462F13EC283FD0D400B73795 /* OAOsmLiveFeaturesCardView.m in Sources */,
 				46FB65B92A8BBC2000A21850 /* CoordinatesBaseWidget.swift in Sources */,
@@ -18329,6 +18550,7 @@
 				DA5A82E526C563A800F274C7 /* OAPublicTransportShieldCell.mm in Sources */,
 				DA5A850F26C563A900F274C7 /* OAUserInteractionInterceptorView.m in Sources */,
 				8A2DF237287EFD9E003642B7 /* OAMapCreatorDbHelper.mm in Sources */,
+				FA359EE02ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift in Sources */,
 				DA5A825926C563A700F274C7 /* OACreateProfileViewController.mm in Sources */,
 				DA5A831826C563A800F274C7 /* OATargetInfoViewCell.m in Sources */,
 				DA5A845726C563A900F274C7 /* OAOsmBugsLayer.mm in Sources */,
@@ -18340,6 +18562,7 @@
 				DA5A83F026C563A800F274C7 /* OAQuickSearchTableController.mm in Sources */,
 				DA5A819E26C563A700F274C7 /* NSData+CRC32.m in Sources */,
 				DA69ED5C2A385B1B001022C7 /* WidgetPanelViewController.swift in Sources */,
+				FACE409F2AEA9ACB00E1E43A /* OASensorsPlugin.mm in Sources */,
 				DA5A816526C563A700F274C7 /* OAApplicationMode.m in Sources */,
 				DA5A834326C563A800F274C7 /* OAImageTextViewCell.m in Sources */,
 				DA5A84AA26C563A900F274C7 /* OASaveTrackBottomSheetViewController.mm in Sources */,
@@ -18377,6 +18600,8 @@
 				DA5A842326C563A800F274C7 /* OAGPXWptListViewController.mm in Sources */,
 				DA5A817F26C563A700F274C7 /* OAUnsupportedAction.m in Sources */,
 				0513AA382A9B530A00CFA2A0 /* OADestinationBarWidget.mm in Sources */,
+				FA86F41A2AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift in Sources */,
+				FA86F4152AE7C56E00DC3B2B /* UserDefaults+Extension.swift in Sources */,
 				DA5A833E26C563A800F274C7 /* OAWaypointCell.m in Sources */,
 				DA5A81DF26C563A700F274C7 /* OAAddress.mm in Sources */,
 				DA5A84FF26C563A900F274C7 /* OAMapRendererView.mm in Sources */,
@@ -18431,6 +18656,7 @@
 				DA4ABEEB2876DA5D00B996EF /* OASettingsCategoryItems.m in Sources */,
 				FA4195592AAB55E6007CBBAB /* ShadowTransporentView.swift in Sources */,
 				DA5A81DE26C563A700F274C7 /* OAStreet.mm in Sources */,
+				FAA650682ADD8D0D0020DCEA /* BLEInitHeader.swift in Sources */,
 				DA5A814426C563A700F274C7 /* OAOsmNotePoint.m in Sources */,
 				DA5A841F26C563A800F274C7 /* OAGPXEditWptViewController.mm in Sources */,
 				DA5A844F26C563A900F274C7 /* OAUnderlayMapLayer.mm in Sources */,
@@ -18471,6 +18697,7 @@
 				DA5A854726C563A900F274C7 /* OANetworkUtilities.m in Sources */,
 				B247453827E35E9B00C18C3F /* OACloudIntroductionHeaderView.m in Sources */,
 				C588D1EC298BF2D3001FEDBD /* OASearchHistoryTableItem.m in Sources */,
+				FA359EE52ADF026D0001C11D /* DeviceType.swift in Sources */,
 				DA5A813A26C563A700F274C7 /* OAEntityInfo.m in Sources */,
 				DA5A846A26C563A900F274C7 /* OADestination.mm in Sources */,
 				46220B792AD70AF9006C3248 /* OAGroupEditorViewController.mm in Sources */,
@@ -18486,7 +18713,9 @@
 				DA5A848526C563A900F274C7 /* OAMapWidgetRegInfo.mm in Sources */,
 				DA5A832F26C563A800F274C7 /* OATitleSliderRoundCell.m in Sources */,
 				DA5A823026C563A700F274C7 /* OAImportDuplicatesViewController.mm in Sources */,
+				FA359EF12ADFD5310001C11D /* DeviceHelper.swift in Sources */,
 				DA5A812B26C563A700F274C7 /* OAMapMarker.mm in Sources */,
+				FAA650582ADD42C50020DCEA /* GattAttributes.swift in Sources */,
 				DA5A855C26C563A900F274C7 /* OARoutingHelper.mm in Sources */,
 				DA5A823A26C563A700F274C7 /* OABaseBigTitleSettingsViewController.m in Sources */,
 				DA5A83B326C563A800F274C7 /* OAFavoritesTabBarViewController.m in Sources */,
@@ -18530,6 +18759,7 @@
 				32119B502847D807005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.mm in Sources */,
 				DA5A853A26C563A900F274C7 /* OAAvoidSpecificRoads.mm in Sources */,
 				DAAC0EC32801885800867D35 /* OABackupImporter.m in Sources */,
+				FA86F41C2AE7CE0100DC3B2B /* BLEBikeSensor.swift in Sources */,
 				DA5A81DB26C563A700F274C7 /* OACity.mm in Sources */,
 				DA5A84B726C563A900F274C7 /* OATrackSegmentsViewController.mm in Sources */,
 				DAABE4E32A13752000569F71 /* OAAverageSpeedComputer.m in Sources */,
@@ -18554,6 +18784,7 @@
 				DA5A832726C563A800F274C7 /* OARouteInfoAltitudeCell.m in Sources */,
 				DA5A817126C563A700F274C7 /* OsmAndApp.mm in Sources */,
 				DA2483E72927916700189AF2 /* OAStatusBackupTableViewController.mm in Sources */,
+				FAA650512ADD42C50020DCEA /* BLESearchViewController.swift in Sources */,
 				DAA61CC42A03983A00AFF65D /* CenterWidgetInfo.swift in Sources */,
 				DA5A815326C563A700F274C7 /* OACarPlayDashboardInterfaceController.mm in Sources */,
 				DA5A84C126C563A900F274C7 /* OAProfileSelectionBottomSheetViewController.m in Sources */,
@@ -18566,6 +18797,7 @@
 				DA5A824626C563A700F274C7 /* OAProfileNavigationSettingsViewController.mm in Sources */,
 				467DFD80297F172C008A9830 /* OACardTableViewCell.m in Sources */,
 				DA5A823126C563A700F274C7 /* OAImportSettingsViewController.mm in Sources */,
+				FAA650522ADD42C50020DCEA /* BLEBatterySensor.swift in Sources */,
 				DA5A82EF26C563A800F274C7 /* OASettingsCheckmarkCell.m in Sources */,
 				DA5A81AB26C563A700F274C7 /* OAQuickSearchHelper.mm in Sources */,
 				DA5A845026C563A900F274C7 /* OAPOILayer.mm in Sources */,
@@ -18578,6 +18810,7 @@
 				3245133A2AAB714200A5F715 /* TravelGuidesState.swift in Sources */,
 				46B619DC29EFE97500950A20 /* OAAltitudeWidget.mm in Sources */,
 				DA5A81C226C563A700F274C7 /* OAPOICategory.m in Sources */,
+				FAA650572ADD42C50020DCEA /* BLEHeartRateDevice.swift in Sources */,
 				DA5A840D26C563A800F274C7 /* OAFavoriteEditingHandler.mm in Sources */,
 				DA5A813626C563A700F274C7 /* OAEditPOIData.mm in Sources */,
 				3271CC6E2A38C27900DCEBAC /* OAMap3DModeVisibilityType.mm in Sources */,
@@ -18622,6 +18855,7 @@
 				DA5A852A26C563A900F274C7 /* OALocationParser.mm in Sources */,
 				327D68AA2A8FB8180076D1E0 /* ArticleTravelCell.swift in Sources */,
 				DA5A848A26C563A900F274C7 /* OARoadSegmentData.mm in Sources */,
+				FAA650542ADD42C50020DCEA /* BLEHeartRateSensor.swift in Sources */,
 				DA5A839726C563A800F274C7 /* OALocalResourceInformationViewController.mm in Sources */,
 				DA5A84B026C563A900F274C7 /* OAAddWaypointBottomSheetViewController.mm in Sources */,
 				DA5A848726C563A900F274C7 /* OANavigationController.m in Sources */,
@@ -18742,6 +18976,7 @@
 				DA4ABF252876DA6800B996EF /* OAFileSettingsItem.mm in Sources */,
 				DA5A820E26C563A700F274C7 /* OARearrangeProfilesViewController.m in Sources */,
 				DA5A823626C563A700F274C7 /* OAExportItemsViewController.mm in Sources */,
+				FAA650552ADD42C50020DCEA /* BLEManager.swift in Sources */,
 				DA5A84E726C563A900F274C7 /* OAWaypointsPOIScreen.mm in Sources */,
 				DA1A886427FC66DA00A82DF6 /* OABackupDbHelper.m in Sources */,
 				DA5A824E26C563A700F274C7 /* OAMapBehaviorViewController.m in Sources */,
@@ -18778,6 +19013,7 @@
 				B0D61831F16BA2B502597852 /* OASelectionCollapsableCell.mm in Sources */,
 				B0D61DCAA5D5FFE23DCA2303 /* OAEditWaypointsGroupBottomSheetViewController.mm in Sources */,
 				B0D610C833B6EA61B1C74268 /* OADeleteWaypointsGroupBottomSheetViewController.mm in Sources */,
+				FAA650562ADD42C50020DCEA /* UIView+Extension.swift in Sources */,
 				B0D61A9D5A74989254593C0B /* OAEditWaypointsGroupOptionsViewController.mm in Sources */,
 				B0D61C5D43831388AD948812 /* OAQuadItemsWithTitleDescIconCell.mm in Sources */,
 				B0D617256EE335C6089A92B5 /* OATrackMenuUIBuilder.mm in Sources */,
@@ -18786,6 +19022,7 @@
 				B0D611C1BD9A29F6A04945A2 /* OATrackMenuTabActions.mm in Sources */,
 				B0D617D463DFB9B852379893 /* OATrackMenuTabOverview.mm in Sources */,
 				B0D6143C1114AC3D58A2F898 /* OATrackMenuTabPoints.mm in Sources */,
+				FA86F4182AE7C5EA00DC3B2B /* UserDefaultsKey.swift in Sources */,
 				DA7B18E02A1227A30029967F /* CurrentTimeWidget.swift in Sources */,
 				B0D610DBE05EACD61CFE6859 /* OATrackMenuTabSegments.mm in Sources */,
 				46E9AD9728DC8B1200CC55F9 /* OASwitchTableViewCell.m in Sources */,
@@ -18836,6 +19073,7 @@
 				CA4EDCD4B8149095B74FD700 /* OACloudAccountLogoutViewController.mm in Sources */,
 				461A3F0029F6A62C008EE079 /* OATrackColoringTypeViewController.m in Sources */,
 				CA4EDBFDA7FC431D027A815E /* OADeleteAllVersionsBackupViewController.mm in Sources */,
+				FAA6505B2ADD42C50020DCEA /* Device.swift in Sources */,
 				CA4ED03A64D6784BA1452142 /* OADeleteAllFilesCommand.mm in Sources */,
 				46CE450D2AAA0A4D00C827B5 /* OADistanceAndDirectionsUpdater.mm in Sources */,
 				CA4ED4F6BF41371BA62511BA /* OADeleteOldFilesCommand.mm in Sources */,
@@ -19237,6 +19475,8 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "OsmAnd Maps.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -19299,6 +19539,8 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "OsmAnd Maps.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -19505,6 +19747,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FAA650622ADD43BE0020DCEA /* XCRemoteSwiftPackageReference "SwiftyBluetooth" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jordanebelanger/SwiftyBluetooth";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FAA650632ADD43BE0020DCEA /* SwiftyBluetooth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FAA650622ADD43BE0020DCEA /* XCRemoteSwiftPackageReference "SwiftyBluetooth" */;
+			productName = SwiftyBluetooth;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BB098CE91793F7FD00423944 /* Project object */;
 }

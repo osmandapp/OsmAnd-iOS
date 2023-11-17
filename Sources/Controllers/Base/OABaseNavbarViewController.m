@@ -39,7 +39,7 @@
     self = [super initWithNibName:@"OABaseNavbarViewController" bundle:nil];
     if (self)
     {
-        _tableData = [[OATableDataModel alloc] init];
+        [self initTableData];
         [self commonInit];
     }
     return self;
@@ -52,6 +52,11 @@
 // use in overridden init method if class properties have complex dependencies
 - (void)postInit
 {
+}
+
+- (void)initTableData
+{
+    _tableData = [[OATableDataModel alloc] init];
 }
 
 #pragma mark - UIViewController

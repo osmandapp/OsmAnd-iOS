@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--External Sensors View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="BLEExternalSensors" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Y6W-OH-hqX" customClass="BLEExternalSensorsViewController" customModule="OsmAnd_Maps" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gsf-dh-kvq" userLabel="EmptyView">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <subviews>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="cox-yX-wdY">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="707"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    </tableView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hCX-fR-RQb">
+                                        <rect key="frame" x="16" y="707" width="361" height="42"/>
+                                        <color key="backgroundColor" name="buttonBgColorPrimary"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="42" id="aez-8H-Bum"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Pair new sensor">
+                                            <color key="titleColor" name="buttonTextColorPrimary"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="9"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="onPairNewSensorButtonPressed:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="MAO-EX-UUc"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="cox-yX-wdY" firstAttribute="top" secondItem="Gsf-dh-kvq" secondAttribute="top" id="2g3-Bq-IMH"/>
+                                    <constraint firstItem="cox-yX-wdY" firstAttribute="leading" secondItem="Gsf-dh-kvq" secondAttribute="leading" id="FZ0-1Z-aBZ"/>
+                                    <constraint firstItem="hCX-fR-RQb" firstAttribute="leading" secondItem="Gsf-dh-kvq" secondAttribute="leading" constant="16" id="Kdd-vT-BUO"/>
+                                    <constraint firstAttribute="trailing" secondItem="hCX-fR-RQb" secondAttribute="trailing" constant="16" id="ZCF-U3-GwO"/>
+                                    <constraint firstAttribute="trailing" secondItem="cox-yX-wdY" secondAttribute="trailing" id="lBy-7z-dXF"/>
+                                    <constraint firstItem="hCX-fR-RQb" firstAttribute="top" secondItem="cox-yX-wdY" secondAttribute="bottom" id="t4t-sG-q8B"/>
+                                    <constraint firstAttribute="bottom" secondItem="hCX-fR-RQb" secondAttribute="bottom" constant="10" id="try-JG-myE"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Gsf-dh-kvq" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="Gys-TC-Abm"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="Gsf-dh-kvq" secondAttribute="bottom" id="Lwf-YU-XKb"/>
+                            <constraint firstAttribute="trailing" secondItem="Gsf-dh-kvq" secondAttribute="trailing" id="fz0-Jg-WdY"/>
+                            <constraint firstItem="Gsf-dh-kvq" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="hTD-UM-Rjx"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="emptyView" destination="Gsf-dh-kvq" id="EaJ-b3-mKY"/>
+                        <outlet property="pairNewSensorButton" destination="hCX-fR-RQb" id="Ipn-Sb-M6h"/>
+                        <outlet property="tableView" destination="cox-yX-wdY" id="sHo-s2-NsC"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="114" y="4"/>
+        </scene>
+    </scenes>
+    <resources>
+        <namedColor name="buttonBgColorPrimary">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="buttonTextColorPrimary">
+            <color red="0.93725490196078431" green="0.90980392156862744" blue="0.99215686274509807" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_search_wave.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

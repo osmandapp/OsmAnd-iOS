@@ -126,6 +126,7 @@
 #import "OAPOI.h"
 #import "OADirectionTableViewCell.h"
 #import "OASegmentSliderTableViewCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OATextInputFloatingCell.h"
 
 // Views

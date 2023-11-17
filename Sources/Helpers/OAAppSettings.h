@@ -785,6 +785,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *depthContoursPurchased;
 @property (nonatomic) OACommonBoolean *contourLinesPurchased;
 @property (nonatomic) OACommonBoolean *wikipediaPurchased;
+@property (nonatomic) OACommonBoolean *sensorsPurchased;
 @property (nonatomic) OACommonBoolean *emailSubscribed;
 @property (nonatomic) OACommonBoolean *osmandProPurchased;
 @property (nonatomic) OACommonBoolean *osmandMapsPurchased;

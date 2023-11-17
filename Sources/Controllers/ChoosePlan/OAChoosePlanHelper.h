@@ -28,6 +28,7 @@ typedef NS_ENUM(NSUInteger, EOAFeature)
     EOAFeatureTerrain,
     EOAFeatureNautical,
     EOAFeatureWeather,
+    EOAFeatureSensors,
 
     EOAFeatureRegionAfrica,
     EOAFeatureRegionRussia,
@@ -67,6 +68,7 @@ typedef NS_ENUM(NSUInteger, EOAFeature)
 + (OAFeature *)TERRAIN;
 + (OAFeature *)NAUTICAL;
 + (OAFeature *)WEATHER;
++ (OAFeature *)SENSORS;
 
 + (NSArray<OAFeature *> *)OSMAND_PRO_FEATURES;
 + (NSArray<OAFeature *> *)OSMAND_PRO_PREVIEW_FEATURES;

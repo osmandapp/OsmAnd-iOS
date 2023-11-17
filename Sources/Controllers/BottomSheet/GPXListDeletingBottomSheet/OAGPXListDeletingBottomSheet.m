@@ -9,7 +9,7 @@
 #import "OAGPXListDeletingBottomSheet.h"
 
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OATextLineViewCell.h"
 #import "OAFilledButtonCell.h"
 
@@ -58,7 +58,7 @@
     self.headerDividerView.hidden = YES;
     [self hideSliderView];
     
-    self.leftIconView.tintColor = UIColorFromRGB(color_support_red);
+    self.leftIconView.tintColor = UIColor.buttonBgColorDisruptive;
     [self.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_remove_outlined.png"]];
     
     self.exitButton.layer.cornerRadius = 9.;
@@ -114,8 +114,8 @@
     [_data addObject: @{
         @"type" : [OAFilledButtonCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_delete"),
-        @"buttonColor" : UIColorFromRGB(color_support_red),
-        @"textColor" : UIColor.whiteColor,
+        @"buttonColor" : UIColor.buttonBgColorDisruptive,
+        @"textColor" : UIColor.buttonTextColorPrimary,
         @"action": @"deleteButtonPressed"
     }];
 }

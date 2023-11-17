@@ -194,7 +194,7 @@
     allColorsRow.key = @"allColors";
     allColorsRow.cellType = [OASimpleTableViewCell getCellIdentifier];
     allColorsRow.title = OALocalizedString(@"shared_string_all_colors");
-    [allColorsRow setObj:@(color_primary_purple) forKey:@"titleTintColor"];
+    [allColorsRow setObj:UIColor.textColorActive forKey:@"titleTintColor"];
     _allColorsIndexPath = [NSIndexPath indexPathForRow:[colorSection rowCount] - 1
                                              inSection:appearenceSectionIndex];
 }
@@ -244,9 +244,9 @@
                 cell.separatorInset = UIEdgeInsetsMake(0., isAllColors ? 0. : CGFLOAT_MAX, 0., 0.);
             cell.selectionStyle = isColorLabel ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
 
-            NSInteger tintColor = [[item objForKey:@"titleTintColor"] integerValue];
+            UIColor *tintColor = [item objForKey:@"titleTintColor"];
             cell.titleLabel.text = item.title;
-            cell.titleLabel.textColor = tintColor > 0 ? UIColorFromRGB(tintColor) : UIColor.blackColor;
+            cell.titleLabel.textColor = tintColor ?: UIColor.textColorPrimary;
         }
         return cell;
     }
@@ -587,6 +587,7 @@
                                                options:nil];
     OATextInputFloatingCell *resultCell = nib[0];
     MDCMultilineTextField *textField = resultCell.inputField;
+    textField.textColor = [UIColor textColorPrimary];
     [textField.underline removeFromSuperview];
     textField.placeholder = hint;
     [textField.textView setText:text];
@@ -598,11 +599,12 @@
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     textField.adjustsFontForContentSizeCategory = YES;
-    textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
+    textField.clearButton.imageView.tintColor = UIColor.iconColorDefault;
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
 
     MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
     fieldController.inlinePlaceholderFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
+    fieldController.inlinePlaceholderColor = UIColor.textColorSecondary;
     fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
     return resultCell;

@@ -90,9 +90,9 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
     
     func updateSearchController() {
         if isFiltered {
-            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
-            searchController.searchBar.searchTextField.backgroundColor = UIColor.white
-            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor.gray
+            searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorTertiary])
+            searchController.searchBar.searchTextField.backgroundColor = UIColor.groupBgColor
+            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor.textColorTertiary
         } else if isSearchActive {
             searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("search_activity"), attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1, alpha: 0.5)])
             searchController.searchBar.searchTextField.backgroundColor = UIColor(white: 1, alpha: 0.3)

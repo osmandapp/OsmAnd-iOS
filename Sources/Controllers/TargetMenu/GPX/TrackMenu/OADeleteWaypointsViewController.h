@@ -6,13 +6,13 @@
 //  Copyright (c) 2021 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseButtonsViewController.h"
 
 @class OAGPXTableData;
 
 @protocol OATrackMenuViewControllerDelegate;
 
-@interface OADeleteWaypointsViewController : OACompoundViewController
+@interface OADeleteWaypointsViewController : OABaseButtonsViewController
 
 - (instancetype)initWithSectionsData:(OAGPXTableData *)tableData;
 

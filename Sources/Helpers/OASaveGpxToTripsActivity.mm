@@ -90,7 +90,8 @@
     
     OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc] initWithFileName:fileName filePath:shortPath showOnMap:YES simplifiedTrack:NO duplicate:NO];
     saveTrackViewController.delegate = self;
-    return saveTrackViewController;
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:saveTrackViewController];
+    return navigationController;
 }
 
 - (void)onSaveAsNewTrack:(NSString *)fileName showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack openTrack:(BOOL)openTrack

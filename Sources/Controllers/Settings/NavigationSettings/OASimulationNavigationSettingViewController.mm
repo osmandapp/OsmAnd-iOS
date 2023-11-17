@@ -23,10 +23,6 @@
 #define kUICellKey @"kUICellKey"
 #define kSimulateNavigationSwitchkey @"kSimulateNavigationSwitchkey"
 
-@interface OASimulationNavigationSettingViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OASimulationNavigationSettingViewController
 {
     OAAppSettings *_settings;
@@ -42,18 +38,20 @@
     NSString *_maxSpeedText;
 }
 
+#pragma mark - Initialization
+
 - (instancetype)initWithAppMode:(OAApplicationMode *)mode
 {
     self = [super init];
     if (self)
     {
         _appMode = mode;
-        [self commonInit];
+        [self postInit];
     }
     return self;
 }
 
-- (void) commonInit
+- (void)postInit
 {
     _settings = [OAAppSettings sharedManager];
     _isEnabled = _settings.simulateNavigation;
@@ -63,39 +61,40 @@
     [self generateData];
 }
 
-- (void) applyLocalization
-{
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"simulate_navigation");
-    [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
-}
+#pragma mark - UIViewController
 
-- (void) viewDidLoad
+- (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+    
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        
     [self generateData];
-    [self updateHeaderButtons];
+    [self updateNavbar];
 }
 
-- (void) viewDidLayoutSubviews
+- (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
+    
     [self generateData];
     [self.tableView reloadData];
 }
-    
-#pragma mark - Setup data
 
-- (NSDictionary *) getDataItem:(NSIndexPath *)indexPath
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    return _data[indexPath.section][indexPath.row];
+    return OALocalizedString(@"simulate_navigation");
 }
 
-- (void) generateData
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
+{
+    return !_isEnabled ? nil : @[[self createRightNavbarButton:OALocalizedString(@"shared_string_done") iconName:nil action:@selector(onRightNavbarButtonPressed) menu:nil]];
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     NSMutableArray *result = [NSMutableArray array];
     NSNumber *zeroInset = [NSNumber numberWithFloat:0];
@@ -188,7 +187,12 @@
     _data = [NSArray arrayWithArray:result];
 }
 
-- (void) setupSpeedSlider
+- (NSDictionary *)getDataItem:(NSIndexPath *)indexPath
+{
+    return _data[indexPath.section][indexPath.row];
+}
+
+- (void)setupSpeedSlider
 {
     float min = kSimMinSpeed;
     float max = kSimMaxSpeed;
@@ -206,114 +210,48 @@
     _maxSpeedText = [OAOsmAndFormatter getFormattedSpeed:max];
 }
 
-- (void) updateHeaderButtons
-{
-    self.cancelButton.hidden = YES;
-    self.backButton.hidden = NO;
-    self.doneButton.hidden = !_isEnabled;
-}
-
-#pragma mark - Actions
-
-- (void) updateSwitchValue:(id)sender
-{
-    if ([sender isKindOfClass:[UISwitch class]])
-    {
-        UISwitch *sw = (UISwitch *) sender;
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
-        NSDictionary *item = [self getDataItem:indexPath];
-        NSString *key = item[@"key"];
-        if (key)
-        {
-            BOOL isChecked = sw.on;
-            if ([key isEqualToString:kSimulateNavigationSwitchkey])
-            {
-                [self setSimulationEnabled:isChecked];
-            }
-        }
-    }
-}
-
-- (void) setSimulationEnabled:(BOOL)enabled
-{
-    _isEnabled = enabled;
-    [self generateData];
-    [self updateHeaderButtons];
-    
-    [self.tableView beginUpdates];
-    if (_isEnabled)
-        [self.tableView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, 1)] withRowAnimation:UITableViewRowAnimationFade];
-    else
-        [self.tableView deleteSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, 1)] withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView endUpdates];
-}
-
-- (void) setSimulationMode:(NSString *)key
-{
-    NSString *oldValue = _selectedMode;
-    _selectedMode = key;
-    BOOL isSliderCellAdded = ![oldValue isEqualToString:[OASimulationMode toKey:EOASimulationModeConstant]] && [_selectedMode isEqualToString:[OASimulationMode toKey:EOASimulationModeConstant]];
-    BOOL isSliderCellDeleted = [oldValue isEqualToString:[OASimulationMode toKey:EOASimulationModeConstant]] && ![_selectedMode isEqualToString:[OASimulationMode toKey:EOASimulationModeConstant]];
-    [self generateData];
-    
-    if (isSliderCellAdded)
-    {
-        [self.tableView beginUpdates];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, 1)] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView endUpdates];
-    }
-    else if (isSliderCellDeleted)
-    {
-        [self.tableView beginUpdates];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, 1)] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView endUpdates];
-    }
-    else
-    {
-        [self.tableView reloadData];
-    }
-}
-
-- (void) updateSliderValue:(UISlider *)sender
-{
-    if (sender)
-    {
-        _selectedSpeed = sender.value;
-        [self generateData];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
-    }
-}
-
-- (void)onDoneButtonPressed
-{
-    //Saving changed variables
-    _settings.simulateNavigationSpeed = _selectedSpeed;
-    _settings.simulateNavigationMode = _selectedMode;
-    _settings.simulateNavigation = _isEnabled;
-    
-    if (self.delegate)
-        [self.delegate onSettingsChanged];
-    [super onDoneButtonPressed];
-}
-
-#pragma mark - TableViewDelegate
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return _data.count;
 }
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+
+- (NSString *)getTitleForHeader:(NSInteger)section;
+{
+    return _data[section][0][@"headerTitle"];
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return _data[section][0][@"footerTitle"];
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return _data[section].count;
 }
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getDataItem:indexPath];
+    NSString *cellType = item[@"type"];
+    if ([cellType isEqualToString:kUICellKey])
+    {
+        return kUICellHeight;
+    }
+    else if ([cellType isEqualToString:[OADividerCell getCellIdentifier]])
+    {
+        return 1.0 / [UIScreen mainScreen].scale;
+    }
+    return UITableViewAutomaticDimension;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getDataItem:indexPath];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
@@ -334,11 +272,10 @@
     }
     else if ([cellType isEqualToString:kUICellKey])
     {
-        UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:kUICellKey];
+        UITableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:kUICellKey];
         if (cell == nil)
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUICellKey];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.groupBgColor;
         }
         if ([item[@"selected"] boolValue])
@@ -369,7 +306,7 @@
     else if ([cellType isEqualToString:[OASliderWithValuesCell getCellIdentifier]])
     {
         OASliderWithValuesCell* cell = nil;
-        cell = (OASliderWithValuesCell *)[tableView dequeueReusableCellWithIdentifier:[OASliderWithValuesCell getCellIdentifier]];
+        cell = (OASliderWithValuesCell *)[self.tableView dequeueReusableCellWithIdentifier:[OASliderWithValuesCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASliderWithValuesCell getCellIdentifier] owner:self options:nil];
@@ -392,7 +329,7 @@
     else if ([cellType isEqualToString:[OADividerCell getCellIdentifier]])
     {
         OADividerCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
@@ -408,37 +345,7 @@
     return nil;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [self getDataItem:indexPath];
-    NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kUICellKey])
-    {
-        return kUICellHeight;
-    }
-    else if ([cellType isEqualToString:[OADividerCell getCellIdentifier]])
-    {
-        return 1.0 / [UIScreen mainScreen].scale;
-    }
-    return UITableViewAutomaticDimension;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 32.0;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return _data[section][0][@"headerTitle"];
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return _data[section][0][@"footerTitle"];
-}
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSDictionary *item = [self getDataItem:indexPath];
@@ -449,5 +356,87 @@
     }
 }
 
-@end
+#pragma mark - Actions
 
+- (void)updateSwitchValue:(id)sender
+{
+    if ([sender isKindOfClass:[UISwitch class]])
+    {
+        UISwitch *sw = (UISwitch *) sender;
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
+        NSDictionary *item = [self getDataItem:indexPath];
+        NSString *key = item[@"key"];
+        if (key)
+        {
+            BOOL isChecked = sw.on;
+            if ([key isEqualToString:kSimulateNavigationSwitchkey])
+            {
+                [self setSimulationEnabled:isChecked];
+            }
+        }
+    }
+}
+
+- (void)setSimulationEnabled:(BOOL)enabled
+{
+    _isEnabled = enabled;
+    [self generateData];
+    [self updateNavbar];
+    
+    [self.tableView beginUpdates];
+    if (_isEnabled)
+        [self.tableView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, 1)] withRowAnimation:UITableViewRowAnimationFade];
+    else
+        [self.tableView deleteSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, 1)] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
+}
+
+- (void)setSimulationMode:(NSString *)key
+{
+    NSString *oldValue = _selectedMode;
+    _selectedMode = key;
+    BOOL isSliderCellAdded = ![oldValue isEqualToString:[OASimulationMode toKey:EOASimulationModeConstant]] && [_selectedMode isEqualToString:[OASimulationMode toKey:EOASimulationModeConstant]];
+    BOOL isSliderCellDeleted = [oldValue isEqualToString:[OASimulationMode toKey:EOASimulationModeConstant]] && ![_selectedMode isEqualToString:[OASimulationMode toKey:EOASimulationModeConstant]];
+    [self generateData];
+    
+    if (isSliderCellAdded)
+    {
+        [self.tableView beginUpdates];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, 1)] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView endUpdates];
+    }
+    else if (isSliderCellDeleted)
+    {
+        [self.tableView beginUpdates];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, 1)] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView endUpdates];
+    }
+    else
+    {
+        [self.tableView reloadData];
+    }
+}
+
+- (void)updateSliderValue:(UISlider *)sender
+{
+    if (sender)
+    {
+        _selectedSpeed = sender.value;
+        [self generateData];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
+    }
+}
+
+- (void)onRightNavbarButtonPressed
+{
+    //Saving changed variables
+    _settings.simulateNavigationSpeed = _selectedSpeed;
+    _settings.simulateNavigationMode = _selectedMode;
+    _settings.simulateNavigation = _isEnabled;
+    
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
+    [self dismissViewController];
+}
+
+@end

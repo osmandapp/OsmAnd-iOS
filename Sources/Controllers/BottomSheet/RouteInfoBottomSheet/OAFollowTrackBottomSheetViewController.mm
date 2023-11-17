@@ -470,8 +470,8 @@
     _navigationController.navigationBarHidden = YES;
     OAOpenAddTrackViewController *saveTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOAFollowTrack];
     saveTrackViewController.delegate = self;
-    [_navigationController setViewControllers:@[saveTrackViewController]];
-    [self presentViewController:_navigationController animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:saveTrackViewController];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

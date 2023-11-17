@@ -992,7 +992,8 @@ typedef enum
 //
 //    self.sidePanelController.recognizesPanGesture = NO;
     OARouteSettingsViewController *routePrefs = [[OARouteSettingsViewController alloc] init];
-    [self presentViewController:routePrefs animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:routePrefs];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void) showRouteInfo
@@ -1986,7 +1987,8 @@ typedef enum
         }
         OAOpenAddTrackViewController *saveTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOASelectTrack showCurrent:YES];
         saveTrackViewController.delegate = self;
-        [self presentViewController:saveTrackViewController animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:saveTrackViewController];
+        [self.navigationController presentViewController:navigationController animated:YES completion:nil];
     }
     else
     {

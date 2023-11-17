@@ -6,7 +6,7 @@
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OABaseTableViewController.h"
+#import "OABaseNavbarViewController.h"
 
 typedef NS_ENUM(NSInteger, EOAPlanningTrackScreenType) {
     EOAOpenExistingTrack = 0,
@@ -30,7 +30,7 @@ typedef NS_ENUM(NSInteger, EOAPlanningTrackScreenType) {
 
 @end
 
-@interface OAOpenAddTrackViewController : OABaseTableViewController
+@interface OAOpenAddTrackViewController : OABaseNavbarViewController
 
 @property (nonatomic, weak) id<OAOpenAddTrackDelegate> delegate;
 

@@ -45,7 +45,6 @@
 #include <GeographicLib/MGRS.hpp>
 
 #define kSearchCityLimit 500
-#define defaultNavBarHeight 58
 #define kHintBarHeight 44
 #define kMaxEastingValue 833360
 #define kMaxNorthingValue 9300000
@@ -76,7 +75,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
 @property (strong, nonatomic) IBOutlet UIView *toolbarView;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @property (weak) UITextView *tagTextView;
 
@@ -111,7 +109,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     UITextField *_currentEditingTextField;
     BOOL _shouldHideHintBar;
-    UIView *_navBarBackgroundView;
     
     NSMutableArray<OAPOI *> *_olcCities;
     NSString *_olcSearchingCity;
@@ -134,6 +131,9 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self configureNavigationBar];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -160,19 +160,10 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorColor = UIColor.separatorColor;
-    self.tableView.contentInset = UIEdgeInsetsMake(defaultNavBarHeight, 0, 0, 0);
 
-    self.titleLabel.text = OALocalizedString(@"coords_search");
-    [self.cancelButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
-    self.doneButton.hidden = YES;
-    self.doneButton.enabled = NO;
-    _activityIndicator.hidden = YES;
+    self.navigationItem.title = OALocalizedString(@"coords_search");
     
     _toolbarView.frame = CGRectMake(0, DeviceScreenHeight, self.view.frame.size.width, kHintBarHeight);
-    
-    _navBarBackgroundView = [self createNavBarBackgroundView];
-    _navBarBackgroundView.frame = self.navbarView.bounds;
-    [self.navbarView insertSubview:_navBarBackgroundView atIndex:0];
     
     _currentFormat = [OAAppSettings.sharedManager.settingGeoFormat get];
     if (!isnan(_quickSearchCoordsLattitude) && !isnan(_quickSearchCoordsLongitude))
@@ -184,23 +175,26 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     [self generateData];
 }
 
-- (UIView *) createNavBarBackgroundView
+- (void) configureNavigationBar
 {
-    if (!UIAccessibilityIsReduceTransparencyEnabled())
-    {
-        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:[ThemeManager shared].isLightTheme ? UIBlurEffectStyleSystemUltraThinMaterialLight : UIBlurEffectStyleSystemUltraThinMaterialDark]];
-        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        blurEffectView.alpha = 0;
-        return blurEffectView;
-    }
-    else
-    {
-        UIView *res = [[UIView alloc] init];
-        res.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        res.backgroundColor = UIColor.viewBgColor;
-        res.alpha = 0;
-        return res;
-    }
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor = self.tableView.backgroundColor;
+    appearance.shadowColor = UIColor.separatorColor;
+    appearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.textColorPrimary
+    };
+    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+    
+    self.navigationController.navigationBar.standardAppearance = blurAppearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.tintColor = UIColor.textColorActive;
+    self.navigationController.navigationBar.prefersLargeTitles = NO;
+    
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_back") style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
+    [self.navigationController.navigationBar.topItem setLeftBarButtonItem:backButton animated:YES];
 }
 
 - (void) generateData
@@ -1054,7 +1048,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         {
             OAQuickSearchCoordinateFormatsViewController *vc = [[OAQuickSearchCoordinateFormatsViewController alloc] initWithCurrentFormat:_currentFormat location:[self getDisplayingCoordinate]];
             vc.delegate = self;
-            [self presentViewController:vc animated:YES completion:nil];
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
+            [self presentViewController:navigationController animated:YES completion:nil];
         }
         else if ([cellType isEqualToString:[OAQuickSearchResultTableViewCell getCellIdentifier]] && ![item[@"isErrorCell"] boolValue])
         {
@@ -1076,25 +1071,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     if([touch.view isKindOfClass:[UITableViewCell class]] || [touch.view.superview isKindOfClass:[UITableViewCell class]] || [touch.view.superview.superview isKindOfClass:[UITableViewCell class]])
         return NO;
     return YES;
-}
-
-- (void) scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    CGFloat alpha = (self.tableView.contentOffset.y + defaultNavBarHeight) < 0 ? 0 : ((self.tableView.contentOffset.y + defaultNavBarHeight) / (fabs(self.tableView.contentSize.height - self.tableView.frame.size.height)));
-    if (alpha > 0)
-    {
-        [UIView animateWithDuration:.2 animations:^{
-            self.navbarView.backgroundColor = UIColor.clearColor;
-            _navBarBackgroundView.alpha = 1;
-        }];
-    }
-    else
-    {
-        [UIView animateWithDuration:.2 animations:^{
-            self.navbarView.backgroundColor = UIColor.viewBgColor;
-            _navBarBackgroundView.alpha = 0;
-        }];
-    }
 }
 
 #pragma mark - UITextFieldDelegate
@@ -1170,7 +1146,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     NSValue *keyboardBoundsValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
     CGFloat keyboardHeight = [keyboardBoundsValue CGRectValue].size.height;
     CGFloat aboveKeyboardScreenPart = self.view.frame.size.height - keyboardHeight;
-    CGFloat inputFieldsHeight = defaultNavBarHeight + 35 + _controlsSectionData.count * kEstimatedCellHeight;
+    CGFloat inputFieldsHeight = 35 + _controlsSectionData.count * kEstimatedCellHeight;
     if (aboveKeyboardScreenPart < inputFieldsHeight)
     {
         [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{

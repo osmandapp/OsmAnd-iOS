@@ -107,13 +107,15 @@
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = UIColor.viewBgColor;
-    appearance.shadowColor = UIColor.viewBgColor;
+    appearance.backgroundColor = self.tableView.backgroundColor;
+    appearance.shadowColor = UIColor.separatorColor;
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
         NSForegroundColorAttributeName : UIColor.textColorPrimary
     };
-    self.navigationController.navigationBar.standardAppearance = appearance;
+    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+
+    self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
     self.navigationController.navigationBar.tintColor = UIColor.textColorActive;
     self.navigationController.navigationBar.prefersLargeTitles = NO;

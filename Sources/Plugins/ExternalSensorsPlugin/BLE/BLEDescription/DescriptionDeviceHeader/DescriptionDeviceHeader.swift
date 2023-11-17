@@ -30,7 +30,7 @@ final class DescriptionDeviceHeader: UIView {
         deviceNameLabel.text = device.deviceName
         updateRSSI(with: device.rssi)
         configureConnectUI(device: device)
-        configureStartStateActivityView(with: device.peripheral.state)
+        configureStartStateActivityView(with: device.state)
     }
     
     func updateRSSI(with signal: Int) {
@@ -73,7 +73,7 @@ final class DescriptionDeviceHeader: UIView {
         guard let device else { return }
         configureConnectButtonTitle(with: .connecting)
         connectActivityView.startAnimating()
-        device.peripheral.connect(withTimeout: 10) { [weak self] result in
+        device.connect(withTimeout: 10) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success:
@@ -92,13 +92,13 @@ final class DescriptionDeviceHeader: UIView {
                 configureConnectButtonTitle(with: .connected)
                 showErrorAlertWith(message: error.localizedDescription)
             }
-            update(with: device.peripheral.state)
+            update(with: device.state)
         }
     }
     
     private func discoverServices(serviceUUIDs: [CBUUID]? = nil) {
         guard let device else { return }
-        device.peripheral.discoverServices(withUUIDs: nil) { [weak self] result in
+        device.discoverServices(withUUIDs: nil) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success(let services):
@@ -113,7 +113,7 @@ final class DescriptionDeviceHeader: UIView {
     private func discoverCharacteristics(services: [CBService]) {
         guard let device else { return }
         for service in services {
-            device.peripheral.discoverCharacteristics(withUUIDs: nil, ofServiceWithUUID: service.uuid) { [weak self] result in
+            device.discoverCharacteristics(withUUIDs: nil, ofServiceWithUUID: service.uuid) { [weak self] result in
                 guard let self else { return }
                 switch result {
                 case .success(let characteristics):
@@ -128,7 +128,7 @@ final class DescriptionDeviceHeader: UIView {
                         }
                         if characteristic.properties.contains(.notify) {
                             debugPrint("\(characteristic.uuid): properties contains .notify")
-                            device.peripheral.setNotifyValue(toEnabled: true, ofCharac: characteristic) { result in
+                            device.setNotifyValue(toEnabled: true, ofCharac: characteristic) { result in
                                 debugPrint(result)
                             }
                         }
@@ -147,7 +147,7 @@ final class DescriptionDeviceHeader: UIView {
         configureConnectButtonTitle(with: .disconnecting)
         connectActivityView.startAnimating()
         device.disableRSSI()
-        device.peripheral.disconnect { [weak self] result in
+        device.disconnect { [weak self] result in
             guard let self else { return }
             switch result {
             case .success:
@@ -158,7 +158,7 @@ final class DescriptionDeviceHeader: UIView {
                 configureConnectButtonTitle(with: .disconnected)
                 showErrorAlertWith(message: error.localizedDescription)
             }
-            update(with: device.peripheral.state)
+            update(with: device.state)
         }
     }
     
@@ -179,7 +179,7 @@ final class DescriptionDeviceHeader: UIView {
     // MARK: - IBAction
     @IBAction func onConnectStatusButtonPressed(_ sender: Any) {
         guard let device else { return }
-        switch device.peripheral.state {
+        switch device.state {
         case .connected: disconnect()
         case .disconnected: connect()
         default: break

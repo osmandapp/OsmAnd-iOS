@@ -15,17 +15,19 @@ extension Notification.Name {
 
 class Device {
     var deviceType: DeviceType!
-    var peripheral: Peripheral!
     var rssi = -1
     var deviceName: String = ""
     var didChangeCharacteristic: (() -> Void)? = nil
     var isSelected = false
+    
+    private(set) var peripheral: Peripheral!
+    
     private var RSSIUpdateTimer: Timer?
     
     init(deviceType: DeviceType!,
          rssi: Int = 1,
          deviceName: String = "",
-         didChangeCharacteristic: ( () -> Void)? = nil,
+         didChangeCharacteristic: (() -> Void)? = nil,
          RSSIUpdateTimer: Timer? = nil) {
         self.deviceType = deviceType
         self.rssi = rssi
@@ -50,10 +52,6 @@ class Device {
         ""
     }
     
-    func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
-        return nil
-    }
-    
     var getServiceConnectedImage: UIImage {
         UIImage()
     }
@@ -63,6 +61,10 @@ class Device {
     }
     
     var getSettingsFields: [String: Any]? {
+        return nil
+    }
+    
+    func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
         return nil
     }
     
@@ -118,6 +120,48 @@ class Device {
      - 0 : Device Information
      - 1 : Heart Rate
      */
+}
+
+extension Device {
+    
+    var state: CBPeripheralState {
+        peripheral.state
+    }
+    
+    func setPeripheral(peripheral: Peripheral) {
+        self.peripheral = peripheral
+    }
+    
+    func connect(withTimeout timeout: TimeInterval?, completion: @escaping ConnectPeripheralCallback) {
+        peripheral.connect(withTimeout: timeout, completion: completion)
+    }
+    
+    func disconnect(completion: @escaping DisconnectPeripheralCallback) {
+        peripheral.disconnect(completion: completion)
+    }
+    
+    func discoverServices(withUUIDs serviceUUIDs: [CBUUIDConvertible]? = nil,
+                          completion: @escaping ServiceRequestCallback) {
+        peripheral.discoverServices(withUUIDs: serviceUUIDs,
+                                    completion: completion)
+    }
+    
+    func discoverCharacteristics(withUUIDs characteristicUUIDs: [CBUUIDConvertible]? = nil,
+                                 ofServiceWithUUID serviceUUID: CBUUIDConvertible,
+                                 completion: @escaping CharacteristicRequestCallback) {
+        peripheral.discoverCharacteristics(withUUIDs: characteristicUUIDs,
+                                           ofServiceWithUUID: serviceUUID,
+                                           completion: completion)
+    }
+    
+    func setNotifyValue(toEnabled enabled: Bool,
+                        ofCharac charac: CBCharacteristic,
+                        completion: @escaping UpdateNotificationStateCallback) {
+        peripheral.setNotifyValue(toEnabled: enabled,
+                                  forCharacWithUUID: charac,
+                                  ofServiceWithUUID: charac.service!,
+                                  completion: completion)
+    }
 }
 
 // RSSI

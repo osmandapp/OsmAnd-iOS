@@ -22,15 +22,15 @@ final class BLEHeartRateDevice: Device {
         UIImage(named: "widget_sensor_heart_rate")!
     }
     
-    override var getDataFields: [String: String]? {
+    override var getDataFields: [[String: String]]? {
         if let sensor = sensors.first(where: { $0 is BLEHeartRateSensor }) as? BLEHeartRateSensor {
             if let lastHeartRateData = sensor.lastHeartRateData {
-                return [localizedString("map_widget_ant_heart_rate"):
+                return [[localizedString("map_widget_ant_heart_rate"):
                             lastHeartRateData.heartRate == 0
                         ? "-"
-                        : String(lastHeartRateData.heartRate) + " " + localizedString("beats_per_minute_short")]
+                        : String(lastHeartRateData.heartRate) + " " + localizedString("beats_per_minute_short")]]
             } else {
-                return [localizedString("map_widget_ant_heart_rate"): "-"]
+                return [[localizedString("map_widget_ant_heart_rate"): "-"]]
             }
         }
         return nil

@@ -1,23 +1,28 @@
 //
-//  BLEChangeDeviceNameViewController.swift
+//  BLEWheelSettingsViewController.swift
 //  OsmAnd Maps
 //
-//  Created by Oleksandr Panchenko on 17.10.2023.
+//  Created by Oleksandr Panchenko on 14.11.2023.
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
 import Foundation
 
-final class BLEChangeDeviceNameViewController: OABaseNavbarViewController {
-    var device: Device!
-    var onSaveAction: (() -> Void)? = nil
+final class BLEWheelSettingsViewController: OABaseNavbarViewController {
+    var wheelSize: Float!
+    var onSaveAction: (() -> Void)?
     
-    private var textView: UITextView?
-    private var newDeviceName = ""
+    private var textView: UITextView? {
+        didSet {
+            textView?.keyboardType = .namePhonePad
+        }
+    }
+    private var wheelSizeString = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        newDeviceName = device.deviceName
+
+        wheelSizeString = String(wheelSize)
         generateData()
     }
     
@@ -26,8 +31,8 @@ final class BLEChangeDeviceNameViewController: OABaseNavbarViewController {
         textView?.becomeFirstResponder()
     }
     
-    override func getTitle() -> String! {
-        localizedString("shared_string_name")
+    override func getTitle() -> String {
+        localizedString("wheel_circumference")
     }
     
     override func getLeftNavbarButtonTitle() -> String {
@@ -40,9 +45,10 @@ final class BLEChangeDeviceNameViewController: OABaseNavbarViewController {
     }
     
     override func onRightNavbarButtonPressed() {
-        if newDeviceName != device.deviceName {
-            device.deviceName = newDeviceName
-            DeviceHelper.shared.changeDeviceName(with: device.id, name: newDeviceName)
+        if wheelSizeString != String(wheelSize) {
+            // TODO: need ui design
+          //  device.deviceName = wheelSizeString
+           // DeviceHelper.shared.changeDeviceName(with: device.id, name: newDeviceName)
             onSaveAction?()
         }
         dismiss()
@@ -59,7 +65,7 @@ final class BLEChangeDeviceNameViewController: OABaseNavbarViewController {
         
         name.cellType = OATextMultilineTableViewCell.getIdentifier()
         name.key = "name_key"
-        name.title = newDeviceName
+        name.title = wheelSizeString
     }
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
@@ -90,14 +96,14 @@ final class BLEChangeDeviceNameViewController: OABaseNavbarViewController {
     }
     
     @objc private func onClearButtonPressed() {
-        newDeviceName = ""
+        wheelSizeString = ""
         generateData()
         tableView.reloadData()
         navigationItem.setRightBarButtonItems(isEnabled: false, with: UIColor.buttonBgColorDisabled)
     }
 }
 
-extension BLEChangeDeviceNameViewController: UITextViewDelegate {
+extension BLEWheelSettingsViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         updateFileNameFromEditText(name: textView.text)
@@ -120,7 +126,7 @@ extension BLEChangeDeviceNameViewController: UITextViewDelegate {
         let text = name.trimmingCharacters(in: .whitespacesAndNewlines)
         navigationItem.setRightBarButtonItems(isEnabled: false, with: UIColor.buttonBgColorDisabled)
         if !text.isEmpty {
-            newDeviceName = text
+            wheelSizeString = text
             navigationItem.setRightBarButtonItems(isEnabled: true, with: UIColor.buttonBgColorPrimary)
         }
     }

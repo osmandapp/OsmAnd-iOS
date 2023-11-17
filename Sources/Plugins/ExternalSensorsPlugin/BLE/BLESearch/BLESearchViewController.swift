@@ -71,6 +71,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
     }
     
     private var hasFirstResult = false
+    private var needRescan = false
     
     // MARK: - Init
     
@@ -93,9 +94,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
         tableView.backgroundColor = .clear
         view.backgroundColor = UIColor.viewBgColor
         tableView.sectionHeaderTopPadding = 26
-        if !hasFirstResult {
-            startScan()
-        }
+        startScan()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -193,6 +192,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
     
     private func scanForPeripherals() {
         showSearchingView()
+        needRescan = false
         BLEManager.shared.scanForPeripherals(withServiceUUIDs: GattAttributes.SUPPORTED_SERVICES.map { $0.CBUUIDRepresentation }) { [weak self] in
             guard let self else { return }
             hasFirstResult = true
@@ -215,21 +215,23 @@ final class BLESearchViewController: OABaseNavbarViewController {
     private func detectBluetoothState() {
         NotificationCenter.default.addObserver(forName: Central.CentralStateChange,
                                                object: Central.sharedInstance,
-                                               queue: nil)
-        { [weak self] notification in
+                                               queue: nil) { [weak self] notification in
             guard let self else { return }
             UserDefaults.standard.set(true, for: .wasAuthorizationRequestBluetooth)
             guard let state = notification.userInfo?["state"] as? CBManagerState else {
                 return
             }
             if case .poweredOn = state {
-                if !hasFirstResult {
+                if !hasFirstResult || needRescan {
                     startScan()
                 }
                 if !discoveredDevices.isEmpty {
                     showDiscoveredDevices()
                 }
             } else {
+                if !discoveredDevices.isEmpty {
+                    needRescan = true
+                }
                showBluetoothTurnedOffView()
             }
         }

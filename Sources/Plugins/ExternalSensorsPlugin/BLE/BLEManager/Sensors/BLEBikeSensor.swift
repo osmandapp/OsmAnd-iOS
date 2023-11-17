@@ -8,22 +8,23 @@
 
 import CoreBluetooth
 
-class BLEBikeSensor: Sensor {
+final class BLEBikeSensor: Sensor {
     
-    static let WheelFlagMask: UInt8    = 0b01
-    static let CrankFlagMask: UInt8    = 0b10
+    private var oldCharacteristic: CyclingCharacteristic = .zero
     
-    var firstWheelRevolutions: Int = -1
-    var lastWheelRevolutions = -1
-    var lastWheelEventTime = -1
-    var wheelCadence: Float = -1
-    var lastCrankRevolutions = -1
-    var lastCrankEventTime = -1
+    // BikeSpeedDistanceData
+    private var travelDistance = Measurement<UnitLength>(value: 0, unit: .meters)
+    private var totalTravelDistance = Measurement<UnitLength>(value: 0, unit: .meters)
+    private var speed = Measurement<UnitSpeed>(value: 0, unit: .metersPerSecond)
     
-    var wheelSize: Float = 2.086 //m
+    // BikeCadenceData
+    private var gearRatio: Double = 1
+    private var cadence: Int = 0
     
     var lastBikeCadenceData: BikeCadenceData?
     var lastBikeSpeedDistanceData: BikeSpeedDistanceData?
+    // NOTE: wheelCircumference = wheelSize * pi
+    var wheelSize: Double = 2.086
     
     override func getLastSensorDataList() -> [SensorData]? {
         var list = [SensorData]()
@@ -36,20 +37,64 @@ class BLEBikeSensor: Sensor {
         return list
     }
     
+    override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
+        [.bicycleSpeed, .bicycleCadence, .bicycleDistance]
+    }
+    
+    override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
+        guard let data = characteristic.value else {
+            return
+        }
+        switch characteristic.uuid {
+        case GattAttributes.CHARACTERISTIC_CYCLING_SPEED_AND_CADENCE_MEASUREMENT.CBUUIDRepresentation:
+            try? decodeSpeedCharacteristic(data: data, result: result)
+        default:
+            debugPrint("Unhandled Characteristic UUID: \(characteristic.uuid)")
+        }
+    }
+    
+    private func decodeSpeedCharacteristic(data: Data, result: (Result<Void, Error>) -> Void) throws {
+        let characteristic = try CyclingCharacteristic(data: data)
+        
+        characteristic.travelDistance(with: wheelSize)
+            .flatMap { totalTravelDistance = $0; return updateBikeSpeedDistanceData() }
+        characteristic.distance(oldCharacteristic, wheelCircumference: wheelSize)
+            .flatMap { travelDistance = travelDistance + $0; return updateBikeSpeedDistanceData() }
+        characteristic.speed(oldCharacteristic, wheelCircumference: wheelSize)
+            .flatMap { speed = $0; return updateBikeSpeedDistanceData() }
+        
+        characteristic.gearRatio(oldCharacteristic)
+            .flatMap { gearRatio = $0; return updateeBikeCadenceData() }
+        characteristic.cadence(oldCharacteristic)
+            .flatMap { cadence = $0; return updateeBikeCadenceData() }
+        
+        oldCharacteristic = characteristic
+        result(.success)
+    }
+    
+    private func updateBikeSpeedDistanceData() {
+        lastBikeCadenceData = nil
+        lastBikeSpeedDistanceData = BikeSpeedDistanceData(timestamp: Date.now.timeIntervalSince1970,
+                                                          speed: speed,
+                                                          travelDistance: travelDistance,
+                                                          totalTravelDistance: totalTravelDistance)
+        debugPrint(lastBikeSpeedDistanceData?.description as Any)
+    }
+    
+    private func updateeBikeCadenceData() {
+        lastBikeSpeedDistanceData = nil
+        lastBikeCadenceData = BikeCadenceData(timestamp: Date.now.timeIntervalSince1970,
+                                              gearRatio: gearRatio,
+                                              cadence: cadence)
+        debugPrint(lastBikeCadenceData?.description as Any)
+    }
+}
+
+extension BLEBikeSensor {
     final class BikeCadenceData: SensorData {
         let timestamp: TimeInterval
-        let gearRatio: Float
+        let gearRatio: Double
         let cadence: Int
-        
-        init(timestamp: TimeInterval, gearRatio: Float, cadence: Int) {
-            self.timestamp = timestamp
-            self.gearRatio = gearRatio
-            self.cadence = cadence
-        }
-        
-        func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField? {
-            widgetFields?.first
-        }
         
         var widgetFields: [SensorWidgetDataField]? {
             [SensorWidgetDataField(fieldType: .bicycleCadence,
@@ -62,29 +107,27 @@ class BLEBikeSensor: Sensor {
         var description: String {
             "BikeCadenceData { timestamp=\(timestamp), gearRatio=\(gearRatio), cadence=\(cadence) }"
         }
-    }
-    
-    final class BikeSpeedDistanceData: SensorData {
-        let timestamp: TimeInterval
-        // m/s
-        let speed: Float
-        // m
-        let distance: Float
-        let totalDistance: Float
         
-        init(timestamp: TimeInterval, speed: Float, distance: Float, totalDistance: Float) {
+        init(timestamp: TimeInterval, gearRatio: Double, cadence: Int) {
             self.timestamp = timestamp
-            self.speed = speed
-            self.distance = distance
-            self.totalDistance = totalDistance
-        }
-        
-        var description: String {
-            "BikeSpeedDistanceData { timestamp=\(timestamp), speed=\(speed), distance=\(distance), totalDistance=\(totalDistance) }"
+            self.gearRatio = gearRatio
+            self.cadence = cadence
         }
         
         func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField? {
             widgetFields?.first
+        }
+    }
+    
+    final class BikeSpeedDistanceData: SensorData {
+        let timestamp: TimeInterval
+        
+        private(set) var travelDistance = Measurement<UnitLength>(value: 0, unit: .meters)
+        private(set) var totalTravelDistance = Measurement<UnitLength>(value: 0, unit: .meters)
+        private(set) var speed = Measurement<UnitSpeed>(value: 0, unit: .metersPerSecond)
+        
+        var description: String {
+            "BikeSpeedDistanceData { timestamp=\(timestamp), speed=\(speed.value), travelDistance=\(travelDistance.value), totalTravelDistance=\(totalTravelDistance.value) }"
         }
         
         var widgetFields: [SensorWidgetDataField]? {
@@ -92,142 +135,33 @@ class BLEBikeSensor: Sensor {
                                    nameId: localizedString("external_device_characteristic_speed"),
                                    unitNameId: "",
                                    numberValue: nil,
-                                   stringValue: String(speed)),
+                                   stringValue: OAOsmAndFormatter.getFormattedSpeed(Float(speed.value))),
              SensorWidgetDataField(fieldType: .bicycleDistance,
                                    nameId: localizedString("external_device_characteristic_distance"),
                                    unitNameId: "",
                                    numberValue: nil,
-                                   stringValue: String(totalDistance))
+                                   stringValue: OAOsmAndFormatter.getFormattedDistance(Float(totalTravelDistance.value)))
             ]
         }
-    }
-    
-    override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
-        guard let data = characteristic.value else {
-            return
+        
+        init(timestamp: TimeInterval,
+             speed: Measurement<UnitSpeed>,
+             travelDistance: Measurement<UnitLength>,
+             totalTravelDistance: Measurement<UnitLength>) {
+            self.timestamp = timestamp
+            self.speed = speed
+            self.travelDistance = travelDistance
+            self.totalTravelDistance = totalTravelDistance
         }
-        switch characteristic.uuid {
-        case GattAttributes.CHARACTERISTIC_CYCLING_SPEED_AND_CADENCE_MEASUREMENT.CBUUIDRepresentation:
-            decodeSpeedCharacteristic(data: data as NSData, result: result)
-        default:
-            debugPrint("Unhandled Characteristic UUID: \(characteristic.uuid)")
+        
+        func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField? {
+            guard let widgetFields, widgetFields.count >= 2 else { return nil }
+            if fieldType == .bicycleSpeed {
+                return widgetFields.first
+            } else if fieldType == .bicycleDistance {
+                return widgetFields[1]
+            }
+            return nil
         }
-    }
-    
-    private func decodeSpeedCharacteristic(data: NSData, result: (Result<Void, Error>) -> Void) {
-        var flags: UInt8 = 0
-        data.getBytes(&flags, range: NSRange(location: 0, length: 1))
-        
-        let wheelRevPresent = ((flags & Self.WheelFlagMask) > 0)
-        let crankRevPreset = ((flags & Self.CrankFlagMask) > 0)
-        
-        var wheel: UInt32 = 0
-        var wheelTime: UInt16 = 0
-        var crank: UInt16 = 0
-        var crankTime: UInt16 = 0
-        
-        var currentOffset = 1
-        var length = 0
-        
-        if wheelRevPresent {
-            length = MemoryLayout<UInt32>.size
-            data.getBytes(&wheel, range: NSRange(location: currentOffset, length: length))
-            currentOffset += length
-            
-            length = MemoryLayout<UInt16>.size
-            data.getBytes(&wheelTime, range: NSRange(location: currentOffset, length: length))
-            currentOffset += length
-            
-            let wheelRevolutions = Int(CFSwapInt32LittleToHost(wheel))
-            debugPrint("wheelRevolutions: \(wheelRevolutions)")
-            let lastWheelEventTime = Int(TimeInterval( Double(CFSwapInt16LittleToHost(wheelTime))))
-            let circumference = wheelSize
-            
-            if firstWheelRevolutions < 0 {
-                firstWheelRevolutions = wheelRevolutions
-            }
-            
-            if self.lastWheelEventTime == lastWheelEventTime {
-                let totalDistance: Float = Float(wheelRevolutions) * circumference
-                let distance: Float = Float(wheelRevolutions - firstWheelRevolutions) * circumference // m
-                var speed: Float = 0
-                
-                if lastBikeSpeedDistanceData != nil {
-                    speed = lastBikeSpeedDistanceData!.speed
-                }
-                createBikeSpeedDistanceData(speed: speed, distance: distance, totalDistance: totalDistance)
-                result(.success)
-            } else if lastWheelRevolutions >= 0 {
-                let timeDifference: Float
-                
-                if lastWheelEventTime < self.lastWheelEventTime {
-                    timeDifference = Float((65535 + lastWheelEventTime - self.lastWheelEventTime)) / 1024.0
-                } else {
-                    timeDifference = Float((lastWheelEventTime - self.lastWheelEventTime)) / 1024.0
-                }
-                
-                let distanceDifference = Float(wheelRevolutions - lastWheelRevolutions) * circumference
-                let totalDistance: Float = Float(wheelRevolutions) * circumference
-                let distance: Float = Float(wheelRevolutions - firstWheelRevolutions) * circumference
-                let speed = distanceDifference / timeDifference
-                
-                wheelCadence = Float((wheelRevolutions - lastWheelRevolutions)) * 60.0 / timeDifference
-                createBikeSpeedDistanceData(speed: speed, distance: distance, totalDistance: totalDistance)
-                result(.success)
-            }
-            
-            lastWheelRevolutions = wheelRevolutions
-            self.lastWheelEventTime = lastWheelEventTime
-        } else if crankRevPreset {
-            length = MemoryLayout<UInt16>.size
-            data.getBytes(&crank, range: NSRange(location: currentOffset, length: length))
-            currentOffset += length
-            
-            length = MemoryLayout<UInt16>.size
-            data.getBytes(&crankTime, range: NSRange(location: currentOffset, length: length))
-            currentOffset += length
-            
-            let crankRevolutions    = Int(CFSwapInt16LittleToHost(crank))
-            debugPrint("crankRevolutions: \(crankRevolutions)")
-            
-            let lastCrankEventTime  = Int(TimeInterval( Double(CFSwapInt16LittleToHost(crankTime))))
-            
-            if lastCrankRevolutions >= 0 {
-                let timeDifference: Float
-                
-                if lastCrankEventTime < self.lastCrankEventTime {
-                    timeDifference = Float((65535 + lastCrankEventTime - self.lastCrankEventTime)) / 1024.0
-                } else {
-                    timeDifference = Float((lastCrankEventTime - self.lastCrankEventTime)) / 1024.0
-                }
-                
-                let crankCadence = Float((crankRevolutions - lastCrankRevolutions)) * 60.0 / timeDifference
-                
-                if crankCadence > 0 {
-                    let gearRatio = wheelCadence / crankCadence
-                    createBikeCadenceData(gearRatio: gearRatio, crankCadence: Int(crankCadence.rounded()))
-                    result(.success)
-                }
-            }
-            
-            lastCrankRevolutions = crankRevolutions
-            self.lastCrankEventTime = lastCrankEventTime
-        }
-    }
-    
-    private func createBikeSpeedDistanceData(speed: Float,
-                                             distance: Float,
-                                             totalDistance: Float) {
-        lastBikeSpeedDistanceData = BikeSpeedDistanceData(timestamp: Date.now.timeIntervalSince1970,
-                                                          speed: speed,
-                                                          distance: distance,
-                                                          totalDistance: totalDistance)
-        print(lastBikeSpeedDistanceData?.description as Any)
-    }
-    
-    private func createBikeCadenceData(gearRatio: Float, crankCadence: Int) {
-        lastBikeCadenceData = BikeCadenceData(timestamp: Date.now.timeIntervalSince1970, gearRatio: gearRatio, cadence: crankCadence)
-        print(lastBikeCadenceData?.description as Any)
     }
 }
-

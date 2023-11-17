@@ -3655,11 +3655,15 @@
 		FA44BF692A72F810000D2F5F /* SceneDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF672A72F810000D2F5F /* SceneDelegate.mm */; };
 		FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */; };
 		FA4768B52A67B86400D533E8 /* FreeBackupBanner.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */; };
+		FA4D7F572B03D366003208D7 /* BLEWheelSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4D7F562B03D366003208D7 /* BLEWheelSettingsViewController.swift */; };
 		FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */; };
 		FA5A21A82A9E17DB00319695 /* UIPageViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */; };
 		FA63F24C2AF3DAA00040A0CE /* SensorDataField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24B2AF3DAA00040A0CE /* SensorDataField.swift */; };
 		FA63F24E2AF3DC550040A0CE /* SensorWidgetDataField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24D2AF3DC550040A0CE /* SensorWidgetDataField.swift */; };
 		FA63F2502AF3DFF60040A0CE /* SensorTextWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24F2AF3DFF60040A0CE /* SensorTextWidget.swift */; };
+		FA6439E72B04D70A00331006 /* CyclingCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6439E62B04D70A00331006 /* CyclingCharacteristic.swift */; };
+		FA6439E92B04D81B00331006 /* Data+Extesnion.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6439E82B04D81B00331006 /* Data+Extesnion.swift */; };
+		FA6439EB2B051A5300331006 /* MeasurementFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6439EA2B051A5300331006 /* MeasurementFormatter+Extension.swift */; };
 		FA6797EF2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA6797EE2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm */; };
 		FA69F2852A73948B0044CFCA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79BF26C563A000F274C7 /* main.m */; };
 		FA740D3A2A7C006900BD12DC /* OAAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79BE26C563A000F274C7 /* OAAppDelegate.mm */; };
@@ -8599,11 +8603,15 @@
 		FA44BF682A72F810000D2F5F /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBanner.swift; sourceTree = "<group>"; };
 		FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FreeBackupBanner.xib; sourceTree = "<group>"; };
+		FA4D7F562B03D366003208D7 /* BLEWheelSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEWheelSettingsViewController.swift; sourceTree = "<group>"; };
 		FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageViewController+Extension.swift"; sourceTree = "<group>"; };
 		FA63F24B2AF3DAA00040A0CE /* SensorDataField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorDataField.swift; sourceTree = "<group>"; };
 		FA63F24D2AF3DC550040A0CE /* SensorWidgetDataField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetDataField.swift; sourceTree = "<group>"; };
 		FA63F24F2AF3DFF60040A0CE /* SensorTextWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorTextWidget.swift; sourceTree = "<group>"; };
+		FA6439E62B04D70A00331006 /* CyclingCharacteristic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CyclingCharacteristic.swift; sourceTree = "<group>"; };
+		FA6439E82B04D81B00331006 /* Data+Extesnion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extesnion.swift"; sourceTree = "<group>"; };
+		FA6439EA2B051A5300331006 /* MeasurementFormatter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MeasurementFormatter+Extension.swift"; sourceTree = "<group>"; };
 		FA6797ED2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherAutoUpdateSettingsViewController.h; sourceTree = "<group>"; };
 		FA6797EE2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherAutoUpdateSettingsViewController.mm; sourceTree = "<group>"; };
 		FA740D412A80D9FA00BD12DC /* CloudIntroductionButtonsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CloudIntroductionButtonsView.xib; sourceTree = "<group>"; };
@@ -14837,6 +14845,8 @@
 				FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */,
 				FAA650652ADD4C9F0020DCEA /* UIImage+Extension.swift */,
 				FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */,
+				FA6439E82B04D81B00331006 /* Data+Extesnion.swift */,
+				FA6439EA2B051A5300331006 /* MeasurementFormatter+Extension.swift */,
 			);
 			path = SwiftExtensions;
 			sourceTree = "<group>";
@@ -15000,6 +15010,22 @@
 			path = FreeFavoritesBackupBanner;
 			sourceTree = "<group>";
 		};
+		FA4D7F552B03D2F8003208D7 /* BLEWheelSettings */ = {
+			isa = PBXGroup;
+			children = (
+				FA4D7F562B03D366003208D7 /* BLEWheelSettingsViewController.swift */,
+			);
+			path = BLEWheelSettings;
+			sourceTree = "<group>";
+		};
+		FA6439E52B04D6EE00331006 /* Characteristics */ = {
+			isa = PBXGroup;
+			children = (
+				FA6439E62B04D70A00331006 /* CyclingCharacteristic.swift */,
+			);
+			path = Characteristics;
+			sourceTree = "<group>";
+		};
 		FA6797EC2A8501C60022F2A9 /* OAWeatherAutoUpdateSettingsViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -15039,6 +15065,7 @@
 			isa = PBXGroup;
 			children = (
 				FA359EF02ADFD5310001C11D /* DeviceHelper.swift */,
+				FA4D7F552B03D2F8003208D7 /* BLEWheelSettings */,
 				FAE0B70F2AFCDA3000C02438 /* BLEPairedSensors */,
 				FA359EE72ADFC0420001C11D /* DeviceSettings */,
 				FA359EDE2ADEA1FE0001C11D /* BLEChangeDeviceName */,
@@ -15071,6 +15098,7 @@
 		FAA650392ADD42C40020DCEA /* BLEManager */ = {
 			isa = PBXGroup;
 			children = (
+				FA6439E52B04D6EE00331006 /* Characteristics */,
 				FAA6503E2ADD42C40020DCEA /* BLEManager.swift */,
 				FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */,
 				FAA650422ADD42C40020DCEA /* GattAttributes.swift */,
@@ -18224,6 +18252,7 @@
 				DA5A812F26C563A700F274C7 /* OAOsmNotesMapLayerProvider.mm in Sources */,
 				DA5A817D26C563A700F274C7 /* OAMapSourceAction.mm in Sources */,
 				DA5A82F626C563A800F274C7 /* OALabelCollectionViewCell.m in Sources */,
+				FA6439E92B04D81B00331006 /* Data+Extesnion.swift in Sources */,
 				DA0C2BDD27EF4B3800B7CC4F /* OAPrepareBackupTask.m in Sources */,
 				DA5A849526C563A900F274C7 /* OARoutePlanningHudViewController.mm in Sources */,
 				DA5A849C26C563A900F274C7 /* OAMeasurementModeCommand.mm in Sources */,
@@ -18380,6 +18409,7 @@
 				DA5A82FE26C563A800F274C7 /* OATextInputFloatingCell.mm in Sources */,
 				DA5A825F26C563A700F274C7 /* OAActivityViewWithTitleCell.m in Sources */,
 				DA5A840826C563A800F274C7 /* OAMyLocationViewController.mm in Sources */,
+				FA6439E72B04D70A00331006 /* CyclingCharacteristic.swift in Sources */,
 				DA5A84E626C563A900F274C7 /* OAWaypointsRadiusScreen.mm in Sources */,
 				DA5A813326C563A700F274C7 /* OATerrainMapLayerProvider.mm in Sources */,
 				DA5A843B26C563A800F274C7 /* OAParkingViewController.mm in Sources */,
@@ -18631,6 +18661,7 @@
 				FACE409F2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm in Sources */,
 				DA5A816526C563A700F274C7 /* OAApplicationMode.m in Sources */,
 				DA5A834326C563A800F274C7 /* OAImageTextViewCell.m in Sources */,
+				FA6439EB2B051A5300331006 /* MeasurementFormatter+Extension.swift in Sources */,
 				DA5A84AA26C563A900F274C7 /* OASaveTrackBottomSheetViewController.mm in Sources */,
 				DA5A853126C563A900F274C7 /* OASettingsImporter.mm in Sources */,
 				DA5A854E26C563A900F274C7 /* OAGPXUIHelper.mm in Sources */,
@@ -18678,6 +18709,7 @@
 				DA5A84FB26C563A900F274C7 /* OADownloadProgressView.m in Sources */,
 				DA5A81EE26C563A700F274C7 /* OANavigationIcon.m in Sources */,
 				DA5A823426C563A700F274C7 /* OAImportCompleteViewController.mm in Sources */,
+				FA4D7F572B03D366003208D7 /* BLEWheelSettingsViewController.swift in Sources */,
 				DA5A849926C563A900F274C7 /* OAInfoBottomView.mm in Sources */,
 				DA5A83BC26C563A800F274C7 /* OAQuickActionListViewController.m in Sources */,
 				DA8DC3A32A0E4EBB006C116B /* OABearingWidget.m in Sources */,

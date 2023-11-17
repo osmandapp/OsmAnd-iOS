@@ -211,7 +211,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     {
         _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:UIColor.textColorTertiary}];
         _searchController.searchBar.searchTextField.backgroundColor = UIColor.groupBgColor;
-        _searchController.searchBar.searchTextField.leftView.tintColor =UIColor.textColorTertiary;
+        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.textColorTertiary;
     }
     else
     {

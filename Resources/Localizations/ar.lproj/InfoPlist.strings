@@ -5,7 +5,7 @@
   Created by Dmitry Svetlichny on 10.11.2023.
   Copyright © 2023 OsmAnd. All rights reserved.
 */
-працює
+
 "NSLocationWhenInUseUsageDescription" = "يلزم الوصول إلى الموقع للملاحة وتسجيل الرحلة.";
 
 "NSLocationAlwaysAndWhenInUseUsageDescription" = "يلزم الوصول إلى الموقع للتنقل وتسجيل الرحلة في الخلفية.";

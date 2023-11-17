@@ -253,17 +253,17 @@ extension WidgetType {
     static let elevationProfile = WidgetType(ordinal: 45, id: "elevation_profile", title: localizedString("elevation_profile"), descr: localizedString("elevation_profile_widget_desc"), iconName: "widget_route_elevation", defaultPanel: .bottomPanel)
     
     // External sensors
-    static let heartRate = WidgetType(ordinal: 46, id: "heartRate", title: localizedString("map_widget_ant_heart_rate"), descr: localizedString("map_widget_ant_heart_rate_desc"), dayIconName: "widget_sensor_heart_rate", nightIconName: "widget_sensor_heart_rate", group: .externalSensors, defaultPanel: .rightPanel)
+    static let heartRate = WidgetType(ordinal: 46, id: "heartRate", title: localizedString("map_widget_ant_heart_rate"), descr: localizedString("map_widget_ant_heart_rate_desc"), iconName: "widget_sensor_heart_rate", group: .externalSensors, defaultPanel: .rightPanel)
     
-    static let bicycleCadence = WidgetType(ordinal: 47, id: "bicycleCadence", title: localizedString("map_widget_ant_bicycle_cadence"), descr: localizedString("map_widget_ant_bicycle_cadence_desc"), dayIconName: "widget_sensor_cadence", nightIconName: "widget_sensor_cadence", group: .externalSensors, defaultPanel: .rightPanel)
+    static let bicycleCadence = WidgetType(ordinal: 47, id: "bicycleCadence", title: localizedString("map_widget_ant_bicycle_cadence"), descr: localizedString("map_widget_ant_bicycle_cadence_desc"), iconName: "widget_sensor_cadence", group: .externalSensors, defaultPanel: .rightPanel)
     
-    static let bicyclePower = WidgetType(ordinal: 48, id: "bicyclePower", title: localizedString("map_widget_ant_bicycle_power"), descr: localizedString("map_widget_ant_bicycle_power_desc"), dayIconName: "widget_sensor_bicycle_power", nightIconName: "widget_sensor_bicycle_power", group: .externalSensors, defaultPanel: .rightPanel)
+    static let bicyclePower = WidgetType(ordinal: 48, id: "bicyclePower", title: localizedString("map_widget_ant_bicycle_power"), descr: localizedString("map_widget_ant_bicycle_power_desc"), iconName: "widget_sensor_bicycle_power", group: .externalSensors, defaultPanel: .rightPanel)
     
-    static let bicycleDistance = WidgetType(ordinal: 49, id: "bicycleDistance", title: localizedString("map_widget_ant_bicycle_dist"), descr: localizedString("map_widget_ant_bicycle_dist_desc"), dayIconName: "widget_sensor_distance", nightIconName: "widget_sensor_distance", group: .externalSensors, defaultPanel: .rightPanel)
+    static let bicycleDistance = WidgetType(ordinal: 49, id: "bicycleDistance", title: localizedString("map_widget_ant_bicycle_dist"), descr: localizedString("map_widget_ant_bicycle_dist_desc"), iconName: "widget_sensor_distance", group: .externalSensors, defaultPanel: .rightPanel)
     
-    static let bicycleSpeed = WidgetType(ordinal: 50, id: "bicycleSpeed", title: localizedString("map_widget_ant_bicycle_speed"), descr: localizedString("map_widget_ant_bicycle_speed_desc"), dayIconName: "widget_sensor_speed", nightIconName: "widget_sensor_speed", group: .externalSensors, defaultPanel: .rightPanel)
+    static let bicycleSpeed = WidgetType(ordinal: 50, id: "bicycleSpeed", title: localizedString("map_widget_ant_bicycle_speed"), descr: localizedString("map_widget_ant_bicycle_speed_desc"), iconName: "widget_sensor_speed", group: .externalSensors, defaultPanel: .rightPanel)
     
-    static let temperature = WidgetType(ordinal: 51, id: "temperature", title: localizedString("shared_string_temperature"), descr: localizedString("sensor_temperature_desc"), dayIconName: "widget_weather_temperature_day", nightIconName: "widget_weather_temperature_night", group: .externalSensors, defaultPanel: .rightPanel)
+    static let temperature = WidgetType(ordinal: 51, id: "temperature", title: localizedString("shared_string_temperature"), descr: localizedString("sensor_temperature_desc"), iconName: "widget_weather_temperature_day", group: .externalSensors, defaultPanel: .rightPanel)
         
     static let values = [nextTurn,
                          smallNextTurn,

@@ -693,8 +693,11 @@
                                                           tintColor:nil
                                                     parentViewWidth:self.view.frame.size.width];
     }
-    self.tableView.tableHeaderView = tableHeaderView;
-    self.tableView.tableHeaderView.backgroundColor = UIColor.viewBgColor;
+    if (![self useCustomTableViewHeader])
+    {
+        self.tableView.tableHeaderView = tableHeaderView;
+        self.tableView.tableHeaderView.backgroundColor = UIColor.viewBgColor;
+    }
 }
 
 - (NSString *)getTableFooterText
@@ -711,6 +714,11 @@
 
 - (void)generateData
 {
+}
+
+- (BOOL)useCustomTableViewHeader
+{
+    return NO;
 }
 
 - (BOOL)hideFirstHeader

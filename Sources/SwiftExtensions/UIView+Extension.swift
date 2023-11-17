@@ -94,10 +94,29 @@ protocol ReuseIdentifier { }
 
 extension ReuseIdentifier {
     static var reuseIdentifier: String {
-        return String(describing: Self.self)
+        String(describing: Self.self)
     }
 }
 
 extension UITableViewCell: ReuseIdentifier { }
 extension UICollectionViewCell: ReuseIdentifier { }
+
+extension UIView {
+    class func fromNib<T: UIView>() -> T {
+        Bundle(for: T.self).loadNibNamed(String(describing: T.self), owner: nil, options: nil)![0] as! T
+    }
+}
+
+extension UIView {
+    var parentViewController: UIViewController? {
+        var parentResponder: UIResponder? = self
+        while parentResponder != nil {
+            parentResponder = parentResponder!.next
+            if parentResponder is UIViewController {
+                return parentResponder as? UIViewController
+            }
+        }
+        return nil
+    }
+}
 

@@ -73,6 +73,7 @@
 #import "OAWeatherPlugin.h"
 #import "OAMapillaryPlugin.h"
 #import "OAParkingPositionPlugin.h"
+#import "OAExternalSensorsPlugin.h"
 
 // TableView Data
 #import "OATableDataModel.h"
@@ -139,3 +140,4 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "SceneDelegate.h"
 #import "OADayNightHelper.h"
+

@@ -275,8 +275,7 @@ static OASubscriptionState *EXPIRED;
 
 + (BOOL) isSensorPurchased
 {
-    return [self isPaidVersion]
-            || [[OAAppSettings sharedManager].sensorsPurchased get];
+    return [self isOsmAndProAvailable];
 }
 
 + (BOOL)isLiveUpdatesSubscription:(OASubscription *)subscription
@@ -586,7 +585,6 @@ static OASubscriptionState *EXPIRED;
         [_settings.depthContoursPurchased set:NO];
         [_settings.contourLinesPurchased set:NO];
         [_settings.wikipediaPurchased set:NO];
-        [_settings.sensorsPurchased set:NO];
         for (OAProduct *product in _products.inAppsPaid)
         {
             if ([[NSUserDefaults standardUserDefaults] boolForKey:product.productIdentifier])
@@ -1025,7 +1023,6 @@ static OASubscriptionState *EXPIRED;
             [_settings.depthContoursPurchased set:depth];
             [_settings.contourLinesPurchased set:contour];
             [_settings.wikipediaPurchased set:wiki];
-            [_settings.sensorsPurchased set:sensors];
 
             for (OAProduct *p in purchased)
             {
@@ -1357,10 +1354,6 @@ static OASubscriptionState *EXPIRED;
             else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Wiki])
             {
                 [_settings.wikipediaPurchased set:YES];
-            }
-            else if ([product.productIdentifier isEqualToString:kInAppId_Addon_External_Sensors])
-            {
-                [_settings.sensorsPurchased set:YES];
             }
 
             [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];

@@ -217,15 +217,19 @@
 
 - (void) restoreMapViewPort
 {
-    if (_mapView.viewportXScale != kViewportScale)
-        _mapView.viewportXScale = kViewportScale;
-    if (_mapView.viewportYScale != _cachedYViewPort)
-        _mapView.viewportYScale = _cachedYViewPort;
+    if (![[OARootViewController instance].mapPanel isCarplayMapDisplayed])
+    {
+        if (_mapView.viewportXScale != kViewportScale)
+            _mapView.viewportXScale = kViewportScale;
+        if (_mapView.viewportYScale != _cachedYViewPort)
+            _mapView.viewportYScale = _cachedYViewPort;
+    }
 }
 
 - (void) adjustViewPort:(BOOL)landscape
 {
-    if (!self.delegate)
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    if (!self.delegate || [mapPanel isCarplayMapDisplayed])
         return;
     
     if (!landscape)

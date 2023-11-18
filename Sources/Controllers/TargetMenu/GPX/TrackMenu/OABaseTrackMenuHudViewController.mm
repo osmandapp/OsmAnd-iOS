@@ -410,22 +410,28 @@
 
 - (void)adjustViewPort:(BOOL)landscape
 {
-    if (landscape && _mapViewController.mapView.viewportXScale != kViewportBottomScale)
-        _mapViewController.mapView.viewportXScale = kViewportBottomScale;
-    else if (!landscape && _mapViewController.mapView.viewportXScale != kViewportScale)
-        _mapViewController.mapView.viewportXScale = kViewportScale;
-    CGFloat newYScale = (DeviceScreenHeight - [self getViewHeight]) / DeviceScreenHeight;
-    if (!landscape && _mapViewController.mapView.viewportYScale != newYScale)
-        _mapViewController.mapView.viewportYScale = newYScale;
+    if (![_mapPanelViewController isCarplayMapDisplayed])
+    {
+        if (landscape && _mapViewController.mapView.viewportXScale != kViewportBottomScale)
+            _mapViewController.mapView.viewportXScale = kViewportBottomScale;
+        else if (!landscape && _mapViewController.mapView.viewportXScale != kViewportScale)
+            _mapViewController.mapView.viewportXScale = kViewportScale;
+        CGFloat newYScale = (DeviceScreenHeight - [self getViewHeight]) / DeviceScreenHeight;
+        if (!landscape && _mapViewController.mapView.viewportYScale != newYScale)
+            _mapViewController.mapView.viewportYScale = newYScale;
+    }
 }
 
 - (void)restoreMapViewPort
 {
-    OAMapRendererView *mapView = _mapViewController.mapView;
-    if (mapView.viewportXScale != kViewportScale)
-        mapView.viewportXScale = kViewportScale;
-    if (mapView.viewportYScale != _cachedYViewPort)
-        mapView.viewportYScale = _cachedYViewPort;
+    if (![_mapPanelViewController isCarplayMapDisplayed])
+    {
+        OAMapRendererView *mapView = _mapViewController.mapView;
+        if (mapView.viewportXScale != kViewportScale)
+            mapView.viewportXScale = kViewportScale;
+        if (mapView.viewportYScale != _cachedYViewPort)
+            mapView.viewportYScale = _cachedYViewPort;
+    }
 }
 
 - (BOOL)isAdjustedMapViewPort

@@ -754,10 +754,13 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 {
     _mapPosition = mapPosition;
     
-    if (mapPosition == BOTTOM_CONSTANT && _mapView.viewportYScale != kViewportBottomScale)
-        _mapView.viewportYScale = kViewportBottomScale;
-    else if (mapPosition != BOTTOM_CONSTANT && _mapView.viewportYScale != kViewportScale)
-        _mapView.viewportYScale = kViewportScale;
+    if (![[OARootViewController instance].mapPanel isCarplayMapDisplayed])
+    {
+        if (mapPosition == BOTTOM_CONSTANT && _mapView.viewportYScale != kViewportBottomScale)
+            _mapView.viewportYScale = kViewportBottomScale;
+        else if (mapPosition != BOTTOM_CONSTANT && _mapView.viewportYScale != kViewportScale)
+            _mapView.viewportYScale = kViewportScale;
+    }
 }
 
 - (void) setupMapArrowsLocation

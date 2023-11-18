@@ -169,26 +169,34 @@
 
 - (void)adjustMapViewPort
 {
-    OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
-    if ([OAUtilities isLandscape])
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    if (![mapPanel isCarplayMapDisplayed])
     {
-        mapView.viewportXScale = kViewportBottomScale;
-        mapView.viewportYScale = kViewportScale;
-    }
-    else
-    {
-        mapView.viewportXScale = kViewportScale;
-        mapView.viewportYScale = (DeviceScreenHeight - _actionsView.frame.size.height) / DeviceScreenHeight;
+        OAMapRendererView *mapView = mapPanel.mapViewController.mapView;
+        if ([OAUtilities isLandscape])
+        {
+            mapView.viewportXScale = kViewportBottomScale;
+            mapView.viewportYScale = kViewportScale;
+        }
+        else
+        {
+            mapView.viewportXScale = kViewportScale;
+            mapView.viewportYScale = (DeviceScreenHeight - _actionsView.frame.size.height) / DeviceScreenHeight;
+        }
     }
 }
 
 - (void) restoreMapViewPort
 {
-    OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
-    if (mapView.viewportXScale != kViewportScale)
-        mapView.viewportXScale = kViewportScale;
-    if (mapView.viewportYScale != _cachedYViewPort)
-        mapView.viewportYScale = _cachedYViewPort;
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    if (![mapPanel isCarplayMapDisplayed])
+    {
+        OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
+        if (mapView.viewportXScale != kViewportScale)
+            mapView.viewportXScale = kViewportScale;
+        if (mapView.viewportYScale != _cachedYViewPort)
+            mapView.viewportYScale = _cachedYViewPort;
+    }
 }
 
 - (void) updateViewVisibility

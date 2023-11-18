@@ -241,5 +241,6 @@
 // CarPlay
 - (void) setMapViewController:(OAMapViewController * _Nullable)mapViewController;
 - (void)detachFromCarPlayWindow;
+- (BOOL)isCarplayMapDisplayed;
 
 @end

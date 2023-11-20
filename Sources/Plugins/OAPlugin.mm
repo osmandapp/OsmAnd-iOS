@@ -187,7 +187,8 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     if ([OAPlugin getPluginById:self.getId])
     {
         OAPluginInstalledViewController *pluginInstalled = [[OAPluginInstalledViewController alloc] initWithPluginId:self.getId];
-        [OARootViewController.instance presentViewController:pluginInstalled animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:pluginInstalled];
+        [OARootViewController.instance presentViewController:navigationController animated:YES completion:nil];
     }
 }
 

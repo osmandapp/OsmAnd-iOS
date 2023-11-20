@@ -104,6 +104,8 @@
 @property (readonly) OAMapRendererEnvironment *mapRendererEnv;
 @property (readonly) OAMapPresentationEnvironment *mapPresentationEnv;
 
+@property (nonatomic, assign) BOOL isCarPlayActive;
+
 - (CLLocation *) getMapLocation;
 - (float) getMapZoom;
 - (void) refreshMap;
@@ -127,6 +129,8 @@
 - (void) animatedPanLeft;
 - (void) animatedPanRight;
 - (void)setViewportScaleX:(double)x y:(double)y;
+- (void)setViewportScaleX:(double)x;
+- (void)setViewportScaleY:(double)y;
 
 - (void) goToPosition:(Point31)position31
             animated:(BOOL)animated;

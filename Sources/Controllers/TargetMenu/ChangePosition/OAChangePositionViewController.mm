@@ -66,13 +66,12 @@
     if (self) {
         _app = [OsmAndApp instance];
         _targetPoint = targetPoint;
-        _contextLayer = OARootViewController.instance.mapPanel.mapViewController.mapLayers.contextMenuLayer;
-        _mapView = OARootViewController.instance.mapPanel.mapViewController.mapView;
-        
+        OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+        _contextLayer = mapPanel.mapViewController.mapLayers.contextMenuLayer;
+        _mapView = mapPanel.mapViewController.mapView;
         _cachedX = _mapView.viewportXScale;
         _cachedY = _mapView.viewportYScale;
-        if (_mapView.viewportYScale != kRegularViewportScale)
-            _mapView.viewportYScale = kRegularViewportScale;
+        [mapPanel.mapViewController setViewportScaleY:kRegularViewportScale];
         [self adjustViewport];
     }
     return self;
@@ -171,16 +170,7 @@
 
 - (void)adjustViewport
 {
-    if (OAUtilities.isLandscapeIpadAware)
-    {
-        if (_mapView.viewportXScale != kAdjustedViewportScale)
-            _mapView.viewportXScale = kAdjustedViewportScale;
-    }
-    else
-    {
-        if (_mapView.viewportXScale != kRegularViewportScale)
-            _mapView.viewportXScale = kRegularViewportScale;
-    }
+    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:[OAUtilities isLandscapeIpadAware] ? kAdjustedViewportScale : kRegularViewportScale];
 }
 
 - (UIView *) getMiddleView
@@ -241,9 +231,7 @@
 - (void)onMenuDismissed
 {
     [_contextLayer exitChangePositionMode:_targetPoint.targetObj applyNewPosition:NO];
-    _mapView.viewportXScale = _cachedX;
-    if (_mapView.viewportYScale != _cachedY)
-        _mapView.viewportYScale = _cachedY;
+    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:_cachedX y:_cachedY];
 }
 
 - (void) applyLocalization

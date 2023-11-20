@@ -273,6 +273,11 @@ static OASubscriptionState *EXPIRED;
             || [[OAAppSettings sharedManager].wikipediaPurchased get];
 }
 
++ (BOOL) isSensorPurchased
+{
+    return [self isOsmAndProAvailable];
+}
+
 + (BOOL)isLiveUpdatesSubscription:(OASubscription *)subscription
 {
     return [subscription.identifierNoVersion isEqualToString:kSubscriptionId_Osm_Live_Subscription_Monthly]
@@ -389,6 +394,11 @@ static OASubscriptionState *EXPIRED;
 - (OAProduct *) weather
 {
     return _products.weather;
+}
+
+- (OAProduct *) sensors
+{
+    return _products.sensors;
 }
 
 - (OAProduct *) carplay
@@ -885,6 +895,7 @@ static OASubscriptionState *EXPIRED;
             BOOL depth = NO;
             BOOL contour = NO;
             BOOL wiki = NO;
+            BOOL sensors = NO;
             NSMutableArray<OASubscription *> *purchasedSubs = [NSMutableArray array];
             for (OAProduct *product in products)
             {
@@ -918,6 +929,10 @@ static OASubscriptionState *EXPIRED;
                 else if ([product.productIdentifier isEqualToString:kInAppId_Addon_Wiki])
                 {
                     wiki = YES;
+                }
+                else if ([product.productIdentifier isEqualToString:kInAppId_Addon_External_Sensors])
+                {
+                    sensors = YES;
                 }
 
                 BOOL wasPurchased = [product isPurchased];

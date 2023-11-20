@@ -26,8 +26,7 @@
     NSString *_subtext;
     BOOL _explicitlyVisible;
     
-    NSString *_dayIcon;
-    NSString *_nightIcon;
+    NSString *_icon;
     BOOL _isNight;
     
     UIColor *_backgroundColor;
@@ -170,18 +169,17 @@
     _imageView.hidden = hidden;
 }
 
-- (BOOL) setIcons:(OAWidgetType *)widgetType
+- (BOOL) setIconForWidgetType:(OAWidgetType *)widgetType
 {
-    return [self setIcons:widgetType.dayIconName widgetNightIcon:widgetType.nightIconName];
+    return [self setIcon:widgetType.iconName];
 }
 
-- (BOOL) setIcons:(NSString *)widgetDayIcon widgetNightIcon:(NSString *)widgetNightIcon
+- (BOOL) setIcon:(NSString *)widgetIcon
 {
-    if (![_dayIcon isEqualToString:widgetDayIcon] || ![_nightIcon isEqualToString:widgetNightIcon])
+    if (![_icon isEqualToString:widgetIcon])
     {
-        _dayIcon = widgetDayIcon;
-        _nightIcon = widgetNightIcon;
-        [self setImage:[UIImage imageNamed:(![self isNight] ? _dayIcon : _nightIcon)]];
+        _icon = widgetIcon;
+        [self setImage:[UIImage imageNamed:_icon]];
         return YES;
     }
     else
@@ -197,12 +195,7 @@
 
 - (NSString *) getIconName
 {
-    return [self getIconName:self.isNight];
-}
-
-- (NSString *) getIconName:(BOOL)nightMode
-{
-    return nightMode ? _nightIcon : _dayIcon;
+    return _icon;
 }
 
 - (NSString *) combine:(NSString *)text subtext:(NSString *)subtext
@@ -431,8 +424,9 @@
 - (void) updateIconMode:(BOOL)night
 {
     _isNight = night;
-    if (_dayIcon)
-        [self setImage:(!night? [UIImage imageNamed:_dayIcon] : [UIImage imageNamed:_nightIcon])];
+    _imageView.overrideUserInterfaceStyle = night ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
+    if (_icon)
+        [self setImage:[UIImage imageNamed:_icon]];
 }
 
 - (void) updateTextColor:(UIColor *)textColor textShadowColor:(UIColor *)textShadowColor bold:(BOOL)bold shadowRadius:(float)shadowRadius

@@ -43,9 +43,9 @@
         
         [self setText:@"-" subtext:@""];
         if ([_state isSunriseMode])
-            [self setIcons:@"widget_sunrise_day" widgetNightIcon:@"widget_sunrise_night"];
+            [self setIcon:@"widget_sunrise"];
         else
-            [self setIcons:@"widget_sunset_day" widgetNightIcon:@"widget_sunset_night"];
+            [self setIcon:@"widget_sunset"];
     }
     return self;
 }

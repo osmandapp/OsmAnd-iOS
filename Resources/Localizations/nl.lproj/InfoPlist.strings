@@ -5,3 +5,11 @@
   Created by Dmitry Svetlichny on 10.11.2023.
   Copyright © 2023 OsmAnd. All rights reserved.
 */
+
+"NSLocationWhenInUseUsageDescription" = "Locatietoegang is nodig voor navigatie en ritregistratie.";
+
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Locatietoegang is nodig voor navigatie en ritregistratie op de achtergrond.";
+
+"NSBluetoothAlwaysUsageDescription" = "Toegang tot Bluetooth is vereist om BLE-sensoren te vinden en er verbinding mee te maken.";
+
+"NSCalendarsUsageDescription" = "OsmAnd wil graag een kalendergebeurtenis aanmaken voor de melding van het ophalen van het voertuig.";

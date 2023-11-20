@@ -5,3 +5,11 @@
   Created by Dmitry Svetlichny on 10.11.2023.
   Copyright © 2023 OsmAnd. All rights reserved.
 */
+
+"NSLocationWhenInUseUsageDescription" = "Platsåtkomst behövs för navigering och inspelning av resor.";
+
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Platsåtkomst behövs för navigering och reseuppföljning i bakgrunden.";
+
+"NSBluetoothAlwaysUsageDescription" = "Tillgång till Bluetooth krävs för att hitta och ansluta till BLE-sensorer.";   
+
+"NSCalendarsUsageDescription" = "OsmAnd skulle vilja skapa en kalenderhändelse för avisering av upphämtning av fordon.";

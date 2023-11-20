@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) NSString *headerText;
 @property (nonatomic) NSString *footerText;
+@property (nonatomic) NSString *key;
 @property (nonatomic, readonly) BOOL hasChanged;
 
 - (OATableRowData *) createNewRow;

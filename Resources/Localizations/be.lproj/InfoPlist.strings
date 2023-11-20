@@ -5,3 +5,11 @@
   Created by Dmitry Svetlichny on 10.11.2023.
   Copyright © 2023 OsmAnd. All rights reserved.
 */
+
+"NSLocationWhenInUseUsageDescription" = "Для навігацыі і запісу паездкі неабходны доступ да месцазнаходжання.";
+
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Доступ да месцазнаходжання неабходны для навігацыі і запісу паездкі ў фонавым рэжыме.";
+
+"NSBluetoothAlwaysUsageDescription" = "Для пошуку датчыкаў BLE і падлучэння да іх патрабуецца доступ да Bluetooth.";
+
+"NSCalendarsUsageDescription" = "OsmAnd хацеў бы стварыць падзею ў календары для апавяшчэння аб атрыманні аўтамабіля.";

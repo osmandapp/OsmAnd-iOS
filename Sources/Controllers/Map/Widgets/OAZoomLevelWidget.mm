@@ -26,7 +26,7 @@
     {
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
         [self setText:@"-" subtext:@""];
-        [self setIcons:@"widget_developer_map_zoom_day" widgetNightIcon:@"widget_developer_map_zoom_night"];
+        [self setIcon:@"widget_developer_map_zoom"];
         
         __weak OAZoomLevelWidget *selfWeak = self;
         self.updateInfoFunction = ^BOOL{
@@ -45,7 +45,7 @@
         _cachedZoom = newZoom;
         NSString *cachedZoomText = [NSString stringWithFormat:@"%d", _cachedZoom];
         [self setText:cachedZoomText subtext:@""];
-        [self setIcons:@"widget_developer_map_zoom_day" widgetNightIcon:@"widget_developer_map_zoom_night"];
+        [self setIcon:@"widget_developer_map_zoom"];
     }
     return YES;
 }

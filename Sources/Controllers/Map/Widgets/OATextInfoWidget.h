@@ -41,10 +41,9 @@
 - (void) setImageHidden:(BOOL)visible;
 - (void) setTimeText:(NSTimeInterval)time;
 - (BOOL) isNight;
-- (BOOL) setIcons:(OAWidgetType *)widgetType;
-- (BOOL) setIcons:(NSString *)widgetDayIcon widgetNightIcon:(NSString *)widgetNightIcon;
+- (BOOL) setIconForWidgetType:(OAWidgetType *)widgetType;
+- (BOOL) setIcon:(NSString *)widgetIcon;
 - (NSString *) getIconName;
-- (NSString *) getIconName:(BOOL)nightMode;
 
 - (void) setContentDescription:(NSString *)text;
 - (void) setContentTitle:(NSString *)text;

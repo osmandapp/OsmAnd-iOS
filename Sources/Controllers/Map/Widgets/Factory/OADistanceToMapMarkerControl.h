@@ -10,6 +10,6 @@
 
 @interface OADistanceToMapMarkerControl : OATextInfoWidget
 
-- (instancetype) initWithIcons:(NSString *)dayIconId nightIconId:(NSString *)nightIconId firstMarker:(BOOL)firstMarker;
+- (instancetype) initWithIcon:(NSString *)iconId firstMarker:(BOOL)firstMarker;
 
 @end

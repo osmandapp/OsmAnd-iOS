@@ -26,7 +26,7 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
             let row = section.createNewRow()
             row.cellType = OASimpleTableViewCell.getIdentifier()
             row.title = widgetInfo.getTitle()
-            row.iconName = widgetInfo.widget.widgetType?.getIconName(OAAppSettings.sharedManager().nightMode)
+            row.iconName = widgetInfo.widget.widgetType?.iconName
             row.setObj(widgetInfo, forKey: "widget_info")
         }
     }

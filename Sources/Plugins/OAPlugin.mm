@@ -29,6 +29,7 @@
 #import "OAWikipediaPlugin.h"
 #import "OAPOIUIFilter.h"
 #import "OAWeatherPlugin.h"
+#import "OAExternalSensorsPlugin.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @implementation OAPlugin
@@ -305,6 +306,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
     [allPlugins addObject:[[OAMapillaryPlugin alloc] init]];
     [allPlugins addObject:[[OAWeatherPlugin alloc] init]];
+    [allPlugins addObject:[[OAExternalSensorsPlugin alloc] init]];
     [allPlugins addObject:[[OAOsmandDevelopmentPlugin alloc] init]];
 
     [self loadCustomPlugins];

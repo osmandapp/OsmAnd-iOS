@@ -108,7 +108,13 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 let nib = Bundle.main.loadNibNamed(OAValueTableViewCell.getIdentifier(), owner: self, options: nil)
                 cell = nib?.first as? OAValueTableViewCell
                 cell?.accessoryType = .disclosureIndicator
-                cell?.descriptionVisibility(false)
+                
+                if item.key == "external_sensor_key" {
+                    cell?.descriptionLabel.text = item.descr
+                    cell?.descriptionVisibility(true)
+                } else {
+                    cell?.descriptionVisibility(false)
+                }
                 cell?.leftIconView.tintColor = UIColor(rgb: Int(selectedAppMode.getIconColor()))
             }
             if let cell {
@@ -232,6 +238,22 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 }
                 
                 showMediumSheetViewController(vc, isLargeAvailable: false)
+            }
+        } else if item.key == "external_sensor_key" {
+            let storyboard = UIStoryboard(name: "BLEPairedSensors", bundle: nil)
+            if let controller = storyboard.instantiateViewController(withIdentifier: "BLEPairedSensors") as? BLEPairedSensorsViewController {
+                if let widget = widgetInfo?.widget as? SensorTextWidget {
+                    controller.widgetType = widget.widgetType
+                    controller.widget = widget
+                }
+                controller.onSelectDeviceAction = { [weak self] id in
+                    guard let self else { return }
+                    if isCreateNewAndSimilarAlreadyExist {
+                        // Pairing widget with selected device
+                        widgetConfigurationParams?[SensorTextWidget.externalDeviceIdConst] = id
+                    }
+                }
+                navigationController?.pushViewController(controller, animated: true)
             }
         }
     }

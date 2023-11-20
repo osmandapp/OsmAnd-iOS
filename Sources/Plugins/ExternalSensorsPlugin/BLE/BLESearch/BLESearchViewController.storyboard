@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_72" orientation="portrait" appearance="light"/>
+    <accessibilityOverrides dynamicTypePreference="8"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Search View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="BLESearchViewController" id="Y6W-OH-hqX" customClass="BLESearchViewController" customModule="OsmAnd_Maps" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="AE6-iV-SNx">
+                                <rect key="frame" x="0.0" y="59" width="430" height="839"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SearchDeviceTableViewCell" rowHeight="72" id="rKB-Sa-5mv" customClass="SearchDeviceTableViewCell" customModule="OsmAnd_Maps" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="430" height="72"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rKB-Sa-5mv" id="LNJ-lH-ZnF">
+                                            <rect key="frame" x="0.0" y="0.0" width="399.66666666666669" height="72"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lKe-KR-MQG">
+                                                    <rect key="frame" x="20" y="21" width="30" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="30" id="BWF-K6-Ccc"/>
+                                                        <constraint firstAttribute="width" constant="30" id="lMn-kc-lhE"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="top" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="e3W-AM-f2R">
+                                                    <rect key="frame" x="66" y="15.000000000000004" width="317.66666666666669" height="42.333333333333343"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Upper label Wahoo SPEED 7D64" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OlY-23-VYj">
+                                                            <rect key="frame" x="0.0" y="0.0" width="248" height="20.333333333333332"/>
+                                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                            <color key="textColor" name="textColorPrimary"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="LiH-CA-Z13">
+                                                            <rect key="frame" x="0.0" y="22.333333333333336" width="106.66666666666667" height="20"/>
+                                                            <subviews>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="y93-4G-CBO">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
+                                                                    <color key="tintColor" name="active"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="20" id="jJ8-50-dwF"/>
+                                                                        <constraint firstAttribute="width" constant="20" id="knm-8n-8hf"/>
+                                                                    </constraints>
+                                                                </imageView>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Disconnected" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fdj-ZX-izt">
+                                                                    <rect key="frame" x="23.000000000000007" y="0.0" width="83.666666666666686" height="20"/>
+                                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                                                    <color key="textColor" name="textColorSecondary"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                        </stackView>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstItem="e3W-AM-f2R" firstAttribute="centerY" secondItem="LNJ-lH-ZnF" secondAttribute="centerY" id="BVa-vH-LxJ"/>
+                                                <constraint firstItem="lKe-KR-MQG" firstAttribute="leading" secondItem="LNJ-lH-ZnF" secondAttribute="leading" constant="20" id="EmT-5L-Obq"/>
+                                                <constraint firstAttribute="trailing" secondItem="e3W-AM-f2R" secondAttribute="trailing" constant="16" id="ZWy-YX-j2a"/>
+                                                <constraint firstItem="e3W-AM-f2R" firstAttribute="leading" secondItem="lKe-KR-MQG" secondAttribute="trailing" constant="16" id="to9-BP-d6r"/>
+                                                <constraint firstItem="lKe-KR-MQG" firstAttribute="centerY" secondItem="LNJ-lH-ZnF" secondAttribute="centerY" id="uxT-Ul-s7W"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="connectStatusLabel" destination="Fdj-ZX-izt" id="pb5-IN-rXj"/>
+                                            <outlet property="deviceImageView" destination="lKe-KR-MQG" id="ulN-oa-UvA"/>
+                                            <outlet property="deviceNameLabel" destination="OlY-23-VYj" id="Fjj-IG-9tR"/>
+                                            <outlet property="signalIndicatorImageView" destination="y93-4G-CBO" id="QeJ-Ez-P74"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="Y6W-OH-hqX" id="HPC-qt-00s"/>
+                                    <outlet property="delegate" destination="Y6W-OH-hqX" id="orW-DY-2l1"/>
+                                </connections>
+                            </tableView>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VYh-in-suY" userLabel="BluetoothTurnedOffView">
+                                <rect key="frame" x="0.0" y="59" width="430" height="300"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_bluetooth_off" translatesAutoresizingMaskIntoConstraints="NO" id="wE8-FA-IHR">
+                                        <rect key="frame" x="191" y="20" width="48" height="48"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="48" id="4R2-T7-iW9"/>
+                                            <constraint firstAttribute="height" constant="48" id="yMJ-Wz-HLS"/>
+                                        </constraints>
+                                    </imageView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="h5N-jK-1xJ">
+                                        <rect key="frame" x="30" y="88" width="370" height="44.333333333333343"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bluetooth is turned off" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YJW-qe-YfR">
+                                                <rect key="frame" x="100.00000000000001" y="0.0" width="170.33333333333337" height="20.333333333333332"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <color key="textColor" name="textColorPrimary"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Turn on Bluetooth to find and pair sensors." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zaU-E4-hdZ">
+                                                <rect key="frame" x="39.333333333333343" y="26.333333333333343" width="291.33333333333326" height="18"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                                <color key="textColor" name="textColorSecondary"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U9q-Cs-scN">
+                                        <rect key="frame" x="57.666666666666657" y="152.33333333333334" width="315" height="44"/>
+                                        <color key="backgroundColor" name="buttonSecondary"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="315" id="JdB-p9-CAk"/>
+                                            <constraint firstAttribute="height" constant="44" id="TMc-yo-scf"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Open Settings">
+                                            <color key="titleColor" name="textColorActive"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="9"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="onOpenSettingsButtonPressed:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="vLT-Fg-R8u"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="h5N-jK-1xJ" firstAttribute="leading" secondItem="VYh-in-suY" secondAttribute="leading" constant="30" id="JkZ-eD-xVw"/>
+                                    <constraint firstAttribute="trailing" secondItem="h5N-jK-1xJ" secondAttribute="trailing" constant="30" id="KOn-LW-saW"/>
+                                    <constraint firstAttribute="height" constant="300" id="KiX-cp-fhJ"/>
+                                    <constraint firstItem="wE8-FA-IHR" firstAttribute="centerX" secondItem="VYh-in-suY" secondAttribute="centerX" id="Q9Y-kj-xZb"/>
+                                    <constraint firstItem="U9q-Cs-scN" firstAttribute="top" secondItem="h5N-jK-1xJ" secondAttribute="bottom" constant="20" id="UCY-a2-7AX"/>
+                                    <constraint firstItem="wE8-FA-IHR" firstAttribute="top" secondItem="VYh-in-suY" secondAttribute="top" constant="20" id="lEd-74-u05"/>
+                                    <constraint firstItem="h5N-jK-1xJ" firstAttribute="top" secondItem="wE8-FA-IHR" secondAttribute="bottom" constant="20" id="mTm-OF-kgO"/>
+                                    <constraint firstItem="U9q-Cs-scN" firstAttribute="centerX" secondItem="VYh-in-suY" secondAttribute="centerX" id="rk0-e8-DP4"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OMj-M0-oTs" userLabel="SearchingView">
+                                <rect key="frame" x="0.0" y="59" width="430" height="246"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_search_wave" translatesAutoresizingMaskIntoConstraints="NO" id="Y7B-4e-J3M">
+                                        <rect key="frame" x="0.0" y="-40" width="430" height="286"/>
+                                    </imageView>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="mdf-qV-p4H">
+                                        <rect key="frame" x="205" y="63" width="20" height="20"/>
+                                    </activityIndicatorView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="4Wl-rn-pk9">
+                                        <rect key="frame" x="30" y="181" width="370" height="84.333333333333314"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Searching for sensors" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QzX-76-Tgh">
+                                                <rect key="frame" x="102.33333333333336" y="0.0" width="165.66666666666663" height="20.333333333333332"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <color key="textColor" name="textColorPrimary"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wQV-O7-UKe" userLabel="Please hold the device close to the sensor.  You need to activate the sensor so OsmAnd can find it.">
+                                                <rect key="frame" x="4" y="26.333333333333314" width="362" height="58"/>
+                                                <string key="text">Please hold the device close to the sensor. 
+You need to activate the sensor so OsmAnd can find it.</string>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                                <color key="textColor" name="textColorSecondary"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="mdf-qV-p4H" firstAttribute="top" secondItem="OMj-M0-oTs" secondAttribute="top" constant="63" id="3nZ-a1-PlV"/>
+                                    <constraint firstAttribute="trailing" secondItem="4Wl-rn-pk9" secondAttribute="trailing" constant="30" id="9aE-xj-4QS"/>
+                                    <constraint firstAttribute="trailing" secondItem="Y7B-4e-J3M" secondAttribute="trailing" id="BvU-b8-jWB"/>
+                                    <constraint firstItem="4Wl-rn-pk9" firstAttribute="leading" secondItem="OMj-M0-oTs" secondAttribute="leading" constant="30" id="EL6-8Q-hZk"/>
+                                    <constraint firstAttribute="bottom" secondItem="Y7B-4e-J3M" secondAttribute="bottom" id="aVk-I3-6Iz"/>
+                                    <constraint firstAttribute="height" constant="246" id="cdC-O1-7AQ"/>
+                                    <constraint firstItem="4Wl-rn-pk9" firstAttribute="top" secondItem="mdf-qV-p4H" secondAttribute="bottom" constant="98" id="dMY-5c-tY5"/>
+                                    <constraint firstItem="Y7B-4e-J3M" firstAttribute="leading" secondItem="OMj-M0-oTs" secondAttribute="leading" id="fuP-0J-6oa"/>
+                                    <constraint firstItem="mdf-qV-p4H" firstAttribute="centerX" secondItem="OMj-M0-oTs" secondAttribute="centerX" id="lRi-gf-cK0"/>
+                                    <constraint firstItem="Y7B-4e-J3M" firstAttribute="top" secondItem="OMj-M0-oTs" secondAttribute="top" constant="-40" id="wYn-mK-PNr"/>
+                                </constraints>
+                            </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iBq-XT-4rq" userLabel="EmptySearchView">
+                                <rect key="frame" x="0.0" y="59" width="430" height="839"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_sensor_find" translatesAutoresizingMaskIntoConstraints="NO" id="6bw-21-tqj">
+                                        <rect key="frame" x="191" y="20" width="48" height="48"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="48" id="6tD-Mx-zb4"/>
+                                            <constraint firstAttribute="width" constant="48" id="hWN-kI-eIl"/>
+                                        </constraints>
+                                    </imageView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="Ffc-0D-2RX">
+                                        <rect key="frame" x="30" y="88" width="370" height="104.33333333333331"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unable to find any sensors" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xtp-zN-Lpc">
+                                                <rect key="frame" x="84" y="0.0" width="202" height="20.333333333333332"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <color key="textColor" name="textColorPrimary"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EZ4-DN-8HM" userLabel="Make sure: – Bluetooth is turned on – Sensor is activated – This device is located near sensor">
+                                                <rect key="frame" x="62.666666666666686" y="26.333333333333343" width="245" height="78"/>
+                                                <string key="text">Make sure:
+– Bluetooth is turned on
+– Sensor is activated
+– This device is located near sensor</string>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                                <color key="textColor" name="textColorSecondary"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3oc-bb-wTL">
+                                        <rect key="frame" x="57.666666666666657" y="212.33333333333331" width="315" height="44"/>
+                                        <color key="backgroundColor" name="buttonSecondary"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="IkB-Cn-xkw"/>
+                                            <constraint firstAttribute="width" constant="315" id="s5K-RS-rPu"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Search again">
+                                            <color key="titleColor" name="textColorActive"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="9"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="onSearchAgainButtonPressed:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="J3a-31-ANz"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="6bw-21-tqj" firstAttribute="centerX" secondItem="iBq-XT-4rq" secondAttribute="centerX" id="0pg-DZ-jcf"/>
+                                    <constraint firstItem="Ffc-0D-2RX" firstAttribute="top" secondItem="6bw-21-tqj" secondAttribute="bottom" constant="20" id="2f3-vL-eOf"/>
+                                    <constraint firstItem="6bw-21-tqj" firstAttribute="top" secondItem="iBq-XT-4rq" secondAttribute="top" constant="20" id="5yl-hB-mue"/>
+                                    <constraint firstItem="3oc-bb-wTL" firstAttribute="centerX" secondItem="iBq-XT-4rq" secondAttribute="centerX" id="SPw-We-EpP"/>
+                                    <constraint firstItem="3oc-bb-wTL" firstAttribute="top" secondItem="Ffc-0D-2RX" secondAttribute="bottom" constant="20" id="Zhc-9b-8D1"/>
+                                    <constraint firstAttribute="trailing" secondItem="Ffc-0D-2RX" secondAttribute="trailing" constant="30" id="dS4-l4-niY"/>
+                                    <constraint firstItem="Ffc-0D-2RX" firstAttribute="leading" secondItem="iBq-XT-4rq" secondAttribute="leading" constant="30" id="wtL-3X-VYz"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="VYh-in-suY" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="0tk-ya-614"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="OMj-M0-oTs" secondAttribute="trailing" id="2gA-iz-ZCR"/>
+                            <constraint firstItem="VYh-in-suY" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="64w-iA-5fk"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="AE6-iV-SNx" secondAttribute="trailing" id="GFP-wN-2jX"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="VYh-in-suY" secondAttribute="trailing" id="Mvd-aW-96G"/>
+                            <constraint firstItem="iBq-XT-4rq" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="NXH-3r-IA0"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="AE6-iV-SNx" secondAttribute="bottom" id="OjX-4D-3vd"/>
+                            <constraint firstItem="AE6-iV-SNx" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="c2C-vs-dNK"/>
+                            <constraint firstItem="iBq-XT-4rq" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="dUs-Ao-8be"/>
+                            <constraint firstItem="AE6-iV-SNx" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="gSh-ay-CGx"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="iBq-XT-4rq" secondAttribute="bottom" id="iUO-Sh-kGj"/>
+                            <constraint firstItem="iBq-XT-4rq" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="m8s-bQ-QzA"/>
+                            <constraint firstItem="OMj-M0-oTs" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="ojw-Xk-bhx"/>
+                            <constraint firstItem="OMj-M0-oTs" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="tnq-Dx-8Bg"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="65B-f2-fya"/>
+                    <connections>
+                        <outlet property="bluetoothOffDescription" destination="zaU-E4-hdZ" id="rWx-gs-reR"/>
+                        <outlet property="bluetoothOffTitle" destination="YJW-qe-YfR" id="OdJ-dE-dya"/>
+                        <outlet property="bluetoothTurnedOffView" destination="VYh-in-suY" id="7J0-XF-wgt"/>
+                        <outlet property="nothingFoundDescription" destination="EZ4-DN-8HM" id="c86-Ub-7l5"/>
+                        <outlet property="nothingFoundTitle" destination="Xtp-zN-Lpc" id="u6a-LZ-8nY"/>
+                        <outlet property="openSettingButton" destination="U9q-Cs-scN" id="WwW-h2-B89"/>
+                        <outlet property="searchAgainButton" destination="3oc-bb-wTL" id="A0M-Or-Ih1"/>
+                        <outlet property="searchEmptyView" destination="iBq-XT-4rq" id="ao0-4u-Uat"/>
+                        <outlet property="searchingDescription" destination="wQV-O7-UKe" id="8m5-8o-in8"/>
+                        <outlet property="searchingTitle" destination="QzX-76-Tgh" id="RHS-4l-Wzs"/>
+                        <outlet property="searchingView" destination="OMj-M0-oTs" id="5cX-oH-iyy"/>
+                        <outlet property="tableView" destination="AE6-iV-SNx" id="xc4-mN-1vX"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="947.44186046511629" y="3.8626609442060089"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="ic_custom_bluetooth_off" width="49" height="48"/>
+        <image name="ic_custom_sensor_find" width="49" height="48"/>
+        <image name="ic_search_wave" width="375" height="341"/>
+        <namedColor name="active">
+            <color red="0.34099999070167542" green="0.078000001609325409" blue="0.80000001192092896" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="buttonSecondary">
+            <color red="0.87800002098083496" green="0.86699998378753662" blue="0.88999998569488525" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorPrimary">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorSecondary">
+            <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

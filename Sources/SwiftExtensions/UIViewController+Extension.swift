@@ -26,3 +26,17 @@ import UIKit
         removeFromParent()
     }
 }
+
+extension UINavigationItem {
+    @objc (setRightBarButtonItemsisEnabled:tintColor:)
+    func setRightBarButtonItems(isEnabled: Bool, with tintColor: UIColor? = nil) {
+        rightBarButtonItems?.forEach {
+            if let button = $0.customView as? UIButton {
+                $0.isEnabled = isEnabled
+                button.isEnabled = isEnabled
+                button.tintColor = tintColor
+                button.setTitleColor(tintColor, for: .normal)
+            }
+        }
+    }
+}

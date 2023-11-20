@@ -32,7 +32,7 @@
         
         self.updateInfoFunction = ^BOOL {
 
-            [weakSelf setIcons:@"widget_track_recording_duration_day" widgetNightIcon:@"widget_track_recording_duration_night"];
+            [weakSelf setIcon:@"widget_track_recording_duration"];
             
             OAGPXMutableDocument *currentTrack = [[OASavingTrackHelper sharedInstance] currentTrack];
             OAGPX *gpxFile = [[OASavingTrackHelper sharedInstance] getCurrentGPX];

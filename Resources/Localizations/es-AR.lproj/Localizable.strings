@@ -3096,3 +3096,74 @@
 "change_appearance" = "Cambiar aspecto";
 "map_screen_orientation" = "Orientación de pantalla";
 "map_orientation_portrait" = "Vertical";
+"shared_string_ear_lobe" = "Lóbulo de la oreja";
+"wheel_circumference" = "Circunferencia de la rueda";
+"external_device_status_connected" = "Conectado";
+"external_sensors_plugin_description" = "Accede a sensores externos para leer, por ejemplo, el ritmo cardíaco, la velocidad en bicicleta y la potencia o cadencia del pedaleo. Debes conectar tu dispositivo con sensores que admitan el protocolo de red personal inalámbrica ANT+.";
+"external_device_characteristic_speed" = "Velocidad";
+"bluetooth_found_title" = "Encontrado: %d";
+"external_sensors_source_of_data" = "Origen de los datos";
+"external_device_status_connecting" = "Conectando";
+"map_widget_ant_bicycle_speed" = "Velocidad de la bicicleta";
+"ant_plus_searching_text" = "Buscando sensores";
+"ant_plus_bluetooth_off" = "Bluetooth desactivado";
+"map_widget_ant_bicycle_speed_desc" = "Muestra la velocidad de desplazamiento";
+"shared_string_hand" = "Mano";
+"external_device_status_disconnecting" = "Desconectando";
+"external_device_status_disconnect" = "Desconectar";
+"purchases_feature_desc_external_sensors" = "Muestra y graba datos de sensores externos: la velocidad, potencia y cadencia de la bicicleta y el ritmo cardíaco.";
+"external_sensors_support" = "Sensores externos admitidos";
+"shared_string_finger" = "Dedo";
+"ant_plus_bluetooth_off_description" = "Activa los sensores de búsqueda y vinculación de Bluetooth.";
+"map_widget_ant_bicycle_cadence_desc" = "Muestra la velocidad del pedaleo";
+"beats_per_minute_short" = "ppm";
+"ant_plus_pair_bluetooth_prompt" = "Puedes vincular sensores Bluetooth de bajo consumo (BLE) con OsmAnd.";
+"external_sensors_not_found" = "Sensores no encontrados";
+"external_device_forget_sensor" = "Olvidar sensor";
+"shared_string_foot" = "Pie";
+"external_device_details_received_data" = "Datos recibidos";
+"there_are_no_connected_sensors_of_this_type" = "No hay sensores de este tipo conectados";
+"learn_more_about_sensors_link" = "Véase más sobre sensores.";
+
+
+"map_widget_ant_heart_rate" = "Ritmo cardíaco";
+"ant_plus_open_settings" = "Abrir los ajustes";
+"ant_plus_pair_new_sensor" = "Vincular nuevo sensor";
+"external_device_characteristic_total_distance" = "Distancia total";
+"external_device_characteristic_cadence" = "Cadencia";
+"shared_string_remove_bookmark" = "Quitar destacado";
+"external_device_menu_forget" = "Olvidar";
+"external_device_blood_pressure" = "Presión arterial";
+"map_widget_ant_bicycle_dist" = "Distancia en bicicleta";
+"external_device_status_disconnected" = "Desconectado";
+"map_widget_ant_bicycle_dist_desc" = "Muestra la distancia recorrida";
+"map_widget_ant_bicycle_power_desc" = "Muestra la potencia de salida del ciclista, que se usa para mover la bicicleta hacia adelante";
+"ant_plus_searching" = "Buscando";
+"external_device_characteristic_distance" = "Distancia";
+"external_sensors_plugin_name" = "Sensores externos";
+"external_device_details_battery" = "Batería";
+"map_widget_ant_bicycle_power" = "Potencia de la bicicleta";
+"map_widget_ant_heart_rate_desc" = "Muestra el ritmo cardíaco del usuario durante una determinada actividad en tiempo real";
+"external_device_status_connect" = "Conectar";
+"shared_string_travel" = "Viaje";
+"ant_plus_nothing_found_text" = "Incapaz de encontrar cualquier sensor";
+"sensor_temperature_desc" = "Muestra la temperatura del sensor";
+"degree_celsius" = "°C";
+"ble_search_again" = "Buscar de nuevo";
+"map_widget_ant_bicycle_cadence" = "Cadencia de la bicicleta";
+"context_menu_read_article" = "Leer artículo";
+"external_device_forget_sensor_description" = "El sensor será quitado de la lista. Podrá volver a vincular este sensor en cualquier momento.";
+
+
+//"device_disconnected">%1$s disconnected"
+//"device_connected">%1$s connected"
+"running_scds_device_name" = "Ejecutando dispositivo";
+"no_bt_permission" = "El permiso de Bluetooth está bloqueado";
+"shared_string_wrist" = "Muñeca";
+"ant_plus_searching_text_description" = "Acerca el dispositivo al sensor.\nDebes activar el sensor para que OsmAnd pueda encontrarlo.";
+"shared_string_chest" = "Pecho";
+"ant_plus_nothing_found_description" = "Asegúrate de que\n- El Bluetooth esté activado\n- El sensor esté activado\n- Este dispositivo se encuentre cerca del sensor";
+"bicycle_scd_device_name" = "Dispositivo para «Bicicleta»";
+"shared_string_temperature" = "Temperatura";
+"external_device_unpair_description" = "Conecta el sensor al dispositivo para obtener información.";
+"external_device_details_information" = "Información";

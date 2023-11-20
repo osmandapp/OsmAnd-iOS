@@ -224,7 +224,7 @@
 {
     _contentTitle = text;
     [self setContentDescription:_textView.text];
-    self.accessibilityLabel = _contentTitle;
+    _shadowButton.accessibilityLabel = _contentTitle;
 }
 
 - (void) setText:(NSString *)text subtext:(NSString *)subtext
@@ -245,7 +245,7 @@
         _textView.text = @"";
         _text = @"";
         _subtext = @"";
-        self.accessibilityValue = nil;
+        _shadowButton.accessibilityValue = nil;
     }
     else
     {
@@ -304,7 +304,7 @@
     
     _textShadowView.attributedText = _primaryShadowColor && _shadowRadius > 0 ? shadowString : nil;
     _textView.attributedText = string;
-    self.accessibilityValue = string.string;
+    _shadowButton.accessibilityValue = string.string;
     [self refreshLayout];
 }
 

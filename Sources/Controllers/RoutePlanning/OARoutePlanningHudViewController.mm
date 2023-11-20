@@ -477,31 +477,15 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void)adjustMapViewPort
 {
-    OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
-    if ([self isLeftSidePresentation] && self.currentState == EOADraggableMenuStateInitial)
-    {
-        mapView.viewportXScale = kViewportScale;
-        mapView.viewportYScale = (DeviceScreenHeight - _landscapeHeaderContainerView.frame.size.height) / DeviceScreenHeight;
-    }
-    else if ([self isLeftSidePresentation])
-    {
-        mapView.viewportXScale = kViewportBottomScale;
-        mapView.viewportYScale = (DeviceScreenHeight - _landscapeHeaderContainerView.frame.size.height) / DeviceScreenHeight;
-    }
-    else
-    {
-        mapView.viewportXScale = kViewportScale;
-        mapView.viewportYScale = (DeviceScreenHeight - self.getViewHeight) / DeviceScreenHeight;
-    }
+    BOOL isLeftSidePresentation = [self isLeftSidePresentation];
+    double x = !isLeftSidePresentation || self.currentState == EOADraggableMenuStateInitial ? kViewportScale : kViewportBottomScale;
+    double y = (DeviceScreenHeight - (isLeftSidePresentation ? _landscapeHeaderContainerView.frame.size.height : [self getViewHeight])) / DeviceScreenHeight;
+    [_mapPanel.mapViewController setViewportScaleX:x y:y];
 }
 
 - (void) restoreMapViewPort
 {
-    OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
-    if (mapView.viewportXScale != kViewportScale)
-        mapView.viewportXScale = kViewportScale;
-    if (mapView.viewportYScale != _cachedYViewPort)
-        mapView.viewportYScale = _cachedYViewPort;
+    [_mapPanel.mapViewController setViewportScaleX:kViewportScale y:_cachedYViewPort];
 }
 
 - (void) adjustNavbarPosition
@@ -592,16 +576,15 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void)centerMapOnBBox:(OAGpxBounds)routeBBox
 {
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     BOOL landscape = [self isLeftSidePresentation];
     if (_adjustMapPosition)
     {
-        [mapPanel displayAreaOnMap:routeBBox.topLeft
-                       bottomRight:routeBBox.bottomRight
-                              zoom:0
-                       bottomInset:!landscape ? self.getViewHeight : 0
-                         leftInset:landscape ? self.tableView.frame.size.width : 0
-                          animated:YES];
+        [_mapPanel displayAreaOnMap:routeBBox.topLeft
+                        bottomRight:routeBBox.bottomRight
+                               zoom:0
+                        bottomInset:!landscape ? self.getViewHeight : 0
+                          leftInset:landscape ? self.tableView.frame.size.width : 0
+                           animated:YES];
     }
     _adjustMapPosition = YES;
 }
@@ -696,7 +679,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     {
         OAExitRoutePlanningBottomSheetViewController *bottomSheet = [[OAExitRoutePlanningBottomSheetViewController alloc] init];
         bottomSheet.delegate = self;
-        [bottomSheet presentInViewController:OARootViewController.instance.mapPanel.mapViewController];
+        [bottomSheet presentInViewController:_mapPanel.mapViewController];
     }
     else
     {
@@ -714,9 +697,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [_layer resetLayer];
 
         if ([_targetMenuState isKindOfClass:OATrackMenuViewControllerState.class])
-            [[OARootViewController instance].mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_fileName]
-                                                  trackHudMode:EOATrackMenuHudMode
-                                                         state:(OATrackMenuViewControllerState *) _targetMenuState];
+            [_mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_fileName]
+                                trackHudMode:EOATrackMenuHudMode
+                                       state:(OATrackMenuViewControllerState *) _targetMenuState];
     }];
 }
 
@@ -746,8 +729,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) selectPoint:(CLLocationCoordinate2D)location longPress:(BOOL)longPress
 {
-    OAMapRendererView *mapView = OARootViewController.instance.mapPanel.mapViewController.mapView;
-    
+    OAMapRendererView *mapView = _mapPanel.mapViewController.mapView;
     double lowestDistance = [self getLowestDistance:mapView];
     for (NSInteger i = 0; i < _editingContext.getPointsCount; i++)
     {
@@ -782,7 +764,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (CLLocationCoordinate2D) getTouchPointCoord:(CGPoint)touchPoint
 {
-    OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
+    OAMapViewController *mapViewController = _mapPanel.mapViewController;
     touchPoint.x *= mapViewController.mapView.contentScaleFactor;
     touchPoint.y *= mapViewController.mapView.contentScaleFactor;
     OsmAnd::PointI touchLocation;
@@ -1142,7 +1124,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
                 [self hide:NO duration:.2 onComplete:^{
                     [_mapPanel.hudViewController resetToDefaultRulerLayout];
                     [self restoreMapViewPort];
-                    [OARootViewController.instance.mapPanel hideScrollableHudViewController];
+                    [_mapPanel hideScrollableHudViewController];
                     _layer.editingCtx = nil;
                     [_layer resetLayer];
                     
@@ -1723,7 +1705,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) directionsSelected
 {
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     OATargetPointsHelper *targetPointsHelper = OATargetPointsHelper.sharedInstance;
     OAApplicationMode *appMode = _editingContext.appMode;
     if (appMode == OAApplicationMode.DEFAULT)
@@ -1738,7 +1719,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
             [targetPointsHelper navigateToPoint:[[CLLocation alloc] initWithLatitude:points.firstObject.getLatitude longitude:points.firstObject.getLongitude] updateRoute:NO intermediate:-1];
             
             [self onCloseButtonPressed];
-            [mapPanel.mapActions enterRoutePlanningModeGivenGpx:nil from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+            [_mapPanel.mapActions enterRoutePlanningModeGivenGpx:nil from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
         }
         else
         {
@@ -1769,7 +1750,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
                     [self onCloseButtonPressed];
                     [targetPointsHelper clearAllPoints:NO];
                     OAGPX *track = [OAGPXDatabase.sharedDb getGPXItem:gpx.path];
-                    [mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+                    [_mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
                 }
             }
         }
@@ -1783,28 +1764,27 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) runNavigation:(OAGPXDocument *)gpx appMode:(OAApplicationMode *)appMode
 {
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     OARoutingHelper *routingHelper = OARoutingHelper.sharedInstance;
     OAGPX *track = [OAGPXDatabase.sharedDb getGPXItem:gpx.path];
     if (routingHelper.isFollowingMode)
     {
         if ([self isFollowTrackMode])
         {
-            [mapPanel.mapActions setGPXRouteParamsWithDocument:gpx path:gpx.path];
+            [_mapPanel.mapActions setGPXRouteParamsWithDocument:gpx path:gpx.path];
             [OATargetPointsHelper.sharedInstance updateRouteAndRefresh:YES];
             [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
         }
         else
         {
-            [mapPanel.mapActions stopNavigationWithoutConfirm];
+            [_mapPanel.mapActions stopNavigationWithoutConfirm];
 //            [mapPanel.mapActions enterRoutePlanningModeGivenGpx:track from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
-            [mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+            [_mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
         }
     }
     else
     {
-        [mapPanel.mapActions stopNavigationWithoutConfirm];
-        [mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx appMode:appMode path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+        [_mapPanel.mapActions stopNavigationWithoutConfirm];
+        [_mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx appMode:appMode path:track.gpxFilePath from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
     }
 }
 

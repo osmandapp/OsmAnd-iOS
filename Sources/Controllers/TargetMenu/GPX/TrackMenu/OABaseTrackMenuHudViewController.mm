@@ -410,28 +410,18 @@
 
 - (void)adjustViewPort:(BOOL)landscape
 {
-    if (![_mapPanelViewController isCarplayMapDisplayed])
+    if (![_mapPanelViewController isCarPlayActive])
     {
-        if (landscape && _mapViewController.mapView.viewportXScale != kViewportBottomScale)
-            _mapViewController.mapView.viewportXScale = kViewportBottomScale;
-        else if (!landscape && _mapViewController.mapView.viewportXScale != kViewportScale)
-            _mapViewController.mapView.viewportXScale = kViewportScale;
-        CGFloat newYScale = (DeviceScreenHeight - [self getViewHeight]) / DeviceScreenHeight;
-        if (!landscape && _mapViewController.mapView.viewportYScale != newYScale)
-            _mapViewController.mapView.viewportYScale = newYScale;
+        [_mapPanelViewController.mapViewController setViewportScaleX:landscape ? kViewportBottomScale : kViewportScale];
+        if (!landscape)
+            [_mapPanelViewController.mapViewController setViewportScaleY:(DeviceScreenHeight - [self getViewHeight]) / DeviceScreenHeight];
     }
 }
 
 - (void)restoreMapViewPort
 {
-    if (![_mapPanelViewController isCarplayMapDisplayed])
-    {
-        OAMapRendererView *mapView = _mapViewController.mapView;
-        if (mapView.viewportXScale != kViewportScale)
-            mapView.viewportXScale = kViewportScale;
-        if (mapView.viewportYScale != _cachedYViewPort)
-            mapView.viewportYScale = _cachedYViewPort;
-    }
+    if (![_mapPanelViewController isCarPlayActive])
+        [_mapPanelViewController.mapViewController setViewportScaleX:kViewportScale y:_cachedYViewPort];
 }
 
 - (BOOL)isAdjustedMapViewPort

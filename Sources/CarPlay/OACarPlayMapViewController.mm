@@ -68,10 +68,10 @@
     [super viewDidLayoutSubviews];
     
     BOOL isLeftSideDriving = [self isLeftSideDriving];
-    
-    if (_isInNavigationMode) {
-        _mapVc.mapView.viewportXScale = isLeftSideDriving ? 1.5 : 0.5;
-    }
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+
+    if (_isInNavigationMode)
+        [mapPanel.mapViewController setViewportScaleX:isLeftSideDriving ? 1.5 : 0.5];
    
     if (isLeftSideDriving)
     {
@@ -94,8 +94,8 @@
     
     if (widthOffset != _cachedWidthOffset && heightOffset != _cachedHeightOffset && widthOffset != 0 && heightOffset != 0 && !_isInNavigationMode)
     {
-        _mapVc.mapView.viewportXScale = isLeftSideDriving ? 1.0 + widthOffset : 1.0 - widthOffset;
-        _mapVc.mapView.viewportYScale = 1.0 + heightOffset;
+        [mapPanel.mapViewController setViewportScaleX:isLeftSideDriving ? 1.0 + widthOffset : 1.0 - widthOffset
+                                                    y:1.0 + heightOffset];
         _cachedWidthOffset = widthOffset;
         _cachedHeightOffset = heightOffset;
         
@@ -144,11 +144,7 @@
 {
     if (_mapVc)
     {
-        _mapVc.mapView.viewportXScale = kViewportXNonShifted;
-        _mapVc.mapView.viewportYScale = _cachedViewportY;
-        
         [_mapVc.mapView suspendRendering];
-        
         [_mapVc removeFromParentViewController];
         [_mapVc.view removeFromSuperview];
         
@@ -159,9 +155,7 @@
         _mapVc.view.frame = mapPanel.view.frame;
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [_mapVc.mapView resumeRendering];
-        
-        _mapVc.mapView.viewportXScale = _originalViewportX;
-        _mapVc.mapView.viewportYScale = _originalViewportY;
+        [mapPanel.mapViewController setViewportScaleX:_originalViewportX y:_originalViewportY];
     }
 }
 
@@ -262,7 +256,7 @@
 
 - (void)exitNavigationMode
 {
-    _mapVc.mapView.viewportXScale = _cachedViewportX;
+    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:_cachedViewportX];
     _isInNavigationMode = NO;
 }
 

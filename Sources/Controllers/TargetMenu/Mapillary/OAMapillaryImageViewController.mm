@@ -196,24 +196,14 @@
 
 - (void)adjustMapViewPort
 {
-    if ([OAUtilities isLandscape])
-    {
-        _mapView.viewportXScale = kViewportBottomScale;
-        _mapView.viewportYScale = kViewportScale;
-    }
-    else
-    {
-        _mapView.viewportXScale = kViewportScale;
-        _mapView.viewportYScale = kViewportBottomScale;
-    }
+    BOOL isLandscale = [OAUtilities isLandscape];
+    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:isLandscale ? kViewportBottomScale : kViewportScale
+                                                                                y:isLandscale ? kViewportScale : kViewportBottomScale];
 }
 
 - (void) restoreMapViewPort
 {
-    if (_mapView.viewportXScale != kViewportScale)
-        _mapView.viewportXScale = kViewportScale;
-    if (_mapView.viewportYScale != _cachedYViewPort)
-        _mapView.viewportYScale = _cachedYViewPort;
+    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:kViewportScale y:_cachedYViewPort];
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

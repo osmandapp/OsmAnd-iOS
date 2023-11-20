@@ -217,14 +217,13 @@
 
 - (void) restoreMapViewPort
 {
-    if (![[OARootViewController instance].mapPanel isCarPlayActive])
-        [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:kViewportScale y:_cachedYViewPort];
+    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:kViewportScale y:_cachedYViewPort];
 }
 
 - (void) adjustViewPort:(BOOL)landscape
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    if (!self.delegate || [mapPanel isCarPlayActive])
+    if (!self.delegate)
         return;
     if (!landscape)
     {

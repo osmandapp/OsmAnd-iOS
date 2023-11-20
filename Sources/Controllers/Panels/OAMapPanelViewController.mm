@@ -3844,11 +3844,6 @@ typedef enum
 
 #pragma mark - CarPlay related actions
 
-- (BOOL)isCarPlayActive
-{
-    return _carPlayActiveController != nil;
-}
-
 - (void) onCarPlayConnected
 {
     if (_carPlayActiveController)

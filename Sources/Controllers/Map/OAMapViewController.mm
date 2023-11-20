@@ -250,6 +250,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
     MBProgressHUD *_progressHUD;
     BOOL _rotationAnd3DViewDisabled;
+
+    BOOL _isCarPlayActive;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -369,6 +371,10 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                                              selector:@selector(onLanguageSettingsChange)
                                                  name:kNotificationSettingsLanguageChange
                                                object:nil];
+
+    [NSNotificationCenter.defaultCenter addObserver:self
+                                           selector:@selector(setCarPlayActive:)
+                                               name:kCarPlayAttachMapNotification object:nil];
     
 
     // Create gesture recognizers:
@@ -744,6 +750,12 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     return _mapView.zoom;
 }
 
+- (void)setCarPlayActive:(NSNotification *)notification
+{
+    if ([notification.object isKindOfClass:NSNumber.class])
+        _isCarPlayActive = ((NSNumber *) notification.object).boolValue;
+}
+
 - (void)setViewportScaleX:(double)x y:(double)y
 {
     [self setViewportScaleX:x];
@@ -752,13 +764,13 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (void)setViewportScaleX:(double)x
 {
-    if (_mapView.viewportXScale != x)
+    if (_mapView.viewportXScale != x && !_isCarPlayActive)
         _mapView.viewportXScale = x;
 }
 
 - (void)setViewportScaleY:(double)y
 {
-    if (_mapView.viewportYScale != y)
+    if (_mapView.viewportYScale != y && !_isCarPlayActive)
         _mapView.viewportYScale = y;
 }
 

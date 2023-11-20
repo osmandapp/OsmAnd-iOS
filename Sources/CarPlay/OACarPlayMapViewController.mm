@@ -68,10 +68,12 @@
     [super viewDidLayoutSubviews];
     
     BOOL isLeftSideDriving = [self isLeftSideDriving];
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
 
     if (_isInNavigationMode)
-        [mapPanel.mapViewController setViewportScaleX:isLeftSideDriving ? 1.5 : 0.5];
+    {
+        _mapVc.mapView.viewportYScale = kViewportBottomScale;
+        _mapVc.mapView.viewportXScale = isLeftSideDriving ? 1.5 : 0.5;
+    }
    
     if (isLeftSideDriving)
     {
@@ -94,8 +96,8 @@
     
     if (widthOffset != _cachedWidthOffset && heightOffset != _cachedHeightOffset && widthOffset != 0 && heightOffset != 0 && !_isInNavigationMode)
     {
-        [mapPanel.mapViewController setViewportScaleX:isLeftSideDriving ? 1.0 + widthOffset : 1.0 - widthOffset
-                                                    y:1.0 + heightOffset];
+        _mapVc.mapView.viewportXScale = isLeftSideDriving ? 1.0 + widthOffset : 1.0 - widthOffset;
+        _mapVc.mapView.viewportYScale = 1.0 + heightOffset;
         _cachedWidthOffset = widthOffset;
         _cachedHeightOffset = heightOffset;
         
@@ -137,6 +139,8 @@
         
         _originalViewportX = _mapVc.mapView.viewportXScale;
         _originalViewportY = _mapVc.mapView.viewportYScale;
+
+        [NSNotificationCenter.defaultCenter postNotificationName:kCarPlayAttachMapNotification object:@(YES)];
     }
 }
 
@@ -147,15 +151,18 @@
         [_mapVc.mapView suspendRendering];
         [_mapVc removeFromParentViewController];
         [_mapVc.view removeFromSuperview];
-        
+
+        [NSNotificationCenter.defaultCenter postNotificationName:kCarPlayAttachMapNotification object:@(NO)];
         OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
-        
+
         [mapPanel addChildViewController:_mapVc];
         [mapPanel.view insertSubview:_mapVc.view atIndex:0];
         _mapVc.view.frame = mapPanel.view.frame;
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [_mapVc.mapView resumeRendering];
-        [mapPanel.mapViewController setViewportScaleX:_originalViewportX y:_originalViewportY];
+
+        _mapVc.mapView.viewportXScale = _originalViewportX;
+        _mapVc.mapView.viewportYScale = _originalViewportY;
     }
 }
 
@@ -256,7 +263,7 @@
 
 - (void)exitNavigationMode
 {
-    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:_cachedViewportX];
+    _mapVc.mapView.viewportXScale = _cachedViewportX;
     _isInNavigationMode = NO;
 }
 

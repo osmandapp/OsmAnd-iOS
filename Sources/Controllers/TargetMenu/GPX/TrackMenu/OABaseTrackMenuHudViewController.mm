@@ -410,18 +410,14 @@
 
 - (void)adjustViewPort:(BOOL)landscape
 {
-    if (![_mapPanelViewController isCarPlayActive])
-    {
-        [_mapPanelViewController.mapViewController setViewportScaleX:landscape ? kViewportBottomScale : kViewportScale];
-        if (!landscape)
-            [_mapPanelViewController.mapViewController setViewportScaleY:(DeviceScreenHeight - [self getViewHeight]) / DeviceScreenHeight];
-    }
+    [_mapPanelViewController.mapViewController setViewportScaleX:landscape ? kViewportBottomScale : kViewportScale];
+    if (!landscape)
+        [_mapPanelViewController.mapViewController setViewportScaleY:(DeviceScreenHeight - [self getViewHeight]) / DeviceScreenHeight];
 }
 
 - (void)restoreMapViewPort
 {
-    if (![_mapPanelViewController isCarPlayActive])
-        [_mapPanelViewController.mapViewController setViewportScaleX:kViewportScale y:_cachedYViewPort];
+    [_mapPanelViewController.mapViewController setViewportScaleX:kViewportScale y:_cachedYViewPort];
 }
 
 - (BOOL)isAdjustedMapViewPort

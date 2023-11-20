@@ -11,16 +11,18 @@
 @implementation OABaseCollectionHandler
 {
     UICollectionViewScrollDirection _scrollDirection;
+    UICollectionView *_collectionView;
 }
 
 #pragma mark - Initialization
 
-- (instancetype)initWithData:(NSArray<NSArray *> *)data
+- (instancetype)initWithData:(NSArray<NSArray *> *)data collectionView:(UICollectionView *)collectionView
 {
     self = [super init];
     if (self)
     {
         _scrollDirection = UICollectionViewScrollDirectionHorizontal;
+        _collectionView = collectionView;
         [self generateData:data];
     }
     return self;
@@ -36,6 +38,11 @@
 - (CGSize)getItemSize
 {
     return CGSizeMake(48., 48.);
+}
+
+- (UICollectionView *)getCollectionView
+{
+    return _collectionView;
 }
 
 - (UICollectionViewScrollDirection)getScrollDirection
@@ -64,13 +71,15 @@
 {
 }
 
-- (void)updateData:(NSArray<NSArray *> *)data collectionView:(UICollectionView *)collectionView
+- (void)generateData:(NSArray<NSArray *> *)data
 {
-    [self generateData:data];
-    [collectionView reloadData];
 }
 
-- (void)generateData:(NSArray<NSArray *> *)data
+- (void)addItem:(NSIndexPath *)indexPath newItem:(id)newItem
+{
+}
+
+- (void)removeItem:(NSIndexPath *)indexPath
 {
 }
 
@@ -79,7 +88,7 @@
     return 0;
 }
 
-- (UICollectionViewCell *)getCollectionViewCell:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView
+- (UICollectionViewCell *)getCollectionViewCell:(NSIndexPath *)indexPath
 {
     return nil;
 }

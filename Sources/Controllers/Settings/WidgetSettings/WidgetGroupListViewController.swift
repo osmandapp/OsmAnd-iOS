@@ -91,10 +91,10 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
             let row = section.createNewRow()
             row.setObj(widgetType, forKey: "widget_type")
             if let widgetGroup {
-                row.iconName = widgetGroup.getIconName(nightMode: nightMode)
+                row.iconName = widgetGroup.iconName
                 row.setObj(widgetGroup, forKey: "widget_group")
             } else {
-                row.iconName = widgetType.getIconName(nightMode)
+                row.iconName = widgetType.iconName
             }
             row.title = widgetGroup != nil ? widgetGroup!.title : widgetType.title
             row.descr = String(widgetGroup?.getWidgets().count ?? 1)

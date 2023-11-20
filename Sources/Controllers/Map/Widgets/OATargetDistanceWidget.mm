@@ -28,7 +28,7 @@
         _cachedTargetDistance = -1;
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
         [self setText:@"-" subtext:@""];
-        [self setIcons:@"widget_developer_target_distance_day" widgetNightIcon:@"widget_developer_target_distance_night"];
+        [self setIcon:@"widget_developer_target_distance"];
         
         __weak OATargetDistanceWidget *selfWeak = self;
         self.updateInfoFunction = ^BOOL{
@@ -47,7 +47,7 @@
         _cachedTargetDistance = targetDistance;
         NSString *text = _cachedTargetDistance > 0 ? [self formatDistance:_cachedTargetDistance] : @"-";
         [self setText:text subtext:@""];
-        [self setIcons:@"widget_developer_target_distance_day" widgetNightIcon:@"widget_developer_target_distance_night"];
+        [self setIcon:@"widget_developer_target_distance"];
     }
     return YES;
 }

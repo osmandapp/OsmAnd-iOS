@@ -68,8 +68,10 @@
     [super viewDidLayoutSubviews];
     
     BOOL isLeftSideDriving = [self isLeftSideDriving];
-    
-    if (_isInNavigationMode) {
+
+    if (_isInNavigationMode)
+    {
+        _mapVc.mapView.viewportYScale = kViewportBottomScale;
         _mapVc.mapView.viewportXScale = isLeftSideDriving ? 1.5 : 0.5;
     }
    
@@ -137,6 +139,8 @@
         
         _originalViewportX = _mapVc.mapView.viewportXScale;
         _originalViewportY = _mapVc.mapView.viewportYScale;
+
+        _mapVc.isCarPlayActive = YES;
     }
 }
 
@@ -144,22 +148,19 @@
 {
     if (_mapVc)
     {
-        _mapVc.mapView.viewportXScale = kViewportXNonShifted;
-        _mapVc.mapView.viewportYScale = _cachedViewportY;
-        
         [_mapVc.mapView suspendRendering];
-        
         [_mapVc removeFromParentViewController];
         [_mapVc.view removeFromSuperview];
-        
+
+        _mapVc.isCarPlayActive = NO;
         OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
-        
+
         [mapPanel addChildViewController:_mapVc];
         [mapPanel.view insertSubview:_mapVc.view atIndex:0];
         _mapVc.view.frame = mapPanel.view.frame;
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [_mapVc.mapView resumeRendering];
-        
+
         _mapVc.mapView.viewportXScale = _originalViewportX;
         _mapVc.mapView.viewportYScale = _originalViewportY;
     }

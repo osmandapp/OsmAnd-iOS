@@ -459,7 +459,7 @@ extension WidgetsListViewController {
     private func createWidgetItem(_ widget: MapWidgetInfo, _ section: OATableSectionData) {
         let row = section.createNewRow()
         row.setObj(widget, forKey: kWidgetsInfoKey)
-        row.iconName = widget.widget.widgetType?.getIconName(OAAppSettings.sharedManager().nightMode)
+        row.iconName = widget.widget.widgetType?.iconName
         row.title = widget.getTitle()
         row.descr = widget.getMessage()
         row.cellType = OASimpleTableViewCell.getIdentifier()

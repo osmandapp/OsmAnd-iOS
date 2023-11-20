@@ -23,15 +23,15 @@
     CLLocationDistance _cachedMeters;
 }
 
-- (instancetype) initWithIcons:(NSString *)dayIconId nightIconId:(NSString *)nightIconId widgetType:(OAWidgetType *)widgetType
+- (instancetype) initWithIcon:(NSString *)iconId widgetType:(OAWidgetType *)widgetType
 {
     self = [super initWithType:widgetType];
     if (self)
     {
         _app = [OsmAndApp instance];
         
-        if (dayIconId && nightIconId)
-            [self setIcons:dayIconId widgetNightIcon:nightIconId];
+        if (iconId)
+            [self setIcon:iconId];
         [self setText:nil subtext:nil];
         __weak OADistanceToPointWidget *selfWeak = self;
         self.onClickFunction = ^(id sender) {

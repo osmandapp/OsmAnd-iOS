@@ -15,13 +15,12 @@ class SideWidgetInfo: MapWidgetInfo {
     
     init(key: String,
          textWidget: OATextInfoWidget,
-         daySettingsIconId: String,
-         nightSettingsIconId: String,
+         settingsIconId: String,
          message: String,
          page: Int,
          order: Int,
          widgetPanel: WidgetsPanel) {
-        super.init(key: key, widget: textWidget, daySettingsIconId: daySettingsIconId, nightSettingsIconId: nightSettingsIconId, message: message, page: page, order: order, widgetPanel: widgetPanel)
+        super.init(key: key, widget: textWidget, settingsIconId: settingsIconId, message: message, page: page, order: order, widgetPanel: widgetPanel)
         
         textWidget.setContentTitle(getMessage())
     }

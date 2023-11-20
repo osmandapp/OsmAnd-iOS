@@ -60,7 +60,7 @@
 
 - (void)changeColor:(OAColorItem *)colorItem newColor:(UIColor *)newColor;
 - (OAColorItem *)addNewSelectedColor:(UIColor *)newColor;
-- (void)duplicateColor:(OAColorItem *)colorItem;
+- (OAColorItem *)duplicateColor:(OAColorItem *)colorItem;
 - (void)deleteColor:(OAColorItem *)colorItem;
 - (void)selectColor:(OAColorItem *)colorItem;
 - (NSArray<OAColorItem *> *)getAvailableColorsSortingByKey;

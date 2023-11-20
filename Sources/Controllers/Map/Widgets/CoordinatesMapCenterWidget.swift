@@ -36,9 +36,7 @@ class CoordinatesMapCenterWidget: CoordinatesBaseWidget {
     }
 
     override func getCoordinateIcon() -> UIImage {
-        let iconId = OAAppSettings.sharedManager().nightMode
-            ? "widget_coordinates_map_center_night"
-            : "widget_coordinates_map_center_day"
+        let iconId = "widget_coordinates_map_center"
         return UIImage.init(named: iconId)!
     }
 }

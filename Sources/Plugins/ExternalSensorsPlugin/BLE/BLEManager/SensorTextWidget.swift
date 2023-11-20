@@ -20,7 +20,7 @@ final class SensorTextWidget: OATextInfoWidget {
     
     convenience init(customId: String?, widgetType: WidgetType, widgetParams: ([String: Any])? = nil) {
         self.init(frame: .zero)
-        setIcons(widgetType)
+        setIconFor(widgetType)
         self.widgetType = widgetType
         deviceIdPref = registerSensorDevicePref(customId: customId)
         

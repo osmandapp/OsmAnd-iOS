@@ -37,7 +37,7 @@ class TimeToNavigationPointWidgetState: OAWidgetState {
     }
     
     override func getSettingsIconId(_ nightMode: Bool) -> String {
-        return TimeToNavigationPointState.getState(intermediate: intermediate, arrivalOtherwiseTimeToGo: arrivalTimeOrTimeToGo.get()).getIconName(nightMode: nightMode)
+        return TimeToNavigationPointState.getState(intermediate: intermediate, arrivalOtherwiseTimeToGo: arrivalTimeOrTimeToGo.get()).iconName
     }
     
     override func changeToNextState() {
@@ -63,41 +63,35 @@ class TimeToNavigationPointState: NSObject {
 
     static let intermediateTimeToGo = TimeToNavigationPointState(
         title: localizedString("map_widget_time"),
-        dayIconName: "widget_intermediate_time_to_go_day",
-        nightIconName: "widget_intermediate_time_to_go_night",
+        iconName: "widget_intermediate_time_to_go",
         intermediate: true
     )
 
     static let intermediateArrivalTime = TimeToNavigationPointState(
         title: localizedString("access_arrival_time"),
-        dayIconName: "widget_intermediate_time_day",
-        nightIconName: "widget_intermediate_time_night",
+        iconName: "widget_intermediate_time",
         intermediate: true
     )
 
     static let destinationTimeToGo = TimeToNavigationPointState(
         title: localizedString("map_widget_time"),
-        dayIconName: "widget_destination_time_to_go_day",
-        nightIconName: "widget_destination_time_to_go_night",
+        iconName: "widget_destination_time_to_go",
         intermediate: false
     )
 
     static let destinationArrivalTime = TimeToNavigationPointState(
         title: localizedString("access_arrival_time"),
-        dayIconName: "widget_time_to_distance_day",
-        nightIconName: "widget_time_to_distance_night",
+        iconName: "widget_time_to_distance",
         intermediate: false
     )
 
     let title: String
-    let dayIconName: String
-    let nightIconName: String
+    let iconName: String
     let intermediate: Bool
 
-    init(title: String, dayIconName: String, nightIconName: String, intermediate: Bool) {
+    init(title: String, iconName: String, intermediate: Bool) {
         self.title = title
-        self.dayIconName = dayIconName
-        self.nightIconName = nightIconName
+        self.iconName = iconName
         self.intermediate = intermediate
     }
 
@@ -105,10 +99,6 @@ class TimeToNavigationPointState: NSObject {
         intermediate
             ? localizedString("map_widget_time_to_intermediate")
             : localizedString("map_widget_time_to_destination")
-    }
-
-    func getIconName(nightMode: Bool) -> String {
-        nightMode ? nightIconName : dayIconName
     }
 
     static func getState(intermediate: Bool, arrivalOtherwiseTimeToGo: Bool) -> TimeToNavigationPointState {

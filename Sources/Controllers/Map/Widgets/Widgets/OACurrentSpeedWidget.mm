@@ -34,7 +34,7 @@ const static CLLocationSpeed LOW_SPEED_UPDATE_THRESHOLD_MPS = .015f; // Update m
         _app = OsmAndApp.instance;
         _currentPositionHelper = OACurrentPositionHelper.instance;
 
-        [self setIcons:type];
+        [self setIconForWidgetType:type];
         [self setText:nil subtext:nil];
         [self setMetricSystemDepended:YES];
     }

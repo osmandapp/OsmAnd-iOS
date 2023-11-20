@@ -147,7 +147,7 @@ class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
     private func updateIconIfNeeded(marker: OADestination, newMode: SideMarkerMode, modeChanged: Bool) {
         let colorChanged = marker.color != cachedMarkerColor || cachedNightMode != isNightMode()
         if colorChanged || modeChanged {
-            let iconName = isNight() ? newMode.dayIconName : newMode.nightIconName
+            let iconName = newMode.iconName
             cachedMarkerColor = marker.color
             cachedNightMode = isNightMode()
             if let cachedMarkerColor = cachedMarkerColor {
@@ -207,7 +207,7 @@ class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
         showRow.key = "value_pref"
         showRow.title = localizedString("recording_context_menu_show")
         showRow.descr = localizedString("recording_context_menu_show")
-        showRow.iconName = markerModePref.get(appMode) == SideMarkerMode.distance.name ? "widget_marker_day" : "widget_marker_eta_day"
+        showRow.iconName = markerModePref.get(appMode) == SideMarkerMode.distance.name ? "widget_marker" : "widget_marker_eta"
         showRow.setObj(markerModePref, forKey: "pref")
         showRow.setObj(getModeTitle(markerModePref, appMode), forKey: "value")
         showRow.setObj(getPossibleValues(markerModePref, appMode), forKey: "possible_values")

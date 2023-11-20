@@ -31,7 +31,7 @@ final class AverageSpeedWidget: OATextInfoWidget {
         self.init(frame: .zero)
         
         widgetType = .averageSpeed
-        setIcons(widgetType)
+        setIconFor(widgetType)
         setMetricSystemDepended(true)
         
         self.customId = customId

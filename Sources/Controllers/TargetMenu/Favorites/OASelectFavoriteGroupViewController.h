@@ -8,6 +8,8 @@
 
 #import "OABaseNavbarViewController.h"
 
+@class OAColorItem;
+
 @protocol OASelectFavoriteGroupDelegate <NSObject>
 
 - (void) onGroupSelected:(NSString *)selectedGroupName;
@@ -17,7 +19,11 @@
                        color:(UIColor *)color
           backgroundIconName:(NSString *)backgroundIconName;
 
-- (void) onFavoriteGroupColorsRefresh;
+- (void)selectColorItem:(OAColorItem *)colorItem;
+- (OAColorItem *)addAndGetNewColorItem:(UIColor *)color;
+- (void)changeColorItem:(OAColorItem *)colorItem withColor:(UIColor *)color;
+- (OAColorItem *)duplicateColorItem:(OAColorItem *)colorItem;
+- (void)deleteColorItem:(OAColorItem *)colorItem;
 
 @end
 

@@ -33,7 +33,7 @@
         _lastUpdatingFrameId = 0;
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
         [self setText:@"-" subtext:@"FPS"];
-        [self setIcons:@"widget_fps_day" widgetNightIcon:@"widget_fps_night"];
+        [self setIcon:@"widget_fps"];
         
         __weak OAFPSTextInfoWidget *selfWeak = self;
         self.onClickFunction = ^(id sender) {
@@ -91,7 +91,7 @@
     _lastUpdatingFrameId = frameId;
     
     [self setText:fps subtext:@"FPS"];
-    [self setIcons:@"widget_fps_day" widgetNightIcon:@"widget_fps_night"];
+    [self setIcon:@"widget_fps"];
     return YES;
 }
 

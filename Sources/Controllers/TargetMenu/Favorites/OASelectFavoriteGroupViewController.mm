@@ -271,10 +271,37 @@
 {
 }
 
-- (void)onFavoriteGroupColorsRefresh
+- (void)selectColorItem:(OAColorItem *)colorItem
 {
-    if (_delegate)
-        [_delegate onFavoriteGroupColorsRefresh];
+    if (self.delegate)
+        [self.delegate selectColorItem:colorItem];
 }
+
+- (OAColorItem *)addAndGetNewColorItem:(UIColor *)color
+{
+    if (self.delegate)
+        return [self.delegate addAndGetNewColorItem:color];
+    return nil;
+}
+
+- (void)changeColorItem:(OAColorItem *)colorItem withColor:(UIColor *)color
+{
+    if (self.delegate)
+        [self.delegate changeColorItem:colorItem withColor:color];
+}
+
+- (OAColorItem *)duplicateColorItem:(OAColorItem *)colorItem
+{
+    if (self.delegate)
+        return [self.delegate duplicateColorItem:colorItem];
+    return nil;
+}
+
+- (void)deleteColorItem:(OAColorItem *)colorItem
+{
+    if (self.delegate)
+        [self.delegate deleteColorItem:colorItem];
+}
+
 
 @end

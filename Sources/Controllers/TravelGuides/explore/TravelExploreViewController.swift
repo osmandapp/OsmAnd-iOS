@@ -449,7 +449,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                 }
                 
                 if let iconName = item.iconName {
-                    cell.rightIconView.image = UIImage(named: iconName)
+                    cell.rightIconView.image = UIImage.templateImageNamed(iconName)
                     cell.rightIconVisibility(true)
                 } else {
                     cell.rightIconVisibility(false)

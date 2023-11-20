@@ -335,7 +335,7 @@
     [_menuButtonPlanRoute setImage:[UIImage templateImageNamed:@"ic_custom_routes.png"] forState:UIControlStateNormal];
     [_menuButtonWeather setImage:[UIImage templateImageNamed:@"ic_custom_umbrella.png"] forState:UIControlStateNormal];
     [_menuButtonPlugins setImage:[UIImage templateImageNamed:@"left_menu_icon_plugins"] forState:UIControlStateNormal];
-    [_menuButtonTravelGuides setImage:[UIImage templateImageNamed:@"left_menu_icon_plugins"] forState:UIControlStateNormal];
+    [_menuButtonTravelGuides setImage:[UIImage templateImageNamed:@"ic_custom_backpack"] forState:UIControlStateNormal];
     
     [self applyingAppTheme];
 }

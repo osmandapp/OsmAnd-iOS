@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#define kCarPlayAttachMapNotification @"kCarPlayAttachMapNotification"
-
 @protocol OACarPlayDashboardDelegate;
 
 @protocol OACarPlayMapViewDelegate <NSObject>

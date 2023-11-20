@@ -140,7 +140,7 @@
         _originalViewportX = _mapVc.mapView.viewportXScale;
         _originalViewportY = _mapVc.mapView.viewportYScale;
 
-        [NSNotificationCenter.defaultCenter postNotificationName:kCarPlayAttachMapNotification object:@(YES)];
+        _mapVc.isCarPlayActive = YES;
     }
 }
 
@@ -152,7 +152,7 @@
         [_mapVc removeFromParentViewController];
         [_mapVc.view removeFromSuperview];
 
-        [NSNotificationCenter.defaultCenter postNotificationName:kCarPlayAttachMapNotification object:@(NO)];
+        _mapVc.isCarPlayActive = NO;
         OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
 
         [mapPanel addChildViewController:_mapVc];

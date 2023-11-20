@@ -104,6 +104,8 @@
 @property (readonly) OAMapRendererEnvironment *mapRendererEnv;
 @property (readonly) OAMapPresentationEnvironment *mapPresentationEnv;
 
+@property (nonatomic, assign) BOOL isCarPlayActive;
+
 - (CLLocation *) getMapLocation;
 - (float) getMapZoom;
 - (void) refreshMap;

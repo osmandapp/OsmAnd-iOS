@@ -12,11 +12,10 @@
 
 @protocol OAColorCollectionDelegate
 
-- (NSArray<OAColorItem *> *)generateColorItems;
 - (void)selectColorItem:(OAColorItem *)colorItem;
 - (OAColorItem *)addAndGetNewColorItem:(UIColor *)color;
 - (void)changeColorItem:(OAColorItem *)colorItem withColor:(UIColor *)color;
-- (void)duplicateColorItem:(OAColorItem *)colorItem;
+- (OAColorItem *)duplicateColorItem:(OAColorItem *)colorItem;
 - (void)deleteColorItem:(OAColorItem *)colorItem;
 
 @end

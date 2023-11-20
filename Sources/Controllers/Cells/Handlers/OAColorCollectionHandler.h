@@ -13,8 +13,8 @@
 @protocol OAColorsCollectionCellDelegate <OACollectionCellDelegate>
 
 - (void)onContextMenuItemEdit:(NSIndexPath *)indexPath;
-- (void)onContextMenuItemDuplicate:(NSIndexPath *)indexPath;
-- (void)onContextMenuItemDelete:(NSIndexPath *)indexPath;
+- (void)duplicateItemFromContextMenu:(NSIndexPath *)indexPath;
+- (void)deleteItemFromContextMenu:(NSIndexPath *)indexPath;
 
 @end
 
@@ -22,11 +22,9 @@
 
 @property (nonatomic, weak) id<OAColorsCollectionCellDelegate> delegate;
 
-- (void)addAndSelectColor:(NSIndexPath *)indexPath
-                  newItem:(OAColorItem *)newItem
-           collectionView:(UICollectionView *)collectionView;
-- (void)replaceOldColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
-- (void)addDuplicatedColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
-- (void)removeColor:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView;
+- (void)addColor:(NSIndexPath *)indexPath newItem:(OAColorItem *)newItem;
+- (void)addAndSelectColor:(NSIndexPath *)indexPath newItem:(OAColorItem *)newItem;
+- (void)replaceOldColor:(NSIndexPath *)indexPath;
+- (void)removeColor:(NSIndexPath *)indexPath;
 
 @end

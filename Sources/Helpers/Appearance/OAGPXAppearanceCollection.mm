@@ -14,6 +14,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
+#import "OADefaultFavorite.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -21,7 +22,6 @@
 #define kDefaulRedColorName @"red"
 #define kDefaulRedColorValue 0xFFFF0000
 #define kDefaulFavoriteColorName @"default_favorite"
-#define kDefaulFavoriteColorValue 0xFF3F51B5
 
 @implementation OAGPXTrackAppearance
 
@@ -278,14 +278,12 @@
     [self saveColorsToEndOfLastUsedIfNeeded:customTrackColors];
     for (NSString *hexColor in customTrackColors)
     {
-        OAColorItem *colorItem = [[OAColorItem alloc] initWithHexColor:hexColor];
-        [_availableColors addObject:colorItem];
-        colorItem.sortedPosition = [_availableColors indexOfObject:colorItem];
-        [colorItem generateId];
+        [_availableColors addObject:[[OAColorItem alloc] initWithHexColor:hexColor]];
     }
+    [self initSortedPosition];
 }
 
-- (void)regenerateSortedPosition
+- (void)initSortedPosition
 {
     NSArray<NSString *> *customTrackColorsLastUsed = [_settings.customTrackColorsLastUsed get];
     NSMutableDictionary<NSNumber *, NSString *> *sortedPositionWithHexColors = [NSMutableDictionary dictionary];
@@ -309,6 +307,21 @@
             [_availableColors removeObject:colorItem];
         }
     }];
+}
+
+- (void)regenerateSortedPositionAfter:(NSInteger)position increment:(BOOL)increment
+{
+    for (OAColorItem *item in _availableColors)
+    {
+        if (item.sortedPosition > position)
+        {
+            if (increment)
+                item.sortedPosition += 1;
+            else
+                item.sortedPosition -= 1;
+            [item generateId];
+        }
+    }
 }
 
 - (void)saveColorsToEndOfLastUsedIfNeeded:(NSArray<NSString *> *)customColors
@@ -355,7 +368,6 @@
         {
             [_settings.customTrackColors set:customTrackColors];
             [_settings.customTrackColorsLastUsed set:customTrackColorsLastUsed];
-            [self regenerateSortedPosition];
         }
     }
     return isRegenerated;
@@ -405,10 +417,10 @@
     if (!_defaultLineColorItem || ![_availableColors containsObject:_defaultLineColorItem])
     {
         _defaultLineColorItem = [[OAColorItem alloc] initWithKey:kDefaulRedColorName value:kDefaulRedColorValue isDefault:YES];
-        [_availableColors addObject:_defaultLineColorItem];
-        _defaultLineColorItem.sortedPosition = [_availableColors indexOfObject:_defaultLineColorItem];
+        _defaultLineColorItem.sortedPosition = _availableColors.count;
         [_defaultLineColorItem generateId];
-        _defaultColorValues[kDefaulRedColorName] = @(kDefaulRedColorValue);
+        [_availableColors addObject:_defaultLineColorItem];
+        _defaultColorValues[_defaultLineColorItem.key] = @(_defaultLineColorItem.value);
     }
     return _defaultLineColorItem;
 }
@@ -417,11 +429,11 @@
 {
     if (!_defaultPointColorItem || ![_availableColors containsObject:_defaultPointColorItem])
     {
-        _defaultPointColorItem = [[OAColorItem alloc] initWithKey:kDefaulFavoriteColorName value:kDefaulFavoriteColorValue isDefault:YES];
-        [_availableColors addObject:_defaultPointColorItem];
-        _defaultPointColorItem.sortedPosition = [_availableColors indexOfObject:_defaultPointColorItem];
+        _defaultPointColorItem = [[OAColorItem alloc] initWithKey:kDefaulFavoriteColorName value:[[OADefaultFavorite getDefaultColor] toARGBNumber] isDefault:YES];
+        _defaultPointColorItem.sortedPosition = _availableColors.count;
         [_defaultPointColorItem generateId];
-        _defaultColorValues[kDefaulFavoriteColorName] = @(kDefaulFavoriteColorValue);
+        [_availableColors addObject:_defaultPointColorItem];
+        _defaultColorValues[_defaultPointColorItem.key] = @(_defaultPointColorItem.value);
     }
     return _defaultPointColorItem;
 }
@@ -479,23 +491,24 @@
     [customTrackColorsLastUsed insertObject:newHexColor atIndex:0];
     [_settings.customTrackColorsLastUsed set:customTrackColorsLastUsed];
 
+    [self regenerateSortedPositionAfter:-1 increment:YES];
     OAColorItem *colorItem = [[OAColorItem alloc] initWithHexColor:newHexColor];
-    [_availableColors addObject:colorItem];
-    colorItem.sortedPosition = [_availableColors indexOfObject:colorItem];
+    [_availableColors insertObject:colorItem atIndex:_defaultColorValues.count];
+    colorItem.sortedPosition = 0;
     [colorItem generateId];
-    [self regenerateSortedPosition];
     return colorItem;
 }
 
-- (void)duplicateColor:(OAColorItem *)colorItem
+- (OAColorItem *)duplicateColor:(OAColorItem *)colorItem
 {
     NSString *hexColor = [colorItem getHexColor];
+    NSInteger indexOfColorItem = [_availableColors indexOfObject:colorItem];
 
     NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[_settings.customTrackColors get]];
     if (colorItem.isDefault)
         [customTrackColors addObject:hexColor];
     else
-        [customTrackColors insertObject:hexColor atIndex:[_availableColors indexOfObject:colorItem] - _defaultColorValues.count + 1];
+        [customTrackColors insertObject:hexColor atIndex:indexOfColorItem - _defaultColorValues.count + 1];
     [_settings.customTrackColors set:customTrackColors];
 
     NSMutableArray<NSString *> *customTrackColorsLastUsed = [NSMutableArray arrayWithArray:[_settings.customTrackColorsLastUsed get]];
@@ -503,11 +516,14 @@
     [_settings.customTrackColorsLastUsed set:customTrackColorsLastUsed];
 
     OAColorItem *duplicatedColorItem = [[OAColorItem alloc] initWithHexColor:hexColor];
+    duplicatedColorItem.sortedPosition = colorItem.sortedPosition + 1;
+    [self regenerateSortedPositionAfter:colorItem.sortedPosition increment:YES];
     if (colorItem.isDefault)
         [_availableColors addObject:duplicatedColorItem];
     else
-        [_availableColors insertObject:duplicatedColorItem atIndex:[_availableColors indexOfObject:colorItem] + 1];
-    [self regenerateSortedPosition];
+        [_availableColors insertObject:duplicatedColorItem atIndex:indexOfColorItem + 1];
+    [duplicatedColorItem generateId];
+    return duplicatedColorItem;
 }
 
 - (void)deleteColor:(OAColorItem *)colorItem
@@ -521,7 +537,8 @@
     [_settings.customTrackColors set:customTrackColors];
 
     [_availableColors removeObject:colorItem];
-    [self regenerateSortedPosition];
+    if (_availableColors.count > colorItem.sortedPosition)
+        [self regenerateSortedPositionAfter:colorItem.sortedPosition increment:NO];
 }
 
 - (void)selectColor:(OAColorItem *)colorItem
@@ -533,7 +550,10 @@
         [customTrackColorsLastUsed removeObjectAtIndex:colorItem.sortedPosition];
         [customTrackColorsLastUsed insertObject:hexColor atIndex:0];
         [_settings.customTrackColorsLastUsed set:customTrackColorsLastUsed];
-        [self regenerateSortedPosition];
+        [self regenerateSortedPositionAfter:-1 increment:YES];
+        [self regenerateSortedPositionAfter:colorItem.sortedPosition increment:NO];
+        colorItem.sortedPosition = 0;
+        [colorItem generateId];
     }
 }
 

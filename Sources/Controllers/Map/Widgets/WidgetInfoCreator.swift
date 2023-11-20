@@ -45,7 +45,7 @@ class WidgetInfoCreator: NSObject {
         let page = panel.getWidgetPage(widgetId, appMode: appMode)
         let order = panel.getWidgetOrder(widgetId, appMode: appMode)
         
-        return createWidgetInfo(widgetId: widgetId, widget: widget, dayIconName: widgetType.dayIconName, nightIconName: widgetType.nightIconName, message: widgetType.title, page: page, order: order, widgetPanel: panel)
+        return createWidgetInfo(widgetId: widgetId, widget: widget, iconName: widgetType.iconName, message: widgetType.title, page: page, order: order, widgetPanel: panel)
     }
     
     func createExternalWidget(widgetId: String, widget: OABaseWidgetView, settingsIconName: String, message: String?, defaultPanel: WidgetsPanel, order: Int) -> MapWidgetInfo {
@@ -58,7 +58,7 @@ class WidgetInfoCreator: NSObject {
             updatedOrder = savedOrder
         }
         
-        return createWidgetInfo(widgetId: widgetId, widget: widget, dayIconName: settingsIconName, nightIconName: settingsIconName, message: message, page: page, order: updatedOrder, widgetPanel: panel)
+        return createWidgetInfo(widgetId: widgetId, widget: widget, iconName: settingsIconName, message: message, page: page, order: updatedOrder, widgetPanel: panel)
     }
     
     private func getExternalWidgetPanel(widgetId: String, defaultPanel: WidgetsPanel) -> WidgetsPanel {
@@ -76,14 +76,14 @@ class WidgetInfoCreator: NSObject {
     func createCustomWidgetInfo(widgetId: String, widget: OABaseWidgetView, widgetType: WidgetType, panel: WidgetsPanel) -> MapWidgetInfo {
         let page = panel.getWidgetPage(widgetId, appMode: appMode)
         let order = panel.getWidgetOrder(widgetId, appMode: appMode)
-        return createWidgetInfo(widgetId: widgetId, widget: widget, dayIconName: widgetType.dayIconName, nightIconName: widgetType.nightIconName, message: widgetType.title, page: page, order: order, widgetPanel: panel)
+        return createWidgetInfo(widgetId: widgetId, widget: widget, iconName: widgetType.iconName, message: widgetType.title, page: page, order: order, widgetPanel: panel)
     }
     
-    func createWidgetInfo(widgetId: String, widget: OABaseWidgetView, dayIconName: String, nightIconName: String, message: String?, page: Int, order: Int, widgetPanel: WidgetsPanel) -> MapWidgetInfo {
+    func createWidgetInfo(widgetId: String, widget: OABaseWidgetView, iconName: String, message: String?, page: Int, order: Int, widgetPanel: WidgetsPanel) -> MapWidgetInfo {
         if let textInfoWidget = widget as? OATextInfoWidget {
-            return SideWidgetInfo(key: widgetId, textWidget: textInfoWidget, daySettingsIconId: dayIconName, nightSettingsIconId: nightIconName, message: message ?? "", page: page, order: order, widgetPanel: widgetPanel)
+            return SideWidgetInfo(key: widgetId, textWidget: textInfoWidget, settingsIconId: iconName, message: message ?? "", page: page, order: order, widgetPanel: widgetPanel)
         } else {
-            return CenterWidgetInfo(key: widgetId, widget: widget, daySettingsIconId: dayIconName, nightSettingsIconId: nightIconName, message: message ?? "", page: page, order: order, widgetPanel: widgetPanel)
+            return CenterWidgetInfo(key: widgetId, widget: widget, settingsIconId: iconName, message: message ?? "", page: page, order: order, widgetPanel: widgetPanel)
         }
     }
 }

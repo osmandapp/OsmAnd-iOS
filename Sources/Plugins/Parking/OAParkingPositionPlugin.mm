@@ -286,7 +286,7 @@
     };
     
     [_parkingPlaceControl setText:nil subtext:nil];
-    [_parkingPlaceControl setIcons:@"widget_parking_day" widgetNightIcon:@"widget_parking_night"];
+    [_parkingPlaceControl setIcon:@"widget_parking"];
     return _parkingPlaceControl;
 }
 

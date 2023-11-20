@@ -30,12 +30,11 @@
             if (pluginWeak.saving)
             {
                 [distanceWidgetWeak setText:OALocalizedString(@"shared_string_save") subtext:@""];
-                [distanceWidgetWeak setIcons:@"widget_monitoring_rec_big_day" widgetNightIcon:@"widget_monitoring_rec_big_night"];
+                [distanceWidgetWeak setIcon:@"widget_monitoring_rec_big"];
                 return YES;
             }
             NSString *txt = OALocalizedString(@"monitoring_control_start");
             NSString *subtxt = nil;
-            NSString *dn;
             NSString *d;
             long last = cachedLastUpdateTime;
             BOOL globalRecord = [OAAppSettings sharedManager].mapSettingTrackRecording;
@@ -65,13 +64,11 @@
                 //indicates global recording (+background recording)
                 if (liveMonitoringEnabled)
                 {
-                    dn = @"widget_live_monitoring_rec_big_night";
-                    d = @"widget_live_monitoring_rec_big_day";
+                    d = @"widget_live_monitoring_rec_big";
                 }
                 else
                 {
-                    dn = @"widget_monitoring_rec_big_night";
-                    d = @"widget_monitoring_rec_big_day";
+                    d = @"widget_monitoring_rec_big";
                 }
             }
             else if (isRecording)
@@ -79,38 +76,33 @@
                 //indicates (profile-based, configured in settings) recording (looks like is only active during nav in follow mode)
                 if (liveMonitoringEnabled)
                 {
-                    dn = @"widget_live_monitoring_rec_small_night";
-                    d = @"widget_live_monitoring_rec_small_day";
+                    d = @"widget_live_monitoring_rec_small";
                 }
                 else
                 {
-                    dn = @"widget_monitoring_rec_small_night";
-                    d = @"widget_monitoring_rec_small_day";
+                    d = @"widget_monitoring_rec_small";
                 }
             }
             else
             {
-                dn = @"widget_monitoring_rec_inactive_night";
-                d = @"widget_monitoring_rec_inactive_day";
+                d = @"widget_monitoring_rec_inactive";
             }
             
             [distanceWidgetWeak setText:txt subtext:subtxt];
-            [distanceWidgetWeak setIcons:d widgetNightIcon:dn];
+            [distanceWidgetWeak setIcon:d];
             if ((last != cachedLastUpdateTime) && (globalRecord || isRecording))
             {
                 cachedLastUpdateTime = last;
                 //blink implementation with 2 indicator states (global logging + profile/navigation logging)
                 if (liveMonitoringEnabled)
                 {
-                    dn = @"widget_live_monitoring_rec_small_night";
-                    d = @"widget_live_monitoring_rec_small_day";
+                    d = @"widget_live_monitoring_rec_small";
                 }
                 else
                 {
-                    dn = @"widget_monitoring_rec_small_night";
-                    d = @"widget_monitoring_rec_small_day";
+                    d = @"widget_monitoring_rec_small";
                 }
-                [distanceWidgetWeak setIcons:d widgetNightIcon:dn];
+                [distanceWidgetWeak setIcon:d];
                 
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     NSString *dn;
@@ -119,28 +111,24 @@
                     {
                         if (liveMonitoringEnabled)
                         {
-                            dn = @"widget_live_monitoring_rec_big_night";
-                            d = @"widget_live_monitoring_rec_big_day";
+                            d = @"widget_live_monitoring_rec_big";
                         } else
                         {
-                            dn = @"widget_monitoring_rec_big_night";
-                            d = @"widget_monitoring_rec_big_day";
+                            d = @"widget_monitoring_rec_big";
                         }
                     }
                     else
                     {
                         if (liveMonitoringEnabled)
                         {
-                            dn = @"widget_live_monitoring_rec_small_night";
-                            d = @"widget_live_monitoring_rec_small_day";
+                            d = @"widget_live_monitoring_rec_small";
                         }
                         else
                         {
-                            dn = @"widget_monitoring_rec_small_night";
-                            d = @"widget_monitoring_rec_small_day";
+                            d = @"widget_monitoring_rec_small";
                         }
                     }
-                    [distanceWidgetWeak setIcons:d widgetNightIcon:dn];
+                    [distanceWidgetWeak setIcon:d];
                 });
             }
             return YES;

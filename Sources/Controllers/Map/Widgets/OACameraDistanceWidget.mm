@@ -31,7 +31,7 @@
         _settings = [OAAppSettings sharedManager];
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
         [self setText:@"-" subtext:@""];
-        [self setIcons:@"widget_developer_camera_distance_day" widgetNightIcon:@"widget_developer_camera_distance_night"];
+        [self setIcon:@"widget_developer_camera_distance"];
         
         __weak OACameraDistanceWidget *selfWeak = self;
         self.updateInfoFunction = ^BOOL{
@@ -50,7 +50,7 @@
         _cachedCameraDistance = cameraDistance;
         NSString *text = _cachedCameraDistance > 0 ? [self formatDistance:_cachedCameraDistance] : @"-";
         [self setText:text subtext:@""];
-        [self setIcons:@"widget_developer_camera_distance_day" widgetNightIcon:@"widget_developer_camera_distance_night"];
+        [self setIcon:@"widget_developer_camera_distance"];
     }
     return YES;
 }

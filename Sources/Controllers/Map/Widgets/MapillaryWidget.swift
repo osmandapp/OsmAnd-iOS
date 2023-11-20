@@ -15,6 +15,7 @@ class MapillaryWidget: OATextInfoWidget {
     init() {
         super.init(type: .mapillary)
         setText(localizedString("mapillary"), subtext: "")
+        setIcon("widget_mapillary")
         onClickFunction = { _ in
             OAMapillaryPlugin.installOrOpenMapillary()
         }

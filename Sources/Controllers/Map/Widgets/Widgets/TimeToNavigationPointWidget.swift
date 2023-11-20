@@ -88,7 +88,7 @@ class TimeToNavigationPointWidget: OATextInfoWidget {
             row.cellType = OASimpleTableViewCell.getIdentifier()
             row.setObj(timeToGo ? "false" : "true", forKey: "value")
             row.title = pointState.title
-            row.iconName = pointState.dayIconName
+            row.iconName = pointState.iconName
             res.append(row)
             timeToGo = true
         }
@@ -132,7 +132,7 @@ class TimeToNavigationPointWidget: OATextInfoWidget {
     
     private func updateIcons() {
         let state = getCurrentState()
-        setIcons(state.dayIconName, widgetNightIcon: state.nightIconName)
+        setIcon(state.iconName)
     }
     
     private func updateContentTitle() {

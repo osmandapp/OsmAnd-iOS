@@ -86,7 +86,7 @@
     if (self)
     {
         _diffElevationUp = 0.0;
-        [self setIcons:@"widget_track_recording_uphill_day" widgetNightIcon:@"widget_track_recording_uphill_night"];
+        [self setIcon:@"widget_track_recording_uphill"];
     }
     return self;
 }
@@ -120,7 +120,7 @@
     if (self)
     {
         _diffElevationDown = 0.0;
-        [self setIcons:@"widget_track_recording_downhill_day" widgetNightIcon:@"widget_track_recording_downhill_night"];
+        [self setIcon:@"widget_track_recording_downhill"];
     }
     return self;
 }

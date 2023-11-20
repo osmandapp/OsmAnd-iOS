@@ -36,9 +36,9 @@
         [self setText:@"-" subtext:nil];
 
         if (_widgetType == EOAAltitudeWidgetTypeMyLocation)
-            [self setIcons:@"widget_altitude_location_day" widgetNightIcon:@"widget_altitude_location_night"];
+            [self setIcon:@"widget_altitude_location"];
         else
-            [self setIcons:@"widget_altitude_map_center_day" widgetNightIcon:@"widget_altitude_map_center_night"];
+            [self setIcon:@"widget_altitude_map_center"];
     }
     return self;
 }

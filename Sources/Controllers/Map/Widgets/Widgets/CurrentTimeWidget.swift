@@ -16,7 +16,7 @@ class CurrentTimeWidget: OATextInfoWidget {
     
     init() {
         super.init(type: .currentTime)
-        setIcons(.currentTime)
+        setIconFor(.currentTime)
         setText(nil, subtext: nil)
     }
     

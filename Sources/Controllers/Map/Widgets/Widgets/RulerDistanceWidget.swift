@@ -20,7 +20,7 @@ class RulerDistanceWidget: OATextInfoWidget {
         self.updateRulerObserver = OAAutoObserverProxy(self,
                                                        withHandler: #selector(onRulerUpdate),
                                                        andObserve: self.updateRulerObservable)
-        setIcons(.radiusRuler)
+        setIconFor(.radiusRuler)
         onClickFunction = { [weak self] _ in
             let settings = OAAppSettings.sharedManager()!
             let mode = settings.rulerMode.get()
@@ -70,9 +70,9 @@ class RulerDistanceWidget: OATextInfoWidget {
 
     @objc private func onRulerUpdate() {
         if OAAppSettings.sharedManager().rulerMode.get() == .RULER_MODE_NO_CIRCLES {
-            self.setIcons("widget_ruler_circle_hide_day", widgetNightIcon: "widget_ruler_circle_hide_night")
+            self.setIcon("widget_hidden")
         } else {
-            self.setIcons(.radiusRuler)
+            self.setIconFor(.radiusRuler)
         }
         OARootViewController.instance().mapPanel.hudViewController.mapInfoController.updateRuler()
     }

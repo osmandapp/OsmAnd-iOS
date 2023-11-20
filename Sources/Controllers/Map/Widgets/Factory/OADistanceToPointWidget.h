@@ -15,7 +15,7 @@
 
 @interface OADistanceToPointWidget : OATextInfoWidget
 
-- (instancetype) initWithIcons:(NSString *)dayIconId nightIconId:(NSString *)nightIconId widgetType:(OAWidgetType *)widgetType;
+- (instancetype) initWithIcon:(NSString *)iconId widgetType:(OAWidgetType *)widgetType;
 
 - (void) click;
 - (CLLocation *) getPointToNavigate;

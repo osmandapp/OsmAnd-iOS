@@ -27,7 +27,7 @@
         _cachedMapTilt = 0;
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
         [self setText:@"-" subtext:@"°"];
-        [self setIcons:@"widget_developer_camera_tilt_day" widgetNightIcon:@"widget_developer_camera_tilt_night"];
+        [self setIcon:@"widget_developer_camera_tilt"];
         __weak OACameraTiltWidget *selfWeak = self;
         self.updateInfoFunction = ^BOOL{
             [selfWeak updateInfo];
@@ -44,7 +44,7 @@
         _cachedMapTilt = mapTilt;
     NSString *cachedMapTiltText = [NSString stringWithFormat:@"%d", _cachedMapTilt];
     [self setText:cachedMapTiltText subtext:@"°"];
-    [self setIcons:@"widget_developer_camera_tilt_day" widgetNightIcon:@"widget_developer_camera_tilt_night"];
+    [self setIcon:@"widget_developer_camera_tilt"];
     return YES;
 }
 

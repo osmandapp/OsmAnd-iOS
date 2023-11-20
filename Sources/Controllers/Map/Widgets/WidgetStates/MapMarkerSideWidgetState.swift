@@ -58,7 +58,7 @@ class MapMarkerSideWidgetState: OAWidgetState {
     }
     
     override func getSettingsIconId(_ nightMode: Bool) -> String! {
-        SideMarkerMode.markerModeByName(mapMarkerModePref.get())!.getIconName(night: nightMode)
+        SideMarkerMode.markerModeByName(mapMarkerModePref.get())!.iconName
     }
     
     override func changeToNextState() {
@@ -97,29 +97,23 @@ class MapMarkerSideWidgetState: OAWidgetState {
 @objcMembers
 class SideMarkerMode: NSObject {
 
-    static let distance = SideMarkerMode(ordinal: 0, name: "DISTANCE", title: localizedString("shared_string_distance"), dayIconName: "widget_marker_day", nightIconName: "widget_marker_night", foregroundIconName: "widget_marker_eta_triangle")
-    static let estimatedArrivalTime = SideMarkerMode(ordinal: 1, name: "ESTIMATED_ARRIVAL_TIME", title: localizedString("side_marker_eta"), dayIconName: "widget_marker_eta_day", nightIconName: "widget_marker_eta_night", foregroundIconName: "widget_marker_eta_triangle")
+    static let distance = SideMarkerMode(ordinal: 0, name: "DISTANCE", title: localizedString("shared_string_distance"), iconName: "widget_marker", foregroundIconName: "widget_marker_eta_triangle")
+    static let estimatedArrivalTime = SideMarkerMode(ordinal: 1, name: "ESTIMATED_ARRIVAL_TIME", title: localizedString("side_marker_eta"), iconName: "widget_marker_eta", foregroundIconName: "widget_marker_eta_triangle")
 
     static let values = [SideMarkerMode.distance, SideMarkerMode.estimatedArrivalTime]
     
     let ordinal: Int
     let name: String
     let title: String
-    let dayIconName: String
-    let nightIconName: String
+    let iconName: String
     let foregroundIconName: String
     
-    private init(ordinal: Int, name: String, title: String, dayIconName: String, nightIconName: String, foregroundIconName: String) {
+    private init(ordinal: Int, name: String, title: String, iconName: String, foregroundIconName: String) {
         self.ordinal = ordinal
         self.name = name
         self.title = title
-        self.dayIconName = dayIconName
-        self.nightIconName = nightIconName
+        self.iconName = iconName
         self.foregroundIconName = foregroundIconName
-    }
-    
-    func getIconName(night: Bool) -> String {
-        night ? nightIconName : dayIconName
     }
 
     func next() -> SideMarkerMode {

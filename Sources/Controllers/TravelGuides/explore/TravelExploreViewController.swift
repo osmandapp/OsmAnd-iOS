@@ -260,6 +260,9 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                     resultRow.title = item.articleTitle
                     resultRow.descr = item.isPartOf
                     resultRow.setObj("ic_custom_history", forKey: "noImageIcon")
+                    if let imageTitle = item.imageTitle, !imageTitle.isEmpty {
+                        resultRow.iconName = TravelArticle.getImageUrl(imageTitle: imageTitle, thumbnail: true)
+                    }
                 }
                 let clearHistoryRow = section.createNewRow()
                 clearHistoryRow.cellType = OASimpleTableViewCell.getIdentifier()
@@ -294,7 +297,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                     
                     resultRow.setObj("ic_custom_photo", forKey: "noImageIcon")
                     if let imageTitle = item.imageTitle, !imageTitle.isEmpty {
-                        resultRow.iconName = TravelArticle.getImageUrl(imageTitle: item.imageTitle ?? "", thumbnail: true)
+                        resultRow.iconName = TravelArticle.getImageUrl(imageTitle: imageTitle, thumbnail: true)
                     }
                 }
             }

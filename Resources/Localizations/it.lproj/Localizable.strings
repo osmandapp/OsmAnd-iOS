@@ -3077,3 +3077,6 @@
 "external_device_unpair_description" = "Connetti il sensore al tuo dispositivo per ottenere informazioni.";
 "map_widget_rendering_fps_desc" = "Mostra la velocità con cui la mappa e i suoi elementi vengono visualizzati e aggiornati, espressa in fotogrammi al secondo (FPS).";
 "external_device_details_information" = "Informazioni";
+"apply_to_existing_favorites_descr" = "Applicare le modifiche ai preferiti esistenti o solo ai nuovi?";
+"apply_only_to_new_points" = "Applica solo ai nuovi punti";
+"apply_to_existing" = "Applica agli esistenti";

@@ -218,7 +218,7 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
         let bottomViewHeight = stackHeight + OAUtilities.getBottomMargin()
         let sideOffset = OAUtilities.getLeftMargin() + 16.0
         
-        bottomView.frame = CGRect(x: 0, y: webView.frame.height - bottomViewHeight, width: webView.frame.width, height: bottomViewHeight)
+        bottomView.frame = CGRect(x: 0, y: self.view.frame.height - bottomViewHeight, width: self.view.frame.width, height: bottomViewHeight)
         bottomStackView.frame = CGRect(x: sideOffset, y: 0, width: bottomView.frame.width - 2 * sideOffset, height: stackHeight)
         
         // Place image on bookmarkButton after text
@@ -283,6 +283,11 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
         guard let languageButton else {return []}
         guard let optionsButton else {return []}
         return [optionsButton, languageButton]
+    }
+    
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        dismiss()
+        return false
     }
     
     //MARK: Actions
@@ -549,11 +554,15 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
     override func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let newUrl = OATravelGuidesHelper.normalizeFileUrl(navigationAction.request.url?.absoluteString) ?? ""
         let isWebPage = newUrl.hasPrefix(PAGE_PREFIX_HTTP) || newUrl.hasPrefix(PAGE_PREFIX_HTTPS)
+        let isPhoneNumber = newUrl.hasPrefix("tel:") || newUrl.rangeOfCharacter(from: CharacterSet(charactersIn: "-+()% 0123456789").inverted) == nil
+        let isEmail = newUrl.isValidEmail()
         
         if newUrl.hasSuffix("showNavigation") {
             //Clicked on Breadcrumbs navigation pannel
             showNavigation()
             decisionHandler(.cancel)
+        } else if isPhoneNumber || isEmail {
+            decisionHandler(.allow)
         } else if newUrl == blankUrl {
             //On open new TravelGuides page via code
             decisionHandler(.allow)

@@ -64,6 +64,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         setupSearchControllerWithFilter(false)
+        tableView.keyboardDismissMode = .onDrag
         isInited = true
     }
     

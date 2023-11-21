@@ -32,6 +32,7 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.keyboardDismissMode = .onDrag
         startAsyncInit()
     }
     

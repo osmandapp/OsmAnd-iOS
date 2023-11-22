@@ -111,7 +111,7 @@
 {
     _headerView = [[OACloudIntroductionHeaderView alloc] init];
     [_headerView setUpViewWithTitle:OALocalizedString(@"osmand_cloud") description:OALocalizedString(@"osmand_cloud_authorize_descr")
-                              image:[UIImage imageNamed:@"ic_custom_cloud_upload_colored"]];
+                              image:[UIImage imageNamed:@"ic_custom_cloud_upload_colored_day_big"]];
     CGRect frame = _headerView.frame;
     frame.size.height = [_headerView calculateViewHeight];
     _headerView.frame = frame;

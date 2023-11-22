@@ -17,7 +17,7 @@
 #import "OARoutingHelper.h"
 #import "OAMapActions.h"
 #import "Localization.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAProfileDataObject.h"
 #import "OAQuickAction.h"
 #import "OASQLiteTileSource.h"
@@ -117,8 +117,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     if (_needRestart)
         importComplete = [NSString stringWithFormat:@"%@\n\n%@", importComplete, OALocalizedString(@"app_restart_required")];
     NSMutableAttributedString *descriptionAttr = [[NSMutableAttributedString alloc] initWithString:importComplete];
-    [descriptionAttr setColor:UIColorFromRGB(color_text_footer) forString:importComplete];
-    [descriptionAttr setColor:UIColor.blackColor forString:_fileName];
+    [descriptionAttr setColor:UIColor.textColorSecondary forString:importComplete];
+    [descriptionAttr setColor:UIColor.textColorPrimary forString:_fileName];
     [descriptionAttr setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] forString:descriptionAttr.string];
     [descriptionAttr setMinLineHeight:18. alignment:NSTextAlignmentNatural forString:descriptionAttr.string];
     return descriptionAttr;
@@ -389,7 +389,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         NSString *countString = [NSString stringWithFormat:OALocalizedString(@"added_items"), item[@"count"]];
         [cell.descriptionLabel setText:countString];
         [cell.rightIconView setImage:[UIImage templateImageNamed:item[@"iconName"]]];
-        [cell.rightIconView setTintColor:UIColorFromRGB(color_primary_purple)];
+        [cell.rightIconView setTintColor:UIColor.iconColorActive];
         cell.rightIconView.contentMode = UIViewContentModeCenter;
     }
     return cell;

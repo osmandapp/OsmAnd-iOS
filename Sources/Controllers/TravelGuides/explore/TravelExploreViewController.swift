@@ -325,7 +325,10 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
             guard let self else { return nil }
             let headerCellsCountInResourcesSection = self.headerCellsCountInResourcesSection()
             if let indexPath, indexPath.row >= headerCellsCountInResourcesSection {
-                return self.downloadingResources[indexPath.row - headerCellsCountInResourcesSection]
+                let index = indexPath.row - headerCellsCountInResourcesSection
+                if self.downloadingResources.count > indexPath.row {
+                    return self.downloadingResources[indexPath.row - headerCellsCountInResourcesSection]
+                }
             }
             return nil
         }

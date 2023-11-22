@@ -11,6 +11,7 @@
 #import "OAMainSettingsViewController.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAResourcesUIHelper.h"
 #import "OASettingsImporter.h"
 #import "OAQuickAction.h"
@@ -138,10 +139,10 @@
     NSString *title = OALocalizedString(@"keep_both");
     NSString *subtitle = OALocalizedString(@"keep_both_desc");
     NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", title, subtitle]];
-    [buttonTitle setColor:UIColorFromRGB(color_primary_purple) forString:title];
+    [buttonTitle setColor:UIColor.buttonTextColorSecondary forString:title];
     [buttonTitle setFont:[UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold maximumSize:20.] forString:title];
     [buttonTitle setMinLineHeight:18. alignment:NSTextAlignmentCenter forString:title];
-    [buttonTitle setColor:UIColorFromRGB(color_icon_inactive) forString:subtitle];
+    [buttonTitle setColor:UIColor.textColorSecondary forString:subtitle];
     [buttonTitle setFont:[UIFont scaledSystemFontOfSize:13. maximumSize:18.] forString:subtitle];
     [buttonTitle setMinLineHeight:17. alignment:NSTextAlignmentCenter forString:subtitle];
     return buttonTitle;
@@ -155,7 +156,7 @@
     NSString *title = OALocalizedString(@"replace_all");
     NSString *subtitle = OALocalizedString(@"replace_all_desc");
     NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", title, subtitle]];
-    [buttonTitle setColor:UIColor.whiteColor forString:title];
+    [buttonTitle setColor:UIColor.buttonTextColorPrimary forString:title];
     [buttonTitle setFont:[UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold maximumSize:20.] forString:title];
     [buttonTitle setMinLineHeight:18. alignment:NSTextAlignmentCenter forString:title];
     [buttonTitle setColor:[UIColor.whiteColor colorWithAlphaComponent:.5] forString:subtitle];
@@ -264,7 +265,7 @@
                     item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_map"];
                     item[@"description"] = @"";
                     item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
-                    item[@"iconColor"] = UIColorFromRGB(color_tint_gray);
+                    item[@"iconColor"] = UIColor.iconColorDefault;
                 }
                 else if ([currentItem isKindOfClass:NSString.class])
                 {
@@ -301,7 +302,7 @@
                         item[@"label"] = [OAFileNameTranslationHelper getMapName:fileName];
                         item[@"icon"] = [UIImage imageNamed:@"ic_custom_map"];
                     }
-                    item[@"iconColor"] = UIColorFromRGB(color_tint_gray);
+                    item[@"iconColor"] = UIColor.iconColorDefault;
                     item[@"description"] = @"";
                     item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                 }

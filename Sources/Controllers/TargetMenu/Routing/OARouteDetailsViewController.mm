@@ -217,34 +217,25 @@
 
 - (void) restoreMapViewPort
 {
-    if (_mapView.viewportXScale != kViewportScale)
-        _mapView.viewportXScale = kViewportScale;
-    if (_mapView.viewportYScale != _cachedYViewPort)
-        _mapView.viewportYScale = _cachedYViewPort;
+    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:kViewportScale y:_cachedYViewPort];
 }
 
 - (void) adjustViewPort:(BOOL)landscape
 {
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     if (!self.delegate)
         return;
-    
     if (!landscape)
     {
-        if (self.delegate.isInFullMode && _mapView.viewportYScale != VIEWPORT_FULL_SCALE)
-            _mapView.viewportYScale = VIEWPORT_FULL_SCALE;
-        else if (!self.delegate.isInFullScreenMode && !self.delegate.isInFullMode && _mapView.viewportYScale != VIEWPORT_MINIMIZED_SCALE)
-            _mapView.viewportYScale = VIEWPORT_MINIMIZED_SCALE;
-        
-        if (_mapView.viewportXScale != kViewportScale)
-            _mapView.viewportXScale = kViewportScale;
+        if (self.delegate.isInFullMode)
+            [mapPanel.mapViewController setViewportScaleY:VIEWPORT_FULL_SCALE];
+        else if (!self.delegate.isInFullScreenMode && !self.delegate.isInFullMode)
+            [mapPanel.mapViewController setViewportScaleY:VIEWPORT_MINIMIZED_SCALE];
+        [mapPanel.mapViewController setViewportScaleX:kViewportScale];
     }
     else
     {
-        if (_mapView.viewportYScale != _cachedYViewPort)
-            _mapView.viewportYScale = _cachedYViewPort;
-        
-        if (_mapView.viewportXScale != kViewportBottomScale)
-            _mapView.viewportXScale = kViewportBottomScale;
+        [mapPanel.mapViewController setViewportScaleX:kViewportBottomScale y:_cachedYViewPort];
     }
 }
 

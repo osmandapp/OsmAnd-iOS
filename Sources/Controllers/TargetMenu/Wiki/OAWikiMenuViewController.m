@@ -31,6 +31,8 @@
         self.additionalRows = @[contentRow];
         self.leftControlButton = [[OATargetMenuControlButton alloc] init];
         self.leftControlButton.title = OALocalizedString(@"context_menu_read_article");
+        self.rightControlButton = nil;
+        self.downloadControlButton = nil;
     }
     return self;
 }
@@ -39,11 +41,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (BOOL) hasControlButtons
-{
-    return YES;
 }
 
 - (void) leftControlButtonPressed

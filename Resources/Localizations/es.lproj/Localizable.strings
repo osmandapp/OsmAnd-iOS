@@ -2061,7 +2061,7 @@
 "lang_bs" = "Bosnio";
 "icon_group_industrial" = "Industrial";
 "route_points" = "Puntos de la ruta";
-"distance_moving" = "Distancia recorrida";
+"distance_moving" = "Distancia corregida";
 "lang_af" = "Africaans";
 "lang_vi" = "Vietnamita";
 "lang_hy" = "Armenio";
@@ -3116,7 +3116,7 @@
 "learn_more_about_sensors_link" = "Más información sobre los sensores.";
 
 
-"map_widget_ant_heart_rate" = "Frecuencia cardíaca";
+"map_widget_ant_heart_rate" = "Ritmo cardíaco";
 "ant_plus_open_settings" = "Abrir los ajustes";
 "ant_plus_pair_new_sensor" = "Emparejar el nuevo sensor";
 "external_device_characteristic_total_distance" = "Distancia total";

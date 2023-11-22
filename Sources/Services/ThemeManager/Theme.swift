@@ -47,6 +47,7 @@ extension Theme {
     var viewBgColor: UIColor { getColorTheme(with: UIColor.viewBgColor) }
     var navBarBgColorPrimary: UIColor { getColorTheme(with: UIColor.navBarBgColorPrimary) }
     var navBarTextColorPrimary: UIColor { getColorTheme(with: UIColor.navBarTextColorPrimary) }
+    var groupBgColorSecondary: UIColor { getColorTheme(with: UIColor.groupBgColorSecondary) }
 }
 
 extension Theme {

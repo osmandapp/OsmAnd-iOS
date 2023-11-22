@@ -369,7 +369,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                                              selector:@selector(onLanguageSettingsChange)
                                                  name:kNotificationSettingsLanguageChange
                                                object:nil];
-    
 
     // Create gesture recognizers:
     
@@ -746,18 +745,26 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (void)setViewportScaleX:(double)x y:(double)y
 {
-    _mapView.viewportXScale = x;
-    _mapView.viewportYScale = y;
+    [self setViewportScaleX:x];
+    [self setViewportScaleY:y];
+}
+
+- (void)setViewportScaleX:(double)x
+{
+    if (_mapView.viewportXScale != x && !_isCarPlayActive)
+        _mapView.viewportXScale = x;
+}
+
+- (void)setViewportScaleY:(double)y
+{
+    if (_mapView.viewportYScale != y && !_isCarPlayActive)
+        _mapView.viewportYScale = y;
 }
 
 - (void) setMapPosition:(int)mapPosition
 {
     _mapPosition = mapPosition;
-    
-    if (mapPosition == BOTTOM_CONSTANT && _mapView.viewportYScale != kViewportBottomScale)
-        _mapView.viewportYScale = kViewportBottomScale;
-    else if (mapPosition != BOTTOM_CONSTANT && _mapView.viewportYScale != kViewportScale)
-        _mapView.viewportYScale = kViewportScale;
+    [self setViewportScaleY:mapPosition == BOTTOM_CONSTANT ? kViewportBottomScale : kViewportScale];
 }
 
 - (void) setupMapArrowsLocation

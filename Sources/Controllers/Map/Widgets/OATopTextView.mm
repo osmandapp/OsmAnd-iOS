@@ -543,6 +543,10 @@
             }
         }
     }
+    
+    _shadowButton.accessibilityLabel =  OALocalizedString(@"map_widget_top_text");
+    _shadowButton.accessibilityValue = streetName.text;
+    
     if ([[OARootViewController instance].mapPanel isTopToolbarActive])
     {
         [self updateVisibility:NO];

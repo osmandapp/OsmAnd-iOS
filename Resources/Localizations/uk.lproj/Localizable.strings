@@ -271,7 +271,7 @@
 "mile_per_hour" = "миль/год";
 "int_hour" = "г";
 "int_min" = "хв.";
-"shared_string_sec" = "с";
+"shared_string_sec" = "сек";
 // Map
 "map_inst_det_map_q" = "Встановіть мапу докладного огляду, щоб отримати більше даних про своє місцеперебування.";
 "map_remind" = "нагадати пізніше";

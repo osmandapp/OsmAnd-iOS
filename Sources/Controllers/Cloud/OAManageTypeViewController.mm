@@ -45,6 +45,11 @@
     return _settingsType.title;
 }
 
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
 - (BOOL)isNavbarSeparatorVisible
 {
     return NO;

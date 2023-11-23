@@ -126,6 +126,11 @@
     return @"";
 }
 
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
 #pragma mark - Table data
 
 - (void)generateData

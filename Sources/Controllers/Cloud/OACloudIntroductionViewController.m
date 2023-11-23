@@ -17,75 +17,45 @@
 #import "OAChoosePlanHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
-@interface OACloudIntroductionViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OACloudIntroductionViewController
 {
     NSArray<NSDictionary *> *_data;
-    
     OACloudIntroductionHeaderView *_headerView;
-    CloudIntroductionButtonsView *_cloudIntroductionButtonsView;
 }
+
+#pragma mark - Initialization
+
+- (void)registerNotifications
+{
+    [self addNotification:UIApplicationWillEnterForegroundNotification selector:@selector(onApplicationEnteredForeground)];
+}
+
+#pragma mark - UIViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.backImageButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     
-    [self setUpTableHeaderView];
-    [self generateData];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+    [self setupTableHeaderView];
     self.tableView.tableHeaderView = _headerView;
     self.tableView.backgroundColor = UIColor.groupBgColor;
-    [self configureCloudIntroductionButtonsView];
-}
-
-- (void)configureCloudIntroductionButtonsView
-{
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"CloudIntroductionButtonsView" owner:self options:nil];
-    _cloudIntroductionButtonsView = (CloudIntroductionButtonsView *)nib[0];
-    __weak OACloudIntroductionViewController *weakSelf = self;
-    _cloudIntroductionButtonsView.didRegisterButtonAction = ^{
-        [weakSelf.navigationController pushViewController:[OACloudAccountCreateViewController new] animated:YES];
-    };
-    _cloudIntroductionButtonsView.didLogInButtonAction = ^{
-        [weakSelf.navigationController pushViewController:[OACloudAccountLoginViewController new] animated:YES];
-    };
-    _cloudIntroductionButtonsView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addSubview:_cloudIntroductionButtonsView];
-    [NSLayoutConstraint activateConstraints:@[
-        [_cloudIntroductionButtonsView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],
-        [_cloudIntroductionButtonsView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
-        [_cloudIntroductionButtonsView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
-        [_cloudIntroductionButtonsView.heightAnchor constraintEqualToConstant:132],
-    ]];
-}
-
-- (void)registerNotifications
-{
-    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onApplicationEnteredForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
-}
-
-- (void)onApplicationEnteredForeground
-{
-    [_headerView addAnimatedViews];
+    self.bottomButton.backgroundColor = UIColor.buttonBgColorTertiary;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     [_headerView addAnimatedViews];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
     __weak OACloudIntroductionViewController *weakSelf = self;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [weakSelf setUpTableHeaderView];
+        [weakSelf setupTableHeaderView];
         weakSelf.tableView.tableHeaderView = _headerView;
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [_headerView addAnimatedViews];
@@ -97,17 +67,66 @@
     return UIStatusBarStyleDefault;
 }
 
-- (void)applyLocalization
+#pragma mark - Base setup UI
+
+- (NSString *)getTitle
 {
-    self.titleLabel.text = OALocalizedString(@"osmand_cloud");
+    return OALocalizedString(@"osmand_cloud");
 }
+
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
+{
+    return EOABaseNavbarColorSchemeWhite;
+}
+
+- (NSString *)getTopButtonTitle
+{
+    return OALocalizedString(@"cloud_create_account");
+}
+
+- (NSString *)getBottomButtonTitle
+{
+    return OALocalizedString(@"register_opr_have_account");
+}
+
+- (EOABaseButtonColorScheme)getTopButtonColorScheme
+{
+    return EOABaseButtonColorSchemePurple;
+}
+
+- (EOABaseButtonColorScheme)getBottomButtonColorScheme
+{
+    return EOABaseButtonColorSchemeGraySimple;
+}
+
+- (EOABaseBottomColorScheme)getBottomColorScheme;
+{
+    return EOABaseBottomColorSchemeWhite;
+}
+
+- (BOOL)isNavbarSeparatorVisible
+{
+    return NO;
+}
+
+- (BOOL)isBottomSeparatorVisible
+{
+    return NO;
+}
+
+- (BOOL)useCustomTableViewHeader
+{
+    return YES;
+}
+
+#pragma mark - Table data
 
 - (void)generateData
 {
     _data = @[];
 }
 
-- (void)setUpTableHeaderView
+- (void)setupTableHeaderView
 {
     _headerView = [[OACloudIntroductionHeaderView alloc] init];
     [_headerView setUpViewWithTitle:OALocalizedString(@"osmand_cloud") description:OALocalizedString(@"osmand_cloud_authorize_descr")
@@ -117,48 +136,38 @@
     _headerView.frame = frame;
 }
 
-- (UIColor *)navBarBackgroundColor
+- (void)onApplicationEnteredForeground
 {
-    return UIColor.groupBgColor;
+    [_headerView addAnimatedViews];
 }
 
-- (void)onScrollViewDidScroll:(UIScrollView *)scrollView
-{
-    if (scrollView.contentOffset.y <= -defaultNavBarHeight)
-    {
-        scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x, -defaultNavBarHeight);
-    }
-}
-
-// MARK: UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount:(UITableView *)tableView
 {
     return _data.count;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
     return _data[section][@"sectionHeader"];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+- (NSString *)getTitleForFooter:(NSInteger)section
 {
     return _data[section][@"sectionFooter"];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return ((NSArray *)_data[section][@"rows"]).count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][@"rows"][indexPath.row];
     NSString *cellId = item[@"cellId"];
     if ([cellId isEqualToString:OATitleRightIconCell.getCellIdentifier])
     {
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:OATitleRightIconCell.getCellIdentifier];
+        OATitleRightIconCell* cell = [self.tableView dequeueReusableCellWithIdentifier:OATitleRightIconCell.getCellIdentifier];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
@@ -173,11 +182,21 @@
     return nil;
 }
 
-// MARK: UITableViewDelegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - Selectors
+
+- (void)onTopButtonPressed
+{
+    [self.navigationController pushViewController:[OACloudAccountCreateViewController new] animated:YES];
+}
+
+- (void)onBottomButtonPressed
+{
+    [self.navigationController pushViewController:[OACloudAccountLoginViewController new] animated:YES];
 }
 
 @end

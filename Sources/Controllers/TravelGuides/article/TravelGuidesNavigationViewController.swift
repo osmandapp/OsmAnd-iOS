@@ -127,6 +127,15 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
         fetchData()
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        if selectedItem != nil {
+            navigationItem.leftItemsSupplementBackButton = true
+            navigationController?.navigationBar.topItem?.backButtonTitle = localizedString("shared_string_navigation")
+            navigationItem.setLeftBarButton(nil, animated: false)
+        }
+    }
+    
     override func getTitle() -> String! {
         if let selectedItem {
             return selectedItem.articleId.title
@@ -135,15 +144,11 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
         }
     }
     
-    override func forceShowShevron() -> Bool {
-        selectedItem != nil
-    }
-    
     override func getLeftNavbarButtonTitle() -> String! {
-        if selectedItem != nil {
-            return localizedString("shared_string_navigation")
-        } else {
+        if selectedItem == nil {
             return localizedString("shared_string_close")
+        } else {
+            return nil
         }
     }
     

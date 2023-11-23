@@ -70,6 +70,8 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        navigationItem.leftItemsSupplementBackButton = true
+        navigationController?.navigationBar.topItem?.backButtonTitle = localizedString("shared_string_back")
         screenMode = .popularArticles
         downloadingResources = []
         setupDownloadingCellHelper()
@@ -90,14 +92,6 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
     
     override func getTitle() -> String! {
         localizedString("shared_string_travel_guides")
-    }
-    
-    override func getLeftNavbarButtonTitle() -> String! {
-        localizedString("shared_string_back")
-    }
-    
-    override func forceShowShevron() -> Bool {
-        true
     }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem]! {

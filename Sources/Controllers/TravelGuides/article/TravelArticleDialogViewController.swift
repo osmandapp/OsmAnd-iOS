@@ -102,9 +102,6 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
     var nightMode = false
     var isDownloadNow = false
     
-    var historyArticleIds: [TravelArticleIdentifier] = []
-    var historyLangs: [String] = []
-    
     var gpxFile: OAGPXDocumentAdapter?
     var gpx: OAGPX?
     var isGpxReading = false
@@ -143,6 +140,9 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.leftItemsSupplementBackButton = true
+        navigationController?.navigationBar.topItem?.backButtonTitle = localizedString("shared_string_back")
+        
         setupBottomButtonsView()
         if OAAppSettings.sharedManager().travelGuidesState.wasWatchingGpx {
             restoreState()
@@ -234,14 +234,6 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
         .customLargeTitle
     }
     
-    override func getLeftNavbarButtonTitle() -> String! {
-        return localizedString("shared_string_back")
-    }
-    
-    override func forceShowShevron() -> Bool {
-        return true
-    }
-    
     override func getRightNavbarButtons() -> [UIBarButtonItem]! {
         let languageMenu = OAWikiArticleHelper.createLanguagesMenu(langs, selectedLocale: selectedLang, delegate: self)
         let languageButton = createRightNavbarButton(nil, iconName: "ic_navbar_languge", action: #selector(onLanguagesButtonClicked), menu: languageMenu)
@@ -285,10 +277,6 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
         return [optionsButton, languageButton]
     }
     
-    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        dismiss()
-        return false
-    }
     
     //MARK: Actions
     
@@ -335,7 +323,7 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
         OAAppSettings.sharedManager().showGpx([file], update: true)
         OARootViewController.instance().mapPanel.openTargetView(with: gpx, selectedTab: .pointsTab, selectedStatisticsTab: .overviewTab, openedFromMap: false)
         
-        delegate?.close()
+        navigationController?.popToRootViewController(animated: true)
         dismiss()
     }
     
@@ -348,20 +336,6 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
         let articleName = article.title ?? localizedString("shared_string_article")
         let message = isSaved ? localizedString("article_removed_from_bookmark") : localizedString("article_added_to_bookmark")
         OAUtilities.showToast(nil, details: articleName + message , duration: 4, in: self.view)
-    }
-    
-    override func dismiss() {
-        if !historyArticleIds.isEmpty {
-            self.articleId = historyArticleIds.popLast()
-            self.selectedLang = historyLangs.popLast()
-            populateArticle()
-        } else {
-            super.dismiss()
-        }
-    }
-    
-    override func onLeftNavbarButtonLongtapPressed() {
-        super.dismiss()
     }
     
     func shareArticle() {
@@ -387,8 +361,6 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
             state.selectedLang = selectedLang
             state.langs = langs
             state.nightMode = nightMode
-            state.historyArticleIds = historyArticleIds
-            state.historyLangs = historyLangs
             state.gpxFile = gpxFile
             state.gpx = gpx
         }
@@ -401,8 +373,6 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
             selectedLang = state.selectedLang
             langs = state.langs
             nightMode = state.nightMode
-            historyArticleIds = state.historyArticleIds
-            historyLangs = state.historyLangs
             gpxFile = state.gpxFile
             gpx = state.gpx
             
@@ -609,41 +579,28 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
     }
     
     func openArticleByTitle(title: String, newSelectedLang: String) {
-        if let currentArticleId = articleId {
-            historyArticleIds.append(currentArticleId)
+        if let newArticleId = TravelObfHelper.shared.getArticleId(title: title, lang: newSelectedLang) {
+            let vc = TravelArticleDialogViewController.init(articleId: newArticleId, lang: newSelectedLang)
+            vc.delegate = delegate
+            show(vc)
         }
-        if let currentSelectedLang = selectedLang {
-            historyLangs.append(currentSelectedLang)
-        }
-        articleId = TravelObfHelper.shared.getArticleId(title: title, lang: newSelectedLang)
-        selectedLang = newSelectedLang
-        populateArticle()
     }
     
     func openArticleById(newArticleId: TravelArticleIdentifier, newSelectedLang: String) {
-        if let currentArticleId = articleId {
-            historyArticleIds.append(currentArticleId)
-        }
-        if let currentSelectedLang = selectedLang {
-            historyLangs.append(currentSelectedLang)
-        }
-        articleId = newArticleId
-        selectedLang = newSelectedLang
-        populateArticle()
+        let vc = TravelArticleDialogViewController.init(articleId: newArticleId, lang: newSelectedLang)
+        vc.delegate = delegate
+        show(vc)
     }
     
     
     //MARK: OAWikiLanguagesWebDelegate
     
     func onLocaleSelected(_ locale: String!) {
-        if let currentArticleId = articleId {
-            historyArticleIds.append(currentArticleId)
+        if let articleId {
+            let vc = TravelArticleDialogViewController.init(articleId: articleId, lang: locale)
+            vc.delegate = delegate
+            show(vc)
         }
-        if let currentSelectedLang = selectedLang {
-            historyLangs.append(currentSelectedLang)
-        }
-        selectedLang = locale
-        populateArticle()
     }
     
     func showLocalesVC(_ vc: UIViewController!) {
@@ -661,4 +618,5 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
         self.gpxFile = gpxFile
         updateTrackButton(processing: false, gpxFile: gpxFile)
     }
+    
 }

@@ -400,7 +400,7 @@
 {
     NSString *leftButtonTitle = [self getLeftNavbarButtonTitle];
     UIImage *leftNavbarButtonCustomIcon = [self getCustomIconForLeftNavbarButton];
-    if ((([self isModal] && !leftButtonTitle) || (![self isModal] && leftButtonTitle && leftButtonTitle.length == 0)) && !leftNavbarButtonCustomIcon || [self forceShowShevron])
+    if ((([self isModal] && !leftButtonTitle) || (![self isModal] && leftButtonTitle && leftButtonTitle.length == 0)) && !leftNavbarButtonCustomIcon)
         leftNavbarButtonCustomIcon = [UIImage templateImageNamed:@"ic_navbar_chevron"];
 
     CGFloat freeSpaceForTitle = DeviceScreenWidth - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2;
@@ -439,7 +439,7 @@
         if (isLongTitle && !leftNavbarButtonCustomIcon)
         {
             leftNavbarButtonCustomIcon = [UIImage templateImageNamed:@"ic_navbar_chevron"];
-            freeSpaceForNavbarButton = 30.;
+            freeSpaceForNavbarButton = 0.;
         }
         [leftButton setImage:leftNavbarButtonCustomIcon forState:UIControlStateNormal];
         [leftButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -496,11 +496,6 @@
     {
         [self.navigationItem setRightBarButtonItems:nil animated:YES];
     }
-}
-
-- (BOOL)forceShowShevron
-{
-    return NO;
 }
 
 - (UIBarButtonItem *)createRightNavbarButton:(NSString *)title

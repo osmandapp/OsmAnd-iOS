@@ -83,7 +83,7 @@ final class TravelObfHelper : NSObject {
                     let fileAmenity = foundAmenities[foundAmenitiesIndex]
                     if let file = fileAmenity.file {
                         let amenity = fileAmenity.amenity!
-                        if amenity.name != nil && amenity.name.length > 0 {
+                        if let name = amenity.getName(lang, transliterate: false), name.length > 0 {
                             let routeId = amenity.getAdditionalInfo()[ROUTE_ID] ?? ""
                             if !popularArticles.containsByRouteId(routeId: routeId) {
                                 if let article = cacheTravelArticles(file: file, amenity: amenity, lang: lang!, readPoints: false, callback: nil) {
@@ -235,9 +235,12 @@ final class TravelObfHelper : NSObject {
         
         var res = TravelArticle()
         res.file = file
-        var title = amenity.getNames(lang, defTag: "en").first
-        if title == nil || title!.length == 0 {
-            title = amenity.name
+        var title = amenity.getName(lang, transliterate: false)
+        if title == nil || (title ?? "").isEmpty {
+            title = amenity.getName("en", transliterate: false)
+            if title == nil || (title ?? "").isEmpty {
+                title = amenity.name
+            }
         }
         res.title = title
         res.content = amenity.getDescription(lang)

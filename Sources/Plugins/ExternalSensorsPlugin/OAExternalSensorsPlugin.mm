@@ -25,6 +25,11 @@
 @implementation OAExternalSensorsPlugin
 {
     OACommonBoolean *_lastUsedSensor;
+    OACommonString *_speedSensorWriteToTrackDeviceID;
+    OACommonString *_cadenceSensorWriteToTrackDeviceID;
+    OACommonString *_powerSensorWriteToTrackDeviceID;
+    OACommonString *_heartSensorWriteToTrackDeviceID;
+    OACommonString *_temperatureSensorWriteToTrackDeviceID;
 }
 
 - (instancetype)init
@@ -33,6 +38,13 @@
     if (self)
     {
         _lastUsedSensor = [OACommonBoolean withKey:kLastUsedExternalSensorKey defValue:NO];
+
+        _speedSensorWriteToTrackDeviceID = [OACommonString withKey:@"speed_sensor_write_to_track_device" defValue:@""];
+        _cadenceSensorWriteToTrackDeviceID = [OACommonString withKey:@"cadence_sensor_write_to_track_device" defValue:@""];
+        _powerSensorWriteToTrackDeviceID = [OACommonString withKey:@"power_sensor_write_to_track_device" defValue:@""];
+        _heartSensorWriteToTrackDeviceID = [OACommonString withKey:@"heart_rate_sensor_write_to_track_device" defValue:@""];
+        _temperatureSensorWriteToTrackDeviceID = [OACommonString withKey:@"temperature_sensor_write_to_track_device" defValue:@""];
+
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.heartRate appModes:@[]];
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.bicycleCadence appModes:@[]];
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.bicyclePower appModes:@[]];
@@ -51,7 +63,7 @@
 - (void)disable
 {
     [super disable];
-    [[DeviceHelper shared] disconnectAllDevices];
+    [[OADeviceHelper shared] disconnectAllDevices];
 }
 
 - (void)setEnabled:(BOOL)enabled
@@ -77,6 +89,15 @@
              OAWidgetType.bicycleDistance.id,
              OAWidgetType.bicycleSpeed.id,
              OAWidgetType.temperature.id];
+}
+
+- (NSArray<OAWidgetType *> *)getExternalSensorTrackDataType
+{
+    return @[OAWidgetType.heartRate,
+             OAWidgetType.bicycleCadence,
+             OAWidgetType.bicyclePower,
+             OAWidgetType.bicycleSpeed,
+             OAWidgetType.temperature];
 }
 
 - (void)createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
@@ -107,6 +128,45 @@
 - (NSString *) getDescription
 {
     return OALocalizedString(@"external_sensors_plugin_description");
+}
+
+- (void)attachAdditionalInfoToRecordedTrack:(CLLocation *)location json:(NSMutableData *)json
+{
+    for (OAWidgetType *widgetType in [self getExternalSensorTrackDataType])
+    {
+        [self attachDeviceSensorInfoToRecordedTrack:widgetType json:json];
+    }
+}
+
+- (void)attachDeviceSensorInfoToRecordedTrack:(OAWidgetType *)widgetType json:(NSMutableData *)json
+{
+    OAApplicationMode *selectedAppMode = [[OAAppSettings sharedManager].applicationMode get];
+    OACommonString *deviceIdPref = [self getWriteToTrackDeviceIdPref:widgetType];
+    if (deviceIdPref)
+    {
+        NSString *speedDeviceId = [deviceIdPref get:selectedAppMode];
+        if (speedDeviceId && speedDeviceId.length > 0 && ![speedDeviceId isEqualToString:kDenyWriteSensorDataToTrackKey])
+        {
+            OADevice *device = [[OADeviceHelper shared] getConnectedDevicesForDeviceId:speedDeviceId];
+            if (device)
+                [device writeSensorDataToJsonWithJson:json widgetDataFieldType:widgetType];
+        }
+    }
+}
+
+- (OACommonString *)getWriteToTrackDeviceIdPref:(OAWidgetType *)dataType
+{
+    if ([dataType isEqual:OAWidgetType.bicycleSpeed])
+        return _speedSensorWriteToTrackDeviceID;
+    if ([dataType isEqual:OAWidgetType.bicyclePower])
+        return _powerSensorWriteToTrackDeviceID;
+    if ([dataType isEqual:OAWidgetType.bicycleCadence])
+        return _cadenceSensorWriteToTrackDeviceID;
+    if ([dataType isEqual:OAWidgetType.heartRate])
+        return _heartSensorWriteToTrackDeviceID;
+    if ([dataType isEqual:OAWidgetType.temperature])
+        return _temperatureSensorWriteToTrackDeviceID;
+    return nil;
 }
 
 @end

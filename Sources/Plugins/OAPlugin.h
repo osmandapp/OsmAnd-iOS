@@ -78,6 +78,8 @@
 
 + (NSString *) getAbsoulutePluginPathByRegion:(OAWorldRegion *)region;
 + (OABaseWidgetView *)createMapWidget:(OAWidgetType *)widgetType customId:(NSString *)customId;
+- (void)attachAdditionalInfoToRecordedTrack:(CLLocation *)location json:(NSMutableData *)json;
++ (void)attachAdditionalInfoToRecordedTrack:(CLLocation *)location json:(NSMutableData *)json;
 
 - (void) onInstall;
 - (void) updateLayers;

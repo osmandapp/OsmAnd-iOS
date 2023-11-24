@@ -428,6 +428,14 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return nil;
 }
 
++ (void)attachAdditionalInfoToRecordedTrack:(CLLocation *)location json:(NSMutableData *)json
+{
+    for (OAPlugin *plugin in [self getEnabledPlugins])
+    {
+        [plugin attachAdditionalInfoToRecordedTrack:location json:json];
+    }
+}
+
 /*
 private static void checkMarketPlugin(OsmandApplication app, OsmandPlugin srtm, boolean paid, NSString *id, NSString *id2) {
     boolean marketEnabled = Version.isMarketEnabled(app);

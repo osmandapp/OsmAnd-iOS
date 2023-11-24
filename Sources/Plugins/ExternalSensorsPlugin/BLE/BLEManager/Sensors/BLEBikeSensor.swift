@@ -88,6 +88,38 @@ final class BLEBikeSensor: Sensor {
                                               cadence: cadence)
         debugPrint(lastBikeCadenceData?.description as Any)
     }
+
+    override func writeSensorDataToJson(json: NSMutableData, widgetDataFieldType: WidgetType) {
+        do {
+            let jsonEncoder = JSONEncoder()
+            var data: Data?
+            switch (widgetDataFieldType) {
+            case .bicycleSpeed:
+                if let lastBikeSpeedDistanceData = lastBikeSpeedDistanceData {
+                    data = try jsonEncoder.encode([PointAttributes.sensorTagSpeed: OAOsmAndFormatter.getFormattedSpeed(Float(lastBikeSpeedDistanceData.speed.value))])
+                }
+                break;
+            case .bicycleCadence:
+                if let cadenceData = lastBikeCadenceData {
+                    data = try jsonEncoder.encode([PointAttributes.sensorTagCadence: cadenceData.cadence])
+                }
+                break;
+            case .bicycleDistance:
+                if let lastBikeSpeedDistanceData = lastBikeSpeedDistanceData {
+                    data = try jsonEncoder.encode([PointAttributes.sensorTagDistance: lastBikeSpeedDistanceData.travelDistance])
+                }
+                break;
+            default:
+                break;
+            }
+            if let data = data {
+                json.append(data)
+            }
+        } catch {
+            
+        }
+    }
+
 }
 
 extension BLEBikeSensor {

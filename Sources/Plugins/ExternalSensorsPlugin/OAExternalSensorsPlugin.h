@@ -8,6 +8,13 @@
 
 #import "OAPlugin.h"
 
+#define kDenyWriteSensorDataToTrackKey @"deny_write_sensor_data"
+
+@class OACommonString;
+
 @interface OAExternalSensorsPlugin : OAPlugin
+
+- (NSArray<OAWidgetType *> *)getExternalSensorTrackDataType;
+- (OACommonString *)getWriteToTrackDeviceIdPref:(OAWidgetType *)dataType;
 
 @end

@@ -11,6 +11,7 @@ import SwiftyBluetooth
 import CoreBluetooth
 import OSLog
 
+@objc(OADeviceHelper)
 @objcMembers
 final class DeviceHelper: NSObject {
     static let shared = DeviceHelper()
@@ -41,7 +42,11 @@ final class DeviceHelper: NSObject {
     func getConnectedDevicesForWidget(type: WidgetType) -> [Device]? {
         connectedDevices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
     }
-    
+
+    func getConnectedDevicesFor(deviceId: String) -> Device? {
+        connectedDevices.first { $0.id == deviceId }
+    }
+
     func gatConnectedAndPaireDisconnectedDevicesFor(type: WidgetType) -> [Device]? {
         if let pairedDevices = getSettingsForPairedDevices() {
             let peripherals = SwiftyBluetooth.retrievePeripherals(withUUIDs: pairedDevices.map { UUID(uuidString: $0.deviceId)! })

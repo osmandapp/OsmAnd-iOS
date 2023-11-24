@@ -10,7 +10,7 @@ import Foundation
 
 final class TravelSearchHelper {
     
-    let TIMEOUT_BETWEEN_CHARS: TimeInterval = 700
+    let TIMEOUT_BETWEEN_CHARS: TimeInterval = 700.0
     let SLEEP_TIME: UInt64 = 50
     
     var requestNumber = 0

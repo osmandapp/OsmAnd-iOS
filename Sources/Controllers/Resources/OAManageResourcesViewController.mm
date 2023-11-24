@@ -1198,7 +1198,7 @@ static BOOL _repositoryUpdated = NO;
 
         if (item.title != nil)
         {
-            if ([item.worldRegion.regionId isEqualToString:_travelRegionId])
+            if ([item.worldRegion.regionId isEqualToString:_travelRegionId] && ![item isKindOfClass:OAOutdatedResourceItem.class])
             {
                 [_localTravelItems addObject:item];
             }

@@ -159,7 +159,8 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
 
 + (OAGPXDocument *)loadGpxFile:(NSString *)file
 {
-    return [[OAGPXDocument alloc] initWithGpxDocument:_favoritesCollection->loadFrom(QString::fromNSString(file))];
+    auto collection = std::make_shared<OsmAnd::FavoriteLocationsGpxCollection>();
+    return [[OAGPXDocument alloc] initWithGpxDocument:collection->loadFrom(QString::fromNSString(file))];
 }
 
 + (void)importFavoritesFromGpx:(OAGPXDocument *)gpxFile

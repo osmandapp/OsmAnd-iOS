@@ -88,8 +88,8 @@ QByteArray OAWebClient::downloadData(
                 if (dataRequest.queryController->isAborted())
                 {
                     [task cancel];
-                    if (dataRequest.requestResult)
-                        dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
+
+                    dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
 
                     return QByteArray();
                 }
@@ -105,16 +105,14 @@ QByteArray OAWebClient::downloadData(
         
         if (!response || error)
         {
-            if (dataRequest.requestResult)
-                dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
+            dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
 
             return QByteArray();
         }
         
         res = QByteArray::fromNSData(data);
-        
-        if (dataRequest.requestResult)
-            dataRequest.requestResult.reset(new OAHttpRequestResult(true, responseCode));
+
+        dataRequest.requestResult.reset(new OAHttpRequestResult(true, responseCode));
     }
     return res;
 }
@@ -152,10 +150,9 @@ QString OAWebClient::downloadString(
                 {
                     [task cancel];
                     
-                    if (dataRequest.requestResult)
-                        dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
+                    dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
 
-                    return QString::null;
+                    return QString();
                 }
             }
         }
@@ -164,7 +161,7 @@ QString OAWebClient::downloadString(
             dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
         }
         
-        QString charset = QString::null;
+        QString charset = QString();
         if (response && [response isKindOfClass:[NSHTTPURLResponse class]])
         {
             NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
@@ -188,21 +185,19 @@ QString OAWebClient::downloadString(
         
         if (!response || error)
         {
-            if (dataRequest.requestResult)
-                dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
+            dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
 
-            return QString::null;
+            return QString();
         }
         
-        if (dataRequest.requestResult)
-            dataRequest.requestResult.reset(new OAHttpRequestResult(true, responseCode));
+        dataRequest.requestResult.reset(new OAHttpRequestResult(true, responseCode));
         
         if (!charset.isNull() && charset.contains(QLatin1String("utf-8")))
             return QString::fromUtf8(QByteArray::fromNSData(data));
 
         return QString::fromLocal8Bit(QByteArray::fromNSData(data));
     }
-    return QString::null;
+    return QString();
 }
 
 long long OAWebClient::downloadFile(
@@ -242,8 +237,7 @@ long long OAWebClient::downloadFile(
                 {
                     [task cancel];
 
-                    if (dataRequest.requestResult)
-                        dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
+                    dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
 
                     return result;
                 }
@@ -259,8 +253,7 @@ long long OAWebClient::downloadFile(
 
         if (!response || error)
         {
-            if (dataRequest.requestResult)
-                dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
+            dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
 
             return result;
         }
@@ -275,8 +268,7 @@ long long OAWebClient::downloadFile(
         if (success)
             success = [data writeToFile:name atomically:YES];
         
-        if (dataRequest.requestResult)
-            dataRequest.requestResult.reset(new OAHttpRequestResult(success, responseCode));
+        dataRequest.requestResult.reset(new OAHttpRequestResult(success, responseCode));
         
         if (success)
             result = 1;

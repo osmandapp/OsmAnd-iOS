@@ -47,6 +47,11 @@
     return OALocalizedString(@"coords_format");
 }
 
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
 #pragma mark - Table data
 
 - (void)generateData

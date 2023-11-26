@@ -86,6 +86,11 @@
     return _editMode ? _filter.name : OALocalizedString(@"create_custom_poi");
 }
 
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
 - (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
     return EOABaseNavbarColorSchemeOrange;

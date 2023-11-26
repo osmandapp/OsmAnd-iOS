@@ -116,6 +116,11 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
         : [_group getText];
 }
 
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return _type != EOARouteParamTypeGroup ? OALocalizedString(@"shared_string_cancel") : nil;
+}
+
 - (NSString *)getTableHeaderDescription
 {
     return _isGoodsRestrictionsCategory ? OALocalizedString(@"road_speeds_descr") : @"";

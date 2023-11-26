@@ -9,7 +9,6 @@
 #import "OACloudAccountBaseViewController.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OATableViewCustomHeaderView.h"
 #import "OASimpleTableViewCell.h"
 #import "OAInputTableViewCell.h"
 #import "OAFilledButtonCell.h"
@@ -47,6 +46,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self configureNavigationBar];
     [self generateData];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -65,7 +66,6 @@
     [super viewDidLoad];
     _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(footerButtonPressed)];
     _tapRecognizer.numberOfTapsRequired = 1;
-    [self setupTableHeaderView];
     [self setupTableFooterView];
     [self applyLocalization];
     _inputText = [OAAppSettings.sharedManager.backupUserEmail get];
@@ -73,17 +73,14 @@
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.tableHeaderView = nil;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
-    self.backButton.hidden = YES;
-    self.backImageButton.hidden = NO;
-    [self.backImageButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self setupTableHeaderView];
         [self setupTableFooterView];
         [self generateData];
         [self.tableView reloadData];
@@ -95,10 +92,24 @@
     return UIStatusBarStyleDefault;
 }
 
-- (void) setupTableHeaderView
+- (void)configureNavigationBar
 {
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:[self getTableHeaderTitle] font:kHeaderBigTitleFont textColor:UIColor.textColorPrimary isBigTitle:YES parentViewWidth:self.view.frame.size.width];
-    self.tableView.tableHeaderView.backgroundColor = UIColor.viewBgColor;
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor = self.tableView.backgroundColor;
+    appearance.shadowColor = self.tableView.backgroundColor;
+    appearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.textColorPrimary
+    };
+    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+
+    self.navigationController.navigationBar.standardAppearance = blurAppearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.tintColor = UIColor.textColorActive;
+    self.navigationController.navigationBar.prefersLargeTitles = YES;
+    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeAlways;
 }
 
 - (void) setupTableFooterView
@@ -129,11 +140,6 @@
 
 #pragma mark - Data section
 
-- (NSString *) getTableHeaderTitle
-{
-    return OALocalizedString(@"user_login");
-}
-
 - (NSString *) getTextFieldValue
 {
     return _inputText;
@@ -143,7 +149,6 @@
 {
     _footerFullText = OALocalizedString(@"login_footer_full_text");
     _footerColoredText = OALocalizedString(@"login_footer_email_part");
-    self.titleLabel.text = [self getTableHeaderTitle];
 }
 
 - (void) generateData

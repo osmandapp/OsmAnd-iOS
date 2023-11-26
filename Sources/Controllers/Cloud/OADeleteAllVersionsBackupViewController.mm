@@ -128,15 +128,13 @@
 
 - (NSString *)getLeftNavbarButtonTitle
 {
-    return _screenType == EOARemoveOldVersionsBackupScreenType || _screenType == EOADeleteAllDataConfirmBackupScreenType ? OALocalizedString(@"shared_string_cancel") : @"";
+    return _screenType == EOARemoveOldVersionsBackupScreenType || _screenType == EOADeleteAllDataConfirmBackupScreenType || _screenType  ==  EOADeleteAllDataBackupScreenType ? OALocalizedString(@"shared_string_cancel") : @"";
 }
 
 - (UIImage *)getCustomIconForLeftNavbarButton
 {
     NSString *iconName;
-    if (_screenType == EOADeleteAllDataBackupScreenType)
-        iconName = @"ic_navbar_chevron";
-    else if (_screenType == EOADeleteAllDataProgressBackupScreenType || _screenType == EOARemoveOldVersionsProgressBackupScreenType)
+    if (_screenType == EOADeleteAllDataProgressBackupScreenType || _screenType == EOARemoveOldVersionsProgressBackupScreenType)
         iconName = @"ic_navbar_close";
     return iconName ? [UIImage templateImageNamed:iconName] : nil;
 }

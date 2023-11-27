@@ -41,7 +41,6 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         tableView.delegate = self
         tableView.dataSource = self
         view.backgroundColor = UIColor.viewBgColor
-        
         tableView.contentInset.bottom = 64
     }
     
@@ -54,10 +53,6 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         configureStartState()
         generateData()
         tableView.reloadData()
-    }
-    
-    override func registerObservers() {
-        detectBluetoothState()
     }
     
     override func getTitle() -> String! {
@@ -106,7 +101,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let item = tableData.item(for: indexPath)
-        var outCell: UITableViewCell? = nil
+        var outCell: UITableViewCell?
         if item.cellType == OASimpleTableViewCell.getIdentifier() {
             var cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier()) as? OASimpleTableViewCell
             if cell == nil {
@@ -131,6 +126,8 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
             outCell = cell
         } else if item.cellType == SearchDeviceTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: SearchDeviceTableViewCell.reuseIdentifier) as! SearchDeviceTableViewCell
+            configureSeparator(cell: cell)
+
             if let key = item.key, let item = ExternalSensorsConnectState(rawValue: key) {
                 if let items = sectionsDevicesData[item], items.count > indexPath.row {
                     cell.configure(item: items[indexPath.row])
@@ -174,6 +171,18 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let header = view as? UITableViewHeaderFooterView
+        header?.textLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
+    }
+    
+    private func configureSeparator(cell: UITableViewCell) {
+        // separators go edge to edge
+        cell.separatorInset = .zero
+        cell.layoutMargins = .zero
+        cell.preservesSuperviewLayoutMargins = false
+    }
+    
     private func configureStartState() {
         pairNewSensorButton.isHidden = DeviceHelper.shared.hasPairedDevices
         if !DeviceHelper.shared.hasPairedDevices {
@@ -201,6 +210,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     }
     
     private func detectBluetoothState() {
+        NotificationCenter.default.removeObserver(self)
         NotificationCenter.default.addObserver(forName: Central.CentralStateChange,
                                                object: Central.sharedInstance,
                                                queue: nil) { [weak self] _ in
@@ -277,6 +287,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     }
     
     @objc private func pairNewSensor() {
+        detectBluetoothState()
         let storyboard = UIStoryboard(name: "BLESearchViewController", bundle: nil)
         if let vc = storyboard.instantiateViewController(withIdentifier: "BLESearchViewController") as? BLESearchViewController {
             navigationController?.pushViewController(vc, animated: true)
@@ -323,7 +334,7 @@ extension BLEExternalSensorsViewController {
     
     private func showForgetSensorActionSheet(device: Device) {
         let alert = UIAlertController(title: device.deviceName, message: localizedString("external_device_forget_sensor_description"), preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: localizedString("external_device_forget_sensor"), style: .destructive , handler: {  _ in
+        alert.addAction(UIAlertAction(title: localizedString("external_device_forget_sensor"), style: .destructive, handler: {  _ in
             DeviceHelper.shared.setDevicePaired(device: device, isPaired: false)
             self.configureStartState()
             self.generateData()

@@ -92,7 +92,11 @@ final class SensorTextWidget: OATextInfoWidget {
         settingRow.iconTintColor = UIColor.iconColorDefault
         settingRow.key = "external_sensor_key"
         settingRow.title = localizedString("external_sensors_source_of_data")
-        settingRow.descr = localizedString("shared_string_none")
+        if let sensor = getCurrentSensor() {
+            settingRow.descr = sensor.device.deviceName
+        } else {
+            settingRow.descr = localizedString("shared_string_none")
+        }
 
         return data
     }

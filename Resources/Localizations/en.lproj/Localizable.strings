@@ -3441,53 +3441,6 @@
 "external_device_characteristic_total_distance" = "Total distance";
 
 "wheel_circumference" = "Wheel circumference";
-
-/**
-
- <string name="external_device_low_battery">Low battery</string>
-    <string name="external_device_disconnected">Disconnected</string>
-    <string name="external_device_connected">Connected</string>
-    <string name="external_device_menu_forget">Forget</string>
-    <string name="weather_download_error">Could not download %1$s tiles.</string>
-    <string name="proxy_port_max_warning">Maximum port value is %1$s</string>
-    <string name="external_device_characteristic_speed">Speed</string>
-    <string name="external_device_characteristic_distance">Distance</string>
-    <string name="external_device_characteristic_battery_level">Battery</string>
-    <string name="external_device_characteristic_gear_ratio">Gear ratio</string>
-    <string name="external_device_characteristic_cadence">Cadence</string>
-    <string name="external_device_characteristic_heart_rate">Heart rate</string>
-    <string name="external_device_characteristic_systolic">Systolic</string>
-    <string name="external_device_characteristic_diastolic">Diastolic</string>
-    <string name="external_device_characteristic_arterial_pressure">Arterial pressure</string>
-    <string name="external_device_characteristic_cuff_pressure">Cuff pressure</string>
-    <string name="external_device_characteristic_pulse_rate">Pulse rate</string>
-    <string name="external_device_characteristic_stride_length">Stride length</string>
-    <string name="external_device_characteristic_temperature">Temperature</string>
-    <string name="external_device_details_information">Information</string>
-    <string name="external_device_details_received_data">Received data</string>
-    <string name="external_device_details_connection">Connection</string>
-   
-    <string name="external_device_details_speed">Speed</string>
-    <string name="external_device_details_total_distance">Total distance</string>
-    <string name="external_device_details_distance">Distance</string>
-    <string name="external_device_details_connect">Connect</string>
-    <string name="external_device_details_pair">Pair</string>
-    <string name="external_device_details_disconnect">Disconnect</string>
-    <string name="bluetooth_disconnected">Disconnected, %s</string>
-    <string name="bluetooth_connected">Connected, %s</string>
-    <string name="external_device_ble">BLE</string>
-    <string name="external_device_ant">ANT</string>
-    <string name="bluetooth_found_title">Found: %d</string>
-    <string name="bluetooth_not_supported">Bluetooth not supported</string>
-
-    <string name="ant_plus_nothing_found_text">Unable to find any sensors</string>
-    <string name="ant_plus_nothing_found_description">Make sure:\n– Bluetooth is turned on\n– Sensor is activated\n– This device is located near sensor</string>
-
-    <string name="ant_plus_help_title">I don\’t know what type of sensor I have</string>
-    <string name="ant_plus_pair_new_sensor_ble">Pair Bluetooth LE sensor</string>
-    <string name="ant_plus_pair_new_sensor_ant_plus">Pair ANT+ sensor</string>
- */
-
 "map_orientation_default" = "Same as device";
 "map_orientation_portrait" = "Portrait";
 "map_orientation_landscape" = "Landscape";

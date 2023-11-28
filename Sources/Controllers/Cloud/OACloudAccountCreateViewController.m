@@ -34,6 +34,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.navigationItem.title = OALocalizedString(@"register_opr_create_new_account");
     _continuePressed = NO;
     _backupHelper = OABackupHelper.sharedInstance;
 }
@@ -50,11 +52,6 @@
     [super viewWillDisappear:animated];
     [_backupHelper.backupListeners removeRegisterUserListener:self];
     [_backupHelper.backupListeners removeRegisterDeviceListener:self];
-}
-
-- (NSString *) getTableHeaderTitle
-{
-    return OALocalizedString(@"register_opr_create_new_account");
 }
 
 - (void) generateData

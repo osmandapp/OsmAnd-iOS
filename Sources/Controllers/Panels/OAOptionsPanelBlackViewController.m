@@ -48,6 +48,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonHelp;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonPlugins;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonTravelGuides;
+@property (weak, nonatomic) IBOutlet UIButton *menuButtonExternalSensors;
 
 @end
 
@@ -64,6 +65,10 @@
     CALayer *_menuButtonPluginsDiv;
     CALayer *_menuButtonMapsAndResourcesDiv;
     CALayer *_menuButtonTravelGuidesDiv;
+    CALayer *_menuButtonExternalSensorsDiv;
+    
+    NSArray<CALayer *> *_menuButtonDivArray;
+    NSArray<UIButton *> *_menuButtonsArray;
 
     OAAutoObserverProxy *_weatherChangeObserver;
 }
@@ -90,6 +95,11 @@
     });
 }
 
+- (void)updateMenu
+{
+    [self updateLayout];
+}
+
 - (void) updateLayout
 {
     CGFloat topY = [OAUtilities getStatusBarHeight];
@@ -101,6 +111,13 @@
         _menuButtonWeatherDiv.hidden = NO;
     else
         _menuButtonPlanRouteDiv.hidden = NO;
+    
+    BOOL isExternalSensorsPluginEnabled = [[OAPlugin getPlugin:OAExternalSensorsPlugin.class] isEnabled];
+    
+    if (isExternalSensorsPluginEnabled)
+        _menuButtonExternalSensors.hidden = NO;
+    else
+        _menuButtonTravelGuidesDiv.hidden = NO;
     
     NSMutableArray<UIButton *> *topButtons = [NSMutableArray arrayWithObjects:
                                               self.menuButtonMaps,
@@ -120,6 +137,16 @@
     else
     {
         self.menuButtonWeather.hidden = YES;
+    }
+    
+    if (isExternalSensorsPluginEnabled)
+    {
+        self.menuButtonExternalSensors.hidden = NO;
+        [topButtons addObject:self.menuButtonExternalSensors];
+    }
+    else
+    {
+        self.menuButtonExternalSensors.hidden = YES;
     }
     
     NSArray<UIButton *> *bottomButtons = @[ self.menuButtonConfigureScreen,
@@ -177,48 +204,22 @@
     CGFloat divY = 49.5;
     CGFloat divW = width - 60;
     CGFloat divH = 0.5;
-
-    _menuButtonMapsDiv.frame = CGRectMake(divX, divY, divW, divH);
-    _menuButtonMyDataDiv.frame = CGRectMake(divX, divY, divW, divH);
-    _menuButtonMyWaypointsDiv.frame = CGRectMake(divX, divY, divW, divH);
-    _menuButtonNavigationDiv.frame = CGRectMake(divX, divY, divW, divH);
-    _menuButtonPlanRouteDiv.frame = CGRectMake(divX, divY, divW, divH);
-    _menuButtonWeatherDiv.frame = CGRectMake(divX, divY, divW, divH);
-    _menuButtonMapsAndResourcesDiv.frame = CGRectMake(divX, divY, divW, divH);
-    _menuButtonConfigureScreenDiv.frame = CGRectMake(divX, divY, divW, divH);
-    _menuButtonSettingsDiv.frame = CGRectMake(divX, divY, divW, divH);
-    _menuButtonPluginsDiv.frame = CGRectMake(divX, divY, divW, divH);
-    _menuButtonTravelGuidesDiv.frame = CGRectMake(divX, divY, divW, divH);
+    
+    for (CALayer *item in _menuButtonDivArray) {
+        item.frame = CGRectMake(divX, divY, divW, divH);
+    }
 }
 
 - (void)applyingAppTheme
 {
     UIColor *divColor = UIColor.separatorColor;
-
-    _menuButtonMapsDiv.backgroundColor = divColor.CGColor;
-    _menuButtonMyDataDiv.backgroundColor = divColor.CGColor;
-    _menuButtonMyWaypointsDiv.backgroundColor = divColor.CGColor;
-    _menuButtonNavigationDiv.backgroundColor = divColor.CGColor;
-    _menuButtonPlanRouteDiv.backgroundColor = divColor.CGColor;
-    _menuButtonWeatherDiv.backgroundColor = divColor.CGColor;
-    _menuButtonMapsAndResourcesDiv.backgroundColor = divColor.CGColor;
-    _menuButtonConfigureScreenDiv.backgroundColor = divColor.CGColor;
-    _menuButtonSettingsDiv.backgroundColor = divColor.CGColor;
-    _menuButtonPluginsDiv.backgroundColor = divColor.CGColor;
-    _menuButtonTravelGuidesDiv.backgroundColor = divColor.CGColor;
+    for (CALayer *item in _menuButtonDivArray) {
+        item.backgroundColor = divColor.CGColor;
+    }
     
-    [_menuButtonMaps setTintColor:UIColor.iconColorDefault];
-    [_menuButtonMyData setTintColor:UIColor.iconColorDefault];
-    [_menuButtonMyWaypoints setTintColor:UIColor.iconColorDefault];
-    [_menuButtonMapsAndResources setTintColor:UIColor.iconColorDefault];
-    [_menuButtonConfigureScreen setTintColor:UIColor.iconColorDefault];
-    [_menuButtonSettings setTintColor:UIColor.iconColorDefault];
-    [_menuButtonHelp setTintColor:UIColor.iconColorDefault];
-    [_menuButtonNavigation setTintColor:UIColor.iconColorDefault];
-    [_menuButtonPlanRoute setTintColor:UIColor.iconColorDefault];
-    [_menuButtonWeather setTintColor:UIColor.iconColorDefault];
-    [_menuButtonPlugins setTintColor:UIColor.iconColorDefault];
-    [_menuButtonTravelGuides setTintColor:UIColor.iconColorDefault];
+    for (UIButton *button in _menuButtonsArray) {
+        [button setTintColor:UIColor.iconColorDefault];
+    }
 }
 
 - (void)adjustButtonInsets:(UIButton *)btn
@@ -258,6 +259,7 @@
     [super viewDidLoad];
 
     self.automaticallyAdjustsScrollViewInsets = NO;
+    self.navigationController.delegate = self;
 
     _menuButtonMapsDiv = [[CALayer alloc] init];
     _menuButtonMyDataDiv = [[CALayer alloc] init];
@@ -270,8 +272,34 @@
     _menuButtonSettingsDiv = [[CALayer alloc] init];
     _menuButtonPluginsDiv = [[CALayer alloc] init];
     _menuButtonTravelGuidesDiv = [[CALayer alloc] init];
-
-    self.navigationController.delegate = self;
+    _menuButtonExternalSensorsDiv = [[CALayer alloc] init];
+    
+    _menuButtonDivArray = @[_menuButtonMapsDiv,
+                            _menuButtonMyDataDiv,
+                            _menuButtonMyWaypointsDiv,
+                            _menuButtonNavigationDiv,
+                            _menuButtonPlanRouteDiv,
+                            _menuButtonWeatherDiv,
+                            _menuButtonMapsAndResourcesDiv,
+                            _menuButtonConfigureScreenDiv,
+                            _menuButtonSettingsDiv,
+                            _menuButtonPluginsDiv,
+                            _menuButtonTravelGuidesDiv,
+                            _menuButtonExternalSensorsDiv];
+    
+    _menuButtonsArray = @[_menuButtonMaps,
+                            _menuButtonMyData,
+                            _menuButtonMyWaypoints,
+                            _menuButtonMapsAndResources,
+                            _menuButtonConfigureScreen,
+                            _menuButtonSettings,
+                            _menuButtonHelp,
+                            _menuButtonNavigation,
+                            _menuButtonPlanRoute,
+                            _menuButtonWeather,
+                            _menuButtonPlugins,
+                            _menuButtonTravelGuides,
+                            _menuButtonExternalSensors];
     
     [_menuButtonMaps setTitle:OALocalizedString(@"configure_map") forState:UIControlStateNormal];
     [_menuButtonMyData setTitle:OALocalizedString(@"shared_string_my_places") forState:UIControlStateNormal];
@@ -285,32 +313,12 @@
     [_menuButtonWeather setTitle:OALocalizedString(@"shared_string_weather") forState:UIControlStateNormal];
     [_menuButtonPlugins setTitle:OALocalizedString(@"plugins_menu_group") forState:UIControlStateNormal];
     [_menuButtonTravelGuides setTitle:OALocalizedString(@"travel_guides_beta") forState:UIControlStateNormal];
-
-    _menuButtonMaps.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    _menuButtonMyData.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    _menuButtonMyWaypoints.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    _menuButtonMapsAndResources.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    _menuButtonConfigureScreen.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    _menuButtonSettings.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    _menuButtonHelp.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    _menuButtonNavigation.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    _menuButtonPlanRoute.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    _menuButtonWeather.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    _menuButtonPlugins.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    _menuButtonTravelGuides.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-
-    _menuButtonMaps.titleLabel.adjustsFontForContentSizeCategory = YES;
-    _menuButtonMyData.titleLabel.adjustsFontForContentSizeCategory = YES;
-    _menuButtonMyWaypoints.titleLabel.adjustsFontForContentSizeCategory = YES;
-    _menuButtonMapsAndResources.titleLabel.adjustsFontForContentSizeCategory = YES;
-    _menuButtonConfigureScreen.titleLabel.adjustsFontForContentSizeCategory = YES;
-    _menuButtonSettings.titleLabel.adjustsFontForContentSizeCategory = YES;
-    _menuButtonHelp.titleLabel.adjustsFontForContentSizeCategory = YES;
-    _menuButtonNavigation.titleLabel.adjustsFontForContentSizeCategory = YES;
-    _menuButtonPlanRoute.titleLabel.adjustsFontForContentSizeCategory = YES;
-    _menuButtonWeather.titleLabel.adjustsFontForContentSizeCategory = YES;
-    _menuButtonPlugins.titleLabel.adjustsFontForContentSizeCategory = YES;
-    _menuButtonTravelGuides.titleLabel.adjustsFontForContentSizeCategory = YES;
+    [_menuButtonExternalSensors setTitle:OALocalizedString(@"external_sensors_plugin_name") forState:UIControlStateNormal];
+    
+    for (UIButton *button in _menuButtonsArray) {
+        button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+        button.titleLabel.adjustsFontForContentSizeCategory = YES;
+    }
 
     [_menuButtonMaps.layer addSublayer:_menuButtonMapsDiv];
     [_menuButtonMyData.layer addSublayer:_menuButtonMyDataDiv];
@@ -323,6 +331,7 @@
     [_menuButtonWeather.layer addSublayer:_menuButtonWeatherDiv];
     [_menuButtonPlugins.layer addSublayer:_menuButtonPluginsDiv];
     [_menuButtonTravelGuides.layer addSublayer:_menuButtonTravelGuidesDiv];
+    [_menuButtonExternalSensors.layer addSublayer:_menuButtonExternalSensorsDiv];
     
     [_menuButtonMaps setImage:[UIImage templateImageNamed:@"left_menu_icon_map.png"] forState:UIControlStateNormal];
     [_menuButtonMyData setImage:[UIImage templateImageNamed:@"ic_custom_my_places.png"] forState:UIControlStateNormal];
@@ -335,7 +344,8 @@
     [_menuButtonPlanRoute setImage:[UIImage templateImageNamed:@"ic_custom_routes.png"] forState:UIControlStateNormal];
     [_menuButtonWeather setImage:[UIImage templateImageNamed:@"ic_custom_umbrella.png"] forState:UIControlStateNormal];
     [_menuButtonPlugins setImage:[UIImage templateImageNamed:@"left_menu_icon_plugins"] forState:UIControlStateNormal];
-    [_menuButtonTravelGuides setImage:[UIImage templateImageNamed:@"left_menu_icon_plugins"] forState:UIControlStateNormal];
+    [_menuButtonTravelGuides setImage:[UIImage templateImageNamed:@"ic_custom_backpack"] forState:UIControlStateNormal];
+    [_menuButtonExternalSensors setImage:[UIImage templateImageNamed:@"ic_custom_sensor"] forState:UIControlStateNormal];
     
     [self applyingAppTheme];
 }
@@ -423,6 +433,11 @@
 {
     [self.sidePanelController toggleLeftPanel:self];
     [[OARootViewController instance].mapPanel showTravelGuides];
+}
+
+- (IBAction)externalSensorsButtonClicked:(id)sender
+{
+    [self.navigationController pushViewController:[[UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"BLEExternalSensors"] animated:YES];
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle

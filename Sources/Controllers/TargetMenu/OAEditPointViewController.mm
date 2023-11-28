@@ -305,6 +305,11 @@
     return @"";
 }
 
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
     UIBarButtonItem *rightButton = [self createRightNavbarButton:OALocalizedString(@"shared_string_save")

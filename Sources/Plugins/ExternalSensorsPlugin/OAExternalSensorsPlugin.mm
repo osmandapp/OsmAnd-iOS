@@ -69,6 +69,7 @@
 - (void)setEnabled:(BOOL)enabled
 {
     [super setEnabled:enabled];
+    [[OARootViewController instance] updateLeftPanelMenu];
 }
 
 - (BOOL)isEnabled

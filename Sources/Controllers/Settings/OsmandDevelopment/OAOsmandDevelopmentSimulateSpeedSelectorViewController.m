@@ -112,6 +112,11 @@ NSString *const kUICellKey = @"kUICellKey";
     return OALocalizedString(@"simulate_location_movement_speed");
 }
 
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
 #pragma mark - Table data
 
 - (void) generateData

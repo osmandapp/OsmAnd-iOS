@@ -2096,7 +2096,7 @@
             cell.valueLabel.text = cellData.desc;
             
             if (isWebsite)
-                cell.valueLabel.textColor = UIColor.iconColorActive;
+                cell.valueLabel.textColor = UIColor.textColorActive;
             else
                 cell.valueLabel.textColor = UIColor.textColorSecondary;
 
@@ -2387,8 +2387,8 @@
             cell.buttonRight.imageView.layer.cornerRadius = 12;
             cell.buttonRight.imageView.backgroundColor = [UIColor.iconColorActive colorWithAlphaComponent:0.1];
             cell.buttonRight.tintColor = UIColor.iconColorActive;
-            [cell.buttonRight setTitleColor:UIColor.iconColorActive forState:UIControlStateNormal];
-            [cell.buttonLeft setTitleColor:UIColor.iconColorActive forState:UIControlStateNormal];
+            [cell.buttonRight setTitleColor:UIColor.textColorActive forState:UIControlStateNormal];
+            [cell.buttonLeft setTitleColor:UIColor.textColorActive forState:UIControlStateNormal];
         }
         if (cell)
         {

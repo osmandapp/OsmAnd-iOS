@@ -15,6 +15,7 @@ final class TravelSearchHistoryItem : NSObject {
     var articleFile: String? = ""
     var articleTitle: String = ""
     var lang: String = ""
+    var imageTitle: String? = ""
     var isPartOf: String = ""
     var lastAccessed: TimeInterval = 0
     

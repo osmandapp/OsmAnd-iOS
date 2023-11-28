@@ -34,6 +34,7 @@
 #import "OAMapDownloadController.h"
 #import "OAShareMenuActivity.h"
 #import "OAPOI.h"
+#import "OAWikiMenuViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define kMargin 16.0
@@ -693,10 +694,10 @@ static const NSInteger _buttonsCount = 4;
     else
     {
         _buttonDirectionIcon.image = [UIImage templateImageNamed:@"ic_custom_arrow_direction"];
-        _buttonDirectionIcon.tintColor = UIColor.buttonTextColorSecondary;
+        _buttonDirectionIcon.tintColor = UIColor.iconColorActive;
         _buttonDirectionLabel.text = OALocalizedString(@"map_marker");
         _buttonDirection.accessibilityLabel = OALocalizedString(@"quick_action_add_marker");
-        _buttonDirectionLabel.textColor = UIColor.buttonTextColorSecondary;
+        _buttonDirectionLabel.textColor = UIColor.textColorActive;
     }
     
     if (self.activeTargetType == OATargetGPX)
@@ -730,7 +731,7 @@ static const NSInteger _buttonsCount = 4;
         }
     }
     
-    _buttonFavoriteIcon.tintColor = UIColor.buttonTextColorSecondary;
+    _buttonFavoriteIcon.tintColor = UIColor.iconColorActive;
     
     _imageView.hidden = NO;
     
@@ -1517,7 +1518,7 @@ static const NSInteger _buttonsCount = 4;
         if (hasDownloadControls && needsSecondRow)
             controlButtonsHeight += kButtonsViewHeight;
         
-        if (controlButtonsHeight > 0 && !_showFull && !_showFullScreen && !self.customController.hasBottomToolbar && self.customController.needsAdditionalBottomMargin && !hasDownloadControls && ![self.customController isKindOfClass:OAMapDownloadController.class])
+        if (controlButtonsHeight > 0 && !_showFull && !_showFullScreen && !self.customController.hasBottomToolbar && self.customController.needsAdditionalBottomMargin && !hasDownloadControls && ![self.customController isKindOfClass:OAMapDownloadController.class] && ![self.customController isKindOfClass:OAWikiMenuViewController.class])
             controlButtonsHeight += OAUtilities.getBottomMargin;
     }
     

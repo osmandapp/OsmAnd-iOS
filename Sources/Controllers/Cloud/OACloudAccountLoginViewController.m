@@ -44,6 +44,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.navigationItem.title = OALocalizedString(@"user_login");
     self.lastTimeCodeSent = 0;
     
     _backupHelper = [OABackupHelper sharedInstance];
@@ -65,11 +67,6 @@
 }
 
 #pragma mark - Data section
-
-- (NSString *) getTableHeaderTitle
-{
-    return OALocalizedString(@"user_login");
-}
 
 - (void) generateData
 {

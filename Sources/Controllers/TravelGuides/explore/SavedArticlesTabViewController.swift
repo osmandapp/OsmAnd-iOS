@@ -32,6 +32,7 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.keyboardDismissMode = .onDrag
         startAsyncInit()
     }
     
@@ -183,7 +184,7 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
                 let lang = item.string(forKey: "lang") ?? ""
                 
                 let menuProvider: UIContextMenuActionProvider = { _ in
-                    let readAction = UIAction(title: localizedString("shared_string_read"), image: UIImage(systemName: "newspaper")) { [weak self] _ in
+                    let readAction = UIAction(title: localizedString("shared_string_read"), image: UIImage(named: "ic_custom_file_read")) { [weak self] _ in
                         guard let self else { return }
                         lastSelectedIndexPath = indexPath
                         OAAppSettings.sharedManager().travelGuidesState.article = article
@@ -192,13 +193,13 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
                         vc.delegate = self
                         navigationController?.pushViewController(vc, animated: true)
                     }
-                    let bookmarkAction = UIAction(title: localizedString("shared_string_remove_bookmark"), image: UIImage(systemName: "bookmark")) { [weak self] _ in
+                    let bookmarkAction = UIAction(title: localizedString("shared_string_remove_bookmark"), image: UIImage(named: "ic_custom_bookmark_outlined")) { [weak self] _ in
                         guard let self else { return }
                         TravelObfHelper.shared.getBookmarksHelper().removeArticleFromSaved(article: article)
                         self.generateData()
-                        self.tableView.deleteRows(at: [indexPath], with: .automatic)
+                        self.tableView.reloadData()
                     }
-                    let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: UIImage(named: "ic_travel_guides_points")) { [weak self] _ in
+                    let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: UIImage(named: "ic_custom_point_markers_outlined")) { [weak self] _ in
                         guard let self else { return }
                         self.view.addSpinner(inCenterOfCurrentView: true)
                         OAAppSettings.sharedManager().travelGuidesState.article = nil

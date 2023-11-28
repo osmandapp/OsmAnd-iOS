@@ -8,6 +8,7 @@
 
 #import "OACloudIntroductionHeaderView.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kBorderWidth 2.
 
@@ -82,6 +83,14 @@
     
     _animatedViews = [NSMutableArray array];
     self.titleLabel.font = [UIFont scaledSystemFontOfSize:34. weight:UIFontWeightBold];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        self.bannerMainImageView.layer.borderColor = UIColor.buttonBgColorTertiary.CGColor;
 }
 
 - (CGFloat)getCompoundImageWidth:(NSInteger)count
@@ -163,7 +172,7 @@
     
     // Add border to main image
     self.bannerMainImageView.layer.borderWidth = kBorderWidth;
-    self.bannerMainImageView.layer.borderColor = UIColorFromARGB(color_purple_border).CGColor;
+    self.bannerMainImageView.layer.borderColor = UIColor.buttonBgColorTertiary.CGColor;
 }
 
 - (CGFloat)calculateViewHeight

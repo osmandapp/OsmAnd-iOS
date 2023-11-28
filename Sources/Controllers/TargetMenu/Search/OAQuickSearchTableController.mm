@@ -758,7 +758,7 @@
                 cell = (OARightIconTableViewCell *) nib[0];
                 [cell leftIconVisibility:NO];
                 [cell descriptionVisibility:NO];
-                cell.titleLabel.textColor = UIColor.iconColorActive;
+                cell.titleLabel.textColor = UIColor.textColorActive;
                 cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
                 cell.rightIconView.tintColor = UIColor.iconColorActive;
             }
@@ -803,7 +803,7 @@
                     cell.titleLabel.attributedText = nil;
                     [cell.titleLabel setText:@""];
                 }
-                cell.titleLabel.textColor = UIColor.iconColorActive;
+                cell.titleLabel.textColor = UIColor.textColorActive;
             }
             return cell;
         }

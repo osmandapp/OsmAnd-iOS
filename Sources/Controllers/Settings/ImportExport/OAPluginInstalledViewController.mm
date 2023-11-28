@@ -37,7 +37,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *disableButton;
 @property (weak, nonatomic) IBOutlet UIButton *enableButton;
-@property (weak, nonatomic) IBOutlet UIButton *closeButton;
 
 @end
 
@@ -84,12 +83,12 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 
 - (void)applyLocalization
 {
-    [self.closeButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
     [self.enableButton setTitle:OALocalizedString(@"shared_string_ok") forState:UIControlStateNormal];
     [self.disableButton setTitle:OALocalizedString(@"shared_string_turn_off") forState:UIControlStateNormal];
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad 
+{
     [super viewDidLoad];
     [self setupDownloadingCellHelper];
     
@@ -105,6 +104,35 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 
     self.disableButton.titleLabel.font =  [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
     self.enableButton.titleLabel.font =  [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self configureNavigationBar];
+}
+
+- (void)configureNavigationBar
+{
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor = self.tableView.backgroundColor;
+    appearance.shadowColor = self.tableView.backgroundColor;
+    appearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : UIColor.textColorPrimary
+    };
+    UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
+
+    self.navigationController.navigationBar.standardAppearance = blurAppearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    self.navigationController.navigationBar.tintColor = UIColor.iconColorActive;
+    self.navigationController.navigationBar.prefersLargeTitles = NO;
+    
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_close") style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
+    [self.navigationController.navigationBar.topItem setLeftBarButtonItem:cancelButton animated:YES];
 }
 
 - (NSString *)descriptionText

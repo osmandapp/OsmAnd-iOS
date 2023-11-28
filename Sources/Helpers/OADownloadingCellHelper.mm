@@ -424,7 +424,7 @@
     id<OADownloadTask> task = key;
 
     // Skip all downloads that are not resources
-    if (![task.key hasPrefix:@"resource:"])
+    if (![task.key hasPrefix:@"resource:"] || ![task.key hasSuffix:@"travel.obf"])
         return;
 
     dispatch_async(dispatch_get_main_queue(), ^{

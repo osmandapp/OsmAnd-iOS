@@ -59,7 +59,7 @@
     OAShapesCollectionViewCell* cell = nil;
     cell = (OAShapesCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:[OAShapesCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
     cell.iconImageView.image = [UIImage templateImageNamed:_iconNames[indexPath.row]];
-    cell.iconImageView.tintColor = UIColor.buttonBgColorTertiary;
+    cell.iconImageView.tintColor = UIColor.contextMenuButtonBgColor;
     
     if (indexPath.row == _currentIcon)
     {

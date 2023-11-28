@@ -45,6 +45,11 @@
     return _isAvoid ? OALocalizedString(@"impassable_road") : OALocalizedString(@"prefer_in_routing_title");
 }
 
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
 - (NSString *)getTableHeaderDescription
 {
     return OALocalizedString(@"avoid_in_routing_descr_");

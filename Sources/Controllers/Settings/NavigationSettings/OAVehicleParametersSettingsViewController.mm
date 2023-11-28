@@ -105,7 +105,7 @@
 
 - (NSString *)getLeftNavbarButtonTitle
 {
-    return _isMotorType ? nil : OALocalizedString(@"shared_string_cancel");
+    return OALocalizedString(@"shared_string_cancel");
 }
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons

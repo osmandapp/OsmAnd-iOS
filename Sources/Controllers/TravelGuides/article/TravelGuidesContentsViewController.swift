@@ -61,6 +61,15 @@ final class TravelGuidesContentsViewController : OABaseNavbarViewController {
     
     //MARK: Base UI setup
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        if selectedSubitemIndex != nil {
+            navigationItem.leftItemsSupplementBackButton = true
+            navigationController?.navigationBar.topItem?.backButtonTitle = localizedString("shared_string_contents")
+            navigationItem.setLeftBarButton(nil, animated: false)
+        }
+    }
+    
     override func getTitle() -> String! {
         if let selectedSubitemIndex {
             if let items {
@@ -71,11 +80,11 @@ final class TravelGuidesContentsViewController : OABaseNavbarViewController {
     }
     
     override func getLeftNavbarButtonTitle() -> String! {
-        selectedSubitemIndex != nil ? localizedString("shared_string_contents") : localizedString("shared_string_close")
-    }
-    
-    override func forceShowShevron() -> Bool {
-        selectedSubitemIndex != nil
+        if selectedSubitemIndex == nil {
+            return localizedString("shared_string_close")
+        } else {
+            return nil
+        }
     }
     
     override func onLeftNavbarButtonPressed() {

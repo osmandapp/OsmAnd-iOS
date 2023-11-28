@@ -266,7 +266,7 @@
 "cannot_add_destination" = "Нельзя добавить направление";
 "int_hour" = "час";
 "int_min" = "мин";
-"shared_string_sec" = "с";
+"shared_string_sec" = "сек";
 "cannot_access_calendar" = "Ошибка доступа к календарю";
 "reminder_not_set_text" = "Нельзя установить напоминание, т.к. не разрешён доступ к календарю";
 "buy" = "Купить";
@@ -695,7 +695,7 @@
 "show_traffic_warnings" = "Ограничения скорости";
 "show_lanes" = "Полосы движения";
 "configure_map" = "Настройки карты";
-"int_seconds" = "с";
+"int_seconds" = "сек";
 "settings_preset" = "Профиль по умолчанию";
 "info_button" = "Информация";
 "day_off_label" = "вых.";
@@ -2690,3 +2690,4 @@
 "shared_string_hidden" = "Скрыто";
 "get_osmand_cloud" = "Получить OsmAnd Cloud";
 "shared_string_cache" = "Кеш";
+"add_row" = "Добавить ряд";

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -11,7 +11,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAPluginInstalledViewController">
             <connections>
-                <outlet property="closeButton" destination="kXa-gs-sfl" id="i8K-Od-cxO"/>
                 <outlet property="disableButton" destination="Dv0-uY-UTh" id="tUJ-qc-5wa"/>
                 <outlet property="enableButton" destination="InA-J4-3G9" id="cNw-Zo-otG"/>
                 <outlet property="tableView" destination="047-sX-bmi" id="GUG-p4-FSj"/>
@@ -24,7 +23,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelection="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="18" sectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="047-sX-bmi">
-                    <rect key="frame" x="0.0" y="104" width="414" height="695"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="799"/>
                     <color key="backgroundColor" name="viewBgColor"/>
                     <color key="separatorColor" name="separatorColor"/>
                 </tableView>
@@ -83,39 +82,16 @@
                         <constraint firstAttribute="trailing" secondItem="WqB-Ea-YDl" secondAttribute="trailing" constant="20" id="vW0-h0-52Z"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z1H-Xh-Vqx" userLabel="navBarView">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="104"/>
-                    <color key="backgroundColor" name="viewBgColor"/>
-                </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kXa-gs-sfl">
-                    <rect key="frame" x="20" y="48" width="53" height="56"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="56" id="b6d-sH-jMu"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                    <state key="normal" title="Cancel">
-                        <color key="titleColor" name="textColorActive"/>
-                    </state>
-                    <connections>
-                        <action selector="onLeftNavbarButtonPressed:" destination="-1" eventType="touchUpInside" id="MP8-Hg-eJr"/>
-                    </connections>
-                </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="3w3-gS-5vz"/>
             <color key="backgroundColor" name="viewBgColor"/>
             <constraints>
                 <constraint firstItem="yZg-za-Wl8" firstAttribute="top" secondItem="047-sX-bmi" secondAttribute="bottom" id="0c7-hT-Wm1"/>
-                <constraint firstItem="z1H-Xh-Vqx" firstAttribute="leading" secondItem="mrf-Nc-zcj" secondAttribute="leading" id="3jf-Lw-BUF"/>
                 <constraint firstItem="yZg-za-Wl8" firstAttribute="leading" secondItem="3w3-gS-5vz" secondAttribute="leading" id="BO2-uT-t3P"/>
-                <constraint firstItem="047-sX-bmi" firstAttribute="top" secondItem="kXa-gs-sfl" secondAttribute="bottom" id="Cp5-N9-TIz"/>
                 <constraint firstItem="3w3-gS-5vz" firstAttribute="bottom" secondItem="yZg-za-Wl8" secondAttribute="bottom" constant="10" id="HSS-zI-zRI"/>
-                <constraint firstItem="kXa-gs-sfl" firstAttribute="top" secondItem="3w3-gS-5vz" secondAttribute="top" id="MGh-G1-cob"/>
-                <constraint firstItem="z1H-Xh-Vqx" firstAttribute="top" secondItem="mrf-Nc-zcj" secondAttribute="top" id="MyA-mE-gyB"/>
                 <constraint firstItem="yZg-za-Wl8" firstAttribute="trailing" secondItem="3w3-gS-5vz" secondAttribute="trailing" id="Rok-99-q1R"/>
-                <constraint firstItem="z1H-Xh-Vqx" firstAttribute="trailing" secondItem="mrf-Nc-zcj" secondAttribute="trailing" id="VCk-ht-Nj5"/>
-                <constraint firstItem="kXa-gs-sfl" firstAttribute="leading" secondItem="3w3-gS-5vz" secondAttribute="leading" constant="20" id="WDL-fk-eK7"/>
                 <constraint firstItem="yZg-za-Wl8" firstAttribute="top" secondItem="047-sX-bmi" secondAttribute="bottom" id="ZG0-vh-ouD"/>
-                <constraint firstItem="047-sX-bmi" firstAttribute="top" secondItem="z1H-Xh-Vqx" secondAttribute="bottom" id="b7V-Ta-c4Q"/>
+                <constraint firstItem="047-sX-bmi" firstAttribute="top" secondItem="mrf-Nc-zcj" secondAttribute="top" id="iDO-ZA-cY9"/>
                 <constraint firstItem="047-sX-bmi" firstAttribute="leading" secondItem="mrf-Nc-zcj" secondAttribute="leading" id="iu1-97-N7o"/>
                 <constraint firstItem="047-sX-bmi" firstAttribute="trailing" secondItem="mrf-Nc-zcj" secondAttribute="trailing" id="sSo-KD-uVY"/>
             </constraints>
@@ -137,9 +113,6 @@
         </namedColor>
         <namedColor name="separatorColor">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="textColorActive">
-            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="viewBgColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

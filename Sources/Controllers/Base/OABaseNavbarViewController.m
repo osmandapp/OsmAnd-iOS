@@ -400,7 +400,7 @@
 {
     NSString *leftButtonTitle = [self getLeftNavbarButtonTitle];
     UIImage *leftNavbarButtonCustomIcon = [self getCustomIconForLeftNavbarButton];
-    if ((([self isModal] && !leftButtonTitle) || (![self isModal] && leftButtonTitle && leftButtonTitle.length == 0)) && !leftNavbarButtonCustomIcon || [self forceShowShevron])
+    if ((([self isModal] && !leftButtonTitle) || (![self isModal] && leftButtonTitle && leftButtonTitle.length == 0)) && !leftNavbarButtonCustomIcon)
         leftNavbarButtonCustomIcon = [UIImage templateImageNamed:@"ic_navbar_chevron"];
 
     CGFloat freeSpaceForTitle = DeviceScreenWidth - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2;
@@ -498,11 +498,6 @@
     }
 }
 
-- (BOOL)forceShowShevron
-{
-    return NO;
-}
-
 - (UIBarButtonItem *)createRightNavbarButton:(NSString *)title
                               systemIconName:(NSString *)iconName
                                       action:(SEL)action
@@ -583,7 +578,7 @@
 
 - (UIColor *)getNavbarButtonsTintColor
 {
-    return [self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange ? UIColor.navBarTextColorPrimary : UIColor.textColorActive;
+    return [self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange ? UIColor.navBarTextColorPrimary : UIColor.iconColorActive;
 }
 
 - (UIColor *)getTitleColor

@@ -504,7 +504,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     UIImage *backImage = [UIImage templateImageNamed:@"ic_custom_arrow_back"];
     [self.backButton setImage:isRTL ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                      forState:UIControlStateNormal];
-    self.backButton.imageView.tintColor = UIColor.textColorActive;
+    self.backButton.imageView.tintColor = UIColor.iconColorActive;
     [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
     self.backButton.accessibilityLabel = localizedString(@"shared_string_dismiss");
     backImage = [UIImage templateImageNamed:@"ic_navbar_chevron"];
@@ -797,10 +797,10 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     if (!isAvailable)
         [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Advanced_Widgets];
     self.applyButton.userInteractionEnabled = isAvailable;
-    [self.applyButton setTitleColor:isAvailable ? UIColor.textColorActive : UIColor.textColorSecondary
+    [self.applyButton setTitleColor:isAvailable ? UIColor.iconColorActive : UIColor.textColorSecondary
                            forState:UIControlStateNormal];
     self.applyNavBarButton.userInteractionEnabled = isAvailable;
-    [self.applyNavBarButton setTitleColor:isAvailable ? UIColor.textColorActive : UIColor.textColorSecondary
+    [self.applyNavBarButton setTitleColor:isAvailable ? UIColor.iconColorActive : UIColor.textColorSecondary
                            forState:UIControlStateNormal];
 }
 

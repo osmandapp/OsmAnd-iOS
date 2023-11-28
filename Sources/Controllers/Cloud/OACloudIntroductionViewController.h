@@ -6,11 +6,11 @@
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCloudBackupViewController.h"
+#import "OABaseButtonsViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OACloudIntroductionViewController : OABaseCloudBackupViewController
+@interface OACloudIntroductionViewController : OABaseButtonsViewController
 
 @end
 

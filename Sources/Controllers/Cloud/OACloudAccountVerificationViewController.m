@@ -46,6 +46,13 @@
     return self;
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    self.navigationItem.title = OALocalizedString(@"verification");
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -61,11 +68,6 @@
 }
 
 #pragma mark - Data section
-
-- (NSString *) getTableHeaderTitle
-{
-    return OALocalizedString(@"verification");
-}
 
 - (void) generateData
 {
@@ -104,7 +106,7 @@
     [otherCells addObject:@{
         @"type" : [OAButtonTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"verification_code_missing"),
-        @"color" : UIColor.textColorActive,
+        @"color" : UIColor.iconColorActive,
         @"action" : @"unfoldButtonPressed",
     }];
     

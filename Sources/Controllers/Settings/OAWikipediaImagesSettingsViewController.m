@@ -38,6 +38,11 @@
     return OALocalizedString(@"wikivoyage_download_pics");
 }
 
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
 - (NSString *)getSubtitle
 {
     return @"";

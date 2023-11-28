@@ -291,7 +291,7 @@
             _stateCanceled = YES;
             [UIView animateWithDuration:0.2 animations:^{
                 OAFeatureCardRow *row = self.viewFeatureRowsContainer.subviews[tag];
-                row.backgroundColor = tag == _selectedFeatureIndex ? UIColorFromARGB(color_primary_purple_05) : UIColor.groupBgColor;
+                row.backgroundColor = tag == _selectedFeatureIndex ? UIColor.cellBgColorSelected : UIColor.groupBgColor;
             }                completion:nil];
         }
         else if (state == UIGestureRecognizerStateEnded)
@@ -311,7 +311,7 @@
             }                completion:^(BOOL finished) {
                 [UIView animateWithDuration:0.2 animations:^{
                     OAFeatureCardRow *row = self.viewFeatureRowsContainer.subviews[_selectedFeatureIndex];
-                    row.backgroundColor = UIColorFromARGB(color_primary_purple_05);
+                    row.backgroundColor = UIColor.cellBgColorSelected;
                     NSMutableArray<OAFeature *> *allFeatures = [NSMutableArray arrayWithArray:OAFeature.OSMAND_PRO_FEATURES];
                     [allFeatures removeObject:OAFeature.COMBINED_WIKI];
                     OAFeature *feature = allFeatures[tag];

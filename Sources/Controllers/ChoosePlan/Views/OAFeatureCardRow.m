@@ -118,7 +118,7 @@
 
 - (void)updateInfo:(OAFeature *)feature showDivider:(BOOL)showDivider selected:(BOOL)selected
 {
-    self.backgroundColor = selected && _type == EOAFeatureCardRowPlan ? UIColorFromARGB(color_primary_purple_05) : UIColor.groupBgColor;
+    self.backgroundColor = selected && _type == EOAFeatureCardRowPlan ? UIColor.cellBgColorSelected : UIColor.groupBgColor;
     self.labelTitle.text = [feature getTitle];
     self.imageViewLeftIcon.image = [feature getIcon];
     if (_type == EOAFeatureCardRowPlan)

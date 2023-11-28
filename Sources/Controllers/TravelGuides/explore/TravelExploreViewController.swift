@@ -645,13 +645,13 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                 let lang = item.string(forKey: "lang") ?? ""
                 
                 let menuProvider: UIContextMenuActionProvider = { _ in
-                    let readAction = UIAction(title: localizedString("shared_string_read"), image: UIImage(systemName: "newspaper")) { [weak self] _ in
+                    let readAction = UIAction(title: localizedString("shared_string_read"), image: UIImage(named: "ic_custom_file_read")) { [weak self] _ in
                         guard let self else { return }
                         self.openArticle(article: article, lang: lang)
                     }
                     
                     let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: article)
-                    let bookmarkAction = UIAction(title: localizedString(isSaved ? "shared_string_remove_bookmark" : "shared_string_bookmark"), image: UIImage(systemName: "bookmark")) { [weak self] _ in
+                    let bookmarkAction = UIAction(title: localizedString(isSaved ? "shared_string_remove_bookmark" : "shared_string_bookmark"), image: UIImage(named: "ic_custom_bookmark_outlined")) { [weak self] _ in
                         guard let self else { return }
                         if isSaved {
                             TravelObfHelper.shared.getBookmarksHelper().removeArticleFromSaved(article: article)
@@ -661,7 +661,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                         self.generateData()
                         self.tableView.reloadRows(at: [indexPath], with: .automatic)
                     }
-                    let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: UIImage(named: "ic_travel_guides_points")) { [weak self] _ in
+                    let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: UIImage(named: "ic_custom_point_markers_outlined")) { [weak self] _ in
                         guard let self else { return }
                         self.isPointsReadingMode = true
                         self.view.addSpinner(inCenterOfCurrentView: true)

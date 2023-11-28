@@ -37,7 +37,7 @@
                             <constraint firstItem="Jan-5F-L7o" firstAttribute="trailing" secondItem="lsw-2B-bAC" secondAttribute="trailing" id="tSu-F8-ojl"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Travel guides" image="ic_custom_backpack" id="3ay-iq-gNx"/>
+                    <tabBarItem key="tabBarItem" title="Travel guides" image="ic_tabbar_travel" id="3ay-iq-gNx"/>
                     <connections>
                         <outlet property="tableView" destination="lsw-2B-bAC" id="rnT-bC-wy8"/>
                     </connections>
@@ -298,13 +298,13 @@
         <image name="change_item_color.png" width="25" height="25"/>
         <image name="delete_items.png" width="25" height="25"/>
         <image name="export_items.png" width="25" height="25"/>
-        <image name="ic_custom_backpack" width="30" height="30"/>
         <image name="ic_custom_export.png" width="30" height="30"/>
         <image name="ic_custom_map_pin_outlined.png" width="30" height="30"/>
         <image name="ic_custom_remove.png" width="30" height="30"/>
         <image name="ic_custom_upload_to_openstreetmap_outlined.png" width="30" height="30"/>
         <image name="ic_tabbar_favorites.png" width="31" height="28"/>
         <image name="ic_tabbar_osm_edits.png" width="31" height="28"/>
+        <image name="ic_tabbar_travel" width="31" height="28"/>
         <image name="ic_tabbar_trips.png" width="31" height="28"/>
         <image name="move_items.png" width="25" height="25"/>
         <namedColor name="groupBgColor">

@@ -104,6 +104,10 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let cell = tableView.dequeueReusableCell(withIdentifier: СhoicePairedDeviceTableViewCell.reuseIdentifier) as! СhoicePairedDeviceTableViewCell
+        // separators go edge to edge
+        cell.separatorInset = .zero
+        cell.layoutMargins = .zero
+        cell.preservesSuperviewLayoutMargins = false
         if let devices, devices.count > indexPath.row {
             cell.configure(item: devices[indexPath.row])
         }

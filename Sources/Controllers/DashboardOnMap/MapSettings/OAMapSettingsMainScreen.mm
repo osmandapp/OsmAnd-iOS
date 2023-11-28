@@ -1118,7 +1118,7 @@
             if (indexPath.row > 0)
                 cell.titleLabel.textColor = UIColor.textColorActive;
 
-            cell.rightIconView.tintColor = UIColor.textColorActive;
+            cell.rightIconView.tintColor = UIColor.iconColorActive;
             cell.rightIconView.image = [UIImage templateImageNamed:group.isOpen ? @"ic_custom_arrow_up" : @"ic_custom_arrow_down"];
             if (!group.isOpen && [cell isDirectionRTL])
                 cell.rightIconView.image = cell.rightIconView.image.imageFlippedForRightToLeftLayoutDirection;

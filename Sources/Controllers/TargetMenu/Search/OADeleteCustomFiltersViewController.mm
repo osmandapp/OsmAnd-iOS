@@ -109,7 +109,7 @@
             [cell descriptionVisibility:NO];
             [cell leftEditButtonVisibility:YES];
             cell.delegate = self;
-            cell.titleLabel.textColor = UIColor.iconColorActive;
+            cell.titleLabel.textColor = UIColor.textColorActive;
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
 
             UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];

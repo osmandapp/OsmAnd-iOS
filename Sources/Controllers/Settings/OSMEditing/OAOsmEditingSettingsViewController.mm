@@ -173,7 +173,7 @@
         kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"osm_edits_title"),
         kCellSecondaryIconName : @"ic_custom_folder",
-        kCellIconTintColor : UIColor.textColorActive,
+        kCellIconTintColor : UIColor.iconColorActive,
         @"titleFont" : [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium]
     }];
 }
@@ -203,7 +203,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
-            cell.leftIconView.tintColor = UIColor.textColorActive;
+            cell.leftIconView.tintColor = UIColor.iconColorActive;
         }
         if (cell)
         {

@@ -57,4 +57,6 @@
 
 - (void) openSafariWithURL:(NSString *)urlString;
 
+- (void)updateLeftPanelMenu;
+
 @end

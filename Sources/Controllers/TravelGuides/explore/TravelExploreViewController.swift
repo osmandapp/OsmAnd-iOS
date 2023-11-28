@@ -519,7 +519,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                 cell?.usernameIcon.contentMode = .scaleAspectFit
                 cell?.usernameIcon.image = UIImage.templateImageNamed("ic_custom_user_profile")
                 cell?.usernameIcon.tintColor = UIColor.iconColorActive
-                cell?.usernameLabel.textColor = UIColor.iconColorActive
+                cell?.usernameLabel.textColor = UIColor.textColorActive
             }
             if let cell {
                 cell.arcticleTitle.text = item.title

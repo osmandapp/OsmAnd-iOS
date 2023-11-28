@@ -128,7 +128,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 
     self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.textColorActive;
+    self.navigationController.navigationBar.tintColor = UIColor.iconColorActive;
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_close") style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];

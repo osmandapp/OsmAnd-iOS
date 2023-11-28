@@ -55,9 +55,9 @@
                         <constraint firstAttribute="width" constant="28" id="4JP-dU-dhN"/>
                         <constraint firstAttribute="height" constant="28" id="Qxa-jK-zwB"/>
                     </constraints>
-                    <color key="tintColor" name="textColorActive"/>
+                    <color key="tintColor" name="iconColorActive"/>
                     <state key="normal" image="ic_navbar_chevron.png">
-                        <color key="titleColor" name="textColorActive"/>
+                        <color key="titleColor" name="iconColorActive"/>
                     </state>
                     <connections>
                         <action selector="cancelButtonClicked:" destination="-1" eventType="touchUpInside" id="n9N-Ho-ji5"/>
@@ -93,8 +93,9 @@
                         <constraint firstAttribute="height" constant="23" id="ydi-W7-jTL"/>
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                    <color key="tintColor" name="iconColorActive"/>
                     <state key="normal" title="Save">
-                        <color key="titleColor" name="textColorActive"/>
+                        <color key="titleColor" name="iconColorActive"/>
                     </state>
                     <connections>
                         <action selector="saveButtonClicked:" destination="-1" eventType="touchUpInside" id="9eT-xZ-3SL"/>
@@ -131,11 +132,11 @@
         <namedColor name="groupBgColor">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <namedColor name="iconColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="separatorColor">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="textColorActive">
-            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

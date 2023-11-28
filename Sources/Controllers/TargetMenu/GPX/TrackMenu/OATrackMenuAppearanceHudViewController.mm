@@ -768,7 +768,7 @@
         if (cell)
         {
             cell.titleLabel.text = cellData.title;
-            cell.titleLabel.textColor = UIColor.iconColorActive;
+            cell.titleLabel.textColor = UIColor.textColorActive;
             cell.rightIconView.image = [UIImage templateImageNamed:cellData.rightIconName];
             cell.rightIconView.tintColor = UIColor.iconColorActive;
         }
@@ -1561,7 +1561,7 @@
                     {
                         [self.tableView reloadData];
                         self.doneButton.userInteractionEnabled = YES;
-                        [self.doneButton setTitleColor:UIColor.textColorActive
+                        [self.doneButton setTitleColor:UIColor.iconColorActive
                                               forState:UIControlStateNormal];
                     }
                     completion:nil];

@@ -197,7 +197,7 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
                         guard let self else { return }
                         TravelObfHelper.shared.getBookmarksHelper().removeArticleFromSaved(article: article)
                         self.generateData()
-                        self.tableView.deleteRows(at: [indexPath], with: .automatic)
+                        self.tableView.reloadData()
                     }
                     let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: UIImage(named: "ic_custom_point_markers_outlined")) { [weak self] _ in
                         guard let self else { return }

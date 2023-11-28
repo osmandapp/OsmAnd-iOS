@@ -133,7 +133,7 @@
 
     self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.textColorActive;
+    self.navigationController.navigationBar.tintColor = UIColor.iconColorActive;
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_back") style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];

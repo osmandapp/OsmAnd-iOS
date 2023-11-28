@@ -423,7 +423,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.titleLabel.textColor = UIColor.textColorActive;
-            cell.rightIconView.tintColor = UIColor.textColorActive;
+            cell.rightIconView.tintColor = UIColor.iconColorActive;
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
         if (cell)

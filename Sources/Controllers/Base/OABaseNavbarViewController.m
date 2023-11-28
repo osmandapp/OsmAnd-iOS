@@ -583,7 +583,7 @@
 
 - (UIColor *)getNavbarButtonsTintColor
 {
-    return [self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange ? UIColor.navBarTextColorPrimary : UIColor.textColorActive;
+    return [self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange ? UIColor.navBarTextColorPrimary : UIColor.iconColorActive;
 }
 
 - (UIColor *)getTitleColor

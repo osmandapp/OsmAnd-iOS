@@ -396,7 +396,7 @@
             cell.titleLabel.text = item.title;
             cell.titleLabel.textColor = isClearHistory ? UIColor.buttonBgColorDisruptive : UIColor.textColorActive;
             cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
-            cell.rightIconView.tintColor = isClearHistory ? UIColor.buttonBgColorDisruptive : UIColor.textColorActive;
+            cell.rightIconView.tintColor = isClearHistory ? UIColor.buttonBgColorDisruptive : UIColor.iconColorActive;
         }
         return cell;
     }
@@ -440,7 +440,7 @@
             [cell leftIconVisibility:hasLeftIcon];
             cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:item.iconName] : nil;
             BOOL hasTintColor = item.iconName && item.iconName.length > 0;
-            cell.leftIconView.tintColor = hasTintColor ? [item objForKey:kCellIconTint] : UIColor.textColorActive;
+            cell.leftIconView.tintColor = hasTintColor ? [item objForKey:kCellIconTint] : UIColor.iconColorActive;
         }
         return cell;
     }

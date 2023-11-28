@@ -150,15 +150,15 @@
     self.leftBottomButton.userInteractionEnabled = isSyncing && !isPreparing;
     self.leftBottomButton.hidden = !isSyncing;
     [self.leftBottomButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.leftBottomButton setTintColor:isSyncing && !isPreparing ? UIColor.textColorActive : UIColor.textColorSecondary];
-    [self.leftBottomButton setTitleColor:isSyncing && !isPreparing ? UIColor.textColorActive : UIColor.textColorSecondary
+    [self.leftBottomButton setTintColor:isSyncing && !isPreparing ? UIColor.iconColorActive : UIColor.textColorSecondary];
+    [self.leftBottomButton setTitleColor:isSyncing && !isPreparing ? UIColor.iconColorActive : UIColor.textColorSecondary
                               forState:UIControlStateNormal];
 
     BOOL isEnabled = !isSyncing && !isPreparing && self.rightButtonEnabled;
     self.rightBottomButton.userInteractionEnabled = isEnabled;
     [self.rightBottomButton setTitle:self.rightButtonTitle forState:UIControlStateNormal];
-    [self.rightBottomButton setTintColor:isEnabled ? UIColor.textColorActive : UIColor.textColorSecondary];
-    [self.rightBottomButton setTitleColor:isEnabled ? UIColor.textColorActive : UIColor.textColorSecondary
+    [self.rightBottomButton setTintColor:isEnabled ? UIColor.iconColorActive : UIColor.textColorSecondary];
+    [self.rightBottomButton setTitleColor:isEnabled ? UIColor.iconColorActive : UIColor.textColorSecondary
                                forState:UIControlStateNormal];
 }
 

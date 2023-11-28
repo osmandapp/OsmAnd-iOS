@@ -234,6 +234,13 @@ typedef enum : NSUInteger {
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
+- (void)updateLeftPanelMenu
+{
+    OAOptionsPanelBlackViewController *controller = (OAOptionsPanelBlackViewController *)self.leftPanel;
+    if ([controller respondsToSelector:@selector(updateMenu)])
+       [controller updateMenu];
+}
+
 - (void) handleOsmAndCloudVerification:(NSString *)tokenParam
 {
     OACloudAccountVerificationViewController *verificationVC = [[OACloudAccountVerificationViewController alloc] initWithEmail:OAAppSettings.sharedManager.backupUserEmail.get sourceType:EOACloudScreenSourceTypeSignIn];

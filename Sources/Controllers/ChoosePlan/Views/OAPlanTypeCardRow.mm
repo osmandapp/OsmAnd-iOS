@@ -142,8 +142,10 @@
     {
         self.layer.borderWidth = selected ? 2. : 0.;
         self.layer.borderColor = selected ? UIColor.buttonBgColorPrimary.CGColor : UIColor.clearColor.CGColor;
-        self.imageViewRightIcon.image = [UIImage imageNamed:selected ? @"ic_system_checkbox_selected" : @"ic_custom_checkbox_unselected"];
+        self.imageViewRightIcon.image = selected ? [UIImage imageNamed:@"ic_system_checkbox_selected"] : [UIImage templateImageNamed: @"ic_custom_checkbox_unselected"];
+        self.imageViewRightIcon.tintColor = [UIColor iconColorDefault];
         self.backgroundColor = selected ? UIColor.buttonBgColorTertiary : UIColor.clearColor;
+        self.labelTitle.textColor = selected ? UIColor.buttonTextColorSecondary : UIColor.textColorActive;
     }
 }
 

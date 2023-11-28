@@ -26,7 +26,7 @@
 #import "OAColors.h"
 #import "OAOsmAndFormatter.h"
 #import "OAIndexConstants.h"
-
+#import "OAGPXAppearanceCollection.h"
 #import "OsmAndApp.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -95,6 +95,7 @@
     
     BOOL _isSearchActive;
     BOOL _isFiltered;
+    OAGPXAppearanceCollection *_appearanceCollection;
 }
 
 static UIViewController *parentController;
@@ -113,6 +114,7 @@ static UIViewController *parentController;
 {
     [super viewDidLoad];
 
+    _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     isDecelerating = NO;
     self.sortingType = 0;
     self.view.backgroundColor = [UIColor viewBgColor];
@@ -1887,6 +1889,30 @@ static UIViewController *parentController;
 - (void)onEditorUpdated;
 {
     [self generateData];
+}
+
+- (void)selectColorItem:(OAColorItem *)colorItem
+{
+}
+
+- (OAColorItem *)addAndGetNewColorItem:(UIColor *)color
+{
+    return [_appearanceCollection addNewSelectedColor:color];
+}
+
+- (void)changeColorItem:(OAColorItem *)colorItem withColor:(UIColor *)color
+{
+    [_appearanceCollection changeColor:colorItem newColor:color];
+}
+
+- (OAColorItem *)duplicateColorItem:(OAColorItem *)colorItem
+{
+    return [_appearanceCollection duplicateColor:colorItem];
+}
+
+- (void)deleteColorItem:(OAColorItem *)colorItem
+{
+    [_appearanceCollection deleteColor:colorItem];
 }
 
 #pragma mark - UIDocumentPickerDelegate

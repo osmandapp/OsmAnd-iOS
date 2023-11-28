@@ -37,6 +37,11 @@
 
 #pragma mark - Base UI
 
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
 - (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
     return EOABaseNavbarColorSchemeWhite;

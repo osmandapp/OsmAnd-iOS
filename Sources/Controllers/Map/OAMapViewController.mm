@@ -2364,8 +2364,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (void) updateElevationConfiguration
 {
-    OASRTMPlugin *plugin = (OASRTMPlugin *)[OAPlugin getPlugin:OASRTMPlugin.class];
-    BOOL disableVertexHillshade = plugin && _app.data.terrainType == EOATerrainTypeHillshade;
+    OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPlugin getEnabledPlugin:OASRTMPlugin.class];
+    BOOL disableVertexHillshade = !plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled;
     OsmAnd::ElevationConfiguration elevationConfiguration;
     if (disableVertexHillshade)
     {

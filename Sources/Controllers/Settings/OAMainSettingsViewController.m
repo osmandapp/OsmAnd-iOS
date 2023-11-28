@@ -306,7 +306,7 @@
             cell.descriptionLabel.text = [self getProfileDescription:am];
             cell.contentView.backgroundColor = UIColor.clearColor;
             if ([item[@"isColored"] boolValue])
-                cell.backgroundColor = [UIColorFromRGB(am.getIconColor) colorWithAlphaComponent:0.1];
+                cell.backgroundColor = UIColor.cellBgColorSelected;
             else
                 cell.backgroundColor = UIColor.groupBgColor;
         }

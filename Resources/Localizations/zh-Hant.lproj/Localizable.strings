@@ -1434,7 +1434,7 @@
 "default_speed_setting_title" = "預設速度";
 "save_as_new_track" = "儲存為新軌跡";
 "icon_group_amenity" = "便利設施";
-"reset_plugin_to_default" = "重設外掛程式設定為預設值";
+"reset_plugin_to_default" = "重設所有外掛程式設定為預設值";
 "routing_profile_straightline" = "直線";
 "importing_from" = "正在從 %@ 匯入資料";
 "reorder_profiles" = "編輯設定檔清單";

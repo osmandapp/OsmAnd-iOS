@@ -128,7 +128,7 @@
 
     self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = _isEditing ? UIColor.textColorActive : UIColor.navBarTextColorPrimary;
+    self.navigationController.navigationBar.tintColor = _isEditing ? UIColor.iconColorActive : UIColor.navBarTextColorPrimary;
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
     if (_isEditing)

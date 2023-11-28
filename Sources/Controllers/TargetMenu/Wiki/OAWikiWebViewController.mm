@@ -360,7 +360,7 @@
 
 - (UIColor *)getButtonTintColor:(EOABaseButtonColorScheme)scheme
 {
-    return UIColor.textColorActive;
+    return UIColor.iconColorActive;
 }
 
 - (EOABaseButtonColorScheme)getTopButtonColorScheme

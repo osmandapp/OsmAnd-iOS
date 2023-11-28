@@ -123,10 +123,8 @@
 {
     if (_openFromMap)
         return OALocalizedString(@"shared_string_close");
-    else if (_settingsType == EOAProfileGeneralSettingsAppTheme)
-        return OALocalizedString(@"shared_string_cancel");
     else
-        return nil;
+        return OALocalizedString(@"shared_string_cancel");
 }
 
 #pragma mark - Table data

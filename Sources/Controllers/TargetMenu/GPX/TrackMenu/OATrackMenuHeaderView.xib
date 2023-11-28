@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -160,16 +160,16 @@
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Ev-Ap-uIN" customClass="OAButton">
                             <rect key="frame" x="0.0" y="0.0" width="91" height="57"/>
-                            <color key="backgroundColor" name="buttonBgColorTertiary"/>
+                            <color key="backgroundColor" name="contextMenuButtonBgColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="57" id="v5j-1s-w6D"/>
                             </constraints>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
-                            <color key="tintColor" name="buttonTextColorSecondary"/>
+                            <color key="tintColor" name="iconColorActive"/>
                             <inset key="titleEdgeInsets" minX="-28" minY="28" maxX="0.0" maxY="0.0"/>
                             <inset key="imageEdgeInsets" minX="27" minY="-18" maxX="0.0" maxY="0.0"/>
                             <state key="normal" title="Hide" image="ic_custom_hide.png">
-                                <color key="titleColor" name="buttonTextColorSecondary"/>
+                                <color key="titleColor" name="textColorActive"/>
                             </state>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="boolean" keyPath="centerVertically" value="YES"/>
@@ -180,16 +180,16 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vDF-Mt-jg2" customClass="OAButton">
                             <rect key="frame" x="97" y="0.0" width="91" height="57"/>
-                            <color key="backgroundColor" name="buttonBgColorTertiary"/>
+                            <color key="backgroundColor" name="contextMenuButtonBgColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="57" id="kfs-vL-D2q"/>
                             </constraints>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
-                            <color key="tintColor" name="buttonTextColorSecondary"/>
+                            <color key="tintColor" name="iconColorActive"/>
                             <inset key="titleEdgeInsets" minX="-24" minY="28" maxX="0.0" maxY="0.0"/>
                             <inset key="imageEdgeInsets" minX="35" minY="-18" maxX="0.0" maxY="0.0"/>
                             <state key="normal" title="Appearance" image="ic_custom_appearance.png">
-                                <color key="titleColor" name="buttonTextColorSecondary"/>
+                                <color key="titleColor" name="textColorActive"/>
                             </state>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="boolean" keyPath="centerVertically" value="YES"/>
@@ -200,16 +200,16 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="41j-Jh-0aW" customClass="OAButton">
                             <rect key="frame" x="194" y="0.0" width="91" height="57"/>
-                            <color key="backgroundColor" name="buttonBgColorTertiary"/>
+                            <color key="backgroundColor" name="contextMenuButtonBgColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="57" id="hcS-sK-07n"/>
                             </constraints>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
-                            <color key="tintColor" name="buttonTextColorSecondary"/>
+                            <color key="tintColor" name="iconColorActive"/>
                             <inset key="titleEdgeInsets" minX="-30" minY="28" maxX="0.0" maxY="0.0"/>
                             <inset key="imageEdgeInsets" minX="30" minY="-18" maxX="0.0" maxY="0.0"/>
                             <state key="normal" title="Export" image="ic_custom_export.png">
-                                <color key="titleColor" name="buttonTextColorSecondary"/>
+                                <color key="titleColor" name="textColorActive"/>
                             </state>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="boolean" keyPath="centerVertically" value="YES"/>
@@ -220,16 +220,16 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pbl-cu-esO" customClass="OAButton">
                             <rect key="frame" x="291" y="0.0" width="91" height="57"/>
-                            <color key="backgroundColor" name="buttonBgColorTertiary"/>
+                            <color key="backgroundColor" name="contextMenuButtonBgColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="57" id="Vow-zd-Iwz"/>
                             </constraints>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
-                            <color key="tintColor" name="buttonTextColorSecondary"/>
+                            <color key="tintColor" name="iconColorActive"/>
                             <inset key="titleEdgeInsets" minX="-30" minY="28" maxX="0.0" maxY="0.0"/>
                             <inset key="imageEdgeInsets" minX="30" minY="-18" maxX="0.0" maxY="0.0"/>
                             <state key="normal" title="Navigation" image="ic_custom_navigation.png">
-                                <color key="titleColor" name="buttonTextColorSecondary"/>
+                                <color key="titleColor" name="textColorActive"/>
                             </state>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="boolean" keyPath="centerVertically" value="YES"/>
@@ -308,11 +308,8 @@
         <image name="ic_custom_trip.png" width="30" height="30"/>
         <image name="ic_small_direction.png" width="20" height="20"/>
         <image name="ic_small_map_point.png" width="20" height="20"/>
-        <namedColor name="buttonBgColorTertiary">
-            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="0.15000000596046448" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="buttonTextColorSecondary">
-            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="contextMenuButtonBgColor">
+            <color red="0.93725490196078431" green="0.90980392156862744" blue="0.99215686274509807" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="groupBgColor">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -325,6 +322,9 @@
         </namedColor>
         <namedColor name="separatorColor">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

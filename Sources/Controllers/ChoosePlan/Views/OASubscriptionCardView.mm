@@ -100,8 +100,16 @@
     self.labelDescription.textColor = UIColor.textColorSecondary;
     [self.labelPurchaseDescription setText:OALocalizedString(@"subscription_cancel_description")];
     self.viewChooseSubscriptionButtonsBorder.layer.borderWidth = 1.;
-    self.viewChooseSubscriptionButtonsBorder.layer.borderColor = UIColor.iconColorDefault.CGColor;
+    self.viewChooseSubscriptionButtonsBorder.layer.borderColor = UIColor.buttonBgColorSecondary.CGColor;
     self.viewChooseSubscriptionButtonsBorder.layer.cornerRadius = 9.;
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        self.viewChooseSubscriptionButtonsBorder.layer.borderColor = UIColor.buttonBgColorSecondary.CGColor;
 }
 
 - (BOOL)isProPlan:(OAProduct *)subscription

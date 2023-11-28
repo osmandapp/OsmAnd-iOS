@@ -170,11 +170,9 @@ QByteArray OASQLiteTileSourceMapLayerProvider::downloadTile(
                 if (httpStatus == 404)
                     db->removeTileData(tileId, zoom);
             }
-            dataRequest.requestResult.reset();
             return nullptr;
         }
         db->storeTileData(tileId, zoom, downloadResult, QDateTime::currentMSecsSinceEpoch());
-        dataRequest.requestResult.reset();
         return downloadResult;
     }
     return nullptr;

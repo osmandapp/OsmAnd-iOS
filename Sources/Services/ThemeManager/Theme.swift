@@ -48,6 +48,8 @@ extension Theme {
     var navBarBgColorPrimary: UIColor { getColorTheme(with: UIColor.navBarBgColorPrimary) }
     var navBarTextColorPrimary: UIColor { getColorTheme(with: UIColor.navBarTextColorPrimary) }
     var groupBgColorSecondary: UIColor { getColorTheme(with: UIColor.groupBgColorSecondary) }
+    var cellBgColorSelected: UIColor { getColorTheme(with: UIColor.cellBgColorSelected) }
+    var contextMenuButtonBgColor: UIColor { getColorTheme(with: UIColor.contextMenuButtonBgColor) }
 }
 
 extension Theme {

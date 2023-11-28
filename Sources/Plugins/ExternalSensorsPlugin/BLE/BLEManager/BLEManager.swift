@@ -78,7 +78,6 @@ final class BLEManager {
             case .scanResult(let peripheral, let advertisementData, let RSSI):
                 let rssi = RSSI ?? -1
                 Self.logger.debug("BLEManager -> peripheral identifier: \(peripheral.identifier) RSSI: \(rssi)")
-                // [1816]
                 guard let serviceUUIDs = (advertisementData["kCBAdvDataServiceUUIDs"] as? [CBUUID]), !serviceUUIDs.isEmpty else {
                     Self.logger.error("BLEManager -> serviceUUIDs is empty")
                     return

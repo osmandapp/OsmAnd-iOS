@@ -16,9 +16,9 @@ final class BLEHeartRateSensor: Sensor {
         var widgetFields: [SensorWidgetDataField]? {
             return [SensorWidgetDataField(fieldType: .heartRate,
                                           nameId: localizedString("map_widget_ant_heart_rate"),
-                                          unitNameId: "",
+                                          unitNameId: localizedString("beats_per_minute_short"),
                                           numberValue: nil,
-                                          stringValue: String(heartRate) + " " + localizedString("beats_per_minute_short"))]
+                                          stringValue: String(heartRate))]
         }
         
         func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField? {
@@ -88,11 +88,9 @@ final class BLEHeartRateSensor: Sensor {
         [.heartRate]
     }
     
-    override func getLastSensorDataList() -> [SensorData]? {
-        if let lastHeartRateData {
-            return [lastHeartRateData]
-        }
-        return nil
+    override func getLastSensorDataList(for wiggetType: WidgetType) -> [SensorData]? {
+        guard wiggetType == .heartRate else { return nil }
+        return [lastHeartRateData].compactMap { $0 }
     }
 }
 

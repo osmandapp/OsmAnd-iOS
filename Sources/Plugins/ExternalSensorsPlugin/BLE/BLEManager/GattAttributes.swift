@@ -61,12 +61,11 @@ enum GattAttributes {
     
     
     static let SUPPORTED_SERVICES = [SERVICE_BATTERY,
-                                            SERVICE_RUNNING_SPEED_AND_CADENCE,
-                                            SERVICE_BLOOD_PRESSURE,
-                                            SERVICE_HEART_RATE,
-                                            SERVICE_RUNNING_SPEED_AND_CADENCE,
-                                            SERVICE_CYCLING_SPEED_AND_CADENCE,
-                                            SERVICE_TEMPERATURE
+                                     SERVICE_BLOOD_PRESSURE,
+                                     SERVICE_HEART_RATE,
+                                     SERVICE_RUNNING_SPEED_AND_CADENCE,
+                                     SERVICE_CYCLING_SPEED_AND_CADENCE,
+                                     SERVICE_TEMPERATURE
     ]
     
     static let SUPPORTED_CHARACTERISTICS = [CHARACTERISTIC_CYCLING_SPEED_AND_CADENCE_MEASUREMENT,

@@ -293,6 +293,16 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             @"key" : kWikipediaSettings
         }];
     }
+    OAPlugin *externalSensors = [OAPlugin getEnabledPlugin:OAExternalSensorsPlugin.class];
+    if (externalSensors)
+    {
+        [plugins addObject:@{
+            @"type" : [OASimpleTableViewCell getCellIdentifier],
+            @"title" : externalSensors.getName,
+            @"img" : @"ic_custom_sensor",
+            @"key" : kExternalSensors
+        }];
+    }
     
     if (plugins.count > 0)
     {
@@ -647,7 +657,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             settingsScreen = [[OAOsmandDevelopmentViewController alloc] init];
         else if ([targetScreenKey isEqualToString:kWikipediaSettings])
             settingsScreen = [[OAWikipediaSettingsViewController alloc] initWithAppMode:_appMode];
-
+        else if ([targetScreenKey isEqualToString:kExternalSensors])
+            settingsScreen = [[UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"BLEExternalSensors"];
         if (settingsScreen)
             [self.navigationController pushViewController:settingsScreen animated:YES];
     }

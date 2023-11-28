@@ -24,7 +24,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     
     var widgetType: WidgetType?
     var widget: SensorTextWidget?
-    var onSelectDeviceAction: ((String) -> Void)?
+    var onSelectDeviceAction: ((Device) -> Void)?
     
     private var devices: [Device]?
     
@@ -124,7 +124,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         for (index, item) in devices.enumerated() {
             item.isSelected = index == indexPath.row
         }
-        onSelectDeviceAction?(currentSelectedDevice.id)
+        onSelectDeviceAction?(currentSelectedDevice)
         tableView.reloadData()
     }
     

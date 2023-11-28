@@ -255,7 +255,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                         NSString *deviceId = [deviceIdPref get:self.appMode];
                         if (deviceId.length > 0
                             && ![deviceId isEqualToString:kDenyWriteSensorDataToTrackKey]
-                            && [[OADeviceHelper shared] getConnectedDevicesForDeviceId:deviceId])
+                            && [[OADeviceHelper shared] getConnectedAndPaireDisconnectedDeviceForType:widgetType deviceId:deviceId])
                             devices++;
                     }
                 }

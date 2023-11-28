@@ -50,7 +50,7 @@ class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarViewContro
                 var deviceName: String = localizedString("shared_string_none")
                 var deviceFound = false
                 if deviceId.length > 0 && deviceId != kDenyWriteSensorDataToTrackKey {
-                    if let device: Device = DeviceHelper.shared.getConnectedDevicesFor(deviceId: deviceId) {
+                    if let device: Device = DeviceHelper.shared.getConnectedAndPaireDisconnectedDeviceFor(type:widgetType, deviceId: deviceId) {
                         deviceName = device.deviceName
                         deviceFound = true
                     }
@@ -87,12 +87,12 @@ class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarViewContro
         let item = tableData.item(for: indexPath)
         if let widgetType = item.obj(forKey: "widgetType") as? WidgetType {
             var widget: SensorTextWidget?
-            var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
+            let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
             let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: appMode,
                                                               panel: widgetType.getPanel(),
                                                               filterModes: Int(KWidgetModeAvailable | kWidgetModeEnabled))!
             for widgetInfos in pagedWidgets {
-                if let widget = widget {
+                if widget != nil {
                     break
                 }
                 for widgetInfo in widgetInfos.array as! [MapWidgetInfo] {
@@ -106,8 +106,10 @@ class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarViewContro
             if let controller = storyboard.instantiateViewController(withIdentifier: "BLEPairedSensors") as? BLEPairedSensorsViewController {
                 controller.widgetType = widgetType
                 controller.widget = widget
-                controller.onSelectDeviceAction = { [weak self] id in
-                    self?.updateUI()
+                controller.onSelectDeviceAction = { [weak self] device in
+                    item.descr = device.deviceName
+                    item.iconTintColor = UIColor.iconColorActive
+                    self?.tableView.reloadRows(at: [indexPath], with: .automatic)
                 }
                 self.showModalViewController(controller)
             }

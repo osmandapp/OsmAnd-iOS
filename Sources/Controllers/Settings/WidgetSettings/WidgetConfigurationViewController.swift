@@ -246,11 +246,11 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                     controller.widgetType = widget.widgetType
                     controller.widget = widget
                 }
-                controller.onSelectDeviceAction = { [weak self] id in
+                controller.onSelectDeviceAction = { [weak self] device in
                     guard let self else { return }
                     if isCreateNewAndSimilarAlreadyExist {
                         // Pairing widget with selected device
-                        widgetConfigurationParams?[SensorTextWidget.externalDeviceIdConst] = id
+                        widgetConfigurationParams?[SensorTextWidget.externalDeviceIdConst] = device.id
                     }
                 }
                 navigationController?.pushViewController(controller, animated: true)

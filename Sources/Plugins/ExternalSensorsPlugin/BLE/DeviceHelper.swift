@@ -43,8 +43,8 @@ final class DeviceHelper: NSObject {
         connectedDevices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
     }
 
-    func getConnectedDevicesFor(deviceId: String) -> Device? {
-        connectedDevices.first { $0.id == deviceId }
+    func getConnectedAndPaireDisconnectedDeviceFor(type: WidgetType, deviceId: String) -> Device? {
+        gatConnectedAndPaireDisconnectedDevicesFor(type: type)?.first { $0.id == deviceId }
     }
 
     func gatConnectedAndPaireDisconnectedDevicesFor(type: WidgetType) -> [Device]? {

@@ -56,23 +56,30 @@
 
 - (UICollectionViewCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAShapesCollectionViewCell* cell = nil;
-    cell = (OAShapesCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:[OAShapesCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
-    cell.iconImageView.image = [UIImage templateImageNamed:_iconNames[indexPath.row]];
-    cell.iconImageView.tintColor = UIColor.buttonBgColorTertiary;
-    
-    if (indexPath.row == _currentIcon)
+    OAShapesCollectionViewCell *cell = (OAShapesCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:[OAShapesCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
+    if (!cell)
     {
-        cell.backgroundImageView.hidden = NO;
-        cell.backgroundImageView.image = [UIImage templateImageNamed:_contourIconNames[indexPath.row]];
-        cell.backgroundImageView.tintColor = UIColor.iconColorActive;
-        cell.iconImageView.tintColor = UIColorFromRGB(_currentColor);
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAShapesCollectionViewCell getCellIdentifier]
+                                                     owner:self
+                                                   options:nil];
+        cell = nib[0];
     }
-    else
+    if (cell)
     {
-        cell.backgroundImageView.hidden = YES;
+        cell.iconImageView.image = [UIImage templateImageNamed:_iconNames[indexPath.row]];
+        cell.iconImageView.tintColor = UIColor.buttonBgColorTertiary;
+        if (indexPath.row == _currentIcon)
+        {
+            cell.backgroundImageView.hidden = NO;
+            cell.backgroundImageView.image = [UIImage templateImageNamed:_contourIconNames[indexPath.row]];
+            cell.backgroundImageView.tintColor = UIColor.iconColorActive;
+            cell.iconImageView.tintColor = UIColorFromRGB(_currentColor);
+        }
+        else
+        {
+            cell.backgroundImageView.hidden = YES;
+        }
     }
-    
     return cell;
 }
 

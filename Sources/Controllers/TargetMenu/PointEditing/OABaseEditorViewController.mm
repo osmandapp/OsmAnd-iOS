@@ -355,6 +355,16 @@
     return nil;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+     OATableRowData *item = [self.tableData itemForIndexPath:indexPath];
+     if ([item.cellType isEqualToString:[OAPoiTableViewCell getCellIdentifier]])
+     {
+         OAPoiTableViewCell *poiCell = (OAPoiTableViewCell *) cell;
+         [poiCell updateContentOffsetForce:NO];
+     }
+ }
+
 - (void)onRowSelected:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [self.tableData itemForIndexPath:indexPath];

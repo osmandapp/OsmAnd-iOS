@@ -9,6 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface OAOptionsPanelBlackViewController : UIViewController
-
-
+- (void)updateMenu;
 @end

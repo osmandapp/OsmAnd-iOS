@@ -9,6 +9,7 @@
 #import "OANauticalDepthParametersViewController.h"
 #import "OARightIconTableViewCell.h"
 #import "OAMapStyleSettings.h"
+#import "Localization.h"
 
 @implementation OANauticalDepthParametersViewController
 {
@@ -34,6 +35,11 @@
 - (NSString *)getTitle
 {
     return _parameter.title;
+}
+
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
 }
 
 #pragma mark - Table data

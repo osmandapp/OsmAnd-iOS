@@ -110,8 +110,7 @@ long long OAWeatherWebClient::downloadFile(
                 {
                     [task cancel];
 
-                    if (dataRequest.requestResult)
-                        dataRequest.requestResult.reset(new OAWeatherHttpRequestResult(false, responseCode));
+                    dataRequest.requestResult.reset(new OAWeatherHttpRequestResult(false, responseCode));
 
                     return result;
                 }
@@ -173,8 +172,7 @@ long long OAWeatherWebClient::downloadFile(
                 {
                     [task cancel];
 
-                    if (dataRequest.requestResult)
-                        dataRequest.requestResult.reset(new OAWeatherHttpRequestResult(false, responseCode));
+                    dataRequest.requestResult.reset(new OAWeatherHttpRequestResult(false, responseCode));
 
                     return false;
                 }
@@ -190,8 +188,7 @@ long long OAWeatherWebClient::downloadFile(
 
         if (!response || error)
         {
-            if (dataRequest.requestResult)
-                dataRequest.requestResult.reset(new OAWeatherHttpRequestResult(false, responseCode));
+            dataRequest.requestResult.reset(new OAWeatherHttpRequestResult(false, responseCode));
 
             return result;
         }
@@ -207,8 +204,7 @@ long long OAWeatherWebClient::downloadFile(
             success = [data writeToFile:name atomically:YES];
         data = nil;
 
-        if (dataRequest.requestResult)
-            dataRequest.requestResult.reset(new OAWeatherHttpRequestResult(success, responseCode));
+        dataRequest.requestResult.reset(new OAWeatherHttpRequestResult(success, responseCode));
 
         if (success)
             result = lastModified > 0 ? lastModified : 1;

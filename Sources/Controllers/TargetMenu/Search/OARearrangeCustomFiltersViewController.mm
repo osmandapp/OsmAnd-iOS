@@ -135,6 +135,11 @@
     return OALocalizedString(@"rearrange_categories");
 }
 
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
     return @[[self createRightNavbarButton:OALocalizedString(@"shared_string_done")

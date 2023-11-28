@@ -563,7 +563,6 @@ sk_sp<const SkImage> OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::
                     
                     // Unlock the tile
                     unlockTile(req.tileId, req.zoom);
-                    dataRequest.requestResult.reset();
                     return nullptr;
                 }
                 else
@@ -574,14 +573,12 @@ sk_sp<const SkImage> OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::
                     
                     // Unlock the tile
                     unlockTile(req.tileId, req.zoom);
-                    dataRequest.requestResult.reset();
                     return nullptr;
                 }
             }
         }
         // Unlock the tile
         unlockTile(req.tileId, req.zoom);
-        dataRequest.requestResult.reset();
         return nullptr;
     }
     
@@ -609,8 +606,6 @@ sk_sp<const SkImage> OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::
                   qPrintable(localFile.absoluteFilePath()));
     }
         
-    dataRequest.requestResult.reset();
-
     const auto& geometryTile = readGeometry(localFile, tileId);
 
     QByteArray rawData = QByteArray();

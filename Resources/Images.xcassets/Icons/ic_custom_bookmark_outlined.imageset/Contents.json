@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "point.topleft.filled.down.to.point.bottomright.curvepath.svg",
+      "filename" : "ic_custom_bookmark_outlined.svg",
       "idiom" : "universal"
     }
   ],
@@ -10,6 +10,7 @@
     "version" : 1
   },
   "properties" : {
+    "preserves-vector-representation" : true,
     "template-rendering-intent" : "template"
   }
 }

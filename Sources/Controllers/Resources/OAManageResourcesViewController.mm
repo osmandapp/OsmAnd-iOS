@@ -1198,20 +1198,15 @@ static BOOL _repositoryUpdated = NO;
 
         if (item.title != nil)
         {
-            if ([item.worldRegion.regionId isEqualToString:_travelRegionId])
-            {
-                [_localTravelItems addObject:item];
-            }
-            else
+            if (![item.worldRegion.regionId isEqualToString:_travelRegionId])
             {
                 if (match == self.region)
                     [_localRegionMapItems addObject:item];
                 else
                     [_localResourceItems addObject:item];
-                
-                _outdatedMapsCount++;
-                _totalOutdatedSize += resourceInRepository->packageSize;
             }
+            _outdatedMapsCount++;
+            _totalOutdatedSize += resourceInRepository->packageSize;
         }
     }
 

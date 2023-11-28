@@ -37,7 +37,7 @@
                             <constraint firstItem="Jan-5F-L7o" firstAttribute="trailing" secondItem="lsw-2B-bAC" secondAttribute="trailing" id="tSu-F8-ojl"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Travel guides" image="ic_tabbar_favorites.png" id="3ay-iq-gNx"/>
+                    <tabBarItem key="tabBarItem" title="Travel guides" image="ic_tabbar_travel" id="3ay-iq-gNx"/>
                     <connections>
                         <outlet property="tableView" destination="lsw-2B-bAC" id="rnT-bC-wy8"/>
                     </connections>
@@ -135,7 +135,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1NW-Oo-sgx">
-                                        <rect key="frame" x="212" y="0.0" width="90" height="44"/>
+                                        <rect key="frame" x="211" y="0.0" width="90" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="tintColor" name="iconColorActive"/>
                                         <state key="normal" image="change_item_color.png"/>
@@ -144,7 +144,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J6h-Aw-khC">
-                                        <rect key="frame" x="321" y="0.0" width="93" height="44"/>
+                                        <rect key="frame" x="320" y="0.0" width="94" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                         <color key="tintColor" name="iconColorActive"/>
                                         <state key="normal" image="delete_items.png"/>
@@ -304,6 +304,7 @@
         <image name="ic_custom_upload_to_openstreetmap_outlined.png" width="30" height="30"/>
         <image name="ic_tabbar_favorites.png" width="31" height="28"/>
         <image name="ic_tabbar_osm_edits.png" width="31" height="28"/>
+        <image name="ic_tabbar_travel" width="31" height="28"/>
         <image name="ic_tabbar_trips.png" width="31" height="28"/>
         <image name="move_items.png" width="25" height="25"/>
         <namedColor name="groupBgColor">

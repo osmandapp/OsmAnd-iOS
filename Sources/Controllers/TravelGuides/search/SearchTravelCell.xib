@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,57 +17,48 @@
                 <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <stackView opaque="NO" contentMode="scaleToFill" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="W2d-hG-SRZ">
-                        <rect key="frame" x="20" y="10" width="335" height="50"/>
-                        <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="VA9-NS-sjQ">
-                                <rect key="frame" x="0.0" y="0.0" width="271" height="50"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Minsk" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WOf-0Z-dPy">
-                                        <rect key="frame" x="0.0" y="0.0" width="271" height="34.333333333333336"/>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                        <color key="textColor" name="textColorPrimary"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Minsk region Minsk region Minsk region Minsk region" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kxv-s6-1WP">
-                                        <rect key="frame" x="0.0" y="34.333333333333336" width="271" height="15.666666666666664"/>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                                        <color key="textColor" name="textColorSecondary"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                            </stackView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YIp-rr-3Da">
-                                <rect key="frame" x="287" y="0.0" width="48" height="50"/>
-                                <color key="backgroundColor" name="viewBgColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="48" id="QQ7-CZ-Ea8"/>
-                                    <constraint firstAttribute="height" constant="48" id="rcG-LF-7US"/>
-                                </constraints>
-                            </imageView>
-                        </subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Minsk region Minsk region Minsk region Minsk region" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kxv-s6-1WP">
+                        <rect key="frame" x="20" y="40.666666666666664" width="271" height="15.666666666666664"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                        <color key="textColor" name="textColorSecondary"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YIp-rr-3Da">
+                        <rect key="frame" x="307" y="12" width="48" height="48"/>
+                        <color key="backgroundColor" name="viewBgColor"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="50" id="CVH-hl-X5f"/>
-                            <constraint firstItem="YIp-rr-3Da" firstAttribute="bottom" secondItem="VA9-NS-sjQ" secondAttribute="bottom" id="MWH-kN-QVo"/>
-                            <constraint firstItem="YIp-rr-3Da" firstAttribute="top" secondItem="VA9-NS-sjQ" secondAttribute="top" id="uhP-DD-vu4"/>
-                        </constraints>
-                    </stackView>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_photo" translatesAutoresizingMaskIntoConstraints="NO" id="4QY-5K-Kgq">
-                        <rect key="frame" x="321" y="25" width="20" height="20"/>
-                        <color key="tintColor" name="iconColorDefault"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="20" id="IEn-j8-uZJ"/>
-                            <constraint firstAttribute="width" constant="20" id="Iv9-Dm-rnS"/>
+                            <constraint firstAttribute="width" constant="48" id="QQ7-CZ-Ea8"/>
+                            <constraint firstAttribute="height" constant="48" id="rcG-LF-7US"/>
                         </constraints>
                     </imageView>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_photo" translatesAutoresizingMaskIntoConstraints="NO" id="4QY-5K-Kgq">
+                        <rect key="frame" x="316" y="21" width="30" height="30"/>
+                        <color key="tintColor" name="iconColorSecondary"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="IEn-j8-uZJ"/>
+                            <constraint firstAttribute="width" constant="30" id="Iv9-Dm-rnS"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Minsk" textAlignment="justified" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WOf-0Z-dPy">
+                        <rect key="frame" x="20" y="16" width="271" height="20.666666666666671"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                        <color key="textColor" name="textColorPrimary"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="W2d-hG-SRZ" secondAttribute="trailing" constant="20" id="Icb-1B-qmS"/>
-                    <constraint firstAttribute="bottom" secondItem="W2d-hG-SRZ" secondAttribute="bottom" constant="10" id="Jw5-OA-lrR"/>
-                    <constraint firstItem="4QY-5K-Kgq" firstAttribute="centerX" secondItem="YIp-rr-3Da" secondAttribute="centerX" id="LoQ-DG-Gnx"/>
-                    <constraint firstItem="W2d-hG-SRZ" firstAttribute="leading" secondItem="Rhw-I2-qQR" secondAttribute="leading" constant="20" id="bai-Vo-URf"/>
-                    <constraint firstItem="4QY-5K-Kgq" firstAttribute="centerY" secondItem="YIp-rr-3Da" secondAttribute="centerY" id="lRK-VJ-mqh"/>
-                    <constraint firstItem="W2d-hG-SRZ" firstAttribute="top" secondItem="Rhw-I2-qQR" secondAttribute="top" constant="10" id="uoh-uX-BUe"/>
+                    <constraint firstItem="kxv-s6-1WP" firstAttribute="leading" secondItem="Rhw-I2-qQR" secondAttribute="leading" constant="20" symbolic="YES" id="04u-U1-MRv"/>
+                    <constraint firstAttribute="trailing" secondItem="YIp-rr-3Da" secondAttribute="trailing" constant="20" symbolic="YES" id="4L8-qx-QVX"/>
+                    <constraint firstItem="4QY-5K-Kgq" firstAttribute="centerY" secondItem="YIp-rr-3Da" secondAttribute="centerY" id="5ki-dK-lFf"/>
+                    <constraint firstItem="WOf-0Z-dPy" firstAttribute="leading" secondItem="Rhw-I2-qQR" secondAttribute="leading" constant="20" symbolic="YES" id="DHt-zU-XCF"/>
+                    <constraint firstItem="YIp-rr-3Da" firstAttribute="top" secondItem="Rhw-I2-qQR" secondAttribute="top" constant="12" id="M7u-At-wiq"/>
+                    <constraint firstAttribute="bottom" secondItem="kxv-s6-1WP" secondAttribute="bottom" constant="14" id="WQJ-j2-Sa5"/>
+                    <constraint firstItem="WOf-0Z-dPy" firstAttribute="top" secondItem="Rhw-I2-qQR" secondAttribute="top" constant="16" id="cbw-e9-OeW"/>
+                    <constraint firstItem="YIp-rr-3Da" firstAttribute="leading" secondItem="kxv-s6-1WP" secondAttribute="trailing" constant="16" id="fft-iS-znW"/>
+                    <constraint firstItem="kxv-s6-1WP" firstAttribute="top" secondItem="WOf-0Z-dPy" secondAttribute="bottom" constant="4" id="hQF-Um-rF9"/>
+                    <constraint firstItem="4QY-5K-Kgq" firstAttribute="centerX" secondItem="YIp-rr-3Da" secondAttribute="centerX" id="mzU-bA-ljd"/>
+                    <constraint firstItem="YIp-rr-3Da" firstAttribute="leading" secondItem="WOf-0Z-dPy" secondAttribute="trailing" constant="16" id="rOa-M9-lz5"/>
+                    <constraint firstAttribute="bottom" secondItem="YIp-rr-3Da" secondAttribute="bottom" constant="12" id="zN9-cf-Gil"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
@@ -77,13 +68,13 @@
                 <outlet property="noImageIcon" destination="4QY-5K-Kgq" id="0pY-8Q-oVE"/>
                 <outlet property="titleLabel" destination="WOf-0Z-dPy" id="3fM-ap-Ztw"/>
             </connections>
-            <point key="canvasLocation" x="-5.343511450381679" y="-120.42253521126761"/>
+            <point key="canvasLocation" x="6.8702290076335872" y="-92.253521126760575"/>
         </tableViewCell>
     </objects>
     <resources>
         <image name="ic_custom_photo" width="30" height="30"/>
-        <namedColor name="iconColorDefault">
-            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="iconColorSecondary">
+            <color red="0.64313725490196083" green="0.61568627450980395" blue="0.68627450980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

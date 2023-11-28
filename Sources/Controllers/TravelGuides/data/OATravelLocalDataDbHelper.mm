@@ -16,7 +16,7 @@
 #import <sqlite3.h>
 
 #define kTravlGuidesDbName @"travel_guides.db"
-#define DB_VERSION 8
+#define DB_VERSION 9
 #define DB_NAME @"wikivoyage_local_data"
 #define TEMP_DIR_NAME @"travelguides"
 #define TEMP_GPX_FILE_NAME @"gpx_tempfile.gpx"
@@ -25,6 +25,7 @@
 #define HISTORY_TABLE_NAME @"wikivoyage_search_history"
 #define HISTORY_COL_ARTICLE_TITLE @"article_title"
 #define HISTORY_COL_LANG @"lang"
+#define HISTORY_COL_IMAGE_TITLE @"image_title"
 #define HISTORY_COL_IS_PART_OF @"is_part_of"
 #define HISTORY_COL_LAST_ACCESSED @"last_accessed"
 #define HISTORY_COL_TRAVEL_BOOK @"travel_book"
@@ -229,12 +230,12 @@
 
 + (NSString *) HISTORY_TABLE_CREATE
 {
-    return [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (%@ TEXT, %@ TEXT, %@ TEXT, %@ long, %@ TEXT);", HISTORY_TABLE_NAME, HISTORY_COL_ARTICLE_TITLE, HISTORY_COL_LANG, HISTORY_COL_IS_PART_OF, HISTORY_COL_LAST_ACCESSED, HISTORY_COL_TRAVEL_BOOK];
+    return [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (%@ TEXT, %@ TEXT, %@ TEXT, %@ TEXT, %@ long, %@ TEXT);", HISTORY_TABLE_NAME, HISTORY_COL_ARTICLE_TITLE, HISTORY_COL_LANG, HISTORY_COL_IMAGE_TITLE, HISTORY_COL_IS_PART_OF, HISTORY_COL_LAST_ACCESSED, HISTORY_COL_TRAVEL_BOOK];
 }
 
 + (NSString *) HISTORY_TABLE_SELECT
 {
-    return [NSString stringWithFormat:@"SELECT %@, %@, %@, %@, %@ FROM %@", HISTORY_COL_ARTICLE_TITLE, HISTORY_COL_LANG, HISTORY_COL_IS_PART_OF, HISTORY_COL_LAST_ACCESSED, HISTORY_COL_TRAVEL_BOOK, HISTORY_TABLE_NAME];
+    return [NSString stringWithFormat:@"SELECT %@, %@, %@, %@, %@, %@ FROM %@", HISTORY_COL_ARTICLE_TITLE, HISTORY_COL_LANG, HISTORY_COL_IMAGE_TITLE, HISTORY_COL_IS_PART_OF, HISTORY_COL_LAST_ACCESSED, HISTORY_COL_TRAVEL_BOOK, HISTORY_TABLE_NAME];
 }
 
 + (NSString *) BOOKMARKS_TABLE_CREATE
@@ -295,7 +296,7 @@
         int dbVersion = [self readDBVersion];
         if (dbVersion < DB_VERSION)
         {
-            [self onUpgrade];
+            [self onUpgrade:dbVersion];
         }
     }
 }
@@ -334,9 +335,34 @@
     });
 }
 
-- (void) onUpgrade
+- (void) onUpgrade:(int)dbVersion
 {
     //Add database migrating code here
+    
+    const char *dbpath = [_dbFilePath UTF8String];
+    __block BOOL isError = NO;
+    
+    if (dbVersion < 9)
+    {
+        dispatch_sync(_dbQueue, ^{
+            if (sqlite3_open(dbpath, &_dbInstance) == SQLITE_OK)
+            {
+                char *errMsg;
+                if (sqlite3_exec(_dbInstance, [[NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ TEXT", HISTORY_TABLE_NAME, HISTORY_COL_IMAGE_TITLE] UTF8String], NULL, NULL, &errMsg) != SQLITE_OK)
+                {
+                    NSLog(@"Failed to migrate to 9 version Travel Guides table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
+                    isError = YES;
+                }
+                if (errMsg != NULL)
+                {
+                    sqlite3_free(errMsg);
+                }
+                sqlite3_close(_dbInstance);
+            }
+        });
+    }
+    if (!isError)
+        [self writeDBVersion:9];
 }
 
 - (int) readDBVersion
@@ -392,11 +418,17 @@
                 while (sqlite3_step(statement) == SQLITE_ROW)
                 {
                     OATravelSearchHistoryItem *item = [[OATravelSearchHistoryItem alloc] init];
-                    item.articleTitle = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 0)];
-                    item.lang = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 1)];
-                    item.isPartOf = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 2)];
-                    item.lastAccessed = sqlite3_column_double(statement, 3);
-                    item.articleFile = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 4)];
+                    if (sqlite3_column_text(statement, 0) != nil)
+                        item.articleTitle = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 0)];
+                    if (sqlite3_column_text(statement, 1) != nil)
+                        item.lang = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 1)];
+                    if (sqlite3_column_text(statement, 2) != nil)
+                        item.imageTitle = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 2)];
+                    if (sqlite3_column_text(statement, 3) != nil)
+                        item.isPartOf = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 3)];
+                    item.lastAccessed = sqlite3_column_double(statement, 4);
+                    if (sqlite3_column_text(statement, 5) != nil)
+                        item.articleFile = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 5)];
                     res[[item getKey]] = item;
                 }
                 sqlite3_finalize(statement);
@@ -418,13 +450,14 @@
         if (sqlite3_open(dbpath, &_dbInstance) == SQLITE_OK)
         {
             sqlite3_stmt *statement;
-            const char *add_stmt = [[NSString stringWithFormat:@"INSERT INTO %@ (%@, %@, %@, %@, %@) VALUES (?, ?, ?, ?, ?)", HISTORY_TABLE_NAME, HISTORY_COL_ARTICLE_TITLE, HISTORY_COL_LANG, HISTORY_COL_IS_PART_OF, HISTORY_COL_LAST_ACCESSED, HISTORY_COL_TRAVEL_BOOK] UTF8String];
+            const char *add_stmt = [[NSString stringWithFormat:@"INSERT INTO %@ (%@, %@, %@, %@, %@, %@) VALUES (?, ?, ?, ?, ?, ?)", HISTORY_TABLE_NAME, HISTORY_COL_ARTICLE_TITLE, HISTORY_COL_LANG, HISTORY_COL_IMAGE_TITLE, HISTORY_COL_IS_PART_OF, HISTORY_COL_LAST_ACCESSED, HISTORY_COL_TRAVEL_BOOK] UTF8String];
             sqlite3_prepare_v2(_dbInstance, add_stmt, -1, &statement, NULL);
             sqlite3_bind_text(statement, 1, [item.articleTitle UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_bind_text(statement, 2, [item.lang UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 3, [item.isPartOf UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_double(statement, 4, item.lastAccessed);
-            sqlite3_bind_text(statement, 5, [travelBook UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 3, [item.imageTitle UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 4, [item.isPartOf UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_double(statement, 5, item.lastAccessed);
+            sqlite3_bind_text(statement, 6, [travelBook UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_step(statement);
             sqlite3_finalize(statement);
             sqlite3_close(_dbInstance);
@@ -443,13 +476,14 @@
         if (sqlite3_open(dbpath, &_dbInstance) == SQLITE_OK)
         {
             sqlite3_stmt *statement;
-            const char *stmt = [[NSString stringWithFormat:@"UPDATE %@ SET %@ = ?, %@ = ? WHERE %@ = ? AND %@ = ? AND %@ = ?", HISTORY_TABLE_NAME, HISTORY_COL_IS_PART_OF, HISTORY_COL_LAST_ACCESSED, HISTORY_COL_ARTICLE_TITLE, HISTORY_COL_LANG, HISTORY_COL_TRAVEL_BOOK] UTF8String];
+            const char *stmt = [[NSString stringWithFormat:@"UPDATE %@ SET %@ = ?, %@ = ?, %@ = ?  WHERE %@ = ? AND %@ = ? AND %@ = ?", HISTORY_TABLE_NAME, HISTORY_COL_IS_PART_OF, HISTORY_COL_LAST_ACCESSED, HISTORY_COL_IMAGE_TITLE, HISTORY_COL_ARTICLE_TITLE, HISTORY_COL_LANG, HISTORY_COL_TRAVEL_BOOK] UTF8String];
             sqlite3_prepare_v2(_dbInstance, stmt, -1, &statement, NULL);
             sqlite3_bind_text(statement, 1, [item.isPartOf UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_bind_double(statement, 2, item.lastAccessed);
-            sqlite3_bind_text(statement, 3, [item.articleTitle UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 4, [item.lang UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 5, [travelBook UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 3, [item.imageTitle UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 4, [item.articleTitle UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 5, [item.lang UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 6, [travelBook UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_step(statement);
             sqlite3_finalize(statement);
             sqlite3_close(_dbInstance);
@@ -625,10 +659,6 @@
 
 - (void) removeSavedArticle:(OATravelArticle *)article
 {
-    NSString *travelBook = [article getTravelBook];
-    if (!travelBook)
-        return;
-    
     //Delete in callback
     OARemoveArticleGpxReader *gpxReader = [[OARemoveArticleGpxReader alloc] init];
     gpxReader.dbInstance = _dbInstance;

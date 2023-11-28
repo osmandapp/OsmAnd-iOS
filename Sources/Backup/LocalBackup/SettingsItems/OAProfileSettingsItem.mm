@@ -254,35 +254,35 @@
 
 - (void)apply
 {
-    if (!_appMode.isCustomProfile && !self.shouldReplace)
-    {
-        OAApplicationMode *parent = [OAApplicationMode valueOfStringKey:_modeBean.stringKey def:nil];
-        [self renameProfile];
-        OAApplicationModeBuilder *builder = [OAApplicationMode createCustomMode:parent stringKey:_modeBean.stringKey];
-        [builder setIconResName:_modeBean.iconName];
-        [builder setUserProfileName:_modeBean.userProfileName];
-        [builder setDerivedProfile:_modeBean.derivedProfile];
-        [builder setRoutingProfile:_modeBean.routingProfile];
-        [builder setRouteService:_modeBean.routeService];
-        [builder setIconColor:_modeBean.iconColor];
-        [builder setLocationIcon:_modeBean.locIcon];
-        [builder setNavigationIcon:_modeBean.navIcon];
-//        app.getSettings().copyPreferencesFromProfile(parent, builder.getApplicationMode());
-        _appMode = [OAApplicationMode saveProfile:builder];
-    }
-    else if (!self.shouldReplace && [self exists])
-    {
-        [self renameProfile];
-        _builder = [OAApplicationMode fromModeBean:_modeBean];
-        _appMode = [OAApplicationMode saveProfile:_builder];
-    }
-    else
-    {
-        _builder = [OAApplicationMode fromModeBean:_modeBean];
-        _appMode = [OAApplicationMode saveProfile:_builder];
-    }
     @synchronized(self.class)
     {
+        if (!_appMode.isCustomProfile && !self.shouldReplace)
+        {
+            OAApplicationMode *parent = [OAApplicationMode valueOfStringKey:_modeBean.stringKey def:nil];
+            [self renameProfile];
+            OAApplicationModeBuilder *builder = [OAApplicationMode createCustomMode:parent stringKey:_modeBean.stringKey];
+            [builder setIconResName:_modeBean.iconName];
+            [builder setUserProfileName:_modeBean.userProfileName];
+            [builder setDerivedProfile:_modeBean.derivedProfile];
+            [builder setRoutingProfile:_modeBean.routingProfile];
+            [builder setRouteService:_modeBean.routeService];
+            [builder setIconColor:_modeBean.iconColor];
+            [builder setLocationIcon:_modeBean.locIcon];
+            [builder setNavigationIcon:_modeBean.navIcon];
+            //        app.getSettings().copyPreferencesFromProfile(parent, builder.getApplicationMode());
+            _appMode = [OAApplicationMode saveProfile:builder];
+        }
+        else if (!self.shouldReplace && [self exists])
+        {
+            [self renameProfile];
+            _builder = [OAApplicationMode fromModeBean:_modeBean];
+            _appMode = [OAApplicationMode saveProfile:_builder];
+        }
+        else
+        {
+            _builder = [OAApplicationMode fromModeBean:_modeBean];
+            _appMode = [OAApplicationMode saveProfile:_builder];
+        }
         [OAApplicationMode changeProfileAvailability:_appMode isSelected:YES];
     }
 }

@@ -115,24 +115,32 @@ body {
 
 .title-image {
     width: 100%;
-    height: 30%;
+    max-height: 30vh;
     background: center;
     background-size: 100%;
     background-size: cover;
     background-repeat: no-repeat;
     background-color: #f2f2f2;
     background-color: var(--topbar-bg-color-day);
+    display: flex;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
 }
 
 .title-image.nightmode {
     width: 100%;
-    height: 30%;
+    max-height: 30vh;
     background: center;
     background-size: 100%;
     background-size: cover;
     background-repeat: no-repeat;
     background-color:#222526;
     background-color: var(--topbar-bg-color-day);
+    display: flex;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
 }
 
 h1 {

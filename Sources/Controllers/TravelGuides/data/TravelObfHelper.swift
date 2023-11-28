@@ -83,7 +83,7 @@ final class TravelObfHelper : NSObject {
                     let fileAmenity = foundAmenities[foundAmenitiesIndex]
                     if let file = fileAmenity.file {
                         let amenity = fileAmenity.amenity!
-                        if amenity.name != nil && amenity.name.length > 0 {
+                        if let name = amenity.getName(lang, transliterate: false), name.length > 0 {
                             let routeId = amenity.getAdditionalInfo()[ROUTE_ID] ?? ""
                             if !popularArticles.containsByRouteId(routeId: routeId) {
                                 if let article = cacheTravelArticles(file: file, amenity: amenity, lang: lang!, readPoints: false, callback: nil) {
@@ -99,7 +99,7 @@ final class TravelObfHelper : NSObject {
                     }
                     foundAmenitiesIndex += 1
                 }
-            } while !articlesLimitReached && searchRadius < MAX_SEARCH_RADIUS
+            } while (!articlesLimitReached && searchRadius < MAX_SEARCH_RADIUS) || popularArticles.articles.count == 0
         }
         self.popularArticles = popularArticles
         return popularArticles
@@ -235,9 +235,12 @@ final class TravelObfHelper : NSObject {
         
         var res = TravelArticle()
         res.file = file
-        var title = amenity.getNames(lang, defTag: "en").first
-        if title == nil || title!.length == 0 {
-            title = amenity.name
+        var title = amenity.getName(lang, transliterate: false)
+        if title == nil || (title ?? "").isEmpty {
+            title = amenity.getName("en", transliterate: false)
+            if title == nil || (title ?? "").isEmpty {
+                title = amenity.name
+            }
         }
         res.title = title
         res.content = amenity.getDescription(lang)
@@ -402,7 +405,7 @@ final class TravelObfHelper : NSObject {
         
         for header in headers {
             
-            guard let parentArticle = getParentArticleByTitle(title: header, lang: lang) else {continue}
+            guard let parentArticle = getParentArticleByTitle(title: header, lang: lang, lat: article.lat, lon: article.lon) else {continue}
 
             navMap[header] = [TravelSearchResult]()
             if let unseparatedText = parentArticle.isParentOf {
@@ -440,12 +443,12 @@ final class TravelObfHelper : NSObject {
         return res
     }
     
-    func getParentArticleByTitle(title: String, lang: String) -> TravelArticle? {
+    func getParentArticleByTitle(title: String, lang: String, lat: Double, lon: Double) -> TravelArticle? {
         var article: TravelArticle? = nil
         var amenities = [OAPOI]()
         
         for reader in getReaders() {
-            OATravelGuidesHelper.searchAmenity(title, categoryNames: [ROUTE_ARTICLE], radius: -1, lat: -1, lon: -1, reader: reader) { amenity in
+            OATravelGuidesHelper.searchAmenity(title, categoryNames: [ROUTE_ARTICLE], radius: -1, lat: lat, lon: lon, reader: reader) { amenity in
                 if let amenity, title == amenity.getName(lang, transliterate: false) {
                     amenities.append(amenity)
                     return true
@@ -733,22 +736,18 @@ final class TravelObfHelper : NSObject {
         }
         
         for reader in getReaders() {
-            
-            OATravelGuidesHelper.searchAmenity(x, y: y, left: left, right: right, top: top, bottom: bottom, reader: reader, searchFilters: [ROUTE_ARTICLE]) { amenity in
-                
+            OATravelGuidesHelper.searchAmenity(title, x: x, y: y, left: left, right: right, top: top, bottom: bottom, reader: reader, searchFilters: [ROUTE_ARTICLE]) { amenity in
                 if let amenity, title == amenity.getName(lang, transliterate: false) {
                     amenities.append(amenity)
                     return true
                 }
                 return false
             }
-            
             if !amenities.isEmpty {
                 article = cacheTravelArticles(file: reader, amenity: amenities[0], lang: lang, readPoints: readGpx, callback: callback)
+                break
             }
-            
         }
-        
         return article
     }
     

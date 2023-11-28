@@ -20,6 +20,10 @@ final class WikipediaCacheSizeViewController : OABaseNavbarViewController {
         return localizedString("wikivoyage_download_pics")
     }
     
+    override func getLeftNavbarButtonTitle() -> String! {
+        return localizedString("shared_string_cancel")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         cacheHelper = WikiImageCacheHelper()

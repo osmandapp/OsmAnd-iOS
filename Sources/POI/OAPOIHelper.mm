@@ -978,6 +978,7 @@
     searchCriteria->name = QString::fromNSString(keyword ? keyword : @"");
     searchCriteria->obfInfoAreaFilter = _visibleArea;
     searchCriteria->bbox31 = bbox31;
+    searchCriteria->xy31 = location;
     
     if (categoryNames)
     {

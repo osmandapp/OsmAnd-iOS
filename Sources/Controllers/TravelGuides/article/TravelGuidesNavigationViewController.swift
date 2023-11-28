@@ -86,6 +86,7 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
                     row.title = headerItem.articleId.title
                     row.iconName = "ic_custom_book_info"
                     row.setObj(headerItem.articleId, forKey: "article")
+                    row.setObj(i, forKey: "index")
                     
                     if let subItems = navigationMap[headerItem] {
                         if !subItems.isEmpty {
@@ -127,6 +128,15 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
         fetchData()
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        if selectedItem != nil {
+            navigationItem.leftItemsSupplementBackButton = true
+            navigationController?.navigationBar.topItem?.backButtonTitle = localizedString("shared_string_navigation")
+            navigationItem.setLeftBarButton(nil, animated: false)
+        }
+    }
+    
     override func getTitle() -> String! {
         if let selectedItem {
             return selectedItem.articleId.title
@@ -135,15 +145,11 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
         }
     }
     
-    override func forceShowShevron() -> Bool {
-        selectedItem != nil
-    }
-    
     override func getLeftNavbarButtonTitle() -> String! {
-        if selectedItem != nil {
-            return localizedString("shared_string_navigation")
-        } else {
+        if selectedItem == nil {
             return localizedString("shared_string_close")
+        } else {
+            return nil
         }
     }
     
@@ -183,9 +189,11 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
                 cell.leftIconView.tintColor = UIColor.iconColorDefault
                 
                 cell.button.setTitle(nil, for: .normal)
-                cell.button.tag = indexPath.row
                 cell.button.removeTarget(nil, action: nil, for: .allEvents)
                 cell.button.addTarget(self, action: #selector(onShevronClicked(_:)), for: .touchUpInside)
+                if let index = item.obj(forKey: "index") as? Int {
+                    cell.button.tag = index
+                }
                 
                 let hasSubitems = item.bool(forKey: "hasSubitems")
                 if hasSubitems {
@@ -203,22 +211,10 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
     override func onRowSelected(_ indexPath: IndexPath!) {
         let item = tableData.item(for: indexPath)
         if let articleId = item.obj(forKey: "article") as? TravelArticleIdentifier {
-            let hasSubitems = item.bool(forKey: "hasSubitems")
-            if hasSubitems {
-                if let item = item.obj(forKey: "item") as? TravelSearchResult {
-                    if let article {
-                        let vc = TravelGuidesNavigationViewController()
-                        vc.setupWith(article: article, selectedLang: selectedLang, navigationMap: navigationMap, regionsNames: [], selectedItem: item)
-                        vc.delegate = delegate
-                        navigationController?.pushViewController(vc, animated: true)
-                    }
-                }
-            } else {
-                if let delegate, let title = articleId.title {
-                    delegate.openArticleByTitle(title: title, newSelectedLang: selectedLang)
-                }
-                dismiss()
+            if let delegate, let title = articleId.title {
+                delegate.openArticleByTitle(title: title, newSelectedLang: selectedLang)
             }
+            dismiss()
         }
     }
     
@@ -235,8 +231,21 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
     
     @objc func onShevronClicked(_ sender: Any) {
         if let button = sender as? UIButton {
-            let indexPath = IndexPath(row: button.tag, section: 0)
-            onRowSelected(indexPath)
+            let indexPath = IndexPath(row: 0, section: button.tag)
+            let item = tableData.item(for: indexPath)
+            if let articleId = item.obj(forKey: "article") as? TravelArticleIdentifier {
+                let hasSubitems = item.bool(forKey: "hasSubitems")
+                if hasSubitems {
+                    if let item = item.obj(forKey: "item") as? TravelSearchResult {
+                        if let article {
+                            let vc = TravelGuidesNavigationViewController()
+                            vc.setupWith(article: article, selectedLang: selectedLang, navigationMap: navigationMap, regionsNames: [], selectedItem: item)
+                            vc.delegate = delegate
+                            navigationController?.pushViewController(vc, animated: true)
+                        }
+                    }
+                }
+            }
         }
     }
 }

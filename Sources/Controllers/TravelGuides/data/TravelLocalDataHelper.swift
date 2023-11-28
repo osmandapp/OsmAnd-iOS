@@ -45,6 +45,7 @@ final class TravelLocalDataHelper : NSObject {
         item.articleFile = article.file
         item.articleTitle = article.title ?? ""
         item.lang = article.lang ?? ""
+        item.imageTitle = article.imageTitle ?? ""
         item.isPartOf = article.isPartOf ?? ""
         item.lastAccessed = Date().timeIntervalSince1970
         

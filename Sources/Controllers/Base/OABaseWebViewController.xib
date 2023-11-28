@@ -38,7 +38,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <wkWebView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qjx-t9-H7r">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <rect key="frame" x="0.0" y="48" width="414" height="848"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <wkWebViewConfiguration key="configuration">
@@ -164,7 +164,7 @@
                 <constraint firstItem="fK1-ba-Shy" firstAttribute="leading" secondItem="hF6-ZP-XAC" secondAttribute="leading" id="brs-s4-obq"/>
                 <constraint firstItem="OSE-nP-3iA" firstAttribute="bottom" secondItem="Fx7-mk-y0y" secondAttribute="bottom" id="hu4-zc-Ghu"/>
                 <constraint firstItem="5aW-Eu-S0A" firstAttribute="leading" secondItem="hF6-ZP-XAC" secondAttribute="leading" id="o5Z-Mp-kv5"/>
-                <constraint firstItem="qjx-t9-H7r" firstAttribute="top" secondItem="hF6-ZP-XAC" secondAttribute="top" id="tG7-5j-jZn"/>
+                <constraint firstItem="qjx-t9-H7r" firstAttribute="top" secondItem="hF6-ZP-XAC" secondAttribute="topMargin" id="tG7-5j-jZn"/>
                 <constraint firstItem="fK1-ba-Shy" firstAttribute="trailing" secondItem="hF6-ZP-XAC" secondAttribute="trailing" id="wpt-Wb-tXo"/>
             </constraints>
             <point key="canvasLocation" x="57.971014492753625" y="770.75892857142856"/>

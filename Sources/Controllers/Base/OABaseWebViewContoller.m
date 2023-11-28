@@ -49,6 +49,7 @@
     self.webView.backgroundColor = UIColor.viewBgColor;
 
     self.webView.hidden = YES;
+    [self.webView.scrollView setContentInsetAdjustmentBehavior: UIScrollViewContentInsetAdjustmentNever];
     [self loadWebView];
     _cachedIsLightTheme = [ThemeManager shared].isLightTheme;
 }

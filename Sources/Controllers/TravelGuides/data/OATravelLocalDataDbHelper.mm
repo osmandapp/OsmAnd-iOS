@@ -659,10 +659,6 @@
 
 - (void) removeSavedArticle:(OATravelArticle *)article
 {
-    NSString *travelBook = [article getTravelBook];
-    if (!travelBook)
-        return;
-    
     //Delete in callback
     OARemoveArticleGpxReader *gpxReader = [[OARemoveArticleGpxReader alloc] init];
     gpxReader.dbInstance = _dbInstance;

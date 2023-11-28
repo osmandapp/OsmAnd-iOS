@@ -169,7 +169,7 @@
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.titleLabel.textColor = UIColor.textColorActive;
-            cell.rightIconView.tintColor = UIColor.textColorActive;
+            cell.rightIconView.tintColor = UIColor.iconColorActive;
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
         cell.titleLabel.text = item[@"title"];

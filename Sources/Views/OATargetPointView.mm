@@ -694,10 +694,10 @@ static const NSInteger _buttonsCount = 4;
     else
     {
         _buttonDirectionIcon.image = [UIImage templateImageNamed:@"ic_custom_arrow_direction"];
-        _buttonDirectionIcon.tintColor = UIColor.buttonTextColorSecondary;
+        _buttonDirectionIcon.tintColor = UIColor.iconColorActive;
         _buttonDirectionLabel.text = OALocalizedString(@"map_marker");
         _buttonDirection.accessibilityLabel = OALocalizedString(@"quick_action_add_marker");
-        _buttonDirectionLabel.textColor = UIColor.buttonTextColorSecondary;
+        _buttonDirectionLabel.textColor = UIColor.textColorActive;
     }
     
     if (self.activeTargetType == OATargetGPX)
@@ -731,7 +731,7 @@ static const NSInteger _buttonsCount = 4;
         }
     }
     
-    _buttonFavoriteIcon.tintColor = UIColor.buttonTextColorSecondary;
+    _buttonFavoriteIcon.tintColor = UIColor.iconColorActive;
     
     _imageView.hidden = NO;
     

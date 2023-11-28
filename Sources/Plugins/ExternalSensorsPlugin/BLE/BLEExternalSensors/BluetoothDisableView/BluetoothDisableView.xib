@@ -14,6 +14,13 @@
             <rect key="frame" x="0.0" y="0.0" width="393" height="157"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Guc-jW-K1C" userLabel="dividerTopView">
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="0.6666666666666714"/>
+                    <color key="backgroundColor" name="divider"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="0.5" id="jzc-gT-FPh"/>
+                    </constraints>
+                </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bluetooth is turned off" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K2I-6s-jjW">
                     <rect key="frame" x="20" y="20" width="170.33333333333334" height="22"/>
                     <constraints>
@@ -61,20 +68,33 @@
                         <constraint firstAttribute="width" constant="30" id="vfj-Zd-XqF"/>
                     </constraints>
                 </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ebP-O7-4Aq" userLabel="dividerBottomView">
+                    <rect key="frame" x="0.0" y="156.66666666666666" width="393" height="0.33333333333334281"/>
+                    <color key="backgroundColor" name="divider"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="0.5" id="RHS-8i-Liw"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" name="groupBgColor"/>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="ebP-O7-4Aq" secondAttribute="trailing" id="5I2-bF-nqb"/>
+                <constraint firstAttribute="trailing" secondItem="Guc-jW-K1C" secondAttribute="trailing" id="ASY-0v-33q"/>
                 <constraint firstItem="i2u-50-9tC" firstAttribute="top" secondItem="jnD-t4-TiZ" secondAttribute="bottom" constant="1" id="Ftc-AO-Rlp"/>
                 <constraint firstAttribute="trailing" secondItem="jnD-t4-TiZ" secondAttribute="trailing" id="LaU-Nt-4LR"/>
                 <constraint firstItem="i2u-50-9tC" firstAttribute="leading" secondItem="eIT-e5-9VR" secondAttribute="leading" constant="20" id="Nv3-wM-Dh3"/>
                 <constraint firstItem="3dG-e2-OE4" firstAttribute="leading" secondItem="eIT-e5-9VR" secondAttribute="leading" constant="20" id="PJV-ba-IJg"/>
                 <constraint firstItem="3dG-e2-OE4" firstAttribute="top" secondItem="K2I-6s-jjW" secondAttribute="bottom" constant="6" id="RES-cz-lV8"/>
+                <constraint firstItem="Guc-jW-K1C" firstAttribute="leading" secondItem="eIT-e5-9VR" secondAttribute="leading" id="ULb-M3-bFs"/>
                 <constraint firstItem="Lhc-H7-DS9" firstAttribute="top" secondItem="eIT-e5-9VR" secondAttribute="top" constant="20" id="VQ6-Zi-3MT"/>
                 <constraint firstItem="K2I-6s-jjW" firstAttribute="leading" secondItem="eIT-e5-9VR" secondAttribute="leading" constant="20" id="Xif-hK-IZt"/>
+                <constraint firstItem="ebP-O7-4Aq" firstAttribute="leading" secondItem="eIT-e5-9VR" secondAttribute="leading" id="hXj-pn-gAG"/>
+                <constraint firstAttribute="bottom" secondItem="ebP-O7-4Aq" secondAttribute="bottom" id="maT-3o-zac"/>
                 <constraint firstItem="K2I-6s-jjW" firstAttribute="top" secondItem="eIT-e5-9VR" secondAttribute="top" constant="20" id="mfF-qA-MWI"/>
                 <constraint firstItem="jnD-t4-TiZ" firstAttribute="leading" secondItem="eIT-e5-9VR" secondAttribute="leading" constant="20" id="q3e-Wa-gei"/>
                 <constraint firstAttribute="trailing" secondItem="Lhc-H7-DS9" secondAttribute="trailing" constant="20" id="qCi-0g-I9h"/>
                 <constraint firstAttribute="bottom" secondItem="i2u-50-9tC" secondAttribute="bottom" id="qoO-JP-nn4"/>
+                <constraint firstItem="Guc-jW-K1C" firstAttribute="top" secondItem="eIT-e5-9VR" secondAttribute="top" id="teg-u7-pHr"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
@@ -89,6 +109,9 @@
     </objects>
     <resources>
         <image name="ic_custom_bluetooth_off" width="49" height="48"/>
+        <namedColor name="divider">
+            <color red="0.32899999618530273" green="0.32400000095367432" blue="0.4779999852180481" alpha="0.33000001311302185" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="groupBgColor">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

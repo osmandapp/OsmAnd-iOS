@@ -206,27 +206,21 @@
     _resourcesManager->repositoryUpdateObservable.detach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self));
 }
 
-- (void) buildFolders
+- (void)buildFolders
+{
+    [self createFolderIfNeeded:_gpxPath];
+    [self createFolderIfNeeded:_favoritesPath];
+    [self createFolderIfNeeded:_weatherForecastPath];
+}
+
+- (void)createFolderIfNeeded:(NSString *)path
 {
     NSError *error;
-
-    if (![[NSFileManager defaultManager] fileExistsAtPath:_gpxPath])
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    if (![fileManager fileExistsAtPath:path])
     {
-        BOOL success = [[NSFileManager defaultManager] createDirectoryAtPath:_gpxPath
-                                                 withIntermediateDirectories:NO
-                                                                  attributes:nil
-                                                                       error:&error];
-        if (!success)
-            OALog(@"Error creating GPX folder: %@", error.localizedFailureReason);
-    }
-    if (![[NSFileManager defaultManager] fileExistsAtPath:_weatherForecastPath])
-    {
-        BOOL success = [[NSFileManager defaultManager] createDirectoryAtPath:_weatherForecastPath
-                                                 withIntermediateDirectories:NO
-                                                                  attributes:nil
-                                                                       error:&error];
-        if (!success)
-            OALog(@"Error creating WeatherForecast folder: %@", error.localizedFailureReason);
+        if (![fileManager createDirectoryAtPath:path withIntermediateDirectories:NO attributes:nil error:&error])
+            OALog(@"Error creating folder \"%@\": %@", path, error.localizedFailureReason);
     }
 }
 

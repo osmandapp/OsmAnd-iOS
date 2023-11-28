@@ -73,6 +73,11 @@ final class BLESearchViewController: OABaseNavbarViewController {
     private var hasFirstResult = false
     private var needRescan = false
     
+    private var discoveredDevices: [Device] {
+        let sortedDevices = BLEManager.shared.discoveredDevices.sorted { $0.isConnected && !$1.isConnected }
+        return sortedDevices
+    }
+    
     // MARK: - Init
     
     required init?(coder: NSCoder) {
@@ -111,11 +116,6 @@ final class BLESearchViewController: OABaseNavbarViewController {
                                                object: nil)
     }
     
-    var discoveredDevices: [Device] {
-        let sortedDevices = BLEManager.shared.discoveredDevices.sorted { $0.isConnected && !$1.isConnected }
-        return sortedDevices
-    }
-    
     override func generateData() {
         tableData.clearAllData()
         if !discoveredDevices.isEmpty {
@@ -135,10 +135,20 @@ final class BLESearchViewController: OABaseNavbarViewController {
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchDeviceTableViewCell.reuseIdentifier) as! SearchDeviceTableViewCell
+        // separators go edge to edge
+        cell.separatorInset = .zero
+        cell.layoutMargins = .zero
+        cell.preservesSuperviewLayoutMargins = false
+        
         if discoveredDevices.count > indexPath.row {
             cell.configure(item: discoveredDevices[indexPath.row])
         }
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let header = view as? UITableViewHeaderFooterView
+        header?.textLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
     }
     
     override func onRowSelected(_ indexPath: IndexPath!) {
@@ -266,7 +276,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
         tableView.reloadData()
     }
     
-    // MARK: -  @IBActions
+    // MARK: - @IBActions
     
     @IBAction private func onOpenSettingsButtonPressed(_ sender: Any) {
         guard let settingsURL = URL(string: UIApplication.openSettingsURLString),

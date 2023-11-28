@@ -259,7 +259,7 @@
             NSString *categoryName = item[@"categoryName"];
             if ([categoryName isEqualToString:_currentCategory])
             {
-                destCell.layer.backgroundColor = UIColor.iconColorActive.CGColor;
+                destCell.layer.backgroundColor = UIColor.buttonBgColorTap.CGColor;
                 destCell.titleLabel.textColor = UIColor.buttonTextColorPrimary;
                 destCell.imageView.tintColor = UIColor.buttonTextColorPrimary;
             }
@@ -302,7 +302,7 @@
             
             cell.backView.layer.borderWidth = 0;
             cell.backView.layer.borderColor = [UIColor clearColor].CGColor;
-            cell.iconView.backgroundColor = UIColor.buttonBgColorTertiary;
+            cell.iconView.backgroundColor = UIColor.contextMenuButtonBgColor;
             cell.iconImageView.tintColor = UIColor.buttonTextColorSecondary;
         }
         if ([self isDirectionRTL])

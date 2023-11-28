@@ -52,7 +52,7 @@
         NSString *sizeString;
         NSNumber *size = sizes[i];
         sizeString = size ? [NSString stringWithFormat:@"%i", size.intValue] : @"";
-        UIColor *color = colors[i] ? colors[i] : UIColor.textColorActive;
+        UIColor *color = colors[i] ? colors[i] : UIColor.iconColorActive;
             
         [_data addObject:@{
             @"title" : values[i],
@@ -160,7 +160,7 @@
         else
         {
             destCell.layer.borderWidth = 1;
-            destCell.layer.borderColor = UIColor.iconColorDisabled.CGColor;
+            destCell.layer.borderColor = UIColor.buttonBgColorSecondary.CGColor;
         }
     }
     return cell;

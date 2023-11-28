@@ -17,6 +17,7 @@
 #define kOsmandDevelopmentSettings @"osmand_development"
 #define kWeatherSettings @"weather"
 #define kWikipediaSettings @"wikipedia"
+#define kExternalSensors @"externalSensors"
 
 @class OAApplicationMode;
 

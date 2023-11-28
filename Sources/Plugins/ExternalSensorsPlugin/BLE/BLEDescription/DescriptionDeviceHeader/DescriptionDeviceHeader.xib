@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <accessibilityOverrides dynamicTypePreference="4"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -12,7 +13,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="DescriptionDeviceHeader" customModule="BLETestProject" customModuleProvider="target">
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="DescriptionDeviceHeader" customModule="OsmAnd_Maps" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="473" height="148"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -71,7 +72,7 @@
                     </subviews>
                 </stackView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C4V-Q7-dfT">
-                    <rect key="frame" x="25" y="100" width="428" height="48"/>
+                    <rect key="frame" x="20" y="100" width="433" height="48"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="48" id="dGT-mN-IT7"/>
                     </constraints>
@@ -92,10 +93,17 @@
                     </constraints>
                 </activityIndicatorView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NkN-F9-TSx" userLabel="dividerView">
-                    <rect key="frame" x="29" y="97.666666666666671" width="424" height="0.3333333333333286"/>
+                    <rect key="frame" x="20" y="97.666666666666671" width="453" height="0.3333333333333286"/>
                     <color key="backgroundColor" name="divider"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="0.5" id="uMs-Hq-NxD"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xg5-ru-81P" userLabel="dividerBottomView">
+                    <rect key="frame" x="0.0" y="147.66666666666666" width="473" height="0.33333333333334281"/>
+                    <color key="backgroundColor" name="divider"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="0.5" id="7RV-6K-U0a"/>
                     </constraints>
                 </view>
             </subviews>
@@ -103,15 +111,18 @@
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="jbx-xX-LM3" firstAttribute="centerY" secondItem="0uJ-Dc-WGi" secondAttribute="centerY" id="0Wu-sK-iqM"/>
-                <constraint firstItem="0uJ-Dc-WGi" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="3fa-2r-Zlu"/>
+                <constraint firstItem="0uJ-Dc-WGi" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="3fa-2r-Zlu"/>
                 <constraint firstItem="jbx-xX-LM3" firstAttribute="leading" secondItem="0uJ-Dc-WGi" secondAttribute="trailing" constant="20" id="8h0-wn-N7E"/>
+                <constraint firstItem="Xg5-ru-81P" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Red-cz-UGQ"/>
                 <constraint firstAttribute="bottom" secondItem="C4V-Q7-dfT" secondAttribute="bottom" id="SKF-a7-Xkb"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="NkN-F9-TSx" secondAttribute="trailing" constant="20" id="V0u-UZ-sPh"/>
+                <constraint firstAttribute="trailing" secondItem="NkN-F9-TSx" secondAttribute="trailing" id="V0u-UZ-sPh"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="jbx-xX-LM3" secondAttribute="trailing" constant="20" id="dgj-gs-Knt"/>
                 <constraint firstItem="h0J-ik-bhZ" firstAttribute="centerY" secondItem="C4V-Q7-dfT" secondAttribute="centerY" id="eR7-l6-f6I"/>
-                <constraint firstItem="NkN-F9-TSx" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="29" id="l96-3C-n3J"/>
+                <constraint firstAttribute="bottom" secondItem="Xg5-ru-81P" secondAttribute="bottom" id="h9x-v6-W4v"/>
+                <constraint firstAttribute="trailing" secondItem="Xg5-ru-81P" secondAttribute="trailing" id="hIs-ws-TcE"/>
+                <constraint firstItem="NkN-F9-TSx" firstAttribute="leading" secondItem="0uJ-Dc-WGi" secondAttribute="leading" id="l96-3C-n3J"/>
                 <constraint firstAttribute="trailing" secondItem="h0J-ik-bhZ" secondAttribute="trailing" constant="20" id="n1O-dV-MoU"/>
-                <constraint firstItem="C4V-Q7-dfT" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="25" id="nfu-HB-yeB"/>
+                <constraint firstItem="C4V-Q7-dfT" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="nfu-HB-yeB"/>
                 <constraint firstItem="0uJ-Dc-WGi" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" id="oLh-6X-oJL"/>
                 <constraint firstItem="C4V-Q7-dfT" firstAttribute="top" secondItem="NkN-F9-TSx" secondAttribute="bottom" constant="2" id="uNI-xX-riw"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="C4V-Q7-dfT" secondAttribute="trailing" constant="20" id="wPH-Ql-soL"/>

@@ -106,7 +106,7 @@
     [otherCells addObject:@{
         @"type" : [OAButtonTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"verification_code_missing"),
-        @"color" : UIColor.textColorActive,
+        @"color" : UIColor.iconColorActive,
         @"action" : @"unfoldButtonPressed",
     }];
     

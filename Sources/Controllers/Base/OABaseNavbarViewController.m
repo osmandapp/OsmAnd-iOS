@@ -439,7 +439,7 @@
         if (isLongTitle && !leftNavbarButtonCustomIcon)
         {
             leftNavbarButtonCustomIcon = [UIImage templateImageNamed:@"ic_navbar_chevron"];
-            freeSpaceForNavbarButton = 0.;
+            freeSpaceForNavbarButton = 30.;
         }
         [leftButton setImage:leftNavbarButtonCustomIcon forState:UIControlStateNormal];
         [leftButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];

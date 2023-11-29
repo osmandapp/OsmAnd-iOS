@@ -46,7 +46,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     
     override func registerObservers() {
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(deviceDisconected),
+                                               selector: #selector(deviceDisconnected),
                                                name: .DeviceDisconnected,
                                                object: nil)
     }
@@ -304,7 +304,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         }
     }
     
-    @objc private func deviceDisconected() {
+    @objc private func deviceDisconnected() {
         guard view.window != nil else { return }
         reloadData()
     }

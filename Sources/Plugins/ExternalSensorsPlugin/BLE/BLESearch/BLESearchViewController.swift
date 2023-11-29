@@ -115,7 +115,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
                                                name: .DeviceRSSIUpdated,
                                                object: nil)
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(deviceDisconected),
+                                               selector: #selector(deviceDisconnected),
                                                name: .DeviceDisconnected,
                                                object: nil)
     }
@@ -281,7 +281,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
         tableView.reloadData()
     }
     
-    @objc private func deviceDisconected() {
+    @objc private func deviceDisconnected() {
         guard view.window != nil else { return }
         tableView.reloadData()
     }

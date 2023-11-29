@@ -52,7 +52,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     
     override func registerObservers() {
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(deviceDisconected),
+                                               selector: #selector(deviceDisconnected),
                                                name: .DeviceDisconnected,
                                                object: nil)
     }
@@ -172,7 +172,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         tableView.reloadData()
     }
     
-    @objc private func deviceDisconected() {
+    @objc private func deviceDisconnected() {
         guard view.window != nil else { return }
         reloadData()
     }

@@ -10,12 +10,14 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
     func sceneWillEnterForeground(_ scene: UIScene) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate sceneWillEnterForeground")
         isForegroundScene = true
+        mapVC?.isCarPlayDashboardActive = true
         configureScene()
     }
     
     func sceneWillResignActive(_ scene: UIScene) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate sceneWillResignActive")
         isForegroundScene = false
+        mapVC?.isCarPlayDashboardActive = false
     }
     
     private func configureScene() {
@@ -32,9 +34,8 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                 OARootViewController.instance()?.mapPanel.setMap(mapVC)
             }
             if let mapVC {
-                let widthOffset: CGFloat = 1 - (window.frame.width - max(window.safeAreaInsets.left, window.safeAreaInsets.right)) / mapVC.view.frame.width
                 let heightOffset = 1 - (window.frame.height / mapVC.view.frame.height)
-                mapVC.setViewportScaleX(1.0 - widthOffset, y: 1.0 - heightOffset)
+                mapVC.setViewportForCarPlayScaleX(1.0, y: 1.0 - heightOffset)
                 dashboardVC = OACarPlayMapDashboardViewController(carPlay: mapVC)
                 dashboardVC?.attachMapToWindow()
                 self.window?.rootViewController = dashboardVC

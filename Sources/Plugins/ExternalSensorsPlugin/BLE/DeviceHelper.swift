@@ -39,11 +39,7 @@ final class DeviceHelper: NSObject {
         return getDevicesFrom(peripherals: disconnectedPeripherals, pairedDevices: pairedDevices)
     }
     
-    func getConnectedDevicesForWidget(type: WidgetType) -> [Device]? {
-        connectedDevices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
-    }
-
-    func getConnectedAndPaireDisconnectedDeviceFor(type: WidgetType, deviceId: String) -> Device? {
+    func getConnectedOrPaireDisconnectedDeviceFor(type: WidgetType, deviceId: String) -> Device? {
         gatConnectedAndPaireDisconnectedDevicesFor(type: type)?.first { $0.id == deviceId }
     }
 
@@ -138,7 +134,7 @@ final class DeviceHelper: NSObject {
     
     private func dropUnpairedDevice(device: Device) {
         device.disableRSSI()
-        device.disconnect { _ in }
+        disconnectIfNeeded(device: device)
         removeDisconnected(device: device)
         devicesSettingsCollection.removeDeviceSetting(with: device.id)
         unpairWidgetsForDevice(id: device.id)
@@ -160,6 +156,12 @@ final class DeviceHelper: NSObject {
 
 extension DeviceHelper {
     
+    func disconnectIfNeeded(device: Device) {
+        if device.isConnected || device.isConnecting {
+            device.peripheral.disconnect { _ in }
+        }
+    }
+    
     func clearConnectedDevicesList() {
         connectedDevices.removeAll()
     }
@@ -168,7 +170,7 @@ extension DeviceHelper {
         guard !connectedDevices.isEmpty else { return }
         connectedDevices.forEach {
             $0.disableRSSI()
-            $0.peripheral.disconnect(completion: { _ in })
+            disconnectIfNeeded(device: $0)
         }
         connectedDevices.removeAll()
         BLEManager.shared.removeAndDisconnectDiscoveredDevices()
@@ -197,15 +199,15 @@ extension DeviceHelper {
     }
     
     func removeDisconnected(device: Device) {
-        connectedDevices = connectedDevices.filter { $0.id != device.id }
         if let discoveredDevice = BLEManager.shared.discoveredDevices.first(where: { $0.id == device.id }) {
             discoveredDevice.disableRSSI()
-            discoveredDevice.peripheral.disconnect { _ in }
+            disconnectIfNeeded(device: discoveredDevice)
         }
         if let connectedDevice = connectedDevices.first(where: { $0.id == device.id }) {
             connectedDevice.disableRSSI()
-            connectedDevice.peripheral.disconnect { _ in }
+            disconnectIfNeeded(device: connectedDevice)
         }
+        connectedDevices = connectedDevices.filter { $0.id != device.id }
     }
     
     private func updateConnected(devices: [Device]) {

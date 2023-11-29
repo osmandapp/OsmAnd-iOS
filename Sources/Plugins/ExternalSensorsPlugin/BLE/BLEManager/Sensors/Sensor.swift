@@ -26,7 +26,7 @@ class Sensor {
         nil
     }
     
-    func getLastSensorDataList() -> [SensorData]? {
+    func getLastSensorDataList(for wiggetType: WidgetType) -> [SensorData]? {
         nil
     }
 

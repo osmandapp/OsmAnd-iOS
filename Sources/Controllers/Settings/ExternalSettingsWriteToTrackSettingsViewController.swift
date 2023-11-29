@@ -50,7 +50,7 @@ class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarViewContro
                 var deviceName: String = localizedString("shared_string_none")
                 var deviceFound = false
                 if deviceId.length > 0 && deviceId != kDenyWriteSensorDataToTrackKey {
-                    if let device: Device = DeviceHelper.shared.getConnectedAndPaireDisconnectedDeviceFor(type:widgetType, deviceId: deviceId) {
+                    if let device: Device = DeviceHelper.shared.getConnectedOrPaireDisconnectedDeviceFor(type:widgetType, deviceId: deviceId) {
                         deviceName = device.deviceName
                         deviceFound = true
                     }

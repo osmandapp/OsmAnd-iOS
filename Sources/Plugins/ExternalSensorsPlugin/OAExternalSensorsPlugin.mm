@@ -148,7 +148,7 @@
         NSString *speedDeviceId = [deviceIdPref get:selectedAppMode];
         if (speedDeviceId && speedDeviceId.length > 0 && ![speedDeviceId isEqualToString:kDenyWriteSensorDataToTrackKey])
         {
-            OADevice *device = [[OADeviceHelper shared] getConnectedAndPaireDisconnectedDeviceForType:widgetType deviceId:speedDeviceId];
+            OADevice *device = [[OADeviceHelper shared] getConnectedOrPaireDisconnectedDeviceForType:widgetType deviceId:speedDeviceId];
             if (device)
                 [device writeSensorDataToJsonWithJson:json widgetDataFieldType:widgetType];
         }

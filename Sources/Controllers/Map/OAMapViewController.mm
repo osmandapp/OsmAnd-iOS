@@ -761,6 +761,24 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         _mapView.viewportYScale = y;
 }
 
+- (void)setViewportForCarPlayScaleX:(double)x y:(double)y
+{
+    [self setViewportForCarPlayScaleX:x];
+    [self setViewportForCarPlayScaleY:y];
+}
+
+- (void)setViewportForCarPlayScaleX:(double)x
+{
+    if (_mapView.viewportXScale != x && _isCarPlayActive)
+        _mapView.viewportXScale = x;
+}
+
+- (void)setViewportForCarPlayScaleY:(double)y
+{
+    if (_mapView.viewportYScale != y && _isCarPlayActive)
+        _mapView.viewportYScale = y;
+}
+
 - (void) setMapPosition:(int)mapPosition
 {
     _mapPosition = mapPosition;

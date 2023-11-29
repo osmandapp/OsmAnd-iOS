@@ -105,6 +105,7 @@
 @property (readonly) OAMapPresentationEnvironment *mapPresentationEnv;
 
 @property (nonatomic, assign) BOOL isCarPlayActive;
+@property (nonatomic, assign) BOOL isCarPlayDashboardActive;
 
 - (CLLocation *) getMapLocation;
 - (float) getMapZoom;
@@ -128,9 +129,13 @@
 - (void) animatedPanDown;
 - (void) animatedPanLeft;
 - (void) animatedPanRight;
+
 - (void)setViewportScaleX:(double)x y:(double)y;
 - (void)setViewportScaleX:(double)x;
 - (void)setViewportScaleY:(double)y;
+- (void)setViewportForCarPlayScaleX:(double)x y:(double)y;
+- (void)setViewportForCarPlayScaleX:(double)x;
+- (void)setViewportForCarPlayScaleY:(double)y;
 
 - (void) goToPosition:(Point31)position31
             animated:(BOOL)animated;

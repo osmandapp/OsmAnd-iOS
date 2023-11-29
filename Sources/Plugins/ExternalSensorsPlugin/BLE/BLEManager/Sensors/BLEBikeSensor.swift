@@ -26,19 +26,17 @@ final class BLEBikeSensor: Sensor {
     // NOTE: wheelCircumference = wheelSize * pi
     var wheelSize: Double = 2.086
     
-    override func getLastSensorDataList() -> [SensorData]? {
-        var list = [SensorData]()
-        if let lastBikeCadenceData {
-            list.append(lastBikeCadenceData)
+    override func getLastSensorDataList(for wiggetType: WidgetType) -> [SensorData]? {
+        if wiggetType == .bicycleCadence {
+            return [lastBikeCadenceData].compactMap { $0 }
+        } else if wiggetType == .bicycleSpeed || wiggetType == .bicycleDistance {
+            return [lastBikeSpeedDistanceData].compactMap { $0 }
         }
-        if let lastBikeSpeedDistanceData {
-            list.append(lastBikeSpeedDistanceData)
-        }
-        return list
+        return nil
     }
     
     override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
-        [.bicycleSpeed, .bicycleCadence, .bicycleDistance]
+        [.bicycleCadence, .bicycleSpeed, .bicycleDistance]
     }
     
     override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
@@ -163,16 +161,16 @@ extension BLEBikeSensor {
         }
         
         var widgetFields: [SensorWidgetDataField]? {
-            [SensorWidgetDataField(fieldType: .bicycleSpeed,
-                                   nameId: localizedString("external_device_characteristic_speed"),
-                                   unitNameId: "",
-                                   numberValue: nil,
-                                   stringValue: OAOsmAndFormatter.getFormattedSpeed(Float(speed.value))),
-             SensorWidgetDataField(fieldType: .bicycleDistance,
-                                   nameId: localizedString("external_device_characteristic_distance"),
-                                   unitNameId: "",
-                                   numberValue: nil,
-                                   stringValue: OAOsmAndFormatter.getFormattedDistance(Float(totalTravelDistance.value)))
+            [SensorSpeedWidgetDataField(fieldType: .bicycleSpeed,
+                                        nameId: localizedString("external_device_characteristic_speed"),
+                                        unitNameId: "",
+                                        numberValue: NSNumber(value: speed.value),
+                                        stringValue: nil),
+             SensorDistanceWidgetDataField(fieldType: .bicycleDistance,
+                                           nameId: localizedString("external_device_characteristic_distance"),
+                                           unitNameId: "",
+                                           numberValue: NSNumber(value: totalTravelDistance.value),
+                                           stringValue: nil)
             ]
         }
         
@@ -187,7 +185,7 @@ extension BLEBikeSensor {
         }
         
         func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField? {
-            guard let widgetFields, widgetFields.count >= 2 else { return nil }
+            guard let widgetFields, widgetFields.count > 1 else { return nil }
             if fieldType == .bicycleSpeed {
                 return widgetFields.first
             } else if fieldType == .bicycleDistance {

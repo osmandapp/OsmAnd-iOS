@@ -48,7 +48,7 @@
     else
     {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_save")
-                                                                       message:@"apply_to_existing_favorites_descr"
+                                                                       message:OALocalizedString(@"apply_to_existing_favorites_descr")
                                                                 preferredStyle:UIAlertControllerStyleActionSheet];
         NSString *titleApplyExisting = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"),
                                         OALocalizedString(@"apply_to_existing"),

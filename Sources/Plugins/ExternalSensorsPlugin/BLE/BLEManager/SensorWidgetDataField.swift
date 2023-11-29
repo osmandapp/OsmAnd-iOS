@@ -10,24 +10,26 @@ import Foundation
 
 class SensorWidgetDataField: SensorDataField {
     let fieldType: WidgetType
-
+    
     init(fieldType: WidgetType, nameId: String, unitNameId: String, numberValue: NSNumber?, stringValue: String?) {
         self.fieldType = fieldType
         super.init(nameId: nameId, unitNameId: unitNameId, numberValue: numberValue, stringValue: stringValue)
     }
-
+    
     func getFieldType() -> WidgetType {
         fieldType
     }
 }
 
-
 class SensorSpeedWidgetDataField: SensorWidgetDataField {
     // SensorWidgetDataFieldType.BIKE_SPEED
     override func getFormattedValue() -> FormattedValue? {
         if let value = numberValue?.floatValue {
-            if let formattedSpeed = OAOsmAndFormatter.getFormattedSpeed(value) {
-                return FormattedValue(valueSrc: 0, value: formattedSpeed, unit: nil)
+            let formattedSpeed = OAOsmAndFormatter.getFormattedSpeed(value).components(separatedBy: " ")
+            if formattedSpeed.count > 1 {
+                return FormattedValue(valueSrc: 0, value: formattedSpeed.first ?? "", unit: formattedSpeed.last ?? "")
+            } else {
+                return nil
             }
         }
         return nil
@@ -38,11 +40,13 @@ class SensorDistanceWidgetDataField: SensorWidgetDataField {
     // SensorWidgetDataFieldType.BIKE_DISTANCE
     override func getFormattedValue() -> FormattedValue? {
         if let value = numberValue?.floatValue {
-            if let formattedDistance = OAOsmAndFormatter.getFormattedDistance(value, forceTrailingZeroes: false) {
-                return FormattedValue(valueSrc: 0, value: formattedDistance, unit: nil)
+            let formattedDistance = OAOsmAndFormatter.getFormattedDistance(value, forceTrailingZeroes: false).components(separatedBy: " ")
+            if formattedDistance.count > 1 {
+                return FormattedValue(valueSrc: 0, value: formattedDistance.first ?? "", unit: formattedDistance.last ?? "")
+            } else {
+                return nil
             }
         }
         return nil
     }
 }
-

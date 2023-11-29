@@ -11,6 +11,7 @@ import UIKit
 
 extension Notification.Name {
     static let DeviceRSSIUpdated = NSNotification.Name("DeviceRSSIUpdated")
+    static let DeviceDisconnected = NSNotification.Name("DeviceDisconnected")
 }
 
 enum DeviceState: Int {
@@ -29,6 +30,8 @@ enum DeviceState: Int {
 @objc(OADevice)
 @objcMembers
 class Device : NSObject {
+    static let identifier = "identifier"
+    
     var deviceType: DeviceType!
     var rssi = -1
     var deviceName: String = ""
@@ -46,6 +49,10 @@ class Device : NSObject {
     
     var isConnected: Bool {
         peripheral.state == .connected
+    }
+    
+    var isConnecting: Bool {
+        peripheral.state == .connecting
     }
     
     var sensors = [Sensor]()
@@ -102,6 +109,10 @@ class Device : NSObject {
                                                queue: nil) { [weak self] notification in
             guard let self else { return }
             if let identifier = notification.userInfo?["identifier"] as? UUID, identifier.uuidString == self.id {
+                DeviceHelper.shared.removeDisconnected(device: self)
+                NotificationCenter.default.post(name: .DeviceDisconnected,
+                                                object: nil,
+                                                userInfo: [Self.identifier: self.id])
                 didDisconnect?()
             }
         }

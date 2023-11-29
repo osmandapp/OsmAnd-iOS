@@ -69,11 +69,8 @@
     
     BOOL isLeftSideDriving = [self isLeftSideDriving];
 
-    if (_isInNavigationMode)
-    {
-        _mapVc.mapView.viewportYScale = kViewportBottomScale;
-        _mapVc.mapView.viewportXScale = isLeftSideDriving ? 1.5 : 0.5;
-    }
+    if (_isInNavigationMode && !_mapVc.isCarPlayDashboardActive)
+        [_mapVc setViewportForCarPlayScaleX:isLeftSideDriving ? 1.5 : 0.5 y:kViewportBottomScale];
    
     if (isLeftSideDriving)
     {
@@ -96,8 +93,7 @@
     
     if (widthOffset != _cachedWidthOffset && heightOffset != _cachedHeightOffset && widthOffset != 0 && heightOffset != 0 && !_isInNavigationMode)
     {
-        _mapVc.mapView.viewportXScale = isLeftSideDriving ? 1.0 + widthOffset : 1.0 - widthOffset;
-        _mapVc.mapView.viewportYScale = 1.0 + heightOffset;
+        [_mapVc setViewportForCarPlayScaleX:isLeftSideDriving ? 1.0 + widthOffset : 1.0 - widthOffset y:1.0 + heightOffset];
         _cachedWidthOffset = widthOffset;
         _cachedHeightOffset = heightOffset;
         
@@ -161,8 +157,7 @@
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [_mapVc.mapView resumeRendering];
 
-        _mapVc.mapView.viewportXScale = _originalViewportX;
-        _mapVc.mapView.viewportYScale = _originalViewportY;
+        [_mapVc setViewportForCarPlayScaleX:_originalViewportX y:_originalViewportY];
     }
 }
 
@@ -263,7 +258,7 @@
 
 - (void)exitNavigationMode
 {
-    _mapVc.mapView.viewportXScale = _cachedViewportX;
+    [_mapVc setViewportForCarPlayScaleX:_cachedViewportX];
     _isInNavigationMode = NO;
 }
 

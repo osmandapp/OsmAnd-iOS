@@ -114,11 +114,12 @@
     _trackingUtilities = [OAMapViewTrackingUtilities instance];
     _locationProvider = _app.locationServices;
     _currentPositionHelper = [OACurrentPositionHelper instance];
+    BOOL isNight = OADayNightHelper.instance.isNightMode;
 
     self.hidden = YES;
 
     CGFloat radius = 3.0;
-    self.backgroundColor = [UIColor whiteColor];
+    self.backgroundColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColor.whiteColor;
     self.layer.cornerRadius = radius;
     
     // drop shadow
@@ -130,7 +131,7 @@
     _regularFont = [UIFont systemFontOfSize:18 weight:UIFontWeightSemibold];
     _boldFont = [UIFont systemFontOfSize:18 weight:UIFontWeightBold];
     _textFont = _regularFont;
-    _textColor = [UIColor blackColor];
+    _textColor = isNight ? UIColor.whiteColor : UIColor.blackColor;
     _textShadowColor = nil;
     _shadowRadius = 0;
     

@@ -44,6 +44,13 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         tableView.contentInset.bottom = 64
     }
     
+    override func registerObservers() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(deviceDisconnected),
+                                               name: .DeviceDisconnected,
+                                               object: nil)
+    }
+    
     override func useCustomTableViewHeader() -> Bool {
         true
     }
@@ -51,8 +58,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureStartState()
-        generateData()
-        tableView.reloadData()
+        reloadData()
     }
     
     override func getTitle() -> String! {
@@ -210,7 +216,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     }
     
     private func detectBluetoothState() {
-        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.removeObserver(self, name: Central.CentralStateChange, object: Central.sharedInstance)
         NotificationCenter.default.addObserver(forName: Central.CentralStateChange,
                                                object: Central.sharedInstance,
                                                queue: nil) { [weak self] _ in
@@ -218,9 +224,13 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
             UserDefaults.standard.set(true, for: .wasAuthorizationRequestBluetooth)
             guard DeviceHelper.shared.hasPairedDevices else { return }
             configureStartState()
-            generateData()
-            tableView.reloadData()
+            reloadData()
         }
+    }
+    
+    private func reloadData() {
+        generateData()
+        tableView.reloadData()
     }
     
     private func configureEmptyHeader() {
@@ -294,6 +304,11 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         }
     }
     
+    @objc private func deviceDisconnected() {
+        guard view.window != nil else { return }
+        reloadData()
+    }
+    
     // MARK: - IBAction
     @IBAction private func onPairNewSensorButtonPressed(_ sender: Any) {
         pairNewSensor()
@@ -337,8 +352,7 @@ extension BLEExternalSensorsViewController {
         alert.addAction(UIAlertAction(title: localizedString("external_device_forget_sensor"), style: .destructive, handler: {  _ in
             DeviceHelper.shared.setDevicePaired(device: device, isPaired: false)
             self.configureStartState()
-            self.generateData()
-            self.tableView.reloadData()
+            self.reloadData()
         }))
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         alert.popoverPresentationController?.sourceView = view
@@ -349,9 +363,7 @@ extension BLEExternalSensorsViewController {
         let nameVC = BLEChangeDeviceNameViewController()
         nameVC.device = device
         nameVC.onSaveAction = { [weak self] in
-            guard let self else { return }
-            generateData()
-            tableView.reloadData()
+            self?.reloadData()
         }
         navigationController?.present(UINavigationController(rootViewController: nameVC), animated: true)
     }

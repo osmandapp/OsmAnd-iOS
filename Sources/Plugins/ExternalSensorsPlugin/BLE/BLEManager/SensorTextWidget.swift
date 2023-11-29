@@ -48,7 +48,7 @@ final class SensorTextWidget: OATextInfoWidget {
     
     private func updateSensorData(sensor: Sensor?) {
         if let sensor, let widgetType {
-            let dataList = sensor.getLastSensorDataList()
+            let dataList = sensor.getLastSensorDataList(for: widgetType)
             if !sensor.device.isConnected || dataList?.isEmpty ?? false {
                 setText("-", subtext: nil)
                 return
@@ -98,7 +98,15 @@ final class SensorTextWidget: OATextInfoWidget {
         settingRow.iconTintColor = UIColor.iconColorDefault
         settingRow.key = "external_sensor_key"
         settingRow.title = localizedString("external_sensors_source_of_data")
-        settingRow.descr = localizedString("shared_string_none")
+        
+        if externalDeviceId == nil || externalDeviceId?.isEmpty ?? false {
+            applyDeviceId()
+        }
+        if let sensor = getCurrentSensor() {
+            settingRow.descr = sensor.device.deviceName
+        } else {
+            settingRow.descr = localizedString("shared_string_none")
+        }
 
         return data
     }

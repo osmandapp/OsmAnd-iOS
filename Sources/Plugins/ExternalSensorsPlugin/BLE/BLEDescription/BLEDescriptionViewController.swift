@@ -20,6 +20,10 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
                 generateData()
                 tableView.reloadData()
             }
+            device.didDisconnect = { [weak self, weak device] in
+                guard let self, let device else { return }
+                headerView.configure(device: device)
+            }
         }
     }
     

@@ -44,29 +44,18 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         configureDataSource()
-        generateData()
-        tableView.reloadData()
-    }
-    
-    func configureDataSource() {
-        devices = gatConnectedAndPaireDisconnectedDevicesFor()?.sorted(by: { $0.deviceName < $1.deviceName })
-        // reset to default state for checkbox
-        devices?.forEach { $0.isSelected = false }
-        if let devices {
-            if let device = devices.first(where: { $0.id == widget?.externalDeviceId }) {
-                device.isSelected = true
-            } else {
-                if let device = devices.first {
-                    widget?.configureDevice(id: device.id)
-                    device.isSelected = true
-                }
-            }
-        }
+        reloadData()
     }
     
     // MARK: - Override's
+    
+    override func registerObservers() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(deviceDisconected),
+                                               name: .DeviceDisconnected,
+                                               object: nil)
+    }
     
     override func getTitle() -> String! {
         localizedString("ant_plus_pair_new_sensor")
@@ -130,6 +119,22 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     
     // MARK: - Private func's
     
+    private func configureDataSource() {
+        devices = gatConnectedAndPaireDisconnectedDevicesFor()?.sorted(by: { $0.deviceName < $1.deviceName })
+        // reset to default state for checkbox
+        devices?.forEach { $0.isSelected = false }
+        if let devices {
+            if let device = devices.first(where: { $0.id == widget?.externalDeviceId }) {
+                device.isSelected = true
+            } else {
+                if let device = devices.first {
+                    widget?.configureDevice(id: device.id)
+                    device.isSelected = true
+                }
+            }
+        }
+    }
+    
     private func configureTableView() {
         tableView.isHidden = false
         tableView.dataSource = self
@@ -160,6 +165,16 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         if let vc = storyboard.instantiateViewController(withIdentifier: "BLESearchViewController") as? BLESearchViewController {
             navigationController?.pushViewController(vc, animated: true)
         }
+    }
+    
+    private func reloadData() {
+        generateData()
+        tableView.reloadData()
+    }
+    
+    @objc private func deviceDisconected() {
+        guard view.window != nil else { return }
+        reloadData()
     }
     
     // MARK: - @IBAction's

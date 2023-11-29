@@ -66,8 +66,7 @@ final class BLEManager {
                             timeoutAfter timeout: TimeInterval = 15,
                             successHandler: @escaping () -> Void,
                             failureHandler: @escaping (BLEManagerUnavailbleFailureReason) -> Void,
-                            scanStoppedHandler: @escaping (Bool) -> Void)
-    {
+                            scanStoppedHandler: @escaping (Bool) -> Void) {
         discoveredDevices.removeAll()
         SwiftyBluetooth.scanForPeripherals(withServiceUUIDs: serviceUUIDs, timeoutAfter: timeout) { [weak self] scanResult in
             guard let self else { return }
@@ -94,7 +93,6 @@ final class BLEManager {
                         if let savedDevice = DeviceHelper.shared.devicesSettingsCollection.getDeviceSettings(deviceId: peripheral.identifier.uuidString) {
                             deviceName = savedDevice.deviceName
                         }
-                        peripheral.disconnect { _ in }
                         device.setPeripheral(peripheral: peripheral)
                         device.rssi = rssi
                         device.deviceName = deviceName
@@ -138,7 +136,7 @@ final class BLEManager {
     func removeAndDisconnectDiscoveredDevices() {
         BLEManager.shared.discoveredDevices.forEach {
             $0.disableRSSI()
-            $0.peripheral.disconnect(completion: { _ in })
+            DeviceHelper.shared.disconnectIfNeeded(device: $0)
         }
         BLEManager.shared.discoveredDevices.removeAll()
     }

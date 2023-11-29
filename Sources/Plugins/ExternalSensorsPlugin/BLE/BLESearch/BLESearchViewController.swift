@@ -114,6 +114,10 @@ final class BLESearchViewController: OABaseNavbarViewController {
                                                selector: #selector(deviceRSSIUpdated),
                                                name: .DeviceRSSIUpdated,
                                                object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(deviceDisconected),
+                                               name: .DeviceDisconnected,
+                                               object: nil)
     }
     
     override func generateData() {
@@ -273,6 +277,12 @@ final class BLESearchViewController: OABaseNavbarViewController {
     }
     
     @objc private func deviceRSSIUpdated() {
+        guard view.window != nil else { return }
+        tableView.reloadData()
+    }
+    
+    @objc private func deviceDisconected() {
+        guard view.window != nil else { return }
         tableView.reloadData()
     }
     
@@ -283,7 +293,6 @@ final class BLESearchViewController: OABaseNavbarViewController {
               UIApplication.shared.canOpenURL(settingsURL) else {
             return
         }
-        
         UIApplication.shared.open(settingsURL)
     }
     

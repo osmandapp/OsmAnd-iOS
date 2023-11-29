@@ -13,16 +13,18 @@ import CoreBluetooth
 final class SensorTextWidget: OATextInfoWidget {
     static let externalDeviceIdConst = "externalDeviceIdConst"
     
+    private(set) var isSelectedAnyConnectedDeviceOption: OACommonBoolean?
     private(set) var externalDeviceId: String?
     
     private var cachedValue: String?
     private var deviceIdPref: OACommonPreference?
-    
+   
     convenience init(customId: String?, widgetType: WidgetType, widgetParams: ([String: Any])? = nil) {
         self.init(frame: .zero)
         setIconFor(widgetType)
         self.widgetType = widgetType
         deviceIdPref = registerSensorDevicePref(customId: customId)
+        isSelectedAnyConnectedDeviceOption = registerIsSelectedAnyConnectedDeviceOption(customId: "isSelectedAnyConnected_\(customId ?? "")")
         
         if let id = widgetParams?[SensorTextWidget.externalDeviceIdConst] as? String {
             // For a newly created widget with selected device(not 1st)
@@ -38,6 +40,10 @@ final class SensorTextWidget: OATextInfoWidget {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setSelectedAnyConnectedDeviceOption(select: Bool) {
+        isSelectedAnyConnectedDeviceOption?.set(select, mode: OAAppSettings.sharedManager().currentMode)
     }
     
     private func updateSensorData(sensor: Sensor?) {
@@ -166,6 +172,14 @@ final class SensorTextWidget: OATextInfoWidget {
             prefId += customId
         }
         return OAAppSettings.sharedManager().registerStringPreference(prefId, defValue: nil).makeProfile() as! OACommonPreference
+    }
+    
+    private func registerIsSelectedAnyConnectedDeviceOption(customId: String?) -> OACommonBoolean {
+        var prefId = widgetType!.title
+        if let customId, !customId.isEmpty {
+            prefId += customId
+        }
+        return OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: true)
     }
     
     private func saveDeviceId(deviceId: String) {

@@ -19,9 +19,9 @@ final class BLETemperatureSensor: Sensor {
         var widgetFields: [SensorWidgetDataField]? {
             return [SensorWidgetDataField(fieldType: .temperature,
                                           nameId: localizedString("shared_string_temperature"),
-                                          unitNameId: "",
+                                          unitNameId: localizedString("degree_celsius"),
                                           numberValue: nil,
-                                          stringValue: String(temperature) + " " + localizedString("degree_celsius"))]
+                                          stringValue: String(temperature))]
         }
         
         func getWidgetField(fieldType: WidgetType) -> SensorWidgetDataField? {
@@ -35,8 +35,9 @@ final class BLETemperatureSensor: Sensor {
         [.temperature]
     }
     
-    override func getLastSensorDataList() -> [SensorData]? {
-        [lastTemperatureData].compactMap { $0 }
+    override func getLastSensorDataList(for wiggetType: WidgetType) -> [SensorData]? {
+        guard wiggetType == .temperature else { return nil }
+        return [lastTemperatureData].compactMap { $0 }
     }
     
     override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {

@@ -9,6 +9,11 @@
 import UIKit
 
 final class BLEPairedSensorsViewController: OABaseNavbarViewController {
+    
+    enum PairedSensorsType {
+        case widget, tripRecording
+    }
+    
     @IBOutlet private weak var searchingTitle: UILabel!
     @IBOutlet private weak var searchingDescription: UILabel! {
         didSet {
@@ -20,10 +25,15 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
             pairNewSensorButton.setTitle(localizedString("ant_plus_pair_new_sensor"), for: .normal)
         }
     }
-    @IBOutlet private weak var emptyView: UIView!
+    @IBOutlet private weak var emptyView: UIView! {
+        didSet {
+            emptyView.isHidden = true
+        }
+    }
     
     var widgetType: WidgetType?
     var widget: SensorTextWidget?
+    var pairedSensorsType: PairedSensorsType = .widget
     var onSelectDeviceAction: ((String) -> Void)?
     
     private var devices: [Device]?
@@ -74,13 +84,18 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     
     override func generateData() {
         tableData.clearAllData()
+        switch pairedSensorsType {
+        case .widget:
+            break
+        default: break
+        }
         if let devices {
-            emptyView.isHidden = true
+            //emptyView.isHidden = true
             let section = tableData.createNewSection()
             devices.forEach { _ in section.createNewRow() }
         } else {
-            configureEmptyViewSearchingTitle()
-            emptyView.isHidden = false
+//            configureEmptyViewSearchingTitle()
+//            emptyView.isHidden = false
         }
         tableView.reloadData()
     }
@@ -128,13 +143,24 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         tableView.reloadData()
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            var height:CGFloat = CGFloat()
+            if indexPath.row == 1 {
+                height = 150
+            }
+            else {
+                height = 50
+            }
+            return height
+        }
+    
     // MARK: - Private func's
     
     private func configureTableView() {
         tableView.isHidden = false
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.rowHeight = 72
+      //  tableView.rowHeight = 73
         tableView.backgroundColor = .clear
         view.backgroundColor = UIColor.viewBgColor
         
@@ -142,9 +168,9 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
                            forHeaderFooterViewReuseIdentifier: SectionHeaderFooterButton.getCellIdentifier())
     }
     
-    private func configureEmptyViewSearchingTitle() {
-        searchingTitle.text = "\"" + (widgetType?.title ?? "") + "\" " + localizedString("external_sensors_not_found").lowercased()
-    }
+//    private func configureEmptyViewSearchingTitle() {
+//        searchingTitle.text = "\"" + (widgetType?.title ?? "") + "\" " + localizedString("external_sensors_not_found").lowercased()
+//    }
     
     private func gatConnectedAndPaireDisconnectedDevicesFor() -> [Device]? {
         if let widgetType,

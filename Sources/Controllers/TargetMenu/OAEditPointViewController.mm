@@ -345,7 +345,8 @@
 - (void)setupColors
 {
     _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    _selectedColorItem = [_appearanceCollection getColorItemWithValue:[[_pointHandler getColor] toARGBNumber]];
+    UIColor *selectedColor = _isNewItemAdding ? [OAFavoritesHelper getGroupByName:self.groupTitle].color : [_pointHandler getColor];
+    _selectedColorItem = [_appearanceCollection getColorItemWithValue:[selectedColor toARGBNumber]];
     _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
 }
 
@@ -418,10 +419,15 @@
 
     _poiCategories = categoriesData;
 
-    if (!_selectedIconName || _selectedIconName.length == 0)
+    OAFavoriteGroup *selectedGroup = [OAFavoritesHelper getGroupByName:self.groupTitle];
+    if (_isNewItemAdding && selectedGroup)
+        _selectedIconName = selectedGroup.iconName;
+    else if (!_selectedIconName || _selectedIconName.length == 0)
         _selectedIconName = DEFAULT_ICON_NAME;
 
-    if (!_selectedIconCategoryName || _selectedIconCategoryName.length == 0)
+    if (_isNewItemAdding && selectedGroup)
+        _selectedIconCategoryName = [self getInitCategory:_selectedIconName];
+    else if (!_selectedIconCategoryName || _selectedIconCategoryName.length == 0)
         _selectedIconCategoryName = @"special";
     
     _backgroundIconNames = [OAFavoritesHelper getFlatBackgroundIconNamesList];
@@ -433,7 +439,7 @@
 
     _backgroundIcons = [NSArray arrayWithArray:tempBackgroundIcons];
 
-    _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:[_pointHandler getBackgroundIcon]];
+    _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:_isNewItemAdding && selectedGroup ? selectedGroup.backgroundType : [_pointHandler getBackgroundIcon]];
     if (_selectedBackgroundIndex == -1)
         _selectedBackgroundIndex = 0;
 }
@@ -1629,14 +1635,19 @@
         groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
         OAFavoriteGroup *group = [OAFavoritesHelper getGroupByName:groupName];
         if (group)
+        {
             _selectedColorItem = [_appearanceCollection getColorItemWithValue:[group.color toARGBNumber]];
+            _selectedIconName = group.iconName;
+            _selectedIconCategoryName = [self getInitCategory:_selectedIconName];
+            _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:group.backgroundType];
+            [self createIconList];
+        }
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
     {
         _selectedColorItem = [_appearanceCollection getColorItemWithValue:[UIColor toNumberFromString:[(OAGpxWptEditingHandler *) _pointHandler getGroupsWithColors][groupName]]];
     }
 
-    [self applyLocalization];
     if ([self.groupTitle isEqualToString:@""])
         self.groupTitle = OALocalizedString(@"favorites_item");
     [self applyLocalization];

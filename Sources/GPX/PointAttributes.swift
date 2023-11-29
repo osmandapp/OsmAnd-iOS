@@ -13,11 +13,11 @@ class PointAttributes : NSObject {
     static let pointElevation = "ele"
     static let pointSpeed = "speed"
     static let sensorTagHartRate = "hr"
-    static let sensorTagSpeed = "osmand:speed_sensor"
-    static let sensorTagCadence = "cadence"
+    static let sensorTagSpeed = "speed_sensor"
+    static let sensorTagCadence = "cad"
     static let sensorTagBikePower = "power"
-    static let sensorTagTemperature = "temp"
-    static let sensorTagDistance = "osmand:bike_distance_sensor"
+    static let sensorTagTemperature = "wtemp"
+    static let sensorTagDistance = "bike_distance_sensor"
 
     let distance: Float
     let timeDiff: Float

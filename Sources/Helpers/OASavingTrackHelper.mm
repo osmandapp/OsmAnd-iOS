@@ -729,11 +729,13 @@
     if (extensions && extensions.count > 0)
     {
         OAGpxExtension *trackPointExtension = [[OAGpxExtension alloc] init];
+        trackPointExtension.prefix = @"gpxtpx";
         trackPointExtension.name = @"TrackPointExtension";
         NSMutableArray<OAGpxExtension *> *subextensions = [NSMutableArray array];
         for (NSString *key in extensions.allKeys)
         {
             OAGpxExtension *subextension = [[OAGpxExtension alloc] init];
+            subextension.prefix = @"gpxtpx";
             subextension.name = key;
             subextension.value = extensions[key];
             [subextensions addObject:subextension];

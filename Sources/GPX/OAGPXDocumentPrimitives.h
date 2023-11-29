@@ -77,6 +77,7 @@ struct RouteDataBundle;
 
 @interface OAGpxExtension : NSObject <NSCopying>
 
+@property (nonatomic) NSString *prefix;
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *value;
 @property (nonatomic) NSDictionary *attributes;

@@ -28,6 +28,8 @@ enum DeviceState: Int {
 }
 
 class Device {
+    static let identifier = "identifier"
+    
     var deviceType: DeviceType!
     var rssi = -1
     var deviceName: String = ""
@@ -105,7 +107,9 @@ class Device {
             guard let self else { return }
             if let identifier = notification.userInfo?["identifier"] as? UUID, identifier.uuidString == self.id {
                 DeviceHelper.shared.removeDisconnected(device: self)
-                NotificationCenter.default.post(name: .DeviceDisconnected, object: nil)
+                NotificationCenter.default.post(name: .DeviceDisconnected,
+                                                object: nil,
+                                                userInfo: [Self.identifier: self.id])
                 didDisconnect?()
             }
         }

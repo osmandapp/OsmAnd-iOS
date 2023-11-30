@@ -253,10 +253,23 @@ static NSArray<NSString *> *minTrackSpeedNames;
                     {
                         OACommonString *deviceIdPref = [plugin getWriteToTrackDeviceIdPref:widgetType];
                         NSString *deviceId = [deviceIdPref get:self.appMode];
-                        if (deviceId.length > 0
-                            && ![deviceId isEqualToString:kDenyWriteSensorDataToTrackKey]
-                            && [[OADeviceHelper shared] getConnectedOrPaireDisconnectedDeviceForType:widgetType deviceId:deviceId])
-                            devices++;
+                        if (![deviceId isEqualToString:OATrackRecordingNone])
+                        {
+                            if ([deviceId isEqualToString:OATrackRecordingAnyConnected])
+                            {
+                                if ([[OADeviceHelper shared] getConnectedDevicesForWidgetWithType:widgetType].firstObject)
+                                {
+                                    devices++;
+                                }
+                            }
+                            else
+                            {
+                                if ([[OADeviceHelper shared] getConnectedOrPaireDisconnectedDeviceForType:widgetType deviceId:deviceId])
+                                {
+                                    devices++;
+                                }
+                            }
+                        }
                     }
                 }
                 [dataArr addObject:

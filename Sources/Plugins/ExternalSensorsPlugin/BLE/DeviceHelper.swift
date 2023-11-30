@@ -146,6 +146,18 @@ final class DeviceHelper: NSObject {
         removeDisconnected(device: device)
         devicesSettingsCollection.removeDeviceSetting(with: device.id)
         unpairWidgetsForDevice(id: device.id)
+        unpairTrackRecordingFor(device: device)
+    }
+    
+    private func unpairTrackRecordingFor(device: Device) {
+        guard let supportedTypes = device.getSupportedWidgetDataFieldTypes(),
+              let plugin = OAPlugin.getEnabledPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin else { return }
+        supportedTypes.forEach {
+            let deviceId = plugin.getDeviceId(for: $0, appMode: OAAppSettings.sharedManager().applicationMode.get())
+            if deviceId != OATrackRecordingNone {
+                plugin.getWriteToTrackDeviceIdPref($0).resetToDefault()
+            }
+        }
     }
     
     private func getDeviceFor(type: DeviceType) -> Device {

@@ -25,16 +25,12 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
             pairNewSensorButton.setTitle(localizedString("ant_plus_pair_new_sensor"), for: .normal)
         }
     }
-    @IBOutlet private weak var emptyView: UIView! {
-        didSet {
-            emptyView.isHidden = true
-        }
-    }
     
     var widgetType: WidgetType?
     var widget: SensorTextWidget?
     var pairedSensorsType: PairedSensorsType = .widget
-    var onSelectDeviceAction: ((String) -> Void)?
+    var onSelectDeviceAction: ((Device) -> Void)?
+    var onSelectCommonOptionsAction: (() -> Void)?
     
     private var devices: [Device]?
     
@@ -54,7 +50,6 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//<<<<<<< HEAD
         
         switch pairedSensorsType {
         case .widget:
@@ -67,16 +62,18 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     }
     
     private func configureTripRecordingDataSource() {
-        
+        guard let widget else { return }
+        // TODO: Add logic in branch TripRecording
     }
     
     private func configureWidgetDataSource() {
         guard let widget else { return }
         let isSelectedAnyConnectedDeviceOption = widget.isSelectedAnyConnectedDeviceOption?.get() == true
-        let anyConnectedDevice = AnyConnectedDevice(deviceType: nil)
+        let anyConnectedDevice = OptionDevice(deviceType: nil)
+        anyConnectedDevice.option = .anyConnected
         anyConnectedDevice.isSelected = isSelectedAnyConnectedDeviceOption
         
-        devices = gatConnectedAndPaireDisconnectedDevicesFor()?.sorted(by: { $0.deviceName < $1.deviceName })
+        devices = gatConnectedAndPaireDisconnectedDevicesFor()?.sorted(by: { $0.deviceName < $1.deviceName }) ?? []
         // reset to default state for checkbox
         devices?.forEach { $0.isSelected = false }
         if devices?.isEmpty ?? true {
@@ -95,23 +92,6 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
             }
             devices?.insert(anyConnectedDevice, at: 0)
         }
-       
-        // reset to default state for checkbox
-    //    devices?.forEach { $0.isSelected = false }
-//        if let devices {
-//            if let device = devices.first(where: { $0.id == widget?.externalDeviceId }) {
-//                device.isSelected = true
-//            } else {
-//                if let device = devices.first {
-//                    widget?.configureDevice(id: device.id)
-//                    device.isSelected = true
-//                }
-//            }
-//        }
-//=======
-//        configureDataSource()
-//        reloadData()
-//>>>>>>> master
     }
     
     // MARK: - Override's
@@ -131,14 +111,6 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         tableData.clearAllData()
         let section = tableData.createNewSection()
         devices?.forEach { _ in section.createNewRow() }
-//        if let devices {
-//            //emptyView.isHidden = true
-//            let section = tableData.createNewSection()
-//            devices.forEach { _ in section.createNewRow() }
-//        } else {
-////            configureEmptyViewSearchingTitle()
-////            emptyView.isHidden = false
-//        }
         tableView.reloadData()
     }
     
@@ -162,12 +134,12 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         if let devices, devices.count > indexPath.row {
             let item = devices[indexPath.row]
-            if item is AnyConnectedDevice {
+            if item is OptionDevice {
                 if let cell = tableView.dequeueReusableCell(withIdentifier: AnyConnectedDevicesTableViewCell.reuseIdentifier) as? AnyConnectedDevicesTableViewCell {
                     cell.separatorInset = .zero
                     cell.layoutMargins = .zero
                     cell.preservesSuperviewLayoutMargins = false
-                    if let widgetType, let anyConnectedDevice = devices[indexPath.row] as? AnyConnectedDevice {
+                    if let widgetType, let anyConnectedDevice = devices[indexPath.row] as? OptionDevice {
                         cell.configure(anyConnectedDevice: anyConnectedDevice,
                                        widgetType: widgetType,
                                        title: localizedString("external_device_any_connected"))
@@ -198,13 +170,14 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
             item.isSelected = index == indexPath.row
         }
         
-        if currentSelectedDevice.deviceType != nil {
-            widget?.setSelectedAnyConnectedDeviceOption(select: false)
-            widget?.configureDevice(id: currentSelectedDevice.id)
-            onSelectDeviceAction?(currentSelectedDevice.id)
-        } else {
+        if currentSelectedDevice is OptionDevice {
             widget?.setSelectedAnyConnectedDeviceOption(select: true)
             widget?.configureDevice(id: "")
+            onSelectCommonOptionsAction?()
+        } else {
+            widget?.setSelectedAnyConnectedDeviceOption(select: false)
+            widget?.configureDevice(id: currentSelectedDevice.id)
+            onSelectDeviceAction?(currentSelectedDevice)
         }
        
         tableView.reloadData()

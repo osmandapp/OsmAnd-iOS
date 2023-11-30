@@ -103,7 +103,11 @@ final class SensorTextWidget: OATextInfoWidget {
             applyDeviceId()
         }
         if let sensor = getCurrentSensor() {
-            settingRow.descr = sensor.device.deviceName
+            if isSelectedAnyConnectedDeviceOption?.get() == true {
+                settingRow.descr = localizedString("external_device_any_connected") + ": " + sensor.device.deviceName
+            } else {
+                settingRow.descr = sensor.device.deviceName
+            }
         } else {
             settingRow.descr = localizedString("shared_string_none")
         }
@@ -116,7 +120,7 @@ final class SensorTextWidget: OATextInfoWidget {
     }
 
     func getFieldType() -> WidgetType {
-        return widgetType!
+        widgetType!
     }
     
     func configureDevice(id: String) {
@@ -128,10 +132,17 @@ final class SensorTextWidget: OATextInfoWidget {
         guard let widgetType else {
             return nil
         }
-        if let externalDeviceId {
-            if let device = gatConnectedAndPaireDisconnectedDevicesFor().first(where: { $0.id == externalDeviceId }) {
-                let sensors = device.sensors.compactMap { $0.getSupportedWidgetDataFieldTypes() != nil ? $0 : nil }
-                return sensors.first(where: { $0.getSupportedWidgetDataFieldTypes()!.contains(widgetType) })
+        if isSelectedAnyConnectedDeviceOption?.get() == true {
+            if let device = DeviceHelper.shared.getConnectedDevicesForWidget(type: widgetType)?.first {
+                return device.sensors.compactMap { $0.getSupportedWidgetDataFieldTypes() != nil ? $0 : nil }
+                    .first(where: { $0.getSupportedWidgetDataFieldTypes()!.contains(widgetType) })
+            }
+        } else {
+            if let externalDeviceId {
+                if let device = gatConnectedAndPaireDisconnectedDevicesFor().first(where: { $0.id == externalDeviceId }) {
+                    return device.sensors.compactMap { $0.getSupportedWidgetDataFieldTypes() != nil ? $0 : nil }
+                        .first(where: { $0.getSupportedWidgetDataFieldTypes()!.contains(widgetType) })
+                }
             }
         }
         return nil
@@ -142,6 +153,9 @@ final class SensorTextWidget: OATextInfoWidget {
     }
     
     private func applyDeviceId() {
+        guard isSelectedAnyConnectedDeviceOption?.get() == false else {
+            return
+        }
         if externalDeviceId == nil || externalDeviceId?.isEmpty ?? false {
             let connectedAndPaireDisconnectedDevicesWithWidgetType = gatConnectedAndPaireDisconnectedDevicesFor()
             if connectedAndPaireDisconnectedDevicesWithWidgetType.isEmpty {

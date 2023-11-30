@@ -8,8 +8,12 @@
 
 import Foundation
 
-final class AnyConnectedDevice: Device {
+final class OptionDevice: Device {
+    enum SelectedOptionDevice: Int {
+        case none, anyConnected
+    }
     
+    var option: SelectedOptionDevice = .none
 }
 
 final class AnyConnectedDevicesTableViewCell: UITableViewCell {
@@ -22,12 +26,9 @@ final class AnyConnectedDevicesTableViewCell: UITableViewCell {
         return imgView
     }()
     
-    func configure(anyConnectedDevice: AnyConnectedDevice, widgetType: WidgetType, title: String) {
-        switch widgetType {
-        case .heartRate:
-            deviceImageView.image = UIImage(named: "ic_custom_sensor_heart_rate_outlined")
-        default:
-            break
+    func configure(anyConnectedDevice: OptionDevice, widgetType: WidgetType, title: String) {
+        if let iconName = widgetType.disabledIconName {
+            deviceImageView.image = UIImage(named: iconName)
         }
         titleLabel.text = title
         if anyConnectedDevice.isSelected {

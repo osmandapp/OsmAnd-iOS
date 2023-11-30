@@ -100,6 +100,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OAMapSettingsTerrainParametersViewController.h"
+#import "OADiscountToolbarViewController.h"
 
 #import "OARouteKey.h"
 #import "OANetworkRouteSelectionTask.h"
@@ -3395,6 +3396,12 @@ typedef enum
 {
     OAToolbarViewController *toolbar = [self getTopToolbar];
     return toolbar && [toolbar isKindOfClass:OASearchToolbarViewController.class];
+}
+
+- (BOOL)isTopToolbarDiscountVisible
+{
+    OAToolbarViewController *toolbar = [self getTopToolbar];
+    return toolbar && [toolbar isKindOfClass:OADiscountToolbarViewController.class];
 }
 
 - (BOOL) isTargetMapRulerNeeds

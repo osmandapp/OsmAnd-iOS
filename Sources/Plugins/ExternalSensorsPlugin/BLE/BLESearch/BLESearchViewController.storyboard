@@ -154,7 +154,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OMj-M0-oTs" userLabel="SearchingView">
                                 <rect key="frame" x="0.0" y="59" width="430" height="246"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_search_wave" translatesAutoresizingMaskIntoConstraints="NO" id="Y7B-4e-J3M">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_search_wave" translatesAutoresizingMaskIntoConstraints="NO" id="Y7B-4e-J3M">
                                         <rect key="frame" x="0.0" y="-40" width="430" height="286"/>
                                     </imageView>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="mdf-qV-p4H">
@@ -170,7 +170,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wQV-O7-UKe" userLabel="Please hold the device close to the sensor.  You need to activate the sensor so OsmAnd can find it.">
-                                                <rect key="frame" x="4" y="26.333333333333314" width="362" height="58"/>
+                                                <rect key="frame" x="19" y="26.333333333333314" width="332" height="58"/>
                                                 <string key="text">Please hold the device close to the sensor. 
 You need to activate the sensor so OsmAnd can find it.</string>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
@@ -302,7 +302,7 @@ You need to activate the sensor so OsmAnd can find it.</string>
     <resources>
         <image name="ic_custom_bluetooth_off" width="49" height="48"/>
         <image name="ic_custom_sensor_find" width="49" height="48"/>
-        <image name="ic_search_wave" width="375" height="341"/>
+        <image name="img_search_wave" width="396" height="396"/>
         <namedColor name="active">
             <color red="0.34099999070167542" green="0.078000001609325409" blue="0.80000001192092896" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

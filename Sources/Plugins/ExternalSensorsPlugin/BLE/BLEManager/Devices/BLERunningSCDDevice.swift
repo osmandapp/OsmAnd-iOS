@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreBluetooth
 
 final class BLERunningSCDDevice: Device {
     
@@ -44,8 +45,8 @@ final class BLERunningSCDDevice: Device {
 
     
     init() {
-        super.init(deviceType: .BLE_BICYCLE_SCD)
-        sensors.append(BLEBikeSensor(device: self, sensorId: "running"))
+        super.init(deviceType: .BLE_RUNNING_SCDS)
+        sensors.append(BLERunningSensor(device: self, sensorId: "running"))
     }
     
     override func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {

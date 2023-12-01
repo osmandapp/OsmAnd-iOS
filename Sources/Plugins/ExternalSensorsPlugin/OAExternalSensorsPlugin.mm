@@ -91,13 +91,13 @@
                              OAWidgetType.temperature];
     for (OAWidgetType *widgetType in widgetTypeArray)
     {
-        [delegate addWidget:[creator createWidgetInfoWithWidget:(SensorTextWidget *) [self createMapWidgetForParams:widgetType]]];
+        [delegate addWidget:[creator createWidgetInfoWithWidget:(SensorTextWidget *) [self createMapWidgetForParams:widgetType appMode:appMode]]];
     }
 }
 
-- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType
+- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType appMode:(OAApplicationMode *)appMode
 {
-    return [[SensorTextWidget alloc] initWithCustomId:@"" widgetType:widgetType widgetParams:nil];
+    return [[SensorTextWidget alloc] initWithCustomId:@"" widgetType:widgetType appMode:appMode widgetParams:nil];
 }
 
 - (NSString *) getName

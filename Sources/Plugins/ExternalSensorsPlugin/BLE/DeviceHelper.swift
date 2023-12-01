@@ -121,7 +121,7 @@ final class DeviceHelper: NSObject {
             widgets.forEach { 
                 // reset to default state
                 $0.configureDevice(id: "")
-                $0.useAnyDevicePref(use: true)
+                $0.setAnyDevice(use: true)
             }
         }
     }

@@ -13,16 +13,23 @@ import CoreBluetooth
 final class SensorTextWidget: OATextInfoWidget {
     static let externalDeviceIdConst = "externalDeviceIdConst"
     
-    private(set) var useAnyDevicePref: OACommonBoolean?
     private(set) var externalDeviceId: String?
+    
+    private var useAnyDevicePref: OACommonBoolean?
     
     private var cachedValue: String?
     private var deviceIdPref: OACommonPreference?
+    private var appMode: OAApplicationMode!
+    
+    var shouldUseAnyDevice: Bool {
+        useAnyDevicePref?.get() == true
+    }
    
-    convenience init(customId: String?, widgetType: WidgetType, widgetParams: ([String: Any])? = nil) {
+    convenience init(customId: String?, widgetType: WidgetType, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         self.init(frame: .zero)
         setIconFor(widgetType)
         self.widgetType = widgetType
+        self.appMode = appMode
         deviceIdPref = registerSensorDevicePref(customId: customId)
         useAnyDevicePref = registerUseAnyDevicePref(customId: customId)
         
@@ -30,7 +37,7 @@ final class SensorTextWidget: OATextInfoWidget {
             // For a newly created widget with selected device(not 1st)
             externalDeviceId = id
         } else {
-            externalDeviceId = getDeviceId(appMode: OAAppSettings.sharedManager().currentMode)
+            externalDeviceId = getDeviceId()
         }
     }
     
@@ -42,8 +49,57 @@ final class SensorTextWidget: OATextInfoWidget {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func useAnyDevicePref(use: Bool) {
-        useAnyDevicePref?.set(use, mode: OAAppSettings.sharedManager().currentMode)
+    override func updateInfo() -> Bool {
+        if externalDeviceId == nil || externalDeviceId?.isEmpty ?? false {
+            applyDeviceId()
+        }
+        updateSensorData(sensor: getCurrentSensor())
+        return false
+    }
+    
+    override func isMetricSystemDepended() -> Bool {
+        true
+    }
+    
+    override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
+        let data = OATableDataModel()
+        let section = data.createNewSection()
+        section.headerText = localizedString("shared_string_settings")
+
+        let settingRow = section.createNewRow()
+        settingRow.cellType = OAValueTableViewCell.getIdentifier()
+        settingRow.iconName = "ic_custom_sensor"
+        settingRow.iconTintColor = UIColor.iconColorDefault
+        settingRow.key = "external_sensor_key"
+        settingRow.title = localizedString("external_sensors_source_of_data")
+        
+        if externalDeviceId == nil || externalDeviceId?.isEmpty ?? false {
+            applyDeviceId()
+        }
+        if let sensor = getCurrentSensor() {
+            if shouldUseAnyDevice {
+                settingRow.descr = localizedString("external_device_any_connected") + ": " + sensor.device.deviceName
+            } else {
+                settingRow.descr = sensor.device.deviceName
+            }
+        } else {
+            settingRow.descr = localizedString("shared_string_none")
+        }
+
+        return data
+    }
+
+    func getFieldType() -> WidgetType {
+        widgetType!
+    }
+    
+    func configureDevice(id: String) {
+        externalDeviceId = id
+        saveDeviceId(deviceId: id)
+    }
+    
+    func setAnyDevice(use: Bool) {
+        useAnyDevicePref?.set(use, mode: appMode)
     }
     
     private func updateSensorData(sensor: Sensor?) {
@@ -75,64 +131,15 @@ final class SensorTextWidget: OATextInfoWidget {
         }
     }
     
-    override func updateInfo() -> Bool {
-        if externalDeviceId == nil || externalDeviceId?.isEmpty ?? false {
-            applyDeviceId()
-        }
-        updateSensorData(sensor: getCurrentSensor())
-        return false
-    }
-    
-    override func isMetricSystemDepended() -> Bool {
-        return true
-    }
-    
-    override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
-        let data = OATableDataModel()
-        let section = data.createNewSection()
-        section.headerText = localizedString("shared_string_settings")
-
-        let settingRow = section.createNewRow()
-        settingRow.cellType = OAValueTableViewCell.getIdentifier()
-        settingRow.iconName = "ic_custom_sensor"
-        settingRow.iconTintColor = UIColor.iconColorDefault
-        settingRow.key = "external_sensor_key"
-        settingRow.title = localizedString("external_sensors_source_of_data")
-        
-        if externalDeviceId == nil || externalDeviceId?.isEmpty ?? false {
-            applyDeviceId()
-        }
-        if let sensor = getCurrentSensor() {
-            if useAnyDevicePref?.get() == true {
-                settingRow.descr = localizedString("external_device_any_connected") + ": " + sensor.device.deviceName
-            } else {
-                settingRow.descr = sensor.device.deviceName
-            }
-        } else {
-            settingRow.descr = localizedString("shared_string_none")
-        }
-
-        return data
-    }
-    
-    func getDeviceId(appMode: OAApplicationMode) -> String? {
+    private func getDeviceId() -> String? {
         deviceIdPref?.getProfileDefaultValue(appMode) as? String
-    }
-
-    func getFieldType() -> WidgetType {
-        widgetType!
-    }
-    
-    func configureDevice(id: String) {
-        externalDeviceId = id
-        saveDeviceId(deviceId: id)
     }
     
     private func getCurrentSensor() -> Sensor? {
         guard let widgetType else {
             return nil
         }
-        if useAnyDevicePref?.get() == true {
+        if shouldUseAnyDevice {
             if let device = DeviceHelper.shared.getConnectedDevicesForWidget(type: widgetType)?.first {
                 return device.sensors.compactMap { $0.getSupportedWidgetDataFieldTypes() != nil ? $0 : nil }
                     .first(where: { $0.getSupportedWidgetDataFieldTypes()!.contains(widgetType) })
@@ -153,7 +160,7 @@ final class SensorTextWidget: OATextInfoWidget {
     }
     
     private func applyDeviceId() {
-        guard useAnyDevicePref?.get() == false else {
+        guard !shouldUseAnyDevice else {
             return
         }
         if externalDeviceId == nil || externalDeviceId?.isEmpty ?? false {
@@ -197,12 +204,11 @@ final class SensorTextWidget: OATextInfoWidget {
     }
     
     private func registerUseAnyDevicePref(customId: String?) -> OACommonBoolean {
-        var prefId = widgetType!.title + "_useAnyDevicePref_\(customId ?? "")"
+        let prefId = widgetType!.title + "_useAnyDevicePref_\(customId ?? "")"
         return OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: true)
     }
     
     private func saveDeviceId(deviceId: String) {
-        let appMode = OAAppSettings.sharedManager().applicationMode.get()
         deviceIdPref?.setValueFrom(deviceId, appMode: appMode)
     }
 }

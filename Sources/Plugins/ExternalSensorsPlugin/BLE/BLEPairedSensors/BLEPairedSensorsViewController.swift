@@ -68,7 +68,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     
     private func configureWidgetDataSource() {
         guard let widget else { return }
-        let isSelectedAnyConnectedDeviceOption = widget.useAnyDevicePref?.get() == true
+        let isSelectedAnyConnectedDeviceOption = widget.shouldUseAnyDevice
         let anyConnectedDevice = OptionDevice(deviceType: nil)
         anyConnectedDevice.option = .anyConnected
         anyConnectedDevice.isSelected = isSelectedAnyConnectedDeviceOption
@@ -171,11 +171,11 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         }
         
         if currentSelectedDevice is OptionDevice {
-            widget?.useAnyDevicePref(use: true)
+            widget?.setAnyDevice(use: true)
             widget?.configureDevice(id: "")
             onSelectCommonOptionsAction?()
         } else {
-            widget?.useAnyDevicePref(use: false)
+            widget?.setAnyDevice(use: false)
             widget?.configureDevice(id: currentSelectedDevice.id)
             onSelectDeviceAction?(currentSelectedDevice)
         }

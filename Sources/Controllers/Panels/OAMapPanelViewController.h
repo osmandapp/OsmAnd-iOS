@@ -107,6 +107,7 @@
 
 - (BOOL) isTopToolbarActive;
 - (BOOL) isTopToolbarSearchVisible;
+- (BOOL) isTopToolbarDiscountVisible;
 - (BOOL) isTargetMapRulerNeeds;
 - (BOOL) isTargetBackButtonVisible;
 - (CGFloat) getTargetToolbarHeight;

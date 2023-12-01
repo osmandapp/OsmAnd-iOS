@@ -60,7 +60,7 @@ class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarViewContro
                             deviceName = localizedString("external_device_any_connected") + ": " + firstDevice.deviceName
                         }
                     } else {
-                        if let device = DeviceHelper.shared.getConnectedOrPaireDisconnectedDeviceFor(type: widgetType, deviceId: deviceId) {
+                        if let device = DeviceHelper.shared.getPairedDevicesFor(type: widgetType, deviceId: deviceId) {
                             deviceFound = true
                             deviceName = device.deviceName
                         }

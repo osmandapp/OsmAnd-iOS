@@ -137,7 +137,7 @@
 -(void)updateFrame:(BOOL)animated
 {
     CGFloat height;
-    CGFloat width = DeviceScreenWidth - OAUtilities.getLeftMargin * 2;
+    CGFloat width = DeviceScreenWidth;
     
     CGSize titleSize = [OAUtilities calculateTextBounds:self.titleLabel.text width:width - 90.0 font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]];
     

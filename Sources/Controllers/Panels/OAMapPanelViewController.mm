@@ -3400,8 +3400,7 @@ typedef enum
 
 - (BOOL)isTopToolbarDiscountVisible
 {
-    OAToolbarViewController *toolbar = [self getTopToolbar];
-    return toolbar && [toolbar isKindOfClass:OADiscountToolbarViewController.class];
+    return [[self getTopToolbar] isKindOfClass:OADiscountToolbarViewController.class];
 }
 
 - (BOOL) isTargetMapRulerNeeds

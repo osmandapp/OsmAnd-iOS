@@ -31,6 +31,10 @@ final class DeviceHelper: NSObject {
     
     private override init() {}
     
+    func getConnectedDevicesForWidget(type: WidgetType) -> [Device]? {
+        connectedDevices.filter { $0.getSupportedWidgetDataFieldTypes()?.contains(type) ?? false }
+    }
+    
     func getDisconnectedDevices(for pairedDevices: [DeviceSettings]) -> [Device] {
         let peripherals = SwiftyBluetooth.retrievePeripherals(withUUIDs: pairedDevices.compactMap { UUID(uuidString: $0.deviceId) })
         updatePeripheralsForConnectedDevices(peripherals: peripherals.filter { $0.state == .connected })
@@ -40,10 +44,10 @@ final class DeviceHelper: NSObject {
     }
     
     func getConnectedOrPaireDisconnectedDeviceFor(type: WidgetType, deviceId: String) -> Device? {
-        gatConnectedAndPaireDisconnectedDevicesFor(type: type)?.first { $0.id == deviceId }
+        getPairedDevicesFor(type: type)?.first { $0.id == deviceId }
     }
 
-    func gatConnectedAndPaireDisconnectedDevicesFor(type: WidgetType) -> [Device]? {
+    func getPairedDevicesFor(type: WidgetType) -> [Device]? {
         if let pairedDevices = getSettingsForPairedDevices() {
             let peripherals = SwiftyBluetooth.retrievePeripherals(withUUIDs: pairedDevices.map { UUID(uuidString: $0.deviceId)! })
             let connectedPeripherals = peripherals.filter { $0.state == .connected }
@@ -119,7 +123,11 @@ final class DeviceHelper: NSObject {
     private func unpairWidgetsForDevice(id: String) {
         let widgets = getWidgetsForExternalDevice(id: id)
         if !widgets.isEmpty {
-            widgets.forEach { $0.configureDevice(id: "") }
+            widgets.forEach { 
+                // reset to default state
+                $0.configureDevice(id: "")
+                $0.setAnyDevice(use: true)
+            }
         }
     }
     

@@ -108,16 +108,16 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 let nib = Bundle.main.loadNibNamed(OAValueTableViewCell.getIdentifier(), owner: self, options: nil)
                 cell = nib?.first as? OAValueTableViewCell
                 cell?.accessoryType = .disclosureIndicator
-                
-                if item.key == "external_sensor_key" {
-                    cell?.descriptionLabel.text = item.descr
-                    cell?.descriptionVisibility(true)
-                } else {
-                    cell?.descriptionVisibility(false)
-                }
                 cell?.leftIconView.tintColor = UIColor(rgb: Int(selectedAppMode.getIconColor()))
             }
             if let cell {
+                if item.key == "external_sensor_key" {
+                    cell.descriptionLabel.text = item.descr
+                    cell.valueVisibility(false)
+                    cell.descriptionVisibility(true)
+                } else {
+                    cell.descriptionVisibility(false)
+                }
                 if isCreateNewAndSimilarAlreadyExist {
                     var value: String
                     if isFirstGenerateData {
@@ -242,6 +242,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         } else if item.key == "external_sensor_key" {
             let storyboard = UIStoryboard(name: "BLEPairedSensors", bundle: nil)
             if let controller = storyboard.instantiateViewController(withIdentifier: "BLEPairedSensors") as? BLEPairedSensorsViewController {
+                controller.pairedSensorsType = .widget
                 if let widget = widgetInfo?.widget as? SensorTextWidget {
                     controller.widgetType = widget.widgetType
                     controller.widget = widget
@@ -252,6 +253,13 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                         // Pairing widget with selected device
                         widgetConfigurationParams?[SensorTextWidget.externalDeviceIdConst] = device.id
                     }
+                    self.generateData()
+                    tableView.reloadData()
+                }
+                controller.onSelectCommonOptionsAction = { [weak self] in
+                    guard let self else { return }
+                    self.generateData()
+                    tableView.reloadData()
                 }
                 navigationController?.pushViewController(controller, animated: true)
             }

@@ -65,7 +65,11 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
     NSString *imageName = [imageFileName stringByRemovingPercentEncoding];
     imageFileName = [imageName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
     imageFileName = [imageName stringByReplacingOccurrencesOfString:@"File:" withString:@""];
-    imageName = [imageName substringToIndex:[imageName lastIndexOf:@"."]];
+    
+    NSRange dotRange = [imageName rangeOfString:@"." options:NSBackwardsSearch];
+    if (dotRange.location != NSNotFound)
+        imageName = [imageName substringToIndex:dotRange.location];
+    
     NSString *urlSafeFileName = [imageFileName stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
 
     NSString *imageHiResUrl = [NSString stringWithFormat:@"%@%@", IMAGE_BASE_URL, urlSafeFileName];

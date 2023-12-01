@@ -155,7 +155,7 @@ NSString * const OATrackRecordingAnyConnected = @"OATrackRecordingAnyConnected";
             if ([deviceId isEqualToString:OATrackRecordingAnyConnected])
                 device = [[OADeviceHelper shared] getConnectedDevicesForWidgetWithType:widgetType].firstObject;
             else
-                device = [[OADeviceHelper shared] getConnectedOrPaireDisconnectedDeviceForType:widgetType deviceId:deviceId];
+                device = [[OADeviceHelper shared] getPairedDevicesForType:widgetType deviceId:deviceId];
             
             if (device)
                 [device writeSensorDataToJsonWithJson:json widgetDataFieldType:widgetType];

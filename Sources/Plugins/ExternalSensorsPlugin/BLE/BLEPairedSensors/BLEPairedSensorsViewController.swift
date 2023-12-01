@@ -256,7 +256,6 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
             devices?.insert(anyConnectedDevice, at: 0)
         }
     }
-    
     private func configureTableView() {
         tableView.isHidden = false
         tableView.dataSource = self

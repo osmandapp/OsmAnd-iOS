@@ -13,7 +13,7 @@ import CoreBluetooth
 final class SensorTextWidget: OATextInfoWidget {
     static let externalDeviceIdConst = "externalDeviceIdConst"
     
-    private(set) var isSelectedAnyConnectedDeviceOption: OACommonBoolean?
+    private(set) var useAnyDevicePref: OACommonBoolean?
     private(set) var externalDeviceId: String?
     
     private var cachedValue: String?
@@ -24,7 +24,7 @@ final class SensorTextWidget: OATextInfoWidget {
         setIconFor(widgetType)
         self.widgetType = widgetType
         deviceIdPref = registerSensorDevicePref(customId: customId)
-        isSelectedAnyConnectedDeviceOption = registerIsSelectedAnyConnectedDeviceOption(customId: "isSelectedAnyConnected_\(customId ?? "")")
+        useAnyDevicePref = registerUseAnyDevicePref(customId: customId)
         
         if let id = widgetParams?[SensorTextWidget.externalDeviceIdConst] as? String {
             // For a newly created widget with selected device(not 1st)
@@ -42,8 +42,8 @@ final class SensorTextWidget: OATextInfoWidget {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setSelectedAnyConnectedDeviceOption(select: Bool) {
-        isSelectedAnyConnectedDeviceOption?.set(select, mode: OAAppSettings.sharedManager().currentMode)
+    func useAnyDevicePref(use: Bool) {
+        useAnyDevicePref?.set(use, mode: OAAppSettings.sharedManager().currentMode)
     }
     
     private func updateSensorData(sensor: Sensor?) {
@@ -103,7 +103,7 @@ final class SensorTextWidget: OATextInfoWidget {
             applyDeviceId()
         }
         if let sensor = getCurrentSensor() {
-            if isSelectedAnyConnectedDeviceOption?.get() == true {
+            if useAnyDevicePref?.get() == true {
                 settingRow.descr = localizedString("external_device_any_connected") + ": " + sensor.device.deviceName
             } else {
                 settingRow.descr = sensor.device.deviceName
@@ -132,14 +132,14 @@ final class SensorTextWidget: OATextInfoWidget {
         guard let widgetType else {
             return nil
         }
-        if isSelectedAnyConnectedDeviceOption?.get() == true {
+        if useAnyDevicePref?.get() == true {
             if let device = DeviceHelper.shared.getConnectedDevicesForWidget(type: widgetType)?.first {
                 return device.sensors.compactMap { $0.getSupportedWidgetDataFieldTypes() != nil ? $0 : nil }
                     .first(where: { $0.getSupportedWidgetDataFieldTypes()!.contains(widgetType) })
             }
         } else {
             if let externalDeviceId {
-                if let device = gatConnectedAndPaireDisconnectedDevicesFor().first(where: { $0.id == externalDeviceId }) {
+                if let device = getPairedDevicesForCurrentWidgetType().first(where: { $0.id == externalDeviceId }) {
                     return device.sensors.compactMap { $0.getSupportedWidgetDataFieldTypes() != nil ? $0 : nil }
                         .first(where: { $0.getSupportedWidgetDataFieldTypes()!.contains(widgetType) })
                 }
@@ -148,17 +148,17 @@ final class SensorTextWidget: OATextInfoWidget {
         return nil
     }
     
-    private func gatConnectedAndPaireDisconnectedDevicesFor() -> [Device] {
-        DeviceHelper.shared.gatConnectedAndPaireDisconnectedDevicesFor(type: widgetType!) ?? []
+    private func getPairedDevicesForCurrentWidgetType() -> [Device] {
+        DeviceHelper.shared.getPairedDevicesFor(type: widgetType!) ?? []
     }
     
     private func applyDeviceId() {
-        guard isSelectedAnyConnectedDeviceOption?.get() == false else {
+        guard useAnyDevicePref?.get() == false else {
             return
         }
         if externalDeviceId == nil || externalDeviceId?.isEmpty ?? false {
-            let connectedAndPaireDisconnectedDevicesWithWidgetType = gatConnectedAndPaireDisconnectedDevicesFor()
-            if connectedAndPaireDisconnectedDevicesWithWidgetType.isEmpty {
+            let pairedDevicesWithWidgetType = getPairedDevicesForCurrentWidgetType()
+            if pairedDevicesWithWidgetType.isEmpty {
                 externalDeviceId = ""
             } else {
                 if let widgetInfos = OAMapWidgetRegistry.sharedInstance().getAllWidgets(), !widgetInfos.isEmpty {
@@ -171,9 +171,9 @@ final class SensorTextWidget: OATextInfoWidget {
                         }
                     }
                     if visibleWidgetsIdsCurrentType.isEmpty {
-                        externalDeviceId = connectedAndPaireDisconnectedDevicesWithWidgetType.first?.id ?? ""
+                        externalDeviceId = pairedDevicesWithWidgetType.first?.id ?? ""
                     } else {
-                        let devices = connectedAndPaireDisconnectedDevicesWithWidgetType.filter { !visibleWidgetsIdsCurrentType.contains($0.id) }
+                        let devices = pairedDevicesWithWidgetType.filter { !visibleWidgetsIdsCurrentType.contains($0.id) }
                         if devices.isEmpty {
                             externalDeviceId = ""
                         } else {
@@ -181,7 +181,7 @@ final class SensorTextWidget: OATextInfoWidget {
                         }
                     }
                 } else {
-                    externalDeviceId = connectedAndPaireDisconnectedDevicesWithWidgetType.first?.id ?? ""
+                    externalDeviceId = pairedDevicesWithWidgetType.first?.id ?? ""
                 }
             }
             saveDeviceId(deviceId: externalDeviceId!)
@@ -196,11 +196,8 @@ final class SensorTextWidget: OATextInfoWidget {
         return OAAppSettings.sharedManager().registerStringPreference(prefId, defValue: nil).makeProfile() as! OACommonPreference
     }
     
-    private func registerIsSelectedAnyConnectedDeviceOption(customId: String?) -> OACommonBoolean {
-        var prefId = widgetType!.title
-        if let customId, !customId.isEmpty {
-            prefId += customId
-        }
+    private func registerUseAnyDevicePref(customId: String?) -> OACommonBoolean {
+        var prefId = widgetType!.title + "_useAnyDevicePref_\(customId ?? "")"
         return OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: true)
     }
     

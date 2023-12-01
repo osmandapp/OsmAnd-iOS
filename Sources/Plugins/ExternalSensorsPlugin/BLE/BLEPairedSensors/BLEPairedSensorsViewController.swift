@@ -68,12 +68,12 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     
     private func configureWidgetDataSource() {
         guard let widget else { return }
-        let isSelectedAnyConnectedDeviceOption = widget.isSelectedAnyConnectedDeviceOption?.get() == true
+        let isSelectedAnyConnectedDeviceOption = widget.useAnyDevicePref?.get() == true
         let anyConnectedDevice = OptionDevice(deviceType: nil)
         anyConnectedDevice.option = .anyConnected
         anyConnectedDevice.isSelected = isSelectedAnyConnectedDeviceOption
         
-        devices = gatConnectedAndPaireDisconnectedDevicesFor()?.sorted(by: { $0.deviceName < $1.deviceName }) ?? []
+        devices = getPairedDevicesForCurrentWidgetType()?.sorted(by: { $0.deviceName < $1.deviceName }) ?? []
         // reset to default state for checkbox
         devices?.forEach { $0.isSelected = false }
         if devices?.isEmpty ?? true {
@@ -171,11 +171,11 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         }
         
         if currentSelectedDevice is OptionDevice {
-            widget?.setSelectedAnyConnectedDeviceOption(select: true)
+            widget?.useAnyDevicePref(use: true)
             widget?.configureDevice(id: "")
             onSelectCommonOptionsAction?()
         } else {
-            widget?.setSelectedAnyConnectedDeviceOption(select: false)
+            widget?.useAnyDevicePref(use: false)
             widget?.configureDevice(id: currentSelectedDevice.id)
             onSelectDeviceAction?(currentSelectedDevice)
         }
@@ -190,7 +190,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     // MARK: - Private func's
     
     private func configureDataSource() {
-        devices = gatConnectedAndPaireDisconnectedDevicesFor()?.sorted(by: { $0.deviceName < $1.deviceName })
+        devices = getPairedDevicesForCurrentWidgetType()?.sorted(by: { $0.deviceName < $1.deviceName })
         // reset to default state for checkbox
         devices?.forEach { $0.isSelected = false }
         if let devices {
@@ -217,9 +217,9 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         tableView.register(UINib(nibName: AnyConnectedDevicesTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: AnyConnectedDevicesTableViewCell.reuseIdentifier)
     }
         
-    private func gatConnectedAndPaireDisconnectedDevicesFor() -> [Device]? {
+    private func getPairedDevicesForCurrentWidgetType() -> [Device]? {
         if let widgetType,
-           let devices = DeviceHelper.shared.gatConnectedAndPaireDisconnectedDevicesFor(type: widgetType), !devices.isEmpty  {
+           let devices = DeviceHelper.shared.getPairedDevicesFor(type: widgetType), !devices.isEmpty  {
             return devices
         } else {
         }

@@ -31,6 +31,8 @@
 {
     OsmAnd::PointI _cachedTarget31;
     OsmAnd::PointI _cachedFixedPixel;
+    OsmAnd::PointI _cachedCenterPixel;
+    OsmAnd::PointI _cachedMarkerCenterPixel;
     OsmAnd::ZoomLevel _cachedZoom;
     NSDate *_cachedDate;
     CGSize _cachedViewFrame;
@@ -64,31 +66,27 @@
                                     
     OsmAnd::PointI target31 = mapCtrl.mapView.target31;
     OsmAnd::PointI fixedPixel = mapCtrl.mapView.fixedPixel;
+    OsmAnd::PointI centerPixel = mapCtrl.mapView.getCenterPixel;
     OsmAnd::ZoomLevel zoom = mapCtrl.mapView.zoomLevel;
     NSDate *date = [OAWeatherHelper roundForecastTimeToHour:mapCtrl.mapLayers.weatherDate];
     NSString *bandUnit = [_formatter displayStringFromUnit:[[OAWeatherBand withWeatherBand:_band] getBandUnit]];
     BOOL needToUpdate = ![_cachedBandUnit isEqualToString:bandUnit];
     CGSize viewFrame = mapCtrl.view.frame.size;
     BOOL frameChanged = !CGSizeEqualToSize(_cachedViewFrame, viewFrame);
+    BOOL centerPixelChanged = _cachedCenterPixel != centerPixel;
 
-    if (_cachedTarget31 == target31 && _cachedFixedPixel == fixedPixel && _cachedZoom == zoom && !frameChanged && _cachedDate && [_cachedDate isEqualToDate:date] && !needToUpdate)
+    if (_cachedTarget31 == target31 && _cachedFixedPixel == fixedPixel && !centerPixelChanged && _cachedZoom == zoom && !frameChanged && _cachedDate && [_cachedDate isEqualToDate:date] && !needToUpdate)
         return false;
-
-    if (frameChanged)
-    {
-        [self setMapCenterMarkerVisibility:NO];
-        [self setMapCenterMarkerVisibility:YES];
-    }
 
     _cachedTarget31 = target31;
     _cachedFixedPixel = fixedPixel;
+    _cachedCenterPixel = centerPixel;
     _cachedZoom = zoom;
     _cachedDate = date;
     _cachedBandUnit = bandUnit;
     _cachedViewFrame = viewFrame;
 
-    CGFloat scale = mapCtrl.view.contentScaleFactor;
-    OsmAnd::PointI elevated31 = [OANativeUtilities get31FromElevatedPixel:OsmAnd::PointI(viewFrame.width / 2.0 * scale, viewFrame.height / 2.0 * scale)];
+    OsmAnd::PointI elevated31 = [OANativeUtilities get31FromElevatedPixel:centerPixel];
 
     OsmAnd::WeatherTileResourcesManager::ValueRequest _request;
     _request.clientId = QStringLiteral("OAWeatherWidget");
@@ -128,56 +126,19 @@
                         {
                             [selfWeak setText:bandValueStr.toNSString() subtext:bandUnit];
                         }
-                        [selfWeak setMapCenterMarkerVisibility:YES];
                     }
                 }
                 else if (selfWeak.cachedValue != selfWeak.undefined)
                 {
                     selfWeak.cachedValue = selfWeak.undefined;
                     [selfWeak setText:nil subtext:nil];
-                    [selfWeak setMapCenterMarkerVisibility:NO];
                 }
             });
         };
         
     _app.resourcesManager->getWeatherResourcesManager()->obtainValueAsync(_request, _callback);
 
-    return true;
-}
-
-- (void) setMapCenterMarkerVisibility:(BOOL)visible
-{
-    UIView *targetView;
-    UIView *view = [OARootViewController instance].mapPanel.mapViewController.view;
-    if (view)
-    {
-        for (UIView *v in view.subviews)
-        {
-            if (v.tag == 2222)
-                targetView = v;
-        }
-        if (targetView.tag != 2222)
-        {
-            double w = 20;
-            double h = 20;
-            targetView = [[UIView alloc] initWithFrame:{view.frame.size.width / 2.0 - w / 2.0, view.frame.size.height / 2.0 - h / 2.0, w, h}];
-            targetView.backgroundColor = UIColor.clearColor;
-            targetView.tag = 2222;
-
-            CAShapeLayer *shape = [CAShapeLayer layer];
-            [shape setPath:[[UIBezierPath bezierPathWithOvalInRect:CGRectMake(2, 2, w - 4, h - 4)] CGPath]];
-            shape.strokeColor = UIColor.redColor.CGColor;
-            shape.fillColor = UIColor.clearColor.CGColor;
-            [targetView.layer addSublayer:shape];
-        }
-        if (targetView)
-        {
-            if (visible)
-                [view addSubview:targetView];
-            else
-                [targetView removeFromSuperview];
-        }
-    }
+    return YES;
 }
 
 @end

@@ -705,7 +705,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (CGPoint) getCenterPoint
 {
-    CGFloat screenScale = [UIScreen mainScreen].scale;
+    CGFloat screenScale = _mapViewController.displayDensityFactor;
     auto centerPixel = _mapViewController.mapView.getCenterPixel;
     return CGPointMake(centerPixel.x / screenScale, centerPixel.y / screenScale);
 }

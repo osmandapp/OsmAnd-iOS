@@ -56,5 +56,7 @@
 - (void) clearWidgets;
 - (void) reorderWidgets;
 
+- (BOOL) isAnyWeatherWidgetVisible;
+
 @end
 

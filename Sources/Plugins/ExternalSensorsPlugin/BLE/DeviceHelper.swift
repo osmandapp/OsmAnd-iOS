@@ -151,6 +151,8 @@ final class DeviceHelper: NSObject {
             return BLETemperatureDevice()
         case .BLE_BICYCLE_SCD:
             return BLEBikeSCDDevice()
+        case .BLE_RUNNING_SCDS:
+            return BLERunningSCDDevice()
         default:
             fatalError("not impl")
         }

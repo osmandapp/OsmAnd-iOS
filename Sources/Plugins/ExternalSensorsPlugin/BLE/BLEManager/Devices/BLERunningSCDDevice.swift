@@ -24,26 +24,34 @@ final class BLERunningSCDDevice: Device {
     }
     
     override var getDataFields: [[String: String]]? {
-//        if let sensor = sensors.first(where: { $0 is BLEBikeSensor }) as? BLEBikeSensor {
-//            var result = [[String: String]]()
-//            if let lastBikeSpeedDistanceData = sensor.lastBikeSpeedDistanceData {
-//                let speed = OAOsmAndFormatter.getFormattedSpeed(Float(lastBikeSpeedDistanceData.speed.value))
-//                let distance = OAOsmAndFormatter.getFormattedDistance(Float(lastBikeSpeedDistanceData.totalTravelDistance.value), forceTrailingZeroes: false)
-//                debugPrint("speed: \(speed ?? "")")
-//                debugPrint("distance: \(distance ?? "")")
-//                
-//                result.append([localizedString("external_device_characteristic_speed"): String(speed!)])
-//                result.append([localizedString("external_device_characteristic_total_distance"): String(distance!)])
-//            }
-//            if let lastBikeCadenceData = sensor.lastBikeCadenceData {
-//                result.append([localizedString("external_device_characteristic_cadence"): String(lastBikeCadenceData.cadence)])
-//            }
-//            return result.isEmpty ? nil : result
-//        }
+        if let sensor = sensors.first(where: { $0 is BLERunningSensor }) as? BLERunningSensor {
+            var result = [[String: String]]()
+            if let lastRunningCadenceData = sensor.lastRunningCadenceData {
+                result.append([localizedString("external_device_characteristic_cadence"): String(lastRunningCadenceData.cadence)])
+            }
+            if let lastRunningSpeedData = sensor.lastRunningSpeedData {
+                if let speed = OAOsmAndFormatter.getFormattedSpeed(Float(lastRunningSpeedData.speed.value)) {
+                    result.append([localizedString("external_device_characteristic_speed"): String(speed)])
+                }
+            }
+            if let lastRunningDistanceData = sensor.lastRunningDistanceData {
+                let distanceMeters = lastRunningDistanceData.totalDistance.value / 10
+                if let distance = OAOsmAndFormatter.getFormattedDistance(Float(distanceMeters), forceTrailingZeroes: false) {
+                    result.append([localizedString("external_device_characteristic_total_distance"): String(distance)])
+                }
+            }
+            if let lastRunningStrideLengthData = sensor.lastRunningStrideLengthData {
+                let strideLengthMeters = lastRunningStrideLengthData.strideLength.value / 100
+               
+                if let strideLength = OAOsmAndFormatter.getFormattedDistance(Float(strideLengthMeters), forceTrailingZeroes: false) {
+                    result.append([localizedString("external_device_characteristic_stride_length"): String(strideLength)])
+                }
+            }
+            return result.isEmpty ? nil : result
+        }
         return nil
     }
 
-    
     init() {
         super.init(deviceType: .BLE_RUNNING_SCDS)
         sensors.append(BLERunningSensor(device: self, sensorId: "running"))

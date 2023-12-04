@@ -35,8 +35,8 @@ final class BLETemperatureSensor: Sensor {
         [.temperature]
     }
     
-    override func getLastSensorDataList(for wiggetType: WidgetType) -> [SensorData]? {
-        guard wiggetType == .temperature else { return nil }
+    override func getLastSensorDataList(for widgetType: WidgetType) -> [SensorData]? {
+        guard widgetType == .temperature else { return nil }
         return [lastTemperatureData].compactMap { $0 }
     }
     

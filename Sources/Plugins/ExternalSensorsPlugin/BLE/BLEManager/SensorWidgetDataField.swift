@@ -27,7 +27,8 @@ class SensorSpeedWidgetDataField: SensorWidgetDataField {
         if let value = numberValue?.floatValue {
             let formattedSpeed = OAOsmAndFormatter.getFormattedSpeed(value).components(separatedBy: " ")
             if formattedSpeed.count > 1 {
-                return FormattedValue(valueSrc: 0, value: formattedSpeed.first ?? "", unit: formattedSpeed.last ?? "")
+                let value = formattedSpeed.count > 2 ? formattedSpeed[0] + formattedSpeed[1] : formattedSpeed.first
+                return FormattedValue(valueSrc: 0, value: value ?? "", unit: formattedSpeed.last ?? "")
             } else {
                 return nil
             }
@@ -42,7 +43,8 @@ class SensorDistanceWidgetDataField: SensorWidgetDataField {
         if let value = numberValue?.floatValue {
             let formattedDistance = OAOsmAndFormatter.getFormattedDistance(value, forceTrailingZeroes: false).components(separatedBy: " ")
             if formattedDistance.count > 1 {
-                return FormattedValue(valueSrc: 0, value: formattedDistance.first ?? "", unit: formattedDistance.last ?? "")
+                let value = formattedDistance.count > 2 ? formattedDistance[0] + formattedDistance[1] : formattedDistance.first
+                return FormattedValue(valueSrc: 0, value: value ?? "", unit: formattedDistance.last ?? "")
             } else {
                 return nil
             }

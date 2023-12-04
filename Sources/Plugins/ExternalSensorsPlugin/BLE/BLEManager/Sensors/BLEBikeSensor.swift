@@ -26,10 +26,10 @@ final class BLEBikeSensor: Sensor {
     // NOTE: wheelCircumference = wheelSize * pi
     var wheelSize: Double = 2.086
     
-    override func getLastSensorDataList(for wiggetType: WidgetType) -> [SensorData]? {
-        if wiggetType == .bicycleCadence {
+    override func getLastSensorDataList(for widgetType: WidgetType) -> [SensorData]? {
+        if widgetType == .bicycleCadence {
             return [lastBikeCadenceData].compactMap { $0 }
-        } else if wiggetType == .bicycleSpeed || wiggetType == .bicycleDistance {
+        } else if widgetType == .bicycleSpeed || widgetType == .bicycleDistance {
             return [lastBikeSpeedDistanceData].compactMap { $0 }
         }
         return nil

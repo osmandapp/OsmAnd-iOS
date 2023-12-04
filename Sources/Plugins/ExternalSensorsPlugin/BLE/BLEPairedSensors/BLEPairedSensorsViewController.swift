@@ -25,7 +25,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
             pairNewSensorButton.setTitle(localizedString("ant_plus_pair_new_sensor"), for: .normal)
         }
     }
-    
+    var appMode: OAApplicationMode?
     var widgetType: WidgetType?
     var widget: SensorTextWidget?
     var pairedSensorsType: PairedSensorsType = .widget
@@ -61,9 +61,172 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         tableView.reloadData()
     }
     
+    
+    // MARK: - Override's
+    
+    override func registerObservers() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(deviceDisconnected),
+                                               name: .DeviceDisconnected,
+                                               object: nil)
+    }
+    
+    override func getTitle() -> String {
+        localizedString("ant_plus_pair_new_sensor")
+    }
+    
+    override func generateData() {
+        tableData.clearAllData()
+        let section = tableData.createNewSection()
+        devices?.forEach { _ in section.createNewRow() }
+        tableView.reloadData()
+    }
+    
+    override func getCustomView(forFooter section: Int) -> UIView {
+        let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterButton.getCellIdentifier()) as! SectionHeaderFooterButton
+        footer.configireButton(title: localizedString("ant_plus_pair_new_sensor"))
+        footer.onBottonAction = { [weak self] in
+            self?.pairNewSensor()
+        }
+        return footer
+    }
+    
+    override func getCustomHeight(forFooter section: Int) -> CGFloat {
+        48
+    }
+    
+    override func getCustomHeight(forHeader section: Int) -> CGFloat {
+        10
+    }
+    
+    override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
+        if let devices, devices.count > indexPath.row {
+            let item = devices[indexPath.row]
+            if item is OptionDevice {
+                if let cell = tableView.dequeueReusableCell(withIdentifier: OptionDeviceTableViewCell.reuseIdentifier) as? OptionDeviceTableViewCell {
+                    cell.separatorInset = .zero
+                    cell.layoutMargins = .zero
+                    cell.preservesSuperviewLayoutMargins = false
+                    if let widgetType, let optionDevice = devices[indexPath.row] as? OptionDevice {
+                        var title = ""
+                        switch optionDevice.option {
+                        case .none:
+                            title = localizedString("shared_string_none")
+                        case .anyConnected:
+                            title = localizedString("external_device_any_connected")
+                        }
+                        cell.configure(optionDevice: optionDevice,
+                                       widgetType: widgetType,
+                                       title: title)
+                    }
+                    return cell
+                }
+            } else {
+                if let cell = tableView.dequeueReusableCell(withIdentifier: СhoicePairedDeviceTableViewCell.reuseIdentifier) as? СhoicePairedDeviceTableViewCell {
+                    // separators go edge to edge
+                    cell.separatorInset = .zero
+                    cell.layoutMargins = .zero
+                    cell.preservesSuperviewLayoutMargins = false
+                    cell.configure(item: devices[indexPath.row])
+                    return cell
+                }
+            }
+        }
+        return nil
+    }
+    
+    override func onRowSelected(_ indexPath: IndexPath!) {
+        guard let devices, devices.count > indexPath.row else { return }
+        guard !devices[indexPath.row].isSelected else { return }
+        guard let widgetType, let appMode else { return }
+        
+        for (index, item) in devices.enumerated() {
+            item.isSelected = index == indexPath.row
+        }
+
+        let currentSelectedDevice = devices[indexPath.row]
+        
+        if let optionDevice = currentSelectedDevice as? OptionDevice {
+            if pairedSensorsType == .widget {
+                widget?.setAnyDevice(use: true)
+                widget?.configureDevice(id: "")
+            } else if pairedSensorsType == .tripRecording {
+                guard let plugin = OAPlugin.getEnabledPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin else { return }
+                switch optionDevice.option {
+                case .none:
+                    plugin.saveDeviceId(OATrackRecordingNone, widgetType: widgetType, appMode: appMode)
+                case .anyConnected:
+                    plugin.saveDeviceId(OATrackRecordingAnyConnected, widgetType: widgetType, appMode: appMode)
+                }
+            }
+            onSelectCommonOptionsAction?()
+        } else {
+            switch pairedSensorsType {
+            case .widget:
+                widget?.setAnyDevice(use: false)
+                widget?.configureDevice(id: currentSelectedDevice.id)
+            case .tripRecording:
+                guard let plugin = OAPlugin.getEnabledPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin else { return }
+                plugin.saveDeviceId(currentSelectedDevice.id, widgetType: widgetType, appMode: appMode)
+            }
+            onSelectDeviceAction?(currentSelectedDevice)
+        }
+        tableView.reloadData()
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch pairedSensorsType {
+        case .widget:
+            return indexPath.row == 0 ? 48 : 73
+        case .tripRecording:
+            return indexPath.row <= 1 ? 48 : 73
+        }
+    }
+    
+    // MARK: - Private func's
+    
     private func configureTripRecordingDataSource() {
-        guard let widget else { return }
-        // TODO: Add logic in branch TripRecording
+        guard let widgetType,
+              let appMode,
+              let plugin = OAPlugin.getEnabledPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin else { return }
+        
+        devices = []
+        let savedDeviceId = plugin.getDeviceId(for: widgetType, appMode: appMode)
+        let isSelectedNoneConnectedDeviceOption = savedDeviceId == OATrackRecordingNone
+        let isSelectedAnyConnectedDeviceOption = savedDeviceId == OATrackRecordingAnyConnected
+        
+        let noneDevice = OptionDevice(deviceType: nil)
+        noneDevice.option = .none
+        if isSelectedNoneConnectedDeviceOption {
+            noneDevice.isSelected = true
+        } else {
+            noneDevice.isSelected = false
+        }
+        devices?.append(noneDevice)
+        
+        let anyConnectedDevice = OptionDevice(deviceType: nil)
+        anyConnectedDevice.option = .anyConnected
+        if isSelectedAnyConnectedDeviceOption {
+            anyConnectedDevice.isSelected = true
+        } else {
+            anyConnectedDevice.isSelected = false
+        }
+        devices?.append(anyConnectedDevice)
+        
+        let isSelectedDeviceId = !isSelectedNoneConnectedDeviceOption && !isSelectedAnyConnectedDeviceOption
+        
+        let devicesArray = getPairedDevicesForCurrentWidgetType()?.sorted(by: { $0.deviceName < $1.deviceName }) ?? []
+        // reset to default state for checkbox
+        devicesArray.forEach { $0.isSelected = false }
+        if isSelectedDeviceId {
+            if let device = devicesArray.first(where: { $0.id == savedDeviceId }) {
+                device.isSelected = true
+            }
+        }
+        
+        if !devicesArray.isEmpty {
+            devices! += devicesArray
+        }
     }
     
     private func configureWidgetDataSource() {
@@ -93,128 +256,16 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
             devices?.insert(anyConnectedDevice, at: 0)
         }
     }
-    
-    // MARK: - Override's
-    
-    override func registerObservers() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(deviceDisconnected),
-                                               name: .DeviceDisconnected,
-                                               object: nil)
-    }
-    
-    override func getTitle() -> String! {
-        localizedString("ant_plus_pair_new_sensor")
-    }
-    
-    override func generateData() {
-        tableData.clearAllData()
-        let section = tableData.createNewSection()
-        devices?.forEach { _ in section.createNewRow() }
-        tableView.reloadData()
-    }
-    
-    override func getCustomView(forFooter section: Int) -> UIView! {
-        let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterButton.getCellIdentifier()) as! SectionHeaderFooterButton
-        footer.configireButton(title: localizedString("ant_plus_pair_new_sensor"))
-        footer.onBottonAction = { [weak self] in
-            self?.pairNewSensor()
-        }
-        return footer
-    }
-    
-    override func getCustomHeight(forFooter section: Int) -> CGFloat {
-        48
-    }
-    
-    override func getCustomHeight(forHeader section: Int) -> CGFloat {
-        10
-    }
-    
-    override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
-        if let devices, devices.count > indexPath.row {
-            let item = devices[indexPath.row]
-            if item is OptionDevice {
-                if let cell = tableView.dequeueReusableCell(withIdentifier: AnyConnectedDevicesTableViewCell.reuseIdentifier) as? AnyConnectedDevicesTableViewCell {
-                    cell.separatorInset = .zero
-                    cell.layoutMargins = .zero
-                    cell.preservesSuperviewLayoutMargins = false
-                    if let widgetType, let anyConnectedDevice = devices[indexPath.row] as? OptionDevice {
-                        cell.configure(anyConnectedDevice: anyConnectedDevice,
-                                       widgetType: widgetType,
-                                       title: localizedString("external_device_any_connected"))
-                    }
-                    return cell
-                }
-            } else {
-                if let cell = tableView.dequeueReusableCell(withIdentifier: СhoicePairedDeviceTableViewCell.reuseIdentifier) as? СhoicePairedDeviceTableViewCell {
-                    // separators go edge to edge
-                    cell.separatorInset = .zero
-                    cell.layoutMargins = .zero
-                    cell.preservesSuperviewLayoutMargins = false
-                    cell.configure(item: devices[indexPath.row])
-                    return cell
-                }
-            }
-        }
-        return nil
-    }
-    
-    override func onRowSelected(_ indexPath: IndexPath!) {
-        guard let devices, devices.count > indexPath.row else { return }
-        guard !devices[indexPath.row].isSelected else { return }
-        
-        let currentSelectedDevice = devices[indexPath.row]
-        
-        for (index, item) in devices.enumerated() {
-            item.isSelected = index == indexPath.row
-        }
-        
-        if currentSelectedDevice is OptionDevice {
-            widget?.setAnyDevice(use: true)
-            widget?.configureDevice(id: "")
-            onSelectCommonOptionsAction?()
-        } else {
-            widget?.setAnyDevice(use: false)
-            widget?.configureDevice(id: currentSelectedDevice.id)
-            onSelectDeviceAction?(currentSelectedDevice)
-        }
-       
-        tableView.reloadData()
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        indexPath.row == 0 ? 48 : 73
-    }
-    
-    // MARK: - Private func's
-    
-    private func configureDataSource() {
-        devices = getPairedDevicesForCurrentWidgetType()?.sorted(by: { $0.deviceName < $1.deviceName })
-        // reset to default state for checkbox
-        devices?.forEach { $0.isSelected = false }
-        if let devices {
-            if let device = devices.first(where: { $0.id == widget?.externalDeviceId }) {
-                device.isSelected = true
-            } else {
-                if let device = devices.first {
-                    widget?.configureDevice(id: device.id)
-                    device.isSelected = true
-                }
-            }
-        }
-    }
-    
     private func configureTableView() {
         tableView.isHidden = false
         tableView.dataSource = self
         tableView.delegate = self
-
+        
         tableView.backgroundColor = .clear
         view.backgroundColor = UIColor.viewBgColor
         tableView.register(SectionHeaderFooterButton.nib,
                            forHeaderFooterViewReuseIdentifier: SectionHeaderFooterButton.getCellIdentifier())
-        tableView.register(UINib(nibName: AnyConnectedDevicesTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: AnyConnectedDevicesTableViewCell.reuseIdentifier)
+        tableView.register(UINib(nibName: OptionDeviceTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OptionDeviceTableViewCell.reuseIdentifier)
     }
         
     private func getPairedDevicesForCurrentWidgetType() -> [Device]? {

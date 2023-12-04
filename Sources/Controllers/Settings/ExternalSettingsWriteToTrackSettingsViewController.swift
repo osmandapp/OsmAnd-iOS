@@ -45,18 +45,27 @@ class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarViewContro
             let dataTypeSection: OATableSectionData = tableData.createNewSection()
             dataTypeSection.headerText = localizedString("shared_string_data_type")
             for widgetType in plugin.getExternalSensorTrackDataType() {
+                var deviceFound = false
                 let deviceIdPref: OACommonString = plugin.getWriteToTrackDeviceIdPref(widgetType)
                 let deviceId: String = deviceIdPref.get(appMode)
-                var deviceName: String = localizedString("shared_string_none")
-                var deviceFound = false
-                if deviceId.length > 0 && deviceId != kDenyWriteSensorDataToTrackKey {
-                    if let device: Device = DeviceHelper.shared.getConnectedOrPaireDisconnectedDeviceFor(type:widgetType, deviceId: deviceId) {
-                        deviceName = device.deviceName
-                        deviceFound = true
-                    }
-                }
+                
                 let dataType: OATableRowData = dataTypeSection.createNewRow()
                 dataType.key = widgetType.id
+                var deviceName = localizedString("shared_string_none")
+                if deviceId != OATrackRecordingNone {
+                    if deviceId == OATrackRecordingAnyConnected {
+                        if let connectedDevices = DeviceHelper.shared.getConnectedDevicesForWidget(type: widgetType),
+                           let firstDevice = connectedDevices.first {
+                            deviceFound = true
+                            deviceName = localizedString("external_device_any_connected") + ": " + firstDevice.deviceName
+                        }
+                    } else {
+                        if let device = DeviceHelper.shared.getPairedDevicesFor(type: widgetType, deviceId: deviceId) {
+                            deviceFound = true
+                            deviceName = device.deviceName
+                        }
+                    }
+                }
                 dataType.iconTintColor = deviceFound ? UIColor.iconColorActive : UIColor.iconColorDisabled
                 dataType.descr = deviceName
                 dataType.setObj(widgetType, forKey: "widgetType")
@@ -72,7 +81,7 @@ class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarViewContro
             cell = nib?.first as? OASimpleTableViewCell
             cell?.accessoryType = .disclosureIndicator
         }
-        if let cell = cell {
+        if let cell {
             if let widgetType = item.obj(forKey: "widgetType") as? WidgetType {
                 cell.titleLabel.text = widgetType.title
                 cell.descriptionLabel.text = item.descr
@@ -86,34 +95,23 @@ class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarViewContro
     override func onRowSelected(_ indexPath: IndexPath!) {
         let item = tableData.item(for: indexPath)
         if let widgetType = item.obj(forKey: "widgetType") as? WidgetType {
-            var widget: SensorTextWidget?
-            let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
-            let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: appMode,
-                                                              panel: widgetType.getPanel(),
-                                                              filterModes: Int(KWidgetModeAvailable | kWidgetModeEnabled))!
-            for widgetInfos in pagedWidgets {
-                if widget != nil {
-                    break
-                }
-                for widgetInfo in widgetInfos.array as! [MapWidgetInfo] {
-                    if widgetInfo.getWidgetType() == widgetType {
-                        widget = widgetInfo.widget as? SensorTextWidget
-                        break
-                    }
-                }
-            }
             let storyboard = UIStoryboard(name: "BLEPairedSensors", bundle: nil)
             if let controller = storyboard.instantiateViewController(withIdentifier: "BLEPairedSensors") as? BLEPairedSensorsViewController {
+                controller.pairedSensorsType = .tripRecording
+                controller.appMode = appMode
                 controller.widgetType = widgetType
-                controller.widget = widget
-                controller.onSelectDeviceAction = { [weak self] device in
-                    item.descr = device.deviceName
-                    item.iconTintColor = UIColor.iconColorActive
-                    self?.tableView.reloadRows(at: [indexPath], with: .automatic)
+                controller.onSelectDeviceAction = { [weak self] _ in
+                    guard let self else { return }
+                    generateData()
+                    tableView.reloadData()
                 }
-                self.showModalViewController(controller)
+                controller.onSelectCommonOptionsAction = { [weak self] in
+                    guard let self else { return }
+                    generateData()
+                    tableView.reloadData()
+                }
+                showModalViewController(controller)
             }
         }
     }
-
 }

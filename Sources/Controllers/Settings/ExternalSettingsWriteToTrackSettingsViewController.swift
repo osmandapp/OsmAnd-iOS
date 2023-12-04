@@ -95,28 +95,11 @@ class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarViewContro
     override func onRowSelected(_ indexPath: IndexPath!) {
         let item = tableData.item(for: indexPath)
         if let widgetType = item.obj(forKey: "widgetType") as? WidgetType {
-            var widget: SensorTextWidget?
-            let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
-            let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: appMode,
-                                                              panel: widgetType.getPanel(),
-                                                              filterModes: Int(KWidgetModeAvailable | kWidgetModeEnabled))!
-            for widgetInfos in pagedWidgets {
-                if widget != nil {
-                    break
-                }
-                for widgetInfo in widgetInfos.array as! [MapWidgetInfo] {
-                    if widgetInfo.getWidgetType() == widgetType {
-                        widget = widgetInfo.widget as? SensorTextWidget
-                        break
-                    }
-                }
-            }
             let storyboard = UIStoryboard(name: "BLEPairedSensors", bundle: nil)
             if let controller = storyboard.instantiateViewController(withIdentifier: "BLEPairedSensors") as? BLEPairedSensorsViewController {
                 controller.pairedSensorsType = .tripRecording
                 controller.appMode = appMode
                 controller.widgetType = widgetType
-                controller.widget = widget
                 controller.onSelectDeviceAction = { [weak self] _ in
                     guard let self else { return }
                     generateData()

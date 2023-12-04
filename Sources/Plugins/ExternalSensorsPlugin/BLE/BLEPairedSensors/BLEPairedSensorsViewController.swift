@@ -138,7 +138,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     override func onRowSelected(_ indexPath: IndexPath!) {
         guard let devices, devices.count > indexPath.row else { return }
         guard !devices[indexPath.row].isSelected else { return }
-        guard let widgetType = widget?.widgetType, let appMode else { return }
+        guard let widgetType, let appMode else { return }
         
         for (index, item) in devices.enumerated() {
             item.isSelected = index == indexPath.row
@@ -186,7 +186,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     // MARK: - Private func's
     
     private func configureTripRecordingDataSource() {
-        guard let widgetType = widget?.widgetType,
+        guard let widgetType,
               let appMode,
               let plugin = OAPlugin.getEnabledPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin else { return }
         

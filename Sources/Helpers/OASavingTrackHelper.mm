@@ -136,7 +136,7 @@
             if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)
             {
                 char *errMsg;
-                const char *sql_stmt = [[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (%@ double, %@ double, %@ double, %@ double, %@ double, %@ double, %@ double)", TRACK_NAME, TRACK_COL_LAT, TRACK_COL_LON, TRACK_COL_ALTITUDE, TRACK_COL_SPEED, TRACK_COL_HDOP, TRACK_COL_DATE, TRACK_COL_HEADING] UTF8String];
+                const char *sql_stmt = [[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (%@ double, %@ double, %@ double, %@ double, %@ double, %@ double, %@ double, %@ string)", TRACK_NAME, TRACK_COL_LAT, TRACK_COL_LON, TRACK_COL_ALTITUDE, TRACK_COL_SPEED, TRACK_COL_HDOP, TRACK_COL_DATE, TRACK_COL_HEADING, TRACK_COL_PLUGINS_INFO] UTF8String];
                 
                 if (sqlite3_exec(tracksDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
@@ -201,8 +201,14 @@
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
 
-
                 sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ double", TRACK_NAME, TRACK_COL_HEADING] UTF8String];
+                if (sqlite3_exec(tracksDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
+                {
+                    //Failed to add column. Already exists;
+                }
+                if (errMsg != NULL) sqlite3_free(errMsg);
+
+                sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ double", TRACK_NAME, TRACK_COL_PLUGINS_INFO] UTF8String];
                 if (sqlite3_exec(tracksDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
                     //Failed to add column. Already exists;
@@ -499,7 +505,7 @@
         
         if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)
         {
-            NSString *querySQL = [NSString stringWithFormat:@"SELECT %@, %@, %@, %@, %@, %@, %@ FROM %@ ORDER BY %@ ASC", TRACK_COL_LAT, TRACK_COL_LON, TRACK_COL_ALTITUDE, TRACK_COL_SPEED, TRACK_COL_HDOP, TRACK_COL_DATE, TRACK_COL_HEADING, TRACK_NAME, TRACK_COL_DATE];
+            NSString *querySQL = [NSString stringWithFormat:@"SELECT %@, %@, %@, %@, %@, %@, %@, %@ FROM %@ ORDER BY %@ ASC", TRACK_COL_LAT, TRACK_COL_LON, TRACK_COL_ALTITUDE, TRACK_COL_SPEED, TRACK_COL_HDOP, TRACK_COL_DATE, TRACK_COL_HEADING, TRACK_COL_PLUGINS_INFO, TRACK_NAME, TRACK_COL_DATE];
             const char *query_stmt = [querySQL UTF8String];
             if (sqlite3_prepare_v2(tracksDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
             {
@@ -523,6 +529,12 @@
                     pt.time = (long)sqlite3_column_double(statement, 5);
                     double heading = sqlite3_column_double(statement, 6);
                     pt.heading = heading == kTrackNoHeading ? NAN : heading;
+                    NSString *pluginsInfo = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 7)];
+                    if (pluginsInfo && pluginsInfo.length > 0)
+                    {
+                        NSDictionary<NSString *, NSString *> *extensions = [self getPluginsExtensions:pluginsInfo];
+                        [self addPluginsExtensions:extensions toPoint:pt];
+                    }
 
                     long currentInterval = labs(pt.time - previousTime);
                     BOOL newInterval = (lat == 0.0 && lon == 0.0);
@@ -691,6 +703,27 @@
     return @{};
 }
 
+- (void)addPluginsExtensions:(NSDictionary<NSString *, NSString *> *)extensions toPoint:(OAWptPt *)point
+{
+    if (extensions && extensions.count > 0)
+    {
+        OAGpxExtension *trackPointExtension = [[OAGpxExtension alloc] init];
+        trackPointExtension.prefix = @"gpxtpx";
+        trackPointExtension.name = @"TrackPointExtension";
+        NSMutableArray<OAGpxExtension *> *subextensions = [NSMutableArray array];
+        for (NSString *key in extensions.allKeys)
+        {
+            OAGpxExtension *subextension = [[OAGpxExtension alloc] init];
+            subextension.prefix = @"gpxtpx";
+            subextension.name = key;
+            subextension.value = extensions[key];
+            [subextensions addObject:subextension];
+        }
+        [trackPointExtension setSubextensions:subextensions];
+        [point addExtension:trackPointExtension];
+    }
+}
+
 - (void) insertDataLat:(double)lat
                    lon:(double)lon
                    alt:(double)alt
@@ -726,23 +759,7 @@
     pt.heading = heading;
 
     NSDictionary<NSString *, NSString *> *extensions = [self getPluginsExtensions:pluginsInfo];
-    if (extensions && extensions.count > 0)
-    {
-        OAGpxExtension *trackPointExtension = [[OAGpxExtension alloc] init];
-        trackPointExtension.prefix = @"gpxtpx";
-        trackPointExtension.name = @"TrackPointExtension";
-        NSMutableArray<OAGpxExtension *> *subextensions = [NSMutableArray array];
-        for (NSString *key in extensions.allKeys)
-        {
-            OAGpxExtension *subextension = [[OAGpxExtension alloc] init];
-            subextension.prefix = @"gpxtpx";
-            subextension.name = key;
-            subextension.value = extensions[key];
-            [subextensions addObject:subextension];
-        }
-        [trackPointExtension setSubextensions:subextensions];
-        [pt addExtension:trackPointExtension];
-    }
+    [self addPluginsExtensions:extensions toPoint:pt];
 
     [self addTrackPoint:pt newSegment:newSegment time:time];
 }
@@ -805,14 +822,23 @@
         
         if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)
         {
-            NSString *query = [NSString stringWithFormat:@"INSERT INTO %@ (%@, %@, %@, %@, %@, %@, %@, %@) VALUES (%f, %f, %f, %f, %f, %ld, %f, %@)", TRACK_NAME, TRACK_COL_LAT, TRACK_COL_LON, TRACK_COL_ALTITUDE, TRACK_COL_SPEED, TRACK_COL_HDOP, TRACK_COL_DATE, TRACK_COL_HEADING, TRACK_COL_PLUGINS_INFO, lat, lon, alt, speed, hdop, time, heading, pluginsInfo];
-            
+            NSString *query = [NSString stringWithFormat:@"INSERT INTO %@ (%@, %@, %@, %@, %@, %@, %@, %@) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", TRACK_NAME, TRACK_COL_LAT, TRACK_COL_LON, TRACK_COL_ALTITUDE, TRACK_COL_SPEED, TRACK_COL_HDOP, TRACK_COL_DATE, TRACK_COL_HEADING, TRACK_COL_PLUGINS_INFO];
             const char *update_stmt = [query UTF8String];
-            
             sqlite3_prepare_v2(tracksDB, update_stmt, -1, &statement, NULL);
+
+            int row = 1;
+            sqlite3_bind_double(statement, row++, lat);
+            sqlite3_bind_double(statement, row++, lon);
+            sqlite3_bind_double(statement, row++, alt);
+            sqlite3_bind_double(statement, row++, speed);
+            sqlite3_bind_double(statement, row++, hdop);
+            sqlite3_bind_int64(statement, row++, time);
+            sqlite3_bind_double(statement, row++, heading);
+            sqlite3_bind_text(statement, row++, (pluginsInfo ? pluginsInfo : @"").UTF8String, -1, SQLITE_TRANSIENT);
+
             sqlite3_step(statement);
             sqlite3_finalize(statement);
-            
+
             sqlite3_close(tracksDB);
         }
     });

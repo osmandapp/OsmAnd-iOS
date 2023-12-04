@@ -3157,3 +3157,4 @@
 "shared_string_temperature" = "Temperatura";
 "external_device_unpair_description" = "Conecta el sensor a tu dispositivo para obtener información.";
 "external_device_details_information" = "Información";
+"external_device_any_connected" = "Cualquiera conectado";

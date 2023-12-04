@@ -99,7 +99,6 @@ NSString * const OATrackRecordingAnyConnected = @"OATrackRecordingAnyConnected";
 {
     return @[OAWidgetType.heartRate,
              OAWidgetType.bicycleCadence,
-             OAWidgetType.bicyclePower,
              OAWidgetType.bicycleSpeed,
              OAWidgetType.temperature];
 }

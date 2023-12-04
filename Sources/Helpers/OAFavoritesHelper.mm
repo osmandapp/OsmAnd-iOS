@@ -1014,7 +1014,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
         }
     };
     
-    void (^handleAccessResponse)(BOOL, NSError *) = ^(BOOL granted, NSError *error) {
+    void (^requestAccessCompletionHandler)(BOOL, NSError *) = ^(BOOL granted, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error)
             {
@@ -1036,9 +1036,9 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
     };
     
     if (@available(iOS 17.0, *))
-        [eventStore requestWriteOnlyAccessToEventsWithCompletion:handleAccessResponse];
+        [eventStore requestWriteOnlyAccessToEventsWithCompletion:requestAccessCompletionHandler];
     else
-        [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:handleAccessResponse];
+        [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:requestAccessCompletionHandler];
 }
 
 + (void) removeParkingReminderFromCalendar

@@ -96,14 +96,12 @@ final class BLEHeartRateSensor: Sensor {
     override func writeSensorDataToJson(json: NSMutableData, widgetDataFieldType: WidgetType) {
         if let lastHeartRateData = lastHeartRateData {
             do {
-                let data = try JSONEncoder().encode([PointAttributes.sensorTagHartRate: lastHeartRateData.heartRate])
+                let data = try JSONEncoder().encode([PointAttributes.sensorTagHartRate: String(lastHeartRateData.heartRate)])
                 json.append(data)
             } catch {
-                
             }
         }
     }
-
 }
 
 // MARK: Parser

@@ -91,33 +91,31 @@ final class BLEBikeSensor: Sensor {
         do {
             let jsonEncoder = JSONEncoder()
             var data: Data?
-            switch (widgetDataFieldType) {
+            switch widgetDataFieldType {
             case .bicycleSpeed:
                 if let lastBikeSpeedDistanceData = lastBikeSpeedDistanceData {
                     data = try jsonEncoder.encode([PointAttributes.sensorTagSpeed: OAOsmAndFormatter.getFormattedSpeed(Float(lastBikeSpeedDistanceData.speed.value))])
                 }
-                break;
+                break
             case .bicycleCadence:
                 if let cadenceData = lastBikeCadenceData {
-                    data = try jsonEncoder.encode([PointAttributes.sensorTagCadence: cadenceData.cadence])
+                    data = try jsonEncoder.encode([PointAttributes.sensorTagCadence: String(cadenceData.cadence)])
                 }
-                break;
+                break
             case .bicycleDistance:
                 if let lastBikeSpeedDistanceData = lastBikeSpeedDistanceData {
-                    data = try jsonEncoder.encode([PointAttributes.sensorTagDistance: lastBikeSpeedDistanceData.travelDistance])
+                    data = try jsonEncoder.encode([PointAttributes.sensorTagDistance: String(lastBikeSpeedDistanceData.travelDistance.value)])
                 }
-                break;
+                break
             default:
-                break;
+                break
             }
             if let data = data {
                 json.append(data)
             }
         } catch {
-            
         }
     }
-
 }
 
 extension BLEBikeSensor {

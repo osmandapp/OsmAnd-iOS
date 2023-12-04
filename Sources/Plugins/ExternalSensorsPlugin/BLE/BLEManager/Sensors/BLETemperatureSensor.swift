@@ -76,12 +76,10 @@ final class BLETemperatureSensor: Sensor {
     override func writeSensorDataToJson(json: NSMutableData, widgetDataFieldType: WidgetType) {
         if let lastTemperatureData = lastTemperatureData {
             do {
-                let data = try JSONEncoder().encode([PointAttributes.sensorTagTemperature: lastTemperatureData.temperature])
+                let data = try JSONEncoder().encode([PointAttributes.sensorTagTemperature: String(lastTemperatureData.temperature)])
                 json.append(data)
             } catch {
-                
             }
         }
     }
-
 }

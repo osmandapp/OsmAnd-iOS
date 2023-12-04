@@ -16,6 +16,7 @@
 #import "OAWeatherPlugin.h"
 #import "OAWeatherToolbar.h"
 #import "OAMapLayers.h"
+#import "OAMapWidgetRegistry.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/WeatherRasterLayerProvider.h>
@@ -32,6 +33,11 @@
     OAAutoObserverProxy* _weatherUseOfflineDataChangeObserver;
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
     NSMutableArray<OAAutoObserverProxy *> *_alphaChangeObservers;
+
+    CGSize _cachedViewFrame;
+    OsmAnd::PointI _cachedCenterPixel;
+    BOOL _cachedAnyWidgetVisible;
+    NSTimeInterval _lastUpdateTime;
 }
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController layerIndex:(int)layerIndex weatherLayer:(EOAWeatherLayer)weatherLayer date:(NSDate *)date
@@ -240,6 +246,86 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         //TODO [[OARootViewController instance].mapPanel updateWeatherView];
     });
+}
+
+- (void) onMapFrameRendered
+{
+    if (CACurrentMediaTime() - _lastUpdateTime < 0.5)
+        return;
+
+    _lastUpdateTime = CACurrentMediaTime();
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+        OAMapViewController *mapCtrl = [OARootViewController instance].mapPanel.mapViewController;
+
+        CGSize viewFrame = mapCtrl.view.frame.size;
+        BOOL frameChanged = !CGSizeEqualToSize(_cachedViewFrame, viewFrame);
+        OsmAnd::PointI centerPixel = mapCtrl.mapView.getCenterPixel;
+        BOOL centerPixelChanged = _cachedCenterPixel != centerPixel;
+        BOOL anyWidgetVisible = OAMapWidgetRegistry.sharedInstance.isAnyWeatherWidgetVisible;
+
+        if (!centerPixelChanged && !frameChanged && _cachedAnyWidgetVisible == anyWidgetVisible)
+            return;
+
+        if (!anyWidgetVisible)
+        {
+            [self setMapCenterMarkerVisibility:NO];
+        }
+        else if (anyWidgetVisible)
+        {
+            [self setMapCenterMarkerVisibility:NO];
+            [self setMapCenterMarkerVisibility:YES];
+        }
+
+        _cachedCenterPixel = centerPixel;
+        _cachedViewFrame = viewFrame;
+        _cachedAnyWidgetVisible = anyWidgetVisible;
+
+    });
+}
+
+- (void) setMapCenterMarkerVisibility:(BOOL)visible
+{
+    UIView *targetView;
+    OAMapViewController *mapCtrl = [OARootViewController instance].mapPanel.mapViewController;
+    UIView *view = mapCtrl.view;
+    if (view)
+    {
+        for (UIView *v in view.subviews)
+        {
+            if (v.tag == 2222)
+                targetView = v;
+        }
+        double w = 20;
+        double h = 20;
+        if (targetView.tag != 2222 && visible)
+        {
+            targetView = [[UIView alloc] initWithFrame:{0, 0, w, h}];
+            targetView.backgroundColor = UIColor.clearColor;
+            targetView.tag = 2222;
+
+            CAShapeLayer *shape = [CAShapeLayer layer];
+            [shape setPath:[[UIBezierPath bezierPathWithOvalInRect:CGRectMake(2, 2, w - 4, h - 4)] CGPath]];
+            shape.strokeColor = UIColor.redColor.CGColor;
+            shape.fillColor = UIColor.clearColor.CGColor;
+            [targetView.layer addSublayer:shape];
+        }
+        if (targetView)
+        {
+            if (visible)
+            {
+                CGFloat screenScale = mapCtrl.displayDensityFactor;
+                OsmAnd::PointI centerPixel = mapCtrl.mapView.getCenterPixel;
+                targetView.frame = {centerPixel.x / screenScale - w / 2.0, centerPixel.y / screenScale - h / 2.0, w, h};
+                [view addSubview:targetView];
+            }
+            else
+            {
+                [targetView removeFromSuperview];
+            }
+        }
+    }
 }
 
 @end

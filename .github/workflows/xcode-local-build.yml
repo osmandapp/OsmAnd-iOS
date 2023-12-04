@@ -101,7 +101,7 @@ jobs:
     - name: Upload qt-ios-prebuilt
       uses: actions/upload-artifact@v2
       with:
-        name: ~/Work/qt-ios-prebuilt.zip
+        name: qt-ios-prebuilt.zip
         path: ~/Work/qt-ios-prebuilt.zip
     - name: Configure iOS OsmAndCore
       run: 'xcodebuild -project OsmAnd_projects.xcodeproj -target ZERO_CHECK -sdk iphoneos -configuration Release'

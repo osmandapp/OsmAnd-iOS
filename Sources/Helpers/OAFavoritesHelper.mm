@@ -982,7 +982,39 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
 + (void) addParkingReminderToCalendar
 {
     EKEventStore *eventStore = [[EKEventStore alloc] init];
-    [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+    
+    void (^createEvent)(void) = ^{
+        EKEvent *event = [EKEvent eventWithEventStore:eventStore];
+        event.title = OALocalizedString(@"pickup_car");
+        
+        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+        if (plugin)
+        {
+            if (plugin.getEventIdentifier)
+                [self.class removeParkingReminderFromCalendar];
+            
+            NSDate *pickupDate = [NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000];
+            event.startDate = pickupDate;
+            event.endDate = pickupDate;
+            
+            [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 5.0]];
+            [event setCalendar:[eventStore defaultCalendarForNewEvents]];
+            NSError *err;
+            [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
+            if (err)
+            {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:err.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+                [UIApplication.sharedApplication.mainWindow.rootViewController presentViewController:alert animated:YES completion:nil];
+            }
+            else
+            {
+                [plugin setEventIdentifier:[event.eventIdentifier copy]];
+            }
+        }
+    };
+    
+    void (^handleAccessResponse)(BOOL, NSError *) = ^(BOOL granted, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error)
             {
@@ -998,35 +1030,15 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
             }
             else
             {
-                EKEvent *event = [EKEvent eventWithEventStore:eventStore];
-                event.title = OALocalizedString(@"pickup_car");
-                
-                OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *) [OAPlugin getPlugin:OAParkingPositionPlugin.class];
-                if (plugin)
-                {
-                    if (plugin.getEventIdentifier)
-                        [self.class removeParkingReminderFromCalendar];
-                    NSDate *pickupDate = [NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000];
-                    event.startDate = pickupDate;
-                    event.endDate = pickupDate;
-                    
-                    [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 5.0]];
-                    
-                    [event setCalendar:[eventStore defaultCalendarForNewEvents]];
-                    NSError *err;
-                    [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
-                    if (err)
-                    {
-                        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-                        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-                        [UIApplication.sharedApplication.mainWindow.rootViewController presentViewController:alert animated:YES completion:nil];
-                    }
-                    else
-                        [plugin setEventIdentifier:[event.eventIdentifier copy]];
-                }
+                createEvent();
             }
         });
-    }];
+    };
+    
+    if (@available(iOS 17.0, *))
+        [eventStore requestWriteOnlyAccessToEventsWithCompletion:handleAccessResponse];
+    else
+        [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:handleAccessResponse];
 }
 
 + (void) removeParkingReminderFromCalendar

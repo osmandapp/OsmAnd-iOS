@@ -612,6 +612,18 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     if (route && start && _routingHelper.isRouteCalculated)
     {
         [self enterRoutePreviewMode];
+        if ([_routingHelper isFollowingMode])
+            [self onTripStartTriggered];
+    }
+}
+
+- (void)onMapViewDettached
+{
+    [NSNotificationCenter.defaultCenter removeObserver:self];
+    if (_locationServicesUpdateObserver)
+    {
+        [_locationServicesUpdateObserver detach];
+        _locationServicesUpdateObserver = nil;
     }
 }
 

@@ -63,6 +63,12 @@
     [self.delegate onMapViewAttached];
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [self.delegate onMapViewDettached];
+}
+
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];

@@ -221,23 +221,22 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     if (_3dModeMapButton)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
             OAMapViewTrackingUtilities *mapViewTrackingUtilities = [OAMapViewTrackingUtilities instance];
-            BOOL hideButton = [_settings.map3dMode get] == EOAMap3DModeVisibilityHidden
-                || ([_settings.map3dMode get] == EOAMap3DModeVisibilityVisibleIn3DMode && ![mapViewTrackingUtilities isIn3dMode]);
+            EOAMap3DModeVisibility map3DMode = [_settings.map3dMode get];
+            BOOL hideButton = map3DMode == EOAMap3DModeVisibilityHidden
+                || (map3DMode == EOAMap3DModeVisibilityVisibleIn3DMode && ![mapViewTrackingUtilities isIn3dMode]);
             _3dModeMapButton.hidden = hideButton ? YES : NO;
             if ([mapViewTrackingUtilities isIn3dMode])
             {
-                _3dModeMapButton.image = [UIImage templateImageNamed:@"ic_custom_2d"];
+                _3dModeMapButton.image = [UIImage imageNamed:@"btn_map_2d_mode"];
                 _3dModeMapButton.accessibilityLabel = OALocalizedString(@"map_3d_mode_action");
             }
             else
             {
-                _3dModeMapButton.image = [UIImage templateImageNamed:@"ic_custom_3d"];
+                _3dModeMapButton.image = [UIImage imageNamed:@"btn_map_3d_mode"];
                 _3dModeMapButton.accessibilityLabel = OALocalizedString(@"map_2d_mode_action");
             }
-            EOAMap3DModeVisibility visibilityMode = ((EOAMap3DModeVisibility) [_settings.map3dMode get]);
-            _3dModeMapButton.accessibilityValue = [OAMap3DModeVisibility getTitle:visibilityMode];
+            _3dModeMapButton.accessibilityValue = [OAMap3DModeVisibility getTitle:map3DMode];
         });
     }
 }
@@ -284,7 +283,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     else if (type == EOACarPlayButtonTypeCenterMap)
         mapButton.image = [UIImage imageNamed:@"btn_map_current_location_day"];
     else if (type == EOACarPlayButtonType3D)
-        mapButton.image = [UIImage imageNamed:[OAMapViewTrackingUtilities.instance isIn3dMode] ? @"ic_custom_2d" : @"ic_custom_3d"];
+        mapButton.image = [UIImage imageNamed:[OAMapViewTrackingUtilities.instance isIn3dMode] ? @"btn_map_2d_mode" : @"btn_map_3d_mode"];
     
     return mapButton;
 }

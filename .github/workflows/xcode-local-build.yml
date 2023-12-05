@@ -94,9 +94,9 @@ jobs:
       run: .github/secrets/decrypt_secrets.sh
       working-directory: ios  
     - name: Build QtCore & prepare build
-      env:
-        BUILT_QT_FILES_ZIPFILE: qt-ios-prebuilt.zip
-        DOWNLOAD_PREBUILT_QT_FILES: ${{ github.event.inputs.download_qt_ios_library }} 
+      #env:
+      #  BUILT_QT_FILES_ZIPFILE: qt-ios-prebuilt.zip
+      #  DOWNLOAD_PREBUILT_QT_FILES: ${{ github.event.inputs.download_qt_ios_library }} 
       run: exec ~/Git/ios/prepare.sh #--sync_translations
     - name: Upload qt-ios-prebuilt
       uses: actions/upload-artifact@v2

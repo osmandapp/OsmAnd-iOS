@@ -3157,7 +3157,7 @@
 
 //"device_disconnected">%1$s disconnected"
 //"device_connected">%1$s connected"
-"running_scds_device_name" = "Ejecutando dispositivo";
+"running_scds_device_name" = "Dispositivo para «Correr»";
 "no_bt_permission" = "El permiso de Bluetooth está bloqueado";
 "shared_string_wrist" = "Muñeca";
 "ant_plus_searching_text_description" = "Acerca el dispositivo al sensor.\nDebes activar el sensor para que OsmAnd pueda encontrarlo.";
@@ -3167,3 +3167,4 @@
 "shared_string_temperature" = "Temperatura";
 "external_device_unpair_description" = "Conecta el sensor al dispositivo para obtener información.";
 "external_device_details_information" = "Información";
+"external_device_any_connected" = "Cualquier conectado";

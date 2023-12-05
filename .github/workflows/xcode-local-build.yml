@@ -15,10 +15,6 @@ on:
         description: 'Release Version'
         required: true
         default: '4.6.0'
-      download_qt_ios_library:
-        description: 'Download prebuilt qt library (true) or build locally (false) - extra 2 h'
-        required: true
-        default: true
 jobs:
   build:
     runs-on: self-hosted
@@ -47,42 +43,49 @@ jobs:
       with:
         ref: refs/heads/master
         path: ios
+        clean: false
     - name: Checkout android
       uses: actions/checkout@v3
       with:
         ref: refs/heads/master
         repository: osmandapp/OsmAnd
         path: android
+        clean: false
     - name: Checkout build
       uses: actions/checkout@v3
       with:
         ref: refs/heads/master
         repository: osmandapp/OsmAnd-build
         path: build
+        clean: false
     - name: Checkout core legacy
       uses: actions/checkout@v3
       with:
         ref: refs/heads/master
         repository: osmandapp/OsmAnd-core-legacy
         path: core-legacy
+        clean: false
     - name: Checkout core
       uses: actions/checkout@v3
       with:
         ref: refs/heads/master
         repository: osmandapp/OsmAnd-core
         path: core
+        clean: false
     - name: Checkout help
       uses: actions/checkout@v3
       with:
         ref: refs/heads/master
         repository: osmandapp/osmandapp.github.io
         path: help
+        clean: false
     - name: Checkout resources
       uses: actions/checkout@v3
       with:
         ref: refs/heads/master
         repository: osmandapp/OsmAnd-resources
         path: resources
+        clean: false
     #- name: Select XCode 15.0.1
     #  run: sudo xcode-select -switch /Applications/Xcode_15.0.1.app
     # - name: Patch __bsfd
@@ -94,15 +97,7 @@ jobs:
       run: .github/secrets/decrypt_secrets.sh
       working-directory: ios  
     - name: Build QtCore & prepare build
-      #env:
-      #  BUILT_QT_FILES_ZIPFILE: qt-ios-prebuilt.zip
-      #  DOWNLOAD_PREBUILT_QT_FILES: ${{ github.event.inputs.download_qt_ios_library }} 
       run: exec ios/prepare.sh #--sync_translations
-    #- name: Upload qt-ios-prebuilt
-    #  uses: actions/upload-artifact@v2
-    #  with:
-    #    name: qt-ios-prebuilt.zip
-    #    path: qt-ios-prebuilt.zip
     - name: Configure iOS OsmAndCore
       run: 'xcodebuild -project OsmAnd_projects.xcodeproj -target ZERO_CHECK -sdk iphoneos -configuration Release'
       working-directory: baked/fat-ios-clang.xcode

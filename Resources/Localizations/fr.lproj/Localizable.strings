@@ -3158,3 +3158,4 @@
 "shared_string_view" = "Afficher";
 "external_device_unpair_description" = "Connectez le capteur à votre téléphone pour obtenir les informations.";
 "external_device_details_information" = "Information";
+"external_device_any_connected" = "N'importe quel appareil connecté";

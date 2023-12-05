@@ -252,21 +252,24 @@ static NSArray<NSString *> *minTrackSpeedNames;
                     for (OAWidgetType *widgetType in externalSensorTrackDataType)
                     {
                         OACommonString *deviceIdPref = [plugin getWriteToTrackDeviceIdPref:widgetType];
-                        NSString *deviceId = [deviceIdPref get:self.appMode];
-                        if (![deviceId isEqualToString:OATrackRecordingNone])
+                        if (deviceIdPref)
                         {
-                            if ([deviceId isEqualToString:OATrackRecordingAnyConnected])
+                            NSString *deviceId = [deviceIdPref get:self.appMode];
+                            if (![deviceId isEqualToString:OATrackRecordingNone])
                             {
-                                if ([[OADeviceHelper shared] getConnectedDevicesForWidgetWithType:widgetType].firstObject)
+                                if ([deviceId isEqualToString:OATrackRecordingAnyConnected])
                                 {
-                                    devices++;
+                                    if ([[OADeviceHelper shared] getConnectedDevicesForWidgetWithType:widgetType].firstObject)
+                                    {
+                                        devices++;
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                if ([[OADeviceHelper shared] getPairedDevicesForType:widgetType deviceId:deviceId])
+                                else
                                 {
-                                    devices++;
+                                    if ([[OADeviceHelper shared] getPairedDevicesForType:widgetType deviceId:deviceId])
+                                    {
+                                        devices++;
+                                    }
                                 }
                             }
                         }

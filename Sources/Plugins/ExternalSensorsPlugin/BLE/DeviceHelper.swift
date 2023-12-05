@@ -155,7 +155,7 @@ final class DeviceHelper: NSObject {
         supportedTypes.forEach {
             let deviceId = plugin.getDeviceId(for: $0, appMode: OAAppSettings.sharedManager().applicationMode.get())
             if deviceId != OATrackRecordingNone {
-                plugin.getWriteToTrackDeviceIdPref($0).resetToDefault()
+                plugin.getWriteToTrackDeviceIdPref($0)?.resetToDefault()
             }
         }
     }

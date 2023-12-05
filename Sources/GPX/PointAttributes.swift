@@ -8,7 +8,7 @@
 
 @objc(OAPointAttributes)
 @objcMembers
-class PointAttributes : NSObject {
+final class PointAttributes : NSObject {
 
     static let pointElevation = "ele"
     static let pointSpeed = "speed"

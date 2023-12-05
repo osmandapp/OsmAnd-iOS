@@ -93,27 +93,28 @@ final class BLEBikeSensor: Sensor {
             var data: Data?
             switch widgetDataFieldType {
             case .bicycleSpeed:
-                if let lastBikeSpeedDistanceData = lastBikeSpeedDistanceData {
+                if let lastBikeSpeedDistanceData {
                     data = try jsonEncoder.encode([PointAttributes.sensorTagSpeed: OAOsmAndFormatter.getFormattedSpeed(Float(lastBikeSpeedDistanceData.speed.value))])
                 }
                 break
             case .bicycleCadence:
-                if let cadenceData = lastBikeCadenceData {
-                    data = try jsonEncoder.encode([PointAttributes.sensorTagCadence: String(cadenceData.cadence)])
+                if let lastBikeCadenceData {
+                    data = try jsonEncoder.encode([PointAttributes.sensorTagCadence: String(lastBikeCadenceData.cadence)])
                 }
                 break
             case .bicycleDistance:
-                if let lastBikeSpeedDistanceData = lastBikeSpeedDistanceData {
+                if let lastBikeSpeedDistanceData {
                     data = try jsonEncoder.encode([PointAttributes.sensorTagDistance: String(lastBikeSpeedDistanceData.travelDistance.value)])
                 }
                 break
             default:
                 break
             }
-            if let data = data {
+            if let data {
                 json.append(data)
             }
         } catch {
+            debugPrint("BLE failed writeSensorDataToJson: speed - \(speed.value), cadence - \(lastBikeCadenceData?.cadence ?? -1), travelDistance - \(lastBikeSpeedDistanceData?.travelDistance.value ?? -1)")
         }
     }
 }

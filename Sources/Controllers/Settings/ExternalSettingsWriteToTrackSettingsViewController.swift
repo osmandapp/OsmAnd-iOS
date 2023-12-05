@@ -10,7 +10,7 @@ import UIKit
 
 @objc(OAExternalSettingsWriteToTrackSettingsViewController)
 @objcMembers
-class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarViewController {
+final class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarViewController {
 
     private let appMode: OAApplicationMode!
 
@@ -46,8 +46,8 @@ class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarViewContro
             dataTypeSection.headerText = localizedString("shared_string_data_type")
             for widgetType in plugin.getExternalSensorTrackDataType() {
                 var deviceFound = false
-                let deviceIdPref: OACommonString = plugin.getWriteToTrackDeviceIdPref(widgetType)
-                let deviceId: String = deviceIdPref.get(appMode)
+                let deviceIdPref: OACommonString? = plugin.getWriteToTrackDeviceIdPref(widgetType)
+                let deviceId: String? = deviceIdPref?.get(appMode)
                 
                 let dataType: OATableRowData = dataTypeSection.createNewRow()
                 dataType.key = widgetType.id
@@ -60,7 +60,7 @@ class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarViewContro
                             deviceName = localizedString("external_device_any_connected") + ": " + firstDevice.deviceName
                         }
                     } else {
-                        if let device = DeviceHelper.shared.getPairedDevicesFor(type: widgetType, deviceId: deviceId) {
+                        if let deviceId, let device = DeviceHelper.shared.getPairedDevicesFor(type: widgetType, deviceId: deviceId) {
                             deviceFound = true
                             deviceName = device.deviceName
                         }

@@ -72,7 +72,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         case EOAFeatureWikipedia:
             return OALocalizedString(@"wikipedia_offline");
         case EOAFeatureWikivoyage:
-            return OALocalizedString(@"wikivoyage_offline");
+            return OALocalizedString(@"offline_wikivoyage");
         case EOAFeatureRelief3D:
             return OALocalizedString(@"shared_string_relief_3d");
         case EOAFeatureTerrain:
@@ -378,7 +378,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
                 OAFeature.CARPLAY,
 //                OAFeature.COMBINED_WIKI,
                 OAFeature.WIKIPEDIA,
-//                OAFeature.WIKIVOYAGE,
+                OAFeature.WIKIVOYAGE,
                 OAFeature.TERRAIN,
                 OAFeature.NAUTICAL,
         ];
@@ -415,7 +415,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
                 OAFeature.CARPLAY,
 //                OAFeature.COMBINED_WIKI,
                 OAFeature.WIKIPEDIA,
-//                OAFeature.WIKIVOYAGE,
+                OAFeature.WIKIVOYAGE,
                 OAFeature.TERRAIN,
                 OAFeature.NAUTICAL
         ];

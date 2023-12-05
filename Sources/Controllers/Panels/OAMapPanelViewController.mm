@@ -974,8 +974,16 @@ typedef enum
 
 - (void) showTravelGuides
 {
-    OATravelExploreViewController *vc = [OATravelExploreViewController new];
-    [self.navigationController pushViewController:vc animated:YES];
+    if ([OAIAPHelper isPaidVersion])
+    {
+        OATravelExploreViewController *vc = [OATravelExploreViewController new];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    else
+    {
+        [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.WIKIVOYAGE
+                                              navController:[OARootViewController instance].navigationController];
+    }
 }
 
 - (void) showRoutePreferences

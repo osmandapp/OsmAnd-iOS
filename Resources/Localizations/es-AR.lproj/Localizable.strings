@@ -3057,7 +3057,7 @@
 "shared_string_discard_changes" = "Descartar cambios";
 "article_has_no_points" = "El artículo no tiene puntos";
 "images" = "Imágenes";
-"shared_string_bookmark" = "Destacado";
+"shared_string_bookmark" = "Destacar";
 "image_cache" = "Almacén de imágenes";
 "download_images_settings_footer" = "La descarga de imágenes se encuentra activa sobre cualquier red, inclusive los datos móviles.";
 "travel_guides_search_placeholder" = "Buscar por país, ciudad o provincia";
@@ -3167,4 +3167,4 @@
 "shared_string_temperature" = "Temperatura";
 "external_device_unpair_description" = "Conecta el sensor al dispositivo para obtener información.";
 "external_device_details_information" = "Información";
-"external_device_any_connected" = "Cualquier conectado";
+"external_device_any_connected" = "Cualquiera conectado";

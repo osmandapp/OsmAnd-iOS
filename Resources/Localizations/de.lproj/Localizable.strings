@@ -2452,7 +2452,7 @@
 "osmand_maps_plus_tagline" = "Erweiterte Features erhalten";
 "osmand_pro_tagline" = "Alle Features erhalten";
 "transport_hazmat_yes_desc" = "Wählen Sie die zutreffende Kategorie aus.";
-"purchases_feature_desc_combined_wiki" = "Erkunden Sie Wikipedia Artikel auch unterwegs, ohne Internetverbindung. Offline-Daten sind nach Ländern aufgeteilt und in allen Sprachen verfügbar.";
+"purchases_feature_desc_combined_wiki" = "Erkunden Sie Wikipedia-Artikel auch unterwegs, ohne Internetverbindung. Offline-Daten sind nach Ländern aufgeteilt und in allen Sprachen verfügbar.";
 "continue_with" = "Mit %@ fortfahren";
 "monthly_subscription" = "Monatliches Abo";
 "expired" = "Abgelaufen";
@@ -3000,7 +3000,7 @@
 "clouds_widget_desc" = "Zeigt die Wolkenbedeckung für die aktuelle Kartenmitte an.";
 "quick_action_coordinates_widget_descr" = "Ein Schalter zum Ein- oder Ausblenden des Koordinaten-Widgets auf der Karte.";
 "bearing_desc" = "Zeigt die absolute oder relative Peilung zu einem Ziel in Winkeleinheiten an (im Modus 180 Grad, 360 Grad oder Milliradiant).";
-"map_widget_group_sunrise_sunset_desc" = "Diese Widgets zeigen Informationen über den nächsten Sonnenauf- und -untergang.";
+"map_widget_group_sunrise_sunset_desc" = "Diese Widgets zeigen Informationen über den nächsten Sonnenauf- und -untergang an.";
 "map_widget_group_sunrise_sunset" = "Sonnenaufgang, Sonnenuntergang";
 "angular_measeurement_descr" = "Ändern, in welcher Einheit Azimut gemessen wird.";
 "add_row" = "Zeile hinzufügen";
@@ -3082,7 +3082,7 @@
 "map_orientation_default" = "Wie Standardeinstellung";
 "cleared_travel_search_history" = "Verlauf gelöscht";
 "cache_size" = "Cachegröße";
-"travel_card_download_descr" = "Wikivoyage Reiseführer herunterladen, um ohne Internetverbindung Artikel über Orte auf der ganzen Welt zu lesen.";
+"travel_card_download_descr" = "Wikivoyage-Reiseführer herunterladen, um ohne Internetverbindung Artikel über Orte auf der ganzen Welt zu lesen.";
 "article_added_to_bookmark" = " zu Lesezeichen hinzugefügt.";
 "no_travel_guides_data_title" = "Sie haben keine Reisedaten";
 "map_orientation_landscape" = "Querformat";
@@ -3098,12 +3098,12 @@
 "shared_string_contents" = "Inhalt";
 "shared_string_view" = "Anzeigen";
 "apply_to_existing_favorites_descr" = "Änderungen auf die bestehenden Favoritenpunkte der Gruppe anwenden oder nur auf neue?";
-"apply_only_to_new_points" = "Anwenden auf neue Punkte";
-"apply_to_existing" = "Anwenden auf bestehende";
+"apply_only_to_new_points" = "Nur auf neue Punkte anwenden";
+"apply_to_existing" = "Auf bestehende Punkte anwenden";
 "default_appearance_desc" = "Standardfarbe, Symbol und Form werden auf die hinzugefügten Favoritenpunkte in der Gruppe angewendet.";
 "change_appearance" = "Erscheinungsbild ändern";
 "shared_string_ear_lobe" = "Ohrläppchen";
-"external_sensors_plugin_description" = "Zugriff auf externe Sensoren, um z.B. Ihre Herzfrequenz, Fahrradgeschwindigkeit, Fahrradleistung oder Kadenz zu lesen. Erfordert, Ihr Gerät über das kabellose, persönliche ANT+ Netzwerkprotokoll mit entsprechenden Sensoren zu verbinden.";
+"external_sensors_plugin_description" = "Zugriff auf externe Sensoren, um z. B. Ihre Herzfrequenz, Fahrradgeschwindigkeit, Fahrradleistung oder Trittfrequenz zu lesen. Dazu muss Ihr Gerät über das kabellose ANT+-Netzwerkprotokoll mit den entsprechenden Sensoren verbunden sein.";
 "external_sensors_source_of_data" = "Quelle der Daten";
 "map_widget_ant_bicycle_speed" = "Fahrradgeschwindigkeit";
 "ant_plus_searching_text" = "Suche nach Sensoren";

@@ -25,7 +25,7 @@ class HelpDetailsViewController: OABaseNavbarViewController {
     }
     
     override func getTitle() -> String? {
-        return localizedString("telegram_chats")
+        localizedString("telegram_chats")
     }
     
     override func getNavbarColorScheme() -> EOABaseNavbarColorScheme {
@@ -36,7 +36,7 @@ class HelpDetailsViewController: OABaseNavbarViewController {
         true
     }
     
-    func generateTelegramChatsData() {
+    private func generateTelegramChatsData() {
         tableData.clearAllData()
         let telegramChatsSection = tableData.createNewSection()
         for chat in telegramChats {
@@ -52,7 +52,7 @@ class HelpDetailsViewController: OABaseNavbarViewController {
         }
     }
     
-    func loadAndParseJson() {
+    private func loadAndParseJson() {
         HelpDataManager.sharedInstance.loadAndParseJson(from: kPopularArticlesAndTelegramChats) { [weak self] success in
             DispatchQueue.main.async {
                 if success {
@@ -64,14 +64,6 @@ class HelpDetailsViewController: OABaseNavbarViewController {
                 }
             }
         }
-    }
-    
-    override func sectionsCount() -> Int {
-        return Int(tableData.sectionCount())
-    }
-    
-    override func rowsCount(_ section: Int) -> Int {
-        Int(tableData.rowCount(UInt(section)))
     }
     
     override func getRow(_ indexPath: IndexPath?) -> UITableViewCell? {
@@ -102,7 +94,7 @@ class HelpDetailsViewController: OABaseNavbarViewController {
         }
     }
     
-    func removeTextInBrackets(from string: String) -> String {
+    private func removeTextInBrackets(from string: String) -> String {
         let pattern = "\\s*\\(.*?\\)"
         do {
             let regex = try NSRegularExpression(pattern: pattern, options: [])

@@ -162,11 +162,28 @@
     return [self getWidgetsForPanel:OAWidgetsPanel.rightPanel];
 }
 
+- (BOOL) isAnyWeatherWidgetVisible
+{
+    OAApplicationMode *mode = [_settings.applicationMode get];
+    BOOL weatherToolbarVisible = self.isWeatherToolbarVisible;
+    for (OAMapWidgetInfo *widgetInfo in OAMapWidgetRegistry.sharedInstance.getAllWidgets)
+    {
+        if (widgetInfo.getWidgetType.group == OAWidgetGroup.weather)
+        {
+            if (weatherToolbarVisible || [widgetInfo isEnabledForAppMode:mode])
+                return YES;
+        }
+    }
+    return NO;
+}
+
 - (void) updateInfo:(OAApplicationMode *)mode expanded:(BOOL)expanded
 {
+    BOOL weatherToolbarVisible = self.isWeatherToolbarVisible;
     for (OAMapWidgetInfo *widgetInfo in self.getAllWidgets)
     {
-        if ([widgetInfo isEnabledForAppMode:mode] || (self.isWeatherToolbarVisible && widgetInfo.getWidgetType.group == OAWidgetGroup.weather))
+        BOOL enabledForAppMode = [widgetInfo isEnabledForAppMode:mode];
+        if (enabledForAppMode || (weatherToolbarVisible && widgetInfo.getWidgetType.group == OAWidgetGroup.weather))
             [widgetInfo.widget updateInfo];
     }
 }

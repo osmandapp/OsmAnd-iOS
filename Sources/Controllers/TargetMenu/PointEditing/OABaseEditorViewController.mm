@@ -56,6 +56,7 @@
     NSString *_selectedIconCategoryName;
     NSString *_selectedIconName;
     OACollectionViewCellState *_scrollCellsState;
+    NSMutableArray<MDCTextInputControllerUnderline *> *_floatingTextFieldControllers;
 
     NSMutableArray<OAColorItem *> *_sortedColorItems;
     OAColorItem *_selectedColorItem;
@@ -100,6 +101,7 @@
     _wasChanged = NO;
     _needToScrollToSelectedColor = YES;
     _scrollCellsState = [[OACollectionViewCellState alloc] init];
+    _floatingTextFieldControllers = [NSMutableArray array];
 }
 
 - (void)postInit
@@ -384,7 +386,7 @@
     if ([item.cellType isEqualToString:[OATextInputFloatingCell getCellIdentifier]])
     {
         OATextInputFloatingCell *cell = [item objForKey:@"cell"];
-        return MAX(cell.inputField.intrinsicContentSize.height, 60.0);
+        return cell ? MAX(cell.inputField.intrinsicContentSize.height, 60.) : 60.;
     }
     return UITableViewAutomaticDimension;
 }
@@ -611,12 +613,18 @@
     textField.adjustsFontForContentSizeCategory = YES;
     textField.clearButton.imageView.tintColor = UIColor.iconColorDefault;
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
+    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
 
+    if (!_floatingTextFieldControllers)
+        _floatingTextFieldControllers = [NSMutableArray array];
     MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
     fieldController.inlinePlaceholderFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
     fieldController.inlinePlaceholderColor = UIColor.textColorSecondary;
+    [fieldController setFloatingPlaceholderNormalColor:UIColor.textColorSecondary];
     fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
+    fieldController.floatingPlaceholderNormalColor = fieldController.floatingPlaceholderNormalColor;
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
+    [_floatingTextFieldControllers addObject:fieldController];
     return resultCell;
 }
 
@@ -826,9 +834,10 @@
             && !groupExist;
         if (!isEnabled && groupExist)
         {
-            isEnabled = ![groupExist.iconName isEqualToString:self.editIconName]
+            isEnabled = textView.text.length > 0
+                && (![groupExist.iconName isEqualToString:self.editIconName]
                 || ![groupExist.backgroundType isEqualToString:self.editBackgroundIconName]
-                || ![groupExist.color isEqual:self.editColor];
+                || ![groupExist.color isEqual:self.editColor]);
         }
         self.editName = textView.text;
     }

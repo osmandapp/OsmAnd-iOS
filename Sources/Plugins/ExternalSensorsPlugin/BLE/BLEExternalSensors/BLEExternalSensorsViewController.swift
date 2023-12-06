@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SwiftyBluetooth
 import CoreBluetooth
 
 final class BLEExternalSensorsViewController: OABaseNavbarViewController {

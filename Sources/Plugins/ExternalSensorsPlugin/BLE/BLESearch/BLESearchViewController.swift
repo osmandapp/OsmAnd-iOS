@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreBluetooth
-import SwiftyBluetooth
 
 final class BLESearchViewController: OABaseNavbarViewController {
     

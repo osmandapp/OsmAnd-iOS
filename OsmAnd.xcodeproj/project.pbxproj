@@ -3446,10 +3446,20 @@
 		FAA6505E2ADD42C50020DCEA /* BLEDescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA6504A2ADD42C50020DCEA /* BLEDescriptionViewController.swift */; };
 		FAA6505F2ADD42C50020DCEA /* DescriptionDeviceHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA6504C2ADD42C50020DCEA /* DescriptionDeviceHeader.swift */; };
 		FAA650602ADD42C50020DCEA /* DescriptionDeviceHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAA6504D2ADD42C50020DCEA /* DescriptionDeviceHeader.xib */; };
-		FAA650642ADD43BE0020DCEA /* SwiftyBluetooth in Frameworks */ = {isa = PBXBuildFile; productRef = FAA650632ADD43BE0020DCEA /* SwiftyBluetooth */; };
 		FAA650662ADD4C9F0020DCEA /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650652ADD4C9F0020DCEA /* UIImage+Extension.swift */; };
 		FAA650682ADD8D0D0020DCEA /* BLEInitHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */; };
 		FAB6E7E42AC5A9FD00A82987 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */; };
+		FABA02BB2B206E130004CC3B /* CentralProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B02B206E130004CC3B /* CentralProxy.swift */; };
+		FABA02BC2B206E130004CC3B /* Peripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B12B206E130004CC3B /* Peripheral.swift */; };
+		FABA02BD2B206E130004CC3B /* CBUUIDConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B22B206E130004CC3B /* CBUUIDConvertible.swift */; };
+		FABA02BE2B206E130004CC3B /* Central.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B32B206E130004CC3B /* Central.swift */; };
+		FABA02BF2B206E130004CC3B /* PeripheralProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B42B206E130004CC3B /* PeripheralProxy.swift */; };
+		FABA02C02B206E130004CC3B /* SBError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B52B206E130004CC3B /* SBError.swift */; };
+		FABA02C12B206E130004CC3B /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B62B206E130004CC3B /* Util.swift */; };
+		FABA02C22B206E130004CC3B /* SwiftyBluetooth.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B72B206E130004CC3B /* SwiftyBluetooth.swift */; };
+		FABA02C32B206E130004CC3B /* CBUUIDPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B82B206E130004CC3B /* CBUUIDPath.swift */; };
+		FABA02C42B206E130004CC3B /* DescriptorValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B92B206E130004CC3B /* DescriptorValue.swift */; };
+		FABA02C52B206E130004CC3B /* CBExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02BA2B206E130004CC3B /* CBExtensions.swift */; };
 		FACE409F2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */; };
 		FAE0B7112AFCDAD400C02438 /* BLEPairedSensorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */; };
 		FAE0B7132AFCDC6B00C02438 /* BLEPairedSensors.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAE0B7122AFCDC6B00C02438 /* BLEPairedSensors.storyboard */; };
@@ -8146,6 +8156,17 @@
 		FAA650652ADD4C9F0020DCEA /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEInitHeader.swift; sourceTree = "<group>"; };
 		FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
+		FABA02B02B206E130004CC3B /* CentralProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CentralProxy.swift; sourceTree = "<group>"; };
+		FABA02B12B206E130004CC3B /* Peripheral.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Peripheral.swift; sourceTree = "<group>"; };
+		FABA02B22B206E130004CC3B /* CBUUIDConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBUUIDConvertible.swift; sourceTree = "<group>"; };
+		FABA02B32B206E130004CC3B /* Central.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Central.swift; sourceTree = "<group>"; };
+		FABA02B42B206E130004CC3B /* PeripheralProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralProxy.swift; sourceTree = "<group>"; };
+		FABA02B52B206E130004CC3B /* SBError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SBError.swift; sourceTree = "<group>"; };
+		FABA02B62B206E130004CC3B /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		FABA02B72B206E130004CC3B /* SwiftyBluetooth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyBluetooth.swift; sourceTree = "<group>"; };
+		FABA02B82B206E130004CC3B /* CBUUIDPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBUUIDPath.swift; sourceTree = "<group>"; };
+		FABA02B92B206E130004CC3B /* DescriptorValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DescriptorValue.swift; sourceTree = "<group>"; };
+		FABA02BA2B206E130004CC3B /* CBExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBExtensions.swift; sourceTree = "<group>"; };
 		FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalSensorsPlugin.mm; sourceTree = "<group>"; };
 		FACE409E2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAExternalSensorsPlugin.h; sourceTree = "<group>"; };
 		FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPairedSensorsViewController.swift; sourceTree = "<group>"; };
@@ -8182,7 +8203,6 @@
 				8440E2DF1ABEA7370088856A /* libpng_static.a in Frameworks */,
 				8440E2E01ABEA7370088856A /* libprotobuf_static.a in Frameworks */,
 				8440E2E11ABEA7370088856A /* libskia_static.a in Frameworks */,
-				FAA650642ADD43BE0020DCEA /* SwiftyBluetooth in Frameworks */,
 				8440E2E21ABEA7370088856A /* libz_static.a in Frameworks */,
 				8A5A002827735D76002227DD /* libharfbuzz_static.a in Frameworks */,
 				8440E2D01ABEA7200088856A /* libarchive_static.a in Frameworks */,
@@ -13974,6 +13994,7 @@
 		DA7F2587231A68CD00E54F77 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				FABA02AF2B206E130004CC3B /* SwiftyBluetooth */,
 				DA7F2588231A68CD00E54F77 /* Charts */,
 			);
 			path = Libraries;
@@ -14409,6 +14430,25 @@
 			path = DescriptionDeviceHeader;
 			sourceTree = "<group>";
 		};
+		FABA02AF2B206E130004CC3B /* SwiftyBluetooth */ = {
+			isa = PBXGroup;
+			children = (
+				FABA02B02B206E130004CC3B /* CentralProxy.swift */,
+				FABA02B12B206E130004CC3B /* Peripheral.swift */,
+				FABA02B22B206E130004CC3B /* CBUUIDConvertible.swift */,
+				FABA02B32B206E130004CC3B /* Central.swift */,
+				FABA02B42B206E130004CC3B /* PeripheralProxy.swift */,
+				FABA02B52B206E130004CC3B /* SBError.swift */,
+				FABA02B62B206E130004CC3B /* Util.swift */,
+				FABA02B72B206E130004CC3B /* SwiftyBluetooth.swift */,
+				FABA02B82B206E130004CC3B /* CBUUIDPath.swift */,
+				FABA02B92B206E130004CC3B /* DescriptorValue.swift */,
+				FABA02BA2B206E130004CC3B /* CBExtensions.swift */,
+			);
+			name = SwiftyBluetooth;
+			path = ../../../../SwiftyBluetooth;
+			sourceTree = "<group>";
+		};
 		FACE409C2AEA9A8000E1E43A /* ExternalSensorsPlugin */ = {
 			isa = PBXGroup;
 			children = (
@@ -14486,7 +14526,6 @@
 			);
 			name = "OsmAnd Maps";
 			packageProductDependencies = (
-				FAA650632ADD43BE0020DCEA /* SwiftyBluetooth */,
 			);
 			productName = OsmAnd;
 			productReference = BBA3AFEE197FC4BB0039D991 /* OsmAnd Maps.app */;
@@ -14628,7 +14667,6 @@
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			packageReferences = (
-				FAA650622ADD43BE0020DCEA /* XCRemoteSwiftPackageReference "SwiftyBluetooth" */,
 			);
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
 			projectDirPath = "";
@@ -17421,6 +17459,7 @@
 				DAABE4EE2A1657AF00569F71 /* Color+INT.swift in Sources */,
 				DA5A850C26C563A900F274C7 /* OASubscribeEmailView.m in Sources */,
 				DA8DC3922A0CD9A3006C116B /* DistanceToIntermediateDestinationWidget.swift in Sources */,
+				FABA02BF2B206E130004CC3B /* PeripheralProxy.swift in Sources */,
 				DA5A819226C563A700F274C7 /* OANavRemoveNextDestination.m in Sources */,
 				326B770A29D9CA6400FB23DF /* OATripRecordingTimeWidget.mm in Sources */,
 				DAAC0EBD2801807200867D35 /* OAImportBackupTask.m in Sources */,
@@ -17447,6 +17486,7 @@
 				DA5A831726C563A800F274C7 /* OAHeaderRoundCell.m in Sources */,
 				DA5A81F626C563A700F274C7 /* OAChoosePlanHelper.mm in Sources */,
 				DA5A83C826C563A800F274C7 /* OACollapsableCoordinatesView.mm in Sources */,
+				FABA02BC2B206E130004CC3B /* Peripheral.swift in Sources */,
 				FAA650662ADD4C9F0020DCEA /* UIImage+Extension.swift in Sources */,
 				32CA13202AF1475200DD6EF5 /* WikipediaCacheSizeViewController.swift in Sources */,
 				DA5A837226C563A800F274C7 /* OARoutingSettingsCell.mm in Sources */,
@@ -17540,6 +17580,7 @@
 				DA5A819F26C563A700F274C7 /* OADownloadMapProgressViewController.mm in Sources */,
 				DA5A833226C563A800F274C7 /* OAPoiCollectionViewCell.m in Sources */,
 				DA5A81B826C563A700F274C7 /* OAPOI.mm in Sources */,
+				FABA02C52B206E130004CC3B /* CBExtensions.swift in Sources */,
 				DA5A814B26C563A700F274C7 /* OABaseCarPlayInterfaceController.mm in Sources */,
 				DA5A84B826C563A900F274C7 /* OAFollowTrackBottomSheetViewController.mm in Sources */,
 				DA5A831B26C563A800F274C7 /* OAIconTitleIconRoundCell.m in Sources */,
@@ -17553,6 +17594,7 @@
 				DA5A841026C563A800F274C7 /* OATargetAddressViewController.mm in Sources */,
 				DA5A825226C563A700F274C7 /* OANavigationTypeViewController.mm in Sources */,
 				DA5A830C26C563A800F274C7 /* OAEmptySearchCell.m in Sources */,
+				FABA02C02B206E130004CC3B /* SBError.swift in Sources */,
 				DA5A850426C563A900F274C7 /* OATargetPointView.mm in Sources */,
 				FA69F2852A73948B0044CFCA /* main.m in Sources */,
 				461A3F0A29F6E68F008EE079 /* OAColorCollectionHandler.m in Sources */,
@@ -17647,6 +17689,7 @@
 				DA5A845726C563A900F274C7 /* OAOsmBugsLayer.mm in Sources */,
 				DA5A84C926C563A900F274C7 /* OATextEditingBottomSheetViewController.mm in Sources */,
 				DA4ABEEC2876DA5D00B996EF /* OAExportSettingsType.mm in Sources */,
+				FABA02C12B206E130004CC3B /* Util.swift in Sources */,
 				DA5A856126C563A900F274C7 /* OAGpxRouteApproximation.mm in Sources */,
 				DAECA4FA26CFE62600241B0B /* OABaseWidgetView.m in Sources */,
 				DA5A81F126C563A700F274C7 /* OAProfileIconColor.m in Sources */,
@@ -17794,6 +17837,7 @@
 				FA359EE52ADF026D0001C11D /* DeviceType.swift in Sources */,
 				DA5A813A26C563A700F274C7 /* OAEntityInfo.m in Sources */,
 				DA5A846A26C563A900F274C7 /* OADestination.mm in Sources */,
+				FABA02C32B206E130004CC3B /* CBUUIDPath.swift in Sources */,
 				46220B792AD70AF9006C3248 /* OAGroupEditorViewController.mm in Sources */,
 				DA5A816326C563A700F274C7 /* OADaytimeAppearance.m in Sources */,
 				DA5A846026C563A900F274C7 /* OARasterMapLayer.mm in Sources */,
@@ -17805,6 +17849,7 @@
 				46FB65BC2A8BCF2300A21850 /* WidgetUtils.swift in Sources */,
 				DA5A831C26C563A800F274C7 /* OAColorsCollectionViewCell.m in Sources */,
 				DA5A848526C563A900F274C7 /* OAMapWidgetRegInfo.mm in Sources */,
+				FABA02BB2B206E130004CC3B /* CentralProxy.swift in Sources */,
 				DA5A832F26C563A800F274C7 /* OATitleSliderRoundCell.m in Sources */,
 				DA5A823026C563A700F274C7 /* OAImportDuplicatesViewController.mm in Sources */,
 				FA359EF12ADFD5310001C11D /* DeviceHelper.swift in Sources */,
@@ -17951,6 +17996,7 @@
 				327D68AA2A8FB8180076D1E0 /* ArticleTravelCell.swift in Sources */,
 				DA5A848A26C563A900F274C7 /* OARoadSegmentData.mm in Sources */,
 				FAA650542ADD42C50020DCEA /* BLEHeartRateSensor.swift in Sources */,
+				FABA02BE2B206E130004CC3B /* Central.swift in Sources */,
 				DA5A839726C563A800F274C7 /* OALocalResourceInformationViewController.mm in Sources */,
 				DA5A84B026C563A900F274C7 /* OAAddWaypointBottomSheetViewController.mm in Sources */,
 				DA5A848726C563A900F274C7 /* OANavigationController.m in Sources */,
@@ -18004,6 +18050,7 @@
 				46D439142AA89C1F001D85FF /* DestinationsListViewController.swift in Sources */,
 				DA5A824826C563A700F274C7 /* OARoadSpeedsViewController.mm in Sources */,
 				DA5A832526C563A800F274C7 /* OACollectionViewCellState.m in Sources */,
+				FABA02C22B206E130004CC3B /* SwiftyBluetooth.swift in Sources */,
 				DA5A81BE26C563A700F274C7 /* OACustomSearchPoiFilter.m in Sources */,
 				46624E722993B28C00F425AE /* OABaseNavbarViewController.m in Sources */,
 				DA5A836A26C563A800F274C7 /* OARouteStatisticsHelper.mm in Sources */,
@@ -18028,6 +18075,7 @@
 				DA5A83A926C563A800F274C7 /* OABasicEditingViewController.mm in Sources */,
 				DA35963529B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm in Sources */,
 				DA5A852F26C563A900F274C7 /* OpenLocationCode.swift in Sources */,
+				FABA02C42B206E130004CC3B /* DescriptorValue.swift in Sources */,
 				DA5A850026C563A900F274C7 /* OARangeSlider.m in Sources */,
 				DA5A84CA26C563A900F274C7 /* OADeleteProfileBottomSheetViewController.m in Sources */,
 				DAB9AECD28E192D300AD01CE /* OAURLSessionProgress.m in Sources */,
@@ -18132,6 +18180,7 @@
 				CA4ED710806E780B7FAB796A /* OAPreviewRouteLineInfo.mm in Sources */,
 				CA4ED153BFA207753EEE0E13 /* OAMapillaryOsmTagHelper.mm in Sources */,
 				CA4EDBC475684B567F9345C9 /* OAWeatherPlugin.mm in Sources */,
+				FABA02BD2B206E130004CC3B /* CBUUIDConvertible.swift in Sources */,
 				CA4ED3D292CC8CAE7922DC3E /* OAWeatherSettingsViewController.mm in Sources */,
 				CA4ED0D1E58A3E00EAE53C55 /* OAWeatherBandSettingsViewController.mm in Sources */,
 				3236428E2900370800E18413 /* OAFPSTextInfoWidget.mm in Sources */,
@@ -18843,25 +18892,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		FAA650622ADD43BE0020DCEA /* XCRemoteSwiftPackageReference "SwiftyBluetooth" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/jordanebelanger/SwiftyBluetooth";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		FAA650632ADD43BE0020DCEA /* SwiftyBluetooth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FAA650622ADD43BE0020DCEA /* XCRemoteSwiftPackageReference "SwiftyBluetooth" */;
-			productName = SwiftyBluetooth;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BB098CE91793F7FD00423944 /* Project object */;
 }

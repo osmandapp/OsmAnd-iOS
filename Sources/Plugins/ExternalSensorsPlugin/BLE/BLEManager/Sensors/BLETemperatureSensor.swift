@@ -79,7 +79,7 @@ final class BLETemperatureSensor: Sensor {
                 let data = try JSONEncoder().encode([PointAttributes.sensorTagTemperature: String(lastTemperatureData.temperature)])
                 json.append(data)
             } catch {
-                debugPrint("BLE failed writeSensorDataToJson: temperature - \(lastTemperatureData.temperature)")
+                debugPrint("BLE failed writeSensorDataToJson: temperature - \(lastTemperatureData.temperature) | error: \(error.localizedDescription)")
             }
         }
     }

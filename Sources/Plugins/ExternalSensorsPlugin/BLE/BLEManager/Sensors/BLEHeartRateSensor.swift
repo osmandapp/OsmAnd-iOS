@@ -99,7 +99,7 @@ final class BLEHeartRateSensor: Sensor {
                 let data = try JSONEncoder().encode([PointAttributes.sensorTagHartRate: String(lastHeartRateData.heartRate)])
                 json.append(data)
             } catch {
-                debugPrint("BLE failed writeSensorDataToJson: heartRate - \(lastHeartRateData.heartRate)")
+                debugPrint("BLE failed writeSensorDataToJson: heartRate - \(lastHeartRateData.heartRate) | error: \(error.localizedDescription)")
             }
         }
     }

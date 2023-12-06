@@ -114,7 +114,7 @@ final class BLEBikeSensor: Sensor {
                 json.append(data)
             }
         } catch {
-            debugPrint("BLE failed writeSensorDataToJson: speed - \(speed.value), cadence - \(lastBikeCadenceData?.cadence ?? -1), travelDistance - \(lastBikeSpeedDistanceData?.travelDistance.value ?? -1)")
+            debugPrint("BLE failed writeSensorDataToJson: speed - \(speed.value), cadence - \(lastBikeCadenceData?.cadence as Any), travelDistance - \(lastBikeSpeedDistanceData?.travelDistance.value as Any) | error: \(error.localizedDescription)")
         }
     }
 }

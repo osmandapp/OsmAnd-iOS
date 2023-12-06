@@ -547,6 +547,7 @@
 "shared_string_purchased" = "Purchased";
 "shared_string_control_start" = "Start";
 "shared_string_control_stop" = "Stop";
+"shared_string_any" = "Any";
 
 "restart" = "Restart";
 

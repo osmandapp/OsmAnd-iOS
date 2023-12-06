@@ -3034,7 +3034,6 @@
 "weather_update_disabled" = "Deaktiviert";
 "weather_update_over_wifi_only" = "Nur über WLAN";
 "weather_update_over_any_network" = "Über jedes Netzwerk";
-"map_settings_topography" = "Topografie";
 "shared_string_cache" = "Zwischenspeicher";
 "weather_updates_manual" = "Die Wettervorhersage muss manuell aktualisiert werden.";
 "click_on_widget" = "Klicken Sie auf das Widget";

@@ -129,7 +129,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) setupView
 {
     _styleSettings = [OAMapStyleSettings sharedInstance];
-    title = OALocalizedString(@"srtm_plugin_name");
+    title = OALocalizedString(@"map_settings_topography");
     tblView.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + 16, 0, 0);
     tblView.estimatedRowHeight = kEstimatedRowHeight;
     

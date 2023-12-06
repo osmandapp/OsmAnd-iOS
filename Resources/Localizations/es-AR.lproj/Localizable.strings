@@ -3035,7 +3035,6 @@
 "auto_update" = "Actualización automática";
 "weather_update_over_any_network" = "Sobre cualquier red";
 "weather_update_parameters_any_network" = "El pronóstico del tiempo será actualizado sobre cualquier red. Pueden usarse los datos móviles.";
-"map_settings_topography" = "Topografía";
 "click_on_widget" = "Pulsar en el widget";
 "shared_string_cache" = "Caché";
 "unsaved_changes_will_be_lost_discard" = "Los cambios sin guardar se perderán. ¿Descartar cambios?";

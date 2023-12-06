@@ -464,7 +464,7 @@
     if (hasSRTM && !_iapHelper.srtm.disabled)
     {
         [topographySectionData addObject:@{
-                @"name": OALocalizedString(@"srtm_plugin_name"),
+                @"name": OALocalizedString(@"map_settings_topography"),
                 @"image": @"ic_custom_contour_lines",
                 @"has_options": @YES,
                 @"type": [OASwitchTableViewCell getCellIdentifier],
@@ -500,7 +500,7 @@
     if (topographySectionData.count > 0)
     {
         [data addObject:@{
-            @"group_name": OALocalizedString(@"map_settings_topography"),
+            @"group_name": OALocalizedString(@"srtm_plugin_name"),
             @"cells": topographySectionData
         }];
     }

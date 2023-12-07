@@ -15,6 +15,10 @@
 #define CM_LIMIT @"&cmlimit=500"
 #define FORMAT_JSON @"&format=json"
 #define IMAGE_BASE_URL @"https://commons.wikimedia.org/wiki/Special:FilePath/"
+#define USE_OSMAND_WIKI_API YES
+#define OSMAND_API_ENDPOINT @"https://osmand.net/api/"
+#define OSMAND_API_WIKIDATA_ARTICLE_ACTION @"wiki_place?article="
+#define OSMAND_API_WIKIDATA_CATEGORY_ACTION @"wiki_place?category="
 
 #define WIKIDATA_PREFIX @"Q"
 #define WIKIMEDIA_FILE @"File:"

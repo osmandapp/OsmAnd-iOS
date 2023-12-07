@@ -1,0 +1,26 @@
+{
+  "images" : [
+    {
+      "filename" : "map_turn_roundabout_right_dark.svg",
+      "idiom" : "car"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "map_turn_roundabout_right.svg",
+      "idiom" : "car"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true,
+    "template-rendering-intent" : "template"
+  }
+}

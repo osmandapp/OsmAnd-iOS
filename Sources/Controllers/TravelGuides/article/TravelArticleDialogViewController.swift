@@ -419,9 +419,7 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
                     self.updateNavbar()
                     self.applyLocalization()
                     self.updateBookmarkButton()
-                    self.loadWebView()
                 }
-                
             }
         })
     }

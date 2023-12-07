@@ -15,10 +15,6 @@ on:
         description: 'Release Version'
         required: true
         default: '4.6.0'
-      download_qt_ios_library:
-        description: 'Download prebuilt qt library (true) or build locally (false) - extra 2 h'
-        required: true
-        default: true
 jobs:
   build:
     runs-on: self-hosted
@@ -46,43 +42,50 @@ jobs:
       uses: actions/checkout@v3
       with:
         ref: refs/heads/master
-        path: ~/Git/ios
+        path: ios
+        clean: false
     - name: Checkout android
       uses: actions/checkout@v3
       with:
         ref: refs/heads/master
         repository: osmandapp/OsmAnd
-        path: ~/Git/android
+        path: android
+        clean: false
     - name: Checkout build
       uses: actions/checkout@v3
       with:
         ref: refs/heads/master
         repository: osmandapp/OsmAnd-build
-        path: ~/Git/build
+        path: build
+        clean: false
     - name: Checkout core legacy
       uses: actions/checkout@v3
       with:
         ref: refs/heads/master
         repository: osmandapp/OsmAnd-core-legacy
-        path: ~/Git/core-legacy
+        path: core-legacy
+        clean: false
     - name: Checkout core
       uses: actions/checkout@v3
       with:
         ref: refs/heads/master
         repository: osmandapp/OsmAnd-core
-        path: ~/Git/core
+        path: core
+        clean: false
     - name: Checkout help
       uses: actions/checkout@v3
       with:
         ref: refs/heads/master
         repository: osmandapp/osmandapp.github.io
-        path: ~/Git/help
+        path: help
+        clean: false
     - name: Checkout resources
       uses: actions/checkout@v3
       with:
         ref: refs/heads/master
         repository: osmandapp/OsmAnd-resources
-        path: ~/Git/resources
+        path: resources
+        clean: false
     #- name: Select XCode 15.0.1
     #  run: sudo xcode-select -switch /Applications/Xcode_15.0.1.app
     # - name: Patch __bsfd
@@ -94,50 +97,42 @@ jobs:
       run: .github/secrets/decrypt_secrets.sh
       working-directory: ios  
     - name: Build QtCore & prepare build
-      env:
-        BUILT_QT_FILES_ZIPFILE: qt-ios-prebuilt.zip
-        DOWNLOAD_PREBUILT_QT_FILES: ${{ github.event.inputs.download_qt_ios_library }} 
-      run: exec ~/Git/ios/prepare.sh #--sync_translations
-    - name: Upload qt-ios-prebuilt
-      uses: actions/upload-artifact@v2
-      with:
-        name: qt-ios-prebuilt.zip
-        path: ~/Work/qt-ios-prebuilt.zip
+      run: exec ios/prepare.sh #--sync_translations
     - name: Configure iOS OsmAndCore
       run: 'xcodebuild -project OsmAnd_projects.xcodeproj -target ZERO_CHECK -sdk iphoneos -configuration Release'
-      working-directory: ~/Git/baked/fat-ios-clang.xcode
+      working-directory: baked/fat-ios-clang.xcode
     - name: Build iOS OsmAndCore
       run: 'xcodebuild -project OsmAnd_projects.xcodeproj -target OsmAndCore_static_standalone -sdk iphoneos -configuration Release'
-      working-directory: ~/Git/baked/fat-ios-clang.xcode
+      working-directory: baked/fat-ios-clang.xcode
     - name: Creating iOS archive
       env:
         BUILD_IOS_VERSION: ${{ github.event.inputs.buildversion }} 
         RELEASE_IOS_VERSION: ${{ github.event.inputs.releaseversion }} 
       run: 'xcodebuild
-            -workspace ~/Git/ios/OsmAnd.xcworkspace
+            -workspace ios/OsmAnd.xcworkspace
             -scheme "OsmAnd Maps Release"
             -sdk iphoneos
             -configuration AppStoreDistribution
-            -archivePath ~/Work/OsmAndMaps.xcarchive
+            -archivePath OsmAndMaps.xcarchive
             CURRENT_PROJECT_VERSION="${RELEASE_IOS_VERSION}.${BUILD_IOS_VERSION}"
             MARKETING_VERSION="${RELEASE_IOS_VERSION}"
             CODE_SIGN_IDENTITY="iPhone Distribution"
             PROVISIONING_PROFILE_SPECIFIER="Github Build"
             archive | xcpretty'
     - name: Zip iOS archive
-      run: 'zip -r ~/Work/OsmAndMaps.xcarchive.zip ~/Work/OsmAndMaps.xcarchive'
+      run: 'zip -r OsmAndMaps.xcarchive.zip OsmAndMaps.xcarchive'
     - name: Upload maps archive zip
       uses: actions/upload-artifact@v2
       with:
          name: OsmAndMaps-${{ github.event.inputs.releaseversion }}.${{ github.event.inputs.buildversion }}.xcarchive.zip
-         path: ~/Work/OsmAndMaps.xcarchive.zip
+         path: OsmAndMaps.xcarchive.zip
     # - name: Download iOS archive
     #   run: 'wget "https://builder.osmand.net/binaries/ios/OsmAndMaps.xcarchive.zip" -O OsmAndMaps.xcarchive.zip'
     # - name: Unzip iOS archive
     #   run: 'unzip OsmAndMaps.xcarchive.zip'  
     - name: Export iOS archive
-      run: 'xcodebuild -archivePath ~/Work/OsmAndMaps.xcarchive 
-            -exportOptionsPlist ~/Git/ios/exportOptions.plist 
+      run: 'xcodebuild -archivePath OsmAndMaps.xcarchive 
+            -exportOptionsPlist ios/exportOptions.plist 
             -exportPath . 
             -allowProvisioningUpdates 
             -exportArchive' 
@@ -145,9 +140,9 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: OsmAndMaps-${{ github.event.inputs.releaseversion }}.${{ github.event.inputs.buildversion }}.ipa
-        path: ~/Work/'OsmAnd Maps.ipa'
+        path: 'OsmAnd Maps.ipa'
     - name: Publish TestFlight
       env:
         APPLEID_USERNAME: ${{ secrets.APPLEID_USERNAME }}
         APPLEID_PASSWORD: ${{ secrets.APPLEID_PASSWORD }}
-      run: 'xcrun altool --upload-app -t ios -f "~/Work/OsmAnd Maps.ipa" -u "$APPLEID_USERNAME" -p "$APPLEID_PASSWORD" --verbose'
+      run: 'xcrun altool --upload-app -t ios -f "OsmAnd Maps.ipa" -u "$APPLEID_USERNAME" -p "$APPLEID_PASSWORD" --verbose'

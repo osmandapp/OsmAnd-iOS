@@ -844,7 +844,7 @@ final class GpxFileReader {
     
     func execute() {
         onPreExecute()
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .default).async {
             let file = self.doInBackground()
             DispatchQueue.main.async {
                 self.onPostExecute(gpxFile: file)

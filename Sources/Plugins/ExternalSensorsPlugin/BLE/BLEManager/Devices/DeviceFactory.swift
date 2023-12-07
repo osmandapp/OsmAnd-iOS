@@ -19,20 +19,10 @@ final class DeviceFactory {
             if BLEBikeSCDDevice.getServiceUUID.contains(uuid) {
                 return BLEBikeSCDDevice()
             }
+            if BLERunningSCDDevice.getServiceUUID.contains(uuid) {
+                return BLERunningSCDDevice()
+            }
         }
         return nil
-
-        /*
-         else if (BLETemperatureDevice.getServiceUUID().equals(uuid)) {
-             device = new BLETemperatureDevice(bluetoothAdapter, address);
-         } else if (BLEBikeSCDDevice.getServiceUUID().equals(uuid)) {
-             device = new BLEBikeSCDDevice(bluetoothAdapter, address);
-         } else if (BLERunningSCDDevice.getServiceUUID().equals(uuid)) {
-             device = new BLERunningSCDDevice(bluetoothAdapter, address);
-         } else if (BLEBPICPDevice.getServiceUUID().equals(uuid)) {
-             device = new BLEBPICPDevice(bluetoothAdapter, address);
-         }
-         
-         */
     }
 }

@@ -3160,3 +3160,4 @@
 "shared_string_view" = "Vis";
 "external_device_unpair_description" = "Tilslut sensor til din enhed for at få oplysninger.";
 "external_device_details_information" = "Information";
+"external_device_any_connected" = "Alle forbundne";

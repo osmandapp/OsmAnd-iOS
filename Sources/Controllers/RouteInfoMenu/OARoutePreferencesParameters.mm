@@ -21,6 +21,7 @@
 #import "OsmAndApp.h"
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OALocalRoutingParameter
 {
@@ -273,7 +274,7 @@
 
 - (UIColor *) getTintColor
 {
-    return UIColorFromRGB(color_primary_purple);
+    return UIColor.iconColorActive;
 }
 
 @end

@@ -11,7 +11,7 @@
 #import "OARoutingHelper.h"
 #import "OARightIconTableViewCell.h"
 #import "OATableViewCustomFooterView.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OARouteSettingsParameterController ()
 
@@ -127,6 +127,7 @@
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OARightIconTableViewCell *) nib[0];
         [cell descriptionVisibility:NO];
+        [cell rightIconVisibility:NO];
     }
     
     if (cell)
@@ -136,22 +137,16 @@
         cell.leftIconView.image = icon;
         if (indexPath.row == _indexSelected)
         {
-            [cell rightIconVisibility:YES];
-            [cell.rightIconView setImage:color
-                    ? [UIImage templateImageNamed:@"menu_cell_selected"]
-                    : [UIImage imageNamed:@"menu_cell_selected"]];
+            cell.accessoryType =  UITableViewCellAccessoryCheckmark;
 
             if (color)
                 cell.leftIconView.tintColor = color;
         }
         else
         {
-            cell.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
-            [cell rightIconVisibility:NO];
+            cell.leftIconView.tintColor = UIColor.iconColorDisabled;
+            cell.accessoryType = UITableViewCellAccessoryNone;
         }
-
-        if (color)
-            cell.rightIconView.tintColor = color;
     }
     
     return cell;
@@ -186,7 +181,7 @@
     UIFont *textFont = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
             NSFontAttributeName: textFont,
-            NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)
+            NSForegroundColorAttributeName: UIColor.textColorSecondary
     }];
     vw.label.attributedText = textStr;
     return vw;

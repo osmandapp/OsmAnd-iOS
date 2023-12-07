@@ -5,7 +5,6 @@
 //  Created by Oleksandr Panchenko on 25.09.2023.
 //
 
-import SwiftyBluetooth
 import CoreBluetooth
 import UIKit
 

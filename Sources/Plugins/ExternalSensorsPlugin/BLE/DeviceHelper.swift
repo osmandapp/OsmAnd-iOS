@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftyBluetooth
 import CoreBluetooth
 import OSLog
 

@@ -39,22 +39,24 @@
 #define WEST @"W"
 #define EAST @"E"
 
-+ (double) calculateRoundedDist:(double)baseMetersDist;
-+ (NSString *) getFormattedDistance:(float) meters;
-+ (NSString *) getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes;
-+ (NSString *) getFormattedAlarmInfoDistance:(float)meters;
-+ (NSString *) getFormattedAzimuth:(float)bearing;
-+ (NSString *) getFormattedTimeHM:(NSTimeInterval)timeInterval;
-+ (NSString *) getFormattedTimeInterval:(NSTimeInterval)interval;
-+ (NSString *) getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat;
-+ (NSString *) getFormattedPassedTime:(NSTimeInterval)time def:(NSString *)def;
-+ (NSString *) getFormattedSpeed:(float) metersperseconds drive:(BOOL)drive;
-+ (NSString *) getFormattedSpeed:(float) metersperseconds;
-+ (NSString *) getFormattedAlt:(double) alt;
-+ (NSString *) getFormattedAlt:(double) alt mc:(EOAMetricsConstant)mc;
-+ (NSString *) getFormattedCoordinatesWithLat:(double)lat lon:(double)lon outputFormat:(NSInteger)outputFormat;
-+ (NSString *) getFormattedDistanceInterval:(double)interval;
-+ (NSString *) getFormattedOsmTagValue:(NSString *)tagValue;
-+ (NSString *) getFormattedDuration:(NSTimeInterval)seconds fullForm:(BOOL) fullForm;
++ (double)calculateRoundedDist:(double)baseMetersDist;
++ (NSString *)getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
++ (NSString *)getFormattedDistance:(float)meters;
++ (NSString *)getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes;
++ (NSString *)getFormattedAlarmInfoDistance:(float)meters;
++ (NSString *)getFormattedAzimuth:(float)bearing;
++ (NSString *)getFormattedTimeHM:(NSTimeInterval)timeInterval;
++ (NSString *)getFormattedTimeInterval:(NSTimeInterval)interval;
++ (NSString *)getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat;
++ (NSString *)getFormattedPassedTime:(NSTimeInterval)time def:(NSString *)def;
++ (NSString *)getFormattedSpeed:(float)metersperseconds valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
++ (NSString *)getFormattedSpeed:(float)metersperseconds drive:(BOOL)drive;
++ (NSString *)getFormattedSpeed:(float)metersperseconds;
++ (NSString *)getFormattedAlt:(double)alt;
++ (NSString *)getFormattedAlt:(double)alt mc:(EOAMetricsConstant)mc;
++ (NSString *)getFormattedCoordinatesWithLat:(double)lat lon:(double)lon outputFormat:(NSInteger)outputFormat;
++ (NSString *)getFormattedDistanceInterval:(double)interval;
++ (NSString *)getFormattedOsmTagValue:(NSString *)tagValue;
++ (NSString *)getFormattedDuration:(NSTimeInterval)seconds fullForm:(BOOL)fullForm;
 
 @end

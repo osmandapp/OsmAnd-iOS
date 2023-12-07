@@ -6,8 +6,6 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import SwiftyBluetooth
-
 @objcMembers
 final class BLEInitHeader: NSObject {
     static func configure() {

@@ -6,8 +6,6 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 class SensorWidgetDataField: SensorDataField {
     let fieldType: WidgetType
     
@@ -19,32 +17,39 @@ class SensorWidgetDataField: SensorDataField {
     func getFieldType() -> WidgetType {
         fieldType
     }
+    
+    func getValueAndUnit(with valueUnitArray: NSMutableArray) -> (value: String, unit: String)? {
+        guard valueUnitArray.count == 2,
+              let value = valueUnitArray[0] as? String,
+              let unit = valueUnitArray[1] as? String else {
+            return nil
+        }
+        return (value: value, unit: unit)
+    }
 }
 
-class SensorSpeedWidgetDataField: SensorWidgetDataField {
+final class SensorSpeedWidgetDataField: SensorWidgetDataField {
     // SensorWidgetDataFieldType.BIKE_SPEED
     override func getFormattedValue() -> FormattedValue? {
         if let value = numberValue?.floatValue {
-            let formattedSpeed = OAOsmAndFormatter.getFormattedSpeed(value).components(separatedBy: " ")
-            if formattedSpeed.count > 1 {
-                return FormattedValue(valueSrc: 0, value: formattedSpeed.first ?? "", unit: formattedSpeed.last ?? "")
-            } else {
-                return nil
+            let valueUnitArray: NSMutableArray = []
+            OAOsmAndFormatter.getFormattedSpeed(value, valueUnitArray: valueUnitArray)
+            if let result = getValueAndUnit(with: valueUnitArray) {
+                return FormattedValue(valueSrc: 0, value: result.value, unit: result.unit)
             }
         }
         return nil
     }
 }
 
-class SensorDistanceWidgetDataField: SensorWidgetDataField {
+final class SensorDistanceWidgetDataField: SensorWidgetDataField {
     // SensorWidgetDataFieldType.BIKE_DISTANCE
     override func getFormattedValue() -> FormattedValue? {
         if let value = numberValue?.floatValue {
-            let formattedDistance = OAOsmAndFormatter.getFormattedDistance(value, forceTrailingZeroes: false).components(separatedBy: " ")
-            if formattedDistance.count > 1 {
-                return FormattedValue(valueSrc: 0, value: formattedDistance.first ?? "", unit: formattedDistance.last ?? "")
-            } else {
-                return nil
+            let valueUnitArray: NSMutableArray = []
+            OAOsmAndFormatter.getFormattedDistance(value, forceTrailingZeroes: false, valueUnitArray: valueUnitArray)
+            if let result = getValueAndUnit(with: valueUnitArray) {
+                return FormattedValue(valueSrc: 0, value: result.value, unit: result.unit)
             }
         }
         return nil

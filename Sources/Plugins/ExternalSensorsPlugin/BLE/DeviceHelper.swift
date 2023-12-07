@@ -7,10 +7,10 @@
 //
 
 import Foundation
-import SwiftyBluetooth
 import CoreBluetooth
 import OSLog
 
+@objc(OADeviceHelper)
 @objcMembers
 final class DeviceHelper: NSObject {
     static let shared = DeviceHelper()
@@ -42,6 +42,10 @@ final class DeviceHelper: NSObject {
         return getDevicesFrom(peripherals: disconnectedPeripherals, pairedDevices: pairedDevices)
     }
     
+    func getPairedDevicesFor(type: WidgetType, deviceId: String) -> Device? {
+        getPairedDevicesFor(type: type)?.first { $0.id == deviceId }
+    }
+
     func getPairedDevicesFor(type: WidgetType) -> [Device]? {
         if let pairedDevices = getSettingsForPairedDevices() {
             let peripherals = SwiftyBluetooth.retrievePeripherals(withUUIDs: pairedDevices.map { UUID(uuidString: $0.deviceId)! })
@@ -141,6 +145,18 @@ final class DeviceHelper: NSObject {
         removeDisconnected(device: device)
         devicesSettingsCollection.removeDeviceSetting(with: device.id)
         unpairWidgetsForDevice(id: device.id)
+        unpairTrackRecordingFor(device: device)
+    }
+    
+    private func unpairTrackRecordingFor(device: Device) {
+        guard let supportedTypes = device.getSupportedWidgetDataFieldTypes(),
+              let plugin = OAPlugin.getEnabledPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin else { return }
+        supportedTypes.forEach {
+            let deviceId = plugin.getDeviceId(for: $0, appMode: OAAppSettings.sharedManager().applicationMode.get())
+            if deviceId != OATrackRecordingNone {
+                plugin.getWriteToTrackDeviceIdPref($0)?.resetToDefault()
+            }
+        }
     }
     
     private func getDeviceFor(type: DeviceType) -> Device {
@@ -151,6 +167,8 @@ final class DeviceHelper: NSObject {
             return BLETemperatureDevice()
         case .BLE_BICYCLE_SCD:
             return BLEBikeSCDDevice()
+        case .BLE_RUNNING_SCDS:
+            return BLERunningSCDDevice()
         default:
             fatalError("not impl")
         }

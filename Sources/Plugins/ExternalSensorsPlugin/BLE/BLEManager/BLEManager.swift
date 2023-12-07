@@ -5,7 +5,6 @@
 //  Created by Oleksandr Panchenko on 22.09.2023.
 //
 
-import SwiftyBluetooth
 import CoreBluetooth
 import OSLog
 
@@ -146,12 +145,12 @@ final class BLEManager {
     }
     
     func getBluetoothState() -> CBManagerState {
-        SwiftyBluetooth.Central.sharedInstance.state
+        Central.sharedInstance.state
     }
     
     func asyncState(completion: @escaping (CBManagerState) -> Void) {
         SwiftyBluetooth.asyncState { _ in
-            completion(SwiftyBluetooth.Central.sharedInstance.state)
+            completion(Central.sharedInstance.state)
         }
     }
     

@@ -180,6 +180,7 @@
         for (const auto &ext: extensions)
         {
             OAGpxExtension *e = [[OAGpxExtension alloc] init];
+            e.prefix = ext->prefix != nullptr ? ext->prefix.toNSString() : nil;
             e.name = ext->name.toNSString().lowerCase;
             e.value = ext->value.toNSString();
             if (!ext->attributes.isEmpty())
@@ -215,6 +216,7 @@
 
 - (void)fillExtension:(const std::shared_ptr<OsmAnd::GpxExtensions::GpxExtension>&)extension ext:(OAGpxExtension *)e
 {
+    extension->prefix = e.prefix ? QString::fromNSString(e.prefix) : nullptr;
     extension->name = QString::fromNSString(e.name);
     extension->value = QString::fromNSString(e.value);
     for (NSString *key in e.attributes.allKeys)

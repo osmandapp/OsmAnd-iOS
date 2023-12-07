@@ -3449,17 +3449,17 @@
 		FAA650662ADD4C9F0020DCEA /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650652ADD4C9F0020DCEA /* UIImage+Extension.swift */; };
 		FAA650682ADD8D0D0020DCEA /* BLEInitHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */; };
 		FAB6E7E42AC5A9FD00A82987 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */; };
-		FABA02BB2B206E130004CC3B /* CentralProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B02B206E130004CC3B /* CentralProxy.swift */; };
-		FABA02BC2B206E130004CC3B /* Peripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B12B206E130004CC3B /* Peripheral.swift */; };
-		FABA02BD2B206E130004CC3B /* CBUUIDConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B22B206E130004CC3B /* CBUUIDConvertible.swift */; };
-		FABA02BE2B206E130004CC3B /* Central.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B32B206E130004CC3B /* Central.swift */; };
-		FABA02BF2B206E130004CC3B /* PeripheralProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B42B206E130004CC3B /* PeripheralProxy.swift */; };
-		FABA02C02B206E130004CC3B /* SBError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B52B206E130004CC3B /* SBError.swift */; };
-		FABA02C12B206E130004CC3B /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B62B206E130004CC3B /* Util.swift */; };
-		FABA02C22B206E130004CC3B /* SwiftyBluetooth.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B72B206E130004CC3B /* SwiftyBluetooth.swift */; };
-		FABA02C32B206E130004CC3B /* CBUUIDPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B82B206E130004CC3B /* CBUUIDPath.swift */; };
-		FABA02C42B206E130004CC3B /* DescriptorValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02B92B206E130004CC3B /* DescriptorValue.swift */; };
-		FABA02C52B206E130004CC3B /* CBExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABA02BA2B206E130004CC3B /* CBExtensions.swift */; };
+		FAC166212B21BEF900D63755 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166162B21BEF700D63755 /* Util.swift */; };
+		FAC166222B21BEF900D63755 /* PeripheralProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166172B21BEF800D63755 /* PeripheralProxy.swift */; };
+		FAC166232B21BEF900D63755 /* DescriptorValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166182B21BEF800D63755 /* DescriptorValue.swift */; };
+		FAC166242B21BEF900D63755 /* SwiftyBluetooth.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166192B21BEF800D63755 /* SwiftyBluetooth.swift */; };
+		FAC166252B21BEF900D63755 /* CBExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1661A2B21BEF800D63755 /* CBExtensions.swift */; };
+		FAC166262B21BEF900D63755 /* SBError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1661B2B21BEF800D63755 /* SBError.swift */; };
+		FAC166272B21BEF900D63755 /* CBUUIDConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1661C2B21BEF800D63755 /* CBUUIDConvertible.swift */; };
+		FAC166282B21BEF900D63755 /* Central.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1661D2B21BEF900D63755 /* Central.swift */; };
+		FAC166292B21BEF900D63755 /* CBUUIDPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1661E2B21BEF900D63755 /* CBUUIDPath.swift */; };
+		FAC1662A2B21BEF900D63755 /* Peripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1661F2B21BEF900D63755 /* Peripheral.swift */; };
+		FAC1662B2B21BEF900D63755 /* CentralProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166202B21BEF900D63755 /* CentralProxy.swift */; };
 		FACE409F2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */; };
 		FAE0B7112AFCDAD400C02438 /* BLEPairedSensorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */; };
 		FAE0B7132AFCDC6B00C02438 /* BLEPairedSensors.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAE0B7122AFCDC6B00C02438 /* BLEPairedSensors.storyboard */; };
@@ -8156,17 +8156,17 @@
 		FAA650652ADD4C9F0020DCEA /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEInitHeader.swift; sourceTree = "<group>"; };
 		FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
-		FABA02B02B206E130004CC3B /* CentralProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CentralProxy.swift; sourceTree = "<group>"; };
-		FABA02B12B206E130004CC3B /* Peripheral.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Peripheral.swift; sourceTree = "<group>"; };
-		FABA02B22B206E130004CC3B /* CBUUIDConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBUUIDConvertible.swift; sourceTree = "<group>"; };
-		FABA02B32B206E130004CC3B /* Central.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Central.swift; sourceTree = "<group>"; };
-		FABA02B42B206E130004CC3B /* PeripheralProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralProxy.swift; sourceTree = "<group>"; };
-		FABA02B52B206E130004CC3B /* SBError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SBError.swift; sourceTree = "<group>"; };
-		FABA02B62B206E130004CC3B /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
-		FABA02B72B206E130004CC3B /* SwiftyBluetooth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyBluetooth.swift; sourceTree = "<group>"; };
-		FABA02B82B206E130004CC3B /* CBUUIDPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBUUIDPath.swift; sourceTree = "<group>"; };
-		FABA02B92B206E130004CC3B /* DescriptorValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DescriptorValue.swift; sourceTree = "<group>"; };
-		FABA02BA2B206E130004CC3B /* CBExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBExtensions.swift; sourceTree = "<group>"; };
+		FAC166162B21BEF700D63755 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		FAC166172B21BEF800D63755 /* PeripheralProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralProxy.swift; sourceTree = "<group>"; };
+		FAC166182B21BEF800D63755 /* DescriptorValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DescriptorValue.swift; sourceTree = "<group>"; };
+		FAC166192B21BEF800D63755 /* SwiftyBluetooth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyBluetooth.swift; sourceTree = "<group>"; };
+		FAC1661A2B21BEF800D63755 /* CBExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBExtensions.swift; sourceTree = "<group>"; };
+		FAC1661B2B21BEF800D63755 /* SBError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SBError.swift; sourceTree = "<group>"; };
+		FAC1661C2B21BEF800D63755 /* CBUUIDConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBUUIDConvertible.swift; sourceTree = "<group>"; };
+		FAC1661D2B21BEF900D63755 /* Central.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Central.swift; sourceTree = "<group>"; };
+		FAC1661E2B21BEF900D63755 /* CBUUIDPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBUUIDPath.swift; sourceTree = "<group>"; };
+		FAC1661F2B21BEF900D63755 /* Peripheral.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Peripheral.swift; sourceTree = "<group>"; };
+		FAC166202B21BEF900D63755 /* CentralProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CentralProxy.swift; sourceTree = "<group>"; };
 		FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalSensorsPlugin.mm; sourceTree = "<group>"; };
 		FACE409E2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAExternalSensorsPlugin.h; sourceTree = "<group>"; };
 		FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPairedSensorsViewController.swift; sourceTree = "<group>"; };
@@ -13994,7 +13994,7 @@
 		DA7F2587231A68CD00E54F77 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				FABA02AF2B206E130004CC3B /* SwiftyBluetooth */,
+				FAC166152B21BECE00D63755 /* SwiftyBluetooth */,
 				DA7F2588231A68CD00E54F77 /* Charts */,
 			);
 			path = Libraries;
@@ -14430,23 +14430,22 @@
 			path = DescriptionDeviceHeader;
 			sourceTree = "<group>";
 		};
-		FABA02AF2B206E130004CC3B /* SwiftyBluetooth */ = {
+		FAC166152B21BECE00D63755 /* SwiftyBluetooth */ = {
 			isa = PBXGroup;
 			children = (
-				FABA02B02B206E130004CC3B /* CentralProxy.swift */,
-				FABA02B12B206E130004CC3B /* Peripheral.swift */,
-				FABA02B22B206E130004CC3B /* CBUUIDConvertible.swift */,
-				FABA02B32B206E130004CC3B /* Central.swift */,
-				FABA02B42B206E130004CC3B /* PeripheralProxy.swift */,
-				FABA02B52B206E130004CC3B /* SBError.swift */,
-				FABA02B62B206E130004CC3B /* Util.swift */,
-				FABA02B72B206E130004CC3B /* SwiftyBluetooth.swift */,
-				FABA02B82B206E130004CC3B /* CBUUIDPath.swift */,
-				FABA02B92B206E130004CC3B /* DescriptorValue.swift */,
-				FABA02BA2B206E130004CC3B /* CBExtensions.swift */,
+				FAC1661A2B21BEF800D63755 /* CBExtensions.swift */,
+				FAC1661C2B21BEF800D63755 /* CBUUIDConvertible.swift */,
+				FAC1661E2B21BEF900D63755 /* CBUUIDPath.swift */,
+				FAC1661D2B21BEF900D63755 /* Central.swift */,
+				FAC166202B21BEF900D63755 /* CentralProxy.swift */,
+				FAC166182B21BEF800D63755 /* DescriptorValue.swift */,
+				FAC1661F2B21BEF900D63755 /* Peripheral.swift */,
+				FAC166172B21BEF800D63755 /* PeripheralProxy.swift */,
+				FAC1661B2B21BEF800D63755 /* SBError.swift */,
+				FAC166192B21BEF800D63755 /* SwiftyBluetooth.swift */,
+				FAC166162B21BEF700D63755 /* Util.swift */,
 			);
-			name = SwiftyBluetooth;
-			path = ../../../../SwiftyBluetooth;
+			path = SwiftyBluetooth;
 			sourceTree = "<group>";
 		};
 		FACE409C2AEA9A8000E1E43A /* ExternalSensorsPlugin */ = {
@@ -17204,12 +17203,14 @@
 				DA5A819A26C563A700F274C7 /* OAMapOverlayAction.mm in Sources */,
 				DA5A82F726C563A800F274C7 /* OARangeSliderCell.m in Sources */,
 				FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */,
+				FAC166222B21BEF900D63755 /* PeripheralProxy.swift in Sources */,
 				DA5A825826C563A700F274C7 /* OASpeedLimitToleranceViewController.m in Sources */,
 				DA5A84AE26C563A900F274C7 /* OAHistoryViewController.mm in Sources */,
 				4643322A291D5FE7005AEF12 /* OAMapSettingsNauticalDepthScreen.m in Sources */,
 				DA5A84E826C563A900F274C7 /* OAWaypointsViewController.mm in Sources */,
 				46E9AD9C28DC8F4C00CC55F9 /* OAValueTableViewCell.m in Sources */,
 				DA5A83FE26C563A800F274C7 /* OAQuickSearchListItem.mm in Sources */,
+				FAC166232B21BEF900D63755 /* DescriptorValue.swift in Sources */,
 				DA5A818E26C563A700F274C7 /* OANewAction.m in Sources */,
 				DA5A814626C563A700F274C7 /* OAOpenStreetMapRemoteUtil.mm in Sources */,
 				DA5A840626C563A800F274C7 /* OAPOIViewController.mm in Sources */,
@@ -17254,6 +17255,7 @@
 				DA4ABF192876DA6800B996EF /* OAQuickActionsSettingsItem.mm in Sources */,
 				32BFF098299137D60023D067 /* OAUploadGPXFilesTask.m in Sources */,
 				DA5A83F926C563A800F274C7 /* OACustomPOIViewController.mm in Sources */,
+				FAC166252B21BEF900D63755 /* CBExtensions.swift in Sources */,
 				46E9AD9128DC869300CC55F9 /* OARightIconTableViewCell.m in Sources */,
 				DA5A815626C563A700F274C7 /* OAWikipediaPlugin.mm in Sources */,
 				DA5A84CC26C563A900F274C7 /* OAWhatsNewBottomSheetViewController.m in Sources */,
@@ -17320,6 +17322,7 @@
 				DA5A84A326C563A900F274C7 /* OAAddPointCommand.mm in Sources */,
 				DA7B18E32A12392E0029967F /* OAMaxSpeedWidget.mm in Sources */,
 				DA5A81C826C563A700F274C7 /* OAResultMatcher.m in Sources */,
+				FAC166242B21BEF900D63755 /* SwiftyBluetooth.swift in Sources */,
 				DA5A814726C563A700F274C7 /* OAUploadOsmPointsAsyncTask.m in Sources */,
 				DA5A81E526C563A700F274C7 /* OAGPXDatabase.mm in Sources */,
 				DA5A84C826C563A900F274C7 /* OAOsmEditingBottomSheetViewController.mm in Sources */,
@@ -17459,7 +17462,6 @@
 				DAABE4EE2A1657AF00569F71 /* Color+INT.swift in Sources */,
 				DA5A850C26C563A900F274C7 /* OASubscribeEmailView.m in Sources */,
 				DA8DC3922A0CD9A3006C116B /* DistanceToIntermediateDestinationWidget.swift in Sources */,
-				FABA02BF2B206E130004CC3B /* PeripheralProxy.swift in Sources */,
 				DA5A819226C563A700F274C7 /* OANavRemoveNextDestination.m in Sources */,
 				326B770A29D9CA6400FB23DF /* OATripRecordingTimeWidget.mm in Sources */,
 				DAAC0EBD2801807200867D35 /* OAImportBackupTask.m in Sources */,
@@ -17486,7 +17488,6 @@
 				DA5A831726C563A800F274C7 /* OAHeaderRoundCell.m in Sources */,
 				DA5A81F626C563A700F274C7 /* OAChoosePlanHelper.mm in Sources */,
 				DA5A83C826C563A800F274C7 /* OACollapsableCoordinatesView.mm in Sources */,
-				FABA02BC2B206E130004CC3B /* Peripheral.swift in Sources */,
 				FAA650662ADD4C9F0020DCEA /* UIImage+Extension.swift in Sources */,
 				32CA13202AF1475200DD6EF5 /* WikipediaCacheSizeViewController.swift in Sources */,
 				DA5A837226C563A800F274C7 /* OARoutingSettingsCell.mm in Sources */,
@@ -17553,6 +17554,7 @@
 				DAD3FD242A4ACB2E00BFA03A /* WidgetGroupListViewController.swift in Sources */,
 				DA5A818426C563A700F274C7 /* OANavAddDestinationAction.mm in Sources */,
 				FAA650532ADD42C50020DCEA /* Sensor.swift in Sources */,
+				FAC166282B21BEF900D63755 /* Central.swift in Sources */,
 				DA5A832626C563A800F274C7 /* OALineChartCell.m in Sources */,
 				DA5A842F26C563A800F274C7 /* OATargetTurnViewController.m in Sources */,
 				FAA6504F2ADD42C50020DCEA /* SearchDeviceTableViewCell.swift in Sources */,
@@ -17580,7 +17582,6 @@
 				DA5A819F26C563A700F274C7 /* OADownloadMapProgressViewController.mm in Sources */,
 				DA5A833226C563A800F274C7 /* OAPoiCollectionViewCell.m in Sources */,
 				DA5A81B826C563A700F274C7 /* OAPOI.mm in Sources */,
-				FABA02C52B206E130004CC3B /* CBExtensions.swift in Sources */,
 				DA5A814B26C563A700F274C7 /* OABaseCarPlayInterfaceController.mm in Sources */,
 				DA5A84B826C563A900F274C7 /* OAFollowTrackBottomSheetViewController.mm in Sources */,
 				DA5A831B26C563A800F274C7 /* OAIconTitleIconRoundCell.m in Sources */,
@@ -17592,9 +17593,9 @@
 				DA5A823226C563A700F274C7 /* OAGpxAppearanceInfo.mm in Sources */,
 				DA5A813C26C563A700F274C7 /* OAEntity.m in Sources */,
 				DA5A841026C563A800F274C7 /* OATargetAddressViewController.mm in Sources */,
+				FAC166262B21BEF900D63755 /* SBError.swift in Sources */,
 				DA5A825226C563A700F274C7 /* OANavigationTypeViewController.mm in Sources */,
 				DA5A830C26C563A800F274C7 /* OAEmptySearchCell.m in Sources */,
-				FABA02C02B206E130004CC3B /* SBError.swift in Sources */,
 				DA5A850426C563A900F274C7 /* OATargetPointView.mm in Sources */,
 				FA69F2852A73948B0044CFCA /* main.m in Sources */,
 				461A3F0A29F6E68F008EE079 /* OAColorCollectionHandler.m in Sources */,
@@ -17677,6 +17678,7 @@
 				DA5A81FD26C563A700F274C7 /* OAFeatureCardRow.m in Sources */,
 				FA6797EF2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm in Sources */,
 				DA5A818C26C563A700F274C7 /* OAQuickAction.m in Sources */,
+				FAC166212B21BEF900D63755 /* Util.swift in Sources */,
 				DA5A849826C563A900F274C7 /* OAExitRoutePlanningBottomSheetViewController.m in Sources */,
 				DA5A853B26C563A900F274C7 /* OAFileNameTranslationHelper.m in Sources */,
 				DA5A819026C563A700F274C7 /* OAShowHideGPXTracksAction.mm in Sources */,
@@ -17689,7 +17691,6 @@
 				DA5A845726C563A900F274C7 /* OAOsmBugsLayer.mm in Sources */,
 				DA5A84C926C563A900F274C7 /* OATextEditingBottomSheetViewController.mm in Sources */,
 				DA4ABEEC2876DA5D00B996EF /* OAExportSettingsType.mm in Sources */,
-				FABA02C12B206E130004CC3B /* Util.swift in Sources */,
 				DA5A856126C563A900F274C7 /* OAGpxRouteApproximation.mm in Sources */,
 				DAECA4FA26CFE62600241B0B /* OABaseWidgetView.m in Sources */,
 				DA5A81F126C563A700F274C7 /* OAProfileIconColor.m in Sources */,
@@ -17834,10 +17835,10 @@
 				DA5A854726C563A900F274C7 /* OANetworkUtilities.m in Sources */,
 				B247453827E35E9B00C18C3F /* OACloudIntroductionHeaderView.m in Sources */,
 				C588D1EC298BF2D3001FEDBD /* OASearchHistoryTableItem.m in Sources */,
+				FAC166292B21BEF900D63755 /* CBUUIDPath.swift in Sources */,
 				FA359EE52ADF026D0001C11D /* DeviceType.swift in Sources */,
 				DA5A813A26C563A700F274C7 /* OAEntityInfo.m in Sources */,
 				DA5A846A26C563A900F274C7 /* OADestination.mm in Sources */,
-				FABA02C32B206E130004CC3B /* CBUUIDPath.swift in Sources */,
 				46220B792AD70AF9006C3248 /* OAGroupEditorViewController.mm in Sources */,
 				DA5A816326C563A700F274C7 /* OADaytimeAppearance.m in Sources */,
 				DA5A846026C563A900F274C7 /* OARasterMapLayer.mm in Sources */,
@@ -17849,7 +17850,6 @@
 				46FB65BC2A8BCF2300A21850 /* WidgetUtils.swift in Sources */,
 				DA5A831C26C563A800F274C7 /* OAColorsCollectionViewCell.m in Sources */,
 				DA5A848526C563A900F274C7 /* OAMapWidgetRegInfo.mm in Sources */,
-				FABA02BB2B206E130004CC3B /* CentralProxy.swift in Sources */,
 				DA5A832F26C563A800F274C7 /* OATitleSliderRoundCell.m in Sources */,
 				DA5A823026C563A700F274C7 /* OAImportDuplicatesViewController.mm in Sources */,
 				FA359EF12ADFD5310001C11D /* DeviceHelper.swift in Sources */,
@@ -17992,11 +17992,11 @@
 				FA44BF5B2A72A91C000D2F5F /* CarPlaySceneDelegates.swift in Sources */,
 				32ABB64E2AEBC02D00491E99 /* OAWebImagesCacheHelper.mm in Sources */,
 				DA5A843526C563A800F274C7 /* OARouteDetailsViewController.mm in Sources */,
+				FAC166272B21BEF900D63755 /* CBUUIDConvertible.swift in Sources */,
 				DA5A852A26C563A900F274C7 /* OALocationParser.mm in Sources */,
 				327D68AA2A8FB8180076D1E0 /* ArticleTravelCell.swift in Sources */,
 				DA5A848A26C563A900F274C7 /* OARoadSegmentData.mm in Sources */,
 				FAA650542ADD42C50020DCEA /* BLEHeartRateSensor.swift in Sources */,
-				FABA02BE2B206E130004CC3B /* Central.swift in Sources */,
 				DA5A839726C563A800F274C7 /* OALocalResourceInformationViewController.mm in Sources */,
 				DA5A84B026C563A900F274C7 /* OAAddWaypointBottomSheetViewController.mm in Sources */,
 				DA5A848726C563A900F274C7 /* OANavigationController.m in Sources */,
@@ -18022,6 +18022,7 @@
 				46D38A9F29C39B0F000AAE0C /* OAProfilesGroup.m in Sources */,
 				DA4ABF1B2876DA6800B996EF /* OAFavoritesSettingsItem.mm in Sources */,
 				DA591EAF28D9EB2C0068CAC7 /* OATableRowData.m in Sources */,
+				FAC1662B2B21BEF900D63755 /* CentralProxy.swift in Sources */,
 				320F712E2A862BC90071C0E7 /* TravelHelper.swift in Sources */,
 				DA5A82F126C563A800F274C7 /* OALocationIconsTableViewCell.m in Sources */,
 				DA5A844026C563A900F274C7 /* OAUsernameFilterViewController.mm in Sources */,
@@ -18050,7 +18051,6 @@
 				46D439142AA89C1F001D85FF /* DestinationsListViewController.swift in Sources */,
 				DA5A824826C563A700F274C7 /* OARoadSpeedsViewController.mm in Sources */,
 				DA5A832526C563A800F274C7 /* OACollectionViewCellState.m in Sources */,
-				FABA02C22B206E130004CC3B /* SwiftyBluetooth.swift in Sources */,
 				DA5A81BE26C563A700F274C7 /* OACustomSearchPoiFilter.m in Sources */,
 				46624E722993B28C00F425AE /* OABaseNavbarViewController.m in Sources */,
 				DA5A836A26C563A800F274C7 /* OARouteStatisticsHelper.mm in Sources */,
@@ -18075,7 +18075,6 @@
 				DA5A83A926C563A800F274C7 /* OABasicEditingViewController.mm in Sources */,
 				DA35963529B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm in Sources */,
 				DA5A852F26C563A900F274C7 /* OpenLocationCode.swift in Sources */,
-				FABA02C42B206E130004CC3B /* DescriptorValue.swift in Sources */,
 				DA5A850026C563A900F274C7 /* OARangeSlider.m in Sources */,
 				DA5A84CA26C563A900F274C7 /* OADeleteProfileBottomSheetViewController.m in Sources */,
 				DAB9AECD28E192D300AD01CE /* OAURLSessionProgress.m in Sources */,
@@ -18098,6 +18097,7 @@
 				C56FAB5629B226F10096192F /* OAZoomLevelWidget.mm in Sources */,
 				DA5A84DD26C563A900F274C7 /* OAMapSettingsGpxScreen.mm in Sources */,
 				DA4ABF1A2876DA6800B996EF /* OAPoiUiFilterSettingsItem.mm in Sources */,
+				FAC1662A2B21BEF900D63755 /* Peripheral.swift in Sources */,
 				DA5A847626C563A900F274C7 /* OALanesDrawable.mm in Sources */,
 				FA77E7A72AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm in Sources */,
 				DA5A831026C563A800F274C7 /* OARouteProgressBarCell.mm in Sources */,
@@ -18180,7 +18180,6 @@
 				CA4ED710806E780B7FAB796A /* OAPreviewRouteLineInfo.mm in Sources */,
 				CA4ED153BFA207753EEE0E13 /* OAMapillaryOsmTagHelper.mm in Sources */,
 				CA4EDBC475684B567F9345C9 /* OAWeatherPlugin.mm in Sources */,
-				FABA02BD2B206E130004CC3B /* CBUUIDConvertible.swift in Sources */,
 				CA4ED3D292CC8CAE7922DC3E /* OAWeatherSettingsViewController.mm in Sources */,
 				CA4ED0D1E58A3E00EAE53C55 /* OAWeatherBandSettingsViewController.mm in Sources */,
 				3236428E2900370800E18413 /* OAFPSTextInfoWidget.mm in Sources */,

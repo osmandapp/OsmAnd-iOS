@@ -868,7 +868,7 @@
 // OSM Editing actions
 "opening_changeset" = "Änderungssatz öffnen …";
 "closing_changeset" = "Änderungssatz schließen …";
-"commiting_node" = "Übertrage Knoten …";
+"commiting_node" = "Knoten übertragen …";
 "loading_poi_obj" = "Lade POI…";
 "osn_bug_name" = "OSM-Hinweis";
 "osm_created" = "Erstellt";
@@ -2031,7 +2031,7 @@
 "carplay_profile_descr" = "Profil, das während der Verbindung mit CarPlay verwendet wird.";
 "carplay_profile" = "CarPlay Profil";
 "shared_string_last_used" = "Zuletzt verwendet";
-"search_more" = "Mehr suchen…";
+"search_more" = "Mehr suchen …";
 "preferred_languages" = "Bevorzugte Sprachen";
 "available_languages" = "Verfügbare Sprachen";
 "some_articles_may_not_available_in_lang" = "Einige Wikipedia-Artikel sind möglicherweise nicht in Ihrer Sprache verfügbar.";
@@ -2052,7 +2052,7 @@
 "srtm_unit_format" = "Einheitenvariante der Höhenlinien";
 "download_suggestion" = "Detaillierte %@ Karte herunterladen, um dieses Gebiet zu sehen";
 "dialogs_and_notifications_descr" = "Steuern Sie Pop-ups, Dialoge und Benachrichtigungen.";
-"routes_color_by_type" = "Routen einfärben nach…";
+"routes_color_by_type" = "Routen einfärben nach …";
 "rendering_value_walkingRoutesOSMC_description" = "Einfärbung von Routen nach Ihrer individuellen lokalen Farbe (falls in OpenStreetMap vorhanden) und der Wandermarkierungen.";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Einfärbung gemäß Routennetzwerk.";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Einfärbung von Routen nach dem Typ Ihres Knotennetzes (international, regional, lokal).";
@@ -2579,7 +2579,7 @@
 "backup_delete_all_data_in_progress" = "Bitte warten Sie, bis OsmAnd alle Ihre Daten aus der Cloud gelöscht hat. Alle Daten auf dem Gerät bleiben unangetastet.";
 "backup_delete_all_data_finished" = "Alle Ihre Daten wurden erfolgreich aus der OsmAnd Cloud gelöscht.";
 "backup_remove_old_versions_finished" = "Alte Versionen wurden erfolgreich aus der OsmAnd Cloud gelöscht.";
-"backup_deleting_all_data" = "Alle Daten werden gelöscht…";
+"backup_deleting_all_data" = "Alle Daten werden gelöscht …";
 "backup_version_history" = "Versionsgeschichte";
 "select_backup_data_descr" = "Wählen Sie Daten und Ordner für die Sicherung aus.";
 "shared_string_logout" = "Abmelden";
@@ -2689,7 +2689,7 @@
 "cloud_version_will_be_removed" = "Die Cloud-Version wird entfernt";
 "cloud_changes_will_be_dismissed" = "Die Cloud-Änderungen werden verworfen";
 "local_file_will_be_restored" = "Die lokale Datei wird wiederhergestellt";
-"checking_progress" = "Prüfung…";
+"checking_progress" = "Prüfung …";
 "cloud_conflict_descr" = "Die lokale und die Cloud-Version enthalten Änderungen seit der letzten Synchronisierung.";
 "local_changes_will_be_dismissed" = "LokaleÄnderungen werden verworfen";
 "download_heightmap_maps" = "Geländekarte (3D)";

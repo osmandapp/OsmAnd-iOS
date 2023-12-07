@@ -18,7 +18,6 @@
 
 static NSString * const kLinkInternalType = @"internal_link";
 static NSString * const kLinkExternalType = @"ext_link";
-static NSString * const kLinkNoType = @"no_link";
 
 @implementation OAHelpViewController
 {
@@ -58,6 +57,7 @@ static NSString * const kLinkNoType = @"no_link";
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
     UIAction *sendLog = [UIAction actionWithTitle:OALocalizedString(@"send_log") image:[UIImage imageNamed:@"ic_custom_file_send_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        [self sendLogFile];
     }];
     
     UIAction *copyBuildVersion = [UIAction actionWithTitle:OALocalizedString(@"copy_build_version") image:[UIImage imageNamed:@"ic_custom_clipboard"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
@@ -236,7 +236,6 @@ static NSString * const kLinkNoType = @"no_link";
     [telegramChatsRow setTitle:OALocalizedString(@"telegram_chats")];
     [telegramChatsRow setDescr:[_helpDataManager getTelegramChatsCount]];
     [telegramChatsRow setIconName:@"ic_custom_logo_telegram"];
-    [telegramChatsRow setObj:kLinkNoType forKey:@"linkType"];
     
     OATableRowData *twitterRow = [contactUsSection createNewRow];
     [twitterRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
@@ -279,7 +278,7 @@ static NSString * const kLinkNoType = @"no_link";
     
     OATableRowData *sendLogRow = [reportAnIssuesSection createNewRow];
     [sendLogRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [sendLogRow setKey:@"reportAnIssues"];
+    [sendLogRow setKey:@"sendLog"];
     [sendLogRow setTitle:OALocalizedString(@"send_log")];
     [sendLogRow setDescr:OALocalizedString(@"detailed_log_file")];
     [sendLogRow setIconName:@"ic_custom_file_send_outlined"];
@@ -355,7 +354,7 @@ static NSString * const kLinkNoType = @"no_link";
     
     NSString *description = item.descr;
     NSString *key = item.key;
-    BOOL isCellAccessoryNone = [key isEqualToString:@"contactSupport"] || [key isEqualToString:@"reportAnIssues"] || [key isEqualToString:@"aboutOsmAnd"];
+    BOOL isCellAccessoryNone = [key isEqualToString:@"contactSupport"] || [key isEqualToString:@"reportAnIssues"] || [key isEqualToString:@"sendLog"] || [key isEqualToString:@"aboutOsmAnd"];
     
     OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
@@ -387,6 +386,7 @@ static NSString * const kLinkNoType = @"no_link";
 - (void)onRowSelected:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
+    NSString *key = item.key;
     NSString *linkType = [item objForKey:@"linkType"];
     NSString *url = [item objForKey:@"url"];
     
@@ -399,10 +399,15 @@ static NSString * const kLinkNoType = @"no_link";
     {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url] options:@{} completionHandler:nil];
     }
-    else if ([linkType isEqualToString:kLinkNoType])
+    
+    if ([key isEqualToString:@"contactSupportTelegram"])
     {
         OAHelpDetailsViewController *vc = [[OAHelpDetailsViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
+    }
+    else if ([key isEqualToString:@"sendLog"])
+    {
+        [self sendLogFile];
     }
 }
 
@@ -433,6 +438,30 @@ static NSString * const kLinkNoType = @"no_link";
 - (void)copyBuildVersion
 {
     [UIPasteboard generalPasteboard].string = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+}
+
+- (void)sendLogFile
+{
+    NSString *logsPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"Logs"];
+    NSFileManager *manager = [NSFileManager defaultManager];
+    
+    NSArray<NSString *> *files = [manager contentsOfDirectoryAtPath:logsPath error:nil];
+    files = [files sortedArrayUsingComparator:^NSComparisonResult(NSString *file1, NSString *file2) {
+        NSString *path1 = [logsPath stringByAppendingPathComponent:file1];
+        NSString *path2 = [logsPath stringByAppendingPathComponent:file2];
+        NSDictionary *attr1 = [manager attributesOfItemAtPath:path1 error:nil];
+        NSDictionary *attr2 = [manager attributesOfItemAtPath:path2 error:nil];
+        return [attr2[NSFileCreationDate] compare:attr1[NSFileCreationDate]];
+    }];
+    
+    if (files.count > 0)
+    {
+        NSString *latestLogFile = [logsPath stringByAppendingPathComponent:[files firstObject]];
+        NSURL *logFileURL = [NSURL fileURLWithPath:latestLogFile];
+        
+        UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[logFileURL] applicationActivities:nil];
+        [self presentViewController:activityViewController animated:YES completion:nil];
+    }
 }
 
 @end

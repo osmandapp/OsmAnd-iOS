@@ -360,7 +360,7 @@
 "first_time_continue" = "続ける";
 "shared_string_of" = "of";
 "shared_string_all" = "全て";
-"shared_string_from" = "から";
+"shared_string_from" = "コピー元";
 "shared_string_time" = "時間";
 "time_of_day" = "時刻";
 "shared_string_distance" = "距離";

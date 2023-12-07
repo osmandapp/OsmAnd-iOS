@@ -7,7 +7,6 @@
 
 import UIKit
 import CoreBluetooth
-import SwiftyBluetooth
 
 final class DescriptionDeviceHeader: UIView {
     @IBOutlet private weak var imageContainerView: UIView!

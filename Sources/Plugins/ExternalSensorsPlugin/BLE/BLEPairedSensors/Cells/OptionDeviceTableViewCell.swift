@@ -1,12 +1,10 @@
 //
-//  AnyConnectedDevicesTableViewCell.swift
+//  OptionDeviceTableViewCell.swift
 //  OsmAnd Maps
 //
 //  Created by Oleksandr Panchenko on 29.11.2023.
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
-
-import Foundation
 
 final class OptionDevice: Device {
     enum SelectedOptionDevice: Int {
@@ -16,22 +14,27 @@ final class OptionDevice: Device {
     var option: SelectedOptionDevice = .none
 }
 
-final class AnyConnectedDevicesTableViewCell: UITableViewCell {
+final class OptionDeviceTableViewCell: UITableViewCell {
     @IBOutlet private weak var deviceImageView: UIImageView!
     @IBOutlet private weak var titleLabel: UILabel!
     
     private lazy var accessoryImageView: UIImageView = {
         let imgView = UIImageView(frame: .init(x: 0, y: 0, width: 30, height: 30))
-        imgView.image = UIImage(named: "ic_checkmark_default")!
+        imgView.image = UIImage(named: "ic_checkmark_default")
         return imgView
     }()
     
-    func configure(anyConnectedDevice: OptionDevice, widgetType: WidgetType, title: String) {
-        if let iconName = widgetType.disabledIconName {
-            deviceImageView.image = UIImage(named: iconName)
+    func configure(optionDevice: OptionDevice, widgetType: WidgetType, title: String) {
+        if optionDevice.option == .anyConnected {
+            if let iconName = widgetType.disabledIconName {
+                deviceImageView.image = UIImage(named: iconName)
+            }
+        } else if optionDevice.option == .none {
+            deviceImageView.image = UIImage(named: "ic_custom_trip_hide")
         }
+
         titleLabel.text = title
-        if anyConnectedDevice.isSelected {
+        if optionDevice.isSelected {
             accessoryView = accessoryImageView
             deviceImageView.tintColor = UIColor.iconColorActive
         } else {

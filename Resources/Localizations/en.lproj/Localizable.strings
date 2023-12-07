@@ -3440,6 +3440,9 @@
 "external_device_characteristic_speed" = "Speed";
 "external_device_characteristic_distance" = "Distance";
 "external_device_characteristic_total_distance" = "Total distance";
+"external_device_characteristic_stride_length" = "Stride length";
+
+"running_scds_device_name" = "Running device";
 
 "wheel_circumference" = "Wheel circumference";
 "map_orientation_default" = "Same as device";

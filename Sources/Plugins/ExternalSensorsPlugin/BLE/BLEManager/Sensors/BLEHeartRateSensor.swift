@@ -88,8 +88,8 @@ final class BLEHeartRateSensor: Sensor {
         [.heartRate]
     }
     
-    override func getLastSensorDataList(for wiggetType: WidgetType) -> [SensorData]? {
-        guard wiggetType == .heartRate else { return nil }
+    override func getLastSensorDataList(for widgetType: WidgetType) -> [SensorData]? {
+        guard widgetType == .heartRate else { return nil }
         return [lastHeartRateData].compactMap { $0 }
     }
 }

@@ -752,6 +752,7 @@
 "shared_string_delete_color" = "Delete color";
 "shared_string_duplicate" = "Duplicate";
 "shared_string_result" = "Result";
+"shared_string_data_type" = "Data type";
 
 "restart" = "Restart";
 
@@ -3365,7 +3366,7 @@
 
 "external_sensors_plugin_name" = "External Sensors";
 "external_sensors_plugin_description" = "Accesses external sensors to read e.g. your heart rate, bicycle speed, cycling power, or cadence. Requires your device to be connected to respective sensors via the ANT+ wireless personal network protocol.";
-
+"write_data_from_sensor_to_track" = "Write data from external sensors to GPX while trip recording.";
 
 "map_widget_ant_heart_rate" = "Heart Rate";
 "map_widget_ant_heart_rate_desc" = "Shows user's heart rate during a given activity in real-time";

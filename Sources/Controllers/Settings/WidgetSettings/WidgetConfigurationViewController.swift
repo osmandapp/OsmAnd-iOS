@@ -52,7 +52,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let item = tableData.item(for: indexPath)
         var outCell: UITableViewCell!
-        if (item.cellType == OASimpleTableViewCell.getIdentifier()) {
+        if item.cellType == OASimpleTableViewCell.getIdentifier() {
             var cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier()) as? OASimpleTableViewCell
             if cell == nil {
                 let nib = Bundle.main.loadNibNamed(OASimpleTableViewCell.getIdentifier(), owner: self, options: nil)
@@ -243,6 +243,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             let storyboard = UIStoryboard(name: "BLEPairedSensors", bundle: nil)
             if let controller = storyboard.instantiateViewController(withIdentifier: "BLEPairedSensors") as? BLEPairedSensorsViewController {
                 controller.pairedSensorsType = .widget
+                controller.appMode = OAAppSettings.sharedManager().applicationMode.get()
                 if let widget = widgetInfo?.widget as? SensorTextWidget {
                     controller.widgetType = widget.widgetType
                     controller.widget = widget

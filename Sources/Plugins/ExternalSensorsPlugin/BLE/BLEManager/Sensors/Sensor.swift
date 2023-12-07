@@ -29,6 +29,10 @@ class Sensor {
     func getLastSensorDataList(for widgetType: WidgetType) -> [SensorData]? {
         nil
     }
+
+    func writeSensorDataToJson(json: NSMutableData, widgetDataFieldType: WidgetType) {
+    }
+
 }
 
 protocol SensorData {

@@ -26,7 +26,9 @@ enum DeviceState: Int {
     }
 }
 
-class Device {
+@objc(OADevice)
+@objcMembers
+class Device : NSObject {
     static let identifier = "identifier"
     
     var deviceType: DeviceType!
@@ -76,6 +78,7 @@ class Device {
          deviceName: String = "",
          didChangeCharacteristic: (() -> Void)? = nil,
          RSSIUpdateTimer: Timer? = nil) {
+        super.init()
         self.deviceType = deviceType
         self.rssi = rssi
         self.deviceName = deviceName
@@ -153,6 +156,15 @@ class Device {
      - 0 : Device Information
      - 1 : Heart Rate
      */
+
+    func writeSensorDataToJson(json: NSMutableData, widgetDataFieldType: WidgetType) {
+        for sensor in sensors {
+            if let widgetTypes = sensor.getSupportedWidgetDataFieldTypes(), widgetTypes.contains(widgetDataFieldType) {
+                sensor.writeSensorDataToJson(json: json, widgetDataFieldType: widgetDataFieldType)
+            }
+        }
+    }
+
 }
 
 extension Device {

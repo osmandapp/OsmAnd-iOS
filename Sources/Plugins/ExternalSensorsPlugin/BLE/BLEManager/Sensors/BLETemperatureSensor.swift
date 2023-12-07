@@ -72,4 +72,15 @@ final class BLETemperatureSensor: Sensor {
                        length: count * MemoryLayout<Int16>.size)
         return array
     }
+
+    override func writeSensorDataToJson(json: NSMutableData, widgetDataFieldType: WidgetType) {
+        if let lastTemperatureData {
+            do {
+                let data = try JSONEncoder().encode([PointAttributes.sensorTagTemperature: String(lastTemperatureData.temperature)])
+                json.append(data)
+            } catch {
+                debugPrint("BLE failed writeSensorDataToJson: temperature - \(lastTemperatureData.temperature) | error: \(error.localizedDescription)")
+            }
+        }
+    }
 }

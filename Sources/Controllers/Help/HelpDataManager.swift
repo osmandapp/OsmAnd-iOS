@@ -6,11 +6,10 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 @objcMembers
-class PopularArticle: NSObject {
+final class PopularArticle: NSObject {
     let title: String
     let url: String
     
@@ -21,7 +20,7 @@ class PopularArticle: NSObject {
 }
 
 @objcMembers
-class TelegramChat: NSObject {
+final class TelegramChat: NSObject {
     let title: String
     let url: String
     
@@ -33,45 +32,69 @@ class TelegramChat: NSObject {
 
 @objc(OAHelpDataManager)
 @objcMembers
-class HelpDataManager: NSObject {
+final class HelpDataManager: NSObject {
     private let urlPrefix = "https://osmand.net"
     var popularArticles: [PopularArticle] = []
     var telegramChats: [TelegramChat] = []
-    private static var sharedHelperInstance: HelpDataManager = {
-        return HelpDataManager()
-    }()
+    static let shared = HelpDataManager()
     
-    static var sharedInstance: HelpDataManager {
-        return sharedHelperInstance
-    }
+    private override init() { }
     
     func loadAndParseJson(from urlString: String, completion: @escaping (Bool) -> Void) {
         guard let url = URL(string: urlString) else {
-            completion(false)
+            DispatchQueue.main.async {
+                completion(false)
+            }
             return
         }
         
         URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-            guard let data = data, error == nil else {
-                print("Error downloading data: \(String(describing: error))")
-                completion(false)
+            guard let data, error == nil else {
+                DispatchQueue.main.async {
+                    debugPrint("Error downloading data: \(String(describing: error))")
+                    completion(false)
+                }
                 return
             }
             
             do {
-                if let jsonDict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                   let popularArticlesData = jsonDict["popularArticles"] as? [String: String],
+                guard let jsonDict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+                    debugPrint("Error: Unable to convert JSON to Dictionary")
+                    completion(false)
+                    return
+                }
+                
+                if let popularArticlesData = jsonDict["popularArticles"] as? [String: String],
                    let telegramChatsData = jsonDict["telegramChats"] as? [String: String] {
                     
-                    self?.processPopularArticles(popularArticlesData)
-                    self?.processTelegramChats(telegramChatsData)
-                    completion(true)
+                    DispatchQueue.main.async {
+                        self?.processPopularArticles(popularArticlesData)
+                        self?.processTelegramChats(telegramChatsData)
+                        completion(true)
+                    }
+                } else {
+                    debugPrint("Error: Required data not found in JSON")
+                    completion(false)
                 }
             } catch {
-                print("Error parsing JSON: \(error)")
-                completion(false)
+                DispatchQueue.main.async {
+                    debugPrint("Error parsing JSON:", error)
+                    completion(false)
+                }
             }
         }.resume()
+    }
+    
+    func getPopularArticles() -> [PopularArticle] {
+        popularArticles
+    }
+    
+    func getTelegramChats() -> [TelegramChat] {
+        telegramChats
+    }
+    
+    func getTelegramChatsCount() -> String {
+        String(telegramChats.count)
     }
     
     private func processPopularArticles(_ data: [String: String]) {
@@ -82,17 +105,5 @@ class HelpDataManager: NSObject {
     private func processTelegramChats(_ data: [String: String]) {
         let orderedData = data.map { ($0.key, $0.value) }.sorted { $0.0 < $1.0 }
         telegramChats = orderedData.map { TelegramChat(title: $0.0, url: $0.1) }
-    }
-    
-    func getPopularArticles() -> [PopularArticle] {
-        return popularArticles
-    }
-    
-    func getTelegramChats() -> [TelegramChat] {
-        return telegramChats
-    }
-    
-    func getTelegramChatsCount() -> String {
-        return String(telegramChats.count)
     }
 }

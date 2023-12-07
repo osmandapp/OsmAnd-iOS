@@ -23,23 +23,23 @@
 #define kBlogGuideline  @"https://osmand.net/blog/guideline-pt"
 
 #define kSupportEmail @"support@osmand.net"
-#define kContactEmail @"mailto:support@osmand.net"
+static NSString * const kContactEmail = @"mailto:support@osmand.net";
 
-#define kPopularArticlesAndTelegramChats  @"https://raw.githubusercontent.com/osmandapp/web/main/main/static/help-links-ios.json"
-#define kDocsMap  @"https://docs.osmand.net/docs/user/map/"
-#define kDocsNavigation  @"https://docs.osmand.net/docs/user/navigation/"
-#define kDocsSearch  @"https://docs.osmand.net/docs/user/search/"
-#define kDocsPersonal  @"https://docs.osmand.net/docs/user/personal/"
-#define kDocsPlanRoute  @"https://docs.osmand.net/docs/user/plan-route/"
-#define kDocsPlugins  @"https://docs.osmand.net/docs/user/plugins/"
-#define kGitHubDiscussion  @"https://github.com/osmandapp/OsmAnd-iOS/discussions/landing"
-#define kOpenIssueOnGitHub  @"https://github.com/osmandapp/OsmAnd-iOS/issues"
-#define kOsmAndTeam  @"https://docs.osmand.net/help-online/about"
-#define kTestFlight  @"https://docs.osmand.net/docs/versions/nightly_versions#testflight"
-#define kTroubleshootingSetup  @"https://docs.osmand.net/docs/user/troubleshooting/setup/"
-#define kTroubleshootingMap  @"https://docs.osmand.net/docs/user/troubleshooting/maps-data/"
-#define kTroubleshootingNavigation  @"https://docs.osmand.net/docs/user/troubleshooting/navigation/"
-#define kTroubleshootingTrackRecording  @"https://docs.osmand.net/docs/user/troubleshooting/track-recording-issues/"
+static NSString * const kPopularArticlesAndTelegramChats =  @"https://raw.githubusercontent.com/osmandapp/web/main/main/static/help-links-ios.json";
+static NSString * const kDocsMap = @"https://docs.osmand.net/docs/user/map/";
+static NSString * const kDocsNavigation = @"https://docs.osmand.net/docs/user/navigation/";
+static NSString * const kDocsSearch = @"https://docs.osmand.net/docs/user/search/";
+static NSString * const kDocsPersonal = @"https://docs.osmand.net/docs/user/personal/";
+static NSString * const kDocsPlanRoute = @"https://docs.osmand.net/docs/user/plan-route/";
+static NSString * const kDocsPlugins = @"https://docs.osmand.net/docs/user/plugins/";
+static NSString * const kGitHubDiscussion = @"https://github.com/osmandapp/OsmAnd-iOS/discussions/landing";
+static NSString * const kOpenIssueOnGitHub = @"https://github.com/osmandapp/OsmAnd-iOS/issues";
+static NSString * const kOsmAndTeam = @"https://docs.osmand.net/help-online/about";
+static NSString * const kTestFlight = @"https://docs.osmand.net/docs/versions/nightly_versions#testflight";
+static NSString * const kTroubleshootingSetup = @"https://docs.osmand.net/docs/user/troubleshooting/setup/";
+static NSString * const kTroubleshootingMap = @"https://docs.osmand.net/docs/user/troubleshooting/maps-data/";
+static NSString * const kTroubleshootingNavigation = @"https://docs.osmand.net/docs/user/troubleshooting/navigation/";
+static NSString * const kTroubleshootingTrackRecording =  @"https://docs.osmand.net/docs/user/troubleshooting/track-recording-issues/";
 
 #define kDocsAddOnlineMaps  @"https://docs.osmand.net/docs/user/map/raster-maps#add-new-online-raster-map-source"
 #define kDocsWidgets  @"https://docs.osmand.net/docs/user/widgets/"

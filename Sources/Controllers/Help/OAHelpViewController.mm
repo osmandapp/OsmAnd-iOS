@@ -30,7 +30,7 @@ static NSString * const kLinkExternalType = @"ext_link";
 
 - (void)commonInit
 {
-    _helpDataManager  = [OAHelpDataManager sharedInstance];
+    _helpDataManager  = [OAHelpDataManager shared];
 }
 
 #pragma mark - UIViewController
@@ -99,7 +99,7 @@ static NSString * const kLinkExternalType = @"ext_link";
         [articleRow setObj:url forKey:@"url"];
     }
     
-    OATableSectionData * userGuideSection = [_data createNewSection];
+    OATableSectionData *userGuideSection = [_data createNewSection];
     userGuideSection.headerText = OALocalizedString(@"user_guide");
     
     OATableRowData *mapRow = [userGuideSection createNewRow];
@@ -166,7 +166,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     [purchasesRow setObj:kLinkInternalType forKey:@"linkType"];
     [purchasesRow setObj:kDocsPurchases forKey:@"url"];
     
-    OATableSectionData *  troubleshootingSection = [_data createNewSection];
+    OATableSectionData *troubleshootingSection = [_data createNewSection];
     troubleshootingSection.headerText = OALocalizedString(@"troubleshooting");
     
     OATableRowData *setupRow = [troubleshootingSection createNewRow];
@@ -209,7 +209,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     [pluginsTroubleshootingRow setObj:kLinkInternalType forKey:@"linkType"];
     [pluginsTroubleshootingRow setObj:kDocsPlugins forKey:@"url"];
     
-    OATableSectionData *  contactUsSection = [_data createNewSection];
+    OATableSectionData *contactUsSection = [_data createNewSection];
     contactUsSection.headerText = OALocalizedString(@"help_contact_us");
     
     OATableRowData *contactSupportRow = [contactUsSection createNewRow];
@@ -264,7 +264,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     [facebookRow setObj:kLinkExternalType forKey:@"linkType"];
     [facebookRow setObj:kCommunityFacebook forKey:@"url"];
     
-    OATableSectionData *  reportAnIssuesSection = [_data createNewSection];
+    OATableSectionData *reportAnIssuesSection = [_data createNewSection];
     reportAnIssuesSection.headerText = OALocalizedString(@"report_an_issues");
     
     OATableRowData *openIssueOnGitHubRow = [reportAnIssuesSection createNewRow];
@@ -283,7 +283,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     [sendLogRow setDescr:OALocalizedString(@"detailed_log_file")];
     [sendLogRow setIconName:@"ic_custom_file_send_outlined"];
     
-    OATableSectionData *  aboutOsmAndSection = [_data createNewSection];
+    OATableSectionData *aboutOsmAndSection = [_data createNewSection];
     aboutOsmAndSection.headerText = OALocalizedString(@"about_osmAnd");
     
     OATableRowData *osmAndTeamRow = [aboutOsmAndSection createNewRow];
@@ -318,17 +318,13 @@ static NSString * const kLinkExternalType = @"ext_link";
     [_helpDataManager loadAndParseJsonFrom:kPopularArticlesAndTelegramChats completion:^(BOOL success) {
         if (success)
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                _mostViewedArticles = [_helpDataManager getPopularArticles];
-                [self generateData];
-                [self.tableView reloadData];
-            });
+            _mostViewedArticles = [_helpDataManager getPopularArticles];
+            [self generateData];
+            [self.tableView reloadData];
         }
         else
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSLog(OALocalizedString(@"osm_failed_uploads"));
-            });
+            NSLog(OALocalizedString(@"osm_failed_uploads"));
         }
     }];
 }

@@ -575,7 +575,7 @@
 "download_wikipedia_maps" = "ويكيبيديا";
 "product_desc_wiki" = "مقالات ويكبيديا على الخريطة";
 "purchases_feature_desc_wikipedia" = "يوفر جميع مقالات ويكيبيديا المتعلقة بالأماكن في وضع عدم الاتصال ، مما يساعدك على التعرف على الأماكن التي تزورها في رحلتك من خلال نقرات بسيطة على الخريطة. لا بد من تنزيل ملفات خرائط ويكيبيديا للمناطق المعنية مسبقا.";
-"srtm_plugin_name" = "الخطوط الكنتورية";
+"srtm_plugin_name" = "الخصائص الجغرافية";
 "product_desc_srtm" = "إظهارالخطوط الكنتورية";
 "srtm_plugin_description" = "تساعدك معلومات التضاريس ، مثل الخطوط الكنتورية ، والتضاريس ، والمنحدرات ، على التقييم البصري لشكل سطح الأرض ، مع مراعاة الانحناء ، والحدود القصوى ، والانحدار ، ونقاط الارتفاع المتساوية ، والمزيد. يمكن تمثيل المعلومات الطبوغرافية على الخريطة من خلال تظليل المنحدر ، والخطوط الكنتورية للصعود والهبوط ، ولون انحراف زاوية الانحدارعن المسطح. \n\nالبيانات من SRTM و ASTER.\n\nكيف - http://osmand.net/docs/user/plugins/contour-lines.";
 "my_location" = "موقعي";
@@ -3163,3 +3163,7 @@
 "shared_string_view" = "عرض";
 "external_device_unpair_description" = "قم بتوصيل المستشعر بجهازك للحصول على المعلومات.";
 "external_device_details_information" = "معلومات";
+"shared_string_data_type" = "نوع البيانات";
+"external_device_characteristic_stride_length" = "طول الخطوة";
+"write_data_from_sensor_to_track" = "كتابة البيانات من أجهزة الاستشعار الخارجية إلى GPX أثناء تسجيل الرحلات.";
+"external_device_any_connected" = "أي متصل";

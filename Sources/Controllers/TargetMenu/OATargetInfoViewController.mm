@@ -499,7 +499,18 @@
 
 - (void)addOtherCards:(NSString *)imageTagContent mapillary:(NSString *)mapillaryTagContent cards:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
 {
-    NSString *urlString = [NSString stringWithFormat:@"https://osmand.net/api/cm_place?lat=%f&lon=%f", self.location.latitude, self.location.longitude];
+    CLLocation *myLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    NSString *preferredLang = [settings.settingPrefMapLanguage get];
+    if (!preferredLang)
+        preferredLang = [OAUtilities currentLang];
+
+    NSString *urlString = [NSString stringWithFormat:@"https://osmand.net/api/cm_place?lat=%f&lon=%f&app=%@%@%@",
+                           self.location.latitude,
+                           self.location.longitude,
+                           [OAIAPHelper isPaidVersion] ? @"paid" : @"free",
+                           (preferredLang && preferredLang.length > 0 ? [@"&lang=" stringByAppendingString:preferredLang] : @""),
+                           (myLocation ? [NSString stringWithFormat:@"&mloc=%f,%f", myLocation.coordinate.latitude, myLocation.coordinate.longitude] : @"")];
     if (imageTagContent)
         urlString = [urlString stringByAppendingString:[NSString stringWithFormat:@"&osm_image=%@", imageTagContent]];
     if (mapillaryTagContent)
@@ -988,10 +999,18 @@
         [cardsView setCards:@[[[OAImageCard alloc] initWithData:@{@"key": @"loading"}]]];
     }
 
-    [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_nearbyImagesRowInfo targetObj:self.getTargetObj addOtherImagesOnComplete:^(NSMutableArray <OAAbstractCard *> *cards) {
+    if ([OAPlugin isEnabled:OAWikipediaPlugin.class])
+    {
+        [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_nearbyImagesRowInfo targetObj:self.getTargetObj addOtherImagesOnComplete:^(NSMutableArray <OAAbstractCard *> *cards) {
+            _wikiCardsReady = YES;
+            [self sendNearbyOtherImagesRequest:cards];
+        }];
+    }
+    else
+    {
         _wikiCardsReady = YES;
-        [self sendNearbyOtherImagesRequest:cards];
-    }];
+        [self sendNearbyOtherImagesRequest:[NSMutableArray array]];
+    }
 }
 
 #pragma mark - OAEditDescriptionViewControllerDelegate

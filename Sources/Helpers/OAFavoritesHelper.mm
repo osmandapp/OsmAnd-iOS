@@ -351,7 +351,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
 
 + (NSArray<OAFavoriteItem *> *) getFavoriteItems
 {
-    return _cachedFavoritePoints;
+    return [_cachedFavoritePoints copy];
 }
 
 + (OAFavoriteItem *) getVisibleFavByLat:(double)lat lon:(double)lon
@@ -933,7 +933,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
     while (fl)
     {
         fl = NO;
-        for (OAFavoriteItem *fp in [self getFavoriteItems])
+        for (OAFavoriteItem *fp in _cachedFavoritePoints)
         {
             if ([[fp getName] isEqualToString:name]
                     && [[fp getCategory] isEqualToString:[point getCategory]])
@@ -1081,7 +1081,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
 
 + (BOOL) hasFavoriteAt:(CLLocationCoordinate2D)location
 {
-    for (OAFavoriteItem *item in [self getFavoriteItems])
+    for (OAFavoriteItem *item in _cachedFavoritePoints)
     {
         double lon = OsmAnd::Utilities::get31LongitudeX(item.favorite->getPosition31().x);
         double lat = OsmAnd::Utilities::get31LatitudeY(item.favorite->getPosition31().y);

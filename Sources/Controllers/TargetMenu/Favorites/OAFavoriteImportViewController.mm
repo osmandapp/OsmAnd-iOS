@@ -18,6 +18,8 @@
 #import "OAColors.h"
 #import "Localization.h"
 
+NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = @"OAFavoriteImportViewControllerDidDismissNotification";
+
 @implementation OAFavoriteImportViewController
 {
     NSURL *_url;
@@ -147,8 +149,7 @@
 - (void)onLeftNavbarButtonPressed
 {
     [OAUtilities denyAccessToFile:_url.path removeFromInbox:YES];
-
-    [super onLeftNavbarButtonPressed];
+    [self dismissViewController];
 }
 
 - (void)onRightNavbarButtonPressed
@@ -163,9 +164,18 @@
 
         [_ignoredNames removeAllObjects];
         _conflictedItem = nil;
-
-        [self onLeftNavbarButtonPressed];
+        
+        [OAUtilities denyAccessToFile:_url.path removeFromInbox:YES];
+        [self dismissViewController];
     }
+}
+
+- (void)dismissViewController
+{
+    [self dismissViewControllerWithAnimated:YES completion:^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:
+         OAFavoriteImportViewControllerDidDismissNotification object:nil userInfo:nil];
+    }];
 }
 
 #pragma mark - Additions

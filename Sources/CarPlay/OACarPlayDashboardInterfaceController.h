@@ -22,6 +22,7 @@
 - (void) enterNavigationMode;
 - (void) exitNavigationMode;
 - (void) onLocationChanged;
+- (void) on3DMapPressed;
 
 - (void) centerMapOnRoute:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;
 

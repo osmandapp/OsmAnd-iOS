@@ -24,6 +24,9 @@
 #import "OACommonTypes.h"
 #import "OAOsmAndFormatter.h"
 #import "OALanesDrawable.h"
+#import "OAMapViewTrackingUtilities.h"
+#import "OAPlugin.h"
+#import "OASRTMPlugin.h"
 
 #define unitsKm OALocalizedString(@"km")
 #define unitsM OALocalizedString(@"m")
@@ -42,6 +45,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     EOACarPlayButtonTypeDirections,
     EOACarPlayButtonTypeRouteCalculation,
     EOACarPlayButtonTypeCancelRoute,
+    EOACarPlayButtonType3D
 };
 
 @interface OACarPlayDashboardInterfaceController() <CPMapTemplateDelegate, OARouteInformationListener, OARouteCalculationProgressCallback>
@@ -50,6 +54,8 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 @implementation OACarPlayDashboardInterfaceController
 {
+    OAAppSettings *_settings;
+
     CPMapTemplate *_mapTemplate;
     CPNavigationSession *_navigationSession;
     CPTrip *_currentTrip;
@@ -60,8 +66,11 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     BOOL _isInRoutePreview;
     
     int _calculationProgress;
-    
+
+    CPMapButton *_3DModeMapButton;
+
     OAAutoObserverProxy *_locationServicesUpdateObserver;
+    OAAutoObserverProxy *_map3DModeObserver;
     OANextDirectionInfo *_currentDirectionInfo;
     
     OALanesDrawable *_lanesDrawable;
@@ -70,6 +79,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (void) commonInit
 {
+    _settings = [OAAppSettings sharedManager];
     _routingHelper = OARoutingHelper.sharedInstance;
     [_routingHelper addListener:self];
     [_routingHelper addProgressBar:self];
@@ -77,8 +87,12 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     _secondaryStyle = CPManeuverDisplayStyleDefault;
     _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                 withHandler:@selector(onLocationServicesUpdate)
-                                                                 andObserve:[OsmAndApp instance].locationServices.updateObserver];
+                                                                 andObserve:[OsmAndApp instance].locationServices.updateObserver];    
+    _map3DModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                   withHandler:@selector(onMap3dModeUpdated)
+                                                    andObserve:[OARootViewController instance].mapPanel.mapViewController.elevationAngleObservable];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onTripStartTriggered) name:kCarPlayTripStartedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
 }
 
 - (void)dealloc
@@ -91,7 +105,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 {
     [OARootViewController.instance.mapPanel.mapActions stopNavigationWithoutConfirm];
     OsmAndAppInstance app = OsmAndApp.instance;
-    if (OAAppSettings.sharedManager.simulateNavigation && [app.locationServices.locationSimulation isRouteAnimating])
+    if (_settings.simulateNavigation && [app.locationServices.locationSimulation isRouteAnimating])
         [app.locationServices.locationSimulation startStopRouteAnimation];
 }
 
@@ -124,10 +138,11 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     CPBarButton *panningButton = [self createBarButton:EOACarPlayButtonTypePanMap];
     _mapTemplate.trailingNavigationBarButtons = @[panningButton];
-    
     _mapTemplate.leadingNavigationBarButtons = @[[self createBarButton:EOACarPlayButtonTypeDirections]];
-    
-    _mapTemplate.mapButtons = @[[self createMapButton:EOACarPlayButtonTypeCenterMap], [self createMapButton:EOACarPlayButtonTypeZoomIn], [self createMapButton:EOACarPlayButtonTypeZoomOut]];
+
+    _3DModeMapButton = [self createMapButton:EOACarPlayButtonType3D];
+    _mapTemplate.mapButtons = @[_3DModeMapButton, [self createMapButton:EOACarPlayButtonTypeCenterMap], [self createMapButton:EOACarPlayButtonTypeZoomIn], [self createMapButton:EOACarPlayButtonTypeZoomOut]];
+    [self onMap3dModeUpdated];
 }
 
 - (void) enterRoutePreviewMode
@@ -201,6 +216,37 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [directionsGrid present];
 }
 
+- (void)onMap3dModeUpdated
+{
+    if (_3DModeMapButton)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            OAMapViewTrackingUtilities *mapViewTrackingUtilities = [OAMapViewTrackingUtilities instance];
+            EOAMap3DModeVisibility map3DMode = [_settings.map3dMode get];
+            BOOL hideButton = map3DMode == EOAMap3DModeVisibilityHidden
+                || (map3DMode == EOAMap3DModeVisibilityVisibleIn3DMode && ![mapViewTrackingUtilities isIn3dMode]);
+            _3DModeMapButton.hidden = hideButton ? YES : NO;
+            if ([mapViewTrackingUtilities isIn3dMode])
+            {
+                _3DModeMapButton.image = [UIImage imageNamed:@"btn_map_2d_mode"];
+                _3DModeMapButton.accessibilityLabel = OALocalizedString(@"map_3d_mode_action");
+            }
+            else
+            {
+                _3DModeMapButton.image = [UIImage imageNamed:@"btn_map_3d_mode"];
+                _3DModeMapButton.accessibilityLabel = OALocalizedString(@"map_2d_mode_action");
+            }
+            _3DModeMapButton.accessibilityValue = [OAMap3DModeVisibility getTitle:map3DMode];
+        });
+    }
+}
+
+- (void)onProfileSettingSet:(NSNotification *)notification
+{
+    if (notification.object == _settings.map3dMode)
+        [self onMap3dModeUpdated];
+}
+
 - (CPMapButton *) createMapButton:(EOACarPlayButtonType)type
 {
     CPMapButton *mapButton = [[CPMapButton alloc] initWithHandler:^(CPMapButton * _Nonnull mapButton) {
@@ -220,17 +266,24 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                     [_delegate onCenterMapPressed];
                 break;
             }
+            case EOACarPlayButtonType3D: {
+                if (_delegate)
+                    [_delegate on3DMapPressed];
+                break;
+            }
             default:
                 break;
         }
     }];
     
     if (type == EOACarPlayButtonTypeZoomIn)
-        mapButton.image = [UIImage imageNamed:@"btn_map_zoom_in_day.png"];
+        mapButton.image = [UIImage imageNamed:@"btn_map_zoom_in_day"];
     else if (type == EOACarPlayButtonTypeZoomOut)
-        mapButton.image = [UIImage imageNamed:@"btn_map_zoom_out_day.png"];
+        mapButton.image = [UIImage imageNamed:@"btn_map_zoom_out_day"];
     else if (type == EOACarPlayButtonTypeCenterMap)
         mapButton.image = [UIImage imageNamed:@"btn_map_current_location_day"];
+    else if (type == EOACarPlayButtonType3D)
+        mapButton.image = [UIImage imageNamed:[OAMapViewTrackingUtilities.instance isIn3dMode] ? @"btn_map_2d_mode" : @"btn_map_3d_mode"];
     
     return mapButton;
 }

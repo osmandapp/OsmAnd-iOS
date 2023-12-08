@@ -54,7 +54,7 @@ final class FreeBackupBanner: UIView {
             titleLabel.text = localizedString("banner_payment_free_backup_settings_title")
             imageView.image = UIImage(named: "ic_custom_settings_cloud_colored")
         case .mapSettingsTopography:
-            titleLabel.text = localizedString("map_settings_topography")
+            titleLabel.text = localizedString("srtm_plugin_name")
             descriptionLabel.text = localizedString("purchases_feature_desc_terrain")
             imageView.image = UIImage.templateImageNamed("ic_custom_terrain")
             imageView.tintColor = UIColor.iconColorActive

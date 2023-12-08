@@ -3010,7 +3010,6 @@
 "map_widget_target_distance_desc" = "Zobrazuje vzdálenost mezi kamerou a cílovým místem.";
 "weather_update_disabled" = "Vypnuto";
 "weather_update_over_wifi_only" = "Pouze přes WIFI";
-"map_settings_topography" = "Topografie";
 "weather_update_over_any_network" = "Přes jakoukoli síť";
 "weather_updates_manual" = "Předpověď počasí je nutné aktualizovat manuálně.";
 "purchases_feature_relief_3d_description" = "Získejte a prohlédněte si model svého okolí nebo celého kontinentu ve věrném měřítku.";

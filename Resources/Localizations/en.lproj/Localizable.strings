@@ -752,6 +752,7 @@
 "shared_string_delete_color" = "Delete color";
 "shared_string_duplicate" = "Duplicate";
 "shared_string_result" = "Result";
+"shared_string_any" = "Any";
 "shared_string_data_type" = "Data type";
 
 "restart" = "Restart";
@@ -949,7 +950,7 @@
 "daynight_mode_night" = "Night";
 "map_widget_renderer" = "Map style";
 "map_settings_overunder" = "Overlay / Underlay";
-"map_settings_topography" = "Topography";
+"map_settings_topography" = "Contour lines";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
 "map_settings_install_maps" = "Choose maps to install or update";

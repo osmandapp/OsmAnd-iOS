@@ -3031,7 +3031,6 @@
 "weather_update_disabled" = "مٌعطل";
 "weather_update_over_wifi_only" = "عبر WIFI فقط";
 "weather_update_over_any_network" = "عبر أي شبكة";
-"map_settings_topography" = "طوبوغرافيا";
 "click_on_widget" = "انقر على الأداة (الويدجت)";
 "shared_string_cache" = "الذاكرة المؤقتة";
 "unsaved_changes_will_be_lost_discard" = "سيتم فقدان أي تغييرات غير محفوظة. هل تريد تجاهل التغييرات؟";

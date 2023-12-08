@@ -3044,7 +3044,6 @@
 // Shared Strings
 "shared_string_discard" = "Descartar";
 "weather_update_parameters_disabled" = "Las actualizaciones automáticas serán desactivadas.";
-"map_settings_topography" = "Topografía";
 "auto_update" = "Actualización automática";
 "specify_number_of_dir_indicators_desc" = "Define el número de indicadores de dirección.";
 "weather_update_over_any_network" = "Sobre cualquier red";

@@ -89,7 +89,7 @@
 {
     if ([[self getUrl].scheme isEqualToString:@"file"])
     {
-        NSString *jsString = [[NSString alloc] initWithFormat:@"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '%lu%%'",(unsigned long) 250];
+        NSString *jsString = [[NSString alloc] initWithFormat:@"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '%d%%'", 250];
         [self.webView evaluateJavaScript:jsString completionHandler:^(id _Nullable object, NSError * _Nullable error) {
             if (onViewCommitted)
                 onViewCommitted();

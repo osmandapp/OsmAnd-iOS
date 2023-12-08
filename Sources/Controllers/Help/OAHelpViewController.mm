@@ -15,6 +15,7 @@
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAAppVersionDependentConstants.h"
 
 static NSString * const kLinkInternalType = @"internal_link";
 static NSString * const kLinkExternalType = @"ext_link";
@@ -369,7 +370,7 @@ static NSString * const kLinkExternalType = @"ext_link";
         }
         else
         {
-            cell.leftIconView.image =  [UIImage templateImageNamed:item.iconName];
+            cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
             cell.leftIconView.tintColor = UIColor.iconColorDefault;
         }
         
@@ -432,7 +433,7 @@ static NSString * const kLinkExternalType = @"ext_link";
 
 - (void)copyBuildVersion
 {
-    [UIPasteboard generalPasteboard].string = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    [UIPasteboard generalPasteboard].string = [OAAppVersionDependentConstants getVersion];
 }
 
 - (void)sendLogFile

@@ -1424,7 +1424,7 @@
 		C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */ = {isa = PBXBuildFile; fileRef = C5AF90782A25E8A100989A86 /* OAKeyboardHintBar.m */; };
 		C5AF907B2A25E8C400989A86 /* OAKeyboardHintBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = C5AF907A2A25E8C400989A86 /* OAKeyboardHintBar.xib */; };
 		C5B4AE5C2B1F480C0019F357 /* HelpDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B4AE5B2B1F480C0019F357 /* HelpDetailsViewController.swift */; };
-		C5B4AE5E2B1F51740019F357 /* HelpDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B4AE5D2B1F51740019F357 /* HelpDataManager.swift */; };
+		C5B4AE5E2B1F51740019F357 /* MenuHelpDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B4AE5D2B1F51740019F357 /* MenuHelpDataService.swift */; };
 		C5CD4CF029EFE6AC00B35C3D /* ic_navbar_trash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CEC29EFE6AB00B35C3D /* ic_navbar_trash@2x.png */; };
 		C5CD4CF129EFE6AC00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CED29EFE6AB00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png */; };
 		C5CD4CF229EFE6AC00B35C3D /* ic_navbar_trash@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5CD4CEE29EFE6AB00B35C3D /* ic_navbar_trash@3x.png */; };
@@ -5252,7 +5252,7 @@
 		C5AF90782A25E8A100989A86 /* OAKeyboardHintBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAKeyboardHintBar.m; sourceTree = "<group>"; };
 		C5AF907A2A25E8C400989A86 /* OAKeyboardHintBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAKeyboardHintBar.xib; sourceTree = "<group>"; };
 		C5B4AE5B2B1F480C0019F357 /* HelpDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpDetailsViewController.swift; sourceTree = "<group>"; };
-		C5B4AE5D2B1F51740019F357 /* HelpDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpDataManager.swift; sourceTree = "<group>"; };
+		C5B4AE5D2B1F51740019F357 /* MenuHelpDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuHelpDataService.swift; sourceTree = "<group>"; };
 		C5CD4CEC29EFE6AB00B35C3D /* ic_navbar_trash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_trash@2x.png"; path = "Resources/Icons/ic_navbar_trash@2x.png"; sourceTree = "<group>"; };
 		C5CD4CED29EFE6AB00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_upload_to_openstreetmap_outlined@3x.png"; path = "Resources/Icons/ic_navbar_upload_to_openstreetmap_outlined@3x.png"; sourceTree = "<group>"; };
 		C5CD4CEE29EFE6AB00B35C3D /* ic_navbar_trash@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_trash@3x.png"; path = "Resources/Icons/ic_navbar_trash@3x.png"; sourceTree = "<group>"; };
@@ -13599,7 +13599,7 @@
 				DA5A802E26C563A500F274C7 /* OAHelpViewController.h */,
 				DA5A802C26C563A500F274C7 /* OAHelpViewController.mm */,
 				C5B4AE5B2B1F480C0019F357 /* HelpDetailsViewController.swift */,
-				C5B4AE5D2B1F51740019F357 /* HelpDataManager.swift */,
+				C5B4AE5D2B1F51740019F357 /* MenuHelpDataService.swift */,
 			);
 			path = Help;
 			sourceTree = "<group>";
@@ -17208,7 +17208,7 @@
 				DA5A839626C563A800F274C7 /* OAPluginsViewController.mm in Sources */,
 				DA5A816226C563A700F274C7 /* OAAppearance.m in Sources */,
 				DAAC0EBA28006D2500867D35 /* OANetworkSettingsHelper.m in Sources */,
-				C5B4AE5E2B1F51740019F357 /* HelpDataManager.swift in Sources */,
+				C5B4AE5E2B1F51740019F357 /* MenuHelpDataService.swift in Sources */,
 				DA5A845E26C563A900F274C7 /* OARoutePointsLayer.mm in Sources */,
 				DA5A852C26C563A900F274C7 /* OAOcbfHelper.m in Sources */,
 				327A19862A98D57800F4A027 /* TravelJsonParser.swift in Sources */,

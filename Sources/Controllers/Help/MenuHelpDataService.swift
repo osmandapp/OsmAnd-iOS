@@ -30,13 +30,13 @@ final class TelegramChat: NSObject {
     }
 }
 
-@objc(OAHelpDataManager)
+@objc(OAMenuHelpDataService)
 @objcMembers
-final class HelpDataManager: NSObject {
+final class MenuHelpDataService: NSObject {
     private let urlPrefix = "https://osmand.net"
     var popularArticles: [PopularArticle] = []
     var telegramChats: [TelegramChat] = []
-    static let shared = HelpDataManager()
+    static let shared = MenuHelpDataService()
     
     private override init() { }
     

@@ -21,7 +21,7 @@ static NSString * const kLinkExternalType = @"ext_link";
 
 @implementation OAHelpViewController
 {
-    OAHelpDataManager *_helpDataManager;
+    OAMenuHelpDataService *_helpDataManager;
     OATableDataModel *_data;
     NSArray *_mostViewedArticles;
 }
@@ -30,7 +30,7 @@ static NSString * const kLinkExternalType = @"ext_link";
 
 - (void)commonInit
 {
-    _helpDataManager  = [OAHelpDataManager shared];
+    _helpDataManager  = [OAMenuHelpDataService shared];
 }
 
 #pragma mark - UIViewController

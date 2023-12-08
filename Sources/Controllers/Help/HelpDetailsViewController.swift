@@ -75,10 +75,10 @@ final class HelpDetailsViewController: OABaseNavbarViewController {
     }
     
     private func loadAndParseJson() {
-        HelpDataManager.shared.loadAndParseJson(from: kPopularArticlesAndTelegramChats) { [weak self] success in
+        MenuHelpDataService.shared.loadAndParseJson(from: kPopularArticlesAndTelegramChats) { [weak self] success in
             guard let self = self else { return }
             if success {
-                self.telegramChats = HelpDataManager.shared.getTelegramChats()
+                self.telegramChats = MenuHelpDataService.shared.getTelegramChats()
                 self.generateTelegramChatsData()
                 self.tableView.reloadData()
             } else {

@@ -3168,3 +3168,6 @@
 "external_device_unpair_description" = "Conecta el sensor al dispositivo para obtener información.";
 "external_device_details_information" = "Información";
 "external_device_any_connected" = "Cualquiera conectado";
+"shared_string_data_type" = "Tipo de dato";
+"external_device_characteristic_stride_length" = "Longitud de zancada";
+"write_data_from_sensor_to_track" = "Escribir datos de sensores externos en el GPX mientras se graba el viaje.";

@@ -711,10 +711,11 @@
     }
     else if (_gpx)
     {
-        routeBBox.top = _gpx.bounds.topLeft.latitude;
-        routeBBox.bottom = _gpx.bounds.bottomRight.latitude;
-        routeBBox.left = _gpx.bounds.topLeft.longitude;
-        routeBBox.right = _gpx.bounds.bottomRight.longitude;
+        OAGpxBounds gpxBounds = _gpx.bounds;
+        routeBBox.top = gpxBounds.topLeft.latitude;
+        routeBBox.bottom = gpxBounds.bottomRight.latitude;
+        routeBBox.left = gpxBounds.topLeft.longitude;
+        routeBBox.right = gpxBounds.bottomRight.longitude;
         [self centerMapOnBBox:routeBBox];
     }
 }

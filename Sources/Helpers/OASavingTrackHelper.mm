@@ -529,11 +529,15 @@
                     pt.time = (long)sqlite3_column_double(statement, 5);
                     double heading = sqlite3_column_double(statement, 6);
                     pt.heading = heading == kTrackNoHeading ? NAN : heading;
-                    NSString *pluginsInfo = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 7)];
-                    if (pluginsInfo && pluginsInfo.length > 0)
+                    const unsigned char *pluginsInfoChar = sqlite3_column_text(statement, 7);
+                    if (pluginsInfoChar != NULL)
                     {
-                        NSDictionary<NSString *, NSString *> *extensions = [self getPluginsExtensions:pluginsInfo];
-                        [self addPluginsExtensions:extensions toPoint:pt];
+                        NSString *pluginsInfo = [[NSString alloc] initWithUTF8String:(const char *) pluginsInfoChar];
+                        if (pluginsInfo && pluginsInfo.length > 0)
+                        {
+                            NSDictionary<NSString *, NSString *> *extensions = [self getPluginsExtensions:pluginsInfo];
+                            [self addPluginsExtensions:extensions toPoint:pt];
+                        }
                     }
 
                     long currentInterval = labs(pt.time - previousTime);

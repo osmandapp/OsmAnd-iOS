@@ -49,6 +49,7 @@ final class HelpDataManager: NSObject {
         }
         
         URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+            guard let self = self else { return }
             guard let data, error == nil else {
                 DispatchQueue.main.async {
                     debugPrint("Error downloading data: \(String(describing: error))")
@@ -59,17 +60,19 @@ final class HelpDataManager: NSObject {
             
             do {
                 guard let jsonDict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-                    debugPrint("Error: Unable to convert JSON to Dictionary")
-                    completion(false)
+                    DispatchQueue.main.async {
+                        debugPrint("Error: Unable to convert JSON to Dictionary")
+                        completion(false)
+                    }
                     return
                 }
                 
                 if let popularArticlesData = jsonDict["popularArticles"] as? [String: String],
                    let telegramChatsData = jsonDict["telegramChats"] as? [String: String] {
                     
+                    self.processPopularArticles(popularArticlesData)
+                    self.processTelegramChats(telegramChatsData)
                     DispatchQueue.main.async {
-                        self?.processPopularArticles(popularArticlesData)
-                        self?.processTelegramChats(telegramChatsData)
                         completion(true)
                     }
                 } else {

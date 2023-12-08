@@ -10,7 +10,7 @@ import UIKit
 
 @objc(OAHelpDetailsViewController)
 @objcMembers
-class HelpDetailsViewController: OABaseNavbarViewController {
+final class HelpDetailsViewController: OABaseNavbarViewController {
     var telegramChats: [TelegramChat] = []
     
     override func viewDidLoad() {
@@ -76,10 +76,11 @@ class HelpDetailsViewController: OABaseNavbarViewController {
     
     private func loadAndParseJson() {
         HelpDataManager.shared.loadAndParseJson(from: kPopularArticlesAndTelegramChats) { [weak self] success in
+            guard let self = self else { return }
             if success {
-                self?.telegramChats = HelpDataManager.shared.getTelegramChats()
-                self?.generateTelegramChatsData()
-                self?.tableView.reloadData()
+                self.telegramChats = HelpDataManager.shared.getTelegramChats()
+                self.generateTelegramChatsData()
+                self.tableView.reloadData()
             } else {
                 print(localizedString("osm_failed_uploads"))
             }

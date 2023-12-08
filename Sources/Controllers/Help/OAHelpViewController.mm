@@ -102,134 +102,64 @@ static NSString * const kLinkExternalType = @"ext_link";
     
     OATableSectionData *userGuideSection = [_data createNewSection];
     userGuideSection.headerText = OALocalizedString(@"user_guide");
-    
-    OATableRowData *mapRow = [userGuideSection createNewRow];
-    [mapRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [mapRow setKey:@"userGuide"];
-    [mapRow setTitle:OALocalizedString(@"shared_string_map")];
-    [mapRow setIconName:@"ic_custom_book_info"];
-    [mapRow setObj:kLinkInternalType forKey:@"linkType"];
-    [mapRow setObj:kDocsMap forKey:@"url"];
-    
-    OATableRowData *mapWidgetsRow = [userGuideSection createNewRow];
-    [mapWidgetsRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [mapWidgetsRow setKey:@"userGuide"];
-    [mapWidgetsRow setTitle:OALocalizedString(@"map_widgets")];
-    [mapWidgetsRow setIconName:@"ic_custom_book_info"];
-    [mapWidgetsRow setObj:kLinkInternalType forKey:@"linkType"];
-    [mapWidgetsRow setObj:kDocsWidgets forKey:@"url"];
-    
-    OATableRowData *navigationsRow = [userGuideSection createNewRow];
-    [navigationsRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [navigationsRow setKey:@"userGuide"];
-    [navigationsRow setTitle:OALocalizedString(@"shared_string_navigation")];
-    [navigationsRow setIconName:@"ic_custom_book_info"];
-    [navigationsRow setObj:kLinkInternalType forKey:@"linkType"];
-    [navigationsRow setObj:kDocsNavigation forKey:@"url"];
-    
-    OATableRowData *searchRow = [userGuideSection createNewRow];
-    [searchRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [searchRow setKey:@"userGuide"];
-    [searchRow setTitle:OALocalizedString(@"search_activity")];
-    [searchRow setIconName:@"ic_custom_book_info"];
-    [searchRow setObj:kLinkInternalType forKey:@"linkType"];
-    [searchRow setObj:kDocsSearch forKey:@"url"];
-    
-    OATableRowData *myDataRow = [userGuideSection createNewRow];
-    [myDataRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [myDataRow setKey:@"userGuide"];
-    [myDataRow setTitle:OALocalizedString(@"my_data")];
-    [myDataRow setIconName:@"ic_custom_book_info"];
-    [myDataRow setObj:kLinkInternalType forKey:@"linkType"];
-    [myDataRow setObj:kDocsPersonal forKey:@"url"];
-    
-    OATableRowData *planRouteRow = [userGuideSection createNewRow];
-    [planRouteRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [planRouteRow setKey:@"userGuide"];
-    [planRouteRow setTitle:OALocalizedString(@"plan_route")];
-    [planRouteRow setIconName:@"ic_custom_book_info"];
-    [planRouteRow setObj:kLinkInternalType forKey:@"linkType"];
-    [planRouteRow setObj:kDocsPlanRoute forKey:@"url"];
-    
-    OATableRowData *pluginsRow = [userGuideSection createNewRow];
-    [pluginsRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [pluginsRow setKey:@"userGuide"];
-    [pluginsRow setTitle:OALocalizedString(@"plugins_menu_group")];
-    [pluginsRow setIconName:@"ic_custom_book_info"];
-    [pluginsRow setObj:kLinkInternalType forKey:@"linkType"];
-    [pluginsRow setObj:kDocsPlugins forKey:@"url"];
-    
-    OATableRowData *purchasesRow = [userGuideSection createNewRow];
-    [purchasesRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [purchasesRow setKey:@"userGuide"];
-    [purchasesRow setTitle:OALocalizedString(@"purchases")];
-    [purchasesRow setIconName:@"ic_custom_book_info"];
-    [purchasesRow setObj:kLinkInternalType forKey:@"linkType"];
-    [purchasesRow setObj:kDocsPurchases forKey:@"url"];
+    NSArray *userGuideItems = @[
+        @{@"title": OALocalizedString(@"shared_string_map"), @"url": kDocsMap},
+        @{@"title": OALocalizedString(@"map_widgets"), @"url": kDocsWidgets},
+        @{@"title": OALocalizedString(@"shared_string_navigation"), @"url": kDocsNavigation},
+        @{@"title": OALocalizedString(@"search_activity"), @"url": kDocsSearch},
+        @{@"title": OALocalizedString(@"my_data"), @"url": kDocsPersonal},
+        @{@"title": OALocalizedString(@"plan_route"), @"url": kDocsPlanRoute},
+        @{@"title": OALocalizedString(@"plugins_menu_group"), @"url": kDocsPlugins},
+        @{@"title": OALocalizedString(@"purchases"), @"url": kDocsPurchases}
+    ];
+    for (NSDictionary *item in userGuideItems)
+    {
+        OATableRowData *row = [userGuideSection createNewRow];
+        [row setCellType:[OASimpleTableViewCell getCellIdentifier]];
+        [row setKey:@"userGuide"];
+        [row setTitle:item[@"title"]];
+        [row setIconName:@"ic_custom_book_info"];
+        [row setObj:kLinkInternalType forKey:@"linkType"];
+        [row setObj:item[@"url"] forKey:@"url"];
+    }
     
     OATableSectionData *troubleshootingSection = [_data createNewSection];
     troubleshootingSection.headerText = OALocalizedString(@"troubleshooting");
-    
-    OATableRowData *setupRow = [troubleshootingSection createNewRow];
-    [setupRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [setupRow setKey:@"troubleshooting"];
-    [setupRow setTitle:OALocalizedString(@"setup")];
-    [setupRow setIconName:@"ic_custom_device_download"];
-    [setupRow setObj:kLinkInternalType forKey:@"linkType"];
-    [setupRow setObj:kTroubleshootingSetup forKey:@"url"];
-    
-    OATableRowData *mapTroubleshootingRow = [troubleshootingSection createNewRow];
-    [mapTroubleshootingRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [mapTroubleshootingRow setKey:@"troubleshooting"];
-    [mapTroubleshootingRow setTitle:OALocalizedString(@"shared_string_map")];
-    [mapTroubleshootingRow setIconName:@"ic_custom_overlay_map"];
-    [mapTroubleshootingRow setObj:kLinkInternalType forKey:@"linkType"];
-    [mapTroubleshootingRow setObj:kTroubleshootingMap forKey:@"url"];
-    
-    OATableRowData *navigationRow = [troubleshootingSection createNewRow];
-    [navigationRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [navigationRow setKey:@"troubleshooting"];
-    [navigationRow setTitle:OALocalizedString(@"shared_string_navigation")];
-    [navigationRow setIconName:@"ic_custom_navigation"];
-    [navigationRow setObj:kLinkInternalType forKey:@"linkType"];
-    [navigationRow setObj:kTroubleshootingNavigation forKey:@"url"];
-    
-    OATableRowData *trackRecordingRow = [troubleshootingSection createNewRow];
-    [trackRecordingRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [trackRecordingRow setKey:@"troubleshooting"];
-    [trackRecordingRow setTitle:OALocalizedString(@"track_recording")];
-    [trackRecordingRow setIconName:@"ic_custom_track_recordable"];
-    [trackRecordingRow setObj:kLinkInternalType forKey:@"linkType"];
-    [trackRecordingRow setObj:kTroubleshootingTrackRecording forKey:@"url"];
-    
-    OATableRowData *pluginsTroubleshootingRow = [troubleshootingSection createNewRow];
-    [pluginsTroubleshootingRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [pluginsTroubleshootingRow setKey:@"troubleshooting"];
-    [pluginsTroubleshootingRow setTitle:OALocalizedString(@"plugins_menu_group")];
-    [pluginsTroubleshootingRow setIconName:@"ic_custom_extension"];
-    [pluginsTroubleshootingRow setObj:kLinkInternalType forKey:@"linkType"];
-    [pluginsTroubleshootingRow setObj:kDocsPlugins forKey:@"url"];
+    NSArray *troubleshootingItems = @[
+        @{@"title": OALocalizedString(@"setup"), @"url": kTroubleshootingSetup, @"icon": @"ic_custom_device_download"},
+        @{@"title": OALocalizedString(@"shared_string_map"), @"url": kTroubleshootingMap, @"icon": @"ic_custom_overlay_map"},
+        @{@"title": OALocalizedString(@"shared_string_navigation"), @"url": kTroubleshootingNavigation, @"icon": @"ic_custom_navigation"},
+        @{@"title": OALocalizedString(@"track_recording"), @"url": kTroubleshootingTrackRecording, @"icon": @"ic_custom_track_recordable"},
+        @{@"title": OALocalizedString(@"plugins_menu_group"), @"url": kDocsPlugins, @"icon": @"ic_custom_extension"}
+    ];
+    for (NSDictionary *item in troubleshootingItems)
+    {
+        OATableRowData *row = [troubleshootingSection createNewRow];
+        [row setCellType:[OASimpleTableViewCell getCellIdentifier]];
+        [row setKey:@"troubleshooting"];
+        [row setTitle:item[@"title"]];
+        [row setIconName:item[@"icon"]];
+        [row setObj:kLinkInternalType forKey:@"linkType"];
+        [row setObj:item[@"url"] forKey:@"url"];
+    }
     
     OATableSectionData *contactUsSection = [_data createNewSection];
     contactUsSection.headerText = OALocalizedString(@"help_contact_us");
-    
-    OATableRowData *contactSupportRow = [contactUsSection createNewRow];
-    [contactSupportRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [contactSupportRow setKey:@"contactSupport"];
-    [contactSupportRow setTitle:OALocalizedString(@"contact_support")];
-    [contactSupportRow setDescr:kSupportEmail];
-    [contactSupportRow setIconName:@"ic_custom_at_mail"];
-    [contactSupportRow setObj:kLinkExternalType forKey:@"linkType"];
-    [contactSupportRow setObj:kContactEmail forKey:@"url"];
-    
-    OATableRowData *gitHubDiscussionRow = [contactUsSection createNewRow];
-    [gitHubDiscussionRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [gitHubDiscussionRow setKey:@"contactSupport"];
-    [gitHubDiscussionRow setTitle:OALocalizedString(@"gitHub_discussion")];
-    [gitHubDiscussionRow setDescr:OALocalizedString(@"ask_question_propose_features")];
-    [gitHubDiscussionRow setIconName:@"ic_custom_logo_github"];
-    [gitHubDiscussionRow setObj:kLinkExternalType forKey:@"linkType"];
-    [gitHubDiscussionRow setObj:kGitHubDiscussion forKey:@"url"];
+    NSArray *initialContactUsItems = @[
+        @{@"title": OALocalizedString(@"contact_support"), @"descr": kSupportEmail, @"icon": @"ic_custom_at_mail", @"url": kContactEmail},
+        @{@"title": OALocalizedString(@"gitHub_discussion"), @"descr": OALocalizedString(@"ask_question_propose_features"), @"icon": @"ic_custom_logo_github", @"url": kGitHubDiscussion}
+    ];
+    for (NSDictionary *item in initialContactUsItems)
+    {
+        OATableRowData *row = [contactUsSection createNewRow];
+        [row setCellType:[OASimpleTableViewCell getCellIdentifier]];
+        [row setKey:@"contactSupport"];
+        [row setTitle:item[@"title"]];
+        [row setDescr:item[@"descr"]];
+        [row setIconName:item[@"icon"]];
+        [row setObj:kLinkExternalType forKey:@"linkType"];
+        [row setObj:item[@"url"] forKey:@"url"];
+    }
     
     OATableRowData *telegramChatsRow = [contactUsSection createNewRow];
     [telegramChatsRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
@@ -240,32 +170,22 @@ static NSString * const kLinkExternalType = @"ext_link";
     }];
     [telegramChatsRow setIconName:@"ic_custom_logo_telegram"];
     
-    OATableRowData *twitterRow = [contactUsSection createNewRow];
-    [twitterRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [twitterRow setKey:@"contactSupport"];
-    [twitterRow setTitle:OALocalizedString(@"twitter")];
-    [twitterRow setDescr:kCommunityTwitter];
-    [twitterRow setIconName:@"ic_custom_logo_twitter"];
-    [twitterRow setObj:kLinkExternalType forKey:@"linkType"];
-    [twitterRow setObj:kCommunityTwitter forKey:@"url"];
-    
-    OATableRowData *redditRow = [contactUsSection createNewRow];
-    [redditRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [redditRow setKey:@"contactSupport"];
-    [redditRow setTitle:OALocalizedString(@"reddit")];
-    [redditRow setDescr:kCommunityReddit];
-    [redditRow setIconName:@"ic_custom_logo_reddit"];
-    [redditRow setObj:kLinkExternalType forKey:@"linkType"];
-    [redditRow setObj:kCommunityReddit forKey:@"url"];
-    
-    OATableRowData *facebookRow = [contactUsSection createNewRow];
-    [facebookRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [facebookRow setKey:@"contactSupport"];
-    [facebookRow setTitle:OALocalizedString(@"facebook")];
-    [facebookRow setDescr:kCommunityFacebook];
-    [facebookRow setIconName:@"ic_custom_logo_facebook"];
-    [facebookRow setObj:kLinkExternalType forKey:@"linkType"];
-    [facebookRow setObj:kCommunityFacebook forKey:@"url"];
+    NSArray *additionalContactUsItems = @[
+        @{@"title": OALocalizedString(@"twitter"), @"descr": kCommunityTwitter, @"icon": @"ic_custom_logo_twitter", @"url": kCommunityTwitter},
+        @{@"title": OALocalizedString(@"reddit"), @"descr": kCommunityReddit, @"icon": @"ic_custom_logo_reddit", @"url": kCommunityReddit},
+        @{@"title": OALocalizedString(@"facebook"), @"descr": kCommunityFacebook, @"icon": @"ic_custom_logo_facebook", @"url": kCommunityFacebook}
+    ];
+    for (NSDictionary *item in additionalContactUsItems)
+    {
+        OATableRowData *row = [contactUsSection createNewRow];
+        [row setCellType:[OASimpleTableViewCell getCellIdentifier]];
+        [row setKey:@"contactSupport"];
+        [row setTitle:item[@"title"]];
+        [row setDescr:item[@"descr"]];
+        [row setIconName:item[@"icon"]];
+        [row setObj:kLinkExternalType forKey:@"linkType"];
+        [row setObj:item[@"url"] forKey:@"url"];
+    }
     
     OATableSectionData *reportAnIssuesSection = [_data createNewSection];
     reportAnIssuesSection.headerText = OALocalizedString(@"report_an_issues");
@@ -288,32 +208,22 @@ static NSString * const kLinkExternalType = @"ext_link";
     
     OATableSectionData *aboutOsmAndSection = [_data createNewSection];
     aboutOsmAndSection.headerText = OALocalizedString(@"about_osmAnd");
-    
-    OATableRowData *osmAndTeamRow = [aboutOsmAndSection createNewRow];
-    [osmAndTeamRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [osmAndTeamRow setKey:@"aboutOsmAnd"];
-    [osmAndTeamRow setTitle:OALocalizedString(@"osmAnd_team")];
-    [osmAndTeamRow setIconName:@"ic_custom_logo_osmand"];
-    [osmAndTeamRow setObj:kLinkInternalType forKey:@"linkType"];
-    [osmAndTeamRow setObj:kOsmAndTeam forKey:@"url"];
-    
-    OATableRowData *whatsNewRow = [aboutOsmAndSection createNewRow];
-    [whatsNewRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [whatsNewRow setKey:@"aboutOsmAnd"];
-    [whatsNewRow setTitle:OALocalizedString(@"help_what_is_new")];
-    [whatsNewRow setDescr:[NSString stringWithFormat:@"%@ %@", OALocalizedString(@"OsmAnd Maps"), [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]];
-    [whatsNewRow setIconName:@"ic_custom_clipboard"];
-    [whatsNewRow setObj:kLinkInternalType forKey:@"linkType"];
-    [whatsNewRow setObj:kDocsLatestVersion forKey:@"url"];
-    
-    OATableRowData *testFlightRow = [aboutOsmAndSection createNewRow];
-    [testFlightRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
-    [testFlightRow setKey:@"aboutOsmAnd"];
-    [testFlightRow setTitle:OALocalizedString(@"testFlight")];
-    [testFlightRow setDescr:OALocalizedString(@"download_install_beta_version")];
-    [testFlightRow setIconName:@"ic_custom_download"];
-    [testFlightRow setObj:kLinkInternalType forKey:@"linkType"];
-    [testFlightRow setObj:kTestFlight forKey:@"url"];
+    NSArray *aboutOsmAndItems = @[
+        @{@"title": OALocalizedString(@"osmAnd_team"), @"descr": @"", @"icon": @"ic_custom_logo_osmand", @"url": kOsmAndTeam},
+        @{@"title": OALocalizedString(@"help_what_is_new"), @"descr": [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"OsmAnd Maps"), [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"icon": @"ic_custom_clipboard", @"url": kDocsLatestVersion},
+        @{@"title": OALocalizedString(@"testFlight"), @"descr": OALocalizedString(@"download_install_beta_version"), @"icon": @"ic_custom_download", @"url": kTestFlight}
+    ];
+    for (NSDictionary *item in aboutOsmAndItems)
+    {
+        OATableRowData *row = [aboutOsmAndSection createNewRow];
+        [row setCellType:[OASimpleTableViewCell getCellIdentifier]];
+        [row setKey:@"aboutOsmAnd"];
+        [row setTitle:item[@"title"]];
+        [row setDescr:item[@"descr"]];
+        [row setIconName:item[@"icon"]];
+        [row setObj:kLinkInternalType forKey:@"linkType"];
+        [row setObj:item[@"url"] forKey:@"url"];
+    }
 }
 
 - (void)loadAndParseJson

@@ -709,6 +709,15 @@
             [self centerMapOnBBox:transportHelper.getBBox];
         }
     }
+    else if (_gpx)
+    {
+        OAGpxBounds gpxBounds = _gpx.bounds;
+        routeBBox.top = gpxBounds.topLeft.latitude;
+        routeBBox.bottom = gpxBounds.bottomRight.latitude;
+        routeBBox.left = gpxBounds.topLeft.longitude;
+        routeBBox.right = gpxBounds.bottomRight.longitude;
+        [self centerMapOnBBox:routeBBox];
+    }
 }
 
 - (void)centerMapOnBBox:(const OABBox)routeBBox

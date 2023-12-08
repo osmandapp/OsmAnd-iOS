@@ -149,11 +149,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
 - (void)onLeftNavbarButtonPressed
 {
     [OAUtilities denyAccessToFile:_url.path removeFromInbox:YES];
-    
-    [self dismissViewControllerWithAnimated:YES completion:^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:
-         OAFavoriteImportViewControllerDidDismissNotification object:nil userInfo:nil];
-    }];
+    [self dismissViewController];
 }
 
 - (void)onRightNavbarButtonPressed
@@ -168,9 +164,18 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
 
         [_ignoredNames removeAllObjects];
         _conflictedItem = nil;
-
-        [self onLeftNavbarButtonPressed];
+        
+        [OAUtilities denyAccessToFile:_url.path removeFromInbox:YES];
+        [self dismissViewController];
     }
+}
+
+- (void)dismissViewController
+{
+    [self dismissViewControllerWithAnimated:YES completion:^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:
+         OAFavoriteImportViewControllerDidDismissNotification object:nil userInfo:nil];
+    }];
 }
 
 #pragma mark - Additions
@@ -284,7 +289,7 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
                                 OAPointsGroup *group = _gpxFile.pointsGroups[keyGroup];
                                 for (OAWptPt *wptPt in group.points)
                                 {
-                                    for (OAFavoriteItem *localFavortite in [favoriteItems copy])
+                                    for (OAFavoriteItem *localFavortite in favoriteItems)
                                     {
                                         if ([[localFavortite getName] isEqualToString:wptPt.name])
                                         {

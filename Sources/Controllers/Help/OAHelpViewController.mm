@@ -234,7 +234,9 @@ static NSString * const kLinkExternalType = @"ext_link";
     [telegramChatsRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
     [telegramChatsRow setKey:@"contactSupportTelegram"];
     [telegramChatsRow setTitle:OALocalizedString(@"telegram_chats")];
-    [telegramChatsRow setDescr:[_helpDataManager getTelegramChatsCount]];
+    [_helpDataManager getCountForCategoryFrom:kPopularArticlesAndTelegramChats for:HelperDataItemsTelegramChats completion:^(NSInteger count) {
+        [telegramChatsRow setDescr:[NSString stringWithFormat:@"%ld", (long)count]];
+    }];
     [telegramChatsRow setIconName:@"ic_custom_logo_telegram"];
     
     OATableRowData *twitterRow = [contactUsSection createNewRow];
@@ -315,16 +317,13 @@ static NSString * const kLinkExternalType = @"ext_link";
 
 - (void)loadAndParseJson
 {
-    [_helpDataManager loadAndParseJsonFrom:kPopularArticlesAndTelegramChats completion:^(BOOL success) {
-        if (success)
-        {
-            _mostViewedArticles = [_helpDataManager getPopularArticles];
+    [_helpDataManager loadAndParseJsonFrom:kPopularArticlesAndTelegramChats for:HelperDataItemsPopularArticles completion:^(NSArray *articles, NSError *error) {
+        if (error) {
+            NSLog(OALocalizedString(@"osm_failed_uploads"));
+        } else if (articles) {
+            _mostViewedArticles = articles;
             [self generateData];
             [self.tableView reloadData];
-        }
-        else
-        {
-            NSLog(OALocalizedString(@"osm_failed_uploads"));
         }
     }];
 }

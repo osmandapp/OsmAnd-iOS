@@ -30,20 +30,42 @@ final class TelegramChat: NSObject {
     }
 }
 
+@objc enum HelperDataItems: Int {
+    case  popularArticles
+    case telegramChats
+    
+    var description: String {
+        switch self {
+        case .popularArticles:
+            return "popularArticles"
+        case .telegramChats:
+            return "telegramChats"
+        }
+    }
+}
+
 @objc(OAMenuHelpDataService)
 @objcMembers
 final class MenuHelpDataService: NSObject {
     private let urlPrefix = "https://osmand.net"
-    var popularArticles: [PopularArticle] = []
-    var telegramChats: [TelegramChat] = []
+    private var popularArticles: [PopularArticle] = []
+    private var telegramChats: [TelegramChat] = []
     static let shared = MenuHelpDataService()
     
     private override init() { }
     
-    func loadAndParseJson(from urlString: String, completion: @escaping (Bool) -> Void) {
+    func loadAndParseJson(from urlString: String, for dataItem: HelperDataItems, completion: @escaping (NSArray?, NSError?) -> Void) {
+        if dataItem == .popularArticles, !popularArticles.isEmpty {
+            completion(popularArticles as NSArray, nil)
+            return
+        } else if dataItem == .telegramChats, !telegramChats.isEmpty {
+            completion(telegramChats as NSArray, nil)
+            return
+        }
+        
         guard let url = URL(string: urlString) else {
             DispatchQueue.main.async {
-                completion(false)
+                completion(nil, NSError(domain: "URLInvalid", code: 0, userInfo: nil))
             }
             return
         }
@@ -52,61 +74,64 @@ final class MenuHelpDataService: NSObject {
             guard let self = self else { return }
             guard let data, error == nil else {
                 DispatchQueue.main.async {
-                    debugPrint("Error downloading data: \(String(describing: error))")
-                    completion(false)
+                    completion(nil, error as NSError? ?? NSError(domain: "DataError", code: 1, userInfo: nil))
                 }
                 return
             }
             
             do {
-                guard let jsonDict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+                guard let jsonDict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                      let jsonData = jsonDict[dataItem.description] as? [String: String] else {
                     DispatchQueue.main.async {
-                        debugPrint("Error: Unable to convert JSON to Dictionary")
-                        completion(false)
+                        completion(nil, NSError(domain: "JSONConversionError", code: 2, userInfo: nil))
                     }
                     return
                 }
                 
-                if let popularArticlesData = jsonDict["popularArticles"] as? [String: String],
-                   let telegramChatsData = jsonDict["telegramChats"] as? [String: String] {
-                    
-                    self.processPopularArticles(popularArticlesData)
-                    self.processTelegramChats(telegramChatsData)
-                    DispatchQueue.main.async {
-                        completion(true)
-                    }
-                } else {
-                    debugPrint("Error: Required data not found in JSON")
-                    completion(false)
-                }
-            } catch {
                 DispatchQueue.main.async {
-                    debugPrint("Error parsing JSON:", error)
-                    completion(false)
+                    switch dataItem {
+                    case .popularArticles:
+                        let articles = self.processPopularArticles(jsonData)
+                        self.popularArticles = articles
+                        completion(articles as NSArray, nil)
+                    case .telegramChats:
+                        let chats = self.processTelegramChats(jsonData)
+                        self.telegramChats = chats
+                        completion(chats as NSArray, nil)
+                    }
+                }
+            } catch let error as NSError {
+                DispatchQueue.main.async {
+                    completion(nil, error)
                 }
             }
         }.resume()
     }
     
-    func getPopularArticles() -> [PopularArticle] {
-        popularArticles
+    func getCountForCategory(from urlString: String, for dataItem: HelperDataItems, completion: @escaping (Int) -> Void) {
+        loadAndParseJson(from: urlString, for: dataItem) { data, error in
+            guard let data = data, error == nil else {
+                completion(0)
+                return
+            }
+            
+            if dataItem == .telegramChats, let chats = data as? [TelegramChat] {
+                completion(chats.count)
+            } else if dataItem == .popularArticles, let articles = data as? [PopularArticle] {
+                completion(articles.count)
+            } else {
+                completion(0)
+            }
+        }
     }
     
-    func getTelegramChats() -> [TelegramChat] {
-        telegramChats
-    }
-    
-    func getTelegramChatsCount() -> String {
-        String(telegramChats.count)
-    }
-    
-    private func processPopularArticles(_ data: [String: String]) {
+    private func processPopularArticles(_ data: [String: String]) -> [PopularArticle] {
         let orderedData = data.map { ($0.key, $0.value) }.sorted { $0.0 < $1.0 }
-        popularArticles = orderedData.map { PopularArticle(title: $0.0, url: urlPrefix + $0.1) }
+        return orderedData.map { PopularArticle(title: $0.0, url: urlPrefix + $0.1) }
     }
     
-    private func processTelegramChats(_ data: [String: String]) {
+    private func processTelegramChats(_ data: [String: String]) -> [TelegramChat] {
         let orderedData = data.map { ($0.key, $0.value) }.sorted { $0.0 < $1.0 }
-        telegramChats = orderedData.map { TelegramChat(title: $0.0, url: $0.1) }
+        return orderedData.map { TelegramChat(title: $0.0, url: $0.1) }
     }
 }

@@ -18,6 +18,8 @@
 #import "OAColors.h"
 #import "Localization.h"
 
+NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = @"OAFavoriteImportViewControllerDidDismissNotification";
+
 @implementation OAFavoriteImportViewController
 {
     NSURL *_url;
@@ -147,8 +149,11 @@
 - (void)onLeftNavbarButtonPressed
 {
     [OAUtilities denyAccessToFile:_url.path removeFromInbox:YES];
-
-    [super onLeftNavbarButtonPressed];
+    
+    [self dismissViewControllerWithAnimated:YES completion:^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:
+         OAFavoriteImportViewControllerDidDismissNotification object:nil userInfo:nil];
+    }];
 }
 
 - (void)onRightNavbarButtonPressed
@@ -279,7 +284,7 @@
                                 OAPointsGroup *group = _gpxFile.pointsGroups[keyGroup];
                                 for (OAWptPt *wptPt in group.points)
                                 {
-                                    for (OAFavoriteItem *localFavortite in favoriteItems)
+                                    for (OAFavoriteItem *localFavortite in [favoriteItems copy])
                                     {
                                         if ([[localFavortite getName] isEqualToString:wptPt.name])
                                         {

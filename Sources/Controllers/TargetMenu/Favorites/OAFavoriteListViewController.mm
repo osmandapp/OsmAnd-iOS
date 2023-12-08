@@ -38,6 +38,7 @@
 #import "OACloudIntroductionViewController.h"
 #import "OAAppSettings.h"
 #import "OABackupHelper.h"
+#import "OAFavoriteImportViewController.h"
 
 
 #define _(name) OAFavoriteListViewController__##name
@@ -138,6 +139,7 @@ static UIViewController *parentController;
     
     self.tabBarController.navigationItem.title = OALocalizedString(@"my_favorites");
     [self addNotification:OAIAPProductPurchasedNotification selector:@selector(productPurchased:)];
+    [self addNotification:OAFavoriteImportViewControllerDidDismissNotification selector:@selector(favoriteImportViewControllerDidDismiss:)];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
@@ -146,6 +148,14 @@ static UIViewController *parentController;
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
         _horizontalLine.backgroundColor = [UIColor.separatorColor CGColor];
+}
+
+- (void)favoriteImportViewControllerDidDismiss:(NSNotification *)notification
+{
+    if (self.isViewLoaded && self.view.window != nil)
+    {
+        [self generateData];
+    }
 }
 
 - (void)productPurchased:(NSNotification *)notification

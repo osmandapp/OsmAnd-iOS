@@ -28,6 +28,11 @@
     return version;
 }
 
++ (NSString *)getBuildVersion
+{
+    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+}
+
 //4_2
 + (NSString *) getShortAppVersion
 {
@@ -37,8 +42,8 @@
 + (NSString *)getAppVersionWithBundle
 {
     NSString *appVersion = self.getVersion;
-    NSString *bundleVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-    return [NSString stringWithFormat:@"OsmAnd Maps %@ (%@)", appVersion, bundleVersion];
+    NSString *buildVersion = self.getBuildVersion;
+    return [NSString stringWithFormat:@"OsmAnd Maps %@ (%@)", appVersion, buildVersion];
 }
 
 + (NSString *) getAppVersionForUrl

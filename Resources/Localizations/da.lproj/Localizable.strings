@@ -3163,3 +3163,6 @@
 "shared_string_data_type" = "Datatype";
 "external_device_characteristic_stride_length" = "Skridtlængde";
 "write_data_from_sensor_to_track" = "Skriv data fra eksterne sensorer til GPX under turoptagelse.";
+"shared_string_any" = "Enhver";
+"offline_wikivoyage" = "Offline Wikivoyage";
+"map_settings_topography" = "Højdekurver";

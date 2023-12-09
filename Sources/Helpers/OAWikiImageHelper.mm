@@ -111,8 +111,8 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
 {
     url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     NSURL *urlObj = [[NSURL alloc] initWithString:url];
-    NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    [[aSession dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[session dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSMutableArray<OAAbstractCard *> *resultCards = [NSMutableArray array];
         if (((NSHTTPURLResponse *)response).statusCode == 200)
         {
@@ -132,11 +132,24 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
                 }
             }
         }
+        else
+        {
+            NSLog(@"Error retrieving Wikimedia photos (OsmandApi): %@", error);
+        }
         dispatch_async(dispatch_get_main_queue(), ^{
             [cards addObjectsFromArray:resultCards];
-            (byCategory ? _wikimediaCardsReady : _wikidataCardsReady) = YES;
-            if (byCategory ? _wikidataCardsReady : _wikimediaCardsReady)
-                _addOtherImagesFunction(cards);
+            if (byCategory)
+            {
+                _wikimediaCardsReady = YES;
+                if (_wikidataCardsReady)
+                    _addOtherImagesFunction(cards);
+            }
+            else
+            {
+                _wikidataCardsReady = YES;
+                if (_wikimediaCardsReady)
+                    _addOtherImagesFunction(cards);
+            }
         });
     }] resume];
 }
@@ -154,8 +167,8 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
         {
             NSString *safeWikidataTagContent = [wikidataTagContent stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
             NSURL *urlObj = [[NSURL alloc] initWithString: [NSString stringWithFormat:@"%@%@%@%@", WIKIDATA_API_ENDPOINT, WIKIDATA_ACTION, safeWikidataTagContent, FORMAT_JSON]];
-            NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-            [[aSession dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+            NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+            [[session dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                 OAWikiImageCard *resultCard = nil;
                 if (((NSHTTPURLResponse *)response).statusCode == 200)
                 {
@@ -179,6 +192,10 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
                             }
                         }
                     }
+                }
+                else
+                {
+                    NSLog(@"Error retrieving Wikidata photos: %@", error);
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (resultCard)
@@ -224,8 +241,8 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
             NSString *url = [NSString stringWithFormat:@"%@%@%@%@%@", WIKIMEDIA_API_ENDPOINT, WIKIMEDIA_ACTION, wikiMediaTagContent, CM_LIMIT, FORMAT_JSON];
             url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
             NSURL *urlObj = [[NSURL alloc] initWithString:url];
-            NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-            [[aSession dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+            NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+            [[session dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                 NSMutableArray<OAAbstractCard *> *resultCards = [NSMutableArray array];
                 if (((NSHTTPURLResponse *)response).statusCode == 200)
                 {
@@ -248,6 +265,10 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
                             }
                         }
                     }
+                }
+                else
+                {
+                    NSLog(@"Error retrieving Wikimedia photos: %@", error);
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [cards addObjectsFromArray:resultCards];

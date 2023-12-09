@@ -85,20 +85,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [_routingHelper addProgressBar:self];
     _lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:10.];
     _secondaryStyle = CPManeuverDisplayStyleDefault;
-    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                withHandler:@selector(onLocationServicesUpdate)
-                                                                 andObserve:[OsmAndApp instance].locationServices.updateObserver];    
-    _map3DModeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                   withHandler:@selector(onMap3dModeUpdated)
-                                                    andObserve:[OARootViewController instance].mapPanel.mapViewController.elevationAngleObservable];
-    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onTripStartTriggered) name:kCarPlayTripStartedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
-}
-
-- (void)dealloc
-{
-    [_locationServicesUpdateObserver detach];
-    [NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
 - (void) stopNavigation
@@ -658,6 +644,28 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 // MARK: OACarPlayMapViewDelegate
 
+- (void)onIntefaceControllerAttached
+{
+    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                withHandler:@selector(onLocationServicesUpdate)
+                                                                 andObserve:[OsmAndApp instance].locationServices.updateObserver];
+    _map3DModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                   withHandler:@selector(onMap3dModeUpdated)
+                                                    andObserve:[OARootViewController instance].mapPanel.mapViewController.elevationAngleObservable];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onTripStartTriggered) name:kCarPlayTripStartedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
+}
+
+- (void)onIntefaceControllerDetached
+{
+    [NSNotificationCenter.defaultCenter removeObserver:self];
+    if (_locationServicesUpdateObserver)
+    {
+        [_locationServicesUpdateObserver detach];
+        _locationServicesUpdateObserver = nil;
+    }
+}
+
 - (void)onMapViewAttached
 {
     OARouteCalculationResult *route = [_routingHelper getRoute];
@@ -667,16 +675,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         [self enterRoutePreviewMode];
         if ([_routingHelper isFollowingMode])
             [self onTripStartTriggered];
-    }
-}
-
-- (void)onMapViewDettached
-{
-    [NSNotificationCenter.defaultCenter removeObserver:self];
-    if (_locationServicesUpdateObserver)
-    {
-        [_locationServicesUpdateObserver detach];
-        _locationServicesUpdateObserver = nil;
     }
 }
 

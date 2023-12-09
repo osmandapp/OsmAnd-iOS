@@ -3160,3 +3160,6 @@
 "shared_string_data_type" = "Tipo de datos";
 "external_device_characteristic_stride_length" = "Longitud del paso";
 "write_data_from_sensor_to_track" = "Escribe los datos de los sensores externos a GPX durante la grabación del viaje.";
+"shared_string_any" = "Cualquiera";
+"offline_wikivoyage" = "Wikiviajes sin conexión";
+"map_settings_topography" = "Líneas de contorno";

@@ -87,6 +87,7 @@
 #define kInstallDate @"install_date"
 #define kNumberOfStarts @"starts_num"
 #define kSubfolderPlaceholder @"_%_"
+#define kBuildVersion @"buildVersion"
 
 #define _(name)
 @implementation OsmAndAppImpl
@@ -487,6 +488,22 @@
     
     float currentVersion = [[[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"] floatValue];
     float prevVersion = [[NSUserDefaults standardUserDefaults] objectForKey:@"appVersion"] ? [[NSUserDefaults standardUserDefaults] floatForKey:@"appVersion"] : 0.;
+    
+    NSString *prevBuildVersion = [[NSUserDefaults standardUserDefaults] stringForKey:kBuildVersion];
+    if (prevBuildVersion)
+    {
+        NSString *buildVersion = [OAAppVersionDependentConstants getBuildVersion];
+        if (![prevBuildVersion isEqualToString:buildVersion])
+        {
+            [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
+            [[NSUserDefaults standardUserDefaults] setObject:buildVersion forKey:kBuildVersion];
+        }
+    }
+    else
+    {
+        [[NSUserDefaults standardUserDefaults] setObject:[OAAppVersionDependentConstants getBuildVersion] forKey:kBuildVersion];
+    }
+    
     if (_firstLaunch)
     {
         [[NSUserDefaults standardUserDefaults] setObject:NSDate.date forKey:kInstallDate];

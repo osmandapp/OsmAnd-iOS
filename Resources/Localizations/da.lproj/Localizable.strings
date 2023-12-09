@@ -3028,7 +3028,6 @@
 "auto_update" = "Auto-opdater";
 "weather_update_over_any_network" = "Via ethvert netværk";
 "weather_update_parameters_any_network" = "Vejrudsigten vil blive opdateret over ethvert netværk. Mobildata kan bruges.";
-"map_settings_topography" = "Topografi";
 "click_on_widget" = "Klik på modul";
 "shared_string_cache" = "Cache";
 "unsaved_changes_will_be_lost_discard" = "Alle ikke-gemte ændringer vil gå tabt. Kassér ændringer?";
@@ -3160,3 +3159,7 @@
 "shared_string_view" = "Vis";
 "external_device_unpair_description" = "Tilslut sensor til din enhed for at få oplysninger.";
 "external_device_details_information" = "Information";
+"external_device_any_connected" = "Alle forbundne";
+"shared_string_data_type" = "Datatype";
+"external_device_characteristic_stride_length" = "Skridtlængde";
+"write_data_from_sensor_to_track" = "Skriv data fra eksterne sensorer til GPX under turoptagelse.";

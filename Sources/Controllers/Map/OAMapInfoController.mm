@@ -248,9 +248,8 @@
 
 - (void) onMapSourceUpdated
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_rulerControl onMapSourceUpdated];
-    });
+    [self execOnDraw];
+    [self updateRuler];
 }
 
 - (void) onLocationServicesUpdate
@@ -677,6 +676,9 @@
     [widgetsToUpdate addObject:_weatherToolbar];
 
     _widgetsToUpdate = widgetsToUpdate;
+
+    if (_rulerControl)
+        [_rulerControl removeFromSuperview];
 
     _rulerControl = [[OARulerWidget alloc] init];
 

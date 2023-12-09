@@ -897,7 +897,7 @@
     BOOL isToolbarVisible = _toolbarViewController && _toolbarViewController.view.superview;
     if (isToolbarVisible)
     {
-        BOOL isAllowToolbarsVisible = isToolbarVisible && [_mapPanelViewController isTopToolbarSearchVisible];
+        BOOL isAllowToolbarsVisible = (isToolbarVisible && ([_mapPanelViewController isTopToolbarSearchVisible] || [_mapPanelViewController isTopToolbarDiscountVisible]));
         if (isAllowToolbarsVisible)
             self.topWidgetsViewYConstraint.constant = _toolbarViewController.view.frame.size.height;
         else
@@ -1154,7 +1154,7 @@
     BOOL isTargetBackButtonVisible = [_mapPanelViewController isTargetBackButtonVisible];
     BOOL isToolbarAllowed = !self.contextMenuMode && !isDashboardVisible && !isWeatherToolbarVisible;
     BOOL isToolbarVisible = isToolbarAllowed && _toolbarViewController && _toolbarViewController.view.superview;
-    BOOL isAllowToolbarsVisible = isToolbarVisible && [_mapPanelViewController isTopToolbarSearchVisible];
+    BOOL isAllowToolbarsVisible = (isToolbarVisible && ([_mapPanelViewController isTopToolbarSearchVisible] || [_mapPanelViewController isTopToolbarDiscountVisible]));
     BOOL isButtonsVisible = isToolbarVisible ? isAllowToolbarsVisible
         : (isInContextMenuVisible || (!isWeatherToolbarVisible && !isDashboardVisible && !isRouteInfoVisible && !isTargetToHideVisible));
     BOOL isPanelAllowed = isButtonsVisible && !self.contextMenuMode && !isScrollableHudVisible && _mapPanelViewController.activeTargetType != OATargetChangePosition;

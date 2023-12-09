@@ -10,10 +10,11 @@
 
 @interface OAAppVersionDependentConstants : NSObject
 
-+ (NSString *) getShortAppVersion;
-+ (NSString *) getShortAppVersionWithSeparator:(NSString *)separator;
++ (NSString *)getShortAppVersion;
++ (NSString *)getShortAppVersionWithSeparator:(NSString *)separator;
 + (NSString *)getAppVersionWithBundle;
-+ (NSString *) getAppVersionForUrl;
-+ (NSString *) getVersion;
++ (NSString *)getAppVersionForUrl;
++ (NSString *)getVersion;
++ (NSString *)getBuildVersion;
 
 @end

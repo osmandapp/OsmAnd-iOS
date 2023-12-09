@@ -239,7 +239,50 @@ static NSArray<NSString *> *minTrackSpeedNames;
                  @"description" : OALocalizedString(@"auto_split_gap_descr"),
                  @"value" : @([_settings.autoSplitRecording get:self.appMode]),
                  @"type" : [OASwitchTableViewCell getCellIdentifier] }]];
-            
+
+            if ([OAPlugin isEnabled:OAExternalSensorsPlugin.class])
+            {
+                NSInteger devices = 0;
+                NSInteger devicesAll = 0;
+                OAExternalSensorsPlugin *plugin = (OAExternalSensorsPlugin *) [OAPlugin getEnabledPlugin:OAExternalSensorsPlugin.class];
+                if (plugin)
+                {
+                    NSArray<OAWidgetType *> *externalSensorTrackDataType = [plugin getExternalSensorTrackDataType];
+                    devicesAll = externalSensorTrackDataType.count;
+                    for (OAWidgetType *widgetType in externalSensorTrackDataType)
+                    {
+                        OACommonString *deviceIdPref = [plugin getWriteToTrackDeviceIdPref:widgetType];
+                        if (deviceIdPref)
+                        {
+                            NSString *deviceId = [deviceIdPref get:self.appMode];
+                            if (![deviceId isEqualToString:OATrackRecordingNone])
+                            {
+                                if ([deviceId isEqualToString:OATrackRecordingAnyConnected])
+                                {
+                                    if ([[OADeviceHelper shared] getConnectedDevicesForWidgetWithType:widgetType].firstObject)
+                                    {
+                                        devices++;
+                                    }
+                                }
+                                else
+                                {
+                                    if ([[OADeviceHelper shared] getPairedDevicesForType:widgetType deviceId:deviceId])
+                                    {
+                                        devices++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                [dataArr addObject:
+                 @[@{
+                     @"name" : @"externalSensors",
+                     @"title" : OALocalizedString(@"external_sensors_plugin_name"),
+                     @"value" : [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_slash"), @(devices).stringValue, @(devicesAll).stringValue],
+                     @"type" : [OAValueTableViewCell getCellIdentifier] }]];
+            }
+
             NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"shared_string_menu"), OALocalizedString(@"shared_string_my_places"), OALocalizedString(@"menu_my_trips")];
             NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"trip_rec_actions_descr"), menuPath];
             NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:actionsDescr attributes:@{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColor.textColorSecondary}];
@@ -713,6 +756,11 @@ static NSArray<NSString *> *minTrackSpeedNames;
         [_settings.saveTrackToGPX resetModeToDefault:self.appMode];
         [_settings.autoSplitRecording resetModeToDefault:self.appMode];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tableView.numberOfSections)] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+    else if ([name isEqualToString:@"externalSensors"])
+    {
+        OAExternalSettingsWriteToTrackSettingsViewController *contoller = [[OAExternalSettingsWriteToTrackSettingsViewController alloc] initWithApplicationMode:self.appMode];
+        [self showViewController:contoller];
     }
 }
 

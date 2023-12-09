@@ -1,0 +1,25 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_carplay_tracks.svg",
+      "idiom" : "car"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "ic_carplay_tracks_night.svg",
+      "idiom" : "car"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true
+  }
+}

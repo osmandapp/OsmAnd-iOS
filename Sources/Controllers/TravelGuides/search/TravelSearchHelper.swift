@@ -17,12 +17,12 @@ final class TravelSearchHelper {
     var uiCanceled = false
     
     func search(query: String, onComplete: @escaping ([TravelSearchResult])->() ) {
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .default).async {
             
             self.requestNumber += 1
             let req = self.requestNumber
             
-            DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + self.TIMEOUT_BETWEEN_CHARS / 1000) {
+            DispatchQueue.global(qos: .default).asyncAfter(deadline: .now() + self.TIMEOUT_BETWEEN_CHARS / 1000) {
                 if self.isCanceled(req) {
                     return
                 }

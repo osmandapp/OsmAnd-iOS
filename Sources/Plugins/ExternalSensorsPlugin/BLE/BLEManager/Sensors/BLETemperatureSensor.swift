@@ -35,8 +35,8 @@ final class BLETemperatureSensor: Sensor {
         [.temperature]
     }
     
-    override func getLastSensorDataList(for wiggetType: WidgetType) -> [SensorData]? {
-        guard wiggetType == .temperature else { return nil }
+    override func getLastSensorDataList(for widgetType: WidgetType) -> [SensorData]? {
+        guard widgetType == .temperature else { return nil }
         return [lastTemperatureData].compactMap { $0 }
     }
     
@@ -71,5 +71,16 @@ final class BLETemperatureSensor: Sensor {
         value.getBytes(&array,
                        length: count * MemoryLayout<Int16>.size)
         return array
+    }
+
+    override func writeSensorDataToJson(json: NSMutableData, widgetDataFieldType: WidgetType) {
+        if let lastTemperatureData {
+            do {
+                let data = try JSONEncoder().encode([PointAttributes.sensorTagTemperature: String(lastTemperatureData.temperature)])
+                json.append(data)
+            } catch {
+                debugPrint("BLE failed writeSensorDataToJson: temperature - \(lastTemperatureData.temperature) | error: \(error.localizedDescription)")
+            }
+        }
     }
 }

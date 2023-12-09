@@ -3005,7 +3005,6 @@
 "free_favorites_backup" = "免費最愛備份";
 "weather_update_parameters_disabled" = "自動更新將會被停用。";
 "map_widget_camera_distance_desc" = "顯示鏡頭在地面上的海拔高度。";
-"map_settings_topography" = "地形";
 "auto_update" = "自動更新";
 "weather_update_over_any_network" = "透過任何網路";
 "weather_update_parameters_any_network" = "連到任何網路時會更新天氣預報，手機網路也會使用。";

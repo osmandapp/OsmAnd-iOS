@@ -752,6 +752,8 @@
 "shared_string_delete_color" = "Delete color";
 "shared_string_duplicate" = "Duplicate";
 "shared_string_result" = "Result";
+"shared_string_any" = "Any";
+"shared_string_data_type" = "Data type";
 
 "restart" = "Restart";
 
@@ -948,7 +950,7 @@
 "daynight_mode_night" = "Night";
 "map_widget_renderer" = "Map style";
 "map_settings_overunder" = "Overlay / Underlay";
-"map_settings_topography" = "Topography";
+"map_settings_topography" = "Contour lines";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
 "map_settings_install_maps" = "Choose maps to install or update";
@@ -1946,6 +1948,7 @@
 "download_select_map_types" = "Other maps";
 
 "shared_string_wikivoyage" = "Wikivoyage";
+"offline_wikivoyage" = "Offline Wikivoyage";
 "travel_guides_beta" = "Travel guides (Beta)";
 "download_file" = "Download file";
 "travel_card_download_descr" = "Download Wikivoyage travel guides to view articles about places around the world without a connection to the Internet.";
@@ -3365,7 +3368,7 @@
 
 "external_sensors_plugin_name" = "External Sensors";
 "external_sensors_plugin_description" = "Accesses external sensors to read e.g. your heart rate, bicycle speed, cycling power, or cadence. Requires your device to be connected to respective sensors via the ANT+ wireless personal network protocol.";
-
+"write_data_from_sensor_to_track" = "Write data from external sensors to GPX while trip recording.";
 
 "map_widget_ant_heart_rate" = "Heart Rate";
 "map_widget_ant_heart_rate_desc" = "Shows user's heart rate during a given activity in real-time";
@@ -3431,6 +3434,8 @@
 "external_device_status_disconnecting" = "Disconnecting";
 "external_device_status_disconnected" = "Disconnected";
 "external_device_status_connected" = "Connected";
+"external_device_any_connected" = "Any connected";
+
 "bluetooth_found_title" = "Found: %d";
 "external_device_menu_forget" = "Forget";
 "degree_celsius" = "°C";
@@ -3438,6 +3443,7 @@
 "external_device_characteristic_speed" = "Speed";
 "external_device_characteristic_distance" = "Distance";
 "external_device_characteristic_total_distance" = "Total distance";
+"external_device_characteristic_stride_length" = "Stride length";
 
 "wheel_circumference" = "Wheel circumference";
 "map_orientation_default" = "Same as device";

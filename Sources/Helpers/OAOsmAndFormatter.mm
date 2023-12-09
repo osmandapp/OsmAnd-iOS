@@ -180,7 +180,12 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
     return [self getFormattedDistance:meters forceTrailingZeroes:YES];
 }
 
-+ (NSString *) getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes
++ (NSString *)getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes
+{
+    return [self getFormattedDistance:meters forceTrailingZeroes:YES valueUnitArray:nil];;
+}
+
++ (NSString *)getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     EOAMetricsConstant mc = [settings.metricSystem get];
@@ -207,60 +212,68 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
 
     if (meters >= 100 * mainUnitInMeters)
     {
-        return [self formatValue:(int) (meters / mainUnitInMeters + 0.5) unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0];
+        return [self formatValue:(int) (meters / mainUnitInMeters + 0.5) unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
     }
     else if (meters > 9.99f * mainUnitInMeters)
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:1];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:1 valueUnitArray:valueUnitArray];
     }
     else if (meters > 0.999f * mainUnitInMeters && (mc != NAUTICAL_MILES_AND_METERS || mc != NAUTICAL_MILES_AND_FEET))
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2 valueUnitArray:valueUnitArray];
     }
     else if (mc == MILES_AND_FEET && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:FEET_IN_ONE_METER])
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2 valueUnitArray:valueUnitArray];
     }
     else if (mc == MILES_AND_METERS && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:1.0000f])
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2 valueUnitArray:valueUnitArray];
     }
     else if (mc == MILES_AND_YARDS && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:YARDS_IN_ONE_METER])
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2 valueUnitArray:valueUnitArray];
     }
     else if (mc == NAUTICAL_MILES_AND_METERS && meters > 0.99f * mainUnitInMeters && ![self isCleanValue:meters inUnits:1.0000f])
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2 valueUnitArray:valueUnitArray];
     }
     else if (mc == NAUTICAL_MILES_AND_FEET && meters > 0.99f * mainUnitInMeters && ![self isCleanValue:meters inUnits:1.0000f])
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2 valueUnitArray:valueUnitArray];
     }
     else
     {
         if (mc == KILOMETERS_AND_METERS || mc == MILES_AND_METERS || mc == NAUTICAL_MILES_AND_METERS)
         {
-            return [self formatValue:(int) (meters + 0.5) unit:_unitsM forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0];
+            return [self formatValue:(int) (meters + 0.5) unit:_unitsM forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
         }
         else if (mc == MILES_AND_FEET || mc == NAUTICAL_MILES_AND_FEET)
         {
             int feet = (int) (meters * FEET_IN_ONE_METER + 0.5);
-            return [self formatValue:feet unit:_unitsFt forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0];
+            return [self formatValue:feet unit:_unitsFt forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
         }
         else if (mc == MILES_AND_YARDS)
         {
             int yards = (int) (meters * YARDS_IN_ONE_METER + 0.5);
-            return [self formatValue:yards unit:_unitsYd forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0];
+            return [self formatValue:yards unit:_unitsYd forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
         }
-        return [self formatValue:(int) (meters + 0.5) unit:_unitsM forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0];
+        return [self formatValue:(int) (meters + 0.5) unit:_unitsM forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
     }
+}
++ (NSString *)formatValue:(float)value
+                     unit:(NSString *)unit
+      forceTrailingZeroes:(BOOL)forceTrailingZeroes
+      decimalPlacesNumber:(NSInteger)decimalPlacesNumber
+{
+    return [self formatValue:value unit:unit forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:decimalPlacesNumber valueUnitArray:nil];
 }
 
 + (NSString *)formatValue:(float)value
                      unit:(NSString *)unit
       forceTrailingZeroes:(BOOL)forceTrailingZeroes
       decimalPlacesNumber:(NSInteger)decimalPlacesNumber
+           valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
@@ -300,6 +313,8 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
         if ([formattedValue hasSuffix:@"."])
             [formattedValue deleteCharactersInRange:NSMakeRange(formattedValue.length - 1, 1)];
     }
+    [valueUnitArray addObject:formattedValue];
+    [valueUnitArray addObject:unit];
 
     return [OAUtilities getFormattedValue:formattedValue unit:unit];
 }
@@ -334,12 +349,17 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
     }
 }
 
-+ (NSString *) getFormattedSpeed:(float) metersperseconds
++ (NSString *)getFormattedSpeed:(float)metersperseconds valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
-    return [self getFormattedSpeed:metersperseconds drive:NO];
+    return [self getFormattedSpeed:metersperseconds drive:NO valueUnitArray:valueUnitArray];
 }
 
-+ (NSString *) getFormattedSpeed:(float) metersperseconds drive:(BOOL)drive
++ (NSString *)getFormattedSpeed:(float) metersperseconds
+{
+    return [self getFormattedSpeed:metersperseconds drive:NO valueUnitArray:nil];
+}
+
++ (NSString *)getFormattedSpeed:(float) metersperseconds drive:(BOOL)drive valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
     float kmh = metersperseconds * 3.6f;
@@ -348,10 +368,10 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
         int kmh10 = (int) (kmh * 10.0f);
         if (kmh >= 20)
         {
-            return [self getFormattedSpeed: (int) kmh10 / 10.0f unit:_unitsKmh];
+            return [self getFormattedSpeed:(int) kmh10 / 10.0f unit:_unitsKmh valueUnitArray:valueUnitArray];
         }
         // calculate 2.0 km/h instead of 2 km/h in order to not stress UI text lengh
-        return [self getFormattedLowSpeed:kmh10 / 10.0f unit:_unitsKmh];
+        return [self getFormattedLowSpeed:kmh10 / 10.0f unit:_unitsKmh valueUnitArray:valueUnitArray];
     }
     else if ([settings.speedSystem get] == MILES_PER_HOUR)
     {
@@ -359,9 +379,9 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
         int mph10 = (int) (mph * 10.0f);
         if (mph >= 20)
         {
-            return [self getFormattedSpeed:mph10 / 10.0f unit:_unitsMph];
+            return [self getFormattedSpeed:mph10 / 10.0f unit:_unitsMph valueUnitArray:valueUnitArray];
         }
-        return [self getFormattedLowSpeed:mph10 / 10.0f unit:_unitsMph];
+        return [self getFormattedLowSpeed:mph10 / 10.0f unit:_unitsMph valueUnitArray:valueUnitArray];
     }
     else if ([settings.speedSystem get] == NAUTICALMILES_PER_HOUR)
     {
@@ -369,67 +389,83 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
         int mph10 = (int) (mph * 10.0f);
         if (mph >= 20)
         {
-            return [self getFormattedSpeed:mph10 / 10.0f unit:_unitsNm];
+            return [self getFormattedSpeed:mph10 / 10.0f unit:_unitsNm valueUnitArray:valueUnitArray];
         }
-        return [self getFormattedLowSpeed:mph10 / 10.0f unit:_unitsNm];
+        return [self getFormattedLowSpeed:mph10 / 10.0f unit:_unitsNm valueUnitArray:valueUnitArray];
     }
     else if ([settings.speedSystem get] == MINUTES_PER_KILOMETER)
     {
         if (metersperseconds < 0.111111111)
         {
+            [valueUnitArray addObject:@"-"];
+            [valueUnitArray addObject:_unitsMinKm];
             return [OAUtilities getFormattedValue:@"-" unit:_unitsMinKm];
         }
         float minPerKm = METERS_IN_KILOMETER / (METERS_PER_SECOND * 60);
         if (minPerKm >= 10)
         {
-            return [self getFormattedSpeed:minPerKm unit:_unitsMinKm];
+            return [self getFormattedSpeed:minPerKm unit:_unitsMinKm valueUnitArray:valueUnitArray];
         }
         else
         {
             int seconds = round(minPerKm * 60);
-            return [OAUtilities getFormattedValue:[self getFormattedTimeInterval:seconds withUnit:NO] unit:_unitsMinKm];
+            NSString *value = [self getFormattedTimeInterval:seconds withUnit:NO];
+            [valueUnitArray addObject:value];
+            [valueUnitArray addObject:_unitsMinKm];
+            return [OAUtilities getFormattedValue:value unit:_unitsMinKm];
         }
     }
     else if ([settings.speedSystem get] == MINUTES_PER_MILE)
     {
         if (metersperseconds < 0.111111111)
         {
+            [valueUnitArray addObject:@"-"];
+            [valueUnitArray addObject:_unitsMinMi];
             return [OAUtilities getFormattedValue:@"-" unit:_unitsMinMi];
         }
         float minPerM = (METERS_IN_ONE_MILE) / (metersperseconds * 60);
         if (minPerM >= 10)
         {
             int rounded = round(minPerM);
-            return [self getFormattedSpeed:rounded unit:_unitsMinMi];
+            return [self getFormattedSpeed:rounded unit:_unitsMinMi valueUnitArray:valueUnitArray];
         }
         else
         {
             int mph10 = round(minPerM * 10.0f);
-            return [self getFormattedLowSpeed: mph10/10.0f unit:_unitsMinMi];
+            return [self getFormattedLowSpeed: mph10/10.0f unit:_unitsMinMi valueUnitArray:valueUnitArray];
         }
     }
     else
     {
         if (metersperseconds >= 10)
         {
-            return [self getFormattedSpeed:metersperseconds unit:_unitsmps];
+            return [self getFormattedSpeed:metersperseconds unit:_unitsmps valueUnitArray:valueUnitArray];
         }
         // for smaller values display 1 decimal digit x.y km/h, (0.5% precision at 20 km/h)
         int kmh10 = round(metersperseconds * 10.0f);
-        return [self getFormattedLowSpeed:kmh10 / 10.0f unit:_unitsmps];
+        return [self getFormattedLowSpeed:kmh10 / 10.0f unit:_unitsmps valueUnitArray:valueUnitArray];
     }
 }
 
-+ (NSString *) getFormattedSpeed:(float) speed unit:(NSString*) unit
++ (NSString *)getFormattedSpeed:(float)speed unit:(NSString *)unit valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
+{
+    return [self formatValue:speed unit:unit forceTrailingZeroes:false decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
+}
+
++ (NSString *)getFormattedSpeed:(float) speed unit:(NSString*) unit
 {
     return [self formatValue:speed unit:unit forceTrailingZeroes:false decimalPlacesNumber:0];
 }
 
-+ (NSString *) getFormattedLowSpeed:(float) speed unit:(NSString*) unit
++ (NSString *)getFormattedLowSpeed:(float) speed unit:(NSString*) unit
 {
-    return [self formatValue:speed unit:unit forceTrailingZeroes:false decimalPlacesNumber:1];
+    return [self formatValue:speed unit:unit forceTrailingZeroes:false decimalPlacesNumber:1 valueUnitArray:nil];
 }
 
++ (NSString *)getFormattedLowSpeed:(float)speed unit:(NSString *)unit valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
+{
+    return [self formatValue:speed unit:unit forceTrailingZeroes:false decimalPlacesNumber:1 valueUnitArray:valueUnitArray];
+}
 
 + (double) calculateRoundedDist:(double)baseMetersDist
 {

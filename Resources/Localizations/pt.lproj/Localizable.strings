@@ -3032,7 +3032,6 @@
 "shared_string_discard" = "Descartar";
 "weather_update_parameters_disabled" = "As atualizações automáticas serão desativadas.";
 "map_widget_camera_distance_desc" = "Mostra a elevação da câmara acima do nível da superfície.";
-"map_settings_topography" = "Topografia";
 "auto_update" = "Atualização automática";
 "specify_number_of_dir_indicators_desc" = "Especifique o número de indicadores de direção.";
 "weather_update_over_any_network" = "Em qualquer rede";

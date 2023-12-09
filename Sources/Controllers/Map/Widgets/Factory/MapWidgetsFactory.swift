@@ -103,8 +103,8 @@ class MapWidgetsFactory: NSObject {
             return OASunriseSunsetWidget(state: sunsetState)
         case .elevationProfile:
             return /*ElevationProfileWidget(mapActivity: mapActivity)*/nil
-        case .heartRate, .bicycleCadence, .bicyclePower, .bicycleDistance, .bicycleSpeed, .temperature:
-            return SensorTextWidget(customId: customId, widgetType: .heartRate, widgetParams: widgetParams)
+        case .heartRate, .bicycleCadence, .bicycleDistance, .bicycleSpeed, .temperature:
+            return SensorTextWidget(customId: customId, widgetType: .heartRate, appMode: OAAppSettings.sharedManager().applicationMode.get(), widgetParams: widgetParams)
         default:
             return OAPlugin.createMapWidget(widgetType, customId: customId)
         }

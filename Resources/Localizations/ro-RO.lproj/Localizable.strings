@@ -2014,7 +2014,7 @@
 "added_profiles" = "Profiluri adăugate";
 "suggested_maps_descr" = "Aceste hărți sunt necesare pentru plugin.";
 "suggested_maps" = "Hărți sugerate";
-"welmode_download_maps" = "Descărcarcare hărți";
+"welmode_download_maps" = "Descărcare hărți";
 "shared_strings_all_regions" = "Toate regiunile";
 "routes_color_by_type" = "Colorează rutele după…";
 "rendering_value_walkingRoutesOSMC_description" = "Colorează rutele în funcție de culoarea lor locală individuală (dacă este prezentă pe OpenStreetMap) și de simbolul marcajului turistic.";
@@ -3019,7 +3019,6 @@
 // Shared Strings
 "shared_string_discard" = "Renunță";
 "weather_update_parameters_disabled" = "Actualizarea automată va fi dezactivată.";
-"map_settings_topography" = "Topografie";
 "auto_update" = "Actualizare automată";
 "specify_number_of_dir_indicators_desc" = "Specificați numărul de indicatori de direcție.";
 "weather_update_over_any_network" = "Prin orice rețea";

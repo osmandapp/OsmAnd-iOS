@@ -3025,7 +3025,6 @@
 "auto_update" = "Actualización automática";
 "weather_update_over_any_network" = "En cualquier red";
 "weather_update_parameters_any_network" = "La previsión meteorológica se actualizará a través de cualquier red. Se pueden utilizar los datos móviles.";
-"map_settings_topography" = "Topografía";
 "click_on_widget" = "Haz clic en el widget";
 "shared_string_cache" = "Cache";
 "unsaved_changes_will_be_lost_discard" = "Cualquier cambio no guardado se perderá. ¿Descartar los cambios?";
@@ -3157,3 +3156,7 @@
 "shared_string_temperature" = "Temperatura";
 "external_device_unpair_description" = "Conecta el sensor a tu dispositivo para obtener información.";
 "external_device_details_information" = "Información";
+"external_device_any_connected" = "Cualquiera conectado";
+"shared_string_data_type" = "Tipo de datos";
+"external_device_characteristic_stride_length" = "Longitud del paso";
+"write_data_from_sensor_to_track" = "Escribe los datos de los sensores externos a GPX durante la grabación del viaje.";

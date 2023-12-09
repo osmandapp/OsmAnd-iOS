@@ -238,6 +238,11 @@
     [[OAMapViewTrackingUtilities instance] backToLocationImpl];
 }
 
+- (void)on3DMapPressed
+{
+    [[OAMapViewTrackingUtilities instance] switchMap3dMode];
+}
+
 - (void)centerMapOnRoute:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
 {
     CGSize screenBBox = self.view.frame.size;

@@ -3036,7 +3036,6 @@
 "auto_update" = "Автооновлення";
 "weather_update_over_any_network" = "Через будь-яку мережу";
 "weather_update_parameters_any_network" = "Прогноз погоди оновлюватиметься через будь-яку мережу. Можна використовувати мобільні дані.";
-"map_settings_topography" = "Топографія";
 "click_on_widget" = "Натиснути віджет";
 "shared_string_cache" = "Кеш";
 "unsaved_changes_will_be_lost_discard" = "Усі незбережені зміни будуть втрачені. Відкинути зміни?";

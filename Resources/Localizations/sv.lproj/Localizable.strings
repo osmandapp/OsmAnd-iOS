@@ -2615,7 +2615,6 @@
 "recalc_angle_dialog_title" = "Minsta vinkel mellan min position och rutten";
 "get_osmand_cloud" = "Skaffa OsmAnd molntjänst";
 "routeInfo_horse_scale_description" = "Rendera stigar enligt svårighetsgrad för ridvägar";
-"map_settings_topography" = "Topografi";
 "ios_release_4_5" = "• Helt omdesignad widgetmiljö: ändra widgetposition, gruppering av sidor, lista över widgetar för vänster och höger panel\n• Ny design av konfigurationsskärm\n• Gratis säkerhetskopiering av favoriter, inställningar och OSM-redigeringar till OsmAnd Cloud\n• Tillagd \"CAI\"-skala för klassificering av leders svårighetsgrad\n• Insticksmodulen \"Höjdkurvor\" byter namn till \"Topografi\", med stöd för nya terrängkartformat\n• 3D relief tillagd\n• OAuth-autentisering för insticksmodulen OpenStreetMap-redigering\n• Särskild knapp för att växla mellan 2D och 3D-läge\n• Ändrad riktning av tilt-gester\n• Fixat problem med export av favoriter, som kunde leda till dataförlust\n";
 "true_bearing_widget_desc" = "Vinkeln mellan norr och målpunkten observerad från din position.";
 "navigation_points_desc" = "Navigationswidgetar aktiveras under navigering för att visa information som avstånd, ankomsttid, kommande svängar, bäring, aktuellt gatunamn, körfält, maxhastighet, ankommande varningar, ruttpunkter och intressepunkter.";

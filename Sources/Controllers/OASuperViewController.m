@@ -155,12 +155,17 @@
 
 #pragma mark - Actions
 
+- (void)dismissViewControllerWithAnimated:(BOOL)flag completion:(void (^ __nullable)(void))completion
+{
+    if ([self isModal] && self.navigationController.viewControllers.count == 1)
+        [self dismissViewControllerAnimated:flag completion:completion];
+    else
+        [self.navigationController popViewControllerAnimated:flag];
+}
+
 - (void)dismissViewController
 {
-    if ([self isModal])
-        [self dismissViewControllerAnimated:YES completion:nil];
-    else
-        [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerWithAnimated:YES completion:nil];
 }
 
 - (void)showViewController:(UIViewController *)viewController

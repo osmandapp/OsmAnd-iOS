@@ -100,6 +100,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OAMapSettingsTerrainParametersViewController.h"
+#import "OADiscountToolbarViewController.h"
 
 #import "OARouteKey.h"
 #import "OANetworkRouteSelectionTask.h"
@@ -973,8 +974,10 @@ typedef enum
 
 - (void) showTravelGuides
 {
-    OATravelExploreViewController *vc = [OATravelExploreViewController new];
-    [self.navigationController pushViewController:vc animated:YES];
+    if ([OAIAPHelper isPaidVersion])
+        [self.navigationController pushViewController:[OATravelExploreViewController new] animated:YES];
+    else
+        [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.WIKIVOYAGE navController:[OARootViewController instance].navigationController];
 }
 
 - (void) showRoutePreferences
@@ -3395,6 +3398,11 @@ typedef enum
 {
     OAToolbarViewController *toolbar = [self getTopToolbar];
     return toolbar && [toolbar isKindOfClass:OASearchToolbarViewController.class];
+}
+
+- (BOOL)isTopToolbarDiscountVisible
+{
+    return [[self getTopToolbar] isKindOfClass:OADiscountToolbarViewController.class];
 }
 
 - (BOOL) isTargetMapRulerNeeds

@@ -60,7 +60,7 @@
     NSString *key;
     NSString *id = [NSString stringWithUTF8String:_routingParameter.id.c_str()];
     if ([id isEqualToString:kRouteParamIdHeightObstacles])
-        key = @"shared_string_any";
+        return OALocalizedString(@"shared_string_any");
     else
         key = [NSString stringWithFormat:@"routing_attr_%@_name", id];
     NSString *res = OALocalizedString(key);

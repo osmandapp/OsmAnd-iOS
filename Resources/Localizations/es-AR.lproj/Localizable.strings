@@ -3035,7 +3035,6 @@
 "auto_update" = "Actualización automática";
 "weather_update_over_any_network" = "Sobre cualquier red";
 "weather_update_parameters_any_network" = "El pronóstico del tiempo será actualizado sobre cualquier red. Pueden usarse los datos móviles.";
-"map_settings_topography" = "Topografía";
 "click_on_widget" = "Pulsar en el widget";
 "shared_string_cache" = "Caché";
 "unsaved_changes_will_be_lost_discard" = "Los cambios sin guardar se perderán. ¿Descartar cambios?";
@@ -3057,7 +3056,7 @@
 "shared_string_discard_changes" = "Descartar cambios";
 "article_has_no_points" = "El artículo no tiene puntos";
 "images" = "Imágenes";
-"shared_string_bookmark" = "Destacado";
+"shared_string_bookmark" = "Destacar";
 "image_cache" = "Almacén de imágenes";
 "download_images_settings_footer" = "La descarga de imágenes se encuentra activa sobre cualquier red, inclusive los datos móviles.";
 "travel_guides_search_placeholder" = "Buscar por país, ciudad o provincia";
@@ -3157,7 +3156,7 @@
 
 //"device_disconnected">%1$s disconnected"
 //"device_connected">%1$s connected"
-"running_scds_device_name" = "Ejecutando dispositivo";
+"running_scds_device_name" = "Dispositivo para «Correr»";
 "no_bt_permission" = "El permiso de Bluetooth está bloqueado";
 "shared_string_wrist" = "Muñeca";
 "ant_plus_searching_text_description" = "Acerca el dispositivo al sensor.\nDebes activar el sensor para que OsmAnd pueda encontrarlo.";
@@ -3167,3 +3166,7 @@
 "shared_string_temperature" = "Temperatura";
 "external_device_unpair_description" = "Conecta el sensor al dispositivo para obtener información.";
 "external_device_details_information" = "Información";
+"external_device_any_connected" = "Cualquiera conectado";
+"shared_string_data_type" = "Tipo de dato";
+"external_device_characteristic_stride_length" = "Longitud de zancada";
+"write_data_from_sensor_to_track" = "Escribir datos de sensores externos en el GPX mientras se graba el viaje.";

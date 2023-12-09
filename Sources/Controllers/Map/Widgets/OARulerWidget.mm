@@ -62,6 +62,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     double _maxRadius;
     double _roundedDist;
     
+    BOOL _firstUpdate;
     float _cachedViewportYScale;
     float _cachedViewportXScale;
     CGFloat _cachedWidth;
@@ -85,6 +86,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     OsmAnd::LatLon _cachedCenterLatLon;
     CGPoint _cachedCenter;
     NSMutableArray<NSString *> *_cacheDistances;
+    CGPoint _cachedCenter2;
 
     NSMutableArray<NSNumber *> *_degrees;
     NSArray<NSString *> *_cardinalDirections;
@@ -150,6 +152,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (void) commonInit
 {
+    _firstUpdate = YES;
     _settings = [OAAppSettings sharedManager];
     _app = [OsmAndApp instance];
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
@@ -214,6 +217,11 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     _northArrowColor = UIColor.redColor;
     _headingArrowColor = UIColor.blueColor;
     
+    [self updateCenterImageStyle];
+}
+
+- (void) updateCenterImageStyle
+{
     BOOL showLightCenterIcon;
     if (_cachedRulerMode == RULER_MODE_NO_CIRCLES)
         showLightCenterIcon = _settings.nightMode;
@@ -226,18 +234,21 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (void) drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
 {
+    if (![self rulerWidgetOn] || [_mapViewController getMapZoom] <= SHOW_RULER_MIN_ZOOM)
+        return;
+
     UIGraphicsPushContext(ctx);
     CGContextSaveGState(ctx);
 
-    if ([self rulerModeOn] && [_mapViewController getMapZoom] > SHOW_RULER_MIN_ZOOM)
+    CGPoint circleCenterPoint = [self getCenterPoint];
+    _imageView.center = circleCenterPoint;
+    if ([self rulerModeOn])
     {
         [self updateStyles];
-        CGPoint circleCenterPoint = [self getCenterPoint];
-        
+
         EOARulerWidgetMode mode = _settings.rulerMode.get;
         BOOL showCompass = _settings.showCompassControlRuler.get && [_mapViewController getMapZoom] > SHOW_COMPASS_MIN_ZOOM;
-        _imageView.center = circleCenterPoint;
-        
+
         if (mode == RULER_MODE_DARK || mode == RULER_MODE_LIGHT )
         {
             [self updateData:circleCenterPoint];
@@ -254,6 +265,11 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             }
         }
     }
+    else
+    {
+        [self updateCenterImageStyle];
+    }
+
     CGContextRestoreGState(ctx);
     UIGraphicsPopContext();
 }
@@ -689,10 +705,9 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (CGPoint) getCenterPoint
 {
-    auto circleCenterPos31 = [self getCenter31];
-    CGPoint circleCenterPoint;
-    [_mapViewController.mapView convert:&circleCenterPos31 toScreen:&circleCenterPoint checkOffScreen:YES];
-    return circleCenterPoint;
+    CGFloat screenScale = _mapViewController.displayDensityFactor;
+    auto centerPixel = _mapViewController.mapView.getCenterPixel;
+    return CGPointMake(centerPixel.x / screenScale, centerPixel.y / screenScale);
 }
 
 - (OsmAnd::LatLon) getCenterLatLon
@@ -761,7 +776,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     BOOL visible = [self rulerWidgetOn];
     if (visible)
     {
-        if (_cachedMapMode != _settings.nightMode)
+        if (_firstUpdate || _cachedMapMode != _settings.nightMode)
         {
             _imageView.image = _settings.nightMode ? _centerIconNight : _centerIconDay;
             _cachedMapMode = _settings.nightMode;
@@ -769,22 +784,24 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         
         OAMapRendererView *mapRendererView = _mapViewController.mapView;
         visible = [_mapViewController calculateMapRuler] != 0
-        && !_mapViewController.zoomingByGesture
-        && !_mapViewController.rotatingByGesture;
-        
+            && !_mapViewController.zoomingByGesture
+            && !_mapViewController.rotatingByGesture;
+
         CGSize viewSize = self.bounds.size;
         float viewportYScale = mapRendererView.viewportYScale;
         float viewportXScale = mapRendererView.viewportXScale;
-        BOOL centerChanged = _cachedViewportYScale != viewportYScale
-        || _cachedViewportXScale != viewportXScale
-        || _cachedWidth != viewSize.width
-        || _cachedHeight != viewSize.height;
-        if (centerChanged) {
-            [self changeCenter];
-        }
-        
+        BOOL viewportChanged = _cachedViewportYScale != viewportYScale
+            || _cachedViewportXScale != viewportXScale
+            || _cachedWidth != viewSize.width
+            || _cachedHeight != viewSize.height;
+
+        CGPoint centerPoint = [self getCenterPoint];
+        BOOL centerChanged = !CGPointEqualToPoint(_cachedCenter2, centerPoint);
+		if (centerChanged)
+            [self updateCenterImage];
+
         BOOL modeChanged = _cachedRulerMode != _settings.rulerMode.get;
-        if ((visible && _cachedRulerMode != RULER_MODE_NO_CIRCLES) || modeChanged)
+        if (_firstUpdate || (visible && _cachedRulerMode != RULER_MODE_NO_CIRCLES) || centerChanged || viewportChanged || modeChanged)
         {
             _cachedMapDensity = mapRendererView.currentPixelsToMetersScaleFactor;
             double fullMapScale = _cachedMapDensity * kMapRulerMaxWidth * [[UIScreen mainScreen] scale];
@@ -808,9 +825,9 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             BOOL wasElevated = abs(_cachedMapElevation - _mapViewController.mapView.elevationAngle) > ELEVATION_UPDATING_THRESHOLD;
 
             double oneFrameTime = 1.0 / FRAMES_PER_SECOND;
-            BOOL wasUpdatedRecently = ([[NSDate date] timeIntervalSince1970] - _cachedTimestamp) < oneFrameTime;
+            BOOL wasUpdatedRecently = ([[NSDate date] timeIntervalSince1970] - _cachedTimestamp) < oneFrameTime && !modeChanged;
 
-            BOOL mapMoved = (wasTargetChanged || centerChanged
+            BOOL mapMoved = (wasTargetChanged || centerChanged || viewportChanged
                              || _cachedWidth != viewSize.width
                              || wasElevated
                              || wasRotated
@@ -822,6 +839,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             BOOL headingChanged = abs(int(_cachedHeading) - int(heading)) >= ARROW_ROTATION_UPDATING_THRESHOLD;
             BOOL shouldUpdateCompass = compassVisible && headingChanged;
             
+            _cachedCenter2 = centerPoint;
             _cachedWidth = viewSize.width;
             _cachedHeight = viewSize.height;
             _cachedHeading = heading;
@@ -834,13 +852,13 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             _radius = (_mapScale / _cachedMapDensity) / [[UIScreen mainScreen] scale];
             _maxRadius = [self calculateMaxRadiusInPx];
             
-             _needUpdate |= mapMoved || shouldUpdateCompass;
-            
+             _needUpdate |= _firstUpdate || mapMoved || shouldUpdateCompass;
             if (_needUpdate && !wasUpdatedRecently)
             {
                 _needUpdate = NO;
                 [self setNeedsDisplay];
             }
+            _firstUpdate = NO;
         }
         _cachedRulerMode = _settings.rulerMode.get;
     }
@@ -860,7 +878,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     [super drawRect:rect];
 }
 
-- (void) changeCenter
+- (void) updateCenterImage
 {
     CGPoint circleCenterPoint = [self getCenterPoint];
     _imageView.center = circleCenterPoint;

@@ -22,22 +22,22 @@
                                 <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="СhoicePairedDeviceTableViewCell" rowHeight="72" id="Yd8-ua-sXd" customClass="СhoicePairedDeviceTableViewCell" customModule="OsmAnd_Maps" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="393" height="72"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="СhoicePairedDeviceTableViewCell" rowHeight="73" id="Yd8-ua-sXd" customClass="СhoicePairedDeviceTableViewCell" customModule="OsmAnd_Maps" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="73"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Yd8-ua-sXd" id="7EY-BS-epS">
-                                            <rect key="frame" x="0.0" y="0.0" width="362.66666666666669" height="72"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="362.66666666666669" height="73"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pu1-Zc-sYK">
-                                                    <rect key="frame" x="20" y="21" width="30" height="30"/>
+                                                    <rect key="frame" x="20" y="21.666666666666671" width="30" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="30" id="Jhp-YX-1up"/>
                                                         <constraint firstAttribute="height" constant="30" id="yXr-ms-2ZS"/>
                                                     </constraints>
                                                 </imageView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="top" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="mtf-4U-yJJ">
-                                                    <rect key="frame" x="66" y="15.000000000000004" width="280.66666666666669" height="42.333333333333343"/>
+                                                    <rect key="frame" x="66" y="15.333333333333332" width="280.66666666666669" height="42.333333333333343"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Upper label Wahoo SPEED 7D64" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AEq-5T-lTq">
                                                             <rect key="frame" x="0.0" y="0.0" width="248" height="20.333333333333332"/>
@@ -46,7 +46,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="tJV-IS-ybh">
-                                                            <rect key="frame" x="0.0" y="22.333333333333336" width="106.66666666666667" height="20"/>
+                                                            <rect key="frame" x="0.0" y="22.333333333333329" width="106.66666666666667" height="20"/>
                                                             <subviews>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iZT-W0-cYw">
                                                                     <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
@@ -89,85 +89,17 @@
                                     <outlet property="delegate" destination="Y6W-OH-hqX" id="8hD-Xh-Dtp"/>
                                 </connections>
                             </tableView>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0CC-JR-udU" userLabel="EmptySearchView">
-                                <rect key="frame" x="0.0" y="89" width="393" height="763"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_sensor_find" translatesAutoresizingMaskIntoConstraints="NO" id="BG1-XI-54j">
-                                        <rect key="frame" x="166.66666666666666" y="20" width="60" height="60"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="60" id="Agv-AX-78x"/>
-                                            <constraint firstAttribute="height" constant="60" id="cYh-JG-Y1F"/>
-                                        </constraints>
-                                    </imageView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="LBl-CZ-jEX">
-                                        <rect key="frame" x="30" y="100" width="333" height="44.333333333333343"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="“Speed” sensors not found" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sS0-il-92C">
-                                                <rect key="frame" x="64.000000000000014" y="0.0" width="205.33333333333337" height="20.333333333333332"/>
-                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                <color key="textColor" name="textColorPrimary"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="There are no connected sensors of this type" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AKm-Ap-dPD" userLabel="Make sure: – Bluetooth is turned on – Sensor is activated – This device is located near sensor">
-                                                <rect key="frame" x="15.333333333333343" y="26.333333333333343" width="302.33333333333326" height="18"/>
-                                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                                <color key="textColor" name="textColorSecondary"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                    </stackView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5ja-14-ERn">
-                                        <rect key="frame" x="39" y="164.33333333333334" width="315" height="44"/>
-                                        <color key="backgroundColor" name="buttonBgColorTertiary"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="44" id="65o-3Z-ei4"/>
-                                            <constraint firstAttribute="width" constant="315" id="pBh-nW-6qt"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="Pair new sensor">
-                                            <color key="titleColor" name="textColorActive"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="9"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="onPairNewSensorButtonPressed:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="b45-Ek-8mC"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstItem="BG1-XI-54j" firstAttribute="top" secondItem="0CC-JR-udU" secondAttribute="top" constant="20" id="QTP-yC-JLK"/>
-                                    <constraint firstItem="5ja-14-ERn" firstAttribute="top" secondItem="LBl-CZ-jEX" secondAttribute="bottom" constant="20" id="Ukg-Xk-lhj"/>
-                                    <constraint firstItem="LBl-CZ-jEX" firstAttribute="leading" secondItem="0CC-JR-udU" secondAttribute="leading" constant="30" id="cmJ-H5-HuY"/>
-                                    <constraint firstAttribute="trailing" secondItem="LBl-CZ-jEX" secondAttribute="trailing" constant="30" id="fSZ-LG-COE"/>
-                                    <constraint firstItem="5ja-14-ERn" firstAttribute="centerX" secondItem="0CC-JR-udU" secondAttribute="centerX" id="gTZ-dE-Yon"/>
-                                    <constraint firstItem="BG1-XI-54j" firstAttribute="centerX" secondItem="0CC-JR-udU" secondAttribute="centerX" id="gxr-gY-MeW"/>
-                                    <constraint firstItem="LBl-CZ-jEX" firstAttribute="top" secondItem="BG1-XI-54j" secondAttribute="bottom" constant="20" id="pu4-QV-RsI"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="mCI-RG-lED" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="80p-3P-w80"/>
-                            <constraint firstAttribute="bottom" secondItem="0CC-JR-udU" secondAttribute="bottom" id="EsT-Aq-1j9"/>
                             <constraint firstAttribute="trailing" secondItem="mCI-RG-lED" secondAttribute="trailing" id="HMZ-ML-0K1"/>
-                            <constraint firstItem="0CC-JR-udU" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="30" id="HUu-br-2wO"/>
-                            <constraint firstAttribute="trailing" secondItem="0CC-JR-udU" secondAttribute="trailing" id="YfC-km-gIY"/>
                             <constraint firstItem="mCI-RG-lED" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="cvn-ae-Pnk"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="mCI-RG-lED" secondAttribute="bottom" id="kQn-Gp-mko"/>
-                            <constraint firstItem="0CC-JR-udU" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="q3c-DY-Xhe"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="emptyView" destination="0CC-JR-udU" id="hpu-Z1-d4V"/>
-                        <outlet property="pairNewSensorButton" destination="5ja-14-ERn" id="WOM-fY-XFI"/>
-                        <outlet property="searchingDescription" destination="AKm-Ap-dPD" id="eTz-1o-qxL"/>
-                        <outlet property="searchingTitle" destination="sS0-il-92C" id="S9Y-cJ-5cb"/>
                         <outlet property="tableView" destination="mCI-RG-lED" id="Jc6-Od-pCV"/>
                     </connections>
                 </viewController>
@@ -177,15 +109,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_custom_sensor_find" width="49" height="48"/>
         <namedColor name="active">
             <color red="0.32899999618530273" green="0.32400000095367432" blue="0.4779999852180481" alpha="0.33000001311302185" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="buttonBgColorTertiary">
-            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="0.15000000596046448" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="textColorActive">
-            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

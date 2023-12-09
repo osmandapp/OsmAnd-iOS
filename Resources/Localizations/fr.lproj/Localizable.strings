@@ -3026,7 +3026,6 @@
 "auto_update" = "Mettre à jour automatiquement";
 "weather_update_over_any_network" = "Sur n'importe quel réseau";
 "weather_update_parameters_any_network" = "Les prévisions météo seront mises à jour sur n'importe quel réseau. Les données mobiles peuvent être utilisées.";
-"map_settings_topography" = "Topographie";
 "click_on_widget" = "Cliquer sur le gadget";
 "shared_string_cache" = "Cache";
 "unsaved_changes_will_be_lost_discard" = "Toutes les modifications non enregistrées seront perdues. Abandonner les modifications ?";
@@ -3158,3 +3157,4 @@
 "shared_string_view" = "Afficher";
 "external_device_unpair_description" = "Connectez le capteur à votre téléphone pour obtenir les informations.";
 "external_device_details_information" = "Information";
+"external_device_any_connected" = "N'importe quel appareil connecté";

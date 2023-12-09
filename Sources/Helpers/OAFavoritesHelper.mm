@@ -351,7 +351,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
 
 + (NSArray<OAFavoriteItem *> *) getFavoriteItems
 {
-    return _cachedFavoritePoints;
+    return [_cachedFavoritePoints copy];
 }
 
 + (OAFavoriteItem *) getVisibleFavByLat:(double)lat lon:(double)lon
@@ -933,7 +933,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
     while (fl)
     {
         fl = NO;
-        for (OAFavoriteItem *fp in [self getFavoriteItems])
+        for (OAFavoriteItem *fp in _cachedFavoritePoints)
         {
             if ([[fp getName] isEqualToString:name]
                     && [[fp getCategory] isEqualToString:[point getCategory]])
@@ -982,7 +982,39 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
 + (void) addParkingReminderToCalendar
 {
     EKEventStore *eventStore = [[EKEventStore alloc] init];
-    [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+    
+    void (^createEvent)(void) = ^{
+        EKEvent *event = [EKEvent eventWithEventStore:eventStore];
+        event.title = OALocalizedString(@"pickup_car");
+        
+        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+        if (plugin)
+        {
+            if (plugin.getEventIdentifier)
+                [self.class removeParkingReminderFromCalendar];
+            
+            NSDate *pickupDate = [NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000];
+            event.startDate = pickupDate;
+            event.endDate = pickupDate;
+            
+            [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 5.0]];
+            [event setCalendar:[eventStore defaultCalendarForNewEvents]];
+            NSError *err;
+            [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
+            if (err)
+            {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:err.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+                [UIApplication.sharedApplication.mainWindow.rootViewController presentViewController:alert animated:YES completion:nil];
+            }
+            else
+            {
+                [plugin setEventIdentifier:[event.eventIdentifier copy]];
+            }
+        }
+    };
+    
+    void (^requestAccessCompletionHandler)(BOOL, NSError *) = ^(BOOL granted, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error)
             {
@@ -998,35 +1030,15 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
             }
             else
             {
-                EKEvent *event = [EKEvent eventWithEventStore:eventStore];
-                event.title = OALocalizedString(@"pickup_car");
-                
-                OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *) [OAPlugin getPlugin:OAParkingPositionPlugin.class];
-                if (plugin)
-                {
-                    if (plugin.getEventIdentifier)
-                        [self.class removeParkingReminderFromCalendar];
-                    NSDate *pickupDate = [NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000];
-                    event.startDate = pickupDate;
-                    event.endDate = pickupDate;
-                    
-                    [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 5.0]];
-                    
-                    [event setCalendar:[eventStore defaultCalendarForNewEvents]];
-                    NSError *err;
-                    [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
-                    if (err)
-                    {
-                        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-                        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-                        [UIApplication.sharedApplication.mainWindow.rootViewController presentViewController:alert animated:YES completion:nil];
-                    }
-                    else
-                        [plugin setEventIdentifier:[event.eventIdentifier copy]];
-                }
+                createEvent();
             }
         });
-    }];
+    };
+    
+    if (@available(iOS 17.0, *))
+        [eventStore requestWriteOnlyAccessToEventsWithCompletion:requestAccessCompletionHandler];
+    else
+        [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:requestAccessCompletionHandler];
 }
 
 + (void) removeParkingReminderFromCalendar
@@ -1069,7 +1081,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
 
 + (BOOL) hasFavoriteAt:(CLLocationCoordinate2D)location
 {
-    for (OAFavoriteItem *item in [self getFavoriteItems])
+    for (OAFavoriteItem *item in _cachedFavoritePoints)
     {
         double lon = OsmAnd::Utilities::get31LongitudeX(item.favorite->getPosition31().x);
         double lat = OsmAnd::Utilities::get31LatitudeY(item.favorite->getPosition31().y);

@@ -26,6 +26,7 @@
 - (void)onLeftNavbarButtonPressed;
 - (void)onContentSizeChanged:(NSNotification *)notification;
 
+- (void)dismissViewControllerWithAnimated:(BOOL)flag completion:(void (^ __nullable)(void))completion;
 - (void)dismissViewController;
 - (void)showViewController:(UIViewController *)viewController;
 - (void)showModalViewController:(UIViewController *)viewController;

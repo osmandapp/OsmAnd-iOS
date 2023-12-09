@@ -11,6 +11,4 @@
 
 @interface OARulerWidget : OABaseWidgetView <UIGestureRecognizerDelegate>
 
-- (void) onMapSourceUpdated;
-
 @end

@@ -3161,6 +3161,6 @@
 "shared_string_any" = "N'importe";
 "shared_string_data_type" = "Type de données";
 "external_device_characteristic_stride_length" = "Longueur de la foulée";
-"write_data_from_sensor_to_track" = "Écrire des données des capteurs externes vers les GPX pendant l'enregistrement de traces.";
+"write_data_from_sensor_to_track" = "Stocker les données des capteurs externes dans le fichier GPX lors de l'enregistrement de traces.";
 "offline_wikivoyage" = "Wikivoyage hors-ligne";
 "map_settings_topography" = "Courbes de niveau";

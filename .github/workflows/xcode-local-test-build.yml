@@ -112,7 +112,7 @@ jobs:
             -workspace ios/OsmAnd.xcworkspace
             -scheme "OsmAnd Maps Release"
             -sdk iphoneos
-            -configuration release
+            -configuration Release
             CURRENT_PROJECT_VERSION="${RELEASE_IOS_VERSION}.${BUILD_IOS_VERSION}"
             MARKETING_VERSION="${RELEASE_IOS_VERSION}"
             CODE_SIGN_IDENTITY="iPhone Distribution"

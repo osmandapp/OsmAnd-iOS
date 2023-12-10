@@ -1,4 +1,4 @@
-name: Build OsmAndMaps (self hosted)
+name: Build OsmAndMaps (self hosted test)
 # on:
 #  push:
 #    branches: [ master ]
@@ -112,37 +112,31 @@ jobs:
             -workspace ios/OsmAnd.xcworkspace
             -scheme "OsmAnd Maps Release"
             -sdk iphoneos
-            -configuration AppStoreDistribution
-            -archivePath OsmAndMaps.xcarchive
+            -configuration release
             CURRENT_PROJECT_VERSION="${RELEASE_IOS_VERSION}.${BUILD_IOS_VERSION}"
             MARKETING_VERSION="${RELEASE_IOS_VERSION}"
             CODE_SIGN_IDENTITY="iPhone Distribution"
-            PROVISIONING_PROFILE_SPECIFIER="Github Build"
-            archive | xcpretty'
-    - name: Zip iOS archive
-      run: 'zip -r OsmAndMaps.xcarchive.zip OsmAndMaps.xcarchive'
-    - name: Upload maps archive zip
-      uses: actions/upload-artifact@v2
-      with:
-         name: OsmAndMaps-${{ github.event.inputs.releaseversion }}.${{ github.event.inputs.buildversion }}.xcarchive.zip
-         path: OsmAndMaps.xcarchive.zip
-    # - name: Download iOS archive
-    #   run: 'wget "https://builder.osmand.net/binaries/ios/OsmAndMaps.xcarchive.zip" -O OsmAndMaps.xcarchive.zip'
-    # - name: Unzip iOS archive
-    #   run: 'unzip OsmAndMaps.xcarchive.zip'  
-    - name: Export iOS archive
-      run: 'xcodebuild -archivePath OsmAndMaps.xcarchive 
-            -exportOptionsPlist ios/exportOptions.plist 
-            -exportPath . 
-            -allowProvisioningUpdates 
-            -exportArchive' 
-    - name: Upload maps archive
-      uses: actions/upload-artifact@v2
-      with:
-        name: OsmAndMaps-${{ github.event.inputs.releaseversion }}.${{ github.event.inputs.buildversion }}.ipa
-        path: 'OsmAnd Maps.ipa'
-    - name: Publish TestFlight
-      env:
-        APPLEID_USERNAME: ${{ secrets.APPLEID_USERNAME }}
-        APPLEID_PASSWORD: ${{ secrets.APPLEID_PASSWORD }}
-      run: 'xcrun altool --upload-app -t ios -f "OsmAnd Maps.ipa" -u "$APPLEID_USERNAME" -p "$APPLEID_PASSWORD" --verbose'
+            PROVISIONING_PROFILE_SPECIFIER="Github Build" | xcpretty'
+    #- name: Zip iOS archive
+    #  run: 'zip -r OsmAndMaps.xcarchive.zip OsmAndMaps.xcarchive'
+    #- name: Upload maps archive zip
+    #  uses: actions/upload-artifact@v2
+    #  with:
+    #     name: OsmAndMaps-${{ github.event.inputs.releaseversion }}.${{ github.event.inputs.buildversion }}.xcarchive.zip
+    #     path: OsmAndMaps.xcarchive.zip
+    #- name: Export iOS archive
+    #  run: 'xcodebuild -archivePath OsmAndMaps.xcarchive 
+    #        -exportOptionsPlist ios/exportOptions.plist 
+    #        -exportPath . 
+    #        -allowProvisioningUpdates 
+    #        -exportArchive' 
+    #- name: Upload maps archive
+    #  uses: actions/upload-artifact@v2
+    #  with:
+    #    name: OsmAndMaps-${{ github.event.inputs.releaseversion }}.${{ github.event.inputs.buildversion }}.ipa
+    #    path: 'OsmAnd Maps.ipa'
+    #- name: Publish TestFlight
+    #  env:
+    #    APPLEID_USERNAME: ${{ secrets.APPLEID_USERNAME }}
+    #    APPLEID_PASSWORD: ${{ secrets.APPLEID_PASSWORD }}
+    #  run: 'xcrun altool --upload-app -t ios -f "OsmAnd Maps.ipa" -u "$APPLEID_USERNAME" -p "$APPLEID_PASSWORD" --verbose'

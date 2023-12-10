@@ -96,6 +96,10 @@ jobs:
     #    PASSWORD_KEYCHAIN_EXPORT: ${{ secrets.PASSWORD_KEYCHAIN_EXPORT }}
     #  run: .github/secrets/decrypt_secrets.sh
     #  working-directory: ios  
+    - name: Setup provisioning profile
+      env:
+        USER_KEY: ${{ secrets.USER_KEY }}
+      run: 'security unlock-keychain -p ${USER_KEY} ~/Library/Keychains/login.keychain-db'
     - name: Build QtCore & prepare build
       run: exec ios/prepare.sh #--sync_translations
     - name: Configure iOS OsmAndCore

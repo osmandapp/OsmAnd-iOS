@@ -60,6 +60,8 @@
 
 @interface OATargetInfoViewController() <OACollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
 
+@property (nonatomic) BOOL wikiCardsReady;
+
 @end
 
 @implementation OATargetInfoViewController
@@ -74,7 +76,6 @@
     
     OARowInfo *_nearbyImagesRowInfo;
     BOOL _otherCardsReady;
-    BOOL _wikiCardsReady;
 }
 
 - (void) setRows:(NSMutableArray<OARowInfo *> *)rows
@@ -499,7 +500,22 @@
 
 - (void)addOtherCards:(NSString *)imageTagContent mapillary:(NSString *)mapillaryTagContent cards:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
 {
-    NSString *urlString = [NSString stringWithFormat:@"https://osmand.net/api/cm_place?lat=%f&lon=%f", self.location.latitude, self.location.longitude];
+    CLLocation *myLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    NSString *preferredLang = [settings.settingPrefMapLanguage get];
+    if (!preferredLang)
+        preferredLang = [OAUtilities currentLang];
+
+    NSString *urlString = [NSString stringWithFormat:@"https://osmand.net/api/cm_place?lat=%f&lon=%f&app=%@",
+                           self.location.latitude,
+                           self.location.longitude,
+                           [OAIAPHelper isPaidVersion] ? @"paid" : @"free"];
+
+    if (preferredLang && preferredLang.length > 0)
+        urlString = [urlString stringByAppendingFormat:@"&lang=%@", preferredLang];
+    if (myLocation)
+        urlString = [urlString stringByAppendingFormat:@"&mloc=%f,%f", myLocation.coordinate.latitude, myLocation.coordinate.longitude];
+
     if (imageTagContent)
         urlString = [urlString stringByAppendingString:[NSString stringWithFormat:@"&osm_image=%@", imageTagContent]];
     if (mapillaryTagContent)
@@ -988,10 +1004,19 @@
         [cardsView setCards:@[[[OAImageCard alloc] initWithData:@{@"key": @"loading"}]]];
     }
 
-    [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_nearbyImagesRowInfo targetObj:self.getTargetObj addOtherImagesOnComplete:^(NSMutableArray <OAAbstractCard *> *cards) {
+    if ([OAPlugin isEnabled:OAWikipediaPlugin.class])
+    {
+        __weak OATargetInfoViewController *selfWeak = self;
+        [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_nearbyImagesRowInfo targetObj:self.getTargetObj addOtherImagesOnComplete:^(NSMutableArray <OAAbstractCard *> *cards) {
+            selfWeak.wikiCardsReady = YES;
+            [selfWeak sendNearbyOtherImagesRequest:cards];
+        }];
+    }
+    else
+    {
         _wikiCardsReady = YES;
-        [self sendNearbyOtherImagesRequest:cards];
-    }];
+        [self sendNearbyOtherImagesRequest:[NSMutableArray array]];
+    }
 }
 
 #pragma mark - OAEditDescriptionViewControllerDelegate

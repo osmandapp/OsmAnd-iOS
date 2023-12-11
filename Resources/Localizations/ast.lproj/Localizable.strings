@@ -2558,7 +2558,7 @@
 \ny enllaciar tolos datos con ella.";
 "sign_in_with_open_street_map" = "Aniciar sesión con OSM";
 "backup_restore_data" = "Restore data";
-"you_can_get_feature_as_part_of_pattern" = "Get“%@” as part of the %@ plan. Comparison:";
+"you_can_get_feature_as_part_of_pattern" = "Get “%@” as part of the %@ plan. Comparison:";
 "recalc_angle_dialog_title" = "L\'ángulu mínimu ente\'l mio allugamientu y el camín";
 "verification_code_missing" = "Nun recibí nengún códigu de verificación";
 "backup_delete_all_data_warning" = "Tas a piques de desaniciar tolos datos xubíos anteriormente a OsmAnd Cloud, incluyíu l\'historial de versiones.

@@ -3031,7 +3031,7 @@
 "purchases_feature_desc_terrain" = "Terrain contour lines, full hillshade map with dark shades and slope maps with colors to show peaks and lowlands.";
 "purchases_feature_desc_nautical" = "Get access to nautical depth information";
 "purchases_feature_weather" = "24h hourly forecast 7 days ahead coloured on the map";
-"you_can_get_feature_as_part_of_pattern" = "Get“%@” as part of the %@ plan. Comparison:";
+"you_can_get_feature_as_part_of_pattern" = "Get “%@” as part of the %@ plan. Comparison:";
 
 "monthly_subscription" = "Monthly subscription";
 "annual_subscription" = "Annual subscription";

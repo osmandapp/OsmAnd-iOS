@@ -31,7 +31,7 @@ final class TelegramChat: NSObject {
 }
 
 @objc enum HelperDataItems: Int {
-    case  popularArticles
+    case popularArticles
     case telegramChats
     
     var description: String {
@@ -71,7 +71,7 @@ final class MenuHelpDataService: NSObject {
         }
         
         URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-            guard let self = self else { return }
+            guard let self else { return }
             guard let data, error == nil else {
                 DispatchQueue.main.async {
                     completion(nil, error as NSError? ?? NSError(domain: "DataError", code: 1, userInfo: nil))
@@ -88,15 +88,17 @@ final class MenuHelpDataService: NSObject {
                     return
                 }
                 
-                DispatchQueue.main.async {
-                    switch dataItem {
-                    case .popularArticles:
-                        let articles = self.processPopularArticles(jsonData)
-                        self.popularArticles = articles
+                switch dataItem {
+                case .popularArticles:
+                    let articles = self.processPopularArticles(jsonData)
+                    self.popularArticles = articles
+                    DispatchQueue.main.async {
                         completion(articles as NSArray, nil)
-                    case .telegramChats:
-                        let chats = self.processTelegramChats(jsonData)
-                        self.telegramChats = chats
+                    }
+                case .telegramChats:
+                    let chats = self.processTelegramChats(jsonData)
+                    self.telegramChats = chats
+                    DispatchQueue.main.async {
                         completion(chats as NSArray, nil)
                     }
                 }

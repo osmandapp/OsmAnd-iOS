@@ -76,10 +76,10 @@ final class HelpDetailsViewController: OABaseNavbarViewController {
     
     private func loadAndParseJson() {
         MenuHelpDataService.shared.loadAndParseJson(from: kPopularArticlesAndTelegramChats, for: .telegramChats) { [weak self] result, error in
-            guard let self = self else { return }
+            guard let self else { return }
             
             if error != nil {
-                print(localizedString("osm_failed_uploads"))
+                debugPrint(error as Any)
             } else if let chats = result as? [TelegramChat] {
                 self.telegramChats = chats
                 self.generateTelegramChatsData()

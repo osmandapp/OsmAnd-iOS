@@ -15,7 +15,7 @@
 
 #include <OsmAndCore/Utilities.h>
 
-#define SLOPE_MIN_VALUE -0.25 // 25%
+#define SLOPE_MIN_VALUE -1.00 // -100%
 #define SLOPE_MAX_VALUE 1.0 // 100%
 
 #define DEFAULT_BASE 17.2
@@ -32,15 +32,17 @@
 #define ALPHA_COLOR_INDEX 4 //RGBA
 
 // Colors
-#define LIGHT_GRAY 0xFFC8C8C8
-#define GREEN 0xFF5ADC5F
-#define YELLOW 0xFFD4EF32
-#define RED 0xFFF3374D
-#define GREEN_SLOPE 0xFF2EB900
-#define WHITE 0xFFFFFFFF
-#define YELLOW_SLOPE 0xFFFFDE02
-#define RED_SLOPE 0xFFFF0101
-#define PURPLE_SLOPE 0xFF8201FF
+static const NSInteger _routeСolorLightGray = 0xFFC8C8C8;
+static const NSInteger _routeСolorGreen = 0xFF5ADC5F;
+static const NSInteger _routeСolorYellow = 0xFFD4EF32;
+static const NSInteger _routeСolorRed = 0xFFF3374D;
+static const NSInteger _routeСolorBlueSlope = 0xFF0000FF;
+static const NSInteger _routeСolorCyanSlope = 0xFF00FFFF;
+static const NSInteger _routeСolorGreenSlope = 0xFF2EB900;
+static const NSInteger _routeСolorWhite = 0xFFFFFFFF;
+static const NSInteger _routeСolorYellowSlope = 0xFFFFDE02;
+static const NSInteger _routeСolorRedSlope = 0xFFFF0101;
+static const NSInteger _routeСolorPurpleSlope = 0xFF8201FF;
 
 static NSArray<NSNumber *> *colors;
 static NSArray<NSNumber *> *slopeColors;
@@ -65,9 +67,9 @@ static NSArray<NSArray<NSNumber *> *> *slopePalette;
 {
     if (self == [OARouteColorizationHelper class])
     {
-        colors = @[@(GREEN), @(YELLOW), @(RED)];
-        slopeColors = @[@(GREEN_SLOPE), @(WHITE), @(YELLOW_SLOPE), @(RED_SLOPE), @(PURPLE_SLOPE)];
-        slopePalette = @[@[@(SLOPE_MIN_VALUE), @(GREEN_SLOPE)], @[@(0.0), @(WHITE)], @[@(0.125), @(YELLOW_SLOPE)], @[@(0.25), @(RED_SLOPE)], @[@(SLOPE_MAX_VALUE), @(PURPLE_SLOPE)]];
+        colors = @[@(_routeСolorGreen), @(_routeСolorYellow), @(_routeСolorRed)];
+        slopeColors = @[@(_routeСolorCyanSlope), @(_routeСolorGreenSlope), @(_routeСolorLightGray), @(_routeСolorYellowSlope), @(_routeСolorRedSlope)];
+        slopePalette = @[@[@(SLOPE_MIN_VALUE), @(_routeСolorBlueSlope)], @[@(-0.15), @(_routeСolorCyanSlope)], @[@(-0.05), @(_routeСolorGreenSlope)], @[@(0.0), @(_routeСolorLightGray)], @[@(0.05), @(_routeСolorYellowSlope)], @[@(0.15), @(_routeСolorRedSlope)], @[@(SLOPE_MAX_VALUE), @(_routeСolorPurpleSlope)]];
     }
 }
 
@@ -256,7 +258,7 @@ static NSArray<NSArray<NSNumber *> *> *slopePalette;
 - (OsmAnd::FColorARGB) getColorByValue:(double)value
 {
     if (isnan(value))
-        return OsmAnd::ColorARGB(LIGHT_GRAY);
+        return OsmAnd::ColorARGB(_routeСolorLightGray);
     
     for (int i = 0; i < _palette.count - 1; i++)
     {
@@ -427,7 +429,7 @@ static NSArray<NSArray<NSNumber *> *> *slopePalette;
     if (_colorizationType == EOAColorizationTypeSlope)
         return slopePalette;
     else
-        return @[@[@(_minValue), @(GREEN)], @[@((_minValue + _maxValue) / 2), @(YELLOW)], @[@(_maxValue), @(RED)]];
+        return @[@[@(_minValue), @(_routeСolorGreen)], @[@((_minValue + _maxValue) / 2), @(_routeСolorYellow)], @[@(_maxValue), @(_routeСolorRed)]];
 }
 
 

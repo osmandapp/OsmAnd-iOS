@@ -34,8 +34,17 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                 OARootViewController.instance()?.mapPanel.setMap(mapVC)
             }
             if let mapVC {
+                let settings: OAAppSettings = OAAppSettings.sharedManager()
+                let isRoutePlanning = OARoutingHelper.sharedInstance().isRoutePlanningMode()
+                let placement = settings.positionPlacementOnMap.get()
+                var y: Double
+                if placement == EOAPositionPlacement.auto.rawValue {
+                    y = settings.rotateMap.get() == ROTATE_MAP_BEARING && !isRoutePlanning ? 1.5 : 1.0
+                } else {
+                    y = placement == EOAPositionPlacement.center.rawValue || isRoutePlanning ? 1.0 : 1.5
+                }
                 let heightOffset = 1 - (window.frame.height / mapVC.view.frame.height)
-                mapVC.setViewportForCarPlayScaleX(1.0, y: 1.0 - heightOffset)
+                mapVC.setViewportForCarPlayScaleX(1.0, y: y - heightOffset)
                 dashboardVC = OACarPlayMapDashboardViewController(carPlay: mapVC)
                 dashboardVC?.attachMapToWindow()
                 self.window?.rootViewController = dashboardVC

@@ -135,6 +135,25 @@
 "coords_format_descr" = "Format for geographical coordinates.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
 "send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
+"send_log" = "Send log";
+"copy_build_version" = "Copy build version";
+"most_viewed" = "Most viewed";
+"user_guide" = "User guide";
+"map_widgets" = "Map Widgets";
+"my_data" = "My data";
+"plan_route" = "Plan route";
+"troubleshooting" = "Troubleshooting";
+"setup" = "Setup";
+"gitHub_discussion" = "GitHub Discussion";
+"telegram_chats" = "Telegram chats";
+"report_an_issues" = "Report an issues";
+"open_issue_on_gitHub" = "Open issue on GitHub";
+"about_osmAnd" = "About OsmAnd";
+"osmAnd_team" = "OsmAnd Team";
+"testFlight" = "TestFlight";
+"ask_question_propose_features" = "Ask question, propose features";
+"detailed_log_file" = "Detailed log file";
+"download_install_beta_version" = "Download and install beta version of OsmAnd";
 "rotate_map_to" = "Map orientation";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "Compass direction";
@@ -3012,7 +3031,7 @@
 "purchases_feature_desc_terrain" = "Terrain contour lines, full hillshade map with dark shades and slope maps with colors to show peaks and lowlands.";
 "purchases_feature_desc_nautical" = "Get access to nautical depth information";
 "purchases_feature_weather" = "24h hourly forecast 7 days ahead coloured on the map";
-"you_can_get_feature_as_part_of_pattern" = "Get“%@” as part of the %@ plan. Comparison:";
+"you_can_get_feature_as_part_of_pattern" = "Get “%@” as part of the %@ plan. Comparison:";
 
 "monthly_subscription" = "Monthly subscription";
 "annual_subscription" = "Annual subscription";

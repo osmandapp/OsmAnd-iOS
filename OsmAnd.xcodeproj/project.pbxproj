@@ -10,6 +10,7 @@
 		05028F792A12A12A003FECD0 /* color_slope.txt in Resources */ = {isa = PBXBuildFile; fileRef = 05028F762A12A12A003FECD0 /* color_slope.txt */; };
 		05028F7A2A12A12A003FECD0 /* hillshade_main.txt in Resources */ = {isa = PBXBuildFile; fileRef = 05028F772A12A12A003FECD0 /* hillshade_main.txt */; };
 		05028F7B2A12A12A003FECD0 /* slopes_main.txt in Resources */ = {isa = PBXBuildFile; fileRef = 05028F782A12A12A003FECD0 /* slopes_main.txt */; };
+		051177FF2B25A51A006B4774 /* OARouteRecalculationHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 051177FE2B25A51A006B4774 /* OARouteRecalculationHelper.mm */; };
 		0513AA382A9B530A00CFA2A0 /* OADestinationBarWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0513AA372A9B530A00CFA2A0 /* OADestinationBarWidget.mm */; };
 		05541D95299267900014AEF8 /* contourlines.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 05541D94299267900014AEF8 /* contourlines.addon.render.xml */; };
 		0575058E292D254500FEECD4 /* weather.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0575058D292D254500FEECD4 /* weather.addon.render.xml */; };
@@ -3525,6 +3526,8 @@
 		05028F762A12A12A003FECD0 /* color_slope.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = color_slope.txt; path = ../resources/heightmap/color_slope.txt; sourceTree = "<group>"; };
 		05028F772A12A12A003FECD0 /* hillshade_main.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = hillshade_main.txt; path = ../resources/heightmap/hillshade_main.txt; sourceTree = "<group>"; };
 		05028F782A12A12A003FECD0 /* slopes_main.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = slopes_main.txt; path = ../resources/heightmap/slopes_main.txt; sourceTree = "<group>"; };
+		051177FD2B25A51A006B4774 /* OARouteRecalculationHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARouteRecalculationHelper.h; sourceTree = "<group>"; };
+		051177FE2B25A51A006B4774 /* OARouteRecalculationHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteRecalculationHelper.mm; sourceTree = "<group>"; };
 		0513AA362A9B530A00CFA2A0 /* OADestinationBarWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADestinationBarWidget.h; sourceTree = "<group>"; };
 		0513AA372A9B530A00CFA2A0 /* OADestinationBarWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADestinationBarWidget.mm; sourceTree = "<group>"; };
 		05541D94299267900014AEF8 /* contourlines.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = contourlines.addon.render.xml; path = ../resources/rendering_styles/contourlines.addon.render.xml; sourceTree = "<group>"; };
@@ -13944,6 +13947,8 @@
 				46BB3678294BE77200155EC8 /* OAEmissionHelper.mm */,
 				461FB12C2987FDFA00097673 /* OAAnnounceTimeDistances.h */,
 				461FB12D2987FE0B00097673 /* OAAnnounceTimeDistances.m */,
+				051177FD2B25A51A006B4774 /* OARouteRecalculationHelper.h */,
+				051177FE2B25A51A006B4774 /* OARouteRecalculationHelper.mm */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -17394,6 +17399,7 @@
 				DA5A855526C563A900F274C7 /* OASimulationProvider.mm in Sources */,
 				DA5A848226C563A900F274C7 /* OADistanceToPointWidget.mm in Sources */,
 				FA359EE92ADFC04A0001C11D /* DeviceSettings.swift in Sources */,
+				051177FF2B25A51A006B4774 /* OARouteRecalculationHelper.mm in Sources */,
 				DA5A857026C563A900F274C7 /* OARouteCalculationParams.mm in Sources */,
 				DA5A816D26C563A700F274C7 /* OsmAndAppImpl.mm in Sources */,
 				DA5A856F26C563A900F274C7 /* OAAlarmInfo.mm in Sources */,

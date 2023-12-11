@@ -42,6 +42,9 @@ struct RouteSegmentResult;
 
 @interface OARoutingHelper : NSObject
 
+@property (nonatomic, readonly) OARouteProvider *provider;
+@property (nonatomic, readonly) OAVoiceRouter *voiceRouter;
+
 + (OARoutingHelper *)sharedInstance;
 
 @property (readonly) OAObservable *routingModeChangedObservable;
@@ -72,6 +75,7 @@ struct RouteSegmentResult;
 
 - (NSArray<CLLocation *> *) getCurrentCalculatedRoute;
 - (OARouteCalculationResult *) getRoute;
+- (void) setRoute:(OARouteCalculationResult *)route;
 - (OAGPXTrackAnalysis *) getTrackAnalysis;
 - (int) getLeftDistance;
 - (int) getLeftDistanceNextIntermediate;
@@ -88,7 +92,7 @@ struct RouteSegmentResult;
 
 - (void) addListener:(id<OARouteInformationListener>)l;
 - (BOOL) removeListener:(id<OARouteInformationListener>)lt;
-- (void) addProgressBar:(id<OARouteCalculationProgressCallback>)progressRoute;
+- (void) addCalculationProgressCallback:(id<OARouteCalculationProgressCallback>)progressRoute;
 
 - (void)updateLocation:(CLLocation *)currentLocation;
 - (CLLocation *) setCurrentLocation:(CLLocation *)currentLocation returnUpdatedLocation:(BOOL)returnUpdatedLocation;
@@ -97,6 +101,7 @@ struct RouteSegmentResult;
 - (void) recalculateRouteDueToSettingsChange;
 - (void) notifyIfRouteIsCalculated;
 - (BOOL) isPublicTransportMode;
+- (void) newRouteCalculated:(BOOL)newRoute;
 
 - (void) startRouteCalculationThread:(OARouteCalculationParams *)params paramsChanged:(BOOL)paramsChanged updateProgress:(BOOL)updateProgress;
 

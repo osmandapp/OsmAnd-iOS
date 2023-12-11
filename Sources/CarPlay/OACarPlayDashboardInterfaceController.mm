@@ -82,7 +82,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     _settings = [OAAppSettings sharedManager];
     _routingHelper = OARoutingHelper.sharedInstance;
     [_routingHelper addListener:self];
-    [_routingHelper addProgressBar:self];
+    [_routingHelper addCalculationProgressCallback:self];
     _lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:10.];
     _secondaryStyle = CPManeuverDisplayStyleDefault;
     _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self

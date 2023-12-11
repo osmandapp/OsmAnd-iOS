@@ -667,9 +667,8 @@
 - (void) startProgress:(OATransportRouteCalculationParams *) params
 {
     for (id<OATransportRouteCalculationProgressCallback> pr in _progressRoutes)
-    {
         [pr start];
-    }
+
     [self setCurrentRoute:-1];
 }
 

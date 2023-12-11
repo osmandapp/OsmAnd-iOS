@@ -9,6 +9,8 @@
 #import "OARoutingHelperUtils.h"
 #import "OARoutePreferencesParameters.h"
 #import "OAApplicationMode.h"
+#import "OAMapUtils.h"
+#import "OALocationServices.h"
 
 #define CACHE_RADIUS 100000
 
@@ -57,6 +59,60 @@
     }
 
     return parameters;
+}
+
++ (int) lookAheadFindMinOrthogonalDistance:(CLLocation *)currentLocation routeNodes:(NSArray<CLLocation *> *)routeNodes currentRoute:(int)currentRoute iterations:(int)iterations
+{
+    double newDist;
+    double dist = DBL_MAX;
+    int index = currentRoute;
+    while (iterations > 0 && currentRoute + 1 < routeNodes.count)
+    {
+        newDist = [OAMapUtils getOrthogonalDistance:currentLocation fromLocation:routeNodes[currentRoute] toLocation:routeNodes[currentRoute + 1]];
+        if (newDist < dist)
+        {
+            index = currentRoute;
+            dist = newDist;
+        }
+        currentRoute++;
+        iterations--;
+    }
+    return index;
+}
+
+/**
+ * Wrong movement direction is considered when between
+ * current location bearing (determines by 2 last fixed position or provided)
+ * and bearing from currentLocation to next (current) point
+ * the difference is more than 60 degrees
+ */
++ (BOOL) checkWrongMovementDirection:(CLLocation *)currentLocation prevRouteLocation:(CLLocation *)prevRouteLocation nextRouteLocation:(CLLocation *)nextRouteLocation
+{
+    // measuring without bearing could be really error prone (with last fixed location)
+    // this code has an effect on route recalculation which should be detected without mistakes
+    if (currentLocation.course >= 0 && nextRouteLocation)
+    {
+        float bearingMotion = currentLocation.course;
+        float bearingToRoute = [prevRouteLocation ? prevRouteLocation : currentLocation bearingTo:nextRouteLocation];
+        double diff = degreesDiff(bearingMotion, bearingToRoute);
+        if (ABS(diff) > 60.0)
+        {
+            // require delay interval since first detection, to avoid false positive
+            //but leave out for now, as late detection is worse than false positive (it may reset voice router then cause bogus turn and u-turn prompting)
+            //if (wrongMovementDetected == 0) {
+            //    wrongMovementDetected = System.currentTimeMillis();
+            //} else if ((System.currentTimeMillis() - wrongMovementDetected > 500)) {
+            return true;
+            //}
+        }
+        else
+        {
+            //wrongMovementDetected = 0;
+            return false;
+        }
+    }
+    //wrongMovementDetected = 0;
+    return false;
 }
 
 @end

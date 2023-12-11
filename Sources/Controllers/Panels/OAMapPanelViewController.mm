@@ -232,7 +232,7 @@ typedef enum
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
 
     [_routingHelper addListener:self];
-    [_routingHelper addProgressBar:self];
+    [_routingHelper addCalculationProgressCallback:self];
     [OATransportRoutingHelper.sharedInstance addProgressBar:self];
     
     _toolbars = [NSMutableArray array];
@@ -3771,6 +3771,10 @@ typedef enum
 
 #pragma mark - OARouteCalculationProgressCallback
 
+- (void) startProgress
+{
+}
+
 - (void) updateProgress:(int)progress
 {
     //NSLog(@"Route calculation in progress: %d", progress);
@@ -3823,7 +3827,6 @@ typedef enum
 
 - (void) start
 {
-    
 }
 
 #pragma mark - OARouteInformationListener

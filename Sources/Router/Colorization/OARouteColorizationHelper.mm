@@ -36,8 +36,8 @@
 #define GREEN 0xFF5ADC5F
 #define YELLOW 0xFFD4EF32
 #define RED 0xFFF3374D
-#define BLUE_SLOPE 0xFF0000FF
-#define CYAN_SLOPE 0xFF00FFFF
+NSInteger const BLUE_SLOPE = 0xFF0000FF;
+NSInteger const CYAN_SLOPE = 0xFF00FFFF;
 #define GREEN_SLOPE 0xFF2EB900
 #define WHITE 0xFFFFFFFF
 #define YELLOW_SLOPE 0xFFFFDE02
@@ -68,7 +68,7 @@ static NSArray<NSArray<NSNumber *> *> *slopePalette;
     if (self == [OARouteColorizationHelper class])
     {
         colors = @[@(GREEN), @(YELLOW), @(RED)];
-        slopeColors = @[@(CYAN_SLOPE),@(GREEN_SLOPE), @(LIGHT_GRAY), @(YELLOW_SLOPE), @(RED_SLOPE)];
+        slopeColors = @[@(CYAN_SLOPE), @(GREEN_SLOPE), @(LIGHT_GRAY), @(YELLOW_SLOPE), @(RED_SLOPE)];
         slopePalette = @[@[@(SLOPE_MIN_VALUE), @(BLUE_SLOPE)], @[@(-0.15), @(CYAN_SLOPE)], @[@(-0.05), @(GREEN_SLOPE)], @[@(0.0), @(LIGHT_GRAY)], @[@(0.05), @(YELLOW_SLOPE)], @[@(0.15), @(RED_SLOPE)], @[@(SLOPE_MAX_VALUE), @(PURPLE_SLOPE)]];
     }
 }

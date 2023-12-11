@@ -184,6 +184,7 @@ extension DeviceHelper {
     }
     
     func clearConnectedDevicesList() {
+        connectedDevices.forEach { $0.didDisconnectDevice() }
         connectedDevices.removeAll()
     }
     

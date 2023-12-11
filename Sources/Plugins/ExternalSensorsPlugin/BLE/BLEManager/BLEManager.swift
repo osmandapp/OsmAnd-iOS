@@ -72,7 +72,6 @@ final class BLEManager {
             switch scanResult {
             case .scanStarted:
                 Self.logger.debug("BLEManager -> scanStarted")
-                break
             case .scanResult(let peripheral, let advertisementData, let RSSI):
                 let rssi = RSSI ?? -1
                 Self.logger.debug("BLEManager -> peripheral identifier: \(peripheral.identifier) RSSI: \(rssi)")
@@ -88,7 +87,7 @@ final class BLEManager {
                 } else {
                     let uuids = serviceUUIDs.map { $0.uuidString.lowercased() }
                     if let device = DeviceFactory.createDevice(with: uuids) {
-                        var deviceName = advertisementData["kCBAdvDataLocalName"] as? String ?? ""
+                        var deviceName = advertisementData["kCBAdvDataLocalName"] as? String ?? device.deviceServiceName
                         if let savedDevice = DeviceHelper.shared.devicesSettingsCollection.getDeviceSettings(deviceId: peripheral.identifier.uuidString) {
                             deviceName = savedDevice.deviceName
                         }

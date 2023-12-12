@@ -50,6 +50,9 @@ extension Theme {
     var groupBgColorSecondary: UIColor { getColorTheme(with: UIColor.groupBgColorSecondary) }
     var cellBgColorSelected: UIColor { getColorTheme(with: UIColor.cellBgColorSelected) }
     var contextMenuButtonBgColor: UIColor { getColorTheme(with: UIColor.contextMenuButtonBgColor) }
+    var weatherSliderLabelBgColor: UIColor { getColorTheme(with: UIColor.weatherSliderLabelBgColor) }
+    var buttonIconColorPrimary: UIColor { getColorTheme(with: UIColor.buttonIconColorPrimary) }
+    var buttonIconColorSecondary: UIColor { getColorTheme(with: UIColor.buttonIconColorSecondary) }
 }
 
 extension Theme {

@@ -35,6 +35,9 @@ extension UIColor {
     @objc static var groupBgColorSecondary: UIColor { UIColor(named: #function)! }
     @objc static var cellBgColorSelected: UIColor { UIColor(named: #function)! }
     @objc static var contextMenuButtonBgColor: UIColor { UIColor(named: #function)! }
+    @objc static var weatherSliderLabelBgColor: UIColor { UIColor(named: #function)! }
+    @objc static var buttonIconColorPrimary: UIColor { UIColor(named: #function)! }
+    @objc static var buttonIconColorSecondary: UIColor { UIColor(named: #function)! }
 }
 
 extension UIColor {

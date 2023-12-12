@@ -328,6 +328,8 @@
     else
     {
         [self.tableView reloadData];
+        if (completion)
+            completion(YES);
     }
 }
 

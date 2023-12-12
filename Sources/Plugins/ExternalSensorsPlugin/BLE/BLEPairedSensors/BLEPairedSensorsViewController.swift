@@ -171,7 +171,10 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
             }
             onSelectDeviceAction?(currentSelectedDevice)
         }
-        dismiss()
+        reloadData(true) { [weak self] _ in
+            guard let self = self else { return }
+            self.dismiss()
+        }
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -284,14 +287,9 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         }
     }
     
-    private func reloadData() {
-        generateData()
-        tableView.reloadData()
-    }
-    
     @objc private func deviceDisconnected() {
         guard view.window != nil else { return }
-        reloadData()
+        reloadData(true, completion: nil)
     }
     
     // MARK: - @IBAction's

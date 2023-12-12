@@ -76,6 +76,7 @@
                                                 <constraint firstItem="0BF-D5-Iu6" firstAttribute="leading" secondItem="waX-JL-gZb" secondAttribute="trailing" constant="16" id="lGH-tk-AZH"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" name="groupBgColor"/>
                                         <connections>
                                             <outlet property="connectStatusLabel" destination="3xT-tE-29r" id="uEb-65-0fA"/>
                                             <outlet property="deviceImageView" destination="waX-JL-gZb" id="uqi-CM-79i"/>
@@ -137,6 +138,9 @@
         </namedColor>
         <namedColor name="buttonTextColorPrimary">
             <color red="0.93725490196078431" green="0.90980392156862744" blue="0.99215686274509807" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="groupBgColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

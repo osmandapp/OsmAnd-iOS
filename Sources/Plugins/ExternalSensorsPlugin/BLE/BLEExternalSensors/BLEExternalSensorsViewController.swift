@@ -60,7 +60,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         reloadData()
     }
     
-    override func getTitle() -> String! {
+    override func getTitle() -> String {
         localizedString("external_sensors_plugin_name")
     }
     
@@ -85,7 +85,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         }
     }
     
-    override func getTitleForHeader(_ section: Int) -> String! {
+    override func getTitleForHeader(_ section: Int) -> String? {
         if DeviceHelper.shared.hasPairedDevices {
             switch section {
             case 0:
@@ -123,7 +123,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                         cell.titleLabel.textColor = UIColor.textColorPrimary
                         cell.selectionStyle = .none
                     case .learnMore:
-                        cell.titleLabel.textColor = UIColor.buttonBgColorPrimary
+                        cell.titleLabel.textColor = UIColor.textColorActive
                         cell.selectionStyle = .default
                     }
                 }
@@ -155,7 +155,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         .leastNonzeroMagnitude
     }
     
-    override func onRowSelected(_ indexPath: IndexPath!) {
+    override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         if let key = item.key {
             if let item = ExternalSensorsCellData(rawValue: key) {

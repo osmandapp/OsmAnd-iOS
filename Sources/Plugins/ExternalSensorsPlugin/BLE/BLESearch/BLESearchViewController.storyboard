@@ -77,6 +77,7 @@
                                                 <constraint firstItem="lKe-KR-MQG" firstAttribute="centerY" secondItem="LNJ-lH-ZnF" secondAttribute="centerY" id="uxT-Ul-s7W"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" name="groupBgColor"/>
                                         <connections>
                                             <outlet property="connectStatusLabel" destination="Fdj-ZX-izt" id="pb5-IN-rXj"/>
                                             <outlet property="deviceImageView" destination="lKe-KR-MQG" id="ulN-oa-UvA"/>
@@ -170,7 +171,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wQV-O7-UKe" userLabel="Please hold the device close to the sensor.  You need to activate the sensor so OsmAnd can find it.">
-                                                <rect key="frame" x="19" y="26.333333333333314" width="332" height="58"/>
+                                                <rect key="frame" x="4" y="26.333333333333314" width="362" height="58"/>
                                                 <string key="text">Please hold the device close to the sensor. 
 You need to activate the sensor so OsmAnd can find it.</string>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
@@ -308,6 +309,9 @@ You need to activate the sensor so OsmAnd can find it.</string>
         </namedColor>
         <namedColor name="buttonSecondary">
             <color red="0.87800002098083496" green="0.86699998378753662" blue="0.88999998569488525" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="groupBgColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

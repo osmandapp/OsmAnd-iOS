@@ -99,7 +99,7 @@ final class TravelObfHelper : NSObject {
                     }
                     foundAmenitiesIndex += 1
                 }
-            } while (!articlesLimitReached && searchRadius < MAX_SEARCH_RADIUS) || popularArticles.articles.count == 0
+            } while (!articlesLimitReached && searchRadius < MAX_SEARCH_RADIUS)
         }
         self.popularArticles = popularArticles
         return popularArticles

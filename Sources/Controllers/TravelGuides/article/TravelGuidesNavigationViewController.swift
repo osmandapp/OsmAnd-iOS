@@ -50,18 +50,20 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
                     if self.navigationMap.isEmpty {
                         OAUtilities.showToast(nil, details: localizedString("travel_guides_no_file_error"), duration: 4, in: self.view)
                     } else {
-                        self.regionsNames = self.getRegionNames()
-                        self.generateData()
-                        self.tableView.reloadData()
+                        self.setupData()
                     }
                     self.view.removeSpinner()
                 }
             }
         } else {
-            self.regionsNames = self.getRegionNames()
-            self.generateData()
-            self.tableView.reloadData()
+            setupData()
         }
+    }
+    
+    func setupData() {
+        self.regionsNames = self.getRegionNames()
+        self.generateData()
+        self.tableView.reloadData()
     }
     
     override func generateData() {

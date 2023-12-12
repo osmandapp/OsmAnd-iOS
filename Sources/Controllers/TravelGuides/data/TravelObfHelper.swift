@@ -386,7 +386,7 @@ final class TravelObfHelper : NSObject {
                         parts[i] = String(originalParts[originalParts.count - i - 1])
                     }
                 } else {
-                    parts = originalParts.map{ String($0) }
+                    parts = originalParts .map{ String($0) }
                 }
             }
         } else {

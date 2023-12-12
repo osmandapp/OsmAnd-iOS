@@ -114,6 +114,10 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                 cell = nib?.first as? OASimpleTableViewCell
                 cell?.descriptionVisibility(false)
                 cell?.leftIconVisibility(false)
+                // separators go edge to edge
+                cell?.separatorInset = .zero
+                cell?.layoutMargins = .zero
+                cell?.preservesSuperviewLayoutMargins = false
             }
             if let cell {
                 cell.titleLabel.text = item.title

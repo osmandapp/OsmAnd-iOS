@@ -60,7 +60,7 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
         }
     }
     
-    func setupData() {
+    private func setupData() {
         self.regionsNames = self.getRegionNames()
         self.generateData()
         self.tableView.reloadData()

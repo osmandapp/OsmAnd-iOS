@@ -171,7 +171,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
             }
             onSelectDeviceAction?(currentSelectedDevice)
         }
-        tableView.reloadData()
+        dismiss()
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

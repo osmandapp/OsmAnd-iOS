@@ -1983,6 +1983,7 @@
 "article_removed_from_bookmark" = " removed from bookmarks.";
 "shared_string_article" = "Article";
 "travel_guides_search_placeholder" = "Search for country, city or province";
+"travel_guides_no_file_error" = "Error: No region file data";
 "clear_history" = "Clear history";
 "search_history" = "Search history";
 "clear_travel_search_history" = "Clear Travel search history?";

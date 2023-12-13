@@ -141,7 +141,6 @@
 "user_guide" = "User guide";
 "map_widgets" = "Map Widgets";
 "my_data" = "My data";
-"plan_route" = "Plan route";
 "troubleshooting" = "Troubleshooting";
 "setup" = "Setup";
 "gitHub_discussion" = "GitHub Discussion";
@@ -1983,6 +1982,7 @@
 "article_removed_from_bookmark" = " removed from bookmarks.";
 "shared_string_article" = "Article";
 "travel_guides_search_placeholder" = "Search for country, city or province";
+"travel_guides_no_file_error" = "Error: No region file data";
 "clear_history" = "Clear history";
 "search_history" = "Search history";
 "clear_travel_search_history" = "Clear Travel search history?";
@@ -1998,6 +1998,8 @@
 "cache_cleared" = "Cache cleared";
 "download_images_settings_header" = "Offline Wikipedia files in OsmAnd don’t contain images. But they can be downloaded while viewing articles.";
 "download_images_settings_footer" = "Image downloading is enabling over any network. Mobile data can be used.";
+"popular_articles_not_found_title" = "Popular articles not found";
+"popular_articles_not_found_descr" = "There are no any articles near current map centre. Use search to find articles.";
 
 // Help
 "help_quiz" = "Quiz";
@@ -2013,6 +2015,8 @@
 
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
+"calendar_new_event_title" = "New event";
+"calendar_new_event_message" = "New calendar event has been added: Pickup the car at %@";
 
 //inapps
 "plugin_nautical_name" = "Nautical map view";

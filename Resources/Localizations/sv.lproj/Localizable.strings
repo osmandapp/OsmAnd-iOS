@@ -2911,3 +2911,7 @@
 "backup_delete_old_data_warning" = "Du håller på att radera ändringshistoriken för tidigare inläst data.\n\nAktuell version av datat bevaras på servern, men du kommer inte kunna återgå till tidigare ändringar.";
 "make_backup_descr" = "Det är många ändringar på den här enheten. Gör gärna en säkerhetskopia av dessa data för att inte förlora det.";
 "backup_delete_types_descr" = "Radera alla data för föråldrade datatyper från OsmAnd Cloud?";
+"rendering_value_caiScale_description" = "Italienska alpinistföreningen (Club Alpino Italiano)";
+"map_settings_topography" = "Höjdkurvor";
+"upload_poi" = "Ladda upp POI";
+"rendering_value_sacScale_description" = "Schweiziska alpinistföreningen (Swiss Alpine Club)";

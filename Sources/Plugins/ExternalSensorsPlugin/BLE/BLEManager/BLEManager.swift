@@ -55,7 +55,7 @@ final class BLEManager {
                 if OAIAPHelper.isOsmAndProAvailable() {
                     // Peripheral that are no longer valid must be rediscovered again (happens when for example the Bluetooth is turned off
                     // from a user's phone and turned back on
-                    DeviceHelper.shared.clearConnectedDevicesList()
+                    DeviceHelper.shared.disconnectAllDevices(reason: .bluetoothPoweredOff)
                 }
             }
         }
@@ -72,8 +72,7 @@ final class BLEManager {
             switch scanResult {
             case .scanStarted:
                 Self.logger.debug("BLEManager -> scanStarted")
-                break
-            case .scanResult(let peripheral, let advertisementData, let RSSI):
+            case let .scanResult(peripheral, advertisementData, RSSI):
                 let rssi = RSSI ?? -1
                 Self.logger.debug("BLEManager -> peripheral identifier: \(peripheral.identifier) RSSI: \(rssi)")
                 guard let serviceUUIDs = (advertisementData["kCBAdvDataServiceUUIDs"] as? [CBUUID]), !serviceUUIDs.isEmpty else {
@@ -88,7 +87,7 @@ final class BLEManager {
                 } else {
                     let uuids = serviceUUIDs.map { $0.uuidString.lowercased() }
                     if let device = DeviceFactory.createDevice(with: uuids) {
-                        var deviceName = advertisementData["kCBAdvDataLocalName"] as? String ?? ""
+                        var deviceName = advertisementData["kCBAdvDataLocalName"] as? String ?? device.deviceServiceName
                         if let savedDevice = DeviceHelper.shared.devicesSettingsCollection.getDeviceSettings(deviceId: peripheral.identifier.uuidString) {
                             deviceName = savedDevice.deviceName
                         }
@@ -100,7 +99,7 @@ final class BLEManager {
                         successHandler()
                     }
                 }
-            case .scanStopped(let peripherals, let error):
+            case let .scanStopped(peripherals, error):
                 // The scan stopped, an error is passed if the scan stopped unexpectedly
                 if let error {
                     Self.logger.error("\(error.localizedDescription)")

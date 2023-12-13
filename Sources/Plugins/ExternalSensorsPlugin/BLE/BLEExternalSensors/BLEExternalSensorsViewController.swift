@@ -34,6 +34,8 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         super.init(coder: coder)
         initTableData()
     }
+
+    // MARK: - Life circle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,24 +45,32 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         tableView.contentInset.bottom = 64
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureStartState()
+        reloadData()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        configureStartState()
+    }
+    
     override func registerObservers() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceDisconnected),
                                                name: .DeviceDisconnected,
                                                object: nil)
+        if UserDefaults.standard.bool(for: .wasAuthorizationRequestBluetooth) {
+            detectBluetoothState()
+        }
     }
     
     override func useCustomTableViewHeader() -> Bool {
         true
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        configureStartState()
-        reloadData()
-    }
-    
-    override func getTitle() -> String! {
+    override func getTitle() -> String {
         localizedString("external_sensors_plugin_name")
     }
     
@@ -85,7 +95,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         }
     }
     
-    override func getTitleForHeader(_ section: Int) -> String! {
+    override func getTitleForHeader(_ section: Int) -> String? {
         if DeviceHelper.shared.hasPairedDevices {
             switch section {
             case 0:
@@ -114,8 +124,13 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                 cell = nib?.first as? OASimpleTableViewCell
                 cell?.descriptionVisibility(false)
                 cell?.leftIconVisibility(false)
+                // separators go edge to edge
+                cell?.separatorInset = .zero
+                cell?.layoutMargins = .zero
+                cell?.preservesSuperviewLayoutMargins = false
             }
             if let cell {
+                cell.setCustomLeftSeparatorInset(true)
                 cell.titleLabel.text = item.title
                 if let key = item.key, let item = ExternalSensorsCellData(rawValue: key) {
                     switch item {
@@ -123,7 +138,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                         cell.titleLabel.textColor = UIColor.textColorPrimary
                         cell.selectionStyle = .none
                     case .learnMore:
-                        cell.titleLabel.textColor = UIColor.buttonBgColorPrimary
+                        cell.titleLabel.textColor = UIColor.textColorActive
                         cell.selectionStyle = .default
                     }
                 }
@@ -155,7 +170,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         .leastNonzeroMagnitude
     }
     
-    override func onRowSelected(_ indexPath: IndexPath!) {
+    override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         if let key = item.key {
             if let item = ExternalSensorsCellData(rawValue: key) {
@@ -209,11 +224,6 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         }
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        configureStartState()
-    }
-    
     private func detectBluetoothState() {
         NotificationCenter.default.removeObserver(self, name: Central.CentralStateChange, object: Central.sharedInstance)
         NotificationCenter.default.addObserver(forName: Central.CentralStateChange,
@@ -240,6 +250,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         headerEmptyView.addSubview(imageView)
         headerEmptyView.frame.size.height = 201
         headerEmptyView.frame.size.width = view.frame.width
+        headerEmptyView.backgroundColor = UIColor.groupBgColor
         imageView.frame = headerEmptyView.frame
         tableView.tableHeaderView = headerEmptyView
     }

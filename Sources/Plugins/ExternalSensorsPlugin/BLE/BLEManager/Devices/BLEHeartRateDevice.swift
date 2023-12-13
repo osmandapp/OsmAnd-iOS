@@ -10,7 +10,7 @@ import UIKit
 
 final class BLEHeartRateDevice: Device {
     
-    var name: String {
+    override var deviceServiceName: String {
         "Heart Rate"
     }
     

@@ -7,7 +7,6 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -47,7 +46,7 @@
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Upper label Wahoo SPEED 7D64" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sah-A4-PB2">
                             <rect key="frame" x="0.0" y="0.0" width="248" height="20.333333333333332"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                            <color key="textColor" name="textPrimary"/>
+                            <color key="textColor" name="textColorPrimary"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="Fvg-NW-EUh">
@@ -64,7 +63,7 @@
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Disconnected" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yzi-QD-JYr">
                                     <rect key="frame" x="23.000000000000007" y="0.0" width="83.666666666666686" height="20"/>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                                    <color key="textColor" name="textSecondary"/>
+                                    <color key="textColor" name="textColorSecondary"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
@@ -79,7 +78,7 @@
                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                     <state key="normal" title="Connect">
-                        <color key="titleColor" name="active"/>
+                        <color key="titleColor" name="textColorActive"/>
                     </state>
                     <connections>
                         <action selector="onConnectStatusButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="fnT-4j-U9b"/>
@@ -94,21 +93,21 @@
                 </activityIndicatorView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NkN-F9-TSx" userLabel="dividerView">
                     <rect key="frame" x="20" y="97.666666666666671" width="453" height="0.3333333333333286"/>
-                    <color key="backgroundColor" name="divider"/>
+                    <color key="backgroundColor" name="separatorColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="0.5" id="uMs-Hq-NxD"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xg5-ru-81P" userLabel="dividerBottomView">
                     <rect key="frame" x="0.0" y="147.66666666666666" width="473" height="0.33333333333334281"/>
-                    <color key="backgroundColor" name="divider"/>
+                    <color key="backgroundColor" name="separatorColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="0.5" id="7RV-6K-U0a"/>
                     </constraints>
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <color key="backgroundColor" name="groupBgColor"/>
             <constraints>
                 <constraint firstItem="jbx-xX-LM3" firstAttribute="centerY" secondItem="0uJ-Dc-WGi" secondAttribute="centerY" id="0Wu-sK-iqM"/>
                 <constraint firstItem="0uJ-Dc-WGi" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="3fa-2r-Zlu"/>
@@ -144,20 +143,23 @@
         <namedColor name="active">
             <color red="0.34099999070167542" green="0.078000001609325409" blue="0.80000001192092896" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="divider">
+        <namedColor name="groupBgColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="separatorColor">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="textPrimary">
+        <namedColor name="textColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="textSecondary">
-            <color red="0.49000000953674316" green="0.45100000500679016" blue="0.54900002479553223" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="textColorSecondary">
+            <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="viewBgColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>

@@ -10,7 +10,7 @@ import CoreBluetooth
 
 final class BLETemperatureDevice: Device {
         
-    var name: String {
+    override var deviceServiceName: String {
         "Temperature"
     }
     
@@ -19,7 +19,7 @@ final class BLETemperatureDevice: Device {
     }
     
     override var getServiceConnectedImage: UIImage {
-        UIImage(named: "widget_weather_temperature_day")!
+        UIImage(named: "widget_weather_temperature")!
     }
     
     override var getDataFields: [[String: String]]? {

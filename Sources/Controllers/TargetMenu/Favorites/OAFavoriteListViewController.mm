@@ -29,17 +29,17 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OsmAndApp.h"
 #import "OsmAnd_Maps-Swift.h"
-
-#include <OsmAndCore.h>
-#include <OsmAndCore/IFavoriteLocation.h>
-#include <OsmAndCore/Utilities.h>
-#include "Localization.h"
 #import "OAChoosePlanHelper.h"
 #import "OACloudIntroductionViewController.h"
 #import "OAAppSettings.h"
 #import "OABackupHelper.h"
 #import "OAFavoriteImportViewController.h"
+#import "Localization.h"
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
+#include <OsmAndCore.h>
+#include <OsmAndCore/IFavoriteLocation.h>
+#include <OsmAndCore/Utilities.h>
 
 #define _(name) OAFavoriteListViewController__##name
 #define kWasClosedFreeBackupFavoritesBannerKey @"wasClosedFreeBackupFavoritesBanner"
@@ -919,7 +919,8 @@ static UIViewController *parentController;
 
 -(void)onImportClicked
 {
-    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[@"com.topografix.gpx"] inMode:UIDocumentPickerModeImport];
+    NSArray<UTType *> *contentTypes = @[[UTType importedTypeWithIdentifier:@"com.topografix.gpx" conformingToType:UTTypeXML]];
+    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:contentTypes asCopy:YES];
     documentPickerVC.allowsMultipleSelection = NO;
     documentPickerVC.delegate = self;
     [self presentViewController:documentPickerVC animated:YES completion:nil];

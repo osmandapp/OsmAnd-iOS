@@ -545,59 +545,76 @@
                 while (sqlite3_step(statement) == SQLITE_ROW)
                 {
                     OATravelArticle *dbArticle = [[OATravelArticle alloc] init];
-                    NSString *lang = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 1)];
+                    NSString *lang;
+                    if (sqlite3_column_text(statement, 1) != nil)
+                        lang = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 1)];
+                    
                     if (!lang && lang.length == 0)
                         dbArticle = [[OATravelGpx alloc] init];
                     else
                         dbArticle = [[OATravelArticle alloc] init];
                     
-                    dbArticle.title = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 0)];
                     dbArticle.lang = lang;
-                    dbArticle.aggregatedPartOf = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 2)];
-                    dbArticle.imageTitle = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 3)];
-                    dbArticle.content = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 9)];
-                    dbArticle.lat = sqlite3_column_double(statement, 5);
-                    dbArticle.lon = sqlite3_column_double(statement, 6);
-                    dbArticle.routeId = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 7)];
-                    dbArticle.contentsJson = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 8)];
-                    NSString *travelBook = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 4)];
-                    if (travelBook && travelBook.length > 0)
+                    
+                    if (sqlite3_column_text(statement, 0) != nil)
+                        dbArticle.title = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 0)];
+                    if (sqlite3_column_text(statement, 2) != nil)
+                        dbArticle.aggregatedPartOf = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 2)];
+                    if (sqlite3_column_text(statement, 3) != nil)
+                        dbArticle.imageTitle = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 3)];
+                    if (sqlite3_column_text(statement, 9) != nil)
+                        dbArticle.content = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 9)];
+                    if (sqlite3_column_text(statement, 5) != nil)
+                        dbArticle.lat = sqlite3_column_double(statement, 5);
+                    if (sqlite3_column_text(statement, 6) != nil)
+                        dbArticle.lon = sqlite3_column_double(statement, 6);
+                    if (sqlite3_column_text(statement, 7) != nil)
+                        dbArticle.routeId = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 7)];
+                    if (sqlite3_column_text(statement, 8) != nil)
+                        dbArticle.contentsJson = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 8)];
+                    if (sqlite3_column_text(statement, 4) != nil)
                     {
-                        //res.file = context.getAppPath(IndexConstants.WIKIVOYAGE_INDEX_DIR + travelBook);
-                        dbArticle.file = travelBook;
-                        dbArticle.lastModified = sqlite3_column_double(statement, 10);
+                        NSString *travelBook = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 4)];
+                        if (travelBook && travelBook.length > 0)
+                        {
+                            //res.file = context.getAppPath(IndexConstants.WIKIVOYAGE_INDEX_DIR + travelBook);
+                            dbArticle.file = travelBook;
+                            dbArticle.lastModified = sqlite3_column_double(statement, 10);
+                        }
                     }
                      
-                    auto blob = QByteArray(
-                        static_cast<const char *>(sqlite3_column_blob(statement, 11)),
-                        sqlite3_column_bytes(statement, 11));
-
-                    if (!blob.isEmpty())
+                    if (sqlite3_column_blob(statement, 11) != nil)
                     {
-                        QString stringContent;
-                        OsmAnd::ArchiveReader archive(blob.constData(), blob.size());
-                        bool ok = NO;
-                        const auto archiveItems = archive.getItems(&ok, true);
-                        if (ok)
+                        auto blob = QByteArray(static_cast<const char *>(sqlite3_column_blob(statement, 11)),
+                                               sqlite3_column_bytes(statement, 11));
+                        
+                        if (!blob.isEmpty())
                         {
-                            for (const auto& archiveItem : constOf(archiveItems))
+                            QString stringContent;
+                            OsmAnd::ArchiveReader archive(blob.constData(), blob.size());
+                            bool ok = NO;
+                            const auto archiveItems = archive.getItems(&ok, true);
+                            if (ok)
                             {
-                                if (!archiveItem.isValid())
-                                    continue;
-
-                                stringContent = archive.extractItemToString(archiveItem.name, true);
-                                break;
+                                for (const auto& archiveItem : constOf(archiveItems))
+                                {
+                                    if (!archiveItem.isValid())
+                                        continue;
+                                    
+                                    stringContent = archive.extractItemToString(archiveItem.name, true);
+                                    break;
+                                }
                             }
-                        }
-
-                        if (!stringContent.isEmpty())
-                        {
-                            OAGPXDocumentAdapter *adapter = [[OAGPXDocumentAdapter alloc] init];
-                            OAGPXDocument *document = [[OAGPXDocument alloc] init];
-                            QXmlStreamReader xmlReader(stringContent);
-                            [document fetch:OsmAnd::GpxDocument::loadFrom(xmlReader)];
-                            adapter.object = document;
-                            dbArticle.gpxFile = adapter;
+                            
+                            if (!stringContent.isEmpty())
+                            {
+                                OAGPXDocumentAdapter *adapter = [[OAGPXDocumentAdapter alloc] init];
+                                OAGPXDocument *document = [[OAGPXDocument alloc] init];
+                                QXmlStreamReader xmlReader(stringContent);
+                                [document fetch:OsmAnd::GpxDocument::loadFrom(xmlReader)];
+                                adapter.object = document;
+                                dbArticle.gpxFile = adapter;
+                            }
                         }
                     }
                 

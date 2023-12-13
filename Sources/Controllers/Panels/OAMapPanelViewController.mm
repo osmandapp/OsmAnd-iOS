@@ -233,7 +233,7 @@ typedef enum
 
     [_routingHelper addListener:self];
     [_routingHelper addCalculationProgressCallback:self];
-    [OATransportRoutingHelper.sharedInstance addProgressBar:self];
+    [OATransportRoutingHelper.sharedInstance addCalculationProgressCallback:self];
     
     _toolbars = [NSMutableArray array];
 }

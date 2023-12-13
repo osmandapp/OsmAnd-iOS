@@ -44,6 +44,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
     var isFiltered = false
     var screenMode: ScreenModes = .popularArticles
     var isInited = false
+    var isDataLoaded = false
     var isGpxPointsOpening = false
     
     override func commonInit() {
@@ -227,6 +228,20 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                     showMoreButtonRow.cellType = OAFilledButtonCell.getIdentifier()
                     showMoreButtonRow.title = localizedString("show_more")
                     showMoreButtonRow.setObj("onShowMoreMapsClicked", forKey: "actionName")
+                } else {
+                    if isDataLoaded {
+                        let section = tableData.createNewSection()
+                        let headerTitleRow = section.createNewRow()
+                        headerTitleRow.cellType = OARightIconTableViewCell.getIdentifier()
+                        headerTitleRow.iconName = "ic_custom_search"
+                        headerTitleRow.title = localizedString("popular_articles_not_found_title")
+                        headerTitleRow.setObj(true, forKey: "kHideSeparator")
+                        
+                        let headerDescrRow = section.createNewRow()
+                        headerDescrRow.cellType = OARightIconTableViewCell.getIdentifier()
+                        headerDescrRow.descr = localizedString("popular_articles_not_found_descr")
+                        headerDescrRow.setObj(false, forKey: "kHideSeparator")
+                    }
                 }
             }
             
@@ -680,6 +695,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
     
     func onDataLoaded() {
         DispatchQueue.main.async {
+            self.isDataLoaded = true
             self.generateData()
             self.tableView.reloadData()
             self.view.removeSpinner()

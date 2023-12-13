@@ -58,9 +58,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
             configureTripRecordingDataSource()
         }
         generateData()
-        tableView.reloadData()
     }
-    
     
     // MARK: - Override's
     
@@ -256,6 +254,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
             devices?.insert(anyConnectedDevice, at: 0)
         }
     }
+    
     private func configureTableView() {
         tableView.isHidden = false
         tableView.dataSource = self
@@ -270,9 +269,8 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         
     private func getPairedDevicesForCurrentWidgetType() -> [Device]? {
         if let widgetType,
-           let devices = DeviceHelper.shared.getPairedDevicesFor(type: widgetType), !devices.isEmpty  {
+           let devices = DeviceHelper.shared.getPairedDevicesFor(type: widgetType), !devices.isEmpty {
             return devices
-        } else {
         }
         return nil
     }
@@ -284,14 +282,9 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         }
     }
     
-    private func reloadData() {
-        generateData()
-        tableView.reloadData()
-    }
-    
     @objc private func deviceDisconnected() {
         guard view.window != nil else { return }
-        reloadData()
+        generateData()
     }
     
     // MARK: - @IBAction's

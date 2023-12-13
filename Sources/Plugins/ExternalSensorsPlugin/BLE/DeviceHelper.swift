@@ -177,25 +177,29 @@ final class DeviceHelper: NSObject {
 
 extension DeviceHelper {
     
+    @objc enum DisconnectDeviceDirection: Int {
+        case plaginOff, bluetoothPoweredOff
+    }
+    
     func disconnectIfNeeded(device: Device) {
         if device.isConnected || device.isConnecting {
             device.peripheral.disconnect { _ in }
         }
     }
     
-    func clearConnectedDevicesList() {
-        connectedDevices.forEach { $0.didDisconnectDevice() }
-        connectedDevices.removeAll()
-    }
-    
-    func disconnectAllDevices() {
+    func disconnectAllDevices(direction: DisconnectDeviceDirection) {
         guard !connectedDevices.isEmpty else { return }
-        connectedDevices.forEach {
-            $0.disableRSSI()
-            disconnectIfNeeded(device: $0)
+        switch direction {
+        case .plaginOff:
+            connectedDevices.forEach {
+                $0.disableRSSI()
+                disconnectIfNeeded(device: $0)
+            }
+            BLEManager.shared.removeAndDisconnectDiscoveredDevices()
+        case .bluetoothPoweredOff:
+            connectedDevices.forEach { $0.didDisconnectDevice() }
         }
         connectedDevices.removeAll()
-        BLEManager.shared.removeAndDisconnectDiscoveredDevices()
     }
     
     func restoreConnectedDevices(with peripherals: [Peripheral]) {

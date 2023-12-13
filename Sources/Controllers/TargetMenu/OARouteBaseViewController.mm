@@ -693,11 +693,13 @@
     routeBBox.bottom = DBL_MAX;
     routeBBox.left = DBL_MAX;
     routeBBox.right = DBL_MAX;
-    if ([_routingHelper isRoutePlanningMode] && [_routingHelper isRouteCalculated] && !error && !_routingHelper.isPublicTransportMode)
+    if ([_routingHelper isRouteCalculated] && !error && !_routingHelper.isPublicTransportMode)
     {
         routeBBox = [_routingHelper getBBox];
-        if (routeBBox.left != DBL_MAX)
+        if ([_routingHelper isRoutePlanningMode] && routeBBox.left != DBL_MAX)
             [self centerMapOnBBox:routeBBox];
+        else
+            [self centerMapOnGpx:_gpx];
     }
     else if (_routingHelper.isPublicTransportMode)
     {
@@ -705,9 +707,18 @@
         if (!transportHelper.isRouteBeingCalculated && transportHelper.getRoutes.size() > 0 && transportHelper.currentRoute != -1)
             [self centerMapOnBBox:transportHelper.getBBox];
     }
-    else if (_gpx)
+    else
     {
-        OAGpxBounds gpxBounds = _gpx.bounds;
+        [self centerMapOnGpx:_gpx];
+    }
+}
+
+- (void)centerMapOnGpx:(OAGPXDocument *)gpx
+{
+    if (gpx)
+    {
+        OABBox routeBBox;
+        OAGpxBounds gpxBounds = gpx.bounds;
         routeBBox.top = gpxBounds.topLeft.latitude;
         routeBBox.bottom = gpxBounds.bottomRight.latitude;
         routeBBox.left = gpxBounds.topLeft.longitude;

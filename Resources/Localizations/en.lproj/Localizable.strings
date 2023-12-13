@@ -2013,6 +2013,8 @@
 
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
+"calendar_new_event_title" = "New event";
+"calendar_new_event_message" = "New calendar event has been added: Pickup the car at %@";
 
 //inapps
 "plugin_nautical_name" = "Nautical map view";

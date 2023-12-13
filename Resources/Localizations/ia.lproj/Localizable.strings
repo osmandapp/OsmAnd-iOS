@@ -50,7 +50,7 @@
 "shared_string_options" = "Options";
 "new_destination_point_dialog" = "You have already set a destination";
 "replace_destination_point" = "Replace the destination";
-"shared_string_current" = "Current";
+"shared_string_current" = "Actual";
 "make_as_start_point" = "Make this the start point";
 "keep_and_add_destination_point" = "Add as subsequent destination";
 "subsequent_dest_description" = "Move destination up, and create destination";
@@ -58,7 +58,7 @@
 "first_intermediate_dest_description" = "Adds the first stop on the route";
 "add_as_last_destination_point" = "Add as last intermediate destination";
 "last_intermediate_dest_description" = "Adds the last stop along the route";
-"start_point" = "Start";
+"start_point" = "Initiar";
 "altitude" = "Altitude";
 "shared_string_speed" = "Speed";
 "show_poi_over_map" = "Show POI";
@@ -562,7 +562,6 @@
 "shared_string_uploaded" = "Uploaded";
 "shared_string_do_not_exist" = "Do not exist";
 "shared_string_any" = "Any";
-
 "restart" = "Restart";
 "offline_maps" = "Offline Maps";
 "shared_string_download_map" = "Download map";

@@ -288,10 +288,22 @@ final class TravelArticleDialogViewController : OABaseWebViewController, TravelA
     @objc func showNavigation() {
         guard let selectedLang else { return }
         guard let article else { return }
-        let vc = TravelGuidesNavigationViewController()
-        vc.setupWith(article: article, selectedLang: selectedLang, navigationMap: [:], regionsNames: [], selectedItem: nil)
-        vc.delegate = self
-        showModalViewController(vc)
+        
+        view.addSpinner(inCenterOfCurrentView: true)
+        DispatchQueue.global(qos: .default).async {
+            let navigationMap = TravelObfHelper.shared.getNavigationMap(article: article)
+            DispatchQueue.main.async {
+                if navigationMap.isEmpty {
+                    OAUtilities.showToast(nil, details: localizedString("travel_guides_no_file_error"), duration: 4, in: self.view)
+                } else {
+                    let vc = TravelGuidesNavigationViewController()
+                    vc.setupWith(article: article, selectedLang: selectedLang, navigationMap: navigationMap, regionsNames: [], selectedItem: nil)
+                    vc.delegate = self
+                    self.showModalViewController(vc)
+                }
+                self.view.removeSpinner()
+            }
+        }
     }
     
     @objc func onContentsButtonClicked() {

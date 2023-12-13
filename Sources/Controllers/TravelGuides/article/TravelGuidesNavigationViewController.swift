@@ -27,7 +27,7 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
             self.regionsNames = regionsNames
             self.selectedItem = selectedItem
         } else {
-            self.navigationMap = [:]
+            self.navigationMap = navigationMap
             self.regionsNames = []
         }
     }
@@ -47,13 +47,23 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
             DispatchQueue.global(qos: .default).async {
                 self.navigationMap = TravelObfHelper.shared.getNavigationMap(article: article)
                 DispatchQueue.main.async {
-                    self.regionsNames = self.getRegionNames()
-                    self.generateData()
-                    self.tableView.reloadData()
+                    if self.navigationMap.isEmpty {
+                        OAUtilities.showToast(nil, details: localizedString("travel_guides_no_file_error"), duration: 4, in: self.view)
+                    } else {
+                        self.setupData()
+                    }
                     self.view.removeSpinner()
                 }
             }
+        } else {
+            setupData()
         }
+    }
+    
+    private func setupData() {
+        self.regionsNames = self.getRegionNames()
+        self.generateData()
+        self.tableView.reloadData()
     }
     
     override func generateData() {

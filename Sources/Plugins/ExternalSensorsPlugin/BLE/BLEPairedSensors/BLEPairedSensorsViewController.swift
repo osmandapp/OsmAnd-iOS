@@ -282,13 +282,9 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         }
     }
     
-    private func reloadData() {
-        generateData()
-    }
-    
     @objc private func deviceDisconnected() {
         guard view.window != nil else { return }
-        reloadData()
+        generateData()
     }
     
     // MARK: - @IBAction's

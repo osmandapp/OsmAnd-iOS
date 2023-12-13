@@ -71,7 +71,7 @@ final class DeviceHelper: NSObject {
     }
     
     func getDevicesFrom(peripherals: [Peripheral], pairedDevices: [DeviceSettings]) -> [Device] {
-        return peripherals.map { peripheral in
+        return peripherals.compactMap { peripheral in
             if let savedDevice = pairedDevices.first(where: { $0.deviceId == peripheral.identifier.uuidString }) {
                 let device = getDeviceFor(type: savedDevice.deviceType)
                 device.deviceName = savedDevice.deviceName
@@ -80,9 +80,9 @@ final class DeviceHelper: NSObject {
                 device.addObservers()
                 return device
             } else {
-                fatalError("getDevicesFrom")
+                return nil
             }
-        }
+        } 
     }
     
     func isDeviceEnabled(for id: String) -> Bool {

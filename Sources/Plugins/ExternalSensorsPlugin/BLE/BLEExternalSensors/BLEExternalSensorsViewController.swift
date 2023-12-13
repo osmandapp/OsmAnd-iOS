@@ -120,6 +120,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                 cell?.preservesSuperviewLayoutMargins = false
             }
             if let cell {
+                cell.setCustomLeftSeparatorInset(true)
                 cell.titleLabel.text = item.title
                 if let key = item.key, let item = ExternalSensorsCellData(rawValue: key) {
                     switch item {
@@ -244,6 +245,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         headerEmptyView.addSubview(imageView)
         headerEmptyView.frame.size.height = 201
         headerEmptyView.frame.size.width = view.frame.width
+        headerEmptyView.backgroundColor = UIColor.groupBgColor
         imageView.frame = headerEmptyView.frame
         tableView.tableHeaderView = headerEmptyView
     }

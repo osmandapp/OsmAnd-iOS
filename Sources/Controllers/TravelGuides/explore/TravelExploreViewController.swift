@@ -240,7 +240,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                         let headerDescrRow = section.createNewRow()
                         headerDescrRow.cellType = OARightIconTableViewCell.getIdentifier()
                         headerDescrRow.descr = localizedString("popular_articles_not_found_descr")
-                        headerDescrRow.setObj(true, forKey: "kHideSeparator")
+                        headerDescrRow.setObj(false, forKey: "kHideSeparator")
                     }
                 }
             }

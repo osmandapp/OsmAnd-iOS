@@ -1998,6 +1998,8 @@
 "cache_cleared" = "Cache cleared";
 "download_images_settings_header" = "Offline Wikipedia files in OsmAnd don’t contain images. But they can be downloaded while viewing articles.";
 "download_images_settings_footer" = "Image downloading is enabling over any network. Mobile data can be used.";
+"popular_articles_not_found_title" = "Popular articles not found";
+"popular_articles_not_found_descr" = "There are no any articles near current map centre. Use search to find articles.";
 
 // Help
 "help_quiz" = "Quiz";

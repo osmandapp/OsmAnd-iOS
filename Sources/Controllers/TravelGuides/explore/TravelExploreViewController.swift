@@ -235,12 +235,12 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                         headerTitleRow.cellType = OARightIconTableViewCell.getIdentifier()
                         headerTitleRow.iconName = "ic_custom_search"
                         headerTitleRow.title = localizedString("popular_articles_not_found_title")
-                        headerTitleRow.setObj(NSNumber(booleanLiteral: true), forKey: "kHideSeparator")
+                        headerTitleRow.setObj(true, forKey: "kHideSeparator")
                         
                         let headerDescrRow = section.createNewRow()
                         headerDescrRow.cellType = OARightIconTableViewCell.getIdentifier()
                         headerDescrRow.descr = localizedString("popular_articles_not_found_descr")
-                        headerDescrRow.setObj(NSNumber(booleanLiteral: false), forKey: "kHideSeparator")
+                        headerDescrRow.setObj(true, forKey: "kHideSeparator")
                     }
                 }
             }

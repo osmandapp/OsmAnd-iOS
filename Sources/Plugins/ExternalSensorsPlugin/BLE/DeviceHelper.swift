@@ -178,7 +178,7 @@ final class DeviceHelper: NSObject {
 extension DeviceHelper {
     
     @objc enum DisconnectDeviceReason: Int {
-        case plaginOff, bluetoothPoweredOff
+        case pluginOff, bluetoothPoweredOff
     }
     
     func disconnectIfNeeded(device: Device) {
@@ -190,7 +190,7 @@ extension DeviceHelper {
     func disconnectAllDevices(reason: DisconnectDeviceReason) {
         guard !connectedDevices.isEmpty else { return }
         switch reason {
-        case .plaginOff:
+        case .pluginOff:
             connectedDevices.forEach {
                 $0.disableRSSI()
                 disconnectIfNeeded(device: $0)

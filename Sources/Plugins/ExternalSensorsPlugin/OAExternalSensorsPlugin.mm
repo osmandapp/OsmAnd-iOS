@@ -63,7 +63,7 @@ NSString * const OATrackRecordingAnyConnected = @"OATrackRecordingAnyConnected";
 - (void)disable
 {
     [super disable];
-    [[OADeviceHelper shared] disconnectAllDevicesWithDirection:DisconnectDeviceDirectionPlaginOff];
+    [[OADeviceHelper shared] disconnectAllDevicesWithReason:DisconnectDeviceReasonPlaginOff];
 }
 
 - (void)setEnabled:(BOOL)enabled

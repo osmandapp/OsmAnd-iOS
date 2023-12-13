@@ -95,7 +95,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         }
     }
     
-    override func getTitleForHeader(_ section: Int) -> String! {
+    override func getTitleForHeader(_ section: Int) -> String? {
         if DeviceHelper.shared.hasPairedDevices {
             switch section {
             case 0:
@@ -124,8 +124,13 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                 cell = nib?.first as? OASimpleTableViewCell
                 cell?.descriptionVisibility(false)
                 cell?.leftIconVisibility(false)
+                // separators go edge to edge
+                cell?.separatorInset = .zero
+                cell?.layoutMargins = .zero
+                cell?.preservesSuperviewLayoutMargins = false
             }
             if let cell {
+                cell.setCustomLeftSeparatorInset(true)
                 cell.titleLabel.text = item.title
                 if let key = item.key, let item = ExternalSensorsCellData(rawValue: key) {
                     switch item {
@@ -133,7 +138,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                         cell.titleLabel.textColor = UIColor.textColorPrimary
                         cell.selectionStyle = .none
                     case .learnMore:
-                        cell.titleLabel.textColor = UIColor.buttonBgColorPrimary
+                        cell.titleLabel.textColor = UIColor.textColorActive
                         cell.selectionStyle = .default
                     }
                 }
@@ -245,6 +250,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         headerEmptyView.addSubview(imageView)
         headerEmptyView.frame.size.height = 201
         headerEmptyView.frame.size.width = view.frame.width
+        headerEmptyView.backgroundColor = UIColor.groupBgColor
         imageView.frame = headerEmptyView.frame
         tableView.tableHeaderView = headerEmptyView
     }

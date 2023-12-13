@@ -11,7 +11,7 @@ import CoreBluetooth
 
 final class BLEBikeSCDDevice: Device {
     
-    var name: String {
+    override var deviceServiceName: String {
         "Bike Sensor"
     }
     

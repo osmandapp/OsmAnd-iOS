@@ -249,7 +249,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     _textField.leftViewMode = UITextFieldViewModeAlways;
 
     _activityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:_textField.leftView.frame];
-    _activityIndicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    _activityIndicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleMedium;
 
     _leftImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"search_icon"]];
     _leftImgView.contentMode = UIViewContentModeCenter;

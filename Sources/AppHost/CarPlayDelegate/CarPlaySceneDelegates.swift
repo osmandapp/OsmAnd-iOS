@@ -109,7 +109,12 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
         OsmAndApp.swiftInstance().carPlayActive = false
         OAAppSettings.sharedManager().setApplicationModePref(OAAppSettings.sharedManager().defaultApplicationMode.get(), markAsLastUsed: false)
         
-        OARootViewController.instance().mapPanel.onCarPlayDisconnected { [weak self] in
+        guard let mapPanel = OARootViewController.instance()?.mapPanel else {
+            NSLog("[CarPlay] CarPlaySceneDelegate rootViewController mapPanel is nil")
+            return
+        }
+        
+        mapPanel.onCarPlayDisconnected { [weak self] in
             guard let self else { return }
             NSLog("[CarPlay] CarPlaySceneDelegate onCarPlayDisconnected")
             carPlayMapController?.detachFromCarPlayWindow()

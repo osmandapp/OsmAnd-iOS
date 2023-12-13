@@ -295,7 +295,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _historyItemsLimit = kHistoryItemLimitDefault;
     
     [_routingHelper addCalculationProgressCallback:self];
-    [_transportHelper addProgressBar:self];
+    [_transportHelper addCalculationProgressCallback:self];
 }
 
 + (int) getDirectionInfo

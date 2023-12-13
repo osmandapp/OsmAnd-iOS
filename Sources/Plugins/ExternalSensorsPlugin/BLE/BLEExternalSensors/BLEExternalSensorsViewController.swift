@@ -34,6 +34,8 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         super.init(coder: coder)
         initTableData()
     }
+
+    // MARK: - Life circle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,21 +45,29 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         tableView.contentInset.bottom = 64
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureStartState()
+        reloadData()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        configureStartState()
+    }
+    
     override func registerObservers() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceDisconnected),
                                                name: .DeviceDisconnected,
                                                object: nil)
+        if UserDefaults.standard.bool(for: .wasAuthorizationRequestBluetooth) {
+            detectBluetoothState()
+        }
     }
     
     override func useCustomTableViewHeader() -> Bool {
         true
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        configureStartState()
-        reloadData()
     }
     
     override func getTitle() -> String {
@@ -212,11 +222,6 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                 tableView.tableHeaderView = nil
             }
         }
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        configureStartState()
     }
     
     private func detectBluetoothState() {

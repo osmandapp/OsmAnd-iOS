@@ -33,6 +33,7 @@
 #import "OAPointHeaderTableViewCell.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OsmAnd_Maps-Swift.h"
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -1020,7 +1021,10 @@ static UIViewController *parentController;
 
 - (void) onImportClicked
 {
-    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[@"public.xml",@"com.topografix.gpx",@"com.google.earth.kmz",@"com.google.earth.kml"] inMode:UIDocumentPickerModeImport];
+    NSArray<UTType *> *contentTypes = @[[UTType importedTypeWithIdentifier:@"com.topografix.gpx" conformingToType:UTTypeXML],
+                                        [UTType importedTypeWithIdentifier:@"com.google.earth.kmz" conformingToType:UTTypeXML],
+                                        [UTType importedTypeWithIdentifier:@"com.google.earth.kml" conformingToType:UTTypeXML]];
+    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:contentTypes asCopy:YES];
     documentPickerVC.allowsMultipleSelection = NO;
     documentPickerVC.delegate = self;
     [self presentViewController:documentPickerVC animated:YES completion:nil];

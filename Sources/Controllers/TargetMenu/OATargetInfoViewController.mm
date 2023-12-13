@@ -1004,19 +1004,11 @@
         [cardsView setCards:@[[[OAImageCard alloc] initWithData:@{@"key": @"loading"}]]];
     }
 
-    if ([OAPlugin isEnabled:OAWikipediaPlugin.class])
-    {
-        __weak OATargetInfoViewController *selfWeak = self;
-        [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_nearbyImagesRowInfo targetObj:self.getTargetObj addOtherImagesOnComplete:^(NSMutableArray <OAAbstractCard *> *cards) {
-            selfWeak.wikiCardsReady = YES;
-            [selfWeak sendNearbyOtherImagesRequest:cards];
-        }];
-    }
-    else
-    {
-        _wikiCardsReady = YES;
-        [self sendNearbyOtherImagesRequest:[NSMutableArray array]];
-    }
+    __weak OATargetInfoViewController *selfWeak = self;
+    [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_nearbyImagesRowInfo targetObj:self.getTargetObj addOtherImagesOnComplete:^(NSMutableArray <OAAbstractCard *> *cards) {
+        selfWeak.wikiCardsReady = YES;
+        [selfWeak sendNearbyOtherImagesRequest:cards];
+    }];
 }
 
 #pragma mark - OAEditDescriptionViewControllerDelegate

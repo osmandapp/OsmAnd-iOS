@@ -1010,6 +1010,16 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
             else
             {
                 [plugin setEventIdentifier:[event.eventIdentifier copy]];
+
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                [dateFormatter setDateStyle:NSDateFormatterNoStyle];
+                [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"calendar_new_event_title")
+                                                                               message:[NSString stringWithFormat:OALocalizedString(@"calendar_new_event_message"),
+                                                                                        [dateFormatter stringFromDate:pickupDate]]
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+                [UIApplication.sharedApplication.mainWindow.rootViewController presentViewController:alert animated:YES completion:nil];
             }
         }
     };

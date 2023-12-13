@@ -535,7 +535,7 @@
     {
         _selectingMarkTitleBackground = [[UIView alloc] initWithFrame:CGRectMake(0., 0., 0., 0.)];
         _selectingMarkTitleBackground.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        _selectingMarkTitleBackground.backgroundColor = UIColor.whiteColor;
+        _selectingMarkTitleBackground.backgroundColor = UIColor.weatherSliderLabelBgColor;
 
         _selectingMarkTitleBackground.layer.masksToBounds = NO;
         _selectingMarkTitleBackground.layer.shadowColor = [UIColor.blackColor colorWithAlphaComponent:.2].CGColor;

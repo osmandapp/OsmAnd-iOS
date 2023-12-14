@@ -3184,3 +3184,8 @@
 "about_osmAnd" = "Om OsmAnd";
 "troubleshooting" = "Fejlfinding";
 "ask_question_propose_features" = "Stil spørgsmål, foreslå funktioner";
+"travel_guides_no_file_error" = "Fejl: Ingen region fildata";
+"calendar_new_event_message" = "Ny kalenderbegivenhed er blevet tilføjet: Afhent bilen %@";
+"calendar_new_event_title" = "Ny begivenhed";
+"popular_articles_not_found_title" = "Populære artikler ikke fundet";
+"popular_articles_not_found_descr" = "Der er ingen artikler i nærheden af det aktuelle kortcentrum. Brug søgning til at finde artikler.";

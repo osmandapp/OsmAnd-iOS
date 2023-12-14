@@ -176,9 +176,9 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch pairedSensorsType {
         case .widget:
-            return indexPath.row == 0 ? 48 : 73
+            return indexPath.row == 0 ? UITableView.automaticDimension : 73
         case .tripRecording:
-            return indexPath.row <= 1 ? 48 : 73
+            return indexPath.row <= 1 ? UITableView.automaticDimension : 73
         }
     }
     

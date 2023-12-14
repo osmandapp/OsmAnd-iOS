@@ -301,7 +301,7 @@
 
 - (void)updateUI:(BOOL)animated completion:(void (^)(BOOL finished))completion
 {
-    [self reloadData:animated completion:completion];
+    [self reloadDataWithAnimated:animated completion:completion];
     [self refreshUI];
 }
 
@@ -311,7 +311,7 @@
     [self.tableView reconfigureRowsAtIndexPaths:self.tableView.indexPathsForVisibleRows];
 }
 
-- (void)reloadData:(BOOL)animated completion:(void (^)(BOOL finished))completion
+- (void)reloadDataWithAnimated:(BOOL)animated completion:(void (^)(BOOL finished))completion
 {
     [self generateData];
     if (animated)

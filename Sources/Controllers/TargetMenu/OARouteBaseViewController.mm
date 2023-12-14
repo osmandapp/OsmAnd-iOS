@@ -706,21 +706,28 @@
     {
         routeBBox = [_routingHelper getBBox];
         if ([_routingHelper isRoutePlanningMode] && routeBBox.left != DBL_MAX)
-        {
             [self centerMapOnBBox:routeBBox];
-        }
+        else
+            [self centerMapOnGpx:_gpx];
     }
     else if (_routingHelper.isPublicTransportMode)
     {
         OATransportRoutingHelper *transportHelper = OATransportRoutingHelper.sharedInstance;
         if (!transportHelper.isRouteBeingCalculated && transportHelper.getRoutes.size() > 0 && transportHelper.currentRoute != -1)
-        {
             [self centerMapOnBBox:transportHelper.getBBox];
-        }
     }
-    else if (_gpx)
+    else
     {
-        OAGpxBounds gpxBounds = _gpx.bounds;
+        [self centerMapOnGpx:_gpx];
+    }
+}
+
+- (void)centerMapOnGpx:(OAGPXDocument *)gpx
+{
+    if (gpx)
+    {
+        OABBox routeBBox;
+        OAGpxBounds gpxBounds = gpx.bounds;
         routeBBox.top = gpxBounds.topLeft.latitude;
         routeBBox.bottom = gpxBounds.bottomRight.latitude;
         routeBBox.left = gpxBounds.topLeft.longitude;

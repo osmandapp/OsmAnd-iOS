@@ -98,7 +98,7 @@ final class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarView
             if let widgetType = item.obj(forKey: "widgetType") as? WidgetType {
                 cell.titleLabel.text = widgetType.title
                 cell.descriptionLabel.text = item.descr
-                cell.leftIconView.image = UIImage.templateImageNamed(widgetType.iconName)
+                cell.leftIconView.image = UIImage.templateImageNamed(widgetType.disabledIconName)
                 cell.leftIconView.tintColor = item.iconTintColor
             }
         }

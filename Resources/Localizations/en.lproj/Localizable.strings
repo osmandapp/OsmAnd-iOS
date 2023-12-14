@@ -3276,10 +3276,22 @@
 • Changed direction of tilt gesture\n
 • Fixed issue with favorites export, that could lead to data loss\n";
 
-"ios_release_4_6" = "• Now you can view map directly on your CarPlay dashboard\n
-• Switch to Night Theme for a more comfortable viewing experience in low light conditions\n
+"ios_release_4_6" = "• Record and track you metrics with external sensors including Bicycle speed, Bicycle Cadence, Bicycle Distance, Heart rate and temperature\n
+• Now you can view map directly on your CarPlay dashboard\n
+• Added Night theme for a comfortable viewing experience in low light conditions\n
+• Discover travel guides by \"Wikivoyage\"\n
 • Improved dialogs for adding notes and uploading notes and POIs to OpenStreetMap\n
-• Easily restore your plugin settings to the installation defaults with a new \"Reset to Default\" option\n";
+• Easily restore your plugin settings to the installation defaults with a new \"Reset to Default\" option\n
+• Added a \"Screen orientation\" option to set your preferred orientation without automatic switching\n
+• Added a separate button to switch 3D Mode directly on CarPlay screen\n
+• Minimum and maximum elevation information has been added to navigation routes in addition to uphill and downhill\n
+• Improved track coloring in Slope mode with new symmetric gradient\n 
+• Favorite folders now store default appearance that are applied automatically to each added point\n
+• Fixed the \"Radius ruler\" center point mismatching with the map center\n
+• Added \"Read article\" button for Wikipedia POIs context menu\n
+• Fixed issue with importing GPX file to favorites\n
+• Fixed issue with the calendar event for parking position\n
+• Fixed crash with removing color from pallet\n";
 
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Don\'t hide waterway tunnels";
